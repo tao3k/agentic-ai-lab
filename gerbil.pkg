@@ -8,5 +8,5 @@ depend:
  ("github.com/tao3k/gerbil-poo@099b381588360a8a49fd772f666a1a00351366f5"
   "github.com/tao3k/asp-gerbil-scheme@v0.1.2.2"
   "github.com/tao3k/gerbil-parser@78507e68b1275be1be748be465d6354f596d9063"
-  "github.com/tao3k/orgize@790212d09d0d5d7294a06c9657a8737d9a3e1728"
+  "github.com/tao3k/orgize@8f04aa246290b56b5605f4a38f25c55d0b416268"
   "github.com/tao3k/gerbil-ascent@86ad9ae3469565bea6229b71ef1d9197c6a82d63"))
