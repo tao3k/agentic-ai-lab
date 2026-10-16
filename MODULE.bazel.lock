@@ -140,7 +140,7 @@
     "@@gerbil_bazel+//gerbil:extensions.bzl%gerbil": {
       "os:linux,arch:amd64": {
         "bzlTransitiveDigest": "ftvcVApdsKajkZscTLJdqAalEp8gjyxQjrBxQOOSik4=",
-        "usagesDigest": "VZLBPe+6s8PSMBVc0Grsg+Ypu+81T8PmkAtHO3h+dWo=",
+        "usagesDigest": "LNVPuo+/JBZi/peDuKEA45s1JCZfgQgdXq73z3iGy/w=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -236,26 +236,12 @@
                 "https://github.com/tao3k/gerbil-ascent/archive/86ad9ae3469565bea6229b71ef1d9197c6a82d63.tar.gz"
               ]
             }
-          },
-          "poo_flow_core_sources": {
-            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
-            "attributes": {
-              "build_script": "build.ss",
-              "canonical_uri": "https://github.com/tao3k/poo-flow-core",
-              "package": "poo-flow-core",
-              "revision": "06fe336bc67105e817613427d5adcef49ca3d446",
-              "sha256": "9b8794493c8bab3d0a764dc2b5db91a3938f65bafe8894c5e19875b4f870b6d7",
-              "strip_prefix": "poo-flow-core-06fe336bc67105e817613427d5adcef49ca3d446",
-              "urls": [
-                "https://github.com/tao3k/poo-flow-core/archive/06fe336bc67105e817613427d5adcef49ca3d446.tar.gz"
-              ]
-            }
           }
         }
       },
       "os:osx,arch:aarch64": {
         "bzlTransitiveDigest": "ftvcVApdsKajkZscTLJdqAalEp8gjyxQjrBxQOOSik4=",
-        "usagesDigest": "VZLBPe+6s8PSMBVc0Grsg+Ypu+81T8PmkAtHO3h+dWo=",
+        "usagesDigest": "LNVPuo+/JBZi/peDuKEA45s1JCZfgQgdXq73z3iGy/w=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -274,20 +260,6 @@
               "project_library_relative_path": ".gerbil/lib",
               "project_root_marker": "@@//:gerbil.pkg",
               "tool_paths": {}
-            }
-          },
-          "poo_flow_core_sources": {
-            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
-            "attributes": {
-              "build_script": "build.ss",
-              "canonical_uri": "https://github.com/tao3k/poo-flow-core",
-              "package": "poo-flow-core",
-              "revision": "06fe336bc67105e817613427d5adcef49ca3d446",
-              "sha256": "9b8794493c8bab3d0a764dc2b5db91a3938f65bafe8894c5e19875b4f870b6d7",
-              "strip_prefix": "poo-flow-core-06fe336bc67105e817613427d5adcef49ca3d446",
-              "urls": [
-                "https://github.com/tao3k/poo-flow-core/archive/06fe336bc67105e817613427d5adcef49ca3d446.tar.gz"
-              ]
             }
           },
           "gerbil_poo_sources": {

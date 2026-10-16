@@ -63,3 +63,25 @@ lacks the pinned gerbil-poo package manifest required by =gerbil build= in
 product build. Core's direct native build and the focused source suites above
 are separate evidence. The product PR's exact-head CI installs pinned package
 dependencies and remains the full-package/cross-platform acceptance gate.
+
+* Core source version authority
+
+The product's Core source version is the Git submodule gitlink. Product builds
+compile that ordinary =core/= directory before compiling product modules, via
+=just build-core= or the equivalent native CI step. Core is not a second direct
+package-install dependency with another root revision. Earlier direct Core
+installation conflicted with the existing dependency packages' bootstrap Core
+pin (=e85fd453= versus =06fe336b=); removing the duplicate declaration restores
+the existing package manager's coherent bootstrap graph without rewriting its
+transitive constraints. The local Core build then supplies this product's Core
+artifacts. Dependency installation alone is not a complete product build.
+Bazel also compiles the initialized local Core directory; external consumer
+qualification exports its tracked files without its Git metadata. No loader or
+old-namespace forwarding layer is introduced.
+
+The local Core build first cleans only Core-owned compiled outputs. A newly
+installed bootstrap dependency can have newer mtimes than the checked-out Core
+sources, so timestamps alone do not qualify reuse across the source-owner
+cutover. Dependency source checkouts and their declared revisions are retained;
+no uninstall or manifest rewriting is used. The subsequent local build and
+product tests qualify the pinned Core implementation rather than stale output.
