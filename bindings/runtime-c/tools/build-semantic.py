@@ -31,6 +31,19 @@ def run(argv: list[str], *, capture: bool = False) -> str:
     return result.stdout or ""
 
 
+def native_link_flags(home: Path, system: str) -> list[str]:
+    flags = shlex.split((home / "lib/libgerbil.ldd").read_text().strip().strip("()"))
+    if system == "Darwin":
+        # A portable SDK can retain its producer's versioned Homebrew paths.
+        # Host pkg-config supplies current OpenSSL search paths; keep the SDK's
+        # complete dependency flags and fail if the host provider is unavailable.
+        current = subprocess.check_output(
+            ["pkg-config", "--libs-only-L", "openssl"], text=True
+        )
+        flags = [*shlex.split(current), *flags]
+    return flags
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
@@ -52,7 +65,7 @@ def main() -> None:
     stage.mkdir(parents=True, exist_ok=True)
     gsc = str(home / "bin/gsc")
     os.environ["GAMBOPT"] = f"~~={home},~~bin={home / 'bin'},~~lib={home / 'lib'}"
-    compiler = [str(home / "bin/gxc"), "-:max-heap=1G,debug=q", "-V"]
+    compiler = [str(home / "bin/gxc"), "-:max-heap=1G,debug=q"]
     # Module compilation already emits compiler-owned static sources.
     # -static controls executable dependency linkage and cannot link Darwin dylibs.
     for source in ["core/utilities/product-syntax.ss", "core/utilities/final-projection-syntax.ss",
@@ -157,7 +170,7 @@ def main() -> None:
                f"-I{ROOT / 'bindings/runtime-c/include'}")
     run([gsc, "-cc-options", options, "-obj", "-o", str(host_object),
          str(ROOT / 'bindings/runtime-c/src/semantic_host.c')])
-    flags = shlex.split((home / "lib/libgerbil.ldd").read_text().strip().strip("()"))
+    flags = native_link_flags(home, platform.system())
     shared = ["-shared"]
     if platform.system() == "Darwin":
         shared = ["-dynamiclib", "-Wl,-no_compact_unwind"]
