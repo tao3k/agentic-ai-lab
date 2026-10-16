@@ -400,10 +400,26 @@
         (check-equal? (length observations) 1)
         (check-equal? (.ref (car observations) 'code)
                       'poo-prototype-lookup-inside-composition)))
+    (poo-flow-test-case "native getter paths are literals but receivers remain expressions"
+      (for-each
+       (lambda (initializer)
+         (check-equal? (poo-flow-poo-slot-authoring-status 'pipeline initializer)
+                       'ok))
+       '((.get ff prototypes pipeline)
+         (.@ ff prototypes pipeline)
+         (.o (:: @ (.get ff prototypes pipeline)) checks: '())))
+      (for-each
+       (lambda (initializer)
+         (check-equal? (poo-flow-poo-slot-authoring-status 'pipeline initializer)
+                       'self-referential-slot-initializer))
+       '((.get pipeline checks)
+         (.@ pipeline checks)
+         (.get (.get pipeline source) checks)
+         (.ref ff pipeline))))
     (poo-flow-test-case "production and performance POO slots pass the authoring gate"
       (let* ((paths
               (append
-               (module-observability-source-files "src")
+               (module-observability-source-files "modules")
                (module-observability-source-files "t/performance")))
              (observations
               (apply append
@@ -412,16 +428,16 @@
         (check-equal?
          (poo-flow-poo-slot-authoring-diagnostics observations)
          '())))
-    (poo-flow-test-case "all repository Scheme sources avoid lexical values calls"
-      (let* ((paths (module-observability-source-files "src"))
+    (poo-flow-test-case "product module Scheme sources avoid lexical values calls"
+      (let* ((paths (module-observability-source-files "modules"))
              (observations
               (apply append
                      (map module-observability-source-lexical-shadow-observations
                           paths))))
         (check-equal? (pair? paths) #t)
         (check-equal? observations '())))
-    (poo-flow-test-case "all repository constructors hoist stable prototype lookups"
-      (let* ((paths (module-observability-source-files "src"))
+    (poo-flow-test-case "product module constructors hoist stable prototype lookups"
+      (let* ((paths (module-observability-source-files "modules"))
              (observations
               (apply append
                      (map module-observability-source-inline-prototype-observations

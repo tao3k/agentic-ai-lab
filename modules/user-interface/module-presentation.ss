@@ -230,12 +230,20 @@
 ;; : (forall (a) (-> Symbol a Boolean))
 ;; : (-> Symbol Value Boolean)
 (def (poo-flow-poo-slot-authoring-identifier-reference? identifier datum)
-  (if (poo-flow-scheme-datum-find
-       (lambda (candidate)
-         (and (symbol? candidate) (eq? identifier candidate)))
-       datum)
-    #t
-    #f))
+  (cond
+   ((symbol? datum) (eq? identifier datum))
+   ((vector? datum)
+    (poo-flow-poo-slot-authoring-identifier-reference?
+     identifier (vector->list datum)))
+   ((not (pair? datum)) #f)
+   ((memq (car datum) '(quote quasiquote syntax quasisyntax)) #f)
+   ;; Native .get/.@ expand their path names to quoted symbols. Only the
+   ;; receiver is an expression; a same-named path is not a slot dependency.
+   ((and (memq (car datum) '(.get .@)) (pair? (cdr datum)))
+    (poo-flow-poo-slot-authoring-identifier-reference? identifier (cadr datum)))
+   (else
+    (or (poo-flow-poo-slot-authoring-identifier-reference? identifier (car datum))
+        (poo-flow-poo-slot-authoring-identifier-reference? identifier (cdr datum))))))
 
 ;; : (-> Symbol Value Boolean)
 (def (poo-flow-poo-slot-authoring-self-reference? slot initializer)
