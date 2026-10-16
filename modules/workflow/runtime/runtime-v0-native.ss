@@ -15,9 +15,9 @@
         (only-in :clan/poo/object .ref)
         (only-in :std/hash/misc hash-key?)
         (only-in :gerbil/core call-with-output-string display-exception)
-        (only-in ../contract/runtime-v0-abi-schema
+        (only-in ../contracts/runtime-v0-abi-schema
                  +poo-flow-runtime-v0-abi-schema+)
-        (only-in ../contract/protocol-person-runtime-abi
+        (only-in ../contracts/protocol-person-runtime-abi
                  poo-flow-runtime-language-source-query-receipt
                  poo-flow-runtime-language-source-query-receipt-failures
                  poo-flow-runtime-language-admission-receipt
