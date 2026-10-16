@@ -13,10 +13,9 @@ on:
       - bindings/runtime-c/bundle-v1/**
       - BUILD.bazel
       - build.ss
-      - src/core/plan.ss
-      - src/feature-system/bundle-v1-*.ss
-      - src/module-system/profile-composition.ss
-      - src/module-system/profile-composition-*.ss
+      - modules/workflow/control-plane/plan.ss
+      - core
+      - modules/workflow/scenario/**
       - t/profile-composition-test.ss
       - .github/workflows/runtime-wasm-package.yml
       - packages/automation/install_gerbil_release.py
@@ -26,10 +25,9 @@ on:
       - bindings/runtime-c/bundle-v1/**
       - BUILD.bazel
       - build.ss
-      - src/core/plan.ss
-      - src/feature-system/bundle-v1-*.ss
-      - src/module-system/profile-composition.ss
-      - src/module-system/profile-composition-*.ss
+      - modules/workflow/control-plane/plan.ss
+      - core
+      - modules/workflow/scenario/**
       - t/profile-composition-test.ss
       - .github/workflows/runtime-wasm-package.yml
       - packages/automation/install_gerbil_release.py
@@ -49,6 +47,9 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Initialize Core source directory
+        run: git submodule update --init core
 
       - name: Set up Node.js
         uses: actions/setup-node@v6

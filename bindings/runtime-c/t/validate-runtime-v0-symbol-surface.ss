@@ -10,7 +10,7 @@
         (only-in :clan/poo/object .ref)
         (only-in :std/list/walist walist)
         (only-in :std/encoding/json json->string)
-        :poo-flow/src/qualification/runtime-symbol-manifest)
+        :poo-flow/modules/workflow/qualification/runtime-symbol-manifest)
 
 (export main)
 

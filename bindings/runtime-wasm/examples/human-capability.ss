@@ -13,7 +13,7 @@
         (only-in :poo-flow/modules/workflow/profiles/human-ai-capability
                  HumanAICapabilityModule
                  HumanCapabilityScenarioProfile)
-        :poo-flow/src/scenario/bundle-v1-projection)
+        :poo-flow/modules/workflow/scenario/bundle-v1-projection)
 
 (export human-capability)
 

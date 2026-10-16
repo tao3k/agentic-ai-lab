@@ -59,7 +59,7 @@ def main() -> None:
                    "core/graph/types-core.ss", "core/graph/algorithms-list-support.ss",
                    "core/graph/algorithms.ss", "modules/temporal-causality/types.ss",
                    "modules/temporal-causality/objects.ss", "modules/temporal-causality/funs.ss",
-                   "src/ffi/temporal-family.ss", "modules/temporal-causality/truth-maintenance/types.ss",
+                   "modules/workflow/runtime/temporal-family.ss", "modules/temporal-causality/truth-maintenance/types.ss",
                    "modules/temporal-causality/conclusions/types.ss",
                    "modules/temporal-causality/conclusions/objects.ss",
                    "modules/temporal-causality/conclusions/funs.ss",
@@ -73,8 +73,8 @@ def main() -> None:
                    "modules/temporal-causality/lifecycle/objects.ss",
                    "modules/temporal-causality/lifecycle/funs.ss",
                    "modules/temporal-causality/lifecycle/interface.ss",
-                   "src/semantic/context-restriction.ss", "src/ffi/context-restriction.ss",
-                   "src/ffi/temporal-admission.ss", "src/ffi/scheme-wire.ss", "src/ffi/temporal-archive.ss",
+                   "modules/query/semantic/context-restriction.ss", "modules/workflow/runtime/context-restriction.ss",
+                   "modules/workflow/runtime/temporal-admission.ss", "modules/workflow/runtime/scheme-wire.ss", "modules/workflow/runtime/temporal-archive.ss",
                    "modules/temporal-causality/time/types.ss", "modules/temporal-causality/time/objects.ss",
                    "modules/temporal-causality/time/funs.ss",
                    "modules/temporal-causality/revisions/types.ss", "modules/temporal-causality/revisions/objects.ss",
@@ -87,18 +87,18 @@ def main() -> None:
                    "modules/temporal-causality/truth-maintenance/support/interface.ss",
                    "modules/temporal-causality/truth-maintenance/support/policy-host.ss",
                    "modules/ai-agentic-context/use-host.ss",
-                   "modules/temporal-causality/evaluator/fact.ss", "src/ffi/temporal-support.ss",
+                   "modules/temporal-causality/evaluator/fact.ss", "modules/workflow/runtime/temporal-support.ss",
                    "modules/temporal-causality/evaluator/positive-proof.ss",
                    "modules/temporal-causality/evaluator/binding.ss",
                    "modules/temporal-causality/evaluator/rule.ss",
                    "modules/temporal-causality/evaluator/derivation.ss",
                    "modules/temporal-causality/evaluator/proof-host.ss",
-                   "modules/temporal-causality/evaluator/interface.ss", "src/ffi/temporal-proof.ss", "src/ffi/temporal-policy.ss", "src/ffi/temporal-proof-host.ss", "src/ffi/context-use.ss"]:
+                   "modules/temporal-causality/evaluator/interface.ss", "modules/workflow/runtime/temporal-proof.ss", "modules/workflow/runtime/temporal-policy.ss", "modules/workflow/runtime/temporal-proof-host.ss", "modules/workflow/runtime/context-use.ss"]:
         run([*compiler, "-O", source])
     run([*compiler, "-O",
          "-ld-options", "-Wl,-undefined,dynamic_lookup" if platform.system() == "Darwin" else "-ldl",
-         "src/ffi/semantic.ss"])
-    expression = '''(let* ((ctx (import-module "src/ffi/semantic.ss"))
+         "modules/workflow/runtime/semantic.ss"])
+    expression = '''(let* ((ctx (import-module "modules/workflow/runtime/semantic.ss"))
                            (deps (gxc#find-runtime-module-deps ctx)))
                       (for-each (lambda (dep)
                         (displayln (expander-context-id dep) "\\t"
@@ -166,7 +166,7 @@ def main() -> None:
          '-L', str(home / 'lib'), '-lgambit', *flags])
     manifest = {"schema": "poo-flow.semantic-aot-artifact", "version": 1, "modules": inputs,
                 "artifactSha256": hashlib.sha256(output.read_bytes()).hexdigest(),
-                "sourceSha256": hashlib.sha256((ROOT / 'src/ffi/semantic.ss').read_bytes()).hexdigest(),
+                "sourceSha256": hashlib.sha256((ROOT / 'modules/workflow/runtime/semantic.ss').read_bytes()).hexdigest(),
                 "hostSha256": hashlib.sha256((ROOT / 'bindings/runtime-c/src/semantic_host.c').read_bytes()).hexdigest(),
                 "headerSha256": hashlib.sha256((ROOT / 'bindings/runtime-c/include/poo_flow/semantic.h').read_bytes()).hexdigest(),
                 "compilerSha256": hashlib.sha256(Path(gsc).read_bytes()).hexdigest()}

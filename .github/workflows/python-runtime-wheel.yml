@@ -29,6 +29,9 @@ jobs:
       - name: Checkout poo-flow
         uses: actions/checkout@v7.0.0
 
+      - name: Initialize Core source directory
+        run: git submodule update --init core
+
       - name: Install SQLite development headers
         run: sudo apt-get update && sudo apt-get install -y libsqlite3-dev
 
@@ -71,7 +74,7 @@ jobs:
           library = Path(os.environ['POO_FLOW_SEMANTIC_LIBRARY'])
           manifest = loads(Path(str(library) + '.ss').read_text())
           assert hashlib.sha256(library.read_bytes()).hexdigest() == manifest['artifactSha256']
-          assert hashlib.sha256(Path('src/ffi/semantic.ss').read_bytes()).hexdigest() == manifest['sourceSha256']
+          assert hashlib.sha256(Path('modules/workflow/runtime/semantic.ss').read_bytes()).hexdigest() == manifest['sourceSha256']
           assert hashlib.sha256(Path('bindings/runtime-c/src/semantic_host.c').read_bytes()).hexdigest() == manifest['hostSha256']
           assert hashlib.sha256(Path('bindings/runtime-c/include/poo_flow/semantic.h').read_bytes()).hexdigest() == manifest['headerSha256']
           PY

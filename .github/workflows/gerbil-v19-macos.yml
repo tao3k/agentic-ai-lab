@@ -14,7 +14,8 @@ on:
       - packages/automation/install_gerbil_release.py
       - build.ss
       - gerbil.pkg
-      - src/**
+      - modules/**
+      - core
       - t/qualification/darwin-gerbil-build-scenario.ss
       - t/qualification/darwin-native-std-make/**
       - t/funflow-github-ci-json-schema-contract-test.ss
@@ -24,7 +25,8 @@ on:
       - packages/automation/install_gerbil_release.py
       - build.ss
       - gerbil.pkg
-      - src/**
+      - modules/**
+      - core
       - t/qualification/darwin-gerbil-build-scenario.ss
       - t/qualification/darwin-native-std-make/**
       - t/funflow-github-ci-json-schema-contract-test.ss
@@ -51,6 +53,9 @@ jobs:
     steps:
       - name: Checkout POO Flow
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Initialize Core source directory
+        run: git submodule update --init core
 
       - name: Install shared Darwin dependencies
         env:

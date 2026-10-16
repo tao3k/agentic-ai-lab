@@ -96,12 +96,18 @@ gerbil_project_compile(
     ],
 )
 
-gerbil_project_compile(
-    name = "poo_flow_core_package",
+# Core is versioned as a submodule and consumed as ordinary checkout files.
+filegroup(
+    name = "core_module_sources",
     srcs = ["core/gerbil.pkg"] + glob(
         ["core/*.ss", "core/**/*.ss"],
-        exclude = ["core/t/**"],
+        exclude = ["core/t/**", "core/module-system/design/**"],
     ),
+)
+
+gerbil_project_compile(
+    name = "poo_flow_core_package",
+    srcs = [":core_module_sources"],
     build_script = "core/build.ss",
     require_library_output = True,
     deps = [":gerbil_poo_package"],

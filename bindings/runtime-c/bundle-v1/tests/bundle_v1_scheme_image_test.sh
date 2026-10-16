@@ -9,11 +9,10 @@ gxi=$1
 fixture=$2
 harness=$3
 clan_package=$4
+core_package=$5
 
-if [ -z "${GERBIL_LOADPATH:-}" ]; then
-  GERBIL_LOADPATH=$PWD:$(dirname "$clan_package")
-  export GERBIL_LOADPATH
-fi
+GERBIL_LOADPATH=$PWD:$(dirname "$core_package"):$(dirname "$clan_package")${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}
+export GERBIL_LOADPATH
 
 temporary=${TEST_TMPDIR:-${TMPDIR:-/tmp}}/poo-flow-bundle-v1.$$
 descriptor=$temporary.descriptor.bin
