@@ -5,10 +5,10 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/policy/authorized-effect-token
+        :poo-flow/modules/governance/policy/authorized-effect-token
         :poo-flow/modules/authorization/providers/cedar/decision
-        :poo-flow/src/policy/strict-mediation
-        :poo-flow/src/proof/authorized-effect-evidence
+        :poo-flow/modules/governance/policy/strict-mediation
+        :poo-flow/modules/proof/projections/authorized-effect-evidence
         :poo-flow/modules/tool-core/calling-control)
 
 

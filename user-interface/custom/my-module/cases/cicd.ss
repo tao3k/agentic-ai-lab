@@ -10,7 +10,7 @@
 ;;; interface selects sandbox profile supers, then declares isolation
 ;;; policy, command fields, and runner-local options.
 ;; : POOObject
-(import (only-in :poo-flow/src/authoring/module-config-syntax
+(import (only-in :poo-flow/modules/module-authoring/module-config-syntax
                  poo-flow-module-inherited-config))
 
 (export poo-flow-custom-my-module-cicd-case)

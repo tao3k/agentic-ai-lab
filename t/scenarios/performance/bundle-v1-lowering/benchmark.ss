@@ -3,8 +3,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import :clan/poo/object
-        :poo-flow/src/feature-system/bundle-v1-lowering
-        :poo-flow/src/utilities/functional)
+        :core/feature-system/bundle-v1-lowering
+        :core/utilities/functional)
 
 (def +agent-count+ 1000)
 

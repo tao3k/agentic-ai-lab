@@ -6,7 +6,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
         (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/object .o .ref)
-        (only-in :poo-flow/src/semantic/orgize-interface
+        (only-in :poo-flow/modules/query/semantic/orgize-interface
                  make-org-element-graph-view org-element-query
                  org-elements property descendant-of)
         :poo-flow/modules/session/config

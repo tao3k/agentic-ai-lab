@@ -10,13 +10,13 @@
          (only-in :std/test
                  test-suite
                  check-equal?)
-        (only-in :poo-flow/src/user-interface/profile-core
+        (only-in :poo-flow/modules/user-interface/profile-core
                  poo-flow-user-profile-name
                  poo-flow-user-profile-set-name
                  poo-flow-user-profile-set-default-profile-name
                  poo-flow-user-profile-module-bundles
                  poo-flow-user-profile-modules)
-        (only-in :poo-flow/src/profiles/kernel/interface
+        (only-in :poo-flow/modules/workflow/profiles/kernel/interface
                  poo-flow-kernel-module-bundles
                  poo-flow-kernel-profile-module-bundles
                  poo-flow-kernel-profile

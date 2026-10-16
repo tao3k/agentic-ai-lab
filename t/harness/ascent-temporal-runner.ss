@@ -14,11 +14,11 @@
    :clan/poo/mop
    :core/types
    :core/module-system/schema/slot-contracts
-   :poo-flow/src/utilities/product-syntax
-   :poo-flow/src/utilities/final-projection-syntax
-   :poo-flow/src/graph/types-core
-   :poo-flow/src/graph/types-contracts
-   :poo-flow/src/graph/types
+   :core/utilities/product-syntax
+   :core/utilities/final-projection-syntax
+   :core/graph/types-core
+   :core/graph/types-contracts
+   :core/graph/types
    :poo-flow/modules/temporal-causality/types
    :poo-flow/modules/temporal-causality/objects
    :poo-flow/modules/temporal-causality/funs

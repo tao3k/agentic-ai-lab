@@ -8,7 +8,7 @@
 ;;; runtime model output or executes reviewer operations.
 
 (import "core.ss"
-        :poo-flow/src/utilities/final-projection-syntax)
+        :core/utilities/final-projection-syntax)
 
 (export poo-flow-user-loop-engine-intent-result-contract
         poo-flow-user-loop-engine-result-contract-valid?

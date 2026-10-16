@@ -11,9 +11,9 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax)
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/user-interface/interface
+        :poo-flow/modules/user-interface/init-syntax)
 
 (export user-interface-custom-loop-engine-result-contract-test)
 

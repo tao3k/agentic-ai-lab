@@ -16,10 +16,10 @@
 (def json-schema-native-contract-test
   (test-suite "json-schema-native-contract-test"
     (poo-flow-test-case "validates the native contract"
-      (eval '(import "./src/contract/json-schema-receipt.ss"))
-      (eval '(import "./src/contract/json-schema-validate.ss"))
+      (eval '(import "./core/modules/json-schema/json-schema-receipt.ss"))
+      (eval '(import "./core/modules/json-schema/json-schema-validate.ss"))
       (eval '(import :core/module-system/schema/slot-contracts))
-      (eval '(import "./src/type-facts/objects.ss"))
+      (eval '(import "./core/type-facts/objects.ss"))
       (eval '(import :clan/poo/mop))
       (json-schema-native-eval
  '(def +json-schema-native-artifact+

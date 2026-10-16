@@ -7,7 +7,7 @@
         (only-in :core/profile-composition/profile-bundle
                  profiles compose)
         :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
+        :poo-flow/modules/workflow/scenario/composition-syntax
         :poo-flow/user-interface/profiles/langgraph)
 (export LangGraphProductionProfile langgraph-scenario)
 

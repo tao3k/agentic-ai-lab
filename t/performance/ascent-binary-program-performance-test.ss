@@ -11,7 +11,7 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :poo-flow/src/qualification/ascent-binary-program
+        (only-in :poo-flow/modules/workflow/qualification/ascent-binary-program
                  poo-flow-ascent-binary-relation
                  poo-flow-ascent-binary-copy-rule
                  poo-flow-ascent-binary-join-rule

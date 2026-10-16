@@ -9,7 +9,7 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list filter)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/src/utilities/functional
+        (only-in :core/utilities/functional
                  poo-flow-all? poo-flow-map)
         "types.ss"
         "objects.ss"

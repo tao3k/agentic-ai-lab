@@ -8,7 +8,7 @@
 ;;; append logs, claim leases, retain artifacts, or attach sandbox handles.
 
 (import :poo-flow/modules/ai-agentic-context/features/memory/durable/store-operation
-        :poo-flow/src/utilities/final-projection-syntax)
+        :core/utilities/final-projection-syntax)
 
 (export poo-flow-durable-runtime-store-operations-from-rows
         poo-flow-durable-runtime-store-rows->marlin-handoff)

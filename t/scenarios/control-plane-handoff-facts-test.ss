@@ -4,7 +4,7 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/src/graph/control-plane-handoff-facts)
+        :poo-flow/modules/workflow/graph/control-plane-handoff-facts)
 
 (def control-plane-handoff-facts-test
   (test-suite "control-plane handoff facts"

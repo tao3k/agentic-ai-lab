@@ -5,8 +5,8 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/contract/release-assurance-manifest
-        :poo-flow/src/contract/release-assurance-claim-verifier)
+        :poo-flow/modules/workflow/contracts/release-assurance-manifest
+        :poo-flow/modules/workflow/contracts/release-assurance-claim-verifier)
 
 (export release-assurance-claim-verifier-test)
 

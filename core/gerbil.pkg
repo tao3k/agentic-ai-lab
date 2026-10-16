@@ -1,8 +1,0 @@
-;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
-;;;
-;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-
-(package:
- core
- depend:
- ("github.com/tao3k/gerbil-poo@099b381588360a8a49fd772f666a1a00351366f5"))

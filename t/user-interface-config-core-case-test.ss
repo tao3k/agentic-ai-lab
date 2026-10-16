@@ -12,7 +12,7 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         "user-interface-fixtures.ss"
-        (only-in :poo-flow/src/user-interface/profile-core
+        (only-in :poo-flow/modules/user-interface/profile-core
                  pooFlowUserConfigFromProfile
                  poo-flow-user-profile?
                  poo-flow-user-profile-name
@@ -20,7 +20,7 @@
         (only-in :poo-flow/testing-api
                  +poo-flow-testing-interface+
                  poo-flow-testing-admit-user-profile!)
-        (only-in :poo-flow/src/user-interface/module-selection
+        (only-in :poo-flow/modules/user-interface/module-selection
                  poo-flow-user-config?
                  poo-flow-user-config-modules
                  poo-flow-user-config-module-keys

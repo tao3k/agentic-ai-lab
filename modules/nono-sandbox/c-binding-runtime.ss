@@ -11,7 +11,7 @@
 
 ;;; Native nono C binding runtime manifest projection.
 ;;; - Keep sandbox manifests validated before runtime dry-run, smoke, or live receipts are emitted.
-(import (only-in :poo-flow/src/core/failure raise-control-plane-failure)
+(import (only-in :poo-flow/modules/workflow/control-plane/failure raise-control-plane-failure)
         :poo-flow/modules/agent-sandbox/alist
         :poo-flow/modules/agent-sandbox/profile
         :poo-flow/modules/agent-sandbox/bridge

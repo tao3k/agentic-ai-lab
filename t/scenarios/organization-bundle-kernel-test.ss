@@ -4,8 +4,8 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :clan/poo/object :std/test
-        :poo-flow/src/semantic/organization-bundle
-        :poo-flow/src/semantic/organization-bundle-kernel)
+        :poo-flow/modules/query/semantic/organization-bundle
+        :poo-flow/modules/query/semantic/organization-bundle-kernel)
 
 
 (def (bundle epoch child-authority)

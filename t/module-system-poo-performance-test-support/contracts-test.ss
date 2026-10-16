@@ -16,7 +16,7 @@
         "../support/poo-performance-fixtures"
         "../support/poo-performance"
         :core/object-family/indexed
-        :poo-flow/src/core/runtime-protocol
+        :poo-flow/modules/workflow/control-plane/runtime-protocol
         :core/module-system/schema/interface
         :core/extension-graph/interface
         :core/module-system/schema/validation)

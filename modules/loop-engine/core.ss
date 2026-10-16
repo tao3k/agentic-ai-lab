@@ -13,12 +13,12 @@
         (only-in :poo-flow/modules/session/selector
                  poo-flow-session-selector-receipt?
                  poo-flow-session-selector-receipt->alist)
-        (only-in :poo-flow/src/loops/spec-evolution
+        (only-in :poo-flow/modules/loop-engine/control/spec-evolution
                  spec-evolution-review-item?
                  spec-evolution-review-item->alist
                  spec-evolution-review-item->human-audit-review-item
                  spec-evolution-review-item->runtime-manifest-row)
-        :poo-flow/src/user-interface/module-selection
+        :poo-flow/modules/user-interface/module-selection
         "prototypes.ss"
         "contract.ss"
         "kind-contract.ss"

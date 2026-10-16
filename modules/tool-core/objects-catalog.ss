@@ -6,7 +6,7 @@
 ;;; Boundary: POO-native tool catalogs, lookups, and final projections.
 
 (import (only-in :clan/poo/object .ref object? object<-alist)
-        :poo-flow/src/utilities/final-projection-syntax
+        :core/utilities/final-projection-syntax
         :poo-flow/modules/session/objects
         :poo-flow/modules/tool-core/objects-spec
         :poo-flow/modules/tool-core/objects-support)

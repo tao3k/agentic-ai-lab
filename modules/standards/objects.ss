@@ -13,7 +13,7 @@
         (only-in :std/encoding/hex hex-encode)
         (only-in :core/object-family/syntax
                  defpoo-object-family)
-        (only-in :poo-flow/src/utilities/functional poo-flow-all?)
+        (only-in :core/utilities/functional poo-flow-all?)
         "types.ss")
 
 (export poo-flow-standard-feature-module

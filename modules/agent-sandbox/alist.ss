@@ -8,7 +8,7 @@
 ;;; Runtime contract: this module performs no backend selection or execution.
 ;;; Policy evidence: larger extension owners should import these helpers.
 
-(import :poo-flow/src/utilities/functional)
+(import :core/utilities/functional)
 
 (export agent-sandbox-option
         agent-sandbox-alist-ref

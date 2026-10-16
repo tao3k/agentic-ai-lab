@@ -5,9 +5,9 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/contract/release-assurance-manifest
-        :poo-flow/src/core/object-syntax
-        :poo-flow/src/qualification/capability-prototypes)
+        :poo-flow/modules/workflow/contracts/release-assurance-manifest
+        :core/object-family/role-syntax
+        :poo-flow/modules/workflow/qualification/capability-prototypes)
 
 
 (def tcb

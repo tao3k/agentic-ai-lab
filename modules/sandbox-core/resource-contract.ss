@@ -16,8 +16,8 @@
                  poo-flow-contract-value-type
                  poo-flow-native-contract
                  poo-flow-native-contract->alist)
-        :poo-flow/src/utilities/final-projection-syntax
-        :poo-flow/src/type-facts/objects)
+        :core/utilities/final-projection-syntax
+        :core/type-facts/objects)
 
 (export poo-flow-runtime-filesystem-prototype
         poo-flow-runtime-volume-filesystem-prototype

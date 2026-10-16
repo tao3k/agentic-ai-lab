@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :poo-flow/src/core/flow-strand
+        (only-in :poo-flow/modules/workflow/control-plane/flow-strand
                  default-flow-strand-registry
                  flow-strand-for-kind-in
                  flow-strand-registry-descriptors

@@ -11,7 +11,7 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :poo-flow/src/feature-system/domain-case/interface)
+        :core/feature-system/domain-case/interface)
 
 (export domain-case-structural-performance-test)
 

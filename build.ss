@@ -39,60 +39,64 @@
 (def +runtime-v0-native-ffi-spec+
   (cond-expand
    (darwin
-    '(gxc: "src/ffi/runtime-v0-native"
+    '(gxc: "modules/workflow/runtime/runtime-v0-native"
            "-ld-options" "-Wl,-undefined,dynamic_lookup"))
    (else
-    '(gxc: "src/ffi/runtime-v0-native"))))
+    '(gxc: "modules/workflow/runtime/runtime-v0-native"))))
 
 (def +semantic-native-ffi-spec+
   (cond-expand
-   (darwin '(gxc: "src/ffi/semantic" "-ld-options" "-Wl,-undefined,dynamic_lookup"))
-   (else '(gxc: "src/ffi/semantic"))))
+   (darwin '(gxc: "modules/workflow/runtime/semantic" "-ld-options" "-Wl,-undefined,dynamic_lookup"))
+   (else '(gxc: "modules/workflow/runtime/semantic"))))
 
 (asp-gerbil-scheme-package-spec!
  (poo-flow-package-spec
  @ asp-gerbil-scheme-library-package-prototype)
  (spec poo-flow-native-spec)
  (public-entry-modules
-  '("src/core/api.ss"
+  '("init.ss"
+    "modules/funflow/profiles/gerbil-scheme.ss"
+    "modules/funflow/native-scope.ss"
+    "modules/workflow/scenario/bundle-v1-projection.ss"
+    "modules/workflow/control-plane/api.ss"
     "testing-api.ss"
-    "src/graph/interface.ss"
-    "src/authoring/module-descriptor.ss"
-    "src/user-interface/module-activation.ss"
-    "src/user-interface/module-selection-syntax.ss"
-    "src/authoring/module-source-collection.ss"
-    "src/building/official-contributions.ss"
-    "src/user-interface/module-source-selection.ss"
-    "src/user-interface/module-source-tree.ss"
-    "src/authoring/source-authoring.ss"
-    "src/testing/source-admission.ss"
-    "src/user-interface/module-diagnostics.ss"
-    "src/user-interface/doctor-presentation.ss"
-    "src/building/build-projection.ss"
-    "src/proof/composition-facts.ss"
-    "src/scenario/profile-root.ss"
-    "src/scenario/composition-syntax.ss"
-    "src/scenario/case.ss"
-    "src/scenario/accessors.ss"
-    "src/scenario/workload.ss"
-    "src/scenario/plan-projection.ss"
-    "src/user-interface/profile-core.ss"
-    "src/user-interface/init-declaration-syntax.ss"
+
+    "modules/module-authoring/module-descriptor.ss"
+    "modules/user-interface/module-activation.ss"
+    "modules/user-interface/module-selection-syntax.ss"
+    "modules/module-authoring/module-source-collection.ss"
+    "modules/building/official-contributions.ss"
+    "modules/user-interface/module-source-selection.ss"
+    "modules/user-interface/module-source-tree.ss"
+    "modules/module-authoring/source-authoring.ss"
+    "modules/testing/source-admission.ss"
+    "modules/user-interface/module-diagnostics.ss"
+    "modules/user-interface/doctor-presentation.ss"
+    "modules/building/build-projection.ss"
+    "modules/proof/projections/composition-facts.ss"
+    "modules/workflow/scenario/profile-root.ss"
+    "modules/workflow/scenario/composition-syntax.ss"
+    "modules/workflow/scenario/case.ss"
+    "modules/workflow/scenario/accessors.ss"
+    "modules/workflow/scenario/workload.ss"
+    "modules/workflow/scenario/plan-projection.ss"
+    "modules/user-interface/profile-core.ss"
+    "modules/user-interface/init-declaration-syntax.ss"
     "modules/session/interface.ss"
     "modules/funflow/interface.ss"
     "modules/ai-agentic-context/interface.ss"
     "modules/funflow/runtime-load-projection.ss"
-    "src/profiles/human-ai-capability.ss"
-    "src/profiles/agentic-research.ss"
+    "modules/workflow/profiles/human-ai-capability.ss"
+    "modules/workflow/profiles/agentic-research.ss"
     "modules/authorization/interface.ss"
     "modules/authorization/providers/cedar/interface.ss"
     "modules/governance/interface.ss"
     "modules/proof/interface.ss"
     "modules/ai-agentic-context/use-host.ss"
     "modules/ai-agentic-context/session-host.ss"
-    "src/semantic/context-restriction.ss"
-    "src/semantic/orgize-interface.ss"
-    "src/semantic/orgize-source-interface.ss"
+    "modules/query/semantic/context-restriction.ss"
+    "modules/query/semantic/orgize-interface.ss"
+    "modules/query/semantic/orgize-source-interface.ss"
     "modules/query/interface.ss"
     "modules/search-engine/interface.ss"
     "modules/query/rust-ir.ss"
@@ -101,16 +105,16 @@
     "modules/temporal-causality/ascent-exchange.ss"
     ;; Advanced embedded owner projections must ship in the installed package.
     ;; Ordinary authoring continues through the POO-native Temporal interface.
-    "src/ffi/scheme-wire.ss"
-    "src/ffi/temporal-policy.ss"
-    "src/ffi/context-use.ss"
-    "src/ffi/temporal-proof.ss"
-    "src/ffi/temporal-proof-host.ss"
-    "src/feature-system/interface.ss"))
+    "modules/workflow/runtime/scheme-wire.ss"
+    "modules/workflow/runtime/temporal-policy.ss"
+    "modules/workflow/runtime/context-use.ss"
+    "modules/workflow/runtime/temporal-proof.ss"
+    "modules/workflow/runtime/temporal-proof-host.ss"
+))
  (exclude-dirs +poo-flow-build-exclude-dirs+)
  (exclude-modules '("modules/nono-sandbox/_nono.ss"
-                    "src/ffi/runtime-v0-native.ss"
-                    "src/ffi/semantic.ss"
+                    "modules/workflow/runtime/runtime-v0-native.ss"
+                    "modules/workflow/runtime/semantic.ss"
                     "observe-contribute-import.ss"
                     "performance-tests.ss"
                     "run-contribute-test.ss"))

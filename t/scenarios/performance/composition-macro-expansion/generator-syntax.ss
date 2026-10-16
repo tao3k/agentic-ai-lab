@@ -7,7 +7,7 @@
 
 (import (only-in :clan/poo/object .def)
         :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
+        :poo-flow/modules/workflow/scenario/composition-syntax
         (only-in :core/profile-composition/profile-bundle
                  compose profiles)
         (for-syntax

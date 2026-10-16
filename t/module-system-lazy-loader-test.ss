@@ -20,19 +20,19 @@
                  test-suite)
         "./support/performance"
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-p95-elapsed-ms)
-        (only-in :poo-flow/src/core/failure
+        (only-in :poo-flow/modules/workflow/control-plane/failure
                  execution-failure?
                  execution-failure-code)
-        (only-in :poo-flow/src/user-interface/module-selection-syntax poo-flow-modules!)
-        :poo-flow/src/authoring/module-imports
+        (only-in :poo-flow/modules/user-interface/module-selection-syntax poo-flow-modules!)
+        :poo-flow/modules/module-authoring/module-imports
         :core/module-system/source/objects
-        :poo-flow/src/authoring/module-descriptor
+        :poo-flow/modules/module-authoring/module-descriptor
         :core/extension-graph/interface
         :core/module-system/loader/objects
-        :poo-flow/src/authoring/module-source-collection
-        :poo-flow/src/building/official-contributions
-        :poo-flow/src/user-interface/module-source-selection
-        :poo-flow/src/user-interface/module-source-tree)
+        :poo-flow/modules/module-authoring/module-source-collection
+        :poo-flow/modules/building/official-contributions
+        :poo-flow/modules/user-interface/module-source-selection
+        :poo-flow/modules/user-interface/module-source-tree)
 
 (export module-system-lazy-loader-test)
 
@@ -252,22 +252,22 @@
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "src/user-interface/profile-config.ss"
+          (check-equal? (if (member "modules/user-interface/profile-config.ss"
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "src/user-interface/init-syntax.ss"
+          (check-equal? (if (member "modules/user-interface/init-syntax.ss"
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "src/user-interface/root-profile.ss"
+          (check-equal? (if (member "modules/user-interface/root-profile.ss"
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "src/user-interface/declaration-case.ss"
+          (check-equal? (if (member "modules/user-interface/declaration-case.ss"
                                     source-values)
                           #t
                           #f)

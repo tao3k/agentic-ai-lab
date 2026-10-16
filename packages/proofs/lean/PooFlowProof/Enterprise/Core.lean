@@ -2,7 +2,7 @@
 --
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-import PooFlowProof.PooC4.ContributorRepositoryQualification
+import PooFlowCoreProof.PooC4.ContributorRepositoryQualification
 
 namespace PooFlowProof.Enterprise.Core
 

@@ -4,7 +4,7 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :clan/poo/object :std/test
-        :poo-flow/src/contract/organization-bundle-runtime-v0-batch)
+        :poo-flow/modules/workflow/contracts/organization-bundle-runtime-v0-batch)
 
 
 (def (id high low) (poo-flow-runtime-v0-compact-id high low))

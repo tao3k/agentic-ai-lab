@@ -7,9 +7,9 @@
 ;;; Invariant: this module must keep profile objects POO-native while emitting
 ;;; stable bounded receipts for policy and parser-owned validation.
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :poo-flow/src/core/runtime-protocol
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-protocol
                  +runtime-request-schema+)
-        (only-in :poo-flow/src/core/runtime-command-descriptor
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
         :poo-flow/modules/ai-agentic-context/features/memory/durable/artifact-profile
         :poo-flow/modules/ai-agentic-context/features/memory/durable/artifact-object

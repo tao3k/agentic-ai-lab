@@ -10,7 +10,7 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :poo-flow/src/qualification/ascent-closure-candidates
+        (only-in :poo-flow/modules/workflow/qualification/ascent-closure-candidates
                  poo-flow-ascent-closure-candidates))
 
 (export ascent-shortest-candidates-performance-test)

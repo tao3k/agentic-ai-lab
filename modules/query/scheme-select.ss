@@ -6,7 +6,7 @@
 ;;; POO nodes and executes MATCH, optional property equality, and RETURN.
 ;;; Path joins and external source admission are outside this small API.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :poo-flow/src/utilities/functional
+        (only-in :core/utilities/functional
                  poo-flow-all? poo-flow-filter-map poo-flow-map)
         (only-in "types.ss" poo-flow-query?)
         (only-in "contracts.ss" poo-flow-query-source-content-identity))

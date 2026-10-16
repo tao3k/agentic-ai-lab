@@ -7,9 +7,9 @@
 ;;; projection helpers for CI/CD runtime handoff.
 
 (import (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/core/runtime-protocol
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-protocol
                  +runtime-request-schema+)
-        (only-in :poo-flow/src/core/runtime-command-descriptor
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
         :poo-flow/modules/workflow/types
         :poo-flow/modules/workflow/objects

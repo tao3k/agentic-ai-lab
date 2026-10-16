@@ -20,23 +20,23 @@
     :asp-gerbil-scheme/src/testing/extension
     :asp-gerbil-scheme/testing-api
     :core/observability/output
-    :poo-flow/src/testing/testing-extension
+    :poo-flow/modules/testing/testing-extension
     :core/module-system/schema/relations
     :core/module-system/types
     :core/module-system/config
     :core/module-system/objects
-    :poo-flow/src/authoring/semantic-module
-    :poo-flow/src/authoring/module-interface
+    :poo-flow/modules/module-authoring/semantic-module
+    :poo-flow/modules/module-authoring/module-interface
     :core/object-family/syntax
-    :poo-flow/src/utilities/product-syntax
-    :poo-flow/src/utilities/final-projection-syntax
+    :core/utilities/product-syntax
+    :core/utilities/final-projection-syntax
     :core/module-system/source/objects
-    :poo-flow/src/authoring/module-imports
-    :poo-flow/src/user-interface/selection-flags
-    :poo-flow/src/user-interface/module-selection
-    :poo-flow/src/user-interface/profile-core
-    :poo-flow/src/utilities/functional
-    :poo-flow/src/user-interface/profile-policy
+    :poo-flow/modules/module-authoring/module-imports
+    :poo-flow/modules/user-interface/selection-flags
+    :poo-flow/modules/user-interface/module-selection
+    :poo-flow/modules/user-interface/profile-core
+    :core/utilities/functional
+    :poo-flow/modules/user-interface/profile-policy
     :poo-flow/testing-api
     :poo-flow/modules/temporal-causality/time/types
     :poo-flow/modules/temporal-causality/time/objects

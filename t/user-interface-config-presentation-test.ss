@@ -11,9 +11,9 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/presentation
-        :poo-flow/src/user-interface/init-syntax
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/user-interface/presentation
+        :poo-flow/modules/user-interface/init-syntax
         :poo-flow/modules/agent-sandbox/config
         (only-in "../user-interface/custom/my-module/profiles/agent-sandbox-audit"
                  poo-flow-custom-module-agent-sandbox-audit-module))

@@ -13,7 +13,7 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :poo-flow/src/qualification/ascent-table-expression
+        (only-in :poo-flow/modules/workflow/qualification/ascent-table-expression
                  poo-flow-ascent-table-expression-prototype)
         (only-in :poo-flow/t/scenarios/performance/ascent-table-expression/baseline
                  ascent-table-expression-baseline))

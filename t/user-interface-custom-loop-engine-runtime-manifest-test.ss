@@ -11,10 +11,10 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax
-        (only-in :poo-flow/src/loops/governor-marlin
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/user-interface/interface
+        :poo-flow/modules/user-interface/init-syntax
+        (only-in :poo-flow/modules/loop-engine/control/governor-marlin
                  +loop-governor-marlin-loop-engine-discovery-schema+
                  loop-governor-marlin-loop-engine-discovery)
         (only-in :poo-flow/modules/cubeSandbox/config

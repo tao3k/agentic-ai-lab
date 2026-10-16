@@ -15,15 +15,15 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :poo-flow/src/loops/descriptor
+        (only-in :poo-flow/modules/loop-engine/control/descriptor
                  make-loop-pattern-descriptor)
-        (only-in :poo-flow/src/loops/strategy
+        (only-in :poo-flow/modules/loop-engine/control/strategy
                  make-loop-strategy-plan)
-        (only-in :poo-flow/src/loops/governor-core
+        (only-in :poo-flow/modules/loop-engine/control/governor-core
                  make-loop-governor)
-        (only-in :poo-flow/src/loops/governor
+        (only-in :poo-flow/modules/loop-engine/control/governor
                  loop-governor->contract)
-        :poo-flow/src/loops/human-audit)
+        :poo-flow/modules/loop-engine/control/human-audit)
 
 (export loop-human-audit-performance-test)
 

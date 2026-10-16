@@ -35,7 +35,7 @@
                  SemanticImports. poo-flow-semantic-identity
                  poo-flow-empty-imports poo-flow-empty-capabilities
                  poo-flow-empty-profiles)
-        :poo-flow/src/authoring/semantic-module)
+        :poo-flow/modules/module-authoring/semantic-module)
 (export observability-framework-test)
 
 (def (framework-id name) (poo-flow-observation-identity 'test name 'v1))

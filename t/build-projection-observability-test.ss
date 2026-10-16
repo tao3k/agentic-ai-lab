@@ -7,9 +7,9 @@
          (only-in :std/test test-suite check-equal?)
         (only-in :std/misc/ports read-all-as-string)
         (only-in :clan/poo/object .o)
-        (only-in :poo-flow/src/building/build-config
+        (only-in :poo-flow/modules/building/build-config
                  poo-flow-default-build-observability-policy)
-        (only-in :poo-flow/src/building/build-projection
+        (only-in :poo-flow/modules/building/build-projection
                  poo-flow-make-observed-package-spec-projector
                  poo-flow-observe-build-projection
                  poo-flow-build-elapsed-milliseconds)
@@ -31,7 +31,7 @@
           ((poo-flow-make-observed-package-spec-projector
             (lambda (_package-spec)
               (set! projected? #t)
-              '("src/core/api.ss" "src/authoring/module-descriptor.ss"))
+              '("modules/workflow/control-plane/api.ss" "modules/module-authoring/module-descriptor.ss"))
             poo-flow-default-build-observability-policy)
            package-spec))
         (let (output (get-output-string port))

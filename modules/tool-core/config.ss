@@ -8,8 +8,8 @@
 
 (import
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/authoring/module-config-syntax
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/module-authoring/module-config-syntax
         :poo-flow/modules/tool-core/objects)
 
 (export (import: :poo-flow/modules/tool-core/objects)

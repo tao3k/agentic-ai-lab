@@ -11,7 +11,7 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        (only-in :poo-flow/src/utilities/functional
+        (only-in :core/utilities/functional
                  poo-flow-stable-duplicates))
 
 (export utilities-functional-performance-test)

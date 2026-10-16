@@ -8,7 +8,7 @@
 ;;; hidden behind an ordinary POO lazy slot reference.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/hash/misc hash-remove!)
-        (only-in :poo-flow/src/utilities/functional poo-flow-find)
+        (only-in :core/utilities/functional poo-flow-find)
         "types.ss"
         "objects.ss")
 

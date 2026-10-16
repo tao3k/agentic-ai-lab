@@ -5,7 +5,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/qualification/agentic-control-plane-fixture)
+        :poo-flow/modules/workflow/qualification/agentic-control-plane-fixture)
 
 
 (def canonical-fixture

@@ -9,7 +9,7 @@
 
 (import (only-in :clan/poo/object .o .ref object?)
         :poo-flow/modules/session/objects
-        (only-in :poo-flow/src/semantic/orgize-interface
+        (only-in :poo-flow/modules/query/semantic/orgize-interface
                  org-element-graph-view?
                  org-element-graph-id-of
                  org-named-element-query?

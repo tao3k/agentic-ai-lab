@@ -8,8 +8,8 @@
 
 (import :poo-flow/modules/cubeSandbox/objects
         :poo-flow/modules/sandbox-core/objects
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/utilities/final-projection-syntax)
+        :poo-flow/modules/user-interface/module-selection
+        :core/utilities/final-projection-syntax)
 
 (export poo-flow-cubeSandbox-module-bundles
         poo-flow-cubeSandbox-config-flags

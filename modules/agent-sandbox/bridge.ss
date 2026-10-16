@@ -11,14 +11,14 @@
 ;;; Runtime contract: real sandbox execution stays behind runtime commands.
 ;;; Policy evidence: runtime command tests should assert this projection surface.
 
-(import (only-in :poo-flow/src/core/task
+(import (only-in :poo-flow/modules/workflow/control-plane/task
                  execution-request? execution-request-kind
                  execution-request-request)
-        (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        (only-in :poo-flow/src/core/runtime-adapter rust-request-envelope)
-        (only-in :poo-flow/src/core/runtime-protocol
+        (only-in :poo-flow/modules/workflow/control-plane/failure raise-control-plane-failure)
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-adapter rust-request-envelope)
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-protocol
                  make-adapter-result normalize-runtime-response)
-        (only-in :poo-flow/src/core/runtime-command-invocation
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-command-invocation
                  runtime-command-call)
         :poo-flow/modules/agent-sandbox/alist
         :poo-flow/modules/agent-sandbox/projection-syntax

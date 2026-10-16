@@ -14,7 +14,7 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files([
     "gerbil-dependencies.MODULE.bazel",
-    "t/feature-system-bundle-v1-foreign-arena-fixture.ss",
+    "core/t/feature-system-bundle-v1-foreign-arena-fixture.ss",
     "t/module-system-observability-test.ss",
     "t/profile-binding-syntax-test.ss",
     "t/profile-bundle-test.ss",
@@ -23,7 +23,7 @@ exports_files([
 
 filegroup(
     name = "runtime_v0_schema",
-    srcs = ["src/contract/runtime-v0-abi-schema.ss"],
+    srcs = ["modules/workflow/contracts/runtime-v0-abi-schema.ss"],
 )
 
 filegroup(
@@ -34,8 +34,7 @@ filegroup(
         "*.ss",
         "bindings/nono-c/**/*.h",
         "modules/**/*.ss",
-        "src/**/*.inc",
-        "src/**/*.ss",
+        "modules/**/*.inc",
         "user-interface/**/*.ss",
     ]),
 )

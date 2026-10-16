@@ -5,8 +5,8 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :clan/poo/object
         :std/test
-        :poo-flow/src/contract/organization-bundle
-        :poo-flow/src/semantic/organization-bundle)
+        :poo-flow/modules/workflow/contracts/organization-bundle
+        :poo-flow/modules/query/semantic/organization-bundle)
 
 
 (def (canonical-bundle . reverse-order?)

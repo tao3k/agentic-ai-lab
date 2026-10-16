@@ -12,8 +12,8 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :poo-flow/src/graph/types
-        :poo-flow/src/graph/algorithms)
+        :core/graph/types
+        :core/graph/algorithms)
 
 (export graph-algorithm-performance-test)
 

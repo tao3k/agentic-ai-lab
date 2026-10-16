@@ -5,7 +5,8 @@
 
 ;;; Boundary: task-family descriptor tests stay separate from flow execution.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import :core/composition/roles
+        (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -16,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
+        :poo-flow/modules/workflow/control-plane/api
         :poo-flow/modules/workflow/store)
 
 ;;; This suite keeps task-family routing policy executable without invoking

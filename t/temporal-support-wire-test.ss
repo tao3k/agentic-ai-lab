@@ -2,8 +2,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :poo-flow/testing-api poo-flow-test-case)
-        :poo-flow/src/ffi/scheme-wire
-        :poo-flow/src/ffi/temporal-support :poo-flow/src/ffi/temporal-policy)
+        :poo-flow/modules/workflow/runtime/scheme-wire
+        :poo-flow/modules/workflow/runtime/temporal-support :poo-flow/modules/workflow/runtime/temporal-policy)
 (export temporal-support-wire-test)
 (def (wire x) (scheme-wire-read (scheme-wire-write x)))
 (def (revision id op predecessor n)

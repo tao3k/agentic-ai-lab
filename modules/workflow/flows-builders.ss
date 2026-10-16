@@ -6,16 +6,16 @@
 ;;; Boundary: composed workflow builders for Docker, Store, Tensorflow, and makefile examples.
 ;;; Invariant: builders produce descriptors and runtime command manifests only.
 
-(import (only-in :poo-flow/src/core/task
+(import (only-in :poo-flow/modules/workflow/control-plane/task
                  execution-request-request execution-request-plan-id)
-        (only-in :poo-flow/src/core/strategy make-local-eager-strategy)
-        (only-in :poo-flow/src/core/runtime-adapter make-rust-adapter)
-        (only-in :poo-flow/src/core/config make-run-config)
-        (only-in :poo-flow/src/core/flow
+        (only-in :poo-flow/modules/workflow/control-plane/strategy make-local-eager-strategy)
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-adapter make-rust-adapter)
+        (only-in :poo-flow/modules/workflow/control-plane/config make-run-config)
+        (only-in :poo-flow/modules/workflow/control-plane/flow
                  default-flow-declaration-registry external-flow flow-then)
-        (only-in :poo-flow/src/core/runtime-command-descriptor
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-command-descriptor
                  make-stdout-runtime-command-descriptor)
-        :poo-flow/src/core/projection-syntax
+        :poo-flow/modules/workflow/control-plane/projection-syntax
         :poo-flow/modules/docker/funs
         :poo-flow/modules/workflow/store)
 

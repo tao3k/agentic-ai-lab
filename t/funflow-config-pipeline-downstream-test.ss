@@ -7,9 +7,9 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test check-equal? test-suite)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/user-interface/interface
+        :poo-flow/modules/user-interface/init-syntax
         :poo-flow/modules/agent-sandbox/config
         :poo-flow/modules/workflow/interface)
 

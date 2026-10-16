@@ -8,7 +8,7 @@
 ;;; Marlin owns fact logs, checkpoints, indexes, leases, replay, and repair.
 
 (import (only-in :clan/poo/object .o .ref .slot? object? object<-alist)
-        :poo-flow/src/utilities/final-projection-syntax)
+        :core/utilities/final-projection-syntax)
 
 (export +poo-flow-durable-policy-kind+
         +poo-flow-durable-policy-schema+

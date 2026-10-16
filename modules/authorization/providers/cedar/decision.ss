@@ -7,7 +7,7 @@
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        :poo-flow/src/policy/authorized-effect-token)
+        :poo-flow/modules/governance/policy/authorized-effect-token)
 
 (export poo-flow-cedar-decision
         poo-flow-cedar-decision-permit?

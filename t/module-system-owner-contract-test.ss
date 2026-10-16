@@ -17,23 +17,23 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o .ref)
-        :poo-flow/src/core/api
-        :poo-flow/src/authoring/module-interface
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/authoring/module-descriptor
-        :poo-flow/src/user-interface/module-authoring-syntax
-        :poo-flow/src/authoring/module-option-projection
-        :poo-flow/src/user-interface/module-runtime-presentation
-        :poo-flow/src/user-interface/module-value-catalog
+        :poo-flow/modules/workflow/control-plane/api
+        :poo-flow/modules/module-authoring/module-interface
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/module-authoring/module-descriptor
+        :poo-flow/modules/user-interface/module-authoring-syntax
+        :poo-flow/modules/module-authoring/module-option-projection
+        :poo-flow/modules/user-interface/module-runtime-presentation
+        :poo-flow/modules/user-interface/module-value-catalog
         :core/module-system/projection/option-objects
         :core/module-system/projection/option-validation
-        :poo-flow/src/authoring/module-imports
+        :poo-flow/modules/module-authoring/module-imports
         :core/module-system/source/objects
         :core/module-system/funs
-        :poo-flow/src/user-interface/module-activation
+        :poo-flow/modules/user-interface/module-activation
         :core/module-system/catalog/objects
-        :poo-flow/src/user-interface/presentation
-        :poo-flow/src/user-interface/facade)
+        :poo-flow/modules/user-interface/presentation
+        :poo-flow/modules/user-interface/interface)
 
 (export module-system-owner-contract-test)
 
@@ -62,7 +62,7 @@
     (poo-flow-test-case "keeps the user-interface facade independent of concrete modules"
       (check-equal?
        (call-with-input-file
-        "src/user-interface/facade.ss"
+        "modules/user-interface/facade.ss"
         (lambda (port)
           (source-port-has-module-prefix?
            port

@@ -5,8 +5,8 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/core/object-syntax
-        :poo-flow/src/qualification/capability-prototypes)
+        :core/object-family/role-syntax
+        :poo-flow/modules/workflow/qualification/capability-prototypes)
 
 
 (def capability-prototypes-test

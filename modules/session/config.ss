@@ -7,7 +7,7 @@
 ;;; Invariant: configuration composes the module-owned syntax surface only.
 
 (import "syntax.ss" "descriptor.ss"
-        :poo-flow/src/user-interface/module-selection)
+        :poo-flow/modules/user-interface/module-selection)
 (export (import: "syntax.ss") (import: "descriptor.ss")
         poo-flow-session-module-bundles)
 

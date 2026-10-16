@@ -7,10 +7,10 @@
 
 (import (only-in :clan/poo/object .ref)
         "./performance"
-        (only-in :poo-flow/src/user-interface/module-selection
+        (only-in :poo-flow/modules/user-interface/module-selection
                  poo-flow-settings
                  pooFlowUserConfig)
-        (only-in :poo-flow/src/user-interface/presentation-config
+        (only-in :poo-flow/modules/user-interface/presentation-config
                  pooFlowUserConfigPresentation))
 
 (export funflow-config-pipeline-scenario-count

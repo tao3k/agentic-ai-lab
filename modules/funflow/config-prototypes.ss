@@ -7,7 +7,7 @@
 ;;; Invariant: this owner declares static prototype slots and predicates only.
 
 (import (only-in :clan/poo/object .ref)
-        :poo-flow/src/authoring/module-config-syntax)
+        :core/profile-composition/module-prototype-syntax)
 
 (export funflow-check
         funflow-pipeline

@@ -8,20 +8,20 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :clan/poo/object .all-slots .def .o .ref .slot?)
         (only-in :std/test check-equal? test-suite)
-        :poo-flow/src/graph/types
-        :poo-flow/src/graph/algorithms
-        :poo-flow/src/graph/control-analysis
-        :poo-flow/src/graph/runtime-executor
-        :poo-flow/src/user-interface/init-syntax
-        (only-in :poo-flow/src/scenario/composition-syntax
+        :core/graph/types
+        :core/graph/algorithms
+        :core/graph/control-analysis
+        :poo-flow/modules/workflow/graph/runtime-executor
+        :poo-flow/modules/user-interface/init-syntax
+        (only-in :poo-flow/modules/workflow/scenario/composition-syntax
                  user-composition)
         :core/profile-composition/profile-bundle
         (rename-in
          (only-in :core/profile-composition/selection-syntax
                   use-module)
          (use-module use-profile-module))
-        :poo-flow/src/scenario/accessors
-        (only-in :poo-flow/src/scenario/case poo-flow-scenario-case?)
+        :poo-flow/modules/workflow/scenario/accessors
+        (only-in :poo-flow/modules/workflow/scenario/case poo-flow-scenario-case?)
         :poo-flow/user-interface/profiles/langchain
         :poo-flow/user-interface/profiles/langgraph
         :poo-flow/user-interface/scenarios/langchain/scenario

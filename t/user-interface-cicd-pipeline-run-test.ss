@@ -11,9 +11,9 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/presentation-config
-        :poo-flow/src/user-interface/init-syntax
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/user-interface/presentation-config
+        :poo-flow/modules/user-interface/init-syntax
         (only-in "../user-interface/custom/my-module/cases/cicd-owner"
                  poo-flow-custom-my-module-cicd-module
                  poo-flow-custom-my-module-funflow-cicd-case))

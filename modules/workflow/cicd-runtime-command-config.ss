@@ -7,7 +7,7 @@
 ;;; Invariant: manifest summaries preserve declaration order and record only
 ;;; policy data, while Marlin owns execution, process lifecycle, and retries.
 
-(import :poo-flow/src/user-interface/module-selection
+(import :poo-flow/modules/user-interface/module-selection
         :poo-flow/modules/sandbox-core/profile-catalog
         :poo-flow/modules/funflow/config
         :poo-flow/modules/workflow/types

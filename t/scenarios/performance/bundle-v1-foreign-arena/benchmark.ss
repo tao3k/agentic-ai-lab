@@ -4,9 +4,9 @@
 
 (import :gerbil/runtime/gambit
         :clan/poo/object
-        :poo-flow/src/utilities/functional
-        :poo-flow/src/feature-system/bundle-v1-lowering
-        :poo-flow/src/feature-system/bundle-v1-foreign-arena)
+        :core/utilities/functional
+        :core/feature-system/bundle-v1-lowering
+        :core/feature-system/bundle-v1-foreign-arena)
 
 (def +benchmark-schema+
   'poo-flow.bundle-v1-foreign-arena.benchmark.v1)

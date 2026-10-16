@@ -1,0 +1,300 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Config Languages 12: Reusing Schema Contracts Through the Guestbook Chain
+#+date: [2026-10-16]
+#+filetags: :config-language:guestbook:contracts:comparison:design:
+#+property: STATUS source-grounded-design-no-implementation-no-loader
+
+* The objective is one connected configuration chain
+
+Read alongside [[file:11-guestbook-source-comparison.org][the pinned Guestbook comparison and evolution experiment]]. The
+question is how to reuse existing schema infrastructure all the way to an
+inspectable final plan. It is not whether to rebuild a Contract engine. Keep
+schema generation, Profile defaults, final admission, resource generation and
+runtime execution distinct while connecting their inputs and evidence.
+
+The actual [[file:scenarios/nickel/omnibus-ncl/aws/main.ncl][Omnibus AWS input]] imports tf-ncl-schema.ncl, applies Aws.Simple and
+Aws.S3Backend, and ends with Tf.Config. Its [[file:scenarios/nickel/omnibus-ncl/aws/flake.nix][development environment]] declares the
+tf-ncl dependency and aws/null/external providers. The generated schema file is
+not tracked in the pinned tree; its generation and Terraform deployment were not
+executed here. The useful ecosystem pattern is provider schemas -> generated
+Nickel Contracts -> maintained business configuration -> Terraform configuration
+JSON -> explicit Terraform execution. Deployment success is a separate claim.
+
+The actual [[file:scenarios/kcl/konfig/examples/appops/guestbook/base/base.k][KCL Guestbook]] follows frontend.Server/container/service schemas ->
+base and environment inputs -> [[file:scenarios/kcl/konfig/models/kube/backend/server_backend.k][ServerBackend]] and ServiceMixin -> typed Kubernetes
+resources -> [[file:scenarios/kcl/konfig/models/kube/render/render.k][manifest rendering]]. kcl.mod locks the k8s package version. We have
+not inspected that OCI package's schema-generation pipeline or executed it; do not
+invent an exact JSON-Schema-to-KCL command from the observed consumption chain.
+
+POO Flow should connect schema artifacts -> native Profile values/defaults ->
+selected Scenario admission -> effective resource projection -> resource validation
+and preview -> explicit executor. Schema provenance and final candidate identity
+must survive the connections. That is the design work, not another language DSL.
+
+* Two schema surfaces, with the same existing bridge
+
+| Surface | Candidate being checked | Schema source/owner |
+|---------+-------------------------+---------------------|
+| Configuration fields | image, replicas, mainContainer, schedulingStrategy, services, labels | Maintained Server configuration schema matching the actual frontend interface |
+| Output resources | apiVersion, kind, metadata, spec | Pinned Kubernetes resource schemas for the chosen API version |
+| Application relationships | Selected frontend/leader/follower and their final resource relationships | Maintained Guestbook Scenario Contract plus compatible reusable relationship checks |
+
+A Kubernetes Deployment schema cannot validate a Server-shaped Profile containing
+mainContainer at its root: the field layout is different. Obtain or publish the
+configuration schema once from the maintained interface; do not require users to
+write it. Reuse upstream resource schemas for output fields instead of copying
+Kubernetes property definitions into hand-written Scheme Contracts. An explicit
+schema dialect/reference policy is needed at both surfaces. The pinned KCL files
+are not evidence that a matching frontend JSON Schema is already available here.
+
+* Existing interfaces that can be reused now
+
+These are internal implementation interfaces. [[file:../../../core/design/config-languages/13-guestbook-module-contract-admission.org][Module 13]] defines their proposed
+module-scope publication and native responsibilities integration; ordinary users
+do not read schema paths or import these implementation functions.
+
+| Interface | Executable owner | Role in this design |
+|-----------+------------------+---------------------|
+| poo-flow-json-schema-read-file | [[file:../../../core/json-schema/json-schema-source.ss][json-schema-source.ss]] | Decode a selected pinned schema; does not resolve an arbitrary external dependency graph |
+| poo-flow-json-schema->contract-artifact | [[file:../../../core/json-schema/json-schema-receipt.ss][json-schema-receipt.ss]] | Normalize/emit schema-backed Contract artifact and diagnostics |
+| poo-flow-json-schema-contract-artifact-valid? | same owner | Reject fatal generation diagnostics; not proof that all schema features were implemented |
+| poo-flow-json-schema-contract-artifact-diagnostics | same owner | Review supported/reference/normalization boundaries before publishing |
+| poo-flow-json-schema-contract-artifact-object-contract | same owner | Retrieve the generated object Contract representation |
+| poo-flow-json-schema-contract-artifact-validate | [[file:../../../core/json-schema/json-schema-validate.ss][json-schema-validate.ss]] | Validate final native POO candidate or supported JSON-like value against the artifact |
+| poo-flow-json-schema-object-contract-validation-valid? | same owner | Read the resulting validation decision |
+| poo-flow-json-schema-object-contract-validation->alist | same owner | Project diagnostics/results for tools; not an object-provenance or runtime receipt |
+
+The [[file:../../../modules/funflow/github-ci-contract.ss][GitHub CI integration]] already uses these entry points.
+[[file:../../../t/json-schema-contract-bridge-test.ss][Bridge tests]] and [[file:../../../t/funflow-github-ci-json-schema-contract-test.ss][GitHub CI tests]] define controls including native POO candidates
+and recursive maps. This study inspected those sources, without rerunning tests.
+Unsupported-reference/normalization warnings require deliberate qualification;
+artifact-valid? alone is not a complete coverage assertion. In particular,
+validation success does not imply insertion of schema default annotations.
+
+Proposed Guestbook library glue, using existing signatures (not added to runtime):
+
+#+begin_src scheme
+(def (guestbook-schema-artifact schema source-ref)
+  (poo-flow-json-schema->contract-artifact
+   schema
+   `((source-ref . ,source-ref)
+     (owner . guestbook)
+     (object-kind . GuestbookServerConfig)
+     (object-key . guestbook/server))))
+
+(def (guestbook-field-results config-artifact scenario)
+  (map
+   (lambda (role)
+     (let* ((candidate (.ref scenario role))
+            (validation
+             (poo-flow-json-schema-contract-artifact-validate
+              config-artifact candidate)))
+       (.o role candidate validation)))
+   '(frontend leader follower)))
+#+end_src
+
+All three roles share the common Server-shaped field artifact in this case.
+Role-specific image/port/DNS constraints belong to the maintained Guestbook
+Contract; create distinct field artifacts only if the actual interfaces differ.
+This function assumes preliminary Scenario shape/required-role checks have passed.
+It reads the final Scenario, not a parent list. Each .o creates an internal result
+object retaining the exact candidate alongside the existing validation result.
+This is proposed glue, not a new validation engine or a complete admission API.
+
+Source verification in module 13 confirms that the generated object Contract
+already derives from the native predicate Contract protocol and supports .admit.
+It is not itself the artifact, nor a default-bearing prototype descriptor.
+Use the generated Contract in responsibilities, retain full-root validation as an
+obligation, and qualify required-field/default/diagnostic semantics explicitly.
+
+Conclusion: the reusable implementation already exists. The remaining schema work
+is choosing/pinning the right sources, checking coverage and wiring the existing
+result into domain admission, not regenerating an independent handwritten model.
+
+* Defaults and maintained Profiles remain native POO values
+
+Field Contracts constrain values; maintained prototypes/Profiles provide operational
+defaults. Keep defaults separate from mandatory policy. The following complete
+small default object is proposed platform code, not an existing export:
+
+#+begin_src scheme
+(.def GuestbookServerDefaults.
+  (replicas ? 1)
+  (workloadType ? "Deployment")
+  (labels ? (.o)))
+#+end_src
+
+It deliberately supplies no frontend image. That field must be configured by the
+selected environment. The full frontend/Redis objects remain in module 11; their
+ports, Services, resource values and images are not reconstructed by every user.
+The pending Contract/default-view adapter should use these defaults while retaining
+final candidate identity and known-field policy. An empty labels default permits
+nested label updates; it does not force the user to accept an inherited label map.
+The recipe's .def proto path and later Contract association must be qualified
+against that adapter, rather than assuming bridge generation performs objectization.
+
+The upstream evolution experiment reuses those Profiles:
+
+#+begin_src scheme
+;; Existing native operators; proposed Guestbook library objects.
+(.def (MaintainedV1 @ Guestbook)
+  frontend: =>.+
+  (.o image: "gcr.io/google-samples/gb-frontend:v5"
+      replicas: 1
+      labels: (.o app: "guestbook" owner: "platform")))
+
+(.def (MaintainedV2 @ MaintainedV1)
+  frontend: =>.+
+  (.o image: "gcr.io/google-samples/gb-frontend:v3"
+      replicas: 2
+      labels: =>.+ (.o owner: "platform-v2" costCenter: "infra")))
+#+end_src
+
+V1/V2 identify Profile releases, not image-version ordering or historical commits.
+The frontend original in V2 is MaintainedV1.frontend; its labels original is that
+frontend's labels. Redis Profiles and all port/Service values remain inherited.
+Selecting the new release constructs a new configuration; it does not mutate old
+objects or rewrite their evidence.
+
+* Three user intentions survive upstream evolution
+
+Target user syntax, pending dotted direct assignment:
+
+#+begin_src scheme
+(.def (ImagePinnedV2 @ MaintainedV2)
+  frontend.image: "gcr.io/google-samples/gb-frontend:v5")
+
+(.def (TeamLabelV2 @ MaintainedV2)
+  frontend.labels.team: "checkout")
+
+(.def (OnlyTeamLabelsV2 @ MaintainedV2)
+  frontend.labels: (.o team: "checkout"))
+#+end_src
+
+Existing native counterparts:
+
+#+begin_src scheme
+(.def (ImagePinnedV2 @ MaintainedV2)
+  frontend: =>.+ (.o image: "gcr.io/google-samples/gb-frontend:v5"))
+
+(.def (TeamLabelV2 @ MaintainedV2)
+  frontend: =>.+ (.o labels: =>.+ (.o team: "checkout")))
+
+(.def (OnlyTeamLabelsV2 @ MaintainedV2)
+  frontend: =>.+ (.o labels: (.o team: "checkout")))
+#+end_src
+
+Every outer refinement preserves MaintainedV2.frontend. Only the single-label form
+refines the inherited labels object. The whole-label form assigns a new complete
+map. No user configures schema artifacts, validation policies or manual child lists.
+
+| User choice | Effective image | replicas | Effective labels |
+|-------------+-----------------+----------+------------------|
+| Pin image | v5 | 2 | app=guestbook, owner=platform-v2, costCenter=infra |
+| Set team | v3 | 2 | app=guestbook, owner=platform-v2, costCenter=infra, team=checkout |
+| Replace labels | v3 | 2 | team=checkout |
+
+Conclusion: the leaf depth expresses intent. Ordinary values stay assignments;
+internal refinement retains intermediate objects. Do not expose a schema/plan
+pipeline to someone pinning one image.
+
+* Scenario admission connects field results and effective resources
+
+This is the concrete integration sequence, not additional executable code:
+
+1. Check Scenario shape and required frontend/leader/follower role presence.
+2. Resolve the maintained Contract/schema association for each final Profile.
+   For this recipe, share the Server config artifact above. Reject missing or
+   ambiguous associations; users must not repeat them for each .def derivative.
+3. Call the existing artifact validator on each final Profile and retain its
+   candidate alongside the result. Field spelling/type errors use this path,
+   subject to the selected schema's additionalProperties policy.
+4. Check recipe capabilities: DNS mode, supported Redis listener/client settings,
+   required roles and namespace/name constraints. If organizational policy makes
+   costCenter mandatory, reject OnlyTeamLabelsV2 for the missing value. Do not
+   silently restore discarded labels or treat a default as mandatory policy.
+5. Project resources from these same effective candidates. Check Deployment Pod
+   labels versus its selector; each Service selector versus its intended workload;
+   final Service port/targetPort/protocol versus exposed container metadata;
+   qualified resource identity conflicts; and same-namespace DNS expectations.
+6. Validate the projected Deployment/Service objects against their pinned resource
+   artifacts with the same existing artifact validator. Keep both field/Scenario
+   and resource results associated with this input generation. Resource schema
+   success alone does not establish selector matching or actual image behavior.
+7. Publish admitted-preview only when the selected obligations pass. Serialize
+   the admitted resource values for an explicit external executor. Preview is
+   neither Terraform apply, Kubernetes deployment nor permission to run them.
+
+The public Core .admit boundary should orchestrate these existing and proposed
+checks, retain final identities and refuse incomplete evidence. The Guestbook
+adapter is pending. A list of field results alone is not a Scenario admission
+receipt; a JSON-schema validation receipt is not an automatic provenance proof.
+The generic application admission design in [[file:../../../core/design/config-languages/09-application-scenario-admission.org][module 09]] remains separate unexecuted
+design and must be specialized without inventing duplicate schema validation.
+
+Expected final-resource view, not executed output:
+
+#+begin_example
+status: projected-unadmitted
+variant          Deployment image  replicas  Deployment metadata label keys
+ImagePinnedV2    frontend:v5        2         app,owner,costCenter
+TeamLabelV2      frontend:v3        2         app,owner,costCenter,team
+OnlyTeamLabelsV2 frontend:v3        2         team
+
+all variants:
+  frontend Service :80/TCP -> frontend Pod container :80/TCP
+  redis-leader Service :6379/TCP -> redis-leader container :6379/TCP
+  redis-follower Service :6379/TCP -> redis-follower container :6379/TCP
+  namespace: sampleappns-dev (explicit appns/appenv parameters)
+  Pod/Service selector identity: unchanged managed labels
+  application connectivity: requires separate image/runtime evidence
+#+end_example
+
+Images above abbreviate the same full gb-frontend references in the code. In the
+actual KCL consumer, server.labels maps to Deployment metadata, not automatically
+to Pod labels or Service metadata. Preserve that distinction. With costCenter
+mandatory, the whole-map variant must produce a refusal instead of admitted-preview.
+
+A warmed parent resource plan must not substitute for a child's plan. Read each
+final child Profile, validate it, and project from that admitted input generation.
+Receiver-local caching supports the object semantics; schema generation, environment,
+projector version and actual referenced dependencies are also invalidation inputs.
+This Guestbook end-to-end warm-cache control remains to be run. Unselected Profiles
+should stay cold; complete selected graph admission necessarily reads selected
+metadata. No new Loader or automatic dependency discovery is claimed.
+
+* Reuse and remaining work: concrete ownership
+
+| Area | Already implemented/reusable | Guestbook qualification still needed |
+|------+------------------------------+-------------------------------------|
+| Schema acquisition | JSON file reader | Pin input/output schemas; supported reference/dialect closure |
+| Contract generation | Normalization, emission, artifact/diagnostics | Verify actual Guestbook/Kubernetes schema coverage; no second generator |
+| Value validation | Artifact validation, POO candidate handling | Apply to final effective candidates and projected resources |
+| Object semantics | Native .def/.o/=>.+ and inherited receiver behavior | Default-view/Contract association and .admit adapter for these domain objects |
+| Simple surface | Direct native slot assignment; existing refinement paths | Dotted direct assignment and grouped-prefix lowering |
+| Scenario semantics | Core admission entry; design reference in module 09 | Role/image/connection checks with final identities and complete evidence |
+| Resource consumption | KCL external backend as a concrete reference | Scheme Guestbook projector, parity tests and final resource diagnostics |
+| Execution | Explicit boundary retained | No execution adapter added or qualified by this work |
+
+* Conclusion: turn ecosystem comparison into design improvement
+
+Omnibus and KCL show the value of carrying domain schemas into configuration and
+then into a maintained consumer. POO Flow already owns a schema bridge: use that
+investment and avoid repeating provider field definitions. The potential additional
+gain is preserving reusable behavior, exact associations and effective-object
+relationships across Profile evolution and cross-domain Scenarios. It must be
+shown on matched outputs and maintenance changes, not asserted from syntax.
+
+The three-label experiment leads to actionable questions: can field discovery
+explain replacement depth; can a preview show inherited and discarded values;
+does policy reject the exact invalid child; can a schema update expose unsupported
+constraints before publication; does a changed Profile recompute only affected
+consumers without stale evidence? Each answer can change the design or remove an
+unnecessary abstraction. This is why comparison conclusions and research questions
+are required: they guide concrete implementation and future experiments on real
+complex Scenarios, rather than certify a preferred language.
+
+This chapter is design only. Source/API inspection and documentation checks are
+not runtime parity, schema completeness, connectivity or performance results.

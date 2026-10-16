@@ -9,7 +9,7 @@
                  poo-flow-session-claim poo-flow-session-recover)
         (only-in :poo-flow/modules/temporal-causality/evaluator/proof-host poo-flow-temporal-proof-host-current)
         "funs-scope.ss" "funs-features.ss" "funs-projection.ss" "funs-session.ss" "use-host.ss"
-        (only-in :poo-flow/src/semantic/context-restriction poo-flow-context-flow-decision))
+        (only-in :poo-flow/modules/query/semantic/context-restriction poo-flow-context-flow-decision))
 (export poo-flow-ai-agentic-context-session-host
         poo-flow-ai-agentic-context-session-host-enroll!
         poo-flow-ai-agentic-context-session-host-refresh!

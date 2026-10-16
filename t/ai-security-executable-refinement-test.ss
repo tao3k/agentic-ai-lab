@@ -5,7 +5,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/policy/ai-security-executable-refinement)
+        :poo-flow/modules/governance/policy/ai-security-executable-refinement)
 
 (def evidence-root
   "sha256:5a9f2c4172506f36e22f17e01d60c771b7d9f9d66df72c7b20b0f2221a5b8f8a")

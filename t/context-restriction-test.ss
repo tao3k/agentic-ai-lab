@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :poo-flow/testing-api poo-flow-test-case)
         (only-in :clan/poo/object .o .cc .ref)
-        :poo-flow/src/semantic/context-restriction)
+        :poo-flow/modules/query/semantic/context-restriction)
 (export context-restriction-test)
 (def (label readers destinations provenance start end)
   (poo-flow-context-restriction "declared-scope-clock" readers destinations provenance start end))

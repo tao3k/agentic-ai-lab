@@ -12,7 +12,7 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        (only-in :poo-flow/src/qualification/ascent-table-expression
+        (only-in :poo-flow/modules/workflow/qualification/ascent-table-expression
                  poo-flow-ascent-table-expression-prototype))
 
 (export ascent-table-expression-performance-test)

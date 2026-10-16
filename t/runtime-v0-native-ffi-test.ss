@@ -11,7 +11,7 @@
                  JSONReadOptions
                  current-json-read-options
                  string->json)
-        (only-in :poo-flow/src/ffi/runtime-v0-native
+        (only-in :poo-flow/modules/workflow/runtime/runtime-v0-native
                  native-abi-version
                  native-descriptor-payload
                  native-query-execution-candidate->json

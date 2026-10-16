@@ -4,7 +4,7 @@
 
 ;;; Materializes one shared runtime request graph from accepted intent.
 ;;; Runtime execution remains outside the Scheme control plane.
-(import :poo-flow/src/core/runtime-protocol
+(import :poo-flow/modules/workflow/control-plane/runtime-protocol
         "core.ss"
         "runtime-base.ss"
         "runtime-capability.ss"

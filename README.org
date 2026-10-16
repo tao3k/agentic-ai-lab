@@ -230,14 +230,14 @@ Concrete references:
 - [[https://github.com/Rath-Team/OpenRath][OpenRATH]] shows a production-oriented vocabulary where session, sandbox, memory, tool, agent, workflow, and selector are explicit runtime objects. POO Flow should use that as reference evidence for cases, not as a source of proof facts.
 - [[https://flueframework.com/][Flue]] shows the harness side: durable sessions, tools, skills, filesystem access, sandbox runtime, and deployable agent workflows. POO Flow should use that to sharpen session/sandbox/loop obligations, not to replace Lean discharge.
 
-The detailed evidence record lives in [[file:docs/10-19-design/10.06-poo-module-system/56-ai-strategy-policy-support-evidence.org][10.06.56 AI Strategy/Policy Support Evidence]]. It separates external observations, candidate cases, Scheme facts, Lean discharges, and runtime accept gates.
+The detailed evidence record lives in [[file:core/module-system/design/56-ai-strategy-policy-support-evidence.org][10.06.56 AI Strategy/Policy Support Evidence]]. It separates external observations, candidate cases, Scheme facts, Lean discharges, and runtime accept gates.
 
-The =user-interface/= tree is also a community profile library, not only an example folder. See [[file:docs/10-19-design/10.06-poo-module-system/57-user-interface-profile-library.org][10.06.57 User Interface Profile Library]] for the contribution model: users contribute reusable profiles, strategies, policies, and scenarios; downstream users import them through the library and extend them with POO objects. Core and community profiles must pass tests and carry Lean proof status before they are treated as public reusable library surface.
+The =user-interface/= tree is also a community profile library, not only an example folder. See [[file:core/module-system/design/57-user-interface-profile-library.org][10.06.57 User Interface Profile Library]] for the contribution model: users contribute reusable profiles, strategies, policies, and scenarios; downstream users import them through the library and extend them with POO objects. Core and community profiles must pass tests and carry Lean proof status before they are treated as public reusable library surface.
 * Project Shape
 The important source areas are:
 
-- =src/core/= for flow, task, plan, role, policy, receipt, runtime protocol, and runner concepts;
-- =core/module-system/= for reusable POO module contracts, catalog, lazy loading, and projection mechanisms; =src/authoring/= and =src/user-interface/= for POO Flow module policy and user-facing adapters;
+- =modules/workflow/control-plane/= for flow, task, plan, role, policy, receipt, runtime protocol, and runner concepts;
+- =core/module-system/= for reusable POO module contracts, catalog, lazy loading, and projection mechanisms; =modules/module-authoring/= and =modules/user-interface/= for POO Flow module policy and user-facing adapters;
 - =modules/= for concrete workflow, sandbox, session, loop, and backend modules;
 - =user-interface/= for example downstream configuration surfaces;
 - =packages/proofs/lean/= for the Lean proof package;
@@ -278,8 +278,8 @@ libraries.  A Scenario composes module libraries; it does not become the owner
 of their proof graph.
 
 #+begin_src shell
-asp org lint docs/10-19-design/10.06-poo-module-system/55-pooc4-proof-architecture.org
-asp org lint docs/10-19-design/10.06-poo-module-system/60-pooc4-policy-composition-proof.org
+asp org lint core/module-system/design/55-pooc4-proof-architecture.org
+asp org lint core/module-system/design/60-pooc4-policy-composition-proof.org
 #+end_src
 
 #+begin_src shell
@@ -336,16 +336,16 @@ remaining tag conflict.
 The design record lives under =docs/10-19-design=. Use these as entry points:
 
 - [[file:docs/10-19-design/10.01-gerbil-poo-funflow-control-plane.org][10.01 Gerbil POO Funflow Control Plane]]
-- [[file:docs/10-19-design/10.06-poo-module-system/00-index.org][10.06 poo-flow Module System]]
-- [[file:docs/10-19-design/10.06-poo-module-system/03-gerbil-scheme-c4-foundation.org][10.06.03 Gerbil Scheme C4 Foundation]]
-- [[file:docs/10-19-design/10.06-poo-module-system/29-gerbil-poo-programming-guidelines.org][10.06.29 Gerbil POO Programming Guidelines]]
-- [[file:docs/10-19-design/10.06-poo-module-system/44-current-project-programming-style.org][10.06.44 Current Project Programming Style]]
-- [[file:docs/10-19-design/10.06-poo-module-system/55-pooc4-proof-architecture.org][10.06.55 PooC4 Proof Architecture]]
-- [[file:docs/10-19-design/10.06-poo-module-system/56-pooc4-formal-semantics.org][10.06.56 PooC4 Formal Semantics]]
-- [[file:docs/10-19-design/10.06-poo-module-system/57-pooc4-lean-proof-implementation.org][10.06.57 PooC4 Lean Proof Implementation]]
-- [[file:docs/10-19-design/10.06-poo-module-system/58-pooc4-session-lifecycle-proof-link.org][10.06.58 PooC4 Session Lifecycle Proof Link]]
-- [[file:docs/10-19-design/10.06-poo-module-system/59-pooc4-typed-fact-contract.org][10.06.59 PooC4 Typed Fact Contract]]
-- [[file:docs/10-19-design/10.06-poo-module-system/60-pooc4-policy-composition-proof.org][10.06.60 PooC4 Policy Composition Proof]]
+- [[file:core/module-system/design/00-index.org][10.06 poo-flow Module System]]
+- [[file:core/module-system/design/03-gerbil-scheme-c4-foundation.org][10.06.03 Gerbil Scheme C4 Foundation]]
+- [[file:core/module-system/design/29-gerbil-poo-programming-guidelines.org][10.06.29 Gerbil POO Programming Guidelines]]
+- [[file:core/module-system/design/44-current-project-programming-style.org][10.06.44 Current Project Programming Style]]
+- [[file:core/module-system/design/55-pooc4-proof-architecture.org][10.06.55 PooC4 Proof Architecture]]
+- [[file:core/module-system/design/56-pooc4-formal-semantics.org][10.06.56 PooC4 Formal Semantics]]
+- [[file:core/module-system/design/57-pooc4-lean-proof-implementation.org][10.06.57 PooC4 Lean Proof Implementation]]
+- [[file:core/module-system/design/58-pooc4-session-lifecycle-proof-link.org][10.06.58 PooC4 Session Lifecycle Proof Link]]
+- [[file:core/module-system/design/59-pooc4-typed-fact-contract.org][10.06.59 PooC4 Typed Fact Contract]]
+- [[file:core/module-system/design/60-pooc4-policy-composition-proof.org][10.06.60 PooC4 Policy Composition Proof]]
 
 * Non-Goals
 =poo-flow= should not become:

@@ -4,9 +4,9 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :clan/poo/object :std/test
-        :poo-flow/src/semantic/organization-bundle
-        :poo-flow/src/semantic/organization-bundle-kernel
-        :poo-flow/src/contract/organization-bundle-runtime-v0)
+        :poo-flow/modules/query/semantic/organization-bundle
+        :poo-flow/modules/query/semantic/organization-bundle-kernel
+        :poo-flow/modules/workflow/contracts/organization-bundle-runtime-v0)
 
 
 (def (runtime-v0-bundle)

@@ -1,9 +1,0 @@
-{
-  "planSha256": "910359b8a90c29ea77485f4dcff80fa7cc63ac0af1f8870b501848701ef27506",
-  "authorizedCalls": 24,
-  "usdCeiling": 1,
-  "retries": 0,
-  "authorization": "Explicit user reply: 批准这24次调用及上述源码外发，上限1美元",
-  "destination": "https://api.deepseek.com",
-  "payload": "actual Scheme sources, tasks and real-time native observations"
-}

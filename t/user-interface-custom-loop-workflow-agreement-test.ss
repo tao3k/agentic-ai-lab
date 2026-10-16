@@ -11,8 +11,8 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/user-interface/interface
         (only-in "../user-interface/custom/my-module/cases/funflow-cicd"
                  poo-flow-custom-my-module-funflow-cicd-case)
         (only-in "../user-interface/custom/my-module/cases/loop-engine"

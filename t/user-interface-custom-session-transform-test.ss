@@ -12,7 +12,7 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/user-interface/module-selection
+        (only-in :poo-flow/modules/user-interface/module-selection
                  poo-flow-user-module-selection-key
                  poo-flow-user-module-selection-flag-entry)
         :poo-flow/modules/session/config

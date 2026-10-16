@@ -11,6 +11,17 @@ gerbil_dependency_sources = use_extension(
     "gerbil",
 )
 gerbil_dependency_sources.source_package(
+    name = "poo_flow_core_sources",
+    canonical_uri = "https://github.com/tao3k/poo-flow-core",
+    package = "poo-flow-core",
+    revision = "06fe336bc67105e817613427d5adcef49ca3d446",
+    sha256 = "9b8794493c8bab3d0a764dc2b5db91a3938f65bafe8894c5e19875b4f870b6d7",
+    strip_prefix = "poo-flow-core-06fe336bc67105e817613427d5adcef49ca3d446",
+    urls = [
+        "https://github.com/tao3k/poo-flow-core/archive/06fe336bc67105e817613427d5adcef49ca3d446.tar.gz",
+    ],
+)
+gerbil_dependency_sources.source_package(
     name = "gerbil_poo_sources",
     canonical_uri = "https://github.com/tao3k/gerbil-poo",
     package = "gerbil-poo",
@@ -71,5 +82,6 @@ use_repo(
     "gerbil_parser_sources",
     "gerbil_ascent_sources",
     "gerbil_poo_sources",
+    "poo_flow_core_sources",
     "orgize_sources",
 )

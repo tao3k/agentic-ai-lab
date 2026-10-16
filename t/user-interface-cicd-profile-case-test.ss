@@ -17,11 +17,11 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
+        :poo-flow/modules/workflow/control-plane/api
         (only-in "../user-interface/custom/my-module/profiles/cicd"
                  poo-flow-custom-my-module-cicd-module)
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax
+        :poo-flow/modules/user-interface/interface
+        :poo-flow/modules/user-interface/init-syntax
         :poo-flow/modules/agent-sandbox/config)
 
 (export user-interface-cicd-profile-case-test)

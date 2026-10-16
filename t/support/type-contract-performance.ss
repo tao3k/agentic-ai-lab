@@ -16,7 +16,7 @@
                  poo-flow-native-contract
                  poo-flow-native-contract->alist
                  poo-flow-native-contract-slots)
-        (only-in :poo-flow/src/type-facts/objects
+        (only-in :core/type-facts/objects
                  poo-flow-native-contract->type-facts
                  poo-flow-native-contract->lean-fact-contracts)
         (only-in :poo-flow/modules/session/policy

@@ -4,7 +4,7 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/src/proof/composition-facts)
+        :poo-flow/modules/proof/projections/composition-facts)
 
 (def composition-proof-facts-test
   (test-suite "composition proof facts"

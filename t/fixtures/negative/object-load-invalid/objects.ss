@@ -4,7 +4,7 @@
 ;;; The harness trusts this fixture to prove load! propagates object contracts.
 
 (import :core/module-system/schema/interface
-        :poo-flow/src/user-interface/init-syntax)
+        :poo-flow/modules/user-interface/init-syntax)
 
 ;;; The negative fixture must fail through the user-facing loader path, so the
 ;;; test keeps load! as the observable boundary instead of importing the part.

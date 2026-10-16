@@ -5,9 +5,9 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/policy/protocol-person-promotion
-        :poo-flow/src/contract/runtime-v0-abi-schema
-        :poo-flow/src/contract/protocol-person-runtime-abi)
+        :poo-flow/modules/governance/policy/protocol-person-promotion
+        :poo-flow/modules/workflow/contracts/runtime-v0-abi-schema
+        :poo-flow/modules/workflow/contracts/protocol-person-runtime-abi)
 
 (export protocol-person-runtime-abi-test)
 

@@ -4,10 +4,10 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/src/proof/proof-fact-wire
-        :poo-flow/src/proof/composition-facts
-        :poo-flow/src/graph/control-plane-handoff-facts
-        :poo-flow/src/graph/scenario-gap-rejection-facts)
+        :poo-flow/modules/proof/projections/proof-fact-wire
+        :poo-flow/modules/proof/projections/composition-facts
+        :poo-flow/modules/workflow/graph/control-plane-handoff-facts
+        :poo-flow/modules/workflow/graph/scenario-gap-rejection-facts)
 
 (def proof-fact-wire-test
   (test-suite "proof fact wire"

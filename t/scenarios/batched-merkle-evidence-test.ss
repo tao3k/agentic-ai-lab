@@ -5,7 +5,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/evidence/batched-merkle)
+        :poo-flow/modules/governance/evidence/batched-merkle)
 
 
 (def (leaf index)

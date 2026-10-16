@@ -6,7 +6,7 @@
 ;;; Boundary: downstream POO object slot-operator example.
 ;;; Invariant: standalone module; it declares extension data only.
 
-(import :poo-flow/src/user-interface/init-syntax)
+(import :poo-flow/modules/user-interface/init-syntax)
 
 (export poo-flow-custom-my-module-object-extension-module)
 

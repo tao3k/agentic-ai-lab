@@ -6,7 +6,7 @@
 (import (only-in :std/test check-equal? check-exception test-case test-suite)
         (only-in :clan/poo/object .o .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :poo-flow/src/qualification/ascent-binary-program
+        (only-in :poo-flow/modules/workflow/qualification/ascent-binary-program
                  poo-flow-ascent-binary-relation
                  poo-flow-ascent-binary-copy-rule
                  poo-flow-ascent-binary-join-rule

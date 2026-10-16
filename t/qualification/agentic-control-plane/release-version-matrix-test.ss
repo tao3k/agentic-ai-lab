@@ -5,7 +5,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/qualification/release-version-matrix)
+        :poo-flow/modules/workflow/qualification/release-version-matrix)
 
 
 (def release-version-matrix-test

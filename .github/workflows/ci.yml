@@ -122,6 +122,9 @@ jobs:
             .gerbil/bin
           key: native-gerbil-pkg-portable-v2-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg') }}
 
+      - name: Initialize Core submodule
+        run: git submodule update --init core
+
       - name: Install native Gerbil package dependencies
         run: |
           mkdir -p "$HOME/.gerbil/pkg"
@@ -136,7 +139,7 @@ jobs:
             gerbil deps --install
           fi
           gerbil env gerbil interactive -e '(begin (import :asp-gerbil-scheme/building-api :asp-gerbil-scheme/benchmark-api :asp-gerbil-scheme/testing-api) (displayln "native-dependencies-ready"))'
-          # The Core subtree owns this checkout's shared POO modules.
+          # The Core submodule owns this checkout's shared POO modules.
           (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/core:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil build)
           # Clean only POO Flow outputs; its build spec excludes Core.
           gerbil clean
@@ -269,7 +272,7 @@ jobs:
       - name: Run native performance scenarios without unit-batch contention
         if: runner.os == 'Linux'
         run: |
-          gerbil env gxc -O src/qualification/ascent-table-expression.ss t/scenarios/performance/ascent-table-expression/baseline.ss
+          gerbil env gxc -O modules/workflow/qualification/ascent-table-expression.ss t/scenarios/performance/ascent-table-expression/baseline.ss
           gerbil env ./performance-tests.ss
           gerbil env gxi t/scenarios/performance/ascent-table-expression/scenario.ss
           gerbil env gxi t/scenarios/performance/ascent-table-expression-membership/scenario.ss
@@ -346,12 +349,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - owner: module-system
-            target: PooFlowModuleSystemProof
-            ffi: true
           - owner: governance
             target: PooFlowModuleGovernanceProof
-            ffi: false
+            ffi: true
           - owner: temporal-causality
             target: PooFlowModuleTemporalCausalityProof
             ffi: false
@@ -383,6 +383,9 @@ jobs:
       - name: Checkout poo-flow
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
+      - name: Initialize Core proof dependency
+        run: git submodule update --init core
+
       - name: Restore Lean cache
         id: lean-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -390,7 +393,8 @@ jobs:
           path: |
             ~/.elan
             packages/proofs/lean/.lake
-          key: lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json') }}
+            core/proofs/lean/.lake
+          key: lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/proofs/lean/lakefile.lean', 'core/proofs/lean/lake-manifest.json') }}
           restore-keys: |
             lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-
 
@@ -429,7 +433,8 @@ jobs:
           path: |
             ~/.elan
             packages/proofs/lean/.lake
-          key: lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json') }}
+            core/proofs/lean/.lake
+          key: lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/proofs/lean/lakefile.lean', 'core/proofs/lean/lake-manifest.json') }}
 
   cedar-rust-runtime-host:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
@@ -448,7 +453,8 @@ jobs:
           path: |
             ~/.elan
             packages/proofs/lean/.lake
-          key: lean-proof-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json') }}
+            core/proofs/lean/.lake
+          key: lean-proof-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/proofs/lean/lakefile.lean', 'core/proofs/lean/lake-manifest.json') }}
           restore-keys: |
             lean-proof-${{ runner.os }}-${{ runner.arch }}-
 

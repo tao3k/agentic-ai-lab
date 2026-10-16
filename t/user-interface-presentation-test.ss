@@ -11,16 +11,16 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/authoring/module-interface
+        (only-in :poo-flow/modules/module-authoring/module-interface
                  poo-flow-brand-group
                  poo-flow-brand-name)
-        (only-in :poo-flow/src/user-interface/module-selection
+        (only-in :poo-flow/modules/user-interface/module-selection
                  poo-flow-user-config-presentation-kind)
-        (only-in :poo-flow/src/user-interface/presentation-config
+        (only-in :poo-flow/modules/user-interface/presentation-config
                  pooFlowUserConfigPresentation)
-        (only-in :poo-flow/src/user-interface/profile-core
+        (only-in :poo-flow/modules/user-interface/profile-core
                  poo-flow-user-profile-presentation-kind)
-        (only-in :poo-flow/src/user-interface/profile-presentation-config
+        (only-in :poo-flow/modules/user-interface/profile-presentation-config
                  pooFlowUserProfilePresentation)
         "user-interface-fixtures.ss")
 

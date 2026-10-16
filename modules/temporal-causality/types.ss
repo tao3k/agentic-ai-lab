@@ -8,7 +8,7 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :poo-flow/src/graph/types-core poo-flow-graph-id?))
+        (only-in :core/graph/types-core poo-flow-graph-id?))
 
 (export poo-flow-relation-trajectory-witness-kind
         poo-flow-structural-impact-receipt-kind

@@ -5,7 +5,7 @@
 
 (import (only-in :std/test check-equal? check-exception test-case test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/qualification/ascent-closure-candidates
+        (only-in :poo-flow/modules/workflow/qualification/ascent-closure-candidates
                  poo-flow-ascent-closure-candidates))
 
 (export ascent-closure-candidates-test)

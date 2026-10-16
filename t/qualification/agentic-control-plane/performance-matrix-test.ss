@@ -5,7 +5,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/qualification/performance-matrix)
+        :poo-flow/modules/workflow/qualification/performance-matrix)
 
 (export performance-matrix-test)
 

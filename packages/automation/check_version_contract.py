@@ -95,7 +95,7 @@ def collect_errors(root: Path = ROOT) -> list[str]:
         )
         expect(errors, "runtime-v0 pkg-config", pkgconfig_version, version)
 
-        scheme_path = root / "src/contract/runtime-v0-abi-schema.ss"
+        scheme_path = root / "modules/workflow/contracts/runtime-v0-abi-schema.ss"
         scheme_major = int(regex_value(scheme_path, r"\(abi-major\s+([0-9]+)\)", "Scheme ABI major"))
         scheme_minor = int(regex_value(scheme_path, r"\(abi-minor\s+([0-9]+)\)", "Scheme ABI minor"))
         expect(errors, "Scheme ABI major", scheme_major, major)

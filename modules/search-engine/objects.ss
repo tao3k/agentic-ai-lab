@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Backend-neutral Search role objects and immutable declaration prototypes.
-(import :poo-flow/src/core/object-syntax
+(import :core/object-family/role-syntax
         :poo-flow/modules/search-engine/types)
 
 (export poo-flow-search-framework-role

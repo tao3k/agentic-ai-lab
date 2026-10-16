@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :poo-flow/src/loops/descriptor
+        (only-in :poo-flow/modules/loop-engine/control/descriptor
                  make-loop-pattern-descriptor
                  loop-pattern-descriptor->contract))
 

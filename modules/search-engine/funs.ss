@@ -5,12 +5,12 @@
 
 ;;; Search composition is declarative; execution remains consumer-owned.
 (import (only-in :clan/poo/object .ref object?)
-        :poo-flow/src/core/object-syntax
+        :core/object-family/role-syntax
         :poo-flow/modules/search-engine/objects
-        (only-in :poo-flow/src/core/flow
+        (only-in :poo-flow/modules/workflow/control-plane/flow
                  external-flow flow-fanout flow-input-contract
                  flow-output-contract flow-then)
-        (only-in :poo-flow/src/core/plan flow->dag-receipt)
+        (only-in :poo-flow/modules/workflow/control-plane/plan flow->dag-receipt)
         (only-in :poo-flow/modules/temporal-causality/objects
                  poo-flow-causal-event poo-flow-temporal-observation))
 

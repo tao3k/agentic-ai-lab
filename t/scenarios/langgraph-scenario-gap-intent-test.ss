@@ -4,7 +4,7 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :clan/poo/object .ref)
-        :poo-flow/src/graph/scenario-gap-intent)
+        :poo-flow/modules/workflow/graph/scenario-gap-intent)
 
 (import (only-in :std/test test-suite))
 

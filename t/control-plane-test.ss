@@ -16,7 +16,7 @@
         check-true
         test-error
         test-suite)
-        :poo-flow/src/core/api
+        :poo-flow/modules/workflow/control-plane/api
         :poo-flow/modules/workflow/store)
 
 ;;; Failure capture keeps configured-runner checks on structured values instead

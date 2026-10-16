@@ -17,7 +17,7 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .@ .slot? .all-slots)
-        :poo-flow/src/core/api)
+        :poo-flow/modules/workflow/control-plane/api)
 
 ;;; This suite keeps descriptor registry lookup behavior separate from concrete
 ;;; workflow execution.

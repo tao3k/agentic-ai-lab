@@ -6,7 +6,7 @@
 ;;; Boundary: loop-engine agent profile and harness projection rows.
 ;;; Invariant: projections describe Marlin-owned work and never open sessions.
 
-(import (only-in :poo-flow/src/core/agent-harness
+(import (only-in :poo-flow/modules/workflow/control-plane/agent-harness
                  make-poo-flow-agent-harness
                  make-poo-flow-agent-profile
                  poo-flow-agent-harness->alist

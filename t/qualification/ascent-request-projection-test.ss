@@ -5,7 +5,7 @@
 
 (import (only-in :std/test check-equal? check-exception test-case test-suite)
         (only-in :clan/poo/object .o .ref .slot?)
-        (only-in :poo-flow/src/qualification/ascent-request-projection
+        (only-in :poo-flow/modules/workflow/qualification/ascent-request-projection
                  poo-flow-ascent-project-request))
 
 (export ascent-request-projection-test)

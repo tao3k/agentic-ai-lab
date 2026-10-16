@@ -17,9 +17,9 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/src/loops/agent
-        :poo-flow/src/loops/human-audit)
+        :poo-flow/modules/workflow/control-plane/api
+        :poo-flow/modules/loop-engine/control/agent
+        :poo-flow/modules/loop-engine/control/human-audit)
 
 (export loop-human-audit-test)
 

@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; Smoke file executed by `poo-flow run` for functional flow validation.
 
-(import :poo-flow/src/core/api)
+(import :poo-flow/modules/workflow/control-plane/api)
 
 ;;; CLI smoke arguments are parsed locally so `poo-flow run` can validate the
 ;;; compiled command path without depending on test harness state.

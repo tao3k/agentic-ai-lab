@@ -8,8 +8,8 @@
 
 (import "funs-attempt.ss"
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/authoring/module-config-syntax)
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/module-authoring/module-config-syntax)
 
 (export (import: "funs-attempt.ss") +poo-flow-session-config-kind+
         session-config

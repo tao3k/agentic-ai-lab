@@ -1,0 +1,752 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Config Languages 11: Guestbook Profiles, Environment Values and Final Resources
+#+date: [2026-10-16]
+#+filetags: :config-language:kcl:guestbook:comparison:design:
+#+property: STATUS source-reviewed-scheme-design-not-executed-no-loader
+
+* Baseline and comparison boundary
+
+Use the actual [[file:scenarios/kcl/konfig/examples/appops/guestbook/base/base.k][Guestbook source]], at konfig commit
+12025e8e250ca409006879126761c40e0eb0c0e0. Source and licenses are retained in
+[[file:scenarios/README.org][the reference submodules]]; the parent gitlinks pin the revisions. These historical image versions are reference inputs, not deployment
+recommendations. Neither KCL evaluation nor Scheme resource generation was run.
+
+All three workloads use frontend.Server. KCL does not declare separate Leader,
+Follower or Guestbook application Contracts here. The Scheme role Contracts below
+are proposed library work, not an existing advantage established by the example.
+Do not substitute PostgreSQL, change Redis into StatefulSets, or silently add
+persistence and then call the result an equivalent comparison.
+
+* Contribution Profiles: preserve the actual objects
+
+The KCL input names three schema instances; the Scheme design publishes three
+independent Profiles. Corresponding fields, list elements, names and images stay
+identical. TinyResource denotes the maintained counterpart of res_tpl.tiny, not
+a newly invented user configuration keyword. The source resource has cpu=100m,
+memory=100Mi and disk=1Gi; representation conversion belongs to the resource
+Contract/consumer, not to every Profile author.
+
+| Actual KCL base | Proposed Scheme Profile |
+|-----------------+-------------------------|
+| frontend.Server supplies schema/defaults | A domain Contract supplies responsibilities and a shared proto |
+| container.Main and service.Service type nested values | Nested responsibilities must admit container/Service values |
+| Three top-level named instances | Three independently reusable named Profile objects |
+| Frontend image absent until environment input | Frontend Profile remains incomplete until environment selection |
+
+Key source, with the repeated service/resource declarations retained:
+
+#+begin_src kcl
+import konfig.models.kube.frontend
+import konfig.models.kube.frontend.container
+import konfig.models.kube.frontend.service
+import konfig.models.kube.templates.resource as res_tpl
+
+guestbookFrontend: frontend.Server {
+    name = "frontend"
+    mainContainer = container.Main {
+        name = "php-redis"
+        env.GET_HOSTS_FROM: { value = "dns" }
+        ports = [{containerPort = 80}]
+    }
+    schedulingStrategy.resource = res_tpl.tiny
+    services = [service.Service { ports = [{"port" = 80}] }]
+}
+redisLeader: frontend.Server {
+    name = "redis-leader"
+    mainContainer = container.Main { ports = [{containerPort = 6379}] }
+    image = "docker.io/redis:6.0.5"
+    schedulingStrategy.resource = res_tpl.tiny
+    services = [service.Service { ports = [{"port" = 6379}] }]
+}
+redisFollower: frontend.Server {
+    name = "redis-follower"
+    mainContainer = container.Main { ports = [{containerPort = 6379}] }
+    image = "gcr.io/google_samples/gb-redis-follower:v2"
+    schedulingStrategy.resource = res_tpl.tiny
+    services = [service.Service { ports = [{"port" = 6379}] }]
+}
+#+end_src
+
+First-time contribution declarations using current native parent syntax follow.
+Each .def derives a named Profile from the indicated Contract proto. Every .o
+inside these declarations constructs a fresh nested data object; none refines an
+inherited container, env record, resource wrapper, Service or port. Each ordinary
+slot assignment replaces that whole slot, including any value from the proto.
+The enclosing Profile parent does not make its nested constructors recursive merges.
+Use this form when declaring the complete desired values, not when patching an
+already maintained Profile.
+
+#+begin_src scheme
+(.def (GuestbookFrontend @ (.get GuestbookFrontendContract proto))
+  name: "frontend"
+  mainContainer:
+  (.o name: "php-redis"
+      env: (.o GET_HOSTS_FROM: (.o value: "dns"))
+      ports: (list (.o containerPort: 80)))
+  schedulingStrategy: (.o resource: TinyResource)
+  services: (list (.o ports: (list (.o port: 80)))))
+
+(.def (RedisLeader @ (.get RedisLeaderContract proto))
+  name: "redis-leader"
+  image: "docker.io/redis:6.0.5"
+  mainContainer: (.o ports: (list (.o containerPort: 6379)))
+  schedulingStrategy: (.o resource: TinyResource)
+  services: (list (.o ports: (list (.o port: 6379)))))
+
+(.def (RedisFollower @ (.get RedisFollowerContract proto))
+  name: "redis-follower"
+  image: "gcr.io/google_samples/gb-redis-follower:v2"
+  mainContainer: (.o ports: (list (.o containerPort: 6379)))
+  schedulingStrategy: (.o resource: TinyResource)
+  services: (list (.o ports: (list (.o port: 6379)))))
+#+end_src
+
+The proposed direct Contract parent, e.g. (GuestbookFrontend @
+GuestbookFrontendContract), would hide proto lookup but requires the declaration
+adapter described in [[file:../../../core/design/config-languages/08-contract-directed-service-scenarios.org][module 08]]. The native forms above do not themselves preserve a
+published Contract association or perform admission. Publication association,
+recursive domain admission and a Kubernetes consumer remain additional work.
+No user should hand-maintain per-derivative association records.
+
+Conclusion: contribution authors write the complete recipe once. These new
+objects are not an extension tutorial. KCL already provides typed nested schema
+construction; the Scheme counterpart still owes equivalent defaults/admission.
+
+* Object-construction audit: what each .o does
+
+| Location in the contribution declarations | Meaning of every constructor at that location | Original object being refined |
+|------------------------------------------+------------------------------------------------+-------------------------------|
+| All three mainContainer values | New container object; its ports slot receives a new list | None |
+| Frontend env and GET_HOSTS_FROM | New env map containing a new value record | None |
+| Every ports list element with containerPort | New container-port data object | None |
+| All three schedulingStrategy values | New wrapper referring to the existing TinyResource value | None; TinyResource is reused, not copied or extended |
+| Every services list element | New Service data object | None |
+| Every Service ports list element with port | New Service-port data object | None |
+
+list constructs a list; .o constructs each object element. The list has no
+implicit super, merge or append. Reassigning services or ports replaces that list.
+Recursive typing/default completion is a separate pending Contract/view adapter;
+these bare nested .o values do not inherit container.Main or service.Service
+prototypes by themselves. The matched field shapes do not establish equivalent
+type/default behavior before that adapter and admission are implemented.
+
+Conclusion: constructor syntax answers what value is created, not which domain
+rules it satisfies. Keep ordinary list/object construction separate from inherited
+refinement and from Contract admission; hiding these distinctions is a UX defect.
+
+* Existing JSON Schema bridge: reuse it, do not redesign it
+
+[[file:12-guestbook-schema-profile-plan-chain.org][Module 12]] connects these existing interfaces to default-bearing Profiles,
+Scenario obligations, output resource validation and the three evolution variants.
+
+POO Flow already implements JSON Schema -> Scheme Contract artifact generation,
+object-contract projection and candidate validation. Calling this a missing
+Contract system would be incorrect. The executable owners are
+[[file:../../../core/json-schema/json-schema-receipt.ss][json-schema-receipt.ss]] and [[file:../../../core/json-schema/json-schema-validate.ss][json-schema-validate.ss]]. The existing
+[[file:../../../modules/funflow/github-ci-contract.ss][GitHub CI consumer]] uses these public entry points:
+
+#+begin_src scheme
+(def poo-flow-funflow-github-ci-contract-artifact
+  (poo-flow-json-schema->contract-artifact
+   +poo-flow-funflow-github-ci-workflow-schema+
+   `((source-ref . ,+poo-flow-funflow-github-ci-schema-source+)
+     (owner . funflow)
+     (object-kind . PooFlowFunflowGithubCiWorkflow)
+     (object-key . funflow/github-ci/workflow))))
+
+(def (poo-flow-funflow-github-ci-validate-workflow workflow)
+  (poo-flow-json-schema-contract-artifact-validate
+   poo-flow-funflow-github-ci-contract-artifact
+   workflow))
+#+end_src
+
+The [[file:../../../t/json-schema-contract-bridge-test.ss][bridge test definitions]] cover generated constraints and recursive maps;
+[[file:../../../t/funflow-github-ci-json-schema-contract-test.ss][GitHub CI test definitions]] include validation of POO candidate objects and a
+pinned raw upstream schema. These sources were inspected, not executed again in
+this study. They establish an existing implementation and test surface, not a new
+Guestbook acceptance receipt or complete support for every JSON Schema feature.
+
+The Guestbook design should reuse that bridge with pinned appropriate schemas,
+inspect normalization diagnostics and qualify supported constraints. Do not
+hand-recreate every Kubernetes field Contract. A generated validation artifact is
+not by itself a default-bearing Profile prototype, a proof of automatic Contract
+association through inheritance, or the public .admit integration described here.
+Those mappings must be checked against the actual bridge/Core representations.
+
+Keep three distinct obligations: schema-derived field validation; maintained
+recipe defaults and image capabilities; Scenario/resource relationships. Some
+relationships can be expressed in an appropriate schema and should be reused;
+others need effective-object/context checks not supplied by a generic Kubernetes
+resource schema. Absence of a qualified Guestbook integration is not absence of
+the underlying schema-to-Contract mechanism.
+
+Conclusion: the design problem is connecting existing Contract infrastructure to
+this task, not building another schema engine. Gap reports must identify the
+specific schema, unsupported constraint, association or consumer that is missing.
+
+* Contract ownership: field schema versus application obligations
+
+The actual [[file:scenarios/kcl/konfig/models/kube/frontend/server.k][Server schema]] supplies workloadType="Deployment", replicas=1,
+useBuiltInLabels=True and useBuiltInSelector=True. It requires mainContainer;
+image comes from option("image") or configuration. The [[file:scenarios/kcl/konfig/models/kube/backend/server_backend.k][backend]] explicitly asserts
+that image is nonempty. The [[file:scenarios/kcl/konfig/models/kube/frontend/container/port/container_port.k][container port schema]] supplies protocol="TCP" and
+checks 1..65535. The [[file:scenarios/kcl/konfig/models/kube/frontend/service/service.k][Service schema]] uses external k8s ServicePort entries;
+that dependency is locked but not vendored/evaluated in this study.
+
+The proposed platform counterpart separates a common Server field Contract from
+optional application-specific restrictions. Its responsibilities must cover the
+complete chosen interface, including metadata, schedulingStrategy and Service
+lists; the abbreviated shape below shows the important nested boundaries, not a
+ready-to-run Kubernetes Contract implementation:
+
+#+begin_src scheme
+(.def (GuestbookFrontendContract @ KubernetesServerContract)
+  identity: 'guestbook/frontend
+  responsibilities: =>.+
+  (.o mainContainer: GuestbookContainerContract
+      services: GuestbookHTTPServicesContract))
+
+(.def (RedisLeaderContract @ KubernetesServerContract)
+  identity: 'guestbook/redis-leader
+  responsibilities: =>.+
+  (.o mainContainer: RedisContainerContract
+      services: RedisServicesContract))
+
+(.def (RedisFollowerContract @ RedisLeaderContract)
+  identity: 'guestbook/redis-follower)
+#+end_src
+
+Both responsibilities refinements above have a real original: the inherited
+responsibilities object of KubernetesServerContract. Each .o is a newly constructed
+specialization object for two entries, and =>.+ preserves the other inherited
+field responsibilities. Replacing responsibilities with that two-entry object
+would lose the other field checks. RedisFollowerContract simply inherits the
+RedisLeaderContract responsibilities and directly replaces identity; it performs
+no additional object refinement. Whether specialization preserves all mandatory
+base constraints remains an admission requirement, not a guarantee of slot merge.
+
+| Boundary | Exact proposed obligation, beyond naming a Contract |
+|----------+----------------------------------------------------|
+| KubernetesServerContract | Nonempty final image/name; positive replicas; known fields; nested container/resource/Service admission; Deployment default |
+| GuestbookContainerContract | Main container fields; env values typed; GET_HOSTS_FROM.value="dns" for this maintained recipe; port 80/TCP |
+| RedisContainerContract | Main container fields; containerPort 6379/TCP for the maintained images |
+| RedisServicesContract | Service list; port 6379; absent targetPort resolves by Kubernetes default or explicit targetPort=6379; TCP |
+| GuestbookHTTPServicesContract | Service port 80; final target resolves to exposed TCP container port 80 |
+| Guestbook Scenario obligation | Three selected roles admitted; compatible namespaces, DNS names, selectors and target ports; evidence tied to final objects |
+
+These role constraints intentionally restrict the maintained recipe. General
+Server configuration may support other ports. A Redis port change must be refused
+under this recipe unless a supported image configuration/consumer changes the
+actual listener and all clients. Matching two integer fields cannot prove that a
+process listens there. Image-level DNS expectations still need an inspected image
+consumer or an integration test; source-only evidence must report that gap.
+
+Conclusion: the opportunity is validating the final selected application graph,
+not merely replacing KCL schema names with POO Contract names. The inspected KCL
+case supplies useful field and resource defaults; the additional Scheme role and
+relationship obligations remain library work with explicit consumer evidence.
+
+* Environment selection: ordinary users write values
+
+Actual [[file:scenarios/kcl/konfig/examples/appops/guestbook/dev/main.k][dev]] and [[file:scenarios/kcl/konfig/examples/appops/guestbook/prod/main.k][prod]] each supply only the frontend image:
+
+#+begin_src kcl
+# dev/main.k
+import konfig.models.kube.frontend
+guestbookFrontend: frontend.Server {
+    image = "gcr.io/google-samples/gb-frontend:v5"
+}
+# prod/main.k (a separately selected environment)
+import konfig.models.kube.frontend
+guestbookFrontend: frontend.Server {
+    image = "gcr.io/google-samples/gb-frontend:v3"
+}
+#+end_src
+
+The proposed Scenario reuses independently published Profiles once. frontend,
+leader and follower bind existing objects; these assignments do not clone them or
+extend their slots. The resource plan is a platform consumer, not another
+user-maintained list of resources. The dotted direct assignments below are the
+target ordinary user interface, pending support in the current path lowerer:
+
+#+begin_src scheme
+(.def (Guestbook @ (.get GuestbookScenarioContract proto))
+  frontend: GuestbookFrontend
+  leader: RedisLeader
+  follower: RedisFollower)
+
+(.def (Development @ Guestbook)
+  frontend.image: "gcr.io/google-samples/gb-frontend:v5")
+
+(.def (Production @ Guestbook)
+  frontend.image: "gcr.io/google-samples/gb-frontend:v3")
+#+end_src
+
+Desired lowering of frontend.image (not an expansion currently accepted by the
+path-slot implementation):
+
+#+begin_src scheme
+(.def (Development @ Guestbook)
+  frontend: =>.+ (.o image: "gcr.io/google-samples/gb-frontend:v5"))
+#+end_src
+
+The leaf image is a direct replacement, not a transformation of the inherited
+image. The intermediate frontend is refined only to retain its other slots.
+Here its original is the frontend inherited from Guestbook, which is
+GuestbookFrontend. The .o image object is a fresh refinement payload, not an
+independently typed Server and not an inherited image object. Later upstream
+container/resource/Service changes remain inherited; the selected image remains
+replaced. Production has the same intended lowering with the v3 string.
+
+The native rule in [[file:../../../.data/gerbil-poo/object.ss][gerbil-poo object.ss]] translates =>.+ to => .+;
+=> passes the same slot's inherited value as the first argument. Thus the
+frontend refinement conceptually computes .+ of its inherited frontend and the
+fresh image payload. It does not use the whole Guestbook as that slot's super.
+The original must be a compatible object; object refinement cannot silently
+manufacture a missing intermediate slot.
+
+Current [[file:../../../core/object-syntax/path-slots.ss][path-slots.ss]] accepts dotted paths only with =>.+ and one object
+expression, and rejects a dotted direct assignment with "path slots require one
+=>.+ object expression". Consequently the native nested form above is the
+currently available equivalent, while the concise user form is a design target.
+Supporting direct leaf assignments and merging their common prefixes remains
+pending; no syntax implementation is changed in this documentation work.
+
+The existing trie merges supported sibling path refinements. The direct-assignment
+extension must preserve the same principle: two leaf assignments under frontend
+become one frontend refinement. Duplicate leaves and ancestor/descendant overlaps
+must be diagnosed, not silently resolved by declaration order.
+
+KCL has a real environment entry mechanism: [[file:scenarios/kcl/konfig/examples/appops/guestbook/dev/kcl.mod][dev/kcl.mod]] selects base/base.k,
+main.k and render/render.k. Scheme currently lacks the corresponding qualified
+Guestbook publication/admission/render route. A shorter expression does not remove
+that platform work. KCL's metadata environment defaults to "prod" in
+[[file:scenarios/kcl/konfig/models/kube/metadata/metadata.k][metadata.k]]; selecting the dev directory alone does not set appenv="dev".
+Both designs need a preview showing resolved parameters, not a misleading filename.
+
+Conclusion: the one-image user task should remain one assignment. KCL already
+achieves that today. Scheme's proposed path assignment can match the task while
+retaining object behavior, but the inspected implementation does not accept it.
+That missing surface must not be disguised as an existing capability.
+
+* Labels: choose a leaf assignment or whole-map replacement
+
+Adding the ownership label does not require the user to write an extension
+operator. The user knows the complete desired value of team:
+
+#+begin_src scheme
+;; Target path-assignment interface; pending direct-path support.
+(.def (TeamDevelopment @ Development)
+  frontend.labels.team: "checkout")
+#+end_src
+
+Its desired lowering uses existing native operations:
+
+#+begin_src scheme
+(.def (TeamDevelopment @ Development)
+  frontend: =>.+
+  (.o labels: =>.+ (.o team: "checkout")))
+#+end_src
+
+The outer original is Development.frontend. The inner original is labels inherited
+from that effective frontend. The first .o supplies a labels refinement; the
+second supplies a direct team assignment. Both are new payload objects. Neither
+requires the user to construct a new Server. Other upstream label keys survive;
+a later upstream team value is replaced. This requires an object-valued labels
+default when absent, a pending platform responsibility, not a property of .o.
+
+If the intention is to replace the entire label map, the target is instead:
+
+#+begin_src scheme
+;; Target path-assignment interface; pending direct-path support.
+(.def (TeamOnlyDevelopment @ Development)
+  frontend.labels: (.o team: "checkout"))
+#+end_src
+
+The native counterpart has only the outer refinement:
+
+#+begin_src scheme
+(.def (TeamOnlyDevelopment @ Development)
+  frontend: =>.+ (.o labels: (.o team: "checkout")))
+#+end_src
+
+Here the inner .o constructs the complete replacement map; there is no labels
+super operation. Other user-configured labels are intentionally replaced. Platform
+reserved selector labels still require their separate final consistency policy.
+
+If users genuinely transform an existing collection, use native => with a named
+function over its inherited value. No such transformation is needed for the actual
+Guestbook image override or the known team value, so this case does not add an
+artificial append/filter example merely to expose an extension operator.
+
+Conclusion: setting one label and replacing the label map are different user
+intentions. Both should be plain assignments at the relevant depth. Native
+refinement belongs in the lowering that preserves intermediate objects; users
+need an extension operator only when the requested operation depends on old values.
+
+* Resource generation and final-value validation
+
+The actual path is Server.instances() -> ServerBackend -> Kubernetes resource
+mapping -> renderer. [[file:scenarios/kcl/konfig/models/kube/mixins/service_mixin.k][ServiceMixin]] uses the workload name/namespace for a single
+Service and defaults its selector to the generated workload matchLabels. It copies
+Service ports, rather than deriving them from mainContainer.ports. The
+[[file:scenarios/kcl/konfig/models/kube/utils/container_frontend2kube.k][container converter]] separately projects containerPort/protocol and env values.
+Thus names/selectors are linked by maintained code, but user-specified ports can
+still diverge. Do not infer a general application connection proof from that code.
+
+For Scheme, one pure resource consumer must receive the admitted effective
+Scenario and generate all selected resources. It must use each final Profile for
+both its workload and Service, then validate the assembled graph. It must not
+cache parent resources as a constant slot and splice child changes into them.
+Cross-object references need qualified identity and evidence, not string equality
+alone. This refines the unexecuted [[file:../../../core/design/config-languages/09-application-scenario-admission.org][application admission design]]; it is not an
+implemented Guestbook projector or a claim that module 06's narrow Server
+projector supports these Redis workloads.
+
+Expected preview, with appns="sampleappns" and appenv="dev" explicitly supplied:
+
+#+begin_example
+status: projected-unadmitted
+frontend: image=gcr.io/google-samples/gb-frontend:v5
+  Deployment/frontend -> Service/frontend :80 -> container :80/TCP
+leader: image=docker.io/redis:6.0.5
+  Deployment/redis-leader -> Service/redis-leader :6379 -> container :6379/TCP
+follower: image=gcr.io/google_samples/gb-redis-follower:v2
+  Deployment/redis-follower -> Service/redis-follower :6379 -> container :6379/TCP
+namespace: sampleappns-dev
+selectors: each Service selects its own final workload labels
+application-DNS: expected names recorded; image consumer behavior unverified
+#+end_example
+
+This is a compact expected relationship view, not generated YAML or a complete
+resource inventory (Namespace and any other emitted resources also need checking).
+Defaulted targetPort behavior must be distinguished from an explicit field in
+source. admitted-preview requires all declared configuration/relationship
+obligations; its scope must still identify unverified runtime behavior. Neither
+preview status starts containers or authorizes deployment.
+
+| Final edit/control | Required result |
+|--------------------+-----------------|
+| Frontend image v5 -> v3 | Final Deployment container image changes; Redis defaults retained |
+| frontend.imgae | Unknown-field rejection with source/path and image suggestion |
+| Service selector misses final Pod labels | Relationship rejection before publish |
+| Redis Service port changed without supported image/client configuration | Reject this recipe; do not claim synthetic endpoint consistency is sufficient |
+| Required follower omitted from selected Guestbook | Scenario role rejection; no fabricated evidence |
+| Two different payloads share resource kind/name/namespace/apiVersion | Diagnose both sources or invoke an explicit replacement policy |
+| Parent plan forced before child image/labels override | Child admission and projection inspect child final objects; parent receipt cannot admit child |
+
+The pinned renderer keeps the later duplicate identity without comparing the full
+payload. A conflicting-payload diagnostic is therefore an explicit proposed policy
+improvement, not a feature observed in this KCL case.
+
+Conclusion: valid field shapes and matching resource fields are insufficient
+for application connectivity. The final consumer must check resource relations;
+image behavior and running connectivity require separate evidence. Neither
+inheritance nor a preview confers runtime correctness.
+
+* Controlled Profile evolution: what downstream users actually retain
+
+This is a proposed evolution experiment on the same Guestbook objects, not a
+claim about historical upstream commits. V1 and V2 below are Profile release
+identities, not image version ordering. Both frontend image strings come from
+the pinned environment examples. Additional ownership labels and replica changes
+are explicit experimental inputs. Redis objects, ports and DNS names stay fixed.
+
+** Maintainer changes the baseline once
+
+Target path-assignment surface (pending direct-path support):
+
+#+begin_src scheme
+(.def (MaintainedV1 @ Guestbook)
+  frontend.image: "gcr.io/google-samples/gb-frontend:v5"
+  frontend.replicas: 1
+  frontend.labels: (.o app: "guestbook" owner: "platform"))
+
+(.def (MaintainedV2 @ MaintainedV1)
+  frontend.image: "gcr.io/google-samples/gb-frontend:v3"
+  frontend.replicas: 2
+  frontend.labels.owner: "platform-v2"
+  frontend.labels.costCenter: "infra")
+#+end_src
+
+Current native counterpart, including common-prefix grouping:
+
+#+begin_src scheme
+(.def (MaintainedV1 @ Guestbook)
+  frontend: =>.+
+  (.o image: "gcr.io/google-samples/gb-frontend:v5"
+      replicas: 1
+      labels: (.o app: "guestbook" owner: "platform")))
+
+(.def (MaintainedV2 @ MaintainedV1)
+  frontend: =>.+
+  (.o image: "gcr.io/google-samples/gb-frontend:v3"
+      replicas: 2
+      labels: =>.+ (.o owner: "platform-v2" costCenter: "infra")))
+#+end_src
+
+V1's frontend original is Guestbook.frontend. V1's labels object is a whole-map
+assignment. V2's frontend original is MaintainedV1.frontend; its labels original
+is that effective frontend's labels. V2 retains app, replaces owner and adds
+costCenter. All .o forms are new payload/maps; no port or Service is reconstructed.
+
+** Users keep the same three intentions when selecting V2
+
+#+begin_src scheme
+;; Target user surface; the same bodies can instead select MaintainedV1.
+(.def (ImagePinnedV2 @ MaintainedV2)
+  frontend.image: "gcr.io/google-samples/gb-frontend:v5")
+
+(.def (TeamLabelV2 @ MaintainedV2)
+  frontend.labels.team: "checkout")
+
+(.def (OnlyTeamLabelsV2 @ MaintainedV2)
+  frontend.labels: (.o team: "checkout"))
+#+end_src
+
+Current native counterparts:
+
+#+begin_src scheme
+(.def (ImagePinnedV2 @ MaintainedV2)
+  frontend: =>.+ (.o image: "gcr.io/google-samples/gb-frontend:v5"))
+
+(.def (TeamLabelV2 @ MaintainedV2)
+  frontend: =>.+ (.o labels: =>.+ (.o team: "checkout")))
+
+(.def (OnlyTeamLabelsV2 @ MaintainedV2)
+  frontend: =>.+ (.o labels: (.o team: "checkout")))
+#+end_src
+
+All outer refinements use MaintainedV2.frontend as their original. Only TeamLabelV2
+refines the inherited labels object. The image variant assigns a complete string;
+the whole-map variant assigns a new labels object without using its original.
+
+| User intention | Effective values against V1 | Effective values against V2 |
+|----------------+-----------------------------+-----------------------------|
+| Pin image v5 | image=v5; replicas=1; labels={app=guestbook, owner=platform} | image=v5; replicas=2; labels={app=guestbook, owner=platform-v2, costCenter=infra} |
+| Set team label | image=v5; replicas=1; labels={app=guestbook, owner=platform, team=checkout} | image=v3; replicas=2; labels={app=guestbook, owner=platform-v2, costCenter=infra, team=checkout} |
+| Replace labels | image=v5; replicas=1; labels={team=checkout} | image=v3; replicas=2; labels={team=checkout} |
+
+These are expected semantic results, not executed Guestbook previews. A child
+already constructed against V1 does not automatically acquire V2 when the library
+publishes it. Select/pin the new baseline and reconstruct the derived configuration;
+then re-admit and re-project. Publishing V2 must not mutate V1 or invalidate the
+meaning of its prior evidence. A user may intentionally remain on V1.
+
+** Final admission and resource consumers
+
+The schema bridge validates each selected final Profile through its associated
+schema artifact, including image, labels, replicas and nested port/Service shapes.
+The Scenario then checks the selected roles and relationships. Any proposed .admit
+adapter must compose that existing validation rather than reconstructing it or
+admitting the parent and treating descendants as already valid.
+
+Replacing labels is admissible only when the selected Contract permits it. This
+experiment permits arbitrary valid user label maps and reserves selector identity
+separately. If a later organizational Contract makes costCenter mandatory, the
+whole-map replacement must fail unless it supplies costCenter. The system must
+not silently reinsert mandatory values and misrepresent replacement semantics.
+Contract evolution is distinct from default evolution and needs its own diagnostic.
+
+The resource consumer reads the same admitted effective frontend for Deployment
+image, replicas and metadata.labels. It reads that Profile's effective container
+ports and Service configuration for the Service/Pod relation. Admission evidence
+must identify the final candidate and the Contract/schema generation, not only
+name the parent Profile. The graph projection must use that exact admitted input;
+a later change requires fresh admission.
+
+Expected partial resource view after selecting V2:
+
+#+begin_example
+ImagePinnedV2:   Deployment image=:v5 replicas=2 labels=app,owner,costCenter
+TeamLabelV2:     Deployment image=:v3 replicas=2 labels=app,owner,costCenter,team
+OnlyTeamLabelsV2: Deployment image=:v3 replicas=2 labels=team
+all variants:    frontend Service :80 -> Pod container :80/TCP
+                redis-leader/follower Services :6379 -> their containers :6379/TCP
+                workload identity and namespace unchanged from selected parameters
+status: projected-unadmitted (expected design view; not generated manifests)
+#+end_example
+
+The actual KCL [[file:scenarios/kcl/konfig/models/kube/utils/metadata_builder.k][MetadataBuilder]] puts server.labels on Deployment metadata.
+[[file:scenarios/kcl/konfig/models/kube/utils/application_builder.k][ApplicationBuilder]] supplies built-in Pod labels and selector labels separately.
+ServiceMixin defaults Service selectors to workload matchLabels; its Service
+metadata uses the Service's own configuration. Therefore changing server.labels
+in this matched case does not automatically label Pods or Service metadata.
+Scheme must preserve that behavior for a parity comparison. Propagating labels to
+all resources would be a separate documented policy change, not a free improvement.
+
+A warmed V1 resource plan must not serve as V2's plan. Each derived configuration
+needs receiver-sensitive computation and evidence for its effective objects;
+projection must additionally track relevant environment/schema/consumer dependencies.
+Existing native receiver/cache controls motivate the design, but do not constitute
+an executed proof of this new Guestbook resource chain.
+
+** What the comparison changes in our design
+
+KCL already supports concise image assignment and nested label configuration.
+This experiment does not establish that only POO can retain upstream defaults.
+The cost/benefit question is how the maintained ecosystem explains replacement
+versus retained values, carries source/Contract associations, and regenerates
+validated outputs as Profiles and protocols evolve. A KCL comparison of whole-map
+replacement must qualify its actual override/union behavior; do not assume a label
+assignment in a merged input erases inherited keys as it does in the Scheme form.
+
+Concrete design consequences: field discovery should distinguish leaf replacement
+from whole-object replacement; previews should show retained/replaced/defaulted
+fields and their sources; release selection must remain explicit; schema-generated
+validation must be reused; required organizational policy cannot be confused with
+optional defaults. MOP and macro work is justified only if it enforces these rules
+without per-user bookkeeping. Native functions/dispatch earn their place when a
+real transformation or open protocol is needed, not for a known image string.
+
+Conclusion: the intended benefit is less duplicated maintenance with explainable
+configuration evolution. The current cost is an unfinished domain integration and
+additional semantic/tooling obligations. Validate both on matched effective output,
+error behavior and maintenance changes before claiming an advantage over KCL.
+
+* User effort, scale and remaining UX gaps
+
+KCL's actual downstream cost is an import plus a typed object with one image
+assignment per environment, alongside the maintained kcl.mod entry list. The
+Scheme target is a parent selection plus one path assignment after the maintained
+Scenario is available. First-time contribution still needs the three complete
+Profiles above. Scheme's list/object delimiters are not inherently less verbose;
+we should not manufacture savings by hiding more defaults than the KCL library.
+Task-specific defaults and role Contracts could also be maintained in KCL.
+
+The useful POO opportunity is sparse independent Profile reuse, native assignment
+and inherited transformations, with receiver-aware derived plans. The unfinished
+Guestbook integration includes field discovery, recursive default views,
+derivation-aware Contract association, supported image capabilities, final resource
+consistency and source-qualified previews. Schema-to-Contract generation and
+candidate-validation diagnostics already exist and should be reused, not listed
+as missing platform mechanisms. Native
+multiple inheritance alone supplies none of those Kubernetes guarantees.
+
+For thousands of Profiles, catalog metadata should identify exports/Contracts
+without forcing their bodies. Selecting Guestbook demands these three Profiles,
+their required schema/defaults and their resource consumers. Complete selected
+relationship admission necessarily reads selected metadata; image pulling and
+runtime execution stay outside it. Unselected Scenarios must remain cold.
+No performance improvement is measured here. Cache qualification must account for
+receiver identity, selected Profile generation, environment parameters, Contract
+and projector versions, and referenced dependencies. A warmed parent and a child
+are different effective configurations. Existing native receiver/cache controls
+support that core distinction, not this unexecuted domain adapter.
+
+* Evidence and next acceptance
+
+Existing: native .def, .o, =>.+, lexical receiver semantics and dotted
+=>.+ path-slot lowering. Dotted direct assignment is not supported by the inspected
+lowerer; its examples above are proposed user syntax. Inspected external implementation: pinned KCL inputs, schemas, backend,
+Service mixin, converter and renderer. Pending for Guestbook: selected-schema integration and default adapters,
+direct-path assignment and its common-prefix handling, publication associations,
+Guestbook obligations, Scheme resource generation,
+relationship-aware diagnostics and matched runnable output/cache controls.
+
+Next tests must compare actual manifests with identical parameters, prove child
+final-image/selector/port identities after a warm parent, reject unsupported Redis
+reconfiguration, and retain an unselected-Profile demand control. Kubernetes
+runtime connectivity needs separate image/deployment evidence. This document adds
+no runtime implementation, module adapter or Loader.
+
+* Conclusion: why build this, and what would make it worthwhile?
+
+** Where can POO Flow do better than this KCL case?
+
+The intended gain is maintaining evolving configuration libraries across many
+owners, not saving a pair of braces in Guestbook. Independent Profiles can carry
+reusable behavior as well as values. A derived Scenario can retain upstream
+behavior while replacing a leaf, transforming a collection, or extending a
+well-defined protocol. Receiver-aware derived values give a native foundation
+for projecting the effective child rather than a warmed parent's configuration.
+
+Native functions and higher-order composition can share domain transformations
+without inventing an overlay language for each data type. Generic multiple
+dispatch can support independently growing Contract/consumer families where the
+crossing is genuinely open. MOP can provide a common construction/provenance
+boundary, rather than requiring users to annotate every derivative. Hygienic
+macros can remove repeated internal declarations while expanding to inspectable
+POO/functional code. None of these tools is a reason to expose their machinery
+in an ordinary image assignment or to use multiple dispatch for a simple function.
+
+These are opportunities supported by native mechanisms, not a demonstrated
+end-to-end advantage over KCL. KCL also supports reusable schemas and abstractions.
+To establish an advantage, the same Guestbook change must require fewer repeated
+policy declarations while retaining final-object evidence, useful diagnostics,
+output parity and bounded demand. Repeat that comparison with larger evolving
+service graphs; do not extrapolate a thousand-service result from three services.
+
+** Where are we worse or incomplete today?
+
+The inspected KCL ecosystem already connects the user schema, environment entries,
+Kubernetes backend and renderer. Our Guestbook counterpart is still a design.
+Guestbook still needs direct path assignment, qualified schema/default views,
+association through contribution/derivation, field discovery, relationship-specific
+diagnostics and a qualified resource consumer. The existing JSON Schema bridge
+already provides Contract generation and candidate validation, with a GitHub CI
+consumer; those are implementation assets, not missing capabilities. Native lists/objects can also be more verbose
+than KCL records. Scheme's general execution power makes effect discipline,
+reproducibility and safe contribution boundaries additional obligations.
+
+Automatic provenance and admissible nested-object discovery are not established
+just by naming a MOP hook. A scalable implementation also needs selected demand,
+conflict policy, dependency-sensitive invalidation and understandable cost.
+Existing small native cache controls do not prove these ecosystem properties.
+
+** Why another configuration system rather than another Kubernetes wrapper?
+
+POO Flow's purpose is a common extensible configuration and admission model for
+complex enterprise and user workflows spanning agents, build/release pipelines,
+deployments, sandbox policies and external providers. Profiles express reusable
+recipes; Scenarios select/combine them under explicit requirements; Modules
+provide focused functionality and consumers. Their roles must remain distinct.
+The module config/org organization should make ownership and discovery legible,
+not introduce a second evaluator or force all Profiles into Modules.
+
+For example, a shared Guestbook Profile may acquire centrally maintained labels
+or security defaults while a team pins its frontend image. The team should retain
+those compatible changes without copying the Profile. A different team may
+replace a whole label map intentionally. The system should explain the difference,
+validate each final graph, and regenerate affected resources without making either
+team implement the schema/renderer. A complex service graph then extends this same
+model with explicit relationships, rather than maintaining unrelated patch files,
+manual resource lists and per-environment copies.
+
+The ambition of code as infrastructure is therefore traceable, evolvable intent
+from contribution to admitted effective plan, with an explicit runtime boundary.
+Scheme, POO, Contracts, generic dispatch and MOP are means to reduce maintenance
+and preserve semantics across those changes. They are not a claim that KCL cannot
+express the task, nor permission to rebuild a Kubernetes API/model ecosystem
+without a concrete benefit. Reuse upstream domain definitions and consumers where
+possible; build adapters only where the shared semantics require them.
+
+** What evidence decides whether this succeeds?
+
+Keep the KCL source and output as controls. Compare ordinary and advanced changes,
+upstream default evolution, invalid connection edits, source-qualified conflicts,
+selected demand and warm-cache derivatives. Measure complete authoring effort and
+maintenance as well as output correctness and cost. If the Scheme route merely
+adds object ceremony to the one-image task, it fails this UX goal. If it preserves
+shared behavior and enforceable relationships across changes with less duplicated
+configuration, it earns its additional abstraction. These are acceptance goals,
+not results from this documentation-only work.
+
+** Reflection questions are design instruments, not a verdict template
+
+The questions above exist to change design decisions. Start from a real task,
+identify a failure or maintenance cost, propose the smallest mechanism that
+addresses it, and retain a matched control that could refute the proposal.
+Do not fill a fixed superiority checklist or turn a hypothetical result into an
+implementation claim. Existing infrastructure such as the schema bridge must be
+counted before proposing new abstractions.
+
+Research on configuration composition, incremental computation and modular
+interfaces should supply testable hypotheses: when does replacement prevent
+upstream evolution; when should policy reject a derivative; what constitutes a
+stable dependency; which combinations should remain uninstantiated? A paper's
+model is not proof of this runtime. Carry its premises into explicit experiments
+on real contribution libraries and complex user Scenarios, including controls
+where simple assignment or the existing KCL route is the better answer.

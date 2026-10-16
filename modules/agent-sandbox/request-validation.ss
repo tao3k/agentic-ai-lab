@@ -15,7 +15,7 @@
 ;;; Policy evidence:
 ;;; - Profile and bridge tests assert both valid requests and failure codes.
 
-(import (only-in :poo-flow/src/core/failure raise-control-plane-failure)
+(import (only-in :poo-flow/modules/workflow/control-plane/failure raise-control-plane-failure)
         :poo-flow/modules/agent-sandbox/alist
         :poo-flow/modules/agent-sandbox/projection-syntax
         :poo-flow/modules/agent-sandbox/profile

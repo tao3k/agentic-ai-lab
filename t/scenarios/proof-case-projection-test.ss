@@ -5,8 +5,8 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/policy/authorized-effect-token
-        :poo-flow/src/proof/proof-case-projection)
+        :poo-flow/modules/governance/policy/authorized-effect-token
+        :poo-flow/modules/proof/projections/proof-case-projection)
 
 (export proof-case-projection-test)
 

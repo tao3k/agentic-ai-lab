@@ -10,7 +10,7 @@
         :poo-flow/modules/tool-core/objects-catalog
         :poo-flow/modules/tool-core/objects-policy-refs
         :poo-flow/modules/tool-core/objects-spec
-        :poo-flow/src/utilities/functional)
+        :core/utilities/functional)
 
 (export poo-flow-tool-action-mismatch-bundle
         poo-flow-tool-policy-catalog-validation-summary)

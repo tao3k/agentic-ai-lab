@@ -15,7 +15,7 @@
 ;;; Policy evidence:
 ;;; - Descriptor tests assert each public accessor field.
 
-(import (only-in :poo-flow/src/core/task task-kind task-request))
+(import (only-in :poo-flow/modules/workflow/control-plane/task task-kind task-request))
 
 (export task-agent-sandbox-config
         task-agent-sandbox-config-ref

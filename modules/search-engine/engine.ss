@@ -4,7 +4,7 @@
 ;;; Pure Search control decisions; physical execution remains consumer-owned.
 (import (only-in :clan/poo/object .ref object?)
         (only-in :std/list/list every filter ormap)
-        :poo-flow/src/core/object-syntax
+        :core/object-family/role-syntax
         :poo-flow/modules/search-engine/funs
         :poo-flow/modules/search-engine/attempt
         (only-in :poo-flow/modules/temporal-causality/types poo-flow-causal-event?)

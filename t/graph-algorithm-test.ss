@@ -11,8 +11,8 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .def .o .ref .slot?)
-        :poo-flow/src/graph/types
-        :poo-flow/src/graph/algorithms)
+        :core/graph/types
+        :core/graph/algorithms)
 
 (export graph-algorithm-test)
 

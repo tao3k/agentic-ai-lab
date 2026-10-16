@@ -5,7 +5,7 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
-        (only-in :poo-flow/src/core/funcs
+        (only-in :core/utilities/algorithms
                  poo-flow-memoize poo-flow-read-datums/append-map
                  poo-flow-scheme-datum-find
                  poo-flow-make-value-index

@@ -5,7 +5,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/qualification/cutover-readiness)
+        :poo-flow/modules/workflow/qualification/cutover-readiness)
 
 
 (def accepted-symbol-receipt

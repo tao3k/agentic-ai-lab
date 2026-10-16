@@ -1,0 +1,93 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Config Languages 10: Actual Scenario Sources and Design Acceptance
+#+date: [2026-10-16]
+#+filetags: :config-language:scenarios:comparison:research:
+#+property: STATUS pinned-source-study-no-evaluation-or-deployment
+
+* Evidence upgrade
+
+The [[file:scenarios/README.org][scenario references]] use complete upstream Git submodules. Repository URLs
+are maintained in .gitmodules and exact revisions in gitlinks, rather than copied
+source subsets and a parallel per-file hash inventory. Read upstream inputs with
+their schema, backend and render owner. Keep proposed Scheme code separate from
+these sources. Configuration evaluation and deployment were not run.
+
+* Actual KCL three-workload case: Guestbook
+
+[[file:scenarios/kcl/konfig/examples/appops/guestbook/base/base.k][The pinned baseline]] declares guestbookFrontend, redisLeader and redisFollower
+as frontend.Server instances. The [[file:11-guestbook-source-comparison.org][detailed Guestbook comparison]] pairs
+these actual values, field schemas and consumers with the proposed Scheme route. The frontend selects php-redis, TCP container
+port 80, GET_HOSTS_FROM=dns and a Service port. Redis workloads declare port 6379
+and their own images/Services. [[file:scenarios/kcl/konfig/examples/appops/guestbook/dev/main.k][Dev input]] only supplies the frontend image;
+[[file:scenarios/kcl/konfig/examples/appops/guestbook/prod/main.k][prod]] likewise supplies only the frontend image. These are actual multi-workload source
+inputs, not the invented Web/API/PostgreSQL example.
+
+Important distinction: the baseline uses DNS conventions but does not contain
+our proposed typed connections map. Whether the application images consume the
+expected names is a consumer/runtime question. Do not describe this as proof of
+descriptor.requirements checking or our .admit protocol. Conversely, do not treat
+the absence of that exact syntax as a lack of reusable KCL models or validation.
+
+The [[file:scenarios/kcl/konfig/examples/appops/guestbook/dev/kcl.mod][actual profile entries]] select base, environment and renderer; the adjacent
+lock records package dependencies. The [[file:scenarios/kcl/konfig/models/kube/frontend/server.k][frontend]] supplies the user schema,
+[[file:scenarios/kcl/konfig/models/kube/backend/server_backend.k][backend]] supplies resource conversion, and [[file:scenarios/kcl/konfig/models/kube/render/render.k][render.k]] gathers the compiled frontend
+instances and emits manifests. This is a real maintained consumption route that
+the Scheme design does not yet provide.
+
+* Complexity is hidden upstream, not removed
+
+[[file:scenarios/kcl/konfig/examples/server/app_stateful_set/prod/main.k][StatefulSet selection]] is one workloadType assignment; it is not implemented
+by pretending a database is an ordinary Deployment. [[file:scenarios/kcl/konfig/examples/server/app_sidecar/prod/main.k][The sidecar case]] supplies
+typed Sidecar/Volume/Mount objects and a container-specific mount reference.
+[[file:scenarios/kcl/konfig/examples/server/app_secret/prod/main.k][The Secret case]] and [[file:scenarios/kcl/konfig/models/kube/frontend/storage/database.k][cloud database schema]] expose additional concrete domain
+contracts. These cases should guide POO role Contracts and consumers, not force
+ordinary authors to write those consumers themselves.
+
+We should match the task-facing interface first: Contract-directed Profile values,
+sparse independent reuse and named relationship references. Then qualify actual
+resource output and typed diagnostics. More general native POO syntax alone does
+not outperform a maintained KCL backend or its field tooling.
+
+* A concrete source-level conflict policy to examine
+
+The pinned [[file:scenarios/kcl/konfig/models/kube/render/render.k][renderer]] compares apiVersion/kind/name/namespace and removes entries
+that have a later matching identity. That is a last-retained duplicate policy;
+the shown equality predicate does not compare every payload field. It is not a
+proof that duplicate definitions agree. POO resource-plan publication should
+diagnose conflicting payloads at the same qualified identity unless the selected
+policy explicitly authorizes replacement, while identifying both sources.
+
+The nested duplicate scan is also a source-level scaling question to measure,
+not a performance result or evidence of global catalog loading. Schema.instances()
+here traverses compiled instance sets. A fair comparison needs selected-instance
+counts, actual dependency demand, output parity and measured work, not inference
+from language branding. Our selected-graph/index plan is not yet qualified.
+
+* Omnibus and HiveBus anchor different user tasks
+
+The actual [[file:scenarios/nickel/omnibus-ncl/aws/main.ncl][AWS input]] refers from an EC2 instance to a maintained network value;
+[[file:scenarios/nickel/omnibus-ncl/aws/modules/aws-simple-ec2.ncl][the library]] derives resource structures. The actual
+[[file:scenarios/nickel/omnibus-ncl/sandbox/examples/web-scraper.ncl][Sandbox input]] supplies command/policy values to the maintained interface.
+The [[file:scenarios/nix/hivebus/hosts/host-1/meta.nix][HiveBus host]] sets deployment values, while [[file:scenarios/nix/hivebus/units/self/flakeOutputs.nix][the export owner]] exposes advanced
+POP extension. Compare these actual operation boundaries with POO configuration
+versus native object/protocol extension; do not flatten them into a list-append demo.
+
+* Acceptance agenda, without implementing adapters
+
+| Requirement | Concrete future check |
+|-------------+-----------------------|
+| Useful type-directed surface | Same ordinary task values, accepted/rejected fields and meaningful defaults |
+| Profile/Scenario reuse | Upstream and downstream derivatives preserve declared mandatory Contracts |
+| Final connections | Changed API/database port updates actual application config, not just a summary |
+| Manifest consistency | Exact names/selectors/ports/namespace/storage and required resource kinds |
+| Conflict diagnosis | Same identity + different payload fails or invokes an explicit selected policy |
+| Errors | Unknown field, absent role, incompatible export and missing evidence show source/path |
+| Demand | Unselected recipes stay cold; selected graph admission is complete and bounded |
+| Cache | Dependency changes invalidate affected consumers and proof generations |
+| UX | Count complete user declarations, discovery steps and maintenance, not only one operation |
+
+The Scheme positive/negative admission examples in [[file:../../../core/design/config-languages/09-application-scenario-admission.org][module 09]] are expected design
+outcomes, not execution receipts. Full KCL/Nix/Nickel evaluation and matched POO
+runtime qualification remain future work. No Loader or production adapter is added.

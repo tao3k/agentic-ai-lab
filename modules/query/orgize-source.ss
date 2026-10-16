@@ -7,7 +7,7 @@
 ;;; grant file, WorkTree, Session, temporal, or effect authority.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :clan/poo/mop validate)
-        (only-in :poo-flow/src/semantic/orgize-source-interface
+        (only-in :poo-flow/modules/query/semantic/orgize-source-interface
                  org-source-headline-elements
                  org-source-headline-elements?
                  org-source-headline-parser-identity)

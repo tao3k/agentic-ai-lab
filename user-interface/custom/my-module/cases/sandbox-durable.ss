@@ -6,7 +6,7 @@
 ;;; Boundary: downstream sandbox durable placement case.
 ;;; Invariant: pure profile declaration; sandbox execution stays in runtime.
 
-(import :poo-flow/src/user-interface/init-syntax
+(import :poo-flow/modules/user-interface/init-syntax
         "../profiles/all")
 
 (export poo-flow-custom-my-module-sandbox-durable-case)

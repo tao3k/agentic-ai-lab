@@ -10,7 +10,7 @@
         (only-in :clan/poo/object .ref)
         (only-in :std/list/walist walist)
         (only-in :std/encoding/json json->string)
-        :poo-flow/src/qualification/release-version-matrix)
+        :poo-flow/modules/workflow/qualification/release-version-matrix)
 
 (export main)
 

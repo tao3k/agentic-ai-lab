@@ -17,7 +17,7 @@
                  test-error
                  test-suite)
         (only-in :poo-flow/testing-api poo-flow-test-case)
-        :poo-flow/src/core/api)
+        :poo-flow/modules/workflow/control-plane/api)
 
 (export functional-flow-kernel-test)
 

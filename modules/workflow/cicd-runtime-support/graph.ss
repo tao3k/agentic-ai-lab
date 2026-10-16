@@ -9,13 +9,13 @@
 (import (only-in :clan/poo/object .ref)
         (only-in :std/hash/misc hash-ensure-modify!)
         (only-in :std/struct/queue dequeue! enqueue! make-Queue queue-empty?)
-        (only-in :poo-flow/src/graph/types-core
+        (only-in :core/graph/types-core
                  poo-flow-graph
                  poo-flow-graph-edge
                  poo-flow-graph-node)
-        (only-in :poo-flow/src/graph/algorithms
+        (only-in :core/graph/algorithms
                  poo-flow-graph-loop-analysis-receipt)
-        (only-in :poo-flow/src/utilities/functional
+        (only-in :core/utilities/functional
                  poo-flow-filter-map
                  poo-flow-stable-duplicates)
         :poo-flow/modules/workflow/types

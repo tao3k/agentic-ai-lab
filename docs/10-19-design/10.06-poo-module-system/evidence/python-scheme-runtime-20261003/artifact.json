@@ -1,1 +1,0 @@
-{"sha256": "ed671778e70b0eec7f6c34e23ef2585e14b7925ad5eda6b8ff78fdf716567804", "descriptor": {"operations": ["temporal.solve", "graph.admit"], "sourceAuthority": "caller-declared-not-authenticated", "schema": "poo-flow.semantic-descriptor.v1", "abiVersion": 1, "maximumInputBytes": 1048576, "threading": "single-owner-thread"}}

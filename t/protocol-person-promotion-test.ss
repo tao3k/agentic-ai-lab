@@ -7,7 +7,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/policy/protocol-person-promotion)
+        :poo-flow/modules/governance/policy/protocol-person-promotion)
 
 (def provenance
   (poo-flow-provenance

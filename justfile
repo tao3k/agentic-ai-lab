@@ -72,7 +72,7 @@ build:
     just build-core
     GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
 
-# Compile the shared Core from the pinned subtree.
+# Compile the shared Core from the pinned submodule.
 [group('build')]
 build-core:
     cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ poo_flow_gerbil_path }}" GERBIL_LOADPATH="{{ poo_flow_library_path }}" GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
@@ -482,7 +482,7 @@ check-governance-lean:
 # traversing the repository-wide Lean aggregate.
 [group('check')]
 check-native-semantic-query-lean:
-    cd "{{ lean_proof_dir }}" && lake build PooFlowProof.PooC4.NativeSemanticQueryModel
+    cd "{{ lean_proof_dir }}" && lake build PooFlowCoreProof.PooC4.NativeSemanticQueryModel
 
 
 [group('check')]
@@ -914,3 +914,15 @@ test-context-temporal:
     for module in temporal-evaluator ai-agentic-context-session-host ai-agentic-context-delta session-attempt ai-agentic-context-org-anchors query-orgize-source; do grep -Fx "MODULE-OK {{ justfile_directory() }}/.gerbil/lib/poo-flow/t/${module}-test.ssi" "$log" >/dev/null; done
     grep -Eq '^HARNESS-OK ' "$log"
     grep -Eq '^OK$' "$log"
+
+# Source-level ownership controls; heap fence applies before any imports.
+test-module-ownership:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    log="$(mktemp)"
+    trap 'rm -f "$log"' EXIT
+    timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/qualification/module-ownership/run.ss 2>&1 | tee "$log"
+    if grep -E 'ERROR (CASE|CHECK|HARNESS)|Heap overflow|Stack overflow' "$log" >/dev/null; then exit 1; fi
+    grep -F 'MODULE-OK t/qualification/module-ownership/run.ss' "$log" >/dev/null
+    grep -F 'HARNESS-OK module-ownership' "$log" >/dev/null
+    grep -x 'OK' "$log" >/dev/null

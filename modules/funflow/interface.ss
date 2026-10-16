@@ -7,7 +7,9 @@
 
 (import "config.ss"
         "github-ci-contract.ss"
-        "profile-library.ss")
+        "profile-library.ss"
+        "native-scope.ss")
 (export (import: "config.ss")
         (import: "github-ci-contract.ss")
-        (import: "profile-library.ss"))
+        (import: "profile-library.ss")
+        (import: "native-scope.ss"))

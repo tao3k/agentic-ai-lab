@@ -8,7 +8,7 @@
         :poo-flow/modules/ai-agentic-context/funs-projection
         :poo-flow/modules/ai-agentic-context/funs-delta
         :poo-flow/modules/ai-agentic-context/funs-session
-        :poo-flow/src/semantic/context-restriction
+        :poo-flow/modules/query/semantic/context-restriction
         (only-in :poo-flow/modules/session/types poo-flow-session-input-ref-shape?))
 (export ai-agentic-context-delta-test)
 (def scope (.o (:: @ AiAgenticContextScope.) bundle: "b" organization: "o" epoch: 1

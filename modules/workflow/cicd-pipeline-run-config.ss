@@ -6,7 +6,7 @@
 ;;; Boundary: workflow CI/CD pipeline run/result projection for user config.
 ;;; Invariant: this owner emits handoff-readiness data and never executes CI.
 
-(import :poo-flow/src/user-interface/module-selection
+(import :poo-flow/modules/user-interface/module-selection
         :poo-flow/modules/sandbox-core/profile-catalog
         :poo-flow/modules/workflow/cicd-config
         (only-in :poo-flow/modules/workflow/funs

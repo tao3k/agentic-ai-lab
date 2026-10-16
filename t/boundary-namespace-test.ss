@@ -25,7 +25,7 @@
 (def boundary-namespace-test
   (test-suite "boundary-namespace-test"
     (poo-flow-test-case "validates the native contract"
-      (eval '(import "./src/contract/boundary-namespace.ss"))
+      (eval '(import "./modules/workflow/contracts/boundary-namespace.ss"))
       (def author-namespace
   (boundary-eval
    '(poo-flow-boundary-namespace 'author '(init))))

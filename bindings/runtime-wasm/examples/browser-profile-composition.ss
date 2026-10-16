@@ -7,9 +7,9 @@
 ;;; runtime chooses to realize its staged composition.
 
 (import :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
+        :poo-flow/modules/workflow/scenario/composition-syntax
         :core/profile-composition/profile-bundle
-        (only-in :poo-flow/src/profiles/agentic-research
+        (only-in :poo-flow/modules/workflow/profiles/agentic-research
                  AgenticResearchModule
                  BrowserResearchScenarioProfile))
 

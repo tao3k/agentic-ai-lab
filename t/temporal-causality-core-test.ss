@@ -5,7 +5,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/graph/types
+        (only-in :core/graph/types
                  poo-flow-graph poo-flow-graph-edge poo-flow-graph-node)
         :poo-flow/modules/temporal-causality/interface)
 

@@ -8,10 +8,10 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :clan/poo/object .all-slots .o .ref .slot?)
         (only-in :std/test check-equal? test-suite)
-        (only-in :poo-flow/src/authoring/fragment-syntax load!)
-        (only-in :poo-flow/src/scenario/case
+        (only-in :poo-flow/modules/module-authoring/fragment-syntax load!)
+        (only-in :poo-flow/modules/workflow/scenario/case
                  poo-flow-scenario-case?)
-        :poo-flow/src/scenario/accessors
+        :poo-flow/modules/workflow/scenario/accessors
         :poo-flow/user-interface/scenarios/crewai/scenario)
 
 

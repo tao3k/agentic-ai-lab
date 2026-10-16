@@ -11,18 +11,18 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/user-interface/init-syntax
+        (only-in :poo-flow/modules/user-interface/init-syntax
                  poo-flow-profile-extend)
-        (only-in :poo-flow/src/authoring/fragment-syntax
+        (only-in :poo-flow/modules/module-authoring/fragment-syntax
                  poo-flow-load-profile-module-binding)
-        (only-in :poo-flow/src/user-interface/module-selection
+        (only-in :poo-flow/modules/user-interface/module-selection
                  poo-flow-user-module-bundle)
-        (only-in :poo-flow/src/user-interface/profile-config
+        (only-in :poo-flow/modules/user-interface/profile-config
                  poo-flow-user-profile-module-bundles
                  poo-flow-user-profile-name)
-        (only-in :poo-flow/src/profiles/kernel/interface
+        (only-in :poo-flow/modules/workflow/profiles/kernel/interface
                  poo-flow-kernel-profile)
-        (only-in :poo-flow/src/utilities/final-projection-syntax
+        (only-in :core/utilities/final-projection-syntax
                  poo-flow-product-field-rows/tail)
         (only-in :poo-flow/modules/ai-agentic-context/features/memory/durable/artifact-policy
                  artifact-module

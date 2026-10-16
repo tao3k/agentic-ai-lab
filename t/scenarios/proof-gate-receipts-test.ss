@@ -4,9 +4,9 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/src/proof/proof-fact-wire
-        :poo-flow/src/proof/proof-gate-receipts
-        :poo-flow/src/proof/proof-gate-bundle)
+        :poo-flow/modules/proof/projections/proof-fact-wire
+        :poo-flow/modules/proof/projections/proof-gate-receipts
+        :poo-flow/modules/proof/projections/proof-gate-bundle)
 
 (def proof-gate-receipts-test
   (test-suite "proof gate receipts"

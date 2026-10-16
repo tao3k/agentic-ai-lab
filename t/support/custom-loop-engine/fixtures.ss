@@ -6,8 +6,8 @@
 ;;; Shared fixtures for custom loop-engine user-interface tests.
 
 (import (only-in :clan/poo/object .ref .slot? object?)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/user-interface/interface
         (only-in :poo-flow/modules/loop-engine/runtime
                  loop-engine-capability-receipt?
                  poo-flow-user-loop-engine-capability-receipt-ref)

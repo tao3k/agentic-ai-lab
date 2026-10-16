@@ -3,8 +3,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import :clan/poo/object
-        :poo-flow/src/feature-system/interface
-        "../../../fixtures/bundle-v1-domain-case-projection.ss")
+        :core/feature-system/interface
+        "../../../../core/t/fixtures/bundle-v1-domain-case-projection.ss")
 
 (def +agent-count+ 1000)
 

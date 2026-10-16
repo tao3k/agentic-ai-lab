@@ -8,7 +8,7 @@
 
 (import (only-in :clan/poo/object .o .ref .call object?)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :poo-flow/src/semantic/organization-bundle
+        (only-in :poo-flow/modules/query/semantic/organization-bundle
                  poo-flow-organization-principal
                  poo-flow-organization-agent
                  poo-flow-organization-delegation

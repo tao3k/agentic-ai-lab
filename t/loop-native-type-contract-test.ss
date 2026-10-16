@@ -25,10 +25,10 @@
 (def loop-native-type-contract-test
   (test-suite "loop-native-type-contract-test"
     (poo-flow-test-case "validates the native contract"
-      (eval '(import "./src/loops/descriptor.ss"))
-      (eval '(import "./src/loops/strategy.ss"))
-      (eval '(import "./src/loops/governor.ss"))
-      (eval '(import "./src/loops/human-audit.ss"))
+      (eval '(import "./modules/loop-engine/control/descriptor.ss"))
+      (eval '(import "./modules/loop-engine/control/strategy.ss"))
+      (eval '(import "./modules/loop-engine/control/governor.ss"))
+      (eval '(import "./modules/loop-engine/control/human-audit.ss"))
       (eval '(import :clan/poo/mop :clan/poo/object))
       (let (node-row
       (loop-contract-eval '(loop-governor-node-type-contract->alist)))

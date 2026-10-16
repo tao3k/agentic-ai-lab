@@ -5,11 +5,12 @@
 
 ;;; Boundary: POO role descriptors are control-plane metadata, not runtime work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import :core/composition/roles
+        (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/src/core/api)
+        :poo-flow/modules/workflow/control-plane/api)
 
 (export control-plane-role-test)
 

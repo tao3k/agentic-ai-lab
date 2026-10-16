@@ -5,8 +5,8 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/proof/generated/proof-case-vector-v1
-        :poo-flow/src/proof/proof-case-vector)
+        :poo-flow/modules/proof/projections/generated/proof-case-vector-v1
+        :poo-flow/modules/proof/projections/proof-case-vector)
 
 (export proof-case-vector-test
         canonical-proof-case)

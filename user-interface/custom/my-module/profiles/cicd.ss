@@ -6,7 +6,7 @@
 ;;; Boundary: CI/CD downstream sandbox profile declarations.
 ;;; Invariant: standalone module; it does not execute workflows.
 
-(import :poo-flow/src/user-interface/init-syntax)
+(import :poo-flow/modules/user-interface/init-syntax)
 
 (export poo-flow-custom-my-module-cicd-module)
 

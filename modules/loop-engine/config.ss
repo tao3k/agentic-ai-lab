@@ -7,7 +7,7 @@
 ;;; Invariant: interface.ss is the sole public module entrypoint; this role
 ;;; never imports outward through interface.ss.
 
-(import :poo-flow/src/authoring/module-config-syntax
+(import :poo-flow/modules/module-authoring/module-config-syntax
         "core.ss"
         "policy-extension.ss"
         "runtime.ss"

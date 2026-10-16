@@ -10,8 +10,8 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/src/core/failure
-        :poo-flow/src/loops/spec-evolution)
+        :poo-flow/modules/workflow/control-plane/failure
+        :poo-flow/modules/loop-engine/control/spec-evolution)
 
 (export loop-spec-evolution-test)
 

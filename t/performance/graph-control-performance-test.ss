@@ -12,8 +12,8 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :poo-flow/src/graph/types-core
-        :poo-flow/src/graph/control-analysis)
+        :core/graph/types-core
+        :core/graph/control-analysis)
 
 (export graph-control-performance-test)
 

@@ -11,7 +11,7 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/user-interface/presentation-config
+        (only-in :poo-flow/modules/user-interface/presentation-config
                  pooFlowUserConfigPresentation)
         (only-in :poo-flow/modules/workflow/cicd-runtime-command-config
                  poo-flow-user-workflow-cicd-runtime-command-manifest-agreement)

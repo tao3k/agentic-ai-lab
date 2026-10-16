@@ -8,7 +8,7 @@
 ;;; parse, validate, or execute a concrete industry standard.
 (import (only-in :clan/poo/object .all-slots .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
-        (only-in :poo-flow/src/utilities/functional
+        (only-in :core/utilities/functional
                  poo-flow-all? poo-flow-any? poo-flow-list-of?))
 
 (export +poo-flow-standard-family-kind+

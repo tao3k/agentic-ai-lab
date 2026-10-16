@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Config Languages 14: Consuming the Core Directory Module Design
+#+date: [2026-10-16]
+#+property: STATUS consumer-router-no-runtime-or-loader-change
+
+* Shared design ownership
+
+Directory source Contracts, source-role structure, native lazy tree projection,
+interface publication and generic selected build views are owned by the
+[[file:../../../core/module-system/design/README.org][Core Module System design]] in the poo-flow-core submodule. The earlier generic
+proposal here has been separated by ownership; do not evolve a second copy.
+
+* POO Flow responsibilities
+
+POO Flow owns poo-flow! syntax, default source/authoring policy, the existing
+poo-flow-load-modules product facade and its integration with Core protocols,
+product Feature System, JsonSchema bridge, contribution Profiles/Scenarios and
+runtime/build providers. Those implementation owners are not moved by this work.
+
+The [[file:../../../core/design/config-languages/15-directory-contract-and-native-tree.org][JsonSchema/Guestbook consumer design]], [[file:../../../core/design/config-languages/17-guestbook-auto-explicit-init-examples.org][complete init examples]] and
+[[file:../../../core/design/config-languages/18-feature-system-guestbook-selection.org][Module/Feature integration]] retain their product-specific code and controls.
+Core must remain usable without importing those consumers.
+
+* Evidence boundary
+
+The shared directory adapter and end-to-end Guestbook renderer remain design.
+No Core source, gitlink, Loader, build registration or runtime behavior is migrated.

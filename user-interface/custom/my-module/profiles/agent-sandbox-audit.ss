@@ -6,7 +6,7 @@
 ;;; Boundary: audit-friendly downstream agent sandbox profile declarations.
 ;;; Invariant: imported by tests as an independent module; it does not execute.
 
-(import :poo-flow/src/user-interface/init-syntax)
+(import :poo-flow/modules/user-interface/init-syntax)
 
 (export poo-flow-custom-module-agent-sandbox-audit-module)
 

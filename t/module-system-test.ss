@@ -16,12 +16,12 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o .ref)
-        :poo-flow/src/core/api
-        :poo-flow/src/authoring/module-descriptor
-        :poo-flow/src/user-interface/module-diagnostics
-        :poo-flow/src/authoring/module-imports
+        :poo-flow/modules/workflow/control-plane/api
+        :poo-flow/modules/module-authoring/module-descriptor
+        :poo-flow/modules/user-interface/module-diagnostics
+        :poo-flow/modules/module-authoring/module-imports
         :core/module-system/source/objects
-        :poo-flow/src/user-interface/module-activation
+        :poo-flow/modules/user-interface/module-activation
         :core/module-system/catalog/objects)
 
 (export module-system-test)

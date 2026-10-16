@@ -7,7 +7,7 @@
 ;;; Invariant: Scheme composes bounded handoff rows only; Rust/Marlin owns
 ;;; event persistence, replay, repair jobs, leases, and side effects.
 
-(import :poo-flow/src/utilities/final-projection-syntax
+(import :core/utilities/final-projection-syntax
         :poo-flow/modules/ai-agentic-context/features/memory/durable/recovery-support)
 
 (export +poo-flow-durable-recovery-scenario-kind+

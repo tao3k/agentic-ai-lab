@@ -12,10 +12,10 @@
                  benchmark-receipt-pass?
                  benchmark-run/result)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/user-interface/module-selection
+        (only-in :poo-flow/modules/user-interface/module-selection
                  poo-flow-settings
                  pooFlowUserConfig)
-        (only-in :poo-flow/src/user-interface/presentation-config
+        (only-in :poo-flow/modules/user-interface/presentation-config
                  pooFlowUserConfigPresentation)
         (only-in "../../user-interface/custom/my-module/cases/cicd-owner"
                  poo-flow-custom-my-module-cicd-module

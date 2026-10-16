@@ -4,7 +4,7 @@
 
 ;;; Projects runtime envelopes into command and proof manifests.
 ;;; Manifests are inert ABI values and never launch the runtime.
-(import :poo-flow/src/core/runtime-command-descriptor
+(import :poo-flow/modules/workflow/control-plane/runtime-command-descriptor
         "core.ss"
         "proof-abi.ss"
         "runtime-intent-request.ss")

@@ -5,7 +5,8 @@
 
 ;;; Boundary: flow descriptor tests cover declaration policy, not execution.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import :core/composition/roles
+        (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -16,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api)
+        :poo-flow/modules/workflow/control-plane/api)
 
 ;;; This suite keeps flow declaration metadata executable independently from
 ;;; runner scheduling behavior.

@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
+        :poo-flow/modules/workflow/control-plane/api
         :poo-flow/modules/custom-task/interface
         :poo-flow/modules/docker/interface
         :poo-flow/modules/text/interface

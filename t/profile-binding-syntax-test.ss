@@ -7,13 +7,13 @@
          (only-in :std/test test-suite check-equal?)
         (only-in :clan/poo/object .o .ref)
         (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        (only-in :poo-flow/src/authoring/semantic-module
+        (only-in :poo-flow/modules/module-authoring/semantic-module
                  poo-flow-semantic-module)
         (only-in :core/profile-composition/profile-bundle
                  profiles compose poo-flow-profile-export
                  poo-flow-module-profiles)
         :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax)
+        :poo-flow/modules/workflow/scenario/composition-syntax)
 
 (export profile-binding-syntax-test)
 

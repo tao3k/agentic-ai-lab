@@ -10,23 +10,23 @@
 ;;; Runtime contract: CAS materialization and cache reuse stay runtime-owned.
 ;;; Policy evidence: receipts carry generic adapter observations from core.
 
-(import (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        (only-in :poo-flow/src/core/task
+(import (only-in :poo-flow/modules/workflow/control-plane/failure raise-control-plane-failure)
+        (only-in :poo-flow/modules/workflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task task? task-name task-kind
                  task-request-operation task-request-payload)
-        (only-in :poo-flow/src/core/strategy
+        (only-in :poo-flow/modules/workflow/control-plane/strategy
                  make-strategy strategy-name strategy-capabilities
                  strategy-cache-policy strategy-failure-policy strategy-planner
                  make-local-eager-strategy make-cached-local-eager-strategy)
-        (only-in :poo-flow/src/core/runtime-adapter
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-adapter
                  make-runtime-adapter runtime-adapter-name
                  runtime-adapter-capabilities runtime-adapter-submitter
                  runtime-adapter-fetcher runtime-adapter-store-putter
                  runtime-adapter-store-getter make-rust-adapter
                  make-request-only-adapter)
-        (only-in :poo-flow/src/core/config make-run-config)
-        (only-in :poo-flow/src/core/flow
+        (only-in :poo-flow/modules/workflow/control-plane/config make-run-config)
+        (only-in :poo-flow/modules/workflow/control-plane/flow
                  default-flow-declaration-registry task-flow flow-name flow-steps
                  flow-input-contract flow-output-contract))
 

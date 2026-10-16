@@ -5,7 +5,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/qualification/runtime-symbol-manifest)
+        :poo-flow/modules/workflow/qualification/runtime-symbol-manifest)
 
 
 (def (read-manifest json)

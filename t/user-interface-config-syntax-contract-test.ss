@@ -8,14 +8,14 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test check-equal? test-suite)
-        (only-in :poo-flow/src/user-interface/module-selection
+        (only-in :poo-flow/modules/user-interface/module-selection
                  poo-flow-user-module-selection
                  poo-flow-user-module-selection-flags
                  poo-flow-user-module-selection-key
                  poo-flow-user-module-selection->alist
                  poo-flow-user-module-when
                  poo-flow-modules-system-use-module)
-        (only-in :poo-flow/src/user-interface/module-selection-contract
+        (only-in :poo-flow/modules/user-interface/module-selection-contract
                  poo-flow-require-use-module-contract!
                  poo-flow-use-module-contract-validation
                  poo-flow-use-module-contract-validation-valid?))

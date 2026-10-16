@@ -6,7 +6,7 @@
 ;;; together or replaced together through this single command boundary.
 
 (import (only-in :std/misc/ports read-file-string write-file-string)
-        :poo-flow/src/contract/runtime-v0-abi-schema)
+        :poo-flow/modules/workflow/contracts/runtime-v0-abi-schema)
 
 ;; : Path
 (def header-path

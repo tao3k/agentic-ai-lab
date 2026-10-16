@@ -23,7 +23,7 @@
   (test-suite "type-facts-contract-projection-test"
     (poo-flow-test-case "validates the native contract"
       (eval '(import :core/module-system/schema/slot-contracts))
-      (eval '(import "./src/type-facts/objects.ss"))
+      (eval '(import "./core/type-facts/objects.ss"))
       (eval '(import :clan/poo/object :clan/poo/mop))
       (type-facts-projection-eval
  '(begin

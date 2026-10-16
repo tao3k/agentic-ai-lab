@@ -4,9 +4,9 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/src/proof/proof-fact-wire
-        :poo-flow/src/proof/proof-gate-decision
-        :poo-flow/src/proof/proof-gate-receipts)
+        :poo-flow/modules/proof/projections/proof-fact-wire
+        :poo-flow/modules/proof/projections/proof-gate-decision
+        :poo-flow/modules/proof/projections/proof-gate-receipts)
 
 (def proof-gate-decision-test
   (test-suite "proof gate decision"

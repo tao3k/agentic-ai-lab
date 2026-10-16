@@ -18,9 +18,9 @@
                  check-output
                  test-error
                  test-suite)
-        :poo-flow/src/user-interface/module-presentation
-        :poo-flow/src/authoring/module-source-observation
-        :poo-flow/src/authoring/source-authoring
+        :poo-flow/modules/user-interface/module-presentation
+        :poo-flow/modules/module-authoring/module-source-observation
+        :poo-flow/modules/module-authoring/source-authoring
         (only-in :core/observability/funcs
                  poo-flow-debug-memory-policy
                  poo-flow-debug-memory-sample
@@ -70,11 +70,11 @@
               (poo-flow-authoring-owner-import-port-observations
                'modules/example/funs.ss
                (open-input-string
-                "(import :poo-flow/src/core/api)")))
+                "(import :poo-flow/modules/workflow/control-plane/api)")))
              (observation (car observations)))
         (check-equal? (length observations) 1)
         (check-equal? (.ref observation 'scope) 'modules/example/funs.ss)
-        (check-equal? (.ref observation 'owner) ':poo-flow/src/core/api)
+        (check-equal? (.ref observation 'owner) ':poo-flow/modules/workflow/control-plane/api)
         (check-equal? (.ref observation 'phase) 'module-admission)
         (check-equal? (.ref observation 'status) 'aggregate-owner-import)
         (check-equal? (.ref observation 'code)
@@ -87,19 +87,19 @@
          (poo-flow-authoring-owner-import-port-observations
           'modules/example/funs.ss
          (open-input-string
-           "(import (only-in :poo-flow/src/core/task make-task))"))
+           "(import (only-in :poo-flow/modules/workflow/control-plane/task make-task))"))
          '())
         (let* ((contribution-observations
                 (poo-flow-authoring-owner-import-port-observations
                  'modules/example/objects.ss
                  (open-input-string
-                  "(import (only-in :poo-flow/src/user-interface/facade poo-flow-module-interface))")))
+                  "(import (only-in :poo-flow/modules/user-interface/interface poo-flow-module-interface))")))
                (contribution-observation
                 (car contribution-observations)))
           (check-equal? (length contribution-observations) 1)
           (check-equal?
            (.ref contribution-observation 'owner)
-           ':poo-flow/src/user-interface/facade)
+           ':poo-flow/modules/user-interface/interface)
           (check-equal? (.ref contribution-observation 'accepted?) #f))))
     (poo-flow-test-case "all maintained module sources import precise owners"
       (let* ((paths (module-observability-source-files "modules"))

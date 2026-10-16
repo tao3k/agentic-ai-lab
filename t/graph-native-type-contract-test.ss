@@ -28,8 +28,8 @@
 (def graph-native-type-contract-test
   (test-suite "graph-native-type-contract-test"
     (poo-flow-test-case "validates the native contract"
-      (eval '(import "./src/graph/types.ss"))
-      (eval '(import "./src/graph/algorithms.ss"))
+      (eval '(import "./core/graph/types.ss"))
+      (eval '(import "./core/graph/algorithms.ss"))
       (eval '(import :clan/poo/mop :clan/poo/object))
       (let (node-row
       (graph-eval '(poo-flow-graph-node-type-contract->alist)))

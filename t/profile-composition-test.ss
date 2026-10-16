@@ -7,12 +7,12 @@
          (only-in :std/test check-equal? check-exception test-suite)
         (only-in :clan/poo/object .all-slots .def .o .ref object?)
         (only-in :clan/poo/mop element?)
-        (only-in :poo-flow/src/core/plan execution-plan? execution-plan-nodes)
+        (only-in :poo-flow/modules/workflow/control-plane/plan execution-plan? execution-plan-nodes)
         (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        (only-in :poo-flow/src/authoring/semantic-module
+        (only-in :poo-flow/modules/module-authoring/semantic-module
                  poo-flow-semantic-module)
         :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
+        :poo-flow/modules/workflow/scenario/composition-syntax
         :core/profile-composition/profile-bundle)
 
 (export profile-composition-test)

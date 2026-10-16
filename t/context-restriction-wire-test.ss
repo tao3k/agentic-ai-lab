@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :poo-flow/testing-api poo-flow-test-case)
-        :poo-flow/src/ffi/scheme-wire :poo-flow/src/ffi/context-restriction)
+        :poo-flow/modules/workflow/runtime/scheme-wire :poo-flow/modules/workflow/runtime/context-restriction)
 (export context-restriction-wire-test)
 (def (wire x) (scheme-wire-read (scheme-wire-write x)))
 (def (restriction readers destinations source start end)

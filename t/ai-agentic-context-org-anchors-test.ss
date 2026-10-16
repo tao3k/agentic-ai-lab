@@ -10,7 +10,7 @@
         :poo-flow/modules/ai-agentic-context/funs-anchors
         :poo-flow/modules/ai-agentic-context/funs-session
         (only-in :poo-flow/modules/session/funs-attempt poo-flow-session-schedule poo-flow-session-claim)
-        :poo-flow/src/semantic/context-restriction)
+        :poo-flow/modules/query/semantic/context-restriction)
 (export ai-agentic-context-org-anchors-test)
 (def scope (.o (:: @ AiAgenticContextScope.) bundle: "bundle" organization: "org" epoch: 1
   project: "project" worktree: "worktree" source-cut: "cut" actor: "actor" task: "task"

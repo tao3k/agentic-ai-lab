@@ -8,11 +8,11 @@
 ;;; owns append, fsync, leases, checkpoint IO, index rebuild, and repair jobs.
 
 (import (only-in :clan/poo/object .ref .slot? object? object<-alist)
-        (only-in :poo-flow/src/core/runtime-protocol
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-protocol
                  +runtime-request-schema+)
-        (only-in :poo-flow/src/core/runtime-command-descriptor
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
-        :poo-flow/src/utilities/final-projection-syntax
+        :core/utilities/final-projection-syntax
         :poo-flow/modules/ai-agentic-context/features/memory/durable/store)
 
 (export +poo-flow-durable-runtime-store-backend-kind+

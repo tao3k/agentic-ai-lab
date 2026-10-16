@@ -17,9 +17,9 @@
         (only-in :core/module-system/schema/slot-contracts
                  poo-flow-contract-slot-name
                  poo-flow-native-contract-slots)
-        (only-in :poo-flow/src/contract/json-schema-source
+        (only-in :core/modules/json-schema/json-schema-source
                  poo-flow-json-schema-read-file)
-        (only-in :poo-flow/src/contract/json-schema-receipt
+        (only-in :core/modules/json-schema/json-schema-receipt
                  poo-flow-json-schema->contract-artifact
                  poo-flow-json-schema-contract-artifact-object-contract
                  poo-flow-json-schema-contract-artifact->alist)

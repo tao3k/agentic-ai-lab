@@ -5,7 +5,7 @@
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :std/list/list every delete-duplicates/hash)
         :poo-flow/modules/query/orgize-source
-        :poo-flow/src/semantic/context-restriction
+        :poo-flow/modules/query/semantic/context-restriction
         "funs-scope.ss" "funs-features.ss")
 (export poo-flow-ai-agentic-context-org-project-incremental
         poo-flow-ai-agentic-context-org-project

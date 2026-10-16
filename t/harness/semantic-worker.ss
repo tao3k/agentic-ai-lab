@@ -14,11 +14,11 @@
    :clan/poo/mop
    :core/types
    :core/module-system/schema/slot-contracts
-   :poo-flow/src/utilities/product-syntax
-   :poo-flow/src/utilities/final-projection-syntax
-   :poo-flow/src/graph/types-core
-   :poo-flow/src/graph/types-contracts
-   :poo-flow/src/graph/types
+   :core/utilities/product-syntax
+   :core/utilities/final-projection-syntax
+   :core/graph/types-core
+   :core/graph/types-contracts
+   :core/graph/types
    :poo-flow/modules/temporal-causality/types
    :poo-flow/modules/temporal-causality/objects
    :poo-flow/modules/temporal-causality/funs
@@ -82,9 +82,9 @@
    :gerbil-ascent/temporal/lens
    :gerbil-ascent/interface/request
    :poo-flow/modules/temporal-causality/ascent-exchange
-   :poo-flow/src/graph/algorithms
-   :poo-flow/src/ffi/scheme-wire
-   :poo-flow/src/ffi/temporal-family
+   :core/graph/algorithms
+   :poo-flow/modules/workflow/runtime/scheme-wire
+   :poo-flow/modules/workflow/runtime/temporal-family
    :poo-flow/modules/temporal-causality/conclusions/types
    :poo-flow/modules/temporal-causality/truth-maintenance/types
    :poo-flow/modules/temporal-causality/conclusions/objects
@@ -98,9 +98,9 @@
    :poo-flow/modules/temporal-causality/lifecycle/funs
    :poo-flow/modules/temporal-causality/lifecycle/interface
    :poo-flow/modules/temporal-causality/truth-maintenance/objects
-   :poo-flow/src/ffi/temporal-admission
-   :poo-flow/src/ffi/temporal-archive
-   :poo-flow/src/ffi/semantic))
+   :poo-flow/modules/workflow/runtime/temporal-admission
+   :poo-flow/modules/workflow/runtime/temporal-archive
+   :poo-flow/modules/workflow/runtime/semantic))
 (displayln "MODULE-OK semantic")
 (displayln "HARNESS-OK semantic-worker")
 (displayln "READY") (force-output)

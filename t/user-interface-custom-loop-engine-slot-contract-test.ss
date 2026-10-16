@@ -10,9 +10,9 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax)
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/user-interface/interface
+        :poo-flow/modules/user-interface/init-syntax)
 
 (export user-interface-custom-loop-engine-slot-contract-test)
 

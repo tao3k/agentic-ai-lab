@@ -8,6 +8,8 @@ open System Lake DSL
 package «poo-flow-proof» where
   version := v!"0.1.0"
 
+require PooFlowCoreProof from "../../../core/proofs/lean"
+
 require Cedar from git
   "https://github.com/cedar-policy/cedar-spec.git"
   @ "e9fa9c1e6b636f29b0897d8706bd7aa5eaf06f9a"
@@ -22,19 +24,9 @@ Lake derives each complete import closure from these roots; no external scanner
 or changed-file projection owns the proof graph. `PooFlowProof` above remains
 the explicit repository-wide integration aggregate.
 -/
-@[default_target]
-lean_lib PooFlowModuleSystemProof where
-  roots := #[
-    `PooFlowProof.PooC4.ModuleProfileBundleImports,
-    `PooFlowProof.PooC4.GerbilPooPhysicalRefinement,
-    `PooFlowProof.PooC4.NativeProjectionPipeline,
-    `PooFlowProof.PooC4.NativeSemanticQueryModel
-  ]
-
 lean_lib PooFlowModuleGovernanceProof where
   roots := #[
     `PooFlowProof.PooC4.GovernanceCore,
-    `PooFlowProof.PooC4.GovernanceDecisionAuthority,
     `PooFlowProof.Enterprise.GovernanceThreatAssuranceClosure
   ]
 
@@ -61,8 +53,7 @@ lean_lib PooFlowModuleAuthorizationProof where
 
 lean_lib PooFlowModuleLoopEngineProof where
   roots := #[
-    `PooFlowProof.PooC4.LoopEngineGraph,
-    `PooFlowProof.PooC4.IncrementalTruthMaintenance
+    `PooFlowProof.PooC4.LoopEngineGraph
   ]
 
 lean_lib PooFlowModuleSessionProof where
@@ -88,7 +79,6 @@ lean_lib PooFlowModuleWorkflowProof where
 
 lean_lib PooFlowModuleMemoryCoreProof where
   roots := #[
-    `PooFlowProof.PooC4.PersistentStateMigrationContract,
     `PooFlowProof.PooC4.RecoveryPolicyAuthorization
   ]
 

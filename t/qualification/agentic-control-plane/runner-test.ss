@@ -5,7 +5,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/qualification/runner)
+        :poo-flow/modules/workflow/qualification/runner)
 
 (def registry (poo-flow-agentic-control-plane-gate-registry))
 

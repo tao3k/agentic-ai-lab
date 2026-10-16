@@ -2,7 +2,7 @@
 --
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-import PooFlowProof.PooC4.EventIngressCausalCut
+import PooFlowCoreProof.PooC4.EventIngressCausalCut
 
 namespace PooFlowProof.PooC4.TemporalCausality
 

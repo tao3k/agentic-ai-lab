@@ -6,14 +6,14 @@
 ;;; Example owner: this composition keeps human authority and evidence return
 ;;; explicit across every stage before bundle publication.
 
-(import :poo-flow/src/core/plan
+(import :poo-flow/modules/workflow/control-plane/plan
         :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
+        :poo-flow/modules/workflow/scenario/composition-syntax
         :core/profile-composition/profile-bundle
-        (only-in :poo-flow/src/profiles/human-ai-capability
+        (only-in :poo-flow/modules/workflow/profiles/human-ai-capability
                  HumanAICapabilityModule
                  HumanCapabilityScenarioProfile)
-        :poo-flow/src/feature-system/bundle-v1-composition-writer)
+        :poo-flow/src/scenario/bundle-v1-projection)
 
 (export human-capability)
 

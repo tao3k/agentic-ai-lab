@@ -8,7 +8,7 @@
 
 (import (only-in :clan/poo/object .ref)
         (only-in :std/list/list delete-duplicates/hash)
-        :poo-flow/src/core/projection-syntax
+        :poo-flow/modules/workflow/control-plane/projection-syntax
         (only-in :poo-flow/modules/agent-sandbox/config
                  poo-flow-sandbox-profile?
                  poo-flow-sandbox-profile-by-name

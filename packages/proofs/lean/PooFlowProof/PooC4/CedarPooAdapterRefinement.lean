@@ -4,7 +4,7 @@
 
 import PooFlowProof.PooC4.CedarAdapterContract
 import PooFlowProof.PooC4.CedarCapabilityRiskProjection
-import PooFlowProof.PooC4.GerbilPooPhysicalRefinement
+import PooFlowCoreProof.PooC4.GerbilPooPhysicalRefinement
 
 namespace PooFlowProof.PooC4.CedarPooAdapterRefinement
 

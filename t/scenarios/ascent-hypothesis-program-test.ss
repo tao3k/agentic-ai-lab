@@ -6,9 +6,9 @@
 (import (only-in :std/test check check-exception test-case test-suite)
         (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :poo-flow/src/qualification/ascent-table-expression
+        (only-in :poo-flow/modules/workflow/qualification/ascent-table-expression
                  poo-flow-ascent-table-expression-prototype)
-        :poo-flow/src/semantic/organization-bundle
+        :poo-flow/modules/query/semantic/organization-bundle
         :poo-flow/user-interface/scenarios/crewai/ascent-hypothesis-program)
 
 (export ascent-hypothesis-program-test)

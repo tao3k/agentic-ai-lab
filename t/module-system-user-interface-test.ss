@@ -18,26 +18,26 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o .ref .slot?)
-        :poo-flow/src/authoring/module-interface
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/authoring/module-descriptor
-        :poo-flow/src/authoring/module-source-collection
-        :poo-flow/src/user-interface/module-source-tree
-        :poo-flow/src/authoring/module-option-projection
-        :poo-flow/src/user-interface/module-runtime-presentation
-        :poo-flow/src/user-interface/module-value-catalog
+        :poo-flow/modules/module-authoring/module-interface
+        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/module-authoring/module-descriptor
+        :poo-flow/modules/module-authoring/module-source-collection
+        :poo-flow/modules/user-interface/module-source-tree
+        :poo-flow/modules/module-authoring/module-option-projection
+        :poo-flow/modules/user-interface/module-runtime-presentation
+        :poo-flow/modules/user-interface/module-value-catalog
         :core/module-system/loader/objects
         :core/module-system/projection/option-objects
         :core/module-system/projection/option-validation
-        :poo-flow/src/user-interface/module-diagnostics
-        :poo-flow/src/user-interface/doctor-presentation
-        :poo-flow/src/authoring/module-imports
+        :poo-flow/modules/user-interface/module-diagnostics
+        :poo-flow/modules/user-interface/doctor-presentation
+        :poo-flow/modules/module-authoring/module-imports
         :core/module-system/source/objects
         :core/module-system/funs
-        :poo-flow/src/user-interface/module-activation
+        :poo-flow/modules/user-interface/module-activation
         :core/module-system/catalog/objects
-        :poo-flow/src/user-interface/module-authoring-syntax
-        :poo-flow/src/user-interface/facade)
+        :poo-flow/modules/user-interface/module-authoring-syntax
+        :poo-flow/modules/user-interface/interface)
 
 (export module-system-user-interface-test)
 

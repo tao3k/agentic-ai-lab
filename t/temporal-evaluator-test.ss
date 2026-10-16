@@ -1,12 +1,12 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :poo-flow/src/ffi/scheme-wire scheme-wire-read scheme-wire-write)
+(import (only-in :poo-flow/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
         (only-in :poo-flow/modules/ai-agentic-context/objects AiAgenticContextScope.)
         (only-in :poo-flow/modules/ai-agentic-context/funs-features poo-flow-ai-agentic-context-profile)
         :poo-flow/modules/ai-agentic-context/session-host
         :poo-flow/modules/ai-agentic-context/use-host
-        :poo-flow/src/semantic/context-restriction
+        :poo-flow/modules/query/semantic/context-restriction
         :std/test (only-in :clan/poo/object .o .ref)
         (only-in :core/observability/testing-case poo-flow-test-case)
         (only-in :gerbil-ascent/candidate/reasoning

@@ -12,22 +12,22 @@
 ;;; Dependency: generic sandbox resources live in =:poo-flow/modules/agent-sandbox/resource=.
 ;;; Policy evidence: tests should trust the installed module registry.
 
-(import (only-in :poo-flow/src/core/task
+(import (only-in :poo-flow/modules/workflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task task? task-kind
                  task-request)
-        (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        (only-in :poo-flow/src/core/strategy
+        (only-in :poo-flow/modules/workflow/control-plane/failure raise-control-plane-failure)
+        (only-in :poo-flow/modules/workflow/control-plane/strategy
                  make-strategy strategy-name strategy-capabilities
                  strategy-cache-policy strategy-failure-policy strategy-planner
                  make-local-eager-strategy)
-        (only-in :poo-flow/src/core/runtime-adapter
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-adapter
                  make-runtime-adapter runtime-adapter-name
                  runtime-adapter-capabilities runtime-adapter-submitter
                  runtime-adapter-fetcher runtime-adapter-store-putter
                  runtime-adapter-store-getter make-rust-adapter)
-        (only-in :poo-flow/src/core/config make-run-config)
-        (only-in :poo-flow/src/core/flow
+        (only-in :poo-flow/modules/workflow/control-plane/config make-run-config)
+        (only-in :poo-flow/modules/workflow/control-plane/flow
                  default-flow-declaration-registry task-flow flow-name flow-steps)
         (only-in :poo-flow/modules/agent-sandbox/resource
                  sandbox-volume-bindings->request

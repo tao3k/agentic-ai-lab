@@ -10,7 +10,7 @@
         :poo-flow/modules/temporal-causality/truth-maintenance/support/policy-host
         :poo-flow/modules/temporal-causality/truth-maintenance/support/policy
         (only-in :poo-flow/modules/temporal-causality/time/objects poo-flow-temporal-instant)
-        :poo-flow/src/semantic/context-restriction)
+        :poo-flow/modules/query/semantic/context-restriction)
 (export ai-agentic-context-session-host-test)
 (def (at n) (poo-flow-temporal-instant "time" "clock" n "host" 'observed))
 (def policy (poo-flow-temporal-support-policy "policy" "revision" (at 0) (at 8)))

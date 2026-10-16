@@ -10,7 +10,7 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list every filter find delete-duplicates/hash)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/src/graph/types-core
+        (only-in :core/graph/types-core
                  poo-flow-graph poo-flow-graph-edge poo-flow-graph-node
                  poo-flow-graph? poo-flow-graph-id poo-flow-graph-nodes
                  poo-flow-graph-edges poo-flow-graph-node-id

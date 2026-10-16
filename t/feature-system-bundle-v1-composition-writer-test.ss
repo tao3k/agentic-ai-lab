@@ -8,14 +8,14 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/core/plan
+        :poo-flow/modules/workflow/control-plane/plan
         (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        :poo-flow/src/authoring/semantic-module
+        :poo-flow/modules/module-authoring/semantic-module
         :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
+        :poo-flow/modules/workflow/scenario/composition-syntax
         :core/profile-composition/profile-bundle
-        :poo-flow/src/feature-system/bundle-v1-composition-writer
-        :poo-flow/src/feature-system/bundle-v1-lowering)
+        :poo-flow/modules/workflow/scenario/bundle-v1-projection
+        :core/feature-system/bundle-v1-lowering)
 
 (.def WriterSourceProfile
   (identity 'source)

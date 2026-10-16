@@ -17,8 +17,8 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/src/loops/agent)
+        :poo-flow/modules/workflow/control-plane/api
+        :poo-flow/modules/loop-engine/control/agent)
 
 (export loop-agent-descriptor-test)
 

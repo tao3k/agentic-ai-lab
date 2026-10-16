@@ -6,7 +6,7 @@
 ;;; Boundary: downstream task sandbox profile declarations.
 ;;; Invariant: standalone module; it declares data only.
 
-(import :poo-flow/src/user-interface/init-syntax)
+(import :poo-flow/modules/user-interface/init-syntax)
 
 (export poo-flow-custom-my-module-task-module)
 

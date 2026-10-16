@@ -8,7 +8,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test test-suite check-equal? check)
         (only-in :clan/poo/object .o .ref)
-        (only-in :poo-flow/src/user-interface/module-presentation
+        (only-in :poo-flow/modules/user-interface/module-presentation
                  poo-flow-poo-slot-authoring-datum-observations
                  poo-flow-poo-slot-authoring-file-observations
                  poo-flow-poo-slot-authoring-diagnostics)

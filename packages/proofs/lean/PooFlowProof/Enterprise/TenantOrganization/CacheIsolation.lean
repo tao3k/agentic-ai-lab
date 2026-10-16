@@ -2,7 +2,7 @@
 --
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-import PooFlowProof.PooC4.DistributedCacheAdmission
+import PooFlowCoreProof.PooC4.DistributedCacheAdmission
 
 namespace PooFlowProof.Enterprise.TenantOrganization.CacheIsolation
 

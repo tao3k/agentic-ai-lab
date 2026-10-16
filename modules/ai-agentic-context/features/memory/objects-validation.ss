@@ -7,7 +7,7 @@
 
 (import (only-in :std/list/list fold)
         (only-in :clan/poo/object .o .ref object? object<-alist)
-        :poo-flow/src/utilities/final-projection-syntax
+        :core/utilities/final-projection-syntax
         :poo-flow/modules/session/objects
         :poo-flow/modules/session/transform
         :poo-flow/modules/ai-agentic-context/features/memory/objects-core

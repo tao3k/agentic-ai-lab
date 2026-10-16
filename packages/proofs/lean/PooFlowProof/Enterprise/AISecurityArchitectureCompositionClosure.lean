@@ -2,7 +2,7 @@
 --
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-import PooFlowProof.PooC4.CompositionIdentity
+import PooFlowCoreProof.PooC4.CompositionIdentity
 import PooFlowProof.PooC4.AuthorizedEffectEvidence
 import PooFlowProof.Enterprise.BundleEvidenceBinding
 import PooFlowProof.Enterprise.BundleOwnership

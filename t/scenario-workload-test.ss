@@ -6,7 +6,7 @@
 (import (only-in :std/test test-suite check-equal? check-exception)
         (only-in :clan/poo/object .ref)
         (only-in :core/observability/testing-case poo-flow-test-case)
-        :poo-flow/src/scenario/workload)
+        :poo-flow/modules/workflow/scenario/workload)
 
 (export scenario-workload-test)
 

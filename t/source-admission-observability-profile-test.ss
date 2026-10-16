@@ -6,7 +6,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test test-suite check-equal?)
         (only-in :clan/poo/object .o .ref)
-        (only-in :poo-flow/src/testing/source-admission
+        (only-in :poo-flow/modules/testing/source-admission
                  poo-flow-source-admission-observability-profile-prototype
                  poo-flow-source-admission-observability-profile?))
 

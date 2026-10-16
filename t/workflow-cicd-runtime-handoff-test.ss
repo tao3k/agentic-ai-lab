@@ -11,7 +11,7 @@
                  test-suite
                  check-equal?
                  )
-        (only-in :poo-flow/src/core/runtime-protocol
+        (only-in :poo-flow/modules/workflow/control-plane/runtime-protocol
                  +runtime-command-descriptor-schema+
                  +runtime-request-schema+)
         :poo-flow/modules/agent-sandbox/config

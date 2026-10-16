@@ -6,7 +6,7 @@
 ;;; Invariant: projection is pure and leaves execution to the runtime handoff boundary.
 (import (only-in :poo-flow/modules/funflow/config
                  poo-flow-funflow-workflow-agreement)
-        :poo-flow/src/user-interface/module-selection
+        :poo-flow/modules/user-interface/module-selection
         :poo-flow/modules/sandbox-core/profile-catalog
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         :poo-flow/modules/workflow/cicd-config
@@ -25,7 +25,7 @@
         (only-in "runtime-intent-handoff.ss"
                  poo-flow-user-loop-engine-runtime-handoff-facts/from-request)
         "result-contract.ss"
-        :poo-flow/src/utilities/functional)
+        :core/utilities/functional)
 
 (export poo-flow-user-loop-engine-memory-policy-for-use-case
         poo-flow-user-loop-engine-memory-policy-use-cases/rev

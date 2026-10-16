@@ -1,0 +1,75 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Config Languages Scenario Source Corpus
+#+date: [2026-10-16]
+#+filetags: :config-language:scenarios:references:
+#+property: STATUS upstream-source-snapshots-not-executed
+
+* Upstream repositories as Git submodules
+
+These are complete upstream repositories pinned by this repository's Git gitlinks.
+[[file:../../../../.gitmodules][.gitmodules]] records their public URLs and paths; Git records each selected
+commit. Do not duplicate that information with per-file sources.json or checksum
+inventories. The upstream licenses and repository layout stay intact.
+
+| Reference checkout | Upstream | License |
+|--------------------+----------+---------|
+| [[file:kcl/examples/README.md][kcl/examples]] | https://github.com/kcl-lang/examples | [[file:kcl/examples/LICENSE][Apache-2.0]] |
+| [[file:kcl/konfig/README.md][kcl/konfig]] | https://github.com/kcl-lang/konfig | [[file:kcl/konfig/LICENSE][Apache-2.0]] |
+| [[file:nickel/omnibus-ncl/][nickel/omnibus-ncl]] | https://github.com/tao3k/omnibus-ncl | [[file:nickel/omnibus-ncl/LICENSE][MIT]] |
+| [[file:nix/hivebus/][nix/hivebus]] | https://github.com/tao3k/hivebus | [[file:nix/hivebus/LICENSE][MIT]] |
+
+From the POO Flow repository root, initialize only the reference needed for the
+current study, for example:
+
+#+begin_src sh
+git submodule update --init -- docs/10-19-design/10.08-config-languages/scenarios/kcl/konfig
+git submodule status -- docs/10-19-design/10.08-config-languages/scenarios/kcl/konfig
+#+end_src
+
+These are optional research checkouts, not product build/runtime dependencies.
+Their registration does not add them to a Loader or execute their configuration.
+Avoid recursive initialization when only this reference is needed. A repository-wide
+recursive submodule command can initialize all registered references; this is an
+explicit Git operation, not evidence of runtime module loading.
+
+Update a reference deliberately, review the gitlink change and revise the affected
+source analysis. Do not follow a moving branch implicitly or format upstream files.
+The migration retained the four previously studied commits and verified every
+previously copied file against its corresponding checkout before removing the
+redundant snapshot manifests. No configuration evaluation or deployment was run.
+
+* Read cases from consumer input to model and renderer
+
+| Actual case | User source | Model/consumer source | Research question |
+|-------------+-------------+-----------------------+-------------------|
+| KCL multi-environment | [[file:kcl/examples/codelab/collaborative/appops/test_app/base/base.k][base]], [[file:kcl/examples/codelab/collaborative/appops/test_app/dev/main.k][dev]], [[file:kcl/examples/codelab/collaborative/appops/test_app/prod/main.k][prod]] | [[file:kcl/examples/codelab/collaborative/pkg/server.k][Server schema]], [[file:kcl/examples/codelab/collaborative/appops/test_app/dev/ci-test/stdout.golden.yaml][upstream dev golden]] | Defaults, assignment/append and reproducible environment inputs |
+| Konfig Guestbook, three workloads | [[file:kcl/konfig/examples/appops/guestbook/base/base.k][frontend/leader/follower baseline]], [[file:kcl/konfig/examples/appops/guestbook/dev/main.k][dev image override]], [[file:kcl/konfig/examples/appops/guestbook/prod/main.k][prod overrides]] | [[file:kcl/konfig/models/kube/frontend/server.k][Server]], [[file:kcl/konfig/models/kube/backend/server_backend.k][backend]], [[file:kcl/konfig/models/kube/render/render.k][renderer]] | Multi-instance typing, DNS conventions, labels and resource relationships |
+| Konfig nginx application | [[file:kcl/konfig/examples/appops/nginx-example/base/base.k][baseline]], [[file:kcl/konfig/examples/appops/nginx-example/dev/main.k][dev]] | [[file:kcl/konfig/models/kube/frontend/service/service.k][Service model]] | How much application config stays out of raw manifests? |
+| Konfig StatefulSet | [[file:kcl/konfig/examples/server/app_stateful_set/prod/main.k][workload selection]] | [[file:kcl/konfig/models/kube/frontend/server.k][Server model]] | Stateful workloads need different consumers/policies |
+| Konfig sidecar/volume | [[file:kcl/konfig/examples/server/app_sidecar/prod/main.k][sidecar and mounts]], [[file:kcl/konfig/examples/server/app_volume/prod/main.k][volume case]] | [[file:kcl/konfig/models/kube/frontend/sidecar/sidecar.k][sidecar]], [[file:kcl/konfig/models/kube/frontend/volume/volume.k][volume]] | Structured nested records and cross-container references |
+| Konfig Secrets | [[file:kcl/konfig/examples/server/app_secret/prod/main.k][Secret input]] | [[file:kcl/konfig/models/kube/frontend/secret/secret.k][Secret model]] | What is validated without exposing sensitive payloads in previews? |
+| KCL portable app abstraction | [[file:kcl/examples/abstraction/main.k][input]] | [[file:kcl/examples/abstraction/app.k][schema]], [[file:kcl/examples/abstraction/kubernetes_render.k][Kubernetes]], [[file:kcl/examples/abstraction/docker_compose_render.k][Compose]] | Shared business values and different backends |
+| KCL database config | [[file:kcl/examples/configuration/db.k][environment-derived connection]] | [[file:kcl/konfig/models/kube/frontend/storage/database.k][separate cloud DB schema]] | Do not confuse connection configuration with database provisioning |
+| Omnibus AWS | [[file:nickel/omnibus-ncl/aws/main.ncl][business inputs and network reference]] | [[file:nickel/omnibus-ncl/aws/modules/aws-simple-ec2.ncl][EC2]], [[file:nickel/omnibus-ncl/aws/modules/aws-simple-vpc.ncl][VPC]] | Typed business relationships and infrastructure elaboration |
+| Omnibus Sandbox | [[file:nickel/omnibus-ncl/sandbox/examples/web-scraper.ncl][scraper]], [[file:nickel/omnibus-ncl/sandbox/examples/data-processor.ncl][processor]] | [[file:nickel/omnibus-ncl/sandbox/seatbelt/interface.ncl][interface]] | Simple policy values versus deliberate policy extension |
+| HiveBus multiple hosts | [[file:nix/hivebus/hosts/host-1/meta.nix][host-1]], [[file:nix/hivebus/hosts/host-2/meta.nix][host-2]], [[file:nix/hivebus/hosts/host-3/meta.nix][host-3]] | [[file:nix/hivebus/units/self/flakeOutputs.nix][exports and extension]], [[file:nix/hivebus/flake.nix][entry]] | Multi-target organization, ordinary deployment values and advanced POP changes |
+
+* Dependency and execution boundaries
+
+A complete upstream Git checkout is not a resolved package dependency closure.
+Relative paths and upstream manifests remain unchanged. Konfig cases retain their
+kcl.mod/lock files; OCI dependencies are not fetched. The AWS example references a
+generated tf-ncl-schema.ncl absent from the pinned tree; no replacement is supplied.
+Sandbox runtime binaries/local paths and HiveBus flake inputs are not resolved.
+Upstream golden files are upstream expectations, not results produced here.
+
+Compare actual APIs/inputs, derived resource identities, validation and demand.
+Do not infer a typed cross-service connection protocol merely from DNS use, or
+that schema.instances() means the whole global package catalog is loaded.
+
+[[file:../10-source-scenario-research.org][The source-to-design study]] connects these cases to the proposed POO surface.
+[[file:../11-guestbook-source-comparison.org][The Guestbook comparison]] traces the three workloads through environment inputs,
+field contracts and resource consumers. [[file:../09-application-scenario-admission.org][Application admission]] remains unexecuted
+Scheme design, separate from these pinned upstream sources.

@@ -11,10 +11,10 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/user-interface/module-selection
+        (only-in :poo-flow/modules/user-interface/module-selection
                  poo-flow-user-module-selection-flags)
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax
+        :poo-flow/modules/user-interface/interface
+        :poo-flow/modules/user-interface/init-syntax
         (only-in :poo-flow/modules/funflow/config
                  poo-flow-funflow-check-map->functional-dag
                  poo-flow-funflow-composition-step?
