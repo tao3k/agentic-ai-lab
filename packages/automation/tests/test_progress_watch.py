@@ -34,7 +34,7 @@ class WatchTest(unittest.TestCase):
         with patch.object(watch.subprocess, 'Popen', return_value=child), \
              patch.object(watch.selectors, 'DefaultSelector') as selector, \
              patch.object(watch, 'capture_failed_process', side_effect=diagnostic), \
-             contextlib.redirect_stdout(output):
+             contextlib.redirect_stderr(output):
             selector.return_value.__enter__.return_value = ready
             self.assertEqual(watch.main(['child']), 124)
         ready.select.assert_called_once_with(timeout=5)
@@ -48,7 +48,7 @@ class WatchTest(unittest.TestCase):
              patch.object(watch.selectors, 'DefaultSelector') as selector, \
              patch.object(watch, 'capture_failed_process'), \
              patch.object(watch.os, 'killpg') as kill, \
-             contextlib.redirect_stdout(io.StringIO()):
+             contextlib.redirect_stderr(io.StringIO()):
             selector.return_value.__enter__.return_value = ready
             self.assertEqual(watch.main(['child']), 124)
         kill.assert_called_once_with(42, signal.SIGKILL)

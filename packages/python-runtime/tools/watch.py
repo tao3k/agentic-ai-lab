@@ -8,6 +8,13 @@ import signal
 import subprocess
 import sys
 
+
+def report_failure(message):
+    """Keep watchdog diagnostics on stderr, separate from child test output."""
+    sys.stderr.write(f'FAIL: {message}\n')
+    sys.stderr.flush()
+
+
 def capture_failed_process(pid):
     """Collect a bounded Darwin stack after admission has already failed."""
     directory = os.environ.get('POO_FLOW_TEST_STALL_DIAGNOSTICS')
@@ -36,7 +43,7 @@ def main(argv):
             ready.register(child.stdout, selectors.EVENT_READ)
             while True:
                 if not ready.select(timeout=5):
-                    print('FAIL: five seconds without test progress', flush=True)
+                    report_failure('five seconds without test progress')
                     # This is failure-only work, never extra time to earn a pass.
                     capture_failed_process(child.pid)
                     if child.poll() is None:
