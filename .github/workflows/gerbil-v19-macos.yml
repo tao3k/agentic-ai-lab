@@ -14,6 +14,7 @@ on:
       - packages/automation/install_gerbil_release.py
       - build.ss
       - gerbil.pkg
+      - init.ss
       - modules/**
       - core
       - t/qualification/darwin-gerbil-build-scenario.ss
@@ -25,6 +26,7 @@ on:
       - packages/automation/install_gerbil_release.py
       - build.ss
       - gerbil.pkg
+      - init.ss
       - modules/**
       - core
       - t/qualification/darwin-gerbil-build-scenario.ss
@@ -141,7 +143,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil build)
+          # Dependency packages may have compiled an older :core namespace into
+          # this shared GERBIL_PATH. Replace those artifacts before the measured
+          # product build; mtimes cannot qualify this checkout's export identity.
+          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" gerbil clean)
+          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" gerbil build)
           gerbil clean
           gerbil env gxi t/qualification/darwin-gerbil-build-scenario.ss \
             cold "$TOOLCHAIN" "$RUNNER_TEMP/cold-build.ss"

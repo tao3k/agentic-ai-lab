@@ -149,8 +149,8 @@ jobs:
           fi
           gerbil env gerbil interactive -e '(begin (import :asp-gerbil-scheme/building-api :asp-gerbil-scheme/benchmark-api :asp-gerbil-scheme/testing-api) (displayln "native-dependencies-ready"))'
           # The Core submodule owns this checkout's shared POO modules.
-          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/core:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil clean)
-          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/core:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil build)
+          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil clean)
+          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil build)
           # Clean only POO Flow outputs; its build spec excludes Core.
           gerbil clean
 
