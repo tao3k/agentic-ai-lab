@@ -25,6 +25,11 @@ export function runBazel(
     stdio = ["ignore", "pipe", "inherit"],
   } = {},
 ) {
+  // npm prepends package-local executable directories. Keep Bazel's declared
+  // toolchain environment identical to the preceding dependency build.
+  const bazelEnv = env.POO_FLOW_BAZEL_PATH === undefined
+    ? env
+    : { ...env, PATH: env.POO_FLOW_BAZEL_PATH };
   const configuredBazel = env.BAZEL;
   if (configuredBazel !== undefined) {
     const executable = configuredBazel.trim();
@@ -32,7 +37,7 @@ export function runBazel(
       throw new Error("BAZEL must name a non-empty executable");
     }
     try {
-      return executor(executable, args, cwd, env, stdio);
+      return executor(executable, args, cwd, bazelEnv, stdio);
     } catch (error) {
       if (error?.code === "ENOENT" || error?.code === "EACCES") {
         throw new Error(
@@ -47,7 +52,7 @@ export function runBazel(
   const missing = [];
   for (const executable of executables) {
     try {
-      return executor(executable, args, cwd, env, stdio);
+      return executor(executable, args, cwd, bazelEnv, stdio);
     } catch (error) {
       if (error?.code !== "ENOENT") throw error;
       missing.push(executable);

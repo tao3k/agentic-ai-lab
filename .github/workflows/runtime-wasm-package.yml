@@ -130,6 +130,7 @@ jobs:
         timeout-minutes: 25
         shell: bash
         run: |
+          export POO_FLOW_BAZEL_PATH="$PATH"
           cp LICENSE bindings/runtime-wasm/LICENSE
           npm --prefix bindings/runtime-wasm test
           archive_json="$(npm pack ./bindings/runtime-wasm --ignore-scripts --json --pack-destination "$RUNNER_TEMP")"
