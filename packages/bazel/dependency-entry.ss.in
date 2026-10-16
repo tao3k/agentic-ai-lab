@@ -18,6 +18,7 @@
 (def (main . args)
   (current-directory dependency-source-root)
   (match args
+    ([] (make (dependency-build-spec) srcdir: dependency-source-root))
     (["spec"] (pretty-print (dependency-build-spec)))
     (["compile"] (make (dependency-build-spec) srcdir: dependency-source-root))
-    (else (error "dependency entry expects spec or compile" args))))
+    (else (error "dependency entry expects no arguments, spec or compile" args))))
