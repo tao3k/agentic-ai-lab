@@ -10,13 +10,10 @@ validator=$2
 library=$3
 manifest=$4
 clan_package=${5:-}
-if [ -z "${GERBIL_LOADPATH:-}" ] && [ -d "${PWD}/src" ]; then
-  GERBIL_LOADPATH=$PWD
-  if [ -n "$clan_package" ]; then
-    GERBIL_LOADPATH=$GERBIL_LOADPATH:$(dirname "$clan_package")
-  fi
-  export GERBIL_LOADPATH
-fi
+# Runfiles expose the migrated product module tree and declared POO source.
+# Source discovery must not depend on the removed product src/ directory.
+GERBIL_LOADPATH=$PWD${clan_package:+:$(dirname "$clan_package")}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}
+export GERBIL_LOADPATH
 temporary=${TEST_TMPDIR:-${TMPDIR:-/tmp}}/poo-flow-runtime-symbols.$$
 actual=$temporary.actual
 trap 'rm -f "$actual"' EXIT HUP INT TERM
@@ -43,4 +40,4 @@ esac \
   | awk '/^poo_flow_runtime_v0_/ || /^poo_flow_proof_/' \
   | LC_ALL=C sort -u >"$actual"
 
-exec "$gxi" "$validator" "$manifest" "$actual"
+exec "$gxi" -:max-heap=1G,debug=q "$validator" "$manifest" "$actual"
