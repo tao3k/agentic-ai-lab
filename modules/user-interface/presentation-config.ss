@@ -14,7 +14,7 @@
         :poo-flow/modules/module-authoring/module-interface
         :poo-flow/modules/user-interface/module-selection
         :poo-flow/modules/user-interface/entrypoints
-        :poo-flow/modules/user-interface/module-presentation
+        :core/module-system/observability/presentation
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         :poo-flow/modules/workflow/cicd-config
         :poo-flow/modules/workflow/cicd-pipeline-run-config

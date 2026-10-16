@@ -6,7 +6,8 @@
 ;;; Boundary: lazy loader tests cover deferred source loading only.
 ;;; Invariant: lazy plans never call loader handlers until explicitly forced.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import :core/module-system/source/projection
+        (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -29,7 +30,8 @@
         :poo-flow/modules/module-authoring/module-descriptor
         :core/extension-graph/interface
         :core/module-system/loader/objects
-        :poo-flow/modules/module-authoring/module-source-collection
+        :core/module-system/source/collection
+        (only-in :poo-flow/modules/module-authoring/module-source-collection make-poo-flow-contribution-module-load-path poo-flow-default-module-load-path poo-flow-maintained-module-source)
         :poo-flow/modules/building/official-contributions
         :poo-flow/modules/user-interface/module-source-selection
         :poo-flow/modules/user-interface/module-source-tree)

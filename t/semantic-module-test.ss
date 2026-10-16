@@ -10,7 +10,8 @@
         (only-in :core/module-system/schema/relations
                  poo-flow-semantic-identity poo-flow-empty-imports
                  SemanticImports. ModuleImportsContract)
-        :poo-flow/modules/module-authoring/semantic-module)
+        :core/module-system/authoring/roles
+        (only-in :poo-flow/modules/module-authoring/semantic-module UserConfigSourceRole. poo-flow-user-root-module-authoring-profile))
 (export semantic-module-test)
 (def semantic-module-test
   (test-suite "role-constrained native Module"

@@ -68,7 +68,6 @@
     "modules/building/official-contributions.ss"
     "modules/user-interface/module-source-selection.ss"
     "modules/user-interface/module-source-tree.ss"
-    "modules/module-authoring/source-authoring.ss"
     "modules/testing/source-admission.ss"
     "modules/user-interface/module-diagnostics.ss"
     "modules/user-interface/doctor-presentation.ss"

@@ -7,7 +7,9 @@
 ;;; Invariant: Git submodule gitlinks own revisions and .gitmodules owns URLs;
 ;;; this module only exposes the packages root for identity-driven discovery.
 
-(import :poo-flow/modules/module-authoring/module-source-collection)
+(import (only-in :poo-flow/modules/module-authoring/source-policy PooFlowModuleStylePolicy)
+        :core/module-system/source/collection
+        :poo-flow/modules/module-authoring/module-source-collection)
 
 (export poo-flow-official-contribution-sources
         poo-flow-official-contribution-load-path)
@@ -15,7 +17,8 @@
 (def poo-flow-official-contribution-sources
   (list
    (make-poo-flow-contribution-root-module-source
-    'poo-flow-official-contributions "packages")))
+    'poo-flow-official-contributions "packages"
+    style-policy: PooFlowModuleStylePolicy)))
 
 (def poo-flow-official-contribution-load-path
   (extend-poo-flow-module-load-path

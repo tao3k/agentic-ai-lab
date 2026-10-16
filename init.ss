@@ -4,8 +4,7 @@
 
 ;;; Product module source root. Discovery/selection stays an explicit operation.
 (import (only-in :clan/poo/object .def)
-        (only-in :poo-flow/modules/module-authoring/module-source-collection
-                 poo-flow-maintained-module-source))
+        (only-in :poo-flow/modules/module-authoring/module-source-collection poo-flow-maintained-module-source))
 (export PooFlowModules)
 
 (.def (PooFlowModules @ poo-flow-maintained-module-source))

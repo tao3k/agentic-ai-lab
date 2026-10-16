@@ -7,7 +7,7 @@
          (only-in :clan/poo/object .cc .o .ref)
         (only-in :clan/poo/mop TypeError?)
         (only-in :std/test check-equal? check-exception test-suite)
-        :poo-flow/modules/module-authoring/module-source-admission
+        :core/module-system/authoring/admission
         (only-in :core/poo-clos/interface
                  poo-clos-call
                  poo-clos-call-next-method
@@ -18,7 +18,7 @@
                  poo-clos-method-bundle
                  poo-clos-prototype-specializer
                  poo-clos-any-specializer)
-        (only-in :poo-flow/modules/user-interface/module-presentation
+        (only-in :core/module-system/observability/presentation
                  poo-flow-poo-slot-authoring-file-observations
                  poo-flow-poo-slot-authoring-diagnostics)
         (only-in :core/utilities/algorithms
@@ -27,16 +27,9 @@
                  poo-flow-module-interface
                  poo-flow-module-interface-authoring
                  poo-flow-module-interface-prototype)
-        (only-in :poo-flow/modules/module-authoring/module-source-collection
-                 make-poo-flow-module-source-collection
-                 make-poo-flow-contribution-module-source
-                 poo-flow-module-source-collection-role-entrypoints)
-        (only-in :poo-flow/modules/module-authoring/semantic-module
-                 ModuleAuthoringExecutor.
-                 ModuleSourceRole.
-                 ObjectsSourceRole.
-                 poo-flow-default-module-authoring-profile
-                 poo-flow-user-root-module-authoring-profile))
+        (only-in :core/module-system/source/collection make-poo-flow-module-source-collection make-poo-flow-contribution-module-source poo-flow-module-source-collection-role-entrypoints)
+        (only-in :core/module-system/authoring/roles ModuleAuthoringExecutor. ModuleSourceRole. ObjectsSourceRole. poo-flow-default-module-authoring-profile)
+        (only-in :poo-flow/modules/module-authoring/semantic-module poo-flow-user-root-module-authoring-profile))
 
 (export module-authoring-contract-test)
 
@@ -441,7 +434,7 @@
       (poo-flow-poo-slot-authoring-diagnostics
        (poo-flow-poo-slot-authoring-file-observations
         'module-authoring-contract
-        "modules/module-authoring/module-source-admission.ss"))
+        "core/module-system/authoring/admission.ss"))
       '()))
 
    (poo-flow-test-case "Core slot presentation blocks lazy self-reference regression"

@@ -5,9 +5,12 @@
 
 ;;; POO Flow identity and default authoring policy for the Core Module Interface.
 ;;; Schema indexing, option vocabulary, and native construction live in Core.
-(import (only-in :clan/poo/object .o .ref .slot? object?)
+(import (rename-in (only-in :core/module-system/source/interface
+                            poo-flow-module-interface-prototype)
+                   (poo-flow-module-interface-prototype ModuleInterface.))
+        (only-in :clan/poo/object .o .ref .slot? object?)
         :core/module-system/config
-        (only-in :poo-flow/modules/module-authoring/semantic-module
+        (only-in :core/module-system/authoring/roles
                  poo-flow-default-module-authoring-profile))
 
 (export poo-flow-modules-kind
@@ -48,14 +51,10 @@
   "poo-flow.modules.import.local-source.v1")
 
 (def poo-flow-module-interface-prototype
-  (.o kind: poo-flow-module-interface-kind
+  (.o (:: @ ModuleInterface.)
+      kind: poo-flow-module-interface-kind
       id: "anonymous-poo-module-interface"
-      brand-name: poo-flow-brand-name
-      schemas: (.o)
-      (schema-index
-       (poo-flow-module-interface-schema-index schemas))
-      authoring: (poo-flow-default-module-authoring-profile)
-      metadata: '()))
+      brand-name: poo-flow-brand-name))
 
 (def (poo-flow-module-interface interface-id-value schema-object metadata-value
                                 authoring: (authoring-value

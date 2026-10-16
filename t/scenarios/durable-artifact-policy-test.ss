@@ -7,7 +7,8 @@
         :clan/poo/object
         :poo-flow/modules/ai-agentic-context/features/memory/durable/artifact-policy
         (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        :poo-flow/modules/module-authoring/semantic-module
+        :core/module-system/authoring/roles
+        (only-in :poo-flow/modules/module-authoring/semantic-module UserConfigSourceRole. poo-flow-user-root-module-authoring-profile)
         :core/profile-composition/selection-syntax
         :poo-flow/modules/workflow/scenario/composition-syntax
         :core/profile-composition/profile-bundle

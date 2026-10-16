@@ -9,9 +9,8 @@
 (import
         :poo-flow/modules/module-authoring/module-imports
         :core/module-system/source/objects
-        (only-in :poo-flow/modules/module-authoring/module-source-collection
-                 poo-flow-load-modules
-                 poo-flow-maintained-module-source))
+        (only-in :core/module-system/source/collection poo-flow-load-modules)
+        (only-in :poo-flow/modules/module-authoring/module-source-collection poo-flow-maintained-module-source))
 
 (export poo-flow-module-tree-source-refs
         poo-flow-modules-root

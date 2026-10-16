@@ -21,7 +21,8 @@
         :poo-flow/modules/module-authoring/module-interface
         :poo-flow/modules/user-interface/module-selection
         :poo-flow/modules/module-authoring/module-descriptor
-        :poo-flow/modules/module-authoring/module-source-collection
+        :core/module-system/source/collection
+        (only-in :poo-flow/modules/module-authoring/module-source-collection make-poo-flow-contribution-module-load-path poo-flow-default-module-load-path poo-flow-maintained-module-source)
         :poo-flow/modules/user-interface/module-source-tree
         :poo-flow/modules/module-authoring/module-option-projection
         :poo-flow/modules/user-interface/module-runtime-presentation

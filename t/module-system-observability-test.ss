@@ -6,7 +6,8 @@
 ;;; Boundary: tests verify strict module-system observability traces.
 ;;; Invariant: trace construction never dereferences POO slots.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :poo-flow/modules/module-authoring/source-policy PooFlowSourcePolicy)
+        (only-in :core/observability/testing-case poo-flow-test-case)
          :gerbil/runtime/gambit
         (only-in :clan/poo/object .ref object?)
         (only-in :std/test
@@ -18,9 +19,9 @@
                  check-output
                  test-error
                  test-suite)
-        :poo-flow/modules/user-interface/module-presentation
-        :poo-flow/modules/module-authoring/module-source-observation
-        :poo-flow/modules/module-authoring/source-authoring
+        :core/module-system/observability/presentation
+        :core/module-system/authoring/observation
+        :core/module-system/authoring/projection
         (only-in :core/observability/funcs
                  poo-flow-debug-memory-policy
                  poo-flow-debug-memory-sample
@@ -70,7 +71,7 @@
               (poo-flow-authoring-owner-import-port-observations
                'modules/example/funs.ss
                (open-input-string
-                "(import :poo-flow/modules/workflow/control-plane/api)")))
+                "(import :poo-flow/modules/workflow/control-plane/api)") PooFlowSourcePolicy))
              (observation (car observations)))
         (check-equal? (length observations) 1)
         (check-equal? (.ref observation 'scope) 'modules/example/funs.ss)
@@ -87,13 +88,13 @@
          (poo-flow-authoring-owner-import-port-observations
           'modules/example/funs.ss
          (open-input-string
-           "(import (only-in :poo-flow/modules/workflow/control-plane/task make-task))"))
+           "(import (only-in :poo-flow/modules/workflow/control-plane/task make-task))") PooFlowSourcePolicy)
          '())
         (let* ((contribution-observations
                 (poo-flow-authoring-owner-import-port-observations
                  'modules/example/objects.ss
                  (open-input-string
-                  "(import (only-in :poo-flow/modules/user-interface/interface poo-flow-module-interface))")))
+                  "(import (only-in :poo-flow/modules/user-interface/interface poo-flow-module-interface))") PooFlowSourcePolicy))
                (contribution-observation
                 (car contribution-observations)))
           (check-equal? (length contribution-observations) 1)
@@ -108,20 +109,20 @@
                      (map (lambda (path)
                             (poo-flow-authoring-owner-import-file-observations
                              (string->symbol path)
-                             path))
+                             path PooFlowSourcePolicy))
                           paths))))
         (check-equal? (> (length paths) 0) #t)
         (check-equal? observations '())))
     (poo-flow-test-case "package build bootstrap imports no package-local owner"
       (check-equal?
        (poo-flow-authoring-build-bootstrap-file-observations
-        'build.ss "build.ss")
+        'build.ss "build.ss" PooFlowSourcePolicy)
        '())
       (let* ((observations
               (poo-flow-authoring-build-bootstrap-import-port-observations
                'build.ss
                (open-input-string
-                "(import (only-in \"./src/building/build-config.ss\" policy))")))
+                "(import (only-in \"./src/building/build-config.ss\" policy))") PooFlowSourcePolicy))
              (observation (car observations)))
         (check-equal? (.ref observation 'phase) 'build-bootstrap-admission)
         (check-equal? (.ref observation 'status)
@@ -134,7 +135,7 @@
        (lambda (form)
          (let* ((observations
                  (poo-flow-authoring-build-bootstrap-datum-observations
-                  'build.ss form))
+                  'build.ss form PooFlowSourcePolicy))
                 (observation (car observations)))
            (check-equal? (length observations) 1)
            (check-equal? (.ref observation 'phase)
@@ -154,7 +155,7 @@
       ;; A quoted documentation example does not execute a projection.
       (check-equal?
        (poo-flow-authoring-build-bootstrap-datum-observations
-        'build.ss '(quote (poo-flow-load-modules maintained-source)))
+        'build.ss '(quote (poo-flow-load-modules maintained-source)) PooFlowSourcePolicy)
        '()))
     (poo-flow-test-case "builds strict presentation trace rows"
       (let* ((native-observation

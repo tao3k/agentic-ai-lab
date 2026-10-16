@@ -25,7 +25,8 @@
     :core/module-system/types
     :core/module-system/config
     :core/module-system/objects
-    :poo-flow/modules/module-authoring/semantic-module
+    :core/module-system/authoring/roles
+        (only-in :poo-flow/modules/module-authoring/semantic-module UserConfigSourceRole. poo-flow-user-root-module-authoring-profile)
     :poo-flow/modules/module-authoring/module-interface
     :core/object-family/syntax
     :core/utilities/product-syntax

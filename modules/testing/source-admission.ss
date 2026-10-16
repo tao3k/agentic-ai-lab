@@ -16,7 +16,7 @@
                  .o .ref .slot? object? make-object $constant-slot-spec)
         (only-in :core/observability/output
                  poo-flow-write-observation-line!)
-        (only-in :poo-flow/modules/user-interface/module-presentation
+        (only-in :core/module-system/observability/presentation
                  poo-flow-poo-slot-authoring-file-observations
                  poo-flow-poo-slot-authoring-observation-ok?))
 

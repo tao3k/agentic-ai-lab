@@ -8,7 +8,8 @@
         (only-in :std/test check-equal? test-suite)
         (only-in :poo-flow/modules/workflow/scenario/case poo-flow-scenario-case?)
         :poo-flow/modules/workflow/scenario/accessors
-        :poo-flow/modules/module-authoring/module-source-collection
+        :core/module-system/source/collection
+        (only-in :poo-flow/modules/module-authoring/module-source-collection make-poo-flow-contribution-module-load-path poo-flow-default-module-load-path poo-flow-maintained-module-source)
         (only-in :core/module-system/source/objects
                  poo-flow-module-source-ref-value)
         (only-in :poo-flow/user-interface/profiles/langchain langchain)
