@@ -1,7 +1,8 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :poo-flow/modules/ai-agentic-context/selection-adapter poo-flow-modules-system-use-module/ai)
+(import (only-in :asp-gerbil-scheme/src/build-api/native-import-closure
+                 asp-gerbil-scheme-native-import-closure)
         :std/test (only-in :poo-flow/testing-api poo-flow-test-case)
         (only-in :clan/poo/object .o .ref)
         :poo-flow/modules/ai-agentic-context/interface
@@ -22,6 +23,13 @@
   (poo-flow-ai-agentic-context-org-project scope source restriction profile))
 (def ai-agentic-context-core-test
   (test-suite "AI Agentic-context source and Feature boundaries"
+    (test-case "public module publication closes the selection adapter build input"
+      (let (sources (asp-gerbil-scheme-native-import-closure
+                     (current-directory)
+                     '("modules/ai-agentic-context/interface.ss")))
+        (check (ormap (lambda (path)
+                        (string-suffix? "modules/ai-agentic-context/selection-adapter.ss" path))
+                      sources) => #t)))
     (poo-flow-test-case "core Org projection requires neither Session nor Memory"
       (let (p (project))
         (check (.ref p 'feature-ids) => '(ai-agentic-context/core))
