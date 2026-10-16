@@ -1,0 +1,23 @@
+;;; -*- Gerbil -*-
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+;;; Consumer API roots only. Native imports own closure; std/make owns execution.
+(import (only-in :std/source this-source-file)
+        (only-in :std/make make)
+        (only-in :asp-gerbil-scheme/building-api
+                 asp-gerbil-scheme-package-spec!
+                 asp-gerbil-scheme-library-package-prototype))
+(export main)
+(def dependency-source-root
+  (path-expand "@SOURCE_ROOT@"
+               (path-expand "@BACKTRACK@" (path-directory (this-source-file)))))
+(asp-gerbil-scheme-package-spec!
+ (DependencyLibrary @ asp-gerbil-scheme-library-package-prototype)
+ (spec dependency-build-spec)
+ (public-entry-modules '(@ENTRIES@)))
+(def (main . args)
+  (current-directory dependency-source-root)
+  (match args
+    (["spec"] (pretty-print (dependency-build-spec)))
+    (["compile"] (make (dependency-build-spec) srcdir: dependency-source-root))
+    (else (error "dependency entry expects spec or compile" args))))

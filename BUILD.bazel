@@ -116,7 +116,9 @@ gerbil_project_compile(
 gerbil_project_compile(
     name = "gerbil_parser_package",
     srcs = ["@gerbil_parser_sources//:sources"],
-    build_script = "@gerbil_parser_sources//:build_script",
+    # Compile the native closure of consumed APIs, not every upstream language
+    # and optional FFI product. Source revision/receipt admission is unchanged.
+    build_script = "//packages/bazel:parser_dependency_build",
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_parser_sources//:source_resolution_receipt"],
     deps = [

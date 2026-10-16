@@ -1,0 +1,69 @@
+;;; -*- Gerbil -*-
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+;;; Qualification of explicit dependency API roots, not an import expander.
+(export main)
+(def (parser-imports datum)
+  (cond
+   ((not (pair? datum)) '())
+   ((memq (car datum) '(quote quasiquote syntax quasisyntax)) '())
+   ((eq? (car datum) 'import)
+    (let collect ((item (cdr datum)))
+      (cond
+       ((symbol? item)
+        (let (name (symbol->string item))
+          (if (string-prefix? ":gerbil-parser/" name)
+            (list (string-append (substring name 15 (string-length name)) ".ss")) '())))
+       ((pair? item) (append (collect (car item)) (collect (cdr item))))
+       (else '()))))
+   (else (append (parser-imports (car datum)) (parser-imports (cdr datum))))))
+(def (source-files directory)
+  (apply append
+   (map (lambda (name)
+          (let (path (path-expand name directory))
+            (cond
+             ((member name '("t" "tests" "benchmarks" "target" ".git" ".gerbil" ".data")) '())
+             ((eq? (file-info-type (file-info path)) 'directory) (source-files path))
+             ((string=? (path-extension path) ".ss") (list path))
+             (else '()))))
+        (directory-files directory))))
+(def (declared-entries forms)
+  (let walk ((datum forms))
+    (cond
+     ((not (pair? datum)) #f)
+     ((eq? (car datum) 'public-entry-modules)
+      (match datum
+        (['public-entry-modules ['quote entries]] entries)
+        (else (error "expected literal native PackageSpec entries" datum))))
+     (else (or (walk (car datum)) (walk (cdr datum)))))))
+(def (require-coverage entries required owner)
+  (for-each (lambda (entry)
+              (unless (member entry entries)
+                (error "Parser dependency profile omits a consumed API" owner entry))) required))
+(def (main generated-entry orgize-build parser-build product-package)
+  (let* ((entries (declared-entries (call-with-input-file generated-entry read-all)))
+         (parser-root (path-directory parser-build))
+         (product-root (path-directory product-package))
+         (sources (append (source-files (path-directory orgize-build))
+                          (source-files (path-expand "modules" product-root))
+                          (source-files (path-expand "user-interface" product-root))))
+         (required-count 0))
+    (unless (and (pair? entries) (andmap string? entries)) (error "missing native API roots" entries))
+    (for-each (lambda (entry)
+                (unless (file-exists? (path-expand entry parser-root))
+                  (error "Parser API root does not exist in the pinned source" entry))) entries)
+    (for-each
+     (lambda (source)
+       (let (required (parser-imports (call-with-input-file source read-all)))
+         (require-coverage entries required source)
+         (set! required-count (+ required-count (length required))))) sources)
+    ;; Matched controls: phase imports count; quoted sample code does not.
+    (unless (equal? (parser-imports '(import (for-syntax :gerbil-parser/language-support/grammar)))
+                    '("language-support/grammar.ss")) (error "phase import control failed"))
+    (unless (null? (parser-imports '(quote (import :gerbil-parser/unrequested))))
+      (error "quoted source control failed"))
+    (unless (with-catch (lambda (_error) #t)
+              (lambda () (require-coverage entries '("not-a-declared-api.ss") 'negative-control) #f))
+      (error "missing API negative control failed"))
+    (displayln "Parser dependency API coverage: " (length entries) " roots, "
+               required-count " import references; phase/negative controls passed")))
