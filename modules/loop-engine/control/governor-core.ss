@@ -7,6 +7,7 @@
 ;;; Invariant: this owner stores policy data only and never evaluates runtime state.
 
 (import (only-in :clan/poo/object .o .ref .slot? object?)
+        (only-in :core/composition/roles role-slot/default)
         :poo-flow/modules/workflow/control-plane/roles
         :poo-flow/modules/workflow/control-plane/failure
         :core/object-family/role-syntax
