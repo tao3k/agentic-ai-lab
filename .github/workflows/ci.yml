@@ -204,6 +204,7 @@ jobs:
       - name: Check original Temporal proof binding and Session invalidation
         env:
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
+          POO_FLOW_TEST_STALL_DIAGNOSTICS: ${{ runner.temp }}/poo-flow-test-stalls
         run: gerbil env just test-context-temporal
 
       - name: Compile Context temporal window policy regression
@@ -278,6 +279,15 @@ jobs:
           gerbil env gxi t/scenarios/performance/ascent-table-expression/scenario.ss
           gerbil env gxi t/scenarios/performance/ascent-table-expression-membership/scenario.ss
           gerbil env gxi t/scenarios/performance/ascent-reachability-closure/scenario.ss
+
+      - name: Upload failed natural-exit stack
+        if: failure() && runner.os == 'macOS'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: native-test-stall-macOS
+          path: ${{ runner.temp }}/poo-flow-test-stalls
+          if-no-files-found: warn
+          retention-days: 7
 
   quint-proof:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
