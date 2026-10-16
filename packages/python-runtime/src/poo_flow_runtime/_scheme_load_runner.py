@@ -63,9 +63,9 @@ def aot_runner_source(module_path: Path, projection_path: Path) -> str:
     projection_source_path = scheme_string(str(projection_path))
     return (
         "(import :core/profile-composition/selection-syntax\n"
-        "        :poo-flow/src/scenario/composition-syntax\n"
+        "        :poo-flow/modules/workflow/scenario/composition-syntax\n"
         "        :core/profile-composition/profile-bundle\n"
-        "        :poo-flow/src/scenario/profile-root\n"
+        "        :poo-flow/modules/workflow/scenario/profile-root\n"
         "        :poo-flow/modules/funflow/profile-library)\n"
         f"(include {projection_source_path})\n"
         "(export main)\n"

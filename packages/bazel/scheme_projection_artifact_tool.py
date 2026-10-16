@@ -89,9 +89,9 @@ def _load_projection_rows(
 ) -> tuple[object, ...]:
     runner_source = (
         "(import :core/profile-composition/selection-syntax\n"
-        "        :poo-flow/src/scenario/composition-syntax\n"
+        "        :poo-flow/modules/workflow/scenario/composition-syntax\n"
         "        :core/profile-composition/profile-bundle\n"
-        "        :poo-flow/src/scenario/profile-root\n"
+        "        :poo-flow/modules/workflow/scenario/profile-root\n"
         "        :poo-flow/modules/funflow/profile-library)\n"
         f"(include {_scheme_string(str(projection))})\n"
         "(poo-flow-runtime-load-write!\n"

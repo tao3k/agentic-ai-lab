@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[3]
-ROOTS = ['src/scenario/composition-syntax.ss', 'modules/funflow/profile-library.ss',
+ROOTS = ['modules/workflow/scenario/composition-syntax.ss', 'modules/funflow/profile-library.ss',
          'modules/funflow/runtime-load-projection.ss']
 
 
@@ -25,7 +25,7 @@ def main():
     modules = list(dict.fromkeys(name for name in result.stdout.splitlines()
         if name.startswith(('clan/', 'core/', 'poo-flow/')) and ' ' not in name))
     for name in ['core/profile-composition/selection-syntax',
-                 'poo-flow/src/scenario/composition-syntax',
+                 'poo-flow/modules/workflow/scenario/composition-syntax',
                  'poo-flow/modules/funflow/profile-library']:
         if name not in modules:
             modules.append(name)

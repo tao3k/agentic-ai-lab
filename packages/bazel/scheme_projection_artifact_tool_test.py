@@ -143,7 +143,7 @@ class SchemeProjectionArtifactToolTest(unittest.TestCase):
                 runner_source,
             )
             self.assertIn(
-                ":poo-flow/src/scenario/profile-root",
+                ":poo-flow/modules/workflow/scenario/profile-root",
                 runner_source,
             )
             self.assertIn(

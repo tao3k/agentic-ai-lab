@@ -44,7 +44,7 @@ def test_json_schema_to_scheme_contract_projects_map_value_schema() -> None:
         object_key="funflow/custom-stage",
     )
 
-    assert "(import (only-in :poo-flow/src/contract/json-schema-receipt" in source
+    assert "(import (only-in :core/modules/json-schema/interface" in source
     assert "(export custom-stage-schema" in source
     assert '("type" . "object")' in source
     assert '("patternProperties" .' in source
