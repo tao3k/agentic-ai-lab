@@ -101,7 +101,7 @@ filegroup(
     name = "core_module_sources",
     srcs = ["core/gerbil.pkg"] + glob(
         ["core/*.ss", "core/**/*.ss"],
-        exclude = ["core/t/**", "core/module-system/design/**"],
+        exclude = ["core/t/**", "core/design/**", "core/module-system/design/**", "core/proofs/**"],
     ),
 )
 
