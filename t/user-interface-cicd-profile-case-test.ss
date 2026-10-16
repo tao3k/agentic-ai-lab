@@ -20,8 +20,8 @@
         :poo-flow/modules/workflow/control-plane/api
         (only-in "../user-interface/custom/my-module/profiles/cicd"
                  poo-flow-custom-my-module-cicd-module)
-        :poo-flow/modules/user-interface/interface
-        :poo-flow/modules/user-interface/init-syntax
+        :poo-flow/modules/workflow/scenario/configuration/interface
+        :poo-flow/modules/workflow/scenario/configuration/init-syntax
         :poo-flow/modules/agent-sandbox/config)
 
 (export user-interface-cicd-profile-case-test)

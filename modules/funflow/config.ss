@@ -7,7 +7,7 @@
 ;;; Invariant: this file only declares maintained Funflow module rows.
 
 (import (only-in :clan/poo/object .ref object<-alist)
-        :poo-flow/modules/user-interface/module-selection
+        :core/module-system/selection/objects
         :poo-flow/modules/module-authoring/module-config-syntax
         :core/utilities/final-projection-syntax
         (only-in :poo-flow/modules/workflow/cicd-funs

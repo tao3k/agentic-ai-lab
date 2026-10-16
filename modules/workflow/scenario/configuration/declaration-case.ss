@@ -7,7 +7,7 @@
 ;;; Invariant: cases consume config declarations; root user-facing files remain declarations only.
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
-        :poo-flow/modules/user-interface/profile-config)
+        :poo-flow/modules/workflow/scenario/configuration/profile-config)
 
 (export poo-flow-declaration-case-kind
         poo-flow-declaration-case-default-setting-keys
@@ -94,7 +94,7 @@
 ;;       ```scheme
 ;;       (pooFlowDeclarationCase
 ;;        'developer
-;;        "modules/user-interface/declaration-case.ss"
+;;        "modules/workflow/scenario/configuration/declaration-case.ss"
 ;;        "user-interface/init.ss"
 ;;        "user-interface/custom/my-module/interface.ss"
 ;;        config
@@ -151,7 +151,7 @@
 (def (pooFlowRootDeveloperDeclarationCase config)
   (pooFlowDeclarationCase
    'developer
-   "modules/user-interface/declaration-case.ss"
+   "modules/workflow/scenario/configuration/declaration-case.ss"
    "user-interface/init.ss"
    "user-interface/custom/my-module/interface.ss"
    config

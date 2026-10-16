@@ -11,7 +11,7 @@
         (only-in :core/module-system/source/objects
                  poo-flow-module-source-ref-metadata
                  poo-flow-module-source-ref-value)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-module-selection?
                  poo-flow-user-module-selection-key
                  poo-flow-user-module-selection-source-ref
@@ -27,7 +27,7 @@
 (def (poo-flow-explicit-module-source-refs source-ref)
   (if (eq? (poo-flow-module-source-ref-metadata-ref source-ref 'kind)
            'custom-module-collection)
-    (poo-flow-load-modules
+    (poo-flow-module-source-collection-interfaces
      (make-poo-flow-module-source-collection
       'user-explicit-modules
       'user

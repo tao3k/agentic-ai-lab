@@ -6,7 +6,7 @@
 ;;; Boundary: downstream session sandbox profile declarations.
 ;;; Invariant: standalone module; it declares data only.
 
-(import :poo-flow/modules/user-interface/init-syntax)
+(import :poo-flow/modules/workflow/scenario/configuration/init-syntax)
 
 (export poo-flow-custom-my-module-session-module)
 

@@ -23,9 +23,6 @@
         poo-flow-eval-modules-result-kind
         poo-flow-module-system-presentation-kind
         poo-flow-module-interface-kind
-        poo-flow-module-import-kind
-        poo-flow-module-import-source-ref-kind
-        poo-flow-module-import-local-source-kind
         poo-flow-module-interface-prototype
         poo-flow-module-interface
         poo-flow-module-interface?
@@ -44,11 +41,6 @@
 (def poo-flow-module-system-presentation-kind
   "poo-flow.modules.system-presentation.v1")
 (def poo-flow-module-interface-kind "poo-flow.modules.interface.v1")
-(def poo-flow-module-import-kind "poo-flow.modules.import.v1")
-(def poo-flow-module-import-source-ref-kind
-  "poo-flow.modules.import.source-ref.v1")
-(def poo-flow-module-import-local-source-kind
-  "poo-flow.modules.import.local-source.v1")
 
 (def poo-flow-module-interface-prototype
   (.o (:: @ ModuleInterface.)

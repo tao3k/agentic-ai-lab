@@ -8,7 +8,7 @@
 
 (import (only-in :poo-flow/modules/workflow/profiles/kernel/core
                  poo-flow-kernel-profile)
-        (only-in :poo-flow/modules/user-interface/profile-core
+        (only-in :core/profile-composition/user-profile
                  pooFlowUserProfileExtend
                  pooFlowUserProfileSet
                  poo-flow-user-profile-set-default-profile
@@ -16,9 +16,9 @@
                  poo-flow-user-profile-settings
                  poo-flow-user-profile-setting-keys
                  pooFlowUserConfigFromProfile)
-        (only-in :poo-flow/modules/user-interface/profile-presentation
+        (only-in :poo-flow/modules/workflow/scenario/configuration/profile-presentation-config
                  pooFlowUserProfileSetPresentation)
-        (only-in :poo-flow/modules/user-interface/presentation
+        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
                  pooFlowUserConfigPresentation))
 
 (export poo-flow-root-profile-name

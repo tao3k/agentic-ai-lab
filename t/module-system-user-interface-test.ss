@@ -19,26 +19,26 @@
                  test-suite)
         (only-in :clan/poo/object .o .ref .slot?)
         :poo-flow/modules/module-authoring/module-interface
-        :poo-flow/modules/user-interface/module-selection
+        :core/module-system/selection/objects
         :poo-flow/modules/module-authoring/module-descriptor
         :core/module-system/source/collection
         (only-in :poo-flow/modules/module-authoring/module-source-collection make-poo-flow-contribution-module-load-path poo-flow-default-module-load-path poo-flow-maintained-module-source)
-        :poo-flow/modules/user-interface/module-source-tree
+        :poo-flow/modules/workflow/scenario/configuration/module-source-tree
         :poo-flow/modules/module-authoring/module-option-projection
-        :poo-flow/modules/user-interface/module-runtime-presentation
-        :poo-flow/modules/user-interface/module-value-catalog
+        :poo-flow/modules/workflow/scenario/configuration/module-runtime-presentation
+        :core/module-system/catalog/values
         :core/module-system/loader/objects
         :core/module-system/projection/option-objects
         :core/module-system/projection/option-validation
-        :poo-flow/modules/user-interface/module-diagnostics
-        :poo-flow/modules/user-interface/doctor-presentation
-        :poo-flow/modules/module-authoring/module-imports
+        :poo-flow/modules/workflow/scenario/configuration/module-diagnostics
+        :poo-flow/modules/workflow/scenario/configuration/doctor-presentation
+        :core/module-system/source/imports
         :core/module-system/source/objects
         :core/module-system/funs
-        :poo-flow/modules/user-interface/module-activation
+        :poo-flow/modules/workflow/scenario/configuration/module-activation
         :core/module-system/catalog/objects
-        :poo-flow/modules/user-interface/module-authoring-syntax
-        :poo-flow/modules/user-interface/interface)
+        :core/module-system/authoring/syntax
+        :poo-flow/modules/workflow/scenario/configuration/interface)
 
 (export module-system-user-interface-test)
 

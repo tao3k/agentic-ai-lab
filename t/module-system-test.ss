@@ -18,10 +18,10 @@
         (only-in :clan/poo/object .o .ref)
         :poo-flow/modules/workflow/control-plane/api
         :poo-flow/modules/module-authoring/module-descriptor
-        :poo-flow/modules/user-interface/module-diagnostics
-        :poo-flow/modules/module-authoring/module-imports
+        :poo-flow/modules/workflow/scenario/configuration/module-diagnostics
+        :core/module-system/source/imports
         :core/module-system/source/objects
-        :poo-flow/modules/user-interface/module-activation
+        :poo-flow/modules/workflow/scenario/configuration/module-activation
         :core/module-system/catalog/objects)
 
 (export module-system-test)

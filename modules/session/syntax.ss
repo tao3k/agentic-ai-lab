@@ -8,8 +8,8 @@
 ;;; selection contract without importing the user-interface aggregate.
 
 (import (only-in :clan/poo/object object<-alist)
-        (only-in :poo-flow/modules/user-interface/module-selection-contract
-                 poo-flow-modules-system-use-module/contract)
+        (only-in :poo-flow/modules/workflow/scenario/configuration/selection-policy
+                 poo-flow-product-use-module)
         "funs.ss"
         :poo-flow/modules/ai-agentic-context/features/memory/durable/policy
         :poo-flow/modules/session/agent
@@ -61,7 +61,7 @@
                   (cons 'metadata '(metadata-entry ...)))
                  supers: session-config)))
              ...)
-        (poo-flow-modules-system-use-module/contract
+        (poo-flow-product-use-module
          'session
          (poo-flow-session-poo-config-flags
           (list case-name ...)
@@ -86,7 +86,7 @@
                   (cons 'metadata '(metadata-entry ...)))
                  supers: session-config)))
              ...)
-        (poo-flow-modules-system-use-module/contract
+        (poo-flow-product-use-module
          'session
          (poo-flow-session-poo-config-flags
           (list case-name ...)

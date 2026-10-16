@@ -11,13 +11,13 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/user-interface/init-syntax
+        (only-in :poo-flow/modules/workflow/scenario/configuration/init-syntax
                  poo-flow-profile-extend)
         (only-in :poo-flow/modules/module-authoring/fragment-syntax
                  poo-flow-load-profile-module-binding)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-module-bundle)
-        (only-in :poo-flow/modules/user-interface/profile-config
+        (only-in :poo-flow/modules/workflow/scenario/configuration/profile-config
                  poo-flow-user-profile-module-bundles
                  poo-flow-user-profile-name)
         (only-in :poo-flow/modules/workflow/profiles/kernel/interface

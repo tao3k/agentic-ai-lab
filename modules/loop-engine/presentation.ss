@@ -9,8 +9,8 @@
 
 (import (only-in :clan/poo/object object<-fun)
         :poo-flow/modules/module-authoring/module-interface
-        :poo-flow/modules/user-interface/module-selection
-        :poo-flow/modules/user-interface/entrypoints
+        :core/module-system/selection/objects
+        :poo-flow/modules/workflow/scenario/configuration/entrypoints
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         (only-in :poo-flow/modules/sandbox-core/profile-support/policy-backend-validation
                  poo-flow-sandbox-backend-capability-registry-validation-valid?
@@ -21,7 +21,7 @@
         (only-in "config.ss"
                  poo-flow-user-config-loop-engine-intents
                  poo-flow-user-loop-engine-intent-ref)
-        :poo-flow/modules/user-interface/presentation-config-support)
+        :poo-flow/modules/workflow/scenario/configuration/presentation-config-support)
 
 ;; Engineering note: loop-engine-only presentation uses lazy slots so heavy
 ;; receipt projections are computed only when a downstream caller asks for them.

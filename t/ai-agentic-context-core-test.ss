@@ -1,12 +1,13 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test (only-in :poo-flow/testing-api poo-flow-test-case)
+(import (only-in :poo-flow/modules/ai-agentic-context/selection-adapter poo-flow-modules-system-use-module/ai)
+        :std/test (only-in :poo-flow/testing-api poo-flow-test-case)
         (only-in :clan/poo/object .o .ref)
         :poo-flow/modules/ai-agentic-context/interface
         :poo-flow/modules/query/semantic/context-restriction
-        :poo-flow/modules/user-interface/module-activation
-        :poo-flow/modules/user-interface/module-selection-contract
+        :poo-flow/modules/workflow/scenario/configuration/module-activation
+        :core/module-system/selection/contract
         :poo-flow/modules/module-authoring/module-descriptor
         :core/feature-system/model
         :core/feature-system/feature-manifest)
@@ -45,13 +46,13 @@
       (check (.ref ai-agentic-context-memory-feature 'owner-module-id) => 'ai-agentic-context)
       (check (.ref (feature-manifest-bundle 'missing-core (list ai-agentic-context-memory-feature)) 'accepted?) => #f))
     (poo-flow-test-case "public Context selection preserves native Session dependency"
-      (let* ((selection (car (poo-flow-modules-system-use-module/contract
+      (let* ((selection (car (poo-flow-modules-system-use-module/ai
                               'ai-agentic-context '(+memory))))
              (descriptor (.ref selection 'module-descriptor)))
         (check (.ref (.ref selection 'feature-manifest) 'feature-ids)
                => '(ai-agentic-context/core ai-agentic-context/memory))
         (check (length (poo-flow-module-closure (list descriptor))) => 2))
-      (check (length (poo-flow-modules-system-use-module/contract 'session '(+lineage))) => 1))
+      (check (length (poo-flow-modules-system-use-module/ai 'session '(+lineage))) => 1))
     (poo-flow-test-case "source edit refuses reuse of an admitted projection"
       (check-exception
         (poo-flow-ai-agentic-context-org-replay "* DONE Review source evidence\n" (project) scope) true))

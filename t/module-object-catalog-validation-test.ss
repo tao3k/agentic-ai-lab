@@ -15,7 +15,7 @@
         :core/module-system/schema/validation
         :poo-flow/modules/sandbox-core/shared-object
         :poo-flow/modules/sandbox-core/objects
-        :poo-flow/modules/user-interface/root-objects
+        :poo-flow/modules/workflow/scenario/configuration/root-objects
         :poo-flow/modules/nono-sandbox/objects
         :poo-flow/modules/cubeSandbox/objects
         :poo-flow/modules/docker-sandbox/objects)

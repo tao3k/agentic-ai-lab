@@ -10,7 +10,7 @@
          (only-in :std/test
                  test-suite
                  check-equal?)
-        (only-in :poo-flow/modules/user-interface/profile-core
+        (only-in :core/profile-composition/user-profile
                  poo-flow-user-profile-name
                  poo-flow-user-profile-set-name
                  poo-flow-user-profile-set-default-profile-name

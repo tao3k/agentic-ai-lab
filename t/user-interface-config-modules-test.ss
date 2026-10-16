@@ -17,8 +17,8 @@
                  check-true
         test-error
         test-suite)
-        :poo-flow/modules/user-interface/interface
-        :poo-flow/modules/user-interface/module-selection
+        :poo-flow/modules/workflow/scenario/configuration/interface
+        :core/module-system/selection/objects
         :poo-flow/modules/agent-sandbox/config
         (only-in "../user-interface/custom/my-module/profiles/session"
                  poo-flow-custom-my-module-session-module)

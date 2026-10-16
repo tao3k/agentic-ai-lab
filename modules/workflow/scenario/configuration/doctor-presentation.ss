@@ -10,7 +10,7 @@
 
 (import (only-in :clan/poo/object .o .ref)
         :poo-flow/modules/module-authoring/module-interface
-        :poo-flow/modules/module-authoring/module-imports
+        :core/module-system/source/imports
         :core/module-system/source/objects
         :poo-flow/modules/module-authoring/module-descriptor
         "module-diagnostics.ss"
@@ -22,7 +22,7 @@
                  poo-flow-module-option-validation-receipt-code
                  poo-flow-module-option-validation-receipt-messages
                  poo-flow-module-option-validation-receipt-metadata)
-        (only-in :poo-flow/modules/user-interface/module-runtime-presentation
+        (only-in :poo-flow/modules/workflow/scenario/configuration/module-runtime-presentation
                  poo-flow-module-evaluate
                  poo-flow-module-value-catalog-root)
         :core/module-system/loader/objects)

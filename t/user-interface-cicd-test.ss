@@ -11,10 +11,10 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-module-selection-key
                  poo-flow-user-module-selection-flag-entry)
-        (only-in :poo-flow/modules/user-interface/presentation-config
+        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
                  pooFlowUserConfigPresentation)
         (only-in :poo-flow/modules/workflow/cicd-config
                  poo-flow-user-config-cicd-intents

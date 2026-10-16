@@ -7,8 +7,8 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test check-equal? test-suite)
-        :poo-flow/modules/user-interface/interface
-        :poo-flow/modules/user-interface/init-syntax)
+        :poo-flow/modules/workflow/scenario/configuration/interface
+        :poo-flow/modules/workflow/scenario/configuration/init-syntax)
 
 (export funflow-config-pipeline-error-test)
 

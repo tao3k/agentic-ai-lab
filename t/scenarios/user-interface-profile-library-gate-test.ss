@@ -10,9 +10,9 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/user-interface/module-selection
-        :poo-flow/modules/user-interface/profile-core
-        :poo-flow/modules/user-interface/profile-gate)
+        :core/module-system/selection/objects
+        :core/profile-composition/user-profile
+        :core/profile-composition/gate)
 
 
 (export user-interface-profile-library-gate-test)

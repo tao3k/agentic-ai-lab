@@ -51,6 +51,6 @@
     (let* ((collection
             (make-poo-flow-module-source-collection
              'user-custom 'user "user-interface" "custom"))
-           (sources (poo-flow-load-modules collection)))
+           (sources (poo-flow-module-source-collection-interfaces collection)))
       (check-equal? (map poo-flow-module-source-ref-value sources)
                     '("user-interface/custom/my-module/interface.ss"))))))

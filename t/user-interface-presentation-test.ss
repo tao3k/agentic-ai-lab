@@ -14,13 +14,13 @@
         (only-in :poo-flow/modules/module-authoring/module-interface
                  poo-flow-brand-group
                  poo-flow-brand-name)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-config-presentation-kind)
-        (only-in :poo-flow/modules/user-interface/presentation-config
+        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
                  pooFlowUserConfigPresentation)
-        (only-in :poo-flow/modules/user-interface/profile-core
+        (only-in :core/profile-composition/user-profile
                  poo-flow-user-profile-presentation-kind)
-        (only-in :poo-flow/modules/user-interface/profile-presentation-config
+        (only-in :poo-flow/modules/workflow/scenario/configuration/profile-presentation-config
                  pooFlowUserProfilePresentation)
         "user-interface-fixtures.ss")
 

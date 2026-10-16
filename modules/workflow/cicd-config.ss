@@ -7,7 +7,7 @@
 ;;; Invariant: this owner emits POO control-plane data and never executes checks.
 
 (import (only-in :clan/poo/object .ref object<-fun)
-        :poo-flow/modules/user-interface/module-selection
+        :core/module-system/selection/objects
         :core/utilities/runtime-receipt-syntax
         (only-in :poo-flow/modules/workflow/cicd-runtime-command-config
                  poo-flow-user-alist-ref)

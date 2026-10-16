@@ -10,13 +10,13 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :clan/poo/object .ref object?)
         (only-in :std/test check-equal? test-suite)
-        (only-in :poo-flow/modules/user-interface/module-diagnostics
+        (only-in :poo-flow/modules/workflow/scenario/configuration/module-diagnostics
                  make-poo-flow-module-diagnostic)
-        :poo-flow/modules/module-authoring/module-imports
+        :core/module-system/source/imports
         :core/module-system/source/objects
         :poo-flow/modules/module-authoring/module-descriptor
-        :poo-flow/modules/user-interface/module-activation
-        :poo-flow/modules/user-interface/module-runtime-presentation
+        :poo-flow/modules/workflow/scenario/configuration/module-activation
+        :poo-flow/modules/workflow/scenario/configuration/module-runtime-presentation
         :core/module-system/loader/objects
         :core/module-system/catalog/objects
         :core/module-system/projection/option-objects)

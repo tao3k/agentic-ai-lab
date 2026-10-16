@@ -15,12 +15,12 @@
                  poo-flow-module-authoring-admission-accepted?
                  poo-flow-module-authoring-admission-diagnostics)
         (only-in :poo-flow/modules/module-authoring/semantic-module poo-flow-user-root-module-authoring-profile)
-        :poo-flow/modules/module-authoring/module-imports
+        :core/module-system/source/imports
         :core/module-system/source/objects
         :core/module-system/source/collection
         (only-in :poo-flow/modules/module-authoring/module-source-collection make-poo-flow-contribution-module-load-path poo-flow-default-module-load-path poo-flow-maintained-module-source)
-        :poo-flow/modules/user-interface/module-source-selection
-        :poo-flow/modules/user-interface/module-activation
+        :poo-flow/modules/workflow/scenario/configuration/module-source-selection
+        :poo-flow/modules/workflow/scenario/configuration/module-activation
         :core/module-system/catalog/objects
         :core/module-system/source/projection
         :core/module-system/loader/objects

@@ -12,7 +12,7 @@
         :core/graph/algorithms
         :core/graph/control-analysis
         :poo-flow/modules/workflow/graph/runtime-executor
-        :poo-flow/modules/user-interface/init-syntax
+        :poo-flow/modules/workflow/scenario/configuration/init-syntax
         (only-in :poo-flow/modules/workflow/scenario/composition-syntax
                  user-composition)
         :core/profile-composition/profile-bundle

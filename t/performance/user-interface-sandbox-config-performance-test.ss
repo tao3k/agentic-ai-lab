@@ -17,8 +17,8 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .ref)
         "../user-interface-fixtures.ss"
-        :poo-flow/modules/user-interface/interface
-        :poo-flow/modules/user-interface/profile-config
+        :poo-flow/modules/workflow/scenario/configuration/interface
+        :poo-flow/modules/workflow/scenario/configuration/profile-config
         :poo-flow/modules/agent-sandbox/config)
 
 (export user-interface-sandbox-config-performance-test)

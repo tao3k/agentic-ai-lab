@@ -7,9 +7,9 @@
 ;;; Invariant: maintained modules enter through validated public interfaces.
 
 (import
-        :poo-flow/modules/module-authoring/module-imports
+        :core/module-system/source/imports
         :core/module-system/source/objects
-        (only-in :core/module-system/source/collection poo-flow-load-modules)
+        (only-in :core/module-system/source/collection poo-flow-module-source-collection-interfaces)
         (only-in :poo-flow/modules/module-authoring/module-source-collection poo-flow-maintained-module-source))
 
 (export poo-flow-module-tree-source-refs
@@ -79,13 +79,13 @@
 (def (poo-flow-module-system-source-refs)
   (list
    (poo-flow-module-system-source
-    'profile-config "modules/user-interface/profile-config.ss")
+    'profile-config "modules/workflow/scenario/configuration/profile-config.ss")
    (poo-flow-module-system-source
-    'init-syntax "modules/user-interface/init-syntax.ss")
+    'init-syntax "modules/workflow/scenario/configuration/init-syntax.ss")
    (poo-flow-module-system-source
-    'root-profile "modules/user-interface/root-profile.ss")
+    'root-profile "modules/workflow/scenario/configuration/root-profile.ss")
    (poo-flow-module-system-source
-    'declaration-case "modules/user-interface/declaration-case.ss")))
+    'declaration-case "modules/workflow/scenario/configuration/declaration-case.ss")))
 
 ;;; Boundary: module registry member predicate is the policy-visible edge for
 ;;; module-system behavior, keeping validation, lookup, or projection
@@ -106,7 +106,7 @@
 ;; : (-> [PooModuleSourceRef])
 (def (poo-flow-src-modules-source-refs)
   (append
-   (poo-flow-load-modules poo-flow-maintained-module-source)
+   (poo-flow-module-source-collection-interfaces poo-flow-maintained-module-source)
    (poo-flow-module-system-source-refs)))
 
 ;;; Boundary: user-root trees have a different shape from upstream modules.

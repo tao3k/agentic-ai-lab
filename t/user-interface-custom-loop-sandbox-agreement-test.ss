@@ -11,14 +11,14 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  pooFlowUserConfig
                  poo-flow-settings
                  poo-flow-user-module-bundles->modules
                  poo-flow-user-module-selection)
         (only-in :poo-flow/modules/agent-sandbox/config
                  poo-flow-sandbox-profile-config)
-        (only-in :poo-flow/modules/user-interface/presentation-config
+        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
                  pooFlowUserConfigPresentation)
         (only-in "../user-interface/custom/my-module/cases/loop-engine-owner"
                  poo-flow-custom-my-module-loop-engine-case))

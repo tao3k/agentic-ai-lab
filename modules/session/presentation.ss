@@ -7,7 +7,7 @@
 ;;; Invariant: this module projects selected session features only; session
 ;;; values and graph receipts stay in modules/session.
 
-(import :poo-flow/modules/user-interface/module-selection)
+(import :core/module-system/selection/objects)
 
 (export poo-flow-user-module-selection-session?
         poo-flow-user-module-selection-session-intent

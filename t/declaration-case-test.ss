@@ -18,10 +18,10 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-config-presentation-kind
                  poo-flow-user-config?)
-        (only-in :poo-flow/modules/user-interface/declaration-case
+        (only-in :poo-flow/modules/workflow/scenario/configuration/declaration-case
                  pooFlowRootDeveloperDeclarationCase
                  poo-flow-declaration-case?
                  poo-flow-declaration-case-name
@@ -37,7 +37,7 @@
                  poo-flow-declaration-case-trace-stages
                  poo-flow-declaration-case-trace-safe?
                  poo-flow-declaration-case-presentation-matches?)
-        (only-in :poo-flow/modules/user-interface/root-profile
+        (only-in :poo-flow/modules/workflow/scenario/configuration/root-profile
                  pooFlowRootConfig)
         (only-in :poo-flow/user-interface/init
                  poo-flow-user-module-bundles))
@@ -72,7 +72,7 @@
         (check-equal? (poo-flow-declaration-case-name case-object)
                       'developer)
         (check-equal? (poo-flow-declaration-case-case-file case-object)
-                      "modules/user-interface/declaration-case.ss")
+                      "modules/workflow/scenario/configuration/declaration-case.ss")
         (check-equal? (poo-flow-declaration-case-init-file case-object)
                       "user-interface/init.ss")
         (check-equal? (poo-flow-declaration-case-custom-module-file

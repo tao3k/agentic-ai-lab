@@ -9,7 +9,7 @@
 (import (only-in :clan/poo/object .o object<-alist)
         :poo-flow/modules/module-authoring/fragment-syntax
         :poo-flow/modules/module-authoring/module-config-syntax
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-module-selection-flag-entry
                  poo-flow-user-module-selection->alist)
         :core/module-system/observability/presentation
@@ -54,19 +54,20 @@
                  loop-engine-safety-policy-extension)
         :poo-flow/modules/sandbox-core/profile
         :poo-flow/modules/sandbox-core/profile-interface
-        :poo-flow/modules/user-interface/init-declaration-syntax
-        :poo-flow/modules/user-interface/profile-config
-        :poo-flow/modules/user-interface/module-selection-syntax
-        :poo-flow/modules/user-interface/module-selection-contract)
+        :core/module-system/selection/init-syntax
+        :poo-flow/modules/workflow/scenario/configuration/profile-config
+        :core/module-system/selection/syntax
+        :core/module-system/selection/contract
+        :poo-flow/modules/ai-agentic-context/selection-adapter)
 
 (export poo-flow-module-bundles
-        (import: :poo-flow/modules/user-interface/module-selection-syntax)
+        (import: :core/module-system/selection/syntax)
         poo-flow-custom-module-bundles
         poo-flow-init-module-bundles
         use-module
         poo-flow-module-configs
         (import: :poo-flow/modules/module-authoring/fragment-syntax)
-        (import: :poo-flow/modules/user-interface/init-declaration-syntax)
+        (import: :core/module-system/selection/init-syntax)
         poo-flow-profile-set
         poo-flow-profile-extend
         poo-flow-profile
@@ -179,7 +180,7 @@
                      (list (cons 'slot-name slot-value) ...)
                      supers: profile-super))
                    ...)
-              (poo-flow-modules-system-use-module/contract
+              (poo-flow-modules-system-use-module/ai
                'module-key
                (config-flags
                 config-arg ...
@@ -191,7 +192,7 @@
                   (.o (:: profile-self profile-super profile-slot ...)
                       slot-def ...))
                  ...)
-            (poo-flow-modules-system-use-module/contract
+            (poo-flow-modules-system-use-module/ai
              'module-key
              (config-flags
               config-arg ...
@@ -232,7 +233,7 @@
                      supers: (poo-flow-ai-agentic-context-memory-prototype-super
                               'prototype-super)))
                    ...)
-              (poo-flow-modules-system-use-module/contract
+              (poo-flow-modules-system-use-module/ai
                'funflow
                (poo-flow-funflow-poo-config-flags
                 (list prototype-name ...)
@@ -247,7 +248,7 @@
                           prototype-slot ...)
                       slot-def ...))
                  ...)
-            (poo-flow-modules-system-use-module/contract
+            (poo-flow-modules-system-use-module/ai
              'funflow
              (poo-flow-funflow-poo-config-flags
               (list prototype-name ...)
@@ -266,7 +267,7 @@
        ...)))
     ((_ workflow :config bad-clause ...)
      (syntax
-      (poo-flow-modules-system-use-module/contract
+      (poo-flow-modules-system-use-module/ai
        'workflow
        '())))
     ((_ session
@@ -420,7 +421,7 @@
      (error "use-module :config DSL has been removed; module configs use native POO .def forms"))
     ((_ module flag ...)
      (syntax
-      (poo-flow-modules-system-use-module/contract 'module (list 'flag ...))))))
+      (poo-flow-modules-system-use-module/ai 'module (list 'flag ...))))))
 
 ;;; Module bundle lists are the direct analogue of Doom's module rows: each row
 ;;; stays a separate bundle so diagnostics can preserve declaration order.

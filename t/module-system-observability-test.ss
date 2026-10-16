@@ -94,13 +94,13 @@
                 (poo-flow-authoring-owner-import-port-observations
                  'modules/example/objects.ss
                  (open-input-string
-                  "(import (only-in :poo-flow/modules/user-interface/interface poo-flow-module-interface))") PooFlowSourcePolicy))
+                  "(import (only-in :poo-flow/modules/workflow/scenario/configuration/interface poo-flow-module-interface))") PooFlowSourcePolicy))
                (contribution-observation
                 (car contribution-observations)))
           (check-equal? (length contribution-observations) 1)
           (check-equal?
            (.ref contribution-observation 'owner)
-           ':poo-flow/modules/user-interface/interface)
+           ':poo-flow/modules/workflow/scenario/configuration/interface)
           (check-equal? (.ref contribution-observation 'accepted?) #f))))
     (poo-flow-test-case "all maintained module sources import precise owners"
       (let* ((paths (module-observability-source-files "modules"))
@@ -146,7 +146,7 @@
                          'build-bootstrap-parallel-projection)
            (check-equal? (.ref observation 'recommendation)
                          'declare-public-entry-modules)))
-       '((def roots (poo-flow-load-modules maintained-source))
+       '((def roots (poo-flow-module-source-collection-interfaces maintained-source))
          (def roots (all-gerbil-modules))
          (asp-gerbil-scheme-package-spec!
           (package @ prototype)
@@ -155,7 +155,7 @@
       ;; A quoted documentation example does not execute a projection.
       (check-equal?
        (poo-flow-authoring-build-bootstrap-datum-observations
-        'build.ss '(quote (poo-flow-load-modules maintained-source)) PooFlowSourcePolicy)
+        'build.ss '(quote (poo-flow-module-source-collection-interfaces maintained-source)) PooFlowSourcePolicy)
        '()))
     (poo-flow-test-case "builds strict presentation trace rows"
       (let* ((native-observation

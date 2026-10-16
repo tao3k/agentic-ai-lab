@@ -12,7 +12,7 @@
         :poo-flow/modules/module-authoring/module-descriptor
         :core/module-system/funs
         :core/module-system/projection/option-objects
-        :poo-flow/modules/user-interface/module-value-catalog
+        :core/module-system/catalog/values
         :poo-flow/modules/module-authoring/module-option-projection)
 
 (export poo-flow-module-runtime-import

@@ -24,8 +24,8 @@
         (only-in :poo-flow/modules/workflow/control-plane/failure
                  execution-failure?
                  execution-failure-code)
-        (only-in :poo-flow/modules/user-interface/module-selection-syntax poo-flow-modules!)
-        :poo-flow/modules/module-authoring/module-imports
+        (only-in :core/module-system/selection/syntax poo-flow-modules!)
+        :core/module-system/source/imports
         :core/module-system/source/objects
         :poo-flow/modules/module-authoring/module-descriptor
         :core/extension-graph/interface
@@ -33,8 +33,8 @@
         :core/module-system/source/collection
         (only-in :poo-flow/modules/module-authoring/module-source-collection make-poo-flow-contribution-module-load-path poo-flow-default-module-load-path poo-flow-maintained-module-source)
         :poo-flow/modules/building/official-contributions
-        :poo-flow/modules/user-interface/module-source-selection
-        :poo-flow/modules/user-interface/module-source-tree)
+        :poo-flow/modules/workflow/scenario/configuration/module-source-selection
+        :poo-flow/modules/workflow/scenario/configuration/module-source-tree)
 
 (export module-system-lazy-loader-test)
 
@@ -235,7 +235,7 @@
           (check-equal?
            (length plans)
            (+ (length
-               (poo-flow-load-modules poo-flow-maintained-module-source))
+               (poo-flow-module-source-collection-interfaces poo-flow-maintained-module-source))
               (length (poo-flow-module-system-source-refs))))
           (check-equal? (car source-values)
                         "modules/agent-sandbox/interface.ss")
@@ -254,22 +254,22 @@
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "modules/user-interface/profile-config.ss"
+          (check-equal? (if (member "modules/workflow/scenario/configuration/profile-config.ss"
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "modules/user-interface/init-syntax.ss"
+          (check-equal? (if (member "modules/workflow/scenario/configuration/init-syntax.ss"
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "modules/user-interface/root-profile.ss"
+          (check-equal? (if (member "modules/workflow/scenario/configuration/root-profile.ss"
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "modules/user-interface/declaration-case.ss"
+          (check-equal? (if (member "modules/workflow/scenario/configuration/declaration-case.ss"
                                     source-values)
                           #t
                           #f)

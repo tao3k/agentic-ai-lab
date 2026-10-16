@@ -32,12 +32,12 @@
     :core/utilities/product-syntax
     :core/utilities/final-projection-syntax
     :core/module-system/source/objects
-    :poo-flow/modules/module-authoring/module-imports
-    :poo-flow/modules/user-interface/selection-flags
-    :poo-flow/modules/user-interface/module-selection
-    :poo-flow/modules/user-interface/profile-core
+    :core/module-system/source/imports
+    :core/module-system/selection/flags
+    :core/module-system/selection/objects
+    :core/profile-composition/user-profile
     :core/utilities/functional
-    :poo-flow/modules/user-interface/profile-policy
+    :core/profile-composition/policy
     :poo-flow/testing-api
     :poo-flow/modules/temporal-causality/time/types
     :poo-flow/modules/temporal-causality/time/objects

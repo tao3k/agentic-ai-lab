@@ -34,7 +34,7 @@
                  poo-flow-sandbox-profile-metadata)
         :poo-flow/modules/workflow/interface
         :poo-flow/modules/module-authoring/module-interface
-        :poo-flow/modules/user-interface/module-selection
+        :core/module-system/selection/objects
         (only-in :poo-flow/modules/workflow/cicd-runtime-command-config
                  poo-flow-user-alist-ref)
         :core/module-system/observability/presentation)

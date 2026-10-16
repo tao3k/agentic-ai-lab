@@ -9,7 +9,7 @@
 ;;; Funflow module boundary.
 
 (import (only-in :clan/poo/object .all-slots .ref .slot? object? object<-alist)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-module-selection-flags
                  poo-flow-user-module-selection-key)
         (only-in :poo-flow/modules/workflow/scenario/accessors

@@ -19,21 +19,21 @@
         (only-in :clan/poo/object .o .ref)
         :poo-flow/modules/workflow/control-plane/api
         :poo-flow/modules/module-authoring/module-interface
-        :poo-flow/modules/user-interface/module-selection
+        :core/module-system/selection/objects
         :poo-flow/modules/module-authoring/module-descriptor
-        :poo-flow/modules/user-interface/module-authoring-syntax
+        :core/module-system/authoring/syntax
         :poo-flow/modules/module-authoring/module-option-projection
-        :poo-flow/modules/user-interface/module-runtime-presentation
-        :poo-flow/modules/user-interface/module-value-catalog
+        :poo-flow/modules/workflow/scenario/configuration/module-runtime-presentation
+        :core/module-system/catalog/values
         :core/module-system/projection/option-objects
         :core/module-system/projection/option-validation
-        :poo-flow/modules/module-authoring/module-imports
+        :core/module-system/source/imports
         :core/module-system/source/objects
         :core/module-system/funs
-        :poo-flow/modules/user-interface/module-activation
+        :poo-flow/modules/workflow/scenario/configuration/module-activation
         :core/module-system/catalog/objects
-        :poo-flow/modules/user-interface/presentation
-        :poo-flow/modules/user-interface/interface)
+        :poo-flow/modules/workflow/scenario/configuration/presentation-config
+        :poo-flow/modules/workflow/scenario/configuration/interface)
 
 (export module-system-owner-contract-test)
 
@@ -62,20 +62,20 @@
 ;; : TestSuite
 (def module-system-owner-contract-test
   (test-suite "poo-flow module owner contracts"
-    (poo-flow-test-case "keeps the user-interface facade independent of concrete modules"
+    (poo-flow-test-case "keeps the Core module entry independent of product imports"
       (check-equal?
        (call-with-input-file
-        "modules/user-interface/interface.ss"
+        "core/module-system/interface.ss"
         (lambda (port)
           (source-port-has-module-prefix?
            port
            ":poo-flow/modules/"
-           ":poo-flow/modules/user-interface/")))
+           ":core/")))
        #f)
       (check-equal?
        (source-datum-has-module-prefix?
         '(import :poo-flow/modules/funflow/interface)
-        ":poo-flow/modules/" ":poo-flow/modules/user-interface/")
+        ":poo-flow/modules/" ":core/")
        #t))
     (poo-flow-test-case "builds Marlin-style interface config descriptors"
       (let* ((interface

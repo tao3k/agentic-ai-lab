@@ -60,6 +60,15 @@ jobs:
       - name: Checkout poo-flow
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
+      - name: Upload focused native unit-test output
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: native-unit-output-${{ runner.os }}
+          path: ${{ runner.temp }}/poo-flow-unit-tests.log
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
         run: |
@@ -159,10 +168,10 @@ jobs:
         run: GERBIL_BUILD_VERBOSE=1 gerbil build
 
       - name: Compile AI Agentic-context module test
-        run: gerbil env gxc -V -O t/ai-agentic-context-core-test.ss
+        run: gerbil env gxc -O t/ai-agentic-context-core-test.ss
 
       - name: Compile Context Delta reference regression
-        run: gerbil env gxc -V -O t/ai-agentic-context-delta-test.ss
+        run: gerbil env gxc -O t/ai-agentic-context-delta-test.ss
 
       - name: Check Context Delta reference admission
         env:
@@ -170,7 +179,7 @@ jobs:
         run: gerbil env just test-file t/ai-agentic-context-delta-test.ss
 
       - name: Compile Session Attempt regression
-        run: gerbil env gxc -V -O t/session-attempt-test.ss
+        run: gerbil env gxc -O t/session-attempt-test.ss
 
       - name: Check Session Attempt routing and recovery
         env:
@@ -183,7 +192,7 @@ jobs:
         run: gerbil env just test-file t/ai-agentic-context-core-test.ss
 
       - name: Compile parser-backed Context Org anchor regression
-        run: gerbil env gxc -V -O t/ai-agentic-context-org-anchors-test.ss
+        run: gerbil env gxc -O t/ai-agentic-context-org-anchors-test.ss
 
       - name: Check Context Org ID admission and Session binding
         env:
@@ -191,7 +200,7 @@ jobs:
         run: gerbil env just test-file t/ai-agentic-context-org-anchors-test.ss
 
       - name: Compile current-input Session Host regression
-        run: gerbil env gxc -V -O t/ai-agentic-context-session-host-test.ss
+        run: gerbil env gxc -O t/ai-agentic-context-session-host-test.ss
 
       - name: Check current-input claim publication and source invalidation
         env:
@@ -199,7 +208,7 @@ jobs:
         run: gerbil env just test-file t/ai-agentic-context-session-host-test.ss
 
       - name: Compile original Context and Temporal suites
-        run: gerbil env gxc -V t/temporal-evaluator-test.ss t/ai-agentic-context-session-host-test.ss t/ai-agentic-context-delta-test.ss t/session-attempt-test.ss t/ai-agentic-context-org-anchors-test.ss t/query-orgize-source-test.ss
+        run: gerbil env gxc t/temporal-evaluator-test.ss t/ai-agentic-context-session-host-test.ss t/ai-agentic-context-delta-test.ss t/session-attempt-test.ss t/ai-agentic-context-org-anchors-test.ss t/query-orgize-source-test.ss
 
       - name: Check original Temporal proof binding and Session invalidation
         env:
@@ -208,7 +217,7 @@ jobs:
         run: gerbil env just test-context-temporal
 
       - name: Compile Context temporal window policy regression
-        run: gerbil env gxc -V -O t/ai-agentic-context-temporal-test.ss
+        run: gerbil env gxc -O t/ai-agentic-context-temporal-test.ss
 
       - name: Check Context policy clock domains and conservative windows
         env:
@@ -216,7 +225,7 @@ jobs:
         run: gerbil env just test-file t/ai-agentic-context-temporal-test.ss
 
       - name: Compile registered Context use Host test
-        run: gerbil env gxc -V -O t/context-use-host-test.ss
+        run: gerbil env gxc -O t/context-use-host-test.ss
 
       - name: Check registered Context use Host
         env:
@@ -234,7 +243,9 @@ jobs:
       - name: Run the single native unit-test entrypoint
         env:
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-        run: gerbil env ./unit-tests.ss
+        run: |
+          set -euo pipefail
+          gerbil env ./unit-tests.ss 2>&1 | tee "$RUNNER_TEMP/poo-flow-unit-tests.log"
 
       - name: Build Scheme semantic AOT byte boundary
         env:

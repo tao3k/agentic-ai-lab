@@ -6,7 +6,7 @@
 ;;; Invariant: projection is pure and leaves execution to the runtime handoff boundary.
 (import (only-in :poo-flow/modules/funflow/config
                  poo-flow-funflow-workflow-agreement)
-        :poo-flow/modules/user-interface/module-selection
+        :core/module-system/selection/objects
         :poo-flow/modules/sandbox-core/profile-catalog
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         :poo-flow/modules/workflow/cicd-config

@@ -10,8 +10,8 @@
 
 (import (only-in :clan/poo/object .ref object<-fun)
         :poo-flow/modules/module-authoring/module-interface
-        :poo-flow/modules/user-interface/module-selection
-        :poo-flow/modules/user-interface/entrypoints
+        :core/module-system/selection/objects
+        :poo-flow/modules/workflow/scenario/configuration/entrypoints
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         (only-in :poo-flow/modules/sandbox-core/profile-support/policy-backend-validation
                  poo-flow-sandbox-backend-capability-registry-validation-valid?
@@ -20,7 +20,7 @@
         :poo-flow/modules/workflow/cicd-config
         :poo-flow/modules/workflow/cicd-pipeline-run-config
         :poo-flow/modules/workflow/cicd-runtime-command-config
-        :poo-flow/modules/user-interface/presentation-config-support)
+        :poo-flow/modules/workflow/scenario/configuration/presentation-config-support)
 
 ;; Engineering note: workflow-CI focused presentation keeps runtime projection
 ;; memoized so command, handoff, and receipt rows share one projection pass.

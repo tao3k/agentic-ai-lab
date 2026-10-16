@@ -8,8 +8,8 @@
 ;;; config authoring remains prototype composition plus named conversion helpers.
 
 (import (only-in :clan/poo/object .o .ref .slot? object? object<-alist)
-        (only-in :poo-flow/modules/user-interface/module-selection-contract
-                 poo-flow-modules-system-use-module/contract))
+        (only-in :poo-flow/modules/workflow/scenario/configuration/selection-policy
+                 poo-flow-product-use-module))
 
 (export defpoo-module-config-prototype
         defpoo-module-config-kind-predicate
@@ -25,7 +25,7 @@
                                        environment
                                        command
                                        backend)
-  (poo-flow-modules-system-use-module/contract
+  (poo-flow-product-use-module
    module-key
    (list (cons ':inherits inherited-profile)
          (cons ':isolation isolation)
@@ -95,7 +95,7 @@
                      (list (cons 'slot-name slot-value) ...)
                      supers: prototype-super))
                    ...)
-              (poo-flow-modules-system-use-module/contract
+              (poo-flow-product-use-module
                'module-key
                (config-flags
                 (list prototype-name ...)
@@ -105,7 +105,7 @@
                   (.o (:: prototype-self prototype-super prototype-slot ...)
                       slot-def ...))
                  ...)
-            (poo-flow-modules-system-use-module/contract
+            (poo-flow-product-use-module
              'module-key
              (config-flags
               (list prototype-name ...)

@@ -10,7 +10,7 @@
         (only-in :core/contribution/objects
                  make-contribution
                  contribution?)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-module-selection?
                  poo-flow-user-module-selection-flags
                  poo-flow-user-module-selection-key)

@@ -9,7 +9,7 @@
 
 (import :poo-flow/modules/session/syntax
         :poo-flow/modules/ai-agentic-context/features/memory/config
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-module-selection-flag-entry
                  poo-flow-user-module-selection->alist))
 

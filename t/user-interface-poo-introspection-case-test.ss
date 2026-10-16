@@ -11,9 +11,9 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/modules/user-interface/module-selection
-        :poo-flow/modules/user-interface/interface
-        :poo-flow/modules/user-interface/init-syntax
+        :core/module-system/selection/objects
+        :poo-flow/modules/workflow/scenario/configuration/interface
+        :poo-flow/modules/workflow/scenario/configuration/init-syntax
         :poo-flow/modules/workflow/interface
         (only-in "../user-interface/custom/my-module/cases/poo-introspection"
                  poo-flow-custom-my-module-poo-introspection-case))

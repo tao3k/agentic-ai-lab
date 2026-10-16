@@ -7,8 +7,8 @@
 ;;; Invariant: Module System and concrete module APIs are imported through their
 ;;; own owner interfaces; they never widen this User Interface facade.
 
-(import :poo-flow/modules/user-interface/entrypoints
-        :poo-flow/modules/user-interface/presentation)
+(import :poo-flow/modules/workflow/scenario/configuration/entrypoints
+        :poo-flow/modules/workflow/scenario/configuration/presentation-config)
 
-(export (import: :poo-flow/modules/user-interface/entrypoints)
-        (import: :poo-flow/modules/user-interface/presentation))
+(export (import: :poo-flow/modules/workflow/scenario/configuration/entrypoints)
+        (import: :poo-flow/modules/workflow/scenario/configuration/presentation-config))

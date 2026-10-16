@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-module-selection?
                  poo-flow-user-module-selection-flag-entry)
         :poo-flow/modules/session/config

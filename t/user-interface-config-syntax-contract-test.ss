@@ -8,17 +8,14 @@
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          (only-in :std/test check-equal? test-suite)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-module-selection
                  poo-flow-user-module-selection-flags
                  poo-flow-user-module-selection-key
                  poo-flow-user-module-selection->alist
-                 poo-flow-user-module-when
-                 poo-flow-modules-system-use-module)
-        (only-in :poo-flow/modules/user-interface/module-selection-contract
-                 poo-flow-require-use-module-contract!
-                 poo-flow-use-module-contract-validation
-                 poo-flow-use-module-contract-validation-valid?))
+                 poo-flow-user-module-when)
+        (only-in :core/module-system/selection/contract poo-flow-use-module-contract-validation-valid?)
+        (only-in :poo-flow/modules/workflow/scenario/configuration/selection-policy poo-flow-product-use-module poo-flow-product-selection-admit! poo-flow-product-selection-validation))
 
 (export user-interface-config-syntax-contract-test)
 
@@ -30,7 +27,7 @@
   (test-suite "poo-flow user interface config syntax contract"
     (poo-flow-test-case "builds module selections and conditional gates"
       (let ((nono-selections
-             (poo-flow-modules-system-use-module
+             (poo-flow-product-use-module
               'nono-sandbox
               '(+nono +doctor)))
             (flow-selection
@@ -54,11 +51,11 @@
                         (enabled? . #t)))))
     (poo-flow-test-case "validates use-module declarations before projection"
       (let* ((valid-selections
-              (poo-flow-modules-system-use-module
+              (poo-flow-product-use-module
                'nono-sandbox
                '(+nono +doctor)))
              (valid-validation
-              (poo-flow-use-module-contract-validation
+              (poo-flow-product-selection-validation
                'nono-sandbox
                valid-selections))
              (invalid-selection
@@ -69,13 +66,13 @@
         (check-equal?
          (syntax-contract-alist-ref valid-validation 'selection-count)
          1)
-        (check-equal? (poo-flow-require-use-module-contract!
+        (check-equal? (poo-flow-product-selection-admit!
                        'nono-sandbox
                        valid-selections)
                       valid-selections)
         (check-equal?
          (poo-flow-use-module-contract-validation-valid?
-          (poo-flow-use-module-contract-validation
+          (poo-flow-product-selection-validation
            'workflow
            (list invalid-selection)))
          #f)
@@ -83,7 +80,7 @@
          (with-catch
           (lambda (_) #t)
           (lambda ()
-            (poo-flow-require-use-module-contract!
+            (poo-flow-product-selection-admit!
              'nono-sandbox
              '(not-a-selection))
             #f))

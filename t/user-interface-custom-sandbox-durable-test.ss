@@ -9,7 +9,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         (only-in :clan/poo/object .ref .slot?)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-module-selection-key
                  poo-flow-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/sandbox-durable"

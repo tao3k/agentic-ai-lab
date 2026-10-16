@@ -18,10 +18,10 @@
         :poo-flow/modules/workflow/control-plane/task
         :poo-flow/modules/workflow/control-plane/flow
         :poo-flow/modules/workflow/control-plane/config
-        :poo-flow/modules/module-authoring/module-imports
+        :core/module-system/source/imports
         :core/module-system/source/objects
         :poo-flow/modules/module-authoring/module-descriptor
-        :poo-flow/modules/user-interface/module-diagnostics
+        :poo-flow/modules/workflow/scenario/configuration/module-diagnostics
         :core/module-system/catalog/objects
         (only-in :core/object-family/syntax
                  defpoo-object-family)

@@ -6,21 +6,21 @@
 ;;; Boundary: public facade for profile config, policy, and presentation.
 ;;; Invariant: profile objects, diagnostics, and presentations live in leaf owners.
 
-(import :poo-flow/modules/user-interface/module-selection
+(import :core/module-system/selection/objects
         :poo-flow/modules/sandbox-core/profile-catalog
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         :poo-flow/modules/workflow/cicd-config
-        :poo-flow/modules/user-interface/presentation
-        :poo-flow/modules/user-interface/profile-core
-        :poo-flow/modules/user-interface/profile-gate
-        :poo-flow/modules/user-interface/profile-policy
-        :poo-flow/modules/user-interface/profile-presentation)
+        :poo-flow/modules/workflow/scenario/configuration/presentation-config
+        :core/profile-composition/user-profile
+        :core/profile-composition/gate
+        :core/profile-composition/policy
+        :poo-flow/modules/workflow/scenario/configuration/profile-presentation-config)
 
-(export (import: :poo-flow/modules/user-interface/module-selection)
+(export (import: :core/module-system/selection/objects)
         (import: :poo-flow/modules/sandbox-core/profile-catalog)
         (import: :poo-flow/modules/sandbox-core/backend-capability-catalog)
         (import: :poo-flow/modules/workflow/cicd-config)
-        (import: :poo-flow/modules/user-interface/presentation)
+        (import: :poo-flow/modules/workflow/scenario/configuration/presentation-config)
         poo-flow-user-profile-kind
         poo-flow-user-profile-set-kind
         poo-flow-user-profile-diagnostic-kind

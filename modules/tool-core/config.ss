@@ -8,7 +8,7 @@
 
 (import
         (only-in :clan/poo/object .ref)
-        :poo-flow/modules/user-interface/module-selection
+        :core/module-system/selection/objects
         :poo-flow/modules/module-authoring/module-config-syntax
         :poo-flow/modules/tool-core/objects)
 

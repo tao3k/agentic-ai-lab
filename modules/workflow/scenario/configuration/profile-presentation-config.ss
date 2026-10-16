@@ -8,13 +8,13 @@
 
 (import (only-in :clan/poo/object .ref object<-alist)
         :poo-flow/modules/module-authoring/module-interface
-        :poo-flow/modules/user-interface/module-selection
-        :poo-flow/modules/user-interface/entrypoints
+        :core/module-system/selection/objects
+        :poo-flow/modules/workflow/scenario/configuration/entrypoints
         :poo-flow/modules/sandbox-core/profile-catalog
-        (only-in :poo-flow/modules/user-interface/presentation
+        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
                  pooFlowUserConfigPresentation)
         :core/utilities/final-projection-syntax
-        :poo-flow/modules/user-interface/profile-core)
+        :core/profile-composition/user-profile)
 
 (export pooFlowUserProfilePresentation
         pooFlowUserProfileSetPresentation)

@@ -20,7 +20,7 @@
                  poo-flow-module-flags-enabled?)
         (only-in :core/object-family/syntax
                  defpoo-object-family)
-        :poo-flow/modules/module-authoring/module-imports
+        :core/module-system/source/imports
         :core/module-system/source/objects)
 
 (export poo-flow-module-role

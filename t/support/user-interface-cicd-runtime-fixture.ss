@@ -7,7 +7,7 @@
 ;;; Invariant: construct only the profiles required by the real downstream
 ;;; Funflow case; do not import the aggregate custom-profile owner.
 
-(import (only-in :poo-flow/modules/user-interface/module-selection
+(import (only-in :core/module-system/selection/objects
                  pooFlowUserConfig
                  poo-flow-settings
                  poo-flow-user-module-selection)

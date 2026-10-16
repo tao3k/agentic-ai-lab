@@ -12,7 +12,7 @@
         (only-in :asp-gerbil-scheme/testing-api +asp-testing-interface+)
         "./modules/testing/testing-extension"
         :core/observability/testing-case
-        (only-in "./modules/user-interface/profile-policy"
+        (only-in :core/profile-composition/policy
                  poo-flow-user-profile-policy-admit
                  poo-flow-user-profile-set-policy-admit
                  poo-flow-user-profile-policy-admitted?

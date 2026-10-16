@@ -10,11 +10,11 @@
   (.o (:: @ SourceInspectionPolicy.)
       aggregate-imports:
       '(:poo-flow/modules/workflow/control-plane/api
-        :poo-flow/modules/user-interface/interface
+        :poo-flow/modules/workflow/scenario/configuration/interface
         :core/feature-system/interface)
       package-prefix: ":poo-flow/"
       source-roots: '("./src/" "src/" "./modules/" "modules/")
-      forbidden-projections: '(poo-flow-load-modules all-gerbil-modules modules)))
+      forbidden-projections: '(poo-flow-module-source-collection-interfaces all-gerbil-modules modules)))
 
 (def PooFlowModuleStylePolicy
   (.o (:: @ poo-flow-default-module-style-policy)

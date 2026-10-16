@@ -12,8 +12,8 @@
         :poo-flow/modules/sandbox-core/profile-support/policy
         :poo-flow/modules/workflow/interface
         :poo-flow/modules/module-authoring/module-interface
-        :poo-flow/modules/user-interface/module-selection
-        :poo-flow/modules/user-interface/entrypoints
+        :core/module-system/selection/objects
+        :poo-flow/modules/workflow/scenario/configuration/entrypoints
         :core/module-system/observability/presentation
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         :poo-flow/modules/workflow/cicd-config
@@ -22,7 +22,7 @@
         (only-in :poo-flow/modules/loop-engine/config
                  poo-flow-user-config-loop-engine-intents
                  poo-flow-user-loop-engine-intent-ref)
-        :poo-flow/modules/user-interface/presentation-config-support
+        :poo-flow/modules/workflow/scenario/configuration/presentation-config-support
         :poo-flow/modules/loop-engine/presentation
         :poo-flow/modules/workflow/presentation)
 

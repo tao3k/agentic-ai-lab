@@ -5,7 +5,7 @@
 ;;; Boundary: adapts module configuration into Funflow and CI/CD POO projections.
 ;;; Invariant: adapters reuse module contracts and do not execute workflow effects.
 (import (only-in :clan/poo/object .ref)
-        :poo-flow/modules/user-interface/module-selection
+        :core/module-system/selection/objects
         :core/utilities/final-projection-syntax
         :poo-flow/modules/workflow/types
         :poo-flow/modules/workflow/objects

@@ -10,7 +10,7 @@
          (only-in :std/test check-equal? test-suite)
         (only-in :poo-flow/user-interface/init
                  poo-flow-user-module-bundles)
-        (only-in :poo-flow/modules/user-interface/profile-core
+        (only-in :core/profile-composition/user-profile
                  pooFlowUserConfigFromProfile
                  poo-flow-user-profile?
                  poo-flow-user-profile-name
@@ -19,9 +19,9 @@
         (only-in :poo-flow/testing-api
                  +poo-flow-testing-interface+
                  poo-flow-testing-admit-user-profile!)
-        (only-in :poo-flow/modules/user-interface/root-profile
+        (only-in :poo-flow/modules/workflow/scenario/configuration/root-profile
                  pooFlowRootProfile)
-        (only-in :poo-flow/modules/user-interface/module-selection
+        (only-in :core/module-system/selection/objects
                  poo-flow-user-config-modules
                  poo-flow-user-config-module-keys
                  poo-flow-user-module-selection-key
