@@ -107,7 +107,7 @@
 (let loop ()
   (let (line (read-line))
     (unless (eof-object? line)
-      (displayln (poo-flow/src/ffi/semantic#semantic-call "temporal.solve" line))
+      (displayln (poo-flow/modules/workflow/runtime/semantic#semantic-call "temporal.solve" line))
       (force-output)
       (loop))))
 (displayln "OK") (force-output)

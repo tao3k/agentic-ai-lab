@@ -357,6 +357,6 @@ C
   "poo_flow_semantic_evaluate" "extern"
   (with-exception-catcher
    (lambda (exception)
-     (poo-flow/src/ffi/semantic#set-result! result 4 (string->utf8
-                    (poo-flow/src/ffi/semantic#semantic-error exception))))
-   (lambda () (poo-flow/src/ffi/semantic#set-result! result 0 (string->utf8 (poo-flow/src/ffi/semantic#semantic-call operation payload)))))))
+     (poo-flow/modules/workflow/runtime/semantic#set-result! result 4 (string->utf8
+                    (poo-flow/modules/workflow/runtime/semantic#semantic-error exception))))
+   (lambda () (poo-flow/modules/workflow/runtime/semantic#set-result! result 0 (string->utf8 (poo-flow/modules/workflow/runtime/semantic#semantic-call operation payload)))))))

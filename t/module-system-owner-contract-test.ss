@@ -37,22 +37,25 @@
 
 (export module-system-owner-contract-test)
 
-(def (source-datum-has-module-prefix? value prefix)
+(def (source-datum-has-module-prefix? value prefix except-prefix)
   (cond
-   ((symbol? value) (string-prefix? prefix (symbol->string value)))
+   ((symbol? value)
+    (let (name (symbol->string value))
+      (and (string-prefix? prefix name)
+           (not (string-prefix? except-prefix name)))))
    ((pair? value)
-    (or (source-datum-has-module-prefix? (car value) prefix)
-        (source-datum-has-module-prefix? (cdr value) prefix)))
+    (or (source-datum-has-module-prefix? (car value) prefix except-prefix)
+        (source-datum-has-module-prefix? (cdr value) prefix except-prefix)))
    ((vector? value)
-    (source-datum-has-module-prefix? (vector->list value) prefix))
+    (source-datum-has-module-prefix? (vector->list value) prefix except-prefix))
    (else #f)))
 
-(def (source-port-has-module-prefix? port prefix)
+(def (source-port-has-module-prefix? port prefix except-prefix)
   (let loop ()
     (let (value (read port))
       (cond
        ((eof-object? value) #f)
-       ((source-datum-has-module-prefix? value prefix) #t)
+       ((source-datum-has-module-prefix? value prefix except-prefix) #t)
        (else (loop))))))
 
 ;;; This suite exercises direct owner imports without an aggregate module API.
@@ -62,12 +65,18 @@
     (poo-flow-test-case "keeps the user-interface facade independent of concrete modules"
       (check-equal?
        (call-with-input-file
-        "modules/user-interface/facade.ss"
+        "modules/user-interface/interface.ss"
         (lambda (port)
           (source-port-has-module-prefix?
            port
-           ":poo-flow/modules/")))
-       #f))
+           ":poo-flow/modules/"
+           ":poo-flow/modules/user-interface/")))
+       #f)
+      (check-equal?
+       (source-datum-has-module-prefix?
+        '(import :poo-flow/modules/funflow/interface)
+        ":poo-flow/modules/" ":poo-flow/modules/user-interface/")
+       #t))
     (poo-flow-test-case "builds Marlin-style interface config descriptors"
       (let* ((interface
               (poo-flow-module-interface

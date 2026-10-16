@@ -142,7 +142,7 @@
    (evidence-suite 'lifecycle "core/t/poo-clos-lifecycle-test.ss"
                    'poo-clos-lifecycle-test 15)
    (evidence-suite 'syntax "core/t/poo-clos-syntax-test.ss"
-                   'poo-clos-syntax-test 10)
+                   'poo-clos-syntax-test 18)
    (evidence-suite 'method-combination
                    "core/t/poo-clos-method-combination-test.ss"
                    'poo-clos-method-combination-test 13)

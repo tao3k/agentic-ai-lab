@@ -339,42 +339,42 @@ END-C
 (begin-foreign
   (c-define (poo-flow-scheme-native-abi-version)
     () unsigned-int32 "poo_flow_scheme_native_abi_version" "extern"
-    (poo-flow/src/ffi/runtime-v0-native#native-abi-version))
+    (poo-flow/modules/workflow/runtime/runtime-v0-native#native-abi-version))
 
   (c-define (poo-flow-scheme-native-descriptor result)
     (poo_flow_scheme_result_v1-borrowed-ptr*) int32
     "poo_flow_scheme_native_descriptor" "extern"
     (with-exception-catcher
      (lambda (exception)
-       (poo-flow/src/ffi/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result -1)
-       (poo-flow/src/ffi/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
+       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result -1)
+       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
         result (string->utf8
-                (poo-flow/src/ffi/runtime-v0-native#native-error-payload
+                (poo-flow/modules/workflow/runtime/runtime-v0-native#native-error-payload
                  exception)))
        -1)
      (lambda ()
-       (poo-flow/src/ffi/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result 0)
-       (poo-flow/src/ffi/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
+       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result 0)
+       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
         result (string->utf8
-                (poo-flow/src/ffi/runtime-v0-native#native-descriptor-payload)))
-       (poo-flow/src/ffi/runtime-v0-native#poo_flow_scheme_result_v1-status result))))
+                (poo-flow/modules/workflow/runtime/runtime-v0-native#native-descriptor-payload)))
+       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status result))))
 
   (c-define (poo-flow-scheme-native-validate contract payload result)
     (UTF-8-string UTF-8-string poo_flow_scheme_result_v1-borrowed-ptr*) int32
     "poo_flow_scheme_native_validate" "extern"
     (with-exception-catcher
      (lambda (exception)
-       (poo-flow/src/ffi/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result -1)
-       (poo-flow/src/ffi/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
+       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result -1)
+       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
         result (string->utf8
-                (poo-flow/src/ffi/runtime-v0-native#native-error-payload
+                (poo-flow/modules/workflow/runtime/runtime-v0-native#native-error-payload
                  exception)))
        -1)
      (lambda ()
-       (poo-flow/src/ffi/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result 0)
-       (poo-flow/src/ffi/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
+       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result 0)
+       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
         result
         (string->utf8
-         (poo-flow/src/ffi/runtime-v0-native#native-validate-payload
+         (poo-flow/modules/workflow/runtime/runtime-v0-native#native-validate-payload
           contract payload)))
-       (poo-flow/src/ffi/runtime-v0-native#poo_flow_scheme_result_v1-status result)))))
+       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status result)))))

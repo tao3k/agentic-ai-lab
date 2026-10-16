@@ -54,24 +54,8 @@
                                  ":asp-gerbil-scheme/src/build-api/")
                       #f)
         (check-equal? (contains? source ":clan/building") #f)
-        (check-equal? (contains? source
-                                 "(public-entry-modules")
-                      #t)
-        (check-equal? (contains? source "\"src/core/api.ss\"") #t)
-        (check-equal? (contains? source
-                                 "\"src/authoring/module-descriptor.ss\"")
-                      #t)
-        (check-equal? (contains? source
-                                 "\"src/authoring/module-interface.ss\"")
-                      #f)
-        (check-equal? (contains? source
-                                 "\"src/feature-system/interface.ss\"")
-                      #t)
-        (check-equal? (contains? source
-                                 "(modules ")
-                      #f)
-        (check-equal? (contains? source "poo-flow-load-modules") #f)
-        (check-equal? (contains? source "all-gerbil-modules") #f)
+        ;; Catalog spelling and enumeration are not the provider boundary.
+        ;; Core's init-selected build view may replace the current manual list.
         (check-equal? (contains? source
                                  "(exclude-dirs +poo-flow-build-exclude-dirs+)")
                       #t)

@@ -272,6 +272,28 @@ test-file path:
     grep -F 'HARNESS-OK' "$log" >/dev/null
     grep -x 'OK' "$log" >/dev/null
 
+# Rebuild only the Scheme/C ABI owner before its source-level round-trip test.
+[group('test')]
+test-runtime-v0-native-ffi:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    link_options=()
+    if [[ "$(uname -s)" == Darwin ]]; then
+      link_options=(-ld-options "-Wl,-undefined,dynamic_lookup")
+    fi
+    library_root="{{ poo_flow_gerbil_path }}/lib"
+    export GERBIL_LOADPATH="$library_root:{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}"
+    {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} env gxc "${link_options[@]}" modules/workflow/runtime/runtime-v0-native.ss
+    {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} env gxc t/runtime-v0-native-ffi-test.ss
+    log="$(mktemp)"
+    trap 'rm -f "$log"' EXIT
+    test_module="$library_root/poo-flow/t/runtime-v0-native-ffi-test.ssi"
+    {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} env gxtest "$test_module" </dev/null 2>&1 | tee "$log"
+    if grep -E 'ERROR (MODULE|CHECK|CASE|HARNESS)|Heap overflow|Stack overflow' "$log" >/dev/null; then exit 1; fi
+    grep -F "MODULE-OK $test_module" "$log" >/dev/null
+    grep -F 'HARNESS-OK' "$log" >/dev/null
+    grep -x 'OK' "$log" >/dev/null
+
 # Run statically linked Query/Orgize/Evidence cases through upstream gxtest.
 [group('test')]
 test-query-parser-native executable:
