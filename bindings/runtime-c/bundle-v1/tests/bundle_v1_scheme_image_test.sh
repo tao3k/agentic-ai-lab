@@ -23,5 +23,5 @@ POO_FLOW_BUNDLE_V1_DESCRIPTOR_OUT=$descriptor
 POO_FLOW_BUNDLE_V1_ARENA_OUT=$arena
 export POO_FLOW_BUNDLE_V1_DESCRIPTOR_OUT POO_FLOW_BUNDLE_V1_ARENA_OUT
 
-"$gxi" -:max-heap=1G,debug=q "$fixture"
+"$gxi" -:max-heap=1G,debug=q "$fixture" < /dev/null
 "$harness" "$descriptor" "$arena"

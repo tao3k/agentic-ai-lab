@@ -40,4 +40,4 @@ esac \
   | awk '/^poo_flow_runtime_v0_/ || /^poo_flow_proof_/' \
   | LC_ALL=C sort -u >"$actual"
 
-exec "$gxi" -:max-heap=1G,debug=q "$validator" "$manifest" "$actual"
+exec "$gxi" -:max-heap=1G,debug=q "$validator" "$manifest" "$actual" < /dev/null
