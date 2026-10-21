@@ -11,6 +11,7 @@ from pathlib import Path
 import platform
 import shutil
 
+from setuptools_rust import Binding, RustExtension
 from setuptools import setup
 from setuptools.command.build_py import build_py
 
@@ -51,6 +52,9 @@ class BuildPyWithRuntime(build_py):
 
 
 setup(
+    rust_extensions=[RustExtension("poo_flow_runtime._reasoning",
+        path="../../modules/evidence-assessment/native/Cargo.toml",
+        binding=Binding.PyO3, features=["python", "extension-module"])],
     cffi_modules=["src/poo_flow_runtime/_native/_build.py:ffibuilder",
                   "src/poo_flow_runtime/_native/_semantic_build.py:ffibuilder",
                   "src/poo_flow_runtime/_native/_temporal_store_build.py:ffibuilder"],

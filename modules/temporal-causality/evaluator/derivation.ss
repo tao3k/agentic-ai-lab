@@ -4,7 +4,7 @@
 ;;; Pure native lineage correspondence. Original evaluator replay owns truth.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :std/crypto/digest sha256) (only-in :std/encoding/hex hex-encode)
-        (only-in :gerbil-ascent/candidate/reasoning reasoning-receipt-proof)
+        (only-in :gerbil-ascent/candidate/checked-program reasoning-receipt-proof)
         (only-in :gerbil-ascent/candidate/provenance positive-proof-nodes proof-node-kind
                  proof-node-inputs proof-node-relation proof-node-row)
         (only-in :poo-flow/modules/temporal-causality/truth-maintenance/support/interface poo-flow-temporal-support)

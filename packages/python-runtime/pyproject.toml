@@ -27,7 +27,7 @@ dev = [
 ]
 
 [build-system]
-requires = ["setuptools>=75", "wheel", "cffi>=2.0.0"]
+requires = ["setuptools>=75", "wheel", "cffi>=2.0.0", "setuptools-rust>=1.12,<2"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
@@ -40,6 +40,7 @@ where = ["src"]
 [tool.setuptools.package-data]
 poo_flow_runtime = [
   "_native/lib/*",
+  "reasoning_rules/*.ss",
   "projections/*.ss",
   "projections/*.sexp",
   "projections/runtime_load_imports.json",
@@ -52,3 +53,9 @@ pythonpath = ["src"]
 
 [tool.uv.sources]
 python-lang-project-harness = { git = "https://github.com/tao3k/python-lang-project-harness" }
+
+[tool.maturin]
+manifest-path = "../../modules/evidence-assessment/native/Cargo.toml"
+module-name = "poo_flow_runtime._reasoning"
+python-source = "src"
+features = ["python", "extension-module"]

@@ -1,0 +1,571 @@
+{
+  "schema": "ascent.movie-cast-source.v1",
+  "property": "P161",
+  "license": "CC0-1.0",
+  "films": [
+    {
+      "id": "Q25188",
+      "label": "Inception",
+      "revision": 2548782898,
+      "sourceSha256": "27084d0d5684161d10080b105828322d14f846fae8b796643ad6d76256f04805",
+      "url": "https://www.wikidata.org/wiki/Special:EntityData/Q25188.json?revision=2548782898"
+    },
+    {
+      "id": "Q44578",
+      "label": "Titanic",
+      "revision": 2547877878,
+      "sourceSha256": "1e5b6945541e5a0745b2149647ce0213aebaf460f837334e35ba19e0a656ccae",
+      "url": "https://www.wikidata.org/wiki/Special:EntityData/Q44578.json?revision=2547877878"
+    },
+    {
+      "id": "Q18002795",
+      "label": "The Revenant",
+      "revision": 2551569467,
+      "sourceSha256": "31277b41db4b0fd9a2f3ab9b6b66e60644b020d9e889bd1fbec6eeff07d49146",
+      "url": "https://www.wikidata.org/wiki/Special:EntityData/Q18002795.json?revision=2551569467"
+    }
+  ],
+  "cast": [
+    {
+      "film": "Q25188",
+      "actor": "Q38111",
+      "statement": "q25188$16028A37-81AB-472B-BE4D-D0E7B2D9F6C9",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q211553",
+      "statement": "q25188$274B2201-308C-4D04-9878-711BA61918C5",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q177311",
+      "statement": "q25188$DF709A09-179A-4FF7-9EFB-95FD2F47988A",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q8927",
+      "statement": "q25188$7ACAE012-CC44-4BC0-B018-09ABD092C06F",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q173399",
+      "statement": "q25188$7A11CA13-517B-4094-8946-16949631862B",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q208026",
+      "statement": "q25188$F6FA9FC8-EBA7-49DB-860E-C47101CF2D48",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q202589",
+      "statement": "q25188$60E94775-966E-44B9-B517-048C66533FDD",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q299317",
+      "statement": "q25188$A213C515-3530-49DC-A343-BD6C60788460",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q123351",
+      "statement": "q25188$6C899C49-DC55-4319-B992-CE557D0637B5",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q1225469",
+      "statement": "q25188$DAB1DCC6-793E-421C-962C-A0C808593F11",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q217137",
+      "statement": "q25188$DA0AFB54-356C-4D78-8F85-CAB718902876",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q532169",
+      "statement": "q25188$4244F355-578C-4F2B-84E9-D46D40E0F34A",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q18720063",
+      "statement": "Q25188$BFEDD13F-7844-44B4-ABDC-C9688D7A9FBF",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q2397879",
+      "statement": "Q25188$5000987E-7154-48C7-A076-D18EEEC346DF",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q18415482",
+      "statement": "Q25188$885384A6-7D31-41C2-B6DE-7E68B8828E5E",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q3573137",
+      "statement": "Q25188$36A1714F-AC4F-4732-B0EE-BDC79EA8D47E",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q3046377",
+      "statement": "Q25188$CCF4B201-E67A-4AA3-BDE2-AAD26788555C",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q269309",
+      "statement": "Q25188$AA3AE89C-CBB0-4A1E-A870-C6FA13C0B17A",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q3507348",
+      "statement": "Q25188$058993CC-503E-411E-A78E-9DF9773A6FC1",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q3560613",
+      "statement": "Q25188$AA7BB4B5-457E-4C55-8946-504436973AD8",
+      "rank": "normal"
+    },
+    {
+      "film": "Q25188",
+      "actor": "Q386249",
+      "statement": "Q25188$D91FBCEA-5669-4905-B054-26B00DD64D56",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q38111",
+      "statement": "q44578$A28AB0AA-6BF2-4170-BBF0-602ABA08553B",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q202765",
+      "statement": "q44578$CB9A3045-1F4F-48DB-8910-D61347FCD8D3",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q205435",
+      "statement": "q44578$5326DA5D-D94F-449D-B299-4901B9A2FC91",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q544465",
+      "statement": "q44578$9C498312-39E2-44B4-92C4-32691651ACCB",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q35011",
+      "statement": "q44578$5699BFFA-F656-470A-A29C-BD75653C53FB",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q310515",
+      "statement": "q44578$D2B13889-0296-4F56-86E0-56BB07105B10",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q435468",
+      "statement": "q44578$580FB79F-20D8-4E49-B780-FDCF81043090",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q363271",
+      "statement": "q44578$078B8A29-3C14-4311-B2EF-AD5E726F76F4",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q270664",
+      "statement": "q44578$C04840DA-14C5-40A1-84C9-430BCFF8D282",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q110374",
+      "statement": "q44578$9A47E804-C93E-48D6-B4A2-D49AB3F84E37",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q189407",
+      "statement": "q44578$D09F69BE-ECB0-449C-9BF7-D47107FCAFAA",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q89552",
+      "statement": "q44578$C9C82593-704E-405B-BB07-6400B13E7E7D",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q1683873",
+      "statement": "q44578$2C9C4ED4-C4C3-4639-8B7E-096B65F3672B",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q235635",
+      "statement": "q44578$095272FB-F823-480B-BB30-32FBD19040F8",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q2553986",
+      "statement": "q44578$3813007D-2406-428B-8039-86F7ECC4798B",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q1234673",
+      "statement": "q44578$29DFBE73-3D69-43BE-83E0-79E89D0EFE7D",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q938230",
+      "statement": "q44578$AAE96653-4224-4B88-BEF1-ED40E02B36AD",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q295974",
+      "statement": "q44578$B6538157-E05C-474B-8BCE-878AB42D46DE",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q1292214",
+      "statement": "q44578$A8FD9AE6-DECF-4E44-892B-89E652930A3A",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q707734",
+      "statement": "q44578$A9E33ED8-5C09-460B-ABF0-B9094E0EBB0C",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q276165",
+      "statement": "q44578$A78CA301-F962-4CDF-8DEB-D0788E462E00",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q11893776",
+      "statement": "Q44578$C9165698-ADC0-4B8F-BBE4-DB81B4C71F5A",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q3430805",
+      "statement": "Q44578$C6FB9DED-970B-44CD-ABBE-052F9CA2E6DC",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q614851",
+      "statement": "Q44578$A15DB674-0FF1-4EE6-9289-1350C23AB70F",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q42574",
+      "statement": "Q44578$E23A883C-FBAB-42FF-BFCB-4B3077CC4E43",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q711941",
+      "statement": "Q44578$2EFA9417-66D7-463A-B34B-4051CE0BDE5D",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q275270",
+      "statement": "Q44578$9ED96CA0-C63E-40F0-97D9-75F20D98DA73",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q242557",
+      "statement": "Q44578$BA8A3810-1FE8-41E7-9182-4A97105564BB",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q263964",
+      "statement": "Q44578$87725E0D-8789-4EE6-A1D9-E0BB02280E6E",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q3275736",
+      "statement": "Q44578$6431555C-6D5C-49FA-8E5C-49123F483E18",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q509442",
+      "statement": "Q44578$4CC85ED9-B2FF-4DAB-8233-84E3283C63B4",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q1332872",
+      "statement": "Q44578$8930D733-77F4-4C55-AE62-4DF13ADFC60F",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q809029",
+      "statement": "Q44578$5C342C00-715C-4E21-ADC7-7C8FFDBB1E82",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q3295501",
+      "statement": "Q44578$A786FAD6-3CC0-4FE0-AEE4-3D0C239B8412",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q12035731",
+      "statement": "Q44578$727E54E4-D025-4984-9802-F34E28CCC11C",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q1254992",
+      "statement": "Q44578$F8CDAAC5-C7FF-4105-96EB-039D0B09ABC9",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q731560",
+      "statement": "Q44578$D1B90502-67AF-4AC9-99F2-DDB9CC1D0BB9",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q2592908",
+      "statement": "Q44578$92FC8320-F443-41FB-B288-AD88A68A2085",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q1750537",
+      "statement": "Q44578$CC5CCEE5-DDAC-4018-A910-E779B55DF2FE",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q7149519",
+      "statement": "Q44578$4002A41A-604A-4CFA-BDC5-52C7213FD4CD",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q3002029",
+      "statement": "Q44578$F14668B9-22D2-49F3-BF6E-F0B9B503BE2F",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q6539824",
+      "statement": "Q44578$F1137576-74F4-4A7C-86C1-ED1AA2341747",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q2405596",
+      "statement": "Q44578$37CE5FCE-A1E7-41E1-9255-8DECA0DFD905",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q3182047",
+      "statement": "Q44578$7DB8B7D7-AA48-4CD0-BB9B-70A10B3287B3",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q16859123",
+      "statement": "Q44578$38FF62ED-993C-43C7-98DC-19F2CDB278FC",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q37269398",
+      "statement": "Q44578$FD2ED0D1-E57D-45E8-B08F-76E686331838",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q56681515",
+      "statement": "Q44578$B8487802-B3C3-48D5-8ACB-942F4F890B1C",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q20752286",
+      "statement": "Q44578$6E0486F5-A5A0-4F08-A844-F26E350980A0",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q1644834",
+      "statement": "Q44578$EFA5BD05-271F-4B72-AA4B-3923874AB579",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q56679144",
+      "statement": "Q44578$EB741874-CF8F-4953-A6FA-849BB54A07E2",
+      "rank": "normal"
+    },
+    {
+      "film": "Q44578",
+      "actor": "Q1440197",
+      "statement": "Q44578$F700FE2C-1719-4FD8-92AC-2EC706B21538",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q38111",
+      "statement": "Q18002795$922ac2a3-49f3-c89b-e97a-03df77579dea",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q208026",
+      "statement": "Q18002795$03b2ae4c-4506-3047-99db-cbc70bfee4ce",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q1319882",
+      "statement": "Q18002795$5ff71a9c-4504-e566-12ea-4edeae0d5e9e",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q456047",
+      "statement": "Q18002795$12c95af5-49f4-83fd-115a-27089ca9281d",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q2058704",
+      "statement": "Q18002795$95B8F1B7-207B-444E-B5C0-280C49E390BE",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q1190263",
+      "statement": "Q18002795$29D4CBED-D4A8-4123-BECA-60AEBA02AA74",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q20676079",
+      "statement": "Q18002795$007752F3-EFA1-4102-B965-49B050E681F2",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q18145198",
+      "statement": "Q18002795$E7992666-5847-4AE3-961F-85299DE523F3",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q532169",
+      "statement": "Q18002795$E5292D07-8795-47A1-9D6F-7AA10B67B5B0",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q908689",
+      "statement": "Q18002795$1B963452-99D4-4E7E-ABE9-C6FAC8003E0A",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q22249882",
+      "statement": "Q18002795$0C3F5305-826F-484D-8AEE-6750E254BAE8",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q3163137",
+      "statement": "Q18002795$46538817-53CC-48B5-838B-82C10347DBB4",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q22277817",
+      "statement": "Q18002795$B0CD5382-EC7A-435D-887F-8EFF39B2E1A6",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q22277625",
+      "statement": "Q18002795$08D5113A-4BA0-4E4B-89CA-F08A10BC8BB7",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q22279353",
+      "statement": "Q18002795$76B7312A-17B0-4ED9-B47A-FDEBA0CB00B9",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q23058836",
+      "statement": "Q18002795$317EAA83-464A-46F4-B842-392DA383616B",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q1118823",
+      "statement": "Q18002795$55859FB5-40A7-424D-9B54-2BDAD749BEA0",
+      "rank": "normal"
+    },
+    {
+      "film": "Q18002795",
+      "actor": "Q22247340",
+      "statement": "Q18002795$5992B016-ED2A-410D-B784-12D8A01B2C85",
+      "rank": "normal"
+    }
+  ],
+  "boundary": "All non-deprecated entity-valued P161 claims in each pinned film revision; finite snapshot, not world completeness."
+}

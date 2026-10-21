@@ -8,7 +8,7 @@
         (only-in :gerbil-ascent/candidate/types reasoning-snapshot-relations
                  reasoning-snapshot-generation reasoning-candidate-relations reasoning-candidate-rules)
         (only-in :gerbil-ascent/candidate/program candidate-inspect)
-        (only-in :gerbil-ascent/candidate/reasoning reasoning-receipt-proof)
+        (only-in :gerbil-ascent/candidate/checked-program reasoning-receipt-proof)
         (only-in :gerbil-ascent/candidate/provenance positive-proof-nodes
                  proof-node-id proof-node-kind proof-node-label)
         "positive-proof.ss")

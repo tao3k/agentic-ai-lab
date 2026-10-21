@@ -59,3 +59,6 @@ fixed point under Ascent's explicit input, derivation, and output bounds. The
 test also checks a concrete witness path, three opposing hypothetical
 branches, unbound content digests, and rejection of a source-impersonating
 reference.
+
+* Library application ownership
+See [[file:migration.org][the ASCENT application migration boundary]] for native, Python, Scheme and formal ownership.

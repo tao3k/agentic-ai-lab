@@ -1,0 +1,49 @@
+#+title: ASCENT application ownership migration
+
+* Owners
+ASCENT remains the producer of generic rules, queries, source maintenance and
+provenance. This module owns computational Evidence and application assessment.
+=modules/ai-agentic-context/clues/native= owns Clue submission and selection;
+=modules/ai-agentic-context/interaction/native= owns model/tool interaction;
+=modules/temporal-causality/trajectory/native= owns ordered application history
+and cost accounting. Their native implementation shares a POO runtime owner,
+which delegates execution to the producer Library.
+
+The existing Python runtime package exposes =poo_flow_runtime.reasoning=.
+=ReasoningRuntime= owns application lifetime; application Evidence, Clue,
+Trajectory and conversation types require that owner. Generic declarations use
+=Engine.rules= from ASCENT when no application owner is needed.
+
+The Scheme computational store is an internal POO-native owner. The existing
+Case objects and functional assessment helpers remain the ordinary Scheme API.
+Candidate syntax and packet dispatchers stay behind internal native transport;
+they are not added to the module facade. There is no old ASCENT import facade.
+
+* Formal and executable closure
+The transferred Quint configurations and negative controls live in the existing
+Python testing package; =just check-assessment-quint= retains exhaustive TLC
+admission and exact negative-property/exit checks. The transferred Lean target is
+=just check-assessment-lean=. Generic source/result/provenance lifecycle and cache
+identity obligations remain with ASCENT.
+
+Installed Python regression tests live under
+=packages/python-runtime/tests/assessment=. Offline study tests live under
+=packages/python-testing/tests/assessment=. Neither gate sends provider requests.
+The native assessment gate is:
+
+#+begin_src sh
+cargo test --locked --manifest-path modules/evidence-assessment/native/Cargo.toml --lib --test assessment
+#+end_src
+
+* Research history and current binding
+Existing reports and failures retain their bytes and old source identities under
+=docs/research/agent-inference=. The migrated study modules are source history and
+consumer qualification code, not a new search framework. Historical plans do not
+qualify the new module layout.
+
+The native build receipt freezes POO source inputs and the resolved producer's
+source hashes into the extension. Current study admission compares these producer
+hashes with the independently installed ASCENT extension, then binds both actual
+extension files. This is content binding; caller authority and applicability are
+separate application obligations. Old compiled-Scheme study plans require their
+original producer and are not silently admitted against the new package.

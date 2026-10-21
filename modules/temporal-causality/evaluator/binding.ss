@@ -4,7 +4,7 @@
 
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/crypto/digest sha256) (only-in :std/encoding/hex hex-encode)
-        (only-in :gerbil-ascent/candidate/reasoning reasoning-receipt-proof)
+        (only-in :gerbil-ascent/candidate/checked-program reasoning-receipt-proof)
         (only-in :gerbil-ascent/candidate/provenance
                  positive-proof-nodes positive-proof-roots proof-node-kind proof-node-row
                  proof-node-relation proof-node-inputs)

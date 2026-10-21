@@ -133,3 +133,6 @@ lean_exe cedarRuntimeHost where
   root := `PooFlowProof.Runtime.CedarRuntimeHost
   moreLinkObjs := #[cedar_runtime_host.o, cedar_runtime_core.a]
   moreLinkArgs := #["-pthread"]
+
+lean_lib PooFlowModuleEvidenceAssessmentProof where
+  roots := #[`PooFlowProof.EvidenceAssessment.ClueSubmission, `PooFlowProof.EvidenceAssessment.AnchoredEvidenceSlice, `PooFlowProof.EvidenceAssessment.DomainEvidence, `PooFlowProof.EvidenceAssessment.EvidenceCheckpoint, `PooFlowProof.EvidenceAssessment.EvidenceInteraction, `PooFlowProof.EvidenceAssessment.Trajectory, `PooFlowProof.EvidenceAssessment.AccountingAbstraction]

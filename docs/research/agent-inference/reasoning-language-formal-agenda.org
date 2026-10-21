@@ -1,0 +1,571 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Model reasoning and inference language: ASCENT, MRR and formal gates
+#+STATUS: code-anchored research and proposed obligations; no new language feature or proof claimed
+#+DATE: 2026-10-05
+#+FILETAGS: :research:ascent:mrr:language:lean:tla:
+
+* Inspected source and design question
+
+This note reads gerbil-ascent PR #1 at =8a2ecab= and the separate,
+clean meta-relational-reasoning =main= checkout at =faedb3e=. The latter
+uses Rust Ascent 0.8.0 for its bounded candidate kernel; it does not
+currently call the Gerbil implementation. These are source snapshots,
+not a claim that the two runtimes or proof projects are integrated.
+
+The question is which *reasoning language* can let a model propose a
+finite relational computation, execute it under a declared meaning,
+and return evidence that MRR may evaluate for admission. The answer
+must preserve three different boundaries:
+
+1. Gerbil ASCENT defines and executes a checked relational program over
+   a fixed input snapshot. Its program/fragment constructors and
+   =relational-admit/solve/query= stages are visible in
+   [[file:../../../program/scheme-language.ss][scheme-language]], [[file:../../../program/scheme-admission.ss][admission]],
+   [[file:../../../program/scheme-query.ss][query]] and [[file:../../../candidate/reasoning.ss][candidate reasoning]].
+2. An LLM's text or structured proposal is *candidate input*. A parser,
+   valid typed program and completed execution are three different
+   observations; none proves the proposal matches the user's intent.
+3. MRR owns fact/relation identities, semantic generations, lineage,
+   transition validation and publication. Its =crates/mrr-ascent/src/api.rs=
+   produces bounded Rust-Ascent candidates without allocating those
+   identities; =proofs/MRRProof/BundleAdmission.lean= proves selected
+   bundle/identity admission properties under stated premises.
+
+Thus the useful language is a typed, inspectable derivation kernel plus
+an exact attempt/result envelope. It is not a general agent planning
+language or a new authority for source facts.
+
+* Papers ranked by semantic contribution
+
+| Work | What is worth transferring | What does not follow |
+|------+---------------------------+----------------------|
+| [[https://thomas.gilray.org/pdf/seamless-deductive.pdf][Ascent rule planning]], §§2–4; [[file:../scheme-dsl/rule-planning.org][reading]] | Rule atoms, bound columns and SCC dependencies remain visible to indexing and semi-naive planning; set and lattice facts have distinct update meanings | Rust macro spelling, host expression purity and performance do not transfer to Scheme |
+| [[https://www.cl.cam.ac.uk/~nk480/datafun.pdf][Datafun functional fixed points]] and [[https://www.rntz.net/files/seminaive-datafun.pdf][higher-order change]]; [[file:../scheme-dsl/functional-fixed-points.org][functional fixed points]]/[[file:../scheme-dsl/higher-order-change.org][higher-order change]] | Typed monotonicity, finite-height fixed points and higher-order changes provide proof targets for admitted descriptors | A finite output per step, a budget, or a Scheme function annotation is not a termination or change theorem |
+| [[https://kmicinski.com/assets/byods.pdf][BYODS Provider concretization]]; [[file:../scheme-dsl/provider-concretization.org][reading]] | Provider concretization and delta must expose every new logical fact | Faster storage does not establish the required semantic laws |
+| [[https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ECOOP.2025.33][Mono Types monotone containers]], ECOOP 2025; [[file:../scheme-dsl/monotone-containers.org][reading]] | First-class containers need monotone, insertion-order-independent observable reads; Rocq theory and real program-analysis studies make this a serious language seam | The interface has no deletion law or termination guarantee; unoptimized nested-map lowering regresses in its interval case |
+| [[https://plg.uwaterloo.ca/~olhotak/pubs/oopsla25b.pdf][Flix program lifecycle]]; [[file:../scheme-dsl/program-lifecycle.org][reading]] | First-class program values, fresh private names, whole-program checks and explicit solve/query phases | Flix's static typing and effect guarantees do not become native Scheme guarantees |
+| [[https://www.vldb.org/pvldb/vol18/p651-micinski.pdf][Datalog with First-Class Facts]], PVLDB 2024 / VLDB 2025 | Fact identities and tree-structured data can become rule-triggering values; its Datalog-only subset terminates | General restricted chase may have no finite fixed point; neither a candidate digest nor MRR =FactId= is the paper's Skolem fact identity |
+| [[https://proceedings.mlr.press/v306/miao26e.html][LLM-MatLogic scoped witness execution]] and [[https://arxiv.org/abs/2609.37233][DatalogBench candidate execution feedback]]; [[file:scoped-witness.org][scoped witness execution]]/[[file:candidate-feedback.org][candidate execution feedback]] | Real-KG scoped constraints/witnesses and execution-tested rule generation provide model-facing falsifiers | scoped witness execution's KG matrix is not Datalog; candidate execution feedback is a Soufflé-dialect preprint; published scores do not predict Gerbil or MRR results |
+
+The selection favors a semantic law, an executable workload and a
+specific code seam. Paper age alone is not the filter: rule planning and functional fixed points have
+greater language-design value here than generic early agent workflows.
+The [[file:2026-logic-ai-screen.org][screen]] records the narrower real-KG and real-code evidence.
+
+* Language kernel and observations
+
+The checked source already distinguishes declared source/relation/lattice
+handles, rule bodies, negative clauses, fixed reducers, typed operators
+and explicit limits. Keep these as *inspectable* objects, with a finite
+scalar/row domain where a complete result is claimed. Program values
+may compose, but dependency, binding, stratification and private-name
+checks must run on the assembled program. A model may submit the inert
+candidate representation only through the same admission boundary.
+
+For a fixed admitted program =P= and frozen source =D_g=, the positive
+kernel's intended meaning is =lfp(T[P,D_g])=. The observable outcome is
+not just a row set; it also includes =complete|bounded|unsupported|rejected=,
+the exact program/snapshot identity and a separately checked witness or
+finite-ground nonmembership result. A completed *program* result still
+does not authenticate =D_g= or establish that a missing KG edge is
+false in the world.
+
+The immediate design rule is to keep three equalities separate:
+
+- tuple equality inside one admitted finite relation;
+- private descriptor/predicate identity during composition and lowering;
+- MRR's caller-owned =FactId=, =DerivationId= and =GenerationId= during
+  admission and publication.
+
+Conflating these makes a structurally valid model proposal look like
+authoritative evidence. The current [[file:../../features/representation/proofs.org::#cross-layer-refinement][refinement audit]] identifies the native
+identity and representation obligations in more detail.
+
+* Lean: proved kernels and next theorem
+
+The [[file:../../scheme-actor-runtime-design.org][actor runtime decision]] now requires source-bound work keys, frozen
+rounds, merge barriers, cancellation draining and unchanged completed publication.
+Quint owns stale/duplicate/canceled reply admission and cancellation/resume
+protocol checks. Lean retains mathematical checkpoint and bucket laws.
+=ActorRound= is a finite protocol model with early-barrier, stale-reply and
+canceled-publication fault controls. These are scheduling specifications;
+native worker correspondence, termination and measured benefit remain open.
+=AtomicBinding= connects ordinary positive atom substitution and known-column
+keys to indexed clause equivalence under =BucketRep=. The separate native
+assignment model keeps this proof premise falsifiable before actor parallelism.
+
+The tracked =packages/proofs/lean/= modules currently include
+=LexicalLowering= (typed lexical preservation), =RecursiveLowering=
+(positive scoped feedback), =FiniteOperators= and =FiniteHeight=
+(monotone/finite-rank laws), =DescriptorScope=, =CappedArithmetic=,
+=PositiveNonmembership=, =SourceUpdateFrame= and =StratifiedNegation=. The
+[[file:../../scheme-compiler-proof-bridge.org][proof bridge]] states their hypotheses and concrete omissions. These
+proofs are valuable but do not yet relate native Scheme scalars,
+descriptor graphs, emitted rules or table steps to the Lean objects.
+
+| Existing statement | Established abstract claim | Still missing for a language claim |
+|--------------------+----------------------------+------------------------------------|
+| =LexicalLowering.lowering_preserves_meaning= | Typed expressions and their relational IR have related denotations | Actual admitted Scheme descriptors translate to that source calculus |
+| =RecursiveLowering.lowered_feedback_is_least= | Scoped positive feedback preserves the least relation | Emitted rules, SCC/delta plans and concrete table steps refine the IR |
+| =FiniteHeight.bounded_bottom_least_fixed= | An ascending finite-rank orbit reaches the least fixed point under its premises | Native type/domain interpretation supplies the rank and every native step preserves its order |
+| =PositiveNonmembership.ground_why_not_sound= | Ground absence follows from the model's closure premises | Native certificate checking and caller source-completeness are separate |
+| =StratifiedNegation.visit_iff= and =evaluateBranches_iff= | A frozen-stratum atom/negation clause walk has the stated branch-local set meaning; a direct witness survives a blocker on the via branch | =gerbil-ascent-bind-row= and =indexed-rows= must refine the modeled match and index-exactness premises; no recursive stratum or aggregation is covered |
+
+The new clause proof follows the control path in =program/evaluate.ss=:
+positive atoms extend the environment; negation checks for a matching
+row without adding bindings. =IndexExact= makes the index requirement
+explicit: candidates come from the full frozen relation and retain
+every row that matches the current binding. Under that premise,
+=atom_indexed_iff= and =negation_indexed_iff= preserve the clause result.
+For a logical key filter, =keyed_rows_exact= reduces that premise to
+one condition: every row accepted by the binder has the key computed
+from the current environment. =keyed_negation_iff= then preserves the
+negative clause. Actual hash buckets, custom providers and the plan's
+key selection still need representation proofs against this filter.
+The next slice makes the canonical bucket algorithm explicit:
+=build_bucket_rep= and =extend_bucket_rep= prove that prepend-based
+build/extension retain exactly the full relation's matching members
+at every key. =ground_bucket_negation_iff= composes that invariant with
+the callback-free admitted negation subset (literal, previously bound
+variable, wildcard): successful row binding entails the same ordered
+key as the index lookup. This is set-membership semantics, so duplicate
+source occurrences and bucket order remain separate observations.
+The actual =hash-get=/=hash-put!= implementation, column extraction,
+scalar equality, cache versioning and custom provider contracts are
+still native interpretation obligations. The existing
+=t/qualification/ascent-index-lifecycle-test.ss= compares physical
+buckets with a frozen reference across build, extension, arbitrary
+columns and retained Session updates; it is finite native evidence,
+not a proof of these obligations for all admitted programs.
+The =frozen_blocker_step_monotone= theorem states the corresponding
+fixed-point premise: with a fixed lower-stratum blocker, growth of the
+positive current-stratum input cannot retract branch results if its
+positive via operator is monotone.
+The proof does not establish that Scheme's index planner satisfies this
+premise, or that the checked rule planner always produces the modeled
+clause sequence. Those are the next implementation refinement obligations.
+
+The next high-value theorem is *native-step refinement for one finite
+positive fragment*, rather than another abstract least-fixed-point
+lemma. Define explicit =TypeRep=, =ValueRep= and =StepRep= relations for
+admitted immutable scalars/rows and one source, join, selection,
+projection and recursive rule. Then prove:
+
+#+begin_example
+admitted(P, D_g) and StepRep(native_state, abstract_state)
+and one successful native step
+  => StepRep(native_state', T[P,D_g](abstract_state))
+completed(native_state) and the finite-height premise
+  => ResultRep(native_rows, lfp(T[P,D_g]))
+#+end_example
+
+The actual compiled plan may perform several index/delta microsteps
+per semantic step, so the first relation may need a stuttering
+simulation rather than a one-to-one equality. Duplicate input
+occurrences, zero-arity tuples, scalar hash/equality, private-name
+renaming and escaped captures are mandatory discriminators. =bounded=
+and =unsupported= cannot satisfy the completed conclusion. For a
+future mono type, prove its *lowering correspondence* from reachable
+container observations to relation rows; merely repeating the Rocq
+=add/read= laws in Lean would miss the native implementation.
+
+MRR's =BundleAdmission.lean= proves identity uniqueness, status and
+owner-premise rejection, and typed portions of its query admission.
+It does not prove that Rust Ascent closure or Gerbil ASCENT results are
+semantically correct, nor that a caller supplied true source facts.
+A future cross-repository theorem would compose a complete,
+generation-bound candidate result with MRR's accepted identity,
+lineage and transition premises. The two proof projects should not be
+silently identified by matching type names.
+
+* Quint: present lifecycle models and missing bridge
+
+[[file:../../../packages/proofs/quint/SessionTransaction.qnt][SessionTransaction]] models atomic source/result publication, stale
+work and abort over one symbolic direct/via/blocked row. Its =ResultOf=
+is the branch-local formula from the Lean slice; a =global= mutation
+puts exclusion after union and must violate =AtomicSnapshot= when a
+blocked direct witness is published. This compares the same formula
+as a semantic oracle for transaction traces. Lean owns the universal
+branch-local equation; Quint checks its use during publication and invalidation.
+This is not a mechanized Lean-to-Quint translation or a duplicate algebra proof.
+A =reuse= mutation keeps the old answer when only the blocker bit
+changes; it must also violate =AtomicSnapshot= once a via witness is
+retracted or restored. This directly checks that a lower-stratum
+source change is not treated as monotone growth of the old answer.
+[[file:../../../packages/proofs/quint/PositiveNonmembershipSession.qnt][PositiveNonmembershipSession]] models certificate binding
+and stale-use rejection. Their =Cuts= are tiny symbolic domains for
+TLC; neither model is a native Gerbil trace refinement, source
+authentication model or liveness proof. The inspected MRR checkout at
+=faedb3e= has one tracked Lean file and no tracked =.tla= or =.cfg=
+file; MRR's README describes Quint evidence at a broader architecture
+level, so that claim should be reconciled before asserting a passing
+MRR-side TLC gate.
+
+The actual checked invariants here are =AtomicSnapshot= in the
+transaction model and =NoStalePublished/NoStaleUse= in the certificate
+model. They speak about protocol state and the symbolic branch result,
+not a native least-fixed-point computation.
+
+The [[file:../../../packages/proofs/quint/NativeSessionPublication.qnt][NativeSessionPublication]] slice follows the *synchronous* retained
+Session entrypoints more closely. =committed=, =pending= and =published=
+abstract =program/session.ss='s accepted committed source, pending source
+and =committed-result=, respectively. =published= deliberately does not
+map to =last-result=: =run-timeout!= may return a receipt whose =finished=
+flag is false while retaining the previous completed result. The model
+distinguishes atomic completed batches, provisional single-source
+replacement, completed runs, bounded runs, and failure restoration.
+=CommittedSnapshot=, =CleanAligned=, =PartialBounded= and
+=NoPrematurePublication= are checked over its finite cuts; =early= and
+=bounded= mutations must expose premature publication. Its logical
+=generation= counts completed commits, but there is no corresponding
+native public generation token. Source appends, callback failures inside
+adoption, opaque providers and native trace refinement remain outside
+this model.
+
+The synchronous protocol belongs to =NativeSessionPublication.qnt=. Its former
+Lean transition replica is retired. Finite TLC exploration does not acquire
+the replica's universal-trace theorem; unbounded temporal refinement remains
+open. Current native correspondence is a review obligation:
+
+| Native entrypoint / path | Abstract action | Unproved condition |
+|--------------------------+-----------------+--------------------|
+| =replace-source!= after completed preflight | =SingleReplace= | Internal batch work is unobservable before the synchronous method returns; committed result and source are restored together |
+| =append-source!= with an owned immutable row | =SingleReplace= at the public cut | Native incremental engine state and its eventual completed solve still require refinement |
+| =replace-sources!= completed | =BatchComplete= | =fresh.run= is complete and its rows equal a fresh solve for the prospective admitted snapshot |
+| =replace-sources!= rejected | =BatchReject= | No accepted source/result pair changes on validation or solve failure |
+| =run!= or completed =run-timeout!= | =RunComplete= | The engine result is complete and matches the pending source snapshot |
+| bounded =run-timeout!= | =RunBounded= | =committed-result= stays fixed, even though the returned =last-result= is partial |
+| failed run with successful restore | =RunFailure= | Rebuilding from =committed= succeeds; a second restoration failure needs a separate fail-closed state |
+
+An added =alias= fault changes a committed source cut without changing
+its published result; TLC and Lean both reject it. This is a concrete
+counterexample to extending the proof to arbitrary mutable host values:
+=program/session.ss= now captures initial source list/row spines before
+building its first engine, copies replacement spines after validation,
+and captures each appended row spine before handing it to the engine.
+The native regressions mutate caller-owned rows before the first run and
+after accepted replacements/appends, then check the captured source cut.
+The checked language admits only exact integers, booleans, symbols and
+characters as scalar fields, and copies constructed rows.
+Nested host objects remain shared; opaque callbacks/providers require
+an ownership or copying contract before their completed results inherit
+this proof. Native checks qualify the row-spine ownership boundary;
+a full native trace refinement is still open.
+
+The proof package now uses LeanPOO directly through Lake. The
+[[file:../../../packages/proofs/lean/SourceCertificates.lean][source-certificate module]] represents each source cut as a typed
+=LeanPoo.Proof.State= and an ordered replacement as =Patch.setMany=.
+A derived-result =Obligation= declares its source dependencies and a
+locality premise. LeanPOO's =reuse= transports a certificate across a
+disjoint batch; =pending= selects affected and new obligations;
+=closePending= requires fresh evidence for those selected. The module
+retains typed patch/certificate reuse and invalidation laws. Atomic publication
+belongs to the Quint Session models; no Lean publication wrapper is counted. Concrete qualification cases live in
+[[file:../../../packages/proofs/lean/Tests/AscentProofTests.lean][AscentProofTests]]. These statements require an accurate dependency
+list and completed =resultOf=; native source-dependency closure, typed
+row representation and evaluator correspondence remain open. The same
+module makes =StratifiedNegation.IndexExact= a LeanPOO obligation over a
+frozen full relation and its candidate bucket. A current certificate
+discharges =negation_indexed_iff=; changing the source relation selects
+that certificate for revalidation. Native hash-bucket fidelity remains
+an independent premise.
+
+The source-update result is now one compositional contract rather than a
+collection of unrelated graph lemmas. For each admitted relation, the old
+source cut is =base ++ reverse(newest-first appends)=; the prospective rows
+form the new cut. Changed source IDs seed a directed graph in which every
+positive, negative and aggregate body read points to every rule head.
+The selected set is the least reachability closure of those seeds. This
+includes a recursive path head, then negative and aggregate dependents,
+while an independent relation remains outside the selected set.
+
+The [[file:../../../packages/proofs/lean/SourceUpdateFrame.lean][SourceUpdateFrame.completed_reuse theorem]] composes that source comparison
+with the typed bitmap worklist, the read-checklist evaluator and the
+completed fixed-point frame theorem. It proves that, for two runs which
+may finish after different numbers of rounds, *every unselected relation*
+has the same completed value. =affected_iff= proves exact membership in
+the computed closure; =source_frame= proves the initial rows agree outside
+it. The proof requires =readsMatch=: each evaluator read is either the
+target's own previous value or a body-read edge in the compiled graph.
+The self-read covers native deduplication and lattice join without adding
+a redundant graph edge; =AscentProofTests= instantiates this case. The
+proof also requires both results to be stable completed
+fixed points. =FunctionalDependency.Program.local= discharges per-step
+locality from LeanPOO's typed =Requirements= checklist; it does not infer
+=readsMatch= from the native evaluator. The finite =count + 1= fuel proves
+termination of graph traversal only, not of recursive evaluation.
+
+The [[file:../../../packages/proofs/lean/RuleBodyFrame.lean][RuleBodyFrame interpreter]] now closes semantic read locality for an explicit
+closed rule grammar. An atom branches over matched source rows; negation
+continues only when no row matches; an aggregate receives the entire ordered
+matched group, including an empty group. Pure guards and bindings consume
+only the current environment. Each surviving environment emits the selected
+heads, and head admission receives only its own old rows and new emissions.
+=evalBody_congr= proves whole-body equality by structural induction;
+=step_local= derives the complete self-or-body read condition. Its
+=completed_reuse= theorem composes that interpreter with the existing source
+log and bitmap proofs without a separate =readsMatch= hypothesis.
+
+The [[file:../../../packages/proofs/lean/Tests/RuleBodyFrameTests.lean][interpreter qualification]] executes the same eight-relation shape used by
+the native stratified matrix. The old cut reaches a recursive path and sum
+12; a blocker/odd-weight replacement keeps that path but produces an empty
+weighted group and sum 0. The theorem is instantiated with completed runs
+of six and five rounds. Ordered branching and repeated/distinct heads have
+separate examples. Dropping either a negative or aggregate read from the
+graph gives a completed stale-result counterexample, not merely a failed
+graph-membership check.
+
+This closes the locality obligation for the typed full-row interpreter.
+Gerbil's admitted plan representation and closed-procedure registry must
+still refine that grammar. Indexed row access, semi-naive pivots, positive
+slot plans, mutable admission and actor scheduling must preserve its
+observations; the finite native matrix supplies independent bounded evidence.
+The theorem assumes stable completed results and supplies neither general
+termination nor a native extraction claim.
+
+The [[file:../../../packages/proofs/lean/PositiveSlots.lean][PositiveSlots refinement]] now establishes the positive matcher boundary
+against =AtomicBinding.bind=. First occurrences allocate dense =fresh= slots;
+later occurrences become =bound= reads. =compiled_binding= proves identical
+success/failure and an extended-environment representation on success, for
+admitted equal-arity rows and an arbitrary frame representing the input
+prefix. =candidate_reuse= proves that any candidate, including a failed partial
+write, preserves that prefix. Stale values in newly allocated slots therefore
+need no clearing: the next candidate overwrites each slot before reading it.
+=compiled_head= transports ordered literal/variable head observations, and
+=compile_slots_bounded= puts all emitted slot IDs below the dense extent.
+
+The [[file:../../../t/qualification/ascent-positive-plan-test.ss][native slot qualification]] checks all 125 three-term combinations of a
+previously bound variable, a new variable, two literals and a wildcard.
+Each compiled two-atom plan receives the 27 rows over =#f, 0, 1=, four initial
+stale frame values, and a second traversal of the same dirty frame. Its entire
+ordered emission stream, including repeated and reversed heads, must agree
+with ordinary association-list binding. A fault changing the first new
+variable's =fresh= action to =bound= rejects the valid row after a failed
+partial write; the ordinary binder still emits it.
+
+The [[file:../../../packages/proofs/lean/PositiveTraversal.lean][PositiveTraversal refinement]] now lifts the matcher law to an arbitrary
+finite positive body. =scan_refines= threads the dirty frame through failed
+rows and successful suffix returns. =walk_prefix= derives the suffix's parent
+prefix law structurally, rather than assuming the native traversal restores
+slots. =precompiled_walk= identifies position-wise lowering with once-compiled
+actions, and =precompiled_refines= proves equality of the entire ordered output
+list with ordinary binding traversal. =walk_reuse= preserves the input
+environment after the complete traversal. Duplicate emissions are preserved,
+not normalized into a set. The only emission premise is that represented
+environments have the same head observations, supplied by =head_observations=.
+
+Lean qualification covers a three-atom body with rejected partial writes at
+two depths, repeated/reversed heads, literal false, empty/zero-arity bodies,
+and a second traversal of the real returned frame. A continuation fault that
+overwrites a parent slot loses a valid sibling output, demonstrating why the
+prefix law is necessary. The native three-atom corpus adds 81 ordered emissions
+per run, provider visit counts =(1 3 9)=, four stale starts and two traversals
+without clearing. The independent binder never reads compiled actions or slots.
+The [[file:../../../packages/proofs/lean/IndexedPositiveTraversal.lean][indexed pivot refinement]] extends that proof to physical row selection and
+semi-naive delta pivots. Arbitrary column lists may be partial, reordered or
+repeated. =compile_known_at= proves that their selected actions remain bound
+reads or literals in the once-compiled plan, and =compiled_key_refines= equates
+those reads with ordinary environment keys. Successful binding implies the
+selected row key, so filtering a canonical ordered bucket removes no successful
+candidate and preserves duplicates. The model uses the same 32-row scan/index
+threshold as =program/index.ss=. =precompiled_indexed_pivot_refines= then yields
+full ordered-output equality for each pivot using delta at exactly its atom
+position, including repeated occurrences of one relation.
+
+=DeltaExact= binds delta to the actual row difference and old rows to the current
+snapshot. =row_partition= follows the frontier partition using concrete row
+witnesses; =row_pivots_iff= identifies that disjunction with the position-selected
+native traversals. =new_output_indexed_pivot= composes these results with slot
+and index refinement: every head absent from the old solve is emitted by a
+compiled indexed pivot. =indexed_pivot_output_sound= proves that every pivot
+head belongs to the full current solve. New rows can collapse to already-known
+environments through wildcards, and different pivots may overlap; neither
+transition difference nor unique emissions are assumed in place of row delta.
+
+The native qualification adds 30 combinations of five layouts, two relation
+alias modes and three pivot positions. Each checks four stale starts and four
+traversals through custom probes and canonical scalar/composite receivers,
+including retained indexes with no rebuild on hits: 480 ordered comparisons.
+All/delta lanes contain 256/128 rows, while the first pivot also exercises the
+small scan lane. Each traversal emits 96 ordered heads; the union covers all
+new consequences and contains only full-solve rows. Wrong-position and dropped-
+candidate controls must disagree. Lean controls cover the 31/32 threshold,
+repeated columns, dirty reuse, literal false, projection collapse and an explicit
+new-head witness. Native decoding, scalar equality, vector ownership and cache
+publication remain representation obligations; the canonical filter model does
+not assert ordering for an arbitrary custom Provider.
+
+The [[file:../../../packages/proofs/lean/IndexedIteration.lean][compiled indexed history]] now composes the entire chain across rounds.
+Each rule carries source atoms, planned columns, a seed environment, its slot
+representation and ordered head emissions. =Schema= discharges per-round arity
+and known-column admission from the declared input domain. Faithful finite
+row enumeration supplies both admitted rows and monotone snapshots. No step
+refinement, complete initialization or completed-solve equality is assumed.
+
+=batch_refines= threads actual dirty frame returns through every position in
+the pivot batch and preserves ordered duplicate heads. =returned_frame_valid=
+proves that the next round may reuse the returned frame; =pivot_frame_independent=
+shows that this reuse has the same ordered output as any frame representing
+the seed prefix. The Set-history recurrence uses such a representative frame,
+while native qualification retains the actual frames throughout execution.
+=full_step_exact= proves full compiled initialization. =pivot_after_full=
+derives all-old coverage from the preceding full consequence step, then uses
+indexed pivot soundness and completeness. =indexed_iterations_equal= proves
+that every natural-number compiled-indexed round agrees with the synchronous
+full ordinary-binding round across all rules and declared heads. =stable_indexed=
+transports an observed stable full step to every subsequent indexed round;
+it supplies no universal native iteration bound or termination claim.
+
+The [[file:../../../packages/proofs/lean/Tests/IndexedIterationTests.lean][Lean history qualifiers]] include an empty-body seed, duplicate heads and a
+second rule that can consume the seed only in the next frozen-snapshot round.
+The [[file:../../../t/qualification/ascent-positive-plan-test.ss][native history qualifier]] runs an 11-edge chain beside a disconnected
+six-vertex clique. It retains the same frames and index owner for all rounds,
+extends admitted all-index rows, and advances all/delta sizes and versions.
+Each of twelve rounds agrees with an independent full-scan consequence oracle:
+47, 57, 66, 74, 81, 87, 92, 96, 99, 101, 102, 102 known paths. Independent Boolean
+Floyd closure verifies all 102 final paths, and an additional stable pivot batch
+admits no rows. Skipping the full initial run leaves empty static-source deltas
+and incorrectly completes with no paths; the discriminator retains this fault.
+This binds initialization, indexed selection, concrete delta, dirty reuse,
+round history and stability to one chain. Native encoding, mutable cache
+publication and actor scheduling still require their own representation and
+protocol evidence.
+
+The constituent proofs make the contract auditable. The
+[[file:../../../packages/proofs/lean/RuleGraphClosure.lean][rule compiler]] proves exact source-to-head membership, including repeated
+heads and all three read kinds. The
+[[file:../../../packages/proofs/lean/NativeGraphWorklist.lean][list worklist]] proves mark-before-enqueue termination for dense relation
+IDs and exact closure even with cycles and duplicate edges. The
+[[file:../../../packages/proofs/lean/NativeBitmapWorklist.lean][bitmap refinement]] relates each typed =Vector Bool= update to that list
+machine. The
+[[file:../../../packages/proofs/lean/DependencyInvalidation.lean][fixed-point frame]] carries equality outside the closed set through
+arbitrary rounds and then through differently timed completed results.
+=AscentProofTests= includes a concrete source-log/recursive/negative/
+aggregate chain with an independent relation, plus the counterexample
+where omitting a negative-read edge incorrectly retains a changed result.
+Lake pins LeanPOO PR #8 at =9e160953=; only its typed Requirements
+contract is used here.
+
+Native evidence exercises the same public update behavior. The graph
+qualification compares all 64 three-relation directed graphs and all
+eight seed subsets with an independent matrix oracle, checks mixed
+lowered read kinds, and traverses a 4,096-relation chain. A second native
+qualification compiles each of those 64 graphs into real recursive Core
+rules, then runs all eight changed-source subsets through completed
+Session replacement. For each of the 512 cuts, every relation's rows
+agree with both a fresh evaluation and an independent reachability
+matrix; the retained relation names agree with the matrix's unaffected
+set. This exercises rule execution, selected-head activation, and
+completed-result reuse together for finite positive recursion. The stratified
+Session qualification now requires the actual dependency-invalidation
+path. In addition to the directed blocker and combined blocker/weight
+cases, a 4-edge-set by 4-blocker-set by 4-weight-set matrix checks 64
+source cuts. For each cut, independently computed transitive reachability,
+negative filtering, even-weight projection and sum give the expected rows
+of all eight relations; Session replacement agrees with those rows and a
+fresh solve. Retained relation names agree with the hand-derived read
+dependencies: a changed edge selects path and all downstream heads, a
+changed blocker selects the negative and aggregate dependents, and a
+changed weight selects the weighted and aggregate heads. The independent
+root stays retained. These are finite execution checks, not a proof that
+Gerbil's mutable vectors and evaluator refine the Lean model. The open
+bridge is concrete: admitted IDs must be in range, source row ownership
+must preserve the compared cut, and each native rule's actual reads must
+be included in =readsMatch=. The positive matrix exhausts all directed
+three-node non-self edge subsets; the stratified matrix samples four edge
+sets, four blockers and four weight sets. Neither establishes a general
+native evaluator refinement.
+A custom index Provider can capture mutable
+state beyond that graph. Reuse admission now accepts only the private
+canonical hash Provider, and a native regression uses a 32-row indexed
+join to show that changing an opaque lookup forces fresh evaluation.
+Opaque rule callbacks and custom storage Providers also use full
+evaluation. The same cut now rejects field predicates other than the
+exact built-in =relational-scalar?= and =exact-integer?= checks. A
+native counterexample has a checker mutate a shared nested source value:
+without the gate, source-log equality selected reuse while a fresh
+solve observed the changed input. Qualification requires fresh evaluation
+and agreement with that input's newly derived output. This closes the
+field-callback effect in reuse admission. A separate red/green native
+counterexample closes the same alias path without any field callback: a
+Core source holds a shared nested list; after the first completed solve,
+the caller mutates that list and replaces an independent trigger. Before
+the gate, the retained =out= still contained =hit= while a fresh solve
+produced no =out= row. Reuse eligibility now requires immutable scalar
+source values and rule literals. Exact built-in scalar field checks
+certify source rows during admission; unchecked Core declarations scan
+their prospective source rows. Non-scalar Core inputs take the fresh
+evaluation path. A second native counterexample exposed a publication
+alias even with scalar source rows: changing the row list returned by a
+completed Session result changed the privately retained source and
+could poison the reused result. Session =rows-of= now returns fresh
+outer and row list spines on every public read; the engine's publication
+cache remains private. The qualification mutates both a published source
+row and a published derived row, then requires the next replacement to
+retain the original values. These two boundaries make the compared cut
+stable for the admitted reuse subset. Arbitrary Core host values can
+still be mutable during a fresh evaluation, and Gerbil-to-Lean evaluator
+refinement remains open.
+No performance claim follows from this proof.
+
+The =GenerationCutoff= constant is a finite *model-checking* search
+parameter, supplied by =ASCENT_FORMAL_GENERATION_CUTOFF= in the =Justfile= (four
+generations in CI; the default Session exploration uses two). Checker
+configuration is generated by the Quint gate.
+Neither value limits a native Session, an ASCENT fixed point, or a model's
+reasoning budget. The former Lean =publications_consistent= protocol theorem
+has been removed and its unbounded trace claim retired. Current finite TLC
+checks do not replace that claim. An unbounded temporal result and native
+trace refinement remain Quint obligations.
+
+The next cross-owner safety model belongs at the ASCENT-to-MRR
+publication boundary. Model =Propose=, =Solve=, =SourceChange=,
+=CheckIdentity=, =CheckLineage=, =CheckTransition= and =Publish= as
+separate actions. At a minimum, require these invariants:
+
+#+begin_example
+Published => Complete and SameProgram and SameGeneration
+             and IdentityAccepted and LineageAccepted and TransitionAccepted
+RejectedOrBounded => PublishedStateUnchanged
+SourceChange => OldReceiptCannotPublish
+#+end_example
+
+The negative controls are a stale solve after a source change, an ABA
+source payload with a new generation, a valid-looking candidate with
+one rejected lineage edge, and a complete relation with a failed
+transition check. TLC can find protocol counterexamples on finite
+symbols; it cannot prove the Scheme evaluator, Rust adapter, cryptographic
+binding or real-world source completeness. Safety is the first target;
+fairness/liveness is separate because a bounded solve may legitimately
+fail or never produce a complete result.
+
+* First falsifiable study
+
+The [[file:wikidata-scoped-exclusion.org][Wikidata scoped exclusion fixture]] starts this study with twelve selected claims from
+seven Wikidata entity revisions, a pinned target entity, a gold structured program and
+two local source generations. Its independently computed finite set
+answer discriminates branch-local exclusion from exclusion after union.
+This is a small executor test, not a model benchmark or a transactional
+Wikidata snapshot.
+
+Submit an
+unaltered model proposal once; retain its raw response, then score
+admission, complete relation rows, branch-scoped negation, witness and
+final answer against independent finite data. Remove a direct edge but
+preserve an alternative *admitted* rule path; also include a truly
+unsupported edge and an incomplete-source status. This separates
+deduction from lookup and global absence from scoped nonmembership.
+BRINK's [[https://aclanthology.org/2026.eacl-long.114/][incomplete-KG construction]] suggests the counterfactual, but its
+AMIE3-mined rules are empirical correlations and cannot be the semantic
+oracle for this test.
+
+If that case passes, repeat on a real-code relation task, and measure
+typed program correctness, source/witness fidelity, intermediate work
+and end-answer quality separately. No change to model weights, MRR
+publication authority or general deployed benefit follows from a
+single fixture. The [[file:../../scheme-design-framework.org][design framework]] keeps paid model comparison and Rust
+integration as later, independent gates.
+
+[[file:index.org][Agent inference index]]; [[file:../scheme-dsl/index.org][Scheme DSL index]].

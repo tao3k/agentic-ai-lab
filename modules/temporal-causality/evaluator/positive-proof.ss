@@ -14,7 +14,7 @@
                  reasoning-candidate-limits)
         (only-in :gerbil-ascent/candidate/program candidate-inspect)
         (only-in :gerbil-ascent/candidate/funs candidate-same-row-set?)
-        (only-in :gerbil-ascent/candidate/reasoning
+        (only-in :gerbil-ascent/candidate/checked-program
                  reasoning-source-snapshot reasoning-attempt reasoning-receipt?
                  reasoning-snapshot-identity reasoning-snapshot-generation reasoning-snapshot-digest
                  reasoning-receipt-bound? reasoning-receipt-status reasoning-receipt-rows

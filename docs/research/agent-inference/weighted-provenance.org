@@ -1,0 +1,39 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: weighted provenance: Differentiable relational reasoning is a separate contract
+#+STATUS: research comparison; no differentiable gerbil-ascent claim
+#+DATE: 2026-09-30
+#+FILETAGS: :research:agent:training:logic:
+
+* Source
+:PROPERTIES:
+:CUSTOM_ID: agent-weighted-provenance
+:SOURCE_PDF: https://www.cis.upenn.edu/~mhnaik/papers/pldi23.pdf
+:DOI: 10.1145/3591280
+:END:
+
+/Scallop: A Language for Neurosymbolic Programming/, PLDI 2023.
+The paper combines a Datalog-based language with differentiable
+reasoning using provenance semirings.
+
+* Evidence ledger
+
+#+NAME: weighted-provenance-evidence
+| Source point | Result | Transfer hypothesis | Limit |
+|--------------+--------+---------------------+-------|
+| Abstract; §1 | Relational symbolic programs can participate in neural tasks | Consider a training-framework adapter after a sound semantic boundary | Scheme Ascent's set-valued closure is not automatically differentiable |
+| Provenance and differentiable reasoning sections | Algebraic provenance carries training-relevant weights and gradients | A future weighted/provenance layer needs explicit algebra and backpropagation semantics | Copying an FFI alone supplies no gradient theorem |
+| Evaluation | Paper measures end-to-end neurosymbolic workloads | Compare on a matched task if pursued | No current gerbil-ascent training benchmark exists |
+
+* Judgment
+
+The first integration with a training framework can consume *discrete*
+checked facts, counterexamples or evaluation records.  It need not sit
+inside backpropagation.  If the goal becomes a differentiable operator,
+that is a separate language and algorithm research program: define a
+weighted fact algebra, prove the forward and backward contracts, and
+compare gradients with an independent reference.  Keep both options
+visible without calling a data-export adapter a differentiable layer.
+
+[[file:index.org][Research index]].

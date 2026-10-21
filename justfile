@@ -950,3 +950,12 @@ test-module-ownership:
     grep -F 'MODULE-OK t/qualification/module-ownership/run.ss' "$log" >/dev/null
     grep -F 'HARNESS-OK module-ownership' "$log" >/dev/null
     grep -x 'OK' "$log" >/dev/null
+
+# Assessment source and all original falsifying mutations migrated from ASCENT.
+[group('check')]
+check-assessment-quint: prepare-quint
+    PYTHONPATH="{{ justfile_directory() }}/packages/python-testing/src" python3 -m poo_flow_testing.checks.assessment_formal quint all
+
+[group('check')]
+check-assessment-lean:
+    cd "{{ lean_proof_dir }}" && lake build PooFlowModuleEvidenceAssessmentProof

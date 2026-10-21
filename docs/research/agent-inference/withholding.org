@@ -1,0 +1,42 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: BRINK: withholding observed heads while protecting grounded bodies
+#+DATE: 2026-10-09
+#+STATUS: dedicated method reading and finite Scheme transfer; no KG-RAG replication
+
+* Primary reading
+
+[[https://aclanthology.org/2026.eacl-long.114/][Zhou et al., EACL 2026]]; [[https://aclanthology.org/2026.eacl-long.114.pdf][authoritative proceedings PDF]], pp. 2522–2538.
+
+| Locator | Method detail | Transfer boundary |
+|---------+---------------+-------------------|
+| §3.1; Appendix A.2 | AMIE3 uses confidence 0.3; head coverage 0.1; Appendix adds PCA confidence 0.4 and dataset-specific length limits | Mining confidence is not universally valid implication |
+| §3.2, Triple Removal | Heads are observed before deletion. Every selected body must remain, including bodies of other selected groundings | Whole-batch conflict check precedes publication |
+| §3.2, Answer Set Completion | Reference answers come from the original KG and include all matching entities | Do not rebuild gold from the incomplete retrieval source or one removed tuple |
+| §3.3 | Complete and incomplete retrieval sources are paired | Bind execution receipts to the exact source used |
+
+* Scheme architecture decision
+
+[[file:../../features/withholding/acceptance.org][Finite withholding]] extends the existing candidate snapshot/feedback path. The caller
+supplies groundings as =(head-atom body-atoms)=. The builder checks source
+membership and tuple schema, collects every head and every protected body atom,
+rejects their intersection, then publishes a copied higher-generation snapshot.
+It preserves the original snapshot and its full reference rows. Existing
+reasoning execution and independently verified finite evidence recover a withheld
+answer under an explicitly supplied composition rule. A direct-lookup proposal
+loses that answer; candidate execution feedback complete row feedback reports it as missing.
+
+This is a deterministic dataset-cut mechanism. It does not validate that the
+provided body entails the head. Caller-supplied groundings require separately
+admitted rule semantics before a reasoning claim. The finite family control is
+hand-written, not an AMIE3 output or real-KG extraction. Lean describes exact
+set removal/protection; Quint checks whole-batch publication and rejected faults.
+Native source/schema/hash correspondence remains an executable-test boundary.
+
+* Remaining experiment
+
+Running released mined-rule groundings, real KG versions, answer extraction,
+retrieval/ranking metrics and model-generated language remains open. Confidence
+metadata never changes Scheme source membership or promotes a proposed rule
+to an authoritative fact. Natural-language fidelity and external source authority
+remain separate from finite execution agreement.

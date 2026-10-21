@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Trusted owner projection; recompute original native proof, never read proof flags.
 (import (only-in :clan/poo/object .ref)
-        (only-in :gerbil-ascent/candidate/reasoning reasoning-source-snapshot reasoning-attempt reasoning-receipt-proof)
+        (only-in :gerbil-ascent/candidate/checked-program reasoning-source-snapshot reasoning-attempt reasoning-receipt-proof)
         (only-in :gerbil-ascent/candidate/provenance positive-proof-nodes positive-proof-roots
                  proof-node-id proof-node-row proof-node-relation)
         :poo-flow/modules/temporal-causality/evaluator/interface

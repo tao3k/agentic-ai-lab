@@ -1,0 +1,78 @@
+#+title: Public Declarative Clue Exchange
+
+* Ownership
+
+The default Rust runtime exports =ascent.trajectory.ClueExchange=. It loads
+caller-owned =define-evidence= declarations through the existing
+=Engine.open_evidence_sources=/=SourceSession= implementation. No downstream
+Scheme executable, compiler, interpreter subprocess, or Python rule engine is
+required. The Scheme implementation and native owner use the same
+=python/src/ascent/clue_query_rules.ss= declaration.
+
+The application owns its projection and selector DSL. The host binds source
+bytes, checks file digests and supplies facts plus source attestations. The
+Library validates the projected Clue protocol and evaluates relations. An
+attestation is a host assertion about checked source content, not runtime
+correctness or independent admission. A claim's truth is not established by
+giving it a source filename.
+
+* Public Surface
+
+- =ClueExchange(engine, sources, constructor, facts, attestations)= projects
+  caller facts. Attestations map source labels to their checked content digest.
+- =include(...)= composes another independently checked projection. Colliding
+  Clue IDs reject the whole addition.
+- =inventory()= returns partial claims and factor vocabulary, never a whitelist.
+- =read(questions, scheme=False)= reads exact claims. Unseen claims are unknown.
+- =read_selected(sources, constructor, bindings, scheme=False)= evaluates the
+  caller's selector and reads its projected claims in one public operation.
+- =select(...)= exposes the same selector result without choosing an action.
+- =submit(hypotheses)= appends immutable Agent hypotheses atomically. Arbitrary
+  new claims and factors are allowed; authority fields and duplicate IDs are
+  rejected. No hypothesis supplies an observation receipt.
+- =close()= releases the Session; later reads and submissions fail closed.
+- =render(value)= renders inert Scheme data for a CLI. It does not evaluate code.
+
+Projection outputs are =clue(id digest claim polarity role source)=,
+=factor(id digest name value)= and =link(claim target label id digest)=.
+Selectors accept =clue=, =factor= and =binding(name value)= and must expose
+=question(claim)=. Extra outputs are preserved. A selector may use conjunction,
+disjunction, explicit claim matching or other supported declarative rules;
+none is selected as the universal Library policy.
+
+* Progressive Evidence, Not An Agent Plan
+
+The shared relations return =support=, =counterevidence=, =conditional=,
+=relevant_factor=, =neighbor=, =conflict= and =unknown=. Counterevidence to an
+already-investigated premise does not ban a materially changed premise.
+Conditional hypotheses remain unknown until independently supported or
+countered. A partial vocabulary never closes the set of possible questions.
+The owner never emits a next action, ranks hypotheses, authorizes execution or
+turns a model result into a native runtime pass.
+
+The host must recheck its source binding before publishing a result. An owner
+is an immutable source projection, not a filesystem watcher. Changed source
+bytes require a new owner. Persistence and source-generation filtering stay in
+the existing host journal; the Library does not introduce a second database.
+Trajectory attempt comparison remains the existing Trajectory API. Ordinary
+View rows are read directly, not serialized into a fake Clue factor named row.
+
+* Qualification Map
+
+- =rust/ascent/tests/integration/clues/=: source matching, counterevidence,
+  unknowns, open factor vocabulary, alternative caller selector, atomic failed
+  batches, composition collisions, cancellation recovery and closed ownership.
+- =workbench/engine_tests/test_clue_exchange.py=: installed default-wheel API,
+  Scheme-data transport, novel hypotheses and authority rejection.
+- =TrajectoryClueScope.qnt=: existing finite protocol abstraction; the formal
+  framework runs healthy exhaustive checking and twelve negative controls for
+  stale bindings, lost receipts, hypothesis promotion, hidden counterevidence,
+  reference misattribution, closed exploration, history loss and confusing a
+  catalog digest with a source-owner identity. Trajectory.lean also separates
+  catalog/context identities from Clue-source support.
+- =ClueSubmission.qnt= and =ClueSubmission.lean=: durable journal/CAS laws.
+  They are not a Rust implementation-equivalence proof.
+
+Native tests, finite model checks and a real Agent investigation are separate
+receipts. A passing interface test does not prove that an Agent avoided a
+failed path, found a runtime repair, or advanced SMP acceptance.
