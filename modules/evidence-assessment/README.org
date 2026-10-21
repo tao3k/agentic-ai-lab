@@ -62,3 +62,24 @@ reference.
 
 * Library application ownership
 See [[file:migration.org][the ASCENT application migration boundary]] for native, Python, Scheme and formal ownership.
+
+* Migration qualification, 2026-10-21
+Application ownership continues in the existing POO Flow PR #34. No replacement
+PR or compatibility facade is introduced. The source inventory now accounts for
+295 paths, including the execution-observation policy introduced after its base
+revision. That additional record retains its exact source revision and bytes.
+
+The execution policy ships in the installed Python package's
+=reasoning_rules/execution.ss=. Its original Python and native SDK assertions
+are in =packages/python-runtime/tests/assessment/test_execution_policy.py= and
+=native/tests/execution.rs=. =just check-assessment-native= builds the resolved
+ASCENT SDK worker before executing all native controls; an old worker cannot
+satisfy the source-identity handshake. No policy assertions or default provenance
+budgets were relaxed. The migrated provenance test still times out at its
+original default limit; the failure is retained, not credited as a producer pass.
+
+Production/development dependency locks, the 295-record inventory and the
+production build-boundary test pass. The complete native consumer test binary
+compiles, as does its Python feature. Final installed-wheel qualification,
+clean-checkout POO native acceptance and complete exact-head CI remain open.
+The Python project harness's prior 154 blocking findings also remain open.

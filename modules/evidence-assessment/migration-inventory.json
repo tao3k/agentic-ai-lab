@@ -3231,9 +3231,21 @@
       "targetSha256": {
         "packages/python-testing/tests/assessment/test_trajectory_study.py": "d57b5e825941657e9fcd3c62c4db03b2f3f5fbb247cf74af8dbb005a892ef48f"
       }
+    },
+    {
+      "source": "rules/execution.ss",
+      "sourceSha256": "4c44ce9b3762ca25615fb476058b2f6c009b54fd4aca8d436d95e657af2453d7",
+      "targets": [
+        "packages/python-runtime/src/poo_flow_runtime/reasoning_rules/execution.ss"
+      ],
+      "disposition": "moved-to-poo-flow",
+      "targetSha256": {
+        "packages/python-runtime/src/poo_flow_runtime/reasoning_rules/execution.ss": "4c44ce9b3762ca25615fb476058b2f6c009b54fd4aca8d436d95e657af2453d7"
+      },
+      "sourceRevision": "fca7913015b58d577eaee7ba0b51fcc83641c766"
     }
   ],
-  "producerRevision": "0f99da9e3a3baf1a272ba58fe0769ed8278ae746",
+  "producerRevision": "71408ec3dc20510416ddbac9f5d4e8f5ed68b854",
   "splits": [
     {
       "source": "rust/ascent/tests/integration/program_definitions.rs",
@@ -3246,6 +3258,20 @@
       "retained": "generic protocol obligations",
       "moved": "packages/python-testing/tests/assessment/test_formal.py",
       "note": "exact model and negative-control inventory also frozen separately in both owners"
+    },
+    {
+      "source": "rust/ascent-scheme/tests/integration/aggregate_constructors.rs",
+      "retained": "generic aggregate and native value tests",
+      "moved": "modules/evidence-assessment/native/tests/execution.rs",
+      "testCount": 1,
+      "note": "Original execution-policy assertions and default provenance limits retained; native test previously timed out and remains an explicit consumer gate."
+    },
+    {
+      "source": "rust/ascent-python/tests/test_aggregates_execution.py",
+      "retained": "generic aggregate and native value tests",
+      "moved": "packages/python-runtime/tests/assessment/test_execution_policy.py",
+      "testCount": 1,
+      "note": "Original execution-policy assertions and default provenance limits retained; native test previously timed out and remains an explicit consumer gate."
     }
   ]
 }

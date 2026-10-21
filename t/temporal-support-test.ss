@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :clan/poo/object .ref .o)
-        (only-in :poo-flow/testing-api poo-flow-test-case)
+        (only-in :poo-flow-dev/testing-api poo-flow-test-case)
         :poo-flow/modules/temporal-causality/time/objects
         :poo-flow/modules/temporal-causality/revisions/interface
         :poo-flow/modules/temporal-causality/truth-maintenance/interface)

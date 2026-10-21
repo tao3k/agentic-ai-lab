@@ -178,7 +178,7 @@
      (poo-flow-module-system-live-case-rsync-exclude-join (cdr values))))))
 
 ;;; Staging is framework-owned, but every concrete path and exclude rule is read
-;;; from the downstream case object. This keeps src/testing generic while still
+;;; from the downstream case object. This keeps dev/testing generic while still
 ;;; proving the project is copied before sandbox execution.
 ;; : (-> POOObject MaybeWorkspacePath)
 (def (poo-flow-module-system-live-case-stage-project-copy live-case)

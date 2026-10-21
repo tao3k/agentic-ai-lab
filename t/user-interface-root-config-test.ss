@@ -16,7 +16,7 @@
                  poo-flow-user-profile-name
                  poo-flow-user-profile-module-bundles)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/testing-api
+        (only-in :poo-flow-dev/testing-api
                  +poo-flow-testing-interface+
                  poo-flow-testing-admit-user-profile!)
         (only-in :poo-flow/modules/workflow/scenario/configuration/root-profile

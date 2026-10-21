@@ -15,7 +15,7 @@
                  testing-interface-profile-enabled?
                  testing-interface-call-with-operation
                  testing-interface-run-test-batch!)
-        (only-in :poo-flow/testing-api
+        (only-in :poo-flow-dev/testing-api
                  +poo-flow-testing-interface+
                  +poo-flow-testing-import-footprint-profile+
                  poo-flow-native-observability-enabled?

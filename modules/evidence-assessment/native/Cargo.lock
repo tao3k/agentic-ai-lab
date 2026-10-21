@@ -62,10 +62,45 @@ dependencies = [
 ]
 
 [[package]]
+name = "ascent-build"
+version = "0.1.0"
+source = "git+https://github.com/tao3k/gerbil-ascent?rev=71408ec3dc20510416ddbac9f5d4e8f5ed68b854#71408ec3dc20510416ddbac9f5d4e8f5ed68b854"
+dependencies = [
+ "gerbil-scheme-aot-build",
+ "serde_json",
+ "sha2 0.10.9",
+]
+
+[[package]]
+name = "ascent-scheme"
+version = "0.1.0"
+source = "git+https://github.com/tao3k/gerbil-ascent?rev=71408ec3dc20510416ddbac9f5d4e8f5ed68b854#71408ec3dc20510416ddbac9f5d4e8f5ed68b854"
+dependencies = [
+ "ascent-build",
+ "bincode",
+ "gerbil-ascent",
+ "gerbil-scheme",
+ "gerbil-scheme-sys",
+ "libc",
+ "num-bigint",
+ "serde",
+ "tempfile",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
+
+[[package]]
+name = "bincode"
+version = "1.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1f45e9417d87227c7a56d22e471c6206462cba514c7590c09aff4cf6d1ddcad"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "bitflags"
@@ -338,7 +373,7 @@ dependencies = [
 [[package]]
 name = "gerbil-ascent"
 version = "0.1.0"
-source = "git+https://github.com/tao3k/gerbil-ascent?rev=0f99da9e3a3baf1a272ba58fe0769ed8278ae746#0f99da9e3a3baf1a272ba58fe0769ed8278ae746"
+source = "git+https://github.com/tao3k/gerbil-ascent?rev=71408ec3dc20510416ddbac9f5d4e8f5ed68b854#71408ec3dc20510416ddbac9f5d4e8f5ed68b854"
 dependencies = [
  "gerbil-scheme-aot-build",
  "gerbil-scheme-rust-ir",
@@ -346,8 +381,19 @@ dependencies = [
  "num-rational",
  "num-traits",
  "rayon",
+ "serde",
  "sha2 0.10.9",
  "smallvec",
+]
+
+[[package]]
+name = "gerbil-scheme"
+version = "0.1.0"
+source = "git+https://github.com/tao3k/gerbil-scheme-rust?rev=8c23217d1f838e71a972e606d6e38e6386f3b0a7#8c23217d1f838e71a972e606d6e38e6386f3b0a7"
+dependencies = [
+ "gerbil-scheme-rust-project-harness-policy",
+ "gerbil-scheme-sys",
+ "simdutf8",
 ]
 
 [[package]]
@@ -413,6 +459,15 @@ version = "0.1.0"
 source = "git+https://github.com/tao3k/gerbil-scheme-rust?rev=8c23217d1f838e71a972e606d6e38e6386f3b0a7#8c23217d1f838e71a972e606d6e38e6386f3b0a7"
 dependencies = [
  "gerbil-scheme-rust-project-harness",
+]
+
+[[package]]
+name = "gerbil-scheme-sys"
+version = "0.1.0"
+source = "git+https://github.com/tao3k/gerbil-scheme-rust?rev=8c23217d1f838e71a972e606d6e38e6386f3b0a7#8c23217d1f838e71a972e606d6e38e6386f3b0a7"
+dependencies = [
+ "gerbil-scheme-aot-build",
+ "gerbil-scheme-rust-project-harness-policy",
 ]
 
 [[package]]
@@ -584,9 +639,9 @@ checksum = "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
 
 [[package]]
 name = "libc"
-version = "0.2.191"
+version = "0.2.190"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "65cd87c9a6d60536580b316ad985726104730a5151c99845f2490428ef91240a"
+checksum = "ce5d3ddc6d3fa000eb1536d85e147bfe31aacaba692ed6a876f95cb7c855be78"
 
 [[package]]
 name = "linux-raw-sys"
@@ -629,6 +684,7 @@ checksum = "c89e69e7e0f03bea5ef08013795c25018e101932225a656383bd384495ecc367"
 dependencies = [
  "num-integer",
  "num-traits",
+ "serde",
 ]
 
 [[package]]
@@ -688,6 +744,7 @@ checksum = "f6b464fbc74e149a392436b17d523f769e057cb6877f6a5c4618bc6f11800548"
 name = "poo-flow-reasoning"
 version = "0.1.0"
 dependencies = [
+ "ascent-scheme",
  "gerbil-ascent",
  "gerbil-scheme-python",
  "num-bigint",
@@ -967,6 +1024,12 @@ name = "shlex"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
+
+[[package]]
+name = "simdutf8"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e"
 
 [[package]]
 name = "smallvec"

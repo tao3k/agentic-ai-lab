@@ -17,7 +17,7 @@
                  poo-flow-user-profile?
                  poo-flow-user-profile-name
                  poo-flow-user-profile-module-bundles)
-        (only-in :poo-flow/testing-api
+        (only-in :poo-flow-dev/testing-api
                  +poo-flow-testing-interface+
                  poo-flow-testing-admit-user-profile!)
         (only-in :core/module-system/selection/objects

@@ -73,6 +73,13 @@ build:
     just build-core
     GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
 
+# Explicit development dependencies and policy qualification; production builds
+# do not install or load ASP.
+[group('build')]
+prepare-dev:
+    cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ poo_flow_gerbil_path }}" {{ gerbil_darwin_env }} gerbil deps --install
+    cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ poo_flow_gerbil_path }}" GERBIL_LOADPATH="{{ poo_flow_library_path }}" {{ gerbil_darwin_env }} gerbil build
+
 # Compile the pinned local Core, replacing any transitive bootstrap artifacts.
 # Cleaning is confined to the Core package; dependency source checkouts stay intact.
 [group('build')]
@@ -258,7 +265,7 @@ test-root:
     log="$(mktemp)"
     trap 'rm -f "$log"' EXIT
     echo "[poo-flow-test-runtime] maxHeap={{ gerbil_test_max_heap }} debug={{ gerbil_test_debug }} scope=worker-process"
-    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} env gxi {{ gerbil_test_runtime_options }} ./unit-tests.ss 2>&1 | tee "$log"
+    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} env gxi {{ gerbil_test_runtime_options }} ./dev/unit-tests.ss 2>&1 | tee "$log"
     if grep -E 'ERROR (MODULE|CHECK|CASE|HARNESS)|Heap overflow|Stack overflow' "$log" >/dev/null; then exit 1; fi
     count="$(sed -n 's/^\[asp-testing\] phase=discovery-complete .* fileCount=\([0-9][0-9]*\)$/\1/p' "$log" | head -1)"
     test -n "$count"
@@ -398,7 +405,7 @@ test-ascent-integration:
 [group('test')]
 test-performance:
     @echo "[poo-flow-test-runtime] maxHeap={{ gerbil_test_max_heap }} debug={{ gerbil_test_debug }} scope=worker-process"
-    gerbil {{ gerbil_test_runtime_options }} env ./performance-tests.ss
+    gerbil {{ gerbil_test_runtime_options }} env ./dev/performance-tests.ss
 
 # Run only hermetic Bazel qualifications; `just test` owns Scheme unit tests.
 [group('test')]
@@ -1051,3 +1058,17 @@ rebuild-poo-native backup:
 [group('proof')]
 check-core-lean:
     cd "{{ justfile_directory() }}/core" && just proofs-lean
+
+# The native SDK is a dev-only consumer test dependency. Build its worker from
+# Cargo's resolved immutable checkout rather than reusing an unrelated binary.
+[group('test')]
+check-assessment-native:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    cd "{{ justfile_directory() }}/modules/evidence-assessment/native"
+    export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$PWD/target}"
+    metadata="$(cargo metadata --locked --format-version 1)"
+    producer="$(printf '%s' "$metadata" | python3 -c 'import json,sys; from pathlib import Path; p=[p for p in json.load(sys.stdin)["packages"] if p["name"]=="ascent-scheme"]; assert len(p)==1; print(Path(p[0]["manifest_path"]).parent.parent / "Cargo.toml")')"
+    cargo build --locked --manifest-path "$producer" -p ascent-scheme --bin ascent-scheme-worker
+    export ASCENT_SCHEME_WORKER="$CARGO_TARGET_DIR/debug/ascent-scheme-worker"
+    cargo test --locked --test assessment -- --test-threads=1

@@ -55,7 +55,7 @@
     (poo-flow-cicd-check
      'test
      'ci/check
-     '("gerbil" "env" "./unit-tests.ss")
+     '("gerbil" "env" "./dev/unit-tests.ss")
      '()
      '()
      '(test-receipt)

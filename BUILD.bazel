@@ -75,14 +75,6 @@ gerbil_project_compile(
     source_resolution_receipts = ["@gerbil_poo_sources//:source_resolution_receipt"],
 )
 
-gerbil_project_compile(
-    name = "asp_gerbil_scheme_package",
-    srcs = ["@asp_gerbil_scheme_sources//:sources"],
-    build_script = "@asp_gerbil_scheme_sources//:build_script",
-    require_library_output = True,
-    source_resolution_receipts = ["@asp_gerbil_scheme_sources//:source_resolution_receipt"],
-    deps = [":gerbil_poo_package"],
-)
 
 gerbil_project_compile(
     name = "orgize_package",
@@ -99,7 +91,7 @@ gerbil_project_compile(
 # Core is versioned as a submodule and consumed as ordinary checkout files.
 filegroup(
     name = "core_module_sources",
-    srcs = ["core/gerbil.pkg"] + glob(
+    srcs = ["core/gerbil.pkg", "core/yuanxu/gerbil.pkg"] + glob(
         ["core/*.ss", "core/**/*.ss"],
         exclude = ["core/t/**", "core/design/**", "core/module-system/design/**", "core/dev/proofs/**"],
     ),
@@ -116,13 +108,12 @@ gerbil_project_compile(
 gerbil_project_compile(
     name = "gerbil_parser_package",
     srcs = ["@gerbil_parser_sources//:sources"],
-    # Compile the native closure of consumed APIs, not every upstream language
-    # and optional FFI product. Source revision/receipt admission is unchanged.
-    build_script = "//packages/bazel:parser_dependency_build",
+    # The upstream production SDK entry owns its module graph; development
+    # harness dependencies are qualified separately.
+    build_script = "@gerbil_parser_sources//:build_script",
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_parser_sources//:source_resolution_receipt"],
     deps = [
-        ":asp_gerbil_scheme_package",
         ":poo_flow_core_package",
     ],
 )
@@ -134,7 +125,6 @@ gerbil_project_compile(
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_ascent_sources//:source_resolution_receipt"],
     deps = [
-        ":asp_gerbil_scheme_package",
         ":poo_flow_core_package",
     ],
 )
@@ -142,7 +132,6 @@ gerbil_project_compile(
 filegroup(
     name = "dependency_packages",
     srcs = [
-        ":asp_gerbil_scheme_package",
         ":gerbil_parser_package",
         ":gerbil_ascent_package",
         ":gerbil_poo_package",
@@ -155,7 +144,6 @@ filegroup(
     filegroup(name = name, srcs = [project], output_group = "receipt")
     for name, project in [
         ("gerbil_poo_package_receipt", ":gerbil_poo_package"),
-        ("asp_gerbil_scheme_package_receipt", ":asp_gerbil_scheme_package"),
         ("orgize_package_receipt", ":orgize_package"),
         ("poo_flow_core_package_receipt", ":poo_flow_core_package"),
         ("gerbil_parser_package_receipt", ":gerbil_parser_package"),
@@ -167,7 +155,6 @@ filegroup(
     filegroup(name = name, srcs = [project], output_group = "project_root")
     for name, project in [
         ("gerbil_poo_package_project_root", ":gerbil_poo_package"),
-        ("asp_gerbil_scheme_package_project_root", ":asp_gerbil_scheme_package"),
         ("orgize_package_project_root", ":orgize_package"),
     ]
 ]
@@ -190,9 +177,9 @@ gerbil_project_environment(
 gerbil_project_dev(
     name = "dev_compile",
     args = ["compile"],
-    build_script = ":build.ss",
+    build_script = "//dev:build.ss",
     tags = ["local", "manual"],
-    deps = [":gerbil_parser_package", ":orgize_package", ":gerbil_ascent_package"],
+    deps = [":compile", "//dev:asp_gerbil_scheme_package"],
 )
 
 filegroup(name = "project_root", srcs = [":compile"], output_group = "project_root")

@@ -358,3 +358,13 @@ The design record lives under =docs/10-19-design=. Use these as entry points:
 - a project where JSON manifests are mistaken for mathematical proof.
 
 POO/C4 makes composition deterministic. Validation and proof decide whether the composed object is legal, safe, and meaningful to project.
+
+* Development tools
+Production installation uses =gerbil deps --install= and =gerbil build=.
+Run =just prepare-dev= before the test and policy lanes. ASP and the POO Flow
+testing extension are owned by =dev/gerbil.pkg= and the =poo-flow-dev= package;
+they are not production dependencies. =dev/build.ss= checks that the SDK
+production target list still equals the native public import closure before
+running source policy qualification and compiling the testing extension.
+The unit and performance entrypoints are =dev/unit-tests.ss= and
+=dev/performance-tests.ss=; the unit entry explicitly retains the project root.

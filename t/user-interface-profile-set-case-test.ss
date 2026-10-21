@@ -18,7 +18,7 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         "user-interface-fixtures.ss"
-        (only-in :poo-flow/testing-api
+        (only-in :poo-flow-dev/testing-api
                  +poo-flow-testing-interface+
                  poo-flow-testing-admit-user-profile-set!
                  poo-flow-testing-check-user-profile-set)

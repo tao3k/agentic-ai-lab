@@ -10,10 +10,12 @@ class MigrationInventory(unittest.TestCase):
     def test_source_inventory_has_no_unaccounted_deletion(self):
         receipt = json.loads((ROOT / 'modules/evidence-assessment/migration-inventory.json').read_text())
         records = receipt['deletions']
-        self.assertEqual(len(records), 294)
+        self.assertEqual(len(records), 295)
         self.assertEqual(len({record['source'] for record in records}), len(records))
         for record in records:
             with self.subTest(source=record['source']):
+                revision = record.get('sourceRevision', receipt['sourceRevision'])
+                self.assertRegex(revision, r'^[0-9a-f]{40}$')
                 if not record['targets']:
                     self.assertEqual(record['source'], 'rust/ascent-python/src/rust_sources.rs')
                     self.assertIn('unused duplicate', record['disposition'])

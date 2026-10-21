@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :asp-gerbil-scheme/src/build-api/native-import-closure
                  asp-gerbil-scheme-native-import-closure)
-        :std/test (only-in :poo-flow/testing-api poo-flow-test-case)
+        :std/test (only-in :poo-flow-dev/testing-api poo-flow-test-case)
         (only-in :clan/poo/object .o .ref)
         :poo-flow/modules/ai-agentic-context/interface
         :poo-flow/modules/query/semantic/context-restriction

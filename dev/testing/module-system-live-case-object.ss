@@ -79,7 +79,7 @@
 ;; pooFlowModuleSystemLiveCase
 ;;   : (-> Symbol [PooUserModuleSelection] [Symbol] LiveCaseConfig POOObject)
 ;;   | contract: constructs inert live-case POO objects for the testing runner
-;;   | result: runtime-executed remains #f until src/testing/module-system-live-case.ss starts it
+;;   | result: runtime-executed remains #f until dev/testing/module-system-live-case.ss starts it
 ;;   | doc m%
 ;;       # Examples
 ;;
@@ -117,10 +117,10 @@
              (poo-flow-module-system-live-case-slot 'config config-value)
              (poo-flow-module-system-live-case-slot
               'case-owner
-              "src/testing")
+              "dev/testing")
              (poo-flow-module-system-live-case-slot
               'framework-owner
-              "modules/testing/module-system-live-case.ss")
+              "dev/testing/module-system-live-case.ss")
              (poo-flow-module-system-live-case-slot 'runtime-executed #f)))))
 
 ;;; Boundary: module system live case flag value is the policy-visible edge for

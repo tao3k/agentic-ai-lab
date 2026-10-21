@@ -53,7 +53,7 @@
                                     runtime-mode dependency-refs)
       check-name: 'integration
       profile-ref: '(ci/check agent/poo-object-extension)
-      command-vector: '("gerbil" "env" "./unit-tests.ss")
+      command-vector: '("gerbil" "env" "./dev/unit-tests.ss")
       artifact-outputs: '(test-receipt)
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
@@ -174,7 +174,7 @@
                   "gerbil")
     (check-equal? (funflow-config-direct-alist-ref integration-manifest
                                                   'arguments)
-                  '("env" "./unit-tests.ss"))
+                  '("env" "./dev/unit-tests.ss"))
     (check-equal? (funflow-config-direct-alist-ref integration-request
                                                   'check)
                   'integration)

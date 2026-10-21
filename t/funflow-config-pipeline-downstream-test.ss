@@ -51,7 +51,7 @@
                                    runtime-mode dependency-refs)
       check-name: 'test
       profile-ref: 'ci/check
-      command-vector: '("gerbil" "env" "./unit-tests.ss")
+      command-vector: '("gerbil" "env" "./dev/unit-tests.ss")
       artifact-outputs: '(test-receipt)
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
@@ -63,7 +63,7 @@
                                       runtime-mode dependency-refs)
       check-name: 'package
       profile-ref: 'ci/check
-      command-vector: '("gerbil" "env" "./unit-tests.ss")
+      command-vector: '("gerbil" "env" "./dev/unit-tests.ss")
       artifact-outputs: '(dependency-graph-receipt)
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff

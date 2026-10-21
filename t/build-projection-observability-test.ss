@@ -42,8 +42,8 @@
           (check-equal? (contains? output "phase=executor-handoff") #t)
           (check-equal? (contains? output "phase=executor-active") #f))))
 
-    (poo-flow-test-case "package build delegates the native public closure to ASP"
-      (let (source (call-with-input-file "build.ss" read-all-as-string))
+    (poo-flow-test-case "development policy checks the native public closure with ASP"
+      (let (source (call-with-input-file "dev/package.ss" read-all-as-string))
         (check-equal? (contains? source
                                  ":asp-gerbil-scheme/building-api")
                       #t)
@@ -61,6 +61,18 @@
                       #t)
         (check-equal? (contains? source "\"performance-tests.ss\"") #t)
         (check-equal? (contains? source "\"run-contribute-test.ss\"") #t)))
+
+    (poo-flow-test-case "production build does not load the development harness"
+      (let ((source (call-with-input-file "build.ss" read-all-as-string))
+            (catalog (call-with-input-file "build-modules.ss" read-all-as-string))
+            (package (call-with-input-file "gerbil.pkg" read-all-as-string)))
+        (check-equal? (contains? source ":std/build-script") #t)
+        (check-equal? (contains? source "build-modules.ss") #t)
+        (for-each
+         (lambda (text)
+           (check-equal? (contains? text "asp-gerbil-scheme") #f)
+           (check-equal? (contains? text "modules/testing/") #f))
+         (list source catalog package))))
 
     (poo-flow-test-case "Bazel stages one package surface without owning the module graph"
       (let ((root-build
@@ -80,7 +92,7 @@
 
     (poo-flow-test-case "performance suite consumes the public POO testing interface"
       (let (performance-source
-            (call-with-input-file "performance-tests.ss" read-all-as-string))
+            (call-with-input-file "dev/performance-tests.ss" read-all-as-string))
         (check-equal?
          (contains?
           performance-source
@@ -102,21 +114,21 @@
          #t)
         (check-equal?
          (contains? source
-                    "gerbil {{ gerbil_test_runtime_options }} env gxi {{ gerbil_test_runtime_options }} ./unit-tests.ss")
+                    "gerbil {{ gerbil_test_runtime_options }} env gxi {{ gerbil_test_runtime_options }} ./dev/unit-tests.ss")
          #t)
         ;; gxpkg env spawns its command; fencing only that dispatcher leaves
         ;; the script's actual VM unbounded before testing Profiles are loaded.
         (check-equal?
          (contains? source
-                    "env ./unit-tests.ss")
+                    "env ./dev/unit-tests.ss")
          #f)
         (check-equal? (contains? source ".devenv/devenv-profile-exec") #f)
         (check-equal? (contains? source "rm -rf") #f)))
 
     (poo-flow-test-case "unit tests inherit the POO Flow default testing policy"
-      (let (source (call-with-input-file "unit-tests.ss" read-all-as-string))
+      (let (source (call-with-input-file "dev/unit-tests.ss" read-all-as-string))
         (check-equal?
-         (contains? source ":poo-flow/testing-api")
+         (contains? source ":poo-flow-dev/testing-api")
          #t)
         (check-equal?
          (contains? source "+poo-flow-testing-interface+")

@@ -9,7 +9,7 @@
         (only-in :clan/poo/object .o .cc .ref .slot? .call CyclicSlot? CyclicSlot-path)
         (only-in :clan/poo/mop element? validate TypeError?)
         :core/observability/debug
-        (only-in :poo-flow/testing-api
+        (only-in :poo-flow-dev/testing-api
                  poo-flow-test-case
                  poo-flow-test-case/with
                  poo-flow-testing-case-profile-prototype

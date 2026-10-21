@@ -37,7 +37,7 @@
      :clan/poo/support/syntax :clan/poo/support/repr :clan/poo/brace
      :clan/poo/mop
      :asp-gerbil-scheme/testing-api :core/observability/testing-case
-     :poo-flow/testing-api
+     :poo-flow-dev/testing-api
      :gerbil-parser/src/modules/parser/graph-syntax
      :poo-flow/modules/query/interface
      :poo-flow/modules/query/orgize-source

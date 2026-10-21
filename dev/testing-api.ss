@@ -10,7 +10,7 @@
 
 (import (only-in :clan/poo/object .call .cc .slot?)
         (only-in :asp-gerbil-scheme/testing-api +asp-testing-interface+)
-        "./modules/testing/testing-extension"
+        "./testing/testing-extension"
         :core/observability/testing-case
         (only-in :core/profile-composition/policy
                  poo-flow-user-profile-policy-admit
@@ -18,7 +18,7 @@
                  poo-flow-user-profile-policy-admitted?
                  poo-flow-user-profile-set-policy-admitted?))
 
-(export (import: "./modules/testing/testing-extension")
+(export (import: "./testing/testing-extension")
         (import: :core/observability/testing-case)
         +poo-flow-testing-interface+
         poo-flow-testing-check-user-profile

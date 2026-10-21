@@ -37,7 +37,10 @@ class GerbilDependencyPinTest(unittest.TestCase):
     def test_gerbil_package_is_the_direct_revision_authority(self) -> None:
         module = pin_module()
         pins = module.parse_package_pins((ROOT / "gerbil.pkg").read_text(encoding="utf-8"))
-        self.assertGreaterEqual(set(pins), {"asp-gerbil-scheme", "gerbil-parser"})
+        self.assertIn("gerbil-parser", pins)
+        self.assertNotIn("asp-gerbil-scheme", pins)
+        owners = module.package_pin_owners(ROOT)
+        self.assertEqual(owners["asp-gerbil-scheme"][0], ROOT / "dev" / "gerbil.pkg")
 
     def test_release_tag_projects_github_archive_prefix(self) -> None:
         module = pin_module()

@@ -58,5 +58,6 @@ use_repo(
 )
 
 include("//:gerbil-dependencies.MODULE.bazel")
+include("//dev:gerbil-dependencies.MODULE.bazel")
 
 register_toolchains("@local_gerbil//:registered_toolchain")

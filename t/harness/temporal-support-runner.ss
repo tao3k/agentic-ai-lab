@@ -20,7 +20,7 @@
     :asp-gerbil-scheme/src/testing/extension
     :asp-gerbil-scheme/testing-api
     :core/observability/output
-    :poo-flow/modules/testing/testing-extension
+    :poo-flow-dev/testing/testing-extension
     :core/module-system/schema/relations
     :core/module-system/types
     :core/module-system/config
@@ -38,7 +38,7 @@
     :core/profile-composition/user-profile
     :core/utilities/functional
     :core/profile-composition/policy
-    :poo-flow/testing-api
+    :poo-flow-dev/testing-api
     :poo-flow/modules/temporal-causality/time/types
     :poo-flow/modules/temporal-causality/time/objects
     :poo-flow/modules/temporal-causality/revisions/types

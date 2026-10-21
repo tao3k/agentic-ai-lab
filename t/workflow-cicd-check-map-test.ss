@@ -46,7 +46,7 @@
     (poo-flow-cicd-check
      'test
      'ci/check
-     '("gerbil" "env" "./unit-tests.ss")
+     '("gerbil" "env" "./dev/unit-tests.ss")
      '()
      '()
      '(test-receipt)
@@ -119,7 +119,7 @@
         (check-equal? (poo-flow-cicd-check-name build-check) 'build)
         (check-equal? (poo-flow-cicd-check-profile build-check) 'ci/build)
         (check-equal? (poo-flow-cicd-check-command test-check)
-                      '("gerbil" "env" "./unit-tests.ss"))
+                      '("gerbil" "env" "./dev/unit-tests.ss"))
         (check-equal? (poo-flow-cicd-check-dependency-refs build-check)
                       '())
         (check-equal? (poo-flow-cicd-check-dependency-refs test-check)
