@@ -14,17 +14,17 @@ inspectable final plan. It is not whether to rebuild a Contract engine. Keep
 schema generation, Profile defaults, final admission, resource generation and
 runtime execution distinct while connecting their inputs and evidence.
 
-The actual [[file:scenarios/nickel/omnibus-ncl/aws/main.ncl][Omnibus AWS input]] imports tf-ncl-schema.ncl, applies Aws.Simple and
-Aws.S3Backend, and ends with Tf.Config. Its [[file:scenarios/nickel/omnibus-ncl/aws/flake.nix][development environment]] declares the
+The actual [[https://github.com/tao3k/omnibus-ncl/blob/c5d37eb51961fd7bd32f775843044ca7f8191715/aws/main.ncl][Omnibus AWS input]] imports tf-ncl-schema.ncl, applies Aws.Simple and
+Aws.S3Backend, and ends with Tf.Config. Its [[https://github.com/tao3k/omnibus-ncl/blob/c5d37eb51961fd7bd32f775843044ca7f8191715/aws/flake.nix][development environment]] declares the
 tf-ncl dependency and aws/null/external providers. The generated schema file is
 not tracked in the pinned tree; its generation and Terraform deployment were not
 executed here. The useful ecosystem pattern is provider schemas -> generated
 Nickel Contracts -> maintained business configuration -> Terraform configuration
 JSON -> explicit Terraform execution. Deployment success is a separate claim.
 
-The actual [[file:scenarios/kcl/konfig/examples/appops/guestbook/base/base.k][KCL Guestbook]] follows frontend.Server/container/service schemas ->
-base and environment inputs -> [[file:scenarios/kcl/konfig/models/kube/backend/server_backend.k][ServerBackend]] and ServiceMixin -> typed Kubernetes
-resources -> [[file:scenarios/kcl/konfig/models/kube/render/render.k][manifest rendering]]. kcl.mod locks the k8s package version. We have
+The actual [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/appops/guestbook/base/base.k][KCL Guestbook]] follows frontend.Server/container/service schemas ->
+base and environment inputs -> [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/backend/server_backend.k][ServerBackend]] and ServiceMixin -> typed Kubernetes
+resources -> [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/render/render.k][manifest rendering]]. kcl.mod locks the k8s package version. We have
 not inspected that OCI package's schema-generation pipeline or executed it; do not
 invent an exact JSON-Schema-to-KCL command from the observed consumption chain.
 

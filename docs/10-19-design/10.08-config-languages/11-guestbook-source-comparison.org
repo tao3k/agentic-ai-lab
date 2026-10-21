@@ -8,9 +8,9 @@
 
 * Baseline and comparison boundary
 
-Use the actual [[file:scenarios/kcl/konfig/examples/appops/guestbook/base/base.k][Guestbook source]], at konfig commit
-12025e8e250ca409006879126761c40e0eb0c0e0. Source and licenses are retained in
-[[file:scenarios/README.org][the reference submodules]]; the parent gitlinks pin the revisions. These historical image versions are reference inputs, not deployment
+Use the actual [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/appops/guestbook/base/base.k][Guestbook source]], at konfig commit
+12025e8e250ca409006879126761c40e0eb0c0e0. Source and licenses remain upstream;
+[[file:scenarios/README.org][the reference index]] records fixed revisions. These historical image versions are reference inputs, not deployment
 recommendations. Neither KCL evaluation nor Scheme resource generation was run.
 
 All three workloads use frontend.Server. KCL does not declare separate Leader,
@@ -188,11 +188,11 @@ specific schema, unsupported constraint, association or consumer that is missing
 
 * Contract ownership: field schema versus application obligations
 
-The actual [[file:scenarios/kcl/konfig/models/kube/frontend/server.k][Server schema]] supplies workloadType="Deployment", replicas=1,
+The actual [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/frontend/server.k][Server schema]] supplies workloadType="Deployment", replicas=1,
 useBuiltInLabels=True and useBuiltInSelector=True. It requires mainContainer;
-image comes from option("image") or configuration. The [[file:scenarios/kcl/konfig/models/kube/backend/server_backend.k][backend]] explicitly asserts
-that image is nonempty. The [[file:scenarios/kcl/konfig/models/kube/frontend/container/port/container_port.k][container port schema]] supplies protocol="TCP" and
-checks 1..65535. The [[file:scenarios/kcl/konfig/models/kube/frontend/service/service.k][Service schema]] uses external k8s ServicePort entries;
+image comes from option("image") or configuration. The [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/backend/server_backend.k][backend]] explicitly asserts
+that image is nonempty. The [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/frontend/container/port/container_port.k][container port schema]] supplies protocol="TCP" and
+checks 1..65535. The [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/frontend/service/service.k][Service schema]] uses external k8s ServicePort entries;
 that dependency is locked but not vendored/evaluated in this study.
 
 The proposed platform counterpart separates a common Server field Contract from
@@ -250,7 +250,7 @@ relationship obligations remain library work with explicit consumer evidence.
 
 * Environment selection: ordinary users write values
 
-Actual [[file:scenarios/kcl/konfig/examples/appops/guestbook/dev/main.k][dev]] and [[file:scenarios/kcl/konfig/examples/appops/guestbook/prod/main.k][prod]] each supply only the frontend image:
+Actual [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/appops/guestbook/dev/main.k][dev]] and [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/appops/guestbook/prod/main.k][prod]] each supply only the frontend image:
 
 #+begin_src kcl
 # dev/main.k
@@ -319,11 +319,11 @@ extension must preserve the same principle: two leaf assignments under frontend
 become one frontend refinement. Duplicate leaves and ancestor/descendant overlaps
 must be diagnosed, not silently resolved by declaration order.
 
-KCL has a real environment entry mechanism: [[file:scenarios/kcl/konfig/examples/appops/guestbook/dev/kcl.mod][dev/kcl.mod]] selects base/base.k,
+KCL has a real environment entry mechanism: [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/examples/appops/guestbook/dev/kcl.mod][dev/kcl.mod]] selects base/base.k,
 main.k and render/render.k. Scheme currently lacks the corresponding qualified
 Guestbook publication/admission/render route. A shorter expression does not remove
 that platform work. KCL's metadata environment defaults to "prod" in
-[[file:scenarios/kcl/konfig/models/kube/metadata/metadata.k][metadata.k]]; selecting the dev directory alone does not set appenv="dev".
+[[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/metadata/metadata.k][metadata.k]]; selecting the dev directory alone does not set appenv="dev".
 Both designs need a preview showing resolved parameters, not a misleading filename.
 
 Conclusion: the one-image user task should remain one assignment. KCL already
@@ -389,10 +389,10 @@ need an extension operator only when the requested operation depends on old valu
 * Resource generation and final-value validation
 
 The actual path is Server.instances() -> ServerBackend -> Kubernetes resource
-mapping -> renderer. [[file:scenarios/kcl/konfig/models/kube/mixins/service_mixin.k][ServiceMixin]] uses the workload name/namespace for a single
+mapping -> renderer. [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/mixins/service_mixin.k][ServiceMixin]] uses the workload name/namespace for a single
 Service and defaults its selector to the generated workload matchLabels. It copies
 Service ports, rather than deriving them from mainContainer.ports. The
-[[file:scenarios/kcl/konfig/models/kube/utils/container_frontend2kube.k][container converter]] separately projects containerPort/protocol and env values.
+[[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/utils/container_frontend2kube.k][container converter]] separately projects containerPort/protocol and env values.
 Thus names/selectors are linked by maintained code, but user-specified ports can
 still diverge. Do not infer a general application connection proof from that code.
 
@@ -569,8 +569,8 @@ all variants:    frontend Service :80 -> Pod container :80/TCP
 status: projected-unadmitted (expected design view; not generated manifests)
 #+end_example
 
-The actual KCL [[file:scenarios/kcl/konfig/models/kube/utils/metadata_builder.k][MetadataBuilder]] puts server.labels on Deployment metadata.
-[[file:scenarios/kcl/konfig/models/kube/utils/application_builder.k][ApplicationBuilder]] supplies built-in Pod labels and selector labels separately.
+The actual KCL [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/utils/metadata_builder.k][MetadataBuilder]] puts server.labels on Deployment metadata.
+[[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126761c40e0eb0c0e0/models/kube/utils/application_builder.k][ApplicationBuilder]] supplies built-in Pod labels and selector labels separately.
 ServiceMixin defaults Service selectors to workload matchLabels; its Service
 metadata uses the Service's own configuration. Therefore changing server.labels
 in this matched case does not automatically label Pods or Service metadata.
