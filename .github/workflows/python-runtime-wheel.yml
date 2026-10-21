@@ -189,6 +189,9 @@ jobs:
           uv run --locked --project packages/python-testing --extra runtime poo-flow-test-cases \
             coverage > .ci/python-testing-coverage.tsv
 
+      - name: Qualify migrated assessment and Review native semantics
+        run: cargo test --locked --manifest-path modules/evidence-assessment/native/Cargo.toml --lib --test assessment
+
       - name: Build wheel
         run: |
           set -euo pipefail
@@ -197,6 +200,22 @@ jobs:
             --wheel \
             --out-dir dist/python-runtime-wheel
           ls -l dist/python-runtime-wheel
+
+      - name: Test installed assessment against the exact ASCENT producer
+        run: |
+          set -euo pipefail
+          python -m venv "$RUNNER_TEMP/poo-flow-reasoning-smoke"
+          py="$RUNNER_TEMP/poo-flow-reasoning-smoke/bin/python"
+          producer="$(python - <<'PYTHON'
+          import tomllib
+          from pathlib import Path
+          dep = tomllib.loads(Path('modules/evidence-assessment/native/Cargo.toml').read_text())['dependencies']['gerbil-ascent']
+          assert set(('git', 'rev')).issubset(dep) and 'path' not in dep
+          print('git+' + dep['git'] + '@' + dep['rev'] + '#subdirectory=python')
+          PYTHON
+          )"
+          "$py" -m pip install dist/python-runtime-wheel/*.whl "$producer"
+          PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" "$py" -m unittest discover -s packages/python-runtime/tests/assessment -v
 
       - name: Install wheel in clean environment
         run: |

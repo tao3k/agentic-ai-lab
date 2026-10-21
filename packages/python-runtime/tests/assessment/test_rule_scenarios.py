@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 import unittest
-from ascent import Engine, EXECUTION_BACKEND
+from ascent import Engine, EngineError, EXECUTION_BACKEND
 
 
 class EvidenceWheelTests(unittest.TestCase):
@@ -79,11 +79,12 @@ class EvidenceWheelTests(unittest.TestCase):
           ((output n) <-- (input n)))"""
         # Direct source loading has no completed public result yet.
         with self.engine.open_sources("(ascent-fragment (relation input ((n integer?))))") as pending:
-            incomplete = pending.run(0)
-            self.assertFalse(incomplete['complete'])
-            self.assertNotIn('resultHandle', incomplete)
+            with self.assertRaisesRegex(EngineError, 'deadline'):
+                pending.run(0)
             completed = pending.run()
-            self.assertTrue(pending.run(0)['complete'])
+            self.assertTrue(completed['complete'])
+            with self.assertRaisesRegex(EngineError, 'deadline'):
+                pending.run(0)
         with self.assertRaises(ValueError):
             pending.run()
         with self.engine.rules(source, trusted=True) as owner:
@@ -150,11 +151,12 @@ class EvidenceWheelTests(unittest.TestCase):
             proof = session.explanation(first, 'ancestry')
             self.assertTrue(proof.current)
             self.assertEqual(proof.source_generation, first['sourceGeneration'])
-            self.assertIn('one', str(proof.graph))
+            historical = proof.graph
+            self.assertIn('one', str(historical))
             session.replace({'contracts': [['a', 'b', 'one']]})
             self.assertFalse(proof.current)
-            with self.assertRaises(ValueError):
-                _ = proof.graph
+            self.assertEqual(proof.graph, historical)
+            self.assertEqual(proof.source_generation, first['sourceGeneration'])
             proof.close()
             second = session.run()
             self.assertEqual(second['relations']['ancestry'], [['a', 'b']])

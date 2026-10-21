@@ -7,7 +7,7 @@ from poo_flow_testing.assessment_studies.interface_tests import qualification_in
 
 class LibraryBoundary(unittest.TestCase):
     def test_no_application_facade_in_rule_library(self):
-        for name in ('EvidenceChain','EvidenceStore','ComputationalEvidence','ClueExchange','Trajectory','ResponseHistory'):
+        for name in ('EvidenceChain','EvidenceStore','ComputationalEvidence','ClueExchange','Trajectory','ResponseHistory','EvidenceReview','DomainEvidence','EvidenceInteraction','EvidenceOperation','EvidenceConversation'):
             self.assertFalse(hasattr(ascent,name),name)
         for name in ('evidence','derivations','trajectory','interaction','conversation','domain','review'):
             self.assertIsNone(importlib.util.find_spec('ascent.'+name),name)
