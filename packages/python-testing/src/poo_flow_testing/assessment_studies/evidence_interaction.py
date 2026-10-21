@@ -209,7 +209,7 @@ def freeze(run):
         if name.endswith('.py') or name in ('t/research/evidence-search.ss','candidate/evidence-store.ss'):
             dest=producers/name; dest.parent.mkdir(parents=True,exist_ok=True); dest.write_bytes((ROOT/name).read_bytes())
         elif name.startswith('/'):
-            dest=producers/'poo-flow'/Path(name).relative_to('/Users/guangtao/ghq/github.com/tao3k/poo-flow');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(Path(name).read_bytes())
+            dest=producers/'poo-flow'/Path(name).relative_to(ROOT);dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(Path(name).read_bytes())
     preview=run/'payload-review';preview.mkdir()
     for entry in qualification['tasks']:
         for arm,context in zip(('baseline','facts','prune'),entry['rootContexts']):
