@@ -10,7 +10,7 @@ name = "poo_flow_reasoning"
 crate-type = ["rlib", "cdylib"]
 
 [dependencies]
-gerbil-ascent = { git = "https://github.com/tao3k/gerbil-ascent", rev = "71408ec3dc20510416ddbac9f5d4e8f5ed68b854" }
+gerbil-ascent = { git = "https://github.com/tao3k/gerbil-ascent", rev = "dc64cd42886da92654d139b6567667aee7c54cc1" }
 num-bigint = "=0.4.8"
 num-rational = "=0.4.2"
 num-traits = "=0.2.19"
@@ -37,4 +37,4 @@ python = ["dep:pyo3", "dep:gerbil-scheme-python"]
 extension-module = ["python", "pyo3/extension-module"]
 
 [dev-dependencies]
-ascent-scheme = { git = "https://github.com/tao3k/gerbil-ascent", rev = "71408ec3dc20510416ddbac9f5d4e8f5ed68b854" }
+ascent-scheme = { git = "https://github.com/tao3k/gerbil-ascent", rev = "dc64cd42886da92654d139b6567667aee7c54cc1" }

@@ -69,9 +69,9 @@ explicitly retired. Generic in-repository renames are not application transfers.
 Historical research reports retain their original bytes. The inventory check
 verifies target existence and content; it is not a semantic equivalence proof.
 
-* Reproduction and current validation
-Cargo and =gerbil.pkg= both consume ASCENT
-=0f99da9e3a3baf1a272ba58fe0769ed8278ae746=. No local path dependency or old
+* Historical reproduction at 0f99da9
+The following receipts belong to ASCENT
+=0f99da9e3a3baf1a272ba58fe0769ed8278ae746=. They do not qualify later pins. No local path dependency or old
 ASCENT application import facade is provided. The source receipt records the
 resolved Git source and 63 producer inputs; the independent installed ASCENT
 wheel must match every input before study admission.
@@ -120,3 +120,22 @@ ASP PR #12 changes only its dependency pin and passed its original native build
 and 17-module parent test suite; its intentional child failure controls remain
 active. Both consumers use that immutable source. Bazel projections are derived
 with the existing pin/lock tool and its contract; no tag override is introduced.
+
+* Current immutable dependency cohort
+The Gerbil and native Cargo declarations both consume ASCENT
+=dc64cd42886da92654d139b6567667aee7c54cc1=. Yuanxu is fixed by the Core
+gitlink at =44a99d45396d1a23e850105ffe8af442a61b2780=, whose public API
+uses =:core=. Parser is =153572a93263f398d2c21d9e4ac948bf835d9905= and
+Orgize is =8807683f6ce5704c3c128b9bb8bb532281a098ca=. The runtime, sys,
+Python and AOT bridge declarations use gerbil-scheme-rust PR #18 revision
+=cfbc10c47ddc41f6670bd78e46e1e9d856cbb870=. The producer's retired build-only
+IR compiler keeps its separate immutable pin because that crate is absent from
+the current SDK; it is not a second runtime bridge or a compatibility facade.
+
+The unchanged dependency projection controls (four tests), 295-path migration
+inventory check, locked Cargo metadata and frozen Bazel source lock pass for
+this cohort. Full installed/AOT and clean-checkout native acceptance remain
+incomplete. In particular, the Core package update exceeded its diagnostic cap,
+and source-only operator and closure controls timed out. Prior wheel and native
+receipts above are not transferred to this cohort. No execution deadline or
+admission guard was relaxed.

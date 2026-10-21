@@ -3245,7 +3245,7 @@
       "sourceRevision": "fca7913015b58d577eaee7ba0b51fcc83641c766"
     }
   ],
-  "producerRevision": "71408ec3dc20510416ddbac9f5d4e8f5ed68b854",
+  "producerRevision": "dc64cd42886da92654d139b6567667aee7c54cc1",
   "splits": [
     {
       "source": "rust/ascent/tests/integration/program_definitions.rs",
