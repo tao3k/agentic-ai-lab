@@ -12,9 +12,6 @@
 [submodule "core"]
 	path = core
 	url = https://github.com/tao3k/poo-flow-core.git
-[submodule "config-reference-kcl-examples"]
-	path = docs/10-19-design/10.08-config-languages/scenarios/kcl/examples
-	url = https://github.com/kcl-lang/examples.git
 [submodule "config-reference-kcl-konfig"]
 	path = docs/10-19-design/10.08-config-languages/scenarios/kcl/konfig
 	url = https://github.com/kcl-lang/konfig.git
