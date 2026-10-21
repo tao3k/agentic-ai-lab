@@ -18,7 +18,7 @@
                  test-error
                  test-suite)
         :poo-flow/modules/workflow/scenario/configuration/interface
-        :core/extension-graph/interface
+        :core/graph/interface
         :core/module-system/schema/interface
         :poo-flow/modules/sandbox-core/shared-object
         :poo-flow/modules/nono-sandbox/objects
@@ -26,9 +26,9 @@
 
 (export module-extension-test)
 
-;; : (-> PooModuleExtensionNode Symbol MaybeAny)
+;; : (-> PooFlowGraph Symbol MaybeAny)
 (def (slot-value node slot-name)
-  (let (entry (assoc slot-name (poo-flow-module-extension-node-slots node)))
+  (let (entry (assoc slot-name (poo-flow-graph-root-payload node)))
     (if entry (cdr entry) #f)))
 
 ;;; This suite locks extension composition behavior for user-authored modules
@@ -38,69 +38,69 @@
   (test-suite "poo-flow module extension resolution"
     (poo-flow-test-case "applies slot and child-node operations to a stable object graph"
       (let* ((build-node
-              (poo-flow-module-extension-node
+              (poo-flow-graph-rooted
                'workflow/pipeline/default/task/build
                '((run . "gxi build.ss")
                  (env . (DEBUG CI))
                  (artifacts . ()))
                '()))
              (legacy-node
-              (poo-flow-module-extension-node
+              (poo-flow-graph-rooted
                'workflow/pipeline/default/task/legacy
                '((run . "echo legacy"))
                '()))
              (root-node
-              (poo-flow-module-extension-node
+              (poo-flow-graph-rooted
                'workflow/pipeline/default
                '((needs . (test)))
                (list build-node legacy-node)))
              (package-node
-              (poo-flow-module-extension-node
+              (poo-flow-graph-rooted
                'workflow/pipeline/default/task/package
                '((run . "tar dist"))
                '()))
              (root-contribution
-              (poo-flow-module-extension-contribution
+              (poo-flow-graph-contribution
                'workflow/pipeline/default
                (list
-                (poo-flow-module-extension-slot-prepend 'needs '(setup))
-                (poo-flow-module-extension-slot-append 'needs '(lint test))
-                (poo-flow-module-extension-node-remove
+                (poo-flow-graph-slot-prepend 'needs '(setup))
+                (poo-flow-graph-slot-append 'needs '(lint test))
+                (poo-flow-graph-node-remove
                  'workflow/pipeline/default/task/legacy)
-                (poo-flow-module-extension-node-extend package-node))))
+                (poo-flow-graph-node-extend package-node))))
              (build-contribution
-              (poo-flow-module-extension-contribution
+              (poo-flow-graph-contribution
                'workflow/pipeline/default/task/build
                (list
-                (poo-flow-module-extension-slot-override
+                (poo-flow-graph-slot-override
                  'run
                  "gxi build.ss --optimized")
-                (poo-flow-module-extension-slot-remove 'env '(DEBUG))
-                (poo-flow-module-extension-slot-append 'artifacts '("dist")))))
+                (poo-flow-graph-slot-remove 'env '(DEBUG))
+                (poo-flow-graph-slot-append 'artifacts '("dist")))))
              (result
-              (poo-flow-module-extension-resolve
+              (poo-flow-graph-resolve
                root-node
                (list root-contribution build-contribution)))
              (resolved-root
-              (poo-flow-module-extension-result-root result))
+              (poo-flow-graph-result-root result))
              (resolved-build
-              (poo-flow-module-extension-child-ref
-               (poo-flow-module-extension-node-children resolved-root)
+              (poo-flow-graph-root-ref
+               (poo-flow-graph-root-children resolved-root)
                'workflow/pipeline/default/task/build))
              (resolved-package
-              (poo-flow-module-extension-child-ref
-               (poo-flow-module-extension-node-children resolved-root)
+              (poo-flow-graph-root-ref
+               (poo-flow-graph-root-children resolved-root)
                'workflow/pipeline/default/task/package))
              (removed-legacy
-              (poo-flow-module-extension-child-ref
-               (poo-flow-module-extension-node-children resolved-root)
+              (poo-flow-graph-root-ref
+               (poo-flow-graph-root-children resolved-root)
                'workflow/pipeline/default/task/legacy)))
-        (check-equal? (poo-flow-module-extension-result? result) #t)
-        (check-equal? (poo-flow-module-extension-result-stable? result) #t)
-        (check-equal? (poo-flow-module-extension-result-iterations result) 1)
+        (check-equal? (poo-flow-graph-result? result) #t)
+        (check-equal? (poo-flow-graph-result-applied? result) #t)
+        (check-equal? (poo-flow-graph-result-changed-passes result) 1)
         (check-equal? (slot-value resolved-root 'needs) '(setup test lint))
         (check-equal? removed-legacy #f)
-        (check-equal? (poo-flow-module-extension-node? resolved-package) #t)
+        (check-equal? (poo-flow-graph? resolved-package) #t)
         (check-equal? (slot-value resolved-build 'run)
                       "gxi build.ss --optimized")
         (check-equal? (slot-value resolved-build 'env) '(CI))
@@ -117,7 +117,7 @@
               (poo-flow-module-field-contract
                'run PooFlowModuleStringType 'override #f '((domain . workflow))))
              (root-node
-              (poo-flow-module-extension-node
+              (poo-flow-graph-rooted
                'workflow/pipeline/default
                '((needs . (test))
                  (features . (ci)))
@@ -145,8 +145,8 @@
                        needs-field 'lint)
                       #f)
         (check-equal? (poo-flow-module-field-resolution-result? result) #t)
-        (check-equal? (poo-flow-module-field-resolution-result-stable? result) #t)
-        (check-equal? (poo-flow-module-field-resolution-result-iterations result) 1)
+        (check-equal? (poo-flow-module-field-resolution-result-applied? result) #t)
+        (check-equal? (poo-flow-module-field-resolution-result-changed-passes result) 1)
         (check-equal? (slot-value resolved-root 'needs) '(test lint))
         (check-equal? (slot-value resolved-root 'features) '(sandbox ci))
         (check-equal? (slot-value resolved-root 'run)
@@ -191,7 +191,7 @@
                  'profile PooFlowModuleSymbolType 'override 'default '()))
                '((backend . cube))))
              (root-node
-              (poo-flow-module-extension-node
+              (poo-flow-graph-rooted
                'sandbox/shared
                '()
                (list
@@ -214,12 +214,12 @@
              (resolved-root
               (poo-flow-module-field-resolution-result-root result))
              (resolved-nono
-              (poo-flow-module-extension-child-ref
-               (poo-flow-module-extension-node-children resolved-root)
+              (poo-flow-graph-root-ref
+               (poo-flow-graph-root-children resolved-root)
                'sandbox/nono))
              (resolved-cube
-              (poo-flow-module-extension-child-ref
-               (poo-flow-module-extension-node-children resolved-root)
+              (poo-flow-graph-root-ref
+               (poo-flow-graph-root-children resolved-root)
                'sandbox/cube)))
         (check-equal? (poo-flow-module-object? shared-sandbox-object) #t)
         (check-equal? (map poo-flow-module-field-contract-identity
@@ -377,7 +377,7 @@
               (poo-flow-module-objects-ref
                resolved-objects
                'objects.cubeSandbox.sandbox)))
-        (check-equal? (poo-flow-module-extension-node-identity
+        (check-equal? (poo-flow-graph-root-id
                        resolved-objects)
                       'objects)
         (check-equal? (slot-value resolved-objects 'namespace) 'objects)

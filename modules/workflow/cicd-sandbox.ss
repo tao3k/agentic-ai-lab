@@ -8,15 +8,15 @@
 
 (import (only-in :clan/poo/object .ref)
         (only-in :std/list/list delete-duplicates/hash)
-        :poo-flow/modules/workflow/control-plane/projection-syntax
+        :core/modules/funflow/control-plane/projection-syntax
         (only-in :poo-flow/modules/agent-sandbox/config
                  poo-flow-sandbox-profile?
                  poo-flow-sandbox-profile-by-name
                  poo-flow-sandbox-profile-handoff-summary
                  poo-flow-sandbox-profile-name
                  poo-flow-sandbox-profile-runtime-summary)
-        :poo-flow/modules/workflow/types
-        :poo-flow/modules/workflow/objects)
+        :core/modules/funflow/check-types
+        :core/modules/funflow/check-objects)
 
 (export poo-flow-cicd-check-profile-refs
         poo-flow-cicd-check-sandbox-runtime-summaries

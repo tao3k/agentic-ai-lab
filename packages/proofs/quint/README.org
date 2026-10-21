@@ -9,7 +9,7 @@ SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 All maintained finite formal models are Quint. Quint =0.33.0= and the
 =0.62.1= Apalache distribution match MRR. Verification uses Quint's =tlc=
-backend, with Java 21 or newer (the backend class version is 65). Generated Quint is transient compiler output. Lean retains its
+backend, with Java 21 or newer (the backend class version is 65). Generated TLA+ is transient compiler output. Lean retains its
 independent algebraic scope; it is not automatically a refinement proof.
 
 #+begin_src sh
@@ -19,6 +19,12 @@ just check-quint
 PYTHONPATH=packages/python-testing/src python3 -m poo_flow_testing.checks.quint \
   --group all --receipt /tmp/poo-quint-proof.ss
 #+end_src
+
+The default runner uses [[file:../../../core/proofs/quint/backend.py][Core's backend session helper]] to own one
+version-checked Apalache process per invocation, with a 1 GiB heap and an
+ephemeral loopback endpoint. Each model gets a fresh compilation and TLC run.
+The session is cleaned up on completion, failure and TERM; proof admission
+also rejects changes to the model or checker source cut during the invocation.
 
 The runner requires real output within five seconds and finishes each check
 within 45 seconds. Missing counts, a nonempty final queue, wrong exit status,

@@ -12,10 +12,10 @@
         (only-in :poo-flow/modules/workflow/cicd-runtime-command-config
                  poo-flow-user-alist-ref)
         :poo-flow/modules/sandbox-core/profile-catalog
-        (only-in :poo-flow/modules/funflow/config
+        (only-in :core/modules/funflow/graph-projection
                  poo-flow-funflow-check-map->functional-dag
                  poo-flow-funflow-functional-dag->alist)
-        (only-in :poo-flow/modules/workflow/objects
+        (only-in :core/modules/funflow/check-objects
                  poo-flow-cicd-check-map?
                  poo-flow-cicd-check-map-name)
         (only-in :poo-flow/modules/workflow/funs

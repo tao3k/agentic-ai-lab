@@ -7,10 +7,10 @@
 (import (only-in :clan/poo/object .ref object?)
         :core/object-family/role-syntax
         :poo-flow/modules/search-engine/objects
-        (only-in :poo-flow/modules/workflow/control-plane/flow
+        (only-in :core/modules/funflow/control-plane/flow
                  external-flow flow-fanout flow-input-contract
                  flow-output-contract flow-then)
-        (only-in :poo-flow/modules/workflow/control-plane/plan flow->dag-receipt)
+        (only-in :core/modules/funflow/control-plane/graph flow->dag-receipt)
         (only-in :poo-flow/modules/temporal-causality/objects
                  poo-flow-causal-event poo-flow-temporal-observation))
 

@@ -1,3 +1,4 @@
+(import (only-in :core/modules/funflow/check-types +poo-flow-durable-action-classes+))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -70,8 +71,7 @@
   'poo-flow.module-system.durable-policy.receipt.v1)
 
 ;; : [PooDurableActionClass]
-(def +poo-flow-durable-action-classes+
-  '(replayable idempotent compensatable terminal manual))
+
 
 ;; : [PooDurableRepairMode]
 (def +poo-flow-durable-repair-modes+

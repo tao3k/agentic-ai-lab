@@ -5,10 +5,10 @@
 
 ;;; Boundary: Marlin ABI projection for CI/CD runtime handoff.
 
-(import :poo-flow/modules/workflow/types
-        :poo-flow/modules/workflow/objects
-        :poo-flow/modules/workflow/cicd-funs
-        :poo-flow/modules/workflow/cicd-projection-syntax
+(import :core/modules/funflow/check-types
+        :core/modules/funflow/check-objects
+        :core/modules/funflow/check-funs
+        :core/modules/funflow/projection-syntax
         :poo-flow/modules/workflow/cicd-sandbox
         :poo-flow/modules/workflow/cicd-runtime-support/checks)
 

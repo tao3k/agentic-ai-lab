@@ -2,18 +2,16 @@
 --
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-import PooFlowCoreProof.PooC4.CrossDomainFederation
+import PooFlowCoreProof.Admission.Federation
 
 namespace PooFlowProof.Enterprise.Delegation
 
-open PooFlowProof.PooC4
-
 structure Admitted
-    (CapabilityIdentity Scope ActionRole Expiry DelegationDepth
+    (CapabilityIdentity Scope ActionRole
       DelegationEvidenceIdentity RevocationObservationIdentity : Type) where
   attenuation :
-    CrossDomainFederation.CapabilityAttenuation
-      CapabilityIdentity Scope ActionRole Expiry DelegationDepth
+    PooFlowCoreProof.Admission.Federation.CapabilityAttenuation
+      CapabilityIdentity Scope ActionRole
   delegationEvidenceIdentity : DelegationEvidenceIdentity
   revocationObservationIdentity : RevocationObservationIdentity
   delegationEvidenceFresh : Prop
@@ -22,24 +20,23 @@ structure Admitted
   notRevoked : ¬ delegationRevoked
 
 theorem neverAmplifies
-    {CapabilityIdentity Scope ActionRole Expiry DelegationDepth
-      DelegationEvidenceIdentity RevocationObservationIdentity : Type}
-    (delegation :
-      Admitted
-        CapabilityIdentity Scope ActionRole Expiry DelegationDepth
-        DelegationEvidenceIdentity RevocationObservationIdentity) :
-    delegation.attenuation.scopeNotAmplified ∧
-      delegation.attenuation.actionNotAmplified ∧
-      delegation.attenuation.expiryNotExtended ∧
-      delegation.attenuation.delegationDepthNotIncreased :=
-  delegation.attenuation.attenuationEstablished
+    {CapabilityIdentity Scope ActionRole DelegationEvidenceIdentity RevocationObservationIdentity : Type}
+    [DecidableEq Scope] [DecidableEq ActionRole]
+    (delegation : Admitted CapabilityIdentity Scope ActionRole
+      DelegationEvidenceIdentity RevocationObservationIdentity) :
+    let result := PooFlowCoreProof.Admission.Federation.attenuate delegation.attenuation
+    (∀ scope ∈ result.scopes, scope ∈ delegation.attenuation.source.scopes) ∧
+    (∀ action ∈ result.actions, action ∈ delegation.attenuation.source.actions) ∧
+    result.expiresAt ≤ delegation.attenuation.source.expiresAt ∧
+    result.delegationDepth ≤ delegation.attenuation.source.delegationDepth :=
+  PooFlowCoreProof.Admission.Federation.attenuationCannotAmplify delegation.attenuation
 
 theorem requiresFreshUnrevokedEvidence
-    {CapabilityIdentity Scope ActionRole Expiry DelegationDepth
+    {CapabilityIdentity Scope ActionRole
       DelegationEvidenceIdentity RevocationObservationIdentity : Type}
     (delegation :
       Admitted
-        CapabilityIdentity Scope ActionRole Expiry DelegationDepth
+        CapabilityIdentity Scope ActionRole
         DelegationEvidenceIdentity RevocationObservationIdentity) :
     delegation.delegationEvidenceFresh ∧
       ¬ delegation.delegationRevoked :=

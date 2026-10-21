@@ -10,7 +10,7 @@
 
 (import (only-in :std/format format)
         (only-in :clan/poo/object .ref .slot?)
-        :poo-flow/modules/workflow/control-plane/plan
+        :core/modules/funflow/control-plane/graph
         (only-in :poo-flow/modules/workflow/scenario/plan-projection
                  poo-flow-scenario-case->execution-plan)
         :core/feature-system/bundle-v1-lowering

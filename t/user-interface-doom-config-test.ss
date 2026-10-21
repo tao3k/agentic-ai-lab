@@ -53,4 +53,4 @@
              'user-custom 'user "user-interface" "custom"))
            (sources (poo-flow-module-source-collection-interfaces collection)))
       (check-equal? (map poo-flow-module-source-ref-value sources)
-                    '("user-interface/custom/my-module/interface.ss"))))))
+                    (list (path-expand "user-interface/custom/my-module/interface.ss")))))))

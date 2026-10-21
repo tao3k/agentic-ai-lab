@@ -1,3 +1,4 @@
+(import (only-in :poo-flow/modules/workflow/funflow-config poo-flow-funflow-pipeline-runtime-command-manifests))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -6,14 +7,13 @@
 ;;; Boundary: direct Funflow POO config lowers to CI/CD runtime facts.
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
+        (only-in :core/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
         :core/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface
         :poo-flow/modules/workflow/scenario/configuration/init-syntax
         :poo-flow/modules/workflow/cicd-config
         :poo-flow/modules/agent-sandbox/config
-        (only-in :poo-flow/modules/funflow/config
-                 poo-flow-funflow-pipeline-runtime-command-manifests)
         :poo-flow/modules/workflow/interface)
 
 (export funflow-config-pipeline-direct-test)

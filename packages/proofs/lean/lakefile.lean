@@ -12,7 +12,7 @@ require PooFlowCoreProof from "../../../core/proofs/lean"
 
 require Cedar from git
   "https://github.com/cedar-policy/cedar-spec.git"
-  @ "e9fa9c1e6b636f29b0897d8706bd7aa5eaf06f9a"
+  @ "acb0db7daa838249d894d2af64c850e1c9bf0d7d"
   / "cedar-lean"
 
 lean_lib PooFlowProof where

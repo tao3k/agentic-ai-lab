@@ -88,6 +88,6 @@ versus native object/protocol extension; do not flatten them into a list-append 
 | Cache | Dependency changes invalidate affected consumers and proof generations |
 | UX | Count complete user declarations, discovery steps and maintenance, not only one operation |
 
-The Scheme positive/negative admission examples in [[file:../../../core/design/config-languages/09-application-scenario-admission.org][module 09]] are expected design
+The Scheme positive/negative admission examples in [[file:../../../core/docs/10-19-design/11-configuration-languages/11.10-application-scenario-admission.org][module 09]] are expected design
 outcomes, not execution receipts. Full KCL/Nix/Nickel evaluation and matched POO
 runtime qualification remain future work. No Loader or production adapter is added.

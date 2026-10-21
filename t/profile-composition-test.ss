@@ -7,7 +7,7 @@
          (only-in :std/test check-equal? check-exception test-suite)
         (only-in :clan/poo/object .all-slots .def .o .ref object?)
         (only-in :clan/poo/mop element?)
-        (only-in :poo-flow/modules/workflow/control-plane/plan execution-plan? execution-plan-nodes)
+        (only-in :core/modules/funflow/control-plane/graph execution-plan? execution-plan-nodes)
         (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
         (only-in :core/module-system/authoring/roles poo-flow-semantic-module)
         :core/profile-composition/selection-syntax

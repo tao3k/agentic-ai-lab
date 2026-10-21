@@ -17,9 +17,9 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/modules/workflow/control-plane/api
+        :core/modules/funflow/control-plane/api
         :poo-flow/modules/docker/interface
-        :poo-flow/modules/workflow/store
+        :core/modules/funflow/store
         :poo-flow/modules/workflow/flows)
 
 (export tutorial-runtime-result-test)

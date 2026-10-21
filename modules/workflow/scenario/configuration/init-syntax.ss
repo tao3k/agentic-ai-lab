@@ -1,3 +1,4 @@
+(import (only-in :poo-flow/modules/workflow/funflow-config poo-flow-funflow-configs poo-flow-funflow-poo-config-flags))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -18,7 +19,7 @@
         :poo-flow/modules/cubeSandbox/profile-interface
         :poo-flow/modules/docker-sandbox/config
         :poo-flow/modules/docker-sandbox/profile-interface
-        :poo-flow/modules/funflow/config
+        :core/modules/funflow/graph-projection
         :poo-flow/modules/session/config
         :poo-flow/modules/session/syntax
         :poo-flow/modules/tool-core/config
@@ -75,7 +76,8 @@
         poo-flow-user-module-selection->alist
         (import: :poo-flow/modules/cubeSandbox/profile-interface)
         (import: :poo-flow/modules/docker-sandbox/profile-interface)
-        (import: :poo-flow/modules/funflow/config)
+        (import: :core/modules/funflow/graph-projection)
+        (import: :poo-flow/modules/workflow/funflow-config)
         (import: :poo-flow/modules/ai-agentic-context/features/memory/interface)
         (import: :poo-flow/modules/session/config)
         (import: :poo-flow/modules/session/syntax)

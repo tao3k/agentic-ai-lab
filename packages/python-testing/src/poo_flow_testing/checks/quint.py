@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import os
 from pathlib import Path
 import re
@@ -87,9 +88,10 @@ def _run_quint(command: list[str], cwd: Path,
 
 
 def check_quint(context: CaseContext, case: QuintCase,
-                progress: Callable[[bytes], None] | None = None) -> CaseEvidence:
-    models = context.repository_root / "packages/proofs/quint"
-    quint = models / "node_modules/.bin/quint"
+                progress: Callable[[bytes], None] | None = None,
+                server_endpoint: str | None = None) -> CaseEvidence:
+    models = context.repository_root / case.source_directory
+    quint = context.repository_root / "packages/proofs/quint/node_modules/.bin/quint"
     version = subprocess.run([str(quint), "--version"], capture_output=True,
                              text=True, check=True, timeout=5).stdout.strip()
     if version != "0.33.0":
@@ -108,6 +110,8 @@ def check_quint(context: CaseContext, case: QuintCase,
                    "--backend", "tlc", "--apalache-version", "0.62.1",
                    "--invariant", case.invariant, "--tlc-config", str(config),
                    "--verbosity", "3"]
+        if server_endpoint is not None:
+            command += ["--server-endpoint", server_endpoint]
         if case.temporal:
             command += ["--temporal", case.temporal]
         if progress is not None:
@@ -132,7 +136,7 @@ def check_quint(context: CaseContext, case: QuintCase,
         progress(f"QUINT-OK {case.model} states={counts[2].decode()} negative={case.negative}\n".encode())
     return CaseEvidence({"model": case.model, "invariant": case.invariant,
                          "negative": case.negative, "temporal": case.temporal,
-                         "quint_version": version, "backend": "tlc", "apalache_version": "0.62.1",
+                         "quint_version": version, "backend": "tlc", "server_endpoint": server_endpoint, "apalache_version": "0.62.1",
                          "sources_sha256": sources, "exit": status,
                          "generated_states": int(counts[1].replace(b",", b"")),
                          "distinct_states": int(counts[2].replace(b",", b"")),
@@ -153,6 +157,16 @@ def _scheme(value: object) -> str:
     return str(value)
 
 
+def _load_backend(root: Path):
+    # Core also runs standalone; locate its tool through the explicit repository.
+    spec = importlib.util.spec_from_file_location(
+        "_poo_flow_quint_backend", root / "core/proofs/quint/backend.py")
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--group", choices=["all", *GROUPS], default="all")
@@ -169,10 +183,25 @@ def main() -> int:
         sys.stdout.buffer.write(data)
         sys.stdout.buffer.flush()
 
-    results = [dict(check_quint(context, c, progress).details) for c in cases]
+    backend = _load_backend(root)
+    from . import quint_cases
+    bound = [Path(__file__), Path(quint_cases.__file__), Path(backend.__file__),
+             root / "packages/proofs/quint/package-lock.json"]
+    directories = sorted({c.source_directory for c in cases})
+    def source_cut():
+        current = set(bound)
+        for directory in directories:
+            current.update((root / directory).glob("*.qnt"))
+        return {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest()
+                for p in sorted(current)}
+    sources = source_cut()
+    with backend.backend_session(progress, root / "packages/proofs/quint/node_modules/.bin/quint") as endpoint:
+        results = [dict(check_quint(context, c, progress, endpoint).details) for c in cases]
+    if sources != source_cut():
+        raise AssertionError("bound Quint sources or checkers changed during qualification")
     if args.receipt:
         args.receipt.parent.mkdir(parents=True, exist_ok=True)
-        args.receipt.write_text(_scheme({"schema": "poo-flow.quint-proof.v1", "cases": results}) + "\n")
+        args.receipt.write_text(_scheme({"schema": "poo-flow.quint-proof.v1", "sources_sha256": sources, "cases": results}) + "\n")
     progress(f"QUINT-QUALIFICATION-OK {len(results)} cases\n".encode())
     return 0
 

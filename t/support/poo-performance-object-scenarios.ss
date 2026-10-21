@@ -7,7 +7,7 @@
 
 (import (only-in :clan/poo/object .ref)
         :core/module-system/schema/interface
-        :core/extension-graph/interface
+        :core/graph/interface
         :core/module-system/schema/validation)
 
 (export poo-performance-slot-ref/default
@@ -169,7 +169,7 @@
   (* rounds (apply + (map cdr slots))))
 
 ;; poo-performance-object-node-lookup-count
-;;   : (-> PooModuleExtensionNode [Symbol] Integer Integer)
+;;   : (-> PooFlowGraph [Symbol] Integer Integer)
 ;;   | doc m%
 ;;       `poo-performance-object-node-lookup-count objects-node identities
 ;;       rounds` counts indexed object hits once, then scales by benchmark rounds.
@@ -197,34 +197,34 @@
   (string->symbol
    (string-append "extension-child-" (number->string index))))
 
-;; : (-> Integer Integer PooModuleExtensionNode)
+;; : (-> Integer Integer PooFlowGraph)
 (def (poo-performance-extension-child index slot-offset)
-  (poo-flow-module-extension-node
+  (poo-flow-graph-rooted
    (poo-performance-extension-child-name index)
    (list (cons 'value (+ slot-offset index)))
    '()))
 
-;; : (-> Integer Integer [PooModuleExtensionNode])
+;; : (-> Integer Integer [PooFlowGraph])
 (def (poo-performance-extension-children count slot-offset)
   (poo-performance-build-list
    count
    (lambda (index)
      (poo-performance-extension-child index slot-offset))))
 
-;; : (-> Integer PooModuleExtensionNode)
+;; : (-> Integer PooFlowGraph)
 (def (poo-performance-extension-merge-root count)
-  (poo-flow-module-extension-node
+  (poo-flow-graph-rooted
    'extension-root
    '((kind . extension-merge-root))
    (poo-performance-extension-children count 1000)))
 
-;; : (-> Integer Integer [PooModuleExtensionOperation])
+;; : (-> Integer Integer [PooGraphOperation])
 (def (poo-performance-extension-node-extend-operations count key-span)
   (poo-performance-build-list
    count
    (lambda (index)
-     (poo-flow-module-extension-node-extend
-      (poo-flow-module-extension-node
+     (poo-flow-graph-node-extend
+      (poo-flow-graph-rooted
        (poo-performance-extension-child-name (modulo index key-span))
        (list (cons 'value (+ 2000 index)))
        '())))))
@@ -234,19 +234,19 @@
   (string->symbol
    (string-append "cross-contribution-child-" (number->string index))))
 
-;; : (-> Integer PooModuleExtensionNode)
+;; : (-> Integer PooFlowGraph)
 (def (poo-performance-cross-contribution-child index)
-  (poo-flow-module-extension-node
+  (poo-flow-graph-rooted
    (poo-performance-cross-contribution-child-name index)
    (list (cons 'created-order index))
    '()))
 
-;; : (-> Integer [PooModuleExtensionOperation])
+;; : (-> Integer [PooGraphOperation])
 (def (poo-performance-cross-contribution-create-operations count)
   (poo-performance-build-list
    count
    (lambda (index)
-     (poo-flow-module-extension-node-extend
+     (poo-flow-graph-node-extend
       (poo-performance-cross-contribution-child index)))))
 
 ;; : (-> PooObject Symbol Value Value)
@@ -288,25 +288,25 @@
                 (poo-performance-object-list-index
                  (poo-flow-performance-ref objects 'modules []))))))))))
 
-;; : (-> Integer Symbol [PooModuleExtensionContribution])
+;; : (-> Integer Symbol [PooGraphContribution])
 (def (poo-performance-cross-contribution-targeting-contributions child-count target)
   (list
-   (poo-flow-module-extension-contribution
+   (poo-flow-graph-contribution
     'extension-root
     (poo-performance-cross-contribution-create-operations child-count))
-   (poo-flow-module-extension-contribution
+   (poo-flow-graph-contribution
     target
-    (list (poo-flow-module-extension-slot-override 'targeted? #t)
-          (poo-flow-module-extension-slot-override 'target-phase 'same-pass)))))
+    (list (poo-flow-graph-slot-override 'targeted? #t)
+          (poo-flow-graph-slot-override 'target-phase 'same-pass)))))
 
-;; : (-> Symbol Integer [PooModuleExtensionContribution])
+;; : (-> Symbol Integer [PooGraphContribution])
 (def (poo-performance-local-slot-contributions target count)
   (poo-performance-build-list
    count
    (lambda (index)
-     (poo-flow-module-extension-contribution
+     (poo-flow-graph-contribution
       target
       (list
-       (poo-flow-module-extension-slot-override
+       (poo-flow-graph-slot-override
         (poo-performance-field-name index)
         index))))))

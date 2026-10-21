@@ -6,6 +6,7 @@
 ;;; Boundary: invalid Funflow POO configs fail at the declarative contract.
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
+        (only-in :core/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
         :poo-flow/modules/workflow/scenario/configuration/interface
         :poo-flow/modules/workflow/scenario/configuration/init-syntax)

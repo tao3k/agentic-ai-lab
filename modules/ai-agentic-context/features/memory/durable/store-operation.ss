@@ -7,9 +7,9 @@
 ;;; Invariant: Scheme projects operation intent only; Rust/Marlin owns append,
 ;;; fsync, checkpoint IO, index rebuild, leases, and repair side effects.
 
-(import (only-in :poo-flow/modules/workflow/control-plane/runtime-protocol
+(import (only-in :core/modules/funflow/control-plane/runtime-protocol
                  +runtime-request-schema+)
-        (only-in :poo-flow/modules/workflow/control-plane/runtime-command-descriptor
+        (only-in :core/modules/funflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
         :core/utilities/final-projection-syntax
         :poo-flow/modules/ai-agentic-context/features/memory/durable/store-backend)

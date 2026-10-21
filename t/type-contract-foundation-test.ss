@@ -51,12 +51,27 @@
               (.cc NamedContract '.classify
                    (lambda (_candidate context)
                      (poo-flow-classification-evidence 'named 'other #t '() context))))
-             (wrong-identity
+             (wrong-context
+              (.cc NamedContract '.classify
+                   (lambda (value _context)
+                     (poo-flow-classification-evidence 'named value #t '() 'other-context)))))
+        (check-exception (poo-flow-contract-admit wrong-source candidate 'context) TypeError?)
+        (check-exception (poo-flow-contract-admit wrong-context candidate 'context) TypeError?)))
+    (poo-flow-test-case "classification labels do not replace the actual admission descriptor"
+      (let* ((prototype (.ref NamedContract 'proto))
+             (candidate (.o (:: @ prototype) name: 'flow))
+             (derived
               (.cc NamedContract '.classify
                    (lambda (value context)
-                     (poo-flow-classification-evidence 'other value #t '() context)))))
-        (check-exception (poo-flow-contract-admit wrong-source candidate 'context) TypeError?)
-        (check-exception (poo-flow-contract-admit wrong-identity candidate 'context) TypeError?)))
+                     (poo-flow-classification-evidence 'other value #t '() context))))
+             (evidence (poo-flow-contract-admit derived candidate 'context)))
+        (check-equal? (.ref evidence 'accepted?) #t)
+        (check-equal? (eq? (.ref evidence 'admission-contract) derived) #t)
+        (check-equal? (eq? (.ref evidence 'admission-contract) NamedContract) #f)
+        (check-equal? (.ref evidence 'contract-identity) 'named)
+        (check-equal? (.ref (.ref evidence 'classification) 'type-identity) 'other)
+        (check-equal? (eq? (.ref evidence 'candidate) candidate) #t)
+        (check-equal? (.ref evidence 'context) 'context)))
     (poo-flow-test-case "incomplete evidence cannot pass admission or serialization"
       (let (partial (.o kind: 'poo-flow.type.classification-evidence
                         accepted?: #t diagnostics: '()))

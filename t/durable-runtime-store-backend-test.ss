@@ -12,8 +12,8 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o object?)
-        :poo-flow/modules/workflow/control-plane/runtime-protocol
-        :poo-flow/modules/workflow/control-plane/runtime-adapter
+        :core/modules/funflow/control-plane/runtime-protocol
+        :core/modules/funflow/control-plane/runtime-adapter
         :poo-flow/modules/ai-agentic-context/features/memory/durable/policy
         :poo-flow/modules/ai-agentic-context/features/memory/durable/store
         :poo-flow/modules/ai-agentic-context/features/memory/durable/store-backend)

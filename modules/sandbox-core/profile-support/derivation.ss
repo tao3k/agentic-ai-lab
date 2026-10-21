@@ -8,7 +8,7 @@
 (import (only-in :std/list/list any fold)
         :gerbil/core
         (only-in :clan/poo/object .def .o .ref .slot? object?)
-        :core/extension-graph/interface
+        :core/graph/interface
         :core/module-system/schema/interface
         :poo-flow/modules/sandbox-core/shared-object
         :poo-flow/modules/agent-sandbox/config
@@ -208,4 +208,4 @@
 
 ;;; Slot reads are strict after merge because missing slots indicate a broken
 ;;; backend object contract, not optional user configuration.
-;; : (-> PooModuleExtensionNode Symbol Value)
+;; : (-> PooFlowGraph Symbol Value)

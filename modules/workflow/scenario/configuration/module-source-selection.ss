@@ -5,7 +5,7 @@
 
 ;;; Boundary: resolve source-neutral POO selections against an ordered load path.
 
-(import :poo-flow/modules/workflow/control-plane/failure
+(import :core/modules/funflow/control-plane/failure
         :core/module-system/source/collection
         (only-in :poo-flow/modules/module-authoring/module-source-collection make-poo-flow-contribution-module-load-path poo-flow-default-module-load-path poo-flow-maintained-module-source)
         (only-in :core/module-system/source/objects

@@ -17,7 +17,7 @@
 ;;; Boundary: callers own the item constructor and count.
 ;; : (-> Integer (-> Integer Object) [Object])
 (import :clan/poo/object
-        :poo-flow/modules/workflow/control-plane/roles)
+        :core/modules/funflow/control-plane/roles)
 
 (export run-domain-case-instance-overlay-benchmark
         domain-case-instance-overlay-benchmark->alist)

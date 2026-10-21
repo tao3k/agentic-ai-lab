@@ -14,6 +14,7 @@ class QuintCase:
     invariant: str = "safety"
     negative: bool = False
     temporal: str | None = None
+    source_directory: str = "packages/proofs/quint"
 
 GROUPS = {
     "search-inputs": [QuintCase("SearchInputs_none"),
@@ -41,7 +42,7 @@ GROUPS = {
         QuintCase("SearchAttempt_ignoreRetired", "NoRetiredAdmission", True),
         QuintCase("SearchAttempt_cancelAny", "NoStaleCancellation", True)],
     "governance": [QuintCase("GovernanceCore")],
-    "query": [QuintCase("NativeSemanticQuery")],
+    "query": [QuintCase("NativeSemanticQuery", source_directory="core/proofs/quint")],
     "healthcare": [QuintCase("HealthcarePrescriptionCausality")],
     "healthcare-ai": [QuintCase("HealthcareAIAssistedPrescriptionCausality")],
     "healthcare-migration": [QuintCase("HealthcareStandardMigration")],

@@ -7,7 +7,7 @@
 
 (import :gerbil/core
         (only-in :clan/poo/object .def .o .ref .slot? object?)
-        :core/extension-graph/interface
+        :core/graph/interface
         :core/module-system/schema/interface
         :poo-flow/modules/sandbox-core/shared-object
         :poo-flow/modules/agent-sandbox/config

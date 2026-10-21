@@ -9,7 +9,7 @@
 ;;; Responsibility: publish L1 report receipts with no write effects.
 ;;; Responsibility: publish runtime discovery manifests for Marlin.
 ;;; Import boundary: this module may depend on =:poo-flow/modules/loop-engine/control/governor=.
-;;; Import boundary: this module may depend on =:poo-flow/modules/workflow/control-plane/failure=.
+;;; Import boundary: this module may depend on =:core/modules/funflow/control-plane/failure=.
 ;;; Import boundary: the core governor must not import Marlin wrappers.
 ;;; Export boundary: =:poo-flow/modules/loop-engine/control/agent= re-exports this owner for callers.
 ;;; Runtime boundary: this module never polls or schedules loops.
@@ -18,7 +18,7 @@
 ;;; Parser evidence: owner-items expose schemas and projection functions here.
 ;;; Policy evidence: tests assert schemas, envelopes, receipts, and manifests.
 
-(import :poo-flow/modules/workflow/control-plane/failure
+(import :core/modules/funflow/control-plane/failure
         (only-in :poo-flow/modules/loop-engine/core
                  +poo-flow-user-loop-engine-handoff-contracts+
                  +poo-flow-user-loop-engine-receipt-contracts+

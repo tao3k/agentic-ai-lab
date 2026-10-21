@@ -25,12 +25,6 @@
          "module-system-lazy-loader-test.ss"
          "module-system-observability-test.ss")))
 
-;; This suite deliberately drives a non-returning lazy POO slot and a bounded
-;; retained-allocation Case. Its heap budget must be independent of earlier
-;; files, while ordinary tests still share their native worker processes.
-(def +poo-flow-isolated-test-selectors+
-  (list (testing-test-selector 'contains "observability-framework-test.ss")))
-
 (def +poo-flow-serial-testing-interface+
   (foldl
     (lambda (selector testing)
@@ -61,12 +55,12 @@
     +poo-flow-serial-test-selectors+))
 
 (def +poo-flow-project-testing-interface+
-  (foldl
-   (lambda (selector testing)
-     (testing-interface-map-profile
-      testing selector +testing-process-isolation-profile+))
+  ;; A repository-sized batch retains all imported test modules in one VM.
+  ;; Keep each file within the original 1 GiB worker allowance; ASP still
+  ;; owns discovery, bounded concurrency, serial-resource policy and gxtest.
+  (testing-interface-add-profile
    +poo-flow-serial-testing-interface+
-   +poo-flow-isolated-test-selectors+))
+   +testing-process-isolation-profile+))
 
 (init-profiled-test-environment! +poo-flow-project-testing-interface+)
 

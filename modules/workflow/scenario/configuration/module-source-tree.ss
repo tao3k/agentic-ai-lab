@@ -7,7 +7,7 @@
 ;;; Invariant: static entrypoint metadata lives in module-registry and stays loader-free.
 
 (import (only-in :clan/poo/object .o)
-        :poo-flow/modules/workflow/control-plane/failure
+        :core/modules/funflow/control-plane/failure
         (only-in :poo-flow/modules/module-authoring/module-interface
                  poo-flow-module-interface)
         (only-in :core/module-system/authoring/admission

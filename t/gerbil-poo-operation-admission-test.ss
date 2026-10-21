@@ -117,14 +117,17 @@
        ;; A further mix uses the prototype, never the mutated instance cache.
        (check-equal? (.get (.mix first-session) state) 'created)))
 
-   (poo-flow-test-case "makes prototype surgery and instance invalidation explicit"
+   (poo-flow-test-case "invalidates derived caches after prototype surgery"
      (.def evolving-scenario
        (status ? 'draft)
        (version 1))
      (check-equal? (.get evolving-scenario version) 1)
-     (.putslot! evolving-scenario 'version ($constant-slot-spec 2))
-     ;; The already-instantiated value stays cached until deliberately reset.
-     (check-equal? (.get evolving-scenario version) 1)
+     (let ((derived (.mix evolving-scenario)))
+       (check-equal? (.get derived version) 1)
+       (.putslot! evolving-scenario 'version ($constant-slot-spec 2))
+       ;; Supported specification writes invalidate the source and descendants.
+       (check-equal? (.get evolving-scenario version) 2)
+       (check-equal? (.get derived version) 2))
      (uninstantiate-object! evolving-scenario)
      (check-equal? (.get evolving-scenario version) 2)
      (uninstantiate-object! evolving-scenario)

@@ -7,7 +7,7 @@
 ;;; Invariant: projection returns inspectable Scheme values, not runtime handles.
 
 (import (only-in :clan/poo/object .@ .o .ref)
-        :poo-flow/modules/workflow/control-plane/agent-harness-vocabulary
+        :core/modules/funflow/control-plane/agent-harness-vocabulary
         :poo-flow/modules/module-authoring/module-interface
         :poo-flow/modules/module-authoring/module-descriptor
         :core/module-system/funs

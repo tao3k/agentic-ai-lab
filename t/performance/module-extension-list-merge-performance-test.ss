@@ -15,13 +15,13 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :core/extension-graph/interface
-                 poo-flow-module-extension-contribution
-                 poo-flow-module-extension-resolve
-                 poo-flow-module-extension-node
-                 poo-flow-module-extension-node-slots
-                 poo-flow-module-extension-result-root
-                 poo-flow-module-extension-slot-append))
+        (only-in :core/graph/interface
+                 poo-flow-graph-contribution
+                 poo-flow-graph-resolve
+                 poo-flow-graph-rooted
+                 poo-flow-graph-root-payload
+                 poo-flow-graph-result-root
+                 poo-flow-graph-slot-append))
 
 (export module-extension-list-merge-performance-test)
 
@@ -33,9 +33,9 @@
 (def module-extension-list-merge-fixture
   (call-with-input-file module-extension-list-merge-fixture-path read))
 
-;; : PooModuleExtensionNode
+;; : PooFlowGraph
 (def module-extension-list-merge-root
-  (poo-flow-module-extension-node
+  (poo-flow-graph-rooted
    'extension.root
    '((capabilities . ()))
    '()))
@@ -58,12 +58,12 @@
    (lambda (index)
      (+ start (* index step)))))
 
-;; : (-> Integer Integer Integer [PooModuleExtensionOperation])
+;; : (-> Integer Integer Integer [PooGraphOperation])
 (def (module-extension-list-merge-operations batch-count batch-size overlap-step)
   (poo-flow-performance-build-list
    batch-count
    (lambda (batch-index)
-     (poo-flow-module-extension-slot-append
+     (poo-flow-graph-slot-append
       'capabilities
       (module-extension-list-merge-batch
        (* batch-index overlap-step)
@@ -76,17 +76,17 @@
     (car values)
     (module-extension-list-merge-last (cdr values))))
 
-;; : (-> [PooModuleExtensionOperation] Alist)
+;; : (-> [PooGraphOperation] Alist)
 (def (module-extension-list-merge-summary/from-operations operations)
   (let* ((result
-          (poo-flow-module-extension-resolve
+          (poo-flow-graph-resolve
            module-extension-list-merge-root
            (list
-            (poo-flow-module-extension-contribution
+            (poo-flow-graph-contribution
              'extension.root
              operations))))
-         (node (poo-flow-module-extension-result-root result))
-         (slots (poo-flow-module-extension-node-slots node))
+         (node (poo-flow-graph-result-root result))
+         (slots (poo-flow-graph-root-payload node))
          (capabilities
           (module-extension-list-merge-ref slots 'capabilities)))
     (list (cons 'capability-count (length capabilities))

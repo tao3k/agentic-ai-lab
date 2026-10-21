@@ -7,13 +7,13 @@
 
 (import (only-in :clan/poo/object .ref)
         (only-in :std/list/list delete-duplicates/hash)
-        :poo-flow/modules/workflow/types
-        :poo-flow/modules/workflow/objects
-        :poo-flow/modules/workflow/cicd-funs
-        :poo-flow/modules/workflow/cicd-projection-syntax
+        :core/modules/funflow/check-types
+        :core/modules/funflow/check-objects
+        :core/modules/funflow/check-funs
+        :core/modules/funflow/projection-syntax
         :poo-flow/modules/workflow/cicd-sandbox
         :poo-flow/modules/workflow/cicd-runtime-support/checks
-        :poo-flow/modules/workflow/cicd-runtime-support/graph)
+        :core/modules/funflow/dependency-graph)
 
 (export poo-flow-cicd-pipeline-run-step-status
         poo-flow-cicd-pipeline-run-step-diagnostics

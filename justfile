@@ -4,7 +4,8 @@
 
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
-export GERBIL_BUILD_CORES := env_var_or_default("GERBIL_BUILD_CORES", `getconf _NPROCESSORS_ONLN`)
+# Keep the default cold build within a bounded compiler memory budget.
+export GERBIL_BUILD_CORES := env_var_or_default("GERBIL_BUILD_CORES", "2")
 
 # Test processes are bounded before any Scheme profile module can load. The
 # ASP POO Testing profile remains the policy and receipt owner inside the
@@ -239,9 +240,34 @@ toolchain:
 # Run the package's single native Scheme test entrypoint.
 [group('test')]
 test:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # A maintenance sleep consumes every real Case/runner deadline. Keep the
+    # host awake for this parent only; -w releases assertions when it exits.
+    if [[ "$(uname -s)" == Darwin ]]; then
+        /usr/bin/caffeinate -is -w "$$" &
+    fi
     just test-core
-    @echo "[poo-flow-test-runtime] maxHeap={{ gerbil_test_max_heap }} debug={{ gerbil_test_debug }} scope=worker-process"
-    gerbil {{ gerbil_test_runtime_options }} env ./unit-tests.ss
+    just test-root
+
+# Keep the root package's native entry independently callable during repairs.
+[group('test')]
+test-root:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    log="$(mktemp)"
+    trap 'rm -f "$log"' EXIT
+    echo "[poo-flow-test-runtime] maxHeap={{ gerbil_test_max_heap }} debug={{ gerbil_test_debug }} scope=worker-process"
+    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gerbil {{ gerbil_test_runtime_options }} env gxi {{ gerbil_test_runtime_options }} ./unit-tests.ss 2>&1 | tee "$log"
+    if grep -E 'ERROR (MODULE|CHECK|CASE|HARNESS)|Heap overflow|Stack overflow' "$log" >/dev/null; then exit 1; fi
+    count="$(sed -n 's/^\[asp-testing\] phase=discovery-complete .* fileCount=\([0-9][0-9]*\)$/\1/p' "$log" | head -1)"
+    test -n "$count"
+    grep -F -x "[asp-testing] phase=all-batches-complete fileCount=$count" "$log" >/dev/null
+    while IFS= read -r file; do
+      grep -F -x "MODULE-OK $file" "$log" >/dev/null
+    done < <(sed -n 's/^\[asp-testing\] phase=batch-start fileCount=1 firstFile=//p' "$log")
+    grep -F 'HARNESS-OK' "$log" >/dev/null
+    grep -x 'OK' "$log" >/dev/null
 
 # Keep ASP's per-phase test receipts and add process wall/user/system timing.
 [group('test')]
@@ -266,9 +292,9 @@ test-file path:
     test -f "{{ path }}"
     log="$(mktemp)"
     trap 'rm -f "$log"' EXIT
-    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} env gxtest "{{ path }}" 2>&1 | tee "$log"
-    if grep -E 'ERROR (CHECK|CASE|HARNESS)|Heap overflow|Stack overflow' "$log" >/dev/null; then exit 1; fi
-    grep -F 'MODULE-OK {{ path }}' "$log" >/dev/null
+    GERBIL_PATH="{{ poo_flow_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxtest {{ gerbil_test_runtime_options }} "{{ path }}" 2>&1 | tee "$log"
+    if grep -E 'ERROR (MODULE|CHECK|CASE|HARNESS)|Heap overflow|Stack overflow' "$log" >/dev/null; then exit 1; fi
+    grep -F -x 'MODULE-OK {{ path }}' "$log" >/dev/null
     grep -F 'HARNESS-OK' "$log" >/dev/null
     grep -x 'OK' "$log" >/dev/null
 
@@ -506,7 +532,7 @@ check-governance-lean:
 # traversing the repository-wide Lean aggregate.
 [group('check')]
 check-native-semantic-query-lean:
-    cd "{{ lean_proof_dir }}" && lake build PooFlowCoreProof.PooC4.NativeSemanticQueryModel
+    cd "{{ lean_proof_dir }}" && lake build PooFlowCoreProof.ModuleSystem.Schema.Query
 
 
 [group('check')]
@@ -959,3 +985,69 @@ check-assessment-quint: prepare-quint
 [group('check')]
 check-assessment-lean:
     cd "{{ lean_proof_dir }}" && lake build PooFlowModuleEvidenceAssessmentProof
+
+# Qualify the default interpreter dispatcher independently of the AOT tool.
+[group('test')]
+test-gerbil-runtime:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    log="$(mktemp)"
+    trap 'rm -f "$log"' EXIT
+    timeout --signal=TERM --kill-after=5s 90s gerbil {{ gerbil_test_runtime_options }} test t/gerbil-runtime-import-test.ss 2>&1 | tee "$log"
+    if grep -E 'ERROR (CHECK|CASE|HARNESS)|Heap overflow|Stack overflow' "$log" >/dev/null; then exit 1; fi
+    grep -F 'MODULE-OK t/gerbil-runtime-import-test.ss' "$log" >/dev/null
+    grep -F 'HARNESS-OK' "$log" >/dev/null
+    grep -x 'OK' "$log" >/dev/null
+
+# Build the installed upstream gxtest source without whole-program elimination:
+# dynamic eval requires runtime globals that cannot be inferred statically.
+[group('build')]
+build-gerbil-test-tool output:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    tool_home="$(gerbil env bash -c 'printf %s "$GERBIL_HOME"')"
+    mkdir -p "{{ output }}/source" "{{ output }}/lib"
+    cp "$tool_home/src/tools/gxtest.ss" "{{ output }}/source/gxtest.ss"
+    cp "$tool_home/src/tools/build-aot.ss" "{{ output }}/source/build-aot.ss"
+    cp "$tool_home/src/tools/env.ss" "{{ output }}/source/env.ss"
+    patch --batch -d "{{ output }}/source" -p1 < tools/ci/patches/gerbil-gxtest-runtime-init.patch
+    printf '(package: gerbil/tools)\n' > "{{ output }}/source/gerbil.pkg"
+    export GERBIL_LOADPATH="{{ output }}/lib${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}"
+    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 180s gerbil compile -s -d "{{ output }}/lib" "{{ output }}/source/env.ss"
+    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 180s gerbil compile -exe -s -d "{{ output }}/lib" -o "{{ output }}/gxtest" "{{ output }}/source/gxtest.ss"
+
+[group('test')]
+test-gerbil-test-tool executable path="t/gerbil-runtime-import-test.ss":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    log="$(mktemp)"
+    trap 'rm -f "$log"' EXIT
+    tool_home="$(gerbil env bash -c 'printf %s "$GERBIL_HOME"')"
+    export GERBIL_HOME="$tool_home"
+    export GAMBOPT="~~=$tool_home,~~bin=$tool_home/bin,~~lib=$tool_home/lib"
+    timeout --signal=TERM --kill-after=5s 90s "{{ executable }}" {{ gerbil_test_runtime_options }} "{{ path }}" 2>&1 | tee "$log"
+    if grep -E 'ERROR (CHECK|CASE|HARNESS)|Heap overflow|Stack overflow' "$log" >/dev/null; then exit 1; fi
+    grep -F 'MODULE-OK {{ path }}' "$log" >/dev/null
+    grep -F 'HARNESS-OK' "$log" >/dev/null
+    grep -x 'OK' "$log" >/dev/null
+
+# Rebuild the pinned POO dependency after a native compiler/runtime repair.
+# Preserve source and old AOT artifacts; never uninstall the package checkout.
+[group('build')]
+rebuild-poo-native backup:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    package_root="{{ poo_flow_gerbil_path }}/pkg/github.com/tao3k/gerbil-poo"
+    test -f "$package_root/build.ss"
+    test ! -e "{{ backup }}"
+    tar -czf "{{ backup }}" -C "{{ poo_flow_library_path }}" clan/poo
+    cd "$package_root"
+    export GERBIL_PATH="{{ poo_flow_gerbil_path }}"
+    export GERBIL_LOADPATH="{{ poo_flow_library_path }}"
+    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 60s gerbil clean
+    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gerbil build
+
+# Core owns one Lean project; LeanPoo is its pinned dependency.
+[group('proof')]
+check-core-lean:
+    cd "{{ justfile_directory() }}/core" && just proofs-lean

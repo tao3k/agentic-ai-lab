@@ -17,8 +17,8 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/modules/workflow/control-plane/api
-        :poo-flow/modules/workflow/store)
+        :core/modules/funflow/control-plane/api
+        :core/modules/funflow/store)
 
 ;;; This suite keeps task-family routing policy executable without invoking
 ;;; runtime adapters, so descriptor regressions fail at the control-plane edge.

@@ -16,9 +16,9 @@
         "../support/poo-performance-fixtures"
         "../support/poo-performance"
         :core/object-family/indexed
-        :poo-flow/modules/workflow/control-plane/runtime-protocol
+        :core/modules/funflow/control-plane/runtime-protocol
         :core/module-system/schema/interface
-        :core/extension-graph/interface
+        :core/graph/interface
         :core/module-system/schema/validation)
 
 (export contracts-test)

@@ -15,7 +15,7 @@
                  poo-flow-cicd-check-map->receipts
                  poo-flow-cicd-check-map->runtime-manifest-readiness
                  poo-flow-cicd-check-map->runtime-command-manifests)
-        (only-in :poo-flow/modules/workflow/cicd-runtime-support/graph
+        (only-in :core/modules/funflow/dependency-graph
                  poo-flow-cicd-check-map->dependency-graph)
         (only-in :poo-flow/modules/workflow/cicd-runtime-support/pipeline
                  poo-flow-cicd-check->pipeline-run-step

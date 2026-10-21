@@ -9,7 +9,7 @@
 (def PooFlowSourcePolicy
   (.o (:: @ SourceInspectionPolicy.)
       aggregate-imports:
-      '(:poo-flow/modules/workflow/control-plane/api
+      '(:core/modules/funflow/control-plane/api
         :poo-flow/modules/workflow/scenario/configuration/interface
         :core/feature-system/interface)
       package-prefix: ":poo-flow/"

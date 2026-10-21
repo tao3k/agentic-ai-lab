@@ -18,7 +18,7 @@
         "../support/poo-performance-object-scenarios"
         "../support/poo-performance"
         :core/module-system/schema/interface
-        :core/extension-graph/interface
+        :core/graph/interface
         :core/module-system/schema/validation)
 
 (export objects-test)
@@ -150,7 +150,7 @@
                  '())))
           (check-equal? (length default-slots) 320)
           (check-equal? (length override-slots) 1200)
-          (check-equal? (length (poo-flow-module-extension-node-slots node))
+          (check-equal? (length (poo-flow-graph-root-payload node))
                         320)
           (check-equal? (benchmark-receipt-pass? receipt) #t))))
 
@@ -196,9 +196,9 @@
                     contributions)))))
           (check-equal? (length contributions) (* object-count field-count))
           (check-equal?
-           (poo-flow-module-field-resolution-result-stable? result)
+           (poo-flow-module-field-resolution-result-applied? result)
            #t)
-          (check-equal? (poo-flow-module-field-resolution-result-iterations result)
+          (check-equal? (poo-flow-module-field-resolution-result-changed-passes result)
                         1)
           (check-equal? (benchmark-receipt-pass? receipt) #t))))
 

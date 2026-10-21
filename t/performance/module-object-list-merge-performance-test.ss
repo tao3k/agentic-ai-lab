@@ -15,8 +15,8 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :core/extension-graph/interface
-                 poo-flow-module-extension-node-slots)
+        (only-in :core/graph/interface
+                 poo-flow-graph-root-payload)
         (only-in :core/module-system/schema/interface
                  PooFlowModuleListType
                  poo-flow-module-field-resolution-result-root
@@ -49,7 +49,7 @@
    (list module-object-list-merge-field)
    '()))
 
-;; : PooModuleExtensionNode
+;; : PooFlowGraph
 (def module-object-list-merge-objects-node
   (poo-flow-module-objects-node (list module-object-list-merge-object)))
 
@@ -103,7 +103,7 @@
            contributions))
          (root (poo-flow-module-field-resolution-result-root result))
          (node (poo-flow-module-objects-ref root 'large.module.object))
-         (slots (poo-flow-module-extension-node-slots node))
+         (slots (poo-flow-graph-root-payload node))
          (capabilities
           (module-object-list-merge-ref slots 'capabilities)))
     (list (cons 'capability-count (length capabilities))

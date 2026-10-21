@@ -26,7 +26,7 @@
                  workdir)
         (only-in :poo-flow/modules/agent-sandbox/config
                  poo-flow-sandbox-profile->profile)
-        (only-in :poo-flow/modules/nono-sandbox/c-binding
+        (only-in :poo-flow/modules/nono-sandbox/c-binding-runtime
                  +nono-c-binding-live-test-receipt-schema+
                  nono-c-binding-dry-run
                  nono-c-binding-live-test))

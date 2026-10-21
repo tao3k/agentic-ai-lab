@@ -8,7 +8,7 @@
 (import (only-in :core/observability/testing-case poo-flow-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/modules/workflow/control-plane/plan
+        :core/modules/funflow/control-plane/graph
         (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
         :core/module-system/authoring/roles
         (only-in :poo-flow/modules/module-authoring/semantic-module UserConfigSourceRole. poo-flow-user-root-module-authoring-profile)

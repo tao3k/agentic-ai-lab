@@ -10,7 +10,8 @@
         :core/module-system/source/imports
         :core/module-system/source/objects
         (only-in :core/module-system/source/collection poo-flow-module-source-collection-interfaces)
-        (only-in :poo-flow/modules/module-authoring/module-source-collection poo-flow-maintained-module-source))
+        (only-in :poo-flow/modules/module-authoring/module-source-collection
+                 poo-flow-maintained-module-source poo-flow-maintained-integration-directories))
 
 (export poo-flow-module-tree-source-refs
         poo-flow-modules-root
@@ -77,7 +78,7 @@
 
 ;; : (-> Unit [PooModuleSourceRef])
 (def (poo-flow-module-system-source-refs)
-  (list
+  (append (list
    (poo-flow-module-system-source
     'profile-config "modules/workflow/scenario/configuration/profile-config.ss")
    (poo-flow-module-system-source
@@ -85,7 +86,12 @@
    (poo-flow-module-system-source
     'root-profile "modules/workflow/scenario/configuration/root-profile.ss")
    (poo-flow-module-system-source
-    'declaration-case "modules/workflow/scenario/configuration/declaration-case.ss")))
+    'declaration-case "modules/workflow/scenario/configuration/declaration-case.ss"))
+    ;; These owned front ends are importable entries, not four-role Modules.
+    (map (lambda (name)
+           (poo-flow-module-system-source 'interface
+             (string-append "modules/" name "/interface.ss")))
+         poo-flow-maintained-integration-directories)))
 
 ;;; Boundary: module registry member predicate is the policy-visible edge for
 ;;; module-system behavior, keeping validation, lookup, or projection

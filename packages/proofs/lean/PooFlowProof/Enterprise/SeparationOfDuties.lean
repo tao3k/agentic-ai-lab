@@ -2,43 +2,34 @@
 --
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-import PooFlowCoreProof.PooC4.GovernanceDecisionAuthority
+import PooFlowCoreProof.Admission.Decision
 
 namespace PooFlowProof.Enterprise.SeparationOfDuties
 
-open PooFlowProof.PooC4
-
-structure ApprovalDiscipline (Principal : Type) where
-  quorum : GovernanceDecisionAuthority.QuorumEvidence Principal
+structure ApprovalDiscipline (Principal : Type) [DecidableEq Principal] where
+  quorum : PooFlowCoreProof.Admission.Decision.QuorumEvidence Principal
+  quorumAdmitted : PooFlowCoreProof.Admission.Decision.quorumSatisfied quorum
   separation :
-    GovernanceDecisionAuthority.SeparationOfDuties Principal
-
-theorem approvingPrincipalsAreDistinct
-    {Principal : Type}
-    (discipline : ApprovalDiscipline Principal) :
-    discipline.quorum.approvingPrincipals.Nodup :=
-  GovernanceDecisionAuthority.quorumCarriesDistinctPrincipals
-    discipline.quorum
+    PooFlowCoreProof.Admission.Decision.SeparationOfDuties Principal
 
 theorem quorumThresholdIsSatisfied
-    {Principal : Type}
+    {Principal : Type} [DecidableEq Principal]
     (discipline : ApprovalDiscipline Principal) :
-    discipline.quorum.thresholdSatisfied :=
-  GovernanceDecisionAuthority.quorumCarriesThresholdEvidence
-    discipline.quorum
+    discipline.quorum.threshold ≤ discipline.quorum.approvingPrincipals.eraseDups.length :=
+  discipline.quorumAdmitted
 
 theorem proposerCannotApprove
-    {Principal : Type}
+    {Principal : Type} [DecidableEq Principal]
     (discipline : ApprovalDiscipline Principal) :
     discipline.separation.proposer ≠ discipline.separation.approver :=
-  GovernanceDecisionAuthority.proposerAndApproverAreSeparated
+  PooFlowCoreProof.Admission.Decision.proposerAndApproverAreSeparated
     discipline.separation
 
 theorem approverCannotExecute
-    {Principal : Type}
+    {Principal : Type} [DecidableEq Principal]
     (discipline : ApprovalDiscipline Principal) :
     discipline.separation.approver ≠ discipline.separation.executor :=
-  GovernanceDecisionAuthority.approverAndExecutorAreSeparated
+  PooFlowCoreProof.Admission.Decision.approverAndExecutorAreSeparated
     discipline.separation
 
 end PooFlowProof.Enterprise.SeparationOfDuties

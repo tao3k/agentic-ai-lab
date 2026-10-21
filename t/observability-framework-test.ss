@@ -6,7 +6,7 @@
 ;;; Real Module admission -> POO Flow observation -> explanation -> gerbil-poo debug.
 (import (only-in :std/test test-suite check-equal? check-exception)
         (only-in :std/test/base current-test-case)
-        (only-in :clan/poo/object .o .cc .ref .slot? .call)
+        (only-in :clan/poo/object .o .cc .ref .slot? .call CyclicSlot? CyclicSlot-path)
         (only-in :clan/poo/mop element? validate TypeError?)
         :core/observability/debug
         (only-in :poo-flow/testing-api
@@ -506,7 +506,7 @@
         (check-equal? (framework-contains? output "slot-resolution-raised") #t)
         (check-equal? (framework-contains? output canary) #f)))
 
-    (poo-flow-test-case "slot guard rejects a lazy self reference before heap growth"
+    (poo-flow-test-case "slot guard preserves the native finite lazy-cycle failure"
       (let* ((policy (poo-flow-debug-slot-policy 'slot-cycle 4))
              (port (open-output-string))
              (source (.o project-id: project-id))
@@ -516,19 +516,17 @@
              (captured
               (with-exception-catcher
                (lambda (failure) failure)
-               (lambda () (.ref guarded 'project-id))))
-             (receipt (PooFlowDebugSlotAnomaly-receipt captured)))
-        (check-equal? (PooFlowDebugSlotAnomaly? captured) #t)
-        (check-equal? (.ref receipt 'receiver) 'configuration)
-        (check-equal? (.ref receipt 'slot) 'project-id)
-        (check-equal? (.ref receipt 'depth) 1)
-        (check-equal? (.ref receipt 'active-path)
-                      '((configuration . project-id)))
-        (check-equal? (.ref receipt 'reason) 'recursive-slot-resolution)
+               (lambda () (.ref guarded 'project-id)))))
+        (check-equal? (CyclicSlot? captured) #t)
+        (check-equal? (map cdr (CyclicSlot-path captured))
+                      '(project-id project-id))
+        (check-equal? (andmap (lambda (edge) (eq? (car edge) guarded))
+                              (CyclicSlot-path captured)) #t)
         (check-equal?
          (framework-contains? (get-output-string port)
-                              "recursive-slot-resolution")
-         #t)))
+                              "slot-resolution-raised")
+         #t)
+        (check-equal? (framework-contains? (get-output-string port) "CyclicSlot") #f)))
 
     (poo-flow-test-case "equal slot names on distinct receivers are not cycles"
       (let* ((policy (poo-flow-debug-slot-policy 'receiver-identity 4))
@@ -647,7 +645,7 @@
          (.ref (PooFlowDebugMemoryAnomaly-receipt captured) 'reason)
          'heap-limit-exceeded)))
 
-    (poo-flow-test-case "native memory monitor contains a lazy POO self-slot cycle"
+    (poo-flow-test-case "native memory monitor propagates finite POO cycle detection"
       (let* ((initial (poo-flow-debug-memory-snapshot 'poo-self-slot-cycle))
              (policy
               (poo-flow-debug-memory-policy
@@ -655,6 +653,7 @@
                heap-limit-bytes: (+ (.ref initial 'heap-size-bytes) 67108864)
                live-growth-limit-bytes: 8388608
                sample-interval-milliseconds: 1))
+             (cycle (.o project-id: project-id))
              (captured #f))
         (with-catch
          (lambda (failure) (set! captured failure))
@@ -663,15 +662,12 @@
             policy
             'poo-self-slot-cycle
             (lambda ()
-              (let (cycle (.o project-id: project-id))
-                (.ref cycle 'project-id))))))
-        (check-equal? (PooFlowDebugMemoryAnomaly? captured) #t)
-        (check-equal?
-         (.ref (PooFlowDebugMemoryAnomaly-receipt captured) 'accepted?)
-         #f)
-        (check-equal?
-         (.ref (PooFlowDebugMemoryAnomaly-receipt captured) 'phase)
-         'poo-self-slot-cycle)))
+              (.ref cycle 'project-id)))))
+        (check-equal? (CyclicSlot? captured) #t)
+        (check-equal? (map cdr (CyclicSlot-path captured))
+                      '(project-id project-id))
+        (check-equal? (andmap (lambda (edge) (eq? (car edge) cycle))
+                              (CyclicSlot-path captured)) #t)))
 
     (poo-flow-test-case "fail-closed checkpoint preserves its typed receipt"
       (let* ((policy

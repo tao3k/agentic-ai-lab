@@ -14,10 +14,10 @@
 ;;; Run-config lowering is the only place this owner touches core config values.
 ;;; Parser policy should treat this file as the resolver/activation owner.
 
-(import :poo-flow/modules/workflow/control-plane/failure
-        :poo-flow/modules/workflow/control-plane/task
-        :poo-flow/modules/workflow/control-plane/flow
-        :poo-flow/modules/workflow/control-plane/config
+(import :core/modules/funflow/control-plane/failure
+        :core/modules/funflow/control-plane/task
+        :core/modules/funflow/control-plane/flow
+        :core/modules/funflow/control-plane/config
         :core/module-system/source/imports
         :core/module-system/source/objects
         :poo-flow/modules/module-authoring/module-descriptor

@@ -11,6 +11,7 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
+        (only-in :core/modules/funflow/config-prototypes funflow-check funflow-pipeline)
         :core/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/presentation-config
         :poo-flow/modules/workflow/scenario/configuration/init-syntax

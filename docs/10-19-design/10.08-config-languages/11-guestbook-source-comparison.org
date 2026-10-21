@@ -105,7 +105,7 @@ already maintained Profile.
 
 The proposed direct Contract parent, e.g. (GuestbookFrontend @
 GuestbookFrontendContract), would hide proto lookup but requires the declaration
-adapter described in [[file:../../../core/design/config-languages/08-contract-directed-service-scenarios.org][module 08]]. The native forms above do not themselves preserve a
+adapter described in [[file:../../../core/docs/10-19-design/11-configuration-languages/11.09-contract-directed-service-scenarios.org][module 08]]. The native forms above do not themselves preserve a
 published Contract association or perform admission. Publication association,
 recursive domain admission and a Kubernetes consumer remain additional work.
 No user should hand-maintain per-derivative association records.
@@ -144,8 +144,8 @@ Scenario obligations, output resource validation and the three evolution variant
 POO Flow already implements JSON Schema -> Scheme Contract artifact generation,
 object-contract projection and candidate validation. Calling this a missing
 Contract system would be incorrect. The executable owners are
-[[file:../../../core/json-schema/json-schema-receipt.ss][json-schema-receipt.ss]] and [[file:../../../core/json-schema/json-schema-validate.ss][json-schema-validate.ss]]. The existing
-[[file:../../../modules/funflow/github-ci-contract.ss][GitHub CI consumer]] uses these public entry points:
+[[file:../../../core/modules/json-schema/json-schema-receipt.ss][json-schema-receipt.ss]] and [[file:../../../core/modules/json-schema/json-schema-validate.ss][json-schema-validate.ss]]. The existing
+[[file:../../../core/modules/funflow/github-ci-contract.ss][GitHub CI consumer]] uses these public entry points:
 
 #+begin_src scheme
 (def poo-flow-funflow-github-ci-contract-artifact
@@ -401,7 +401,7 @@ Scenario and generate all selected resources. It must use each final Profile for
 both its workload and Service, then validate the assembled graph. It must not
 cache parent resources as a constant slot and splice child changes into them.
 Cross-object references need qualified identity and evidence, not string equality
-alone. This refines the unexecuted [[file:../../../core/design/config-languages/09-application-scenario-admission.org][application admission design]]; it is not an
+alone. This refines the unexecuted [[file:../../../core/docs/10-19-design/11-configuration-languages/11.10-application-scenario-admission.org][application admission design]]; it is not an
 implemented Guestbook projector or a claim that module 06's narrow Server
 projector supports these Redis workloads.
 

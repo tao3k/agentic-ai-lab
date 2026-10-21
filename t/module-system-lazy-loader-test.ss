@@ -21,17 +21,17 @@
                  test-suite)
         "./support/performance"
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-p95-elapsed-ms)
-        (only-in :poo-flow/modules/workflow/control-plane/failure
+        (only-in :core/modules/funflow/control-plane/failure
                  execution-failure?
                  execution-failure-code)
         (only-in :core/module-system/selection/syntax poo-flow-modules!)
         :core/module-system/source/imports
         :core/module-system/source/objects
         :poo-flow/modules/module-authoring/module-descriptor
-        :core/extension-graph/interface
+        :core/graph/interface
         :core/module-system/loader/objects
         :core/module-system/source/collection
-        (only-in :poo-flow/modules/module-authoring/module-source-collection make-poo-flow-contribution-module-load-path poo-flow-default-module-load-path poo-flow-maintained-module-source)
+        (only-in :poo-flow/modules/module-authoring/module-source-collection make-poo-flow-contribution-module-load-path poo-flow-default-module-load-path poo-flow-maintained-module-source poo-flow-maintained-integration-directories)
         :poo-flow/modules/building/official-contributions
         :poo-flow/modules/workflow/scenario/configuration/module-source-selection
         :poo-flow/modules/workflow/scenario/configuration/module-source-tree)
@@ -238,18 +238,35 @@
                (poo-flow-module-source-collection-interfaces poo-flow-maintained-module-source))
               (length (poo-flow-module-system-source-refs))))
           (check-equal? (car source-values)
-                        "modules/agent-sandbox/interface.ss")
-          (check-equal? (if (member "modules/sandbox-core/interface.ss"
+                        (path-expand "modules/agent-sandbox/interface.ss"))
+          ;; Integration facades remain present, but cannot advertise the
+          ;; four-role Module receipt that belongs to validated Modules.
+          (for-each
+           (lambda (name)
+             (def path (string-append "modules/" name "/interface.ss"))
+             (check-equal? (and (member path source-values) #t) #t)
+             (check-equal?
+              (poo-flow-module-source-collection-locate poo-flow-maintained-module-source
+                (cons 'custom (string->symbol name))) '())
+             (for-each
+              (lambda (plan)
+                (def source (poo-flow-lazy-load-plan-source plan))
+                (when (equal? (poo-flow-module-source-ref-value source) path)
+                  (let (metadata (poo-flow-module-source-ref-metadata source))
+                    (check-equal? (cdr (assoc 'kind metadata)) 'framework-entrypoint)
+                    (check-equal? (assoc 'required-roles metadata) #f)))) plans))
+           poo-flow-maintained-integration-directories)
+          (check-equal? (if (member (path-expand "modules/sandbox-core/interface.ss")
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "modules/nono-sandbox/interface.ss"
+          (check-equal? (if (member (path-expand "modules/nono-sandbox/interface.ss")
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "modules/standards/interface.ss"
+          (check-equal? (if (member (path-expand "modules/standards/interface.ss")
                                     source-values)
                           #t
                           #f)
@@ -412,11 +429,11 @@
                poo-flow-official-contribution-load-path selection))
           (check-equal?
            (map poo-flow-module-source-ref-value source-refs)
-           '("packages/lambda-aitia/modules/ADR/interface.ss"
+           (map path-expand '("packages/lambda-aitia/modules/ADR/interface.ss"
              "packages/lambda-aitia/modules/assurance/interface.ss"
              "packages/lambda-aitia/modules/formal-methods/interface.ss"
              "packages/lambda-aitia/modules/gitops/interface.ss"
-             "packages/lambda-aitia/modules/sdlc/interface.ss")))
+             "packages/lambda-aitia/modules/sdlc/interface.ss"))))
         (let (failure
               (capture-lazy-loader-failure
                (lambda ()
@@ -433,10 +450,10 @@
         (let* ((source-refs
                 (poo-flow-user-tree-source-refs "user-interface"))
                (disable-config
-                (poo-flow-module-extension-contribution
+                (poo-flow-graph-contribution
                  poo-flow-module-auto-import-root-identity
                  (list
-                  (poo-flow-module-extension-node-remove
+                  (poo-flow-graph-node-remove
                    "user-interface/config.ss"))))
                (result
                 (poo-flow-module-auto-imports-resolve
@@ -445,7 +462,7 @@
                (resolved-source-values
                 (map poo-flow-module-source-ref-value
                      (poo-flow-module-auto-imports-result-source-refs result))))
-          (check-equal? (poo-flow-module-extension-result-stable? result) #t)
+          (check-equal? (poo-flow-graph-result-applied? result) #t)
           (check-equal? (length resolved-source-values) 1)
           (check-equal? (member "user-interface/config.ss"
                                 resolved-source-values)

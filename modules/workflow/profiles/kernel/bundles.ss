@@ -1,3 +1,4 @@
+(import (only-in :poo-flow/modules/workflow/funflow-config poo-flow-funflow-module-bundles poo-upstream-flow-funflow-module-bundles))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -7,10 +8,8 @@
 ;;; Invariant: every module owns its default flags and bundle in config.ss;
 ;;; this profile only composes those module-owned values.
 
-(import (only-in :poo-flow/modules/funflow/config
-                 poo-flow-funflow-cicd-default-payload
-                 poo-flow-funflow-module-bundles
-                 poo-upstream-flow-funflow-module-bundles)
+(import (only-in :core/modules/funflow/graph-projection
+                 poo-flow-funflow-cicd-default-payload)
         (only-in :poo-flow/modules/session/config
                  +poo-flow-session-default-flags+
                  poo-flow-session-module-bundles)

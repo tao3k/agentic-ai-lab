@@ -9,9 +9,9 @@
 
 (import :core/module-system/selection/objects
         :poo-flow/modules/sandbox-core/profile-catalog
-        :poo-flow/modules/funflow/config
-        :poo-flow/modules/workflow/types
-        :poo-flow/modules/workflow/objects
+        :core/modules/funflow/graph-projection
+        :core/modules/funflow/check-types
+        :core/modules/funflow/check-objects
         :poo-flow/modules/workflow/funs)
 
 (export poo-flow-user-cicd-payload?

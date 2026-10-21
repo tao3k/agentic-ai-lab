@@ -7,16 +7,16 @@
 ;;; projection helpers for CI/CD runtime handoff.
 
 (import (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/workflow/control-plane/runtime-protocol
+        (only-in :core/modules/funflow/control-plane/runtime-protocol
                  +runtime-request-schema+)
-        (only-in :poo-flow/modules/workflow/control-plane/runtime-command-descriptor
+        (only-in :core/modules/funflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
-        :poo-flow/modules/workflow/types
-        :poo-flow/modules/workflow/objects
-        :poo-flow/modules/workflow/cicd-funs
-        :poo-flow/modules/workflow/cicd-projection-syntax
+        :core/modules/funflow/check-types
+        :core/modules/funflow/check-objects
+        :core/modules/funflow/check-funs
+        :core/modules/funflow/projection-syntax
         :poo-flow/modules/workflow/cicd-sandbox
-        :poo-flow/modules/workflow/cicd-runtime-support/graph)
+        :core/modules/funflow/dependency-graph)
 
 (export poo-flow-cicd-check-artifact-provenance
         poo-flow-cicd-check-durable-fields

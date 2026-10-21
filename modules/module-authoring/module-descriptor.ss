@@ -8,11 +8,11 @@
 
 (import :core/composition/roles
         (only-in :clan/poo/object .o .@ .ref object?)
-        :poo-flow/modules/workflow/control-plane/roles
-        :poo-flow/modules/workflow/control-plane/failure
+        :core/modules/funflow/control-plane/roles
+        :core/modules/funflow/control-plane/failure
         :core/object-family/role-syntax
-        :poo-flow/modules/workflow/control-plane/task
-        :poo-flow/modules/workflow/control-plane/flow
+        :core/modules/funflow/control-plane/task
+        :core/modules/funflow/control-plane/flow
         :poo-flow/modules/module-authoring/module-interface
         (only-in :core/module-system/graph/funs
                  module-closure module-missing-imports)

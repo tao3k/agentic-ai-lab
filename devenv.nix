@@ -4,12 +4,30 @@
 
 { pkgs, lib, config, inputs, ... }:
 
+let
+  # Development-only matched control; production selects its own provider package.
+  awsProvider =
+    if pkgs.stdenv.hostPlatform.system == "aarch64-darwin" then
+      import ./core/t/fixtures/opentofu/aws-5.100.0/package.nix { inherit pkgs; }
+    else
+      pkgs.terraform-providers.hashicorp_aws;
+  awsSchema = pkgs.callPackage ./core/modules/opentofu/nix/provider-schema.nix {
+    provider = awsProvider;
+  };
+  opentofuArtifact = pkgs.callPackage ./core/modules/opentofu/nix/provider-artifacts.nix {
+    selection.providers = [ "aws" ];
+    schemas.aws = awsSchema;
+  };
+in
 {
   # https://devenv.sh/basics/
   env.GREET = "devenv";
+  env.POO_FLOW_OPENTOFU_ARTIFACT = "${opentofuArtifact}";
 
   # https://devenv.sh/packages/
   packages = [
+    opentofuArtifact
+    awsSchema.engine
     pkgs.typst
     pkgs.git
     pkgs.actionlint

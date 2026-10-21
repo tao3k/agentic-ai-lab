@@ -17,7 +17,7 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o .ref)
-        :poo-flow/modules/workflow/control-plane/api
+        :core/modules/funflow/control-plane/api
         :poo-flow/modules/module-authoring/module-interface
         :core/module-system/selection/objects
         :poo-flow/modules/module-authoring/module-descriptor

@@ -37,7 +37,7 @@ def Hold (checks : Checks) : Prop :=
 structure Scoped
     (Principal Asset Action Responsibility Evidence FacetIdentity
       CoreContractIdentity Organization Tenant Project Resource
-      ScopeEvidence : Type) where
+      ScopeEvidence : Type) [DecidableEq Principal] where
   enterprise :
     Enterprise.Admission.Admitted
       Principal Asset Action Responsibility Evidence FacetIdentity
@@ -51,7 +51,7 @@ structure Scoped
 def enterpriseAdmission
     {Principal Asset Action Responsibility Evidence FacetIdentity
       CoreContractIdentity Organization Tenant Project Resource
-      ScopeEvidence : Type}
+      ScopeEvidence : Type} [DecidableEq Principal]
     (admission :
       Scoped
         Principal Asset Action Responsibility Evidence FacetIdentity
@@ -65,7 +65,7 @@ def enterpriseAdmission
 theorem scopedAdmissionRequiresEnterpriseBase
     {Principal Asset Action Responsibility Evidence FacetIdentity
       CoreContractIdentity Organization Tenant Project Resource
-      ScopeEvidence : Type}
+      ScopeEvidence : Type} [DecidableEq Principal]
     (admission :
       Scoped
         Principal Asset Action Responsibility Evidence FacetIdentity
@@ -77,7 +77,7 @@ theorem scopedAdmissionRequiresEnterpriseBase
 theorem scopedAdmissionRequiresAllIsolationChecks
     {Principal Asset Action Responsibility Evidence FacetIdentity
       CoreContractIdentity Organization Tenant Project Resource
-      ScopeEvidence : Type}
+      ScopeEvidence : Type} [DecidableEq Principal]
     (admission :
       Scoped
         Principal Asset Action Responsibility Evidence FacetIdentity

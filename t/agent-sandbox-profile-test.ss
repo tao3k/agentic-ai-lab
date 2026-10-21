@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/modules/workflow/control-plane/api
+        :core/modules/funflow/control-plane/api
         :poo-flow/modules/agent-sandbox/api
         :poo-flow/modules/agent-sandbox/nono
         :poo-flow/modules/agent-sandbox/cube)

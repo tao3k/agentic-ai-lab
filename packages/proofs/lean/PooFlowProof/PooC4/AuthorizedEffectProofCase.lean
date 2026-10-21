@@ -261,7 +261,38 @@ def durabilityProfileTag : DurabilityProfile → UInt32
   | .batched => durabilityBatched
   | .diagnostic => durabilityDiagnostic
 
+private theorem uint32LE_length (value : UInt32) : (uint32LE value).length = 4 := rfl
+private theorem uint64LE_length (value : UInt64) : (uint64LE value).length = 8 := rfl
+private theorem fingerprint_length : schemaFingerprintBytes.length = 32 := rfl
+
 def encodeProofCaseVector (vector : ProofCaseVector) : List UInt8 :=
+  List.flatten [
+    uint32LE abiVersion,
+    uint32LE (caseKindTag vector.caseKind),
+    schemaFingerprintBytes,
+    vector.tokenDigest.bytes,
+    vector.policyRevision.bytes,
+    vector.effectDigest.bytes,
+    vector.semanticRoot.bytes,
+    vector.executionRoot.bytes,
+    vector.batchRoot.bytes,
+    vector.subjectBinding.bytes,
+    vector.resourceBinding.bytes,
+    vector.actionBinding.bytes,
+    vector.previousEvidenceRoot.bytes,
+    uint64LE vector.nonce,
+    uint64LE vector.epoch,
+    uint64LE vector.sequence,
+    uint64LE vector.requiredObligationMask,
+    uint64LE vector.presentObligationMask,
+    uint32LE vector.obligationCount,
+    uint32LE (mediationOutcomeTag vector.mediationOutcome),
+    uint32LE (durabilityProfileTag vector.durabilityProfile),
+    List.replicate 12 0]
+
+/-- The chunk representation preserves the original ABI byte order for every vector. -/
+theorem encodeProofCaseVector_byte_order (vector : ProofCaseVector) :
+    encodeProofCaseVector vector =
   uint32LE abiVersion ++
   uint32LE (caseKindTag vector.caseKind) ++
   schemaFingerprintBytes ++
@@ -283,17 +314,19 @@ def encodeProofCaseVector (vector : ProofCaseVector) : List UInt8 :=
   uint32LE vector.obligationCount ++
   uint32LE (mediationOutcomeTag vector.mediationOutcome) ++
   uint32LE (durabilityProfileTag vector.durabilityProfile) ++
-  List.replicate 12 0
+  List.replicate 12 0 := by
+  simp only [encodeProofCaseVector, List.flatten_cons, List.flatten_nil, List.append_nil,
+    List.append_assoc]
 
 theorem encodeProofCaseVector_size (vector : ProofCaseVector) :
     (encodeProofCaseVector vector).length = vectorSize := by
-  simp [encodeProofCaseVector, uint32LE, uint64LE, vectorSize,
-    schemaFingerprintBytes, vector.tokenDigest.size_eq,
-    vector.policyRevision.size_eq, vector.effectDigest.size_eq,
-    vector.semanticRoot.size_eq, vector.executionRoot.size_eq,
-    vector.batchRoot.size_eq, vector.subjectBinding.size_eq,
-    vector.resourceBinding.size_eq, vector.actionBinding.size_eq,
-    vector.previousEvidenceRoot.size_eq]
+  simp only [encodeProofCaseVector, List.length_flatten, List.map_cons, List.map_nil,
+    List.sum_cons, List.sum_nil, List.length_replicate,
+    uint32LE_length, uint64LE_length, fingerprint_length,
+    vector.tokenDigest.size_eq, vector.policyRevision.size_eq, vector.effectDigest.size_eq,
+    vector.semanticRoot.size_eq, vector.executionRoot.size_eq, vector.batchRoot.size_eq,
+    vector.subjectBinding.size_eq, vector.resourceBinding.size_eq,
+    vector.actionBinding.size_eq, vector.previousEvidenceRoot.size_eq] <;> rfl
 
 def domainSeparatedPayload (domain : String) (payload : List UInt8) : List UInt8 :=
   domain.toUTF8.toList ++ [0] ++ payload

@@ -12,7 +12,7 @@
         (only-in :gerbil/runtime/hash list->hash-table-eq)
         (only-in :std/list/list delete-duplicates/hash)
         (only-in :std/list/list append-map filter-map fold)
-        :poo-flow/modules/workflow/control-plane/plan)
+        :core/modules/funflow/control-plane/graph)
 
 (export poo-flow-scenario-case->execution-plan)
 

@@ -11,8 +11,8 @@
 ;;; Policy evidence: tests validate contracts without invoking nono or CubeSandbox.
 
 (import (only-in :clan/poo/object .@ object?)
-        (only-in :poo-flow/modules/workflow/control-plane/roles execution-policy-role)
-        (only-in :poo-flow/modules/workflow/control-plane/failure raise-control-plane-failure)
+        (only-in :core/modules/funflow/control-plane/roles execution-policy-role)
+        (only-in :core/modules/funflow/control-plane/failure raise-control-plane-failure)
         :core/object-family/role-syntax
         :poo-flow/modules/agent-sandbox/alist
         :poo-flow/modules/agent-sandbox/profile)

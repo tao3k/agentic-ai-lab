@@ -55,10 +55,7 @@
  (spec poo-flow-native-spec)
  (public-entry-modules
   '("init.ss"
-    "modules/funflow/profiles/gerbil-scheme.ss"
-    "modules/funflow/native-scope.ss"
     "modules/workflow/scenario/bundle-v1-projection.ss"
-    "modules/workflow/control-plane/api.ss"
     "testing-api.ss"
 
     "modules/module-authoring/module-descriptor.ss"
@@ -78,10 +75,12 @@
     "modules/workflow/scenario/accessors.ss"
     "modules/workflow/scenario/workload.ss"
     "modules/workflow/scenario/plan-projection.ss"
+    "modules/workflow/funflow-config.ss"
+    "modules/workflow/profiles/funflow-library.ss"
+    "modules/workflow/profiles/github-ci-contract.ss"
+    "modules/workflow/scenario/runtime-funflow.ss"
     "modules/session/interface.ss"
-    "modules/funflow/interface.ss"
     "modules/ai-agentic-context/interface.ss"
-    "modules/funflow/runtime-load-projection.ss"
     "modules/workflow/profiles/human-ai-capability.ss"
     "modules/workflow/profiles/agentic-research.ss"
     "modules/authorization/interface.ss"

@@ -6,6 +6,7 @@
 ;;; Boundary: downstream-shaped Funflow POO config lowers to readiness facts.
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
+        (only-in :core/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
         :core/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface

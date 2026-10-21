@@ -71,11 +71,11 @@
               (poo-flow-authoring-owner-import-port-observations
                'modules/example/funs.ss
                (open-input-string
-                "(import :poo-flow/modules/workflow/control-plane/api)") PooFlowSourcePolicy))
+                "(import :core/modules/funflow/control-plane/api)") PooFlowSourcePolicy))
              (observation (car observations)))
         (check-equal? (length observations) 1)
         (check-equal? (.ref observation 'scope) 'modules/example/funs.ss)
-        (check-equal? (.ref observation 'owner) ':poo-flow/modules/workflow/control-plane/api)
+        (check-equal? (.ref observation 'owner) ':core/modules/funflow/control-plane/api)
         (check-equal? (.ref observation 'phase) 'module-admission)
         (check-equal? (.ref observation 'status) 'aggregate-owner-import)
         (check-equal? (.ref observation 'code)
@@ -88,7 +88,7 @@
          (poo-flow-authoring-owner-import-port-observations
           'modules/example/funs.ss
          (open-input-string
-           "(import (only-in :poo-flow/modules/workflow/control-plane/task make-task))") PooFlowSourcePolicy)
+           "(import (only-in :core/modules/funflow/control-plane/task make-task))") PooFlowSourcePolicy)
          '())
         (let* ((contribution-observations
                 (poo-flow-authoring-owner-import-port-observations

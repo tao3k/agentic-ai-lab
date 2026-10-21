@@ -5,8 +5,8 @@
 
 ;;; Public workflow module interface; all internal roles close through this file.
 
-(import "types.ss" "objects.ss" "funs.ss" "config.ss")
-(export (import: "types.ss")
-        (import: "objects.ss")
+(import :core/modules/funflow/check-types :core/modules/funflow/check-objects "funs.ss" "config.ss")
+(export (import: :core/modules/funflow/check-types)
+        (import: :core/modules/funflow/check-objects)
         (import: "funs.ss")
         (import: "config.ss"))

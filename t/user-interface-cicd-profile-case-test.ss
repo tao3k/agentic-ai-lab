@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/modules/workflow/control-plane/api
+        :core/modules/funflow/control-plane/api
         (only-in "../user-interface/custom/my-module/profiles/cicd"
                  poo-flow-custom-my-module-cicd-module)
         :poo-flow/modules/workflow/scenario/configuration/interface

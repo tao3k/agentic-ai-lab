@@ -8,8 +8,8 @@
 
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :core/composition/roles role-slot/default)
-        :poo-flow/modules/workflow/control-plane/roles
-        :poo-flow/modules/workflow/control-plane/failure
+        :core/modules/funflow/control-plane/roles
+        :core/modules/funflow/control-plane/failure
         :core/object-family/role-syntax
         (only-in "./strategy.ss"
                  loop-strategy-engine-role

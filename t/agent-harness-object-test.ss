@@ -10,7 +10,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/workflow/control-plane/api)
+        :core/modules/funflow/control-plane/api)
 
 (export agent-harness-object-test)
 

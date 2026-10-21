@@ -8,30 +8,28 @@ import PooFlowProof.Enterprise.SeparationOfDuties
 
 namespace PooFlowProof.Enterprise.Admission
 
-open PooFlowProof.PooC4
-
 structure Admitted
     (Principal Asset Action Responsibility Evidence FacetIdentity
-      CoreContractIdentity : Type) where
+      CoreContractIdentity : Type) [DecidableEq Principal] where
   context :
     Core.GovernanceContext
       Principal Asset Action Responsibility Evidence FacetIdentity
       CoreContractIdentity
   baseAdmission : Core.BaseAdmission context
   decisionKind :
-    GovernanceDecisionAuthority.GovernanceDecisionKind
+    PooFlowCoreProof.Admission.Decision.GovernanceDecisionKind
   decisionMayRequestScopedCapability :
-    GovernanceDecisionAuthority.MayRequestScopedCapability decisionKind
-  governanceChecks : GovernanceDecisionAuthority.GovernanceChecks
+    PooFlowCoreProof.Admission.Decision.MayRequestScopedCapability decisionKind
+  governanceChecks : PooFlowCoreProof.Admission.Decision.GovernanceChecks
   governanceChecksHold :
-    GovernanceDecisionAuthority.GovernanceChecksHold governanceChecks
+    PooFlowCoreProof.Admission.Decision.GovernanceChecksHold governanceChecks
   approval : SeparationOfDuties.ApprovalDiscipline Principal
   freshness : EvidenceFreshness.Checks
   freshnessHolds : EvidenceFreshness.Hold freshness
 
 theorem requiresBaseAdmission
     {Principal Asset Action Responsibility Evidence FacetIdentity
-      CoreContractIdentity : Type}
+      CoreContractIdentity : Type} [DecidableEq Principal]
     (admission :
       Admitted
         Principal Asset Action Responsibility Evidence FacetIdentity
@@ -41,18 +39,18 @@ theorem requiresBaseAdmission
 
 theorem requiresEveryGovernanceCheck
     {Principal Asset Action Responsibility Evidence FacetIdentity
-      CoreContractIdentity : Type}
+      CoreContractIdentity : Type} [DecidableEq Principal]
     (admission :
       Admitted
         Principal Asset Action Responsibility Evidence FacetIdentity
         CoreContractIdentity) :
-    GovernanceDecisionAuthority.GovernanceChecksHold
+    PooFlowCoreProof.Admission.Decision.GovernanceChecksHold
       admission.governanceChecks :=
   admission.governanceChecksHold
 
 theorem requiresFreshEvidence
     {Principal Asset Action Responsibility Evidence FacetIdentity
-      CoreContractIdentity : Type}
+      CoreContractIdentity : Type} [DecidableEq Principal]
     (admission :
       Admitted
         Principal Asset Action Responsibility Evidence FacetIdentity
@@ -62,7 +60,7 @@ theorem requiresFreshEvidence
 
 theorem expiredDecisionCannotBeAdmitted
     {Principal Asset Action Responsibility Evidence FacetIdentity
-      CoreContractIdentity : Type}
+      CoreContractIdentity : Type} [DecidableEq Principal]
     (admission :
       Admitted
         Principal Asset Action Responsibility Evidence FacetIdentity
@@ -72,12 +70,12 @@ theorem expiredDecisionCannotBeAdmitted
   have mayRequest := admission.decisionMayRequestScopedCapability
   rw [expired] at mayRequest
   exact
-    GovernanceDecisionAuthority.expiredDecisionFailsClosed
+    PooFlowCoreProof.Admission.Decision.expiredDecisionFailsClosed
       mayRequest
 
 theorem revokedDecisionCannotBeAdmitted
     {Principal Asset Action Responsibility Evidence FacetIdentity
-      CoreContractIdentity : Type}
+      CoreContractIdentity : Type} [DecidableEq Principal]
     (admission :
       Admitted
         Principal Asset Action Responsibility Evidence FacetIdentity
@@ -87,7 +85,7 @@ theorem revokedDecisionCannotBeAdmitted
   have mayRequest := admission.decisionMayRequestScopedCapability
   rw [revoked] at mayRequest
   exact
-    GovernanceDecisionAuthority.revokedDecisionFailsClosed
+    PooFlowCoreProof.Admission.Decision.revokedDecisionFailsClosed
       mayRequest
 
 end PooFlowProof.Enterprise.Admission

@@ -2,11 +2,11 @@
 --
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-import PooFlowCoreProof.PooC4.EventIngressCausalCut
+import PooFlowCoreProof.Modules.Funflow.CausalCut
 
 namespace PooFlowProof.PooC4.TemporalCausality
 
-open EventIngressCausalCut
+open PooFlowCoreProof.Modules.Funflow.CausalCut
 
 inductive EventModality where
   | observed

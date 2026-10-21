@@ -7,6 +7,7 @@
 ;;; Invariant: DAG construction is pure and never schedules or runs checks.
 
 (import (only-in :core/observability/testing-case poo-flow-test-case)
+        (only-in :core/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,7 +16,7 @@
                  poo-flow-user-module-selection-flags)
         :poo-flow/modules/workflow/scenario/configuration/interface
         :poo-flow/modules/workflow/scenario/configuration/init-syntax
-        (only-in :poo-flow/modules/funflow/config
+        (only-in :core/modules/funflow/graph-projection
                  poo-flow-funflow-check-map->functional-dag
                  poo-flow-funflow-composition-step?
                  poo-flow-funflow-composition-step->alist

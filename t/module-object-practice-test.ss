@@ -19,14 +19,14 @@
                  test-suite)
         "./support/performance"
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-p95-elapsed-ms)
-        :core/extension-graph/interface
+        :core/graph/interface
         :core/module-system/schema/interface)
 
 (export module-object-practice-test)
 
-;; : (-> PooModuleExtensionNode Symbol MaybeAny)
+;; : (-> PooFlowGraph Symbol MaybeAny)
 (def (slot-value node slot-name)
-  (let (entry (assoc slot-name (poo-flow-module-extension-node-slots node)))
+  (let (entry (assoc slot-name (poo-flow-graph-root-payload node)))
     (if entry (cdr entry) #f)))
 
 ;; : (-> Integer Symbol)
@@ -104,11 +104,11 @@
                         '(capabilities note))
           (check-equal? (map poo-flow-module-field-contribution? contributions)
                         '(#t #t))
-          (check-equal? (map poo-flow-module-extension-contribution?
+          (check-equal? (map poo-flow-graph-contribution?
                              extension-contributions)
                         '(#t #t))
           (check-equal? (poo-flow-module-field-resolution-result? merge-result) #t)
-          (check-equal? (poo-flow-module-field-resolution-result-stable?
+          (check-equal? (poo-flow-module-field-resolution-result-applied?
                          merge-result)
                         #t)
           (check-equal? (poo-flow-module-field-resolution-result-contributions
@@ -220,15 +220,15 @@
                  base-node noop-contributions))
                (resolved-node
                 (poo-flow-module-field-resolution-result-root merge-result)))
-          (check-equal? (poo-flow-module-field-resolution-result-stable?
+          (check-equal? (poo-flow-module-field-resolution-result-applied?
                          merge-result)
                         #t)
-          (check-equal? (length (poo-flow-module-extension-node-slots
+          (check-equal? (length (poo-flow-graph-root-payload
                                  resolved-node))
                         field-count)
           (check-equal? (slot-value resolved-node 'field-0)
                         '(0 1000))
-          (check-equal? (poo-flow-module-field-resolution-result-iterations
+          (check-equal? (poo-flow-module-field-resolution-result-changed-passes
                          noop-result)
                         0)
           (check-equal? (< elapsed-ms 1000) #t)
@@ -323,7 +323,7 @@
                          capabilities-field
                          'process-run)
                         '("transformer:list.remove:argument-kind-mismatch"))
-          (check-equal? (poo-flow-module-field-resolution-result-stable?
+          (check-equal? (poo-flow-module-field-resolution-result-applied?
                          merge-result)
                         #t)
           (check-equal? (slot-value resolved-node 'capabilities)

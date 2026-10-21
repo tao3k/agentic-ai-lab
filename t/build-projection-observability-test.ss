@@ -102,8 +102,14 @@
          #t)
         (check-equal?
          (contains? source
-                    "gerbil {{ gerbil_test_runtime_options }} env ./unit-tests.ss")
+                    "gerbil {{ gerbil_test_runtime_options }} env gxi {{ gerbil_test_runtime_options }} ./unit-tests.ss")
          #t)
+        ;; gxpkg env spawns its command; fencing only that dispatcher leaves
+        ;; the script's actual VM unbounded before testing Profiles are loaded.
+        (check-equal?
+         (contains? source
+                    "env ./unit-tests.ss")
+         #f)
         (check-equal? (contains? source ".devenv/devenv-profile-exec") #f)
         (check-equal? (contains? source "rm -rf") #f)))
 

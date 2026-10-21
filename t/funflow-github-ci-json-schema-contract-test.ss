@@ -23,7 +23,7 @@
                  poo-flow-json-schema->contract-artifact
                  poo-flow-json-schema-contract-artifact-object-contract
                  poo-flow-json-schema-contract-artifact->alist)
-        (only-in :poo-flow/modules/funflow/github-ci-contract
+        (only-in :poo-flow/modules/workflow/profiles/github-ci-contract
                  +poo-flow-funflow-github-ci-schema-audit+
                  poo-flow-funflow-github-ci-contract-receipt
                  poo-flow-funflow-github-ci-validate-workflow->alist))

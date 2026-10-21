@@ -19,8 +19,8 @@ poo-flow-load-modules product facade and its integration with Core protocols,
 product Feature System, JsonSchema bridge, contribution Profiles/Scenarios and
 runtime/build providers. Those implementation owners are not moved by this work.
 
-The [[file:../../../core/design/config-languages/15-directory-contract-and-native-tree.org][JsonSchema/Guestbook consumer design]], [[file:../../../core/design/config-languages/17-guestbook-auto-explicit-init-examples.org][complete init examples]] and
-[[file:../../../core/design/config-languages/18-feature-system-guestbook-selection.org][Module/Feature integration]] retain their product-specific code and controls.
+The [[file:../../../core/docs/10-19-design/11-configuration-languages/11.16-directory-contract-and-native-tree.org][JsonSchema/Guestbook consumer design]], [[file:../../../core/docs/10-19-design/11-configuration-languages/11.18-guestbook-auto-explicit-init-examples.org][complete init examples]] and
+[[file:../../../core/docs/10-19-design/11-configuration-languages/11.19-feature-system-guestbook-selection.org][Module/Feature integration]] retain their product-specific code and controls.
 Core must remain usable without importing those consumers.
 
 * Evidence boundary

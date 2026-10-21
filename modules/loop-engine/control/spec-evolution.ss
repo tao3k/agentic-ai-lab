@@ -8,8 +8,8 @@
 
 (import :core/composition/roles
         (only-in :clan/poo/object .o object?)
-        :poo-flow/modules/workflow/control-plane/roles
-        :poo-flow/modules/workflow/control-plane/failure
+        :core/modules/funflow/control-plane/roles
+        :core/modules/funflow/control-plane/failure
         :core/object-family/role-syntax
         (only-in :poo-flow/modules/loop-engine/control/human-audit
                  +loop-human-audit-decisions+))

@@ -3,9 +3,9 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Funflow profile contract: GitHub Actions workflow schema projection.
-;;; Invariant: this module owns a Funflow profile contract surface only. GitHub
-;;; execution, API adapters, and CI runners remain outside the Scheme core.
+;;; Product workflow profile: GitHub Actions schema projection over Core's
+;;; JSON Schema contracts. The generic Core Funflow publication stays independent
+;;; of this optional GitHub-specific profile and its product-owned schema.
 
 (import (only-in :clan/poo/object
                  object<-alist)

@@ -17,12 +17,12 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/modules/workflow/control-plane/api
+        :core/modules/funflow/control-plane/api
         :poo-flow/modules/custom-task/interface
         :poo-flow/modules/docker/interface
         :poo-flow/modules/text/interface
         :poo-flow/modules/workflow/flows
-        :poo-flow/modules/workflow/store)
+        :core/modules/funflow/store)
 
 ;; : (-> RunConfig Flow Input Value)
 (def (configured-run config flow input)

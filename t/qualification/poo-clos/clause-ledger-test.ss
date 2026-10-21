@@ -140,9 +140,11 @@
               (map (lambda (suite) (.ref suite 'id))
                    poo-clos-evidence-suites))
              => #t)
-      (check (andmap poo-clos-evidence-suite-valid?
-                     poo-clos-evidence-suites)
-             => #t)
+      (for-each
+       (lambda (suite)
+         (check-equal? (list (.ref suite 'id) (poo-clos-evidence-suite-valid? suite))
+                       (list (.ref suite 'id) #t)))
+       poo-clos-evidence-suites)
       (check (andmap
               (lambda (row)
                 (poo-clos-evidence-id-resolves? (.ref row 'evidence-id)))

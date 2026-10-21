@@ -17,7 +17,7 @@
         "../support/poo-performance-object-scenarios"
         "../support/poo-performance"
         :core/module-system/schema/interface
-        :core/extension-graph/interface
+        :core/graph/interface
         :core/module-system/schema/validation)
 
 (export extensions-test)
@@ -33,25 +33,25 @@
                 (poo-performance-extension-node-extend-operations extra-count
                                                                   key-span))
                (contribution
-                (poo-flow-module-extension-contribution 'extension-root
+                (poo-flow-graph-contribution 'extension-root
                                                         operations))
                (merged
-                (poo-flow-module-extension-apply-contribution base
+                (poo-flow-graph-apply-contribution base
                                                               contribution))
                (receipt
                 (poo-performance-run-gate
                  (poo-performance-extension-children-merge-fixture)
                  (lambda ()
-                   (poo-flow-module-extension-apply-contribution
+                   (poo-flow-graph-apply-contribution
                     base
                     contribution)))))
           (check-equal?
-           (length (poo-flow-module-extension-node-children merged))
+           (length (poo-flow-graph-root-children merged))
            key-span)
           (check-equal?
            (cdar
-            (poo-flow-module-extension-node-slots
-             (car (poo-flow-module-extension-node-children merged))))
+            (poo-flow-graph-root-payload
+             (car (poo-flow-graph-root-children merged))))
            3400)
           (check-equal? (benchmark-receipt-pass? receipt) #t))))
 
@@ -67,31 +67,31 @@
                  child-count
                  target))
                (merged
-                (poo-flow-module-extension-apply-contributions base
+                (poo-flow-graph-apply-contributions base
                                                                contributions))
                (target-child
-                (poo-flow-module-extension-child-ref
-                 (poo-flow-module-extension-node-children merged)
+                (poo-flow-graph-root-ref
+                 (poo-flow-graph-root-children merged)
                  target))
                (receipt
                 (poo-performance-run-gate
                  (poo-performance-cross-contribution-targeting-fixture)
                  (lambda ()
-                   (poo-flow-module-extension-apply-contributions
+                   (poo-flow-graph-apply-contributions
                     base
                     contributions)))))
           (check-equal?
-           (length (poo-flow-module-extension-node-children merged))
+           (length (poo-flow-graph-root-children merged))
            child-count)
           (check-equal?
            (poo-performance-slot-ref/default
-            (poo-flow-module-extension-node-slots target-child)
+            (poo-flow-graph-root-payload target-child)
             'targeted?
             #f)
            #t)
           (check-equal?
            (poo-performance-slot-ref/default
-            (poo-flow-module-extension-node-slots target-child)
+            (poo-flow-graph-root-payload target-child)
             'target-phase
             #f)
            'same-pass)
@@ -107,24 +107,24 @@
                 (poo-performance-local-slot-contributions 'extension-root
                                                           contribution-count))
                (merged
-                (poo-flow-module-extension-apply-contributions base
+                (poo-flow-graph-apply-contributions base
                                                                contributions))
                (receipt
                 (poo-performance-run-gate
                  (poo-performance-local-contribution-coalescing-fixture)
                  (lambda ()
-                   (poo-flow-module-extension-apply-contributions
+                   (poo-flow-graph-apply-contributions
                     base
                     contributions)))))
           (check-equal?
-           (length (poo-flow-module-extension-node-children merged))
+           (length (poo-flow-graph-root-children merged))
            child-count)
           (check-equal?
-           (length (poo-flow-module-extension-node-slots merged))
+           (length (poo-flow-graph-root-payload merged))
            (+ contribution-count 1))
           (check-equal?
            (poo-performance-slot-ref/default
-            (poo-flow-module-extension-node-slots merged)
+            (poo-flow-graph-root-payload merged)
             'field-640
             #f)
            640)

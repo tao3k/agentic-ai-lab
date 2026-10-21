@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/modules/workflow/control-plane/api)
+        :core/modules/funflow/control-plane/api)
 
 ;;; This suite keeps flow declaration metadata executable independently from
 ;;; runner scheduling behavior.

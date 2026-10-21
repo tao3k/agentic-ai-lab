@@ -8,10 +8,10 @@
 
 (import :core/composition/roles
         (only-in :clan/poo/object .o .ref .slot? object?)
-        :poo-flow/modules/workflow/control-plane/roles
-        :poo-flow/modules/workflow/control-plane/failure
+        :core/modules/funflow/control-plane/roles
+        :core/modules/funflow/control-plane/failure
         :core/object-family/role-syntax
-        :poo-flow/modules/workflow/control-plane/agent-harness
+        :core/modules/funflow/control-plane/agent-harness
         (only-in "./governor.ss"
                  loop-governor?
                  loop-governor->contract/validated

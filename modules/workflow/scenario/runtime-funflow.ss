@@ -18,7 +18,7 @@
                  poo-flow-scenario-case-stages)
         (only-in :poo-flow/modules/workflow/scenario/case
                  poo-flow-scenario-case?)
-        (only-in :poo-flow/modules/funflow/config
+        (only-in :core/modules/funflow/graph-projection
                  funflow-plan
                  poo-flow-funflow-plan->runtime-projection))
 

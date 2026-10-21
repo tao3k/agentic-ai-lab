@@ -145,7 +145,7 @@
                    'poo-clos-syntax-test 18)
    (evidence-suite 'method-combination
                    "core/t/poo-clos-method-combination-test.ss"
-                   'poo-clos-method-combination-test 13)
+                   'poo-clos-method-combination-test 14)
    (evidence-suite 'evolution "core/t/poo-clos-evolution-test.ss"
                    'poo-clos-evolution-test 8)
    (evidence-suite 'generic-evolution

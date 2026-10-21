@@ -17,13 +17,15 @@ inventories. The upstream licenses and repository layout stay intact.
 |--------------------+----------+---------|
 | [[file:kcl/examples/README.md][kcl/examples]] | https://github.com/kcl-lang/examples | [[file:kcl/examples/LICENSE][Apache-2.0]] |
 | [[file:kcl/konfig/README.md][kcl/konfig]] | https://github.com/kcl-lang/konfig | [[file:kcl/konfig/LICENSE][Apache-2.0]] |
-| [[file:nickel/omnibus-ncl/][nickel/omnibus-ncl]] | https://github.com/tao3k/omnibus-ncl | [[file:nickel/omnibus-ncl/LICENSE][MIT]] |
-| [[file:nix/hivebus/][nix/hivebus]] | https://github.com/tao3k/hivebus | [[file:nix/hivebus/LICENSE][MIT]] |
+| [[file:nickel/omnibus-ncl][nickel/omnibus-ncl]] | https://github.com/tao3k/omnibus-ncl | [[file:nickel/omnibus-ncl/LICENSE][MIT]] |
+| [[file:nix/hivebus][nix/hivebus]] | https://github.com/tao3k/hivebus | [[file:nix/hivebus/LICENSE][MIT]] |
 
 From the POO Flow repository root, initialize only the reference needed for the
 current study, for example:
 
 #+begin_src sh
+git submodule update --init -- docs/10-19-design/10.08-config-languages/scenarios/kcl/examples
+git submodule status -- docs/10-19-design/10.08-config-languages/scenarios/kcl/examples
 git submodule update --init -- docs/10-19-design/10.08-config-languages/scenarios/kcl/konfig
 git submodule status -- docs/10-19-design/10.08-config-languages/scenarios/kcl/konfig
 #+end_src
@@ -71,5 +73,5 @@ that schema.instances() means the whole global package catalog is loaded.
 
 [[file:../10-source-scenario-research.org][The source-to-design study]] connects these cases to the proposed POO surface.
 [[file:../11-guestbook-source-comparison.org][The Guestbook comparison]] traces the three workloads through environment inputs,
-field contracts and resource consumers. [[file:../09-application-scenario-admission.org][Application admission]] remains unexecuted
+field contracts and resource consumers. [[file:../../../../core/docs/10-19-design/11-configuration-languages/11.10-application-scenario-admission.org][Application admission]] remains unexecuted
 Scheme design, separate from these pinned upstream sources.

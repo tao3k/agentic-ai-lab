@@ -6,8 +6,8 @@
 ;;; Boundary: non-mutating module diagnostics within Observability.
 ;;; Invariant: diagnostics never change activation behavior.
 
-(import :poo-flow/modules/workflow/control-plane/task
-        :poo-flow/modules/workflow/control-plane/flow
+(import :core/modules/funflow/control-plane/task
+        :core/modules/funflow/control-plane/flow
         :poo-flow/modules/module-authoring/module-descriptor
         (only-in :core/utilities/functional
                  poo-flow-stable-duplicates)
