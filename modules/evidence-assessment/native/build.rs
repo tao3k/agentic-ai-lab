@@ -43,7 +43,8 @@ fn main() {
         collect(&root, &root.join(relative), &mut inputs);
     }
     let metadata = Command::new(env::var_os("CARGO").unwrap())
-        .args(["metadata", "--locked", "--offline", "--format-version", "1"])
+        .args(["metadata", "--locked", "--offline", "--format-version", "1",
+            "--filter-platform", &env::var("TARGET").expect("Cargo target triple")])
         .current_dir(&package)
         .output()
         .expect("resolved dependency inventory");
