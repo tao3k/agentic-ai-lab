@@ -83,3 +83,16 @@ production build-boundary test pass. The complete native consumer test binary
 compiles, as does its Python feature. Final installed-wheel qualification,
 clean-checkout POO native acceptance and complete exact-head CI remain open.
 The Python project harness's prior 154 blocking findings also remain open.
+
+The full consumer native run subsequently completed with 55 passed, 0 failed,
+0 skipped and 0 filtered controls, including the relocated execution policy.
+The preceding isolated provenance timeout remains a failed receipt. No claim
+about reduced inference cost or stable deadline performance follows from this
+single passing full run. The native Python feature and all test targets also
+compile against the same producer revision.
+
+The primary POO checkout contains a large concurrent uncommitted source migration.
+These changes were not reset or staged by this migration. The implementation is
+committed on the existing PR branch from an isolated checkout; merging that PR
+head into the active dirty checkout requires integrating its source changes,
+not forcing a reset. No release tag has been issued.
