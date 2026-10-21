@@ -14,22 +14,22 @@ gerbil_dependency_sources.source_package(
     name = "gerbil_poo_sources",
     canonical_uri = "https://github.com/tao3k/gerbil-poo",
     package = "gerbil-poo",
-    revision = "099b381588360a8a49fd772f666a1a00351366f5",
-    sha256 = "5cafed5170c4ade18a1cce3898149f92b236aabba11c80020359f19531084597",
-    strip_prefix = "gerbil-poo-099b381588360a8a49fd772f666a1a00351366f5",
+    revision = "fdeadfa40ca5cee5fe20308985aef1577f2eb49b",
+    sha256 = "534b2fbbd3efc63be6fbc0bbcfac958a51f1fbb53c834855d2dbd8b9a7c7bbdc",
+    strip_prefix = "gerbil-poo-fdeadfa40ca5cee5fe20308985aef1577f2eb49b",
     urls = [
-        "https://github.com/tao3k/gerbil-poo/archive/099b381588360a8a49fd772f666a1a00351366f5.tar.gz",
+        "https://github.com/tao3k/gerbil-poo/archive/fdeadfa40ca5cee5fe20308985aef1577f2eb49b.tar.gz",
     ],
 )
 gerbil_dependency_sources.source_package(
     name = "asp_gerbil_scheme_sources",
     canonical_uri = "https://github.com/tao3k/asp-gerbil-scheme",
     package = "asp-gerbil-scheme",
-    revision = "v0.1.2.2",
-    sha256 = "189f4e5ca7dc3f07af06052bc5c830e8599e081657d2b2d0016660b59ef47ba8",
-    strip_prefix = "asp-gerbil-scheme-0.1.2.2",
+    revision = "0f78289a7ae465a84370f5d94d8d14671f3c43af",
+    sha256 = "290111ab54c89059e926c47f78c41fc132dec7d7a0272e3b90f935f149257cea",
+    strip_prefix = "asp-gerbil-scheme-0f78289a7ae465a84370f5d94d8d14671f3c43af",
     urls = [
-        "https://github.com/tao3k/asp-gerbil-scheme/archive/v0.1.2.2.tar.gz",
+        "https://github.com/tao3k/asp-gerbil-scheme/archive/0f78289a7ae465a84370f5d94d8d14671f3c43af.tar.gz",
     ],
 )
 gerbil_dependency_sources.source_package(
@@ -47,11 +47,11 @@ gerbil_dependency_sources.source_package(
     name = "gerbil_ascent_sources",
     canonical_uri = "https://github.com/tao3k/gerbil-ascent",
     package = "gerbil-ascent",
-    revision = "86ad9ae3469565bea6229b71ef1d9197c6a82d63",
-    sha256 = "c9494de9c583ccad21f31aaad2ec3a9d2058d7cad5005ea9ceafee78d249d973",
-    strip_prefix = "gerbil-ascent-86ad9ae3469565bea6229b71ef1d9197c6a82d63",
+    revision = "0f99da9e3a3baf1a272ba58fe0769ed8278ae746",
+    sha256 = "82c9256ec711384640d29829be434bfe3656ad41b76754ae01e5fe57d26bb940",
+    strip_prefix = "gerbil-ascent-0f99da9e3a3baf1a272ba58fe0769ed8278ae746",
     urls = [
-        "https://github.com/tao3k/gerbil-ascent/archive/86ad9ae3469565bea6229b71ef1d9197c6a82d63.tar.gz",
+        "https://github.com/tao3k/gerbil-ascent/archive/0f99da9e3a3baf1a272ba58fe0769ed8278ae746.tar.gz",
     ],
 )
 gerbil_dependency_sources.source_package(

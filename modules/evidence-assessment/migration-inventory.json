@@ -3233,7 +3233,7 @@
       }
     }
   ],
-  "producerRevision": "b03efb55f2bfda0a7062687b6539a45f06adbabe",
+  "producerRevision": "0f99da9e3a3baf1a272ba58fe0769ed8278ae746",
   "splits": [
     {
       "source": "rust/ascent/tests/integration/program_definitions.rs",

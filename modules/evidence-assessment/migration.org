@@ -71,7 +71,7 @@ verifies target existence and content; it is not a semantic equivalence proof.
 
 * Reproduction and current validation
 Cargo and =gerbil.pkg= both consume ASCENT
-=b03efb55f2bfda0a7062687b6539a45f06adbabe=. No local path dependency or old
+=0f99da9e3a3baf1a272ba58fe0769ed8278ae746=. No local path dependency or old
 ASCENT application import facade is provided. The source receipt records the
 resolved Git source and 63 producer inputs; the independent installed ASCENT
 wheel must match every input before study admission.
@@ -111,3 +111,12 @@ completed.
 Raw local logs remain outside source control under /private/tmp; CI retains its
 own artifacts. These checks qualify ownership, bindings and execution. They do
 not establish a reduction in model thinking or improved search quality.
+
+The first migration CI also exposed missing transferred licensing metadata, a
+stale Bazel producer projection, and the real Core/ASP dependency conflict
+(gerbil-poo 099b381 versus fdeadfa). Explicit REUSE annotations preserve original
+source/report bytes. The native workspace declares the existing license.
+ASP PR #12 changes only its dependency pin and passed its original native build
+and 17-module parent test suite; its intentional child failure controls remain
+active. Both consumers use that immutable source. Bazel projections are derived
+with the existing pin/lock tool and its contract; no tag override is introduced.
