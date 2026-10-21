@@ -16,3 +16,22 @@ class AssessmentFormal(unittest.TestCase):
                         self.assertEqual(fault.expected, 12)
                         self.assertIn(fault.property, fault.configuration.invariants)
                         self.assertEqual(fault.configuration.properties, ())
+
+    def test_concurrent_delivery_and_query_controls_survive_migration(self):
+        anchored = {o.name: o for o in obligations(configuration("AnchoredEvidenceSlice", {}))}
+        self.assertEqual({name: o.property for name, o in anchored.items() if name != "correct"}, {
+            "index-only-hit": "SoundHit",
+            "mix-witnesses": "SoundHit",
+            "invalid-declaration-hit": "SoundHit",
+            "ack-collapsed": "Acknowledged",
+            "ack-before-delivery": "DeliveryAcknowledged",
+            "reuse-unverified-delivery": "VerifiedReuse",
+            "drop-query-on-replay": "QueryRetained",
+            "drop-first-hit": "FirstHit", "invent-hit": "SoundHit", "dump-graph": "Local",
+            "hide-counter": "Family", "wrong-chain": "Traceable",
+            "hide-truncation": "HonestPresentation", "gap-as-absent": "Gaps",
+            "mask-gap": "Gaps", "count-only-delta": "ExactDelta",
+            "hide-discovery": "DiscoveryExact", "invent-discovery": "DiscoveryExact",
+            "select-action": "Open", "close-scope": "Open",
+        })
+        self.assertTrue(all(o.expected == 12 for name, o in anchored.items() if name != "correct"))
