@@ -160,7 +160,7 @@ def _scheme(value: object) -> str:
 def _load_backend(root: Path):
     # Core also runs standalone; locate its tool through the explicit repository.
     spec = importlib.util.spec_from_file_location(
-        "_poo_flow_quint_backend", root / "core/proofs/quint/backend.py")
+        "_poo_flow_quint_backend", root / "core/dev/proofs/quint/backend.py")
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

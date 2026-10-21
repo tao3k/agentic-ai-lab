@@ -42,7 +42,7 @@ GROUPS = {
         QuintCase("SearchAttempt_ignoreRetired", "NoRetiredAdmission", True),
         QuintCase("SearchAttempt_cancelAny", "NoStaleCancellation", True)],
     "governance": [QuintCase("GovernanceCore")],
-    "query": [QuintCase("NativeSemanticQuery", source_directory="core/proofs/quint")],
+    "query": [QuintCase("NativeSemanticQuery", source_directory="core/dev/proofs/quint")],
     "healthcare": [QuintCase("HealthcarePrescriptionCausality")],
     "healthcare-ai": [QuintCase("HealthcareAIAssistedPrescriptionCausality")],
     "healthcare-migration": [QuintCase("HealthcareStandardMigration")],

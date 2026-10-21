@@ -16,7 +16,7 @@
    "name": "PooFlowCoreProof",
    "manifestFile": "lake-manifest.json",
    "inherited": false,
-   "dir": "../../../core/proofs/lean",
+   "dir": "../../../core/dev/proofs/lean",
    "configFile": "lakefile.lean"},
   {"url": "https://github.com/leanprover-community/batteries",
    "type": "git",

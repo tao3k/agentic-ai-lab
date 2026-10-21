@@ -5,7 +5,7 @@
 (package:
  poo-flow
 depend:
- ("github.com/tao3k/gerbil-poo@fdeadfa40ca5cee5fe20308985aef1577f2eb49b"
+ ("github.com/tao3k/gerbil-poo@0df023fd9e15192156935c971f0f1940028c5277"
   "github.com/tao3k/asp-gerbil-scheme@0f78289a7ae465a84370f5d94d8d14671f3c43af"
   "github.com/tao3k/gerbil-parser@78507e68b1275be1be748be465d6354f596d9063"
   "github.com/tao3k/orgize@8f04aa246290b56b5605f4a38f25c55d0b416268"

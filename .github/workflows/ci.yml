@@ -423,8 +423,8 @@ jobs:
           path: |
             ~/.elan
             packages/proofs/lean/.lake
-            core/proofs/lean/.lake
-          key: lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/proofs/lean/lakefile.lean', 'core/proofs/lean/lake-manifest.json') }}
+            core/dev/proofs/lean/.lake
+          key: lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
           restore-keys: |
             lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-
 
@@ -463,8 +463,8 @@ jobs:
           path: |
             ~/.elan
             packages/proofs/lean/.lake
-            core/proofs/lean/.lake
-          key: lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/proofs/lean/lakefile.lean', 'core/proofs/lean/lake-manifest.json') }}
+            core/dev/proofs/lean/.lake
+          key: lean-proof-${{ matrix.target }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
 
   cedar-rust-runtime-host:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
@@ -483,8 +483,8 @@ jobs:
           path: |
             ~/.elan
             packages/proofs/lean/.lake
-            core/proofs/lean/.lake
-          key: lean-proof-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/proofs/lean/lakefile.lean', 'core/proofs/lean/lake-manifest.json') }}
+            core/dev/proofs/lean/.lake
+          key: lean-proof-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
           restore-keys: |
             lean-proof-${{ runner.os }}-${{ runner.arch }}-
 

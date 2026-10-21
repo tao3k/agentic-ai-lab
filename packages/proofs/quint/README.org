@@ -20,7 +20,7 @@ PYTHONPATH=packages/python-testing/src python3 -m poo_flow_testing.checks.quint 
   --group all --receipt /tmp/poo-quint-proof.ss
 #+end_src
 
-The default runner uses [[file:../../../core/proofs/quint/backend.py][Core's backend session helper]] to own one
+The default runner uses [[file:../../../core/dev/proofs/quint/backend.py][Core's backend session helper]] to own one
 version-checked Apalache process per invocation, with a 1 GiB heap and an
 ephemeral loopback endpoint. Each model gets a fresh compilation and TLC run.
 The session is cleaned up on completion, failure and TERM; proof admission

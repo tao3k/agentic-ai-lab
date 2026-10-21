@@ -26,7 +26,7 @@ def test_model_source_cut_controls_receipt_publication(monkeypatch, change):
         monkeypatch.setattr(quint, "GROUPS", {"control": [case]})
         monkeypatch.setattr(sys, "argv", ["quint", "--receipt", str(receipt)])
         monkeypatch.setattr(quint, "_load_backend", lambda root: SimpleNamespace(
-            __file__=str(root / "core/proofs/quint/backend.py"),
+            __file__=str(root / "core/dev/proofs/quint/backend.py"),
             backend_session=lambda _progress, _quint: nullcontext("localhost:0")))
 
         def verifier(*_):

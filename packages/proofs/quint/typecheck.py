@@ -10,7 +10,7 @@ version = subprocess.run([str(quint), '--version'], capture_output=True, text=Tr
                          check=True, timeout=5).stdout.strip()
 if version != '0.33.0':
     raise SystemExit(f'expected Quint 0.33.0, got {version!r}')
-sources = [*models.glob('*.qnt'), *(models.parents[2] / 'core/proofs/quint').glob('*.qnt')]
+sources = [*models.glob('*.qnt'), *(models.parents[2] / 'core/dev/proofs/quint').glob('*.qnt')]
 for source in sorted(sources):
     print(f'QUINT-TYPECHECK {source.name}', flush=True)
     subprocess.run([str(quint), 'typecheck', str(source)], check=True, timeout=5)
