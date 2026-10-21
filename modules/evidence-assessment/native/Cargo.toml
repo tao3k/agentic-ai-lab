@@ -10,7 +10,7 @@ name = "poo_flow_reasoning"
 crate-type = ["rlib", "cdylib"]
 
 [dependencies]
-gerbil-ascent = { path = "/private/tmp/ascent-rule-library-migration-20261021/rust/ascent", features = ["provider-protocol"] }
+gerbil-ascent = { git = "https://github.com/tao3k/gerbil-ascent", rev = "b03efb55f2bfda0a7062687b6539a45f06adbabe" }
 num-bigint = "=0.4.8"
 num-rational = "=0.4.2"
 num-traits = "=0.2.19"

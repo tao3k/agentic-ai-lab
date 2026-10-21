@@ -338,6 +338,7 @@ dependencies = [
 [[package]]
 name = "gerbil-ascent"
 version = "0.1.0"
+source = "git+https://github.com/tao3k/gerbil-ascent?rev=b03efb55f2bfda0a7062687b6539a45f06adbabe#b03efb55f2bfda0a7062687b6539a45f06adbabe"
 dependencies = [
  "gerbil-scheme-aot-build",
  "gerbil-scheme-rust-ir",
@@ -345,7 +346,6 @@ dependencies = [
  "num-rational",
  "num-traits",
  "rayon",
- "serde_json",
  "sha2 0.10.9",
  "smallvec",
 ]

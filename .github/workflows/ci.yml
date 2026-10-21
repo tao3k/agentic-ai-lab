@@ -337,6 +337,11 @@ jobs:
         run: |
           python3 -m poo_flow_testing.checks.quint --group all \
             --receipt "$RUNNER_TEMP/poo-quint-proof.ss"
+      - name: Verify migrated assessment protocols and negative controls
+        env:
+          PYTHONPATH: packages/python-testing/src
+          QUINT_HOME: ${{ runner.temp }}/poo-quint-cache
+        run: python3 -m poo_flow_testing.checks.assessment_formal quint all
       - name: Upload Quint receipt
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -397,6 +402,9 @@ jobs:
             ffi: false
           - owner: workflow
             target: PooFlowModuleWorkflowProof
+            ffi: false
+          - owner: evidence-assessment
+            target: PooFlowModuleEvidenceAssessmentProof
             ffi: false
           - owner: memory-core
             target: PooFlowModuleMemoryCoreProof
