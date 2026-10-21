@@ -16,7 +16,7 @@ num-rational = "=0.4.2"
 num-traits = "=0.2.19"
 sha2 = "=0.10.9"
 pyo3 = { version = "=0.27.2", features = ["abi3-py310", "num-bigint"], optional = true }
-gerbil-scheme-python = { git = "https://github.com/tao3k/gerbil-scheme-rust", rev = "8c23217d1f838e71a972e606d6e38e6386f3b0a7", default-features = false, features = ["python", "owned-values"], optional = true }
+gerbil-scheme-python = { git = "https://github.com/tao3k/gerbil-scheme-rust", rev = "cfbc10c47ddc41f6670bd78e46e1e9d856cbb870", default-features = false, features = ["python", "owned-values"], optional = true }
 serde_json = { version = "=1.0.151", features = ["arbitrary_precision"] }
 
 [build-dependencies]

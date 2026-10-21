@@ -413,7 +413,7 @@ dependencies = [
 [[package]]
 name = "gerbil-scheme-python"
 version = "0.1.0"
-source = "git+https://github.com/tao3k/gerbil-scheme-rust?rev=8c23217d1f838e71a972e606d6e38e6386f3b0a7#8c23217d1f838e71a972e606d6e38e6386f3b0a7"
+source = "git+https://github.com/tao3k/gerbil-scheme-rust?rev=cfbc10c47ddc41f6670bd78e46e1e9d856cbb870#cfbc10c47ddc41f6670bd78e46e1e9d856cbb870"
 dependencies = [
  "num-bigint",
  "pyo3",
