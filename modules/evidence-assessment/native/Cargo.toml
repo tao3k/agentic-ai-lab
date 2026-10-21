@@ -25,6 +25,9 @@ serde_json = "=1.0.151"
 
 [workspace]
 
+[workspace.package]
+license = "Apache-2.0 AND LGPL-2.1-or-later"
+
 [[test]]
 name = "assessment"
 path = "tests/assessment.rs"
