@@ -393,3 +393,10 @@ published Source or deployment/execution path.
 - [[https://github.com/NixOS/nix/blob/2.34.4/src/libflake-c/nix_api_flake.h][Nix 2.34.4 public Flake C API]]: strict mode, overrides, parsing and output lifetime.
 - [[https://github.com/NixOS/nix/blob/2.34.4/src/libstore/globals.cc][Nix 2.34.4 library settings]]: native platform-probe initialization.
 - [[https://github.com/NixOS/nix/blob/2.34.4/src/libcmd/installables.cc][Nix 2.34.4 CLI installable arguments]]: override/write-lock interaction.
+
+* First-demand attribution follow-up
+
+See [[file:16-nix-c-api-first-demand.org][10.08.16 First-Demand Attribution]] for native wall/CPU phase measurements,
+the corrected CLI persistent-cache conclusion, shared-cache controls and the
+prepared immutable-reference experiment. The cold-start cache explanation
+must follow that source/experimental result rather than speculation.

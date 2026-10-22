@@ -12,7 +12,8 @@
         (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
         "../compatibility.ss")
 (export nix-api-suite root nix demand field admit provider-expression
-        write-input assert rejected? timed checked-query observe-inputs AwsOnly AwsNull)
+        write-input assert rejected? timed checked-query observe-inputs AwsOnly AwsNull
+        provider-exports)
 
 (def root (getenv "POO_FLOW_NIX_C_API_ROOT"))
 (def nix (getenv "POO_FLOW_NIX_C_API_CLI"))
@@ -67,23 +68,40 @@
     (assert 'awscc-not-selected (not (.has? (.get Module modules) awscc)))
     evidence))
 
+(def (provider-environment directory (package-set #f))
+  (string-append
+    (if package-set
+      (string-append "let pkgs = import " package-set " {}; ")
+      (string-append "let source = import " (path-expand "t/fixtures/nixpkgs.nix" root)
+                     "; pkgs = import source.outPath {}; "))
+    "catalog = import " (path-expand "t/fixtures/opentofu/family-schemas.nix" root)
+    " { inherit pkgs; }; "
+    "schemas = catalog // { awscc = throw \"unselected awscc forced\"; }; "
+    "makePackage = selection: pkgs.callPackage "
+    (path-expand "modules/services/opentofu/nix/provider-artifacts.nix" root)
+    " { inherit schemas selection; }; "
+    "receipt = selection: package: builtins.toJSON { "
+    "derivation = package.drvPath; output = package.outPath; "
+    "providers = selection.providers; version = builtins.nixVersion; "
+    "stamp = import " (path-expand "stamp.nix" directory) "; }; "))
+
 (def (provider-expression directory)
-  (let ((core root)
-        (stamp (path-expand "stamp.nix" directory)))
-    (string-append
-      "let source = import " (path-expand "t/fixtures/nixpkgs.nix" core) "; "
-      "pkgs = import source.outPath {}; "
-      "catalog = import " (path-expand "t/fixtures/opentofu/family-schemas.nix" core)
-      " { inherit pkgs; }; "
-      "schemas = catalog // { awscc = throw \"unselected awscc forced\"; }; "
-      "in input: let selection = builtins.fromJSON input; "
-      "package = pkgs.callPackage " (path-expand "modules/services/opentofu/nix/provider-artifacts.nix" core)
-      " { inherit schemas selection; }; "
-      ;; Nix toJSON coerces an attrset with outPath to a path string. These
-      ;; private receipt keys deliberately do not invoke that coercion.
-      "in builtins.toJSON { derivation = package.drvPath; output = package.outPath; "
-      "providers = selection.providers; version = builtins.nixVersion; "
-      "stamp = import " stamp "; }")))
+  (string-append (provider-environment directory)
+    "in input: let selection = builtins.fromJSON input; "
+    "in receipt selection (makePackage selection)"))
+
+;; Both exports share the exact same environment, constructor and receipt.
+;; WHNF probes are explicit force points, not a claim to exhaust lazy imports.
+(def (provider-exports directory (package-set #f))
+  (string-append (provider-environment directory package-set)
+    "in { providerArtifacts = input: let selection = builtins.fromJSON input; "
+    "in receipt selection (makePackage selection); "
+    "diagnostic = input: let selection = builtins.fromJSON input; "
+    "package = makePackage selection; in { "
+    (if package-set "" "source = builtins.toString source.outPath; ")
+    "imports = builtins.seq pkgs.callPackage (builtins.seq schemas \"ready\"); "
+    "package = builtins.seq package \"ready\"; "
+    "receipt = receipt selection package; }; }"))
 
 ;; This bounded expression fixture has an explicit complete import closure.
 ;; Reuse the production currentness checker; do not claim automatic FFI input

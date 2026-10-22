@@ -85,3 +85,18 @@ returning a stale configuration. The parent plan and derived child plan have
 separate POO receiver caches; adding Null never changes the cached AWS parent.
 
 See [[file:../../docs/10-19-design/10.08-config-languages/15-nix-c-api-qualification.org][the design report]] for measurements, failed controls and limits.
+
+* First-demand profiling
+
+#+begin_src sh
+just --justfile bindings/nix-c-api/Justfile test profile
+#+end_src
+
+This uses the same bounded Ops/TestingScript entry, with one real Case. It
+reports native wall/CPU/call counts, first-process lazy force points and three
+matched AWS-to-Null rounds. Both backends receive the same fresh cache root
+before startup. Impure CLI eval-cache on/off controls create no eval database;
+a pure scalar positive control does create one. A preparation-produced Store
+reference removes repeated source resolution without adding a global cache.
+The prepared path is not a new Flake path input and is not proven to improve
+cold latency. See [[file:../../docs/10-19-design/10.08-config-languages/16-nix-c-api-first-demand.org][the first-demand report]] for measurements and limits.

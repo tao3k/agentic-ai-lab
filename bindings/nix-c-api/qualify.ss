@@ -21,7 +21,7 @@
 (def observations
   (map (lambda (name) (let (path (local name)) (cons path (module-source-read path))))
     '("dependencies.json" "session.h" "worker.c" "binding.ss" "session.ss"
-      "compatibility.ss" "tests/cases.ss" "tests/embedding-test.ss" "tests/qualification-test.ss" "tests/flake-cases.ss")))
+      "compatibility.ss" "tests/cases.ss" "tests/embedding-test.ss" "tests/qualification-test.ss" "tests/flake-cases.ss" "tests/profile-test.ss")))
 (def (current!) (module-source-admit-current! observations))
 
 (def (execute command (environment (.o)))
@@ -37,14 +37,17 @@
                    '("flake-dev" "fetchers-dev" "expr-dev" "store-dev" "util-dev")) ":"))
 
 (def (qualify backend build)
-  (unless (member backend '("worker" "embedded" "embedded-preload"))
+  (unless (member backend '("worker" "embedded" "embedded-preload" "profile"))
     (error "unknown C API qualification backend" backend))
   (def packages (.o PKG_CONFIG_PATH: (package-path)))
   (def flags (words (execute '("pkg-config" "--cflags" "nix-flake-c") packages)))
   (def libraries (words (execute '("pkg-config" "--libs" "nix-flake-c") packages)))
   (def library-directory (string-trim (execute '("pkg-config" "--variable=libdir" "nix-flake-c") packages)))
   (def worker? (equal? backend "worker"))
-  (def test-file (local (if worker? "tests/qualification-test.ss" "tests/embedding-test.ss")))
+  (def profiling? (equal? backend "profile"))
+  (def test-file (local (cond (worker? "tests/qualification-test.ss")
+                             (profiling? "tests/profile-test.ss")
+                             (else "tests/embedding-test.ss"))))
   (if worker?
     (execute (append '("/usr/bin/clang" "-O2") flags
                 (list (string-append "-I" directory) (local "worker.c")) libraries
@@ -53,6 +56,18 @@
                   "-cc-options" (string-join (append flags (list (string-append "-I" directory))) " ")
                   "-ld-options" (string-join libraries " ") (local "binding.ss"))
       (.o COMPILER_PATH: "/usr/bin" CPATH: "" LIBRARY_PATH: "" SDKROOT: "")))
+  (def profile-cache (path-expand "nix-cache" build))
+  (when profiling? (create-directory profile-cache))
+  (def package-start (real-time))
+  (def profile-package
+    (and profiling?
+      (string-trim
+        (execute (list (dependency "cli") "--extra-experimental-features" "nix-command flakes" "eval" "--impure" "--raw" "--expr"
+                   (string-append "(import " (path-expand "t/fixtures/nixpkgs.nix" root) ").outPath"))
+          (.o XDG_CACHE_HOME: profile-cache)))))
+  (when profiling?
+    (displayln "NIX-PROFILE-PREPARATION package-set-seconds=" (- (real-time) package-start))
+    (force-output))
   (def cli-output (string-trim (execute (list (dependency "cli") "--version"))))
   (unless (string-prefix? "nix (Nix) " cli-output) (error "unexpected Nix version output" cli-output))
   (def cli-version (substring cli-output 10 (string-length cli-output)))
@@ -63,8 +78,13 @@
         POO_FLOW_NIX_C_API_CLI: (dependency "cli")
         POO_FLOW_NIX_C_API_CLI_VERSION: cli-version
         POO_FLOW_NIX_C_API_WORKER: (path-expand "worker" build)))
+  (when profiling?
+    (set! test-environment
+      (.+ test-environment
+        (.o XDG_CACHE_HOME: profile-cache
+            POO_FLOW_NIX_PROFILE_PACKAGE_SET: profile-package))))
   (def test-command '("gxtest" "-:max-heap=2G,debug=q"))
-  (when (equal? backend "embedded-preload")
+  (when (member backend '("embedded-preload" "profile"))
     (let* ((installed (string-trim (execute '("which" "gerbil"))))
            (actual (string-trim (execute (list "realpath" installed))))
            (prefix (path-directory (path-strip-trailing-directory-separator (path-directory actual))))
@@ -77,8 +97,9 @@
               DYLD_INSERT_LIBRARIES: (path-expand "libnixflakec.dylib" library-directory))))))
   ;; Core owns marker validation, fixture cleanup, return currentness and limits.
   (.def (Test @ TestingScript.)
-    case-count: (if worker? 3 4)
-    required-lines: (if worker? '() '("ASSERT-OK failed-lock-never-written"))
+    case-count: (cond (worker? 3) (profiling? 1) (else 4))
+    required-lines: (cond (worker? '()) (profiling? '("ASSERT-OK profile-controls-complete"))
+                          (else '("ASSERT-OK failed-lock-never-written")))
     source: (.o spec: (list test-file) source-root: root admit-current: current!)
     command: (append test-command (list "-v" "5" test-file))
     environment: test-environment
