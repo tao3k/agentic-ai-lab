@@ -233,3 +233,8 @@ failed receipts, not passing evidence. No library/compiler source is patched.
 - Next evidence question: which import subtrees and external waits dominate
   real application startup after the process-first force point is isolated?
   Such attribution must precede a global cache or new lifetime policy.
+
+The follow-up [[file:17-nix-c-api-wait-attribution.org][import/derivation wait attribution]] adds GC, thread CPU,
+rusage and targeted stack observations without changing the workload or
+relaxing deadlines. It distinguishes a measured host-contention episode from
+an intrinsic API cost and retains the failed runs.

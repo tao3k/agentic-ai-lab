@@ -42,6 +42,8 @@
   (let* ((start (real-time)) (result (thunk)) (seconds (- (real-time) start)))
     (displayln "NIX-API-TIMING " backend " round=" round
                " phase=" phase " seconds=" seconds)
+    ;; Flush actual completed work; a stalled call still hits the idle limit.
+    (force-output)
     result))
 
 (.def AwsOnly

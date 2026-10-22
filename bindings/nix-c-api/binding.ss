@@ -15,6 +15,8 @@
 (def-C-lambda native-apply (session-pointer char-string) int "pf_nix_apply")
 (def-C-lambda native-result (session-pointer char-string) int "pf_nix_result")
 (def-C-lambda phase-seconds (session-pointer int int) double "pf_nix_seconds")
+(def-C-lambda incremental-gc-mode () int "___return(pf_nix_profile ? pf_gc_incremental_mode() : -1);")
+(def-C-lambda phase-metric (session-pointer int int) double "pf_nix_metric")
 (def-C-lambda phase-calls (session-pointer int) unsigned-int "pf_nix_phase_calls")
 (def-C-lambda session-output (session-pointer) char-string "___return(___arg1->output);")
 (def-C-lambda session-error (session-pointer) char-string "___return(___arg1->error);")
@@ -66,5 +68,7 @@
     ;; Freeze scalar observations now; do not leave C pointers in lazy slots.
     (let ((wall-seconds (phase-seconds session index 0))
           (cpu-seconds (phase-seconds session index 1))
-          (count (phase-calls session index)))
-      (.o wall: wall-seconds cpu: cpu-seconds calls: count))))
+          (count (phase-calls session index))
+          (gc-mode (incremental-gc-mode))
+          (metric-values (map (lambda (metric) (phase-metric session index metric)) (iota 10))))
+      (.o wall: wall-seconds cpu: cpu-seconds calls: count metrics: metric-values incremental-gc: gc-mode))))

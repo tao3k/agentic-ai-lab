@@ -41,7 +41,10 @@
          (after (session-timing session 'result)))
     (displayln "NIX-FORCE round=" round " phase=" label
                " wall=" (- (.get after wall) (.get before wall))
-               " cpu=" (- (.get after cpu) (.get before cpu)))
+               " cpu=" (- (.get after cpu) (.get before cpu))
+               " incremental-gc=" (.get after incremental-gc)
+               " metrics=" (map - (.get after metrics) (.get before metrics)))
+    (force-output)
     value))
 
 (def profile-test
@@ -49,6 +52,7 @@
     (test-case "three matched rounds, baseline versus explicit lazy force points"
       (call-with-temporary-directory "poo-flow-nix-profile"
         (lambda (temporary)
+          (displayln "NIX-METRIC-FIELDS thread-cpu-seconds full-gc-milliseconds gc-cycles allocated-bytes minor-faults major-faults input-blocks output-blocks voluntary-switches involuntary-switches")
           (def base (path-normalize temporary))
           (def directory (path-expand "project" base))
           (def cache (getenv "XDG_CACHE_HOME"))

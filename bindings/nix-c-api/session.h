@@ -8,17 +8,55 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <sys/resource.h>
+#include <dlfcn.h>
 
 enum { PF_INIT, PF_STORE, PF_STATE, PF_SETTINGS, PF_LOCK, PF_OUTPUTS,
        PF_APPLY, PF_RESULT, PF_PHASES };
-typedef struct { double wall, cpu; } pf_nix_clock;
+/* Qualification-only counters. GC symbols belong to the already loaded Nix
+ * dependency; no second collector is loaded. Thread CPU excludes helper threads.
+ * rusage block counts are not read(2) counts and may be zero for cached I/O. */
+enum { PF_THREAD, PF_GC_MS, PF_GC_CYCLES, PF_ALLOCATED, PF_MINOR, PF_MAJOR,
+       PF_INBLOCK, PF_OUTBLOCK, PF_VOLUNTARY, PF_INVOLUNTARY, PF_METRICS };
+static int pf_nix_profile;
+static int (*pf_gc_incremental_mode)(void);
+static unsigned long (*pf_gc_time)(void), (*pf_gc_cycles)(void);
+static size_t (*pf_gc_allocated)(void);
+static int pf_nix_profile_start(void)
+{
+    pf_nix_profile = getenv("POO_FLOW_NIX_PROFILE_METRICS") != NULL;
+    if (!pf_nix_profile) return 1;
+    if (pf_gc_time && pf_gc_cycles && pf_gc_allocated) return 1;
+    void (*start)(void) = dlsym(RTLD_DEFAULT, "GC_start_performance_measurement");
+    pf_gc_time = dlsym(RTLD_DEFAULT, "GC_get_full_gc_total_time");
+    pf_gc_cycles = dlsym(RTLD_DEFAULT, "GC_get_gc_no");
+    pf_gc_allocated = dlsym(RTLD_DEFAULT, "GC_get_total_bytes");
+    pf_gc_incremental_mode = dlsym(RTLD_DEFAULT, "GC_is_incremental_mode");
+    if (!start || !pf_gc_time || !pf_gc_cycles || !pf_gc_allocated || !pf_gc_incremental_mode) return 0;
+    start();
+    return 1;
+}
+typedef struct { double wall, cpu, metrics[PF_METRICS]; } pf_nix_clock;
 static pf_nix_clock pf_nix_now(void)
 {
     struct timespec wall, cpu;
     clock_gettime(CLOCK_MONOTONIC, &wall);
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &cpu);
-    return (pf_nix_clock){wall.tv_sec + wall.tv_nsec * 1e-9,
-                          cpu.tv_sec + cpu.tv_nsec * 1e-9};
+    pf_nix_clock result = {wall.tv_sec + wall.tv_nsec * 1e-9,
+                           cpu.tv_sec + cpu.tv_nsec * 1e-9, {0}};
+    if (pf_nix_profile) {
+        struct timespec thread;
+        struct rusage usage;
+        clock_gettime(CLOCK_THREAD_CPUTIME_ID, &thread);
+        getrusage(RUSAGE_SELF, &usage);
+        double metrics[PF_METRICS] = {
+            thread.tv_sec + thread.tv_nsec * 1e-9,
+            pf_gc_time(), pf_gc_cycles(), pf_gc_allocated(),
+            usage.ru_minflt, usage.ru_majflt, usage.ru_inblock, usage.ru_oublock,
+            usage.ru_nvcsw, usage.ru_nivcsw};
+        memcpy(result.metrics, metrics, sizeof metrics);
+    }
+    return result;
 }
 
 typedef struct {
@@ -36,6 +74,7 @@ typedef struct {
     unsigned calls;
     double wall[PF_PHASES], cpu[PF_PHASES];
     unsigned phase_calls[PF_PHASES];
+    double metrics[PF_PHASES][PF_METRICS];
 } pf_nix_session;
 
 static void pf_nix_elapsed(pf_nix_session *s, int phase, pf_nix_clock start)
@@ -43,12 +82,20 @@ static void pf_nix_elapsed(pf_nix_session *s, int phase, pf_nix_clock start)
     pf_nix_clock end = pf_nix_now();
     s->wall[phase] += end.wall - start.wall;
     s->cpu[phase] += end.cpu - start.cpu;
+    if (pf_nix_profile)
+        for (int i = 0; i < PF_METRICS; ++i)
+            s->metrics[phase][i] += end.metrics[i] - start.metrics[i];
     ++s->phase_calls[phase];
 }
 static double pf_nix_seconds(pf_nix_session *s, int phase, int cpu)
 {
     if (phase < 0 || phase >= PF_PHASES) return -1;
     return cpu ? s->cpu[phase] : s->wall[phase];
+}
+static double pf_nix_metric(pf_nix_session *s, int phase, int metric)
+{
+    return phase >= 0 && phase < PF_PHASES && metric >= 0 && metric < PF_METRICS
+        ? s->metrics[phase][metric] : -1;
 }
 static unsigned pf_nix_phase_calls(pf_nix_session *s, int phase)
 {
@@ -81,6 +128,10 @@ static pf_nix_session *pf_nix_create(void)
     if (!s) return NULL;
     s->ctx = nix_c_context_create();
     if (!s->ctx) { free(s); return NULL; }
+    if (!pf_nix_profile_start()) {
+        s->error = strdup("loaded Nix GC lacks required qualification counters");
+        return s;
+    }
     pf_nix_clock start = pf_nix_now();
     nix_libexpr_init(s->ctx);
     pf_nix_elapsed(s, PF_INIT, start);

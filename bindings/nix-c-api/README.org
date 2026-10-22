@@ -100,3 +100,10 @@ a pure scalar positive control does create one. A preparation-produced Store
 reference removes repeated source resolution without adding a global cache.
 The prepared path is not a new Flake path input and is not proven to improve
 cold latency. See [[file:../../docs/10-19-design/10.08-config-languages/16-nix-c-api-first-demand.org][the first-demand report]] for measurements and limits.
+
+The profile backend additionally records thread CPU, Nix GC allocation/time
+and process rusage counters. These counters are disabled in ordinary runs.
+Use =POO_FLOW_NIX_PROFILE_LOG=/absolute/local/path= to retain the partial
+Harness transcript through existing Ops logging. Completed query timings are
+flushed; stalled calls retain the same idle deadline. See
+[[file:../../docs/10-19-design/10.08-config-languages/17-nix-c-api-wait-attribution.org][the wait-attribution report]] for host-contention controls and measurement limits.

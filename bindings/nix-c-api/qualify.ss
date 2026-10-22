@@ -82,6 +82,7 @@
     (set! test-environment
       (.+ test-environment
         (.o XDG_CACHE_HOME: profile-cache
+            POO_FLOW_NIX_PROFILE_METRICS: "1"
             POO_FLOW_NIX_PROFILE_PACKAGE_SET: profile-package))))
   (def test-command '("gxtest" "-:max-heap=2G,debug=q"))
   (when (member backend '("embedded-preload" "profile"))
@@ -102,6 +103,7 @@
                           (else '("ASSERT-OK failed-lock-never-written")))
     source: (.o spec: (list test-file) source-root: root admit-current: current!)
     command: (append test-command (list "-v" "5" test-file))
+    log: (and profiling? (getenv "POO_FLOW_NIX_PROFILE_LOG" #f))
     environment: test-environment
     profile: =>.+ (.o max-duration-milliseconds: 120000 max-idle-milliseconds: 60000))
   (display (.get (.call Test .run) output)))
