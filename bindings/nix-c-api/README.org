@@ -1,0 +1,87 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: POO Flow Nix C API Binding Qualification
+#+language: en
+
+* Boundary
+
+The C binding and process bootstrap belong to POO Flow, never Yuanxu.
+=call-with-flake-session= parses a reference, strictly checks its lock and
+selects an output function using =libflake-c=. =session-query= calls that
+function in the same EvalState. Scope/lifetime are explicit; no evaluation
+session is created by a Scheme declaration.
+
+Compatibility requires numeric =(major, minor) >= (2, 34)= and actual header,
+linker and runtime probes. =dependencies.json= pins the qualification CLI and
+C libraries to =2.34.4+1= on =aarch64-darwin=. It does not rebuild Gerbil.
+
+* Direct embedding and startup ownership
+
+The default test uses the installed Gerbil executable and preloads
+=libnixflakec.dylib= before Gambit initialization. This is direct in-process
+FFI: no evaluator worker or Nix CLI is launched for an API query.
+
+This ordering matters on macOS. Loading libstore with =dlopen= after Gambit
+initialization runs =Settings::getDefaultExtraPlatforms()=, which invokes
+=arch -arch x86_64 /usr/bin/true=. The recorded abort backtrace goes through
+=Pid::wait=, =runProgram= and the library's global initializer. Gambit's
+SIGCHLD reaper can consume that child first. Early native-library loading
+avoids that particular initialization race without replacing signal handlers.
+The launcher targets the actual installed =current/bin/gxtest=, because a
+system-interpreter wrapper may discard =DYLD_INSERT_LIBRARIES=.
+
+Preloading itself runs Nix's native initializers, including its platform
+probe; it is an explicit process-startup action, not inert module discovery.
+The successful qualification does not prove that every Nix feature that
+spawns subprocesses can coexist with Gambit's child reaper. Realization,
+remote builders and arbitrary execution remain separate qualifications.
+
+* Files
+
+- =session.h=: private reference-counted expression/Flake bridge.
+- =binding.ss=: explicit functional session and query interface.
+- =qualify.ss=: product preparation and installed-binary bootstrap; Core Ops
+  and TestingScript retain execution, failure, source and timeout gates.
+- =tests/flake-cases.ss=: native Flake/CLI comparison, real AWS and Null
+  Contracts, strict lock/override negatives, receiver and source controls.
+- =tests/cases.ss=: shared real-provider fixture and expression controls.
+- =worker.c= and =session.ss=: retained expression-worker comparison, not the
+  final Flake implementation or the default test path.
+
+* Run
+
+Use an installed, compiled Yuanxu/gerbil-poo dependency closure in
+=GERBIL_PATH= / =GERBIL_LOADPATH= and run serially:
+
+#+begin_src sh
+just --justfile bindings/nix-c-api/Justfile dependencies
+just --justfile bindings/nix-c-api/Justfile test
+#+end_src
+
+Preparation and Harness execution retain separate 120-second limits, the
+Harness retains its 60-second idle limit, and Scheme processes have a 2 GiB
+pre-import heap fence. Four actual Cases and the final strict-lock assertion
+are required, in addition to MODULE-OK / HARNESS-OK / OK and no failure markers.
+Real AWS/Null schema artifacts must already exist; no synthetic replacement
+is made and package acquisition is excluded from evaluation timings.
+
+=just --justfile bindings/nix-c-api/Justfile test worker= retains the three
+expression comparison Cases. =test embedded= is the late-loading negative
+control; its abort is a failure, never a successful receipt.
+
+* Locking and source boundaries
+
+The bridge always selects =nix_flake_lock_flags_set_mode_check=. It never
+writes or virtually updates a lock. Input overrides must be locked references;
+adding one preserves check mode. Lock creation in the test is explicit fixture
+preparation performed by the CLI, outside measured evaluation.
+
+The existing source-currentness consumer runs before and after a query and
+before returning a cached POO preview. The bounded fixture explicitly records
+its complete known file closure. This is not automatic general-purpose Flake
+source discovery. Neither a warm EvalState nor a locked input authorizes
+returning a stale configuration. The parent plan and derived child plan have
+separate POO receiver caches; adding Null never changes the cached AWS parent.
+
+See [[file:../../docs/10-19-design/10.08-config-languages/15-nix-c-api-qualification.org][the design report]] for measurements, failed controls and limits.
