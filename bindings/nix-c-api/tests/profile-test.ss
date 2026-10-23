@@ -84,8 +84,8 @@
                           (cons policy-source (module-source-read policy-source)))))
           (def aws (demand AwsOnly))
           (def both (demand AwsNull))
-          (def (cli-query input option (attribute "lib.providerArtifacts"))
-            (checked-query observations
+          (def (cli-query input option (attribute "lib.providerArtifacts") (checks observations))
+            (checked-query checks
               (lambda ()
                 (cli (list "eval" "--impure" "--raw" "--no-update-lock-file"
                            "--option" "eval-cache" option
@@ -199,10 +199,24 @@
                 (admit AwsOnly (car baseline))
                 (admit AwsNull (cdr baseline))
                 (when (= number 3)
-                  (write-input stamp "2")
-                  (let (count (session-calls session))
-                    (assert 'staged-source-change-refused (rejected? (cut staged both "stale")))
-                    (assert 'stale-before-native-call (= count (session-calls session))))))))
+                  ;; Cost reuse is not currentness authority. The product's
+                  ;; local Flake header observations cover flake.nix/flake.lock,
+                  ;; not arbitrary imported files. Model precisely that subset
+                  ;; here; this is a negative control, never an accepted path.
+                  (let (headers (filter (lambda (row) (member (car row) (list flake lock))) observations))
+                    (write-input stamp "2")
+                    (let (count (session-calls session))
+                      (assert 'staged-source-change-refused (rejected? (cut staged both "stale")))
+                      (assert 'stale-before-native-call (= count (session-calls session))))
+                    (let* ((cached
+                            (checked-query headers
+                              (lambda ()
+                                (session-apply! session both)
+                                (session-result session "receipt"))))
+                           (fresh (cli-query both "true" "lib.providerArtifacts" headers)))
+                      (assert 'headers-only-reuse-retains-stale-import (= (field cached 'stamp) 1))
+                      (assert 'fresh-evaluation-observes-import-change (= (field fresh 'stamp) 2))
+                      (assert 'same-lock-does-not-prove-current-imports (not (equal? cached fresh)))))))))
           (round 1) (round 2) (round 3)
           ;; A pure scalar positive control proves cache-directory discovery is
           ;; working; it is not a claim that --apply results are persistent.

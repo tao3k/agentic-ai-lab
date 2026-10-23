@@ -113,3 +113,9 @@ with the identical candidate in a fresh EvalState. Both receipts must match;
 this quantifies unnecessary state reconstruction without adding a cache.
 See [[file:../../docs/10-19-design/10.08-config-languages/18-nix-session-reuse-validation.org][the stable-host session-reuse validation]] for the three-round results,
 completed runtime regressions and separate sampling limits.
+
+The profile additionally demonstrates why unchanged Flake headers alone are
+insufficient: an imported file changes, a warm state retains its old value,
+and a fresh evaluation sees the new one. Full observations still reject before
+the native call. See [[file:../../docs/10-19-design/10.08-config-languages/19-nix-callchain-and-reuse-boundary.org][the actual-call-chain audit]]; product Sources currently
+use the CLI, and this qualification is not a completed product integration.

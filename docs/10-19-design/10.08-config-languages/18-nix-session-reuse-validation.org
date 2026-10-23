@@ -142,3 +142,7 @@ These are local binding qualifications, not a claim that PR #34's complete
 CI matrix is green. The inspected preceding head still had other matrix
 failures whose causes were not investigated in this performance task. The numbers also exclude Provider acquisition, realization,
 cloud execution and arbitrary larger Provider sets.
+
+[[file:19-nix-callchain-and-reuse-boundary.org][The actual-call-chain audit]] distinguishes this binding qualification from
+the product's current CLI route and adds an executable stale-import control.
+The same lock/header snapshot alone does not authorize native state reuse.
