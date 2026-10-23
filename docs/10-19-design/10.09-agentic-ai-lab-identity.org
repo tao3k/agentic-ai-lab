@@ -55,6 +55,18 @@ admission or compilation records cannot authorize modified source. Strict Flake
 locking, source-change rejection, per-receiver cache isolation and final Contract
 admission retain their existing owners and checks.
 
+Proof-vector generation also updates its identity-bound fingerprint and digest
+domains through the existing generator. The 424-byte layout and field offsets
+are unchanged; old fingerprints are not silently accepted as the new schema.
+The Scheme differential fixture runs through the heap-fenced Just entry rather
+than invoking an unbounded interpreter from Python.
+
+Published Lean consumers lock the real Agentic AI Lab revision and current
+=packages/proofs/lean= directory. That package locks the same Yuanxu revision as
+the Core gitlink, through its published =dev/proofs/lean= package. CI checks both
+the declaration and Lake lock against that gitlink. A new public package name
+must not be paired with an immutable commit that still exports the old name.
+
 The CI namespace contract scans maintained product source names and text,
 excludes submodule-owned files and recorded evidence, and rejects obsolete
 product identifiers. Submodules retain their own namespace checks. The gate
@@ -73,3 +85,19 @@ the pre-migration commit. Its three displayed failure-frontier records match
 exactly after normalizing only the package path; all 50 functional unit cases
 pass with the declared runtime extra. The migration does not disable that
 Harness or claim its quality gate passes.
+
+The existing proof Python suite passes all 189 cases after native regeneration,
+including installed-wheel consumption and the C/Scheme/Python vector checks.
+The namespace/automation controls pass 25 cases. Local C ABI Bazel qualification
+still requires the declared Gerbil =2591dcd= release; the installed =1cfb032=
+runtime is rejected rather than admitted by weakening its version check. The
+initial cold selected Nix executable build exceeded its existing 240-second cap
+with other compilation running and remains a failed local receipt. The ordinary
+Flake test and functional C API product qualification pass separately; they do
+not relabel that build as a cold success or establish complete CI closure.
+
+The Lambda Episteme consumer resolves the published proof package without a
+parent checkout: its Temporal library and Cedar authorization refinement both
+build against the locked Agentic AI Lab/Yuanxu sources. Its Lean toolchain and
+C4 imports follow that published package; no old-namespace theorem alias is
+introduced.
