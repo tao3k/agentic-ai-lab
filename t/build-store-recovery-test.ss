@@ -1,3 +1,4 @@
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; The orchestrator retains a selected store path, NEVER a Core issuance map.
 (import :std/test :clan/poo/object

@@ -1,3 +1,4 @@
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Independent installed-Gerbil process; no issuer or plan object is inherited.
 (import (only-in :std/encoding/json read-json)

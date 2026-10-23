@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 name: Set up Gerbil prerequisites
 description: Activate the immutable gerbil-bazel release and required tools.
 runs:
@@ -32,7 +34,7 @@ runs:
     - name: Resolve pinned qualification dependencies through Nix
       shell: bash
       run: |
-        package_set=$(nix-instantiate --eval --strict --json t/fixtures/nixpkgs.nix | jq -er .outPath)
+        package_set=$(nix-instantiate --eval --strict --json --attr outPath t/fixtures/nixpkgs.nix | jq -er .)
         test -d "$package_set"
         echo "NIX_PATH=nixpkgs=$package_set" >> "$GITHUB_ENV"
         coreutils=$(NIX_PATH="nixpkgs=$package_set" nix-build --no-out-link '<nixpkgs>' -A coreutils)

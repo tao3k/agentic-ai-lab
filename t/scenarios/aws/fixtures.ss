@@ -1,3 +1,4 @@
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Private version inputs over the existing reader and selected-package owners.
 (import (only-in :poo-flow/modules/nix/progress make-nix-progress-reader) :clan/poo/object

@@ -1,3 +1,4 @@
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Optional ASP policy composition belongs to the development package only.
 (import (only-in :clan/poo/object .cc)

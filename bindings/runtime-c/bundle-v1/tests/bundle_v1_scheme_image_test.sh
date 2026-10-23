@@ -22,6 +22,11 @@ trap 'rm -f "$descriptor" "$arena"' EXIT HUP INT TERM
 YUANXU_BUNDLE_V1_DESCRIPTOR_OUT=$descriptor
 YUANXU_BUNDLE_V1_ARENA_OUT=$arena
 export YUANXU_BUNDLE_V1_DESCRIPTOR_OUT YUANXU_BUNDLE_V1_ARENA_OUT
+YUANXU_BUNDLE_V1_CORE_SOURCE=$(dirname "$core_package")
+export YUANXU_BUNDLE_V1_CORE_SOURCE
 
-"$gxi" -:max-heap=1G,debug=q "$fixture" < /dev/null
+"$gxi" -:max-heap=1G,debug=q \
+  -e '(import (only-in :yuanxu/module-system/building/source-package register-yuanxu-build-source!))' \
+  -e '(register-yuanxu-build-source! (getenv "YUANXU_BUNDLE_V1_CORE_SOURCE"))' \
+  "$fixture" < /dev/null
 "$harness" "$descriptor" "$arena"

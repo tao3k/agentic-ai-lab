@@ -1,3 +1,4 @@
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Qualification of the existing init-owned AWS integration endpoint.
 (import :std/test :yuanxu/object-syntax/path-slots

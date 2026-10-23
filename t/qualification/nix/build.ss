@@ -1,3 +1,4 @@
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Build only the selected adapter import closure with the installed compiler.
 (import (only-in :std/make make pkg-config-libs)

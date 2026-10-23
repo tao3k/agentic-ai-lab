@@ -1,3 +1,4 @@
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (rename-in (only-in :yuanxu/ops/progress make-test-progress-reader) (make-test-progress-reader make-core-test-progress-reader)) (only-in :yuanxu/ops/progress execution-progress! progress-record))
 (export make-nix-progress-reader make-nix-test-progress-reader)

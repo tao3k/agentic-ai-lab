@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 #+title: AWS Profile Contribution
 
 The [[file:../../docs/10-19-design/12-contracts-types/12.25-aws-contextual-publication-validation.org][AWS contextual publication control]] runs real versioned provider Schemas
