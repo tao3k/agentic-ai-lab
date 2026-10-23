@@ -167,3 +167,8 @@ conclusion cached or Gerbil/compiler source changed. A clean-host repeat of
 the final complete profile and ordinary regression remains required before
 claiming a qualified performance improvement. There is no demonstrated new
 cold-import optimization in this change.
+
+The subsequent [[file:18-nix-session-reuse-validation.org][stable-host session-reuse validation]] closes this final-runtime
+rerun gate, preserves these historical failures, and measures an actual
+fresh-EvalState negative cost control. It distinguishes proven session reuse
+from a new runtime optimization and retains the limits of filesystem tracing.

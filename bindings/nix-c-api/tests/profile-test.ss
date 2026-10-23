@@ -32,7 +32,8 @@
         (assert 'nonnegative-native-phase
           (and (>= (.get row wall) 0) (>= (.get row cpu) 0)))
         (displayln "NIX-PHASE round=" round " mode=" mode " phase=" phase
-                   " wall=" (.get row wall) " cpu=" (.get row cpu) " calls=" (.get row calls))))
+                   " wall=" (.get row wall) " cpu=" (.get row cpu) " calls=" (.get row calls)
+                   " incremental-gc=" (.get row incremental-gc) " metrics=" (.get row metrics))))
     '(initialize store state settings lock outputs apply result)))
 
 (def (force-result session round attribute label)
@@ -166,6 +167,16 @@
             (assert 'prepared-cli-null-identical
               (equal? (timed 'profile-prepared-cli number 'null-cold
                         (cut cli-query both "true" "lib.prepared.providerArtifacts")) (cdr baseline)))
+            ;; Negative cost control: rebuilding only because the candidate
+            ;; gains Null repeats imports. It must yield the SAME receipt.
+            (call-with-flake-session reference directory "lib.providerArtifacts" (.o)
+              (lambda (session)
+                (assert 'fresh-child-matches-reused-session
+                  (equal? (timed 'profile-fresh-child number 'null-cold
+                            (lambda ()
+                              (checked-query observations (cut session-query session both))))
+                          (cdr baseline)))
+                (phases session number 'fresh-child)))
             ;; Fresh state; native values from one application share the real
             ;; Nix import/constructor thunks. Each stage reports wall/CPU.
             (call-with-flake-session reference directory "lib.diagnostic" (.o)

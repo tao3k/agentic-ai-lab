@@ -107,3 +107,9 @@ Use =POO_FLOW_NIX_PROFILE_LOG=/absolute/local/path= to retain the partial
 Harness transcript through existing Ops logging. Completed query timings are
 flushed; stalled calls retain the same idle deadline. See
 [[file:../../docs/10-19-design/10.08-config-languages/17-nix-c-api-wait-attribution.org][the wait-attribution report]] for host-contention controls and measurement limits.
+
+The existing profile Case also compares adding Null in the retained session
+with the identical candidate in a fresh EvalState. Both receipts must match;
+this quantifies unnecessary state reconstruction without adding a cache.
+See [[file:../../docs/10-19-design/10.08-config-languages/18-nix-session-reuse-validation.org][the stable-host session-reuse validation]] for the three-round results,
+completed runtime regressions and separate sampling limits.
