@@ -174,3 +174,20 @@ pointer. Scheme sources used by the qualified runtime are unchanged by that
 commit; one new QNT file's redundant trailing blank line was removed during
 the commit check. Other workspace changes included in the coordinated snapshot
 have not all been requalified by this Nix suite. No Gerbil source was modified.
+
+* CI source closure
+
+The pinned Nix package-set expression has an =outPath= attribute. Select that
+attribute before JSON serialization: Nix may coerce the whole attribute set to
+a string when serializing it. The setup action uses =--attr outPath= and checks
+that the decoded result is a directory; it does not change the source lock.
+
+Source-only Bazel inputs include nested =gerbil.pkg= files as well as Scheme
+sources. These headers select each role's native prelude and package identity.
+The ABI source consumer registers the single Yuanxu prelude through the existing
+source-package bootstrap helper before importing the fixture; it does not
+publish a second prelude or depend on an incidental installed Core copy.
+
+The root =gerbil.pkg= and Bazel source/lock projections must name the same
+qualified =gerbil-poo= revision. Dependency-contract checks remain mandatory;
+matching one installed runtime does not excuse a different CI dependency graph.

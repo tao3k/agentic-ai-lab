@@ -8,7 +8,7 @@ let
   # Development-only matched control; production selects its own provider package.
   awsProvider =
     if pkgs.stdenv.hostPlatform.system == "aarch64-darwin" then
-      import ./core/t/fixtures/opentofu/aws-5.100.0/package.nix { inherit pkgs; }
+      import ./t/fixtures/opentofu/aws-5.100.0/package.nix { inherit pkgs; }
     else
       pkgs.terraform-providers.hashicorp_aws;
   awsSchema = pkgs.callPackage ./modules/services/opentofu/nix/provider-schema.nix {
@@ -22,7 +22,7 @@ in
 {
   # https://devenv.sh/basics/
   env.GREET = "devenv";
-  env.YUANXU_OPENTOFU_ARTIFACT = "${opentofuArtifact}";
+  env.POO_FLOW_OPENTOFU_ARTIFACT = "${opentofuArtifact}";
 
   # https://devenv.sh/packages/
   packages = [

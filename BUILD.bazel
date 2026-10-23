@@ -100,7 +100,7 @@ gerbil_project_compile(
 filegroup(
     name = "core_module_sources",
     srcs = ["core/gerbil.pkg"] + glob(
-        ["core/*.ss", "core/**/*.ss"],
+        ["core/*.ss", "core/**/*.ss", "core/**/gerbil.pkg"],
         exclude = ["core/t/**", "core/design/**", "core/module-system/design/**", "core/dev/proofs/**"],
     ),
 )
