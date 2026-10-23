@@ -176,3 +176,22 @@ regression and exact-commit CI are separate gates; neither is implied by these
 focused results. Existing deadlines, memory limits and rejection controls remain
 unchanged. Concurrent uncommitted dependency/type work in the original checkout
 is outside this isolated qualification cohort and is preserved.
+
+** Remaining CI failures and producer fixes
+
+The subsequent full Core run refused four suites: the 1,000 and 10,000 Module
+declaration memory gates, compiled namespace idle progress, and the isolated
+source-admission gateway. These are retained failures, not qualification passes.
+
+Product CI independently exposed a missing explicit =.get= import, a development
+ASP revision not fetched from =dev/gerbil.pkg=, and an SDK =gxtags= crash after
+dependency compilation. Dependency installation now calls the installed SDK's
+documented =pkg-install= under =with-pkg-build-env=. Recursive dependency builds
+and revision checks remain SDK-owned; editor TAGS generation is excluded from
+the compiler gate. This does not modify the SDK or suppress compiler failures.
+Development dependencies are prefetched from their own manifest and package root.
+
+Bazel dependency actions now declare two native compiler workers and two
+concurrent projects instead of multiplying the host CPU count by every action.
+The twelve-minute action limits remain unchanged. Whether this closes the CI
+deadline failures must be established by the next exact-head run.

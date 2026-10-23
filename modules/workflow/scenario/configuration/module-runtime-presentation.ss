@@ -6,7 +6,7 @@
 ;;; Boundary: module runtime-facing projections and presentation receipts.
 ;;; Invariant: projection returns inspectable Scheme values, not runtime handles.
 
-(import (only-in :clan/poo/object .@ .o .ref)
+(import (only-in :clan/poo/object .@ .o .ref .get)
         (only-in :yuanxu/modules/funflow/objects FunflowModule.)
         :agentic-ai-lab/modules/module-authoring/module-interface
         :agentic-ai-lab/modules/module-authoring/module-descriptor

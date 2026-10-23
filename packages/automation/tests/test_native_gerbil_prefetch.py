@@ -7,6 +7,7 @@ import importlib.util
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 SCRIPT = Path(__file__).resolve().parents[1] / "gerbil_dependency_pin.py"
@@ -24,6 +25,33 @@ def git(root: Path, *args: str) -> str:
 
 
 class NativePinPrefetchTest(unittest.TestCase):
+    def test_package_manifest_selects_only_its_own_install_root(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "dev").mkdir()
+            production = "1" * 40
+            development = "2" * 40
+            (root / "gerbil.pkg").write_text(
+                f'(package: production depend: ("github.com/team/library@{production}"))'
+            )
+            manifest = root / "dev" / "gerbil.pkg"
+            manifest.write_text(
+                f'(package: development depend: ("github.com/team/tool@{development}"))'
+            )
+            api = module()
+            with mock.patch.object(api, "ensure_native_commit") as prepare:
+                api.prepare_native_pins(root / "production-pkg", root)
+                prepare.assert_called_once_with(
+                    "https://github.com/team/library.git", production,
+                    (root / "production-pkg/github.com/team/library").resolve(),
+                )
+                prepare.reset_mock()
+                api.prepare_native_pins(root / "development-pkg", root, manifest)
+                prepare.assert_called_once_with(
+                    "https://github.com/team/tool.git", development,
+                    (root / "development-pkg/github.com/team/tool").resolve(),
+                )
+
     def test_unadvertised_commit_is_fetched_without_changing_existing_checkout(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

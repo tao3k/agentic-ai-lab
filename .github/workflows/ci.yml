@@ -145,10 +145,10 @@ jobs:
           if [ "${{ steps.native-gerbil-pkg-cache.outputs.cache-hit }}" = "true" ]; then
             if ! gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "native-dependency-cache-ready"))' >/tmp/native-gerbil-dependency-cache-check.log 2>&1; then
               echo "::notice::Exact native dependency cache is incomplete; refreshing declared revisions"
-              gerbil deps --update
+              gerbil env gerbil interactive packages/automation/native-dependencies.ss
             fi
           else
-            gerbil deps --install
+            gerbil env gerbil interactive packages/automation/native-dependencies.ss
           fi
           gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "native-dependencies-ready"))'
           # The Core submodule owns this checkout's shared POO modules.
@@ -172,7 +172,8 @@ jobs:
 
       - name: Install optional development policy dependencies
         run: |
-          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil deps --install)
+          python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "$GITHUB_WORKSPACE/dev/.gerbil/pkg"
+          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/native-dependencies.ss)
           export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
           gerbil env gerbil interactive -e '(begin (import :asp-gerbil-scheme/benchmark-api :asp-gerbil-scheme/testing-api) (displayln "development-dependencies-ready"))'

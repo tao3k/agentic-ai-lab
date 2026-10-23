@@ -140,7 +140,7 @@
     "@@gerbil_bazel+//gerbil:extensions.bzl%gerbil": {
       "os:linux,arch:amd64": {
         "bzlTransitiveDigest": "ftvcVApdsKajkZscTLJdqAalEp8gjyxQjrBxQOOSik4=",
-        "usagesDigest": "Rd/sq+dZh2Z0/qnpF52G7NhI0RkvtygXH7W/KUFzk8Q=",
+        "usagesDigest": "VV8Z48N1Yob1VbElcXMEvIayV7+2Y4sGT4rmA0KmMKw=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -241,7 +241,7 @@
       },
       "os:osx,arch:aarch64": {
         "bzlTransitiveDigest": "ftvcVApdsKajkZscTLJdqAalEp8gjyxQjrBxQOOSik4=",
-        "usagesDigest": "Rd/sq+dZh2Z0/qnpF52G7NhI0RkvtygXH7W/KUFzk8Q=",
+        "usagesDigest": "VV8Z48N1Yob1VbElcXMEvIayV7+2Y4sGT4rmA0KmMKw=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -253,7 +253,9 @@
                 "zlib"
               ],
               "dependency_roots": [],
-              "environment": {},
+              "environment": {
+                "GERBIL_BUILD_CORES": "2"
+              },
               "expected_version_prefixes": [
                 "Gerbil 1cfb032"
               ],

@@ -329,9 +329,10 @@ def ensure_native_commit(url: str, revision: str, target: Path) -> None:
     print(f"gerbil-native-pin: ready {revision}", flush=True)
 
 
-def prepare_native_pins(package_root: Path, root: Path = ROOT) -> None:
+def prepare_native_pins(package_root: Path, root: Path = ROOT, manifest: Path | None = None) -> None:
     """Materialize declared SHA objects; gxpkg still owns tag resolution/builds."""
-    for repository, revision in parse_package_pins((root / "gerbil.pkg").read_text()).values():
+    package_manifest = manifest if manifest is not None else root / "gerbil.pkg"
+    for repository, revision in parse_package_pins(package_manifest.read_text()).values():
         if not re.fullmatch(r"[0-9a-f]{40}", revision):
             continue
         target = (package_root / repository).resolve()
@@ -351,11 +352,12 @@ def main() -> int:
     subparsers.add_parser("sync-lock", help="copy the native lock projection across platforms")
     prepare_parser = subparsers.add_parser("prepare-native", help="fetch immutable commit objects for gxpkg")
     prepare_parser.add_argument("--package-root", type=Path, required=True)
+    prepare_parser.add_argument("--manifest", type=Path, help="authoritative package manifest (defaults to root gerbil.pkg)")
     args = parser.parse_args()
 
     try:
         if args.command == "prepare-native":
-            prepare_native_pins(args.package_root)
+            prepare_native_pins(args.package_root, manifest=args.manifest)
         elif args.command == "pin":
             project_pin(args.package, args.revision)
         elif args.command == "sync-lock":
