@@ -12,6 +12,13 @@ selects an output function using =libflake-c=. =session-query= calls that
 function in the same EvalState. Scope/lifetime are explicit; no evaluation
 session is created by a Scheme declaration.
 
+The opt-in product adapter =call-with-flake-evaluator= instead owns a lazy POO
+handle used by =NixFlakeSource. evaluator:=. Each independent query strictly
+relocks and reselects in one Store/EvalState; it does not authenticate a later
+source generation with a cached output thunk. It closes at the functional
+scope boundary and refuses escaped use. Details, fallback limits and actual
+product controls are in [[file:../../docs/10-19-design/10.08-config-languages/20-nix-flake-source-c-api.org][20 Product Flake Source C API]].
+
 Compatibility requires numeric =(major, minor) >= (2, 34)= and actual header,
 linker and runtime probes. =dependencies.json= pins the qualification CLI and
 C libraries to =2.34.4+1= on =aarch64-darwin=. It does not rebuild Gerbil.
@@ -58,6 +65,14 @@ Use an installed, compiled Yuanxu/gerbil-poo dependency closure in
 just --justfile bindings/nix-c-api/Justfile dependencies
 just --justfile bindings/nix-c-api/Justfile test
 #+end_src
+
+The real product suite has matched =product-native= and =product-cli= modes in
+the same Just entrypoint. Supply the existing real Provider fixture's
+=POO_FLOW_OPENTOFU_FLAKE_ARTIFACT= and =POO_FLOW_NIX_TEST_TOOLS=. These modes use
+pure evaluation and the same startup libraries. The CLI control includes the
+strict root-lock preflight required when an override would enable virtual
+locking. Unsupported native override shapes use that same strict CLI path;
+fallbacks cannot be reported as zero-process native queries.
 
 Preparation and Harness execution retain separate 120-second limits, the
 Harness retains its 60-second idle limit, and Scheme processes have a 2 GiB

@@ -1,15 +1,22 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Opt-in product qualification; importing this file starts no evaluator.
-(import :clan/poo/object (only-in :std/ffi C-include def-C-type def-C-lambda))
+(import :clan/poo/object (only-in :std/ffi C-include def-C-type def-C-lambda)
+        (only-in :std/encoding/json json->string read-json JSONReadOptions)
+        (only-in "../../modules/nix/func.ss" poo-flow-nix-flake-instantiate))
 (export call-with-nix-session call-with-flake-session session-query session-calls session-apply! session-result session-timing)
+(export call-with-flake-evaluator)
 (C-include "\"session.h\"")
 (def-C-type session "pf_nix_session")
 (def-C-type session-pointer (pointer session))
 (def-C-lambda session-open (char-string char-string) session-pointer "pf_nix_open")
 (def-C-lambda flake-prepare (char-string char-string) session-pointer "pf_nix_flake_prepare")
+(def-C-lambda flake-create () session-pointer "pf_nix_flake_create")
 (def-C-lambda flake-override (session-pointer char-string char-string char-string) int "pf_nix_flake_override")
 (def-C-lambda flake-select (session-pointer char-string) int "pf_nix_flake_select")
+(def-C-lambda flake-reset (session-pointer char-string char-string) int "pf_nix_flake_reset")
+(def-C-lambda derivation-function (session-pointer int char-string) int "pf_nix_derivation_function")
+(def-C-lambda session-pure? (session-pointer) int "pf_nix_pure")
 (def-C-lambda session-close (session-pointer) void "pf_nix_close")
 (def-C-lambda session-call (session-pointer char-string) int "pf_nix_query")
 (def-C-lambda native-apply (session-pointer char-string) int "pf_nix_apply")
@@ -37,6 +44,88 @@
   (unless (= (session-call session input) 1)
     (error "Nix C API evaluation failed" (session-error session)))
   (session-output session))
+
+;; An explicit dynamic resource lifetime, with lazy acquisition owned by one
+;; ordinary POO object. Escaped scopes fail before touching a closed C pointer.
+(def (locked-input-references reference inputs)
+  ;; This only projects a direct path input's existing lock row. It does not
+  ;; resolve follows, fetch inputs, create locks, or decide lock validity.
+  ;; libflake-c still authenticates the resulting reference in mode_check.
+  (def names (.all-slots inputs))
+  (if (null? names) '()
+    (let* ((directory (cond ((string-prefix? "path:/" reference)
+                            (substring reference 5 (string-length reference)))
+                           ((string-prefix? "/" reference) reference) (else #f)))
+           (file (and directory (path-expand "flake.lock" directory))))
+      (and file (file-exists? file)
+        (let* ((document (call-with-input-file file
+                           (cut read-json <> (JSONReadOptions object-as-hash: #t))))
+               (nodes (hash-ref document "nodes"))
+               (root (hash-ref nodes (hash-ref document "root")))
+               (bindings (hash-ref root "inputs")))
+          (def rows
+            (map (lambda (name)
+                   (let* ((target (hash-get bindings (symbol->string name)))
+                          (node (and (string? target) (hash-get nodes target)))
+                          (locked (and node (hash-get node "locked")))
+                          (path (and locked (hash-get locked "path")))
+                          (hash (and locked (hash-get locked "narHash")))
+                          (modified (and locked (hash-get locked "lastModified"))))
+                     (and path hash (string-prefix? "/nix/store/" path)
+                       (equal? (hash-get locked "type") "path")
+                       (equal? (path-strip-trailing-directory-separator (path-normalize path))
+                               (path-strip-trailing-directory-separator (path-normalize (.ref inputs name))))
+                       (cons name (string-append "path:" path "?narHash=" hash
+                                    (if modified (string-append "&lastModified=" (number->string modified)) ""))))))
+                 names))
+          (and (andmap pair? rows) rows))))))
+
+(def (call-with-flake-evaluator procedure)
+  (let ((closed? #f) (queries 0) (fallbacks 0))
+    (def evaluator
+      (.o (:: scope)
+          handle: (let (value (flake-create))
+                    (unless (and value (not (session-error value)))
+                      (when value (session-close value))
+                      (error "Nix evaluator initialization failed"))
+                    (unless (= (session-pure? value) 1)
+                      (session-close value)
+                      (error "product Nix evaluator requires pure-eval = true at startup"))
+                    value)
+          .calls: (lambda () queries)
+          .fallback-calls: (lambda () fallbacks)
+          .timing: (lambda (phase)
+                     (when (or closed? (not (.ref/cached scope 'handle)))
+                       (error "Nix evaluator is not active"))
+                     (session-timing handle phase))
+          .instantiate:
+          (lambda (reference attribute arguments inputs executable)
+            (when closed? (error "Nix evaluator scope is closed"))
+            (def overrides (locked-input-references reference inputs))
+            (set! queries (+ queries 1))
+            (if (not overrides)
+              (begin
+                (set! fallbacks (+ fallbacks 1))
+                (poo-flow-nix-flake-instantiate executable reference attribute arguments inputs))
+              (let (directory (current-directory))
+                (unless (= (flake-reset handle reference directory) 1)
+                  (error "Nix flake reset rejected" (session-error handle)))
+                (for-each
+                  (lambda (row)
+                    (unless (= (flake-override handle (symbol->string (car row)) (cdr row) directory) 1)
+                      (error "Nix flake input rejected" (car row) (session-error handle))))
+                  overrides)
+                (unless (= (flake-select handle attribute) 1)
+                  (error "Nix strict flake lock/selection rejected" (session-error handle)))
+                (unless (= (derivation-function handle (if (pair? (.all-slots arguments)) 1 0) directory) 1)
+                  (error "Nix derivation projection rejected" (session-error handle)))
+                (session-query handle (json->string (list->hash-table (.alist/sort arguments)))))))))
+    (dynamic-wind void
+      (lambda () (procedure evaluator))
+      (lambda ()
+        (set! closed? #t)
+        (let (value (.ref/cached evaluator 'handle))
+          (when value (session-close value)))))))
 
 ;; Explicit lifetime: imports neither initialize Nix nor launch an evaluator.
 ;; `inputs` is the ordinary POO mapping used by the product Flake Source.

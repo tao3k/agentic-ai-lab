@@ -19,9 +19,12 @@
     (lambda (port) (read-json port (JSONReadOptions object-as-hash: #t)))))
 (def (dependency name) (hash-ref lock name))
 (def observations
+  (append
   (map (lambda (name) (let (path (local name)) (cons path (module-source-read path))))
     '("dependencies.json" "session.h" "worker.c" "binding.ss" "session.ss"
-      "compatibility.ss" "tests/cases.ss" "tests/embedding-test.ss" "tests/qualification-test.ss" "tests/flake-cases.ss" "tests/profile-test.ss")))
+      "compatibility.ss" "tests/cases.ss" "tests/embedding-test.ss" "tests/qualification-test.ss" "tests/flake-cases.ss" "tests/profile-test.ss"))
+  (map (lambda (name) (let (path (path-expand name root)) (cons path (module-source-read path))))
+    '("modules/nix/objects.ss" "modules/nix/func.ss" "modules/nix/types.ss" "t/nix-flake-source-test.ss"))))
 (def (current!) (module-source-admit-current! observations))
 
 (def (execute command (environment (.o)))
@@ -37,7 +40,7 @@
                    '("flake-dev" "fetchers-dev" "expr-dev" "store-dev" "util-dev")) ":"))
 
 (def (qualify backend build)
-  (unless (member backend '("worker" "embedded" "embedded-preload" "profile"))
+  (unless (member backend '("worker" "embedded" "embedded-preload" "profile" "product-native" "product-cli"))
     (error "unknown C API qualification backend" backend))
   (def packages (.o PKG_CONFIG_PATH: (package-path)))
   (def flags (words (execute '("pkg-config" "--cflags" "nix-flake-c") packages)))
@@ -45,7 +48,10 @@
   (def library-directory (string-trim (execute '("pkg-config" "--variable=libdir" "nix-flake-c") packages)))
   (def worker? (equal? backend "worker"))
   (def profiling? (equal? backend "profile"))
+  (def product? (member backend '("product-native" "product-cli")))
   (def test-file (local (cond (worker? "tests/qualification-test.ss")
+                             ((equal? backend "product-native") "tests/product-test.ss")
+                             ((equal? backend "product-cli") "../../t/nix-flake-source-test.ss")
                              (profiling? "tests/profile-test.ss")
                              (else "tests/embedding-test.ss"))))
   (if worker?
@@ -56,6 +62,31 @@
                   "-cc-options" (string-join (append flags (list (string-append "-I" directory))) " ")
                   "-ld-options" (string-join libraries " ") (local "binding.ss"))
       (.o COMPILER_PATH: "/usr/bin" CPATH: "" LIBRARY_PATH: "" SDKROOT: "")))
+  (when (equal? backend "product-native")
+    ;; Native absolute compiled imports keep std/make from treating this
+    ;; already-built C binding as an ordinary local Scheme support root.
+    (set! test-file (path-expand "product-test.ss" build))
+    (call-with-output-file test-file
+      (lambda (port)
+        (pretty-print
+          `(import :std/test :clan/poo/object
+             (only-in ,(path-expand "poo-flow/bindings/nix-c-api/binding.ssi" build)
+               call-with-flake-evaluator)
+             (only-in ,(path-expand "t/nix-flake-source-test.ss" root) nix-flake-source-suite)) port)
+        (pretty-print '(export product-test) port)
+        (pretty-print
+          '(def (with-owned-evaluator procedure)
+             (def escaped #f)
+             (def result
+               (call-with-flake-evaluator
+                 (lambda (scope)
+                   (check-equal? (.ref/cached scope 'handle) #f)
+                   (set! escaped scope)
+                   (procedure scope))))
+             (check-exception
+               (.call escaped .instantiate "closed" "closed" (.o) (.o) "nix") error?)
+             result) port)
+        (pretty-print '(def product-test (nix-flake-source-suite with-owned-evaluator)) port))))
   (def profile-cache (path-expand "nix-cache" build))
   (when profiling? (create-directory profile-cache))
   (def package-start (real-time))
@@ -85,7 +116,7 @@
             POO_FLOW_NIX_PROFILE_METRICS: "1"
             POO_FLOW_NIX_PROFILE_PACKAGE_SET: profile-package))))
   (def test-command '("gxtest" "-:max-heap=2G,debug=q"))
-  (when (member backend '("embedded-preload" "profile"))
+  (when (member backend '("embedded-preload" "profile" "product-native" "product-cli"))
     (let* ((installed (string-trim (execute '("which" "gerbil"))))
            (actual (string-trim (execute (list "realpath" installed))))
            (prefix (path-directory (path-strip-trailing-directory-separator (path-directory actual))))
@@ -96,10 +127,16 @@
           (.o GERBIL_PREFIX: prefix GERBIL_HOME: runtime
               GAMBOPT: (string-append "~~=" runtime ",~~bin=" runtime "/bin,~~lib=" runtime "/lib")
               DYLD_INSERT_LIBRARIES: (path-expand "libnixflakec.dylib" library-directory))))))
+  (when product?
+    ;; Both controls use this Just-owned TestingScript/Harness gate and the
+    ;; resolved native binary: Homebrew's shell launcher drops DYLD preload
+    ;; before Nix can initialize. Limits and exact Harness checks are unchanged.
+    (set! test-environment (.+ test-environment (.o NIX_CONFIG: "pure-eval = true"))))
   ;; Core owns marker validation, fixture cleanup, return currentness and limits.
   (.def (Test @ TestingScript.)
-    case-count: (cond (worker? 3) (profiling? 1) (else 4))
-    required-lines: (cond (worker? '()) (profiling? '("ASSERT-OK profile-controls-complete"))
+    case-count: (cond (product? 1) (worker? 3) (profiling? 1) (else 4))
+    required-lines: (cond (product? '("ASSERT-OK failed-eval-did-not-write-lock"))
+                          (worker? '()) (profiling? '("ASSERT-OK profile-controls-complete"))
                           (else '("ASSERT-OK failed-lock-never-written")))
     source: (.o spec: (list test-file) source-root: root admit-current: current!)
     command: (append test-command (list "-v" "5" test-file))

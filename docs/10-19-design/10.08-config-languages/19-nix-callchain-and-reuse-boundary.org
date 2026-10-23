@@ -4,7 +4,11 @@
 #+title: 10.08.19 Actual Nix Call Chain and the Reuse Boundary
 #+language: en
 
-* Correction to the performance interpretation
+* Historical observation before product integration
+
+The following records the pre-integration call chain. The subsequent opt-in
+product adapter and its independent-query boundary are documented in
+[[file:20-nix-flake-source-c-api.org][20 Product Flake Source C API]]. The earlier stale-import control remains valid.
 
 [[file:18-nix-session-reuse-validation.org][The preceding session comparison]] established the cost of an unnecessary
 fresh state in the binding qualification. It did not establish that the product

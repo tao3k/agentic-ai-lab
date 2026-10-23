@@ -1,6 +1,6 @@
 /* SPDX-FileCopyrightText: 2026 tao3k team and Contributors
  * SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
- * Private, serial qualification bridge. Never installed into Yuanxu.
+ * Product-owned serial evaluator bridge. Never installed into Yuanxu.
  */
 #include <nix_api_expr.h>
 #include <nix_api_value.h>
@@ -186,7 +186,7 @@ static nix_flake_reference *pf_nix_reference(pf_nix_session *s, const char *text
     return reference;
 }
 
-static pf_nix_session *pf_nix_flake_prepare(const char *reference, const char *directory)
+static pf_nix_session *pf_nix_flake_create(void)
 {
     pf_nix_session *s = pf_nix_create();
     if (!s || s->error) return s;
@@ -201,8 +201,14 @@ static pf_nix_session *pf_nix_flake_prepare(const char *reference, const char *d
     if (!pf_nix_status(s)) return s;
     nix_flake_lock_flags_set_mode_check(s->ctx, s->lock_flags);
     if (!pf_nix_status(s)) return s;
-    s->reference = pf_nix_reference(s, reference, directory);
     pf_nix_elapsed(s, PF_SETTINGS, start);
+    return s;
+}
+
+static pf_nix_session *pf_nix_flake_prepare(const char *reference, const char *directory)
+{
+    pf_nix_session *s = pf_nix_flake_create();
+    if (s && !s->error) s->reference = pf_nix_reference(s, reference, directory);
     return s;
 }
 
@@ -239,9 +245,69 @@ static int pf_nix_flake_select(pf_nix_session *s, const char *attribute)
         if (!pf_nix_status(s)) { free(path); return 0; }
     }
     free(path);
+    if (s->function) nix_value_decref(NULL, s->function);
     s->function = value;
     pf_nix_elapsed(s, PF_OUTPUTS, start);
     return 1;
+}
+
+/* Re-lock on every independent product query, while retaining Store/EvalState.
+ * A selected output thunk cannot authenticate a later filesystem generation. */
+static int pf_nix_flake_reset(pf_nix_session *s, const char *reference, const char *directory)
+{
+    if (s->reference) nix_flake_reference_free(s->reference);
+    if (s->lock_flags) nix_flake_lock_flags_free(s->lock_flags);
+    free(s->error); s->error = NULL;
+    nix_clear_err(s->ctx);
+    s->reference = NULL;
+    s->lock_flags = nix_flake_lock_flags_new(s->ctx, s->flakes);
+    if (!pf_nix_status(s)) return 0;
+    nix_flake_lock_flags_set_mode_check(s->ctx, s->lock_flags);
+    if (!pf_nix_status(s)) return 0;
+    s->reference = pf_nix_reference(s, reference, directory);
+    return s->reference != NULL;
+}
+
+static int pf_nix_derivation_function(pf_nix_session *s, int applied, const char *directory)
+{
+    nix_value *adapter = nix_alloc_value(s->ctx, s->state);
+    nix_value *function = nix_alloc_value(s->ctx, s->state);
+    int ok = pf_nix_status(s);
+    if (ok) {
+        nix_expr_eval_from_string(s->ctx, s->state,
+            applied ? "value: input: (value (builtins.fromJSON input)).drvPath"
+                    : "value: input: value.drvPath", directory, adapter);
+        ok = pf_nix_status(s);
+    }
+    if (ok) {
+        nix_value_call(s->ctx, s->state, adapter, s->function, function);
+        ok = pf_nix_status(s);
+    }
+    if (ok) {
+        nix_value_decref(NULL, s->function);
+        s->function = function;
+    } else if (function) nix_value_decref(NULL, function);
+    if (adapter) nix_value_decref(NULL, adapter);
+    return ok;
+}
+
+static int pf_nix_pure(pf_nix_session *s)
+{
+    /* pure-eval belongs to EvalSettings, not the global settings registry.
+     * Inspect the effective state, rather than accepting an environment label. */
+    nix_value *value = nix_alloc_value(s->ctx, s->state);
+    int ok = pf_nix_status(s);
+    if (ok) {
+        nix_expr_eval_from_string(s->ctx, s->state,
+            "!(builtins ? currentSystem) && !(builtins ? currentTime)", "/", value);
+        ok = pf_nix_status(s);
+    }
+    if (ok) {
+        ok = nix_get_bool(s->ctx, value);
+        ok = pf_nix_status(s) && ok;
+    }
+    if (value) nix_value_decref(NULL, value);
+    return ok;
 }
 
 /* One explicit native application; diagnostic attribute reads share its thunks.

@@ -1,0 +1,149 @@
+#+title: Declared OpenTofu service configuration
+
+* Declarations and values
+
+=modules/services/types.ss= publishes the closed =Services= Type. This module
+extends its POO responsibilities with =opentofu: OpenTofuContract=;
+=OpenTofuContract= declares =Null: (OrFalse NullContract)=, and =NullContract=
+declares =message: String=. A false Null value is inactive, not an untyped field.
+New services require Type extension before their configuration becomes legal.
+
+The existing Module scope publishes =config= and =types.config=. Its
+=core.admissions.Config= associates those paths. Core validates the final
+configuration while linking that declared interface, before export binding.
+Internal config-shaped values without that declaration are not represented as
+admitted configuration publications. Requesting an undeclared admission fails.
+
+* Configuration interface
+
+In a consuming project's selected service role, inherit the maintained defaults
+and supply its locked Nix Source. For the repository's local Null qualification,
+run from the repository root and reuse the maintained finite provider fixtures:
+
+#+begin_src scheme
+(import :clan/poo/object
+        (only-in :poo-flow/modules/nix/objects NixSource.)
+        (rename-in
+          (only-in :poo-flow/modules/services/opentofu/config
+                   Config OpenTofuProviderConfig)
+          (Config Defaults)))
+
+(.def (Config @ Defaults)
+  source:
+  (.o (:: @ NixSource.)
+    expression:
+    (path-expand "modules/services/opentofu/nix/selected-provider-artifacts.nix")
+    arguments:
+    (.o catalog: (path-expand "t/fixtures/opentofu/family-schemas.nix")
+        collector: (path-expand "modules/services/opentofu/nix/provider-artifacts.nix")))
+  services: =>.+
+  (.o opentofu: =>.+
+    (.o Null: (.o message: "hello from the user"))))
+#+end_src
+
+=NixSource.= is the existing Source supplied by the consuming project's package
+configuration; it is not a new service API. The executable test
+=t/opentofu-service-test.ss= supplies a complete expression Source using the
+maintained locked provider fixtures. It derives build demand and input from
+this configuration; it does not maintain a second hand-written resource input.
+The lifecycle test first evaluates that real Null producer, then reuses its
+immutable store derivation through Nix's built-in derivation import. Its Source
+still evaluates on every check, asserts the exact Null demand, and checks the
+configuration's source observations. No freshness result or process result is
+replaced by a Scheme cache or a fabricated fixture result.
+
+The selection uses the existing syntax:
+
+#+begin_src scheme
+(yuanxu!
+  :load-modules "./core/modules" mode: explicit rename: Modules
+  (json-schema)
+  (funflow)
+  (ops @ "./core/ops")
+  :load-modules "./modules" mode: auto)
+#+end_src
+
+Its generated namespace exposes =init.modules.services.opentofu.scope=.
+Importing init and browsing the source namespace never realizes packages.
+
+* Preparation and execution
+
+The existing =SelectedPackages.= operation prepares a selection. Its
+=.with-packages= handoff requires the exact selected Graph and returns a new
+ready view. The original source view stays unprepared; source objects are not
+mutated into approved execution objects. For the ordinary source adapter:
+
+#+begin_src scheme
+(def selection (yuanxu-load-modules "./init.ss"))
+(def packages
+  (.call (.cc SelectedPackages.
+              'selection selection 'directory "./work/packages") .run))
+(def ready (.call selection .with-packages packages))
+(def modules (.get ready modules modules))
+(def Null (.get modules services opentofu Null))
+(.def (Hello @ Null) message: "an independently checked override")
+(.call Hello .run "./work/null")
+#+end_src
+
+The ready-view example uses the existing source/operation APIs. The generated
+init namespace additionally wraps each leaf with identity/scope/test metadata.
+Workspaces must already exist and be empty. Operators own explicit preparation;
+ordinary recipe users supply values and call the existing =.run= entry.
+
+Core invokes =.bind-publication= only after configuration admission. The hook
+captures the selection, owner, admission name and package guard. Its publication
+slot stays lazy until execution, avoiding re-entry into an active scope link.
+Derived recipes share that binding's publication construction through a promise.
+The promise does not cache approval or currentness: publication admission and
+every forward Task still perform their live checks. A source-only binding
+cannot become ready by forcing the promise; a ready view creates a new binding.
+The selected package's effective scope is bound before the hook runs.
+Core applies the package scope's direct POO overrides to the source-owned
+scope. The package's complete scope remains inspectable, while a second
+evaluation context's ancestor Types cannot replace the selected declarations.
+The exact OpenTofu declaration identity checks remain in force.
+
+The provider Schema output retains an =engine= symlink to the exact engine
+used to extract that Schema. Both the Provider and command are read through
+that selected output; command overrides must match the selected publication.
+There is no PATH fallback or user-supplied engine command.
+
+* Refusals and cleanup
+
+- Unknown service/recipe/field names and wrong field Types fail
+  ObjectContract validation. Missing declaration paths or non-Type descriptors
+  fail Core configuration admission.
+- Source-only objects refuse with =build-required= before workspace writes.
+- Stale configuration/package sources are rechecked before and after forward
+  effects. A mismatched snapshot refuses before execution. Core checks exact
+  bytes and source resolution; restoring both can make that snapshot current
+  again. This is not a durable monotonic revision fence.
+- A failed output command propagates the Ops error after destroy. When sources
+  change after apply, forward work refuses but cleanup retains the command and
+  workspace belonging to that execution.
+- Cleanup failure is a failure, not a successful execution receipt. Existing
+  Funflow finalizer handling retains the primary and cleanup exceptions.
+
+Source guards and process calls are separate boundaries, not an atomic external
+transaction. Process termination and durable crash recovery are outside these
+tests. Full qualified results require successful executable test receipts;
+this document is not such a receipt.
+
+* Executable acceptance
+
+=t/opentofu-service-contract-test.ss= checks the finite declaration tree without
+building a Provider. =core/t/module-configuration-admission-test.ss= and
+=core/t/module-build-graph-test.ss= check generic configuration admission,
+binding order and source-owned declaration identities.
+=t/opentofu-execution-binding-test.ss= checks that detached forward/cleanup
+Tasks refuse before package approval, and that a different validated receiver
+receives its own Task check.
+
+=t/opentofu-service-test.ss= exercises unprepared refusal and a real selected
+Null apply/output/destroy workflow. =t/opentofu-service-failure-test.ss= checks
+command failure and real destroy. =t/opentofu-service-cleanup-test.ss= checks
+source expiry after apply, cleanup and source revalidation in one process
+and selection. The independent epochs reuse the existing Core fixture protocol
+through =t/qualification/opentofu/service.ss=. They use real selected Nix
+artifacts and keep the maintained heap and wall-clock limits. These test sources
+describe required checks; a timeout or unsuccessful natural exit is not a pass.
