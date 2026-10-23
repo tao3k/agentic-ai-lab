@@ -6,7 +6,7 @@
 ;;; Boundary: loop strategy performance gates cover batched slot projection.
 ;;; Invariant: strategy projection stays local contract data, not runtime work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -100,7 +100,7 @@
 ;; : TestSuite
 (def loop-strategy-performance-test
   (test-suite "loop strategy performance"
-    (poo-flow-test-case "keeps large strategy projection inside benchmark contract"
+    (yuanxu-test-case "keeps large strategy projection inside benchmark contract"
       (let* ((pattern-count 600)
              (plan (loop-strategy-performance-plan pattern-count))
              (summary

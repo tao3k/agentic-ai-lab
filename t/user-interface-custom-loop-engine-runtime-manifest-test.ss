@@ -6,12 +6,12 @@
 ;;; Boundary: tests verify concrete loop-engine runtime manifest projection.
 ;;; Invariant: manifest rows are inert Marlin handoff data, not execution.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface
         :poo-flow/modules/workflow/scenario/configuration/init-syntax
         (only-in :poo-flow/modules/loop-engine/control/governor-marlin
@@ -131,12 +131,12 @@
 ;; : (-> PooUserModuleSelection POOObject)
 (def (custom-loop-presentation module-bundle)
   (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules
      (append poo-flow-nono-sandbox-module-bundles
              poo-flow-cubeSandbox-module-bundles
              (list module-bundle)))
-    (poo-flow-settings))))
+    (yuanxu-settings))))
 
 ;;; Manifest descriptor assertions prove the adapter row is inert command data,
 ;;; not evidence that Scheme launched Marlin.
@@ -144,9 +144,9 @@
 (def (check-custom-loop-runtime-manifest-descriptor runtime-manifest
                                                     runtime-manifest-summary)
   (check-equal? (test-ref runtime-manifest 'schema)
-                'poo-flow.runtime-command-descriptor.v1)
+                'yuanxu.runtime-command-descriptor.v1)
   (check-equal? (test-ref runtime-manifest 'request-schema)
-                'poo-flow.runtime-request.v1)
+                'yuanxu.runtime-request.v1)
   (check-equal? (test-ref runtime-manifest 'operation)
                 'loop-engine-handoff)
   (check-equal? (test-ref runtime-manifest 'executable)
@@ -575,7 +575,7 @@
 ;;; guessing the loop-engine entrypoint or request shape.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-runtime-manifest-case)
-  (poo-flow-test-case "projects custom loop-engine runtime manifest"
+  (yuanxu-test-case "projects custom loop-engine runtime manifest"
     (let* ((presentation
             (custom-loop-presentation
              poo-flow-custom-my-module-loop-engine-case))

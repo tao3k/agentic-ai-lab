@@ -1,4 +1,4 @@
-(import (only-in :core/modules/funflow/check-types +poo-flow-durable-action-classes+))
+(import (only-in :yuanxu/modules/funflow/check-types +yuanxu-durable-action-classes+))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -9,13 +9,13 @@
 ;;; Marlin owns fact logs, checkpoints, indexes, leases, replay, and repair.
 
 (import (only-in :clan/poo/object .o .ref .slot? object? object<-alist)
-        :core/utilities/final-projection-syntax)
+        :yuanxu/utilities/final-projection-syntax)
 
 (export +poo-flow-durable-policy-kind+
         +poo-flow-durable-policy-schema+
         +poo-flow-durable-policy-diagnostic-schema+
         +poo-flow-durable-policy-receipt-schema+
-        +poo-flow-durable-action-classes+
+        +yuanxu-durable-action-classes+
         +poo-flow-durable-repair-modes+
         make-poo-flow-durable-policy-receipt
         poo-flow-durable-policy-receipt?
@@ -240,7 +240,7 @@
          (action-classes-value
           (poo-flow-durable-option options
                                    'action-classes
-                                   +poo-flow-durable-action-classes+))
+                                   +yuanxu-durable-action-classes+))
          (runtime-owner-value
           (poo-flow-durable-option options
                                    'runtime-owner
@@ -331,13 +331,13 @@
         (list (cons 'policy (poo-flow-durable-policy-name policy))
               (cons 'value action-classes)
               (cons 'expected 'symbol-list)
-              (cons 'allowed +poo-flow-durable-action-classes+)
+              (cons 'allowed +yuanxu-durable-action-classes+)
               (cons 'recoverable? #t)))))
      ((poo-flow-durable-every?
        (lambda (action-class)
          (poo-flow-durable-member?
           action-class
-          +poo-flow-durable-action-classes+))
+          +yuanxu-durable-action-classes+))
        action-classes)
       '())
      (else
@@ -348,7 +348,7 @@
         'error
         (list (cons 'policy (poo-flow-durable-policy-name policy))
               (cons 'value action-classes)
-              (cons 'allowed +poo-flow-durable-action-classes+)
+              (cons 'allowed +yuanxu-durable-action-classes+)
               (cons 'recoverable? #t))))))))
 
 ;; : (-> PooDurablePolicy [PooDurablePolicyDiagnostic])

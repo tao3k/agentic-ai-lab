@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :poo-flow-dev/testing-api poo-flow-test-case)
+(import (only-in :poo-flow/testing-api yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
         :std/test
         :poo-flow/modules/temporal-causality/objects
@@ -22,7 +22,7 @@
    "cut" "projection" policy generation-value value))
 (def temporal-applicability-test
   (test-suite "replayed family proof and current source applicability"
-    (poo-flow-test-case "current source replays original premises"
+    (yuanxu-test-case "current source replays original premises"
       (let* ((m (model 1)) (s (source "source" "host" "policy" 7 m))
              (a (poo-flow-temporal-family-admit m query s "conclusion"))
              (checked (poo-flow-temporal-family-applicability a s)))
@@ -32,7 +32,7 @@
         (check (.ref checked 'runtime-executed?) => #f)
         (check (.ref (poo-flow-temporal-family-admission-replay a) 'semantic-digest)
                => (.ref a 'semantic-digest))))
-    (poo-flow-test-case "generation policy authority and corrected rows stale history"
+    (yuanxu-test-case "generation policy authority and corrected rows stale history"
       (let* ((m (model 1)) (s (source "source" "host" "policy" 7 m))
              (a (poo-flow-temporal-family-admit m query s "conclusion")))
         (for-each
@@ -47,12 +47,12 @@
                (a2 (poo-flow-temporal-family-admit corrected query s2 "revised")))
           (check (.ref a2 'classification) => 'refuted)
           (check (.ref (poo-flow-temporal-family-applicability a2 s2) 'status) => 'current))))
-    (poo-flow-test-case "foreign logical source cannot establish currentness"
+    (yuanxu-test-case "foreign logical source cannot establish currentness"
       (let* ((m (model 1)) (s (source "source" "host" "policy" 7 m))
              (a (poo-flow-temporal-family-admit m query s "conclusion")))
         (check-exception (poo-flow-temporal-family-applicability a
                          (source "foreign" "host" "policy" 7 m)) true)))
-    (poo-flow-test-case "forged proof fields and source digest fail replay"
+    (yuanxu-test-case "forged proof fields and source digest fail replay"
       (let* ((m (model 1)) (s (source "source" "host" "policy" 7 m))
              (a (poo-flow-temporal-family-admit m query s "conclusion")))
         (check-exception

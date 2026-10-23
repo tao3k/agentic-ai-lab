@@ -5,16 +5,16 @@
 
 ;;; Boundary: workflow presentation uses one native POO projection constructor.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run/result)
         (only-in :clan/poo/object .ref)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-settings
-                 pooFlowUserConfig)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-settings
+                 yuanxuUserConfig)
         (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
                  pooFlowUserConfigPresentation)
         (only-in "../../user-interface/custom/my-module/cases/cicd-owner"
@@ -31,10 +31,10 @@
 (def (workflow-presentation-native-projection-summary)
   (let (presentation
         (pooFlowUserConfigPresentation
-         (pooFlowUserConfig
+         (yuanxuUserConfig
           (append poo-flow-custom-my-module-cicd-module
                   poo-flow-custom-my-module-funflow-cicd-case)
-          (poo-flow-settings))))
+          (yuanxu-settings))))
     (list
      (cons 'pipeline-count
            (.ref presentation 'workflow-cicd-pipeline-count))
@@ -55,7 +55,7 @@
 
 (def workflow-presentation-native-projection-performance-test
   (test-suite "workflow presentation native projection performance"
-    (poo-flow-test-case "keeps one native workflow projection inside the fixed gate"
+    (yuanxu-test-case "keeps one native workflow projection inside the fixed gate"
       (let-values (((receipt summary)
                     (benchmark-run/result
                      workflow-presentation-native-projection-fixture

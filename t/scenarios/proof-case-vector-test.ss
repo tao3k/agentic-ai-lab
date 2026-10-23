@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :poo-flow/modules/proof/projections/generated/proof-case-vector-v1
@@ -46,7 +46,7 @@
 
 (def proof-case-vector-test
   (test-suite "AC-09 Scheme native proof vector"
-    (poo-flow-test-case "caller-owned write follows the canonical layout"
+    (yuanxu-test-case "caller-owned write follows the canonical layout"
       (let ((vector (make-u8vector poo-flow-proof-case-vector-size #xff))
             (repeated (make-u8vector poo-flow-proof-case-vector-size #x5a)))
         (check (poo-flow-proof-case-vector-write! canonical-proof-case vector)
@@ -69,7 +69,7 @@
         (check (u8vector-ref vector poo-flow-proof-field-reserved-offset) => 0)
         (check (poo-flow-proof-case-vector-digest vector)
                => "970eaffbfaae38970e2107b89fa11258c6211a5c293a1e400a464527b7a0e44a")))
-    (poo-flow-test-case "wrong target size and malformed digests fail closed"
+    (yuanxu-test-case "wrong target size and malformed digests fail closed"
       (let* ((short-target (make-u8vector 423 0))
              (wrong-size
               (with-catch

@@ -6,9 +6,9 @@
 ;;; Reusable Scenario: native Profile selection plus noun-slot metadata.
 
 (import (only-in :clan/poo/object .def .o)
-        (only-in :core/profile-composition/profile-bundle
+        (only-in :yuanxu/profile-composition/profile-bundle
                  profiles compose)
-        :core/profile-composition/selection-syntax
+        :yuanxu/profile-composition/selection-syntax
         :poo-flow/modules/workflow/scenario/composition-syntax
         :poo-flow/user-interface/profiles/crewai)
 (export CrewAIProductionProfile crewai-scenario)

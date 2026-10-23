@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :poo-flow/modules/governance/policy/ai-security-executable-refinement)
@@ -30,7 +30,7 @@
 (def ai-security-executable-refinement-test
   (test-suite
    "ai-security executable refinement"
-   (poo-flow-test-case "POO engine accepts a confined action and replays it"
+   (yuanxu-test-case "POO engine accepts a confined action and replays it"
      (let* ((engine (poo-flow-ai-security-transition-engine))
             (receipt ((.ref engine 'execute) (valid-envelope) (valid-policy))))
        (check (.ref engine 'kind) => 'poo-flow-ai-security-transition-engine)
@@ -38,7 +38,7 @@
        (check (length (.ref receipt 'invariants)) => 4)
        (check ((.ref engine 'replay-valid?)
                (valid-envelope) (valid-policy) receipt) => #t)))
-   (poo-flow-test-case "capability amplification fails closed"
+   (yuanxu-test-case "capability amplification fails closed"
      (let* ((envelope
              (poo-flow-agent-action-evidence-envelope
               "action-2" "action-1" "observation-7" "decision-7"
@@ -51,7 +51,7 @@
 	       (check (.ref receipt 'decision) => 'fail-closed)
 	       (check (not (not (member 'capability-confinement
 	                                (.ref receipt 'escalation-reasons)))) => #t)))
-   (poo-flow-test-case "effect escape fails closed"
+   (yuanxu-test-case "effect escape fails closed"
      (let* ((envelope
              (poo-flow-agent-action-evidence-envelope
               "action-2" "action-1" "observation-7" "decision-7"

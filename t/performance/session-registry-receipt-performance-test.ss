@@ -7,7 +7,7 @@
 ;;; Invariant: registry projection is a bounded address-space receipt, not a
 ;;; live runtime store.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -114,7 +114,7 @@
 ;; : TestSuite
 (def session-registry-receipt-performance-test
   (test-suite "session registry receipt performance"
-    (poo-flow-test-case "keeps registry receipt projection inside benchmark contract"
+    (yuanxu-test-case "keeps registry receipt projection inside benchmark contract"
       (let* ((entry-count 240)
              (summary (registry-performance-summary entry-count))
              (receipt

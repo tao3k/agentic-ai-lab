@@ -6,7 +6,7 @@
 ;;; Boundary: executable contracts for the public module/profile macro surface.
 ;;; Invariant: syntax lowers to ordinary POO objects and pure projection values.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,15 +15,15 @@
                  poo-flow-profile-extend)
         (only-in :poo-flow/modules/module-authoring/fragment-syntax
                  poo-flow-load-profile-module-binding)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-bundle)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-bundle)
         (only-in :poo-flow/modules/workflow/scenario/configuration/profile-config
-                 poo-flow-user-profile-module-bundles
-                 poo-flow-user-profile-name)
+                 yuanxu-user-profile-module-bundles
+                 yuanxu-user-profile-name)
         (only-in :poo-flow/modules/workflow/profiles/kernel/interface
                  poo-flow-kernel-profile)
-        (only-in :core/utilities/final-projection-syntax
-                 poo-flow-product-field-rows/tail)
+        (only-in :yuanxu/utilities/final-projection-syntax
+                 yuanxu-product-field-rows/tail)
         (only-in :poo-flow/modules/ai-agentic-context/features/memory/durable/artifact-policy
                  artifact-module
                  database-module
@@ -49,7 +49,7 @@
 ;;; module bundles without flattening individual module selection rows.
 (def macro-extra-module-bundles
   (list
-   (poo-flow-user-module-bundle
+   (yuanxu-user-module-bundle
     (custom macro-surface "/tmp/poo-flow-macro-surface" +contract))))
 
 (poo-flow-profile-extend macro-extended-profile
@@ -129,24 +129,24 @@
 ;; : TestSuite
 (def module-macro-surface-test
   (test-suite "poo-flow public module macro surface"
-    (poo-flow-test-case "loader identifier macro preserves the generated binding"
+    (yuanxu-test-case "loader identifier macro preserves the generated binding"
       (check-equal? load-profile-binding 'syntax-probe-binding))
-    (poo-flow-test-case "profile extension appends bundles to a POO profile"
-      (check-equal? (poo-flow-user-profile-name macro-extended-profile)
+    (yuanxu-test-case "profile extension appends bundles to a POO profile"
+      (check-equal? (yuanxu-user-profile-name macro-extended-profile)
                     'macro-extended)
       (check-equal?
-       (length (poo-flow-user-profile-module-bundles macro-extended-profile))
-       (+ (length (poo-flow-user-profile-module-bundles
+       (length (yuanxu-user-profile-module-bundles macro-extended-profile))
+       (+ (length (yuanxu-user-profile-module-bundles
                    poo-flow-kernel-profile))
           (length macro-extra-module-bundles))))
-    (poo-flow-test-case "field-row tail projection preserves fixed-first ordering"
+    (yuanxu-test-case "field-row tail projection preserves fixed-first ordering"
       (check-equal?
-       (poo-flow-product-field-rows/tail
+       (yuanxu-product-field-rows/tail
         '((tail . value))
         (kind 'module)
         (name 'syntax-surface))
        '((kind . module) (name . syntax-surface) (tail . value))))
-    (poo-flow-test-case "durable module macros expose POO-native named profiles"
+    (yuanxu-test-case "durable module macros expose POO-native named profiles"
       (check-equal?
        (poo-flow-artifact-profile?
         (.ref durable-artifact-module-witness 'macro-artifact))
@@ -155,7 +155,7 @@
        (poo-flow-artifact-database-profile?
         (.ref durable-database-module-witness 'macro-database))
        #t))
-    (poo-flow-test-case "backend profile macros construct and derive POO profiles"
+    (yuanxu-test-case "backend profile macros construct and derive POO profiles"
       (check-equal? (poo-flow-sandbox-profile-backend-kind
                      cube-direct-profile)
                     'cube)
@@ -171,7 +171,7 @@
                     'nono)
       (check-equal? (poo-flow-sandbox-profile-name nono-derived-profile)
                     'nono/derived))
-    (poo-flow-test-case "backend profile collections preserve declaration order"
+    (yuanxu-test-case "backend profile collections preserve declaration order"
       (check-equal? (profile-names cube-profile-list)
                     '(cube/list cube/list-derived))
       (check-equal? (profile-names docker-profile-list)

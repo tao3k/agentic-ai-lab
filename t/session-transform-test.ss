@@ -5,7 +5,7 @@
 
 ;;; Boundary: report-only session transforms for agent-flow control-plane work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -82,7 +82,7 @@
 ;; : TestSuite
 (def session-transform-test
   (test-suite "poo-flow report-only session transforms"
-    (poo-flow-test-case "declares transform specs without runtime execution"
+    (yuanxu-test-case "declares transform specs without runtime execution"
       (let* ((review-memory-intent (make-review-memory-intent))
              (review-transform (make-review-transform)))
       (check-equal? (poo-flow-session-transform? review-transform) #t)
@@ -117,7 +117,7 @@
                      review-transform)
                     "marlin-agent-core")
       (check-equal? (.ref review-transform 'runtime-executed) #f)))
-    (poo-flow-test-case "applies transforms as derived sessions and receipts"
+    (yuanxu-test-case "applies transforms as derived sessions and receipts"
       (let* ((review-transform-receipt
               (make-review-transform-receipt))
              (derived-session

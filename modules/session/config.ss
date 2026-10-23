@@ -7,11 +7,11 @@
 ;;; Invariant: configuration composes the module-owned syntax surface only.
 
 (import "syntax.ss" "descriptor.ss"
-        :core/module-system/selection/objects)
+        :yuanxu/module-system/selection/objects)
 (export (import: "syntax.ss") (import: "descriptor.ss")
         poo-flow-session-module-bundles)
 
 ;;; Independent Session selection uses its own module identity.
 (def poo-flow-session-module-bundles
-  (list (poo-flow-user-module-bundle
+  (list (yuanxu-user-module-bundle
           (session session +lineage +placement +handoff +graph +transform +doctor))))

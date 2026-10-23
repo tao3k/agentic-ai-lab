@@ -7,7 +7,7 @@
 ;;; Invariant: AgentParam contracts are report-only policy/topology bindings;
 ;;; Scheme never opens providers, tools, memory stores, streams, or sandboxes.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -197,7 +197,7 @@
 ;; : TestSuite
 (def session-agent-param-contract-test
   (test-suite "poo-flow session AgentParam contract"
-    (poo-flow-test-case "derives AgentParam contract from topology and policy validation"
+    (yuanxu-test-case "derives AgentParam contract from topology and policy validation"
       (let* ((node (make-agent-param-test-node))
              (validation (make-agent-param-test-validation))
              (contract

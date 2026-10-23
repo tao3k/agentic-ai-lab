@@ -6,7 +6,7 @@
 ;;; POO-native tool specification owner and runtime-boundary projection.
 
 (import (only-in :clan/poo/object .ref object? object<-alist)
-        :core/utilities/final-projection-syntax
+        :yuanxu/utilities/final-projection-syntax
         :poo-flow/modules/session/objects
         :poo-flow/modules/session/policy
         :poo-flow/modules/tool-core/objects-support)

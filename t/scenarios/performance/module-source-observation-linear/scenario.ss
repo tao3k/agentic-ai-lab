@@ -12,8 +12,8 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :core/module-system/authoring/observation
-                 poo-flow-scheme-lexical-call-shadow-datum-observations))
+        (only-in :yuanxu/module-system/authoring/observation
+                 yuanxu-scheme-lexical-call-shadow-datum-observations))
 
 (def +nesting-depth+ 300)
 (def +scope+ 'module-source-observation-linear)
@@ -46,13 +46,13 @@
    ((not (pair? datum)) '())
    ((memq (car datum) '(quote quasiquote syntax quasisyntax)) '())
    ((definition-form? datum)
-    (poo-flow-scheme-lexical-call-shadow-datum-observations +scope+ datum))
+    (yuanxu-scheme-lexical-call-shadow-datum-observations +scope+ datum))
    (else
     (append (baseline-observations (car datum))
             (baseline-observations (cdr datum))))))
 
 (def (candidate-observations datum)
-  (poo-flow-scheme-lexical-call-shadow-datum-observations +scope+ datum))
+  (yuanxu-scheme-lexical-call-shadow-datum-observations +scope+ datum))
 
 (unless (benchmark-fixture-contract-pass? fixture)
   (error "invalid ASP benchmark fixture" fixture))

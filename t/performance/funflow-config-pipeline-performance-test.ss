@@ -5,7 +5,7 @@
 
 ;;; Boundary: Funflow user-interface pipeline benchmark gate.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -44,7 +44,7 @@
 ;; : TestSuite
 (def funflow-config-pipeline-performance-test
   (test-suite "funflow config pipeline performance"
-    (poo-flow-test-case "keeps user-interface Funflow pipeline projection inside benchmark contract"
+    (yuanxu-test-case "keeps user-interface Funflow pipeline projection inside benchmark contract"
       (let-values (((receipt summary)
                     (benchmark-run/result
                      funflow-config-pipeline-fixture

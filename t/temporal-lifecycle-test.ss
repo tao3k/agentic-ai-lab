@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :poo-flow-dev/testing-api poo-flow-test-case)
+(import (only-in :poo-flow/testing-api yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
         :std/test
         :poo-flow/modules/temporal-causality/objects
@@ -37,7 +37,7 @@
      index (.ref source 'cut-digest) (.ref source 'projection-digest) '("build"))))
 (def temporal-lifecycle-test
   (test-suite "native family proof bound conclusion lifecycle"
-    (poo-flow-test-case "same classification still gets new proof and predecessor"
+    (yuanxu-test-case "same classification still gets new proof and predecessor"
       (let* ((root (poo-flow-temporal-family-revision-root (admit 7 1)))
              (next (admit 8 1))
              (changed (poo-flow-temporal-family-revision-change root next (frontier root next #t) 'correct))
@@ -48,7 +48,7 @@
                => (.ref (.ref root 'revision) 'identity))
         (check (equal? (.ref root 'semantic-digest) (.ref checked 'semantic-digest)) => #f)
         (check (.ref checked 'action-authorized?) => #f)))
-    (poo-flow-test-case "refutation binds a tombstone without erasing necessary history"
+    (yuanxu-test-case "refutation binds a tombstone without erasing necessary history"
       (let* ((root (poo-flow-temporal-family-revision-root (admit 7 1)))
              (a2 (admit 8 1))
              (corrected (poo-flow-temporal-family-revision-change root a2 (frontier root a2 #t) 'correct))
@@ -64,19 +64,19 @@
         (let (revived (admit 10 1))
           (check-exception (poo-flow-temporal-family-revision-change
                            withdrawn revived (frontier withdrawn revived #t) 'correct) true))))
-    (poo-flow-test-case "frontier alone and incomplete frontier cannot withdraw"
+    (yuanxu-test-case "frontier alone and incomplete frontier cannot withdraw"
       (let* ((root (poo-flow-temporal-family-revision-root (admit 7 1))) (next (admit 8 1)))
         (check-exception (poo-flow-temporal-family-revision-change root next (frontier root next #t) 'retract) true)
         (check-exception (poo-flow-temporal-family-revision-change root next (frontier root next #f) 'correct) true)
         (check-exception (poo-flow-temporal-family-revision-change
                          root next (.o (:: @ (frontier root next #f)) status: 'scoped-complete) 'correct) true)))
-    (poo-flow-test-case "wrong revised cut and nonadvancing generation reject"
+    (yuanxu-test-case "wrong revised cut and nonadvancing generation reject"
       (let* ((root (poo-flow-temporal-family-revision-root (admit 7 1)))
              (next (admit 8 1)) (plan (frontier root next #t)))
         (check-exception (poo-flow-temporal-family-revision-change
                          root next (.o (:: @ plan) revised-cut-digest: "foreign") 'correct) true)
         (check-exception (poo-flow-temporal-family-revision-change root (admit 7 3) plan 'correct) true)))
-    (poo-flow-test-case "independently valid foreign source or query cannot replace a claim"
+    (yuanxu-test-case "independently valid foreign source or query cannot replace a claim"
       (let* ((root (poo-flow-temporal-family-revision-root (admit 7 1)))
              (next (admit 8 1)) (m (.ref next 'model)) (s (.ref next 'source))
              (other-query (poo-flow-temporal-family-admit
@@ -87,7 +87,7 @@
                                      "cut-8" "projection-8" "policy" 8 m) "claim")))
         (check-exception (poo-flow-temporal-family-revision-change root other-query (frontier root next #t) 'correct) true)
         (check-exception (poo-flow-temporal-family-revision-change root other-source (frontier root next #t) 'correct) true)))
-    (poo-flow-test-case "forged proof and digest cannot enter a journal"
+    (yuanxu-test-case "forged proof and digest cannot enter a journal"
       (let* ((root (poo-flow-temporal-family-revision-root (admit 7 1)))
              (next (admit 8 3))
              (changed (poo-flow-temporal-family-revision-change root next (frontier root next #t) 'retract)))
@@ -95,11 +95,11 @@
                          "history" (list root (.o (:: @ changed) semantic-digest: "forged"))) true)
         (check-exception (poo-flow-temporal-family-revision-replay
                          (.o (:: @ changed) revision: (.o (:: @ (.ref changed 'revision)) proof-identity: "forged"))) true)))
-    (poo-flow-test-case "missing predecessor inventory cannot masquerade as complete journal"
+    (yuanxu-test-case "missing predecessor inventory cannot masquerade as complete journal"
       (let* ((root (poo-flow-temporal-family-revision-root (admit 7 1))) (next (admit 8 3))
              (changed (poo-flow-temporal-family-revision-change root next (frontier root next #t) 'retract)))
         (check-exception (poo-flow-temporal-family-revision-journal "history" (list changed)) true)))
-    (poo-flow-test-case "native archive replays a canonical full premise graph"
+    (yuanxu-test-case "native archive replays a canonical full premise graph"
       (let* ((root (poo-flow-temporal-family-revision-root (admit 7 1)))
              (next (admit 8 3))
              (changed (poo-flow-temporal-family-revision-change root next (frontier root next #t) 'retract))
@@ -113,7 +113,7 @@
         (check (.ref replayed 'durable?) => #f)
         (check (.ref replayed 'source-authenticated?) => #f)
         (check (.ref replayed 'action-authorized?) => #f)))
-    (poo-flow-test-case "archive rejects forged hashes and incomplete history"
+    (yuanxu-test-case "archive rejects forged hashes and incomplete history"
       (let* ((root (poo-flow-temporal-family-revision-root (admit 7 1)))
              (next (admit 8 3))
              (changed (poo-flow-temporal-family-revision-change root next (frontier root next #t) 'retract))

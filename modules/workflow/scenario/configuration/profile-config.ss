@@ -6,69 +6,69 @@
 ;;; Boundary: public facade for profile config, policy, and presentation.
 ;;; Invariant: profile objects, diagnostics, and presentations live in leaf owners.
 
-(import :core/module-system/selection/objects
+(import :yuanxu/module-system/selection/objects
         :poo-flow/modules/sandbox-core/profile-catalog
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         :poo-flow/modules/workflow/cicd-config
         :poo-flow/modules/workflow/scenario/configuration/presentation-config
-        :core/profile-composition/user-profile
-        :core/profile-composition/gate
-        :core/profile-composition/policy
+        :yuanxu/profile-composition/user-profile
+        :yuanxu/profile-composition/gate
+        :yuanxu/profile-composition/policy
         :poo-flow/modules/workflow/scenario/configuration/profile-presentation-config)
 
-(export (import: :core/module-system/selection/objects)
+(export (import: :yuanxu/module-system/selection/objects)
         (import: :poo-flow/modules/sandbox-core/profile-catalog)
         (import: :poo-flow/modules/sandbox-core/backend-capability-catalog)
         (import: :poo-flow/modules/workflow/cicd-config)
         (import: :poo-flow/modules/workflow/scenario/configuration/presentation-config)
-        poo-flow-user-profile-kind
-        poo-flow-user-profile-set-kind
-        poo-flow-user-profile-diagnostic-kind
-        poo-flow-user-profile-presentation-kind
-        poo-flow-user-profile-set-presentation-kind
-        poo-flow-user-profile-policy-receipt-kind
-        poo-flow-user-profile-set-policy-receipt-kind
-        poo-flow-user-interface-profile-gate-kind
-        poo-flow-user-interface-profile-gate-receipt-kind
-        poo-flow-user-interface-profile-gate-fact-keys
-        poo-flow-user-interface-profile-proof-statuses
-        pooFlowUserProfile
-        pooFlowUserProfileSet
-        pooFlowUserProfileExtend
-        poo-flow-user-interface-profile-gate-receipt
-        poo-flow-user-interface-profile-gate
-        poo-flow-user-interface-profile-gate/receipt
-        pooFlowUserInterfaceProfileGateReceipt
-        pooFlowUserInterfaceProfileGate
-        pooFlowUserInterfaceProfileGateWithReceipt
-        pooFlowDefaultUserSettings
-        poo-flow-default-user-setting-keys
-        pooFlowUserConfigFromProfile
-        poo-flow-user-profile-policy-admit
-        poo-flow-user-profile-set-policy-admit
+        yuanxu-user-profile-kind
+        yuanxu-user-profile-set-kind
+        yuanxu-user-profile-diagnostic-kind
+        yuanxu-user-profile-presentation-kind
+        yuanxu-user-profile-set-presentation-kind
+        yuanxu-user-profile-policy-receipt-kind
+        yuanxu-user-profile-set-policy-receipt-kind
+        yuanxu-user-interface-profile-gate-kind
+        yuanxu-user-interface-profile-gate-receipt-kind
+        yuanxu-user-interface-profile-gate-fact-keys
+        yuanxu-user-interface-profile-proof-statuses
+        yuanxuUserProfile
+        yuanxuUserProfileSet
+        yuanxuUserProfileExtend
+        yuanxu-user-interface-profile-gate-receipt
+        yuanxu-user-interface-profile-gate
+        yuanxu-user-interface-profile-gate/receipt
+        yuanxuUserInterfaceProfileGateReceipt
+        yuanxuUserInterfaceProfileGate
+        yuanxuUserInterfaceProfileGateWithReceipt
+        yuanxuDefaultUserSettings
+        yuanxu-default-user-setting-keys
+        yuanxuUserConfigFromProfile
+        yuanxu-user-profile-policy-admit
+        yuanxu-user-profile-set-policy-admit
         pooFlowUserProfilePresentation
         pooFlowUserProfileSetPresentation
-        poo-flow-user-profile-policy-admitted?
-        poo-flow-user-profile-set-policy-admitted?
-        poo-flow-user-profile?
-        poo-flow-user-profile-set?
-        poo-flow-user-profile-name
-        poo-flow-user-profile-set-name
-        poo-flow-user-profile-set-default-profile-name
-        poo-flow-user-profile-set-profiles
-        poo-flow-user-profile-set-profile-names
-        poo-flow-user-profile-set-find-profile
-        poo-flow-user-profile-set-default-profile
-        poo-flow-user-profile-module-bundles
-        poo-flow-user-profile-modules
-        poo-flow-user-profile-settings
-        poo-flow-user-profile-setting-keys
-        poo-flow-user-interface-profile-gate?
-        poo-flow-user-interface-profile-gate-receipt?
-        poo-flow-user-interface-profile-gate-profile-name
-        poo-flow-user-interface-profile-gate-accepted?
-        poo-flow-user-interface-profile-gate->lean-facts
-        poo-flow-user-interface-profile-lean-fact-contract-complete?
-        poo-flow-user-profile-diagnostics
-        poo-flow-user-profile-set-diagnostics
-        poo-flow-user-profile-diagnostic->alist)
+        yuanxu-user-profile-policy-admitted?
+        yuanxu-user-profile-set-policy-admitted?
+        yuanxu-user-profile?
+        yuanxu-user-profile-set?
+        yuanxu-user-profile-name
+        yuanxu-user-profile-set-name
+        yuanxu-user-profile-set-default-profile-name
+        yuanxu-user-profile-set-profiles
+        yuanxu-user-profile-set-profile-names
+        yuanxu-user-profile-set-find-profile
+        yuanxu-user-profile-set-default-profile
+        yuanxu-user-profile-module-bundles
+        yuanxu-user-profile-modules
+        yuanxu-user-profile-settings
+        yuanxu-user-profile-setting-keys
+        yuanxu-user-interface-profile-gate?
+        yuanxu-user-interface-profile-gate-receipt?
+        yuanxu-user-interface-profile-gate-profile-name
+        yuanxu-user-interface-profile-gate-accepted?
+        yuanxu-user-interface-profile-gate->lean-facts
+        yuanxu-user-interface-profile-lean-fact-contract-complete?
+        yuanxu-user-profile-diagnostics
+        yuanxu-user-profile-set-diagnostics
+        yuanxu-user-profile-diagnostic->alist)

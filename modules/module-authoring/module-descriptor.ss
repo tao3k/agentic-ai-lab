@@ -6,22 +6,22 @@
 ;;; Boundary: POO Flow module descriptors and import closure validation.
 ;;; Invariant: descriptors are POO values and never load module sources.
 
-(import :core/composition/roles
+(import :yuanxu/composition/roles
         (only-in :clan/poo/object .o .@ .ref object?)
-        :core/modules/funflow/control-plane/roles
-        :core/modules/funflow/control-plane/failure
-        :core/object-family/role-syntax
-        :core/modules/funflow/control-plane/task
-        :core/modules/funflow/control-plane/flow
+        :yuanxu/modules/funflow/control-plane/roles
+        :yuanxu/modules/funflow/control-plane/failure
+        :yuanxu/object-family/role-syntax
+        :yuanxu/modules/funflow/control-plane/task
+        :yuanxu/modules/funflow/control-plane/flow
         :poo-flow/modules/module-authoring/module-interface
-        (only-in :core/module-system/graph/funs
+        (only-in :yuanxu/module-system/graph/funs
                  module-closure module-missing-imports)
-        (only-in :core/module-system/funs
-                 poo-flow-module-flags-enabled?)
-        (only-in :core/object-family/syntax
+        (only-in :yuanxu/module-system/funs
+                 yuanxu-module-flags-enabled?)
+        (only-in :yuanxu/object-family/syntax
                  defpoo-object-family)
-        :core/module-system/source/imports
-        :core/module-system/source/objects)
+        :yuanxu/module-system/source/imports
+        :yuanxu/module-system/source/objects)
 
 (export poo-flow-module-role
         poo-flow-module-descriptor-prototype
@@ -36,7 +36,7 @@
         pooFlowModules
         defpoo-flow-module
         poo-flow-module-name
-        poo-flow-module-imports
+        yuanxu-module-imports
         poo-flow-module-task-registry
         poo-flow-module-flow-registry
         poo-flow-module-options
@@ -65,7 +65,7 @@
         poo-flow-module-all-flow-descriptors
         poo-flow-module-all-options
         poo-flow-module-missing-imports
-        validate-poo-flow-module-imports)
+        validate-yuanxu-module-imports)
 
 ;;; Boundary: role data anchors module descriptors in the control-plane C4 set.
 ;; : (-> Unit Role)
@@ -82,7 +82,7 @@
 ;;; Product admission is distinct from Core's pure flag query.
 (def (poo-flow-module-active? descriptor . required-flags)
   (and (poo-flow-module-descriptor? descriptor)
-       (poo-flow-module-flags-enabled? descriptor required-flags)))
+       (yuanxu-module-flags-enabled? descriptor required-flags)))
 
 ;;; Boundary: descriptor defaults define the product module slot layout.
 ;;; Intent: every module surface lowers into this slot layout.
@@ -229,54 +229,54 @@
 (def (poo-flow-modules interface module-config)
   (let* ((config-values
           ;; Config may be supplied under Marlin's `config` slot or as option data.
-          (poo-flow-module-object-ref/default
+          (yuanxu-module-object-ref/default
            module-config
            'config
-           (poo-flow-module-object-ref/default module-config 'options (.o))))
+           (yuanxu-module-object-ref/default module-config 'options (.o))))
          (module-id-value
           ;; Missing ids inherit the interface id so sparse configs stay valid.
-          (poo-flow-module-object-ref/default
+          (yuanxu-module-object-ref/default
            module-config
            'id
-           (poo-flow-module-interface-id interface)))
+           (yuanxu-module-interface-id interface)))
          (module-imports
-          (poo-flow-module-object-ref/default module-config 'imports '()))
+          (yuanxu-module-object-ref/default module-config 'imports '()))
          (module-extensions
-          (poo-flow-module-object-ref/default module-config 'extensions '()))
+          (yuanxu-module-object-ref/default module-config 'extensions '()))
          (module-scripts
-          (poo-flow-module-object-ref/default module-config 'scripts '()))
+          (yuanxu-module-object-ref/default module-config 'scripts '()))
          (module-metadata
-          (poo-flow-module-object-ref/default
+          (yuanxu-module-object-ref/default
            module-config
            'metadata
-           (poo-flow-module-interface-metadata interface)))
+           (yuanxu-module-interface-metadata interface)))
          (module-source-ref
-          (poo-flow-module-object-ref/default module-config 'source-ref #f))
+          (yuanxu-module-object-ref/default module-config 'source-ref #f))
          (module-group
-          (poo-flow-module-object-ref/default
+          (yuanxu-module-object-ref/default
            module-config
            'group
            poo-flow-brand-group))
          (module-flags
-          (poo-flow-module-object-ref/default module-config 'flags '()))
+          (yuanxu-module-object-ref/default module-config 'flags '()))
          (module-features
-          (poo-flow-module-object-ref/default module-config 'features '()))
+          (yuanxu-module-object-ref/default module-config 'features '()))
          (module-depth
-          (poo-flow-module-object-ref/default module-config 'depth (cons 0 0)))
+          (yuanxu-module-object-ref/default module-config 'depth (cons 0 0)))
          (module-phase-files
-          (poo-flow-module-object->alist
-           (poo-flow-module-object-ref/default module-config 'phase-files '())))
+          (yuanxu-module-object->alist
+           (yuanxu-module-object-ref/default module-config 'phase-files '())))
          (module-hooks
-          (poo-flow-module-object->alist
-           (poo-flow-module-object-ref/default module-config 'hooks '()))))
+          (yuanxu-module-object->alist
+           (yuanxu-module-object-ref/default module-config 'hooks '()))))
     (make-poo-flow-module-descriptor/full
      module-id-value
      module-imports
      (make-task-family-registry module-id-value '())
      (make-flow-declaration-registry module-id-value '())
-     (poo-flow-module-object->alist config-values)
+     (yuanxu-module-object->alist config-values)
      interface
-     (poo-flow-module-interface-schemas interface)
+     (yuanxu-module-interface-schemas interface)
      config-values
      module-extensions
      module-scripts
@@ -329,9 +329,9 @@
      (pooFlowModules
       interface
       (.o id: module-id
-          imports: (poo-flow-imports import-value ...)
+          imports: (yuanxu-imports import-value ...)
           config: config-object
-          extensions: (poo-flow-extensions extension-value ...)
+          extensions: (yuanxu-extensions extension-value ...)
           scripts: (list script-value ...)
           metadata: metadata-value))))
   ((_ binding
@@ -345,11 +345,11 @@
      (pooFlowModules
       interface
       (.o id: module-id
-          imports: (poo-flow-imports import-value ...)
+          imports: (yuanxu-imports import-value ...)
           config: config-object
-          extensions: (poo-flow-extensions extension-value ...)
+          extensions: (yuanxu-extensions extension-value ...)
           scripts: (list script-value ...)
-          metadata: (poo-flow-module-interface-metadata interface))))))
+          metadata: (yuanxu-module-interface-metadata interface))))))
 
 ;;; Boundary:
 ;;; - poo-flow-module preserves the registry-oriented descriptor constructor surface.
@@ -396,7 +396,7 @@
   (reader .@)
   (accessors
    (poo-flow-module-name name)
-   (poo-flow-module-imports imports)
+   (yuanxu-module-imports imports)
    (poo-flow-module-task-registry task-registry)
    (poo-flow-module-flow-registry flow-registry)
    (poo-flow-module-options options)
@@ -432,7 +432,7 @@
 ;;; Boundary: import profiles can be descriptor values or closed-world names.
 ;; : (-> ModuleImportValue ModuleImportProfile)
 (def (poo-flow-module-import-profile import-value)
-  (if (poo-flow-import? import-value)
+  (if (yuanxu-import? import-value)
     (.ref import-value 'profile)
     import-value))
 
@@ -489,19 +489,19 @@
    modules
    poo-flow-module-name
    (lambda (module)
-     (poo-flow-module-import-configs (poo-flow-module-imports module)))))
+     (poo-flow-module-import-configs (yuanxu-module-imports module)))))
 
 (def (poo-flow-module-missing-imports modules)
   (module-missing-imports
    (poo-flow-module-closure modules)
    poo-flow-module-name
-   poo-flow-module-imports
+   yuanxu-module-imports
    poo-flow-module-named-import?
    poo-flow-module-import-name))
 
 ;;; Boundary: activation may only proceed after closed-world imports validate.
 ;; : (-> [PooModuleDescriptor] Boolean)
-(def (validate-poo-flow-module-imports modules)
+(def (validate-yuanxu-module-imports modules)
   (let ((missing (poo-flow-module-missing-imports modules)))
     (if (null? missing)
       #t

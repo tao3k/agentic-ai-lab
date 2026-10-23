@@ -48,8 +48,8 @@ def _poo_flow_bundle_v1_impl(ctx):
     arguments.add("GERBIL_LOADPATH=" + ":".join(load_path))
     arguments.add("POO_FLOW_BUNDLE_V1_ID=" + ctx.attr.bundle_id)
     arguments.add("POO_FLOW_BUNDLE_V1_EPOCH=" + str(ctx.attr.bundle_epoch))
-    arguments.add("POO_FLOW_BUNDLE_V1_DESCRIPTOR_OUT=" + descriptor.path)
-    arguments.add("POO_FLOW_BUNDLE_V1_ARENA_OUT=" + arena.path)
+    arguments.add("YUANXU_BUNDLE_V1_DESCRIPTOR_OUT=" + descriptor.path)
+    arguments.add("YUANXU_BUNDLE_V1_ARENA_OUT=" + arena.path)
     arguments.add(toolchain.gxi.executable.path)
     arguments.add(ctx.file.src.path)
 

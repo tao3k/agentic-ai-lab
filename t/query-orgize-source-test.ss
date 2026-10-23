@@ -2,10 +2,10 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test check check-exception test-suite)
         (only-in :clan/poo/object .o .ref)
-        :core/poo-clos/interface
+        :yuanxu/poo-clos/interface
         :poo-flow/modules/query/objects
         :poo-flow/modules/query/results/funs
         :poo-flow/modules/query/orgize-source)
@@ -24,7 +24,7 @@
 
 (def query-orgize-source-test
   (test-suite "Orgize source Elements under canonical POO Flow Query"
-    (poo-flow-test-case "one source produces a source-bound open headline row"
+    (yuanxu-test-case "one source produces a source-bound open headline row"
       (let* ((observation (poo-flow-query-orgize-open-headlines org-source))
              (query (.ref observation 'query))
              (result (.ref observation 'result-set))
@@ -45,7 +45,7 @@
         (check (poo-flow-query-orgize-source-observation?
                 (poo-flow-query-orgize-open-headlines-replay
                  org-source observation)) => #t)))
-    (poo-flow-test-case "current bytes, not a declared digest, drive replay"
+    (yuanxu-test-case "current bytes, not a declared digest, drive replay"
       (let ((observation (poo-flow-query-orgize-open-headlines org-source)))
         (check-exception
          (poo-flow-query-orgize-open-headlines-replay
@@ -55,7 +55,7 @@
         (check-exception
          (poo-flow-query-orgize-open-headlines (.o kind: 'forged-graph))
          true)))
-    (poo-flow-test-case "a self-consistent forged row fails source replay"
+    (yuanxu-test-case "a self-consistent forged row fails source replay"
       (let* ((observation (poo-flow-query-orgize-open-headlines org-source))
              (query (.ref observation 'query))
              (result (.ref observation 'result-set))
@@ -78,7 +78,7 @@
          (poo-flow-query-orgize-open-headlines-replay
           org-source (.o (:: @ observation) result-set: forged-set))
          true)))
-    (poo-flow-test-case "an altered canonical Query predicate fails replay"
+    (yuanxu-test-case "an altered canonical Query predicate fails replay"
       (let* ((observation (poo-flow-query-orgize-open-headlines org-source))
              (query (.ref observation 'query))
              (program (.ref query 'program))

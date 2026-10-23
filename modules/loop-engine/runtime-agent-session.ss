@@ -6,9 +6,9 @@
 ;;; Boundary: loop-engine agent session and harness collection projection rows.
 ;;; Invariant: projections describe Marlin-owned work and never open sessions.
 
-(import (only-in :core/modules/funflow/control-plane/agent-harness
-                 make-poo-flow-agent-session
-                 poo-flow-agent-session->alist)
+(import (only-in :yuanxu/modules/funflow/control-plane/agent-harness
+                 make-yuanxu-agent-session
+                 yuanxu-agent-session->alist)
         (rename-in "session-agent-graph.ss"
                    (poo-flow-user-loop-engine-intent-session-agent-graph
                     poo-flow-loop-engine-session-agent-graph/projection))
@@ -50,8 +50,8 @@
            (string-append (symbol->string role) "-harness")))
          (operation-id
           (poo-flow-user-loop-engine-runtime-id use-case-name "operation")))
-    (poo-flow-agent-session->alist
-     (make-poo-flow-agent-session
+    (yuanxu-agent-session->alist
+     (make-yuanxu-agent-session
       session-name
       harness-id
       (poo-flow-user-loop-engine-intent-status intent)
@@ -89,8 +89,8 @@
            (string-append (symbol->string role) "-harness")))
          (operation-id
           (poo-flow-user-loop-engine-runtime-id use-case-name "operation")))
-    (poo-flow-agent-session->alist
-     (make-poo-flow-agent-session
+    (yuanxu-agent-session->alist
+     (make-yuanxu-agent-session
       session-name
       harness-id
       (poo-flow-user-loop-engine-intent-status intent)

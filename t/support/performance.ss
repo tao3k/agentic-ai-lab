@@ -6,7 +6,7 @@
 ;;; Boundary: shared performance-test helpers for synthetic fixture data.
 ;;; Invariant: helper functions are pure except elapsed measurement thunks.
 
-(import :core/composition/roles
+(import :yuanxu/composition/roles
         :gerbil/runtime/gambit
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-p95-elapsed-us))
@@ -17,7 +17,7 @@
 ;;; Boundary: callers own the item constructor and count.
 ;; : (-> Integer (-> Integer Object) [Object])
 (import :clan/poo/object
-        :core/modules/funflow/control-plane/roles)
+        :yuanxu/modules/funflow/control-plane/roles)
 
 (export run-domain-case-instance-overlay-benchmark
         domain-case-instance-overlay-benchmark->alist)

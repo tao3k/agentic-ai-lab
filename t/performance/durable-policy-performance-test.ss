@@ -7,7 +7,7 @@
 ;;; Invariant: authoring stays POO-native; runtime handoff sees struct receipts
 ;;; and bounded alist serialization.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -96,7 +96,7 @@
 ;; : TestSuite
 (def durable-policy-performance-test
   (test-suite "durable policy projection performance"
-    (poo-flow-test-case "keeps durable policy batch projection inside benchmark contract"
+    (yuanxu-test-case "keeps durable policy batch projection inside benchmark contract"
       (let* ((summary
               (durable-policy-performance-summary
                durable-policy-projection-count))

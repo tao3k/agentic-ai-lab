@@ -7,13 +7,13 @@
 ;;; Invariant: this projection remains inert and grants no runtime authority.
 (import (only-in :clan/poo/object .ref .slot?)
         (only-in :std/list/list every)
-        (only-in :core/contribution/objects
+        (only-in :yuanxu/contribution/objects
                  make-contribution
                  contribution?)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection?
-                 poo-flow-user-module-selection-flags
-                 poo-flow-user-module-selection-key)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection?
+                 yuanxu-user-module-selection-flags
+                 yuanxu-user-module-selection-key)
         (only-in :poo-flow/modules/governance/types
                  poo-flow-governance-profile?
                  poo-flow-governance-assess))
@@ -59,10 +59,10 @@
 (def (poo-flow-governance-module-config
       selection module-family-value contribution-value)
   (unless (and (symbol? module-family-value)
-               (poo-flow-user-module-selection? selection)
-               (equal? (poo-flow-user-module-selection-key selection)
+               (yuanxu-user-module-selection? selection)
+               (equal? (yuanxu-user-module-selection-key selection)
                        (cons 'custom module-family-value))
-               (null? (poo-flow-user-module-selection-flags selection))
+               (null? (yuanxu-user-module-selection-flags selection))
                (contribution? contribution-value)
                (.slot? (.ref contribution-value 'profile) 'module-family)
                (eq? (.ref (.ref contribution-value 'profile) 'module-family)

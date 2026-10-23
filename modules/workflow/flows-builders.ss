@@ -6,18 +6,18 @@
 ;;; Boundary: composed workflow builders for Docker, Store, Tensorflow, and makefile examples.
 ;;; Invariant: builders produce descriptors and runtime command manifests only.
 
-(import (only-in :core/modules/funflow/control-plane/task
+(import (only-in :yuanxu/modules/funflow/control-plane/task
                  execution-request-request execution-request-plan-id)
-        (only-in :core/modules/funflow/control-plane/strategy make-local-eager-strategy)
-        (only-in :core/modules/funflow/control-plane/runtime-adapter make-rust-adapter)
-        (only-in :core/modules/funflow/control-plane/config make-run-config)
-        (only-in :core/modules/funflow/control-plane/flow
+        (only-in :yuanxu/modules/funflow/control-plane/strategy make-local-eager-strategy)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter make-rust-adapter)
+        (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
+        (only-in :yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry external-flow flow-then)
-        (only-in :core/modules/funflow/control-plane/runtime-command-descriptor
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-command-descriptor
                  make-stdout-runtime-command-descriptor)
-        :core/modules/funflow/control-plane/projection-syntax
+        :yuanxu/modules/funflow/control-plane/projection-syntax
         :poo-flow/modules/docker/funs
-        :core/modules/funflow/store)
+        :yuanxu/modules/funflow/store)
 
 (export make-docker-store-run-config
         make-ccompilation-flow
@@ -98,7 +98,7 @@
       (docker-enable-strategy (make-local-eager-strategy)))
      (make-store-enabled-adapter
       (make-docker-enabled-adapter (make-rust-adapter command)))
-     (poo-flow-product-field-rows/tail
+     (yuanxu-product-field-rows/tail
       options
       (runtime 'rust)
       (extensions '(docker store)))
@@ -295,7 +295,7 @@
                      options
                      'arguments
                      (make-makefile-tool-runtime-arguments options)))
-         (metadata (poo-flow-product-field-rows/tail
+         (metadata (yuanxu-product-field-rows/tail
                     (workflow-options-without options 'arguments)
                     (workflow 'makefile-tool)
                     (runtime 'rust-cli-compatible))))

@@ -31,7 +31,7 @@ The downstream surface follows the project invariant: POO Flow is 100% POO-nativ
 
 The files here stay declarative:
 
-- =init.ss= lists optional feature patches/custom modules through =poo-flow!= category rows.
+- =init.ss= lists optional feature patches/custom modules through =yuanxu!= category rows.
 - =config.ss= uses the thin =user-composition= binding and directly composes
   maintained Profile and Standard values with explicit imports; operational
   responsibilities remain owned by those values.
@@ -87,7 +87,7 @@ identity.
 =init.ss= is intentionally closer to Doom's =init.el= than to an implementation
 module:
 
-- enable required workflow, loop, and sandbox modules through =poo-flow!=;
+- enable required workflow, loop, and sandbox modules through =yuanxu!=;
 - group optional feature patches by category, such as =:workflow= and =:custom=;
 - attach user-toggleable module features with =+feature= flags;
 - keep object contracts, sandbox recipes, settings, and facade exports out of =init.ss=;

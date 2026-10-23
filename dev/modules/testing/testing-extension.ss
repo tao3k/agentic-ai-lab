@@ -13,11 +13,11 @@
                  testing-interface-add-profile
                  testing-interface-call-with-operation)
         (only-in :std/string/path path-expand)
-        (only-in :core/observability/output
-                 poo-flow-write-observation-line!)
-        (only-in :core/observability/debug
-                 poo-flow-debug-call-policy
-                 call-with-poo-flow-debug-trace))
+        (only-in :yuanxu/observability/output
+                 yuanxu-write-observation-line!)
+        (only-in :yuanxu/observability/debug
+                 yuanxu-debug-call-policy
+                 call-with-yuanxu-debug-trace))
 
 (export poo-flow-native-observability-enabled?
         poo-flow-testing-observability-profile-prototype
@@ -33,7 +33,7 @@
         poo-flow-testing-observability-extension)
 
 (def +poo-flow-testing-observation-policy+
-  (poo-flow-debug-call-policy 'native-gerbil-testing 8))
+  (yuanxu-debug-call-policy 'native-gerbil-testing 8))
 
 ;;; ASP derives closure ownership from Gerbil's resident module registry.  POO
 ;;; Flow declares only the policy slots: what counts as a large closure, how
@@ -150,7 +150,7 @@
                  (thread-sleep! interval)
                  (parameterize ((current-output-port port)
                                 (current-error-port port))
-                   (poo-flow-write-observation-line!
+                   (yuanxu-write-observation-line!
                     "[poo-flow-testing] phase=operation-heartbeat operation=%a elapsedNs=%a"
                     operation
                     (poo-flow-testing-elapsed-nanoseconds started-jiffy)))
@@ -167,7 +167,7 @@
 
 ;; : (forall (a) (-> Symbol (-> a) a))
 (def (poo-flow-observe-testing-operation operation thunk)
-  (call-with-poo-flow-debug-trace
+  (call-with-yuanxu-debug-trace
    +poo-flow-testing-observation-policy+
    operation
    (lambda ()

@@ -11,10 +11,10 @@ let
       import ./core/t/fixtures/opentofu/aws-5.100.0/package.nix { inherit pkgs; }
     else
       pkgs.terraform-providers.hashicorp_aws;
-  awsSchema = pkgs.callPackage ./core/modules/opentofu/nix/provider-schema.nix {
+  awsSchema = pkgs.callPackage ./modules/services/opentofu/nix/provider-schema.nix {
     provider = awsProvider;
   };
-  opentofuArtifact = pkgs.callPackage ./core/modules/opentofu/nix/provider-artifacts.nix {
+  opentofuArtifact = pkgs.callPackage ./modules/services/opentofu/nix/provider-artifacts.nix {
     selection.providers = [ "aws" ];
     schemas.aws = awsSchema;
   };
@@ -22,7 +22,7 @@ in
 {
   # https://devenv.sh/basics/
   env.GREET = "devenv";
-  env.POO_FLOW_OPENTOFU_ARTIFACT = "${opentofuArtifact}";
+  env.YUANXU_OPENTOFU_ARTIFACT = "${opentofuArtifact}";
 
   # https://devenv.sh/packages/
   packages = [

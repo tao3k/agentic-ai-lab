@@ -153,7 +153,7 @@ Poo-flow target result:
   commands, process-backed commands, and later Rust commands share one
   invocation shape.
 - Process-backed commands may use the stdout protocol: print one
-  =poo-flow.runtime-response.v1= s-expression and let Scheme normalize it.
+  =yuanxu.runtime-response.v1= s-expression and let Scheme normalize it.
 - Docker-specific declarations belong to =modules/docker/config.ss=.
 - CAS/store lifecycle interpretation belongs to a store/CAS extension or Rust
   runtime, not to =src/core/runner.ss=.
@@ -207,7 +207,7 @@ Poo-flow target result:
 - The composed config installs Docker and Store task registries, strategy
   capabilities, and adapter capabilities without changing core defaults.
 - The stdout runtime command handles both =docker= and =store= requests through
-  the same =poo-flow.runtime-response.v1= schema.
+  the same =yuanxu.runtime-response.v1= schema.
 - The Store step receives the previous Docker =adapter-result= as input and can
   observe its value and artifact handle.
 
@@ -232,7 +232,7 @@ Poo-flow target result:
   builder, response protocol, and metadata as inert data.
 - =runtime-command-descriptor->command= materializes a descriptor into the
   existing process command boundary.
-- The stdout protocol remains =poo-flow.runtime-response.v1=, so a future Rust
+- The stdout protocol remains =yuanxu.runtime-response.v1=, so a future Rust
   CLI only needs to print the same response s-expression.
 - Docker-to-Store workflows depend on the descriptor protocol, not on the
   =make-stdout-runtime-command= constructor directly.
@@ -259,7 +259,7 @@ Reference result:
 Poo-flow target result:
 - =runtime-command-descriptor->manifest= projects a descriptor and request
   envelope into stable CLI handoff data.
-- The manifest records =poo-flow.runtime-command-descriptor.v1=, the request
+- The manifest records =yuanxu.runtime-command-descriptor.v1=, the request
   schema, request id, command name, protocol, executable, arguments, argv, and
   metadata.
 - The projection evaluates the descriptor's argument builder for a concrete

@@ -7,17 +7,17 @@
 ;;; Invariant: this owner emits POO control-plane data and never executes checks.
 
 (import (only-in :clan/poo/object .ref object<-fun)
-        :core/module-system/selection/objects
-        :core/utilities/runtime-receipt-syntax
+        :yuanxu/module-system/selection/objects
+        :yuanxu/utilities/runtime-receipt-syntax
         (only-in :poo-flow/modules/workflow/cicd-runtime-command-config
                  poo-flow-user-alist-ref)
         :poo-flow/modules/sandbox-core/profile-catalog
-        (only-in :core/modules/funflow/graph-projection
-                 poo-flow-funflow-check-map->functional-dag
-                 poo-flow-funflow-functional-dag->alist)
-        (only-in :core/modules/funflow/check-objects
-                 poo-flow-cicd-check-map?
-                 poo-flow-cicd-check-map-name)
+        (only-in :yuanxu/modules/funflow/graph-projection
+                 yuanxu-funflow-check-map->functional-dag
+                 yuanxu-funflow-functional-dag->alist)
+        (only-in :yuanxu/modules/funflow/check-objects
+                 yuanxu-cicd-check-map?
+                 yuanxu-cicd-check-map-name)
         (only-in :poo-flow/modules/workflow/funs
                  poo-flow-cicd-check-map->receipts
                  poo-flow-cicd-check-map->runtime-manifest-readiness
@@ -74,29 +74,29 @@
 ;;; Workflow CI/CD check-maps are the typed pipeline objects attached by the
 ;;; Funflow module. Presentation consumes them, but still performs no runtime
 ;;; descriptor realization or provider execution.
-;; : (-> PooUserModuleSelection MaybePooFlowCicdCheckMap)
+;; : (-> PooUserModuleSelection MaybeYuanxuCicdCheckMap)
 ;;; Check-map accumulation filters selected modules without losing declaration
 ;;; order. Invalid or absent CI/CD maps are skipped so presentation can stay
 ;;; inspectable before runtime validation.
-;; : (-> [PooUserModuleSelection] [PooFlowCicdCheckMap])
+;; : (-> [PooUserModuleSelection] [YuanxuCicdCheckMap])
 ;;; Config-level check-map discovery keeps the user interface on the declared
 ;;; POO object graph: sandbox profile resolution happens against selected
 ;;; module config plus standard defaults, not by probing the filesystem.
-;; : (-> PooUserConfig [PooFlowCicdCheckMap])
+;; : (-> PooUserConfig [YuanxuCicdCheckMap])
 ;;; Functional DAG discovery stays in the Funflow owner. This layer only
 ;;; projects check-map values into POO DAG objects and final presentation rows.
-;; : (-> [PooFlowCicdCheckMap] [PooFlowFunflowFunctionalDag])
-;; : (-> [PooFlowCicdCheckMap] [Alist])
+;; : (-> [YuanxuCicdCheckMap] [YuanxuFunflowFunctionalDag])
+;; : (-> [YuanxuCicdCheckMap] [Alist])
 ;; : (-> PooUserConfig [Alist])
 ;;; Boundary: user workflow cicd runtime readiness add is the policy-visible
 ;;; edge for module-system, workflow behavior, keeping validation, lookup, or
 ;;; projection responsibilities centralized for callers.
-;; : (-> [PooFlowCicdCheckMap] [PooSandboxProfile] [Alist])
+;; : (-> [YuanxuCicdCheckMap] [PooSandboxProfile] [Alist])
 ;; : (-> PooUserConfig [Alist])
 ;;; Boundary: user workflow cicd runtime command manifests add is the policy-
 ;;; visible edge for module-system, workflow behavior, keeping validation,
 ;;; lookup, or projection responsibilities centralized for callers.
-;; : (-> [PooFlowCicdCheckMap] [PooSandboxProfile] [Alist])
+;; : (-> [YuanxuCicdCheckMap] [PooSandboxProfile] [Alist])
 ;;; Runtime command manifests use the same configured profile catalog as
 ;;; readiness, so user/project overrides are visible before Marlin consumes the
 ;;; handoff data.
@@ -346,7 +346,7 @@
 
 ;;; Receipt accumulation preserves check-map declaration order while flattening
 ;;; per-check receipts into the presentation contract.
-;; : (-> [PooFlowCicdCheckMap] [PooSandboxProfile] [Alist] [Alist])
+;; : (-> [YuanxuCicdCheckMap] [PooSandboxProfile] [Alist] [Alist])
 (def (poo-flow-user-workflow-cicd-receipts/add/rev check-maps
                                                        profile-catalog
                                                        receipts-rev)
@@ -360,7 +360,7 @@
       (poo-flow-cicd-check-map->receipts (car check-maps) profile-catalog)
       receipts-rev)))))
 
-;; : (-> [PooFlowCicdCheckMap] [PooSandboxProfile] [Alist])
+;; : (-> [YuanxuCicdCheckMap] [PooSandboxProfile] [Alist])
 (def (poo-flow-user-workflow-cicd-receipts/add check-maps profile-catalog)
   (reverse
    (poo-flow-user-workflow-cicd-receipts/add/rev
@@ -372,7 +372,7 @@
 ;;; preserving user overrides before Marlin receives check receipts.
 ;; : (-> PooUserConfig [Alist])
 (def (poo-flow-user-config-workflow-cicd-receipts config)
-  (let* ((selected-modules (poo-flow-user-config-modules config))
+  (let* ((selected-modules (yuanxu-user-config-modules config))
          (profile-catalog
           (poo-flow-user-config-sandbox-profile-catalog selected-modules)))
     (poo-flow-user-workflow-cicd-receipts/add
@@ -390,12 +390,12 @@
 ;;       ;; => '(build test)
 ;;       ```
 ;;     %
-;; : (-> [PooFlowCicdCheckMap] [Symbol])
+;; : (-> [YuanxuCicdCheckMap] [Symbol])
 (def (poo-flow-user-workflow-cicd-check-map-names check-maps)
   (cond
    ((null? check-maps) '())
    (else
-    (cons (poo-flow-cicd-check-map-name (car check-maps))
+    (cons (yuanxu-cicd-check-map-name (car check-maps))
           (poo-flow-user-workflow-cicd-check-map-names
            (cdr check-maps))))))
 
@@ -421,7 +421,7 @@
 
 ;; : (-> PooUserConfig POOObject)
 (def (poo-flow-user-config-workflow-cicd-runtime-projection-object config)
-  (let* ((selected-modules (poo-flow-user-config-modules config))
+  (let* ((selected-modules (yuanxu-user-config-modules config))
          (profile-catalog/promise
           (delay
             (poo-flow-user-config-sandbox-profile-catalog selected-modules)))

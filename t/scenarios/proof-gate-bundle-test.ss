@@ -2,14 +2,14 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
         :poo-flow/modules/proof/projections/proof-fact-wire
         :poo-flow/modules/proof/projections/proof-gate-bundle)
 
 (def proof-gate-bundle-test
   (test-suite "proof gate bundle"
-    (poo-flow-test-case "validates accepted and rejected bundles"
+    (yuanxu-test-case "validates accepted and rejected bundles"
 
 (def (assert-equal label actual expected)
   (unless (equal? actual expected)

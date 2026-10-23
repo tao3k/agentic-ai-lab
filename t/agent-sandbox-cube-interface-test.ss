@@ -6,7 +6,7 @@
 ;;; Boundary: Cube interface tests cover Marlin-facing lifecycle manifests.
 ;;; Invariant: tests do not call Cube APIs or create remote sandboxes.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :core/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/control-plane/api
         :poo-flow/modules/agent-sandbox/api
         :poo-flow/modules/agent-sandbox/cube
         :poo-flow/modules/agent-sandbox/nono)
@@ -33,7 +33,7 @@
 ;; : TestSuite
 (def agent-sandbox-cube-interface-test
   (test-suite "CubeSandbox interface contract"
-    (poo-flow-test-case "declares POO descriptor for Marlin Cube API handoff"
+    (yuanxu-test-case "declares POO descriptor for Marlin Cube API handoff"
       (let* ((descriptor (make-cube-interface-descriptor))
              (contract (cube-interface-descriptor->contract descriptor))
              (override (make-cube-interface-descriptor
@@ -53,7 +53,7 @@
                                                'lifecycle-operations))
                                 'stage)
                       'resolve-template)))
-    (poo-flow-test-case "projects Cube runtime manifests into lifecycle plans"
+    (yuanxu-test-case "projects Cube runtime manifests into lifecycle plans"
       (let* ((profile (make-cube-agent-sandbox-profile 'python-template))
              (request (agent-sandbox-request
                        profile
@@ -102,7 +102,7 @@
                       "python")
         (check-equal? (test-ref snapshot 'policy) 'clone)
         (check-equal? (test-ref resume 'policy) 'supported)))
-    (poo-flow-test-case "rejects non-Cube and unsupported Cube interface policy"
+    (yuanxu-test-case "rejects non-Cube and unsupported Cube interface policy"
       (let* ((nono-request
               (agent-sandbox-request
                (make-nono-agent-sandbox-profile 'always-further/opencode)

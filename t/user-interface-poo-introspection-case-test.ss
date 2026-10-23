@@ -6,12 +6,12 @@
 ;;; Boundary: tests the public CI/CD POO authoring gate user config.
 ;;; Invariant: assertions inspect formal use-module data, not runtime work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface
         :poo-flow/modules/workflow/scenario/configuration/init-syntax
         :poo-flow/modules/workflow/interface
@@ -38,60 +38,60 @@
 ;; : TestSuite
 (def user-interface-poo-introspection-case-test
   (test-suite "poo-flow user interface POO authoring gate case"
-    (poo-flow-test-case "loads as a formal funflow module configuration"
+    (yuanxu-test-case "loads as a formal funflow module configuration"
       (let* ((selection (car poo-flow-custom-my-module-poo-introspection-case))
-             (flags (poo-flow-user-module-selection-flags selection))
+             (flags (yuanxu-user-module-selection-flags selection))
              (pipeline
               (poo-introspection-test-flag flags ':workflow-pipeline))
              (user-config
               (poo-introspection-test-flag flags ':user-config))
-             (checks (poo-flow-cicd-check-map-checks pipeline))
+             (checks (yuanxu-cicd-check-map-checks pipeline))
              (profile-authoring-check (car checks))
              (funflow-readiness-check (cadr checks)))
-        (check-equal? (poo-flow-user-module-selection-key selection)
+        (check-equal? (yuanxu-user-module-selection-key selection)
                       '(flow . funflow))
-        (check-equal? (poo-flow-cicd-check-map? pipeline) #t)
-        (check-equal? (poo-flow-cicd-check-map-name pipeline)
+        (check-equal? (yuanxu-cicd-check-map? pipeline) #t)
+        (check-equal? (yuanxu-cicd-check-map-name pipeline)
                       'poo-authoring-gate)
         (check-equal? (.ref pipeline 'runtime-executed) #f)
         (check-equal? (car user-config) ':config)
         (check-equal? (caadr user-config) '.def)
-        (check-equal? (map poo-flow-cicd-check-name checks)
+        (check-equal? (map yuanxu-cicd-check-name checks)
                       '(profile-authoring funflow-readiness))
-        (check-equal? (poo-flow-cicd-check-profile
+        (check-equal? (yuanxu-cicd-check-profile
                        profile-authoring-check)
                       'ci/build)
-        (check-equal? (poo-flow-cicd-check-profile
+        (check-equal? (yuanxu-cicd-check-profile
                        funflow-readiness-check)
                       'ci/check)))
-    (poo-flow-test-case "keeps POO authoring observability on check metadata"
+    (yuanxu-test-case "keeps POO authoring observability on check metadata"
       (let* ((selection (car poo-flow-custom-my-module-poo-introspection-case))
-             (flags (poo-flow-user-module-selection-flags selection))
+             (flags (yuanxu-user-module-selection-flags selection))
              (pipeline
               (poo-introspection-test-flag flags ':workflow-pipeline))
-             (checks (poo-flow-cicd-check-map-checks pipeline))
+             (checks (yuanxu-cicd-check-map-checks pipeline))
              (profile-authoring-check (car checks))
              (funflow-readiness-check (cadr checks))
              (profile-authoring-metadata
               (.ref profile-authoring-check 'metadata))
              (funflow-readiness-metadata
               (.ref funflow-readiness-check 'metadata)))
-        (check-equal? (poo-flow-cicd-check-command
+        (check-equal? (yuanxu-cicd-check-command
                        profile-authoring-check)
                       '("gxpkg"
                         "env"
                         "gxtest"
                         "t/sandbox-core-profile-authoring-diagnostics-test.ss"))
-        (check-equal? (poo-flow-cicd-check-command
+        (check-equal? (yuanxu-cicd-check-command
                        funflow-readiness-check)
                       '("gxpkg"
                         "env"
                         "gxtest"
                         "t/user-interface-cicd-pipeline-run-test.ss"))
-        (check-equal? (poo-flow-cicd-check-dependency-refs
+        (check-equal? (yuanxu-cicd-check-dependency-refs
                        profile-authoring-check)
                       '())
-        (check-equal? (poo-flow-cicd-check-dependency-refs
+        (check-equal? (yuanxu-cicd-check-dependency-refs
                        funflow-readiness-check)
                       '(profile-authoring))
         (check-equal? (poo-introspection-test-alist-ref

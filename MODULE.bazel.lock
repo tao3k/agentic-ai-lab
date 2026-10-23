@@ -140,7 +140,7 @@
     "@@gerbil_bazel+//gerbil:extensions.bzl%gerbil": {
       "os:linux,arch:amd64": {
         "bzlTransitiveDigest": "ftvcVApdsKajkZscTLJdqAalEp8gjyxQjrBxQOOSik4=",
-        "usagesDigest": "VPwlDNqHtWWdPhsbdOZmPPUw+kjW/8l6ivUipJXPBNQ=",
+        "usagesDigest": "s+S7Dot9lVObM3ppbobRFjNljpCfcBeVM0OxXZ/bFRo=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -173,11 +173,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/gerbil-poo",
               "package": "gerbil-poo",
-              "revision": "0df023fd9e15192156935c971f0f1940028c5277",
-              "sha256": "002506cda3336c34320c4512019014af5f548343d31e3d1153c58f29be7076c3",
-              "strip_prefix": "gerbil-poo-0df023fd9e15192156935c971f0f1940028c5277",
+              "revision": "096da65e0dfb57df397ee16c78f71643847ec46b",
+              "sha256": "1c789d034af19abe8a765a706860adaa2541c9cecc6c03ae768f23a9e0463671",
+              "strip_prefix": "gerbil-poo-096da65e0dfb57df397ee16c78f71643847ec46b",
               "urls": [
-                "https://github.com/tao3k/gerbil-poo/archive/0df023fd9e15192156935c971f0f1940028c5277.tar.gz"
+                "https://github.com/tao3k/gerbil-poo/archive/096da65e0dfb57df397ee16c78f71643847ec46b.tar.gz"
               ]
             }
           },
@@ -187,11 +187,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/asp-gerbil-scheme",
               "package": "asp-gerbil-scheme",
-              "revision": "9ae9bc377cbab4b84de52b512a2c03375a36d6c9",
-              "sha256": "27f4cfef9406c300a70efe4d90b72314b3e558a058892fc0604346d77ded7bbe",
-              "strip_prefix": "asp-gerbil-scheme-9ae9bc377cbab4b84de52b512a2c03375a36d6c9",
+              "revision": "0f78289a7ae465a84370f5d94d8d14671f3c43af",
+              "sha256": "290111ab54c89059e926c47f78c41fc132dec7d7a0272e3b90f935f149257cea",
+              "strip_prefix": "asp-gerbil-scheme-0f78289a7ae465a84370f5d94d8d14671f3c43af",
               "urls": [
-                "https://github.com/tao3k/asp-gerbil-scheme/archive/9ae9bc377cbab4b84de52b512a2c03375a36d6c9.tar.gz"
+                "https://github.com/tao3k/asp-gerbil-scheme/archive/0f78289a7ae465a84370f5d94d8d14671f3c43af.tar.gz"
               ]
             }
           },
@@ -201,11 +201,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/gerbil-parser",
               "package": "gerbil-parser",
-              "revision": "153572a93263f398d2c21d9e4ac948bf835d9905",
-              "sha256": "fee57c04e6b7a5c6f857c4ccbb3ba2cce099bc03f16848b4eac75cc193b9be04",
-              "strip_prefix": "gerbil-parser-153572a93263f398d2c21d9e4ac948bf835d9905",
+              "revision": "78507e68b1275be1be748be465d6354f596d9063",
+              "sha256": "533fe829db410773513989964eb75d0e07cd97b712a4a4f286b7db2c2bf397f4",
+              "strip_prefix": "gerbil-parser-78507e68b1275be1be748be465d6354f596d9063",
               "urls": [
-                "https://github.com/tao3k/gerbil-parser/archive/153572a93263f398d2c21d9e4ac948bf835d9905.tar.gz"
+                "https://github.com/tao3k/gerbil-parser/archive/78507e68b1275be1be748be465d6354f596d9063.tar.gz"
               ]
             }
           },
@@ -215,11 +215,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/orgize",
               "package": "orgize",
-              "revision": "8807683f6ce5704c3c128b9bb8bb532281a098ca",
-              "sha256": "97b286abb3e368bc8026b224b04938be9427580e098996f7552d1cfca5b7b151",
-              "strip_prefix": "orgize-8807683f6ce5704c3c128b9bb8bb532281a098ca",
+              "revision": "8f04aa246290b56b5605f4a38f25c55d0b416268",
+              "sha256": "86e4af58c076a33ef58ffa8b3bf8e2bd0d6f47379e82d67ec769ec74533a4c97",
+              "strip_prefix": "orgize-8f04aa246290b56b5605f4a38f25c55d0b416268",
               "urls": [
-                "https://github.com/tao3k/orgize/archive/8807683f6ce5704c3c128b9bb8bb532281a098ca.tar.gz"
+                "https://github.com/tao3k/orgize/archive/8f04aa246290b56b5605f4a38f25c55d0b416268.tar.gz"
               ]
             }
           },
@@ -229,11 +229,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/gerbil-ascent",
               "package": "gerbil-ascent",
-              "revision": "dc64cd42886da92654d139b6567667aee7c54cc1",
-              "sha256": "4efd9701d785bb164a8be17bb280fc640dbbb5a2fe00ed815e05d672adbdfe5a",
-              "strip_prefix": "gerbil-ascent-dc64cd42886da92654d139b6567667aee7c54cc1",
+              "revision": "0b6da0403f75b35a23d198557510e139f1902eff",
+              "sha256": "26d9894d64ee7b58a81a6623599bb66a5b5c502c8aa98dfc96c512cd7afacf36",
+              "strip_prefix": "gerbil-ascent-0b6da0403f75b35a23d198557510e139f1902eff",
               "urls": [
-                "https://github.com/tao3k/gerbil-ascent/archive/dc64cd42886da92654d139b6567667aee7c54cc1.tar.gz"
+                "https://github.com/tao3k/gerbil-ascent/archive/0b6da0403f75b35a23d198557510e139f1902eff.tar.gz"
               ]
             }
           }
@@ -241,7 +241,7 @@
       },
       "os:osx,arch:aarch64": {
         "bzlTransitiveDigest": "ftvcVApdsKajkZscTLJdqAalEp8gjyxQjrBxQOOSik4=",
-        "usagesDigest": "VPwlDNqHtWWdPhsbdOZmPPUw+kjW/8l6ivUipJXPBNQ=",
+        "usagesDigest": "s+S7Dot9lVObM3ppbobRFjNljpCfcBeVM0OxXZ/bFRo=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -268,53 +268,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/gerbil-poo",
               "package": "gerbil-poo",
-              "revision": "0df023fd9e15192156935c971f0f1940028c5277",
-              "sha256": "002506cda3336c34320c4512019014af5f548343d31e3d1153c58f29be7076c3",
-              "strip_prefix": "gerbil-poo-0df023fd9e15192156935c971f0f1940028c5277",
+              "revision": "096da65e0dfb57df397ee16c78f71643847ec46b",
+              "sha256": "1c789d034af19abe8a765a706860adaa2541c9cecc6c03ae768f23a9e0463671",
+              "strip_prefix": "gerbil-poo-096da65e0dfb57df397ee16c78f71643847ec46b",
               "urls": [
-                "https://github.com/tao3k/gerbil-poo/archive/0df023fd9e15192156935c971f0f1940028c5277.tar.gz"
-              ]
-            }
-          },
-          "gerbil_parser_sources": {
-            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
-            "attributes": {
-              "build_script": "build.ss",
-              "canonical_uri": "https://github.com/tao3k/gerbil-parser",
-              "package": "gerbil-parser",
-              "revision": "153572a93263f398d2c21d9e4ac948bf835d9905",
-              "sha256": "fee57c04e6b7a5c6f857c4ccbb3ba2cce099bc03f16848b4eac75cc193b9be04",
-              "strip_prefix": "gerbil-parser-153572a93263f398d2c21d9e4ac948bf835d9905",
-              "urls": [
-                "https://github.com/tao3k/gerbil-parser/archive/153572a93263f398d2c21d9e4ac948bf835d9905.tar.gz"
-              ]
-            }
-          },
-          "gerbil_ascent_sources": {
-            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
-            "attributes": {
-              "build_script": "build.ss",
-              "canonical_uri": "https://github.com/tao3k/gerbil-ascent",
-              "package": "gerbil-ascent",
-              "revision": "dc64cd42886da92654d139b6567667aee7c54cc1",
-              "sha256": "4efd9701d785bb164a8be17bb280fc640dbbb5a2fe00ed815e05d672adbdfe5a",
-              "strip_prefix": "gerbil-ascent-dc64cd42886da92654d139b6567667aee7c54cc1",
-              "urls": [
-                "https://github.com/tao3k/gerbil-ascent/archive/dc64cd42886da92654d139b6567667aee7c54cc1.tar.gz"
-              ]
-            }
-          },
-          "orgize_sources": {
-            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
-            "attributes": {
-              "build_script": "build.ss",
-              "canonical_uri": "https://github.com/tao3k/orgize",
-              "package": "orgize",
-              "revision": "8807683f6ce5704c3c128b9bb8bb532281a098ca",
-              "sha256": "97b286abb3e368bc8026b224b04938be9427580e098996f7552d1cfca5b7b151",
-              "strip_prefix": "orgize-8807683f6ce5704c3c128b9bb8bb532281a098ca",
-              "urls": [
-                "https://github.com/tao3k/orgize/archive/8807683f6ce5704c3c128b9bb8bb532281a098ca.tar.gz"
+                "https://github.com/tao3k/gerbil-poo/archive/096da65e0dfb57df397ee16c78f71643847ec46b.tar.gz"
               ]
             }
           },
@@ -324,11 +282,53 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/asp-gerbil-scheme",
               "package": "asp-gerbil-scheme",
-              "revision": "9ae9bc377cbab4b84de52b512a2c03375a36d6c9",
-              "sha256": "27f4cfef9406c300a70efe4d90b72314b3e558a058892fc0604346d77ded7bbe",
-              "strip_prefix": "asp-gerbil-scheme-9ae9bc377cbab4b84de52b512a2c03375a36d6c9",
+              "revision": "0f78289a7ae465a84370f5d94d8d14671f3c43af",
+              "sha256": "290111ab54c89059e926c47f78c41fc132dec7d7a0272e3b90f935f149257cea",
+              "strip_prefix": "asp-gerbil-scheme-0f78289a7ae465a84370f5d94d8d14671f3c43af",
               "urls": [
-                "https://github.com/tao3k/asp-gerbil-scheme/archive/9ae9bc377cbab4b84de52b512a2c03375a36d6c9.tar.gz"
+                "https://github.com/tao3k/asp-gerbil-scheme/archive/0f78289a7ae465a84370f5d94d8d14671f3c43af.tar.gz"
+              ]
+            }
+          },
+          "gerbil_parser_sources": {
+            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
+            "attributes": {
+              "build_script": "build.ss",
+              "canonical_uri": "https://github.com/tao3k/gerbil-parser",
+              "package": "gerbil-parser",
+              "revision": "78507e68b1275be1be748be465d6354f596d9063",
+              "sha256": "533fe829db410773513989964eb75d0e07cd97b712a4a4f286b7db2c2bf397f4",
+              "strip_prefix": "gerbil-parser-78507e68b1275be1be748be465d6354f596d9063",
+              "urls": [
+                "https://github.com/tao3k/gerbil-parser/archive/78507e68b1275be1be748be465d6354f596d9063.tar.gz"
+              ]
+            }
+          },
+          "gerbil_ascent_sources": {
+            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
+            "attributes": {
+              "build_script": "build.ss",
+              "canonical_uri": "https://github.com/tao3k/gerbil-ascent",
+              "package": "gerbil-ascent",
+              "revision": "0b6da0403f75b35a23d198557510e139f1902eff",
+              "sha256": "26d9894d64ee7b58a81a6623599bb66a5b5c502c8aa98dfc96c512cd7afacf36",
+              "strip_prefix": "gerbil-ascent-0b6da0403f75b35a23d198557510e139f1902eff",
+              "urls": [
+                "https://github.com/tao3k/gerbil-ascent/archive/0b6da0403f75b35a23d198557510e139f1902eff.tar.gz"
+              ]
+            }
+          },
+          "orgize_sources": {
+            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
+            "attributes": {
+              "build_script": "build.ss",
+              "canonical_uri": "https://github.com/tao3k/orgize",
+              "package": "orgize",
+              "revision": "8f04aa246290b56b5605f4a38f25c55d0b416268",
+              "sha256": "86e4af58c076a33ef58ffa8b3bf8e2bd0d6f47379e82d67ec769ec74533a4c97",
+              "strip_prefix": "orgize-8f04aa246290b56b5605f4a38f25c55d0b416268",
+              "urls": [
+                "https://github.com/tao3k/orgize/archive/8f04aa246290b56b5605f4a38f25c55d0b416268.tar.gz"
               ]
             }
           }

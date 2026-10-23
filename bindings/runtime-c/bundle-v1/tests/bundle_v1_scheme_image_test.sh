@@ -19,9 +19,9 @@ descriptor=$temporary.descriptor.bin
 arena=$temporary.arena.bin
 trap 'rm -f "$descriptor" "$arena"' EXIT HUP INT TERM
 
-POO_FLOW_BUNDLE_V1_DESCRIPTOR_OUT=$descriptor
-POO_FLOW_BUNDLE_V1_ARENA_OUT=$arena
-export POO_FLOW_BUNDLE_V1_DESCRIPTOR_OUT POO_FLOW_BUNDLE_V1_ARENA_OUT
+YUANXU_BUNDLE_V1_DESCRIPTOR_OUT=$descriptor
+YUANXU_BUNDLE_V1_ARENA_OUT=$arena
+export YUANXU_BUNDLE_V1_DESCRIPTOR_OUT YUANXU_BUNDLE_V1_ARENA_OUT
 
 "$gxi" -:max-heap=1G,debug=q "$fixture" < /dev/null
 "$harness" "$descriptor" "$arena"

@@ -10,9 +10,9 @@
 ;;; Policy evidence: binding tests assert descriptor override and manifest gates.
 
 (import (only-in :clan/poo/object .ref object?)
-        (only-in :core/modules/funflow/control-plane/roles execution-policy-role)
-        (only-in :core/modules/funflow/control-plane/failure raise-control-plane-failure)
-        :core/object-family/role-syntax
+        (only-in :yuanxu/modules/funflow/control-plane/roles execution-policy-role)
+        (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        :yuanxu/object-family/role-syntax
         :poo-flow/modules/agent-sandbox/alist
         :poo-flow/modules/agent-sandbox/profile)
 

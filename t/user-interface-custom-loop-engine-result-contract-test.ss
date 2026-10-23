@@ -6,12 +6,12 @@
 ;;; Boundary: focused user-interface loop-engine result contract diagnostics.
 ;;; Invariant: invalid result contracts are reported, never executed.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface
         :poo-flow/modules/workflow/scenario/configuration/init-syntax)
 
@@ -64,15 +64,15 @@
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation module-bundle)
   (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules (list module-bundle))
-    (poo-flow-settings))))
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules (list module-bundle))
+    (yuanxu-settings))))
 
 ;;; Invalid result contracts remain reportable config data: presentation and
 ;;; runtime manifests surface diagnostics, but no runtime work is executed.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-invalid-result-case)
-  (poo-flow-test-case "diagnoses invalid loop-engine result contract"
+  (yuanxu-test-case "diagnoses invalid loop-engine result contract"
     (let* ((presentation
             (custom-loop-presentation custom-loop-invalid-result-module))
            (intent

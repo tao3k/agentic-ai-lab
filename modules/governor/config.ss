@@ -6,7 +6,7 @@
 ;;; Boundary: loop governor kernel module selection.
 ;;; Invariant: profile owners compose this row; user-interface does not.
 
-(import :core/module-system/selection/objects)
+(import :yuanxu/module-system/selection/objects)
 
 (export poo-flow-loop-governor-module-bundles)
 
@@ -14,6 +14,6 @@
 ;; : (-> Unit [[PooUserModuleSelection]])
 (def poo-flow-loop-governor-module-bundles
   (list
-   (poo-flow-user-module-bundle
+   (yuanxu-user-module-bundle
     (loop governor +strategy +policy +marlin-handoff +runtime-manifest
           +l1-report))))

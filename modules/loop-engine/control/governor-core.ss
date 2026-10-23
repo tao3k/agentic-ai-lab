@@ -7,19 +7,19 @@
 ;;; Invariant: this owner stores policy data only and never evaluates runtime state.
 
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :core/composition/roles role-slot/default)
-        :core/modules/funflow/control-plane/roles
-        :core/modules/funflow/control-plane/failure
-        :core/object-family/role-syntax
+        (only-in :yuanxu/composition/roles role-slot/default)
+        :yuanxu/modules/funflow/control-plane/roles
+        :yuanxu/modules/funflow/control-plane/failure
+        :yuanxu/object-family/role-syntax
         (only-in "./strategy.ss"
                  loop-strategy-engine-role
                  loop-strategy-plan?)
-        (only-in :core/module-system/schema/slot-contracts
-                 poo-flow-contract-check-slot!
-                 poo-flow-contract-slot
-                 poo-flow-contract-value-type
-                 poo-flow-native-contract
-                 poo-flow-native-contract->alist)
+        (only-in :yuanxu/module-system/schema/slot-contracts
+                 yuanxu-contract-check-slot!
+                 yuanxu-contract-slot
+                 yuanxu-contract-value-type
+                 yuanxu-native-contract
+                 yuanxu-native-contract->alist)
         :poo-flow/modules/loop-engine/control/governor-core-slot-rows)
 
 (export +loop-governor-schema+
@@ -443,7 +443,7 @@
 ;;     %
 
 ;; loop-governor-check-slot!
-;;   : (-> PooFlowSlotContract PooFlowValue PooFlowValue)
+;;   : (-> YuanxuSlotContract PooFlowValue PooFlowValue)
 ;;   | doc m%
 ;;       Execute one governor slot contract through the utilities layer.
 ;;       # Examples
@@ -519,24 +519,24 @@
 ;; : (-> LoopGovernor Alist)
 
 (def LoopGovernorSymbolType
-  (poo-flow-contract-value-type 'Symbol symbol? 'Symbol))
+  (yuanxu-contract-value-type 'Symbol symbol? 'Symbol))
 (def LoopGovernorBooleanType
-  (poo-flow-contract-value-type 'Boolean boolean? 'Boolean))
+  (yuanxu-contract-value-type 'Boolean boolean? 'Boolean))
 (def LoopGovernorAlistType
-  (poo-flow-contract-value-type 'Alist loop-governor-alist? 'Alist))
+  (yuanxu-contract-value-type 'Alist loop-governor-alist? 'Alist))
 (def LoopGovernorStrategyType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'LoopStrategyPlan loop-governor-strategy-plan-slot? 'LoopStrategyPlan))
 (def LoopGovernorActionKeyListType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    '[ActionKey] loop-governor-action-key-list? '[ActionKey]))
 (def LoopGovernorNodeListType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    '[LoopGovernorNode] loop-governor-node-list? '[LoopGovernorNode]))
 
-;; : (-> LoopGovernorContractKey Symbol PooFlowContractValueType PooFlowSlotContract)
+;; : (-> LoopGovernorContractKey Symbol YuanxuContractValueType YuanxuSlotContract)
 (def (loop-governor-required-slot key slot value-type)
-  (poo-flow-contract-slot key slot value-type #t
+  (yuanxu-contract-slot key slot value-type #t
                           (map cons '(scope slot)
                                (list 'loop-governor slot))))
 
@@ -576,7 +576,7 @@
         +loop-governor-node-execution-owner-contract+
         +loop-governor-node-metadata-contract+))
 (def +loop-governor-node-type-contract+
-  (poo-flow-native-contract
+  (yuanxu-native-contract
    'loop-governor/node 'loops 'LoopGovernorNode loop-governor-node?
    +loop-governor-node-slot-contracts+
    (lambda (candidate slot) (and (object? candidate) (.slot? candidate slot)))
@@ -645,7 +645,7 @@
         +loop-governor-execution-owner-contract+
         +loop-governor-metadata-contract+))
 (def +loop-governor-type-contract+
-  (poo-flow-native-contract
+  (yuanxu-native-contract
    'loop-governor 'loops 'LoopGovernor loop-governor?
    +loop-governor-slot-contracts+
    (lambda (candidate slot) (and (object? candidate) (.slot? candidate slot)))

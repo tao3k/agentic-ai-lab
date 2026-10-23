@@ -4,9 +4,9 @@
 
 ;;; Boundary: projects user loop-engine configuration into runtime-owned inputs.
 ;;; Invariant: projection is pure and leaves execution to the runtime handoff boundary.
-(import (only-in :core/modules/funflow/graph-projection
-                 poo-flow-funflow-workflow-agreement)
-        :core/module-system/selection/objects
+(import (only-in :yuanxu/modules/funflow/graph-projection
+                 yuanxu-funflow-workflow-agreement)
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/sandbox-core/profile-catalog
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         :poo-flow/modules/workflow/cicd-config
@@ -25,7 +25,7 @@
         (only-in "runtime-intent-handoff.ss"
                  poo-flow-user-loop-engine-runtime-handoff-facts/from-request)
         "result-contract.ss"
-        :core/utilities/functional)
+        :yuanxu/utilities/functional)
 
 (export poo-flow-user-loop-engine-memory-policy-for-use-case
         poo-flow-user-loop-engine-memory-policy-use-cases/rev
@@ -66,7 +66,7 @@
 (def (poo-flow-user-loop-engine-memory-policy-use-cases/rev
       memory-policies
       use-cases-rev)
-  (poo-flow-fold-left
+  (yuanxu-fold-left
    (lambda (memory-policy use-cases)
      (cons (poo-flow-user-loop-engine-intent-ref
             memory-policy
@@ -222,7 +222,7 @@
           request 'runtime-snapshot '())))))
 
 (def (poo-flow-user-loop-engine-intents-field-values intents field)
-  (poo-flow-fold-right
+  (yuanxu-fold-right
    (lambda (intent values)
      (cons (poo-flow-user-loop-engine-intent-ref intent field #f)
            values))
@@ -230,7 +230,7 @@
    intents))
 
 (def (poo-flow-user-module-selection-loop-engine? selection)
-  (equal? (poo-flow-user-module-selection-key selection)
+  (equal? (yuanxu-user-module-selection-key selection)
           '(flow . loop-engine)))
 
 (def (poo-flow-user-loop-engine-context-profile-catalog context)
@@ -251,7 +251,7 @@
 (def (poo-flow-user-loop-engine-base-intent selection poo-intent-fields)
   (append
    (list (cons 'key
-               (poo-flow-user-module-selection-key selection))
+               (yuanxu-user-module-selection-key selection))
          (cons 'feature '+loop-engine)
          (cons 'workflow-owned? #t)
          (cons 'governor-derived? #t))
@@ -287,7 +287,7 @@
            sandbox-handoff-summaries
            sandbox-unresolved-profile-refs))
          (workflow-agreement
-          (poo-flow-funflow-workflow-agreement
+          (yuanxu-funflow-workflow-agreement
            (poo-flow-user-loop-engine-intent-workflow-ref base-intent)
            workflow-check-maps))
          (workflow-functional-dags
@@ -376,7 +376,7 @@
 (def (poo-flow-user-config-loop-engine-intents/project-rev project-selection
                                                            selected-modules
                                                            intents-rev)
-  (poo-flow-fold-left
+  (yuanxu-fold-left
    (lambda (selection intents)
      (let (intent (project-selection selection))
        (if intent
@@ -407,7 +407,7 @@
      (car maybe-backend-capability-registry))))
 
 (def (poo-flow-user-config-loop-engine-intents config)
-  (let* ((selected-modules (poo-flow-user-config-modules config))
+  (let* ((selected-modules (yuanxu-user-config-modules config))
          (profile-catalog
           (poo-flow-user-config-sandbox-profile-catalog selected-modules))
          (workflow-check-maps

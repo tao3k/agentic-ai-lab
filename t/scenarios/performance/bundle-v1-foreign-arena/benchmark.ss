@@ -4,9 +4,9 @@
 
 (import :gerbil/runtime/gambit
         :clan/poo/object
-        :core/utilities/functional
-        :core/feature-system/bundle-v1-lowering
-        :core/feature-system/bundle-v1-foreign-arena)
+        :yuanxu/utilities/functional
+        :yuanxu/feature-system/bundle-v1-lowering
+        :yuanxu/feature-system/bundle-v1-foreign-arena)
 
 (def +benchmark-schema+
   'poo-flow.bundle-v1-foreign-arena.benchmark.v1)
@@ -54,7 +54,7 @@
            "POO_FLOW_BUNDLE_V1_BENCH_COMPONENTS" 4096))
          (generation-started (now-seconds))
          (components
-          (poo-flow-map benchmark-component (iota component-count)))
+          (yuanxu-map benchmark-component (iota component-count)))
          (generation-ms (elapsed-milliseconds generation-started))
          (lowering-started (now-seconds))
          (plan

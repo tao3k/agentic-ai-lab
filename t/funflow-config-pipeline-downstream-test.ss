@@ -5,10 +5,10 @@
 
 ;;; Boundary: downstream-shaped Funflow POO config lowers to readiness facts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
-        (only-in :core/modules/funflow/config-prototypes funflow-check funflow-pipeline)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface
         :poo-flow/modules/workflow/scenario/configuration/init-syntax
         :poo-flow/modules/agent-sandbox/config
@@ -51,7 +51,7 @@
                                    runtime-mode dependency-refs)
       check-name: 'test
       profile-ref: 'ci/check
-      command-vector: '("gerbil" "env" "./dev/unit-tests.ss")
+      command-vector: '("gerbil" "env" "./unit-tests.ss")
       artifact-outputs: '(test-receipt)
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
@@ -63,7 +63,7 @@
                                       runtime-mode dependency-refs)
       check-name: 'package
       profile-ref: 'ci/check
-      command-vector: '("gerbil" "env" "./dev/unit-tests.ss")
+      command-vector: '("gerbil" "env" "./unit-tests.ss")
       artifact-outputs: '(dependency-graph-receipt)
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
@@ -121,7 +121,7 @@
   (let* ((selection (car (funflow-config-downstream-selection)))
          (pipeline
           (funflow-config-downstream-alist-ref
-           (poo-flow-user-module-selection-flags selection)
+           (yuanxu-user-module-selection-flags selection)
            ':workflow-pipeline))
          (readiness
           (poo-flow-cicd-check-map->runtime-manifest-readiness
@@ -140,9 +140,9 @@
          (build-summary (car build-summaries))
          (build-filesystem
           (funflow-config-downstream-alist-ref build-summary 'filesystem)))
-    (check-equal? (poo-flow-user-module-selection-key selection)
+    (check-equal? (yuanxu-user-module-selection-key selection)
                   '(flow . funflow))
-    (check-equal? (poo-flow-cicd-check-map-name pipeline) 'default)
+    (check-equal? (yuanxu-cicd-check-map-name pipeline) 'default)
     (check-equal? (length entries) 3)
     (check-equal? (funflow-config-downstream-alist-ref dependency-graph
                                                       'nodes)
@@ -184,5 +184,5 @@
 
 (def funflow-config-pipeline-downstream-test
   (test-suite "poo-flow Funflow downstream config pipeline"
-    (poo-flow-test-case "lowers downstream Funflow POO config to readiness facts"
+    (yuanxu-test-case "lowers downstream Funflow POO config to readiness facts"
       (check-equal? (run-funflow-config-pipeline-downstream-checks) 'ok))))

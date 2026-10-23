@@ -5,7 +5,7 @@
 
 ;;; Native POO prototype admission for backend-owned Sandbox Profiles.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test check-equal? test-suite)
         :poo-flow/modules/nono-sandbox/objects
         :poo-flow/modules/agent-sandbox/config
@@ -15,7 +15,7 @@
 
 (def sandbox-core-profile-native-composition-test
   (test-suite "native Sandbox Profile composition"
-    (poo-flow-test-case "backend defaults are direct POO prototype slots"
+    (yuanxu-test-case "backend defaults are direct POO prototype slots"
       (let (base
             (poo-flow-sandbox-profile-object-base-prototype
              poo-flow-nono-sandbox-profile-object 'nono 'native/base))
@@ -25,14 +25,14 @@
         (check-equal?
          (poo-flow-sandbox-profile-object-slot base 'backend-kind)
          'nono)))
-    (poo-flow-test-case "an empty row set projects the backend prototype"
+    (yuanxu-test-case "an empty row set projects the backend prototype"
       (let (profile
             (poo-flow-sandbox-profile-object-config
              poo-flow-nono-sandbox-profile-object 'nono 'native/empty '()))
         (check-equal?
          (poo-flow-sandbox-profile-object-profile? profile)
          #t)))
-    (poo-flow-test-case "explicit list policy composes on a POO prototype"
+    (yuanxu-test-case "explicit list policy composes on a POO prototype"
       (let (profile
             (poo-flow-sandbox-profile-object-config
              poo-flow-nono-sandbox-profile-object

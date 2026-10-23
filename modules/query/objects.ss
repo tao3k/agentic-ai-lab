@@ -33,7 +33,7 @@
                  PooFlowQueryProvider
                  PooFlowQueryExecutionCandidate
                  PooFlowSourceQueryReceipt)
-        :core/poo-clos/interface)
+        :yuanxu/poo-clos/interface)
 
 (export PooFlowQuery.
         PooFlowQueryLanguage.

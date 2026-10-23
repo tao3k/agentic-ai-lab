@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         (only-in :clan/poo/mop element?)
@@ -16,7 +16,7 @@
 
 (def model-core-test
   (test-suite "model core"
-    (poo-flow-test-case "model specs expose POO-native accessors and projections"
+    (yuanxu-test-case "model specs expose POO-native accessors and projections"
       (check-equal? (element? PooFlowModelSpec
                               poo-flow-model-core-tool-json-model)
                     #t)
@@ -38,7 +38,7 @@
                       poo-flow-model-core-tool-json-model)
                      'runtime-executed)
                     #f))
-    (poo-flow-test-case "model catalog summarizes refs without runtime execution"
+    (yuanxu-test-case "model catalog summarizes refs without runtime execution"
       (check-equal? (element? PooFlowModelCatalog
                               poo-flow-model-core-default-catalog)
                     #t)
@@ -55,7 +55,7 @@
                       poo-flow-model-core-default-catalog
                       'fast-text))
                     'fast-text))
-    (poo-flow-test-case "selection policy chooses the first compatible model"
+    (yuanxu-test-case "selection policy chooses the first compatible model"
       (check-equal? (element? PooFlowModelSelectionPolicy
                               poo-flow-model-core-default-selection-policy)
                     #t)
@@ -74,7 +74,7 @@
                      (poo-flow-model-selection-receipt->alist receipt)
                      'runtime-executed)
                     #f))
-    (poo-flow-test-case "selection policy records diagnostics before fallback"
+    (yuanxu-test-case "selection policy records diagnostics before fallback"
       (def small-catalog
         (poo-flow-model-catalog
          'small

@@ -2,13 +2,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
         :poo-flow/modules/workflow/graph/scenario-gap-rejection-facts)
 
 (def scenario-gap-rejection-facts-test
   (test-suite "scenario gap rejection facts"
-    (poo-flow-test-case "projects each rejection class"
+    (yuanxu-test-case "projects each rejection class"
 
 (def (alist-ref key alist)
   (let ((entry (assq key alist)))

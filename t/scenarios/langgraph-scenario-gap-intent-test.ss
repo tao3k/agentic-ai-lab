@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref)
         :poo-flow/modules/workflow/graph/scenario-gap-intent)
 
@@ -10,7 +10,7 @@
 
 (def langgraph-scenario-gap-intent-test
   (test-suite "LangGraph scenario gap intent"
-    (poo-flow-test-case "projects exact runtime and Lean facts"
+    (yuanxu-test-case "projects exact runtime and Lean facts"
 
 (def (check-equal label actual expected)
   (unless (equal? actual expected)

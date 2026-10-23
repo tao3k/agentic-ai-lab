@@ -6,7 +6,7 @@
 ;;; Boundary: POO-native policy-catalog validation receipts.
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :core/utilities/final-projection-syntax
+        :yuanxu/utilities/final-projection-syntax
         :poo-flow/modules/session/objects
         :poo-flow/modules/session/policy
         :poo-flow/modules/tool-core/objects-catalog

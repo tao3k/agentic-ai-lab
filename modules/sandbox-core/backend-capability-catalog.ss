@@ -6,7 +6,7 @@
 ;;; Boundary: backend capability registry extraction for module-system projections.
 ;;; Invariant: catalog helpers read user module selections but never probe runtimes.
 
-(import :core/module-system/selection/objects
+(import :yuanxu/module-system/selection/objects
         (only-in :poo-flow/modules/sandbox-core/profile-support/policy
                  poo-flow-sandbox-backend-capability-registry/sandbox-core
                  poo-flow-sandbox-backend-capability-registry-merge
@@ -29,7 +29,7 @@
 (def (poo-flow-user-module-selection-sandbox-backend-capability-registry
       selection)
   (let (entry
-        (poo-flow-user-module-selection-flag-entry
+        (yuanxu-user-module-selection-flag-entry
          selection
          ':backend-capability-registry))
     (and (pair? entry)

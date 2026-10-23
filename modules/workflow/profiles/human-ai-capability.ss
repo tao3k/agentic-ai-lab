@@ -6,11 +6,11 @@
 ;;; Boundary: maintained human/AI capability Profiles and Scenario graph.
 
 (import (only-in :clan/poo/object .def .o)
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        (only-in :core/module-system/authoring/roles poo-flow-semantic-module)
-        (only-in :core/profile-composition/profile-bundle
-                 poo-flow-module-profiles
-                 poo-flow-profile-export))
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :yuanxu/module-system/authoring/roles yuanxu-semantic-module)
+        (only-in :yuanxu/profile-composition/profile-bundle
+                 yuanxu-module-profiles
+                 yuanxu-profile-export))
 
 (export HumanAICapabilityModule HumanCapabilityScenarioProfile)
 
@@ -46,16 +46,16 @@
   (guard '(all receipt continuity)))
 
 (def HumanAICapabilityModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'poo-flow 'human-ai-capability)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'poo-flow 'human-ai-capability)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'access AccessProfile)
-    (poo-flow-profile-export 'understand UnderstandProfile)
-    (poo-flow-profile-export 'compose ComposeProfile)
-    (poo-flow-profile-export 'qualify QualifyProfile)
-    (poo-flow-profile-export 'act ActProfile)
-    (poo-flow-profile-export 'learn LearnProfile))))
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'access AccessProfile)
+    (yuanxu-profile-export 'understand UnderstandProfile)
+    (yuanxu-profile-export 'compose ComposeProfile)
+    (yuanxu-profile-export 'qualify QualifyProfile)
+    (yuanxu-profile-export 'act ActProfile)
+    (yuanxu-profile-export 'learn LearnProfile))))
 
 (.def HumanCapabilityScenarioProfile
   (identity 'human-capability-scenario)

@@ -6,7 +6,7 @@
 ;;; Boundary: AgentParam contract performance gate.
 ;;; Invariant: batch AgentParam projection stays bounded and report-only.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -314,7 +314,7 @@
 ;; : TestSuite
 (def session-agent-param-contract-performance-test
   (test-suite "session AgentParam contract performance"
-    (poo-flow-test-case "keeps AgentParam contract batch projection inside benchmark contract"
+    (yuanxu-test-case "keeps AgentParam contract batch projection inside benchmark contract"
       (let* ((contract-count 200)
              (node (agent-param-performance-node))
              (validation (agent-param-performance-validation))

@@ -2,16 +2,16 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :poo-flow/modules/ai-agentic-context/features/memory/durable/artifact-policy
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        :core/module-system/authoring/roles
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        :yuanxu/module-system/authoring/roles
         (only-in :poo-flow/modules/module-authoring/semantic-module UserConfigSourceRole. poo-flow-user-root-module-authoring-profile)
-        :core/profile-composition/selection-syntax
+        :yuanxu/profile-composition/selection-syntax
         :poo-flow/modules/workflow/scenario/composition-syntax
-        :core/profile-composition/profile-bundle
+        :yuanxu/profile-composition/profile-bundle
         :poo-flow/modules/workflow/scenario/accessors
         (only-in :poo-flow/modules/workflow/scenario/case poo-flow-scenario-case?))
 
@@ -89,15 +89,15 @@
                      vector-top-k))))
 
 (def ArtifactTestModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'test 'artifact)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'test 'artifact)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'research-report
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'research-report
                              (.ref agent-artifacts 'research-report))
-    (poo-flow-profile-export 'tool-output
+    (yuanxu-profile-export 'tool-output
                              (.ref agent-artifacts 'tool-output))
-    (poo-flow-profile-export 'turso (.ref artifact-databases 'turso)))))
+    (yuanxu-profile-export 'turso (.ref artifact-databases 'turso)))))
 
 (.def ArtifactScenarioProfile
   (identity 'artifact-production)
@@ -124,13 +124,13 @@
   (retention '(project-retained audit-log)))
 
 (def InlineArtifactTestModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'test 'inline-artifact)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'test 'inline-artifact)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'research-report
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'research-report
                              (.ref agent-artifacts 'research-report))
-    (poo-flow-profile-export 'internal-report InternalReportProfile))))
+    (yuanxu-profile-export 'internal-report InternalReportProfile))))
 
 (.def InlineArtifactScenarioProfile
   (identity 'inline-artifact-production)
@@ -227,7 +227,7 @@
 
 (def durable-artifact-policy-test
   (test-suite "durable artifact policy"
-    (poo-flow-test-case "artifact profile macro creates reusable POO objects"
+    (yuanxu-test-case "artifact profile macro creates reusable POO objects"
       (check-equal? (poo-flow-artifact-profile? research-report) #t)
       (check-equal? (.ref research-report 'name) 'research-report)
       (check-equal? (.ref research-report 'kind) 'research-report)
@@ -242,7 +242,7 @@
                     #t)
       (check-equal? (poo-flow-artifact-publish-gated? research-report) #t))
 
-    (poo-flow-test-case "profile hook composes native POO object extension"
+    (yuanxu-test-case "profile hook composes native POO object extension"
       (check-equal? (poo-flow-artifact-profile? audited-report) #t)
       (check-equal? (.ref audited-report 'name) 'audited-report)
       (check-equal? (.ref audited-report 'storage)
@@ -252,7 +252,7 @@
       (check-equal? (.ref audited-report 'retention)
                     '(project-retained audit-log)))
 
-    (poo-flow-test-case "durable artifact object implements policy scope"
+    (yuanxu-test-case "durable artifact object implements policy scope"
       (check-equal? (poo-flow-durable-artifact? report-artifact) #t)
       (check-equal? (.ref report-artifact 'artifact-id) 'report/artifact-1)
       (check-equal? (.ref report-artifact 'artifact-kind) 'report)
@@ -275,7 +275,7 @@
                      granted-tool-actor)
                     #t))
 
-    (poo-flow-test-case "durable artifact validation emits policy receipts"
+    (yuanxu-test-case "durable artifact validation emits policy receipts"
       (check-equal? (poo-flow-durable-artifact-policy-receipt?
                      artifact-policy-receipt)
                     #t)
@@ -331,7 +331,7 @@
                       artifact-storage-not-supported-by-database
                       artifact-database-capability-not-satisfied)))
 
-    (poo-flow-test-case "durable artifact manifest projects Marlin handoff"
+    (yuanxu-test-case "durable artifact manifest projects Marlin handoff"
       (let ((manifest-row
              (poo-flow-durable-artifact-manifest-receipt->alist
               artifact-manifest-receipt)))
@@ -361,7 +361,7 @@
                                 'scheme-manufactures-runtime-handlers)
                       #f)))
 
-    (poo-flow-test-case "durable artifact lifecycle follows document edges"
+    (yuanxu-test-case "durable artifact lifecycle follows document edges"
       (let (stored (poo-flow-durable-artifact-transition
                     report-artifact
                     'stored))
@@ -376,7 +376,7 @@
                        'published)
                       #f)))
 
-    (poo-flow-test-case "artifact and database profiles feed inline composition syntax"
+    (yuanxu-test-case "artifact and database profiles feed inline composition syntax"
       (let* ((stages (poo-flow-scenario-case-stages artifact-composition))
              (stage (.ref stages 'production))
              (compose-payload (poo-flow-scenario-case-profiles
@@ -398,7 +398,7 @@
                         artifact-publish-gated
                         database-capability-satisfied))))
 
-    (poo-flow-test-case "inline use-module profiles expand to POO module objects"
+    (yuanxu-test-case "inline use-module profiles expand to POO module objects"
       (let* ((modules (poo-flow-scenario-case-modules inline-artifact-composition))
              (module-binding (car modules))
              (module-object (.ref module-binding 'module))

@@ -31,9 +31,10 @@
   (let walk ((datum forms))
     (cond
      ((not (pair? datum)) #f)
-     ((eq? (car datum) 'public-entry-modules)
+     ((and (eq? (car datum) 'def) (pair? (cdr datum))
+           (eq? (cadr datum) 'public-entry-modules))
       (match datum
-        (['public-entry-modules ['quote entries]] entries)
+        (['def 'public-entry-modules ['quote entries]] entries)
         (else (error "expected literal native PackageSpec entries" datum))))
      (else (or (walk (car datum)) (walk (cdr datum)))))))
 (def (require-coverage entries required owner)

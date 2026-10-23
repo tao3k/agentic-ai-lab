@@ -5,18 +5,18 @@
 (export feature-system-bundle-v1-composition-writer-test-suite
         feature-system-bundle-v1-composition-writer-test)
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :core/modules/funflow/control-plane/graph
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        :core/module-system/authoring/roles
+        :yuanxu/modules/funflow/control-plane/graph
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        :yuanxu/module-system/authoring/roles
         (only-in :poo-flow/modules/module-authoring/semantic-module UserConfigSourceRole. poo-flow-user-root-module-authoring-profile)
-        :core/profile-composition/selection-syntax
+        :yuanxu/profile-composition/selection-syntax
         :poo-flow/modules/workflow/scenario/composition-syntax
-        :core/profile-composition/profile-bundle
+        :yuanxu/profile-composition/profile-bundle
         :poo-flow/modules/workflow/scenario/bundle-v1-projection
-        :core/feature-system/bundle-v1-lowering)
+        :yuanxu/feature-system/bundle-v1-lowering)
 
 (.def WriterSourceProfile
   (identity 'source)
@@ -31,12 +31,12 @@
   (guard '(all verified authority)))
 
 (def WriterTestModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'test 'writer)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'test 'writer)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'source WriterSourceProfile)
-    (poo-flow-profile-export 'target WriterTargetProfile))))
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'source WriterSourceProfile)
+    (yuanxu-profile-export 'target WriterTargetProfile))))
 
 (.def WriterTestScenarioProfile
   (identity 'writer-test-flow)
@@ -55,7 +55,7 @@
   (test-suite
    "Bundle v1 composition writer"
 
-   (poo-flow-test-case
+   (yuanxu-test-case
     "arbitrary POO composition lowers with symbols and dependency edges"
     (let-values (((plan image)
                   (poo-flow-scenario-case->bundle-v1-image

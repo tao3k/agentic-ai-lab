@@ -5,7 +5,7 @@
 
 ;;; Boundary: Docker sandbox module objects.
 
-(import :core/module-system/schema/interface
+(import :yuanxu/module-system/schema/interface
         :poo-flow/modules/sandbox-core/shared-object
         :poo-flow/modules/sandbox-core/backend-object-syntax
         :poo-flow/modules/sandbox-core/objects
@@ -28,8 +28,8 @@
   (sandbox objects.docker-sandbox.sandbox
            objects.docker-sandbox
            objects.shared.sandbox
-           ((backend PooFlowModuleSymbolType override 'docker '((scope . docker-sandbox)))
-            (image PooFlowModuleStringType override "ubuntu:latest" '((scope . docker-sandbox)))))
+           ((backend YuanxuModuleSymbolType override 'docker '((scope . docker-sandbox)))
+            (image YuanxuModuleStringType override "ubuntu:latest" '((scope . docker-sandbox)))))
   (backend docker
            poo-flow-sandbox-backend-capability/docker
            '((metadata . ((scope . docker-sandbox)
@@ -39,21 +39,21 @@
            objects.sandbox-core.profile
            (poo-flow-sandbox-core-profile-object
             poo-flow-docker-sandbox-object)
-           ((backend-kind PooFlowModuleSymbolType override 'docker
+           ((backend-kind YuanxuModuleSymbolType override 'docker
                           '((scope . docker-sandbox)
                             (owned-by . module-config)))
-            (backend-ref PooFlowModuleSymbolType override 'docker-sandbox
+            (backend-ref YuanxuModuleSymbolType override 'docker-sandbox
                          '((scope . docker-sandbox)
                            (owned-by . module-config)))
-            (capabilities PooFlowModuleListType override
+            (capabilities YuanxuModuleListType override
                           '(process-run filesystem-read filesystem-write tmpdir)
                           '((scope . docker-sandbox)
                             (dsl-row . capabilities)))
-            (backend-capability PooFlowModuleObjectType override
+            (backend-capability YuanxuModuleObjectType override
                                 poo-flow-docker-sandbox-backend-capability
                                 '((scope . docker-sandbox)
                                   (owned-by . module-config)))
-            (resource-policy PooFlowModuleListType override
+            (resource-policy YuanxuModuleListType override
                              (poo-flow-sandbox-filesystem-prototype->resource-policy
                               poo-flow-runtime-volume-filesystem-prototype)
                              '((scope . docker-sandbox)

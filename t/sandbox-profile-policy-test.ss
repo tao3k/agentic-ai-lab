@@ -6,7 +6,7 @@
 ;;; Boundary: sandbox profile policy tests stay projection-only.
 ;;; Invariant: backend capability checks never execute sandbox runtimes.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -50,7 +50,7 @@
 ;; : TestSuite
 (def sandbox-profile-policy-test
   (test-suite "poo-flow sandbox profile policy"
-    (poo-flow-test-case "publishes static POO backend capability objects"
+    (yuanxu-test-case "publishes static POO backend capability objects"
       (check-equal?
        (poo-flow-sandbox-backend-capability?
         poo-flow-sandbox-backend-capability/nono)
@@ -69,7 +69,7 @@
         poo-flow-sandbox-backend-capability/nono
         'gpu-device)
        #f))
-    (poo-flow-test-case "returns structured capability diagnostics"
+    (yuanxu-test-case "returns structured capability diagnostics"
       (let* ((policy
               (poo-flow-sandbox-profile-policy '(process-run gpu-device)))
              (validation
@@ -86,7 +86,7 @@
         (check-equal? (test-ref validation 'diagnostic-count #f) 1)
         (check-equal? (test-diagnostic-codes validation)
                       '(missing-backend-capability))))
-    (poo-flow-test-case "validates backend capability for profile candidates"
+    (yuanxu-test-case "validates backend capability for profile candidates"
       (let ((validation
              (poo-flow-sandbox-profile-policy-validation
               'agent/sandbox
@@ -113,7 +113,7 @@
          #f)
         (check-equal? (test-diagnostic-codes validation)
                       '(missing-backend-capability))))
-    (poo-flow-test-case "projects profile policy receipts without runtime execution"
+    (yuanxu-test-case "projects profile policy receipts without runtime execution"
       (let* ((projection
               (poo-flow-sandbox-profile-policy-projection
                'agent/sandbox
@@ -143,7 +143,7 @@
         (check-equal? (test-ref projection 'runtime-owner #f)
                       "marlin-agent-core")
         (check-equal? (test-ref projection 'runtime-executed #t) #f)))
-    (poo-flow-test-case "rejects missing sandbox durable placement policy"
+    (yuanxu-test-case "rejects missing sandbox durable placement policy"
       (let* ((policy
               (poo-flow-sandbox-profile-policy
                '(process-run)
@@ -162,7 +162,7 @@
         (check-equal? (test-ref validation 'durable-valid? #t) #f)
         (check-equal? (test-diagnostic-codes validation)
                       '(missing-durable-placement-policy))))
-    (poo-flow-test-case "rejects invalid inherited durable placement policy"
+    (yuanxu-test-case "rejects invalid inherited durable placement policy"
       (let* ((invalid-durable
               (poo-flow-durable-policy
                'durable/invalid-sandbox

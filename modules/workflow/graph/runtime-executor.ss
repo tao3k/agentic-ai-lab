@@ -7,7 +7,7 @@
 ;;; Invariant: this executor records graph semantics; it never calls tools/models.
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
-        :core/graph/types-core)
+        :yuanxu/graph/types-core)
 
 (export +poo-flow-graph-branch-choice-kind+
         +poo-flow-graph-runtime-policy-kind+
@@ -182,11 +182,11 @@
            (eq? (.ref value 'kind)
                 +poo-flow-graph-runtime-receipt-kind+))))
 
-;; : (-> PooFlowGraph PooFlowGraphRuntimePolicy PooFlowGraphRuntimeReceipt)
+;; : (-> YuanxuGraph PooFlowGraphRuntimePolicy PooFlowGraphRuntimeReceipt)
 (def (poo-flow-graph-runtime-execute graph-value policy)
   (let* ((fuel (.ref policy 'fuel))
          (max-steps (+ 1 (* (+ fuel 1)
-                            (+ 1 (length (poo-flow-graph-edges graph-value)))))))
+                            (+ 1 (length (yuanxu-graph-edges graph-value)))))))
     (runtime-walk graph-value
                   policy
                   (.ref policy 'entry-id)
@@ -197,7 +197,7 @@
                   max-steps
                   '())))
 
-;; : (-> PooFlowGraph PooFlowGraphRuntimePolicy Object [PooFlowGraphBranchChoice] Nat [Object] Nat Nat Alist PooFlowGraphRuntimeReceipt)
+;; : (-> YuanxuGraph PooFlowGraphRuntimePolicy Object [PooFlowGraphBranchChoice] Nat [Object] Nat Nat Alist PooFlowGraphRuntimeReceipt)
 (def (runtime-walk graph-value
                    policy
                    current-id
@@ -229,7 +229,7 @@
    (else
     (let* ((selection
             (runtime-select-edge current-id
-                                 (poo-flow-graph-edges graph-value)
+                                 (yuanxu-graph-edges graph-value)
                                  branch-choices))
            (edge (car selection))
            (branch-choices* (cadr selection))
@@ -255,7 +255,7 @@
                           (cons (cons 'fuel-exhausted current-id)
                                 diagnostics-rev))))
        (else
-        (let* ((next-id (poo-flow-graph-edge-to edge))
+        (let* ((next-id (yuanxu-graph-edge-to edge))
                (fuel* (if (runtime-loop-edge? edge)
                         (- fuel 1)
                         fuel)))
@@ -269,7 +269,7 @@
                         max-steps
                         diagnostics-rev))))))))
 
-;; : (-> Object [PooFlowGraphEdge] [PooFlowGraphBranchChoice] [MaybeEdge [PooFlowGraphBranchChoice] MaybeDiagnostic])
+;; : (-> Object [YuanxuGraphEdge] [PooFlowGraphBranchChoice] [MaybeEdge [PooFlowGraphBranchChoice] MaybeDiagnostic])
 (def (runtime-select-edge current-id edges branch-choices)
   (let* ((outgoing (runtime-outgoing-edges current-id edges))
          (choice-result
@@ -292,7 +292,7 @@
      (else
       (list (car outgoing) branch-choices #f)))))
 
-;; : (-> PooFlowGraph PooFlowGraphRuntimePolicy [Object] Nat Object Boolean Alist PooFlowGraphRuntimeReceipt)
+;; : (-> YuanxuGraph PooFlowGraphRuntimePolicy [Object] Nat Object Boolean Alist PooFlowGraphRuntimeReceipt)
 (def (runtime-receipt graph-value
                       policy
                       trace
@@ -314,7 +314,7 @@
                                      policy
                                      handoff-reached?
                                      human-approval-sound?)))
-    (let ((graph-id-value (poo-flow-graph-id graph-value))
+    (let ((graph-id-value (yuanxu-graph-id graph-value))
           (policy-name-value (.ref policy 'name))
           (entry-id-value (.ref policy 'entry-id))
           (finish-id-value (.ref policy 'finish-id))
@@ -578,36 +578,36 @@
 (def (poo-flow-graph-branch-choice-to choice)
   (.ref choice 'to))
 
-;; : (-> Object [PooFlowGraphEdge] [PooFlowGraphEdge])
+;; : (-> Object [YuanxuGraphEdge] [YuanxuGraphEdge])
 (def (runtime-outgoing-edges current-id edges)
   (cond
    ((null? edges) '())
-   ((equal? current-id (poo-flow-graph-edge-from (car edges)))
+   ((equal? current-id (yuanxu-graph-edge-from (car edges)))
     (cons (car edges)
           (runtime-outgoing-edges current-id (cdr edges))))
    (else
     (runtime-outgoing-edges current-id (cdr edges)))))
 
-;; : (-> Object [PooFlowGraphEdge] MaybeEdge)
+;; : (-> Object [YuanxuGraphEdge] MaybeEdge)
 (def (runtime-edge-to target-id edges)
   (cond
    ((null? edges) #f)
-   ((equal? target-id (poo-flow-graph-edge-to (car edges)))
+   ((equal? target-id (yuanxu-graph-edge-to (car edges)))
     (car edges))
    (else
     (runtime-edge-to target-id (cdr edges)))))
 
-;; : (-> PooFlowGraphEdge Boolean)
+;; : (-> YuanxuGraphEdge Boolean)
 (def (runtime-loop-edge? edge)
-  (memq (poo-flow-graph-edge-kind edge)
+  (memq (yuanxu-graph-edge-kind edge)
         '(loop back-edge retry self-loop)))
 
-;; : (-> PooFlowGraphEdge Boolean)
+;; : (-> YuanxuGraphEdge Boolean)
 (def (runtime-conditional-edge? edge)
-  (memq (poo-flow-graph-edge-kind edge)
+  (memq (yuanxu-graph-edge-kind edge)
         '(conditional branch router)))
 
-;; : (-> [PooFlowGraphEdge] Boolean)
+;; : (-> [YuanxuGraphEdge] Boolean)
 (def (runtime-has-conditional-edge? edges)
   (cond
    ((null? edges) #f)

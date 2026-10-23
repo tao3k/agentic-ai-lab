@@ -149,7 +149,7 @@ Contract system would be incorrect. The executable owners are
 
 #+begin_src scheme
 (def poo-flow-funflow-github-ci-contract-artifact
-  (poo-flow-json-schema->contract-artifact
+  (yuanxu-json-schema->contract-artifact
    +poo-flow-funflow-github-ci-workflow-schema+
    `((source-ref . ,+poo-flow-funflow-github-ci-schema-source+)
      (owner . funflow)
@@ -157,7 +157,7 @@ Contract system would be incorrect. The executable owners are
      (object-key . funflow/github-ci/workflow))))
 
 (def (poo-flow-funflow-github-ci-validate-workflow workflow)
-  (poo-flow-json-schema-contract-artifact-validate
+  (yuanxu-json-schema-contract-artifact-validate
    poo-flow-funflow-github-ci-contract-artifact
    workflow))
 #+end_src

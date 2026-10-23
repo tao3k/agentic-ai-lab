@@ -6,7 +6,7 @@
 ;;; Boundary: Docker descriptor tests cover tutorial-shaped request data only.
 ;;; Invariant: Scheme never pulls images, mounts volumes, or executes Docker.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :core/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/control-plane/api
         :poo-flow/modules/docker/interface
         :poo-flow/modules/agent-sandbox/resource)
 
@@ -42,7 +42,7 @@
 ;; : TestSuite
 (def docker-descriptor-test
   (test-suite "docker task descriptor"
-    (poo-flow-test-case "captures CCompilation-style docker payload"
+    (yuanxu-test-case "captures CCompilation-style docker payload"
       (let (seen-request #f)
         (let* ((command (lambda (envelope)
                           (set! seen-request (cdr (assoc 'request envelope)))
@@ -69,7 +69,7 @@
           (check-equal? (cdr (assoc 'image docker)) "gcc:9.3.0")
           (check-equal? (cdr (assoc 'command docker)) "gcc")
           (check-equal? (cdr (assoc 'output-policy docker)) 'process-handle))))
-    (poo-flow-test-case "captures ExternalConfig-style rendered arguments"
+    (yuanxu-test-case "captures ExternalConfig-style rendered arguments"
       (let (seen-request #f)
         (let* ((source (list (cons 'env
                                    (list (cons 'SECOND_GREETING "I'm from an env var!")))
@@ -105,7 +105,7 @@
                         '("Hello from the flow.yaml"
                           "I'm from an env var!"
                           ((placeholder . par3)))))))
-    (poo-flow-test-case "merges DockerTaskInput with left-biased bindings and args"
+    (yuanxu-test-case "merges DockerTaskInput with left-biased bindings and args"
       (let* ((left (make-docker-task-input
                     (list (make-sandbox-volume-binding 'source-item "/work" 'read)
                           (make-sandbox-volume-binding 'config-item "/config" 'read))
@@ -135,7 +135,7 @@
                       '((message . "hello")
                         (mode . "left")
                         (count . "3")))))
-    (poo-flow-test-case "exposes Funflow dockerFlow-shaped task input boundary"
+    (yuanxu-test-case "exposes Funflow dockerFlow-shaped task input boundary"
       (let* ((flow (docker-task-flow 'parameterized-docker
                                      "alpine:latest"
                                      "echo"
@@ -169,7 +169,7 @@
                       'cas-item)
         (check-equal? (docker-task-input-receipt-runtime-executed receipt)
                       #f)))
-    (poo-flow-test-case "passes DockerTaskInput through runtime request envelope"
+    (yuanxu-test-case "passes DockerTaskInput through runtime request envelope"
       (let (seen-request #f)
         (let* ((command (lambda (envelope)
                           (set! seen-request (cdr (assoc 'request envelope)))

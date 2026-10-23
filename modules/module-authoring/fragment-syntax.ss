@@ -221,7 +221,7 @@
          (if objects-fragment?
            (syntax
             (begin
-              (import :core/module-system/schema/interface)
+              (import :yuanxu/module-system/schema/interface)
               ;; : Any
               (def binding
                 (begin (include fragment-source)))

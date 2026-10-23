@@ -15,8 +15,8 @@
                  poo-flow-cicd-check-map->receipts
                  poo-flow-cicd-check-map->runtime-manifest-readiness
                  poo-flow-cicd-check-map->runtime-command-manifests)
-        (only-in :core/modules/funflow/dependency-graph
-                 poo-flow-cicd-check-map->dependency-graph)
+        (only-in :yuanxu/modules/funflow/dependency-graph
+                 yuanxu-cicd-check-map->dependency-graph)
         (only-in :poo-flow/modules/workflow/cicd-runtime-support/pipeline
                  poo-flow-cicd-check->pipeline-run-step
                  poo-flow-cicd-check-map->pipeline-run
@@ -26,7 +26,7 @@
                  poo-flow-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi
                  poo-flow-cicd-check-map->marlin-runtime-handoff-abi))
 
-(export poo-flow-cicd-check-map->dependency-graph
+(export yuanxu-cicd-check-map->dependency-graph
         poo-flow-cicd-check->pipeline-run-step
         poo-flow-cicd-check-map->pipeline-run
         poo-flow-cicd-pipeline-run->result

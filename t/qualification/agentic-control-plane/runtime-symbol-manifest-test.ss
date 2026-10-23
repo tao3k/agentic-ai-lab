@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :poo-flow/modules/workflow/qualification/runtime-symbol-manifest)
@@ -16,21 +16,21 @@
 
 (def runtime-symbol-manifest-test
   (test-suite "AC-11 runtime symbol JSON manifest"
-    (poo-flow-test-case "valid manifest and exact symbols pass"
+    (yuanxu-test-case "valid manifest and exact symbols pass"
       (let (receipt
             (poo-flow-runtime-symbol-manifest-verify
              (read-manifest valid-json)
              '("poo_flow_runtime_v0_open")))
         (check (.ref receipt 'accepted?) => #t)
         (check (.ref receipt 'diagnostics) => '())))
-    (poo-flow-test-case "symbol drift fails closed"
+    (yuanxu-test-case "symbol drift fails closed"
       (let (receipt
             (poo-flow-runtime-symbol-manifest-verify
              (read-manifest valid-json)
              '("poo_flow_runtime_v0_open" "poo_flow_runtime_v0_extra")))
         (check (.ref receipt 'accepted?) => #f)
         (check (.ref receipt 'diagnostics) => '(exported-symbol-drift))))
-    (poo-flow-test-case "unknown schema version fails closed"
+    (yuanxu-test-case "unknown schema version fails closed"
       (let (receipt
             (poo-flow-runtime-symbol-manifest-verify
              (read-manifest
@@ -39,7 +39,7 @@
         (check (.ref receipt 'accepted?) => #f)
         (check (.ref receipt 'diagnostics)
                => '(invalid-or-unknown-manifest))))
-    (poo-flow-test-case "malformed manifest shape fails closed"
+    (yuanxu-test-case "malformed manifest shape fails closed"
       (let (receipt
             (poo-flow-runtime-symbol-manifest-verify
              (read-manifest
@@ -48,7 +48,7 @@
         (check (.ref receipt 'accepted?) => #f)
         (check (.ref receipt 'diagnostics)
                => '(invalid-or-unknown-manifest))))
-    (poo-flow-test-case "malformed JSON fails closed"
+    (yuanxu-test-case "malformed JSON fails closed"
       (let (receipt
             (poo-flow-runtime-symbol-manifest-verify
              (read-manifest "{\"schema\":") '()))

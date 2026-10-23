@@ -135,13 +135,13 @@
   (loop-strategy-plan? value))
 
 (def (loop-governor-node-type-contract->alist)
-  (poo-flow-native-contract->alist +loop-governor-node-type-contract+))
+  (yuanxu-native-contract->alist +loop-governor-node-type-contract+))
 
 (def (loop-governor-type-contract->alist)
-  (poo-flow-native-contract->alist +loop-governor-type-contract+))
+  (yuanxu-native-contract->alist +loop-governor-type-contract+))
 
 (def (loop-governor-check-slot! contract value)
-  (poo-flow-contract-check-slot! contract value))
+  (yuanxu-contract-check-slot! contract value))
 
 (def (loop-governor-require-node-slots! name governance-node-kind responsibility human-intervention? control-owner execution-owner metadata)
   (loop-governor-check-slot! +loop-governor-node-name-contract+ name)

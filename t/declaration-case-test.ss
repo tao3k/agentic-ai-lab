@@ -6,7 +6,7 @@
 ;;; Boundary: tests verify maintained root declaration cases.
 ;;; Invariant: cases are downstream declarations and report data, never runtime work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -18,9 +18,9 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-config-presentation-kind
-                 poo-flow-user-config?)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-config-presentation-kind
+                 yuanxu-user-config?)
         (only-in :poo-flow/modules/workflow/scenario/configuration/declaration-case
                  pooFlowRootDeveloperDeclarationCase
                  poo-flow-declaration-case?
@@ -40,7 +40,7 @@
         (only-in :poo-flow/modules/workflow/scenario/configuration/root-profile
                  pooFlowRootConfig)
         (only-in :poo-flow/user-interface/init
-                 poo-flow-user-module-bundles))
+                 yuanxu-user-module-bundles))
 
 (export declaration-case-test)
 
@@ -48,7 +48,7 @@
 ;; : (-> Unit POOObject)
 (def (root-developer-case)
   (pooFlowRootDeveloperDeclarationCase
-   (pooFlowRootConfig poo-flow-user-module-bundles)))
+   (pooFlowRootConfig yuanxu-user-module-bundles)))
 
 ;; : (-> [Alist] Pair MaybeAlist)
 (def (poo-flow-declaration-case-find-entry entries key)
@@ -64,7 +64,7 @@
 ;;; upstream module system owns validation.
 (def declaration-case-test
   (test-suite "poo-flow declaration cases"
-    (poo-flow-test-case "keeps developer case as an explicit root declaration contract"
+    (yuanxu-test-case "keeps developer case as an explicit root declaration contract"
       (let* ((case-object (root-developer-case))
              (presentation
               (poo-flow-declaration-case-presentation case-object)))
@@ -83,12 +83,12 @@
         (check-equal? (.ref case-object 'runtime-owner) "marlin-agent-core")
         (check-equal? (.ref case-object 'descriptor-realized?) #f)
         (check-equal? (.ref case-object 'runtime-executed) #f)
-        (check-equal? (poo-flow-user-config?
+        (check-equal? (yuanxu-user-config?
                        (poo-flow-declaration-case-config case-object))
                       #t)
         (check-equal? (.ref presentation 'kind)
-                      poo-flow-user-config-presentation-kind)))
-    (poo-flow-test-case "presents selected modules and custom entrypoint from the case"
+                      yuanxu-user-config-presentation-kind)))
+    (yuanxu-test-case "presents selected modules and custom entrypoint from the case"
       (let* ((case-object (root-developer-case))
              (presentation
               (poo-flow-declaration-case-presentation case-object))
@@ -167,7 +167,7 @@
                       #f)
         (check-equal? (.ref presentation 'loop-engine-intent-count) 0)
         (check-equal? (.ref presentation 'loop-engine-intents) '())))
-    (poo-flow-test-case "exposes trace observability for the maintained case"
+    (yuanxu-test-case "exposes trace observability for the maintained case"
       (let* ((case-object (root-developer-case))
              (presentation
               (poo-flow-declaration-case-presentation case-object))

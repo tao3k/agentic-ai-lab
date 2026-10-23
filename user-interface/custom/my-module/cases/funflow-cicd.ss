@@ -7,7 +7,7 @@
 ;;; Invariant: this file declares POO workflow objects only; no runtime work.
 
 (import (only-in :clan/poo/object .def)
-        (only-in :core/modules/funflow/config-prototypes funflow-check funflow-pipeline)
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
         (only-in :poo-flow/modules/workflow/funflow-config poo-flow-funflow-configs))
 
 (export poo-flow-custom-my-module-funflow-cicd-case)
@@ -36,7 +36,7 @@
                       dependency-refs durable-task-id action-class)
     check-name: 'test
     profile-ref: 'ci/check
-    command-vector: '("gerbil" "env" "./dev/unit-tests.ss")
+    command-vector: '("gerbil" "env" "./unit-tests.ss")
     artifact-outputs: '(test-receipt)
     result-protocol: '(read :lines)
     runtime-mode: 'manifest-handoff
@@ -51,7 +51,7 @@
                          compensation-refs artifact-retention)
     check-name: 'package
     profile-ref: 'ci/check
-    command-vector: '("gerbil" "env" "./dev/unit-tests.ss")
+    command-vector: '("gerbil" "env" "./unit-tests.ss")
     artifact-outputs: '(dependency-graph-receipt)
     result-protocol: '(read :lines)
     runtime-mode: 'manifest-handoff

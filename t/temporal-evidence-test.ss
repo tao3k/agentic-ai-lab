@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
         :poo-flow/modules/temporal-causality/evidence/interface)
@@ -18,7 +18,7 @@
 
 (def temporal-evidence-test
   (test-suite "evidence use assessment and downstream reachability"
-    (poo-flow-test-case "retrieval does not imply use or assessed support"
+    (yuanxu-test-case "retrieval does not imply use or assessed support"
       (let* ((primary (poo-flow-evidence-retrieval
                        "r1" "q1" "e1" "sha256:source-1"))
              (unused (poo-flow-evidence-retrieval
@@ -43,7 +43,7 @@
                          "l1" (list primary unused) (list citation) '()
                          (list edge)) 'semantic-digest))))
 
-    (poo-flow-test-case "assessment binds one exact use and claim version"
+    (yuanxu-test-case "assessment binds one exact use and claim version"
       (let* ((retrieval (poo-flow-evidence-retrieval
                          "r" "q" "e" "sha256:source"))
              (citation (use "u" "e" "c" "sha256:source"
@@ -77,7 +77,7 @@
                      "sha256:claim-v2"))
           '() '()) true)))
 
-    (poo-flow-test-case "conflicting assessments remain disputed"
+    (yuanxu-test-case "conflicting assessments remain disputed"
       (let* ((citation (use "u" "e" "c" "sha256:source"
                             "sha256:claim"))
              (yes (assessment "yes" citation 'supports))
@@ -94,7 +94,7 @@
                          "l" '() (list citation) (list no yes) '())
                         'semantic-digest))))
 
-    (poo-flow-test-case "uncertainty and refutation have separate buckets"
+    (yuanxu-test-case "uncertainty and refutation have separate buckets"
       (let* ((u1 (use "u1" "e1" "c1" "sha256:s1" "sha256:c1"))
              (u2 (use "u2" "e2" "c2" "sha256:s2" "sha256:c2"))
              (lineage (poo-flow-evidence-lineage
@@ -105,7 +105,7 @@
         (check (.ref audit 'uncertain-use-identities) => '("u1"))
         (check (.ref audit 'refuted-use-identities) => '("u2"))))
 
-    (poo-flow-test-case "dependency cycles terminate without causal admission"
+    (yuanxu-test-case "dependency cycles terminate without causal admission"
       (let* ((citation (use "u" "e" "a"
                             "sha256:source" "sha256:claim"))
              (lineage (poo-flow-evidence-lineage

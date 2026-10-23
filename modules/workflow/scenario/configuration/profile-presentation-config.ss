@@ -8,20 +8,20 @@
 
 (import (only-in :clan/poo/object .ref object<-alist)
         :poo-flow/modules/module-authoring/module-interface
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/entrypoints
         :poo-flow/modules/sandbox-core/profile-catalog
         (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
                  pooFlowUserConfigPresentation)
-        :core/utilities/final-projection-syntax
-        :core/profile-composition/user-profile)
+        :yuanxu/utilities/final-projection-syntax
+        :yuanxu/profile-composition/user-profile)
 
 (export pooFlowUserProfilePresentation
         pooFlowUserProfileSetPresentation)
 
 ;; : (-> [PooUserModuleSelection] [Symbol])
 (def (poo-flow-user-profile-module-keys modules)
-  (map poo-flow-user-module-selection-key modules))
+  (map yuanxu-user-module-selection-key modules))
 
 ;; : (-> [PooUserProfile] [Alist])
 (def (poo-flow-user-profile-summaries profiles)
@@ -31,14 +31,14 @@
 ;; : (-> PooUserProfile Alist)
 (defpoo-final-projection
   poo-flow-user-profile-summary->alist (profile)
-  (bindings ((modules (poo-flow-user-profile-modules profile))))
-  (fields ((profile-name (poo-flow-user-profile-name profile))
+  (bindings ((modules (yuanxu-user-profile-modules profile))))
+  (fields ((profile-name (yuanxu-user-profile-name profile))
            (module-count (length modules))
            (module-keys
             (poo-flow-user-profile-module-keys modules))
            (module-bundle-count
-            (length (poo-flow-user-profile-module-bundles profile)))
-           (setting-keys (poo-flow-user-profile-setting-keys profile))
+            (length (yuanxu-user-profile-module-bundles profile)))
+           (setting-keys (yuanxu-user-profile-setting-keys profile))
            (descriptor-realized? #f)
            (runtime-executed #f))))
 
@@ -52,17 +52,17 @@
 ;;; entrypoint. It keeps config fields shallow to avoid recursive POO printing.
 ;; : (-> PooUserProfile POOObject)
 (def (pooFlowUserProfilePresentation profile)
-  (let* ((config (pooFlowUserConfigFromProfile profile))
+  (let* ((config (yuanxuUserConfigFromProfile profile))
          (config-presentation
           (pooFlowUserConfigPresentation
            config
-           (poo-flow-user-profile-setting-keys profile))))
+           (yuanxu-user-profile-setting-keys profile))))
     (object<-alist
      (append
-      (list (cons 'kind poo-flow-user-profile-presentation-kind)
-            (cons 'profile-name (poo-flow-user-profile-name profile))
+      (list (cons 'kind yuanxu-user-profile-presentation-kind)
+            (cons 'profile-name (yuanxu-user-profile-name profile))
             (cons 'module-bundle-count
-                  (length (poo-flow-user-profile-module-bundles profile))))
+                  (length (yuanxu-user-profile-module-bundles profile))))
       (poo-flow-user-profile-presentation-copy-slots
        config-presentation
        '(module-count
@@ -161,26 +161,26 @@
 ;; : (-> PooUserProfileSet POOObject)
 (def (pooFlowUserProfileSetPresentation profile-set)
   (let ((selected-profile
-         (poo-flow-user-profile-set-default-profile profile-set)))
+         (yuanxu-user-profile-set-default-profile profile-set)))
     (object<-alist
      (list
-      (cons 'kind poo-flow-user-profile-set-presentation-kind)
+      (cons 'kind yuanxu-user-profile-set-presentation-kind)
       (cons 'profile-set-name
-            (poo-flow-user-profile-set-name profile-set))
+            (yuanxu-user-profile-set-name profile-set))
       (cons 'default-profile-name
-            (poo-flow-user-profile-set-default-profile-name profile-set))
+            (yuanxu-user-profile-set-default-profile-name profile-set))
       (cons 'selected-profile-name
             (if selected-profile
-              (poo-flow-user-profile-name selected-profile)
+              (yuanxu-user-profile-name selected-profile)
               #f))
       (cons 'selected-profile? (not (not selected-profile)))
       (cons 'profile-count
-            (length (poo-flow-user-profile-set-profiles profile-set)))
+            (length (yuanxu-user-profile-set-profiles profile-set)))
       (cons 'profile-names
-            (poo-flow-user-profile-set-profile-names profile-set))
+            (yuanxu-user-profile-set-profile-names profile-set))
       (cons 'profiles
             (poo-flow-user-profile-summaries
-             (poo-flow-user-profile-set-profiles profile-set)))
+             (yuanxu-user-profile-set-profiles profile-set)))
       (cons 'user-entrypoints poo-flow-user-config-public-entrypoints)
       (cons 'api-entrypoints poo-flow-user-config-api-entrypoints)
       (cons 'boundary poo-flow-user-config-boundary)

@@ -8,6 +8,7 @@ from __future__ import annotations
 import importlib.util
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -59,6 +60,17 @@ class GerbilDependencyPinTest(unittest.TestCase):
             projection["urls"],
             ["https://github.com/tao3k/asp-gerbil-scheme/archive/v0.1.2.tar.gz"],
         )
+
+    def test_root_and_dev_cannot_both_own_the_same_pin(self) -> None:
+        module = pin_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "dev").mkdir()
+            declaration = '(depend: ("github.com/tao3k/asp-gerbil-scheme@v0.1.2"))'
+            (root / "gerbil.pkg").write_text(declaration, encoding="utf-8")
+            (root / "dev" / "gerbil.pkg").write_text(declaration, encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "duplicate dependency authority"):
+                module.package_pin_owners(root)
 
     def test_repository_dependency_projection_is_closed(self) -> None:
         completed = subprocess.run(

@@ -9,8 +9,8 @@
                  .@
                  .ref
                  object?)
-        (only-in :core/utilities/functional
-                 poo-flow-set-subset?))
+        (only-in :yuanxu/utilities/functional
+                 yuanxu-set-subset?))
 
 (export +poo-flow-gerbil-poo-provider-label+
         +poo-flow-gerbil-poo-resolution-receipt-label+
@@ -61,6 +61,6 @@
 (def (poo-flow-gerbil-poo-api-closed? observed-api)
   (and (= (length observed-api)
           (length +poo-flow-gerbil-poo-required-api+))
-       (poo-flow-set-subset?
+       (yuanxu-set-subset?
         +poo-flow-gerbil-poo-required-api+
         observed-api)))

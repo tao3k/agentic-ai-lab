@@ -30,7 +30,7 @@ def _source_fixture(root: Path) -> Path:
 
 def _projection_rows(name: str) -> tuple[tuple[str, str], tuple[str, str]]:
     return (
-        ("schema", "poo-flow.funflow-plan-projection.v1"),
+        ("schema", "yuanxu.funflow-plan-projection.v1"),
         ("name", name),
     )
 
@@ -115,7 +115,7 @@ def test_scheme_projection_ignores_stale_artifact_and_falls_back(
             args,
             0,
             stdout=(
-                '(("schema" "poo-flow.funflow-plan-projection.v1") '
+                '(("schema" "yuanxu.funflow-plan-projection.v1") '
                 '("name" "fresh"))\n'
             ),
             stderr="",
@@ -143,7 +143,7 @@ def test_preproject_load_writes_projection_artifact(tmp_path, monkeypatch) -> No
             args,
             0,
             stdout=(
-                '(("schema" "poo-flow.funflow-plan-projection.v1") '
+                '(("schema" "yuanxu.funflow-plan-projection.v1") '
                 '("name" "built"))\n'
             ),
             stderr="",

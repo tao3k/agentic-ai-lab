@@ -6,16 +6,16 @@
 ;;; Boundary: focused tests for loop-engine sandbox handoff agreement receipts.
 ;;; Invariant: sandbox agreement projection is report-only and never starts runtime.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :core/module-system/selection/objects
-                 pooFlowUserConfig
-                 poo-flow-settings
-                 poo-flow-user-module-bundles->modules
-                 poo-flow-user-module-selection)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxuUserConfig
+                 yuanxu-settings
+                 yuanxu-user-module-bundles->modules
+                 yuanxu-user-module-selection)
         (only-in :poo-flow/modules/agent-sandbox/config
                  poo-flow-sandbox-profile-config)
         (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
@@ -43,9 +43,9 @@
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation/bundles module-bundles)
   (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules module-bundles)
-    (poo-flow-settings))))
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules module-bundles)
+    (yuanxu-settings))))
 
 ;;; The concrete loop case references `ci/build`. These focused fixtures use
 ;;; the public POO profile constructor directly, so agreement qualification
@@ -79,7 +79,7 @@
 ;; : [PooUserModuleSelection]
 (def custom-loop-sandbox-profile-module
   (list
-   (poo-flow-user-module-selection
+   (yuanxu-user-module-selection
     'sandbox
     'nono-sandbox
     (list (cons ':config (list (custom-loop-sandbox-profile)))))))
@@ -110,7 +110,7 @@
 ;; : [PooUserModuleSelection]
 (def custom-loop-invalid-sandbox-profile-module
   (list
-   (poo-flow-user-module-selection
+   (yuanxu-user-module-selection
     'sandbox
     'nono-sandbox
     (list
@@ -120,7 +120,7 @@
 ;;; intent, runtime manifest, and public presentation slots unchanged.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-sandbox-case)
-  (poo-flow-test-case "resolves sandbox profile summaries into loop-engine manifest"
+  (yuanxu-test-case "resolves sandbox profile summaries into loop-engine manifest"
     (let* ((presentation
             (custom-loop-presentation/bundles
              (list custom-loop-sandbox-profile-module
@@ -187,7 +187,7 @@
 ;;; sandbox shapes without throwing from the handoff summary path.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-invalid-sandbox-case)
-  (poo-flow-test-case "diagnoses invalid sandbox profile agreement"
+  (yuanxu-test-case "diagnoses invalid sandbox profile agreement"
     (let* ((presentation
             (custom-loop-presentation/bundles
              (list custom-loop-invalid-sandbox-profile-module

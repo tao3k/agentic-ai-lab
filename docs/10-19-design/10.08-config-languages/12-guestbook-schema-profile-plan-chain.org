@@ -57,14 +57,14 @@ do not read schema paths or import these implementation functions.
 
 | Interface | Executable owner | Role in this design |
 |-----------+------------------+---------------------|
-| poo-flow-json-schema-read-file | [[file:../../../core/modules/json-schema/json-schema-source.ss][json-schema-source.ss]] | Decode a selected pinned schema; does not resolve an arbitrary external dependency graph |
-| poo-flow-json-schema->contract-artifact | [[file:../../../core/modules/json-schema/json-schema-receipt.ss][json-schema-receipt.ss]] | Normalize/emit schema-backed Contract artifact and diagnostics |
-| poo-flow-json-schema-contract-artifact-valid? | same owner | Reject fatal generation diagnostics; not proof that all schema features were implemented |
-| poo-flow-json-schema-contract-artifact-diagnostics | same owner | Review supported/reference/normalization boundaries before publishing |
-| poo-flow-json-schema-contract-artifact-object-contract | same owner | Retrieve the generated object Contract representation |
-| poo-flow-json-schema-contract-artifact-validate | [[file:../../../core/modules/json-schema/json-schema-validate.ss][json-schema-validate.ss]] | Validate final native POO candidate or supported JSON-like value against the artifact |
-| poo-flow-json-schema-object-contract-validation-valid? | same owner | Read the resulting validation decision |
-| poo-flow-json-schema-object-contract-validation->alist | same owner | Project diagnostics/results for tools; not an object-provenance or runtime receipt |
+| yuanxu-json-schema-read-file | [[file:../../../core/modules/json-schema/json-schema-source.ss][json-schema-source.ss]] | Decode a selected pinned schema; does not resolve an arbitrary external dependency graph |
+| yuanxu-json-schema->contract-artifact | [[file:../../../core/modules/json-schema/json-schema-receipt.ss][json-schema-receipt.ss]] | Normalize/emit schema-backed Contract artifact and diagnostics |
+| yuanxu-json-schema-contract-artifact-valid? | same owner | Reject fatal generation diagnostics; not proof that all schema features were implemented |
+| yuanxu-json-schema-contract-artifact-diagnostics | same owner | Review supported/reference/normalization boundaries before publishing |
+| yuanxu-json-schema-contract-artifact-object-contract | same owner | Retrieve the generated object Contract representation |
+| yuanxu-json-schema-contract-artifact-validate | [[file:../../../core/modules/json-schema/json-schema-validate.ss][json-schema-validate.ss]] | Validate final native POO candidate or supported JSON-like value against the artifact |
+| yuanxu-json-schema-object-contract-validation-valid? | same owner | Read the resulting validation decision |
+| yuanxu-json-schema-object-contract-validation->alist | same owner | Project diagnostics/results for tools; not an object-provenance or runtime receipt |
 
 The [[file:../../../core/modules/funflow/github-ci-contract.ss][GitHub CI integration]] already uses these entry points.
 [[file:../../../t/json-schema-contract-bridge-test.ss][Bridge tests]] and [[file:../../../t/funflow-github-ci-json-schema-contract-test.ss][GitHub CI tests]] define controls including native POO candidates
@@ -77,7 +77,7 @@ Proposed Guestbook library glue, using existing signatures (not added to runtime
 
 #+begin_src scheme
 (def (guestbook-schema-artifact schema source-ref)
-  (poo-flow-json-schema->contract-artifact
+  (yuanxu-json-schema->contract-artifact
    schema
    `((source-ref . ,source-ref)
      (owner . guestbook)
@@ -89,7 +89,7 @@ Proposed Guestbook library glue, using existing signatures (not added to runtime
    (lambda (role)
      (let* ((candidate (.ref scenario role))
             (validation
-             (poo-flow-json-schema-contract-artifact-validate
+             (yuanxu-json-schema-contract-artifact-validate
               config-artifact candidate)))
        (.o role candidate validation)))
    '(frontend leader follower)))

@@ -16,7 +16,7 @@
 (asp-gerbil-scheme-package-spec!
  (cedar-conformance-package @ asp-gerbil-scheme-library-package-prototype)
  (spec cedar-conformance-spec)
- (modules ["core/object-family/syntax.ss"
+ (modules ["yuanxu/object-family/syntax.ss"
            "modules/authorization/providers/cedar/objects.ss"
            "bindings/cedar-gerbil/crates/cedar-gerbil/scheme/conformance.ss"]))
 

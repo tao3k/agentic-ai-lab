@@ -10,7 +10,7 @@
 ;;; and std/make retain projection and execution ownership.
 
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :core/observability/output poo-flow-write-observation-line!))
+        (only-in :yuanxu/observability/output yuanxu-write-observation-line!))
 
 (export poo-flow-build-elapsed-milliseconds
         poo-flow-make-observed-package-spec-projector
@@ -53,7 +53,7 @@
                roots))
       (when (and (pair? roots)
                  (poo-flow-build-policy-ref policy 'enabled?))
-        (poo-flow-write-observation-line!
+        (yuanxu-write-observation-line!
          "[poo-flow] phase=spec-input profile=%a mode=public-entry-modules declared-root-count=%a policy=%a owner=asp-build-api/native-import-closure executor=asp-build-api/std-make"
          (poo-flow-build-policy-ref policy 'profile)
          (length roots)
@@ -80,7 +80,7 @@
 
 (def (poo-flow-build-budget-exceeded! policy reason observed budget action)
   (let (profile-name (poo-flow-build-policy-ref policy 'profile))
-    (poo-flow-write-observation-line!
+    (yuanxu-write-observation-line!
      "[poo-flow] phase=spec-budget-exceeded profile=%a reason=%a observed=%a budget=%a action=%a policy=%a owner=observability/build executor=asp-build-api/std-make"
      profile-name reason observed budget action
      (poo-flow-build-policy-ref policy 'id))
@@ -91,7 +91,7 @@
 (def (poo-flow-observe-build-projection-start policy)
   (when (poo-flow-build-policy-ref policy 'enabled?)
     (let (profile-name (poo-flow-build-policy-ref policy 'profile))
-      (poo-flow-write-observation-line!
+      (yuanxu-write-observation-line!
        "[poo-flow] phase=spec-start profile=%a policy=%a owner=observability/build executor=asp-build-api/std-make"
        profile-name (poo-flow-build-policy-ref policy 'id)))))
 
@@ -105,7 +105,7 @@
          (projection-budget-action
           (poo-flow-build-budget-action policy 'projection-budget-action)))
     (when (poo-flow-build-policy-ref policy 'enabled?)
-      (poo-flow-write-observation-line!
+      (yuanxu-write-observation-line!
        "[poo-flow] phase=spec-projected profile=%a target-count=%a elapsedMs=%a policy=%a owner=observability/build executor=asp-build-api/std-make"
        profile-name target-count elapsed-ms
        (poo-flow-build-policy-ref policy 'id)))
@@ -129,7 +129,7 @@
       ;; an unbounded heartbeat thread.  ASP's scoped projection observer owns
       ;; and terminates its heartbeat with dynamic-wind; this edge records the
       ;; handoff exactly once and then returns control to the native executor.
-      (poo-flow-write-observation-line!
+      (yuanxu-write-observation-line!
        "[poo-flow] phase=executor-handoff profile=%a boundary=std/make/source-import-currentness-or-compile target-count=%a policy=%a owner=observability/build executor=asp-build-api/std-make"
        (poo-flow-build-policy-ref policy 'profile)
        target-count (poo-flow-build-policy-ref policy 'id)))))

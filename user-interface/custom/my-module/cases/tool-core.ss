@@ -9,9 +9,9 @@
 
 (import :poo-flow/modules/session/syntax
         :poo-flow/modules/tool-core/config
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection-flag-entry
-                 poo-flow-user-module-selection->alist))
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flag-entry
+                 yuanxu-user-module-selection->alist))
 
 (export poo-flow-custom-my-module-tool-core-case)
 
@@ -43,7 +43,7 @@
                          (case . tool-core))))))
        (catalog
         (cdr
-         (poo-flow-user-module-selection-flag-entry
+         (yuanxu-user-module-selection-flag-entry
           selection
           ':tool-catalog)))
        (calculator-grant
@@ -83,6 +83,6 @@
           '((source . user-interface)
             (case . tool-core)))))
   (list
-   (poo-flow-user-module-selection->alist selection)
+   (yuanxu-user-module-selection->alist selection)
    (poo-flow-tool-catalog->alist catalog)
    (tool-catalog-validation-row validation))))

@@ -17,12 +17,12 @@ structure Admitted
       CoreContractIdentity
   baseAdmission : Core.BaseAdmission context
   decisionKind :
-    PooFlowCoreProof.Admission.Decision.GovernanceDecisionKind
+    YuanxuProof.Admission.Decision.GovernanceDecisionKind
   decisionMayRequestScopedCapability :
-    PooFlowCoreProof.Admission.Decision.MayRequestScopedCapability decisionKind
-  governanceChecks : PooFlowCoreProof.Admission.Decision.GovernanceChecks
+    YuanxuProof.Admission.Decision.MayRequestScopedCapability decisionKind
+  governanceChecks : YuanxuProof.Admission.Decision.GovernanceChecks
   governanceChecksHold :
-    PooFlowCoreProof.Admission.Decision.GovernanceChecksHold governanceChecks
+    YuanxuProof.Admission.Decision.GovernanceChecksHold governanceChecks
   approval : SeparationOfDuties.ApprovalDiscipline Principal
   freshness : EvidenceFreshness.Checks
   freshnessHolds : EvidenceFreshness.Hold freshness
@@ -44,7 +44,7 @@ theorem requiresEveryGovernanceCheck
       Admitted
         Principal Asset Action Responsibility Evidence FacetIdentity
         CoreContractIdentity) :
-    PooFlowCoreProof.Admission.Decision.GovernanceChecksHold
+    YuanxuProof.Admission.Decision.GovernanceChecksHold
       admission.governanceChecks :=
   admission.governanceChecksHold
 
@@ -70,7 +70,7 @@ theorem expiredDecisionCannotBeAdmitted
   have mayRequest := admission.decisionMayRequestScopedCapability
   rw [expired] at mayRequest
   exact
-    PooFlowCoreProof.Admission.Decision.expiredDecisionFailsClosed
+    YuanxuProof.Admission.Decision.expiredDecisionFailsClosed
       mayRequest
 
 theorem revokedDecisionCannotBeAdmitted
@@ -85,7 +85,7 @@ theorem revokedDecisionCannotBeAdmitted
   have mayRequest := admission.decisionMayRequestScopedCapability
   rw [revoked] at mayRequest
   exact
-    PooFlowCoreProof.Admission.Decision.revokedDecisionFailsClosed
+    YuanxuProof.Admission.Decision.revokedDecisionFailsClosed
       mayRequest
 
 end PooFlowProof.Enterprise.Admission

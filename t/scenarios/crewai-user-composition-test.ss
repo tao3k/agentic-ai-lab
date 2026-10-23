@@ -5,7 +5,7 @@
 
 ;;; Scenario: user-interface CrewAI-style composition instance.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .all-slots .o .ref .slot?)
         (only-in :std/test check-equal? test-suite)
         (only-in :poo-flow/modules/module-authoring/fragment-syntax load!)
@@ -23,7 +23,7 @@
 
 (def crewai-user-composition-test
  (test-suite "crewai user composition"
-  (poo-flow-test-case "crewai declares one reusable production composition"
+  (yuanxu-test-case "crewai declares one reusable production composition"
     (let* ((stage-space (poo-flow-scenario-case-stages crewai-composition))
            (stage (.ref stage-space 'production))
            (compose-payload

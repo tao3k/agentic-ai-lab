@@ -8,7 +8,7 @@
 ;;; Runtime contract: accepted field names are inert data until request assembly.
 ;;; Policy evidence: request facade re-exports these constants for stable callers.
 
-(import (only-in :core/modules/funflow/control-plane/failure raise-control-plane-failure)
+(import (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
         :poo-flow/modules/agent-sandbox/alist)
 
 (export +agent-sandbox-request-schema+

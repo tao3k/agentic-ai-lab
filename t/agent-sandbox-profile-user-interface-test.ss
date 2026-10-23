@@ -5,7 +5,7 @@
 
 ;;; Boundary: sandbox profile user interface stays on the module-system facade.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  test-error
         test-suite)
         (only-in :clan/poo/object .o .ref .slot? object?)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface
         :poo-flow/modules/workflow/scenario/configuration/init-syntax
         :poo-flow/modules/agent-sandbox/config)
@@ -204,7 +204,7 @@
 ;; : TestSuite
 (def agent-sandbox-profile-user-interface-test
   (test-suite "poo-flow agent sandbox profile user interface"
-    (poo-flow-test-case "declares nono and cubeSandbox profiles as inert user data"
+    (yuanxu-test-case "declares nono and cubeSandbox profiles as inert user data"
       (let* ((nono-profile
               (poo-flow-sandbox-profile-by-name user-sandbox-profiles
                                                 'agent/nono))
@@ -220,15 +220,15 @@
                       'cube-local)
         (check-equal? (poo-flow-sandbox-profile-network-policy cube-profile)
                       '(allowlisted "github.com" "crates.io"))))
-    (poo-flow-test-case "applies POO slot transforms through nono object validation"
+    (yuanxu-test-case "applies POO slot transforms through nono object validation"
       (let* ((profile-payload
-              (poo-flow-user-module-selection-flag-entry
+              (yuanxu-user-module-selection-flag-entry
                user-nono-operator-module
                ':config))
              (profiles (cdr profile-payload))
              (operator-profile
               (poo-flow-sandbox-profile-by-name profiles 'agent/operator)))
-        (check-equal? (poo-flow-user-module-selection-key
+        (check-equal? (yuanxu-user-module-selection-key
                        user-nono-operator-module)
                       '(sandbox . nono-sandbox))
         (check-equal? (length profiles) 1)
@@ -263,13 +263,13 @@
                         (backend . nono-sandbox)
                         (intent . operator-demo)
                         (stage . extension)))))
-    (poo-flow-test-case "applies profile inheritance for cube and docker sandbox objects"
+    (yuanxu-test-case "applies profile inheritance for cube and docker sandbox objects"
       (let* ((cube-profiles
-              (cdr (poo-flow-user-module-selection-flag-entry
+              (cdr (yuanxu-user-module-selection-flag-entry
                     user-cube-build-module
                     ':config)))
              (docker-profiles
-              (cdr (poo-flow-user-module-selection-flag-entry
+              (cdr (yuanxu-user-module-selection-flag-entry
                     user-docker-build-module
                     ':config)))
              (cube-profile
@@ -286,10 +286,10 @@
                (poo-flow-sandbox-profile-metadata docker-profile)))
              (cube-step (last-value cube-lineage))
              (docker-step (last-value docker-lineage)))
-        (check-equal? (poo-flow-user-module-selection-key
+        (check-equal? (yuanxu-user-module-selection-key
                        user-cube-build-module)
                       '(sandbox . cubeSandbox))
-        (check-equal? (poo-flow-user-module-selection-key
+        (check-equal? (yuanxu-user-module-selection-key
                        user-docker-build-module)
                       '(sandbox . docker-sandbox))
         (check-equal? (poo-flow-sandbox-profile-backend-kind cube-profile)
@@ -328,7 +328,7 @@
                        'backend-kind
                        (poo-flow-sandbox-profile->profile docker-profile))
                       'docker)))
-    (poo-flow-test-case "projects user declarations into validated agent sandbox profiles"
+    (yuanxu-test-case "projects user declarations into validated agent sandbox profiles"
       (let* ((nono-profile
               (poo-flow-sandbox-profile-by-name user-sandbox-profiles
                                                 'agent/nono))
@@ -354,7 +354,7 @@
                         (cpu . 2)
                         (memory . "4Gi")
                         (timeout-ms . 300000)))))
-    (poo-flow-test-case "presents profile collections as runtime handoff intent data"
+    (yuanxu-test-case "presents profile collections as runtime handoff intent data"
       (let* ((presentation
               (pooFlowSandboxProfilesPresentation user-sandbox-profiles))
              (runtime-intents (.ref presentation 'runtime-intents))

@@ -6,7 +6,7 @@
 ;;; the caller. Private receipts never escape; all published pair trees detach.
 (import (only-in :clan/poo/object .o .ref object? .slot?)
         (only-in :clan/poo/mop define-type validate)
-        (only-in :core/types PooFlowNativeObjectContract. poo-flow-predicate-contract)
+        (only-in :yuanxu/types YuanxuObjectContract. yuanxu-predicate-contract)
         (only-in :std/error exception->string)
         (only-in :gerbil-ascent/candidate/datum reasoning-bounded-data?)
         (only-in :gerbil-ascent/candidate/types reasoning-snapshot-valid? reasoning-snapshot-relations)
@@ -33,11 +33,11 @@
   (and (object? owner)
        (andmap (lambda (slot) (and (.slot? owner slot) (procedure? (.ref owner slot))))
                '(.resolve .claim .fact .fragment .certificate .partition .stats .clear))))
-(define-type (PooFlowComputationalEvidenceStoreContract @ PooFlowNativeObjectContract.)
+(define-type (PooFlowComputationalEvidenceStoreContract @ YuanxuObjectContract.)
   identity: 'poo-flow/computational-evidence-store
   proto: (.o)
   responsibilities:
-  (.o .operations: (poo-flow-predicate-contract 'ascent/evidence-operations
+  (.o .operations: (yuanxu-predicate-contract 'ascent/evidence-operations
                     evidence-operations? (lambda (_v _c) []))))
 
 (def (detached value)

@@ -7,7 +7,7 @@
 
 (import :gerbil/core
         (only-in :clan/poo/object .def .o .ref .slot? object?)
-        :core/module-system/schema/interface
+        :yuanxu/module-system/schema/interface
         :poo-flow/modules/sandbox-core/shared-object
         :poo-flow/modules/agent-sandbox/config
         (only-in :poo-flow/modules/agent-sandbox/profile-validation
@@ -125,7 +125,7 @@
       profile-object
       row)
   (let* ((field (poo-flow-sandbox-profile-object-row-field profile-object row))
-         (slot (and field (poo-flow-module-field-contract-identity field)))
+         (slot (and field (yuanxu-module-field-contract-identity field)))
          (operator (and (pair? row)
                         (poo-flow-sandbox-profile-object-row-operator row)))
          (value (poo-flow-sandbox-profile-object-row-value/default row)))
@@ -197,7 +197,7 @@
   (if (and (pair? row) (symbol? (car row)))
     (let (slot (poo-flow-sandbox-profile-object-row-slot (car row)))
       (and slot
-           (poo-flow-module-object-field profile-object slot)))
+           (yuanxu-module-object-field profile-object slot)))
     #f))
 
 ;;; User-supplied merge operators override the field default only for this row;
@@ -210,4 +210,4 @@
    ((eq? operator ':prepend) 'prepend)
    ((eq? operator ':remove) 'remove)
    (else
-    (poo-flow-module-field-contract-merge field))))
+    (yuanxu-module-field-contract-merge field))))

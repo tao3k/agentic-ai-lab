@@ -8,8 +8,8 @@
 
 (import :poo-flow/modules/docker-sandbox/objects
         :poo-flow/modules/sandbox-core/objects
-        :core/module-system/selection/objects
-        :core/utilities/final-projection-syntax)
+        :yuanxu/module-system/selection/objects
+        :yuanxu/utilities/final-projection-syntax)
 
 (export poo-flow-docker-sandbox-module-bundles
         poo-flow-docker-sandbox-config-flags
@@ -25,7 +25,7 @@
 (def poo-flow-docker-sandbox-module-bundles
   (list
    (list
-    (poo-flow-user-module-selection
+    (yuanxu-user-module-selection
      'sandbox 'docker-sandbox
      (list '+docker '+doctor
            (cons ':backend-capability-registry
@@ -36,11 +36,11 @@
 ;; : (-> [PooSandboxProfile] [UserModuleFlagEntry])
 (def (poo-flow-docker-sandbox-config-flags profiles . maybe-user-config)
   (if (null? maybe-user-config)
-    (poo-flow-product-field-rows
+    (yuanxu-product-field-rows
      (:backend-capability-registry
       poo-flow-docker-sandbox-backend-capability-registry)
      (:config profiles))
-    (poo-flow-product-field-rows
+    (yuanxu-product-field-rows
      (:backend-capability-registry
       poo-flow-docker-sandbox-backend-capability-registry)
      (:config profiles)

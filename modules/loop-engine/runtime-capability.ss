@@ -15,8 +15,8 @@
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         "core.ss"
         "runtime-base.ss"
-        :core/utilities/runtime-receipt-syntax
-        :core/utilities/functional)
+        :yuanxu/utilities/runtime-receipt-syntax
+        :yuanxu/utilities/functional)
 
 (export make-loop-engine-capability-receipt
         loop-engine-capability-receipt?

@@ -7,12 +7,12 @@
 
 (import :gerbil/runtime/gambit
         (only-in :clan/poo/object .ref)
-        (only-in :core/observability/debug
-                 poo-flow-debug-memory-policy
-                 poo-flow-debug-memory-snapshot
+        (only-in :yuanxu/observability/debug
+                 yuanxu-debug-memory-policy
+                 yuanxu-debug-memory-snapshot
                  call-with-poo-flow-debug-memory-monitor
-                 PooFlowDebugMemoryAnomaly?
-                 PooFlowDebugMemoryAnomaly-receipt))
+                 YuanxuDebugMemoryAnomaly?
+                 YuanxuDebugMemoryAnomaly-receipt))
 
 (export poo-clos-observe-fixture!)
 
@@ -43,12 +43,12 @@
                                port: (port (current-error-port)))
   (unless (and (symbol? phase) (procedure? thunk) (output-port? port))
     (error "invalid POO CLOS fixture observation request" phase))
-  (let* ((baseline (poo-flow-debug-memory-snapshot phase))
+  (let* ((baseline (yuanxu-debug-memory-snapshot phase))
          (heap-limit
           (+ (.ref baseline 'heap-size-bytes)
              +poo-clos-heap-growth-limit-bytes+))
          (policy
-          (poo-flow-debug-memory-policy
+          (yuanxu-debug-memory-policy
            phase
            heap-limit-bytes: heap-limit
            live-growth-limit-bytes: +poo-clos-live-growth-limit-bytes+
@@ -64,11 +64,11 @@
                  +poo-clos-sample-interval-milliseconds+)))
     (with-exception-catcher
      (lambda (failure)
-       (if (PooFlowDebugMemoryAnomaly? failure)
+       (if (YuanxuDebugMemoryAnomaly? failure)
          (poo-clos-observation-emit
           port phase 'end
           (poo-clos-memory-fields
-           (PooFlowDebugMemoryAnomaly-receipt failure)))
+           (YuanxuDebugMemoryAnomaly-receipt failure)))
          (poo-clos-observation-emit
           port phase 'end '((outcome raised) (reason test-failure))))
        (raise failure))

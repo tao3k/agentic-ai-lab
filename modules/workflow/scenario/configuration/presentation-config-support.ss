@@ -34,10 +34,10 @@
                  poo-flow-sandbox-profile-metadata)
         :poo-flow/modules/workflow/interface
         :poo-flow/modules/module-authoring/module-interface
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         (only-in :poo-flow/modules/workflow/cicd-runtime-command-config
                  poo-flow-user-alist-ref)
-        :core/module-system/observability/presentation)
+        :yuanxu/module-system/observability/presentation)
 
 ;; : (-> CicdCheckMaps SymbolList SymbolList)
 (def (poo-flow-user-config-presentation-workflow-cicd-check-map-names/rev
@@ -47,12 +47,12 @@
     names-rev
     (poo-flow-user-config-presentation-workflow-cicd-check-map-names/rev
      (cdr check-maps)
-     (cons (poo-flow-cicd-check-map-name (car check-maps)) names-rev))))
+     (cons (yuanxu-cicd-check-map-name (car check-maps)) names-rev))))
 
 ;; : (-> CicdCheckMaps SymbolList)
 (def (poo-flow-user-config-presentation-workflow-cicd-check-map-names
       check-maps)
-  (map poo-flow-cicd-check-map-name check-maps))
+  (map yuanxu-cicd-check-map-name check-maps))
 
 ;; : (-> DerivationPath DerivationStep)
 (def (poo-flow-user-sandbox-profile-derivation-last-step derivation-path)
@@ -71,7 +71,7 @@
 
 ;; : (-> ModuleSelection SandboxProfile DerivationRow)
 (def (poo-flow-user-sandbox-profile-derivation-row selection profile)
-  (let* ((module-key (poo-flow-user-module-selection-key selection))
+  (let* ((module-key (yuanxu-user-module-selection-key selection))
          (derivation-path
           (poo-flow-user-sandbox-profile-derivation-path profile))
          (last-step
@@ -98,7 +98,7 @@
 
 ;; : (-> ModuleSelection SandboxProfiles)
 (def (poo-flow-user-module-selection-sandbox-config-profiles selection)
-  (let ((entry (poo-flow-user-module-selection-flag-entry selection ':config)))
+  (let ((entry (yuanxu-user-module-selection-flag-entry selection ':config)))
     (if (and entry (pair? entry))
       (filter poo-flow-sandbox-profile? (cdr entry))
       '())))
@@ -178,7 +178,7 @@
       workflow-cicd-marlin-handoff-receipt-bundle
       loop-engine-intent-rows
       public-setting-keys)
-  (poo-flow-module-presentation-trace
+  (yuanxu-module-presentation-trace
    'user-config-presentation
    (list (cons 'selected-modules (length selected-modules))
          (cons 'feature-facts (length feature-fact-rows))

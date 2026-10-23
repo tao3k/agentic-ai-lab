@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :poo-flow/modules/governance/policy/protocol-person-promotion
@@ -63,7 +63,7 @@
   (test-suite
    "RFC 150 Runtime Language ABI promotion lane"
 
-   (poo-flow-test-case "approved promotion lowers to an implementation-neutral request"
+   (yuanxu-test-case "approved promotion lowers to an implementation-neutral request"
      (let (key (.ref request 'idempotency-key))
        (check (.ref request 'kind)
               => 'poo-flow.runtime-language.promotion-request.1)
@@ -75,7 +75,7 @@
        (check (.ref key 'injection-target) => 'org-bundle-active)
        (check (.ref request 'required-capabilities) => required-capabilities)))
 
-   (poo-flow-test-case "unapproved promotion cannot cross the ABI boundary"
+   (yuanxu-test-case "unapproved promotion cannot cross the ABI boundary"
      (let (denied
            (poo-flow-promotion-intent-validate intent current-world denied-facts))
        (check
@@ -86,7 +86,7 @@
            #f))
         => #t)))
 
-   (poo-flow-test-case "qualification vector and C header share the ABI identity"
+   (yuanxu-test-case "qualification vector and C header share the ABI identity"
      (let ((vector (poo-flow-runtime-language-promotion-request->vector request))
            (header (poo-flow-runtime-language-promotion-abi->c-header))
            (runtime-header
@@ -137,7 +137,7 @@
                    #t)
               => #t)))
 
-   (poo-flow-test-case "qualified current runtime can return a complete injection receipt"
+   (yuanxu-test-case "qualified current runtime can return a complete injection receipt"
      (let (receipt
            (runtime-receipt current-world required-capabilities 'injected
                             "materialization-digest-1"
@@ -148,7 +148,7 @@
               => #t)
        (check (.ref receipt 'runtime-executed) => #t)))
 
-   (poo-flow-test-case "capability negotiation fails closed"
+   (yuanxu-test-case "capability negotiation fails closed"
      (let ((rejected
             (runtime-receipt current-world '(PROMOTION_MATERIALIZE)
                              'rejected-capability #f #f #f #f))
@@ -165,7 +165,7 @@
                      illegal))
               => '(unsupported-capability-effect))))
 
-   (poo-flow-test-case "runtime epoch fence rejects stale requests before effects"
+   (yuanxu-test-case "runtime epoch fence rejects stale requests before effects"
      (let ((rejected
             (runtime-receipt stale-world required-capabilities
                              'rejected-stale-epoch #f #f #f #f))
@@ -182,7 +182,7 @@
                      illegal))
               => '(stale-epoch-effect))))
 
-   (poo-flow-test-case "injection and rollback receipts are structurally complete"
+   (yuanxu-test-case "injection and rollback receipts are structurally complete"
      (let ((incomplete
             (runtime-receipt current-world required-capabilities 'injected
                              "materialization-digest-1" #f #f #f))
@@ -194,7 +194,7 @@
        (check (poo-flow-runtime-language-promotion-receipt-valid? rolled-back)
               => #t)))
 
-   (poo-flow-test-case "replay is causal and does not count as a second commit"
+   (yuanxu-test-case "replay is causal and does not count as a second commit"
      (let* ((injected
              (runtime-receipt current-world required-capabilities 'injected
                               "materialization-digest-1"
@@ -220,7 +220,7 @@
          (list injected duplicate))
         => #f)))
 
-   (poo-flow-test-case "Org AST query results remain data before Contract admission"
+   (yuanxu-test-case "Org AST query results remain data before Contract admission"
      (let ((json-query
             (poo-flow-runtime-language-source-query-receipt
              'org "org-content-blake3-1" "7"
@@ -245,7 +245,7 @@
        (check (.ref json-query 'result-digest)
               => "query-result-digest-json-1")))
 
-   (poo-flow-test-case "source query identity and provenance fail closed"
+   (yuanxu-test-case "source query identity and provenance fail closed"
      (let ((missing-nodes
             (poo-flow-runtime-language-source-query-receipt
              'org "org-content-blake3-1" "7"
@@ -289,7 +289,7 @@
                numeric-version))
         => '(missing-source-version))))
 
-   (poo-flow-test-case "Runtime Language admission requires the identified POO Contract"
+   (yuanxu-test-case "Runtime Language admission requires the identified POO Contract"
      (let* ((query
              (poo-flow-runtime-language-source-query-receipt
               'org "org-content-blake3-1" "7"
@@ -334,7 +334,7 @@
         (poo-flow-runtime-language-admission-receipt-failures illegal)
         => '(missing-contract-id admitted-projection-has-failures))))
 
-   (poo-flow-test-case "Contract artifact projections do not require a source query"
+   (yuanxu-test-case "Contract artifact projections do not require a source query"
      (let ((vector-receipt
             (poo-flow-contract-artifact-projection-receipt
              'promotion-request-vector-v1

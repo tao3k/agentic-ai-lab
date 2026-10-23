@@ -7,7 +7,7 @@
 ;;; Invariant: policies are declarative authorization objects; Scheme never
 ;;; runs tools or hooks.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -476,19 +476,19 @@
 ;; : TestSuite
 (def session-policy-contract-test
   (test-suite "poo-flow session policy contracts"
-    (poo-flow-test-case "declares POO-native tool permission policies"
+    (yuanxu-test-case "declares POO-native tool permission policies"
       (check-session-tool-permission-policy!))
-    (poo-flow-test-case "keeps hook-triggered tools separate from agent tools"
+    (yuanxu-test-case "keeps hook-triggered tools separate from agent tools"
       (check-session-hook-tool-separation!))
-    (poo-flow-test-case "uses native POO inheritance for policy refinement"
+    (yuanxu-test-case "uses native POO inheritance for policy refinement"
       (check-session-policy-poo-inheritance!))
-    (poo-flow-test-case "projects generated foundational policy families"
+    (yuanxu-test-case "projects generated foundational policy families"
       (check-generated-session-policy-families!))
-    (poo-flow-test-case "projects durable policy receipts from session policy composition"
+    (yuanxu-test-case "projects durable policy receipts from session policy composition"
       (check-session-durable-policy-receipt!))
-    (poo-flow-test-case "reports invalid durable policies through receipt diagnostics"
+    (yuanxu-test-case "reports invalid durable policies through receipt diagnostics"
       (check-invalid-session-durable-policy!))
-    (poo-flow-test-case "batch projects durable policies as struct receipts before alists"
+    (yuanxu-test-case "batch projects durable policies as struct receipts before alists"
       (check-session-durable-policy-batch!))
-    (poo-flow-test-case "exposes custom-shaped policy presentation"
+    (yuanxu-test-case "exposes custom-shaped policy presentation"
       (check-session-policy-presentation!))))

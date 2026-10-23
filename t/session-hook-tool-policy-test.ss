@@ -5,7 +5,7 @@
 
 ;;; Boundary: hook-scoped tool permission policy.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -16,7 +16,7 @@
 ;; : TestSuite
 (def session-hook-tool-policy-test
   (test-suite "poo-flow session hook tool policy"
-    (poo-flow-test-case "does not inherit child-agent command grants implicitly"
+    (yuanxu-test-case "does not inherit child-agent command grants implicitly"
       (let* ((read-grant
               (poo-flow-session-tool-grant
                'grant/hook-read

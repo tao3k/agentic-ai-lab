@@ -8,7 +8,7 @@
 ;;; Invariant: planning remains pure; only a fresh Session instance mutates.
 
 (import (only-in :clan/poo/object .all-slots .call .mix .o .put! .ref .set! object?)
-        (rename-in (only-in :core/modules/funflow/control-plane/graph
+        (rename-in (only-in :yuanxu/modules/funflow/control-plane/graph
                             execution-plan?
                             plan-node-count)
                    (plan-node-count core-plan-node-count))

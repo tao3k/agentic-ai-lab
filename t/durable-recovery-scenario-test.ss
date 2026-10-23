@@ -6,7 +6,7 @@
 ;;; Boundary: crash/replay/repair scenario receipts for durable policy.
 ;;; Invariant: tests validate scenario projection only; no runtime recovery runs.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -97,7 +97,7 @@
 ;; : TestSuite
 (def durable-recovery-scenario-test
   (test-suite "poo-flow durable recovery scenario"
-    (poo-flow-test-case "projects crash replay recovery with observability stages"
+    (yuanxu-test-case "projects crash replay recovery with observability stages"
       (let* ((receipt
               (poo-flow-durable-recovery-scenario
                'recovery-scenario/build-audit
@@ -142,7 +142,7 @@
                       '(#f #f #f #f #f #f))
         (check-equal? (test-ref row 'runtime-executed) #f)))
 
-    (poo-flow-test-case "rejects unsafe replay without memory durable jobs"
+    (yuanxu-test-case "rejects unsafe replay without memory durable jobs"
       (let* ((unsafe-task-rows
               '(((kind . poo-flow.workflow.cicd.check-receipt)
                  (check . release)
@@ -186,7 +186,7 @@
          (diagnostic-code-present? diagnostics 'unresolved-sandbox-ref)
          #t)))
 
-    (poo-flow-test-case "reports invalid durable memory job rows"
+    (yuanxu-test-case "reports invalid durable memory job rows"
       (let* ((invalid-memory-rows
               '(((kind . poo-flow.memory-core.durable-job-receipt)
                  (job-id . memory-job/fake)

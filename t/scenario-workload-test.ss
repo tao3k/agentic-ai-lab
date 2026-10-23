@@ -5,14 +5,14 @@
 
 (import (only-in :std/test test-suite check-equal? check-exception)
         (only-in :clan/poo/object .ref)
-        (only-in :core/observability/testing-case poo-flow-test-case)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :poo-flow/modules/workflow/scenario/workload)
 
 (export scenario-workload-test)
 
 (def scenario-workload-test
   (test-suite "Scenario workload owner"
-    (poo-flow-test-case "ordered launch ranges preserve local ordinals"
+    (yuanxu-test-case "ordered launch ranges preserve local ordinals"
       (let* ((first (poo-flow-scenario-case-multiplicity 'first 2))
              (second (poo-flow-scenario-case-multiplicity 'second 3))
              (workload (poo-flow-scenario-case-workload
@@ -27,7 +27,7 @@
         (check-exception
          (poo-flow-scenario-case-workload/ref workload 5)
          (lambda (_) #t))))
-    (poo-flow-test-case "one thousand ranges retain bounded ordinal lookup"
+    (yuanxu-test-case "one thousand ranges retain bounded ordinal lookup"
       (let* ((multiplicities
               (map (lambda (index)
                      (poo-flow-scenario-case-multiplicity index 1))

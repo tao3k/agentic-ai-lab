@@ -5,7 +5,7 @@
 
 ;;; Funflow: GitHub CI profile contract backed by JSON Schema projection.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -14,15 +14,15 @@
         (only-in :std/encoding/json
                  JSONReadOptions
                  string->json)
-        (only-in :core/module-system/schema/slot-contracts
-                 poo-flow-contract-slot-name
-                 poo-flow-native-contract-slots)
-        (only-in :core/modules/json-schema/json-schema-source
-                 poo-flow-json-schema-read-file)
-        (only-in :core/modules/json-schema/json-schema-receipt
-                 poo-flow-json-schema->contract-artifact
-                 poo-flow-json-schema-contract-artifact-object-contract
-                 poo-flow-json-schema-contract-artifact->alist)
+        (only-in :yuanxu/module-system/schema/slot-contracts
+                 yuanxu-contract-slot-name
+                 yuanxu-native-contract-slots)
+        (only-in :yuanxu/modules/json-schema/json-schema-source
+                 yuanxu-json-schema-read-file)
+        (only-in :yuanxu/modules/json-schema/json-schema-receipt
+                 yuanxu-json-schema->contract-artifact
+                 yuanxu-json-schema-contract-artifact-object-contract
+                 yuanxu-json-schema-contract-artifact->alist)
         (only-in :poo-flow/modules/workflow/profiles/github-ci-contract
                  +poo-flow-funflow-github-ci-schema-audit+
                  poo-flow-funflow-github-ci-contract-receipt
@@ -99,7 +99,7 @@
 ;; : TestSuite
 (def funflow-github-ci-json-schema-contract-test
   (test-suite "funflow github-ci json schema contract"
-    (poo-flow-test-case "keeps the upstream workflow schema pinned in the repo"
+    (yuanxu-test-case "keeps the upstream workflow schema pinned in the repo"
       (let ((receipt (poo-flow-funflow-github-ci-contract-receipt)))
         (check-equal?
          (funflow-github-ci-audit-ref 'repo-path)
@@ -109,24 +109,24 @@
          "7a952fdb7c1b130732e40ccea9db9bced906c1198e97834f8a49ae3b411f3161")
         (check-equal? (funflow-github-ci-test-ref receipt 'valid?) #t)
         (check-equal? (funflow-github-ci-test-ref receipt 'diagnostic-count) 0)))
-    (poo-flow-test-case "feeds the pinned raw github workflow schema into the bridge"
+    (yuanxu-test-case "feeds the pinned raw github workflow schema into the bridge"
       (let* ((schema
-              (poo-flow-json-schema-read-file
+              (yuanxu-json-schema-read-file
                "schemas/json/github-workflow.json"))
              (artifact
-              (poo-flow-json-schema->contract-artifact
+              (yuanxu-json-schema->contract-artifact
                schema
                '((source-ref . schemas/json/github-workflow.json)
                  (owner . funflow)
                  (object-kind . PooFlowFunflowPinnedGithubWorkflow)
                  (object-key . funflow/github-ci/pinned-workflow))))
              (receipt
-              (poo-flow-json-schema-contract-artifact->alist artifact))
+              (yuanxu-json-schema-contract-artifact->alist artifact))
              (slots
               (map
-               poo-flow-contract-slot-name
-               (poo-flow-native-contract-slots
-                (poo-flow-json-schema-contract-artifact-object-contract
+               yuanxu-contract-slot-name
+               (yuanxu-native-contract-slots
+                (yuanxu-json-schema-contract-artifact-object-contract
                  artifact)))))
         (check-equal? (funflow-github-ci-test-ref receipt 'valid?) #t)
         (check-equal? (funflow-github-ci-member? 'on slots) #t)
@@ -134,7 +134,7 @@
         (check-equal?
          (>= (funflow-github-ci-test-ref receipt 'diagnostic-count) 1)
          #t)))
-    (poo-flow-test-case "validates top-level github workflow profile shape"
+    (yuanxu-test-case "validates top-level github workflow profile shape"
       (let ((alist-receipt
              (poo-flow-funflow-github-ci-validate-workflow->alist
               funflow-github-ci-valid-workflow))
@@ -145,7 +145,7 @@
         (check-equal? (funflow-github-ci-test-ref alist-receipt 'checked-slots)
                       '(name run-name on env defaults concurrency permissions jobs))
         (check-equal? (funflow-github-ci-test-ref poo-receipt 'valid?) #t)))
-    (poo-flow-test-case "validates native JSON hash objects directly"
+    (yuanxu-test-case "validates native JSON hash objects directly"
       (let* ((string-key-workflow
               (string->json funflow-github-ci-native-json
                             (JSONReadOptions object-as-hash: #t)))
@@ -167,7 +167,7 @@
         (check-equal?
          (funflow-github-ci-test-ref symbol-key-receipt 'valid?)
          #t)))
-    (poo-flow-test-case "rejects missing and empty required workflow slots"
+    (yuanxu-test-case "rejects missing and empty required workflow slots"
       (let ((missing-receipt
              (poo-flow-funflow-github-ci-validate-workflow->alist
               funflow-github-ci-missing-jobs-workflow))
@@ -181,7 +181,7 @@
         (check-equal? (funflow-github-ci-test-ref empty-receipt 'valid?) #f)
         (check-equal? (funflow-github-ci-test-ref empty-receipt 'invalid-slots)
                       '(jobs))))
-    (poo-flow-test-case "recursively validates dynamic job ids and job bodies"
+    (yuanxu-test-case "recursively validates dynamic job ids and job bodies"
       (let ((missing-runs-on
              (poo-flow-funflow-github-ci-validate-workflow->alist
               funflow-github-ci-missing-runs-on-workflow))

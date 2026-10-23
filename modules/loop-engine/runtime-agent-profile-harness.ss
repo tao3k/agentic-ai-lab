@@ -6,11 +6,11 @@
 ;;; Boundary: loop-engine agent profile and harness projection rows.
 ;;; Invariant: projections describe Marlin-owned work and never open sessions.
 
-(import (only-in :core/modules/funflow/control-plane/agent-harness
-                 make-poo-flow-agent-harness
-                 make-poo-flow-agent-profile
-                 poo-flow-agent-harness->alist
-                 poo-flow-agent-profile->alist)
+(import (only-in :yuanxu/modules/funflow/control-plane/agent-harness
+                 make-yuanxu-agent-harness
+                 make-yuanxu-agent-profile
+                 yuanxu-agent-harness->alist
+                 yuanxu-agent-profile->alist)
         (rename-in "session-agent-graph.ss"
                    (poo-flow-user-loop-engine-intent-session-agent-graph
                     poo-flow-loop-engine-session-agent-graph/projection))
@@ -46,8 +46,8 @@
 (def (poo-flow-user-loop-engine-intent-agent-profile intent role-ref)
   (let ((role (car role-ref))
         (profile-name (cdr role-ref)))
-    (poo-flow-agent-profile->alist
-     (make-poo-flow-agent-profile
+    (yuanxu-agent-profile->alist
+     (make-yuanxu-agent-profile
       profile-name
       'runtime-selected
       (list 'loop-engine role)
@@ -95,8 +95,8 @@
           node
           'result-contract
           'poo-flow.loop-governor.node-result.v1)))
-    (poo-flow-agent-profile->alist
-     (make-poo-flow-agent-profile
+    (yuanxu-agent-profile->alist
+     (make-yuanxu-agent-profile
       profile-name
       'runtime-selected
       (list 'loop-engine role)
@@ -159,8 +159,8 @@
           (poo-flow-user-loop-engine-runtime-id
            use-case-name
            (string-append (symbol->string role) "-harness"))))
-    (poo-flow-agent-harness->alist
-     (make-poo-flow-agent-harness
+    (yuanxu-agent-harness->alist
+     (make-yuanxu-agent-harness
       harness-id
       profile-name
       (poo-flow-user-loop-engine-intent-primary-sandbox-profile intent)
@@ -197,8 +197,8 @@
            'sandbox-profile-ref
            (poo-flow-user-loop-engine-intent-primary-sandbox-profile
             intent))))
-    (poo-flow-agent-harness->alist
-     (make-poo-flow-agent-harness
+    (yuanxu-agent-harness->alist
+     (make-yuanxu-agent-harness
       harness-id
       profile-name
       sandbox-profile-ref

@@ -8,7 +8,7 @@
 ;;; this module only exposes the packages root for identity-driven discovery.
 
 (import (only-in :poo-flow/modules/module-authoring/source-policy PooFlowModuleStylePolicy)
-        :core/module-system/source/collection
+        :yuanxu/module-system/source/collection
         :poo-flow/modules/module-authoring/module-source-collection)
 
 (export poo-flow-official-contribution-sources
@@ -16,12 +16,12 @@
 
 (def poo-flow-official-contribution-sources
   (list
-   (make-poo-flow-contribution-root-module-source
+   (make-yuanxu-contribution-root-module-source
     'poo-flow-official-contributions "packages"
     style-policy: PooFlowModuleStylePolicy)))
 
 (def poo-flow-official-contribution-load-path
-  (extend-poo-flow-module-load-path
+  (extend-yuanxu-module-load-path
    poo-flow-default-module-load-path
    'poo-flow-with-official-contributions
    poo-flow-official-contribution-sources))

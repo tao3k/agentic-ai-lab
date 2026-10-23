@@ -5,7 +5,7 @@
 
 ;;; Contract: session policy and tool grants expose native POO Contracts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
 ;; : (-> PooFlowSessionPolicyExpr PooFlowSessionPolicyValue)
@@ -27,7 +27,7 @@
 
 (def session-policy-native-type-contract-test
   (test-suite "session-policy-native-type-contract-test"
-    (poo-flow-test-case "validates the native contract"
+    (yuanxu-test-case "validates the native contract"
       (eval '(import "./modules/session/policy.ss"))
       (eval '(import :clan/poo/mop :clan/poo/object))
       (eval

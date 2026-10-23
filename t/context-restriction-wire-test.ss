@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test (only-in :poo-flow-dev/testing-api poo-flow-test-case)
+(import :std/test (only-in :poo-flow/testing-api yuanxu-test-case)
         :poo-flow/modules/workflow/runtime/scheme-wire :poo-flow/modules/workflow/runtime/context-restriction)
 (export context-restriction-wire-test)
 (def (wire x) (scheme-wire-read (scheme-wire-write x)))
@@ -13,7 +13,7 @@
         (restriction '("bob") '("store") "source-b" 2 8)))
 (def context-restriction-wire-test
   (test-suite "Context Library wire projection"
-    (poo-flow-test-case "composition and flow remain material-bound declarations"
+    (yuanxu-test-case "composition and flow remain material-bound declarations"
       (let* ((composed (context-restriction-compose-call (wire
                          (hash (schema "poo-flow.context-restriction-compose-request.v1") (restrictions (restrictions))))))
              (query (wire (hash (schema "poo-flow.context-flow-request.v1") (restrictions (restrictions))

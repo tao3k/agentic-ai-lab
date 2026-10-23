@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
         :poo-flow/modules/temporal-causality/interface)
@@ -25,7 +25,7 @@
 
 (def temporal-truth-maintenance-test
   (test-suite "temporal reverse dependency planning"
-    (poo-flow-test-case "changed evidence reaches downstream conclusions only"
+    (yuanxu-test-case "changed evidence reaches downstream conclusions only"
       (let* ((index (poo-flow-temporal-dependency-index
                      "index-1" "cut-1" "projection-1" #t
                      (list (derived "dose" '("prescription") '())
@@ -52,7 +52,7 @@
         (check (.ref plan 'trigger) => 'premise-delta)
         (check (.ref plan 'runtime-executed?) => #f)))
 
-    (poo-flow-test-case "cycles terminate and partial inventory does not certify absence"
+    (yuanxu-test-case "cycles terminate and partial inventory does not certify absence"
       (let* ((index (poo-flow-temporal-dependency-index
                      "partial" "cut-1" "projection-1" #f
                      (list (derived "a" '("event") '("b"))
@@ -65,7 +65,7 @@
         (check (.ref miss 'affected-conclusion-identities) => '())
         (check (.ref miss 'status) => 'partial)))
 
-    (poo-flow-test-case "journal cuts supply changed subjects to the index"
+    (yuanxu-test-case "journal cuts supply changed subjects to the index"
       (let* ((first (poo-flow-temporal-evidence-revision
                      "r1" "subject" 'assert #f (instant "admit-1" 10)
                      (validity) "old"))
@@ -111,7 +111,7 @@
          (poo-flow-temporal-reverse-dependency-plan-from-cuts
           index journal before after #f) true)))
 
-    (poo-flow-test-case "valid-time change reprojects every indexed derivation"
+    (yuanxu-test-case "valid-time change reprojects every indexed derivation"
       (let* ((journal (poo-flow-temporal-evidence-journal
                        "journal" "txn"
                        (list (poo-flow-temporal-evidence-revision
@@ -156,7 +156,7 @@
          (poo-flow-temporal-reverse-dependency-plan-from-projections
           index journal prior revised valid-4) true)))
 
-    (poo-flow-test-case "cut and premise inventories are validated"
+    (yuanxu-test-case "cut and premise inventories are validated"
       (check-exception
        (poo-flow-temporal-dependency-index
         "bad-cut" "cut-1" "projection-1" #t

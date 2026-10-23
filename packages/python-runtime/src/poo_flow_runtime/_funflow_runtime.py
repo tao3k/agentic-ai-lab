@@ -134,9 +134,9 @@ def _validate_dag(steps: Mapping[str, FunFlowStep]) -> None:
 
 def _coerce_projection(dag: FunFlowDag | FunFlowPlanProjection) -> FunFlowDag:
     if isinstance(dag, FunFlowPlanProjection):
-        if dag.runtime_contract != "poo-flow.anyio.v1":
+        if dag.runtime_contract != "yuanxu.anyio.v1":
             raise FunFlowRuntimeError(
-                "FunFlow projection requires runtime contract 'poo-flow.anyio.v1'"
+                "FunFlow projection requires runtime contract 'yuanxu.anyio.v1'"
             )
         return dag.dag
     return dag

@@ -6,12 +6,12 @@
 ;;; Boundary: focused tests for loop-engine to Funflow workflow agreement.
 ;;; Invariant: workflow agreement is report-only and never executes a pipeline.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface
         (only-in "../user-interface/custom/my-module/cases/funflow-cicd"
                  poo-flow-custom-my-module-funflow-cicd-case)
@@ -38,15 +38,15 @@
 ;; : (-> [[PooUserModuleSelection]] POOObject)
 (def (custom-workflow-presentation module-bundles)
   (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules module-bundles)
-    (poo-flow-settings))))
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules module-bundles)
+    (yuanxu-settings))))
 
 ;;; A loop-engine use-case that references `funflow-cicd` without selecting the
 ;;; Funflow pipeline should be visibly unbacked by Funflow config.
 ;; : TestCase
 (def (custom-loop-workflow-missing-funflow-case)
-  (poo-flow-test-case "reports missing Funflow workflow pipeline agreement"
+  (yuanxu-test-case "reports missing Funflow workflow pipeline agreement"
     (let* ((presentation
             (custom-workflow-presentation
              (list poo-flow-custom-my-module-loop-engine-case)))
@@ -89,7 +89,7 @@
 ;;; concrete pipeline/check-map owner without executing that pipeline.
 ;; : TestCase
 (def (custom-loop-workflow-funflow-backed-case)
-  (poo-flow-test-case "backs loop-engine workflow ref with Funflow pipeline config"
+  (yuanxu-test-case "backs loop-engine workflow ref with Funflow pipeline config"
     (let* ((presentation
             (custom-workflow-presentation
              (list poo-flow-custom-my-module-funflow-cicd-case
@@ -120,7 +120,7 @@
                     '(default))
       (check-equal? (test-ref workflow-agreement 'functional-dag-count) 1)
       (check-equal? (test-ref functional-dag 'kind)
-                    'poo-flow.funflow.functional-dag.prototype)
+                    'yuanxu.funflow.functional-dag.prototype)
       (check-equal? (test-ref functional-dag 'composition-style)
                     'arrow-kleisli)
       (check-equal? (test-ref functional-dag 'composition-step-count) 5)

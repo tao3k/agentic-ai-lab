@@ -7,14 +7,14 @@
 ;;; Invariant: profile objects are semantic POO values; rows are projections.
 
 (import (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :core/module-system/schema/slot-contracts
-                 poo-flow-contract-slot
-                 poo-flow-contract-value-type
-                 poo-flow-native-contract
-                 poo-flow-native-contract->alist)
-        (only-in :core/types
-                 poo-flow-contract-admit
-                 poo-flow-validation-evidence-accepted?))
+        (only-in :yuanxu/module-system/schema/slot-contracts
+                 yuanxu-contract-slot
+                 yuanxu-contract-value-type
+                 yuanxu-native-contract
+                 yuanxu-native-contract->alist)
+        (only-in :yuanxu/types
+                 yuanxu-contract-admit
+                 yuanxu-validation-evidence-accepted?))
 
 (export poo-flow-sandbox-profile-kind
         PooFlowSandboxProfileContract
@@ -46,21 +46,21 @@
   (.ref candidate slot))
 
 (def PooFlowSandboxProfileKindType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'PooSandboxProfileKind
    poo-flow-sandbox-profile-kind-value?
    'String
    'sandbox-profile-kind))
 
 (def PooFlowSandboxProfileSymbolType
-  (poo-flow-contract-value-type 'Symbol symbol? 'Symbol))
+  (yuanxu-contract-value-type 'Symbol symbol? 'Symbol))
 
 (def PooFlowSandboxProfileListType
-  (poo-flow-contract-value-type 'List list? 'List))
+  (yuanxu-contract-value-type 'List list? 'List))
 
 ;; : (-> Symbol Symbol PooContractValueType Alist PooContractSlot)
 (def (poo-flow-sandbox-profile-slot key slot value-type metadata)
-  (poo-flow-contract-slot key slot value-type #t metadata))
+  (yuanxu-contract-slot key slot value-type #t metadata))
 
 (def +poo-flow-sandbox-profile-slots+
   (list
@@ -90,7 +90,7 @@
     '((scope . agent-sandbox) (projection . metadata)))))
 
 (def PooFlowSandboxProfileContract
-  (poo-flow-native-contract
+  (yuanxu-native-contract
    'PooSandboxProfileContract
    'agent-sandbox
    'PooSandboxProfile
@@ -104,23 +104,23 @@
 
 ;; : (-> PooSandboxProfile PooValidationEvidence)
 (def (poo-flow-sandbox-profile-contract-admission profile)
-  (poo-flow-contract-admit
+  (yuanxu-contract-admit
    PooFlowSandboxProfileContract
    profile
    'sandbox-profile-recipe))
 
 ;; : (-> PooSandboxProfile Boolean)
 (def (poo-flow-sandbox-profile-contract-admitted? profile)
-  (poo-flow-validation-evidence-accepted?
+  (yuanxu-validation-evidence-accepted?
    (poo-flow-sandbox-profile-contract-admission profile)))
 
 ;; : (-> Alist)
 (def (poo-flow-sandbox-profile-type-contract->alist)
-  (poo-flow-native-contract->alist PooFlowSandboxProfileContract))
+  (yuanxu-native-contract->alist PooFlowSandboxProfileContract))
 
 ;; : (-> PooSandboxProfile PooSandboxProfile)
 (def (poo-flow-require-sandbox-profile-contract! profile)
   (let (evidence (poo-flow-sandbox-profile-contract-admission profile))
-    (if (poo-flow-validation-evidence-accepted? evidence)
+    (if (yuanxu-validation-evidence-accepted? evidence)
       profile
       (error "sandbox profile failed native contract admission" evidence))))

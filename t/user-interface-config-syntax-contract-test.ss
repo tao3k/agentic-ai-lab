@@ -6,15 +6,15 @@
 ;;; Boundary: module-selection syntax and declaration-contract admission.
 ;;; Invariant: contract qualification does not load profiles or root config.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection
-                 poo-flow-user-module-selection-flags
-                 poo-flow-user-module-selection-key
-                 poo-flow-user-module-selection->alist
-                 poo-flow-user-module-when)
-        (only-in :core/module-system/selection/contract poo-flow-use-module-contract-validation-valid?)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection
+                 yuanxu-user-module-selection-flags
+                 yuanxu-user-module-selection-key
+                 yuanxu-user-module-selection->alist
+                 yuanxu-user-module-when)
+        (only-in :yuanxu/module-system/selection/contract yuanxu-use-module-contract-validation-valid?)
         (only-in :poo-flow/modules/workflow/scenario/configuration/selection-policy poo-flow-product-use-module poo-flow-product-selection-admit! poo-flow-product-selection-validation))
 
 (export user-interface-config-syntax-contract-test)
@@ -25,23 +25,23 @@
 
 (def user-interface-config-syntax-contract-test
   (test-suite "poo-flow user interface config syntax contract"
-    (poo-flow-test-case "builds module selections and conditional gates"
+    (yuanxu-test-case "builds module selections and conditional gates"
       (let ((nono-selections
              (poo-flow-product-use-module
               'nono-sandbox
               '(+nono +doctor)))
             (flow-selection
-             (poo-flow-user-module-selection 'flow 'funflow '(+dag))))
-        (check-equal? (poo-flow-user-module-selection-key
+             (yuanxu-user-module-selection 'flow 'funflow '(+dag))))
+        (check-equal? (yuanxu-user-module-selection-key
                        (car nono-selections))
                       '(sandbox . nono-sandbox))
-        (check-equal? (poo-flow-user-module-selection-flags
+        (check-equal? (yuanxu-user-module-selection-flags
                        (car nono-selections))
                       '(+nono +doctor))
-        (check-equal? (poo-flow-user-module-when #f
+        (check-equal? (yuanxu-user-module-when #f
                        (sandbox cubeSandbox +doctor))
                       '())
-        (check-equal? (poo-flow-user-module-selection->alist flow-selection)
+        (check-equal? (yuanxu-user-module-selection->alist flow-selection)
                       '((group . flow)
                         (module . funflow)
                         (key flow . funflow)
@@ -49,7 +49,7 @@
                         (entrypoint . #f)
                         (flags +dag)
                         (enabled? . #t)))))
-    (poo-flow-test-case "validates use-module declarations before projection"
+    (yuanxu-test-case "validates use-module declarations before projection"
       (let* ((valid-selections
               (poo-flow-product-use-module
                'nono-sandbox
@@ -59,7 +59,7 @@
                'nono-sandbox
                valid-selections))
              (invalid-selection
-              (poo-flow-user-module-selection 'custom 'workflow '())))
+              (yuanxu-user-module-selection 'custom 'workflow '())))
         (check-equal? (syntax-contract-alist-ref valid-validation 'valid) #t)
         (check-equal? (syntax-contract-alist-ref valid-validation 'module)
                       'nono-sandbox)
@@ -71,7 +71,7 @@
                        valid-selections)
                       valid-selections)
         (check-equal?
-         (poo-flow-use-module-contract-validation-valid?
+         (yuanxu-use-module-contract-validation-valid?
           (poo-flow-product-selection-validation
            'workflow
            (list invalid-selection)))

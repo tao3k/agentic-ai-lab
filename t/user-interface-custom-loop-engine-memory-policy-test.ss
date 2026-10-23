@@ -6,11 +6,11 @@
 ;;; Boundary: tests verify loop-engine memory-policy declaration contracts.
 ;;; Invariant: malformed memory policy rows fail before runtime projection.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface
         :poo-flow/modules/workflow/scenario/configuration/init-syntax)
 
@@ -21,9 +21,9 @@
 ;; : (-> PooUserModuleSelection POOObject)
 (def (custom-loop-memory-policy-presentation module-bundle)
   (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules (list module-bundle))
-    (poo-flow-settings))))
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules (list module-bundle))
+    (yuanxu-settings))))
 
 ;;; Duplicate memory policies for one loop case would make Marlin guess which
 ;;; state spine to bind. The POO lowering rejects that shape before receipt
@@ -70,7 +70,7 @@
 ;;; contract before receipts are emitted for Marlin.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-duplicate-memory-policy-case)
-  (poo-flow-test-case "rejects duplicate loop-engine memory-policies"
+  (yuanxu-test-case "rejects duplicate loop-engine memory-policies"
     (check-equal?
      (with-catch
       (lambda (_) #t)
@@ -84,7 +84,7 @@
 ;;; use-case names do not become inert but misleading runtime handoff data.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-unmatched-memory-policy-case)
-  (poo-flow-test-case "rejects loop-engine memory-policy for undeclared use-case"
+  (yuanxu-test-case "rejects loop-engine memory-policy for undeclared use-case"
     (check-equal?
      (with-catch
       (lambda (_) #t)

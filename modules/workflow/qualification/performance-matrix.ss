@@ -10,8 +10,8 @@
 
 (import :gerbil/core
         (only-in :clan/poo/object object<-alist object?)
-        (only-in :core/utilities/functional
-                 poo-flow-set-subset?))
+        (only-in :yuanxu/utilities/functional
+                 yuanxu-set-subset?))
 
 (def +runtime-batches+ '(1 8 32 128 1024))
 (def +runtime-payloads+ '(0 1024 65536 1048576))
@@ -106,7 +106,7 @@
             (cons (list (cons 'code code) (cons 'observed observed-value))
                   diagnostics)))
     (unless (and (= (length runtime-blocks-value) 140)
-                 (poo-flow-set-subset? expected observed))
+                 (yuanxu-set-subset? expected observed))
       (reject! 'incomplete-runtime-cartesian-matrix
                (length runtime-blocks-value)))
     (unless (and (line-present? runtime-lines

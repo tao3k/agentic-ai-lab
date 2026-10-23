@@ -21,7 +21,7 @@ def dependency_modules(root, output):
         str(root/'t/model-study/direct-understanding/source-closure.ss')],
         output/'source-closure.native.log')
     modules = json.loads(next(line for line in text.splitlines() if line.startswith('[')))
-    project = [name for name in modules if name.startswith('gerbil-ascent/') or name == 'core/types']
+    project = [name for name in modules if name.startswith('gerbil-ascent/') or name == 'yuanxu/types']
     if not all('gerbil-ascent/'+name.removesuffix('.ss') in project for name in DIRECT_MODULES):
         raise ValueError('compiler source closure omits task entry modules')
     return project, [name for name in modules if name not in project]
@@ -70,7 +70,7 @@ def prepare(root, ascent, output):
         'computeLoaderSha256': digest((root/'t/model-study/direct-understanding/compute-loader.ss').read_bytes()),
         'closureProbeSha256': digest((root/'t/model-study/direct-understanding/source-closure.ss').read_bytes()),
         'inputContract': 'actual module source and Scheme check-equal? task with missing expected datum; no semantic instructions',
-        'sourceClosure': 'compiler-derived ASCENT runtime project closure plus core/types; language and POO framework modules explicitly listed as assumed dependencies, not supplied source',
+        'sourceClosure': 'compiler-derived ASCENT runtime project closure plus yuanxu/types; language and POO framework modules explicitly listed as assumed dependencies, not supplied source',
         'outputContract': 'bounded explicit literal or quoted check-equal? prediction; differing explicit data reject; bare fences fallback only; never evaluated',
         'transportContract': 'raw preserved; unique inert data normalized without oracle; EOF, placeholder and ambiguity reject',
         'cases': [], 'order': []}

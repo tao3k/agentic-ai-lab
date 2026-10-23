@@ -12,12 +12,12 @@
                  list->hash-table)
         (only-in "./performance.ss"
                  poo-flow-performance-build-list)
-        (only-in :core/modules/json-schema/json-schema-ir
-                 poo-flow-json-schema-normalization-schema)
-        (only-in :core/modules/json-schema/json-schema-receipt
-                 poo-flow-json-schema-contract-artifact-normalization)
-        (only-in :core/modules/json-schema/json-schema-valid
-                 poo-flow-json-schema-node-valid?)
+        (only-in :yuanxu/modules/json-schema/json-schema-ir
+                 yuanxu-json-schema-normalization-schema)
+        (only-in :yuanxu/modules/json-schema/json-schema-receipt
+                 yuanxu-json-schema-contract-artifact-normalization)
+        (only-in :yuanxu/modules/json-schema/json-schema-valid
+                 yuanxu-json-schema-node-valid?)
         (only-in :poo-flow/modules/workflow/profiles/github-ci-contract
                  poo-flow-funflow-github-ci-contract-artifact
                  poo-flow-funflow-github-ci-validate-workflow->alist))
@@ -139,12 +139,12 @@
 ;; : (-> Object Integer Integer)
 (def (json-schema-contract-performance-fast-validate-rounds workflow rounds)
   (let (root-node
-        (poo-flow-json-schema-normalization-schema
-         (poo-flow-json-schema-contract-artifact-normalization
+        (yuanxu-json-schema-normalization-schema
+         (yuanxu-json-schema-contract-artifact-normalization
           poo-flow-funflow-github-ci-contract-artifact)))
     (json-schema-contract-performance-repeat
      rounds
      (lambda ()
-       (if (poo-flow-json-schema-node-valid? root-node workflow)
+       (if (yuanxu-json-schema-node-valid? root-node workflow)
          1
          0)))))

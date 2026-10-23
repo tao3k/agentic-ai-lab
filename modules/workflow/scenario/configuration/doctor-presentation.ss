@@ -10,22 +10,22 @@
 
 (import (only-in :clan/poo/object .o .ref)
         :poo-flow/modules/module-authoring/module-interface
-        :core/module-system/source/imports
-        :core/module-system/source/objects
+        :yuanxu/module-system/source/imports
+        :yuanxu/module-system/source/objects
         :poo-flow/modules/module-authoring/module-descriptor
         "module-diagnostics.ss"
-        :core/utilities/final-projection-syntax
-        (only-in :core/module-system/projection/option-objects
-                 poo-flow-module-option-validation-receipt-id
-                 poo-flow-module-option-validation-receipt-source-module
-                 poo-flow-module-option-validation-receipt-valid?
-                 poo-flow-module-option-validation-receipt-code
-                 poo-flow-module-option-validation-receipt-messages
-                 poo-flow-module-option-validation-receipt-metadata)
+        :yuanxu/utilities/final-projection-syntax
+        (only-in :yuanxu/module-system/projection/option-objects
+                 yuanxu-module-option-validation-receipt-id
+                 yuanxu-module-option-validation-receipt-source-module
+                 yuanxu-module-option-validation-receipt-valid?
+                 yuanxu-module-option-validation-receipt-code
+                 yuanxu-module-option-validation-receipt-messages
+                 yuanxu-module-option-validation-receipt-metadata)
         (only-in :poo-flow/modules/workflow/scenario/configuration/module-runtime-presentation
                  poo-flow-module-evaluate
                  poo-flow-module-value-catalog-root)
-        :core/module-system/loader/objects)
+        :yuanxu/module-system/loader/objects)
 
 (export poo-flow-module-doctor-presentation-kind
         poo-flow-module-source-doctor-presentation-kind
@@ -49,15 +49,15 @@
 (defpoo-final-projection
   poo-flow-module-validation-receipt->alist (receipt)
   (bindings ())
-  (fields ((id (poo-flow-module-option-validation-receipt-id receipt))
+  (fields ((id (yuanxu-module-option-validation-receipt-id receipt))
            (source-module
-            (poo-flow-module-option-validation-receipt-source-module receipt))
-           (valid? (poo-flow-module-option-validation-receipt-valid? receipt))
-           (code (poo-flow-module-option-validation-receipt-code receipt))
+            (yuanxu-module-option-validation-receipt-source-module receipt))
+           (valid? (yuanxu-module-option-validation-receipt-valid? receipt))
+           (code (yuanxu-module-option-validation-receipt-code receipt))
            (messages
-            (poo-flow-module-option-validation-receipt-messages receipt))
+            (yuanxu-module-option-validation-receipt-messages receipt))
            (metadata
-            (poo-flow-module-option-validation-receipt-metadata receipt)))))
+            (yuanxu-module-option-validation-receipt-metadata receipt)))))
 
 ;;; Boundary: import profiles are summarized without resolving source refs.
 ;; : (-> ModuleImportProfile Value)
@@ -69,12 +69,12 @@
 ;;; Boundary: import summaries expose source metadata and profile identity only.
 ;; : (-> ModuleImportValue Alist)
 (def (poo-flow-module-import-summary import-value)
-  (if (poo-flow-import? import-value)
+  (if (yuanxu-import? import-value)
     (let ((source-ref (.ref import-value 'source-ref))
           (profile (.ref import-value 'profile)))
       (list (cons 'source
                   (if source-ref
-                    (poo-flow-module-source-ref->alist source-ref)
+                    (yuanxu-module-source-ref->alist source-ref)
                     #f))
             (cons 'profile
                   (poo-flow-module-import-profile-summary profile))))
@@ -87,7 +87,7 @@
 (def (poo-flow-module-import-graph-entry module)
   (cons (poo-flow-module-name module)
         (map poo-flow-module-import-summary
-             (poo-flow-module-imports module))))
+             (yuanxu-module-imports module))))
 
 ;;; Boundary: full import graph keeps named imports unresolved for doctor visibility.
 ;; : (-> [PooModuleDescriptor] Alist)
@@ -98,7 +98,7 @@
 ;; : (-> PooModuleDescriptor Alist)
 (def (poo-flow-module-contribution-summary module)
   (list (cons 'module (poo-flow-module-name module))
-        (cons 'import-count (length (poo-flow-module-imports module)))
+        (cons 'import-count (length (yuanxu-module-imports module)))
         (cons 'task-count (length (poo-flow-module-task-descriptors module)))
         (cons 'flow-count (length (poo-flow-module-flow-descriptors module)))
         (cons 'option-count (length (poo-flow-module-options module)))
@@ -116,7 +116,7 @@
 (def (poo-flow-module-load-receipts-all-loaded? receipts)
   (cond
    ((null? receipts) #t)
-   ((poo-flow-module-load-receipt-loaded? (car receipts))
+   ((yuanxu-module-load-receipt-loaded? (car receipts))
     (poo-flow-module-load-receipts-all-loaded? (cdr receipts)))
    (else #f)))
 
@@ -125,7 +125,7 @@
 (def (poo-flow-module-load-receipts-missing-count receipts)
   (cond
    ((null? receipts) 0)
-   ((poo-flow-module-load-receipt-loaded? (car receipts))
+   ((yuanxu-module-load-receipt-loaded? (car receipts))
     (poo-flow-module-load-receipts-missing-count (cdr receipts)))
    (else
     (+ 1 (poo-flow-module-load-receipts-missing-count (cdr receipts))))))
@@ -149,11 +149,11 @@
     (.o kind: poo-flow-module-doctor-presentation-kind
         root-module-id: (poo-flow-module-name root-module)
         module-ids: (poo-flow-module-names closed-modules)
-        doctor-status: (poo-flow-module-doctor-report-status doctor-report)
-        doctor-ok: (poo-flow-module-doctor-ok? doctor-report)
+        doctor-status: (yuanxu-module-doctor-report-status doctor-report)
+        doctor-ok: (yuanxu-module-doctor-ok? doctor-report)
         diagnostics:
         (map poo-flow-module-diagnostic->alist
-             (poo-flow-module-doctor-report-diagnostics doctor-report))
+             (yuanxu-module-doctor-report-diagnostics doctor-report))
         import-graph: (poo-flow-module-import-graph closed-modules)
         contributions: (poo-flow-module-contribution-summaries closed-modules)
         validation-receipt-count: (length validation-receipts)
@@ -188,8 +188,8 @@
 (def (poo-flow-module-loaded-modules-from-receipts receipts)
   (cond
    ((null? receipts) '())
-   ((poo-flow-module-load-receipt-loaded? (car receipts))
-    (cons (poo-flow-module-load-receipt-module (car receipts))
+   ((yuanxu-module-load-receipt-loaded? (car receipts))
+    (cons (yuanxu-module-load-receipt-module (car receipts))
           (poo-flow-module-loaded-modules-from-receipts (cdr receipts))))
    (else
     (poo-flow-module-loaded-modules-from-receipts (cdr receipts)))))
@@ -198,7 +198,7 @@
 ;; : (-> [PooModuleLoaderBackend] [PooModuleSourceRef] POOObject)
 (def (pooFlowModuleSourceDoctorPresentation backends source-refs)
   (let* ((load-receipts-value
-         (poo-flow-module-load-source-receipts backends source-refs))
+         (yuanxu-module-load-source-receipts backends source-refs))
          (loaded-modules
           (poo-flow-module-loaded-modules-from-receipts load-receipts-value))
          (root-module
@@ -213,7 +213,7 @@
         missing-count: missing-count-value
         load-status: load-status-value
         load-receipts:
-        (map poo-flow-module-load-receipt->alist load-receipts-value)
+        (map yuanxu-module-load-receipt->alist load-receipts-value)
         module-doctor:
         (if root-module
           (poo-flow-module-root-doctor-presentation root-module)

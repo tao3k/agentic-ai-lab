@@ -6,7 +6,7 @@
 ;;; Boundary: session graph performance gates cover indexed lineage traversal.
 ;;; Invariant: graph presentation stays report-only and never executes runtime work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -79,7 +79,7 @@
 ;; : TestSuite
 (def session-graph-performance-test
   (test-suite "session graph performance"
-    (poo-flow-test-case "keeps large lineage presentation inside benchmark contract"
+    (yuanxu-test-case "keeps large lineage presentation inside benchmark contract"
       (let* ((session-count 1200)
              (sessions (session-graph-performance-sessions session-count))
              (summary

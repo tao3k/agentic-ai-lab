@@ -8,7 +8,7 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :core/graph/types-core poo-flow-graph-id?))
+        (only-in :yuanxu/graph/types-core yuanxu-graph-id?))
 
 (export poo-flow-relation-trajectory-witness-kind
         poo-flow-structural-impact-receipt-kind
@@ -94,10 +94,10 @@
   (and (temporal-causality-has-slots?
         value '(kind target-node-id node-path relation-path))
        (eq? (.ref value 'kind) poo-flow-relation-trajectory-witness-kind)
-       (poo-flow-graph-id? (.ref value 'target-node-id))
+       (yuanxu-graph-id? (.ref value 'target-node-id))
        (list? (.ref value 'node-path))
        (pair? (.ref value 'node-path))
-       (every poo-flow-graph-id? (.ref value 'node-path))
+       (every yuanxu-graph-id? (.ref value 'node-path))
        (equal? (.ref value 'target-node-id)
                (car (reverse (.ref value 'node-path))))
        (list? (.ref value 'relation-path))
@@ -122,16 +122,16 @@
        (memq (.ref value 'status)
              '(snapshot-scoped-impact partial-impact invalid-inventory))
        (eq? (.ref value 'scope) 'structural-snapshot)
-       (poo-flow-graph-id? (.ref value 'graph-id))
+       (yuanxu-graph-id? (.ref value 'graph-id))
        (list? (.ref value 'changed-node-ids))
        (pair? (.ref value 'changed-node-ids))
-       (every poo-flow-graph-id? (.ref value 'changed-node-ids))
+       (every yuanxu-graph-id? (.ref value 'changed-node-ids))
        (memq (.ref value 'direction) '(dependents dependencies))
        (list? (.ref value 'selected-relations))
        (pair? (.ref value 'selected-relations))
        (every symbol? (.ref value 'selected-relations))
        (list? (.ref value 'affected-node-ids))
-       (every poo-flow-graph-id? (.ref value 'affected-node-ids))
+       (every yuanxu-graph-id? (.ref value 'affected-node-ids))
        (list? (.ref value 'relation-trajectories))
        (every poo-flow-relation-trajectory-witness?
               (.ref value 'relation-trajectories))

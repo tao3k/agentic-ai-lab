@@ -129,7 +129,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: native-gerbil-pkg-portable-v2-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'dev/gerbil.pkg') }}
+          key: native-gerbil-pkg-portable-v2-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg') }}
 
       - name: Initialize Core submodule
         run: git submodule update --init core
@@ -140,15 +140,14 @@ jobs:
           gerbil pkg dir --add git.cons.io/mighty-gerbils/gerbil-directory
           python3 packages/automation/gerbil_dependency_pin.py prepare-native --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
           if [ "${{ steps.native-gerbil-pkg-cache.outputs.cache-hit }}" = "true" ]; then
-            if ! gerbil env gerbil interactive -e '(begin (import :clan/poo/object :core/module-system/source/module-prelude) (displayln "native-dependency-cache-ready"))' >/tmp/native-gerbil-dependency-cache-check.log 2>&1; then
+            if ! gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "native-dependency-cache-ready"))' >/tmp/native-gerbil-dependency-cache-check.log 2>&1; then
               echo "::notice::Exact native dependency cache is incomplete; refreshing declared revisions"
               gerbil deps --update
             fi
           else
             gerbil deps --install
           fi
-          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" gerbil deps --install)
-          gerbil env gerbil interactive -e '(begin (import :asp-gerbil-scheme/building-api :asp-gerbil-scheme/benchmark-api :asp-gerbil-scheme/testing-api) (displayln "native-development-dependencies-ready"))'
+          gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "native-dependencies-ready"))'
           # The Core submodule owns this checkout's shared POO modules.
           (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil clean)
           (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil build)
@@ -163,13 +162,17 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: native-gerbil-pkg-portable-v2-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'dev/gerbil.pkg') }}
+          key: native-gerbil-pkg-portable-v2-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg') }}
 
       - name: Build native Gerbil package
         run: GERBIL_BUILD_VERBOSE=1 gerbil build
 
-      - name: Qualify and build development testing modules
-        run: gerbil env just prepare-dev
+      - name: Install optional development policy dependencies
+        run: |
+          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil deps --install)
+          export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
+          echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
+          gerbil env gerbil interactive -e '(begin (import :asp-gerbil-scheme/benchmark-api :asp-gerbil-scheme/testing-api) (displayln "development-dependencies-ready"))'
 
       - name: Compile AI Agentic-context module test
         run: gerbil env gxc -O t/ai-agentic-context-core-test.ss
@@ -312,8 +315,6 @@ jobs:
     steps:
       - name: Checkout poo-flow
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - name: Initialize the pinned Core proof runner
-        run: git submodule update --init core
       - name: Install Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:

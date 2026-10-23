@@ -18,7 +18,7 @@
                  spec-evolution-review-item->alist
                  spec-evolution-review-item->human-audit-review-item
                  spec-evolution-review-item->runtime-manifest-row)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         "prototypes.ss"
         "contract.ss"
         "kind-contract.ss"
@@ -45,7 +45,7 @@
 ;;; lowering can treat shorthand flags and repeated entries uniformly.
 ;; : (-> PooUserModuleSelection Symbol [Value])
 (def (poo-flow-user-loop-engine-section selection section)
-  (let (entry (poo-flow-user-module-selection-flag-entry selection section))
+  (let (entry (yuanxu-user-module-selection-flag-entry selection section))
     (cond
      ((and entry (pair? entry)) (cdr entry))
      (entry (list entry))
@@ -334,7 +334,7 @@
 ;; : (-> PooUserModuleSelection MaybeAlist)
 (def (poo-flow-user-loop-engine-selection-poo-intent selection)
   (let (entry
-        (poo-flow-user-module-selection-flag-entry
+        (yuanxu-user-module-selection-flag-entry
          selection
          ':loop-engine-intent))
     (and entry (pair? entry) (cdr entry))))

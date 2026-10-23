@@ -46,7 +46,7 @@ OWNER_MAP_ROWS = [
         "row_id": "rfc45-04-observability-snapshot",
         "rfc": "45-04",
         "source_path": "core/module-system/observability/presentation.ss",
-        "source_symbol": "poo-flow-module-presentation-trace",
+        "source_symbol": "yuanxu-module-presentation-trace",
         "source_kind": "function",
         "test_path": "t/module-system-observability-test.ss",
         "test_symbol": "module-system-observability-test",

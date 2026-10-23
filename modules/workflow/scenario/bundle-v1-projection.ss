@@ -10,12 +10,12 @@
 
 (import (only-in :std/format format)
         (only-in :clan/poo/object .ref .slot?)
-        :core/modules/funflow/control-plane/graph
+        :yuanxu/modules/funflow/control-plane/graph
         (only-in :poo-flow/modules/workflow/scenario/plan-projection
                  poo-flow-scenario-case->execution-plan)
-        :core/feature-system/bundle-v1-lowering
-        :core/feature-system/bundle-v1-foreign-arena
-        :core/feature-system/bundle-v1-writer)
+        :yuanxu/feature-system/bundle-v1-lowering
+        :yuanxu/feature-system/bundle-v1-foreign-arena
+        :yuanxu/feature-system/bundle-v1-writer)
 
 ;; : (-> PooPlanNode String)
 (def (plan-node-semantic-id node)
@@ -179,9 +179,9 @@
           (required-environment-value "POO_FLOW_BUNDLE_V1_EPOCH"))
          (bundle-epoch (string->number bundle-epoch-text))
          (descriptor-path
-          (required-environment-value "POO_FLOW_BUNDLE_V1_DESCRIPTOR_OUT"))
+          (required-environment-value "YUANXU_BUNDLE_V1_DESCRIPTOR_OUT"))
          (arena-path
-          (required-environment-value "POO_FLOW_BUNDLE_V1_ARENA_OUT")))
+          (required-environment-value "YUANXU_BUNDLE_V1_ARENA_OUT")))
     (unless (and bundle-epoch
                  (integer? bundle-epoch)
                  (>= bundle-epoch 0))

@@ -3,7 +3,7 @@
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 import Cedar.Thm.Authorization
-import PooFlowCoreProof.ProfileComposition.BundleIdentity
+import YuanxuProof.ProfileComposition.BundleIdentity
 
 namespace PooFlowProof.PooC4.CedarDualEngineArbitration
 

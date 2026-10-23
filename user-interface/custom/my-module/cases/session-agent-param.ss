@@ -9,8 +9,8 @@
 
 (import :poo-flow/modules/session/syntax
         :poo-flow/modules/ai-agentic-context/features/memory/config
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection-flag-entry))
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flag-entry))
 
 (export poo-flow-custom-my-module-session-agent-param-case)
 
@@ -183,7 +183,7 @@
                              (case . session-agent-param))))))
            (memory-catalog
             (cdr
-             (poo-flow-user-module-selection-flag-entry
+             (yuanxu-user-module-selection-flag-entry
               memory-selection
               ':memory-catalog)))
            (memory-intent

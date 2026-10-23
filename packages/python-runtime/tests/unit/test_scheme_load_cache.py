@@ -33,7 +33,7 @@ def _fake_scheme_run(calls: list[tuple[str, ...]]):
         return subprocess.CompletedProcess(
             args,
             0,
-            stdout='((schema "poo-flow.funflow-plan-projection.v1"))\n',
+            stdout='((schema "yuanxu.funflow-plan-projection.v1"))\n',
             stderr="",
         )
 
@@ -145,7 +145,7 @@ def test_scheme_projection_uses_existing_aot_runner(tmp_path, monkeypatch) -> No
         return subprocess.CompletedProcess(
             args,
             0,
-            stdout='((schema "poo-flow.funflow-plan-projection.v1"))\n',
+            stdout='((schema "yuanxu.funflow-plan-projection.v1"))\n',
             stderr="",
         )
 
@@ -153,7 +153,7 @@ def test_scheme_projection_uses_existing_aot_runner(tmp_path, monkeypatch) -> No
 
     rows = scheme_load.load_projection_rows(source, cwd=tmp_path)
 
-    assert rows == (("schema", "poo-flow.funflow-plan-projection.v1"),)
+    assert rows == (("schema", "yuanxu.funflow-plan-projection.v1"),)
     assert aot_calls == [(str(artifact.binary),)]
 
 

@@ -6,7 +6,7 @@
 ;;; Boundary: bridge tests cover request envelopes and runtime command handoff.
 ;;; Invariant: profile descriptor defaults are tested in the profile owner.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :core/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/control-plane/api
         :poo-flow/modules/agent-sandbox/api)
 
 (export agent-sandbox-bridge-test)
@@ -41,7 +41,7 @@
 ;; : TestSuite
 (def agent-sandbox-bridge-test
   (test-suite "agent sandbox bridge request"
-    (poo-flow-test-case "treats non-alist optional metadata as absent"
+    (yuanxu-test-case "treats non-alist optional metadata as absent"
       (check-equal? (agent-sandbox-alist-ref 'profile-default 'timeout-ms 30000)
                     30000)
       (check-equal? (agent-sandbox-alist-ref '((timeout-ms . 10000))
@@ -51,7 +51,7 @@
       (check-equal? (agent-sandbox-merge-alists 'task-local
                                                 '((timeout-ms . 30000)))
                     '((timeout-ms . 30000))))
-    (poo-flow-test-case "captures backend-neutral request contract"
+    (yuanxu-test-case "captures backend-neutral request contract"
       (let (seen-request #f)
         (let* ((command (lambda (envelope)
                           (set! seen-request (cdr (assoc 'request envelope)))
@@ -98,7 +98,7 @@
           (check-equal? (cdr (assoc 'resource-policy sandbox))
                         '((timeout-ms . 30000)
                           (memory-mb . 512))))))
-    (poo-flow-test-case "projects execution requests into bridge envelopes"
+    (yuanxu-test-case "projects execution requests into bridge envelopes"
       (let ((seen-request #f)
             (seen-envelope #f))
         (let* ((command (lambda (envelope)
@@ -164,7 +164,7 @@
                         '((snapshot . clone)))
           (check-equal? (agent-sandbox-request? '()) #f)
           (check-equal? (agent-sandbox-execution-request? #f) #f))))
-    (poo-flow-test-case "rejects non sandbox execution requests before bridge projection"
+    (yuanxu-test-case "rejects non sandbox execution requests before bridge projection"
       (let* ((request
               (make-execution-request
                'compile

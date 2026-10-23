@@ -7,7 +7,7 @@
 ;;; Invariant: Scheme records pending/materialized/failed state only; it never
 ;;; synchronizes runtime futures, opens sandbox handles, or replays IO.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -23,7 +23,7 @@
 ;; : TestSuite
 (def session-materialization-receipt-test
   (test-suite "poo-flow session materialization receipts"
-    (poo-flow-test-case "projects pending runtime materialization receipt"
+    (yuanxu-test-case "projects pending runtime materialization receipt"
       (let* ((receipt
               (poo-flow-session-runtime-materialization-receipt
                'runtime/request-1
@@ -62,7 +62,7 @@
         (check-equal? (test-ref row 'runtime-owner)
                       "marlin-agent-core")
         (check-equal? (test-ref row 'runtime-executed) #f)))
-    (poo-flow-test-case "projects materialized token usage without executing runtime"
+    (yuanxu-test-case "projects materialized token usage without executing runtime"
       (let* ((receipt
               (poo-flow-session-runtime-materialization-receipt
                'runtime/request-2
@@ -86,7 +86,7 @@
                       20)
         (check-equal? (test-ref row 'error-summary) #f)
         (check-equal? (test-ref row 'runtime-executed) #f)))
-    (poo-flow-test-case "projects failed materialization error summary"
+    (yuanxu-test-case "projects failed materialization error summary"
       (let* ((receipt
               (poo-flow-session-runtime-materialization-receipt
                'runtime/request-3

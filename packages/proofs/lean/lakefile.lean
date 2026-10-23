@@ -8,7 +8,7 @@ open System Lake DSL
 package «poo-flow-proof» where
   version := v!"0.1.0"
 
-require PooFlowCoreProof from "../../../core/dev/proofs/lean"
+require YuanxuProof from "../../../core/dev/proofs/lean"
 
 require Cedar from git
   "https://github.com/cedar-policy/cedar-spec.git"

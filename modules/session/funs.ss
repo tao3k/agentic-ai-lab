@@ -8,7 +8,7 @@
 
 (import "funs-attempt.ss"
         (only-in :clan/poo/object .ref)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/module-authoring/module-config-syntax)
 
 (export (import: "funs-attempt.ss") +poo-flow-session-config-kind+

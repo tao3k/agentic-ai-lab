@@ -4,8 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Project native Gerbil dependency pins into Bazel declarations and locks.
 
-The production ``gerbil.pkg`` and development ``dev/gerbil.pkg`` own their
-direct dependency revisions.  This tool does not resolve dependencies; gxpkg and Bazel retain
+``gerbil.pkg`` and ``dev/gerbil.pkg`` own production and optional development
+pins respectively. This tool does not resolve dependencies; gxpkg and Bazel retain
 that responsibility.  It only updates and checks the equivalent Bazel source
 projection required by isolated builds.
 """
@@ -24,8 +24,6 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-GERBIL_PACKAGE = ROOT / "gerbil.pkg"
-DEVELOPMENT_PACKAGE = ROOT / "dev" / "gerbil.pkg"
 BAZEL_SOURCES = ROOT / "gerbil-dependencies.MODULE.bazel"
 BAZEL_LOCK = ROOT / "MODULE.bazel.lock"
 REVISION = re.compile(r"(?:[0-9a-f]{40}|v\d+(?:\.\d+)+)")
@@ -57,28 +55,17 @@ def parse_package_pins(text: str) -> dict[str, tuple[str, str]]:
     return pins
 
 
-def source_projection_text(root: Path) -> str:
-    return "\n".join(path.read_text(encoding="utf-8")
-                     for path in (root / "gerbil-dependencies.MODULE.bazel",
-                                  root / "dev" / "gerbil-dependencies.MODULE.bazel")
-                     if path.is_file())
-
-
-def package_pin_owners(root: Path) -> dict[str, tuple[Path, str, str]]:
-    owners: dict[str, tuple[Path, str, str]] = {}
-    for path in (root / "gerbil.pkg", root / "dev" / "gerbil.pkg"):
-        if not path.is_file():
+def package_pin_owners(root: Path) -> dict[str, tuple[Path, tuple[str, str]]]:
+    owners: dict[str, tuple[Path, tuple[str, str]]] = {}
+    for relative in ("gerbil.pkg", "dev/gerbil.pkg"):
+        path = root / relative
+        if not path.exists():
             continue
-        for package, (repository, revision) in parse_package_pins(path.read_text()).items():
+        for package, pin in parse_package_pins(path.read_text(encoding="utf-8")).items():
             if package in owners:
-                raise ValueError(f"dependency {package!r} has multiple manifest owners")
-            owners[package] = (path, repository, revision)
+                raise ValueError(f"duplicate dependency authority for {package!r}")
+            owners[package] = (path, pin)
     return owners
-
-
-def package_pins(root: Path) -> dict[str, tuple[str, str]]:
-    return {name: (repository, revision)
-            for name, (_, repository, revision) in package_pin_owners(root).items()}
 
 
 def source_block(text: str, repository_name: str) -> tuple[re.Match[str], str]:
@@ -147,10 +134,9 @@ def declared_projection(text: str, repository_name: str) -> dict[str, object]:
 
 def collect_errors(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
-    package_text = (root / "gerbil.pkg").read_text(encoding="utf-8")
-    sources_text = source_projection_text(root)
+    sources_text = (root / "gerbil-dependencies.MODULE.bazel").read_text(encoding="utf-8")
     lock = json.loads((root / "MODULE.bazel.lock").read_text(encoding="utf-8"))
-    pins = package_pins(root)
+    pins = {package: pin for package, (_path, pin) in package_pin_owners(root).items()}
     repositories = direct_source_repositories(sources_text)
     declared_repository_names = set(repositories.values())
     extension = lock.get("moduleExtensions", {}).get(EXTENSION_ID, {})
@@ -224,10 +210,14 @@ def project_pin(package: str, revision: str, root: Path = ROOT) -> None:
 
     owners = package_pin_owners(root)
     if package not in owners:
-        raise ValueError(f"direct dependency {package!r} is absent")
-    package_path, repository, old_revision = owners[package]
-    sources_path = package_path.parent / "gerbil-dependencies.MODULE.bazel"
+        raise ValueError(f"declared direct dependency {package!r} is absent")
+    package_path, _pin = owners[package]
+    sources_path = root / "gerbil-dependencies.MODULE.bazel"
     package_text = package_path.read_text(encoding="utf-8")
+    pins = parse_package_pins(package_text)
+    if package not in pins:
+        raise ValueError(f"root/development package dependency {package!r} is absent")
+    repository, old_revision = pins[package]
     projection = expected_projection(repository, package, revision)
     url = projection["urls"][0]
     assert isinstance(url, str)
@@ -290,7 +280,7 @@ def sync_lock(root: Path = ROOT) -> None:
     native = extension[host_lock_key(extension)]
     native_repositories = native["generatedRepoSpecs"]
     repositories_by_package = direct_source_repositories(
-        source_projection_text(root)
+        (root / "gerbil-dependencies.MODULE.bazel").read_text(encoding="utf-8")
     )
     repository_names = set(repositories_by_package.values())
     for platform_lock in extension.values():
@@ -341,7 +331,7 @@ def ensure_native_commit(url: str, revision: str, target: Path) -> None:
 
 def prepare_native_pins(package_root: Path, root: Path = ROOT) -> None:
     """Materialize declared SHA objects; gxpkg still owns tag resolution/builds."""
-    for repository, revision in package_pins(root).values():
+    for repository, revision in parse_package_pins((root / "gerbil.pkg").read_text()).values():
         if not re.fullmatch(r"[0-9a-f]{40}", revision):
             continue
         target = (package_root / repository).resolve()

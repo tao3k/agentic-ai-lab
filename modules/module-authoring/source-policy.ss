@@ -3,19 +3,19 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Product source policy only. Core owns inert inspection and receipt projection.
 (import (only-in :clan/poo/object .o)
-        (only-in :core/module-system/authoring/import-policy SourceInspectionPolicy.)
-        (only-in :core/module-system/source/collection poo-flow-default-module-style-policy))
+        (only-in :yuanxu/module-system/authoring/import-policy SourceInspectionPolicy.)
+        (only-in :yuanxu/module-system/source/collection yuanxu-default-module-style-policy))
 (export PooFlowSourcePolicy PooFlowModuleStylePolicy)
 (def PooFlowSourcePolicy
   (.o (:: @ SourceInspectionPolicy.)
       aggregate-imports:
-      '(:core/modules/funflow/control-plane/api
+      '(:yuanxu/modules/funflow/control-plane/api
         :poo-flow/modules/workflow/scenario/configuration/interface
-        :core/feature-system/interface)
+        :yuanxu/feature-system/interface)
       package-prefix: ":poo-flow/"
       source-roots: '("./src/" "src/" "./modules/" "modules/")
-      forbidden-projections: '(poo-flow-module-source-collection-interfaces all-gerbil-modules modules)))
+      forbidden-projections: '(yuanxu-module-source-collection-interfaces all-gerbil-modules modules)))
 
 (def PooFlowModuleStylePolicy
-  (.o (:: @ poo-flow-default-module-style-policy)
+  (.o (:: @ yuanxu-default-module-style-policy)
       source-policy: PooFlowSourcePolicy))

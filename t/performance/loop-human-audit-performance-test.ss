@@ -6,7 +6,7 @@
 ;;; Boundary: loop human-audit performance gates cover reused governor facts.
 ;;; Invariant: audit projection is review data and never mutates runtime state.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -123,7 +123,7 @@
 ;; : TestSuite
 (def loop-human-audit-performance-test
   (test-suite "loop human-audit performance"
-    (poo-flow-test-case "keeps human audit projection inside benchmark contract"
+    (yuanxu-test-case "keeps human audit projection inside benchmark contract"
       (let* ((pattern-count 600)
              (governor
               (loop-human-audit-performance-governor pattern-count))

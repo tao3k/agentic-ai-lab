@@ -6,7 +6,7 @@
 ;;; Boundary: runtime materialization receipt performance gate.
 ;;; Invariant: defstruct receipts project to bounded ABI rows in one pass.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -175,7 +175,7 @@
 ;; : TestSuite
 (def session-materialization-receipt-performance-test
   (test-suite "session materialization receipt performance"
-    (poo-flow-test-case "keeps materialization receipt batch projection inside benchmark contract"
+    (yuanxu-test-case "keeps materialization receipt batch projection inside benchmark contract"
       (let* ((receipt-count 300)
              (summary (materialization-performance-summary receipt-count))
              (receipt

@@ -6,42 +6,44 @@
 ;;; Boundary: non-mutating module diagnostics within Observability.
 ;;; Invariant: diagnostics never change activation behavior.
 
-(import :core/modules/funflow/control-plane/task
-        :core/modules/funflow/control-plane/flow
+(import :yuanxu/modules/funflow/control-plane/task
+        :yuanxu/modules/funflow/control-plane/flow
         :poo-flow/modules/module-authoring/module-descriptor
-        (only-in :core/utilities/functional
-                 poo-flow-stable-duplicates)
-        :core/module-system/observability/diagnostics
-        :core/utilities/final-projection-syntax)
+        (only-in :yuanxu/utilities/functional
+                 yuanxu-stable-duplicates)
+        (rename-in :yuanxu/module-system/observability/diagnostics
+          (make-yuanxu-module-diagnostic make-poo-flow-module-diagnostic)
+          (make-yuanxu-module-doctor-report make-poo-flow-module-doctor-report))
+        :yuanxu/utilities/final-projection-syntax)
 
-(export poo-flow-module-diagnostic-prototype
+(export yuanxu-module-diagnostic-prototype
         make-poo-flow-module-diagnostic
-        poo-flow-module-diagnostic?
-        poo-flow-module-diagnostic-severity
-        poo-flow-module-diagnostic-code
-        poo-flow-module-diagnostic-target
-        poo-flow-module-diagnostic-detail
+        yuanxu-module-diagnostic?
+        yuanxu-module-diagnostic-severity
+        yuanxu-module-diagnostic-code
+        yuanxu-module-diagnostic-target
+        yuanxu-module-diagnostic-detail
         poo-flow-module-diagnostic->alist
         poo-flow-module-diagnostics
-        poo-flow-module-diagnostics-status
-        poo-flow-module-doctor-report-prototype
+        yuanxu-module-diagnostics-status
+        yuanxu-module-doctor-report-prototype
         make-poo-flow-module-doctor-report
-        poo-flow-module-doctor-report?
-        poo-flow-module-doctor-report-modules
-        poo-flow-module-doctor-report-status
-        poo-flow-module-doctor-report-diagnostics
+        yuanxu-module-doctor-report?
+        yuanxu-module-doctor-report-modules
+        yuanxu-module-doctor-report-status
+        yuanxu-module-doctor-report-diagnostics
         poo-flow-module-doctor
-        poo-flow-module-doctor-ok?
+        yuanxu-module-doctor-ok?
         poo-flow-module-doctor-report->alist)
 
 ;; : (-> PooModuleDiagnostic Alist)
 (defpoo-final-projection
   poo-flow-module-diagnostic->alist (diagnostic)
   (bindings ())
-  (fields ((severity (poo-flow-module-diagnostic-severity diagnostic))
-           (code (poo-flow-module-diagnostic-code diagnostic))
-           (target (poo-flow-module-diagnostic-target diagnostic))
-           (detail (poo-flow-module-diagnostic-detail diagnostic)))))
+  (fields ((severity (yuanxu-module-diagnostic-severity diagnostic))
+           (code (yuanxu-module-diagnostic-code diagnostic))
+           (target (yuanxu-module-diagnostic-target diagnostic))
+           (detail (yuanxu-module-diagnostic-detail diagnostic)))))
 
 ;;; Boundary: module diagnostic key member predicate is the policy-visible edge
 ;;; for module-system behavior, keeping validation, lookup, or projection
@@ -51,7 +53,7 @@
 ;;; Intent: doctor remains responsive when downstream overlays repeat template option keys.
 ;; : (-> [DiagnosticKey] [DiagnosticKey])
 (def (poo-flow-module-duplicate-symbols values)
-  (poo-flow-stable-duplicates values))
+  (yuanxu-stable-duplicates values))
 
 ;;; Boundary: option diagnostics look only at keys, not option payloads.
 ;; : (-> ModuleOptionAlist [Symbol])
@@ -207,7 +209,7 @@
         (diagnostics (poo-flow-module-diagnostics modules)))
     (make-poo-flow-module-doctor-report
      (poo-flow-module-names closed-modules)
-     (poo-flow-module-diagnostics-status diagnostics)
+     (yuanxu-module-diagnostics-status diagnostics)
      diagnostics)))
 
 ;;; Boundary: alist conversion is reserved for CLI/agent presentation edges.
@@ -216,7 +218,7 @@
   poo-flow-module-doctor-report->alist (report)
   (bindings ((diagnostics
               (map poo-flow-module-diagnostic->alist
-                   (poo-flow-module-doctor-report-diagnostics report)))))
-  (fields ((modules (poo-flow-module-doctor-report-modules report))
-           (status (poo-flow-module-doctor-report-status report))
+                   (yuanxu-module-doctor-report-diagnostics report)))))
+  (fields ((modules (yuanxu-module-doctor-report-modules report))
+           (status (yuanxu-module-doctor-report-status report))
            (diagnostics diagnostics))))

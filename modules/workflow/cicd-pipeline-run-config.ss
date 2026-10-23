@@ -6,7 +6,7 @@
 ;;; Boundary: workflow CI/CD pipeline run/result projection for user config.
 ;;; Invariant: this owner emits handoff-readiness data and never executes CI.
 
-(import :core/module-system/selection/objects
+(import :yuanxu/module-system/selection/objects
         :poo-flow/modules/sandbox-core/profile-catalog
         :poo-flow/modules/workflow/cicd-config
         (only-in :poo-flow/modules/workflow/funs
@@ -20,7 +20,7 @@
 
 ;;; Pipeline runs are the tutorial-facing projection over check maps. They use
 ;;; the selected sandbox profile catalog so run status matches user config.
-;; : (-> [PooFlowCicdCheckMap] [PooSandboxProfile] [Alist])
+;; : (-> [YuanxuCicdCheckMap] [PooSandboxProfile] [Alist])
 (def (poo-flow-user-workflow-cicd-pipeline-runs/add check-maps
                                                      profile-catalog)
   (cond
@@ -38,7 +38,7 @@
 ;;; runtime command manifest or Marlin ABI surfaces.
 ;; : (-> PooUserConfig [Alist])
 (def (poo-flow-user-config-workflow-cicd-pipeline-runs config)
-  (let* ((selected-modules (poo-flow-user-config-modules config))
+  (let* ((selected-modules (yuanxu-user-config-modules config))
          (profile-catalog
           (poo-flow-user-config-sandbox-profile-catalog selected-modules)))
     (poo-flow-user-workflow-cicd-pipeline-runs/add
@@ -47,7 +47,7 @@
 
 ;;; Result projections are derived from pipeline runs so presentation and tests
 ;;; see the same admission status that runtime handoff will consume.
-;; : (-> [PooFlowCicdCheckMap] [PooSandboxProfile] [Alist])
+;; : (-> [YuanxuCicdCheckMap] [PooSandboxProfile] [Alist])
 (def (poo-flow-user-workflow-cicd-pipeline-results check-maps
                                                     profile-catalog)
   (cond
@@ -65,7 +65,7 @@
 ;;; handoff readiness data, not CI execution output.
 ;; : (-> PooUserConfig [Alist])
 (def (poo-flow-user-config-workflow-cicd-pipeline-results config)
-  (let* ((selected-modules (poo-flow-user-config-modules config))
+  (let* ((selected-modules (yuanxu-user-config-modules config))
          (profile-catalog
           (poo-flow-user-config-sandbox-profile-catalog selected-modules)))
     (poo-flow-user-workflow-cicd-pipeline-results

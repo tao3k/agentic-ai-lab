@@ -11,9 +11,9 @@
         (only-in :std/hash/misc hash-key? hash-put!)
         (only-in :std/list/list filter)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :core/object-family/syntax
+        (only-in :yuanxu/object-family/syntax
                  defpoo-object-family)
-        (only-in :core/utilities/functional poo-flow-all?)
+        (only-in :yuanxu/utilities/functional yuanxu-all?)
         "types.ss")
 
 (export poo-flow-standard-feature-module
@@ -271,7 +271,7 @@
      (lambda (artifact)
        (hash-put! artifact-identities (.ref artifact 'identity) #t))
      artifact-values)
-    (unless (poo-flow-all?
+    (unless (yuanxu-all?
              (lambda (root) (hash-key? artifact-identities root))
              root-artifact-values)
       (error "standard edition root artifact is absent from its artifact index"

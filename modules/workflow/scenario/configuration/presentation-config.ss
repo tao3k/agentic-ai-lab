@@ -12,9 +12,9 @@
         :poo-flow/modules/sandbox-core/profile-support/policy
         :poo-flow/modules/workflow/interface
         :poo-flow/modules/module-authoring/module-interface
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/entrypoints
-        :core/module-system/observability/presentation
+        :yuanxu/module-system/observability/presentation
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         :poo-flow/modules/workflow/cicd-config
         :poo-flow/modules/workflow/cicd-pipeline-run-config
@@ -34,7 +34,7 @@
     (let loop ((modules selected-modules))
       (cond
        ((null? modules) #t)
-       ((equal? (poo-flow-user-module-selection-key (car modules))
+       ((equal? (yuanxu-user-module-selection-key (car modules))
                 '(flow . loop-engine))
         (loop (cdr modules)))
        (else #f))))))
@@ -42,7 +42,7 @@
 ;; : (-> ModuleSelection Bool)
 (def (poo-flow-user-config-workflow-cicd-focused-selection? selection)
   (or (poo-flow-user-module-selection-workflow-cicd-check-map selection)
-      (eq? (car (poo-flow-user-module-selection-key selection)) 'sandbox)))
+      (eq? (car (yuanxu-user-module-selection-key selection)) 'sandbox)))
 
 ;; : (-> ModuleSelections Bool)
 (def (poo-flow-user-config-workflow-cicd-focused? selected-modules)
@@ -59,9 +59,9 @@
   ;; Engineering note: branch order preserves the loop-only fast path first, then
   ;; the workflow-CI focused path, and keeps the full mixed fallback last.
   (let ((selected-modules
-         (poo-flow-user-config-modules config))
+         (yuanxu-user-config-modules config))
         (setting-object
-         (poo-flow-user-config-settings config))
+         (yuanxu-user-config-settings config))
         (public-setting-keys
          (if (null? maybe-setting-keys) '() (car maybe-setting-keys))))
     (if (poo-flow-user-config-loop-engine-only? selected-modules)
@@ -77,7 +77,7 @@
          setting-object
          public-setting-keys)
         (let* ((feature-fact-rows
-                (poo-flow-user-config-feature-facts config))
+                (yuanxu-user-config-feature-facts config))
                (sandbox-profile-derivation-rows
                 (poo-flow-user-config-sandbox-profile-derivations
                  selected-modules))
@@ -187,11 +187,11 @@
               (object<-alist
                (append
                 (list
-                 (cons 'kind poo-flow-user-config-presentation-kind)
+                 (cons 'kind yuanxu-user-config-presentation-kind)
                  (cons 'module-count (length selected-modules))
-                 (cons 'module-keys (poo-flow-user-config-module-keys config))
+                 (cons 'module-keys (yuanxu-user-config-module-keys config))
                  (cons 'modules
-                       (map poo-flow-user-module-selection->alist
+                       (map yuanxu-user-module-selection->alist
                             selected-modules))
                  (cons 'feature-count (length selected-modules))
                  (cons 'feature-facts feature-fact-rows)
@@ -283,7 +283,7 @@
                  (cons 'setting-count (length public-setting-keys))
                  (cons 'setting-keys public-setting-keys)
                  (cons 'settings
-                       (poo-flow-user-settings->alist
+                       (yuanxu-user-settings->alist
                         setting-object
                         public-setting-keys))
                  (cons 'user-entrypoints

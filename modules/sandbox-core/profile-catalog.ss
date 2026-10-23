@@ -9,7 +9,7 @@
 (import (only-in :poo-flow/modules/agent-sandbox/config
                  poo-flow-default-sandbox-profiles
                  poo-flow-sandbox-profile?)
-        :core/module-system/selection/objects)
+        :yuanxu/module-system/selection/objects)
 
 (export poo-flow-user-module-selection-sandbox-profiles
         poo-flow-sandbox-profile-catalog-defaults
@@ -39,7 +39,7 @@
 ;;; projection responsibilities centralized for callers.
 ;; : (-> PooUserModuleSelection [PooSandboxProfile])
 (def (poo-flow-user-module-selection-sandbox-profiles selection)
-  (let (entry (poo-flow-user-module-selection-flag-entry selection ':config))
+  (let (entry (yuanxu-user-module-selection-flag-entry selection ':config))
     (if (and entry (pair? entry))
       (poo-flow-user-module-selection-sandbox-profiles/filter (cdr entry))
       '())))

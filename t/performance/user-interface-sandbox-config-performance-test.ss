@@ -7,7 +7,7 @@
 ;;; Invariant: benchmark payloads live under t/; user-interface declarations
 ;;; stay POO-native and never realize sandbox descriptors.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -63,21 +63,21 @@
      (cons 'profile-count (.ref presentation 'profile-count))
      (cons 'profile-names poo-flow-default-sandbox-profile-names)
      (cons 'nono-feature?
-           (poo-flow-user-config-feature?
+           (yuanxu-user-config-feature?
             test-poo-flow-user-config
             'sandbox
             'nono-sandbox
             '+nono
             '+doctor))
      (cons 'cube-feature?
-           (poo-flow-user-config-feature?
+           (yuanxu-user-config-feature?
             test-poo-flow-user-config
             'sandbox
             'cubeSandbox
             '+cube
             '+doctor))
      (cons 'docker-feature?
-           (poo-flow-user-config-feature?
+           (yuanxu-user-config-feature?
             test-poo-flow-user-config
             'sandbox
             'docker-sandbox
@@ -98,7 +98,7 @@
 ;; : TestSuite
 (def user-interface-sandbox-config-performance-test
   (test-suite "user-interface sandbox config performance"
-    (poo-flow-test-case "keeps sandbox config projection inside benchmark contract"
+    (yuanxu-test-case "keeps sandbox config projection inside benchmark contract"
       (let-values (((receipt summary)
                     (benchmark-run/result
                      user-interface-sandbox-config-fixture

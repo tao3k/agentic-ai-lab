@@ -6,7 +6,7 @@
 ;;; Boundary: selector receipt performance gate.
 ;;; Invariant: selector candidate projection stays bounded and report-only.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -154,7 +154,7 @@
 ;; : TestSuite
 (def session-selector-receipt-performance-test
   (test-suite "session selector receipt performance"
-    (poo-flow-test-case "keeps selector candidate projection inside benchmark contract"
+    (yuanxu-test-case "keeps selector candidate projection inside benchmark contract"
       (let* ((candidate-count 300)
              (summary (selector-performance-summary candidate-count))
              (receipt

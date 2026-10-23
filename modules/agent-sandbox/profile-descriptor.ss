@@ -7,8 +7,8 @@
 ;;; Invariant: descriptors project through the shared validation owner.
 
 (import (only-in :clan/poo/object .@ object?)
-        (only-in :core/modules/funflow/control-plane/roles execution-policy-role)
-        :core/object-family/role-syntax
+        (only-in :yuanxu/modules/funflow/control-plane/roles execution-policy-role)
+        :yuanxu/object-family/role-syntax
         :poo-flow/modules/agent-sandbox/alist
         :poo-flow/modules/agent-sandbox/projection-syntax
         :poo-flow/modules/agent-sandbox/profile-data

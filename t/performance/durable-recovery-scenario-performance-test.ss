@@ -6,7 +6,7 @@
 ;;; Boundary: durable recovery scenario projection performance gate.
 ;;; Invariant: crash/replay/repair receipts stay bounded and report-only.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -166,7 +166,7 @@
 ;; : TestSuite
 (def durable-recovery-scenario-performance-test
   (test-suite "durable recovery scenario performance"
-    (poo-flow-test-case "keeps recovery scenario batch projection inside benchmark contract"
+    (yuanxu-test-case "keeps recovery scenario batch projection inside benchmark contract"
       (let* ((scenario-count 96))
         (let-values (((receipt summary)
                       (benchmark-run/result

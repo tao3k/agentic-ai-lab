@@ -5,7 +5,7 @@
 
 ;;; Boundary: performance gates for session transform POO row boundaries.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -96,7 +96,7 @@
 ;; : TestSuite
 (def session-transform-performance-test
   (test-suite "poo-flow session transform POO performance"
-    (poo-flow-test-case "keeps memory-intent transform receipts inside row boundary"
+    (yuanxu-test-case "keeps memory-intent transform receipts inside row boundary"
       (let (receipt
             (benchmark-run
              session-transform-memory-intent-fixture

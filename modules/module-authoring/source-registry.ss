@@ -7,9 +7,9 @@
 ;;; Invariant: maintained modules enter through validated public interfaces.
 
 (import
-        :core/module-system/source/imports
-        :core/module-system/source/objects
-        (only-in :core/module-system/source/collection poo-flow-module-source-collection-interfaces)
+        :yuanxu/module-system/source/imports
+        :yuanxu/module-system/source/objects
+        (only-in :yuanxu/module-system/source/collection yuanxu-module-source-collection-interfaces)
         (only-in :poo-flow/modules/module-authoring/module-source-collection
                  poo-flow-maintained-module-source poo-flow-maintained-integration-directories))
 
@@ -44,7 +44,7 @@
 (def (poo-flow-module-tree-source module-root-path entrypoint-role)
   (let (entrypoint
         (poo-flow-module-tree-entrypoint module-root-path entrypoint-role))
-    (make-poo-flow-module-source-ref
+    (make-yuanxu-module-source-ref
      'local
      entrypoint
      (list (cons 'kind 'module-tree)
@@ -69,7 +69,7 @@
 ;; : (-> Symbol Path PooModuleSourceRef)
 (def (poo-flow-module-system-source entrypoint-role entrypoint-path)
   (let (entrypoint entrypoint-path)
-    (make-poo-flow-module-source-ref
+    (make-yuanxu-module-source-ref
      'local
      entrypoint
      (list (cons 'kind 'framework-entrypoint)
@@ -112,7 +112,7 @@
 ;; : (-> [PooModuleSourceRef])
 (def (poo-flow-src-modules-source-refs)
   (append
-   (poo-flow-module-source-collection-interfaces poo-flow-maintained-module-source)
+   (yuanxu-module-source-collection-interfaces poo-flow-maintained-module-source)
    (poo-flow-module-system-source-refs)))
 
 ;;; Boundary: user-root trees have a different shape from upstream modules.
@@ -159,7 +159,7 @@
                                          entrypoint-path))
          (policy
           (poo-flow-user-tree-entrypoint-policy entrypoint-role)))
-    (make-poo-flow-module-source-ref
+    (make-yuanxu-module-source-ref
      'local
      entrypoint
      (append
@@ -172,14 +172,14 @@
 ;; : (-> PooModuleSourceRef [Symbol])
 (def (poo-flow-user-tree-source-allowed-responsibilities source-ref)
   (poo-flow-module-registry-alist-ref/default
-   (poo-flow-module-source-ref-metadata source-ref)
+   (yuanxu-module-source-ref-metadata source-ref)
    'allowed-responsibilities
    '()))
 
 ;; : (-> PooModuleSourceRef [Symbol])
 (def (poo-flow-user-tree-source-denied-responsibilities source-ref)
   (poo-flow-module-registry-alist-ref/default
-   (poo-flow-module-source-ref-metadata source-ref)
+   (yuanxu-module-source-ref-metadata source-ref)
    'denied-responsibilities
    '()))
 

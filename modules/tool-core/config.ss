@@ -8,7 +8,7 @@
 
 (import
         (only-in :clan/poo/object .ref)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/module-authoring/module-config-syntax
         :poo-flow/modules/tool-core/objects)
 
@@ -192,5 +192,5 @@
 ;; : [[PooUserModuleSelection]]
 (def poo-flow-tool-core-module-bundles
   (list
-   (poo-flow-user-module-bundle
+   (yuanxu-user-module-bundle
     (session tool-core +catalog +typed-receipts +runtime-manifest))))

@@ -285,7 +285,7 @@ Implement:
 
 Implementation receipt:
 - Landed the first Scheme-side bridge schema in =src/core/runtime-adapter.ss=
-  with =poo-flow.runtime-request.v1= and =poo-flow.runtime-response.v1=
+  with =yuanxu.runtime-request.v1= and =yuanxu.runtime-response.v1=
   constants.
 - Rust submit and store-put now emit alist-shaped envelopes with schema,
   runtime, operation, request id, artifact handle, policy, plan id, node id,

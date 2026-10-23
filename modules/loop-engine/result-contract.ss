@@ -8,7 +8,7 @@
 ;;; runtime model output or executes reviewer operations.
 
 (import "core.ss"
-        :core/utilities/final-projection-syntax)
+        :yuanxu/utilities/final-projection-syntax)
 
 (export poo-flow-user-loop-engine-intent-result-contract
         poo-flow-user-loop-engine-result-contract-valid?
@@ -21,7 +21,7 @@
 (def (poo-flow-user-loop-engine-result-contract-diagnostic code
                                                            target
                                                            detail)
-  (poo-flow-product-field-rows
+  (yuanxu-product-field-rows
    (severity 'error)
    (code code)
    (target target)
@@ -38,7 +38,7 @@
         (poo-flow-user-loop-engine-result-contract-diagnostic
         'invalid-result-contract-role
         role
-        (poo-flow-product-field-rows
+        (yuanxu-product-field-rows
          (expected 'symbol)
          (value value)))))))
 
@@ -50,7 +50,7 @@
   (cond
    ((null? roles) '())
    (else
-    (poo-flow-product-rows/tail
+    (yuanxu-product-rows/tail
      (poo-flow-user-loop-engine-result-contract-role-diagnostics
       (car roles)
       contract)
@@ -80,7 +80,7 @@
         (poo-flow-user-loop-engine-result-contract-diagnostic
         'invalid-result-required-fields
         'required-fields
-        (poo-flow-product-field-rows
+        (yuanxu-product-field-rows
          (expected '(non-empty-list-of-symbols))
          (value fields)))))))
 
@@ -98,7 +98,7 @@
         (poo-flow-user-loop-engine-result-contract-diagnostic
         'invalid-result-format
         'format
-        (poo-flow-product-field-rows
+        (yuanxu-product-field-rows
          (expected 'symbol)
          (value format)))))))
 
@@ -106,11 +106,11 @@
 ;;; receipt shape that agents edit, not the future backend result payload.
 ;; : (-> LoopEngineResultContract [ResultContractDiagnostic])
 (def (poo-flow-user-loop-engine-result-contract-diagnostics contract)
-  (poo-flow-product-rows/tail
+  (yuanxu-product-rows/tail
    (poo-flow-user-loop-engine-result-contract-roles-diagnostics
     +poo-flow-user-loop-engine-result-contract-roles+
     contract)
-   (poo-flow-product-rows/tail
+   (yuanxu-product-rows/tail
     (poo-flow-user-loop-engine-result-required-fields-diagnostics contract)
     (poo-flow-user-loop-engine-result-format-diagnostics contract))))
 
@@ -128,7 +128,7 @@
   (let ((result-rows
          (poo-flow-user-loop-engine-intent-ref intent 'result '())))
     (let* ((contract
-            (poo-flow-product-field-rows
+            (yuanxu-product-field-rows
              (kind 'loop-engine-result-contract)
              (contract +poo-flow-user-loop-engine-result-contract+)
              (default
@@ -178,9 +178,9 @@
              (runtime-executed #f)))
            (diagnostics
             (poo-flow-user-loop-engine-result-contract-diagnostics contract)))
-      (poo-flow-product-rows/tail
+      (yuanxu-product-rows/tail
        contract
-       (poo-flow-product-field-rows
+       (yuanxu-product-field-rows
         (valid? (null? diagnostics))
         (diagnostic-count (length diagnostics))
         (diagnostics diagnostics))))))

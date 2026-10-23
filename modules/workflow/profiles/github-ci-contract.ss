@@ -9,13 +9,13 @@
 
 (import (only-in :clan/poo/object
                  object<-alist)
-        (only-in :core/modules/json-schema/json-schema-receipt
-                 poo-flow-json-schema->contract-artifact
-                 poo-flow-json-schema-contract-artifact-object-contract
-                 poo-flow-json-schema-contract-artifact->alist)
-        (only-in :core/modules/json-schema/json-schema-validate
-                 poo-flow-json-schema-contract-artifact-validate
-                 poo-flow-json-schema-object-contract-validation->alist))
+        (only-in :yuanxu/modules/json-schema/json-schema-receipt
+                 yuanxu-json-schema->contract-artifact
+                 yuanxu-json-schema-contract-artifact-object-contract
+                 yuanxu-json-schema-contract-artifact->alist)
+        (only-in :yuanxu/modules/json-schema/json-schema-validate
+                 yuanxu-json-schema-contract-artifact-validate
+                 yuanxu-json-schema-object-contract-validation->alist))
 
 (export +poo-flow-funflow-github-ci-schema-source+
         +poo-flow-funflow-github-ci-workflow-schema+
@@ -139,23 +139,23 @@
                      (with . ((type . "object")))
                      (env . (($ref . "#/definitions/env")))))))))))
 
-;; : PooFlowJsonSchemaContractArtifact
+;; : YuanxuJsonSchemaContractArtifact
 (def poo-flow-funflow-github-ci-contract-artifact
-  (poo-flow-json-schema->contract-artifact
+  (yuanxu-json-schema->contract-artifact
    +poo-flow-funflow-github-ci-workflow-schema+
    `((source-ref . ,+poo-flow-funflow-github-ci-schema-source+)
      (owner . funflow)
      (object-kind . PooFlowFunflowGithubCiWorkflow)
      (object-key . funflow/github-ci/workflow))))
 
-;; : (-> PooFlowObjectTypeContract)
+;; : (-> YuanxuObjectTypeContract)
 (def (poo-flow-funflow-github-ci-workflow-contract)
-  (poo-flow-json-schema-contract-artifact-object-contract
+  (yuanxu-json-schema-contract-artifact-object-contract
    poo-flow-funflow-github-ci-contract-artifact))
 
 ;; : (-> Alist)
 (def (poo-flow-funflow-github-ci-contract-receipt)
-  (poo-flow-json-schema-contract-artifact->alist
+  (yuanxu-json-schema-contract-artifact->alist
    poo-flow-funflow-github-ci-contract-artifact))
 
 ;;; The profile object exposes the contract artifact as data for module-system
@@ -174,13 +174,13 @@
     (cons 'schema-audit +poo-flow-funflow-github-ci-schema-audit+)
     (cons 'runtime-executed #f))))
 
-;; : (-> PooFlowObjectOrAlist PooFlowJsonSchemaObjectContractValidation)
+;; : (-> PooFlowObjectOrAlist YuanxuJsonSchemaObjectContractValidation)
 (def (poo-flow-funflow-github-ci-validate-workflow workflow)
-  (poo-flow-json-schema-contract-artifact-validate
+  (yuanxu-json-schema-contract-artifact-validate
    poo-flow-funflow-github-ci-contract-artifact
    workflow))
 
 ;; : (-> PooFlowObjectOrAlist Alist)
 (def (poo-flow-funflow-github-ci-validate-workflow->alist workflow)
-  (poo-flow-json-schema-object-contract-validation->alist
+  (yuanxu-json-schema-object-contract-validation->alist
    (poo-flow-funflow-github-ci-validate-workflow workflow)))

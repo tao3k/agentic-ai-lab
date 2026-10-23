@@ -6,7 +6,7 @@
 ;;; Boundary: custom user-interface scenarios keep a real performance fixture.
 ;;; Invariant: user modules stay POO-native; benchmark contracts live under t/.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,9 +15,9 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection?
-                 poo-flow-user-module-selection-flag-entry)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection?
+                 yuanxu-user-module-selection-flag-entry)
         :poo-flow/modules/session/config
         (only-in "../../user-interface/custom/my-module/cases/cicd"
                  poo-flow-custom-my-module-cicd-case)
@@ -123,9 +123,9 @@
 ;; : (-> CustomScenarioRowValue MaybeList)
 (def (custom-scenario-module-config-rows value)
   (if (and (pair? value)
-           (poo-flow-user-module-selection? (car value)))
+           (yuanxu-user-module-selection? (car value)))
     (let (entry
-          (poo-flow-user-module-selection-flag-entry (car value) ':config))
+          (yuanxu-user-module-selection-flag-entry (car value) ':config))
       (and entry (cdr entry)))
     #f))
 
@@ -223,7 +223,7 @@
 ;; : TestSuite
 (def user-interface-custom-scenario-batch-performance-test
   (test-suite "custom user-interface scenario batch performance"
-    (poo-flow-test-case "keeps custom scenario aggregation inside benchmark contract"
+    (yuanxu-test-case "keeps custom scenario aggregation inside benchmark contract"
       (let* ((summary (custom-user-interface-scenario-batch-summary))
              (receipt
               (benchmark-run
@@ -245,7 +245,7 @@
          #f)
         (custom-scenario-display-receipt receipt)
         (check-equal? (benchmark-receipt-pass? receipt) #t)))
-    (poo-flow-test-case "ignores dotted selection-count rows as runtime flags"
+    (yuanxu-test-case "ignores dotted selection-count rows as runtime flags"
       (check-equal?
        (custom-scenario-runtime-flags '((memory/project) . 1))
        '()))))

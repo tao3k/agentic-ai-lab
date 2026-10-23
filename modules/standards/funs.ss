@@ -9,8 +9,8 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list filter)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :core/utilities/functional
-                 poo-flow-all? poo-flow-map)
+        (only-in :yuanxu/utilities/functional
+                 yuanxu-all? yuanxu-map)
         "types.ss"
         "objects.ss"
         "resolution-objects.ss")
@@ -62,14 +62,14 @@
   (poo-flow-standard-digest
    (list
     'poo-flow.standard-bundle.v1
-    (poo-flow-map
+    (yuanxu-map
      (lambda (edition)
        (list (.ref edition 'identity)
              (.ref edition 'canonical-uri)
              (.ref edition 'version)
              (.ref edition 'digest)))
      editions)
-    (poo-flow-map
+    (yuanxu-map
      (lambda (artifact)
        (list (.ref artifact 'identity) (.ref artifact 'digest)))
      artifacts)
@@ -97,7 +97,7 @@
                                 terminology-snapshot-digest)
   (unless (and (standard-resolution-catalog? catalog)
                (pair? root-identities)
-               (poo-flow-all? poo-flow-standard-text? root-identities)
+               (yuanxu-all? poo-flow-standard-text? root-identities)
                (poo-flow-standard-budget? budget)
                (poo-flow-standard-digest? terminology-snapshot-digest))
     (error "invalid Standard resolution request"
@@ -258,7 +258,7 @@
       case-identity profiles catalog budget terminology-snapshot-digest)
   (unless (and (poo-flow-standard-text? case-identity)
                (pair? profiles)
-               (poo-flow-all? poo-flow-standard-constraint-profile? profiles)
+               (yuanxu-all? poo-flow-standard-constraint-profile? profiles)
                (poo-flow-standard-catalog? catalog)
                (poo-flow-standard-budget? budget)
                (poo-flow-standard-digest? terminology-snapshot-digest))
@@ -368,7 +368,7 @@
                provider-identity
                subject-kind
                subject-snapshot-digest
-               (poo-flow-map
+               (yuanxu-map
                 (lambda (constraint)
                   (if (and (object? constraint) (.slot? constraint 'identity))
                     (.ref constraint 'identity)
@@ -407,9 +407,9 @@
 (def (poo-flow-standard-admit-case case-identity conformance-receipts
                                    evidence-digests)
   (unless (and (poo-flow-standard-text? case-identity)
-               (poo-flow-all? poo-flow-standard-conformance-receipt?
+               (yuanxu-all? poo-flow-standard-conformance-receipt?
                               conformance-receipts)
-               (poo-flow-all? poo-flow-standard-digest? evidence-digests))
+               (yuanxu-all? poo-flow-standard-digest? evidence-digests))
     (error "invalid Standard Case admission input" case-identity))
   (let* ((failures
           (apply append
@@ -436,9 +436,9 @@
                (poo-flow-standard-digest? validator-binary-digest)
                (poo-flow-standard-text? fixture-identity)
                (poo-flow-standard-digest? subject-snapshot-digest)
-               (poo-flow-all? poo-flow-standard-text? profile-identities)
+               (yuanxu-all? poo-flow-standard-text? profile-identities)
                (memq outcome '(valid invalid not-evaluated))
-               (poo-flow-all? poo-flow-standard-text? issues)
+               (yuanxu-all? poo-flow-standard-text? issues)
                (poo-flow-standard-digest? output-digest)
                (list? metadata))
     (error "invalid Standard reference observation input" fixture-identity))

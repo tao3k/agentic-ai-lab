@@ -9,15 +9,15 @@
 (import :gerbil/core
         (only-in :clan/poo/object .def .o .ref .slot? object?)
         (only-in :clan/poo/mop element?)
-        (only-in :core/module-system/schema/slot-contracts
-                 poo-flow-contract-slot
-                 poo-flow-contract-slot-name
-                 poo-flow-contract-slot-type
-                 poo-flow-contract-value-type
-                 poo-flow-native-contract
-                 poo-flow-native-contract->alist)
-        :core/utilities/final-projection-syntax
-        :core/type-facts/objects)
+        (only-in :yuanxu/module-system/schema/slot-contracts
+                 yuanxu-contract-slot
+                 yuanxu-contract-slot-name
+                 yuanxu-contract-slot-type
+                 yuanxu-contract-value-type
+                 yuanxu-native-contract
+                 yuanxu-native-contract->alist)
+        :yuanxu/utilities/final-projection-syntax
+        :yuanxu/type-facts/objects)
 
 (export poo-flow-runtime-filesystem-prototype
         poo-flow-runtime-volume-filesystem-prototype
@@ -51,33 +51,33 @@
   "poo-flow-sandbox-resources-prototype-contract-validation/v1")
 
 (def PooFlowSandboxFilesystemType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'PooSandboxFilesystemPrototype object? 'PooSandboxFilesystemPrototype))
 (def PooFlowSandboxNumberType
-  (poo-flow-contract-value-type 'Number number? 'Number))
+  (yuanxu-contract-value-type 'Number number? 'Number))
 (def PooFlowSandboxListType
-  (poo-flow-contract-value-type 'List list? 'List))
+  (yuanxu-contract-value-type 'List list? 'List))
 (def PooFlowSandboxStringType
-  (poo-flow-contract-value-type 'String string? 'String))
+  (yuanxu-contract-value-type 'String string? 'String))
 
 (def PooFlowSandboxFilesystemSlot
-  (poo-flow-contract-slot
+  (yuanxu-contract-slot
    'sandbox.resources/filesystem 'filesystem PooFlowSandboxFilesystemType #t
    '((scope . sandbox-core) (slot . filesystem) (merge . node-extend))))
 (def PooFlowSandboxCpuSlot
-  (poo-flow-contract-slot
+  (yuanxu-contract-slot
    'sandbox.resources/cpu 'cpu PooFlowSandboxNumberType #t
    '((scope . sandbox-core) (slot . cpu) (merge . override))))
 (def PooFlowSandboxPortsSlot
-  (poo-flow-contract-slot
+  (yuanxu-contract-slot
    'sandbox.resources/ports 'ports PooFlowSandboxListType #f
    '((scope . sandbox-core) (slot . ports) (optional . #t) (merge . override))))
 (def PooFlowSandboxMemorySlot
-  (poo-flow-contract-slot
+  (yuanxu-contract-slot
    'sandbox.resources/memory 'memory PooFlowSandboxStringType #t
    '((scope . sandbox-core) (slot . memory) (merge . override))))
 (def PooFlowSandboxTimeoutSlot
-  (poo-flow-contract-slot
+  (yuanxu-contract-slot
    'sandbox.resources/timeout-ms 'timeout-ms PooFlowSandboxNumberType #f
    '((scope . sandbox-core) (slot . timeout-ms) (optional . #t) (merge . override))))
 
@@ -89,7 +89,7 @@
         PooFlowSandboxTimeoutSlot))
 
 (def PooFlowSandboxResourcesPrototypeContract
-  (poo-flow-native-contract
+  (yuanxu-native-contract
    'sandbox/resources
    'sandbox-core
    'PooSandboxResourcesPrototype
@@ -159,7 +159,7 @@
 
 ;; : (-> Alist)
 (def (poo-flow-sandbox-resources-prototype-type-contract->alist)
-  (poo-flow-native-contract->alist PooFlowSandboxResourcesPrototypeContract))
+  (yuanxu-native-contract->alist PooFlowSandboxResourcesPrototypeContract))
 
 ;; : (-> Symbol String Dyn POOObject)
 (def (poo-flow-sandbox-resources-prototype-diagnostic code message value)
@@ -177,10 +177,10 @@
         (cons 'object (.ref diagnostic 'object))
         (cons 'value (.ref diagnostic 'value))))
 
-;; : [PooFlowTypeFactContract]
+;; : [YuanxuTypeFactContract]
 (def +poo-flow-sandbox-resources-prototype-type-facts+
   (list
-   (poo-flow-type-fact
+   (yuanxu-type-fact
     'sandbox.resources/filesystem-prototype
     'slot-contract
     'PooSandboxResourcesPrototype
@@ -189,7 +189,7 @@
     'PooSandboxFilesystemPrototype
     'positive
     '((scope . sandbox-core) (required . #t)))
-   (poo-flow-type-fact
+   (yuanxu-type-fact
     'sandbox.resources/cpu-number
     'slot-contract
     'PooSandboxResourcesPrototype
@@ -198,7 +198,7 @@
     'Number
     'positive
     '((scope . sandbox-core) (required . #t)))
-   (poo-flow-type-fact
+   (yuanxu-type-fact
     'sandbox.resources/memory-string
     'slot-contract
     'PooSandboxResourcesPrototype
@@ -207,7 +207,7 @@
     'String
     'positive
     '((scope . sandbox-core) (required . #t)))
-   (poo-flow-type-fact
+   (yuanxu-type-fact
     'sandbox.resources/ports-list
     'slot-contract
     'PooSandboxResourcesPrototype
@@ -216,7 +216,7 @@
     'List
     'optional
     '((scope . sandbox-core) (required . #f)))
-   (poo-flow-type-fact
+   (yuanxu-type-fact
     'sandbox.resources/timeout-number
     'slot-contract
     'PooSandboxResourcesPrototype
@@ -226,10 +226,10 @@
     'optional
     '((scope . sandbox-core) (required . #f)))))
 
-;; : [PooFlowLeanFactContract]
+;; : [YuanxuLeanFactContract]
 (def +poo-flow-sandbox-resources-prototype-lean-fact-contracts+
   (list
-   (poo-flow-lean-fact
+   (yuanxu-lean-fact
     'sandbox.resources/filesystem-structured
     'fact
     'SandboxResources.SandboxResourceFact
@@ -237,7 +237,7 @@
     'filesystem
     'positive
     '((scope . sandbox-core)))
-   (poo-flow-lean-fact
+   (yuanxu-lean-fact
     'sandbox.resources/cpu-present
     'fact
     'SandboxResources.SandboxResourceFact
@@ -245,7 +245,7 @@
     'cpu
     'positive
     '((scope . sandbox-core)))
-   (poo-flow-lean-fact
+   (yuanxu-lean-fact
     'sandbox.resources/memory-present
     'fact
     'SandboxResources.SandboxResourceFact
@@ -253,7 +253,7 @@
     'memory
     'positive
     '((scope . sandbox-core)))
-   (poo-flow-lean-fact
+   (yuanxu-lean-fact
     'sandbox.resources/runtime-executed-false
     'fact
     'SandboxResources.SandboxResourceFact
@@ -292,11 +292,11 @@
       "sandbox resources prototype slot exists but cannot be read through POO slot resolution"
       resources))))
 
-;; : (-> PooSandboxResourcesPrototype PooFlowSlotContract [POOObject])
+;; : (-> PooSandboxResourcesPrototype YuanxuSlotContract [POOObject])
 (def (poo-flow-sandbox-resources-prototype-slot-contract-diagnostics
       resources
       contract)
-  (let (slot (poo-flow-contract-slot-name contract))
+  (let (slot (yuanxu-contract-slot-name contract))
     (if (and (object? resources)
              (.slot? resources slot)
              (poo-flow-sandbox-resources-prototype-slot-readable? resources slot))
@@ -309,7 +309,7 @@
            (list (cons 'slot slot)))))
        (lambda ()
          (let (slot-value (.ref resources slot))
-           (if (element? (poo-flow-contract-slot-type contract) slot-value)
+           (if (element? (yuanxu-contract-slot-type contract) slot-value)
              '()
              (list
               (poo-flow-sandbox-resources-prototype-diagnostic
@@ -532,10 +532,10 @@
            (diagnostic-count (length diagnostic-objects))
            (checked-signals (.ref validation 'checked-signals))
            (type-facts
-            (map poo-flow-type-fact-contract->alist
+            (map yuanxu-type-fact-contract->alist
                  (.ref validation 'type-facts)))
            (lean-fact-contracts
-            (map poo-flow-lean-fact-contract->alist
+            (map yuanxu-lean-fact-contract->alist
                  (.ref validation 'lean-fact-contracts)))
            (runtime-executed (.ref validation 'runtime-executed)))))
 

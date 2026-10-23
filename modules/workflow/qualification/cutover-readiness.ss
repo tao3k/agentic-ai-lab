@@ -9,8 +9,8 @@
 (export #t)
 
 (import (only-in :clan/poo/object .ref object<-alist)
-        :core/object-family/role-syntax
-        :core/object-family/syntax
+        :yuanxu/object-family/role-syntax
+        :yuanxu/object-family/syntax
         :poo-flow/modules/workflow/qualification/capability-prototypes)
 
 (def +poo-flow-cutover-readiness-input-kind+

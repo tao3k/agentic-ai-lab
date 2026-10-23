@@ -14,6 +14,7 @@ on:
       - packages/automation/install_gerbil_release.py
       - build.ss
       - gerbil.pkg
+      - dev/gerbil.pkg
       - init.ss
       - modules/**
       - core
@@ -26,6 +27,7 @@ on:
       - packages/automation/install_gerbil_release.py
       - build.ss
       - gerbil.pkg
+      - dev/gerbil.pkg
       - init.ss
       - modules/**
       - core
@@ -120,10 +122,14 @@ jobs:
           python3 packages/automation/gerbil_dependency_pin.py prepare-native --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
           if [[ "${{ steps.dependency-cache.outputs.cache-hit }}" == "true" ]]; then
             gerbil env gerbil interactive -e \
-              '(begin (import :asp-gerbil-scheme/benchmark-api) (displayln "asp-benchmark-cache-ready"))'
+              '(begin (import :clan/poo/object) (displayln "library-cache-ready"))'
           else
             gerbil deps --install
           fi
+          # The measurement harness is development tooling, not a library input.
+          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil deps --install)
+          export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
+          echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
           gerbil env gerbil interactive -e \
             '(begin (import :asp-gerbil-scheme/benchmark-api) (displayln "asp-benchmark-ready"))'
 

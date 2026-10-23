@@ -7,9 +7,9 @@
 
 (import (only-in :clan/poo/object .ref)
         "./performance"
-        (only-in :core/module-system/selection/objects
-                 poo-flow-settings
-                 pooFlowUserConfig)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-settings
+                 yuanxuUserConfig)
         (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
                  pooFlowUserConfigPresentation))
 
@@ -29,9 +29,9 @@
 
 ;; : (-> [[PooUserModuleSelection]] PooUserConfig)
 (def (funflow-performance-user-config module-bundles)
-  (pooFlowUserConfig
+  (yuanxuUserConfig
    module-bundles
-   (poo-flow-settings)))
+   (yuanxu-settings)))
 
 ;; : (-> PooUserConfig Integer POOObject)
 (def (funflow-performance-presentation config _index)

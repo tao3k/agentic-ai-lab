@@ -7,10 +7,10 @@
 ;;; Invariant: construct only the profiles required by the real downstream
 ;;; Funflow case; do not import the aggregate custom-profile owner.
 
-(import (only-in :core/module-system/selection/objects
-                 pooFlowUserConfig
-                 poo-flow-settings
-                 poo-flow-user-module-selection)
+(import (only-in :yuanxu/module-system/selection/objects
+                 yuanxuUserConfig
+                 yuanxu-settings
+                 yuanxu-user-module-selection)
         (only-in :poo-flow/modules/agent-sandbox/config
                  poo-flow-sandbox-profile-config)
         (only-in "../../user-interface/custom/my-module/cases/funflow-cicd"
@@ -41,7 +41,7 @@
 ;; : (-> [PooUserModuleSelection])
 (def (user-interface-cicd-runtime-fixture-profile-module)
   (list
-   (poo-flow-user-module-selection
+   (yuanxu-user-module-selection
     'sandbox
     'nono-sandbox
     (list
@@ -68,7 +68,7 @@
 
 ;; : (-> PooUserConfig)
 (def (user-interface-cicd-runtime-fixture-config)
-  (pooFlowUserConfig
+  (yuanxuUserConfig
    (append (user-interface-cicd-runtime-fixture-profile-module)
            poo-flow-custom-my-module-funflow-cicd-case)
-   (poo-flow-settings)))
+   (yuanxu-settings)))

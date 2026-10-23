@@ -6,8 +6,8 @@
 ;;; POO nodes and executes MATCH, optional property equality, and RETURN.
 ;;; Path joins and external source admission are outside this small API.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :core/utilities/functional
-                 poo-flow-all? poo-flow-filter-map poo-flow-map)
+        (only-in :yuanxu/utilities/functional
+                 yuanxu-all? yuanxu-filter-map yuanxu-map)
         (only-in "types.ss" poo-flow-query?)
         (only-in "contracts.ss" poo-flow-query-source-content-identity))
 
@@ -23,7 +23,7 @@
   (unless (and (poo-flow-query? query)
                (eq? (.ref (.ref query 'language) 'runtime-owner) 'poo-flow)
                (list? nodes) (<= (length nodes) 256)
-               (poo-flow-all? object? nodes))
+               (yuanxu-all? object? nodes))
     (error "Scheme node selection requires a bounded Scheme GQL Query"))
   (let* ((program (.ref query 'program))
          (path (.ref program 'match))
@@ -33,10 +33,10 @@
          (expressions
           (projection-expressions (.ref program 'project)))
          (properties
-          (poo-flow-map (lambda (expression) (.ref expression 'property))
+          (yuanxu-map (lambda (expression) (.ref expression 'property))
                         expressions)))
     (unless (and (not (.ref path 'next))
-                 (poo-flow-all?
+                 (yuanxu-all?
                   (lambda (expression)
                     (eq? (.ref expression 'binding) binding))
                   expressions)
@@ -45,7 +45,7 @@
                           binding)))
       (error "unsupported Scheme GQL syntax: expected one node"))
     (let ((rows-value
-           (poo-flow-filter-map
+           (yuanxu-filter-map
             (lambda (node)
               (and (.slot? node 'label)
                    (eq? (.ref node 'label) (.ref start 'label))
@@ -55,11 +55,11 @@
                               (equal? (.ref node name)
                                       (.ref (.ref predicate 'right) 'value)))))
                    (begin
-                     (unless (poo-flow-all?
+                     (unless (yuanxu-all?
                               (lambda (name) (.slot? node name))
                               properties)
                        (error "Scheme GQL node lacks projected property"))
-                     (poo-flow-map (lambda (name) (.ref node name))
+                     (yuanxu-map (lambda (name) (.ref node name))
                                    properties))))
             nodes)))
       (when (> (length rows-value) (.ref query 'result-bound))

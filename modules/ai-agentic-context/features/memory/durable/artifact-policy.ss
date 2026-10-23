@@ -7,9 +7,9 @@
 ;;; Invariant: this module must keep profile objects POO-native while emitting
 ;;; stable bounded receipts for policy and parser-owned validation.
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :core/modules/funflow/control-plane/runtime-protocol
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol
                  +runtime-request-schema+)
-        (only-in :core/modules/funflow/control-plane/runtime-command-descriptor
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
         :poo-flow/modules/ai-agentic-context/features/memory/durable/artifact-profile
         :poo-flow/modules/ai-agentic-context/features/memory/durable/artifact-object

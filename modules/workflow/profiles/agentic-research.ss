@@ -6,11 +6,11 @@
 ;;; Boundary: maintained agentic-research Profiles and browser Scenario graph.
 
 (import (only-in :clan/poo/object .def .o)
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        (only-in :core/module-system/authoring/roles poo-flow-semantic-module)
-        (only-in :core/profile-composition/profile-bundle
-                 poo-flow-module-profiles
-                 poo-flow-profile-export))
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :yuanxu/module-system/authoring/roles yuanxu-semantic-module)
+        (only-in :yuanxu/profile-composition/profile-bundle
+                 yuanxu-module-profiles
+                 yuanxu-profile-export))
 
 (export AgenticResearchModule BrowserResearchScenarioProfile)
 
@@ -28,13 +28,13 @@
   (capabilities '(schedule observe)))
 
 (def AgenticResearchModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'poo-flow 'agentic-research)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'poo-flow 'agentic-research)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'researcher ResearcherProfile)
-    (poo-flow-profile-export 'evidence-curator EvidenceCuratorProfile)
-    (poo-flow-profile-export 'runtime ResearchRuntimeProfile))))
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'researcher ResearcherProfile)
+    (yuanxu-profile-export 'evidence-curator EvidenceCuratorProfile)
+    (yuanxu-profile-export 'runtime ResearchRuntimeProfile))))
 
 (.def BrowserResearchScenarioProfile
   (identity 'browser-research-scenario)

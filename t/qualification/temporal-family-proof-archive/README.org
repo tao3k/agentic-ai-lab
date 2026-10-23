@@ -34,7 +34,7 @@ Both parent and child must execute one real test and finish successfully. The
 watchdog requires genuine completed work within five seconds, including native
 loader hash progress. No timer output or deadline widening is used.
 
-The public POO cases use =poo-flow-test-case= and the original upstream gxtest
+The public POO cases use =yuanxu-test-case= and the original upstream gxtest
 runner. Compile changed modules/tests and the existing native entry before
 linking with official =compile-exe=. Run =just test-temporal-family-native
 /absolute/fresh-native-executable=. It applies =gerbil_test_runtime_options= before

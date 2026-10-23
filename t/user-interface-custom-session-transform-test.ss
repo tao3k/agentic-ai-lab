@@ -7,14 +7,14 @@
 ;;; Invariant: transform rows are report-only handoff receipts; Scheme never
 ;;; invokes a provider, memory backend, sandbox runtime, or tool.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection-key
-                 poo-flow-user-module-selection-flag-entry)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-key
+                 yuanxu-user-module-selection-flag-entry)
         :poo-flow/modules/session/config
         (only-in "../user-interface/custom/my-module/cases/session-transform"
                  poo-flow-custom-my-module-session-transform-case))
@@ -30,13 +30,13 @@
 (def (module-config-rows module-selection-bundle)
   (let* ((selection (car module-selection-bundle))
          (entry
-          (poo-flow-user-module-selection-flag-entry selection ':session-rows)))
+          (yuanxu-user-module-selection-flag-entry selection ':session-rows)))
     (if entry (cdr entry) '())))
 
 ;; : TestSuite
 (def user-interface-custom-session-transform-test
   (test-suite "poo-flow custom user-interface session-transform case"
-    (poo-flow-test-case "projects transform declarations through session-owned syntax"
+    (yuanxu-test-case "projects transform declarations through session-owned syntax"
       (let* ((selection
               (car poo-flow-custom-my-module-session-transform-case))
              (rows
@@ -48,7 +48,7 @@
              (receipt (list-ref rows 3))
              (handoff-intent
               (poo-flow-session-transform-receipt-handoff-intent receipt)))
-        (check-equal? (poo-flow-user-module-selection-key selection)
+        (check-equal? (yuanxu-user-module-selection-key selection)
                       '(session . session))
         (check-equal? (length rows) 4)
         (check-equal? (poo-flow-session-memory-intent? memory-intent) #t)

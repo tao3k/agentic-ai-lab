@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
         :poo-flow/modules/temporal-causality/interface)
@@ -32,7 +32,7 @@
 
 (def temporal-impact-test
   (test-suite "exact dynamic trajectory contrasts"
-    (poo-flow-test-case "irregular intervals yield exact level and rate contrasts"
+    (yuanxu-test-case "irregular intervals yield exact level and rate contrasts"
       (let* ((left (series "left" "policy-a" 'observed
                            (list (sample "l5" 5 10)
                                  (sample "l0" 0 0)
@@ -59,7 +59,7 @@
         (check (.ref contrast 'status) => 'descriptive-contrast)
         (check (.ref contrast 'causal-impact-admitted?) => #f)))
 
-    (poo-flow-test-case "counterfactual values stay candidates"
+    (yuanxu-test-case "counterfactual values stay candidates"
       (let* ((baseline (series "baseline" "actual" 'observed
                                (list (sample "a0" 0 1)
                                      (sample "a2" 2 3))))
@@ -74,7 +74,7 @@
         (check (.ref (cadr (.ref contrast 'points)) 'rate-delta) => 0)
         (check (.ref contrast 'causal-impact-admitted?) => #f)))
 
-    (poo-flow-test-case "intervention window audits prefix and exact irregular area"
+    (yuanxu-test-case "intervention window audits prefix and exact irregular area"
       (let* ((baseline (series "baseline-window" "actual" 'observed
                                (list (sample "b0" 0 0)
                                      (sample "b2" 2 2)
@@ -114,7 +114,7 @@
           "audit-unobserved-baseline" "intervention-a" baseline candidate
           onset end) true)))
 
-    (poo-flow-test-case "scoped candidate audit checks declared negative controls"
+    (yuanxu-test-case "scoped candidate audit checks declared negative controls"
       (let* ((onset (poo-flow-temporal-instant
                      "onset-2" "study-time" 2 "policy-a" 'proposed))
              (end (poo-flow-temporal-instant
@@ -196,7 +196,7 @@
           "overlap" "intervention-a" "subject-1" "cut-1"
           "projection-1" onset end '("outcome-1") '("outcome-1")) true)))
 
-    (poo-flow-test-case "revised trajectories reissue or block Impact"
+    (yuanxu-test-case "revised trajectories reissue or block Impact"
       (let* ((old-left
               (versioned-series "left-v1" "proposal" 'counterfactual
                                 "cut-1" "projection-1"
@@ -274,7 +274,7 @@
                                                (sample "r3" 3 2)))))
                      'reason) => 'grid-mismatch)))
 
-    (poo-flow-test-case "grid and evidence-scope mismatch fail closed"
+    (yuanxu-test-case "grid and evidence-scope mismatch fail closed"
       (let ((left (series "left" "a" 'observed
                           (list (sample "a0" 0 1) (sample "a2" 2 3)))))
         (check-exception

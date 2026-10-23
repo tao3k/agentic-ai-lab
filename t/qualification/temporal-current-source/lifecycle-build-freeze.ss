@@ -4,7 +4,7 @@
   (idle-seconds 5) (wall-seconds 45) (cases 11) (exit-status 0)
   (compiler-route official-gxc-then-compile-exe)
   (sdk-overlay temporary-unchanged-upstream-outputs)
-  (runner upstream-gxtest) (test-policy poo-flow-test-case)
+  (runner upstream-gxtest) (test-policy yuanxu-test-case)
   (source-authenticated? #f) (runtime-executed? #f) (action-authorized? #f)
   (frontier-completeness caller-premise) (retraction-scope same-family-query)
   (prior-discovery-failures 4) (prior-exit-status 124)

@@ -7,7 +7,7 @@
 ;;; Invariant: projection stays report-only and does not duplicate topology
 ;;; outside the session module graph owner.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -125,7 +125,7 @@
 
 (def loop-engine-session-agent-graph-performance-test
   (test-suite "loop-engine session-agent graph performance"
-    (poo-flow-test-case "keeps loop-engine topology projection inside benchmark contract"
+    (yuanxu-test-case "keeps loop-engine topology projection inside benchmark contract"
       (let-values (((receipt summary)
                     (benchmark-run/result
                      loop-engine-session-agent-graph-performance-fixture

@@ -6,12 +6,12 @@
 ;;; Boundary: sandbox backend object-family macro contracts.
 ;;; Invariant: generated backend objects stay POO-native and runtime-free.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-eq?
                  check-equal?
                  test-suite)
-        :core/module-system/schema/interface
+        :yuanxu/module-system/schema/interface
         :poo-flow/modules/sandbox-core/objects
         :poo-flow/modules/sandbox-core/profile-support/policy
         :poo-flow/modules/nono-sandbox/objects
@@ -25,24 +25,24 @@
 
 ;; : (-> PooModuleObject Symbol PooModuleFieldContract)
 (def (required-field object field)
-  (let (contract (poo-flow-module-object-field object field))
-    (check-equal? (poo-flow-module-field-contract? contract) #t)
+  (let (contract (yuanxu-module-object-field object field))
+    (check-equal? (yuanxu-module-field-contract? contract) #t)
     contract))
 
 ;; : (-> PooModuleObject Symbol Value)
 (def (field-default object field)
-  (poo-flow-module-field-contract-default
+  (yuanxu-module-field-contract-default
    (required-field object field)))
 
 ;; : (-> PooModuleObject Symbol Symbol)
 (def (field-value-kind object field)
-  (poo-flow-module-value-type-kind
-   (poo-flow-module-field-contract-value-type
+  (yuanxu-module-value-type-kind
+   (yuanxu-module-field-contract-value-type
     (required-field object field))))
 
 ;; : (-> PooModuleObject Symbol Alist)
 (def (field-metadata object field)
-  (poo-flow-module-field-contract-metadata
+  (yuanxu-module-field-contract-metadata
    (required-field object field)))
 
 ;; : (-> Object Symbol Object Void)
@@ -59,32 +59,32 @@
 
 (def sandbox-backend-object-family-test
  (test-suite "sandbox backend object family macro contracts"
-   (poo-flow-test-case "generates backend object identities and metadata"
-     (check-equal? (poo-flow-module-object? poo-flow-nono-sandbox-object) #t)
-     (check-equal? (poo-flow-module-object? poo-flow-cubeSandbox-object) #t)
-     (check-equal? (poo-flow-module-object? poo-flow-docker-sandbox-object) #t)
-     (check-eq? (poo-flow-module-object-identity
+   (yuanxu-test-case "generates backend object identities and metadata"
+     (check-equal? (yuanxu-module-object? poo-flow-nono-sandbox-object) #t)
+     (check-equal? (yuanxu-module-object? poo-flow-cubeSandbox-object) #t)
+     (check-equal? (yuanxu-module-object? poo-flow-docker-sandbox-object) #t)
+     (check-eq? (yuanxu-module-object-identity
                  poo-flow-nono-sandbox-object)
                 'objects.nono-sandbox.sandbox)
-     (check-eq? (poo-flow-module-object-identity
+     (check-eq? (yuanxu-module-object-identity
                  poo-flow-cubeSandbox-object)
                 'objects.cubeSandbox.sandbox)
-     (check-eq? (poo-flow-module-object-identity
+     (check-eq? (yuanxu-module-object-identity
                  poo-flow-docker-sandbox-object)
                 'objects.docker-sandbox.sandbox)
      (check-eq? (alist-ref/default
                  'domain
-                 (poo-flow-module-object-metadata
+                 (yuanxu-module-object-metadata
                   poo-flow-docker-sandbox-object)
                  #f)
                 'sandbox)
      (check-eq? (alist-ref/default
                  'namespace
-                 (poo-flow-module-object-metadata
+                 (yuanxu-module-object-metadata
                   poo-flow-docker-sandbox-object)
                  #f)
                 'objects.docker-sandbox))
-   (poo-flow-test-case "generates backend field contracts"
+   (yuanxu-test-case "generates backend field contracts"
      (check-eq? (field-value-kind poo-flow-nono-sandbox-object 'backend)
                 'Symbol)
      (check-eq? (field-default poo-flow-nono-sandbox-object 'backend)
@@ -98,24 +98,24 @@
                  (field-metadata poo-flow-cubeSandbox-object 'profile)
                  #f)
                 'cubeSandbox)
-     (check-equal? (poo-flow-module-object-field
+     (check-equal? (yuanxu-module-object-field
                     poo-flow-docker-sandbox-object
                     'backend-ref)
                    #f))
-   (poo-flow-test-case "generates profile object inheritance and resolved fields"
-     (check-equal? (poo-flow-module-object?
+   (yuanxu-test-case "generates profile object inheritance and resolved fields"
+     (check-equal? (yuanxu-module-object?
                     poo-flow-nono-sandbox-profile-object)
                    #t)
-     (check-equal? (poo-flow-module-object?
+     (check-equal? (yuanxu-module-object?
                     poo-flow-cubeSandbox-profile-object)
                    #t)
-     (check-equal? (poo-flow-module-object?
+     (check-equal? (yuanxu-module-object?
                     poo-flow-docker-sandbox-profile-object)
                    #t)
-     (check-eq? (poo-flow-module-object-identity
+     (check-eq? (yuanxu-module-object-identity
                  poo-flow-docker-sandbox-profile-object)
                 'objects.docker-sandbox.profile)
-     (check-equal? (poo-flow-module-object-inherits
+     (check-equal? (yuanxu-module-object-inherits
                     poo-flow-docker-sandbox-profile-object)
                    (list poo-flow-sandbox-core-profile-object
                          poo-flow-docker-sandbox-object))
@@ -141,7 +141,7 @@
                    '((filesystem
                       (scope . snapshot)
                       (snapshot . clone)))))
-   (poo-flow-test-case "generates backend capability registries"
+   (yuanxu-test-case "generates backend capability registries"
      (check-backend-registry
       poo-flow-nono-sandbox-backend-capability-registry
       'nono

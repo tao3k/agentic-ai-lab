@@ -135,11 +135,11 @@ class SchemeProjectionArtifactToolTest(unittest.TestCase):
             )
             runner_source = runner_capture.read_text(encoding="utf-8")
             self.assertIn(
-                ":core/profile-composition/selection-syntax",
+                ":yuanxu/profile-composition/selection-syntax",
                 runner_source,
             )
             self.assertIn(
-                ":core/profile-composition/profile-bundle",
+                ":yuanxu/profile-composition/profile-bundle",
                 runner_source,
             )
             self.assertIn(

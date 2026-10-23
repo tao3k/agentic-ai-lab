@@ -8,8 +8,8 @@
 
 (import :poo-flow/modules/nono-sandbox/objects
         :poo-flow/modules/sandbox-core/objects
-        :core/module-system/selection/objects
-        :core/utilities/final-projection-syntax)
+        :yuanxu/module-system/selection/objects
+        :yuanxu/utilities/final-projection-syntax)
 
 (export poo-flow-nono-sandbox-module-bundles
         +poo-flow-nono-sandbox-default-binding+
@@ -26,7 +26,7 @@
 (def poo-flow-nono-sandbox-module-bundles
   (list
    (list
-    (poo-flow-user-module-selection
+    (yuanxu-user-module-selection
      'sandbox 'nono-sandbox
      (list '+nono '+native-ffi '+doctor
            (cons ':backend-capability-registry
@@ -48,12 +48,12 @@
 ;; : (-> Symbol [PooSandboxProfile] [UserModuleFlagEntry])
 (def (poo-flow-nono-sandbox-config-flags binding-value profiles . maybe-user-config)
   (if (null? maybe-user-config)
-    (poo-flow-product-field-rows
+    (yuanxu-product-field-rows
      (:binding (poo-flow-nono-sandbox-binding-config binding-value))
      (:backend-capability-registry
       poo-flow-nono-sandbox-backend-capability-registry)
      (:config profiles))
-    (poo-flow-product-field-rows
+    (yuanxu-product-field-rows
      (:binding (poo-flow-nono-sandbox-binding-config binding-value))
      (:backend-capability-registry
       poo-flow-nono-sandbox-backend-capability-registry)

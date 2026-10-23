@@ -8,8 +8,8 @@
 ;;; Invariant: every module owns its default flags and bundle in config.ss;
 ;;; this profile only composes those module-owned values.
 
-(import (only-in :core/modules/funflow/graph-projection
-                 poo-flow-funflow-cicd-default-payload)
+(import (only-in :yuanxu/modules/funflow/graph-projection
+                 yuanxu-funflow-cicd-default-payload)
         (only-in :poo-flow/modules/session/config
                  +poo-flow-session-default-flags+
                  poo-flow-session-module-bundles)
@@ -22,7 +22,7 @@
         (only-in :poo-flow/modules/docker-sandbox/config
                  poo-flow-docker-sandbox-module-bundles))
 
-(export poo-flow-funflow-cicd-default-payload
+(export yuanxu-funflow-cicd-default-payload
         poo-flow-kernel-module-bundles
         poo-flow-funflow-module-bundles
         poo-upstream-flow-funflow-module-bundles

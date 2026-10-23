@@ -5,7 +5,7 @@
 
 ;;; Boundary: POO performance cases for tool-calling control-plane objects.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -132,7 +132,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-tool-calling-object-list-control-case)
-  (poo-flow-test-case "validates tool-call proof objects through stable POO lists"
+  (yuanxu-test-case "validates tool-call proof objects through stable POO lists"
     (let* ((pair-count 96)
            (rounds 4)
            (pairs

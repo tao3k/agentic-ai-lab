@@ -6,7 +6,7 @@
 ;;; Boundary: sandbox-core profile derivation follows native POO extension.
 ;;; Invariant: derived profiles are inert recipes; no backend runtime executes.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -47,7 +47,7 @@
 
 (def sandbox-core-profile-derivation-test
  (test-suite "sandbox-core profile derivation"
-   (poo-flow-test-case "derives session and task profiles through POO extensions"
+   (yuanxu-test-case "derives session and task profiles through POO extensions"
      (let* ((project-profile
              (poo-flow-nono-sandbox-profile-config
               'project/dev
@@ -93,7 +93,7 @@
                      'build)
        (check-equal? (derivation-test-alist-ref metadata 'runtime-executed #t)
                      #f)))
-   (poo-flow-test-case "rejects backend rows during derivation"
+   (yuanxu-test-case "rejects backend rows during derivation"
      (let (project-profile
            (poo-flow-nono-sandbox-profile-config
             'project/dev
@@ -107,7 +107,7 @@
             'session/bad
             '((backend docker)))))
         #t)))
-   (poo-flow-test-case "rejects non-symbol names before profile resolution"
+   (yuanxu-test-case "rejects non-symbol names before profile resolution"
      (let (project-profile
            (poo-flow-nono-sandbox-profile-config
             'project/dev
@@ -128,7 +128,7 @@
             "project/bad"
             '((metadata (project . bad))))))
         #t)))
-   (poo-flow-test-case "rejects non-profile parents during derivation"
+   (yuanxu-test-case "rejects non-profile parents during derivation"
      (check-equal?
       (derivation-test-error?
        (lambda ()
@@ -138,7 +138,7 @@
           'session/bad-parent
           '((metadata (session . bad-parent))))))
       #t))
-   (poo-flow-test-case "rejects unknown rows through POO field validation"
+   (yuanxu-test-case "rejects unknown rows through POO field validation"
      (let (project-profile
            (poo-flow-nono-sandbox-profile-config
             'project/dev
@@ -152,7 +152,7 @@
             'session/unknown-row
             '((unknown-row value)))))
         #t)))
-   (poo-flow-test-case "rejects unsafe filesystem resources before runtime handoff"
+   (yuanxu-test-case "rejects unsafe filesystem resources before runtime handoff"
      (let (project-profile
            (poo-flow-nono-sandbox-profile-config
             'project/dev

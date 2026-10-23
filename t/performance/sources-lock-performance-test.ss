@@ -7,14 +7,14 @@
 ;;; Invariant: admitted entries are fixture data; the measurement owns
 ;;; canonical lock construction, digest construction, indexing and lookup.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .o .ref)
         (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :core/feature-system/source-lock-feature)
+        :yuanxu/feature-system/source-lock-feature)
 
 (export sources-lock-performance-test)
 
@@ -80,7 +80,7 @@
 (def sources-lock-performance-test
   (test-suite
    "Sources Lock canonical freeze and lookup performance"
-   (poo-flow-test-case
+   (yuanxu-test-case
     "constructs and indexes 10,000 admitted source lock entries"
     (displayln
      "[poo-flow-benchmark] sources-lock phase=fixture-ready count="

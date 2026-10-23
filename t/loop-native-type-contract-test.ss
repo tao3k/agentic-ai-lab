@@ -5,7 +5,7 @@
 
 ;;; Contract: loop governor and human audit expose native POO Contracts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
 (def (loop-contract-eval expr)
@@ -24,7 +24,7 @@
 
 (def loop-native-type-contract-test
   (test-suite "loop-native-type-contract-test"
-    (poo-flow-test-case "validates the native contract"
+    (yuanxu-test-case "validates the native contract"
       (eval '(import "./modules/loop-engine/control/descriptor.ss"))
       (eval '(import "./modules/loop-engine/control/strategy.ss"))
       (eval '(import "./modules/loop-engine/control/governor.ss"))

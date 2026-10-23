@@ -5,7 +5,7 @@
 
 ;;; Boundary: nono sandbox module objects.
 
-(import :core/module-system/schema/interface
+(import :yuanxu/module-system/schema/interface
         :poo-flow/modules/sandbox-core/shared-object
         :poo-flow/modules/sandbox-core/backend-object-syntax
         :poo-flow/modules/sandbox-core/objects
@@ -28,8 +28,8 @@
   (sandbox objects.nono-sandbox.sandbox
            objects.nono-sandbox
            objects.shared.sandbox
-           ((backend PooFlowModuleSymbolType override 'nono '((scope . nono-sandbox)))
-            (binding PooFlowModuleSymbolType override 'native-ffi '((scope . nono-sandbox)))))
+           ((backend YuanxuModuleSymbolType override 'nono '((scope . nono-sandbox)))
+            (binding YuanxuModuleSymbolType override 'native-ffi '((scope . nono-sandbox)))))
   (backend nono
            poo-flow-sandbox-backend-capability/nono
            '((metadata . ((scope . nono-sandbox)
@@ -39,30 +39,30 @@
            objects.nono-sandbox.sandbox
            (poo-flow-sandbox-core-profile-object
             poo-flow-nono-sandbox-object)
-           ((profile-name PooFlowModuleSymbolType override 'default
+           ((profile-name YuanxuModuleSymbolType override 'default
                           '((scope . nono-sandbox)
                             (dsl-row . profile-name)))
-            (backend-kind PooFlowModuleSymbolType override 'nono
+            (backend-kind YuanxuModuleSymbolType override 'nono
                           '((scope . nono-sandbox)
                             (owned-by . module-config)))
-            (backend-ref PooFlowModuleSymbolType override 'nono-sandbox
+            (backend-ref YuanxuModuleSymbolType override 'nono-sandbox
                          '((scope . nono-sandbox)
                            (owned-by . module-config)))
-            (network-policy PooFlowModuleListType override '(deny-by-default)
+            (network-policy YuanxuModuleListType override '(deny-by-default)
                             '((scope . nono-sandbox)
                               (dsl-row . network)))
-            (capabilities PooFlowModuleListType override '(process filesystem tmpdir)
+            (capabilities YuanxuModuleListType override '(process filesystem tmpdir)
                           '((scope . nono-sandbox)
                             (dsl-row . capabilities)))
-            (backend-capability PooFlowModuleObjectType override
+            (backend-capability YuanxuModuleObjectType override
                                 poo-flow-nono-sandbox-backend-capability
                                 '((scope . nono-sandbox)
                                   (owned-by . module-config)))
-            (resource-policy PooFlowModuleListType override
+            (resource-policy YuanxuModuleListType override
                              (poo-flow-sandbox-filesystem-prototype->resource-policy
                               poo-flow-runtime-filesystem-prototype)
                              '((scope . nono-sandbox)
                                (dsl-row . resources)))
-            (metadata PooFlowModuleListType append '()
+            (metadata YuanxuModuleListType append '()
                       '((scope . nono-sandbox)
                         (dsl-row . metadata))))))

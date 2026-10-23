@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :poo-flow/modules/workflow/qualification/performance-matrix)
@@ -11,7 +11,7 @@
 
 (def performance-matrix-test
   (test-suite "AC-10 S5 performance matrix"
-    (poo-flow-test-case "existing owners cover the supported Cartesian matrix"
+    (yuanxu-test-case "existing owners cover the supported Cartesian matrix"
       (let (receipt
             (poo-flow-performance-matrix-verify
              "bindings/runtime-c/benchmarks/receipts/runtime_v0_batch_macos_arm64.receipt"

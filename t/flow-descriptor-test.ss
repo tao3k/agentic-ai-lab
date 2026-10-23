@@ -5,8 +5,8 @@
 
 ;;; Boundary: flow descriptor tests cover declaration policy, not execution.
 
-(import :core/composition/roles
-        (only-in :core/observability/testing-case poo-flow-test-case)
+(import :yuanxu/composition/roles
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,14 +17,14 @@
                  check-true
                  test-error
                  test-suite)
-        :core/modules/funflow/control-plane/api)
+        :yuanxu/modules/funflow/control-plane/api)
 
 ;;; This suite keeps flow declaration metadata executable independently from
 ;;; runner scheduling behavior.
 ;; : TestSuite
 (def flow-descriptor-test
   (test-suite "flow declaration descriptors"
-    (poo-flow-test-case "declares POO-backed flow planning policy"
+    (yuanxu-test-case "declares POO-backed flow planning policy"
       (check-equal? (flow-declaration-descriptor? branch-flow-descriptor) #t)
       (check-equal? (role-object? sequential-flow-descriptor) #t)
       (check-equal? (flow-declaration-name task-flow-descriptor) 'task-flow)
@@ -47,7 +47,7 @@
                                                  'branch-capability
                                                  #f)
                     #f))
-    (poo-flow-test-case "selects descriptors from flow declaration shape"
+    (yuanxu-test-case "selects descriptors from flow declaration shape"
       (let* ((inc (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
              (double (scheme-flow 'double (lambda (x) (* x 2)) 'number 'number))
              (pipeline (flow-then 'pipeline inc double))
@@ -60,7 +60,7 @@
         (check-equal? (flow-task-declaration? inc) #t)
         (check-equal? (flow-sequential-declaration? pipeline) #t)
         (check-equal? (flow-branch-declaration? branch) #t)))
-    (poo-flow-test-case "strategy selects planner through flow descriptor policy"
+    (yuanxu-test-case "strategy selects planner through flow descriptor policy"
       (let* ((left (pure-flow 'left (lambda (x) (+ x 1)) 'number 'number))
              (right (pure-flow 'right (lambda (x) (* x 2)) 'number 'number))
              (branch (flow-branch 'fanout left right))

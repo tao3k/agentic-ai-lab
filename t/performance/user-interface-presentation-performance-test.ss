@@ -7,7 +7,7 @@
 ;;; Invariant: public authoring remains POO-native; generated runtime receipts
 ;;; are fixed structs until Marlin ABI handoff serialization.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -17,10 +17,10 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .ref .slot? object?)
         "../support/performance"
-        (only-in :core/module-system/selection/objects
-                 poo-flow-settings
-                 poo-flow-user-module-bundles->modules
-                 pooFlowUserConfig)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-settings
+                 yuanxu-user-module-bundles->modules
+                 yuanxuUserConfig)
         (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
                  pooFlowUserConfigPresentation)
         (only-in :poo-flow/modules/loop-engine/runtime
@@ -78,10 +78,10 @@
 ;; : (-> Integer UserInterfacePresentationObject)
 (def (user-interface-presentation-build count)
   (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules
      (user-interface-presentation-module-bundles count))
-    (poo-flow-settings))))
+    (yuanxu-settings))))
 
 ;; : (-> Integer UserInterfacePresentationSummary)
 (def (user-interface-presentation-summary count)
@@ -126,7 +126,7 @@
 ;; : TestSuite
 (def user-interface-presentation-performance-test
   (test-suite "user-interface presentation performance"
-    (poo-flow-test-case "keeps batch presentation projection inside benchmark contract"
+    (yuanxu-test-case "keeps batch presentation projection inside benchmark contract"
       (let-values (((receipt summary)
                     (benchmark-run/result
                      user-interface-presentation-fixture

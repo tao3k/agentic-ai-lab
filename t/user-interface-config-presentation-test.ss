@@ -6,12 +6,12 @@
 ;;; Boundary: use-module config must be inspectable before runtime.
 ;;; Invariant: presentation is inert; no module descriptors or runtimes execute.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/presentation-config
         :poo-flow/modules/workflow/scenario/configuration/init-syntax
         :poo-flow/modules/agent-sandbox/config
@@ -43,10 +43,10 @@
 
 (def user-interface-config-presentation-test
  (test-suite "user-interface config presentation"
-   (poo-flow-test-case "shows an independent custom-module profile fragment as user config"
-     (let* ((config (pooFlowUserConfig
+   (yuanxu-test-case "shows an independent custom-module profile fragment as user config"
+     (let* ((config (yuanxuUserConfig
                      poo-flow-custom-module-agent-sandbox-audit-module
-                     (poo-flow-settings)))
+                     (yuanxu-settings)))
             (presentation (pooFlowUserConfigPresentation config))
             (module-row (car (.ref presentation 'modules)))
             (feature-row (car (.ref presentation 'feature-facts)))
@@ -59,7 +59,7 @@
             (selection
              (car poo-flow-custom-module-agent-sandbox-audit-module))
             (internal-flags
-             (poo-flow-user-module-selection-flags selection))
+             (yuanxu-user-module-selection-flags selection))
             (internal-config-entry
              (alist-value ':config internal-flags))
             (base-profile (car internal-config-entry))
@@ -180,7 +180,7 @@
        (check-equal? (alist-value 'scope-ref last-lineage-step)
                      "feature/agent-sandbox-audit")
        (check-equal? (alist-value ':binding internal-flags) 'native-ffi)))
-   (poo-flow-test-case "rejects user-layer derive parents that are not POO profiles"
+   (yuanxu-test-case "rejects user-layer derive parents that are not POO profiles"
      (let (not-profile 'not-a-poo-profile)
        (check-equal?
         (presentation-test-error?

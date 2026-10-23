@@ -1,0 +1,11 @@
+{
+  "format": "yuanxu/provider-schema-v2",
+  "provider": "registry.terraform.io/hashicorp/aws",
+  "version": "5.100.0",
+  "schema-sha256": "30cf1c04c71f30ce3ec366e5ce7e841b333d75d7ce06ae0764a5a22e2fc831b9",
+  "indexes": {
+    "provider": "453b0e780b293a9a9b244c56db5a4e7ca911417629c80f9e6ca7e899af02ab6a",
+    "resource": "b813d4f6427880d604929395b4242f7ddc17efa4e06e735ef469f3e5d994add9",
+    "data": "493827feeac3631a18a5b6ae8fbdf233e52dc23bc62831085bb26f9cc8b3e47e"
+  }
+}

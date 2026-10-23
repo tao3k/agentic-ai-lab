@@ -2,10 +2,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .ref object? object<-alist)
-        :core/object-family/syntax)
+        :yuanxu/object-family/syntax)
 
 (def +poo-object-family-syntax-test-kind+
   'poo-object-family-syntax-test)
@@ -62,7 +62,7 @@
 
 (def object-family-syntax-test
   (test-suite "object family syntax"
-    (poo-flow-test-case "generates POO-native predicates, accessors, and projections"
+    (yuanxu-test-case "generates POO-native predicates, accessors, and projections"
       (check-equal? (poo-object-family-syntax-test?
                      poo-object-family-syntax-test-object)
                     #t)
@@ -86,7 +86,7 @@
                       (provider . runtime-local)
                       (capabilities chat text json)
                       (runtime-executed . #f))))
-    (poo-flow-test-case "generates prototype constructor and fixed family surface once"
+    (yuanxu-test-case "generates prototype constructor and fixed family surface once"
       (let (declaration
             (make-poo-object-family-declaration
              'scenario-model '(chat text json)))
@@ -99,7 +99,7 @@
         (check-equal? (poo-object-family-declaration->alist declaration)
                       '((ref . scenario-model)
                         (capabilities chat text json)))))
-    (poo-flow-test-case "preserves fixed prototype slots for every instance"
+    (yuanxu-test-case "preserves fixed prototype slots for every instance"
       (let (instance (make-poo-object-family-fixed 42))
         (check-equal? (poo-object-family-fixed? instance) #t)
         (check-equal? (.ref instance 'kind) 'fixed-object)

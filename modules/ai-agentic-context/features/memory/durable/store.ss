@@ -9,7 +9,7 @@
 
 (import (only-in :clan/poo/object .o .ref .slot? object? object<-alist)
         :poo-flow/modules/ai-agentic-context/features/memory/durable/policy
-        :core/utilities/final-projection-syntax)
+        :yuanxu/utilities/final-projection-syntax)
 
 (export +poo-flow-durable-runtime-store-contract-kind+
         +poo-flow-durable-runtime-store-contract-schema+

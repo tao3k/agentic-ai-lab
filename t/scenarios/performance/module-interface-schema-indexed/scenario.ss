@@ -14,17 +14,17 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .o .ref object<-alist)
         (only-in :poo-flow/modules/module-authoring/module-interface
-                 poo-flow-module-interface
-                 poo-flow-module-interface-schema-spec)
+                 yuanxu-module-interface
+                 yuanxu-module-interface-schema-spec)
         (only-in :poo-flow/modules/module-authoring/module-descriptor
                  poo-flow-modules)
-        (only-in :core/module-system/projection/option-objects
-                 poo-flow-module-option-schema-id
-                 poo-flow-module-option-schema-value)
+        (only-in :yuanxu/module-system/projection/option-objects
+                 yuanxu-module-option-schema-id
+                 yuanxu-module-option-schema-value)
         (only-in :poo-flow/modules/module-authoring/module-option-projection
                  poo-flow-module-option-schemas)
-        (only-in :core/module-system/projection/option-validation
-                 poo-flow-module-find-schema))
+        (only-in :yuanxu/module-system/projection/option-validation
+                 yuanxu-module-find-schema))
 
 (def +schema-count+ 1000)
 (def fixture
@@ -45,7 +45,7 @@
              rows-rev)))))
 
 (def interface
-  (poo-flow-module-interface
+  (yuanxu-module-interface
    "IndexedSchemaProfile"
    (object<-alist schema-rows)
    '((owner . "poo-flow"))))
@@ -54,17 +54,17 @@
   (poo-flow-modules interface (.o id: 'indexed-schema config: (.o))))
 
 (def schemas (poo-flow-module-option-schemas module))
-(def option-ids (map poo-flow-module-option-schema-id schemas))
+(def option-ids (map yuanxu-module-option-schema-id schemas))
 
 (def (baseline-values)
   (map (lambda (option-id)
-         (poo-flow-module-option-schema-value
-          (poo-flow-module-find-schema schemas option-id)))
+         (yuanxu-module-option-schema-value
+          (yuanxu-module-find-schema schemas option-id)))
        option-ids))
 
 (def (candidate-values)
   (map (lambda (option-id)
-         (.ref (poo-flow-module-interface-schema-spec interface option-id)
+         (.ref (yuanxu-module-interface-schema-spec interface option-id)
                'constant))
        option-ids))
 

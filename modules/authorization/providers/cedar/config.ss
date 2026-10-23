@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import :core/poo-clos/interface
+(import :yuanxu/poo-clos/interface
         (only-in :poo-flow/modules/authorization/objects
                  AuthorizationCapabilityContractExecutor
                  poo-flow-authorization-provider))

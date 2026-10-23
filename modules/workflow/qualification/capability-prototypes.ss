@@ -8,7 +8,7 @@
 (export #t)
 
 (import (only-in :clan/poo/object .ref)
-        :core/object-family/role-syntax
+        :yuanxu/object-family/role-syntax
         (only-in :std/list/list fold fold-right))
 
 (def +poo-flow-versioned-capability-slots+ '(schema-id schema-version))

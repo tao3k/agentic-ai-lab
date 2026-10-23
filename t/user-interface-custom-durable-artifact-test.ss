@@ -8,7 +8,7 @@
 ;;; receipts only; runtime artifact storage/indexing/publishing stays outside
 ;;; Scheme.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -25,7 +25,7 @@
 ;; : TestSuite
 (def user-interface-custom-durable-artifact-test
   (test-suite "poo-flow custom durable artifact case"
-    (poo-flow-test-case "projects POO artifact policy to bounded receipts"
+    (yuanxu-test-case "projects POO artifact policy to bounded receipts"
       (let* ((row poo-flow-custom-my-module-durable-artifact-case)
              (profile (test-ref row 'profile))
              (database (test-ref row 'database))

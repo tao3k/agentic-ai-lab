@@ -7,7 +7,7 @@
 ;;; Invariant: graph construction is declarative; Scheme does not run agents or
 ;;; deliver messages.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -30,7 +30,7 @@
 ;; : TestSuite
 (def session-multi-agent-graph-test
   (test-suite "poo-flow multi-agent session graph"
-    (poo-flow-test-case "unifies child agent sessions through shared topology"
+    (yuanxu-test-case "unifies child agent sessions through shared topology"
       (let* ((root-session
               (make-agent-graph-session 'graph/root #f))
              (build-session

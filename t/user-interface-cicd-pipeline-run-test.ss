@@ -6,13 +6,13 @@
 ;;; Boundary: tests inspect Funflow CI/CD pipeline run/result presentation.
 ;;; Invariant: pipeline results are handoff-readiness data, not execution output.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :core/modules/funflow/config-prototypes funflow-check funflow-pipeline)
-        :core/module-system/selection/objects
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/presentation-config
         :poo-flow/modules/workflow/scenario/configuration/init-syntax
         (only-in "../user-interface/custom/my-module/cases/cicd-owner"
@@ -43,10 +43,10 @@
 ;;; selected beside the Funflow pipeline before presentation is built.
 ;; : (-> Unit PooUserConfig)
 (def (pipeline-run-test-config)
-  (pooFlowUserConfig
+  (yuanxuUserConfig
    (append poo-flow-custom-my-module-cicd-module
            poo-flow-custom-my-module-funflow-cicd-case)
-   (poo-flow-settings)))
+   (yuanxu-settings)))
 
 ;;; Invalid pipeline cases use the same user-facing Funflow POO syntax as
 ;;; init.ss; only the check graph/profile facts vary between cases.
@@ -149,16 +149,16 @@
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (pipeline-run-test-presentation funflow-case)
   (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
+   (yuanxuUserConfig
     (append poo-flow-custom-my-module-cicd-module funflow-case)
-    (poo-flow-settings))))
+    (yuanxu-settings))))
 
 ;;; The assertions bind the user-facing result to both trace accounting and the
 ;;; concrete run rows, preventing future UI changes from reporting fake results.
 ;; : TestSuite
 (def user-interface-cicd-pipeline-run-test
   (test-suite "poo-flow user interface cicd pipeline run"
-    (poo-flow-test-case "projects Funflow pipeline into handoff-ready run/result"
+    (yuanxu-test-case "projects Funflow pipeline into handoff-ready run/result"
       (let* ((presentation
               (pooFlowUserConfigPresentation
                (pipeline-run-test-config)))
@@ -195,7 +195,7 @@
         (check-equal? (pipeline-run-test-ref result 'status) 'handoff-ready)
         (check-equal? (pipeline-run-test-ref result 'valid?) #t)
         (check-equal? (pipeline-run-test-ref result 'runtime-executed) #f)))
-    (poo-flow-test-case "blocks invalid pipelines with stable diagnostics"
+    (yuanxu-test-case "blocks invalid pipelines with stable diagnostics"
       (let* ((duplicate-presentation
               (pipeline-run-test-presentation
                pipeline-run-test-duplicate-case))

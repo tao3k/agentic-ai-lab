@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         "../support/performance")
@@ -11,7 +11,7 @@
 
 (def domain-case-instance-overlay-performance-test
   (test-suite "DomainCase instance overlay hot path"
-    (poo-flow-test-case "constant-slot overlay removes per-Agent C4 mix"
+    (yuanxu-test-case "constant-slot overlay removes per-Agent C4 mix"
       (let (receipts (run-domain-case-instance-overlay-benchmark))
         (check (map (lambda (receipt) (.ref receipt 'shared-slot-count))
                     receipts)

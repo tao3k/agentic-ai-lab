@@ -13,7 +13,7 @@ verified original MRR observations. Every authority/effect flag remains false.
 
 =native-test.ss= delegates to upstream gxtest's =main=. Its four applicability
 cases and seven =t/temporal-lifecycle-test.ss= cases use the public
-=poo-flow-test-case= helper.
+=yuanxu-test-case= helper.
 Compile through the official Gerbil compiler, with native dependency inputs
 selected explicitly. Run the executable through a five-second genuine-output
 watchdog and a 45-second total deadline, passing =-v 5= and the original test

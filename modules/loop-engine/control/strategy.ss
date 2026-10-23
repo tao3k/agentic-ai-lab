@@ -6,11 +6,11 @@
 ;;; Boundary: loop strategies compose policy descriptors into inert handoff data.
 ;;; Invariant: local execution here is harness-only validation, never production runtime.
 
-(import :core/composition/roles
+(import :yuanxu/composition/roles
         (only-in :clan/poo/object .o object?)
-        :core/modules/funflow/control-plane/roles
-        :core/modules/funflow/control-plane/failure
-        :core/object-family/role-syntax
+        :yuanxu/modules/funflow/control-plane/roles
+        :yuanxu/modules/funflow/control-plane/failure
+        :yuanxu/object-family/role-syntax
         :poo-flow/modules/loop-engine/control/descriptor)
 
 (export +loop-strategy-plan-schema+

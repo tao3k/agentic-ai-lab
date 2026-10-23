@@ -6,7 +6,7 @@
 ;;; Boundary: tests custom user config profile modules.
 ;;; Invariant: user fragments remain declarative module selections.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -18,7 +18,7 @@
         test-error
         test-suite)
         :poo-flow/modules/workflow/scenario/configuration/interface
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/agent-sandbox/config
         (only-in "../user-interface/custom/my-module/profiles/session"
                  poo-flow-custom-my-module-session-module)
@@ -33,7 +33,7 @@
 
 ;; : (-> PooUserModuleSelection [PooSandboxProfile])
 (def (config-module-profiles module-selection)
-  (cdr (poo-flow-user-module-selection-flag-entry module-selection ':config)))
+  (cdr (yuanxu-user-module-selection-flag-entry module-selection ':config)))
 
 ;; : (-> [PooSandboxProfile] Symbol PooSandboxProfile)
 (def (config-profile profiles name)
@@ -48,7 +48,7 @@
 ;;; remains owned by upstream modules.
 (def user-interface-config-modules-test
   (test-suite "poo-flow user interface config modules"
-    (poo-flow-test-case "imports custom profile modules through their owner"
+    (yuanxu-test-case "imports custom profile modules through their owner"
       (let* ((session-profiles
               (config-module-profiles
                (car poo-flow-custom-my-module-session-module)))

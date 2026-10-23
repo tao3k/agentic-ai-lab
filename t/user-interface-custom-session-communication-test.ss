@@ -7,13 +7,13 @@
 ;;; Invariant: communication receipts are route declarations only; Scheme does
 ;;; not deliver messages or mutate session state.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection-key
-                 poo-flow-user-module-selection-flag-entry)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-key
+                 yuanxu-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/session-communication"
                  poo-flow-custom-my-module-session-communication-case))
 
@@ -28,13 +28,13 @@
 (def (module-config-rows module-selection-bundle)
   (let* ((selection (car module-selection-bundle))
          (entry
-          (poo-flow-user-module-selection-flag-entry selection ':session-rows)))
+          (yuanxu-user-module-selection-flag-entry selection ':session-rows)))
     (if entry (cdr entry) '())))
 
 ;; : TestSuite
 (def user-interface-custom-session-communication-test
   (test-suite "poo-flow custom user-interface session-communication case"
-    (poo-flow-test-case "projects custom session communication receipt rows"
+    (yuanxu-test-case "projects custom session communication receipt rows"
       (let* ((selection
               (car poo-flow-custom-my-module-session-communication-case))
              (rows
@@ -46,7 +46,7 @@
              (parent-child (car communication-rows))
              (sibling (caddr communication-rows))
              (cross-root (cadddr communication-rows)))
-        (check-equal? (poo-flow-user-module-selection-key selection)
+        (check-equal? (yuanxu-user-module-selection-key selection)
                       '(session . session))
         (check-equal? (length rows) 8)
         (check-equal? (test-ref root-build-channel 'kind)

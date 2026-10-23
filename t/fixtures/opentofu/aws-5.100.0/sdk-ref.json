@@ -1,0 +1,10 @@
+{
+  "ref": "refs/tags/v2.36.1",
+  "node_id": "MDM6UmVmMTkxMjQ5NzMyOnJlZnMvdGFncy92Mi4zNi4x",
+  "url": "https://api.github.com/repos/hashicorp/terraform-plugin-sdk/git/refs/tags/v2.36.1",
+  "object": {
+    "sha": "7b9b1111b68d597dccb33fdc8ac4904d8a122f44",
+    "type": "commit",
+    "url": "https://api.github.com/repos/hashicorp/terraform-plugin-sdk/git/commits/7b9b1111b68d597dccb33fdc8ac4904d8a122f44"
+  }
+}

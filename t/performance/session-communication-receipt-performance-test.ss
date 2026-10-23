@@ -6,7 +6,7 @@
 ;;; Boundary: session communication receipt performance gate.
 ;;; Invariant: communication projection stays bounded and report-only.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -108,7 +108,7 @@
 ;; : TestSuite
 (def session-communication-receipt-performance-test
   (test-suite "session communication receipt performance"
-    (poo-flow-test-case "keeps communication receipt batch projection inside benchmark contract"
+    (yuanxu-test-case "keeps communication receipt batch projection inside benchmark contract"
       (let* ((receipt-count 320)
              (summary (communication-performance-summary receipt-count))
              (receipt

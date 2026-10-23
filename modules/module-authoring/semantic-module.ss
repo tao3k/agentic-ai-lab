@@ -4,9 +4,9 @@
 ;;; Product-specific restricted root authoring policy; shared roles live in Core.
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :core/module-system/types ModuleSourceRoleContract ModuleAuthoringProfileContract)
-        (only-in :core/module-system/authoring/roles
-                 ConfigSourceRole. poo-flow-default-module-authoring-profile))
+        (only-in :yuanxu/module-system/types ModuleSourceRoleContract ModuleAuthoringProfileContract)
+        (only-in :yuanxu/module-system/authoring/roles
+                 ConfigSourceRole. yuanxu-default-module-authoring-profile))
 (export UserConfigSourceRole. poo-flow-user-root-module-authoring-profile)
 
 ;;; The ordinary user root is deliberately narrower than a maintained module's
@@ -22,7 +22,7 @@
         recursive-root-forms?: #t
         forbidden-imports:
         '(:clan/poo/mop
-          :core/poo-clos/interface)
+          :yuanxu/poo-clos/interface)
         forbidden-forms:
         '(poo-clos-class
           poo-clos-generic-function
@@ -34,5 +34,5 @@
         freedom: 'maintained-value-composition-only)))
 (def (poo-flow-user-root-module-authoring-profile)
   (validate ModuleAuthoringProfileContract
-    (.o (:: @ (poo-flow-default-module-authoring-profile))
+    (.o (:: @ (yuanxu-default-module-authoring-profile))
         config: UserConfigSourceRole.)))

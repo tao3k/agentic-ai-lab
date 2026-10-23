@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :poo-flow/modules/workflow/qualification/cutover-readiness)
@@ -41,20 +41,20 @@
 
 (def cutover-readiness-test
   (test-suite "AC-11 cutover readiness preflight"
-    (poo-flow-test-case "qualified evidence is ready only for release decision"
+    (yuanxu-test-case "qualified evidence is ready only for release decision"
       (let (receipt (poo-flow-cutover-readiness-verify (input)))
         (check (.ref receipt 'ready?) => #t)
         (check (.ref receipt 'decision-required?) => #t)
         (check (.ref receipt 'abi-v1-frozen?) => #f)
         (check (.ref receipt 'deletion-authorized?) => #f)))
-    (poo-flow-test-case "revision mismatch fails closed"
+    (yuanxu-test-case "revision mismatch fails closed"
       (let (receipt
             (poo-flow-cutover-readiness-verify
              (input "revision" "stale-symbol" "stale-version")))
         (check (.ref receipt 'ready?) => #f)
         (check (.ref receipt 'diagnostics)
                => '(symbol-revision-mismatch version-revision-mismatch))))
-    (poo-flow-test-case "failed symbol, version, or legacy evidence fails closed"
+    (yuanxu-test-case "failed symbol, version, or legacy evidence fails closed"
       (let* ((failed (.o (kind 'failed) (accepted? #f)))
              (failed-guards
               (list (poo-flow-cutover-legacy-guard
@@ -68,7 +68,7 @@
                => '(runtime-symbol-surface-rejected
                     release-version-matrix-rejected
                     legacy-guard-rejected))))
-    (poo-flow-test-case "missing external blocker classification fails closed"
+    (yuanxu-test-case "missing external blocker classification fails closed"
       (let (receipt
             (poo-flow-cutover-readiness-verify
              (input "revision" "revision" "revision"
@@ -79,7 +79,7 @@
         (check (.ref receipt 'ready?) => #f)
         (check (.ref receipt 'diagnostics)
                => '(external-blocker-unclassified))))
-    (poo-flow-test-case "decision, freeze, and deletion escalation is rejected"
+    (yuanxu-test-case "decision, freeze, and deletion escalation is rejected"
       (let (receipt
             (poo-flow-cutover-readiness-verify
              (input "revision" "revision" "revision"

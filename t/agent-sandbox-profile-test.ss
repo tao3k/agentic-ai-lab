@@ -6,7 +6,7 @@
 ;;; Boundary: agent-sandbox profile tests cover profile descriptors and defaults.
 ;;; Invariant: backend execution stays outside Scheme tests.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :core/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/control-plane/api
         :poo-flow/modules/agent-sandbox/api
         :poo-flow/modules/agent-sandbox/nono
         :poo-flow/modules/agent-sandbox/cube)
@@ -61,7 +61,7 @@
 
 (def agent-sandbox-profile-test
  (test-suite "agent sandbox profile descriptors"
-   (poo-flow-test-case "builds backend profiles for nono and CubeSandbox"
+   (yuanxu-test-case "builds backend profiles for nono and CubeSandbox"
      (let ((nono (make-nono-agent-sandbox-profile 'always-further/opencode))
            (cube (make-cube-agent-sandbox-profile 'python-template)))
        (check-equal? (agent-sandbox-profile-ref nono 'schema #f)
@@ -93,7 +93,7 @@
                         (snapshot . clone))
                        (snapshot . clone)
                        (resume . supported)))))
-   (poo-flow-test-case "summarizes structured profiles for runtime handoff"
+   (yuanxu-test-case "summarizes structured profiles for runtime handoff"
      (let* ((profile
              (make-agent-sandbox-backend-profile
               'nono
@@ -144,7 +144,7 @@
        (check-equal? (alist-value 'schema handoff-summary)
                      +agent-sandbox-profile-runtime-summary-schema+)
        (check-equal? (alist-value 'runtime-executed handoff) #f)))
-   (poo-flow-test-case "uses POO profile descriptors for backend overrides"
+   (yuanxu-test-case "uses POO profile descriptors for backend overrides"
      (let* ((cube-descriptor
              (make-cube-agent-sandbox-profile-descriptor 'python-template))
             (override-descriptor
@@ -180,7 +180,7 @@
        (check-equal? (agent-sandbox-profile-metadata override-profile)
                      '((backend . override)
                        (reason . test)))))
-   (poo-flow-test-case "validates profile and request contracts before runtime"
+   (yuanxu-test-case "validates profile and request contracts before runtime"
      (let* ((invalid-profile
              (make-agent-sandbox-backend-profile 'nono #f '() '() '() '()))
             (profile-failure
@@ -306,7 +306,7 @@
        (check-equal? (execution-failure? request-failure) #t)
        (check-equal? (execution-failure-code request-failure)
                      'invalid-agent-sandbox-request)))
-   (poo-flow-test-case "builds requests with named-field macro contracts"
+   (yuanxu-test-case "builds requests with named-field macro contracts"
      (let* ((profile (make-nono-agent-sandbox-profile
                       'always-further/opencode))
             (request (agent-sandbox-request
@@ -339,7 +339,7 @@
        (check-equal? (execution-failure? field-failure) #t)
        (check-equal? (execution-failure-code field-failure)
                      'invalid-agent-sandbox-request-fields)))
-   (poo-flow-test-case "profiled flow normalizes defaults and task overrides"
+   (yuanxu-test-case "profiled flow normalizes defaults and task overrides"
      (let (seen-request #f)
        (let* ((profile (make-nono-agent-sandbox-profile
                         'always-further/opencode

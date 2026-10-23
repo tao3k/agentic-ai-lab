@@ -9,8 +9,8 @@
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        :core/object-family/role-syntax
-        :core/object-family/syntax
+        :yuanxu/object-family/role-syntax
+        :yuanxu/object-family/syntax
         :poo-flow/modules/workflow/qualification/capability-prototypes)
 
 (def +poo-flow-release-assurance-manifest-schema+

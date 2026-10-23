@@ -6,7 +6,7 @@
 ;;; Boundary: CI/CD downstream sandbox profile cases live here.
 ;;; Invariant: cases stay declarative and do not execute release workflows.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :core/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/control-plane/api
         (only-in "../user-interface/custom/my-module/profiles/cicd"
                  poo-flow-custom-my-module-cicd-module)
         :poo-flow/modules/workflow/scenario/configuration/interface
@@ -31,15 +31,15 @@
 ;;; configuration story.
 (def user-interface-cicd-profile-case-test
   (test-suite "poo-flow user interface CI/CD sandbox profiles"
-    (poo-flow-test-case "loads CI/CD sandbox profiles from root user-interface config"
+    (yuanxu-test-case "loads CI/CD sandbox profiles from root user-interface config"
       (let* ((nono-config
               (car poo-flow-custom-my-module-cicd-module))
              (profiles
-              (cdr (poo-flow-user-module-selection-flag-entry
+              (cdr (yuanxu-user-module-selection-flag-entry
                     nono-config
                     ':config)))
              (binding
-              (cdr (poo-flow-user-module-selection-flag-entry
+              (cdr (yuanxu-user-module-selection-flag-entry
                     nono-config
                     ':binding)))
              (check-profile
@@ -87,7 +87,7 @@
                         (scope . cicd)
                         (stage . promote)
                         (artifacts . consume)))))
-    (poo-flow-test-case "defaults nono use-module config to native FFI binding"
+    (yuanxu-test-case "defaults nono use-module config to native FFI binding"
       (let* ((check-capabilities '(process-run filesystem-read tmpdir))
              (check-metadata '((intent . ci-check)))
              (nono-config
@@ -100,11 +100,11 @@
                                       (append super-metadata
                                               check-metadata))))))
              (binding
-              (cdr (poo-flow-user-module-selection-flag-entry
+              (cdr (yuanxu-user-module-selection-flag-entry
                     nono-config
                     ':binding))))
         (check-equal? binding 'native-ffi)))
-    (poo-flow-test-case "rejects CI/CD resources without filesystem sandbox"
+    (yuanxu-test-case "rejects CI/CD resources without filesystem sandbox"
       (let* ((broken-capabilities '(process-run filesystem-read tmpdir))
              (broken-metadata '((intent . ci-check)
                                 (scope . cicd)))
@@ -128,7 +128,7 @@
                                                             broken-metadata))))))
                                    (profiles
                                     (cdr
-                                     (poo-flow-user-module-selection-flag-entry
+                                     (yuanxu-user-module-selection-flag-entry
                                       broken-config
                                       ':config)))
                                    (broken-profile

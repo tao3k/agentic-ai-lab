@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test test-suite check check-exception)
         (only-in :clan/poo/object .o .ref .slot?)
         (only-in :poo-flow/modules/query/interface
@@ -94,7 +94,7 @@
 
 (def evidence-assessment-core-test
   (test-suite "generic evidence assessment over POO evidence"
-    (poo-flow-test-case "matching sources support one candidate only"
+    (yuanxu-test-case "matching sources support one candidate only"
       (let (receipt (poo-flow-evidence-assessment-evaluate CoreCase.))
         (check (.ref receipt 'query-executed-in-scheme?) => #t)
         (check (result-status receipt 'matched-source) => 'supported)
@@ -109,7 +109,7 @@
         (check (.ref receipt 'evidence-without-content-digest)
                => '(outcome target-b))
         (check (.ref receipt 'source-authenticity-verified?) => #f)))
-    (poo-flow-test-case "multiple proposed directions retain every hypothesis"
+    (yuanxu-test-case "multiple proposed directions retain every hypothesis"
       (let* ((exploration
               (poo-flow-evidence-assessment-explore
                CoreCase.
@@ -138,7 +138,7 @@
         (check (.slot? exploration 'recommended-branch) => #f)
         (check (.ref exploration 'historical-attribution-verified?) => #f)
         (check (.ref exploration 'action-authority?) => #f)))
-    (poo-flow-test-case "a conflicting source defeats the matching pair"
+    (yuanxu-test-case "a conflicting source defeats the matching pair"
       (let* ((case-value
               (.o (:: @ CoreCase.)
                   claims:
@@ -150,7 +150,7 @@
         (check (result-status receipt 'matched-source) => 'conflicted)
         (check (result-status receipt 'alternative-source)
                => 'needs-evidence)))
-    (poo-flow-test-case "a cyclic candidate graph reaches a finite fixed point"
+    (yuanxu-test-case "a cyclic candidate graph reaches a finite fixed point"
       (let* ((case-value
               (.o (:: @ CoreCase.)
                   steps:
@@ -161,14 +161,14 @@
         (check (result-status receipt 'matched-source) => 'supported)
         (check (< (length (.ref receipt 'reachable-candidates)) 16)
                => #t)))
-    (poo-flow-test-case "negative claims are rejected"
+    (yuanxu-test-case "negative claims are rejected"
       (check-exception
        (poo-flow-evidence-assessment-evaluate
         (.o (:: @ CoreCase.)
             claims: (list (poo-flow-evidence-claim
                            'outcome 'absent 'source-a))))
        true))
-    (poo-flow-test-case "a source reference cannot impersonate another claim"
+    (yuanxu-test-case "a source reference cannot impersonate another claim"
       (check-exception
        (poo-flow-evidence-assessment-evaluate
         (.o (:: @ CoreCase.)
@@ -178,7 +178,7 @@
                    (poo-flow-evidence-reference
                     'source-b "fixture://wrong-source" 'owner-b)))))
        true))
-    (poo-flow-test-case "agent branches require distinct bounded identities"
+    (yuanxu-test-case "agent branches require distinct bounded identities"
       (let (branch-value
             (poo-flow-evidence-branch
              'same-direction

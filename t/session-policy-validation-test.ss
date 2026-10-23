@@ -7,7 +7,7 @@
 ;;; Invariant: validation inspects composed POO policies and bounded attempts;
 ;;; it does not run tools, hooks, providers, sandboxes, or communication.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -267,7 +267,7 @@
 ;; : TestSuite
 (def session-policy-validation-test
   (test-suite "poo-flow session policy validation"
-    (poo-flow-test-case "validates effective policy and reports denied session edges"
+    (yuanxu-test-case "validates effective policy and reports denied session edges"
       (let* ((context (make-session-policy-validation-context))
              (receipt
               (poo-flow-session-policy-validation-receipt

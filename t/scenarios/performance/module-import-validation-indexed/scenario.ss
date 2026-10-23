@@ -15,7 +15,7 @@
         (only-in :poo-flow/modules/module-authoring/module-descriptor
                  make-empty-poo-flow-module-descriptor
                  poo-flow-module-name
-                 poo-flow-module-imports
+                 yuanxu-module-imports
                  poo-flow-module-import-profile
                  poo-flow-module-missing-imports))
 
@@ -73,7 +73,7 @@
          (map (lambda (module)
                 (baseline-missing-for
                  (poo-flow-module-name module)
-                 (poo-flow-module-imports module)))
+                 (yuanxu-module-imports module)))
               modules)))
 
 (unless (benchmark-fixture-contract-pass? fixture)

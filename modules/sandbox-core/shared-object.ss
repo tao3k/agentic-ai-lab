@@ -5,22 +5,22 @@
 
 ;;; Boundary: shared sandbox object owned by the sandbox module family.
 
-(import :core/module-system/schema/interface)
+(import :yuanxu/module-system/schema/interface)
 
 (export poo-flow-shared-sandbox-object
         poo-flow-shared-module-objects)
 
 (def poo-flow-shared-sandbox-object
-  (poo-flow-module-object
+  (yuanxu-module-object
    'objects.shared.sandbox
    '()
    (list
-    (poo-flow-module-field-contract
-     'backend PooFlowModuleSymbolType 'override 'sandbox '((scope . shared)))
-    (poo-flow-module-field-contract
-     'flags PooFlowModuleListType 'append '() '((scope . shared)))
-    (poo-flow-module-field-contract
-     'runtime-args PooFlowModuleListType 'append '() '((scope . shared))))
+    (yuanxu-module-field-contract
+     'backend YuanxuModuleSymbolType 'override 'sandbox '((scope . shared)))
+    (yuanxu-module-field-contract
+     'flags YuanxuModuleListType 'append '() '((scope . shared)))
+    (yuanxu-module-field-contract
+     'runtime-args YuanxuModuleListType 'append '() '((scope . shared))))
    '((namespace . objects.shared)
      (domain . sandbox))))
 

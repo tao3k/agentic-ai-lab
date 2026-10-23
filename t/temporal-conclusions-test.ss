@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
         :poo-flow/modules/temporal-causality/interface)
@@ -27,7 +27,7 @@
 
 (def temporal-conclusions-test
   (test-suite "immutable temporal conclusions and selection planning"
-    (poo-flow-test-case "correction and retraction preserve a branched history"
+    (yuanxu-test-case "correction and retraction preserve a branched history"
       (let* ((prior (root))
              (plan (impact #t #t))
              (corrected (poo-flow-temporal-conclusion-change
@@ -77,7 +77,7 @@
              "observation-7" "patient-7" "prescription" 7 "c1") 7)
            true))))
 
-    (poo-flow-test-case "valid-time reprojection creates a new conclusion version"
+    (yuanxu-test-case "valid-time reprojection creates a new conclusion version"
       (let* ((validity
               (poo-flow-temporal-interval
                "window"
@@ -126,7 +126,7 @@
         (check (.ref next 'predecessor-identity) => "c1")
         (check (length (.ref history 'revisions)) => 2)))
 
-    (poo-flow-test-case "CAS plans expose a stale pointer without publishing"
+    (yuanxu-test-case "CAS plans expose a stale pointer without publishing"
       (let* ((prior (root))
              (plan (impact #t #t))
              (corrected (poo-flow-temporal-conclusion-change
@@ -181,7 +181,7 @@
            "proof-2" (.ref plan 'index-digest))
           observed 7) true)))
 
-    (poo-flow-test-case "incomplete or unaffected frontier cannot change a conclusion"
+    (yuanxu-test-case "incomplete or unaffected frontier cannot change a conclusion"
       (check-exception
        (poo-flow-temporal-conclusion-change
         "c2" (root) (impact #f #t) 'correct "dose-8" "proof-2"
@@ -199,7 +199,7 @@
         (impact #t #t) 'correct "dose-8" "proof-2"
         "policy-1" "generation-2") true))
 
-    (poo-flow-test-case "journal rejects missing and cyclic supersession"
+    (yuanxu-test-case "journal rejects missing and cyclic supersession"
       (check-exception
        (poo-flow-temporal-conclusion-journal
         "missing" (list

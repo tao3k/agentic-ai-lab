@@ -7,7 +7,7 @@
 ;;; Invariant: validation resolves POO memory specs and intent refs without
 ;;; runtime recall, commit, or backend startup.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -97,7 +97,7 @@
 
 (def memory-core-performance-test
   (test-suite "memory-core performance"
-    (poo-flow-test-case "keeps catalog policy validation inside benchmark contract"
+    (yuanxu-test-case "keeps catalog policy validation inside benchmark contract"
       (let* ((summary
               (memory-core-performance-summary memory-core-performance-count))
              (receipt

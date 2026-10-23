@@ -8,8 +8,8 @@
 (import (only-in :std/list/list any fold)
         :gerbil/core
         (only-in :clan/poo/object .def .o .ref .slot? object?)
-        :core/graph/interface
-        :core/module-system/schema/interface
+        :yuanxu/graph/interface
+        :yuanxu/module-system/schema/interface
         :poo-flow/modules/sandbox-core/shared-object
         :poo-flow/modules/agent-sandbox/config
         (only-in :poo-flow/modules/agent-sandbox/profile-validation
@@ -148,7 +148,7 @@
 ;;; covered by their POO field contract.
 ;; : (-> PooModuleFieldContract [Value] Boolean)
 (def (poo-flow-sandbox-profile-object-field-value-safe? field value)
-  (if (eq? (poo-flow-module-field-contract-identity field) 'resource-policy)
+  (if (eq? (yuanxu-module-field-contract-identity field) 'resource-policy)
     (not (poo-flow-sandbox-profile-object-unsafe-filesystem-resource? value))
     #t))
 
@@ -167,7 +167,7 @@
                  profile-object
                  row))
       (if (and field
-               (poo-flow-module-field-contract-accepts?
+               (yuanxu-module-field-contract-accepts?
                 field
                 (poo-flow-sandbox-profile-object-row-value row))
                (poo-flow-sandbox-profile-object-field-value-safe?
@@ -178,13 +178,13 @@
                (poo-flow-sandbox-profile-field-rows
                 (row row)
                 (slot (and field
-                           (poo-flow-module-field-contract-identity
+                           (yuanxu-module-field-contract-identity
                             field)))
                 (value
                  (poo-flow-sandbox-profile-object-row-value row))
                 (accepted?
                  (and field
-                      (poo-flow-module-field-contract-accepts?
+                      (yuanxu-module-field-contract-accepts?
                        field
                        (poo-flow-sandbox-profile-object-row-value
                         row))))
@@ -208,4 +208,4 @@
 
 ;;; Slot reads are strict after merge because missing slots indicate a broken
 ;;; backend object contract, not optional user configuration.
-;; : (-> PooFlowGraph Symbol Value)
+;; : (-> YuanxuGraph Symbol Value)

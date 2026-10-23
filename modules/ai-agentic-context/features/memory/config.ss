@@ -8,7 +8,7 @@
 
 (import
         (only-in :clan/poo/object .ref)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/module-authoring/module-config-syntax
         :poo-flow/modules/ai-agentic-context/features/memory/objects)
 
@@ -206,7 +206,7 @@
 ;; : [[PooUserModuleSelection]]
 (def poo-flow-ai-agentic-context-memory-module-bundles
   (list
-   (poo-flow-user-module-bundle
+   (yuanxu-user-module-bundle
     (agentic ai-agentic-context +memory +catalog +typed-receipts +runtime-manifest))))
 
 (def (poo-flow-ai-agentic-context-memory-poo-config-flags prototypes user-config)

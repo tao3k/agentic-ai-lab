@@ -14,18 +14,18 @@
 ;;; Run-config lowering is the only place this owner touches core config values.
 ;;; Parser policy should treat this file as the resolver/activation owner.
 
-(import :core/modules/funflow/control-plane/failure
-        :core/modules/funflow/control-plane/task
-        :core/modules/funflow/control-plane/flow
-        :core/modules/funflow/control-plane/config
-        :core/module-system/source/imports
-        :core/module-system/source/objects
+(import :yuanxu/modules/funflow/control-plane/failure
+        :yuanxu/modules/funflow/control-plane/task
+        :yuanxu/modules/funflow/control-plane/flow
+        :yuanxu/modules/funflow/control-plane/config
+        :yuanxu/module-system/source/imports
+        :yuanxu/module-system/source/objects
         :poo-flow/modules/module-authoring/module-descriptor
         :poo-flow/modules/workflow/scenario/configuration/module-diagnostics
-        :core/module-system/catalog/objects
-        (only-in :core/object-family/syntax
+        :yuanxu/module-system/catalog/objects
+        (only-in :yuanxu/object-family/syntax
                  defpoo-object-family)
-        :core/utilities/final-projection-syntax)
+        :yuanxu/utilities/final-projection-syntax)
 
 (export resolve-poo-flow-module-source
         resolve-poo-flow-module-sources
@@ -46,16 +46,16 @@
 ;;; Boundary: missing catalog source is a typed config failure, not a loader miss.
 ;; : (-> PooModuleCatalog PooModuleSourceRef PooModuleDescriptor)
 (def (resolve-poo-flow-module-source catalog source-ref)
-  (let (module (resolve-poo-flow-module-source/default catalog source-ref #f))
+  (let (module (resolve-yuanxu-module-source/default catalog source-ref #f))
     (if module
       module
       (raise-control-plane-failure
        'module-system
        'missing-module-source
        "poo-flow module source was not found in catalog"
-       (poo-flow-product-field-rows
-        (catalog (poo-flow-module-catalog-name catalog))
-        (source (poo-flow-module-source-ref->alist source-ref)))))))
+       (yuanxu-product-field-rows
+        (catalog (yuanxu-module-catalog-name catalog))
+        (source (yuanxu-module-source-ref->alist source-ref)))))))
 
 ;;; Boundary: multi-source resolution preserves requested source order.
 ;; : (-> PooModuleCatalog [PooModuleSourceRef] [PooModuleDescriptor])
@@ -110,7 +110,7 @@
 (def (activate-poo-flow-modules-with-base modules base-task-registry base-flow-registry base-options)
   (let (closed-modules (poo-flow-module-closure modules))
     ;; Import validation must see the same closure that registry aggregation uses.
-    (validate-poo-flow-module-imports closed-modules)
+    (validate-yuanxu-module-imports closed-modules)
     (make-poo-flow-module-activation
      closed-modules
      (make-task-family-registry

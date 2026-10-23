@@ -7,11 +7,11 @@
 ;;; Invariant: commands are inert metadata; execution remains Python-owned.
 
 (import (only-in :clan/poo/object .def .o)
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        (only-in :core/module-system/authoring/roles poo-flow-semantic-module)
-        (only-in :core/profile-composition/profile-bundle
-                 poo-flow-module-profiles
-                 poo-flow-profile-export))
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :yuanxu/module-system/authoring/roles yuanxu-semantic-module)
+        (only-in :yuanxu/profile-composition/profile-bundle
+                 yuanxu-module-profiles
+                 yuanxu-profile-export))
 
 (export FunflowProfileModule
         GithubCIProfile
@@ -32,12 +32,12 @@
   (runtime-executed? #f))
 
 (def FunflowProfileModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'poo-flow 'funflow)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'poo-flow 'funflow)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'github-ci GithubCIProfile)
-    (poo-flow-profile-export 'python-anyio PythonAnyioProfile))))
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'github-ci GithubCIProfile)
+    (yuanxu-profile-export 'python-anyio PythonAnyioProfile))))
 
 (.def WheelSmokeScenarioProfile
   (identity 'wheel-smoke-scenario)

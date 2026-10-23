@@ -6,7 +6,7 @@
 ;;; Shared fixtures for custom loop-engine user-interface tests.
 
 (import (only-in :clan/poo/object .ref .slot? object?)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface
         (only-in :poo-flow/modules/loop-engine/runtime
                  loop-engine-capability-receipt?
@@ -151,9 +151,9 @@
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation/bundles module-bundles)
   (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules module-bundles)
-    (poo-flow-settings))))
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules module-bundles)
+    (yuanxu-settings))))
 
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation module-bundle)

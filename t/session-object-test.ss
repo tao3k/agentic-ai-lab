@@ -6,7 +6,7 @@
 ;;; Boundary: report-only session objects inspired by OpenRath's session-first
 ;;; model.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -94,7 +94,7 @@
 ;; : TestSuite
 (def session-object-test
   (test-suite "poo-flow report-only session objects"
-    (poo-flow-test-case "builds chunks, lineage, placement, and handoff receipts"
+    (yuanxu-test-case "builds chunks, lineage, placement, and handoff receipts"
       (let* ((handoff (poo-flow-session-handoff session-child))
              (handoff-alist (poo-flow-session-handoff->alist handoff)))
         (check-equal? (poo-flow-session? session-root) #t)
@@ -120,7 +120,7 @@
         (check-equal? (poo-flow-session-alist-ref handoff-alist 'placement-resolved? #f) #t)
         (check-equal? (poo-flow-session-alist-ref handoff-alist 'runtime-owner #f) "marlin-agent-core")
         (check-equal? (poo-flow-session-alist-ref handoff-alist 'runtime-executed #t) #f)))
-    (poo-flow-test-case "presents session graph without runtime execution"
+    (yuanxu-test-case "presents session graph without runtime execution"
       (let (presentation
             (pooFlowSessionGraphPresentation
              (list session-root session-child)))
@@ -136,7 +136,7 @@
         (check-equal? (.ref presentation 'acyclic?) #t)
         (check-equal? (.ref presentation 'runtime-executed) #f)
         (check-equal? (.ref presentation 'descriptor-realized?) #f)))
-    (poo-flow-test-case "detects cyclic lineage as structured validation data"
+    (yuanxu-test-case "detects cyclic lineage as structured validation data"
       (let (presentation
             (pooFlowSessionGraphPresentation
              (list session-cycle-root session-cycle-child)))
@@ -144,7 +144,7 @@
         (check-equal? (.ref presentation 'lineage-edge-pairs)
                       '((cycle-child . cycle-root)
                         (cycle-root . cycle-child)))))
-    (poo-flow-test-case "reports missing placement profiles without runtime execution"
+    (yuanxu-test-case "reports missing placement profiles without runtime execution"
       (let (diagnostic
             (car (poo-flow-session-placement-diagnostics
                   session-missing-placement)))
@@ -159,7 +159,7 @@
         (check-equal? (poo-flow-session-placement-runtime-summary
                        session-missing-placement)
                       '())))
-    (poo-flow-test-case "declares sessions through compact user syntax"
+    (yuanxu-test-case "declares sessions through compact user syntax"
       (let ((presentation
              (session-graph session-macro-root session-macro-child))
             (child-placement

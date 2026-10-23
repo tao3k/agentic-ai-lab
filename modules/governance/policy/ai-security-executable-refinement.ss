@@ -11,8 +11,8 @@
         (only-in :std/list/list every filter-map)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :core/utilities/functional
-                 poo-flow-set-subset?))
+        (only-in :yuanxu/utilities/functional
+                 yuanxu-set-subset?))
 
 (export poo-flow-agent-action-evidence-envelope
         poo-flow-agent-action-evidence-envelope->projection
@@ -174,7 +174,7 @@
          (effect-ok
           (and (member (.ref envelope 'effect-domain)
                        (.ref policy 'allowed-effect-domains))
-               (poo-flow-set-subset? (.ref envelope 'requested-effects)
+               (yuanxu-set-subset? (.ref envelope 'requested-effects)
                                      (.ref envelope 'allowed-effects))))
          (causal-ok
           (and (equal? (.ref envelope 'parent-action-id)

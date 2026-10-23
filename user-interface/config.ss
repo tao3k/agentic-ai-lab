@@ -5,9 +5,9 @@
 
 ;;; Final User Composition: one thin binding over maintained Profiles.
 
-(import (only-in :core/profile-composition/profile-bundle
+(import (only-in :yuanxu/profile-composition/profile-bundle
                  profiles compose)
-        :core/profile-composition/selection-syntax
+        :yuanxu/profile-composition/selection-syntax
         :poo-flow/modules/workflow/scenario/composition-syntax
         :poo-flow/modules/workflow/scenario/configuration/default-agent-control-plane-profile
         :poo-flow/user-interface/profiles/langgraph

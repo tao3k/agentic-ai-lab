@@ -16,7 +16,7 @@
                  testing-interface-map-profile)
         (only-in :asp-gerbil-scheme/testing-runner-api
                  init-profiled-test-environment!)
-        (only-in :poo-flow-dev/testing-api
+        (only-in :poo-flow/dev/testing-api
                  +poo-flow-testing-interface+))
 
 (def +poo-flow-serial-test-selectors+
@@ -62,7 +62,7 @@
    +poo-flow-serial-testing-interface+
    +testing-process-isolation-profile+))
 
-(init-profiled-test-environment! +poo-flow-project-testing-interface+ pkgdir: "..")
+(init-profiled-test-environment! +poo-flow-project-testing-interface+)
 
 ;; The ASP declaration installs the selected entry point.  V19's script
 ;; launcher looks up a caller-visible `main`, so expose that trampoline here.

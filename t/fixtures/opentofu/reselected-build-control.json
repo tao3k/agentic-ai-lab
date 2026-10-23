@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-17",
+  "runtime": "default Gerbil; serial heap-fenced just test-file",
+  "test": "t/opentofu-reselected-artifact-test.ss",
+  "parent_collection": "/nix/store/aw9dlhhxs5lkgpr3yrqp7h07mly21rxa-opentofu-artifacts",
+  "child_collection": "/nix/store/jfgkcznr78mhh6vwbij2l5ad79bywwxp-opentofu-artifacts",
+  "child_demand": {
+    "providers": [
+      "aws",
+      "null"
+    ]
+  },
+  "checks": {
+    "bootstrap": {
+      "passed": true,
+      "assertions": 3
+    },
+    "real": {
+      "passed": true,
+      "assertions": 15
+    }
+  },
+  "loader_connected": false,
+  "general_selected_graph_adapter_implemented": false
+}

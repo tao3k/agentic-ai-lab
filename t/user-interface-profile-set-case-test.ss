@@ -5,7 +5,7 @@
 
 ;;; Boundary: profile-set cases validate selection through Testing Policy.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -18,7 +18,7 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         "user-interface-fixtures.ss"
-        (only-in :poo-flow-dev/testing-api
+        (only-in :poo-flow/dev/testing-api
                  +poo-flow-testing-interface+
                  poo-flow-testing-admit-user-profile-set!
                  poo-flow-testing-check-user-profile-set)
@@ -32,28 +32,28 @@
 ;;; from upstream module contracts.
 (def user-interface-profile-set-case-test
   (test-suite "poo-flow user interface profile sets"
-    (poo-flow-test-case "manages Doom-style profile sets before realization"
+    (yuanxu-test-case "manages Doom-style profile sets before realization"
       (let* ((selected-profile
-              (poo-flow-user-profile-set-default-profile
+              (yuanxu-user-profile-set-default-profile
                test-poo-flow-user-profile-set))
              (presentation
               (pooFlowUserProfileSetPresentation
                test-poo-flow-user-profile-set)))
-        (check-equal? (poo-flow-user-profile-set?
+        (check-equal? (yuanxu-user-profile-set?
                        test-poo-flow-user-profile-set)
                       #t)
-        (check-equal? (poo-flow-user-profile-set-name
+        (check-equal? (yuanxu-user-profile-set-name
                        test-poo-flow-user-profile-set)
                       'workspace)
-        (check-equal? (poo-flow-user-profile-set-default-profile-name
+        (check-equal? (yuanxu-user-profile-set-default-profile-name
                        test-poo-flow-user-profile-set)
                       'developer)
-        (check-equal? (poo-flow-user-profile-set-profile-names
+        (check-equal? (yuanxu-user-profile-set-profile-names
                        test-poo-flow-user-profile-set)
                       '(developer custom-developer))
-        (check-equal? (poo-flow-user-profile-name selected-profile) 'developer)
+        (check-equal? (yuanxu-user-profile-name selected-profile) 'developer)
         (check-equal? (.ref presentation 'kind)
-                      poo-flow-user-profile-set-presentation-kind)
+                      yuanxu-user-profile-set-presentation-kind)
         (check-equal? (.ref presentation 'profile-count) 2)
         (check-equal? (.ref presentation 'selected-profile-name)
                       'developer)
@@ -71,7 +71,7 @@
         (check-equal? (.ref presentation 'package-management?) #f)
         (check-equal? (.ref presentation 'descriptor-realized?) #f)
         (check-equal? (.ref presentation 'runtime-executed) #f)))
-    (poo-flow-test-case "admits profile sets through the POO testing policy"
+    (yuanxu-test-case "admits profile sets through the POO testing policy"
       (let* ((valid-report
               (poo-flow-testing-admit-user-profile-set!
                +poo-flow-testing-interface+

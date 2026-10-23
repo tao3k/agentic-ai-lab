@@ -13,11 +13,8 @@
                  testing-interface-map-profile
                  testing-interface-run-test-files!)
         (only-in :std/list/list filter foldl)
-        (only-in :std/source this-source-file)
-        (only-in :poo-flow-dev/testing-api
+        (only-in :poo-flow/dev/testing-api
                  +poo-flow-testing-interface+))
-
-(current-directory (path-expand ".." (path-directory (this-source-file))))
 
 ;;; Scenario end-to-end benchmarks admit on wall-clock p95, so every file in
 ;;; the performance lane needs an uncontended process.  This is a test-owned
@@ -47,7 +44,7 @@
           path)))
    (testing-interface-test-files
     +poo-flow-performance-testing-interface+
-    "performance-tests.ss")))
+    "dev/performance-tests.ss")))
 
 (displayln "[poo-performance-testing] phase=entry-ready")
 (force-output)

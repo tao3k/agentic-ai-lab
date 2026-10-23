@@ -82,9 +82,9 @@ class FunFlowPlanProjection:
     """Runtime boundary object projected from the Scheme FunFlow facade."""
 
     dag: FunFlowDag
-    schema: str = "poo-flow.funflow-plan-projection.v1"
+    schema: str = "yuanxu.funflow-plan-projection.v1"
     origin: str = "use-module funflow"
-    runtime_contract: str = "poo-flow.anyio.v1"
+    runtime_contract: str = "yuanxu.anyio.v1"
     source_map: Mapping[str, str] = field(default_factory=dict)
 
 

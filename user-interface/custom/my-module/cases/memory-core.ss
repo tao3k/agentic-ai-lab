@@ -9,9 +9,9 @@
 
 (import :poo-flow/modules/session/syntax
         :poo-flow/modules/ai-agentic-context/features/memory/config
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection-flag-entry
-                 poo-flow-user-module-selection->alist))
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flag-entry
+                 yuanxu-user-module-selection->alist))
 
 (export poo-flow-custom-my-module-memory-core-case)
 
@@ -42,7 +42,7 @@
                          (case . memory-core))))))
        (catalog
         (cdr
-         (poo-flow-user-module-selection-flag-entry
+         (yuanxu-user-module-selection-flag-entry
           selection
           ':memory-catalog)))
        (memory-intent
@@ -60,6 +60,6 @@
           (metadata (source . user-interface)
                     (case . memory-core)))))
   (list
-   (poo-flow-user-module-selection->alist selection)
+   (yuanxu-user-module-selection->alist selection)
    (poo-flow-memory-catalog->alist catalog)
    (memory-catalog-validation-row validation))))

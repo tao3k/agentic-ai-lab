@@ -8,8 +8,8 @@
 
 (import :poo-flow/modules/cubeSandbox/objects
         :poo-flow/modules/sandbox-core/objects
-        :core/module-system/selection/objects
-        :core/utilities/final-projection-syntax)
+        :yuanxu/module-system/selection/objects
+        :yuanxu/utilities/final-projection-syntax)
 
 (export poo-flow-cubeSandbox-module-bundles
         poo-flow-cubeSandbox-config-flags
@@ -24,7 +24,7 @@
 (def poo-flow-cubeSandbox-module-bundles
   (list
    (list
-    (poo-flow-user-module-selection
+    (yuanxu-user-module-selection
      'sandbox 'cubeSandbox
      (list '+cube '+doctor
            (cons ':backend-capability-registry
@@ -35,11 +35,11 @@
 ;; : (-> [PooSandboxProfile] [UserModuleFlagEntry])
 (def (poo-flow-cubeSandbox-config-flags profiles . maybe-user-config)
   (if (null? maybe-user-config)
-    (poo-flow-product-field-rows
+    (yuanxu-product-field-rows
      (:backend-capability-registry
       poo-flow-cubeSandbox-backend-capability-registry)
      (:config profiles))
-    (poo-flow-product-field-rows
+    (yuanxu-product-field-rows
      (:backend-capability-registry
       poo-flow-cubeSandbox-backend-capability-registry)
      (:config profiles)

@@ -3,15 +3,15 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .o .ref)
         (only-in :clan/poo/mop element?)
-        (only-in :core/contribution/objects
+        (only-in :yuanxu/contribution/objects
                  admit-contributions)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection)
-        (only-in :core/poo-clos/interface
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection)
+        (only-in :yuanxu/poo-clos/interface
                  poo-clos-generic-methods
                  poo-clos-make-instance)
         :poo-flow/modules/governance/interface
@@ -97,7 +97,7 @@
 
 (def governance-core-test
   (test-suite "POO Flow Governance core and Cedar Provider boundary"
-    (poo-flow-test-case "core prototype requires explicit contributor identity"
+    (yuanxu-test-case "core prototype requires explicit contributor identity"
       (check-equal?
        (poo-flow-governance-profile? PooFlowGovernanceProfile.) #f)
       (check-equal?
@@ -106,14 +106,14 @@
                     #t)
       (check-equal? (element? PooFlowGovernanceThreat BlockingThreat) #t)
       (check-equal? (poo-flow-governance-source? DerivedGovernanceSource) #t))
-    (poo-flow-test-case "Profile generic dispatch produces a typed inert assessment"
+    (yuanxu-test-case "Profile generic dispatch produces a typed inert assessment"
       (let (assessment
             (poo-flow-governance-evaluate
              TestGovernanceProfile (.o request: 'release)))
         (check-equal? (poo-flow-governance-assessment? assessment) #t)
         (check-equal? (.ref assessment 'handoff-ready?) #t)
         (check-equal? (.ref assessment 'runtime-executed?) #f)))
-    (poo-flow-test-case "pre-threat exposure blocks Provider handoff"
+    (yuanxu-test-case "pre-threat exposure blocks Provider handoff"
       (let (assessment
             (poo-flow-governance-evaluate
              UnsafeGovernanceProfile (.o request: 'release)))
@@ -121,20 +121,20 @@
         (check-equal?
          (.ref assessment 'unresolved-threats)
          '("test/threat/unreviewed-external-input"))))
-    (poo-flow-test-case "observed preconditions require evidence identity"
+    (yuanxu-test-case "observed preconditions require evidence identity"
       (check-exception
        (poo-flow-governance-precondition "test/precondition/forged" #t #f)
        true))
-    (poo-flow-test-case "governance contribution is semantic and inert"
+    (yuanxu-test-case "governance contribution is semantic and inert"
       (let* ((contribution
               (poo-flow-governance-contribution
                TestGovernanceProfile '(knowledge-governance) '()))
              (receipt (admit-contributions (list contribution) '())))
         (check-equal? (.ref receipt 'accepted?) #t)
         (check-equal? (.ref receipt 'runtime-executed?) #f)))
-    (poo-flow-test-case "shared module projection admits only its declared family"
+    (yuanxu-test-case "shared module projection admits only its declared family"
       (let (selection
-            (poo-flow-user-module-selection 'custom 'test-governance '()))
+            (yuanxu-user-module-selection 'custom 'test-governance '()))
         (check-equal?
          (eq? (poo-flow-governance-module-config
                selection 'test-governance TestGovernanceModule)
@@ -149,7 +149,7 @@
           TestGovernanceModuleProfile 'other-family
           '(knowledge-governance) '())
          true)))
-    (poo-flow-test-case "Authorization contracts keep elevated capability strict"
+    (yuanxu-test-case "Authorization contracts keep elevated capability strict"
       (check-equal?
        (.ref CedarAuthorizationProvider 'identity)
        "poo-flow/authorization/cedar")
@@ -170,7 +170,7 @@
          (poo-flow-authorization-provider-engines
           CedarAuthorizationProvider)
          '("cedar-rust" "cedar-lean"))))
-    (poo-flow-test-case "Authorization Provider publishes its CLOS method bundle"
+    (yuanxu-test-case "Authorization Provider publishes its CLOS method bundle"
       (check-equal?
        (length
         (poo-clos-generic-methods AuthorizationCapabilityContractGeneric))
@@ -188,7 +188,7 @@
           unsupported-provider
           (list test-elevated-capability))
          true)))
-    (poo-flow-test-case "Cedar adapter binds the exact Governance Profile identity"
+    (yuanxu-test-case "Cedar adapter binds the exact Governance Profile identity"
       (let* ((profiles (list TestGovernanceProfile))
              (assessments
               (list (poo-flow-governance-evaluate TestGovernanceProfile (.o))))
@@ -204,7 +204,7 @@
         (check-equal?
          (.ref (.ref snapshot 'proof-binding) 'composition)
          "test/governance")))
-    (poo-flow-test-case "Cedar capability owns the source-admission requirement"
+    (yuanxu-test-case "Cedar capability owns the source-admission requirement"
       (let* ((protected
               (poo-flow-cedar-runtime-capability
                "test::Action" 1 source-admission-required?: #t))
@@ -229,7 +229,7 @@
          (poo-flow-cedar-runtime-capability
           "test::Action" 1 source-admission-required?: 'yes)
          true)))
-    (poo-flow-test-case "Cedar adapter rejects another composition"
+    (yuanxu-test-case "Cedar adapter rejects another composition"
       (check-exception
        (let* ((profiles (list TestGovernanceProfile))
               (assessments
@@ -239,7 +239,7 @@
           (test-proof "other/governance" profiles assessments)
           (list test-policy) test-schema test-entities (list test-capability)))
        true))
-    (poo-flow-test-case "Cedar adapter cannot bypass unresolved Governance threats"
+    (yuanxu-test-case "Cedar adapter cannot bypass unresolved Governance threats"
       (check-exception
        (let* ((profiles (list UnsafeGovernanceProfile))
               (assessments

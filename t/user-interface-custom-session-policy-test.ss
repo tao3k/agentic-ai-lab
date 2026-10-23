@@ -7,13 +7,13 @@
 ;;; Invariant: user config projects effective policy validation only; Scheme
 ;;; never executes tools, hooks, providers, sandboxes, or communication.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection-key
-                 poo-flow-user-module-selection-flag-entry)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-key
+                 yuanxu-user-module-selection-flag-entry)
         :poo-flow/modules/session/config
         (only-in "../user-interface/custom/my-module/cases/session-policy"
                  poo-flow-custom-my-module-session-policy-case))
@@ -91,13 +91,13 @@
 (def (module-config-rows module-selection-bundle)
   (let* ((selection (car module-selection-bundle))
          (entry
-          (poo-flow-user-module-selection-flag-entry selection ':session-rows)))
+          (yuanxu-user-module-selection-flag-entry selection ':session-rows)))
     (if entry (cdr entry) '())))
 
 ;; : TestSuite
 (def user-interface-custom-session-policy-test
   (test-suite "poo-flow custom user-interface session-policy case"
-    (poo-flow-test-case "projects custom effective session-policy validation"
+    (yuanxu-test-case "projects custom effective session-policy validation"
       (let* ((selection
               (car poo-flow-custom-my-module-session-policy-case))
              (rows
@@ -125,7 +125,7 @@
              (validation (find-validation-row rows))
              (codes (diagnostic-codes
                      (test-ref validation 'diagnostics))))
-        (check-equal? (poo-flow-user-module-selection-key selection)
+        (check-equal? (yuanxu-user-module-selection-key selection)
                       '(session . session))
         (check-equal? (test-ref durable-row 'runtime-executed) #f)
         (check-equal? (test-ref isolation-row 'schema)

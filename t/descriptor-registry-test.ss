@@ -5,7 +5,7 @@
 
 ;;; Boundary: descriptor registries are policy extension surfaces.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,14 +17,14 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .@ .slot? .all-slots)
-        :core/modules/funflow/control-plane/api)
+        :yuanxu/modules/funflow/control-plane/api)
 
 ;;; This suite keeps descriptor registry lookup behavior separate from concrete
 ;;; workflow execution.
 ;; : TestSuite
 (def descriptor-registry-test
   (test-suite "descriptor registries"
-    (poo-flow-test-case "extends task family descriptors without editing defaults"
+    (yuanxu-test-case "extends task family descriptors without editing defaults"
       (let* ((custom (make-task-family-descriptor 'custom-runtime
                                                   'external
                                                   'adapter
@@ -54,7 +54,7 @@
         (check-equal? (and (memq 'extension-policy (.all-slots custom)) #t)
                       #t)
         (check-equal? (length task-family-descriptors) 3)))
-    (poo-flow-test-case "extends flow declarations without editing defaults"
+    (yuanxu-test-case "extends flow declarations without editing defaults"
       (let* ((remote (make-flow-declaration-descriptor 'remote-flow
                                                        'remote
                                                        'linear-dag

@@ -7,7 +7,7 @@
 ;;; Invariant: capability backends name registry backend-kind values, never
 ;;; runtime owners.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -16,7 +16,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         (only-in :clan/poo/object .ref .slot? object?)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/presentation-config
         (only-in :poo-flow/modules/loop-engine/runtime
                  loop-engine-capability-receipt?
@@ -81,9 +81,9 @@
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation module-bundle)
   (let* ((modules
-          (poo-flow-user-module-bundles->modules (list module-bundle)))
+          (yuanxu-user-module-bundles->modules (list module-bundle)))
          (config
-          (pooFlowUserConfig modules (poo-flow-settings))))
+          (yuanxuUserConfig modules (yuanxu-settings))))
     (pooFlowUserConfigPresentation config)))
 
 ;; : (-> Alist)
@@ -109,7 +109,7 @@
 ;;; capability value.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-invalid-capability-case)
-  (poo-flow-test-case "diagnoses invalid loop-engine capability backend"
+  (yuanxu-test-case "diagnoses invalid loop-engine capability backend"
     (let* ((presentation
             (custom-loop-presentation custom-loop-invalid-capability-module))
            (intent
@@ -145,7 +145,7 @@
 
 ;; : TestCase
 (def (user-interface-custom-loop-engine-invalid-capability-performance-case)
-  (poo-flow-test-case "keeps invalid capability presentation inside benchmark contract"
+  (yuanxu-test-case "keeps invalid capability presentation inside benchmark contract"
     (let* ((summary
             (custom-loop-invalid-capability-summary))
            (receipt

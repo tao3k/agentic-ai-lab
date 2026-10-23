@@ -5,8 +5,8 @@
 
 ;;; Boundary: task-family descriptor tests stay separate from flow execution.
 
-(import :core/composition/roles
-        (only-in :core/observability/testing-case poo-flow-test-case)
+(import :yuanxu/composition/roles
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,15 +17,15 @@
                  check-true
                  test-error
                  test-suite)
-        :core/modules/funflow/control-plane/api
-        :core/modules/funflow/store)
+        :yuanxu/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/store)
 
 ;;; This suite keeps task-family routing policy executable without invoking
 ;;; runtime adapters, so descriptor regressions fail at the control-plane edge.
 ;; : TestSuite
 (def task-family-descriptor-test
   (test-suite "task family descriptors"
-    (poo-flow-test-case "declares POO-backed task family policy"
+    (yuanxu-test-case "declares POO-backed task family policy"
       (check-equal? (task-family-descriptor? pure-task-family-descriptor) #t)
       (check-equal? (role-object? store-task-family-descriptor) #t)
       (check-equal? (task-family-name scheme-task-family-descriptor) 'scheme)
@@ -36,7 +36,7 @@
                     'rust-or-external-runtime)
       (check-equal? (task-family-adapter-dispatch external-task-family-descriptor)
                     'submit))
-    (poo-flow-test-case "routes tasks through descriptor policy"
+    (yuanxu-test-case "routes tasks through descriptor policy"
       (let ((registry (make-store-task-family-registry))
             (pure (make-pure-task 'inc (lambda (x) (+ x 1)) 'number 'number))
             (put (make-store-task 'put-cache 'put 'cache-handle 'artifact 'artifact))

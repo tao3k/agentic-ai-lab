@@ -8,7 +8,7 @@
         :poo-flow/modules/ai-agentic-context/use-host
         :poo-flow/modules/query/semantic/context-restriction
         :std/test (only-in :clan/poo/object .o .ref)
-        (only-in :core/observability/testing-case poo-flow-test-case)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :gerbil-ascent/candidate/reasoning
                  reasoning-source-snapshot reasoning-attempt reasoning-receipt-status reasoning-receipt-proof
                  reasoning-receipt-rows reasoning-receipt-bound?)
@@ -44,10 +44,10 @@
     program journal (at 1) #f 128))
 (def temporal-evaluator-test
   (test-suite "original evaluator positive proof admission"
-    (poo-flow-test-case "rejection assertions fail when the operation returns normally"
+    (yuanxu-test-case "rejection assertions fail when the operation returns normally"
       (check (rejected? (lambda () 42)) => #f)
       (check (rejected? (lambda () (error "typed rejection"))) => #t))
-    (poo-flow-test-case "Context binds original proof into input and fences prepared claims"
+    (yuanxu-test-case "Context binds original proof into input and fences prepared claims"
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
         (check (.ref (context-claim context-host 0 0) 'reason) => 'temporal-proof-denied)
         (let* ((before (poo-flow-ai-agentic-context-session-host-current context-host "session"))
@@ -60,7 +60,7 @@
             (check (.ref claim 'accepted?) => #t)
             (check (.ref claim 'provider-disclosed?) => #f)
             (check (.ref claim 'action-authorized?) => #f)))))
-    (poo-flow-test-case "Temporal correction invalidates active Context while preserving one obligation"
+    (yuanxu-test-case "Temporal correction invalidates active Context while preserving one obligation"
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
         (context-bind context-host proof-host registration p 0 0 1 1)
         (context-claim context-host 1 0)
@@ -77,7 +77,7 @@
           (let (again (poo-flow-ai-agentic-context-session-host-revalidate! context-host "session" 3 0))
             (check (.ref again 'runtime-published?) => #f)
             (check (length (.ref (.ref again 'schedule) 'obligations)) => 1)))))
-    (poo-flow-test-case "Context source refresh cannot reuse a Temporal requirement at another source generation"
+    (yuanxu-test-case "Context source refresh cannot reuse a Temporal requirement at another source generation"
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
         (context-bind context-host proof-host registration p 0 0 1 1)
         (poo-flow-ai-agentic-context-session-host-refresh! context-host "session" 0 1 context-source
@@ -85,7 +85,7 @@
         (check (.ref (context-claim context-host 1 1) 'reason) => 'temporal-proof-denied)
         (context-bind context-host proof-host registration p 1 1 1 1)
         (check (.ref (context-claim context-host 2 1) 'accepted?) => #t)))
-    (poo-flow-test-case "Context refuses unknown proof budget exhaustion policy drift and stale catalog"
+    (yuanxu-test-case "Context refuses unknown proof budget exhaustion policy drift and stale catalog"
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
         (check-rejected (poo-flow-ai-agentic-context-session-host-require-proof! context-host "session" 0 0
           proof-host "unknown" 1 1 (.ref p 'semantic-digest) 128))
@@ -102,13 +102,13 @@
           (poo-flow-temporal-proof-host-refresh! proof-host "source" 2 changed (list-ref ctx 9))
           (check-rejected (context-bind context-host proof-host registration p 1 0 2 2))
           (check (.ref (context-claim context-host 1 0) 'reason) => 'temporal-proof-denied))))
-    (poo-flow-test-case "Temporal proof capability retains creating owner even before first use"
+    (yuanxu-test-case "Temporal proof capability retains creating owner even before first use"
       (let* ((ph (poo-flow-temporal-support-policy-host)) (proof-host (poo-flow-temporal-proof-host ph))
              (ctx (mrr-derivation-fixture)))
         (check (thread-join! (thread-start! (make-thread (lambda ()
           (rejected? (lambda () (poo-flow-temporal-proof-host-refresh! proof-host "source" 1 (car ctx) (list-ref ctx 9)))))))) => #t)
         (check (.ref (poo-flow-temporal-proof-host-refresh! proof-host "source" 1 (car ctx) (list-ref ctx 9)) 'generation) => 1)))
-    (poo-flow-test-case "retained native proof uses registered current source policy and observed clock"
+    (yuanxu-test-case "retained native proof uses registered current source policy and observed clock"
       (let* ((ctx (mrr-derivation-fixture)) (ph (poo-flow-temporal-support-policy-host))
              (host (poo-flow-temporal-proof-host ph)) (p (policy "v1"))
              (snapshot (poo-flow-temporal-proof-host-refresh! host "source" 1 (car ctx) (list-ref ctx 9)))
@@ -127,7 +127,7 @@
         (check-rejected (proof-current host registration 0 1 p) )
         (check-rejected (proof-current host registration 1 0 p) )
         (check (.ref (poo-flow-temporal-proof-host-current host (.ref registration 'identity) 1 1 (.ref p 'semantic-digest) 0) 'status) => 'unknown)))
-    (poo-flow-test-case "current proof cannot reuse historical cut after late correction"
+    (yuanxu-test-case "current proof cannot reuse historical cut after late correction"
       (let* ((ctx (mrr-derivation-fixture)) (ph (poo-flow-temporal-support-policy-host))
              (host (poo-flow-temporal-proof-host ph)) (p (policy "v1")) (j (list-ref ctx 9))
              (snapshot (poo-flow-temporal-proof-host-refresh! host "source" 1 (car ctx) j))
@@ -143,7 +143,7 @@
         (check-rejected (poo-flow-temporal-proof-host-refresh! host "source" 2 (car ctx) j) )
         (check-rejected (register-selected host snapshot ctx) )
         (check (.ref (proof-current host registration 2 2 p) 'status) => 'unsupported)))
-    (poo-flow-test-case "registered proof detects catalog replacement and Host policy expiry"
+    (yuanxu-test-case "registered proof detects catalog replacement and Host policy expiry"
       (let* ((ctx (mrr-derivation-fixture)) (ph (poo-flow-temporal-support-policy-host))
              (host (poo-flow-temporal-proof-host ph)) (p (policy "v1")) (program-value (car ctx))
              (snapshot (poo-flow-temporal-proof-host-refresh! host "source" 1 program-value (list-ref ctx 9)))
@@ -156,7 +156,7 @@
         (poo-flow-temporal-proof-host-refresh! host "source" 2 changed (list-ref ctx 9))
         (check (.ref (proof-current host registration 2 1 p) 'status) => 'stale-catalog)
         (check (.ref (replay-selected (derive-selected ctx (list-ref ctx 6)) ctx (list-ref ctx 6)) 'mrr-rule-equivalence-verified?) => #t)))
-    (poo-flow-test-case "proof host rejects forged contexts and same generation conflict before mutation"
+    (yuanxu-test-case "proof host rejects forged contexts and same generation conflict before mutation"
       (let* ((ctx (mrr-derivation-fixture)) (ph (poo-flow-temporal-support-policy-host))
              (host (poo-flow-temporal-proof-host ph)) (p (policy "v1")) (j (list-ref ctx 9))
              (snapshot (poo-flow-temporal-proof-host-refresh! host "source" 1 (car ctx) j))
@@ -170,7 +170,7 @@
         (check-rejected (poo-flow-temporal-proof-host-refresh! host "source" 2 (car ctx)
           (.o (:: @ j) semantic-digest: "forged")) )
         (check (.ref (proof-current host registration 1 1 p) 'status) => 'current)))
-    (poo-flow-test-case "current proof applies evidence validity and conflicting heads conservatively"
+    (yuanxu-test-case "current proof applies evidence validity and conflicting heads conservatively"
       (let* ((ctx (mrr-derivation-fixture)) (ph (poo-flow-temporal-support-policy-host))
              (host (poo-flow-temporal-proof-host ph))
              (p (poo-flow-temporal-support-policy "policy" "long" (at 1) (at 20)))
@@ -191,7 +191,7 @@
           (check (.ref (proof-current host registration 2 1 p) 'status) => 'unknown)
           (poo-flow-temporal-support-policy-host-refresh! ph p 2 (at 10))
           (check (.ref (proof-current host registration 2 2 p) 'status) => 'unsupported))))
-    (poo-flow-test-case "selected recursive MRR Derivation authority and direct premises bind exact source leaves"
+    (yuanxu-test-case "selected recursive MRR Derivation authority and direct premises bind exact source leaves"
       (let* ((ctx (mrr-derivation-fixture)) (bindings (list-ref ctx 6)) (value (derive-selected ctx bindings))
              (qualified-support (.ref value 'support)) (journal-value (list-ref ctx 9))
              (program-value (poo-flow-temporal-support-program "qualified" "read-only" #t (list qualified-support))))
@@ -220,7 +220,7 @@
             (hash-put! out "supportProof" (.ref qualified-support 'proof-identity))
             (call-with-output-file (getenv "POO_FLOW_MRR_DERIVATION_ADMISSION_ORACLE")
               (lambda (port) (display (scheme-wire-write out) port) (newline port)))))))
-    (poo-flow-test-case "original direct support cannot be replaced by transitive leaves or another rule"
+    (yuanxu-test-case "original direct support cannot be replaced by transitive leaves or another rule"
       (let* ((ctx (mrr-derivation-fixture)) (bindings (list-ref ctx 6)) (root (.ref (list-ref ctx 2) 'root))
              (root-binding (find (lambda (b) (= (.ref b 'node) root)) bindings))
              (d (.ref root-binding 'derivation))
@@ -236,7 +236,7 @@
             (.ref base-rule 'identity) (.ref d 'generation) (.ref d 'output) (.ref d 'supports)))) ))
         (check-rejected (derive-selected ctx (map (lambda (b) (if (= (.ref b 'node) root)
           (poo-flow-temporal-proof-node-fact root (.ref root-binding 'fact) #f) b)) bindings)) )))
-    (poo-flow-test-case "original MRR recursive rules correspond to verified native proof nodes"
+    (yuanxu-test-case "original MRR recursive rules correspond to verified native proof nodes"
       (let* ((p (mrr-rule-program-fixture)) (s (source 1)) (r (reasoning-attempt s proposal 512))
              (a (admit s proposal r))
              (c (poo-flow-temporal-rule-correspondence-from-ascent p a s proposal r 512 32)))
@@ -268,7 +268,7 @@
                (changed (poo-flow-temporal-rule-program (.ref p 'identity) (.ref p 'catalog-digest)
                  (.ref p 'generation) 1 (.ref p 'relations) (cons wrong (cdr (.ref p 'rules))))))
           (check-rejected (poo-flow-temporal-rule-correspondence-from-ascent changed a s proposal r 512 32) ))))
-    (poo-flow-test-case "native rule program rejects unsafe variables typed terms and missing relation"
+    (yuanxu-test-case "native rule program rejects unsafe variables typed terms and missing relation"
       (let* ((p (mrr-rule-program-fixture)) (rs (.ref p 'relations)) (old (car (.ref p 'rules)))
              (head (.ref old 'head))
              (rebuild (lambda (rules) (poo-flow-temporal-rule-program "invalid" (.ref p 'catalog-digest)
@@ -282,7 +282,7 @@
         (check-rejected (rebuild (list (poo-flow-temporal-rule "missing" head
           (list (poo-flow-temporal-rule-atom "missing" (.ref head 'terms)))))) )
         (check-rejected (rebuild (list old old)) )))
-    (poo-flow-test-case "native positive query and original proof replay produce POO admission"
+    (yuanxu-test-case "native positive query and original proof replay produce POO admission"
       (let* ((s (source 1)) (receipt (reasoning-attempt s proposal 512)) (a (admit s proposal receipt))
              (replay (poo-flow-temporal-positive-proof-replay a s proposal receipt 512 32)))
         (check (reasoning-receipt-status receipt) => 'complete)
@@ -293,7 +293,7 @@
         (check (.ref a 'action-authorized?) => #f)
         (check (.ref a 'durable?) => #f)
         (check (.ref replay 'semantic-digest) => (.ref a 'semantic-digest))))
-    (poo-flow-test-case "stale snapshot changed proposal and forged admission reject"
+    (yuanxu-test-case "stale snapshot changed proposal and forged admission reject"
       (let* ((s (source 1)) (receipt (reasoning-attempt s proposal 512)) (a (admit s proposal receipt))
              (changed '(candidate (relation path 2) (rule (path ?x ?y) (edge ?x ?y))
                           (query path 1 2) (limits 8 16 32))))
@@ -305,7 +305,7 @@
           (.o (:: @ a) rows: '((1 99))) s proposal receipt 512 32) )
         (check-rejected (poo-flow-temporal-positive-proof-replay
           (.o (:: @ a) action-authorized?: #t) s proposal receipt 512 32) )))
-    (poo-flow-test-case "bounded proof and bounded verification do not become admitted"
+    (yuanxu-test-case "bounded proof and bounded verification do not become admitted"
       (let* ((s (source 1)) (bounded (reasoning-attempt s proposal 1))
              (complete (reasoning-attempt s proposal 512)))
         (check (reasoning-receipt-status bounded) => 'complete)
@@ -315,7 +315,7 @@
         (check-rejected (admit s proposal complete 1 32) )
         (check-rejected (admit s proposal complete 4097 32) )
         (check-rejected (admit s proposal complete 512 129) )))
-    (poo-flow-test-case "hypothetical premise and empty query have no source-only positive admission"
+    (yuanxu-test-case "hypothetical premise and empty query have no source-only positive admission"
       (let* ((s (reasoning-source-snapshot 'graph 1 '((edge 2 ((1 2))))))
              (hypothetical '(candidate (relation path 2) (fact edge 2 3)
                               (rule (path ?x ?y) (edge ?x ?y))
@@ -327,7 +327,7 @@
         (check-rejected (admit s hypothetical h) )
         (check (reasoning-receipt-status empty) => 'complete)
         (check-rejected (admit s proposal empty) )))
-    (poo-flow-test-case "host refresh selects registered time and refuses stale generation"
+    (yuanxu-test-case "host refresh selects registered time and refuses stale generation"
       (let* ((host (poo-flow-temporal-support-policy-host)) (p (policy "rev1"))
              (registered (poo-flow-temporal-support-policy-host-refresh! host p 1 (at 1)))
              (historical (guard host 1 p)))
@@ -338,7 +338,7 @@
         (check-rejected (guard host 1 p) )
         (check (.ref (poo-flow-temporal-support-guard-replay historical program journal p) 'policy-status) => 'applicable)
         (check (.ref (guard host 2 p) 'action-authorized?) => #f)))
-    (poo-flow-test-case "host replacement preserves revision identity and rollback failures preserve current"
+    (yuanxu-test-case "host replacement preserves revision identity and rollback failures preserve current"
       (let* ((host (poo-flow-temporal-support-policy-host)) (old (policy "rev1")) (new (policy "rev2")))
         (poo-flow-temporal-support-policy-host-refresh! host old 1 (at 1))
         (poo-flow-temporal-support-policy-host-refresh! host new 2 (at 2))
@@ -350,7 +350,7 @@
         (check-rejected (poo-flow-temporal-support-policy-host-refresh! host
           (poo-flow-temporal-support-policy "policy" "rev2" (at 1) (at 6)) 3 (at 3)) )
         (check (.ref (guard host 2 new) 'policy-status) => 'applicable)))
-    (poo-flow-test-case "host capability instances are isolated and exact snapshot replay is idempotent"
+    (yuanxu-test-case "host capability instances are isolated and exact snapshot replay is idempotent"
       (let* ((a (poo-flow-temporal-support-policy-host)) (b (poo-flow-temporal-support-policy-host))
              (p (policy "rev1"))
              (first (poo-flow-temporal-support-policy-host-refresh! a p 1 (at 1))))
@@ -362,7 +362,7 @@
         (check-rejected (poo-flow-temporal-support-policy-host-refresh! a p 2
           (poo-flow-temporal-instant "uncertain" "txn" 2 "host" 'uncertain)) )
         (check (.ref first 'durable?) => #f)))
-    (poo-flow-test-case "original evaluator rule node tamper rejects despite intact native rows and binding"
+    (yuanxu-test-case "original evaluator rule node tamper rejects despite intact native rows and binding"
       (let* ((s (source 1)) (receipt (reasoning-attempt s proposal 512))
              (nodes (positive-proof-nodes (reasoning-receipt-proof receipt)))
              (last-node (list-ref nodes (- (length nodes) 1))))
@@ -370,7 +370,7 @@
         (check (reasoning-receipt-bound? receipt s proposal) => #t)
         (check (reasoning-receipt-rows receipt) => '((1 3)))
         (check-rejected (admit s proposal receipt) )))
-    (poo-flow-test-case "full host revision inventory rejects overflow without replacing current"
+    (yuanxu-test-case "full host revision inventory rejects overflow without replacing current"
       (let ((host (poo-flow-temporal-support-policy-host)))
         (let loop ((n 1))
           (when (<= n 128)
@@ -378,7 +378,7 @@
             (loop (+ n 1))))
         (check-rejected (poo-flow-temporal-support-policy-host-refresh! host (policy "129") 129 (at 1)) )
         (check (.ref (guard host 128 (policy "128")) 'policy-status) => 'applicable)))
-    (poo-flow-test-case "positive query row projection uses canonical set order"
+    (yuanxu-test-case "positive query row projection uses canonical set order"
       (let* ((s (source 1))
              (all '(candidate (relation path 2)
                      (rule (path ?x ?y) (edge ?x ?y))
@@ -389,7 +389,7 @@
         (check (.ref a 'rows) => '((1 2) (1 3) (2 3)))
         (check (.ref (poo-flow-temporal-positive-proof-replay a s all receipt 512 32) 'semantic-digest)
                => (.ref a 'semantic-digest))))
-    (poo-flow-test-case "proof root and exact source leaves bind fact content into Temporal support"
+    (yuanxu-test-case "proof root and exact source leaves bind fact content into Temporal support"
       (let* ((s (source 1)) (receipt (reasoning-attempt s proposal 512)) (a (admit s proposal receipt))
              (root (car (positive-proof-roots (reasoning-receipt-proof receipt))))
              (leaves (filter (lambda (n) (eq? (proof-node-kind n) 'source))
@@ -439,12 +439,12 @@
         (check-rejected (poo-flow-temporal-proof-support-replay
           (.o (:: @ bound) support: (.o (:: @ (.ref bound 'support)) proof-identity: "forged"))
           a s proposal receipt 512 32 out bindings j) )))
-    (poo-flow-test-case "fact digest rejects unsupported scalar types and forged content"
+    (yuanxu-test-case "fact digest rejects unsupported scalar types and forged content"
       (let (f (poo-flow-temporal-mrr-fact-content "id" "generation" "relation" "edge" '(1 #t)))
         (check-rejected (poo-flow-temporal-mrr-fact-content "id" "generation" "relation" "edge" '(1.0)) )
         (check-rejected (poo-flow-temporal-mrr-fact-content "id" "generation" "relation" "edge" '()) )
         (check-rejected (poo-flow-temporal-mrr-fact-content-replay (.o (:: @ f) row: '(2 #t))) )))
-    (poo-flow-test-case "original MRR fact and Derivation fixture binds to native proof leaves"
+    (yuanxu-test-case "original MRR fact and Derivation fixture binds to native proof leaves"
       (let* ((cases (call-with-input-file "t/qualification/temporal-library-basic/fact-binding-v1/typed-facts.ss"
                       (lambda (p) (read-line p) (read-line p) (scheme-wire-read (read-line p)))))
              (facts (map (lambda (c) (let (r (hash-ref c "request"))

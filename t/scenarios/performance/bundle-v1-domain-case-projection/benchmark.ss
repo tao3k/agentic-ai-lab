@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import :clan/poo/object
-        :core/feature-system/interface
+        :yuanxu/feature-system/interface
         "../../../../core/t/fixtures/bundle-v1-domain-case-projection.ss")
 
 (def +agent-count+ 1000)

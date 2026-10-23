@@ -6,7 +6,7 @@
 ;;; Boundary: POO-native memory specs and catalog validation.
 ;;; Invariant: Scheme builds memory handoff receipts only; no backend runs.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -28,13 +28,13 @@
 
 (def memory-core-test
   (test-suite "poo-flow memory-core"
-    (poo-flow-test-case "expands ordered memory field rows"
+    (yuanxu-test-case "expands ordered memory field rows"
       (check-equal?
        (poo-flow-memory-field-rows
         (kind 'memory)
         (schema 'memory.v1))
        '((kind . memory) (schema . memory.v1))))
-    (poo-flow-test-case "authors custom memory store specs and projects handoff manifests"
+    (yuanxu-test-case "authors custom memory store specs and projects handoff manifests"
       (let* ((store
               (poo-flow-memory-store-spec
                'memory/project-notes
@@ -67,7 +67,7 @@
                       'memory/project-notes)
         (check-equal? (test-ref manifest 'handoff-ready?) #t)
         (check-equal? (test-ref manifest 'runtime-executed) #f)))
-    (poo-flow-test-case "projects default memory stores without runtime execution"
+    (yuanxu-test-case "projects default memory stores without runtime execution"
       (let* ((catalog poo-flow-ai-agentic-context-memory-default-catalog)
              (local-store
               (poo-flow-memory-catalog-find catalog 'memory/local-session))
@@ -84,7 +84,7 @@
         (check-equal? (test-ref row 'runtime-owner)
                       "marlin-agent-core")
         (check-equal? (test-ref row 'runtime-executed) #f)))
-    (poo-flow-test-case "validates session memory intents against concrete store specs"
+    (yuanxu-test-case "validates session memory intents against concrete store specs"
       (let* ((store
               (poo-flow-memory-store-spec
                'memory/project-notes

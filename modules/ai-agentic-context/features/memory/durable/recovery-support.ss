@@ -185,7 +185,7 @@
                                                               tail)
   (if (poo-flow-durable-recovery-member?
        action-class
-       +poo-flow-durable-action-classes+)
+       +yuanxu-durable-action-classes+)
     tail
     (cons
      (poo-flow-durable-recovery-diagnostic
@@ -194,7 +194,7 @@
       'error
       (list (cons 'task task-id)
             (cons 'action-class action-class)
-            (cons 'allowed +poo-flow-durable-action-classes+)
+            (cons 'allowed +yuanxu-durable-action-classes+)
             (cons 'recoverable? #t)))
      tail)))
 

@@ -2,11 +2,11 @@
 --
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-import PooFlowCoreProof.Contribution.Qualification
+import YuanxuProof.Contribution.Qualification
 
 namespace PooFlowProof.Enterprise.Core
 
-open PooFlowCoreProof.Contribution.Qualification
+open YuanxuProof.Contribution.Qualification
 
 structure GovernanceContext
     (Principal Asset Action Responsibility Evidence FacetIdentity

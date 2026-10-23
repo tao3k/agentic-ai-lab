@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Inert Context prototypes and owned Feature descriptor values.
 (import (only-in :clan/poo/object .def)
-        :core/feature-system/model
+        :yuanxu/feature-system/model
         "types.ss")
 (export AiAgenticContextTemporalPolicy. AiAgenticContextOrgAnchor. AiAgenticContextDelta. AiAgenticContextEdit. AiAgenticContextScope. ai-agentic-context-core-feature
         ai-agentic-context-memory-feature)

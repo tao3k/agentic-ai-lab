@@ -6,7 +6,7 @@
 ;;; Boundary: tests verify user-interface presentation receipts.
 ;;; Invariant: presentations stay report-only and never realize descriptors.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -14,12 +14,12 @@
         (only-in :poo-flow/modules/module-authoring/module-interface
                  poo-flow-brand-group
                  poo-flow-brand-name)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-config-presentation-kind)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-config-presentation-kind)
         (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
                  pooFlowUserConfigPresentation)
-        (only-in :core/profile-composition/user-profile
-                 poo-flow-user-profile-presentation-kind)
+        (only-in :yuanxu/profile-composition/user-profile
+                 yuanxu-user-profile-presentation-kind)
         (only-in :poo-flow/modules/workflow/scenario/configuration/profile-presentation-config
                  pooFlowUserProfilePresentation)
         "user-interface-fixtures.ss")
@@ -63,7 +63,7 @@
 ;;; switches, CI/CD handoff rows, loop-engine rows, and ownership boundaries.
 ;; : (-> Unit TestSuite)
 (def (user-interface-config-presentation-test)
-  (poo-flow-test-case "presents downstream config without descriptor realization"
+  (yuanxu-test-case "presents downstream config without descriptor realization"
       (let* ((presentation
               (pooFlowUserConfigPresentation
                test-poo-flow-user-config
@@ -84,7 +84,7 @@
              (trace (.ref presentation 'presentation-trace))
              (settings (.ref presentation 'settings)))
         (check-equal? (.ref presentation 'kind)
-                      poo-flow-user-config-presentation-kind)
+                      yuanxu-user-config-presentation-kind)
         (check-equal? (.ref presentation 'module-count) 7)
         (check-equal? (.ref presentation 'module-keys)
                       '((flow . funflow)
@@ -217,7 +217,7 @@
         (check-equal? (.ref presentation 'brand-group) poo-flow-brand-group)
         (check-equal? (not
                        (not
-                        (member "poo-flow!"
+                        (member "yuanxu!"
                                 (.ref presentation 'user-entrypoints))))
                       #t)
         (check-equal? (not
@@ -232,7 +232,7 @@
                       #t)
         (check-equal? (not
                        (not
-                        (member "poo-flow-user-config-feature?"
+                        (member "yuanxu-user-config-feature?"
                                 (.ref presentation 'api-entrypoints))))
                       #t)
         (check-equal? (not
@@ -260,16 +260,16 @@
 ;;; higher-level Doom-style profile fields users inspect.
 ;; : (-> Unit TestSuite)
 (def (user-interface-profile-presentation-case-test)
-  (poo-flow-test-case "presents profile without descriptor realization"
+  (yuanxu-test-case "presents profile without descriptor realization"
       (let* ((presentation
               (pooFlowUserProfilePresentation test-poo-flow-user-profile)))
         (check-equal? (.ref presentation 'kind)
-                      poo-flow-user-profile-presentation-kind)
+                      yuanxu-user-profile-presentation-kind)
         (check-equal? (.ref presentation 'profile-name) 'developer)
         (check-equal? (.ref presentation 'module-bundle-count) 7)
         (check-equal? (.ref presentation 'module-count) 7)
         (check-equal? (.ref presentation 'config-presentation-kind)
-                      poo-flow-user-config-presentation-kind)
+                      yuanxu-user-config-presentation-kind)
         (check-equal? (.ref presentation 'config-module-count) 7)
         (check-equal? (.ref presentation 'feature-count) 7)
         (check-equal? (.ref presentation 'sandbox-profile-derivation-count)

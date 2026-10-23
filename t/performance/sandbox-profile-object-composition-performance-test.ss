@@ -5,7 +5,7 @@
 
 ;;; Scale gate for inert Sandbox Profile construction and explicit list policy.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test check-equal? test-suite)
         :poo-flow/modules/nono-sandbox/config
         :poo-flow/modules/agent-sandbox/config)
@@ -34,7 +34,7 @@
 
 (def sandbox-profile-object-composition-performance-test
   (test-suite "Sandbox Profile POO composition performance"
-    (poo-flow-test-case "1000 inert profiles retain ordered list policy"
+    (yuanxu-test-case "1000 inert profiles retain ordered list policy"
       (let* ((started (current-jiffy))
              (profiles
               (sandbox-profile-composition-build

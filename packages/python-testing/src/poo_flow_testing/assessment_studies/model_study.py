@@ -57,7 +57,7 @@ def producer_hashes():
 def module_path(name):
     if name.startswith('gerbil-ascent/'):
         return ROOT/(name.split('/',1)[1]+'.ss')
-    if name in ('core/types.ssi','core/types.scm','core/types~0.scm'):
+    if name in ('yuanxu/types.ssi','yuanxu/types.scm','yuanxu/types~0.scm'):
         return ROOT/'.data/dependencies/prefix/lib'/name
     raise ValueError('unrecognized source binding')
 
@@ -151,8 +151,8 @@ def prepare(output):
     for case in cases:
         deps = sorted({module for root in case['imports'] for module in closures[root]})
         owned = [name for name in deps if name.startswith('gerbil-ascent/')]
-        lowered = ['core/types.ssi','core/types.scm','core/types~0.scm'] if 'core/types' in deps else []
-        assumed = [name for name in deps if name not in owned and name!='core/types']
+        lowered = ['yuanxu/types.ssi','yuanxu/types.scm','yuanxu/types~0.scm'] if 'yuanxu/types' in deps else []
+        assumed = [name for name in deps if name not in owned and name!='yuanxu/types']
         if not owned:
             raise ValueError('compiler source closure has no project modules')
         context = ''

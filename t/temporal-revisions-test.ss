@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
         :poo-flow/modules/temporal-causality/interface)
@@ -29,7 +29,7 @@
 
 (def temporal-revisions-test
   (test-suite "bitemporal evidence revisions"
-    (poo-flow-test-case "late correction preserves the prior admission cut"
+    (yuanxu-test-case "late correction preserves the prior admission cut"
       (let* ((first (assertion))
              (fixed (correction "r2" 20))
              (early (poo-flow-temporal-evidence-journal
@@ -58,7 +58,7 @@
                        (.ref full 'semantic-digest)) => #f)
         (check (.ref replayed 'future-revision-identities) => '("r2"))))
 
-    (poo-flow-test-case "valid time and admission time remain independent"
+    (yuanxu-test-case "valid time and admission time remain independent"
       (let* ((journal (poo-flow-temporal-evidence-journal
                        "history" "txn"
                        (list (assertion) (correction "r2" 20))))
@@ -95,7 +95,7 @@
         (check (equal? (.ref reused-id-earlier 'projection-digest)
                        (.ref reused-id-later 'projection-digest)) => #f)))
 
-    (poo-flow-test-case "retraction removes current applicability, not history"
+    (yuanxu-test-case "retraction removes current applicability, not history"
       (let* ((withdrawal
               (poo-flow-temporal-evidence-revision
                "r3" "subject" 'retract "r2"
@@ -113,7 +113,7 @@
         (check (.ref after 'visible-revision-identities)
                => '("r1" "r2" "r3"))))
 
-    (poo-flow-test-case "concurrent corrections expose conflict"
+    (yuanxu-test-case "concurrent corrections expose conflict"
       (let* ((journal (poo-flow-temporal-evidence-journal
                        "branched" "txn"
                        (list (assertion) (correction "r2" 20)
@@ -124,7 +124,7 @@
                => '("subject"))
         (check (.ref receipt 'active-revision-identities) => '())))
 
-    (poo-flow-test-case "predecessor and admission clock are checked"
+    (yuanxu-test-case "predecessor and admission clock are checked"
       (let* ((valid (poo-flow-temporal-evidence-journal
                      "valid" "txn" (list (assertion))))
              (forged (poo-flow-temporal-evidence-journal-value

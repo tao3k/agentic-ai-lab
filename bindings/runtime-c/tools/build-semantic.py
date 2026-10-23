@@ -68,9 +68,9 @@ def main() -> None:
     compiler = [str(home / "bin/gxc"), "-:max-heap=1G,debug=q"]
     # Module compilation already emits compiler-owned static sources.
     # -static controls executable dependency linkage and cannot link Darwin dylibs.
-    for source in ["core/utilities/product-syntax.ss", "core/utilities/final-projection-syntax.ss",
-                   "core/graph/types-core.ss", "core/graph/algorithms-list-support.ss",
-                   "core/graph/algorithms.ss", "modules/temporal-causality/types.ss",
+    for source in ["yuanxu/utilities/product-syntax.ss", "yuanxu/utilities/final-projection-syntax.ss",
+                   "yuanxu/graph/types-core.ss", "yuanxu/graph/algorithms-list-support.ss",
+                   "yuanxu/graph/algorithms.ss", "modules/temporal-causality/types.ss",
                    "modules/temporal-causality/objects.ss", "modules/temporal-causality/funs.ss",
                    "modules/workflow/runtime/temporal-family.ss", "modules/temporal-causality/truth-maintenance/types.ss",
                    "modules/temporal-causality/conclusions/types.ss",

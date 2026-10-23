@@ -3,18 +3,21 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite check-equal?)
         (only-in :std/misc/ports read-all-as-string)
-        (only-in :clan/poo/object .o)
+        (only-in :clan/poo/object .o .get .ref/cached)
+        (only-in :gerbil/expander core-import-module module-context-path)
+        :yuanxu/init
+        "../init.ss"
         (only-in :poo-flow/modules/building/build-config
                  poo-flow-default-build-observability-policy)
         (only-in :poo-flow/modules/building/build-projection
                  poo-flow-make-observed-package-spec-projector
                  poo-flow-observe-build-projection
                  poo-flow-build-elapsed-milliseconds)
-        (only-in :core/observability/output
-                 poo-flow-write-observation-line!))
+        (only-in :yuanxu/observability/output
+                 yuanxu-write-observation-line!))
 
 (export build-projection-observability-test)
 
@@ -23,7 +26,15 @@
 
 (def build-projection-observability-test
   (test-suite "POO PackageSpec projection observability"
-    (poo-flow-test-case "native package catalog reaches the ASP projector unchanged"
+    (yuanxu-test-case "native package init entries coexist without forcing either graph"
+      (yuanxu-write-observation-line! "init-entry source=%s"
+        (module-context-path (core-import-module ':yuanxu/init)))
+      (check-equal? (eq? yuanxu.init.exports poo-flow.init.exports) #f)
+      (check-equal? (.ref/cached yuanxu.init.exports 'Modules) #f)
+      (check-equal? (.ref/cached poo-flow.init.exports 'Core) #f)
+      (check-equal? (.ref/cached (.get yuanxu.init.exports tests) 'selected-graph) #f)
+      (check-equal? (.ref/cached (.get poo-flow.init.exports tests) 'selected-graph) #f))
+    (yuanxu-test-case "native package catalog reaches the supplied projector unchanged"
       (let ((projected? #f)
             (port (open-output-string))
             (package-spec (.o)))
@@ -42,39 +53,17 @@
           (check-equal? (contains? output "phase=executor-handoff") #t)
           (check-equal? (contains? output "phase=executor-active") #f))))
 
-    (poo-flow-test-case "development policy checks the native public closure with ASP"
-      (let (source (call-with-input-file "dev/package.ss" read-all-as-string))
-        (check-equal? (contains? source
-                                 ":asp-gerbil-scheme/building-api")
-                      #t)
-        (check-equal? (contains? source
-                                 ":asp-gerbil-scheme/build-api")
-                      #f)
-        (check-equal? (contains? source
-                                 ":asp-gerbil-scheme/src/build-api/")
-                      #f)
-        (check-equal? (contains? source ":clan/building") #f)
-        ;; Catalog spelling and enumeration are not the provider boundary.
-        ;; Core's init-selected build view may replace the current manual list.
-        (check-equal? (contains? source
-                                 "(exclude-dirs +poo-flow-build-exclude-dirs+)")
-                      #t)
-        (check-equal? (contains? source "\"performance-tests.ss\"") #t)
-        (check-equal? (contains? source "\"run-contribute-test.ss\"") #t)))
-
-    (poo-flow-test-case "production build does not load the development harness"
+    (yuanxu-test-case "package build delegates selection and execution to Core and std/make"
       (let ((source (call-with-input-file "build.ss" read-all-as-string))
-            (catalog (call-with-input-file "build-modules.ss" read-all-as-string))
-            (package (call-with-input-file "gerbil.pkg" read-all-as-string)))
+            (projection (call-with-input-file "build-spec.ss" read-all-as-string)))
+        (check-equal? (contains? source ":asp-gerbil-scheme/") #f)
         (check-equal? (contains? source ":std/build-script") #t)
-        (check-equal? (contains? source "build-modules.ss") #t)
-        (for-each
-         (lambda (text)
-           (check-equal? (contains? text "asp-gerbil-scheme") #f)
-           (check-equal? (contains? text "modules/testing/") #f))
-         (list source catalog package))))
+        ;; Core passes its admitted value into the unchanged SDK macro.
+        (check-equal? (contains? source "(defbuild-script spec)") #t)
+        (check-equal? (contains? source "(.get poo-flow.init.exports std-make-run) retained-spec") #t)
+        (check-equal? (contains? projection "package-library-spec") #t)))
 
-    (poo-flow-test-case "Bazel stages one package surface without owning the module graph"
+    (yuanxu-test-case "Bazel stages one package surface without owning the module graph"
       (let ((root-build
              (call-with-input-file "BUILD.bazel" read-all-as-string)))
         (check-equal? (contains? root-build
@@ -90,7 +79,7 @@
                                  "build_script = \":build.ss\"")
                       #t)))
 
-    (poo-flow-test-case "performance suite consumes the public POO testing interface"
+    (yuanxu-test-case "performance suite consumes the public POO testing interface"
       (let (performance-source
             (call-with-input-file "dev/performance-tests.ss" read-all-as-string))
         (check-equal?
@@ -102,33 +91,21 @@
          (contains? performance-source "+asp-testing-interface+")
          #f)))
 
-    (poo-flow-test-case "Just test launch is fail-closed before Profile loading"
-      (let (source (call-with-input-file "justfile" read-all-as-string))
-        (check-equal?
-         (contains? source
-                    "env_var_or_default(\"GERBIL_TEST_MAX_HEAP\", \"1G\")")
-         #t)
-        (check-equal?
-         (contains? source
-                    "env_var_or_default(\"GERBIL_TEST_DEBUG\", \"q\")")
-         #t)
-        (check-equal?
-         (contains? source
-                    "gerbil {{ gerbil_test_runtime_options }} env gxi {{ gerbil_test_runtime_options }} ./dev/unit-tests.ss")
-         #t)
-        ;; gxpkg env spawns its command; fencing only that dispatcher leaves
-        ;; the script's actual VM unbounded before testing Profiles are loaded.
-        (check-equal?
-         (contains? source
-                    "env ./dev/unit-tests.ss")
-         #f)
-        (check-equal? (contains? source ".devenv/devenv-profile-exec") #f)
-        (check-equal? (contains? source "rm -rf") #f)))
+    (yuanxu-test-case "Just test launch is fail-closed before Profile loading"
+      (let ((environment (call-with-input-file "dev/just/environment.just" read-all-as-string))
+            (testing (call-with-input-file "dev/just/testing.just" read-all-as-string))
+            (driver (call-with-input-file "t/qualification/testing/specialized.ss" read-all-as-string)))
+        (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_MAX_HEAP\", \"1G\")") #t)
+        (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_DEBUG\", \"q\")") #t)
+        (check-equal? (contains? testing "gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss package") #t)
+        (check-equal? (contains? driver "(list \"gerbil\" vm \"env\" \"gxi\" vm \"./dev/unit-tests.ss\")") #t)
+        (check-equal? (contains? testing ".devenv/devenv-profile-exec") #f)
+        (check-equal? (contains? testing "rm -rf") #f)))
 
-    (poo-flow-test-case "unit tests inherit the POO Flow default testing policy"
+    (yuanxu-test-case "unit tests inherit the POO Flow default testing policy"
       (let (source (call-with-input-file "dev/unit-tests.ss" read-all-as-string))
         (check-equal?
-         (contains? source ":poo-flow-dev/testing-api")
+         (contains? source ":poo-flow/dev/testing-api")
          #t)
         (check-equal?
          (contains? source "+poo-flow-testing-interface+")
@@ -136,7 +113,7 @@
         (check-equal? (contains? source "+asp-testing-interface+") #f)
         (check-equal? (contains? source "maxHeapMiB: 1024") #f)))
 
-    (poo-flow-test-case "default policy measures catalog size without an invented limit"
+    (yuanxu-test-case "default policy measures catalog size without an invented limit"
       (let (port (open-output-string))
         (parameterize ((current-output-port port))
           (poo-flow-observe-build-projection
@@ -147,7 +124,7 @@
           (check-equal? (contains? output "target-count=601") #t)
           (check-equal? (contains? output "reason=target-count") #f))))
 
-    (poo-flow-test-case "derived POO policy overrides the budget without environment state"
+    (yuanxu-test-case "derived POO policy overrides the budget without environment state"
       (let ((port (open-output-string))
             (policy
              (.o (:: @ poo-flow-default-build-observability-policy)
@@ -159,7 +136,7 @@
           (check-equal? (contains? output "phase=spec-projected") #t)
           (check-equal? (contains? output "phase=spec-budget-exceeded") #f))))
 
-    (poo-flow-test-case "derived POO policy can admit against measured package evidence"
+    (yuanxu-test-case "derived POO policy can admit against measured package evidence"
       (let ((port (open-output-string))
             (policy
              (.o (:: @ poo-flow-default-build-observability-policy)
@@ -173,7 +150,7 @@
           (check-equal? (contains? output "reason=target-count") #t)
           (check-equal? (contains? output "budget=256") #t))))
 
-    (poo-flow-test-case "concurrent Owner receipts remain complete line records"
+    (yuanxu-test-case "concurrent Owner receipts remain complete line records"
       (let* ((worker-count 12)
              (records-per-worker 40)
              (port (open-output-string))
@@ -184,7 +161,7 @@
                         (parameterize ((current-output-port port))
                           (let loop ((sequence 0))
                             (when (< sequence records-per-worker)
-                              (poo-flow-write-observation-line!
+                              (yuanxu-write-observation-line!
                                "[poo-flow-test] worker=%a sequence=%a"
                                worker-id sequence)
                               (loop (+ sequence 1))))))))
@@ -201,7 +178,7 @@
                    records)
            #t))))
 
-    (poo-flow-test-case "Owner elapsed time is sampled from the wall clock"
+    (yuanxu-test-case "Owner elapsed time is sampled from the wall clock"
       (let (started-jiffy (current-jiffy))
         (thread-sleep! 0.03)
         (check-equal?

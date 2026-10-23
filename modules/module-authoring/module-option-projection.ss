@@ -12,8 +12,8 @@
 (import (only-in :clan/poo/object .all-slots .ref .slot?)
         :poo-flow/modules/module-authoring/module-interface
         :poo-flow/modules/module-authoring/module-descriptor
-        :core/module-system/projection/option-objects
-        :core/module-system/projection/option-validation)
+        :yuanxu/module-system/projection/option-objects
+        :yuanxu/module-system/projection/option-validation)
 
 (export poo-flow-module-option-configs
         poo-flow-module-option-schemas
@@ -30,12 +30,12 @@
 ;;; Boundary: schema specs default to String when the interface is concise.
 ;; : (-> PooModuleSchemaSpec OptionValueType)
 (def (poo-flow-module-schema-spec-type schema-spec)
-  (poo-flow-module-object-ref/default schema-spec 'type 'String))
+  (yuanxu-module-object-ref/default schema-spec 'type 'String))
 
 ;;; Boundary: schema metadata is optional and never required for validation.
 ;; : (-> PooModuleSchemaSpec SchemaMetadata)
 (def (poo-flow-module-schema-spec-metadata schema-spec)
-  (poo-flow-module-object-ref/default schema-spec 'metadata '()))
+  (yuanxu-module-object-ref/default schema-spec 'metadata '()))
 
 ;;; Boundary: one schema spec records required/default/constant/optional rule.
 ;; : (-> ModuleName OptionId PooModuleSchemaSpec PooModuleOptionSchema)
@@ -44,15 +44,15 @@
         (metadata-value (poo-flow-module-schema-spec-metadata schema-spec)))
     (cond
      ((.slot? schema-spec 'policy)
-      (make-poo-flow-module-option-schema
+      (make-yuanxu-module-option-schema
        option-id-value
        module-id-value
        value-type
        (.ref schema-spec 'policy)
-       (poo-flow-module-object-ref/default schema-spec 'default #f)
+       (yuanxu-module-object-ref/default schema-spec 'default #f)
        metadata-value))
      ((.slot? schema-spec 'constant)
-      (make-poo-flow-module-option-schema
+      (make-yuanxu-module-option-schema
        option-id-value
        module-id-value
        value-type
@@ -60,15 +60,15 @@
        (.ref schema-spec 'constant)
        metadata-value))
      ((.slot? schema-spec 'default)
-      (make-poo-flow-module-option-schema
+      (make-yuanxu-module-option-schema
        option-id-value
        module-id-value
        value-type
        'default
        (.ref schema-spec 'default)
        metadata-value))
-     ((poo-flow-module-object-ref/default schema-spec 'optional? #f)
-      (make-poo-flow-module-option-schema
+     ((yuanxu-module-object-ref/default schema-spec 'optional? #f)
+      (make-yuanxu-module-option-schema
        option-id-value
        module-id-value
        value-type
@@ -76,7 +76,7 @@
        #f
        metadata-value))
      (else
-      (make-poo-flow-module-option-schema
+      (make-yuanxu-module-option-schema
        option-id-value
        module-id-value
        value-type
@@ -97,7 +97,7 @@
      module-id-value
      option-object
      (cdr slot-names)
-     (cons (make-poo-flow-module-option-config
+     (cons (make-yuanxu-module-option-config
             (poo-flow-module-option-id (car slot-names))
             (.ref option-object (car slot-names))
             module-id-value
@@ -114,7 +114,7 @@
     (poo-flow-module-alist-option-configs/rev
      module-id-value
      (cdr options)
-     (cons (make-poo-flow-module-option-config
+     (cons (make-yuanxu-module-option-config
             (poo-flow-module-option-id (caar options))
             (cdar options)
             module-id-value
@@ -176,10 +176,10 @@
 (def (poo-flow-module-option-validation-receipts module)
   (let* ((interface (poo-flow-module-interface-object module))
          (schema-ref
-          (if (poo-flow-module-interface? interface)
+          (if (yuanxu-module-interface? interface)
             (lambda (option-id)
               (alet (schema-spec
-                     (poo-flow-module-interface-schema-spec
+                     (yuanxu-module-interface-schema-spec
                       interface
                       option-id))
                 (poo-flow-module-schema-from-spec
@@ -191,11 +191,11 @@
               (for-each
                (lambda (schema)
                  (hash-put! index
-                            (poo-flow-module-option-schema-id schema)
+                            (yuanxu-module-option-schema-id schema)
                             schema))
                schemas)
               (lambda (option-id) (hash-get index option-id))))))
-    (poo-flow-module-options-validate
+    (yuanxu-module-options-validate
      schema-ref
      (poo-flow-module-option-configs module))))
 
@@ -206,5 +206,5 @@
    (foldr append
           '()
           (map poo-flow-module-validation-receipts
-               (poo-flow-module-import-configs (poo-flow-module-imports module))))
+               (poo-flow-module-import-configs (yuanxu-module-imports module))))
    (poo-flow-module-option-validation-receipts module)))

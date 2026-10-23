@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
         (only-in :poo-flow/modules/temporal-causality/time/watermark-objects
@@ -37,7 +37,7 @@
 
 (def temporal-time-test
   (test-suite "temporal type algebra"
-    (poo-flow-test-case "clock domains and modality preserve partial order"
+    (yuanxu-test-case "clock domains and modality preserve partial order"
       (check (poo-flow-temporal-compare
               (instant "a" "event" 1 'observed)
               (instant "b" "event" 2 'observed)) => 'before)
@@ -50,7 +50,7 @@
       (check (poo-flow-temporal-compare
               (instant "a" "event" 1 'corrected)
               (instant "b" "event" 2 'observed)) => 'unknown))
-    (poo-flow-test-case "interval endpoint openness is explicit"
+    (yuanxu-test-case "interval endpoint openness is explicit"
       (let ((span
              (poo-flow-temporal-interval
               "window" (instant "start" "event" 1 'observed)
@@ -63,12 +63,12 @@
         (check (poo-flow-temporal-interval-contains?
                 span (instant "other" "ingest" 2 'observed))
                => 'incomparable)))
-    (poo-flow-test-case "event, ingress and processing axes remain distinct"
+    (yuanxu-test-case "event, ingress and processing axes remain distinct"
       (let ((axes (poo-flow-temporal-axes
                    "event-1" (instant "event" "device" 1 'observed)
                    (instant "ingress" "server" 8 'observed) #f)))
         (check (poo-flow-temporal-axes? axes) => #t)))
-    (poo-flow-test-case "Allen endpoint relations are exhaustive on proper extents"
+    (yuanxu-test-case "Allen endpoint relations are exhaustive on proper extents"
       (for-each
        (lambda (row)
          (check
@@ -104,7 +104,7 @@
                "declared" (instant "declared-start" "event" 2 'declared)
                (instant "declared-end" "event" 4 'observed) #t #f))
              => 'unknown))
-    (poo-flow-test-case "uncertain observations preserve boundary ambiguity"
+    (yuanxu-test-case "uncertain observations preserve boundary ambiguity"
       (let* ((observation
               (poo-flow-temporal-bounded-observation
                "reading" 'wall "clock-source"
@@ -136,7 +136,7 @@
                => 'before)
         (check (poo-flow-temporal-bounded-observation-compare later observation)
                => 'after)))
-    (poo-flow-test-case "observation excludes declared endpoints and inverted bounds"
+    (yuanxu-test-case "observation excludes declared endpoints and inverted bounds"
       (check-exception
        (poo-flow-temporal-bounded-observation
         "declared" 'wall "source"
@@ -151,7 +151,7 @@
         (instant "upper" "clock" 2 'observed)
         1 (instant "acquired" "ingress" 4 'observed)
         "receipt" #f "attempt" "time.v1") true))
-    (poo-flow-test-case "elapsed bounds require ordered monotonic observations"
+    (yuanxu-test-case "elapsed bounds require ordered monotonic observations"
       (let* ((start (bounded "start" 'monotonic "worker-clock" 2 4))
              (end (bounded "end" 'monotonic "worker-clock" 9 12))
              (duration (poo-flow-temporal-monotonic-duration
@@ -179,7 +179,7 @@
                       "wall" start
                       (bounded "wall-end" 'wall-clock "worker-clock" 9 12))
                      'status) => 'unsupported-clock)))
-    (poo-flow-test-case "watermark preserves scope and uncertainty"
+    (yuanxu-test-case "watermark preserves scope and uncertainty"
       (let* ((observation
               (poo-flow-temporal-bounded-observation
                "watermark-time" 'logical "stream-clock"

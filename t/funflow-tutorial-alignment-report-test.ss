@@ -6,7 +6,7 @@
 ;;; Boundary: Funflow tutorial alignment is a POO report, not loose prose.
 ;;; Invariant: heavy Docker/CAS/process work remains runtime-owned.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  test-suite
                  check-equal?
@@ -72,7 +72,7 @@
 ;; : TestSuite
 (def funflow-tutorial-alignment-report-shape-test
   (test-suite "funflow tutorial alignment report shape"
-    (poo-flow-test-case "projects audited upstream tutorial coverage as a POO report"
+    (yuanxu-test-case "projects audited upstream tutorial coverage as a POO report"
       (let* ((report (poo-flow-funflow-tutorial-alignment-report))
              (spec-snapshots (.ref report 'specs))
              (source-index (.ref report 'source-index))
@@ -196,7 +196,7 @@
 ;; : TestSuite
 (def funflow-tutorial-alignment-runtime-gap-test
   (test-suite "funflow tutorial alignment runtime gaps"
-    (poo-flow-test-case "keeps runtime-heavy tutorial gaps explicit"
+    (yuanxu-test-case "keeps runtime-heavy tutorial gaps explicit"
       (let* ((report (poo-flow-funflow-tutorial-alignment-report))
              (specs (poo-flow-funflow-tutorial-alignment-specs))
              (ccompilation (alignment-test-spec-by-id 'ccompilation specs))
@@ -233,7 +233,7 @@
 ;; : TestSuite
 (def funflow-tutorial-alignment-index-test
   (test-suite "funflow tutorial alignment indexes"
-    (poo-flow-test-case "indexes upstream sources and runtime-owned gaps"
+    (yuanxu-test-case "indexes upstream sources and runtime-owned gaps"
       (let* ((report (poo-flow-funflow-tutorial-alignment-report))
              (source-index (.ref report 'source-index))
              (source-proof-index (.ref report 'source-proof-index))
@@ -342,7 +342,7 @@
 ;; : TestSuite
 (def funflow-tutorial-alignment-proof-test
   (test-suite "funflow tutorial alignment proofs"
-    (poo-flow-test-case "keeps proof receipts attached to result-covered tutorial specs"
+    (yuanxu-test-case "keeps proof receipts attached to result-covered tutorial specs"
       (let* ((specs (poo-flow-funflow-tutorial-alignment-specs))
              (tutorial1 (alignment-test-spec-by-id 'tutorial1 specs))
              (word-count (alignment-test-spec-by-id 'word-count specs))
@@ -370,7 +370,7 @@
 ;; : TestSuite
 (def funflow-tutorial-alignment-gate-test
   (test-suite "funflow tutorial alignment gates"
-    (poo-flow-test-case "keeps late-stage proof gates visible in report metadata"
+    (yuanxu-test-case "keeps late-stage proof gates visible in report metadata"
       (let* ((report (poo-flow-funflow-tutorial-alignment-report))
              (gate-ids (.ref report 'gate-ids))
              (gate-proofs (.ref report 'gate-proofs))

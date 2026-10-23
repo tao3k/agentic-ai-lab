@@ -7,11 +7,11 @@
 ;;; Invariant: manifest summaries preserve declaration order and record only
 ;;; policy data, while Marlin owns execution, process lifecycle, and retries.
 
-(import :core/module-system/selection/objects
+(import :yuanxu/module-system/selection/objects
         :poo-flow/modules/sandbox-core/profile-catalog
-        :core/modules/funflow/graph-projection
-        :core/modules/funflow/check-types
-        :core/modules/funflow/check-objects
+        :yuanxu/modules/funflow/graph-projection
+        :yuanxu/modules/funflow/check-types
+        :yuanxu/modules/funflow/check-objects
         :poo-flow/modules/workflow/funs)
 
 (export poo-flow-user-cicd-payload?
@@ -61,11 +61,11 @@
 
 (def (poo-flow-user-module-selection-cicd-intent selection)
   (let ((payload
-         (poo-flow-user-module-selection-flag-entry selection '+cicd)))
-    (if (and (equal? (poo-flow-user-module-selection-key selection)
+         (yuanxu-user-module-selection-flag-entry selection '+cicd)))
+    (if (and (equal? (yuanxu-user-module-selection-key selection)
                      '(flow . funflow))
              (poo-flow-user-cicd-payload? payload))
-      (list (cons 'key (poo-flow-user-module-selection-key selection))
+      (list (cons 'key (yuanxu-user-module-selection-key selection))
             (cons 'feature '+cicd)
             (cons 'checks
                   (poo-flow-user-cicd-payload-section payload 'checks))
@@ -96,14 +96,14 @@
 
 (def (poo-flow-user-config-cicd-intents config)
   (poo-flow-user-config-cicd-intents/add
-   (poo-flow-user-config-modules config)))
+   (yuanxu-user-config-modules config)))
 
 (def (poo-flow-user-module-selection-workflow-cicd-check-map selection)
   (let (entry
-        (poo-flow-user-module-selection-flag-entry selection ':workflow-pipeline))
+        (yuanxu-user-module-selection-flag-entry selection ':workflow-pipeline))
     (if (and entry
              (pair? entry)
-             (poo-flow-cicd-check-map? (cdr entry)))
+             (yuanxu-cicd-check-map? (cdr entry)))
       (cdr entry)
       #f)))
 
@@ -122,13 +122,13 @@
 
 (def (poo-flow-user-config-workflow-cicd-check-maps config)
   (poo-flow-user-config-workflow-cicd-check-maps/add
-   (poo-flow-user-config-modules config)))
+   (yuanxu-user-config-modules config)))
 
 (def (poo-flow-user-workflow-cicd-functional-dags check-maps)
-  (map poo-flow-funflow-check-map->functional-dag check-maps))
+  (map yuanxu-funflow-check-map->functional-dag check-maps))
 
 (def (poo-flow-user-workflow-cicd-functional-dag-rows check-maps)
-  (map poo-flow-funflow-functional-dag->alist
+  (map yuanxu-funflow-functional-dag->alist
        (poo-flow-user-workflow-cicd-functional-dags check-maps)))
 
 (def (poo-flow-user-config-workflow-cicd-functional-dag-rows config)
@@ -149,7 +149,7 @@
       profile-catalog)))))
 
 (def (poo-flow-user-config-workflow-cicd-runtime-readiness config)
-  (let* ((selected-modules (poo-flow-user-config-modules config))
+  (let* ((selected-modules (yuanxu-user-config-modules config))
          (profile-catalog
           (poo-flow-user-config-sandbox-profile-catalog selected-modules)))
     (poo-flow-user-workflow-cicd-runtime-readiness/add
@@ -171,7 +171,7 @@
       profile-catalog)))))
 
 (def (poo-flow-user-config-workflow-cicd-runtime-command-manifests config)
-  (let* ((selected-modules (poo-flow-user-config-modules config))
+  (let* ((selected-modules (yuanxu-user-config-modules config))
          (profile-catalog
           (poo-flow-user-config-sandbox-profile-catalog selected-modules)))
     (poo-flow-user-workflow-cicd-runtime-command-manifests/add

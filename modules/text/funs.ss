@@ -11,19 +11,19 @@
 ;;; Runtime contract: file IO remains caller/runtime-owned.
 ;;; Policy evidence: tests should assert parsing, formatting, and task flow result.
 
-(import (only-in :core/modules/funflow/control-plane/task
+(import (only-in :yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task task-kind
                  task-request-operation task-request-payload)
-        (only-in :core/modules/funflow/control-plane/strategy
+        (only-in :yuanxu/modules/funflow/control-plane/strategy
                  make-strategy strategy-name strategy-capabilities
                  strategy-cache-policy strategy-failure-policy strategy-planner
                  make-local-eager-strategy)
-        (only-in :core/modules/funflow/control-plane/runtime-adapter make-request-only-adapter)
-        (only-in :core/modules/funflow/control-plane/config make-run-config)
-        (only-in :core/modules/funflow/control-plane/flow
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter make-request-only-adapter)
+        (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
+        (only-in :yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry task-flow)
-        :core/modules/funflow/control-plane/projection-syntax)
+        :yuanxu/modules/funflow/control-plane/projection-syntax)
 
 (export text-task-family-descriptor
         make-text-task-family-registry
@@ -95,7 +95,7 @@
     (make-run-config 'text-local
                      (make-text-enabled-strategy)
                      (make-request-only-adapter)
-                     (poo-flow-product-field-rows/tail
+                     (yuanxu-product-field-rows/tail
                       options
                       (runtime 'gerbil)
                       (extension 'text))

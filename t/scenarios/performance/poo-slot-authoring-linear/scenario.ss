@@ -12,8 +12,8 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :core/module-system/observability/presentation
-                 poo-flow-poo-slot-authoring-datum-bindings))
+        (only-in :yuanxu/module-system/observability/presentation
+                 yuanxu-poo-slot-authoring-datum-bindings))
 
 (def +nesting-depth+ 300)
 (def fixture
@@ -78,7 +78,7 @@
                 (benchmark-run/result
                  fixture
                  (lambda ()
-                   (poo-flow-poo-slot-authoring-datum-bindings source-datum)))))
+                   (yuanxu-poo-slot-authoring-datum-bindings source-datum)))))
     (unless (equal? baseline-value candidate-value)
       (error "tail-passing POO slot walk changed source-order semantics"))
     (unless (benchmark-receipt-pass? candidate-receipt)

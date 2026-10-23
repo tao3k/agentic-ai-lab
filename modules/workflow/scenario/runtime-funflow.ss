@@ -9,18 +9,18 @@
 ;;; Funflow module boundary.
 
 (import (only-in :clan/poo/object .all-slots .ref .slot? object? object<-alist)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection-flags
-                 poo-flow-user-module-selection-key)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flags
+                 yuanxu-user-module-selection-key)
         (only-in :poo-flow/modules/workflow/scenario/accessors
                  poo-flow-scenario-case-name
                  poo-flow-scenario-case-profiles
                  poo-flow-scenario-case-stages)
         (only-in :poo-flow/modules/workflow/scenario/case
                  poo-flow-scenario-case?)
-        (only-in :core/modules/funflow/graph-projection
+        (only-in :yuanxu/modules/funflow/graph-projection
                  funflow-plan
-                 poo-flow-funflow-plan->runtime-projection))
+                 yuanxu-funflow-plan->runtime-projection))
 
 (export poo-flow-runtime-load-projection
         poo-flow-runtime-load-write!)
@@ -179,7 +179,7 @@
     (object<-alist
      (list
       (cons 'kind (.ref funflow-plan 'kind))
-      (cons 'schema 'poo-flow.modules.funflow.plan.v1)
+      (cons 'schema 'yuanxu.modules.funflow.plan.v1)
       (cons 'name (poo-flow-scenario-case-name composition))
       (cons 'version 1)
       (cons 'origin 'user-composition-funflow)
@@ -194,7 +194,7 @@
                          (map (lambda (profile) (.ref profile 'name))
                               profiles)))))
       (cons 'effect-table '#())
-      (cons 'runtime-contract 'poo-flow.anyio.v1)
+      (cons 'runtime-contract 'yuanxu.anyio.v1)
       (cons 'source-map source-map)
       (cons 'diagnostics '())
       (cons 'valid? #t)
@@ -203,18 +203,18 @@
 
 ;; : (-> PooObject Alist)
 (def (poo-flow-runtime-load-composition-projection composition)
-  (poo-flow-funflow-plan->runtime-projection
+  (yuanxu-funflow-plan->runtime-projection
    (poo-flow-runtime-load-composition->funflow-plan composition)))
 
 ;; : (-> [PooObject] Alist)
 (def (poo-flow-runtime-load-selection-projection selections)
   (let* ((selection (poo-flow-runtime-load-first-selection selections))
-         (key (poo-flow-user-module-selection-key selection))
-         (flags (poo-flow-user-module-selection-flags selection))
+         (key (yuanxu-user-module-selection-key selection))
+         (flags (yuanxu-user-module-selection-flags selection))
          (funflow-plan (poo-flow-runtime-load-flag-ref flags ':funflow-plan)))
     (cond
      (funflow-plan
-      (poo-flow-funflow-plan->runtime-projection funflow-plan))
+      (yuanxu-funflow-plan->runtime-projection funflow-plan))
      (else
       (error "runtime load does not have a projection for module" key)))))
 

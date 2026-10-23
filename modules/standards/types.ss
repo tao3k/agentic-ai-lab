@@ -8,8 +8,8 @@
 ;;; parse, validate, or execute a concrete industry standard.
 (import (only-in :clan/poo/object .all-slots .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
-        (only-in :core/utilities/functional
-                 poo-flow-all? poo-flow-any? poo-flow-list-of?))
+        (only-in :yuanxu/utilities/functional
+                 yuanxu-all? yuanxu-any? yuanxu-list-of?))
 
 (export +poo-flow-standard-family-kind+
         +poo-flow-standard-failure-codes+
@@ -195,17 +195,17 @@
 
 (def (standard-has-slots? value slots)
   (and (object? value)
-       (poo-flow-all? (lambda (slot) (.slot? value slot)) slots)))
+       (yuanxu-all? (lambda (slot) (.slot? value slot)) slots)))
 
 (def (standard-kind? value kind slots)
   (and (standard-has-slots? value (cons 'kind slots))
        (eq? (.ref value 'kind) kind)))
 
 (def (standard-text-list? value)
-  (poo-flow-list-of? poo-flow-standard-text? value))
+  (yuanxu-list-of? poo-flow-standard-text? value))
 
 (def (standard-symbol-list? value)
-  (poo-flow-list-of? symbol? value))
+  (yuanxu-list-of? symbol? value))
 
 ;;; Validate list elements and the declared cardinality in one traversal.
 ;;; Large Standard catalogs must not rescan the same spine merely to compare
@@ -300,7 +300,7 @@
        (symbol? (.ref value 'jurisdiction))
        (poo-flow-standard-digest? (.ref value 'digest))
        (standard-text-list? (.ref value 'dependencies))
-       (poo-flow-list-of? poo-flow-standard-artifact-ref?
+       (yuanxu-list-of? poo-flow-standard-artifact-ref?
                           (.ref value 'artifacts))
        (standard-text-list? (.ref value 'root-artifacts))
        (symbol? (.ref value 'status))
@@ -421,7 +421,7 @@
        (standard-text-list? (.ref value 'roots))
        (or (not (.ref value 'bundle))
            (poo-flow-standard-bundle? (.ref value 'bundle)))
-       (poo-flow-list-of? poo-flow-standard-failure?
+       (yuanxu-list-of? poo-flow-standard-failure?
                           (.ref value 'failures))
        (eq? (.ref value 'valid?) (null? (.ref value 'failures)))
        (eq? (.ref value 'runtime-executed?) #f)))
@@ -438,7 +438,7 @@
           composition-digest runtime-executed?))
        (boolean? (.ref value 'valid?))
        (poo-flow-standard-text? (.ref value 'case-identity))
-       (poo-flow-list-of? poo-flow-standard-constraint-profile?
+       (yuanxu-list-of? poo-flow-standard-constraint-profile?
                           (.ref value 'profiles))
        (standard-text-list? (.ref value 'profile-identities))
        (standard-text-list? (.ref value 'base-editions))
@@ -451,7 +451,7 @@
        (or (not (.ref value 'resolution-receipt))
            (poo-flow-standard-resolution-receipt?
             (.ref value 'resolution-receipt)))
-       (poo-flow-list-of? poo-flow-standard-failure? (.ref value 'failures))
+       (yuanxu-list-of? poo-flow-standard-failure? (.ref value 'failures))
        (eq? (.ref value 'valid?) (null? (.ref value 'failures)))
        (poo-flow-standard-digest? (.ref value 'composition-digest))
        (eq? (.ref value 'runtime-executed?) #f)))
@@ -471,7 +471,7 @@
        (poo-flow-standard-digest? (.ref value 'source-digest))
        (standard-natural? (.ref value 'loaded-bytes))
        (symbol? (.ref value 'outcome))
-       (poo-flow-list-of? poo-flow-standard-failure? (.ref value 'failures))
+       (yuanxu-list-of? poo-flow-standard-failure? (.ref value 'failures))
        (eq? (.ref value 'valid?) (null? (.ref value 'failures)))
        (boolean? (.ref value 'runtime-executed?))))
 
@@ -491,7 +491,7 @@
        (poo-flow-standard-digest? (.ref value 'generation))
        (or (not (.ref value 'load-receipt))
            (poo-flow-standard-load-receipt? (.ref value 'load-receipt)))
-       (poo-flow-list-of? poo-flow-standard-failure?
+       (yuanxu-list-of? poo-flow-standard-failure?
                           (.ref value 'failures))
        (standard-natural? (.ref value 'load-count))
        (boolean? (.ref value 'runtime-executed?))))
@@ -534,7 +534,7 @@
        (standard-natural? (.ref value 'unsupported-count))
        (symbol? (.ref value 'cache-outcome))
        (poo-flow-standard-digest? (.ref value 'generation))
-       (poo-flow-list-of? poo-flow-standard-failure? (.ref value 'failures))
+       (yuanxu-list-of? poo-flow-standard-failure? (.ref value 'failures))
        (eq? (.ref value 'valid?) (null? (.ref value 'failures)))
        (boolean? (.ref value 'runtime-executed?))))
 
@@ -553,7 +553,7 @@
        (poo-flow-standard-digest? (.ref value 'subject-snapshot-digest))
        (standard-text-list? (.ref value 'evaluated-constraints))
        (standard-text-list? (.ref value 'unsupported-constraints))
-       (poo-flow-list-of? poo-flow-standard-failure?
+       (yuanxu-list-of? poo-flow-standard-failure?
                           (.ref value 'failures))
        (poo-flow-standard-digest? (.ref value 'conformance-digest))
        (eq? (.ref value 'runtime-executed?) #t)))
@@ -568,11 +568,11 @@
           admission-digest runtime-executed?))
        (boolean? (.ref value 'valid?))
        (poo-flow-standard-text? (.ref value 'case-identity))
-       (poo-flow-list-of? poo-flow-standard-digest?
+       (yuanxu-list-of? poo-flow-standard-digest?
                           (.ref value 'conformance-digests))
-       (poo-flow-list-of? poo-flow-standard-digest?
+       (yuanxu-list-of? poo-flow-standard-digest?
                           (.ref value 'evidence-digests))
-       (poo-flow-list-of? poo-flow-standard-failure? (.ref value 'failures))
+       (yuanxu-list-of? poo-flow-standard-failure? (.ref value 'failures))
        (eq? (.ref value 'valid?) (null? (.ref value 'failures)))
        (poo-flow-standard-digest? (.ref value 'admission-digest))
        (eq? (.ref value 'runtime-executed?) #f)))
@@ -619,7 +619,7 @@
        (poo-flow-standard-digest? (.ref value 'conformance-digest))
        (poo-flow-standard-digest? (.ref value 'reference-observation-digest))
        (standard-symbol-list? (.ref value 'discrepancies))
-       (poo-flow-list-of? poo-flow-standard-failure? (.ref value 'failures))
+       (yuanxu-list-of? poo-flow-standard-failure? (.ref value 'failures))
        (eq? (.ref value 'valid?) (null? (.ref value 'failures)))
        (eq? (.ref value 'agreement?) (null? (.ref value 'discrepancies)))
        (poo-flow-standard-digest? (.ref value 'comparison-digest))
@@ -649,15 +649,15 @@
 
 (def (standard-governance-requirements? value)
   (and (object? value)
-       (poo-flow-all?
+       (yuanxu-all?
         (lambda (stage)
           (let (requirements (.ref value stage))
             (and (object? requirements)
-                 (poo-flow-all?
+                 (yuanxu-all?
                   (lambda (slot)
                     (let (statuses (.ref requirements slot))
                       (and (pair? statuses)
-                           (poo-flow-all?
+                           (yuanxu-all?
                             (lambda (status)
                               (memq status
                                     +poo-flow-standard-governance-statuses+))
@@ -667,7 +667,7 @@
 
 (def (standard-governance-bindings? value)
   (and (object? value)
-       (poo-flow-all?
+       (yuanxu-all?
         (lambda (slot)
           (let (binding (.ref value slot))
             (and (poo-flow-standard-governance-binding? binding)
@@ -683,7 +683,7 @@
        (poo-flow-standard-text? (.ref value 'identity))
        (standard-symbol-list? (.ref value 'required-slots))
        (standard-symbol-list? (.ref value 'optional-slots))
-       (not (poo-flow-any?
+       (not (yuanxu-any?
              (lambda (slot)
                (memq slot (.ref value 'optional-slots)))
              (.ref value 'required-slots)))

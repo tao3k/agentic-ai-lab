@@ -7,7 +7,7 @@
 ;;; Invariant: POO policy authoring projects to bounded validation receipts
 ;;; without executing tools, hooks, providers, sandboxes, or communication.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -396,7 +396,7 @@
 ;; : TestSuite
 (def session-policy-validation-performance-test
   (test-suite "session policy validation performance"
-    (poo-flow-test-case "keeps multi-agent policy validation inside benchmark contract"
+    (yuanxu-test-case "keeps multi-agent policy validation inside benchmark contract"
       (let* ((attempt-count 240)
              (context (session-policy-validation-performance-context))
              (summary

@@ -7,12 +7,12 @@
 ;;; Invariant: projection returns inspectable Scheme values, not runtime handles.
 
 (import (only-in :clan/poo/object .@ .o .ref)
-        :core/modules/funflow/control-plane/agent-harness-vocabulary
+        :yuanxu/modules/funflow/control-plane/agent-harness-vocabulary
         :poo-flow/modules/module-authoring/module-interface
         :poo-flow/modules/module-authoring/module-descriptor
-        :core/module-system/funs
-        :core/module-system/projection/option-objects
-        :core/module-system/catalog/values
+        :yuanxu/module-system/funs
+        :yuanxu/module-system/projection/option-objects
+        :yuanxu/module-system/catalog/values
         :poo-flow/modules/module-authoring/module-option-projection)
 
 (export poo-flow-module-runtime-import
@@ -51,7 +51,7 @@
       phase-files: (poo-flow-module-phase-files module)
       hooks: (poo-flow-module-hooks module)
       imports: (map poo-flow-module-runtime-import
-                    (poo-flow-module-imports module))
+                    (yuanxu-module-imports module))
       extensions: (poo-flow-module-extensions module)
       scripts: (poo-flow-module-scripts module)
       options: (poo-flow-module-option-configs module)
@@ -70,10 +70,10 @@
         module-ids: (poo-flow-module-names closed-modules)
         init-module-ids:
         (poo-flow-module-names
-         (poo-flow-module-phase-order closed-modules 'init))
+         (yuanxu-module-phase-order closed-modules 'init))
         config-module-ids:
         (poo-flow-module-names
-         (poo-flow-module-phase-order closed-modules 'config))
+         (yuanxu-module-phase-order closed-modules 'config))
         hooks:
         (poo-flow-module-append-projection
          closed-modules poo-flow-module-hooks)
@@ -128,8 +128,8 @@
         workflow-run
         dispatch-receipt
         runtime-snapshot)
-      operation-kinds: +poo-flow-agent-operation-kinds+
-      snapshot-statuses: +poo-flow-runtime-snapshot-statuses+
+      operation-kinds: +yuanxu-agent-operation-kinds+
+      snapshot-statuses: +yuanxu-runtime-snapshot-statuses+
       handoff-contracts:
       '(start-workflow-run
         admit-dispatch
@@ -280,7 +280,7 @@
         catalog-module-count: (length (.ref catalog 'modules))
         root-module-id: (poo-flow-module-name root-module)
         root-module-kind: (.@ root-module kind)
-        root-import-count: (length (poo-flow-module-imports root-module))
+        root-import-count: (length (yuanxu-module-imports root-module))
         root-flag-count: (length (poo-flow-module-flags root-module))
         root-hook-count: (length (poo-flow-module-hooks root-module))
         root-extension-count: (length (poo-flow-module-extensions root-module))
@@ -288,7 +288,7 @@
         allowed-hook-count: (length allowed-hook-id-values)
         user-entrypoints:
         '("poo-flow-modules"
-          "poo-flow-module-catalog"
+          "yuanxu-module-catalog"
           "poo-flow-module-active?"
           "poo-flow-module-value-catalog-active?"
           "poo-flow-eval-modules"

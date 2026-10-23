@@ -6,7 +6,7 @@
 ;;; Boundary: sandbox cases prove declarations stay data-only before realization.
 ;;; Backend descriptors are inspected as upstream module facts, not executed here.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -36,7 +36,7 @@
 (def (module-selection-by-key modules key)
   (cond
    ((null? modules) #f)
-   ((equal? (poo-flow-user-module-selection-key (car modules)) key)
+   ((equal? (yuanxu-user-module-selection-key (car modules)) key)
     (car modules))
    (else
     (module-selection-by-key (cdr modules) key))))
@@ -46,7 +46,7 @@
 ;;; data rather than backend implementation code.
 (def user-interface-config-sandbox-case-test
   (test-suite "poo-flow user interface sandbox config"
-    (poo-flow-test-case "loads upstream agent sandbox profile defaults"
+    (yuanxu-test-case "loads upstream agent sandbox profile defaults"
       (let* ((presentation
               (poo-flow-default-sandbox-profile-presentation))
              (nono-profile
@@ -89,7 +89,7 @@
          #t)
         (check-equal? (.ref presentation 'descriptor-realized?) #f)
         (check-equal? (.ref presentation 'runtime-executed) #f)))
-(poo-flow-test-case "rejects absolute paths in public sandbox recipes"
+(yuanxu-test-case "rejects absolute paths in public sandbox recipes"
   (let (profile
         (poo-flow-sandbox-profile
          (absolute-path-recipe
@@ -112,7 +112,7 @@
     (check-error
      (lambda () (poo-flow-sandbox-profile->descriptor profile)))))
 
-(poo-flow-test-case "rejects relative runtime targets in public sandbox recipes"
+(yuanxu-test-case "rejects relative runtime targets in public sandbox recipes"
   (let (profile
         (poo-flow-sandbox-profile
          (relative-target-recipe
@@ -135,7 +135,7 @@
     (check-error
      (lambda () (poo-flow-sandbox-profile->descriptor profile)))))
 
-(poo-flow-test-case "rejects traversal sources outside the logical resource root"
+(yuanxu-test-case "rejects traversal sources outside the logical resource root"
   (let (profile
         (poo-flow-sandbox-profile
          (traversal-source-recipe
@@ -157,7 +157,7 @@
     (check-error
      (lambda () (poo-flow-sandbox-profile->descriptor profile)))))
 
-(poo-flow-test-case "rejects alternate absolute source syntaxes"
+(yuanxu-test-case "rejects alternate absolute source syntaxes"
   (let ((windows-drive-profile
          (poo-flow-sandbox-profile
           (windows-drive-source-recipe
@@ -213,7 +213,7 @@
      (poo-flow-sandbox-profile-recipe-portable? file-uri-profile)
      #f)))
 
-(poo-flow-test-case "accepts canonical relative sources under a logical resource root"
+(yuanxu-test-case "accepts canonical relative sources under a logical resource root"
   (let (profile
         (poo-flow-sandbox-profile
          canonical-relative-source-recipe
@@ -232,9 +232,9 @@
     (check-equal?
      (poo-flow-sandbox-profile-recipe-portable? profile)
      #t)))
-    (poo-flow-test-case "declares sandbox and loop module flags without descriptors"
+    (yuanxu-test-case "declares sandbox and loop module flags without descriptors"
       (let* ((modules
-              (poo-flow-user-config-modules test-poo-flow-user-config))
+              (yuanxu-user-config-modules test-poo-flow-user-config))
              (loop-module
               (module-selection-by-key modules '(flow . loop-engine)))
              (nono-module
@@ -243,26 +243,26 @@
               (module-selection-by-key modules '(sandbox . cubeSandbox)))
              (docker-module
               (module-selection-by-key modules '(sandbox . docker-sandbox))))
-        (check-equal? (poo-flow-user-module-selection? loop-module) #t)
-        (check-equal? (poo-flow-user-module-selection-has-flags?
+        (check-equal? (yuanxu-user-module-selection? loop-module) #t)
+        (check-equal? (yuanxu-user-module-selection-has-flags?
                        loop-module
                        '(+loop-engine +runtime-manifest))
                       #t)
-        (check-equal? (poo-flow-user-module-selection-has-flag?
+        (check-equal? (yuanxu-user-module-selection-has-flag?
                        nono-module
                        '+nono)
                       #t)
-        (check-equal? (poo-flow-user-module-selection-has-flag?
+        (check-equal? (yuanxu-user-module-selection-has-flag?
                        cube-module
                        '+cube)
                       #t)
-        (check-equal? (poo-flow-user-module-selection-has-flag?
+        (check-equal? (yuanxu-user-module-selection-has-flag?
                        docker-module
                        '+docker)
                       #t)))
-    (poo-flow-test-case "backend modules contribute capabilities without core branches"
+    (yuanxu-test-case "backend modules contribute capabilities without core branches"
       (let* ((modules
-              (poo-flow-user-config-modules test-poo-flow-user-config))
+              (yuanxu-user-config-modules test-poo-flow-user-config))
              (nono
               (poo-flow-user-config-sandbox-backend-capability modules 'nono))
              (cube
@@ -278,13 +278,13 @@
         (check-equal?
          (let ((selection
                 (module-selection-by-key modules '(sandbox . nono-sandbox))))
-           (poo-flow-user-module-selection-has-flag?
+           (yuanxu-user-module-selection-has-flag?
             selection ':backend-capability-registry))
          #t)))
-    (poo-flow-test-case "queries selected module features without package management"
+    (yuanxu-test-case "queries selected module features without package management"
       (let* ((custom-config
-              (pooFlowUserConfigFromProfile test-poo-flow-user-custom-profile)))
-        (check-equal? (poo-flow-user-config-feature?
+              (yuanxuUserConfigFromProfile test-poo-flow-user-custom-profile)))
+        (check-equal? (yuanxu-user-config-feature?
                        test-poo-flow-user-config
                        'flow
                        'funflow
@@ -293,54 +293,54 @@
                        '+typed-receipts
                        '+runtime-manifest)
                       #t)
-        (check-equal? (poo-flow-user-config-feature?
+        (check-equal? (yuanxu-user-config-feature?
                        test-poo-flow-user-config
                        'flow
                        'funflow
                        '+cicd)
                       #t)
-        (check-equal? (poo-flow-user-config-feature?
+        (check-equal? (yuanxu-user-config-feature?
                        test-poo-flow-user-config
                        'flow
                        'loop-engine
                        '+loop-engine
                        '+runtime-manifest)
                       #t)
-        (check-equal? (poo-flow-user-config-feature?
+        (check-equal? (yuanxu-user-config-feature?
                        test-poo-flow-user-config
                        'loop
                        'governor
                        '+missing)
                       #f)
-        (check-equal? (poo-flow-user-config-feature?
+        (check-equal? (yuanxu-user-config-feature?
                        test-poo-flow-user-config
                        'sandbox
                        'nono-sandbox
                        '+nono
                        '+doctor)
                       #t)
-        (check-equal? (poo-flow-user-config-feature?
+        (check-equal? (yuanxu-user-config-feature?
                        test-poo-flow-user-config
                        'sandbox
                        'cubeSandbox
                        '+cube
                        '+doctor)
                       #t)
-        (check-equal? (poo-flow-user-config-feature?
+        (check-equal? (yuanxu-user-config-feature?
                        test-poo-flow-user-config
                        'sandbox
                        'docker-sandbox
                        '+docker
                        '+doctor)
                       #t)
-        (check-equal? (poo-flow-user-config-feature?
+        (check-equal? (yuanxu-user-config-feature?
                        custom-config
                        'custom
                        'my-module
                        '+doctor)
                       #t)))
-    (poo-flow-test-case "keeps flow loop and sandbox settings declarative"
-      (let ((settings (poo-flow-user-config-settings test-poo-flow-user-config)))
+    (yuanxu-test-case "keeps flow loop and sandbox settings declarative"
+      (let ((settings (yuanxu-user-config-settings test-poo-flow-user-config)))
         (check-equal? (.ref settings 'surface) "poo-flow")
         (check-equal? (.ref settings 'flow-mode) 'funflow)
         (check-equal? (.ref settings 'loop-strategy) 'governed)

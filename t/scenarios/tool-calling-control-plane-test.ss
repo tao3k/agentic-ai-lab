@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
         (only-in :clan/poo/object .o)
         :poo-flow/modules/tool-core/calling-control
@@ -11,7 +11,7 @@
 
 (def tool-calling-control-plane-test
   (test-suite "tool calling control plane"
-    (poo-flow-test-case "validates tool call plan and receipt facts"
+    (yuanxu-test-case "validates tool call plan and receipt facts"
 
 (unless tool-calling
   (error "Tool calling profile module did not load"))

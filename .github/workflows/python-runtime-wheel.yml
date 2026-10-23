@@ -298,7 +298,7 @@ jobs:
           plan = {}
           for row in rows["plan"]:
               plan[str(row[0])] = row[1] if len(row) == 2 else tuple(row[1:])
-          assert rows["schema"] == "poo-flow.funflow-plan-projection.v1"
+          assert rows["schema"] == "yuanxu.funflow-plan-projection.v1"
           assert rows["origin"] == "user-composition-funflow"
           assert plan["name"] == "wheel-smoke"
           print("packaged no-gerbil artifact load: ok")

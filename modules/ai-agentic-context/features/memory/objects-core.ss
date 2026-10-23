@@ -6,7 +6,7 @@
 ;;; Boundary: memory store spec primitives shared by memory-core modules.
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
-        :core/utilities/final-projection-syntax
+        :yuanxu/utilities/final-projection-syntax
         :poo-flow/modules/session/objects
         :poo-flow/modules/session/transform)
 

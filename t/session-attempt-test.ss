@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test (only-in :core/observability/testing-case poo-flow-test-case)
+(import :std/test (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
         :poo-flow/modules/session/types
         :poo-flow/modules/session/objects-attempt
@@ -16,14 +16,14 @@
 (def (running) (.ref (claim (poo-flow-session-schedule "session") 0) 'schedule))
 (def session-attempt-test
   (test-suite "Session exact Attempt routing and recovery intents"
-    (poo-flow-test-case "textual Session and Org anchor references preserve exact input"
+    (yuanxu-test-case "textual Session and Org anchor references preserve exact input"
       (let* ((state (running)) (a (.ref state 'active)))
         (check (poo-flow-session-schedule-shape? state) => #t)
         (check (.ref a 'session) => "session")
         (check (.ref a 'anchor-refs) => '("org:property-id"))
         (check (.ref (.ref a 'input) 'digest) => "content")
         (check (.ref (claim (poo-flow-session-schedule "session") 0) 'runtime-published?) => #f)))
-    (poo-flow-test-case "claimed input is copied before source proposal mutation"
+    (yuanxu-test-case "claimed input is copied before source proposal mutation"
       (let* ((mutable-name (string-copy "session"))
              (proposal (.o (:: @ input-ref) consumer-session: mutable-name))
              (task-value (.o (:: @ task) input: proposal))
@@ -31,7 +31,7 @@
                     task-value "attempt" "request" 0)))
         (string-set! mutable-name 0 #\x)
         (check (.ref (.ref (.ref (.ref r 'schedule) 'active) 'input) 'consumer-session) => "session")))
-    (poo-flow-test-case "wrong request, Task, Turn and input cannot complete another Attempt"
+    (yuanxu-test-case "wrong request, Task, Turn and input cannot complete another Attempt"
       (let* ((state (running)) (a (.ref state 'active)))
         (for-each (lambda (wrong)
           (check (.ref (poo-flow-session-complete state 1 wrong) 'reason) => 'wrong-attempt))
@@ -39,19 +39,19 @@
                 (.o (:: @ a) turn: 1) (.o (:: @ a) generation: 0)
                 (.o (:: @ a) session: "foreign") (.o (:: @ a) anchor-refs: '("other"))
                 (.o (:: @ a) input: (.o (:: @ input-ref) source-vector-digest: "new"))))))
-    (poo-flow-test-case "foreign consumer and Turn cannot claim input"
+    (yuanxu-test-case "foreign consumer and Turn cannot claim input"
       (let (state (poo-flow-session-schedule "foreign"))
         (check (.ref (claim state 0) 'reason) => 'wrong-consumer))
       (check (.ref (poo-flow-session-claim (poo-flow-session-schedule "session") 0
                     task "attempt" "request" 1) 'reason) => 'wrong-consumer))
-    (poo-flow-test-case "completion is once per Attempt and owner revision"
+    (yuanxu-test-case "completion is once per Attempt and owner revision"
       (let* ((state (running)) (a (.ref state 'active))
              (r (poo-flow-session-complete state 1 a)) (next (.ref r 'schedule)))
         (check (.ref r 'accepted?) => #t)
         (check (.ref r 'action-authorized?) => #f)
         (check (.ref (poo-flow-session-complete next 1 a) 'reason) => 'stale-revision)
         (check (.ref (claim next 2) 'reason) => 'attempt-reuse-or-capacity)))
-    (poo-flow-test-case "recovery preserves obligations and fences late completion"
+    (yuanxu-test-case "recovery preserves obligations and fences late completion"
       (let* ((state (running)) (a (.ref state 'active))
              (recovered (.ref (poo-flow-session-recover state 1) 'schedule))
              (again (.ref (poo-flow-session-recover recovered 2) 'schedule)))
@@ -64,7 +64,7 @@
         (check (.ref (poo-flow-session-close recovered 2) 'reason) => 'pending-obligation)
         (check (.ref (poo-flow-session-reconcile recovered 2 (.o (:: @ a) request: "foreign")) 'reason)
           => 'wrong-obligation)))
-    (poo-flow-test-case "reconciliation proposes fresh retry without accepting old completion"
+    (yuanxu-test-case "reconciliation proposes fresh retry without accepting old completion"
       (let* ((state (running)) (a (.ref state 'active))
              (recovered (.ref (poo-flow-session-recover state 1) 'schedule))
              (r (poo-flow-session-reconcile recovered 2 a))
@@ -73,7 +73,7 @@
         (check (.ref retry 'generation) => 3)
         (check (.ref (poo-flow-session-complete retry 4 a) 'reason) => 'wrong-attempt)
         (check (poo-flow-session-schedule-shape? retry) => #t)))
-    (poo-flow-test-case "closed Session cannot recover and exhausted coordinates cannot wrap"
+    (yuanxu-test-case "closed Session cannot recover and exhausted coordinates cannot wrap"
       (let* ((state (poo-flow-session-schedule "session"))
              (closed (.ref (poo-flow-session-close state 0) 'schedule)))
         (check (.ref (poo-flow-session-recover closed 1) 'reason) => 'closed)

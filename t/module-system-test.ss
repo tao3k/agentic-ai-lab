@@ -5,7 +5,7 @@
 
 ;;; Boundary: module-system tests cover descriptor activation, not loading.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -16,13 +16,13 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o .ref)
-        :core/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/control-plane/api
         :poo-flow/modules/module-authoring/module-descriptor
         :poo-flow/modules/workflow/scenario/configuration/module-diagnostics
-        :core/module-system/source/imports
-        :core/module-system/source/objects
+        :yuanxu/module-system/source/imports
+        :yuanxu/module-system/source/objects
         :poo-flow/modules/workflow/scenario/configuration/module-activation
-        :core/module-system/catalog/objects)
+        :yuanxu/module-system/catalog/objects)
 
 (export module-system-test)
 
@@ -38,7 +38,7 @@
 ;; : TestSuite
 (def module-system-test
   (test-suite "poo-flow module system"
-    (poo-flow-test-case "activates module descriptor registries into run config"
+    (yuanxu-test-case "activates module descriptor registries into run config"
       (let* ((task-descriptor
               (make-task-family-descriptor 'remote-job
                                            'remote-job
@@ -80,7 +80,7 @@
                         (run-config-flow-registry config)
                         'remote))
                       'remote-flow)))
-    (poo-flow-test-case "rejects missing module imports before activation"
+    (yuanxu-test-case "rejects missing module imports before activation"
       (let* ((module (make-empty-poo-flow-module-descriptor
                       'feature
                       '(foundation)
@@ -95,7 +95,7 @@
         (check-equal? (execution-failure-code failure) 'missing-module-imports)
         (check-equal? (cdr (assoc 'module (car missing))) 'feature)
         (check-equal? (cdr (assoc 'import (car missing))) 'foundation)))
-    (poo-flow-test-case "resolves named imports through the closure name index"
+    (yuanxu-test-case "resolves named imports through the closure name index"
       (let ((foundation
              (make-empty-poo-flow-module-descriptor 'foundation '() '()))
             (feature
@@ -106,7 +106,7 @@
         (check-equal?
          (poo-flow-module-missing-imports (list feature foundation))
          '())))
-    (poo-flow-test-case "module closure admits shared inline imports once"
+    (yuanxu-test-case "module closure admits shared inline imports once"
       (let* ((shared
               (make-empty-poo-flow-module-descriptor 'shared '() '()))
              (left
@@ -127,31 +127,31 @@
         (check-equal?
          (poo-flow-module-names (poo-flow-module-closure (list root)))
          '(root left shared right))))
-    (poo-flow-test-case "normalizes source refs as inspectable metadata"
-      (let* ((local (make-poo-flow-module-local-source "modules/remote-runtime.ss"))
-             (package (make-poo-flow-module-package-source 'remote-runtime))
+    (yuanxu-test-case "normalizes source refs as inspectable metadata"
+      (let* ((local (make-yuanxu-module-local-source "modules/remote-runtime.ss"))
+             (package (make-yuanxu-module-package-source 'remote-runtime))
              (standard-library
-              (make-poo-flow-module-standard-library-source 'kernel-profile))
-             (registry (make-poo-flow-module-registry-source 'kernel-profile))
-             (generated (make-poo-flow-module-generated-source 'generated-runtime))
+              (make-yuanxu-module-standard-library-source 'kernel-profile))
+             (registry (make-yuanxu-module-registry-source 'kernel-profile))
+             (generated (make-yuanxu-module-generated-source 'generated-runtime))
              (custom-entrypoint
-              (poo-flow-module-custom-interface-entrypoint "./custom/my-module"))
+              (yuanxu-module-custom-interface-entrypoint "./custom/my-module"))
              (custom
-              (make-poo-flow-module-custom-interface-source "./custom/my-module"))
+              (make-yuanxu-module-custom-interface-source "./custom/my-module"))
              (custom-metadata
-              (poo-flow-module-source-ref-metadata custom))
-             (local-shape (poo-flow-module-source-ref->alist local)))
-        (check-equal? (poo-flow-module-source-ref? local) #t)
-        (check-equal? (poo-flow-module-source-ref-kind package) 'package)
-        (check-equal? (poo-flow-module-source-ref-kind standard-library)
+              (yuanxu-module-source-ref-metadata custom))
+             (local-shape (yuanxu-module-source-ref->alist local)))
+        (check-equal? (yuanxu-module-source-ref? local) #t)
+        (check-equal? (yuanxu-module-source-ref-kind package) 'package)
+        (check-equal? (yuanxu-module-source-ref-kind standard-library)
                       'standard-library)
         (check-equal? (cdr (assoc 'library
-                                  (poo-flow-module-source-ref-metadata
+                                  (yuanxu-module-source-ref-metadata
                                    standard-library)))
                       'standard)
-        (check-equal? (poo-flow-module-source-ref-value registry) 'kernel-profile)
-        (check-equal? (poo-flow-module-source-ref=? generated
-                                               (make-poo-flow-module-generated-source
+        (check-equal? (yuanxu-module-source-ref-value registry) 'kernel-profile)
+        (check-equal? (yuanxu-module-source-ref=? generated
+                                               (make-yuanxu-module-generated-source
                                                 'generated-runtime))
                       #t)
         (check-equal? (cdr (assoc 'kind local-shape)) 'local)
@@ -159,12 +159,12 @@
                       "modules/remote-runtime.ss")
         (check-equal? custom-entrypoint
                       "./custom/my-module/interface.ss")
-        (check-equal? (poo-flow-module-source-ref-kind custom) 'local)
-        (check-equal? (poo-flow-module-source-ref-value custom)
+        (check-equal? (yuanxu-module-source-ref-kind custom) 'local)
+        (check-equal? (yuanxu-module-source-ref-value custom)
                       "./custom/my-module/interface.ss")
         (check-equal? (cdr (assoc 'entrypoint custom-metadata))
                       "./custom/my-module/interface.ss")))
-    (poo-flow-test-case "macro syntax expands to the same descriptor contract"
+    (yuanxu-test-case "macro syntax expands to the same descriptor contract"
       (let* ((task-descriptor
               (make-task-family-descriptor 'macro-job
                                            'macro-job
@@ -183,7 +183,7 @@
                 (flows flow-descriptor)
                 (options (cons 'source 'macro-test)))))
         (check-equal? (poo-flow-module-name module) 'macro-runtime)
-        (check-equal? (poo-flow-module-imports module) '(foundation))
+        (check-equal? (yuanxu-module-imports module) '(foundation))
         (check-equal? (task-family-name (car (poo-flow-module-task-descriptors module)))
                       'macro-job)
         (check-equal? (flow-declaration-kind
@@ -191,7 +191,7 @@
                       'macro)
         (check-equal? (cdr (assoc 'source (poo-flow-module-options module)))
                       'macro-test)))
-    (poo-flow-test-case "doctor reports duplicate and empty module diagnostics"
+    (yuanxu-test-case "doctor reports duplicate and empty module diagnostics"
       (let* ((task-a (make-task-family-descriptor 'dup-job
                                                   'dup-job
                                                   'adapter
@@ -226,15 +226,15 @@
                      '()))
              (report (poo-flow-module-doctor (list foundation empty)))
              (shape (poo-flow-module-doctor-report->alist report)))
-        (check-equal? (poo-flow-module-doctor-ok? report) #f)
-        (check-equal? (poo-flow-module-doctor-report-status report) 'warning)
-        (check-equal? (length (poo-flow-module-doctor-report-diagnostics report)) 4)
+        (check-equal? (yuanxu-module-doctor-ok? report) #f)
+        (check-equal? (yuanxu-module-doctor-report-status report) 'warning)
+        (check-equal? (length (yuanxu-module-doctor-report-diagnostics report)) 4)
         (check-equal? (cdr (assoc 'modules shape)) '(foundation empty))
-        (check-equal? (poo-flow-module-diagnostic-code
-                       (car (poo-flow-module-doctor-report-diagnostics report)))
+        (check-equal? (yuanxu-module-diagnostic-code
+                       (car (yuanxu-module-doctor-report-diagnostics report)))
                       'duplicate-task-family)))
-    (poo-flow-test-case "resolves catalog source refs before doctor and activation"
-      (let* ((source (make-poo-flow-module-generated-source 'remote-runtime))
+    (yuanxu-test-case "resolves catalog source refs before doctor and activation"
+      (let* ((source (make-yuanxu-module-generated-source 'remote-runtime))
              (task-descriptor
               (make-task-family-descriptor 'catalog-job
                                            'catalog-job
@@ -249,24 +249,24 @@
                                           (list task-descriptor))
                (make-flow-declaration-registry 'catalog-flows '())
                (list (cons 'source source))))
-             (entry (make-poo-flow-module-catalog-entry source module))
-             (catalog (make-poo-flow-module-catalog 'test-catalog (list entry)))
+             (entry (make-yuanxu-module-catalog-entry source module))
+             (catalog (make-yuanxu-module-catalog 'test-catalog (list entry)))
              (doctor (poo-flow-module-resolve-doctor catalog (list source)))
              (activation (poo-flow-module-resolve-and-activate catalog (list source)))
-             (catalog-shape (poo-flow-module-catalog->alist catalog)))
-        (check-equal? (poo-flow-module-catalog? catalog) #t)
-        (check-equal? (cdr (assoc 'module (poo-flow-module-catalog-entry->alist entry)))
+             (catalog-shape (yuanxu-module-catalog->alist catalog)))
+        (check-equal? (yuanxu-module-catalog? catalog) #t)
+        (check-equal? (cdr (assoc 'module (yuanxu-module-catalog-entry->alist entry)))
                       'remote-runtime)
-        (check-equal? (poo-flow-module-doctor-report-status doctor) 'ok)
+        (check-equal? (yuanxu-module-doctor-report-status doctor) 'ok)
         (check-equal? (task-family-name
                        (task-family-for-kind-in
                         (poo-flow-module-activation-task-registry activation)
                         'catalog-job))
                       'catalog-job)
         (check-equal? (cdr (assoc 'name catalog-shape)) 'test-catalog)))
-    (poo-flow-test-case "raises typed failure for missing catalog sources"
-      (let* ((catalog (make-poo-flow-module-catalog 'empty-catalog '()))
-             (source (make-poo-flow-module-local-source "missing.ss"))
+    (yuanxu-test-case "raises typed failure for missing catalog sources"
+      (let* ((catalog (make-yuanxu-module-catalog 'empty-catalog '()))
+             (source (make-yuanxu-module-local-source "missing.ss"))
              (failure (capture-module-failure
                        (lambda ()
                          (resolve-poo-flow-module-source catalog source))))

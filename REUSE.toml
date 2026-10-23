@@ -283,12 +283,3 @@ path = [
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
 SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
-
-[[annotations]]
-path = [
-  "tools/ci/patches/gerbil-gxtest-runtime-init.patch",
-  "tools/ci/patches/gerbil-homebrew-release-compiler.patch",
-]
-precedence = "aggregate"
-SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
-SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"

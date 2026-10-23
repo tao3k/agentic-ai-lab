@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :poo-flow/modules/ai-agentic-context/features/memory/durable/policy
         :poo-flow/modules/ai-agentic-context/features/memory/durable/policy-manifest)
@@ -17,7 +17,7 @@
 ;; : TestSuite
 (def durable-policy-manifest-test
   (test-suite "poo-flow durable policy runtime manifest"
-    (poo-flow-test-case "projects Scheme durable policy receipt into runtime manifest"
+    (yuanxu-test-case "projects Scheme durable policy receipt into runtime manifest"
       (let ((manifest
              (poo-flow-durable-policy-runtime-manifest-alist
               poo-flow-durable-policy/default)))
@@ -41,7 +41,7 @@
                       +poo-flow-durable-policy-kind+)
         (check-equal? (test-ref manifest 'receipt-valid) #t)
         (check-equal? (test-ref manifest 'receipt-diagnostic-count) 0)))
-    (poo-flow-test-case "emits byte carrier for FFI runtime adapters"
+    (yuanxu-test-case "emits byte carrier for FFI runtime adapters"
       (let* ((policy (poo-flow-durable-policy 'durable/runtime 'shared))
              (manifest
               (poo-flow-durable-policy-runtime-manifest-alist policy))

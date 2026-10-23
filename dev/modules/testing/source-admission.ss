@@ -14,11 +14,11 @@
                  duration-micros monotonic-micros)
         (only-in :clan/poo/object
                  .o .ref .slot? object? make-object $constant-slot-spec)
-        (only-in :core/observability/output
-                 poo-flow-write-observation-line!)
-        (only-in :core/module-system/observability/presentation
-                 poo-flow-poo-slot-authoring-file-observations
-                 poo-flow-poo-slot-authoring-observation-ok?))
+        (only-in :yuanxu/observability/output
+                 yuanxu-write-observation-line!)
+        (only-in :yuanxu/module-system/observability/presentation
+                 yuanxu-poo-slot-authoring-file-observations
+                 yuanxu-poo-slot-authoring-observation-ok?))
 
 (export poo-flow-source-admission-observability-profile-prototype
         poo-flow-source-admission-observability-profile?
@@ -59,7 +59,7 @@
   (unless (poo-flow-source-admission-observability-profile? profile)
     (error "invalid source-admission observability profile" profile))
   (when (.ref profile 'emit-summary?)
-    (poo-flow-write-observation-line!
+    (yuanxu-write-observation-line!
      "[poo-flow-observability] phase=source-scanned profile=%a owner=%a module=%a files=%a observations=%a diagnostics=%a preparedGraphElapsedUs=%a policyElapsedUs=%a elapsedUs=%a"
      (.ref profile 'identity)
      (.ref profile 'owner)
@@ -72,7 +72,7 @@
      (.ref receipt 'elapsed-us)))
   (when (and (.ref profile 'emit-diagnostics?)
              (> (.ref receipt 'diagnostic-count) 0))
-    (poo-flow-write-observation-line!
+    (yuanxu-write-observation-line!
      "[poo-flow-observability] phase=source-diagnostics profile=%a owner=%a module=%a diagnostics=%a"
      (.ref profile 'identity)
      (.ref profile 'owner)
@@ -106,11 +106,11 @@
        (foldl
         (lambda (observation inner-state)
           (cons (+ (car inner-state) 1)
-                (if (poo-flow-poo-slot-authoring-observation-ok? observation)
+                (if (yuanxu-poo-slot-authoring-observation-ok? observation)
                   (cdr inner-state)
                   (cons observation (cdr inner-state)))))
         state
-        (poo-flow-poo-slot-authoring-file-observations
+        (yuanxu-poo-slot-authoring-file-observations
          (string->symbol path) path))))
    (cons 0 [])
    sources))

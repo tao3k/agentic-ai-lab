@@ -88,9 +88,9 @@ def _load_projection_rows(
     project_dependency_roots: tuple[Path, ...],
 ) -> tuple[object, ...]:
     runner_source = (
-        "(import :core/profile-composition/selection-syntax\n"
+        "(import :yuanxu/profile-composition/selection-syntax\n"
         "        :poo-flow/modules/workflow/scenario/composition-syntax\n"
-        "        :core/profile-composition/profile-bundle\n"
+        "        :yuanxu/profile-composition/profile-bundle\n"
         "        :poo-flow/modules/workflow/scenario/profile-root\n"
         "        :poo-flow/modules/funflow/profile-library)\n"
         f"(include {_scheme_string(str(projection))})\n"

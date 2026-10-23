@@ -6,8 +6,8 @@
 ;;; Boundary: lazy loader tests cover deferred source loading only.
 ;;; Invariant: lazy plans never call loader handlers until explicitly forced.
 
-(import :core/module-system/source/projection
-        (only-in :core/observability/testing-case poo-flow-test-case)
+(import :yuanxu/module-system/source/projection
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -21,16 +21,16 @@
                  test-suite)
         "./support/performance"
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-p95-elapsed-ms)
-        (only-in :core/modules/funflow/control-plane/failure
+        (only-in :yuanxu/modules/funflow/control-plane/failure
                  execution-failure?
                  execution-failure-code)
-        (only-in :core/module-system/selection/syntax poo-flow-modules!)
-        :core/module-system/source/imports
-        :core/module-system/source/objects
+        (only-in :yuanxu/module-system/selection/syntax yuanxu-modules!)
+        :yuanxu/module-system/source/imports
+        :yuanxu/module-system/source/objects
         :poo-flow/modules/module-authoring/module-descriptor
-        :core/graph/interface
-        :core/module-system/loader/objects
-        :core/module-system/source/collection
+        :yuanxu/graph/interface
+        :yuanxu/module-system/loader/objects
+        :yuanxu/module-system/source/collection
         (only-in :poo-flow/modules/module-authoring/module-source-collection make-poo-flow-contribution-module-load-path poo-flow-default-module-load-path poo-flow-maintained-module-source poo-flow-maintained-integration-directories)
         :poo-flow/modules/building/official-contributions
         :poo-flow/modules/workflow/scenario/configuration/module-source-selection
@@ -42,7 +42,7 @@
 ;;; filesystem-backed module loading.
 ;; : (-> Unit PooModuleSourceRef)
 (def loader-standard-library-source
-  (poo-flow-standard-library-source 'standard/kernel))
+  (yuanxu-standard-library-source 'standard/kernel))
 
 ;;; Mutable call count is scoped to this owner to prove deferred loading without
 ;;; reaching into loader internals.
@@ -69,25 +69,25 @@
 ;;; library module source.
 ;; : (-> Unit PooModuleLoaderBackend)
 (def user-standard-library-loader
-  (make-poo-flow-module-loader-backend
+  (make-yuanxu-module-loader-backend
    'user-standard-library-loader
    'standard-library
    (lambda (source-ref)
      (set! lazy-loader-call-count (+ lazy-loader-call-count 1))
-     (if (poo-flow-module-source-ref=? source-ref loader-standard-library-source)
+     (if (yuanxu-module-source-ref=? source-ref loader-standard-library-source)
        loader-standard-library-module
        #f))
    '((library . standard))))
 
 ;;; Plan predicate keeps assertions about deferred receipts compact and local to
 ;;; the lazy-loader policy owner.
-;; : (-> [PooFlowLazyLoadPlan] Boolean)
+;; : (-> [YuanxuLazyLoadPlan] Boolean)
 (def (lazy-loader-plans-deferred? plans)
   (cond
    ((null? plans) #t)
-   ((and (not (poo-flow-lazy-load-plan-forced? (car plans)))
-         (eq? (poo-flow-module-load-receipt-code
-               (poo-flow-lazy-load-plan-receipt (car plans)))
+   ((and (not (yuanxu-lazy-load-plan-forced? (car plans)))
+         (eq? (yuanxu-module-load-receipt-code
+               (yuanxu-lazy-load-plan-receipt (car plans)))
               'deferred))
     (lazy-loader-plans-deferred? (cdr plans)))
    (else #f)))
@@ -117,7 +117,7 @@
 ;; : TestSuite
 ;; : TestCase
 (def (module-system-lazy-loader-large-registry-case)
-  (poo-flow-test-case "expands large module registry manifests without loading modules"
+  (yuanxu-test-case "expands large module registry manifests without loading modules"
         (for-each
          (lambda (module-count)
            (let* ((module-roots
@@ -134,12 +134,12 @@
                     (lambda ()
                       (lazy-loader-module-tree-source-refs module-roots)))))
              (check-equal? (length source-refs) module-count)
-             (check-equal? (poo-flow-module-source-ref-value (car source-refs))
+             (check-equal? (yuanxu-module-source-ref-value (car source-refs))
                            "modules/generated-0/interface.ss")
              ;; Emit the scale receipt without embedding a machine-specific
              ;; timing threshold in this semantic unit test. Performance
              ;; admission belongs to a selected Observability profile.
-             (displayln "[poo-flow-module-catalog] phase=projection-complete module-count="
+             (displayln "[yuanxu-module-catalog] phase=projection-complete module-count="
                         module-count " p95-ms=" p95-ms
                         " selected-build-target-count=0")
              (check-equal? (and (real? p95-ms) (>= p95-ms 0)) #t)))
@@ -147,77 +147,77 @@
 
 ;; : TestCase
 (def (module-system-lazy-loader-deferred-standard-library-case)
-  (poo-flow-test-case "defers standard-library module loading until forced"
+  (yuanxu-test-case "defers standard-library module loading until forced"
         (set! lazy-loader-call-count 0)
         (let* ((backends (list user-standard-library-loader))
                (deferred
-                (poo-flow-lazy-load-source-receipt
+                (yuanxu-lazy-load-source-receipt
                  backends
                  loader-standard-library-source))
                (plan
-                (poo-flow-make-lazy-load-plan
+                (yuanxu-make-lazy-load-plan
                  backends
                  loader-standard-library-source
                  '((owner . standard-library))))
                (deferred-metadata
-                (poo-flow-module-load-receipt-metadata deferred)))
-          (check-equal? (poo-flow-module-source-ref-kind loader-standard-library-source)
+                (yuanxu-module-load-receipt-metadata deferred)))
+          (check-equal? (yuanxu-module-source-ref-kind loader-standard-library-source)
                         'standard-library)
-          (check-equal? (poo-flow-module-load-receipt-code deferred)
+          (check-equal? (yuanxu-module-load-receipt-code deferred)
                         'deferred)
-          (check-equal? (poo-flow-module-load-receipt-loaded? deferred)
+          (check-equal? (yuanxu-module-load-receipt-loaded? deferred)
                         #f)
           (check-equal? (cdr (assoc 'mode deferred-metadata))
                         'lazy)
           (check-equal? (cdr (assoc 'enabled? deferred-metadata))
                         #f)
           (check-equal? lazy-loader-call-count 0)
-          (check-equal? (poo-flow-lazy-load-plan-forced? plan)
+          (check-equal? (yuanxu-lazy-load-plan-forced? plan)
                         #f)
           (let* ((forced-plan
-                  (poo-flow-force-lazy-load-plan plan))
+                  (yuanxu-force-lazy-load-plan plan))
                  (forced-receipt
-                  (poo-flow-lazy-load-plan-receipt forced-plan)))
-            (check-equal? (poo-flow-lazy-load-plan-forced? forced-plan)
+                  (yuanxu-lazy-load-plan-receipt forced-plan)))
+            (check-equal? (yuanxu-lazy-load-plan-forced? forced-plan)
                           #t)
             (check-equal? lazy-loader-call-count 1)
-            (check-equal? (poo-flow-module-load-receipt-code forced-receipt)
+            (check-equal? (yuanxu-module-load-receipt-code forced-receipt)
                           'loaded)
             (check-equal? (poo-flow-module-name
-                           (poo-flow-module-load-receipt-module forced-receipt))
+                           (yuanxu-module-load-receipt-module forced-receipt))
                           'standard-kernel)))))
 
 ;; : TestCase
 (def (module-system-lazy-loader-module-tree-case)
-  (poo-flow-test-case "projects the public interface entrypoint from a module tree"
+  (yuanxu-test-case "projects the public interface entrypoint from a module tree"
         (set! lazy-loader-call-count 0)
         (let* ((module-root "modules/nono-sandbox")
                (source-refs
                 (poo-flow-module-tree-source-refs module-root))
                (interface-source (car source-refs))
                (interface-metadata
-                (poo-flow-module-source-ref-metadata interface-source))
+                (yuanxu-module-source-ref-metadata interface-source))
                (plans
                 (poo-flow-module-tree-lazy-load-plans
                  (list user-standard-library-loader)
                  module-root
                  '((owner . module-tree)))))
           (check-equal? (length source-refs) 1)
-          (check-equal? (poo-flow-module-source-ref-kind interface-source) 'local)
-          (check-equal? (poo-flow-module-source-ref-value interface-source)
+          (check-equal? (yuanxu-module-source-ref-kind interface-source) 'local)
+          (check-equal? (yuanxu-module-source-ref-value interface-source)
                         "modules/nono-sandbox/interface.ss")
           (check-equal? (cdr (assoc 'entrypoint-role interface-metadata))
                         'interface)
           (check-equal? (length plans) 1)
-          (check-equal? (poo-flow-lazy-load-plan-forced? (car plans)) #f)
-          (check-equal? (poo-flow-module-load-receipt-code
-                         (poo-flow-lazy-load-plan-receipt (car plans)))
+          (check-equal? (yuanxu-lazy-load-plan-forced? (car plans)) #f)
+          (check-equal? (yuanxu-module-load-receipt-code
+                         (yuanxu-lazy-load-plan-receipt (car plans)))
                         'deferred)
           (check-equal? lazy-loader-call-count 0))))
 
 ;; : TestCase
 (def (module-system-lazy-loader-src-modules-case)
-  (poo-flow-test-case "projects canonical modules interfaces as lazy load plans"
+  (yuanxu-test-case "projects canonical modules interfaces as lazy load plans"
         (set! lazy-loader-call-count 0)
         (let* ((plans
                 (poo-flow-src-modules-lazy-load-plans
@@ -225,17 +225,17 @@
                  '((owner . src-modules))))
                (source-values
                 (map (lambda (plan)
-                       (poo-flow-module-source-ref-value
-                        (poo-flow-lazy-load-plan-source plan)))
+                       (yuanxu-module-source-ref-value
+                        (yuanxu-lazy-load-plan-source plan)))
                      plans))
                (first-receipt
-                (poo-flow-lazy-load-plan-receipt (car plans)))
+                (yuanxu-lazy-load-plan-receipt (car plans)))
                (first-metadata
-                (poo-flow-module-load-receipt-metadata first-receipt)))
+                (yuanxu-module-load-receipt-metadata first-receipt)))
           (check-equal?
            (length plans)
            (+ (length
-               (poo-flow-module-source-collection-interfaces poo-flow-maintained-module-source))
+               (yuanxu-module-source-collection-interfaces poo-flow-maintained-module-source))
               (length (poo-flow-module-system-source-refs))))
           (check-equal? (car source-values)
                         (path-expand "modules/agent-sandbox/interface.ss"))
@@ -246,13 +246,13 @@
              (def path (string-append "modules/" name "/interface.ss"))
              (check-equal? (and (member path source-values) #t) #t)
              (check-equal?
-              (poo-flow-module-source-collection-locate poo-flow-maintained-module-source
+              (yuanxu-module-source-collection-locate poo-flow-maintained-module-source
                 (cons 'custom (string->symbol name))) '())
              (for-each
               (lambda (plan)
-                (def source (poo-flow-lazy-load-plan-source plan))
-                (when (equal? (poo-flow-module-source-ref-value source) path)
-                  (let (metadata (poo-flow-module-source-ref-metadata source))
+                (def source (yuanxu-lazy-load-plan-source plan))
+                (when (equal? (yuanxu-module-source-ref-value source) path)
+                  (let (metadata (yuanxu-module-source-ref-metadata source))
                     (check-equal? (cdr (assoc 'kind metadata)) 'framework-entrypoint)
                     (check-equal? (assoc 'required-roles metadata) #f)))) plans))
            poo-flow-maintained-integration-directories)
@@ -310,7 +310,7 @@
 
 ;; : TestCase
 (def (module-system-lazy-loader-user-root-case)
-  (poo-flow-test-case "projects only the Doom-style init and config roots"
+  (yuanxu-test-case "projects only the Doom-style init and config roots"
         (set! lazy-loader-call-count 0)
         (let* ((user-root "user-interface")
                (source-refs
@@ -318,18 +318,18 @@
                (init-source (car source-refs))
                (config-source (cadr source-refs))
                (init-metadata
-                (poo-flow-module-source-ref-metadata init-source))
+                (yuanxu-module-source-ref-metadata init-source))
                (config-metadata
-                (poo-flow-module-source-ref-metadata config-source))
+                (yuanxu-module-source-ref-metadata config-source))
                (plans
                 (poo-flow-user-tree-lazy-load-plans
                  (list user-standard-library-loader)
                  user-root
                  '((owner . user-root-tree)))))
           (check-equal? (length source-refs) 2)
-          (check-equal? (poo-flow-module-source-ref-value init-source)
+          (check-equal? (yuanxu-module-source-ref-value init-source)
                         "user-interface/init.ss")
-          (check-equal? (poo-flow-module-source-ref-value config-source)
+          (check-equal? (yuanxu-module-source-ref-value config-source)
                         "user-interface/config.ss")
           (check-equal? (cdr (assoc 'kind config-metadata)) 'user-tree)
           (check-equal? (cdr (assoc 'policy init-metadata))
@@ -377,14 +377,14 @@
                          'module-switch)
                         #f)
           (check-equal? (length plans) 2)
-          (check-equal? (poo-flow-module-load-receipt-code
-                         (poo-flow-lazy-load-plan-receipt (car plans)))
+          (check-equal? (yuanxu-module-load-receipt-code
+                         (yuanxu-lazy-load-plan-receipt (car plans)))
                         'deferred)
           (check-equal? lazy-loader-call-count 0))))
 
 ;; : TestCase
 (def (module-system-user-root-authoring-contract-case)
-  (poo-flow-test-case "admits value composition and rejects advanced root mechanisms"
+  (yuanxu-test-case "admits value composition and rejects advanced root mechanisms"
     (check-equal?
      (begin
        (poo-flow-user-tree-config-authoring-validate! "user-interface")
@@ -411,24 +411,24 @@
 
 ;; : TestCase
 (def (module-system-lazy-loader-aitia-submodule-source-case)
-  (poo-flow-test-case "official contribution sources are optional and resolve by checkout identity"
+  (yuanxu-test-case "official contribution sources are optional and resolve by checkout identity"
     (check-equal?
-     (map poo-flow-module-source-collection-identity
-          (poo-flow-module-load-path-collections
+     (map yuanxu-module-source-collection-identity
+          (yuanxu-module-load-path-collections
            (make-poo-flow-contribution-module-load-path
             'example-contribution ".")))
      '(example-contribution poo-flow-maintained))
     (check-equal?
-     (map poo-flow-module-source-collection-identity
+     (map yuanxu-module-source-collection-identity
           poo-flow-official-contribution-sources)
      '(poo-flow-official-contributions))
-    (let (selection (caar (poo-flow-modules! :custom (lambda-aitia))))
+    (let (selection (caar (yuanxu-modules! :custom (lambda-aitia))))
       (if (file-exists? "packages/lambda-aitia/modules")
         (let (source-refs
               (poo-flow-module-selection-source-refs
                poo-flow-official-contribution-load-path selection))
           (check-equal?
-           (map poo-flow-module-source-ref-value source-refs)
+           (map yuanxu-module-source-ref-value source-refs)
            (map path-expand '("packages/lambda-aitia/modules/ADR/interface.ss"
              "packages/lambda-aitia/modules/assurance/interface.ss"
              "packages/lambda-aitia/modules/formal-methods/interface.ss"
@@ -445,24 +445,24 @@
 
 ;; : TestCase
 (def (module-system-lazy-loader-auto-import-removal-case)
-  (poo-flow-test-case "removes auto-imported entrypoints through POO extension"
+  (yuanxu-test-case "removes auto-imported entrypoints through POO extension"
         (set! lazy-loader-call-count 0)
         (let* ((source-refs
                 (poo-flow-user-tree-source-refs "user-interface"))
                (disable-config
-                (poo-flow-graph-contribution
-                 poo-flow-module-auto-import-root-identity
+                (yuanxu-graph-contribution
+                 yuanxu-module-auto-import-root-identity
                  (list
-                  (poo-flow-graph-node-remove
+                  (yuanxu-graph-node-remove
                    "user-interface/config.ss"))))
                (result
-                (poo-flow-module-auto-imports-resolve
+                (yuanxu-module-auto-imports-resolve
                  source-refs
                  (list disable-config)))
                (resolved-source-values
-                (map poo-flow-module-source-ref-value
-                     (poo-flow-module-auto-imports-result-source-refs result))))
-          (check-equal? (poo-flow-graph-result-applied? result) #t)
+                (map yuanxu-module-source-ref-value
+                     (yuanxu-module-auto-imports-result-source-refs result))))
+          (check-equal? (yuanxu-graph-result-applied? result) #t)
           (check-equal? (length resolved-source-values) 1)
           (check-equal? (member "user-interface/config.ss"
                                 resolved-source-values)

@@ -12,13 +12,13 @@
    (displayln "IMPORT-OK " module) (force-output))
  '(:clan/poo/object
    :clan/poo/mop
-   :core/types
-   :core/module-system/schema/slot-contracts
-   :core/utilities/product-syntax
-   :core/utilities/final-projection-syntax
-   :core/graph/types-core
-   :core/graph/types-contracts
-   :core/graph/types
+   :yuanxu/types
+   :yuanxu/module-system/schema/slot-contracts
+   :yuanxu/utilities/product-syntax
+   :yuanxu/utilities/final-projection-syntax
+   :yuanxu/graph/types-core
+   :yuanxu/graph/types-contracts
+   :yuanxu/graph/types
    :poo-flow/modules/temporal-causality/types
    :poo-flow/modules/temporal-causality/objects
    :poo-flow/modules/temporal-causality/funs
@@ -82,7 +82,7 @@
    :gerbil-ascent/temporal/lens
    :gerbil-ascent/interface/request
    :poo-flow/modules/temporal-causality/ascent-exchange
-   :core/graph/algorithms
+   :yuanxu/graph/algorithms
    :poo-flow/modules/workflow/runtime/scheme-wire
    :poo-flow/modules/workflow/runtime/temporal-family
    :poo-flow/modules/temporal-causality/conclusions/types

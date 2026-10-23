@@ -30,15 +30,15 @@ def funflow_projection_from_scheme_plan(
     schema = _text(_required(rows, "schema"))
     wrapper_origin = rows.get("origin", "use-module-funflow")
     wrapper_source_map = rows.get("source-map")
-    if schema == "poo-flow.funflow-plan-projection.v1":
+    if schema == "yuanxu.funflow-plan-projection.v1":
         rows = _rows(_required(rows, "plan"))
         schema = _text(_required(rows, "schema"))
-    if schema != "poo-flow.modules.funflow.plan.v1":
+    if schema != "yuanxu.modules.funflow.plan.v1":
         raise FunFlowRuntimeError(f"unsupported FunFlow Scheme plan schema: {schema}")
     runtime_contract = _text(_required(rows, "runtime-contract"))
-    if runtime_contract != "poo-flow.anyio.v1":
+    if runtime_contract != "yuanxu.anyio.v1":
         raise FunFlowRuntimeError(
-            "FunFlow Scheme plan requires runtime contract 'poo-flow.anyio.v1'"
+            "FunFlow Scheme plan requires runtime contract 'yuanxu.anyio.v1'"
         )
 
     name = _text(_required(rows, "name"))

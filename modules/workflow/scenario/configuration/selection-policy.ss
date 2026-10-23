@@ -3,14 +3,14 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Product module routing is an input to Core selection admission.
 (import (only-in :clan/poo/object .o)
-        (only-in :core/module-system/selection/objects current-module-selection-policy)
-        (rename-in (only-in :core/module-system/selection/contract
-                            poo-flow-use-module-contract-validation
-                            poo-flow-require-use-module-contract!
-                            poo-flow-modules-system-use-module/contract)
-                   (poo-flow-use-module-contract-validation core-validation)
-                   (poo-flow-require-use-module-contract! core-admit!)
-                   (poo-flow-modules-system-use-module/contract core-use-module)))
+        (only-in :yuanxu/module-system/selection/objects current-module-selection-policy)
+        (rename-in (only-in :yuanxu/module-system/selection/contract
+                            yuanxu-use-module-contract-validation
+                            yuanxu-require-use-module-contract!
+                            yuanxu-modules-system-use-module/contract)
+                   (yuanxu-use-module-contract-validation core-validation)
+                   (yuanxu-require-use-module-contract! core-admit!)
+                   (yuanxu-modules-system-use-module/contract core-use-module)))
 (export PooFlowSelectionPolicy poo-flow-product-selection-validation
         poo-flow-product-selection-admit! poo-flow-product-use-module)
 (def PooFlowSelectionPolicy

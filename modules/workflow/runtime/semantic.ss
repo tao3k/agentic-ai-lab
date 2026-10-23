@@ -22,9 +22,9 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :gerbil/core call-with-output-string display-exception)
-        (only-in :core/graph/types-core
-                 poo-flow-graph poo-flow-graph-node poo-flow-graph-edge)
-        (only-in :core/graph/algorithms poo-flow-graph-outgoing-ids)
+        (only-in :yuanxu/graph/types-core
+                 yuanxu-graph yuanxu-graph-node yuanxu-graph-edge)
+        (only-in :yuanxu/graph/algorithms yuanxu-graph-outgoing-ids)
         (only-in :gerbil-ascent/temporal/lens
                  temporal-lens temporal-source temporal-solve temporal-status
                  temporal-rows temporal-frontier temporal-projection
@@ -258,24 +258,24 @@
                           (let (pair (list source target))
                             (unless (member pair pairs) (set! pairs (cons pair pairs))))) routes)
                        pairs)) [] conditional))
-           (graph (poo-flow-graph
-                   'runtime-plan (map poo-flow-graph-node ids)
+           (graph (yuanxu-graph
+                   'runtime-plan (map yuanxu-graph-node ids)
                    (map (lambda (edge)
                           (unless (and (list? edge) (= (length edge) 2)
                                        (member (car edge) ids) (member (cadr edge) ids)
                                        (not (equal? (car edge) "__end__"))
                                        (not (equal? (cadr edge) "__start__")))
                             (error "invalid graph edge"))
-                          (poo-flow-graph-edge (car edge) (cadr edge)))
+                          (yuanxu-graph-edge (car edge) (cadr edge)))
                         (append edges (filter (lambda (e) (not (member e edges))) conditional-edges)))))
-           (static-graph (poo-flow-graph
-                          'runtime-static (map poo-flow-graph-node ids)
-                          (map (lambda (edge) (poo-flow-graph-edge (car edge) (cadr edge))) edges)))
+           (static-graph (yuanxu-graph
+                          'runtime-static (map yuanxu-graph-node ids)
+                          (map (lambda (edge) (yuanxu-graph-edge (car edge) (cadr edge))) edges)))
            (successors (make-hash-table))
            (static-successors (make-hash-table))
            (digest (hex-encode (sha256 (string->utf8 payload)))))
-      (for-each (lambda (id) (hash-put! successors id (poo-flow-graph-outgoing-ids graph id))) ids)
-      (for-each (lambda (id) (hash-put! static-successors id (poo-flow-graph-outgoing-ids static-graph id))) ids)
+      (for-each (lambda (id) (hash-put! successors id (yuanxu-graph-outgoing-ids graph id))) ids)
+      (for-each (lambda (id) (hash-put! static-successors id (yuanxu-graph-outgoing-ids static-graph id))) ids)
       (hash (schema "poo-flow.semantic-result") (operation "graph.admit")
             (status "admitted") (planDigest digest) (successors successors)
             (staticSuccessors static-successors)

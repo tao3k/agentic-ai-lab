@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :poo-flow/modules/ai-agentic-context/features/memory/durable/policy
         :poo-flow/modules/ai-agentic-context/features/memory/durable/store
@@ -19,7 +19,7 @@
 ;; : TestSuite
 (def durable-runtime-manifest-test
   (test-suite "poo-flow durable runtime manifest envelope"
-    (poo-flow-test-case "projects policy store backend and operations into one envelope"
+    (yuanxu-test-case "projects policy store backend and operations into one envelope"
       (let ((manifest
              (poo-flow-durable-runtime-manifest-alist
               poo-flow-durable-policy/default
@@ -55,7 +55,7 @@
         (check-equal? (test-ref manifest 'backend-valid) #t)
         (check-equal? (test-ref manifest 'diagnostic-count) 0)
         (check-equal? (test-ref manifest 'runtime-executed) #f)))
-    (poo-flow-test-case "emits byte carrier for runtime languages"
+    (yuanxu-test-case "emits byte carrier for runtime languages"
       (let* ((payload
               (poo-flow-durable-runtime-manifest-string
                (poo-flow-durable-policy 'durable/runtime 'shared)

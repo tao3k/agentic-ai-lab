@@ -8,12 +8,12 @@
 (import :poo-flow/modules/session/objects
         :poo-flow/modules/session/policy-syntax
         :poo-flow/modules/session/policy-core
-        (only-in :core/module-system/schema/slot-contracts
-                 poo-flow-contract-check-slot!
-                 poo-flow-contract-slot
-                 poo-flow-contract-value-type
-                 poo-flow-native-contract
-                 poo-flow-native-contract->alist))
+        (only-in :yuanxu/module-system/schema/slot-contracts
+                 yuanxu-contract-check-slot!
+                 yuanxu-contract-slot
+                 yuanxu-contract-value-type
+                 yuanxu-native-contract
+                 yuanxu-native-contract->alist))
 
 (export PooFlowSessionToolGrantContract
         poo-flow-session-tool-grant
@@ -97,25 +97,25 @@
   (poo-flow-session-alist-ref grant 'trigger-refs '()))
 
 (def PooFlowSessionToolGrantKindType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'SessionToolGrantKind poo-flow-session-tool-grant-kind-value? 'Symbol))
 (def PooFlowSessionToolGrantSymbolType
-  (poo-flow-contract-value-type 'Symbol symbol? 'Symbol))
+  (yuanxu-contract-value-type 'Symbol symbol? 'Symbol))
 (def PooFlowSessionToolGrantSymbolListType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    '[Symbol] poo-flow-session-symbol-list? '[Symbol]))
 (def PooFlowSessionToolGrantRefListType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    '[Symbol/String] poo-flow-session-policy-ref-list? '[Symbol/String]))
 (def PooFlowSessionToolGrantAlistType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'Alist poo-flow-session-policy-alist? 'Alist))
 (def PooFlowSessionToolGrantBooleanType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'Boolean poo-flow-session-policy-boolean? 'Boolean))
 
 (def (poo-flow-session-tool-grant-slot-contract key slot value-type)
-  (poo-flow-contract-slot key slot value-type #t '()))
+  (yuanxu-contract-slot key slot value-type #t '()))
 
 (def PooFlowSessionToolGrantKindSlot
   (poo-flow-session-tool-grant-slot-contract
@@ -163,7 +163,7 @@
         PooFlowSessionToolGrantRuntimeExecutedSlot))
 
 (def PooFlowSessionToolGrantContract
-  (poo-flow-native-contract
+  (yuanxu-native-contract
    'session/tool-grant
    'session
    'PooSessionToolGrant
@@ -184,11 +184,11 @@
 ;;     %
 ;; : (-> Unit Alist)
 (def (poo-flow-session-tool-grant-type-contract->alist)
-  (poo-flow-native-contract->alist PooFlowSessionToolGrantContract))
+  (yuanxu-native-contract->alist PooFlowSessionToolGrantContract))
 
-;; : (-> PooFlowSlotContract PooFlowValue PooFlowValue)
+;; : (-> YuanxuSlotContract PooFlowValue PooFlowValue)
 (def (poo-flow-session-tool-grant-check-slot! contract value)
-  (poo-flow-contract-check-slot! contract value))
+  (yuanxu-contract-check-slot! contract value))
 
 ;; poo-flow-session-tool-grant-require-slots!
 ;;   | contract: adjacent machine contract below defines the tool grant gate.

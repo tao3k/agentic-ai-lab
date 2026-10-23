@@ -25,7 +25,7 @@
         (only-in "results/funs.ss"
                  poo-flow-query-result-cell poo-flow-query-result-row
                  poo-flow-query-result-set poo-flow-query-result-set-replay)
-        :core/poo-clos/interface)
+        :yuanxu/poo-clos/interface)
 
 (export poo-flow-query-orgize-open-headlines-incremental
         poo-flow-query-orgize-open-headlines

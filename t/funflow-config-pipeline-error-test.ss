@@ -5,8 +5,8 @@
 
 ;;; Boundary: invalid Funflow POO configs fail at the declarative contract.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
-        (only-in :core/modules/funflow/config-prototypes funflow-check funflow-pipeline)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
         :poo-flow/modules/workflow/scenario/configuration/interface
         :poo-flow/modules/workflow/scenario/configuration/init-syntax)
@@ -61,5 +61,5 @@
 
 (def funflow-config-pipeline-error-test
   (test-suite "poo-flow Funflow config contract errors"
-    (poo-flow-test-case "rejects invalid Funflow POO declarations"
+    (yuanxu-test-case "rejects invalid Funflow POO declarations"
       (check-equal? (run-funflow-config-pipeline-error-checks) 'ok))))

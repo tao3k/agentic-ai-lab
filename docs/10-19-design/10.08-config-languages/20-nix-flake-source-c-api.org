@@ -166,8 +166,10 @@ used to claim a general speedup. Host/daemon wait attribution remains open.
 
 The runtime was built from the current Core working tree with declared
 =gerbil-poo@80b590b15c6d4bde7717f5fd85d5b98dbf230bd8=. This is local consumer
-qualification, not an exact-remote-head or complete CI claim. The shared Core
-working tree's concurrent init/tests migration is not absorbed by this Nix
-change; its publication and the product dependency pointer need coordinated
-completion by their owners. No Gerbil source or shared dependency checkout
-was modified.
+qualification, not a complete CI claim. The underlying Core init/tests and
+product-ownership migration was subsequently published as =59cc155= on the
+existing Core PR branch, and the product snapshot carries that dependency
+pointer. Scheme sources used by the qualified runtime are unchanged by that
+commit; one new QNT file's redundant trailing blank line was removed during
+the commit check. Other workspace changes included in the coordinated snapshot
+have not all been requalified by this Nix suite. No Gerbil source was modified.

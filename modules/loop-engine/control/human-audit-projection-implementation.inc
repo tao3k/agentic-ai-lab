@@ -181,7 +181,7 @@
     (symbol->string (loop-human-audit-name audit)))))
 
 (def (loop-human-audit->agent-operation* audit review-items)
-  (make-poo-flow-agent-operation
+  (make-yuanxu-agent-operation
    (loop-human-audit-operation-id audit)
    'human-audit
    (list 'loop-human-audit (loop-human-audit-name audit))
@@ -208,7 +208,7 @@
     (loop-human-audit->agent-operation* valid-audit review-items)))
 
 (def (loop-human-audit->runtime-snapshot* audit review-items)
-  (make-poo-flow-runtime-snapshot
+  (make-yuanxu-runtime-snapshot
    'human-audit
    (loop-human-audit-name audit)
    (loop-human-audit-operation-status review-items)
@@ -272,9 +272,9 @@
           (cons 'review-items review-items)
           (cons 'review-count (length review-items))
           (cons 'agent-operation
-                (poo-flow-agent-operation->alist agent-operation))
+                (yuanxu-agent-operation->alist agent-operation))
           (cons 'runtime-snapshot
-                (poo-flow-runtime-snapshot->alist runtime-snapshot))
+                (yuanxu-runtime-snapshot->alist runtime-snapshot))
           (cons 'decisions (loop-human-audit-decisions valid-audit))
           (cons 'approved-patterns
                 (loop-human-audit-patterns-by-decision valid-audit 'approved))

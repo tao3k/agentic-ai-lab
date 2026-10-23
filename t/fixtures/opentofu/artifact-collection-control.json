@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-17",
+  "runtime": "default Gerbil, heap-fenced Justfile gates",
+  "collection": "/nix/store/281n2p22prmw8c94w8pm2885v5kqc2nd-opentofu-artifacts",
+  "injection": "YUANXU_OPENTOFU_ARTIFACT",
+  "injection_semantics": "one immutable package collection, not a single Provider output",
+  "per_provider_environment_required": false,
+  "manual_provider_scope_definitions_required": false,
+  "schema_receipt": "indexed-artifact-control.json",
+  "gates": {
+    "artifact-collection": {
+      "test": "t/opentofu-artifact-collection-test.ss",
+      "assertions": 21,
+      "passed": true
+    },
+    "indexed-inputs": {
+      "test": "t/opentofu-indexed-inputs-test.ss",
+      "assertions": 93,
+      "passed": true
+    },
+    "configuration-discovery": {
+      "test": "t/opentofu-configuration-discovery-test.ss",
+      "assertions": 49,
+      "passed": true
+    },
+    "provider-families": {
+      "test": "t/opentofu-provider-families-test.ss",
+      "assertions": 64,
+      "passed": true
+    },
+    "configuration-families": {
+      "test": "t/opentofu-configuration-families-test.ss",
+      "assertions": 36,
+      "passed": true
+    },
+    "artifact-fixture": {
+      "test": "t/opentofu-provider-artifact-test.ss",
+      "assertions": 17,
+      "passed": true
+    },
+    "artifact-real": {
+      "test": "t/opentofu-provider-artifact-test.ss",
+      "assertions": 17,
+      "passed": true
+    },
+    "module-scope": {
+      "test": "t/opentofu-module-scope-test.ss",
+      "assertions": 20,
+      "passed": true
+    },
+    "provider-versions": {
+      "test": "t/opentofu-provider-versions-test.ss",
+      "assertions": 84,
+      "passed": true
+    },
+    "schema": {
+      "test": "t/opentofu-schema-test.ss",
+      "assertions": 57,
+      "passed": true
+    }
+  },
+  "assertions": 458,
+  "providers": {
+    "aws": {
+      "target": "/nix/store/g79zf5kxy8778bsiq3iagvhl4qww7pbc-terraform-provider-aws-5.100.0-schema",
+      "manifest": {
+        "format": "yuanxu/provider-schema-v2",
+        "provider": "registry.opentofu.org/hashicorp/aws",
+        "version": "5.100.0",
+        "schema-sha256": "7e4fc064120609e23bc317629f1308d72891b7241993fbf68be523f03b6c633c",
+        "indexes": {
+          "data": "6111efe35eedfcf75e7baa012e61d7cdedf8ffcc98b846a5dd0af464bcc499a3",
+          "provider": "517d5f3f1e83fbbcf1a8f4a0c33ea31284df6190138fb3e8442ebe9f1be29f41",
+          "resource": "35a034014d56aacf5a9498b09887f45b630cd86d33874482e5957c45df4b07a9"
+        }
+      }
+    },
+    "awscc": {
+      "target": "/nix/store/5yag978db1m9w853817z8z10d43gz4mm-terraform-provider-awscc-1.77.0-schema",
+      "manifest": {
+        "format": "yuanxu/provider-schema-v2",
+        "provider": "registry.opentofu.org/hashicorp/awscc",
+        "version": "1.77.0",
+        "schema-sha256": "da2d45cbf066407681bc9b3ead3196277f966fd562bd004411a460ae83cfe7f0",
+        "indexes": {
+          "data": "2daa275fb7bcf4f952805cb7f479b80668c592e3a0602767927c04facc0c91c5",
+          "provider": "af717ad85e79da607c6d9e56cc158b1dde6fd89542b8e9ddfb093d578d6f2436",
+          "resource": "ac16bdfc7bf55b0c3f6dbbd786f867d07f7d02825956005034f98713b386d371"
+        }
+      }
+    },
+    "null": {
+      "target": "/nix/store/pn9vvfwwajj67n54p1d9vi92jgxl1dga-terraform-provider-null-3.2.4-schema",
+      "manifest": {
+        "format": "yuanxu/provider-schema-v2",
+        "provider": "registry.opentofu.org/hashicorp/null",
+        "version": "3.2.4",
+        "schema-sha256": "da768a39ea9a9c3464288786667f8cd2f6838c7d4a258e3a563bd49eb2466448",
+        "indexes": {
+          "data": "a5c7c6c69312461b4b77f015b7f110cc0ff29bde8868def5f3f9066c68a24f4f",
+          "provider": "ed92d87525b624740fa7519eab2ba20dd25681cb0424859cf7cd24492aef0638",
+          "resource": "0e9f9ff3659671b82407ecde6966dabd37e9c65b1d5000474eff765b3127f0c4"
+        }
+      }
+    }
+  },
+  "negative_demand_fixture": {
+    "real_aws_link": 1,
+    "poison_manifest_placeholders": 99,
+    "unselected_leaves_forced": 0,
+    "real_100_provider_performance_claim": false
+  },
+  "loader_connected": false,
+  "provider_plan_or_apply_executed": false,
+  "nix_build_boundary": "all explicitly linked schema outputs are realized; runtime laziness does not imply build laziness"
+}

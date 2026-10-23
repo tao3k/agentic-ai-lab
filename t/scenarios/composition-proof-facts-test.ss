@@ -2,13 +2,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
         :poo-flow/modules/proof/projections/composition-facts)
 
 (def composition-proof-facts-test
   (test-suite "composition proof facts"
-    (poo-flow-test-case "projects accepted and rejected composition facts"
+    (yuanxu-test-case "projects accepted and rejected composition facts"
 
 (def (alist-ref key alist)
   (let ((entry (assq key alist)))

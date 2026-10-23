@@ -4,7 +4,7 @@
 ;;; Pure per-stage temporal attempt and predecessor admission. No physical execution.
 (import (only-in :clan/poo/object .ref object?)
         (only-in :std/list/list every ormap)
-        :core/object-family/role-syntax
+        :yuanxu/object-family/role-syntax
         (only-in :poo-flow/modules/search-engine/funs poo-flow-search-stage?))
 (export poo-flow-search-attempt-state poo-flow-search-attempt-issue
         poo-flow-search-attempt-settle poo-flow-search-attempt-revise

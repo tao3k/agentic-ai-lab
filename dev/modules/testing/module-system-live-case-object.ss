@@ -6,7 +6,7 @@
 ;;; Boundary: inert test fixtures for downstream module-system live cases.
 ;;; Invariant: no sandbox execution or process work here.
 ;;; Note: this is not the module-system POO object model. That model is owned by
-;;; core/module-system/schema/interface.ss, modules/*/objects.ss, and object-validation.ss.
+;;; yuanxu/module-system/schema/interface.ss, modules/*/objects.ss, and object-validation.ss.
 
 (import (only-in :clan/poo/object
                  .ref
@@ -15,8 +15,8 @@
                  $constant-slot-spec)
         (only-in :poo-flow/modules/agent-sandbox/config
                  poo-flow-sandbox-profile-by-name)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection-flag-entry))
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flag-entry))
 
 (export pooFlowModuleSystemLiveCase
         pooFlowModuleSystemLiveCaseFromModuleSelection
@@ -46,7 +46,7 @@
             (car module-bundle)
             (error "live case requires a module bundle")))
          (config-entry
-          (poo-flow-user-module-selection-flag-entry module-selection
+          (yuanxu-user-module-selection-flag-entry module-selection
                                                      ':config)))
     (if (and config-entry (pair? config-entry))
       (cdr config-entry)
@@ -79,7 +79,7 @@
 ;; pooFlowModuleSystemLiveCase
 ;;   : (-> Symbol [PooUserModuleSelection] [Symbol] LiveCaseConfig POOObject)
 ;;   | contract: constructs inert live-case POO objects for the testing runner
-;;   | result: runtime-executed remains #f until dev/testing/module-system-live-case.ss starts it
+;;   | result: runtime-executed remains #f until src/testing/module-system-live-case.ss starts it
 ;;   | doc m%
 ;;       # Examples
 ;;
@@ -117,10 +117,10 @@
              (poo-flow-module-system-live-case-slot 'config config-value)
              (poo-flow-module-system-live-case-slot
               'case-owner
-              "dev/testing")
+              "src/testing")
              (poo-flow-module-system-live-case-slot
               'framework-owner
-              "dev/testing/module-system-live-case.ss")
+              "dev/modules/testing/module-system-live-case.ss")
              (poo-flow-module-system-live-case-slot 'runtime-executed #f)))))
 
 ;;; Boundary: module system live case flag value is the policy-visible edge for
@@ -128,7 +128,7 @@
 ;;; or projection responsibilities centralized for callers.
 ;; : (-> PooUserModuleSelection Symbol Value)
 (def (poo-flow-module-system-live-case-flag-value selection flag)
-  (let (entry (poo-flow-user-module-selection-flag-entry selection flag))
+  (let (entry (yuanxu-user-module-selection-flag-entry selection flag))
     (if (and entry (pair? entry))
       (cdr entry)
       (error "live case module selection missing required flag" flag))))

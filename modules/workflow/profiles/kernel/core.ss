@@ -6,12 +6,12 @@
 ;;; Boundary: minimal kernel profile data for root profile projection.
 ;;; Invariant: no init syntax, doctor, or presentation owners are imported here.
 
-(import (only-in :core/module-system/selection/objects
-                 poo-flow-settings)
-        (only-in :core/profile-composition/user-profile
-                 pooFlowUserProfile
-                 pooFlowUserProfileSet
-                 poo-flow-user-profile-modules)
+(import (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-settings)
+        (only-in :yuanxu/profile-composition/user-profile
+                 yuanxuUserProfile
+                 yuanxuUserProfileSet
+                 yuanxu-user-profile-modules)
         (only-in "bundles.ss"
                  poo-flow-kernel-module-bundles))
 
@@ -29,10 +29,10 @@
 ;;; The kernel profile is inspectable user-profile data, not descriptor activation.
 ;; : (-> Unit PooUserProfile)
 (def poo-flow-kernel-profile
-  (pooFlowUserProfile
+  (yuanxuUserProfile
    'kernel
    poo-flow-kernel-profile-module-bundles
-   (poo-flow-settings
+   (yuanxu-settings
     surface: "poo-flow"
     profile: "kernel"
     profile-kind: 'kernel)
@@ -44,11 +44,11 @@
 ;;; upstream-owned and declarative.
 ;; : (-> Unit PooUserProfileSet)
 (def poo-flow-kernel-profile-set
-  (pooFlowUserProfileSet
+  (yuanxuUserProfileSet
    'kernel-profiles
    'kernel
    (list poo-flow-kernel-profile)))
 
 ;; : (-> Unit [PooUserModuleSelection])
 (def poo-flow-kernel-profile-modules
-  (poo-flow-user-profile-modules poo-flow-kernel-profile))
+  (yuanxu-user-profile-modules poo-flow-kernel-profile))

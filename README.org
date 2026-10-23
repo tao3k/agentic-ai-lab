@@ -95,7 +95,7 @@ This is why =poo-flow= is stronger than a generic worker runner. It does not onl
 C4 linearization prepares composed POO facts and deterministic definition
 precedence.  It is not a private graph or loop-engine algorithm layer.  Loop
 and dependency-graph validation is consumed through the public =src/graph=
-POO API, especially =poo-flow-graph-loop-analysis= receipts for cycle,
+POO API, especially =yuanxu-graph-loop-analysis= receipts for cycle,
 strong-component, condensation, topological-order, and diagnostic questions.
 Downstream workflow and loop modules project their facts into that API instead
 of maintaining separate graph semantics.
@@ -303,12 +303,15 @@ Run the single native test entrypoint and Scheme scripts through the package
 environment:
 
 #+begin_src shell
+just deps-dev
 just test
-gerbil env ./unit-tests.ss
 gerbil env gerbil interactive t/fixtures/cli-run-smoke.ss 3
 #+end_src
 
-=unit-tests.ss= is the only package test interface. It applies ASP Scheme's
+=dev/unit-tests.ss= is the optional package test interface. Its ASP dependency
+is owned by =dev/gerbil.pkg=; the library build uses Core's source closure and
+native build interface without importing ASP. =just deps-dev= installs the
+development dependencies separately. It applies ASP Scheme's
 default POO Testing profile to the current Gambit runtime, initializes
 =clan/testing=, and leaves recursive =*-test.ss= discovery to that upstream
 framework. =just test= and =just test-performance= fail closed before Scheme
@@ -358,13 +361,3 @@ The design record lives under =docs/10-19-design=. Use these as entry points:
 - a project where JSON manifests are mistaken for mathematical proof.
 
 POO/C4 makes composition deterministic. Validation and proof decide whether the composed object is legal, safe, and meaningful to project.
-
-* Development tools
-Production installation uses =gerbil deps --install= and =gerbil build=.
-Run =just prepare-dev= before the test and policy lanes. ASP and the POO Flow
-testing extension are owned by =dev/gerbil.pkg= and the =poo-flow-dev= package;
-they are not production dependencies. =dev/build.ss= checks that the SDK
-production target list still equals the native public import closure before
-running source policy qualification and compiling the testing extension.
-The unit and performance entrypoints are =dev/unit-tests.ss= and
-=dev/performance-tests.ss=; the unit entry explicitly retains the project root.

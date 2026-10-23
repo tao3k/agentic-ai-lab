@@ -6,7 +6,7 @@
 ;;; Boundary: loop governor performance gates cover one-pass policy projection.
 ;;; Invariant: governor projection consumes state facts without runtime mutation.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -117,7 +117,7 @@
 ;; : TestSuite
 (def loop-governor-performance-test
   (test-suite "loop governor performance"
-    (poo-flow-test-case "keeps large governor projection inside benchmark contract"
+    (yuanxu-test-case "keeps large governor projection inside benchmark contract"
       (let* ((pattern-count 600)
              (governor
               (loop-governor-performance-governor pattern-count))

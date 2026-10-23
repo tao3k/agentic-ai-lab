@@ -2,15 +2,15 @@
 --
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-import PooFlowCoreProof.Admission.Decision
+import YuanxuProof.Admission.Decision
 
 namespace PooFlowProof.Enterprise.SeparationOfDuties
 
 structure ApprovalDiscipline (Principal : Type) [DecidableEq Principal] where
-  quorum : PooFlowCoreProof.Admission.Decision.QuorumEvidence Principal
-  quorumAdmitted : PooFlowCoreProof.Admission.Decision.quorumSatisfied quorum
+  quorum : YuanxuProof.Admission.Decision.QuorumEvidence Principal
+  quorumAdmitted : YuanxuProof.Admission.Decision.quorumSatisfied quorum
   separation :
-    PooFlowCoreProof.Admission.Decision.SeparationOfDuties Principal
+    YuanxuProof.Admission.Decision.SeparationOfDuties Principal
 
 theorem quorumThresholdIsSatisfied
     {Principal : Type} [DecidableEq Principal]
@@ -22,14 +22,14 @@ theorem proposerCannotApprove
     {Principal : Type} [DecidableEq Principal]
     (discipline : ApprovalDiscipline Principal) :
     discipline.separation.proposer ≠ discipline.separation.approver :=
-  PooFlowCoreProof.Admission.Decision.proposerAndApproverAreSeparated
+  YuanxuProof.Admission.Decision.proposerAndApproverAreSeparated
     discipline.separation
 
 theorem approverCannotExecute
     {Principal : Type} [DecidableEq Principal]
     (discipline : ApprovalDiscipline Principal) :
     discipline.separation.approver ≠ discipline.separation.executor :=
-  PooFlowCoreProof.Admission.Decision.approverAndExecutorAreSeparated
+  YuanxuProof.Admission.Decision.approverAndExecutorAreSeparated
     discipline.separation
 
 end PooFlowProof.Enterprise.SeparationOfDuties

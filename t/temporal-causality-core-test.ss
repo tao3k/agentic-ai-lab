@@ -2,11 +2,11 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .ref)
-        (only-in :core/graph/types
-                 poo-flow-graph poo-flow-graph-edge poo-flow-graph-node)
+        (only-in :yuanxu/graph/types
+                 yuanxu-graph yuanxu-graph-edge yuanxu-graph-node)
         :poo-flow/modules/temporal-causality/interface)
 
 (export temporal-causality-core-test)
@@ -15,17 +15,17 @@
   (test-suite
    "Temporal Causality core"
 
-   (poo-flow-test-case "structural Impact returns relation trajectory witnesses"
+   (yuanxu-test-case "structural Impact returns relation trajectory witnesses"
      (let* ((graph
-             (poo-flow-graph
+             (yuanxu-graph
               'medication-change
-              (list (poo-flow-graph-node 'case)
-                    (poo-flow-graph-node 'profile)
-                    (poo-flow-graph-node 'source)
-                    (poo-flow-graph-node 'unrelated))
-              (list (poo-flow-graph-edge
+              (list (yuanxu-graph-node 'case)
+                    (yuanxu-graph-node 'profile)
+                    (yuanxu-graph-node 'source)
+                    (yuanxu-graph-node 'unrelated))
+              (list (yuanxu-graph-edge
                      'case 'profile 'HAS_EFFECTIVE_PROFILE)
-                    (poo-flow-graph-edge
+                    (yuanxu-graph-edge
                      'profile 'source 'DECLARES_SOURCE))))
             (receipt
              (poo-flow-structural-impact-analyze
@@ -51,26 +51,26 @@
        (check (.ref receipt 'temporal-impact-assessed?) => #f)
        (check (.ref receipt 'release-authorized?) => #f)))
 
-   (poo-flow-test-case "incomplete inventory cannot claim scoped completeness"
+   (yuanxu-test-case "incomplete inventory cannot claim scoped completeness"
      (let* ((graph
-             (poo-flow-graph
+             (yuanxu-graph
               'partial
-              (list (poo-flow-graph-node 'changed))
+              (list (yuanxu-graph-node 'changed))
               '()))
             (receipt
              (poo-flow-structural-impact-analyze
               graph '(changed) '(dependency) 'dependents #f)))
        (check (.ref receipt 'status) => 'partial-impact)))
 
-   (poo-flow-test-case "structural Impact terminates on relation cycles"
+   (yuanxu-test-case "structural Impact terminates on relation cycles"
      (let* ((graph
-             (poo-flow-graph
+             (yuanxu-graph
               'cyclic-software-structure
-              (list (poo-flow-graph-node 'requirement)
-                    (poo-flow-graph-node 'verification))
-              (list (poo-flow-graph-edge
+              (list (yuanxu-graph-node 'requirement)
+                    (yuanxu-graph-node 'verification))
+              (list (yuanxu-graph-edge
                      'requirement 'verification 'VERIFIES)
-                    (poo-flow-graph-edge
+                    (yuanxu-graph-edge
                      'verification 'requirement 'TRACES_BACK))))
             (receipt
              (poo-flow-structural-impact-analyze
@@ -81,7 +81,7 @@
               => '(requirement verification))
        (check (length (.ref receipt 'relation-trajectories)) => 2)))
 
-   (poo-flow-test-case "causal cut classifies bounded past present and future"
+   (yuanxu-test-case "causal cut classifies bounded past present and future"
      (let* ((subject "patient-1")
             (event
              (lambda (identity kind position parents modality committed?)
@@ -145,7 +145,7 @@
        (check (.ref receipt 'assurance-closed?) => #f)
        (check (.ref receipt 'release-authorized?) => #f)))
 
-   (poo-flow-test-case "trajectory contract separates intended error and Impact layers"
+   (yuanxu-test-case "trajectory contract separates intended error and Impact layers"
      (let* ((subject "patient-1")
             (event
              (lambda (identity position parents modality committed?)
@@ -188,7 +188,7 @@
        (check (.ref assessment 'error-impact-event-ids) => '("harm"))
        (check (.ref assessment 'release-authorized?) => #f)))
 
-   (poo-flow-test-case "observed error branch is rejected instead of becoming fact"
+   (yuanxu-test-case "observed error branch is rejected instead of becoming fact"
      (let* ((subject "patient-1")
             (event
              (lambda (identity position parents modality committed?)
@@ -219,7 +219,7 @@
               => '(invalid-error-modality))
        (check (.ref assessment 'release-authorized?) => #f)))
 
-   (poo-flow-test-case "missing parents keep temporal classification partial"
+   (yuanxu-test-case "missing parents keep temporal classification partial"
      (let* ((event
              (poo-flow-causal-event
               "observation-1" "patient-1" 'clinical-observation
@@ -239,7 +239,7 @@
        (check (.ref receipt 'unknown-frontier)
               => '("missing-administration"))))
 
-   (poo-flow-test-case "parent-after-child ordering invalidates the causal cut"
+   (yuanxu-test-case "parent-after-child ordering invalidates the causal cut"
      (let* ((parent
              (poo-flow-causal-event
               "late-parent" "patient-1" 'late-parent
@@ -265,7 +265,7 @@
        (check (.ref receipt 'status) => 'invalid-causal-cut)
        (check (.ref receipt 'assurance-closed?) => #f)))
 
-   (poo-flow-test-case "same-time causal cycle cannot qualify as complete"
+   (yuanxu-test-case "same-time causal cycle cannot qualify as complete"
      (let* ((event
              (lambda (identity parent)
                (poo-flow-causal-event

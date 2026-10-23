@@ -61,7 +61,7 @@ def test_scheme_load_aot_benchmark_reports_exact_samples(
         assert projection_artifact is False
         assert compile_aot is False
         calls.append((cache, aot))
-        return (("schema", "poo-flow.funflow-plan-projection.v1"),)
+        return (("schema", "yuanxu.funflow-plan-projection.v1"),)
 
     monkeypatch.setattr(
         benchmark_cases, "load_projection_rows", fake_load_projection_rows
@@ -103,7 +103,7 @@ def test_scheme_load_aot_benchmark_can_include_projection_artifact(
         ),
         module_path=source,
         projection_path=projection,
-        rows=(("schema", "poo-flow.funflow-plan-projection.v1"),),
+        rows=(("schema", "yuanxu.funflow-plan-projection.v1"),),
     )
 
     def fake_load_projection_rows(
@@ -119,8 +119,8 @@ def test_scheme_load_aot_benchmark_can_include_projection_artifact(
         assert Path(cwd).resolve() == tmp_path.resolve()
         assert compile_aot is False
         if projection_artifact and not aot:
-            return (("schema", "poo-flow.funflow-plan-projection.v1"),)
-        return (("schema", "poo-flow.funflow-plan-projection.v1"),)
+            return (("schema", "yuanxu.funflow-plan-projection.v1"),)
+        return (("schema", "yuanxu.funflow-plan-projection.v1"),)
 
     monkeypatch.setattr(
         benchmark_cases, "load_projection_rows", fake_load_projection_rows
@@ -183,7 +183,7 @@ def test_scheme_load_aot_benchmark_cli_emits_receipts(
         _path: str | Path,
         **_kwargs: object,
     ) -> tuple[tuple[str, str]]:
-        return (("schema", "poo-flow.funflow-plan-projection.v1"),)
+        return (("schema", "yuanxu.funflow-plan-projection.v1"),)
 
     monkeypatch.setattr(
         benchmark_cases, "load_projection_rows", fake_load_projection_rows
@@ -219,7 +219,7 @@ def test_benchmark_dispatcher_runs_scheme_load_aot_suite(
         _path: str | Path,
         **_kwargs: object,
     ) -> tuple[tuple[str, str]]:
-        return (("schema", "poo-flow.funflow-plan-projection.v1"),)
+        return (("schema", "yuanxu.funflow-plan-projection.v1"),)
 
     monkeypatch.setattr(
         benchmark_cases, "load_projection_rows", fake_load_projection_rows

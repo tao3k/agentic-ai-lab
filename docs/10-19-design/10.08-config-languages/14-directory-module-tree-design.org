@@ -14,8 +14,8 @@ proposal here has been separated by ownership; do not evolve a second copy.
 
 * POO Flow responsibilities
 
-POO Flow owns poo-flow! syntax, default source/authoring policy, the existing
-poo-flow-load-modules product facade and its integration with Core protocols,
+POO Flow owns yuanxu! syntax, default source/authoring policy, the existing
+yuanxu-load-modules product facade and its integration with Core protocols,
 product Feature System, JsonSchema bridge, contribution Profiles/Scenarios and
 runtime/build providers. Those implementation owners are not moved by this work.
 

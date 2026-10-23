@@ -8,37 +8,37 @@
   (displayln "IMPORT-OK " module) (force-output))
  '( :clan/poo/object
     :clan/poo/mop
-    :core/types
-    :core/module-system/schema/slot-contracts
-    :core/observability/types
-    :core/observability/funcs
-    :core/observability/slot-debug
-    :core/observability/debug
-    :core/observability/testing-case
+    :yuanxu/types
+    :yuanxu/module-system/schema/slot-contracts
+    :yuanxu/observability/types
+    :yuanxu/observability/funcs
+    :yuanxu/observability/slot-debug
+    :yuanxu/observability/debug
+    :yuanxu/observability/testing-case
     :asp-gerbil-scheme/src/build-api/core-capacity
     :asp-gerbil-scheme/src/testing/import-footprint-reader
     :asp-gerbil-scheme/src/testing/extension
     :asp-gerbil-scheme/testing-api
-    :core/observability/output
-    :poo-flow-dev/testing/testing-extension
-    :core/module-system/schema/relations
-    :core/module-system/types
-    :core/module-system/config
-    :core/module-system/objects
-    :core/module-system/authoring/roles
+    :yuanxu/observability/output
+    :poo-flow/dev/modules/testing/testing-extension
+    :yuanxu/module-system/schema/relations
+    :yuanxu/module-system/types
+    :yuanxu/module-system/config
+    :yuanxu/module-system/objects
+    :yuanxu/module-system/authoring/roles
         (only-in :poo-flow/modules/module-authoring/semantic-module UserConfigSourceRole. poo-flow-user-root-module-authoring-profile)
     :poo-flow/modules/module-authoring/module-interface
-    :core/object-family/syntax
-    :core/utilities/product-syntax
-    :core/utilities/final-projection-syntax
-    :core/module-system/source/objects
-    :core/module-system/source/imports
-    :core/module-system/selection/flags
-    :core/module-system/selection/objects
-    :core/profile-composition/user-profile
-    :core/utilities/functional
-    :core/profile-composition/policy
-    :poo-flow-dev/testing-api
+    :yuanxu/object-family/syntax
+    :yuanxu/utilities/product-syntax
+    :yuanxu/utilities/final-projection-syntax
+    :yuanxu/module-system/source/objects
+    :yuanxu/module-system/source/imports
+    :yuanxu/module-system/selection/flags
+    :yuanxu/module-system/selection/objects
+    :yuanxu/profile-composition/user-profile
+    :yuanxu/utilities/functional
+    :yuanxu/profile-composition/policy
+    :poo-flow/testing-api
     :poo-flow/modules/temporal-causality/time/types
     :poo-flow/modules/temporal-causality/time/objects
     :poo-flow/modules/temporal-causality/revisions/types

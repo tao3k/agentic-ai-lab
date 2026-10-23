@@ -9,7 +9,7 @@
         (only-in :clan/poo/mop Type. define-type element?)
         (only-in :gerbil/core hash-get hash-put!)
         (only-in :std/list/list every)
-        (only-in :core/poo-clos/interface
+        (only-in :yuanxu/poo-clos/interface
                  poo-clos-instance?))
 
 (export poo-flow-query-kind

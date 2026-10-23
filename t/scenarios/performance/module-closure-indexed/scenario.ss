@@ -15,7 +15,7 @@
         (only-in :poo-flow/modules/module-authoring/module-descriptor
                  make-empty-poo-flow-module-descriptor
                  poo-flow-module-name
-                 poo-flow-module-imports
+                 yuanxu-module-imports
                  poo-flow-module-import-configs
                  poo-flow-module-closure
                  poo-flow-module-names))
@@ -54,7 +54,7 @@
     (let* ((module (car pending))
            (next-seen (cons (poo-flow-module-name module) seen-names))
            (inline-modules
-            (poo-flow-module-import-configs (poo-flow-module-imports module))))
+            (poo-flow-module-import-configs (yuanxu-module-imports module))))
       (cons module
             (append (baseline-closure/add inline-modules next-seen)
                     (baseline-closure/add (cdr pending) next-seen)))))))

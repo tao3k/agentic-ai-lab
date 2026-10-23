@@ -7,7 +7,7 @@
 
 (import :gerbil/core
         (only-in :clan/poo/object .o .ref .slot? .extend $constant-slot-spec)
-        :core/module-system/schema/interface
+        :yuanxu/module-system/schema/interface
         :poo-flow/modules/sandbox-core/shared-object
         :poo-flow/modules/agent-sandbox/config
         (only-in :poo-flow/modules/agent-sandbox/profile-validation
@@ -43,9 +43,9 @@
 ;;; native POO prototype, not an extension-graph node.
 ;; : (-> PooModuleObject Symbol Value)
 (def (poo-flow-sandbox-profile-object-field-default profile-object slot)
-  (let (field (poo-flow-module-object-field profile-object slot))
+  (let (field (yuanxu-module-object-field profile-object slot))
     (if field
-      (poo-flow-module-field-contract-default field)
+      (yuanxu-module-field-contract-default field)
       (error "sandbox profile object has no required field" slot))))
 
 ;; : (-> PooModuleObject Symbol Symbol PooSandboxProfilePrototype)
@@ -98,13 +98,13 @@
 ;; : (-> PooModuleObject PooSandboxProfilePrototype SandboxProfileForm PooSandboxProfilePrototype)
 (def (poo-flow-sandbox-profile-object-extend-row profile-object prototype row)
   (let* ((field (poo-flow-sandbox-profile-object-row-field profile-object row))
-         (slot (poo-flow-module-field-contract-identity field))
+         (slot (yuanxu-module-field-contract-identity field))
          (merge (poo-flow-sandbox-profile-object-row-merge
                  (poo-flow-sandbox-profile-object-row-operator row)
                  field))
          (value (poo-flow-sandbox-profile-object-row-value row))
          (resolved-value
-          (poo-flow-module-slot-apply-policy
+          (yuanxu-module-slot-apply-policy
            merge (poo-flow-sandbox-profile-object-slot prototype slot) value)))
     (.extend prototype (cons slot ($constant-slot-spec resolved-value)))))
 

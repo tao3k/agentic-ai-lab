@@ -8,7 +8,7 @@
 ;;; append logs, claim leases, retain artifacts, or attach sandbox handles.
 
 (import :poo-flow/modules/ai-agentic-context/features/memory/durable/store-operation
-        :core/utilities/final-projection-syntax)
+        :yuanxu/utilities/final-projection-syntax)
 
 (export poo-flow-durable-runtime-store-operations-from-rows
         poo-flow-durable-runtime-store-rows->marlin-handoff)
@@ -52,10 +52,10 @@
 ;; : (-> Object [Symbol] Alist)
 (def (bridge-options target-ref causal-refs)
   (if target-ref
-    (poo-flow-product-field-rows
+    (yuanxu-product-field-rows
      (target-ref target-ref)
      (causal-refs (bridge-symbol-refs causal-refs)))
-    (poo-flow-product-field-rows
+    (yuanxu-product-field-rows
      (causal-refs (bridge-symbol-refs causal-refs)))))
 
 ;; : (-> Alist Symbol Symbol Symbol Alist Object [Symbol] Object)
@@ -70,7 +70,7 @@
    operation-id
    operation-kind
    negotiation
-   (poo-flow-product-field-rows
+   (yuanxu-product-field-rows
     (source-kind source-kind)
     (source-row row))
    (bridge-options target-ref causal-refs)))
@@ -136,7 +136,7 @@
    artifact-ref
    'retain-artifact
    'workflow-artifact
-   (poo-flow-product-field-rows
+   (yuanxu-product-field-rows
     (artifact-ref artifact-ref))
    #f
    (list artifact-ref)))
@@ -148,7 +148,7 @@
    sandbox-ref
    'attach-sandbox-handle
    'sandbox-handle
-   (poo-flow-product-field-rows
+   (yuanxu-product-field-rows
     (sandbox-ref sandbox-ref))
    #f
    (list sandbox-ref)))

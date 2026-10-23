@@ -6,7 +6,7 @@
 ;;; Boundary: custom user-interface tool-core scenario.
 ;;; Invariant: user config declares tool specs and validation receipts only.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -23,7 +23,7 @@
 ;; : TestSuite
 (def user-interface-custom-tool-core-test
   (test-suite "poo-flow custom user-interface tool-core case"
-    (poo-flow-test-case "projects custom tool-core case without runtime execution"
+    (yuanxu-test-case "projects custom tool-core case without runtime execution"
       (let* ((selection-row
               (car poo-flow-custom-my-module-tool-core-case))
              (catalog-row

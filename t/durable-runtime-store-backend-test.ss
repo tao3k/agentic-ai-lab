@@ -7,13 +7,13 @@
 ;;; Invariant: tests validate backend selection and ABI projection only; no
 ;;; runtime store process is started.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o object?)
-        :core/modules/funflow/control-plane/runtime-protocol
-        :core/modules/funflow/control-plane/runtime-adapter
+        :yuanxu/modules/funflow/control-plane/runtime-protocol
+        :yuanxu/modules/funflow/control-plane/runtime-adapter
         :poo-flow/modules/ai-agentic-context/features/memory/durable/policy
         :poo-flow/modules/ai-agentic-context/features/memory/durable/store
         :poo-flow/modules/ai-agentic-context/features/memory/durable/store-backend)
@@ -54,7 +54,7 @@
 ;; : TestSuite
 (def durable-runtime-store-backend-test
   (test-suite "poo-flow durable runtime store backend"
-    (poo-flow-test-case "selects a Marlin backend and emits runtime command handoff"
+    (yuanxu-test-case "selects a Marlin backend and emits runtime command handoff"
       (let* ((contract-receipt (test-runtime-store-contract-receipt))
              (backend-receipt
               (poo-flow-durable-runtime-store-backend->receipt
@@ -111,7 +111,7 @@
         (check-equal? (test-ref handoff 'scheme-manufactures-runtime-handlers)
                       #f)))
 
-    (poo-flow-test-case "declares Turso concurrency and AI backend capabilities"
+    (yuanxu-test-case "declares Turso concurrency and AI backend capabilities"
       (let* ((backend-receipt
               (poo-flow-durable-runtime-store-backend->receipt
                poo-flow-durable-runtime-store-backend/turso))
@@ -145,7 +145,7 @@
                       'libsql_vector_idx)
         (check-equal? (test-ref metadata 'vector-query) 'vector_top_k)))
 
-    (poo-flow-test-case "rejects a backend that cannot satisfy durable store contract"
+    (yuanxu-test-case "rejects a backend that cannot satisfy durable store contract"
       (let* ((backend
               (poo-flow-durable-runtime-store-backend
                'runtime-backend/weak
@@ -183,7 +183,7 @@
          (diagnostic-code-present? diagnostics 'unsupported-operation-kinds)
          #t)))
 
-    (poo-flow-test-case "keeps invalid store contracts out of backend selection"
+    (yuanxu-test-case "keeps invalid store contracts out of backend selection"
       (let* ((invalid-contract
               (.o durable-runtime-store-kind:
                   +poo-flow-durable-runtime-store-contract-kind+

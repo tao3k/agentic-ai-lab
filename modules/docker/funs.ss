@@ -12,22 +12,22 @@
 ;;; Dependency: generic sandbox resources live in =:poo-flow/modules/agent-sandbox/resource=.
 ;;; Policy evidence: tests should trust the installed module registry.
 
-(import (only-in :core/modules/funflow/control-plane/task
+(import (only-in :yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task task? task-kind
                  task-request)
-        (only-in :core/modules/funflow/control-plane/failure raise-control-plane-failure)
-        (only-in :core/modules/funflow/control-plane/strategy
+        (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        (only-in :yuanxu/modules/funflow/control-plane/strategy
                  make-strategy strategy-name strategy-capabilities
                  strategy-cache-policy strategy-failure-policy strategy-planner
                  make-local-eager-strategy)
-        (only-in :core/modules/funflow/control-plane/runtime-adapter
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter
                  make-runtime-adapter runtime-adapter-name
                  runtime-adapter-capabilities runtime-adapter-submitter
                  runtime-adapter-fetcher runtime-adapter-store-putter
                  runtime-adapter-store-getter make-rust-adapter)
-        (only-in :core/modules/funflow/control-plane/config make-run-config)
-        (only-in :core/modules/funflow/control-plane/flow
+        (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
+        (only-in :yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry task-flow flow-name flow-steps)
         (only-in :poo-flow/modules/agent-sandbox/resource
                  sandbox-volume-bindings->request

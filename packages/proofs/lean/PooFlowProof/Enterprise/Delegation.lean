@@ -2,7 +2,7 @@
 --
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-import PooFlowCoreProof.Admission.Federation
+import YuanxuProof.Admission.Federation
 
 namespace PooFlowProof.Enterprise.Delegation
 
@@ -10,7 +10,7 @@ structure Admitted
     (CapabilityIdentity Scope ActionRole
       DelegationEvidenceIdentity RevocationObservationIdentity : Type) where
   attenuation :
-    PooFlowCoreProof.Admission.Federation.CapabilityAttenuation
+    YuanxuProof.Admission.Federation.CapabilityAttenuation
       CapabilityIdentity Scope ActionRole
   delegationEvidenceIdentity : DelegationEvidenceIdentity
   revocationObservationIdentity : RevocationObservationIdentity
@@ -24,12 +24,12 @@ theorem neverAmplifies
     [DecidableEq Scope] [DecidableEq ActionRole]
     (delegation : Admitted CapabilityIdentity Scope ActionRole
       DelegationEvidenceIdentity RevocationObservationIdentity) :
-    let result := PooFlowCoreProof.Admission.Federation.attenuate delegation.attenuation
+    let result := YuanxuProof.Admission.Federation.attenuate delegation.attenuation
     (∀ scope ∈ result.scopes, scope ∈ delegation.attenuation.source.scopes) ∧
     (∀ action ∈ result.actions, action ∈ delegation.attenuation.source.actions) ∧
     result.expiresAt ≤ delegation.attenuation.source.expiresAt ∧
     result.delegationDepth ≤ delegation.attenuation.source.delegationDepth :=
-  PooFlowCoreProof.Admission.Federation.attenuationCannotAmplify delegation.attenuation
+  YuanxuProof.Admission.Federation.attenuationCannotAmplify delegation.attenuation
 
 theorem requiresFreshUnrevokedEvidence
     {CapabilityIdentity Scope ActionRole

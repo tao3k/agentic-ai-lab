@@ -7,7 +7,7 @@
 
 (import :std/test
         (only-in :clan/poo/object .ref)
-        :core/object-family/role-syntax
+        :yuanxu/object-family/role-syntax
         :poo-flow/modules/search-engine/interface
         (only-in :poo-flow/modules/temporal-causality/funs
                  poo-flow-causal-event-graph))

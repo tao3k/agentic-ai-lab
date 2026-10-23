@@ -12,9 +12,9 @@
  '(:clan/poo/object
    :clan/poo/mop
    :clan/poo/trie
-   :core/types
-   :core/module-system/schema/slot-contracts
-   :core/observability/testing-case
+   :yuanxu/types
+   :yuanxu/module-system/schema/slot-contracts
+   :yuanxu/observability/testing-case
    :gerbil-ascent/table/expression
    :gerbil-ascent/core/binary-relation
    :gerbil-ascent/core/binary-program

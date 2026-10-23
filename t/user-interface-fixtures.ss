@@ -7,16 +7,16 @@
 ;;; Invariant: fixtures are declarative data and never realize descriptors.
 
 (import (only-in :clan/poo/object .o .ref)
-        :core/module-system/selection/objects
-        (only-in :core/module-system/selection/syntax
-                 poo-flow-modules!)
+        :yuanxu/module-system/selection/objects
+        (only-in :yuanxu/module-system/selection/syntax
+                 yuanxu-modules!)
         :poo-flow/modules/loop-engine/config
-        :core/profile-composition/user-profile
+        :yuanxu/profile-composition/user-profile
         :poo-flow/modules/workflow/profiles/kernel/interface)
 
 (defrules poo-flow-profile-set (default profiles)
   ((_ name (default default-name) (profiles profile ...))
-   (.o kind: "poo-flow.modules.user-profile-set.v1"
+   (.o kind: "yuanxu.modules.user-profile-set.v1"
        profile-set-name: 'name
        default-profile-name: 'default-name
        user-profiles: (list profile ...))))
@@ -25,21 +25,21 @@
   ((_ name (modules module ...)
       (settings setting ...)
       (setting-keys key ...))
-   (.o kind: "poo-flow.modules.user-profile.v1"
+   (.o kind: "yuanxu.modules.user-profile.v1"
        profile-name: 'name
        profile-selection-bundles: (list module ...)
        user-settings: (.o setting ...)
        public-setting-keys: '(key ...))))
 
-(defrules poo-flow-user-module-bundle ()
+(defrules yuanxu-user-module-bundle ()
   ((_ (category module feature ...) ...)
    (list
-    (poo-flow-user-module-selection 'category
+    (yuanxu-user-module-selection 'category
                                     'module
                                     '(feature ...))
     ...)))
 
-(defrules poo-flow-user-module-when ()
+(defrules yuanxu-user-module-when ()
   ((_ condition (category module feature ...))
    (if condition
      (list
@@ -52,16 +52,16 @@
           module-features: '(feature ...)))
      [])))
 
-(def (poo-flow-user-module-bundles-extend base-bundles extra-bundles)
+(def (yuanxu-user-module-bundles-extend base-bundles extra-bundles)
   (append base-bundles extra-bundles))
 
-(def (poo-flow-user-module-bundles->modules bundles)
+(def (yuanxu-user-module-bundles->modules bundles)
   (apply append bundles))
 
-(def poo-flow-default-user-setting-keys
+(def yuanxu-default-user-setting-keys
   '(surface profile flow-mode loop-strategy sandbox-policy sandbox-backends mode-lock))
 
-(def (pooFlowDefaultUserSettings profile-name)
+(def (yuanxuDefaultUserSettings profile-name)
   (.o surface: "poo-flow"
       profile: (symbol->string profile-name)
       flow-mode: 'funflow
@@ -70,21 +70,21 @@
       sandbox-backends: '(nono cube docker)
       mode-lock: "stable"))
 
-(def (pooFlowUserProfile name module-bundles settings setting-keys)
-  (.o kind: "poo-flow.modules.user-profile.v1"
+(def (yuanxuUserProfile name module-bundles settings setting-keys)
+  (.o kind: "yuanxu.modules.user-profile.v1"
       profile-name: name
       profile-selection-bundles: module-bundles
       user-settings: settings
       public-setting-keys: setting-keys))
 
-(def (pooFlowUserProfileExtend name base-profile module-bundles)
-  (pooFlowUserProfile
+(def (yuanxuUserProfileExtend name base-profile module-bundles)
+  (yuanxuUserProfile
    name
    (append (.ref base-profile 'profile-selection-bundles) module-bundles)
    (.ref base-profile 'user-settings)
    (.ref base-profile 'public-setting-keys)))
 
-(export test-poo-flow-user-module-bundles
+(export test-yuanxu-user-module-bundles
         test-poo-flow-user-modules
         test-poo-flow-user-custom-module-bundles
         test-poo-flow-user-custom-profile
@@ -98,8 +98,8 @@
         diagnostic-code-member?)
 
 ;; : (-> Unit [[PooUserModuleSelection]])
-(def test-poo-flow-user-module-bundles
-  (poo-flow-user-module-bundles-extend
+(def test-yuanxu-user-module-bundles
+  (yuanxu-user-module-bundles-extend
    poo-flow-kernel-profile-module-bundles
    (list
     (poo-flow-loop-engine-configs
@@ -132,37 +132,37 @@
 
 ;; : (-> Unit [PooUserModuleSelection])
 (def test-poo-flow-user-modules
-  (poo-flow-user-module-bundles->modules test-poo-flow-user-module-bundles))
+  (yuanxu-user-module-bundles->modules test-yuanxu-user-module-bundles))
 
 ;; : (-> Unit [[PooUserModuleSelection]])
 (def test-poo-flow-user-custom-module-bundles
-  (poo-flow-modules!
+  (yuanxu-modules!
    :custom
    (my-module @ "./custom/my-module" +private +doctor)))
 
 ;; : (-> Unit PooUserProfile)
 (def test-poo-flow-user-custom-profile
-  (pooFlowUserProfileExtend
+  (yuanxuUserProfileExtend
    'custom-developer
    poo-flow-kernel-profile
    test-poo-flow-user-custom-module-bundles))
 
 ;; : (-> Unit PooUserProfile)
 (def test-poo-flow-user-profile
-  (pooFlowUserProfile
+  (yuanxuUserProfile
    'developer
-   test-poo-flow-user-module-bundles
-   (pooFlowDefaultUserSettings 'developer)
-   poo-flow-default-user-setting-keys))
+   test-yuanxu-user-module-bundles
+   (yuanxuDefaultUserSettings 'developer)
+   yuanxu-default-user-setting-keys))
 
 ;; : (-> Unit PooUserProfile)
 (def test-poo-flow-user-broken-profile
   (poo-flow-profile broken
    (modules
-    (poo-flow-user-module-bundle
+    (yuanxu-user-module-bundle
      (flow workflow +typed-receipts)
      (flow workflow +duplicate))
-    (poo-flow-user-module-when #f
+    (yuanxu-user-module-when #f
      (sandbox cubeSandbox +doctor)))
    (settings
     surface: "poo-flow")
@@ -192,7 +192,7 @@
 
 ;; : (-> Unit PooUserConfig)
 (def test-poo-flow-user-config
-  (pooFlowUserConfigFromProfile test-poo-flow-user-profile))
+  (yuanxuUserConfigFromProfile test-poo-flow-user-profile))
 
 ;; : (-> UserInterfaceEntry Alist MaybeValue)
 (def (alist-value key entries)

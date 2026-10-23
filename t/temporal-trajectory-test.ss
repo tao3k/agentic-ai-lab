@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
         :poo-flow/modules/temporal-causality/time/interface
@@ -27,7 +27,7 @@
 
 (def temporal-trajectory-test
   (test-suite "trajectory module is independent and canonical"
-    (poo-flow-test-case "canonical ordering and strict clock domain"
+    (yuanxu-test-case "canonical ordering and strict clock domain"
       (let ((a (point "instant-a" "clock-1" 0 1))
             (b (point "instant-b" "clock-1" 3 7)))
         (check (.ref (series (list b a)) 'semantic-digest)
@@ -37,7 +37,7 @@
         (check-exception
          (series (list a (point "instant-a" "clock-1" 3 7))) true)))
 
-    (poo-flow-test-case "late correction produces a bounded coordinate delta"
+    (yuanxu-test-case "late correction produces a bounded coordinate delta"
       (let* ((old (version "v1" "cut-1" "projection-1"
                            (list (point "a" "clock-1" 0 1)
                                  (point "b" "clock-1" 2 3)
@@ -61,7 +61,7 @@
                          (point "b" "clock-1" 2 3)
                          (point "c" "clock-1" 5 8)))) true)))
 
-    (poo-flow-test-case "identity-only and projection-only changes stay distinct"
+    (yuanxu-test-case "identity-only and projection-only changes stay distinct"
       (let* ((samples (list (point "a" "clock-1" 0 1)
                             (point "b" "clock-1" 2 3)))
              (old (version "v1" "cut-1" "projection-1" samples)))

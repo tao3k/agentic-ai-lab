@@ -99,9 +99,9 @@ def test_funflow_cicd_sandbox_dag_shape_is_funflow_native() -> None:
 def test_funflow_cicd_projection_marks_scheme_facade_origin() -> None:
     projection = build_funflow_cicd_sandbox_projection(fanout=2)
 
-    assert projection.schema == "poo-flow.funflow-plan-projection.v1"
+    assert projection.schema == "yuanxu.funflow-plan-projection.v1"
     assert projection.origin == "use-module funflow"
-    assert projection.runtime_contract == "poo-flow.anyio.v1"
+    assert projection.runtime_contract == "yuanxu.anyio.v1"
     assert projection.dag.name == "funflow-cicd-sandbox-dag"
     assert projection.source_map["checkout"].startswith("use-module funflow:")
 

@@ -5,13 +5,13 @@
 
 ;;; Clause ledger completeness and profile-separation checks.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite check-equal? check)
         (only-in :clan/poo/object .o .ref)
-        (only-in :core/module-system/observability/presentation
-                 poo-flow-poo-slot-authoring-datum-observations
-                 poo-flow-poo-slot-authoring-file-observations
-                 poo-flow-poo-slot-authoring-diagnostics)
+        (only-in :yuanxu/module-system/observability/presentation
+                 yuanxu-poo-slot-authoring-datum-observations
+                 yuanxu-poo-slot-authoring-file-observations
+                 yuanxu-poo-slot-authoring-diagnostics)
         "clause-ledger.ss")
 
 (export clause-ledger-test)
@@ -30,16 +30,16 @@
 
 (def (poo-clos-owned-sources)
   (append
-   (scheme-files "core/poo-clos" (lambda (_name) #t))
-   (scheme-files "core/t"
+   (scheme-files "yuanxu/poo-clos" (lambda (_name) #t))
+   (scheme-files "yuanxu/t"
                  (lambda (name) (string-prefix? "poo-clos-" name)))
    (scheme-files "t"
                  (lambda (name) (string-prefix? "poo-clos-" name)))
    (scheme-files "t/qualification/poo-clos" (lambda (_name) #t))))
 
 (def (poo-clos-authoring-diagnostics path)
-  (poo-flow-poo-slot-authoring-diagnostics
-   (poo-flow-poo-slot-authoring-file-observations 'poo-clos path)))
+  (yuanxu-poo-slot-authoring-diagnostics
+   (yuanxu-poo-slot-authoring-file-observations 'poo-clos path)))
 
 (def (read-source-forms path)
   (call-with-input-file
@@ -70,7 +70,7 @@
 (def (suite-test-case-forms suite-form)
   (filter (lambda (form)
             (and (pair? form)
-                 (memq (car form) '(poo-flow-test-case poo-flow-test-case))
+                 (memq (car form) '(yuanxu-test-case yuanxu-test-case))
                  (pair? (cdr form)) (string? (cadr form))))
           (cddr (caddr suite-form))))
 
@@ -106,14 +106,14 @@
 
 (def clause-ledger-test
   (test-suite "POO-native CLOS executable clause ledger"
-    (poo-flow-test-case "semantic clause rows remain explicit and structurally valid"
+    (yuanxu-test-case "semantic clause rows remain explicit and structurally valid"
       (let (required (poo-clos-required-rows))
         (check (> (length required) 30) => #t)
         (check-equal? (.ref (car required) 'id) 'C43-class-metaobjects)
         (check (andmap poo-clos-ledger-row-valid? required) => #t)
         (check (unique-symbols?
                 (map (lambda (row) (.ref row 'id)) required)) => #t)))
-    (poo-flow-test-case "the CLHS Objects Dictionary is exhaustive and fail-closed"
+    (yuanxu-test-case "the CLHS Objects Dictionary is exhaustive and fail-closed"
       (let* ((operators (poo-clos-required-operators))
              (names (map (lambda (row) (.ref row 'id)) operators))
              (open (poo-clos-open-required-rows)))
@@ -135,7 +135,7 @@
            class-name (setf class-name) class-of unbound-slot
            unbound-slot-instance))
         (check-equal? open '())))
-    (poo-flow-test-case "closed evidence resolves to executable source-owned suites"
+    (yuanxu-test-case "closed evidence resolves to executable source-owned suites"
       (check (unique-symbols?
               (map (lambda (suite) (.ref suite 'id))
                    poo-clos-evidence-suites))
@@ -150,7 +150,7 @@
                 (poo-clos-evidence-id-resolves? (.ref row 'evidence-id)))
               (poo-clos-required-rows))
              => #t))
-    (poo-flow-test-case "evidence binding fails closed on removed or emptied suites"
+    (yuanxu-test-case "evidence binding fails closed on removed or emptied suites"
       (check
        (poo-clos-evidence-suite-valid?
         (.o id: 'removed path: "t/poo-clos-removed-test.ss"
@@ -162,15 +162,15 @@
           (.o id: 'dispatch path: (.ref dispatch 'path)
               binding: (.ref dispatch 'binding) caseCount: 0))
          => #f)))
-    (poo-flow-test-case "all CLOS-owned POO slot initializers pass the source gate"
+    (yuanxu-test-case "all CLOS-owned POO slot initializers pass the source gate"
       (check-equal?
        (apply append (map poo-clos-authoring-diagnostics
                           (poo-clos-owned-sources)))
        '()))
-    (poo-flow-test-case "the source gate rejects the observed lazy self-slot leak shape"
+    (yuanxu-test-case "the source gate rejects the observed lazy self-slot leak shape"
       (let (diagnostics
-            (poo-flow-poo-slot-authoring-diagnostics
-             (poo-flow-poo-slot-authoring-datum-observations
+            (yuanxu-poo-slot-authoring-diagnostics
+             (yuanxu-poo-slot-authoring-datum-observations
               'poo-clos
               '(def (operator status-name)
                  (.o status: status)))))
@@ -178,7 +178,7 @@
         (check-equal? (cdr (assoc 'code (car diagnostics)))
                       'poo-slot-initializer-shadows-slot)
         (check-equal? (cdr (assoc 'slot (car diagnostics))) 'status)))
-    (poo-flow-test-case "MOP evidence remains outside the POO CLOS core denominator"
+    (yuanxu-test-case "MOP evidence remains outside the POO CLOS core denominator"
       (let (extended
             (filter (lambda (row) (eq? (.ref row 'profile) 'mop-extended))
                     poo-clos-clause-ledger))

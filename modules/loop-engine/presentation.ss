@@ -9,7 +9,7 @@
 
 (import (only-in :clan/poo/object object<-fun)
         :poo-flow/modules/module-authoring/module-interface
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/entrypoints
         :poo-flow/modules/sandbox-core/backend-capability-catalog
         (only-in :poo-flow/modules/sandbox-core/profile-support/policy-backend-validation
@@ -36,7 +36,7 @@
   (let ()
     ;; : (-> Void FeatureFacts)
     (def feature-fact-rows/promise
-      (delay (poo-flow-user-config-feature-facts config)))
+      (delay (yuanxu-user-config-feature-facts config)))
     (def (feature-fact-rows)
       (force feature-fact-rows/promise))
     ;; : (-> Void SandboxValidation)
@@ -112,10 +112,10 @@
     (object<-fun
      (lambda (key)
        (case key
-        ((kind) poo-flow-user-config-presentation-kind)
+        ((kind) yuanxu-user-config-presentation-kind)
         ((module-count) (length selected-modules))
-        ((module-keys) (poo-flow-user-config-module-keys config))
-        ((modules) (map poo-flow-user-module-selection->alist
+        ((module-keys) (yuanxu-user-config-module-keys config))
+        ((modules) (map yuanxu-user-module-selection->alist
                        selected-modules))
         ((feature-count) (length selected-modules))
         ((feature-facts) (feature-fact-rows))
@@ -207,7 +207,7 @@
         ((presentation-trace) (presentation-trace-rows))
         ((setting-count) (length public-setting-keys))
         ((setting-keys) public-setting-keys)
-        ((settings) (poo-flow-user-settings->alist
+        ((settings) (yuanxu-user-settings->alist
                    setting-object
                    public-setting-keys))
         ((user-entrypoints) poo-flow-user-config-public-entrypoints)

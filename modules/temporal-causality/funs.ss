@@ -10,12 +10,12 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list every filter find delete-duplicates/hash)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :core/graph/types-core
-                 poo-flow-graph poo-flow-graph-edge poo-flow-graph-node
-                 poo-flow-graph? poo-flow-graph-id poo-flow-graph-nodes
-                 poo-flow-graph-edges poo-flow-graph-node-id
-                 poo-flow-graph-edge-from poo-flow-graph-edge-to
-                 poo-flow-graph-edge-kind)
+        (only-in :yuanxu/graph/types-core
+                 yuanxu-graph yuanxu-graph-edge yuanxu-graph-node
+                 yuanxu-graph? yuanxu-graph-id yuanxu-graph-nodes
+                 yuanxu-graph-edges yuanxu-graph-node-id
+                 yuanxu-graph-edge-from yuanxu-graph-edge-to
+                 yuanxu-graph-edge-kind)
         (only-in :poo-flow/modules/temporal-causality/objects
                  poo-flow-relation-trajectory-witness
                  poo-flow-structural-impact-receipt
@@ -52,7 +52,7 @@
 
 (def (poo-flow-structural-impact-analyze
       graph changed-node-ids selected-relations direction inventory-complete?)
-  (unless (poo-flow-graph? graph)
+  (unless (yuanxu-graph? graph)
     (error "structural Impact requires a POO Flow Graph" graph))
   (unless (and (list? changed-node-ids) (pair? changed-node-ids)
                (temporal-causality-unique? changed-node-ids)
@@ -66,11 +66,11 @@
         (unresolved '()))
     (for-each
      (lambda (node)
-       (let (id (poo-flow-graph-node-id node))
+       (let (id (yuanxu-graph-node-id node))
          (when (hash-get node-index id)
            (error "duplicate graph node identity" id))
          (hash-put! node-index id node)))
-     (poo-flow-graph-nodes graph))
+     (yuanxu-graph-nodes graph))
     (for-each
      (lambda (changed)
        (unless (hash-get node-index changed)
@@ -78,9 +78,9 @@
      changed-node-ids)
     (for-each
      (lambda (edge)
-       (let ((relation (poo-flow-graph-edge-kind edge))
-             (from (poo-flow-graph-edge-from edge))
-             (to (poo-flow-graph-edge-to edge)))
+       (let ((relation (yuanxu-graph-edge-kind edge))
+             (from (yuanxu-graph-edge-from edge))
+             (to (yuanxu-graph-edge-to edge)))
          (when (memq relation selected-relations)
            (if (and (hash-get node-index from) (hash-get node-index to))
              (let* ((origin (if (eq? direction 'dependents) to from))
@@ -90,7 +90,7 @@
                           (cons (cons destination relation) neighbors)))
              (set! unresolved
                    (cons (list from relation to) unresolved))))))
-     (poo-flow-graph-edges graph))
+     (yuanxu-graph-edges graph))
     (let ((witness-index (make-hash-table))
           (affected-reverse '()))
       (for-each
@@ -139,7 +139,7 @@
                    (else 'snapshot-scoped-impact))))
             (poo-flow-structural-impact-receipt
              status
-             (poo-flow-graph-id graph)
+             (yuanxu-graph-id graph)
              changed-node-ids
              direction
              selected-relations
@@ -631,10 +631,10 @@
 
 (def (causal-event-graph->graph event-graph)
   (let ((events (.ref event-graph 'events)))
-    (poo-flow-graph
+    (yuanxu-graph
      (list 'causal-event-graph (.ref event-graph 'identity))
      (map (lambda (event)
-            (poo-flow-graph-node
+            (yuanxu-graph-node
              (.ref event 'identity)
              event
              (list (cons 'entity-kind 'causal-event)
@@ -644,7 +644,7 @@
             (map
              (lambda (event)
                (map (lambda (parent)
-                      (poo-flow-graph-edge
+                      (yuanxu-graph-edge
                        parent (.ref event 'identity) 'CAUSAL_PARENT
                        (list (cons 'modality (.ref event 'modality)))))
                     (.ref event 'causal-parent-identities)))

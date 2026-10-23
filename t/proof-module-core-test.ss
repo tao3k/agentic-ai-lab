@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .cc .o .ref)
         :poo-flow/modules/proof/interface)
@@ -13,7 +13,7 @@
 (def proof-module-core-test
   (test-suite
    "POO Proof Module core"
-   (poo-flow-test-case "admits exact artifact receipts and refinement bindings"
+   (yuanxu-test-case "admits exact artifact receipts and refinement bindings"
      (let* ((quint
              (poo-flow-proof-artifact
               "test/quint" 'quint 'quint "test/model.qnt"
@@ -47,7 +47,7 @@
        (check (.ref assurance 'admitted?) => #t)
        (check (hash-get (.ref assurance 'artifact-index) "test/quint")
               => quint)))
-   (poo-flow-test-case "changed upstream digest invalidates the exact refinement"
+   (yuanxu-test-case "changed upstream digest invalidates the exact refinement"
      (let* ((quint
              (poo-flow-proof-artifact
               "test/quint" 'quint 'quint "test/model.qnt"

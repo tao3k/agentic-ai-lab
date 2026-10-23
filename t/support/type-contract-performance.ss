@@ -9,16 +9,16 @@
 
 (import (only-in "./performance.ss"
                  poo-flow-performance-build-list)
-        (only-in :core/module-system/schema/slot-contracts
-                 poo-flow-contract-check-slot!
-                 poo-flow-contract-slot
-                 poo-flow-contract-value-type
-                 poo-flow-native-contract
-                 poo-flow-native-contract->alist
-                 poo-flow-native-contract-slots)
-        (only-in :core/type-facts/objects
-                 poo-flow-native-contract->type-facts
-                 poo-flow-native-contract->lean-fact-contracts)
+        (only-in :yuanxu/module-system/schema/slot-contracts
+                 yuanxu-contract-check-slot!
+                 yuanxu-contract-slot
+                 yuanxu-contract-value-type
+                 yuanxu-native-contract
+                 yuanxu-native-contract->alist
+                 yuanxu-native-contract-slots)
+        (only-in :yuanxu/type-facts/objects
+                 yuanxu-native-contract->type-facts
+                 yuanxu-native-contract->lean-fact-contracts)
         (only-in :poo-flow/modules/session/policy
                  PooFlowSessionPolicyContract
                  PooFlowSessionToolGrantContract
@@ -46,22 +46,22 @@
   (string->symbol
    (string-append "contract-slot-" (number->string index))))
 
-;; : (-> Integer PooFlowSlotContract)
+;; : (-> Integer YuanxuSlotContract)
 (def (type-contract-performance-slot-contract index)
   (let (slot-name (type-contract-performance-slot-name index))
-    (poo-flow-contract-slot
+    (yuanxu-contract-slot
      (string->symbol
       (string-append "type-contract.performance/"
                      (number->string index)))
      slot-name
-     (poo-flow-contract-value-type 'Symbol symbol? 'Symbol 'symbol?)
+     (yuanxu-contract-value-type 'Symbol symbol? 'Symbol 'symbol?)
      #t
      (list (cons 'scenario 'type-contract-performance)
            (cons 'slot-index index)))))
 
-;; : (-> Integer PooFlowObjectTypeContract)
+;; : (-> Integer YuanxuObjectTypeContract)
 (def (type-contract-performance-object-contract slot-count)
-  (poo-flow-native-contract
+  (yuanxu-native-contract
    'type-contract/performance
    'type-contract-performance
    'PooFlowTypeContractPerformanceObject
@@ -80,7 +80,7 @@
    type-contract-performance-slot-name))
 
 ;; type-contract-performance-check-slots-once
-;;   : (-> PooFlowObjectTypeContract [Symbol] Integer)
+;;   : (-> YuanxuObjectTypeContract [Symbol] Integer)
 ;;   | doc m%
 ;;       Checks each slot contract against the matching symbol value once and
 ;;       returns the number of validated slots for the benchmark receipt.
@@ -94,8 +94,8 @@
 ;;       ```
 ;;     %
 (def (type-contract-performance-check-slots-once object-contract values)
-  (for-each poo-flow-contract-check-slot!
-            (poo-flow-native-contract-slots object-contract)
+  (for-each yuanxu-contract-check-slot!
+            (yuanxu-native-contract-slots object-contract)
             values)
   (length values))
 
@@ -151,7 +151,7 @@
      (lambda ()
        (length
         (cdr (assoc 'slots
-                    (poo-flow-native-contract->alist
+                    (yuanxu-native-contract->alist
                      object-contract))))))))
 
 ;; : (-> Integer Integer Integer)
@@ -162,7 +162,7 @@
      rounds
      (lambda ()
        (length
-        (poo-flow-native-contract->type-facts object-contract))))))
+        (yuanxu-native-contract->type-facts object-contract))))))
 
 ;; : (-> Integer Integer Integer)
 (def (type-contract-performance-lean-facts-rounds slot-count rounds)
@@ -172,7 +172,7 @@
      rounds
      (lambda ()
        (length
-        (poo-flow-native-contract->lean-fact-contracts
+        (yuanxu-native-contract->lean-fact-contracts
          object-contract))))))
 
 ;;; Boundary: cached projections model agent-loop hot paths. Contract facts are
@@ -181,7 +181,7 @@
 ;; : (-> Integer Integer Integer)
 (def (type-contract-performance-cached-type-facts-rounds slot-count rounds)
   (let (facts
-        (poo-flow-native-contract->type-facts
+        (yuanxu-native-contract->type-facts
          (type-contract-performance-object-contract slot-count)))
     (type-contract-performance-repeat
      rounds
@@ -194,7 +194,7 @@
    rounds
    (lambda ()
      (length
-      (poo-flow-native-contract->alist
+      (yuanxu-native-contract->alist
        PooFlowSessionPolicyContract)))))
 
 ;; : (-> Integer Integer)
@@ -203,7 +203,7 @@
    rounds
    (lambda ()
      (length
-      (poo-flow-native-contract->alist
+      (yuanxu-native-contract->alist
        PooFlowSessionToolGrantContract)))))
 
 ;; : (-> Integer Integer)

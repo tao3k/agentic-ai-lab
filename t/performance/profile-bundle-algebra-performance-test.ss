@@ -3,12 +3,12 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite check-equal?)
         (only-in :clan/poo/object .o .ref)
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        (only-in :core/module-system/authoring/roles poo-flow-semantic-module)
-        :core/profile-composition/profile-bundle)
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :yuanxu/module-system/authoring/roles yuanxu-semantic-module)
+        :yuanxu/profile-composition/profile-bundle)
 
 (export profile-bundle-algebra-performance-test)
 
@@ -37,17 +37,17 @@
                identities))
          (exports
           (map (lambda (profile-identity-value profile-value)
-                 (poo-flow-profile-export
+                 (yuanxu-profile-export
                   profile-identity-value profile-value))
                identities
                profiles-value))
          (started (current-jiffy))
          (module-value
-          (poo-flow-semantic-module
-           (poo-flow-semantic-identity 'performance 'profile-bundle)
-           profiles: (apply poo-flow-module-profiles exports)))
+          (yuanxu-semantic-module
+           (yuanxu-semantic-identity 'performance 'profile-bundle)
+           profiles: (apply yuanxu-module-profiles exports)))
          (selection
-          (poo-flow-select-module-profiles
+          (yuanxu-select-module-profiles
            module-value 'profile-bundle identities))
          (composed (compose profiles selection selection))
          (elapsed-ms
@@ -69,6 +69,6 @@
 (def profile-bundle-algebra-performance-test
   (test-suite
    "ProfileBundle indexed selection and idempotent composition performance"
-   (poo-flow-test-case "1000 and 5000 Profile values stay within the hard gate"
+   (yuanxu-test-case "1000 and 5000 Profile values stay within the hard gate"
      (for-each profile-bundle-performance-case
                +profile-bundle-performance-counts+))))

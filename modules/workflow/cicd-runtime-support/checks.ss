@@ -7,16 +7,16 @@
 ;;; projection helpers for CI/CD runtime handoff.
 
 (import (only-in :clan/poo/object .ref)
-        (only-in :core/modules/funflow/control-plane/runtime-protocol
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol
                  +runtime-request-schema+)
-        (only-in :core/modules/funflow/control-plane/runtime-command-descriptor
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
-        :core/modules/funflow/check-types
-        :core/modules/funflow/check-objects
-        :core/modules/funflow/check-funs
-        :core/modules/funflow/projection-syntax
+        :yuanxu/modules/funflow/check-types
+        :yuanxu/modules/funflow/check-objects
+        :yuanxu/modules/funflow/check-funs
+        :yuanxu/modules/funflow/projection-syntax
         :poo-flow/modules/workflow/cicd-sandbox
-        :core/modules/funflow/dependency-graph)
+        :yuanxu/modules/funflow/dependency-graph)
 
 (export poo-flow-cicd-check-artifact-provenance
         poo-flow-cicd-check-durable-fields
@@ -36,88 +36,88 @@
 ;; Durable fields are a bounded runtime receipt projection. They are derived
 ;; from validated POO check metadata once, then copied into runtime handoff
 ;; alists so Marlin never has to inspect the POO object graph.
-;; : (forall (a) (-> PooFlowCicdCheck [a]))
-;; : (-> PooFlowCicdCheck [Alist])
+;; : (forall (a) (-> YuanxuCicdCheck [a]))
+;; : (-> YuanxuCicdCheck [Alist])
 (def (poo-flow-cicd-check-artifact-provenance check)
-  (let ((producer-check (poo-flow-cicd-check-name check))
-        (durable-task-id (poo-flow-cicd-check-durable-task-id check))
-        (retention (poo-flow-cicd-check-artifact-retention check)))
+  (let ((producer-check (yuanxu-cicd-check-name check))
+        (durable-task-id (yuanxu-cicd-check-durable-task-id check))
+        (retention (yuanxu-cicd-check-artifact-retention check)))
     (map (lambda (artifact-ref)
-           (poo-flow-cicd-field-rows
+           (yuanxu-cicd-field-rows
             (artifact-ref artifact-ref)
             (producer-check producer-check)
             (durable-task-id durable-task-id)
             (retention retention)
-            (runtime-owner +poo-flow-cicd-marlin-runtime-owner+)
+            (runtime-owner +yuanxu-cicd-marlin-runtime-owner+)
             (runtime-executed #f)))
-         (poo-flow-cicd-check-artifacts check))))
+         (yuanxu-cicd-check-artifacts check))))
 
-;; : (-> PooFlowCicdCheck Alist)
+;; : (-> YuanxuCicdCheck Alist)
 (def (poo-flow-cicd-check-durable-fields check)
-  (poo-flow-cicd-field-rows
-   (durable-task-id (poo-flow-cicd-check-durable-task-id check))
-   (action-class (poo-flow-cicd-check-action-class check))
-   (artifact-refs (poo-flow-cicd-check-artifacts check))
+  (yuanxu-cicd-field-rows
+   (durable-task-id (yuanxu-cicd-check-durable-task-id check))
+   (action-class (yuanxu-cicd-check-action-class check))
+   (artifact-refs (yuanxu-cicd-check-artifacts check))
    (artifact-provenance (poo-flow-cicd-check-artifact-provenance check))
-   (artifact-retention (poo-flow-cicd-check-artifact-retention check))
+   (artifact-retention (yuanxu-cicd-check-artifact-retention check))
    (sandbox-refs (poo-flow-cicd-check-profile-refs check))
    (checkpoint-ref
     (list 'workflow-cicd-check
-          (poo-flow-cicd-check-name check)))
-   (compensation-refs (poo-flow-cicd-check-compensation-refs check))))
+          (yuanxu-cicd-check-name check)))
+   (compensation-refs (yuanxu-cicd-check-compensation-refs check))))
 
-;; : (-> PooFlowCicdCheck Alist Alist)
+;; : (-> YuanxuCicdCheck Alist Alist)
 (def (poo-flow-cicd-check-runtime-metadata check readiness)
-  (poo-flow-cicd-field-rows/tail
+  (yuanxu-cicd-field-rows/tail
    (poo-flow-cicd-check-durable-fields check)
-   (source 'poo-flow.workflow.cicd.check)
-   (check (poo-flow-cicd-check-name check))
-   (profile (poo-flow-cicd-check-profile check))
+   (source 'yuanxu.workflow.cicd.check)
+   (check (yuanxu-cicd-check-name check))
+   (profile (yuanxu-cicd-check-profile check))
    (profile-refs (poo-flow-cicd-check-profile-refs check))
-   (dependency-refs (poo-flow-cicd-check-dependency-refs check))
-   (runtime (poo-flow-cicd-check-runtime check))
+   (dependency-refs (yuanxu-cicd-check-dependency-refs check))
+   (runtime (yuanxu-cicd-check-runtime check))
    (runtime-executed #f)
    (handoff-required #t)
-   (artifacts (poo-flow-cicd-check-artifacts check))
-   (cache (poo-flow-cicd-check-cache check))
-   (secrets (poo-flow-cicd-check-secrets check))
+   (artifacts (yuanxu-cicd-check-artifacts check))
+   (cache (yuanxu-cicd-check-cache check))
+   (secrets (yuanxu-cicd-check-secrets check))
    (readiness readiness)))
 
-;; : (-> PooFlowCicdCheck Alist)
+;; : (-> YuanxuCicdCheck Alist)
 (def (poo-flow-cicd-check-runtime-policy check)
-  (poo-flow-cicd-field-rows/tail
+  (yuanxu-cicd-field-rows/tail
    (poo-flow-cicd-check-durable-fields check)
-   (runtime (poo-flow-cicd-check-runtime check))
-   (dependency-refs (poo-flow-cicd-check-dependency-refs check))
+   (runtime (yuanxu-cicd-check-runtime check))
+   (dependency-refs (yuanxu-cicd-check-dependency-refs check))
    (runtime-executed #f)
    (handoff-required #t)))
 
 ;; The envelope is intentionally the smallest runtime request shape: it names
 ;; the workflow operation and carries readiness as data, while leaving plan and
 ;; frontier fields inert until a real scheduler supplies them.
-;; : (-> PooFlowCicdCheck Alist Alist)
+;; : (-> YuanxuCicdCheck Alist Alist)
 (def (poo-flow-cicd-check-runtime-command-envelope check readiness)
-  (poo-flow-cicd-field-rows
+  (yuanxu-cicd-field-rows
    (schema +runtime-request-schema+)
    (operation 'workflow-cicd-check)
    (request-id
     (list 'poo-flow.workflow.cicd
-          (poo-flow-cicd-check-name check)))
-   (artifact-handle (poo-flow-cicd-check-artifacts check))
+          (yuanxu-cicd-check-name check)))
+   (artifact-handle (yuanxu-cicd-check-artifacts check))
    (request readiness)
    (policy (poo-flow-cicd-check-runtime-policy check))
    (plan-id #f)
-   (node-id (poo-flow-cicd-check-name check))
+   (node-id (yuanxu-cicd-check-name check))
    (frontier '())))
 
 ;; Public manifest projection is the handoff boundary for one check. It
 ;; validates the POO check, reuses the readiness projector, and delegates final
 ;; manifest shape to class-free runtime command helpers.
-;; : (-> PooFlowCicdCheck [PooSandboxProfile] Alist)
+;; : (-> YuanxuCicdCheck [PooSandboxProfile] Alist)
 (def (poo-flow-cicd-check->runtime-command-manifest check
                                                      . maybe-profile-catalog)
-  (poo-flow-cicd-require "runtime command manifest requires a cicd check"
-                         (poo-flow-cicd-check? check)
+  (yuanxu-cicd-require "runtime command manifest requires a cicd check"
+                         (yuanxu-cicd-check? check)
                          check)
   (let* ((profile-catalog (if (null? maybe-profile-catalog)
                             '()
@@ -126,11 +126,11 @@
           (poo-flow-cicd-check->runtime-manifest-readiness
            check
            profile-catalog))
-         (command (poo-flow-cicd-check-command check))
+         (command (yuanxu-cicd-check-command check))
          (envelope
           (poo-flow-cicd-check-runtime-command-envelope check readiness)))
     (runtime-command-fields->manifest
-     (poo-flow-cicd-check-name check)
+     (yuanxu-cicd-check-name check)
      (car command)
      (cdr command)
      (.ref check 'result-protocol)
@@ -139,18 +139,18 @@
 
 ;; Receipts are normalized alists so Rust/Marlin can consume them without
 ;; knowing the Gerbil POO object representation.
-;; : (-> PooFlowCicdCheck [PooSandboxProfile] Alist Alist)
+;; : (-> YuanxuCicdCheck [PooSandboxProfile] Alist Alist)
 (def (poo-flow-cicd-check-receipt-fields check
                                           profile-catalog
                                           runtime-ready)
-  (poo-flow-cicd-field-rows/tail
+  (yuanxu-cicd-field-rows/tail
    (poo-flow-cicd-check-durable-fields check)
-   (schema +poo-flow-cicd-check-receipt-schema+)
+   (schema +yuanxu-cicd-check-receipt-schema+)
    (kind 'poo-flow.workflow.cicd.check-receipt)
-   (check (poo-flow-cicd-check-name check))
-   (profile (poo-flow-cicd-check-profile check))
+   (check (yuanxu-cicd-check-name check))
+   (profile (yuanxu-cicd-check-profile check))
    (profile-refs (poo-flow-cicd-check-profile-refs check))
-   (dependency-refs (poo-flow-cicd-check-dependency-refs check))
+   (dependency-refs (yuanxu-cicd-check-dependency-refs check))
    (sandbox-runtime-summaries
     (poo-flow-cicd-check-sandbox-runtime-summaries
      check
@@ -163,22 +163,22 @@
     (poo-flow-cicd-check-sandbox-unresolved-profile-refs
      check
      profile-catalog))
-   (command (poo-flow-cicd-check-command check))
+   (command (yuanxu-cicd-check-command check))
    (inputs (.ref check 'input-bindings))
    (config (.ref check 'config-sources))
-   (artifacts (poo-flow-cicd-check-artifacts check))
-   (cache (poo-flow-cicd-check-cache check))
-   (secrets (poo-flow-cicd-check-secrets check))
+   (artifacts (yuanxu-cicd-check-artifacts check))
+   (cache (yuanxu-cicd-check-cache check))
+   (secrets (yuanxu-cicd-check-secrets check))
    (result (.ref check 'result-protocol))
-   (runtime (poo-flow-cicd-check-runtime check))
+   (runtime (yuanxu-cicd-check-runtime check))
    (runtime-executed #f)
    (status 'ready)
    (runtime-manifest-ready runtime-ready)))
 
-;; : (-> PooFlowCicdCheck [PooSandboxProfile] Alist)
+;; : (-> YuanxuCicdCheck [PooSandboxProfile] Alist)
 (def (poo-flow-cicd-check->receipt check . maybe-profile-catalog)
-  (poo-flow-cicd-require "cicd receipt requires a cicd check"
-                         (poo-flow-cicd-check? check)
+  (yuanxu-cicd-require "cicd receipt requires a cicd check"
+                         (yuanxu-cicd-check? check)
                          check)
   (let* ((profile-catalog (if (null? maybe-profile-catalog)
                             '()
@@ -193,7 +193,7 @@
 
 ;; The map is the whole data-flow: each POO check becomes one immutable
 ;; receipt row, preserving order without a hand-written accumulator.
-;; : (-> [PooFlowCicdCheck] [PooSandboxProfile] [Alist])
+;; : (-> [YuanxuCicdCheck] [PooSandboxProfile] [Alist])
 (def (poo-flow-cicd-checks->receipts checks profile-catalog)
   (cond
    ((null? checks) '())
@@ -202,21 +202,21 @@
           (poo-flow-cicd-checks->receipts (cdr checks)
                                           profile-catalog)))))
 
-;; : (-> PooFlowCicdCheckMap [PooSandboxProfile] [Alist])
+;; : (-> YuanxuCicdCheckMap [PooSandboxProfile] [Alist])
 (def (poo-flow-cicd-check-map->receipts check-map . maybe-profile-catalog)
-  (poo-flow-cicd-require "cicd receipts require a cicd check-map"
-                         (poo-flow-cicd-check-map? check-map)
+  (yuanxu-cicd-require "cicd receipts require a cicd check-map"
+                         (yuanxu-cicd-check-map? check-map)
                          check-map)
   (let (profile-catalog (if (null? maybe-profile-catalog)
                           '()
                           (car maybe-profile-catalog)))
     (poo-flow-cicd-checks->receipts
-     (poo-flow-cicd-check-map-checks check-map)
+     (yuanxu-cicd-check-map-checks check-map)
      profile-catalog)))
 
 ;; Runtime readiness uses the same ordered sequence-map as receipts so every
 ;; check has exactly one handoff row and no runtime side effect is introduced.
-;; : (-> [PooFlowCicdCheck] [PooSandboxProfile] [Alist])
+;; : (-> [YuanxuCicdCheck] [PooSandboxProfile] [Alist])
 (def (poo-flow-cicd-checks->runtime-manifest-readiness checks
                                                        profile-catalog)
   (cond
@@ -229,32 +229,32 @@
            (cdr checks)
            profile-catalog)))))
 
-;; : (-> PooFlowCicdCheckMap [PooSandboxProfile] Alist)
+;; : (-> YuanxuCicdCheckMap [PooSandboxProfile] Alist)
 (def (poo-flow-cicd-check-map->runtime-manifest-readiness check-map
                                                               . maybe-profile-catalog)
-  (poo-flow-cicd-require "runtime manifest readiness requires a cicd check-map"
-                         (poo-flow-cicd-check-map? check-map)
+  (yuanxu-cicd-require "runtime manifest readiness requires a cicd check-map"
+                         (yuanxu-cicd-check-map? check-map)
                          check-map)
   (let (profile-catalog (if (null? maybe-profile-catalog)
                           '()
                           (car maybe-profile-catalog)))
-    (poo-flow-cicd-field-rows
-     (schema +poo-flow-cicd-runtime-manifest-readiness-schema+)
+    (yuanxu-cicd-field-rows
+     (schema +yuanxu-cicd-runtime-manifest-readiness-schema+)
      (kind 'poo-flow.workflow.cicd.runtime-manifest-ready-map)
-     (check-map (poo-flow-cicd-check-map-name check-map))
+     (check-map (yuanxu-cicd-check-map-name check-map))
      (runtime-executed #f)
      (handoff-required #t)
      (dependency-graph
-      (poo-flow-cicd-check-map->dependency-graph check-map))
+      (yuanxu-cicd-check-map->dependency-graph check-map))
      (checks
       (poo-flow-cicd-checks->runtime-manifest-readiness
-       (poo-flow-cicd-check-map-checks check-map)
+       (yuanxu-cicd-check-map-checks check-map)
        profile-catalog)))))
 
 ;; Check-map manifest projection keeps CI/CD orchestration declarative: each
 ;; check contributes one runtime command manifest, and the wrapper records that
 ;; this is still report-only handoff data, not an execution result.
-;; : (-> [PooFlowCicdCheck] [PooSandboxProfile] [Alist])
+;; : (-> [YuanxuCicdCheck] [PooSandboxProfile] [Alist])
 (def (poo-flow-cicd-checks->runtime-command-manifests checks profile-catalog)
   (cond
    ((null? checks) '())
@@ -266,24 +266,24 @@
            (cdr checks)
            profile-catalog)))))
 
-;; : (-> PooFlowCicdCheckMap [PooSandboxProfile] Alist)
+;; : (-> YuanxuCicdCheckMap [PooSandboxProfile] Alist)
 (def (poo-flow-cicd-check-map->runtime-command-manifests check-map
                                                           . maybe-profile-catalog)
-  (poo-flow-cicd-require "runtime command manifests require a cicd check-map"
-                         (poo-flow-cicd-check-map? check-map)
+  (yuanxu-cicd-require "runtime command manifests require a cicd check-map"
+                         (yuanxu-cicd-check-map? check-map)
                          check-map)
   (let (profile-catalog (if (null? maybe-profile-catalog)
                           '()
                           (car maybe-profile-catalog)))
-    (poo-flow-cicd-field-rows
-     (schema +poo-flow-cicd-runtime-manifest-readiness-schema+)
+    (yuanxu-cicd-field-rows
+     (schema +yuanxu-cicd-runtime-manifest-readiness-schema+)
      (kind 'poo-flow.workflow.cicd.runtime-command-manifest-map)
-     (check-map (poo-flow-cicd-check-map-name check-map))
+     (check-map (yuanxu-cicd-check-map-name check-map))
      (runtime-executed #f)
      (handoff-required #t)
      (dependency-graph
-      (poo-flow-cicd-check-map->dependency-graph check-map))
+      (yuanxu-cicd-check-map->dependency-graph check-map))
      (manifests
       (poo-flow-cicd-checks->runtime-command-manifests
-       (poo-flow-cicd-check-map-checks check-map)
+       (yuanxu-cicd-check-map-checks check-map)
        profile-catalog)))))

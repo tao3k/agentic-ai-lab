@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :poo-flow/modules/workflow/qualification/release-version-matrix)
@@ -10,14 +10,14 @@
 
 (def release-version-matrix-test
   (test-suite "AC-11 release version matrix"
-    (poo-flow-test-case "current qualified owners bind without freezing ABI v1"
+    (yuanxu-test-case "current qualified owners bind without freezing ABI v1"
       (let* ((matrix (poo-flow-ac11-current-release-version-matrix))
              (receipt (poo-flow-ac11-release-version-matrix-verify matrix)))
         (check (poo-flow-release-version-matrix? matrix) => #t)
         (check (.ref receipt 'accepted?) => #t)
         (check (.ref receipt 'abi-v1-frozen?) => #f)
         (check (.ref receipt 'decision-required?) => #t)))
-    (poo-flow-test-case "version drift fails closed"
+    (yuanxu-test-case "version drift fails closed"
       (let* ((current (poo-flow-ac11-current-release-version-matrix))
              (changed
               (poo-flow-release-version-matrix
@@ -31,7 +31,7 @@
         (check (.ref receipt 'accepted?) => #f)
         (check (.ref receipt 'diagnostics)
                => '(release-version-owner-drift))))
-    (poo-flow-test-case "implicit ABI v1 freeze fails closed"
+    (yuanxu-test-case "implicit ABI v1 freeze fails closed"
       (let* ((current (poo-flow-ac11-current-release-version-matrix))
              (frozen
               (poo-flow-release-version-matrix

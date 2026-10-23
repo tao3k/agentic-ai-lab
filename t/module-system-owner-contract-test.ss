@@ -5,7 +5,7 @@
 
 ;;; Boundary: module owner contracts stay separate from activation tests.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,21 +17,21 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o .ref)
-        :core/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/control-plane/api
         :poo-flow/modules/module-authoring/module-interface
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/module-authoring/module-descriptor
-        :core/module-system/authoring/syntax
+        :yuanxu/module-system/authoring/syntax
         :poo-flow/modules/module-authoring/module-option-projection
         :poo-flow/modules/workflow/scenario/configuration/module-runtime-presentation
-        :core/module-system/catalog/values
-        :core/module-system/projection/option-objects
-        :core/module-system/projection/option-validation
-        :core/module-system/source/imports
-        :core/module-system/source/objects
-        :core/module-system/funs
+        :yuanxu/module-system/catalog/values
+        :yuanxu/module-system/projection/option-objects
+        :yuanxu/module-system/projection/option-validation
+        :yuanxu/module-system/source/imports
+        :yuanxu/module-system/source/objects
+        :yuanxu/module-system/funs
         :poo-flow/modules/workflow/scenario/configuration/module-activation
-        :core/module-system/catalog/objects
+        :yuanxu/module-system/catalog/objects
         :poo-flow/modules/workflow/scenario/configuration/presentation-config
         :poo-flow/modules/workflow/scenario/configuration/interface)
 
@@ -62,33 +62,33 @@
 ;; : TestSuite
 (def module-system-owner-contract-test
   (test-suite "poo-flow module owner contracts"
-    (poo-flow-test-case "keeps the Core module entry independent of product imports"
+    (yuanxu-test-case "keeps the Core module entry independent of product imports"
       (check-equal?
        (call-with-input-file
-        "core/module-system/interface.ss"
+        "yuanxu/module-system/interface.ss"
         (lambda (port)
           (source-port-has-module-prefix?
            port
            ":poo-flow/modules/"
-           ":core/")))
+           ":yuanxu/")))
        #f)
       (check-equal?
        (source-datum-has-module-prefix?
         '(import :poo-flow/modules/funflow/interface)
-        ":poo-flow/modules/" ":core/")
+        ":poo-flow/modules/" ":yuanxu/")
        #t))
-    (poo-flow-test-case "builds Marlin-style interface config descriptors"
+    (yuanxu-test-case "builds Marlin-style interface config descriptors"
       (let* ((interface
-              (poo-flow-module-interface
+              (yuanxu-module-interface
                "WorkspaceProfile"
-               (.o workspace-root: (poo-flow-string-default "workspace")
-                   surface: (poo-flow-string-constant "poo-flow"))
+               (.o workspace-root: (yuanxu-string-default "workspace")
+                   surface: (yuanxu-string-constant "poo-flow"))
                '((owner . "poo-flow") (surface . "module-system"))))
-             (source (poo-flow-local-source "modules/workspace.ss"))
+             (source (yuanxu-local-source "modules/workspace.ss"))
              (derived-interface
               (.o (:: @ interface)
                   schemas: (.o derived-only:
-                                (poo-flow-string-constant "derived"))))
+                                (yuanxu-string-constant "derived"))))
              (module
               (poo-flow-modules
                interface
@@ -97,7 +97,7 @@
                    config:
                    (.o workspace-root: "demo"
                        surface: "poo-flow")
-                   extensions: (poo-flow-extensions 'workspace-extension)
+                   extensions: (yuanxu-extensions 'workspace-extension)
                    scripts: (list 'workspace-script)
                    metadata: '((layer . "base"))
                    group: 'tools
@@ -117,24 +117,24 @@
              (receipts (poo-flow-module-option-validation-receipts module)))
         (check-equal? (poo-flow-module-descriptor? module) #t)
         (check-equal? (poo-flow-module-name module) 'workspace)
-        (check-equal? (poo-flow-module-interface?
+        (check-equal? (yuanxu-module-interface?
                        (poo-flow-module-interface-object module))
                       #t)
         (check-equal?
-         (.ref (poo-flow-module-interface-schema-spec interface "surface")
+         (.ref (yuanxu-module-interface-schema-spec interface "surface")
                'constant)
          "poo-flow")
         (check-equal?
-         (poo-flow-module-interface-schema-spec interface "missing")
+         (yuanxu-module-interface-schema-spec interface "missing")
          #f)
         (check-equal?
-         (.ref (poo-flow-module-interface-schema-spec
+         (.ref (yuanxu-module-interface-schema-spec
                 derived-interface
                 "derived-only")
                'constant)
          "derived")
         (check-equal?
-         (poo-flow-module-interface-schema-spec
+         (yuanxu-module-interface-schema-spec
           derived-interface
           "surface")
          #f)
@@ -146,23 +146,23 @@
         (check-equal? (poo-flow-module-group module) 'tools)
         (check-equal? (poo-flow-module-flags module) '(+fast +gerbil))
         (check-equal? (poo-flow-module-features module) '(poo c4))
-        (check-equal? (poo-flow-module-depth-value module 'init) -10)
-        (check-equal? (poo-flow-module-depth-value module 'config) 10)
-        (check-equal? (poo-flow-module-phase-file module 'config) "config.ss")
-        (check-equal? (poo-flow-module-hook-values module 'before-init)
+        (check-equal? (yuanxu-module-depth-value module 'init) -10)
+        (check-equal? (yuanxu-module-depth-value module 'config) 10)
+        (check-equal? (yuanxu-module-phase-file module 'config) "config.ss")
+        (check-equal? (yuanxu-module-hook-values module 'before-init)
                       '(prepare-workspace))
-        (check-equal? (poo-flow-module-flag-enabled? module '+fast) #t)
+        (check-equal? (yuanxu-module-flag-enabled? module '+fast) #t)
         (check-equal? (poo-flow-module-active? module '+fast '-slow) #t)
         (check-equal? (poo-flow-module-active? module '+missing) #f)
-        (check-equal? (poo-flow-module-source-ref=?
+        (check-equal? (yuanxu-module-source-ref=?
                        (poo-flow-module-descriptor-source-ref module)
                        source)
                       #t)
         (check-equal? (length schemas) 2)
         (check-equal? (length configs) 2)
-        (check-equal? (map poo-flow-module-option-validation-receipt-code receipts)
+        (check-equal? (map yuanxu-module-option-validation-receipt-code receipts)
                       '(ok ok))))
-    (poo-flow-test-case "inline imports join activation closure and workflow receipts"
+    (yuanxu-test-case "inline imports join activation closure and workflow receipts"
       (let* ((child-task
               (make-task-family-descriptor 'inline-job
                                            'inline-job
@@ -177,25 +177,25 @@
                (make-flow-declaration-registry 'child-flows '())
                '((layer . "child"))))
              (interface
-              (poo-flow-module-interface
+              (yuanxu-module-interface
                "RootProfile"
-               (.o surface: (poo-flow-string-default "root"))
+               (.o surface: (yuanxu-string-default "root"))
                '((owner . "poo-flow"))))
              (root
               (poo-flow-modules
                interface
                (.o id: 'root
                    imports:
-                   (poo-flow-imports
-                    (poo-flow-import ":poo-flow/modules/root#child" child))
+                   (yuanxu-imports
+                    (yuanxu-import ":poo-flow/modules/root#child" child))
                    config: (.o surface: "root")
                    flags: '(+root)
                    depth: (cons 10 10)
                    hooks: '((before-init . (root-hook)))
-                   extensions: (poo-flow-extensions 'root-extension)
+                   extensions: (yuanxu-extensions 'root-extension)
                    scripts: (list 'root-script))))
              (activation (activate-poo-flow-modules (list root)))
-             (catalog (pooFlowModuleCatalog root))
+             (catalog (yuanxuModuleCatalog root))
              (eval-result (poo-flow-eval-modules catalog 'root '("runtime-hook")))
              (evaluation (poo-flow-module-evaluate root))
              (presentation (poo-flow-module-system-presentation

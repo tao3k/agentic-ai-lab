@@ -6,7 +6,7 @@
 ;;; Boundary: bridge existing durable rows into runtime store operation rows.
 ;;; Invariant: bridge tests validate projection only; no runtime store runs.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -106,7 +106,7 @@
 ;; : TestSuite
 (def durable-runtime-store-operation-bridge-test
   (test-suite "poo-flow durable runtime store operation bridge"
-    (poo-flow-test-case "bridges session memory workflow artifact and sandbox rows"
+    (yuanxu-test-case "bridges session memory workflow artifact and sandbox rows"
       (let* ((negotiation (test-negotiation))
              (operations
               (poo-flow-durable-runtime-store-operations-from-rows
@@ -147,7 +147,7 @@
         (check-equal? (test-ref handoff 'operation-count) 7)
         (check-equal? (test-ref handoff 'runtime-executed) #f)))
 
-    (poo-flow-test-case "preserves operation diagnostics from invalid source rows"
+    (yuanxu-test-case "preserves operation diagnostics from invalid source rows"
       (let* ((operations
               (poo-flow-durable-runtime-store-operations-from-rows
                (test-negotiation)

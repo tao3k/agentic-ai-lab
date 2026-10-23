@@ -3,8 +3,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import (only-in :std/test check-equal? test-suite)
-        (only-in :core/observability/testing-case
-                 poo-flow-test-case)
+        (only-in :yuanxu/observability/testing-case
+                 yuanxu-test-case)
         (only-in :clan/poo/object .o .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
         (only-in :gerbil-ascent/core/binary-program
@@ -37,7 +37,7 @@
 
 (def ascent-integration-test
   (test-suite "POO Flow consumes gerbil-ascent"
-    (poo-flow-test-case "guarded copy and join preserve source snapshots"
+    (yuanxu-test-case "guarded copy and join preserve source snapshots"
       (let* ((first (evaluate '(10 19 20 37 29)))
              (withdrawn (evaluate '(10 19 20 29)))
              (pairs-of (lambda (result name) ((.ref result 'pair-list-of) name))))

@@ -6,10 +6,10 @@
 
 ;;; Boundary: direct Funflow POO config lowers to CI/CD runtime facts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
-        (only-in :core/modules/funflow/config-prototypes funflow-check funflow-pipeline)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface
         :poo-flow/modules/workflow/scenario/configuration/init-syntax
         :poo-flow/modules/workflow/cicd-config
@@ -53,7 +53,7 @@
                                     runtime-mode dependency-refs)
       check-name: 'integration
       profile-ref: '(ci/check agent/poo-object-extension)
-      command-vector: '("gerbil" "env" "./dev/unit-tests.ss")
+      command-vector: '("gerbil" "env" "./unit-tests.ss")
       artifact-outputs: '(test-receipt)
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
@@ -107,10 +107,10 @@
 ;; : (-> Unit Symbol)
 (def (run-funflow-config-pipeline-direct-checks)
   (let* ((selection (car (funflow-config-direct-selection)))
-         (flags (poo-flow-user-module-selection-flags selection))
+         (flags (yuanxu-user-module-selection-flags selection))
          (pipeline
           (funflow-config-direct-alist-ref flags ':workflow-pipeline))
-         (checks (poo-flow-cicd-check-map-checks pipeline))
+         (checks (yuanxu-cicd-check-map-checks pipeline))
          (integration-check (cadr checks))
          (receipts
           (poo-flow-cicd-check-map->receipts
@@ -134,16 +134,16 @@
           (poo-flow-user-workflow-cicd-runtime-command-manifest-summaries
            (list manifest-map)))
          (integration-summary (cadr manifest-summaries)))
-    (check-equal? (poo-flow-user-module-selection-key selection)
+    (check-equal? (yuanxu-user-module-selection-key selection)
                   '(flow . funflow))
-    (check-equal? (poo-flow-cicd-check-map? pipeline) #t)
-    (check-equal? (poo-flow-cicd-check-map-name pipeline) 'default)
+    (check-equal? (yuanxu-cicd-check-map? pipeline) #t)
+    (check-equal? (yuanxu-cicd-check-map-name pipeline) 'default)
     (check-equal? (length checks) 2)
-    (check-equal? (poo-flow-cicd-check-name integration-check)
+    (check-equal? (yuanxu-cicd-check-name integration-check)
                   'integration)
-    (check-equal? (poo-flow-cicd-check-profile integration-check)
+    (check-equal? (yuanxu-cicd-check-profile integration-check)
                   '(ci/check agent/poo-object-extension))
-    (check-equal? (poo-flow-cicd-check-dependency-refs integration-check)
+    (check-equal? (yuanxu-cicd-check-dependency-refs integration-check)
                   '(build))
     (check-equal? (funflow-config-direct-alist-ref dependency-graph 'nodes)
                   '(build integration))
@@ -174,7 +174,7 @@
                   "gerbil")
     (check-equal? (funflow-config-direct-alist-ref integration-manifest
                                                   'arguments)
-                  '("env" "./dev/unit-tests.ss"))
+                  '("env" "./unit-tests.ss"))
     (check-equal? (funflow-config-direct-alist-ref integration-request
                                                   'check)
                   'integration)
@@ -195,5 +195,5 @@
 
 (def funflow-config-pipeline-direct-test
   (test-suite "poo-flow Funflow direct config pipeline"
-    (poo-flow-test-case "lowers direct Funflow POO config to CI/CD runtime facts"
+    (yuanxu-test-case "lowers direct Funflow POO config to CI/CD runtime facts"
       (check-equal? (run-funflow-config-pipeline-direct-checks) 'ok))))

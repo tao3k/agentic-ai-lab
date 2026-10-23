@@ -5,7 +5,7 @@
 
 ;;; Contract: native POO Contracts project into type-fact proof rows.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
 ;; : (-> PooFlowTypeFactsProjectionExpr PooFlowTypeFactsProjectionValue)
@@ -21,28 +21,28 @@
 
 (def type-facts-contract-projection-test
   (test-suite "type-facts-contract-projection-test"
-    (poo-flow-test-case "validates the native contract"
-      (eval '(import :core/module-system/schema/slot-contracts))
+    (yuanxu-test-case "validates the native contract"
+      (eval '(import :yuanxu/module-system/schema/slot-contracts))
       (eval '(import "./core/type-facts/objects.ss"))
       (eval '(import :clan/poo/object :clan/poo/mop))
       (type-facts-projection-eval
  '(begin
     (def +type-facts-fixture-name-slot+
-      (poo-flow-contract-slot
+      (yuanxu-contract-slot
        'type-facts.fixture/name
        'name
-       (poo-flow-contract-value-type 'Symbol symbol? 'Symbol 'symbol?)
+       (yuanxu-contract-value-type 'Symbol symbol? 'Symbol 'symbol?)
        #t
        '((slot . name))))
     (def +type-facts-fixture-tags-slot+
-      (poo-flow-contract-slot
+      (yuanxu-contract-slot
        'type-facts.fixture/tags
        'tags
-       (poo-flow-contract-value-type 'List list? 'List 'list?)
+       (yuanxu-contract-value-type 'List list? 'List 'list?)
        #f
        '((slot . tags))))
     (def +type-facts-fixture-contract+
-      (poo-flow-native-contract
+      (yuanxu-native-contract
        'type-facts/fixture
        'type-facts
        'PooFlowTypeFactsFixture
@@ -55,8 +55,8 @@
 
 (let* ((rows
         (type-facts-projection-eval
-         '(map poo-flow-type-fact-contract->alist
-               (poo-flow-native-contract->type-facts
+         '(map yuanxu-type-fact-contract->alist
+               (yuanxu-native-contract->type-facts
                 +type-facts-fixture-contract+))))
        (name-row (car rows))
        (tags-row (cadr rows))
@@ -74,8 +74,8 @@
 
 (let* ((rows
         (type-facts-projection-eval
-         '(map poo-flow-lean-fact-contract->alist
-               (poo-flow-native-contract->lean-fact-contracts
+         '(map yuanxu-lean-fact-contract->alist
+               (yuanxu-native-contract->lean-fact-contracts
                 +type-facts-fixture-contract+))))
        (name-row (car rows))
        (tags-row (cadr rows)))

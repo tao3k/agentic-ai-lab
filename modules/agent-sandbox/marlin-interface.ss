@@ -8,8 +8,8 @@
 ;;; Runtime contract: Marlin owns all native/Cube API execution after handoff.
 ;;; Policy evidence: dispatcher tests assert nono/Cube routing and failure gates.
 
-(import (only-in :core/modules/funflow/control-plane/failure raise-control-plane-failure)
-        (only-in :core/modules/funflow/control-plane/runtime-protocol +runtime-request-schema+)
+(import (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol +runtime-request-schema+)
         :poo-flow/modules/agent-sandbox/alist
         :poo-flow/modules/agent-sandbox/projection-syntax
         :poo-flow/modules/agent-sandbox/profile

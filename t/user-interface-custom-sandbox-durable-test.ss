@@ -6,12 +6,12 @@
 ;;; Boundary: test verifies durable sandbox config projection without runtime work.
 ;;; Invariant: assertions inspect user-interface metadata only.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .ref .slot?)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection-key
-                 poo-flow-user-module-selection-flag-entry)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-key
+                 yuanxu-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/sandbox-durable"
                  poo-flow-custom-my-module-sandbox-durable-case))
 
@@ -49,7 +49,7 @@
 (def (sandbox-config module-selection-bundle)
   (let* ((selection (car module-selection-bundle))
          (entry
-          (poo-flow-user-module-selection-flag-entry selection ':config)))
+          (yuanxu-user-module-selection-flag-entry selection ':config)))
     (and entry
          (pair? (cdr entry))
          (car (cdr entry)))))
@@ -57,12 +57,12 @@
 ;; : TestSuite
 (def user-interface-custom-sandbox-durable-test
   (test-suite "poo-flow custom user-interface sandbox-durable case"
-    (poo-flow-test-case "projects durable sandbox config without runtime work"
+    (yuanxu-test-case "projects durable sandbox config without runtime work"
       (let* ((selection (car poo-flow-custom-my-module-sandbox-durable-case))
              (config (sandbox-config
                       poo-flow-custom-my-module-sandbox-durable-case))
              (metadata (.ref config 'metadata)))
-        (check-equal? (poo-flow-user-module-selection-key selection)
+        (check-equal? (yuanxu-user-module-selection-key selection)
                       '(sandbox . nono-sandbox))
         (check-equal? (.slot? config 'name) #t)
         (check-equal? (.slot? config 'metadata) #t)

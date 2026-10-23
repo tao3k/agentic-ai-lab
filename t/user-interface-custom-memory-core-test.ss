@@ -6,7 +6,7 @@
 ;;; Boundary: custom user-interface memory-core scenario.
 ;;; Invariant: user config declares memory specs and validation receipts only.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -22,7 +22,7 @@
 
 (def user-interface-custom-memory-core-test
   (test-suite "poo-flow custom user-interface memory-core case"
-    (poo-flow-test-case "projects custom memory-core case without runtime execution"
+    (yuanxu-test-case "projects custom memory-core case without runtime execution"
       (let* ((selection-row
               (car poo-flow-custom-my-module-memory-core-case))
              (catalog-row

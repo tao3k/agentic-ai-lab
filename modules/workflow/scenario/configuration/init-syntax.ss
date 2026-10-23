@@ -10,16 +10,16 @@
 (import (only-in :clan/poo/object .o object<-alist)
         :poo-flow/modules/module-authoring/fragment-syntax
         :poo-flow/modules/module-authoring/module-config-syntax
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection-flag-entry
-                 poo-flow-user-module-selection->alist)
-        :core/module-system/observability/presentation
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flag-entry
+                 yuanxu-user-module-selection->alist)
+        :yuanxu/module-system/observability/presentation
         :poo-flow/modules/ai-agentic-context/features/memory/interface
         :poo-flow/modules/cubeSandbox/config
         :poo-flow/modules/cubeSandbox/profile-interface
         :poo-flow/modules/docker-sandbox/config
         :poo-flow/modules/docker-sandbox/profile-interface
-        :core/modules/funflow/graph-projection
+        :yuanxu/modules/funflow/graph-projection
         :poo-flow/modules/session/config
         :poo-flow/modules/session/syntax
         :poo-flow/modules/tool-core/config
@@ -55,28 +55,28 @@
                  loop-engine-safety-policy-extension)
         :poo-flow/modules/sandbox-core/profile
         :poo-flow/modules/sandbox-core/profile-interface
-        :core/module-system/selection/init-syntax
+        :yuanxu/module-system/selection/init-syntax
         :poo-flow/modules/workflow/scenario/configuration/profile-config
-        :core/module-system/selection/syntax
-        :core/module-system/selection/contract
+        :yuanxu/module-system/selection/syntax
+        :yuanxu/module-system/selection/contract
         :poo-flow/modules/ai-agentic-context/selection-adapter)
 
 (export poo-flow-module-bundles
-        (import: :core/module-system/selection/syntax)
+        (import: :yuanxu/module-system/selection/syntax)
         poo-flow-custom-module-bundles
         poo-flow-init-module-bundles
         use-module
         poo-flow-module-configs
         (import: :poo-flow/modules/module-authoring/fragment-syntax)
-        (import: :core/module-system/selection/init-syntax)
+        (import: :yuanxu/module-system/selection/init-syntax)
         poo-flow-profile-set
         poo-flow-profile-extend
         poo-flow-profile
-        poo-flow-user-module-selection-flag-entry
-        poo-flow-user-module-selection->alist
+        yuanxu-user-module-selection-flag-entry
+        yuanxu-user-module-selection->alist
         (import: :poo-flow/modules/cubeSandbox/profile-interface)
         (import: :poo-flow/modules/docker-sandbox/profile-interface)
-        (import: :core/modules/funflow/graph-projection)
+        (import: :yuanxu/modules/funflow/graph-projection)
         (import: :poo-flow/modules/workflow/funflow-config)
         (import: :poo-flow/modules/ai-agentic-context/features/memory/interface)
         (import: :poo-flow/modules/session/config)
@@ -106,12 +106,12 @@
         loop-engine-observability-policy-extension
         loop-engine-safety-policy-extension
         (import: :poo-flow/modules/nono-sandbox/profile-interface)
-        (import: :core/module-system/observability/presentation)
+        (import: :yuanxu/module-system/observability/presentation)
         (import: :poo-flow/modules/sandbox-core/profile-interface))
 
 ;;; Concrete module loading is the primary user-facing surface. The macro stays
 ;;; thin: it only quotes the module name and payload, while group routing lives
-;;; in `poo-flow-modules-system-use-module` upstream data helpers.
+;;; in `yuanxu-modules-system-use-module` upstream data helpers.
 (begin-syntax
   (def (poo-flow-syntax-list->list stx)
     (syntax->list stx))
@@ -149,7 +149,7 @@
      ctx
      (poo-flow-syntax-list->list slot-def-groups)))
 
-  (def (poo-flow-all? values)
+  (def (yuanxu-all? values)
     (not (member #f values))))
 
 ;; poo-flow-use-module-sandbox-profile-config
@@ -174,7 +174,7 @@
              (poo-flow-simple-keyword-slot-groups
               (syntax ctx)
               (syntax ((slot-def ...) ...)))))
-       (if (poo-flow-all? slot-groups)
+       (if (yuanxu-all? slot-groups)
          (with-syntax (((((slot-name slot-value) ...) ...) slot-groups))
            (syntax
             (let* ((profile-name
@@ -226,7 +226,7 @@
              (poo-flow-simple-keyword-slot-groups
               (syntax ctx)
               (syntax ((slot-def ...) ...)))))
-       (if (poo-flow-all? slot-groups)
+       (if (yuanxu-all? slot-groups)
          (with-syntax (((((slot-name slot-value) ...) ...) slot-groups))
            (syntax
             (let* ((prototype-name
@@ -445,7 +445,7 @@
   ((_)
    '())
   ((_ module-clause module-clause-rest ...)
-   (cons (poo-flow-user-module-bundle module-clause)
+   (cons (yuanxu-user-module-bundle module-clause)
          (poo-flow-module-bundles module-clause-rest ...))))
 
 ;;; Private/custom module rows keep the init surface pure: users name the
@@ -467,7 +467,7 @@
   ((_)
    '())
   ((_ (module module-root-path flag ...) custom-clause ...)
-   (cons (poo-flow-user-module-bundle
+   (cons (yuanxu-user-module-bundle
           (custom module module-root-path flag ...))
          (poo-flow-custom-module-bundles custom-clause ...))))
 
@@ -496,10 +496,10 @@
    '())
   ((_ (modules module-clause ...) init-clause ...)
    (append (poo-flow-module-bundles module-clause ...)
-           (poo-flow-modules! init-clause ...)))
+           (yuanxu-modules! init-clause ...)))
   ((_ (custom custom-clause ...) init-clause ...)
    (append (poo-flow-custom-module-bundles custom-clause ...)
-           (poo-flow-modules! init-clause ...)))
+           (yuanxu-modules! init-clause ...)))
   ((_ :workflow init-clause ...)
    (poo-flow-init-flow-bundles init-clause ...))
   ((_ :loop init-clause ...)
@@ -541,7 +541,7 @@
            ((_ :custom init-clause ...)
             (poo-flow-init-custom-bundles init-clause ...))
            ((_ (module flag ...) init-clause ...)
-            (cons (poo-flow-user-module-bundle
+            (cons (yuanxu-user-module-bundle
                    (,category-name module flag ...))
                   (,walker-name init-clause ...)))))))))
 
@@ -575,11 +575,11 @@
   ((_ (loop-engine flag flag-rest ...) init-clause ...)
    (error "loop-engine init row config DSL has been removed; use use-module loop-engine :config with native POO .def forms"))
   ((_ (loop-engine) init-clause ...)
-   (cons (poo-flow-user-module-bundle
+   (cons (yuanxu-user-module-bundle
           (flow loop-engine))
          (poo-flow-init-flow-bundles init-clause ...)))
   ((_ (module flag ...) init-clause ...)
-   (cons (poo-flow-user-module-bundle
+   (cons (yuanxu-user-module-bundle
           (flow module flag ...))
          (poo-flow-init-flow-bundles init-clause ...))))
 
@@ -644,7 +644,7 @@
   ((_ :custom init-clause ...)
    (poo-flow-init-custom-bundles init-clause ...))
   ((_ (module module-root-path flag ...) init-clause ...)
-   (cons (poo-flow-user-module-bundle
+   (cons (yuanxu-user-module-bundle
           (custom module module-root-path flag ...))
          (poo-flow-init-custom-bundles init-clause ...))))
 
@@ -671,13 +671,13 @@
       (_ default-profile-name)
       (_ profile ...))
    (def binding-name
-     (pooFlowUserProfileSet 'set-name
+     (yuanxuUserProfileSet 'set-name
                             'default-profile-name
                             (list profile ...))))
   ((_ set-name
       (_ default-profile-name)
       (_ profile ...))
-   (pooFlowUserProfileSet 'set-name
+   (yuanxuUserProfileSet 'set-name
                           'default-profile-name
                           (list profile ...))))
 
@@ -705,7 +705,7 @@
       base-profile
       (bundles module-bundles ...))
    (def binding-name
-     (pooFlowUserProfileExtend 'profile-name
+     (yuanxuUserProfileExtend 'profile-name
                                base-profile
                                (append module-bundles ...))))
   ((_ binding-name
@@ -713,7 +713,7 @@
       base-profile
       (modules module-bundle ...))
    (def binding-name
-     (pooFlowUserProfileExtend 'profile-name
+     (yuanxuUserProfileExtend 'profile-name
                                base-profile
                                (list module-bundle ...)))))
 
@@ -730,7 +730,7 @@
 ;;       ```scheme
 ;;       (poo-flow-profile developer
 ;;         (modules
-;;          (poo-flow-user-module-bundle (flow funflow +functional)))
+;;          (yuanxu-user-module-bundle (flow funflow +functional)))
 ;;         (settings surface: "poo-flow")
 ;;         (setting-keys surface))
 ;;       ;; => profile
@@ -743,15 +743,15 @@
       (settings setting ...)
       (setting-keys setting-key ...))
    (def binding-name
-     (pooFlowUserProfile 'profile-name
+     (yuanxuUserProfile 'profile-name
                          (list module-bundle ...)
-                         (poo-flow-settings setting ...)
+                         (yuanxu-settings setting ...)
                          (list 'setting-key ...))))
   ((_ profile-name
       (modules module-bundle ...)
       (settings setting ...)
       (setting-keys setting-key ...))
-   (pooFlowUserProfile 'profile-name
+   (yuanxuUserProfile 'profile-name
                        (list module-bundle ...)
-                       (poo-flow-settings setting ...)
+                       (yuanxu-settings setting ...)
                        (list 'setting-key ...))))

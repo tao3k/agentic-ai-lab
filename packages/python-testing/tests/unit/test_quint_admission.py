@@ -17,7 +17,6 @@ from poo_flow_testing.checks.quint_cases import QuintCase
 @pytest.mark.parametrize("change", ["unchanged", "added", "modified", "deleted"])
 def test_model_source_cut_controls_receipt_publication(monkeypatch, change):
     root = Path(quint.__file__).resolve().parents[5]
-    (root / ".gerbil").mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="quint-admission-", dir=root / ".gerbil") as directory:
         models = Path(directory)
         source = models / "Control.qnt"

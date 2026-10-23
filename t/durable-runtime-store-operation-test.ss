@@ -6,7 +6,7 @@
 ;;; Boundary: durable runtime store operation receipts for Marlin handoff.
 ;;; Invariant: tests validate receipt projection only; no durable store runs.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -56,7 +56,7 @@
 ;; : TestSuite
 (def durable-runtime-store-operation-test
   (test-suite "poo-flow durable runtime store operations"
-    (poo-flow-test-case "projects one operation per durable store capability"
+    (yuanxu-test-case "projects one operation per durable store capability"
       (let* ((negotiation (test-negotiation))
              (operations
               (poo-flow-durable-runtime-store-operation-receipts
@@ -94,7 +94,7 @@
                         "operations"))
         (check-equal? (test-ref handoff 'runtime-executed) #f)))
 
-    (poo-flow-test-case "rejects unsupported operation kinds and invalid causal refs"
+    (yuanxu-test-case "rejects unsupported operation kinds and invalid causal refs"
       (let* ((receipt
               (poo-flow-durable-runtime-store-operation
                'op/invalid

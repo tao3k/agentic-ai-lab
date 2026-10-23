@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
         :poo-flow/modules/proof/projections/proof-fact-wire
         :poo-flow/modules/proof/projections/composition-facts
@@ -11,7 +11,7 @@
 
 (def proof-fact-wire-test
   (test-suite "proof fact wire"
-    (poo-flow-test-case "validates composition handoff and scenario wires"
+    (yuanxu-test-case "validates composition handoff and scenario wires"
 
 (def (assert-equal label actual expected)
   (unless (equal? actual expected)

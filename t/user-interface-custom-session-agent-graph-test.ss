@@ -7,14 +7,14 @@
 ;;; Invariant: graph, registry, and communication receipts are declarative;
 ;;; Scheme never delivers messages or starts agents.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :core/module-system/selection/objects
-                 poo-flow-user-module-selection-flag-entry
-                 poo-flow-user-module-selection-key)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flag-entry
+                 yuanxu-user-module-selection-key)
         :poo-flow/modules/session/config
         (only-in "../user-interface/custom/my-module/cases/session-agent-graph"
                  poo-flow-custom-my-module-session-agent-graph-case))
@@ -43,13 +43,13 @@
 (def (module-config-rows module-selection-bundle)
   (let* ((selection (car module-selection-bundle))
          (entry
-          (poo-flow-user-module-selection-flag-entry selection ':session-rows)))
+          (yuanxu-user-module-selection-flag-entry selection ':session-rows)))
     (if entry (cdr entry) '())))
 
 ;; : TestSuite
 (def user-interface-custom-session-agent-graph-test
   (test-suite "poo-flow custom user-interface session-agent-graph case"
-    (poo-flow-test-case "projects custom session graph and communication receipts"
+    (yuanxu-test-case "projects custom session graph and communication receipts"
       (let* ((selection
               (car poo-flow-custom-my-module-session-agent-graph-case))
              (rows
@@ -68,7 +68,7 @@
                'poo-flow.session.communication-channel-receipt))
              (communication-rows
               (rows-with-kind rows 'poo-flow.session.communication-receipt)))
-        (check-equal? (poo-flow-user-module-selection-key selection)
+        (check-equal? (yuanxu-user-module-selection-key selection)
                       '(session . session))
         (check-equal? registry-entry-count 3)
         (check-equal? (test-ref graph 'kind)

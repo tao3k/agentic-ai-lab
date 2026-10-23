@@ -12,7 +12,7 @@
         :poo-flow/modules/agent-sandbox/profile-native-contract
         :poo-flow/modules/agent-sandbox/projection-syntax
         :poo-flow/modules/sandbox-core/profile-support/policy
-        :core/utilities/final-projection-syntax)
+        :yuanxu/utilities/final-projection-syntax)
 
 (export #t)
 

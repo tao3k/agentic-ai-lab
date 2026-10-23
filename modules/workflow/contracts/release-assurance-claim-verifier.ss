@@ -7,8 +7,8 @@
 (export #t)
 
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :core/utilities/functional
-                 poo-flow-set-subset?)
+        (only-in :yuanxu/utilities/functional
+                 yuanxu-set-subset?)
         :poo-flow/modules/workflow/contracts/release-assurance-manifest)
 
 (def +poo-flow-assurance-levels+
@@ -36,25 +36,25 @@
 (def (assurance-tcb-components-valid? family components)
   (case family
     ((bundle-semantic)
-     (poo-flow-set-subset? '(canonical-schema bundle-validator digest)
+     (yuanxu-set-subset? '(canonical-schema bundle-validator digest)
                            components))
     ((authorization)
-     (poo-flow-set-subset?
+     (yuanxu-set-subset?
       '(bundle-to-cedar-projector cedar-evaluator token-issuer digest
                                   revocation-state)
       components))
     ((actual-effect)
-     (and (poo-flow-set-subset? '(c-abi-transition-engine runtime adapter)
+     (and (yuanxu-set-subset? '(c-abi-transition-engine runtime adapter)
                                 components)
           (assurance-any? '(isolation independent-observation measurement
                                       attestation)
                           components)))
     ((evidence-history)
-     (poo-flow-set-subset?
+     (yuanxu-set-subset?
       '(canonical-event-hashing replay-protection batch-root)
       components))
     ((lean-claim)
-     (poo-flow-set-subset?
+     (yuanxu-set-subset?
       '(lean-kernel theorem-statement typed-decoder locked-import-environment
                     digest-binding)
       components))

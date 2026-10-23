@@ -5,7 +5,7 @@
 
 ;;; External qualification only: replay the pinned HL7 FHIR Validator and
 ;;; compare the decoded JSON evidence.  Normal Lambda tests remain inert.
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :gerbil/runtime/gambit getenv)
         (only-in :std/crypto/digest sha256)
@@ -61,7 +61,7 @@
 
 (def healthcare-fhir-reference-validator-replay-test
   (test-suite "Healthcare FHIR reference validator replay"
-    (poo-flow-test-case "pinned Validator reproduces the retained OperationOutcome Bundle"
+    (yuanxu-test-case "pinned Validator reproduces the retained OperationOutcome Bundle"
       (let* ((jar (getenv "FHIR_VALIDATOR_JAR" #f))
              (output-path (qualification-output-path))
              (exit-status 0))

@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :poo-flow/modules/governance/evidence/batched-merkle)
@@ -21,19 +21,19 @@
 
 (def batched-merkle-evidence-test
   (test-suite "AC-08 Batched Merkle evidence"
-    (poo-flow-test-case "five-leaf odd tree is deterministic"
+    (yuanxu-test-case "five-leaf odd tree is deterministic"
       (let ((left (poo-flow-batched-merkle-root leaves))
             (right (poo-flow-batched-merkle-root leaves)))
         (check (.ref left 'leaf-count) => 5)
         (check (.ref left 'digest) => (.ref right 'digest))))
-    (poo-flow-test-case "every canonical leaf verifies its logarithmic proof"
+    (yuanxu-test-case "every canonical leaf verifies its logarithmic proof"
       (for-each
        (lambda (index)
          (let (proof (poo-flow-batched-merkle-proof leaves index))
            (check (poo-flow-batched-merkle-proof-verify?
                    (list-ref leaves index) proof) => #t)))
        '(0 1 2 3 4)))
-    (poo-flow-test-case "same leaf produces the same inclusion receipt"
+    (yuanxu-test-case "same leaf produces the same inclusion receipt"
       (let ((left (poo-flow-batched-merkle-proof leaves 2))
             (right (poo-flow-batched-merkle-proof leaves 2)))
         (check (.ref left 'root-digest) => (.ref right 'root-digest))
@@ -47,7 +47,7 @@
                       (list (.ref step 'direction)
                             (.ref step 'sibling-digest)))
                     (.ref right 'steps)))))
-    (poo-flow-test-case "reorder omission and substitution change or reject proof"
+    (yuanxu-test-case "reorder omission and substitution change or reject proof"
       (let* ((canonical (poo-flow-batched-merkle-root leaves))
              (reordered (poo-flow-batched-merkle-root
                          (list (list-ref leaves 1) (list-ref leaves 0)

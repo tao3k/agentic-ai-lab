@@ -6,24 +6,24 @@
 ;;; Boundary: human audit loops project review decisions over loop facts.
 ;;; Invariant: this module never edits config, schedules loops, or executes runtime work.
 
-(import :core/composition/roles
+(import :yuanxu/composition/roles
         (only-in :clan/poo/object .o .ref .slot? object?)
-        :core/modules/funflow/control-plane/roles
-        :core/modules/funflow/control-plane/failure
-        :core/object-family/role-syntax
-        :core/modules/funflow/control-plane/agent-harness
+        :yuanxu/modules/funflow/control-plane/roles
+        :yuanxu/modules/funflow/control-plane/failure
+        :yuanxu/object-family/role-syntax
+        :yuanxu/modules/funflow/control-plane/agent-harness
         (only-in "./governor.ss"
                  loop-governor?
                  loop-governor->contract/validated
                  loop-governor-human-node-role
                  loop-governor-node->contract
                  loop-governor-validation-errors)
-        (only-in :core/module-system/schema/slot-contracts
-                 poo-flow-contract-check-slot!
-                 poo-flow-contract-slot
-                 poo-flow-contract-value-type
-                 poo-flow-native-contract
-                 poo-flow-native-contract->alist))
+        (only-in :yuanxu/module-system/schema/slot-contracts
+                 yuanxu-contract-check-slot!
+                 yuanxu-contract-slot
+                 yuanxu-contract-value-type
+                 yuanxu-native-contract
+                 yuanxu-native-contract->alist))
 
 (export +loop-human-audit-schema+
         +loop-human-audit-decisions+
@@ -217,10 +217,10 @@
 ;;       An alist representation for doctor, graph explanation, and manifests.
 ;;     %
 (def (loop-human-audit-type-contract->alist)
-  (poo-flow-native-contract->alist +loop-human-audit-type-contract+))
+  (yuanxu-native-contract->alist +loop-human-audit-type-contract+))
 
 ;; loop-human-audit-check-slot!
-;;   : (-> PooFlowSlotContract PooFlowValue PooFlowValue)
+;;   : (-> YuanxuSlotContract PooFlowValue PooFlowValue)
 ;;   | doc m%
 ;;       Execute one human-audit slot contract through utilities.
 ;;       # Examples
@@ -229,7 +229,7 @@
 ;;       The original value when valid; otherwise raises a contract error.
 ;;     %
 (def (loop-human-audit-check-slot! contract value)
-  (poo-flow-contract-check-slot! contract value))
+  (yuanxu-contract-check-slot! contract value))
 
 ;; loop-human-audit-require-slots!
 ;;   : (-> Symbol LoopGovernor MaybeAlist [Alist] [Alist] Alist Boolean Symbol Boolean Symbol Symbol Symbol Alist Boolean)
@@ -514,13 +514,13 @@
 ;;; Human audit is projected as an agent operation so loop cases can hand the
 ;;; same inert object family to CLI, UI, or runtime adapters. It is still
 ;;; review-only data: no runtime work is submitted here.
-;; : (-> LoopHumanAudit [Alist] PooFlowAgentOperation)
+;; : (-> LoopHumanAudit [Alist] YuanxuAgentOperation)
 
-;; : (-> LoopHumanAudit PooFlowAgentOperation)
+;; : (-> LoopHumanAudit YuanxuAgentOperation)
 
-;; : (-> LoopHumanAudit [Alist] PooFlowRuntimeSnapshot)
+;; : (-> LoopHumanAudit [Alist] YuanxuRuntimeSnapshot)
 
-;; : (-> LoopHumanAudit PooFlowRuntimeSnapshot)
+;; : (-> LoopHumanAudit YuanxuRuntimeSnapshot)
 
 ;;; Contract projection is the human audit loop review surface.
 ;;; It records review state without writing config, state, or runtime effects.
@@ -532,28 +532,28 @@
 ;; : (-> LoopHumanAudit Alist)
 
 (def LoopHumanAuditSymbolType
-  (poo-flow-contract-value-type 'Symbol symbol? 'Symbol))
+  (yuanxu-contract-value-type 'Symbol symbol? 'Symbol))
 (def LoopHumanAuditBooleanType
-  (poo-flow-contract-value-type 'Boolean boolean? 'Boolean))
+  (yuanxu-contract-value-type 'Boolean boolean? 'Boolean))
 (def LoopHumanAuditAlistType
-  (poo-flow-contract-value-type 'Alist loop-human-audit-alist? 'Alist))
+  (yuanxu-contract-value-type 'Alist loop-human-audit-alist? 'Alist))
 (def LoopHumanAuditGovernorType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'LoopGovernor loop-governor? 'LoopGovernor))
 (def LoopHumanAuditMaybeAlistType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'MaybeAlist loop-human-audit-governor-contract? 'MaybeAlist))
 (def LoopHumanAuditStateFactListType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    '[Alist] loop-human-audit-state-fact-list? '[Alist]))
 (def LoopHumanAuditDecisionListType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    '[LoopHumanAuditDecision]
    loop-human-audit-decision-list?
    '[LoopHumanAuditDecision]))
 
 (def (loop-human-audit-required-slot key slot value-type)
-  (poo-flow-contract-slot key slot value-type #t '()))
+  (yuanxu-contract-slot key slot value-type #t '()))
 
 (def +loop-human-audit-name-contract+
   (loop-human-audit-required-slot
@@ -622,7 +622,7 @@
         +loop-human-audit-execution-owner-contract+
         +loop-human-audit-metadata-contract+))
 (def +loop-human-audit-type-contract+
-  (poo-flow-native-contract
+  (yuanxu-native-contract
    'loop-human-audit 'loops 'LoopHumanAudit loop-human-audit?
    +loop-human-audit-slot-contracts+
    (lambda (candidate slot) (and (object? candidate) (.slot? candidate slot)))

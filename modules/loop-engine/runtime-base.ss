@@ -6,8 +6,8 @@
 ;;; Boundary: loop-engine runtime base facts and policy envelopes.
 ;;; Invariant: base helpers are pure report rows and never realize runtime work.
 
-(import (only-in :core/modules/funflow/graph-projection
-                 poo-flow-funflow-workflow-agreement)
+(import (only-in :yuanxu/modules/funflow/graph-projection
+                 yuanxu-funflow-workflow-agreement)
         "core.ss"
         "result-contract.ss")
 
@@ -153,7 +153,7 @@
   (poo-flow-user-loop-engine-intent-ref
    intent
    'workflow-agreement
-    (poo-flow-funflow-workflow-agreement
+    (yuanxu-funflow-workflow-agreement
      (poo-flow-user-loop-engine-intent-workflow-ref intent)
      '())))
 

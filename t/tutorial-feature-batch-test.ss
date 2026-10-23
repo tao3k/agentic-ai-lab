@@ -6,7 +6,7 @@
 ;;; Boundary: tutorial feature batch tests public APIs, not test-local helpers.
 ;;; Invariant: each case maps to a visible Funflow notebook result or descriptor.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,12 +17,12 @@
                  check-true
                  test-error
                  test-suite)
-        :core/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/control-plane/api
         :poo-flow/modules/custom-task/interface
         :poo-flow/modules/docker/interface
         :poo-flow/modules/text/interface
         :poo-flow/modules/workflow/flows
-        :core/modules/funflow/store)
+        :yuanxu/modules/funflow/store)
 
 ;; : (-> RunConfig Flow Input Value)
 (def (configured-run config flow input)
@@ -84,7 +84,7 @@
 
 (def tutorial-feature-batch-test
   (test-suite "funflow tutorial feature batch"
-    (poo-flow-test-case "stage 11 quick reference conditional and cached increment run"
+    (yuanxu-test-case "stage 11 quick reference conditional and cached increment run"
       (let* ((limited-increment
               (conditional-flow 'limited-increment
                                 (lambda (n) (< n 10))
@@ -122,7 +122,7 @@
                                            cached-increment))))
           (check-equal? (local-run flow 99) 1)
           (check-equal? increments 1))))
-    (poo-flow-test-case "stage 12 tutorial2 custom task interpreter runs through extension"
+    (yuanxu-test-case "stage 12 tutorial2 custom task interpreter runs through extension"
       (let* ((config (make-custom-run-config))
              (flow (custom-repeat-flow 'custom-repeat
                                        "woop!"
@@ -136,7 +136,7 @@
         (check-equal? (task-kind task) 'custom)
         (check-equal? (task-custom-repeat? task) #t)
         (check-equal? (custom-repeat-spec-count payload) 7)))
-    (poo-flow-test-case "stage 13 word count extension returns notebook counts"
+    (yuanxu-test-case "stage 13 word count extension returns notebook counts"
       (let* ((sample "a and it try words a and it try words a and it try words
 Lets This count give pipeline should Lets This count give pipeline should
 FILE WordCount.hs complex-words numbers 123 punctuation!")
@@ -154,7 +154,7 @@ FILE WordCount.hs complex-words numbers 123 punctuation!")
         (check-equal? (and (member "Lets: 2" lines) #t) #t)
         (check-equal? (and (member "FILE: 1" lines) #t) #t)
         (check-equal? summary (word-count-summary sample))))
-    (poo-flow-test-case "stage 14 ccompilation and tensorflow workflow descriptors are public"
+    (yuanxu-test-case "stage 14 ccompilation and tensorflow workflow descriptors are public"
       (let* ((compile-flow (make-ccompilation-flow 'compile-c))
              (compile-task (car (flow-steps compile-flow)))
              (compile-config (cadr (task-request compile-task)))
@@ -185,7 +185,7 @@ FILE WordCount.hs complex-words numbers 123 punctuation!")
         (check-equal? (execution-plan-node-ids tf-plan)
                       '((node tensorflow-demo 0 docker train-mnist)
                         (node tensorflow-demo 1 docker infer-mnist)))))
-    (poo-flow-test-case "stage 15 error handling recovers local throw and adapter failure"
+    (yuanxu-test-case "stage 15 error handling recovers local throw and adapter failure"
       (let* ((runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
              (flow (throw-string-flow 'throw-demo
@@ -264,7 +264,7 @@ FILE WordCount.hs complex-words numbers 123 punctuation!")
         (check-equal? (cdr (assoc 'error (execution-failure-detail failure)))
                       '((code . bad-image)
                         (image . "badImageName")))))
-    (poo-flow-test-case "stage 16 makefile tool workflow descriptor is public"
+    (yuanxu-test-case "stage 16 makefile tool workflow descriptor is public"
       (let* ((workflow (make-makefile-tool-workflow 'makefile-tool-demo))
              (plan (runner-plan
                     (run-config->runner (make-rust-run-config))
@@ -286,7 +286,7 @@ FILE WordCount.hs complex-words numbers 123 punctuation!")
                       '((target . "hello")
                         (binary . "./hello")
                         (expected-output . process-output)))))
-    (poo-flow-test-case "authors extension-owned workflows with Gerbil macros"
+    (yuanxu-test-case "authors extension-owned workflows with Gerbil macros"
       (let* ((custom-task (car (flow-steps macro-custom-repeat)))
              (docker-task (car (flow-steps macro-docker-compile)))
              (store-task (car (flow-steps macro-store-put)))

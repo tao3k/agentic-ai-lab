@@ -7,8 +7,8 @@
 
 (import :gerbil/core
         (only-in :clan/poo/object .def .o .ref .slot? object?)
-        :core/graph/interface
-        :core/module-system/schema/interface
+        :yuanxu/graph/interface
+        :yuanxu/module-system/schema/interface
         :poo-flow/modules/sandbox-core/shared-object
         :poo-flow/modules/agent-sandbox/config
         (only-in :poo-flow/modules/agent-sandbox/profile-validation
@@ -30,42 +30,42 @@
 ;; : PooModuleObject
 ;; | PooSandboxCoreProfileObject = PooModuleObject
 (def poo-flow-sandbox-core-profile-object
-  (poo-flow-module-object
+  (yuanxu-module-object
    'objects.sandbox-core.profile
    (list poo-flow-shared-sandbox-object)
    (list
-    (poo-flow-module-field-contract
-     'profile-name PooFlowModuleSymbolType 'override 'default
+    (yuanxu-module-field-contract
+     'profile-name YuanxuModuleSymbolType 'override 'default
      '((scope . sandbox-core) (dsl-row . profile-name)))
-    (poo-flow-module-field-contract
-     'backend-kind PooFlowModuleSymbolType 'override 'sandbox
+    (yuanxu-module-field-contract
+     'backend-kind YuanxuModuleSymbolType 'override 'sandbox
      '((scope . sandbox-core) (owned-by . module-config)))
-    (poo-flow-module-field-contract
-     'backend-ref PooFlowModuleSymbolType 'override 'sandbox-profile
+    (yuanxu-module-field-contract
+     'backend-ref YuanxuModuleSymbolType 'override 'sandbox-profile
      '((scope . sandbox-core) (owned-by . module-config)))
-    (poo-flow-module-field-contract
-     'network-policy PooFlowModuleListType 'override '(deny-by-default)
+    (yuanxu-module-field-contract
+     'network-policy YuanxuModuleListType 'override '(deny-by-default)
      '((scope . sandbox-core) (dsl-row . network)))
-    (poo-flow-module-field-contract
-     'capabilities PooFlowModuleListType 'override '(process-run filesystem-read tmpdir)
+    (yuanxu-module-field-contract
+     'capabilities YuanxuModuleListType 'override '(process-run filesystem-read tmpdir)
      '((scope . sandbox-core) (dsl-row . capabilities)))
-    (poo-flow-module-field-contract
-     'backend-capability PooFlowModuleObjectType 'override
+    (yuanxu-module-field-contract
+     'backend-capability YuanxuModuleObjectType 'override
      poo-flow-sandbox-backend-capability/sandbox
      '((scope . sandbox-core) (owned-by . module-config)))
-    (poo-flow-module-field-contract
-     'profile-policy PooFlowModuleObjectType 'override
+    (yuanxu-module-field-contract
+     'profile-policy YuanxuModuleObjectType 'override
      poo-flow-sandbox-profile-policy/default
      '((scope . sandbox-core) (owned-by . policy-object)))
-    (poo-flow-module-field-contract
-     'resource-policy PooFlowModuleListType 'override
+    (yuanxu-module-field-contract
+     'resource-policy YuanxuModuleListType 'override
      '((filesystem
         (scope . runtime)
         (materialized-by . runtime)
         (mounts . runtime)))
      '((scope . sandbox-core) (dsl-row . resources)))
-    (poo-flow-module-field-contract
-     'metadata PooFlowModuleListType 'append '()
+    (yuanxu-module-field-contract
+     'metadata YuanxuModuleListType 'append '()
      '((scope . sandbox-core) (dsl-row . metadata))))
    '((namespace . objects.sandbox-core)
      (domain . profile)

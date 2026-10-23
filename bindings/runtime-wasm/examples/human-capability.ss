@@ -7,9 +7,9 @@
 ;;; explicit across every stage before bundle publication.
 
 (import :poo-flow/modules/workflow/control-plane/plan
-        :core/profile-composition/selection-syntax
+        :yuanxu/profile-composition/selection-syntax
         :poo-flow/modules/workflow/scenario/composition-syntax
-        :core/profile-composition/profile-bundle
+        :yuanxu/profile-composition/profile-bundle
         (only-in :poo-flow/modules/workflow/profiles/human-ai-capability
                  HumanAICapabilityModule
                  HumanCapabilityScenarioProfile)

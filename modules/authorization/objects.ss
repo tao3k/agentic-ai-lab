@@ -6,7 +6,7 @@
 ;;; Boundary: inert authorization Provider objects; execution is external.
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        :core/poo-clos/interface
+        :yuanxu/poo-clos/interface
         (only-in :poo-flow/modules/authorization/types
                  poo-flow-authorization-provider-kind
                  poo-flow-authorization-capability-kind

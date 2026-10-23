@@ -6,13 +6,13 @@
 ;;; Boundary: loop-engine agent/profile/session runtime projection rows.
 ;;; Invariant: projections describe Marlin-owned work and never open sessions.
 
-(import (only-in :core/modules/funflow/control-plane/agent-harness
-                 make-poo-flow-agent-operation
-                 make-poo-flow-dispatch-receipt
-                 make-poo-flow-workflow-run
-                 poo-flow-agent-operation->alist
-                 poo-flow-dispatch-receipt->alist
-                 poo-flow-workflow-run->alist)
+(import (only-in :yuanxu/modules/funflow/control-plane/agent-harness
+                 make-yuanxu-agent-operation
+                 make-yuanxu-dispatch-receipt
+                 make-yuanxu-workflow-run
+                 yuanxu-agent-operation->alist
+                 yuanxu-dispatch-receipt->alist
+                 yuanxu-workflow-run->alist)
         "core.ss"
         "result-contract.ss"
         "runtime-agent-profile-harness.ss"
@@ -302,8 +302,8 @@
           (poo-flow-user-loop-engine-intent-use-case-name intent))
          (run-id
           (poo-flow-user-loop-engine-runtime-id use-case-name "workflow-run")))
-    (poo-flow-workflow-run->alist
-     (make-poo-flow-workflow-run
+    (yuanxu-workflow-run->alist
+     (make-yuanxu-workflow-run
       run-id
       (poo-flow-user-loop-engine-intent-workflow-ref intent)
       (list (cons 'use-case
@@ -330,8 +330,8 @@
          (target-agent
           (poo-flow-user-loop-engine-primary-agent
            (poo-flow-user-loop-engine-intent-ref intent 'agent-judges '()))))
-    (poo-flow-dispatch-receipt->alist
-     (make-poo-flow-dispatch-receipt
+    (yuanxu-dispatch-receipt->alist
+     (make-yuanxu-dispatch-receipt
       (poo-flow-user-loop-engine-runtime-id use-case-name "dispatch")
       target-agent
       (poo-flow-user-loop-engine-runtime-id use-case-name "runtime-instance")
@@ -352,8 +352,8 @@
           (poo-flow-user-loop-engine-intent-use-case-name intent))
          (operation-kind
           (poo-flow-user-loop-engine-intent-operation-kind intent)))
-    (poo-flow-agent-operation->alist
-     (make-poo-flow-agent-operation
+    (yuanxu-agent-operation->alist
+     (make-yuanxu-agent-operation
       (poo-flow-user-loop-engine-runtime-id use-case-name "operation")
       operation-kind
       (poo-flow-user-loop-engine-runtime-id use-case-name "session")

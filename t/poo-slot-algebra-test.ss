@@ -7,12 +7,12 @@
 ;;; Invariant: refinements retain inherited declarations and never mutate their
 ;;; parent objects.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-exception check-equal? test-suite)
         (only-in :clan/poo/object .all-slots .def .get .o)
-        (only-in :core/observability/slot-presentation
-                 poo-flow-slot-view
-                 poo-flow-slot-presentation))
+        (only-in :yuanxu/observability/slot-presentation
+                 yuanxu-slot-view
+                 yuanxu-slot-presentation))
 
 (export poo-slot-algebra-test)
 
@@ -53,12 +53,12 @@
   (test-suite
    "POO noun-slot algebra"
 
-   (poo-flow-test-case "base collection defaults remain empty"
+   (yuanxu-test-case "base collection defaults remain empty"
      (check-equal? (.all-slots (.get OntologyCase profile-selection)) '())
      (check-equal? (.all-slots (.get OntologyCase events)) '())
      (check-equal? (.all-slots (.get OntologyCase trajectories)) '()))
 
-   (poo-flow-test-case "refinement retains identities and overrides one identity"
+   (yuanxu-test-case "refinement retains identities and overrides one identity"
      (check-equal?
       (.get PrescriptionCase events prescription)
       'prescription-event)
@@ -72,7 +72,7 @@
       (.get PrescriptionCase events prescription)
       'prescription-event))
 
-   (poo-flow-test-case "selection recursively refines named groups"
+   (yuanxu-test-case "selection recursively refines named groups"
      (check-equal?
       (.get ReviewedPrescriptionCase
             profile-selection common evidence)
@@ -86,17 +86,17 @@
             profile-selection healthcare base)
       'healthcare-base-profile))
 
-   (poo-flow-test-case "unmentioned noun slots remain inherited"
+   (yuanxu-test-case "unmentioned noun slots remain inherited"
      (check-equal?
       (.get ReviewedPrescriptionCase trajectories safety)
       'prescription-safety-trajectory))
 
-   (poo-flow-test-case "effective value precedes its slot declaration lineage"
+   (yuanxu-test-case "effective value precedes its slot declaration lineage"
      (let* ((events-view
-             (poo-flow-slot-view
+             (yuanxu-slot-view
               ReviewedPrescriptionCase 'events fixture-prototype-sources))
             (trajectory-view
-             (poo-flow-slot-view
+             (yuanxu-slot-view
               ReviewedPrescriptionCase 'trajectories fixture-prototype-sources)))
        (check-equal? (.get (.get events-view effective-value) prescription)
                      'reviewed-prescription-event)
@@ -108,29 +108,29 @@
                            source-path)
                      "t/poo-slot-algebra-test.ss")))
 
-   (poo-flow-test-case "default presentation shows only the effective value"
+   (yuanxu-test-case "default presentation shows only the effective value"
      (let (presented
-           (poo-flow-slot-presentation
+           (yuanxu-slot-presentation
             ReviewedPrescriptionCase 'events))
        (check-equal? (.all-slots presented) '(effective-value))
        (check-equal? (.get (.get presented effective-value) prescription)
                      'reviewed-prescription-event)))
 
-   (poo-flow-test-case "progressive views preserve native declaration order"
+   (yuanxu-test-case "progressive views preserve native declaration order"
      (let* ((provenance
-             (poo-flow-slot-presentation
+             (yuanxu-slot-presentation
               ReviewedPrescriptionCase 'events 'provenance
               fixture-prototype-sources))
             (composition
-             (poo-flow-slot-presentation
+             (yuanxu-slot-presentation
               ReviewedPrescriptionCase 'events 'composition
               fixture-prototype-sources))
             (advanced
-             (poo-flow-slot-presentation
+             (yuanxu-slot-presentation
               ReviewedPrescriptionCase 'events 'advanced
               fixture-prototype-sources))
             (source
-             (poo-flow-slot-presentation
+             (yuanxu-slot-presentation
               ReviewedPrescriptionCase 'events 'source
               fixture-prototype-sources)))
        (check-equal? (.get provenance declaration-lineage)
@@ -147,19 +147,19 @@
                            source-line)
                      32)))
 
-   (poo-flow-test-case "detailed presentation requires declared source metadata"
+   (yuanxu-test-case "detailed presentation requires declared source metadata"
      (check-exception
-      (poo-flow-slot-presentation
+      (yuanxu-slot-presentation
        ReviewedPrescriptionCase 'events 'advanced)
       true))
 
-   (poo-flow-test-case "unknown disclosure level fails closed"
+   (yuanxu-test-case "unknown disclosure level fails closed"
      (check-exception
-      (poo-flow-slot-presentation
+      (yuanxu-slot-presentation
        ReviewedPrescriptionCase 'events 'unsupported)
       true))
 
-   (poo-flow-test-case "default and detailed views use one slot evaluation"
+   (yuanxu-test-case "default and detailed views use one slot evaluation"
      (let* ((evaluation-count 0)
             (subject (.o measured:
                          (begin
@@ -168,26 +168,26 @@
             (sources
              (.o measured: (fixture-source subject 163))))
        (check-equal?
-        (.get (poo-flow-slot-presentation subject 'measured)
+        (.get (yuanxu-slot-presentation subject 'measured)
               effective-value)
         'native-result)
        (check-equal?
-        (.get (poo-flow-slot-presentation
+        (.get (yuanxu-slot-presentation
                subject 'measured 'source sources)
               effective-value)
         'native-result)
        (check-equal? evaluation-count 1)))
 
-   (poo-flow-test-case "incomplete provenance labels fail closed"
+   (yuanxu-test-case "incomplete provenance labels fail closed"
      (check-exception
-      (poo-flow-slot-view
+      (yuanxu-slot-view
        ReviewedPrescriptionCase 'events
        (.o reviewed: (fixture-source ReviewedPrescriptionCase 32)))
       true))
 
-   (poo-flow-test-case "duplicate prototype labels fail closed"
+   (yuanxu-test-case "duplicate prototype labels fail closed"
      (check-exception
-      (poo-flow-slot-view
+      (yuanxu-slot-view
        ReviewedPrescriptionCase 'events
        (.o reviewed: (fixture-source ReviewedPrescriptionCase 32)
            duplicate: (fixture-source ReviewedPrescriptionCase 32)
@@ -195,9 +195,9 @@
            ontology: (fixture-source OntologyCase 18)))
       true))
 
-   (poo-flow-test-case "invalid declared source fails closed"
+   (yuanxu-test-case "invalid declared source fails closed"
      (check-exception
-      (poo-flow-slot-view
+      (yuanxu-slot-view
        ReviewedPrescriptionCase 'events
        (.o reviewed: (.o prototype: ReviewedPrescriptionCase
                          source-path: "" source-line: 0)
@@ -205,8 +205,8 @@
            ontology: (fixture-source OntologyCase 18)))
       true))
 
-   (poo-flow-test-case "missing slot cannot be presented"
+   (yuanxu-test-case "missing slot cannot be presented"
      (check-exception
-      (poo-flow-slot-view
+      (yuanxu-slot-view
        ReviewedPrescriptionCase 'nonexistent fixture-prototype-sources)
       true))))

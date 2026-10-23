@@ -7,7 +7,7 @@
 ;;; Invariant: formal POO-native use-module config only; no runtime work.
 
 (import (only-in :clan/poo/object .def)
-        (only-in :core/modules/funflow/config-prototypes funflow-check funflow-pipeline)
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
         (only-in :poo-flow/modules/workflow/funflow-config poo-flow-funflow-configs))
 
 (export poo-flow-custom-my-module-poo-introspection-case)

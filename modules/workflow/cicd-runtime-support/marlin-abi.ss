@@ -5,10 +5,10 @@
 
 ;;; Boundary: Marlin ABI projection for CI/CD runtime handoff.
 
-(import :core/modules/funflow/check-types
-        :core/modules/funflow/check-objects
-        :core/modules/funflow/check-funs
-        :core/modules/funflow/projection-syntax
+(import :yuanxu/modules/funflow/check-types
+        :yuanxu/modules/funflow/check-objects
+        :yuanxu/modules/funflow/check-funs
+        :yuanxu/modules/funflow/projection-syntax
         :poo-flow/modules/workflow/cicd-sandbox
         :poo-flow/modules/workflow/cicd-runtime-support/checks)
 
@@ -22,8 +22,8 @@
 ;; should not depend on incidental top-level keys from runtime descriptors.
 ;; : (-> Alist Symbol Value Value)
 (def (poo-flow-cicd-runtime-command-manifest-policy-ref manifest key default)
-  (poo-flow-cicd-alist-ref
-   (poo-flow-cicd-alist-ref manifest 'policy '())
+  (yuanxu-cicd-alist-ref
+   (yuanxu-cicd-alist-ref manifest 'policy '())
    key
    default))
 
@@ -32,31 +32,31 @@
 ;; objects out of the payload.
 ;; : (-> Alist Alist)
 (def (poo-flow-cicd-runtime-command-manifest->marlin-handoff-entry manifest)
-  (poo-flow-cicd-field-rows
+  (yuanxu-cicd-field-rows
    (kind 'poo-flow.workflow.cicd.marlin-runtime-handoff-entry)
-   (schema +poo-flow-cicd-marlin-runtime-handoff-abi-schema+)
+   (schema +yuanxu-cicd-marlin-runtime-handoff-abi-schema+)
    (request-schema
-    (poo-flow-cicd-alist-ref manifest 'request-schema #f))
+    (yuanxu-cicd-alist-ref manifest 'request-schema #f))
    (operation
-    (poo-flow-cicd-alist-ref manifest 'operation #f))
+    (yuanxu-cicd-alist-ref manifest 'operation #f))
    (request-id
-    (poo-flow-cicd-alist-ref manifest 'request-id #f))
+    (yuanxu-cicd-alist-ref manifest 'request-id #f))
    (artifact-handle
-    (poo-flow-cicd-alist-ref manifest 'artifact-handle #f))
+    (yuanxu-cicd-alist-ref manifest 'artifact-handle #f))
    (argv
-    (poo-flow-cicd-alist-ref manifest 'argv '()))
+    (yuanxu-cicd-alist-ref manifest 'argv '()))
    (request
-    (poo-flow-cicd-alist-ref manifest 'request '()))
+    (yuanxu-cicd-alist-ref manifest 'request '()))
    (policy
-    (poo-flow-cicd-alist-ref manifest 'policy '()))
+    (yuanxu-cicd-alist-ref manifest 'policy '()))
    (plan-id
-    (poo-flow-cicd-alist-ref manifest 'plan-id #f))
+    (yuanxu-cicd-alist-ref manifest 'plan-id #f))
    (node-id
-    (poo-flow-cicd-alist-ref manifest 'node-id #f))
+    (yuanxu-cicd-alist-ref manifest 'node-id #f))
    (frontier
-    (poo-flow-cicd-alist-ref manifest 'frontier '()))
+    (yuanxu-cicd-alist-ref manifest 'frontier '()))
    (metadata
-    (poo-flow-cicd-alist-ref manifest 'metadata '()))
+    (yuanxu-cicd-alist-ref manifest 'metadata '()))
    (durable-task-id
     (poo-flow-cicd-runtime-command-manifest-policy-ref
      manifest
@@ -97,7 +97,7 @@
      manifest
      'compensation-refs
      '()))
-   (runtime-owner +poo-flow-cicd-marlin-runtime-owner+)
+   (runtime-owner +yuanxu-cicd-marlin-runtime-owner+)
    (handoff-required
     (poo-flow-cicd-runtime-command-manifest-policy-ref
      manifest
@@ -126,23 +126,23 @@
 ;; : (-> Alist Alist)
 (def (poo-flow-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi
       manifest-map)
-  (let ((manifests (poo-flow-cicd-alist-ref manifest-map 'manifests '())))
-    (poo-flow-cicd-field-rows
-     (schema +poo-flow-cicd-marlin-runtime-handoff-abi-schema+)
+  (let ((manifests (yuanxu-cicd-alist-ref manifest-map 'manifests '())))
+    (yuanxu-cicd-field-rows
+     (schema +yuanxu-cicd-marlin-runtime-handoff-abi-schema+)
      (kind 'poo-flow.workflow.cicd.marlin-runtime-handoff-abi)
      (check-map
-      (poo-flow-cicd-alist-ref manifest-map 'check-map #f))
-     (runtime-owner +poo-flow-cicd-marlin-runtime-owner+)
+      (yuanxu-cicd-alist-ref manifest-map 'check-map #f))
+     (runtime-owner +yuanxu-cicd-marlin-runtime-owner+)
      (runtime-executed #f)
      (runtime-parses-scheme-source #f)
      (scheme-manufactures-runtime-handlers #f)
      (handoff-required
-      (poo-flow-cicd-alist-ref manifest-map 'handoff-required #t))
+      (yuanxu-cicd-alist-ref manifest-map 'handoff-required #t))
      (required-fields
-      +poo-flow-cicd-marlin-runtime-handoff-abi-fields+)
+      +yuanxu-cicd-marlin-runtime-handoff-abi-fields+)
      (manifest-count (length manifests))
      (dependency-graph
-      (poo-flow-cicd-alist-ref manifest-map
+      (yuanxu-cicd-alist-ref manifest-map
                                'dependency-graph
                                '()))
      (entries
@@ -151,7 +151,7 @@
 
 ;; The check-map shortcut keeps callers on the public POO object surface while
 ;; delegating ABI formation through the manifest-map boundary above.
-;; : (-> PooFlowCicdCheckMap [PooSandboxProfile] Alist)
+;; : (-> YuanxuCicdCheckMap [PooSandboxProfile] Alist)
 (def (poo-flow-cicd-check-map->marlin-runtime-handoff-abi check-map
                                                                . maybe-profile-catalog)
   (let (profile-catalog (if (null? maybe-profile-catalog)

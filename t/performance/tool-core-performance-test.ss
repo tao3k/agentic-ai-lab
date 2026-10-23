@@ -7,7 +7,7 @@
 ;;; Invariant: validation resolves POO tool specs and policy refs without
 ;;; runtime execution or backend startup.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -125,7 +125,7 @@
 ;; : TestSuite
 (def tool-core-performance-test
   (test-suite "tool-core performance"
-    (poo-flow-test-case "keeps catalog policy validation inside benchmark contract"
+    (yuanxu-test-case "keeps catalog policy validation inside benchmark contract"
       (let* ((summary
               (tool-core-performance-summary tool-core-performance-count))
              (receipt

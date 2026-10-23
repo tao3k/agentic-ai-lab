@@ -5,7 +5,7 @@
 
 ;;; Boundary: POO performance cases for fixed slot projection.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -68,7 +68,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-fixed-slot-projection-case)
-  (poo-flow-test-case "projects fixed POO slots once before scalar loops"
+  (yuanxu-test-case "projects fixed POO slots once before scalar loops"
     (let* ((rounds 4000)
            (expected (module-system-poo-performance-fixed-slot-sum
                       module-system-poo-performance-fixed-slot-profile

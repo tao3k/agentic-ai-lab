@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test (only-in :poo-flow-dev/testing-api poo-flow-test-case)
+(import :std/test (only-in :poo-flow/testing-api yuanxu-test-case)
         (only-in :clan/poo/object .o .cc .ref)
         :poo-flow/modules/query/semantic/context-restriction)
 (export context-restriction-test)
@@ -14,7 +14,7 @@
 (def content (string-append "sha256:" (make-string 64 #\b)))
 (def context-restriction-test
   (test-suite "RFC 91 restrictive Context profile"
-    (poo-flow-test-case "composition intersects disclosure and preserves provenance"
+    (yuanxu-test-case "composition intersects disclosure and preserves provenance"
       (let (v (poo-flow-context-restriction-compose (list a b)))
         (check (.ref v 'readers) => '("bob"))
         (check (.ref v 'destinations) => '("store"))
@@ -23,14 +23,14 @@
         (check (.ref v 'lease-end) => 8)
         (check (.ref (poo-flow-context-restriction-refinement a v) 'semantic-digest) => (.ref v 'semantic-digest))
         (check (.ref (poo-flow-context-restriction-refinement b v) 'semantic-digest) => (.ref v 'semantic-digest))))
-    (poo-flow-test-case "restriction algebra is order independent and associative"
+    (yuanxu-test-case "restriction algebra is order independent and associative"
       (let ((ab (poo-flow-context-restriction-compose (list a b)))
             (ba (poo-flow-context-restriction-compose (list b a))))
         (check (.ref ab 'semantic-digest) => (.ref ba 'semantic-digest))
         (check (.ref (poo-flow-context-restriction-compose (list a a)) 'semantic-digest) => (.ref a 'semantic-digest))
         (check (.ref (poo-flow-context-restriction-compose (list ab c)) 'semantic-digest)
           => (.ref (poo-flow-context-restriction-compose (list a (poo-flow-context-restriction-compose (list b c)))) 'semantic-digest))))
-    (poo-flow-test-case "widening lost provenance and lease expansion reject"
+    (yuanxu-test-case "widening lost provenance and lease expansion reject"
       (for-each (lambda (bad)
         (check-exception (poo-flow-context-restriction-refinement a bad) true))
         (list (label '("alice" "bob" "charlie") '("store") '("source-a") 2 8)
@@ -38,7 +38,7 @@
               (label '("bob") '("store") '("source-b") 2 8)
               (label '("bob") '("store") '("source-a") 0 8)
               (label '("bob") '("store") '("source-a") 2 11))))
-    (poo-flow-test-case "empty intersection denies and invalid composition rejects"
+    (yuanxu-test-case "empty intersection denies and invalid composition rejects"
       (let (v (poo-flow-context-restriction-compose (list a (label '("charlie") '("tool") '("source-c") 2 8))))
         (check (.ref v 'readers) => '())
         (check (.ref v 'destinations) => '())
@@ -48,7 +48,7 @@
       (check-exception (poo-flow-context-restriction-compose '()) true)
       (check-exception (label '("bob" "bob") '("store") '("source") 1 2) true)
       (check-exception (label '("bob") '("store") '() 1 2) true))
-    (poo-flow-test-case "half-open lease principal and destination bind eligibility only"
+    (yuanxu-test-case "half-open lease principal and destination bind eligibility only"
       (for-each (lambda (row)
         (let (v (poo-flow-context-flow-decision a source content (car row) (cadr row) (caddr row)))
           (check (.ref v 'status) => (cadddr row))
@@ -60,7 +60,7 @@
         '(("alice" "store" 0 not-yet-effective) ("alice" "store" 1 eligible)
           ("alice" "store" 10 expired-lease) ("charlie" "store" 2 reader-denied)
           ("alice" "tool" 2 destination-denied))))
-    (poo-flow-test-case "material substitution changes binding and forged label rejects"
+    (yuanxu-test-case "material substitution changes binding and forged label rejects"
       (let (first (poo-flow-context-flow-decision a source content "alice" "store" 2))
         (for-each (lambda (changed)
           (check (equal? (.ref first 'semantic-digest) (.ref changed 'semantic-digest)) => #f))

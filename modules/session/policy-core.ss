@@ -9,12 +9,12 @@
         :poo-flow/modules/ai-agentic-context/features/memory/durable/policy
         :poo-flow/modules/session/objects
         :poo-flow/modules/session/policy-syntax
-        (only-in :core/module-system/schema/slot-contracts
-                 poo-flow-contract-check-slot!
-                 poo-flow-contract-slot
-                 poo-flow-contract-value-type
-                 poo-flow-native-contract
-                 poo-flow-native-contract->alist))
+        (only-in :yuanxu/module-system/schema/slot-contracts
+                 yuanxu-contract-check-slot!
+                 yuanxu-contract-slot
+                 yuanxu-contract-value-type
+                 yuanxu-native-contract
+                 yuanxu-native-contract->alist))
 
 (export poo-flow-session-policy-ref?
         poo-flow-session-policy-alist?
@@ -347,22 +347,22 @@
       metadata))))
 
 (def PooFlowSessionPolicyKindType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'SessionPolicyKind poo-flow-session-policy-kind-value? 'Symbol))
 (def PooFlowSessionSymbolType
-  (poo-flow-contract-value-type 'Symbol symbol? 'Symbol))
+  (yuanxu-contract-value-type 'Symbol symbol? 'Symbol))
 (def PooFlowSessionAlistType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'Alist poo-flow-session-policy-alist? 'Alist))
 (def PooFlowSessionRuntimeOwnerType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'RuntimeOwner poo-flow-session-policy-runtime-owner? 'RuntimeOwner))
 (def PooFlowSessionBooleanType
-  (poo-flow-contract-value-type
+  (yuanxu-contract-value-type
    'Boolean poo-flow-session-policy-boolean? 'Boolean))
 
 (def (poo-flow-session-policy-slot-contract key slot value-type)
-  (poo-flow-contract-slot key slot value-type #t '()))
+  (yuanxu-contract-slot key slot value-type #t '()))
 
 (def PooFlowSessionPolicyKindSlot
   (poo-flow-session-policy-slot-contract
@@ -408,7 +408,7 @@
         PooFlowSessionPolicyRuntimeExecutedSlot))
 
 (def PooFlowSessionPolicyContract
-  (poo-flow-native-contract
+  (yuanxu-native-contract
    'session/policy
    'session
    'PooSessionPolicy
@@ -429,11 +429,11 @@
 ;;     %
 ;; : (-> Unit Alist)
 (def (poo-flow-session-policy-type-contract->alist)
-  (poo-flow-native-contract->alist PooFlowSessionPolicyContract))
+  (yuanxu-native-contract->alist PooFlowSessionPolicyContract))
 
-;; : (-> PooFlowSlotContract PooFlowValue PooFlowValue)
+;; : (-> YuanxuSlotContract PooFlowValue PooFlowValue)
 (def (poo-flow-session-policy-check-slot! contract value)
-  (poo-flow-contract-check-slot! contract value))
+  (yuanxu-contract-check-slot! contract value))
 
 ;; poo-flow-session-policy-require-slots!
 ;;   | contract: adjacent machine contract below defines the session policy gate.

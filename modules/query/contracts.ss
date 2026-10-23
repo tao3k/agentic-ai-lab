@@ -9,7 +9,7 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list filter-map)
-        :core/poo-clos/interface
+        :yuanxu/poo-clos/interface
         (only-in "types.ss"
                  poo-flow-query?
                  poo-flow-query-provider?

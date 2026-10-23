@@ -23,8 +23,8 @@ def main():
         '(import :gerbil/compiler/driver :gerbil/expander)', '-e', expression],
         cwd=ROOT, check=True, capture_output=True, text=True, timeout=60)
     modules = list(dict.fromkeys(name for name in result.stdout.splitlines()
-        if name.startswith(('clan/', 'core/', 'poo-flow/')) and ' ' not in name))
-    for name in ['core/profile-composition/selection-syntax',
+        if name.startswith(('clan/', 'yuanxu/', 'poo-flow/')) and ' ' not in name))
+    for name in ['yuanxu/profile-composition/selection-syntax',
                  'poo-flow/modules/workflow/scenario/composition-syntax',
                  'poo-flow/modules/funflow/profile-library']:
         if name not in modules:

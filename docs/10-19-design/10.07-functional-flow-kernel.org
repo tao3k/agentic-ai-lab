@@ -70,7 +70,7 @@ Implemented functional kernel surface:
   category operations.
 - =src/core/flow-syntax.ss= owns hygienic Gerbil authoring macros:
   =defpoo-flow-arr=, =defpoo-flow-identity=, =defpoo-flow-compose=,
-  =defpoo-flow-map=, =defpoo-flow-fanout=, =defpoo-flow-first=, and
+  =defyuanxu-map=, =defpoo-flow-fanout=, =defpoo-flow-first=, and
   =defpoo-flow-second=.
 
 The stable =flow= struct is unchanged. The POO category object is metadata and
@@ -115,7 +115,7 @@ Current proof:
 
 - =defpoo-flow-arr= authors pure arrows.
 - =defpoo-flow-compose= authors sequential composition.
-- =defpoo-flow-map= authors output mapping.
+- =defyuanxu-map= authors output mapping.
 - =defpoo-flow-fanout= authors branch/fanout declarations.
 - =defpoo-flow-first= and =defpoo-flow-second= author pair-shaped Arrow
   projections.

@@ -1,0 +1,10 @@
+{
+  "ref": "refs/tags/v5.100.0",
+  "node_id": "MDM6UmVmOTM0NDQ2MTU6cmVmcy90YWdzL3Y1LjEwMC4w",
+  "url": "https://api.github.com/repos/hashicorp/terraform-provider-aws/git/refs/tags/v5.100.0",
+  "object": {
+    "sha": "9e7371e4f9e3ea7963c0ac4165f5ec204a28a97b",
+    "type": "tag",
+    "url": "https://api.github.com/repos/hashicorp/terraform-provider-aws/git/tags/9e7371e4f9e3ea7963c0ac4165f5ec204a28a97b"
+  }
+}

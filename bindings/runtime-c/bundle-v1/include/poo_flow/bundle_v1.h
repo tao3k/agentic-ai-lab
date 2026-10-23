@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-#define POO_FLOW_BUNDLE_V1_SCHEMA "poo-flow.bundle.1"
+#define POO_FLOW_BUNDLE_V1_SCHEMA "yuanxu.bundle.1"
 #define POO_FLOW_BUNDLE_V1_SCHEMA_MAJOR 1u
 #define POO_FLOW_BUNDLE_V1_SCHEMA_MINOR 0u
 #define POO_FLOW_BUNDLE_V1_DIGEST_BYTES 32u

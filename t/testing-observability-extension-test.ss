@@ -4,23 +4,24 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
-        (only-in :clan/poo/object .call .o .ref .slot?)
-        (only-in :core/observability/debug
-                 PooFlowDebugMemoryAnomaly?
-                 PooFlowDebugMemoryAnomaly-receipt)
+        (only-in :clan/poo/object .call .cc .get .o .ref .slot?)
+        (only-in :yuanxu/ops/process-script ProcessScript.)
+        (only-in :yuanxu/observability/debug
+                 YuanxuDebugMemoryAnomaly?
+                 YuanxuDebugMemoryAnomaly-receipt)
         (only-in :asp-gerbil-scheme/testing-api
                  +asp-testing-interface+
                  testing-interface-profile-enabled?
                  testing-interface-call-with-operation
                  testing-interface-run-test-batch!)
-        (only-in :poo-flow-dev/testing-api
+        (only-in :poo-flow/dev/testing-api
                  +poo-flow-testing-interface+
                  +poo-flow-testing-import-footprint-profile+
                  poo-flow-native-observability-enabled?
                  poo-flow-testing-observability-profile-prototype
-                 poo-flow-testing-case-profile-prototype
+                 yuanxu-testing-case-profile-prototype
                  make-poo-flow-testing-observability-profile
                  poo-flow-testing-observability-profile-source-load-paths
                  poo-flow-testing-observability-extension))
@@ -34,14 +35,14 @@
 
 (def testing-observability-extension-test
   (test-suite "POO Flow native testing observability extension"
-    (poo-flow-test-case "the public POO Flow interface owns the ASP extension once"
+    (yuanxu-test-case "the public POO Flow interface owns the ASP extension once"
       (check (.slot? +poo-flow-testing-interface+ 'around-operation) => #t)
       (check (testing-interface-profile-enabled?
               +poo-flow-testing-interface+
               'import-footprint)
              => #t))
 
-    (poo-flow-test-case "source roots are owned by the POO testing profile"
+    (yuanxu-test-case "source roots are owned by the POO testing profile"
       (let (profile
             (make-poo-flow-testing-observability-profile
              'testing/source-root 1/100))
@@ -49,7 +50,7 @@
          (poo-flow-testing-observability-profile-source-load-paths profile)
          '("."))))
 
-    (poo-flow-test-case "default testing profile does not spawn batch heartbeats"
+    (yuanxu-test-case "default testing profile does not spawn batch heartbeats"
       (let (port (open-output-string))
         (parameterize ((current-error-port port))
           (testing-interface-call-with-operation
@@ -61,9 +62,9 @@
                      (get-output-string port) "operation-heartbeat") #t)
                => #f)))
 
-    (poo-flow-test-case "shared worker Case memory override retains typed rejection"
+    (yuanxu-test-case "shared worker Case memory override retains typed rejection"
       (let* ((profile
-             (.o (:: @ poo-flow-testing-case-profile-prototype)
+             (.o (:: @ yuanxu-testing-case-profile-prototype)
                   identity: 'testing/shared-memory-rejection
                   heap-limit-bytes: 0
                   sample-interval-milliseconds: 1))
@@ -76,11 +77,11 @@
                     (let loop ()
                       (thread-sleep! 0.01)
                       (loop))))))
-        (check (PooFlowDebugMemoryAnomaly? captured) => #t)
-        (check (.ref (PooFlowDebugMemoryAnomaly-receipt captured) 'reason)
+        (check (YuanxuDebugMemoryAnomaly? captured) => #t)
+        (check (.ref (YuanxuDebugMemoryAnomaly-receipt captured) 'reason)
                => 'heap-limit-exceeded)))
 
-    (poo-flow-test-case "registry footprint policy is declared only through POO slots"
+    (yuanxu-test-case "registry footprint policy is declared only through POO slots"
       (check (.ref +poo-flow-testing-import-footprint-profile+
                    'heavyOwners)
              => '())
@@ -96,7 +97,7 @@
                    'action)
              => 'reject))
 
-    (poo-flow-test-case "the default POO profile avoids duplicate trace output"
+    (yuanxu-test-case "the default POO profile avoids duplicate trace output"
       (let ((port (open-output-string))
             (admission-visible-inside? #f))
         (parameterize ((current-error-port port))
@@ -120,7 +121,7 @@
                      "call-returned")
                     #t)
                => #f)))
-    (poo-flow-test-case "long operations emit bounded POO heartbeat and elapsed receipts"
+    (yuanxu-test-case "long operations emit bounded POO heartbeat and elapsed receipts"
       (let (port (open-output-string))
         (parameterize
             ((current-error-port port))
@@ -136,7 +137,7 @@
                  => #t)
           (check (and (string-contains output "elapsed-nanoseconds") #t)
                  => #t))))
-    (poo-flow-test-case "enablement is a composable POO profile slot"
+    (yuanxu-test-case "enablement is a composable POO profile slot"
       (let ((enabled-inside? #t)
             (profile
              (.o (:: @ (make-poo-flow-testing-observability-profile
@@ -153,7 +154,7 @@
             'completed))
          => 'completed)
         (check enabled-inside? => #f)))
-    (poo-flow-test-case "the native batch emits POO receipts and upstream elapsed timing"
+    (yuanxu-test-case "the native batch emits POO receipts and upstream elapsed timing"
       (let (port (open-output-string))
         (parameterize ((current-output-port port)
                        (current-error-port port))
@@ -171,24 +172,23 @@
                                        "phase=batch-complete elapsedNs=")
                       #t)
                  => #t))))
-    (poo-flow-test-case "failed native batches retain POO and ASP elapsed terminals"
-      (let ((port (open-output-string))
-            (raised? #f))
-        (parameterize ((current-output-port port)
-                       (current-error-port port))
-          (with-catch
-           (lambda (_failure) (set! raised? #t))
-           (lambda ()
-             (testing-interface-run-test-batch!
-              (poo-flow-testing-observability-extension
-               +asp-testing-interface+ +testing-trace-profile+)
-              '("t/scenarios/testing-observability/missing-test.ss")))))
-        (let (output (get-output-string port))
-          (check raised? => #t)
-          (check (and (string-contains output "call-raised") #t) => #t)
-          (check (and (string-contains output "elapsed-nanoseconds") #t)
-                 => #t)
-          (check (and (string-contains output
-                                       "phase=batch-failed elapsedNs=")
-                      #t)
-                 => #t))))))
+    (yuanxu-test-case "failed native batches retain POO and ASP elapsed terminals"
+      (def missing "t/scenarios/testing-observability/missing-test.ss")
+      (check-equal? (file-exists? missing) #f)
+      (def result
+        (.call
+          (.cc ProcessScript.
+            'command (list "gxi" "-:max-heap=1G,debug=q"
+                           "dev/fixtures/testing-missing-batch.ss" missing)
+            'timeout 30 'check-status #f)
+          .run))
+      (check-equal? (.get result status) 70)
+      (def output (.get result output))
+      (for-each
+        (lambda (required)
+          (check-equal? (and (string-contains output required) #t) #t))
+        (list "call-raised" "elapsed-nanoseconds"
+              "phase=batch-failed elapsedNs="
+              "gerbil/tools/gxtest#collect-files" "No such file or directory"
+              missing))
+      (check-equal? (and (string-contains output "phase=batch-complete") #t) #f))))

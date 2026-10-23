@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
         :poo-flow/modules/temporal-causality/interface)
@@ -31,7 +31,7 @@
 
 (def temporal-model-test
   (test-suite "open temporal model"
-    (poo-flow-test-case "medication vocabulary admits two candidate explanations"
+    (yuanxu-test-case "medication vocabulary admits two candidate explanations"
       (let* ((domain (poo-flow-temporal-clock-domain
                       "care-sequence" 'logical-version))
              (model
@@ -55,7 +55,7 @@
         (check (.ref receipt 'exhausted?) => #t)
         (check (.ref receipt 'assumption) => 'exclusive-explanations)))
 
-    (poo-flow-test-case "new evidence refutes one candidate and changes identity"
+    (yuanxu-test-case "new evidence refutes one candidate and changes identity"
       (let* ((before (two-explanations "build-flow"
                                        "revision-clock" 2 #t))
              (after (two-explanations "build-flow"
@@ -69,7 +69,7 @@
         (check (.ref receipt 'model-digest)
                => (.ref after 'semantic-digest))))
 
-    (poo-flow-test-case "overlapping mechanisms do not imply exclusive necessity"
+    (yuanxu-test-case "overlapping mechanisms do not imply exclusive necessity"
       (let* ((domains (list clock))
              (observations
               (list (observation "source-a" "revision-clock" 1)
@@ -111,7 +111,7 @@
                       exclusive (poo-flow-temporal-query "why" "via-a" #f))
                      'classification) => 'necessary)))
 
-    (poo-flow-test-case "coexisting mechanisms remain possible together"
+    (yuanxu-test-case "coexisting mechanisms remain possible together"
       (let* ((model
               (poo-flow-temporal-overlapping-model
                "coexisting" (list clock)
@@ -127,7 +127,7 @@
                => '("via-a" "via-b"))
         (check (.ref receipt 'classification) => 'possible)))
 
-    (poo-flow-test-case "software release vocabulary uses the same POO API"
+    (yuanxu-test-case "software release vocabulary uses the same POO API"
       (let* ((domain (poo-flow-temporal-clock-domain
                       "build-sequence" 'logical-version))
              (model
@@ -151,7 +151,7 @@
         (check (.ref receipt 'refuted-hypothesis-ids)
                => '("via-verification"))))
 
-    (poo-flow-test-case "incomparable clocks and bounds preserve unknown frontier"
+    (yuanxu-test-case "incomparable clocks and bounds preserve unknown frontier"
       (let* ((model (two-explanations "build-flow"
                                       "external-clock" 2 #t))
              (full (poo-flow-temporal-model-classify
@@ -164,7 +164,7 @@
         (check (.ref bounded 'unexplored-hypothesis-ids) => '("via-b"))
         (check (.ref bounded 'exhausted?) => #f)))
 
-    (poo-flow-test-case "input order does not change identity or bounded traversal"
+    (yuanxu-test-case "input order does not change identity or bounded traversal"
       (let* ((observations
               (list (observation "source-a" "revision-clock" 1)
                     (observation "source-b" "revision-clock" 2)
@@ -185,7 +185,7 @@
                => (.ref (poo-flow-temporal-model-classify reverse-input query)
                         'unexplored-hypothesis-ids))))
 
-    (poo-flow-test-case "incomplete family cannot imply necessity"
+    (yuanxu-test-case "incomplete family cannot imply necessity"
       (let* ((model (two-explanations "build-flow"
                                       "revision-clock" 4 #f))
              (receipt (poo-flow-temporal-model-classify
@@ -193,7 +193,7 @@
         (check (.ref receipt 'classification) => 'possible)
         (check (.ref receipt 'family-complete?) => #f)))
 
-    (poo-flow-test-case "unbounded query exhausts the finite family"
+    (yuanxu-test-case "unbounded query exhausts the finite family"
       (let* ((model (two-explanations "unbounded" "revision-clock" 4 #t))
              (receipt (poo-flow-temporal-model-classify
                        model (poo-flow-temporal-query "all" "via-a" #f))))
@@ -201,12 +201,12 @@
         (check (.ref receipt 'exhausted?) => #t)
         (check (.ref receipt 'unexplored-hypothesis-ids) => '())))
 
-    (poo-flow-test-case "new clock roles are POO data, not core branches"
+    (yuanxu-test-case "new clock roles are POO data, not core branches"
       (let ((domain (poo-flow-temporal-clock-domain
                      "satellite-revision" 'satellite-epoch)))
         (check (poo-flow-temporal-clock-domain? domain) => #t)))
 
-    (poo-flow-test-case "missing observations remain unresolved"
+    (yuanxu-test-case "missing observations remain unresolved"
       (let* ((model
               (poo-flow-temporal-model
                "partial" (list clock)
@@ -219,7 +219,7 @@
         (check (.ref receipt 'unknown-hypothesis-ids)
                => '("unseen-cause"))))
 
-    (poo-flow-test-case "an explicit inconsistent constraint refutes its candidate"
+    (yuanxu-test-case "an explicit inconsistent constraint refutes its candidate"
       (let* ((model
               (poo-flow-temporal-model
                "constrained" (list clock)
@@ -237,12 +237,12 @@
         (check (.ref receipt 'refuted-hypothesis-ids)
                => '("candidate"))))
 
-    (poo-flow-test-case "empty candidate family is invalid"
+    (yuanxu-test-case "empty candidate family is invalid"
       (check-exception
        (poo-flow-temporal-model "empty" (list clock) '() '() #t)
        true))
 
-    (poo-flow-test-case "duplicate candidate identities are invalid"
+    (yuanxu-test-case "duplicate candidate identities are invalid"
       (check-exception
        (poo-flow-temporal-model
         "duplicate" (list clock) '()

@@ -6,12 +6,12 @@
 ;;; Boundary: tests verify profile-style loop-engine user declarations.
 ;;; Invariant: profile projection is report-only and never executes loops.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :core/module-system/selection/objects
+        :yuanxu/module-system/selection/objects
         :poo-flow/modules/workflow/scenario/configuration/interface
         (only-in "../user-interface/custom/my-module/profiles/loops"
                  poo-flow-custom-my-module-loops-module))
@@ -55,15 +55,15 @@
 ;; : (-> PooUserModuleSelection POOObject)
 (def (custom-loop-presentation module-bundle)
   (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules (list module-bundle))
-    (poo-flow-settings))))
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules (list module-bundle))
+    (yuanxu-settings))))
 
 ;;; Profile modules should still read like user declarations: one loop-engine
 ;;; row, ordered use-cases, sandbox refs, and no runtime execution.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-profile-case)
-  (poo-flow-test-case "projects custom loop-engine profile use cases"
+  (yuanxu-test-case "projects custom loop-engine profile use cases"
     (let* ((presentation
             (custom-loop-presentation
              poo-flow-custom-my-module-loops-module))

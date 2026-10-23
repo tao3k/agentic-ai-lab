@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :clan/poo/object .ref .o)
-        (only-in :poo-flow-dev/testing-api poo-flow-test-case)
+        (only-in :poo-flow/testing-api yuanxu-test-case)
         :poo-flow/modules/temporal-causality/time/objects
         :poo-flow/modules/temporal-causality/revisions/interface
         :poo-flow/modules/temporal-causality/truth-maintenance/interface)
@@ -29,14 +29,14 @@
 (def (claim r) (car (.ref r 'conclusions)))
 (def temporal-support-test
   (test-suite "acyclic temporal support applicability"
-    (poo-flow-test-case "named inventory preserves unsupported claims and scoped uncertainty"
+    (yuanxu-test-case "named inventory preserves unsupported claims and scoped uncertainty"
       (let* ((complete (poo-flow-temporal-support-inventory "empty" "policy" #t '("unproved") '()))
              (partial (poo-flow-temporal-support-inventory "empty" "policy" #f '("unproved") '())))
         (check (.ref (claim (result complete history 1 128)) 'status) => 'unsupported)
         (check (.ref (claim (result partial history 1 128)) 'status) => 'unknown)
         (check-exception (poo-flow-temporal-support-inventory "bad" "policy" #t '("claim" "claim") '()) true)
         (check-exception (poo-flow-temporal-support-inventory "bad" "policy" #t '("foreign") (.ref (program #t) 'supports)) true)))
-    (poo-flow-test-case "reverse claim projection groups alternatives and includes downstream claims"
+    (yuanxu-test-case "reverse claim projection groups alternatives and includes downstream claims"
       (let* ((p (program #t))
              (first (poo-flow-temporal-support-reverse-plan p history (at 1) (at 2) #f))
              (last (poo-flow-temporal-support-reverse-plan p history (at 2) (at 3) #f)))
@@ -48,7 +48,7 @@
         (check (.ref (poo-flow-temporal-support-reverse-plan (program #f) history (at 1) (at 2) #f)
                     'status) => 'partial)))
 
-    (poo-flow-test-case "two supports then one then none preserves historical cuts"
+    (yuanxu-test-case "two supports then one then none preserves historical cuts"
       (let* ((p (program #t)) (two (result p history 1 128))
              (one (result p history 2 128)) (none (result p history 3 128)))
         (check (.ref (claim two) 'active-support-identities) => '("left" "right"))
@@ -59,12 +59,12 @@
         (check (.ref two 'semantic-digest) => (.ref (result p history 1 128) 'semantic-digest))
         (check (.ref none 'proof-admitted?) => #f)
         (check (.ref none 'action-authorized?) => #f)))
-    (poo-flow-test-case "partial inventory and budget never certify no support"
+    (yuanxu-test-case "partial inventory and budget never certify no support"
       (check (.ref (claim (result (program #f) history 3 128)) 'status) => 'unknown)
       (let (r (result (program #t) history 3 0))
         (check (.ref (claim r) 'status) => 'unknown)
         (check (.ref r 'budget-exhausted?) => #t)))
-    (poo-flow-test-case "correction binds exact revision and conflicts remain unknown"
+    (yuanxu-test-case "correction binds exact revision and conflicts remain unknown"
       (let* ((journal (poo-flow-temporal-evidence-journal "correction" "txn"
                        (list (revision "a1" "a" 'assert #f 1)
                              (revision "a2" "a" 'correct "a1" 2)
@@ -75,17 +75,17 @@
         (check (.ref (claim (result p journal 1 128)) 'status) => 'supported)
         (check (.ref (claim (result p journal 2 128)) 'status) => 'unsupported)
         (check (.ref (claim (result p journal 3 128)) 'status) => 'unknown)))
-    (poo-flow-test-case "future evidence is unknown until its admission cut"
+    (yuanxu-test-case "future evidence is unknown until its admission cut"
       (check (.ref (claim (result (program #t) history 0 128)) 'status) => 'unknown)
       (check (.ref (claim (result (program #t) history 1 128)) 'status) => 'supported)
       (check (.ref (claim (poo-flow-temporal-support-evaluate (program #t) history (at 1) (valid 11) 128)) 'status) => 'unsupported))
-    (poo-flow-test-case "recursive and foreign support declarations reject"
+    (yuanxu-test-case "recursive and foreign support declarations reject"
       (check-exception (poo-flow-temporal-support-program "cycle" "policy" #t
                          (list (poo-flow-temporal-support "loop" "claim" "proof" '() '("claim")))) true)
       (check-exception (result (poo-flow-temporal-support-program "foreign" "policy" #t
                                  (list (poo-flow-temporal-support "x" "claim" "proof"
                                    (list (poo-flow-temporal-support-premise "foreign" "a1")) '()))) history 1 128) true))
-    (poo-flow-test-case "policy half-open window keeps proof and effects unadmitted"
+    (yuanxu-test-case "policy half-open window keeps proof and effects unadmitted"
       (let* ((p (program #t)) (policy (poo-flow-temporal-support-policy "policy" "rev1" (at 1) (at 4)))
              (evaluate (lambda (n) (poo-flow-temporal-support-guard p history (at 1) #f 128
                          policy (.ref policy 'semantic-digest) (at n))))
@@ -100,7 +100,7 @@
         (check (.ref active 'selection-admitted?) => #f)
         (check (.ref active 'action-authorized?) => #f)
         (check (.ref active 'durable?) => #f)))
-    (poo-flow-test-case "replacement policy cannot inherit the old binding"
+    (yuanxu-test-case "replacement policy cannot inherit the old binding"
       (let* ((old (poo-flow-temporal-support-policy "policy" "rev1" (at 1) (at 4)))
              (new (poo-flow-temporal-support-policy "policy" "rev2" (at 1) (at 4)))
              (r (poo-flow-temporal-support-guard (program #t) history (at 1) #f 128
@@ -110,7 +110,7 @@
         (check-exception (poo-flow-temporal-support-guard (program #t) history (at 1) #f 128
           (poo-flow-temporal-support-policy "foreign" "rev1" (at 1) (at 4))
           (.ref old 'semantic-digest) (at 2)) true)))
-    (poo-flow-test-case "historical replay binds policy evidence and declared time"
+    (yuanxu-test-case "historical replay binds policy evidence and declared time"
       (let* ((p (program #t)) (policy (poo-flow-temporal-support-policy "policy" "rev1" (at 1) (at 4)))
              (r (poo-flow-temporal-support-guard p history (at 1) #f 128 policy
                   (.ref policy 'semantic-digest) (at 2)))
@@ -126,7 +126,7 @@
           (poo-flow-temporal-support-policy "policy" "rev2" (at 1) (at 4))) true)
         (check-exception (poo-flow-temporal-support-guard-replay
           (.o (:: @ r) semantic-digest: "forged") p history policy) true)))
-    (poo-flow-test-case "invalid policy windows time domains and forged values reject"
+    (yuanxu-test-case "invalid policy windows time domains and forged values reject"
       (let (policy (poo-flow-temporal-support-policy "policy" "rev1" (at 1) (at 4)))
         (check-exception (poo-flow-temporal-support-policy "policy" "rev1" (at 4) (at 1)) true)
         (check-exception (poo-flow-temporal-support-policy "policy" "rev1" (at 1) (at 1)) true)
