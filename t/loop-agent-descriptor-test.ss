@@ -18,7 +18,7 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/loop-engine/control/agent)
+        :agentic-ai-lab/modules/loop-engine/control/agent)
 
 (export loop-agent-descriptor-test)
 

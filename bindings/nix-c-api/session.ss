@@ -9,7 +9,7 @@
   (let (file (path-expand "session-expression.nix" directory))
     (call-with-output-file (list path: file truncate: #t) (cut display expression <>))
     (run-process
-      (list (getenv "POO_FLOW_NIX_C_API_WORKER") file directory)
+      (list (getenv "AGENTIC_AI_LAB_NIX_C_API_WORKER") file directory)
       stderr-redirection: #f
       coprocess:
       (lambda (port)

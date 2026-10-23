@@ -38,7 +38,7 @@ fn main() {
         "modules/ai-agentic-context/clues/native",
         "modules/ai-agentic-context/interaction/native",
         "modules/temporal-causality/trajectory/native",
-        "packages/python-runtime/src/poo_flow_runtime/reasoning_rules",
+        "packages/python-runtime/src/agentic_ai_lab_runtime/reasoning_rules",
     ] {
         collect(&root, &root.join(relative), &mut inputs);
     }
@@ -75,7 +75,7 @@ fn main() {
         &mut producer_inputs,
     );
     collect(producer_root, producer_manifest, &mut producer_inputs);
-    let receipt = serde_json::json!({"schema":"poo-flow.reasoning-build.v1","sourceInputs":inputs,
+    let receipt = serde_json::json!({"schema":"agentic-ai-lab.reasoning-build.v1","sourceInputs":inputs,
         "producerSource":producer["source"],"producerInputs":producer_inputs});
     fs::write(
         Path::new(&env::var_os("OUT_DIR").unwrap()).join("reasoning-build.json"),

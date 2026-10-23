@@ -11,8 +11,8 @@ class ComputationalEvidenceIntegration(unittest.TestCase):
     def test_caller_owned_counts_preserve_complete_source_and_finite_rejection(self):
         code = '''
 import copy, os
-from poo_flow_runtime.reasoning import ReasoningRuntime
-from poo_flow_runtime.reasoning import ComputationalEvidence
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime
+from agentic_ai_lab_runtime.reasoning import ComputationalEvidence
 library = os.environ.get('ASCENT_ENGINE_LIBRARY') if os.environ.get('ASCENT_ENGINE_BACKEND') == 'abi' else None
 source = {'identity':'caller-count-policy','generation':0,
           'relations':[['seed',1,[[i] for i in range(1100)]]]}
@@ -52,9 +52,9 @@ print('CALLER-PROOF-COUNTS-OK',flush=True)
     def test_native_store_through_selected_public_binding(self):
         code = '''
 import copy, os
-from poo_flow_runtime.reasoning import ReasoningRuntime, ReasoningError
-from poo_flow_runtime.reasoning import ComputationalEvidence, compact_observation, expand_observation
-from poo_flow_testing.assessment_studies.evidence_chain_study import shared_qualify, shared_tasks, shared_source, SHARED_CANDIDATE
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime, ReasoningError
+from agentic_ai_lab_runtime.reasoning import ComputationalEvidence, compact_observation, expand_observation
+from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import shared_qualify, shared_tasks, shared_source, SHARED_CANDIDATE
 library = os.environ.get('ASCENT_ENGINE_LIBRARY') if os.environ.get('ASCENT_ENGINE_BACKEND') == 'abi' else None
 with ReasoningRuntime() as engine:
     checks = shared_qualify(engine)

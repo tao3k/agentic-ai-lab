@@ -16,46 +16,46 @@
                  yuanxu-user-profile-set-default-profile-name
                  yuanxu-user-profile-module-bundles
                  yuanxu-user-profile-modules)
-        (only-in :poo-flow/modules/workflow/profiles/kernel/interface
-                 poo-flow-kernel-module-bundles
-                 poo-flow-kernel-profile-module-bundles
-                 poo-flow-kernel-profile
-                 poo-flow-kernel-profile-set
-                 poo-flow-kernel-profile-modules)
+        (only-in :agentic-ai-lab/modules/workflow/profiles/kernel/interface
+                 agentic-ai-lab-kernel-module-bundles
+                 agentic-ai-lab-kernel-profile-module-bundles
+                 agentic-ai-lab-kernel-profile
+                 agentic-ai-lab-kernel-profile-set
+                 agentic-ai-lab-kernel-profile-modules)
         "user-interface-fixtures.ss")
 
 (export module-system-kernel-profile-test)
 
 ;; : TestSuite
 (def module-system-kernel-profile-test
-  (test-suite "poo-flow module-system kernel profile"
+  (test-suite "agentic-ai-lab module-system kernel profile"
     (yuanxu-test-case "exports kernel profile runtime values from public facade"
-      (check-equal? (yuanxu-user-profile-name poo-flow-kernel-profile)
+      (check-equal? (yuanxu-user-profile-name agentic-ai-lab-kernel-profile)
                     'kernel)
-      (check-equal? (yuanxu-user-profile-set-name poo-flow-kernel-profile-set)
+      (check-equal? (yuanxu-user-profile-set-name agentic-ai-lab-kernel-profile-set)
                     'kernel-profiles)
       (check-equal? (yuanxu-user-profile-set-default-profile-name
-                     poo-flow-kernel-profile-set)
+                     agentic-ai-lab-kernel-profile-set)
                     'kernel)
-      (check-equal? (yuanxu-user-profile-modules poo-flow-kernel-profile)
-                    poo-flow-kernel-profile-modules)
-      (check-equal? (> (length poo-flow-kernel-profile-module-bundles) 0)
+      (check-equal? (yuanxu-user-profile-modules agentic-ai-lab-kernel-profile)
+                    agentic-ai-lab-kernel-profile-modules)
+      (check-equal? (> (length agentic-ai-lab-kernel-profile-module-bundles) 0)
                     #t)
-      (check-equal? (> (length poo-flow-kernel-profile-modules) 0)
+      (check-equal? (> (length agentic-ai-lab-kernel-profile-modules) 0)
                     #t)
-      (check-equal? (length poo-flow-kernel-module-bundles) 6)
-      (check-equal? (length poo-flow-kernel-profile-module-bundles) 6))
+      (check-equal? (length agentic-ai-lab-kernel-module-bundles) 6)
+      (check-equal? (length agentic-ai-lab-kernel-profile-module-bundles) 6))
     (yuanxu-test-case "user interface fixtures compile against explicit kernel imports"
-      (check-equal? (yuanxu-user-profile-name test-poo-flow-user-profile)
+      (check-equal? (yuanxu-user-profile-name test-agentic-ai-lab-user-profile)
                     'developer)
       (check-equal? (yuanxu-user-profile-set-name
-                     test-poo-flow-user-profile-set)
+                     test-agentic-ai-lab-user-profile-set)
                     'workspace)
       (check-equal? (yuanxu-user-profile-set-default-profile-name
-                     test-poo-flow-user-profile-set)
+                     test-agentic-ai-lab-user-profile-set)
                     'developer)
       (check-equal? (> (length test-yuanxu-user-module-bundles) 0)
                     #t)
       (check-equal? (yuanxu-user-profile-module-bundles
-                     test-poo-flow-user-profile)
+                     test-agentic-ai-lab-user-profile)
                     test-yuanxu-user-module-bundles))))

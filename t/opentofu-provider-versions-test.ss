@@ -4,7 +4,7 @@
 (import :std/test
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
-        (only-in :poo-flow/modules/services/opentofu/objects OpenTofuModule.)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuModule.)
         :yuanxu/types :clan/poo/object)
 (export opentofu-provider-versions-test)
 
@@ -121,11 +121,11 @@
   (test-suite "opentofu-provider-versions-test"
     (yuanxu-test-case "real AWS upgrade after parent Contract caching"
       (verify-isolation
-        (getenv "POO_FLOW_OPENTOFU_TEST_PARENT_ARTIFACT" #f)
-        (getenv "POO_FLOW_OPENTOFU_TEST_CHILD_ARTIFACT" #f)
+        (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_PARENT_ARTIFACT" #f)
+        (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_CHILD_ARTIFACT" #f)
         "5.99.0" "5.100.0"))
     (yuanxu-test-case "real AWS rollback after parent Contract caching"
       (verify-isolation
-        (getenv "POO_FLOW_OPENTOFU_TEST_CHILD_ARTIFACT" #f)
-        (getenv "POO_FLOW_OPENTOFU_TEST_PARENT_ARTIFACT" #f)
+        (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_CHILD_ARTIFACT" #f)
+        (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_PARENT_ARTIFACT" #f)
         "5.100.0" "5.99.0"))))

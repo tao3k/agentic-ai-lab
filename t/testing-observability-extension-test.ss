@@ -16,45 +16,45 @@
                  testing-interface-profile-enabled?
                  testing-interface-call-with-operation
                  testing-interface-run-test-batch!)
-        (only-in :poo-flow/dev/testing-api
-                 +poo-flow-testing-interface+
-                 +poo-flow-testing-import-footprint-profile+
-                 poo-flow-native-observability-enabled?
-                 poo-flow-testing-observability-profile-prototype
+        (only-in :agentic-ai-lab/dev/testing-api
+                 +agentic-ai-lab-testing-interface+
+                 +agentic-ai-lab-testing-import-footprint-profile+
+                 agentic-ai-lab-native-observability-enabled?
+                 agentic-ai-lab-testing-observability-profile-prototype
                  yuanxu-testing-case-profile-prototype
-                 make-poo-flow-testing-observability-profile
-                 poo-flow-testing-observability-profile-source-load-paths
-                 poo-flow-testing-observability-extension))
+                 make-agentic-ai-lab-testing-observability-profile
+                 agentic-ai-lab-testing-observability-profile-source-load-paths
+                 agentic-ai-lab-testing-observability-extension))
 
 (export testing-observability-extension-test)
 
 (def +testing-trace-profile+
-  (.o (:: @ poo-flow-testing-observability-profile-prototype)
+  (.o (:: @ agentic-ai-lab-testing-observability-profile-prototype)
       identity: 'testing/trace-qualification
       trace-enabled?: #t))
 
 (def testing-observability-extension-test
-  (test-suite "POO Flow native testing observability extension"
-    (yuanxu-test-case "the public POO Flow interface owns the ASP extension once"
-      (check (.slot? +poo-flow-testing-interface+ 'around-operation) => #t)
+  (test-suite "Agentic AI Lab native testing observability extension"
+    (yuanxu-test-case "the public Agentic AI Lab interface owns the ASP extension once"
+      (check (.slot? +agentic-ai-lab-testing-interface+ 'around-operation) => #t)
       (check (testing-interface-profile-enabled?
-              +poo-flow-testing-interface+
+              +agentic-ai-lab-testing-interface+
               'import-footprint)
              => #t))
 
     (yuanxu-test-case "source roots are owned by the POO testing profile"
       (let (profile
-            (make-poo-flow-testing-observability-profile
+            (make-agentic-ai-lab-testing-observability-profile
              'testing/source-root 1/100))
         (check-equal?
-         (poo-flow-testing-observability-profile-source-load-paths profile)
+         (agentic-ai-lab-testing-observability-profile-source-load-paths profile)
          '("."))))
 
     (yuanxu-test-case "default testing profile does not spawn batch heartbeats"
       (let (port (open-output-string))
         (parameterize ((current-error-port port))
           (testing-interface-call-with-operation
-           (poo-flow-testing-observability-extension
+           (agentic-ai-lab-testing-observability-extension
             +asp-testing-interface+)
            'native-test-batch
            (lambda () (thread-sleep! 0.02))))
@@ -82,18 +82,18 @@
                => 'heap-limit-exceeded)))
 
     (yuanxu-test-case "registry footprint policy is declared only through POO slots"
-      (check (.ref +poo-flow-testing-import-footprint-profile+
+      (check (.ref +agentic-ai-lab-testing-import-footprint-profile+
                    'heavyOwners)
              => '())
-      (check (.ref +poo-flow-testing-import-footprint-profile+
+      (check (.ref +agentic-ai-lab-testing-import-footprint-profile+
                    'largeClosureModuleCount)
              ? (lambda (value) (and (integer? value) (> value 0))))
-      (check (< (.ref +poo-flow-testing-import-footprint-profile+
+      (check (< (.ref +agentic-ai-lab-testing-import-footprint-profile+
                       'maxSharedClosureModules)
-                (.ref +poo-flow-testing-import-footprint-profile+
+                (.ref +agentic-ai-lab-testing-import-footprint-profile+
                       'largeClosureModuleCount))
              => #t)
-      (check (.ref +poo-flow-testing-import-footprint-profile+
+      (check (.ref +agentic-ai-lab-testing-import-footprint-profile+
                    'action)
              => 'reject))
 
@@ -103,7 +103,7 @@
         (parameterize ((current-error-port port))
           (check
            (testing-interface-call-with-operation
-            (poo-flow-testing-observability-extension
+            (agentic-ai-lab-testing-observability-extension
              +asp-testing-interface+)
             'native-test-batch
             (lambda ()
@@ -114,7 +114,7 @@
                          #t))
               'completed))
            => 'completed))
-        (check (poo-flow-native-observability-enabled?) => #t)
+        (check (agentic-ai-lab-native-observability-enabled?) => #t)
         (check admission-visible-inside? => #f)
         (check (and (string-contains
                      (get-output-string port)
@@ -126,9 +126,9 @@
         (parameterize
             ((current-error-port port))
           (testing-interface-call-with-operation
-           (poo-flow-testing-observability-extension
+           (agentic-ai-lab-testing-observability-extension
             +asp-testing-interface+
-            (make-poo-flow-testing-observability-profile
+            (make-agentic-ai-lab-testing-observability-profile
              'testing/fast-heartbeat 0.01))
            'native-test-batch
            (lambda () (thread-sleep! 0.03))))
@@ -140,17 +140,17 @@
     (yuanxu-test-case "enablement is a composable POO profile slot"
       (let ((enabled-inside? #t)
             (profile
-             (.o (:: @ (make-poo-flow-testing-observability-profile
+             (.o (:: @ (make-agentic-ai-lab-testing-observability-profile
                          'testing/quiet 1))
                  (enabled? #f))))
         (check
          (testing-interface-call-with-operation
-          (poo-flow-testing-observability-extension
+          (agentic-ai-lab-testing-observability-extension
            +asp-testing-interface+ profile)
           'native-test-batch
           (lambda ()
             (set! enabled-inside?
-                  (poo-flow-native-observability-enabled?))
+                  (agentic-ai-lab-native-observability-enabled?))
             'completed))
          => 'completed)
         (check enabled-inside? => #f)))
@@ -160,7 +160,7 @@
                        (current-error-port port))
           (check
            (testing-interface-run-test-batch!
-            (poo-flow-testing-observability-extension
+            (agentic-ai-lab-testing-observability-extension
              +asp-testing-interface+ +testing-trace-profile+)
             '("t/scenarios/testing-observability/native-batch-test.ss"))
            => (void)))

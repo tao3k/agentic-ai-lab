@@ -1,7 +1,7 @@
 -- SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import Lean
-namespace PooFlowContextTemporalPolicyProof
+namespace AgenticAILabContextTemporalPolicyProof
 -- Exact source metadata, not semantic refinement or an authenticated owner.
 def quintSourceDigest : String := "sha256:61a322e9ffa316c0d3371734bca70fb1f68d7e6b1f758579f10fd59906000708"
 def quintInvariantNames : List String := ["ExactSource", "ExactTemporal", "ExactPolicy", "CurrentEvidence",
@@ -82,7 +82,7 @@ theorem settled_obligation_stays_clear (outstanding : Bool) :
     invalidatePending outstanding true false = false := by simp [invalidatePending]
 theorem unresolved_obligation_preserved (outstanding settled : Bool) :
     invalidatePending outstanding settled true = true := by simp [invalidatePending]
-end PooFlowContextTemporalPolicyProof
+end AgenticAILabContextTemporalPolicyProof
 
 open Lean Elab Command in
 run_cmd do
@@ -90,22 +90,22 @@ run_cmd do
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let mut count : Nat := 0
   for (name, info) in environment.constants.toList do
-    if (`PooFlowContextTemporalPolicyProof).isPrefixOf name then
+    if (`AgenticAILabContextTemporalPolicyProof).isPrefixOf name then
       if info.isTheorem then count := count + 1
       for axiomName in (← collectAxioms name) do
         unless allowed.contains axiomName do throwError "Disallowed temporal policy axiom: {axiomName}"
-  for required in #[`PooFlowContextTemporalPolicyProof.accepted_has_whole_interval,
-      `PooFlowContextTemporalPolicyProof.accepted_upper_is_strict,
-      `PooFlowContextTemporalPolicyProof.foreign_domain_refused,
-      `PooFlowContextTemporalPolicyProof.unobserved_clock_refused,
-      `PooFlowContextTemporalPolicyProof.upper_boundary_refused,
-      `PooFlowContextTemporalPolicyProof.lower_boundary_refused,
-      `PooFlowContextTemporalPolicyProof.accepted_has_exact_current_vector,
-      `PooFlowContextTemporalPolicyProof.stale_source_refused,
-      `PooFlowContextTemporalPolicyProof.stale_temporal_refused,
-      `PooFlowContextTemporalPolicyProof.stale_policy_refused,
-      `PooFlowContextTemporalPolicyProof.refuted_evidence_refused,
-      `PooFlowContextTemporalPolicyProof.settled_obligation_stays_clear,
-      `PooFlowContextTemporalPolicyProof.unresolved_obligation_preserved] do
+  for required in #[`AgenticAILabContextTemporalPolicyProof.accepted_has_whole_interval,
+      `AgenticAILabContextTemporalPolicyProof.accepted_upper_is_strict,
+      `AgenticAILabContextTemporalPolicyProof.foreign_domain_refused,
+      `AgenticAILabContextTemporalPolicyProof.unobserved_clock_refused,
+      `AgenticAILabContextTemporalPolicyProof.upper_boundary_refused,
+      `AgenticAILabContextTemporalPolicyProof.lower_boundary_refused,
+      `AgenticAILabContextTemporalPolicyProof.accepted_has_exact_current_vector,
+      `AgenticAILabContextTemporalPolicyProof.stale_source_refused,
+      `AgenticAILabContextTemporalPolicyProof.stale_temporal_refused,
+      `AgenticAILabContextTemporalPolicyProof.stale_policy_refused,
+      `AgenticAILabContextTemporalPolicyProof.refuted_evidence_refused,
+      `AgenticAILabContextTemporalPolicyProof.settled_obligation_stays_clear,
+      `AgenticAILabContextTemporalPolicyProof.unresolved_obligation_preserved] do
     unless environment.contains required do throwError "Missing temporal policy theorem: {required}"
   logInfo m!"CONTEXT-TEMPORAL-POLICY-AXIOM-AUDIT-OK: {count} theorems; standard Lean axioms only"

@@ -11,29 +11,29 @@
         (only-in :std/list/list filter-map)
         :yuanxu/poo-clos/interface
         (only-in "types.ss"
-                 poo-flow-query?
-                 poo-flow-query-provider?
-                 poo-flow-query-admission-receipt?
-                 poo-flow-query-execution-candidate?)
+                 agentic-ai-lab-query?
+                 agentic-ai-lab-query-provider?
+                 agentic-ai-lab-query-admission-receipt?
+                 agentic-ai-lab-query-execution-candidate?)
         (only-in "objects.ss"
-                 PooFlowQuery.
+                 AgenticAILabQuery.
                  QueryReceiptBindingExecutor
-                 poo-flow-source-query-receipt)
-        (only-in "gql.ss" poo-flow-query->gql))
+                 agentic-ai-lab-source-query-receipt)
+        (only-in "gql.ss" agentic-ai-lab-query->gql))
 
 (export QueryReceiptBindingProtocol
         QueryReceiptBindingGeneric
         QueryReceiptBindingCoreMethods
-        poo-flow-query-source-content-identity
-        poo-flow-query-bind-execution-receipt/default
-        poo-flow-query-bind-execution-receipt)
+        agentic-ai-lab-query-source-content-identity
+        agentic-ai-lab-query-bind-execution-receipt/default
+        agentic-ai-lab-query-bind-execution-receipt)
 
-(def (poo-flow-query-source-content-identity query)
-  (unless (poo-flow-query? query)
+(def (agentic-ai-lab-query-source-content-identity query)
+  (unless (agentic-ai-lab-query? query)
     (error "source identity requires a canonical Query" query))
   (string-append
    "sha256:"
-   (hex-encode (sha256 (string->utf8 (poo-flow-query->gql query))))))
+   (hex-encode (sha256 (string->utf8 (agentic-ai-lab-query->gql query))))))
 
 (def (candidate-evidence-present? candidate requirement)
   (case requirement
@@ -45,15 +45,15 @@
      (> (string-length (.ref candidate 'result-digest)) 0))
     (else #f)))
 
-(def (poo-flow-query-bind-execution-receipt/default
+(def (agentic-ai-lab-query-bind-execution-receipt/default
       provider query admission candidate)
-  (unless (poo-flow-query-provider? provider)
+  (unless (agentic-ai-lab-query-provider? provider)
     (error "Query receipt binding requires a Provider" provider))
-  (unless (poo-flow-query? query)
+  (unless (agentic-ai-lab-query? query)
     (error "Query receipt binding requires a Query" query))
-  (unless (poo-flow-query-admission-receipt? admission)
+  (unless (agentic-ai-lab-query-admission-receipt? admission)
     (error "Query receipt binding requires an admission receipt" admission))
-  (unless (poo-flow-query-execution-candidate? candidate)
+  (unless (agentic-ai-lab-query-execution-candidate? candidate)
     (error "Query receipt binding requires an execution candidate" candidate))
   (let* ((language (.ref query 'language))
          (result-contract (.ref query 'result-contract))
@@ -103,7 +103,7 @@
                        (.ref candidate 'semantic-revision)
                        (.ref query 'semantic-revision)))
             (and (not (equal? (.ref candidate 'source-content-identity)
-                              (poo-flow-query-source-content-identity query)))
+                              (agentic-ai-lab-query-source-content-identity query)))
                  '(source-content-identity-mismatch))
             (and (not (equal? (.ref candidate 'parser-identity)
                               (.ref language 'parser-owner)))
@@ -131,7 +131,7 @@
                           requirement))
                    (.ref query 'evidence-requirements)))
               (and (pair? missing) (list 'missing-required-evidence missing)))))))
-    (poo-flow-source-query-receipt
+    (agentic-ai-lab-source-query-receipt
      candidate (.ref result-contract 'identity) diagnostics)))
 
 ;;; Provider and Query are independently extensible.  The core method fails
@@ -150,7 +150,7 @@
    (list
     (poo-clos-class-specializer QueryReceiptBindingExecutor)
     (poo-clos-any-specializer)
-    (poo-clos-prototype-specializer PooFlowQuery.)
+    (poo-clos-prototype-specializer AgenticAILabQuery.)
     (poo-clos-any-specializer)
     (poo-clos-any-specializer))
    (lambda (_frame _executor provider _query _admission _candidate)
@@ -165,9 +165,9 @@
  QueryReceiptBindingGeneric
  QueryReceiptBindingCoreMethods)
 
-(def (poo-flow-query-bind-execution-receipt
+(def (agentic-ai-lab-query-bind-execution-receipt
       provider query admission candidate)
-  (unless (poo-flow-query-provider? provider)
+  (unless (agentic-ai-lab-query-provider? provider)
     (error "Query receipt binding requires a Provider" provider))
   (poo-clos-call QueryReceiptBindingGeneric
                  (.ref provider 'receipt-executor)

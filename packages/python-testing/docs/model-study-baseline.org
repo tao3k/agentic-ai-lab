@@ -12,7 +12,7 @@ Does a typed observation from the ASCENT or temporal-causality module
 change a real model's answers on five fixed, finite tasks? This is a
 small paired pilot. It cannot establish general model benefit, proof of
 real-world causation, or superiority over other systems. The fixed tasks
-and answer keys are in =src/poo_flow_testing/model_study/cases.json=.
+and answer keys are in =src/agentic_ai_lab_testing/model_study/cases.json=.
 Freeze that file's SHA256 and the tested repository heads in each result.
 Do not edit its prompts, expected answers or task order after the first
 live request; register a separate protocol for changes.

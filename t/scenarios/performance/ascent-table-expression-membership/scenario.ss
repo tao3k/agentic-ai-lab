@@ -12,8 +12,8 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-table-expression
-                 poo-flow-ascent-table-expression-prototype))
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+                 agentic-ai-lab-ascent-table-expression-prototype))
 
 (def fixture
   (call-with-input-file
@@ -32,7 +32,7 @@
                                values)))))))
 
 (def expression
-  (.mix poo-flow-ascent-table-expression-prototype
+  (.mix agentic-ai-lab-ascent-table-expression-prototype
         (.o (source-pairs edge-pairs) (radix 256))))
 
 (def projected (.ref expression 'at-most-two-hop-pairs))
@@ -64,7 +64,7 @@
                (benchmark-fixture-ref baseline-receipt 'p95Ns))
       (error "indexed membership did not beat repeated list membership"
              baseline-receipt candidate-receipt))
-    (display "[poo-flow-benchmark] ascent-membership baseline-p95=")
+    (display "[agentic-ai-lab-benchmark] ascent-membership baseline-p95=")
     (display (benchmark-fixture-ref baseline-receipt 'elapsed))
     (display " candidate-p95=")
     (display (benchmark-fixture-ref candidate-receipt 'elapsed))

@@ -6,26 +6,26 @@
 
 ;;; slots while the facade keeps only scenario selection.
 
-(export poo-flow-user-config-workflow-cicd-focused-presentation)
+(export agentic-ai-lab-user-config-workflow-cicd-focused-presentation)
 
 (import (only-in :clan/poo/object .ref object<-fun)
-        :poo-flow/modules/module-authoring/module-interface
+        :agentic-ai-lab/modules/module-authoring/module-interface
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/workflow/scenario/configuration/entrypoints
-        :poo-flow/modules/sandbox-core/backend-capability-catalog
-        (only-in :poo-flow/modules/sandbox-core/profile-support/policy-backend-validation
-                 poo-flow-sandbox-backend-capability-registry-validation-valid?
-                 poo-flow-sandbox-backend-capability-registry-validation-diagnostic-count
-                 poo-flow-sandbox-backend-capability-registry-validation-diagnostics)
-        :poo-flow/modules/workflow/cicd-config
-        :poo-flow/modules/workflow/cicd-pipeline-run-config
-        :poo-flow/modules/workflow/cicd-runtime-command-config
-        :poo-flow/modules/workflow/scenario/configuration/presentation-config-support)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
+        (only-in :agentic-ai-lab/modules/sandbox-core/profile-support/policy-backend-validation
+                 agentic-ai-lab-sandbox-backend-capability-registry-validation-valid?
+                 agentic-ai-lab-sandbox-backend-capability-registry-validation-diagnostic-count
+                 agentic-ai-lab-sandbox-backend-capability-registry-validation-diagnostics)
+        :agentic-ai-lab/modules/workflow/cicd-config
+        :agentic-ai-lab/modules/workflow/cicd-pipeline-run-config
+        :agentic-ai-lab/modules/workflow/cicd-runtime-command-config
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config-support)
 
 ;; Engineering note: workflow-CI focused presentation keeps runtime projection
 ;; memoized so command, handoff, and receipt rows share one projection pass.
 ;; : (-> UserConfig ModuleSelections UserSettings SettingKeys PresentationObject)
-(def (poo-flow-user-config-workflow-cicd-focused-presentation
+(def (agentic-ai-lab-user-config-workflow-cicd-focused-presentation
       config
       selected-modules
       setting-object
@@ -41,25 +41,25 @@
     ;; : (-> Void DerivationRows)
     (def sandbox-profile-derivation-rows/promise
       (delay
-        (poo-flow-user-config-sandbox-profile-derivations selected-modules)))
+        (agentic-ai-lab-user-config-sandbox-profile-derivations selected-modules)))
     (def (sandbox-profile-derivation-rows)
       (force sandbox-profile-derivation-rows/promise))
     ;; : (-> Void SandboxValidation)
     (def sandbox-validation/promise
       (delay
-        (poo-flow-user-config-sandbox-backend-capability-registry-validation
+        (agentic-ai-lab-user-config-sandbox-backend-capability-registry-validation
          selected-modules)))
     (def (sandbox-validation)
       (force sandbox-validation/promise))
     ;; : (-> Void CicdIntents)
     (def cicd-intent-rows/promise
-      (delay (poo-flow-user-config-cicd-intents config)))
+      (delay (agentic-ai-lab-user-config-cicd-intents config)))
     (def (cicd-intent-rows)
       (force cicd-intent-rows/promise))
     ;; : (-> Void RuntimeProjection)
     (def workflow-projection/promise
       (delay
-        (poo-flow-user-config-workflow-cicd-runtime-projection-object config)))
+        (agentic-ai-lab-user-config-workflow-cicd-runtime-projection-object config)))
     (def (workflow-projection)
       (force workflow-projection/promise))
     ;; : (-> Symbol FieldDefault FieldValue)
@@ -71,18 +71,18 @@
     ;; : (-> Void FunctionalDagRows)
     (def workflow-functional-dag-rows/promise
       (delay
-        (poo-flow-user-workflow-cicd-functional-dag-rows
+        (agentic-ai-lab-user-workflow-cicd-functional-dag-rows
          (workflow-check-maps))))
     (def (workflow-functional-dag-rows)
       (force workflow-functional-dag-rows/promise))
     ;; : (-> Void PipelineRunRows)
     (def workflow-pipeline-run-rows/promise
-      (delay (poo-flow-user-config-workflow-cicd-pipeline-runs config)))
+      (delay (agentic-ai-lab-user-config-workflow-cicd-pipeline-runs config)))
     (def (workflow-pipeline-run-rows)
       (force workflow-pipeline-run-rows/promise))
     ;; : (-> Void PipelineResultRows)
     (def workflow-pipeline-result-rows/promise
-      (delay (poo-flow-user-config-workflow-cicd-pipeline-results config)))
+      (delay (agentic-ai-lab-user-config-workflow-cicd-pipeline-results config)))
     (def (workflow-pipeline-result-rows)
       (force workflow-pipeline-result-rows/promise))
     ;; : (-> Void RuntimeReadinessRows)
@@ -112,7 +112,7 @@
     ;; : (-> Void PresentationTrace)
     (def presentation-trace-rows/promise
       (delay
-        (poo-flow-user-config-presentation-trace
+        (agentic-ai-lab-user-config-presentation-trace
          selected-modules
          (feature-fact-rows)
          (sandbox-profile-derivation-rows)
@@ -146,11 +146,11 @@
         ((sandbox-profile-derivation-count) (length (sandbox-profile-derivation-rows)))
         ((sandbox-profile-derivations) (sandbox-profile-derivation-rows))
         ((sandbox-backend-capability-registry-validation) (sandbox-validation))
-        ((sandbox-backend-capability-registry-valid?) (poo-flow-sandbox-backend-capability-registry-validation-valid?
+        ((sandbox-backend-capability-registry-valid?) (agentic-ai-lab-sandbox-backend-capability-registry-validation-valid?
                    (sandbox-validation)))
-        ((sandbox-backend-capability-registry-diagnostic-count) (poo-flow-sandbox-backend-capability-registry-validation-diagnostic-count
+        ((sandbox-backend-capability-registry-diagnostic-count) (agentic-ai-lab-sandbox-backend-capability-registry-validation-diagnostic-count
                    (sandbox-validation)))
-        ((sandbox-backend-capability-registry-diagnostics) (poo-flow-sandbox-backend-capability-registry-validation-diagnostics
+        ((sandbox-backend-capability-registry-diagnostics) (agentic-ai-lab-sandbox-backend-capability-registry-validation-diagnostics
                    (sandbox-validation)))
         ((session-intent-count) 0)
         ((session-intents) '())
@@ -172,11 +172,11 @@
                    (workflow-runtime-command-manifest-summary-rows)))
         ((workflow-cicd-runtime-command-manifest-summaries) (workflow-runtime-command-manifest-summary-rows))
         ((workflow-cicd-runtime-command-manifest-agreement) (workflow-runtime-command-manifest-agreement))
-        ((workflow-cicd-runtime-command-manifest-agreement-valid?) (poo-flow-user-alist-ref
+        ((workflow-cicd-runtime-command-manifest-agreement-valid?) (agentic-ai-lab-user-alist-ref
                    (workflow-runtime-command-manifest-agreement)
                    'valid?
                    #f))
-        ((workflow-cicd-runtime-command-manifest-agreement-diagnostics) (poo-flow-user-alist-ref
+        ((workflow-cicd-runtime-command-manifest-agreement-diagnostics) (agentic-ai-lab-user-alist-ref
                    (workflow-runtime-command-manifest-agreement)
                    'diagnostics
                    '()))
@@ -234,13 +234,13 @@
         ((settings) (yuanxu-user-settings->alist
                    setting-object
                    public-setting-keys))
-        ((user-entrypoints) poo-flow-user-config-public-entrypoints)
-        ((api-entrypoints) poo-flow-user-config-api-entrypoints)
-        ((boundary) poo-flow-user-config-boundary)
-        ((brand-name) poo-flow-brand-name)
-        ((brand-group) poo-flow-brand-group)
-        ((scheme-owner) poo-flow-scheme-owner)
-        ((module-system-owner) poo-flow-module-system-owner)
+        ((user-entrypoints) agentic-ai-lab-user-config-public-entrypoints)
+        ((api-entrypoints) agentic-ai-lab-user-config-api-entrypoints)
+        ((boundary) agentic-ai-lab-user-config-boundary)
+        ((brand-name) agentic-ai-lab-brand-name)
+        ((brand-group) agentic-ai-lab-brand-group)
+        ((scheme-owner) agentic-ai-lab-scheme-owner)
+        ((module-system-owner) agentic-ai-lab-module-system-owner)
         ((runtime-owner) "marlin-agent-core")
         ((runtime-parses-scheme-source) #f)
         ((scheme-manufactures-runtime-handlers) #f)
@@ -249,7 +249,7 @@
         ((descriptor-realized?) #f)
         ((runtime-executed) #f)
         ((workflow-cicd-marlin-handoff-receipt-bundle) (workflow-handoff-bundle))
-        ((workflow-cicd-marlin-handoff-receipt-bundle-runtime-executed) (poo-flow-user-alist-ref
+        ((workflow-cicd-marlin-handoff-receipt-bundle-runtime-executed) (agentic-ai-lab-user-alist-ref
                    (workflow-handoff-bundle)
                    'runtime-executed
                    #f))

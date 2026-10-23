@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-materialization-receipt-performance-test)
 
@@ -34,7 +34,7 @@
 
 ;; : (-> Alist Void)
 (def (materialization-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] session-materialization-receipt ")
+  (display "[agentic-ai-lab-benchmark] session-materialization-receipt ")
   (write receipt)
   (newline)
   (force-output))
@@ -89,8 +89,8 @@
 
 ;; : (-> Integer Alist)
 (def (materialization-performance-row index)
-  (poo-flow-session-materialization-receipt->alist
-   (poo-flow-session-runtime-materialization-receipt
+  (agentic-ai-lab-session-materialization-receipt->alist
+   (agentic-ai-lab-session-runtime-materialization-receipt
     (materialization-performance-symbol "runtime/request" index)
     'project/materialization
     'session/root
@@ -143,7 +143,7 @@
 ;; : (-> Integer Alist)
 (def (materialization-performance-summary count)
   (let (rows
-        (poo-flow-performance-build-list
+        (agentic-ai-lab-performance-build-list
          count
          materialization-performance-row))
     (list (cons 'receipt-count (length rows))

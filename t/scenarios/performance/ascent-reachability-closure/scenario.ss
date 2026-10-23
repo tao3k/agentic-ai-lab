@@ -10,8 +10,8 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-table-expression
-                 poo-flow-ascent-table-expression-prototype))
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+                 agentic-ai-lab-ascent-table-expression-prototype))
 
 (def fixture
   (call-with-input-file
@@ -34,7 +34,7 @@
                         (cons (+ (* origin radix) target) result))))))))
 
 (def (candidate-closure)
-  (.ref (.mix poo-flow-ascent-table-expression-prototype
+  (.ref (.mix agentic-ai-lab-ascent-table-expression-prototype
               (.o (source-pairs edges) (radix 32)))
         'closure-pairs))
 
@@ -49,7 +49,7 @@
     (error "ASCENT closure changed the complete chain relation"))
   (unless (benchmark-receipt-pass? receipt)
     (error "ASCENT closure exceeded the benchmark budget" receipt))
-  (display "[poo-flow-benchmark] ascent-reachability-closure p95=")
+  (display "[agentic-ai-lab-benchmark] ascent-reachability-closure p95=")
   (display (benchmark-fixture-ref receipt 'elapsed))
   (displayln " pairs=190 semanticEquivalent=#t")
   (force-output))

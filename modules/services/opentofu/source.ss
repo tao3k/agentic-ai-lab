@@ -15,7 +15,7 @@
                  yuanxu-json-schema-source->json-like yuanxu-json-schema-read-port)
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
         "./types.ss")
-(export poo-flow-opentofu-read-provider-artifact)
+(export agentic-ai-lab-opentofu-read-provider-artifact)
 
 (def (required rows key)
   (or (yuanxu-contract-object-ref rows key #f)
@@ -83,7 +83,7 @@
          '.index-loaded? (lambda (kind) (hash-key? indexes kind))
          '.entry-read-count (lambda (name kind) (hash-ref reads (cons kind name) 0)))))
 
-(def (poo-flow-opentofu-read-provider-artifact directory)
+(def (agentic-ai-lab-opentofu-read-provider-artifact directory)
   (let (path (string-append directory "/manifest.json"))
     (if (not (file-exists? path))
       (.cc (.o) 'status 'build-required 'directory directory 'missing '("manifest.json"))

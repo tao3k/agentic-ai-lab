@@ -10,13 +10,13 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref object?)
         (only-in :std/test check-equal? test-suite)
-        (only-in :poo-flow/modules/workflow/scenario/configuration/module-diagnostics
-                 make-poo-flow-module-diagnostic)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
+                 make-agentic-ai-lab-module-diagnostic)
         :yuanxu/module-system/source/imports
         :yuanxu/module-system/source/objects
-        :poo-flow/modules/module-authoring/module-descriptor
-        :poo-flow/modules/workflow/scenario/configuration/module-activation
-        :poo-flow/modules/workflow/scenario/configuration/module-runtime-presentation
+        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
         :yuanxu/module-system/loader/objects
         :yuanxu/module-system/catalog/objects
         :yuanxu/module-system/projection/option-objects)
@@ -33,7 +33,7 @@
     (yuanxu-test-case "source loader resolver diagnostics and projections compose as POO"
       (let* ((source (yuanxu-local-source "modules/example/config.ss"))
              (module
-              (make-empty-poo-flow-module-descriptor
+              (make-empty-agentic-ai-lab-module-descriptor
                'example '() '((owner . native-value-test))))
              (loader-entry
               (make-yuanxu-module-loader-entry source module))
@@ -48,9 +48,9 @@
              (catalog
               (make-yuanxu-module-catalog
                'native-value-test (list catalog-entry)))
-             (activation (activate-poo-flow-modules (list module)))
+             (activation (activate-agentic-ai-lab-modules (list module)))
              (diagnostic
-              (make-poo-flow-module-diagnostic
+              (make-agentic-ai-lab-module-diagnostic
                'warning 'native-value-test 'module '()))
              (option-config
               (make-yuanxu-module-option-config
@@ -61,7 +61,7 @@
              (option-receipt
               (make-yuanxu-module-option-validation-receipt
                "enabled" 'example #t 'valid '() '()))
-             (runtime-module (poo-flow-module-apply module)))
+             (runtime-module (agentic-ai-lab-module-apply module)))
         (check-equal?
          (native-family-marker? source 'module-source-ref?) #t)
         (check-equal?
@@ -89,5 +89,5 @@
         (check-equal? (object? runtime-module) #t)
         (check-equal? (.ref runtime-module 'id) 'example)
         (check-equal?
-         (resolve-poo-flow-module-source catalog source)
+         (resolve-agentic-ai-lab-module-source catalog source)
          module)))))

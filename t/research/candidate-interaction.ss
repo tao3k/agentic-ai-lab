@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Finite Library consumer: no search controller or workflow dependencies.
 (import :std/encoding/json :std/error
-        :poo-flow/modules/evidence-assessment/candidate/evidence-store
+        :agentic-ai-lab/modules/evidence-assessment/candidate/evidence-store
         :gerbil-ascent/candidate/feedback
         (only-in :gerbil-ascent/candidate/checked-program
                  reasoning-source-snapshot reasoning-attempt

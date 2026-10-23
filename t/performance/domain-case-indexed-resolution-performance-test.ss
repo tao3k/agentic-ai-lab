@@ -74,7 +74,7 @@
          (domain-case-indexed-resolution-ref summary 'contract-count) count)
         (check-equal?
          (domain-case-indexed-resolution-ref summary 'diagnostic-count) 0)
-        (display "[poo-flow-benchmark] domain-case-indexed-resolution ")
+        (display "[agentic-ai-lab-benchmark] domain-case-indexed-resolution ")
         (write receipt)
         (newline)
         (force-output)

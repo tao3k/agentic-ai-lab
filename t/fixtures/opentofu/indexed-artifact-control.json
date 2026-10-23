@@ -4,9 +4,9 @@
   "artifact_format": "yuanxu/provider-schema-v2",
   "default_injection": "YUANXU_OPENTOFU_ARTIFACT",
   "test_injection": [
-    "POO_FLOW_OPENTOFU_AWS_ARTIFACT",
-    "POO_FLOW_OPENTOFU_AWSCC_ARTIFACT",
-    "POO_FLOW_OPENTOFU_NULL_ARTIFACT"
+    "AGENTIC_AI_LAB_OPENTOFU_AWS_ARTIFACT",
+    "AGENTIC_AI_LAB_OPENTOFU_AWSCC_ARTIFACT",
+    "AGENTIC_AI_LAB_OPENTOFU_NULL_ARTIFACT"
   ],
   "runtime": "default Gerbil, heap-fenced Justfile gates",
   "gates": {

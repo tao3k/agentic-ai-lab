@@ -15,7 +15,7 @@
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/session-selector"
-                 poo-flow-custom-my-module-session-selector-case))
+                 agentic-ai-lab-custom-my-module-session-selector-case))
 
 (export user-interface-custom-session-selector-test)
 
@@ -33,13 +33,13 @@
 
 ;; : TestSuite
 (def user-interface-custom-session-selector-test
-  (test-suite "poo-flow custom user-interface session-selector case"
+  (test-suite "agentic-ai-lab custom user-interface session-selector case"
     (yuanxu-test-case "projects custom selector receipt without dispatch"
       (let* ((selection
-              (car poo-flow-custom-my-module-session-selector-case))
+              (car agentic-ai-lab-custom-my-module-session-selector-case))
              (rows
               (module-config-rows
-               poo-flow-custom-my-module-session-selector-case))
+               agentic-ai-lab-custom-my-module-session-selector-case))
              (row (car rows))
              (candidates (test-ref row 'candidates))
              (build-candidate (car candidates))
@@ -47,7 +47,7 @@
         (check-equal? (yuanxu-user-module-selection-key selection)
                       '(session . session))
         (check-equal? (test-ref row 'kind)
-                      'poo-flow.session.selector-receipt)
+                      'agentic-ai-lab.session.selector-receipt)
         (check-equal? (test-ref row 'selector-id)
                       'selector/custom-router)
         (check-equal? (test-ref row 'candidate-count) 3)

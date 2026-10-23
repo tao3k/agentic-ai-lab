@@ -21,7 +21,7 @@
 
 ;; : (-> Alist Void)
 (def (json-schema-contract-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] json-schema-contract-performance ")
+  (display "[agentic-ai-lab-benchmark] json-schema-contract-performance ")
   (write receipt)
   (newline)
   (force-output))

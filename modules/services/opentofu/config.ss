@@ -15,7 +15,7 @@
   ;; Declared but inactive recipes do not demand packages. Build derives its
   ;; demand from this tree rather than maintaining a second configuration.
   services: (.o opentofu: (.o Null: #f))
-  artifact: (getenv "POO_FLOW_OPENTOFU_ARTIFACT" #f))
+  artifact: (getenv "AGENTIC_AI_LAB_OPENTOFU_ARTIFACT" #f))
 
 ;; A provider leaf is created from the collection; it has no environment input.
 (.def OpenTofuProviderConfig

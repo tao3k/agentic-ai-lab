@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :poo-flow/modules/loop-engine/control/descriptor
+        (only-in :agentic-ai-lab/modules/loop-engine/control/descriptor
                  make-loop-pattern-descriptor
                  loop-pattern-descriptor->contract))
 
@@ -69,7 +69,7 @@
 
 ;; : (-> Integer [LoopPatternDescriptor])
 (def (loop-descriptor-performance-descriptors count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    loop-descriptor-performance-descriptor))
 
@@ -79,7 +79,7 @@
 
 ;; : (-> Alist Void)
 (def (loop-descriptor-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] loop-descriptor-contract-projection ")
+  (display "[agentic-ai-lab-benchmark] loop-descriptor-contract-projection ")
   (write receipt)
   (newline)
   (force-output))

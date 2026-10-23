@@ -13,9 +13,9 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-table-expression
-                 poo-flow-ascent-table-expression-prototype)
-        (only-in :poo-flow/t/scenarios/performance/ascent-table-expression/baseline
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+                 agentic-ai-lab-ascent-table-expression-prototype)
+        (only-in :agentic-ai-lab/t/scenarios/performance/ascent-table-expression/baseline
                  ascent-table-expression-baseline))
 
 (def fixture
@@ -34,7 +34,7 @@
                                values)))))))
 
 (def (candidate-projection pairs-value pair-radix)
-  (.ref (.mix poo-flow-ascent-table-expression-prototype
+  (.ref (.mix agentic-ai-lab-ascent-table-expression-prototype
               (.o (source-pairs pairs-value) (radix pair-radix)))
         'at-most-two-hop-pairs))
 
@@ -60,7 +60,7 @@
                (benchmark-fixture-ref baseline-receipt 'p95Ns))
       (error "ASCENT indexed projection did not improve the persistent baseline"
              baseline-receipt candidate-receipt))
-    (display "[poo-flow-benchmark] ascent-table-expression baseline-p95=")
+    (display "[agentic-ai-lab-benchmark] ascent-table-expression baseline-p95=")
     (display (benchmark-fixture-ref baseline-receipt 'elapsed))
     (display " candidate-p95=")
     (display (benchmark-fixture-ref candidate-receipt 'elapsed))

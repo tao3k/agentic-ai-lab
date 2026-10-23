@@ -8,7 +8,7 @@
         (only-in :std/text/pregexp pregexp-match)
         (only-in :yuanxu/ops/objects ProcessScript.)
         (only-in :yuanxu/ops/func run-script)
-        (only-in :poo-flow/modules/nix/objects NixSource.)
+        (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :yuanxu/module-system/source/admission module-source-admit-current! module-source-read)
         (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in :yuanxu/t/qualification/service-publication/fixtures ServicesFixture write-source))

@@ -5,8 +5,8 @@
 
 ;;; Product syntax for declaring one stable Scenario composition root.
 
-(import (only-in :poo-flow/modules/workflow/scenario/profile-root
-                 poo-flow-profile-bundle-root))
+(import (only-in :agentic-ai-lab/modules/workflow/scenario/profile-root
+                 agentic-ai-lab-profile-bundle-root))
 
 (export user-composition)
 
@@ -16,7 +16,7 @@
      (identifier? #'composition-name)
      (syntax/loc stx
        (def composition-name
-         (poo-flow-profile-bundle-root
+         (agentic-ai-lab-profile-bundle-root
           'composition-name
           composition-expression))))
     (_

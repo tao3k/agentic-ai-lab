@@ -1,8 +1,8 @@
 """Installed default-backend API: declarative sources, no consumer compiler."""
 import unittest
 
-from poo_flow_runtime.reasoning import ReasoningRuntime
-from poo_flow_runtime.reasoning import ClueExchange
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime
+from agentic_ai_lab_runtime.reasoning import ClueExchange
 
 
 DECLARATIONS = """

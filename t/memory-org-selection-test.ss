@@ -6,17 +6,17 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/object .o .ref)
-        (only-in :poo-flow/modules/query/semantic/orgize-interface
+        (only-in :agentic-ai-lab/modules/query/semantic/orgize-interface
                  make-org-element-graph-view org-element-query
                  org-elements property descendant-of)
-        :poo-flow/modules/session/config
-        :poo-flow/modules/ai-agentic-context/features/memory/config
-        :poo-flow/modules/ai-agentic-context/features/memory/org-selection
-        :poo-flow/modules/session/org-memory-selection)
+        :agentic-ai-lab/modules/session/config
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/org-selection
+        :agentic-ai-lab/modules/session/org-memory-selection)
 
 (export memory-org-selection-test)
 
-;;; The fixture uses Orgize's public Scheme query DSL. POO Flow does not parse
+;;; The fixture uses Orgize's public Scheme query DSL. Agentic AI Lab does not parse
 ;;; Org text or reimplement Element query or Memory semantics.
 (def org-graph
   (make-org-element-graph-view
@@ -35,35 +35,35 @@
                   (descendant-of scope))))
 
 (def org-selection
-  (poo-flow-memory-org-select
+  (agentic-ai-lab-memory-org-select
    "project-one" "worktree-a" "notes/memory.org" "cut-a"
    "bytes-sha256" org-graph org-query 0))
 
 (def org-store
-  (poo-flow-memory-store-spec
+  (agentic-ai-lab-memory-store-spec
    'memory/team 'org-worktree 'worktree '(worktree)
    '(exact-key) '(append) "marlin-agent-core" 'memory/team
    #t 'marlin-memory-adapter))
 
 (def org-intent
-  (poo-flow-session-memory-intent
+  (agentic-ai-lab-session-memory-intent
    'intent/team 'memory/team 'worktree '(review) 'append))
 
 (def org-session
-  (poo-flow-session-value
+  (agentic-ai-lab-session-value
    'session/one '()
-   (poo-flow-session-lineage 'session/one '() 'root)
-   (poo-flow-session-placement 'profile/test)))
+   (agentic-ai-lab-session-lineage 'session/one '() 'root)
+   (agentic-ai-lab-session-placement 'profile/test)))
 
 (def (org-context worktree-id cut bytes query expected current granted? active?)
-  (poo-flow-session-org-memory-selection-context
+  (agentic-ai-lab-session-org-memory-selection-context
    "project-one" worktree-id cut bytes query
    expected current granted? active?))
 
 (def memory-org-selection-test
-  (test-suite "POO Flow consumes Orgize Scheme selection"
+  (test-suite "Agentic AI Lab consumes Orgize Scheme selection"
     (yuanxu-test-case "Orgize named query selects only current headline"
-      (check-equal? (poo-flow-memory-org-selection? org-selection) #t)
+      (check-equal? (agentic-ai-lab-memory-org-selection? org-selection) #t)
       (check-equal? (.ref org-selection 'query-id) "tasks.open")
       (check-equal? (.ref org-selection 'candidate-record-ids) '(1))
       (check-equal? (.ref org-selection 'orgize-evaluated?) #t)
@@ -71,17 +71,17 @@
       (check-equal? (.ref org-selection 'memory-published?) #f))
     (yuanxu-test-case "same-cut policy match still lacks source admission"
       (let (proposal
-            (poo-flow-session-org-memory-selection-intent
+            (agentic-ai-lab-session-org-memory-selection-intent
              org-selection org-intent org-store org-session
              (org-context "worktree-a" "cut-a" "bytes-sha256"
                           "tasks.open" 3 3 #t #t)))
         (check-equal?
-         (poo-flow-session-org-memory-selection-intent-policy-eligible?
+         (agentic-ai-lab-session-org-memory-selection-intent-policy-eligible?
           proposal) #t)
         (check-equal?
-         (poo-flow-session-org-memory-selection-intent-eligible? proposal) #f)
+         (agentic-ai-lab-session-org-memory-selection-intent-eligible? proposal) #f)
         (check-equal?
-         (poo-flow-session-org-memory-selection-intent-diagnostics proposal)
+         (agentic-ai-lab-session-org-memory-selection-intent-diagnostics proposal)
          '(unverified-source-graph))
         (check-equal? (.ref proposal 'semantic-admitted?) #f)
         (check-equal? (.ref proposal 'memory-published?) #f)))
@@ -97,48 +97,48 @@
                (lambda (record name)
                  (and (equal? name "todo-type") (.ref record 'todo-type)))))
              (forged-selection
-              (poo-flow-memory-org-select
+              (agentic-ai-lab-memory-org-select
                "project-one" "worktree-a" "notes/memory.org" "cut-a"
                "bytes-sha256" forged-graph org-query 0))
              (proposal
-              (poo-flow-session-org-memory-selection-intent
+              (agentic-ai-lab-session-org-memory-selection-intent
                forged-selection org-intent org-store org-session
                (org-context "worktree-a" "cut-a" "bytes-sha256"
                             "tasks.open" 3 3 #t #t))))
         (check-equal? (.ref forged-selection 'candidate-record-ids) '(2))
         (check-equal?
-         (poo-flow-session-org-memory-selection-intent-policy-eligible?
+         (agentic-ai-lab-session-org-memory-selection-intent-policy-eligible?
           proposal) #t)
         (check-equal?
-         (poo-flow-session-org-memory-selection-intent-eligible? proposal) #f)
+         (agentic-ai-lab-session-org-memory-selection-intent-eligible? proposal) #f)
         (check-equal?
-         (poo-flow-session-org-memory-selection-intent-diagnostics proposal)
+         (agentic-ai-lab-session-org-memory-selection-intent-diagnostics proposal)
          '(unverified-source-graph))))
     (yuanxu-test-case "foreign WorkTree, stale cut, query and head are refused"
       (let (proposal
-            (poo-flow-session-org-memory-selection-intent
+            (agentic-ai-lab-session-org-memory-selection-intent
              org-selection org-intent org-store org-session
              (org-context "worktree-b" "cut-b" "bytes-sha256"
                           "tasks.done" 3 4 #t #t)))
         (check-equal?
-         (poo-flow-session-org-memory-selection-intent-diagnostics proposal)
+         (agentic-ai-lab-session-org-memory-selection-intent-diagnostics proposal)
          '(foreign-scope stale-source-cut query-not-granted stale-memory-head
                          unverified-source-graph))))
     (yuanxu-test-case "changed bytes at same cut are refused"
       (let (proposal
-            (poo-flow-session-org-memory-selection-intent
+            (agentic-ai-lab-session-org-memory-selection-intent
              org-selection org-intent org-store org-session
              (org-context "worktree-a" "cut-a" "new-bytes"
                           "tasks.open" 3 3 #t #t)))
         (check-equal?
-         (poo-flow-session-org-memory-selection-intent-diagnostics proposal)
+         (agentic-ai-lab-session-org-memory-selection-intent-diagnostics proposal)
          '(stale-org-bytes unverified-source-graph))))
     (yuanxu-test-case "revoked read and inactive Session are refused"
       (let (proposal
-            (poo-flow-session-org-memory-selection-intent
+            (agentic-ai-lab-session-org-memory-selection-intent
              org-selection org-intent org-store org-session
              (org-context "worktree-a" "cut-a" "bytes-sha256"
                           "tasks.open" 3 3 #f #f)))
         (check-equal?
-         (poo-flow-session-org-memory-selection-intent-diagnostics proposal)
+         (agentic-ai-lab-session-org-memory-selection-intent-diagnostics proposal)
          '(read-not-granted session-inactive unverified-source-graph))))))

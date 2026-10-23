@@ -2,7 +2,7 @@
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import Lean
 import Lean.Util.CollectAxioms
-namespace PooFlowContextProof
+namespace AgenticAILabContextProof
 
 -- Source freshness only; this metadata is not a semantic refinement proof.
 def coverageSourceDigest : String := "sha256:c099a7dc16730a608a576a27df757241f928a2b61c06ed0527d4c7213460442c"
@@ -125,26 +125,26 @@ theorem rebind_global_source (bind : γ → Option β → δ) (cut : γ)
     (fun key => bind cut (incremental query old new key)) =
     (fun key => bind cut (localProject query new key)) := by
   rw [incremental_equals_full]
-end PooFlowContextProof
+end AgenticAILabContextProof
 
 open Lean Elab Command in
 run_cmd do
   let environment ← getEnv
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
-  for required in #[`PooFlowContextProof.update_at_key,
-      `PooFlowContextProof.update_frame, `PooFlowContextProof.wrong_version_refused,
-      `PooFlowContextProof.exact_version_applies, `PooFlowContextProof.deletion_removes,
-      `PooFlowContextProof.untouched_edits_frame, `PooFlowContextProof.accepted_equals_full,
-      `PooFlowContextProof.wrong_base_refused, `PooFlowContextProof.incompatible_refused,
-      `PooFlowContextProof.missing_content_refused,
-      `PooFlowContextProof.unchanged_source_is_equal, `PooFlowContextProof.incremental_equals_full, `PooFlowContextProof.insertion_is_covered,
-      `PooFlowContextProof.removal_is_covered, `PooFlowContextProof.nonmatching_to_matching_is_covered,
-      `PooFlowContextProof.rebind_global_source] do
+  for required in #[`AgenticAILabContextProof.update_at_key,
+      `AgenticAILabContextProof.update_frame, `AgenticAILabContextProof.wrong_version_refused,
+      `AgenticAILabContextProof.exact_version_applies, `AgenticAILabContextProof.deletion_removes,
+      `AgenticAILabContextProof.untouched_edits_frame, `AgenticAILabContextProof.accepted_equals_full,
+      `AgenticAILabContextProof.wrong_base_refused, `AgenticAILabContextProof.incompatible_refused,
+      `AgenticAILabContextProof.missing_content_refused,
+      `AgenticAILabContextProof.unchanged_source_is_equal, `AgenticAILabContextProof.incremental_equals_full, `AgenticAILabContextProof.insertion_is_covered,
+      `AgenticAILabContextProof.removal_is_covered, `AgenticAILabContextProof.nonmatching_to_matching_is_covered,
+      `AgenticAILabContextProof.rebind_global_source] do
     unless environment.contains required do
       throwError "Required Context Delta theorem is missing: {required}"
   let mut count : Nat := 0
   for (name, info) in environment.constants.toList do
-    if (`PooFlowContextProof).isPrefixOf name then
+    if (`AgenticAILabContextProof).isPrefixOf name then
       if info.isTheorem then count := count + 1
       for axiomName in (← collectAxioms name) do
         unless allowed.contains axiomName do

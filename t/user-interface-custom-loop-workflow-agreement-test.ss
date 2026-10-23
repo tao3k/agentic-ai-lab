@@ -12,11 +12,11 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
         (only-in "../user-interface/custom/my-module/cases/funflow-cicd"
-                 poo-flow-custom-my-module-funflow-cicd-case)
+                 agentic-ai-lab-custom-my-module-funflow-cicd-case)
         (only-in "../user-interface/custom/my-module/cases/loop-engine"
-                 poo-flow-custom-my-module-loop-engine-case))
+                 agentic-ai-lab-custom-my-module-loop-engine-case))
 
 (export user-interface-custom-loop-workflow-agreement-test)
 
@@ -37,7 +37,7 @@
 ;;; real user profiles, preserving declaration order and selected check maps.
 ;; : (-> [[PooUserModuleSelection]] POOObject)
 (def (custom-workflow-presentation module-bundles)
-  (pooFlowUserConfigPresentation
+  (agenticAiLabUserConfigPresentation
    (yuanxuUserConfig
     (yuanxu-user-module-bundles->modules module-bundles)
     (yuanxu-settings))))
@@ -49,7 +49,7 @@
   (yuanxu-test-case "reports missing Funflow workflow pipeline agreement"
     (let* ((presentation
             (custom-workflow-presentation
-             (list poo-flow-custom-my-module-loop-engine-case)))
+             (list agentic-ai-lab-custom-my-module-loop-engine-case)))
            (intent (car (.ref presentation 'loop-engine-intents)))
            (runtime-manifest
             (test-ref intent 'runtime-command-manifest))
@@ -92,8 +92,8 @@
   (yuanxu-test-case "backs loop-engine workflow ref with Funflow pipeline config"
     (let* ((presentation
             (custom-workflow-presentation
-             (list poo-flow-custom-my-module-funflow-cicd-case
-                   poo-flow-custom-my-module-loop-engine-case)))
+             (list agentic-ai-lab-custom-my-module-funflow-cicd-case
+                   agentic-ai-lab-custom-my-module-loop-engine-case)))
            (intent (car (.ref presentation 'loop-engine-intents)))
            (runtime-manifest
             (test-ref intent 'runtime-command-manifest))
@@ -157,6 +157,6 @@
 
 ;; : TestSuite
 (def user-interface-custom-loop-workflow-agreement-test
-  (test-suite "poo-flow custom user-interface loop workflow agreement"
+  (test-suite "agentic-ai-lab custom user-interface loop workflow agreement"
     (custom-loop-workflow-missing-funflow-case)
     (custom-loop-workflow-funflow-backed-case)))

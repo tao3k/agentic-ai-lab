@@ -9,19 +9,19 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every filter delete-duplicates/hash)
-        (only-in :poo-flow/modules/temporal-causality/time/types
-                 poo-flow-temporal-instant?)
-        (only-in :poo-flow/modules/temporal-causality/time/funs
-                 poo-flow-temporal-interval-contains?)
-        (only-in :poo-flow/modules/temporal-causality/revisions/types
-                 poo-flow-temporal-evidence-revision?
-                 poo-flow-temporal-evidence-journal?)
-        (only-in :poo-flow/modules/temporal-causality/revisions/objects
-                 poo-flow-temporal-evidence-journal-value
-                 poo-flow-temporal-evidence-snapshot-value))
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+                 agentic-ai-lab-temporal-instant?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/funs
+                 agentic-ai-lab-temporal-interval-contains?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/types
+                 agentic-ai-lab-temporal-evidence-revision?
+                 agentic-ai-lab-temporal-evidence-journal?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/objects
+                 agentic-ai-lab-temporal-evidence-journal-value
+                 agentic-ai-lab-temporal-evidence-snapshot-value))
 
-(export poo-flow-temporal-evidence-journal
-        poo-flow-temporal-evidence-as-of)
+(export agentic-ai-lab-temporal-evidence-journal
+        agentic-ai-lab-temporal-evidence-as-of)
 
 (def (digest datum)
   (string-append
@@ -59,11 +59,11 @@
 ;;; The journal is a set of immutable revisions. A predecessor must be in the
 ;;; same subject and earlier on one observed admission clock. Branches remain
 ;;; possible and are reported as conflicts at query time.
-(def (poo-flow-temporal-evidence-journal identity-value domain-value revisions)
+(def (agentic-ai-lab-temporal-evidence-journal identity-value domain-value revisions)
   (unless (and (string? identity-value) (> (string-length identity-value) 0)
                (string? domain-value) (> (string-length domain-value) 0)
                (list? revisions)
-               (every poo-flow-temporal-evidence-revision? revisions))
+               (every agentic-ai-lab-temporal-evidence-revision? revisions))
     (error "invalid temporal evidence journal inventory"))
   (let ((index (make-hash-table)))
     (for-each
@@ -93,25 +93,25 @@
      revisions))
   (let* ((canonical (list-sort revision<? revisions))
          (semantic-digest
-          (digest (list 'poo-flow.temporal-evidence-journal.v1
+          (digest (list 'agentic-ai-lab.temporal-evidence-journal.v1
                         identity-value domain-value
                         (map revision-row canonical)))))
-    (poo-flow-temporal-evidence-journal-value
+    (agentic-ai-lab-temporal-evidence-journal-value
      identity-value semantic-digest domain-value canonical)))
 
 ;;; Project one immutable admission-time cut. A valid-at instant optionally
 ;;; filters the selected head of each subject. Branching heads are conflicts,
 ;;; never an arbitrary latest-value winner.
-(def (poo-flow-temporal-evidence-as-of journal as-of valid-at)
-  (unless (and (poo-flow-temporal-evidence-journal? journal)
-               (poo-flow-temporal-instant? as-of)
+(def (agentic-ai-lab-temporal-evidence-as-of journal as-of valid-at)
+  (unless (and (agentic-ai-lab-temporal-evidence-journal? journal)
+               (agentic-ai-lab-temporal-instant? as-of)
                (eq? (.ref as-of 'modality) 'observed)
                (equal? (.ref as-of 'domain-identity)
                        (.ref journal 'admission-domain-identity))
-               (or (not valid-at) (poo-flow-temporal-instant? valid-at)))
+               (or (not valid-at) (agentic-ai-lab-temporal-instant? valid-at)))
     (error "invalid temporal evidence as-of query"))
   (let (canonical
-        (poo-flow-temporal-evidence-journal
+        (agentic-ai-lab-temporal-evidence-journal
          (.ref journal 'identity)
          (.ref journal 'admission-domain-identity)
          (.ref journal 'revisions)))
@@ -158,7 +158,7 @@
            (let* ((head (car heads))
                   (membership
                    (if valid-at
-                     (poo-flow-temporal-interval-contains?
+                     (agentic-ai-lab-temporal-interval-contains?
                       (.ref head 'valid-interval) valid-at)
                      #t)))
              (cond
@@ -171,7 +171,7 @@
               (else (set! uncertain (cons subject uncertain)))))))))
      (list-sort string<? (delete-duplicates/hash subjects)))
     (let* ((cut-digest
-            (digest (list 'poo-flow.temporal-evidence-cut.v1
+            (digest (list 'agentic-ai-lab.temporal-evidence-cut.v1
                           (.ref journal 'identity) (instant-row as-of)
                           (map revision-row visible))))
            (valid-at-digest (and valid-at (digest (instant-row valid-at))))
@@ -182,11 +182,11 @@
            (uncertain (list-sort string<? uncertain))
            (incomparable (list-sort string<? incomparable))
            (projection-digest
-            (digest (list 'poo-flow.temporal-evidence-projection.v1
+            (digest (list 'agentic-ai-lab.temporal-evidence-projection.v1
                           cut-digest valid-at-digest
                           active retracted conflicted outside
                           uncertain incomparable))))
-      (poo-flow-temporal-evidence-snapshot-value
+      (agentic-ai-lab-temporal-evidence-snapshot-value
        (.ref journal 'semantic-digest) cut-digest projection-digest
        (.ref as-of 'identity)
        (and valid-at (.ref valid-at 'identity)) valid-at-digest

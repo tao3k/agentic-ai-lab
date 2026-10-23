@@ -21,14 +21,14 @@
    :yuanxu/graph/types-core
    :yuanxu/graph/types-contracts
    :yuanxu/graph/types
-   :poo-flow/modules/temporal-causality/types
-   :poo-flow/modules/temporal-causality/objects
-   :poo-flow/modules/temporal-causality/funs
-   :poo-flow/modules/temporal-causality/time/types
-   :poo-flow/modules/temporal-causality/time/objects
-   :poo-flow/modules/temporal-causality/time/uncertainty-types
-   :poo-flow/modules/temporal-causality/time/uncertainty-objects
-   :poo-flow/modules/temporal-causality/time/uncertainty-funs
+   :agentic-ai-lab/modules/temporal-causality/types
+   :agentic-ai-lab/modules/temporal-causality/objects
+   :agentic-ai-lab/modules/temporal-causality/funs
+   :agentic-ai-lab/modules/temporal-causality/time/types
+   :agentic-ai-lab/modules/temporal-causality/time/objects
+   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-objects
+   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs
    :gerbil-ascent/core/binary-relation
    :gerbil-ascent/table/expression
    :gerbil-ascent/table/funs
@@ -83,26 +83,26 @@
    :gerbil-ascent/temporal/graph
    :gerbil-ascent/temporal/lens
    :gerbil-ascent/interface/request
-   :poo-flow/modules/temporal-causality/time/types
-   :poo-flow/modules/temporal-causality/time/objects
-   :poo-flow/modules/temporal-causality/time/funs
-   :poo-flow/modules/temporal-causality/revisions/types
-   :poo-flow/modules/temporal-causality/revisions/objects
-   :poo-flow/modules/temporal-causality/revisions/funs
-   :poo-flow/modules/temporal-causality/revisions/interface
-   :poo-flow/modules/temporal-causality/truth-maintenance/support/types
-   :poo-flow/modules/temporal-causality/truth-maintenance/support/objects
-   :poo-flow/modules/temporal-causality/truth-maintenance/support/funs
-   :poo-flow/modules/temporal-causality/truth-maintenance/support/policy
-   :poo-flow/modules/temporal-causality/truth-maintenance/support/interface
-   :poo-flow/modules/temporal-causality/truth-maintenance/support/policy-host
-   :poo-flow/modules/temporal-causality/evaluator/positive-proof
-   :poo-flow/modules/temporal-causality/evaluator/fact
-   :poo-flow/modules/temporal-causality/evaluator/binding
-   :poo-flow/modules/temporal-causality/evaluator/rule
-   :poo-flow/modules/temporal-causality/evaluator/derivation
-   :poo-flow/modules/temporal-causality/evaluator/proof-host
-   :poo-flow/modules/temporal-causality/evaluator/interface
+   :agentic-ai-lab/modules/temporal-causality/time/types
+   :agentic-ai-lab/modules/temporal-causality/time/objects
+   :agentic-ai-lab/modules/temporal-causality/time/funs
+   :agentic-ai-lab/modules/temporal-causality/revisions/types
+   :agentic-ai-lab/modules/temporal-causality/revisions/objects
+   :agentic-ai-lab/modules/temporal-causality/revisions/funs
+   :agentic-ai-lab/modules/temporal-causality/revisions/interface
+   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/types
+   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/objects
+   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/funs
+   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
+   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
+   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
+   :agentic-ai-lab/modules/temporal-causality/evaluator/positive-proof
+   :agentic-ai-lab/modules/temporal-causality/evaluator/fact
+   :agentic-ai-lab/modules/temporal-causality/evaluator/binding
+   :agentic-ai-lab/modules/temporal-causality/evaluator/rule
+   :agentic-ai-lab/modules/temporal-causality/evaluator/derivation
+   :agentic-ai-lab/modules/temporal-causality/evaluator/proof-host
+   :agentic-ai-lab/modules/temporal-causality/evaluator/interface
    :gerbil/tools/gxtest))
 ;;; Resolve the Context/Orgize closure with the compiler's real dependency order.
 ;;; No timer emits progress and no hand-written parser dependency list is kept.

@@ -4,15 +4,15 @@
 
 ;;; Boundary: declares the default model catalog and selection policy objects.
 ;;; Invariant: configuration is inert data; provider invocation remains runtime-owned.
-(export poo-flow-model-core-fast-text-model
-        poo-flow-model-core-tool-json-model
-        poo-flow-model-core-default-catalog
-        poo-flow-model-core-default-selection-policy)
+(export agentic-ai-lab-model-core-fast-text-model
+        agentic-ai-lab-model-core-tool-json-model
+        agentic-ai-lab-model-core-default-catalog
+        agentic-ai-lab-model-core-default-selection-policy)
 
-(import :poo-flow/modules/model-core/objects)
+(import :agentic-ai-lab/modules/model-core/objects)
 
-(def poo-flow-model-core-fast-text-model
-  (poo-flow-model-spec
+(def agentic-ai-lab-model-core-fast-text-model
+  (agentic-ai-lab-model-spec
    'fast-text
    'runtime-local
    "local-fast-text"
@@ -25,8 +25,8 @@
    'python-runtime
    '((profile . default-fast))))
 
-(def poo-flow-model-core-tool-json-model
-  (poo-flow-model-spec
+(def agentic-ai-lab-model-core-tool-json-model
+  (agentic-ai-lab-model-spec
    'tool-json
    'runtime-local
    "local-tool-json"
@@ -39,16 +39,16 @@
    'python-runtime
    '((profile . default-tool-json))))
 
-(def poo-flow-model-core-default-catalog
-  (poo-flow-model-catalog
+(def agentic-ai-lab-model-core-default-catalog
+  (agentic-ai-lab-model-catalog
    'model-core-default
-   (list poo-flow-model-core-fast-text-model
-         poo-flow-model-core-tool-json-model)
+   (list agentic-ai-lab-model-core-fast-text-model
+         agentic-ai-lab-model-core-tool-json-model)
    '((owner . model-core)
      (projection . runtime-facing))))
 
-(def poo-flow-model-core-default-selection-policy
-  (poo-flow-model-selection-policy
+(def agentic-ai-lab-model-core-default-selection-policy
+  (agentic-ai-lab-model-selection-policy
    'default-tool-aware
    '(tool-json fast-text)
    'fast-text

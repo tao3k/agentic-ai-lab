@@ -19,14 +19,14 @@
    :yuanxu/graph/types-core
    :yuanxu/graph/types-contracts
    :yuanxu/graph/types
-   :poo-flow/modules/temporal-causality/types
-   :poo-flow/modules/temporal-causality/objects
-   :poo-flow/modules/temporal-causality/funs
-   :poo-flow/modules/temporal-causality/time/types
-   :poo-flow/modules/temporal-causality/time/objects
-   :poo-flow/modules/temporal-causality/time/uncertainty-types
-   :poo-flow/modules/temporal-causality/time/uncertainty-objects
-   :poo-flow/modules/temporal-causality/time/uncertainty-funs
+   :agentic-ai-lab/modules/temporal-causality/types
+   :agentic-ai-lab/modules/temporal-causality/objects
+   :agentic-ai-lab/modules/temporal-causality/funs
+   :agentic-ai-lab/modules/temporal-causality/time/types
+   :agentic-ai-lab/modules/temporal-causality/time/objects
+   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-objects
+   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs
    :gerbil-ascent/core/binary-relation
    :gerbil-ascent/table/expression
    :gerbil-ascent/table/funs
@@ -81,33 +81,33 @@
    :gerbil-ascent/temporal/graph
    :gerbil-ascent/temporal/lens
    :gerbil-ascent/interface/request
-   :poo-flow/modules/temporal-causality/ascent-exchange
+   :agentic-ai-lab/modules/temporal-causality/ascent-exchange
    :yuanxu/graph/algorithms
-   :poo-flow/modules/workflow/runtime/scheme-wire
-   :poo-flow/modules/workflow/runtime/temporal-family
-   :poo-flow/modules/temporal-causality/conclusions/types
-   :poo-flow/modules/temporal-causality/truth-maintenance/types
-   :poo-flow/modules/temporal-causality/conclusions/objects
-   :poo-flow/modules/temporal-causality/conclusions/funs
-   :poo-flow/modules/temporal-causality/admission/interface
-   :poo-flow/modules/temporal-causality/applicability/types
-   :poo-flow/modules/temporal-causality/applicability/objects
-   :poo-flow/modules/temporal-causality/applicability/funs
-   :poo-flow/modules/temporal-causality/lifecycle/types
-   :poo-flow/modules/temporal-causality/lifecycle/objects
-   :poo-flow/modules/temporal-causality/lifecycle/funs
-   :poo-flow/modules/temporal-causality/lifecycle/interface
-   :poo-flow/modules/temporal-causality/truth-maintenance/objects
-   :poo-flow/modules/workflow/runtime/temporal-admission
-   :poo-flow/modules/workflow/runtime/temporal-archive
-   :poo-flow/modules/workflow/runtime/semantic))
+   :agentic-ai-lab/modules/workflow/runtime/scheme-wire
+   :agentic-ai-lab/modules/workflow/runtime/temporal-family
+   :agentic-ai-lab/modules/temporal-causality/conclusions/types
+   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/types
+   :agentic-ai-lab/modules/temporal-causality/conclusions/objects
+   :agentic-ai-lab/modules/temporal-causality/conclusions/funs
+   :agentic-ai-lab/modules/temporal-causality/admission/interface
+   :agentic-ai-lab/modules/temporal-causality/applicability/types
+   :agentic-ai-lab/modules/temporal-causality/applicability/objects
+   :agentic-ai-lab/modules/temporal-causality/applicability/funs
+   :agentic-ai-lab/modules/temporal-causality/lifecycle/types
+   :agentic-ai-lab/modules/temporal-causality/lifecycle/objects
+   :agentic-ai-lab/modules/temporal-causality/lifecycle/funs
+   :agentic-ai-lab/modules/temporal-causality/lifecycle/interface
+   :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects
+   :agentic-ai-lab/modules/workflow/runtime/temporal-admission
+   :agentic-ai-lab/modules/workflow/runtime/temporal-archive
+   :agentic-ai-lab/modules/workflow/runtime/semantic))
 (displayln "MODULE-OK semantic")
 (displayln "HARNESS-OK semantic-worker")
 (displayln "READY") (force-output)
 (let loop ()
   (let (line (read-line))
     (unless (eof-object? line)
-      (displayln (poo-flow/modules/workflow/runtime/semantic#semantic-call "temporal.solve" line))
+      (displayln (agentic-ai-lab/modules/workflow/runtime/semantic#semantic-call "temporal.solve" line))
       (force-output)
       (loop))))
 (displayln "OK") (force-output)

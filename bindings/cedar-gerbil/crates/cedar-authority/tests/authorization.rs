@@ -4,13 +4,13 @@
 
 mod support;
 
-use poo_flow_cedar_authority::authority::{Authority, ConsumeRequest, verify_signature};
-use poo_flow_cedar_authority::canonical;
-use poo_flow_cedar_authority::projection::{
+use agentic_ai_lab_cedar_authority::authority::{Authority, ConsumeRequest, verify_signature};
+use agentic_ai_lab_cedar_authority::canonical;
+use agentic_ai_lab_cedar_authority::projection::{
     Bootstrap, HandoffInput, PolicySource, Proposal, Snapshot,
 };
-use poo_flow_cedar_authority::runtime::Deployment;
-use poo_flow_cedar_authority::wire::{CEDAR_VERSION, LEAN_REVISION};
+use agentic_ai_lab_cedar_authority::runtime::Deployment;
+use agentic_ai_lab_cedar_authority::wire::{CEDAR_VERSION, LEAN_REVISION};
 use serde_json::json;
 use std::path::PathBuf;
 use std::process::{Child, Command, Stdio};
@@ -27,13 +27,13 @@ fn bootstrap() -> Bootstrap {
         }}
     }}}}});
     serde_json::from_value(json!({
-        "schema_id": "poo-flow.cedar-authority-snapshot.v1", "producer": "poo-flow.scheme-control",
+        "schema_id": "agentic-ai-lab.cedar-authority-snapshot.v1", "producer": "agentic-ai-lab.scheme-control",
         "source": "modules/authorization/providers/cedar/objects.ss", "object_kind": "cedar-authority-snapshot",
         "provenance": {"composition_identity": "example.composition",
             "profile_identities": ["example.profile"], "profile_origin_digest": digest(1),
             "governance_assessment_digest": digest(10), "subject_snapshot_digest": digest(11),
             "governance_admitted": true,
-            "certification_names": ["PooFlowProof.Runtime.CedarNative", "PooFlowProof.Runtime.CedarRuntimeHost"]},
+            "certification_names": ["AgenticAILabProof.Runtime.CedarNative", "AgenticAILabProof.Runtime.CedarRuntimeHost"]},
         "authority_id": "example.authority", "runtime_context_id": "context-1", "runtime_generation": 1, "bundle_epoch": 7,
         "runtime_bundle_digest": digest(2), "profile_bundle_digest": digest(3), "independent_bundle_digest": digest(4),
         "capability_contract_digest": digest(5), "policy_revision": 1, "revocation_epoch": 0,
@@ -49,7 +49,7 @@ fn bootstrap() -> Bootstrap {
 
 fn proposal() -> Proposal {
     Proposal {
-        schema_id: "poo-flow.cedar-authorization-request.v1".into(),
+        schema_id: "agentic-ai-lab.cedar-authorization-request.v1".into(),
         principal: "User::\"alice\"".into(),
         action: "Action::\"run\"".into(),
         resource: "Job::\"demo\"".into(),
@@ -98,8 +98,8 @@ fn healthcare_bootstrap(reconciliation_observed: bool, revoked: bool) -> Bootstr
          }, "parents": []}
     ]);
     serde_json::from_value(json!({
-        "schema_id": "poo-flow.cedar-authority-snapshot.v1",
-        "producer": "poo-flow.scheme-control",
+        "schema_id": "agentic-ai-lab.cedar-authority-snapshot.v1",
+        "producer": "agentic-ai-lab.scheme-control",
         "source": "modules/authorization/providers/cedar/objects.ss",
         "object_kind": "cedar-authority-snapshot",
         "provenance": {
@@ -116,8 +116,8 @@ fn healthcare_bootstrap(reconciliation_observed: bool, revoked: bool) -> Bootstr
             "subject_snapshot_digest": digest(11),
             "governance_admitted": true,
             "certification_names": [
-                "PooFlowProof.Enterprise.GovernanceThreatAssuranceClosure",
-                "PooFlowProof.PooC4.CedarDualEngineArbitration"
+                "AgenticAILabProof.Enterprise.GovernanceThreatAssuranceClosure",
+                "AgenticAILabProof.PooC4.CedarDualEngineArbitration"
             ]
         },
         "authority_id": "healthcare.authority",
@@ -150,7 +150,7 @@ fn healthcare_bootstrap(reconciliation_observed: bool, revoked: bool) -> Bootstr
 
 fn healthcare_proposal(provider: &str) -> Proposal {
     Proposal {
-        schema_id: "poo-flow.cedar-authorization-request.v1".into(),
+        schema_id: "agentic-ai-lab.cedar-authorization-request.v1".into(),
         principal: format!("Healthcare::Provider::\"{provider}\""),
         action: "Healthcare::Action::\"administerMedication\"".into(),
         resource: "Healthcare::MedicationOrder::\"medication-order-1\"".into(),
@@ -221,7 +221,7 @@ impl Drop for TestRuntime {
 
 fn spawn_runtime(timeout_ms: u64) -> TestRuntime {
     let host = PathBuf::from(
-        std::env::var_os("POO_FLOW_CEDAR_RUNTIME_HOST")
+        std::env::var_os("AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST")
             .expect("qualification requires the AOT Runtime Host artifact"),
     );
     let runtime_artifact_digest = artifact(&host);
@@ -271,7 +271,7 @@ fn deployment(runtime: &TestRuntime) -> Deployment {
 
 fn consume_request(
     authority: &Authority,
-    grant: poo_flow_cedar_authority::authority::Signed<poo_flow_cedar_authority::authority::Grant>,
+    grant: agentic_ai_lab_cedar_authority::authority::Signed<agentic_ai_lab_cedar_authority::authority::Grant>,
     proposal: &Proposal,
 ) -> ConsumeRequest {
     let info = authority.info();
@@ -568,7 +568,7 @@ fn snapshot_and_request_failures_do_not_manufacture_decisions() {
     );
     let snapshot = Snapshot::new(bootstrap()).unwrap();
     let mut request = proposal();
-    request.context["poo_flow"] = json!({});
+    request.context["agentic_ai_lab"] = json!({});
     assert_eq!(
         snapshot.prepare(&request).err().unwrap().code,
         "reserved-authority-context"
@@ -601,12 +601,12 @@ fn snapshot_and_request_failures_do_not_manufacture_decisions() {
 fn preflight_only_request_requires_runtime_source_admission() {
     let snapshot = Snapshot::new(bootstrap()).unwrap();
     let mut request = proposal();
-    request.context["poo_flow_preflight_only"] = json!(true);
+    request.context["agentic_ai_lab_preflight_only"] = json!(true);
     assert_eq!(
         snapshot.prepare(&request).err().unwrap().code,
         "runtime-source-admission-required"
     );
-    request.context["poo_flow_preflight_only"] = json!(false);
+    request.context["agentic_ai_lab_preflight_only"] = json!(false);
     assert_eq!(
         snapshot.prepare(&request).err().unwrap().code,
         "runtime-source-admission-required"
@@ -625,7 +625,7 @@ fn source_bound_capability_rejects_stripped_preflight_context() {
     administrative.capabilities[0].source_admission_required = true;
     let snapshot = Snapshot::new(administrative).unwrap();
     let mut request = proposal();
-    request.context["poo_flow_preflight_only"] = json!(true);
+    request.context["agentic_ai_lab_preflight_only"] = json!(true);
     assert_eq!(
         snapshot.prepare(&request).err().unwrap().code,
         "runtime-source-admission-required"
@@ -634,7 +634,7 @@ fn source_bound_capability_rejects_stripped_preflight_context() {
         .context
         .as_object_mut()
         .unwrap()
-        .remove("poo_flow_preflight_only");
+        .remove("agentic_ai_lab_preflight_only");
     assert_eq!(
         snapshot.prepare(&request).err().unwrap().code,
         "runtime-source-admission-required"

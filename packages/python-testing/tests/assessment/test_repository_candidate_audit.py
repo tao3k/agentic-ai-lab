@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from poo_flow_testing.assessment_studies.repository_candidate_audit import admitted_edits
+from agentic_ai_lab_testing.assessment_studies.repository_candidate_audit import admitted_edits
 
 
 class PublicCandidateReplay(unittest.TestCase):

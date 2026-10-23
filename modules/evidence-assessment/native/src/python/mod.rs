@@ -1,4 +1,4 @@
-//! Existing POO Flow Python runtime's assessment bindings; no ASCENT application exports.
+//! Existing Agentic AI Lab Python runtime's assessment bindings; no ASCENT application exports.
 mod clues;
 mod computational;
 mod context;
@@ -27,7 +27,7 @@ use pyo3::{
     wrap_pyfunction,
 };
 pyo3::create_exception!(
-    poo_flow_runtime,
+    agentic_ai_lab_runtime,
     ReasoningError,
     pyo3::exceptions::PyValueError
 );

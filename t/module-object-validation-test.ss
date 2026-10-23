@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO Flow integration with Core's native module-schema admission.
+;;; Boundary: Agentic AI Lab integration with Core's native module-schema admission.
 
 (import :gerbil/core
         (only-in :clan/poo/object .ref object?)
@@ -39,7 +39,7 @@
    '((domain . validation))))
 
 (def module-object-validation-test
-  (test-suite "poo-flow native module object validation"
+  (test-suite "agentic-ai-lab native module object validation"
     (yuanxu-test-case "admits inherited module objects through native Type and C4"
       (let* ((validation
               (yuanxu-module-object-validation validation-nono-sandbox-object))

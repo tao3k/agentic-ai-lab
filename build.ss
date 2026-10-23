@@ -6,12 +6,12 @@
           (only-in :std/source this-source-file)
           (only-in :yuanxu/module-system/building/source-package register-module-build-source!)))
 (begin-syntax
-  (register-module-build-source! (path-directory (this-source-file)) 'poo-flow))
+  (register-module-build-source! (path-directory (this-source-file)) 'agentic-ai-lab))
 
 (import (only-in :clan/poo/object .get)
         (only-in :std/build-script defbuild-script)
-        (only-in "./init.ss" poo-flow.init.exports)
-        (only-in "./build-spec.ss" poo-flow-library-spec))
+        (only-in "./init.ss" agentic-ai-lab.init.exports)
+        (only-in "./build-spec.ss" agentic-ai-lab-library-spec))
 
 (def +nono-c-include-option+
   (string-append
@@ -39,15 +39,15 @@
    (else '(gxc: "modules/workflow/runtime/semantic"))))
 
 
-(def (poo-flow-spec)
+(def (agentic-ai-lab-spec)
   (append
     `((gxc: "modules/nono-sandbox/_nono"
             "-cc-options" ,+nono-c-include-option+
             "-ld-options" ,+nono-c-link-option+))
-    (poo-flow-library-spec)
+    (agentic-ai-lab-library-spec)
     (list +runtime-v0-native-ffi-spec+ +semantic-native-ffi-spec+)))
 
-(def retained-spec (poo-flow-spec))
+(def retained-spec (agentic-ai-lab-spec))
 
 ;; Use the admitted specification directly; std/build-script owns dispatch.
 (def (package-main spec args)
@@ -58,7 +58,7 @@
   ;; Package compilation returns no module-publication authority. Keep its
   ;; source guards and let the SDK reuse its own incremental output cohort.
   (if (and (pair? args) (equal? (car args) "clean"))
-    ((.get poo-flow.init.exports std-make-run) retained-spec package-main args)
-    (let (spec ((.get poo-flow.init.exports std-make-spec) retained-spec))
+    ((.get agentic-ai-lab.init.exports std-make-run) retained-spec package-main args)
+    (let (spec ((.get agentic-ai-lab.init.exports std-make-spec) retained-spec))
       (begin0 (package-main spec args)
-        ((.get poo-flow.init.exports admit-current))))))
+        ((.get agentic-ai-lab.init.exports admit-current))))))

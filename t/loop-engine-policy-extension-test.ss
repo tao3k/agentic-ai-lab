@@ -11,7 +11,7 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o)
-        :poo-flow/modules/loop-engine/policy-extension)
+        :agentic-ai-lab/modules/loop-engine/policy-extension)
 
 (export loop-engine-policy-extension-test)
 
@@ -36,7 +36,7 @@
 ;;; and presentation tests.
 ;; : (-> [Alist])
 (def (custom-loop-policy-extension-receipts)
-  (poo-flow-user-loop-engine-poo-policy-extensions->receipts
+  (agentic-ai-lab-user-loop-engine-poo-policy-extensions->receipts
    (list
     (.o (:: @ loop-engine-coordination-policy-extension)
         name: 'repo-loop-coordination
@@ -94,12 +94,12 @@
 
 ;;; Malformed extension slots fail before runtime manifests can carry ambiguous
 ;;; policy receipts.
-;; : (-> PooFlowLoopEnginePolicyExtensionPrototype)
+;; : (-> AgenticAILabLoopEnginePolicyExtensionPrototype)
 (def (custom-loop-invalid-policy-extension)
   (.o (:: @ loop-engine-policy-extension)
       name: 'invalid-policy-extension
       receipt-kind: 'coordination-receipt
-      contract: 'poo-flow.loop-engine.coordination-receipt.v1
+      contract: 'agentic-ai-lab.loop-engine.coordination-receipt.v1
       priority: 'bad-priority))
 
 ;;; Coordination coverage proves cross-loop ownership and collision facts are
@@ -122,7 +122,7 @@
       (check-equal? (test-ref safety-receipt 'kind)
                     'safety-receipt)
       (check-equal? (test-ref coordination-receipt 'contract)
-                    'poo-flow.loop-engine.coordination-receipt.v1)
+                    'agentic-ai-lab.loop-engine.coordination-receipt.v1)
       (check-equal? (test-ref coordination-receipt 'priority)
                     '(ci-sweeper
                       dependency-sweeper
@@ -156,7 +156,7 @@
            (observability-receipt
             (test-row-by-field receipts 'kind 'observability-receipt)))
       (check-equal? (test-ref observability-receipt 'contract)
-                    'poo-flow.loop-engine.observability-receipt.v1)
+                    'agentic-ai-lab.loop-engine.observability-receipt.v1)
       (check-equal? (test-ref observability-receipt 'run-log)
                     "loop-run-log.md")
       (check-equal? (test-ref observability-receipt 'metric-keys)
@@ -176,7 +176,7 @@
            (safety-receipt
             (test-row-by-field receipts 'kind 'safety-receipt)))
       (check-equal? (test-ref safety-receipt 'contract)
-                    'poo-flow.loop-engine.safety-receipt.v1)
+                    'agentic-ai-lab.loop-engine.safety-receipt.v1)
       (check-equal? (test-ref safety-receipt 'denylist-paths)
                     '(".env"
                       ".env.local"
@@ -217,7 +217,7 @@
      (with-catch
       (lambda (_) #t)
       (lambda ()
-        (poo-flow-user-loop-engine-poo-policy-extensions->receipts
+        (agentic-ai-lab-user-loop-engine-poo-policy-extensions->receipts
          (list (custom-loop-invalid-policy-extension)))
         #f))
      #t)))

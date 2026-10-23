@@ -4,7 +4,7 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/modules/workflow/graph/control-plane-handoff-facts)
+        :agentic-ai-lab/modules/workflow/graph/control-plane-handoff-facts)
 
 (def control-plane-handoff-facts-test
   (test-suite "control-plane handoff facts"
@@ -21,7 +21,7 @@
     (error "control-plane handoff proof fact mismatch" label actual expected)))
 
 (def accepted-facts
-  (poo-flow-control-plane-handoff-contract->proof-facts
+  (agentic-ai-lab-control-plane-handoff-contract->proof-facts
    'generated-langgraph-control-plane-handoff
    #t
    #t
@@ -33,7 +33,7 @@
 
 (assert-equal 'schema
               (alist-ref 'schema accepted-facts)
-              'poo-flow.proof.control-plane.handoff)
+              'agentic-ai-lab.proof.control-plane.handoff)
 (assert-equal 'fact-id
               (alist-ref 'fact-id accepted-facts)
               'generated-langgraph-control-plane-handoff)
@@ -50,7 +50,7 @@
 (assert-equal 'ffi-ready? (alist-ref 'ffi-ready? accepted-facts) #t)
 
 (def runtime-owned-here-facts
-  (poo-flow-control-plane-handoff-contract->proof-facts
+  (agentic-ai-lab-control-plane-handoff-contract->proof-facts
    'generated-runtime-owned-here-handoff
    #t
    #t
@@ -65,7 +65,7 @@
               'control-plane-handoff-rejected-by-runtime-owner)
 
 (def runtime-executed-here-facts
-  (poo-flow-control-plane-handoff-contract->proof-facts
+  (agentic-ai-lab-control-plane-handoff-contract->proof-facts
    'generated-runtime-executed-here-handoff
    #t
    #t

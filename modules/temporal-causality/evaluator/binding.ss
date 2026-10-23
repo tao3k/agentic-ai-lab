@@ -8,25 +8,25 @@
         (only-in :gerbil-ascent/candidate/provenance
                  positive-proof-nodes positive-proof-roots proof-node-kind proof-node-row
                  proof-node-relation proof-node-inputs)
-        (only-in :poo-flow/modules/temporal-causality/revisions/interface poo-flow-temporal-evidence-journal)
-        (only-in :poo-flow/modules/temporal-causality/truth-maintenance/support/interface
-                 poo-flow-temporal-support poo-flow-temporal-support-premise)
+        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/interface agentic-ai-lab-temporal-evidence-journal)
+        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
+                 agentic-ai-lab-temporal-support agentic-ai-lab-temporal-support-premise)
         "positive-proof.ss" "fact.ss")
-(export poo-flow-temporal-proof-source-binding poo-flow-temporal-proof-support
-        poo-flow-temporal-proof-support-replay)
+(export agentic-ai-lab-temporal-proof-source-binding agentic-ai-lab-temporal-proof-support
+        agentic-ai-lab-temporal-proof-support-replay)
 (def (text? x) (and (string? x) (< 0 (string-length x) 257)))
 (def (digest x) (string-append "sha256:" (hex-encode (sha256 (string->utf8
   (call-with-output-string (lambda (p) (write x p))))))))
-(def (poo-flow-temporal-proof-source-binding node-value fact-value subject-value revision-value)
+(def (agentic-ai-lab-temporal-proof-source-binding node-value fact-value subject-value revision-value)
   (unless (and (exact-integer? node-value) (<= 0 node-value 127) (text? subject-value) (text? revision-value))
     (error "invalid proof source binding"))
-  (.o kind: 'poo-flow.temporal-causality.proof-source-binding.v1 source-node: node-value
-      fact: (poo-flow-temporal-mrr-fact-content-replay fact-value)
+  (.o kind: 'agentic-ai-lab.temporal-causality.proof-source-binding.v1 source-node: node-value
+      fact: (agentic-ai-lab-temporal-mrr-fact-content-replay fact-value)
       subject-identity: subject-value revision-identity: revision-value))
 (def (binding-row b)
-  (unless (eq? (.ref b 'kind) 'poo-flow.temporal-causality.proof-source-binding.v1)
+  (unless (eq? (.ref b 'kind) 'agentic-ai-lab.temporal-causality.proof-source-binding.v1)
     (error "invalid source binding kind"))
-  (let* ((canonical (poo-flow-temporal-proof-source-binding (.ref b 'source-node) (.ref b 'fact)
+  (let* ((canonical (agentic-ai-lab-temporal-proof-source-binding (.ref b 'source-node) (.ref b 'fact)
                        (.ref b 'subject-identity) (.ref b 'revision-identity)))
          (f (.ref canonical 'fact)))
     (list (.ref canonical 'source-node) (.ref f 'identity) (.ref f 'semantic-digest)
@@ -35,15 +35,15 @@
   (let (seen (make-hash-table))
     (for-each (lambda (x) (hash-put! seen x #t)) xs)
     (= (length xs) (hash-length seen))))
-(def (poo-flow-temporal-proof-support identity-value admission snapshot candidate receipt steps max-nodes
+(def (agentic-ai-lab-temporal-proof-support identity-value admission snapshot candidate receipt steps max-nodes
                                       root-value output-value bindings journal)
   (unless (and (text? identity-value) (list? bindings) (<= 1 (length bindings) 128)
                (exact-integer? root-value))
     (error "invalid proof support declaration"))
-  (let* ((verified (poo-flow-temporal-positive-proof-replay admission snapshot candidate receipt steps max-nodes))
+  (let* ((verified (agentic-ai-lab-temporal-positive-proof-replay admission snapshot candidate receipt steps max-nodes))
          (proof (reasoning-receipt-proof receipt)) (nodes (positive-proof-nodes proof))
-         (owned-output (poo-flow-temporal-mrr-fact-content-replay output-value))
-         (owned-journal (poo-flow-temporal-evidence-journal (.ref journal 'identity)
+         (owned-output (agentic-ai-lab-temporal-mrr-fact-content-replay output-value))
+         (owned-journal (agentic-ai-lab-temporal-evidence-journal (.ref journal 'identity)
                           (.ref journal 'admission-domain-identity) (.ref journal 'revisions)))
          (rows (list-sort (lambda (a b) (< (car a) (car b))) (map binding-row bindings)))
          (leaves '()) (seen (make-hash-table)))
@@ -70,7 +70,7 @@
                  (not (member (.ref owned-output 'identity) (map cadr rows))))
       (error "source correspondence must cover exact root leaves without ambiguity"))
     (for-each (lambda (b)
-      (let* ((f (poo-flow-temporal-mrr-fact-content-replay (.ref b 'fact)))
+      (let* ((f (agentic-ai-lab-temporal-mrr-fact-content-replay (.ref b 'fact)))
              (node (list-ref nodes (.ref b 'source-node)))
              (matches (filter (lambda (r) (equal? (.ref r 'identity) (.ref b 'revision-identity)))
                               (.ref owned-journal 'revisions))))
@@ -82,34 +82,34 @@
                      (memq (.ref (car matches) 'operation) '(assert correct))
                      (equal? (.ref (car matches) 'content-identity) (.ref f 'semantic-digest)))
           (error "proof leaf/fact/revision content correspondence rejected")))) bindings)
-    (let* ((fingerprint (digest (list 'poo-flow.temporal-proof-support.v1 identity-value
+    (let* ((fingerprint (digest (list 'agentic-ai-lab.temporal-proof-support.v1 identity-value
                           (.ref verified 'semantic-digest) root-value (.ref owned-output 'semantic-digest)
                           rows (.ref owned-journal 'semantic-digest))))
-           (support-value (poo-flow-temporal-support identity-value (.ref owned-output 'identity) fingerprint
-                            (map (lambda (r) (poo-flow-temporal-support-premise (list-ref r 3) (list-ref r 4))) rows) '())))
-      (.o kind: 'poo-flow.temporal-causality.proof-support.v1 identity: identity-value
+           (support-value (agentic-ai-lab-temporal-support identity-value (.ref owned-output 'identity) fingerprint
+                            (map (lambda (r) (agentic-ai-lab-temporal-support-premise (list-ref r 3) (list-ref r 4))) rows) '())))
+      (.o kind: 'agentic-ai-lab.temporal-causality.proof-support.v1 identity: identity-value
           semantic-digest: fingerprint proof-admission-digest: (.ref verified 'semantic-digest)
           root: root-value output: owned-output source-bindings: rows journal-digest: (.ref owned-journal 'semantic-digest)
           support: support-value proof-admitted?: #t binding-verified?: #t mrr-rule-equivalence-verified?: #f
           source-authenticated?: #f selection-admitted?: #f action-authorized?: #f durable?: #f))))
 (def (support-row s)
-  (unless (and (eq? (.ref s 'kind) 'poo-flow.temporal-causality.support)
-               (andmap (lambda (p) (eq? (.ref p 'kind) 'poo-flow.temporal-causality.support-premise)) (.ref s 'premises)))
+  (unless (and (eq? (.ref s 'kind) 'agentic-ai-lab.temporal-causality.support)
+               (andmap (lambda (p) (eq? (.ref p 'kind) 'agentic-ai-lab.temporal-causality.support-premise)) (.ref s 'premises)))
     (error "invalid embedded support kind"))
   (list (.ref s 'identity) (.ref s 'conclusion-identity) (.ref s 'proof-identity)
         (map (lambda (p) (list (.ref p 'subject-identity) (.ref p 'revision-identity))) (.ref s 'premises))
         (.ref s 'conclusion-premises)))
-(def (poo-flow-temporal-proof-support-replay held admission snapshot candidate receipt steps max-nodes
+(def (agentic-ai-lab-temporal-proof-support-replay held admission snapshot candidate receipt steps max-nodes
                                              output bindings journal)
-  (unless (and (eq? (.ref held 'kind) 'poo-flow.temporal-causality.proof-support.v1)
+  (unless (and (eq? (.ref held 'kind) 'agentic-ai-lab.temporal-causality.proof-support.v1)
                (.ref held 'proof-admitted?) (.ref held 'binding-verified?)
                (not (.ref held 'mrr-rule-equivalence-verified?)) (not (.ref held 'source-authenticated?))
                (not (.ref held 'selection-admitted?)) (not (.ref held 'action-authorized?)) (not (.ref held 'durable?)))
     (error "invalid proof support receipt"))
-  (let (value (poo-flow-temporal-proof-support (.ref held 'identity) admission snapshot candidate receipt steps max-nodes
+  (let (value (agentic-ai-lab-temporal-proof-support (.ref held 'identity) admission snapshot candidate receipt steps max-nodes
                 (.ref held 'root) output bindings journal))
     (unless (and (andmap (lambda (s) (equal? (.ref value s) (.ref held s)))
                           '(semantic-digest proof-admission-digest root source-bindings journal-digest))
-                 (equal? (.ref (.ref value 'output) 'semantic-digest) (.ref (poo-flow-temporal-mrr-fact-content-replay (.ref held 'output)) 'semantic-digest))
+                 (equal? (.ref (.ref value 'output) 'semantic-digest) (.ref (agentic-ai-lab-temporal-mrr-fact-content-replay (.ref held 'output)) 'semantic-digest))
                  (equal? (support-row (.ref value 'support)) (support-row (.ref held 'support))))
       (error "proof support replay mismatch")) value))

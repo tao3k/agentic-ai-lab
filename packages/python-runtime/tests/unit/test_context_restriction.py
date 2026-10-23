@@ -4,12 +4,12 @@ from copy import deepcopy
 import os
 from pathlib import Path
 import pytest
-from poo_flow_runtime.semantic_runtime import SemanticRuntimeError
-from poo_flow_runtime.scheme_wire import loads
+from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
+from agentic_ai_lab_runtime.scheme_wire import loads
 
 
 def declarations():
-    return [dict(schema='poo-flow.context-restriction.v1', domain='declared-library-clock',
+    return [dict(schema='agentic-ai-lab.context-restriction.v1', domain='declared-library-clock',
                  readers=readers, destinations=['store'], provenance=[source], leaseStart=start, leaseEnd=end)
             for readers, source, start, end in [(['alice', 'bob'], 'source-a', 1, 10),
                                                 (['bob'], 'source-b', 2, 8)]]
@@ -18,14 +18,14 @@ def declarations():
 def query(runtime):
     labels = declarations()
     composed = runtime.compose_context_restrictions(dict(
-        schema='poo-flow.context-restriction-compose-request.v1', restrictions=labels))
-    return dict(schema='poo-flow.context-flow-request.v1', restrictions=labels,
+        schema='agentic-ai-lab.context-restriction-compose-request.v1', restrictions=labels))
+    return dict(schema='agentic-ai-lab.context-flow-request.v1', restrictions=labels,
                 expectedRestrictionDigest=composed['bindingDigest'], sourceDigest='sha256:'+'a'*64,
                 contentDigest='sha256:'+'b'*64, principal='bob', destination='store', declaredAt=2)
 
 
 def test_native_context_composition_preserves_provenance_and_order(runtime):
-    request = dict(schema='poo-flow.context-restriction-compose-request.v1', restrictions=declarations())
+    request = dict(schema='agentic-ai-lab.context-restriction-compose-request.v1', restrictions=declarations())
     original = deepcopy(request)
     first = runtime.compose_context_restrictions(request)
     assert request == original
@@ -71,7 +71,7 @@ def test_context_wire_rejects_stale_or_unqualified_declarations(runtime, mode):
 
 
 def test_original_mrr_context_flow_oracle_replay(runtime):
-    path = os.environ.get('POO_FLOW_MRR_CONTEXT_FLOW_ORACLE')
+    path = os.environ.get('AGENTIC_AI_LAB_MRR_CONTEXT_FLOW_ORACLE')
     if not path:
         pytest.skip('original MRR Context flow oracle must be configured')
     receipt = loads(Path(path).read_text())

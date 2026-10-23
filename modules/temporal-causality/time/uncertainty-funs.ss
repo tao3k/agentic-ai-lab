@@ -8,21 +8,21 @@
 (import (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/modules/temporal-causality/time/types
-                 poo-flow-temporal-instant?)
-        (only-in :poo-flow/modules/temporal-causality/time/uncertainty-types
-                 poo-flow-temporal-bounded-observation?
-                 poo-flow-temporal-duration-assessment?)
-        (only-in :poo-flow/modules/temporal-causality/time/uncertainty-objects
-                 poo-flow-temporal-bounded-observation-value
-                 poo-flow-temporal-duration-assessment-value))
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+                 agentic-ai-lab-temporal-instant?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+                 agentic-ai-lab-temporal-bounded-observation?
+                 agentic-ai-lab-temporal-duration-assessment?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-objects
+                 agentic-ai-lab-temporal-bounded-observation-value
+                 agentic-ai-lab-temporal-duration-assessment-value))
 
-(export poo-flow-temporal-bounded-observation
-        poo-flow-temporal-bounded-observation-replay
-        poo-flow-temporal-bounded-observation-compare
-        poo-flow-temporal-bounded-observation-boundary
-        poo-flow-temporal-monotonic-duration
-        poo-flow-temporal-duration-assessment-replay)
+(export agentic-ai-lab-temporal-bounded-observation
+        agentic-ai-lab-temporal-bounded-observation-replay
+        agentic-ai-lab-temporal-bounded-observation-compare
+        agentic-ai-lab-temporal-bounded-observation-boundary
+        agentic-ai-lab-temporal-monotonic-duration
+        agentic-ai-lab-temporal-duration-assessment-replay)
 
 (def (instant-row instant)
   (list (.ref instant 'identity) (.ref instant 'domain-identity)
@@ -37,31 +37,31 @@
              (call-with-output-string
               (lambda (port) (write datum port))))))))
 
-(def (poo-flow-temporal-bounded-observation
+(def (agentic-ai-lab-temporal-bounded-observation
       identity-value role-value source-value earliest-value latest-value
       precision-value acquisition-value receipt-value attestation-value
       attempt-value schema-value)
-  (unless (and (poo-flow-temporal-instant? earliest-value)
-               (poo-flow-temporal-instant? latest-value)
-               (poo-flow-temporal-instant? acquisition-value))
+  (unless (and (agentic-ai-lab-temporal-instant? earliest-value)
+               (agentic-ai-lab-temporal-instant? latest-value)
+               (agentic-ai-lab-temporal-instant? acquisition-value))
     (error "time observation requires temporal instants"))
   (let (semantic
-        (digest (list 'poo-flow.temporal-observation.v1 identity-value
+        (digest (list 'agentic-ai-lab.temporal-observation.v1 identity-value
                       role-value source-value
                       (instant-row earliest-value) (instant-row latest-value)
                       precision-value (instant-row acquisition-value)
                       receipt-value attestation-value attempt-value
                       schema-value)))
-    (poo-flow-temporal-bounded-observation-value
+    (agentic-ai-lab-temporal-bounded-observation-value
      identity-value semantic role-value source-value earliest-value
      latest-value precision-value acquisition-value receipt-value
      attestation-value attempt-value schema-value)))
 
-(def (poo-flow-temporal-bounded-observation-replay observation)
-  (unless (poo-flow-temporal-bounded-observation? observation)
+(def (agentic-ai-lab-temporal-bounded-observation-replay observation)
+  (unless (agentic-ai-lab-temporal-bounded-observation? observation)
     (error "invalid temporal observation"))
   (let (canonical
-        (poo-flow-temporal-bounded-observation
+        (agentic-ai-lab-temporal-bounded-observation
          (.ref observation 'identity) (.ref observation 'clock-role)
          (.ref observation 'source-identity) (.ref observation 'earliest)
          (.ref observation 'latest) (.ref observation 'precision)
@@ -75,9 +75,9 @@
       (error "temporal observation digest mismatch"))
     canonical))
 
-(def (poo-flow-temporal-bounded-observation-compare left right)
-  (poo-flow-temporal-bounded-observation-replay left)
-  (poo-flow-temporal-bounded-observation-replay right)
+(def (agentic-ai-lab-temporal-bounded-observation-compare left right)
+  (agentic-ai-lab-temporal-bounded-observation-replay left)
+  (agentic-ai-lab-temporal-bounded-observation-replay right)
   (let ((left-start (.ref left 'earliest))
         (left-end (.ref left 'latest))
         (right-start (.ref right 'earliest))
@@ -97,11 +97,11 @@
               (.ref right-start 'coordinate))) 'equal)
      (else 'unknown))))
 
-(def (poo-flow-temporal-bounded-observation-boundary observation boundary)
-  (unless (and (poo-flow-temporal-instant? boundary)
+(def (agentic-ai-lab-temporal-bounded-observation-boundary observation boundary)
+  (unless (and (agentic-ai-lab-temporal-instant? boundary)
                (eq? (.ref boundary 'modality) 'observed))
     (error "temporal boundary requires an observed instant"))
-  (poo-flow-temporal-bounded-observation-replay observation)
+  (agentic-ai-lab-temporal-bounded-observation-replay observation)
   (let ((earliest (.ref observation 'earliest))
         (latest (.ref observation 'latest))
         (position (.ref boundary 'coordinate)))
@@ -114,10 +114,10 @@
            (= (.ref latest 'coordinate) position)) 'equal)
      (else 'unknown))))
 
-(def (poo-flow-temporal-monotonic-duration
+(def (agentic-ai-lab-temporal-monotonic-duration
       identity-value start-observation end-observation)
-  (poo-flow-temporal-bounded-observation-replay start-observation)
-  (poo-flow-temporal-bounded-observation-replay end-observation)
+  (agentic-ai-lab-temporal-bounded-observation-replay start-observation)
+  (agentic-ai-lab-temporal-bounded-observation-replay end-observation)
   (let* ((start-lower (.ref start-observation 'earliest))
          (start-upper (.ref start-observation 'latest))
          (end-lower (.ref end-observation 'earliest))
@@ -147,20 +147,20 @@
          (start-digest (.ref start-observation 'semantic-digest))
          (end-digest (.ref end-observation 'semantic-digest))
          (semantic
-          (digest (list 'poo-flow.temporal-duration-assessment.v1
+          (digest (list 'agentic-ai-lab.temporal-duration-assessment.v1
                         identity-value start-digest end-digest
                         status domain minimum maximum))))
-    (poo-flow-temporal-duration-assessment-value
+    (agentic-ai-lab-temporal-duration-assessment-value
      identity-value semantic status start-digest end-digest
      domain minimum maximum)))
 
-(def (poo-flow-temporal-duration-assessment-replay assessment
+(def (agentic-ai-lab-temporal-duration-assessment-replay assessment
                                                     start-observation
                                                     end-observation)
-  (unless (poo-flow-temporal-duration-assessment? assessment)
+  (unless (agentic-ai-lab-temporal-duration-assessment? assessment)
     (error "invalid temporal duration assessment"))
   (let (canonical
-        (poo-flow-temporal-monotonic-duration
+        (agentic-ai-lab-temporal-monotonic-duration
          (.ref assessment 'identity) start-observation end-observation))
     (unless (equal? (.ref canonical 'semantic-digest)
                     (.ref assessment 'semantic-digest))

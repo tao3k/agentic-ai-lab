@@ -39,7 +39,7 @@
 
 ;; : (-> Alist Void)
 (def (flow-strand-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] flow-strand-registry-merge ")
+  (display "[agentic-ai-lab-benchmark] flow-strand-registry-merge ")
   (write receipt)
   (newline)
   (force-output))
@@ -61,7 +61,7 @@
 
 ;; : (-> Integer [FlowStrandDescriptor])
 (def (flow-strand-performance-descriptors count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    flow-strand-performance-descriptor))
 

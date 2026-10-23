@@ -3,13 +3,13 @@
 (import (only-in :clan/poo/object .cc)
         (only-in :asp-gerbil-scheme/testing-api
                  +asp-testing-interface+ testing-interface-run-test-batch!)
-        (only-in :poo-flow/dev/testing-api
-                 poo-flow-testing-observability-extension
-                 make-poo-flow-testing-observability-profile))
+        (only-in :agentic-ai-lab/dev/testing-api
+                 agentic-ai-lab-testing-observability-extension
+                 make-agentic-ai-lab-testing-observability-profile))
 (def (main missing-file)
   (testing-interface-run-test-batch!
-    (poo-flow-testing-observability-extension
+    (agentic-ai-lab-testing-observability-extension
       +asp-testing-interface+
-      (.cc (make-poo-flow-testing-observability-profile 'testing/missing-batch 1)
+      (.cc (make-agentic-ai-lab-testing-observability-profile 'testing/missing-batch 1)
            'trace-enabled? #t))
     (list missing-file)))

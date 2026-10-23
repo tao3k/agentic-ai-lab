@@ -3,16 +3,16 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Full Family premise projection/replay. No current Source or handle mutation.
 (import (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/workflow/runtime/scheme-wire scheme-wire-write)
-        (only-in :poo-flow/modules/workflow/runtime/temporal-family temporal-family-values temporal-family-task)
-        (only-in :poo-flow/modules/workflow/runtime/temporal-admission
+        (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-write)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-family temporal-family-values temporal-family-task)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-admission
                  temporal-family-revisions temporal-journal-receipt
                  temporal-frontier-value temporal-revision-receipt)
-        (only-in :poo-flow/modules/temporal-causality/admission/interface
-                 poo-flow-temporal-source-snapshot poo-flow-temporal-family-admit)
-        (only-in :poo-flow/modules/temporal-causality/lifecycle/interface
-                 poo-flow-temporal-family-archive poo-flow-temporal-family-revision-root
-                 poo-flow-temporal-family-revision-change))
+        (only-in :agentic-ai-lab/modules/temporal-causality/admission/interface
+                 agentic-ai-lab-temporal-source-snapshot agentic-ai-lab-temporal-family-admit)
+        (only-in :agentic-ai-lab/modules/temporal-causality/lifecycle/interface
+                 agentic-ai-lab-temporal-family-archive agentic-ai-lab-temporal-family-revision-root
+                 agentic-ai-lab-temporal-family-revision-change))
 (export temporal-family-archive-export-call temporal-family-archive-replay-call)
 (def (field object key)
   (unless (and (hash-table? object) (hash-key? object key)) (error "missing archive field" key))
@@ -54,9 +54,9 @@
           (revision (hash-get (temporal-revision-receipt value) 'revision)))))
 (def (temporal-family-archive-export-call object)
   (fields object ["identity" "revisionDigests"])
-  (let* ((archive (poo-flow-temporal-family-archive (field object "identity")
+  (let* ((archive (agentic-ai-lab-temporal-family-archive (field object "identity")
                     (temporal-family-revisions (field object "revisionDigests"))))
-         (value (hash (schema "poo-flow.temporal-family-proof-archive.v1")
+         (value (hash (schema "agentic-ai-lab.temporal-family-proof-archive.v1")
                  (identity (.ref archive 'identity)) (archiveDigest (.ref archive 'semantic-digest))
                  (journalDigest (.ref (.ref archive 'journal) 'semantic-digest))
                  (entries (map entry-wire (.ref archive 'family-revisions)))))
@@ -70,7 +70,7 @@
   (let* ((payload (field object "archive")) (expected (field object "expectedDigest"))
          (pending (make-hash-table)) (resolved (make-hash-table)))
     (fields payload ["schema" "identity" "archiveDigest" "journalDigest" "entries"])
-    (unless (and (equal? (field payload "schema") "poo-flow.temporal-family-proof-archive.v1")
+    (unless (and (equal? (field payload "schema") "agentic-ai-lab.temporal-family-proof-archive.v1")
                  (text? expected) (equal? expected (field payload "archiveDigest"))
                  (list? (field payload "entries")) (<= 1 (length (field payload "entries")) 128))
       (error "archive schema, trusted digest or inventory differs"))
@@ -89,7 +89,7 @@
                  (scope (field source-payload "scope"))
                  (_ (fields scope scope-keys))
                  (source-values (temporal-family-values (field source-payload "task")))
-                 (source (apply poo-flow-temporal-source-snapshot
+                 (source (apply agentic-ai-lab-temporal-source-snapshot
                           (append (map (lambda (key) (field scope key)) scope-keys)
                                   (list (car source-values)))))
                  (values (temporal-family-values (field entry "task")))
@@ -97,7 +97,7 @@
                       (scheme-wire-write (field (field source-payload "task") "query"))
                       (scheme-wire-write (field (field entry "task") "query")))
                       (error "source task query differs from admission query")))
-                 (admission (poo-flow-temporal-family-admit (car values) (cadr values) source
+                 (admission (agentic-ai-lab-temporal-family-admit (car values) (cadr values) source
                              (field entry "conclusionIdentity")))
                  (operation (field entry "operation"))
                  (previous (field entry "predecessorDigest"))
@@ -105,10 +105,10 @@
                    ((equal? operation "assert")
                     (unless (and (eq? previous #f) (eq? (field entry "frontier") #f))
                       (error "archive root has a predecessor or frontier"))
-                    (poo-flow-temporal-family-revision-root admission))
+                    (agentic-ai-lab-temporal-family-revision-root admission))
                    ((member operation '("correct" "retract"))
                     (unless (text? previous) (error "archive predecessor identity bound"))
-                    (poo-flow-temporal-family-revision-change
+                    (agentic-ai-lab-temporal-family-revision-change
                      (resolve previous (cons id ancestors)) admission
                      (temporal-frontier-value (field entry "frontier")) (string->symbol operation)))
                    (else (error "invalid archive revision operation")))))
@@ -120,11 +120,11 @@
             (hash-put! resolved id value) value)))
     (let* ((values (map (lambda (entry) (resolve (field entry "revisionDigest") '()))
                        (field payload "entries")))
-           (archive (poo-flow-temporal-family-archive (field payload "identity") values)))
+           (archive (agentic-ai-lab-temporal-family-archive (field payload "identity") values)))
       (unless (and (equal? (.ref archive 'semantic-digest) expected)
                    (equal? (.ref (.ref archive 'journal) 'semantic-digest) (field payload "journalDigest")))
         (error "archive graph digest mismatch"))
-      (hash (schema "poo-flow.temporal-family-proof-replay.v1")
+      (hash (schema "agentic-ai-lab.temporal-family-proof-replay.v1")
             (archiveDigest (.ref archive 'semantic-digest))
             (journal (temporal-journal-receipt (.ref archive 'identity) (.ref archive 'family-revisions)))
             (currentSourceSelected #f) (handlesRestored #f) (sourceAuthenticated #f)

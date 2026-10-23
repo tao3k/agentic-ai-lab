@@ -1,7 +1,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Private version inputs over the existing reader and selected-package owners.
-(import (only-in :poo-flow/modules/nix/progress make-nix-progress-reader) :clan/poo/object
+(import (only-in :agentic-ai-lab/modules/nix/progress make-nix-progress-reader) :clan/poo/object
         (only-in :std/source this-source-file)
         (only-in :std/encoding/json read-json)
         (only-in :std/io/tempfile make-temporary-file-name clear-temporary-file!)
@@ -10,7 +10,7 @@
         (only-in :yuanxu/ops/progress execution-idle-seconds execution-total-seconds)
         (only-in :yuanxu/module-system/interface yuanxu-load-modules)
         (only-in :yuanxu/ops/selected-packages SelectedPackages.)
-        (only-in :poo-flow/modules/nix/objects NixFlakeSource.)
+        (only-in :agentic-ai-lab/modules/nix/objects NixFlakeSource.)
         (only-in :yuanxu/module-system/source/admission module-source-read)
         (only-in :yuanxu/module-system/source/reader module-publication-reader)
         (only-in :yuanxu/module-system/source/directory module-directory-context))

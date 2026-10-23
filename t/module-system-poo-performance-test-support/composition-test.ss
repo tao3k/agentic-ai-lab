@@ -147,7 +147,7 @@
 
 ;; : TestSuite
 (def composition-test
-  (test-suite "poo-flow composition macro POO performance"
+  (test-suite "agentic-ai-lab composition macro POO performance"
     (module-system-poo-performance-profile-declaration-case)
     (module-system-poo-performance-profiles-bulk-case)
     (module-system-poo-performance-local-override-case)

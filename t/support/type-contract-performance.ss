@@ -8,7 +8,7 @@
 ;;; package loading, Lean execution, or Marlin runtime work.
 
 (import (only-in "./performance.ss"
-                 poo-flow-performance-build-list)
+                 agentic-ai-lab-performance-build-list)
         (only-in :yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
@@ -19,11 +19,11 @@
         (only-in :yuanxu/type-facts/objects
                  yuanxu-native-contract->type-facts
                  yuanxu-native-contract->lean-fact-contracts)
-        (only-in :poo-flow/modules/session/policy
-                 PooFlowSessionPolicyContract
-                 PooFlowSessionToolGrantContract
-                 poo-flow-session-policy-require-slots!
-                 poo-flow-session-tool-grant-require-slots!))
+        (only-in :agentic-ai-lab/modules/session/policy
+                 AgenticAILabSessionPolicyContract
+                 AgenticAILabSessionToolGrantContract
+                 agentic-ai-lab-session-policy-require-slots!
+                 agentic-ai-lab-session-tool-grant-require-slots!))
 
 (export type-contract-performance-slot-name
         type-contract-performance-slot-contract
@@ -64,9 +64,9 @@
   (yuanxu-native-contract
    'type-contract/performance
    'type-contract-performance
-   'PooFlowTypeContractPerformanceObject
+   'AgenticAILabTypeContractPerformanceObject
    (lambda (_candidate) #t)
-   (poo-flow-performance-build-list
+   (agentic-ai-lab-performance-build-list
     slot-count
     type-contract-performance-slot-contract)
    (lambda (_candidate _slot) #f)
@@ -75,7 +75,7 @@
 
 ;; : (-> Integer [Symbol])
 (def (type-contract-performance-values slot-count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    slot-count
    type-contract-performance-slot-name))
 
@@ -195,7 +195,7 @@
    (lambda ()
      (length
       (yuanxu-native-contract->alist
-       PooFlowSessionPolicyContract)))))
+       AgenticAILabSessionPolicyContract)))))
 
 ;; : (-> Integer Integer)
 (def (type-contract-performance-session-tool-grant-projection-rounds rounds)
@@ -204,16 +204,16 @@
    (lambda ()
      (length
       (yuanxu-native-contract->alist
-       PooFlowSessionToolGrantContract)))))
+       AgenticAILabSessionToolGrantContract)))))
 
 ;; : (-> Integer Integer)
 (def (type-contract-performance-session-policy-require-rounds rounds)
   (type-contract-performance-repeat
    rounds
    (lambda ()
-     (poo-flow-session-policy-require-slots!
-      'poo-flow.session.policy
-      'poo-flow.modules.session.policy.tool-permission.v1
+     (agentic-ai-lab-session-policy-require-slots!
+      'agentic-ai-lab.session.policy
+      'agentic-ai-lab.modules.session.policy.tool-permission.v1
       'agent-tool-permission
       'policy/performance-tools
       'session/performance
@@ -230,9 +230,9 @@
   (type-contract-performance-repeat
    rounds
    (lambda ()
-     (poo-flow-session-tool-grant-require-slots!
-      'poo-flow.session.tool-grant
-      'poo-flow.modules.session.tool-grant.v1
+     (agentic-ai-lab-session-tool-grant-require-slots!
+      'agentic-ai-lab.session.tool-grant
+      'agentic-ai-lab.modules.session.tool-grant.v1
       'grant/performance-read
       'read-workspace-file
       '(read)

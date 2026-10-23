@@ -34,4 +34,4 @@ mod-tidy:
 # Optional ASP policy probes belong to the development package, not the library.
 [group('dependency')]
 deps-dev:
-    cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ poo_flow_dev_gerbil_path }}" GERBIL_LOADPATH="{{ poo_flow_library_path }}" {{ gerbil_darwin_env }} gerbil deps --install
+    cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} gerbil deps --install

@@ -70,7 +70,7 @@
       (lambda (port)
         (pretty-print
           `(import :std/test :clan/poo/object
-             (only-in ,(path-expand "poo-flow/bindings/nix-c-api/binding.ssi" build)
+             (only-in ,(path-expand "agentic-ai-lab/bindings/nix-c-api/binding.ssi" build)
                call-with-flake-evaluator)
              (only-in ,(path-expand "t/nix-flake-source-test.ss" root) nix-flake-source-suite)) port)
         (pretty-print '(export product-test) port)
@@ -105,16 +105,16 @@
   (def loadpath (string-append build ":" root ":" (getenv "GERBIL_LOADPATH" "")))
   (def test-environment
     (.o GERBIL_LOADPATH: loadpath
-        POO_FLOW_NIX_C_API_ROOT: root
-        POO_FLOW_NIX_C_API_CLI: (dependency "cli")
-        POO_FLOW_NIX_C_API_CLI_VERSION: cli-version
-        POO_FLOW_NIX_C_API_WORKER: (path-expand "worker" build)))
+        AGENTIC_AI_LAB_NIX_C_API_ROOT: root
+        AGENTIC_AI_LAB_NIX_C_API_CLI: (dependency "cli")
+        AGENTIC_AI_LAB_NIX_C_API_CLI_VERSION: cli-version
+        AGENTIC_AI_LAB_NIX_C_API_WORKER: (path-expand "worker" build)))
   (when profiling?
     (set! test-environment
       (.+ test-environment
         (.o XDG_CACHE_HOME: profile-cache
-            POO_FLOW_NIX_PROFILE_METRICS: "1"
-            POO_FLOW_NIX_PROFILE_PACKAGE_SET: profile-package))))
+            AGENTIC_AI_LAB_NIX_PROFILE_METRICS: "1"
+            AGENTIC_AI_LAB_NIX_PROFILE_PACKAGE_SET: profile-package))))
   (def test-command '("gxtest" "-:max-heap=2G,debug=q"))
   (when (member backend '("embedded-preload" "profile" "product-native" "product-cli"))
     (let* ((installed (string-trim (execute '("which" "gerbil"))))
@@ -140,7 +140,7 @@
                           (else '("ASSERT-OK failed-lock-never-written")))
     source: (.o spec: (list test-file) source-root: root admit-current: current!)
     command: (append test-command (list "-v" "5" test-file))
-    log: (and profiling? (getenv "POO_FLOW_NIX_PROFILE_LOG" #f))
+    log: (and profiling? (getenv "AGENTIC_AI_LAB_NIX_PROFILE_LOG" #f))
     environment: test-environment
     profile: =>.+ (.o max-duration-milliseconds: 120000 max-idle-milliseconds: 60000))
   (display (.get (.call Test .run) output)))
@@ -149,6 +149,6 @@
   (if (equal? mode "dependencies")
     (display (execute (list "nix-store" "--realise" (dependency "expr")
                           (dependency "store") (dependency "util") (dependency "flake"))))
-    (call-with-temporary-directory "poo-flow-nix-api" (cut qualify mode <>))))
+    (call-with-temporary-directory "agentic-ai-lab-nix-api" (cut qualify mode <>))))
 
 ;; gxi invokes main after loading the script; never invoke it again here.

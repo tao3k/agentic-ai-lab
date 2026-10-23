@@ -7,7 +7,7 @@
         :yuanxu/modules/json-schema/contracts
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
-        (only-in :poo-flow/modules/services/opentofu/func poo-flow-opentofu-block->schema))
+        (only-in :agentic-ai-lab/modules/services/opentofu/func agentic-ai-lab-opentofu-block->schema))
 (export json-schema-aws-value-contract-test)
 
 (def (ref value key) (yuanxu-contract-object-ref value key #f))
@@ -22,8 +22,8 @@
 (def provider (or tofu-provider terraform-provider))
 (unless provider (error "Expected the AWS provider export"))
 (def resources (ref provider 'resource_schemas))
-(def vpc-input (poo-flow-opentofu-block->schema (ref (ref resources 'aws_vpc) 'block)))
-(def instance-input (poo-flow-opentofu-block->schema (ref (ref resources 'aws_instance) 'block)))
+(def vpc-input (agentic-ai-lab-opentofu-block->schema (ref (ref resources 'aws_vpc) 'block)))
+(def instance-input (agentic-ai-lab-opentofu-block->schema (ref (ref resources 'aws_instance) 'block)))
 (def VpcContract (schema-value-contract 'aws/vpc vpc-input))
 (def InstanceContract (schema-value-contract 'aws/instance instance-input))
 (def ProfileContract

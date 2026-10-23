@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from poo_flow_testing.assessment_studies.repository_continuation import restored_history
+from agentic_ai_lab_testing.assessment_studies.repository_continuation import restored_history
 
 
 class RepositoryContinuationTests(unittest.TestCase):

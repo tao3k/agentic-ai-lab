@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO Flow Scenario projection from a closed Case into its
+;;; Boundary: Agentic AI Lab Scenario projection from a closed Case into its
 ;;; product-owned ExecutionPlan.
 ;;; Invariant: internal traversal records are compact structs; public Plan
 ;;; nodes remain owned by src/core/plan.ss.
@@ -14,7 +14,7 @@
         (only-in :std/list/list append-map filter-map fold)
         :yuanxu/modules/funflow/control-plane/graph)
 
-(export poo-flow-scenario-case->execution-plan)
+(export agentic-ai-lab-scenario-case->execution-plan)
 
 ;;; Boundary: a composition lowers into the canonical execution-plan before
 ;;; any consumer observes it. Bundle/WASM and future projections consume the
@@ -69,7 +69,7 @@
         (unless (and (pair? payload)
                      (null? (cdr payload))
                      (symbol? (car payload)))
-          (error "POO-FLOW-PLAN-E101 target requires one symbol"
+          (error "AGENTIC-AI-LAB-PLAN-E101 target requires one symbol"
                  (composition-plan-stage-name stage) kind payload))
         (let (target (car payload))
           (cond
@@ -78,7 +78,7 @@
            ((hash-get binding-index target)
             (make-composition-plan-target 'profile target kind))
            (else
-            (error "POO-FLOW-PLAN-E102 unknown Case or Profile target"
+            (error "AGENTIC-AI-LAB-PLAN-E102 unknown Case or Profile target"
                    (composition-plan-stage-name stage) kind target))))))))
 
 (def (composition-plan-stage-targets stage stage-index binding-index)
@@ -99,7 +99,7 @@
                        (null? (cddr edge))
                        (symbol? (car edge))
                        (symbol? (cadr edge)))
-            (error "POO-FLOW-PLAN-E103 edge requires two symbols"
+            (error "AGENTIC-AI-LAB-PLAN-E103 edge requires two symbols"
                    (composition-plan-stage-name stage) edge))
           (make-composition-plan-edge (car edge) (cadr edge)))
         (composition-plan-clause-payload clause))))
@@ -143,7 +143,7 @@
 (def (composition-plan-target-key path target-index name stage-name)
   (let (target (hash-get target-index name))
     (unless target
-      (error "POO-FLOW-PLAN-E104 edge endpoint is not a direct target"
+      (error "AGENTIC-AI-LAB-PLAN-E104 edge endpoint is not a direct target"
              stage-name name))
     (if (eq? (composition-plan-target-kind target) 'case)
       (composition-plan-case-key (composition-plan-path-child path name))
@@ -177,7 +177,7 @@
 (def (composition-plan-build-case
       stage-name path parent-key stage-index binding-index active)
   (when (memq stage-name active)
-    (error "POO-FLOW-PLAN-E105 recursive Case cycle"
+    (error "AGENTIC-AI-LAB-PLAN-E105 recursive Case cycle"
            (reverse (cons stage-name active))))
   (let* ((stage (hash-get stage-index stage-name))
          (key (composition-plan-case-key path))
@@ -258,7 +258,7 @@
 (def (composition-plan-node-id flow-name descriptor-index key)
   (let (entry (hash-get descriptor-index key))
     (unless entry
-      (error "POO-FLOW-PLAN-E106 unresolved descriptor" key))
+      (error "AGENTIC-AI-LAB-PLAN-E106 unresolved descriptor" key))
     (let ((ordinal (car entry))
           (descriptor (cdr entry)))
       (list 'node flow-name ordinal
@@ -297,10 +297,10 @@
        (cons 1 '())
        descriptors)))))
 
-;; : (-> PooFlowScenarioCase ExecutionPlan)
-(def (poo-flow-scenario-case->execution-plan composition)
-  (unless (eq? (.ref composition 'kind) 'poo-flow.scenario-case.v1)
-    (error "POO-FLOW-PLAN-E100 expected poo-flow.scenario-case.v1" composition))
+;; : (-> AgenticAILabScenarioCase ExecutionPlan)
+(def (agentic-ai-lab-scenario-case->execution-plan composition)
+  (unless (eq? (.ref composition 'kind) 'agentic-ai-lab.scenario-case.v1)
+    (error "AGENTIC-AI-LAB-PLAN-E100 expected agentic-ai-lab.scenario-case.v1" composition))
   (let* ((name (.ref composition 'name))
          (stage-space (.ref composition 'stages))
          (stages
@@ -322,7 +322,7 @@
           (composition-plan-root-stage-names
            stages stage-index binding-index)))
     (when (null? roots)
-      (error "POO-FLOW-PLAN-E107 composition has no acyclic root Case" name))
+      (error "AGENTIC-AI-LAB-PLAN-E107 composition has no acyclic root Case" name))
     (let (descriptors+edges
           (fold
            (lambda (root-name state)

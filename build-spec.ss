@@ -3,8 +3,8 @@
 ;;; Public library roots projected through Core's installed native import graph.
 (import (only-in :gerbil/expander expander-context-id)
         (only-in :yuanxu/module-system/building/source-closure package-library-spec))
-(export poo-flow-public-build-roots poo-flow-library-spec)
-(def poo-flow-public-build-roots '
+(export agentic-ai-lab-public-build-roots agentic-ai-lab-library-spec)
+(def agentic-ai-lab-public-build-roots '
 ("init.ss"
     "modules/workflow/scenario/bundle-v1-projection.ss"
     "testing-api.ss"
@@ -65,8 +65,8 @@
          (name (and (symbol? identity) (symbol->string identity))))
     (when (and name (string-prefix? "asp-gerbil-scheme/" name))
       (error "production build imports the development-only ASP package" identity))
-    (when (and name (string-prefix? "poo-flow/dev/" name))
+    (when (and name (string-prefix? "agentic-ai-lab/dev/" name))
       (error "production build imports a development module" identity))))
-(def (poo-flow-library-spec (roots poo-flow-public-build-roots))
-  (package-library-spec (current-directory) 'poo-flow roots
+(def (agentic-ai-lab-library-spec (roots agentic-ai-lab-public-build-roots))
+  (package-library-spec (current-directory) 'agentic-ai-lab roots
     admit-context: admit-production-build-context exclude: special-targets))

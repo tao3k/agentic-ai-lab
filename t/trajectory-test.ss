@@ -1,6 +1,6 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test :poo-flow/modules/temporal-causality/trajectory/ascent-ledger)
+(import :std/test :agentic-ai-lab/modules/temporal-causality/trajectory/ascent-ledger)
 (export trajectory-test)
 (def (open) (hash-ref (ascent-trajectory (hash ("action" "open") ("task" "task") ("sourceIdentity" "s"))) "trajectory"))
 (def (event h id kind . fields)

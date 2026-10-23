@@ -132,7 +132,7 @@
 
 ;; : TestSuite
 (def extensions-test
-  (test-suite "poo-flow module system POO extension performance"
+  (test-suite "agentic-ai-lab module system POO extension performance"
     (module-system-poo-performance-extension-children-case)
     (module-system-poo-performance-cross-targeting-case)
     (module-system-poo-performance-local-coalescing-case)))

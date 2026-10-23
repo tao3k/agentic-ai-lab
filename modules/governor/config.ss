@@ -8,11 +8,11 @@
 
 (import :yuanxu/module-system/selection/objects)
 
-(export poo-flow-loop-governor-module-bundles)
+(export agentic-ai-lab-loop-governor-module-bundles)
 
 ;;; The loop governor module keeps policy/strategy composition enabled.
 ;; : (-> Unit [[PooUserModuleSelection]])
-(def poo-flow-loop-governor-module-bundles
+(def agentic-ai-lab-loop-governor-module-bundles
   (list
    (yuanxu-user-module-bundle
     (loop governor +strategy +policy +marlin-handoff +runtime-manifest

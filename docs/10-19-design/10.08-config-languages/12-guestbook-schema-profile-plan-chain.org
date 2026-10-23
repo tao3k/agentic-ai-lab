@@ -28,7 +28,7 @@ resources -> [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126
 not inspected that OCI package's schema-generation pipeline or executed it; do not
 invent an exact JSON-Schema-to-KCL command from the observed consumption chain.
 
-POO Flow should connect schema artifacts -> native Profile values/defaults ->
+Agentic AI Lab should connect schema artifacts -> native Profile values/defaults ->
 selected Scenario admission -> effective resource projection -> resource validation
 and preview -> explicit executor. Schema provenance and final candidate identity
 must survive the connections. That is the design work, not another language DSL.
@@ -281,7 +281,7 @@ metadata. No new Loader or automatic dependency discovery is claimed.
 * Conclusion: turn ecosystem comparison into design improvement
 
 Omnibus and KCL show the value of carrying domain schemas into configuration and
-then into a maintained consumer. POO Flow already owns a schema bridge: use that
+then into a maintained consumer. Agentic AI Lab already owns a schema bridge: use that
 investment and avoid repeating provider field definitions. The potential additional
 gain is preserving reusable behavior, exact associations and effective-object
 relationships across Profile evolution and cross-domain Scenarios. It must be

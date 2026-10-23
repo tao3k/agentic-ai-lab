@@ -6,7 +6,7 @@ import json
 import subprocess
 from pathlib import Path
 
-from poo_flow_proof.lean_declaration_closure import (
+from agentic_ai_lab_proof.lean_declaration_closure import (
     LeanDeclarationClosureRequest,
     export_declaration_closure,
     export_declaration_closures,
@@ -36,7 +36,7 @@ def test_export_uses_native_lake_executable(tmp_path: Path) -> None:
             },
         }
         payload = {
-            "schema_id": "poo-flow.lean-declaration-closure.v1",
+            "schema_id": "agentic-ai-lab.lean-declaration-closure.v1",
             "lean_version": "4.31.0",
             "root_module": "Root",
             "root_declarations": ["Root.x"],
@@ -50,7 +50,7 @@ def test_export_uses_native_lake_executable(tmp_path: Path) -> None:
             {
                 "elapsed_ms": 3,
                 "phase": "environment-import",
-                "schema_id": "poo-flow.lean-export-phase.v1",
+                "schema_id": "agentic-ai-lab.lean-export-phase.v1",
                 "state": "completed",
             }
         )
@@ -74,12 +74,12 @@ def test_export_uses_native_lake_executable(tmp_path: Path) -> None:
         "lake",
         "build",
         "Root",
-        "pooFlowDeclarationClosure",
+        "agenticAiLabDeclarationClosure",
     ]
     assert calls[1][:3] == [
         "lake",
         "env",
-        ".lake/build/bin/pooFlowDeclarationClosure",
+        ".lake/build/bin/agenticAiLabDeclarationClosure",
     ]
     assert [phase["phase"] for phase in phases] == [
         "lake-build",
@@ -100,7 +100,7 @@ def test_batch_export_reuses_one_lake_build_generation(
         root_declaration: str,
     ) -> dict[str, object]:
         return {
-            "schema_id": "poo-flow.lean-declaration-closure.v1",
+            "schema_id": "agentic-ai-lab.lean-declaration-closure.v1",
             "lean_version": "4.31.0",
             "root_module": root_module,
             "root_declarations": [root_declaration],
@@ -160,7 +160,7 @@ def test_batch_export_reuses_one_lake_build_generation(
         "build",
         "Root.One",
         "Root.Two",
-        "pooFlowDeclarationClosure",
+        "agenticAiLabDeclarationClosure",
     ]
     assert len([call for call in calls if call[:2] == ["lake", "build"]]) == 1
     assert tuple(closure.root_module for closure in closures) == (

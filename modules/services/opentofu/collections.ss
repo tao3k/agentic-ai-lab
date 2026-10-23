@@ -18,9 +18,9 @@
                  yuanxu-contract-object-ref yuanxu-contract-key->symbol)
         (only-in :yuanxu/modules/json-schema/json-schema-validation-core
                  yuanxu-json-schema-candidate-rows))
-(export poo-flow-opentofu-string-set-authority
-        poo-flow-opentofu-value-digest
-        poo-flow-opentofu-hash-string-authority)
+(export agentic-ai-lab-opentofu-string-set-authority
+        agentic-ai-lab-opentofu-value-digest
+        agentic-ai-lab-opentofu-hash-string-authority)
 
 ;; Canonical, tagged wire snapshots; order-independent object keys, ordered
 ;; arrays, no live receiver/pointer retained. Schema and candidate are separate.
@@ -37,7 +37,7 @@
    ((list? value) (cons 'array (map freeze value)))
    (else value)))
 
-(def (poo-flow-opentofu-value-digest value)
+(def (agentic-ai-lab-opentofu-value-digest value)
   (hex-encode
     (sha256 (string->utf8
       (call-with-output-string (lambda (port) (write (freeze value) port)))))))
@@ -50,10 +50,10 @@
 (.def AwsHashStringPolicy.
   identity: 'sdk-hash-string-crc32-v2.36.1
   .field: (lambda (path) (filter (lambda (key) (not (integer? key))) path))
-  .normalize: poo-flow-opentofu-aws-string-set
+  .normalize: agentic-ai-lab-opentofu-aws-string-set
   .valid-input?:
   (lambda (values)
-    (not (poo-flow-opentofu-aws-string-collision? values))))
+    (not (agentic-ai-lab-opentofu-aws-string-collision? values))))
 (.def CollectionBinding.)
 (.def MissingCollectionBinding.)
 
@@ -91,7 +91,7 @@
 (local-policy-method LiteralStringSetPolicy.)
 (local-policy-method AwsHashStringPolicy.)
 
-(def (poo-flow-opentofu-string-set-authority provider version block paths
+(def (agentic-ai-lab-opentofu-string-set-authority provider version block paths
        (clock (lambda () (time->seconds (current-time)))))
   (set-authority provider version block paths clock
                  (.o (:: @ LiteralStringSetPolicy.))
@@ -99,7 +99,7 @@
 
 ;; The source owner supplies the verification closure; downstream never selects
 ;; this policy by writing a symbol in a configuration value.
-(def (poo-flow-opentofu-hash-string-authority provider version block paths source-check)
+(def (agentic-ai-lab-opentofu-hash-string-authority provider version block paths source-check)
   (set-authority provider version block paths
                  (lambda () (time->seconds (current-time)))
                  (.o (:: @ AwsHashStringPolicy.))
@@ -122,8 +122,8 @@
     (error "evidence authority requires an explicit provider/version and paths"))
   (let* ((provider (string-copy provider))
          (version (string-copy version))
-         (schema (poo-flow-opentofu-value-digest block))
-         (binding (poo-flow-opentofu-value-digest
+         (schema (agentic-ai-lab-opentofu-value-digest block))
+         (binding (agentic-ai-lab-opentofu-value-digest
                     (list provider version schema (.get policy identity) paths)))
          ;; Private identity ledger. Copying a prototype or its visible audit
          ;; fields cannot enroll a receipt here. Weak keys follow Core's native
@@ -136,8 +136,8 @@
                                      (if (integer? key) key (yuanxu-contract-key->symbol key))) path)) paths)))
     (def (request candidate path values)
       (.cc (.o) 'binding binding 'path (map (lambda (key) key) path)
-           'candidate (poo-flow-opentofu-value-digest candidate)
-           'values (poo-flow-opentofu-value-digest values)))
+           'candidate (agentic-ai-lab-opentofu-value-digest candidate)
+           'values (agentic-ai-lab-opentofu-value-digest values)))
     (def (issue candidate path values literal? lifetime (field path))
       (and (source-check) literal? (authorized-field? policy allowed-paths field)
            (.call policy .valid-input? values)
@@ -170,6 +170,6 @@
     (.cc (.o) 'provider (string-copy provider) 'version (string-copy version)
          'schema (string-copy schema)
          '.matches? (lambda (candidate-block)
-                      (equal? schema (poo-flow-opentofu-value-digest candidate-block)))
+                      (equal? schema (agentic-ai-lab-opentofu-value-digest candidate-block)))
          '.normalize-values (.get policy .normalize)
          '.issue issue '.verify verify)))

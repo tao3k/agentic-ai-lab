@@ -9,9 +9,9 @@
 (import "syntax.ss" "descriptor.ss"
         :yuanxu/module-system/selection/objects)
 (export (import: "syntax.ss") (import: "descriptor.ss")
-        poo-flow-session-module-bundles)
+        agentic-ai-lab-session-module-bundles)
 
 ;;; Independent Session selection uses its own module identity.
-(def poo-flow-session-module-bundles
+(def agentic-ai-lab-session-module-bundles
   (list (yuanxu-user-module-bundle
           (session session +lineage +placement +handoff +graph +transform +doctor))))

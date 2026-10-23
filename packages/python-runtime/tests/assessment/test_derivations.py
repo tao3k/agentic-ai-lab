@@ -1,16 +1,16 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import os,subprocess,sys,unittest
-from poo_flow_testing.assessment_studies.inference_reuse_study import ROOT
+from agentic_ai_lab_testing.assessment_studies.inference_reuse_study import ROOT
 
 
 class DerivationChainIntegration(unittest.TestCase):
     def test_scheme_closure_is_reused_across_rounds_but_not_after_source_change(self):
         code='''
 import copy,os
-from poo_flow_runtime.reasoning import ReasoningRuntime
-from poo_flow_runtime.reasoning import EvidenceChain
-from poo_flow_testing.assessment_studies import inference_reuse_study as s
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime
+from agentic_ai_lab_runtime.reasoning import EvidenceChain
+from agentic_ai_lab_testing.assessment_studies import inference_reuse_study as s
 case=s.workload(3);source=case['source'];contract=s.oracle_contract(case)
 stage=copy.deepcopy(contract);stage['rules']=[r for r in stage['rules'] if r['head'][0]['relation']=='reachable']
 p1=s.program(source,stage);p1['queries']=['reachable']

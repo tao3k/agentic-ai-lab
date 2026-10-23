@@ -6,7 +6,7 @@
 ;;; Boundary: tests verify strict module-system observability traces.
 ;;; Invariant: trace construction never dereferences POO slots.
 
-(import (only-in :poo-flow/modules/module-authoring/source-policy PooFlowSourcePolicy)
+(import (only-in :agentic-ai-lab/modules/module-authoring/source-policy AgenticAILabSourcePolicy)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :gerbil/runtime/gambit
         (only-in :clan/poo/object .ref object?)
@@ -65,13 +65,13 @@
 ;;; This suite protects module observability receipts used to debug expansion
 ;;; and lazy-load decisions.
 (def module-system-observability-test
-  (test-suite "poo-flow module-system observability"
+  (test-suite "agentic-ai-lab module-system observability"
     (yuanxu-test-case "reports aggregate owner imports before module admission"
       (let* ((observations
               (yuanxu-authoring-owner-import-port-observations
                'modules/example/funs.ss
                (open-input-string
-                "(import :yuanxu/modules/funflow/control-plane/api)") PooFlowSourcePolicy))
+                "(import :yuanxu/modules/funflow/control-plane/api)") AgenticAILabSourcePolicy))
              (observation (car observations)))
         (check-equal? (length observations) 1)
         (check-equal? (.ref observation 'scope) 'modules/example/funs.ss)
@@ -88,19 +88,19 @@
          (yuanxu-authoring-owner-import-port-observations
           'modules/example/funs.ss
          (open-input-string
-           "(import (only-in :yuanxu/modules/funflow/control-plane/task make-task))") PooFlowSourcePolicy)
+           "(import (only-in :yuanxu/modules/funflow/control-plane/task make-task))") AgenticAILabSourcePolicy)
          '())
         (let* ((contribution-observations
                 (yuanxu-authoring-owner-import-port-observations
                  'modules/example/objects.ss
                  (open-input-string
-                  "(import (only-in :poo-flow/modules/workflow/scenario/configuration/interface yuanxu-module-interface))") PooFlowSourcePolicy))
+                  "(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/interface yuanxu-module-interface))") AgenticAILabSourcePolicy))
                (contribution-observation
                 (car contribution-observations)))
           (check-equal? (length contribution-observations) 1)
           (check-equal?
            (.ref contribution-observation 'owner)
-           ':poo-flow/modules/workflow/scenario/configuration/interface)
+           ':agentic-ai-lab/modules/workflow/scenario/configuration/interface)
           (check-equal? (.ref contribution-observation 'accepted?) #f))))
     (yuanxu-test-case "all maintained module sources import precise owners"
       (let* ((paths (module-observability-source-files "modules"))
@@ -109,20 +109,20 @@
                      (map (lambda (path)
                             (yuanxu-authoring-owner-import-file-observations
                              (string->symbol path)
-                             path PooFlowSourcePolicy))
+                             path AgenticAILabSourcePolicy))
                           paths))))
         (check-equal? (> (length paths) 0) #t)
         (check-equal? observations '())))
     (yuanxu-test-case "package build bootstrap imports no package-local owner"
       (check-equal?
        (yuanxu-authoring-build-bootstrap-file-observations
-        'build.ss "build.ss" PooFlowSourcePolicy)
+        'build.ss "build.ss" AgenticAILabSourcePolicy)
        '())
       (let* ((observations
               (yuanxu-authoring-build-bootstrap-import-port-observations
                'build.ss
                (open-input-string
-                "(import (only-in \"./src/building/build-config.ss\" policy))") PooFlowSourcePolicy))
+                "(import (only-in \"./src/building/build-config.ss\" policy))") AgenticAILabSourcePolicy))
              (observation (car observations)))
         (check-equal? (.ref observation 'phase) 'build-bootstrap-admission)
         (check-equal? (.ref observation 'status)
@@ -135,7 +135,7 @@
        (lambda (form)
          (let* ((observations
                  (yuanxu-authoring-build-bootstrap-datum-observations
-                  'build.ss form PooFlowSourcePolicy))
+                  'build.ss form AgenticAILabSourcePolicy))
                 (observation (car observations)))
            (check-equal? (length observations) 1)
            (check-equal? (.ref observation 'phase)
@@ -155,7 +155,7 @@
       ;; A quoted documentation example does not execute a projection.
       (check-equal?
        (yuanxu-authoring-build-bootstrap-datum-observations
-        'build.ss '(quote (yuanxu-module-source-collection-interfaces maintained-source)) PooFlowSourcePolicy)
+        'build.ss '(quote (yuanxu-module-source-collection-interfaces maintained-source)) AgenticAILabSourcePolicy)
        '()))
     (yuanxu-test-case "builds strict presentation trace rows"
       (let* ((native-observation
@@ -327,7 +327,7 @@
     (yuanxu-test-case "reader-native source inspection catches lexical values calls"
       (let* ((source
               (string-append
-               "(def (poo-flow-tool-unique-symbols/accumulate remaining seen values)\n"
+               "(def (agentic-ai-lab-tool-unique-symbols/accumulate remaining seen values)\n"
                "  (if (null? remaining) (values remaining values) values))\n"
                "(def (safe values) (reverse values))\n"
                "(def (safe-loop values)\n"
@@ -347,7 +347,7 @@
          yuanxu-scheme-lexical-call-shadow-observation-kind)
         (check-equal?
          (module-observability-test-alist-value 'definition observation)
-         'poo-flow-tool-unique-symbols/accumulate)
+         'agentic-ai-lab-tool-unique-symbols/accumulate)
         (check-equal?
          (module-observability-test-alist-value 'identifier observation)
          'values)

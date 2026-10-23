@@ -12,21 +12,21 @@
         (only-in :clan/poo/trie UIntTrieSet)
         (only-in :clan/poo/support/base until)
         (only-in :std/list/list filter)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-table-expression
-                 poo-flow-ascent-relation-closure-bounded))
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+                 agentic-ai-lab-ascent-relation-closure-bounded))
 
-(export poo-flow-ascent-binary-relation
-        poo-flow-ascent-binary-copy-rule
-        poo-flow-ascent-binary-join-rule
-        poo-flow-ascent-evaluate-binary-program)
+(export agentic-ai-lab-ascent-binary-relation
+        agentic-ai-lab-ascent-binary-copy-rule
+        agentic-ai-lab-ascent-binary-join-rule
+        agentic-ai-lab-ascent-evaluate-binary-program)
 
-(def (poo-flow-ascent-binary-relation relation-name source-set)
+(def (agentic-ai-lab-ascent-binary-relation relation-name source-set)
   (.o (name relation-name) (pairs source-set)))
 
-(def (poo-flow-ascent-binary-copy-rule head-name body-name)
+(def (agentic-ai-lab-ascent-binary-copy-rule head-name body-name)
   (.o (kind 'copy) (head head-name) (left body-name)))
 
-(def (poo-flow-ascent-binary-join-rule head-name left-name right-name)
+(def (agentic-ai-lab-ascent-binary-join-rule head-name left-name right-name)
   (.o (kind 'join) (head head-name)
       (left left-name) (right right-name)))
 
@@ -51,7 +51,7 @@
                      (.o (source-index (position-of source-name))
                          (head-index (position-of head-name)))))))))
 
-(def (poo-flow-ascent-evaluate-binary-program program)
+(def (agentic-ai-lab-ascent-evaluate-binary-program program)
   (let* ((width (.ref program 'radix))
          (sources (.ref program 'relations))
          (rules (.ref program 'rules))
@@ -184,7 +184,7 @@
                   (.ref (list-ref sources source-position) 'pairs))
                  (allowance (min limit (- output-limit source-count)))
                  (closure-pairs
-                  (.ref (poo-flow-ascent-relation-closure-bounded
+                  (.ref (agentic-ai-lab-ascent-relation-closure-bounded
                          source-set width allowance) 'pairs))
                  (results (make-vector count #f)))
             (let publish-sources ((i 0))

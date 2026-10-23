@@ -8,11 +8,11 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
-;; : (-> PooFlowTypeFactsProjectionExpr PooFlowTypeFactsProjectionValue)
+;; : (-> AgenticAILabTypeFactsProjectionExpr AgenticAILabTypeFactsProjectionValue)
 (def (type-facts-projection-eval expr)
   (eval expr))
 
-;; : (-> Alist Symbol PooFlowTypeFactsProjectionValue PooFlowTypeFactsProjectionValue)
+;; : (-> Alist Symbol AgenticAILabTypeFactsProjectionValue AgenticAILabTypeFactsProjectionValue)
 (def (alist-ref/default entries key default-value)
   (let (entry (assoc key entries))
     (if entry (cdr entry) default-value)))
@@ -45,7 +45,7 @@
       (yuanxu-native-contract
        'type-facts/fixture
        'type-facts
-       'PooFlowTypeFactsFixture
+       'AgenticAILabTypeFactsFixture
        object?
        (list +type-facts-fixture-name-slot+
              +type-facts-fixture-tags-slot+)
@@ -63,7 +63,7 @@
        (name-metadata (alist-ref/default name-row 'metadata '())))
   (unless (and (= (length rows) 2)
                (eq? (alist-ref/default name-row 'owner #f)
-                    'PooFlowTypeFactsFixture)
+                    'AgenticAILabTypeFactsFixture)
                (eq? (alist-ref/default name-row 'source-slot #f) 'name)
                (eq? (alist-ref/default name-row 'value-kind #f) 'Symbol)
                (eq? (alist-ref/default name-row 'polarity #f) 'positive)
@@ -82,7 +82,7 @@
   (unless (and (= (length rows) 2)
                (eq? (alist-ref/default name-row 'kind #f) 'slot-contract)
                (eq? (alist-ref/default name-row 'lean-owner #f)
-                    'PooFlowTypeFactsFixture)
+                    'AgenticAILabTypeFactsFixture)
                (eq? (alist-ref/default name-row 'lean-name #f) 'name)
                (eq? (alist-ref/default name-row 'source-slot #f) 'name)
                (eq? (alist-ref/default tags-row 'polarity #f) 'optional))

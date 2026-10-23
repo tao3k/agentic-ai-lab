@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 #+title: Python Runtime qualification tools
 
-The Python Runtime is =packages/python-runtime/src/poo_flow_runtime=.
+The Python Runtime is =packages/python-runtime/src/agentic_ai_lab_runtime=.
 These tools exercise that package and the shared native Scheme/C ABI.
 MRR =runtime/= owns Rust ABI code, assertions and consumer CI. MRR consumes
 POO through its declared Gerbil dependency; POO CI does not check out MRR.

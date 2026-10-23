@@ -5,135 +5,135 @@
 
 ;;; Boundary: communication receipt normalization and grant checks.
 
-(import (only-in :poo-flow/modules/session/communication
-                 poo-flow-session-communication-channel-receipt?
-                 poo-flow-session-communication-channel-receipt->alist
-                 poo-flow-session-communication-receipt?
-                 poo-flow-session-communication-receipt->alist)
-        :poo-flow/modules/session/policy-validation-support)
+(import (only-in :agentic-ai-lab/modules/session/communication
+                 agentic-ai-lab-session-communication-channel-receipt?
+                 agentic-ai-lab-session-communication-channel-receipt->alist
+                 agentic-ai-lab-session-communication-receipt?
+                 agentic-ai-lab-session-communication-receipt->alist)
+        :agentic-ai-lab/modules/session/policy-validation-support)
 
-(export poo-flow-session-policy-communication-receipts
-        poo-flow-session-policy-communication-channel-receipts
-        poo-flow-session-policy-communication-channel-receipt-row
-        poo-flow-session-policy-communication-channel-receipt-rows
-        poo-flow-session-policy-communication-receipt-row
-        poo-flow-session-policy-communication-receipt-rows
-        poo-flow-session-policy-communication-receipt-channel
-        poo-flow-session-policy-communication-channel-receipt-channel
-        poo-flow-session-policy-communication-receipt-target
-        poo-flow-session-policy-communication-channel-receipt-target
-        poo-flow-session-policy-communication-receipt-channel-allowed?
-        poo-flow-session-policy-communication-channel-receipt-channel-allowed?
-        poo-flow-session-policy-communication-receipt-target-allowed?
-        poo-flow-session-policy-communication-channel-receipt-target-allowed?
-        poo-flow-session-policy-communication-receipt-allowed?
-        poo-flow-session-policy-communication-channel-receipt-allowed?)
+(export agentic-ai-lab-session-policy-communication-receipts
+        agentic-ai-lab-session-policy-communication-channel-receipts
+        agentic-ai-lab-session-policy-communication-channel-receipt-row
+        agentic-ai-lab-session-policy-communication-channel-receipt-rows
+        agentic-ai-lab-session-policy-communication-receipt-row
+        agentic-ai-lab-session-policy-communication-receipt-rows
+        agentic-ai-lab-session-policy-communication-receipt-channel
+        agentic-ai-lab-session-policy-communication-channel-receipt-channel
+        agentic-ai-lab-session-policy-communication-receipt-target
+        agentic-ai-lab-session-policy-communication-channel-receipt-target
+        agentic-ai-lab-session-policy-communication-receipt-channel-allowed?
+        agentic-ai-lab-session-policy-communication-channel-receipt-channel-allowed?
+        agentic-ai-lab-session-policy-communication-receipt-target-allowed?
+        agentic-ai-lab-session-policy-communication-channel-receipt-target-allowed?
+        agentic-ai-lab-session-policy-communication-receipt-allowed?
+        agentic-ai-lab-session-policy-communication-channel-receipt-allowed?)
 
 ;; : (-> Alist [PooSessionCommunicationReceiptOrRow])
-(def (poo-flow-session-policy-communication-receipts metadata)
-  (poo-flow-session-validation-alist-ref metadata 'communication-receipts '()))
+(def (agentic-ai-lab-session-policy-communication-receipts metadata)
+  (agentic-ai-lab-session-validation-alist-ref metadata 'communication-receipts '()))
 
 ;; : (-> Alist [PooSessionCommunicationChannelReceiptOrRow])
-(def (poo-flow-session-policy-communication-channel-receipts metadata)
-  (poo-flow-session-validation-alist-ref
+(def (agentic-ai-lab-session-policy-communication-channel-receipts metadata)
+  (agentic-ai-lab-session-validation-alist-ref
    metadata
    'communication-channel-receipts
    '()))
 
 ;; : (-> PooSessionCommunicationChannelReceiptOrRow Alist)
-(def (poo-flow-session-policy-communication-channel-receipt-row receipt)
+(def (agentic-ai-lab-session-policy-communication-channel-receipt-row receipt)
   (cond
-   ((poo-flow-session-communication-channel-receipt? receipt)
-    (poo-flow-session-communication-channel-receipt->alist receipt))
+   ((agentic-ai-lab-session-communication-channel-receipt? receipt)
+    (agentic-ai-lab-session-communication-channel-receipt->alist receipt))
    ((list? receipt) receipt)
    (else
-    (list (cons 'kind 'poo-flow.session.communication-channel-receipt.invalid)
+    (list (cons 'kind 'agentic-ai-lab.session.communication-channel-receipt.invalid)
           (cons 'value receipt)))))
 
 ;; : (forall (a b) (-> [a] [b]))
 ;; : (-> [PooSessionCommunicationChannelReceiptOrRow] [Alist])
-(def (poo-flow-session-policy-communication-channel-receipt-rows receipts)
-  (map poo-flow-session-policy-communication-channel-receipt-row receipts))
+(def (agentic-ai-lab-session-policy-communication-channel-receipt-rows receipts)
+  (map agentic-ai-lab-session-policy-communication-channel-receipt-row receipts))
 
 ;; : (-> PooSessionCommunicationReceiptOrRow Alist)
-(def (poo-flow-session-policy-communication-receipt-row receipt)
+(def (agentic-ai-lab-session-policy-communication-receipt-row receipt)
   (cond
-   ((poo-flow-session-communication-receipt? receipt)
-    (poo-flow-session-communication-receipt->alist receipt))
+   ((agentic-ai-lab-session-communication-receipt? receipt)
+    (agentic-ai-lab-session-communication-receipt->alist receipt))
    ((list? receipt) receipt)
    (else
-    (list (cons 'kind 'poo-flow.session.communication-receipt.invalid)
+    (list (cons 'kind 'agentic-ai-lab.session.communication-receipt.invalid)
           (cons 'value receipt)))))
 
 ;; : (forall (a b) (-> [a] [b]))
 ;; : (-> [PooSessionCommunicationReceiptOrRow] [Alist])
-(def (poo-flow-session-policy-communication-receipt-rows receipts)
-  (map poo-flow-session-policy-communication-receipt-row receipts))
+(def (agentic-ai-lab-session-policy-communication-receipt-rows receipts)
+  (map agentic-ai-lab-session-policy-communication-receipt-row receipts))
 
 ;; : (-> Alist Symbol)
-(def (poo-flow-session-policy-communication-receipt-channel row)
-  (poo-flow-session-validation-row-ref row 'channel-id #f))
+(def (agentic-ai-lab-session-policy-communication-receipt-channel row)
+  (agentic-ai-lab-session-validation-row-ref row 'channel-id #f))
 
 ;; : (-> Alist Symbol)
-(def (poo-flow-session-policy-communication-channel-receipt-channel row)
-  (poo-flow-session-validation-row-ref row 'channel-id #f))
+(def (agentic-ai-lab-session-policy-communication-channel-receipt-channel row)
+  (agentic-ai-lab-session-validation-row-ref row 'channel-id #f))
 
 ;; : (-> Alist Symbol)
-(def (poo-flow-session-policy-communication-receipt-target row)
-  (poo-flow-session-validation-row-ref row 'target-session-id #f))
+(def (agentic-ai-lab-session-policy-communication-receipt-target row)
+  (agentic-ai-lab-session-validation-row-ref row 'target-session-id #f))
 
 ;; : (-> Alist Symbol)
-(def (poo-flow-session-policy-communication-channel-receipt-target row)
-  (poo-flow-session-validation-row-ref row 'target-session-id #f))
+(def (agentic-ai-lab-session-policy-communication-channel-receipt-target row)
+  (agentic-ai-lab-session-validation-row-ref row 'target-session-id #f))
 
 ;; : (-> PooSessionPolicy Alist Boolean)
-(def (poo-flow-session-policy-communication-receipt-channel-allowed?
+(def (agentic-ai-lab-session-policy-communication-receipt-channel-allowed?
       policy
       row)
-  (poo-flow-session-validation-granted?
-   (poo-flow-session-policy-communication-receipt-channel row)
-   (poo-flow-session-policy-channel-allowed policy)))
+  (agentic-ai-lab-session-validation-granted?
+   (agentic-ai-lab-session-policy-communication-receipt-channel row)
+   (agentic-ai-lab-session-policy-channel-allowed policy)))
 
 ;; : (-> PooSessionPolicy Alist Boolean)
-(def (poo-flow-session-policy-communication-channel-receipt-channel-allowed?
+(def (agentic-ai-lab-session-policy-communication-channel-receipt-channel-allowed?
       policy
       row)
-  (poo-flow-session-validation-granted?
-   (poo-flow-session-policy-communication-channel-receipt-channel row)
-   (poo-flow-session-policy-channel-allowed policy)))
+  (agentic-ai-lab-session-validation-granted?
+   (agentic-ai-lab-session-policy-communication-channel-receipt-channel row)
+   (agentic-ai-lab-session-policy-channel-allowed policy)))
 
 ;; : (-> PooSessionPolicy Alist Boolean)
-(def (poo-flow-session-policy-communication-receipt-target-allowed?
+(def (agentic-ai-lab-session-policy-communication-receipt-target-allowed?
       policy
       row)
-  (poo-flow-session-validation-granted?
-   (poo-flow-session-policy-communication-receipt-target row)
-   (poo-flow-session-policy-communication-targets policy)))
+  (agentic-ai-lab-session-validation-granted?
+   (agentic-ai-lab-session-policy-communication-receipt-target row)
+   (agentic-ai-lab-session-policy-communication-targets policy)))
 
 ;; : (-> PooSessionPolicy Alist Boolean)
-(def (poo-flow-session-policy-communication-channel-receipt-target-allowed?
+(def (agentic-ai-lab-session-policy-communication-channel-receipt-target-allowed?
       policy
       row)
-  (poo-flow-session-validation-granted?
-   (poo-flow-session-policy-communication-channel-receipt-target row)
-   (poo-flow-session-policy-communication-targets policy)))
+  (agentic-ai-lab-session-validation-granted?
+   (agentic-ai-lab-session-policy-communication-channel-receipt-target row)
+   (agentic-ai-lab-session-policy-communication-targets policy)))
 
 ;; : (-> PooSessionPolicy Alist Boolean)
-(def (poo-flow-session-policy-communication-receipt-allowed? policy row)
-  (and (poo-flow-session-policy-communication-receipt-channel-allowed?
+(def (agentic-ai-lab-session-policy-communication-receipt-allowed? policy row)
+  (and (agentic-ai-lab-session-policy-communication-receipt-channel-allowed?
         policy
         row)
-       (poo-flow-session-policy-communication-receipt-target-allowed?
+       (agentic-ai-lab-session-policy-communication-receipt-target-allowed?
         policy
         row)))
 
 ;; : (-> PooSessionPolicy Alist Boolean)
-(def (poo-flow-session-policy-communication-channel-receipt-allowed?
+(def (agentic-ai-lab-session-policy-communication-channel-receipt-allowed?
       policy
       row)
-  (and (poo-flow-session-policy-communication-channel-receipt-channel-allowed?
+  (and (agentic-ai-lab-session-policy-communication-channel-receipt-channel-allowed?
         policy
         row)
-       (poo-flow-session-policy-communication-channel-receipt-target-allowed?
+       (agentic-ai-lab-session-policy-communication-channel-receipt-target-allowed?
         policy
         row)))

@@ -4,43 +4,43 @@
 
 ;;; Proof FFI bridge payload projection.
 ;;; - Keep gate decisions serialized explicitly before handing them to foreign runtimes.
-(import :poo-flow/modules/proof/projections/proof-fact-wire
-        :poo-flow/modules/proof/projections/proof-gate-decision)
+(import :agentic-ai-lab/modules/proof/projections/proof-fact-wire
+        :agentic-ai-lab/modules/proof/projections/proof-gate-decision)
 
-(export poo-flow-proof-gate-decision->ffi-payload
-        poo-flow-proof-gate-receipts->ffi-payload
-        poo-flow-langgraph-user-interface-proof-ffi-payload)
+(export agentic-ai-lab-proof-gate-decision->ffi-payload
+        agentic-ai-lab-proof-gate-receipts->ffi-payload
+        agentic-ai-lab-langgraph-user-interface-proof-ffi-payload)
 
 ;;; Boundary: decision payloads are serialized as stable alist fields for FFI consumers.
 ;; : (-> ProofGateDecision ProofFfiPayload)
-(def (poo-flow-proof-gate-decision->ffi-payload decision)
-  (let ((bundle (poo-flow-proof-fact-ref 'bundle decision)))
+(def (agentic-ai-lab-proof-gate-decision->ffi-payload decision)
+  (let ((bundle (agentic-ai-lab-proof-fact-ref 'bundle decision)))
     (foldr cons
            '()
-           (list (cons 'schema 'poo-flow.proof.ffi-bridge.payload)
+           (list (cons 'schema 'agentic-ai-lab.proof.ffi-bridge.payload)
                  (cons 'version 1)
-                 (cons 'accepted? (poo-flow-proof-fact-ref 'accepted? decision))
+                 (cons 'accepted? (agentic-ai-lab-proof-fact-ref 'accepted? decision))
                  (cons 'runtime-boundary-ok?
-                       (poo-flow-proof-fact-ref 'runtime-boundary-ok? decision))
+                       (agentic-ai-lab-proof-fact-ref 'runtime-boundary-ok? decision))
                  (cons 'rejection-reasons
-                       (poo-flow-proof-fact-ref 'rejection-reasons decision))
+                       (agentic-ai-lab-proof-fact-ref 'rejection-reasons decision))
                  (cons 'composition-wire
-                       (poo-flow-proof-fact-ref 'composition bundle))
+                       (agentic-ai-lab-proof-fact-ref 'composition bundle))
                  (cons 'scenario-wire
-                       (poo-flow-proof-fact-ref 'scenario bundle))
+                       (agentic-ai-lab-proof-fact-ref 'scenario bundle))
                  (cons 'handoff-wire
-                       (poo-flow-proof-fact-ref 'handoff bundle))))))
+                       (agentic-ai-lab-proof-fact-ref 'handoff bundle))))))
 
 ;;; Boundary: receipt projection composes validation and FFI serialization without exposing intermediate state.
 ;; : (-> ProofGateReceipts ProofFfiPayload)
-(def (poo-flow-proof-gate-receipts->ffi-payload receipts)
+(def (agentic-ai-lab-proof-gate-receipts->ffi-payload receipts)
   (foldr (lambda (step value) (step value))
          receipts
-         (list poo-flow-proof-gate-decision->ffi-payload
-               poo-flow-proof-gate-receipts->decision)))
+         (list agentic-ai-lab-proof-gate-decision->ffi-payload
+               agentic-ai-lab-proof-gate-receipts->decision)))
 
 ;;; Boundary: the LangGraph fixture enters the same FFI payload projection as user receipts.
 ;; : (-> ProofFfiPayload)
-(def (poo-flow-langgraph-user-interface-proof-ffi-payload)
-  (poo-flow-proof-gate-decision->ffi-payload
-   (poo-flow-langgraph-user-interface-proof-gate-decision)))
+(def (agentic-ai-lab-langgraph-user-interface-proof-ffi-payload)
+  (agentic-ai-lab-proof-gate-decision->ffi-payload
+   (agentic-ai-lab-langgraph-user-interface-proof-gate-decision)))

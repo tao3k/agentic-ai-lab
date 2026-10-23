@@ -11,7 +11,7 @@
                  check-equal?
                  test-suite)
         :yuanxu/modules/funflow/control-plane/failure
-        :poo-flow/modules/loop-engine/control/spec-evolution)
+        :agentic-ai-lab/modules/loop-engine/control/spec-evolution)
 
 (export loop-spec-evolution-test)
 

@@ -8,7 +8,7 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
-        (only-in :poo-flow/user-interface/init
+        (only-in :agentic-ai-lab/user-interface/init
                  yuanxu-user-module-bundles)
         (only-in :yuanxu/profile-composition/user-profile
                  yuanxuUserConfigFromProfile
@@ -16,11 +16,11 @@
                  yuanxu-user-profile-name
                  yuanxu-user-profile-module-bundles)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/dev/testing-api
-                 +poo-flow-testing-interface+
-                 poo-flow-testing-admit-user-profile!)
-        (only-in :poo-flow/modules/workflow/scenario/configuration/root-profile
-                 pooFlowRootProfile)
+        (only-in :agentic-ai-lab/dev/testing-api
+                 +agentic-ai-lab-testing-interface+
+                 agentic-ai-lab-testing-admit-user-profile!)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/root-profile
+                 agenticAiLabRootProfile)
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-user-config-modules
                  yuanxu-user-config-module-keys
@@ -31,7 +31,7 @@
 (export user-interface-root-config-test)
 
 (def root-config-profile
-  (pooFlowRootProfile yuanxu-user-module-bundles))
+  (agenticAiLabRootProfile yuanxu-user-module-bundles))
 
 (def root-config
   (yuanxuUserConfigFromProfile root-config-profile))
@@ -55,7 +55,7 @@
     (root-config-module-selection-by-key (cdr modules) key))))
 
 (def user-interface-root-config-test
-  (test-suite "poo-flow user interface root config"
+  (test-suite "agentic-ai-lab user interface root config"
     (yuanxu-test-case "loads modules directory facade through top-level config"
       (let* ((root-modules (yuanxu-user-config-modules root-config))
              (root-flow-module
@@ -67,8 +67,8 @@
         (check-equal? (yuanxu-user-profile? root-config-profile) #t)
         (check-equal? (yuanxu-user-profile-name root-config-profile) 'users)
         (check-equal?
-         (.ref (poo-flow-testing-admit-user-profile!
-                +poo-flow-testing-interface+
+         (.ref (agentic-ai-lab-testing-admit-user-profile!
+                +agentic-ai-lab-testing-interface+
                 root-config-profile)
                'admitted?)
          #t)

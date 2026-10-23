@@ -133,7 +133,7 @@ only a missing file value installs/forces a parse thunk. The C API
 one state inside its explicit validated lifetime, not globally sharing a state
 across changed sources or caching a Contract admission conclusion.
 
-Local receipts: =/private/tmp/poo-flow-nix-stable-20261023/{default,profile,
+Local receipts: =/private/tmp/agentic-ai-lab-nix-stable-20261023/{default,profile,
 worker,rebuild,cold-sample}.log=. Raw output and the 6 MB sample remain local.
 Later host saturation and the two failed sampling attempts remain recorded;
 they do not erase the earlier passing final-runtime receipts.

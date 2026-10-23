@@ -141,24 +141,24 @@ refinement and from Contract admission; hiding these distinctions is a UX defect
 [[file:12-guestbook-schema-profile-plan-chain.org][Module 12]] connects these existing interfaces to default-bearing Profiles,
 Scenario obligations, output resource validation and the three evolution variants.
 
-POO Flow already implements JSON Schema -> Scheme Contract artifact generation,
+Agentic AI Lab already implements JSON Schema -> Scheme Contract artifact generation,
 object-contract projection and candidate validation. Calling this a missing
 Contract system would be incorrect. The executable owners are
 [[file:../../../core/modules/json-schema/json-schema-receipt.ss][json-schema-receipt.ss]] and [[file:../../../core/modules/json-schema/json-schema-validate.ss][json-schema-validate.ss]]. The existing
 [[file:../../../core/modules/funflow/github-ci-contract.ss][GitHub CI consumer]] uses these public entry points:
 
 #+begin_src scheme
-(def poo-flow-funflow-github-ci-contract-artifact
+(def agentic-ai-lab-funflow-github-ci-contract-artifact
   (yuanxu-json-schema->contract-artifact
-   +poo-flow-funflow-github-ci-workflow-schema+
-   `((source-ref . ,+poo-flow-funflow-github-ci-schema-source+)
+   +agentic-ai-lab-funflow-github-ci-workflow-schema+
+   `((source-ref . ,+agentic-ai-lab-funflow-github-ci-schema-source+)
      (owner . funflow)
-     (object-kind . PooFlowFunflowGithubCiWorkflow)
+     (object-kind . AgenticAILabFunflowGithubCiWorkflow)
      (object-key . funflow/github-ci/workflow))))
 
-(def (poo-flow-funflow-github-ci-validate-workflow workflow)
+(def (agentic-ai-lab-funflow-github-ci-validate-workflow workflow)
   (yuanxu-json-schema-contract-artifact-validate
-   poo-flow-funflow-github-ci-contract-artifact
+   agentic-ai-lab-funflow-github-ci-contract-artifact
    workflow))
 #+end_src
 
@@ -654,7 +654,7 @@ no runtime implementation, module adapter or Loader.
 
 * Conclusion: why build this, and what would make it worthwhile?
 
-** Where can POO Flow do better than this KCL case?
+** Where can Agentic AI Lab do better than this KCL case?
 
 The intended gain is maintaining evolving configuration libraries across many
 owners, not saving a pair of braces in Guestbook. Independent Profiles can carry
@@ -698,7 +698,7 @@ Existing small native cache controls do not prove these ecosystem properties.
 
 ** Why another configuration system rather than another Kubernetes wrapper?
 
-POO Flow's purpose is a common extensible configuration and admission model for
+Agentic AI Lab's purpose is a common extensible configuration and admission model for
 complex enterprise and user workflows spanning agents, build/release pipelines,
 deployments, sandbox policies and external providers. Profiles express reusable
 recipes; Scenarios select/combine them under explicit requirements; Modules

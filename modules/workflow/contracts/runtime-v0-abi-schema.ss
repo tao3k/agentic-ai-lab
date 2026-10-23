@@ -9,29 +9,29 @@
 (import (only-in :clan/poo/object .o .ref))
 
 (def (runtime-v0-capability name-value bit-value)
-  (.o (kind 'poo-flow.runtime-v0.abi-capability.1)
+  (.o (kind 'agentic-ai-lab.runtime-v0.abi-capability.1)
       (name name-value) (bit bit-value)))
 
-(def +poo-flow-runtime-v0-abi-schema+
-  (.o (kind 'poo-flow.runtime-v0.abi-schema.1)
+(def +agentic-ai-lab-runtime-v0-abi-schema+
+  (.o (kind 'agentic-ai-lab.runtime-v0.abi-schema.1)
       (abi-major 0)
       (abi-minor 1)
-      (bundle-schema "poo-flow.organization-bundle.draft.3")
-      (control-packet-schema "poo-flow.runtime-v0.control-packet.1")
+      (bundle-schema "agentic-ai-lab.organization-bundle.draft.3")
+      (control-packet-schema "agentic-ai-lab.runtime-v0.control-packet.1")
       (promotion-request-schema
-       "poo-flow.runtime-language.promotion-request.1")
+       "agentic-ai-lab.runtime-language.promotion-request.1")
       (promotion-receipt-schema
-       "poo-flow.runtime-language.promotion-receipt.1")
+       "agentic-ai-lab.runtime-language.promotion-receipt.1")
       (promotion-idempotency-key-schema
-       "poo-flow.runtime-language.promotion-idempotency-key.1")
+       "agentic-ai-lab.runtime-language.promotion-idempotency-key.1")
       (source-query-receipt-schema
-       "poo-flow.runtime-language.source-query-receipt.1")
+       "agentic-ai-lab.runtime-language.source-query-receipt.1")
       (query-execution-candidate-schema
-       "poo-flow.query.execution-candidate.1")
+       "agentic-ai-lab.query.execution-candidate.1")
       (runtime-admission-receipt-schema
-       "poo-flow.runtime-language.admission-receipt.1")
+       "agentic-ai-lab.runtime-language.admission-receipt.1")
       (contract-artifact-projection-receipt-schema
-       "poo-flow.contract.artifact-projection-receipt.1")
+       "agentic-ai-lab.contract.artifact-projection-receipt.1")
       (abi-v1-frozen? #f)
       (hot-layout-version 1)
       (event-header-bytes 96)
@@ -58,48 +58,48 @@
   (for-each (lambda (value) (display value port)) values)
   (newline port))
 
-(def (poo-flow-runtime-v0-abi-schema->c-header schema)
+(def (agentic-ai-lab-runtime-v0-abi-schema->c-header schema)
   (let (port (open-output-string))
     (emit-line port "// SPDX-FileCopyrightText: 2026 tao3k team and Contributors")
     (emit-line port "//")
     (emit-line port "// SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later")
     (newline port)
-    (emit-line port "#ifndef POO_FLOW_RUNTIME_V0_CONTRACT_H")
-    (emit-line port "#define POO_FLOW_RUNTIME_V0_CONTRACT_H")
+    (emit-line port "#ifndef AGENTIC_AI_LAB_RUNTIME_V0_CONTRACT_H")
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_V0_CONTRACT_H")
     (newline port)
     (emit-line port "#include <stdint.h>")
     (newline port)
-    (emit-line port "#define POO_FLOW_RUNTIME_V0_ABI_MAJOR "
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_V0_ABI_MAJOR "
                (.ref schema 'abi-major) "u")
-    (emit-line port "#define POO_FLOW_RUNTIME_V0_ABI_MINOR "
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_V0_ABI_MINOR "
                (.ref schema 'abi-minor) "u")
-    (emit-line port "#define POO_FLOW_RUNTIME_V0_BUNDLE_SCHEMA \""
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_V0_BUNDLE_SCHEMA \""
                (.ref schema 'bundle-schema) "\"")
-    (emit-line port "#define POO_FLOW_RUNTIME_V0_CONTROL_PACKET_SCHEMA \""
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_V0_CONTROL_PACKET_SCHEMA \""
                (.ref schema 'control-packet-schema) "\"")
-    (emit-line port "#define POO_FLOW_RUNTIME_LANGUAGE_PROMOTION_REQUEST_SCHEMA \""
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_LANGUAGE_PROMOTION_REQUEST_SCHEMA \""
                (.ref schema 'promotion-request-schema) "\"")
-    (emit-line port "#define POO_FLOW_RUNTIME_LANGUAGE_PROMOTION_RECEIPT_SCHEMA \""
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_LANGUAGE_PROMOTION_RECEIPT_SCHEMA \""
                (.ref schema 'promotion-receipt-schema) "\"")
-    (emit-line port "#define POO_FLOW_RUNTIME_LANGUAGE_PROMOTION_IDEMPOTENCY_KEY_SCHEMA \""
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_LANGUAGE_PROMOTION_IDEMPOTENCY_KEY_SCHEMA \""
                (.ref schema 'promotion-idempotency-key-schema) "\"")
-    (emit-line port "#define POO_FLOW_RUNTIME_LANGUAGE_SOURCE_QUERY_RECEIPT_SCHEMA \""
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_LANGUAGE_SOURCE_QUERY_RECEIPT_SCHEMA \""
                (.ref schema 'source-query-receipt-schema) "\"")
-    (emit-line port "#define POO_FLOW_QUERY_EXECUTION_CANDIDATE_SCHEMA \""
+    (emit-line port "#define AGENTIC_AI_LAB_QUERY_EXECUTION_CANDIDATE_SCHEMA \""
                (.ref schema 'query-execution-candidate-schema) "\"")
-    (emit-line port "#define POO_FLOW_RUNTIME_LANGUAGE_ADMISSION_RECEIPT_SCHEMA \""
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_LANGUAGE_ADMISSION_RECEIPT_SCHEMA \""
                (.ref schema 'runtime-admission-receipt-schema) "\"")
-    (emit-line port "#define POO_FLOW_CONTRACT_ARTIFACT_PROJECTION_RECEIPT_SCHEMA \""
+    (emit-line port "#define AGENTIC_AI_LAB_CONTRACT_ARTIFACT_PROJECTION_RECEIPT_SCHEMA \""
                (.ref schema 'contract-artifact-projection-receipt-schema) "\"")
-    (emit-line port "#define POO_FLOW_RUNTIME_V0_LAYOUT_VERSION "
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_V0_LAYOUT_VERSION "
                (.ref schema 'hot-layout-version) "u")
-    (emit-line port "#define POO_FLOW_RUNTIME_V0_EVENT_HEADER_BYTES "
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_V0_EVENT_HEADER_BYTES "
                (.ref schema 'event-header-bytes) "u")
-    (emit-line port "#define POO_FLOW_RUNTIME_V0_COMPACT_IDENTITY_BITS "
+    (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_V0_COMPACT_IDENTITY_BITS "
                (.ref schema 'compact-identity-bits) "u")
     (for-each
      (lambda (capability)
-       (emit-line port "#define POO_FLOW_RUNTIME_V0_CAP_"
+       (emit-line port "#define AGENTIC_AI_LAB_RUNTIME_V0_CAP_"
                   (.ref capability 'name) " (UINT64_C(1) << "
                   (.ref capability 'bit) ")"))
      (.ref schema 'capabilities))
@@ -107,9 +107,9 @@
     (emit-line port "#endif")
     (get-output-string port)))
 
-(def (poo-flow-runtime-v0-abi-schema->vector schema)
+(def (agentic-ai-lab-runtime-v0-abi-schema->vector schema)
   (let (port (open-output-string))
-    (emit-line port "schema=poo-flow.runtime-v0.contract-vector.1")
+    (emit-line port "schema=agentic-ai-lab.runtime-v0.contract-vector.1")
     (emit-line port "abi-major=" (.ref schema 'abi-major))
     (emit-line port "abi-minor=" (.ref schema 'abi-minor))
     (emit-line port "bundle-schema=" (.ref schema 'bundle-schema))
@@ -142,9 +142,9 @@
      (.ref schema 'capabilities))
     (get-output-string port)))
 
-(def (poo-flow-runtime-v0-abi-schema->event-vector schema)
+(def (agentic-ai-lab-runtime-v0-abi-schema->event-vector schema)
   (let (port (open-output-string))
-    (emit-line port "schema=poo-flow.runtime-v0.native-event-vector.1")
+    (emit-line port "schema=agentic-ai-lab.runtime-v0.native-event-vector.1")
     (emit-line port "layout-version=" (.ref schema 'hot-layout-version))
     (emit-line port "header-bytes=" (.ref schema 'event-header-bytes))
     (emit-line port "event-kind=1")

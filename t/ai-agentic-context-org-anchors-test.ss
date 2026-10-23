@@ -3,29 +3,29 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
-        :poo-flow/modules/ai-agentic-context/objects
-        :poo-flow/modules/ai-agentic-context/types
-        :poo-flow/modules/ai-agentic-context/funs-features
-        :poo-flow/modules/ai-agentic-context/funs-projection
-        :poo-flow/modules/ai-agentic-context/funs-anchors
-        :poo-flow/modules/ai-agentic-context/funs-session
-        (only-in :poo-flow/modules/session/funs-attempt poo-flow-session-schedule poo-flow-session-claim)
-        :poo-flow/modules/query/semantic/context-restriction)
+        :agentic-ai-lab/modules/ai-agentic-context/objects
+        :agentic-ai-lab/modules/ai-agentic-context/types
+        :agentic-ai-lab/modules/ai-agentic-context/funs-features
+        :agentic-ai-lab/modules/ai-agentic-context/funs-projection
+        :agentic-ai-lab/modules/ai-agentic-context/funs-anchors
+        :agentic-ai-lab/modules/ai-agentic-context/funs-session
+        (only-in :agentic-ai-lab/modules/session/funs-attempt agentic-ai-lab-session-schedule agentic-ai-lab-session-claim)
+        :agentic-ai-lab/modules/query/semantic/context-restriction)
 (export ai-agentic-context-org-anchors-test)
 (def scope (.o (:: @ AiAgenticContextScope.) bundle: "bundle" organization: "org" epoch: 1
   project: "project" worktree: "worktree" source-cut: "cut" actor: "actor" task: "task"
   destination: "provider" session: "session" turn: 0))
-(def restriction (poo-flow-context-restriction "domain" '("actor") '("provider") '("org") 0 10))
-(def profile (poo-flow-ai-agentic-context-profile #f))
+(def restriction (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 10))
+(def profile (agentic-ai-lab-ai-agentic-context-profile #f))
 (def source "* TODO Parent\n:PROPERTIES:\n:ID: parent\n:END:\n** TODO 子项\n:PROPERTIES:\n:ID: child-α\n:END:\n")
 (def (project text (scope-value scope))
-  (poo-flow-ai-agentic-context-org-project scope-value text restriction profile))
-(def (anchors text ids) (poo-flow-ai-agentic-context-org-anchors text (project text) scope ids))
+  (agentic-ai-lab-ai-agentic-context-org-project scope-value text restriction profile))
+(def (anchors text ids) (agentic-ai-lab-ai-agentic-context-org-anchors text (project text) scope ids))
 (def ai-agentic-context-org-anchors-test
   (test-suite "Orgize property ID Context and Session bindings"
     (yuanxu-test-case "parser-owned ID spans bind exact parent and child containers"
       (let (bound (anchors source '("parent" "child-α")))
-        (check (poo-flow-ai-agentic-context-org-anchor-shape? (car bound)) => #t)
+        (check (agentic-ai-lab-ai-agentic-context-org-anchor-shape? (car bound)) => #t)
         (check (.ref (car bound) 'container-start) => 0)
         (check (> (.ref (cadr bound) 'container-start) 0) => #t)
         (for-each (lambda (anchor)
@@ -34,7 +34,7 @@
           (check (.ref anchor 'session) => "session")
           (check (.ref anchor 'action-authorized?) => #f)) bound)
         (check (map (lambda (a) (.ref a 'semantic-digest))
-                 (poo-flow-ai-agentic-context-org-anchors-replay source (project source) scope bound))
+                 (agentic-ai-lab-ai-agentic-context-org-anchors-replay source (project source) scope bound))
                => (map (lambda (a) (.ref a 'semantic-digest)) bound))))
     (yuanxu-test-case "document ID and case-insensitive property key are source-backed"
       (let (a (car (anchors ":PROPERTIES:\n:id: document\n:END:\n* TODO Work\n" '("document"))))
@@ -53,14 +53,14 @@
     (yuanxu-test-case "source correction and forged spans invalidate old anchors"
       (let* ((old (anchors source '("parent")))
              (changed "* TODO A\n:PROPERTIES:\n:ID: parent\n:END:\n"))
-        (check-exception (poo-flow-ai-agentic-context-org-anchors-replay changed (project changed) scope old) true)
-        (check-exception (poo-flow-ai-agentic-context-org-anchors-replay source (project source) scope
+        (check-exception (agentic-ai-lab-ai-agentic-context-org-anchors-replay changed (project changed) scope old) true)
+        (check-exception (agentic-ai-lab-ai-agentic-context-org-anchors-replay source (project source) scope
            (list (.o (:: @ (car old)) value-end: (+ 1 (.ref (car old) 'value-end))))) true)
-        (check-exception (poo-flow-ai-agentic-context-org-anchors-replay source (project source) scope
+        (check-exception (agentic-ai-lab-ai-agentic-context-org-anchors-replay source (project source) scope
            (list (.o (:: @ (car old)) session: "foreign"))) true)))
     (yuanxu-test-case "Context builds Task references that survive exact Session claim"
-      (let* ((task (poo-flow-ai-agentic-context-session-task source (project source) scope "receipt" 3 '("parent" "child-α")))
-             (r (poo-flow-session-claim (poo-flow-session-schedule "session") 0 task "attempt" "request" 0)))
+      (let* ((task (agentic-ai-lab-ai-agentic-context-session-task source (project source) scope "receipt" 3 '("parent" "child-α")))
+             (r (agentic-ai-lab-session-claim (agentic-ai-lab-session-schedule "session") 0 task "attempt" "request" 0)))
         (check (.ref r 'accepted?) => #t)
         (check (.ref (.ref (.ref r 'schedule) 'active) 'anchor-refs)
                => (map (lambda (a) (.ref a 'semantic-digest)) (.ref task 'anchor-bindings)))
@@ -68,4 +68,4 @@
         (check (.ref r 'runtime-published?) => #f)))
     (yuanxu-test-case "new Session or Turn requires newly bound anchors"
       (let* ((old (anchors source '("parent"))) (next-scope (.o (:: @ scope) turn: 1)))
-        (check-exception (poo-flow-ai-agentic-context-org-anchors-replay source (project source next-scope) next-scope old) true)))))
+        (check-exception (agentic-ai-lab-ai-agentic-context-org-anchors-replay source (project source next-scope) next-scope old) true)))))

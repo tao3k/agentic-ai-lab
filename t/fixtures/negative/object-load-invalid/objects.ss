@@ -4,9 +4,9 @@
 ;;; The harness trusts this fixture to prove load! propagates object contracts.
 
 (import :yuanxu/module-system/schema/interface
-        :poo-flow/modules/workflow/scenario/configuration/init-syntax)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
 ;;; The negative fixture must fail through the user-facing loader path, so the
 ;;; test keeps load! as the observable boundary instead of importing the part.
-;; : [PooFlowModuleObject]
+;; : [AgenticAILabModuleObject]
 (load! "parts/object1")

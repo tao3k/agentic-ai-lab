@@ -11,6 +11,6 @@
    "inputRev": "0a111f6c5de43b261de5bba9287b48540d9f7c2e",
    "inherited": false,
    "configFile": "lakefile.toml"}],
- "name": "POOFlowCompositionProofs",
+ "name": "AgenticAILabCompositionProofs",
  "lakeDir": ".lake",
  "fixedToolchain": false}

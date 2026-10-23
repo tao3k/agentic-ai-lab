@@ -4,7 +4,7 @@
 (import :std/test :clan/poo/object
         (only-in :std/error Error? Error-message)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :poo-flow/modules/services/opentofu/execution NullExecution.))
+        (only-in :agentic-ai-lab/modules/services/opentofu/execution NullExecution.))
 (export opentofu-execution-binding-test)
 
 ;; The publication stub counts boundary calls; no process or artifact is built.

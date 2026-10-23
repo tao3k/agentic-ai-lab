@@ -7,21 +7,21 @@
 ;;; Invariant: Git submodule gitlinks own revisions and .gitmodules owns URLs;
 ;;; this module only exposes the packages root for identity-driven discovery.
 
-(import (only-in :poo-flow/modules/module-authoring/source-policy PooFlowModuleStylePolicy)
+(import (only-in :agentic-ai-lab/modules/module-authoring/source-policy AgenticAILabModuleStylePolicy)
         :yuanxu/module-system/source/collection
-        :poo-flow/modules/module-authoring/module-source-collection)
+        :agentic-ai-lab/modules/module-authoring/module-source-collection)
 
-(export poo-flow-official-contribution-sources
-        poo-flow-official-contribution-load-path)
+(export agentic-ai-lab-official-contribution-sources
+        agentic-ai-lab-official-contribution-load-path)
 
-(def poo-flow-official-contribution-sources
+(def agentic-ai-lab-official-contribution-sources
   (list
    (make-yuanxu-contribution-root-module-source
-    'poo-flow-official-contributions "packages"
-    style-policy: PooFlowModuleStylePolicy)))
+    'agentic-ai-lab-official-contributions "packages"
+    style-policy: AgenticAILabModuleStylePolicy)))
 
-(def poo-flow-official-contribution-load-path
+(def agentic-ai-lab-official-contribution-load-path
   (extend-yuanxu-module-load-path
-   poo-flow-default-module-load-path
-   'poo-flow-with-official-contributions
-   poo-flow-official-contribution-sources))
+   agentic-ai-lab-default-module-load-path
+   'agentic-ai-lab-with-official-contributions
+   agentic-ai-lab-official-contribution-sources))

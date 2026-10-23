@@ -8,10 +8,10 @@
         (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/module-system/source/admission admit-module-configuration!)
-        (only-in :poo-flow/modules/services/opentofu/types
+        (only-in :agentic-ai-lab/modules/services/opentofu/types
                  NullContract OpenTofuContract ServicesContract OpenTofuConfigContract)
-        (only-in :poo-flow/modules/services/opentofu/config Config)
-        (only-in :poo-flow/modules/services/opentofu/func opentofu-service-configuration))
+        (only-in :agentic-ai-lab/modules/services/opentofu/config Config)
+        (only-in :agentic-ai-lab/modules/services/opentofu/func opentofu-service-configuration))
 (export opentofu-service-contract-test)
 
 ;; Exercise the same configuration association used by the actual Module.

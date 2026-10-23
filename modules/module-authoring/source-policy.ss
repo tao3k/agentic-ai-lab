@@ -5,17 +5,17 @@
 (import (only-in :clan/poo/object .o)
         (only-in :yuanxu/module-system/authoring/import-policy SourceInspectionPolicy.)
         (only-in :yuanxu/module-system/source/collection yuanxu-default-module-style-policy))
-(export PooFlowSourcePolicy PooFlowModuleStylePolicy)
-(def PooFlowSourcePolicy
+(export AgenticAILabSourcePolicy AgenticAILabModuleStylePolicy)
+(def AgenticAILabSourcePolicy
   (.o (:: @ SourceInspectionPolicy.)
       aggregate-imports:
       '(:yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
         :yuanxu/feature-system/interface)
-      package-prefix: ":poo-flow/"
+      package-prefix: ":agentic-ai-lab/"
       source-roots: '("./src/" "src/" "./modules/" "modules/")
       forbidden-projections: '(yuanxu-module-source-collection-interfaces all-gerbil-modules modules)))
 
-(def PooFlowModuleStylePolicy
+(def AgenticAILabModuleStylePolicy
   (.o (:: @ yuanxu-default-module-style-policy)
-      source-policy: PooFlowSourcePolicy))
+      source-policy: AgenticAILabSourcePolicy))

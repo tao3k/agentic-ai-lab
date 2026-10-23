@@ -55,7 +55,7 @@
            (* (- (current-jiffy) started) 1000)
            (jiffies-per-second))))
     (displayln
-     "[poo-flow-benchmark] profile-bundle count=" count
+     "[agentic-ai-lab-benchmark] profile-bundle count=" count
      " elapsedMs=" elapsed-ms
      " maxMs=" +profile-bundle-performance-maximum-ms+
      " indexedExports=" count

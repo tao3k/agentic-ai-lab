@@ -93,7 +93,7 @@ assert.deepEqual(fallbackCalls, ["bazelisk", "bazel"]);
 for (const configured of [false, true]) {
   const npmEnv = {
     PATH: "/package/node_modules/.bin:/sdk/bin:/usr/bin",
-    POO_FLOW_BAZEL_PATH: "/sdk/bin:/usr/bin",
+    AGENTIC_AI_LAB_BAZEL_PATH: "/sdk/bin:/usr/bin",
     GERBIL_NATIVE_ABI: "source-bound-abi",
     ...(configured ? { BAZEL: "configured-bazel" } : {}),
   };

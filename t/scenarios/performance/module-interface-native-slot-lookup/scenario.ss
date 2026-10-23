@@ -60,7 +60,7 @@
                (benchmark-fixture-ref baseline-receipt 'elapsedNs))
       (error "native POO slot lookup did not improve repeated presence checks"
              baseline-receipt candidate-receipt))
-    (display "[poo-flow-benchmark] module-interface-native-slot-lookup baseline=")
+    (display "[agentic-ai-lab-benchmark] module-interface-native-slot-lookup baseline=")
     (write baseline-receipt)
     (display " candidate=")
     (write candidate-receipt)

@@ -15,7 +15,7 @@
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/session-communication"
-                 poo-flow-custom-my-module-session-communication-case))
+                 agentic-ai-lab-custom-my-module-session-communication-case))
 
 (export user-interface-custom-session-communication-test)
 
@@ -33,13 +33,13 @@
 
 ;; : TestSuite
 (def user-interface-custom-session-communication-test
-  (test-suite "poo-flow custom user-interface session-communication case"
+  (test-suite "agentic-ai-lab custom user-interface session-communication case"
     (yuanxu-test-case "projects custom session communication receipt rows"
       (let* ((selection
-              (car poo-flow-custom-my-module-session-communication-case))
+              (car agentic-ai-lab-custom-my-module-session-communication-case))
              (rows
               (module-config-rows
-               poo-flow-custom-my-module-session-communication-case))
+               agentic-ai-lab-custom-my-module-session-communication-case))
              (root-build-channel (car rows))
              (audit-release-channel (cadddr rows))
              (communication-rows (cddddr rows))
@@ -50,7 +50,7 @@
                       '(session . session))
         (check-equal? (length rows) 8)
         (check-equal? (test-ref root-build-channel 'kind)
-                      'poo-flow.session.communication-channel-receipt)
+                      'agentic-ai-lab.session.communication-channel-receipt)
         (check-equal? (test-ref root-build-channel 'channel-id)
                       'channel/root-build)
         (check-equal? (test-ref root-build-channel 'allowed-message-kinds)

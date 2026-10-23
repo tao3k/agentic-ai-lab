@@ -4,9 +4,9 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/modules/proof/projections/proof-fact-wire
-        :poo-flow/modules/proof/projections/proof-gate-decision
-        :poo-flow/modules/proof/projections/proof-gate-receipts)
+        :agentic-ai-lab/modules/proof/projections/proof-fact-wire
+        :agentic-ai-lab/modules/proof/projections/proof-gate-decision
+        :agentic-ai-lab/modules/proof/projections/proof-gate-receipts)
 
 (def proof-gate-decision-test
   (test-suite "proof gate decision"
@@ -21,16 +21,16 @@
     (error "proof gate decision expected true" label value)))
 
 (def accepted-decision
-  (poo-flow-langgraph-user-interface-proof-gate-decision))
+  (agentic-ai-lab-langgraph-user-interface-proof-gate-decision))
 
 (assert-true 'accepted-decision
-             (poo-flow-proof-gate-decision-accepted? accepted-decision))
+             (agentic-ai-lab-proof-gate-decision-accepted? accepted-decision))
 (assert-equal 'accepted-reasons
-              (poo-flow-proof-gate-decision-rejection-reasons accepted-decision)
+              (agentic-ai-lab-proof-gate-decision-rejection-reasons accepted-decision)
               '())
 
 (def bad-override-receipts
-  (let ((receipts (poo-flow-langgraph-user-interface-proof-receipts)))
+  (let ((receipts (agentic-ai-lab-langgraph-user-interface-proof-receipts)))
     (list (assq 'schema receipts)
           (cons 'composition
                 (list (cons 'fact-id 'decision-bad-override-composition)
@@ -43,26 +43,26 @@
           (assq 'handoff receipts))))
 
 (def bad-override-decision
-  (poo-flow-proof-gate-receipts->decision bad-override-receipts))
+  (agentic-ai-lab-proof-gate-receipts->decision bad-override-receipts))
 
 (assert-equal 'bad-override-accepted
-              (poo-flow-proof-gate-decision-accepted? bad-override-decision)
+              (agentic-ai-lab-proof-gate-decision-accepted? bad-override-decision)
               #f)
 (assert-equal 'bad-override-reason-source
-              (poo-flow-proof-fact-ref
+              (agentic-ai-lab-proof-fact-ref
                'source
-               (car (poo-flow-proof-gate-decision-rejection-reasons
+               (car (agentic-ai-lab-proof-gate-decision-rejection-reasons
                      bad-override-decision)))
               'composition)
 (assert-equal 'bad-override-reason-rule
-              (poo-flow-proof-fact-ref
+              (agentic-ai-lab-proof-fact-ref
                'rejection-rule
-               (car (poo-flow-proof-gate-decision-rejection-reasons
+               (car (agentic-ai-lab-proof-gate-decision-rejection-reasons
                      bad-override-decision)))
               'composition-rejected-by-override-scope)
 
 (def runtime-owner-receipts
-  (let ((receipts (poo-flow-langgraph-user-interface-proof-receipts)))
+  (let ((receipts (agentic-ai-lab-langgraph-user-interface-proof-receipts)))
     (list (assq 'schema receipts)
           (assq 'composition receipts)
           (assq 'scenario receipts)
@@ -76,12 +76,12 @@
                       (cons 'artifacts-declared #t))))))
 
 (def runtime-owner-decision
-  (poo-flow-proof-gate-receipts->decision runtime-owner-receipts))
+  (agentic-ai-lab-proof-gate-receipts->decision runtime-owner-receipts))
 
 (assert-equal 'runtime-owner-accepted
-              (poo-flow-proof-gate-decision-accepted? runtime-owner-decision)
+              (agentic-ai-lab-proof-gate-decision-accepted? runtime-owner-decision)
               #f)
 (assert-equal 'runtime-owner-reason-count
-              (length (poo-flow-proof-gate-decision-rejection-reasons
+              (length (agentic-ai-lab-proof-gate-decision-rejection-reasons
                        runtime-owner-decision))
               2))))

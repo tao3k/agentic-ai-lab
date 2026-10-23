@@ -15,8 +15,8 @@ This document turns provider, evidence, and proof-closure failures discovered
 while implementing the composable AI security architecture package into
 versioned regression obligations.
 
-It is not an AI security architecture, an engine layer, or a new POO Flow
-public interface. POO Flow remains the general composition engine. These
+It is not an AI security architecture, an engine layer, or a new Agentic AI Lab
+public interface. Agentic AI Lab remains the general composition engine. These
 receipts record whether a concrete toolchain can preserve the semantic,
 evidence, and proof boundaries selected by a composed architecture package.
 
@@ -50,7 +50,7 @@ surface.
 
 Selector:
 
-=python://src/poo_flow_proof/axle_exact_closure.py#item/async_function/build_exact_axle_closure=
+=python://src/agentic_ai_lab_proof/axle_exact_closure.py#item/async_function/build_exact_axle_closure=
 
 Expected provider: =py-harness=.
 
@@ -173,10 +173,10 @@ architecture package.
 Lean compilation establishes that
 =AISecurityArchitectureRuntimeProjectionClosed= crosses these owners:
 
-- =PooFlowProof.Enterprise.BundleEvidenceBinding.BundleSubject=;
-- =PooFlowProof.Enterprise.BundleEvidenceBinding.BoundVerificationReceipt=;
-- =PooFlowProof.PooC4.AuthorizedEffectEvidenceFacts=;
-- =PooFlowProof.PooC4.authorizedEffectL1=.
+- =AgenticAILabProof.Enterprise.BundleEvidenceBinding.BundleSubject=;
+- =AgenticAILabProof.Enterprise.BundleEvidenceBinding.BoundVerificationReceipt=;
+- =AgenticAILabProof.PooC4.AuthorizedEffectEvidenceFacts=;
+- =AgenticAILabProof.PooC4.authorizedEffectL1=.
 
 The runtime-projection AXLE preflight finds 85 declarations across 5 owner
 sources, but composed-owner extraction reports
@@ -259,12 +259,12 @@ than one authoritative layer count:
 - Snowflake publishes Data, Model, and Agent protection-object layers;
 - CSA describes ten reference-architecture layers grouped into three
   operational domains, while its final document remains pending;
-- POO Flow must compose both without treating either framework as its ontology.
+- Agentic AI Lab must compose both without treating either framework as its ontology.
 
 ** Versioned bundle
 
 - schema: =ai-security-framework-mapping-bundle.v1=
-- bundle id: =snowflake-csa-poo-flow-001=
+- bundle id: =snowflake-csa-agentic-ai-lab-001=
 - bundle:
   =receipts/asr-framework-mapping-005.bundle.v1.json=
 - receipt:
@@ -273,9 +273,9 @@ than one authoritative layer count:
   =829a2476e80940124ddae18d2955fb850011ff7b223472787bb3ecd511f7aed6=
 - receipt SHA-256:
   =c0fdb518f495f1b4ee7841178e06599dd5490c05a04e2a6152a2a1ca5688c4fe=
-- owner: =poo-flow=
+- owner: =agentic-ai-lab=
 
-The JSON bundle is an internal evidence artifact.  It is not a public POO Flow
+The JSON bundle is an internal evidence artifact.  It is not a public Agentic AI Lab
 module API or a new ordinary record DSL.
 
 ** Mapping admission
@@ -296,7 +296,7 @@ final document is therefore not silently promoted into an exact mapping.
 
 Implemented in:
 
-- =PooFlowProof/Enterprise/AISecurityExternalFrameworkMappingBundleClosure.lean=
+- =AgenticAILabProof/Enterprise/AISecurityExternalFrameworkMappingBundleClosure.lean=
 
 The proof closes:
 
@@ -353,7 +353,7 @@ Python test or artifact replay receipt is claimed.
 
 The additional proof boundary is implemented in:
 
-- =PooFlowProof/Enterprise/AISecurityEvidenceAttestationAssuranceClosure.lean=
+- =AgenticAILabProof/Enterprise/AISecurityEvidenceAttestationAssuranceClosure.lean=
 
 ** ASR-006 closure condition
 
@@ -369,12 +369,12 @@ This receipt closes only when:
 
 ** Receipt identity
 
-- receipt schema: =poo-flow.ai-security.regression-receipt.v1=;
+- receipt schema: =agentic-ai-lab.ai-security.regression-receipt.v1=;
 - receipt id: =EASE-CHANGE-REOPENING-007=;
 - claim id: =EASE-004=;
-- owning repository/package: =poo-flow/packages/proofs/lean=;
+- owning repository/package: =agentic-ai-lab/packages/proofs/lean=;
 - formal owner:
-  =PooFlowProof.Enterprise.AISecurityEmbodiedChangeDrivenAssuranceReopeningClosure=;
+  =AgenticAILabProof.Enterprise.AISecurityEmbodiedChangeDrivenAssuranceReopeningClosure=;
 - owner source digest:
   =sha256:b0b43edc4286cb7ecc031b796073aac0b3bac2287914a7312b0fe3b7659b5a64=.
 
@@ -395,13 +395,13 @@ No duplicate evidence type, axiom, or elapsed-time assumption is introduced.
 
 #+begin_src sh
 cd packages/proofs/lean
-lake env lean PooFlowProof/Enterprise/AISecurityEmbodiedChangeDrivenAssuranceReopeningClosure.lean
-lake build PooFlowProof.Enterprise
+lake env lean AgenticAILabProof/Enterprise/AISecurityEmbodiedChangeDrivenAssuranceReopeningClosure.lean
+lake build AgenticAILabProof.Enterprise
 #+end_src
 
 Observed result: focused Lean compilation and the aggregate enterprise build
 pass.  The umbrella owner imports the declaration, so the claim is visible
-through =PooFlowProof.Enterprise=.
+through =AgenticAILabProof.Enterprise=.
 
 - fail-closed outcome: architecture-context mismatch cannot satisfy
   =contextBoundClosed=;
@@ -425,19 +425,19 @@ still does not claim empirical closure.
 
 ** Receipt identity
 
-- receipt schema: =poo-flow.ai-security.regression-receipt.v1=;
+- receipt schema: =agentic-ai-lab.ai-security.regression-receipt.v1=;
 - receipt id: =EASE-PROVIDER-NON-AUTHORITY-008=;
 - claim id: =EASE-005=;
-- owning repository/package: =poo-flow/packages/proofs=;
+- owning repository/package: =agentic-ai-lab/packages/proofs=;
 - formal owner:
-  =PooFlowProof.Enterprise.AISecurityEmbodiedAIProviderNonAuthorityClosure=;
+  =AgenticAILabProof.Enterprise.AISecurityEmbodiedAIProviderNonAuthorityClosure=;
 - formal owner source digest:
   =sha256:eac527a389329be6d55a2e1d56f5822b70ee7505acb6ebb662e7f6d7119d1ce1=;
 - executable owner:
-  =src/poo_flow_proof/embodied_ai_provider_non_authority.py=;
+  =src/agentic_ai_lab_proof/embodied_ai_provider_non_authority.py=;
 - executable artifact digest:
   =sha256:b31cbf63be0c7fd0c4acf9ea001449f9f61bc67d8ac8a265305cb3d70bceda0b=;
-- replay schema: =poo-flow.ai-security.ease005-replay-receipt.v1=;
+- replay schema: =agentic-ai-lab.ai-security.ease005-replay-receipt.v1=;
 - trace root:
   =sha256:83bc876033e40ab5bac81326b12bf9185bfe7a53d78bd7157fb63ce442b93cd0=.
 
@@ -450,7 +450,7 @@ acceptance.  It is not exposed as an ordinary public callable.
 
 The repaired transition is =evaluate_provider_admission= at:
 
-=python://src/poo_flow_proof/embodied_ai_provider_non_authority.py#item/function/evaluate_provider_admission=
+=python://src/agentic_ai_lab_proof/embodied_ai_provider_non_authority.py#item/function/evaluate_provider_admission=
 
 It binds the declared role to an issuer kind and an independent authority
 identity.  The Lean counterexample =roleOnlyAdmissionAcceptsForgedProvider=
@@ -466,8 +466,8 @@ repaired boundary without granting authority to a provider declaration.
 #+begin_src sh
 cd packages/proofs/python
 uv run pytest tests/test_embodied_ai_provider_non_authority.py tests/test_embodied_ai_provider_non_authority_replay.py -q
-uv run ruff check src/poo_flow_proof/embodied_ai_provider_non_authority.py src/poo_flow_proof/embodied_ai_provider_non_authority_replay.py tests/test_embodied_ai_provider_non_authority.py tests/test_embodied_ai_provider_non_authority_replay.py
-uv run python -m poo_flow_proof.embodied_ai_provider_non_authority_replay
+uv run ruff check src/agentic_ai_lab_proof/embodied_ai_provider_non_authority.py src/agentic_ai_lab_proof/embodied_ai_provider_non_authority_replay.py tests/test_embodied_ai_provider_non_authority.py tests/test_embodied_ai_provider_non_authority_replay.py
+uv run python -m agentic_ai_lab_proof.embodied_ai_provider_non_authority_replay
 #+end_src
 
 Observed result: eight focused tests pass, Ruff passes, and two independent
@@ -497,12 +497,12 @@ obligation rather than a fabricated success.
 
 ** Receipt identity
 
-- receipt schema: =poo-flow.ai-security.regression-receipt.v1=;
+- receipt schema: =agentic-ai-lab.ai-security.regression-receipt.v1=;
 - receipt id: =EASE-AUTHORITY-DECLARATION-009=;
 - claim id: =EASE-002=;
-- owning repository/package: =poo-flow/packages/proofs/lean=;
+- owning repository/package: =agentic-ai-lab/packages/proofs/lean=;
 - formal owner:
-  =PooFlowProof.Enterprise.AISecurityEmbodiedAuthorityBearingDeclarationClosure=;
+  =AgenticAILabProof.Enterprise.AISecurityEmbodiedAuthorityBearingDeclarationClosure=;
 - owner source digest:
   =sha256:bbcca97ad4c9656d53c58aaab12f77b462c6a5fa869a9bd9fe24cfcf0ee60a0e=.
 
@@ -529,8 +529,8 @@ subject-mismatch, and invalid-receipt rejection.
 
 #+begin_src sh
 cd packages/proofs/lean
-lake env lean PooFlowProof/Enterprise/AISecurityEmbodiedAuthorityBearingDeclarationClosure.lean
-lake build PooFlowProof.Enterprise
+lake env lean AgenticAILabProof/Enterprise/AISecurityEmbodiedAuthorityBearingDeclarationClosure.lean
+lake build AgenticAILabProof.Enterprise
 #+end_src
 
 - fail-closed outcome: provider issuer, provider/authority identity equality,
@@ -544,11 +544,11 @@ lake build PooFlowProof.Enterprise
 
 ** Receipt identity and formal closure
 
-- receipt schema: =poo-flow.ai-security.regression-receipt.v1=;
+- receipt schema: =agentic-ai-lab.ai-security.regression-receipt.v1=;
 - receipt id: =EASE-CONSTRAINED-SYSTEM-EFFECT-010=;
 - claim id: =EASE-001=;
 - formal owner:
-  =PooFlowProof.Enterprise.AISecurityEmbodiedConstrainedSystemEffectClosure=;
+  =AgenticAILabProof.Enterprise.AISecurityEmbodiedConstrainedSystemEffectClosure=;
 - owner source digest:
   =sha256:8187854ff66ec90815a4c8e26105ad9756a4c85a388900e8e4e201c49918f02b=.
 
@@ -558,15 +558,15 @@ that an authorized effect is already a constrained system effect.  The repaired
 effect-domain coverage, duplicate safety, exclusive fencing, terminal recovery,
 and validated compensation evidence.
 
-This owner reuses =PooFlowProof.PooC4.authorizedEffectL1=,
+This owner reuses =AgenticAILabProof.PooC4.authorizedEffectL1=,
 =PromotionTransactionRecovery.closedDuplicateRequiresPriorCommit=,
 =PromotionTransactionRecovery.closedRollbackRestoresCompleteEffectObservation=,
 and =EffectDomainCoverage.coveredRollbackAgreesOnEveryPlanEffect=.
 
 #+begin_src sh
 cd packages/proofs/lean
-lake env lean PooFlowProof/Enterprise/AISecurityEmbodiedConstrainedSystemEffectClosure.lean
-lake build PooFlowProof.Enterprise
+lake env lean AgenticAILabProof/Enterprise/AISecurityEmbodiedConstrainedSystemEffectClosure.lean
+lake build AgenticAILabProof.Enterprise
 #+end_src
 
 - fail-closed outcome: authorization alone cannot close EASE-001;
@@ -579,22 +579,22 @@ lake build PooFlowProof.Enterprise
 
 ** Receipt identity
 
-- receipt schema: =poo-flow.ai-security.regression-receipt.v1=;
+- receipt schema: =agentic-ai-lab.ai-security.regression-receipt.v1=;
 - receipt id: =EASE-TYPED-GRAPH-CHANGE-IMPACT-011=;
 - claim ids: =EASE-003= and =EASE-004=;
 - formal graph owner:
-  =PooFlowProof.Enterprise.AISecurityEmbodiedTypedRelationGraphClosure=;
+  =AgenticAILabProof.Enterprise.AISecurityEmbodiedTypedRelationGraphClosure=;
 - formal graph source digest:
   =sha256:71e79e460c78a64a52bd6e9c640c78e3b2e55830501f22bc953ee7d9f437c72c=;
 - executable graph owner:
-  =src/poo_flow_proof/embodied_ai_security_relation_graph.py=;
+  =src/agentic_ai_lab_proof/embodied_ai_security_relation_graph.py=;
 - executable graph source digest:
   =sha256:05516fac56efd141a444e38cf36db2e87bc89f6c13dcad5f7c5393367dc0c05b=;
 - replay owner:
-  =src/poo_flow_proof/embodied_ai_security_change_impact_replay.py=;
+  =src/agentic_ai_lab_proof/embodied_ai_security_change_impact_replay.py=;
 - replay source digest:
   =sha256:c768a11cb7f814499e43b1339a6589e578b7458bdf7fdbd9b1dbcb8e5a56c16f=;
-- change-impact schema: =poo-flow.ai-security.change-impact-receipt.v1=;
+- change-impact schema: =agentic-ai-lab.ai-security.change-impact-receipt.v1=;
 - graph digest:
   =sha256:d374b0cc01ee2bd006b3ad17157ab715ede55c1665b9126cc4d15d49dbb4a28f=;
 - trace root:
@@ -622,13 +622,13 @@ DSL and no boolean-only invalidation side channel.
 
 #+begin_src sh
 cd packages/proofs/lean
-lake env lean PooFlowProof/Enterprise/AISecurityEmbodiedTypedRelationGraphClosure.lean
-lake build PooFlowProof.Enterprise
+lake env lean AgenticAILabProof/Enterprise/AISecurityEmbodiedTypedRelationGraphClosure.lean
+lake build AgenticAILabProof.Enterprise
 
 cd ../python
 uv run pytest tests/test_embodied_ai_security_relation_graph.py -q
-uv run ruff check src/poo_flow_proof/embodied_ai_security_relation_graph.py src/poo_flow_proof/embodied_ai_security_change_impact_replay.py tests/test_embodied_ai_security_relation_graph.py
-uv run python -m poo_flow_proof.embodied_ai_security_change_impact_replay
+uv run ruff check src/agentic_ai_lab_proof/embodied_ai_security_relation_graph.py src/agentic_ai_lab_proof/embodied_ai_security_change_impact_replay.py tests/test_embodied_ai_security_relation_graph.py
+uv run python -m agentic_ai_lab_proof.embodied_ai_security_change_impact_replay
 #+end_src
 
 Observed executable result: eight tests pass; replay is byte-identical across
@@ -646,18 +646,18 @@ two independent invocations; =command-admission-test= and
 
 ** Receipt identity
 
-- receipt schema: =poo-flow.ai-security.regression-receipt.v1=;
+- receipt schema: =agentic-ai-lab.ai-security.regression-receipt.v1=;
 - receipt id: =EASE-CONSTRAINED-EFFECT-EXECUTABLE-012=;
 - claim id: =EASE-001=;
 - executable owner:
-  =src/poo_flow_proof/embodied_ai_constrained_effect.py=;
+  =src/agentic_ai_lab_proof/embodied_ai_constrained_effect.py=;
 - executable owner digest:
   =sha256:34a7088bce66839fdd7c0f8abbde5143bf07c9a6dea8252606aad138653ae0d8=;
 - replay owner:
-  =src/poo_flow_proof/embodied_ai_constrained_effect_replay.py=;
+  =src/agentic_ai_lab_proof/embodied_ai_constrained_effect_replay.py=;
 - replay owner digest:
   =sha256:70b065055bc72001fb9f1b3e58b1ef810f904f7df696f42f502db78e9190d9f6=;
-- replay schema: =poo-flow.ai-security.ease001-replay-receipt.v1=;
+- replay schema: =agentic-ai-lab.ai-security.ease001-replay-receipt.v1=;
 - trace root:
   =sha256:d519efdc9cd22e189ce990bb329c14f3f26f38b7cb93c948dbafc7440753ef63=.
 
@@ -665,7 +665,7 @@ two independent invocations; =command-admission-test= and
 
 The exact transition identity is:
 
-=python://src/poo_flow_proof/embodied_ai_constrained_effect.py#item/function/evaluate_constrained_effect=
+=python://src/agentic_ai_lab_proof/embodied_ai_constrained_effect.py#item/function/evaluate_constrained_effect=
 
 The transition consumes typed authorization, effect-obligation, prior-commit,
 compensation, and recovery receipts.  It rejects:
@@ -686,8 +686,8 @@ is not the admitted transition and is not an ordinary public API.
 #+begin_src sh
 cd packages/proofs/python
 uv run pytest tests/test_embodied_ai_constrained_effect.py tests/test_embodied_ai_constrained_effect_replay.py -q
-uv run ruff check src/poo_flow_proof/embodied_ai_constrained_effect.py src/poo_flow_proof/embodied_ai_constrained_effect_replay.py tests/test_embodied_ai_constrained_effect.py tests/test_embodied_ai_constrained_effect_replay.py
-uv run python -m poo_flow_proof.embodied_ai_constrained_effect_replay
+uv run ruff check src/agentic_ai_lab_proof/embodied_ai_constrained_effect.py src/agentic_ai_lab_proof/embodied_ai_constrained_effect_replay.py tests/test_embodied_ai_constrained_effect.py tests/test_embodied_ai_constrained_effect_replay.py
+uv run python -m agentic_ai_lab_proof.embodied_ai_constrained_effect_replay
 #+end_src
 
 Observed result: ten focused tests pass in the combined EASE-001 slice; two
@@ -702,18 +702,18 @@ contains six rejected cases with distinct reason kinds and one admitted case.
 
 ** Receipt identity
 
-- receipt schema: =poo-flow.ai-security.regression-receipt.v1=;
+- receipt schema: =agentic-ai-lab.ai-security.regression-receipt.v1=;
 - receipt id: =EASE-AUTHORITY-DECLARATION-EXECUTABLE-013=;
 - claim id: =EASE-002=;
 - executable owner:
-  =src/poo_flow_proof/embodied_ai_authority_declaration.py=;
+  =src/agentic_ai_lab_proof/embodied_ai_authority_declaration.py=;
 - executable owner digest:
   =sha256:91383a6a4ba629eda32e53094a4da6a4532e29f1735bcae26090f7bb49834891=;
 - replay owner:
-  =src/poo_flow_proof/embodied_ai_authority_declaration_replay.py=;
+  =src/agentic_ai_lab_proof/embodied_ai_authority_declaration_replay.py=;
 - replay owner digest:
   =sha256:923068bead0863bd19f61d6097377818cc6256d1990bb14b3ad478d2dadfcb0e=;
-- replay schema: =poo-flow.ai-security.ease002-replay-receipt.v1=;
+- replay schema: =agentic-ai-lab.ai-security.ease002-replay-receipt.v1=;
 - trace root:
   =sha256:33924ee01743bebeae0ed9c350e4d245b8d906dc2284277722e488c8d90ab905=.
 
@@ -721,7 +721,7 @@ contains six rejected cases with distinct reason kinds and one admitted case.
 
 The exact transition identity is:
 
-=python://src/poo_flow_proof/embodied_ai_authority_declaration.py#item/function/evaluate_authority_declaration_admission=
+=python://src/agentic_ai_lab_proof/embodied_ai_authority_declaration.py#item/function/evaluate_authority_declaration_admission=
 
 The transition distinguishes =declaration=, =execution=, =evidence=,
 =verification=, =residual-risk acceptance=, and =recovery= authority acts.  An
@@ -743,8 +743,8 @@ issue authority-bearing declarations.
 #+begin_src sh
 cd packages/proofs/python
 uv run pytest tests/test_embodied_ai_authority_declaration.py tests/test_embodied_ai_authority_declaration_replay.py -q
-uv run ruff check src/poo_flow_proof/embodied_ai_authority_declaration.py src/poo_flow_proof/embodied_ai_authority_declaration_replay.py tests/test_embodied_ai_authority_declaration.py tests/test_embodied_ai_authority_declaration_replay.py
-uv run python -m poo_flow_proof.embodied_ai_authority_declaration_replay
+uv run ruff check src/agentic_ai_lab_proof/embodied_ai_authority_declaration.py src/agentic_ai_lab_proof/embodied_ai_authority_declaration_replay.py tests/test_embodied_ai_authority_declaration.py tests/test_embodied_ai_authority_declaration_replay.py
+uv run python -m agentic_ai_lab_proof.embodied_ai_authority_declaration_replay
 #+end_src
 
 Observed result: nine focused tests pass in the combined EASE-002 slice; all six
@@ -760,12 +760,12 @@ invocations emit byte-identical canonical JSON.
 
 ** Parser-owned tooling receipt
 
-- receipt schema: =poo-flow.ai-security.regression-receipt.v1=;
+- receipt schema: =agentic-ai-lab.ai-security.regression-receipt.v1=;
 - receipt id: =EASE-PYTHON-SELECTOR-DEFERRED-014=;
 - affected claims: =EASE-001= and =EASE-002=;
 - attempted owners:
-  =src/poo_flow_proof/embodied_ai_constrained_effect.py= and
-  =src/poo_flow_proof/embodied_ai_authority_declaration.py=;
+  =src/agentic_ai_lab_proof/embodied_ai_constrained_effect.py= and
+  =src/agentic_ai_lab_proof/embodied_ai_authority_declaration.py=;
 - requested projection: exact owner search followed by callable skeleton;
 - returned schema: =agent.semantic-protocols.host-native-execution-required=;
 - reason kind: =host-local-ipc-permission-denied=;
@@ -846,7 +846,7 @@ healthcheck therefore cannot increase proof coverage.
 
 Implemented in:
 
-- =PooFlowProof/Enterprise/AISecurityCapabilityConformanceAttestationClosure.lean=
+- =AgenticAILabProof/Enterprise/AISecurityCapabilityConformanceAttestationClosure.lean=
 
 The proof closes:
 
@@ -885,5 +885,5 @@ This receipt closes only when:
   bundle for all three runtime theorem roots.
 - [ ] =ASR-RESIDENT-ENDPOINT-004= produces an atomic reconciliation receipt.
 - [ ] Historical failing artifacts remain replayable.
-- [ ] The repaired path does not add a POO Flow public API, local evidence
+- [ ] The repaired path does not add a Agentic AI Lab public API, local evidence
   duplicate, or architecture-specific engine assumption.

@@ -25,11 +25,11 @@
         (only-in :yuanxu/modules/json-schema/json-schema-validation-core
                  yuanxu-json-schema-candidate-rows yuanxu-json-schema-path->symbol
                  yuanxu-json-schema-candidate-slot))
-(export poo-flow-opentofu-block-contract poo-flow-opentofu-configuration-contract
-        poo-flow-opentofu-configuration-from-types
-        poo-flow-opentofu-normalize-block
+(export agentic-ai-lab-opentofu-block-contract agentic-ai-lab-opentofu-configuration-contract
+        agentic-ai-lab-opentofu-configuration-from-types
+        agentic-ai-lab-opentofu-normalize-block
         OpenTofuModule. OpenTofuScope. OpenTofuConfiguration.
-        poo-flow-opentofu-provider-from-directory)
+        agentic-ai-lab-opentofu-provider-from-directory)
 
 ;; Configuration admission is structural. Provider collection identity belongs
 ;; to the explicit collection-contract, never a prerequisite for configuration.
@@ -47,13 +47,13 @@
 
 (def (contract-with-collections identity block authority-for)
   (let (shape-contract (yuanxu-json-schema->contract identity
-                         (poo-flow-opentofu-block->schema block)))
+                         (agentic-ai-lab-opentofu-block->schema block)))
     (def (walk candidate context issue? lifetime)
       (let (diagnostics '())
         (let (receipts
                (with-list-builder (emit)
                  (set! diagnostics
-                   (poo-flow-opentofu-block-obligations block candidate context
+                   (agentic-ai-lab-opentofu-block-obligations block candidate context
                      (lambda (path values literal?)
                        (collection-step (authority-for path) candidate context
                          issue? lifetime emit path values literal?))))))
@@ -72,7 +72,7 @@
          (lambda (candidate)
            (let (evidence (.call shape-contract .classify candidate #f))
              (if (yuanxu-classification-evidence-accepted? evidence)
-               (poo-flow-opentofu-block-normalization block candidate
+               (agentic-ai-lab-opentofu-block-normalization block candidate
                  (lambda (path values)
                    (let (binding (authority-for path))
                      (if (and binding (.has? (car binding) .normalize-values))
@@ -85,19 +85,19 @@
        (.call authority .matches? block)
        (cons authority field)))
 
-(def (poo-flow-opentofu-block-contract identity block (authority #f))
+(def (agentic-ai-lab-opentofu-block-contract identity block (authority #f))
   (when (and authority (not (checked-authority authority block '())))
     (error "collection authority Schema does not match block" identity))
   (contract-with-collections identity block
     (lambda (path) (checked-authority authority block path))))
 
-(def (poo-flow-opentofu-normalize-block block candidate)
-  (.call (poo-flow-opentofu-block-contract 'opentofu/normalization block)
+(def (agentic-ai-lab-opentofu-normalize-block block candidate)
+  (.call (agentic-ai-lab-opentofu-block-contract 'opentofu/normalization block)
          .normalize candidate))
 
 ;; A selected configuration is just another block shape. Selection is explicit
 ;; and inert; provider acquisition, lock verification and publication are not here.
-(def (poo-flow-opentofu-configuration-contract providers resources data (authorities #f))
+(def (agentic-ai-lab-opentofu-configuration-contract providers resources data (authorities #f))
   (let (instance-block
          (lambda (members mode)
            `((attributes . ())
@@ -127,7 +127,7 @@
 ;; Compose selected generated input schemas, not raw provider exports. The
 ;; selected native Contracts remain attached for provenance/inspection. This
 ;; structural boundary does not discharge collection identity or Provider RPC.
-(def (poo-flow-opentofu-configuration-from-types selected)
+(def (agentic-ai-lab-opentofu-configuration-from-types selected)
   (def (rows value) (yuanxu-json-schema-candidate-rows value))
   (def (object-schema properties)
     `((type . "object") (additionalProperties . #f) (properties . ,properties)))
@@ -180,7 +180,7 @@
         (or (hash-ref contracts key #f)
             (let* ((input (.call artifact .read-entry name kind))
                    (entry (.get input schema))
-                   (generated (poo-flow-opentofu-block-contract
+                   (generated (agentic-ai-lab-opentofu-block-contract
                                 (string->symbol
                                   (string-append address "@" version "/"
                                     (symbol->string kind) "/" (symbol->string name)
@@ -221,8 +221,8 @@
          '.contract-cached? (lambda (name kind) (hash-key? contracts (cons kind name))))))
 
 
-(def (poo-flow-opentofu-provider-from-directory directory)
-  (let (artifact (poo-flow-opentofu-read-provider-artifact directory))
+(def (agentic-ai-lab-opentofu-provider-from-directory directory)
+  (let (artifact (agentic-ai-lab-opentofu-read-provider-artifact directory))
     (if (eq? (.get artifact status) 'ready)
       (provider-scope directory (.get artifact manifest) artifact)
       artifact)))
@@ -230,7 +230,7 @@
 (def (required-provider directory)
   (unless (string? directory)
     (error "build-required: OpenTofu provider artifact has not been injected"))
-  (let (scope (poo-flow-opentofu-provider-from-directory directory))
+  (let (scope (agentic-ai-lab-opentofu-provider-from-directory directory))
     (unless (eq? (.get scope status) 'ready)
       (error "build-required: OpenTofu provider artifact is incomplete" (.get scope missing)))
     scope))
@@ -392,7 +392,7 @@
   prototypes: (.o provider: OpenTofuModule. configuration: OpenTofuConfiguration.
                    execution: OpenTofuExecution.)
   execution: opentofu-execution
-  schema: (.o type: poo-flow-opentofu-cty->schema block: poo-flow-opentofu-block->schema)
-  normalize: poo-flow-opentofu-normalize-block
-  configuration-from-types: poo-flow-opentofu-configuration-from-types
-  provider-from-directory: poo-flow-opentofu-provider-from-directory)
+  schema: (.o type: agentic-ai-lab-opentofu-cty->schema block: agentic-ai-lab-opentofu-block->schema)
+  normalize: agentic-ai-lab-opentofu-normalize-block
+  configuration-from-types: agentic-ai-lab-opentofu-configuration-from-types
+  provider-from-directory: agentic-ai-lab-opentofu-provider-from-directory)

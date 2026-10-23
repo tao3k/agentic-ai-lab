@@ -14,7 +14,7 @@ devenv.local.yaml
 # pre-commit
 .pre-commit-config.yaml
 .data
-# Gerbil std/make output for the poo-flow executable.
+# Gerbil std/make output for the agentic-ai-lab executable.
 .bin
 .gerbil
 manifest.ss
@@ -37,8 +37,8 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 *.so
-/packages/python-runtime/src/poo_flow_runtime/_native/_semantic_cffi.c
-/packages/python-runtime/src/poo_flow_runtime/_native/_semantic_cffi.o
+/packages/python-runtime/src/agentic_ai_lab_runtime/_native/_semantic_cffi.c
+/packages/python-runtime/src/agentic_ai_lab_runtime/_native/_semantic_cffi.o
 
 # Generated runtime-WASM bundle artifacts are build outputs, not sources.
 /bindings/runtime-wasm/workflows/*.bin

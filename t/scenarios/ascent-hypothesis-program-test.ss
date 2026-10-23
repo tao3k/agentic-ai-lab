@@ -6,43 +6,43 @@
 (import (only-in :std/test check check-exception test-case test-suite)
         (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-table-expression
-                 poo-flow-ascent-table-expression-prototype)
-        :poo-flow/modules/query/semantic/organization-bundle
-        :poo-flow/user-interface/scenarios/crewai/ascent-hypothesis-program)
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+                 agentic-ai-lab-ascent-table-expression-prototype)
+        :agentic-ai-lab/modules/query/semantic/organization-bundle
+        :agentic-ai-lab/user-interface/scenarios/crewai/ascent-hypothesis-program)
 
 (export ascent-hypothesis-program-test)
 
 (def (research-organization)
-  (poo-flow-organization-bundle
+  (agentic-ai-lab-organization-bundle
    1
-   (poo-flow-organization-organization-facet
-    (list (poo-flow-organization-principal 'parent-principal)
-          (poo-flow-organization-principal 'worker-principal)
-          (poo-flow-organization-role 'role/researcher)
-          (poo-flow-organization-role 'role/worker)
-          (poo-flow-organization-agent
+   (agentic-ai-lab-organization-organization-facet
+    (list (agentic-ai-lab-organization-principal 'parent-principal)
+          (agentic-ai-lab-organization-principal 'worker-principal)
+          (agentic-ai-lab-organization-role 'role/researcher)
+          (agentic-ai-lab-organization-role 'role/worker)
+          (agentic-ai-lab-organization-agent
            'researcher 'parent-principal 'role/researcher #f
            '(search review) '(public))
-          (poo-flow-organization-agent
+          (agentic-ai-lab-organization-agent
            'worker 'worker-principal 'role/worker 'researcher
            '(search) '(public))))
-   (poo-flow-organization-authority-facet
-    (list (poo-flow-organization-capability 'search #t)
-          (poo-flow-organization-capability 'review #t))
-    (list (poo-flow-organization-delegation
+   (agentic-ai-lab-organization-authority-facet
+    (list (agentic-ai-lab-organization-capability 'search #t)
+          (agentic-ai-lab-organization-capability 'review #t))
+    (list (agentic-ai-lab-organization-delegation
            'researcher 'worker 'search)))
-   (poo-flow-organization-context-facet
-    (list (poo-flow-organization-context-projection
+   (agentic-ai-lab-organization-context-facet
+    (list (agentic-ai-lab-organization-context-projection
            'worker '(public))))
-   (poo-flow-organization-protocol-facet
-    (list (poo-flow-organization-tool-effect
+   (agentic-ai-lab-organization-protocol-facet
+    (list (agentic-ai-lab-organization-tool-effect
            'search-tool 'search 'external-tool))
     '())
-   (poo-flow-organization-empty-evidence-facet)))
+   (agentic-ai-lab-organization-empty-evidence-facet)))
 
 (def (expression-from-pairs pairs)
-  (.mix poo-flow-ascent-table-expression-prototype
+  (.mix agentic-ai-lab-ascent-table-expression-prototype
         (.o source-pairs: (.call UIntTrieSet .<-list pairs)
             radix: 8)))
 
@@ -58,38 +58,38 @@
             (cycle (expression-from-pairs '(10 19 28 34 11)))
             (withdrawn (expression-from-pairs '(10 19 28 11)))
             (predictions
-             (list (poo-flow-ascent-prediction 11 #t)
-                   (poo-flow-ascent-prediction 36 #t)))
+             (list (agentic-ai-lab-ascent-prediction 11 #t)
+                   (agentic-ai-lab-ascent-prediction 36 #t)))
             (cycle-program
-             (poo-flow-ascent-hypothesis-program
+             (agentic-ai-lab-ascent-hypothesis-program
               'research-cycle "source/cycle" cycle predictions base 3))
             (withdrawn-program
-             (poo-flow-ascent-hypothesis-program
+             (agentic-ai-lab-ascent-hypothesis-program
               'research-withdrawn "source/withdrawn" withdrawn
               predictions base 3))
-            (cycle-demand (poo-flow-ascent-hypothesis-demand cycle-program))
+            (cycle-demand (agentic-ai-lab-ascent-hypothesis-demand cycle-program))
             (withdrawn-demand
-             (poo-flow-ascent-hypothesis-demand withdrawn-program))
+             (agentic-ai-lab-ascent-hypothesis-demand withdrawn-program))
             (cycle-observation
-             (poo-flow-ascent-hypothesis-observe
+             (agentic-ai-lab-ascent-hypothesis-observe
               cycle-program cycle-demand cycle base))
             (withdrawn-observation
-             (poo-flow-ascent-hypothesis-observe
+             (agentic-ai-lab-ascent-hypothesis-observe
               withdrawn-program withdrawn-demand withdrawn base)))
        (let-values
         (((cycle-successor cycle-organization)
-          (poo-flow-ascent-hypothesis-revise
+          (agentic-ai-lab-ascent-hypothesis-revise
            cycle-program cycle-demand cycle-observation base))
          ((withdrawn-successor withdrawn-organization)
-          (poo-flow-ascent-hypothesis-revise
+          (agentic-ai-lab-ascent-hypothesis-revise
            withdrawn-program withdrawn-demand withdrawn-observation base)))
         (check (.ref cycle-successor 'prediction-verdict) => 'matched)
         (check (eq? cycle-organization base) => #t)
         (check (.ref withdrawn-successor 'prediction-verdict) => 'falsified)
         (check (.ref withdrawn-successor 'failed-pairs) => '(36))
         (check (agent-count withdrawn-organization) => 3)
-        (check (poo-flow-organization-validation-accepted?
-                (poo-flow-organization-bundle-validate
+        (check (agentic-ai-lab-organization-validation-accepted?
+                (agentic-ai-lab-organization-bundle-validate
                  withdrawn-organization)) => #t)
         (check (.ref withdrawn-successor 'activation-authority?) => #f)
         (check (.ref withdrawn-successor 'mrr-admitted?) => #f)
@@ -99,7 +99,7 @@
         (check (.ref withdrawn 'closure-pairs)
                => '(10 11 12 19 20 28))
         (check-exception
-         (poo-flow-ascent-hypothesis-observe
+         (agentic-ai-lab-ascent-hypothesis-observe
           cycle-program cycle-demand withdrawn base)
          true))))
 
@@ -107,29 +107,29 @@
      (let* ((base (research-organization))
             (expression (expression-from-pairs '(10 19 28 11)))
             (predictions
-             (list (poo-flow-ascent-prediction 36 #t)
-                   (poo-flow-ascent-prediction 35 #t)))
+             (list (agentic-ai-lab-ascent-prediction 36 #t)
+                   (agentic-ai-lab-ascent-prediction 35 #t)))
             (program
-             (poo-flow-ascent-hypothesis-program
+             (agentic-ai-lab-ascent-hypothesis-program
               'bounded-research "source/withdrawn" expression
               predictions base 1))
-            (demand (poo-flow-ascent-hypothesis-demand program))
+            (demand (agentic-ai-lab-ascent-hypothesis-demand program))
             (observation
-             (poo-flow-ascent-hypothesis-observe
+             (agentic-ai-lab-ascent-hypothesis-observe
               program demand expression base)))
        (let-values
         (((successor organization)
-          (poo-flow-ascent-hypothesis-revise
+          (agentic-ai-lab-ascent-hypothesis-revise
            program demand observation base)))
         (check (.ref successor 'failed-pairs) => '(36 35))
         (check (agent-count organization) => 3)
         (check (.ref organization 'epoch) => 2)
         (check-exception
-         (poo-flow-ascent-hypothesis-revise
+         (agentic-ai-lab-ascent-hypothesis-revise
           successor demand observation organization)
          true)
         (check-exception
-         (poo-flow-ascent-hypothesis-revise
+         (agentic-ai-lab-ascent-hypothesis-revise
           program demand observation organization)
          true))))
 
@@ -138,19 +138,19 @@
             (cycle (expression-from-pairs '(10 19 28 34 11)))
             (withdrawn (expression-from-pairs '(10 19 28 11)))
             (program
-             (poo-flow-ascent-hypothesis-program
+             (agentic-ai-lab-ascent-hypothesis-program
               'counterfactual "source/cycle" cycle
-              (list (poo-flow-ascent-prediction 36 #t)) base 1))
-            (old-demand (poo-flow-ascent-hypothesis-demand program))
+              (list (agentic-ai-lab-ascent-prediction 36 #t)) base 1))
+            (old-demand (agentic-ai-lab-ascent-hypothesis-demand program))
             (specialized
-             (poo-flow-ascent-hypothesis-specialize-source
+             (agentic-ai-lab-ascent-hypothesis-specialize-source
               program "source/withdrawn" withdrawn base))
-            (new-demand (poo-flow-ascent-hypothesis-demand specialized))
+            (new-demand (agentic-ai-lab-ascent-hypothesis-demand specialized))
             (old-observation
-             (poo-flow-ascent-hypothesis-observe
+             (agentic-ai-lab-ascent-hypothesis-observe
               program old-demand cycle base))
             (new-observation
-             (poo-flow-ascent-hypothesis-observe
+             (agentic-ai-lab-ascent-hypothesis-observe
               specialized new-demand withdrawn base)))
        (check (equal? (.ref old-demand 'identity)
                       (.ref new-demand 'identity)) => #f)
@@ -159,29 +159,29 @@
        (check (.ref specialized 'external-effect-executed?) => #f)
        (check (.ref specialized 'activation-authority?) => #f)
        (check-exception
-        (poo-flow-ascent-hypothesis-revise
+        (agentic-ai-lab-ascent-hypothesis-revise
          specialized old-demand new-observation base)
         true)
        (check-exception
-        (poo-flow-ascent-hypothesis-revise
+        (agentic-ai-lab-ascent-hypothesis-revise
          specialized new-demand old-observation base)
         true)
        (check-exception
-        (poo-flow-ascent-hypothesis-revise
+        (agentic-ai-lab-ascent-hypothesis-revise
          specialized new-demand
          (.mix new-observation (.o failed-pairs: '(63))) base)
         true)
        (check-exception
-        (poo-flow-ascent-hypothesis-specialize-source
+        (agentic-ai-lab-ascent-hypothesis-specialize-source
          program "source/cycle" cycle base)
         true)
        (check-exception
-        (poo-flow-ascent-hypothesis-specialize-source
+        (agentic-ai-lab-ascent-hypothesis-specialize-source
          program "source/cycle" withdrawn base)
         true)
        (let-values
         (((successor society)
-          (poo-flow-ascent-hypothesis-revise
+          (agentic-ai-lab-ascent-hypothesis-revise
            specialized new-demand new-observation base)))
         (check (.ref successor 'prediction-verdict) => 'falsified)
         (check (.ref successor 'failed-pairs) => '(36))
@@ -195,9 +195,9 @@
      (let ((base (research-organization))
            (expression (expression-from-pairs '(10 19))))
        (check-exception
-        (poo-flow-ascent-hypothesis-program
+        (agentic-ai-lab-ascent-hypothesis-program
          'duplicate "source/duplicate" expression
-         (list (poo-flow-ascent-prediction 11 #t)
-               (poo-flow-ascent-prediction 11 #f))
+         (list (agentic-ai-lab-ascent-prediction 11 #t)
+               (agentic-ai-lab-ascent-prediction 11 #f))
          base 2)
         true)))))

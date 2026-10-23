@@ -23,7 +23,7 @@
         "(def Config (.o expression: \"release.nix\"))\n")
       (write-source (path-expand "objects.ss" owner)
         (string-append
-          "(import (only-in :std/source this-source-file) (only-in :poo-flow/modules/nix/objects NixSource.) (only-in \"./config.ss\" Config))\n(export ReleaseSource)\n"
+          "(import (only-in :std/source this-source-file) (only-in :agentic-ai-lab/modules/nix/objects NixSource.) (only-in \"./config.ss\" Config))\n(export ReleaseSource)\n"
           "(.def (ReleaseSource @ NixSource.) expression: "
           "(path-expand (.get Config expression) (path-directory (this-source-file))))\n"))
       (write-source (path-expand "types.ss" owner)
@@ -67,7 +67,7 @@
       ;; evaluation nor stdenv. Its unique local packet has no binary-cache owner;
       ;; realize locally while retaining the real policy and store checks.
       (def tools-literal
-        (call-with-output-string (cut write-json <> (getenv "POO_FLOW_NIX_TEST_TOOLS"))))
+        (call-with-output-string (cut write-json <> (getenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS"))))
       (def (release-recipe packet-directory)
         (string-append "let tools = builtins.fromJSON " tools-literal "; in "
           "builtins.derivation { name = import ./release-name.nix; "

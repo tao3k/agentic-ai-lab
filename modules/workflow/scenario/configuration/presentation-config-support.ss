@@ -5,90 +5,90 @@
 ;;; Module boundary: shared presentation projection helpers stay here so facade
 ;;; and focused runtime leaf modules preserve one stable slot vocabulary.
 
-(export poo-flow-user-config-presentation-workflow-cicd-check-map-names/rev
-        poo-flow-user-config-presentation-workflow-cicd-check-map-names
-        poo-flow-user-sandbox-profile-derivation-last-step
-        poo-flow-user-sandbox-profile-derivation-path
-        poo-flow-user-sandbox-profile-derivation-row
-        poo-flow-user-module-selection-sandbox-config-profiles
-        poo-flow-user-module-selection-sandbox-profile-derivations/rev
-        poo-flow-user-module-selection-sandbox-profile-derivations
-        poo-flow-user-config-sandbox-profile-derivations/rev
-        poo-flow-user-config-sandbox-profile-derivations
-        poo-flow-user-config-presentation-trace
-        poo-flow-user-config-presentation-empty-field-values
-        poo-flow-user-config-presentation-accumulate-field-values
-        poo-flow-user-config-presentation-accumulate-rows
-        poo-flow-user-config-presentation-reverse-field-values
-        poo-flow-user-config-presentation-field-values
-        poo-flow-user-config-presentation-field-values-ref
-        poo-flow-user-config-presentation-loop-engine-slots
-        +poo-flow-user-config-presentation-loop-engine-fields+)
+(export agentic-ai-lab-user-config-presentation-workflow-cicd-check-map-names/rev
+        agentic-ai-lab-user-config-presentation-workflow-cicd-check-map-names
+        agentic-ai-lab-user-sandbox-profile-derivation-last-step
+        agentic-ai-lab-user-sandbox-profile-derivation-path
+        agentic-ai-lab-user-sandbox-profile-derivation-row
+        agentic-ai-lab-user-module-selection-sandbox-config-profiles
+        agentic-ai-lab-user-module-selection-sandbox-profile-derivations/rev
+        agentic-ai-lab-user-module-selection-sandbox-profile-derivations
+        agentic-ai-lab-user-config-sandbox-profile-derivations/rev
+        agentic-ai-lab-user-config-sandbox-profile-derivations
+        agentic-ai-lab-user-config-presentation-trace
+        agentic-ai-lab-user-config-presentation-empty-field-values
+        agentic-ai-lab-user-config-presentation-accumulate-field-values
+        agentic-ai-lab-user-config-presentation-accumulate-rows
+        agentic-ai-lab-user-config-presentation-reverse-field-values
+        agentic-ai-lab-user-config-presentation-field-values
+        agentic-ai-lab-user-config-presentation-field-values-ref
+        agentic-ai-lab-user-config-presentation-loop-engine-slots
+        +agentic-ai-lab-user-config-presentation-loop-engine-fields+)
 
-(import :poo-flow/modules/sandbox-core/profile-support/policy
-        (only-in :poo-flow/modules/agent-sandbox/config
-                 poo-flow-sandbox-profile?
-                 poo-flow-sandbox-profile-name
-                 poo-flow-sandbox-profile-backend-kind
-                 poo-flow-sandbox-profile-backend-ref
-                 poo-flow-sandbox-profile-metadata)
-        :poo-flow/modules/workflow/interface
-        :poo-flow/modules/module-authoring/module-interface
+(import :agentic-ai-lab/modules/sandbox-core/profile-support/policy
+        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+                 agentic-ai-lab-sandbox-profile?
+                 agentic-ai-lab-sandbox-profile-name
+                 agentic-ai-lab-sandbox-profile-backend-kind
+                 agentic-ai-lab-sandbox-profile-backend-ref
+                 agentic-ai-lab-sandbox-profile-metadata)
+        :agentic-ai-lab/modules/workflow/interface
+        :agentic-ai-lab/modules/module-authoring/module-interface
         :yuanxu/module-system/selection/objects
-        (only-in :poo-flow/modules/workflow/cicd-runtime-command-config
-                 poo-flow-user-alist-ref)
+        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime-command-config
+                 agentic-ai-lab-user-alist-ref)
         :yuanxu/module-system/observability/presentation)
 
 ;; : (-> CicdCheckMaps SymbolList SymbolList)
-(def (poo-flow-user-config-presentation-workflow-cicd-check-map-names/rev
+(def (agentic-ai-lab-user-config-presentation-workflow-cicd-check-map-names/rev
       check-maps
       names-rev)
   (if (null? check-maps)
     names-rev
-    (poo-flow-user-config-presentation-workflow-cicd-check-map-names/rev
+    (agentic-ai-lab-user-config-presentation-workflow-cicd-check-map-names/rev
      (cdr check-maps)
      (cons (yuanxu-cicd-check-map-name (car check-maps)) names-rev))))
 
 ;; : (-> CicdCheckMaps SymbolList)
-(def (poo-flow-user-config-presentation-workflow-cicd-check-map-names
+(def (agentic-ai-lab-user-config-presentation-workflow-cicd-check-map-names
       check-maps)
   (map yuanxu-cicd-check-map-name check-maps))
 
 ;; : (-> DerivationPath DerivationStep)
-(def (poo-flow-user-sandbox-profile-derivation-last-step derivation-path)
+(def (agentic-ai-lab-user-sandbox-profile-derivation-last-step derivation-path)
   (if (null? derivation-path)
     #f
     (car (reverse derivation-path))))
 
 ;; : (-> SandboxProfile DerivationPath)
-(def (poo-flow-user-sandbox-profile-derivation-path profile)
+(def (agentic-ai-lab-user-sandbox-profile-derivation-path profile)
   (let ((derivation-path
-         (poo-flow-user-alist-ref
-          (poo-flow-sandbox-profile-metadata profile)
+         (agentic-ai-lab-user-alist-ref
+          (agentic-ai-lab-sandbox-profile-metadata profile)
           'derivation-path
           '())))
     (if (list? derivation-path) derivation-path '())))
 
 ;; : (-> ModuleSelection SandboxProfile DerivationRow)
-(def (poo-flow-user-sandbox-profile-derivation-row selection profile)
+(def (agentic-ai-lab-user-sandbox-profile-derivation-row selection profile)
   (let* ((module-key (yuanxu-user-module-selection-key selection))
          (derivation-path
-          (poo-flow-user-sandbox-profile-derivation-path profile))
+          (agentic-ai-lab-user-sandbox-profile-derivation-path profile))
          (last-step
-          (poo-flow-user-sandbox-profile-derivation-last-step
+          (agentic-ai-lab-user-sandbox-profile-derivation-last-step
            derivation-path)))
     (if last-step
       (list
        (cons 'key module-key)
        (cons 'group (car module-key))
        (cons 'module (cdr module-key))
-       (cons 'profile-name (poo-flow-sandbox-profile-name profile))
-       (cons 'backend-kind (poo-flow-sandbox-profile-backend-kind profile))
-       (cons 'backend-ref (poo-flow-sandbox-profile-backend-ref profile))
+       (cons 'profile-name (agentic-ai-lab-sandbox-profile-name profile))
+       (cons 'backend-kind (agentic-ai-lab-sandbox-profile-backend-kind profile))
+       (cons 'backend-ref (agentic-ai-lab-sandbox-profile-backend-ref profile))
        (cons 'parent-profile
-             (poo-flow-user-alist-ref last-step 'parent-profile #f))
-       (cons 'scope (poo-flow-user-alist-ref last-step 'scope #f))
-       (cons 'scope-ref (poo-flow-user-alist-ref last-step 'scope-ref #f))
+             (agentic-ai-lab-user-alist-ref last-step 'parent-profile #f))
+       (cons 'scope (agentic-ai-lab-user-alist-ref last-step 'scope #f))
+       (cons 'scope-ref (agentic-ai-lab-user-alist-ref last-step 'scope-ref #f))
        (cons 'derivation-depth (length derivation-path))
        (cons 'derivation-path derivation-path)
        (cons 'runtime-owner "marlin-agent-core")
@@ -97,69 +97,69 @@
       #f)))
 
 ;; : (-> ModuleSelection SandboxProfiles)
-(def (poo-flow-user-module-selection-sandbox-config-profiles selection)
+(def (agentic-ai-lab-user-module-selection-sandbox-config-profiles selection)
   (let ((entry (yuanxu-user-module-selection-flag-entry selection ':config)))
     (if (and entry (pair? entry))
-      (filter poo-flow-sandbox-profile? (cdr entry))
+      (filter agentic-ai-lab-sandbox-profile? (cdr entry))
       '())))
 
 ;; : (-> ModuleSelection SandboxProfiles DerivationRows DerivationRows)
-(def (poo-flow-user-module-selection-sandbox-profile-derivations/rev
+(def (agentic-ai-lab-user-module-selection-sandbox-profile-derivations/rev
       selection
       profiles
       results)
   (cond
    ((null? profiles) results)
    (else
-    (let ((row (poo-flow-user-sandbox-profile-derivation-row
+    (let ((row (agentic-ai-lab-user-sandbox-profile-derivation-row
                 selection
                 (car profiles))))
       (if row
-        (poo-flow-user-module-selection-sandbox-profile-derivations/rev
+        (agentic-ai-lab-user-module-selection-sandbox-profile-derivations/rev
          selection
          (cdr profiles)
          (cons row results))
-        (poo-flow-user-module-selection-sandbox-profile-derivations/rev
+        (agentic-ai-lab-user-module-selection-sandbox-profile-derivations/rev
          selection
          (cdr profiles)
          results))))))
 
 ;; : (-> ModuleSelection DerivationRows)
-(def (poo-flow-user-module-selection-sandbox-profile-derivations selection)
+(def (agentic-ai-lab-user-module-selection-sandbox-profile-derivations selection)
   (filter (lambda (row) row)
           (map (lambda (profile)
-                 (poo-flow-user-sandbox-profile-derivation-row
+                 (agentic-ai-lab-user-sandbox-profile-derivation-row
                   selection
                   profile))
-               (poo-flow-user-module-selection-sandbox-config-profiles
+               (agentic-ai-lab-user-module-selection-sandbox-config-profiles
                 selection))))
 
 ;; : (-> ModuleSelections DerivationRows DerivationRows)
-(def (poo-flow-user-config-sandbox-profile-derivations/rev selected-modules
+(def (agentic-ai-lab-user-config-sandbox-profile-derivations/rev selected-modules
                                                            results)
   (cond
    ((null? selected-modules) results)
    (else
-    (poo-flow-user-config-sandbox-profile-derivations/rev
+    (agentic-ai-lab-user-config-sandbox-profile-derivations/rev
      (cdr selected-modules)
-     (poo-flow-user-module-selection-sandbox-profile-derivations/rev
+     (agentic-ai-lab-user-module-selection-sandbox-profile-derivations/rev
       (car selected-modules)
-      (poo-flow-user-module-selection-sandbox-config-profiles
+      (agentic-ai-lab-user-module-selection-sandbox-config-profiles
        (car selected-modules))
       results)))))
 
 ;; : (-> ModuleSelections DerivationRows)
-(def (poo-flow-user-config-sandbox-profile-derivations selected-modules)
+(def (agentic-ai-lab-user-config-sandbox-profile-derivations selected-modules)
   (if (null? selected-modules)
     '()
     (apply append
-           (map poo-flow-user-module-selection-sandbox-profile-derivations
+           (map agentic-ai-lab-user-module-selection-sandbox-profile-derivations
                 selected-modules))))
 
 ;; Engineering note: trace construction is a count-only projection so presentation
 ;; callers can observe large configs without retaining the source rows again.
 ;; : (-> ModuleSelections FeatureFacts DerivationRows SessionIntents CicdIntents CicdCheckMaps FunctionalDagRows PipelineRunRows PipelineResultRows RuntimeReadinessRows RuntimeCommandRows RuntimeCommandSummaryRows RuntimeAgreementReport HandoffAbiRows ReceiptRows HandoffBundle LoopIntentRows SettingKeys PresentationTrace)
-(def (poo-flow-user-config-presentation-trace
+(def (agentic-ai-lab-user-config-presentation-trace
       selected-modules
       feature-fact-rows
       sandbox-profile-derivation-rows
@@ -201,7 +201,7 @@
          (cons 'workflow-cicd-runtime-command-manifest-summaries
                (length workflow-cicd-runtime-command-manifest-summary-rows))
          (cons 'workflow-cicd-runtime-command-manifest-agreement
-               (if (poo-flow-user-alist-ref
+               (if (agentic-ai-lab-user-alist-ref
                     workflow-cicd-runtime-command-manifest-agreement-report
                     'valid?
                     #f)
@@ -212,7 +212,7 @@
          (cons 'workflow-cicd-receipts
                (length workflow-cicd-receipt-rows))
          (cons 'workflow-cicd-marlin-handoff-receipt-bundle
-               (if (poo-flow-user-alist-ref
+               (if (agentic-ai-lab-user-alist-ref
                     workflow-cicd-marlin-handoff-receipt-bundle
                     'runtime-executed
                     #t)
@@ -222,11 +222,11 @@
          (cons 'settings (length public-setting-keys)))))
 
 ;; : (-> List List)
-(def (poo-flow-user-config-presentation-empty-field-values fields)
+(def (agentic-ai-lab-user-config-presentation-empty-field-values fields)
   (map (lambda (field) (cons field '())) fields))
 
 ;; : (-> ProjectionRow FieldValues RowRef FieldValues)
-(def (poo-flow-user-config-presentation-accumulate-field-values
+(def (agentic-ai-lab-user-config-presentation-accumulate-field-values
       row
       field-values
       row-ref)
@@ -237,49 +237,49 @@
        field-values))
 
 ;; : (-> ProjectionRows FieldValues RowRef FieldValues)
-(def (poo-flow-user-config-presentation-accumulate-rows
+(def (agentic-ai-lab-user-config-presentation-accumulate-rows
       rows
       field-values
       row-ref)
   (cond
    ((null? rows) field-values)
    (else
-    (poo-flow-user-config-presentation-accumulate-rows
+    (agentic-ai-lab-user-config-presentation-accumulate-rows
      (cdr rows)
-     (poo-flow-user-config-presentation-accumulate-field-values
+     (agentic-ai-lab-user-config-presentation-accumulate-field-values
       (car rows)
       field-values
       row-ref)
      row-ref))))
 
 ;; : (-> List List)
-(def (poo-flow-user-config-presentation-reverse-field-values field-values)
+(def (agentic-ai-lab-user-config-presentation-reverse-field-values field-values)
   (map (lambda (field-value)
          (cons (car field-value) (reverse (cdr field-value))))
        field-values))
 
 ;; : (-> ProjectionRows FieldNames RowRef FieldValues)
-(def (poo-flow-user-config-presentation-field-values rows fields row-ref)
-  (poo-flow-user-config-presentation-reverse-field-values
-   (poo-flow-user-config-presentation-accumulate-rows
+(def (agentic-ai-lab-user-config-presentation-field-values rows fields row-ref)
+  (agentic-ai-lab-user-config-presentation-reverse-field-values
+   (agentic-ai-lab-user-config-presentation-accumulate-rows
     rows
-    (poo-flow-user-config-presentation-empty-field-values fields)
+    (agentic-ai-lab-user-config-presentation-empty-field-values fields)
     row-ref)))
 
 ;; : (-> FieldValues Symbol FieldValues)
-(def (poo-flow-user-config-presentation-field-values-ref field-values field)
-  (poo-flow-user-alist-ref field-values field '()))
+(def (agentic-ai-lab-user-config-presentation-field-values-ref field-values field)
+  (agentic-ai-lab-user-alist-ref field-values field '()))
 
 ;; Engineering note: loop-engine slots are centralized because the mixed facade
 ;; and loop-only summary must expose the same field vocabulary.
 ;; : (-> LoopFieldValues LoopIntentRows PresentationSlots)
-(def (poo-flow-user-config-presentation-loop-engine-slots
+(def (agentic-ai-lab-user-config-presentation-loop-engine-slots
       loop-engine-field-values
       loop-engine-intent-rows)
   ;; Engineering note: keeping the vocabulary as one alist builder prevents the
   ;; mixed and summary presentations from drifting field-by-field.
   (def (field key)
-    (poo-flow-user-config-presentation-field-values-ref
+    (agentic-ai-lab-user-config-presentation-field-values-ref
      loop-engine-field-values
      key))
   (list
@@ -341,7 +341,7 @@
    (cons 'loop-engine-runtime-snapshots (field 'runtime-snapshot))))
 
 ;; : LoopEngineFieldNames
-(def +poo-flow-user-config-presentation-loop-engine-fields+
+(def +agentic-ai-lab-user-config-presentation-loop-engine-fields+
   '(runtime-handoff-facts
     workflow-agreement
     workflow-functional-dag-count

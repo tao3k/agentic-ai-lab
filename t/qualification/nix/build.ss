@@ -9,7 +9,7 @@
 ;; The compiler resolves public application imports through its package prefix.
 ;; Register application sources, while keeping Core and the SDK compiled.
 (def root (path-expand "../../.." (path-directory (this-source-file))))
-(register-module-build-source! root 'poo-flow)
+(register-module-build-source! root 'agentic-ai-lab)
 (def output (path-expand "lib" (getenv "GERBIL_PATH")))
 (def seen (make-hash-table-eq))
 ;; The existing Core traversal selects roots; std/make owns all compilation.
@@ -19,9 +19,10 @@
     (and (symbol? identity)
       (let (name (symbol->string identity))
         (cond
-         ((or (string-prefix? "poo-flow/modules/nix/" name)
-              (string-prefix? "poo-flow/modules/services/" name))
-          (string-append (substring name 9 (string-length name)) ".ss"))
+         ((or (string-prefix? "agentic-ai-lab/modules/nix/" name)
+              (string-prefix? "agentic-ai-lab/modules/services/" name))
+          (string-append
+            (substring name (string-length "agentic-ai-lab/") (string-length name)) ".ss"))
          ((or (string-prefix? "yuanxu/t/qualification/service-publication/" name)
               (string-prefix? "yuanxu/t/qualification/build-publication/" name))
           (string-append "core/" (substring name 7 (string-length name)) ".ss"))

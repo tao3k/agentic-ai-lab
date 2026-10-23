@@ -8,9 +8,9 @@
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
         (only-in :yuanxu/modules/json-schema/json-schema-validation-core
                  yuanxu-json-schema-candidate-rows))
-(export poo-flow-opentofu-aws-string-hash poo-flow-opentofu-aws-string-set
-        poo-flow-opentofu-aws-rule-hash poo-flow-opentofu-aws-rule-key
-        poo-flow-opentofu-aws-string-collision?)
+(export agentic-ai-lab-opentofu-aws-string-hash agentic-ai-lab-opentofu-aws-string-set
+        agentic-ai-lab-opentofu-aws-rule-hash agentic-ai-lab-opentofu-aws-rule-key
+        agentic-ai-lab-opentofu-aws-string-collision?)
 
 ;; No CRC32 primitive is exported by the installed Gerbil standard library.
 ;; Reflected IEEE polynomial; the result is unsigned on the pinned 64-bit target.
@@ -23,7 +23,7 @@
                   byte (iota 8)))
          (iota 256))))
 
-(def (poo-flow-opentofu-aws-string-hash text)
+(def (agentic-ai-lab-opentofu-aws-string-hash text)
   (bitwise-xor #xffffffff
     (foldl (lambda (byte crc)
              (bitwise-xor (arithmetic-shift crc -8)
@@ -32,16 +32,16 @@
 
 ;; SDK Set.add keeps the first value for a hash key, even on CRC collisions.
 ;; Set.List sorts the DECIMAL STRING keys, not numerically or by element text.
-(def (poo-flow-opentofu-aws-string-set values)
+(def (agentic-ai-lab-opentofu-aws-string-set values)
   (list-sort
     (lambda (left right)
-      (string<? (number->string (poo-flow-opentofu-aws-string-hash left))
-                (number->string (poo-flow-opentofu-aws-string-hash right))))
-    (delete-duplicates/hash values key: poo-flow-opentofu-aws-string-hash from-end?: #t)))
+      (string<? (number->string (agentic-ai-lab-opentofu-aws-string-hash left))
+                (number->string (agentic-ai-lab-opentofu-aws-string-hash right))))
+    (delete-duplicates/hash values key: agentic-ai-lab-opentofu-aws-string-hash from-end?: #t)))
 
-(def (poo-flow-opentofu-aws-string-collision? values)
+(def (agentic-ai-lab-opentofu-aws-string-collision? values)
   (not (= (length (delete-duplicates/hash values from-end?: #t))
-          (length (poo-flow-opentofu-aws-string-set values)))))
+          (length (agentic-ai-lab-opentofu-aws-string-set values)))))
 
 (def protocols '(("icmpv6" . 58) ("udp" . 17) ("tcp" . 6) ("icmp" . 1) ("all" . -1)))
 (def (protocol-name text)
@@ -54,7 +54,7 @@
 
 ;; Hash correspondence only, not complete resource admission. Unknown values,
 ;; SDK defaults, validators and AWS execution remain separate responsibilities.
-(def (poo-flow-opentofu-aws-rule-key rule)
+(def (agentic-ai-lab-opentofu-aws-rule-key rule)
   (let* ((rows (yuanxu-json-schema-candidate-rows rule))
          (ref (lambda (key fallback) (yuanxu-contract-object-ref rows key fallback)))
          (parts
@@ -67,10 +67,10 @@
                (map (lambda (key) (list-sort string<? (ref key '())))
                     '(cidr_blocks ipv6_cidr_blocks prefix_list_ids)))
              (list-sort string<?
-               (poo-flow-opentofu-aws-string-set (ref 'security_groups '())))
+               (agentic-ai-lab-opentofu-aws-string-set (ref 'security_groups '())))
              (let (description (ref 'description ""))
                (if (string=? description "") '() (list description))))))
     (apply string-append (map (lambda (part) (string-append part "-")) parts))))
 
-(def (poo-flow-opentofu-aws-rule-hash rule)
-  (poo-flow-opentofu-aws-string-hash (poo-flow-opentofu-aws-rule-key rule)))
+(def (agentic-ai-lab-opentofu-aws-rule-hash rule)
+  (agentic-ai-lab-opentofu-aws-string-hash (agentic-ai-lab-opentofu-aws-rule-key rule)))

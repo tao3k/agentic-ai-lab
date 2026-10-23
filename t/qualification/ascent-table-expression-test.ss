@@ -6,8 +6,8 @@
 (import (only-in :std/test check-equal? check-exception test-case test-suite)
         (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-table-expression
-                 poo-flow-ascent-table-expression-prototype))
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+                 agentic-ai-lab-ascent-table-expression-prototype))
 
 (export ascent-table-expression-test)
 
@@ -18,7 +18,7 @@
       (let* ((source
               (.o (source-pairs (.call UIntTrieSet .<-list '(10 19 12 35)))
                   (radix 8)))
-             (expression (.mix poo-flow-ascent-table-expression-prototype
+             (expression (.mix agentic-ai-lab-ascent-table-expression-prototype
                                source)))
         (check-equal? (.ref expression 'two-hop-pairs)
                       '(11))
@@ -36,7 +36,7 @@
                 (.mix (.o (source-pairs
                            (.call UIntTrieSet .remove
                                   (.ref source 'source-pairs) 19)))
-                      poo-flow-ascent-table-expression-prototype source)))
+                      agentic-ai-lab-ascent-table-expression-prototype source)))
           (check-equal? (.ref withdrawn 'two-hop-pairs)
                         '(11))
           (check-equal? ((.ref withdrawn 'at-most-two-hop-contains?) 19) #f)
@@ -47,14 +47,14 @@
       (let* ((source (.o (source-pairs
                           (.call UIntTrieSet .<-list '(10 17)))
                          (radix 8)))
-             (expression (.mix poo-flow-ascent-table-expression-prototype
+             (expression (.mix agentic-ai-lab-ascent-table-expression-prototype
                                source)))
         (check-equal? (.ref expression 'two-hop-pairs)
                       '(9 18))))
     (test-case "frontier steps deduplicate alternate paths and terminate on a cycle"
       (let* ((edges (.call UIntTrieSet .<-list '(10 19 28 34 11)))
              (expression
-              (.mix poo-flow-ascent-table-expression-prototype
+              (.mix agentic-ai-lab-ascent-table-expression-prototype
                     (.o (source-pairs edges) (radix 8))))
              (first ((.ref expression 'delta-step) edges edges))
              (second ((.ref expression 'delta-step)
@@ -78,7 +78,7 @@
         (let* ((without-cycle-edge
                 (.call UIntTrieSet .remove edges 34))
                (withdrawn
-                (.mix poo-flow-ascent-table-expression-prototype
+                (.mix agentic-ai-lab-ascent-table-expression-prototype
                       (.o (source-pairs without-cycle-edge) (radix 8)))))
           (check-equal? (.ref withdrawn 'closure-pairs)
                         '(10 11 12 19 20 28))
@@ -86,14 +86,14 @@
                         '(10 11 12 18 19 20 26 27 28 34 35 36)))))
     (test-case "empty source has an empty closure"
       (let (expression
-            (.mix poo-flow-ascent-table-expression-prototype
+            (.mix agentic-ai-lab-ascent-table-expression-prototype
                   (.o (source-pairs (.ref UIntTrieSet '.empty))
                       (radix 8))))
         (check-equal? (.ref expression 'closure-pairs) '())))
     (test-case "Dual shortest-distance lattice keeps the minimum path"
       (let* ((edges (.call UIntTrieSet .<-list '(10 19 12 35)))
              (expression
-              (.mix poo-flow-ascent-table-expression-prototype
+              (.mix agentic-ai-lab-ascent-table-expression-prototype
                     (.o (source-pairs edges) (radix 8)))))
         (check-equal? (.ref expression 'shortest-distance-pairs)
                       (.ref expression 'closure-pairs))
@@ -101,7 +101,7 @@
         (check-equal? ((.ref expression 'shortest-distance-of) 10) 1)
         (check-equal? ((.ref expression 'shortest-distance-of) 13) #f)
         (let (direct
-              (.mix poo-flow-ascent-table-expression-prototype
+              (.mix agentic-ai-lab-ascent-table-expression-prototype
                     (.o (source-pairs
                          (.call UIntTrieSet .<-list '(10 11 12 19 35)))
                         (radix 8))))
@@ -110,12 +110,12 @@
                         (.ref expression 'closure-pairs)))))
     (test-case "Dual lattice stabilizes on a cycle and a sparse radix"
       (let ((cycle
-             (.mix poo-flow-ascent-table-expression-prototype
+             (.mix agentic-ai-lab-ascent-table-expression-prototype
                    (.o (source-pairs
                         (.call UIntTrieSet .<-list '(10 19 28 34 11)))
                        (radix 8))))
             (sparse
-             (.mix poo-flow-ascent-table-expression-prototype
+             (.mix agentic-ai-lab-ascent-table-expression-prototype
                    (.o (source-pairs
                         (.call UIntTrieSet .<-list '(515 1029)))
                        (radix 513)))))
@@ -128,7 +128,7 @@
       (let* ((source (.o (source-pairs
                           (.call UIntTrieSet .<-list '(515 1029)))
                          (radix 513)))
-             (expression (.mix poo-flow-ascent-table-expression-prototype
+             (expression (.mix agentic-ai-lab-ascent-table-expression-prototype
                                source)))
         (check-equal? (.ref expression 'at-most-two-hop-pairs)
                       '(515 516 1029))
@@ -141,7 +141,7 @@
         (check-equal? ((.ref expression 'at-most-two-hop-contains?) 517) #f)))
     (test-case "rejects a radix that would alias pair identities"
       (let (invalid
-            (.mix poo-flow-ascent-table-expression-prototype
+            (.mix agentic-ai-lab-ascent-table-expression-prototype
                   (.o (source-pairs (.call UIntTrieSet .<-list '(10)))
                       (radix 2))))
         (check-exception (.ref invalid 'right-index) true)))))

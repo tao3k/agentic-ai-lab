@@ -6,14 +6,14 @@
 ;;; Example owner: this composition keeps human authority and evidence return
 ;;; explicit across every stage before bundle publication.
 
-(import :poo-flow/modules/workflow/control-plane/plan
+(import :agentic-ai-lab/modules/workflow/control-plane/plan
         :yuanxu/profile-composition/selection-syntax
-        :poo-flow/modules/workflow/scenario/composition-syntax
+        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
         :yuanxu/profile-composition/profile-bundle
-        (only-in :poo-flow/modules/workflow/profiles/human-ai-capability
+        (only-in :agentic-ai-lab/modules/workflow/profiles/human-ai-capability
                  HumanAICapabilityModule
                  HumanCapabilityScenarioProfile)
-        :poo-flow/modules/workflow/scenario/bundle-v1-projection)
+        :agentic-ai-lab/modules/workflow/scenario/bundle-v1-projection)
 
 (export human-capability)
 
@@ -27,4 +27,4 @@
 
 ;;; Publication boundary: the example's only effect is the explicit bundle
 ;;; writer handoff after the complete composition value has been constructed.
-(poo-flow-write-composition-bundle-v1/from-environment! human-capability)
+(agentic-ai-lab-write-composition-bundle-v1/from-environment! human-capability)

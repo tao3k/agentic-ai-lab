@@ -9,10 +9,10 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from poo_flow_runtime import _scheme_load as scheme_load
-from poo_flow_runtime import _scheme_load_artifact as scheme_artifact
-from poo_flow_runtime import _scheme_load_runner as scheme_runner
-from poo_flow_runtime import scheme_projection_artifact
+from agentic_ai_lab_runtime import _scheme_load as scheme_load
+from agentic_ai_lab_runtime import _scheme_load_artifact as scheme_artifact
+from agentic_ai_lab_runtime import _scheme_load_runner as scheme_runner
+from agentic_ai_lab_runtime import scheme_projection_artifact
 
 
 def _runtime_projection_fixture(root: Path) -> Path:
@@ -201,6 +201,6 @@ def test_scheme_projection_artifact_command_emits_receipt(
 
     output = capsys.readouterr().out
     assert exit_code == 0
-    assert 'schema: "poo-flow.scheme-load-projection-artifact.v1"' in output
+    assert 'schema: "agentic-ai-lab.scheme-load-projection-artifact.v1"' in output
     assert 'action: "export"' in output
     assert f'artifact: "{artifact.resolve()}"' in output

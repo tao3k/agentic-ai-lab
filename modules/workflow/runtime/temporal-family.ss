@@ -7,14 +7,14 @@
         (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/modules/temporal-causality/objects
-                 poo-flow-temporal-clock-domain
-                 poo-flow-temporal-model-observation
-                 poo-flow-temporal-constraint poo-flow-temporal-hypothesis
-                 poo-flow-temporal-query)
-        (only-in :poo-flow/modules/temporal-causality/funs
-                 poo-flow-temporal-model poo-flow-temporal-overlapping-model
-                 poo-flow-temporal-model-classify))
+        (only-in :agentic-ai-lab/modules/temporal-causality/objects
+                 agentic-ai-lab-temporal-clock-domain
+                 agentic-ai-lab-temporal-model-observation
+                 agentic-ai-lab-temporal-constraint agentic-ai-lab-temporal-hypothesis
+                 agentic-ai-lab-temporal-query)
+        (only-in :agentic-ai-lab/modules/temporal-causality/funs
+                 agentic-ai-lab-temporal-model agentic-ai-lab-temporal-overlapping-model
+                 agentic-ai-lab-temporal-model-classify))
 (export temporal-family-values temporal-family-task temporal-family-call temporal-family-observe)
 
 (def (field object key)
@@ -49,13 +49,13 @@
          (domains
           (map (lambda (d)
                  (exact-fields d ["identity" "role"])
-                 (poo-flow-temporal-clock-domain
+                 (agentic-ai-lab-temporal-clock-domain
                   (text (field d "identity")) (string->symbol (text (field d "role")))))
                (inventory (field m "domains") 32)))
          (observations
           (map (lambda (o)
                  (exact-fields o ["identity" "domain" "position" "provenance" "modality"])
-                 (poo-flow-temporal-model-observation
+                 (agentic-ai-lab-temporal-model-observation
                   (text (field o "identity")) (text (field o "domain"))
                   (field o "position") (text (field o "provenance"))
                   (choice (field o "modality") ["observed" "declared" "missing"])))
@@ -64,7 +64,7 @@
          (hypotheses
           (map (lambda (h)
                  (exact-fields h ["identity" "cause" "effect" "constraints"])
-                 (poo-flow-temporal-hypothesis
+                 (agentic-ai-lab-temporal-hypothesis
                   (text (field h "identity")) (text (field h "cause"))
                   (text (field h "effect"))
                   (map (lambda (c)
@@ -72,7 +72,7 @@
                          (when (> constraint-count 256)
                            (error "temporal family constraint bounds exceeded"))
                          (exact-fields c ["identity" "relation" "left" "right"])
-                         (poo-flow-temporal-constraint
+                         (agentic-ai-lab-temporal-constraint
                           (text (field c "identity"))
                           (choice (field c "relation") ["before" "not-after"])
                           (text (field c "left")) (text (field c "right"))))
@@ -80,11 +80,11 @@
                (inventory (field m "hypotheses") 128)))
          (builder (case (choice (field m "mode")
                                 ["exclusive-explanations" "overlapping-mechanisms"])
-                    ((exclusive-explanations) poo-flow-temporal-model)
-                    (else poo-flow-temporal-overlapping-model)))
+                    ((exclusive-explanations) agentic-ai-lab-temporal-model)
+                    (else agentic-ai-lab-temporal-overlapping-model)))
          (model (builder (text (field m "identity")) domains observations
                          hypotheses (field m "complete")))
-         (query (poo-flow-temporal-query
+         (query (agentic-ai-lab-temporal-query
                  (text (field q "identity")) (text (field q "target"))
                  (field q "limit")))
          )
@@ -93,18 +93,18 @@
 (def (temporal-family-call task)
   (let* ((values (temporal-family-values task))
          (model (car values)) (query (cadr values))
-         (receipt (poo-flow-temporal-model-classify model query))
+         (receipt (agentic-ai-lab-temporal-model-classify model query))
          (binding
           (hex-encode
            (sha256 (string->utf8
                     (call-with-output-string
                      (lambda (port)
-                       (write (list 'poo-flow.temporal-family.binding.v1
+                       (write (list 'agentic-ai-lab.temporal-family.binding.v1
                                     (.ref model 'semantic-digest)
                                     (.ref query 'identity)
                                     (.ref query 'hypothesis-identity)
                                     (.ref query 'exploration-limit)) port))))))))
-    (hash (schema "poo-flow.temporal-family-result.v1")
+    (hash (schema "agentic-ai-lab.temporal-family-result.v1")
           (profile "finite-hypothesis-family")
           (modelDigest (.ref model 'semantic-digest)) (bindingDigest binding)
           (classification (symbol->string (.ref receipt 'classification)))
@@ -131,7 +131,7 @@
                               (equal? (hash-get expected key)
                                       (hash-get candidate (symbol->string key)))))
                        (hash-keys expected)))))
-    (hash (schema "poo-flow.temporal-family-observation.v1")
+    (hash (schema "agentic-ai-lab.temporal-family-observation.v1")
           (verdict (if matches "consistent" "contradicted"))
           (claim "finite-family-result-fidelity")
           (bindingDigest (hash-get expected 'bindingDigest))

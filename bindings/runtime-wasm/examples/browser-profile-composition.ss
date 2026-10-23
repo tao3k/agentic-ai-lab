@@ -7,9 +7,9 @@
 ;;; runtime chooses to realize its staged composition.
 
 (import :yuanxu/profile-composition/selection-syntax
-        :poo-flow/modules/workflow/scenario/composition-syntax
+        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
         :yuanxu/profile-composition/profile-bundle
-        (only-in :poo-flow/modules/workflow/profiles/agentic-research
+        (only-in :agentic-ai-lab/modules/workflow/profiles/agentic-research
                  AgenticResearchModule
                  BrowserResearchScenarioProfile))
 

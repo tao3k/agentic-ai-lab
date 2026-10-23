@@ -23,9 +23,9 @@
 
 ;; : TestSuite
 (def module-object-load-validation-test
-  (test-suite "poo-flow module object load validation"
+  (test-suite "agentic-ai-lab module object load validation"
     (yuanxu-test-case "validates loaded objects with native Core contracts"
-      (let* ((objects poo-flow-custom-module-object1-module)
+      (let* ((objects agentic-ai-lab-custom-module-object1-module)
              (validation
               (yuanxu-module-object-validation (car objects)))
              (field-validations

@@ -4,16 +4,16 @@ import os
 import subprocess
 import sys
 import unittest
-from poo_flow_testing.assessment_studies.inference_reuse_study import ROOT
+from agentic_ai_lab_testing.assessment_studies.inference_reuse_study import ROOT
 
 
 class EvidenceIntegration(unittest.TestCase):
     def test_real_scheme_evidence_survives_repeat_and_rebuilds_after_withdrawal(self):
         code='''
 import copy,os
-from poo_flow_runtime.reasoning import ReasoningRuntime
-from poo_flow_runtime.reasoning import EvidenceStore
-from poo_flow_testing.assessment_studies import inference_reuse_study as s
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime
+from agentic_ai_lab_runtime.reasoning import EvidenceStore
+from agentic_ai_lab_testing.assessment_studies import inference_reuse_study as s
 with ReasoningRuntime() as engine:
   for i in range(4):
     case=s.workload(i);source=case['source'];contract=s.oracle_contract(case)

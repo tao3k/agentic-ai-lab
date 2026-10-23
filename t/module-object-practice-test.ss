@@ -124,7 +124,7 @@
   (yuanxu-test-case "keeps large object contribution projection linear"
         (let* ((field-count 1000)
                (fields
-                (poo-flow-performance-build-list field-count large-object-field))
+                (agentic-ai-lab-performance-build-list field-count large-object-field))
                (practice-object
                 (yuanxu-module-object
                  'objects.practice.large
@@ -133,7 +133,7 @@
                  '((namespace . objects.practice)
                    (domain . performance))))
                (entries
-                (poo-flow-performance-build-list
+                (agentic-ai-lab-performance-build-list
                  field-count
                  (lambda (index)
                    (cons (large-object-field-name index)
@@ -166,7 +166,7 @@
   (yuanxu-test-case "keeps large object slot config merge bounded"
         (let* ((field-count 1000)
                (fields
-                (poo-flow-performance-build-list
+                (agentic-ai-lab-performance-build-list
                  field-count
                  large-object-list-field))
                (practice-object
@@ -177,13 +177,13 @@
                  '((namespace . objects.practice)
                    (domain . performance))))
                (base-entries
-                (poo-flow-performance-build-list
+                (agentic-ai-lab-performance-build-list
                  field-count
                  (lambda (index)
                    (cons (large-object-field-name index)
                          (list index)))))
                (append-entries
-                (poo-flow-performance-build-list
+                (agentic-ai-lab-performance-build-list
                  field-count
                  (lambda (index)
                    (cons (large-object-field-name index)
@@ -334,7 +334,7 @@
 
 ;; : TestSuite
 (def module-object-practice-test
-  (test-suite "poo-flow module object best practices"
+  (test-suite "agentic-ai-lab module object best practices"
     (module-object-practice-projection-case)
     (module-object-practice-contribution-performance-case)
     (module-object-practice-merge-performance-case)

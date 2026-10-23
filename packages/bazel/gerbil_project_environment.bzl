@@ -52,7 +52,7 @@ def _gerbil_project_environment_impl(ctx):
     project_dependency_roots = project.dependency_roots.to_list()
 
     declaration = {
-        "schema": "poo-flow.gerbil-project-environment-declaration.v1",
+        "schema": "agentic-ai-lab.gerbil-project-environment-declaration.v1",
         "label": str(ctx.label),
         "project": str(ctx.attr.project.label),
         "nativeAbi": toolchain.native_abi_fingerprint,

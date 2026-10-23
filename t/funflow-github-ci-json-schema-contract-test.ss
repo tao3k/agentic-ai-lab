@@ -23,10 +23,10 @@
                  yuanxu-json-schema->contract-artifact
                  yuanxu-json-schema-contract-artifact-object-contract
                  yuanxu-json-schema-contract-artifact->alist)
-        (only-in :poo-flow/modules/workflow/profiles/github-ci-contract
-                 +poo-flow-funflow-github-ci-schema-audit+
-                 poo-flow-funflow-github-ci-contract-receipt
-                 poo-flow-funflow-github-ci-validate-workflow->alist))
+        (only-in :agentic-ai-lab/modules/workflow/profiles/github-ci-contract
+                 +agentic-ai-lab-funflow-github-ci-schema-audit+
+                 agentic-ai-lab-funflow-github-ci-contract-receipt
+                 agentic-ai-lab-funflow-github-ci-validate-workflow->alist))
 
 (export funflow-github-ci-json-schema-contract-test)
 
@@ -38,7 +38,7 @@
 ;; : (-> Alist Symbol Object)
 (def (funflow-github-ci-audit-ref key)
   (funflow-github-ci-test-ref
-   +poo-flow-funflow-github-ci-schema-audit+
+   +agentic-ai-lab-funflow-github-ci-schema-audit+
    key))
 
 ;; : (-> Object [Object] Boolean)
@@ -47,46 +47,46 @@
 
 ;; : Alist
 (def funflow-github-ci-valid-workflow
-  '((name . "POO Flow CI")
+  '((name . "Agentic AI Lab CI")
     (on . ("push" "pull_request"))
     (jobs . ((build . ((runs-on . "macos-latest")
                        (steps . (((run . "gxpkg build -g"))))))))))
 
-;; : PooFlowObject
+;; : AgenticAILabObject
 (def funflow-github-ci-valid-poo-workflow
   (object<-alist
-   '((name . "POO Flow CI")
+   '((name . "Agentic AI Lab CI")
      (on . ((push . #t)))
      (jobs . ((build . ((runs-on . "ubuntu-latest")
                         (steps . (((uses . "actions/checkout@v4")))))))))))
 
 ;; : Alist
 (def funflow-github-ci-missing-jobs-workflow
-  '((name . "POO Flow CI")
+  '((name . "Agentic AI Lab CI")
     (on . "push")))
 
 ;; : Alist
 (def funflow-github-ci-empty-jobs-workflow
-  '((name . "POO Flow CI")
+  '((name . "Agentic AI Lab CI")
     (on . "push")
     (jobs . ())))
 
 ;; : Alist
 (def funflow-github-ci-missing-runs-on-workflow
-  '((name . "POO Flow CI")
+  '((name . "Agentic AI Lab CI")
     (on . "push")
     (jobs . ((build . ((steps . (((run . "gxpkg build -g"))))))))))
 
 ;; : Alist
 (def funflow-github-ci-invalid-job-key-workflow
-  '((name . "POO Flow CI")
+  '((name . "Agentic AI Lab CI")
     (on . "push")
     (jobs . ((1bad . ((runs-on . "ubuntu-latest")
                       (steps . (((run . "gxpkg build -g"))))))))))
 
 ;; : Alist
 (def funflow-github-ci-invalid-step-id-workflow
-  '((name . "POO Flow CI")
+  '((name . "Agentic AI Lab CI")
     (on . "push")
     (jobs . ((build . ((runs-on . "ubuntu-latest")
                        (steps . (((id . "bad id")
@@ -94,13 +94,13 @@
 
 ;; : String
 (def funflow-github-ci-native-json
-  "{\"name\":\"POO Flow CI\",\"on\":\"push\",\"jobs\":{\"build\":{\"runs-on\":\"ubuntu-latest\",\"steps\":[{\"run\":\"gxpkg build -g\"}]}}}")
+  "{\"name\":\"Agentic AI Lab CI\",\"on\":\"push\",\"jobs\":{\"build\":{\"runs-on\":\"ubuntu-latest\",\"steps\":[{\"run\":\"gxpkg build -g\"}]}}}")
 
 ;; : TestSuite
 (def funflow-github-ci-json-schema-contract-test
   (test-suite "funflow github-ci json schema contract"
     (yuanxu-test-case "keeps the upstream workflow schema pinned in the repo"
-      (let ((receipt (poo-flow-funflow-github-ci-contract-receipt)))
+      (let ((receipt (agentic-ai-lab-funflow-github-ci-contract-receipt)))
         (check-equal?
          (funflow-github-ci-audit-ref 'repo-path)
          "schemas/json/github-workflow.json")
@@ -118,7 +118,7 @@
                schema
                '((source-ref . schemas/json/github-workflow.json)
                  (owner . funflow)
-                 (object-kind . PooFlowFunflowPinnedGithubWorkflow)
+                 (object-kind . AgenticAILabFunflowPinnedGithubWorkflow)
                  (object-key . funflow/github-ci/pinned-workflow))))
              (receipt
               (yuanxu-json-schema-contract-artifact->alist artifact))
@@ -136,10 +136,10 @@
          #t)))
     (yuanxu-test-case "validates top-level github workflow profile shape"
       (let ((alist-receipt
-             (poo-flow-funflow-github-ci-validate-workflow->alist
+             (agentic-ai-lab-funflow-github-ci-validate-workflow->alist
               funflow-github-ci-valid-workflow))
             (poo-receipt
-             (poo-flow-funflow-github-ci-validate-workflow->alist
+             (agentic-ai-lab-funflow-github-ci-validate-workflow->alist
               funflow-github-ci-valid-poo-workflow)))
         (check-equal? (funflow-github-ci-test-ref alist-receipt 'valid?) #t)
         (check-equal? (funflow-github-ci-test-ref alist-receipt 'checked-slots)
@@ -154,10 +154,10 @@
                             (JSONReadOptions object-as-hash: #t
                                              key-as-symbol: #t)))
              (string-key-receipt
-              (poo-flow-funflow-github-ci-validate-workflow->alist
+              (agentic-ai-lab-funflow-github-ci-validate-workflow->alist
                string-key-workflow))
              (symbol-key-receipt
-              (poo-flow-funflow-github-ci-validate-workflow->alist
+              (agentic-ai-lab-funflow-github-ci-validate-workflow->alist
                symbol-key-workflow)))
         (check-equal? (hash-table? string-key-workflow) #t)
         (check-equal? (hash-table? symbol-key-workflow) #t)
@@ -169,10 +169,10 @@
          #t)))
     (yuanxu-test-case "rejects missing and empty required workflow slots"
       (let ((missing-receipt
-             (poo-flow-funflow-github-ci-validate-workflow->alist
+             (agentic-ai-lab-funflow-github-ci-validate-workflow->alist
               funflow-github-ci-missing-jobs-workflow))
             (empty-receipt
-             (poo-flow-funflow-github-ci-validate-workflow->alist
+             (agentic-ai-lab-funflow-github-ci-validate-workflow->alist
               funflow-github-ci-empty-jobs-workflow)))
         (check-equal? (funflow-github-ci-test-ref missing-receipt 'valid?) #f)
         (check-equal? (funflow-github-ci-test-ref missing-receipt
@@ -183,13 +183,13 @@
                       '(jobs))))
     (yuanxu-test-case "recursively validates dynamic job ids and job bodies"
       (let ((missing-runs-on
-             (poo-flow-funflow-github-ci-validate-workflow->alist
+             (agentic-ai-lab-funflow-github-ci-validate-workflow->alist
               funflow-github-ci-missing-runs-on-workflow))
             (invalid-job-key
-             (poo-flow-funflow-github-ci-validate-workflow->alist
+             (agentic-ai-lab-funflow-github-ci-validate-workflow->alist
               funflow-github-ci-invalid-job-key-workflow))
             (invalid-step-id
-             (poo-flow-funflow-github-ci-validate-workflow->alist
+             (agentic-ai-lab-funflow-github-ci-validate-workflow->alist
               funflow-github-ci-invalid-step-id-workflow)))
         (check-equal? (funflow-github-ci-test-ref missing-runs-on 'valid?) #f)
         (check-equal? (funflow-github-ci-test-ref missing-runs-on

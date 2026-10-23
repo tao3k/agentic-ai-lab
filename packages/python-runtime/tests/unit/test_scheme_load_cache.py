@@ -9,10 +9,10 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from poo_flow_runtime import _scheme_load as scheme_load
-from poo_flow_runtime import _scheme_load_aot as scheme_aot
-from poo_flow_runtime import _scheme_load_cache as scheme_cache
-from poo_flow_runtime import _scheme_load_runner as scheme_runner
+from agentic_ai_lab_runtime import _scheme_load as scheme_load
+from agentic_ai_lab_runtime import _scheme_load_aot as scheme_aot
+from agentic_ai_lab_runtime import _scheme_load_cache as scheme_cache
+from agentic_ai_lab_runtime import _scheme_load_runner as scheme_runner
 
 
 def _runtime_projection_fixture(root: Path) -> None:
@@ -106,7 +106,7 @@ def test_scheme_projection_cache_can_be_disabled(tmp_path, monkeypatch) -> None:
     calls: list[tuple[str, ...]] = []
     monkeypatch.setattr(scheme_runner, "_run_with_native_progress",
                         lambda command, workdir: _fake_scheme_run(calls)(command.argv))
-    monkeypatch.setenv("POO_FLOW_SCHEME_LOAD_CACHE", "0")
+    monkeypatch.setenv("AGENTIC_AI_LAB_SCHEME_LOAD_CACHE", "0")
 
     scheme_load.load_projection_rows(source, cwd=tmp_path)
     scheme_load.load_projection_rows(source, cwd=tmp_path)
@@ -117,7 +117,7 @@ def test_scheme_projection_cache_can_be_disabled(tmp_path, monkeypatch) -> None:
 def test_scheme_projection_prefers_direct_gerbil_runner(tmp_path, monkeypatch) -> None:
     scheme_load.clear_load_cache()
     _runtime_projection_fixture(tmp_path)
-    (tmp_path / ".gerbil" / "lib" / "poo-flow").mkdir(parents=True)
+    (tmp_path / ".gerbil" / "lib" / "agentic-ai-lab").mkdir(parents=True)
     source = _source_fixture(tmp_path)
     calls: list[tuple[str, ...]] = []
     monkeypatch.setattr(scheme_runner, "_run_with_native_progress",

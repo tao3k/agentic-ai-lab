@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-from poo_flow_testing.assessment_studies.repository_model_study import Workspace, evidence_program, symbol_table, episode
+from agentic_ai_lab_testing.assessment_studies.repository_model_study import Workspace, evidence_program, symbol_table, episode
 
 
 class RepositoryModelStudy(unittest.TestCase):
@@ -53,7 +53,7 @@ class RepositoryModelStudy(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)
             terminal={'status':'completed','usage':{'input_tokens':1,'output_tokens':1,'output_tokens_details':{'reasoning_tokens':1}},'output':[{'type':'function_call','name':'edit_source','call_id':'call-1','arguments':'{"edits": []}'}]}
-            with patch('poo_flow_testing.assessment_studies.repository_model_study.Workspace') as factory,patch('poo_flow_testing.assessment_studies.repository_model_study.provider_key',return_value='unused'),patch('poo_flow_testing.assessment_studies.repository_model_study.provider',return_value=('',{'terminal':terminal,'providerSeconds':0,'error':None})) as provider:
+            with patch('agentic_ai_lab_testing.assessment_studies.repository_model_study.Workspace') as factory,patch('agentic_ai_lab_testing.assessment_studies.repository_model_study.provider_key',return_value='unused'),patch('agentic_ai_lab_testing.assessment_studies.repository_model_study.provider',return_value=('',{'terminal':terminal,'providerSeconds':0,'error':None})) as provider:
                 workspace=factory.return_value;workspace.source_identity='source';workspace.journal=[];workspace.domain=None
                 workspace.edit.return_value={'edited':['source.py']};workspace.execute.return_value={'verified':True};workspace.seal_candidate.return_value={'sourceIdentity':'source'}
                 record=episode({'maxTurns':10,'maxOutputTokens':131072,'verifyCandidatesOnEdit':True},root,root,{'name':'task','editable':[],'question':'Repair.'},0,'ordinary-tools')
@@ -64,7 +64,7 @@ class RepositoryModelStudy(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)
             terminal={'status':'completed','usage':{'input_tokens':1,'output_tokens':1,'output_tokens_details':{'reasoning_tokens':1}},'output':[{'type':'message','role':'assistant','content':[{'type':'output_text','text':'The repair is complete.'}]}]}
-            with patch('poo_flow_testing.assessment_studies.repository_model_study.Workspace') as factory,patch('poo_flow_testing.assessment_studies.repository_model_study.provider_key',return_value='unused'),patch('poo_flow_testing.assessment_studies.repository_model_study.provider',return_value=('The repair is complete.',{'terminal':terminal,'providerSeconds':0,'error':None})) as provider:
+            with patch('agentic_ai_lab_testing.assessment_studies.repository_model_study.Workspace') as factory,patch('agentic_ai_lab_testing.assessment_studies.repository_model_study.provider_key',return_value='unused'),patch('agentic_ai_lab_testing.assessment_studies.repository_model_study.provider',return_value=('The repair is complete.',{'terminal':terminal,'providerSeconds':0,'error':None})) as provider:
                 workspace=factory.return_value;workspace.source_identity='source';workspace.journal=[];workspace.domain=None;workspace.execute.return_value={'verified':True}
                 record=episode({'maxTurns':10,'maxOutputTokens':131072},root,root,{'name':'task','editable':[],'question':'Repair.'},0,'ordinary-tools')
                 self.assertEqual(record['status'],'verified');workspace.execute.assert_called_once_with(grading=True)
@@ -92,7 +92,7 @@ class RepositoryModelStudy(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)
             terminal={'status':'completed','usage':{'input_tokens':1,'output_tokens':1,'output_tokens_details':{'reasoning_tokens':1}},'output':[{'type':'function_call','name':'run_checks','call_id':'call-1','arguments':'{}'}]}
-            with patch('poo_flow_testing.assessment_studies.repository_model_study.Workspace') as factory,patch('poo_flow_testing.assessment_studies.repository_model_study.provider_key',return_value='unused'),patch('poo_flow_testing.assessment_studies.repository_model_study.provider',return_value=('',{'terminal':terminal,'providerSeconds':0,'error':None})) as provider:
+            with patch('agentic_ai_lab_testing.assessment_studies.repository_model_study.Workspace') as factory,patch('agentic_ai_lab_testing.assessment_studies.repository_model_study.provider_key',return_value='unused'),patch('agentic_ai_lab_testing.assessment_studies.repository_model_study.provider',return_value=('',{'terminal':terminal,'providerSeconds':0,'error':None})) as provider:
                 factory.return_value.source_identity='source';factory.return_value.journal=[];factory.return_value.domain=None
                 factory.return_value.execute.side_effect=RuntimeError('test environment did not produce a complete receipt')
                 record=episode({'maxTurns':10,'maxOutputTokens':131072},root,root,{'name':'task','editable':[],'question':'Repair.'},0,'ordinary-tools')

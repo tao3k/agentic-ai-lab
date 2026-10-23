@@ -7,38 +7,38 @@
 ;;; Invariant: graph helpers inspect report-only session objects.
 
 (import (only-in :clan/poo/object object<-alist)
-        :poo-flow/modules/session/objects-core)
+        :agentic-ai-lab/modules/session/objects-core)
 
-(export poo-flow-session-by-id
-        poo-flow-session-lineage-edge-pairs
-        poo-flow-session-graph-edge-pairs
-        poo-flow-session-graph-acyclic?
-        pooFlowSessionGraphPresentation)
+(export agentic-ai-lab-session-by-id
+        agentic-ai-lab-session-lineage-edge-pairs
+        agentic-ai-lab-session-graph-edge-pairs
+        agentic-ai-lab-session-graph-acyclic?
+        agenticAiLabSessionGraphPresentation)
 
 ;;; Boundary: session by id is the policy-visible edge for object behavior,
 ;;; keeping validation, lookup, or projection responsibilities centralized for
 ;;; callers.
 ;; : (-> [PooSession] Symbol MaybePooSession)
-(def (poo-flow-session-by-id sessions session-id)
+(def (agentic-ai-lab-session-by-id sessions session-id)
   (cond
    ((null? sessions) #f)
-   ((eq? (poo-flow-session-id (car sessions)) session-id) (car sessions))
+   ((eq? (agentic-ai-lab-session-id (car sessions)) session-id) (car sessions))
    (else
-    (poo-flow-session-by-id (cdr sessions) session-id))))
+    (agentic-ai-lab-session-by-id (cdr sessions) session-id))))
 
 ;;; Boundary: session lineage edge pairs is the policy-visible edge for object
 ;;; behavior, keeping validation, lookup, or projection responsibilities
 ;;; centralized for callers.
 ;; : (-> PooSession [Pair])
-(def (poo-flow-session-lineage-edge-pairs session)
-  (reverse (poo-flow-session-lineage-edge-pairs/rev session '())))
+(def (agentic-ai-lab-session-lineage-edge-pairs session)
+  (reverse (agentic-ai-lab-session-lineage-edge-pairs/rev session '())))
 
 ;; : (-> PooSession [Pair] [Pair])
-(def (poo-flow-session-lineage-edge-pairs/rev session edge-pairs)
-  (let ((session-id (poo-flow-session-id session))
+(def (agentic-ai-lab-session-lineage-edge-pairs/rev session edge-pairs)
+  (let ((session-id (agentic-ai-lab-session-id session))
         (parent-session-ids
-         (poo-flow-session-lineage-parent-session-ids
-          (poo-flow-session-value-lineage session))))
+         (agentic-ai-lab-session-lineage-parent-session-ids
+          (agentic-ai-lab-session-value-lineage session))))
     (foldl (lambda (parent-session-id edge-pair-values)
              (cons (cons parent-session-id session-id) edge-pair-values))
            edge-pairs
@@ -48,10 +48,10 @@
 ;;; behavior, keeping validation, lookup, or projection responsibilities
 ;;; centralized for callers.
 ;; : (-> [PooSession] [Pair])
-(def (poo-flow-session-graph-edge-pairs sessions)
+(def (agentic-ai-lab-session-graph-edge-pairs sessions)
   (reverse
    (foldl (lambda (session edge-pair-values)
-            (poo-flow-session-lineage-edge-pairs/rev
+            (agentic-ai-lab-session-lineage-edge-pairs/rev
              session
              edge-pair-values))
           '()
@@ -61,38 +61,38 @@
 ;;; keeping validation, lookup, or projection responsibilities centralized for
 ;;; callers.
 ;; : (-> [PooSession] HashTable)
-(def (poo-flow-session-index sessions)
+(def (agentic-ai-lab-session-index sessions)
   (let (index (make-hash-table))
     (for-each
      (lambda (session)
-       (hash-put! index (poo-flow-session-id session) session))
+       (hash-put! index (agentic-ai-lab-session-id session) session))
      sessions)
     index))
 
 ;;; Cycle detection walks parent links by session id only. Missing parents are
 ;;; treated as external roots so partial user-interface cases remain inspectable.
 ;; : (-> [PooSession] Symbol [Symbol] Boolean)
-(def (poo-flow-session-graph-acyclic-from? sessions session-id path)
+(def (agentic-ai-lab-session-graph-acyclic-from? sessions session-id path)
   (cond
    ((memq session-id path) #f)
    (else
-    (let (session (poo-flow-session-by-id sessions session-id))
+    (let (session (agentic-ai-lab-session-by-id sessions session-id))
       (if session
-        (poo-flow-session-every?
+        (agentic-ai-lab-session-every?
          (lambda (parent-id)
-           (poo-flow-session-graph-acyclic-from?
+           (agentic-ai-lab-session-graph-acyclic-from?
             sessions
             parent-id
             (cons session-id path)))
-          (poo-flow-session-lineage-parent-session-ids
-           (poo-flow-session-value-lineage session)))
+          (agentic-ai-lab-session-lineage-parent-session-ids
+           (agentic-ai-lab-session-value-lineage session)))
         #t)))))
 
 ;;; Boundary: session graph acyclic from index predicate is the policy-visible
 ;;; edge for object behavior, keeping validation, lookup, or projection
 ;;; responsibilities centralized for callers.
 ;; : (-> HashTable HashTable Symbol Boolean)
-(def (poo-flow-session-graph-acyclic-from-index? session-index visit-states session-id)
+(def (agentic-ai-lab-session-graph-acyclic-from-index? session-index visit-states session-id)
   (let (state (hash-get visit-states session-id))
     (cond
      ((eq? state 'visiting) #f)
@@ -103,14 +103,14 @@
           (begin
             (hash-put! visit-states session-id 'visiting)
             (let (acyclic?
-                  (poo-flow-session-every?
+                  (agentic-ai-lab-session-every?
                    (lambda (parent-id)
-                     (poo-flow-session-graph-acyclic-from-index?
+                     (agentic-ai-lab-session-graph-acyclic-from-index?
                       session-index
                       visit-states
                       parent-id))
-                   (poo-flow-session-lineage-parent-session-ids
-                    (poo-flow-session-value-lineage session))))
+                   (agentic-ai-lab-session-lineage-parent-session-ids
+                    (agentic-ai-lab-session-value-lineage session))))
               (if acyclic?
                 (hash-put! visit-states session-id 'done)
                 #f)
@@ -121,22 +121,22 @@
 ;;; object behavior, keeping validation, lookup, or projection responsibilities
 ;;; centralized for callers.
 ;; : (-> [PooSession] Boolean)
-(def (poo-flow-session-graph-acyclic? sessions)
-  (let ((session-index (poo-flow-session-index sessions))
+(def (agentic-ai-lab-session-graph-acyclic? sessions)
+  (let ((session-index (agentic-ai-lab-session-index sessions))
         (visit-states (make-hash-table)))
-    (poo-flow-session-every?
+    (agentic-ai-lab-session-every?
      (lambda (session)
-       (poo-flow-session-graph-acyclic-from-index?
+       (agentic-ai-lab-session-graph-acyclic-from-index?
         session-index
         visit-states
-        (poo-flow-session-id session)))
+        (agentic-ai-lab-session-id session)))
      sessions)))
 
 ;;; The graph presentation is intentionally compact. It exposes ids, edges,
 ;;; placement refs, and runtime flags without embedding the full session object
 ;;; graph in downstream receipts.
 ;; : (-> [PooSession] List)
-(def (poo-flow-session-graph-presentation-summary sessions)
+(def (agentic-ai-lab-session-graph-presentation-summary sessions)
   (foldl (lambda (session summary)
            (let* ((session-count-value (car summary))
                   (session-id-values (cadr summary))
@@ -146,33 +146,33 @@
                   (placement-profile-ref-values (car placement-summary-values))
                   (placement-resolved-values (cadr placement-summary-values))
                   (placement-diagnostic-values (caddr placement-summary-values))
-                  (placement (poo-flow-session-value-placement session)))
+                  (placement (agentic-ai-lab-session-value-placement session)))
              (list
               (+ session-count-value 1)
-              (cons (poo-flow-session-id session) session-id-values)
-              (+ chunk-count-value (length (poo-flow-session-chunks session)))
-              (poo-flow-session-lineage-edge-pairs/rev
+              (cons (agentic-ai-lab-session-id session) session-id-values)
+              (+ chunk-count-value (length (agentic-ai-lab-session-chunks session)))
+              (agentic-ai-lab-session-lineage-edge-pairs/rev
                session
                lineage-edge-pair-values)
-              (cons (poo-flow-session-placement-profile-ref placement)
+              (cons (agentic-ai-lab-session-placement-profile-ref placement)
                     placement-profile-ref-values)
-              (cons (poo-flow-session-placement-resolved? placement)
+              (cons (agentic-ai-lab-session-placement-resolved? placement)
                     placement-resolved-values)
-              (cons (poo-flow-session-placement-diagnostics placement)
+              (cons (agentic-ai-lab-session-placement-diagnostics placement)
                     placement-diagnostic-values))))
          '(0 () 0 () () () ())
          sessions))
 
 ;; : (-> [PooSession] PooSessionGraphPresentation)
-(def (pooFlowSessionGraphPresentation sessions)
-  (poo-flow-session-require "session graph presentation requires sessions"
+(def (agenticAiLabSessionGraphPresentation sessions)
+  (agentic-ai-lab-session-require "session graph presentation requires sessions"
                             (list? sessions)
                             sessions)
-  (poo-flow-session-require
+  (agentic-ai-lab-session-require
    "session graph presentation entries must be sessions"
-   (poo-flow-session-every? poo-flow-session? sessions)
+   (agentic-ai-lab-session-every? agentic-ai-lab-session? sessions)
    sessions)
-  (let* ((summary (poo-flow-session-graph-presentation-summary sessions))
+  (let* ((summary (agentic-ai-lab-session-graph-presentation-summary sessions))
          (session-count-value (car summary))
          (session-id-values (reverse (cadr summary)))
          (chunk-count-value (caddr summary))
@@ -183,13 +183,13 @@
          (placement-diagnostic-values (reverse (caddr placement-summary-values))))
     (object<-alist
      (list
-      (cons 'kind 'poo-flow.session.graph.presentation)
-      (cons 'schema 'poo-flow.modules.session.graph-presentation.v1)
+      (cons 'kind 'agentic-ai-lab.session.graph.presentation)
+      (cons 'schema 'agentic-ai-lab.modules.session.graph-presentation.v1)
       (cons 'session-count session-count-value)
       (cons 'session-ids session-id-values)
       (cons 'chunk-count chunk-count-value)
       (cons 'lineage-edge-pairs lineage-edge-pair-values)
-      (cons 'acyclic? (poo-flow-session-graph-acyclic? sessions))
+      (cons 'acyclic? (agentic-ai-lab-session-graph-acyclic? sessions))
       (cons 'placement-profile-refs placement-profile-ref-values)
       (cons 'placement-resolved? placement-resolved-values)
       (cons 'placement-diagnostics placement-diagnostic-values)

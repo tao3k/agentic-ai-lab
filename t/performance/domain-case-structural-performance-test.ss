@@ -77,7 +77,7 @@
   (cdr (assoc key row)))
 
 (def (domain-case-structural-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] domain-case-structural-catalog ")
+  (display "[agentic-ai-lab-benchmark] domain-case-structural-catalog ")
   (write receipt)
   (newline)
   (force-output))

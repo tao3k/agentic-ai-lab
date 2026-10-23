@@ -55,7 +55,7 @@ jobs:
     env:
       GERBIL_RELEASE_ROOT: ${{ github.workspace }}/.ci/gerbil-release/${{ matrix.toolchain }}
     steps:
-      - name: Checkout POO Flow
+      - name: Checkout Agentic AI Lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Initialize Core source directory
@@ -143,7 +143,7 @@ jobs:
             .gerbil/bin
           key: darwin-gerbil-build-v1-${{ runner.os }}-${{ runner.arch }}-${{ matrix.toolchain }}-${{ hashFiles('gerbil.pkg') }}
 
-      - name: Measure cold POO Flow build
+      - name: Measure cold Agentic AI Lab build
         env:
           TOOLCHAIN: ${{ matrix.toolchain }}
         shell: bash
@@ -158,7 +158,7 @@ jobs:
           gerbil env gxi t/qualification/darwin-gerbil-build-scenario.ss \
             cold "$TOOLCHAIN" "$RUNNER_TEMP/cold-build.ss"
 
-      - name: Measure warm POO Flow build
+      - name: Measure warm Agentic AI Lab build
         env:
           TOOLCHAIN: ${{ matrix.toolchain }}
         shell: bash

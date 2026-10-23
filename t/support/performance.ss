@@ -11,7 +11,7 @@
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-p95-elapsed-us))
 
-(export poo-flow-performance-build-list)
+(export agentic-ai-lab-performance-build-list)
 
 ;;; Intent: construct deterministic index-addressed fixture lists.
 ;;; Boundary: callers own the item constructor and count.
@@ -22,11 +22,11 @@
 (export run-domain-case-instance-overlay-benchmark
         domain-case-instance-overlay-benchmark->alist)
 
-(def (poo-flow-performance-build-list count make-value)
+(def (agentic-ai-lab-performance-build-list count make-value)
   (map make-value (iota count)))
 
 (def +domain-case-instance-overlay-benchmark-kind+
-  'poo-flow.domain-case-instance-overlay-benchmark.v1)
+  'agentic-ai-lab.domain-case-instance-overlay-benchmark.v1)
 
 (def +domain-case-instance-overlay-benchmark-sample-count+ 20)
 (def +domain-case-instance-overlay-benchmark-agent-count+ 5000)
@@ -48,7 +48,7 @@
 (def (domain-case-instance-overlay-benchmark-shared slot-count)
   (apply
    role-compose
-   (poo-flow-performance-build-list
+   (agentic-ai-lab-performance-build-list
     slot-count domain-case-instance-overlay-benchmark-component)))
 
 (def (domain-case-instance-overlay-benchmark-marker)

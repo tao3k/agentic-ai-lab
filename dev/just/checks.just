@@ -18,7 +18,7 @@ rebuild:
 [group('check')]
 check: build test
 
-# Admit gerbil-parser through POO Flow's current V19 dependency environment.
+# Admit gerbil-parser through Agentic AI Lab's current V19 dependency environment.
 # The sibling remains the parser source owner; qualification imports only the
 # demanded modules and never builds a second stale package cache.
 _prepare-gerbil-parser:
@@ -27,7 +27,7 @@ _prepare-gerbil-parser:
 
 [group('check')]
 check-governance-model:
-    PYTHONPATH="{{ justfile_directory() }}/packages/python-testing/src" python3 -m poo_flow_testing.checks.quint --group governance
+    PYTHONPATH="{{ justfile_directory() }}/packages/python-testing/src" python3 -m agentic_ai_lab_testing.checks.quint --group governance
 
 # Validate the repository and published-package license contract.
 [group('check')]

@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+title: POO Flow Runtime v0.1 Control Contract
+#+title: Agentic AI Lab Runtime v0.1 Control Contract
 
 * Version
 
@@ -10,8 +10,8 @@
 |-------+-------|
 | ABI major | 0 |
 | ABI minor | 1 |
-| Bundle schema | =poo-flow.organization-bundle.draft.3= |
-| Control packet | =poo-flow.runtime-v0.control-packet.1= |
+| Bundle schema | =agentic-ai-lab.organization-bundle.draft.3= |
+| Control packet | =agentic-ai-lab.runtime-v0.control-packet.1= |
 | ABI v1 frozen | false |
 
 * Capabilities
@@ -26,5 +26,5 @@
 * Ownership
 
 Inputs are call-bounded borrowed byte views.  Outputs are ABI-owned byte buffers
-released through =poo_flow_runtime_v0_owned_bytes_release=.  No pointer is a
+released through =agentic_ai_lab_runtime_v0_owned_bytes_release=.  No pointer is a
 resource handle and no Scheme heap address crosses the public boundary.

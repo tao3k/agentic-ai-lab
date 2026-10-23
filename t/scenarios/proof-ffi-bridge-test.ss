@@ -4,9 +4,9 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/modules/proof/projections/proof-fact-wire
-        :poo-flow/modules/proof/projections/proof-ffi-bridge
-        :poo-flow/modules/proof/projections/proof-gate-receipts)
+        :agentic-ai-lab/modules/proof/projections/proof-fact-wire
+        :agentic-ai-lab/modules/proof/projections/proof-ffi-bridge
+        :agentic-ai-lab/modules/proof/projections/proof-gate-receipts)
 
 (def proof-ffi-bridge-test
   (test-suite "proof FFI bridge"
@@ -17,29 +17,29 @@
     (error "proof ffi bridge mismatch" label actual expected)))
 
 (def payload
-  (poo-flow-langgraph-user-interface-proof-ffi-payload))
+  (agentic-ai-lab-langgraph-user-interface-proof-ffi-payload))
 
 (assert-equal 'payload-schema
-              (poo-flow-proof-fact-ref 'schema payload)
-              'poo-flow.proof.ffi-bridge.payload)
+              (agentic-ai-lab-proof-fact-ref 'schema payload)
+              'agentic-ai-lab.proof.ffi-bridge.payload)
 (assert-equal 'payload-version
-              (poo-flow-proof-fact-ref 'version payload)
+              (agentic-ai-lab-proof-fact-ref 'version payload)
               1)
 (assert-equal 'payload-accepted
-              (poo-flow-proof-fact-ref 'accepted? payload)
+              (agentic-ai-lab-proof-fact-ref 'accepted? payload)
               #t)
 (assert-equal 'composition-wire-schema
-              (poo-flow-proof-fact-ref
+              (agentic-ai-lab-proof-fact-ref
                'schema
-               (poo-flow-proof-fact-ref 'composition-wire payload))
-              'poo-flow.proof.ffi-wire)
+               (agentic-ai-lab-proof-fact-ref 'composition-wire payload))
+              'agentic-ai-lab.proof.ffi-wire)
 (assert-equal 'scenario-wire-schema
-              (poo-flow-proof-fact-ref
+              (agentic-ai-lab-proof-fact-ref
                'schema
-               (poo-flow-proof-fact-ref 'scenario-wire payload))
-              'poo-flow.proof.ffi-wire)
+               (agentic-ai-lab-proof-fact-ref 'scenario-wire payload))
+              'agentic-ai-lab.proof.ffi-wire)
 (assert-equal 'handoff-wire-schema
-              (poo-flow-proof-fact-ref
+              (agentic-ai-lab-proof-fact-ref
                'schema
-               (poo-flow-proof-fact-ref 'handoff-wire payload))
-              'poo-flow.proof.ffi-wire))))
+               (agentic-ai-lab-proof-fact-ref 'handoff-wire payload))
+              'agentic-ai-lab.proof.ffi-wire))))

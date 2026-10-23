@@ -1,5 +1,5 @@
 import unittest
-from poo_flow_testing.checks.assessment_formal import configuration, obligations
+from agentic_ai_lab_testing.checks.assessment_formal import configuration, obligations
 class AssessmentFormal(unittest.TestCase):
     def test_integrated_checkpoint_extensions_retain_all_fault_controls(self):
             for model, faults in [('ModelApplicability', 7), ('CheckpointProjection', 8)]:

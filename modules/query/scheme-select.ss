@@ -8,10 +8,10 @@
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :yuanxu/utilities/functional
                  yuanxu-all? yuanxu-filter-map yuanxu-map)
-        (only-in "types.ss" poo-flow-query?)
-        (only-in "contracts.ss" poo-flow-query-source-content-identity))
+        (only-in "types.ss" agentic-ai-lab-query?)
+        (only-in "contracts.ss" agentic-ai-lab-query-source-content-identity))
 
-(export poo-flow-query-select-scheme-nodes)
+(export agentic-ai-lab-query-select-scheme-nodes)
 
 (def (projection-expressions projection)
   (if projection
@@ -19,9 +19,9 @@
           (projection-expressions (.ref projection 'next)))
     '()))
 
-(def (poo-flow-query-select-scheme-nodes query nodes)
-  (unless (and (poo-flow-query? query)
-               (eq? (.ref (.ref query 'language) 'runtime-owner) 'poo-flow)
+(def (agentic-ai-lab-query-select-scheme-nodes query nodes)
+  (unless (and (agentic-ai-lab-query? query)
+               (eq? (.ref (.ref query 'language) 'runtime-owner) 'agentic-ai-lab)
                (list? nodes) (<= (length nodes) 256)
                (yuanxu-all? object? nodes))
     (error "Scheme node selection requires a bounded Scheme GQL Query"))
@@ -64,10 +64,10 @@
             nodes)))
       (when (> (length rows-value) (.ref query 'result-bound))
         (error "Scheme GQL result bound exceeded"))
-      (.o kind: 'poo-flow.query.scheme-node-selection
+      (.o kind: 'agentic-ai-lab.query.scheme-node-selection
           query-identity: (.ref query 'identity)
           query-source-identity:
-          (poo-flow-query-source-content-identity query)
+          (agentic-ai-lab-query-source-content-identity query)
           rows: rows-value
           executed-in-scheme?: #t
           external-provenance-verified?: #f

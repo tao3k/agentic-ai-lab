@@ -3,11 +3,11 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/encoding/json :std/crypto/digest :std/encoding/hex
         (only-in :clan/poo/object .ref)
-        :poo-flow/modules/ai-agentic-context/clue-query
+        :agentic-ai-lab/modules/ai-agentic-context/clue-query
         (only-in :gerbil-ascent/rules/declaration rule-module-program)
         (only-in :gerbil-ascent/program/session gerbil-ascent-open-session
           gerbil-ascent-session-run gerbil-ascent-session-replace-source!)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/ascent-ledger ascent-trajectory))
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/ascent-ledger ascent-trajectory))
 (export open-clue-exchange open-trajectory-clue-exchange)
 
 ;; Only the trusted host supplies verify. Agent input never contains attested rows.

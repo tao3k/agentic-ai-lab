@@ -4,9 +4,9 @@
 
 #+title: Python Runtime Package
 
-This package is the Python runtime consumer for POO Flow runtime bindings.
+This package is the Python runtime consumer for Agentic AI Lab runtime bindings.
 
-Python runtime code lives in =src/poo_flow_runtime=, Python tests in =tests=,
+Python runtime code lives in =src/agentic_ai_lab_runtime=, Python tests in =tests=,
 and cross-language/model qualification entrypoints in =tools=. The Rust ABI
 consumer lives separately in =runtime/= in the MRR repository. Both callers use the
 shared =bindings/runtime-c= boundary; Temporal semantics stay in Scheme.
@@ -20,7 +20,7 @@ surface is ABI v0.1 and is not an ABI v1 freeze claim.
 
 The package is managed by =uv=. It provides a Python API and a command-line
 probe for the current C ABI. Future ALALEX validation runtime code should plug
-into this package and consume the same =poo_flow_runtime= API.
+into this package and consume the same =agentic_ai_lab_runtime= API.
 
 Scheme owns flow composition, graph, policy-family and strategy-combinator
 semantics. The installed runtime-v0 C ABI owns the control lane: negotiation,
@@ -65,7 +65,7 @@ local qualification are in [[file:../../modules/temporal-causality/design-audit.
 
 Host-pinned source admission is a separate control operation.
 =register_temporal_source(scope, task)= registers canonical domain/observation
-bytes using =poo_flow_semantic_v1_source_register=, not the semantic operation
+bytes using =agentic_ai_lab_semantic_v1_source_register=, not the semantic operation
 router. Do not expose registration as a model tool. The scope binds source
 identity, authority, subject, scope, cut, projection, policy and generation.
 A conflicting registration at the same generation or a rollback is rejected;
@@ -105,7 +105,7 @@ or authenticated source data.
 Run:
 
 #+begin_src sh
-uv run --project packages/python-runtime poo-flow-jsonschema-contract --help
+uv run --project packages/python-runtime agentic-ai-lab-jsonschema-contract --help
 uv run --project packages/python-runtime pytest packages/python-runtime/tests
 #+end_src
 
@@ -121,7 +121,7 @@ Users can bring a JSON Schema file and generate a Scheme contract artifact for
 a Funflow stage or profile:
 
 #+begin_src sh
-uv run --project packages/python-runtime poo-flow-jsonschema-contract \
+uv run --project packages/python-runtime agentic-ai-lab-jsonschema-contract \
   schemas/json/custom-stage.json \
   --name custom-stage \
   --object-key funflow/custom-stage \
@@ -144,27 +144,27 @@ precompiled.
 Precompile a user module explicitly during CI, install, or runtime warmup:
 
 #+begin_src sh
-uv run --project packages/python-runtime python -m poo_flow_runtime.scheme_load_aot \
+uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.scheme_load_aot \
   precompile packages/python-runtime/t/fixtures/funflow_user_module.ss \
   --cwd .
 #+end_src
 
-The command prints a single =poo-flow.scheme-load-aot.v1= receipt containing the
+The command prints a single =agentic-ai-lab.scheme-load-aot.v1= receipt containing the
 source path, workspace root, binary path, rebuild flag, and elapsed time. Normal
 =load(...)= calls reuse a matching AOT runner when present but do not compile
 one synchronously unless the caller passes =compile_aot=True= or sets
-=POO_FLOW_SCHEME_LOAD_AOT_COMPILE=1=.
+=AGENTIC_AI_LAB_SCHEME_LOAD_AOT_COMPILE=1=.
 
 Run the exact AOT benchmark after precompile:
 
 #+begin_src sh
-uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks \
+uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks \
   scheme-load-aot --iterations 10 \
   --source packages/python-runtime/t/fixtures/funflow_user_module.ss \
   --cwd .
 #+end_src
 
-The benchmark emits =poo-flow.scheme-load-aot-benchmark.v1= receipts with
+The benchmark emits =agentic-ai-lab.scheme-load-aot-benchmark.v1= receipts with
 per-sample timings: =samples-us=, =min-us=, =median-us=, =mean-us=, =p95-us=,
 and =max-us=. The default scenarios measure in-process cache hits,
 in-process AOT reuse, and fresh Python process AOT reuse. Add
@@ -175,12 +175,12 @@ For downstream users that should not install Gerbil, publish a preprojected
 Scheme datum artifact from a Gerbil-enabled authoring/release lane:
 
 #+begin_src sh
-uv run --project packages/python-runtime python -m poo_flow_runtime.scheme_projection_artifact \
+uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.scheme_projection_artifact \
   export packages/python-runtime/t/fixtures/funflow_user_module.ss \
   --cwd .
 #+end_src
 
-The artifact is =SOURCE.poo-flow-projection.sexp= by default and stores the
+The artifact is =SOURCE.agentic-ai-lab-projection.sexp= by default and stores the
 normalized projection rows plus source/projection digests. Runtime =load(...)=
 checks this artifact before AOT or Gerbil fallback, so an installed package can
 run an already-published flow without =gxi= or =gxc=.
@@ -188,7 +188,7 @@ run an already-published flow without =gxi= or =gxc=.
 Benchmark the artifact path explicitly:
 
 #+begin_src sh
-uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks \
+uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks \
   scheme-load-aot --iterations 10 --include-artifact --preproject-artifact \
   --source packages/python-runtime/t/fixtures/funflow_user_module.ss \
   --cwd .
@@ -198,7 +198,7 @@ uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks \
 
 The GitHub wheel workflow keeps this boundary explicit:
 
-1. =projection-artifact= runs with Gerbil and =ccache=, builds the POO Flow
+1. =projection-artifact= runs with Gerbil and =ccache=, builds the Agentic AI Lab
    package, exports real packaged projection artifacts, and uploads them.
 2. =wheel= runs without Gerbil, downloads those artifacts, builds the Python
    wheel, installs it, and loads the packaged artifact from package resources.
@@ -208,7 +208,7 @@ artifact has been placed next to its Scheme source:
 
 #+begin_src sh
 bazel build //bindings/runtime-c:runtime_c_shared
-POO_FLOW_RUNTIME_V0_LIBRARY="$PWD/bazel-bin/bindings/runtime-c/libruntime_c_shared.dylib" \
+AGENTIC_AI_LAB_RUNTIME_V0_LIBRARY="$PWD/bazel-bin/bindings/runtime-c/libruntime_c_shared.dylib" \
   uv build --project packages/python-runtime --wheel \
     --out-dir dist/python-runtime-wheel
 #+end_src
@@ -220,19 +220,19 @@ or discovers a source-tree =bindings/runtime-c/build= directory.
 Install and smoke test the built wheel in a clean environment:
 
 #+begin_src sh
-python -m venv /tmp/poo-flow-runtime-wheel-smoke
-/tmp/poo-flow-runtime-wheel-smoke/bin/python -m pip install \
+python -m venv /tmp/agentic-ai-lab-runtime-wheel-smoke
+/tmp/agentic-ai-lab-runtime-wheel-smoke/bin/python -m pip install \
   dist/python-runtime-wheel/*.whl
-/tmp/poo-flow-runtime-wheel-smoke/bin/python -m poo_flow_runtime.scheme_projection_artifact --help
-/tmp/poo-flow-runtime-wheel-smoke/bin/python -m poo_flow_runtime.benchmarks scheme-load-aot --help
+/tmp/agentic-ai-lab-runtime-wheel-smoke/bin/python -m agentic_ai_lab_runtime.scheme_projection_artifact --help
+/tmp/agentic-ai-lab-runtime-wheel-smoke/bin/python -m agentic_ai_lab_runtime.benchmarks scheme-load-aot --help
 #+end_src
 
 The wheel build validates the downstream runtime package shape. Gerbil stays in
 the authoring/release lane when source Scheme fragments need to be projected
-into =*.poo-flow-projection.sexp= artifacts.
+into =*.agentic-ai-lab-projection.sexp= artifacts.
 To ship built-in flows, generate each projection artifact before =uv build= and
-place the source plus adjacent =*.poo-flow-projection.sexp= under the package
-tree, for example =src/poo_flow_runtime/projections/=. Hatch includes those
+place the source plus adjacent =*.agentic-ai-lab-projection.sexp= under the package
+tree, for example =src/agentic_ai_lab_runtime/projections/=. Hatch includes those
 package data files in the wheel. The no-Gerbil wheel CI lane must only consume
 and verify these files; it must not generate real projection artifacts.
 
@@ -277,7 +277,7 @@ Use the file checkpointer when the Python runtime needs a local durable
 snapshot:
 
 #+begin_src python
-checkpointer = FileRuntimeGraphCheckpointer("/tmp/poo-flow-runtime")
+checkpointer = FileRuntimeGraphCheckpointer("/tmp/agentic-ai-lab-runtime")
 #+end_src
 
 The file backend stores trusted Python runtime snapshots and uses hashed
@@ -308,7 +308,7 @@ the C ABI validation/materialization unit.
 Use runtime stores for cross-thread, namespace-addressed memory:
 
 #+begin_src python
-store = FileRuntimeGraphStore("/tmp/poo-flow-store")
+store = FileRuntimeGraphStore("/tmp/agentic-ai-lab-store")
 store.put(("users", "alice"), "profile", {"name": "Alice"})
 profile = store.get(("users", "alice"), "profile")
 items = store.search(("users",))
@@ -401,7 +401,7 @@ developer cleans local build artifacts.
 Override the cache location when needed:
 
 #+begin_src sh
-POO_FLOW_RUNTIME_C_ABI_BUILD_DIR=/path/to/cache uv run poo-flow-runtime-probe
+AGENTIC_AI_LAB_RUNTIME_C_ABI_BUILD_DIR=/path/to/cache uv run agentic-ai-lab-runtime-probe
 #+end_src
 
 The runtime tests include gates for hot binding load, steady rebuild, repeated
@@ -437,7 +437,7 @@ retry rule remain unchanged; see
 [[file:../../t/qualification/semantic-abi/README.org][the retained qualification evidence]].
 
 * Bound read-only model tool calls
-=poo_flow_runtime.semantic_tools= exposes =temporal_tool_definition=,
+=agentic_ai_lab_runtime.semantic_tools= exposes =temporal_tool_definition=,
 =invoke_temporal_tool= and =ainvoke_temporal_tool=. The model submits a structured
 function call for the caller's current task. The Library validates operation,
 argument identity and exact task data before executing native =temporal.solve=.
@@ -453,7 +453,7 @@ See [[file:../../t/qualification/semantic-abi/README.org][the bounded receipts a
 
 * Temporal durable first-root selection
 
-=poo_flow_runtime.temporal_publication.TemporalPublicationStore= is a trusted
+=agentic_ai_lab_runtime.temporal_publication.TemporalPublicationStore= is a trusted
 host port backed by the Runtime C SQLite transaction library. Build requires
 SQLite development headers and library. Create a store at an absolute local
 file, =register_source(runtime, scope, task)=, then install an explicit

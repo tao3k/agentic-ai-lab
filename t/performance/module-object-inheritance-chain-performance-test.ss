@@ -36,7 +36,7 @@
 
 ;; : (-> Alist Void)
 (def (module-object-inheritance-chain-display-receipt receipt)
-  (display "[poo-flow-benchmark] module-object-inheritance-chain ")
+  (display "[agentic-ai-lab-benchmark] module-object-inheritance-chain ")
   (write receipt)
   (newline)
   (force-output))
@@ -55,7 +55,7 @@
            '()
            '()))
         #f
-        (poo-flow-performance-build-list count (lambda (index) index))))
+        (agentic-ai-lab-performance-build-list count (lambda (index) index))))
 
 ;; : (-> [Object] Object)
 (def (module-object-inheritance-chain-last values)

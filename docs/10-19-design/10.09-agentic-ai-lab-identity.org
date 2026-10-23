@@ -1,0 +1,75 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: 10.09 Agentic AI Lab Identity And Namespace Migration
+
+* One product identity
+
+The repository is [[https://github.com/tao3k/agentic-ai-lab][tao3k/agentic-ai-lab]]. Existing pull requests and branch
+identities remain in that repository. The local checkout directory is not a
+module identity and need not be renamed while other sessions use it.
+
+| Surface | Maintained identity |
+|---------+---------------------|
+| Gerbil package and imports | =agentic-ai-lab=, =:agentic-ai-lab/modules/...= |
+| Source-qualified init exports | =agentic-ai-lab.init.exports= |
+| Scheme functions and declarative macros | =agentic-ai-lab-*= |
+| Python distributions | =agentic-ai-lab-runtime=, =agentic-ai-lab-testing=, =agentic-ai-lab-proof= |
+| Python modules and C symbols | =agentic_ai_lab_*= |
+| Rust crates and Bazel root module | =agentic-ai-lab-*= and =agentic_ai_lab= |
+| Lean module families | =AgenticAILabProof=, =AgenticAILabSessionProof=, =AgenticAILabTemporalPooProof= |
+| Environment variables and C guards | =AGENTIC_AI_LAB_*= |
+
+Yuanxu remains a separate library with package =yuanxu=, imports =:yuanxu/...=
+and its existing optional language entry =:tao3k/yuanxu/prelude=. Its Module
+System diagnostics identify Yuanxu. Product consumers do not rename that library
+or acquire a second prelude. The contribution packages retain their own brands;
+references to the product package and their nested Gerbil package prefixes follow
+the new product identity.
+
+* Direct migration
+
+There is no old public import, environment-variable fallback or C symbol alias.
+Build targets, package-data declarations, CLI entry points, source-generated
+imports and header include paths migrate with their consumers. Numeric ABI
+layouts and protocol versions do not change merely because identifiers change.
+The Nix binding's formerly abbreviated private C prefix also uses the complete
+product namespace.
+
+A source-package projection must derive prefix lengths from its actual package
+string. Hard-coded offsets for an earlier package name are invalid. The native
+build and test entries continue to own dependency discovery, issuance and
+currentness; this migration introduces no cache protocol or Builder.
+
+* Evidence and rebuilding
+
+Recorded execution logs, receipts, frozen snapshots, compressed artifacts and
+=evidence/= records and dated qualification captures retain their original bytes
+and source identities. They are
+historical evidence, not an alternate live namespace or qualification of renamed
+binaries. Existing Git branch refs and references to files in external projects
+likewise identify actual objects; a textual rename must not invent their names.
+
+New consumers must rebuild their outputs under the new package identity. Prior
+admission or compilation records cannot authorize modified source. Strict Flake
+locking, source-change rejection, per-receiver cache isolation and final Contract
+admission retain their existing owners and checks.
+
+The CI namespace contract scans maintained product source names and text,
+excludes submodule-owned files and recorded evidence, and rejects obsolete
+product identifiers. Submodules retain their own namespace checks. The gate
+shares the existing license checker's tracked/untracked source inventory rather
+than introducing another module discovery mechanism.
+
+* Validation boundary
+
+The migration is qualified by rebuilding Yuanxu, Gitea/PostgreSQL admission,
+product Nix/Flake controls, cross-language metadata, proof imports, source
+bindings and namespace checks. Each failed build or test remains a local/CI
+artifact; a warm retry does not turn a failed cold build into a cold pass.
+
+The Python testing package's 154 Harness findings were also reproduced from
+the pre-migration commit. Its three displayed failure-frontier records match
+exactly after normalizing only the package path; all 50 functional unit cases
+pass with the declared runtime extra. The migration does not disable that
+Harness or claim its quality gate passes.

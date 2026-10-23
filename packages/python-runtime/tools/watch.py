@@ -17,7 +17,7 @@ def report_failure(message):
 
 def capture_failed_process(pid):
     """Collect a bounded Darwin stack after admission has already failed."""
-    directory = os.environ.get('POO_FLOW_TEST_STALL_DIAGNOSTICS')
+    directory = os.environ.get('AGENTIC_AI_LAB_TEST_STALL_DIAGNOSTICS')
     if sys.platform != 'darwin' or not directory:
         return
     try:

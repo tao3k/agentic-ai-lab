@@ -69,9 +69,9 @@ Implemented functional kernel surface:
   =flow-category-map=, and =flow-category-fanout= call the selected POO
   category operations.
 - =src/core/flow-syntax.ss= owns hygienic Gerbil authoring macros:
-  =defpoo-flow-arr=, =defpoo-flow-identity=, =defpoo-flow-compose=,
-  =defyuanxu-map=, =defpoo-flow-fanout=, =defpoo-flow-first=, and
-  =defpoo-flow-second=.
+  =defagentic-ai-lab-arr=, =defagentic-ai-lab-identity=, =defagentic-ai-lab-compose=,
+  =defyuanxu-map=, =defagentic-ai-lab-fanout=, =defagentic-ai-lab-first=, and
+  =defagentic-ai-lab-second=.
 
 The stable =flow= struct is unchanged. The POO category object is metadata and
 operation selection over existing declarations, not a replacement runtime
@@ -86,7 +86,7 @@ representation.
 5. Authoring conveniences may use hygienic Gerbil macros later, but those
    macros must expand to the functional kernel and POO objects. They must not
    define a new alist/record DSL.
-6. The landed =defpoo-flow-*= macros define Gerbil bindings over existing
+6. The landed =defagentic-ai-lab-*= macros define Gerbil bindings over existing
    combinators. Flow names become quoted symbolic names; procedures, contracts,
    and source flows remain caller expressions.
 
@@ -113,11 +113,11 @@ The hygienic macro authoring layer is now implemented.
 
 Current proof:
 
-- =defpoo-flow-arr= authors pure arrows.
-- =defpoo-flow-compose= authors sequential composition.
+- =defagentic-ai-lab-arr= authors pure arrows.
+- =defagentic-ai-lab-compose= authors sequential composition.
 - =defyuanxu-map= authors output mapping.
-- =defpoo-flow-fanout= authors branch/fanout declarations.
-- =defpoo-flow-first= and =defpoo-flow-second= author pair-shaped Arrow
+- =defagentic-ai-lab-fanout= authors branch/fanout declarations.
+- =defagentic-ai-lab-first= and =defagentic-ai-lab-second= author pair-shaped Arrow
   projections.
 - =t/functional-flow-kernel-test.ss= proves that macro-authored flows run
   through the same runner path as direct function-authored flows.
@@ -246,32 +246,32 @@ Boundary result:
 ** 10.07.120 User-Facing Functional DAG Authoring Landing
 This slice exposes a compact Gerbil macro surface for users who want to write a
 Funflow-style DAG through functional composition.
-- =defpoo-flow-dag= defines a DAG flow as Arrow fanout over two already-defined
+- =defagentic-ai-lab-dag= defines a DAG flow as Arrow fanout over two already-defined
   flow expressions.
-- =defpoo-flow-dag-artifacts= names the report-only DAG receipt and Marlin
+- =defagentic-ai-lab-dag-artifacts= names the report-only DAG receipt and Marlin
   runtime manifest for that flow.
 - Both macros expand to public =flow= and =plan= combinators. They do not
   introduce an alist/record workflow language.
 Example:
 #+begin_src scheme
-(defpoo-flow-arr parse-input
+(defagentic-ai-lab-arr parse-input
   parse-input
   (lambda (x) x)
   'text
   'tokens)
 
-(defpoo-flow-arr score-input
+(defagentic-ai-lab-arr score-input
   score-input
   (lambda (x) x)
   'text
   'score)
 
-(defpoo-flow-dag analyze-input
+(defagentic-ai-lab-dag analyze-input
   analyze-input
   parse-input
   score-input)
 
-(defpoo-flow-dag-artifacts analyze-input-receipt
+(defagentic-ai-lab-dag-artifacts analyze-input-receipt
   analyze-input-manifest
   analyze-input
   'analyze-input-request)
@@ -323,8 +323,8 @@ Code landing:
 - =src/core/runner.ss= interprets the =kleisli= node by running the source flow,
   calling the binder with the source value, validating that the binder returns a
   =flow=, and then running the returned flow.
-- =src/core/flow-syntax.ss= exposes =defpoo-flow-bind= and
-  =defpoo-flow-kleisli= for compact authoring.
+- =src/core/flow-syntax.ss= exposes =defagentic-ai-lab-bind= and
+  =defagentic-ai-lab-kleisli= for compact authoring.
 
 Boundary result:
 - Static =flow-then= remains the Category compose operation.

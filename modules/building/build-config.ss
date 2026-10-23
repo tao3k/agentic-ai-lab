@@ -9,10 +9,10 @@
 
 (import (only-in :clan/poo/object .def))
 
-(export poo-flow-build-observability-policy-prototype
-        poo-flow-default-build-observability-policy)
+(export agentic-ai-lab-build-observability-policy-prototype
+        agentic-ai-lab-default-build-observability-policy)
 
-(.def poo-flow-build-observability-policy-prototype
+(.def agentic-ai-lab-build-observability-policy-prototype
   id: 'build-projection/package
   profile: 'package
   enabled?: #t
@@ -26,6 +26,6 @@
   projection-budget-action: 'observe
   emit-executor-handoff?: #t)
 
-(.def (poo-flow-default-build-observability-policy
-       @ poo-flow-build-observability-policy-prototype)
+(.def (agentic-ai-lab-default-build-observability-policy
+       @ agentic-ai-lab-build-observability-policy-prototype)
   id: 'build-projection/package)

@@ -8,7 +8,7 @@
         (only-in :clan/poo/mop call-with-slot-read-observer)
         (only-in :clan/poo/object object-protocol-set! .o)
         (only-in :yuanxu/module-system/source/admission module-source-operation-resume)
-        (only-in :poo-flow/modules/nix/objects NixSource.)
+        (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/module-system/interface yuanxu-load-modules))

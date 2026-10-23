@@ -10,8 +10,8 @@
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/module-system/source/admission current-module-source-observer
                  current-module-process-trace-budget)
-        (only-in :poo-flow/modules/nix/objects NixFlakeSource.
-                 poo-flow-nix-flake-admit-generation))
+        (only-in :agentic-ai-lab/modules/nix/objects NixFlakeSource.
+                 agentic-ai-lab-nix-flake-admit-generation))
 (export nix-evaluation-cache-test)
 
 (def (write-input path text)
@@ -272,7 +272,7 @@
           (write-input (path-expand "value.nix" input)
             "builtins.trace \"core-input-body\" \"after\"")
           (check-exception
-            (poo-flow-nix-flake-admit-generation
+            (agentic-ai-lab-nix-flake-admit-generation
               (.get Source reference) "package" expected "nix"
               '() (.get Source source-inputs) (list (cons 'selection input)))
             error?)

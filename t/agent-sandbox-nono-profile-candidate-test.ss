@@ -17,9 +17,9 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/modules/agent-sandbox/api
-        :poo-flow/modules/agent-sandbox/profile-candidate
-        :poo-flow/modules/agent-sandbox/nono-profile-candidate)
+        :agentic-ai-lab/modules/agent-sandbox/api
+        :agentic-ai-lab/modules/agent-sandbox/profile-candidate
+        :agentic-ai-lab/modules/agent-sandbox/nono-profile-candidate)
 
 ;; : (-> ProfileCandidateChoice Symbol)
 (def (choice-action choice)

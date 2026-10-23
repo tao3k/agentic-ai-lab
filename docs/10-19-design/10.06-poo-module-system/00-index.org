@@ -4,9 +4,9 @@
 #+title: Module System Design — Core Ownership
 
 The complete design chapter, its expansions and historical validation material
-have moved to [[file:../../../core/module-system/design/00-index.org][poo-flow-core Module System design]].
+have moved to [[file:../../../core/module-system/design/00-index.org][agentic-ai-lab-core Module System design]].
 The [[file:../../../core/module-system/design/README.org][current ownership and protocol guide]] distinguishes proposals, existing
 mechanisms and consumer evidence. Do not add shared mechanism design here.
 
-POO Flow owns concrete Modules, Profiles, Scenarios and application integration.
+Agentic AI Lab owns concrete Modules, Profiles, Scenarios and application integration.
 See [[file:../10.08-config-languages/00-index.org][product configuration cases and ecosystem references]].

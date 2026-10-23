@@ -7,27 +7,27 @@
                  yuanxu-user-profile-policy-admitted?
                  yuanxu-user-profile-set-policy-admitted?))
 (export (import: :yuanxu/observability/testing-case)
-        poo-flow-testing-check-user-profile poo-flow-testing-check-user-profile-set
-        poo-flow-testing-admit-user-profile! poo-flow-testing-admit-user-profile-set!)
+        agentic-ai-lab-testing-check-user-profile agentic-ai-lab-testing-check-user-profile-set
+        agentic-ai-lab-testing-admit-user-profile! agentic-ai-lab-testing-admit-user-profile-set!)
 
-(def (poo-flow-testing-check-user-profile testing profile)
+(def (agentic-ai-lab-testing-check-user-profile testing profile)
   (unless (.slot? testing '.check-user-profile)
     (error "testing interface has no user profile policy" testing))
   (.call testing .check-user-profile profile))
 
-(def (poo-flow-testing-check-user-profile-set testing profile-set)
+(def (agentic-ai-lab-testing-check-user-profile-set testing profile-set)
   (unless (.slot? testing '.check-user-profile-set)
     (error "testing interface has no user profile-set policy" testing))
   (.call testing .check-user-profile-set profile-set))
 
-(def (poo-flow-testing-admit-user-profile! testing profile)
-  (let (receipt (poo-flow-testing-check-user-profile testing profile))
+(def (agentic-ai-lab-testing-admit-user-profile! testing profile)
+  (let (receipt (agentic-ai-lab-testing-check-user-profile testing profile))
     (unless (yuanxu-user-profile-policy-admitted? receipt)
-      (error "POO Flow user profile policy rejected declaration" receipt))
+      (error "Agentic AI Lab user profile policy rejected declaration" receipt))
     receipt))
 
-(def (poo-flow-testing-admit-user-profile-set! testing profile-set)
-  (let (receipt (poo-flow-testing-check-user-profile-set testing profile-set))
+(def (agentic-ai-lab-testing-admit-user-profile-set! testing profile-set)
+  (let (receipt (agentic-ai-lab-testing-check-user-profile-set testing profile-set))
     (unless (yuanxu-user-profile-set-policy-admitted? receipt)
-      (error "POO Flow user profile-set policy rejected declaration" receipt))
+      (error "Agentic AI Lab user profile-set policy rejected declaration" receipt))
     receipt))

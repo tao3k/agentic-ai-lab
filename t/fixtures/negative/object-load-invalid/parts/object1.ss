@@ -5,7 +5,7 @@
 
 ;;; This object intentionally references an unknown type so validation proves
 ;;; load! reports schema errors at the included fragment boundary.
-;; : [PooFlowModuleObject]
+;; : [AgenticAILabModuleObject]
 (list
  (yuanxu-module-object
   'objects.fixture.invalid

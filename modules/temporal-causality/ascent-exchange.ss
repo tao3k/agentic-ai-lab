@@ -8,16 +8,16 @@
         (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/modules/temporal-causality/types
-                 poo-flow-causal-event-graph? poo-flow-causal-cut?)
-        (only-in :poo-flow/modules/temporal-causality/funs poo-flow-causal-cut)
-        (only-in :poo-flow/modules/temporal-causality/time/types poo-flow-temporal-instant?)
-        (only-in :poo-flow/modules/temporal-causality/time/uncertainty-types
-                 poo-flow-temporal-bounded-observation?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/types
+                 agentic-ai-lab-causal-event-graph? agentic-ai-lab-causal-cut?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/funs agentic-ai-lab-causal-cut)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/types agentic-ai-lab-temporal-instant?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+                 agentic-ai-lab-temporal-bounded-observation?)
         (only-in :gerbil-ascent/temporal/lens
                  temporal-interval temporal-lens temporal-source temporal-solve temporal-verify))
-(export poo-flow-ascent-event-binding poo-flow-ascent-exchange
-        poo-flow-ascent-exchange-solve poo-flow-ascent-exchange-verify)
+(export agentic-ai-lab-ascent-event-binding agentic-ai-lab-ascent-exchange
+        agentic-ai-lab-ascent-exchange-solve agentic-ai-lab-ascent-exchange-verify)
 
 (def (text? x) (and (string? x) (> (string-length x) 0)))
 (def (id? x) (and (symbol? x) (not (eq? x 'unknown))))
@@ -26,7 +26,7 @@
 (def (slots? x names)
   (and (object? x) (andmap (lambda (name) (.slot? x name)) names)))
 (def (observed-instant? x)
-  (and (poo-flow-temporal-instant? x) (eq? (.ref x 'modality) 'observed)))
+  (and (agentic-ai-lab-temporal-instant? x) (eq? (.ref x 'modality) 'observed)))
 (def (instant-data x)
   (map (lambda (slot) (.ref x slot))
        '(identity domain-identity coordinate provenance-identity modality)))
@@ -41,14 +41,14 @@
                            receipt-identity attestation-identity attempt-identity schema-identity))))))
 (def (binding? x)
   (and (slots? x '(kind event-identity native-identity valid-time knowledge-time))
-       (eq? (.ref x 'kind) 'poo-flow.ascent-event-binding.v1)
+       (eq? (.ref x 'kind) 'agentic-ai-lab.ascent-event-binding.v1)
        (text? (.ref x 'event-identity)) (id? (.ref x 'native-identity))
        (let (v (.ref x 'valid-time))
-         (or (not v) (observed-instant? v) (poo-flow-temporal-bounded-observation? v)))
+         (or (not v) (observed-instant? v) (agentic-ai-lab-temporal-bounded-observation? v)))
        (observed-instant? (.ref x 'knowledge-time))))
 
-(def (poo-flow-ascent-event-binding event-id native-id valid-value knowledge-value)
-  (let (binding (.o kind: 'poo-flow.ascent-event-binding.v1
+(def (agentic-ai-lab-ascent-event-binding event-id native-id valid-value knowledge-value)
+  (let (binding (.o kind: 'agentic-ai-lab.ascent-event-binding.v1
                    event-identity: event-id native-identity: native-id
                    valid-time: valid-value knowledge-time: knowledge-value))
     (unless (binding? binding) (error "invalid ASCENT event binding"))
@@ -71,10 +71,10 @@
 ;;; Both domains are explicit: the common native clock name identifies this
 ;;; declared pair of axes. Acquisition time and cut logical time are never used
 ;;; as a replacement for the caller's knowledge coordinate.
-(def (poo-flow-ascent-exchange graph cut bindings source-name generation clock
+(def (agentic-ai-lab-ascent-exchange graph cut bindings source-name generation clock
                               valid-domain knowledge-domain cut-name
                               start end as-of horizon closed?)
-  (unless (and (poo-flow-causal-event-graph? graph) (poo-flow-causal-cut? cut)
+  (unless (and (agentic-ai-lab-causal-event-graph? graph) (agentic-ai-lab-causal-cut? cut)
                (id? source-name) (boolean? closed?) (text? valid-domain) (text? knowledge-domain)
                (list? bindings) (<= (length bindings) 256) (andmap binding? bindings)
                (unique? (map (lambda (b) (.ref b 'event-identity)) bindings))
@@ -82,7 +82,7 @@
     (error "invalid ASCENT exchange"))
   ;; Recompute owner cut selection instead of trusting a caller's complete? slot.
   (unless (equal? (cut-data cut)
-                  (cut-data (poo-flow-causal-cut graph (.ref cut 'as-of-position))))
+                  (cut-data (agentic-ai-lab-causal-cut graph (.ref cut 'as-of-position))))
     (error "ASCENT exchange cut does not match the supplied graph"))
   (let* ((events (.ref graph 'events))
          (ordered (list-sort
@@ -123,7 +123,7 @@
            ;; This derived snapshot name is content integrity, not authentication.
            (source-id (string->symbol
                        (string-append "poo-exchange-"
-                         (digest (list 'poo-flow.ascent-exchange.v1 source-name generation clock
+                         (digest (list 'agentic-ai-lab.ascent-exchange.v1 source-name generation clock
                                        valid-domain knowledge-domain (cut-data cut)
                                        (.ref graph 'identity) (map event-data events)
                                        (map (lambda (b)
@@ -132,14 +132,14 @@
                                                     (instant-data (.ref b 'knowledge-time)))) ordered))))))
            (source-value (temporal-source source-id generation clock rows parents))
            (lookup (map (lambda (b) (cons (string-copy (.ref b 'event-identity)) (.ref b 'native-identity))) ordered)))
-      (.o kind: 'poo-flow.ascent-exchange.v1 lens: lens-value source: source-value
+      (.o kind: 'agentic-ai-lab.ascent-exchange.v1 lens: lens-value source: source-value
           native-root: (lambda (name)
                          (let (entry (assoc name lookup))
                            (if entry (cdr entry) (error "unmapped ASCENT root" name))))))))
 
-(def (poo-flow-ascent-exchange-solve exchange root)
+(def (agentic-ai-lab-ascent-exchange-solve exchange root)
   (temporal-solve (.ref exchange 'lens) (.ref exchange 'source)
                   ((.ref exchange 'native-root) root)))
-(def (poo-flow-ascent-exchange-verify exchange root answer)
+(def (agentic-ai-lab-ascent-exchange-verify exchange root answer)
   (temporal-verify (.ref exchange 'lens) (.ref exchange 'source)
                    ((.ref exchange 'native-root) root) answer))

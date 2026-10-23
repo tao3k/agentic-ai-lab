@@ -92,7 +92,7 @@
 (def (line-present? lines expected)
   (member expected lines))
 
-(def (poo-flow-performance-matrix-verify runtime-path native-proof-path
+(def (agentic-ai-lab-performance-matrix-verify runtime-path native-proof-path
                                          python-proof-path)
   (let* ((runtime-lines (receipt-lines runtime-path))
          (runtime-blocks-value (receipt-blocks runtime-lines))
@@ -126,7 +126,7 @@
                                 "caller-output-allocations-per-item=0"))
       (reject! 'invalid-python-proof-baseline python-proof-path))
     (object<-alist
-     (list (cons 'kind 'poo-flow.performance-matrix-verification.v1)
+     (list (cons 'kind 'agentic-ai-lab.performance-matrix-verification.v1)
            (cons 'accepted? (null? diagnostics))
            (cons 'runtime-block-count (length runtime-blocks-value))
            (cons 'batch-sizes +runtime-batches+)

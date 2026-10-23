@@ -33,7 +33,7 @@ class ExternalModuleTest(unittest.TestCase):
         self.fake_bazel = root / "fake_bazel.py"
         self.fake_bazel.write_text(
             """import json, os, sys
-with open(os.environ['POO_FLOW_EXTERNAL_BAZEL_ARGS_LOG'], 'a', encoding='utf-8') as stream:
+with open(os.environ['AGENTIC_AI_LAB_EXTERNAL_BAZEL_ARGS_LOG'], 'a', encoding='utf-8') as stream:
     stream.write(json.dumps(sys.argv[1:]) + '\\n')
 raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:]) else 0)
 """,
@@ -41,7 +41,7 @@ raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:
         )
         self.environment = patch.dict(
             os.environ,
-            {"POO_FLOW_EXTERNAL_BAZEL_ARGS_LOG": str(self.log)},
+            {"AGENTIC_AI_LAB_EXTERNAL_BAZEL_ARGS_LOG": str(self.log)},
         )
         self.environment.start()
 

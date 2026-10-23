@@ -106,7 +106,7 @@ filegroup(
 )
 
 gerbil_project_compile(
-    name = "poo_flow_core_package",
+    name = "yuanxu_package",
     srcs = [":core_module_sources"],
     build_script = "core/build.ss",
     require_library_output = True,
@@ -122,7 +122,7 @@ gerbil_project_compile(
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_parser_sources//:source_resolution_receipt"],
     deps = [
-        ":poo_flow_core_package",
+        ":yuanxu_package",
     ],
 )
 
@@ -134,7 +134,7 @@ gerbil_project_compile(
     source_resolution_receipts = ["@gerbil_ascent_sources//:source_resolution_receipt"],
     deps = [
         ":asp_gerbil_scheme_package",
-        ":poo_flow_core_package",
+        ":yuanxu_package",
     ],
 )
 
@@ -145,7 +145,7 @@ filegroup(
         ":gerbil_ascent_package",
         ":gerbil_poo_package",
         ":orgize_package",
-        ":poo_flow_core_package",
+        ":yuanxu_package",
     ],
 )
 
@@ -155,7 +155,7 @@ filegroup(
         ("gerbil_poo_package_receipt", ":gerbil_poo_package"),
         ("asp_gerbil_scheme_package_receipt", ":asp_gerbil_scheme_package"),
         ("orgize_package_receipt", ":orgize_package"),
-        ("poo_flow_core_package_receipt", ":poo_flow_core_package"),
+        ("yuanxu_package_receipt", ":yuanxu_package"),
         ("gerbil_parser_package_receipt", ":gerbil_parser_package"),
         ("gerbil_ascent_package_receipt", ":gerbil_ascent_package"),
     ]
@@ -198,8 +198,8 @@ filegroup(name = "compile_log", srcs = [":compile"], output_group = "log")
 
 gerbil_project_projection(
     name = "wheel_smoke_projection_artifact",
-    output_name = "wheel_smoke.ss.poo-flow-projection.sexp",
+    output_name = "wheel_smoke.ss.agentic-ai-lab-projection.sexp",
     project = ":compile",
     projection_source = ":runtime_load_projection_source",
-    source = "//packages/python-runtime/src/poo_flow_runtime:wheel_smoke_projection_source",
+    source = "//packages/python-runtime/src/agentic_ai_lab_runtime:wheel_smoke_projection_source",
 )

@@ -7,7 +7,7 @@
         (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/module-system/source/publication module-publication?)
-        (only-in :poo-flow/scenarios/aws/types AWSProfileContract.
+        (only-in :agentic-ai-lab/scenarios/aws/types AWSProfileContract.
           AWSInterfaceContract aws-scenario-contract))
 (export aws-scenario-contract-test)
 ;; Deliberately a tiny Schema fixture, never claimed to be the AWS export.

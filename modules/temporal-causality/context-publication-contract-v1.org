@@ -70,7 +70,7 @@ execution and Python oracle replay on the delivered head remain the closure gate
 
 | Owner | Required work |
 |-------+---------------|
-| POO Flow Library | Replay original proof; compare current applicability; canonicalize restrictions; emit a material-bound flow decision |
+| Agentic AI Lab Library | Replay original proof; compare current applicability; canonicalize restrictions; emit a material-bound flow decision |
 | MRR runtime | Preserve original identities and typed candidate; invoke Library; transport exact immutable material and decision to Data |
 | MRR Data Backend/Protocols | Resolve protected material; own durable source/policy/grant frontier; recheck fences and lease in one conditional commit; persist pointer/history/outbox; recover |
 | Python Runtime | Exercise the Library and adapter contract; provider IO remains separate |

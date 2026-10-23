@@ -1,8 +1,8 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test :poo-flow/modules/ai-agentic-context/clue-exchange
-        (only-in :poo-flow/modules/temporal-causality/trajectory/ascent-ledger ascent-trajectory))
+(import :std/test :agentic-ai-lab/modules/ai-agentic-context/clue-exchange
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/ascent-ledger ascent-trajectory))
 (export clue-exchange-test)
 
 (def (clue id claim polarity role source (factors []) (links []))

@@ -4,7 +4,7 @@
 import unittest
 from fractions import Fraction
 from types import SimpleNamespace
-from poo_flow_testing.assessment_studies.domain_observations import group_schedule, series_precision
+from agentic_ai_lab_testing.assessment_studies.domain_observations import group_schedule, series_precision
 
 def root_with_boundary_term(p, n, x, prec):
     prec = Fraction(5,2)

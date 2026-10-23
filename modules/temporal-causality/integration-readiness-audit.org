@@ -25,7 +25,7 @@ remains a separate atomicity gate.
 
 * Audited identities and method
 
-Source audit at POO Flow =a7566036315304b9439b7fd3beb21715fd2c0a95=,
+Source audit at Agentic AI Lab =a7566036315304b9439b7fd3beb21715fd2c0a95=,
 MRR =faedb3e49d63b0ba32e74a037a1bd0859a18b9c6= and
 MRR Data =55285d510bd655fd546d73e07400c642bdf534e4=.
 Both Rust checkouts were clean and inspected read-only. This audit did not run
@@ -140,7 +140,7 @@ negative cases must continue to pass under that exact dependency head.
 
 ** R2: Implement one POO-owned Rust runtime consumer
 
-Use =bindings/runtime-c/include/poo_flow/semantic.h= rather than a Python bridge
+Use =bindings/runtime-c/include/agentic_ai_lab/semantic.h= rather than a Python bridge
 or a new Rust classifier. The native lifetime is process-global, thread-affine
 and terminal on close. Open/call/release/close on one dedicated OS owner thread
 with a bounded queue. Do not dispatch native calls on arbitrary Tokio workers,

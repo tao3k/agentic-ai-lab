@@ -4,37 +4,37 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :clan/poo/object :std/test
-        :poo-flow/modules/query/semantic/organization-bundle
-        :poo-flow/modules/query/semantic/organization-bundle-kernel
-        :poo-flow/modules/workflow/contracts/organization-bundle-runtime-v0)
+        :agentic-ai-lab/modules/query/semantic/organization-bundle
+        :agentic-ai-lab/modules/query/semantic/organization-bundle-kernel
+        :agentic-ai-lab/modules/workflow/contracts/organization-bundle-runtime-v0)
 
 
 (def (runtime-v0-bundle)
-  (poo-flow-organization-bundle
+  (agentic-ai-lab-organization-bundle
    12
-   (poo-flow-organization-organization-facet
-    (list (poo-flow-organization-principal 'pp)
-          (poo-flow-organization-principal 'pc)
-          (poo-flow-organization-role 'rp)
-          (poo-flow-organization-role 'rc)
-          (poo-flow-organization-agent 'parent 'pp 'rp #f
+   (agentic-ai-lab-organization-organization-facet
+    (list (agentic-ai-lab-organization-principal 'pp)
+          (agentic-ai-lab-organization-principal 'pc)
+          (agentic-ai-lab-organization-role 'rp)
+          (agentic-ai-lab-organization-role 'rc)
+          (agentic-ai-lab-organization-agent 'parent 'pp 'rp #f
                                        '(write search) '(public private))
-          (poo-flow-organization-agent 'child 'pc 'rc 'parent
+          (agentic-ai-lab-organization-agent 'child 'pc 'rc 'parent
                                        '(search) '(public))))
-   (poo-flow-organization-authority-facet
-    (list (poo-flow-organization-capability 'write #t)
-          (poo-flow-organization-capability 'search #t))
-    (list (poo-flow-organization-delegation 'parent 'child 'search)))
-   (poo-flow-organization-context-facet
-    (list (poo-flow-organization-context-projection 'child '(public))))
-   (poo-flow-organization-protocol-facet
-    (list (poo-flow-organization-tool-effect 'tool 'search 'external-tool)) '())
-   (poo-flow-organization-empty-evidence-facet)))
+   (agentic-ai-lab-organization-authority-facet
+    (list (agentic-ai-lab-organization-capability 'write #t)
+          (agentic-ai-lab-organization-capability 'search #t))
+    (list (agentic-ai-lab-organization-delegation 'parent 'child 'search)))
+   (agentic-ai-lab-organization-context-facet
+    (list (agentic-ai-lab-organization-context-projection 'child '(public))))
+   (agentic-ai-lab-organization-protocol-facet
+    (list (agentic-ai-lab-organization-tool-effect 'tool 'search 'external-tool)) '())
+   (agentic-ai-lab-organization-empty-evidence-facet)))
 
 (def (validated-state)
-  (let-values (((candidate _) (poo-flow-organization-bundle-kernel-open
+  (let-values (((candidate _) (agentic-ai-lab-organization-bundle-kernel-open
                                 (runtime-v0-bundle))))
-    (let-values (((state _) (poo-flow-organization-bundle-kernel-validate candidate)))
+    (let-values (((state _) (agentic-ai-lab-organization-bundle-kernel-validate candidate)))
       state)))
 
 (def organization-bundle-runtime-v0-test
@@ -42,19 +42,19 @@
    "organization Bundle runtime v0 control packet"
    (yuanxu-test-case "validated Kernel projects deterministic pre-v1 packet"
      (let* ((state (validated-state))
-            (packet (poo-flow-runtime-v0-control-packet state)))
+            (packet (agentic-ai-lab-runtime-v0-control-packet state)))
        (check-equal? (.ref packet 'abi-major) 0)
        (check-equal? (.ref packet 'abi-minor) 1)
        (check-equal? (.ref packet 'bundle-schema)
-                     'poo-flow.organization-bundle.draft.3)
+                     'agentic-ai-lab.organization-bundle.draft.3)
        (check-equal? (.ref packet 'bundle-epoch) 12)
        (check-equal? (.ref packet 'abi-v1-frozen?) #f)))
    (yuanxu-test-case "candidate Kernel cannot cross runtime boundary"
-     (let-values (((candidate _) (poo-flow-organization-bundle-kernel-open
+     (let-values (((candidate _) (agentic-ai-lab-organization-bundle-kernel-open
                                    (runtime-v0-bundle))))
        (check-equal?
         (with-catch (lambda (_failure) #t)
                     (lambda ()
-                      (poo-flow-runtime-v0-control-packet candidate)
+                      (agentic-ai-lab-runtime-v0-control-packet candidate)
                       #f))
         #t)))))

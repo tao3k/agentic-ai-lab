@@ -46,21 +46,21 @@
 
 ;; : (-> Alist Void)
 (def (module-extension-list-merge-display-receipt receipt)
-  (display "[poo-flow-benchmark] module-extension-list-merge ")
+  (display "[agentic-ai-lab-benchmark] module-extension-list-merge ")
   (write receipt)
   (newline)
   (force-output))
 
 ;; : (-> Integer Integer Integer [Integer])
 (def (module-extension-list-merge-batch start size step)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    size
    (lambda (index)
      (+ start (* index step)))))
 
 ;; : (-> Integer Integer Integer [PooGraphOperation])
 (def (module-extension-list-merge-operations batch-count batch-size overlap-step)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    batch-count
    (lambda (batch-index)
      (yuanxu-graph-slot-append

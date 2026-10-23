@@ -5,7 +5,7 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/error Error? Error-message)
         (only-in :yuanxu/module-system/source/admission module-source-read module-source-admit-current!)
-        (only-in :poo-flow/modules/nix/objects NixSource.)
+        (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/types yuanxu-predicate-contract))
 (export ops-selected-packages-test)

@@ -2,18 +2,18 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 from copy import deepcopy
 import pytest
-from poo_flow_runtime.semantic_runtime import SemanticRuntimeError
+from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
 from test_temporal_support import request as support_request
 
 def instant(n):
     return dict(identity=f'at-{n}',domain='policy-clock',coordinate=n,provenance='host-observation',modality='observed')
 def refresh(identity='policy-abi',revision='r1',generation=1,now=1):
-    return dict(schema='poo-flow.temporal-policy-refresh-request.v1',
+    return dict(schema='agentic-ai-lab.temporal-policy-refresh-request.v1',
                 policy=dict(identity=identity,revision=revision,start=instant(1),end=instant(4)),
                 generation=generation,effectiveAt=instant(now))
 def guard(registered):
     task=support_request();task['program']['policy']=registered['policyIdentity']
-    return dict(schema='poo-flow.temporal-support-guard-request.v1',expectedGeneration=registered['generation'],
+    return dict(schema='agentic-ai-lab.temporal-support-guard-request.v1',expectedGeneration=registered['generation'],
                 expectedPolicyDigest=registered['policyDigest'],task=task)
 
 def test_real_host_policy_control_and_current_clock(runtime):
@@ -49,13 +49,13 @@ def test_control_is_not_a_model_tool_even_through_raw_c(runtime):
     req=refresh('control-lane')
     with pytest.raises(ValueError,match='host control'):runtime.call('$host.temporal.policy.refresh',req)
     ffi=runtime._ffi;lib=runtime._lib
-    result=ffi.new('poo_flow_semantic_result *')
-    from poo_flow_runtime.scheme_wire import dumps
+    result=ffi.new('agentic_ai_lab_semantic_result *')
+    from agentic_ai_lab_runtime.scheme_wire import dumps
     data=dumps(req).encode()
     try:
-        assert runtime._submit_host(lambda:lib.poo_flow_python_semantic_call(b'$host.temporal.policy.refresh',data,len(data),result)).result()==3
+        assert runtime._submit_host(lambda:lib.agentic_ai_lab_python_semantic_call(b'$host.temporal.policy.refresh',data,len(data),result)).result()==3
         assert result.status == 3 and result.length == 0 and result.data == ffi.NULL
-    finally:lib.poo_flow_python_semantic_release(result)
+    finally:lib.agentic_ai_lab_python_semantic_release(result)
     fake=dict(policyIdentity='control-lane',generation=1,policyDigest='unregistered')
     with pytest.raises(SemanticRuntimeError):runtime.guard_temporal_support(guard(fake))
     registered=runtime.refresh_temporal_policy(req)
@@ -69,7 +69,7 @@ def test_guard_cannot_replace_registered_state(runtime,mode):
     if mode=='clock':bad['effectiveAt']=instant(0)
     if mode=='policy':bad['policy']=refresh()['policy']
     if mode=='proof':bad['proofAdmitted']=True
-    if mode=='schema':bad['schema']='poo-flow.temporal-support-guard-request.v2'
+    if mode=='schema':bad['schema']='agentic-ai-lab.temporal-support-guard-request.v2'
     if mode=='generation':bad['expectedGeneration']+=1
     with pytest.raises(SemanticRuntimeError):runtime.guard_temporal_support(bad)
     assert runtime.guard_temporal_support(query)==before
@@ -79,7 +79,7 @@ def test_rejected_refresh_leaves_previous_state(runtime,mode):
     original=refresh('refresh-reject-'+mode)
     reg=runtime.refresh_temporal_policy(original);query=guard(reg);before=runtime.guard_temporal_support(query)
     bad=deepcopy(original);bad.update(generation=2)
-    if mode=='schema':bad['schema']='poo-flow.temporal-policy-refresh-request.v2'
+    if mode=='schema':bad['schema']='agentic-ai-lab.temporal-policy-refresh-request.v2'
     if mode=='extra':bad['actionAuthorized']=True
     if mode=='domain':bad['effectiveAt']['domain']='foreign'
     if mode=='modality':bad['effectiveAt']['modality']='predicted'
@@ -90,8 +90,8 @@ def test_rejected_refresh_leaves_previous_state(runtime,mode):
 def test_original_rust_policy_projection_parity(runtime):
     import os
     from pathlib import Path
-    from poo_flow_runtime.scheme_wire import loads
-    path = os.environ.get('POO_FLOW_POLICY_ORACLE')
+    from agentic_ai_lab_runtime.scheme_wire import loads
+    path = os.environ.get('AGENTIC_AI_LAB_POLICY_ORACLE')
     if not path:
         pytest.skip('original Rust policy projection must be configured')
     original = loads(Path(path).read_text())
@@ -116,7 +116,7 @@ def test_policy_start_boundary_and_generation_conflict(runtime):
 def test_named_claim_selection_fences_context_and_preserves_history(runtime):
     reg = runtime.refresh_temporal_policy(refresh('claim-selection'))
     q = guard(reg)
-    q.update(schema='poo-flow.temporal-support-claim-request.v1',
+    q.update(schema='agentic-ai-lab.temporal-support-claim-request.v1',
              claim='claim', expectedContextBinding=False)
     q['task']['program']['conclusions'] = ['claim', 'empty']
     first = runtime.select_temporal_claim(q)

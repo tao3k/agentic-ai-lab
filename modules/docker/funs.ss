@@ -9,7 +9,7 @@
 ;;; Runtime contract: this module emits request data only.
 ;;; Runtime contract: image pulls and mounts stay behind runtime commands.
 ;;; Runtime contract: process control and CAS writes stay out of Scheme.
-;;; Dependency: generic sandbox resources live in =:poo-flow/modules/agent-sandbox/resource=.
+;;; Dependency: generic sandbox resources live in =:agentic-ai-lab/modules/agent-sandbox/resource=.
 ;;; Policy evidence: tests should trust the installed module registry.
 
 (import (only-in :yuanxu/modules/funflow/control-plane/task
@@ -29,7 +29,7 @@
         (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
         (only-in :yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry task-flow flow-name flow-steps)
-        (only-in :poo-flow/modules/agent-sandbox/resource
+        (only-in :agentic-ai-lab/modules/agent-sandbox/resource
                  sandbox-volume-bindings->request
                  sandbox-volume-bindings-merge))
 
@@ -77,7 +77,7 @@
 ;;; can discover report-only handoff data without guessing task entrypoints.
 ;; : (-> Unit Symbol)
 (def +docker-task-input-receipt-schema+
-  'poo-flow.extensions.docker-task-input-receipt.v1)
+  'agentic-ai-lab.extensions.docker-task-input-receipt.v1)
 
 ;;; Docker task input mirrors Funflow's DockerTaskInput: inputBindings plus
 ;;; placeholder argument values. It is input data to the flow, not task config.

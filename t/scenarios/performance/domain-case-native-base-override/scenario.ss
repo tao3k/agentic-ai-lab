@@ -98,7 +98,7 @@
   (error "native base/override did not improve the composition scenario"
          baseline-p95-us candidate-p95-us))
 
-(displayln "schema=poo-flow.domain-case-native-base-override.v1")
+(displayln "schema=agentic-ai-lab.domain-case-native-base-override.v1")
 (displayln "sample-count=" +sample-count+)
 (displayln "agent-count=" +agent-count+)
 (displayln "shared-slot-count=" +shared-slot-count+)

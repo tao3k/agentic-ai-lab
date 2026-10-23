@@ -15,7 +15,7 @@
                  yuanxu-user-module-selection->alist
                  yuanxu-user-module-when)
         (only-in :yuanxu/module-system/selection/contract yuanxu-use-module-contract-validation-valid?)
-        (only-in :poo-flow/modules/workflow/scenario/configuration/selection-policy poo-flow-product-use-module poo-flow-product-selection-admit! poo-flow-product-selection-validation))
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module agentic-ai-lab-product-selection-admit! agentic-ai-lab-product-selection-validation))
 
 (export user-interface-config-syntax-contract-test)
 
@@ -24,10 +24,10 @@
     (if entry (cdr entry) #f)))
 
 (def user-interface-config-syntax-contract-test
-  (test-suite "poo-flow user interface config syntax contract"
+  (test-suite "agentic-ai-lab user interface config syntax contract"
     (yuanxu-test-case "builds module selections and conditional gates"
       (let ((nono-selections
-             (poo-flow-product-use-module
+             (agentic-ai-lab-product-use-module
               'nono-sandbox
               '(+nono +doctor)))
             (flow-selection
@@ -51,11 +51,11 @@
                         (enabled? . #t)))))
     (yuanxu-test-case "validates use-module declarations before projection"
       (let* ((valid-selections
-              (poo-flow-product-use-module
+              (agentic-ai-lab-product-use-module
                'nono-sandbox
                '(+nono +doctor)))
              (valid-validation
-              (poo-flow-product-selection-validation
+              (agentic-ai-lab-product-selection-validation
                'nono-sandbox
                valid-selections))
              (invalid-selection
@@ -66,13 +66,13 @@
         (check-equal?
          (syntax-contract-alist-ref valid-validation 'selection-count)
          1)
-        (check-equal? (poo-flow-product-selection-admit!
+        (check-equal? (agentic-ai-lab-product-selection-admit!
                        'nono-sandbox
                        valid-selections)
                       valid-selections)
         (check-equal?
          (yuanxu-use-module-contract-validation-valid?
-          (poo-flow-product-selection-validation
+          (agentic-ai-lab-product-selection-validation
            'workflow
            (list invalid-selection)))
          #f)
@@ -80,7 +80,7 @@
          (with-catch
           (lambda (_) #t)
           (lambda ()
-            (poo-flow-product-selection-admit!
+            (agentic-ai-lab-product-selection-admit!
              'nono-sandbox
              '(not-a-selection))
             #f))

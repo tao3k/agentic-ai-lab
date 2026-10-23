@@ -10,7 +10,7 @@ import subprocess
 import sys
 import unittest
 
-from poo_flow_testing.assessment_studies import inference_reuse_study as study
+from agentic_ai_lab_testing.assessment_studies import inference_reuse_study as study
 
 
 class InferenceReuse(unittest.TestCase):
@@ -51,7 +51,7 @@ class InferenceReuse(unittest.TestCase):
     def test_actual_scheme_repeat_and_source_update_match_fresh_evaluation(self):
         code='''
 from ascent import Engine, EngineError
-from poo_flow_testing.assessment_studies import inference_reuse_study as s
+from agentic_ai_lab_testing.assessment_studies import inference_reuse_study as s
 import os
 with Engine() as e:
     for i in range(4):
@@ -82,7 +82,7 @@ with Engine() as e:
         with tempfile.TemporaryDirectory() as directory:
             output=Path(directory)/'receipt.json'
             library=Path(importlib.util.find_spec('ascent._core').origin)
-            subprocess.run([sys.executable,'-u','-m','poo_flow_testing.assessment_studies.retained_inference',
+            subprocess.run([sys.executable,'-u','-m','agentic_ai_lab_testing.assessment_studies.retained_inference',
                 str(study.ROOT/'t/qualification/fixtures/inference-reuse/conformance.json'),
                 str(library),str(output)],check=True)
             receipt=json.loads(output.read_text())

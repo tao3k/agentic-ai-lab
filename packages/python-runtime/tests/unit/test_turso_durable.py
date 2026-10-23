@@ -7,17 +7,17 @@ from __future__ import annotations
 import pytest
 import anyio
 
-from poo_flow_runtime.checkpoints import RuntimeGraphCheckpoint
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime.checkpoints import RuntimeGraphCheckpoint
+from agentic_ai_lab_runtime import (
     TursoRuntimeGraphBackend,
     turso_runtime_graph_backend,
 )
-from poo_flow_runtime.durable import (
+from agentic_ai_lab_runtime.durable import (
     TursoRuntimeGraphCheckpointer,
     TursoRuntimeGraphStore,
 )
-from poo_flow_runtime.program import RuntimeGraphProgram, RuntimeGraphRegistries
-from poo_flow_runtime.runtime_graph import (
+from agentic_ai_lab_runtime.program import RuntimeGraphProgram, RuntimeGraphRegistries
+from agentic_ai_lab_runtime.runtime_graph import (
     END,
     START,
     RuntimeGraphEdge,

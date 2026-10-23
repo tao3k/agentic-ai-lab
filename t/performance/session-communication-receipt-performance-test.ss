@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-communication-receipt-performance-test)
 
@@ -34,7 +34,7 @@
 
 ;; : (-> Alist Void)
 (def (communication-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] session-communication-receipt ")
+  (display "[agentic-ai-lab-benchmark] session-communication-receipt ")
   (write receipt)
   (newline)
   (force-output))
@@ -58,7 +58,7 @@
          (target-root (if (eq? relation-kind 'cross-root)
                         'root/release
                         'root/main)))
-    (poo-flow-session-communication-receipt
+    (agentic-ai-lab-session-communication-receipt
      'project/performance
      relation-kind
      'root/main
@@ -79,10 +79,10 @@
 ;; : (-> Integer Alist)
 (def (communication-performance-summary count)
   (let* ((receipts
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            count
            communication-performance-receipt))
-         (rows (poo-flow-session-communication-receipts->alists receipts)))
+         (rows (agentic-ai-lab-session-communication-receipts->alists receipts)))
     (map (lambda (entry)
            (cons (car entry) ((cdr entry))))
          (list

@@ -52,7 +52,7 @@
   (cdr (assoc key row)))
 
 (def (graph-algorithm-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] graph-analysis-linear-dag ")
+  (display "[agentic-ai-lab-benchmark] graph-analysis-linear-dag ")
   (write receipt)
   (newline)
   (force-output))

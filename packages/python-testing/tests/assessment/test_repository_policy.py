@@ -8,7 +8,7 @@ import os
 import subprocess
 import sys
 
-from poo_flow_testing.assessment_studies.repository_policy import artifact_path, violation
+from agentic_ai_lab_testing.assessment_studies.repository_policy import artifact_path, violation
 
 
 class RepositoryPolicyTests(unittest.TestCase):
@@ -63,7 +63,7 @@ class RepositoryPolicyTests(unittest.TestCase):
             (root / 'run.stderr').write_text('retained failure\n')
             subprocess.run(['git', '-C', str(root), 'add', '-f', 'run.stderr'], check=True)
             env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[2] / 'src'))
-            result = subprocess.run([sys.executable, '-m', 'poo_flow_testing.assessment_studies.repository_policy'],
+            result = subprocess.run([sys.executable, '-m', 'agentic_ai_lab_testing.assessment_studies.repository_policy'],
                                     cwd=root, env=env, capture_output=True, text=True)
             self.assertEqual(result.returncode, 1, result.stderr)
             self.assertIn('run.stderr: execution output', result.stdout)

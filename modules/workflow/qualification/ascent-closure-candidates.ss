@@ -9,10 +9,10 @@
 
 (import (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-table-expression
-                 poo-flow-ascent-table-expression-prototype))
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+                 agentic-ai-lab-ascent-table-expression-prototype))
 
-(export poo-flow-ascent-closure-candidates)
+(export agentic-ai-lab-ascent-closure-candidates)
 
 (def (support<? left right)
   (let loop ((left left) (right right))
@@ -89,7 +89,7 @@
     (let* ((edges (.call UIntTrieSet .<-list (map car facts)))
            (width radix)
            (expression
-            (.mix poo-flow-ascent-table-expression-prototype
+            (.mix agentic-ai-lab-ascent-table-expression-prototype
                   (.o (source-pairs edges) (radix width))))
            (pairs (.ref expression 'shortest-distance-pairs))
            (distance-of (.ref expression 'shortest-distance-of))
@@ -120,7 +120,7 @@
           (input-count (length facts))
           (candidates (if truncated? (take all max-results) all))))))
 
-(def (poo-flow-ascent-closure-candidates
+(def (agentic-ai-lab-ascent-closure-candidates
       source-facts radix max-input-facts max-derived-pairs max-results)
   (closure-candidates source-facts radix
                       max-input-facts max-derived-pairs max-results))

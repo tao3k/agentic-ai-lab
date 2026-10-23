@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Qualification owner: measure one POO Flow build through the unique
+;;; Qualification owner: measure one Agentic AI Lab build through the unique
 ;;; build.ss entry and emit a generation-neutral Scheme receipt.  Keeping the
 ;;; observer independent of std/json lets the v18 and v19 jobs measure the
 ;;; build before the application compatibility boundary is evaluated.
@@ -23,7 +23,7 @@
            (lambda ()
              (run-process/batch '("gerbil" "build")))))
          (receipt
-          `((schema . poo-flow.darwin-gerbil-build-scenario.v1)
+          `((schema . agentic-ai-lab.darwin-gerbil-build-scenario.v1)
             (phase . ,phase)
             (toolchain . ,toolchain)
             (entrypoint . "build.ss")
@@ -36,7 +36,7 @@
      (lambda (port)
        (write receipt port)
        (newline port)))
-    (display "[poo-flow-darwin-gerbil] ")
+    (display "[agentic-ai-lab-darwin-gerbil] ")
     (write receipt)
     (newline)))
 

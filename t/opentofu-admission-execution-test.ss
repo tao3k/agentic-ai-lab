@@ -4,7 +4,7 @@
 (import :std/test :clan/poo/object
         (only-in :std/source this-source-file)
         (only-in :std/io/tempfile make-temporary-file-name)
-        (only-in :poo-flow/modules/services/opentofu/execution opentofu-execution)
+        (only-in :agentic-ai-lab/modules/services/opentofu/execution opentofu-execution)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :std/encoding/json read-json)
         (only-in :std/list/walist waref)
@@ -103,7 +103,7 @@
       (def Null (opentofu-execution execution-view 'null 'Scenario))
       ;; Parent resource was demanded before the user's scalar replacement.
       (assert 'null-parent-cached
-        (equal? (.get Null resource triggers message) "hello from POO Flow"))
+        (equal? (.get Null resource triggers message) "hello from Agentic AI Lab"))
       (assert 'null-parent-graph-cached
         (equal? (.get Null graph order) '(init validate plan apply output)))
       (.def (Hello @ Null) message: "hello from the user ${literal} %{literal}")
@@ -120,7 +120,7 @@
       (assert 'null-destroyed
         (zero? (.get executed steps destroy status)))
       (assert 'null-parent-unchanged
-        (equal? (.get Null resource triggers message) "hello from POO Flow"))
+        (equal? (.get Null resource triggers message) "hello from Agentic AI Lab"))
       (assert 'nonempty-workspace-refused
         (rejects? "workspace must be empty" (lambda () (.call Hello .run null-work))))
 

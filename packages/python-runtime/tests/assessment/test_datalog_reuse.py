@@ -1,6 +1,6 @@
 import unittest
 from ascent.datalog import read_datalog
-from poo_flow_runtime.reasoning import ReasoningRuntime, ReasoningError, EvidenceChain, FactLimits
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime, ReasoningError, EvidenceChain, FactLimits
 class ApplicationDatalogReuse(unittest.TestCase):
     def setUp(self):
         self.engine=ReasoningRuntime()
@@ -21,7 +21,7 @@ class ApplicationDatalogReuse(unittest.TestCase):
                 self.assertEqual(first['evaluationCount'],1)
                 self.assertEqual(second['evaluationCount'],1)
     def test_total_input_fact_limit_is_not_relaxed_by_repeat_fix(self):
-            from poo_flow_runtime.reasoning import FactLimits
+            from agentic_ai_lab_runtime.reasoning import FactLimits
             program, _ = read_datalog({"a": [[str(n)] for n in range(2050)],
                                           "b": [[str(n)] for n in range(2050)]},
                                          "out(X) <= a(X) & b(X)", {"answer": "out(X)"})

@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import pytest
-from poo_flow_runtime.scheme_wire import dumps, loads
+from agentic_ai_lab_runtime.scheme_wire import dumps, loads
 
 
 def test_scheme_data_roundtrip():

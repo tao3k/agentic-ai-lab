@@ -10,10 +10,10 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/policy
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/store
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/store-backend
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/store-operation)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation)
 
 (export durable-runtime-store-operation-test)
 
@@ -33,50 +33,50 @@
 ;; : (-> Alist)
 (def (test-negotiation)
   (let* ((contract
-          (poo-flow-durable-runtime-store-contract
+          (agentic-ai-lab-durable-runtime-store-contract
            'runtime-store/project
            'marlin-runtime-store
-           (poo-flow-durable-policy
+           (agentic-ai-lab-durable-policy
             'durable/runtime-store
             'objects.shared.durable
             '((repair-mode . rebuild)
               (action-classes . (replayable idempotent compensatable))))))
          (contract-receipt
-          (poo-flow-durable-runtime-store-contract->receipt
+          (agentic-ai-lab-durable-runtime-store-contract->receipt
            contract
-           '((project-id . project/poo-flow)
+           '((project-id . project/agentic-ai-lab)
              (root-session-id . session/root)
              (session-id . session/root))))
          (backend-receipt
-          (poo-flow-durable-runtime-store-backend->receipt
-           poo-flow-durable-runtime-store-backend/default)))
-    (poo-flow-durable-runtime-store-backend-negotiation contract-receipt
+          (agentic-ai-lab-durable-runtime-store-backend->receipt
+           agentic-ai-lab-durable-runtime-store-backend/default)))
+    (agentic-ai-lab-durable-runtime-store-backend-negotiation contract-receipt
                                                         backend-receipt)))
 
 ;; : TestSuite
 (def durable-runtime-store-operation-test
-  (test-suite "poo-flow durable runtime store operations"
+  (test-suite "agentic-ai-lab durable runtime store operations"
     (yuanxu-test-case "projects one operation per durable store capability"
       (let* ((negotiation (test-negotiation))
              (operations
-              (poo-flow-durable-runtime-store-operation-receipts
+              (agentic-ai-lab-durable-runtime-store-operation-receipts
                negotiation
                '((causal-refs . (event/root))
                  (watermark . event/1))))
              (rows
-              (poo-flow-durable-runtime-store-operation-receipts->alists
+              (agentic-ai-lab-durable-runtime-store-operation-receipts->alists
                operations))
              (handoff
-              (poo-flow-durable-runtime-store-operations->marlin-handoff
+              (agentic-ai-lab-durable-runtime-store-operations->marlin-handoff
                negotiation
                operations))
              (manifest (test-ref handoff 'runtime-command-manifest)))
         (check-equal? (length rows)
-                      (length +poo-flow-durable-runtime-store-operation-specs+))
+                      (length +agentic-ai-lab-durable-runtime-store-operation-specs+))
         (check-equal? (map (lambda (row) (test-ref row 'operation-kind))
                            rows)
                       (map car
-                           +poo-flow-durable-runtime-store-operation-specs+))
+                           +agentic-ai-lab-durable-runtime-store-operation-specs+))
         (check-equal? (map (lambda (row) (test-ref row 'valid?)) rows)
                       '(#t #t #t #t #t #t #t #t))
         (check-equal? (map (lambda (row) (test-ref row 'runtime-executed))
@@ -85,7 +85,7 @@
         (check-equal? (test-ref (car rows) 'ledger-kind) 'fact-log)
         (check-equal? (test-ref (car rows) 'capability-flag) 'append-fact)
         (check-equal? (test-ref handoff 'kind)
-                      'poo-flow.durable.runtime-store.operation-handoff)
+                      'agentic-ai-lab.durable.runtime-store.operation-handoff)
         (check-equal? (test-ref handoff 'handoff-ready?) #t)
         (check-equal? (test-ref handoff 'operation-count) 8)
         (check-equal? (test-ref manifest 'argv)
@@ -96,14 +96,14 @@
 
     (yuanxu-test-case "rejects unsupported operation kinds and invalid causal refs"
       (let* ((receipt
-              (poo-flow-durable-runtime-store-operation
+              (agentic-ai-lab-durable-runtime-store-operation
                'op/invalid
                'teleport
                (test-negotiation)
                '((summary . invalid))
                '((causal-refs . ("not-symbol")))))
              (row
-              (poo-flow-durable-runtime-store-operation-receipt->alist
+              (agentic-ai-lab-durable-runtime-store-operation-receipt->alist
                receipt))
              (diagnostics (test-ref row 'diagnostics)))
         (check-equal? (test-ref row 'valid?) #f)

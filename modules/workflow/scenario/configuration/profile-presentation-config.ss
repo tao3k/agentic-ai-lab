@@ -7,35 +7,35 @@
 ;;; Invariant: presentation is shallow inspection data and does not activate modules.
 
 (import (only-in :clan/poo/object .ref object<-alist)
-        :poo-flow/modules/module-authoring/module-interface
+        :agentic-ai-lab/modules/module-authoring/module-interface
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/workflow/scenario/configuration/entrypoints
-        :poo-flow/modules/sandbox-core/profile-catalog
-        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
-                 pooFlowUserConfigPresentation)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/sandbox-core/profile-catalog
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation)
         :yuanxu/utilities/final-projection-syntax
         :yuanxu/profile-composition/user-profile)
 
-(export pooFlowUserProfilePresentation
-        pooFlowUserProfileSetPresentation)
+(export agenticAiLabUserProfilePresentation
+        agenticAiLabUserProfileSetPresentation)
 
 ;; : (-> [PooUserModuleSelection] [Symbol])
-(def (poo-flow-user-profile-module-keys modules)
+(def (agentic-ai-lab-user-profile-module-keys modules)
   (map yuanxu-user-module-selection-key modules))
 
 ;; : (-> [PooUserProfile] [Alist])
-(def (poo-flow-user-profile-summaries profiles)
-  (map poo-flow-user-profile-summary->alist profiles))
+(def (agentic-ai-lab-user-profile-summaries profiles)
+  (map agentic-ai-lab-user-profile-summary->alist profiles))
 
 ;;; Profile summaries avoid embedding POO profile objects in presentations.
 ;; : (-> PooUserProfile Alist)
 (defpoo-final-projection
-  poo-flow-user-profile-summary->alist (profile)
+  agentic-ai-lab-user-profile-summary->alist (profile)
   (bindings ((modules (yuanxu-user-profile-modules profile))))
   (fields ((profile-name (yuanxu-user-profile-name profile))
            (module-count (length modules))
            (module-keys
-            (poo-flow-user-profile-module-keys modules))
+            (agentic-ai-lab-user-profile-module-keys modules))
            (module-bundle-count
             (length (yuanxu-user-profile-module-bundles profile)))
            (setting-keys (yuanxu-user-profile-setting-keys profile))
@@ -43,7 +43,7 @@
            (runtime-executed #f))))
 
 ;; : (-> POOObject [Symbol] Alist)
-(def (poo-flow-user-profile-presentation-copy-slots source keys)
+(def (agentic-ai-lab-user-profile-presentation-copy-slots source keys)
   (map (lambda (key)
          (cons key (.ref source key)))
        keys))
@@ -51,10 +51,10 @@
 ;;; Profile presentation is the downstream view for the high-level user
 ;;; entrypoint. It keeps config fields shallow to avoid recursive POO printing.
 ;; : (-> PooUserProfile POOObject)
-(def (pooFlowUserProfilePresentation profile)
+(def (agenticAiLabUserProfilePresentation profile)
   (let* ((config (yuanxuUserConfigFromProfile profile))
          (config-presentation
-          (pooFlowUserConfigPresentation
+          (agenticAiLabUserConfigPresentation
            config
            (yuanxu-user-profile-setting-keys profile))))
     (object<-alist
@@ -63,7 +63,7 @@
             (cons 'profile-name (yuanxu-user-profile-name profile))
             (cons 'module-bundle-count
                   (length (yuanxu-user-profile-module-bundles profile))))
-      (poo-flow-user-profile-presentation-copy-slots
+      (agentic-ai-lab-user-profile-presentation-copy-slots
        config-presentation
        '(module-count
          module-keys
@@ -142,13 +142,13 @@
       (list
        (cons 'config-presentation-kind (.ref config-presentation 'kind))
        (cons 'config-module-count (.ref config-presentation 'module-count))
-       (cons 'user-entrypoints poo-flow-user-config-public-entrypoints)
-       (cons 'api-entrypoints poo-flow-user-config-api-entrypoints)
-       (cons 'boundary poo-flow-user-config-boundary)
-       (cons 'brand-name poo-flow-brand-name)
-       (cons 'brand-group poo-flow-brand-group)
-       (cons 'scheme-owner poo-flow-scheme-owner)
-       (cons 'module-system-owner poo-flow-module-system-owner)
+       (cons 'user-entrypoints agentic-ai-lab-user-config-public-entrypoints)
+       (cons 'api-entrypoints agentic-ai-lab-user-config-api-entrypoints)
+       (cons 'boundary agentic-ai-lab-user-config-boundary)
+       (cons 'brand-name agentic-ai-lab-brand-name)
+       (cons 'brand-group agentic-ai-lab-brand-group)
+       (cons 'scheme-owner agentic-ai-lab-scheme-owner)
+       (cons 'module-system-owner agentic-ai-lab-module-system-owner)
        (cons 'runtime-owner "marlin-agent-core")
        (cons 'package-management? #f)
        (cons 'dependency-installation? #f)
@@ -159,7 +159,7 @@
 ;;; Profile set presentation is the inspectable registry view. It keeps the
 ;;; selected profile shallow and does not trigger descriptor realization.
 ;; : (-> PooUserProfileSet POOObject)
-(def (pooFlowUserProfileSetPresentation profile-set)
+(def (agenticAiLabUserProfileSetPresentation profile-set)
   (let ((selected-profile
          (yuanxu-user-profile-set-default-profile profile-set)))
     (object<-alist
@@ -179,15 +179,15 @@
       (cons 'profile-names
             (yuanxu-user-profile-set-profile-names profile-set))
       (cons 'profiles
-            (poo-flow-user-profile-summaries
+            (agentic-ai-lab-user-profile-summaries
              (yuanxu-user-profile-set-profiles profile-set)))
-      (cons 'user-entrypoints poo-flow-user-config-public-entrypoints)
-      (cons 'api-entrypoints poo-flow-user-config-api-entrypoints)
-      (cons 'boundary poo-flow-user-config-boundary)
-      (cons 'brand-name poo-flow-brand-name)
-      (cons 'brand-group poo-flow-brand-group)
-      (cons 'scheme-owner poo-flow-scheme-owner)
-      (cons 'module-system-owner poo-flow-module-system-owner)
+      (cons 'user-entrypoints agentic-ai-lab-user-config-public-entrypoints)
+      (cons 'api-entrypoints agentic-ai-lab-user-config-api-entrypoints)
+      (cons 'boundary agentic-ai-lab-user-config-boundary)
+      (cons 'brand-name agentic-ai-lab-brand-name)
+      (cons 'brand-group agentic-ai-lab-brand-group)
+      (cons 'scheme-owner agentic-ai-lab-scheme-owner)
+      (cons 'module-system-owner agentic-ai-lab-module-system-owner)
       (cons 'runtime-owner "marlin-agent-core")
       (cons 'package-management? #f)
       (cons 'dependency-installation? #f)

@@ -29,7 +29,7 @@
            (warm-compile-count (benchmark-series-compile-count warm))
            (classification (benchmark-classification warm-p50))
            (receipt
-            `((schema . poo-flow.darwin.native-std-make-one-target.v1)
+            `((schema . agentic-ai-lab.darwin.native-std-make-one-target.v1)
               (upstreamRef . ,(getenv "GERBIL_SOURCE_REF" "v0.19-staging"))
               (upstreamSha . ,(getenv "UPSTREAM_SHA" "local"))
               (runner . ,(string-append (getenv "RUNNER_OS" "local") "-"

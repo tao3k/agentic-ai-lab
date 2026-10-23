@@ -11,10 +11,10 @@
                  yuanxuUserConfig
                  yuanxu-settings
                  yuanxu-user-module-selection)
-        (only-in :poo-flow/modules/agent-sandbox/config
-                 poo-flow-sandbox-profile-config)
+        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+                 agentic-ai-lab-sandbox-profile-config)
         (only-in "../../user-interface/custom/my-module/cases/funflow-cicd"
-                 poo-flow-custom-my-module-funflow-cicd-case))
+                 agentic-ai-lab-custom-my-module-funflow-cicd-case))
 
 (export user-interface-cicd-runtime-fixture-config)
 
@@ -48,7 +48,7 @@
      (cons
       ':config
       (list
-       (poo-flow-sandbox-profile-config
+       (agentic-ai-lab-sandbox-profile-config
         'ci/check
         (list
          '(backend nono)
@@ -56,7 +56,7 @@
          '(capabilities process-run filesystem-read tmpdir)
          (cons 'resources
                user-interface-cicd-runtime-fixture-readonly-resources)))
-       (poo-flow-sandbox-profile-config
+       (agentic-ai-lab-sandbox-profile-config
         'ci/build
         (list
          '(backend nono)
@@ -70,5 +70,5 @@
 (def (user-interface-cicd-runtime-fixture-config)
   (yuanxuUserConfig
    (append (user-interface-cicd-runtime-fixture-profile-module)
-           poo-flow-custom-my-module-funflow-cicd-case)
+           agentic-ai-lab-custom-my-module-funflow-cicd-case)
    (yuanxu-settings)))

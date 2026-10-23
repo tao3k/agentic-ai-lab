@@ -6,21 +6,21 @@
 ;;; Boundary: public facade for workflow feature flows and Funflow tutorial alignment.
 ;;; Invariant: alignment reports and workflow builders live in leaf owners.
 
-(import :poo-flow/modules/workflow/flows-alignment-specs
-        :poo-flow/modules/workflow/flows-alignment-report
-        :poo-flow/modules/workflow/flows-builders)
+(import :agentic-ai-lab/modules/workflow/flows-alignment-specs
+        :agentic-ai-lab/modules/workflow/flows-alignment-report
+        :agentic-ai-lab/modules/workflow/flows-builders)
 
 (export make-docker-store-run-config
-        poo-flow-funflow-tutorial-alignment-schema
-        poo-flow-funflow-tutorial-alignment-spec-kind
-        poo-flow-funflow-tutorial-alignment-report-kind
-        poo-flow-funflow-tutorial-alignment-spec
-        poo-flow-funflow-tutorial-alignment-spec?
-        poo-flow-funflow-tutorial-alignment-report?
-        poo-flow-funflow-tutorial-alignment-spec-id
-        poo-flow-funflow-tutorial-alignment-spec-status
-        poo-flow-funflow-tutorial-alignment-specs
-        poo-flow-funflow-tutorial-alignment-report
+        agentic-ai-lab-funflow-tutorial-alignment-schema
+        agentic-ai-lab-funflow-tutorial-alignment-spec-kind
+        agentic-ai-lab-funflow-tutorial-alignment-report-kind
+        agentic-ai-lab-funflow-tutorial-alignment-spec
+        agentic-ai-lab-funflow-tutorial-alignment-spec?
+        agentic-ai-lab-funflow-tutorial-alignment-report?
+        agentic-ai-lab-funflow-tutorial-alignment-spec-id
+        agentic-ai-lab-funflow-tutorial-alignment-spec-status
+        agentic-ai-lab-funflow-tutorial-alignment-specs
+        agentic-ai-lab-funflow-tutorial-alignment-report
         make-ccompilation-flow
         make-ccompilation-store-workflow
         make-tensorflow-train-flow

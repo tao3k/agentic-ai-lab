@@ -8,115 +8,115 @@
 
 (import (only-in :clan/poo/object .@ .o .ref)
         :yuanxu/modules/funflow/control-plane/agent-harness-vocabulary
-        :poo-flow/modules/module-authoring/module-interface
-        :poo-flow/modules/module-authoring/module-descriptor
+        :agentic-ai-lab/modules/module-authoring/module-interface
+        :agentic-ai-lab/modules/module-authoring/module-descriptor
         :yuanxu/module-system/funs
         :yuanxu/module-system/projection/option-objects
         :yuanxu/module-system/catalog/values
-        :poo-flow/modules/module-authoring/module-option-projection)
+        :agentic-ai-lab/modules/module-authoring/module-option-projection)
 
-(export poo-flow-module-runtime-import
-        poo-flow-module-apply
-        poo-flow-module-evaluate
-        poo-flow-module-workflow
-        poo-flow-module-runtime-capability-projection
-        poo-flow-module-value-catalog-find
-        poo-flow-module-value-catalog-active?
-        poo-flow-module-value-catalog-root
-        pooFlowModuleActive?
-        poo-flow-module-active?
-        pooFlowEvalModules
-        poo-flow-eval-modules
-        pooFlowModuleSystemPresentation
-        poo-flow-module-system-presentation)
+(export agentic-ai-lab-module-runtime-import
+        agentic-ai-lab-module-apply
+        agentic-ai-lab-module-evaluate
+        agentic-ai-lab-module-workflow
+        agentic-ai-lab-module-runtime-capability-projection
+        agentic-ai-lab-module-value-catalog-find
+        agentic-ai-lab-module-value-catalog-active?
+        agentic-ai-lab-module-value-catalog-root
+        agenticAiLabModuleActive?
+        agentic-ai-lab-module-active?
+        agenticAiLabEvalModules
+        agentic-ai-lab-eval-modules
+        agenticAiLabModuleSystemPresentation
+        agentic-ai-lab-module-system-presentation)
 
 ;;; Boundary: runtime imports unwrap structured imports but preserve payloads.
 ;; : (-> ModuleImportValue RuntimeImport)
-(def (poo-flow-module-runtime-import import-value)
-  (let (profile (poo-flow-module-import-profile import-value))
+(def (agentic-ai-lab-module-runtime-import import-value)
+  (let (profile (agentic-ai-lab-module-import-profile import-value))
     (cond
-     ((poo-flow-module-config? profile)
-      (poo-flow-module-apply profile))
+     ((agentic-ai-lab-module-config? profile)
+      (agentic-ai-lab-module-apply profile))
      (else profile))))
 
 ;;; Boundary: apply creates an inspectable runtime-module value, not a handle.
 ;; : (-> PooModuleDescriptor POOObject)
-(def (poo-flow-module-apply module)
-  (.o kind: "poo-flow.modules.runtime-module.v1"
-      id: (poo-flow-module-name module)
-      group: (poo-flow-module-group module)
-      flags: (poo-flow-module-flags module)
-      features: (poo-flow-module-features module)
-      depth: (poo-flow-module-depth module)
-      phase-files: (poo-flow-module-phase-files module)
-      hooks: (poo-flow-module-hooks module)
-      imports: (map poo-flow-module-runtime-import
+(def (agentic-ai-lab-module-apply module)
+  (.o kind: "agentic-ai-lab.modules.runtime-module.v1"
+      id: (agentic-ai-lab-module-name module)
+      group: (agentic-ai-lab-module-group module)
+      flags: (agentic-ai-lab-module-flags module)
+      features: (agentic-ai-lab-module-features module)
+      depth: (agentic-ai-lab-module-depth module)
+      phase-files: (agentic-ai-lab-module-phase-files module)
+      hooks: (agentic-ai-lab-module-hooks module)
+      imports: (map agentic-ai-lab-module-runtime-import
                     (yuanxu-module-imports module))
-      extensions: (poo-flow-module-extensions module)
-      scripts: (poo-flow-module-scripts module)
-      options: (poo-flow-module-option-configs module)
-      metadata: (poo-flow-module-metadata module)))
+      extensions: (agentic-ai-lab-module-extensions module)
+      scripts: (agentic-ai-lab-module-scripts module)
+      options: (agentic-ai-lab-module-option-configs module)
+      metadata: (agentic-ai-lab-module-metadata module)))
 
 ;;; Boundary: projection append preserves closure module order.
 ;; : (-> [PooModuleDescriptor] (-> PooModuleDescriptor ProjectionValueList) [ProjectionValue])
-(def (poo-flow-module-append-projection modules projector)
+(def (agentic-ai-lab-module-append-projection modules projector)
   (foldr append '() (map projector modules)))
 
 ;;; Boundary: evaluation folds the import closure into one receipt object.
 ;; : (-> PooModuleDescriptor POOObject)
-(def (poo-flow-module-evaluate module)
-  (let (closed-modules (poo-flow-module-closure (list module)))
-    (.o kind: "poo-flow.modules.runtime-evaluation.v1"
-        module-ids: (poo-flow-module-names closed-modules)
+(def (agentic-ai-lab-module-evaluate module)
+  (let (closed-modules (agentic-ai-lab-module-closure (list module)))
+    (.o kind: "agentic-ai-lab.modules.runtime-evaluation.v1"
+        module-ids: (agentic-ai-lab-module-names closed-modules)
         init-module-ids:
-        (poo-flow-module-names
+        (agentic-ai-lab-module-names
          (yuanxu-module-phase-order closed-modules 'init))
         config-module-ids:
-        (poo-flow-module-names
+        (agentic-ai-lab-module-names
          (yuanxu-module-phase-order closed-modules 'config))
         hooks:
-        (poo-flow-module-append-projection
-         closed-modules poo-flow-module-hooks)
+        (agentic-ai-lab-module-append-projection
+         closed-modules agentic-ai-lab-module-hooks)
         extensions:
-        (poo-flow-module-append-projection
-         closed-modules poo-flow-module-extensions)
+        (agentic-ai-lab-module-append-projection
+         closed-modules agentic-ai-lab-module-extensions)
         scripts:
-        (poo-flow-module-append-projection
-         closed-modules poo-flow-module-scripts)
+        (agentic-ai-lab-module-append-projection
+         closed-modules agentic-ai-lab-module-scripts)
         options:
-        (poo-flow-module-append-projection
-         closed-modules poo-flow-module-option-configs)
+        (agentic-ai-lab-module-append-projection
+         closed-modules agentic-ai-lab-module-option-configs)
         validation-receipts:
-        (poo-flow-module-append-projection
-         closed-modules poo-flow-module-option-validation-receipts))))
+        (agentic-ai-lab-module-append-projection
+         closed-modules agentic-ai-lab-module-option-validation-receipts))))
 
 ;;; Boundary: workflow groups root projections and validation receipts.
 ;; : (-> PooModuleDescriptor [AllowedHookId] POOObject)
-(def (poo-flow-module-workflow module . maybe-allowed-hook-id-values)
+(def (agentic-ai-lab-module-workflow module . maybe-allowed-hook-id-values)
   (let* ((allowed-hook-id-values
           (if (null? maybe-allowed-hook-id-values)
             '()
             (car maybe-allowed-hook-id-values)))
-         (runtime-module-value (poo-flow-module-apply module))
-         (evaluation-value (poo-flow-module-evaluate module)))
-    (.o kind: poo-flow-module-workflow-kind
+         (runtime-module-value (agentic-ai-lab-module-apply module))
+         (evaluation-value (agentic-ai-lab-module-evaluate module)))
+    (.o kind: agentic-ai-lab-module-workflow-kind
         config: module
         runtime-module: runtime-module-value
         evaluation: evaluation-value
         allowed-hook-ids: allowed-hook-id-values
-        root-options: (poo-flow-module-option-configs module)
-        option-schemas: (poo-flow-module-option-schemas module)
+        root-options: (agentic-ai-lab-module-option-configs module)
+        option-schemas: (agentic-ai-lab-module-option-schemas module)
         root-validation-receipts:
-        (poo-flow-module-option-validation-receipts module)
+        (agentic-ai-lab-module-option-validation-receipts module)
         validation-receipts:
         (.ref evaluation-value 'validation-receipts))))
 
 ;;; Boundary: this projection reports runtime-facing object family capability.
 ;;; It does not construct runtime handles, start sessions, or submit dispatches.
 ;; : (-> POOObject)
-(def (poo-flow-module-runtime-capability-projection)
-  (.o kind: "poo-flow.modules.runtime-capability-projection.v1"
-      owner: poo-flow-module-system-owner
+(def (agentic-ai-lab-module-runtime-capability-projection)
+  (.o kind: "agentic-ai-lab.modules.runtime-capability-projection.v1"
+      owner: agentic-ai-lab-module-system-owner
       runtime-owner: "marlin-agent-core"
       runtime-executed: #f
       object-families:
@@ -144,50 +144,50 @@
 
 ;;; Boundary: value catalog lookup is by module id only.
 ;; : (-> PooModuleValueCatalog ModuleName MaybePooModuleDescriptor)
-(def (poo-flow-module-value-catalog-find catalog module-id-value)
+(def (agentic-ai-lab-module-value-catalog-find catalog module-id-value)
   (find (lambda (module)
-          (equal? (poo-flow-module-name module) module-id-value))
+          (equal? (agentic-ai-lab-module-name module) module-id-value))
         (.ref catalog 'modules)))
 
 ;;; Boundary: catalog active checks make Doom's modulep behavior data-driven.
 ;; : (-> PooModuleValueCatalog ModuleName [ModuleFlag] Boolean)
-(def (poo-flow-module-value-catalog-active? catalog module-id-value . required-flags)
-  (let (module (poo-flow-module-value-catalog-find catalog module-id-value))
+(def (agentic-ai-lab-module-value-catalog-active? catalog module-id-value . required-flags)
+  (let (module (agentic-ai-lab-module-value-catalog-find catalog module-id-value))
     (and module
-         (apply poo-flow-module-active? module required-flags))))
+         (apply agentic-ai-lab-module-active? module required-flags))))
 
 ;; : (-> PooModuleValueCatalog ModuleName [ModuleFlag] Boolean)
-(def (pooFlowModuleActive? catalog module-id-value . required-flags)
-  (apply poo-flow-module-value-catalog-active?
+(def (agenticAiLabModuleActive? catalog module-id-value . required-flags)
+  (apply agentic-ai-lab-module-value-catalog-active?
          catalog
          module-id-value
          required-flags))
 
 ;;; Boundary: missing root id falls back to the first catalog module.
 ;; : (-> PooModuleValueCatalog MaybeModuleName PooModuleDescriptor)
-(def (poo-flow-module-value-catalog-root catalog module-id-value)
+(def (agentic-ai-lab-module-value-catalog-root catalog module-id-value)
   (cond
    (module-id-value
-    (or (poo-flow-module-value-catalog-find catalog module-id-value)
-        (error "poo-flow module root not found" module-id-value)))
+    (or (agentic-ai-lab-module-value-catalog-find catalog module-id-value)
+        (error "agentic-ai-lab module root not found" module-id-value)))
    ((pair? (.ref catalog 'modules))
     (car (.ref catalog 'modules)))
    (else
-    (error "poo-flow module catalog is empty"))))
+    (error "agentic-ai-lab module catalog is empty"))))
 
 ;;; Boundary: evalModules mirrors Marlin without entering runtime execution.
-;; | PooFlowEvalModuleOptions = [MaybeModuleName [AllowedHookId]]
-;; pooFlowEvalModules
-;;   : (-> PooModuleValueCatalog PooFlowEvalModuleOptions POOObject)
-;;   | contract: returns branded POO Flow evaluation data, never runtime handles
+;; | AgenticAILabEvalModuleOptions = [MaybeModuleName [AllowedHookId]]
+;; agenticAiLabEvalModules
+;;   : (-> PooModuleValueCatalog AgenticAILabEvalModuleOptions POOObject)
+;;   | contract: returns branded Agentic AI Lab evaluation data, never runtime handles
 ;;   | doc m%
 ;;   | # Examples
 ;;   | ```scheme
-;;   | (pooFlowEvalModules catalog 'root '("after-config"))
+;;   | (agenticAiLabEvalModules catalog 'root '("after-config"))
 ;;   | ```
 ;;   | result: replayable module evaluation receipt with brand and owner fields.
-;; : (-> PooModuleValueCatalog PooFlowEvalModuleOptions POOObject)
-(def (poo-flow-eval-modules catalog . eval-options)
+;; : (-> PooModuleValueCatalog AgenticAILabEvalModuleOptions POOObject)
+(def (agentic-ai-lab-eval-modules catalog . eval-options)
   (let* ((root-module-id-value
           (if (null? eval-options) #f (car eval-options)))
          (allowed-hook-id-values
@@ -196,15 +196,15 @@
             '()
             (cadr eval-options)))
          (root-module
-          (poo-flow-module-value-catalog-root catalog root-module-id-value))
+          (agentic-ai-lab-module-value-catalog-root catalog root-module-id-value))
          (workflow
-          (poo-flow-module-workflow root-module allowed-hook-id-values))
+          (agentic-ai-lab-module-workflow root-module allowed-hook-id-values))
          (evaluation-value (.ref workflow 'evaluation))
          (runtime-capabilities
-          (poo-flow-module-runtime-capability-projection)))
-    (.o kind: poo-flow-eval-modules-result-kind
+          (agentic-ai-lab-module-runtime-capability-projection)))
+    (.o kind: agentic-ai-lab-eval-modules-result-kind
         catalog-kind: (.ref catalog 'kind)
-        root-module-id: (poo-flow-module-name root-module)
+        root-module-id: (agentic-ai-lab-module-name root-module)
         root-module-kind: (.@ root-module kind)
         workflow-kind: (.ref workflow 'kind)
         module-evaluation-kind: (.ref evaluation-value 'kind)
@@ -217,10 +217,10 @@
         option-count: (length (.ref evaluation-value 'options))
         validation-receipt-count:
         (length (.ref evaluation-value 'validation-receipts))
-        brand-name: poo-flow-brand-name
-        brand-group: poo-flow-brand-group
-        scheme-owner: poo-flow-scheme-owner
-        module-system-owner: poo-flow-module-system-owner
+        brand-name: agentic-ai-lab-brand-name
+        brand-group: agentic-ai-lab-brand-group
+        scheme-owner: agentic-ai-lab-scheme-owner
+        module-system-owner: agentic-ai-lab-module-system-owner
         runtime-owner: "marlin-agent-core"
         runtime-boundary-owner: "marlin-agent-core"
         runtime-capability-projection-kind:
@@ -236,23 +236,23 @@
         runtime-executed: #f
         replayable: #t)))
 
-;; : (-> PooModuleValueCatalog PooFlowEvalModuleOptions POOObject)
-(def (pooFlowEvalModules catalog . eval-options)
-  (apply poo-flow-eval-modules catalog eval-options))
+;; : (-> PooModuleValueCatalog AgenticAILabEvalModuleOptions POOObject)
+(def (agenticAiLabEvalModules catalog . eval-options)
+  (apply agentic-ai-lab-eval-modules catalog eval-options))
 
 ;;; Boundary: presentation is the debug/doctor scalar summary of evalModules.
-;; | PooFlowModulePresentationOptions = [MaybeModuleName [AllowedHookId]]
-;; pooFlowModuleSystemPresentation
-;;   : (-> PooModuleValueCatalog PooFlowModulePresentationOptions POOObject)
-;;   | contract: presents POO Flow brand, module counts, and owner boundaries
+;; | AgenticAILabModulePresentationOptions = [MaybeModuleName [AllowedHookId]]
+;; agenticAiLabModuleSystemPresentation
+;;   : (-> PooModuleValueCatalog AgenticAILabModulePresentationOptions POOObject)
+;;   | contract: presents Agentic AI Lab brand, module counts, and owner boundaries
 ;;   | doc m%
 ;;   | # Examples
 ;;   | ```scheme
-;;   | (pooFlowModuleSystemPresentation catalog 'root)
+;;   | (agenticAiLabModuleSystemPresentation catalog 'root)
 ;;   | ```
 ;;   | result: user-facing presentation object with runtime-executed set to #f.
-;; : (-> PooModuleValueCatalog PooFlowModulePresentationOptions POOObject)
-(def (poo-flow-module-system-presentation catalog . eval-options)
+;; : (-> PooModuleValueCatalog AgenticAILabModulePresentationOptions POOObject)
+(def (agentic-ai-lab-module-system-presentation catalog . eval-options)
   (let* ((root-module-id-value
           (if (null? eval-options) #f (car eval-options)))
          (allowed-hook-id-values
@@ -261,38 +261,38 @@
             '()
             (cadr eval-options)))
          (root-module
-          (poo-flow-module-value-catalog-root catalog root-module-id-value))
+          (agentic-ai-lab-module-value-catalog-root catalog root-module-id-value))
          (eval-result
           (cond
            ((null? eval-options)
-            (poo-flow-eval-modules catalog))
+            (agentic-ai-lab-eval-modules catalog))
            ((null? (cdr eval-options))
-            (poo-flow-eval-modules catalog root-module-id-value))
+            (agentic-ai-lab-eval-modules catalog root-module-id-value))
            (else
-            (poo-flow-eval-modules
+            (agentic-ai-lab-eval-modules
              catalog
              root-module-id-value
              allowed-hook-id-values))))
          (runtime-capabilities
-          (poo-flow-module-runtime-capability-projection)))
-    (.o kind: poo-flow-module-system-presentation-kind
+          (agentic-ai-lab-module-runtime-capability-projection)))
+    (.o kind: agentic-ai-lab-module-system-presentation-kind
         catalog-kind: (.ref catalog 'kind)
         catalog-module-count: (length (.ref catalog 'modules))
-        root-module-id: (poo-flow-module-name root-module)
+        root-module-id: (agentic-ai-lab-module-name root-module)
         root-module-kind: (.@ root-module kind)
         root-import-count: (length (yuanxu-module-imports root-module))
-        root-flag-count: (length (poo-flow-module-flags root-module))
-        root-hook-count: (length (poo-flow-module-hooks root-module))
-        root-extension-count: (length (poo-flow-module-extensions root-module))
-        root-script-count: (length (poo-flow-module-scripts root-module))
+        root-flag-count: (length (agentic-ai-lab-module-flags root-module))
+        root-hook-count: (length (agentic-ai-lab-module-hooks root-module))
+        root-extension-count: (length (agentic-ai-lab-module-extensions root-module))
+        root-script-count: (length (agentic-ai-lab-module-scripts root-module))
         allowed-hook-count: (length allowed-hook-id-values)
         user-entrypoints:
-        '("poo-flow-modules"
+        '("agentic-ai-lab-modules"
           "yuanxu-module-catalog"
-          "poo-flow-module-active?"
-          "poo-flow-module-value-catalog-active?"
-          "poo-flow-eval-modules"
-          "poo-flow-module-system-presentation")
+          "agentic-ai-lab-module-active?"
+          "agentic-ai-lab-module-value-catalog-active?"
+          "agentic-ai-lab-eval-modules"
+          "agentic-ai-lab-module-system-presentation")
         module-eval-result-kind: (.ref eval-result 'kind)
         workflow-kind: (.ref eval-result 'workflow-kind)
         module-evaluation-receipt-kind:
@@ -306,11 +306,11 @@
         option-count: (.ref eval-result 'option-count)
         validation-receipt-count:
         (.ref eval-result 'validation-receipt-count)
-        import-graph-owner: "poo-flow-module-system"
-        brand-name: poo-flow-brand-name
-        brand-group: poo-flow-brand-group
-        option-policy-owner: poo-flow-module-system-owner
-        extension-composition-owner: poo-flow-module-system-owner
+        import-graph-owner: "agentic-ai-lab-module-system"
+        brand-name: agentic-ai-lab-brand-name
+        brand-group: agentic-ai-lab-brand-group
+        option-policy-owner: agentic-ai-lab-module-system-owner
+        extension-composition-owner: agentic-ai-lab-module-system-owner
         scheme-owner: (.ref eval-result 'scheme-owner)
         module-system-owner: (.ref eval-result 'module-system-owner)
         runtime-owner: (.ref eval-result 'runtime-owner)
@@ -331,6 +331,6 @@
         scheme-manufactures-runtime-handlers: #f
         replayable: (.ref eval-result 'replayable))))
 
-;; : (-> PooModuleValueCatalog PooFlowModulePresentationOptions POOObject)
-(def (pooFlowModuleSystemPresentation catalog . eval-options)
-  (apply poo-flow-module-system-presentation catalog eval-options))
+;; : (-> PooModuleValueCatalog AgenticAILabModulePresentationOptions POOObject)
+(def (agenticAiLabModuleSystemPresentation catalog . eval-options)
+  (apply agentic-ai-lab-module-system-presentation catalog eval-options))

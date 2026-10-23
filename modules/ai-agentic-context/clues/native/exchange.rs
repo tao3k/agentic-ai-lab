@@ -6,7 +6,7 @@ use crate::{Cancellation, Data, Engine, FactLimits, Limits, Result, Row, SourceS
 use std::collections::{BTreeMap, BTreeSet};
 
 pub(super) const RULES: &str = include_str!(
-    "../../../../packages/python-runtime/src/poo_flow_runtime/reasoning_rules/clue_query_rules.ss"
+    "../../../../packages/python-runtime/src/agentic_ai_lab_runtime/reasoning_rules/clue_query_rules.ss"
 );
 
 /// Caller-owned projection declarations and host-attested input facts.

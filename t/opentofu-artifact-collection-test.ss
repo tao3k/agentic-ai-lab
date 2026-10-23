@@ -5,7 +5,7 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
-        (only-in :poo-flow/modules/services/opentofu/objects OpenTofuScope.) :yuanxu/types :clan/poo/object)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) :yuanxu/types :clan/poo/object)
 (export opentofu-artifact-collection-test)
 (def (assert label value)
   (unless value (error "assertion failed" label))

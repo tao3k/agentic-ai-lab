@@ -10,23 +10,23 @@
 ;;; eligibility must not be mistaken for source-admission eligibility.
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :poo-flow/modules/session/objects
-        :poo-flow/modules/session/transform-support/memory-intent
-        :poo-flow/modules/ai-agentic-context/features/memory/objects-core
-        :poo-flow/modules/ai-agentic-context/features/memory/org-selection)
+        :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/transform-support/memory-intent
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/org-selection)
 
-(export poo-flow-session-org-memory-selection-context
-        poo-flow-session-org-memory-selection-context?
-        poo-flow-session-org-memory-selection-intent
-        poo-flow-session-org-memory-selection-intent?
-        poo-flow-session-org-memory-selection-intent-policy-eligible?
-        poo-flow-session-org-memory-selection-intent-eligible?
-        poo-flow-session-org-memory-selection-intent-diagnostics)
+(export agentic-ai-lab-session-org-memory-selection-context
+        agentic-ai-lab-session-org-memory-selection-context?
+        agentic-ai-lab-session-org-memory-selection-intent
+        agentic-ai-lab-session-org-memory-selection-intent?
+        agentic-ai-lab-session-org-memory-selection-intent-policy-eligible?
+        agentic-ai-lab-session-org-memory-selection-intent-eligible?
+        agentic-ai-lab-session-org-memory-selection-intent-diagnostics)
 
-(def (poo-flow-session-org-nonempty-string? value)
+(def (agentic-ai-lab-session-org-nonempty-string? value)
   (and (string? value) (> (string-length value) 0)))
 
-(def (poo-flow-session-org-memory-selection-context project-id
+(def (agentic-ai-lab-session-org-memory-selection-context project-id
                                                     worktree-id
                                                     current-cut-digest
                                                     current-bytes-sha256
@@ -35,26 +35,26 @@
                                                     current-head-revision
                                                     read-granted?
                                                     session-active?)
-  (poo-flow-session-require "selection context requires project and WorkTree ids"
-                            (and (poo-flow-session-org-nonempty-string? project-id)
-                                 (poo-flow-session-org-nonempty-string? worktree-id))
+  (agentic-ai-lab-session-require "selection context requires project and WorkTree ids"
+                            (and (agentic-ai-lab-session-org-nonempty-string? project-id)
+                                 (agentic-ai-lab-session-org-nonempty-string? worktree-id))
                             (list project-id worktree-id))
-  (poo-flow-session-require "selection context requires source and query ids"
-                            (and (poo-flow-session-org-nonempty-string?
+  (agentic-ai-lab-session-require "selection context requires source and query ids"
+                            (and (agentic-ai-lab-session-org-nonempty-string?
                                   current-cut-digest)
-                                 (poo-flow-session-org-nonempty-string?
+                                 (agentic-ai-lab-session-org-nonempty-string?
                                   current-bytes-sha256)
-                                 (poo-flow-session-org-nonempty-string?
+                                 (agentic-ai-lab-session-org-nonempty-string?
                                   allowed-query-id))
                             (list current-cut-digest current-bytes-sha256
                                   allowed-query-id))
-  (poo-flow-session-require "head revisions must be nonnegative integers"
+  (agentic-ai-lab-session-require "head revisions must be nonnegative integers"
                             (and (integer? expected-head-revision)
                                  (>= expected-head-revision 0)
                                  (integer? current-head-revision)
                                  (>= current-head-revision 0))
                             (list expected-head-revision current-head-revision))
-  (poo-flow-session-require "grant and Session state must be booleans"
+  (agentic-ai-lab-session-require "grant and Session state must be booleans"
                             (and (boolean? read-granted?)
                                  (boolean? session-active?))
                             (list read-granted? session-active?))
@@ -67,7 +67,7 @@
         (current-value current-head-revision)
         (grant-value read-granted?)
         (active-value session-active?))
-    (.o (kind 'poo-flow.session.org-memory-selection-context)
+    (.o (kind 'agentic-ai-lab.session.org-memory-selection-context)
         (project-id project-value)
         (worktree-id worktree-value)
         (current-cut-digest cut-value)
@@ -78,11 +78,11 @@
         (read-granted? grant-value)
         (session-active? active-value))))
 
-(def (poo-flow-session-org-memory-selection-context? value)
+(def (agentic-ai-lab-session-org-memory-selection-context? value)
   (and (object? value)
-       (eq? (.ref value 'kind) 'poo-flow.session.org-memory-selection-context)))
+       (eq? (.ref value 'kind) 'agentic-ai-lab.session.org-memory-selection-context)))
 
-(def (poo-flow-session-org-memory-selection-diagnostics selection intent store context)
+(def (agentic-ai-lab-session-org-memory-selection-diagnostics selection intent store context)
   (filter
    (lambda (diagnostic) diagnostic)
    (list
@@ -100,12 +100,12 @@
     (and (not (equal? (.ref selection 'query-id)
                       (.ref context 'allowed-query-id)))
          'query-not-granted)
-    (and (not (and (equal? (poo-flow-session-memory-intent-store-ref intent)
-                           (poo-flow-memory-store-spec-ref store))
-                   (member (poo-flow-session-memory-intent-scope intent)
-                           (poo-flow-memory-store-spec-scopes store))
-                   (member (poo-flow-session-memory-intent-commit-policy intent)
-                           (poo-flow-memory-store-spec-commit-policies store))))
+    (and (not (and (equal? (agentic-ai-lab-session-memory-intent-store-ref intent)
+                           (agentic-ai-lab-memory-store-spec-ref store))
+                   (member (agentic-ai-lab-session-memory-intent-scope intent)
+                           (agentic-ai-lab-memory-store-spec-scopes store))
+                   (member (agentic-ai-lab-session-memory-intent-commit-policy intent)
+                           (agentic-ai-lab-memory-store-spec-commit-policies store))))
          'memory-policy-denied)
     (and (not (.ref context 'read-granted?)) 'read-not-granted)
     (and (not (.ref context 'session-active?)) 'session-inactive)
@@ -114,31 +114,31 @@
          'stale-memory-head)
     (and (null? (.ref selection 'candidate-record-ids)) 'no-candidate))))
 
-(def (poo-flow-session-org-memory-selection-intent selection intent store session context)
-  (poo-flow-session-require "Org selection requires an Orgize Scheme selection"
-                            (poo-flow-memory-org-selection? selection)
+(def (agentic-ai-lab-session-org-memory-selection-intent selection intent store session context)
+  (agentic-ai-lab-session-require "Org selection requires an Orgize Scheme selection"
+                            (agentic-ai-lab-memory-org-selection? selection)
                             selection)
-  (poo-flow-session-require "Org selection requires a Session memory intent"
-                            (poo-flow-session-memory-intent? intent)
+  (agentic-ai-lab-session-require "Org selection requires a Session memory intent"
+                            (agentic-ai-lab-session-memory-intent? intent)
                             intent)
-  (poo-flow-session-require "Org selection requires a Memory store spec"
-                            (poo-flow-memory-store-spec? store)
+  (agentic-ai-lab-session-require "Org selection requires a Memory store spec"
+                            (agentic-ai-lab-memory-store-spec? store)
                             store)
-  (poo-flow-session-require "Org selection requires a Session"
-                            (poo-flow-session? session)
+  (agentic-ai-lab-session-require "Org selection requires a Session"
+                            (agentic-ai-lab-session? session)
                             session)
-  (poo-flow-session-require "Org selection requires current host context"
-                            (poo-flow-session-org-memory-selection-context? context)
+  (agentic-ai-lab-session-require "Org selection requires current host context"
+                            (agentic-ai-lab-session-org-memory-selection-context? context)
                             context)
   (let ((policy-diagnostic-values
-         (poo-flow-session-org-memory-selection-diagnostics
+         (agentic-ai-lab-session-org-memory-selection-diagnostics
           selection intent store context))
-        (session-value (poo-flow-session-id session))
+        (session-value (agentic-ai-lab-session-id session))
         (selection-value selection)
         (intent-value intent)
         (head-value (.ref context 'expected-head-revision)))
-    (.o (kind 'poo-flow.session.org-memory-selection-intent)
-        (schema 'poo-flow.modules.session.org-memory-selection.v1)
+    (.o (kind 'agentic-ai-lab.session.org-memory-selection-intent)
+        (schema 'agentic-ai-lab.modules.session.org-memory-selection.v1)
         (session-id session-value)
         (org-selection selection-value)
         (memory-intent intent-value)
@@ -150,15 +150,15 @@
         (semantic-admitted? #f)
         (memory-published? #f))))
 
-(def (poo-flow-session-org-memory-selection-intent? value)
+(def (agentic-ai-lab-session-org-memory-selection-intent? value)
   (and (object? value)
-       (eq? (.ref value 'kind) 'poo-flow.session.org-memory-selection-intent)))
+       (eq? (.ref value 'kind) 'agentic-ai-lab.session.org-memory-selection-intent)))
 
-(def (poo-flow-session-org-memory-selection-intent-eligible? value)
+(def (agentic-ai-lab-session-org-memory-selection-intent-eligible? value)
   (.ref value 'eligible?))
 
-(def (poo-flow-session-org-memory-selection-intent-policy-eligible? value)
+(def (agentic-ai-lab-session-org-memory-selection-intent-policy-eligible? value)
   (.ref value 'policy-eligible?))
 
-(def (poo-flow-session-org-memory-selection-intent-diagnostics value)
+(def (agentic-ai-lab-session-org-memory-selection-intent-diagnostics value)
   (.ref value 'diagnostics))

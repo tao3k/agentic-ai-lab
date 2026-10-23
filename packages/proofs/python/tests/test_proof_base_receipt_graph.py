@@ -8,7 +8,7 @@ from dataclasses import replace
 
 import pytest
 
-from poo_flow_proof.proof_base_receipt_graph import (
+from agentic_ai_lab_proof.proof_base_receipt_graph import (
     AcceptedProofBaseReceiptNodeV1,
     AcceptedReceiptEvidenceV1,
     CanonicalInterfaceV1,
@@ -84,7 +84,7 @@ def accepted_chain() -> ProofBaseReceiptGraphV1:
         "base",
         base_interface,
         (),
-        "PooFlowProof.Base.verified",
+        "AgenticAILabProof.Base.verified",
     )
     terminal = node(
         "terminal",
@@ -95,7 +95,7 @@ def accepted_chain() -> ProofBaseReceiptGraphV1:
                 interface=base_interface,
             ),
         ),
-        "PooFlowProof.Terminal.verified",
+        "AgenticAILabProof.Terminal.verified",
     )
     return ProofBaseReceiptGraphV1(
         schema_id=PROOF_BASE_RECEIPT_GRAPH_SCHEMA_V1,
@@ -257,7 +257,7 @@ def test_rejects_cyclic_receipt_dependency() -> None:
                 interface=terminal_interface,
             ),
         ),
-        "PooFlowProof.Sink.verified",
+        "AgenticAILabProof.Sink.verified",
     )
     cyclic_base = replace(
         base,
@@ -345,7 +345,7 @@ def test_rejects_node_outside_terminal_closure() -> None:
         "unrelated",
         canonical_interface(b"canonical-interface:unrelated"),
         (),
-        "PooFlowProof.Unrelated.verified",
+        "AgenticAILabProof.Unrelated.verified",
     )
     disconnected_graph = replace(
         graph,
@@ -363,7 +363,7 @@ def test_rejects_overlapping_root_declaration_owners() -> None:
     terminal = next(item for item in graph.nodes if item.node_id == "terminal")
     overlapping_terminal = replace(
         terminal,
-        root_declarations=("PooFlowProof.Base.verified",),
+        root_declarations=("AgenticAILabProof.Base.verified",),
     )
     overlapping_graph = replace(
         graph,

@@ -10,19 +10,19 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list any every delete-duplicates/hash)
-        (only-in :poo-flow/modules/temporal-causality/time/types
-                 poo-flow-temporal-instant?)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/types
-                 poo-flow-temporal-trajectory-series?)
-        (only-in :poo-flow/modules/temporal-causality/impact/scope-types
-                 poo-flow-temporal-impact-scope?)
-        (only-in :poo-flow/modules/temporal-causality/impact/scope-objects
-                 poo-flow-temporal-impact-scope-value
-                 poo-flow-temporal-impact-scope-audit-value)
-        (only-in :poo-flow/modules/temporal-causality/impact/funs
-                 poo-flow-temporal-intervention-window-audit))
-(export poo-flow-temporal-impact-scope
-        poo-flow-temporal-impact-scope-audit)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+                 agentic-ai-lab-temporal-instant?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/types
+                 agentic-ai-lab-temporal-trajectory-series?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/impact/scope-types
+                 agentic-ai-lab-temporal-impact-scope?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/impact/scope-objects
+                 agentic-ai-lab-temporal-impact-scope-value
+                 agentic-ai-lab-temporal-impact-scope-audit-value)
+        (only-in :agentic-ai-lab/modules/temporal-causality/impact/funs
+                 agentic-ai-lab-temporal-intervention-window-audit))
+(export agentic-ai-lab-temporal-impact-scope
+        agentic-ai-lab-temporal-impact-scope-audit)
 
 (def (text? value) (and (string? value) (> (string-length value) 0)))
 (def (unique? values)
@@ -37,11 +37,11 @@
         (.ref instant 'modality)))
 (def (outcome series) (.ref series 'outcome-identity))
 
-(def (poo-flow-temporal-impact-scope
+(def (agentic-ai-lab-temporal-impact-scope
       identity intervention subject cut projection onset end targets protected)
   (unless (and (every text? (list identity intervention subject cut projection))
-               (poo-flow-temporal-instant? onset)
-               (poo-flow-temporal-instant? end)
+               (agentic-ai-lab-temporal-instant? onset)
+               (agentic-ai-lab-temporal-instant? end)
                (equal? (.ref onset 'domain-identity)
                        (.ref end 'domain-identity))
                (< (.ref onset 'coordinate) (.ref end 'coordinate))
@@ -53,23 +53,23 @@
   (let* ((targets (list-sort string<? targets))
          (protected (list-sort string<? protected))
          (domain (.ref onset 'domain-identity)))
-    (poo-flow-temporal-impact-scope-value
+    (agentic-ai-lab-temporal-impact-scope-value
      identity
-     (digest (list 'poo-flow.temporal-causality.impact-scope.v1
+     (digest (list 'agentic-ai-lab.temporal-causality.impact-scope.v1
                    identity intervention subject cut projection domain
                    (instant-row onset) (instant-row end) targets protected))
      intervention subject cut projection domain onset end targets protected)))
 
-(def (poo-flow-temporal-impact-scope-audit
+(def (agentic-ai-lab-temporal-impact-scope-audit
       identity scope candidates baselines)
-  (unless (and (text? identity) (poo-flow-temporal-impact-scope? scope)
+  (unless (and (text? identity) (agentic-ai-lab-temporal-impact-scope? scope)
                (list? candidates) (pair? candidates)
                (list? baselines) (pair? baselines)
-               (every poo-flow-temporal-trajectory-series? candidates)
-               (every poo-flow-temporal-trajectory-series? baselines))
+               (every agentic-ai-lab-temporal-trajectory-series? candidates)
+               (every agentic-ai-lab-temporal-trajectory-series? baselines))
     (error "invalid temporal impact scope audit input"))
   (let* ((canonical
-          (poo-flow-temporal-impact-scope
+          (agentic-ai-lab-temporal-impact-scope
            (.ref scope 'identity) (.ref scope 'intervention-identity)
            (.ref scope 'subject-identity) (.ref scope 'source-cut-digest)
            (.ref scope 'source-projection-digest)
@@ -126,7 +126,7 @@
             (map (lambda (candidate)
                    (let* ((id (outcome candidate))
                           (baseline (hash-get baseline-index id)))
-                     (poo-flow-temporal-intervention-window-audit
+                     (agentic-ai-lab-temporal-intervention-window-audit
                       (string-append identity "/" id)
                       (.ref scope 'intervention-identity)
                       candidate baseline (.ref scope 'onset) (.ref scope 'end))))
@@ -159,14 +159,14 @@
                   (else 'consistent-with-declaration)))
            (semantic-digest
             (digest
-             (list 'poo-flow.temporal-causality.impact-scope-audit.v1
+             (list 'agentic-ai-lab.temporal-causality.impact-scope-audit.v1
                    identity (.ref scope 'semantic-digest)
                    candidate-scenario baseline-scenario
                    (map (lambda (audit)
                           (list (.ref audit 'outcome-identity)
                                 (.ref audit 'semantic-digest))) audits)
                    prefix-status protected-status status))))
-      (poo-flow-temporal-impact-scope-audit-value
+      (agentic-ai-lab-temporal-impact-scope-audit-value
        identity semantic-digest (.ref scope 'semantic-digest)
        candidate-scenario baseline-scenario
        (map outcome ordered) audits prefix-status protected-status status))))

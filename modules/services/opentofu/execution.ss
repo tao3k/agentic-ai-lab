@@ -156,7 +156,7 @@
 
 ;; Null is a bounded recipe of the same execution protocol, not a service Module.
 (.def (NullExecution. @ OpenTofuExecution. message)
-  message: "hello from POO Flow"
+  message: "hello from Agentic AI Lab"
   resource: (let (text message) (.o triggers: (.o message: text)))
   provider-name: 'null resource-kind: 'null_resource resource-name: "hello")
 

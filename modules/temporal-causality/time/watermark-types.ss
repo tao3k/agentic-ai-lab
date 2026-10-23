@@ -8,14 +8,14 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every)
-        (only-in :poo-flow/modules/temporal-causality/time/uncertainty-types
-                 poo-flow-temporal-bounded-observation?))
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+                 agentic-ai-lab-temporal-bounded-observation?))
 
-(export poo-flow-temporal-watermark-kind PooFlowTemporalWatermark
-        poo-flow-temporal-watermark?)
+(export agentic-ai-lab-temporal-watermark-kind AgenticAILabTemporalWatermark
+        agentic-ai-lab-temporal-watermark?)
 
-(def poo-flow-temporal-watermark-kind
-  'poo-flow.temporal-causality.watermark)
+(def agentic-ai-lab-temporal-watermark-kind
+  'agentic-ai-lab.temporal-causality.watermark)
 
 (def (text? value)
   (and (string? value) (> (string-length value) 0)))
@@ -27,7 +27,7 @@
                      partition-identity first-sequence last-sequence
                      time-observation issuer-identity coverage-identity
                      late-policy-identity receipt-identity))
-       (eq? (.ref value 'kind) poo-flow-temporal-watermark-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-temporal-watermark-kind)
        (every text? (list (.ref value 'identity)
                           (.ref value 'semantic-digest)
                           (.ref value 'source-identity)
@@ -40,9 +40,9 @@
        (>= (.ref value 'first-sequence) 0)
        (exact-integer? (.ref value 'last-sequence))
        (>= (.ref value 'last-sequence) (.ref value 'first-sequence))
-       (poo-flow-temporal-bounded-observation? (.ref value 'time-observation))))
+       (agentic-ai-lab-temporal-bounded-observation? (.ref value 'time-observation))))
 
-(define-type (PooFlowTemporalWatermark @ Type.)
+(define-type (AgenticAILabTemporalWatermark @ Type.)
   .element?: watermark-shape?)
-(def (poo-flow-temporal-watermark? value)
-  (element? PooFlowTemporalWatermark value))
+(def (agentic-ai-lab-temporal-watermark? value)
+  (element? AgenticAILabTemporalWatermark value))

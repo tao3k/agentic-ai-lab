@@ -3,7 +3,7 @@
 ;;; Opt-in measurement of the maintained path, not a runner or another publisher.
 (import :std/test :clan/poo/object
         (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
-        (only-in :poo-flow/modules/nix/func current-nix-process-completion-observer)
+        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-completion-observer)
         (only-in :yuanxu/module-system/source/admission current-module-source-observer current-module-source-phase)
         (only-in :yuanxu/observability/debug YuanxuDebugMemoryAnomaly? YuanxuDebugMemoryAnomaly-receipt
                  yuanxu-debug-memory-snapshot)

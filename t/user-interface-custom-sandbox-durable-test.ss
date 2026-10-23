@@ -13,7 +13,7 @@
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/sandbox-durable"
-                 poo-flow-custom-my-module-sandbox-durable-case))
+                 agentic-ai-lab-custom-my-module-sandbox-durable-case))
 
 (export user-interface-custom-sandbox-durable-test)
 
@@ -56,11 +56,11 @@
 
 ;; : TestSuite
 (def user-interface-custom-sandbox-durable-test
-  (test-suite "poo-flow custom user-interface sandbox-durable case"
+  (test-suite "agentic-ai-lab custom user-interface sandbox-durable case"
     (yuanxu-test-case "projects durable sandbox config without runtime work"
-      (let* ((selection (car poo-flow-custom-my-module-sandbox-durable-case))
+      (let* ((selection (car agentic-ai-lab-custom-my-module-sandbox-durable-case))
              (config (sandbox-config
-                      poo-flow-custom-my-module-sandbox-durable-case))
+                      agentic-ai-lab-custom-my-module-sandbox-durable-case))
              (metadata (.ref config 'metadata)))
         (check-equal? (yuanxu-user-module-selection-key selection)
                       '(sandbox . nono-sandbox))

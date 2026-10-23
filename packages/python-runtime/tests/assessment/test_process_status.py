@@ -13,7 +13,7 @@ class EmbeddedProcessStatus(unittest.TestCase):
         root=Path(__file__).resolve().parents[4]
         code='''
 import os,subprocess,sys
-from poo_flow_runtime.reasoning import ReasoningRuntime
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime
 engine=ReasoningRuntime()
 assert not engine.closed
 for status in (7,0,9):
@@ -27,9 +27,9 @@ print('EMBEDDED-PROCESS-STATUS-OK',flush=True)
         root=Path(__file__).resolve().parents[4]
         code="""
 import os,fcntl
-from poo_flow_runtime.reasoning import ReasoningRuntime
-from poo_flow_runtime.reasoning import EvidenceChain
-from poo_flow_testing.assessment_studies import inference_reuse_study as s
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime
+from agentic_ai_lab_runtime.reasoning import EvidenceChain
+from agentic_ai_lab_testing.assessment_studies import inference_reuse_study as s
 read,write=os.pipe()
 fds=(0,1,2,read,write)
 before={fd:fcntl.fcntl(fd,fcntl.F_GETFL) for fd in fds}
@@ -49,9 +49,9 @@ print('EMBEDDED-HOST-IO-FLAGS-OK',flush=True)
         root=Path(__file__).resolve().parents[4]
         code="""
 import concurrent.futures,multiprocessing,os,fcntl
-from poo_flow_runtime.reasoning import ReasoningRuntime
-from poo_flow_runtime.reasoning import EvidenceChain
-from poo_flow_testing.assessment_studies import inference_reuse_study as s
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime
+from agentic_ai_lab_runtime.reasoning import EvidenceChain
+from agentic_ai_lab_testing.assessment_studies import inference_reuse_study as s
 def job(index):
  flags={fd:fcntl.fcntl(fd,fcntl.F_GETFL) for fd in (0,1,2)}
  engine=ReasoningRuntime()

@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+title: POO Flow Product Module Owners
+#+title: Agentic AI Lab Product Module Owners
 
 Shared mechanisms are implemented in the independent Core submodule. This product
 repository contains maintained modules, Profiles, Scenarios, adapters and cases;

@@ -12,7 +12,7 @@ admission and source checks still bracket that method. With no evaluator the
 existing CLI path is unchanged. This is an opt-in product call chain, not a
 claim that every product process already bootstraps libflake-c.
 
-The adapter belongs to POO Flow's =bindings/nix-c-api=, never Yuanxu. It uses
+The adapter belongs to Agentic AI Lab's =bindings/nix-c-api=, never Yuanxu. It uses
 the installed Gerbil and the pinned Nix 2.34.4+1 C libraries. No compiler or
 Gerbil source is patched. Minimum supported Nix remains major/minor >= 2.34.
 
@@ -91,8 +91,8 @@ just -f bindings/nix-c-api/Justfile test product-native
 just -f bindings/nix-c-api/Justfile test product-cli
 #+end_src
 
-The existing real Nix fixture supplies POO_FLOW_OPENTOFU_FLAKE_ARTIFACT and
-POO_FLOW_NIX_TEST_TOOLS. Real AWS 5.100.0 and Null 3.2.4 schema artifacts are
+The existing real Nix fixture supplies AGENTIC_AI_LAB_OPENTOFU_FLAKE_ARTIFACT and
+AGENTIC_AI_LAB_NIX_TEST_TOOLS. Real AWS 5.100.0 and Null 3.2.4 schema artifacts are
 already populated in the Store. Measurements therefore are not download-cold.
 Fixture lock creation, FFI compilation and native process startup are outside
 the reported product phase times; both controls use the same startup libraries.

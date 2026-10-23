@@ -1,4 +1,4 @@
-//! POO Flow assessment, evidence reuse and agent context over a rules Library.
+//! Agentic AI Lab assessment, evidence reuse and agent context over a rules Library.
 #[path = "../../../ai-agentic-context/clues/native/mod.rs"]
 mod clues;
 mod computational;

@@ -1,9 +1,9 @@
 //! Shared Scheme semantics through the existing native Session, not a second scheduler.
-use poo_flow_reasoning::{Cancellation, FactLimits, Limits, Row, Runtime, SourceSession};
+use agentic_ai_lab_reasoning::{Cancellation, FactLimits, Limits, Row, Runtime, SourceSession};
 use std::collections::BTreeMap;
 
 const RULES: &str = include_str!(
-    "../../../../packages/python-runtime/src/poo_flow_runtime/reasoning_rules/checkpoint_rules.ss"
+    "../../../../packages/python-runtime/src/agentic_ai_lab_runtime/reasoning_rules/checkpoint_rules.ss"
 );
 
 fn row(values: &[&str]) -> Row {

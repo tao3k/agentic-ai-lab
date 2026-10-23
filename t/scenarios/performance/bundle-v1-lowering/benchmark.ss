@@ -57,7 +57,7 @@
 
 (def descriptor (.ref plan 'descriptor))
 
-(display "schema=poo-flow.bundle-v1.scheme-lowering-benchmark.1\n")
+(display "schema=agentic-ai-lab.bundle-v1.scheme-lowering-benchmark.1\n")
 (display "agents=")
 (display +agent-count+)
 (newline)

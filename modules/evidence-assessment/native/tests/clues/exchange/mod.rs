@@ -1,4 +1,4 @@
-use poo_flow_reasoning::{
+use agentic_ai_lab_reasoning::{
     Cancellation, ClueExchange, ClueProjection, ClueSelector, Data, Limits, Runtime, clue_sexpr,
 };
 

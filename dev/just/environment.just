@@ -62,24 +62,24 @@ darwin_openssl_prefix := env_var_or_default("OPENSSL_PREFIX", homebrew_openssl_p
 # A Nix Gerbil runtime retains its own compiler and linker environment.
 gerbil_darwin_env := if os() == "macos" { if gerbil_homebrew_runtime == "true" { "env -u SDKROOT -u DEVELOPER_DIR -u CPATH -u LIBRARY_PATH -u C_INCLUDE_PATH -u CPLUS_INCLUDE_PATH -u MACOSX_DEPLOYMENT_TARGET -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH COMPILER_PATH=/usr/bin CPATH='" + darwin_openssl_prefix + "/include' LIBRARY_PATH='" + darwin_openssl_prefix + "/lib'" } else { "env" } } else { "env" }
 
-poo_flow_gerbil_path := env_var_or_default("GERBIL_PATH", justfile_directory() + "/.gerbil")
+agentic_ai_lab_gerbil_path := env_var_or_default("GERBIL_PATH", justfile_directory() + "/.gerbil")
 
-poo_flow_library_path := env_var_or_default("GERBIL_LOADPATH", poo_flow_gerbil_path + "/lib")
+agentic_ai_lab_library_path := env_var_or_default("GERBIL_LOADPATH", agentic_ai_lab_gerbil_path + "/lib")
 
 # Optional development packages must never rewrite the production package store.
-poo_flow_dev_gerbil_path := justfile_directory() + "/dev/.gerbil"
-poo_flow_dev_library_path := poo_flow_library_path + ":" + poo_flow_dev_gerbil_path + "/lib"
+agentic_ai_lab_dev_gerbil_path := justfile_directory() + "/dev/.gerbil"
+agentic_ai_lab_dev_library_path := agentic_ai_lab_library_path + ":" + agentic_ai_lab_dev_gerbil_path + "/lib"
 
 # gerbil.pkg is the parser revision authority.  Resolve source-owned fixtures
 # through gxpkg's installed package root; never fall back to an arbitrary
 # sibling checkout whose branch may differ from the declared dependency.
-gerbil_parser_dir := poo_flow_gerbil_path + "/pkg/github.com/tao3k/gerbil-parser"
+gerbil_parser_dir := agentic_ai_lab_gerbil_path + "/pkg/github.com/tao3k/gerbil-parser"
 
-gerbil_parser_path := poo_flow_gerbil_path
+gerbil_parser_path := agentic_ai_lab_gerbil_path
 
-gerbil_parser_library_path := poo_flow_library_path + ":" + gerbil_parser_dir + ":" + contribution_source_root + "/lambda-episteme:" + justfile_directory()
+gerbil_parser_library_path := agentic_ai_lab_library_path + ":" + gerbil_parser_dir + ":" + contribution_source_root + "/lambda-episteme:" + justfile_directory()
 
-aitia_native_library := justfile_directory() + "/.gerbil/native/libpoo_flow_aitia.dylib"
+aitia_native_library := justfile_directory() + "/.gerbil/native/libagentic_ai_lab_aitia.dylib"
 
 aitia_python_dir := contribution_source_root + "/lambda-aitia/bindings/python"
 

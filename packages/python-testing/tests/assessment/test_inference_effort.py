@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import unittest
-from poo_flow_testing.assessment_studies.inference_effort import until_verified,paired_reduction
+from agentic_ai_lab_testing.assessment_studies.inference_effort import until_verified,paired_reduction
 
 
 def attempt(correct,reasoning,visible=20,adaptive=False):

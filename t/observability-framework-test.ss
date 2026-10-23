@@ -3,13 +3,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Real Module admission -> POO Flow observation -> explanation -> gerbil-poo debug.
+;;; Real Module admission -> Agentic AI Lab observation -> explanation -> gerbil-poo debug.
 (import (only-in :std/test test-suite check-equal? check-exception)
         (only-in :std/test/base current-test-case)
         (only-in :clan/poo/object .o .cc .ref .slot? .call CyclicSlot? CyclicSlot-path)
         (only-in :clan/poo/mop element? validate TypeError?)
         :yuanxu/observability/debug
-        (only-in :poo-flow/testing-api
+        (only-in :agentic-ai-lab/testing-api
                  yuanxu-test-case
                  yuanxu-test-case/with
                  yuanxu-testing-case-profile-prototype
@@ -36,7 +36,7 @@
                  yuanxu-empty-imports yuanxu-empty-capabilities
                  yuanxu-empty-profiles)
         :yuanxu/module-system/authoring/roles
-        (only-in :poo-flow/modules/module-authoring/semantic-module UserConfigSourceRole. poo-flow-user-root-module-authoring-profile))
+        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
 (export observability-framework-test)
 
 (def (framework-id name) (yuanxu-observation-identity 'test name 'v1))
@@ -77,7 +77,7 @@
       max-duration-milliseconds: 2000))
 
 (def observability-framework-test
-  (test-suite "POO Flow observability over gerbil-poo"
+  (test-suite "Agentic AI Lab observability over gerbil-poo"
     (let (harness-thread (current-thread))
       (yuanxu-test-case "default POO Case preserves native assertions"
         (check-equal? (eq? (current-thread) harness-thread) #t)
@@ -346,7 +346,7 @@
               (with-exception-catcher
                (lambda (failure) failure)
                (lambda ()
-                 (call-with-poo-flow-debug-trace
+                 (call-with-agentic-ai-lab-debug-trace
                   policy 'unique-symbols-return shadowed-values '(seen values)
                   port: port)))))
         (check-equal? (YuanxuDebugCallAnomaly? captured) #t)
@@ -367,7 +367,7 @@
              (result
               (call-with-values
                 (lambda ()
-                  (call-with-poo-flow-debug-trace
+                  (call-with-agentic-ai-lab-debug-trace
                    policy 'return-pair
                    (lambda (left right) (values left right))
                    '(left right)
@@ -385,10 +385,10 @@
         (with-catch
          (lambda (failure) (set! captured failure))
          (lambda ()
-           (call-with-poo-flow-debug-trace
+           (call-with-agentic-ai-lab-debug-trace
             policy 'cycle-edge
             (lambda ()
-              (call-with-poo-flow-debug-trace
+              (call-with-agentic-ai-lab-debug-trace
                policy 'cycle-edge (lambda () 'unreachable) '()
                port: port))
             '()
@@ -406,7 +406,7 @@
               (with-exception-catcher
                (lambda (failure) failure)
                (lambda ()
-                 (call-with-poo-flow-debug-trace
+                 (call-with-agentic-ai-lab-debug-trace
                   policy 'raises
                   (lambda () (raise private-marker))
                   '()
@@ -416,10 +416,10 @@
               (with-exception-catcher
                (lambda (failure) failure)
                (lambda ()
-                 (call-with-poo-flow-debug-trace
+                 (call-with-agentic-ai-lab-debug-trace
                   policy 'outer
                   (lambda ()
-                    (call-with-poo-flow-debug-trace
+                    (call-with-agentic-ai-lab-debug-trace
                      policy 'inner (lambda () 'unreachable) '()
                      port: depth-port))
                   '()
@@ -586,7 +586,7 @@
              (port (open-output-string)))
         (call-with-values
           (lambda ()
-            (call-with-poo-flow-debug-memory-span
+            (call-with-agentic-ai-lab-debug-memory-span
              policy 'native-span (lambda () 'completed) port: port emit?: #t))
           (lambda (value receipt)
             (check-equal? value 'completed)
@@ -605,7 +605,7 @@
              (port (open-output-string)))
         (call-with-values
           (lambda ()
-            (call-with-poo-flow-debug-memory-monitor
+            (call-with-agentic-ai-lab-debug-memory-monitor
              policy
              'native-monitor
              (lambda () (thread-sleep! 0.01) 'completed)
@@ -630,7 +630,7 @@
         (with-catch
          (lambda (failure) (set! captured failure))
          (lambda ()
-           (call-with-poo-flow-debug-memory-monitor
+           (call-with-agentic-ai-lab-debug-memory-monitor
             policy
             'native-monitor-rejected
             (lambda ()
@@ -658,7 +658,7 @@
         (with-catch
          (lambda (failure) (set! captured failure))
          (lambda ()
-           (call-with-poo-flow-debug-memory-monitor
+           (call-with-agentic-ai-lab-debug-memory-monitor
             policy
             'poo-self-slot-cycle
             (lambda ()

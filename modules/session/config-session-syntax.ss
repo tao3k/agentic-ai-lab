@@ -6,14 +6,14 @@
 ;;; while keeping category/module configuration separate from runtime state.
 ;;; Invariant: this owner must preserve the compact init/config shape expected
 ;;; by the module loader.
-(import :poo-flow/modules/session/config-session-runtime
-        :poo-flow/modules/session/config-session-syntax-core
-        :poo-flow/modules/session/config-session-syntax-communication
-        :poo-flow/modules/session/config-session-syntax-selector
-        :poo-flow/modules/session/config-session-syntax-agent)
+(import :agentic-ai-lab/modules/session/config-session-runtime
+        :agentic-ai-lab/modules/session/config-session-syntax-core
+        :agentic-ai-lab/modules/session/config-session-syntax-communication
+        :agentic-ai-lab/modules/session/config-session-syntax-selector
+        :agentic-ai-lab/modules/session/config-session-syntax-agent)
 
-(export (import: :poo-flow/modules/session/config-session-runtime)
-        (import: :poo-flow/modules/session/config-session-syntax-core)
-        (import: :poo-flow/modules/session/config-session-syntax-communication)
-        (import: :poo-flow/modules/session/config-session-syntax-selector)
-        (import: :poo-flow/modules/session/config-session-syntax-agent))
+(export (import: :agentic-ai-lab/modules/session/config-session-runtime)
+        (import: :agentic-ai-lab/modules/session/config-session-syntax-core)
+        (import: :agentic-ai-lab/modules/session/config-session-syntax-communication)
+        (import: :agentic-ai-lab/modules/session/config-session-syntax-selector)
+        (import: :agentic-ai-lab/modules/session/config-session-syntax-agent))

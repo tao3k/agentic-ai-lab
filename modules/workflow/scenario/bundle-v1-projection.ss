@@ -4,15 +4,15 @@
 
 ;;; Boundary: serializes validated feature compositions as Bundle v1 images.
 ;;; Invariant: writing preserves the lowering result and canonical content identity.
-(export poo-flow-scenario-case->bundle-v1-image
-        poo-flow-write-composition-bundle-v1!
-        poo-flow-write-composition-bundle-v1/from-environment!)
+(export agentic-ai-lab-scenario-case->bundle-v1-image
+        agentic-ai-lab-write-composition-bundle-v1!
+        agentic-ai-lab-write-composition-bundle-v1/from-environment!)
 
 (import (only-in :std/format format)
         (only-in :clan/poo/object .ref .slot?)
         :yuanxu/modules/funflow/control-plane/graph
-        (only-in :poo-flow/modules/workflow/scenario/plan-projection
-                 poo-flow-scenario-case->execution-plan)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/plan-projection
+                 agentic-ai-lab-scenario-case->execution-plan)
         :yuanxu/feature-system/bundle-v1-lowering
         :yuanxu/feature-system/bundle-v1-foreign-arena
         :yuanxu/feature-system/bundle-v1-writer)
@@ -21,9 +21,9 @@
 (def (plan-node-semantic-id node)
   (format "%s" (plan-node-id node)))
 
-;;; Guard declarations are data. POO Flow compiles them into Bundle v1
+;;; Guard declarations are data. Agentic AI Lab compiles them into Bundle v1
 ;;; policy metadata; an admitted receipt is supplied by the execution runtime.
-(def +poo-flow-bundle-v1-guard-symbol-kind+ 2)
+(def +agentic-ai-lab-bundle-v1-guard-symbol-kind+ 2)
 
 ;; : (-> Object String)
 (def (guard->string guard)
@@ -40,7 +40,7 @@
 ;; : (-> List String)
 (def (guard-payload->string payload)
   (unless (and (pair? payload) (null? (cdr payload)))
-    (error "POO-FLOW-GUARD-E001 guard expects exactly one declaration" payload))
+    (error "AGENTIC-AI-LAB-GUARD-E001 guard expects exactly one declaration" payload))
   (guard->string (guard-unbox (car payload))))
 
 ;; : (-> PooCompositionStage MaybeString)
@@ -79,17 +79,17 @@
    (lambda (node)
      (let* ((semantic-id (plan-node-semantic-id node))
             (guard (plan-node-guard composition node))
-            (policy-id (if guard (plan-node-policy-id node) 'poo-flow.policy.none)))
+            (policy-id (if guard (plan-node-policy-id node) 'agentic-ai-lab.policy.none)))
        (feature-bundle-v1-component
         (execution-plan-flow-name plan)
         semantic-id
         semantic-id
         (plan-node-kind node)
-        'poo-flow.contract.none
+        'agentic-ai-lab.contract.none
         (plan-node-kind node)
         (plan-node-name node)
         policy-id
-        'poo-flow.strategy.none
+        'agentic-ai-lab.strategy.none
         +feature-bundle-v1-no-adapter-id+
         +feature-bundle-v1-no-projection-id+
         (plan-node-ordinal node))))
@@ -114,7 +114,7 @@
               'policy
               (plan-node-policy-id node)
               guard
-              +poo-flow-bundle-v1-guard-symbol-kind+))))
+              +agentic-ai-lab-bundle-v1-guard-symbol-kind+))))
     (execution-plan-nodes plan))))
 
 ;; : (-> PooExecutionPlan [PooFeatureBundleV1Edge])
@@ -130,7 +130,7 @@
                 (execution-plan-flow-name plan)
                 (format "%s" (car edge))
                 (format "%s" (cadr edge))
-                'poo-flow.bundle-v1.plan-dependency
+                'agentic-ai-lab.bundle-v1.plan-dependency
                 order)
                (cdr state)))))
          (cons 0 '())
@@ -138,8 +138,8 @@
     (reverse (cdr order+edges-reversed))))
 
 ;; : (-> PooComposition Symbol Integer (Values PooExecutionPlan PooFeatureBundleV1ForeignArenaImage))
-(def (poo-flow-scenario-case->bundle-v1-image composition bundle-id bundle-epoch)
-  (let* ((plan (poo-flow-scenario-case->execution-plan composition))
+(def (agentic-ai-lab-scenario-case->bundle-v1-image composition bundle-id bundle-epoch)
+  (let* ((plan (agentic-ai-lab-scenario-case->execution-plan composition))
          (lowering
           (require-feature-bundle-v1-lowering-plan
            (feature-bundle-v1-lowering/with-symbols
@@ -155,10 +155,10 @@
     (values plan image)))
 
 ;; : (-> PooComposition Symbol Integer String String PooExecutionPlan)
-(def (poo-flow-write-composition-bundle-v1!
+(def (agentic-ai-lab-write-composition-bundle-v1!
       composition bundle-id bundle-epoch descriptor-path arena-path)
   (let-values (((plan image)
-                (poo-flow-scenario-case->bundle-v1-image
+                (agentic-ai-lab-scenario-case->bundle-v1-image
                  composition bundle-id bundle-epoch)))
     (write-feature-bundle-v1-image! image descriptor-path arena-path)
     plan))
@@ -171,12 +171,12 @@
     value))
 
 ;; : (-> PooComposition PooExecutionPlan)
-(def (poo-flow-write-composition-bundle-v1/from-environment! composition)
+(def (agentic-ai-lab-write-composition-bundle-v1/from-environment! composition)
   (let* ((bundle-id
           (string->symbol
-           (required-environment-value "POO_FLOW_BUNDLE_V1_ID")))
+           (required-environment-value "AGENTIC_AI_LAB_BUNDLE_V1_ID")))
          (bundle-epoch-text
-          (required-environment-value "POO_FLOW_BUNDLE_V1_EPOCH"))
+          (required-environment-value "AGENTIC_AI_LAB_BUNDLE_V1_EPOCH"))
          (bundle-epoch (string->number bundle-epoch-text))
          (descriptor-path
           (required-environment-value "YUANXU_BUNDLE_V1_DESCRIPTOR_OUT"))
@@ -188,9 +188,9 @@
       (error "Bundle v1 epoch must be a non-negative integer"
              bundle-epoch-text))
     (let (plan
-          (poo-flow-write-composition-bundle-v1!
+          (agentic-ai-lab-write-composition-bundle-v1!
            composition bundle-id bundle-epoch descriptor-path arena-path))
-      (display "POO_FLOW_BUNDLE_V1_RECEIPT bundle=")
+      (display "AGENTIC_AI_LAB_BUNDLE_V1_RECEIPT bundle=")
       (display bundle-id)
       (display " nodes=")
       (display (length (execution-plan-nodes plan)))

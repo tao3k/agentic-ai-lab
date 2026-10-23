@@ -7,25 +7,25 @@
 ;;; Invariant: this owner normalizes receipt rows only; scenario construction
 ;;; and public projection stay in durable-recovery-scenario.ss.
 
-(import :poo-flow/modules/ai-agentic-context/features/memory/durable/policy
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/store)
+(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store)
 
-(export +poo-flow-durable-recovery-scenario-diagnostic-schema+
-        +poo-flow-durable-recovery-observability-schema+
-        +poo-flow-durable-recovery-stages+
-        poo-flow-durable-recovery-option
-        poo-flow-durable-recovery-runtime-store-row
-        poo-flow-durable-recovery-runtime-store-ref
-        poo-flow-durable-recovery-diagnostics
-        poo-flow-durable-recovery-observability-rows)
+(export +agentic-ai-lab-durable-recovery-scenario-diagnostic-schema+
+        +agentic-ai-lab-durable-recovery-observability-schema+
+        +agentic-ai-lab-durable-recovery-stages+
+        agentic-ai-lab-durable-recovery-option
+        agentic-ai-lab-durable-recovery-runtime-store-row
+        agentic-ai-lab-durable-recovery-runtime-store-ref
+        agentic-ai-lab-durable-recovery-diagnostics
+        agentic-ai-lab-durable-recovery-observability-rows)
 
-(def +poo-flow-durable-recovery-scenario-diagnostic-schema+
-  'poo-flow.module-system.durable-recovery-scenario.diagnostic.v1)
+(def +agentic-ai-lab-durable-recovery-scenario-diagnostic-schema+
+  'agentic-ai-lab.module-system.durable-recovery-scenario.diagnostic.v1)
 
-(def +poo-flow-durable-recovery-observability-schema+
-  'poo-flow.module-system.durable-recovery-scenario.observability.v1)
+(def +agentic-ai-lab-durable-recovery-observability-schema+
+  'agentic-ai-lab.module-system.durable-recovery-scenario.observability.v1)
 
-(def +poo-flow-durable-recovery-stages+
+(def +agentic-ai-lab-durable-recovery-stages+
   '(durable-event-append
     checkpoint-read
     derived-index-rebuild
@@ -34,64 +34,64 @@
     recovery-decision))
 
 ;; : (forall (a) (-> Alist Symbol a a))
-(def (poo-flow-durable-recovery-alist-ref row key default-value)
+(def (agentic-ai-lab-durable-recovery-alist-ref row key default-value)
   (if (list? row)
     (let (entry (assoc key row))
       (if entry (cdr entry) default-value))
     default-value))
 
 ;; : (forall (a) (-> Alist Symbol a a))
-(def (poo-flow-durable-recovery-option options key default-value)
-  (poo-flow-durable-recovery-alist-ref options key default-value))
+(def (agentic-ai-lab-durable-recovery-option options key default-value)
+  (agentic-ai-lab-durable-recovery-alist-ref options key default-value))
 
 ;; : (-> Procedure List Boolean)
-(def (poo-flow-durable-recovery-every? predicate values)
+(def (agentic-ai-lab-durable-recovery-every? predicate values)
   (cond
    ((null? values) #t)
    ((predicate (car values))
-    (poo-flow-durable-recovery-every? predicate (cdr values)))
+    (agentic-ai-lab-durable-recovery-every? predicate (cdr values)))
    (else #f)))
 
 ;; : (forall (a) (-> (List a) (List a) (List a)))
-(def (poo-flow-durable-recovery-reverse-onto values tail)
+(def (agentic-ai-lab-durable-recovery-reverse-onto values tail)
   (if (null? values)
     tail
-    (poo-flow-durable-recovery-reverse-onto
+    (agentic-ai-lab-durable-recovery-reverse-onto
      (cdr values)
      (cons (car values) tail))))
 
 ;; : (forall (a) (-> a (List a) Boolean))
-(def (poo-flow-durable-recovery-member? value values)
+(def (agentic-ai-lab-durable-recovery-member? value values)
   (if (member value values) #t #f))
 
 ;; : (-> Datum Boolean)
-(def (poo-flow-durable-recovery-alist? value)
+(def (agentic-ai-lab-durable-recovery-alist? value)
   (list? value))
 
 ;; : (-> Datum Boolean)
-(def (poo-flow-durable-recovery-row-valid? row)
-  (eq? (poo-flow-durable-recovery-alist-ref row 'valid? #f) #t))
+(def (agentic-ai-lab-durable-recovery-row-valid? row)
+  (eq? (agentic-ai-lab-durable-recovery-alist-ref row 'valid? #f) #t))
 
 ;; : (-> Symbol Symbol Symbol Alist Alist)
-(def (poo-flow-durable-recovery-diagnostic code slot severity payload)
+(def (agentic-ai-lab-durable-recovery-diagnostic code slot severity payload)
   (list
-   (cons 'kind +poo-flow-durable-recovery-scenario-diagnostic-schema+)
-   (cons 'schema +poo-flow-durable-recovery-scenario-diagnostic-schema+)
+   (cons 'kind +agentic-ai-lab-durable-recovery-scenario-diagnostic-schema+)
+   (cons 'schema +agentic-ai-lab-durable-recovery-scenario-diagnostic-schema+)
    (cons 'code code)
    (cons 'phase 'durable-recovery-scenario)
    (cons 'slot slot)
    (cons 'severity severity)
    (cons 'payload payload)
    (cons 'recoverable?
-         (poo-flow-durable-recovery-option payload 'recoverable? #t))
+         (agentic-ai-lab-durable-recovery-option payload 'recoverable? #t))
    (cons 'runtime-executed #f)))
 
 ;; : (-> Symbol Symbol Datum [Alist])
-(def (poo-flow-durable-recovery-required-symbol-diagnostics code slot value)
+(def (agentic-ai-lab-durable-recovery-required-symbol-diagnostics code slot value)
   (if (symbol? value)
     '()
     (list
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       code
       slot
       'error
@@ -100,64 +100,64 @@
             (cons 'recoverable? #t))))))
 
 ;; : (-> Datum Alist)
-(def (poo-flow-durable-recovery-runtime-store-row runtime-store-receipt)
+(def (agentic-ai-lab-durable-recovery-runtime-store-row runtime-store-receipt)
   (cond
-   ((poo-flow-durable-runtime-store-contract-receipt?
+   ((agentic-ai-lab-durable-runtime-store-contract-receipt?
      runtime-store-receipt)
-    (poo-flow-durable-runtime-store-contract-receipt->alist
+    (agentic-ai-lab-durable-runtime-store-contract-receipt->alist
      runtime-store-receipt))
    ((list? runtime-store-receipt) runtime-store-receipt)
    (else runtime-store-receipt)))
 
 ;; : (-> Alist [Alist])
-(def (poo-flow-durable-recovery-runtime-store-diagnostics runtime-store-row)
+(def (agentic-ai-lab-durable-recovery-runtime-store-diagnostics runtime-store-row)
   (cond
-   ((not (poo-flow-durable-recovery-alist? runtime-store-row))
+   ((not (agentic-ai-lab-durable-recovery-alist? runtime-store-row))
     (list
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'invalid-runtime-store-receipt
       'runtime-store-row
       'error
       (list (cons 'value runtime-store-row)
             (cons 'recoverable? #t)))))
-   ((not (eq? (poo-flow-durable-recovery-alist-ref
+   ((not (eq? (agentic-ai-lab-durable-recovery-alist-ref
                runtime-store-row
                'kind
                #f)
-              'poo-flow.durable.runtime-store-contract-receipt))
+              'agentic-ai-lab.durable.runtime-store-contract-receipt))
     (list
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'invalid-runtime-store-receipt
       'runtime-store-row
       'error
       (list (cons 'kind
-                  (poo-flow-durable-recovery-alist-ref
+                  (agentic-ai-lab-durable-recovery-alist-ref
                    runtime-store-row
                    'kind
                    #f))
             (cons 'recoverable? #t)))))
-   ((poo-flow-durable-recovery-row-valid? runtime-store-row) '())
+   ((agentic-ai-lab-durable-recovery-row-valid? runtime-store-row) '())
    (else
     (list
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'runtime-store-receipt-invalid
       'runtime-store-row
       'error
       (list (cons 'diagnostics
-                  (poo-flow-durable-recovery-alist-ref
+                  (agentic-ai-lab-durable-recovery-alist-ref
                    runtime-store-row
                    'diagnostics
                    '()))
             (cons 'recoverable? #t)))))))
 
 ;; : (-> Alist Symbol Value)
-(def (poo-flow-durable-recovery-runtime-store-ref runtime-store-row key)
-  (poo-flow-durable-recovery-alist-ref runtime-store-row key #f))
+(def (agentic-ai-lab-durable-recovery-runtime-store-ref runtime-store-row key)
+  (agentic-ai-lab-durable-recovery-alist-ref runtime-store-row key #f))
 
 ;; : (-> Alist Boolean)
-(def (poo-flow-durable-recovery-replayable-task? task-row)
+(def (agentic-ai-lab-durable-recovery-replayable-task? task-row)
   (let (action-class
-        (poo-flow-durable-recovery-alist-ref
+        (agentic-ai-lab-durable-recovery-alist-ref
          task-row
          'action-class
          #f))
@@ -165,30 +165,30 @@
         (eq? action-class 'idempotent))))
 
 ;; : (-> Alist Boolean)
-(def (poo-flow-durable-recovery-compensated-task? task-row)
+(def (agentic-ai-lab-durable-recovery-compensated-task? task-row)
   (not
    (null?
-    (poo-flow-durable-recovery-alist-ref
+    (agentic-ai-lab-durable-recovery-alist-ref
      task-row
      'compensation-refs
      '()))))
 
 ;; : (-> Alist Boolean)
-(def (poo-flow-durable-recovery-task-has-checkpoint? task-row)
-  (if (poo-flow-durable-recovery-alist-ref task-row 'checkpoint-ref #f)
+(def (agentic-ai-lab-durable-recovery-task-has-checkpoint? task-row)
+  (if (agentic-ai-lab-durable-recovery-alist-ref task-row 'checkpoint-ref #f)
     #t
     #f))
 
 ;; : (-> Symbol Symbol [Alist] [Alist])
-(def (poo-flow-durable-recovery-action-class-diagnostics/tail task-id
+(def (agentic-ai-lab-durable-recovery-action-class-diagnostics/tail task-id
                                                               action-class
                                                               tail)
-  (if (poo-flow-durable-recovery-member?
+  (if (agentic-ai-lab-durable-recovery-member?
        action-class
        +yuanxu-durable-action-classes+)
     tail
     (cons
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'unsupported-action-class
       'workflow-task-rows
       'error
@@ -199,15 +199,15 @@
      tail)))
 
 ;; : (-> Alist Symbol Symbol [Alist] [Alist])
-(def (poo-flow-durable-recovery-checkpoint-diagnostics/tail task-row
+(def (agentic-ai-lab-durable-recovery-checkpoint-diagnostics/tail task-row
                                                             task-id
                                                             action-class
                                                             tail)
   (if (or (eq? action-class 'idempotent)
-          (poo-flow-durable-recovery-task-has-checkpoint? task-row))
+          (agentic-ai-lab-durable-recovery-task-has-checkpoint? task-row))
     tail
     (cons
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'missing-task-checkpoint
       'workflow-task-rows
       'error
@@ -217,16 +217,16 @@
      tail)))
 
 ;; : (-> Alist Symbol Symbol [Alist] [Alist])
-(def (poo-flow-durable-recovery-compensation-diagnostics/tail task-row
+(def (agentic-ai-lab-durable-recovery-compensation-diagnostics/tail task-row
                                                               task-id
                                                               action-class
                                                               tail)
-  (if (or (poo-flow-durable-recovery-replayable-task? task-row)
-          (poo-flow-durable-recovery-compensated-task? task-row)
-          (poo-flow-durable-recovery-task-has-checkpoint? task-row))
+  (if (or (agentic-ai-lab-durable-recovery-replayable-task? task-row)
+          (agentic-ai-lab-durable-recovery-compensated-task? task-row)
+          (agentic-ai-lab-durable-recovery-task-has-checkpoint? task-row))
     tail
     (cons
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'non-idempotent-without-compensation
       'workflow-task-rows
       'error
@@ -236,17 +236,17 @@
      tail)))
 
 ;; : (-> Alist Symbol Symbol [Alist] [Alist])
-(def (poo-flow-durable-recovery-manual-replay-diagnostics/tail task-row
+(def (agentic-ai-lab-durable-recovery-manual-replay-diagnostics/tail task-row
                                                                task-id
                                                                action-class
                                                                tail)
-  (if (or (not (poo-flow-durable-recovery-member?
+  (if (or (not (agentic-ai-lab-durable-recovery-member?
                 action-class
                 '(terminal manual)))
-          (poo-flow-durable-recovery-compensated-task? task-row))
+          (agentic-ai-lab-durable-recovery-compensated-task? task-row))
     tail
     (cons
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'unsafe-manual-replay
       'workflow-task-rows
       'error
@@ -256,55 +256,55 @@
      tail)))
 
 ;; : (-> Alist [Alist])
-(def (poo-flow-durable-recovery-workflow-task-diagnostics/one task-row)
+(def (agentic-ai-lab-durable-recovery-workflow-task-diagnostics/one task-row)
   (let ((action-class
-         (poo-flow-durable-recovery-alist-ref
+         (agentic-ai-lab-durable-recovery-alist-ref
           task-row
           'action-class
           #f))
         (task-id
-         (poo-flow-durable-recovery-alist-ref
+         (agentic-ai-lab-durable-recovery-alist-ref
           task-row
           'durable-task-id
-          (poo-flow-durable-recovery-alist-ref task-row 'check #f))))
-    (poo-flow-durable-recovery-action-class-diagnostics/tail
+          (agentic-ai-lab-durable-recovery-alist-ref task-row 'check #f))))
+    (agentic-ai-lab-durable-recovery-action-class-diagnostics/tail
      task-id
      action-class
-     (poo-flow-durable-recovery-checkpoint-diagnostics/tail
+     (agentic-ai-lab-durable-recovery-checkpoint-diagnostics/tail
       task-row
       task-id
       action-class
-      (poo-flow-durable-recovery-compensation-diagnostics/tail
+      (agentic-ai-lab-durable-recovery-compensation-diagnostics/tail
        task-row
        task-id
        action-class
-       (poo-flow-durable-recovery-manual-replay-diagnostics/tail
+       (agentic-ai-lab-durable-recovery-manual-replay-diagnostics/tail
         task-row
         task-id
         action-class
         '()))))))
 
 ;; : (-> [Alist] [Alist] [Alist])
-(def (poo-flow-durable-recovery-workflow-task-diagnostics/rev task-rows
+(def (agentic-ai-lab-durable-recovery-workflow-task-diagnostics/rev task-rows
                                                               diagnostics-rev)
   (if (null? task-rows)
     diagnostics-rev
-    (poo-flow-durable-recovery-workflow-task-diagnostics/rev
+    (agentic-ai-lab-durable-recovery-workflow-task-diagnostics/rev
      (cdr task-rows)
-     (poo-flow-durable-recovery-reverse-onto
-      (poo-flow-durable-recovery-workflow-task-diagnostics/one
+     (agentic-ai-lab-durable-recovery-reverse-onto
+      (agentic-ai-lab-durable-recovery-workflow-task-diagnostics/one
        (car task-rows))
       diagnostics-rev))))
 
 ;; : (-> [Alist] [Alist])
-(def (poo-flow-durable-recovery-workflow-task-diagnostics task-rows)
+(def (agentic-ai-lab-durable-recovery-workflow-task-diagnostics task-rows)
   (if (list? task-rows)
     (reverse
-     (poo-flow-durable-recovery-workflow-task-diagnostics/rev
+     (agentic-ai-lab-durable-recovery-workflow-task-diagnostics/rev
       task-rows
       '()))
     (list
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'invalid-workflow-task-rows
       'workflow-task-rows
       'error
@@ -312,51 +312,51 @@
             (cons 'recoverable? #t))))))
 
 ;; : (-> Alist [Alist])
-(def (poo-flow-durable-recovery-memory-job-row-diagnostics/one row)
-  (if (and (poo-flow-durable-recovery-alist? row)
-           (eq? (poo-flow-durable-recovery-alist-ref row 'kind #f)
-                'poo-flow.memory-core.durable-job-receipt)
-           (poo-flow-durable-recovery-row-valid? row))
+(def (agentic-ai-lab-durable-recovery-memory-job-row-diagnostics/one row)
+  (if (and (agentic-ai-lab-durable-recovery-alist? row)
+           (eq? (agentic-ai-lab-durable-recovery-alist-ref row 'kind #f)
+                'agentic-ai-lab.memory-core.durable-job-receipt)
+           (agentic-ai-lab-durable-recovery-row-valid? row))
     '()
     (list
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'invalid-memory-durable-job
       'memory-job-rows
       'error
       (list (cons 'job-id
-                  (poo-flow-durable-recovery-alist-ref
+                  (agentic-ai-lab-durable-recovery-alist-ref
                    row
                    'job-id
                    #f))
             (cons 'diagnostics
-                  (poo-flow-durable-recovery-alist-ref
+                  (agentic-ai-lab-durable-recovery-alist-ref
                    row
                    'diagnostics
                    '()))
             (cons 'recoverable? #t))))))
 
 ;; : (-> [Alist] [Alist] [Alist])
-(def (poo-flow-durable-recovery-memory-job-row-diagnostics/rev
+(def (agentic-ai-lab-durable-recovery-memory-job-row-diagnostics/rev
       memory-job-rows
       diagnostics-rev)
   (if (null? memory-job-rows)
     diagnostics-rev
-    (poo-flow-durable-recovery-memory-job-row-diagnostics/rev
+    (agentic-ai-lab-durable-recovery-memory-job-row-diagnostics/rev
      (cdr memory-job-rows)
-     (poo-flow-durable-recovery-reverse-onto
-      (poo-flow-durable-recovery-memory-job-row-diagnostics/one
+     (agentic-ai-lab-durable-recovery-reverse-onto
+      (agentic-ai-lab-durable-recovery-memory-job-row-diagnostics/one
        (car memory-job-rows))
       diagnostics-rev))))
 
 ;; : (-> [Alist] [Alist])
-(def (poo-flow-durable-recovery-memory-job-row-diagnostics memory-job-rows)
+(def (agentic-ai-lab-durable-recovery-memory-job-row-diagnostics memory-job-rows)
   (if (list? memory-job-rows)
     (reverse
-     (poo-flow-durable-recovery-memory-job-row-diagnostics/rev
+     (agentic-ai-lab-durable-recovery-memory-job-row-diagnostics/rev
       memory-job-rows
       '()))
     (list
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'invalid-memory-job-rows
       'memory-job-rows
       'error
@@ -364,26 +364,26 @@
             (cons 'recoverable? #t))))))
 
 ;; : (-> [Alist] [Alist])
-(def (poo-flow-durable-recovery-memory-job-diagnostics memory-job-rows)
+(def (agentic-ai-lab-durable-recovery-memory-job-diagnostics memory-job-rows)
   (if (null? memory-job-rows)
     (list
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'missing-memory-durable-job
       'memory-job-rows
       'error
       (list (cons 'recoverable? #t))))
-    (poo-flow-durable-recovery-memory-job-row-diagnostics memory-job-rows)))
+    (agentic-ai-lab-durable-recovery-memory-job-row-diagnostics memory-job-rows)))
 
 ;; : (-> Alist [Alist] [Alist])
-(def (poo-flow-durable-recovery-communication-diagnostics
+(def (agentic-ai-lab-durable-recovery-communication-diagnostics
       runtime-store-row
       communication-rows)
   (if (and (pair? communication-rows)
-           (not (poo-flow-durable-recovery-runtime-store-ref
+           (not (agentic-ai-lab-durable-recovery-runtime-store-ref
                  runtime-store-row
                  'communication-ledger-ref)))
     (list
-     (poo-flow-durable-recovery-diagnostic
+     (agentic-ai-lab-durable-recovery-diagnostic
       'missing-communication-ledger-ref
       'communication-rows
       'error
@@ -392,52 +392,52 @@
     '()))
 
 ;; : (-> [Symbol] [Symbol] [Symbol])
-(def (poo-flow-durable-recovery-missing-refs refs declared-refs)
+(def (agentic-ai-lab-durable-recovery-missing-refs refs declared-refs)
   (cond
    ((null? refs) '())
-   ((poo-flow-durable-recovery-member? (car refs) declared-refs)
-    (poo-flow-durable-recovery-missing-refs (cdr refs) declared-refs))
+   ((agentic-ai-lab-durable-recovery-member? (car refs) declared-refs)
+    (agentic-ai-lab-durable-recovery-missing-refs (cdr refs) declared-refs))
    (else
     (cons (car refs)
-          (poo-flow-durable-recovery-missing-refs (cdr refs)
+          (agentic-ai-lab-durable-recovery-missing-refs (cdr refs)
                                                   declared-refs)))))
 
 ;; : (-> [Alist] [Symbol] [Alist])
-(def (poo-flow-durable-recovery-sandbox-diagnostics workflow-task-rows
+(def (agentic-ai-lab-durable-recovery-sandbox-diagnostics workflow-task-rows
                                                      sandbox-refs)
   (if (list? workflow-task-rows)
     (reverse
-     (poo-flow-durable-recovery-sandbox-diagnostics/rev
+     (agentic-ai-lab-durable-recovery-sandbox-diagnostics/rev
       workflow-task-rows
       sandbox-refs
       '()))
     '()))
 
 ;; : (-> [Alist] [Symbol] [Alist] [Alist])
-(def (poo-flow-durable-recovery-sandbox-diagnostics/rev workflow-task-rows
+(def (agentic-ai-lab-durable-recovery-sandbox-diagnostics/rev workflow-task-rows
                                                          sandbox-refs
                                                          diagnostics-rev)
   (if (null? workflow-task-rows)
     diagnostics-rev
     (let* ((task-row (car workflow-task-rows))
            (task-refs
-            (poo-flow-durable-recovery-alist-ref
+            (agentic-ai-lab-durable-recovery-alist-ref
              task-row
              'sandbox-refs
              '()))
            (missing-refs
-            (poo-flow-durable-recovery-missing-refs task-refs sandbox-refs)))
-      (poo-flow-durable-recovery-sandbox-diagnostics/rev
+            (agentic-ai-lab-durable-recovery-missing-refs task-refs sandbox-refs)))
+      (agentic-ai-lab-durable-recovery-sandbox-diagnostics/rev
        (cdr workflow-task-rows)
        sandbox-refs
        (if (null? missing-refs)
          diagnostics-rev
-         (cons (poo-flow-durable-recovery-diagnostic
+         (cons (agentic-ai-lab-durable-recovery-diagnostic
                 'unresolved-sandbox-ref
                 'sandbox-refs
                 'error
                 (list (cons 'task
-                            (poo-flow-durable-recovery-alist-ref
+                            (agentic-ai-lab-durable-recovery-alist-ref
                              task-row
                              'durable-task-id
                              #f))
@@ -448,7 +448,7 @@
 ;;; Boundary: recovery diagnostics consolidate durable runtime, communication,
 ;;; memory, workflow, and sandbox evidence without executing recovery actions.
 ;; : (-> Symbol Symbol Symbol Symbol Alist [Alist] [Alist] [Alist] [Alist] [Symbol] [Alist])
-(def (poo-flow-durable-recovery-diagnostics scenario-id
+(def (agentic-ai-lab-durable-recovery-diagnostics scenario-id
                                              project-id
                                              root-session-id
                                              session-id
@@ -458,62 +458,62 @@
                                              workflow-task-rows
                                              sandbox-refs)
   (let* ((diagnostics-rev
-          (poo-flow-durable-recovery-reverse-onto
-           (poo-flow-durable-recovery-required-symbol-diagnostics
+          (agentic-ai-lab-durable-recovery-reverse-onto
+           (agentic-ai-lab-durable-recovery-required-symbol-diagnostics
             'missing-scenario-id
             'scenario-id
             scenario-id)
            '()))
          (diagnostics-rev
-          (poo-flow-durable-recovery-reverse-onto
-           (poo-flow-durable-recovery-required-symbol-diagnostics
+          (agentic-ai-lab-durable-recovery-reverse-onto
+           (agentic-ai-lab-durable-recovery-required-symbol-diagnostics
             'missing-project-id
             'project-id
             project-id)
            diagnostics-rev))
          (diagnostics-rev
-          (poo-flow-durable-recovery-reverse-onto
-           (poo-flow-durable-recovery-required-symbol-diagnostics
+          (agentic-ai-lab-durable-recovery-reverse-onto
+           (agentic-ai-lab-durable-recovery-required-symbol-diagnostics
             'missing-root-session-id
             'root-session-id
             root-session-id)
            diagnostics-rev))
          (diagnostics-rev
-          (poo-flow-durable-recovery-reverse-onto
-           (poo-flow-durable-recovery-required-symbol-diagnostics
+          (agentic-ai-lab-durable-recovery-reverse-onto
+           (agentic-ai-lab-durable-recovery-required-symbol-diagnostics
             'missing-session-id
             'session-id
             session-id)
            diagnostics-rev))
          (diagnostics-rev
-          (poo-flow-durable-recovery-reverse-onto
-           (poo-flow-durable-recovery-runtime-store-diagnostics
+          (agentic-ai-lab-durable-recovery-reverse-onto
+           (agentic-ai-lab-durable-recovery-runtime-store-diagnostics
             runtime-store-row)
            diagnostics-rev))
          (diagnostics-rev
-          (poo-flow-durable-recovery-reverse-onto
-           (poo-flow-durable-recovery-communication-diagnostics
+          (agentic-ai-lab-durable-recovery-reverse-onto
+           (agentic-ai-lab-durable-recovery-communication-diagnostics
             runtime-store-row
             communication-rows)
            diagnostics-rev))
          (diagnostics-rev
-          (poo-flow-durable-recovery-reverse-onto
-           (poo-flow-durable-recovery-memory-job-diagnostics memory-job-rows)
+          (agentic-ai-lab-durable-recovery-reverse-onto
+           (agentic-ai-lab-durable-recovery-memory-job-diagnostics memory-job-rows)
            diagnostics-rev))
          (diagnostics-rev
-          (poo-flow-durable-recovery-reverse-onto
-           (poo-flow-durable-recovery-workflow-task-diagnostics
+          (agentic-ai-lab-durable-recovery-reverse-onto
+           (agentic-ai-lab-durable-recovery-workflow-task-diagnostics
             workflow-task-rows)
            diagnostics-rev))
          (diagnostics-rev
-          (poo-flow-durable-recovery-reverse-onto
-           (poo-flow-durable-recovery-sandbox-diagnostics workflow-task-rows
+          (agentic-ai-lab-durable-recovery-reverse-onto
+           (agentic-ai-lab-durable-recovery-sandbox-diagnostics workflow-task-rows
                                                          sandbox-refs)
            diagnostics-rev)))
     (reverse diagnostics-rev)))
 
 ;; : (-> Symbol Symbol Symbol Symbol Alist [Alist] [Alist] [Alist] [Alist] [Symbol] [Alist])
-(def (poo-flow-durable-recovery-observability-row scenario-id
+(def (agentic-ai-lab-durable-recovery-observability-row scenario-id
                                                   stage
                                                   status
                                                   detail
@@ -521,8 +521,8 @@
                                                   handoff-required
                                                   runtime-executed)
   (list
-   (cons 'kind 'poo-flow.durable.recovery-observability-row)
-   (cons 'schema +poo-flow-durable-recovery-observability-schema+)
+   (cons 'kind 'agentic-ai-lab.durable.recovery-observability-row)
+   (cons 'schema +agentic-ai-lab-durable-recovery-observability-schema+)
    (cons 'scenario-id scenario-id)
    (cons 'stage stage)
    (cons 'status status)
@@ -533,12 +533,12 @@
 
 ;; : (forall (a) (-> Symbol Symbol [a] String [a]))
 ;; : (-> Symbol Symbol [Alist] String [Alist])
-(def (poo-flow-durable-recovery-observability-rows scenario-id
+(def (agentic-ai-lab-durable-recovery-observability-rows scenario-id
                                                    status
                                                    detail
                                                    runtime-owner)
   (map (lambda (stage)
-         (poo-flow-durable-recovery-observability-row
+         (agentic-ai-lab-durable-recovery-observability-row
           scenario-id
           stage
           status
@@ -546,4 +546,4 @@
           runtime-owner
           #t
           #f))
-       +poo-flow-durable-recovery-stages+))
+       +agentic-ai-lab-durable-recovery-stages+))

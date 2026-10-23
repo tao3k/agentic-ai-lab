@@ -11,7 +11,7 @@ creating owner records. The selected root path(1,3) uses intermediate path(1,2)
 and edge(2,3) as direct MRR inputs. Temporal support binds the two transitive
 source leaves to separately named Host subjects and revision IDs.
 
-The dedicated C control =poo_flow_semantic_v1_derivation_admit= invokes the
+The dedicated C control =agentic_ai_lab_semantic_v1_derivation_admit= invokes the
 original Scheme producer and positive-proof replay, Rule node correspondence,
 selected original direct Derivation inputs and exact journal bindings. The
 response projects proof/Rule/Derivation flags from those native admission

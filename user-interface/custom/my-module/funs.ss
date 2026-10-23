@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import "types.ss")
-(export poo-flow-custom-my-module-identity?)
+(export agentic-ai-lab-custom-my-module-identity?)
 
-(def (poo-flow-custom-my-module-identity? value)
-  (eq? value +poo-flow-custom-my-module-identity+))
+(def (agentic-ai-lab-custom-my-module-identity? value)
+  (eq? value +agentic-ai-lab-custom-my-module-identity+))

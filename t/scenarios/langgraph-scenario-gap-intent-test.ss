@@ -4,7 +4,7 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref)
-        :poo-flow/modules/workflow/graph/scenario-gap-intent)
+        :agentic-ai-lab/modules/workflow/graph/scenario-gap-intent)
 
 (import (only-in :std/test test-suite))
 
@@ -38,54 +38,54 @@
 
 (def p0-intents
   (list
-   (poo-flow-graph-reducer-intent
+   (agentic-ai-lab-graph-reducer-intent
     'messages-append 'messages 'append 'message-list 'message-list)
-   (poo-flow-graph-command-intent
+   (agentic-ai-lab-graph-command-intent
     'router-command 'router '(messages) '(tool-node final))
-   (poo-flow-graph-fanout-intent
+   (agentic-ai-lab-graph-fanout-intent
     'retriever-fanout 'router 'queries 'retriever 'documents)
-   (poo-flow-graph-barrier-intent
+   (agentic-ai-lab-graph-barrier-intent
     'retriever-join '(retriever) 'agent-node '(documents))
-   (poo-flow-checkpoint-cadence-intent
+   (agentic-ai-lab-checkpoint-cadence-intent
     'checkpoint-each-superstep 'superstep 'thread)
-   (poo-flow-checkpoint-before-intent
+   (agentic-ai-lab-checkpoint-before-intent
     'checkpoint-before-approval 'human-approval 'thread-checkpoint)
-   (poo-flow-subgraph-node-intent
+   (agentic-ai-lab-subgraph-node-intent
     'research-subgraph 'research-node 'research-graph '(query) '(query docs))
-   (poo-flow-subagent-node-intent
+   (agentic-ai-lab-subagent-node-intent
     'analysis-subagent 'analysis-node 'session-id 'sandbox-scope 'marlin)))
 
 (def p1-intents
   (list
-   (poo-flow-stream-intent
+   (agentic-ai-lab-stream-intent
     'typed-stream '(messages values subgraphs output) '(ui audit))
-   (poo-flow-retry-intent
+   (agentic-ai-lab-retry-intent
     'tool-retry 'tool-node 3 'exponential)
-   (poo-flow-timeout-intent
+   (agentic-ai-lab-timeout-intent
     'tool-timeout 'tool-node 30000)
-   (poo-flow-error-route-intent
+   (agentic-ai-lab-error-route-intent
     'tool-error-route 'tool-node 'after-retries 'human-approval)
-   (poo-flow-replay-fork-intent
+   (agentic-ai-lab-replay-fork-intent
     'checkpoint-fork 'thread-checkpoint 'fork-id 'explicit-approval)
-   (poo-flow-store-scope-intent
+   (agentic-ai-lab-store-scope-intent
     'profile-store 'store-id 'user-profile '(read write))
-   (poo-flow-observability-intent
+   (agentic-ai-lab-observability-intent
     'runtime-observability '(graph-node checkpoint retry timeout)
     '(plan-id receipt-id trace-id))))
 
 (def p2-intents
   (list
-   (poo-flow-state-version-intent
+   (agentic-ai-lab-state-version-intent
     'messages-v1-v2 'messages 'v1 'v2 'drain-before-remove)))
 
 (def plan
-  (poo-flow-scenario-gap-plan
+  (agentic-ai-lab-scenario-gap-plan
    'langgraph-like-gap-plan
    p0-intents
    p1-intents
    p2-intents))
 
-(def facts (poo-flow-scenario-gap-plan-facts plan))
+(def facts (agentic-ai-lab-scenario-gap-plan-facts plan))
 
 (displayln "Test suite: LangGraph scenario gap intent")
 
@@ -114,17 +114,17 @@
    observability?
    state-version?))
 
-(check-true 'complete? (poo-flow-scenario-gap-plan-complete? plan))
+(check-true 'complete? (agentic-ai-lab-scenario-gap-plan-complete? plan))
 
 (def accepted-kinds
-  (poo-flow-scenario-gap-intent-kinds plan))
+  (agentic-ai-lab-scenario-gap-intent-kinds plan))
 
 (check-equal 'missing-kinds-none
-             (poo-flow-scenario-gap-receipt-missing-kinds plan accepted-kinds)
+             (agentic-ai-lab-scenario-gap-receipt-missing-kinds plan accepted-kinds)
              '())
 
 (check-equal 'missing-kinds-error-route
-             (poo-flow-scenario-gap-receipt-missing-kinds
+             (agentic-ai-lab-scenario-gap-receipt-missing-kinds
               plan
               (remove-symbol 'runtime.error-route accepted-kinds))
              '(runtime.error-route))
@@ -138,13 +138,13 @@
         (cons 'rejected-kinds '())))
 
 (check-true 'runtime-row-plan-ok
-            (poo-flow-scenario-gap-runtime-row-plan-ok? plan runtime-row))
+            (agentic-ai-lab-scenario-gap-runtime-row-plan-ok? plan runtime-row))
 (check-true 'runtime-row-rejections-ok
-            (poo-flow-scenario-gap-runtime-row-rejections-ok? runtime-row))
+            (agentic-ai-lab-scenario-gap-runtime-row-rejections-ok? runtime-row))
 (check-true 'runtime-row-accepted-ok
-            (poo-flow-scenario-gap-runtime-row-accepted-ok? plan runtime-row))
+            (agentic-ai-lab-scenario-gap-runtime-row-accepted-ok? plan runtime-row))
 (check-true 'runtime-row-ok
-            (poo-flow-scenario-gap-runtime-row-ok? plan runtime-row))
+            (agentic-ai-lab-scenario-gap-runtime-row-ok? plan runtime-row))
 
 (def missing-kind-row
   (list (cons 'kind 'scenario.receipt)
@@ -156,7 +156,7 @@
         (cons 'rejected-kinds '())))
 
 (check-equal 'runtime-row-missing-kind-rejected
-             (poo-flow-scenario-gap-runtime-row-ok? plan missing-kind-row)
+             (agentic-ai-lab-scenario-gap-runtime-row-ok? plan missing-kind-row)
              #f)
 
 (def wrong-plan-row
@@ -168,7 +168,7 @@
         (cons 'rejected-kinds '())))
 
 (check-equal 'runtime-row-wrong-plan-rejected
-             (poo-flow-scenario-gap-runtime-row-ok? plan wrong-plan-row)
+             (agentic-ai-lab-scenario-gap-runtime-row-ok? plan wrong-plan-row)
              #f)
 
 (def rejected-kind-row
@@ -180,11 +180,11 @@
         (cons 'rejected-kinds '(runtime.timeout))))
 
 (check-equal 'runtime-row-rejected-kind-rejected
-             (poo-flow-scenario-gap-runtime-row-ok? plan rejected-kind-row)
+             (agentic-ai-lab-scenario-gap-runtime-row-ok? plan rejected-kind-row)
              #f)
 
 (def runtime-row-lean-source
-  (poo-flow-scenario-gap-runtime-row->lean-facts
+  (agentic-ai-lab-scenario-gap-runtime-row->lean-facts
    plan
    runtime-row
    "GeneratedScenarioGap"))
@@ -200,8 +200,8 @@
 
 (def expected-runtime-row-lean-source
   (string-append
-   "import PooFlowProof.PooC4.ScenarioGap\n\n"
-   "namespace PooFlowProof\n\n"
+   "import AgenticAILabProof.PooC4.ScenarioGap\n\n"
+   "namespace AgenticAILabProof\n\n"
    "def GeneratedScenarioGapRuntimeRowFacts : ScenarioRuntimeRowFacts :=\n"
    "  { planOk := true\n"
    "    rejectionsOk := true\n"
@@ -214,14 +214,14 @@
    "    runtimeRowMatchesPlan GeneratedScenarioGapRuntimeRowFacts := by\n"
    "  unfold runtimeRowMatchesPlan GeneratedScenarioGapRuntimeRowFacts\n"
    "  decide\n\n"
-   "end PooFlowProof\n"))
+   "end AgenticAILabProof\n"))
 
 (check-equal 'runtime-row-lean-source-exact
              runtime-row-lean-source
              expected-runtime-row-lean-source)
 
 (def invalid-row-lean-source
-  (poo-flow-scenario-gap-runtime-row->lean-facts
+  (agentic-ai-lab-scenario-gap-runtime-row->lean-facts
    plan
    missing-kind-row
    "GeneratedScenarioGapInvalid"))
@@ -237,7 +237,7 @@
              #f)
 
 (def lean-source
-  (poo-flow-scenario-gap-plan->lean-facts plan "GeneratedScenarioGap"))
+  (agentic-ai-lab-scenario-gap-plan->lean-facts plan "GeneratedScenarioGap"))
 
 (check-true 'lean-complete
             (contains-string? lean-source "GeneratedScenarioGapComplete_ok"))

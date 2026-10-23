@@ -10,7 +10,7 @@
 (export defpoo-session-policy-family)
 
 ;; : (-> List List List)
-(def (poo-flow-session-policy-rows/tail rows tail)
+(def (agentic-ai-lab-session-policy-rows/tail rows tail)
   (foldr cons tail rows))
 
 ;; defpoo-session-policy-family

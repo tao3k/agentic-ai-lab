@@ -11,7 +11,7 @@
                  yuanxu-semantic-identity yuanxu-empty-imports
                  SemanticImports. ModuleImportsContract)
         :yuanxu/module-system/authoring/roles
-        (only-in :poo-flow/modules/module-authoring/semantic-module UserConfigSourceRole. poo-flow-user-root-module-authoring-profile))
+        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
 (export semantic-module-test)
 (def semantic-module-test
   (test-suite "role-constrained native Module"

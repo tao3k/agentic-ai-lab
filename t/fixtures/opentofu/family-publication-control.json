@@ -11,7 +11,7 @@
         "version": "5.100.0"
       },
       "manifest": {
-        "format": "poo-flow/provider-schema-v1",
+        "format": "agentic-ai-lab/provider-schema-v1",
         "provider": "registry.opentofu.org/hashicorp/aws",
         "version": "5.100.0",
         "schema-sha256": "7e4fc064120609e23bc317629f1308d72891b7241993fbf68be523f03b6c633c"
@@ -30,7 +30,7 @@
         "version": "1.77.0"
       },
       "manifest": {
-        "format": "poo-flow/provider-schema-v1",
+        "format": "agentic-ai-lab/provider-schema-v1",
         "provider": "registry.opentofu.org/hashicorp/awscc",
         "version": "1.77.0",
         "schema-sha256": "da2d45cbf066407681bc9b3ead3196277f966fd562bd004411a460ae83cfe7f0"
@@ -49,7 +49,7 @@
         "version": "3.2.4"
       },
       "manifest": {
-        "format": "poo-flow/provider-schema-v1",
+        "format": "agentic-ai-lab/provider-schema-v1",
         "provider": "registry.opentofu.org/hashicorp/null",
         "version": "3.2.4",
         "schema-sha256": "da768a39ea9a9c3464288786667f8cd2f6838c7d4a258e3a563bd49eb2466448"

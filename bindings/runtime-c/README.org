@@ -10,15 +10,15 @@ heap type.
 
 | Owner | Path |
 |-------+------|
-| Public C11 header | =include/poo_flow/runtime_v0.h= |
+| Public C11 header | =include/agentic_ai_lab/runtime_v0.h= |
 | POO-native ABI schema | =src/contract/runtime-v0-abi-schema.ss= |
 | Control contract notes | =schema/runtime_v0_control.org= |
 | Handle/lifecycle engine | =src/runtime_v0.c= |
 | Pure C harness | =tests/runtime_v0_harness.c= |
 | Hot/bulk harness | =tests/runtime_v0_batch_harness.c= |
 | Installed consumer | =tests/runtime_v0_installed_consumer.c= |
-| Relocatable SDK metadata | =pkgconfig/poo-flow-runtime-v0.pc= |
-| Scheme-native C header | =include/poo_flow/scheme_native_v1.h= |
+| Relocatable SDK metadata | =pkgconfig/agentic-ai-lab-runtime-v0.pc= |
+| Scheme-native C header | =include/agentic_ai_lab/scheme_native_v1.h= |
 | Scheme semantic owner | =src/ffi/runtime-v0-native.ss= |
 
 The Bundle remains the semantic owner.  The C engine owns negotiation, opaque
@@ -62,14 +62,14 @@ headers, the symbol manifest and =pkg-config= metadata.
 Rust, MRR, Python and other runtimes bind this C11 surface directly.  They do
 not import Gerbil heap objects, discover Scheme source paths, or launch a
 Scheme subprocess.  A Rust =build.rs= may use =PKG_CONFIG_PATH= pointing at
-=lib/pkgconfig= or link =libpoo_flow_runtime_v0.a= explicitly; generated Rust
+=lib/pkgconfig= or link =libagentic_ai_lab_runtime_v0.a= explicitly; generated Rust
 types must remain projections of =runtime_v0.h=, never an independently owned
 protocol.
 
 The optional Scheme-native ABI is a separate, AOT-linked C surface for POO
 Flow-owned contract semantics.  It follows Gerbil's =begin-ffi= contract:
 =c-define= exports versioned symbols, =define-c-struct= types the borrowed
-result pointer, and =poo_flow_scheme_result_v1_release= is the sole owner-side
+result pointer, and =agentic_ai_lab_scheme_result_v1_release= is the sole owner-side
 release operation for copied payload bytes.  It currently exposes a descriptor
 and bounded validation for source-query receipts, Query execution candidates,
 language-admission receipts, and artifact-projection receipts.  The generic C
@@ -77,7 +77,7 @@ ABI remains a descriptor and JSON-validation boundary.  Native Query producers
 consume the Scheme-owned function IR in =bindings/rust-ir= through
 =gerbil-scheme-rust-ir=; no Query-specific C structure duplicates that model.
 Unsupported contract names and malformed payloads fail closed with
-=poo-flow.scheme-native-error.v1= bytes.
+=agentic-ai-lab.scheme-native-error.v1= bytes.
 
 The ordinary Runtime C SDK does not contain a hidden Scheme VM and therefore
 does not ship =scheme_native_v1.h= by itself.  Downstream AOT packages include
@@ -89,20 +89,20 @@ idempotent result release.  The independent Runtime C workflow remains a small
 pure-C/header/sanitizer boundary and does not rebuild the Gerbil package graph.
 
 The installed contract is ABI v0.1 and Bundle schema
-=poo-flow.organization-bundle.draft.3=.  Neither is an ABI v1 freeze claim.
+=agentic-ai-lab.organization-bundle.draft.3=.  Neither is an ABI v1 freeze claim.
 
 * Registered Host policy through fixed ABI v1
 
 The native semantic AOT library now exports
-=poo_flow_semantic_v1_policy_refresh= for trusted Host policy and observed-time
+=agentic_ai_lab_semantic_v1_policy_refresh= for trusted Host policy and observed-time
 registration. Python calls =SemanticRuntime.refresh_temporal_policy=; Rust calls
 =SemanticRuntime::refresh_policy=. These helpers are Host controls and must not
-be exposed as model tools. Ordinary =poo_flow_semantic_v1_call= rejects all
+be exposed as model tools. Ordinary =agentic_ai_lab_semantic_v1_call= rejects all
 =$host.= operations with transport status 3 before Scheme dispatch. The
 ordinary descriptor lists =temporal.support.guard=, never policy registration.
 
 The strict inert Scheme request uses schema
-=poo-flow.temporal-policy-refresh-request.v1= and exactly =policy=, =generation=
+=agentic-ai-lab.temporal-policy-refresh-request.v1= and exactly =policy=, =generation=
 and =effectiveAt= fields. Policy contains =identity=, =revision=, =start= and
 =end=. Each instant has =identity=, =domain=, integer =coordinate=,
 =provenance= and =modality= equal to =observed=. The original native POO policy
@@ -113,7 +113,7 @@ idempotent. All checks precede registry mutation; rejected updates preserve the
 previous snapshot.
 
 The ordinary guard request has schema
-=poo-flow.temporal-support-guard-request.v1= and exactly =expectedGeneration=,
+=agentic-ai-lab.temporal-support-guard-request.v1= and exactly =expectedGeneration=,
 =expectedPolicyDigest= and =task=. Task is the existing bounded support request.
 Python uses =guard_temporal_support=; Rust uses
 =call("temporal.support.guard", &request)=. The guard reads the registered
@@ -137,16 +137,16 @@ failed attempts are retained in
 
 * Trusted original Derivation admission through ABI v1
 
-=poo_flow_semantic_v1_derivation_admit= is a dedicated trusted Host entrypoint.
+=agentic_ai_lab_semantic_v1_derivation_admit= is a dedicated trusted Host entrypoint.
 Ordinary/model calls cannot dispatch =$host.temporal.derivation.admit=. Python
 uses =SemanticRuntime.admit_temporal_derivation=; Rust uses
 =MrrDerivationProjection::verify_native= with original retained owner records,
 typed =MrrTemporalSourceBinding= values and the original Temporal journal.
 
 The strict inert Scheme v1 request has schema
-=poo-flow.temporal-derivation-admit-request.v1= and exactly =projection=,
+=agentic-ai-lab.temporal-derivation-admit-request.v1= and exactly =projection=,
 =journal=, =sourceBindings=, =workSteps= and =maximumNodes=. Projection is the
-original =poo-flow.mrr-derivation-projection.v1= Rule/Catalog/Fact/Derivation
+original =agentic-ai-lab.mrr-derivation-projection.v1= Rule/Catalog/Fact/Derivation
 projection. Source bindings each contain =fact=, =subject= and =revision=;
 callers supply no proof nodes, proof flags or completion claims. Journal uses
 the existing support journal shape. All inventories and field sets are bounded;

@@ -55,7 +55,7 @@
 
 (def (qualification-output-path)
   (path-expand
-   (string-append "poo-flow-fhir-validator-6.9.12-"
+   (string-append "agentic-ai-lab-fhir-validator-6.9.12-"
                   (number->string (current-jiffy)) ".json")
    (getenv "TMPDIR" "/tmp")))
 

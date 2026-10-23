@@ -4,7 +4,7 @@ import copy
 import tempfile
 import unittest
 from pathlib import Path
-from poo_flow_testing.assessment_studies.repository_corpus import provenance, qualify, test_receipt as read_test_receipt, tree_identity, model_view
+from agentic_ai_lab_testing.assessment_studies.repository_corpus import provenance, qualify, test_receipt as read_test_receipt, tree_identity, model_view
 
 
 class RepositoryCorpus(unittest.TestCase):

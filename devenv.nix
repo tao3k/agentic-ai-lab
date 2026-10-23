@@ -22,7 +22,7 @@ in
 {
   # https://devenv.sh/basics/
   env.GREET = "devenv";
-  env.POO_FLOW_OPENTOFU_ARTIFACT = "${opentofuArtifact}";
+  env.AGENTIC_AI_LAB_OPENTOFU_ARTIFACT = "${opentofuArtifact}";
 
   # https://devenv.sh/packages/
   packages = [

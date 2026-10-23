@@ -14,8 +14,8 @@
         (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol
                  +runtime-command-descriptor-schema+
                  +runtime-request-schema+)
-        :poo-flow/modules/agent-sandbox/config
-        :poo-flow/modules/workflow/interface)
+        :agentic-ai-lab/modules/agent-sandbox/config
+        :agentic-ai-lab/modules/workflow/interface)
 
 (export workflow-cicd-runtime-handoff-test)
 
@@ -70,7 +70,7 @@
 ;;; proves only cross-module projection, not backend resource parsing.
 ;; : [PooSandboxProfile]
 (def cicd-runtime-test-sandbox-profiles
-  (poo-flow-sandbox-profiles
+  (agentic-ai-lab-sandbox-profiles
    (ci/build
     (backend nono)
     (network allowlisted "github.com" "crates.io")
@@ -114,7 +114,7 @@
     (yuanxu-test-case "projects check-map runtime manifest readiness"
       (let* ((check-map (cicd-runtime-test-check-map))
              (readiness
-              (poo-flow-cicd-check-map->runtime-manifest-readiness check-map))
+              (agentic-ai-lab-cicd-check-map->runtime-manifest-readiness check-map))
              (dependency-graph
               (cicd-runtime-test-alist-ref readiness 'dependency-graph))
              (dependency-edge
@@ -166,7 +166,7 @@
     (yuanxu-test-case "projects runtime command manifests from readiness"
       (let* ((check-map (cicd-runtime-test-check-map))
              (manifest-map
-              (poo-flow-cicd-check-map->runtime-command-manifests
+              (agentic-ai-lab-cicd-check-map->runtime-command-manifests
                check-map
                cicd-runtime-test-sandbox-profiles))
              (manifests (cicd-runtime-test-alist-ref manifest-map
@@ -186,7 +186,7 @@
              (test-metadata
               (cicd-runtime-test-alist-ref test-manifest 'metadata)))
         (check-equal? (cicd-runtime-test-alist-ref manifest-map 'kind)
-                      'poo-flow.workflow.cicd.runtime-command-manifest-map)
+                      'agentic-ai-lab.workflow.cicd.runtime-command-manifest-map)
         (check-equal? (cicd-runtime-test-alist-ref manifest-map
                                                   'runtime-executed)
                       #f)
@@ -207,7 +207,7 @@
                       'workflow-cicd-check)
         (check-equal? (cicd-runtime-test-alist-ref build-manifest
                                                   'request-id)
-                      '(poo-flow.workflow.cicd build))
+                      '(agentic-ai-lab.workflow.cicd build))
         (check-equal? (cicd-runtime-test-alist-ref build-manifest 'name)
                       'build)
         (check-equal? (cicd-runtime-test-alist-ref build-manifest
@@ -222,7 +222,7 @@
         (check-equal? (cicd-runtime-test-alist-ref build-manifest 'argv)
                       '("gerbil" "build"))
         (check-equal? (cicd-runtime-test-alist-ref build-request 'kind)
-                      'poo-flow.workflow.cicd.runtime-manifest-ready)
+                      'agentic-ai-lab.workflow.cicd.runtime-manifest-ready)
         (check-equal? (cicd-runtime-test-alist-ref
                        build-request
                        'sandbox-unresolved-profile-refs)
@@ -243,7 +243,7 @@
                       #f)))
     (yuanxu-test-case "exports Marlin runtime handoff ABI without execution"
       (let* ((check-map (cicd-runtime-test-check-map))
-             (abi (poo-flow-cicd-check-map->marlin-runtime-handoff-abi
+             (abi (agentic-ai-lab-cicd-check-map->marlin-runtime-handoff-abi
                    check-map
                    cicd-runtime-test-sandbox-profiles))
              (dependency-graph
@@ -260,7 +260,7 @@
         (check-equal? (cicd-runtime-test-alist-ref abi 'schema)
                       +yuanxu-cicd-marlin-runtime-handoff-abi-schema+)
         (check-equal? (cicd-runtime-test-alist-ref abi 'kind)
-                      'poo-flow.workflow.cicd.marlin-runtime-handoff-abi)
+                      'agentic-ai-lab.workflow.cicd.marlin-runtime-handoff-abi)
         (check-equal? (cicd-runtime-test-alist-ref abi 'check-map)
                       'default)
         (check-equal? (cicd-runtime-test-alist-ref abi 'runtime-owner)
@@ -301,11 +301,11 @@
                       '(build test))
         (check-equal? (length entries) 2)
         (check-equal? (cicd-runtime-test-alist-ref build-entry 'kind)
-                      'poo-flow.workflow.cicd.marlin-runtime-handoff-entry)
+                      'agentic-ai-lab.workflow.cicd.marlin-runtime-handoff-entry)
         (check-equal? (cicd-runtime-test-alist-ref build-entry 'operation)
                       'workflow-cicd-check)
         (check-equal? (cicd-runtime-test-alist-ref build-entry 'request-id)
-                      '(poo-flow.workflow.cicd build))
+                      '(agentic-ai-lab.workflow.cicd build))
         (check-equal? (cicd-runtime-test-alist-ref build-entry 'argv)
                       '("gerbil" "build"))
         (check-equal? (cicd-runtime-test-alist-ref

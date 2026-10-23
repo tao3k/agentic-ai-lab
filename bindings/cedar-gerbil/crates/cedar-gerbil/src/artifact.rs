@@ -6,8 +6,8 @@
 //! authority snapshot; it cannot construct one or publish policy inputs.
 
 use cedar_poo_bridge::{ValidatedManifest, render_validated_policy_sources};
-use poo_flow_cedar_authority::projection::Bootstrap;
-use poo_flow_cedar_authority::{Error, Result};
+use agentic_ai_lab_cedar_authority::projection::Bootstrap;
+use agentic_ai_lab_cedar_authority::{Error, Result};
 use serde_json::Value;
 use std::collections::BTreeMap;
 
@@ -90,7 +90,7 @@ mod tests {
         .unwrap();
         let sources = render_validated_policy_sources(&manifest, "view").unwrap();
         let mut snapshot: Bootstrap = serde_json::from_value(json!({
-            "schema_id": "poo-flow.cedar.bootstrap.v1",
+            "schema_id": "agentic-ai-lab.cedar.bootstrap.v1",
             "producer": "gerbil-poo",
             "source": "poo-composition",
             "object_kind": "cedar-authority",

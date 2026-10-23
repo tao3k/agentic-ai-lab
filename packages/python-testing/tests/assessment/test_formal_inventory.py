@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 import unittest
-from poo_flow_testing.checks.assessment_models import MODEL_ORDER, CONFIGURATIONS, FAULTS
+from agentic_ai_lab_testing.checks.assessment_models import MODEL_ORDER, CONFIGURATIONS, FAULTS
 class FormalInventory(unittest.TestCase):
     def test_frozen_obligations(self):
         expected=json.loads((Path(__file__).parent/'fixtures/formal-obligations.json').read_text())

@@ -10,5 +10,5 @@
 
 (def orgize-runtime-reuse-test
   (test-suite "Orgize POO runtime and C ABI dependency"
-    (yuanxu-test-case "installed Orgize semantics are reused through POO Flow"
+    (yuanxu-test-case "installed Orgize semantics are reused through Agentic AI Lab"
       (check (run-orgize-runtime-reuse-test) => #t))))

@@ -18,9 +18,9 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/agent-sandbox/api
-        :poo-flow/modules/agent-sandbox/nono
-        :poo-flow/modules/agent-sandbox/cube)
+        :agentic-ai-lab/modules/agent-sandbox/api
+        :agentic-ai-lab/modules/agent-sandbox/nono
+        :agentic-ai-lab/modules/agent-sandbox/cube)
 
 ;;; Fixture result mirrors runtime bridge receipts while keeping the profile
 ;;; tests independent of an actual sandbox backend.
@@ -139,7 +139,7 @@
        (check-equal? (alist-value 'handoff-target handoff)
                      "marlin-agent-core")
        (check-equal? (alist-value 'handoff-contract handoff)
-                     'poo-flow.agent-sandbox-profile.runtime-handoff.v1)
+                     'agentic-ai-lab.agent-sandbox-profile.runtime-handoff.v1)
        (check-equal? (alist-value 'profile handoff) profile)
        (check-equal? (alist-value 'schema handoff-summary)
                      +agent-sandbox-profile-runtime-summary-schema+)
@@ -261,7 +261,7 @@
                  (scope . project-workspace)
                  (paths
                   ((role . project-workspace)
-                   (source . ".data/poo-flow-missing-source")
+                   (source . ".data/agentic-ai-lab-missing-source")
                    (project-marker . "gerbil.pkg")
                    (target . "/workspace/project")
                    (mode . read-only))))

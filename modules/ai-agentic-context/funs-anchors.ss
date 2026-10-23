@@ -5,10 +5,10 @@
 ;;; Initial anchors are document IDs and IDs of selected ordinary headlines.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/list/list every delete-duplicates/hash find)
-        (only-in :poo-flow/modules/query/semantic/orgize-source-interface parse-org-native-events
+        (only-in :agentic-ai-lab/modules/query/semantic/orgize-source-interface parse-org-native-events
                  org-source-headline-parser-identity)
         "types.ss" "objects.ss" "funs-projection.ss" "funs-scope.ss")
-(export poo-flow-ai-agentic-context-org-anchors poo-flow-ai-agentic-context-org-anchors-replay)
+(export agentic-ai-lab-ai-agentic-context-org-anchors agentic-ai-lab-ai-agentic-context-org-anchors-replay)
 (defstruct anchor-frame (kind start key-start key-end value-start value-end))
 (def (nearest stack kind)
   (find (lambda (frame) (eq? (anchor-frame-kind frame) kind)) stack))
@@ -65,12 +65,12 @@
         (unless (= (length ids) (length (delete-duplicates/hash ids)))
           (error "Ambiguous duplicate Org property ID")))
       (reverse properties))))
-(def (poo-flow-ai-agentic-context-org-anchors source projection expected-scope ids)
+(def (agentic-ai-lab-ai-agentic-context-org-anchors source projection expected-scope ids)
   (unless (and (list? ids) (<= 1 (length ids) 32)
                (every (lambda (id) (and (string? id) (< 0 (string-length id) 257))) ids)
                (= (length ids) (length (delete-duplicates/hash ids))))
     (error "Org anchor request requires unique bounded IDs"))
-  (let* ((verified (poo-flow-ai-agentic-context-org-replay source projection expected-scope))
+  (let* ((verified (agentic-ai-lab-ai-agentic-context-org-replay source projection expected-scope))
          (scope-value (.ref verified 'scope)) (properties (source-properties source))
          (rows (.ref (.ref (.ref verified 'observation) 'result-set) 'rows))
          (starts (map (lambda (row)
@@ -86,7 +86,7 @@
                (projection-value (string-copy (.ref verified 'semantic-digest)))
                (scope-digest-value (string-copy (.ref scope-value 'semantic-digest)))
                (session-value (string-copy (.ref scope-value 'session))) (turn-value (.ref scope-value 'turn))
-               (binding-value (poo-flow-ai-agentic-context-digest
+               (binding-value (agentic-ai-lab-ai-agentic-context-digest
                   (list 'org-property-anchor-v1 id-value container-value start-value value-start-value
                     value-end-value source-value org-source-headline-parser-identity projection-value
                     scope-digest-value session-value turn-value))))
@@ -95,10 +95,10 @@
               source-digest: source-value parser-identity: org-source-headline-parser-identity
               projection-digest: projection-value scope-digest: scope-digest-value session: session-value
               turn: turn-value semantic-digest: binding-value)))) ids)))
-(def (poo-flow-ai-agentic-context-org-anchors-replay source projection scope anchors)
-  (unless (and (list? anchors) (every poo-flow-ai-agentic-context-org-anchor-shape? anchors))
+(def (agentic-ai-lab-ai-agentic-context-org-anchors-replay source projection scope anchors)
+  (unless (and (list? anchors) (every agentic-ai-lab-ai-agentic-context-org-anchor-shape? anchors))
     (error "Invalid Context Org anchor proposal"))
-  (let (fresh (poo-flow-ai-agentic-context-org-anchors source projection scope
+  (let (fresh (agentic-ai-lab-ai-agentic-context-org-anchors source projection scope
                   (map (lambda (anchor) (.ref anchor 'org-id)) anchors)))
     (unless (every (lambda (pair)
       (every (lambda (key) (equal? (.ref (car pair) key) (.ref (cdr pair) key)))

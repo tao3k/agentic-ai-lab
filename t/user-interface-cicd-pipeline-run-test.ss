@@ -13,11 +13,11 @@
         (only-in :clan/poo/object .ref)
         (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/workflow/scenario/configuration/presentation-config
-        :poo-flow/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
         (only-in "../user-interface/custom/my-module/cases/cicd-owner"
-                 poo-flow-custom-my-module-cicd-module
-                 poo-flow-custom-my-module-funflow-cicd-case))
+                 agentic-ai-lab-custom-my-module-cicd-module
+                 agentic-ai-lab-custom-my-module-funflow-cicd-case))
 
 (export user-interface-cicd-pipeline-run-test)
 
@@ -44,8 +44,8 @@
 ;; : (-> Unit PooUserConfig)
 (def (pipeline-run-test-config)
   (yuanxuUserConfig
-   (append poo-flow-custom-my-module-cicd-module
-           poo-flow-custom-my-module-funflow-cicd-case)
+   (append agentic-ai-lab-custom-my-module-cicd-module
+           agentic-ai-lab-custom-my-module-funflow-cicd-case)
    (yuanxu-settings)))
 
 ;;; Invalid pipeline cases use the same user-facing Funflow POO syntax as
@@ -148,19 +148,19 @@
 ;;; and sandbox-profile errors remain distinguishable.
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (pipeline-run-test-presentation funflow-case)
-  (pooFlowUserConfigPresentation
+  (agenticAiLabUserConfigPresentation
    (yuanxuUserConfig
-    (append poo-flow-custom-my-module-cicd-module funflow-case)
+    (append agentic-ai-lab-custom-my-module-cicd-module funflow-case)
     (yuanxu-settings))))
 
 ;;; The assertions bind the user-facing result to both trace accounting and the
 ;;; concrete run rows, preventing future UI changes from reporting fake results.
 ;; : TestSuite
 (def user-interface-cicd-pipeline-run-test
-  (test-suite "poo-flow user interface cicd pipeline run"
+  (test-suite "agentic-ai-lab user interface cicd pipeline run"
     (yuanxu-test-case "projects Funflow pipeline into handoff-ready run/result"
       (let* ((presentation
-              (pooFlowUserConfigPresentation
+              (agenticAiLabUserConfigPresentation
                (pipeline-run-test-config)))
              (trace (.ref presentation 'presentation-trace))
              (run-step

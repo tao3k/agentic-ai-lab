@@ -23,7 +23,7 @@
 (def (flake-api-suite call-with-flake-session session-query session-calls)
   (test-suite "libflake-c / CLI strict locking and receiver-local plans"
     (test-case "three rounds: AWS-only then Null, no implicit lock updates"
-      (call-with-temporary-directory "poo-flow-libflake"
+      (call-with-temporary-directory "agentic-ai-lab-libflake"
         (lambda (temporary)
           ;; Nix rejects symlinked path components (/var -> /private/var on macOS).
           (def directory (path-normalize temporary))

@@ -3,9 +3,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :poo-flow/modules/services/opentofu/objects poo-flow-opentofu-block-contract poo-flow-opentofu-configuration-contract)
-        (only-in :poo-flow/modules/services/opentofu/collections poo-flow-opentofu-value-digest)
-        (only-in :poo-flow/modules/services/opentofu/collections poo-flow-opentofu-string-set-authority)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects agentic-ai-lab-opentofu-block-contract agentic-ai-lab-opentofu-configuration-contract)
+        (only-in :agentic-ai-lab/modules/services/opentofu/collections agentic-ai-lab-opentofu-value-digest)
+        (only-in :agentic-ai-lab/modules/services/opentofu/collections agentic-ai-lab-opentofu-string-set-authority)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
         :yuanxu/types
         :clan/poo/object)
@@ -28,9 +28,9 @@
                      (name . ((type . "string") (optional . #t)))))))
       (def now 100)
       (def authority
-        (poo-flow-opentofu-string-set-authority
+        (agentic-ai-lab-opentofu-string-set-authority
           "test/provider" "1.0.0" block '((accounts) (peers)) (lambda () now)))
-      (def Contract (poo-flow-opentofu-block-contract 'test/provider block authority))
+      (def Contract (agentic-ai-lab-opentofu-block-contract 'test/provider block authority))
       (def raw '((accounts . ("b" "a" "b"))))
       (def candidate (.get (.call Contract .normalize raw) value))
       (def proof (.call Contract .prove candidate 10))
@@ -73,24 +73,24 @@
       (assert 'fresh-proof-accepted
         (accepted? (.call (.get Contract collection-contract) .admit candidate (.call Contract .prove candidate))))
       (assert 'ttl-bounded (null? (.get (.call Contract .prove candidate 3601) receipts)))
-      (def v2 (poo-flow-opentofu-string-set-authority
+      (def v2 (agentic-ai-lab-opentofu-string-set-authority
                 "test/provider" "2.0.0" block '((accounts)) (lambda () now)))
-      (def V2Contract (poo-flow-opentofu-block-contract 'test/v2 block v2))
+      (def V2Contract (agentic-ai-lab-opentofu-block-contract 'test/v2 block v2))
       (assert 'version-replay-rejected
         (reason? (.call (.get V2Contract collection-contract) .admit candidate (.call Contract .prove candidate))
                  'provider-set-evidence-forged))
-      (def other-provider (poo-flow-opentofu-string-set-authority
+      (def other-provider (agentic-ai-lab-opentofu-string-set-authority
                             "other/provider" "1.0.0" block '((accounts)) (lambda () now)))
-      (def OtherContract (poo-flow-opentofu-block-contract 'test/other block other-provider))
+      (def OtherContract (agentic-ai-lab-opentofu-block-contract 'test/other block other-provider))
       (assert 'provider-replay-rejected
         (not (accepted? (.call (.get OtherContract collection-contract) .admit candidate (.call Contract .prove candidate)))))
       (def other-schema '((attributes . ((accounts . ((type . ("set" "string")) (required . #t)))))))
       (assert 'schema-binding-construction-rejected
         (with-catch (lambda (_) #t)
-          (lambda () (poo-flow-opentofu-block-contract 'wrong other-schema authority) #f)))
-      (def restricted (poo-flow-opentofu-string-set-authority
+          (lambda () (agentic-ai-lab-opentofu-block-contract 'wrong other-schema authority) #f)))
+      (def restricted (agentic-ai-lab-opentofu-string-set-authority
                         "test/provider" "1.0.0" block '((peers)) (lambda () now)))
-      (def Restricted (poo-flow-opentofu-block-contract 'restricted block restricted))
+      (def Restricted (agentic-ai-lab-opentofu-block-contract 'restricted block restricted))
       (assert 'field-not-enrolled
         (null? (.get (.call Restricted .prove candidate) receipts)))
       ;; A full candidate digest also prevents moving proofs across identical
@@ -103,7 +103,7 @@
                    (.o receipts: (list (car (.get both-proof receipts)))))
                  'provider-set-evidence-path-mismatch))
       (def ConfigurationContract
-        (poo-flow-opentofu-configuration-contract '() (list (cons 'test_resource block)) '()
+        (agentic-ai-lab-opentofu-configuration-contract '() (list (cons 'test_resource block)) '()
           (.o resource: (.o test_resource: authority))))
       (def config `((resource . ((test_resource . ((web . ,candidate)))))))
       (def config-proof (.call ConfigurationContract .prove config))
@@ -119,11 +119,11 @@
         (equal? (.get (car (.get changed-result diagnostics)) path)
                 '(resource test_resource web accounts)))
       (assert 'wire-order-independent
-        (equal? (poo-flow-opentofu-value-digest '((a . 1) (b . 2)))
-                (poo-flow-opentofu-value-digest '((b . 2) (a . 1)))))
+        (equal? (agentic-ai-lab-opentofu-value-digest '((a . 1) (b . 2)))
+                (agentic-ai-lab-opentofu-value-digest '((b . 2) (a . 1)))))
       ;; Real fixtures remain useful rejection controls, not invented attestations.
       (def aws (yuanxu-json-schema-read-file "t/fixtures/opentofu/aws-security-group.json"))
-      (def AwsContract (poo-flow-opentofu-block-contract 'aws/security-group aws))
+      (def AwsContract (agentic-ai-lab-opentofu-block-contract 'aws/security-group aws))
       (def sg '((name . "demo") (ingress . (((from_port . 443) (to_port . 443)
                         (protocol . "tcp") (security_groups . ("sg-a" "sg-a")))))))
       (def sg-normal (.get (.call AwsContract .normalize sg) value))
@@ -132,17 +132,17 @@
                  'provider-set-identity-unresolved))
       (assert 'real-aws-no-custom-proof (null? (.get (.call AwsContract .prove sg-normal) receipts)))
       ;; Even an enrolled field never converts object-set equality into strings.
-      (def aws-authority (poo-flow-opentofu-string-set-authority
+      (def aws-authority (agentic-ai-lab-opentofu-string-set-authority
                            "test/aws-shape" "fixture-control-1" aws '((ingress)) (lambda () now)))
-      (def BoundAws (poo-flow-opentofu-block-contract 'aws/control aws aws-authority))
+      (def BoundAws (agentic-ai-lab-opentofu-block-contract 'aws/control aws aws-authority))
       (assert 'object-policy-cannot-mint (null? (.get (.call BoundAws .prove sg-normal) receipts)))
       (assert 'object-policy-still-rejected
         (not (accepted? (.call (.get BoundAws collection-contract) .admit sg-normal (.call BoundAws .prove sg-normal)))))
       (def inner-authority
-        (poo-flow-opentofu-string-set-authority
+        (agentic-ai-lab-opentofu-string-set-authority
           "test/aws-shape" "fixture-control-1" aws
           '((ingress 0 security_groups)) (lambda () now)))
-      (def InnerAws (poo-flow-opentofu-block-contract 'aws/inner-control aws inner-authority))
+      (def InnerAws (agentic-ai-lab-opentofu-block-contract 'aws/inner-control aws inner-authority))
       (def inner-proof (.call InnerAws .prove sg-normal))
       (assert 'real-shape-inner-literal-proof (= (length (.get inner-proof receipts)) 1))
       (assert 'real-shape-outer-still-unresolved
@@ -155,9 +155,9 @@
         (let* ((mutable-block (list (cons 'attributes
                                      (list (cons 'accounts
                                              '((type . ("set" "string")) (required . #t)))))))
-               (auth (poo-flow-opentofu-string-set-authority
+               (auth (agentic-ai-lab-opentofu-string-set-authority
                        "test/provider" "1.0.0" mutable-block '((accounts))))
-               (bound (poo-flow-opentofu-block-contract 'mutable mutable-block auth))
+               (bound (agentic-ai-lab-opentofu-block-contract 'mutable mutable-block auth))
                (value '((accounts . ("a"))))
                (evidence (.call bound .prove value)))
           (set-cdr! mutable-block '((description . "changed")))

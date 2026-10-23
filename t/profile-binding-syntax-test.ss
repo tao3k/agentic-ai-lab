@@ -12,7 +12,7 @@
                  profiles compose yuanxu-profile-export
                  yuanxu-module-profiles)
         :yuanxu/profile-composition/selection-syntax
-        :poo-flow/modules/workflow/scenario/composition-syntax)
+        :agentic-ai-lab/modules/workflow/scenario/composition-syntax)
 
 (export profile-binding-syntax-test)
 

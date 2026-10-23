@@ -17,11 +17,11 @@
                  test-suite)
         (only-in :clan/poo/object .o .ref)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/module-authoring/module-descriptor
-        :poo-flow/modules/workflow/scenario/configuration/module-diagnostics
+        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
         :yuanxu/module-system/source/imports
         :yuanxu/module-system/source/objects
-        :poo-flow/modules/workflow/scenario/configuration/module-activation
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
         :yuanxu/module-system/catalog/objects)
 
 (export module-system-test)
@@ -37,7 +37,7 @@
 ;;; contract for higher-level user interface tests.
 ;; : TestSuite
 (def module-system-test
-  (test-suite "poo-flow module system"
+  (test-suite "agentic-ai-lab module system"
     (yuanxu-test-case "activates module descriptor registries into run config"
       (let* ((task-descriptor
               (make-task-family-descriptor 'remote-job
@@ -51,7 +51,7 @@
                                                 'linear-dag
                                                 'extension))
              (module
-              (make-poo-flow-module-descriptor
+              (make-agentic-ai-lab-module-descriptor
                'remote-runtime
                '()
                (make-task-family-registry 'remote-runtime-tasks
@@ -59,16 +59,16 @@
                (make-flow-declaration-registry 'remote-runtime-flows
                                                (list flow-descriptor))
                (list (cons 'source 'test-module))))
-             (activation (activate-poo-flow-modules (list module)))
-             (config (poo-flow-module-activation->run-config
+             (activation (activate-agentic-ai-lab-modules (list module)))
+             (config (agentic-ai-lab-module-activation->run-config
                       'with-remote-runtime
                       (make-local-eager-strategy)
                       (make-request-only-adapter)
                       activation)))
-        (check-equal? (poo-flow-module-descriptor? module) #t)
-        (check-equal? (poo-flow-module-name module) 'remote-runtime)
-        (check-equal? (cdr (assoc 'poo-flow-modules
-                                  (poo-flow-module-activation-options activation)))
+        (check-equal? (agentic-ai-lab-module-descriptor? module) #t)
+        (check-equal? (agentic-ai-lab-module-name module) 'remote-runtime)
+        (check-equal? (cdr (assoc 'agentic-ai-lab-modules
+                                  (agentic-ai-lab-module-activation-options activation)))
                       '(remote-runtime))
         (check-equal? (task-family-name
                        (task-family-for-kind-in
@@ -81,13 +81,13 @@
                         'remote))
                       'remote-flow)))
     (yuanxu-test-case "rejects missing module imports before activation"
-      (let* ((module (make-empty-poo-flow-module-descriptor
+      (let* ((module (make-empty-agentic-ai-lab-module-descriptor
                       'feature
                       '(foundation)
                       '()))
              (failure (capture-module-failure
                        (lambda ()
-                         (activate-poo-flow-modules (list module)))))
+                         (activate-agentic-ai-lab-modules (list module)))))
              (missing (cdr (assoc 'missing
                                   (execution-failure-detail failure)))))
         (check-equal? (execution-failure? failure) #t)
@@ -97,35 +97,35 @@
         (check-equal? (cdr (assoc 'import (car missing))) 'foundation)))
     (yuanxu-test-case "resolves named imports through the closure name index"
       (let ((foundation
-             (make-empty-poo-flow-module-descriptor 'foundation '() '()))
+             (make-empty-agentic-ai-lab-module-descriptor 'foundation '() '()))
             (feature
-             (make-empty-poo-flow-module-descriptor
+             (make-empty-agentic-ai-lab-module-descriptor
               'feature
               '(foundation)
               '())))
         (check-equal?
-         (poo-flow-module-missing-imports (list feature foundation))
+         (agentic-ai-lab-module-missing-imports (list feature foundation))
          '())))
     (yuanxu-test-case "module closure admits shared inline imports once"
       (let* ((shared
-              (make-empty-poo-flow-module-descriptor 'shared '() '()))
+              (make-empty-agentic-ai-lab-module-descriptor 'shared '() '()))
              (left
-              (make-empty-poo-flow-module-descriptor
+              (make-empty-agentic-ai-lab-module-descriptor
                'left
                (list shared)
                '()))
              (right
-              (make-empty-poo-flow-module-descriptor
+              (make-empty-agentic-ai-lab-module-descriptor
                'right
                (list shared)
                '()))
              (root
-              (make-empty-poo-flow-module-descriptor
+              (make-empty-agentic-ai-lab-module-descriptor
                'root
                (list left right)
                '())))
         (check-equal?
-         (poo-flow-module-names (poo-flow-module-closure (list root)))
+         (agentic-ai-lab-module-names (agentic-ai-lab-module-closure (list root)))
          '(root left shared right))))
     (yuanxu-test-case "normalizes source refs as inspectable metadata"
       (let* ((local (make-yuanxu-module-local-source "modules/remote-runtime.ss"))
@@ -177,19 +177,19 @@
                                                 'linear-dag
                                                 'extension))
              (module
-              (poo-flow-module macro-runtime
+              (agentic-ai-lab-module macro-runtime
                 (imports foundation)
                 (tasks task-descriptor)
                 (flows flow-descriptor)
                 (options (cons 'source 'macro-test)))))
-        (check-equal? (poo-flow-module-name module) 'macro-runtime)
+        (check-equal? (agentic-ai-lab-module-name module) 'macro-runtime)
         (check-equal? (yuanxu-module-imports module) '(foundation))
-        (check-equal? (task-family-name (car (poo-flow-module-task-descriptors module)))
+        (check-equal? (task-family-name (car (agentic-ai-lab-module-task-descriptors module)))
                       'macro-job)
         (check-equal? (flow-declaration-kind
-                       (car (poo-flow-module-flow-descriptors module)))
+                       (car (agentic-ai-lab-module-flow-descriptors module)))
                       'macro)
-        (check-equal? (cdr (assoc 'source (poo-flow-module-options module)))
+        (check-equal? (cdr (assoc 'source (agentic-ai-lab-module-options module)))
                       'macro-test)))
     (yuanxu-test-case "doctor reports duplicate and empty module diagnostics"
       (let* ((task-a (make-task-family-descriptor 'dup-job
@@ -211,7 +211,7 @@
                                                        'linear-dag
                                                        'extension))
              (foundation
-              (make-poo-flow-module-descriptor
+              (make-agentic-ai-lab-module-descriptor
                'foundation
                '()
                (make-task-family-registry 'foundation-tasks
@@ -220,12 +220,12 @@
                                                (list flow-a flow-b))
                (list (cons 'source 'first)
                      (cons 'source 'second))))
-             (empty (make-empty-poo-flow-module-descriptor
+             (empty (make-empty-agentic-ai-lab-module-descriptor
                      'empty
                      '(foundation)
                      '()))
-             (report (poo-flow-module-doctor (list foundation empty)))
-             (shape (poo-flow-module-doctor-report->alist report)))
+             (report (agentic-ai-lab-module-doctor (list foundation empty)))
+             (shape (agentic-ai-lab-module-doctor-report->alist report)))
         (check-equal? (yuanxu-module-doctor-ok? report) #f)
         (check-equal? (yuanxu-module-doctor-report-status report) 'warning)
         (check-equal? (length (yuanxu-module-doctor-report-diagnostics report)) 4)
@@ -242,7 +242,7 @@
                                            'rust-or-external-runtime
                                            'submit))
              (module
-              (make-poo-flow-module-descriptor
+              (make-agentic-ai-lab-module-descriptor
                'remote-runtime
                '()
                (make-task-family-registry 'catalog-tasks
@@ -251,8 +251,8 @@
                (list (cons 'source source))))
              (entry (make-yuanxu-module-catalog-entry source module))
              (catalog (make-yuanxu-module-catalog 'test-catalog (list entry)))
-             (doctor (poo-flow-module-resolve-doctor catalog (list source)))
-             (activation (poo-flow-module-resolve-and-activate catalog (list source)))
+             (doctor (agentic-ai-lab-module-resolve-doctor catalog (list source)))
+             (activation (agentic-ai-lab-module-resolve-and-activate catalog (list source)))
              (catalog-shape (yuanxu-module-catalog->alist catalog)))
         (check-equal? (yuanxu-module-catalog? catalog) #t)
         (check-equal? (cdr (assoc 'module (yuanxu-module-catalog-entry->alist entry)))
@@ -260,7 +260,7 @@
         (check-equal? (yuanxu-module-doctor-report-status doctor) 'ok)
         (check-equal? (task-family-name
                        (task-family-for-kind-in
-                        (poo-flow-module-activation-task-registry activation)
+                        (agentic-ai-lab-module-activation-task-registry activation)
                         'catalog-job))
                       'catalog-job)
         (check-equal? (cdr (assoc 'name catalog-shape)) 'test-catalog)))
@@ -269,7 +269,7 @@
              (source (make-yuanxu-module-local-source "missing.ss"))
              (failure (capture-module-failure
                        (lambda ()
-                         (resolve-poo-flow-module-source catalog source))))
+                         (resolve-agentic-ai-lab-module-source catalog source))))
              (detail (execution-failure-detail failure))
              (source-shape (cdr (assoc 'source detail))))
         (check-equal? (execution-failure? failure) #t)

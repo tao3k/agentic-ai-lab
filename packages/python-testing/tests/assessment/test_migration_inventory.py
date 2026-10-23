@@ -18,7 +18,7 @@ class MigrationInventory(unittest.TestCase):
                     self.assertEqual(record['source'], 'rust/ascent-python/src/rust_sources.rs')
                     self.assertIn('unused duplicate', record['disposition'])
                 else:
-                    self.assertEqual(record['disposition'], 'moved-to-poo-flow')
+                    self.assertEqual(record['disposition'], 'moved-to-agentic-ai-lab')
                     for target in record['targets']:
                         path = ROOT / target
                         self.assertTrue(path.is_file(), target)

@@ -7,7 +7,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from poo_flow_runtime._scheme_load_runner import (
+from agentic_ai_lab_runtime._scheme_load_runner import (
     _direct_scheme_loader_env,
     _scheme_loader_commands,
 )
@@ -18,7 +18,7 @@ def test_direct_loader_consumes_declared_bazel_environment(
     monkeypatch,
 ) -> None:
     gerbil_path = tmp_path / "compiled-project" / ".gerbil"
-    (gerbil_path / "lib" / "poo-flow").mkdir(parents=True)
+    (gerbil_path / "lib" / "agentic-ai-lab").mkdir(parents=True)
     loadpath = os.pathsep.join(
         (
             str(gerbil_path / "lib"),
@@ -44,7 +44,7 @@ def test_declared_bazel_environment_selects_direct_gxi_first(
     monkeypatch,
 ) -> None:
     gerbil_path = tmp_path / "compiled-project" / ".gerbil"
-    (gerbil_path / "lib" / "poo-flow").mkdir(parents=True)
+    (gerbil_path / "lib" / "agentic-ai-lab").mkdir(parents=True)
     monkeypatch.setenv("GERBIL_PATH", str(gerbil_path))
     monkeypatch.setenv("GERBIL_LOADPATH", str(gerbil_path / "lib"))
     runner = tmp_path / "runner.ss"
@@ -60,7 +60,7 @@ def test_declared_bazel_environment_selects_direct_gxi_first(
 
 def test_native_progress_keeps_datum_and_diagnostics_separate(tmp_path, capsys):
     import sys
-    from poo_flow_runtime._scheme_load_runner import (
+    from agentic_ai_lab_runtime._scheme_load_runner import (
         _SchemeLoaderCommand, _run_with_native_progress,
     )
 
@@ -78,7 +78,7 @@ def test_native_progress_keeps_datum_and_diagnostics_separate(tmp_path, capsys):
 def test_total_deadline_stops_child_even_with_continuous_output(tmp_path, monkeypatch):
     import sys
     import pytest
-    import poo_flow_runtime._scheme_load_runner as runner
+    import agentic_ai_lab_runtime._scheme_load_runner as runner
 
     monkeypatch.setattr(runner, '_SCHEME_LOAD_TOTAL_SECONDS', 0.2)
     command = runner._SchemeLoaderCommand(

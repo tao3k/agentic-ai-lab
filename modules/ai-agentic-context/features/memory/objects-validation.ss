@@ -8,32 +8,32 @@
 (import (only-in :std/list/list fold)
         (only-in :clan/poo/object .o .ref object? object<-alist)
         :yuanxu/utilities/final-projection-syntax
-        :poo-flow/modules/session/objects
-        :poo-flow/modules/session/transform
-        :poo-flow/modules/ai-agentic-context/features/memory/objects-core
-        :poo-flow/modules/ai-agentic-context/features/memory/objects-catalog)
+        :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/transform
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-catalog)
 
-(export poo-flow-memory-policy-validation-receipt-record
-        make-poo-flow-memory-policy-validation-receipt-record
-        poo-flow-memory-policy-validation-receipt-record?
-        poo-flow-memory-diagnostic
-        poo-flow-memory-store-intent-diagnostics/tail
-        poo-flow-memory-store-intent-diagnostics
-        poo-flow-memory-policy-catalog-validation-summary-finish
-        poo-flow-memory-policy-catalog-intent-diagnostics
-        poo-flow-memory-policy-catalog-seen-store-refs
-        poo-flow-memory-policy-catalog-intent-store-refs/rev
-        poo-flow-memory-policy-catalog-resolved-store-refs/rev
-        poo-flow-memory-policy-catalog-unresolved-store-refs/rev
-        poo-flow-memory-policy-catalog-validation-summary/rev
-        poo-flow-memory-policy-catalog-validation-summary
-        poo-flow-memory-policy-catalog-validation-receipt
-        poo-flow-memory-policy-catalog-validation-receipt?
-        poo-flow-memory-policy-catalog-validation-receipt-valid?
-        poo-flow-memory-policy-catalog-validation-receipt-diagnostics
-        poo-flow-memory-policy-catalog-validation-receipt->alist)
+(export agentic-ai-lab-memory-policy-validation-receipt-record
+        make-agentic-ai-lab-memory-policy-validation-receipt-record
+        agentic-ai-lab-memory-policy-validation-receipt-record?
+        agentic-ai-lab-memory-diagnostic
+        agentic-ai-lab-memory-store-intent-diagnostics/tail
+        agentic-ai-lab-memory-store-intent-diagnostics
+        agentic-ai-lab-memory-policy-catalog-validation-summary-finish
+        agentic-ai-lab-memory-policy-catalog-intent-diagnostics
+        agentic-ai-lab-memory-policy-catalog-seen-store-refs
+        agentic-ai-lab-memory-policy-catalog-intent-store-refs/rev
+        agentic-ai-lab-memory-policy-catalog-resolved-store-refs/rev
+        agentic-ai-lab-memory-policy-catalog-unresolved-store-refs/rev
+        agentic-ai-lab-memory-policy-catalog-validation-summary/rev
+        agentic-ai-lab-memory-policy-catalog-validation-summary
+        agentic-ai-lab-memory-policy-catalog-validation-receipt
+        agentic-ai-lab-memory-policy-catalog-validation-receipt?
+        agentic-ai-lab-memory-policy-catalog-validation-receipt-valid?
+        agentic-ai-lab-memory-policy-catalog-validation-receipt-diagnostics
+        agentic-ai-lab-memory-policy-catalog-validation-receipt->alist)
 
-(defstruct poo-flow-memory-policy-validation-receipt-record
+(defstruct agentic-ai-lab-memory-policy-validation-receipt-record
   (kind
    schema
    validation-id
@@ -52,53 +52,53 @@
    metadata)
   transparent: #t)
 ;; : (-> Symbol PooSessionMemoryIntent Alist)
-(def (poo-flow-memory-diagnostic code intent)
-  (poo-flow-memory-field-rows
-   (kind 'poo-flow.memory-core.diagnostic)
-   (schema 'poo-flow.modules.memory-core.diagnostic.v1)
+(def (agentic-ai-lab-memory-diagnostic code intent)
+  (agentic-ai-lab-memory-field-rows
+   (kind 'agentic-ai-lab.memory-core.diagnostic)
+   (schema 'agentic-ai-lab.modules.memory-core.diagnostic.v1)
    (code code)
-   (intent-name (poo-flow-session-memory-intent-name intent))
-   (store-ref (poo-flow-session-memory-intent-store-ref intent))
-   (scope (poo-flow-session-memory-intent-scope intent))
-   (commit-policy (poo-flow-session-memory-intent-commit-policy intent))
+   (intent-name (agentic-ai-lab-session-memory-intent-name intent))
+   (store-ref (agentic-ai-lab-session-memory-intent-store-ref intent))
+   (scope (agentic-ai-lab-session-memory-intent-scope intent))
+   (commit-policy (agentic-ai-lab-session-memory-intent-commit-policy intent))
    (severity 'error)
    (runtime-executed #f)))
 
 ;; : (-> PooMemoryStoreSpec PooSessionMemoryIntent [Alist] [Alist])
-(def (poo-flow-memory-store-intent-diagnostics/tail spec intent tail)
-  (let ((scope (poo-flow-session-memory-intent-scope intent))
+(def (agentic-ai-lab-memory-store-intent-diagnostics/tail spec intent tail)
+  (let ((scope (agentic-ai-lab-session-memory-intent-scope intent))
         (commit-policy
-         (poo-flow-session-memory-intent-commit-policy intent))
-        (recall-keys (poo-flow-session-memory-intent-recall intent)))
+         (agentic-ai-lab-session-memory-intent-commit-policy intent))
+        (recall-keys (agentic-ai-lab-session-memory-intent-recall intent)))
     (let* ((recall-tail
             (if (or (null? recall-keys)
-                    (not (null? (poo-flow-memory-store-spec-recall-policies
+                    (not (null? (agentic-ai-lab-memory-store-spec-recall-policies
                                  spec))))
               tail
-              (cons (poo-flow-memory-diagnostic
+              (cons (agentic-ai-lab-memory-diagnostic
                      'memory-store-recall-disabled
                      intent)
                     tail)))
            (commit-tail
             (if (member commit-policy
-                        (poo-flow-memory-store-spec-commit-policies spec))
+                        (agentic-ai-lab-memory-store-spec-commit-policies spec))
               recall-tail
-              (cons (poo-flow-memory-diagnostic
+              (cons (agentic-ai-lab-memory-diagnostic
                      'memory-intent-commit-denied
                      intent)
                     recall-tail))))
-      (if (member scope (poo-flow-memory-store-spec-scopes spec))
+      (if (member scope (agentic-ai-lab-memory-store-spec-scopes spec))
         commit-tail
-        (cons (poo-flow-memory-diagnostic 'memory-intent-scope-denied
+        (cons (agentic-ai-lab-memory-diagnostic 'memory-intent-scope-denied
                                           intent)
               commit-tail)))))
 
 ;; : (-> PooMemoryStoreSpec PooSessionMemoryIntent [Alist])
-(def (poo-flow-memory-store-intent-diagnostics spec intent)
-  (poo-flow-memory-store-intent-diagnostics/tail spec intent '()))
+(def (agentic-ai-lab-memory-store-intent-diagnostics spec intent)
+  (agentic-ai-lab-memory-store-intent-diagnostics/tail spec intent '()))
 
 ;; : (-> PooMemoryCatalog [PooSessionMemoryIntent] [Symbol] Integer [Symbol] [Symbol] [Symbol] [Alist] Alist)
-(def (poo-flow-memory-policy-catalog-validation-summary-finish
+(def (agentic-ai-lab-memory-policy-catalog-validation-summary-finish
       intent-count
       intent-store-refs-rev
       resolved-store-refs-rev
@@ -112,15 +112,15 @@
    (cons 'diagnostics (reverse diagnostics-rev))))
 
 ;; : (-> Object PooSessionMemoryIntent [Alist])
-(def (poo-flow-memory-policy-catalog-intent-diagnostics spec intent)
+(def (agentic-ai-lab-memory-policy-catalog-intent-diagnostics spec intent)
   (if spec
-    (poo-flow-memory-store-intent-diagnostics spec intent)
-    (list (poo-flow-memory-diagnostic
+    (agentic-ai-lab-memory-store-intent-diagnostics spec intent)
+    (list (agentic-ai-lab-memory-diagnostic
            'memory-store-not-in-catalog
            intent))))
 
 ;; : (-> Boolean Symbol [Symbol] [Symbol])
-(def (poo-flow-memory-policy-catalog-seen-store-refs already-seen?
+(def (agentic-ai-lab-memory-policy-catalog-seen-store-refs already-seen?
                                                             store-ref
                                                             seen-store-refs)
   (if already-seen?
@@ -128,7 +128,7 @@
     (cons store-ref seen-store-refs)))
 
 ;; : (-> Boolean Symbol [Symbol] [Symbol])
-(def (poo-flow-memory-policy-catalog-intent-store-refs/rev already-seen?
+(def (agentic-ai-lab-memory-policy-catalog-intent-store-refs/rev already-seen?
                                                                   store-ref
                                                                   refs-rev)
   (if already-seen?
@@ -136,7 +136,7 @@
     (cons store-ref refs-rev)))
 
 ;; : (-> Boolean Object Symbol [Symbol] [Symbol])
-(def (poo-flow-memory-policy-catalog-resolved-store-refs/rev already-seen?
+(def (agentic-ai-lab-memory-policy-catalog-resolved-store-refs/rev already-seen?
                                                                     spec
                                                                     store-ref
                                                                     refs-rev)
@@ -145,7 +145,7 @@
     refs-rev))
 
 ;; : (-> Boolean Object Symbol [Symbol] [Symbol])
-(def (poo-flow-memory-policy-catalog-unresolved-store-refs/rev already-seen?
+(def (agentic-ai-lab-memory-policy-catalog-unresolved-store-refs/rev already-seen?
                                                                       spec
                                                                       store-ref
                                                                       refs-rev)
@@ -154,33 +154,33 @@
     refs-rev))
 
 ;; : (-> PooMemoryCatalog PooSessionMemoryIntent List List)
-(def (poo-flow-memory-policy-catalog-validation-summary-step catalog intent state)
+(def (agentic-ai-lab-memory-policy-catalog-validation-summary-step catalog intent state)
   (match state
     ([seen-store-refs intent-count intent-store-refs-rev
       resolved-store-refs-rev unresolved-store-refs-rev diagnostics-rev]
-     (let* ((store-ref (poo-flow-session-memory-intent-store-ref intent))
+     (let* ((store-ref (agentic-ai-lab-session-memory-intent-store-ref intent))
             (already-seen? (member store-ref seen-store-refs))
-            (spec (poo-flow-memory-catalog-find catalog store-ref))
+            (spec (agentic-ai-lab-memory-catalog-find catalog store-ref))
             (intent-diagnostics
-             (poo-flow-memory-policy-catalog-intent-diagnostics spec intent)))
+             (agentic-ai-lab-memory-policy-catalog-intent-diagnostics spec intent)))
        (list
-        (poo-flow-memory-policy-catalog-seen-store-refs
+        (agentic-ai-lab-memory-policy-catalog-seen-store-refs
          already-seen? store-ref seen-store-refs)
         (+ intent-count 1)
-        (poo-flow-memory-policy-catalog-intent-store-refs/rev
+        (agentic-ai-lab-memory-policy-catalog-intent-store-refs/rev
          already-seen? store-ref intent-store-refs-rev)
-        (poo-flow-memory-policy-catalog-resolved-store-refs/rev
+        (agentic-ai-lab-memory-policy-catalog-resolved-store-refs/rev
          already-seen? spec store-ref resolved-store-refs-rev)
-        (poo-flow-memory-policy-catalog-unresolved-store-refs/rev
+        (agentic-ai-lab-memory-policy-catalog-unresolved-store-refs/rev
          already-seen? spec store-ref unresolved-store-refs-rev)
-        (poo-flow-memory-reverse-onto intent-diagnostics diagnostics-rev))))))
+        (agentic-ai-lab-memory-reverse-onto intent-diagnostics diagnostics-rev))))))
 
-;; poo-flow-memory-policy-catalog-validation-summary/rev
+;; agentic-ai-lab-memory-policy-catalog-validation-summary/rev
 ;;   : (forall (a d) (-> PooMemoryCatalog (List a) [Symbol] Integer [Symbol] [Symbol] [Symbol] (List d) Alist))
 ;;   : (-> PooMemoryCatalog [PooSessionMemoryIntent] [Symbol] Integer [Symbol] [Symbol] [Symbol] [Alist] Alist)
 ;;   | result: ordered validation summary alist
 ;;   | doc m%
-;;       `poo-flow-memory-policy-catalog-validation-summary/rev` folds session
+;;       `agentic-ai-lab-memory-policy-catalog-validation-summary/rev` folds session
 ;;       memory intents against a memory catalog while preserving
 ;;       declaration order and diagnostic provenance. This helper owns the
 ;;       accumulator state for catalog validation; runtime recall, commit, and
@@ -189,7 +189,7 @@
 ;;       # Examples
 ;;
 ;;       ```scheme
-;;       (poo-flow-memory-policy-catalog-validation-summary/rev
+;;       (agentic-ai-lab-memory-policy-catalog-validation-summary/rev
 ;;        catalog intents '() 0 '() '() '() '())
 ;;       ;; => validation summary alist
 ;;       ```
@@ -199,7 +199,7 @@
 ;;       A validation summary alist with intent, resolved-store, unresolved-store,
 ;;       and diagnostic rows.
 ;;     %
-(def (poo-flow-memory-policy-catalog-validation-summary/rev catalog
+(def (agentic-ai-lab-memory-policy-catalog-validation-summary/rev catalog
                                                             memory-intents
                                                             seen-store-refs
                                                             intent-count
@@ -208,7 +208,7 @@
                                                             unresolved-store-refs-rev
                                                             diagnostics-rev)
   (match (fold
-          (cut poo-flow-memory-policy-catalog-validation-summary-step
+          (cut agentic-ai-lab-memory-policy-catalog-validation-summary-step
                catalog <> <>)
           (list seen-store-refs
                 intent-count
@@ -220,7 +220,7 @@
     ([_ final-intent-count final-intent-store-refs-rev
       final-resolved-store-refs-rev final-unresolved-store-refs-rev
       final-diagnostics-rev]
-      (poo-flow-memory-policy-catalog-validation-summary-finish
+      (agentic-ai-lab-memory-policy-catalog-validation-summary-finish
        final-intent-count
        final-intent-store-refs-rev
        final-resolved-store-refs-rev
@@ -228,8 +228,8 @@
        final-diagnostics-rev))))
 
 ;; : (-> PooMemoryCatalog [PooSessionMemoryIntent] Alist)
-(def (poo-flow-memory-policy-catalog-validation-summary catalog memory-intents)
-  (poo-flow-memory-policy-catalog-validation-summary/rev
+(def (agentic-ai-lab-memory-policy-catalog-validation-summary catalog memory-intents)
+  (agentic-ai-lab-memory-policy-catalog-validation-summary/rev
    catalog
    memory-intents
    '()
@@ -240,50 +240,50 @@
    '()))
 
 ;; : (-> Symbol PooMemoryCatalog [PooSessionMemoryIntent] [Alist] PooMemoryPolicyCatalogValidationReceipt)
-(def (poo-flow-memory-policy-catalog-validation-receipt validation-id
+(def (agentic-ai-lab-memory-policy-catalog-validation-receipt validation-id
                                                         catalog
                                                         memory-intents
                                                         . maybe-metadata)
-  (poo-flow-session-require "memory validation id must be a symbol"
+  (agentic-ai-lab-session-require "memory validation id must be a symbol"
                             (symbol? validation-id)
                             validation-id)
-  (poo-flow-session-require "memory validation requires a catalog"
-                            (poo-flow-memory-catalog? catalog)
+  (agentic-ai-lab-session-require "memory validation requires a catalog"
+                            (agentic-ai-lab-memory-catalog? catalog)
                             catalog)
-  (poo-flow-session-require "memory validation intents must be memory intents"
-                            (poo-flow-session-every?
-                             poo-flow-session-memory-intent?
+  (agentic-ai-lab-session-require "memory validation intents must be memory intents"
+                            (agentic-ai-lab-session-every?
+                             agentic-ai-lab-session-memory-intent?
                              memory-intents)
                             memory-intents)
   (let* ((validation-summary
-          (poo-flow-memory-policy-catalog-validation-summary
+          (agentic-ai-lab-memory-policy-catalog-validation-summary
            catalog
            memory-intents))
          (intent-count-value
-          (poo-flow-session-alist-ref validation-summary 'intent-count 0))
+          (agentic-ai-lab-session-alist-ref validation-summary 'intent-count 0))
          (intent-store-refs
-          (poo-flow-session-alist-ref validation-summary
+          (agentic-ai-lab-session-alist-ref validation-summary
                                       'intent-store-refs
                                       '()))
          (resolved-store-refs
-          (poo-flow-session-alist-ref validation-summary
+          (agentic-ai-lab-session-alist-ref validation-summary
                                       'resolved-store-refs
                                       '()))
          (unresolved-store-refs
-          (poo-flow-session-alist-ref validation-summary
+          (agentic-ai-lab-session-alist-ref validation-summary
                                       'unresolved-store-refs
                                       '()))
          (diagnostics
-          (poo-flow-session-alist-ref validation-summary 'diagnostics '())))
-    (poo-flow-memory-runtime-object
-     (poo-flow-memory-policy-catalog-validation-receipt->alist
-      (make-poo-flow-memory-policy-validation-receipt-record
-       +poo-flow-ai-agentic-context-memory-policy-validation-receipt-kind+
-       'poo-flow.modules.memory-core.policy-catalog-validation.v1
+          (agentic-ai-lab-session-alist-ref validation-summary 'diagnostics '())))
+    (agentic-ai-lab-memory-runtime-object
+     (agentic-ai-lab-memory-policy-catalog-validation-receipt->alist
+      (make-agentic-ai-lab-memory-policy-validation-receipt-record
+       +agentic-ai-lab-ai-agentic-context-memory-policy-validation-receipt-kind+
+       'agentic-ai-lab.modules.memory-core.policy-catalog-validation.v1
        validation-id
-       (poo-flow-memory-catalog-ref catalog)
-       (poo-flow-memory-catalog-store-count catalog)
-       (poo-flow-memory-catalog-store-refs catalog)
+       (agentic-ai-lab-memory-catalog-ref catalog)
+       (agentic-ai-lab-memory-catalog-store-count catalog)
+       (agentic-ai-lab-memory-catalog-store-refs catalog)
        intent-count-value
        intent-store-refs
        resolved-store-refs
@@ -298,65 +298,65 @@
          (car maybe-metadata)))))))
 
 ;; : (-> POOObject Boolean)
-(def (poo-flow-memory-policy-catalog-validation-receipt? value)
-  (or (poo-flow-memory-policy-validation-receipt-record? value)
+(def (agentic-ai-lab-memory-policy-catalog-validation-receipt? value)
+  (or (agentic-ai-lab-memory-policy-validation-receipt-record? value)
       (and (object? value)
-           (eq? (poo-flow-memory-slot value 'kind #f)
-                +poo-flow-ai-agentic-context-memory-policy-validation-receipt-kind+))))
+           (eq? (agentic-ai-lab-memory-slot value 'kind #f)
+                +agentic-ai-lab-ai-agentic-context-memory-policy-validation-receipt-kind+))))
 
 ;; : (-> PooMemoryPolicyCatalogValidationReceipt Boolean)
-(def (poo-flow-memory-policy-catalog-validation-receipt-valid? receipt)
-  (if (poo-flow-memory-policy-validation-receipt-record? receipt)
-    (poo-flow-memory-policy-validation-receipt-record-valid? receipt)
+(def (agentic-ai-lab-memory-policy-catalog-validation-receipt-valid? receipt)
+  (if (agentic-ai-lab-memory-policy-validation-receipt-record? receipt)
+    (agentic-ai-lab-memory-policy-validation-receipt-record-valid? receipt)
     (.ref receipt 'valid?)))
 
 ;; : (-> PooMemoryPolicyCatalogValidationReceipt [Alist])
-(def (poo-flow-memory-policy-catalog-validation-receipt-diagnostics receipt)
-  (if (poo-flow-memory-policy-validation-receipt-record? receipt)
-    (poo-flow-memory-policy-validation-receipt-record-diagnostics receipt)
+(def (agentic-ai-lab-memory-policy-catalog-validation-receipt-diagnostics receipt)
+  (if (agentic-ai-lab-memory-policy-validation-receipt-record? receipt)
+    (agentic-ai-lab-memory-policy-validation-receipt-record-diagnostics receipt)
     (.ref receipt 'diagnostics)))
 
 ;; : (-> PooMemoryPolicyCatalogValidationReceipt Alist)
-(def (poo-flow-memory-policy-catalog-validation-receipt->alist receipt)
+(def (agentic-ai-lab-memory-policy-catalog-validation-receipt->alist receipt)
   (let (checked-receipt
-        (poo-flow-session-require
+        (agentic-ai-lab-session-require
          "memory policy validation projection requires a validation receipt"
-         (poo-flow-memory-policy-catalog-validation-receipt? receipt)
+         (agentic-ai-lab-memory-policy-catalog-validation-receipt? receipt)
          receipt))
-    (if (poo-flow-memory-policy-validation-receipt-record? checked-receipt)
+    (if (agentic-ai-lab-memory-policy-validation-receipt-record? checked-receipt)
       (list
        (cons 'kind
-             (poo-flow-memory-policy-validation-receipt-record-kind checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-kind checked-receipt))
        (cons 'schema
-             (poo-flow-memory-policy-validation-receipt-record-schema checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-schema checked-receipt))
        (cons 'validation-id
-             (poo-flow-memory-policy-validation-receipt-record-validation-id checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-validation-id checked-receipt))
        (cons 'catalog-ref
-             (poo-flow-memory-policy-validation-receipt-record-catalog-ref checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-catalog-ref checked-receipt))
        (cons 'catalog-store-count
-             (poo-flow-memory-policy-validation-receipt-record-catalog-store-count checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-catalog-store-count checked-receipt))
        (cons 'catalog-store-refs
-             (poo-flow-memory-policy-validation-receipt-record-catalog-store-refs checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-catalog-store-refs checked-receipt))
        (cons 'intent-count
-             (poo-flow-memory-policy-validation-receipt-record-intent-count checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-intent-count checked-receipt))
        (cons 'intent-store-refs
-             (poo-flow-memory-policy-validation-receipt-record-intent-store-refs checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-intent-store-refs checked-receipt))
        (cons 'resolved-store-refs
-             (poo-flow-memory-policy-validation-receipt-record-resolved-store-refs checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-resolved-store-refs checked-receipt))
        (cons 'unresolved-store-refs
-             (poo-flow-memory-policy-validation-receipt-record-unresolved-store-refs checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-unresolved-store-refs checked-receipt))
        (cons 'valid?
-             (poo-flow-memory-policy-validation-receipt-record-valid? checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-valid? checked-receipt))
        (cons 'diagnostic-count
-             (poo-flow-memory-policy-validation-receipt-record-diagnostic-count checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-diagnostic-count checked-receipt))
        (cons 'diagnostics
-             (poo-flow-memory-policy-validation-receipt-record-diagnostics checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-diagnostics checked-receipt))
        (cons 'runtime-owner
-             (poo-flow-memory-policy-validation-receipt-record-runtime-owner checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-runtime-owner checked-receipt))
        (cons 'runtime-executed
-             (poo-flow-memory-policy-validation-receipt-record-runtime-executed checked-receipt))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-runtime-executed checked-receipt))
        (cons 'metadata
-             (poo-flow-memory-policy-validation-receipt-record-metadata checked-receipt)))
+             (agentic-ai-lab-memory-policy-validation-receipt-record-metadata checked-receipt)))
       (list
        (cons 'kind (.ref checked-receipt 'kind))
        (cons 'schema (.ref checked-receipt 'schema))

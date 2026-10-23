@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Validate POO Flow's SPDX, REUSE, and publication license contract."""
+"""Validate Agentic AI Lab's SPDX, REUSE, and publication license contract."""
 
 from __future__ import annotations
 

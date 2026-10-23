@@ -11,17 +11,17 @@
                  JSONReadOptions
                  current-json-read-options
                  string->json)
-        (only-in :poo-flow/modules/workflow/runtime/runtime-v0-native
+        (only-in :agentic-ai-lab/modules/workflow/runtime/runtime-v0-native
                  native-abi-version
                  native-descriptor-payload
                  native-query-execution-candidate->json
                  native-query-execution-candidate<-json
                  native-validate-payload
                  native-c-round-trip)
-        (only-in :poo-flow/modules/query/objects
-                 poo-flow-query-execution-candidate)
-        (only-in :poo-flow/modules/query/types
-                 poo-flow-query-execution-candidate?))
+        (only-in :agentic-ai-lab/modules/query/objects
+                 agentic-ai-lab-query-execution-candidate)
+        (only-in :agentic-ai-lab/modules/query/types
+                 agentic-ai-lab-query-execution-candidate?))
 
 (export runtime-v0-native-ffi-test)
 
@@ -37,7 +37,7 @@ JSON
   )
 
 (def valid-query-execution-candidate
-  (poo-flow-query-execution-candidate
+  (agentic-ai-lab-query-execution-candidate
    'mrr 'healthcare-impact "1" "healthcare-1" "sha256:source"
    'gerbil-parser "sha256:provenance" "sha256:result" 0 #f))
 
@@ -47,7 +47,7 @@ JSON
       (check (native-abi-version) => 1)
       (let (descriptor (runtime-test-json-object (native-descriptor-payload)))
         (check (hash-get descriptor "schema")
-               => "poo-flow.scheme-native-descriptor.v1")
+               => "agentic-ai-lab.scheme-native-descriptor.v1")
         (check (hash-get descriptor "runtimeAbiMajor") => 0)
         (check (hash-get descriptor "runtimeAbiMinor") => 1)
         (check (hash-get descriptor "maximumInputBytes") => (* 16 1024 1024))
@@ -69,7 +69,7 @@ JSON
               (runtime-test-json-object
                (native-validate-payload "query-execution-candidate"
                                         wire))))
-        (check (poo-flow-query-execution-candidate? candidate) => #t)
+        (check (agentic-ai-lab-query-execution-candidate? candidate) => #t)
         (check (.ref candidate 'query-identity) => 'healthcare-impact)
         (check (.ref candidate 'complete?) => #f)
         (check (hash-get receipt "valid") => #t)

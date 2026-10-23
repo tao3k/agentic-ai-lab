@@ -6,9 +6,9 @@
 
 * Decision
 
-POO Flow owns the generic =search-engine=. It composes reusable POO Search
+Agentic AI Lab owns the generic =search-engine=. It composes reusable POO Search
 stages with =temporal-causality= as its semantic core for readiness, evidence
-validity, invalidation and logical continuation. LeanPoo owns C3/C4 mathematics. POO Flow producer qualification uses
+validity, invalidation and logical continuation. LeanPoo owns C3/C4 mathematics. Agentic AI Lab producer qualification uses
 those certificates together with Quint models of its own transitions. Rust MRR
 consumes the admitted Scheme plan and dispatches physical work through MRR Data;
 ASP configures particular scenarios such as code search.
@@ -33,7 +33,7 @@ consumer qualification, and a consumer witness cannot substitute for producer
 qualification.
 
 Reusable certificate composition, typed stages and sequential/parallel algebra
-now live in =proofs/Composition/PooFlowComposition.lean=, with an independent
+now live in =proofs/Composition/AgenticAILabComposition.lean=, with an independent
 Lake package and =just check-composition-proof= entrypoint. MRR imports the
 library and runs this gate before its own consumer checks. No MRR dependency or
 binding/scenario model was introduced into the producer package.

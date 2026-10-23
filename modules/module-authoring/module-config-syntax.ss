@@ -8,24 +8,24 @@
 ;;; config authoring remains prototype composition plus named conversion helpers.
 
 (import (only-in :clan/poo/object .o .ref .slot? object? object<-alist)
-        (only-in :poo-flow/modules/workflow/scenario/configuration/selection-policy
-                 poo-flow-product-use-module))
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
+                 agentic-ai-lab-product-use-module))
 
 (export defpoo-module-config-prototype
         defpoo-module-config-kind-predicate
         defpoo-module-config-converter
-        poo-flow-module-configs
-        poo-flow-module-inherited-config)
+        agentic-ai-lab-module-configs
+        agentic-ai-lab-module-inherited-config)
 
 ;;; One runtime lowering owns inherited external execution declarations.
 ;;; Values remain inert module-selection facts; no sandbox or command runs here.
-(def (poo-flow-module-inherited-config module-key
+(def (agentic-ai-lab-module-inherited-config module-key
                                        inherited-profile
                                        isolation
                                        environment
                                        command
                                        backend)
-  (poo-flow-product-use-module
+  (agentic-ai-lab-product-use-module
    module-key
    (list (cons ':inherits inherited-profile)
          (cons ':isolation isolation)
@@ -34,14 +34,14 @@
          (cons ':nono backend))))
 
 (begin-syntax
-  (def (poo-flow-config-syntax-keyword-slots/elements ctx elements)
+  (def (agentic-ai-lab-config-syntax-keyword-slots/elements ctx elements)
     (match elements
       ([] '())
       ([slot-key slot-value . more]
        (let (key (syntax->datum slot-key))
          (and (keyword? key)
               (let (rest
-                    (poo-flow-config-syntax-keyword-slots/elements ctx more))
+                    (agentic-ai-lab-config-syntax-keyword-slots/elements ctx more))
                 (and rest
                      (cons (list (datum->syntax
                                   ctx
@@ -50,27 +50,27 @@
                            rest))))))
       (else #f)))
 
-  (def (poo-flow-config-syntax-keyword-slots ctx slot-specs)
+  (def (agentic-ai-lab-config-syntax-keyword-slots ctx slot-specs)
     (let (elements (syntax->list slot-specs))
       (and elements
-           (poo-flow-config-syntax-keyword-slots/elements ctx elements))))
+           (agentic-ai-lab-config-syntax-keyword-slots/elements ctx elements))))
 
-  (def (poo-flow-config-syntax-keyword-slot-groups ctx slot-def-groups)
+  (def (agentic-ai-lab-config-syntax-keyword-slot-groups ctx slot-def-groups)
     (map (lambda (slot-specs)
-           (poo-flow-config-syntax-keyword-slots ctx slot-specs))
+           (agentic-ai-lab-config-syntax-keyword-slots ctx slot-specs))
          (syntax->list slot-def-groups)))
 
-  (def (poo-flow-config-syntax-all? values)
+  (def (agentic-ai-lab-config-syntax-all? values)
     (not (member #f values)))
 
-  (def (poo-flow-config-syntax-definition-heads? heads)
+  (def (agentic-ai-lab-config-syntax-definition-heads? heads)
     (andmap (lambda (head)
               (eq? (syntax->datum head) '.def))
             (syntax->list heads))))
 
 ;;; One lowering owns POO prototype config declarations for every module.
 ;;; Module-specific syntax supplies only its module key and config projector.
-(defsyntax (poo-flow-module-configs stx)
+(defsyntax (agentic-ai-lab-module-configs stx)
   (syntax-case stx (quoted)
     ((ctx module-key config-flags
           (quoted quoted-form ...)
@@ -79,15 +79,15 @@
            slot-def ...)
           ...)
      (let* ((definition-heads?
-             (poo-flow-config-syntax-definition-heads?
+             (agentic-ai-lab-config-syntax-definition-heads?
               (syntax (definition-head ...))))
             (slot-groups
-             (poo-flow-config-syntax-keyword-slot-groups
+             (agentic-ai-lab-config-syntax-keyword-slot-groups
               (syntax ctx)
               (syntax ((slot-def ...) ...)))))
        (unless definition-heads?
-         (error "poo-flow module config expects native .def forms"))
-       (if (poo-flow-config-syntax-all? slot-groups)
+         (error "agentic-ai-lab module config expects native .def forms"))
+       (if (agentic-ai-lab-config-syntax-all? slot-groups)
          (with-syntax (((((slot-name slot-value) ...) ...) slot-groups))
            (syntax
             (let* ((prototype-name
@@ -95,7 +95,7 @@
                      (list (cons 'slot-name slot-value) ...)
                      supers: prototype-super))
                    ...)
-              (poo-flow-product-use-module
+              (agentic-ai-lab-product-use-module
                'module-key
                (config-flags
                 (list prototype-name ...)
@@ -105,7 +105,7 @@
                   (.o (:: prototype-self prototype-super prototype-slot ...)
                       slot-def ...))
                  ...)
-            (poo-flow-product-use-module
+            (agentic-ai-lab-product-use-module
              'module-key
              (config-flags
               (list prototype-name ...)

@@ -13,16 +13,16 @@
                  benchmark-receipt-pass?
                  benchmark-run/result)
         (only-in :clan/poo/object .o .ref object<-alist)
-        (only-in :poo-flow/modules/module-authoring/module-interface
+        (only-in :agentic-ai-lab/modules/module-authoring/module-interface
                  yuanxu-module-interface
                  yuanxu-module-interface-schema-spec)
-        (only-in :poo-flow/modules/module-authoring/module-descriptor
-                 poo-flow-modules)
+        (only-in :agentic-ai-lab/modules/module-authoring/module-descriptor
+                 agentic-ai-lab-modules)
         (only-in :yuanxu/module-system/projection/option-objects
                  yuanxu-module-option-schema-id
                  yuanxu-module-option-schema-value)
-        (only-in :poo-flow/modules/module-authoring/module-option-projection
-                 poo-flow-module-option-schemas)
+        (only-in :agentic-ai-lab/modules/module-authoring/module-option-projection
+                 agentic-ai-lab-module-option-schemas)
         (only-in :yuanxu/module-system/projection/option-validation
                  yuanxu-module-find-schema))
 
@@ -48,12 +48,12 @@
   (yuanxu-module-interface
    "IndexedSchemaProfile"
    (object<-alist schema-rows)
-   '((owner . "poo-flow"))))
+   '((owner . "agentic-ai-lab"))))
 
 (def module
-  (poo-flow-modules interface (.o id: 'indexed-schema config: (.o))))
+  (agentic-ai-lab-modules interface (.o id: 'indexed-schema config: (.o))))
 
-(def schemas (poo-flow-module-option-schemas module))
+(def schemas (agentic-ai-lab-module-option-schemas module))
 (def option-ids (map yuanxu-module-option-schema-id schemas))
 
 (def (baseline-values)
@@ -84,7 +84,7 @@
                (benchmark-fixture-ref baseline-receipt 'elapsedNs))
       (error "Interface schema index did not improve repeated lookup"
              baseline-receipt candidate-receipt))
-    (display "[poo-flow-benchmark] module-interface-schema-indexed baseline=")
+    (display "[agentic-ai-lab-benchmark] module-interface-schema-indexed baseline=")
     (write baseline-receipt)
     (display " candidate=")
     (write candidate-receipt)

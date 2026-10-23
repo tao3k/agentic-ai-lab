@@ -6,37 +6,37 @@
 ;;; Contract: validation receipt for P0 boundary namespace descriptors.
 
 (import (only-in "../../query/semantic/boundary-namespace.ss"
-                 poo-flow-intent-boundary-prototype
-                 poo-flow-author-boundary-prototype
-                 poo-flow-graph-boundary-prototype
-                 poo-flow-semantic-boundary-prototype
-                 poo-flow-contract-boundary-prototype
-                 poo-flow-observability-boundary-prototype
-                 poo-flow-projection-boundary-prototype
-                 poo-flow-runtime-boundary-prototype
-                 +poo-flow-boundary-layers+
-                 +poo-flow-agent-repair-boundary-layers+
-                 +poo-flow-disallowed-public-categories+
-                 +poo-flow-boundary-namespace-prefix+
-                 poo-flow-boundary-layer?
-                 poo-flow-agent-repair-boundary-layer?
-                 poo-flow-public-category-allowed?
-                 poo-flow-boundary-prototype?
-                 poo-flow-boundary-prototype-id
-                 poo-flow-boundary-prototype->alist
-                 make-poo-flow-namespace-descriptor
-                 poo-flow-namespace-descriptor?
-                 poo-flow-namespace-descriptor-kind
-                 poo-flow-namespace-descriptor-boundary
-                 poo-flow-namespace-descriptor-category
-                 poo-flow-namespace-descriptor-module
-                 poo-flow-namespace-descriptor-segments
-                 poo-flow-namespace-descriptor-public?
-                 poo-flow-namespace-descriptor-repair-layer
-                 poo-flow-namespace-descriptor->symbol
-                 poo-flow-namespace-descriptor->alist
-                 poo-flow-boundary-namespace
-                 poo-flow-category-module-namespace)
+                 agentic-ai-lab-intent-boundary-prototype
+                 agentic-ai-lab-author-boundary-prototype
+                 agentic-ai-lab-graph-boundary-prototype
+                 agentic-ai-lab-semantic-boundary-prototype
+                 agentic-ai-lab-contract-boundary-prototype
+                 agentic-ai-lab-observability-boundary-prototype
+                 agentic-ai-lab-projection-boundary-prototype
+                 agentic-ai-lab-runtime-boundary-prototype
+                 +agentic-ai-lab-boundary-layers+
+                 +agentic-ai-lab-agent-repair-boundary-layers+
+                 +agentic-ai-lab-disallowed-public-categories+
+                 +agentic-ai-lab-boundary-namespace-prefix+
+                 agentic-ai-lab-boundary-layer?
+                 agentic-ai-lab-agent-repair-boundary-layer?
+                 agentic-ai-lab-public-category-allowed?
+                 agentic-ai-lab-boundary-prototype?
+                 agentic-ai-lab-boundary-prototype-id
+                 agentic-ai-lab-boundary-prototype->alist
+                 make-agentic-ai-lab-namespace-descriptor
+                 agentic-ai-lab-namespace-descriptor?
+                 agentic-ai-lab-namespace-descriptor-kind
+                 agentic-ai-lab-namespace-descriptor-boundary
+                 agentic-ai-lab-namespace-descriptor-category
+                 agentic-ai-lab-namespace-descriptor-module
+                 agentic-ai-lab-namespace-descriptor-segments
+                 agentic-ai-lab-namespace-descriptor-public?
+                 agentic-ai-lab-namespace-descriptor-repair-layer
+                 agentic-ai-lab-namespace-descriptor->symbol
+                 agentic-ai-lab-namespace-descriptor->alist
+                 agentic-ai-lab-boundary-namespace
+                 agentic-ai-lab-category-module-namespace)
         (only-in "../../../core/type-facts/objects.ss"
                  yuanxu-type-fact
                  yuanxu-type-fact-contract->alist
@@ -52,55 +52,55 @@
                  yuanxu-observability-readiness
                  yuanxu-observability-repair))
 
-(export poo-flow-intent-boundary-prototype
-        poo-flow-author-boundary-prototype
-        poo-flow-graph-boundary-prototype
-        poo-flow-semantic-boundary-prototype
-        poo-flow-contract-boundary-prototype
-        poo-flow-observability-boundary-prototype
-        poo-flow-projection-boundary-prototype
-        poo-flow-runtime-boundary-prototype
-        +poo-flow-boundary-layers+
-        +poo-flow-agent-repair-boundary-layers+
-        +poo-flow-disallowed-public-categories+
-        +poo-flow-boundary-namespace-prefix+
-        poo-flow-boundary-layer?
-        poo-flow-agent-repair-boundary-layer?
-        poo-flow-public-category-allowed?
-        poo-flow-boundary-prototype?
-        poo-flow-boundary-prototype-id
-        poo-flow-boundary-prototype->alist
-        make-poo-flow-namespace-descriptor
-        poo-flow-namespace-descriptor?
-        poo-flow-namespace-descriptor-kind
-        poo-flow-namespace-descriptor-boundary
-        poo-flow-namespace-descriptor-category
-        poo-flow-namespace-descriptor-module
-        poo-flow-namespace-descriptor-segments
-        poo-flow-namespace-descriptor-public?
-        poo-flow-namespace-descriptor-repair-layer
-        poo-flow-namespace-descriptor->symbol
-        poo-flow-namespace-descriptor->alist
-        poo-flow-boundary-namespace
-        poo-flow-category-module-namespace
-        make-poo-flow-boundary-namespace-validation
-        poo-flow-boundary-namespace-validation?
-        poo-flow-boundary-namespace-validation-kind
-        poo-flow-boundary-namespace-validation-schema
-        poo-flow-boundary-namespace-validation-descriptor
-        poo-flow-boundary-namespace-validation-valid
-        poo-flow-boundary-namespace-validation-diagnostics
-        poo-flow-boundary-namespace-validation-type-facts
-        poo-flow-boundary-namespace-validation-lean-fact-contracts
-        poo-flow-boundary-namespace-validation-valid?
-        poo-flow-boundary-namespace-contract-validation
-        poo-flow-boundary-namespace-validation->alist
-        poo-flow-boundary-namespace-validation-summary
-        poo-flow-boundary-namespace-agent-feedback
-        poo-flow-require-boundary-namespace!)
+(export agentic-ai-lab-intent-boundary-prototype
+        agentic-ai-lab-author-boundary-prototype
+        agentic-ai-lab-graph-boundary-prototype
+        agentic-ai-lab-semantic-boundary-prototype
+        agentic-ai-lab-contract-boundary-prototype
+        agentic-ai-lab-observability-boundary-prototype
+        agentic-ai-lab-projection-boundary-prototype
+        agentic-ai-lab-runtime-boundary-prototype
+        +agentic-ai-lab-boundary-layers+
+        +agentic-ai-lab-agent-repair-boundary-layers+
+        +agentic-ai-lab-disallowed-public-categories+
+        +agentic-ai-lab-boundary-namespace-prefix+
+        agentic-ai-lab-boundary-layer?
+        agentic-ai-lab-agent-repair-boundary-layer?
+        agentic-ai-lab-public-category-allowed?
+        agentic-ai-lab-boundary-prototype?
+        agentic-ai-lab-boundary-prototype-id
+        agentic-ai-lab-boundary-prototype->alist
+        make-agentic-ai-lab-namespace-descriptor
+        agentic-ai-lab-namespace-descriptor?
+        agentic-ai-lab-namespace-descriptor-kind
+        agentic-ai-lab-namespace-descriptor-boundary
+        agentic-ai-lab-namespace-descriptor-category
+        agentic-ai-lab-namespace-descriptor-module
+        agentic-ai-lab-namespace-descriptor-segments
+        agentic-ai-lab-namespace-descriptor-public?
+        agentic-ai-lab-namespace-descriptor-repair-layer
+        agentic-ai-lab-namespace-descriptor->symbol
+        agentic-ai-lab-namespace-descriptor->alist
+        agentic-ai-lab-boundary-namespace
+        agentic-ai-lab-category-module-namespace
+        make-agentic-ai-lab-boundary-namespace-validation
+        agentic-ai-lab-boundary-namespace-validation?
+        agentic-ai-lab-boundary-namespace-validation-kind
+        agentic-ai-lab-boundary-namespace-validation-schema
+        agentic-ai-lab-boundary-namespace-validation-descriptor
+        agentic-ai-lab-boundary-namespace-validation-valid
+        agentic-ai-lab-boundary-namespace-validation-diagnostics
+        agentic-ai-lab-boundary-namespace-validation-type-facts
+        agentic-ai-lab-boundary-namespace-validation-lean-fact-contracts
+        agentic-ai-lab-boundary-namespace-validation-valid?
+        agentic-ai-lab-boundary-namespace-contract-validation
+        agentic-ai-lab-boundary-namespace-validation->alist
+        agentic-ai-lab-boundary-namespace-validation-summary
+        agentic-ai-lab-boundary-namespace-agent-feedback
+        agentic-ai-lab-require-boundary-namespace!)
 
-;; : (-> Symbol String PooFlowDiagnosticValue YuanxuObservabilityDiagnostic)
-(def (poo-flow-boundary-namespace-diagnostic code message value)
+;; : (-> Symbol String AgenticAILabDiagnosticValue YuanxuObservabilityDiagnostic)
+(def (agentic-ai-lab-boundary-namespace-diagnostic code message value)
   (yuanxu-observability-diagnostic-record
    'error
    'contract
@@ -111,84 +111,84 @@
    message
    'author
    (list
-    (cons 'object 'PooFlowNamespaceDescriptor)
+    (cons 'object 'AgenticAILabNamespaceDescriptor)
     (cons 'value value))))
 
-;; : (-> PooFlowNamespaceDescriptor [Alist])
-(def (poo-flow-boundary-namespace-repair-layer-diagnostics descriptor)
+;; : (-> AgenticAILabNamespaceDescriptor [Alist])
+(def (agentic-ai-lab-boundary-namespace-repair-layer-diagnostics descriptor)
   (let (repair-layer
-        (poo-flow-namespace-descriptor-repair-layer descriptor))
+        (agentic-ai-lab-namespace-descriptor-repair-layer descriptor))
     (if (or (not repair-layer)
-            (poo-flow-agent-repair-boundary-layer? repair-layer))
+            (agentic-ai-lab-agent-repair-boundary-layer? repair-layer))
       '()
       (list
-       (poo-flow-boundary-namespace-diagnostic
+       (agentic-ai-lab-boundary-namespace-diagnostic
         'invalid-agent-repair-layer
         "namespace repair layer must be a legal agent repair boundary"
         repair-layer)))))
 
-;; : (-> PooFlowNamespaceDescriptor [Alist])
-(def (poo-flow-category-module-namespace-diagnostics descriptor)
+;; : (-> AgenticAILabNamespaceDescriptor [Alist])
+(def (agentic-ai-lab-category-module-namespace-diagnostics descriptor)
   (cond
-   ((not (and (symbol? (poo-flow-namespace-descriptor-category descriptor))
-              (symbol? (poo-flow-namespace-descriptor-module descriptor))))
+   ((not (and (symbol? (agentic-ai-lab-namespace-descriptor-category descriptor))
+              (symbol? (agentic-ai-lab-namespace-descriptor-module descriptor))))
     (list
-     (poo-flow-boundary-namespace-diagnostic
+     (agentic-ai-lab-boundary-namespace-diagnostic
       'invalid-category-module-namespace
       "category module namespace requires symbolic category and module names"
       descriptor)))
-   ((not (poo-flow-public-category-allowed?
-          (poo-flow-namespace-descriptor-category descriptor)))
+   ((not (agentic-ai-lab-public-category-allowed?
+          (agentic-ai-lab-namespace-descriptor-category descriptor)))
     (list
-     (poo-flow-boundary-namespace-diagnostic
+     (agentic-ai-lab-boundary-namespace-diagnostic
       'disallowed-public-category
       "public category module namespace must not use stale or ambiguous categories"
-      (poo-flow-namespace-descriptor-category descriptor))))
+      (agentic-ai-lab-namespace-descriptor-category descriptor))))
    (else '())))
 
-;; : (-> PooFlowNamespaceDescriptor [Alist])
-(def (poo-flow-boundary-namespace-local-diagnostics descriptor)
+;; : (-> AgenticAILabNamespaceDescriptor [Alist])
+(def (agentic-ai-lab-boundary-namespace-local-diagnostics descriptor)
   (cond
-   ((not (poo-flow-namespace-descriptor? descriptor))
+   ((not (agentic-ai-lab-namespace-descriptor? descriptor))
     (list
-     (poo-flow-boundary-namespace-diagnostic
+     (agentic-ai-lab-boundary-namespace-diagnostic
       'namespace-descriptor-not-object
       "boundary namespace validation expects a namespace descriptor"
       descriptor)))
-   ((eq? (poo-flow-namespace-descriptor-kind descriptor) 'boundary)
+   ((eq? (agentic-ai-lab-namespace-descriptor-kind descriptor) 'boundary)
     (let (boundary-diagnostics
-          (if (poo-flow-boundary-layer?
-               (poo-flow-namespace-descriptor-boundary descriptor))
+          (if (agentic-ai-lab-boundary-layer?
+               (agentic-ai-lab-namespace-descriptor-boundary descriptor))
             '()
             (list
-             (poo-flow-boundary-namespace-diagnostic
+             (agentic-ai-lab-boundary-namespace-diagnostic
               'unknown-boundary-layer
               "boundary namespace must use a canonical P0 boundary layer"
-              (poo-flow-namespace-descriptor-boundary descriptor)))))
+              (agentic-ai-lab-namespace-descriptor-boundary descriptor)))))
       (append boundary-diagnostics
-              (poo-flow-boundary-namespace-repair-layer-diagnostics
+              (agentic-ai-lab-boundary-namespace-repair-layer-diagnostics
                descriptor))))
-   ((eq? (poo-flow-namespace-descriptor-kind descriptor) 'category-module)
+   ((eq? (agentic-ai-lab-namespace-descriptor-kind descriptor) 'category-module)
     (let (category-diagnostics
-          (poo-flow-category-module-namespace-diagnostics descriptor))
+          (agentic-ai-lab-category-module-namespace-diagnostics descriptor))
       (append category-diagnostics
-              (poo-flow-boundary-namespace-repair-layer-diagnostics
+              (agentic-ai-lab-boundary-namespace-repair-layer-diagnostics
                descriptor))))
    (else
     (list
-     (poo-flow-boundary-namespace-diagnostic
+     (agentic-ai-lab-boundary-namespace-diagnostic
       'unknown-namespace-kind
       "namespace descriptor kind must be boundary or category-module"
-      (poo-flow-namespace-descriptor-kind descriptor))))))
+      (agentic-ai-lab-namespace-descriptor-kind descriptor))))))
 
-;; poo-flow-boundary-namespace-validation
-;;   : (-> String String PooFlowNamespaceDescriptor Boolean [YuanxuObservabilityDiagnostic] [YuanxuTypeFactContract] [YuanxuLeanFactContract] PooFlowBoundaryNamespaceValidation)
+;; agentic-ai-lab-boundary-namespace-validation
+;;   : (-> String String AgenticAILabNamespaceDescriptor Boolean [YuanxuObservabilityDiagnostic] [YuanxuTypeFactContract] [YuanxuLeanFactContract] AgenticAILabBoundaryNamespaceValidation)
 ;;   | doc m%
 ;;       Fixed validation receipt row for one namespace descriptor.
 ;;       Constructor and accessors are generated by defstruct; all public
-;;       projection leaves through `poo-flow-boundary-namespace-validation->alist`.
+;;       projection leaves through `agentic-ai-lab-boundary-namespace-validation->alist`.
 ;;     %
-(defstruct poo-flow-boundary-namespace-validation
+(defstruct agentic-ai-lab-boundary-namespace-validation
   (kind
    schema
    descriptor
@@ -198,19 +198,19 @@
    lean-fact-contracts)
   transparent: #t)
 
-;; : (-> PooFlowBoundaryNamespaceValidation Boolean)
-(def (poo-flow-boundary-namespace-validation-valid? validation)
-  (and (poo-flow-boundary-namespace-validation? validation)
-       (poo-flow-boundary-namespace-validation-valid validation)))
+;; : (-> AgenticAILabBoundaryNamespaceValidation Boolean)
+(def (agentic-ai-lab-boundary-namespace-validation-valid? validation)
+  (and (agentic-ai-lab-boundary-namespace-validation? validation)
+       (agentic-ai-lab-boundary-namespace-validation-valid validation)))
 
-;; : (-> PooFlowNamespaceDescriptor PooFlowBoundaryNamespaceValidation)
-(def (poo-flow-boundary-namespace-contract-validation descriptor)
+;; : (-> AgenticAILabNamespaceDescriptor AgenticAILabBoundaryNamespaceValidation)
+(def (agentic-ai-lab-boundary-namespace-contract-validation descriptor)
   (let* ((diagnostics
-          (poo-flow-boundary-namespace-local-diagnostics descriptor))
+          (agentic-ai-lab-boundary-namespace-local-diagnostics descriptor))
          (valid? (null? diagnostics)))
-    (make-poo-flow-boundary-namespace-validation
-     "poo-flow-boundary-namespace-validation"
-     "poo-flow-boundary-namespace-validation/v1"
+    (make-agentic-ai-lab-boundary-namespace-validation
+     "agentic-ai-lab-boundary-namespace-validation"
+     "agentic-ai-lab-boundary-namespace-validation/v1"
      descriptor
      valid?
      diagnostics
@@ -218,7 +218,7 @@
       (yuanxu-type-fact
        'boundary.namespace/boundary-layer
        'slot-contract
-       'PooFlowNamespaceDescriptor
+       'AgenticAILabNamespaceDescriptor
        'boundaryLayer
        'boundary
        'Symbol
@@ -227,7 +227,7 @@
       (yuanxu-type-fact
        'boundary.namespace/category-module
        'slot-contract
-       'PooFlowNamespaceDescriptor
+       'AgenticAILabNamespaceDescriptor
        'categoryModule
        'category
        'Symbol
@@ -236,7 +236,7 @@
       (yuanxu-type-fact
        'boundary.namespace/repair-layer
        'slot-contract
-       'PooFlowNamespaceDescriptor
+       'AgenticAILabNamespaceDescriptor
        'repairLayer
        'repair-layer
        'Symbol
@@ -261,90 +261,90 @@
        '((scope . boundary)))))))
 
 ;; : (forall (v) (-> v [(Pair Symbol Object)]))
-;; : (-> PooFlowBoundaryNamespaceValidation Alist)
-(def (poo-flow-boundary-namespace-validation->alist validation)
+;; : (-> AgenticAILabBoundaryNamespaceValidation Alist)
+(def (agentic-ai-lab-boundary-namespace-validation->alist validation)
   (list
-   (cons 'kind (poo-flow-boundary-namespace-validation-kind validation))
-   (cons 'schema (poo-flow-boundary-namespace-validation-schema validation))
-   (cons 'valid (poo-flow-boundary-namespace-validation-valid validation))
+   (cons 'kind (agentic-ai-lab-boundary-namespace-validation-kind validation))
+   (cons 'schema (agentic-ai-lab-boundary-namespace-validation-schema validation))
+   (cons 'valid (agentic-ai-lab-boundary-namespace-validation-valid validation))
    (cons 'descriptor
-         (if (poo-flow-namespace-descriptor?
-              (poo-flow-boundary-namespace-validation-descriptor validation))
-           (poo-flow-namespace-descriptor->alist
-            (poo-flow-boundary-namespace-validation-descriptor validation))
-           (poo-flow-boundary-namespace-validation-descriptor validation)))
+         (if (agentic-ai-lab-namespace-descriptor?
+              (agentic-ai-lab-boundary-namespace-validation-descriptor validation))
+           (agentic-ai-lab-namespace-descriptor->alist
+            (agentic-ai-lab-boundary-namespace-validation-descriptor validation))
+           (agentic-ai-lab-boundary-namespace-validation-descriptor validation)))
    (cons 'diagnostics
          (map yuanxu-observability-diagnostic->alist
-              (poo-flow-boundary-namespace-validation-diagnostics
+              (agentic-ai-lab-boundary-namespace-validation-diagnostics
                validation)))
    (cons 'diagnostic-count
-         (length (poo-flow-boundary-namespace-validation-diagnostics
+         (length (agentic-ai-lab-boundary-namespace-validation-diagnostics
                   validation)))
    (cons 'type-facts
          (map yuanxu-type-fact-contract->alist
-              (poo-flow-boundary-namespace-validation-type-facts
+              (agentic-ai-lab-boundary-namespace-validation-type-facts
                validation)))
    (cons 'lean-fact-contracts
          (map yuanxu-lean-fact-contract->alist
-              (poo-flow-boundary-namespace-validation-lean-fact-contracts
+              (agentic-ai-lab-boundary-namespace-validation-lean-fact-contracts
                validation)))))
 
-;; : (-> PooFlowBoundaryNamespaceValidation [Symbol])
-(def (poo-flow-boundary-namespace-validation-diagnostic-codes validation)
+;; : (-> AgenticAILabBoundaryNamespaceValidation [Symbol])
+(def (agentic-ai-lab-boundary-namespace-validation-diagnostic-codes validation)
   (map yuanxu-observability-diagnostic-code
-       (poo-flow-boundary-namespace-validation-diagnostics validation)))
+       (agentic-ai-lab-boundary-namespace-validation-diagnostics validation)))
 
-;; : (-> PooFlowBoundaryNamespaceValidation Alist)
-(def (poo-flow-boundary-namespace-validation-summary validation)
+;; : (-> AgenticAILabBoundaryNamespaceValidation Alist)
+(def (agentic-ai-lab-boundary-namespace-validation-summary validation)
   (let ((descriptor
-         (poo-flow-boundary-namespace-validation-descriptor validation))
+         (agentic-ai-lab-boundary-namespace-validation-descriptor validation))
         (diagnostics
-         (poo-flow-boundary-namespace-validation-diagnostics validation)))
+         (agentic-ai-lab-boundary-namespace-validation-diagnostics validation)))
     (list
-     (cons 'kind 'poo-flow-boundary-namespace-summary)
+     (cons 'kind 'agentic-ai-lab-boundary-namespace-summary)
      (cons 'valid?
-           (poo-flow-boundary-namespace-validation-valid? validation))
+           (agentic-ai-lab-boundary-namespace-validation-valid? validation))
      (cons 'namespace
-           (and (poo-flow-namespace-descriptor? descriptor)
-                (poo-flow-namespace-descriptor->symbol descriptor)))
+           (and (agentic-ai-lab-namespace-descriptor? descriptor)
+                (agentic-ai-lab-namespace-descriptor->symbol descriptor)))
      (cons 'diagnostic-count (length diagnostics))
      (cons 'diagnostic-codes
-           (poo-flow-boundary-namespace-validation-diagnostic-codes
+           (agentic-ai-lab-boundary-namespace-validation-diagnostic-codes
            validation)))))
 
 ;; : (-> Boolean (Or Symbol False))
-(def (poo-flow-boundary-namespace-feedback-repair-layer valid?)
+(def (agentic-ai-lab-boundary-namespace-feedback-repair-layer valid?)
   (if valid? #f 'author))
 
 ;; : (-> Boolean (Or Symbol False))
-(def (poo-flow-boundary-namespace-feedback-repair-target valid?)
+(def (agentic-ai-lab-boundary-namespace-feedback-repair-target valid?)
   (if valid? #f 'boundary-namespace-declaration))
 
 ;; : (-> Boolean Symbol)
-(def (poo-flow-boundary-namespace-feedback-readiness-state valid?)
+(def (agentic-ai-lab-boundary-namespace-feedback-readiness-state valid?)
   (if valid? 'ready 'blocked))
 
-;; : (-> PooFlowBoundaryNamespaceValidation Alist)
-(def (poo-flow-boundary-namespace-agent-feedback validation)
+;; : (-> AgenticAILabBoundaryNamespaceValidation Alist)
+(def (agentic-ai-lab-boundary-namespace-agent-feedback validation)
   (let* ((summary
-          (poo-flow-boundary-namespace-validation-summary validation))
+          (agentic-ai-lab-boundary-namespace-validation-summary validation))
          (valid?
-          (poo-flow-boundary-namespace-validation-valid? validation))
+          (agentic-ai-lab-boundary-namespace-validation-valid? validation))
          (receipt
           (yuanxu-observability-feedback-receipt
-           "poo-flow-boundary-namespace-agent-feedback/v1"
+           "agentic-ai-lab-boundary-namespace-agent-feedback/v1"
            'boundary-namespace
            (yuanxu-observability-graph 'boundary-namespace summary)
-           (poo-flow-boundary-namespace-validation-diagnostics validation)
+           (agentic-ai-lab-boundary-namespace-validation-diagnostics validation)
            (yuanxu-observability-repair
-            (poo-flow-boundary-namespace-feedback-repair-layer valid?)
-            (poo-flow-boundary-namespace-feedback-repair-target valid?))
+            (agentic-ai-lab-boundary-namespace-feedback-repair-layer valid?)
+            (agentic-ai-lab-boundary-namespace-feedback-repair-target valid?))
            (yuanxu-observability-readiness
-            (poo-flow-boundary-namespace-feedback-readiness-state valid?)
+            (agentic-ai-lab-boundary-namespace-feedback-readiness-state valid?)
             valid?)
            (list
             (cons 'validation
-                  (poo-flow-boundary-namespace-validation->alist
+                  (agentic-ai-lab-boundary-namespace-validation->alist
                    validation))))))
     (yuanxu-observability-agent-feedback
      'yuanxu-agent-feedback
@@ -352,9 +352,9 @@
      'repair-boundary-namespace
      receipt)))
 
-;; : (-> PooFlowNamespaceDescriptor PooFlowNamespaceDescriptor)
-(def (poo-flow-require-boundary-namespace! descriptor)
-  (let (validation (poo-flow-boundary-namespace-contract-validation descriptor))
-    (if (poo-flow-boundary-namespace-validation-valid? validation)
+;; : (-> AgenticAILabNamespaceDescriptor AgenticAILabNamespaceDescriptor)
+(def (agentic-ai-lab-require-boundary-namespace! descriptor)
+  (let (validation (agentic-ai-lab-boundary-namespace-contract-validation descriptor))
+    (if (agentic-ai-lab-boundary-namespace-validation-valid? validation)
       descriptor
       (error "boundary namespace failed validation" validation))))

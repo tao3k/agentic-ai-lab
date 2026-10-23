@@ -12,8 +12,8 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-table-expression
-                 poo-flow-ascent-table-expression-prototype))
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
+                 agentic-ai-lab-ascent-table-expression-prototype))
 
 (export ascent-table-expression-performance-test)
 
@@ -34,7 +34,7 @@
                                  pairs)))))))
 
 (def (relation-expression-projection pairs pair-radix)
-  (.ref (.mix poo-flow-ascent-table-expression-prototype
+  (.ref (.mix agentic-ai-lab-ascent-table-expression-prototype
               (.o (source-pairs pairs) (radix pair-radix)))
         'at-most-two-hop-pairs))
 
@@ -54,10 +54,10 @@
          #t)
         (check-equal? (.call UIntTrieSet .count pairs) 512)
         (check-equal? (length projected) 1024)
-        (display "[poo-flow-benchmark] ascent-table-expression p95=")
+        (display "[agentic-ai-lab-benchmark] ascent-table-expression p95=")
         (display (cdr (assoc 'elapsed receipt)))
         (newline)
-        (display "[poo-flow-benchmark] ascent-table-expression ")
+        (display "[agentic-ai-lab-benchmark] ascent-table-expression ")
         (write receipt)
         (newline)
         (force-output)

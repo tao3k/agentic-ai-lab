@@ -4,12 +4,12 @@ from copy import deepcopy
 import os
 from pathlib import Path
 import pytest
-from poo_flow_runtime.scheme_wire import loads, dumps
-from poo_flow_runtime.semantic_runtime import SemanticRuntimeError
+from agentic_ai_lab_runtime.scheme_wire import loads, dumps
+from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
 
 @pytest.fixture
 def original_proof():
-    path = os.environ.get('POO_FLOW_NATIVE_DERIVATION_ORACLE')
+    path = os.environ.get('AGENTIC_AI_LAB_NATIVE_DERIVATION_ORACLE')
     if not path:
         pytest.skip('original Rust/native joint admission oracle must be configured')
     return loads(Path(path).read_text())
@@ -21,7 +21,7 @@ def test_actual_original_joint_proof_parity_and_late_correction(runtime, origina
     assert admitted == original_proof['expected'] and request == before
     assert admitted['proofAdmitted'] and admitted['mrrRuleEquivalenceVerified'] and admitted['derivationCorrespondenceVerified']
     assert not any(admitted[k] for k in ['sourceAuthenticated', 'selectionAdmitted', 'actionAuthorized', 'durable'])
-    task = dict(schema='poo-flow.temporal-support-request.v1',
+    task = dict(schema='agentic-ai-lab.temporal-support-request.v1',
         program=dict(identity='native-proof-support', policy='read-only', complete=True, supports=[admitted['support']]),
         journal=deepcopy(request['journal']), asOf=1, validAt=False, budget=128)
     assert runtime.evaluate_temporal_support(task)['conclusions'][0]['status'] == 'supported'
@@ -39,14 +39,14 @@ def test_proof_control_is_not_available_as_an_ordinary_c_tool(runtime, original_
     with pytest.raises(ValueError, match='host control'):
         runtime.call('$host.temporal.derivation.admit', request)
     assert '$host.temporal.derivation.admit' not in runtime.descriptor['operations']
-    result = runtime._ffi.new('poo_flow_semantic_result *')
+    result = runtime._ffi.new('agentic_ai_lab_semantic_result *')
     raw = dumps(request).encode()
     try:
-        status = runtime._submit_host(lambda:runtime._lib.poo_flow_python_semantic_call(
+        status = runtime._submit_host(lambda:runtime._lib.agentic_ai_lab_python_semantic_call(
             b'$host.temporal.derivation.admit',raw,len(raw),result)).result()
         assert status == 3 and result.status == 3 and result.length == 0 and result.data == runtime._ffi.NULL
     finally:
-        runtime._lib.poo_flow_python_semantic_release(result)
+        runtime._lib.agentic_ai_lab_python_semantic_release(result)
 
 @pytest.mark.parametrize('mode', ['schema','flags','rule','direct_support','output','source_content','source_binding',
                                   'missing_fact','duplicate_fact','unused_fact','missing_derivation','source_marker',
@@ -54,7 +54,7 @@ def test_proof_control_is_not_available_as_an_ordinary_c_tool(runtime, original_
 def test_forged_or_incomplete_joint_evidence_rejected(runtime, original_proof, mode):
     request = deepcopy(original_proof['request'])
     p = request['projection']
-    if mode == 'schema': request['schema'] = 'poo-flow.temporal-derivation-admit-request.v2'
+    if mode == 'schema': request['schema'] = 'agentic-ai-lab.temporal-derivation-admit-request.v2'
     elif mode == 'flags': request['proofAdmitted'] = True
     elif mode == 'rule': p['derivations'][1]['rule'] = p['derivations'][0]['rule']
     elif mode == 'direct_support': p['derivations'][1]['supports'] = [f['content']['identity'] for f in p['facts'] if f['source']]

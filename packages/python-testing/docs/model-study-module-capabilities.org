@@ -49,7 +49,7 @@ Run each program with the same committed checkouts and a 1 GiB Gerbil
 heap fence. Preview generation uses at most two native processes at once.
 The source, expected answer, pinned Git heads, and SHA256 hashes are
 recorded in an external preview manifest. Live execution requires clean
-checkouts and an exact match to that manifest and the POO Flow ASCENT pin.
+checkouts and an exact match to that manifest and the Agentic AI Lab ASCENT pin.
 
 Use =deepseek-flash= through the Responses API, non-thinking,
 =temperature=0=, =max_output_tokens=512=, timeout 45 seconds, and no
@@ -63,10 +63,10 @@ Syntax validity and exact answer correctness are separate results.
 The preview is generated with:
 
 #+begin_src sh
-python -m poo_flow_testing.model_study.scheme \
+python -m agentic_ai_lab_testing.model_study.scheme \
   --ascent-root /path/to/pinned/gerbil-ascent \
-  --poo-root /path/to/poo-flow \
-  --gerbil-path /path/to/poo-flow/.gerbil \
+  --poo-root /path/to/agentic-ai-lab \
+  --gerbil-path /path/to/agentic-ai-lab/.gerbil \
   --preview-dir /private/tmp/poo-scheme-module-preview
 #+end_src
 

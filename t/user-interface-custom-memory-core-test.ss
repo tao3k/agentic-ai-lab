@@ -11,7 +11,7 @@
                  check-equal?
                  test-suite)
         (only-in "../user-interface/custom/my-module/cases/memory-core"
-                 poo-flow-custom-my-module-memory-core-case))
+                 agentic-ai-lab-custom-my-module-memory-core-case))
 
 (export user-interface-custom-memory-core-test)
 
@@ -21,14 +21,14 @@
     (if entry (cdr entry) #f)))
 
 (def user-interface-custom-memory-core-test
-  (test-suite "poo-flow custom user-interface memory-core case"
+  (test-suite "agentic-ai-lab custom user-interface memory-core case"
     (yuanxu-test-case "projects custom memory-core case without runtime execution"
       (let* ((selection-row
-              (car poo-flow-custom-my-module-memory-core-case))
+              (car agentic-ai-lab-custom-my-module-memory-core-case))
              (catalog-row
-              (cadr poo-flow-custom-my-module-memory-core-case))
+              (cadr agentic-ai-lab-custom-my-module-memory-core-case))
              (validation-row
-              (caddr poo-flow-custom-my-module-memory-core-case)))
+              (caddr agentic-ai-lab-custom-my-module-memory-core-case)))
         (check-equal? (test-ref selection-row 'key)
                       '(agentic . ai-agentic-context))
         (check-equal? (test-ref catalog-row 'catalog-ref)

@@ -2,9 +2,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Production module data; no development harness is loaded.
 (import (only-in :std/source this-source-file))
-(export poo-flow-library-modules poo-flow-native-spec)
+(export agentic-ai-lab-library-modules agentic-ai-lab-native-spec)
 
-(def poo-flow-library-modules
+(def agentic-ai-lab-library-modules
   '("init.ss"
     "modules/workflow/scenario/plan-projection.ss"
     "modules/workflow/scenario/bundle-v1-projection.ss"
@@ -296,10 +296,10 @@
    (else '(gxc: "modules/workflow/runtime/semantic"))))
 
 
-(def (poo-flow-native-spec)
+(def (agentic-ai-lab-native-spec)
   (append
     `((gxc: "modules/nono-sandbox/_nono"
             "-cc-options" ,+nono-c-include-option+
             "-ld-options" ,+nono-c-link-option+))
-    poo-flow-library-modules
+    agentic-ai-lab-library-modules
     (list +runtime-v0-native-ffi-spec+ +semantic-native-ffi-spec+)))

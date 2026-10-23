@@ -7,8 +7,8 @@
 ;;; Invariant: tool, memory, and sandbox-durable cases can be imported without
 ;;; compiling CI/CD, loop-engine, or durable artifact scenarios.
 
-(import :poo-flow/modules/session/objects
-        :poo-flow/modules/session/config
+(import :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/config
         "session-memory-durable"
         "tool-core"
         "memory-core"

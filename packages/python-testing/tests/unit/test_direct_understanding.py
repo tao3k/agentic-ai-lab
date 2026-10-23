@@ -3,10 +3,10 @@
 import pytest
 import json
 from types import SimpleNamespace
-from poo_flow_testing.model_study.direct.tasks import finite_rows
-from poo_flow_testing.model_study.direct.live import live
-from poo_flow_testing.model_study.direct.live import _provider_response
-from poo_flow_testing.model_study.direct.native import score_candidate
+from agentic_ai_lab_testing.model_study.direct.tasks import finite_rows
+from agentic_ai_lab_testing.model_study.direct.live import live
+from agentic_ai_lab_testing.model_study.direct.live import _provider_response
+from agentic_ai_lab_testing.model_study.direct.native import score_candidate
 
 
 def test_independent_closure_oracle_handles_cycles_and_positive_length_paths():
@@ -61,14 +61,14 @@ def test_provider_stream_retains_raw_events_and_requires_a_terminal_record(tmp_p
 
 def test_native_computation_has_no_interactive_stdin(tmp_path):
     import sys
-    from poo_flow_testing.model_study.direct.native import native_run
+    from agentic_ai_lab_testing.model_study.direct.native import native_run
     script = "import sys; assert sys.stdin.read() == ''; print('MODULE-OK noninteractive'); print('HARNESS-OK noninteractive'); print('OK')"
     assert 'HARNESS-OK noninteractive' in native_run(
         tmp_path, [sys.executable, '-c', script], tmp_path/'native.log')
 
 
 def test_history_control_differs_only_by_current_native_observation(tmp_path):
-    from poo_flow_testing.model_study.direct.live import _request
+    from agentic_ai_lab_testing.model_study.direct.live import _request
     source = "(def implementation 'source)\n(import :std/test :gerbil-ascent/program/scheme-language)\n(def task 'transfer)"
     (tmp_path/'join-transfer.input.ss').write_text(source)
     (tmp_path/'join-initial.input.ss').write_text(source.replace('transfer', 'initial'))

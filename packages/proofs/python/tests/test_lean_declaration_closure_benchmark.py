@@ -14,7 +14,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from poo_flow_proof.lean_declaration_closure import LeanClosureError
+from agentic_ai_lab_proof.lean_declaration_closure import LeanClosureError
 
 
 @pytest.fixture

@@ -5,17 +5,17 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :poo-flow/modules/temporal-causality/time/watermark-types
-                 poo-flow-temporal-watermark-kind PooFlowTemporalWatermark))
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/watermark-types
+                 agentic-ai-lab-temporal-watermark-kind AgenticAILabTemporalWatermark))
 
-(export poo-flow-temporal-watermark-value)
+(export agentic-ai-lab-temporal-watermark-value)
 
-(def (poo-flow-temporal-watermark-value
+(def (agentic-ai-lab-temporal-watermark-value
       identity-value digest-value source-value partition-value first-value
       last-value observation-value issuer-value coverage-value policy-value
       receipt-value)
-  (validate PooFlowTemporalWatermark
-    (.o kind: poo-flow-temporal-watermark-kind
+  (validate AgenticAILabTemporalWatermark
+    (.o kind: agentic-ai-lab-temporal-watermark-kind
         identity: identity-value semantic-digest: digest-value
         source-identity: source-value partition-identity: partition-value
         first-sequence: first-value last-sequence: last-value

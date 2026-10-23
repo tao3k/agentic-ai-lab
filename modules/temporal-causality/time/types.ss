@@ -9,16 +9,16 @@
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every))
 
-(export poo-flow-temporal-instant-kind
-        poo-flow-temporal-interval-kind
-        poo-flow-temporal-axes-kind
-        PooFlowTemporalInstant PooFlowTemporalInterval PooFlowTemporalAxes
-        poo-flow-temporal-instant? poo-flow-temporal-interval?
-        poo-flow-temporal-axes?)
+(export agentic-ai-lab-temporal-instant-kind
+        agentic-ai-lab-temporal-interval-kind
+        agentic-ai-lab-temporal-axes-kind
+        AgenticAILabTemporalInstant AgenticAILabTemporalInterval AgenticAILabTemporalAxes
+        agentic-ai-lab-temporal-instant? agentic-ai-lab-temporal-interval?
+        agentic-ai-lab-temporal-axes?)
 
-(def poo-flow-temporal-instant-kind 'poo-flow.temporal-causality.instant)
-(def poo-flow-temporal-interval-kind 'poo-flow.temporal-causality.interval)
-(def poo-flow-temporal-axes-kind 'poo-flow.temporal-causality.time-axes)
+(def agentic-ai-lab-temporal-instant-kind 'agentic-ai-lab.temporal-causality.instant)
+(def agentic-ai-lab-temporal-interval-kind 'agentic-ai-lab.temporal-causality.interval)
+(def agentic-ai-lab-temporal-axes-kind 'agentic-ai-lab.temporal-causality.time-axes)
 
 (def (text? value)
   (and (string? value) (> (string-length value) 0)))
@@ -29,7 +29,7 @@
 (def (instant-shape? value)
   (and (slots? value '(kind identity domain-identity coordinate
                              provenance-identity modality))
-       (eq? (.ref value 'kind) poo-flow-temporal-instant-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-temporal-instant-kind)
        (every text? (list (.ref value 'identity)
                           (.ref value 'domain-identity)
                           (.ref value 'provenance-identity)))
@@ -37,17 +37,17 @@
        (>= (.ref value 'coordinate) 0)
        (symbol? (.ref value 'modality))))
 
-(define-type (PooFlowTemporalInstant @ Type.)
+(define-type (AgenticAILabTemporalInstant @ Type.)
   .element?: instant-shape?)
-(def (poo-flow-temporal-instant? value)
-  (element? PooFlowTemporalInstant value))
+(def (agentic-ai-lab-temporal-instant? value)
+  (element? AgenticAILabTemporalInstant value))
 
 (def (interval-shape? value)
   (and (slots? value '(kind identity start end start-closed? end-closed?))
-       (eq? (.ref value 'kind) poo-flow-temporal-interval-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-temporal-interval-kind)
        (text? (.ref value 'identity))
-       (poo-flow-temporal-instant? (.ref value 'start))
-       (poo-flow-temporal-instant? (.ref value 'end))
+       (agentic-ai-lab-temporal-instant? (.ref value 'start))
+       (agentic-ai-lab-temporal-instant? (.ref value 'end))
        (equal? (.ref (.ref value 'start) 'domain-identity)
                (.ref (.ref value 'end) 'domain-identity))
        (<= (.ref (.ref value 'start) 'coordinate)
@@ -55,27 +55,27 @@
        (boolean? (.ref value 'start-closed?))
        (boolean? (.ref value 'end-closed?))))
 
-(define-type (PooFlowTemporalInterval @ Type.)
+(define-type (AgenticAILabTemporalInterval @ Type.)
   .element?: interval-shape?)
-(def (poo-flow-temporal-interval? value)
-  (element? PooFlowTemporalInterval value))
+(def (agentic-ai-lab-temporal-interval? value)
+  (element? AgenticAILabTemporalInterval value))
 
 ;;; An event may have only some axes. The role is given by its slot, and no
 ;;; relation among event, ingress and processing coordinates is inferred.
 (def (axes-shape? value)
   (and (slots? value '(kind identity event-instant ingress-instant
                              processing-instant))
-       (eq? (.ref value 'kind) poo-flow-temporal-axes-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-temporal-axes-kind)
        (text? (.ref value 'identity))
        (let ((axes (list (.ref value 'event-instant)
                          (.ref value 'ingress-instant)
                          (.ref value 'processing-instant))))
-         (and (ormap poo-flow-temporal-instant? axes)
+         (and (ormap agentic-ai-lab-temporal-instant? axes)
               (every (lambda (axis)
-                       (or (not axis) (poo-flow-temporal-instant? axis)))
+                       (or (not axis) (agentic-ai-lab-temporal-instant? axis)))
                      axes)))))
 
-(define-type (PooFlowTemporalAxes @ Type.)
+(define-type (AgenticAILabTemporalAxes @ Type.)
   .element?: axes-shape?)
-(def (poo-flow-temporal-axes? value)
-  (element? PooFlowTemporalAxes value))
+(def (agentic-ai-lab-temporal-axes? value)
+  (element? AgenticAILabTemporalAxes value))

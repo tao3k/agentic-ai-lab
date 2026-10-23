@@ -11,7 +11,7 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "bundle_v1_headers",
-    hdrs = ["include/poo_flow/bundle_v1.h"],
+    hdrs = ["include/agentic_ai_lab/bundle_v1.h"],
     strip_include_prefix = "include",
 )
 

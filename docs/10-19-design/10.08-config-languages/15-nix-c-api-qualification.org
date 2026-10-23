@@ -6,7 +6,7 @@
 
 * Ownership and purpose
 
-The C binding, evaluator lifetime and process startup belong to POO Flow.
+The C binding, evaluator lifetime and process startup belong to Agentic AI Lab.
 Yuanxu remains the library providing POO, Contracts, source admission and
 module/build protocols. This experiment changes no Yuanxu files, does not
 replace its existing Nix Source, and neither modifies nor rebuilds Gerbil.
@@ -239,7 +239,7 @@ Flow must own that runtime boundary while Yuanxu remains a reusable library.
 
 ** Ownership and native interface
 
-This implementation lives entirely in =poo-flow/bindings/nix-c-api=. Yuanxu
+This implementation lives entirely in =agentic-ai-lab/bindings/nix-c-api=. Yuanxu
 neither links Nix nor gains a Nix dependency. The installed Gerbil and Gambit
 executables/sources are unchanged. The existing product PR is #34; no new
 branch or PR is introduced.

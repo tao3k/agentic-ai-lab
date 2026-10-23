@@ -7,11 +7,11 @@
 ;;; Invariant: this is a functional projection layer only; Scheme does not
 ;;; append logs, claim leases, retain artifacts, or attach sandbox handles.
 
-(import :poo-flow/modules/ai-agentic-context/features/memory/durable/store-operation
+(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
         :yuanxu/utilities/final-projection-syntax)
 
-(export poo-flow-durable-runtime-store-operations-from-rows
-        poo-flow-durable-runtime-store-rows->marlin-handoff)
+(export agentic-ai-lab-durable-runtime-store-operations-from-rows
+        agentic-ai-lab-durable-runtime-store-rows->marlin-handoff)
 
 ;; : (-> Alist Symbol Object Object)
 (def (bridge-ref row key default-value)
@@ -66,7 +66,7 @@
                        row
                        target-ref
                        causal-refs)
-  (poo-flow-durable-runtime-store-operation
+  (agentic-ai-lab-durable-runtime-store-operation
    operation-id
    operation-kind
    negotiation
@@ -229,7 +229,7 @@
   (if operation (cons operation operations-rev) operations-rev))
 
 ;; : (-> Alist Alist [Alist] [Alist] [Alist] [Symbol] [Object])
-(def (poo-flow-durable-runtime-store-operations-from-rows negotiation
+(def (agentic-ai-lab-durable-runtime-store-operations-from-rows negotiation
                                                           session-graph-row
                                                           communication-rows
                                                           memory-job-rows
@@ -266,15 +266,15 @@
                                              '())))))))))
 
 ;; : (-> Alist Alist [Alist] [Alist] [Alist] [Symbol] Alist)
-(def (poo-flow-durable-runtime-store-rows->marlin-handoff negotiation
+(def (agentic-ai-lab-durable-runtime-store-rows->marlin-handoff negotiation
                                                           session-graph-row
                                                           communication-rows
                                                           memory-job-rows
                                                           workflow-task-rows
                                                           sandbox-refs)
-  (poo-flow-durable-runtime-store-operations->marlin-handoff
+  (agentic-ai-lab-durable-runtime-store-operations->marlin-handoff
    negotiation
-   (poo-flow-durable-runtime-store-operations-from-rows
+   (agentic-ai-lab-durable-runtime-store-operations-from-rows
     negotiation
     session-graph-row
     communication-rows

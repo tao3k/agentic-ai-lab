@@ -5,6 +5,6 @@
 
 ;;; Boundary: stable import surface for memory-core public specs.
 
-(import :poo-flow/modules/ai-agentic-context/features/memory/config)
+(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
 
-(export (import: :poo-flow/modules/ai-agentic-context/features/memory/config))
+(export (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/config))

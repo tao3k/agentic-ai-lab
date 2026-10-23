@@ -13,7 +13,7 @@
                  yuanxu-debug-memory-policy
                  yuanxu-debug-memory-receipt-sexp
                  yuanxu-debug-memory-snapshot
-                 call-with-poo-flow-debug-memory-monitor))
+                 call-with-agentic-ai-lab-debug-memory-monitor))
 
 (def (elapsed-milliseconds started)
   (quotient (* (- (current-jiffy) started) 1000)
@@ -26,10 +26,10 @@
                  (string=? (substring path (- length 3) length) ".ss"))
       (error "contribution test import requires an .ss file" path))
     (string->symbol
-     (string-append ":poo-flow/" (substring path 0 (- length 3))))))
+     (string-append ":agentic-ai-lab/" (substring path 0 (- length 3))))))
 
 (def (emit-import-event phase owner module test-file module-id . fields)
-  (display "[poo-flow-observability] phase=")
+  (display "[agentic-ai-lab-observability] phase=")
   (display phase)
   (display " owner=")
   (display owner)
@@ -66,7 +66,7 @@
      (lambda (failure)
        (if (YuanxuDebugMemoryAnomaly? failure)
          (begin
-           (display "[poo-flow-observability] phase=import-memory-rejected receipt=")
+           (display "[agentic-ai-lab-observability] phase=import-memory-rejected receipt=")
            (write
             (yuanxu-debug-memory-receipt-sexp
              (YuanxuDebugMemoryAnomaly-receipt failure)))
@@ -77,7 +77,7 @@
      (lambda ()
        (call-with-values
         (lambda ()
-          (call-with-poo-flow-debug-memory-monitor
+          (call-with-agentic-ai-lab-debug-memory-monitor
            policy
            'test-import
            (lambda () (eval `(import ,module-id)))))

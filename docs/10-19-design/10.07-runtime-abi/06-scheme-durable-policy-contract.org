@@ -10,7 +10,7 @@ Durable policy belongs to the Scheme control plane.  Python, Rust, Marlin, and
 other runtime languages should implement durable substrates and adapters, not
 the durable strategy engine.
 
-This keeps POO Flow's durable behavior in one semantic owner while allowing each
+This keeps Agentic AI Lab's durable behavior in one semantic owner while allowing each
 runtime to use the best local execution libraries.
 
 * Scheme Responsibility
@@ -78,7 +78,7 @@ that layer has the validated runtime graph plan receipt.
 
 Python also exposes =RuntimeDurableAdapter=.  The adapter consumes the Scheme
 policy manifest, creates the runtime substrate, and emits a
-=poo-flow-durable-adapter.v1= receipt.  This is the handoff shape other runtime
+=agentic-ai-lab-durable-adapter.v1= receipt.  This is the handoff shape other runtime
 languages should mirror: policy in, substrate adapter out, receipt back.
 * 2026-07-06 Scheme Runtime Manifest Closure
 
@@ -90,12 +90,12 @@ The policy manifest is necessary but not sufficient for runtime language adoptio
 
 Implemented closure:
 
-- Scheme module: =:poo-flow/modules/memory-core/durable/runtime-manifest=.
-- Canonical schema: =poo-flow.durable.runtime-envelope.v1=.
+- Scheme module: =:agentic-ai-lab/modules/memory-core/durable/runtime-manifest=.
+- Canonical schema: =agentic-ai-lab.durable.runtime-envelope.v1=.
 - Public carrier helpers:
-  - =poo-flow-durable-runtime-manifest-alist=
-  - =poo-flow-durable-runtime-manifest-string=
-  - =poo-flow-durable-runtime-manifest-bytes=
+  - =agentic-ai-lab-durable-runtime-manifest-alist=
+  - =agentic-ai-lab-durable-runtime-manifest-string=
+  - =agentic-ai-lab-durable-runtime-manifest-bytes=
 - Envelope content is projected from POO receipts:
   - durable policy manifest
   - durable runtime store contract receipt
@@ -118,13 +118,13 @@ Primary validation gate:
 
 Implemented closure:
 
-- Scheme module: =:poo-flow/modules/memory-core/durable/policy-manifest=.
-- Canonical schema: =poo-flow.durable.runtime-policy-manifest.v1=.
+- Scheme module: =:agentic-ai-lab/modules/memory-core/durable/policy-manifest=.
+- Canonical schema: =agentic-ai-lab.durable.runtime-policy-manifest.v1=.
 - Public carrier helpers:
-  - =poo-flow-durable-policy-runtime-manifest-alist=
-  - =poo-flow-durable-policy-runtime-manifest-string=
-  - =poo-flow-durable-policy-runtime-manifest-bytes=
-- Runtime-facing fields are projected from =poo-flow-durable-policy->receipt=: policy id, checkpoint id strategy, checkpoint store, repair mode, action classes, runtime owner, receipt schema/kind, receipt validity, and receipt diagnostic count.
+  - =agentic-ai-lab-durable-policy-runtime-manifest-alist=
+  - =agentic-ai-lab-durable-policy-runtime-manifest-string=
+  - =agentic-ai-lab-durable-policy-runtime-manifest-bytes=
+- Runtime-facing fields are projected from =agentic-ai-lab-durable-policy->receipt=: policy id, checkpoint id strategy, checkpoint store, repair mode, action classes, runtime owner, receipt schema/kind, receipt validity, and receipt diagnostic count.
 
 Runtime role boundary:
 

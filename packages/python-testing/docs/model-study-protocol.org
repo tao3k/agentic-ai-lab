@@ -10,7 +10,7 @@
 Does showing a verified finite, founded ASCENT receipt improve model use of
 the checked candidate without promoting it to verified intent? This is one
 interface intervention, not a test of model training or general reasoning.
-The stable code namespace is =poo_flow_testing.model_study=; protocol
+The stable code namespace is =agentic_ai_lab_testing.model_study=; protocol
 identity and revision are fixed only in =model_study/schema.py=. This
 experiment selects its =founded= protocol. Future studies must register
 their protocol there and keep filenames and the command entry point stable.
@@ -59,7 +59,7 @@ three-repeat pilot.
 
 Before any paid call, build and test both committed heads, run the frozen
 native fixture and the stable model-study entry point with =--dry-run=,
-and require the pinned POO Flow Linux
+and require the pinned Agentic AI Lab Linux
 consumer gate. The live runner rejects dirty checkouts and an existing
 output path. Use an absolute external =--output= path and supply an existing
 local =--env-file= only to the process; never store its value in a receipt.
@@ -67,9 +67,9 @@ The experiment's cold and warm tool times are separate from model latency.
 
 #+begin_src sh
 uv run --project packages/python-testing --extra live --extra runtime \
-  python -m poo_flow_testing.model_study \
+  python -m agentic_ai_lab_testing.model_study \
   --ascent-root /path/to/gerbil-ascent \
-  --poo-root /path/to/poo-flow \
+  --poo-root /path/to/agentic-ai-lab \
   --dry-run
 #+end_src
 

@@ -8,10 +8,10 @@ import json
 
 import pytest
 
-from poo_flow_runtime.benchmarks import __main__ as benchmark_cli
-from poo_flow_runtime.benchmarks import anyio_runtime
-from poo_flow_runtime.benchmarks import large_state_copy as benchmark
-from poo_flow_runtime.benchmarks import _large_state_copy_workload as workload
+from agentic_ai_lab_runtime.benchmarks import __main__ as benchmark_cli
+from agentic_ai_lab_runtime.benchmarks import anyio_runtime
+from agentic_ai_lab_runtime.benchmarks import large_state_copy as benchmark
+from agentic_ai_lab_runtime.benchmarks import _large_state_copy_workload as workload
 
 
 def _receipt(**overrides: object) -> benchmark.LargeStateCopyBenchmark:
@@ -114,7 +114,7 @@ def test_large_state_copy_receipt_is_canonical_json() -> None:
         separators=(",", ":"),
         sort_keys=True,
     )
-    assert payload["schema"] == "poo-flow.large-state-copy-benchmark.v1"
+    assert payload["schema"] == "agentic-ai-lab.large-state-copy-benchmark.v1"
     assert payload["copy-boundary"] == "program-executor"
     assert payload["copy-kind"] == "shallow-root-dict"
     assert payload["candidate-mode"] == "owned-transfer"
@@ -190,7 +190,7 @@ def test_benchmark_dispatcher_routes_large_state_copy(
         "relative_tolerance": 0.25,
     }
     assert json.loads(capsys.readouterr().out)["schema"] == (
-        "poo-flow.large-state-copy-benchmark.v1"
+        "agentic-ai-lab.large-state-copy-benchmark.v1"
     )
 
 
@@ -211,11 +211,11 @@ def test_anyio_runtime_schema_defaults_and_receipt_remain_unchanged() -> None:
     )
 
     assert anyio_runtime.ANYIO_RUNTIME_BENCHMARK_SCHEMA == (
-        "poo-flow.anyio-runtime-benchmark.v1"
+        "agentic-ai-lab.anyio-runtime-benchmark.v1"
     )
     assert anyio_runtime.ANYIO_RUNTIME_DEFAULT_TARGET_OBSERVATIONS_PER_SIDE == 10_000
     assert args.observations_per_side == 10_000
     assert args.max_concurrency is None
     assert phase.receipt().startswith(
-        '|poo-flow-benchmark (schema: "poo-flow.anyio-runtime-benchmark.v1"'
+        '|agentic-ai-lab-benchmark (schema: "agentic-ai-lab.anyio-runtime-benchmark.v1"'
     )

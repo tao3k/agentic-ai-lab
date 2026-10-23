@@ -10,7 +10,7 @@ SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 | Owner | Responsibility |
 |-------+----------------|
-| POO Flow Scheme Library | Temporal semantics, proof replay, revisions, applicability and IFC meaning |
+| Agentic AI Lab Scheme Library | Temporal semantics, proof replay, revisions, applicability and IFC meaning |
 | Scheme ASCENT | Bounded relational evaluation and native proof production |
 | Runtime C | Bounded ABI v1 and explicit trusted Host controls |
 | Python Runtime | Library consumers, scheduling and provider IO |
@@ -68,7 +68,7 @@ No new model call or benchmark win is implied by this stage.
 
 * Qualified native consumer source cut
 
-[[https://github.com/tao3k/poo-flow/actions/runs/37769701506/job/113291895168][The original consumer CI run]] passed at POO source cut
+[[https://github.com/tao3k/agentic-ai-lab/actions/runs/37769701506/job/113291895168][The original consumer CI run]] passed at POO source cut
 =0a7a2c3c22775cbcd657a250e00f75a541a5b5b4= with the immutable graph above.
 Ten original Rust tests and a separate fresh-process archive replay passed.
 Installed Python replay passed 63 tests with no skips. Both consumers used the
@@ -102,7 +102,7 @@ physical execution. B3's authoritative Data commit and IFC remain separate.
 
 * Qualified B1 source cut
 
-[[https://github.com/tao3k/poo-flow/actions/runs/37778052826][The complete CI run]] passed at
+[[https://github.com/tao3k/agentic-ai-lab/actions/runs/37778052826][The complete CI run]] passed at
 =6c275f1701b397ea798283d9c976446a66b9e93d= with the fixed graph above.
 The Linux producer executed the original physical query and changed-root
 correction. Ten Rust tests plus fresh-process replay and 63 Python tests with
@@ -150,7 +150,7 @@ all checks on the delivered head. General Quint/native refinement remains B4.
 * B2 execution failure retained
 
 At =f0cf5577ebb62439ac325d281a2967bd110b75ce= both native Gerbil jobs and
-original physical correction passed in [[https://github.com/tao3k/poo-flow/actions/runs/37788179600][CI]]. The Rust consumer failed before
+original physical correction passed in [[https://github.com/tao3k/agentic-ai-lab/actions/runs/37788179600][CI]]. The Rust consumer failed before
 its new native revision call: the Rust operation whitelist omitted
 =temporal.support.revise= and =temporal.support.claim= and returned InvalidInput.
 The missing operations are now registered; a new delivered-head consumer run
@@ -317,7 +317,7 @@ to re-dispatch an effect. Required CI on these delivered heads remains separate.
 * 2026-10-09 dependency direction correction
 
 The earlier POO CI runtime-owner checkout plan is superseded. MRR consumes
-POO Flow; POO CI must not check out or pin MRR. POO removes all three reverse
+Agentic AI Lab; POO CI must not check out or pin MRR. POO removes all three reverse
 checkout sites, the runtime pin descriptor/guard and the consumer-owned physical
 build entrypoints. MRR CI owns native Rust/Python comparison and Data physical
 acceptance, using its declared Gerbil POO dependency and existing SDK/toolchains.

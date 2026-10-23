@@ -23,7 +23,7 @@
    'developer
    '()
    (yuanxu-settings
-    surface: "poo-flow"
+    surface: "agentic-ai-lab"
     profile: "developer")
    '(surface profile)))
 
@@ -33,7 +33,7 @@
    'custom-developer
    '()
    (yuanxu-settings
-    surface: "poo-flow"
+    surface: "agentic-ai-lab"
     profile: "custom-developer")
    '(surface profile)))
 
@@ -132,7 +132,7 @@
 
 ;; : TestSuite
 (def user-interface-profile-library-gate-test
-  (test-suite "poo-flow user-interface profile library gate"
+  (test-suite "agentic-ai-lab user-interface profile library gate"
     (yuanxu-test-case "accepts only tested proof-backed public profiles"
       (let* ((gate accepted-profile-gate)
              (facts (yuanxu-user-interface-profile-gate->lean-facts gate)))

@@ -4,4 +4,4 @@
 #+title: Programming Style — Core Owner
 
 The normative programming style is maintained in
-[[file:../../../core/module-system/design/44-current-project-programming-style.org][poo-flow-core]]. This file is a navigation entry, not a second policy.
+[[file:../../../core/module-system/design/44-current-project-programming-style.org][agentic-ai-lab-core]]. This file is a navigation entry, not a second policy.

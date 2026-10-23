@@ -1,5 +1,5 @@
 {
-  "name": "poo-flow-quint-proofs",
+  "name": "agentic-ai-lab-quint-proofs",
   "private": true,
   "dependencies": {
     "@informalsystems/quint": "0.33.0"

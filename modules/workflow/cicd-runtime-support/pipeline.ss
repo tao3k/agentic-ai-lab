@@ -11,30 +11,30 @@
         :yuanxu/modules/funflow/check-objects
         :yuanxu/modules/funflow/check-funs
         :yuanxu/modules/funflow/projection-syntax
-        :poo-flow/modules/workflow/cicd-sandbox
-        :poo-flow/modules/workflow/cicd-runtime-support/checks
+        :agentic-ai-lab/modules/workflow/cicd-sandbox
+        :agentic-ai-lab/modules/workflow/cicd-runtime-support/checks
         :yuanxu/modules/funflow/dependency-graph)
 
-(export poo-flow-cicd-pipeline-run-step-status
-        poo-flow-cicd-pipeline-run-step-diagnostics
-        poo-flow-cicd-pipeline-run-step-fields
-        poo-flow-cicd-check->pipeline-run-step
-        poo-flow-cicd-pipeline-run-step-summary
-        poo-flow-cicd-symbol-list-unique
-        poo-flow-cicd-symbols-into/rev
-        poo-flow-cicd-pipeline-run-steps-diagnostics/rev
-        poo-flow-cicd-pipeline-run-steps-diagnostics
-        poo-flow-cicd-pipeline-run-diagnostics
-        poo-flow-cicd-pipeline-run-steps-admitted?
-        poo-flow-cicd-pipeline-run-status
-        poo-flow-cicd-check-map->pipeline-run
-        poo-flow-cicd-pipeline-run->result
-        poo-flow-cicd-check-map->pipeline-result)
+(export agentic-ai-lab-cicd-pipeline-run-step-status
+        agentic-ai-lab-cicd-pipeline-run-step-diagnostics
+        agentic-ai-lab-cicd-pipeline-run-step-fields
+        agentic-ai-lab-cicd-check->pipeline-run-step
+        agentic-ai-lab-cicd-pipeline-run-step-summary
+        agentic-ai-lab-cicd-symbol-list-unique
+        agentic-ai-lab-cicd-symbols-into/rev
+        agentic-ai-lab-cicd-pipeline-run-steps-diagnostics/rev
+        agentic-ai-lab-cicd-pipeline-run-steps-diagnostics
+        agentic-ai-lab-cicd-pipeline-run-diagnostics
+        agentic-ai-lab-cicd-pipeline-run-steps-admitted?
+        agentic-ai-lab-cicd-pipeline-run-status
+        agentic-ai-lab-cicd-check-map->pipeline-run
+        agentic-ai-lab-cicd-pipeline-run->result
+        agentic-ai-lab-cicd-check-map->pipeline-result)
 
 ;; A step is admitted only when the declarative graph accepts its dependency
 ;; path and sandbox profile refs are resolved. This is not execution state.
 ;; : (-> Alist Alist Symbol Symbol)
-(def (poo-flow-cicd-pipeline-run-step-status graph readiness check-name)
+(def (agentic-ai-lab-cicd-pipeline-run-step-status graph readiness check-name)
   (cond
    ((not (yuanxu-cicd-alist-ref graph 'valid? #f)) 'blocked)
    ((not (null? (yuanxu-cicd-alist-ref
@@ -51,7 +51,7 @@
 ;; Pipeline-run diagnostics keep graph errors and sandbox errors distinct.
 ;; Agents can decide whether to edit dependencies or profile bindings first.
 ;; : (-> Alist Alist Symbol [Symbol])
-(def (poo-flow-cicd-pipeline-run-step-diagnostics graph readiness check-name)
+(def (agentic-ai-lab-cicd-pipeline-run-step-diagnostics graph readiness check-name)
   (let* ((diagnostics0
           (if (yuanxu-cicd-alist-ref graph 'valid? #f)
             '()
@@ -73,23 +73,23 @@
     (reverse diagnostics2)))
 
 ;; : (-> YuanxuCicdCheck Symbol Symbol [Symbol] [Symbol] Alist Alist)
-(def (poo-flow-cicd-pipeline-run-step-fields check
+(def (agentic-ai-lab-cicd-pipeline-run-step-fields check
                                               check-name
                                               status
                                               unresolved-profile-refs
                                               diagnostics
                                               readiness)
   (yuanxu-cicd-field-rows/tail
-   (poo-flow-cicd-check-durable-fields check)
+   (agentic-ai-lab-cicd-check-durable-fields check)
    (schema +yuanxu-cicd-pipeline-run-schema+)
-   (kind 'poo-flow.workflow.cicd.pipeline-run-step)
+   (kind 'agentic-ai-lab.workflow.cicd.pipeline-run-step)
    (check check-name)
    (status status)
    (handoff-ready
     (and (eq? status 'admitted)
          (null? unresolved-profile-refs)))
    (profile (yuanxu-cicd-check-profile check))
-   (profile-refs (poo-flow-cicd-check-profile-refs check))
+   (profile-refs (agentic-ai-lab-cicd-check-profile-refs check))
    (dependency-refs
     (yuanxu-cicd-check-dependency-refs check))
    (command (yuanxu-cicd-check-command check))
@@ -106,7 +106,7 @@
    (runtime-executed #f)))
 
 ;; : (-> YuanxuCicdCheck Alist [PooSandboxProfile] Alist)
-(def (poo-flow-cicd-check->pipeline-run-step check
+(def (agentic-ai-lab-cicd-check->pipeline-run-step check
                                              graph
                                              . maybe-profile-catalog)
   (yuanxu-cicd-require "pipeline run step requires a cicd check"
@@ -116,12 +116,12 @@
                             '()
                             (car maybe-profile-catalog)))
          (readiness
-          (poo-flow-cicd-check->runtime-manifest-readiness
+          (agentic-ai-lab-cicd-check->runtime-manifest-readiness
            check
            profile-catalog))
          (check-name (yuanxu-cicd-check-name check))
          (status
-          (poo-flow-cicd-pipeline-run-step-status
+          (agentic-ai-lab-cicd-pipeline-run-step-status
            graph
            readiness
            check-name))
@@ -131,11 +131,11 @@
            'sandbox-unresolved-profile-refs
            '()))
          (diagnostics
-          (poo-flow-cicd-pipeline-run-step-diagnostics
+          (agentic-ai-lab-cicd-pipeline-run-step-diagnostics
            graph
            readiness
            check-name)))
-    (poo-flow-cicd-pipeline-run-step-fields check
+    (agentic-ai-lab-cicd-pipeline-run-step-fields check
                                             check-name
                                             status
                                             unresolved-profile-refs
@@ -144,10 +144,10 @@
 
 ;; : (forall (c p) (-> [c] Alist [p] Alist))
 ;; : (-> [YuanxuCicdCheck] Alist [PooSandboxProfile] Alist)
-(def (poo-flow-cicd-pipeline-run-step-summary checks graph profile-catalog)
+(def (agentic-ai-lab-cicd-pipeline-run-step-summary checks graph profile-catalog)
   (let* ((steps
           (map (lambda (check)
-                 (poo-flow-cicd-check->pipeline-run-step
+                 (agentic-ai-lab-cicd-check->pipeline-run-step
                   check
                   graph
                   profile-catalog))
@@ -170,75 +170,75 @@
      (cons 'blocked-steps (reverse blocked-steps-rev)))))
 
 ;; : (-> [Symbol] [Symbol])
-(def (poo-flow-cicd-symbol-list-unique values)
+(def (agentic-ai-lab-cicd-symbol-list-unique values)
   (delete-duplicates/hash values from-end?: #t))
 
 ;; : (-> [Symbol] [Symbol] [Symbol])
-(def (poo-flow-cicd-symbols-into/rev values result)
+(def (agentic-ai-lab-cicd-symbols-into/rev values result)
   (cond
    ((null? values) result)
    (else
-    (poo-flow-cicd-symbols-into/rev
+    (agentic-ai-lab-cicd-symbols-into/rev
      (cdr values)
      (cons (car values) result)))))
 
 ;; : (-> [Alist] [Symbol] [Symbol])
-(def (poo-flow-cicd-pipeline-run-steps-diagnostics/rev steps diagnostics-rev)
+(def (agentic-ai-lab-cicd-pipeline-run-steps-diagnostics/rev steps diagnostics-rev)
   (cond
    ((null? steps) diagnostics-rev)
    (else
-    (poo-flow-cicd-pipeline-run-steps-diagnostics/rev
+    (agentic-ai-lab-cicd-pipeline-run-steps-diagnostics/rev
      (cdr steps)
-     (poo-flow-cicd-symbols-into/rev
+     (agentic-ai-lab-cicd-symbols-into/rev
       (yuanxu-cicd-alist-ref (car steps) 'diagnostics '())
       diagnostics-rev)))))
 
 ;; Step diagnostics are aggregated at the pipeline level so result rows can be
 ;; audited without traversing every step.
 ;; : (-> [Alist] [Symbol])
-(def (poo-flow-cicd-pipeline-run-steps-diagnostics steps)
-  (reverse (poo-flow-cicd-pipeline-run-steps-diagnostics/rev steps '())))
+(def (agentic-ai-lab-cicd-pipeline-run-steps-diagnostics steps)
+  (reverse (agentic-ai-lab-cicd-pipeline-run-steps-diagnostics/rev steps '())))
 
 ;; Pipeline diagnostics merge graph, step, and blocked-step facts into a
 ;; stable report-only list for user-interface and agent editing loops.
 ;; : (-> Alist [Alist] [Symbol] [Symbol])
-(def (poo-flow-cicd-pipeline-run-diagnostics graph steps blocked-steps)
+(def (agentic-ai-lab-cicd-pipeline-run-diagnostics graph steps blocked-steps)
   (let* ((diagnostics0
-          (poo-flow-cicd-symbols-into/rev
+          (agentic-ai-lab-cicd-symbols-into/rev
            (yuanxu-cicd-alist-ref graph 'diagnostics '())
            '()))
          (diagnostics1
-          (poo-flow-cicd-pipeline-run-steps-diagnostics/rev
+          (agentic-ai-lab-cicd-pipeline-run-steps-diagnostics/rev
            steps
            diagnostics0))
          (diagnostics2
           (if (null? blocked-steps)
             diagnostics1
             (cons 'blocked-steps diagnostics1))))
-    (poo-flow-cicd-symbol-list-unique (reverse diagnostics2))))
+    (agentic-ai-lab-cicd-symbol-list-unique (reverse diagnostics2))))
 
 ;; Pipeline run status is a control-plane admission result. It stays blocked
 ;; when graph diagnostics or sandbox refs prevent a clean Marlin handoff.
 ;; : (-> [Alist] Boolean)
-(def (poo-flow-cicd-pipeline-run-steps-admitted? steps)
+(def (agentic-ai-lab-cicd-pipeline-run-steps-admitted? steps)
   (cond
    ((null? steps) #t)
    ((eq? (yuanxu-cicd-alist-ref (car steps) 'status 'blocked)
          'admitted)
-    (poo-flow-cicd-pipeline-run-steps-admitted? (cdr steps)))
+    (agentic-ai-lab-cicd-pipeline-run-steps-admitted? (cdr steps)))
    (else #f)))
 
 ;; : (-> Alist [Alist] Symbol)
-(def (poo-flow-cicd-pipeline-run-status graph steps)
+(def (agentic-ai-lab-cicd-pipeline-run-status graph steps)
   (if (and (yuanxu-cicd-alist-ref graph 'valid? #f)
-           (poo-flow-cicd-pipeline-run-steps-admitted? steps))
+           (agentic-ai-lab-cicd-pipeline-run-steps-admitted? steps))
     'admitted
     'blocked))
 
 ;; The pipeline run is the concrete, inspectable plan produced from a
 ;; check-map. It includes DAG order, steps, and handoff status but no output.
 ;; : (-> YuanxuCicdCheckMap [PooSandboxProfile] Alist)
-(def (poo-flow-cicd-check-map->pipeline-run check-map . maybe-profile-catalog)
+(def (agentic-ai-lab-cicd-check-map->pipeline-run check-map . maybe-profile-catalog)
   (yuanxu-cicd-require "pipeline run requires a cicd check-map"
                          (yuanxu-cicd-check-map? check-map)
                          check-map)
@@ -247,7 +247,7 @@
                             (car maybe-profile-catalog)))
          (graph (yuanxu-cicd-check-map->dependency-graph check-map))
          (step-summary
-          (poo-flow-cicd-pipeline-run-step-summary
+          (agentic-ai-lab-cicd-pipeline-run-step-summary
            (yuanxu-cicd-check-map-checks check-map)
            graph
            profile-catalog))
@@ -255,15 +255,15 @@
           (yuanxu-cicd-alist-ref step-summary 'steps '()))
          (blocked-steps
           (yuanxu-cicd-alist-ref step-summary 'blocked-steps '()))
-         (status (poo-flow-cicd-pipeline-run-status graph steps))
+         (status (agentic-ai-lab-cicd-pipeline-run-status graph steps))
          (diagnostics
-          (poo-flow-cicd-pipeline-run-diagnostics
+          (agentic-ai-lab-cicd-pipeline-run-diagnostics
            graph
            steps
            blocked-steps)))
     (yuanxu-cicd-field-rows
      (schema +yuanxu-cicd-pipeline-run-schema+)
-     (kind 'poo-flow.workflow.cicd.pipeline-run)
+     (kind 'agentic-ai-lab.workflow.cicd.pipeline-run)
      (check-map (yuanxu-cicd-check-map-name check-map))
      (status status)
      (step-count (length steps))
@@ -283,7 +283,7 @@
 ;; Pipeline results summarize the projected run. They are the tutorial-facing
 ;; "what would this produce" surface before a runtime returns real outputs.
 ;; : (-> Alist Alist)
-(def (poo-flow-cicd-pipeline-run->result run)
+(def (agentic-ai-lab-cicd-pipeline-run->result run)
   (let* ((blocked-steps
           (yuanxu-cicd-alist-ref run 'blocked-steps '()))
          (diagnostics
@@ -294,7 +294,7 @@
                (null? diagnostics))))
     (yuanxu-cicd-field-rows
      (schema +yuanxu-cicd-pipeline-result-schema+)
-     (kind 'poo-flow.workflow.cicd.pipeline-result)
+     (kind 'agentic-ai-lab.workflow.cicd.pipeline-result)
      (check-map (yuanxu-cicd-alist-ref run 'check-map #f))
      (status (if handoff-ready 'handoff-ready 'blocked))
      (pipeline-run-status
@@ -312,10 +312,10 @@
 ;; The check-map shortcut keeps callers on the public object surface when they
 ;; only need the result projection rather than the full run step payload.
 ;; : (-> YuanxuCicdCheckMap [PooSandboxProfile] Alist)
-(def (poo-flow-cicd-check-map->pipeline-result check-map
+(def (agentic-ai-lab-cicd-check-map->pipeline-result check-map
                                                 . maybe-profile-catalog)
   (let (profile-catalog (if (null? maybe-profile-catalog)
                           '()
                           (car maybe-profile-catalog)))
-    (poo-flow-cicd-pipeline-run->result
-     (poo-flow-cicd-check-map->pipeline-run check-map profile-catalog))))
+    (agentic-ai-lab-cicd-pipeline-run->result
+     (agentic-ai-lab-cicd-check-map->pipeline-run check-map profile-catalog))))

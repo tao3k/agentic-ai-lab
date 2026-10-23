@@ -5,7 +5,7 @@
 
 ;;; Contract: executable admission evidence for the pinned gerbil-poo surface.
 ;;; This test exercises upstream mechanics directly; its Scenario and Session
-;;; examples remain native objects and introduce no alternate POO Flow object,
+;;; examples remain native objects and introduce no alternate Agentic AI Lab object,
 ;;; dispatch, precedence, or inherited-computation adapter.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
@@ -74,7 +74,7 @@
    (yuanxu-test-case "expresses a Scenario as defaults, inherited refinement, nested composition, and behavior"
      (.def scenario-base
        (profiles ? '())
-       (metadata (.o (owner 'poo-flow)
+       (metadata (.o (owner 'agentic-ai-lab)
                      (runtime-owner 'marlin)))
        (prepare (lambda (facts)
                   (list 'prepared facts profiles))))
@@ -85,7 +85,7 @@
                   (list 'github-release facts profiles))))
      (check-equal? (.get github-release profiles)
                    '(developer staging production))
-     (check-equal? (.get github-release metadata owner) 'poo-flow)
+     (check-equal? (.get github-release metadata owner) 'agentic-ai-lab)
      (check-equal? (.get github-release metadata provider) 'github-actions)
      ;; In the pinned provider `.has?` checks several slots on one receiver;
      ;; explicitly select a child object before reflecting over its slots.

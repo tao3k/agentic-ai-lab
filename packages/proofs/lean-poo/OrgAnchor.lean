@@ -1,7 +1,7 @@
 /- SPDX-FileCopyrightText: 2026 tao3k team and Contributors
    SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later -/
 import Lean
-namespace PooFlowOrgAnchorProof
+namespace AgenticAILabOrgAnchorProof
 -- The parser owns rows; this law projects unique source lookup and selected ownership.
 -- Natural-number cuts/scopes abstract exact native binding records, not hash injectivity.
 structure Anchor where
@@ -62,7 +62,7 @@ theorem ambiguous_lookup_refused (rows : List Anchor) (id : Nat) (candidate : An
     apply ambiguous
     simp [equality]
   simp [admit, different]
-end PooFlowOrgAnchorProof
+end AgenticAILabOrgAnchorProof
 
 open Lean Elab Command in
 run_cmd do
@@ -70,14 +70,14 @@ run_cmd do
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let mut count : Nat := 0
   for (name, info) in environment.constants.toList do
-    if (`PooFlowOrgAnchorProof).isPrefixOf name then
+    if (`AgenticAILabOrgAnchorProof).isPrefixOf name then
       if info.isTheorem then count := count + 1
       for axiomName in (← collectAxioms name) do
         unless allowed.contains axiomName do throwError "Disallowed anchor axiom: {axiomName}"
-  for required in #[`PooFlowOrgAnchorProof.accepted_has_exact_source_lookup,
-      `PooFlowOrgAnchorProof.accepted_reconstructs_current_binding,
-      `PooFlowOrgAnchorProof.wrong_source_refused, `PooFlowOrgAnchorProof.wrong_scope_refused,
-      `PooFlowOrgAnchorProof.unselected_owner_refused, `PooFlowOrgAnchorProof.invalid_span_refused,
-      `PooFlowOrgAnchorProof.ambiguous_lookup_refused] do
+  for required in #[`AgenticAILabOrgAnchorProof.accepted_has_exact_source_lookup,
+      `AgenticAILabOrgAnchorProof.accepted_reconstructs_current_binding,
+      `AgenticAILabOrgAnchorProof.wrong_source_refused, `AgenticAILabOrgAnchorProof.wrong_scope_refused,
+      `AgenticAILabOrgAnchorProof.unselected_owner_refused, `AgenticAILabOrgAnchorProof.invalid_span_refused,
+      `AgenticAILabOrgAnchorProof.ambiguous_lookup_refused] do
     unless environment.contains required do throwError "Missing anchor theorem: {required}"
   logInfo m!"ORG-ANCHOR-AXIOM-AUDIT-OK: {count} theorems; standard Lean axioms only"

@@ -16,7 +16,7 @@
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/session-registry"
-                 poo-flow-custom-my-module-session-registry-case))
+                 agentic-ai-lab-custom-my-module-session-registry-case))
 
 (export user-interface-custom-session-registry-test)
 
@@ -34,20 +34,20 @@
 
 ;; : TestSuite
 (def user-interface-custom-session-registry-test
-  (test-suite "poo-flow custom user-interface session-registry case"
+  (test-suite "agentic-ai-lab custom user-interface session-registry case"
     (yuanxu-test-case "projects custom session registry receipt"
       (let* ((selection
-              (car poo-flow-custom-my-module-session-registry-case))
+              (car agentic-ai-lab-custom-my-module-session-registry-case))
              (rows
               (module-config-rows
-               poo-flow-custom-my-module-session-registry-case))
+               agentic-ai-lab-custom-my-module-session-registry-case))
              (registry (car rows))
              (entries (.ref registry 'entries))
              (build-entry (cadr entries)))
         (check-equal? (yuanxu-user-module-selection-key selection)
                       '(session . session))
         (check-equal? (.ref registry 'kind)
-                      'poo-flow.session.registry-receipt)
+                      'agentic-ai-lab.session.registry-receipt)
         (check-equal? (.ref registry 'project-id) 'custom/project)
         (check-equal? (.ref registry 'root-session-ids)
                       '(custom/root-session))

@@ -574,7 +574,7 @@
   },
   "source_unchanged": true,
   "purpose": "Automatic final-configuration Provider demand applied to a native FlakeSource through the Core selected build graph; no product Loader.",
-  "schema": "poo-flow/opentofu-selected-flake-control/v1",
+  "schema": "agentic-ai-lab/opentofu-selected-flake-control/v1",
   "lock_boundary": "Nix 2.34.4+1: --no-update-lock-file alone rejects changed lock graphs; adding --no-write-lock-file allowed in-memory lock changes in the negative control.",
   "selection_boundary": "Direct collection derivation references include AWS Schema producer only, then AWS and Null; awscc sentinel remains unforced. Not an exhaustive transitive closure benchmark.",
   "provider_versions": {

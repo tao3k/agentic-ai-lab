@@ -3,15 +3,15 @@
 import os
 from pathlib import Path
 import pytest
-from poo_flow_runtime.scheme_wire import loads
-from poo_flow_runtime.semantic_runtime import SemanticRuntimeError
+from agentic_ai_lab_runtime.scheme_wire import loads
+from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
 
 def request():
-    return dict(schema='poo-flow.mrr-fact-request.v1',identity='id',generation='generation',
+    return dict(schema='agentic-ai-lab.mrr-fact-request.v1',identity='id',generation='generation',
                 relationId='relation',evaluatorRelation='edge',row=[1,True])
 
 def test_original_mrr_fact_oracle(runtime):
-    path=os.environ.get('POO_FLOW_MRR_FACT_ORACLE')
+    path=os.environ.get('AGENTIC_AI_LAB_MRR_FACT_ORACLE')
     if not path: pytest.skip('original MRR fact oracle must be configured')
     for case in loads(Path(path).read_text()):
         assert runtime.canonical_mrr_fact_content(case['request']) == case['expected']
@@ -22,6 +22,6 @@ def test_fact_content_rejects_unqualified_profile(runtime,mode):
     if mode=='float':p['row']=[1.0]
     if mode=='empty':p['row']=[]
     if mode=='extra':p['proofAdmitted']=True
-    if mode=='schema':p['schema']='poo-flow.mrr-fact-request.v2'
+    if mode=='schema':p['schema']='agentic-ai-lab.mrr-fact-request.v2'
     if mode=='range':p['row']=[2**63]
     with pytest.raises(SemanticRuntimeError):runtime.canonical_mrr_fact_content(p)

@@ -3,8 +3,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :poo-flow/modules/services/opentofu/objects poo-flow-opentofu-block-contract poo-flow-opentofu-configuration-contract poo-flow-opentofu-normalize-block)
-        (only-in :poo-flow/modules/services/opentofu/func poo-flow-opentofu-cty->schema)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects agentic-ai-lab-opentofu-block-contract agentic-ai-lab-opentofu-configuration-contract agentic-ai-lab-opentofu-normalize-block)
+        (only-in :agentic-ai-lab/modules/services/opentofu/func agentic-ai-lab-opentofu-cty->schema)
         (only-in :yuanxu/modules/json-schema/json-schema-contract yuanxu-json-schema->contract)
         (only-in :yuanxu/modules/json-schema/json-schema-receipt yuanxu-json-schema->contract-artifact yuanxu-json-schema-contract-artifact-normalization)
         (only-in :yuanxu/modules/json-schema/json-schema-validate yuanxu-json-schema-contract-artifact-validate)
@@ -44,12 +44,12 @@
           (not (valid? unique-schema '(#("a" "b") #("a" "b")))))
         (assert 'unique-false (valid? '((type . "array") (uniqueItems . #f)) '("a" "a")))
         ;; Synthetic tuple; neither downloaded AWS fixture contains one.
-        (def tuple-schema (poo-flow-opentofu-cty->schema '("tuple" ("string" "number"))))
+        (def tuple-schema (agentic-ai-lab-opentofu-cty->schema '("tuple" ("string" "number"))))
         (assert 'tuple-valid (valid? tuple-schema '("x" 2)))
         (assert 'tuple-index (not (valid? tuple-schema '(2 "x"))))
         (assert 'tuple-short (not (valid? tuple-schema '("x"))))
         (assert 'tuple-long (not (valid? tuple-schema '("x" 2 3))))
-        (assert 'tuple-empty (valid? (poo-flow-opentofu-cty->schema '("tuple" ())) '()))
+        (assert 'tuple-empty (valid? (agentic-ai-lab-opentofu-cty->schema '("tuple" ())) '()))
         (def tuple-artifact (yuanxu-json-schema->contract-artifact
           `((type . "object") (properties . ((pair . ,tuple-schema))))))
         (assert 'tuple-emitted
@@ -60,14 +60,14 @@
             (yuanxu-json-schema-contract-artifact-validate tuple-artifact '((pair . (2 "x")))))))
         (def aws (yuanxu-json-schema-read-file "t/fixtures/opentofu/aws-security-group.json"))
         (def awscc (yuanxu-json-schema-read-file "t/fixtures/opentofu/awscc-provider.json"))
-        (def AwsContract (poo-flow-opentofu-block-contract 'aws/security-group aws))
-        (def AwsccContract (poo-flow-opentofu-block-contract 'awscc/provider awscc))
+        (def AwsContract (agentic-ai-lab-opentofu-block-contract 'aws/security-group aws))
+        (def AwsccContract (agentic-ai-lab-opentofu-block-contract 'awscc/provider awscc))
         (assert 'awscc-nested (accepted? AwsccContract '((assume_role . ((duration . "900"))))))
         (assert 'awscc-nested-wrong (not (accepted? AwsccContract '((assume_role . ((duration . 900)))))))
         (assert 'awscc-unknown (not (accepted? AwsccContract '((assume_role . ((duraton . "900")))))))
         (def StringsBlock '((attributes . ((accounts . ((type . ("set" "string")) (required . #t)))))))
-        (def StringsContract (poo-flow-opentofu-block-contract 'string-set StringsBlock))
-        (def normalized (poo-flow-opentofu-normalize-block StringsBlock '((accounts . ("b" "a" "b")))))
+        (def StringsContract (agentic-ai-lab-opentofu-block-contract 'string-set StringsBlock))
+        (def normalized (agentic-ai-lab-opentofu-normalize-block StringsBlock '((accounts . ("b" "a" "b")))))
         (assert 'string-set-normalized (equal? (.get normalized value) '((accounts . ("b" "a")))))
         (assert 'string-set-no-issue (null? (.get normalized diagnostics)))
         (assert 'string-set-shape-admit
@@ -87,7 +87,7 @@
           (not (yuanxu-validation-evidence-accepted?
             (.call (.get AwsContract collection-contract) .admit sg (.o accepted?: #t)))))
         (def ConfigurationContract
-          (poo-flow-opentofu-configuration-contract (list (cons 'awscc awscc)) (list (cons 'aws_security_group aws)) '()))
+          (agentic-ai-lab-opentofu-configuration-contract (list (cons 'awscc awscc)) (list (cons 'aws_security_group aws)) '()))
         (assert 'custom-hash-not-required-for-configuration (accepted? AwsContract sg))
         (assert 'duplicates-are-config-not-identity
           (accepted? StringsContract '((accounts . ("a" "a")))))
@@ -134,14 +134,14 @@
           (equal? (cdr (assoc 'path (yuanxu-json-schema-validation-diagnostic-metadata
                                      (car (.get wrong diagnostics))))) '(assume_role duration)))
         (assert 'normalize-malformed-safe
-          (pair? (.get (poo-flow-opentofu-normalize-block awscc
+          (pair? (.get (agentic-ai-lab-opentofu-normalize-block awscc
                           '((assume_role . ((duration . 900))))) diagnostics)))
         (assert 'native-object-normalization
-          (equal? (.get (poo-flow-opentofu-normalize-block StringsBlock
+          (equal? (.get (agentic-ai-lab-opentofu-normalize-block StringsBlock
                           (.o accounts: '("a" "a"))) value) '((accounts . ("a")))))
         (def nested-tuple-block
           '((attributes . ((pair . ((type . ("tuple" ("string" ("set" "string")))) (required . #t)))))))
-        (def NestedTupleContract (poo-flow-opentofu-block-contract 'tuple-set nested-tuple-block))
+        (def NestedTupleContract (agentic-ai-lab-opentofu-block-contract 'tuple-set nested-tuple-block))
         (def nested-normal (.call NestedTupleContract .normalize '((pair . ("x" ("a" "a"))))))
         (assert 'nested-tuple-normalize (equal? (.get nested-normal value) '((pair . ("x" ("a"))))))
         (assert 'nested-tuple-shape-admit
@@ -153,7 +153,7 @@
           '((attributes . ((rules . ((optional . #t)
                     (nested_type . ((nesting_mode . "set")
                                     (attributes . ((name . ((type . "string") (required . #t)))))))))))))
-        (def NestedSetContract (poo-flow-opentofu-block-contract 'nested-set nested-set-block))
+        (def NestedSetContract (agentic-ai-lab-opentofu-block-contract 'nested-set nested-set-block))
         (assert 'empty-object-set-unresolved (not (collection-accepted? NestedSetContract '((rules . ())))))
         (def final-unresolved (.call (.get ConfigurationContract collection-contract) .admit
                                 `((resource . ((aws_security_group . ((web . ,sg)))))) #f))
@@ -163,7 +163,7 @@
                 (.get final-unresolved diagnostics)))
         (assert 'unsupported-dynamic-rejected
           (with-catch (lambda (_) #t)
-                      (lambda () (poo-flow-opentofu-cty->schema "dynamic") #f)))
+                      (lambda () (agentic-ai-lab-opentofu-cty->schema "dynamic") #f)))
         (def sg-normalized (.call AwsContract .normalize sg))
         (assert 'inner-string-set-normalized
           (equal? (cdr (assoc 'security_groups

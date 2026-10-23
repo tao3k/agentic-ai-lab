@@ -13,7 +13,7 @@ artifact contains both evaluator graphs and pins a private copy for each
 isolated worker invocation; this document does not declare native Gerbil
 authorization qualified.
 
-=packages/proofs/lean/PooFlowProof/Runtime/CedarNative.lean= owns the one Lean
+=packages/proofs/lean/AgenticAILabProof/Runtime/CedarNative.lean= owns the one Lean
 outcome projection. The diagnostic native probe and the AOT Host call that same
 exported function; it decodes the upstream protobuf and calls
 =Cedar.Spec.isAuthorized=. Rust's existing =wire::evaluate_rust= evaluates
@@ -24,9 +24,9 @@ those exact bytes independently.
 Supply the probe as an explicit build artifact input. For example:
 
 #+begin_src sh
-POO_FLOW_CEDAR_NATIVE_PROBE=/nix/store/...-cedar-native-probe/bin/cedarNativeProbe \
+AGENTIC_AI_LAB_CEDAR_NATIVE_PROBE=/nix/store/...-cedar-native-probe/bin/cedarNativeProbe \
   cargo test --manifest-path bindings/cedar-gerbil/Cargo.toml \
-  -p poo-flow-cedar-authority \
+  -p agentic-ai-lab-cedar-authority \
   --features native-ffi-qualification --test native_ffi -- --nocapture
 #+end_src
 
@@ -64,7 +64,7 @@ digest mismatch becomes a typed failure; neither worker is an external engine
 artifact or a public CLI contract. Receipts bind the one Host artifact digest,
 the Host generation, and the two linked component identities.
 
-An explicit =poo_flow_preflight_only= context field is rejected before either
+An explicit =agentic_ai_lab_preflight_only= context field is rejected before either
 engine runs, regardless of its value. A POO-native preflight request is editable
 input, not Runtime source admission; a permissive Cedar policy cannot promote
 that marked request to a grant. This guard does not attest unmarked requests or
@@ -99,7 +99,7 @@ owner supplies the socket, the expected Host digest, the Rust component
 identity, the Lean component identity, and the hard timeout. The handshake
 binds those identities and the Runtime generation before the first request.
 
-Tests accept =POO_FLOW_CEDAR_RUNTIME_HOST= as an explicit artifact input. No
+Tests accept =AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST= as an explicit artifact input. No
 crate derives a repository root or build-cache path. The variable may point to
 a Nix store output, Bazel executable, or another declared build result; absence
 is an explicit qualification failure. A local Lake output is only a developer

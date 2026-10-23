@@ -25,7 +25,7 @@
 (export reasoning-open-evidence-store reasoning-resolve-evidence reasoning-evidence-claim
         reasoning-evidence-fact reasoning-evidence-fragment
         reasoning-evidence-certificate reasoning-evidence-store-stats reasoning-evidence-store-clear!
-        reasoning-evidence-partition PooFlowComputationalEvidenceStoreContract)
+        reasoning-evidence-partition AgenticAILabComputationalEvidenceStoreContract)
 
 ;;; The entry is private. The POO owner is the public procedure protocol.
 (defstruct evidence-entry (snapshot candidate receipt handle) final: #t)
@@ -33,8 +33,8 @@
   (and (object? owner)
        (andmap (lambda (slot) (and (.slot? owner slot) (procedure? (.ref owner slot))))
                '(.resolve .claim .fact .fragment .certificate .partition .stats .clear))))
-(define-type (PooFlowComputationalEvidenceStoreContract @ YuanxuObjectContract.)
-  identity: 'poo-flow/computational-evidence-store
+(define-type (AgenticAILabComputationalEvidenceStoreContract @ YuanxuObjectContract.)
+  identity: 'agentic-ai-lab/computational-evidence-store
   proto: (.o)
   responsibilities:
   (.o .operations: (yuanxu-predicate-contract 'ascent/evidence-operations
@@ -189,8 +189,8 @@
             (for-each visit roots)
             (detached (list (list 'status 'verified) (list 'fact answer)
                             (list 'roots roots) (list 'nodes (reverse selected))))))))
-    (validate PooFlowComputationalEvidenceStoreContract
-      (.o (:: @ (.ref PooFlowComputationalEvidenceStoreContract 'proto))
+    (validate AgenticAILabComputationalEvidenceStoreContract
+      (.o (:: @ (.ref AgenticAILabComputationalEvidenceStoreContract 'proto))
           .operations:
           (.o .resolve: (lambda (snapshot candidate) (serialized (lambda () (resolve snapshot candidate))))
           .claim: (lambda (snapshot candidate handle row) (serialized (lambda () (claim snapshot candidate handle row))))

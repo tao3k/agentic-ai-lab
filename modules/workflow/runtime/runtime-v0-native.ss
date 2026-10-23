@@ -3,9 +3,9 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Versioned C projection of POO Flow-owned Runtime v0 contract semantics.
+;;; Versioned C projection of Agentic AI Lab-owned Runtime v0 contract semantics.
 ;;; The ABI never exposes a Gerbil object: every returned payload is a copied,
-;;; caller-released byte buffer owned by poo_flow_scheme_result_v1.
+;;; caller-released byte buffer owned by agentic_ai_lab_scheme_result_v1.
 (import (only-in :std/ffi C-declare C-ffi-macrology def-C-type def-C-lambda)
         (only-in :std/encoding/json
                  JSONReadOptions
@@ -16,18 +16,18 @@
         (only-in :std/hash/misc hash-key?)
         (only-in :gerbil/core call-with-output-string display-exception)
         (only-in ../contracts/runtime-v0-abi-schema
-                 +poo-flow-runtime-v0-abi-schema+)
+                 +agentic-ai-lab-runtime-v0-abi-schema+)
         (only-in ../contracts/protocol-person-runtime-abi
-                 poo-flow-runtime-language-source-query-receipt
-                 poo-flow-runtime-language-source-query-receipt-failures
-                 poo-flow-runtime-language-admission-receipt
-                 poo-flow-runtime-language-admission-receipt-failures
-                 poo-flow-contract-artifact-projection-receipt
-                 poo-flow-contract-artifact-projection-receipt-failures)
-        (only-in :poo-flow/modules/query/objects
-                 poo-flow-query-execution-candidate)
-        (only-in :poo-flow/modules/query/types
-                 poo-flow-query-execution-candidate?))
+                 agentic-ai-lab-runtime-language-source-query-receipt
+                 agentic-ai-lab-runtime-language-source-query-receipt-failures
+                 agentic-ai-lab-runtime-language-admission-receipt
+                 agentic-ai-lab-runtime-language-admission-receipt-failures
+                 agentic-ai-lab-contract-artifact-projection-receipt
+                 agentic-ai-lab-contract-artifact-projection-receipt-failures)
+        (only-in :agentic-ai-lab/modules/query/objects
+                 agentic-ai-lab-query-execution-candidate)
+        (only-in :agentic-ai-lab/modules/query/types
+                 agentic-ai-lab-query-execution-candidate?))
 
 (export native-abi-version
         native-descriptor-payload
@@ -38,9 +38,9 @@
         native-c-round-trip)
 
 (def +native-abi-version+ 1)
-(def +native-descriptor-schema+ "poo-flow.scheme-native-descriptor.v1")
-(def +native-validation-schema+ "poo-flow.scheme-native-validation.v1")
-(def +native-error-schema+ "poo-flow.scheme-native-error.v1")
+(def +native-descriptor-schema+ "agentic-ai-lab.scheme-native-descriptor.v1")
+(def +native-validation-schema+ "agentic-ai-lab.scheme-native-validation.v1")
+(def +native-error-schema+ "agentic-ai-lab.scheme-native-error.v1")
 (def +native-max-input-bytes+ (* 16 1024 1024))
 
 (def (native-abi-version) +native-abi-version+)
@@ -50,7 +50,7 @@
         (bit (.ref capability 'bit))))
 
 (def (native-descriptor-payload)
-  (let (schema +poo-flow-runtime-v0-abi-schema+)
+  (let (schema +agentic-ai-lab-runtime-v0-abi-schema+)
     (json->string
      (hash (schema +native-descriptor-schema+)
            (nativeAbiVersion +native-abi-version+)
@@ -99,7 +99,7 @@
    (else (error "native contract identity must be a symbol or string" value))))
 
 (def (source-query-receipt<-json object)
-  (poo-flow-runtime-language-source-query-receipt
+  (agentic-ai-lab-runtime-language-source-query-receipt
    (json-required object "source-language")
    (json-required object "source-content-id")
    (json-required object "source-version")
@@ -115,7 +115,7 @@
 ;;; This transport projection deliberately constructs the canonical Query
 ;;; object.  Runtime v0 owns the byte boundary; Query owns the semantic shape.
 (def (native-query-execution-candidate->json candidate)
-  (unless (poo-flow-query-execution-candidate? candidate)
+  (unless (agentic-ai-lab-query-execution-candidate? candidate)
     (error "invalid canonical query execution candidate" candidate))
   (json->string
    (hash (provider-identity
@@ -134,7 +134,7 @@
          (complete (.ref candidate 'complete?)))))
 
 (def (native-query-execution-candidate<-json object)
-  (poo-flow-query-execution-candidate
+  (agentic-ai-lab-query-execution-candidate
    (json-symbol object "provider-identity")
    (json-symbol object "query-identity")
    (json-required object "query-version")
@@ -147,7 +147,7 @@
    (json-required object "complete")))
 
 (def (admission-receipt<-json object)
-  (poo-flow-runtime-language-admission-receipt
+  (agentic-ai-lab-runtime-language-admission-receipt
    (source-query-receipt<-json
     (json-required object "source-query-receipt"))
    (json-required object "contract-id")
@@ -160,7 +160,7 @@
    (json-symbol-list object "failure-codes")))
 
 (def (artifact-projection-receipt<-json object)
-  (poo-flow-contract-artifact-projection-receipt
+  (agentic-ai-lab-contract-artifact-projection-receipt
    (json-required object "projection-id")
    (json-required object "contract-id")
    (json-required object "contract-version")
@@ -190,22 +190,22 @@
      ((string=? contract "source-query-receipt")
       (validation-result
        contract
-       (poo-flow-runtime-language-source-query-receipt-failures
+       (agentic-ai-lab-runtime-language-source-query-receipt-failures
         (source-query-receipt<-json object))))
      ((string=? contract "query-execution-candidate")
       (let (candidate (native-query-execution-candidate<-json object))
-        (unless (poo-flow-query-execution-candidate? candidate)
+        (unless (agentic-ai-lab-query-execution-candidate? candidate)
           (error "invalid canonical query execution candidate" candidate))
         (validation-result contract '())))
      ((string=? contract "language-admission-receipt")
       (validation-result
        contract
-       (poo-flow-runtime-language-admission-receipt-failures
+       (agentic-ai-lab-runtime-language-admission-receipt-failures
         (admission-receipt<-json object))))
      ((string=? contract "artifact-projection-receipt")
       (validation-result
        contract
-       (poo-flow-contract-artifact-projection-receipt-failures
+       (agentic-ai-lab-contract-artifact-projection-receipt-failures
         (artifact-projection-receipt<-json object))))
      (else (error "unsupported native contract" contract)))))
 
@@ -220,16 +220,16 @@ typedef struct {
   int32_t status;
   uint8_t *payload;
   size_t length;
-} poo_flow_scheme_result_v1;
+} agentic_ai_lab_scheme_result_v1;
 
-void poo_flow_scheme_result_v1_init(poo_flow_scheme_result_v1 *result) {
+void agentic_ai_lab_scheme_result_v1_init(agentic_ai_lab_scheme_result_v1 *result) {
   if (result == NULL) return;
   result->status = 0;
   result->payload = NULL;
   result->length = 0;
 }
 
-void poo_flow_scheme_result_v1_release(poo_flow_scheme_result_v1 *result) {
+void agentic_ai_lab_scheme_result_v1_release(agentic_ai_lab_scheme_result_v1 *result) {
   if (result == NULL) return;
   free(result->payload);
   result->status = 0;
@@ -237,13 +237,13 @@ void poo_flow_scheme_result_v1_release(poo_flow_scheme_result_v1 *result) {
   result->length = 0;
 }
 
-uint32_t poo_flow_scheme_native_abi_version(void);
-int32_t poo_flow_scheme_native_descriptor(poo_flow_scheme_result_v1 *result);
-int32_t poo_flow_scheme_native_validate(char *contract,
+uint32_t agentic_ai_lab_scheme_native_abi_version(void);
+int32_t agentic_ai_lab_scheme_native_descriptor(agentic_ai_lab_scheme_result_v1 *result);
+int32_t agentic_ai_lab_scheme_native_validate(char *contract,
                                         char *payload,
-                                        poo_flow_scheme_result_v1 *result);
+                                        agentic_ai_lab_scheme_result_v1 *result);
 
-static int poo_flow_native_c_round_trip(void) {
+static int agentic_ai_lab_native_c_round_trip(void) {
   static const char source_query[] =
     "{\"source-language\":\"scheme\",\"source-content-id\":\"sha256:source\","
     "\"source-version\":\"1\",\"parser-id\":\"gerbil-parser\","
@@ -258,63 +258,63 @@ static int poo_flow_native_c_round_trip(void) {
     "\"provenance-root\":\"sha256:provenance\","
     "\"result-digest\":\"sha256:result\",\"result-count\":1,"
     "\"complete\":true}";
-  poo_flow_scheme_result_v1 result;
+  agentic_ai_lab_scheme_result_v1 result;
 
-  if (poo_flow_scheme_native_abi_version() != 1u) return 1;
-  poo_flow_scheme_result_v1_init(&result);
-  if (poo_flow_scheme_native_descriptor(&result) != 0 || result.status != 0 ||
+  if (agentic_ai_lab_scheme_native_abi_version() != 1u) return 1;
+  agentic_ai_lab_scheme_result_v1_init(&result);
+  if (agentic_ai_lab_scheme_native_descriptor(&result) != 0 || result.status != 0 ||
       result.payload == NULL || result.length == 0 ||
       strstr((const char *)result.payload,
-             "poo-flow.scheme-native-descriptor.v1") == NULL)
+             "agentic-ai-lab.scheme-native-descriptor.v1") == NULL)
     return 2;
-  poo_flow_scheme_result_v1_release(&result);
+  agentic_ai_lab_scheme_result_v1_release(&result);
   if (result.payload != NULL || result.length != 0 || result.status != 0)
     return 3;
 
-  if (poo_flow_scheme_native_validate("source-query-receipt", (char *)source_query,
+  if (agentic_ai_lab_scheme_native_validate("source-query-receipt", (char *)source_query,
                                       &result) != 0 ||
       result.status != 0 || result.payload == NULL ||
       strstr((const char *)result.payload, "\"valid\":true") == NULL) {
-    poo_flow_scheme_result_v1_release(&result);
+    agentic_ai_lab_scheme_result_v1_release(&result);
     return 4;
   }
-  poo_flow_scheme_result_v1_release(&result);
-  if (poo_flow_scheme_native_validate("query-execution-candidate",
+  agentic_ai_lab_scheme_result_v1_release(&result);
+  if (agentic_ai_lab_scheme_native_validate("query-execution-candidate",
                                       (char *)query_execution_candidate,
                                       &result) != 0 ||
       result.status != 0 || result.payload == NULL ||
       strstr((const char *)result.payload, "\"valid\":true") == NULL) {
-    poo_flow_scheme_result_v1_release(&result);
+    agentic_ai_lab_scheme_result_v1_release(&result);
     return 5;
   }
-  poo_flow_scheme_result_v1_release(&result);
-  if (poo_flow_scheme_native_validate("unknown", "{}", &result) != -1 ||
+  agentic_ai_lab_scheme_result_v1_release(&result);
+  if (agentic_ai_lab_scheme_native_validate("unknown", "{}", &result) != -1 ||
       result.status != -1 || result.payload == NULL ||
       strstr((const char *)result.payload,
-             "poo-flow.scheme-native-error.v1") == NULL) {
-    poo_flow_scheme_result_v1_release(&result);
+             "agentic-ai-lab.scheme-native-error.v1") == NULL) {
+    agentic_ai_lab_scheme_result_v1_release(&result);
     return 6;
   }
-  poo_flow_scheme_result_v1_release(&result);
+  agentic_ai_lab_scheme_result_v1_release(&result);
   return 0;
 }
 END-C
   )
 
-(def-C-type poo_flow_scheme_result_v1 "poo_flow_scheme_result_v1")
-(def-C-type poo_flow_scheme_result_v1-borrowed-ptr*
-  (pointer poo_flow_scheme_result_v1
-           (poo_flow_scheme_result_v1-borrowed-ptr*)))
+(def-C-type agentic_ai_lab_scheme_result_v1 "agentic_ai_lab_scheme_result_v1")
+(def-C-type agentic_ai_lab_scheme_result_v1-borrowed-ptr*
+  (pointer agentic_ai_lab_scheme_result_v1
+           (agentic_ai_lab_scheme_result_v1-borrowed-ptr*)))
 
-(def-C-lambda poo_flow_scheme_result_v1-status
-  (poo_flow_scheme_result_v1-borrowed-ptr*) int32
+(def-C-lambda agentic_ai_lab_scheme_result_v1-status
+  (agentic_ai_lab_scheme_result_v1-borrowed-ptr*) int32
   "___return (___arg1->status);")
-(def-C-lambda poo_flow_scheme_result_v1-status-set!
-  (poo_flow_scheme_result_v1-borrowed-ptr* int32) void
+(def-C-lambda agentic_ai_lab_scheme_result_v1-status-set!
+  (agentic_ai_lab_scheme_result_v1-borrowed-ptr* int32) void
   "___arg1->status = ___arg2; ___return;")
 
-(def-C-lambda poo-flow-scheme-result-v1-set-bytes!
-    (poo_flow_scheme_result_v1-borrowed-ptr* scheme-object) void
+(def-C-lambda agentic-ai-lab-scheme-result-v1-set-bytes!
+    (agentic_ai_lab_scheme_result_v1-borrowed-ptr* scheme-object) void
     #<<END-C
 free(___arg1->payload);
 ___arg1->payload = NULL;
@@ -334,47 +334,47 @@ END-C
     )
 
 (def-C-lambda native-c-round-trip () int
-    "poo_flow_native_c_round_trip")
+    "agentic_ai_lab_native_c_round_trip")
 
 (begin-foreign
-  (c-define (poo-flow-scheme-native-abi-version)
-    () unsigned-int32 "poo_flow_scheme_native_abi_version" "extern"
-    (poo-flow/modules/workflow/runtime/runtime-v0-native#native-abi-version))
+  (c-define (agentic-ai-lab-scheme-native-abi-version)
+    () unsigned-int32 "agentic_ai_lab_scheme_native_abi_version" "extern"
+    (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#native-abi-version))
 
-  (c-define (poo-flow-scheme-native-descriptor result)
-    (poo_flow_scheme_result_v1-borrowed-ptr*) int32
-    "poo_flow_scheme_native_descriptor" "extern"
+  (c-define (agentic-ai-lab-scheme-native-descriptor result)
+    (agentic_ai_lab_scheme_result_v1-borrowed-ptr*) int32
+    "agentic_ai_lab_scheme_native_descriptor" "extern"
     (with-exception-catcher
      (lambda (exception)
-       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result -1)
-       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
+       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#agentic_ai_lab_scheme_result_v1-status-set! result -1)
+       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#agentic-ai-lab-scheme-result-v1-set-bytes!
         result (string->utf8
-                (poo-flow/modules/workflow/runtime/runtime-v0-native#native-error-payload
+                (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#native-error-payload
                  exception)))
        -1)
      (lambda ()
-       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result 0)
-       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
+       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#agentic_ai_lab_scheme_result_v1-status-set! result 0)
+       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#agentic-ai-lab-scheme-result-v1-set-bytes!
         result (string->utf8
-                (poo-flow/modules/workflow/runtime/runtime-v0-native#native-descriptor-payload)))
-       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status result))))
+                (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#native-descriptor-payload)))
+       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#agentic_ai_lab_scheme_result_v1-status result))))
 
-  (c-define (poo-flow-scheme-native-validate contract payload result)
-    (UTF-8-string UTF-8-string poo_flow_scheme_result_v1-borrowed-ptr*) int32
-    "poo_flow_scheme_native_validate" "extern"
+  (c-define (agentic-ai-lab-scheme-native-validate contract payload result)
+    (UTF-8-string UTF-8-string agentic_ai_lab_scheme_result_v1-borrowed-ptr*) int32
+    "agentic_ai_lab_scheme_native_validate" "extern"
     (with-exception-catcher
      (lambda (exception)
-       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result -1)
-       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
+       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#agentic_ai_lab_scheme_result_v1-status-set! result -1)
+       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#agentic-ai-lab-scheme-result-v1-set-bytes!
         result (string->utf8
-                (poo-flow/modules/workflow/runtime/runtime-v0-native#native-error-payload
+                (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#native-error-payload
                  exception)))
        -1)
      (lambda ()
-       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status-set! result 0)
-       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo-flow-scheme-result-v1-set-bytes!
+       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#agentic_ai_lab_scheme_result_v1-status-set! result 0)
+       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#agentic-ai-lab-scheme-result-v1-set-bytes!
         result
         (string->utf8
-         (poo-flow/modules/workflow/runtime/runtime-v0-native#native-validate-payload
+         (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#native-validate-payload
           contract payload)))
-       (poo-flow/modules/workflow/runtime/runtime-v0-native#poo_flow_scheme_result_v1-status result)))))
+       (agentic-ai-lab/modules/workflow/runtime/runtime-v0-native#agentic_ai_lab_scheme_result_v1-status result)))))

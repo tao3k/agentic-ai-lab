@@ -32,7 +32,7 @@
 (def lowering-plan (.ref projection 'lowering-plan))
 (def descriptor (.ref lowering-plan 'descriptor))
 
-(display "schema=poo-flow.bundle-v1.domain-case-projection-benchmark.1\n")
+(display "schema=agentic-ai-lab.bundle-v1.domain-case-projection-benchmark.1\n")
 (display "agents=")
 (display +agent-count+)
 (newline)

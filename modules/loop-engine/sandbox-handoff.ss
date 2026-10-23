@@ -7,36 +7,36 @@
 ;;; Invariant: missing or invalid profiles become diagnostics, never runtime IO.
 
 (import
-        (only-in :poo-flow/modules/agent-sandbox/config
-                 poo-flow-sandbox-profile-by-name
-                 poo-flow-sandbox-profile-handoff-summary
-                 poo-flow-sandbox-profile-runtime-summary)
+        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+                 agentic-ai-lab-sandbox-profile-by-name
+                 agentic-ai-lab-sandbox-profile-handoff-summary
+                 agentic-ai-lab-sandbox-profile-runtime-summary)
         "intent-utils.ss")
 
-(export +poo-flow-user-loop-engine-sandbox-handoff-agreement-contract+
-        poo-flow-user-loop-engine-sandbox-entry-profile-ref
-        poo-flow-user-loop-engine-profile-ref-member?
-        poo-flow-user-loop-engine-profile-ref-add
-        poo-flow-user-loop-engine-sandbox-profile-refs/add
-        poo-flow-user-loop-engine-sandbox-profile-refs
-        poo-flow-user-loop-engine-sandbox-profile-ref->profile
-        poo-flow-user-loop-engine-sandbox-profile-ref->runtime-summary
-        poo-flow-user-loop-engine-sandbox-profile-ref->handoff-summary
-        poo-flow-user-loop-engine-sandbox-runtime-summaries
-        poo-flow-user-loop-engine-sandbox-handoff-summaries
-        poo-flow-user-loop-engine-sandbox-unresolved-profile-refs
-        poo-flow-user-loop-engine-sandbox-handoff-agreement)
+(export +agentic-ai-lab-user-loop-engine-sandbox-handoff-agreement-contract+
+        agentic-ai-lab-user-loop-engine-sandbox-entry-profile-ref
+        agentic-ai-lab-user-loop-engine-profile-ref-member?
+        agentic-ai-lab-user-loop-engine-profile-ref-add
+        agentic-ai-lab-user-loop-engine-sandbox-profile-refs/add
+        agentic-ai-lab-user-loop-engine-sandbox-profile-refs
+        agentic-ai-lab-user-loop-engine-sandbox-profile-ref->profile
+        agentic-ai-lab-user-loop-engine-sandbox-profile-ref->runtime-summary
+        agentic-ai-lab-user-loop-engine-sandbox-profile-ref->handoff-summary
+        agentic-ai-lab-user-loop-engine-sandbox-runtime-summaries
+        agentic-ai-lab-user-loop-engine-sandbox-handoff-summaries
+        agentic-ai-lab-user-loop-engine-sandbox-unresolved-profile-refs
+        agentic-ai-lab-user-loop-engine-sandbox-handoff-agreement)
 
 ;;; Sandbox handoff agreement is the loop-engine receipt that compares declared
 ;;; refs, runtime summaries, and bridge-ready handoff summaries without raising.
 ;; : Symbol
-(def +poo-flow-user-loop-engine-sandbox-handoff-agreement-contract+
-  'poo-flow.loop-engine.sandbox-handoff-agreement.v1)
+(def +agentic-ai-lab-user-loop-engine-sandbox-handoff-agreement-contract+
+  'agentic-ai-lab.loop-engine.sandbox-handoff-agreement.v1)
 
 ;;; Sandbox entries accept profile rows and per-use-case shorthand. Returning
 ;;; `#f` keeps malformed rows visible to unresolved-ref diagnostics.
 ;; : (-> Value [Symbol] MaybeSymbol)
-(def (poo-flow-user-loop-engine-sandbox-entry-profile-ref entry use-case-names)
+(def (agentic-ai-lab-user-loop-engine-sandbox-entry-profile-ref entry use-case-names)
   (cond
    ((symbol? entry) entry)
    ((and (pair? entry)
@@ -45,7 +45,7 @@
     (cdr entry))
    ((and (pair? entry)
          (symbol? (car entry))
-         (poo-flow-user-loop-engine-use-case-name? (car entry)
+         (agentic-ai-lab-user-loop-engine-use-case-name? (car entry)
                                                    use-case-names)
          (symbol? (cdr entry)))
     (cdr entry))
@@ -54,102 +54,102 @@
 ;;; Profile ref membership is Boolean-normalized for deterministic duplicate
 ;;; filtering in profile-ref accumulation.
 ;; : (-> Symbol [Symbol] Boolean)
-(def (poo-flow-user-loop-engine-profile-ref-member? value refs)
+(def (agentic-ai-lab-user-loop-engine-profile-ref-member? value refs)
   (and (member value refs) #t))
 
 ;;; Profile refs preserve first declaration order. Later duplicates do not
 ;;; change the runtime handoff order.
 ;; : (forall (a) (-> [a] [a] [a]))
-(def (poo-flow-user-loop-engine-values/tail values tail)
+(def (agentic-ai-lab-user-loop-engine-values/tail values tail)
   (foldr cons tail values))
 
 ;; : (-> MaybeSymbol [Symbol] [Symbol])
-(def (poo-flow-user-loop-engine-profile-ref-add value refs)
+(def (agentic-ai-lab-user-loop-engine-profile-ref-add value refs)
   (if (and value
-           (not (poo-flow-user-loop-engine-profile-ref-member? value refs)))
-    (poo-flow-user-loop-engine-values/tail refs (list value))
+           (not (agentic-ai-lab-user-loop-engine-profile-ref-member? value refs)))
+    (agentic-ai-lab-user-loop-engine-values/tail refs (list value))
     refs))
 
 ;;; Sandbox profile refs are collected from user rows without resolving the
 ;;; profile catalog so missing refs can be reported separately.
 ;; : (-> [Value] [Symbol] [Symbol] [Symbol])
-(def (poo-flow-user-loop-engine-sandbox-profile-refs/add entries
+(def (agentic-ai-lab-user-loop-engine-sandbox-profile-refs/add entries
                                                          use-case-names
                                                          refs)
   (cond
    ((null? entries) refs)
    (else
-    (poo-flow-user-loop-engine-sandbox-profile-refs/add
+    (agentic-ai-lab-user-loop-engine-sandbox-profile-refs/add
      (cdr entries)
      use-case-names
-     (poo-flow-user-loop-engine-profile-ref-add
-      (poo-flow-user-loop-engine-sandbox-entry-profile-ref
+     (agentic-ai-lab-user-loop-engine-profile-ref-add
+      (agentic-ai-lab-user-loop-engine-sandbox-entry-profile-ref
        (car entries)
        use-case-names)
       refs)))))
 
 ;; : (-> Alist [Symbol])
-(def (poo-flow-user-loop-engine-sandbox-profile-refs intent)
-  (poo-flow-user-loop-engine-sandbox-profile-refs/add
-   (poo-flow-user-loop-engine-intent-ref intent 'sandbox '())
-   (poo-flow-user-loop-engine-use-case-names intent)
+(def (agentic-ai-lab-user-loop-engine-sandbox-profile-refs intent)
+  (agentic-ai-lab-user-loop-engine-sandbox-profile-refs/add
+   (agentic-ai-lab-user-loop-engine-intent-ref intent 'sandbox '())
+   (agentic-ai-lab-user-loop-engine-use-case-names intent)
    '()))
 
 ;;; Sandbox profile lookup is intentionally catalog-only here; loop-engine
 ;;; projection must not construct or repair profiles during presentation.
 ;; : (-> Symbol [PooSandboxProfile] MaybePooSandboxProfile)
-(def (poo-flow-user-loop-engine-sandbox-profile-ref->profile profile-ref
+(def (agentic-ai-lab-user-loop-engine-sandbox-profile-ref->profile profile-ref
                                                              profile-catalog)
-  (poo-flow-sandbox-profile-by-name profile-catalog profile-ref))
+  (agentic-ai-lab-sandbox-profile-by-name profile-catalog profile-ref))
 
 ;;; Runtime summaries are optional evidence rows. Missing profiles are surfaced
 ;;; by the unresolved-ref scan instead of throwing inside this lookup.
 ;; : (-> Symbol [PooSandboxProfile] MaybeAlist)
-(def (poo-flow-user-loop-engine-sandbox-profile-ref->runtime-summary
+(def (agentic-ai-lab-user-loop-engine-sandbox-profile-ref->runtime-summary
       profile-ref
       profile-catalog)
   (let (profile
-        (poo-flow-user-loop-engine-sandbox-profile-ref->profile
+        (agentic-ai-lab-user-loop-engine-sandbox-profile-ref->profile
          profile-ref
          profile-catalog))
-    (and profile (poo-flow-sandbox-profile-runtime-summary profile))))
+    (and profile (agentic-ai-lab-sandbox-profile-runtime-summary profile))))
 
 ;;; Handoff summaries follow the same optional lookup path as runtime summaries
 ;;; so presentation can report partial profile catalogs deterministically.
 ;; : (-> Symbol [PooSandboxProfile] MaybeAlist)
-(def (poo-flow-user-loop-engine-sandbox-profile-ref->handoff-summary
+(def (agentic-ai-lab-user-loop-engine-sandbox-profile-ref->handoff-summary
       profile-ref
       profile-catalog)
   (let* ((profile
-          (poo-flow-user-loop-engine-sandbox-profile-ref->profile
+          (agentic-ai-lab-user-loop-engine-sandbox-profile-ref->profile
            profile-ref
            profile-catalog))
          (runtime-summary
-          (and profile (poo-flow-sandbox-profile-runtime-summary profile))))
+          (and profile (agentic-ai-lab-sandbox-profile-runtime-summary profile))))
     (and profile
-         (poo-flow-user-loop-engine-intent-ref
+         (agentic-ai-lab-user-loop-engine-intent-ref
           runtime-summary
           'valid?
           #f)
-         (poo-flow-sandbox-profile-handoff-summary profile))))
+         (agentic-ai-lab-sandbox-profile-handoff-summary profile))))
 
 ;;; Runtime summary collection preserves reference order and skips missing
 ;;; profiles; unresolved refs are recorded by a sibling diagnostic pass.
 ;; : (forall (a b) (-> [a] [b] [Alist]))
 ;; : (-> [Symbol] [PooSandboxProfile] [Alist])
-(def (poo-flow-user-loop-engine-sandbox-runtime-summaries refs profile-catalog)
+(def (agentic-ai-lab-user-loop-engine-sandbox-runtime-summaries refs profile-catalog)
   (cond
    ((null? refs) '())
-   ((poo-flow-user-loop-engine-sandbox-profile-ref->runtime-summary
+   ((agentic-ai-lab-user-loop-engine-sandbox-profile-ref->runtime-summary
      (car refs)
      profile-catalog)
     => (lambda (summary)
          (cons summary
-               (poo-flow-user-loop-engine-sandbox-runtime-summaries
+               (agentic-ai-lab-user-loop-engine-sandbox-runtime-summaries
                 (cdr refs)
                 profile-catalog))))
    (else
-    (poo-flow-user-loop-engine-sandbox-runtime-summaries
+    (agentic-ai-lab-user-loop-engine-sandbox-runtime-summaries
      (cdr refs)
      profile-catalog))))
 
@@ -157,62 +157,62 @@
 ;;; projections stay comparable in tests and presentation traces.
 ;; : (forall (a b) (-> [a] [b] [Alist]))
 ;; : (-> [Symbol] [PooSandboxProfile] [Alist])
-(def (poo-flow-user-loop-engine-sandbox-handoff-summaries refs profile-catalog)
+(def (agentic-ai-lab-user-loop-engine-sandbox-handoff-summaries refs profile-catalog)
   (cond
    ((null? refs) '())
-   ((poo-flow-user-loop-engine-sandbox-profile-ref->handoff-summary
+   ((agentic-ai-lab-user-loop-engine-sandbox-profile-ref->handoff-summary
      (car refs)
      profile-catalog)
     => (lambda (summary)
          (cons summary
-               (poo-flow-user-loop-engine-sandbox-handoff-summaries
+               (agentic-ai-lab-user-loop-engine-sandbox-handoff-summaries
                 (cdr refs)
                 profile-catalog))))
    (else
-    (poo-flow-user-loop-engine-sandbox-handoff-summaries
+    (agentic-ai-lab-user-loop-engine-sandbox-handoff-summaries
      (cdr refs)
      profile-catalog))))
 
 ;;; Unresolved refs are the safety channel for profile catalog holes. This keeps
 ;;; runtime handoff pure while still rejecting fake completeness in tests.
 ;; : (-> [Symbol] [PooSandboxProfile] [Symbol])
-(def (poo-flow-user-loop-engine-sandbox-unresolved-profile-refs refs
+(def (agentic-ai-lab-user-loop-engine-sandbox-unresolved-profile-refs refs
                                                                 profile-catalog)
   (cond
    ((null? refs) '())
-   ((poo-flow-user-loop-engine-sandbox-profile-ref->profile
+   ((agentic-ai-lab-user-loop-engine-sandbox-profile-ref->profile
      (car refs)
      profile-catalog)
-    (poo-flow-user-loop-engine-sandbox-unresolved-profile-refs
+    (agentic-ai-lab-user-loop-engine-sandbox-unresolved-profile-refs
      (cdr refs)
      profile-catalog))
    (else
     (cons (car refs)
-          (poo-flow-user-loop-engine-sandbox-unresolved-profile-refs
+          (agentic-ai-lab-user-loop-engine-sandbox-unresolved-profile-refs
            (cdr refs)
            profile-catalog)))))
 
 ;;; Invalid runtime summaries stay reportable facts. They are not filtered out
 ;;; of the intent because doctor and handoff agreement need the validation rows.
 ;; : (-> [Alist] [Alist])
-(def (poo-flow-user-loop-engine-invalid-sandbox-runtime-summaries summaries)
-  (filter poo-flow-user-loop-engine-invalid-sandbox-runtime-summary?
+(def (agentic-ai-lab-user-loop-engine-invalid-sandbox-runtime-summaries summaries)
+  (filter agentic-ai-lab-user-loop-engine-invalid-sandbox-runtime-summary?
           summaries))
 
 ;; : (-> Alist Boolean)
-(def (poo-flow-user-loop-engine-invalid-sandbox-runtime-summary? summary)
-  (not (poo-flow-user-loop-engine-intent-ref summary 'valid? #f)))
+(def (agentic-ai-lab-user-loop-engine-invalid-sandbox-runtime-summary? summary)
+  (not (agentic-ai-lab-user-loop-engine-intent-ref summary 'valid? #f)))
 
 ;;; Agreement diagnostics are aggregate rows so presentation and Testing Policy
 ;;; can report one actionable sandbox issue per loop intent, not one per mount.
 ;; : (-> [Symbol] [Alist] [Alist] [Symbol] [Alist])
-(def (poo-flow-user-loop-engine-sandbox-handoff-agreement-diagnostics
+(def (agentic-ai-lab-user-loop-engine-sandbox-handoff-agreement-diagnostics
       refs
       runtime-summaries
       handoff-summaries
       unresolved-refs)
   (let ((invalid-runtime-summaries
-         (poo-flow-user-loop-engine-invalid-sandbox-runtime-summaries
+         (agentic-ai-lab-user-loop-engine-invalid-sandbox-runtime-summaries
           runtime-summaries)))
     (append
      (if (null? unresolved-refs)
@@ -246,16 +246,16 @@
 ;;; The agreement is the stable loop-engine view over sandbox readiness. It is
 ;;; report-only and total; invalid profiles become diagnostics instead of throws.
 ;; : (-> [Symbol] [Alist] [Alist] [Symbol] Alist)
-(def (poo-flow-user-loop-engine-sandbox-handoff-agreement
+(def (agentic-ai-lab-user-loop-engine-sandbox-handoff-agreement
       refs
       runtime-summaries
       handoff-summaries
       unresolved-refs)
   (let* ((invalid-runtime-summaries
-          (poo-flow-user-loop-engine-invalid-sandbox-runtime-summaries
+          (agentic-ai-lab-user-loop-engine-invalid-sandbox-runtime-summaries
            runtime-summaries))
          (diagnostics
-          (poo-flow-user-loop-engine-sandbox-handoff-agreement-diagnostics
+          (agentic-ai-lab-user-loop-engine-sandbox-handoff-agreement-diagnostics
            refs
            runtime-summaries
            handoff-summaries
@@ -263,7 +263,7 @@
     (list
      (cons 'kind 'loop-engine-sandbox-handoff-agreement)
      (cons 'contract
-           +poo-flow-user-loop-engine-sandbox-handoff-agreement-contract+)
+           +agentic-ai-lab-user-loop-engine-sandbox-handoff-agreement-contract+)
      (cons 'profile-refs refs)
      (cons 'profile-ref-count (length refs))
      (cons 'runtime-summary-count (length runtime-summaries))

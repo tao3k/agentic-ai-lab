@@ -24,9 +24,9 @@ run from the repository root and reuse the maintained finite provider fixtures:
 
 #+begin_src scheme
 (import :clan/poo/object
-        (only-in :poo-flow/modules/nix/objects NixSource.)
+        (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
         (rename-in
-          (only-in :poo-flow/modules/services/opentofu/config
+          (only-in :agentic-ai-lab/modules/services/opentofu/config
                    Config OpenTofuProviderConfig)
           (Config Defaults)))
 

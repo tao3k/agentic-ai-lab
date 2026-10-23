@@ -28,8 +28,8 @@ proved contract cannot be confused with an observed runtime implementation.
 
 | Obligation | Owner | State | Closure evidence |
 |-
-| =EFF-005C= | POO Flow formal model | =counterexample-proven= | Raw same-snapshot transitions admit two distinct commits without arbitration. |
-| =EFF-005CR-M= | POO Flow formal model | =theorem-proven= | =RuntimeArbitrationReceipt= refines =AtomicCommitArbitration=; Lean build and AXLE pass. |
+| =EFF-005C= | Agentic AI Lab formal model | =counterexample-proven= | Raw same-snapshot transitions admit two distinct commits without arbitration. |
+| =EFF-005CR-M= | Agentic AI Lab formal model | =theorem-proven= | =RuntimeArbitrationReceipt= refines =AtomicCommitArbitration=; Lean build and AXLE pass. |
 | =EFF-005CR-R= | =marlin-agent-core= runtime | =blocked-external-owner= | Concrete atomic primitive, durable arbitration receipt, and execution-to-model correspondence are not observed in this repository. |
 | =EFF-005CR= | Cross-owner qualification | =blocked= | Closes only when both =EFF-005CR-M= and =EFF-005CR-R= are qualified. |
 
@@ -67,7 +67,7 @@ Implementation checklist:
 - [X] Define the proof-carrying runtime arbitration receipt contract.
 - [X] Build the Lean package with the pinned Lean 4.31.0 toolchain.
 - [X] Recheck the final module independently with AXLE.
-- [X] Verify that current POO Flow sources stop at a non-executed Marlin handoff.
+- [X] Verify that current Agentic AI Lab sources stop at a non-executed Marlin handoff.
 - [ ] Obtain the concrete Marlin atomic primitive identity and version.
 - [ ] Obtain a durable Marlin arbitration receipt containing terminal key,
   before/after state, decision, receipt digests, and arbiter sequence.
@@ -123,8 +123,8 @@ boundary-scoped recovery-policy authority defined by 45-03.
 | =REC-004A= | Independent AXLE acceptance of the modular proof owner. | =blocked-verifier-import-boundary= |
 | =REC-004S-P= | Exact generic =gerbil-poo= prototype/object mechanism used by the correspondence. | =symbol-located= |
 | =REC-004S-B= | Behavior-qualify the pinned mechanism for recovery-policy prototype/receipt object construction. | =pending-behavior-proof= |
-| =REC-004S-F= | Concrete POO Flow recovery-policy prototype and receipt constructor/validator owner. | =implementation-unobserved= |
-| =REC-004S= | Exact Scheme/=gerbil-poo= and POO Flow constructor correspondence. | =blocked= |
+| =REC-004S-F= | Concrete Agentic AI Lab recovery-policy prototype and receipt constructor/validator owner. | =implementation-unobserved= |
+| =REC-004S= | Exact Scheme/=gerbil-poo= and Agentic AI Lab constructor correspondence. | =blocked= |
 | =REC-004= | Cross-layer recovery-policy authorization qualification. | =blocked= |
 
 #+begin_src text
@@ -152,7 +152,7 @@ flowchart TD
   SP["REC-004S-P<br/>gerbil-poo symbols<br/>located"]
   SB["REC-004S-B<br/>behavior proof<br/>pending"]
   PE["Provider envelope<br/>incomplete"]
-  SF["REC-004S-F<br/>POO Flow constructor owner<br/>unresolved"]
+  SF["REC-004S-F<br/>Agentic AI Lab constructor owner<br/>unresolved"]
   S["REC-004S<br/>Scheme correspondence<br/>blocked"]
   C["REC-004<br/>cross-layer qualification"]
 
@@ -216,7 +216,7 @@ Verification receipts:
 - AXLE request =645847d4-fce9-4387-a230-e6e117f81f6a=: default import
   replacement made the dependency unavailable;
 - AXLE request =9a73f9ff-a949-4362-9022-154878b60096=: preserved import could
-  not resolve the local =PooFlowProof= module prefix;
+  not resolve the local =AgenticAILabProof= module prefix;
 - combined-source export: not authorized and not performed.
 
 No fallback receipt, duplicate POO model, or scalar-to-authority inference is
@@ -242,7 +242,7 @@ implementation is absent. Raw source search is not an admissible substitute.
 - [X] Record the incomplete provider-envelope blocker.
 - [X] Define the minimum approved correspondence contract in RFC 45-08.
 - [ ] Restore or complete the provider source envelope.
-- [ ] Identify the exact POO Flow constructor and effect-boundary owners.
+- [ ] Identify the exact Agentic AI Lab constructor and effect-boundary owners.
 - [ ] Verify that the owner uses the canonical =gerbil-poo= mechanisms rather
   than a duplicate object runtime.
 - [ ] Implement and test POO-native capability projection only after owner
@@ -477,7 +477,7 @@ Use durable receipts for:
 | =EFF-003= | =45-08/45-11= | reconciliation requires matching provider capability | Lean + AXLE at type level | theorem-proven |
 | =EFF-004= | =45-08/45-11= | committed continuation re-entry preserves the original receipt | Lean + AXLE | theorem-proven |
 | =EFF-005= | =45-08/45-11= | every valid finite trace accepts at most one verified commit event | Lean + AXLE | theorem-proven |
-| =EFF-005C= | =45-08/45-11= | combined provider evidence and POO Flow atomic arbitration prevent a second accepted commit | Lean + AXLE | theorem-proven at model level |
+| =EFF-005C= | =45-08/45-11= | combined provider evidence and Agentic AI Lab atomic arbitration prevent a second accepted commit | Lean + AXLE | theorem-proven at model level |
 | =EFF-005CR= | =45-08= | concrete concurrent runtime proposals linearize to =AtomicCommitArbitration= | linearizability correspondence plus stress test | registered |
 | =EFF-006= | =45-08= | retry authorization is causally linked and creates a fresh attempt | authorization provenance model plus runtime test | registered |
 | =EFF-007= | =45-08= | idempotency and reconciliation capabilities are independently non-forgeable | capability model and negative provider fixtures | registered |
@@ -550,7 +550,7 @@ flowchart TD
       committed-receipt preservation.
 - [ ] Lift the remaining =EFF-001..003= properties to finite traces.
 - [X] Resolve the =EFF-005C= same-snapshot double-commit model gap through
-      approved combined provider evidence and POO Flow atomic arbitration.
+      approved combined provider evidence and Agentic AI Lab atomic arbitration.
 - [ ] Prove =EFF-005CR= runtime linearizability and run conflicting-receipt
       stress cases.
 - [X] Prove =EFF-006= and =EFF-007=.
@@ -632,7 +632,7 @@ Required counterexample record:
 | classification | =missing-premise= with approved architecture clarification |
 | invalidated claim | runtime at-most-once commit without a linearization/uniqueness receipt |
 | unaffected theorem | finite traces and explicitly linearizable executions accept at most one commit |
-| approved resolution | provider terminal/idempotency evidence plus POO Flow atomic arbitration, implemented as POO-native semantics through the sole =gerbil-poo= library |
+| approved resolution | provider terminal/idempotency evidence plus Agentic AI Lab atomic arbitration, implemented as POO-native semantics through the sole =gerbil-poo= library |
 | remaining gap | concrete runtime linearizability and provider evidence correspondence, tracked as =EFF-005CR= |
 
 * Receipt requirements

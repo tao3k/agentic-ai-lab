@@ -7,7 +7,7 @@
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/modules/workflow/runtime/scheme-wire scheme-wire-read))
+        (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read))
 (export main main-with-cases)
 (def (file-digest path)
   (hex-encode (sha256 (call-with-input-file path read-all-as-u8vector))))
@@ -28,17 +28,17 @@
          (paths (append (list binary library oracle adapter
                       "t/qualification/temporal-model-native/scenario.ss"
                       "t/qualification/temporal-physical-native/model-scenario.ss"
-                      "packages/python-testing/src/poo_flow_testing/model_study/semantic_provider.py"
-                      "packages/python-testing/src/poo_flow_testing/model_study/semantic_plan.py"
-                      "packages/python-runtime/src/poo_flow_runtime/scheme_wire.py")
-                        (if (getenv "POO_FLOW_MODEL_PHYSICAL_RECEIPT" #f)
-                          (list (getenv "POO_FLOW_MODEL_PHYSICAL_RECEIPT")) [])))
+                      "packages/python-testing/src/agentic_ai_lab_testing/model_study/semantic_provider.py"
+                      "packages/python-testing/src/agentic_ai_lab_testing/model_study/semantic_plan.py"
+                      "packages/python-runtime/src/agentic_ai_lab_runtime/scheme_wire.py")
+                        (if (getenv "AGENTIC_AI_LAB_MODEL_PHYSICAL_RECEIPT" #f)
+                          (list (getenv "AGENTIC_AI_LAB_MODEL_PHYSICAL_RECEIPT")) [])))
          (freeze (map (lambda (path) (cons path (file-digest path))) paths))
          (records []))
     ;; Existing output is a paid-batch claim: never overwrite or retry it.
     (create-directory output)
     (save (path-expand "plan.ss" output)
-          `((schema . poo-flow.asp-temporal-model-plan.v1)
+          `((schema . agentic-ai-lab.asp-temporal-model-plan.v1)
             (measurement-owner . asp-gerbil-scheme/benchmark-api)
             (cases . ,cases) (maximum-provider-calls . ,(* 2 (length cases))) (retries . 0)
             (content-idle-seconds . 5) (artifact-freeze . ,freeze)))
@@ -67,7 +67,7 @@
          (set! records (cons `((case . ,name) (passed . ,passed)
                               (elapsed-ms . ,elapsed-ms) (failure . ,failure)) records))
          (save (path-expand "receipt.ss" output)
-               `((schema . poo-flow.asp-temporal-model-progress.v1)
+               `((schema . agentic-ai-lab.asp-temporal-model-progress.v1)
                  (measurement-owner . asp-gerbil-scheme/benchmark-api)
                  (cases . ,(reverse records))))
          (displayln "ASP-MODEL-CASE " name " passed=" passed)
@@ -75,7 +75,7 @@
     (let* ((intact (equal? freeze (map (lambda (path) (cons path (file-digest path))) paths)))
            (passed (and intact (andmap (lambda (r) (cdr (assq 'passed r))) records))))
       (save (path-expand "receipt.ss" output)
-            `((schema . poo-flow.asp-temporal-model-acceptance.v1)
+            `((schema . agentic-ai-lab.asp-temporal-model-acceptance.v1)
               (measurement-owner . asp-gerbil-scheme/benchmark-api)
               (maximum-provider-calls . ,(* 2 (length cases))) (retries . 0)
               (freeze-intact . ,intact) (passed . ,passed)

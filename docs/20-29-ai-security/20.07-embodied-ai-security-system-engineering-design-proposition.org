@@ -9,7 +9,7 @@
 
 - State: proposal
 - Scope: embodied AI, humanoid robots, and other AI-enabled cyber-physical systems
-- Owner: poo-flow AI security architecture
+- Owner: agentic-ai-lab AI security architecture
 - Normative language: MUST, MUST NOT, SHOULD, and MAY are requirement keywords
 
 * Problem statement
@@ -29,7 +29,7 @@ recovery behavior, evidence, and residual-risk acceptance.
 
 #+begin_quote
 Embodied-AI security MUST be engineered as a compositional system property over
-authority-governed effects and continuously qualified evidence.  poo-flow MUST
+authority-governed effects and continuously qualified evidence.  agentic-ai-lab MUST
 connect system declarations, cross-domain risk, executable control flow,
 verification obligations, authority-bearing receipts, and empirical operating
 feedback without allowing any one representation or provider to claim complete
@@ -113,7 +113,7 @@ model, sensor, controller, network path, firmware image, OTA service, operating
 environment, supplier, policy, responsibility assignment, or recovery procedure
 MAY invalidate an earlier conclusion.
 
-poo-flow MUST be able to project a change onto affected assumptions, risks,
+agentic-ai-lab MUST be able to project a change onto affected assumptions, risks,
 requirements, controls, proofs, tests, receipts, and acceptance decisions.  The
 result MUST distinguish:
 
@@ -143,12 +143,12 @@ AI output MUST NOT by itself:
 - replace the accountable human or organizational authority.
 
 Providers translate and propose.  Canonical composition, execution authority,
-verification, and risk acceptance remain governed by the poo-flow system model
+verification, and risk acceptance remain governed by the agentic-ai-lab system model
 and its explicitly assigned authorities.
 
-* poo-flow responsibility boundary
+* agentic-ai-lab responsibility boundary
 
-poo-flow is the compositional assurance control plane.  It SHOULD provide:
+agentic-ai-lab is the compositional assurance control plane.  It SHOULD provide:
 
 - POO-native declarations for systems, scenarios, assets, boundaries, effects,
   risks, controls, obligations, evidence, receipts, and authorities;
@@ -160,7 +160,7 @@ poo-flow is the compositional assurance control plane.  It SHOULD provide:
 - provider boundaries for external standards, threat intelligence, scanners,
   simulators, robot platforms, and AI-assisted analysis.
 
-poo-flow is not, by itself:
+agentic-ai-lab is not, by itself:
 
 - a robot operating system, motion planner, safety PLC, or real-time controller;
 - a vulnerability scanner, SIEM, penetration-testing engine, or model evaluator;
@@ -225,6 +225,6 @@ this RFC alone.
 * Design consequence
 
 Security is therefore a first-class input to system composition, not a final
-inspection stage.  poo-flow creates value when it makes risk-driven decisions
+inspection stage.  agentic-ai-lab creates value when it makes risk-driven decisions
 composable, effects governable, evidence challengeable, responsibility explicit,
 and change continuously traceable from architecture to physical operation.

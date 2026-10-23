@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from poo_flow_testing.assessment_studies.repository_recovery import recover
+from agentic_ai_lab_testing.assessment_studies.repository_recovery import recover
 
 
 class RepositoryRecoveryTests(unittest.TestCase):
@@ -13,7 +13,7 @@ class RepositoryRecoveryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);plan=root/'plan';plan.mkdir();(plan/'plan.json').write_text('{}')
             primary=root/'primary';primary.mkdir();interrupted=root/'interrupted';interrupted.mkdir()
-            with patch('poo_flow_testing.assessment_studies.repository_recovery.continue_episode') as resume:
+            with patch('agentic_ai_lab_testing.assessment_studies.repository_recovery.continue_episode') as resume:
                 with self.assertRaisesRegex(ValueError,'exactly one interrupted'):
                     recover(plan,primary,interrupted,root/'output')
                 resume.assert_not_called()
@@ -29,7 +29,7 @@ class RepositoryRecoveryTests(unittest.TestCase):
             for i in range(11):
                 directory=interrupted/f'terminal-{i}';directory.mkdir();(directory/'episode.json').write_text('{"status":"verified"}')
             source=primary/name;source.mkdir();(source/'1.request.json').write_text('{}');(source/'1.response.json').write_text('{"terminal":{"output":[]}}')
-            with patch('poo_flow_testing.assessment_studies.repository_recovery.continue_episode') as resume:
+            with patch('agentic_ai_lab_testing.assessment_studies.repository_recovery.continue_episode') as resume:
                 with self.assertRaisesRegex(ValueError,'no usage'):
                     recover(plan,primary,interrupted,root/'output')
                 resume.assert_not_called()

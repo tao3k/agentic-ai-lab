@@ -11,7 +11,7 @@
                  test-suite
                  check-equal?
                  )
-        :poo-flow/modules/workflow/interface)
+        :agentic-ai-lab/modules/workflow/interface)
 
 (export workflow-cicd-dependency-graph-test)
 

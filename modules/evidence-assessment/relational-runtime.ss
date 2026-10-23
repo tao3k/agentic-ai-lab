@@ -2,14 +2,14 @@
 (import :std/encoding/json
         (only-in :std/hash/misc hash-key?)
         (only-in :gerbil-ascent/interface/engine-api ascent-engine-call)
-        (only-in :poo-flow/modules/evidence-assessment/ascent-dag ascent-evidence-dag)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/ascent-ledger ascent-trajectory)
-        (only-in :poo-flow/modules/evidence-assessment/domain-checks ascent-domain-check ascent-domain-contract)
+        (only-in :agentic-ai-lab/modules/evidence-assessment/ascent-dag ascent-evidence-dag)
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/ascent-ledger ascent-trajectory)
+        (only-in :agentic-ai-lab/modules/evidence-assessment/domain-checks ascent-domain-check ascent-domain-contract)
         (only-in :gerbil-ascent/candidate/checked-program reasoning-source-snapshot)
-        (only-in :poo-flow/modules/evidence-assessment/candidate/evidence-store
+        (only-in :agentic-ai-lab/modules/evidence-assessment/candidate/evidence-store
           reasoning-open-evidence-store reasoning-resolve-evidence reasoning-evidence-fact
           reasoning-evidence-fragment reasoning-evidence-store-stats reasoning-evidence-store-clear!))
-(export poo-flow-assessment-call)
+(export agentic-ai-lab-assessment-call)
 (def evidence-owners (make-hash-table-eqv))
 (def next-evidence-owner 0)
 (def (name value) (if (string? value) (string->symbol value) (error "symbol name required")))
@@ -60,7 +60,7 @@
                    ((fragment) (reasoning-evidence-fragment store snapshot candidate
                                  (hash-ref request "handle") (evidence-datum (hash-ref request "atom")))))))))
           (else (error "unsupported evidence action")))))))
-(def (poo-flow-assessment-call request)
+(def (agentic-ai-lab-assessment-call request)
   (case (name (hash-ref request "operation"))
     ((trajectory)
      (shape request '("operation" "action") '("task" "sourceIdentity" "trajectory" "event" "includeEvents" "reason"))

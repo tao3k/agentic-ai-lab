@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-from poo_flow_testing.model_study.prediction_transport import prediction_from_output
-from poo_flow_testing.model_study.direct.native import score_candidate
+from agentic_ai_lab_testing.model_study.prediction_transport import prediction_from_output
+from agentic_ai_lab_testing.model_study.direct.native import score_candidate
 
 
 def test_transport_extracts_one_assertion_with_explanation():

@@ -4,9 +4,9 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from poo_flow_testing.assessment_studies.repository_statistics import billing, repair_effort
-from poo_flow_testing.assessment_studies.repository_metrics import trajectory_metrics, integrated_metrics
-from poo_flow_testing.assessment_studies.inference_effort import until_verified
+from agentic_ai_lab_testing.assessment_studies.repository_statistics import billing, repair_effort
+from agentic_ai_lab_testing.assessment_studies.repository_metrics import trajectory_metrics, integrated_metrics
+from agentic_ai_lab_testing.assessment_studies.inference_effort import until_verified
 
 
 def attempt(tokens, correct=False, submission=False):

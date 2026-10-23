@@ -12,11 +12,11 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/workflow/scenario/configuration/interface
-        :poo-flow/modules/workflow/scenario/configuration/init-syntax
-        :poo-flow/modules/workflow/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/workflow/interface
         (only-in "../user-interface/custom/my-module/cases/poo-introspection"
-                 poo-flow-custom-my-module-poo-introspection-case))
+                 agentic-ai-lab-custom-my-module-poo-introspection-case))
 
 (export user-interface-poo-introspection-case-test)
 
@@ -37,9 +37,9 @@
 
 ;; : TestSuite
 (def user-interface-poo-introspection-case-test
-  (test-suite "poo-flow user interface POO authoring gate case"
+  (test-suite "agentic-ai-lab user interface POO authoring gate case"
     (yuanxu-test-case "loads as a formal funflow module configuration"
-      (let* ((selection (car poo-flow-custom-my-module-poo-introspection-case))
+      (let* ((selection (car agentic-ai-lab-custom-my-module-poo-introspection-case))
              (flags (yuanxu-user-module-selection-flags selection))
              (pipeline
               (poo-introspection-test-flag flags ':workflow-pipeline))
@@ -65,7 +65,7 @@
                        funflow-readiness-check)
                       'ci/check)))
     (yuanxu-test-case "keeps POO authoring observability on check metadata"
-      (let* ((selection (car poo-flow-custom-my-module-poo-introspection-case))
+      (let* ((selection (car agentic-ai-lab-custom-my-module-poo-introspection-case))
              (flags (yuanxu-user-module-selection-flags selection))
              (pipeline
               (poo-introspection-test-flag flags ':workflow-pipeline))

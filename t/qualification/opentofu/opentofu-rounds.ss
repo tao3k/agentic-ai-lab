@@ -155,9 +155,9 @@
                (log (path-expand (string-append prefix ".log") output))
                (host (path-expand (string-append prefix "-host.json") output))
                (env (.o NIX_PATH: (string-append "nixpkgs=" (hash-ref report 'nixpkgs))))
-               (env (if flake-test? (.cc env 'POO_FLOW_NIX_FLAKE_METRICS metrics)
-                      (.cc env 'POO_FLOW_OPENTOFU_GRAPH_METRICS metrics
-                        'POO_FLOW_OPENTOFU_GRAPH_TRACE (path-expand (string-append prefix ".jsonl") output))))
+               (env (if flake-test? (.cc env 'AGENTIC_AI_LAB_NIX_FLAKE_METRICS metrics)
+                      (.cc env 'AGENTIC_AI_LAB_OPENTOFU_GRAPH_METRICS metrics
+                        'AGENTIC_AI_LAB_OPENTOFU_GRAPH_TRACE (path-expand (string-append prefix ".jsonl") output))))
                (base (cond (flake-test? (.get Ops tests FlakeSource))
                            (flake (.get Ops tests SelectedFlake)) (else (.get Ops tests SelectedGraph))))
                (script (.cc base 'directory root 'environment env 'log log))

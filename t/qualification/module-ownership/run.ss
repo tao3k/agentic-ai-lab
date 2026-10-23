@@ -3,13 +3,13 @@
 
 ;;; Native source controls using the installed std/test harness.
 (import :std/test/base
-        (only-in :poo-flow/t/control-plane-role-test control-plane-role-test)
-        (only-in :poo-flow/t/feature-system-bundle-v1-composition-writer-test feature-system-bundle-v1-composition-writer-test)
-        (only-in :poo-flow/t/funflow-public-module-test funflow-public-module-test)
-        (only-in :poo-flow/t/funflow-native-publication-test funflow-native-publication-test)
-        (only-in :poo-flow/t/json-schema-contract-bridge-test json-schema-contract-bridge-test)
-        (only-in :poo-flow/t/json-schema-native-contract-test json-schema-native-contract-test)
-        (only-in :poo-flow/t/funflow-github-ci-json-schema-contract-test funflow-github-ci-json-schema-contract-test))
+        (only-in :agentic-ai-lab/t/control-plane-role-test control-plane-role-test)
+        (only-in :agentic-ai-lab/t/feature-system-bundle-v1-composition-writer-test feature-system-bundle-v1-composition-writer-test)
+        (only-in :agentic-ai-lab/t/funflow-public-module-test funflow-public-module-test)
+        (only-in :agentic-ai-lab/t/funflow-native-publication-test funflow-native-publication-test)
+        (only-in :agentic-ai-lab/t/json-schema-contract-bridge-test json-schema-contract-bridge-test)
+        (only-in :agentic-ai-lab/t/json-schema-native-contract-test json-schema-native-contract-test)
+        (only-in :agentic-ai-lab/t/funflow-github-ci-json-schema-contract-test funflow-github-ci-json-schema-contract-test))
 
 (def results
   (map test-suite!

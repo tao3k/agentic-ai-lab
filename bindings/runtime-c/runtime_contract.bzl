@@ -22,7 +22,7 @@ RuntimeContractInfo = provider(
 def _runtime_contract_impl(ctx):
     toolchain = resolved_gerbil_toolchain(ctx)
     header = ctx.actions.declare_file(
-        "generated/include/poo_flow/runtime_v0_contract.h",
+        "generated/include/agentic_ai_lab/runtime_v0_contract.h",
     )
     vector = ctx.actions.declare_file(
         "generated/tests/vectors/runtime_v0_contract.txt",
@@ -61,9 +61,9 @@ header="$3"
 vector="$4"
 event_vector="$5"
 poo_root="$(dirname "$6")"
-loadpath="$(mktemp -d "${TMPDIR:-/tmp}/poo-flow-gerbil-loadpath.XXXXXX")"
+loadpath="$(mktemp -d "${TMPDIR:-/tmp}/agentic-ai-lab-gerbil-loadpath.XXXXXX")"
 trap 'rm -rf "$loadpath"' EXIT
-ln -s "$PWD" "$loadpath/poo-flow"
+ln -s "$PWD" "$loadpath/agentic-ai-lab"
 mkdir -p "$loadpath/clan"
 mkdir -p "$loadpath/clan/poo"
 for entry in "$poo_root"/*; do
@@ -73,7 +73,7 @@ for entry in "$poo_root"/*; do
   fi
 done
 mkdir -p "$(dirname "$header")" "$(dirname "$vector")" "$(dirname "$event_vector")"
-home="$(mktemp -d "${TMPDIR:-/tmp}/poo-flow-gerbil-home.XXXXXX")"
+home="$(mktemp -d "${TMPDIR:-/tmp}/agentic-ai-lab-gerbil-home.XXXXXX")"
 env -u CPATH -u C_INCLUDE_PATH -u LIBRARY_PATH \
   HOME="$home" \
   GERBIL_LOADPATH="$loadpath" \

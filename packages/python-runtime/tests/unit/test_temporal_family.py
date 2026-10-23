@@ -7,7 +7,7 @@ from copy import deepcopy
 
 import pytest
 
-from poo_flow_runtime.semantic_runtime import SemanticRuntimeError
+from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
 
 
 def family_task(vocabulary='release'):

@@ -8,8 +8,8 @@ import tempfile
 import unittest
 from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).parents[1]/'src'))
-from poo_flow_testing.assessment_studies import movie_study as study
-from poo_flow_testing.assessment_studies.model_study import response_outcome
+from agentic_ai_lab_testing.assessment_studies import movie_study as study
+from agentic_ai_lab_testing.assessment_studies.model_study import response_outcome
 
 class MovieRequestBytes(unittest.TestCase):
     def test_incomplete_output_is_not_an_incorrect_answer_or_account_error(self):

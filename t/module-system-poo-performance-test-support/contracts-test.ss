@@ -138,7 +138,7 @@
         (let* ((family
                 (poo-indexed-family
                  'module-indexed-family
-                 'poo-flow.module-system.indexed-family
+                 'agentic-ai-lab.module-system.indexed-family
                  '(profile-id limit)))
                (object
                 (poo-indexed-family-object family '(large-profile 128)))
@@ -243,7 +243,7 @@
 
 ;; : TestSuite
 (def contracts-test
-  (test-suite "poo-flow module system POO performance contracts"
+  (test-suite "agentic-ai-lab module system POO performance contracts"
     (module-system-poo-performance-fixture-contract-case)
     (module-system-poo-performance-fixture-policy-reject-case)
     (module-system-poo-performance-api-evidence-case)

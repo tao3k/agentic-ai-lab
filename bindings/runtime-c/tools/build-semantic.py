@@ -16,7 +16,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(ROOT / "packages/python-runtime/src/poo_flow_runtime"))
+sys.path.insert(0, str(ROOT / "packages/python-runtime/src/agentic_ai_lab_runtime"))
 from scheme_wire import dumps
 
 
@@ -166,7 +166,7 @@ def main() -> None:
     link_object, host_object = stage / "link.o", stage / "host.o"
     run([gsc, "-cc-options", "-fPIC -D___LIBRARY", "-obj", "-o", str(link_object), str(linker)])
     options = (f"-fPIC -D___VERSION={define('___VERSION')} "
-               f"-DPOO_FLOW_SEMANTIC_LINKER={define('___LINKER_ID')} "
+               f"-DAGENTIC_AI_LAB_SEMANTIC_LINKER={define('___LINKER_ID')} "
                f"-I{ROOT / 'bindings/runtime-c/include'}")
     run([gsc, "-cc-options", options, "-obj", "-o", str(host_object),
          str(ROOT / 'bindings/runtime-c/src/semantic_host.c')])
@@ -177,11 +177,11 @@ def main() -> None:
     run([os.environ.get('CC', 'cc'), *shared, '-o', str(output),
          *map(str, objects), str(link_object), str(host_object),
          '-L', str(home / 'lib'), '-lgambit', *flags])
-    manifest = {"schema": "poo-flow.semantic-aot-artifact", "version": 1, "modules": inputs,
+    manifest = {"schema": "agentic-ai-lab.semantic-aot-artifact", "version": 1, "modules": inputs,
                 "artifactSha256": hashlib.sha256(output.read_bytes()).hexdigest(),
                 "sourceSha256": hashlib.sha256((ROOT / 'modules/workflow/runtime/semantic.ss').read_bytes()).hexdigest(),
                 "hostSha256": hashlib.sha256((ROOT / 'bindings/runtime-c/src/semantic_host.c').read_bytes()).hexdigest(),
-                "headerSha256": hashlib.sha256((ROOT / 'bindings/runtime-c/include/poo_flow/semantic.h').read_bytes()).hexdigest(),
+                "headerSha256": hashlib.sha256((ROOT / 'bindings/runtime-c/include/agentic_ai_lab/semantic.h').read_bytes()).hexdigest(),
                 "compilerSha256": hashlib.sha256(Path(gsc).read_bytes()).hexdigest()}
     output.with_suffix(output.suffix + '.ss').write_text(dumps(manifest) + '\n')
     print(f"BUILD-OK {output} {manifest['artifactSha256']}", flush=True)

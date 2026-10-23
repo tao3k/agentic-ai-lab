@@ -74,7 +74,7 @@
                (benchmark-fixture-ref baseline-receipt 'elapsedNs))
       (error "tail-passing source observation did not improve deep traversal"
              baseline-receipt candidate-receipt))
-    (display "[poo-flow-benchmark] module-source-observation-linear baseline=")
+    (display "[agentic-ai-lab-benchmark] module-source-observation-linear baseline=")
     (write baseline-receipt)
     (display " candidate=")
     (write candidate-receipt)

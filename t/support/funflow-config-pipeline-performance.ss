@@ -10,8 +10,8 @@
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-settings
                  yuanxuUserConfig)
-        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
-                 pooFlowUserConfigPresentation))
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation))
 
 (export funflow-config-pipeline-scenario-count
         funflow-performance-ref
@@ -35,7 +35,7 @@
 
 ;; : (-> PooUserConfig Integer POOObject)
 (def (funflow-performance-presentation config _index)
-  (pooFlowUserConfigPresentation config))
+  (agenticAiLabUserConfigPresentation config))
 
 ;; : (-> POOObject Alist)
 (def (funflow-performance-presentation-summary presentation)
@@ -61,7 +61,7 @@
 
 ;; : (-> Integer [Boolean])
 (def (funflow-performance-expected-runtime-values count)
-  (poo-flow-performance-build-list count (lambda (_index) #f)))
+  (agentic-ai-lab-performance-build-list count (lambda (_index) #f)))
 
 ;; : (-> PooUserConfig Integer Alist)
 (def (funflow-performance-scaled-presentation-summary config count)

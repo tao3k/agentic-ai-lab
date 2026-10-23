@@ -62,12 +62,12 @@
         digest: "sha256:7dfc64a99fe0c18d4886545e43809bafa78da1be8c25186c0f6744a3232cc892" size-bytes: 7716)
     (.o (:: @ SourceLockEntry.)
         identity: "provider.lock.hcl" path: "provider.lock.hcl"
-        canonical-uri: "urn:poo-flow:opentofu:aws:5.100.0:provider-lock"
+        canonical-uri: "urn:agentic-ai-lab:opentofu:aws:5.100.0:provider-lock"
         exact-version: "5.100.0" representation: 'bytes
         digest: "sha256:96022e37c1424c8716af0ff53330edec5a7d6dbe482606d1a58e4944a01a3450" size-bytes: 1403)
     (.o (:: @ SourceLockEntry.)
         identity: "schema.json" path: "schema.json"
-        canonical-uri: "urn:poo-flow:opentofu:aws:5.100.0:selected-schema"
+        canonical-uri: "urn:agentic-ai-lab:opentofu:aws:5.100.0:selected-schema"
         exact-version: "5.100.0" representation: 'bytes
         digest: "sha256:30cf1c04c71f30ce3ec366e5ce7e841b333d75d7ce06ae0764a5a22e2fc831b9" size-bytes: 5899)
     (.o (:: @ SourceLockEntry.)

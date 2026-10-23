@@ -13,16 +13,16 @@
         (only-in :gerbil-parser/src/compiler/rust-syntax
                  rust-function-ir-json))
 
-(export poo-flow-query-execution-candidate-transport-diagnostic
-        poo-flow-query-execution-candidate-transport-diagnostic-rust
-        poo-flow-query-execution-candidate-transport-ir-json)
+(export agentic-ai-lab-query-execution-candidate-transport-diagnostic
+        agentic-ai-lab-query-execution-candidate-transport-diagnostic-rust
+        agentic-ai-lab-query-execution-candidate-transport-ir-json)
 
 ;;; Rust types close two Scheme predicates before this function runs:
 ;;; result-count is u64 and complete? is bool.  They remain explicit inputs so
 ;;; the generated boundary covers the complete transport shape.
 (define-rust-pure
-  poo-flow-query-execution-candidate-transport-diagnostic
-  poo-flow-query-execution-candidate-transport-diagnostic-rust
+  agentic-ai-lab-query-execution-candidate-transport-diagnostic
+  agentic-ai-lab-query-execution-candidate-transport-diagnostic-rust
   ((provider-identity "&str")
    (query-identity "&str")
    (query-version "&str")
@@ -44,13 +44,13 @@
               (if (equal? provenance-root "") "provenance_root"
                 (if (equal? result-digest "") "result_digest" "")))))))))
 
-(def (poo-flow-query-execution-candidate-transport-ir-json)
+(def (agentic-ai-lab-query-execution-candidate-transport-ir-json)
   ;; Re-encode with sorted keys so the checked-in build input is byte-stable.
   (string-append
    (json->string
     (string->json
      (rust-function-ir-json
-      poo-flow-query-execution-candidate-transport-diagnostic-rust)
+      agentic-ai-lab-query-execution-candidate-transport-diagnostic-rust)
      (JSONReadOptions object-as-hash: #t))
     sort-keys: #t)
    "\n"))

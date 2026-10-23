@@ -5,10 +5,10 @@
         (only-in :std/error Error? Error-message)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :poo-flow/modules/nix/objects NixSource. poo-flow-nix-admit-generation)
+        (only-in :agentic-ai-lab/modules/nix/objects NixSource. agentic-ai-lab-nix-admit-generation)
         (only-in :yuanxu/module-system/source/admission current-module-source-observer
                  current-module-process-trace-budget)
-        (only-in :poo-flow/modules/nix/func current-nix-process-observer call-with-nix-derivation-query))
+        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-observer call-with-nix-derivation-query))
 (export nix-derivation-query-test test-cleanup!)
 ;; Store registration can stream a final path without a newline. Keep native
 ;; harness markers on their own line without changing the captured process data.
@@ -67,19 +67,19 @@
                                realize: (error "readonly query forced the store capability")))
                     .instantiate)))
               original)
-            (poo-flow-nix-admit-generation expression '() original)
+            (agentic-ai-lab-nix-admit-generation expression '() original)
             (check-equal? (and (member "--eval" (car argv)) #t) #t)
             (check-equal? (member "--read-write-mode" (car argv)) #f)
             ;; Neither transitive input was declared as a Scheme observation.
             (write-input transitive "\"after\"")
-            (check-exception (poo-flow-nix-admit-generation expression '() original) error?)
+            (check-exception (agentic-ai-lab-nix-admit-generation expression '() original) error?)
             (write-input transitive "\"before\"")
             (write-input (path-expand "optional.nix" root) "{}")
-            (check-exception (poo-flow-nix-admit-generation expression '() original) error?)
+            (check-exception (agentic-ai-lab-nix-admit-generation expression '() original) error?)
             ;; An exception inside the subprocess thunk must unwind query mode,
             ;; not merely a mismatch raised after a successful query returned.
             (write-input transitive "throw \"query-fixture-refused\"")
-            (check-exception (poo-flow-nix-admit-generation expression '() original) error?)
+            (check-exception (agentic-ai-lab-nix-admit-generation expression '() original) error?)
             (write-input transitive "\"before\"")
             (def queried (call-with-nix-derivation-query (lambda () (.call Source .instantiate))))
             (check-equal? (file-exists? queried) #f)

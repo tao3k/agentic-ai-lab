@@ -5,8 +5,8 @@ class MovieContract(unittest.TestCase):
         self.engine=Engine()
         self.addCleanup(self.engine.close)
     def test_movie_contract_shape_repair_and_current_source_witnesses(self):
-            from poo_flow_testing.assessment_studies import complex_movie_study as study
-            from poo_flow_testing.assessment_studies.complex_movie_validation import singleton_heads
+            from agentic_ai_lab_testing.assessment_studies import complex_movie_study as study
+            from agentic_ai_lab_testing.assessment_studies.complex_movie_validation import singleton_heads
             source=json.loads(study.FIXTURE.read_text());case=study.cases()[0]
             views=study.materialize(self.engine,source)
             valid=study.gold(case,True);malformed=copy.deepcopy(valid)

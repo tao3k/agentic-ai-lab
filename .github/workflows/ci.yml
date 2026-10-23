@@ -31,13 +31,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Validate repository license, version, and dependency contracts
         run: |
           python3 packages/automation/check_license_contract.py
           python3 packages/automation/check_version_contract.py
+          python3 packages/automation/check_namespace_contract.py
           python3 packages/automation/gerbil_dependency_pin.py check
           python3 -m unittest discover -s packages/automation/tests -p 'test_*.py'
 
@@ -57,7 +58,7 @@ jobs:
     env:
       GERBIL_RELEASE_ROOT: ${{ github.workspace }}/.ci/gerbil-release/${{ matrix.gerbil-label }}
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Upload focused native unit-test output
@@ -65,7 +66,7 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-unit-output-${{ runner.os }}
-          path: ${{ runner.temp }}/poo-flow-unit-tests.log
+          path: ${{ runner.temp }}/agentic-ai-lab-unit-tests.log
           if-no-files-found: ignore
           retention-days: 7
 
@@ -151,7 +152,7 @@ jobs:
           # The Core submodule owns this checkout's shared POO modules.
           (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil clean)
           (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil build)
-          # Clean only POO Flow outputs; its build spec excludes Core.
+          # Clean only Agentic AI Lab outputs; its build spec excludes Core.
           gerbil clean
 
       - name: Save native Gerbil package cache
@@ -220,7 +221,7 @@ jobs:
       - name: Check original Temporal proof binding and Session invalidation
         env:
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-          POO_FLOW_TEST_STALL_DIAGNOSTICS: ${{ runner.temp }}/poo-flow-test-stalls
+          AGENTIC_AI_LAB_TEST_STALL_DIAGNOSTICS: ${{ runner.temp }}/agentic-ai-lab-test-stalls
         run: gerbil env just test-context-temporal
 
       - name: Compile Context temporal window policy regression
@@ -239,7 +240,7 @@ jobs:
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
         run: |
           set -euo pipefail
-          test_module=.gerbil/lib/poo-flow/t/context-use-host-test.ssi
+          test_module=.gerbil/lib/agentic-ai-lab/t/context-use-host-test.ssi
           test -f "$test_module"
           gerbil env python3 packages/python-runtime/tools/watch.py \
             gxtest -v 3 "$test_module" 2>&1 | tee /tmp/context-use-host-test.log
@@ -252,7 +253,7 @@ jobs:
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
         run: |
           set -euo pipefail
-          gerbil env ./dev/unit-tests.ss 2>&1 | tee "$RUNNER_TEMP/poo-flow-unit-tests.log"
+          gerbil env ./dev/unit-tests.ss 2>&1 | tee "$RUNNER_TEMP/agentic-ai-lab-unit-tests.log"
 
       - name: Build Scheme semantic AOT byte boundary
         env:
@@ -263,16 +264,16 @@ jobs:
           extension=so
           if [ "$RUNNER_OS" = macOS ]; then extension=dylib; fi
           python3 bindings/runtime-c/tools/build-semantic.py \
-            --output ".ci/semantic/libpoo_flow_semantic.$extension"
+            --output ".ci/semantic/libagentic_ai_lab_semantic.$extension"
 
       - name: Upload immutable semantic AOT producer artifact
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: poo-flow-semantic-native-linux
+          name: agentic-ai-lab-semantic-native-linux
           path: |
-            .ci/semantic/libpoo_flow_semantic.so
-            .ci/semantic/libpoo_flow_semantic.so.ss
+            .ci/semantic/libagentic_ai_lab_semantic.so
+            .ci/semantic/libagentic_ai_lab_semantic.so.ss
 
       - name: Run declared ASCENT package integration
         if: runner.os == 'Linux'
@@ -280,13 +281,13 @@ jobs:
           gerbil env just test-ascent-integration
           gerbil env python3 "$GITHUB_WORKSPACE/packages/python-runtime/tools/watch.py" just test-ascent-temporal
           PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" \
-            gerbil env python3 -m poo_flow_testing run \
+            gerbil env python3 -m agentic_ai_lab_testing run \
               --case ascent.source-withdrawal
           PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" \
-            gerbil env python3 -m poo_flow_testing run \
+            gerbil env python3 -m agentic_ai_lab_testing run \
               --case evidence-ascent.hypothesis-status
           PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" \
-            gerbil env python3 -m poo_flow_testing run \
+            gerbil env python3 -m agentic_ai_lab_testing run \
               --case model-study.native-fixtures
 
       - name: Run native performance scenarios without unit-batch contention
@@ -303,7 +304,7 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-test-stall-macOS
-          path: ${{ runner.temp }}/poo-flow-test-stalls
+          path: ${{ runner.temp }}/agentic-ai-lab-test-stalls
           if-no-files-found: warn
           retention-days: 7
 
@@ -313,7 +314,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Initialize Core proof backend
         run: git submodule update --init core
@@ -344,13 +345,13 @@ jobs:
           PYTHONPATH: packages/python-testing/src
           QUINT_HOME: ${{ runner.temp }}/poo-quint-cache
         run: |
-          python3 -m poo_flow_testing.checks.quint --group all \
+          python3 -m agentic_ai_lab_testing.checks.quint --group all \
             --receipt "$RUNNER_TEMP/poo-quint-proof.ss"
       - name: Verify migrated assessment protocols and negative controls
         env:
           PYTHONPATH: packages/python-testing/src
           QUINT_HOME: ${{ runner.temp }}/poo-quint-cache
-        run: python3 -m poo_flow_testing.checks.assessment_formal quint all
+        run: python3 -m agentic_ai_lab_testing.checks.assessment_formal quint all
       - name: Upload Quint receipt
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -365,7 +366,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Build Session and WorkTree proofs with axiom audit
@@ -374,7 +375,7 @@ jobs:
           lake-package-directory: packages/proofs/lean-poo
           auto-config: false
           build: true
-          build-args: PooFlowSessionProof PooFlowContextProof PooFlowAttemptProof
+          build-args: AgenticAILabSessionProof AgenticAILabContextProof AgenticAILabAttemptProof
 
   lean-proof:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
@@ -386,40 +387,40 @@ jobs:
       matrix:
         include:
           - owner: governance
-            target: PooFlowModuleGovernanceProof
+            target: AgenticAILabModuleGovernanceProof
             ffi: true
           - owner: temporal-causality
-            target: PooFlowModuleTemporalCausalityProof
+            target: AgenticAILabModuleTemporalCausalityProof
             ffi: false
           - owner: healthcare-scenario
-            target: PooFlowScenarioHealthcareProof
+            target: AgenticAILabScenarioHealthcareProof
             ffi: false
           - owner: authorization
-            target: PooFlowModuleAuthorizationProof
+            target: AgenticAILabModuleAuthorizationProof
             ffi: false
           - owner: loop-engine
-            target: PooFlowModuleLoopEngineProof
+            target: AgenticAILabModuleLoopEngineProof
             ffi: false
           - owner: session
-            target: PooFlowModuleSessionProof
+            target: AgenticAILabModuleSessionProof
             ffi: false
           - owner: sandbox-core
-            target: PooFlowModuleSandboxCoreProof
+            target: AgenticAILabModuleSandboxCoreProof
             ffi: false
           - owner: funflow
-            target: PooFlowModuleFunflowProof
+            target: AgenticAILabModuleFunflowProof
             ffi: false
           - owner: workflow
-            target: PooFlowModuleWorkflowProof
+            target: AgenticAILabModuleWorkflowProof
             ffi: false
           - owner: evidence-assessment
-            target: PooFlowModuleEvidenceAssessmentProof
+            target: AgenticAILabModuleEvidenceAssessmentProof
             ffi: false
           - owner: memory-core
-            target: PooFlowModuleMemoryCoreProof
+            target: AgenticAILabModuleMemoryCoreProof
             ffi: false
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Initialize Core proof dependency
@@ -481,7 +482,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           submodules: recursive
@@ -514,9 +515,9 @@ jobs:
         run: |
           set -euo pipefail
           host="$RUNNER_TEMP/cedarRuntimeHost"
-          POO_FLOW_CEDAR_BUILD_PROFILE=dev \
+          AGENTIC_AI_LAB_CEDAR_BUILD_PROFILE=dev \
             python3 packages/automation/build_cedar_runtime_host.py "$host"
-          echo "POO_FLOW_CEDAR_RUNTIME_HOST=$host" >> "$GITHUB_ENV"
+          echo "AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST=$host" >> "$GITHUB_ENV"
 
       - name: Run Cedar Rust Runtime Host tests
         shell: bash
@@ -524,7 +525,7 @@ jobs:
           set -euo pipefail
           cargo test --locked \
             --manifest-path bindings/cedar-gerbil/Cargo.toml \
-            -p poo-flow-cedar-authority \
+            -p agentic-ai-lab-cedar-authority \
             --features native-runtime-host-qualification \
             --test runtime_host \
             --test authorization \
@@ -536,18 +537,18 @@ jobs:
           set -euo pipefail
           cargo run --locked --quiet \
             --manifest-path bindings/cedar-gerbil/Cargo.toml \
-            -p poo-flow-cedar-authority --bin cedar-case-check -- \
+            -p agentic-ai-lab-cedar-authority --bin cedar-case-check -- \
             bindings/cedar-gerbil/fixtures/atomic-case/manifest.json \
-            "$POO_FLOW_CEDAR_RUNTIME_HOST" \
+            "$AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST" \
             bindings/cedar-gerbil/fixtures/atomic-case/policies.cedar
 
   external-module-linux-full:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
-    name: POO Flow external Bazel module (linux-amd64, full)
+    name: Agentic AI Lab external Bazel module (linux-amd64, full)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Initialize Core source directory
@@ -568,12 +569,12 @@ jobs:
       - name: Declare Bazel disk-cache generation
         shell: bash
         env:
-          POO_FLOW_BAZEL_CACHE_GENERATION: ${{ github.sha }}
+          AGENTIC_AI_LAB_BAZEL_CACHE_GENERATION: ${{ github.sha }}
         run: |
           set -euo pipefail
           mkdir -p .ci/bazel-cache-generation
-          printf '# POO Flow external-module cache generation: %s\n' \
-            "$POO_FLOW_BAZEL_CACHE_GENERATION" \
+          printf '# Agentic AI Lab external-module cache generation: %s\n' \
+            "$AGENTIC_AI_LAB_BAZEL_CACHE_GENERATION" \
             > .ci/bazel-cache-generation/BUILD.bazel
 
       - name: Set up Bazel
@@ -592,16 +593,16 @@ jobs:
         timeout-minutes: 2
         run: python3 -m unittest discover -s t/qualification/external_bazel -p 'external_module_test.py' -v
 
-      - name: Validate POO Flow as an external Bazel module
+      - name: Validate Agentic AI Lab as an external Bazel module
         timeout-minutes: 12
         env:
-          POO_FLOW_EXTERNAL_BAZEL_OUTPUT_BASE: ${{ runner.temp }}/poo-flow-external-bazel-output-base-v1
-          POO_FLOW_EXTERNAL_TEST_MODE: full
+          AGENTIC_AI_LAB_EXTERNAL_BAZEL_OUTPUT_BASE: ${{ runner.temp }}/agentic-ai-lab-external-bazel-output-base-v1
+          AGENTIC_AI_LAB_EXTERNAL_TEST_MODE: full
         run: python3 t/qualification/external_bazel/external_module.py
 
   native-linux:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
-    name: POO Flow Gerbil package (${{ matrix.os }}, ${{ matrix.gerbil-label }})
+    name: Agentic AI Lab Gerbil package (${{ matrix.os }}, ${{ matrix.gerbil-label }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: ${{ matrix.job-timeout-minutes }}
     strategy:
@@ -619,7 +620,7 @@ jobs:
             external-module-mode: analysis
             job-timeout-minutes: 30
     steps: &native-steps
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Initialize Core source directory
@@ -675,12 +676,12 @@ jobs:
       - name: Declare Bazel disk-cache generation
         shell: bash
         env:
-          POO_FLOW_BAZEL_CACHE_GENERATION: ${{ github.sha }}
+          AGENTIC_AI_LAB_BAZEL_CACHE_GENERATION: ${{ github.sha }}
         run: |
           set -euo pipefail
           mkdir -p .ci/bazel-cache-generation
-          printf '# POO Flow CI cache generation: %s\n' \
-            "$POO_FLOW_BAZEL_CACHE_GENERATION" \
+          printf '# Agentic AI Lab CI cache generation: %s\n' \
+            "$AGENTIC_AI_LAB_BAZEL_CACHE_GENERATION" \
             > .ci/bazel-cache-generation/BUILD.bazel
 
       - name: Set up Bazel
@@ -700,10 +701,10 @@ jobs:
       - name: Verify Bazel module lock
         run: bazelisk mod deps --lockfile_mode=error
 
-      - name: Validate POO Flow as an external Bazel module
+      - name: Validate Agentic AI Lab as an external Bazel module
         timeout-minutes: ${{ matrix.dependency-timeout-minutes }}
         env:
-          POO_FLOW_EXTERNAL_TEST_MODE: ${{ matrix.external-module-mode }}
+          AGENTIC_AI_LAB_EXTERNAL_TEST_MODE: ${{ matrix.external-module-mode }}
         run: python3 t/qualification/external_bazel/external_module.py
 
       - name: Resolve shared Gerbil capability
@@ -762,7 +763,7 @@ jobs:
 
           set +e
           bazel build \
-            --action_env=POO_FLOW_BUILD_TOTAL_TIMEOUT_SECONDS="$COMPILE_RUNAWAY_TIMEOUT_SECONDS" \
+            --action_env=AGENTIC_AI_LAB_BUILD_TOTAL_TIMEOUT_SECONDS="$COMPILE_RUNAWAY_TIMEOUT_SECONDS" \
             --profile="$profile" \
             //:compile
           build_status=$?
@@ -771,7 +772,7 @@ jobs:
           elapsed_seconds=$((SECONDS - start_seconds))
           gerbil_receipt="bazel-bin/compile.receipt.json"
           jq -n \
-            --arg schema "poo-flow.ci.bazel-phase-observation.v1" \
+            --arg schema "agentic-ai-lab.ci.bazel-phase-observation.v1" \
             --arg phase "scheme-compile" \
             --arg runner "${RUNNER_OS}-${RUNNER_ARCH}" \
             --argjson status "$build_status" \
@@ -807,7 +808,7 @@ jobs:
         id: wheel-scheme-projection
         timeout-minutes: 2
         env:
-          PROJECTION_ARTIFACT: bazel-bin/wheel_smoke.ss.poo-flow-projection.sexp
+          PROJECTION_ARTIFACT: bazel-bin/wheel_smoke.ss.agentic-ai-lab-projection.sexp
           PROJECTION_BUDGET_SECONDS: 120
         shell: bash
         run: |
@@ -834,7 +835,7 @@ jobs:
             cp "$PROJECTION_ARTIFACT" "$handoff_dir/"
           fi
           jq -n \
-            --arg schema "poo-flow.ci.scheme-projection-handoff.v1" \
+            --arg schema "agentic-ai-lab.ci.scheme-projection-handoff.v1" \
           --arg producerJob "native-linux" \
           --arg action "//:wheel_smoke_projection_artifact" \
           --arg compileOwner "//:compile" \
@@ -904,7 +905,7 @@ jobs:
 
           library="$GITHUB_WORKSPACE/bazel-bin/bindings/runtime-c/libruntime_c_shared.so"
           test -s "$library"
-          cp "$library" "$handoff_dir/libpoo_flow_runtime_v0.so"
+          cp "$library" "$handoff_dir/libagentic_ai_lab_runtime_v0.so"
 
       - name: Run Bazel acceptance suites
         id: bazel-acceptance
@@ -940,7 +941,7 @@ jobs:
 
           elapsed_seconds=$((SECONDS - start_seconds))
           jq -n \
-            --arg schema "poo-flow.ci.bazel-phase-receipt.v1" \
+            --arg schema "agentic-ai-lab.ci.bazel-phase-receipt.v1" \
             --arg phase "acceptance" \
             --arg runner "${RUNNER_OS}-${RUNNER_ARCH}" \
             --argjson status "$test_status" \
@@ -970,7 +971,7 @@ jobs:
         run: |
           set -euo pipefail
           handoff_dir="$GITHUB_WORKSPACE/.ci/runtime-c"
-          library="$handoff_dir/libpoo_flow_runtime_v0.so"
+          library="$handoff_dir/libagentic_ai_lab_runtime_v0.so"
           acceptance_receipt="${{ steps.bazel-acceptance.outputs.receipt }}"
           producer_receipt="$handoff_dir/producer-receipt.json"
           test -s "$library"
@@ -1000,13 +1001,13 @@ jobs:
           acceptance_digest="$(sha256sum "$acceptance_receipt" | awk '{print $1}')"
 
           jq -n \
-            --arg schema "poo-flow.ci.runtime-c-handoff.v1" \
+            --arg schema "agentic-ai-lab.ci.runtime-c-handoff.v1" \
             --arg producerJob "native-linux" \
             --arg producerTarget "//bindings/runtime-c:runtime_c_shared" \
             --arg platform "${RUNNER_OS}-${RUNNER_ARCH}" \
             --arg currentHeadSha "$GITHUB_SHA" \
             --arg gerbilNativeAbi "$GERBIL_NATIVE_ABI" \
-            --arg artifactPath "libpoo_flow_runtime_v0.so" \
+            --arg artifactPath "libagentic_ai_lab_runtime_v0.so" \
             --arg artifactDigest "$artifact_digest" \
             --arg exportedSymbolsDigest "$symbols_digest" \
             --arg acceptanceReceiptDigest "$acceptance_digest" \
@@ -1045,14 +1046,14 @@ jobs:
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: poo-flow-runtime-native-library
+          name: agentic-ai-lab-runtime-native-library
           path: .ci/runtime-c
           if-no-files-found: error
           retention-days: 7
 
   native-macos:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
-    name: POO Flow Gerbil package (${{ matrix.os }}, ${{ matrix.gerbil-label }})
+    name: Agentic AI Lab Gerbil package (${{ matrix.os }}, ${{ matrix.gerbil-label }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: ${{ matrix.job-timeout-minutes }}
     strategy:
@@ -1084,7 +1085,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Set up Bazel
@@ -1101,7 +1102,7 @@ jobs:
       - name: Upload the Linux lock seed
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: poo-flow-module-lock-linux-${{ github.run_id }}-${{ github.run_attempt }}
+          name: agentic-ai-lab-module-lock-linux-${{ github.run_id }}-${{ github.run_attempt }}
           path: MODULE.bazel.lock
           if-no-files-found: error
 
@@ -1113,13 +1114,13 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Download the Linux lock seed
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
-          name: poo-flow-module-lock-linux-${{ github.run_id }}-${{ github.run_attempt }}
+          name: agentic-ai-lab-module-lock-linux-${{ github.run_id }}-${{ github.run_attempt }}
           path: .ci/lock-linux
 
       - name: Set up Bazel
@@ -1137,7 +1138,7 @@ jobs:
       - name: Upload the merged cross-platform lock
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: poo-flow-module-lock-${{ github.run_id }}-${{ github.run_attempt }}
+          name: agentic-ai-lab-module-lock-${{ github.run_id }}-${{ github.run_attempt }}
           path: MODULE.bazel.lock
           if-no-files-found: error
 
@@ -1149,13 +1150,13 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Download the merged cross-platform lock
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
-          name: poo-flow-module-lock-${{ github.run_id }}-${{ github.run_attempt }}
+          name: agentic-ai-lab-module-lock-${{ github.run_id }}-${{ github.run_attempt }}
           path: .ci/lock-merged
 
       - name: Set up Bazel

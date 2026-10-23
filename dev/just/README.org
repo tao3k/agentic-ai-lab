@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-#+title: POO Flow Developer Entrypoints
+#+title: Agentic AI Lab Developer Entrypoints
 
 * Organization
 
@@ -81,7 +81,7 @@ require their original producer outputs; absence is a failure, never a skip.
 =dev/gerbil.pkg= owns the optional ASP pin. =just deps-dev= installs it;
 =dev/testing-api.ss= composes the policy interface and =dev/unit-tests.ss=
 owns the package test entry. Production =build.ss= uses Core's native import
-closure and build projection. It rejects a dependency on =poo-flow/dev/= or
+closure and build projection. It rejects a dependency on =agentic-ai-lab/dev/= or
 =asp-gerbil-scheme/= rather than silently building development modules.
 CI installs the optional development dependency after the library build.
 
@@ -94,7 +94,7 @@ digest evaluated by Bazel and synchronized to both platform lock projections.
 ** Namespace and negative-process repairs
 
 Product adapters now call the actual =yuanxu= source/catalog/option constructors.
-The earlier unbound =resolve-poo-flow-module-source/default= and constructor
+The earlier unbound =resolve-agentic-ai-lab-module-source/default= and constructor
 failures are retained as historical local failures, not current interfaces.
 =check-production-build= uses native =build.ss spec=: =--help= is not a supported
 =std/build-script= operation on this runtime.

@@ -33,7 +33,7 @@
 
 (def FunflowProfileModule
   (yuanxu-semantic-module
-   (yuanxu-semantic-identity 'poo-flow 'funflow)
+   (yuanxu-semantic-identity 'agentic-ai-lab 'funflow)
    profiles:
    (yuanxu-module-profiles
     (yuanxu-profile-export 'github-ci GithubCIProfile)

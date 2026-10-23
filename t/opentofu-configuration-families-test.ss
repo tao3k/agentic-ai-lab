@@ -5,7 +5,7 @@
         (only-in :std/list/list delete-duplicates/hash)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
-        (only-in :poo-flow/modules/services/opentofu/objects OpenTofuScope. poo-flow-opentofu-configuration-from-types)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. agentic-ai-lab-opentofu-configuration-from-types)
         (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
         :yuanxu/types :clan/poo/object)
 (export opentofu-configuration-families-test)
@@ -48,7 +48,7 @@
         (and (not (.ref/cached AWS 'provider)) (not (.ref/cached AWSCC 'provider))
              (not (.ref/cached Null 'provider))))
       (def ConfigurationContract
-        (poo-flow-opentofu-configuration-from-types SelectedTypes))
+        (agentic-ai-lab-opentofu-configuration-from-types SelectedTypes))
       (def Configuration
         (.o
           provider: (.o aws: (list (.o region: "us-east-1"))
@@ -141,41 +141,41 @@
       (assert 'wrong-kind-selection-rejected
         (with-catch (lambda (_) #t)
           (lambda ()
-            (poo-flow-opentofu-configuration-from-types
+            (agentic-ai-lab-opentofu-configuration-from-types
               (.cc SelectedTypes 'resource (.o awscc_ec2_security_group:
                                               (.get SelectedTypes data awscc_ec2_security_group))))
             #f)))
       (assert 'different-package-schema-rejected
         (with-catch (lambda (_) #t)
           (lambda ()
-            (poo-flow-opentofu-configuration-from-types
+            (agentic-ai-lab-opentofu-configuration-from-types
               (.cc SelectedTypes 'provider (.o aws: (.cc AwsProvider 'version "stale")
                                                awscc: AwsccProvider null: NullProvider)))
             #f)))
       (assert 'different-schema-digest-rejected
         (with-catch (lambda (_) #t)
           (lambda ()
-            (poo-flow-opentofu-configuration-from-types
+            (agentic-ai-lab-opentofu-configuration-from-types
               (.cc SelectedTypes 'provider (.o aws: (.cc AwsProvider 'schema-digest "stale")
                                                awscc: AwsccProvider null: NullProvider)))
             #f)))
       (assert 'different-provider-address-rejected
         (with-catch (lambda (_) #t)
           (lambda ()
-            (poo-flow-opentofu-configuration-from-types
+            (agentic-ai-lab-opentofu-configuration-from-types
               (.cc SelectedTypes 'provider (.o aws: (.cc AwsProvider 'provider "wrong/address")
                                                awscc: AwsccProvider null: NullProvider)))
             #f)))
       (assert 'wrong-resource-name-rejected
         (with-catch (lambda (_) #t)
           (lambda ()
-            (poo-flow-opentofu-configuration-from-types
+            (agentic-ai-lab-opentofu-configuration-from-types
               (.cc SelectedTypes 'resource
                 (.o wrong_name: (.get SelectedTypes resource null_resource))))
             #f)))
       (assert 'malformed-selection-rejected
         (with-catch (lambda (_) #t)
           (lambda ()
-            (poo-flow-opentofu-configuration-from-types (.cc SelectedTypes 'data "wrong"))
+            (agentic-ai-lab-opentofu-configuration-from-types (.cc SelectedTypes 'data "wrong"))
             #f)))
       (displayln "OPENTOFU-CONFIGURATION-FAMILIES-OK"))))

@@ -1,12 +1,12 @@
 [package]
-name = "poo-flow-reasoning"
+name = "agentic-ai-lab-reasoning"
 version = "0.1.0"
 edition = "2024"
 license = "Apache-2.0 AND LGPL-2.1-or-later"
-description = "POO Flow evidence assessment and agent context over the ASCENT rules Library"
+description = "Agentic AI Lab evidence assessment and agent context over the ASCENT rules Library"
 
 [lib]
-name = "poo_flow_reasoning"
+name = "agentic_ai_lab_reasoning"
 crate-type = ["rlib", "cdylib"]
 
 [dependencies]

@@ -15,13 +15,13 @@
                  current-json-read-options
                  read-json))
 
-(def +poo-flow-runtime-symbol-manifest-schema+
-  "poo-flow.runtime-symbol-manifest.v1")
-(def +poo-flow-runtime-symbol-manifest-version+ 1)
+(def +agentic-ai-lab-runtime-symbol-manifest-schema+
+  "agentic-ai-lab.runtime-symbol-manifest.v1")
+(def +agentic-ai-lab-runtime-symbol-manifest-version+ 1)
 
 ;;; Optimization boundary: parsed manifests share one fixed native POO shape.
-(.def poo-flow-runtime-symbol-manifest-prototype
-  kind: 'poo-flow.runtime-symbol-manifest.v1
+(.def agentic-ai-lab-runtime-symbol-manifest-prototype
+  kind: 'agentic-ai-lab.runtime-symbol-manifest.v1
   schema: #f
   schema-version: #f
   abi: #f
@@ -30,9 +30,9 @@
   owners: #f)
 
 ;;; Optimization boundary: verification receipts specialize one fixed slot layout.
-(.def poo-flow-runtime-symbol-manifest-receipt-prototype
-  kind: 'poo-flow.runtime-symbol-manifest-receipt.v1
-  schema: "poo-flow.runtime-symbol-manifest-receipt.v1"
+(.def agentic-ai-lab-runtime-symbol-manifest-receipt-prototype
+  kind: 'agentic-ai-lab.runtime-symbol-manifest-receipt.v1
+  schema: "agentic-ai-lab.runtime-symbol-manifest-receipt.v1"
   schema-version: 1
   accepted?: #f
   abi: #f
@@ -52,9 +52,9 @@
   (list-sort string<? (append values '())))
 
 (def (invalid-symbol-manifest)
-  poo-flow-runtime-symbol-manifest-prototype)
+  agentic-ai-lab-runtime-symbol-manifest-prototype)
 
-(def (poo-flow-runtime-symbol-manifest-read port)
+(def (agentic-ai-lab-runtime-symbol-manifest-read port)
   (with-catch
    (lambda (_failure) (invalid-symbol-manifest))
    (lambda ()
@@ -65,7 +65,7 @@
        (if (not (PureAList? decoded))
            (invalid-symbol-manifest)
            (let (rows (walist->list decoded))
-             (.cc poo-flow-runtime-symbol-manifest-prototype
+             (.cc agentic-ai-lab-runtime-symbol-manifest-prototype
                   'schema (symbol-manifest-ref rows 'schema #f)
                   'schema-version (symbol-manifest-ref rows 'schemaVersion #f)
                   'abi (symbol-manifest-ref rows 'abi #f)
@@ -73,8 +73,8 @@
                   'forbidden-fragments (symbol-manifest-ref rows 'forbiddenFragments #f)
                   'owners (symbol-manifest-ref rows 'owners #f))))))))
 
-(def (poo-flow-runtime-symbol-manifest-read-file path)
-  (call-with-input-file path poo-flow-runtime-symbol-manifest-read))
+(def (agentic-ai-lab-runtime-symbol-manifest-read-file path)
+  (call-with-input-file path agentic-ai-lab-runtime-symbol-manifest-read))
 
 ;; : (-> Boolean [String] [String] [String] [Symbol])
 (def (runtime-symbol-manifest-diagnostics shape-valid? expected actual
@@ -100,14 +100,14 @@
       (list expected actual forbidden-symbols (.ref manifest 'abi)))
     (list '() '() '() #f)))
 
-(def (poo-flow-runtime-symbol-manifest-verify manifest actual-symbols)
+(def (agentic-ai-lab-runtime-symbol-manifest-verify manifest actual-symbols)
   (let* ((required (.ref manifest 'required-symbols))
          (forbidden (.ref manifest 'forbidden-fragments))
          (shape-valid?
           (and (equal? (.ref manifest 'schema)
-                       +poo-flow-runtime-symbol-manifest-schema+)
+                       +agentic-ai-lab-runtime-symbol-manifest-schema+)
                (equal? (.ref manifest 'schema-version)
-                       +poo-flow-runtime-symbol-manifest-version+)
+                       +agentic-ai-lab-runtime-symbol-manifest-version+)
                (string? (.ref manifest 'abi))
                (symbol-string-list? required)
                (symbol-string-list? forbidden)
@@ -123,7 +123,7 @@
          (accepted?
           (and shape-valid? (equal? expected actual)
                (null? forbidden-symbols))))
-    (.cc poo-flow-runtime-symbol-manifest-receipt-prototype
+    (.cc agentic-ai-lab-runtime-symbol-manifest-receipt-prototype
          'accepted? accepted?
          'abi abi
          'expected-symbols expected

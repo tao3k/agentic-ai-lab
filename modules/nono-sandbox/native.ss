@@ -10,8 +10,8 @@
 ;;; Native nono dynamic-library selection and live-test receipts.
 ;;; - Keep FFI handles isolated while the Scheme layer reports bounded sandbox receipts.
 (import :gerbil/core
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/nono-sandbox/c-binding-runtime
+        :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
         :yuanxu/module-system/selection/objects
         (only-in ./_nono
                  nono_native_apply_null
@@ -38,11 +38,11 @@
 
 ;; : Symbol
 (def +nono-c-binding-native-live-test-receipt-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.native-live-test.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.native-live-test.v1)
 
 ;; : Symbol
 (def +nono-c-binding-selection-live-test-receipt-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.selection-live-test.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.selection-live-test.v1)
 
 ;; : Integer
 (def +nono-c-binding-native-apply-null-error-code+ -12)

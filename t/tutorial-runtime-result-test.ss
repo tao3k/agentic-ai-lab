@@ -18,9 +18,9 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/docker/interface
+        :agentic-ai-lab/modules/docker/interface
         :yuanxu/modules/funflow/store
-        :poo-flow/modules/workflow/flows)
+        :agentic-ai-lab/modules/workflow/flows)
 
 (export tutorial-runtime-result-test)
 
@@ -262,7 +262,7 @@
       (let* ((descriptor
               (make-stdout-runtime-command-descriptor
                'stage-10-rust-cli
-               "/usr/bin/poo-flow-runtime"
+               "/usr/bin/agentic-ai-lab-runtime"
                (lambda (envelope)
                  (list "run"
                        "--request-id"
@@ -284,7 +284,7 @@
         (check-equal? (cdr (assoc 'name manifest)) 'stage-10-rust-cli)
         (check-equal? (cdr (assoc 'protocol manifest)) 'stdout-s-expression)
         (check-equal? (cdr (assoc 'executable manifest))
-                      "/usr/bin/poo-flow-runtime")
+                      "/usr/bin/agentic-ai-lab-runtime")
         (check-equal? (cdr (assoc 'arguments manifest))
                       '("run"
                         "--request-id"
@@ -292,7 +292,7 @@
                         "--response-protocol"
                         "stdout-s-expression"))
         (check-equal? (cdr (assoc 'argv manifest))
-                      '("/usr/bin/poo-flow-runtime"
+                      '("/usr/bin/agentic-ai-lab-runtime"
                         "run"
                         "--request-id"
                         "stage-10-request"

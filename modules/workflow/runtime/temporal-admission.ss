@@ -4,18 +4,18 @@
 
 ;;; Effectful host registration is separate from pure semantic admission.
 (import (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/workflow/runtime/temporal-family temporal-family-values)
-        (only-in :poo-flow/modules/temporal-causality/admission/interface
-                 poo-flow-temporal-source-snapshot poo-flow-temporal-family-admit)
-        (only-in :poo-flow/modules/temporal-causality/applicability/funs
-                 poo-flow-temporal-family-applicability)
-        (only-in :poo-flow/modules/temporal-causality/lifecycle/interface
-                 poo-flow-temporal-family-revision-root
-                 poo-flow-temporal-family-revision-change
-                 poo-flow-temporal-family-revision-replay
-                 poo-flow-temporal-family-revision-journal)
-        (only-in :poo-flow/modules/temporal-causality/truth-maintenance/objects
-                 poo-flow-temporal-invalidation-plan-value))
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-family temporal-family-values)
+        (only-in :agentic-ai-lab/modules/temporal-causality/admission/interface
+                 agentic-ai-lab-temporal-source-snapshot agentic-ai-lab-temporal-family-admit)
+        (only-in :agentic-ai-lab/modules/temporal-causality/applicability/funs
+                 agentic-ai-lab-temporal-family-applicability)
+        (only-in :agentic-ai-lab/modules/temporal-causality/lifecycle/interface
+                 agentic-ai-lab-temporal-family-revision-root
+                 agentic-ai-lab-temporal-family-revision-change
+                 agentic-ai-lab-temporal-family-revision-replay
+                 agentic-ai-lab-temporal-family-revision-journal)
+        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects
+                 agentic-ai-lab-temporal-invalidation-plan-value))
 (export temporal-source-register temporal-family-admit-call temporal-family-current-call
         temporal-family-revision-root-call temporal-family-revision-change-call
         temporal-family-journal-call temporal-family-revisions temporal-journal-receipt
@@ -36,7 +36,7 @@
   (let* ((scope (field object "scope"))
          (values (temporal-family-values (field object "task"))))
     (fields scope scope-fields)
-    (apply poo-flow-temporal-source-snapshot
+    (apply agentic-ai-lab-temporal-source-snapshot
            (append (map (lambda (key) (field scope key)) scope-fields)
                    (list (car values))))))
 
@@ -53,7 +53,7 @@
     (unless (or old (< (hash-length sources) 128))
       (error "source registry capacity exceeded"))
     (hash-put! sources id source)
-    (hash (schema "poo-flow.temporal-source-registration.v1")
+    (hash (schema "agentic-ai-lab.temporal-source-registration.v1")
           (sourceDigest (.ref source 'semantic-digest))
           (generation (.ref source 'generation))
           (trustBasis "host-registered-snapshot") (sourceAuthenticated #f)
@@ -66,14 +66,14 @@
                                        (field object "sourceDigest")))
               (error "unregistered or stale source snapshot")))
          (values (temporal-family-values (field object "task")))
-         (admission (poo-flow-temporal-family-admit
+         (admission (agentic-ai-lab-temporal-family-admit
                      (car values) (cadr values) source (field object "conclusionIdentity")))
          (revision (.ref admission 'conclusion)))
     (let (id (.ref admission 'semantic-digest))
       (unless (or (hash-key? admissions id) (< (hash-length admissions) 128))
         (error "admission history capacity exceeded"))
       (hash-put! admissions id admission))
-    (hash (schema "poo-flow.temporal-family-admission.v1")
+    (hash (schema "agentic-ai-lab.temporal-family-admission.v1")
           (claim "family-relative-classification")
           (trustBasis "host-registered-snapshot") (sourceVerified #t)
           (sourceAuthenticated #f) (actionAuthorized #f)
@@ -99,8 +99,8 @@
   (let* ((admission (hash-get admissions (field object "admissionDigest")))
          (_ (unless admission (error "unknown historical family admission")))
          (source (hash-get sources (.ref (.ref admission 'source) 'identity)))
-         (applicability (poo-flow-temporal-family-applicability admission source)))
-    (hash (schema "poo-flow.temporal-family-applicability.v1")
+         (applicability (agentic-ai-lab-temporal-family-applicability admission source)))
+    (hash (schema "agentic-ai-lab.temporal-family-applicability.v1")
           (admissionDigest (.ref applicability 'admission-digest))
           (originalSourceDigest (.ref applicability 'original-source-digest))
           (currentSourceDigest (.ref applicability 'current-source-digest))
@@ -126,14 +126,14 @@
         (proofDigest (.ref revision 'proof-identity)) (resultDigest (.ref revision 'result-identity))
         (invalidationIndexDigest (.ref revision 'invalidation-index-digest))))
 (def (retain-revision value)
-  (let* ((canonical (poo-flow-temporal-family-revision-replay value))
+  (let* ((canonical (agentic-ai-lab-temporal-family-revision-replay value))
          (id (.ref canonical 'semantic-digest)))
     (unless (or (hash-key? revisions id) (< (hash-length revisions) 128))
       (error "revision history capacity exceeded"))
     (hash-put! revisions id canonical)
     (temporal-revision-receipt canonical)))
 (def (temporal-revision-receipt canonical)
-  (hash (schema "poo-flow.temporal-family-revision.v1")
+  (hash (schema "agentic-ai-lab.temporal-family-revision.v1")
         (revisionDigest (.ref canonical 'semantic-digest))
         (admissionDigest (.ref (.ref canonical 'admission) 'semantic-digest))
         (classification (symbol->string (.ref (.ref canonical 'admission) 'classification)))
@@ -142,7 +142,7 @@
         (durable #f)))
 (def (temporal-family-revision-root-call object)
   (fields object ["admissionDigest"])
-  (retain-revision (poo-flow-temporal-family-revision-root
+  (retain-revision (agentic-ai-lab-temporal-family-revision-root
                     (known admissions (field object "admissionDigest")))))
 (def (temporal-frontier-value frontier)
   (fields frontier ["indexIdentity" "indexDigest" "previousCut" "revisedCut"
@@ -157,7 +157,7 @@
   (let (trigger (field frontier "trigger"))
     (unless (member trigger '("premise-delta" "valid-time-reprojection"))
       (error "invalid frontier trigger"))
-    (poo-flow-temporal-invalidation-plan-value
+    (agentic-ai-lab-temporal-invalidation-plan-value
      (field frontier "indexIdentity") (field frontier "indexDigest")
      (field frontier "previousCut") (field frontier "revisedCut")
      (field frontier "previousProjection") (field frontier "revisedProjection")
@@ -168,7 +168,7 @@
   (let (operation (field object "operation"))
     (unless (member operation '("correct" "retract")) (error "invalid revision operation"))
     (retain-revision
-     (poo-flow-temporal-family-revision-change
+     (agentic-ai-lab-temporal-family-revision-change
       (known revisions (field object "previousDigest"))
       (known admissions (field object "admissionDigest"))
       (temporal-frontier-value (field object "frontier")) (string->symbol operation)))))
@@ -176,12 +176,12 @@
   (unless (and (bounded-identities? ids) (pair? ids)) (error "journal inventory bound"))
   (map (lambda (id) (known revisions id)) ids))
 (def (temporal-journal-receipt identity values)
-  (let (journal (poo-flow-temporal-family-revision-journal identity values))
-    (hash (schema "poo-flow.temporal-family-journal.v1")
+  (let (journal (agentic-ai-lab-temporal-family-revision-journal identity values))
+    (hash (schema "agentic-ai-lab.temporal-family-journal.v1")
           (identity (.ref journal 'identity)) (journalDigest (.ref journal 'semantic-digest))
           (revisions (map revision-wire (.ref journal 'revisions)))
           (entries (map (lambda (value) (temporal-revision-receipt
-                         (poo-flow-temporal-family-revision-replay value))) values))
+                         (agentic-ai-lab-temporal-family-revision-replay value))) values))
           (sourceAuthenticated #f) (runtimeExecuted #f) (actionAuthorized #f) (durable #f))))
 (def (temporal-family-journal-call object)
   (fields object ["identity" "revisionDigests"])

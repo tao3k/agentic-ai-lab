@@ -75,7 +75,7 @@
 
 ;; : TestSuite
 (def graph-algorithm-test
-  (test-suite "poo-flow graph algorithms"
+  (test-suite "agentic-ai-lab graph algorithms"
     (yuanxu-test-case "Graph derives algorithm values from declarative POO slots"
       (check-equal? (.slot? graph-declarative-slot-sample
                             'node-declarations)

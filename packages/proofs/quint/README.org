@@ -1,4 +1,4 @@
-#+TITLE: POO Flow Quint proofs
+#+TITLE: Agentic AI Lab Quint proofs
 
 #+begin_comment
 SPDX-FileCopyrightText: 2026 tao3k team and Contributors
@@ -16,7 +16,7 @@ independent algebraic scope; it is not automatically a refinement proof.
 just prepare-quint
 just check-quint-types
 just check-quint
-PYTHONPATH=packages/python-testing/src python3 -m poo_flow_testing.checks.quint \
+PYTHONPATH=packages/python-testing/src python3 -m agentic_ai_lab_testing.checks.quint \
   --group all --receipt /tmp/poo-quint-proof.ss
 #+end_src
 
@@ -31,7 +31,7 @@ within 45 seconds. Missing counts, a nonempty final queue, wrong exit status,
 missing temporal completion or an unexpected counterexample fails admission.
 Negative cases select a named predicate and require an invariant violation;
 syntax errors, crashes and timeouts are not successful negative controls.
-Receipts use inert Scheme =poo-flow.quint-proof.v1= and bind every local Quint
+Receipts use inert Scheme =agentic-ai-lab.quint-proof.v1= and bind every local Quint
 source hash, versions, selected properties, exit, counts and output hash.
 Do not commit logs, generated traces, backend output or acceptance receipts.
 Install dependencies before checking; package manifests only pin build tools.

@@ -8,39 +8,39 @@
 
 (import (only-in :clan/poo/object .ref))
 
-(export poo-flow-scenario-case-name
-        poo-flow-scenario-case-modules
-        poo-flow-scenario-case-profiles
-        poo-flow-scenario-case-stages)
+(export agentic-ai-lab-scenario-case-name
+        agentic-ai-lab-scenario-case-modules
+        agentic-ai-lab-scenario-case-profiles
+        agentic-ai-lab-scenario-case-stages)
 
 ;;; Returns the symbolic composition name.
 ;;   | doc m%
 ;;       # Examples
-;;       (poo-flow-scenario-case-name composition)
+;;       (agentic-ai-lab-scenario-case-name composition)
 ;;   | result: composition name symbol
-;; : (-> PooFlowScenarioCase Symbol)
-(def (poo-flow-scenario-case-name composition)
+;; : (-> AgenticAILabScenarioCase Symbol)
+(def (agentic-ai-lab-scenario-case-name composition)
   (.ref composition 'name))
 
 ;;; Returns module alias binding objects captured by the composer.
 ;;   | doc m%
 ;;       # Examples
-;;       (poo-flow-scenario-case-modules composition)
+;;       (agentic-ai-lab-scenario-case-modules composition)
 ;;   | result: ordered module binding objects
-;; : (-> PooFlowScenarioCase List)
-(def (poo-flow-scenario-case-modules composition)
+;; : (-> AgenticAILabScenarioCase List)
+(def (agentic-ai-lab-scenario-case-modules composition)
   (.ref composition 'modules))
 
 ;;; Returns top-level profiles selected by the composition.
-;; : (-> PooFlowScenarioCase List)
-(def (poo-flow-scenario-case-profiles composition)
+;; : (-> AgenticAILabScenarioCase List)
+(def (agentic-ai-lab-scenario-case-profiles composition)
   (.ref composition 'profiles))
 
 ;;; Returns the native named Stage slot space.
 ;;   | doc m%
 ;;       # Examples
-;;       (poo-flow-scenario-case-stages composition)
+;;       (agentic-ai-lab-scenario-case-stages composition)
 ;;   | result: POO Stage slot space
-;; : (-> PooFlowScenarioCase PooObject)
-(def (poo-flow-scenario-case-stages composition)
+;; : (-> AgenticAILabScenarioCase PooObject)
+(def (agentic-ai-lab-scenario-case-stages composition)
   (.ref composition 'stages))

@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; POO Flow identity and default authoring policy for the Core Module Interface.
+;;; Agentic AI Lab identity and default authoring policy for the Core Module Interface.
 ;;; Schema indexing, option vocabulary, and native construction live in Core.
 (import (rename-in (only-in :yuanxu/module-system/source/interface
                             yuanxu-module-interface-prototype)
@@ -13,40 +13,40 @@
         (only-in :yuanxu/module-system/authoring/roles
                  yuanxu-default-module-authoring-profile))
 
-(export poo-flow-modules-kind
-        poo-flow-brand-name
-        poo-flow-brand-group
-        poo-flow-scheme-owner
-        poo-flow-module-system-owner
-        poo-flow-module-workflow-kind
+(export agentic-ai-lab-modules-kind
+        agentic-ai-lab-brand-name
+        agentic-ai-lab-brand-group
+        agentic-ai-lab-scheme-owner
+        agentic-ai-lab-module-system-owner
+        agentic-ai-lab-module-workflow-kind
         yuanxu-module-value-catalog-kind
-        poo-flow-eval-modules-result-kind
-        poo-flow-module-system-presentation-kind
-        poo-flow-module-interface-kind
+        agentic-ai-lab-eval-modules-result-kind
+        agentic-ai-lab-module-system-presentation-kind
+        agentic-ai-lab-module-interface-kind
         yuanxu-module-interface-prototype
         yuanxu-module-interface
         yuanxu-module-interface?
         (import: :yuanxu/module-system/config))
 
-(def poo-flow-brand-name "poo-flow")
-(def poo-flow-brand-group 'poo-flow)
-(def poo-flow-scheme-owner "poo-flow.scheme")
-(def poo-flow-module-system-owner "poo-flow.modules")
+(def agentic-ai-lab-brand-name "agentic-ai-lab")
+(def agentic-ai-lab-brand-group 'agentic-ai-lab)
+(def agentic-ai-lab-scheme-owner "agentic-ai-lab.scheme")
+(def agentic-ai-lab-module-system-owner "agentic-ai-lab.modules")
 
 ;;; Product receipt vocabulary is not a Core mechanism.
-(def poo-flow-modules-kind "poo-flow.modules.v1")
-(def poo-flow-module-workflow-kind "poo-flow.modules.workflow.v1")
+(def agentic-ai-lab-modules-kind "agentic-ai-lab.modules.v1")
+(def agentic-ai-lab-module-workflow-kind "agentic-ai-lab.modules.workflow.v1")
 (def yuanxu-module-value-catalog-kind "yuanxu.modules.value-catalog.v1")
-(def poo-flow-eval-modules-result-kind "poo-flow.modules.eval-result.v1")
-(def poo-flow-module-system-presentation-kind
-  "poo-flow.modules.system-presentation.v1")
-(def poo-flow-module-interface-kind "poo-flow.modules.interface.v1")
+(def agentic-ai-lab-eval-modules-result-kind "agentic-ai-lab.modules.eval-result.v1")
+(def agentic-ai-lab-module-system-presentation-kind
+  "agentic-ai-lab.modules.system-presentation.v1")
+(def agentic-ai-lab-module-interface-kind "agentic-ai-lab.modules.interface.v1")
 
 (def yuanxu-module-interface-prototype
   (.o (:: @ ModuleInterface.)
-      kind: poo-flow-module-interface-kind
+      kind: agentic-ai-lab-module-interface-kind
       id: "anonymous-poo-module-interface"
-      brand-name: poo-flow-brand-name))
+      brand-name: agentic-ai-lab-brand-name))
 
 (def (yuanxu-module-interface interface-id-value schema-object metadata-value
                                 authoring: (authoring-value
@@ -59,4 +59,4 @@
   (and (object? value)
        (.slot? value 'kind)
        (yuanxu-module-kind=? (.ref value 'kind)
-                               poo-flow-module-interface-kind)))
+                               agentic-ai-lab-module-interface-kind)))

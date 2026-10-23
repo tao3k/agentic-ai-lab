@@ -14,24 +14,24 @@
                  yuanxu-user-module-selection?
                  yuanxu-user-module-selection-flags
                  yuanxu-user-module-selection-key)
-        (only-in :poo-flow/modules/governance/types
-                 poo-flow-governance-profile?
-                 poo-flow-governance-assess))
+        (only-in :agentic-ai-lab/modules/governance/types
+                 agentic-ai-lab-governance-profile?
+                 agentic-ai-lab-governance-assess))
 
-(export poo-flow-governance-contribution
-        poo-flow-governance-module-contribution
-        poo-flow-governance-module-config
-        poo-flow-governance-evaluate)
+(export agentic-ai-lab-governance-contribution
+        agentic-ai-lab-governance-module-contribution
+        agentic-ai-lab-governance-module-config
+        agentic-ai-lab-governance-evaluate)
 
 ;;; Derived Profiles replace their native method slot while callers retain one
 ;;; open protocol.  The result remains a semantic assessment, not authority.
-(def (poo-flow-governance-evaluate profile-value context-value)
-  (unless (poo-flow-governance-profile? profile-value)
+(def (agentic-ai-lab-governance-evaluate profile-value context-value)
+  (unless (agentic-ai-lab-governance-profile? profile-value)
     (error "invalid governance profile" profile-value))
-  (poo-flow-governance-assess profile-value context-value))
+  (agentic-ai-lab-governance-assess profile-value context-value))
 
-(def (poo-flow-governance-contribution profile-value facets requirements)
-  (unless (poo-flow-governance-profile? profile-value)
+(def (agentic-ai-lab-governance-contribution profile-value facets requirements)
+  (unless (agentic-ai-lab-governance-profile? profile-value)
     (error "invalid governance profile" profile-value))
   (unless (and (list? facets) (pair? facets) (every symbol? facets)
                (list? requirements) (every symbol? requirements))
@@ -47,16 +47,16 @@
 ;;; Module families declare their identity once on the Profile.  This shared
 ;;; projection keeps contributor funs/config roles thin without introducing a
 ;;; macro or a parallel module declaration language.
-(def (poo-flow-governance-module-contribution
+(def (agentic-ai-lab-governance-module-contribution
       profile-value module-family-value facets requirements)
   (unless (and (symbol? module-family-value)
                (.slot? profile-value 'module-family)
                (eq? (.ref profile-value 'module-family) module-family-value))
     (error "governance Profile belongs to another module family"
            module-family-value profile-value))
-  (poo-flow-governance-contribution profile-value facets requirements))
+  (agentic-ai-lab-governance-contribution profile-value facets requirements))
 
-(def (poo-flow-governance-module-config
+(def (agentic-ai-lab-governance-module-config
       selection module-family-value contribution-value)
   (unless (and (symbol? module-family-value)
                (yuanxu-user-module-selection? selection)

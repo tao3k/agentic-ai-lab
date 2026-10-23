@@ -13,27 +13,27 @@
                  yuanxuUserProfileSet
                  yuanxu-user-profile-modules)
         (only-in "bundles.ss"
-                 poo-flow-kernel-module-bundles))
+                 agentic-ai-lab-kernel-module-bundles))
 
-(export poo-flow-kernel-module-bundles
-        poo-flow-kernel-profile-module-bundles
-        poo-flow-kernel-profile
-        poo-flow-kernel-profile-set
-        poo-flow-kernel-profile-modules)
+(export agentic-ai-lab-kernel-module-bundles
+        agentic-ai-lab-kernel-profile-module-bundles
+        agentic-ai-lab-kernel-profile
+        agentic-ai-lab-kernel-profile-set
+        agentic-ai-lab-kernel-profile-modules)
 
 ;;; Kernel profile bundles are loaded through profile composition.
 ;; : (-> Unit [[PooUserModuleSelection]])
-(def poo-flow-kernel-profile-module-bundles
-  poo-flow-kernel-module-bundles)
+(def agentic-ai-lab-kernel-profile-module-bundles
+  agentic-ai-lab-kernel-module-bundles)
 
 ;;; The kernel profile is inspectable user-profile data, not descriptor activation.
 ;; : (-> Unit PooUserProfile)
-(def poo-flow-kernel-profile
+(def agentic-ai-lab-kernel-profile
   (yuanxuUserProfile
    'kernel
-   poo-flow-kernel-profile-module-bundles
+   agentic-ai-lab-kernel-profile-module-bundles
    (yuanxu-settings
-    surface: "poo-flow"
+    surface: "agentic-ai-lab"
     profile: "kernel"
     profile-kind: 'kernel)
    '(surface
@@ -43,12 +43,12 @@
 ;;; Kernel profile set mirrors Doom's profiles.el registry shape while staying
 ;;; upstream-owned and declarative.
 ;; : (-> Unit PooUserProfileSet)
-(def poo-flow-kernel-profile-set
+(def agentic-ai-lab-kernel-profile-set
   (yuanxuUserProfileSet
    'kernel-profiles
    'kernel
-   (list poo-flow-kernel-profile)))
+   (list agentic-ai-lab-kernel-profile)))
 
 ;; : (-> Unit [PooUserModuleSelection])
-(def poo-flow-kernel-profile-modules
-  (yuanxu-user-profile-modules poo-flow-kernel-profile))
+(def agentic-ai-lab-kernel-profile-modules
+  (yuanxu-user-profile-modules agentic-ai-lab-kernel-profile))

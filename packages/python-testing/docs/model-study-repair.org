@@ -60,10 +60,10 @@ the exact pinned ASCENT head, and unchanged preview contents. A
 changed source or dependency requires a new preview and approval.
 
 #+begin_src sh
-python -m poo_flow_testing.model_study.repair \
+python -m agentic_ai_lab_testing.model_study.repair \
   --ascent-root /private/tmp/gerbil-ascent \
   --poo-root /private/tmp/poo-ascent-pr34-20261001 \
-  --gerbil-path /Users/guangtao/ghq/github.com/tao3k/poo-flow/.gerbil \
+  --gerbil-path /Users/guangtao/ghq/github.com/tao3k/agentic-ai-lab/.gerbil \
   --preview-dir /private/tmp/poo-scheme-repair-preview
 #+end_src
 
@@ -104,7 +104,7 @@ Its SHA256 is
 =76219b170aa93ae94329e93d7535e117a61e508de6ea3ee1a3159a5a0e150492=.
 
 The warm process boundary is below 0.2% of the native call's median.
-This does not justify adding a separate ASCENT C ABI to POO Flow's
+This does not justify adding a separate ASCENT C ABI to Agentic AI Lab's
 shared runtime. Cold startup is material and is a separate target:
 check compiled worker startup and retained process reuse before
 changing the ABI. This timing does not measure allocator totals,

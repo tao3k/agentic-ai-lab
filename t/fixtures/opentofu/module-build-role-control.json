@@ -575,7 +575,7 @@
     }
   },
   "source_unchanged": true,
-  "schema": "poo-flow/module-build-role-control/v1",
+  "schema": "agentic-ai-lab/module-build-role-control/v1",
   "purpose": "Optional module build.ss wrapping, phase-isolated Build publication and final domain admission before Core write-build-entry returns; no product Loader.",
   "admission_accounting": "Build now includes 3 Nix evaluations, 1 realization call and 1/2 selected type reads/compiles. Returned admission access costs zero. Previously build=2 and first-admission=1: no increase through first completed admission.",
   "provider_versions": {

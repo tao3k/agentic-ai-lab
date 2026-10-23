@@ -6,55 +6,55 @@
 ;;; Invariant: promotion requires explicit provenance, commitments, and world evidence.
 (import (only-in :clan/poo/object .o .ref))
 
-(export poo-flow-provenance
-        poo-flow-protocol-subject
-        poo-flow-commitment
-        poo-flow-promotion-intent
-        poo-flow-promotion-world
-        poo-flow-promotion-decision-facts
-        make-poo-flow-promotion-validation-receipt
-        poo-flow-promotion-validation-receipt?
-        poo-flow-promotion-validation-receipt-kind
-        poo-flow-promotion-validation-receipt-schema
-        poo-flow-promotion-validation-receipt-promotion-id
-        poo-flow-promotion-validation-receipt-candidate-digest
-        poo-flow-promotion-validation-receipt-approved
-        poo-flow-promotion-validation-receipt-active
-        poo-flow-promotion-validation-receipt-approval-code
-        poo-flow-promotion-validation-receipt-activation-code
-        poo-flow-promotion-validation-receipt-approval-failures
-        poo-flow-promotion-validation-receipt-activation-failures
-        poo-flow-promotion-validation-receipt-checked-gates
-        poo-flow-promotion-validation-receipt-evidence-root
-        poo-flow-promotion-validation-receipt-materialization-id
-        poo-flow-promotion-validation-receipt-injection-target
-        poo-flow-promotion-validation-receipt-runtime-executed
-        poo-flow-promotion-epochs-match?
-        poo-flow-promotion-approved?
-        poo-flow-promotion-active?
-        poo-flow-promotion-intent-validate
-        poo-flow-promotion-validation-receipt-approved?
-        poo-flow-promotion-validation-receipt-active?
-        poo-flow-promotion-validation-receipt->alist)
+(export agentic-ai-lab-provenance
+        agentic-ai-lab-protocol-subject
+        agentic-ai-lab-commitment
+        agentic-ai-lab-promotion-intent
+        agentic-ai-lab-promotion-world
+        agentic-ai-lab-promotion-decision-facts
+        make-agentic-ai-lab-promotion-validation-receipt
+        agentic-ai-lab-promotion-validation-receipt?
+        agentic-ai-lab-promotion-validation-receipt-kind
+        agentic-ai-lab-promotion-validation-receipt-schema
+        agentic-ai-lab-promotion-validation-receipt-promotion-id
+        agentic-ai-lab-promotion-validation-receipt-candidate-digest
+        agentic-ai-lab-promotion-validation-receipt-approved
+        agentic-ai-lab-promotion-validation-receipt-active
+        agentic-ai-lab-promotion-validation-receipt-approval-code
+        agentic-ai-lab-promotion-validation-receipt-activation-code
+        agentic-ai-lab-promotion-validation-receipt-approval-failures
+        agentic-ai-lab-promotion-validation-receipt-activation-failures
+        agentic-ai-lab-promotion-validation-receipt-checked-gates
+        agentic-ai-lab-promotion-validation-receipt-evidence-root
+        agentic-ai-lab-promotion-validation-receipt-materialization-id
+        agentic-ai-lab-promotion-validation-receipt-injection-target
+        agentic-ai-lab-promotion-validation-receipt-runtime-executed
+        agentic-ai-lab-promotion-epochs-match?
+        agentic-ai-lab-promotion-approved?
+        agentic-ai-lab-promotion-active?
+        agentic-ai-lab-promotion-intent-validate
+        agentic-ai-lab-promotion-validation-receipt-approved?
+        agentic-ai-lab-promotion-validation-receipt-active?
+        agentic-ai-lab-promotion-validation-receipt->alist)
 
 ;; Protocol subjects are durable content identities.  The temporal role is a
 ;; projection over that identity, not a second identity and not a memory kind.
-(def (poo-flow-provenance origin-value source-digest-value observed-at-value
+(def (agentic-ai-lab-provenance origin-value source-digest-value observed-at-value
                           parent-digests-value receipts-value)
-  (.o (kind 'poo-flow-provenance)
-      (schema 'poo-flow.provenance.draft.1)
+  (.o (kind 'agentic-ai-lab-provenance)
+      (schema 'agentic-ai-lab.provenance.draft.1)
       (origin origin-value)
       (source-digest source-digest-value)
       (observed-at observed-at-value)
       (parent-digests parent-digests-value)
       (receipts receipts-value)))
 
-(def (poo-flow-protocol-subject subject-id-value content-digest-value
+(def (agentic-ai-lab-protocol-subject subject-id-value content-digest-value
                                 version-value provenance-value
                                 temporal-role-value valid-from-value
                                 valid-until-value invalidation-triggers-value)
-  (.o (kind 'poo-flow-protocol-subject)
-      (schema 'poo-flow.protocol-subject.draft.1)
+  (.o (kind 'agentic-ai-lab-protocol-subject)
+      (schema 'agentic-ai-lab.protocol-subject.draft.1)
       (subject-id subject-id-value)
       (content-digest content-digest-value)
       (version version-value)
@@ -64,11 +64,11 @@
       (valid-until valid-until-value)
       (invalidation-triggers invalidation-triggers-value)))
 
-(def (poo-flow-commitment commitment-id-value subject-id-value
+(def (agentic-ai-lab-commitment commitment-id-value subject-id-value
                           subject-digest-value contract-digest-value
                           scope-value authority-epoch-value status-value)
-  (.o (kind 'poo-flow-commitment)
-      (schema 'poo-flow.commitment.draft.1)
+  (.o (kind 'agentic-ai-lab-commitment)
+      (schema 'agentic-ai-lab.commitment.draft.1)
       (commitment-id commitment-id-value)
       (subject-id subject-id-value)
       (subject-digest subject-digest-value)
@@ -77,15 +77,15 @@
       (authority-epoch authority-epoch-value)
       (status status-value)))
 
-(def (poo-flow-promotion-intent promotion-id-value candidate-digest-value
+(def (agentic-ai-lab-promotion-intent promotion-id-value candidate-digest-value
                                 subject-id-value commitment-id-value
                                 source-role-value target-role-value scope-value
                                 bundle-epoch-value authority-epoch-value
                                 proof-epoch-value evaluator-epoch-value
                                 evidence-root-value materialization-id-value
                                 injection-target-value rollback-target-value)
-  (.o (kind 'poo-flow-promotion-intent)
-      (schema 'poo-flow.promotion-intent.draft.1)
+  (.o (kind 'agentic-ai-lab-promotion-intent)
+      (schema 'agentic-ai-lab.promotion-intent.draft.1)
       (promotion-id promotion-id-value)
       (candidate-digest candidate-digest-value)
       (subject-id subject-id-value)
@@ -102,23 +102,23 @@
       (injection-target injection-target-value)
       (rollback-target rollback-target-value)))
 
-(def (poo-flow-promotion-world bundle-epoch-value authority-epoch-value
+(def (agentic-ai-lab-promotion-world bundle-epoch-value authority-epoch-value
                                proof-epoch-value evaluator-epoch-value)
-  (.o (kind 'poo-flow-promotion-world)
-      (schema 'poo-flow.promotion-world.draft.1)
+  (.o (kind 'agentic-ai-lab-promotion-world)
+      (schema 'agentic-ai-lab.promotion-world.draft.1)
       (bundle-epoch bundle-epoch-value)
       (authority-epoch authority-epoch-value)
       (proof-epoch proof-epoch-value)
       (evaluator-epoch evaluator-epoch-value)))
 
-(def (poo-flow-promotion-decision-facts cedar-permit-value
+(def (agentic-ai-lab-promotion-decision-facts cedar-permit-value
                                         lean-verified-value
                                         evaluator-applicable-value
                                         evidence-complete-value
                                         materialization-count-value
                                         injection-receipted-value)
-  (.o (kind 'poo-flow-promotion-decision-facts)
-      (schema 'poo-flow.promotion-decision-facts.draft.1)
+  (.o (kind 'agentic-ai-lab-promotion-decision-facts)
+      (schema 'agentic-ai-lab.promotion-decision-facts.draft.1)
       (cedar-permit? cedar-permit-value)
       (lean-verified? lean-verified-value)
       (evaluator-applicable? evaluator-applicable-value)
@@ -128,7 +128,7 @@
 
 ;; The public inputs stay POO-native.  The receipt is deliberately closed so
 ;; callers cannot extend an approval result with unchecked fields.
-(defstruct poo-flow-promotion-validation-receipt
+(defstruct agentic-ai-lab-promotion-validation-receipt
   (kind
    schema
    promotion-id
@@ -146,7 +146,7 @@
    runtime-executed)
   transparent: #t)
 
-(def +poo-flow-promotion-checked-gates+
+(def +agentic-ai-lab-promotion-checked-gates+
   '(intent-kind
     world-kind
     decision-facts-kind
@@ -161,22 +161,22 @@
     exactly-once-materialization
     injection-receipt))
 
-(def (poo-flow-compact-failures values)
+(def (agentic-ai-lab-compact-failures values)
   (cond
    ((null? values) '())
    ((car values)
-    (cons (car values) (poo-flow-compact-failures (cdr values))))
+    (cons (car values) (agentic-ai-lab-compact-failures (cdr values))))
    (else
-    (poo-flow-compact-failures (cdr values)))))
+    (agentic-ai-lab-compact-failures (cdr values)))))
 
-(def (poo-flow-promotion-approval-failures intent world facts)
-  (poo-flow-compact-failures
+(def (agentic-ai-lab-promotion-approval-failures intent world facts)
+  (agentic-ai-lab-compact-failures
    (list
-    (and (not (eq? (.ref intent 'kind) 'poo-flow-promotion-intent))
+    (and (not (eq? (.ref intent 'kind) 'agentic-ai-lab-promotion-intent))
          'invalid-promotion-intent)
-    (and (not (eq? (.ref world 'kind) 'poo-flow-promotion-world))
+    (and (not (eq? (.ref world 'kind) 'agentic-ai-lab-promotion-world))
          'invalid-promotion-world)
-    (and (not (eq? (.ref facts 'kind) 'poo-flow-promotion-decision-facts))
+    (and (not (eq? (.ref facts 'kind) 'agentic-ai-lab-promotion-decision-facts))
          'invalid-promotion-decision-facts)
     (and (not (.ref facts 'cedar-permit?)) 'cedar-deny)
     (and (not (.ref facts 'lean-verified?)) 'lean-unverified)
@@ -195,9 +195,9 @@
     (and (not (.ref facts 'evaluator-applicable?)) 'evaluator-inapplicable)
     (and (not (.ref facts 'evidence-complete?)) 'evidence-incomplete))))
 
-(def (poo-flow-promotion-activation-failures approved? facts)
+(def (agentic-ai-lab-promotion-activation-failures approved? facts)
   (let (materialization-count (.ref facts 'materialization-count))
-    (poo-flow-compact-failures
+    (agentic-ai-lab-compact-failures
      (list
       (and (not approved?) 'approval-rejected)
       (and (not (integer? materialization-count))
@@ -211,7 +211,7 @@
       (and (not (.ref facts 'injection-receipted?))
            'injection-receipt-missing)))))
 
-(def (poo-flow-promotion-epochs-match? intent world)
+(def (agentic-ai-lab-promotion-epochs-match? intent world)
   (and (equal? (.ref intent 'expected-bundle-epoch)
                (.ref world 'bundle-epoch))
        (equal? (.ref intent 'expected-authority-epoch)
@@ -221,23 +221,23 @@
        (equal? (.ref intent 'expected-evaluator-epoch)
                (.ref world 'evaluator-epoch))))
 
-(def (poo-flow-promotion-approved? intent world facts)
-  (null? (poo-flow-promotion-approval-failures intent world facts)))
+(def (agentic-ai-lab-promotion-approved? intent world facts)
+  (null? (agentic-ai-lab-promotion-approval-failures intent world facts)))
 
-(def (poo-flow-promotion-active? intent world facts)
-  (let (approved? (poo-flow-promotion-approved? intent world facts))
-    (null? (poo-flow-promotion-activation-failures approved? facts))))
+(def (agentic-ai-lab-promotion-active? intent world facts)
+  (let (approved? (agentic-ai-lab-promotion-approved? intent world facts))
+    (null? (agentic-ai-lab-promotion-activation-failures approved? facts))))
 
-(def (poo-flow-promotion-intent-validate intent world facts)
+(def (agentic-ai-lab-promotion-intent-validate intent world facts)
   (let* ((approval-failures
-          (poo-flow-promotion-approval-failures intent world facts))
+          (agentic-ai-lab-promotion-approval-failures intent world facts))
          (approved? (null? approval-failures))
          (activation-failures
-          (poo-flow-promotion-activation-failures approved? facts))
+          (agentic-ai-lab-promotion-activation-failures approved? facts))
          (active? (null? activation-failures)))
-    (make-poo-flow-promotion-validation-receipt
-     'poo-flow-promotion-validation-receipt
-     'poo-flow.promotion-validation-receipt.draft.1
+    (make-agentic-ai-lab-promotion-validation-receipt
+     'agentic-ai-lab-promotion-validation-receipt
+     'agentic-ai-lab.promotion-validation-receipt.draft.1
      (.ref intent 'promotion-id)
      (.ref intent 'candidate-digest)
      approved?
@@ -246,47 +246,47 @@
      (if active? 'promotion-active (car activation-failures))
      approval-failures
      activation-failures
-     +poo-flow-promotion-checked-gates+
+     +agentic-ai-lab-promotion-checked-gates+
      (.ref intent 'evidence-root)
      (.ref intent 'materialization-id)
      (.ref intent 'injection-target)
      #f)))
 
-(def (poo-flow-promotion-validation-receipt-approved? receipt)
-  (and (poo-flow-promotion-validation-receipt? receipt)
-       (poo-flow-promotion-validation-receipt-approved receipt)))
+(def (agentic-ai-lab-promotion-validation-receipt-approved? receipt)
+  (and (agentic-ai-lab-promotion-validation-receipt? receipt)
+       (agentic-ai-lab-promotion-validation-receipt-approved receipt)))
 
-(def (poo-flow-promotion-validation-receipt-active? receipt)
-  (and (poo-flow-promotion-validation-receipt? receipt)
-       (poo-flow-promotion-validation-receipt-active receipt)))
+(def (agentic-ai-lab-promotion-validation-receipt-active? receipt)
+  (and (agentic-ai-lab-promotion-validation-receipt? receipt)
+       (agentic-ai-lab-promotion-validation-receipt-active receipt)))
 
-(def (poo-flow-promotion-validation-receipt->alist receipt)
+(def (agentic-ai-lab-promotion-validation-receipt->alist receipt)
   (list
-   (cons 'kind (poo-flow-promotion-validation-receipt-kind receipt))
-   (cons 'schema (poo-flow-promotion-validation-receipt-schema receipt))
+   (cons 'kind (agentic-ai-lab-promotion-validation-receipt-kind receipt))
+   (cons 'schema (agentic-ai-lab-promotion-validation-receipt-schema receipt))
    (cons 'promotion-id
-         (poo-flow-promotion-validation-receipt-promotion-id receipt))
+         (agentic-ai-lab-promotion-validation-receipt-promotion-id receipt))
    (cons 'candidate-digest
-         (poo-flow-promotion-validation-receipt-candidate-digest receipt))
+         (agentic-ai-lab-promotion-validation-receipt-candidate-digest receipt))
    (cons 'approved
-         (poo-flow-promotion-validation-receipt-approved receipt))
+         (agentic-ai-lab-promotion-validation-receipt-approved receipt))
    (cons 'active
-         (poo-flow-promotion-validation-receipt-active receipt))
+         (agentic-ai-lab-promotion-validation-receipt-active receipt))
    (cons 'approval-code
-         (poo-flow-promotion-validation-receipt-approval-code receipt))
+         (agentic-ai-lab-promotion-validation-receipt-approval-code receipt))
    (cons 'activation-code
-         (poo-flow-promotion-validation-receipt-activation-code receipt))
+         (agentic-ai-lab-promotion-validation-receipt-activation-code receipt))
    (cons 'approval-failures
-         (poo-flow-promotion-validation-receipt-approval-failures receipt))
+         (agentic-ai-lab-promotion-validation-receipt-approval-failures receipt))
    (cons 'activation-failures
-         (poo-flow-promotion-validation-receipt-activation-failures receipt))
+         (agentic-ai-lab-promotion-validation-receipt-activation-failures receipt))
    (cons 'checked-gates
-         (poo-flow-promotion-validation-receipt-checked-gates receipt))
+         (agentic-ai-lab-promotion-validation-receipt-checked-gates receipt))
    (cons 'evidence-root
-         (poo-flow-promotion-validation-receipt-evidence-root receipt))
+         (agentic-ai-lab-promotion-validation-receipt-evidence-root receipt))
    (cons 'materialization-id
-         (poo-flow-promotion-validation-receipt-materialization-id receipt))
+         (agentic-ai-lab-promotion-validation-receipt-materialization-id receipt))
    (cons 'injection-target
-         (poo-flow-promotion-validation-receipt-injection-target receipt))
+         (agentic-ai-lab-promotion-validation-receipt-injection-target receipt))
    (cons 'runtime-executed
-         (poo-flow-promotion-validation-receipt-runtime-executed receipt))))
+         (agentic-ai-lab-promotion-validation-receipt-runtime-executed receipt))))

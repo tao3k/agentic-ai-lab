@@ -1,9 +1,9 @@
 ;;; -*- Gerbil -*-
-;;; Smoke file executed by `poo-flow run` for functional flow validation.
+;;; Smoke file executed by `agentic-ai-lab run` for functional flow validation.
 
 (import :yuanxu/modules/funflow/control-plane/api)
 
-;;; CLI smoke arguments are parsed locally so `poo-flow run` can validate the
+;;; CLI smoke arguments are parsed locally so `agentic-ai-lab run` can validate the
 ;;; compiled command path without depending on test harness state.
 ;; : [String]
 (def args (cddr (command-line)))
@@ -27,7 +27,7 @@
 
 ;; : (-> RunResult Unit)
 (def (emit-cli-smoke-result! result)
-  (display "poo-flow-run:")
+  (display "agentic-ai-lab-run:")
   (write (run-result-value result))
   (newline))
 

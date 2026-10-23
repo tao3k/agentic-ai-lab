@@ -11,10 +11,10 @@
 The protocol and answer key were fixed in [[file:model-study-baseline.org][the pre-registration]]
 before the first API request. Corpus SHA256:
 =7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
-ASCENT head =00930e20f382516d78d2d2f2df084b89322162ae=, POO Flow
+ASCENT head =00930e20f382516d78d2d2f2df084b89322162ae=, Agentic AI Lab
 checkout head =a3ed9f9c3ebcacdd8d4edea3191cc422b85b2427=. The
 runner and native fixture files were uncommitted during execution, so
-the POO Flow head alone is not a complete source receipt. Their SHA256s
+the Agentic AI Lab head alone is not a complete source receipt. Their SHA256s
 were recorded immediately after the run: runner
 =cd57a4381595b8801efd328ae93b91f1398ec5fe1c0f065ab16864233dbf416c=,
 ASCENT fixture

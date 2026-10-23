@@ -1,14 +1,14 @@
 /* SPDX-FileCopyrightText: 2026 tao3k team and Contributors
  * SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later */
 #include "gambit.h"
-#include <poo_flow/semantic.h>
+#include <agentic_ai_lab/semantic.h>
 #include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
 ___BEGIN_NEW_LNK
-___DEF_NEW_LNK(POO_FLOW_SEMANTIC_LINKER)
+___DEF_NEW_LNK(AGENTIC_AI_LAB_SEMANTIC_LINKER)
 ___END_NEW_LNK
-extern int32_t poo_flow_semantic_evaluate(char *, char *, poo_flow_semantic_result *);
+extern int32_t agentic_ai_lab_semantic_evaluate(char *, char *, agentic_ai_lab_semantic_result *);
 static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 static int state = 0;
 static pthread_t owner;
@@ -46,7 +46,7 @@ static int bounded_scheme_depth(const uint8_t *bytes, size_t length) {
   }
   return depth == 0 && !quoted;
 }
-int32_t poo_flow_semantic_v1_open(void) {
+int32_t agentic_ai_lab_semantic_v1_open(void) {
   pthread_mutex_lock(&lock);
   if (state != 0) { pthread_mutex_unlock(&lock); return 1; }
   state = 2; /* Failed setup is terminal. */
@@ -54,7 +54,7 @@ int32_t poo_flow_semantic_v1_open(void) {
   ___setup_params_struct params;
   ___setup_params_reset(&params);
   params.version = ___VERSION;
-  params.linker = POO_FLOW_SEMANTIC_LINKER;
+  params.linker = AGENTIC_AI_LAB_SEMANTIC_LINKER;
   params.parallelism_level = 1;
   params.max_heap = 1024 * 1024 * 1024;
   params.debug_settings = ___DEBUG_SETTINGS_INITIAL;
@@ -66,7 +66,7 @@ int32_t poo_flow_semantic_v1_open(void) {
   return 0;
 }
 static int32_t semantic_call(const char *operation, const uint8_t *input,
-                             size_t length, poo_flow_semantic_result *result, int control) {
+                             size_t length, agentic_ai_lab_semantic_result *result, int control) {
   pthread_mutex_lock(&lock);
   int32_t status;
   if (state != 1) status = 1;
@@ -83,7 +83,7 @@ static int32_t semantic_call(const char *operation, const uint8_t *input,
     if (!copy) status = 5;
     else {
       memcpy(copy, input, length); copy[length] = 0;
-      status = poo_flow_semantic_evaluate((char *)operation, copy, result);
+      status = agentic_ai_lab_semantic_evaluate((char *)operation, copy, result);
       free(copy);
     }
   }
@@ -91,23 +91,23 @@ static int32_t semantic_call(const char *operation, const uint8_t *input,
   pthread_mutex_unlock(&lock);
   return status;
 }
-int32_t poo_flow_semantic_v1_call(const char *operation, const uint8_t *input,
-                                 size_t length, poo_flow_semantic_result *result) {
+int32_t agentic_ai_lab_semantic_v1_call(const char *operation, const uint8_t *input,
+                                 size_t length, agentic_ai_lab_semantic_result *result) {
   return semantic_call(operation, input, length, result, 0);
 }
-int32_t poo_flow_semantic_v1_source_register(const uint8_t *input, size_t length,
-                                           poo_flow_semantic_result *result) {
+int32_t agentic_ai_lab_semantic_v1_source_register(const uint8_t *input, size_t length,
+                                           agentic_ai_lab_semantic_result *result) {
   return semantic_call("$host.temporal.source.register", input, length, result, 1);
 }
-int32_t poo_flow_semantic_v1_policy_refresh(const uint8_t *input, size_t length,
-                                          poo_flow_semantic_result *result) {
+int32_t agentic_ai_lab_semantic_v1_policy_refresh(const uint8_t *input, size_t length,
+                                          agentic_ai_lab_semantic_result *result) {
   return semantic_call("$host.temporal.policy.refresh", input, length, result, 1);
 }
-int32_t poo_flow_semantic_v1_derivation_admit(const uint8_t *input, size_t length,
-                                            poo_flow_semantic_result *result) {
+int32_t agentic_ai_lab_semantic_v1_derivation_admit(const uint8_t *input, size_t length,
+                                            agentic_ai_lab_semantic_result *result) {
   return semantic_call("$host.temporal.derivation.admit", input, length, result, 1);
 }
-int32_t poo_flow_semantic_v1_close(void) {
+int32_t agentic_ai_lab_semantic_v1_close(void) {
   pthread_mutex_lock(&lock);
   if (state != 1) { pthread_mutex_unlock(&lock); return 1; }
   if (!pthread_equal(owner, pthread_self())) { pthread_mutex_unlock(&lock); return 2; }
@@ -115,20 +115,20 @@ int32_t poo_flow_semantic_v1_close(void) {
   pthread_mutex_unlock(&lock);
   return 0;
 }
-void poo_flow_semantic_v1_result_release(poo_flow_semantic_result *result) {
+void agentic_ai_lab_semantic_v1_result_release(agentic_ai_lab_semantic_result *result) {
   if (!result) return;
   free(result->data); result->data = NULL; result->length = 0; result->status = 0;
 }
 
-int32_t poo_flow_semantic_v1_proof_state_refresh(const uint8_t *input, size_t length, poo_flow_semantic_result *result) {
+int32_t agentic_ai_lab_semantic_v1_proof_state_refresh(const uint8_t *input, size_t length, agentic_ai_lab_semantic_result *result) {
   return semantic_call("$host.temporal.proof.state.refresh", input, length, result, 1);
 }
 
-int32_t poo_flow_semantic_v1_proof_register(const uint8_t *input, size_t length, poo_flow_semantic_result *result) {
+int32_t agentic_ai_lab_semantic_v1_proof_register(const uint8_t *input, size_t length, agentic_ai_lab_semantic_result *result) {
   return semantic_call("$host.temporal.proof.register", input, length, result, 1);
 }
 
-int32_t poo_flow_semantic_v1_context_use_refresh(const uint8_t *input, size_t length,
-    poo_flow_semantic_result *result) {
+int32_t agentic_ai_lab_semantic_v1_context_use_refresh(const uint8_t *input, size_t length,
+    agentic_ai_lab_semantic_result *result) {
   return semantic_call("$host.context.use.refresh", input, length, result, 1);
 }

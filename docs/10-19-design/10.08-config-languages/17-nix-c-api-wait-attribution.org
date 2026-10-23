@@ -143,7 +143,7 @@ alone proves faster end-to-end evaluation.
 
 * Validation receipt and remaining gate
 
-Local artifacts are under =/private/tmp/poo-flow-nix-wait-20261023=:
+Local artifacts are under =/private/tmp/agentic-ai-lab-nix-wait-20261023=:
 
 | Run | Result | Interpretation |
 |-----+--------+----------------|

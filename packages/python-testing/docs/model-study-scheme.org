@@ -53,10 +53,10 @@ call. The live runner requires clean committed checkouts, the exact POO
 Flow dependency pin, and unchanged preview hashes and Git heads.
 
 #+begin_src sh
-python -m poo_flow_testing.model_study.scheme \
+python -m agentic_ai_lab_testing.model_study.scheme \
   --ascent-root /path/to/gerbil-ascent \
-  --poo-root /path/to/poo-flow \
-  --gerbil-path /path/to/poo-flow/.gerbil \
+  --poo-root /path/to/agentic-ai-lab \
+  --gerbil-path /path/to/agentic-ai-lab/.gerbil \
   --preview-dir /private/tmp/poo-scheme-preview
 #+end_src
 

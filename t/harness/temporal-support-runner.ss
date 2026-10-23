@@ -20,14 +20,14 @@
     :asp-gerbil-scheme/src/testing/extension
     :asp-gerbil-scheme/testing-api
     :yuanxu/observability/output
-    :poo-flow/dev/modules/testing/testing-extension
+    :agentic-ai-lab/dev/modules/testing/testing-extension
     :yuanxu/module-system/schema/relations
     :yuanxu/module-system/types
     :yuanxu/module-system/config
     :yuanxu/module-system/objects
     :yuanxu/module-system/authoring/roles
-        (only-in :poo-flow/modules/module-authoring/semantic-module UserConfigSourceRole. poo-flow-user-root-module-authoring-profile)
-    :poo-flow/modules/module-authoring/module-interface
+        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
+    :agentic-ai-lab/modules/module-authoring/module-interface
     :yuanxu/object-family/syntax
     :yuanxu/utilities/product-syntax
     :yuanxu/utilities/final-projection-syntax
@@ -38,19 +38,19 @@
     :yuanxu/profile-composition/user-profile
     :yuanxu/utilities/functional
     :yuanxu/profile-composition/policy
-    :poo-flow/testing-api
-    :poo-flow/modules/temporal-causality/time/types
-    :poo-flow/modules/temporal-causality/time/objects
-    :poo-flow/modules/temporal-causality/revisions/types
-    :poo-flow/modules/temporal-causality/revisions/objects
-    :poo-flow/modules/temporal-causality/time/funs
-    :poo-flow/modules/temporal-causality/revisions/funs
-    :poo-flow/modules/temporal-causality/revisions/interface
-    :poo-flow/modules/temporal-causality/truth-maintenance/support/types
-    :poo-flow/modules/temporal-causality/truth-maintenance/support/objects
-    :poo-flow/modules/temporal-causality/truth-maintenance/support/funs
-    :poo-flow/modules/temporal-causality/truth-maintenance/support/policy
-    :poo-flow/modules/temporal-causality/truth-maintenance/support/interface
-    :poo-flow/modules/temporal-causality/truth-maintenance/interface
+    :agentic-ai-lab/testing-api
+    :agentic-ai-lab/modules/temporal-causality/time/types
+    :agentic-ai-lab/modules/temporal-causality/time/objects
+    :agentic-ai-lab/modules/temporal-causality/revisions/types
+    :agentic-ai-lab/modules/temporal-causality/revisions/objects
+    :agentic-ai-lab/modules/temporal-causality/time/funs
+    :agentic-ai-lab/modules/temporal-causality/revisions/funs
+    :agentic-ai-lab/modules/temporal-causality/revisions/interface
+    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/types
+    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/objects
+    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/funs
+    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy
+    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
+    :agentic-ai-lab/modules/temporal-causality/truth-maintenance/interface
     :gerbil/tools/gxtest))
 (eval '(exit (gerbil/tools/gxtest#main "-v" "5" "t/temporal-support-test.ss")))

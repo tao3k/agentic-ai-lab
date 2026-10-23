@@ -9,7 +9,7 @@
         :yuanxu/feature-system/bundle-v1-foreign-arena)
 
 (def +benchmark-schema+
-  'poo-flow.bundle-v1-foreign-arena.benchmark.v1)
+  'agentic-ai-lab.bundle-v1-foreign-arena.benchmark.v1)
 
 (def (environment-positive-integer name default-value)
   (let* ((raw (getenv name))
@@ -51,7 +51,7 @@
 (def (run-benchmark)
   (let* ((component-count
           (environment-positive-integer
-           "POO_FLOW_BUNDLE_V1_BENCH_COMPONENTS" 4096))
+           "AGENTIC_AI_LAB_BUNDLE_V1_BENCH_COMPONENTS" 4096))
          (generation-started (now-seconds))
          (components
           (yuanxu-map benchmark-component (iota component-count)))

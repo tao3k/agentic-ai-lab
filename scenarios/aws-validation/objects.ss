@@ -1,8 +1,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :clan/poo/object
-        (only-in :poo-flow/scenarios/aws/objects WebProfile)
-        (only-in :poo-flow/modules/services/opentofu/execution OpenTofuExecution.))
+        (only-in :agentic-ai-lab/scenarios/aws/objects WebProfile)
+        (only-in :agentic-ai-lab/modules/services/opentofu/execution OpenTofuExecution.))
 (export Profile Scenario)
 ;; Syntactically valid example AMI, not a claim that it exists in any account.
 (.def (Profile @ WebProfile) ami: "ami-0123456789abcdef0")

@@ -6,15 +6,15 @@
 ;;; Pure partial comparison. Unknown means evidence is declared rather than
 ;;; observed; incomparable means distinct clock domains without conversion.
 (import (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/temporal-causality/time/types
-                 poo-flow-temporal-instant? poo-flow-temporal-interval?))
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+                 agentic-ai-lab-temporal-instant? agentic-ai-lab-temporal-interval?))
 
-(export poo-flow-temporal-compare poo-flow-temporal-interval-contains?
-        poo-flow-temporal-interval-extent-relation)
+(export agentic-ai-lab-temporal-compare agentic-ai-lab-temporal-interval-contains?
+        agentic-ai-lab-temporal-interval-extent-relation)
 
-(def (poo-flow-temporal-compare left right)
-  (unless (and (poo-flow-temporal-instant? left)
-               (poo-flow-temporal-instant? right))
+(def (agentic-ai-lab-temporal-compare left right)
+  (unless (and (agentic-ai-lab-temporal-instant? left)
+               (agentic-ai-lab-temporal-instant? right))
     (error "temporal comparison requires two instants"))
   (cond
    ((not (equal? (.ref left 'domain-identity)
@@ -25,9 +25,9 @@
    ((> (.ref left 'coordinate) (.ref right 'coordinate)) 'after)
    (else 'equal)))
 
-(def (poo-flow-temporal-interval-contains? interval instant)
-  (unless (and (poo-flow-temporal-interval? interval)
-               (poo-flow-temporal-instant? instant))
+(def (agentic-ai-lab-temporal-interval-contains? interval instant)
+  (unless (and (agentic-ai-lab-temporal-interval? interval)
+               (agentic-ai-lab-temporal-instant? instant))
     (error "interval membership requires an interval and instant"))
   (let ((start (.ref interval 'start)) (end (.ref interval 'end)))
     (cond
@@ -48,9 +48,9 @@
 ;;; Allen's thirteen endpoint relations apply only to proper, observed
 ;;; intervals. Endpoint closure is a separate membership concern. A point or
 ;;; empty interval has no Allen extent and is reported as 'degenerate.
-(def (poo-flow-temporal-interval-extent-relation left right)
-  (unless (and (poo-flow-temporal-interval? left)
-               (poo-flow-temporal-interval? right))
+(def (agentic-ai-lab-temporal-interval-extent-relation left right)
+  (unless (and (agentic-ai-lab-temporal-interval? left)
+               (agentic-ai-lab-temporal-interval? right))
     (error "interval relation requires two intervals"))
   (let* ((left-start (.ref left 'start))
          (left-end (.ref left 'end))

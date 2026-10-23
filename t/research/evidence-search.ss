@@ -6,13 +6,13 @@
         (only-in :gerbil-ascent/program/scheme-language relational-program)
         (only-in :gerbil-ascent/program/session gerbil-ascent-open-session
                  gerbil-ascent-session-run gerbil-ascent-session-replace-source!)
-        (only-in :poo-flow/modules/temporal-causality/time/objects poo-flow-temporal-instant poo-flow-temporal-interval)
-        (only-in :poo-flow/modules/temporal-causality/revisions/objects poo-flow-temporal-evidence-revision)
-        (only-in :poo-flow/modules/temporal-causality/revisions/funs poo-flow-temporal-evidence-journal poo-flow-temporal-evidence-as-of)
-        (only-in :poo-flow/modules/temporal-causality/truth-maintenance/objects poo-flow-temporal-derivation)
-        (only-in :poo-flow/modules/temporal-causality/truth-maintenance/funs
-                 poo-flow-temporal-dependency-index poo-flow-temporal-reverse-dependency-plan-from-cuts)
-        :poo-flow/modules/evidence-assessment/candidate/evidence-store
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant agentic-ai-lab-temporal-interval)
+        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/objects agentic-ai-lab-temporal-evidence-revision)
+        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/funs agentic-ai-lab-temporal-evidence-journal agentic-ai-lab-temporal-evidence-as-of)
+        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects agentic-ai-lab-temporal-derivation)
+        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/funs
+                 agentic-ai-lab-temporal-dependency-index agentic-ai-lab-temporal-reverse-dependency-plan-from-cuts)
+        :agentic-ai-lab/modules/evidence-assessment/candidate/evidence-store
         (only-in :gerbil-ascent/candidate/checked-program reasoning-source-snapshot))
 (export main)
 (def (field key rows) (cadr (assq key rows)))
@@ -65,20 +65,20 @@
 ;;; Upper-layer objects are consumed in this test fixture. Nothing here is
 ;;; registered in the Library build or implements temporal admission itself.
 (def (instant at (domain "txn"))
-  (poo-flow-temporal-instant (string-append domain "/" (number->string at)) domain at "fixture-owner" 'observed))
+  (agentic-ai-lab-temporal-instant (string-append domain "/" (number->string at)) domain at "fixture-owner" 'observed))
 (def (edge-id row) (string-append "edge/" (number->string (car row)) "/" (number->string (cadr row))))
 (def (atom-id relation row) (object->string (cons relation row)))
 (def (fixture-journal)
-  (let* ((valid (poo-flow-temporal-interval "valid" (instant 0 "valid") (instant 100 "valid") #t #f))
+  (let* ((valid (agentic-ai-lab-temporal-interval "valid" (instant 0 "valid") (instant 100 "valid") #t #f))
          (initial (map (lambda (row)
-                   (poo-flow-temporal-evidence-revision (string-append (edge-id row) "/assert")
+                   (agentic-ai-lab-temporal-evidence-revision (string-append (edge-id row) "/assert")
                      (edge-id row) 'assert #f (instant 10) valid (edge-id row))) base-edges))
-         (bridge (poo-flow-temporal-evidence-revision "bridge/assert" "bridge" 'assert #f (instant 10) valid "edge/4/8"))
-         (fixed (poo-flow-temporal-evidence-revision "bridge/correct" "bridge" 'correct "bridge/assert" (instant 20) valid "edge/5/8"))
-         (withdrawn (poo-flow-temporal-evidence-revision "bridge/retract" "bridge" 'retract "bridge/correct" (instant 30) #f #f)))
-    (poo-flow-temporal-evidence-journal "fixture-history" "txn" (append initial (list bridge fixed withdrawn)))))
+         (bridge (agentic-ai-lab-temporal-evidence-revision "bridge/assert" "bridge" 'assert #f (instant 10) valid "edge/4/8"))
+         (fixed (agentic-ai-lab-temporal-evidence-revision "bridge/correct" "bridge" 'correct "bridge/assert" (instant 20) valid "edge/5/8"))
+         (withdrawn (agentic-ai-lab-temporal-evidence-revision "bridge/retract" "bridge" 'retract "bridge/correct" (instant 30) #f #f)))
+    (agentic-ai-lab-temporal-evidence-journal "fixture-history" "txn" (append initial (list bridge fixed withdrawn)))))
 (def (project-edges journal at)
-  (let* ((cut (poo-flow-temporal-evidence-as-of journal (instant at) #f))
+  (let* ((cut (agentic-ai-lab-temporal-evidence-as-of journal (instant at) #f))
          (ids (.ref cut 'active-revision-identities)))
     (values cut
       (append (filter (lambda (row) (member (string-append (edge-id row) "/assert") ids)) base-edges)
@@ -97,11 +97,11 @@
     (error "retained Session and independently verified closure disagree")))
 (def (dependency-index cut cert)
   (let (nodes (field 'nodes cert))
-    (poo-flow-temporal-dependency-index "consumer-index" (.ref cut 'cut-digest) (.ref cut 'projection-digest) #t
+    (agentic-ai-lab-temporal-dependency-index "consumer-index" (.ref cut 'cut-digest) (.ref cut 'projection-digest) #t
       (map (lambda (node)
         (let* ((relation (list-ref node 2)) (row (list-ref node 3))
                (parents (map (lambda (id) (assoc id nodes)) (list-ref node 5))))
-          (poo-flow-temporal-derivation (atom-id relation row)
+          (agentic-ai-lab-temporal-derivation (atom-id relation row)
             (.ref cut 'cut-digest) (.ref cut 'projection-digest) "fixture-positive-support"
             (if (eq? (list-ref node 1) 'source)
               (list (if (and (eq? relation 'edge) (member row '((4 8) (5 8)))) "bridge"
@@ -117,7 +117,7 @@
                                         (gerbil-ascent-session-run session))
                          (begin (set! session (gerbil-ascent-open-session (library-program edges)))
                                 (gerbil-ascent-session-run session))))
-               (plan (and previous-cut (poo-flow-temporal-reverse-dependency-plan-from-cuts
+               (plan (and previous-cut (agentic-ai-lab-temporal-reverse-dependency-plan-from-cuts
                          (dependency-index previous-cut previous-cert) journal
                          (instant (- position 10)) (instant position) #f))))
           (unless (.ref result 'finished) (error "incomplete retained Session"))
@@ -152,7 +152,7 @@
           (set! old-source source) (set! old-handle (field 'handle resolved)))))
       (filter (lambda (p) (<= p at)) '(15 25 35)))
     (set! lifecycle (hash ("records" (reverse records)) ("currentKnowledgeAt" at)
-      ("ownership" "Synthetic consumer fixture. POO Flow selects revisions and schedules reevaluation; ASCENT retained Session computes relations; proof store independently verifies current finite results.")))))
+      ("ownership" "Synthetic consumer fixture. Agentic AI Lab selects revisions and schedules reevaluation; ASCENT retained Session computes relations; proof store independently verifies current finite results.")))))
 (def (fact atom) (reasoning-evidence-fact store source proposal (field 'handle resolved) atom))
 (def (check selection full?)
   (let* ((options (hash-ref task "options")) (goal (hash-ref task "goal"))

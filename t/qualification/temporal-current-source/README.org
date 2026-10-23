@@ -27,7 +27,7 @@ gxc -O -static t/qualification/temporal-current-source/native-test.ss
 Then use official =compile-exe= and =execute-pending-compile-jobs!=. Linking
 alone can reuse installed static code that predates a source edit. The entry's
 static compiler output must contain the current completion diagnostics, and
-the run must enable =POO_FLOW_TEST_PROGRESS= to expose those real boundaries.
+the run must enable =AGENTIC_AI_LAB_TEST_PROGRESS= to expose those real boundaries.
 The entry also imports named dependency contexts through the official expander
 before gxtest discovery, reporting only completed imports. A single stalled
 import still fails the five-second gate. Compile changed dependency and test
@@ -88,7 +88,7 @@ the public helper's import syntax; =gxtest-expander-missing.log= preserves that
 failure. The entry now calls the official =gerbil-load-expander!= hook before
 the same upstream runner, matching Gerbil's interpreter initialization.
 
-The rebuilt entry also exposes optional =POO_FLOW_TEST_PROGRESS= completion
+The rebuilt entry also exposes optional =AGENTIC_AI_LAB_TEST_PROGRESS= completion
 events after static initialization and after expander initialization. These
 are completed stages, not timer output. The first diagnostic run timed out
 without an entry event: =gxtest-before-entry-failed.log=. Inspection subsequently

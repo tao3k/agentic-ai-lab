@@ -83,7 +83,7 @@ retains historical receipts, and atomically retires coverage and reviewability.
 | Invariant | Model obligation | Executable counterpart |
 |-----------+------------------+------------------------|
 | Type | Every state value stays in its finite domain | POO type predicates and constructor validation |
-| Reviewability | Current cut, coverage, complete required receipts and valid checks | =poo-flow-candidate-exchange= status calculation |
+| Reviewability | Current cut, coverage, complete required receipts and valid checks | =agentic-ai-lab-candidate-exchange= status calculation |
 | Coverage | No coverage declaration implies no reviewable candidate | =source-coverage-digest= =#f= gives =pending= |
 | Uniqueness | First receipt/check is unique at its key; a later conflict revokes reviewability | Multiple POO receipts or conflicting checks are =contested= |
 | Dispute | =contested= and =reviewable= stay disjoint | Exchange recomputation gives =contested= priority |
@@ -105,7 +105,7 @@ theorem.
 :CUSTOM_ID: temporal-candidate-exchange-adapters
 :END:
 
-The =poo-flow-gql-candidate-receipt= bridge now accepts a canonical Query,
+The =agentic-ai-lab-gql-candidate-receipt= bridge now accepts a canonical Query,
 ElementSpace, GQL Provider and =SourceQueryReceipt=.  It requires the
 ElementSpace semantic revision to equal the Temporal cut digest, recomputes
 Query admission, rebinds the Provider candidate through the Query method,
@@ -117,7 +117,7 @@ identifier, not authenticated source bytes.
 
 The Query owner now has a finite [[file:../../query/results/model.org][scalar result-row profile]]: POO cells,
 rows and a set with a versioned canonical digest.  The separate
-=poo-flow-gql-candidate-row-check= replays that set and compares its digest,
+=agentic-ai-lab-gql-candidate-row-check= replays that set and compares its digest,
 count and completion bit with the =CandidateReceipt=.  A mismatch is
 =invalid=; a matching incomplete set is =unknown=; a matching complete set
 is =valid= *for this local row-consistency claim*.  The bridge itself does

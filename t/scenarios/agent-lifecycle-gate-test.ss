@@ -10,7 +10,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/session/lifecycle-gate)
+        :agentic-ai-lab/modules/session/lifecycle-gate)
 
 
 (export agent-lifecycle-gate-test)
@@ -23,9 +23,9 @@
    (else
     (alist-value key (cdr entries)))))
 
-;; : (-> Unit PooFlowAgentLifecycleReceipt)
+;; : (-> Unit AgenticAILabAgentLifecycleReceipt)
 (def lifecycle-accepted-receipt
-  (poo-flow-agent-lifecycle-receipt
+  (agentic-ai-lab-agent-lifecycle-receipt
    'session-main
    'nono-restricted
    'governed-loop
@@ -46,9 +46,9 @@
    #t
    #t))
 
-;; : (-> Unit PooFlowAgentLifecycleReceipt)
+;; : (-> Unit AgenticAILabAgentLifecycleReceipt)
 (def lifecycle-unparented-subagent-receipt
-  (poo-flow-agent-lifecycle-receipt
+  (agentic-ai-lab-agent-lifecycle-receipt
    'session-child
    'nono-restricted
    'governed-loop
@@ -69,9 +69,9 @@
    #t
    #t))
 
-;; : (-> Unit PooFlowAgentLifecycleReceipt)
+;; : (-> Unit AgenticAILabAgentLifecycleReceipt)
 (def lifecycle-sandbox-leak-receipt
-  (poo-flow-agent-lifecycle-receipt
+  (agentic-ai-lab-agent-lifecycle-receipt
    'session-main
    'nono-wide
    'governed-loop
@@ -92,9 +92,9 @@
    #t
    #f))
 
-;; : (-> Unit PooFlowAgentLifecycleReceipt)
+;; : (-> Unit AgenticAILabAgentLifecycleReceipt)
 (def lifecycle-loop-open-receipt
-  (poo-flow-agent-lifecycle-receipt
+  (agentic-ai-lab-agent-lifecycle-receipt
    'session-main
    'nono-restricted
    'unbounded-loop
@@ -115,35 +115,35 @@
    #t
    #f))
 
-;; : (-> Unit PooFlowAgentLifecycleGate)
+;; : (-> Unit AgenticAILabAgentLifecycleGate)
 (def lifecycle-accepted-gate
-  (poo-flow-agent-lifecycle-gate
+  (agentic-ai-lab-agent-lifecycle-gate
    'session-sandbox-loop-subagent
    'public
    lifecycle-accepted-receipt
    '((owner . agent-lifecycle-gate-test))))
 
-;; : (-> Unit PooFlowAgentLifecycleGate)
+;; : (-> Unit AgenticAILabAgentLifecycleGate)
 (def lifecycle-unparented-subagent-gate
-  (poo-flow-agent-lifecycle-gate
+  (agentic-ai-lab-agent-lifecycle-gate
    'unparented-subagent
    'public
    lifecycle-unparented-subagent-receipt
    '((owner . agent-lifecycle-gate-test)
      (bad-case . unparented-subagent))))
 
-;; : (-> Unit PooFlowAgentLifecycleGate)
+;; : (-> Unit AgenticAILabAgentLifecycleGate)
 (def lifecycle-sandbox-leak-gate
-  (poo-flow-agent-lifecycle-gate
+  (agentic-ai-lab-agent-lifecycle-gate
    'sandbox-scope-leak
    'public
    lifecycle-sandbox-leak-receipt
    '((owner . agent-lifecycle-gate-test)
      (bad-case . sandbox-scope-leak))))
 
-;; : (-> Unit PooFlowAgentLifecycleGate)
+;; : (-> Unit AgenticAILabAgentLifecycleGate)
 (def lifecycle-loop-open-gate
-  (poo-flow-agent-lifecycle-gate
+  (agentic-ai-lab-agent-lifecycle-gate
    'loop-without-exit
    'public
    lifecycle-loop-open-receipt
@@ -152,19 +152,19 @@
 
 ;; : TestSuite
 (def agent-lifecycle-gate-test
-  (test-suite "poo-flow AI agent lifecycle proof gate"
+  (test-suite "agentic-ai-lab AI agent lifecycle proof gate"
     (yuanxu-test-case "accepts complete session sandbox loop subagent lifecycle"
       (let* ((gate lifecycle-accepted-gate)
-             (facts (poo-flow-agent-lifecycle-gate->lean-facts gate)))
-        (check-equal? (poo-flow-agent-lifecycle-gate? gate) #t)
-        (check-equal? (poo-flow-agent-lifecycle-receipt?
+             (facts (agentic-ai-lab-agent-lifecycle-gate->lean-facts gate)))
+        (check-equal? (agentic-ai-lab-agent-lifecycle-gate? gate) #t)
+        (check-equal? (agentic-ai-lab-agent-lifecycle-receipt?
                        lifecycle-accepted-receipt)
                       #t)
-        (check-equal? (poo-flow-agent-lifecycle-gate-name gate)
+        (check-equal? (agentic-ai-lab-agent-lifecycle-gate-name gate)
                       'session-sandbox-loop-subagent)
-        (check-equal? (poo-flow-agent-lifecycle-gate-accepted? gate) #t)
+        (check-equal? (agentic-ai-lab-agent-lifecycle-gate-accepted? gate) #t)
         (check-equal?
-         (poo-flow-agent-lifecycle-lean-fact-contract-complete? facts)
+         (agentic-ai-lab-agent-lifecycle-lean-fact-contract-complete? facts)
          #t)
         (check-equal? (alist-value
                        'ai.lifecycle/reusable-policy-surface
@@ -182,10 +182,10 @@
                       #t)))
     (yuanxu-test-case "rejects subagents without parent session binding"
       (let* ((gate lifecycle-unparented-subagent-gate)
-             (facts (poo-flow-agent-lifecycle-gate->lean-facts gate)))
-        (check-equal? (poo-flow-agent-lifecycle-gate-accepted? gate) #f)
+             (facts (agentic-ai-lab-agent-lifecycle-gate->lean-facts gate)))
+        (check-equal? (agentic-ai-lab-agent-lifecycle-gate-accepted? gate) #f)
         (check-equal?
-         (poo-flow-agent-lifecycle-lean-fact-contract-complete? facts)
+         (agentic-ai-lab-agent-lifecycle-lean-fact-contract-complete? facts)
          #t)
         (check-equal? (alist-value 'ai.session/parent-bound facts) #f)
         (check-equal? (alist-value 'ai.subagent/parented facts) #f)
@@ -197,10 +197,10 @@
                       #f)))
     (yuanxu-test-case "rejects sandbox and tool scope leaks"
       (let* ((gate lifecycle-sandbox-leak-gate)
-             (facts (poo-flow-agent-lifecycle-gate->lean-facts gate)))
-        (check-equal? (poo-flow-agent-lifecycle-gate-accepted? gate) #f)
+             (facts (agentic-ai-lab-agent-lifecycle-gate->lean-facts gate)))
+        (check-equal? (agentic-ai-lab-agent-lifecycle-gate-accepted? gate) #f)
         (check-equal?
-         (poo-flow-agent-lifecycle-lean-fact-contract-complete? facts)
+         (agentic-ai-lab-agent-lifecycle-lean-fact-contract-complete? facts)
          #t)
         (check-equal? (alist-value 'ai.sandbox/scope-contained facts) #f)
         (check-equal? (alist-value 'ai.tool/permissions-contained facts) #f)
@@ -213,10 +213,10 @@
                       #f)))
     (yuanxu-test-case "rejects loop policies without exit and handoff guards"
       (let* ((gate lifecycle-loop-open-gate)
-             (facts (poo-flow-agent-lifecycle-gate->lean-facts gate)))
-        (check-equal? (poo-flow-agent-lifecycle-gate-accepted? gate) #f)
+             (facts (agentic-ai-lab-agent-lifecycle-gate->lean-facts gate)))
+        (check-equal? (agentic-ai-lab-agent-lifecycle-gate-accepted? gate) #f)
         (check-equal?
-         (poo-flow-agent-lifecycle-lean-fact-contract-complete? facts)
+         (agentic-ai-lab-agent-lifecycle-lean-fact-contract-complete? facts)
          #t)
         (check-equal? (alist-value 'ai.loop/start-guarded facts) #t)
         (check-equal? (alist-value 'ai.loop/exit-defined facts) #f)

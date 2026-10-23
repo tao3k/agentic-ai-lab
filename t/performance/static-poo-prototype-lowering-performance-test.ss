@@ -17,7 +17,7 @@
   (test-suite "static POO prototype lowering performance"
     (yuanxu-test-case "avoids full .o normalization for bounded constant rows"
       (let (receipt (static-poo-prototype-lowering-benchmark))
-        (display "[poo-flow-benchmark] static-poo-prototype-lowering ")
+        (display "[agentic-ai-lab-benchmark] static-poo-prototype-lowering ")
         (write receipt)
         (newline)
         (force-output)

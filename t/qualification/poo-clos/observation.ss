@@ -10,7 +10,7 @@
         (only-in :yuanxu/observability/debug
                  yuanxu-debug-memory-policy
                  yuanxu-debug-memory-snapshot
-                 call-with-poo-flow-debug-memory-monitor
+                 call-with-agentic-ai-lab-debug-memory-monitor
                  YuanxuDebugMemoryAnomaly?
                  YuanxuDebugMemoryAnomaly-receipt))
 
@@ -75,7 +75,7 @@
      (lambda ()
        (call-with-values
         (lambda ()
-          (call-with-poo-flow-debug-memory-monitor
+          (call-with-agentic-ai-lab-debug-memory-monitor
            policy phase thunk port: port emit?: #f))
         (lambda (value receipt)
           (poo-clos-observation-emit

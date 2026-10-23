@@ -15,7 +15,7 @@ deliberately outside the POO CLOS core denominator.
 | =clause-ledger-test.ss= | closure, uniqueness, profile separation, and native-reader binding to exported suites with nonzero checks |
 | =observation.ss= | optional POO memory-observation extension for scenario tests |
 
-POO Flow does not maintain a qualification-local source catalog, dependency
+Agentic AI Lab does not maintain a qualification-local source catalog, dependency
 order, compiler wrapper, output directory, artifact scanner, or manifest.
 =build.ss= declares the package once through the ASP Gerbil Scheme Build API;
 the inherited native build graph owns those concerns.

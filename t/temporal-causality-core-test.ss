@@ -7,7 +7,7 @@
         (only-in :clan/poo/object .ref)
         (only-in :yuanxu/graph/types
                  yuanxu-graph yuanxu-graph-edge yuanxu-graph-node)
-        :poo-flow/modules/temporal-causality/interface)
+        :agentic-ai-lab/modules/temporal-causality/interface)
 
 (export temporal-causality-core-test)
 
@@ -28,7 +28,7 @@
                     (yuanxu-graph-edge
                      'profile 'source 'DECLARES_SOURCE))))
             (receipt
-             (poo-flow-structural-impact-analyze
+             (agentic-ai-lab-structural-impact-analyze
               graph
               '(source)
               '(HAS_EFFECTIVE_PROFILE DECLARES_SOURCE)
@@ -40,7 +40,7 @@
                (lambda (witness)
                  (eq? (.ref witness 'target-node-id) 'case))
                (.ref receipt 'relation-trajectories)))))
-       (check (poo-flow-structural-impact-receipt? receipt) => #t)
+       (check (agentic-ai-lab-structural-impact-receipt? receipt) => #t)
        (check (.ref receipt 'status) => 'snapshot-scoped-impact)
        (check (.ref receipt 'affected-node-ids)
               => '(source profile case))
@@ -58,7 +58,7 @@
               (list (yuanxu-graph-node 'changed))
               '()))
             (receipt
-             (poo-flow-structural-impact-analyze
+             (agentic-ai-lab-structural-impact-analyze
               graph '(changed) '(dependency) 'dependents #f)))
        (check (.ref receipt 'status) => 'partial-impact)))
 
@@ -73,7 +73,7 @@
                     (yuanxu-graph-edge
                      'verification 'requirement 'TRACES_BACK))))
             (receipt
-             (poo-flow-structural-impact-analyze
+             (agentic-ai-lab-structural-impact-analyze
               graph '(requirement) '(VERIFIES TRACES_BACK)
               'dependencies #t)))
        (check (.ref receipt 'status) => 'snapshot-scoped-impact)
@@ -85,9 +85,9 @@
      (let* ((subject "patient-1")
             (event
              (lambda (identity kind position parents modality committed?)
-               (poo-flow-causal-event
+               (agentic-ai-lab-causal-event
                 identity subject kind
-                (poo-flow-temporal-observation
+                (agentic-ai-lab-temporal-observation
                  (string-append identity "/observation")
                  'logical-version position "clinical-ledger")
                 (string-append identity "/payload")
@@ -113,22 +113,22 @@
              (event "follow-up-1" 'follow-up 9
                     '("error-discovery-1") 'declared #f))
             (event-graph
-             (poo-flow-causal-event-graph
+             (agentic-ai-lab-causal-event-graph
               subject
               (list prescription administration observation discovery
                     future-dose counterfactual outside)))
-            (cut (poo-flow-causal-cut event-graph 4))
+            (cut (agentic-ai-lab-causal-cut event-graph 4))
             (receipt
-             (poo-flow-temporal-causal-classify
+             (agentic-ai-lab-temporal-causal-classify
               event-graph cut "prescription-1" 6)))
-       (check (poo-flow-causal-event-graph? event-graph) => #t)
-       (check (poo-flow-causal-cut? cut) => #t)
+       (check (agentic-ai-lab-causal-event-graph? event-graph) => #t)
+       (check (agentic-ai-lab-causal-cut? cut) => #t)
        (check (.ref cut 'complete?) => #t)
        (check (map (lambda (event) (.ref event 'identity))
                    (.ref cut 'events))
               => '("prescription-1" "administration-1"
                    "observation-1" "error-discovery-1"))
-       (check (poo-flow-temporal-classification-receipt? receipt) => #t)
+       (check (agentic-ai-lab-temporal-classification-receipt? receipt) => #t)
        (check (.ref receipt 'status) => 'bounded-temporal-classification)
        (check (.ref receipt 'past-event-ids)
               => '("prescription-1" "administration-1" "observation-1"))
@@ -149,9 +149,9 @@
      (let* ((subject "patient-1")
             (event
              (lambda (identity position parents modality committed?)
-               (poo-flow-causal-event
+               (agentic-ai-lab-causal-event
                 identity subject 'clinical-event
-                (poo-flow-temporal-observation
+                (agentic-ai-lab-temporal-observation
                  (string-append identity "/time")
                  'logical-version position "clinical-ledger")
                 (string-append identity "/payload")
@@ -168,17 +168,17 @@
                      'counterfactual #f)
               (event "benefit" 6 '("ready") 'hypothesized #f)
               (event "harm" 5 '("wrong-effect") 'hypothesized #f)))
-            (event-graph (poo-flow-causal-event-graph subject events))
+            (event-graph (agentic-ai-lab-causal-event-graph subject events))
             (contract
-             (poo-flow-causal-trajectory-contract
+             (agentic-ai-lab-causal-trajectory-contract
               "clinical-safety" "request"
               '("evidence" "hold" "review" "ready")
               '(("auto-approval" "wrong-effect"))
               '("benefit") '("harm")))
             (assessment
-             (poo-flow-causal-trajectory-assess contract event-graph)))
-       (check (poo-flow-causal-trajectory-contract? contract) => #t)
-       (check (poo-flow-causal-trajectory-assessment? assessment) => #t)
+             (agentic-ai-lab-causal-trajectory-assess contract event-graph)))
+       (check (agentic-ai-lab-causal-trajectory-contract? contract) => #t)
+       (check (agentic-ai-lab-causal-trajectory-assessment? assessment) => #t)
        (check (.ref assessment 'status) => 'causal-trajectory-admitted)
        (check (.ref assessment 'accepted?) => #t)
        (check (.ref assessment 'error-event-paths)
@@ -192,15 +192,15 @@
      (let* ((subject "patient-1")
             (event
              (lambda (identity position parents modality committed?)
-               (poo-flow-causal-event
+               (agentic-ai-lab-causal-event
                 identity subject 'clinical-event
-                (poo-flow-temporal-observation
+                (agentic-ai-lab-temporal-observation
                  (string-append identity "/time")
                  'logical-version position "clinical-ledger")
                 (string-append identity "/payload")
                 parents modality committed?)))
             (event-graph
-             (poo-flow-causal-event-graph
+             (agentic-ai-lab-causal-event-graph
               subject
               (list (event "request" 1 '() 'observed #t)
                     (event "review" 2 '("request") 'observed #t)
@@ -209,11 +209,11 @@
                     (event "harm" 3 '("unsafe-auto-approval")
                            'hypothesized #f))))
             (contract
-             (poo-flow-causal-trajectory-contract
+             (agentic-ai-lab-causal-trajectory-contract
               "reject-observed-error" "request" '("review")
               '(("unsafe-auto-approval")) '() '("harm")))
             (assessment
-             (poo-flow-causal-trajectory-assess contract event-graph)))
+             (agentic-ai-lab-causal-trajectory-assess contract event-graph)))
        (check (.ref assessment 'accepted?) => #f)
        (check (map car (.ref assessment 'diagnostics))
               => '(invalid-error-modality))
@@ -221,17 +221,17 @@
 
    (yuanxu-test-case "missing parents keep temporal classification partial"
      (let* ((event
-             (poo-flow-causal-event
+             (agentic-ai-lab-causal-event
               "observation-1" "patient-1" 'clinical-observation
-              (poo-flow-temporal-observation
+              (agentic-ai-lab-temporal-observation
                "observation-1/time" 'logical-version 2 "clinical-ledger")
               "observation-1/payload"
               '("missing-administration") 'observed #t))
             (event-graph
-             (poo-flow-causal-event-graph "patient-1" (list event)))
-            (cut (poo-flow-causal-cut event-graph 2))
+             (agentic-ai-lab-causal-event-graph "patient-1" (list event)))
+            (cut (agentic-ai-lab-causal-cut event-graph 2))
             (receipt
-             (poo-flow-temporal-causal-classify
+             (agentic-ai-lab-temporal-causal-classify
               event-graph cut "observation-1" 4)))
        (check (.ref event-graph 'complete?) => #f)
        (check (.ref cut 'complete?) => #f)
@@ -241,23 +241,23 @@
 
    (yuanxu-test-case "parent-after-child ordering invalidates the causal cut"
      (let* ((parent
-             (poo-flow-causal-event
+             (agentic-ai-lab-causal-event
               "late-parent" "patient-1" 'late-parent
-              (poo-flow-temporal-observation
+              (agentic-ai-lab-temporal-observation
                "late-parent/time" 'logical-version 3 "clinical-ledger")
               "late-parent/payload" '() 'observed #t))
             (child
-             (poo-flow-causal-event
+             (agentic-ai-lab-causal-event
               "early-child" "patient-1" 'early-child
-              (poo-flow-temporal-observation
+              (agentic-ai-lab-temporal-observation
                "early-child/time" 'logical-version 2 "clinical-ledger")
               "early-child/payload" '("late-parent") 'observed #t))
             (event-graph
-             (poo-flow-causal-event-graph
+             (agentic-ai-lab-causal-event-graph
               "patient-1" (list parent child)))
-            (cut (poo-flow-causal-cut event-graph 3))
+            (cut (agentic-ai-lab-causal-cut event-graph 3))
             (receipt
-             (poo-flow-temporal-causal-classify
+             (agentic-ai-lab-temporal-causal-classify
               event-graph cut "late-parent" 4)))
        (check (.ref event-graph 'temporal-order-violations)
               => '(("late-parent" "early-child")))
@@ -268,14 +268,14 @@
    (yuanxu-test-case "same-time causal cycle cannot qualify as complete"
      (let* ((event
              (lambda (identity parent)
-               (poo-flow-causal-event
+               (agentic-ai-lab-causal-event
                 identity "cycle-probe" 'proposed-event
-                (poo-flow-temporal-observation
+                (agentic-ai-lab-temporal-observation
                  (string-append identity "/time")
                  'logical-version 1 "cycle-probe")
                 identity (list parent) 'counterfactual #f)))
             (graph
-             (poo-flow-causal-event-graph
+             (agentic-ai-lab-causal-event-graph
               "cycle-probe"
               (list (event "a" "b") (event "b" "a")))))
        (check (.ref graph 'complete?) => #f)

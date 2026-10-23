@@ -9,25 +9,25 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every find)
-        (only-in :poo-flow/modules/temporal-causality/truth-maintenance/types
-                 poo-flow-temporal-invalidation-plan?)
-        (only-in :poo-flow/modules/temporal-causality/conclusions/types
-                 poo-flow-temporal-conclusion-revision?
-                 poo-flow-temporal-conclusion-journal?
-                 poo-flow-temporal-selection-observation?
-                 poo-flow-temporal-selection-plan?)
-        (only-in :poo-flow/modules/temporal-causality/conclusions/objects
-                 poo-flow-temporal-conclusion-revision-value
-                 poo-flow-temporal-conclusion-journal-value
-                 poo-flow-temporal-selection-plan-value))
+        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/types
+                 agentic-ai-lab-temporal-invalidation-plan?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/conclusions/types
+                 agentic-ai-lab-temporal-conclusion-revision?
+                 agentic-ai-lab-temporal-conclusion-journal?
+                 agentic-ai-lab-temporal-selection-observation?
+                 agentic-ai-lab-temporal-selection-plan?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/conclusions/objects
+                 agentic-ai-lab-temporal-conclusion-revision-value
+                 agentic-ai-lab-temporal-conclusion-journal-value
+                 agentic-ai-lab-temporal-selection-plan-value))
 
-(export poo-flow-temporal-conclusion-root
-        poo-flow-temporal-conclusion-change
-        poo-flow-temporal-conclusion-journal
-        poo-flow-temporal-conclusion-journal-replay
-        poo-flow-temporal-conclusion-journal-extend
-        poo-flow-temporal-selection-prepare
-        poo-flow-temporal-selection-plan-replay)
+(export agentic-ai-lab-temporal-conclusion-root
+        agentic-ai-lab-temporal-conclusion-change
+        agentic-ai-lab-temporal-conclusion-journal
+        agentic-ai-lab-temporal-conclusion-journal-replay
+        agentic-ai-lab-temporal-conclusion-journal-extend
+        agentic-ai-lab-temporal-selection-prepare
+        agentic-ai-lab-temporal-selection-plan-replay)
 
 (def (text? value)
   (and (string? value) (> (string-length value) 0)))
@@ -43,19 +43,19 @@
 
 ;;; A root conclusion carries an evaluator-owned proof identity. This type
 ;;; validates the envelope, not the theorem or domain result it names.
-(def (poo-flow-temporal-conclusion-root
+(def (agentic-ai-lab-temporal-conclusion-root
       identity subject scope cut projection policy generation result proof)
-  (poo-flow-temporal-conclusion-revision-value
+  (agentic-ai-lab-temporal-conclusion-revision-value
    identity subject scope cut projection policy generation
    'assert #f result proof #f))
 
 ;;; The invalidation plan establishes only the reevaluation frontier. The
 ;;; caller supplies a separate proof identity for the corrected/retracted
 ;;; result; the actual proof admission remains with its evaluator.
-(def (poo-flow-temporal-conclusion-change
+(def (agentic-ai-lab-temporal-conclusion-change
       identity previous plan operation result proof policy generation)
-  (unless (and (poo-flow-temporal-conclusion-revision? previous)
-               (poo-flow-temporal-invalidation-plan? plan)
+  (unless (and (agentic-ai-lab-temporal-conclusion-revision? previous)
+               (agentic-ai-lab-temporal-invalidation-plan? plan)
                (text? identity) (text? proof) (text? policy)
                (text? generation)
                (not (equal? identity (.ref previous 'identity)))
@@ -74,7 +74,7 @@
                                 (.ref plan 'revised-projection-digest))))
                (if (eq? operation 'correct) (text? result) (not result)))
     (error "conclusion change lacks a complete affected frontier or proof binding"))
-  (poo-flow-temporal-conclusion-revision-value
+  (agentic-ai-lab-temporal-conclusion-revision-value
    identity (.ref previous 'subject-identity) (.ref previous 'scope-identity)
    (.ref plan 'revised-cut-digest) (.ref plan 'revised-projection-digest)
    policy generation operation
@@ -89,9 +89,9 @@
 
 ;;; A journal is a finite immutable graph. Correction branches are retained;
 ;;; they are not resolved by identity order or a latest-value rule.
-(def (poo-flow-temporal-conclusion-journal identity revisions)
+(def (agentic-ai-lab-temporal-conclusion-journal identity revisions)
   (unless (and (text? identity) (list? revisions)
-               (every poo-flow-temporal-conclusion-revision? revisions))
+               (every agentic-ai-lab-temporal-conclusion-revision? revisions))
     (error "invalid temporal conclusion journal"))
   (let ((index (make-hash-table))
         (color (make-hash-table)))
@@ -134,20 +134,20 @@
           (list-sort (lambda (a b)
                        (string<? (.ref a 'identity) (.ref b 'identity)))
                      revisions))
-      (poo-flow-temporal-conclusion-journal-value
+      (agentic-ai-lab-temporal-conclusion-journal-value
        identity
-       (digest (list 'poo-flow.temporal-conclusion-journal.v1
+       (digest (list 'agentic-ai-lab.temporal-conclusion-journal.v1
                      identity (map revision-row canonical)))
        canonical))))
 
 ;;; Check the complete graph and digest again at the point of use. A POO
 ;;; journal value can be copied across a boundary or reconstructed by a caller;
 ;;; its type shape alone does not bind its digest to its rows.
-(def (poo-flow-temporal-conclusion-journal-replay journal)
-  (unless (poo-flow-temporal-conclusion-journal? journal)
+(def (agentic-ai-lab-temporal-conclusion-journal-replay journal)
+  (unless (agentic-ai-lab-temporal-conclusion-journal? journal)
     (error "invalid temporal conclusion journal"))
   (let (canonical
-        (poo-flow-temporal-conclusion-journal
+        (agentic-ai-lab-temporal-conclusion-journal
          (.ref journal 'identity) (.ref journal 'revisions)))
     (unless (equal? (.ref canonical 'semantic-digest)
                     (.ref journal 'semantic-digest))
@@ -155,23 +155,23 @@
     canonical))
 
 ;;; Preserve every old row when admitting a new set of revision envelopes.
-(def (poo-flow-temporal-conclusion-journal-extend journal additions)
-  (unless (and (poo-flow-temporal-conclusion-journal? journal)
+(def (agentic-ai-lab-temporal-conclusion-journal-extend journal additions)
+  (unless (and (agentic-ai-lab-temporal-conclusion-journal? journal)
                (list? additions) (pair? additions)
-               (every poo-flow-temporal-conclusion-revision? additions))
+               (every agentic-ai-lab-temporal-conclusion-revision? additions))
     (error "invalid temporal conclusion journal extension"))
-  (poo-flow-temporal-conclusion-journal-replay journal)
-  (poo-flow-temporal-conclusion-journal
+  (agentic-ai-lab-temporal-conclusion-journal-replay journal)
+  (agentic-ai-lab-temporal-conclusion-journal
    (.ref journal 'identity)
    (append (.ref journal 'revisions) additions)))
 
 ;;; Prepare an external compare-and-swap over a versioned active pointer.
 ;;; A ready plan can still lose a race before the runtime commits it.
-(def (poo-flow-temporal-selection-prepare
+(def (agentic-ai-lab-temporal-selection-prepare
       journal proposed observation expected-version)
-  (unless (and (poo-flow-temporal-conclusion-journal? journal)
-               (poo-flow-temporal-conclusion-revision? proposed)
-               (poo-flow-temporal-selection-observation? observation)
+  (unless (and (agentic-ai-lab-temporal-conclusion-journal? journal)
+               (agentic-ai-lab-temporal-conclusion-revision? proposed)
+               (agentic-ai-lab-temporal-selection-observation? observation)
                (natural? expected-version)
                (memq (.ref proposed 'operation) '(correct retract))
                (equal? (.ref proposed 'subject-identity)
@@ -179,7 +179,7 @@
                (equal? (.ref proposed 'scope-identity)
                        (.ref observation 'scope-identity)))
     (error "invalid temporal active-selection request"))
-  (poo-flow-temporal-conclusion-journal-replay journal)
+  (agentic-ai-lab-temporal-conclusion-journal-replay journal)
   (let (stored
         (find (lambda (entry)
                 (equal? (.ref entry 'identity) (.ref proposed 'identity)))
@@ -190,7 +190,7 @@
          (ready? (and (= expected-version (.ref observation 'version))
                       (equal? expected-id
                               (.ref observation 'selected-revision-identity)))))
-    (poo-flow-temporal-selection-plan-value
+    (agentic-ai-lab-temporal-selection-plan-value
      (.ref journal 'semantic-digest) (.ref observation 'identity)
      (.ref proposed 'subject-identity) (.ref proposed 'scope-identity)
      expected-version expected-id
@@ -211,12 +211,12 @@
          proposed-revision-identity change-proof-identity status
          requires-atomic-cas? runtime-executed?)))
 
-(def (poo-flow-temporal-selection-plan-replay
+(def (agentic-ai-lab-temporal-selection-plan-replay
       plan journal proposed observation)
-  (unless (poo-flow-temporal-selection-plan? plan)
+  (unless (agentic-ai-lab-temporal-selection-plan? plan)
     (error "invalid temporal selection plan"))
   (let (canonical
-        (poo-flow-temporal-selection-prepare
+        (agentic-ai-lab-temporal-selection-prepare
          journal proposed observation (.ref plan 'expected-version)))
     (unless (equal? (selection-plan-row canonical)
                     (selection-plan-row plan))

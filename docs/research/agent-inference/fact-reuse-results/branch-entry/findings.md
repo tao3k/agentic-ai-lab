@@ -1,6 +1,6 @@
 # Branch-entry evidence: bounded Library result
 
-The current Library and public Python binding deliver native evidence **before the first thinking call of each sibling branch**. Fact and Scheme receive identical path conclusions; Scheme additionally receives shared named support nodes. Actual requests, source hashes, native packets and independent scores pass the protocol audit. No anti-repetition instructions were added. The retained native store builds one proof per source and reuses it; this is computational evidence, not POO Flow authority or temporal trust.
+The current Library and public Python binding deliver native evidence **before the first thinking call of each sibling branch**. Fact and Scheme receive identical path conclusions; Scheme additionally receives shared named support nodes. Actual requests, source hashes, native packets and independent scores pass the protocol audit. No anti-repetition instructions were added. The retained native store builds one proof per source and reuses it; this is computational evidence, not Agentic AI Lab authority or temporal trust.
 
 Producer: `01f00e23c2eb90dfd24f834d1324487f643b49b9`. All 102 frozen inputs match the committed source. A fresh bundle checkout passes the cold Scheme build, Python API/ABI and 15 consumer checks, 1,000 sampled Quint traces, 32 native Quint observations and the scoped Lean ProofDag proof. These are local Darwin qualifications; no remote CI or other-host claim is made.
 

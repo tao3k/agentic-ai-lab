@@ -5,27 +5,27 @@
 ;;; Boundary: defines the Runtime v0 wire ABI for protocol-person promotion.
 ;;; Invariant: ABI receipts preserve policy decision and provenance identities.
 (import (only-in :clan/poo/object .o .ref object?)
-        :poo-flow/modules/governance/policy/protocol-person-promotion
-        :poo-flow/modules/workflow/contracts/runtime-v0-abi-schema)
+        :agentic-ai-lab/modules/governance/policy/protocol-person-promotion
+        :agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema)
 
 (export #t)
 
-(def +poo-flow-runtime-language-promotion-request-schema+
+(def +agentic-ai-lab-runtime-language-promotion-request-schema+
   (string->symbol
-   (.ref +poo-flow-runtime-v0-abi-schema+ 'promotion-request-schema)))
+   (.ref +agentic-ai-lab-runtime-v0-abi-schema+ 'promotion-request-schema)))
 
-(def +poo-flow-runtime-language-promotion-receipt-schema+
+(def +agentic-ai-lab-runtime-language-promotion-receipt-schema+
   (string->symbol
-   (.ref +poo-flow-runtime-v0-abi-schema+ 'promotion-receipt-schema)))
+   (.ref +agentic-ai-lab-runtime-v0-abi-schema+ 'promotion-receipt-schema)))
 
-(def +poo-flow-runtime-language-promotion-required-capabilities+
+(def +agentic-ai-lab-runtime-language-promotion-required-capabilities+
   '(PROMOTION_MATERIALIZE
     INJECTION_RECEIPT
     ROLLBACK
     EXACTLY_ONCE
     LANGUAGE_QUALIFICATION))
 
-(def +poo-flow-runtime-language-promotion-outcomes+
+(def +agentic-ai-lab-runtime-language-promotion-outcomes+
   '(accepted
     materialized
     injected
@@ -36,15 +36,15 @@
     failed))
 
 ;; : (-> PooPromotionIntent PooRuntimeLanguagePromotionIdempotencyKey)
-(def (poo-flow-runtime-language-promotion-idempotency-key intent)
-  (.o (kind 'poo-flow.runtime-language.promotion-idempotency-key.1)
+(def (agentic-ai-lab-runtime-language-promotion-idempotency-key intent)
+  (.o (kind 'agentic-ai-lab.runtime-language.promotion-idempotency-key.1)
       (promotion-id (.ref intent 'promotion-id))
       (materialization-id (.ref intent 'materialization-id))
       (candidate-digest (.ref intent 'candidate-digest))
       (injection-target (.ref intent 'injection-target))))
 
 ;; : (-> PooRuntimeLanguagePromotionIdempotencyKey Alist)
-(def (poo-flow-runtime-language-promotion-idempotency-key->alist key)
+(def (agentic-ai-lab-runtime-language-promotion-idempotency-key->alist key)
   (list (cons 'kind (.ref key 'kind))
         (cons 'promotion-id (.ref key 'promotion-id))
         (cons 'materialization-id (.ref key 'materialization-id))
@@ -52,31 +52,31 @@
         (cons 'injection-target (.ref key 'injection-target))))
 
 ;; : (-> PooPromotionIntent PooPromotionValidationReceipt PooRuntimeLanguagePromotionRequest)
-(def (poo-flow-runtime-language-promotion-request intent validation-receipt)
+(def (agentic-ai-lab-runtime-language-promotion-request intent validation-receipt)
   (unless (and (object? intent)
-               (eq? (.ref intent 'kind) 'poo-flow-promotion-intent))
+               (eq? (.ref intent 'kind) 'agentic-ai-lab-promotion-intent))
     (error "runtime language ABI requires a POO promotion intent" intent))
-  (unless (and (poo-flow-promotion-validation-receipt?
+  (unless (and (agentic-ai-lab-promotion-validation-receipt?
                 validation-receipt)
-               (poo-flow-promotion-validation-receipt-approved?
+               (agentic-ai-lab-promotion-validation-receipt-approved?
                 validation-receipt))
     (error "runtime language ABI rejects an unapproved promotion"
            validation-receipt))
   (unless (and (equal? (.ref intent 'promotion-id)
-                       (poo-flow-promotion-validation-receipt-promotion-id
+                       (agentic-ai-lab-promotion-validation-receipt-promotion-id
                         validation-receipt))
                (equal? (.ref intent 'candidate-digest)
-                       (poo-flow-promotion-validation-receipt-candidate-digest
+                       (agentic-ai-lab-promotion-validation-receipt-candidate-digest
                         validation-receipt)))
     (error "promotion intent and validation receipt identities differ"
            intent validation-receipt))
-  (.o (kind +poo-flow-runtime-language-promotion-request-schema+)
-      (abi-major (.ref +poo-flow-runtime-v0-abi-schema+ 'abi-major))
-      (abi-minor (.ref +poo-flow-runtime-v0-abi-schema+ 'abi-minor))
+  (.o (kind +agentic-ai-lab-runtime-language-promotion-request-schema+)
+      (abi-major (.ref +agentic-ai-lab-runtime-v0-abi-schema+ 'abi-major))
+      (abi-minor (.ref +agentic-ai-lab-runtime-v0-abi-schema+ 'abi-minor))
       (required-capabilities
-       +poo-flow-runtime-language-promotion-required-capabilities+)
+       +agentic-ai-lab-runtime-language-promotion-required-capabilities+)
       (idempotency-key
-       (poo-flow-runtime-language-promotion-idempotency-key intent))
+       (agentic-ai-lab-runtime-language-promotion-idempotency-key intent))
       (promotion-id (.ref intent 'promotion-id))
       (candidate-digest (.ref intent 'candidate-digest))
       (subject-id (.ref intent 'subject-id))
@@ -93,17 +93,17 @@
       (injection-target (.ref intent 'injection-target))
       (rollback-target (.ref intent 'rollback-target))
       (validation-receipt-schema
-       (poo-flow-promotion-validation-receipt-schema validation-receipt))
+       (agentic-ai-lab-promotion-validation-receipt-schema validation-receipt))
       (approval-code
-       (poo-flow-promotion-validation-receipt-approval-code
+       (agentic-ai-lab-promotion-validation-receipt-approval-code
         validation-receipt))
       (checked-gates
-       (poo-flow-promotion-validation-receipt-checked-gates
+       (agentic-ai-lab-promotion-validation-receipt-checked-gates
         validation-receipt))
       (runtime-executed #f)))
 
 ;; : (-> PooRuntimeLanguagePromotionRequest Alist)
-(def (poo-flow-runtime-language-promotion-request->alist request)
+(def (agentic-ai-lab-runtime-language-promotion-request->alist request)
   (let (key (.ref request 'idempotency-key))
     (list
      (cons 'kind (.ref request 'kind))
@@ -111,7 +111,7 @@
      (cons 'abi-minor (.ref request 'abi-minor))
      (cons 'required-capabilities (.ref request 'required-capabilities))
      (cons 'idempotency-key
-           (poo-flow-runtime-language-promotion-idempotency-key->alist key))
+           (agentic-ai-lab-runtime-language-promotion-idempotency-key->alist key))
      (cons 'promotion-id (.ref request 'promotion-id))
      (cons 'candidate-digest (.ref request 'candidate-digest))
      (cons 'subject-id (.ref request 'subject-id))
@@ -141,7 +141,7 @@
   (newline port))
 
 ;; : (-> PooRuntimeLanguagePromotionRequest String)
-(def (poo-flow-runtime-language-promotion-request->vector request)
+(def (agentic-ai-lab-runtime-language-promotion-request->vector request)
   (let ((port (open-output-string))
         (key (.ref request 'idempotency-key)))
     (runtime-language-abi-emit-field port "schema" (.ref request 'kind))
@@ -190,36 +190,36 @@
     (get-output-string port)))
 
 ;; : (-> String)
-(def (poo-flow-runtime-language-promotion-abi->c-header)
-  (poo-flow-runtime-v0-abi-schema->c-header
-   +poo-flow-runtime-v0-abi-schema+))
+(def (agentic-ai-lab-runtime-language-promotion-abi->c-header)
+  (agentic-ai-lab-runtime-v0-abi-schema->c-header
+   +agentic-ai-lab-runtime-v0-abi-schema+))
 
 ;; : (-> [Symbol] Boolean)
-(def (poo-flow-runtime-language-promotion-capabilities-cover? supported)
+(def (agentic-ai-lab-runtime-language-promotion-capabilities-cover? supported)
   (let loop ((required
-              +poo-flow-runtime-language-promotion-required-capabilities+))
+              +agentic-ai-lab-runtime-language-promotion-required-capabilities+))
     (or (null? required)
         (and (memq (car required) supported)
              (loop (cdr required))))))
 
 ;; : (-> PooRuntimeLanguagePromotionRequest PooRuntimeLanguageWorld Boolean)
-(def (poo-flow-runtime-language-promotion-epochs-current? request world)
+(def (agentic-ai-lab-runtime-language-promotion-epochs-current? request world)
   (and (= (.ref request 'bundle-epoch) (.ref world 'bundle-epoch))
        (= (.ref request 'authority-epoch) (.ref world 'authority-epoch))
        (= (.ref request 'proof-epoch) (.ref world 'proof-epoch))
        (= (.ref request 'evaluator-epoch) (.ref world 'evaluator-epoch))))
 
 ;; : (-> PooRuntimeLanguagePromotionRequest PooRuntimeLanguageWorld Symbol String Symbol [Symbol] Integer Symbol MaybeString MaybeString MaybeString MaybeString PooRuntimeLanguagePromotionReceipt)
-(def (poo-flow-runtime-language-promotion-receipt
+(def (agentic-ai-lab-runtime-language-promotion-receipt
       request world implementation-id-value implementation-version-value
       language-value supported-capabilities-value attempt-value outcome-value
       materialization-digest-value injection-receipt-digest-value
       rollback-receipt-digest-value causal-receipt-digest-value)
   (unless (and (object? request)
                (eq? (.ref request 'kind)
-                    +poo-flow-runtime-language-promotion-request-schema+))
+                    +agentic-ai-lab-runtime-language-promotion-request-schema+))
     (error "runtime receipt requires a canonical promotion request" request))
-  (.o (kind +poo-flow-runtime-language-promotion-receipt-schema+)
+  (.o (kind +agentic-ai-lab-runtime-language-promotion-receipt-schema+)
       (abi-major (.ref request 'abi-major))
       (abi-minor (.ref request 'abi-minor))
       (idempotency-key (.ref request 'idempotency-key))
@@ -231,7 +231,7 @@
       (language language-value)
       (supported-capabilities supported-capabilities-value)
       (capability-qualified
-       (poo-flow-runtime-language-promotion-capabilities-cover?
+       (agentic-ai-lab-runtime-language-promotion-capabilities-cover?
         supported-capabilities-value))
       (attempt attempt-value)
       (outcome outcome-value)
@@ -240,7 +240,7 @@
       (observed-proof-epoch (.ref world 'proof-epoch))
       (observed-evaluator-epoch (.ref world 'evaluator-epoch))
       (epoch-current
-       (poo-flow-runtime-language-promotion-epochs-current? request world))
+       (agentic-ai-lab-runtime-language-promotion-epochs-current? request world))
       (materialization-digest materialization-digest-value)
       (injection-receipt-digest injection-receipt-digest-value)
       (rollback-receipt-digest rollback-receipt-digest-value)
@@ -258,7 +258,7 @@
   (memq outcome '(rejected-stale-epoch rejected-capability failed)))
 
 ;; : (-> PooRuntimeLanguagePromotionReceipt [Symbol])
-(def (poo-flow-runtime-language-promotion-receipt-failures receipt)
+(def (agentic-ai-lab-runtime-language-promotion-receipt-failures receipt)
   (let ((outcome (.ref receipt 'outcome))
         (qualified? (.ref receipt 'capability-qualified))
         (current? (.ref receipt 'epoch-current))
@@ -272,7 +272,7 @@
            (cons (and (integer? (.ref receipt 'attempt))
                       (> (.ref receipt 'attempt) 0))
                  'invalid-attempt)
-           (cons (memq outcome +poo-flow-runtime-language-promotion-outcomes+)
+           (cons (memq outcome +agentic-ai-lab-runtime-language-promotion-outcomes+)
                  'invalid-outcome)
            (cons (or qualified? (eq? outcome 'rejected-capability))
                  'unsupported-capability-effect)
@@ -306,23 +306,23 @@
                  'runtime-execution-receipt-missing)))))
 
 ;; : (-> PooRuntimeLanguagePromotionReceipt Boolean)
-(def (poo-flow-runtime-language-promotion-receipt-valid? receipt)
-  (null? (poo-flow-runtime-language-promotion-receipt-failures receipt)))
+(def (agentic-ai-lab-runtime-language-promotion-receipt-valid? receipt)
+  (null? (agentic-ai-lab-runtime-language-promotion-receipt-failures receipt)))
 
 ;; : (-> PooRuntimeLanguagePromotionReceipt Boolean)
-(def (poo-flow-runtime-language-promotion-receipt-active? receipt)
-  (and (poo-flow-runtime-language-promotion-receipt-valid? receipt)
+(def (agentic-ai-lab-runtime-language-promotion-receipt-active? receipt)
+  (and (agentic-ai-lab-runtime-language-promotion-receipt-valid? receipt)
        (memq (.ref receipt 'outcome) '(injected replayed-active))
        #t))
 
 ;; : (-> PooRuntimeLanguagePromotionReceipt Alist)
-(def (poo-flow-runtime-language-promotion-receipt->alist receipt)
+(def (agentic-ai-lab-runtime-language-promotion-receipt->alist receipt)
   (list
    (cons 'kind (.ref receipt 'kind))
    (cons 'abi-major (.ref receipt 'abi-major))
    (cons 'abi-minor (.ref receipt 'abi-minor))
    (cons 'idempotency-key
-         (poo-flow-runtime-language-promotion-idempotency-key->alist
+         (agentic-ai-lab-runtime-language-promotion-idempotency-key->alist
           (.ref receipt 'idempotency-key)))
    (cons 'promotion-id (.ref receipt 'promotion-id))
    (cons 'materialization-id (.ref receipt 'materialization-id))
@@ -347,16 +347,16 @@
    (cons 'causal-receipt-digest (.ref receipt 'causal-receipt-digest))
    (cons 'runtime-executed (.ref receipt 'runtime-executed))
    (cons 'valid
-         (poo-flow-runtime-language-promotion-receipt-valid? receipt))
+         (agentic-ai-lab-runtime-language-promotion-receipt-valid? receipt))
    (cons 'failures
-         (poo-flow-runtime-language-promotion-receipt-failures receipt))))
+         (agentic-ai-lab-runtime-language-promotion-receipt-failures receipt))))
 
 ;; : (-> [PooRuntimeLanguagePromotionReceipt] Boolean)
-(def (poo-flow-runtime-language-promotion-receipts-exactly-once? receipts)
+(def (agentic-ai-lab-runtime-language-promotion-receipts-exactly-once? receipts)
   (= 1
      (foldl
       (lambda (receipt committed)
-        (if (and (poo-flow-runtime-language-promotion-receipt-valid? receipt)
+        (if (and (agentic-ai-lab-runtime-language-promotion-receipt-valid? receipt)
                  (eq? (.ref receipt 'outcome) 'injected))
           (+ committed 1)
           committed))

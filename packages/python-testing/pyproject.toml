@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 [project]
-name = "poo-flow-testing"
+name = "agentic-ai-lab-testing"
 version = "0.1.0"
-description = "Module and cross-module case testing for POO Flow."
+description = "Module and cross-module case testing for Agentic AI Lab."
 license = "Apache-2.0 AND LGPL-2.1-or-later"
 license-files = ["LICENSE"]
 readme = { file = "README.org", content-type = "text/plain" }
@@ -14,10 +14,10 @@ dependencies = []
 
 [project.optional-dependencies]
 live = ["openai>=2.29,<3", "httpx>=0.28,<0.29"]
-runtime = ["poo-flow-runtime==0.1.0"]
+runtime = ["agentic-ai-lab-runtime==0.1.0"]
 
 [project.scripts]
-poo-flow-test-cases = "poo_flow_testing.cli:main"
+agentic-ai-lab-test-cases = "agentic_ai_lab_testing.cli:main"
 
 [dependency-groups]
 dev = [
@@ -37,10 +37,10 @@ include-package-data = true
 where = ["src"]
 
 [tool.setuptools.package-data]
-"poo_flow_testing.ascent" = ["attempt.ss", "finite_attempt.ss", "stratified_attempt.ss"]
-"poo_flow_testing.model_study.scheme_source" = ["*.ss", "*.sexp"]
-"poo_flow_testing.temporal" = ["attempt.ss"]
-"poo_flow_testing.model_study" = ["cases.json", "scheme_questions.json"]
+"agentic_ai_lab_testing.ascent" = ["attempt.ss", "finite_attempt.ss", "stratified_attempt.ss"]
+"agentic_ai_lab_testing.model_study.scheme_source" = ["*.ss", "*.sexp"]
+"agentic_ai_lab_testing.temporal" = ["attempt.ss"]
+"agentic_ai_lab_testing.model_study" = ["cases.json", "scheme_questions.json"]
 
 [tool.pytest.ini_options]
 addopts = ["--python-project-harness"]
@@ -48,5 +48,5 @@ testpaths = ["tests"]
 pythonpath = ["src", "../python-runtime/src"]
 
 [tool.uv.sources]
-poo-flow-runtime = { path = "../python-runtime" }
+agentic-ai-lab-runtime = { path = "../python-runtime" }
 python-lang-project-harness = { git = "https://github.com/tao3k/python-lang-project-harness" }

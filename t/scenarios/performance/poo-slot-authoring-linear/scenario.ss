@@ -88,7 +88,7 @@
                (benchmark-fixture-ref baseline-receipt 'elapsedNs))
       (error "tail-passing POO slot walk did not improve deep traversal"
              baseline-receipt candidate-receipt))
-    (display "[poo-flow-benchmark] poo-slot-authoring-linear baseline=")
+    (display "[agentic-ai-lab-benchmark] poo-slot-authoring-linear baseline=")
     (write baseline-receipt)
     (display " candidate=")
     (write candidate-receipt)

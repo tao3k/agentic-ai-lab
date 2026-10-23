@@ -7,40 +7,40 @@
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
         :yuanxu/utilities/final-projection-syntax
-        :poo-flow/modules/session/objects
-        :poo-flow/modules/session/transform
-        :poo-flow/modules/ai-agentic-context/features/memory/objects-core)
+        :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/transform
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core)
 
-(export poo-flow-memory-catalog-summary
-        poo-flow-memory-catalog
-        poo-flow-memory-catalog?
-        poo-flow-memory-catalog-ref
-        poo-flow-memory-catalog-store-refs
-        poo-flow-memory-catalog-store-count
-        poo-flow-memory-store-spec-find
-        poo-flow-memory-catalog-find
-        poo-flow-memory-catalog->alist)
+(export agentic-ai-lab-memory-catalog-summary
+        agentic-ai-lab-memory-catalog
+        agentic-ai-lab-memory-catalog?
+        agentic-ai-lab-memory-catalog-ref
+        agentic-ai-lab-memory-catalog-store-refs
+        agentic-ai-lab-memory-catalog-store-count
+        agentic-ai-lab-memory-store-spec-find
+        agentic-ai-lab-memory-catalog-find
+        agentic-ai-lab-memory-catalog->alist)
 
-(def (poo-flow-memory-catalog-summary stores)
-  (cons (map poo-flow-memory-store-spec-ref stores)
+(def (agentic-ai-lab-memory-catalog-summary stores)
+  (cons (map agentic-ai-lab-memory-store-spec-ref stores)
         (length stores)))
 
 ;; : (-> Symbol [PooMemoryStoreSpec] [Alist] PooMemoryCatalog)
-(def (poo-flow-memory-catalog catalog-ref stores . maybe-metadata)
-  (poo-flow-session-require "memory catalog ref must be a symbol"
+(def (agentic-ai-lab-memory-catalog catalog-ref stores . maybe-metadata)
+  (agentic-ai-lab-session-require "memory catalog ref must be a symbol"
                             (symbol? catalog-ref)
                             catalog-ref)
-  (poo-flow-session-require "memory catalog stores must be specs"
-                            (poo-flow-session-every? poo-flow-memory-store-spec?
+  (agentic-ai-lab-session-require "memory catalog stores must be specs"
+                            (agentic-ai-lab-session-every? agentic-ai-lab-memory-store-spec?
                                                      stores)
                             stores)
-  (let* ((catalog-summary (poo-flow-memory-catalog-summary stores))
+  (let* ((catalog-summary (agentic-ai-lab-memory-catalog-summary stores))
          (store-refs (car catalog-summary))
          (store-count (cdr catalog-summary)))
     (object<-alist
      (list
-      (cons 'kind +poo-flow-ai-agentic-context-memory-catalog-kind+)
-      (cons 'schema 'poo-flow.modules.memory-core.catalog.v1)
+      (cons 'kind +agentic-ai-lab-ai-agentic-context-memory-catalog-kind+)
+      (cons 'schema 'agentic-ai-lab.modules.memory-core.catalog.v1)
       (cons 'catalog-ref catalog-ref)
       (cons 'stores stores)
       (cons 'store-refs store-refs)
@@ -52,41 +52,41 @@
                         (car maybe-metadata)))))))
 
 ;; : (-> POOObject Boolean)
-(def (poo-flow-memory-catalog? value)
+(def (agentic-ai-lab-memory-catalog? value)
   (and (object? value)
-       (eq? (poo-flow-memory-slot value 'kind #f)
-            +poo-flow-ai-agentic-context-memory-catalog-kind+)))
+       (eq? (agentic-ai-lab-memory-slot value 'kind #f)
+            +agentic-ai-lab-ai-agentic-context-memory-catalog-kind+)))
 
 ;; : (-> PooMemoryCatalog Symbol)
-(def (poo-flow-memory-catalog-ref catalog)
+(def (agentic-ai-lab-memory-catalog-ref catalog)
   (.ref catalog 'catalog-ref))
 
 ;; : (-> PooMemoryCatalog [Symbol])
-(def (poo-flow-memory-catalog-store-refs catalog)
+(def (agentic-ai-lab-memory-catalog-store-refs catalog)
   (.ref catalog 'store-refs))
 
 ;; : (-> PooMemoryCatalog Integer)
-(def (poo-flow-memory-catalog-store-count catalog)
+(def (agentic-ai-lab-memory-catalog-store-count catalog)
   (.ref catalog 'store-count))
 
 ;; : (-> [PooMemoryStoreSpec] Symbol MaybePooMemoryStoreSpec)
-(def (poo-flow-memory-store-spec-find stores store-ref)
+(def (agentic-ai-lab-memory-store-spec-find stores store-ref)
   (cond
    ((null? stores) #f)
-   ((eq? (poo-flow-memory-store-spec-ref (car stores)) store-ref) (car stores))
+   ((eq? (agentic-ai-lab-memory-store-spec-ref (car stores)) store-ref) (car stores))
    (else
-    (poo-flow-memory-store-spec-find (cdr stores) store-ref))))
+    (agentic-ai-lab-memory-store-spec-find (cdr stores) store-ref))))
 
 ;; : (-> PooMemoryCatalog Symbol MaybePooMemoryStoreSpec)
-(def (poo-flow-memory-catalog-find catalog store-ref)
-  (poo-flow-memory-store-spec-find (.ref catalog 'stores) store-ref))
+(def (agentic-ai-lab-memory-catalog-find catalog store-ref)
+  (agentic-ai-lab-memory-store-spec-find (.ref catalog 'stores) store-ref))
 ;; : (-> PooMemoryCatalog Alist)
 (defpoo-final-projection
-  poo-flow-memory-catalog->alist (catalog)
+  agentic-ai-lab-memory-catalog->alist (catalog)
   (bindings ((checked-catalog
-              (poo-flow-session-require
+              (agentic-ai-lab-session-require
                "memory catalog projection requires a memory catalog"
-               (poo-flow-memory-catalog? catalog)
+               (agentic-ai-lab-memory-catalog? catalog)
                catalog))))
   (fields ((kind (.ref checked-catalog 'kind))
            (schema (.ref checked-catalog 'schema))

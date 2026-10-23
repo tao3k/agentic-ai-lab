@@ -2,8 +2,8 @@
 import importlib.util
 import unittest
 import ascent
-from poo_flow_runtime.reasoning import ReasoningRuntime
-from poo_flow_testing.assessment_studies.interface_tests import qualification_inputs
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime
+from agentic_ai_lab_testing.assessment_studies.interface_tests import qualification_inputs
 
 class LibraryBoundary(unittest.TestCase):
     def test_no_application_facade_in_rule_library(self):

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 module(
-    name = "poo_flow",
+    name = "agentic_ai_lab",
     version = "0.1.0",
 )
 

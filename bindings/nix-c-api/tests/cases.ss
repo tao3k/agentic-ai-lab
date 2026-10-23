@@ -8,15 +8,15 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :yuanxu/module-system/source/admission
                  module-source-read module-source-admit-current!)
-        (only-in :poo-flow/modules/services/opentofu/objects OpenTofuScope.)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
         (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
         "../compatibility.ss")
 (export nix-api-suite root nix demand field admit provider-expression
         write-input assert rejected? timed checked-query observe-inputs AwsOnly AwsNull
         provider-exports)
 
-(def root (getenv "POO_FLOW_NIX_C_API_ROOT"))
-(def nix (getenv "POO_FLOW_NIX_C_API_CLI"))
+(def root (getenv "AGENTIC_AI_LAB_NIX_C_API_ROOT"))
+(def nix (getenv "AGENTIC_AI_LAB_NIX_C_API_CLI"))
 (def cli-calls 0)
 (def (native-cli expression (registration? #f))
   (set! cli-calls (1+ cli-calls))
@@ -136,10 +136,10 @@
       (assert 'newer-major-accepted (supported-version? "3.0.0"))
       (assert 'not-lexicographic (not (supported-version? "2.9.99")))
       (assert 'malformed-version-refused (not (supported-version? "unknown")))
-      (assert 'cli-minimum-supported (supported-version? (getenv "POO_FLOW_NIX_C_API_CLI_VERSION"))))
+      (assert 'cli-minimum-supported (supported-version? (getenv "AGENTIC_AI_LAB_NIX_C_API_CLI_VERSION"))))
     (test-case "simple evaluator initialization before provider work"
       (displayln "NIX-API-PHASE before-simple-session") (force-output)
-      (call-with-temporary-directory "poo-flow-nix-api-init"
+      (call-with-temporary-directory "agentic-ai-lab-nix-api-init"
         (lambda (directory)
           (call-with-nix-session "input: builtins.nixVersion" directory
             (lambda (session)
@@ -147,7 +147,7 @@
                 (supported-version? (session-query session "")))))))
       (displayln "NIX-API-PHASE after-simple-session") (force-output))
     (test-case "three rounds: real AWS then Null, shared evaluator and receiver isolation"
-      (call-with-temporary-directory "poo-flow-nix-api"
+      (call-with-temporary-directory "agentic-ai-lab-nix-api"
         (lambda (directory)
           (write-input (path-expand "stamp.nix" directory) "1")
           (def expression (provider-expression directory))
@@ -211,7 +211,7 @@
                       (lambda () (cli aws #t)))))
                 (assert 'c-api-minimum-supported (supported-version? (field child 'version)))
                 (assert 'matched-cli-and-c-api-version
-                  (equal? (field child 'version) (getenv "POO_FLOW_NIX_C_API_CLI_VERSION")))
+                  (equal? (field child 'version) (getenv "AGENTIC_AI_LAB_NIX_C_API_CLI_VERSION")))
                 (admit AwsOnly parent)
                 (admit AwsNull child)
                 (displayln "NIX-API-COUNTS round=" number

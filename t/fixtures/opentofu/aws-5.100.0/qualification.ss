@@ -13,12 +13,12 @@
         (only-in :std/encoding/json read-json JSONReadOptions current-json-read-options)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
-        :poo-flow/modules/services/opentofu/types "./release.ss"
-        :poo-flow/modules/services/opentofu/collections :poo-flow/modules/services/opentofu/objects
+        :agentic-ai-lab/modules/services/opentofu/types "./release.ss"
+        :agentic-ai-lab/modules/services/opentofu/collections :agentic-ai-lab/modules/services/opentofu/objects
         "./request-types.ss")
-(export AwsProviderBinaryContract AwsProviderSourceContract poo-flow-opentofu-aws-sources-lock poo-flow-opentofu-aws-provider)
+(export AwsProviderBinaryContract AwsProviderSourceContract agentic-ai-lab-opentofu-aws-sources-lock agentic-ai-lab-opentofu-aws-provider)
 
-(def (poo-flow-opentofu-aws-sources-lock)
+(def (agentic-ai-lab-opentofu-aws-sources-lock)
   (sources-lock-value "opentofu/aws" "5.100.0" #f (.get Aws5100Release sources)))
 
 (def (failure reason path)
@@ -48,7 +48,7 @@
 
 (def (source-obligations request _context)
   (let* ((lock (.get request lock)) (read-source (.get request read))
-         (trusted-lock (poo-flow-opentofu-aws-sources-lock))
+         (trusted-lock (agentic-ai-lab-opentofu-aws-sources-lock))
          (selection-errors (selection-failures (.get request selection))))
     (cond
      ((pair? selection-errors) selection-errors)
@@ -85,7 +85,7 @@
 (def (verified-schema lock read-source)
   (let* ((bytes (read-source "schema.json"))
          (receipt (source-lock-verify-payload
-                    (poo-flow-opentofu-aws-sources-lock) "schema.json" bytes)))
+                    (agentic-ai-lab-opentofu-aws-sources-lock) "schema.json" bytes)))
     (unless (.get receipt valid?) (error "provider-schema-mismatch"))
     (decode-schema bytes)))
 
@@ -96,7 +96,7 @@
 
 ;; Lock + byte reader is the existing publication boundary. The retained
 ;; closure rechecks pinned source bytes, never trusts user-provided flags.
-(def (poo-flow-opentofu-aws-provider selection lock read-source)
+(def (agentic-ai-lab-opentofu-aws-provider selection lock read-source)
   (let* ((request (.cc (.o) 'selection selection 'lock lock 'read read-source))
          (admission (.call AwsProviderSourceContract .admit request #f)))
     (unless (yuanxu-validation-evidence-accepted? admission)
@@ -107,14 +107,14 @@
       (def (authority resource)
         (let ((block (fresh-block resource))
               (paths (.ref (.get Aws5100Release collections) resource)))
-          (poo-flow-opentofu-hash-string-authority
+          (agentic-ai-lab-opentofu-hash-string-authority
             (.get selection provider) (.get selection version) block paths source-check)))
       (.cc (.o) 'selection selection 'release Aws5100Release 'source-admission admission
            '.block fresh-block
            '.authority authority
            '.contract
            (lambda (resource)
-             (let (contract (poo-flow-opentofu-block-contract resource
+             (let (contract (agentic-ai-lab-opentofu-block-contract resource
                               (fresh-block resource) (authority resource)))
                ;; Source integrity is independent of collection identity. A
                ;; configuration caller does not mint or retain collection proofs.

@@ -4,7 +4,7 @@
 #+title: Interactive ASCENT candidate pilot with DeepSeek, 2026-10-01
 #+status: bounded live observation
 
-The POO Flow Runtime graph ran =model= and =candidate= nodes in sequence.
+The Agentic AI Lab Runtime graph ran =model= and =candidate= nodes in sequence.
 The model transport was the official OpenAI Python SDK pointed at DeepSeek's
 Responses endpoint, using =deepseek-flash= (documented as V4.1-Flash),
 non-thinking mode and a 4096-token output cap. No system/developer message
@@ -32,13 +32,13 @@ verified semantic claim is agreement with these two finite snapshots. The
 independent snapshot checks do not establish a retained deletion algorithm,
 general proof soundness, or model reliability across tasks.
 
-The local POO Flow integration branch updates the PR #34 dependency pin to gerbil-ascent
+The local Agentic AI Lab integration branch updates the PR #34 dependency pin to gerbil-ascent
 =955b1784aed504f5096ddf40106619705de876b3=. The dependency projection
 check and Python integration checks passed. The isolated =gerbil deps --install=
 gate was attempted twice. GitHub HTTPS first disconnected while fetching
 =gerbil-parser= and then timed out while fetching =gerbil-poo=. The subsequent
 =just build= compiled Core but failed because the pinned
-=gerbil-ascent.manifest= had not been installed. The full POO Flow build and
+=gerbil-ascent.manifest= had not been installed. The full Agentic AI Lab build and
 its pinned Ascent integration test remain unverified. A focused
 =just test-file t/qualification/ascent-integration/guarded-test.ss= run with
 the local ASCENT PR checkout on =GERBIL_LOADPATH= passed with =MODULE-OK=,

@@ -15,11 +15,11 @@ int main(int argc, char **argv)
     char *expression = calloc((size_t)size + 1, 1);
     if (!expression || fread(expression, 1, (size_t)size, file) != (size_t)size) return 74;
     fclose(file);
-    pf_nix_session *s = pf_nix_open(expression, argv[2]);
+    agentic_ai_lab_nix_session *s = agentic_ai_lab_nix_open(expression, argv[2]);
     free(expression);
     if (!s || s->error) {
         fprintf(stderr, "Nix C API initialization: %s\n", s ? s->error : "allocation failed");
-        pf_nix_close(s);
+        agentic_ai_lab_nix_close(s);
         return 70;
     }
     printf("READY %s\n", nix_version_get());
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     while ((length = getline(&input, &capacity, stdin)) >= 0) {
         if (length > 1024 * 1024) { status = 65; break; }
         if (length && input[length - 1] == '\n') input[length - 1] = 0;
-        if (!pf_nix_query(s, input)) {
+        if (!agentic_ai_lab_nix_query(s, input)) {
             fprintf(stderr, "Nix C API evaluation: %s\n", s->error ? s->error : "allocation failed");
             status = 70;
             break;
@@ -40,6 +40,6 @@ int main(int argc, char **argv)
         fflush(stdout);
     }
     free(input);
-    pf_nix_close(s);
+    agentic_ai_lab_nix_close(s);
     return status;
 }

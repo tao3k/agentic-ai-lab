@@ -23,23 +23,23 @@
                  candidate-verify-positive-proof positive-proof? positive-proof-status
                  positive-proof-query positive-proof-work-budget positive-proof-roots positive-proof-nodes
                  proof-node-id proof-node-kind proof-node-relation proof-node-row proof-node-label proof-node-inputs))
-(export PooFlowTemporalPositiveProof
-        poo-flow-temporal-positive-proof-from-ascent
-        poo-flow-temporal-positive-proof-replay)
+(export AgenticAILabTemporalPositiveProof
+        agentic-ai-lab-temporal-positive-proof-from-ascent
+        agentic-ai-lab-temporal-positive-proof-replay)
 (def (text? x) (and (string? x) (< 0 (string-length x) 257)))
 (def (digest x) (string-append "sha256:" (hex-encode (sha256 (string->utf8
   (call-with-output-string (lambda (p) (write x p))))))))
 (def required '(identity evaluator-identity semantic-digest snapshot-identity snapshot-generation
                          snapshot-digest candidate-digest query rows proof-digest node-count
                          proof-admitted? source-authenticated? selection-admitted? action-authorized? durable?))
-(define-type (PooFlowTemporalPositiveProof @ Type.)
+(define-type (AgenticAILabTemporalPositiveProof @ Type.)
   .element?: (lambda (v)
-    (and (object? v) (.slot? v 'kind) (eq? (.ref v 'kind) 'poo-flow.temporal-causality.positive-proof.v1)
+    (and (object? v) (.slot? v 'kind) (eq? (.ref v 'kind) 'agentic-ai-lab.temporal-causality.positive-proof.v1)
          (andmap (lambda (s) (.slot? v s)) required))))
 (def (node-row n)
   (list (proof-node-id n) (proof-node-kind n) (proof-node-relation n)
         (proof-node-row n) (proof-node-label n) (proof-node-inputs n)))
-(def (poo-flow-temporal-positive-proof-from-ascent id-value snapshot candidate receipt work-steps max-nodes)
+(def (agentic-ai-lab-temporal-positive-proof-from-ascent id-value snapshot candidate receipt work-steps max-nodes)
   (unless (and (text? id-value) (reasoning-snapshot-valid? snapshot)
                (reasoning-receipt? receipt)
                (exact-integer? work-steps) (<= 1 work-steps 4096)
@@ -88,11 +88,11 @@
                (lambda (a b) (string<? (call-with-output-string (lambda (p) (write a p)))
                                        (call-with-output-string (lambda (p) (write b p)))))
                (candidate-copy-pairs rows-value)))
-             (fingerprint (digest (list 'poo-flow.temporal-positive-proof.v1 id-value
+             (fingerprint (digest (list 'agentic-ai-lab.temporal-positive-proof.v1 id-value
                snapshot-id-value snapshot-generation-value snapshot-digest-value candidate-digest-value
                query-value owned-rows proof-digest-value work-steps max-nodes))))
-        (validate PooFlowTemporalPositiveProof
-          (.o kind: 'poo-flow.temporal-causality.positive-proof.v1 identity: id-value
+        (validate AgenticAILabTemporalPositiveProof
+          (.o kind: 'agentic-ai-lab.temporal-causality.positive-proof.v1 identity: id-value
               evaluator-identity: 'ascent-positive-v1 semantic-digest: fingerprint
               snapshot-identity: snapshot-id-value snapshot-generation: snapshot-generation-value
               snapshot-digest: snapshot-digest-value candidate-digest: candidate-digest-value
@@ -100,14 +100,14 @@
               node-count: (length (positive-proof-nodes proof))
               proof-admitted?: #t source-authenticated?: #f selection-admitted?: #f
               action-authorized?: #f durable?: #f))))))
-(def (poo-flow-temporal-positive-proof-replay admission snapshot candidate receipt work-steps max-nodes)
+(def (agentic-ai-lab-temporal-positive-proof-replay admission snapshot candidate receipt work-steps max-nodes)
   (unless (and (object? admission) (.slot? admission 'kind)
-               (eq? (.ref admission 'kind) 'poo-flow.temporal-causality.positive-proof.v1)
+               (eq? (.ref admission 'kind) 'agentic-ai-lab.temporal-causality.positive-proof.v1)
                (.ref admission 'proof-admitted?) (not (.ref admission 'source-authenticated?))
                (not (.ref admission 'selection-admitted?)) (not (.ref admission 'action-authorized?))
                (not (.ref admission 'durable?)))
     (error "invalid positive proof admission"))
-  (let (canonical (poo-flow-temporal-positive-proof-from-ascent (.ref admission 'identity)
+  (let (canonical (agentic-ai-lab-temporal-positive-proof-from-ascent (.ref admission 'identity)
                     snapshot candidate receipt work-steps max-nodes))
     (unless (andmap (lambda (s) (equal? (.ref canonical s) (.ref admission s))) required)
       (error "positive proof admission replay mismatch")) canonical))

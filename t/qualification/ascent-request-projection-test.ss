@@ -5,8 +5,8 @@
 
 (import (only-in :std/test check-equal? check-exception test-case test-suite)
         (only-in :clan/poo/object .o .ref .slot?)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-request-projection
-                 poo-flow-ascent-project-request))
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-request-projection
+                 agentic-ai-lab-ascent-project-request))
 
 (export ascent-request-projection-test)
 
@@ -22,14 +22,14 @@
                   max-input-facts: 8
                   max-derived-pairs: 16
                   max-results: 16))
-             (request (poo-flow-ascent-project-request declaration)))
+             (request (agentic-ai-lab-ascent-project-request declaration)))
         (check-equal? (.ref request 'mrr-bundle-identity) "bundle-1")
         (check-equal? (.ref request 'capability-identity) "capability-1")
         (check-equal? (.ref request 'runtime-executed?) #f)
         (check-equal? (.slot? request 'expected-receipt-schema) #f)))
     (test-case "rejects a zero evaluation bound"
       (check-exception
-       (poo-flow-ascent-project-request
+       (agentic-ai-lab-ascent-project-request
         (.o mrr-bundle-identity: "bundle-1"
             mrr-rule-pack-identity: "pack-1"
             mrr-generation-identity: "generation-1"

@@ -9,7 +9,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/sandbox-core/objects)
+        :agentic-ai-lab/modules/sandbox-core/objects)
 
 (export sandbox-core-profile-authoring-diagnostics-test)
 
@@ -45,14 +45,14 @@
   (test-suite "sandbox-core profile authoring diagnostics"
     (yuanxu-test-case "keeps POO-native rows diagnostic-free"
       (let ((diagnostics
-             (poo-flow-sandbox-profile-object-authoring-diagnostics
-              poo-flow-sandbox-core-profile-object
+             (agentic-ai-lab-sandbox-profile-object-authoring-diagnostics
+              agentic-ai-lab-sandbox-core-profile-object
               clean-profile-authoring-rows)))
         (check-equal? diagnostics '())))
     (yuanxu-test-case "reports advanced and non-native authoring shapes"
       (let ((diagnostics
-             (poo-flow-sandbox-profile-object-authoring-diagnostics
-              poo-flow-sandbox-core-profile-object
+             (agentic-ai-lab-sandbox-profile-object-authoring-diagnostics
+              agentic-ai-lab-sandbox-core-profile-object
               advanced-profile-authoring-rows)))
         (check-equal? (map (lambda (diagnostic)
                              (alist-value 'code diagnostic))

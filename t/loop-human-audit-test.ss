@@ -18,8 +18,8 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/loop-engine/control/agent
-        :poo-flow/modules/loop-engine/control/human-audit)
+        :agentic-ai-lab/modules/loop-engine/control/agent
+        :agentic-ai-lab/modules/loop-engine/control/human-audit)
 
 (export loop-human-audit-test)
 

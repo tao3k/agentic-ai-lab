@@ -11,7 +11,7 @@
         :yuanxu/modules/funflow/control-plane/roles
         :yuanxu/modules/funflow/control-plane/failure
         :yuanxu/object-family/role-syntax
-        (only-in :poo-flow/modules/loop-engine/control/human-audit
+        (only-in :agentic-ai-lab/modules/loop-engine/control/human-audit
                  +loop-human-audit-decisions+))
 
 (export +spec-evolution-feedback-schema+
@@ -56,19 +56,19 @@
 
 ;; : Symbol
 (def +spec-evolution-feedback-schema+
-  'poo-flow.spec-evolution.external-feedback-receipt.v1)
+  'agentic-ai-lab.spec-evolution.external-feedback-receipt.v1)
 
 ;; : Symbol
 (def +spec-evolution-proposal-schema+
-  'poo-flow.spec-evolution.spec-change-proposal.v1)
+  'agentic-ai-lab.spec-evolution.spec-change-proposal.v1)
 
 ;; : Symbol
 (def +spec-evolution-review-schema+
-  'poo-flow.spec-evolution.review-item.v1)
+  'agentic-ai-lab.spec-evolution.review-item.v1)
 
 ;; : Symbol
 (def +spec-evolution-manifest-row-schema+
-  'poo-flow.spec-evolution.runtime-manifest-row.v1)
+  'agentic-ai-lab.spec-evolution.runtime-manifest-row.v1)
 
 ;; : [Symbol]
 (def +spec-evolution-target-kinds+

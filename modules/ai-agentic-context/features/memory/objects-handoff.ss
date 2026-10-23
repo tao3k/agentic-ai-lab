@@ -7,18 +7,18 @@
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
         :yuanxu/utilities/final-projection-syntax
-        :poo-flow/modules/session/objects
-        :poo-flow/modules/session/transform
-        :poo-flow/modules/ai-agentic-context/features/memory/objects-core)
+        :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/transform
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core)
 
-(export poo-flow-memory-handoff-manifest-receipt
-        make-poo-flow-memory-handoff-manifest-receipt
-        poo-flow-memory-handoff-manifest-receipt?
-        poo-flow-memory-handoff-manifest
-        poo-flow-memory-handoff-manifest?
-        poo-flow-memory-handoff-manifest->alist)
+(export agentic-ai-lab-memory-handoff-manifest-receipt
+        make-agentic-ai-lab-memory-handoff-manifest-receipt
+        agentic-ai-lab-memory-handoff-manifest-receipt?
+        agentic-ai-lab-memory-handoff-manifest
+        agentic-ai-lab-memory-handoff-manifest?
+        agentic-ai-lab-memory-handoff-manifest->alist)
 
-(defstruct poo-flow-memory-handoff-manifest-receipt
+(defstruct agentic-ai-lab-memory-handoff-manifest-receipt
   (kind
    schema
    request-id
@@ -39,19 +39,19 @@
    metadata)
   transparent: #t)
 ;; : (-> Symbol PooMemoryStoreSpec [Alist] PooMemoryHandoffManifest)
-(def (poo-flow-memory-handoff-manifest request-id spec . maybe-metadata)
-  (poo-flow-session-require "memory handoff request id must be a symbol"
+(def (agentic-ai-lab-memory-handoff-manifest request-id spec . maybe-metadata)
+  (agentic-ai-lab-session-require "memory handoff request id must be a symbol"
                             (symbol? request-id)
                             request-id)
-  (poo-flow-session-require "memory handoff requires a store spec"
-                            (poo-flow-memory-store-spec? spec)
+  (agentic-ai-lab-session-require "memory handoff requires a store spec"
+                            (agentic-ai-lab-memory-store-spec? spec)
                             spec)
-  (poo-flow-memory-runtime-object
+  (agentic-ai-lab-memory-runtime-object
    (list
-    (cons 'kind +poo-flow-ai-agentic-context-memory-handoff-manifest-kind+)
-    (cons 'schema 'poo-flow.modules.memory-core.handoff-manifest.v1)
+    (cons 'kind +agentic-ai-lab-ai-agentic-context-memory-handoff-manifest-kind+)
+    (cons 'schema 'agentic-ai-lab.modules.memory-core.handoff-manifest.v1)
     (cons 'request-id request-id)
-    (cons 'store-ref (poo-flow-memory-store-spec-ref spec))
+    (cons 'store-ref (agentic-ai-lab-memory-store-spec-ref spec))
     (cons 'store-kind (.ref spec 'store-kind))
     (cons 'namespace (.ref spec 'namespace))
     (cons 'scopes (.ref spec 'scopes))
@@ -70,59 +70,59 @@
                       (car maybe-metadata))))))
 
 ;; : (-> POOObject Boolean)
-(def (poo-flow-memory-handoff-manifest? value)
-  (or (poo-flow-memory-handoff-manifest-receipt? value)
+(def (agentic-ai-lab-memory-handoff-manifest? value)
+  (or (agentic-ai-lab-memory-handoff-manifest-receipt? value)
       (and (object? value)
-           (eq? (poo-flow-memory-slot value 'kind #f)
-                +poo-flow-ai-agentic-context-memory-handoff-manifest-kind+))))
+           (eq? (agentic-ai-lab-memory-slot value 'kind #f)
+                +agentic-ai-lab-ai-agentic-context-memory-handoff-manifest-kind+))))
 
 ;;; Boundary: handoff manifest serialization is the bounded ABI between memory
 ;;; policy objects and Marlin/runtime transfer.
 ;; : (-> PooMemoryHandoffManifest Alist)
-(def (poo-flow-memory-handoff-manifest->alist manifest)
+(def (agentic-ai-lab-memory-handoff-manifest->alist manifest)
   (let (checked-manifest
-        (poo-flow-session-require
+        (agentic-ai-lab-session-require
          "memory handoff projection requires a memory handoff manifest"
-         (poo-flow-memory-handoff-manifest? manifest)
+         (agentic-ai-lab-memory-handoff-manifest? manifest)
          manifest))
-    (if (poo-flow-memory-handoff-manifest-receipt? checked-manifest)
+    (if (agentic-ai-lab-memory-handoff-manifest-receipt? checked-manifest)
       (list
        (cons 'kind
-             (poo-flow-memory-handoff-manifest-receipt-kind checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-kind checked-manifest))
        (cons 'schema
-             (poo-flow-memory-handoff-manifest-receipt-schema checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-schema checked-manifest))
        (cons 'request-id
-             (poo-flow-memory-handoff-manifest-receipt-request-id checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-request-id checked-manifest))
        (cons 'store-ref
-             (poo-flow-memory-handoff-manifest-receipt-store-ref checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-store-ref checked-manifest))
        (cons 'store-kind
-             (poo-flow-memory-handoff-manifest-receipt-store-kind checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-store-kind checked-manifest))
        (cons 'namespace
-             (poo-flow-memory-handoff-manifest-receipt-namespace checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-namespace checked-manifest))
        (cons 'scopes
-             (poo-flow-memory-handoff-manifest-receipt-scopes checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-scopes checked-manifest))
        (cons 'recall-policies
-             (poo-flow-memory-handoff-manifest-receipt-recall-policies checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-recall-policies checked-manifest))
        (cons 'commit-policies
-             (poo-flow-memory-handoff-manifest-receipt-commit-policies checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-commit-policies checked-manifest))
        (cons 'operation
-             (poo-flow-memory-handoff-manifest-receipt-operation checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-operation checked-manifest))
        (cons 'runtime-owner
-             (poo-flow-memory-handoff-manifest-receipt-runtime-owner checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-runtime-owner checked-manifest))
        (cons 'runtime-backend
-             (poo-flow-memory-handoff-manifest-receipt-runtime-backend checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-runtime-backend checked-manifest))
        (cons 'durable?
-             (poo-flow-memory-handoff-manifest-receipt-durable? checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-durable? checked-manifest))
        (cons 'handoff-ready?
-             (poo-flow-memory-handoff-manifest-receipt-handoff-ready? checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-handoff-ready? checked-manifest))
        (cons 'diagnostic-count
-             (poo-flow-memory-handoff-manifest-receipt-diagnostic-count checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-diagnostic-count checked-manifest))
        (cons 'diagnostics
-             (poo-flow-memory-handoff-manifest-receipt-diagnostics checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-diagnostics checked-manifest))
        (cons 'runtime-executed
-             (poo-flow-memory-handoff-manifest-receipt-runtime-executed checked-manifest))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-runtime-executed checked-manifest))
        (cons 'metadata
-             (poo-flow-memory-handoff-manifest-receipt-metadata checked-manifest)))
+             (agentic-ai-lab-memory-handoff-manifest-receipt-metadata checked-manifest)))
       (list
        (cons 'kind (.ref checked-manifest 'kind))
        (cons 'schema (.ref checked-manifest 'schema))

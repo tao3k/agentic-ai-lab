@@ -59,7 +59,7 @@
 
 ;; : (-> Alist Void)
 (def (module-object-list-merge-display-receipt receipt)
-  (display "[poo-flow-benchmark] module-object-list-merge ")
+  (display "[agentic-ai-lab-benchmark] module-object-list-merge ")
   (write receipt)
   (newline)
   (force-output))
@@ -70,7 +70,7 @@
 
 ;; : (-> Integer Integer Integer [Integer])
 (def (module-object-list-merge-batch start size step)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    size
    (lambda (index)
      (module-object-list-merge-capability
@@ -78,7 +78,7 @@
 
 ;; : (-> Integer Integer Integer [PooModuleFieldContribution])
 (def (module-object-list-merge-contributions batch-count batch-size overlap-step)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    batch-count
    (lambda (batch-index)
      (yuanxu-module-field-contribution

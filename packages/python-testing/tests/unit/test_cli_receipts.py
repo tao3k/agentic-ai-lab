@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import json
 
-from poo_flow_testing import CaseEvidence, CaseRegistry, CaseSpec, ModulePart
-from poo_flow_testing import cli
+from agentic_ai_lab_testing import CaseEvidence, CaseRegistry, CaseSpec, ModulePart
+from agentic_ai_lab_testing import cli
 
 
 def test_receipt_preserves_pass_and_failure(tmp_path, monkeypatch) -> None:
@@ -29,7 +29,7 @@ def test_receipt_preserves_pass_and_failure(tmp_path, monkeypatch) -> None:
 
     assert status == 1
     document = json.loads(receipt.read_text())
-    assert document["schema"] == "poo-flow.testing-cases.v1"
+    assert document["schema"] == "agentic-ai-lab.testing-cases.v1"
     assert document["source_revision"] is None
     assert document["working_tree_dirty"] is None
     assert [(result["identity"], result["status"]) for result in document["results"]] == [

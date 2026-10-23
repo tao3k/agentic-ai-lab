@@ -6,15 +6,15 @@
         (only-in :clan/poo/mop Type. define-type)
         (only-in :std/list/list every delete-duplicates/hash))
 (export SessionInputRefType SessionTaskType SessionScheduleType
-        poo-flow-session-input-ref-shape? poo-flow-session-task-shape?
-        poo-flow-session-schedule-shape?)
+        agentic-ai-lab-session-input-ref-shape? agentic-ai-lab-session-task-shape?
+        agentic-ai-lab-session-schedule-shape?)
 (def (name? value) (and (string? value) (< 0 (string-length value) 257)))
 (def (coordinate? value) (and (exact-integer? value) (<= 0 value 65535)))
 (def (has? value kind keys)
   (and (object? value) (.slot? value 'kind) (eq? (.ref value 'kind) kind)
        (every (lambda (key) (.slot? value key)) keys)))
-(def (poo-flow-session-input-ref-shape? value)
-  (and (has? value 'poo-flow.session.input-ref.v1
+(def (agentic-ai-lab-session-input-ref-shape? value)
+  (and (has? value 'agentic-ai-lab.session.input-ref.v1
           '(producer contract identity digest scope-digest source-vector-digest query-digest
             restriction-digest profile-digest receipt-ref complete? consumer-session consumer-turn))
        (every (lambda (key) (name? (.ref value key)))
@@ -22,24 +22,24 @@
             restriction-digest profile-digest receipt-ref))
        (eq? (.ref value 'complete?) #t)
        (name? (.ref value 'consumer-session)) (coordinate? (.ref value 'consumer-turn))))
-(def (poo-flow-session-task-shape? value)
-  (and (has? value 'poo-flow.session.task.v1 '(identity revision input anchor-refs))
+(def (agentic-ai-lab-session-task-shape? value)
+  (and (has? value 'agentic-ai-lab.session.task.v1 '(identity revision input anchor-refs))
        (name? (.ref value 'identity)) (coordinate? (.ref value 'revision))
-       (poo-flow-session-input-ref-shape? (.ref value 'input))
+       (agentic-ai-lab-session-input-ref-shape? (.ref value 'input))
        (list? (.ref value 'anchor-refs)) (<= (length (.ref value 'anchor-refs)) 32)
        (every name? (.ref value 'anchor-refs))))
 (def (attempt? value)
-  (and (has? value 'poo-flow.session.attempt.v1
+  (and (has? value 'agentic-ai-lab.session.attempt.v1
           '(session task task-revision identity generation turn request input anchor-refs))
        (every (lambda (key) (name? (.ref value key))) '(session task identity request))
        (every (lambda (key) (coordinate? (.ref value key))) '(task-revision generation turn))
-       (poo-flow-session-input-ref-shape? (.ref value 'input))
+       (agentic-ai-lab-session-input-ref-shape? (.ref value 'input))
        (list? (.ref value 'anchor-refs)) (<= (length (.ref value 'anchor-refs)) 32)
        (every name? (.ref value 'anchor-refs))
        (equal? (.ref value 'session) (.ref (.ref value 'input) 'consumer-session))
        (= (.ref value 'turn) (.ref (.ref value 'input) 'consumer-turn))))
-(def (poo-flow-session-schedule-shape? value)
-  (and (has? value 'poo-flow.session.schedule.v1
+(def (agentic-ai-lab-session-schedule-shape? value)
+  (and (has? value 'agentic-ai-lab.session.schedule.v1
           '(identity revision generation status active obligations completed))
        (name? (.ref value 'identity))
        (coordinate? (.ref value 'revision)) (coordinate? (.ref value 'generation))
@@ -64,6 +64,6 @@
                 (null? (.ref value 'obligations)))
            (eq? (.ref value 'active) #f))
        (or (eq? (.ref value 'status) 'recovering) (null? (.ref value 'obligations)))))
-(define-type (SessionInputRefType @ Type.) .element?: poo-flow-session-input-ref-shape?)
-(define-type (SessionTaskType @ Type.) .element?: poo-flow-session-task-shape?)
-(define-type (SessionScheduleType @ Type.) .element?: poo-flow-session-schedule-shape?)
+(define-type (SessionInputRefType @ Type.) .element?: agentic-ai-lab-session-input-ref-shape?)
+(define-type (SessionTaskType @ Type.) .element?: agentic-ai-lab-session-task-shape?)
+(define-type (SessionScheduleType @ Type.) .element?: agentic-ai-lab-session-schedule-shape?)

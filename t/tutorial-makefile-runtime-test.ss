@@ -18,7 +18,7 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/workflow/flows)
+        :agentic-ai-lab/modules/workflow/flows)
 
 (export tutorial-makefile-runtime-test)
 
@@ -122,8 +122,8 @@
 (def macro-makefile-tool-cli
   (make-makefile-tool-runtime-command-descriptor
    'macro-makefile-tool-cli
-   "/usr/bin/poo-flow-runtime"
-   (list (cons 'runtime-name "poo-flow-runtime")
+   "/usr/bin/agentic-ai-lab-runtime"
+   (list (cons 'runtime-name "agentic-ai-lab-runtime")
          (cons 'tutorial 'macro-stage))))
 
 ;;; This suite protects tutorial runtime receipts so documentation examples stay
@@ -171,8 +171,8 @@
       (let* ((descriptor
               (make-makefile-tool-runtime-command-descriptor
                'stage-18-makefile-tool-cli
-               "/usr/bin/poo-flow-runtime"
-               (list (cons 'runtime-name "poo-flow-runtime")
+               "/usr/bin/agentic-ai-lab-runtime"
+               (list (cons 'runtime-name "agentic-ai-lab-runtime")
                      (cons 'tutorial 'stage-18))))
              (flow (make-makefile-tool-workflow 'makefile-tool-stage-18))
              (parse-task (car (flow-steps flow)))
@@ -214,11 +214,11 @@
         (check-equal? (cdr (assoc 'name parse-manifest))
                       'stage-18-makefile-tool-cli)
         (check-equal? (cdr (assoc 'executable parse-manifest))
-                      "/usr/bin/poo-flow-runtime")
+                      "/usr/bin/agentic-ai-lab-runtime")
         (check-equal? (cdr (assoc 'metadata parse-manifest))
                       '((workflow . makefile-tool)
                         (runtime . rust-cli-compatible)
-                        (runtime-name . "poo-flow-runtime")
+                        (runtime-name . "agentic-ai-lab-runtime")
                         (tutorial . stage-18)))
         (check-equal? (member "--operation" parse-args)
                       '("--operation"
@@ -239,7 +239,7 @@
                         "--expected-output"
                         "process-output"))
         (check-equal? (cdr (assoc 'argv run-manifest))
-                      (cons "/usr/bin/poo-flow-runtime" run-args))))
+                      (cons "/usr/bin/agentic-ai-lab-runtime" run-args))))
     (yuanxu-test-case "authors makefile runtime descriptor with Gerbil macros"
       (let* ((parse-task (car (flow-steps macro-makefile-runtime-flow)))
              (parse-request
@@ -265,7 +265,7 @@
         (check-equal? (cdr (assoc 'metadata manifest))
                       '((workflow . makefile-tool)
                         (runtime . rust-cli-compatible)
-                        (runtime-name . "poo-flow-runtime")
+                        (runtime-name . "agentic-ai-lab-runtime")
                         (tutorial . macro-stage)))
         (check-equal? (member "--operation" args)
                       '("--operation"

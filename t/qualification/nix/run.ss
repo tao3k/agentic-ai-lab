@@ -4,7 +4,7 @@
 (import :clan/poo/object
         (only-in :std/source this-source-file)
         (only-in :yuanxu/observability/testing-script TestingScript.)
-        (only-in :poo-flow/modules/nix/progress make-nix-test-progress-reader)
+        (only-in :agentic-ai-lab/modules/nix/progress make-nix-test-progress-reader)
         (only-in :yuanxu/module-system/source/admission module-source-read module-source-admit-current!))
 ;; Resolve test inputs from the maintained product root, independent of cwd.
 (def root (path-expand "../../.." (path-directory (this-source-file))))

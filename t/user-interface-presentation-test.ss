@@ -11,17 +11,17 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/module-authoring/module-interface
-                 poo-flow-brand-group
-                 poo-flow-brand-name)
+        (only-in :agentic-ai-lab/modules/module-authoring/module-interface
+                 agentic-ai-lab-brand-group
+                 agentic-ai-lab-brand-name)
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-user-config-presentation-kind)
-        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
-                 pooFlowUserConfigPresentation)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation)
         (only-in :yuanxu/profile-composition/user-profile
                  yuanxu-user-profile-presentation-kind)
-        (only-in :poo-flow/modules/workflow/scenario/configuration/profile-presentation-config
-                 pooFlowUserProfilePresentation)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/profile-presentation-config
+                 agenticAiLabUserProfilePresentation)
         "user-interface-fixtures.ss")
 
 (export user-interface-presentation-test)
@@ -65,8 +65,8 @@
 (def (user-interface-config-presentation-test)
   (yuanxu-test-case "presents downstream config without descriptor realization"
       (let* ((presentation
-              (pooFlowUserConfigPresentation
-               test-poo-flow-user-config
+              (agenticAiLabUserConfigPresentation
+               test-agentic-ai-lab-user-config
                '(surface
                  profile
                  flow-mode
@@ -192,10 +192,10 @@
         (check-equal? (alist-value 'runtime-handoff loop-engine-intent)
                       'loop-governor-marlin-runtime-manifest)
         (check-equal? (alist-value 'contract loop-engine-result-contract)
-                      'poo-flow.loop-governor.result-contract.v1)
+                      'agentic-ai-lab.loop-governor.result-contract.v1)
         (check-equal? (alist-value 'valid? loop-engine-result-contract) #t)
         (check-equal? (alist-value 'human-audit loop-engine-result-contract)
-                      'poo-flow.loop-governor.node-result.v1)
+                      'agentic-ai-lab.loop-governor.node-result.v1)
         (check-equal? (alist-value 'required-fields
                                    loop-engine-result-contract)
                       '(decision summary evidence))
@@ -213,8 +213,8 @@
                       '(#f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f))
         (check-equal? (alist-value 'profile settings)
                       "developer")
-        (check-equal? (.ref presentation 'brand-name) poo-flow-brand-name)
-        (check-equal? (.ref presentation 'brand-group) poo-flow-brand-group)
+        (check-equal? (.ref presentation 'brand-name) agentic-ai-lab-brand-name)
+        (check-equal? (.ref presentation 'brand-group) agentic-ai-lab-brand-group)
         (check-equal? (not
                        (not
                         (member "yuanxu!"
@@ -227,7 +227,7 @@
                       #t)
         (check-equal? (not
                        (not
-                        (member "pooFlowUserConfigPresentation"
+                        (member "agenticAiLabUserConfigPresentation"
                                 (.ref presentation 'api-entrypoints))))
                       #t)
         (check-equal? (not
@@ -237,7 +237,7 @@
                       #t)
         (check-equal? (not
                        (not
-                        (member "pooFlowSandboxProfilesPresentation"
+                        (member "agenticAiLabSandboxProfilesPresentation"
                                 (.ref presentation 'api-entrypoints))))
                       #t)
         (check-equal? (alist-value 'runtime-owner
@@ -262,7 +262,7 @@
 (def (user-interface-profile-presentation-case-test)
   (yuanxu-test-case "presents profile without descriptor realization"
       (let* ((presentation
-              (pooFlowUserProfilePresentation test-poo-flow-user-profile)))
+              (agenticAiLabUserProfilePresentation test-agentic-ai-lab-user-profile)))
         (check-equal? (.ref presentation 'kind)
                       yuanxu-user-profile-presentation-kind)
         (check-equal? (.ref presentation 'profile-name) 'developer)
@@ -326,10 +326,10 @@
                       '(flow . funflow))
         (check-equal? (not
                        (not
-                        (member "poo-flow-profile"
+                        (member "agentic-ai-lab-profile"
                                 (.ref presentation 'user-entrypoints))))
                       #t)
-        (check-equal? (.ref presentation 'brand-name) poo-flow-brand-name)
+        (check-equal? (.ref presentation 'brand-name) agentic-ai-lab-brand-name)
         (check-equal? (.ref presentation 'descriptor-realized?) #f)
         (check-equal? (.ref presentation 'runtime-executed) #f))))
 
@@ -337,6 +337,6 @@
 ;;; This suite keeps presentation output aligned with the declarative user
 ;;; interface contract while each case remains a separately inspectable owner.
 (def user-interface-presentation-test
-  (test-suite "poo-flow user interface presentation"
+  (test-suite "agentic-ai-lab user interface presentation"
     (user-interface-config-presentation-test)
     (user-interface-profile-presentation-case-test)))

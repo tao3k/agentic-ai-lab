@@ -102,7 +102,7 @@ retained and was fixed before this passing run. No deadline was changed.
 
 The default command =just test-file t/nix-flake-source-test.ss= was attempted.
 It failed before entering the Case because the current root environment cannot
-resolve =:yuanxu/module-system/selection/init-syntax= from =poo-flow/init=.
+resolve =:yuanxu/module-system/selection/init-syntax= from =agentic-ai-lab/init=.
 This is not a passing product integration receipt or an observed Nix failure.
 The current =modules/nix= / =modules/services/opentofu= migration is staged or
 untracked concurrent work and is absent from the inspected PR head
@@ -119,7 +119,7 @@ The ordinary binding regression also passed all four Cases, required module/
 Harness/final markers and zero process exit. This does not turn the separate
 product test import failure into a pass.
 
-Local logs: =/private/tmp/poo-flow-nix-callchain-20261023=. No raw logs enter Git.
+Local logs: =/private/tmp/agentic-ai-lab-nix-callchain-20261023=. No raw logs enter Git.
 
 * Decision and remaining integration work
 

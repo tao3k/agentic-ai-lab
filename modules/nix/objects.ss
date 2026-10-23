@@ -5,12 +5,12 @@
         (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/module-system/source/admission module-source-admit-current! module-source-type module-source-read
                  module-source-checked-operation module-source-operation-procedure))
-(export NixSource. NixFlakeSource. poo-flow-nix-admit-generation
-        poo-flow-nix-flake-admit-generation)
+(export NixSource. NixFlakeSource. agentic-ai-lab-nix-admit-generation
+        agentic-ai-lab-nix-flake-admit-generation)
 (.def (NixSource. source [])
   .restore-build:
   (lambda (graph)
-    (poo-flow-nix-restore-build-publication! source graph))
+    (agentic-ai-lab-nix-restore-build-publication! source graph))
   expression: #f
   ;; A configured Source owns its byte observations. Flake Sources override this
   ;; with their lock/source closure; expression callers may refine it upstream.
@@ -22,18 +22,18 @@
   (lambda ()
     (unless (yuanxu-validation-evidence-accepted? (.call NixSourceContract .admit source #f))
       (error "invalid Nix Source"))
-    (poo-flow-nix-instantiate
+    (agentic-ai-lab-nix-instantiate
       (.get config instantiate) expression arguments
       ;; Readonly guards do not need the realization capability.
       (lambda () (.get config realize))))
   .realize:
   (lambda (derivation)
-    (poo-flow-nix-realize (.get config realize) derivation))
+    (agentic-ai-lab-nix-realize (.get config realize) derivation))
   .guard-form:
   (lambda (expected)
     (let ((rows (map (lambda (name) (cons name (.ref arguments name))) (.all-slots arguments)))
           (tools (map (lambda (name) (cons name (.ref config name))) '(instantiate realize))))
-      `(poo-flow-nix-admit-generation ,expression ',rows ,expected ',tools)))
+      `(agentic-ai-lab-nix-admit-generation ,expression ',rows ,expected ',tools)))
   ;; A native phase object: derivation and realization are receiver-local lazy
   ;; slots. Core may write its guarded entry between preparation and validation.
   ;; This is a candidate until admit-current succeeds; .build keeps the eager
@@ -59,7 +59,7 @@
           ;; entry guard when its caller has immediately run that exact guard.
           ;; Tail checks and all external effect boundaries remain unchanged.
           admit-current: (module-source-operation-procedure %source-operation)
-          guard-imports: '(:poo-flow/modules/nix/objects)
+          guard-imports: '(:agentic-ai-lab/modules/nix/objects)
           guard-forms:
           (list (.call source-value .guard-form derivation)))))
   .build:
@@ -76,7 +76,7 @@
   ;; An optional explicitly owned evaluator scope. Native POO receiver copies
   ;; retain configuration, not an admission verdict or a selected flake output.
   evaluator: #f
-  source-inputs: (poo-flow-nix-flake-source-inputs reference)
+  source-inputs: (agentic-ai-lab-nix-flake-source-inputs reference)
   .instantiate:
   (lambda ()
     (unless (yuanxu-validation-evidence-accepted?
@@ -85,13 +85,13 @@
     (module-source-admit-current! source-inputs)
     (let (result (if evaluator
                    (.call evaluator .instantiate reference attribute arguments inputs (.get config nix))
-                   (poo-flow-nix-flake-instantiate
+                   (agentic-ai-lab-nix-flake-instantiate
                      (.get config nix) reference attribute arguments inputs)))
       (module-source-admit-current! source-inputs)
       result))
   .guard-form:
   (lambda (expected)
-    `(poo-flow-nix-flake-admit-generation
+    `(agentic-ai-lab-nix-flake-admit-generation
        ,reference ,attribute ,expected ,(.get config nix)
        ',(map (lambda (key) (cons key (.ref arguments key))) (.all-slots arguments))
        ',source-inputs
@@ -102,11 +102,11 @@
     (error "stale external package derivation; regenerate the selected build graph" expected)))
 
 ;; Serialized generated build guard: rows are a private wire boundary, not a DSL.
-(def (poo-flow-nix-admit-generation expression-path argument-rows expected (tools #f))
+(def (agentic-ai-lab-nix-admit-generation expression-path argument-rows expected (tools #f))
   (let (source (.cc NixSource. 'expression expression-path 'arguments (object<-alist argument-rows)
                     'config (if tools (object<-alist tools) NixConfig)))
     (admit-derivation! source expected)))
-(def (poo-flow-nix-flake-admit-generation reference attribute expected executable
+(def (agentic-ai-lab-nix-flake-admit-generation reference attribute expected executable
         (argument-rows '()) (observations '()) (input-rows '()))
   (admit-derivation!
     (.cc NixFlakeSource. 'reference reference 'attribute attribute

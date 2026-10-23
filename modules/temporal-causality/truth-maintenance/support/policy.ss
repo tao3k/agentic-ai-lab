@@ -6,45 +6,45 @@
         (only-in :clan/poo/mop validate)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/modules/temporal-causality/time/objects poo-flow-temporal-instant)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
         "types.ss" "funs.ss")
-(export poo-flow-temporal-support-policy poo-flow-temporal-support-policy-status poo-flow-temporal-support-guard
-        poo-flow-temporal-support-guard-replay poo-flow-temporal-support-claim)
+(export agentic-ai-lab-temporal-support-policy agentic-ai-lab-temporal-support-policy-status agentic-ai-lab-temporal-support-guard
+        agentic-ai-lab-temporal-support-guard-replay agentic-ai-lab-temporal-support-claim)
 (def (text? x) (and (string? x) (< 0 (string-length x) 257)))
 (def (digest x) (string-append "sha256:" (hex-encode (sha256 (string->utf8
   (call-with-output-string (lambda (p) (write x p))))))))
 (def (instant x)
   (unless (and (object? x) (.slot? x 'kind)
-               (eq? (.ref x 'kind) 'poo-flow.temporal-causality.instant))
+               (eq? (.ref x 'kind) 'agentic-ai-lab.temporal-causality.instant))
     (error "invalid policy instant"))
-  (let (value (poo-flow-temporal-instant (.ref x 'identity) (.ref x 'domain-identity)
+  (let (value (agentic-ai-lab-temporal-instant (.ref x 'identity) (.ref x 'domain-identity)
                (.ref x 'coordinate) (.ref x 'provenance-identity) (.ref x 'modality)))
     (unless (and (integer? (.ref value 'coordinate)) (exact? (.ref value 'coordinate))
                  (eq? (.ref value 'modality) 'observed))
       (error "policy requires explicit observed integer coordinate")) value))
 (def (instant-row x)
   (map (lambda (s) (.ref x s)) '(identity domain-identity coordinate provenance-identity modality)))
-(def (poo-flow-temporal-support-policy id revision start end)
+(def (agentic-ai-lab-temporal-support-policy id revision start end)
   (unless (and (text? id) (text? revision)) (error "invalid support policy identity"))
   (let* ((a (instant start)) (b (instant end))
          (domain (.ref a 'domain-identity)))
     (unless (and (equal? domain (.ref b 'domain-identity))
                  (< (.ref a 'coordinate) (.ref b 'coordinate)))
       (error "policy window must be nonempty in one time domain"))
-    (validate PooFlowTemporalSupportPolicy
-      (.o kind: 'poo-flow.temporal-causality.support-policy identity: id revision-identity: revision
+    (validate AgenticAILabTemporalSupportPolicy
+      (.o kind: 'agentic-ai-lab.temporal-causality.support-policy identity: id revision-identity: revision
           start: a end: b semantic-digest: (digest
-            (list 'poo-flow.temporal-support-policy.v1 id revision (instant-row a) (instant-row b)))))))
+            (list 'agentic-ai-lab.temporal-support-policy.v1 id revision (instant-row a) (instant-row b)))))))
 (def (canonical-policy policy)
   (unless (and (object? policy) (.slot? policy 'kind)
-               (eq? (.ref policy 'kind) 'poo-flow.temporal-causality.support-policy))
+               (eq? (.ref policy 'kind) 'agentic-ai-lab.temporal-causality.support-policy))
     (error "invalid support policy"))
-  (let (value (poo-flow-temporal-support-policy (.ref policy 'identity)
+  (let (value (agentic-ai-lab-temporal-support-policy (.ref policy 'identity)
                (.ref policy 'revision-identity) (.ref policy 'start) (.ref policy 'end)))
     (unless (equal? (.ref value 'semantic-digest) (.ref policy 'semantic-digest))
       (error "support policy digest mismatch")) value))
 ;;; Shared temporal applicability; Context use consumes the existing clock owner.
-(def (poo-flow-temporal-support-policy-status policy expected-digest effective-at)
+(def (agentic-ai-lab-temporal-support-policy-status policy expected-digest effective-at)
   (unless (text? expected-digest) (error "expected policy digest required"))
   (let* ((owned (canonical-policy policy)) (now (instant effective-at))
          (start (.ref owned 'start)) (end (.ref owned 'end)))
@@ -54,35 +54,35 @@
           ((< (.ref now 'coordinate) (.ref start 'coordinate)) 'not-yet-effective)
           ((>= (.ref now 'coordinate) (.ref end 'coordinate)) 'expired-policy)
           (else 'applicable))))
-(def (poo-flow-temporal-support-guard program journal as-of-value valid-at-value budget-value policy expected-digest effective-at)
+(def (agentic-ai-lab-temporal-support-guard program journal as-of-value valid-at-value budget-value policy expected-digest effective-at)
   (unless (text? expected-digest) (error "expected policy digest required"))
   (let* ((owned (canonical-policy policy)) (now (instant effective-at))
-         (evaluation-value (poo-flow-temporal-support-evaluate program journal as-of-value valid-at-value budget-value))
+         (evaluation-value (agentic-ai-lab-temporal-support-evaluate program journal as-of-value valid-at-value budget-value))
          (start (.ref owned 'start)) (end (.ref owned 'end)))
     (unless (equal? (.ref now 'domain-identity) (.ref start 'domain-identity))
       (error "policy evaluation time domain mismatch"))
     (unless (equal? (.ref program 'policy-identity) (.ref owned 'identity))
       (error "support program policy owner mismatch"))
-    (let* ((status (poo-flow-temporal-support-policy-status owned expected-digest now))
-           (fingerprint (digest (list 'poo-flow.temporal-support-guard.v1
+    (let* ((status (agentic-ai-lab-temporal-support-policy-status owned expected-digest now))
+           (fingerprint (digest (list 'agentic-ai-lab.temporal-support-guard.v1
               (.ref evaluation-value 'semantic-digest) (.ref owned 'semantic-digest)
               expected-digest (instant-row now) status))))
-      (validate PooFlowTemporalSupportGuard
-        (.o kind: 'poo-flow.temporal-causality.support-guard semantic-digest: fingerprint
+      (validate AgenticAILabTemporalSupportGuard
+        (.o kind: 'agentic-ai-lab.temporal-causality.support-guard semantic-digest: fingerprint
             policy: owned policy-digest: (.ref owned 'semantic-digest)
             expected-policy-digest: expected-digest effective-at: now policy-status: status
             policy-applicable?: (eq? status 'applicable) evaluation: evaluation-value
             as-of: as-of-value valid-at: valid-at-value budget: budget-value
             proof-admitted?: #f source-authenticated?: #f selection-admitted?: #f
             action-authorized?: #f durable?: #f)))))
-(def (poo-flow-temporal-support-guard-replay receipt program journal policy)
+(def (agentic-ai-lab-temporal-support-guard-replay receipt program journal policy)
   (unless (and (object? receipt) (.slot? receipt 'kind)
-               (eq? (.ref receipt 'kind) 'poo-flow.temporal-causality.support-guard)
+               (eq? (.ref receipt 'kind) 'agentic-ai-lab.temporal-causality.support-guard)
                (not (.ref receipt 'proof-admitted?)) (not (.ref receipt 'source-authenticated?))
                (not (.ref receipt 'selection-admitted?)) (not (.ref receipt 'action-authorized?))
                (not (.ref receipt 'durable?)))
     (error "invalid support guard receipt"))
-  (let (value (poo-flow-temporal-support-guard program journal (.ref receipt 'as-of)
+  (let (value (agentic-ai-lab-temporal-support-guard program journal (.ref receipt 'as-of)
                (.ref receipt 'valid-at) (.ref receipt 'budget) policy
                (.ref receipt 'expected-policy-digest) (.ref receipt 'effective-at)))
     (unless (and (equal? (.ref value 'semantic-digest) (.ref receipt 'semantic-digest))
@@ -96,8 +96,8 @@
       (error "support guard replay binding mismatch")) value))
 
 ;;; A read-only projection of a native policy guard, never an effect permit.
-(def (poo-flow-temporal-support-claim guard-value identity expected-binding)
-  (validate PooFlowTemporalSupportGuard guard-value)
+(def (agentic-ai-lab-temporal-support-claim guard-value identity expected-binding)
+  (validate AgenticAILabTemporalSupportGuard guard-value)
   (unless (and (text? identity) (or (not expected-binding) (text? expected-binding)))
     (error "invalid native claim selection"))
   (let* ((matches (filter (lambda (row) (equal? (.ref row 'identity) identity))
@@ -105,8 +105,8 @@
          (binding (.ref guard-value 'semantic-digest))
          (fresh? (or (not expected-binding) (equal? expected-binding binding))))
     (unless (= (length matches) 1) (error "claim outside named inventory"))
-    (validate PooFlowTemporalSupportClaim
-      (.o kind: 'poo-flow.temporal-causality.support-claim claim: (car matches)
+    (validate AgenticAILabTemporalSupportClaim
+      (.o kind: 'agentic-ai-lab.temporal-causality.support-claim claim: (car matches)
           status: (if (and fresh? (.ref guard-value 'policy-applicable?)) (.ref (car matches) 'status) 'unknown)
           context-status: (if fresh? 'matches-cut 'stale-context)
           binding-digest: binding guard: guard-value proof-admitted?: #f source-authenticated?: #f

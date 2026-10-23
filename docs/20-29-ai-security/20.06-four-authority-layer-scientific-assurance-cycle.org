@@ -7,14 +7,14 @@
 * Status
 
 - Status: normative RFC and Lean closure model implemented
-- Owner: =poo-flow=
+- Owner: =agentic-ai-lab=
 - Scope: assurance lifecycle for composable architecture-semantics packages
 - Engine boundary: this RFC governs evidence and authority; it does not impose
-  a fixed security-layer ontology on POO Flow
+  a fixed security-layer ontology on Agentic AI Lab
 
 * Decision
 
-POO Flow assurance uses four correctness-authoritative layers:
+Agentic AI Lab assurance uses four correctness-authoritative layers:
 
 1. *Normative layer* -- Org RFCs state the claim, assumptions, failure
    semantics, owner, and observable acceptance criteria.
@@ -225,9 +225,9 @@ reuse another claim's proof or receipt.
 ** Shared formal framework binding
 
 - Lean module identity ::
-  =PooFlowProof.Enterprise.AISecurityFourAuthorityLayerClosure=
+  =AgenticAILabProof.Enterprise.AISecurityFourAuthorityLayerClosure=
 - Verified command ::
-  =lake env lean PooFlowProof/Enterprise/AISecurityFourAuthorityLayerClosure.lean=
+  =lake env lean AgenticAILabProof/Enterprise/AISecurityFourAuthorityLayerClosure.lean=
 - Current receipt :: exit =0= in =5.2303s= with no warnings or errors.
 - Declaration scope :: =AuthorityChain=, =FourLayerClosed=, authority-layer
   necessity theorems, open-counterexample reopening, and presentation
@@ -243,16 +243,16 @@ effect, authority, relation, change, or provider-non-authority semantics.
 
 ** EASE-001 — constrained system effect
 - Formal identity ::
-  =PooFlowProof.Enterprise.AISecurityEmbodiedConstrainedSystemEffectClosure.ease001FormalBound=
+  =AgenticAILabProof.Enterprise.AISecurityEmbodiedConstrainedSystemEffectClosure.ease001FormalBound=
 - Countermodel identity :: =authorizedEffectAloneDoesNotClose=
 - Reference transition identity ::
-  =python://src/poo_flow_proof/embodied_ai_constrained_effect.py#item/function/evaluate_constrained_effect=
+  =python://src/agentic_ai_lab_proof/embodied_ai_constrained_effect.py#item/function/evaluate_constrained_effect=
 - Implementation artifact identity ::
-  =src/poo_flow_proof/embodied_ai_constrained_effect.py= at
+  =src/agentic_ai_lab_proof/embodied_ai_constrained_effect.py= at
   =sha256:34a7088bce66839fdd7c0f8abbde5143bf07c9a6dea8252606aad138653ae0d8=
-- Trace schema/root :: =poo-flow.ai-security.ease001-replay-receipt.v1= /
+- Trace schema/root :: =agentic-ai-lab.ai-security.ease001-replay-receipt.v1= /
   =sha256:d519efdc9cd22e189ce990bb329c14f3f26f38b7cb93c948dbafc7440753ef63=
-- Reused owners :: =PooFlowProof.PooC4.authorizedEffectL1=,
+- Reused owners :: =AgenticAILabProof.PooC4.authorizedEffectL1=,
   =PromotionTransactionRecovery.closedDuplicateRequiresPriorCommit=,
   =PromotionTransactionRecovery.closedRollbackRestoresCompleteEffectObservation=,
   and =EffectDomainCoverage.coveredRollbackAgreesOnEveryPlanEffect=
@@ -271,16 +271,16 @@ effect, authority, relation, change, or provider-non-authority semantics.
 
 - Normative identity :: =20.07/a-security-conclusion-is-an-authority-bearing-declaration=
 - Formal identity ::
-  =PooFlowProof.Enterprise.AISecurityEmbodiedAuthorityBearingDeclarationClosure.ease002FormalBound=
+  =AgenticAILabProof.Enterprise.AISecurityEmbodiedAuthorityBearingDeclarationClosure.ease002FormalBound=
 - Countermodel identity ::
   =roleOnlyAdmissionAcceptsForgedProvider= and
   =roleDeclarationDoesNotImplyAuthority=
 - Reference transition identity ::
-  =python://src/poo_flow_proof/embodied_ai_authority_declaration.py#item/function/evaluate_authority_declaration_admission=
+  =python://src/agentic_ai_lab_proof/embodied_ai_authority_declaration.py#item/function/evaluate_authority_declaration_admission=
 - Implementation artifact identity ::
-  =src/poo_flow_proof/embodied_ai_authority_declaration.py= at
+  =src/agentic_ai_lab_proof/embodied_ai_authority_declaration.py= at
   =sha256:91383a6a4ba629eda32e53094a4da6a4532e29f1735bcae26090f7bb49834891=
-- Trace schema/root :: =poo-flow.ai-security.ease002-replay-receipt.v1= /
+- Trace schema/root :: =agentic-ai-lab.ai-security.ease002-replay-receipt.v1= /
   =sha256:33924ee01743bebeae0ed9c350e4d245b8d906dc2284277722e488c8d90ab905=
 - Reused authority owners ::
   =CedarDualEngineAuthorization.closedDualDecisionProvidesSubjectEquality=,
@@ -301,13 +301,13 @@ effect, authority, relation, change, or provider-non-authority semantics.
 
 ** EASE-003 — computable typed security relation graph
 - Formal identity ::
-  =PooFlowProof.Enterprise.AISecurityEmbodiedTypedRelationGraphClosure.ease003FormalBound=
+  =AgenticAILabProof.Enterprise.AISecurityEmbodiedTypedRelationGraphClosure.ease003FormalBound=
 - Countermodel identity :: =labelOnlyAdmissionAcceptsIllTypedRelation= and
   =typedGraphRejectsIllTypedRelation=
 - Reference transition identity ::
-  =poo_flow_proof.embodied_ai_security_relation_graph.validate_typed_relation_graph=
+  =agentic_ai_lab_proof.embodied_ai_security_relation_graph.validate_typed_relation_graph=
 - Implementation artifact identity ::
-  =src/poo_flow_proof/embodied_ai_security_relation_graph.py= at
+  =src/agentic_ai_lab_proof/embodied_ai_security_relation_graph.py= at
   =sha256:05516fac56efd141a444e38cf36db2e87bc89f6c13dcad5f7c5393367dc0c05b=
 
 - Normative identity :: =20.07/the-security-digital-thread-is-a-computable-typed-relation-graph=
@@ -322,20 +322,20 @@ effect, authority, relation, change, or provider-non-authority semantics.
 
 ** EASE-004 — change-driven assurance reopening
 - Reference transition identity ::
-  =poo_flow_proof.embodied_ai_security_relation_graph.project_change_impact=
+  =agentic_ai_lab_proof.embodied_ai_security_relation_graph.project_change_impact=
 - Implementation artifact identity ::
-  =src/poo_flow_proof/embodied_ai_security_relation_graph.py= at
+  =src/agentic_ai_lab_proof/embodied_ai_security_relation_graph.py= at
   =sha256:05516fac56efd141a444e38cf36db2e87bc89f6c13dcad5f7c5393367dc0c05b=
-- Trace schema/root :: =poo-flow.ai-security.change-impact-receipt.v1= /
+- Trace schema/root :: =agentic-ai-lab.ai-security.change-impact-receipt.v1= /
   =sha256:314f2a57fe86d21c2bdd77d7ebd0cf271679a92b25a585ac30e85ef0b0de5da5=
 
 - Normative identity :: =20.07/system-change-drives-invalidation-and-obligation-regeneration=
 - Lean declaration set ::
-  =PooFlowProof.Enterprise.AISecurityEmbodiedChangeDrivenAssuranceReopeningClosure=
+  =AgenticAILabProof.Enterprise.AISecurityEmbodiedChangeDrivenAssuranceReopeningClosure=
 - Formal verification receipt ::
-  =lake env lean PooFlowProof/Enterprise/AISecurityEmbodiedChangeDrivenAssuranceReopeningClosure.lean=
+  =lake env lean AgenticAILabProof/Enterprise/AISecurityEmbodiedChangeDrivenAssuranceReopeningClosure.lean=
   completed with exit =0= in approximately =8.1s= and no warnings or errors;
-  =lake build PooFlowProof.Enterprise= completed =477= jobs with exit =0=.
+  =lake build AgenticAILabProof.Enterprise= completed =477= jobs with exit =0=.
 - Formal obligation :: prove that affected claims cannot remain closed when their
   assumptions, authority context, publication head, or evidence envelope changes.
 - Executable obligation :: bind change-impact projection, stale-evidence rejection,
@@ -353,23 +353,23 @@ effect, authority, relation, change, or provider-non-authority semantics.
 
 - Normative identity :: =20.07/ai-is-an-analysis-provider-not-a-risk-acceptance-authority=
 - Lean declaration set ::
-  =PooFlowProof.Enterprise.AISecurityEmbodiedAIProviderNonAuthorityClosure=
+  =AgenticAILabProof.Enterprise.AISecurityEmbodiedAIProviderNonAuthorityClosure=
 - Formal verification receipt ::
-  =lake env lean PooFlowProof/Enterprise/AISecurityEmbodiedAIProviderNonAuthorityClosure.lean=
+  =lake env lean AgenticAILabProof/Enterprise/AISecurityEmbodiedAIProviderNonAuthorityClosure.lean=
   completed with exit =0= in =5.1985s= and no warnings or errors.
 - Formal obligation :: prove that provider output cannot authorize an effect,
   discharge verification, attest implementation, or accept residual risk.
 - Executable obligation :: bind provider provenance and candidate-review flow to an
   independently identified execution, verification, or acceptance authority.
 - Reference transition identity ::
-  =python://src/poo_flow_proof/embodied_ai_provider_non_authority.py#item/function/evaluate_provider_admission=
+  =python://src/agentic_ai_lab_proof/embodied_ai_provider_non_authority.py#item/function/evaluate_provider_admission=
 - Implementation artifact ::
-  =src/poo_flow_proof/embodied_ai_provider_non_authority.py= with digest
+  =src/agentic_ai_lab_proof/embodied_ai_provider_non_authority.py= with digest
   =sha256:b31cbf63be0c7fd0c4acf9ea001449f9f61bc67d8ac8a265305cb3d70bceda0b=.
 - Replay artifact ::
-  =src/poo_flow_proof/embodied_ai_provider_non_authority_replay.py=
+  =src/agentic_ai_lab_proof/embodied_ai_provider_non_authority_replay.py=
 - Independent replay action ::
-  =uv run python -m poo_flow_proof.embodied_ai_provider_non_authority_replay=
+  =uv run python -m agentic_ai_lab_proof.embodied_ai_provider_non_authority_replay=
 - Trace root ::
   =sha256:83bc876033e40ab5bac81326b12bf9185bfe7a53d78bd7157fb63ce442b93cd0=
 - Executable verification receipt :: two independent process runs produced
@@ -401,8 +401,8 @@ provider log, presentation note, or detached issue.
 
 The authority rules are modeled by:
 
-- =PooFlowProof.Enterprise.AISecurityFourAuthorityLayerClosure=
-- =PooFlowProof.Enterprise.AISecurityExecutableRefinementContractClosure=
+- =AgenticAILabProof.Enterprise.AISecurityFourAuthorityLayerClosure=
+- =AgenticAILabProof.Enterprise.AISecurityExecutableRefinementContractClosure=
 
 The proof establishes that:
 

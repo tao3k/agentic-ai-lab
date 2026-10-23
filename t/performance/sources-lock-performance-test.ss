@@ -83,7 +83,7 @@
    (yuanxu-test-case
     "constructs and indexes 10,000 admitted source lock entries"
     (displayln
-     "[poo-flow-benchmark] sources-lock phase=fixture-ready count="
+     "[agentic-ai-lab-benchmark] sources-lock phase=fixture-ready count="
      +sources-lock-performance-count+
      " constructorOwnedIndex="
      (eq? (.ref SourcesLock. 'index) #f))
@@ -100,7 +100,7 @@
            (_construction-receipt
             (begin
               (displayln
-               "[poo-flow-benchmark] sources-lock phase=construction-complete elapsedMs="
+               "[agentic-ai-lab-benchmark] sources-lock phase=construction-complete elapsedMs="
                construction-elapsed-ms
                " targetMs=" +sources-lock-performance-construction-target-ms+
                " maxMs=" +sources-lock-performance-construction-maximum-ms+)
@@ -110,7 +110,7 @@
             (benchmark-run
              sources-lock-performance-benchmark
              (lambda () (sources-lock-performance-summary lock)))))
-      (display "[poo-flow-benchmark] sources-lock ")
+      (display "[agentic-ai-lab-benchmark] sources-lock ")
       (write receipt)
       (newline)
       (force-output)

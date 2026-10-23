@@ -55,7 +55,7 @@ class WatchTest(unittest.TestCase):
 
     def test_sample_failure_is_bounded_and_retained(self):
         with tempfile.TemporaryDirectory() as directory, \
-             patch.dict(os.environ, POO_FLOW_TEST_STALL_DIAGNOSTICS=directory), \
+             patch.dict(os.environ, AGENTIC_AI_LAB_TEST_STALL_DIAGNOSTICS=directory), \
              patch.object(watch.sys, 'platform', 'darwin'), \
              patch.object(watch.subprocess, 'run',
                           side_effect=subprocess.TimeoutExpired('sample', 10)) as run:

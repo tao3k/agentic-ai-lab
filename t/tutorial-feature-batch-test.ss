@@ -18,10 +18,10 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/custom-task/interface
-        :poo-flow/modules/docker/interface
-        :poo-flow/modules/text/interface
-        :poo-flow/modules/workflow/flows
+        :agentic-ai-lab/modules/custom-task/interface
+        :agentic-ai-lab/modules/docker/interface
+        :agentic-ai-lab/modules/text/interface
+        :agentic-ai-lab/modules/workflow/flows
         :yuanxu/modules/funflow/store)
 
 ;; : (-> RunConfig Flow Input Value)

@@ -1,8 +1,8 @@
 use super::exchange::{PROJECTION, anchored_exchange, at, list, rows};
-use poo_flow_reasoning::{
+use agentic_ai_lab_reasoning::{
     Cancellation, ClueExchange, Data, Limits, Runtime, clue_sexpr, read_clue_request,
 };
-use poo_flow_reasoning::{ClueProjection, ClueSelector};
+use agentic_ai_lab_reasoning::{ClueProjection, ClueSelector};
 
 const CONJUNCTIVE_SELECTOR: &str = r"(define-program (query)
       (sources clue factor binding)

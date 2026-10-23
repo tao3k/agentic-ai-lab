@@ -26,7 +26,7 @@
     (loop-human-audit-member? value (cdr values)))))
 
 ;; loop-human-audit-alist?
-;;   : (-> PooFlowValue Boolean)
+;;   : (-> AgenticAILabValue Boolean)
 ;;   | doc m%
 ;;       Recognize proper alist values used by audit review projections.
 ;;       # Examples
@@ -38,7 +38,7 @@
   (and (list? value) (andmap pair? value)))
 
 ;; loop-human-audit-list-of?
-;;   : (-> (-> PooFlowValue Boolean) PooFlowValue Boolean)
+;;   : (-> (-> AgenticAILabValue Boolean) AgenticAILabValue Boolean)
 ;;   | doc m%
 ;;       Recognize proper human-audit lists whose elements satisfy a predicate.
 ;;       # Examples
@@ -49,11 +49,11 @@
 (def (loop-human-audit-list-of? predicate values)
   (and (list? values) (andmap predicate values)))
 
-;; : (-> PooFlowValue Boolean)
+;; : (-> AgenticAILabValue Boolean)
 (def (loop-human-audit-state-fact-list? value)
   (loop-human-audit-list-of? loop-human-audit-alist? value))
 
-;; : (-> PooFlowValue Boolean)
+;; : (-> AgenticAILabValue Boolean)
 (def (loop-human-audit-governor-contract? value)
   (or (not value)
       (loop-human-audit-alist? value)))

@@ -8,10 +8,10 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list iota)
         (only-in :std/encoding/hex hex-decode hex-encode)
-        :poo-flow/modules/proof/projections/generated/proof-case-vector-v1)
+        :agentic-ai-lab/modules/proof/projections/generated/proof-case-vector-v1)
 
-(export poo-flow-proof-case-vector-write!
-        poo-flow-proof-case-vector-digest)
+(export agentic-ai-lab-proof-case-vector-write!
+        agentic-ai-lab-proof-case-vector-digest)
 
 (def (write-u32-le! target offset value)
   (unless (and (exact-integer? value) (<= 0 value #xffffffff))
@@ -68,74 +68,74 @@
 
 (def (mediation-tag outcome)
   (case outcome
-    ((committed allow) poo-flow-proof-mediation-allow)
-    ((denied deny) poo-flow-proof-mediation-deny)
-    ((invalid-token) poo-flow-proof-mediation-invalid-token)
+    ((committed allow) agentic-ai-lab-proof-mediation-allow)
+    ((denied deny) agentic-ai-lab-proof-mediation-deny)
+    ((invalid-token) agentic-ai-lab-proof-mediation-invalid-token)
     (else (error "unsupported proof mediation outcome" outcome))))
 
 (def (durability-tag durability)
   (case durability
-    ((strict) poo-flow-proof-durability-strict)
-    ((batched) poo-flow-proof-durability-batched)
-    ((diagnostic) poo-flow-proof-durability-diagnostic)
+    ((strict) agentic-ai-lab-proof-durability-strict)
+    ((batched) agentic-ai-lab-proof-durability-batched)
+    ((diagnostic) agentic-ai-lab-proof-durability-diagnostic)
     (else (error "unsupported proof durability" durability))))
 
-(def (poo-flow-proof-case-vector-write! proof-case target)
-  (unless (eq? (.ref proof-case 'kind) 'poo-flow-authorized-effect-proof-case)
+(def (agentic-ai-lab-proof-case-vector-write! proof-case target)
+  (unless (eq? (.ref proof-case 'kind) 'agentic-ai-lab-authorized-effect-proof-case)
     (error "proof vector requires AuthorizedEffectProofCase" proof-case))
-  (unless (= (u8vector-length target) poo-flow-proof-case-vector-size)
+  (unless (= (u8vector-length target) agentic-ai-lab-proof-case-vector-size)
     (error "proof vector target has wrong size"
-           (u8vector-length target) poo-flow-proof-case-vector-size))
+           (u8vector-length target) agentic-ai-lab-proof-case-vector-size))
   (u8vector-fill! target 0)
-  (write-u32-le! target poo-flow-proof-field-abi-version-offset
-                 poo-flow-proof-case-abi-version)
-  (write-u32-le! target poo-flow-proof-field-case-kind-offset
-                 poo-flow-proof-case-kind-authorized-effect-token)
-  (copy-u8vector! (hex-decode poo-flow-proof-case-schema-fingerprint)
-                  target poo-flow-proof-field-schema-fingerprint-offset)
+  (write-u32-le! target agentic-ai-lab-proof-field-abi-version-offset
+                 agentic-ai-lab-proof-case-abi-version)
+  (write-u32-le! target agentic-ai-lab-proof-field-case-kind-offset
+                 agentic-ai-lab-proof-case-kind-authorized-effect-token)
+  (copy-u8vector! (hex-decode agentic-ai-lab-proof-case-schema-fingerprint)
+                  target agentic-ai-lab-proof-field-schema-fingerprint-offset)
   (write-digest! proof-case 'token-digest target
-                 poo-flow-proof-field-token-digest-offset)
+                 agentic-ai-lab-proof-field-token-digest-offset)
   (write-digest! proof-case 'policy-revision target
-                 poo-flow-proof-field-policy-revision-offset)
+                 agentic-ai-lab-proof-field-policy-revision-offset)
   (write-digest! proof-case 'effect-digest target
-                 poo-flow-proof-field-effect-digest-offset)
+                 agentic-ai-lab-proof-field-effect-digest-offset)
   (write-digest! proof-case 'semantic-root target
-                 poo-flow-proof-field-semantic-root-offset)
+                 agentic-ai-lab-proof-field-semantic-root-offset)
   (write-digest! proof-case 'execution-root target
-                 poo-flow-proof-field-execution-root-offset)
+                 agentic-ai-lab-proof-field-execution-root-offset)
   (write-digest! proof-case 'batch-root target
-                 poo-flow-proof-field-batch-root-offset optional?: #t)
+                 agentic-ai-lab-proof-field-batch-root-offset optional?: #t)
   (write-digest! proof-case 'subject-binding target
-                 poo-flow-proof-field-subject-binding-offset)
+                 agentic-ai-lab-proof-field-subject-binding-offset)
   (write-digest! proof-case 'resource-binding target
-                 poo-flow-proof-field-resource-binding-offset)
+                 agentic-ai-lab-proof-field-resource-binding-offset)
   (write-digest! proof-case 'action-binding target
-                 poo-flow-proof-field-action-binding-offset)
+                 agentic-ai-lab-proof-field-action-binding-offset)
   (write-digest! proof-case 'previous-evidence-root target
-                 poo-flow-proof-field-previous-evidence-root-offset)
-  (write-u64-le! target poo-flow-proof-field-nonce-offset
+                 agentic-ai-lab-proof-field-previous-evidence-root-offset)
+  (write-u64-le! target agentic-ai-lab-proof-field-nonce-offset
                  (.ref proof-case 'nonce))
-  (write-u64-le! target poo-flow-proof-field-epoch-offset
+  (write-u64-le! target agentic-ai-lab-proof-field-epoch-offset
                  (.ref proof-case 'epoch))
-  (write-u64-le! target poo-flow-proof-field-sequence-offset
+  (write-u64-le! target agentic-ai-lab-proof-field-sequence-offset
                  (.ref proof-case 'sequence))
-  (write-u64-le! target poo-flow-proof-field-required-obligation-mask-offset
+  (write-u64-le! target agentic-ai-lab-proof-field-required-obligation-mask-offset
                  (.ref proof-case 'required-obligation-mask))
-  (write-u64-le! target poo-flow-proof-field-present-obligation-mask-offset
+  (write-u64-le! target agentic-ai-lab-proof-field-present-obligation-mask-offset
                  (.ref proof-case 'present-obligation-mask))
-  (write-u32-le! target poo-flow-proof-field-obligation-count-offset
+  (write-u32-le! target agentic-ai-lab-proof-field-obligation-count-offset
                  (.ref proof-case 'obligation-count))
-  (write-u32-le! target poo-flow-proof-field-mediation-outcome-offset
+  (write-u32-le! target agentic-ai-lab-proof-field-mediation-outcome-offset
                  (mediation-tag (.ref proof-case 'outcome)))
-  (write-u32-le! target poo-flow-proof-field-durability-profile-offset
+  (write-u32-le! target agentic-ai-lab-proof-field-durability-profile-offset
                  (durability-tag (.ref proof-case 'durability)))
   target)
 
-(def (poo-flow-proof-case-vector-digest vector)
-  (unless (= (u8vector-length vector) poo-flow-proof-case-vector-size)
+(def (agentic-ai-lab-proof-case-vector-digest vector)
+  (unless (= (u8vector-length vector) agentic-ai-lab-proof-case-vector-size)
     (error "proof vector digest requires canonical vector size"
            (u8vector-length vector)))
-  (let* ((domain (string->utf8 poo-flow-proof-vector-digest-domain))
+  (let* ((domain (string->utf8 agentic-ai-lab-proof-vector-digest-domain))
          (payload (make-u8vector (+ (u8vector-length domain) 1
                                     (u8vector-length vector)) 0)))
     (copy-u8vector! domain payload 0)

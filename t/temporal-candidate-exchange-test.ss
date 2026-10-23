@@ -6,19 +6,19 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .ref)
         :std/test
-        :poo-flow/modules/temporal-causality/candidates/interface)
+        :agentic-ai-lab/modules/temporal-causality/candidates/interface)
 (export temporal-candidate-exchange-test)
 
 (def (scope generation coverage)
-  (poo-flow-candidate-scope
+  (agentic-ai-lab-candidate-scope
    "scope" "sha256:cut" generation coverage '(gql ascent)))
 (def (receipt id candidate scope provider complete?)
-  (poo-flow-candidate-receipt
+  (agentic-ai-lab-candidate-receipt
    id candidate scope provider (string-append "sha256:request/" id)
    (string-append "sha256:provider/" id)
    (string-append "sha256:result/" id) 2 complete?))
 (def (check-receipt id receipt verdict)
-  (poo-flow-candidate-check
+  (agentic-ai-lab-candidate-check
    id receipt (string-append "verifier/" id) verdict
    (string-append "sha256:basis/" id)))
 
@@ -30,10 +30,10 @@
              (ascent (receipt "a" "candidate" cut 'ascent #t))
              (gql-check (check-receipt "gc" gql 'valid))
              (ascent-check (check-receipt "ac" ascent 'valid))
-             (first (poo-flow-candidate-exchange
+             (first (agentic-ai-lab-candidate-exchange
                      "x" "candidate" cut (list gql ascent)
                      (list gql-check ascent-check)))
-             (reordered (poo-flow-candidate-exchange
+             (reordered (agentic-ai-lab-candidate-exchange
                          "x" "candidate" cut (list ascent gql)
                          (list ascent-check gql-check))))
         (check (.ref first 'status) => 'reviewable)
@@ -47,7 +47,7 @@
              (new (scope 2 "sha256:coverage"))
              (gql (receipt "g" "candidate" old 'gql #t))
              (ascent (receipt "a" "candidate" old 'ascent #t))
-             (exchange (poo-flow-candidate-exchange
+             (exchange (agentic-ai-lab-candidate-exchange
                         "x" "candidate" new (list gql ascent)
                         (list (check-receipt "gc" gql 'valid)
                               (check-receipt "ac" ascent 'valid)))))
@@ -58,7 +58,7 @@
     (yuanxu-test-case "missing coverage, provider, completion and check stay pending"
       (let* ((cut (scope 1 #f))
              (gql (receipt "g" "candidate" cut 'gql #f))
-             (exchange (poo-flow-candidate-exchange
+             (exchange (agentic-ai-lab-candidate-exchange
                         "x" "candidate" cut (list gql) '())))
         (check (.ref exchange 'status) => 'pending)
         (check (.ref exchange 'missing-providers) => '(ascent))
@@ -71,14 +71,14 @@
              (ascent (receipt "a" "candidate" cut 'ascent #t))
              (gql-valid (check-receipt "gv" gql 'valid))
              (ascent-valid (check-receipt "av" ascent 'valid))
-             (no-coverage (poo-flow-candidate-exchange
+             (no-coverage (agentic-ai-lab-candidate-exchange
                            "x" "candidate" cut (list gql ascent)
                            (list gql-valid ascent-valid)))
              (with-coverage (scope 1 "sha256:coverage"))
              (gql-current (receipt "gc" "candidate" with-coverage 'gql #t))
              (ascent-current (receipt "ac" "candidate" with-coverage
                                       'ascent #t))
-             (unknown (poo-flow-candidate-exchange
+             (unknown (agentic-ai-lab-candidate-exchange
                        "y" "candidate" with-coverage
                        (list gql-current ascent-current)
                        (list (check-receipt "gcv" gql-current 'valid)
@@ -96,13 +96,13 @@
              (valid (check-receipt "yes" gql 'valid))
              (invalid (check-receipt "no" gql 'invalid))
              (ascent-valid (check-receipt "ac" ascent 'valid))
-             (before (poo-flow-candidate-exchange
+             (before (agentic-ai-lab-candidate-exchange
                       "before" "candidate" cut (list gql ascent)
                       (list valid ascent-valid)))
-             (contested (poo-flow-candidate-exchange
+             (contested (agentic-ai-lab-candidate-exchange
                          "x" "candidate" cut (list gql ascent)
                          (list valid invalid ascent-valid)))
-             (rejected (poo-flow-candidate-exchange
+             (rejected (agentic-ai-lab-candidate-exchange
                         "y" "candidate" cut (list gql ascent)
                         (list invalid ascent-valid))))
         (check (.ref before 'status) => 'reviewable)
@@ -116,7 +116,7 @@
              (gql (receipt "g" "other" cut 'gql #t))
              (a1 (receipt "a1" "candidate" cut 'ascent #t))
              (a2 (receipt "a2" "candidate" cut 'ascent #t))
-             (exchange (poo-flow-candidate-exchange
+             (exchange (agentic-ai-lab-candidate-exchange
                         "x" "candidate" cut (list gql a1 a2)
                         (list (check-receipt "c1" a1 'valid)
                               (check-receipt "c2" a2 'valid)))))
@@ -127,20 +127,20 @@
     (yuanxu-test-case "forged digest and revised check binding are rejected"
       (let* ((cut (scope 1 "sha256:coverage"))
              (gql (receipt "g" "candidate" cut 'gql #t))
-             (forged (poo-flow-candidate-receipt-value
+             (forged (agentic-ai-lab-candidate-receipt-value
                       "g" "sha256:forged" "candidate"
                       (.ref cut 'semantic-digest) 'gql
                       (.ref gql 'request-digest)
                       (.ref gql 'source-receipt-digest)
                       (.ref gql 'result-digest) 2 #t))
              (checked (check-receipt "c" gql 'valid))
-             (changed (poo-flow-candidate-receipt
+             (changed (agentic-ai-lab-candidate-receipt
                        "g" "candidate" cut 'gql "sha256:other-request"
                        "sha256:provider/g" "sha256:result/g" 2 #t)))
         (check-exception
-         (poo-flow-candidate-exchange "x" "candidate" cut (list forged) '())
+         (agentic-ai-lab-candidate-exchange "x" "candidate" cut (list forged) '())
          true)
         (check-exception
-         (poo-flow-candidate-exchange
+         (agentic-ai-lab-candidate-exchange
           "x" "candidate" cut (list changed) (list checked))
          true)))))

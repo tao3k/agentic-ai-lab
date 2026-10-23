@@ -11,8 +11,8 @@
                  current-module-source-observer current-module-process-trace-budget)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode))
-(export poo-flow-nix-flake-source-inputs poo-flow-nix-flake-instantiate current-nix-process-observer current-nix-process-completion-observer poo-flow-nix-instantiate poo-flow-nix-realize poo-flow-nix-source-inputs call-with-nix-derivation-query)
-(export poo-flow-nix-verify-store)
+(export agentic-ai-lab-nix-flake-source-inputs agentic-ai-lab-nix-flake-instantiate current-nix-process-observer current-nix-process-completion-observer agentic-ai-lab-nix-instantiate agentic-ai-lab-nix-realize agentic-ai-lab-nix-source-inputs call-with-nix-derivation-query)
+(export agentic-ai-lab-nix-verify-store)
 ;; Optional build-tool observability at the actual process boundary. No cache or
 ;; Provider-specific instrumentation; default execution has no observer.
 (def current-nix-process-observer (make-parameter #f))
@@ -125,7 +125,7 @@
       (observer (list 'package-store-validity (if valid? 'hit 'miss)) 1))
     valid?))
 
-(def (poo-flow-nix-verify-store executable path)
+(def (agentic-ai-lab-nix-verify-store executable path)
   (unless (and (string? path) (string-prefix? "/nix/store/" path)
                (not (string-index (substring path 11 (string-length path)) #\/))
                (eq? (module-source-type path) 'directory))
@@ -137,7 +137,7 @@
       (call-with-package-process-observation argv (cut run-nix-process <> #t)))
     '("--check-validity" "--verify-path")))
 
-(def (poo-flow-nix-instantiate executable expression arguments
+(def (agentic-ai-lab-nix-instantiate executable expression arguments
                                    (store-command (lambda () "nix-store")))
   ;; Nix owns the cache. Always evaluate the CURRENT expression/arguments first;
   ;; do not reuse a Scheme result or assume our source list closes Nix imports.
@@ -169,7 +169,7 @@
         (string-subst (string-subst text "\\" "\\\\") "\"" "\\\"")
         "$" "\\$")
       "\n" "\\n") "\""))
-(def (poo-flow-nix-flake-instantiate executable reference attribute
+(def (agentic-ai-lab-nix-flake-instantiate executable reference attribute
         (arguments (.o)) (inputs (.o)))
   ;; Nix's --override-input implies virtual/no-write locking. In that mode,
   ;; --no-update-lock-file alone can accept unrelated missing lock entries.
@@ -216,7 +216,7 @@
           (list "--apply" (string-append "function: (function (builtins.fromJSON "
                                          (nix-string json) ")).drvPath"))
           '())))))
-(def (poo-flow-nix-flake-source-inputs reference)
+(def (agentic-ai-lab-nix-flake-source-inputs reference)
   ;; No tree scan. Native Nix checks transitive derivation dependencies. Remote
   ;; roots have no local byte observations; transport/pinning remains upstream.
   (let (root (cond ((string-prefix? "path:/" reference) (substring reference 5 (string-length reference)))
@@ -227,11 +227,11 @@
                (cons path (and (module-source-type path) (module-source-read path)))))
            '("flake.nix" "flake.lock"))
       '())))
-(def (poo-flow-nix-realize executable derivation)
+(def (agentic-ai-lab-nix-realize executable derivation)
   (store-path-command (list executable "--realise" derivation)))
 
 ;; Project already-observed Core source bytes; no extra filesystem scan.
-(def (poo-flow-nix-source-inputs observations)
+(def (agentic-ai-lab-nix-source-inputs observations)
   (list->vector
    (map (lambda (row)
           (list->hash-table

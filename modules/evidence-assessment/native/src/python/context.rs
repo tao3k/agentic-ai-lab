@@ -7,7 +7,7 @@ use std::{collections::BTreeMap, sync::Mutex};
 
 #[pyclass(
     name = "ReasoningRuntime",
-    module = "poo_flow_runtime.reasoning",
+    module = "agentic_ai_lab_runtime.reasoning",
     frozen
 )]
 pub(super) struct Runtime(pub(super) crate::Runtime);
@@ -73,7 +73,7 @@ impl Runtime {
         .map_err(super::error)
     }
 }
-#[pyclass(name = "RuleSession", module = "poo_flow_runtime.reasoning", frozen)]
+#[pyclass(name = "RuleSession", module = "agentic_ai_lab_runtime.reasoning", frozen)]
 pub(super) struct Rules(Mutex<SourceSession>);
 impl Rules {
     fn lock(&self) -> PyResult<std::sync::MutexGuard<'_, SourceSession>> {
@@ -176,7 +176,7 @@ impl Rules {
         self.close()
     }
 }
-#[pyclass(name = "RuleResult", module = "poo_flow_runtime.reasoning", frozen)]
+#[pyclass(name = "RuleResult", module = "agentic_ai_lab_runtime.reasoning", frozen)]
 pub(super) struct RuleResult(gerbil_ascent::SourceResult);
 #[pymethods]
 impl RuleResult {

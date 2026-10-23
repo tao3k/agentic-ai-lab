@@ -30,7 +30,7 @@ if __name__ == '__main__':
     root = Path(__file__).resolve().parents[3]
     digest = check_binding(
         root / 'packages/proofs/quint/HealthcareStandardMigration.qnt',
-        root / 'packages/proofs/lean/PooFlowProof/Vertical/Healthcare/StandardMigrationRefinement.lean')
+        root / 'packages/proofs/lean/AgenticAILabProof/Vertical/Healthcare/StandardMigrationRefinement.lean')
     print('QUINT-LEAN-SOURCE-BINDING-OK ' + digest, flush=True)
 
     delta_digest = check_binding(

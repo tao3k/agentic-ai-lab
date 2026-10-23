@@ -18,9 +18,9 @@
         test-suite)
         (only-in :clan/poo/object .o .ref .slot? object?)
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/workflow/scenario/configuration/interface
-        :poo-flow/modules/workflow/scenario/configuration/init-syntax
-        :poo-flow/modules/agent-sandbox/config)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/agent-sandbox/config)
 
 (export agent-sandbox-profile-user-interface-test)
 
@@ -28,7 +28,7 @@
 ;;; upstream modules remain responsible for validation and backend defaults.
 ;; : [PooSandboxProfile]
 (def user-sandbox-profiles
-  (poo-flow-sandbox-profiles
+  (agentic-ai-lab-sandbox-profiles
    (agent/nono
     (backend nono)
     (network deny-by-default)
@@ -203,22 +203,22 @@
 ;;; backend implementation slots as part of the user contract.
 ;; : TestSuite
 (def agent-sandbox-profile-user-interface-test
-  (test-suite "poo-flow agent sandbox profile user interface"
+  (test-suite "agentic-ai-lab agent sandbox profile user interface"
     (yuanxu-test-case "declares nono and cubeSandbox profiles as inert user data"
       (let* ((nono-profile
-              (poo-flow-sandbox-profile-by-name user-sandbox-profiles
+              (agentic-ai-lab-sandbox-profile-by-name user-sandbox-profiles
                                                 'agent/nono))
              (cube-profile
-              (poo-flow-sandbox-profile-by-name user-sandbox-profiles
+              (agentic-ai-lab-sandbox-profile-by-name user-sandbox-profiles
                                                 'agent/cube)))
         (check-equal? (length user-sandbox-profiles) 2)
-        (check-equal? (poo-flow-sandbox-profile? nono-profile) #t)
-        (check-equal? (poo-flow-sandbox-profile-name nono-profile) 'agent/nono)
-        (check-equal? (poo-flow-sandbox-profile-backend-kind nono-profile)
+        (check-equal? (agentic-ai-lab-sandbox-profile? nono-profile) #t)
+        (check-equal? (agentic-ai-lab-sandbox-profile-name nono-profile) 'agent/nono)
+        (check-equal? (agentic-ai-lab-sandbox-profile-backend-kind nono-profile)
                       'nono)
-        (check-equal? (poo-flow-sandbox-profile-backend-ref cube-profile)
+        (check-equal? (agentic-ai-lab-sandbox-profile-backend-ref cube-profile)
                       'cube-local)
-        (check-equal? (poo-flow-sandbox-profile-network-policy cube-profile)
+        (check-equal? (agentic-ai-lab-sandbox-profile-network-policy cube-profile)
                       '(allowlisted "github.com" "crates.io"))))
     (yuanxu-test-case "applies POO slot transforms through nono object validation"
       (let* ((profile-payload
@@ -227,24 +227,24 @@
                ':config))
              (profiles (cdr profile-payload))
              (operator-profile
-              (poo-flow-sandbox-profile-by-name profiles 'agent/operator)))
+              (agentic-ai-lab-sandbox-profile-by-name profiles 'agent/operator)))
         (check-equal? (yuanxu-user-module-selection-key
                        user-nono-operator-module)
                       '(sandbox . nono-sandbox))
         (check-equal? (length profiles) 1)
-        (check-equal? (poo-flow-sandbox-profile-name operator-profile)
+        (check-equal? (agentic-ai-lab-sandbox-profile-name operator-profile)
                       'agent/operator)
-        (check-equal? (poo-flow-sandbox-profile-backend-kind operator-profile)
+        (check-equal? (agentic-ai-lab-sandbox-profile-backend-kind operator-profile)
                       'nono)
-        (check-equal? (poo-flow-sandbox-profile-backend-ref operator-profile)
+        (check-equal? (agentic-ai-lab-sandbox-profile-backend-ref operator-profile)
                       'agent/operator)
-        (check-equal? (poo-flow-sandbox-profile-network-policy
+        (check-equal? (agentic-ai-lab-sandbox-profile-network-policy
                        operator-profile)
                       '(allowlisted "github.com" "crates.io"))
-        (check-equal? (poo-flow-sandbox-profile-capabilities
+        (check-equal? (agentic-ai-lab-sandbox-profile-capabilities
                        operator-profile)
                       '(process-run filesystem-read tmpdir cache-mount))
-        (check-equal? (poo-flow-sandbox-profile-resource-policy
+        (check-equal? (agentic-ai-lab-sandbox-profile-resource-policy
                        operator-profile)
                       '((filesystem
                          (scope . project-workspace)
@@ -257,8 +257,8 @@
                         (cpu . 2)
                         (memory . "4Gi")
                         (timeout-ms . 300000)))
-        (check-equal? (poo-flow-sandbox-profile-metadata operator-profile)
-                      '((declared-by . poo-flow-poo-prototype)
+        (check-equal? (agentic-ai-lab-sandbox-profile-metadata operator-profile)
+                      '((declared-by . agentic-ai-lab-poo-prototype)
                         (runtime-executed . #f)
                         (backend . nono-sandbox)
                         (intent . operator-demo)
@@ -273,17 +273,17 @@
                     user-docker-build-module
                     ':config)))
              (cube-profile
-              (poo-flow-sandbox-profile-by-name cube-profiles 'ci/cube))
+              (agentic-ai-lab-sandbox-profile-by-name cube-profiles 'ci/cube))
              (docker-profile
-              (poo-flow-sandbox-profile-by-name docker-profiles 'ci/docker))
+              (agentic-ai-lab-sandbox-profile-by-name docker-profiles 'ci/docker))
              (cube-lineage
               (alist-value
                'derivation-path
-               (poo-flow-sandbox-profile-metadata cube-profile)))
+               (agentic-ai-lab-sandbox-profile-metadata cube-profile)))
              (docker-lineage
               (alist-value
                'derivation-path
-               (poo-flow-sandbox-profile-metadata docker-profile)))
+               (agentic-ai-lab-sandbox-profile-metadata docker-profile)))
              (cube-step (last-value cube-lineage))
              (docker-step (last-value docker-lineage)))
         (check-equal? (yuanxu-user-module-selection-key
@@ -292,9 +292,9 @@
         (check-equal? (yuanxu-user-module-selection-key
                        user-docker-build-module)
                       '(sandbox . docker-sandbox))
-        (check-equal? (poo-flow-sandbox-profile-backend-kind cube-profile)
+        (check-equal? (agentic-ai-lab-sandbox-profile-backend-kind cube-profile)
                       'cube)
-        (check-equal? (poo-flow-sandbox-profile-resource-policy cube-profile)
+        (check-equal? (agentic-ai-lab-sandbox-profile-resource-policy cube-profile)
                       '((filesystem
                          (scope . snapshot)
                          (snapshot . clone))
@@ -305,11 +305,11 @@
                       'ci/cube-base)
         (check-equal? (alist-value 'scope cube-step) 'session)
         (check-equal? (alist-value 'scope-ref cube-step) "cube-build")
-        (check-equal? (poo-flow-sandbox-profile-backend-kind docker-profile)
+        (check-equal? (agentic-ai-lab-sandbox-profile-backend-kind docker-profile)
                       'docker)
-        (check-equal? (poo-flow-sandbox-profile-capabilities docker-profile)
+        (check-equal? (agentic-ai-lab-sandbox-profile-capabilities docker-profile)
                       '(process-run filesystem-read tmpdir))
-        (check-equal? (poo-flow-sandbox-profile-resource-policy docker-profile)
+        (check-equal? (agentic-ai-lab-sandbox-profile-resource-policy docker-profile)
                       '((filesystem
                          (scope . volume)
                          (materialized-by . runtime)
@@ -322,20 +322,20 @@
         (check-equal? (alist-value 'scope-ref docker-step) "docker-build")
         (check-equal? (alist-value
                        'backend-kind
-                       (poo-flow-sandbox-profile->profile cube-profile))
+                       (agentic-ai-lab-sandbox-profile->profile cube-profile))
                       'cube)
         (check-equal? (alist-value
                        'backend-kind
-                       (poo-flow-sandbox-profile->profile docker-profile))
+                       (agentic-ai-lab-sandbox-profile->profile docker-profile))
                       'docker)))
     (yuanxu-test-case "projects user declarations into validated agent sandbox profiles"
       (let* ((nono-profile
-              (poo-flow-sandbox-profile-by-name user-sandbox-profiles
+              (agentic-ai-lab-sandbox-profile-by-name user-sandbox-profiles
                                                 'agent/nono))
              (profile
-              (poo-flow-sandbox-profile->profile nono-profile)))
+              (agentic-ai-lab-sandbox-profile->profile nono-profile)))
         (check-equal? (alist-value 'schema profile)
-                      'poo-flow.agent-sandbox-profile.v1)
+                      'agentic-ai-lab.agent-sandbox-profile.v1)
         (check-equal? (alist-value 'backend-kind profile) 'nono)
         (check-equal? (alist-value 'backend-ref profile) 'nono)
         (check-equal? (alist-value 'network-policy profile)
@@ -356,7 +356,7 @@
                         (timeout-ms . 300000)))))
     (yuanxu-test-case "presents profile collections as runtime handoff intent data"
       (let* ((presentation
-              (pooFlowSandboxProfilesPresentation user-sandbox-profiles))
+              (agenticAiLabSandboxProfilesPresentation user-sandbox-profiles))
              (runtime-intents (.ref presentation 'runtime-intents))
              (runtime-summaries (.ref presentation 'runtime-summaries))
              (handoff-summaries (.ref presentation 'handoff-summaries))
@@ -378,7 +378,7 @@
              (nono-policy-durable-summary
               (alist-value 'durable-policy-summary nono-policy)))
         (check-equal? (.ref presentation 'kind)
-                      poo-flow-sandbox-profiles-presentation-kind)
+                      agentic-ai-lab-sandbox-profiles-presentation-kind)
         (check-equal? (.ref presentation 'profile-count) 2)
         (check-equal? (.ref presentation 'profile-names)
                       '(agent/nono agent/cube))
@@ -391,7 +391,7 @@
         (check-equal? (alist-value 'backend-ref cube-intent) 'cube-local)
         (check-equal? (alist-value 'policy-valid? nono-intent) #t)
         (check-equal? (alist-value 'kind nono-intent-policy)
-                      "poo-flow.sandbox.profile-policy.projection.v1")
+                      "agentic-ai-lab.sandbox.profile-policy.projection.v1")
         (check-equal? (alist-value 'durable-policy-ref nono-intent)
                       'durable/default)
         (check-equal? (alist-value 'durable-valid? nono-intent) #t)
@@ -406,7 +406,7 @@
         (check-equal? (alist-value 'descriptor-realized? cube-intent) #f)
         (check-equal? (alist-value 'runtime-executed cube-intent) #f)
         (check-equal? (alist-value 'schema nono-summary)
-                      'poo-flow.agent-sandbox-profile.runtime-summary.v1)
+                      'agentic-ai-lab.agent-sandbox-profile.runtime-summary.v1)
         (check-equal? (alist-value 'profile-name nono-summary) 'agent/nono)
         (check-equal? (alist-value 'descriptor-realized? nono-summary) #t)
         (check-equal? (alist-value 'valid? nono-summary) #t)
@@ -414,13 +414,13 @@
         (check-equal? (alist-value 'scope nono-filesystem)
                       'project-workspace)
         (check-equal? (alist-value 'schema cube-handoff)
-                      'poo-flow.agent-sandbox-profile.handoff-summary.v1)
+                      'agentic-ai-lab.agent-sandbox-profile.handoff-summary.v1)
         (check-equal? (alist-value 'handoff-contract cube-handoff)
-                      'poo-flow.agent-sandbox-profile.runtime-handoff.v1)
+                      'agentic-ai-lab.agent-sandbox-profile.runtime-handoff.v1)
         (check-equal? (alist-value 'schema cube-handoff-summary)
-                      'poo-flow.agent-sandbox-profile.runtime-summary.v1)
+                      'agentic-ai-lab.agent-sandbox-profile.runtime-summary.v1)
         (check-equal? (alist-value 'kind nono-policy)
-                      "poo-flow.sandbox.profile-policy.projection.v1")
+                      "agentic-ai-lab.sandbox.profile-policy.projection.v1")
         (check-equal? (alist-value 'valid? nono-policy) #t)
         (check-equal? (alist-value 'durable-policy-ref nono-policy)
                       'durable/default)

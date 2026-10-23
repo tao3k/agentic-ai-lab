@@ -6,9 +6,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from poo_flow_runtime import scheme_load_aot
-from poo_flow_runtime import _scheme_load_aot as scheme_aot
-from poo_flow_runtime import _scheme_load_cache as scheme_cache
+from agentic_ai_lab_runtime import scheme_load_aot
+from agentic_ai_lab_runtime import _scheme_load_aot as scheme_aot
+from agentic_ai_lab_runtime import _scheme_load_cache as scheme_cache
 
 
 def _runtime_projection_fixture(root: Path) -> None:
@@ -59,7 +59,7 @@ def test_scheme_load_aot_precompile_command_emits_receipt(
 
     captured = capsys.readouterr()
     assert exit_code == 0
-    assert 'schema: "poo-flow.scheme-load-aot.v1"' in captured.out
+    assert 'schema: "agentic-ai-lab.scheme-load-aot.v1"' in captured.out
     assert 'action: "precompile"' in captured.out
     assert f'binary: "{expected_binary}"' in captured.out
     assert "rebuilt?: #t" in captured.out

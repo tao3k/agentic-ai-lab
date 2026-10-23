@@ -18,7 +18,7 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/agent-sandbox/api)
+        :agentic-ai-lab/modules/agent-sandbox/api)
 
 (export agent-sandbox-bridge-test)
 
@@ -169,7 +169,7 @@
               (make-execution-request
                'compile
                'external
-               '(external rust-build ((crate . "poo-flow")))
+               '(external rust-build ((crate . "agentic-ai-lab")))
                'input-artifact
                'artifact
                'artifact

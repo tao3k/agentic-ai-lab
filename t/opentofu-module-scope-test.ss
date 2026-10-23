@@ -4,7 +4,7 @@
 (import :std/test
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
-        (only-in :poo-flow/modules/services/opentofu/objects OpenTofuScope. OpenTofuModule.)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. OpenTofuModule.)
         :yuanxu/types :clan/poo/object)
 (export opentofu-module-scope-test)
 
@@ -16,7 +16,7 @@
         (displayln "ASSERT-OK " label) (force-output))
       (def (accepted? evidence) (yuanxu-validation-evidence-accepted? evidence))
       ;; Build/test composition supplies this input; resource authors never do it.
-      (def artifact-path (if (getenv "POO_FLOW_OPENTOFU_ARTIFACT" #f)
+      (def artifact-path (if (getenv "AGENTIC_AI_LAB_OPENTOFU_ARTIFACT" #f)
                             (.get OpenTofuScope. modules aws config provider-artifact)
                             "t/fixtures/opentofu/aws-5.100.0"))
       (.def (Selected @ OpenTofuModule.)
@@ -78,7 +78,7 @@
           (lambda ()
             (use-module Unconfigured as tf (.get tf types resources aws_security_group)) #f)))
       ;; Devenv supplies the exported default object, without user composition.
-      (when (getenv "POO_FLOW_OPENTOFU_ARTIFACT" #f)
+      (when (getenv "AGENTIC_AI_LAB_OPENTOFU_ARTIFACT" #f)
         (assert 'devenv-default-module-admit
           (use-module OpenTofuScope. as tf
             (accepted? (.call (.get tf types configuration) .admit

@@ -4,12 +4,12 @@
 
 use gerbil_scheme::{GerbilRuntime, LinkedGerbilProgram};
 use gerbil_scheme_sys::{GerbilGlobalState, GerbilModuleOrLink};
-use poo_flow_cedar_authority::{
+use agentic_ai_lab_cedar_authority::{
     canonical,
     runtime::{Deployment, HOST_READY_SCHEMA, RuntimeReady},
     wire::{CEDAR_VERSION, LEAN_REVISION},
 };
-use poo_flow_cedar_gerbil::NativeAuthority;
+use agentic_ai_lab_cedar_gerbil::NativeAuthority;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command, Stdio};
@@ -18,10 +18,10 @@ use std::time::Duration;
 
 unsafe extern "C" {
     fn ___LNK_poo__flow__cedar__linker(state: *mut GerbilGlobalState) -> *mut GerbilModuleOrLink;
-    fn poo_flow_cedar_snapshot_root() -> i64;
-    fn poo_flow_cedar_allow_root() -> i64;
-    fn poo_flow_cedar_deny_root() -> i64;
-    fn poo_flow_cedar_forbid_root() -> i64;
+    fn agentic_ai_lab_cedar_snapshot_root() -> i64;
+    fn agentic_ai_lab_cedar_allow_root() -> i64;
+    fn agentic_ai_lab_cedar_deny_root() -> i64;
+    fn agentic_ai_lab_cedar_forbid_root() -> i64;
 }
 
 struct TestRuntime {
@@ -39,7 +39,7 @@ impl Drop for TestRuntime {
 
 fn spawn_runtime() -> TestRuntime {
     let host = PathBuf::from(
-        std::env::var_os("POO_FLOW_CEDAR_RUNTIME_HOST")
+        std::env::var_os("AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST")
             .expect("qualification requires the AOT Runtime Host artifact"),
     );
     let runtime_artifact_digest = canonical::raw_digest(&std::fs::read(&host).unwrap());
@@ -106,10 +106,10 @@ fn native_poo_projection_dual_authorization_and_single_use_consumption() {
     let program = unsafe { LinkedGerbilProgram::from_linker(___LNK_poo__flow__cedar__linker) };
     let runtime = GerbilRuntime::initialize_program(program).unwrap();
     assert!(GerbilRuntime::initialize().is_err());
-    let snapshot = unsafe { runtime.bind_string_export(poo_flow_cedar_snapshot_root) }.unwrap();
-    let allow = unsafe { runtime.bind_string_export(poo_flow_cedar_allow_root) }.unwrap();
-    let deny = unsafe { runtime.bind_string_export(poo_flow_cedar_deny_root) }.unwrap();
-    let forbid = unsafe { runtime.bind_string_export(poo_flow_cedar_forbid_root) }.unwrap();
+    let snapshot = unsafe { runtime.bind_string_export(agentic_ai_lab_cedar_snapshot_root) }.unwrap();
+    let allow = unsafe { runtime.bind_string_export(agentic_ai_lab_cedar_allow_root) }.unwrap();
+    let deny = unsafe { runtime.bind_string_export(agentic_ai_lab_cedar_deny_root) }.unwrap();
+    let forbid = unsafe { runtime.bind_string_export(agentic_ai_lab_cedar_forbid_root) }.unwrap();
     let host = spawn_runtime();
     let mut authority =
         NativeAuthority::new(&runtime, &snapshot, host.deployment.clone(), [42; 32]).unwrap();

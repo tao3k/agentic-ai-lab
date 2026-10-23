@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+TITLE: POO Flow Scheme-owned Rust IR
+#+TITLE: Agentic AI Lab Scheme-owned Rust IR
 
 This directory contains byte-stable build inputs projected from executable
 Scheme contracts.  =gerbil-parser= admits the bounded pure Scheme subset and
@@ -15,7 +15,7 @@ owning Scheme function and determinism test are:
 - =modules/query/rust-ir.ss=
 - =t/query-rust-ir-test.ss=
 
-Native Rust consumers depend on the small =poo-flow-rust-ir= crate in this
+Native Rust consumers depend on the small =agentic-ai-lab-rust-ir= crate in this
 directory.  The crate only embeds the checked-in IR as bytes; it contains no
 contract implementation.  Consumer build scripts lower those bytes through
 =gerbil-scheme-rust-ir=, so no checkout path or runtime Scheme process is

@@ -1,8 +1,8 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import unittest
-from poo_flow_testing.assessment_studies.trajectory_study import task, extract, closure
-from poo_flow_testing.assessment_studies.trajectory_transfer_study import followup
+from agentic_ai_lab_testing.assessment_studies.trajectory_study import task, extract, closure
+from agentic_ai_lab_testing.assessment_studies.trajectory_transfer_study import followup
 
 
 class TrajectoryStudyIntent(unittest.TestCase):

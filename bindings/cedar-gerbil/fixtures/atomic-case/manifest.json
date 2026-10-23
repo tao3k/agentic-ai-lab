@@ -1,21 +1,21 @@
 {
   "bootstrap": {
-    "schema_id": "poo-flow.cedar-authority-snapshot.v1",
-    "producer": "poo-flow.scheme-control",
+    "schema_id": "agentic-ai-lab.cedar-authority-snapshot.v1",
+    "producer": "agentic-ai-lab.scheme-control",
     "source": "modules/authorization/providers/cedar/objects.ss",
     "object_kind": "cedar-authority-snapshot",
     "provenance": {
       "composition_identity": "generic-atomic-case",
       "profile_identities": [
-        "poo-flow/cedar/atomic-case"
+        "agentic-ai-lab/cedar/atomic-case"
       ],
       "profile_origin_digest": "sha256:0101010101010101010101010101010101010101010101010101010101010101",
       "governance_assessment_digest": "sha256:0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a",
       "subject_snapshot_digest": "sha256:0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b",
       "governance_admitted": true,
       "certification_names": [
-        "PooFlowProof.Runtime.CedarNative",
-        "PooFlowProof.Runtime.CedarRuntimeHost"
+        "AgenticAILabProof.Runtime.CedarNative",
+        "AgenticAILabProof.Runtime.CedarRuntimeHost"
       ]
     },
     "authority_id": "generic.atomic.authority",
@@ -44,7 +44,7 @@
       "name": "base-permit",
       "expected_status": "authorized",
       "proposal": {
-        "schema_id": "poo-flow.cedar-authorization-request.v1",
+        "schema_id": "agentic-ai-lab.cedar-authorization-request.v1",
         "principal": "User::\"alice\"",
         "action": "Action::\"run\"",
         "resource": "Job::\"demo\"",
@@ -67,7 +67,7 @@
       "name": "forbid-overrides-permit",
       "expected_status": "denied",
       "proposal": {
-        "schema_id": "poo-flow.cedar-authorization-request.v1",
+        "schema_id": "agentic-ai-lab.cedar-authorization-request.v1",
         "principal": "User::\"alice\"",
         "action": "Action::\"run\"",
         "resource": "Job::\"demo\"",

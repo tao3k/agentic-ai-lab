@@ -5,7 +5,7 @@
 
 ;;; This object is a valid load! fragment used to prove included object parts
 ;;; preserve field contracts and metadata.
-;; : [PooFlowModuleObject]
+;; : [AgenticAILabModuleObject]
 (list
  (yuanxu-module-object
   'objects.fixture.loaded

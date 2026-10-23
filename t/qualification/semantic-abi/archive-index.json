@@ -212,7 +212,7 @@
   "2026-10-04-output-contract-build/dependency-sources.json": "sha256:66faeee0bc87c291d97e35c8095c11c5527660cd708652d59b075b7d171a1945",
   "2026-10-04-output-contract-build/facade-build.log.gz": "sha256:9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64",
   "2026-10-04-output-contract-build/installed-tests.xml": "sha256:a7d493e662dddce21d86c612782100e0ebb5a249d9fc71fb9454b052b47e53ba",
-  "2026-10-04-output-contract-build/libpoo_flow_semantic.dylib.json": "sha256:a1164c937b89494ebe6c72b96eee442926dc86010b80a1d0d941bbebddc131b9",
+  "2026-10-04-output-contract-build/libagentic_ai_lab_semantic.dylib.json": "sha256:a1164c937b89494ebe6c72b96eee442926dc86010b80a1d0d941bbebddc131b9",
   "2026-10-04-output-contract-build/semantic-build-fixed.log.gz": "sha256:e9689819caaa29f63162e119fa9a5f7f0315886070b88e73a1c0f6158f52a867",
   "2026-10-04-output-contract-build/semantic-build.log.gz": "sha256:2429cdd9c5961090da2799e223aca1ce107eeceba9f969afd2b372b4627c13db",
   "2026-10-04-output-contract-build/summary.json": "sha256:958e6078763e1c3003412147ac54ec8f540b28335d2679d1f20410b4da3e7dfc",

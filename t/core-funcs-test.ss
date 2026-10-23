@@ -17,7 +17,7 @@
 (export core-funcs-test)
 
 (def core-funcs-test
-  (test-suite "POO Flow core algorithm functions"
+  (test-suite "Agentic AI Lab core algorithm functions"
     (yuanxu-test-case "streaming datum projection preserves order and empty results"
       (check
        (call-with-input-string

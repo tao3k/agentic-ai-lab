@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (package:
- poo-flow
+ agentic-ai-lab
 depend:
  ("github.com/tao3k/gerbil-poo@80b590b15c6d4bde7717f5fd85d5b98dbf230bd8"
   "github.com/tao3k/gerbil-parser@78507e68b1275be1be748be465d6354f596d9063"

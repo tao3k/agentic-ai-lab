@@ -9,8 +9,8 @@
         (only-in :yuanxu/profile-composition/profile-bundle
                  profiles compose)
         :yuanxu/profile-composition/selection-syntax
-        :poo-flow/modules/workflow/scenario/composition-syntax
-        :poo-flow/user-interface/profiles/crewai)
+        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
+        :agentic-ai-lab/user-interface/profiles/crewai)
 (export CrewAIProductionProfile crewai-scenario)
 
 (.def CrewAIProductionProfile

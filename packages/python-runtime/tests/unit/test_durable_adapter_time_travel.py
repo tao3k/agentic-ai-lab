@@ -4,9 +4,9 @@
 
 import pytest
 
-from poo_flow_runtime.builder import RuntimeGraphBuilder
-from poo_flow_runtime.durable_adapter import RuntimeDurableAdapter
-from poo_flow_runtime.runtime_graph import RuntimeGraphInterrupt, RuntimeGraphInterrupted
+from agentic_ai_lab_runtime.builder import RuntimeGraphBuilder
+from agentic_ai_lab_runtime.durable_adapter import RuntimeDurableAdapter
+from agentic_ai_lab_runtime.runtime_graph import RuntimeGraphInterrupt, RuntimeGraphInterrupted
 
 
 def _interrupting_program():

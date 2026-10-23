@@ -4,10 +4,10 @@ SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 #+end_comment
 
-Native public values are =poo-flow-temporal-support-premise= and
-=poo-flow-temporal-support=. Assemble them with
-=poo-flow-temporal-support-program= and apply the named pure
-=poo-flow-temporal-support-evaluate= to an original evidence journal, admission
+Native public values are =agentic-ai-lab-temporal-support-premise= and
+=agentic-ai-lab-temporal-support=. Assemble them with
+=agentic-ai-lab-temporal-support-program= and apply the named pure
+=agentic-ai-lab-temporal-support-evaluate= to an original evidence journal, admission
 cut, optional valid-time instant and work budget. Import the parent
 =truth-maintenance/interface.ss=; public values are POO objects.
 
@@ -39,14 +39,14 @@ idle / 45-second total watchdog with actual import-boundary output.
 
 * Declared policy window and replay guard
 
-=poo-flow-temporal-support-policy(identity, revision, start, end)= constructs a
+=agentic-ai-lab-temporal-support-policy(identity, revision, start, end)= constructs a
 native POO policy value with a nonempty half-open [start,end) window. Instants
 must have observed integer coordinates in one declared domain. The digest binds
 policy identity/revision and each instant's identity/domain/coordinate/provenance
 and modality. These labels are caller declarations, not authenticated clock or
 policy authority.
 
-=poo-flow-temporal-support-guard(program, journal, as-of, valid-at, budget, policy,
+=agentic-ai-lab-temporal-support-guard(program, journal, as-of, valid-at, budget, policy,
 expected-policy-digest, effective-at)= recomputes the original support projection.
 The policy identity must match the program and effective-at must share its time
 domain. A changed digest yields stale-policy; early and end-or-later instants
@@ -54,7 +54,7 @@ yield not-yet-effective and expired-policy. Only the exact declared binding
 inside the window yields applicable. Policy applicability is reported separately
 from support applicability, preserving historical evidence when a policy expires.
 
-=poo-flow-temporal-support-guard-replay(receipt, program, journal, policy)=
+=agentic-ai-lab-temporal-support-guard-replay(receipt, program, journal, policy)=
 recomputes the historical cut and declared effective instant and checks the
 receipt binding. Policy replacement, evidence/cut changes and tampered fields
 reject. It returns a reconstructed native value. Replay does not refresh a current
@@ -71,8 +71,8 @@ MRR host grant is introduced.
 * Explicit Host policy control
 
 Import =support/policy-host.ss= at the runtime boundary. The named
-=poo-flow-temporal-support-policy-host= constructs a native capability with
-opaque in-process state. =poo-flow-temporal-support-policy-host-refresh!= is an
+=agentic-ai-lab-temporal-support-policy-host= constructs a native capability with
+opaque in-process state. =agentic-ai-lab-temporal-support-policy-host-refresh!= is an
 explicit effectful control call; it registers the canonical policy, generation
 and Host-supplied observed clock snapshot. The application owns this capability
 and serializes refresh/use. It is not exported through semantic wire dispatch.
@@ -83,7 +83,7 @@ Current policies and historical revision identities each have a 128-entry cap.
 Failed registration changes neither current nor history state. Separate Host
 capabilities have isolated registries.
 
-=poo-flow-temporal-support-policy-host-guard= reads the registered policy/time,
+=agentic-ai-lab-temporal-support-policy-host-guard= reads the registered policy/time,
 requires the expected generation and compares the expected policy digest. Query
 inputs contain no replacement policy or effective time. The guard remains an
 applicability result with false proof/selection/effect/durability flags.

@@ -7,7 +7,7 @@
         (only-in :yuanxu/module-system/types ModuleSourceRoleContract ModuleAuthoringProfileContract)
         (only-in :yuanxu/module-system/authoring/roles
                  ConfigSourceRole. yuanxu-default-module-authoring-profile))
-(export UserConfigSourceRole. poo-flow-user-root-module-authoring-profile)
+(export UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
 
 ;;; The ordinary user root is deliberately narrower than a maintained module's
 ;;; config.ss.  It selects maintained values and never reopens the advanced
@@ -32,7 +32,7 @@
         forbid-raw-behavior-hooks?: #t
         forbid-raw-query-initializers?: #t
         freedom: 'maintained-value-composition-only)))
-(def (poo-flow-user-root-module-authoring-profile)
+(def (agentic-ai-lab-user-root-module-authoring-profile)
   (validate ModuleAuthoringProfileContract
     (.o (:: @ (yuanxu-default-module-authoring-profile))
         config: UserConfigSourceRole.)))

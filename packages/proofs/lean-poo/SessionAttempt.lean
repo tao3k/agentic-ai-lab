@@ -1,7 +1,7 @@
 /- SPDX-FileCopyrightText: 2026 tao3k team and Contributors
    SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later -/
 import Lean
-namespace PooFlowSessionAttemptProof
+namespace AgenticAILabSessionAttemptProof
 def quintSourceDigest : String := "sha256:2857ad1bc556179f034255a93537a136f08dcc21cd46458a6af18fef206f58b4"
 def quintInvariantNames : List String := ["ExactAttempt", "RecoveryPreservesObligation", "ClosedIsTerminal"]
 -- Pure owner-coordinate projection. Binding includes every native routing/input field.
@@ -50,7 +50,7 @@ theorem accepted_has_exact_attempt [DecidableEq α] (s result : Schedule α) (r 
   split at accepted
   · assumption
   · simp at accepted
-end PooFlowSessionAttemptProof
+end AgenticAILabSessionAttemptProof
 
 open Lean Elab Command in
 run_cmd do
@@ -58,18 +58,18 @@ run_cmd do
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let mut count : Nat := 0
   for (name, info) in environment.constants.toList do
-    if (`PooFlowSessionAttemptProof).isPrefixOf name then
+    if (`AgenticAILabSessionAttemptProof).isPrefixOf name then
       if info.isTheorem then count := count + 1
       for axiomName in (← collectAxioms name) do
         unless allowed.contains axiomName do
           throwError "{name} depends on disallowed axiom {axiomName}"
-  for required in #[`PooFlowSessionAttemptProof.closed_recovery_refused,
-      `PooFlowSessionAttemptProof.recovery_generation_advances,
-      `PooFlowSessionAttemptProof.recovery_revision_advances,
-      `PooFlowSessionAttemptProof.recovery_keeps_obligations,
-      `PooFlowSessionAttemptProof.recovery_fences_active,
-      `PooFlowSessionAttemptProof.wrong_revision_refused,
-      `PooFlowSessionAttemptProof.wrong_attempt_refused,
-      `PooFlowSessionAttemptProof.accepted_has_exact_attempt] do
+  for required in #[`AgenticAILabSessionAttemptProof.closed_recovery_refused,
+      `AgenticAILabSessionAttemptProof.recovery_generation_advances,
+      `AgenticAILabSessionAttemptProof.recovery_revision_advances,
+      `AgenticAILabSessionAttemptProof.recovery_keeps_obligations,
+      `AgenticAILabSessionAttemptProof.recovery_fences_active,
+      `AgenticAILabSessionAttemptProof.wrong_revision_refused,
+      `AgenticAILabSessionAttemptProof.wrong_attempt_refused,
+      `AgenticAILabSessionAttemptProof.accepted_has_exact_attempt] do
     unless environment.contains required do throwError "Missing Attempt theorem: {required}"
   logInfo m!"SESSION-ATTEMPT-AXIOM-AUDIT-OK: {count} theorems; standard Lean axioms only"

@@ -1,8 +1,8 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import unittest
-from poo_flow_testing.assessment_studies import iterative_inference_study as loop
-from poo_flow_testing.assessment_studies import inference_reuse_study as study
+from agentic_ai_lab_testing.assessment_studies import iterative_inference_study as loop
+from agentic_ai_lab_testing.assessment_studies import inference_reuse_study as study
 
 
 class IterativeEvidenceProtocol(unittest.TestCase):

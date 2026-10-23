@@ -5,13 +5,13 @@
 
 (import (only-in :std/test check-equal? check-exception test-case test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-closure-candidates
-                 poo-flow-ascent-closure-candidates))
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-closure-candidates
+                 agentic-ai-lab-ascent-closure-candidates))
 
 (export ascent-closure-candidates-test)
 
 (def (evaluate facts (max-input 16) (max-pairs 64) (max-results 64))
-  (poo-flow-ascent-closure-candidates facts 8
+  (agentic-ai-lab-ascent-closure-candidates facts 8
                                       max-input max-pairs max-results))
 
 (def (candidate receipt pair)

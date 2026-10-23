@@ -7,10 +7,10 @@
 
 (import :yuanxu/module-system/schema/interface)
 
-(export poo-flow-shared-sandbox-object
-        poo-flow-shared-module-objects)
+(export agentic-ai-lab-shared-sandbox-object
+        agentic-ai-lab-shared-module-objects)
 
-(def poo-flow-shared-sandbox-object
+(def agentic-ai-lab-shared-sandbox-object
   (yuanxu-module-object
    'objects.shared.sandbox
    '()
@@ -24,5 +24,5 @@
    '((namespace . objects.shared)
      (domain . sandbox))))
 
-(def poo-flow-shared-module-objects
-  (list poo-flow-shared-sandbox-object))
+(def agentic-ai-lab-shared-module-objects
+  (list agentic-ai-lab-shared-sandbox-object))

@@ -15,15 +15,15 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :poo-flow/modules/loop-engine/control/descriptor
+        (only-in :agentic-ai-lab/modules/loop-engine/control/descriptor
                  make-loop-pattern-descriptor)
-        (only-in :poo-flow/modules/loop-engine/control/strategy
+        (only-in :agentic-ai-lab/modules/loop-engine/control/strategy
                  make-loop-strategy-plan)
-        (only-in :poo-flow/modules/loop-engine/control/governor-core
+        (only-in :agentic-ai-lab/modules/loop-engine/control/governor-core
                  make-loop-governor)
-        (only-in :poo-flow/modules/loop-engine/control/governor
+        (only-in :agentic-ai-lab/modules/loop-engine/control/governor
                  loop-governor->contract)
-        :poo-flow/modules/loop-engine/control/human-audit)
+        :agentic-ai-lab/modules/loop-engine/control/human-audit)
 
 (export loop-human-audit-performance-test)
 
@@ -41,7 +41,7 @@
 
 ;; : (-> Alist Void)
 (def (loop-human-audit-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] loop-human-audit-contract-projection ")
+  (display "[agentic-ai-lab-benchmark] loop-human-audit-contract-projection ")
   (write receipt)
   (newline)
   (force-output))
@@ -64,20 +64,20 @@
 
 ;; : (-> Integer [LoopPatternDescriptor])
 (def (loop-human-audit-performance-patterns count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    loop-human-audit-performance-pattern))
 
 ;; : (-> Integer Integer [String])
 (def (loop-human-audit-performance-action-keys start count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    (lambda (offset)
      (loop-human-audit-performance-action-key (+ start offset)))))
 
 ;; : (-> Integer Integer [Alist])
 (def (loop-human-audit-performance-states start count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    (lambda (offset)
      (list (cons 'acting_on

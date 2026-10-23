@@ -69,12 +69,12 @@ jobs:
       - name: Declare Bazel disk-cache generation
         shell: bash
         env:
-          POO_FLOW_BAZEL_CACHE_GENERATION: ${{ github.sha }}
+          AGENTIC_AI_LAB_BAZEL_CACHE_GENERATION: ${{ github.sha }}
         run: |
           set -euo pipefail
           mkdir -p .ci/bazel-cache-generation
-          printf '# POO Flow Runtime-WASM cache generation: %s\n' \
-            "$POO_FLOW_BAZEL_CACHE_GENERATION" \
+          printf '# Agentic AI Lab Runtime-WASM cache generation: %s\n' \
+            "$AGENTIC_AI_LAB_BAZEL_CACHE_GENERATION" \
             > .ci/bazel-cache-generation/BUILD.bazel
 
       - name: Set up Bazel
@@ -111,14 +111,14 @@ jobs:
           fi
           echo "GERBIL_NATIVE_ABI=$native_abi" >> "$GITHUB_ENV"
 
-      - name: Validate POO Flow Gerbil dependency graph
+      - name: Validate Agentic AI Lab Gerbil dependency graph
         timeout-minutes: 2
         shell: bash
         run: |
           test -n "$(bazelisk query 'somepath(//:compile, //:asp_gerbil_scheme_package)')"
           test -n "$(bazelisk query 'somepath(//:compile, //:gerbil_poo_package)')"
           test -n "$(bazelisk query 'somepath(//:compile, //:gerbil_parser_package)')"
-          test -n "$(bazelisk query 'somepath(//:gerbil_parser_package, //:poo_flow_core_package)')"
+          test -n "$(bazelisk query 'somepath(//:gerbil_parser_package, //:yuanxu_package)')"
 
       - name: Build declared Gerbil dependency projects
         timeout-minutes: 12
@@ -126,25 +126,25 @@ jobs:
 
       - name: Build, test, and pack the package
         # Dependency actions are materialized and attributed by the preceding
-        # phase. This budget covers the POO Flow package and Runtime-WASM lane.
+        # phase. This budget covers the Agentic AI Lab package and Runtime-WASM lane.
         timeout-minutes: 25
         shell: bash
         run: |
-          export POO_FLOW_BAZEL_PATH="$PATH"
+          export AGENTIC_AI_LAB_BAZEL_PATH="$PATH"
           cp LICENSE bindings/runtime-wasm/LICENSE
           npm --prefix bindings/runtime-wasm test
           archive_json="$(npm pack ./bindings/runtime-wasm --ignore-scripts --json --pack-destination "$RUNNER_TEMP")"
           archive="$(jq -r '.[0].filename' <<< "$archive_json")"
-          payload="$RUNNER_TEMP/poo-flow-runtime-wasm-package"
+          payload="$RUNNER_TEMP/agentic-ai-lab-runtime-wasm-package"
           mkdir -p "$payload"
           tar -xzf "$RUNNER_TEMP/$archive" -C "$payload" --strip-components=1
-          printf '%s\n' "$GITHUB_SHA" > "$payload/.poo-flow-source-rev"
+          printf '%s\n' "$GITHUB_SHA" > "$payload/.agentic-ai-lab-source-rev"
 
       - name: Upload verified package payload
         uses: actions/upload-artifact@v7
         with:
-          name: poo-flow-runtime-wasm-package-payload
-          path: ${{ runner.temp }}/poo-flow-runtime-wasm-package
+          name: agentic-ai-lab-runtime-wasm-package-payload
+          path: ${{ runner.temp }}/agentic-ai-lab-runtime-wasm-package
           include-hidden-files: true
           if-no-files-found: error
 
@@ -158,7 +158,7 @@ jobs:
       - name: Download verified package payload
         uses: actions/download-artifact@v8
         with:
-          name: poo-flow-runtime-wasm-package-payload
+          name: agentic-ai-lab-runtime-wasm-package-payload
           path: ${{ runner.temp }}/package-payload
 
       - name: Materialize independent package branch

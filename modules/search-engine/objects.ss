@@ -5,18 +5,18 @@
 
 ;;; Backend-neutral Search role objects and immutable declaration prototypes.
 (import :yuanxu/object-family/role-syntax
-        :poo-flow/modules/search-engine/types)
+        :agentic-ai-lab/modules/search-engine/types)
 
-(export poo-flow-search-framework-role
-        poo-flow-search-acquisition-role
-        poo-flow-search-refinement-role
-        poo-flow-search-reasoning-role
-        poo-flow-search-projection-role
-        poo-flow-search-stage-prototype
-        poo-flow-search-composition-prototype
-        poo-flow-search-strategy-prototype)
+(export agentic-ai-lab-search-framework-role
+        agentic-ai-lab-search-acquisition-role
+        agentic-ai-lab-search-refinement-role
+        agentic-ai-lab-search-reasoning-role
+        agentic-ai-lab-search-projection-role
+        agentic-ai-lab-search-stage-prototype
+        agentic-ai-lab-search-composition-prototype
+        agentic-ai-lab-search-strategy-prototype)
 
-(def poo-flow-search-framework-role
+(def agentic-ai-lab-search-framework-role
   (poo-core-role-object
    (slots ((search/framework? #t)
            (search/factor? #f)
@@ -24,33 +24,33 @@
            (execution-owner 'consumer-runtime)))
    (supers)))
 
-(def poo-flow-search-acquisition-role
+(def agentic-ai-lab-search-acquisition-role
   (poo-core-role-object
    (slots ((search/factor? #t)
            (search/stage-role 'acquisition)))
-   (supers poo-flow-search-framework-role)))
+   (supers agentic-ai-lab-search-framework-role)))
 
-(def poo-flow-search-refinement-role
+(def agentic-ai-lab-search-refinement-role
   (poo-core-role-object
    (slots ((search/factor? #t)
            (search/stage-role 'refinement)))
-   (supers poo-flow-search-framework-role)))
+   (supers agentic-ai-lab-search-framework-role)))
 
-(def poo-flow-search-reasoning-role
+(def agentic-ai-lab-search-reasoning-role
   (poo-core-role-object
    (slots ((search/factor? #t)
            (search/stage-role 'reasoning)))
-   (supers poo-flow-search-framework-role)))
+   (supers agentic-ai-lab-search-framework-role)))
 
-(def poo-flow-search-projection-role
+(def agentic-ai-lab-search-projection-role
   (poo-core-role-object
    (slots ((search/factor? #t)
            (search/stage-role 'projection)))
-   (supers poo-flow-search-framework-role)))
+   (supers agentic-ai-lab-search-framework-role)))
 
-(def poo-flow-search-stage-prototype
+(def agentic-ai-lab-search-stage-prototype
   (poo-core-role-object
-   (slots ((schema +poo-flow-search-schema+)
+   (slots ((schema +agentic-ai-lab-search-schema+)
            (kind 'search-stage)
            (name #f)
            (operation #f)
@@ -59,11 +59,11 @@
            (output-domain #f)
            (flow #f)
            (metadata '())))
-   (supers poo-flow-search-framework-role)))
+   (supers agentic-ai-lab-search-framework-role)))
 
-(def poo-flow-search-composition-prototype
+(def agentic-ai-lab-search-composition-prototype
   (poo-core-role-object
-   (slots ((schema +poo-flow-search-schema+)
+   (slots ((schema +agentic-ai-lab-search-schema+)
            (kind 'search-composition)
            (name #f)
            (mode #f)
@@ -72,15 +72,15 @@
            (output-domain #f)
            (flow #f)
            (metadata '())))
-   (supers poo-flow-search-framework-role)))
+   (supers agentic-ai-lab-search-framework-role)))
 
-(def poo-flow-search-strategy-prototype
+(def agentic-ai-lab-search-strategy-prototype
   (poo-core-role-object
-   (slots ((schema +poo-flow-search-schema+)
+   (slots ((schema +agentic-ai-lab-search-schema+)
            (kind 'search-strategy)
            (name #f)
            (root #f)
            (policy '())
            (dag-receipt #f)
            (metadata '())))
-   (supers poo-flow-search-framework-role)))
+   (supers agentic-ai-lab-search-framework-role)))

@@ -18,9 +18,9 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/agent-sandbox/api
-        :poo-flow/modules/agent-sandbox/cube
-        :poo-flow/modules/agent-sandbox/nono)
+        :agentic-ai-lab/modules/agent-sandbox/api
+        :agentic-ai-lab/modules/agent-sandbox/cube
+        :agentic-ai-lab/modules/agent-sandbox/nono)
 
 (export agent-sandbox-cube-interface-test)
 

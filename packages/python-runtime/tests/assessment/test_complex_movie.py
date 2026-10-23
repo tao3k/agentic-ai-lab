@@ -8,8 +8,8 @@ import unittest
 import subprocess
 import sys
 import tempfile
-from poo_flow_testing.assessment_studies import complex_movie_study as study
-from poo_flow_testing.assessment_studies.query_contract import compact_request
+from agentic_ai_lab_testing.assessment_studies import complex_movie_study as study
+from agentic_ai_lab_testing.assessment_studies.query_contract import compact_request
 
 class ComplexMovieProtocol(unittest.TestCase):
     def setUp(self): self.source=json.loads(study.FIXTURE.read_text())
@@ -48,7 +48,7 @@ class ComplexMovieProtocol(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             output=study.Path(directory)/'result.json'
             library=study.Path(importlib.util.find_spec('ascent._core').origin)
-            subprocess.run([sys.executable,'-u','-m','poo_flow_testing.assessment_studies.complex_movie_study','qualify',
+            subprocess.run([sys.executable,'-u','-m','agentic_ai_lab_testing.assessment_studies.complex_movie_study','qualify',
                             str(study.FIXTURE.parent/'conformance.json'),str(library),str(output)],check=True)
             receipt=json.loads(output.read_text())
             self.assertEqual(receipt['librarySha256'], hashlib.sha256(library.read_bytes()).hexdigest())

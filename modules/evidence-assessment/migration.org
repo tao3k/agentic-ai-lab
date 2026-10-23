@@ -9,7 +9,7 @@ provenance. This module owns computational Evidence and application assessment.
 and cost accounting. Their native implementation shares a POO runtime owner,
 which delegates execution to the producer Library.
 
-The existing Python runtime package exposes =poo_flow_runtime.reasoning=.
+The existing Python runtime package exposes =agentic_ai_lab_runtime.reasoning=.
 =ReasoningRuntime= owns application lifetime; application Evidence, Clue,
 Trajectory and conversation types require that owner. Generic declarations use
 =Engine.rules= from ASCENT when no application owner is needed.
@@ -52,7 +52,7 @@ original producer and are not silently admitted against the new package.
 Review is application policy, not a rule-engine primitive. Its native owner and
 rule source are =native/src/review/{mod,owner,policy}.rs= and
 =policies/review-rules.scm=; its Python binding is =native/src/python/review.rs=.
-=poo_flow_runtime.reasoning.EvidenceReview= and =review_sources= are the public
+=agentic_ai_lab_runtime.reasoning.EvidenceReview= and =review_sources= are the public
 Python entry. =packages/python-runtime/tests/assessment/test_review.py= checks
 source identity, withdrawal, failed receipts and engine failure.
 
@@ -84,7 +84,7 @@ inventory suite passed 152 tests. No provider request was sent.
 
 The existing Python wheel CI now tests the installed assessment consumers against
 the exact producer revision. Existing CI Quint and Lean jobs include the migrated
-protocols and the =PooFlowModuleEvidenceAssessmentProof= target. Full wheel
+protocols and the =AgenticAILabModuleEvidenceAssessmentProof= target. Full wheel
 assembly with the existing Bazel C-runtime handoffs remains a distinct CI gate;
 the local extension-wheel check does not claim that unrelated runtime handoff
 completed.

@@ -7,8 +7,8 @@
 ;;; Invariant: macros expand to ordinary POO module objects and field contracts.
 
 (import :yuanxu/module-system/schema/interface
-        :poo-flow/modules/sandbox-core/shared-object
-        :poo-flow/modules/sandbox-core/objects)
+        :agentic-ai-lab/modules/sandbox-core/shared-object
+        :agentic-ai-lab/modules/sandbox-core/objects)
 
 (export defpoo-sandbox-backend-object-family)
 
@@ -55,7 +55,7 @@
      (def sandbox-object
        (yuanxu-module-object
         'sandbox-identity
-        (list poo-flow-shared-sandbox-object)
+        (list agentic-ai-lab-shared-sandbox-object)
         (list
          (yuanxu-module-field-contract
           'sandbox-field sandbox-type 'sandbox-merge
@@ -72,7 +72,7 @@
 
      ;; : Any
      (def backend-capability-registry
-       (poo-flow-sandbox-backend-capability-registry
+       (agentic-ai-lab-sandbox-backend-capability-registry
         (list (cons 'backend-key backend-capability))
         registry-metadata))
 

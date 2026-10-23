@@ -9,7 +9,7 @@
 Why can the first API query take longer than a CLI query, and which repeated
 work can be removed without weakening lock/currentness/receiver admission?
 This follows [[file:15-nix-c-api-qualification.org][the direct-embedding qualification]]. The implementation stays in
-POO Flow's =bindings/nix-c-api=; Gerbil/Gambit sources and Yuanxu are unchanged.
+Agentic AI Lab's =bindings/nix-c-api=; Gerbil/Gambit sources and Yuanxu are unchanged.
 
 The qualified platform is aarch64-darwin, with the installed Gerbil 1cfb032 /
 Gambit ea114fc, compiled gerbil-poo 80b590b, current Core 013b89f consumers,

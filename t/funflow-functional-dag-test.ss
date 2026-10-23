@@ -14,8 +14,8 @@
         (only-in :clan/poo/object .ref)
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flags)
-        :poo-flow/modules/workflow/scenario/configuration/interface
-        :poo-flow/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
         (only-in :yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-check-map->functional-dag
                  yuanxu-funflow-composition-step?

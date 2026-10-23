@@ -13,6 +13,6 @@
                      FlakeSource: NixFlakeSourceContract)
           prototypes: (.o Source: (.cc NixSource. 'config config)
                           FlakeSource: (.cc NixFlakeSource. 'config config))
-          source-inputs: poo-flow-nix-source-inputs
-          admit-generation: poo-flow-nix-admit-generation))
+          source-inputs: agentic-ai-lab-nix-source-inputs
+          admit-generation: agentic-ai-lab-nix-admit-generation))
   features: (.o))

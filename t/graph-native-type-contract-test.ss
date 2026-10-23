@@ -8,7 +8,7 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
-;; : (-> PooFlowGraphExpr PooFlowGraphValue)
+;; : (-> AgenticAILabGraphExpr AgenticAILabGraphValue)
 (def (graph-eval expr)
   (eval expr))
 

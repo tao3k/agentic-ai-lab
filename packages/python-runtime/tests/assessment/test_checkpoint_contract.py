@@ -8,8 +8,8 @@ import subprocess
 import sys
 import unittest
 
-from poo_flow_runtime.reasoning import ReasoningRuntime, ReasoningError
-from poo_flow_runtime.reasoning import ClueExchange
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime, ReasoningError
+from agentic_ai_lab_runtime.reasoning import ClueExchange
 
 
 PROJECTION = """
@@ -69,7 +69,7 @@ TRACE_PROJECTION = """
 
 def trace_packet(request):
     engine = ReasoningRuntime()
-    source = files("poo_flow_runtime").joinpath("reasoning_rules/checkpoint_rules.ss").read_text()
+    source = files("agentic_ai_lab_runtime").joinpath("reasoning_rules/checkpoint_rules.ss").read_text()
     owner = ClueExchange(engine, [source, TRACE_PROJECTION, PROJECTION],
                          "project-trace", request["facts"], {"dsl": "d", "report": "h"})
     try:
@@ -87,7 +87,7 @@ def resume_trace_fixture():
 
 def resume_progress_fixture():
     engine = ReasoningRuntime()
-    source = files("poo_flow_runtime").joinpath("reasoning_rules/checkpoint_rules.ss").read_text()
+    source = files("agentic_ai_lab_runtime").joinpath("reasoning_rules/checkpoint_rules.ss").read_text()
     session = engine.rules(source, "make-evidence-checkpoint", trusted=True)
     try:
         session.replace(json.load(sys.stdin))
@@ -103,7 +103,7 @@ def resume_progress_fixture():
 
 class CheckpointTransport(unittest.TestCase):
     def setUp(self):
-        source = files("poo_flow_runtime").joinpath("reasoning_rules/checkpoint_rules.ss")
+        source = files("agentic_ai_lab_runtime").joinpath("reasoning_rules/checkpoint_rules.ss")
         self.engine = ReasoningRuntime()
         self.session = self.engine.rules(source.read_text(), "make-evidence-checkpoint", trusted=True)
         self.addCleanup(self.session.close)

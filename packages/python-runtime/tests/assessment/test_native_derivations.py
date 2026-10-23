@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Pure graph operations execute directly in Rust without an engine dispatcher."""
 import unittest
-from poo_flow_runtime.reasoning import normalize_contract,evidence_graph,components,canonical_rule
+from agentic_ai_lab_runtime.reasoning import normalize_contract,evidence_graph,components,canonical_rule
 
 class DerivationStructure(unittest.TestCase):
     def test_dag_helpers_use_the_same_native_operation(self):

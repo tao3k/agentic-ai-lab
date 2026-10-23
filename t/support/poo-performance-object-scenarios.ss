@@ -250,15 +250,15 @@
       (poo-performance-cross-contribution-child index)))))
 
 ;; : (-> PooObject Symbol Value Value)
-(def (poo-flow-performance-ref object key default)
+(def (agentic-ai-lab-performance-ref object key default)
   (try
     (.ref object key)
     (catch (e) default)))
 
 ;; : (-> PooObject Value)
 (def (poo-performance-object-index-identity object)
-  (or (poo-flow-performance-ref object 'identity #f)
-      (poo-flow-performance-ref object 'name #f)))
+  (or (agentic-ai-lab-performance-ref object 'identity #f)
+      (agentic-ai-lab-performance-ref object 'name #f)))
 
 ;; : (-> [PooObject] HashTable)
 (def (poo-performance-object-list-index objects)
@@ -276,17 +276,17 @@
 (def (yuanxu-module-objects-index objects)
   (if (list? objects)
     (poo-performance-object-list-index objects)
-    (let ((objects-index (poo-flow-performance-ref objects 'objects-index #f)))
+    (let ((objects-index (agentic-ai-lab-performance-ref objects 'objects-index #f)))
       (if objects-index
         objects-index
-        (let ((index (poo-flow-performance-ref objects 'index #f)))
+        (let ((index (agentic-ai-lab-performance-ref objects 'index #f)))
           (if index
             index
-            (let ((children (poo-flow-performance-ref objects 'children #f)))
+            (let ((children (agentic-ai-lab-performance-ref objects 'children #f)))
               (if children
                 (poo-performance-object-list-index children)
                 (poo-performance-object-list-index
-                 (poo-flow-performance-ref objects 'modules []))))))))))
+                 (agentic-ai-lab-performance-ref objects 'modules []))))))))))
 
 ;; : (-> Integer Symbol [PooGraphContribution])
 (def (poo-performance-cross-contribution-targeting-contributions child-count target)

@@ -15,9 +15,9 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :poo-flow/modules/loop-engine/control/descriptor
+        (only-in :agentic-ai-lab/modules/loop-engine/control/descriptor
                  make-loop-pattern-descriptor)
-        (only-in :poo-flow/modules/loop-engine/control/strategy
+        (only-in :agentic-ai-lab/modules/loop-engine/control/strategy
                  make-loop-strategy-plan
                  loop-strategy-plan->contract))
 
@@ -37,7 +37,7 @@
 
 ;; : (-> Alist Void)
 (def (loop-strategy-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] loop-strategy-contract-projection ")
+  (display "[agentic-ai-lab-benchmark] loop-strategy-contract-projection ")
   (write receipt)
   (newline)
   (force-output))
@@ -71,7 +71,7 @@
 
 ;; : (-> Integer [LoopPatternDescriptor])
 (def (loop-strategy-performance-patterns count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    loop-strategy-performance-pattern))
 

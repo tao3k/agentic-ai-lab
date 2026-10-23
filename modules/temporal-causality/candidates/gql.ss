@@ -8,25 +8,25 @@
 (import (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/modules/query/types
-                 poo-flow-query? poo-flow-query-element-space?
-                 poo-flow-query-provider?
-                 poo-flow-source-query-receipt?)
-        (only-in :poo-flow/modules/query/funs poo-flow-query-admit)
-        (only-in :poo-flow/modules/query/contracts
-                 poo-flow-query-source-content-identity
-                 poo-flow-query-bind-execution-receipt)
-        (only-in :poo-flow/modules/query/objects
-                 poo-flow-query-execution-candidate)
-        (only-in :poo-flow/modules/query/results/types
-                 poo-flow-query-result-set?)
-        (only-in :poo-flow/modules/query/results/funs
-                 poo-flow-query-result-set-replay)
-        (only-in :poo-flow/modules/temporal-causality/candidates/types
-                 poo-flow-candidate-scope? poo-flow-candidate-receipt?)
-        (only-in :poo-flow/modules/temporal-causality/candidates/funs
-                 poo-flow-candidate-receipt poo-flow-candidate-check))
-(export poo-flow-gql-candidate-receipt poo-flow-gql-candidate-row-check)
+        (only-in :agentic-ai-lab/modules/query/types
+                 agentic-ai-lab-query? agentic-ai-lab-query-element-space?
+                 agentic-ai-lab-query-provider?
+                 agentic-ai-lab-source-query-receipt?)
+        (only-in :agentic-ai-lab/modules/query/funs agentic-ai-lab-query-admit)
+        (only-in :agentic-ai-lab/modules/query/contracts
+                 agentic-ai-lab-query-source-content-identity
+                 agentic-ai-lab-query-bind-execution-receipt)
+        (only-in :agentic-ai-lab/modules/query/objects
+                 agentic-ai-lab-query-execution-candidate)
+        (only-in :agentic-ai-lab/modules/query/results/types
+                 agentic-ai-lab-query-result-set?)
+        (only-in :agentic-ai-lab/modules/query/results/funs
+                 agentic-ai-lab-query-result-set-replay)
+        (only-in :agentic-ai-lab/modules/temporal-causality/candidates/types
+                 agentic-ai-lab-candidate-scope? agentic-ai-lab-candidate-receipt?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/candidates/funs
+                 agentic-ai-lab-candidate-receipt agentic-ai-lab-candidate-check))
+(export agentic-ai-lab-gql-candidate-receipt agentic-ai-lab-gql-candidate-row-check)
 
 (def (receipt-digest receipt)
   (string-append
@@ -37,7 +37,7 @@
       (call-with-output-string
        (lambda (port)
          (write
-          (cons 'poo-flow.gql-source-receipt.v1
+          (cons 'agentic-ai-lab.gql-source-receipt.v1
                 (map (lambda (slot) (.ref receipt slot))
                      '(provider-identity query-identity query-version
                        semantic-revision source-content-identity
@@ -47,18 +47,18 @@
                        mutation-authority? action-authority?)))
           port))))))))
 
-(def (poo-flow-gql-candidate-receipt id candidate scope query element-space
+(def (agentic-ai-lab-gql-candidate-receipt id candidate scope query element-space
                                      provider source-receipt)
-  (unless (and (poo-flow-candidate-scope? scope)
-               (poo-flow-query? query)
-               (poo-flow-query-element-space? element-space)
-               (poo-flow-query-provider? provider)
-               (poo-flow-source-query-receipt? source-receipt))
+  (unless (and (agentic-ai-lab-candidate-scope? scope)
+               (agentic-ai-lab-query? query)
+               (agentic-ai-lab-query-element-space? element-space)
+               (agentic-ai-lab-query-provider? provider)
+               (agentic-ai-lab-source-query-receipt? source-receipt))
     (error "invalid GQL candidate bridge input"))
-  (let* ((admission (poo-flow-query-admit query element-space))
-         (source-digest (poo-flow-query-source-content-identity query))
+  (let* ((admission (agentic-ai-lab-query-admit query element-space))
+         (source-digest (agentic-ai-lab-query-source-content-identity query))
          (execution-candidate
-          (poo-flow-query-execution-candidate
+          (agentic-ai-lab-query-execution-candidate
            (.ref source-receipt 'provider-identity)
            (.ref source-receipt 'query-identity)
            (.ref source-receipt 'query-version)
@@ -70,7 +70,7 @@
            (.ref source-receipt 'result-count)
            (.ref source-receipt 'complete?)))
          (rebound
-          (poo-flow-query-bind-execution-receipt
+          (agentic-ai-lab-query-bind-execution-receipt
            provider query admission execution-candidate)))
     (unless (and (memq 'gql (.ref scope 'required-providers))
                  (equal? (.ref scope 'evidence-cut-digest)
@@ -82,7 +82,7 @@
                  (equal? (receipt-digest source-receipt)
                          (receipt-digest rebound)))
       (error "GQL candidate receipt does not match Temporal cut and Query"))
-    (poo-flow-candidate-receipt
+    (agentic-ai-lab-candidate-receipt
      id candidate scope 'gql source-digest (receipt-digest source-receipt)
      (.ref source-receipt 'result-digest)
      (.ref source-receipt 'result-count)
@@ -90,21 +90,21 @@
 
 ;;; Only checks the supplied scalar rows against a declared result digest.
 ;;; It cannot attest that a Provider produced either the rows or the digest.
-(def (poo-flow-gql-candidate-row-check id candidate-receipt query result-set)
-  (unless (and (poo-flow-candidate-receipt? candidate-receipt)
-               (poo-flow-query? query)
-               (poo-flow-query-result-set? result-set))
+(def (agentic-ai-lab-gql-candidate-row-check id candidate-receipt query result-set)
+  (unless (and (agentic-ai-lab-candidate-receipt? candidate-receipt)
+               (agentic-ai-lab-query? query)
+               (agentic-ai-lab-query-result-set? result-set))
     (error "invalid GQL candidate row-check input"))
   (let (result-set
-        (poo-flow-query-result-set-replay
+        (agentic-ai-lab-query-result-set-replay
          result-set (.ref query 'result-contract)))
     (unless (and (>= (string-length (.ref candidate-receipt 'result-digest)) 29)
                  (string=?
                   (substring (.ref candidate-receipt 'result-digest) 0 29)
-                  "poo-flow.query.scalar-row-v1:")
+                  "agentic-ai-lab.query.scalar-row-v1:")
                  (eq? (.ref candidate-receipt 'provider-identity) 'gql)
                  (equal? (.ref candidate-receipt 'request-digest)
-                         (poo-flow-query-source-content-identity query))
+                         (agentic-ai-lab-query-source-content-identity query))
                  (equal? (.ref result-set 'query-identity)
                          (.ref query 'identity))
                  (equal? (.ref result-set 'query-version)
@@ -112,8 +112,8 @@
                  (equal? (.ref result-set 'semantic-revision)
                          (.ref query 'semantic-revision)))
       (error "GQL result set does not match candidate Query"))
-    (poo-flow-candidate-check
-     id candidate-receipt "poo-flow/query/scalar-row-check-v1"
+    (agentic-ai-lab-candidate-check
+     id candidate-receipt "agentic-ai-lab/query/scalar-row-check-v1"
      (cond ((or (not (equal? (.ref candidate-receipt 'result-digest)
                              (.ref result-set 'result-digest)))
                 (not (= (.ref candidate-receipt 'result-count)

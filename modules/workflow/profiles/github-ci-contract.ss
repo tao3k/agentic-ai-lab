@@ -17,22 +17,22 @@
                  yuanxu-json-schema-contract-artifact-validate
                  yuanxu-json-schema-object-contract-validation->alist))
 
-(export +poo-flow-funflow-github-ci-schema-source+
-        +poo-flow-funflow-github-ci-workflow-schema+
-        +poo-flow-funflow-github-ci-schema-audit+
-        poo-flow-funflow-github-ci-contract-artifact
-        poo-flow-funflow-github-ci-workflow-contract
-        poo-flow-funflow-github-ci-contract-receipt
-        poo-flow-funflow-github-ci-profile
-        poo-flow-funflow-github-ci-validate-workflow
-        poo-flow-funflow-github-ci-validate-workflow->alist)
+(export +agentic-ai-lab-funflow-github-ci-schema-source+
+        +agentic-ai-lab-funflow-github-ci-workflow-schema+
+        +agentic-ai-lab-funflow-github-ci-schema-audit+
+        agentic-ai-lab-funflow-github-ci-contract-artifact
+        agentic-ai-lab-funflow-github-ci-workflow-contract
+        agentic-ai-lab-funflow-github-ci-contract-receipt
+        agentic-ai-lab-funflow-github-ci-profile
+        agentic-ai-lab-funflow-github-ci-validate-workflow
+        agentic-ai-lab-funflow-github-ci-validate-workflow->alist)
 
 ;; : GithubWorkflowSchemaSourceURL
-(def +poo-flow-funflow-github-ci-schema-source+
+(def +agentic-ai-lab-funflow-github-ci-schema-source+
   "https://json.schemastore.org/github-workflow.json")
 
 ;; : PinnedGithubWorkflowSchemaAudit
-(def +poo-flow-funflow-github-ci-schema-audit+
+(def +agentic-ai-lab-funflow-github-ci-schema-audit+
   '((source . "https://json.schemastore.org/github-workflow.json")
     (repo-path . "schemas/json/github-workflow.json")
     (sha256 . "7a952fdb7c1b130732e40ccea9db9bced906c1198e97834f8a49ae3b411f3161")
@@ -54,7 +54,7 @@
 ;;; we can enforce today. Dynamic job identifiers stay visible through
 ;;; patternProperties metadata until the bridge owns map-value contracts.
 ;; : FunflowGithubCiWorkflowJsonLikeSchema
-(def +poo-flow-funflow-github-ci-workflow-schema+
+(def +agentic-ai-lab-funflow-github-ci-workflow-schema+
   '((type . "object")
     (required . ("on" "jobs"))
     (additionalProperties . #f)
@@ -140,47 +140,47 @@
                      (env . (($ref . "#/definitions/env")))))))))))
 
 ;; : YuanxuJsonSchemaContractArtifact
-(def poo-flow-funflow-github-ci-contract-artifact
+(def agentic-ai-lab-funflow-github-ci-contract-artifact
   (yuanxu-json-schema->contract-artifact
-   +poo-flow-funflow-github-ci-workflow-schema+
-   `((source-ref . ,+poo-flow-funflow-github-ci-schema-source+)
+   +agentic-ai-lab-funflow-github-ci-workflow-schema+
+   `((source-ref . ,+agentic-ai-lab-funflow-github-ci-schema-source+)
      (owner . funflow)
-     (object-kind . PooFlowFunflowGithubCiWorkflow)
+     (object-kind . AgenticAILabFunflowGithubCiWorkflow)
      (object-key . funflow/github-ci/workflow))))
 
 ;; : (-> YuanxuObjectTypeContract)
-(def (poo-flow-funflow-github-ci-workflow-contract)
+(def (agentic-ai-lab-funflow-github-ci-workflow-contract)
   (yuanxu-json-schema-contract-artifact-object-contract
-   poo-flow-funflow-github-ci-contract-artifact))
+   agentic-ai-lab-funflow-github-ci-contract-artifact))
 
 ;; : (-> Alist)
-(def (poo-flow-funflow-github-ci-contract-receipt)
+(def (agentic-ai-lab-funflow-github-ci-contract-receipt)
   (yuanxu-json-schema-contract-artifact->alist
-   poo-flow-funflow-github-ci-contract-artifact))
+   agentic-ai-lab-funflow-github-ci-contract-artifact))
 
 ;;; The profile object exposes the contract artifact as data for module-system
 ;;; composition. It does not load the raw JSON file at runtime and does not
 ;;; execute GitHub Actions; those are adapter/runtime responsibilities.
-;; : PooFlowFunflowGithubCiProfileObject
-(def poo-flow-funflow-github-ci-profile
+;; : AgenticAILabFunflowGithubCiProfileObject
+(def agentic-ai-lab-funflow-github-ci-profile
   (object<-alist
    (list
-    (cons 'kind 'poo-flow.funflow.github-ci.profile)
+    (cons 'kind 'agentic-ai-lab.funflow.github-ci.profile)
     (cons 'module 'funflow)
     (cons 'profile 'github-ci)
     (cons 'feature '+cicd)
-    (cons 'schema-source +poo-flow-funflow-github-ci-schema-source+)
-    (cons 'contract-artifact poo-flow-funflow-github-ci-contract-artifact)
-    (cons 'schema-audit +poo-flow-funflow-github-ci-schema-audit+)
+    (cons 'schema-source +agentic-ai-lab-funflow-github-ci-schema-source+)
+    (cons 'contract-artifact agentic-ai-lab-funflow-github-ci-contract-artifact)
+    (cons 'schema-audit +agentic-ai-lab-funflow-github-ci-schema-audit+)
     (cons 'runtime-executed #f))))
 
-;; : (-> PooFlowObjectOrAlist YuanxuJsonSchemaObjectContractValidation)
-(def (poo-flow-funflow-github-ci-validate-workflow workflow)
+;; : (-> AgenticAILabObjectOrAlist YuanxuJsonSchemaObjectContractValidation)
+(def (agentic-ai-lab-funflow-github-ci-validate-workflow workflow)
   (yuanxu-json-schema-contract-artifact-validate
-   poo-flow-funflow-github-ci-contract-artifact
+   agentic-ai-lab-funflow-github-ci-contract-artifact
    workflow))
 
-;; : (-> PooFlowObjectOrAlist Alist)
-(def (poo-flow-funflow-github-ci-validate-workflow->alist workflow)
+;; : (-> AgenticAILabObjectOrAlist Alist)
+(def (agentic-ai-lab-funflow-github-ci-validate-workflow->alist workflow)
   (yuanxu-json-schema-object-contract-validation->alist
-   (poo-flow-funflow-github-ci-validate-workflow workflow)))
+   (agentic-ai-lab-funflow-github-ci-validate-workflow workflow)))

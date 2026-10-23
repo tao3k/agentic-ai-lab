@@ -3,15 +3,15 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 #+title: 20-29 AI Security
-#+author: POO Flow
+#+author: Agentic AI Lab
 #+startup: overview
 
 * Purpose
 
 This Org-first family owns AI-security research, architecture semantics, and
-enterprise security architecture packages built with the POO Flow engine.
+enterprise security architecture packages built with the Agentic AI Lab engine.
 
-POO Flow itself remains the general POO-native architecture-semantics
+Agentic AI Lab itself remains the general POO-native architecture-semantics
 composition engine.  Documents in this family describe security architectures
 that the engine may compose; they do not redefine the engine or widen its
 public API.
@@ -71,7 +71,7 @@ File: =20.04-enterprise-ai-security-guarantee-coordinate-algebra.org=
 
 Research synthesis for composing topology, lifecycle, threat, design,
 control, evidence, response, and accountability coordinates without treating
-any industry's layer count as the POO Flow engine ontology.
+any industry's layer count as the Agentic AI Lab engine ontology.
 
 * 20.05 Data and Knowledge Security Guarantee Semantics
 

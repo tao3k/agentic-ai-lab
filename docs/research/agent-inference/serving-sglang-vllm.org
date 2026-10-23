@@ -43,7 +43,7 @@ must pin server/model/parser versions for a reproducible experiment.
 #+NAME: serving-interface-evidence
 | Source locator | Documented behavior | Consequence for our design | Limit |
 |----------------+---------------------+----------------------------+-------|
-| SG-tool, OpenAI Compatible API | =--tool-call-parser= interprets model output; examples return =message.tool_calls=, execute a function in the client, then send a =tool= result back | POO Flow can run the candidate-check loop outside the model server | Parser support and model template are model-specific |
+| SG-tool, OpenAI Compatible API | =--tool-call-parser= interprets model output; examples return =message.tool_calls=, execute a function in the client, then send a =tool= result back | Agentic AI Lab can run the candidate-check loop outside the model server | Parser support and model template are model-specific |
 | SG-tool, Tool Choice Mode | =required= and specific function choice use grammar-constrained calls | Force a check in an evaluation when needed | Docs say XGrammar supports this; other backends may not |
 | SG-structured, overview | JSON Schema, regex and EBNF constrain output shape | A candidate envelope can have syntactic shape constraints | Valid shape does not establish truthful facts or correct rules |
 | VL-tool, Quickstart and Automatic Function Calling | =--enable-auto-tool-choice= and =--tool-call-parser= parse a model's call; the caller handles tool execution and result messages | Same external loop can use a vLLM endpoint | Parser/chat-template support varies by model |
@@ -78,7 +78,7 @@ from the native checked Library contract and the
 | Owner | Responsibility |
 |-------+----------------|
 | SGLang or vLLM | Generate a tool-call proposal and parse its model-specific syntax |
-| POO Flow/application adapter | Advertise capability; route call/result; maintain attempt IDs, source binding and budgets |
+| Agentic AI Lab/application adapter | Advertise capability; route call/result; maintain attempt IDs, source binding and budgets |
 | Gerbil Ascent Library | Inspect candidate declarations; execute finite relational fixpoint; return typed bounded evidence |
 | MRR/source owner | Decide semantic admission and canonical evidence lineage |
 | LLM/model caller | Choose a next reasoning step or answer using observations; no automatic admission |

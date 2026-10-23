@@ -11,7 +11,7 @@
 ;;; assertions, Case profiles, reporting and exit status.
 (def (main . args)
   (def (completed-stage message)
-    (when (getenv "POO_FLOW_TEST_PROGRESS" #f)
+    (when (getenv "AGENTIC_AI_LAB_TEST_PROGRESS" #f)
       (let (port (current-error-port))
         (display message port)
         (newline port)
@@ -36,7 +36,7 @@
      :clan/poo/support/syntax :clan/poo/support/repr :clan/poo/brace
      :clan/poo/mop
      :asp-gerbil-scheme/testing-api :yuanxu/observability/testing-case
-     :poo-flow/testing-api
-     :poo-flow/modules/temporal-causality/admission/interface
-     :poo-flow/modules/temporal-causality/lifecycle/interface))
+     :agentic-ai-lab/testing-api
+     :agentic-ai-lab/modules/temporal-causality/admission/interface
+     :agentic-ai-lab/modules/temporal-causality/lifecycle/interface))
   (exit (apply gxtest-main args)))

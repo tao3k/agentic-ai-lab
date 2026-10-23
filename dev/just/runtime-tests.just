@@ -8,47 +8,47 @@ test-gerbil-test-tool executable path="t/gerbil-runtime-import-test.ss":
 # Parse an exported policy set without starting the Runtime Host.
 [group('test')]
 inspect-cedar-file policy:
-    cargo run --locked --quiet --manifest-path {{ cedar_workspace }} -p poo-flow-cedar-authority --bin cedar-case-check -- inspect "{{ policy }}"
+    cargo run --locked --quiet --manifest-path {{ cedar_workspace }} -p agentic-ai-lab-cedar-authority --bin cedar-case-check -- inspect "{{ policy }}"
 
 # Check explicit clock domains and conservative interval observations.
 [group('check')]
 check-temporal-time:
-    GERBIL_PATH="{{ poo_flow_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ poo_flow_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-time-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-time-test.ss
 
 # Replay immutable conclusion journals before forming a CAS proposal.
 [group('check')]
 check-temporal-conclusions:
-    GERBIL_PATH="{{ poo_flow_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ poo_flow_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-conclusions-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-conclusions-test.ss
 
 # Check exclusive and overlapping finite hypothesis-family semantics.
 [group('check')]
 check-temporal-model:
-    GERBIL_PATH="{{ poo_flow_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ poo_flow_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-model-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-model-test.ss
 
 # Verify Trajectory independently of the consuming Impact module.
 [group('check')]
 check-temporal-trajectory:
-    GERBIL_PATH="{{ poo_flow_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ poo_flow_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-trajectory-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-trajectory-test.ss
 
 # Verify exact irregular-grid Impact arithmetic without claiming a
 # trained forecaster, statistical estimator or causal effect.
 [group('check')]
 check-temporal-impact:
-    GERBIL_PATH="{{ poo_flow_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ poo_flow_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-impact-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-impact-test.ss
 
 # Check domain-neutral retrieval/use lineage and finite interleavings.
 [group('check')]
 check-temporal-evidence:
-    GERBIL_PATH="{{ poo_flow_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ poo_flow_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-evidence-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-evidence-test.ss
 
 # Audit exact cut/provider receipts as inert candidate review material.
 [group('check')]
 check-temporal-candidate-exchange:
-    GERBIL_PATH="{{ poo_flow_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ poo_flow_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-candidate-exchange-test.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-candidate-exchange-test.ss
 
 [group('check')]
 check-native-semantic-query-model: check-native-semantic-query-lean
-    PYTHONPATH="{{ justfile_directory() }}/packages/python-testing/src" python3 -m poo_flow_testing.checks.quint --group query
+    PYTHONPATH="{{ justfile_directory() }}/packages/python-testing/src" python3 -m agentic_ai_lab_testing.checks.quint --group query
 
 # Rebuild the pinned POO dependency after a native compiler/runtime repair.
 # Preserve source and old AOT artifacts; never uninstall the package checkout.
@@ -56,13 +56,13 @@ check-native-semantic-query-model: check-native-semantic-query-lean
 rebuild-poo-native backup:
     #!/usr/bin/env bash
     set -euo pipefail
-    package_root="{{ poo_flow_gerbil_path }}/pkg/github.com/tao3k/gerbil-poo"
+    package_root="{{ agentic_ai_lab_gerbil_path }}/pkg/github.com/tao3k/gerbil-poo"
     test -f "$package_root/build.ss"
     test ! -e "{{ backup }}"
-    tar -czf "{{ backup }}" -C "{{ poo_flow_library_path }}" clan/poo
+    tar -czf "{{ backup }}" -C "{{ agentic_ai_lab_library_path }}" clan/poo
     cd "$package_root"
-    export GERBIL_PATH="{{ poo_flow_gerbil_path }}"
-    export GERBIL_LOADPATH="{{ poo_flow_library_path }}"
+    export GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}"
+    export GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}"
     {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 60s gerbil clean
     {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gerbil build
 
@@ -80,11 +80,11 @@ test-runtime-v0-native-ffi:
     if [[ "$(uname -s)" == Darwin ]]; then
       link_options=(-ld-options "-Wl,-undefined,dynamic_lookup")
     fi
-    library_root="{{ poo_flow_gerbil_path }}/lib"
+    library_root="{{ agentic_ai_lab_gerbil_path }}/lib"
     export GERBIL_LOADPATH="$library_root:{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}"
     {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} env gxc "${link_options[@]}" modules/workflow/runtime/runtime-v0-native.ss
     {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} env gxc t/runtime-v0-native-ffi-test.ss
-    test_module="$library_root/poo-flow/t/runtime-v0-native-ffi-test.ssi"
+    test_module="$library_root/agentic-ai-lab/t/runtime-v0-native-ffi-test.ssi"
     {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss runtime-ffi "{{ gerbil_test_runtime_options }}" "$test_module"
 
 # Run statically linked Query/Orgize/Evidence cases through upstream gxtest.
@@ -106,7 +106,7 @@ test-temporal-family-archive executable library sha256 directory:
     test -f "{{ library }}"
     log="$(mktemp)"
     trap 'rm -f "$log"' EXIT
-    MRR_NATIVE_PROGRESS=1 POO_FLOW_RUNTIME_TRACE=1 POO_FLOW_ARCHIVE_DIRECTORY="{{ directory }}" POO_FLOW_SEMANTIC_LIBRARY="{{ library }}" POO_FLOW_SEMANTIC_SHA256="{{ sha256 }}" timeout --foreground --signal=TERM --kill-after=1s 45s python3 "{{ justfile_directory() }}/packages/python-runtime/tools/watch.py" "{{ executable }}" --exact original_mrr_values_project_to_real_native_poo --nocapture --test-threads=1 2>&1 | tee "$log"
+    MRR_NATIVE_PROGRESS=1 AGENTIC_AI_LAB_RUNTIME_TRACE=1 AGENTIC_AI_LAB_ARCHIVE_DIRECTORY="{{ directory }}" AGENTIC_AI_LAB_SEMANTIC_LIBRARY="{{ library }}" AGENTIC_AI_LAB_SEMANTIC_SHA256="{{ sha256 }}" timeout --foreground --signal=TERM --kill-after=1s 45s python3 "{{ justfile_directory() }}/packages/python-runtime/tools/watch.py" "{{ executable }}" --exact original_mrr_values_project_to_real_native_poo --nocapture --test-threads=1 2>&1 | tee "$log"
     test "$(grep -Ec '^test result: ok\. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;' "$log" || true)" = 2
     grep -Eq '^Fresh-process full Family proof archive replay verified$' "$log"
     test -s "{{ directory }}/archive.ss"
@@ -123,7 +123,7 @@ test-temporal-mrr-context executable library sha256 directory:
     grep -F 'MRR Context checked original receipt, policy, temporal fact and current Source; forged/missing/foreign bindings rejected' "$log" >/dev/null
     grep -Fx 'MRR Context rejected stale native Source after correction' "$log" >/dev/null
 
-# Check the declared ASCENT package through POO Flow's Observability Case.
+# Check the declared ASCENT package through Agentic AI Lab's Observability Case.
 [group('test')]
 test-ascent-integration:
     #!/usr/bin/env bash
@@ -150,17 +150,17 @@ test-bundle-v1:
 # Qualify an explicitly supplied Cedar Runtime Host artifact.
 [group('test')]
 test-cedar-runtime-host host:
-    POO_FLOW_CEDAR_RUNTIME_HOST="{{ host }}" cargo test --locked --manifest-path {{ cedar_workspace }} -p poo-flow-cedar-authority --features native-runtime-host-qualification --test runtime_host --test authorization --test case_check
+    AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST="{{ host }}" cargo test --locked --manifest-path {{ cedar_workspace }} -p agentic-ai-lab-cedar-authority --features native-runtime-host-qualification --test runtime_host --test authorization --test case_check
 
 # Qualify the Scheme POO -> native authority -> AOT Host path with one Cedar artifact.
 [group('test')]
 test-cedar-native host:
-    POO_FLOW_CEDAR_RUNTIME_HOST="{{ host }}" cargo test --locked --manifest-path {{ cedar_workspace }} -p poo-flow-cedar-gerbil --features conformance --test native_authorization
+    AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST="{{ host }}" cargo test --locked --manifest-path {{ cedar_workspace }} -p agentic-ai-lab-cedar-gerbil --features conformance --test native_authorization
 
 # Replay one data-only case manifest against exported Cedar files and both Host engines.
 [group('test')]
 test-cedar-case manifest host policy:
-    cargo run --locked --quiet --manifest-path {{ cedar_workspace }} -p poo-flow-cedar-authority --bin cedar-case-check -- "{{ manifest }}" "{{ host }}" "{{ policy }}"
+    cargo run --locked --quiet --manifest-path {{ cedar_workspace }} -p agentic-ai-lab-cedar-authority --bin cedar-case-check -- "{{ manifest }}" "{{ host }}" "{{ policy }}"
 
 # Run the explicit runtime-C sanitizer gate.
 [group('test')]

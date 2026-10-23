@@ -1,10 +1,10 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :clan/poo/object "./types.ss" "./objects.ss"
-        (only-in :poo-flow/modules/services/opentofu/objects poo-flow-opentofu-provider-from-directory))
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects agentic-ai-lab-opentofu-provider-from-directory))
 (export null-scope)
 (def (null-scope directory)
-  (def selected-provider (poo-flow-opentofu-provider-from-directory directory))
+  (def selected-provider (agentic-ai-lab-opentofu-provider-from-directory directory))
   (unless (eq? (.get selected-provider status) 'ready)
     (error "Null provider package build required" directory))
   (def baseline Scenario)

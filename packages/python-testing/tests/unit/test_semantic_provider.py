@@ -6,8 +6,8 @@ import json
 
 import pytest
 
-from poo_flow_testing.model_study.semantic_config import configuration
-from poo_flow_testing.model_study.semantic_provider import ContentTimeout, consume_lines
+from agentic_ai_lab_testing.model_study.semantic_config import configuration
+from agentic_ai_lab_testing.model_study.semantic_provider import ContentTimeout, consume_lines
 
 
 def line(kind, **fields):

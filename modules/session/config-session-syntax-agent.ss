@@ -6,8 +6,8 @@
 ;;; session POO objects without crossing runtime execution boundaries.
 ;;; Invariant: generated agent objects must retain stable ids for parent and
 ;;; child session policy checks.
-(import :poo-flow/modules/session/config-session-syntax-materialization
-        :poo-flow/modules/session/config-session-syntax-agent-node)
+(import :agentic-ai-lab/modules/session/config-session-syntax-materialization
+        :agentic-ai-lab/modules/session/config-session-syntax-agent-node)
 
-(export (import: :poo-flow/modules/session/config-session-syntax-materialization)
-        (import: :poo-flow/modules/session/config-session-syntax-agent-node))
+(export (import: :agentic-ai-lab/modules/session/config-session-syntax-materialization)
+        (import: :agentic-ai-lab/modules/session/config-session-syntax-agent-node))

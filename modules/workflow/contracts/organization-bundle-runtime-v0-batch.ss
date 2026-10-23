@@ -9,26 +9,26 @@
 (import (only-in :clan/poo/object .o .ref object<-alist)
         (only-in :std/list/list fold))
 
-(def +poo-flow-runtime-v0-layout-version+ 1)
-(def +poo-flow-runtime-v0-event-header-bytes+ 96)
+(def +agentic-ai-lab-runtime-v0-layout-version+ 1)
+(def +agentic-ai-lab-runtime-v0-event-header-bytes+ 96)
 
-(def (poo-flow-runtime-v0-compact-id high-value low-value)
+(def (agentic-ai-lab-runtime-v0-compact-id high-value low-value)
   (unless (and (integer? high-value) (>= high-value 0)
                (integer? low-value) (>= low-value 0))
     (error "compact identity requires nonnegative 64-bit words"
            high-value low-value))
-  (.o (kind 'poo-flow.runtime-v0.compact-id.128)
+  (.o (kind 'agentic-ai-lab.runtime-v0.compact-id.128)
       (high high-value) (low low-value)))
 
-(def (poo-flow-runtime-v0-identity-entry full-identity-value compact-value)
-  (.o (kind 'poo-flow.runtime-v0.identity-entry.1)
+(def (agentic-ai-lab-runtime-v0-identity-entry full-identity-value compact-value)
+  (.o (kind 'agentic-ai-lab.runtime-v0.identity-entry.1)
       (full-identity full-identity-value)
       (compact compact-value)))
 
 (def (compact-id->list value)
   (list (.ref value 'high) (.ref value 'low)))
 
-(def (poo-flow-runtime-v0-identity-table entries)
+(def (agentic-ai-lab-runtime-v0-identity-table entries)
   (let (validated-identity-index
         (fold
          (lambda (entry seen)
@@ -45,11 +45,11 @@
          '()
          entries))
     (let (entry-values entries)
-      (.o (kind 'poo-flow.runtime-v0.identity-table.1)
+      (.o (kind 'agentic-ai-lab.runtime-v0.identity-table.1)
           (entries entry-values)
           (collision-checked? (list? validated-identity-index))))))
 
-(def (poo-flow-runtime-v0-event event-kind-value flags-value sequence-value
+(def (agentic-ai-lab-runtime-v0-event event-kind-value flags-value sequence-value
                                 event-identity-value correlation-identity-value
                                 authorization-identity-value payload-offset-value
                                 payload-length-value deadline-value
@@ -59,9 +59,9 @@
                (integer? payload-length-value) (>= payload-length-value 0))
     (error "runtime v0 event requires nonnegative sequence and payload slice"))
   (object<-alist
-   (list (cons 'kind 'poo-flow.runtime-v0.event.1)
-         (cons 'layout-version +poo-flow-runtime-v0-layout-version+)
-         (cons 'header-bytes +poo-flow-runtime-v0-event-header-bytes+)
+   (list (cons 'kind 'agentic-ai-lab.runtime-v0.event.1)
+         (cons 'layout-version +agentic-ai-lab-runtime-v0-layout-version+)
+         (cons 'header-bytes +agentic-ai-lab-runtime-v0-event-header-bytes+)
          (cons 'event-kind event-kind-value) (cons 'flags flags-value)
          (cons 'sequence sequence-value)
          (cons 'event-identity event-identity-value)
@@ -73,7 +73,7 @@
          (cons 'required-evidence-bits evidence-bits-value)
          (cons 'reserved0 0))))
 
-(def (poo-flow-runtime-v0-event->native-fields event)
+(def (agentic-ai-lab-runtime-v0-event->native-fields event)
   (list (cons 'layout-version (.ref event 'layout-version))
         (cons 'header-bytes (.ref event 'header-bytes))
         (cons 'event-kind (.ref event 'event-kind))

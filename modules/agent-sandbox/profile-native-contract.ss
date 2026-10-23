@@ -16,111 +16,111 @@
                  yuanxu-contract-admit
                  yuanxu-validation-evidence-accepted?))
 
-(export poo-flow-sandbox-profile-kind
-        PooFlowSandboxProfileContract
-        poo-flow-sandbox-profile-contract-admission
-        poo-flow-sandbox-profile-contract-admitted?
-        poo-flow-sandbox-profile-type-contract->alist
-        poo-flow-require-sandbox-profile-contract!)
+(export agentic-ai-lab-sandbox-profile-kind
+        AgenticAILabSandboxProfileContract
+        agentic-ai-lab-sandbox-profile-contract-admission
+        agentic-ai-lab-sandbox-profile-contract-admitted?
+        agentic-ai-lab-sandbox-profile-type-contract->alist
+        agentic-ai-lab-require-sandbox-profile-contract!)
 
 ;; Kind ids remain boundary vocabulary. They do not select a runtime backend.
-(def poo-flow-sandbox-profile-kind
-  "poo-flow.agent-sandbox.user-profile.v1")
+(def agentic-ai-lab-sandbox-profile-kind
+  "agentic-ai-lab.agent-sandbox.user-profile.v1")
 
 ;; : (-> Object Boolean)
-(def (poo-flow-sandbox-profile-object? value)
+(def (agentic-ai-lab-sandbox-profile-object? value)
   (and (object? value)
        (.slot? value 'kind)
-       (equal? (.ref value 'kind) poo-flow-sandbox-profile-kind)))
+       (equal? (.ref value 'kind) agentic-ai-lab-sandbox-profile-kind)))
 
 ;; : (-> Object Boolean)
-(def (poo-flow-sandbox-profile-kind-value? value)
-  (equal? value poo-flow-sandbox-profile-kind))
+(def (agentic-ai-lab-sandbox-profile-kind-value? value)
+  (equal? value agentic-ai-lab-sandbox-profile-kind))
 
 ;; : (-> POOObject Symbol Boolean)
-(def (poo-flow-sandbox-profile-slot-present? candidate slot)
+(def (agentic-ai-lab-sandbox-profile-slot-present? candidate slot)
   (.slot? candidate slot))
 
 ;; : (-> POOObject Symbol Object)
-(def (poo-flow-sandbox-profile-slot-ref candidate slot)
+(def (agentic-ai-lab-sandbox-profile-slot-ref candidate slot)
   (.ref candidate slot))
 
-(def PooFlowSandboxProfileKindType
+(def AgenticAILabSandboxProfileKindType
   (yuanxu-contract-value-type
    'PooSandboxProfileKind
-   poo-flow-sandbox-profile-kind-value?
+   agentic-ai-lab-sandbox-profile-kind-value?
    'String
    'sandbox-profile-kind))
 
-(def PooFlowSandboxProfileSymbolType
+(def AgenticAILabSandboxProfileSymbolType
   (yuanxu-contract-value-type 'Symbol symbol? 'Symbol))
 
-(def PooFlowSandboxProfileListType
+(def AgenticAILabSandboxProfileListType
   (yuanxu-contract-value-type 'List list? 'List))
 
 ;; : (-> Symbol Symbol PooContractValueType Alist PooContractSlot)
-(def (poo-flow-sandbox-profile-slot key slot value-type metadata)
+(def (agentic-ai-lab-sandbox-profile-slot key slot value-type metadata)
   (yuanxu-contract-slot key slot value-type #t metadata))
 
-(def +poo-flow-sandbox-profile-slots+
+(def +agentic-ai-lab-sandbox-profile-slots+
   (list
-   (poo-flow-sandbox-profile-slot
-    'sandbox.profile/kind 'kind PooFlowSandboxProfileKindType
+   (agentic-ai-lab-sandbox-profile-slot
+    'sandbox.profile/kind 'kind AgenticAILabSandboxProfileKindType
     '((scope . agent-sandbox) (owned-by . profile-native-contract)))
-   (poo-flow-sandbox-profile-slot
-    'sandbox.profile/name 'name PooFlowSandboxProfileSymbolType
+   (agentic-ai-lab-sandbox-profile-slot
+    'sandbox.profile/name 'name AgenticAILabSandboxProfileSymbolType
     '((scope . agent-sandbox) (owned-by . user-declaration)))
-   (poo-flow-sandbox-profile-slot
-    'sandbox.profile/backend-kind 'backend-kind PooFlowSandboxProfileSymbolType
+   (agentic-ai-lab-sandbox-profile-slot
+    'sandbox.profile/backend-kind 'backend-kind AgenticAILabSandboxProfileSymbolType
     '((scope . sandbox-core) (owned-by . module-config)))
-   (poo-flow-sandbox-profile-slot
-    'sandbox.profile/backend-ref 'backend-ref PooFlowSandboxProfileSymbolType
+   (agentic-ai-lab-sandbox-profile-slot
+    'sandbox.profile/backend-ref 'backend-ref AgenticAILabSandboxProfileSymbolType
     '((scope . sandbox-core) (owned-by . module-config)))
-   (poo-flow-sandbox-profile-slot
-    'sandbox.profile/network-policy 'network-policy PooFlowSandboxProfileListType
+   (agentic-ai-lab-sandbox-profile-slot
+    'sandbox.profile/network-policy 'network-policy AgenticAILabSandboxProfileListType
     '((scope . sandbox-core) (projection . network)))
-   (poo-flow-sandbox-profile-slot
-    'sandbox.profile/capabilities 'capabilities PooFlowSandboxProfileListType
+   (agentic-ai-lab-sandbox-profile-slot
+    'sandbox.profile/capabilities 'capabilities AgenticAILabSandboxProfileListType
     '((scope . sandbox-core) (projection . capabilities)))
-   (poo-flow-sandbox-profile-slot
-    'sandbox.profile/resource-policy 'resource-policy PooFlowSandboxProfileListType
+   (agentic-ai-lab-sandbox-profile-slot
+    'sandbox.profile/resource-policy 'resource-policy AgenticAILabSandboxProfileListType
     '((scope . sandbox-core) (projection . resources)))
-   (poo-flow-sandbox-profile-slot
-    'sandbox.profile/metadata 'metadata PooFlowSandboxProfileListType
+   (agentic-ai-lab-sandbox-profile-slot
+    'sandbox.profile/metadata 'metadata AgenticAILabSandboxProfileListType
     '((scope . agent-sandbox) (projection . metadata)))))
 
-(def PooFlowSandboxProfileContract
+(def AgenticAILabSandboxProfileContract
   (yuanxu-native-contract
    'PooSandboxProfileContract
    'agent-sandbox
    'PooSandboxProfile
-   poo-flow-sandbox-profile-object?
-   +poo-flow-sandbox-profile-slots+
-   poo-flow-sandbox-profile-slot-present?
-   poo-flow-sandbox-profile-slot-ref
+   agentic-ai-lab-sandbox-profile-object?
+   +agentic-ai-lab-sandbox-profile-slots+
+   agentic-ai-lab-sandbox-profile-slot-present?
+   agentic-ai-lab-sandbox-profile-slot-ref
    '((semantic-owner . agent-sandbox)
      (runtime-executed . #f)
      (projection . sandbox-profile-recipe))))
 
 ;; : (-> PooSandboxProfile PooValidationEvidence)
-(def (poo-flow-sandbox-profile-contract-admission profile)
+(def (agentic-ai-lab-sandbox-profile-contract-admission profile)
   (yuanxu-contract-admit
-   PooFlowSandboxProfileContract
+   AgenticAILabSandboxProfileContract
    profile
    'sandbox-profile-recipe))
 
 ;; : (-> PooSandboxProfile Boolean)
-(def (poo-flow-sandbox-profile-contract-admitted? profile)
+(def (agentic-ai-lab-sandbox-profile-contract-admitted? profile)
   (yuanxu-validation-evidence-accepted?
-   (poo-flow-sandbox-profile-contract-admission profile)))
+   (agentic-ai-lab-sandbox-profile-contract-admission profile)))
 
 ;; : (-> Alist)
-(def (poo-flow-sandbox-profile-type-contract->alist)
-  (yuanxu-native-contract->alist PooFlowSandboxProfileContract))
+(def (agentic-ai-lab-sandbox-profile-type-contract->alist)
+  (yuanxu-native-contract->alist AgenticAILabSandboxProfileContract))
 
 ;; : (-> PooSandboxProfile PooSandboxProfile)
-(def (poo-flow-require-sandbox-profile-contract! profile)
-  (let (evidence (poo-flow-sandbox-profile-contract-admission profile))
+(def (agentic-ai-lab-require-sandbox-profile-contract! profile)
+  (let (evidence (agentic-ai-lab-sandbox-profile-contract-admission profile))
     (if (yuanxu-validation-evidence-accepted? evidence)
       profile
       (error "sandbox profile failed native contract admission" evidence))))

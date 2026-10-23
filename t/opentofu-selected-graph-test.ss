@@ -5,9 +5,9 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/process run-process)
         (only-in :std/misc/ports read-all-as-string)
-        (only-in :poo-flow/modules/nix/objects NixSource. NixFlakeSource.)
+        (only-in :agentic-ai-lab/modules/nix/objects NixSource. NixFlakeSource.)
         (only-in :std/encoding/json read-json write-json)
-        (only-in :poo-flow/modules/nix/func current-nix-process-observer current-nix-process-completion-observer)
+        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-observer current-nix-process-completion-observer)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :std/string/misc string-subst)
         (only-in :gerbil/expander eval-syntax current-expander-context make-top-context syntax->list)
@@ -90,11 +90,11 @@
 (def source-observations (make-hash-table))
 (def nix-seconds 0.)
 (def (trace-row row)
-  (when (getenv "POO_FLOW_OPENTOFU_GRAPH_TRACE" #f)
+  (when (getenv "AGENTIC_AI_LAB_OPENTOFU_GRAPH_TRACE" #f)
     (call-with-output-file
-      (list path: (getenv "POO_FLOW_OPENTOFU_GRAPH_TRACE") append: #t)
+      (list path: (getenv "AGENTIC_AI_LAB_OPENTOFU_GRAPH_TRACE") append: #t)
       (lambda (port) (write-json port (list->hash-table row)) (newline port)))))
-(def flake-root (getenv "POO_FLOW_OPENTOFU_GRAPH_FLAKE" #f))
+(def flake-root (getenv "AGENTIC_AI_LAB_OPENTOFU_GRAPH_FLAKE" #f))
 (def evaluator (if flake-root "nix" "nix-instantiate"))
 (def measurements '())
 (def (process-count name) (hash-ref processes name 0))
@@ -169,9 +169,9 @@
                                           (cons 'completed completed?)))))
                      (current-nix-process-observer
                        (lambda (argv)
-                         (when (getenv "POO_FLOW_NIX_ARGV_TRACE" #f)
+                         (when (getenv "AGENTIC_AI_LAB_NIX_ARGV_TRACE" #f)
                            (call-with-output-file
-                             (list path: (getenv "POO_FLOW_NIX_ARGV_TRACE") append: #t)
+                             (list path: (getenv "AGENTIC_AI_LAB_NIX_ARGV_TRACE") append: #t)
                              (lambda (port) (write-json port (list->vector argv)) (newline port))))
                          (hash-update! processes (path-strip-directory (car argv)) 1+ 0)
                          (cond
@@ -228,7 +228,7 @@
                   (map (lambda (path) (cons path (module-source-read path)))
                        (list expression-path catalog-path collector-path checker))))))
           (write-source (path-expand "types.ss" owner)
-            (string-append "(import (only-in :poo-flow/modules/services/opentofu/types OpenTofuScopeContract)) "
+            (string-append "(import (only-in :agentic-ai-lab/modules/services/opentofu/types OpenTofuScopeContract)) "
                            (string-subst (module-source-read (path-expand "types.ss" owner)) "(export Scope)" "(export Scope OpenTofuScopeContract)")))
           (write-source (path-expand "interface.ss" owner)
             "(.def Infrastructure identity: 'app/infrastructure core: (.o requires: (.o Tofu: (.o module-id: 'services/opentofu contract: OpenTofuScopeContract)) scope-contract: Scope exports: (.o config: Config)) features: (.o))")
@@ -428,8 +428,8 @@
               (delete-directory (string-append flake-root "-unlocked")))
             (assert 'flake-lock-unchanged-across-config-generations
               (equal? lock-text (module-source-read (path-expand "flake.lock" flake-root)))))
-          (when (getenv "POO_FLOW_OPENTOFU_GRAPH_METRICS" #f)
-            (call-with-output-file (list path: (getenv "POO_FLOW_OPENTOFU_GRAPH_METRICS") truncate: #t)
+          (when (getenv "AGENTIC_AI_LAB_OPENTOFU_GRAPH_METRICS" #f)
+            (call-with-output-file (list path: (getenv "AGENTIC_AI_LAB_OPENTOFU_GRAPH_METRICS") truncate: #t)
               (lambda (port) (write-json port (list->hash-table (list (cons 'phases (list->vector (reverse measurements))) (cons 'parent-types (list->vector (map list->vector parent-counts))) (cons 'child-types (list->vector (map list->vector child-counts)))))))))
           (assert 'tampered-demand-kept-for-diagnosis
             (equal? (module-source-read selection) "{\"providers\":[\"aws\"]}"))))))))

@@ -11,8 +11,8 @@
                  check-equal?
                  test-suite)
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/workflow/scenario/configuration/interface
-        :poo-flow/modules/workflow/scenario/configuration/init-syntax)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
 (export user-interface-custom-loop-engine-memory-policy-test)
 
@@ -20,7 +20,7 @@
 ;;; memory-policy failures stay tied to real `use-module` declarations.
 ;; : (-> PooUserModuleSelection POOObject)
 (def (custom-loop-memory-policy-presentation module-bundle)
-  (pooFlowUserConfigPresentation
+  (agenticAiLabUserConfigPresentation
    (yuanxuUserConfig
     (yuanxu-user-module-bundles->modules (list module-bundle))
     (yuanxu-settings))))
@@ -98,6 +98,6 @@
 ;;; loop-engine presentation test, keeping negative POO-native cases explicit.
 ;; : TestSuite
 (def user-interface-custom-loop-engine-memory-policy-test
-  (test-suite "poo-flow custom loop-engine memory-policy contracts"
+  (test-suite "agentic-ai-lab custom loop-engine memory-policy contracts"
     (user-interface-custom-loop-engine-duplicate-memory-policy-case)
     (user-interface-custom-loop-engine-unmatched-memory-policy-case)))

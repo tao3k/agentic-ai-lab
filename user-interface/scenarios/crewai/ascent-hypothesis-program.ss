@@ -8,40 +8,40 @@
 
 (import (only-in :clan/poo/object .o .ref .call object?)
         (only-in :clan/poo/trie UIntTrieSet)
-        (only-in :poo-flow/modules/query/semantic/organization-bundle
-                 poo-flow-organization-principal
-                 poo-flow-organization-agent
-                 poo-flow-organization-delegation
-                 poo-flow-organization-context-projection
-                 poo-flow-organization-organization-facet
-                 poo-flow-organization-authority-facet
-                 poo-flow-organization-context-facet
-                 poo-flow-organization-bundle
-                 poo-flow-organization-bundle?
-                 poo-flow-organization-bundle-identity
-                 poo-flow-organization-bundle-validate
-                 poo-flow-organization-validation-accepted?))
+        (only-in :agentic-ai-lab/modules/query/semantic/organization-bundle
+                 agentic-ai-lab-organization-principal
+                 agentic-ai-lab-organization-agent
+                 agentic-ai-lab-organization-delegation
+                 agentic-ai-lab-organization-context-projection
+                 agentic-ai-lab-organization-organization-facet
+                 agentic-ai-lab-organization-authority-facet
+                 agentic-ai-lab-organization-context-facet
+                 agentic-ai-lab-organization-bundle
+                 agentic-ai-lab-organization-bundle?
+                 agentic-ai-lab-organization-bundle-identity
+                 agentic-ai-lab-organization-bundle-validate
+                 agentic-ai-lab-organization-validation-accepted?))
 
-(export poo-flow-ascent-prediction
-        poo-flow-ascent-hypothesis-program
-        poo-flow-ascent-hypothesis-specialize-source
-        poo-flow-ascent-hypothesis-demand
-        poo-flow-ascent-hypothesis-observe
-        poo-flow-ascent-hypothesis-revise)
+(export agentic-ai-lab-ascent-prediction
+        agentic-ai-lab-ascent-hypothesis-program
+        agentic-ai-lab-ascent-hypothesis-specialize-source
+        agentic-ai-lab-ascent-hypothesis-demand
+        agentic-ai-lab-ascent-hypothesis-observe
+        agentic-ai-lab-ascent-hypothesis-revise)
 
 (def (valid-organization? value)
-  (and (poo-flow-organization-bundle? value)
-       (poo-flow-organization-validation-accepted?
-        (poo-flow-organization-bundle-validate value))))
+  (and (agentic-ai-lab-organization-bundle? value)
+       (agentic-ai-lab-organization-validation-accepted?
+        (agentic-ai-lab-organization-bundle-validate value))))
 
 (def (source-pairs expression)
   (.call UIntTrieSet .list<- (.ref expression 'source-pairs)))
 
-(def (poo-flow-ascent-prediction pair-value expected-value?)
+(def (agentic-ai-lab-ascent-prediction pair-value expected-value?)
   (unless (and (exact-integer? pair-value) (>= pair-value 0)
                (boolean? expected-value?))
     (error "Ascent prediction requires a pair and expected membership"))
-  (.o kind: 'poo-flow.ascent-prediction.v1
+  (.o kind: 'agentic-ai-lab.ascent-prediction.v1
       pair: pair-value
       expected-reachable?: expected-value?))
 
@@ -64,7 +64,7 @@
              (not (member pair-value seen))
              (loop (cdr remaining) (cons pair-value seen)))))))
 
-(def (poo-flow-ascent-hypothesis-program identity-value source-id-value
+(def (agentic-ai-lab-ascent-hypothesis-program identity-value source-id-value
                                          expression prediction-values
                                          organization-value limit-value)
   (unless (and (symbol? identity-value)
@@ -80,13 +80,13 @@
          (pairs (source-pairs expression))
          (projection (prediction-projection prediction-values))
          (organization-digest-value
-          (.ref (poo-flow-organization-bundle-identity organization-value)
+          (.ref (agentic-ai-lab-organization-bundle-identity organization-value)
                 'digest)))
     (unless (and (exact-integer? radix-value)
                  (> radix-value 1)
                  (valid-prediction-projection? projection radix-value))
       (error "Ascent predictions must be distinct in the source radix"))
-    (.o kind: 'poo-flow.ascent-hypothesis-candidate.v1
+    (.o kind: 'agentic-ai-lab.ascent-hypothesis-candidate.v1
         identity: identity-value
         generation: 0
         predecessor-identity: #f
@@ -103,16 +103,16 @@
 
 ;;; A source intervention here is a pure counterfactual program specialization.
 ;;; It neither changes the source owner nor admits a semantic result.
-(def (poo-flow-ascent-hypothesis-specialize-source program source-id-value
+(def (agentic-ai-lab-ascent-hypothesis-specialize-source program source-id-value
                                                     expression organization)
   (unless (and (object? program)
                (eq? (.ref program 'kind)
-                    'poo-flow.ascent-hypothesis-candidate.v1)
+                    'agentic-ai-lab.ascent-hypothesis-candidate.v1)
                (string? source-id-value)
                (> (string-length source-id-value) 0)
                (object? expression)
                (valid-organization? organization)
-               (equal? (.ref (poo-flow-organization-bundle-identity organization)
+               (equal? (.ref (agentic-ai-lab-organization-bundle-identity organization)
                              'digest)
                        (.ref program 'organization-digest))
                (equal? (.ref expression 'radix) (.ref program 'radix)))
@@ -122,7 +122,7 @@
   (let ((pairs (source-pairs expression)))
     (let* ((generation-value (+ 1 (.ref program 'generation)))
            (predecessor (.ref program 'identity)))
-      (.o kind: 'poo-flow.ascent-hypothesis-candidate.v1
+      (.o kind: 'agentic-ai-lab.ascent-hypothesis-candidate.v1
           identity: (list predecessor 'source-specialization
                           generation-value source-id-value pairs)
           generation: generation-value
@@ -139,13 +139,13 @@
           activation-authority?: #f
           mrr-admitted?: #f))))
 
-(def (poo-flow-ascent-hypothesis-demand program)
+(def (agentic-ai-lab-ascent-hypothesis-demand program)
   (unless (and (object? program)
                (eq? (.ref program 'kind)
-                    'poo-flow.ascent-hypothesis-candidate.v1))
+                    'agentic-ai-lab.ascent-hypothesis-candidate.v1))
     (error "Ascent demand requires a hypothesis program"))
   (let ((demand-id
-         (list 'poo-flow.ascent-hypothesis-demand.v1
+         (list 'agentic-ai-lab.ascent-hypothesis-demand.v1
                (.ref program 'identity)
                (.ref program 'generation)
                (.ref program 'source-identity)
@@ -154,7 +154,7 @@
                (.ref program 'prediction-projection)
                (.ref program 'organization-digest)
                (.ref program 'max-derived-agents))))
-    (.o kind: 'poo-flow.ascent-hypothesis-demand.v1
+    (.o kind: 'agentic-ai-lab.ascent-hypothesis-demand.v1
         identity: demand-id
         activation-authority?: #f)))
 
@@ -193,8 +193,8 @@
             (apply append
                    (map (lambda (agent-id principal-id)
                           (list
-                           (poo-flow-organization-principal principal-id)
-                           (poo-flow-organization-agent
+                           (agentic-ai-lab-organization-principal principal-id)
+                           (agentic-ai-lab-organization-agent
                             agent-id principal-id (.ref template 'role-id)
                             root-id authorities visible)))
                         agent-ids principal-ids)))
@@ -202,26 +202,26 @@
             (apply append
                    (map (lambda (agent-id)
                           (map (lambda (capability-id)
-                                 (poo-flow-organization-delegation
+                                 (agentic-ai-lab-organization-delegation
                                   root-id agent-id capability-id))
                                authorities))
                         agent-ids)))
            (new-contexts
             (map (lambda (agent-id)
-                   (poo-flow-organization-context-projection agent-id visible))
+                   (agentic-ai-lab-organization-context-projection agent-id visible))
                  agent-ids))
            (derived
-            (poo-flow-organization-bundle
+            (agentic-ai-lab-organization-bundle
              (+ 1 (.ref base 'epoch))
-             (poo-flow-organization-organization-facet
+             (agentic-ai-lab-organization-organization-facet
               (append (.ref organization-facet 'entities) new-members)
               (.ref organization-facet 'relations)
               (.ref organization-facet 'constraints))
-             (poo-flow-organization-authority-facet
+             (agentic-ai-lab-organization-authority-facet
               (.ref authority-facet 'entities)
               (append (.ref authority-facet 'relations) new-delegations)
               (.ref authority-facet 'constraints))
-             (poo-flow-organization-context-facet
+             (agentic-ai-lab-organization-context-facet
               (append (.ref context-facet 'entities) new-contexts)
               (.ref context-facet 'constraints))
              (.ref base 'protocol)
@@ -231,22 +231,22 @@
       derived)))
 
 (def (candidate-observation-identity demand-id failed-pairs verdict)
-  (list 'poo-flow.ascent-hypothesis-observation.v1
+  (list 'agentic-ai-lab.ascent-hypothesis-observation.v1
         demand-id failed-pairs verdict))
 
-(def (poo-flow-ascent-hypothesis-observe program demand expression organization)
+(def (agentic-ai-lab-ascent-hypothesis-observe program demand expression organization)
   (unless (and (object? program)
                (eq? (.ref program 'kind)
-                    'poo-flow.ascent-hypothesis-candidate.v1)
+                    'agentic-ai-lab.ascent-hypothesis-candidate.v1)
                (object? demand)
                (eq? (.ref demand 'kind)
-                    'poo-flow.ascent-hypothesis-demand.v1)
+                    'agentic-ai-lab.ascent-hypothesis-demand.v1)
                (equal? (.ref demand 'identity)
-                       (.ref (poo-flow-ascent-hypothesis-demand program)
+                       (.ref (agentic-ai-lab-ascent-hypothesis-demand program)
                              'identity))
                (eq? (.ref demand 'activation-authority?) #f)
                (valid-organization? organization)
-               (equal? (.ref (poo-flow-organization-bundle-identity organization)
+               (equal? (.ref (agentic-ai-lab-organization-bundle-identity organization)
                              'digest)
                        (.ref program 'organization-digest))
                (equal? (source-pairs expression)
@@ -262,7 +262,7 @@
          (failed-pair-values
           (map (lambda (value) (.ref value 'pair)) failures))
          (verdict-value (if (null? failures) 'matched 'falsified)))
-    (.o kind: 'poo-flow.ascent-hypothesis-observation.v1
+    (.o kind: 'agentic-ai-lab.ascent-hypothesis-observation.v1
         identity: (candidate-observation-identity
                    (.ref demand 'identity) failed-pair-values verdict-value)
         program-identity: (.ref program 'identity)
@@ -279,19 +279,19 @@
         activation-authority?: #f
         mrr-admitted?: #f)))
 
-(def (poo-flow-ascent-hypothesis-revise program demand observation organization)
+(def (agentic-ai-lab-ascent-hypothesis-revise program demand observation organization)
   (unless (and (object? program)
                (eq? (.ref program 'kind)
-                    'poo-flow.ascent-hypothesis-candidate.v1)
+                    'agentic-ai-lab.ascent-hypothesis-candidate.v1)
                (object? demand)
                (eq? (.ref demand 'kind)
-                    'poo-flow.ascent-hypothesis-demand.v1)
+                    'agentic-ai-lab.ascent-hypothesis-demand.v1)
                (equal? (.ref demand 'identity)
-                       (.ref (poo-flow-ascent-hypothesis-demand program)
+                       (.ref (agentic-ai-lab-ascent-hypothesis-demand program)
                              'identity))
                (object? observation)
                (eq? (.ref observation 'kind)
-                    'poo-flow.ascent-hypothesis-observation.v1)
+                    'agentic-ai-lab.ascent-hypothesis-observation.v1)
                (equal? (.ref observation 'program-identity)
                        (.ref program 'identity))
                (equal? (.ref observation 'demand-identity)
@@ -309,7 +309,7 @@
                (eq? (.ref observation 'activation-authority?) #f)
                (eq? (.ref observation 'mrr-admitted?) #f)
                (valid-organization? organization)
-               (equal? (.ref (poo-flow-organization-bundle-identity organization)
+               (equal? (.ref (agentic-ai-lab-organization-bundle-identity organization)
                              'digest)
                        (.ref observation 'organization-digest))
                (equal? (.ref observation 'organization-digest)
@@ -338,7 +338,7 @@
                             failed-pair-values
                             (.ref program 'max-derived-agents))))
          (selected-digest
-          (.ref (poo-flow-organization-bundle-identity selected-organization)
+          (.ref (agentic-ai-lab-organization-bundle-identity selected-organization)
                 'digest))
          (predecessor (.ref program 'identity))
          (source-values (.ref program 'source-pair-values))
@@ -349,7 +349,7 @@
          (observation-id (.ref observation 'identity))
          (verdict-value (.ref observation 'prediction-verdict)))
       (values
-       (.o kind: 'poo-flow.ascent-hypothesis-candidate.v1
+       (.o kind: 'agentic-ai-lab.ascent-hypothesis-candidate.v1
            identity: (list predecessor next-generation observation-id)
            generation: next-generation
            predecessor-identity: predecessor

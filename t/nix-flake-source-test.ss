@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :poo-flow/modules/nix/progress make-nix-progress-reader) :std/test :clan/poo/object
+(import (only-in :agentic-ai-lab/modules/nix/progress make-nix-progress-reader) :std/test :clan/poo/object
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :yuanxu/ops/func run-script)
         (only-in :yuanxu/ops/process-script ProcessScript.)
@@ -12,10 +12,10 @@
         (only-in :std/text/pregexp pregexp-match)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
-        (only-in :poo-flow/modules/nix/objects NixFlakeSource.)
-        (only-in :poo-flow/modules/nix/types NixFlakeSourceContract)
-        (only-in :poo-flow/modules/nix/func current-nix-process-observer)
-        (only-in :poo-flow/modules/services/opentofu/objects OpenTofuScope.)
+        (only-in :agentic-ai-lab/modules/nix/objects NixFlakeSource.)
+        (only-in :agentic-ai-lab/modules/nix/types NixFlakeSourceContract)
+        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-observer)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
         (only-in :yuanxu/module-system/source/admission module-source-read module-source-admit-current!))
@@ -42,10 +42,10 @@
       (with-evaluator (lambda (evaluator)
       (call-with-temporary-directory "nix-flake-source"
         (lambda (root)
-          (def artifacts (getenv "POO_FLOW_OPENTOFU_FLAKE_ARTIFACT"))
-          (def nix (getenv "POO_FLOW_NIX_C_API_CLI" "nix"))
+          (def artifacts (getenv "AGENTIC_AI_LAB_OPENTOFU_FLAKE_ARTIFACT"))
+          (def nix (getenv "AGENTIC_AI_LAB_NIX_C_API_CLI" "nix"))
           (def tools-json (yuanxu-json-schema-source->json-like
-                            (call-with-input-string (getenv "POO_FLOW_NIX_TEST_TOOLS") read-json)))
+                            (call-with-input-string (getenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS") read-json)))
           (def package-set (yuanxu-contract-object-ref tools-json 'nixpkgs #f))
           (def package-hash (yuanxu-contract-object-ref tools-json 'nixpkgsHash #f))
           (def tools (yuanxu-contract-object-ref tools-json 'tools #f))
@@ -209,7 +209,7 @@
               (rejects? "stale external package derivation"
                 (lambda ()
                   (parameterize ((current-expander-context (make-top-context)))
-                    (eval-syntax '(import :poo-flow/modules/nix/objects))
+                    (eval-syntax '(import :agentic-ai-lab/modules/nix/objects))
                     (for-each eval-syntax (.get child guard-forms))))))
             (write-source providers (string-append "{ artifacts }: " provider-text))
             (assert 'lock-unchanged (equal? lock-text (module-source-read lock)))
@@ -221,8 +221,8 @@
             (assert 'implicit-lock-update-rejected
               (rejects? "process exited|lock" (lambda () (.call (source) .instantiate))))
             (assert 'failed-eval-did-not-write-lock (equal? lock-text (module-source-read lock))))
-          (when (getenv "POO_FLOW_NIX_FLAKE_METRICS" #f)
-            (call-with-output-file (list path: (getenv "POO_FLOW_NIX_FLAKE_METRICS") truncate: #t)
+          (when (getenv "AGENTIC_AI_LAB_NIX_FLAKE_METRICS" #f)
+            (call-with-output-file (list path: (getenv "AGENTIC_AI_LAB_NIX_FLAKE_METRICS") truncate: #t)
               (lambda (port) (write-json port (list->hash-table
                 (list (cons 'phases (list->vector (reverse measurements))))))))))))))))
 (def nix-flake-source-test (nix-flake-source-suite (lambda (procedure) (procedure #f))))

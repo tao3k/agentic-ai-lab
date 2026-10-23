@@ -4,40 +4,40 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :clan/poo/object :std/test
-        :poo-flow/modules/query/semantic/organization-bundle
-        :poo-flow/modules/query/semantic/organization-bundle-kernel
-        :poo-flow/modules/query/semantic/organization-bundle-shadow)
+        :agentic-ai-lab/modules/query/semantic/organization-bundle
+        :agentic-ai-lab/modules/query/semantic/organization-bundle-kernel
+        :agentic-ai-lab/modules/query/semantic/organization-bundle-shadow)
 
 
 (def (shadow-bundle)
-  (poo-flow-organization-bundle
+  (agentic-ai-lab-organization-bundle
    11
-   (poo-flow-organization-organization-facet
-    (list (poo-flow-organization-principal 'pp)
-          (poo-flow-organization-principal 'pc)
-          (poo-flow-organization-role 'rp)
-          (poo-flow-organization-role 'rc)
-          (poo-flow-organization-agent 'parent 'pp 'rp #f
+   (agentic-ai-lab-organization-organization-facet
+    (list (agentic-ai-lab-organization-principal 'pp)
+          (agentic-ai-lab-organization-principal 'pc)
+          (agentic-ai-lab-organization-role 'rp)
+          (agentic-ai-lab-organization-role 'rc)
+          (agentic-ai-lab-organization-agent 'parent 'pp 'rp #f
                                        '(write search) '(public private))
-          (poo-flow-organization-agent 'child 'pc 'rc 'parent '(search) '(public))))
-   (poo-flow-organization-authority-facet
-    (list (poo-flow-organization-capability 'write #t)
-          (poo-flow-organization-capability 'search #t))
-    (list (poo-flow-organization-delegation 'parent 'child 'search)))
-   (poo-flow-organization-context-facet
-    (list (poo-flow-organization-context-projection 'child '(public))))
-   (poo-flow-organization-protocol-facet
-    (list (poo-flow-organization-tool-effect 'tool 'search 'external-tool)
-          (poo-flow-organization-protocol-transition
+          (agentic-ai-lab-organization-agent 'child 'pc 'rc 'parent '(search) '(public))))
+   (agentic-ai-lab-organization-authority-facet
+    (list (agentic-ai-lab-organization-capability 'write #t)
+          (agentic-ai-lab-organization-capability 'search #t))
+    (list (agentic-ai-lab-organization-delegation 'parent 'child 'search)))
+   (agentic-ai-lab-organization-context-facet
+    (list (agentic-ai-lab-organization-context-projection 'child '(public))))
+   (agentic-ai-lab-organization-protocol-facet
+    (list (agentic-ai-lab-organization-tool-effect 'tool 'search 'external-tool)
+          (agentic-ai-lab-organization-protocol-transition
            'run '(parent child) 'search)) '())
-   (poo-flow-organization-evidence-facet
-    (list (poo-flow-organization-evidence-obligation
+   (agentic-ai-lab-organization-evidence-facet
+    (list (agentic-ai-lab-organization-evidence-obligation
            'audit 'child 'transition 'run)) '())))
 
 (def (validated-state)
   (let* ((bundle (shadow-bundle))
-         (canonical (poo-flow-organization-bundle-normalize bundle))
-         (identity (poo-flow-organization-bundle-identity bundle)))
+         (canonical (agentic-ai-lab-organization-bundle-normalize bundle))
+         (identity (agentic-ai-lab-organization-bundle-identity bundle)))
     (kernel-state 'validated bundle canonical identity 0 #f 'validate #f)))
 
 (def organization-bundle-shadow-test
@@ -45,9 +45,9 @@
    "read-only organization Bundle shadow projection"
    (yuanxu-test-case "equivalent facts are deterministic draft evidence"
      (let* ((state (validated-state))
-            (facts (poo-flow-organization-bundle-shadow-facts state))
-            (profile (poo-flow-organization-shadow-profile/all facts))
-            (receipt (poo-flow-organization-bundle-shadow-compare
+            (facts (agentic-ai-lab-organization-bundle-shadow-facts state))
+            (profile (agentic-ai-lab-organization-shadow-profile/all facts))
+            (receipt (agentic-ai-lab-organization-bundle-shadow-compare
                       state (reverse facts) profile)))
        (check-equal? (.ref receipt 'accepted?) #t)
        (check-equal? (.ref receipt 'equivalent?) #t)
@@ -56,18 +56,18 @@
        (check-equal? (.ref state 'epoch) 0)))
    (yuanxu-test-case "three semantic difference classes stay distinct"
      (let* ((state (validated-state))
-            (facts (poo-flow-organization-bundle-shadow-facts state))
+            (facts (agentic-ai-lab-organization-bundle-shadow-facts state))
             (first (car facts))
-            (changed (poo-flow-organization-shadow-fact
+            (changed (agentic-ai-lab-organization-shadow-fact
                       (.ref first 'facet) (.ref first 'path) (.ref first 'key) 'changed))
-            (extra (poo-flow-organization-shadow-fact
+            (extra (agentic-ai-lab-organization-shadow-fact
                     'organization '(extra) 'value 'extra))
             (current (cons changed (cons extra (cddr facts))))
-            (profile (poo-flow-organization-shadow-profile
+            (profile (agentic-ai-lab-organization-shadow-profile
                       (cons '(organization (extra))
-                            (.ref (poo-flow-organization-shadow-profile/all facts)
+                            (.ref (agentic-ai-lab-organization-shadow-profile/all facts)
                                   'entries))))
-            (receipt (poo-flow-organization-bundle-shadow-compare state current profile)))
+            (receipt (agentic-ai-lab-organization-bundle-shadow-compare state current profile)))
        (check-equal? (.ref receipt 'accepted?) #t)
        (check-equal? (.ref receipt 'equivalent?) #f)
        (check-equal? (length (.ref receipt 'missing-current)) 1)
@@ -75,34 +75,34 @@
        (check-equal? (length (.ref receipt 'mismatched-values)) 1)))
    (yuanxu-test-case "duplicate current fact fails closed"
      (let* ((state (validated-state))
-            (facts (poo-flow-organization-bundle-shadow-facts state))
-            (profile (poo-flow-organization-shadow-profile/all facts))
-            (receipt (poo-flow-organization-bundle-shadow-compare
+            (facts (agentic-ai-lab-organization-bundle-shadow-facts state))
+            (profile (agentic-ai-lab-organization-shadow-profile/all facts))
+            (receipt (agentic-ai-lab-organization-bundle-shadow-compare
                       state (cons (car facts) facts) profile)))
        (check-equal? (.ref receipt 'accepted?) #f)
        (check-equal? (.ref receipt 'equivalent?) #f)))
    (yuanxu-test-case "incomplete profile fails closed"
      (let* ((state (validated-state))
-            (facts (poo-flow-organization-bundle-shadow-facts state))
-            (profile (poo-flow-organization-shadow-profile '()))
-            (receipt (poo-flow-organization-bundle-shadow-compare state facts profile)))
+            (facts (agentic-ai-lab-organization-bundle-shadow-facts state))
+            (profile (agentic-ai-lab-organization-shadow-profile '()))
+            (receipt (agentic-ai-lab-organization-bundle-shadow-compare state facts profile)))
        (check-equal? (.ref receipt 'accepted?) #f)))
    (yuanxu-test-case "unknown facet and unstable value fail closed"
      (let* ((state (validated-state))
-            (facts (poo-flow-organization-bundle-shadow-facts state))
-            (profile (poo-flow-organization-shadow-profile
+            (facts (agentic-ai-lab-organization-bundle-shadow-facts state))
+            (profile (agentic-ai-lab-organization-shadow-profile
                       (cons '(unknown (bad))
-                            (.ref (poo-flow-organization-shadow-profile/all facts)
+                            (.ref (agentic-ai-lab-organization-shadow-profile/all facts)
                                   'entries))))
-            (unstable (poo-flow-organization-shadow-fact
+            (unstable (agentic-ai-lab-organization-shadow-fact
                        'organization '(unstable) 'value '#(unstable)))
-            (receipt (poo-flow-organization-bundle-shadow-compare
+            (receipt (agentic-ai-lab-organization-bundle-shadow-compare
                       state (cons unstable facts) profile)))
        (check-equal? (.ref receipt 'accepted?) #f)
        (check-equal? (.ref receipt 'equivalent?) #f)
        (check-equal? (.ref receipt 'v1-conformant?) #f)))
    (yuanxu-test-case "schema is explicitly draft.3"
-     (check-equal? +poo-flow-organization-bundle-schema+
-                   'poo-flow.organization-bundle.draft.3)
-     (check-equal? +poo-flow-organization-facet-schema+
-                   'poo-flow.organization-facet.draft.3))))
+     (check-equal? +agentic-ai-lab-organization-bundle-schema+
+                   'agentic-ai-lab.organization-bundle.draft.3)
+     (check-equal? +agentic-ai-lab-organization-facet-schema+
+                   'agentic-ai-lab.organization-facet.draft.3))))

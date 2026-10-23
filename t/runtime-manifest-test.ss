@@ -30,7 +30,7 @@
       (let* ((descriptor
               (make-stdout-runtime-command-descriptor
                'manifest-runtime-command
-               "/usr/bin/poo-flow-runtime"
+               "/usr/bin/agentic-ai-lab-runtime"
                (lambda (envelope)
                  (list "--request-id"
                        (symbol->string (cdr (assoc 'request-id envelope)))))
@@ -50,11 +50,11 @@
                       '(artifact manifest-output))
         (check-equal? (cdr (assoc 'protocol manifest)) 'stdout-s-expression)
         (check-equal? (cdr (assoc 'executable manifest))
-                      "/usr/bin/poo-flow-runtime")
+                      "/usr/bin/agentic-ai-lab-runtime")
         (check-equal? (cdr (assoc 'arguments manifest))
                       '("--request-id" "manifest-request"))
         (check-equal? (cdr (assoc 'argv manifest))
-                      '("/usr/bin/poo-flow-runtime"
+                      '("/usr/bin/agentic-ai-lab-runtime"
                         "--request-id"
                         "manifest-request"))))
     (yuanxu-test-case "runtime command manifest consumer executes stdout protocol"

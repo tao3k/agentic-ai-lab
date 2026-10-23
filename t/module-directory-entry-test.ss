@@ -5,7 +5,7 @@
         (only-in :clan/poo/object .get)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/module-system/interface
-        (only-in :poo-flow/init yuanxu-module-init))
+        (only-in :agentic-ai-lab/init yuanxu-module-init))
 (export module-directory-entry-test)
 (def module-directory-entry-test
   (test-suite "Product init uses the Core source entry without a runtime Loader"

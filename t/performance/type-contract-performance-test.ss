@@ -23,7 +23,7 @@
 
 ;; : (-> Alist Void)
 (def (type-contract-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] type-contract-performance ")
+  (display "[agentic-ai-lab-benchmark] type-contract-performance ")
   (write receipt)
   (newline)
   (force-output))

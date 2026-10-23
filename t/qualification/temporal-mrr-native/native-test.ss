@@ -14,8 +14,8 @@
   (test-suite "ASP native Temporal MRR benchmark"
     (test-case "original typed MRR values reach native Scheme in every sample"
       (check-equal? (benchmark-fixture-contract-pass? fixture) #t)
-      (let* ((binary (getenv "POO_FLOW_MRR_TEST_BINARY"))
-             (output (getenv "POO_FLOW_MRR_BENCHMARK_RECEIPT"))
+      (let* ((binary (getenv "AGENTIC_AI_LAB_MRR_TEST_BINARY"))
+             (output (getenv "AGENTIC_AI_LAB_MRR_BENCHMARK_RECEIPT"))
              (binary-digest (hex-encode (sha256 (call-with-input-file binary read-all-as-u8vector))))
              (completed 0))
         (let-values (((receipt result)
@@ -35,10 +35,10 @@
           (call-with-output-file output
             (lambda (port)
               (write (append
-                      `((schema . poo-flow.temporal-mrr-asp-benchmark.v2)
+                      `((schema . agentic-ai-lab.temporal-mrr-asp-benchmark.v2)
                         (measurement-owner . asp-gerbil-scheme/benchmark-api)
                         (test-binary-sha256 . ,binary-digest)
-                        (native-artifact-sha256 . ,(getenv "POO_FLOW_SEMANTIC_SHA256"))
+                        (native-artifact-sha256 . ,(getenv "AGENTIC_AI_LAB_SEMANTIC_SHA256"))
                         (source-digests . ,(map (lambda (path)
                            (cons path (hex-encode (sha256 (call-with-input-file path read-all-as-u8vector)))))
                            '("gerbil.pkg" ".ci/mrr-runtime/runtime/src/lib.rs" ".ci/mrr-runtime/runtime/src/mrr.rs"

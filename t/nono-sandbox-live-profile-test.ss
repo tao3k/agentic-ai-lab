@@ -18,9 +18,9 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o)
-        :poo-flow/modules/agent-sandbox/api
-        :poo-flow/modules/agent-sandbox/nono
-        :poo-flow/modules/nono-sandbox/c-binding)
+        :agentic-ai-lab/modules/agent-sandbox/api
+        :agentic-ai-lab/modules/agent-sandbox/nono
+        :agentic-ai-lab/modules/nono-sandbox/c-binding)
 
 (export nono-sandbox-live-profile-test
         make-custom-cicd-ci-check-profile
@@ -82,7 +82,7 @@
   (agent-sandbox-request
    (make-custom-cicd-ci-check-profile)
    (command "sh")
-   (args '("-lc" "printf poo-flow-native-cicd"))
+   (args '("-lc" "printf agentic-ai-lab-native-cicd"))
    (workdir ".")
    (mounts '(((path . ".")
               (kind . directory)

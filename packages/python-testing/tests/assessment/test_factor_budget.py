@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import unittest
-from poo_flow_testing.assessment_studies.factor_budget import charge_usage, input_reserve
+from agentic_ai_lab_testing.assessment_studies.factor_budget import charge_usage, input_reserve
 
 
 class FactorBudget(unittest.TestCase):

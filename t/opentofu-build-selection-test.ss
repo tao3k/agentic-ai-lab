@@ -5,7 +5,7 @@
         (only-in :std/encoding/json write-json)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
-        (only-in :poo-flow/modules/services/opentofu/objects OpenTofuScope.) (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata) :yuanxu/types :clan/poo/object)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata) :yuanxu/types :clan/poo/object)
 (export opentofu-build-selection-test)
 (def (assert label value)
   (unless value (error "assertion failed" label))
@@ -44,14 +44,14 @@
       (check-exception (inputs (.o resource: (.o typo: #f))) error?)
       (assert 'projection-never-demands-artifact (not (.ref/cached OpenTofuScope. 'modules)))
       ;; Wire projection consumed by Nix; not a second user selection list.
-      (let (output (getenv "POO_FLOW_OPENTOFU_TEST_SELECTION" #f))
+      (let (output (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_SELECTION" #f))
         (when output
           (call-with-output-file output
             (lambda (port)
               (write-json port (list->hash-table
                             (list (cons 'providers (list->vector (providers Configuration))))))))))
       ;; Second phase runs against the real AWS-only Nix output.
-      (when (getenv "POO_FLOW_OPENTOFU_ARTIFACT" #f)
+      (when (getenv "AGENTIC_AI_LAB_OPENTOFU_ARTIFACT" #f)
        (let ()
         (def Contract (.get OpenTofuScope. types configuration))
         (def parent (.call Contract .admit Configuration #f))

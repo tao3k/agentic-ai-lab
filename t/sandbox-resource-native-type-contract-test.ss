@@ -8,7 +8,7 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
-;; : (-> PooFlowSandboxResourceExpr PooFlowSandboxResourceValue)
+;; : (-> AgenticAILabSandboxResourceExpr AgenticAILabSandboxResourceValue)
 (def (sandbox-resource-eval expr)
   (eval expr))
 
@@ -27,7 +27,7 @@
       (eval '(import "./modules/sandbox-core/resource-contract.ss"))
       (let* ((row
         (sandbox-resource-eval
-         '(poo-flow-sandbox-resources-prototype-type-contract->alist)))
+         '(agentic-ai-lab-sandbox-resources-prototype-type-contract->alist)))
        (slot-rows (alist-ref/default row 'slots '()))
        (slot-names
         (map (lambda (slot-row)
@@ -40,36 +40,36 @@
     (error "sandbox resource type contract should expose structured slot contracts")))
 
 (unless (sandbox-resource-eval
-         '(and (element? Type PooFlowSandboxResourcesPrototypeContract)
-               (element? PooFlowSandboxResourcesPrototypeContract
-                         poo-flow-runtime-volume-resources-prototype)))
+         '(and (element? Type AgenticAILabSandboxResourcesPrototypeContract)
+               (element? AgenticAILabSandboxResourcesPrototypeContract
+                         agentic-ai-lab-runtime-volume-resources-prototype)))
   (error "sandbox resource contract should be native and admit valid resources"))
 
 (when (sandbox-resource-eval
-       '(element? PooFlowSandboxResourcesPrototypeContract
-                  (.o filesystem: poo-flow-runtime-volume-filesystem-prototype
+       '(element? AgenticAILabSandboxResourcesPrototypeContract
+                  (.o filesystem: agentic-ai-lab-runtime-volume-filesystem-prototype
                       cpu: "two"
                       memory: "4Gi")))
   (error "native sandbox resource contract should reject an invalid cpu slot"))
 
 (def valid-validation
   (sandbox-resource-eval
-   '(poo-flow-sandbox-resources-prototype-contract-validation
-     poo-flow-runtime-volume-resources-prototype)))
+   '(agentic-ai-lab-sandbox-resources-prototype-contract-validation
+     agentic-ai-lab-runtime-volume-resources-prototype)))
 
 (unless (sandbox-resource-eval
-         `(poo-flow-sandbox-resources-prototype-contract-validation-valid?
+         `(agentic-ai-lab-sandbox-resources-prototype-contract-validation-valid?
            ',valid-validation))
   (error "runtime volume resources should satisfy native validation"))
 
 (def invalid-validation
   (sandbox-resource-eval
-   '(poo-flow-sandbox-resources-prototype-contract-validation
-     (.o filesystem: poo-flow-runtime-volume-filesystem-prototype
+   '(agentic-ai-lab-sandbox-resources-prototype-contract-validation
+     (.o filesystem: agentic-ai-lab-runtime-volume-filesystem-prototype
          cpu: "two"
          memory: "4Gi"))))
 
 (when (sandbox-resource-eval
-       `(poo-flow-sandbox-resources-prototype-contract-validation-valid?
+       `(agentic-ai-lab-sandbox-resources-prototype-contract-validation-valid?
          ',invalid-validation))
   (error "invalid cpu should fail native validation")))))

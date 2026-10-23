@@ -6,18 +6,18 @@
         (only-in :std/list/list every)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/modules/temporal-causality/admission/interface
-                 poo-flow-temporal-family-admission-replay)
-        (only-in :poo-flow/modules/temporal-causality/conclusions/funs
-                 poo-flow-temporal-conclusion-change poo-flow-temporal-conclusion-journal
-                 poo-flow-temporal-conclusion-journal-replay)
-        (only-in :poo-flow/modules/temporal-causality/lifecycle/types
-                 poo-flow-temporal-family-revision? poo-flow-temporal-family-archive?)
-        (only-in :poo-flow/modules/temporal-causality/lifecycle/objects
-                 poo-flow-temporal-family-revision-value poo-flow-temporal-family-archive-value))
-(export poo-flow-temporal-family-revision-root poo-flow-temporal-family-revision-change
-        poo-flow-temporal-family-revision-replay poo-flow-temporal-family-revision-journal
-        poo-flow-temporal-family-archive poo-flow-temporal-family-archive-replay)
+        (only-in :agentic-ai-lab/modules/temporal-causality/admission/interface
+                 agentic-ai-lab-temporal-family-admission-replay)
+        (only-in :agentic-ai-lab/modules/temporal-causality/conclusions/funs
+                 agentic-ai-lab-temporal-conclusion-change agentic-ai-lab-temporal-conclusion-journal
+                 agentic-ai-lab-temporal-conclusion-journal-replay)
+        (only-in :agentic-ai-lab/modules/temporal-causality/lifecycle/types
+                 agentic-ai-lab-temporal-family-revision? agentic-ai-lab-temporal-family-archive?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/lifecycle/objects
+                 agentic-ai-lab-temporal-family-revision-value agentic-ai-lab-temporal-family-archive-value))
+(export agentic-ai-lab-temporal-family-revision-root agentic-ai-lab-temporal-family-revision-change
+        agentic-ai-lab-temporal-family-revision-replay agentic-ai-lab-temporal-family-revision-journal
+        agentic-ai-lab-temporal-family-archive agentic-ai-lab-temporal-family-archive-replay)
 (def revision-slots
   '(identity subject-identity scope-identity cut-digest projection-digest policy-identity
     generation-identity operation predecessor-identity result-identity proof-identity
@@ -31,14 +31,14 @@
   (string-append "sha256:" (hex-encode (sha256 (string->utf8
     (call-with-output-string (lambda (port) (write value port))))))))
 (def (make-revision admission revision predecessor frontier)
-  (poo-flow-temporal-family-revision-value
-   (digest (list 'poo-flow.temporal-family-revision.v1
+  (agentic-ai-lab-temporal-family-revision-value
+   (digest (list 'agentic-ai-lab.temporal-family-revision.v1
                  (.ref admission 'semantic-digest) (row revision revision-slots)
                  (and predecessor (.ref predecessor 'semantic-digest))
                  (and frontier (row frontier frontier-slots))))
    admission revision predecessor frontier))
-(def (poo-flow-temporal-family-revision-root admission)
-  (let (canonical (poo-flow-temporal-family-admission-replay admission))
+(def (agentic-ai-lab-temporal-family-revision-root admission)
+  (let (canonical (agentic-ai-lab-temporal-family-admission-replay admission))
     (make-revision canonical (.ref canonical 'conclusion) #f #f)))
 (def (change previous admission frontier operation)
   (let* ((old (.ref previous 'admission))
@@ -63,55 +63,55 @@
                           (eq? (.ref admission 'classification) 'refuted))))
       (error "family revision scope, generation, cut or retraction proof differs"))
     (let (proposed
-          (poo-flow-temporal-conclusion-change
-           (digest (list 'poo-flow.temporal-family-change.v1 (.ref revision 'identity)
+          (agentic-ai-lab-temporal-conclusion-change
+           (digest (list 'agentic-ai-lab.temporal-family-change.v1 (.ref revision 'identity)
                          (.ref admission 'semantic-digest) operation (row frontier frontier-slots)))
            revision frontier operation (and (eq? operation 'correct) proof) proof
            (.ref source 'policy-identity) (number->string (.ref source 'generation))))
       (make-revision admission proposed previous frontier))))
-(def (poo-flow-temporal-family-revision-change previous admission frontier operation)
-  (change (poo-flow-temporal-family-revision-replay previous)
-          (poo-flow-temporal-family-admission-replay admission) frontier operation))
-(def (poo-flow-temporal-family-revision-replay value)
+(def (agentic-ai-lab-temporal-family-revision-change previous admission frontier operation)
+  (change (agentic-ai-lab-temporal-family-revision-replay previous)
+          (agentic-ai-lab-temporal-family-admission-replay admission) frontier operation))
+(def (agentic-ai-lab-temporal-family-revision-replay value)
   (def (walk value ancestors)
-    (unless (poo-flow-temporal-family-revision? value) (error "invalid family revision"))
+    (unless (agentic-ai-lab-temporal-family-revision? value) (error "invalid family revision"))
     (let (id (.ref (.ref value 'revision) 'identity))
       (when (member id ancestors) (error "cyclic family revision predecessor"))
-      (let* ((admission (poo-flow-temporal-family-admission-replay (.ref value 'admission)))
+      (let* ((admission (agentic-ai-lab-temporal-family-admission-replay (.ref value 'admission)))
              (canonical
               (if (.ref value 'predecessor)
                 (change (walk (.ref value 'predecessor) (cons id ancestors))
                         admission (.ref value 'frontier) (.ref (.ref value 'revision) 'operation))
-                (poo-flow-temporal-family-revision-root admission))))
+                (agentic-ai-lab-temporal-family-revision-root admission))))
         (unless (and (equal? (.ref canonical 'semantic-digest) (.ref value 'semantic-digest))
                      (equal? (row (.ref canonical 'revision) revision-slots)
                              (row (.ref value 'revision) revision-slots)))
           (error "family revision proof or journal binding mismatch"))
         canonical)))
   (walk value '()))
-(def (poo-flow-temporal-family-revision-journal identity values)
-  (poo-flow-temporal-conclusion-journal
+(def (agentic-ai-lab-temporal-family-revision-journal identity values)
+  (agentic-ai-lab-temporal-conclusion-journal
    identity (map (lambda (value)
-                   (.ref (poo-flow-temporal-family-revision-replay value) 'revision)) values)))
+                   (.ref (agentic-ai-lab-temporal-family-revision-replay value) 'revision)) values)))
 
 ;;; A pure POO archive owns complete Family proof premises and a canonical graph.
 ;;; Projection onto persistent bytes belongs to the explicit ABI boundary.
-(def (poo-flow-temporal-family-archive identity values)
+(def (agentic-ai-lab-temporal-family-archive identity values)
   (unless (and (string? identity) (< 0 (string-length identity) 129)
                (list? values) (<= 1 (length values) 128))
     (error "family archive identity or inventory bound"))
   (let* ((canonical (list-sort
                     (lambda (a b) (string<? (.ref a 'semantic-digest) (.ref b 'semantic-digest)))
-                    (map poo-flow-temporal-family-revision-replay values)))
-         (journal (poo-flow-temporal-family-revision-journal identity canonical)))
-    (poo-flow-temporal-family-archive-value identity
-     (digest (list 'poo-flow.temporal-family-archive.v1 identity
+                    (map agentic-ai-lab-temporal-family-revision-replay values)))
+         (journal (agentic-ai-lab-temporal-family-revision-journal identity canonical)))
+    (agentic-ai-lab-temporal-family-archive-value identity
+     (digest (list 'agentic-ai-lab.temporal-family-archive.v1 identity
                    (.ref journal 'semantic-digest)
                    (map (lambda (v) (.ref v 'semantic-digest)) canonical))) canonical journal)))
-(def (poo-flow-temporal-family-archive-replay value)
-  (unless (poo-flow-temporal-family-archive? value) (error "invalid family archive"))
-  (poo-flow-temporal-conclusion-journal-replay (.ref value 'journal))
-  (let (canonical (poo-flow-temporal-family-archive
+(def (agentic-ai-lab-temporal-family-archive-replay value)
+  (unless (agentic-ai-lab-temporal-family-archive? value) (error "invalid family archive"))
+  (agentic-ai-lab-temporal-conclusion-journal-replay (.ref value 'journal))
+  (let (canonical (agentic-ai-lab-temporal-family-archive
                    (.ref value 'identity) (.ref value 'family-revisions)))
     (unless (and (equal? (.ref canonical 'semantic-digest) (.ref value 'semantic-digest))
                  (equal? (.ref (.ref canonical 'journal) 'semantic-digest)

@@ -53,7 +53,7 @@
        (.cc (native files
               (watched (append (list executable vm "-v" "5") files))
               45 (if query? 24 13) (list watch))
-         'environment (.o POO_FLOW_TEST_PROGRESS: "1"))))
+         'environment (.o AGENTIC_AI_LAB_TEST_PROGRESS: "1"))))
     ((query-source)
      (runner "t/harness/query-orgize-source-runner.ss" "t/query-orgize-source-test.ss" 4))
     ((temporal-support)
@@ -70,7 +70,7 @@
      (let* ((runner "t/harness/context-temporal-runner.ss")
             (progress "t/harness/scheme-progress.ss")
             (files (map (lambda (name)
-                          (absolute (string-append ".gerbil/lib/poo-flow/t/" name "-test.ssi")))
+                          (absolute (string-append ".gerbil/lib/agentic-ai-lab/t/" name "-test.ssi")))
                      '("temporal-evaluator" "ai-agentic-context-session-host"
                        "ai-agentic-context-delta" "session-attempt"
                        "ai-agentic-context-org-anchors" "query-orgize-source"))))

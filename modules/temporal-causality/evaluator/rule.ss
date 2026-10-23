@@ -12,12 +12,12 @@
         (only-in :gerbil-ascent/candidate/provenance positive-proof-nodes
                  proof-node-id proof-node-kind proof-node-label)
         "positive-proof.ss")
-(export PooFlowTemporalRuleProgram poo-flow-temporal-rule-relation
-        poo-flow-temporal-rule-variable poo-flow-temporal-rule-literal
-        poo-flow-temporal-rule-atom poo-flow-temporal-rule
-        poo-flow-temporal-rule-program poo-flow-temporal-rule-correspondence-from-ascent
-        poo-flow-temporal-rule-correspondence-replay
-        poo-flow-temporal-rule-program-ascent-query)
+(export AgenticAILabTemporalRuleProgram agentic-ai-lab-temporal-rule-relation
+        agentic-ai-lab-temporal-rule-variable agentic-ai-lab-temporal-rule-literal
+        agentic-ai-lab-temporal-rule-atom agentic-ai-lab-temporal-rule
+        agentic-ai-lab-temporal-rule-program agentic-ai-lab-temporal-rule-correspondence-from-ascent
+        agentic-ai-lab-temporal-rule-correspondence-replay
+        agentic-ai-lab-temporal-rule-program-ascent-query)
 (def (text? x) (and (string? x) (< 0 (string-length x) 257)))
 (def (name? x) (and (text? x) (andmap (lambda (c) (or (char<=? #\a c #\z)
   (char<=? #\A c #\Z) (char<=? #\0 c #\9) (eqv? c #\_))) (string->list x))))
@@ -25,44 +25,44 @@
 (def (bounded? xs n) (and (list? xs) (< 0 (length xs) (+ n 1))))
 (def (digest x) (string-append "sha256:" (hex-encode (sha256 (string->utf8
   (call-with-output-string (lambda (p) (write x p))))))))
-(def (poo-flow-temporal-rule-relation id-value predicate-value columns-value)
+(def (agentic-ai-lab-temporal-rule-relation id-value predicate-value columns-value)
   (unless (and (text? id-value) (name? predicate-value) (bounded? columns-value 32)
                (andmap (lambda (t) (memq t '(integer boolean))) columns-value))
     (error "invalid rule relation"))
   (.o kind: 'temporal.rule-relation.v1 identity: (string-copy id-value)
       predicate: (string-copy predicate-value) columns: (map (lambda (x) x) columns-value)))
-(def (poo-flow-temporal-rule-variable name-value)
+(def (agentic-ai-lab-temporal-rule-variable name-value)
   (unless (name? name-value) (error "invalid rule variable"))
   (.o kind: 'temporal.rule-variable.v1 name: (string-copy name-value)))
-(def (poo-flow-temporal-rule-literal value-value)
+(def (agentic-ai-lab-temporal-rule-literal value-value)
   (unless (or (boolean? value-value) (and (exact-integer? value-value)
     (<= -9223372036854775808 value-value 9223372036854775807))) (error "invalid rule literal"))
   (.o kind: 'temporal.rule-literal.v1 value: value-value))
 (def (term-row t)
   (cond ((tag? t 'temporal.rule-variable.v1)
-          (poo-flow-temporal-rule-variable (.ref t 'name)) (list 'variable (.ref t 'name)))
+          (agentic-ai-lab-temporal-rule-variable (.ref t 'name)) (list 'variable (.ref t 'name)))
         ((tag? t 'temporal.rule-literal.v1)
-          (poo-flow-temporal-rule-literal (.ref t 'value)) (list 'literal (.ref t 'value)))
+          (agentic-ai-lab-temporal-rule-literal (.ref t 'value)) (list 'literal (.ref t 'value)))
         (else (error "invalid rule term"))))
-(def (poo-flow-temporal-rule-atom relation-value terms-value)
+(def (agentic-ai-lab-temporal-rule-atom relation-value terms-value)
   (unless (and (text? relation-value) (bounded? terms-value 32)) (error "invalid rule atom"))
   (for-each term-row terms-value)
   (.o kind: 'temporal.rule-atom.v1 relation-identity: (string-copy relation-value) terms: (map (lambda (x) x) terms-value)))
 (def (atom-row a)
   (unless (tag? a 'temporal.rule-atom.v1) (error "invalid rule atom kind"))
-  (poo-flow-temporal-rule-atom (.ref a 'relation-identity) (.ref a 'terms))
+  (agentic-ai-lab-temporal-rule-atom (.ref a 'relation-identity) (.ref a 'terms))
   (list (.ref a 'relation-identity) (map term-row (.ref a 'terms))))
-(def (poo-flow-temporal-rule id-value head-value body-value)
+(def (agentic-ai-lab-temporal-rule id-value head-value body-value)
   (unless (and (text? id-value) (bounded? body-value 32)) (error "invalid rule"))
   (atom-row head-value) (for-each atom-row body-value)
   (.o kind: 'temporal.rule.v1 identity: (string-copy id-value) head: head-value body: (map (lambda (x) x) body-value)))
 (def (rule-row r)
   (unless (tag? r 'temporal.rule.v1) (error "invalid rule kind"))
-  (poo-flow-temporal-rule (.ref r 'identity) (.ref r 'head) (.ref r 'body))
+  (agentic-ai-lab-temporal-rule (.ref r 'identity) (.ref r 'head) (.ref r 'body))
   (list (.ref r 'identity) (atom-row (.ref r 'head)) (map atom-row (.ref r 'body))))
 (def (relation-row r)
   (unless (tag? r 'temporal.rule-relation.v1) (error "invalid rule relation kind"))
-  (poo-flow-temporal-rule-relation (.ref r 'identity) (.ref r 'predicate) (.ref r 'columns))
+  (agentic-ai-lab-temporal-rule-relation (.ref r 'identity) (.ref r 'predicate) (.ref r 'columns))
   (list (.ref r 'identity) (.ref r 'predicate) (.ref r 'columns)))
 (def (unique! xs) (let (seen (make-hash-table)) (for-each (lambda (x)
   (when (hash-get seen x) (error "duplicate rule correspondence")) (hash-put! seen x #t)) xs)))
@@ -84,24 +84,24 @@
          (body-value (map (lambda (a) (atom-clause a relations variables #f)) (.ref r 'body)))
          (head-value (atom-clause (.ref r 'head) relations variables #t)))
     (cons head-value body-value)))
-(define-type (PooFlowTemporalRuleProgram @ Type.)
+(define-type (AgenticAILabTemporalRuleProgram @ Type.)
   .element?: (lambda (v) (tag? v 'temporal.rule-program.v1)))
-(def (poo-flow-temporal-rule-program id-value catalog-value generation-value ascent-value relations-value rules-value)
+(def (agentic-ai-lab-temporal-rule-program id-value catalog-value generation-value ascent-value relations-value rules-value)
   (unless (and (text? id-value) (text? catalog-value) (text? generation-value)
     (exact-integer? ascent-value) (<= 0 ascent-value) (bounded? relations-value 32) (bounded? rules-value 32))
     (error "invalid rule program"))
   (let* ((relation-data (map relation-row relations-value)) (rule-data (map rule-row rules-value)))
     (unique! (map car relation-data)) (unique! (map cadr relation-data)) (unique! (map car rule-data))
     (for-each (lambda (r) (rule-clause r relations-value)) rules-value)
-    (validate PooFlowTemporalRuleProgram (.o kind: 'temporal.rule-program.v1 identity: id-value
+    (validate AgenticAILabTemporalRuleProgram (.o kind: 'temporal.rule-program.v1 identity: id-value
       catalog-digest: catalog-value generation: generation-value ascent-generation: ascent-value
       relations: relations-value rules: rules-value semantic-digest:
       (digest (list 'temporal.rule-program.v1 id-value catalog-value generation-value ascent-value relation-data rule-data))))))
-(def (poo-flow-temporal-rule-correspondence-from-ascent program admission snapshot candidate receipt steps nodes)
+(def (agentic-ai-lab-temporal-rule-correspondence-from-ascent program admission snapshot candidate receipt steps nodes)
   (unless (tag? program 'temporal.rule-program.v1) (error "invalid rule program kind"))
-  (let* ((canonical (poo-flow-temporal-rule-program (.ref program 'identity) (.ref program 'catalog-digest)
+  (let* ((canonical (agentic-ai-lab-temporal-rule-program (.ref program 'identity) (.ref program 'catalog-digest)
                    (.ref program 'generation) (.ref program 'ascent-generation) (.ref program 'relations) (.ref program 'rules)))
-         (verified (poo-flow-temporal-positive-proof-replay admission snapshot candidate receipt steps nodes))
+         (verified (agentic-ai-lab-temporal-positive-proof-replay admission snapshot candidate receipt steps nodes))
          (spec (candidate-inspect snapshot candidate))
          (relations-value (.ref canonical 'relations)) (rules-value (.ref canonical 'rules))
          (original-rules (reasoning-candidate-rules spec)))
@@ -134,9 +134,9 @@
           proof-digest: proof-digest-value generation: (.ref canonical 'generation)
           applications: applications-value semantic-digest: (digest (list 'temporal.rule-correspondence.v1 program-digest-value proof-digest-value applications-value))
           rule-correspondence-verified?: #t source-authenticated?: #f selection-admitted?: #f action-authorized?: #f durable?: #f))))
-(def (poo-flow-temporal-rule-correspondence-replay held program admission snapshot candidate receipt steps nodes)
+(def (agentic-ai-lab-temporal-rule-correspondence-replay held program admission snapshot candidate receipt steps nodes)
   (unless (tag? held 'temporal.rule-correspondence.v1) (error "invalid rule correspondence kind"))
-  (let (canonical (poo-flow-temporal-rule-correspondence-from-ascent program admission snapshot candidate receipt steps nodes))
+  (let (canonical (agentic-ai-lab-temporal-rule-correspondence-from-ascent program admission snapshot candidate receipt steps nodes))
     (unless (andmap (lambda (s) (and (.slot? held s) (equal? (.ref held s) (.ref canonical s))))
       '(program-digest proof-digest generation applications semantic-digest rule-correspondence-verified?
         source-authenticated? selection-admitted? action-authorized? durable?))
@@ -144,8 +144,8 @@
 
 ;;; Named owner handoff: native POO program/output to original ASCENT candidate.
 ;;; This bounded projection is for trusted adapters, not a general user DSL.
-(def (poo-flow-temporal-rule-program-ascent-query program snapshot output)
-  (let* ((canonical (poo-flow-temporal-rule-program (.ref program 'identity) (.ref program 'catalog-digest)
+(def (agentic-ai-lab-temporal-rule-program-ascent-query program snapshot output)
+  (let* ((canonical (agentic-ai-lab-temporal-rule-program (.ref program 'identity) (.ref program 'catalog-digest)
                      (.ref program 'generation) (.ref program 'ascent-generation)
                      (.ref program 'relations) (.ref program 'rules)))
          (source-names (map car (reasoning-snapshot-relations snapshot)))

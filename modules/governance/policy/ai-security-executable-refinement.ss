@@ -14,19 +14,19 @@
         (only-in :yuanxu/utilities/functional
                  yuanxu-set-subset?))
 
-(export poo-flow-agent-action-evidence-envelope
-        poo-flow-agent-action-evidence-envelope->projection
-        poo-flow-ai-security-transition-policy
-        poo-flow-ai-security-transition-prototype
-        poo-flow-ai-security-transition-engine
-        poo-flow-ai-security-reference-transition
-        poo-flow-ai-security-transition-replay-valid?)
+(export agentic-ai-lab-agent-action-evidence-envelope
+        agentic-ai-lab-agent-action-evidence-envelope->projection
+        agentic-ai-lab-ai-security-transition-policy
+        agentic-ai-lab-ai-security-transition-prototype
+        agentic-ai-lab-ai-security-transition-engine
+        agentic-ai-lab-ai-security-reference-transition
+        agentic-ai-lab-ai-security-transition-replay-valid?)
 
 (def action-evidence-envelope-schema
-  'poo-flow.ai-security.action-evidence-envelope.v1)
+  'agentic-ai-lab.ai-security.action-evidence-envelope.v1)
 
 (def executable-transition-receipt-schema
-  'poo-flow.ai-security.executable-transition-receipt.v1)
+  'agentic-ai-lab.ai-security.executable-transition-receipt.v1)
 
 ;; : (-> Object String)
 (def (canonical-digest value)
@@ -39,7 +39,7 @@
        (lambda (port) (write value port))))))))
 
 ;; : (-> Symbol MaybeSymbol Symbol Symbol Symbol Symbol Symbol Symbol String String [Symbol] [Symbol] PooAgentActionEvidenceEnvelope)
-(def (poo-flow-agent-action-evidence-envelope
+(def (agentic-ai-lab-agent-action-evidence-envelope
       action-id parent-action-id observation-event-id recovery-decision-id
       actor-identity tool-identity capability-id effect-domain evidence-root
       trace-parent-root requested-effects allowed-effects)
@@ -55,7 +55,7 @@
         (trace-parent-root-value trace-parent-root)
         (requested-effect-values requested-effects)
         (allowed-effect-values allowed-effects))
-    (.o (kind 'poo-flow-agent-action-evidence-envelope)
+    (.o (kind 'agentic-ai-lab-agent-action-evidence-envelope)
         (schema action-evidence-envelope-schema)
         (schema-version "1")
         (action-id action-id-value)
@@ -72,9 +72,9 @@
         (allowed-effects allowed-effect-values))))
 
 ;; : (-> PooAgentActionEvidenceEnvelope Alist)
-(def (poo-flow-agent-action-evidence-envelope->projection envelope)
+(def (agentic-ai-lab-agent-action-evidence-envelope->projection envelope)
   (unless (eq? (.ref envelope 'kind)
-               'poo-flow-agent-action-evidence-envelope)
+               'agentic-ai-lab-agent-action-evidence-envelope)
     (error "projection requires AgentActionEvidenceEnvelope" envelope))
   (list
    (cons 'schemaId (.ref envelope 'schema))
@@ -93,7 +93,7 @@
    (cons 'allowedEffects (.ref envelope 'allowed-effects))))
 
 ;; : (-> [Symbol] Symbol [Symbol] MaybeSymbol String PooAiSecurityTransitionPolicy)
-(def (poo-flow-ai-security-transition-policy
+(def (agentic-ai-lab-ai-security-transition-policy
       granted-capabilities expected-tool-identity allowed-effect-domains
       expected-parent-action-id expected-trace-parent-root)
   (let ((granted-capability-values granted-capabilities)
@@ -101,8 +101,8 @@
         (allowed-effect-domain-values allowed-effect-domains)
         (expected-parent-action-id-value expected-parent-action-id)
         (expected-trace-parent-root-value expected-trace-parent-root))
-    (.o (kind 'poo-flow-ai-security-transition-policy)
-        (schema 'poo-flow.ai-security.transition-policy.v1)
+    (.o (kind 'agentic-ai-lab-ai-security-transition-policy)
+        (schema 'agentic-ai-lab.ai-security.transition-policy.v1)
         (schema-version "1")
         (granted-capabilities granted-capability-values)
         (expected-tool-identity expected-tool-identity-value)
@@ -130,7 +130,7 @@
 ;; : (-> Symbol Boolean String PooAiSecurityInvariantEvidence)
 (def (invariant-receipt name satisfied reason)
   (let (reason-value reason)
-    (.o (kind 'poo-flow-ai-security-invariant-evidence)
+    (.o (kind 'agentic-ai-lab-ai-security-invariant-evidence)
         (invariant name)
         (satisfied? satisfied)
         (reason reason-value))))
@@ -157,12 +157,12 @@
 
 ;;; Reference transition: evaluate the full invariant set and return an auditable denial or acceptance receipt.
 ;; : (-> PooAgentActionEvidenceEnvelope PooAiSecurityTransitionPolicy PooAiSecurityTransitionReceipt)
-(def (poo-flow-ai-security-reference-transition envelope policy)
+(def (agentic-ai-lab-ai-security-reference-transition envelope policy)
   (unless (eq? (.ref envelope 'kind)
-               'poo-flow-agent-action-evidence-envelope)
+               'agentic-ai-lab-agent-action-evidence-envelope)
     (error "reference transition requires AgentActionEvidenceEnvelope" envelope))
   (unless (eq? (.ref policy 'kind)
-               'poo-flow-ai-security-transition-policy)
+               'agentic-ai-lab-ai-security-transition-policy)
     (error "reference transition requires TransitionPolicy" policy))
   (let* ((capability-ok
           (and (member (.ref envelope 'capability-id)
@@ -215,7 +215,7 @@
           (invariant-values invariants)
           (output-digest-value output-digest)
           (trace-root-value trace-root))
-      (.o (kind 'poo-flow-ai-security-executable-transition-receipt)
+      (.o (kind 'agentic-ai-lab-ai-security-executable-transition-receipt)
         (schema executable-transition-receipt-schema)
         (schema-version "1")
         (envelope-digest envelope-digest-value)
@@ -237,20 +237,20 @@
         (.ref receipt 'trace-root)))
 
 ;; : (-> PooAgentActionEvidenceEnvelope PooAiSecurityTransitionPolicy PooAiSecurityTransitionReceipt Boolean)
-(def (poo-flow-ai-security-transition-replay-valid? envelope policy receipt)
+(def (agentic-ai-lab-ai-security-transition-replay-valid? envelope policy receipt)
   (equal? (receipt-identity
-           (poo-flow-ai-security-reference-transition envelope policy))
+           (agentic-ai-lab-ai-security-reference-transition envelope policy))
           (receipt-identity receipt)))
 
 ;;; The public extension point is an ordinary POO prototype.  Downstream policy
 ;;; modules compose it with `.mix`; the execution slot remains a pure function.
-(.def poo-flow-ai-security-transition-prototype
-  (kind 'poo-flow-ai-security-transition-engine)
-  (schema 'poo-flow.ai-security.transition-engine.v1)
+(.def agentic-ai-lab-ai-security-transition-prototype
+  (kind 'agentic-ai-lab-ai-security-transition-engine)
+  (schema 'agentic-ai-lab.ai-security.transition-engine.v1)
   (schema-version "1")
-  (execute poo-flow-ai-security-reference-transition)
-  (replay-valid? poo-flow-ai-security-transition-replay-valid?))
+  (execute agentic-ai-lab-ai-security-reference-transition)
+  (replay-valid? agentic-ai-lab-ai-security-transition-replay-valid?))
 
 ;; : (-> [POOObject] PooAiSecurityTransitionEngine)
-(def (poo-flow-ai-security-transition-engine . policy-prototypes)
-  (.mix policy-prototypes poo-flow-ai-security-transition-prototype))
+(def (agentic-ai-lab-ai-security-transition-engine . policy-prototypes)
+  (.mix policy-prototypes agentic-ai-lab-ai-security-transition-prototype))

@@ -10,38 +10,38 @@
 ;; | PooModuleOptionValidationReceiptCandidate = Value
 
 (import (only-in :clan/poo/object .all-slots .ref .slot?)
-        :poo-flow/modules/module-authoring/module-interface
-        :poo-flow/modules/module-authoring/module-descriptor
+        :agentic-ai-lab/modules/module-authoring/module-interface
+        :agentic-ai-lab/modules/module-authoring/module-descriptor
         :yuanxu/module-system/projection/option-objects
         :yuanxu/module-system/projection/option-validation)
 
-(export poo-flow-module-option-configs
-        poo-flow-module-option-schemas
-        poo-flow-module-option-validation-receipts
-        poo-flow-module-validation-receipts)
+(export agentic-ai-lab-module-option-configs
+        agentic-ai-lab-module-option-schemas
+        agentic-ai-lab-module-option-validation-receipts
+        agentic-ai-lab-module-validation-receipts)
 
 ;;; Boundary: option ids use the public slot name form.
 ;; : (-> OptionSlotName OptionId)
-(def (poo-flow-module-option-id slot-name)
+(def (agentic-ai-lab-module-option-id slot-name)
   (if (symbol? slot-name)
     (symbol->string slot-name)
     slot-name))
 
 ;;; Boundary: schema specs default to String when the interface is concise.
 ;; : (-> PooModuleSchemaSpec OptionValueType)
-(def (poo-flow-module-schema-spec-type schema-spec)
+(def (agentic-ai-lab-module-schema-spec-type schema-spec)
   (yuanxu-module-object-ref/default schema-spec 'type 'String))
 
 ;;; Boundary: schema metadata is optional and never required for validation.
 ;; : (-> PooModuleSchemaSpec SchemaMetadata)
-(def (poo-flow-module-schema-spec-metadata schema-spec)
+(def (agentic-ai-lab-module-schema-spec-metadata schema-spec)
   (yuanxu-module-object-ref/default schema-spec 'metadata '()))
 
 ;;; Boundary: one schema spec records required/default/constant/optional rule.
 ;; : (-> ModuleName OptionId PooModuleSchemaSpec PooModuleOptionSchema)
-(def (poo-flow-module-schema-from-spec module-id-value option-id-value schema-spec)
-  (let ((value-type (poo-flow-module-schema-spec-type schema-spec))
-        (metadata-value (poo-flow-module-schema-spec-metadata schema-spec)))
+(def (agentic-ai-lab-module-schema-from-spec module-id-value option-id-value schema-spec)
+  (let ((value-type (agentic-ai-lab-module-schema-spec-type schema-spec))
+        (metadata-value (agentic-ai-lab-module-schema-spec-metadata schema-spec)))
     (cond
      ((.slot? schema-spec 'policy)
       (make-yuanxu-module-option-schema
@@ -86,86 +86,86 @@
 
 ;;; Boundary: config objects become option config receipts at projection time.
 ;; : (-> ModuleId POOConfigRecord [Symbol] [PooModuleOptionConfig] [PooModuleOptionConfig])
-(def (poo-flow-module-object-option-configs/rev
+(def (agentic-ai-lab-module-object-option-configs/rev
       module-id-value
       option-object
       slot-names
       configs-rev)
   (if (null? slot-names)
     configs-rev
-    (poo-flow-module-object-option-configs/rev
+    (agentic-ai-lab-module-object-option-configs/rev
      module-id-value
      option-object
      (cdr slot-names)
      (cons (make-yuanxu-module-option-config
-            (poo-flow-module-option-id (car slot-names))
+            (agentic-ai-lab-module-option-id (car slot-names))
             (.ref option-object (car slot-names))
             module-id-value
             '())
            configs-rev))))
 
 ;; : (-> ModuleId ModuleOptionAlist [PooModuleOptionConfig] [PooModuleOptionConfig])
-(def (poo-flow-module-alist-option-configs/rev
+(def (agentic-ai-lab-module-alist-option-configs/rev
       module-id-value
       options
       configs-rev)
   (if (null? options)
     configs-rev
-    (poo-flow-module-alist-option-configs/rev
+    (agentic-ai-lab-module-alist-option-configs/rev
      module-id-value
      (cdr options)
      (cons (make-yuanxu-module-option-config
-            (poo-flow-module-option-id (caar options))
+            (agentic-ai-lab-module-option-id (caar options))
             (cdar options)
             module-id-value
             '())
            configs-rev))))
 
 ;; : (-> PooModuleDescriptor [PooModuleOptionConfig])
-(def (poo-flow-module-option-configs module)
-  (let ((module-id-value (poo-flow-module-name module))
-        (option-object (poo-flow-module-config module)))
+(def (agentic-ai-lab-module-option-configs module)
+  (let ((module-id-value (agentic-ai-lab-module-name module))
+        (option-object (agentic-ai-lab-module-config module)))
     (cond
      ((object? option-object)
       (reverse
-       (poo-flow-module-object-option-configs/rev
+       (agentic-ai-lab-module-object-option-configs/rev
         module-id-value
         option-object
         (.all-slots option-object)
         '())))
      (else
       (reverse
-       (poo-flow-module-alist-option-configs/rev
+       (agentic-ai-lab-module-alist-option-configs/rev
         module-id-value
-        (poo-flow-module-options module)
+        (agentic-ai-lab-module-options module)
         '()))))))
 
 ;;; Boundary: option schemas are projected from interface schema slots.
 ;; : (-> ModuleId POOConfigRecord [Symbol] [PooModuleOptionSchema] [PooModuleOptionSchema])
-(def (poo-flow-module-option-schemas/rev
+(def (agentic-ai-lab-module-option-schemas/rev
       module-id-value
       schema-object
       slot-names
       schemas-rev)
   (if (null? slot-names)
     schemas-rev
-    (poo-flow-module-option-schemas/rev
+    (agentic-ai-lab-module-option-schemas/rev
      module-id-value
      schema-object
      (cdr slot-names)
-     (cons (poo-flow-module-schema-from-spec
+     (cons (agentic-ai-lab-module-schema-from-spec
             module-id-value
-            (poo-flow-module-option-id (car slot-names))
+            (agentic-ai-lab-module-option-id (car slot-names))
             (.ref schema-object (car slot-names)))
            schemas-rev))))
 
 ;; : (-> PooModuleDescriptor [PooModuleOptionSchema])
-(def (poo-flow-module-option-schemas module)
-  (let ((module-id-value (poo-flow-module-name module))
-        (schema-object (poo-flow-module-schemas module)))
+(def (agentic-ai-lab-module-option-schemas module)
+  (let ((module-id-value (agentic-ai-lab-module-name module))
+        (schema-object (agentic-ai-lab-module-schemas module)))
     (if (object? schema-object)
       (reverse
-       (poo-flow-module-option-schemas/rev
+       (agentic-ai-lab-module-option-schemas/rev
         module-id-value
         schema-object
         (.all-slots schema-object)
@@ -173,8 +173,8 @@
       '())))
 
 ;; : (-> PooModuleDescriptor [PooModuleOptionValidationReceipt])
-(def (poo-flow-module-option-validation-receipts module)
-  (let* ((interface (poo-flow-module-interface-object module))
+(def (agentic-ai-lab-module-option-validation-receipts module)
+  (let* ((interface (agentic-ai-lab-module-interface-object module))
          (schema-ref
           (if (yuanxu-module-interface? interface)
             (lambda (option-id)
@@ -182,11 +182,11 @@
                      (yuanxu-module-interface-schema-spec
                       interface
                       option-id))
-                (poo-flow-module-schema-from-spec
-                 (poo-flow-module-name module)
+                (agentic-ai-lab-module-schema-from-spec
+                 (agentic-ai-lab-module-name module)
                  option-id
                  schema-spec)))
-            (let ((schemas (poo-flow-module-option-schemas module))
+            (let ((schemas (agentic-ai-lab-module-option-schemas module))
                   (index (make-hash-table)))
               (for-each
                (lambda (schema)
@@ -197,14 +197,14 @@
               (lambda (option-id) (hash-get index option-id))))))
     (yuanxu-module-options-validate
      schema-ref
-     (poo-flow-module-option-configs module))))
+     (agentic-ai-lab-module-option-configs module))))
 
 ;;; Boundary: module validation stays recursive over inline import profiles.
 ;; : (-> PooModuleDescriptor [PooModuleOptionValidationReceipt])
-(def (poo-flow-module-validation-receipts module)
+(def (agentic-ai-lab-module-validation-receipts module)
   (append
    (foldr append
           '()
-          (map poo-flow-module-validation-receipts
-               (poo-flow-module-import-configs (yuanxu-module-imports module))))
-   (poo-flow-module-option-validation-receipts module)))
+          (map agentic-ai-lab-module-validation-receipts
+               (agentic-ai-lab-module-import-configs (yuanxu-module-imports module))))
+   (agentic-ai-lab-module-option-validation-receipts module)))

@@ -3,10 +3,10 @@
 import copy
 import os
 import unittest
-from poo_flow_runtime.reasoning import ReasoningRuntime, ReasoningError
-from poo_flow_runtime.reasoning import identity
-from poo_flow_runtime.reasoning import EvidenceOperation, EvidenceInteraction, EvidenceConversation
-from poo_flow_runtime.reasoning import Trajectory
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime, ReasoningError
+from agentic_ai_lab_runtime.reasoning import identity
+from agentic_ai_lab_runtime.reasoning import EvidenceOperation, EvidenceInteraction, EvidenceConversation
+from agentic_ai_lab_runtime.reasoning import Trajectory
 
 
 def fixture():

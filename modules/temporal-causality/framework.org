@@ -9,7 +9,7 @@ SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 * Abstract
 
-Temporal Causality is a domain-neutral POO Flow Module for asking what is
+Temporal Causality is a domain-neutral Agentic AI Lab Module for asking what is
 known, possible, necessary *relative to declared assumptions*, refuted, or
 still unknown about events and their causal explanations over time.  The
 framework must support partial order, multiple clock roles, intervals,
@@ -81,7 +81,7 @@ An elapsed duration requires monotonic clocks and cannot be inferred from a
 wall-clock or logical-version coordinate alone.
 
 For two proper observed intervals on the same domain,
-=poo-flow-temporal-interval-extent-relation= classifies their ordered endpoints
+=agentic-ai-lab-temporal-interval-extent-relation= classifies their ordered endpoints
 into [[https://cse.unl.edu/~choueiry/Documents/Allen-CACM1983.pdf][Allen's thirteen basic relations]].
 The relation concerns interval *extents*: endpoint openness still governs
 membership, and no relation is inferred for a point or empty extent.  Those
@@ -92,7 +92,7 @@ networks of interval relations remains unimplemented.
 
 ** Bounded time observation
 
-An immutable =PooFlowTemporalBoundedObservation= records a source, clock role,
+An immutable =AgenticAILabTemporalBoundedObservation= records a source, clock role,
 observed lower and upper instants, precision, acquisition instant, receipt,
 optional attestation identity, attempt and schema.  Its semantic digest covers
 the complete field tuple, including each instant's domain, coordinate,
@@ -122,7 +122,7 @@ arithmetic, not a policy deadline, clock attestation or runtime budget spend.
 
 ** Source watermark claim
 
-A =PooFlowTemporalWatermark= binds source, partition, inclusive sequence range,
+A =AgenticAILabTemporalWatermark= binds source, partition, inclusive sequence range,
 bounded event-time observation, issuer, coverage receipt identity, late-event
 policy identity and receipt identity.  Its digest covers every field and the
 observation digest.  For a cut boundary =b= in the watermark domain, an
@@ -149,8 +149,8 @@ while a positive number requests an early stop.  Full possible-world semantics r
 model with explicit interventions, environment actions and observation map.
 
 Classification is relative to the declared hypothesis family.  The
-=poo-flow-temporal-model= constructor declares exclusive explanations;
-=poo-flow-temporal-overlapping-model= declares potentially coexisting
+=agentic-ai-lab-temporal-model= constructor declares exclusive explanations;
+=agentic-ai-lab-temporal-overlapping-model= declares potentially coexisting
 mechanisms.  Both use the same finite constraint checker, and the family mode
 enters the model digest and classification receipt.  For target
 =h=, =refuted= means a known constraint fails; =possible= means the candidate
@@ -321,7 +321,7 @@ the selected frontier yields a revised certificate while LeanPoo reuses
 unaffected obligations.  This proof is about a typed POO proof object; a
 future projection theorem must connect concrete Scheme index rows and patch
 footprints to those Lean obligations.  The target uses a separate Lean
-toolchain because the existing Cedar-bound POO Flow proof package uses Lean
+toolchain because the existing Cedar-bound Agentic AI Lab proof package uses Lean
 4.31 and LeanPoo currently uses Lean 4.34.
 
 This design follows the explicit justification dependency idea of
@@ -415,7 +415,7 @@ are broader:
 
 - *Temporal soundness*: every admitted native comparison follows from
   observed coordinates in one domain or validated conversion evidence.
-- *Bounded-time arithmetic*: =PooFlowProof.PooC4.TemporalBoundedTime= proves
+- *Bounded-time arithmetic*: =AgenticAILabProof.PooC4.TemporalBoundedTime= proves
   that a definite-before or definite-after judgment holds for every coordinate
   inside the stated interval, a crossing boundary permits neither definite
   judgment, and two overlapping bounded observations cannot have a definite
@@ -431,7 +431,7 @@ are broader:
   so this law does not apply without an unchanged prefix assumption.
 - *Future-append replay*: for an admission cut =c=, appending only revisions
   with admission position greater than =c= preserves the visible list at =c=.
-  =PooFlowProof.PooC4.TemporalEvidenceRevision= proves this abstract list law
+  =AgenticAILabProof.PooC4.TemporalEvidenceRevision= proves this abstract list law
   and preservation of a fixed valid-time projection key; it also proves that
   distinct valid-time parameters give distinct structural projection keys.
   The Scheme test checks digest behavior for concrete instances.  Neither is a general
@@ -558,7 +558,7 @@ invalidation frontier, not actual influence or claim truth.
 * Quint proof authority (2026-10-08)
 
 Run =just prepare-quint=, =just check-quint-types= and =just check-quint=.
-The maintained case catalog is =packages/python-testing/src/poo_flow_testing/checks/quint.py=.
+The maintained case catalog is =packages/python-testing/src/agentic_ai_lab_testing/checks/quint.py=.
 Quint 0.33.0, backend distribution 0.62.1 and Java 21 match MRR.
 Proof receipts use inert Scheme v1 and remain local or CI artifacts.
 The finite model checks do not establish a general Scheme/Rust refinement.

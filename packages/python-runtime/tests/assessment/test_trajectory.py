@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import os
 import unittest
-from poo_flow_runtime.reasoning import ReasoningRuntime, ReasoningError
-from poo_flow_runtime.reasoning import Trajectory
-from poo_flow_runtime.reasoning import EvidenceChain, evidence_graph
-from poo_flow_runtime.reasoning import identity
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime, ReasoningError
+from agentic_ai_lab_runtime.reasoning import Trajectory
+from agentic_ai_lab_runtime.reasoning import EvidenceChain, evidence_graph
+from agentic_ai_lab_runtime.reasoning import identity
 
 
 def relation(name, source, rows=()):

@@ -19,7 +19,7 @@ strategy definition layer.
 The self-test command is the smallest executable gate for that boundary:
 
 #+begin_src sh
-poo-flow-runtime-abi-surface --self-test
+agentic-ai-lab-runtime-abi-surface --self-test
 #+end_src
 
 It validates the generated manifest with the same parser used for external
@@ -28,16 +28,16 @@ facade method exists in the installed runtime package. The command emits a
 line-oriented validation receipt:
 
 #+begin_example
-schema=poo-flow.python-runtime.abi-surface.validation.v1
+schema=agentic-ai-lab.python-runtime.abi-surface.validation.v1
 status=ok
-detail=poo-flow.python-runtime.abi-surface.v1
+detail=agentic-ai-lab.python-runtime.abi-surface.v1
 #+end_example
 
 The same receipt is available to Python harnesses without parsing command
 stdout:
 
 #+begin_src python
-from poo_flow_runtime import runtime_abi_surface_self_test_receipt
+from agentic_ai_lab_runtime import runtime_abi_surface_self_test_receipt
 
 receipt = runtime_abi_surface_self_test_receipt()
 assert receipt.status == "ok"
@@ -54,7 +54,7 @@ ad hoc documentation before testing integration readiness. They can execute the
 self-test gate first, then validate any captured manifest through:
 
 #+begin_src sh
-poo-flow-runtime-abi-surface --validate <path-or-stdin>
+agentic-ai-lab-runtime-abi-surface --validate <path-or-stdin>
 #+end_src
 
 This keeps the interface cheap for Python, Rust, Marlin, and future runtime

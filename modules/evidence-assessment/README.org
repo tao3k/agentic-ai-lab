@@ -22,23 +22,23 @@ attribution, authorize an action, or assign a calibrated probability.
 
 * Public values
 
-[[file:objects.ss][objects.ss]] exports =PooFlowEvidenceAssessmentCase.= and the
-=poo-flow-evidence-reference=, =poo-flow-evidence-claim=,
-=poo-flow-evidence-step=, =poo-flow-evidence-hypothesis=, and
-=poo-flow-evidence-branch= constructors. A branch proposes claims, withholds
+[[file:objects.ss][objects.ss]] exports =AgenticAILabEvidenceAssessmentCase.= and the
+=agentic-ai-lab-evidence-reference=, =agentic-ai-lab-evidence-claim=,
+=agentic-ai-lab-evidence-step=, =agentic-ai-lab-evidence-hypothesis=, and
+=agentic-ai-lab-evidence-branch= constructors. A branch proposes claims, withholds
 contested claims, or does both. An inference step has either =presence= or
 =equal-value= join semantics. A hypothesis names its outcome, candidate
 origin, and required claims. The first value is an observed outcome; the
 second is an explanatory candidate.
 
-[[file:funs.ss][funs.ss]] exports =poo-flow-evidence-assessment-evaluate=,
-=poo-flow-evidence-hypothesis-result=, and
-=poo-flow-evidence-assessment-explore=. Each hypothesis result is one of
+[[file:funs.ss][funs.ss]] exports =agentic-ai-lab-evidence-assessment-evaluate=,
+=agentic-ai-lab-evidence-hypothesis-result=, and
+=agentic-ai-lab-evidence-assessment-explore=. Each hypothesis result is one of
 =supported=, =needs-evidence=, or =conflicted=. Missing claims preserve open
 questions for every hypothesis. Equality mismatches and conflicting values
 are attached to the affected hypotheses; an unrelated hypothesis retains
 its own status. Each reachable hypothesis carries one bounded path of
-supported step rows. =poo-flow-evidence-assessment-explore= evaluates up to
+supported step rows. =agentic-ai-lab-evidence-assessment-explore= evaluates up to
 eight caller-authored branches against every hypothesis, preserving the
 baseline, changed statuses, witness paths, and remaining gaps for each
 branch. It emits no preferred branch, probability, or next action.

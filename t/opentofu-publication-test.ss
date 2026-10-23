@@ -7,7 +7,7 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :poo-flow/modules/nix/func current-nix-process-observer)
+        (only-in :agentic-ai-lab/modules/nix/func current-nix-process-observer)
         (only-in :yuanxu/module-system/source/admission module-source-read)
         (only-in :yuanxu/module-system/source/preparation yuanxu-prepare-module-build-source)
         (only-in :yuanxu/module-system/observability/presentation
@@ -101,7 +101,7 @@
                           (.get prepared source-dependencies)))))
               (let (consumer (path-expand "modules/app/infrastructure" root))
                 (write-source (path-expand "types.ss" consumer)
-                  "(import (only-in :poo-flow/modules/services/opentofu/types OpenTofuScopeContract)) (export OpenTofuScopeContract)")
+                  "(import (only-in :agentic-ai-lab/modules/services/opentofu/types OpenTofuScopeContract)) (export OpenTofuScopeContract)")
                 (write-source (path-expand "objects.ss" consumer)
                   "(import :clan/poo/object) (def Defaults (.o)) (export Defaults)")
                 (write-source (path-expand "config.ss" consumer) "(def Config (.o))")

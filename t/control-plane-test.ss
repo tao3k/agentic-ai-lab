@@ -64,7 +64,7 @@
 (def adapter-request-test
   (test-suite "adapter request boundary"
     (yuanxu-test-case "lowers external tasks into adapter requests"
-      (let* ((external (make-external-task 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
+      (let* ((external (make-external-task 'compile 'rust-build '((crate . "agentic-ai-lab")) 'artifact 'artifact))
              (flow (flow-compose 'external-demo (list external) 'artifact 'artifact))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
@@ -117,7 +117,7 @@
              (result (runner-run runner identity 11)))
         (check-equal? (run-result-value result) 11)))
     (yuanxu-test-case "lowers external-flow into adapter request"
-      (let* ((compile (external-flow 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
+      (let* ((compile (external-flow 'compile 'rust-build '((crate . "agentic-ai-lab")) 'artifact 'artifact))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
              (result (runner-run runner compile 'input-artifact))
@@ -139,7 +139,7 @@
 (def configured-runner-test
   (test-suite "configured runner"
     (yuanxu-test-case "runs through request-only config"
-      (let* ((compile (external-flow 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
+      (let* ((compile (external-flow 'compile 'rust-build '((crate . "agentic-ai-lab")) 'artifact 'artifact))
              (config (make-request-only-run-config))
              (result (run-flow-with-config config compile 'input-artifact))
              (adapter-result (run-result-value result))
@@ -149,7 +149,7 @@
         (check-equal? (adapter-result-status adapter-result) 'requested)
         (check-equal? (execution-request-plan-id request) 'compile)))
     (yuanxu-test-case "submits external requests to rust adapter boundary"
-      (let* ((compile (external-flow 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
+      (let* ((compile (external-flow 'compile 'rust-build '((crate . "agentic-ai-lab")) 'artifact 'artifact))
              (config (make-rust-run-config))
              (runner (run-config->runner config))
              (result (run-flow-with-config config compile 'input-artifact))
@@ -171,7 +171,7 @@
                       (execution-request-policy request))
         (check-equal? (receipt-adapter-decision child) 'rust)))
     (yuanxu-test-case "submits branch arms to rust adapter boundary"
-      (let* ((compile (external-flow 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
+      (let* ((compile (external-flow 'compile 'rust-build '((crate . "agentic-ai-lab")) 'artifact 'artifact))
              (put (store-flow 'put-cache 'put '((path . "target")) 'artifact 'artifact))
              (branch (flow-branch 'runtime-fanout compile put))
              (config (make-store-rust-run-config))
@@ -499,7 +499,7 @@
                       '((node audit-demo 0 pure inc)))
         (check-equal? (cdr (assoc 'task third-event)) 'label)))
     (yuanxu-test-case "counts adapter request receipts"
-      (let* ((external (external-flow 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact))
+      (let* ((external (external-flow 'compile 'rust-build '((crate . "agentic-ai-lab")) 'artifact 'artifact))
              (runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
              (receipt (run-result-receipt (runner-run runner external 'input-artifact)))

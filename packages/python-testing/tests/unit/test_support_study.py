@@ -5,9 +5,9 @@
 
 from types import SimpleNamespace
 
-from poo_flow_testing.model_study import support
-from poo_flow_testing.model_study.support_native import score
-from poo_flow_testing.model_study.support_protocol import SELF_REVIEW, NATIVE_REVIEW
+from agentic_ai_lab_testing.model_study import support
+from agentic_ai_lab_testing.model_study.support_native import score
+from agentic_ai_lab_testing.model_study.support_protocol import SELF_REVIEW, NATIVE_REVIEW
 
 REFERENCE = "\n".join([
     "0\tcomplete\t((0 20))\tvalid\tvalid\ttask-shape\t()",
@@ -63,7 +63,7 @@ def test_native_validity_does_not_make_wrong_task_results_correct():
 
 def test_preview_rejects_modified_bytes_before_live_calls(tmp_path, monkeypatch):
     import pytest
-    from poo_flow_testing.model_study import support_protocol as protocol
+    from agentic_ai_lab_testing.model_study import support_protocol as protocol
 
     ascent, poo, directory = tmp_path / "ascent", tmp_path / "poo", tmp_path / "preview"
     ascent.mkdir()

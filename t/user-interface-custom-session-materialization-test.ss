@@ -15,7 +15,7 @@
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/session-materialization"
-                 poo-flow-custom-my-module-session-materialization-case))
+                 agentic-ai-lab-custom-my-module-session-materialization-case))
 
 (export user-interface-custom-session-materialization-test)
 
@@ -33,19 +33,19 @@
 
 ;; : TestSuite
 (def user-interface-custom-session-materialization-test
-  (test-suite "poo-flow custom user-interface session-materialization case"
+  (test-suite "agentic-ai-lab custom user-interface session-materialization case"
     (yuanxu-test-case "projects custom materialization receipts without runtime work"
       (let* ((selection
-              (car poo-flow-custom-my-module-session-materialization-case))
+              (car agentic-ai-lab-custom-my-module-session-materialization-case))
              (rows
               (module-config-rows
-               poo-flow-custom-my-module-session-materialization-case))
+               agentic-ai-lab-custom-my-module-session-materialization-case))
              (pending (car rows))
              (failed (cadr rows)))
         (check-equal? (yuanxu-user-module-selection-key selection)
                       '(session . session))
         (check-equal? (test-ref pending 'kind)
-                      'poo-flow.session.materialization-receipt)
+                      'agentic-ai-lab.session.materialization-receipt)
         (check-equal? (test-ref pending 'request-id)
                       'runtime/custom-build-request)
         (check-equal? (test-ref pending 'materialization-state) 'pending)

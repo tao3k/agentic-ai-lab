@@ -45,9 +45,9 @@ fn text_rows(data: &Data) -> Vec<String> {
 #[test]
 fn bundled_execution_evidence_uses_original_native_dsl_and_explicit_source_authority() {
     let engine = ascent_scheme::Engine::new(1).unwrap();
-    const MODULE: &str = ":poo-flow/modules/evidence-assessment/execution";
+    const MODULE: &str = ":agentic-ai-lab/modules/evidence-assessment/execution";
     engine.register_module(MODULE, include_str!(
-        "../../../../packages/python-runtime/src/poo_flow_runtime/reasoning_rules/execution.ss"
+        "../../../../packages/python-runtime/src/agentic_ai_lab_runtime/reasoning_rules/execution.ss"
     )).unwrap();
     let module = engine.module(MODULE).unwrap();
     let value = module.call("make-execution-evidence", &[], None).unwrap();

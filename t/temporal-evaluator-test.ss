@@ -1,23 +1,23 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :poo-flow/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
-        (only-in :poo-flow/modules/ai-agentic-context/objects AiAgenticContextScope.)
-        (only-in :poo-flow/modules/ai-agentic-context/funs-features poo-flow-ai-agentic-context-profile)
-        :poo-flow/modules/ai-agentic-context/session-host
-        :poo-flow/modules/ai-agentic-context/use-host
-        :poo-flow/modules/query/semantic/context-restriction
+(import (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
+        (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
+        (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features agentic-ai-lab-ai-agentic-context-profile)
+        :agentic-ai-lab/modules/ai-agentic-context/session-host
+        :agentic-ai-lab/modules/ai-agentic-context/use-host
+        :agentic-ai-lab/modules/query/semantic/context-restriction
         :std/test (only-in :clan/poo/object .o .ref)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :gerbil-ascent/candidate/reasoning
                  reasoning-source-snapshot reasoning-attempt reasoning-receipt-status reasoning-receipt-proof
                  reasoning-receipt-rows reasoning-receipt-bound?)
         (only-in :gerbil-ascent/candidate/provenance positive-proof-status positive-proof-nodes positive-proof-roots proof-node-id proof-node-kind proof-node-row proof-node-relation)
-        :poo-flow/modules/temporal-causality/evaluator/interface
-        :poo-flow/modules/temporal-causality/time/objects
-        :poo-flow/modules/temporal-causality/revisions/interface
-        :poo-flow/modules/temporal-causality/truth-maintenance/support/interface
-        :poo-flow/modules/temporal-causality/truth-maintenance/support/policy-host)
+        :agentic-ai-lab/modules/temporal-causality/evaluator/interface
+        :agentic-ai-lab/modules/temporal-causality/time/objects
+        :agentic-ai-lab/modules/temporal-causality/revisions/interface
+        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
+        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
 (export temporal-evaluator-test)
 ;;; Keep the assertion outside the catch: std/test check-exception with `true`
 ;;; can catch its own missing-exception TestError and silently pass.
@@ -30,17 +30,17 @@
                  (rule (path ?x ?z) (path ?x ?y) (edge ?y ?z))
                  (query path 1 3) (limits 8 16 32)))
 (def (admit snapshot datum receipt (steps 512) (nodes 32))
-  (poo-flow-temporal-positive-proof-from-ascent "proof" snapshot datum receipt steps nodes))
+  (agentic-ai-lab-temporal-positive-proof-from-ascent "proof" snapshot datum receipt steps nodes))
 
-(def (at n) (poo-flow-temporal-instant (number->string n) "txn" n "host-clock" 'observed))
-(def (policy rev) (poo-flow-temporal-support-policy "policy" rev (at 1) (at 4)))
-(def program (poo-flow-temporal-support-program "p" "policy" #t
-  (list (poo-flow-temporal-support "s" "claim" "unadmitted-label"
-    (list (poo-flow-temporal-support-premise "source" "r1")) '()))))
-(def journal (poo-flow-temporal-evidence-journal "j" "txn"
-  (list (poo-flow-temporal-evidence-revision "r1" "source" 'assert #f (at 1) (poo-flow-temporal-interval "valid" (at 0) (at 10) #t #f) "content"))))
+(def (at n) (agentic-ai-lab-temporal-instant (number->string n) "txn" n "host-clock" 'observed))
+(def (policy rev) (agentic-ai-lab-temporal-support-policy "policy" rev (at 1) (at 4)))
+(def program (agentic-ai-lab-temporal-support-program "p" "policy" #t
+  (list (agentic-ai-lab-temporal-support "s" "claim" "unadmitted-label"
+    (list (agentic-ai-lab-temporal-support-premise "source" "r1")) '()))))
+(def journal (agentic-ai-lab-temporal-evidence-journal "j" "txn"
+  (list (agentic-ai-lab-temporal-evidence-revision "r1" "source" 'assert #f (at 1) (agentic-ai-lab-temporal-interval "valid" (at 0) (at 10) #t #f) "content"))))
 (def (guard host gen p)
-  (poo-flow-temporal-support-policy-host-guard host gen (.ref p 'semantic-digest)
+  (agentic-ai-lab-temporal-support-policy-host-guard host gen (.ref p 'semantic-digest)
     program journal (at 1) #f 128))
 (def temporal-evaluator-test
   (test-suite "original evaluator positive proof admission"
@@ -50,7 +50,7 @@
     (yuanxu-test-case "Context binds original proof into input and fences prepared claims"
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
         (check (.ref (context-claim context-host 0 0) 'reason) => 'temporal-proof-denied)
-        (let* ((before (poo-flow-ai-agentic-context-session-host-current context-host "session"))
+        (let* ((before (agentic-ai-lab-ai-agentic-context-session-host-current context-host "session"))
                (bound (context-bind context-host proof-host registration p 0 0 1 1)))
           (check (.ref bound 'reason) => 'proof-bound)
           (check (equal? (.ref (.ref (.ref before 'task) 'input) 'digest)
@@ -64,9 +64,9 @@
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
         (context-bind context-host proof-host registration p 0 0 1 1)
         (context-claim context-host 1 0)
-        (poo-flow-temporal-proof-host-refresh! proof-host "source" 2 (car ctx) (corrected-journal (list-ref ctx 9)))
-        (poo-flow-temporal-support-policy-host-refresh! policy-host p 2 (at 2))
-        (let* ((r (poo-flow-ai-agentic-context-session-host-revalidate! context-host "session" 2 0))
+        (agentic-ai-lab-temporal-proof-host-refresh! proof-host "source" 2 (car ctx) (corrected-journal (list-ref ctx 9)))
+        (agentic-ai-lab-temporal-support-policy-host-refresh! policy-host p 2 (at 2))
+        (let* ((r (agentic-ai-lab-ai-agentic-context-session-host-revalidate! context-host "session" 2 0))
                (schedule (.ref r 'schedule)))
           (check (.ref r 'reason) => 'temporal-proof-denied)
           (check (.ref r 'runtime-published?) => #t)
@@ -74,46 +74,46 @@
           (check (.ref schedule 'generation) => 3)
           (check (length (.ref schedule 'obligations)) => 1)
           (check (.ref (car (.ref schedule 'obligations)) 'identity) => "attempt")
-          (let (again (poo-flow-ai-agentic-context-session-host-revalidate! context-host "session" 3 0))
+          (let (again (agentic-ai-lab-ai-agentic-context-session-host-revalidate! context-host "session" 3 0))
             (check (.ref again 'runtime-published?) => #f)
             (check (length (.ref (.ref again 'schedule) 'obligations)) => 1)))))
     (yuanxu-test-case "Context source refresh cannot reuse a Temporal requirement at another source generation"
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
         (context-bind context-host proof-host registration p 0 0 1 1)
-        (poo-flow-ai-agentic-context-session-host-refresh! context-host "session" 0 1 context-source
+        (agentic-ai-lab-ai-agentic-context-session-host-refresh! context-host "session" 0 1 context-source
           (.o (:: @ context-scope) source-cut: "cut:1"))
         (check (.ref (context-claim context-host 1 1) 'reason) => 'temporal-proof-denied)
         (context-bind context-host proof-host registration p 1 1 1 1)
         (check (.ref (context-claim context-host 2 1) 'accepted?) => #t)))
     (yuanxu-test-case "Context refuses unknown proof budget exhaustion policy drift and stale catalog"
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
-        (check-rejected (poo-flow-ai-agentic-context-session-host-require-proof! context-host "session" 0 0
+        (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-require-proof! context-host "session" 0 0
           proof-host "unknown" 1 1 (.ref p 'semantic-digest) 128))
-        (check-rejected (poo-flow-ai-agentic-context-session-host-require-proof! context-host "session" 0 0
+        (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-require-proof! context-host "session" 0 0
           proof-host (.ref registration 'identity) 1 1 (.ref p 'semantic-digest) 0))
-        (check (.ref (.ref (poo-flow-ai-agentic-context-session-host-current context-host "session") 'schedule) 'revision) => 0)
+        (check (.ref (.ref (agentic-ai-lab-ai-agentic-context-session-host-current context-host "session") 'schedule) 'revision) => 0)
         (context-bind context-host proof-host registration p 0 0 1 1)
-        (poo-flow-temporal-support-policy-host-refresh! policy-host p 2 (at 2))
+        (agentic-ai-lab-temporal-support-policy-host-refresh! policy-host p 2 (at 2))
         (check (.ref (context-claim context-host 1 0) 'reason) => 'temporal-proof-denied)
         (let* ((program-value (car ctx))
-               (changed (poo-flow-temporal-rule-program (.ref program-value 'identity) "replaced"
+               (changed (agentic-ai-lab-temporal-rule-program (.ref program-value 'identity) "replaced"
                  (.ref program-value 'generation) (.ref program-value 'ascent-generation)
                  (.ref program-value 'relations) (.ref program-value 'rules))))
-          (poo-flow-temporal-proof-host-refresh! proof-host "source" 2 changed (list-ref ctx 9))
+          (agentic-ai-lab-temporal-proof-host-refresh! proof-host "source" 2 changed (list-ref ctx 9))
           (check-rejected (context-bind context-host proof-host registration p 1 0 2 2))
           (check (.ref (context-claim context-host 1 0) 'reason) => 'temporal-proof-denied))))
     (yuanxu-test-case "Temporal proof capability retains creating owner even before first use"
-      (let* ((ph (poo-flow-temporal-support-policy-host)) (proof-host (poo-flow-temporal-proof-host ph))
+      (let* ((ph (agentic-ai-lab-temporal-support-policy-host)) (proof-host (agentic-ai-lab-temporal-proof-host ph))
              (ctx (mrr-derivation-fixture)))
         (check (thread-join! (thread-start! (make-thread (lambda ()
-          (rejected? (lambda () (poo-flow-temporal-proof-host-refresh! proof-host "source" 1 (car ctx) (list-ref ctx 9)))))))) => #t)
-        (check (.ref (poo-flow-temporal-proof-host-refresh! proof-host "source" 1 (car ctx) (list-ref ctx 9)) 'generation) => 1)))
+          (rejected? (lambda () (agentic-ai-lab-temporal-proof-host-refresh! proof-host "source" 1 (car ctx) (list-ref ctx 9)))))))) => #t)
+        (check (.ref (agentic-ai-lab-temporal-proof-host-refresh! proof-host "source" 1 (car ctx) (list-ref ctx 9)) 'generation) => 1)))
     (yuanxu-test-case "retained native proof uses registered current source policy and observed clock"
-      (let* ((ctx (mrr-derivation-fixture)) (ph (poo-flow-temporal-support-policy-host))
-             (host (poo-flow-temporal-proof-host ph)) (p (policy "v1"))
-             (snapshot (poo-flow-temporal-proof-host-refresh! host "source" 1 (car ctx) (list-ref ctx 9)))
+      (let* ((ctx (mrr-derivation-fixture)) (ph (agentic-ai-lab-temporal-support-policy-host))
+             (host (agentic-ai-lab-temporal-proof-host ph)) (p (policy "v1"))
+             (snapshot (agentic-ai-lab-temporal-proof-host-refresh! host "source" 1 (car ctx) (list-ref ctx 9)))
              (registration (register-selected host snapshot ctx)))
-        (poo-flow-temporal-support-policy-host-refresh! ph p 1 (at 1))
+        (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 1 (at 1))
         (let (result (proof-current host registration 1 1 p))
           (check (.ref result 'status) => 'current)
           (check (.ref result 'proof-admitted?) => #t)
@@ -123,78 +123,78 @@
           (check (.ref result 'durable?) => #f)
           (check (.ref (.ref (.ref result 'guard) 'effective-at) 'coordinate) => 1))
         (check (.ref (register-selected host snapshot ctx) 'identity) => (.ref registration 'identity))
-        (check-rejected (poo-flow-temporal-proof-host-current host "unknown" 1 1 (.ref p 'semantic-digest) 128) )
+        (check-rejected (agentic-ai-lab-temporal-proof-host-current host "unknown" 1 1 (.ref p 'semantic-digest) 128) )
         (check-rejected (proof-current host registration 0 1 p) )
         (check-rejected (proof-current host registration 1 0 p) )
-        (check (.ref (poo-flow-temporal-proof-host-current host (.ref registration 'identity) 1 1 (.ref p 'semantic-digest) 0) 'status) => 'unknown)))
+        (check (.ref (agentic-ai-lab-temporal-proof-host-current host (.ref registration 'identity) 1 1 (.ref p 'semantic-digest) 0) 'status) => 'unknown)))
     (yuanxu-test-case "current proof cannot reuse historical cut after late correction"
-      (let* ((ctx (mrr-derivation-fixture)) (ph (poo-flow-temporal-support-policy-host))
-             (host (poo-flow-temporal-proof-host ph)) (p (policy "v1")) (j (list-ref ctx 9))
-             (snapshot (poo-flow-temporal-proof-host-refresh! host "source" 1 (car ctx) j))
+      (let* ((ctx (mrr-derivation-fixture)) (ph (agentic-ai-lab-temporal-support-policy-host))
+             (host (agentic-ai-lab-temporal-proof-host ph)) (p (policy "v1")) (j (list-ref ctx 9))
+             (snapshot (agentic-ai-lab-temporal-proof-host-refresh! host "source" 1 (car ctx) j))
              (registration (register-selected host snapshot ctx)) (changed (corrected-journal j)))
-        (poo-flow-temporal-support-policy-host-refresh! ph p 1 (at 1))
+        (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 1 (at 1))
         (check (.ref (proof-current host registration 1 1 p) 'status) => 'current)
-        (poo-flow-temporal-proof-host-refresh! host "source" 2 (car ctx) changed)
-        (poo-flow-temporal-support-policy-host-refresh! ph p 2 (at 2))
+        (agentic-ai-lab-temporal-proof-host-refresh! host "source" 2 (car ctx) changed)
+        (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 2 (at 2))
         (check (.ref (proof-current host registration 2 2 p) 'status) => 'unsupported)
         (check (.ref (replay-selected (derive-selected ctx (list-ref ctx 6)) ctx (list-ref ctx 6)) 'semantic-digest) => (.ref registration 'proof-digest))
-        (check-rejected (poo-flow-temporal-proof-host-refresh! host "source" 3 (car ctx) j) )
-        (check-rejected (poo-flow-temporal-proof-host-refresh! host "source" 1 (car ctx) changed) )
-        (check-rejected (poo-flow-temporal-proof-host-refresh! host "source" 2 (car ctx) j) )
+        (check-rejected (agentic-ai-lab-temporal-proof-host-refresh! host "source" 3 (car ctx) j) )
+        (check-rejected (agentic-ai-lab-temporal-proof-host-refresh! host "source" 1 (car ctx) changed) )
+        (check-rejected (agentic-ai-lab-temporal-proof-host-refresh! host "source" 2 (car ctx) j) )
         (check-rejected (register-selected host snapshot ctx) )
         (check (.ref (proof-current host registration 2 2 p) 'status) => 'unsupported)))
     (yuanxu-test-case "registered proof detects catalog replacement and Host policy expiry"
-      (let* ((ctx (mrr-derivation-fixture)) (ph (poo-flow-temporal-support-policy-host))
-             (host (poo-flow-temporal-proof-host ph)) (p (policy "v1")) (program-value (car ctx))
-             (snapshot (poo-flow-temporal-proof-host-refresh! host "source" 1 program-value (list-ref ctx 9)))
+      (let* ((ctx (mrr-derivation-fixture)) (ph (agentic-ai-lab-temporal-support-policy-host))
+             (host (agentic-ai-lab-temporal-proof-host ph)) (p (policy "v1")) (program-value (car ctx))
+             (snapshot (agentic-ai-lab-temporal-proof-host-refresh! host "source" 1 program-value (list-ref ctx 9)))
              (registration (register-selected host snapshot ctx))
-             (changed (poo-flow-temporal-rule-program (.ref program-value 'identity) "new-catalog"
+             (changed (agentic-ai-lab-temporal-rule-program (.ref program-value 'identity) "new-catalog"
                (.ref program-value 'generation) (.ref program-value 'ascent-generation)
                (.ref program-value 'relations) (.ref program-value 'rules))))
-        (poo-flow-temporal-support-policy-host-refresh! ph p 1 (at 4))
+        (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 1 (at 4))
         (check (.ref (proof-current host registration 1 1 p) 'status) => 'expired-policy)
-        (poo-flow-temporal-proof-host-refresh! host "source" 2 changed (list-ref ctx 9))
+        (agentic-ai-lab-temporal-proof-host-refresh! host "source" 2 changed (list-ref ctx 9))
         (check (.ref (proof-current host registration 2 1 p) 'status) => 'stale-catalog)
         (check (.ref (replay-selected (derive-selected ctx (list-ref ctx 6)) ctx (list-ref ctx 6)) 'mrr-rule-equivalence-verified?) => #t)))
     (yuanxu-test-case "proof host rejects forged contexts and same generation conflict before mutation"
-      (let* ((ctx (mrr-derivation-fixture)) (ph (poo-flow-temporal-support-policy-host))
-             (host (poo-flow-temporal-proof-host ph)) (p (policy "v1")) (j (list-ref ctx 9))
-             (snapshot (poo-flow-temporal-proof-host-refresh! host "source" 1 (car ctx) j))
+      (let* ((ctx (mrr-derivation-fixture)) (ph (agentic-ai-lab-temporal-support-policy-host))
+             (host (agentic-ai-lab-temporal-proof-host ph)) (p (policy "v1")) (j (list-ref ctx 9))
+             (snapshot (agentic-ai-lab-temporal-proof-host-refresh! host "source" 1 (car ctx) j))
              (registration (register-selected host snapshot ctx)) (context-value (selected-context ctx)))
-        (poo-flow-temporal-support-policy-host-refresh! ph p 1 (at 1))
-        (check-rejected (poo-flow-temporal-proof-host-register! host "source" (.ref snapshot 'semantic-digest)
+        (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 1 (at 1))
+        (check-rejected (agentic-ai-lab-temporal-proof-host-register! host "source" (.ref snapshot 'semantic-digest)
           (.o (:: @ context-value) semantic-digest: "forged") "policy") )
-        (check-rejected (poo-flow-temporal-proof-host-refresh! host "source" 1 (car ctx) (corrected-journal j)) )
-        (check-rejected (poo-flow-temporal-proof-host-refresh! host "source" 2
+        (check-rejected (agentic-ai-lab-temporal-proof-host-refresh! host "source" 1 (car ctx) (corrected-journal j)) )
+        (check-rejected (agentic-ai-lab-temporal-proof-host-refresh! host "source" 2
           (.o (:: @ (car ctx)) catalog-digest: "forged") j) )
-        (check-rejected (poo-flow-temporal-proof-host-refresh! host "source" 2 (car ctx)
+        (check-rejected (agentic-ai-lab-temporal-proof-host-refresh! host "source" 2 (car ctx)
           (.o (:: @ j) semantic-digest: "forged")) )
         (check (.ref (proof-current host registration 1 1 p) 'status) => 'current)))
     (yuanxu-test-case "current proof applies evidence validity and conflicting heads conservatively"
-      (let* ((ctx (mrr-derivation-fixture)) (ph (poo-flow-temporal-support-policy-host))
-             (host (poo-flow-temporal-proof-host ph))
-             (p (poo-flow-temporal-support-policy "policy" "long" (at 1) (at 20)))
+      (let* ((ctx (mrr-derivation-fixture)) (ph (agentic-ai-lab-temporal-support-policy-host))
+             (host (agentic-ai-lab-temporal-proof-host ph))
+             (p (agentic-ai-lab-temporal-support-policy "policy" "long" (at 1) (at 20)))
              (j (list-ref ctx 9)) (first (car (.ref j 'revisions)))
-             (snapshot (poo-flow-temporal-proof-host-refresh! host "source" 1 (car ctx) j))
+             (snapshot (agentic-ai-lab-temporal-proof-host-refresh! host "source" 1 (car ctx) j))
              (registration (register-selected host snapshot ctx)))
-        (poo-flow-temporal-support-policy-host-refresh! ph p 1 (at 3))
+        (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 1 (at 3))
         (check (.ref (proof-current host registration 1 1 p) 'status) => 'current)
-        (let* ((a (poo-flow-temporal-evidence-journal (.ref j 'identity) (.ref j 'admission-domain-identity)
-                    (append (.ref j 'revisions) (list (poo-flow-temporal-evidence-revision "first-branch"
+        (let* ((a (agentic-ai-lab-temporal-evidence-journal (.ref j 'identity) (.ref j 'admission-domain-identity)
+                    (append (.ref j 'revisions) (list (agentic-ai-lab-temporal-evidence-revision "first-branch"
                       (.ref first 'subject-identity) 'correct (.ref first 'identity) (at 2)
-                      (poo-flow-temporal-interval "v2" (at 0) (at 20) #t #f) "changed")))))
-               (conflict (poo-flow-temporal-evidence-journal (.ref j 'identity) (.ref j 'admission-domain-identity)
-                 (append (.ref a 'revisions) (list (poo-flow-temporal-evidence-revision "other-branch"
+                      (agentic-ai-lab-temporal-interval "v2" (at 0) (at 20) #t #f) "changed")))))
+               (conflict (agentic-ai-lab-temporal-evidence-journal (.ref j 'identity) (.ref j 'admission-domain-identity)
+                 (append (.ref a 'revisions) (list (agentic-ai-lab-temporal-evidence-revision "other-branch"
                    (.ref first 'subject-identity) 'correct (.ref first 'identity) (at 3)
-                   (poo-flow-temporal-interval "v3" (at 0) (at 20) #t #f) "other"))))))
-          (poo-flow-temporal-proof-host-refresh! host "source" 2 (car ctx) conflict)
+                   (agentic-ai-lab-temporal-interval "v3" (at 0) (at 20) #t #f) "other"))))))
+          (agentic-ai-lab-temporal-proof-host-refresh! host "source" 2 (car ctx) conflict)
           (check (.ref (proof-current host registration 2 1 p) 'status) => 'unknown)
-          (poo-flow-temporal-support-policy-host-refresh! ph p 2 (at 10))
+          (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 2 (at 10))
           (check (.ref (proof-current host registration 2 2 p) 'status) => 'unsupported))))
     (yuanxu-test-case "selected recursive MRR Derivation authority and direct premises bind exact source leaves"
       (let* ((ctx (mrr-derivation-fixture)) (bindings (list-ref ctx 6)) (value (derive-selected ctx bindings))
              (qualified-support (.ref value 'support)) (journal-value (list-ref ctx 9))
-             (program-value (poo-flow-temporal-support-program "qualified" "read-only" #t (list qualified-support))))
+             (program-value (agentic-ai-lab-temporal-support-program "qualified" "read-only" #t (list qualified-support))))
         (check (.ref value 'derivation-correspondence-verified?) => #t)
         (check (.ref value 'mrr-rule-equivalence-verified?) => #t)
         (check (.ref value 'action-authorized?) => #f)
@@ -205,86 +205,86 @@
         (check-rejected (replay-selected (.o (:: @ value) action-authorized?: #t) ctx bindings) )
         (check-rejected (replay-selected (.o (:: @ value) support: (.o (:: @ qualified-support) proof-identity: "forged")) ctx bindings) )
         (let* ((first (car (.ref journal-value 'revisions)))
-               (changed (poo-flow-temporal-evidence-journal "original-lineage" "txn"
-                 (append (.ref journal-value 'revisions) (list (poo-flow-temporal-evidence-revision "late-correction"
+               (changed (agentic-ai-lab-temporal-evidence-journal "original-lineage" "txn"
+                 (append (.ref journal-value 'revisions) (list (agentic-ai-lab-temporal-evidence-revision "late-correction"
                    (.ref first 'subject-identity) 'correct (.ref first 'identity) (at 2)
-                   (poo-flow-temporal-interval "v2" (at 0) (at 10) #t #f) "changed"))))))
-          (check (.ref (car (.ref (poo-flow-temporal-support-evaluate program-value changed (at 1) #f 128) 'conclusions)) 'status) => 'supported)
-          (check (.ref (car (.ref (poo-flow-temporal-support-evaluate program-value changed (at 2) #f 128) 'conclusions)) 'status) => 'unsupported))
-        (when (getenv "POO_FLOW_MRR_DERIVATION_ADMISSION_ORACLE" #f)
+                   (agentic-ai-lab-temporal-interval "v2" (at 0) (at 10) #t #f) "changed"))))))
+          (check (.ref (car (.ref (agentic-ai-lab-temporal-support-evaluate program-value changed (at 1) #f 128) 'conclusions)) 'status) => 'supported)
+          (check (.ref (car (.ref (agentic-ai-lab-temporal-support-evaluate program-value changed (at 2) #f 128) 'conclusions)) 'status) => 'unsupported))
+        (when (getenv "AGENTIC_AI_LAB_MRR_DERIVATION_ADMISSION_ORACLE" #f)
           (let (out (make-hash-table))
-            (hash-put! out "schema" "poo-flow.derivation-admission-receipt.v1")
+            (hash-put! out "schema" "agentic-ai-lab.derivation-admission-receipt.v1")
             (for-each (lambda (slot) (hash-put! out (symbol->string slot) (.ref value slot)))
               '(root derivation-identity rule-identity node-bindings support-binding-digest rule-correspondence-digest semantic-digest
                 derivation-correspondence-verified? mrr-rule-equivalence-verified? source-authenticated? selection-admitted? action-authorized? durable?))
             (hash-put! out "supportProof" (.ref qualified-support 'proof-identity))
-            (call-with-output-file (getenv "POO_FLOW_MRR_DERIVATION_ADMISSION_ORACLE")
+            (call-with-output-file (getenv "AGENTIC_AI_LAB_MRR_DERIVATION_ADMISSION_ORACLE")
               (lambda (port) (display (scheme-wire-write out) port) (newline port)))))))
     (yuanxu-test-case "original direct support cannot be replaced by transitive leaves or another rule"
       (let* ((ctx (mrr-derivation-fixture)) (bindings (list-ref ctx 6)) (root (.ref (list-ref ctx 2) 'root))
              (root-binding (find (lambda (b) (= (.ref b 'node) root)) bindings))
              (d (.ref root-binding 'derivation))
              (replace-root (lambda (changed) (map (lambda (b) (if (= (.ref b 'node) root)
-                          (poo-flow-temporal-proof-node-fact root (.ref root-binding 'fact) changed) b)) bindings)))
+                          (agentic-ai-lab-temporal-proof-node-fact root (.ref root-binding 'fact) changed) b)) bindings)))
              (leaf-ids (map (lambda (b) (.ref (.ref b 'fact) 'identity)) (filter (lambda (b) (not (.ref b 'derivation))) bindings))))
         (check-rejected (derive-selected ctx (cdr bindings)) )
         (check-rejected (derive-selected ctx (append bindings (list (car bindings)))) )
-        (check-rejected (derive-selected ctx (replace-root (poo-flow-temporal-mrr-derivation (.ref d 'identity)
+        (check-rejected (derive-selected ctx (replace-root (agentic-ai-lab-temporal-mrr-derivation (.ref d 'identity)
           (.ref d 'rule-identity) (.ref d 'generation) (.ref d 'output) leaf-ids))) )
         (let (base-rule (car (.ref (car ctx) 'rules)))
-          (check-rejected (derive-selected ctx (replace-root (poo-flow-temporal-mrr-derivation (.ref d 'identity)
+          (check-rejected (derive-selected ctx (replace-root (agentic-ai-lab-temporal-mrr-derivation (.ref d 'identity)
             (.ref base-rule 'identity) (.ref d 'generation) (.ref d 'output) (.ref d 'supports)))) ))
         (check-rejected (derive-selected ctx (map (lambda (b) (if (= (.ref b 'node) root)
-          (poo-flow-temporal-proof-node-fact root (.ref root-binding 'fact) #f) b)) bindings)) )))
+          (agentic-ai-lab-temporal-proof-node-fact root (.ref root-binding 'fact) #f) b)) bindings)) )))
     (yuanxu-test-case "original MRR recursive rules correspond to verified native proof nodes"
       (let* ((p (mrr-rule-program-fixture)) (s (source 1)) (r (reasoning-attempt s proposal 512))
              (a (admit s proposal r))
-             (c (poo-flow-temporal-rule-correspondence-from-ascent p a s proposal r 512 32)))
+             (c (agentic-ai-lab-temporal-rule-correspondence-from-ascent p a s proposal r 512 32)))
         (check (.ref c 'rule-correspondence-verified?) => #t)
         (check (pair? (.ref c 'applications)) => #t)
         (for-each (lambda (rule) (check (and (member (.ref rule 'identity) (map cadr (.ref c 'applications))) #t) => #t)) (.ref p 'rules))
         (check (.ref c 'action-authorized?) => #f)
-        (check (.ref (poo-flow-temporal-rule-correspondence-replay c p a s proposal r 512 32) 'semantic-digest) => (.ref c 'semantic-digest))
-        (check-rejected (poo-flow-temporal-rule-correspondence-replay
+        (check (.ref (agentic-ai-lab-temporal-rule-correspondence-replay c p a s proposal r 512 32) 'semantic-digest) => (.ref c 'semantic-digest))
+        (check-rejected (agentic-ai-lab-temporal-rule-correspondence-replay
           (.o (:: @ c) applications: '((999 "forged"))) p a s proposal r 512 32) )
-        (check-rejected (poo-flow-temporal-rule-correspondence-replay
+        (check-rejected (agentic-ai-lab-temporal-rule-correspondence-replay
           (.o (:: @ c) action-authorized?: #t) p a s proposal r 512 32) )
-        (when (getenv "POO_FLOW_MRR_RULE_CORRESPONDENCE_ORACLE" #f)
+        (when (getenv "AGENTIC_AI_LAB_MRR_RULE_CORRESPONDENCE_ORACLE" #f)
           (let (out (make-hash-table))
-            (hash-put! out "schema" "poo-flow.rule-correspondence-receipt.v1")
+            (hash-put! out "schema" "agentic-ai-lab.rule-correspondence-receipt.v1")
             (for-each (lambda (slot) (hash-put! out (symbol->string slot) (.ref c slot)))
               '(program-digest proof-digest generation applications semantic-digest rule-correspondence-verified?
                 source-authenticated? selection-admitted? action-authorized? durable?))
-            (call-with-output-file (getenv "POO_FLOW_MRR_RULE_CORRESPONDENCE_ORACLE")
+            (call-with-output-file (getenv "AGENTIC_AI_LAB_MRR_RULE_CORRESPONDENCE_ORACLE")
               (lambda (port) (display (scheme-wire-write out) port) (newline port)))))
-        (check-rejected (poo-flow-temporal-rule-correspondence-from-ascent
+        (check-rejected (agentic-ai-lab-temporal-rule-correspondence-from-ascent
           (.o (:: @ p) ascent-generation: 2) a s proposal r 512 32) )
-        (check-rejected (poo-flow-temporal-rule-correspondence-from-ascent
+        (check-rejected (agentic-ai-lab-temporal-rule-correspondence-from-ascent
           (.o (:: @ p) rules: (reverse (.ref p 'rules))) a s proposal r 512 32) )
         (let* ((old (car (.ref p 'rules)))
-               (wrong (poo-flow-temporal-rule (.ref old 'identity) (.ref old 'head)
-                        (list (poo-flow-temporal-rule-atom (.ref (.ref old 'head) 'relation-identity)
+               (wrong (agentic-ai-lab-temporal-rule (.ref old 'identity) (.ref old 'head)
+                        (list (agentic-ai-lab-temporal-rule-atom (.ref (.ref old 'head) 'relation-identity)
                           (.ref (.ref old 'head) 'terms)))))
-               (changed (poo-flow-temporal-rule-program (.ref p 'identity) (.ref p 'catalog-digest)
+               (changed (agentic-ai-lab-temporal-rule-program (.ref p 'identity) (.ref p 'catalog-digest)
                  (.ref p 'generation) 1 (.ref p 'relations) (cons wrong (cdr (.ref p 'rules))))))
-          (check-rejected (poo-flow-temporal-rule-correspondence-from-ascent changed a s proposal r 512 32) ))))
+          (check-rejected (agentic-ai-lab-temporal-rule-correspondence-from-ascent changed a s proposal r 512 32) ))))
     (yuanxu-test-case "native rule program rejects unsafe variables typed terms and missing relation"
       (let* ((p (mrr-rule-program-fixture)) (rs (.ref p 'relations)) (old (car (.ref p 'rules)))
              (head (.ref old 'head))
-             (rebuild (lambda (rules) (poo-flow-temporal-rule-program "invalid" (.ref p 'catalog-digest)
+             (rebuild (lambda (rules) (agentic-ai-lab-temporal-rule-program "invalid" (.ref p 'catalog-digest)
                         (.ref p 'generation) 1 rs rules))))
-        (check-rejected (rebuild (list (poo-flow-temporal-rule "unsafe"
-          (poo-flow-temporal-rule-atom (.ref head 'relation-identity)
-            (list (poo-flow-temporal-rule-variable "unbound") (poo-flow-temporal-rule-variable "y"))) (.ref old 'body)))) )
-        (check-rejected (rebuild (list (poo-flow-temporal-rule "wrong-type" head
-          (list (poo-flow-temporal-rule-atom (.ref (car (.ref old 'body)) 'relation-identity)
-            (list (poo-flow-temporal-rule-literal #t) (poo-flow-temporal-rule-variable "y"))))))) )
-        (check-rejected (rebuild (list (poo-flow-temporal-rule "missing" head
-          (list (poo-flow-temporal-rule-atom "missing" (.ref head 'terms)))))) )
+        (check-rejected (rebuild (list (agentic-ai-lab-temporal-rule "unsafe"
+          (agentic-ai-lab-temporal-rule-atom (.ref head 'relation-identity)
+            (list (agentic-ai-lab-temporal-rule-variable "unbound") (agentic-ai-lab-temporal-rule-variable "y"))) (.ref old 'body)))) )
+        (check-rejected (rebuild (list (agentic-ai-lab-temporal-rule "wrong-type" head
+          (list (agentic-ai-lab-temporal-rule-atom (.ref (car (.ref old 'body)) 'relation-identity)
+            (list (agentic-ai-lab-temporal-rule-literal #t) (agentic-ai-lab-temporal-rule-variable "y"))))))) )
+        (check-rejected (rebuild (list (agentic-ai-lab-temporal-rule "missing" head
+          (list (agentic-ai-lab-temporal-rule-atom "missing" (.ref head 'terms)))))) )
         (check-rejected (rebuild (list old old)) )))
     (yuanxu-test-case "native positive query and original proof replay produce POO admission"
       (let* ((s (source 1)) (receipt (reasoning-attempt s proposal 512)) (a (admit s proposal receipt))
-             (replay (poo-flow-temporal-positive-proof-replay a s proposal receipt 512 32)))
+             (replay (agentic-ai-lab-temporal-positive-proof-replay a s proposal receipt 512 32)))
         (check (reasoning-receipt-status receipt) => 'complete)
         (check (.ref a 'rows) => '((1 3)))
         (check (.ref a 'proof-admitted?) => #t)
@@ -299,11 +299,11 @@
                           (query path 1 2) (limits 8 16 32))))
         (check-rejected (admit (source 2) proposal receipt) )
         (check-rejected (admit s changed receipt) )
-        (check-rejected (poo-flow-temporal-positive-proof-replay
+        (check-rejected (agentic-ai-lab-temporal-positive-proof-replay
           (.o (:: @ a) proof-digest: "forged") s proposal receipt 512 32) )
-        (check-rejected (poo-flow-temporal-positive-proof-replay
+        (check-rejected (agentic-ai-lab-temporal-positive-proof-replay
           (.o (:: @ a) rows: '((1 99))) s proposal receipt 512 32) )
-        (check-rejected (poo-flow-temporal-positive-proof-replay
+        (check-rejected (agentic-ai-lab-temporal-positive-proof-replay
           (.o (:: @ a) action-authorized?: #t) s proposal receipt 512 32) )))
     (yuanxu-test-case "bounded proof and bounded verification do not become admitted"
       (let* ((s (source 1)) (bounded (reasoning-attempt s proposal 1))
@@ -328,39 +328,39 @@
         (check (reasoning-receipt-status empty) => 'complete)
         (check-rejected (admit s proposal empty) )))
     (yuanxu-test-case "host refresh selects registered time and refuses stale generation"
-      (let* ((host (poo-flow-temporal-support-policy-host)) (p (policy "rev1"))
-             (registered (poo-flow-temporal-support-policy-host-refresh! host p 1 (at 1)))
+      (let* ((host (agentic-ai-lab-temporal-support-policy-host)) (p (policy "rev1"))
+             (registered (agentic-ai-lab-temporal-support-policy-host-refresh! host p 1 (at 1)))
              (historical (guard host 1 p)))
         (check (.ref registered 'generation) => 1)
         (check (.ref historical 'policy-status) => 'applicable)
-        (poo-flow-temporal-support-policy-host-refresh! host p 2 (at 4))
+        (agentic-ai-lab-temporal-support-policy-host-refresh! host p 2 (at 4))
         (check (.ref (guard host 2 p) 'policy-status) => 'expired-policy)
         (check-rejected (guard host 1 p) )
-        (check (.ref (poo-flow-temporal-support-guard-replay historical program journal p) 'policy-status) => 'applicable)
+        (check (.ref (agentic-ai-lab-temporal-support-guard-replay historical program journal p) 'policy-status) => 'applicable)
         (check (.ref (guard host 2 p) 'action-authorized?) => #f)))
     (yuanxu-test-case "host replacement preserves revision identity and rollback failures preserve current"
-      (let* ((host (poo-flow-temporal-support-policy-host)) (old (policy "rev1")) (new (policy "rev2")))
-        (poo-flow-temporal-support-policy-host-refresh! host old 1 (at 1))
-        (poo-flow-temporal-support-policy-host-refresh! host new 2 (at 2))
+      (let* ((host (agentic-ai-lab-temporal-support-policy-host)) (old (policy "rev1")) (new (policy "rev2")))
+        (agentic-ai-lab-temporal-support-policy-host-refresh! host old 1 (at 1))
+        (agentic-ai-lab-temporal-support-policy-host-refresh! host new 2 (at 2))
         (check (.ref (guard host 2 old) 'policy-status) => 'stale-policy)
         (check (.ref (guard host 2 new) 'policy-status) => 'applicable)
-        (check-rejected (poo-flow-temporal-support-policy-host-refresh! host old 1 (at 2)) )
-        (check-rejected (poo-flow-temporal-support-policy-host-refresh! host new 3 (at 1)) )
-        (check-rejected (poo-flow-temporal-support-policy-host-refresh! host old 2 (at 2)) )
-        (check-rejected (poo-flow-temporal-support-policy-host-refresh! host
-          (poo-flow-temporal-support-policy "policy" "rev2" (at 1) (at 6)) 3 (at 3)) )
+        (check-rejected (agentic-ai-lab-temporal-support-policy-host-refresh! host old 1 (at 2)) )
+        (check-rejected (agentic-ai-lab-temporal-support-policy-host-refresh! host new 3 (at 1)) )
+        (check-rejected (agentic-ai-lab-temporal-support-policy-host-refresh! host old 2 (at 2)) )
+        (check-rejected (agentic-ai-lab-temporal-support-policy-host-refresh! host
+          (agentic-ai-lab-temporal-support-policy "policy" "rev2" (at 1) (at 6)) 3 (at 3)) )
         (check (.ref (guard host 2 new) 'policy-status) => 'applicable)))
     (yuanxu-test-case "host capability instances are isolated and exact snapshot replay is idempotent"
-      (let* ((a (poo-flow-temporal-support-policy-host)) (b (poo-flow-temporal-support-policy-host))
+      (let* ((a (agentic-ai-lab-temporal-support-policy-host)) (b (agentic-ai-lab-temporal-support-policy-host))
              (p (policy "rev1"))
-             (first (poo-flow-temporal-support-policy-host-refresh! a p 1 (at 1))))
+             (first (agentic-ai-lab-temporal-support-policy-host-refresh! a p 1 (at 1))))
         (check-rejected (guard b 1 p) )
-        (check (.ref (poo-flow-temporal-support-policy-host-refresh! a p 1 (at 1)) 'generation) => 1)
+        (check (.ref (agentic-ai-lab-temporal-support-policy-host-refresh! a p 1 (at 1)) 'generation) => 1)
         (check (.ref (guard a 1 p) 'source-authenticated?) => #f)
-        (check-rejected (poo-flow-temporal-support-policy-host-refresh! a p 2
-          (poo-flow-temporal-instant "wrong" "foreign" 2 "host" 'observed)) )
-        (check-rejected (poo-flow-temporal-support-policy-host-refresh! a p 2
-          (poo-flow-temporal-instant "uncertain" "txn" 2 "host" 'uncertain)) )
+        (check-rejected (agentic-ai-lab-temporal-support-policy-host-refresh! a p 2
+          (agentic-ai-lab-temporal-instant "wrong" "foreign" 2 "host" 'observed)) )
+        (check-rejected (agentic-ai-lab-temporal-support-policy-host-refresh! a p 2
+          (agentic-ai-lab-temporal-instant "uncertain" "txn" 2 "host" 'uncertain)) )
         (check (.ref first 'durable?) => #f)))
     (yuanxu-test-case "original evaluator rule node tamper rejects despite intact native rows and binding"
       (let* ((s (source 1)) (receipt (reasoning-attempt s proposal 512))
@@ -371,12 +371,12 @@
         (check (reasoning-receipt-rows receipt) => '((1 3)))
         (check-rejected (admit s proposal receipt) )))
     (yuanxu-test-case "full host revision inventory rejects overflow without replacing current"
-      (let ((host (poo-flow-temporal-support-policy-host)))
+      (let ((host (agentic-ai-lab-temporal-support-policy-host)))
         (let loop ((n 1))
           (when (<= n 128)
-            (poo-flow-temporal-support-policy-host-refresh! host (policy (number->string n)) n (at 1))
+            (agentic-ai-lab-temporal-support-policy-host-refresh! host (policy (number->string n)) n (at 1))
             (loop (+ n 1))))
-        (check-rejected (poo-flow-temporal-support-policy-host-refresh! host (policy "129") 129 (at 1)) )
+        (check-rejected (agentic-ai-lab-temporal-support-policy-host-refresh! host (policy "129") 129 (at 1)) )
         (check (.ref (guard host 128 (policy "128")) 'policy-status) => 'applicable)))
     (yuanxu-test-case "positive query row projection uses canonical set order"
       (let* ((s (source 1))
@@ -387,68 +387,68 @@
              (receipt (reasoning-attempt s all 512))
              (a (admit s all receipt)))
         (check (.ref a 'rows) => '((1 2) (1 3) (2 3)))
-        (check (.ref (poo-flow-temporal-positive-proof-replay a s all receipt 512 32) 'semantic-digest)
+        (check (.ref (agentic-ai-lab-temporal-positive-proof-replay a s all receipt 512 32) 'semantic-digest)
                => (.ref a 'semantic-digest))))
     (yuanxu-test-case "proof root and exact source leaves bind fact content into Temporal support"
       (let* ((s (source 1)) (receipt (reasoning-attempt s proposal 512)) (a (admit s proposal receipt))
              (root (car (positive-proof-roots (reasoning-receipt-proof receipt))))
              (leaves (filter (lambda (n) (eq? (proof-node-kind n) 'source))
                              (positive-proof-nodes (reasoning-receipt-proof receipt))))
-             (facts (map (lambda (n) (poo-flow-temporal-mrr-fact-content
+             (facts (map (lambda (n) (agentic-ai-lab-temporal-mrr-fact-content
                        (number->string (proof-node-id n)) "generation" "edge-id" "edge" (proof-node-row n))) leaves))
-             (out (poo-flow-temporal-mrr-fact-content "output" "generation" "path-id" "path" '(1 3)))
-             (bindings (map (lambda (n f) (poo-flow-temporal-proof-source-binding (proof-node-id n)
+             (out (agentic-ai-lab-temporal-mrr-fact-content "output" "generation" "path-id" "path" '(1 3)))
+             (bindings (map (lambda (n f) (agentic-ai-lab-temporal-proof-source-binding (proof-node-id n)
                             f (.ref f 'identity) (.ref f 'identity))) leaves facts))
-             (j (poo-flow-temporal-evidence-journal "bound" "txn"
-                  (map (lambda (f) (poo-flow-temporal-evidence-revision (.ref f 'identity) (.ref f 'identity)
-                    'assert #f (at 1) (poo-flow-temporal-interval "v" (at 0) (at 10) #t #f)
+             (j (agentic-ai-lab-temporal-evidence-journal "bound" "txn"
+                  (map (lambda (f) (agentic-ai-lab-temporal-evidence-revision (.ref f 'identity) (.ref f 'identity)
+                    'assert #f (at 1) (agentic-ai-lab-temporal-interval "v" (at 0) (at 10) #t #f)
                     (.ref f 'semantic-digest))) facts)))
-             (bound (poo-flow-temporal-proof-support "derivation" a s proposal receipt 512 32 root out bindings j))
-             (p (poo-flow-temporal-support-program "bound" "policy" #t (list (.ref bound 'support))))
-             (current (poo-flow-temporal-support-evaluate p j (at 1) #f 128)))
+             (bound (agentic-ai-lab-temporal-proof-support "derivation" a s proposal receipt 512 32 root out bindings j))
+             (p (agentic-ai-lab-temporal-support-program "bound" "policy" #t (list (.ref bound 'support))))
+             (current (agentic-ai-lab-temporal-support-evaluate p j (at 1) #f 128)))
         (check (.ref bound 'proof-admitted?) => #t)
         (check (.ref bound 'binding-verified?) => #t)
         (check (.ref bound 'mrr-rule-equivalence-verified?) => #f)
         (check (.ref (car (.ref current 'conclusions)) 'status) => 'supported)
         (let* ((first (car facts))
-               (changed (poo-flow-temporal-evidence-journal "bound" "txn"
+               (changed (agentic-ai-lab-temporal-evidence-journal "bound" "txn"
                  (append (.ref j 'revisions)
-                   (list (poo-flow-temporal-evidence-revision "correction" (.ref first 'identity)
+                   (list (agentic-ai-lab-temporal-evidence-revision "correction" (.ref first 'identity)
                      'correct (.ref first 'identity) (at 2)
-                     (poo-flow-temporal-interval "v2" (at 0) (at 10) #t #f) "changed-content"))))))
-          (check (.ref (car (.ref (poo-flow-temporal-support-evaluate p changed (at 2) #f 128) 'conclusions)) 'status) => 'unsupported)
-          (check (.ref (car (.ref (poo-flow-temporal-support-evaluate p changed (at 1) #f 128) 'conclusions)) 'status) => 'supported)
+                     (agentic-ai-lab-temporal-interval "v2" (at 0) (at 10) #t #f) "changed-content"))))))
+          (check (.ref (car (.ref (agentic-ai-lab-temporal-support-evaluate p changed (at 2) #f 128) 'conclusions)) 'status) => 'unsupported)
+          (check (.ref (car (.ref (agentic-ai-lab-temporal-support-evaluate p changed (at 1) #f 128) 'conclusions)) 'status) => 'supported)
           (check (.ref bound 'proof-admitted?) => #t))
-        (check (.ref (poo-flow-temporal-proof-support-replay bound a s proposal receipt 512 32 out bindings j)
+        (check (.ref (agentic-ai-lab-temporal-proof-support-replay bound a s proposal receipt 512 32 out bindings j)
                      'semantic-digest) => (.ref bound 'semantic-digest))
-        (check-rejected (poo-flow-temporal-proof-support "derivation" a s proposal receipt 512 32
-          root (poo-flow-temporal-mrr-fact-content "output" "generation" "path-id" "path" '(1 99)) bindings j) )
-        (check-rejected (poo-flow-temporal-proof-support "derivation" a s proposal receipt 512 32
+        (check-rejected (agentic-ai-lab-temporal-proof-support "derivation" a s proposal receipt 512 32
+          root (agentic-ai-lab-temporal-mrr-fact-content "output" "generation" "path-id" "path" '(1 99)) bindings j) )
+        (check-rejected (agentic-ai-lab-temporal-proof-support "derivation" a s proposal receipt 512 32
           root out (cdr bindings) j) )
-        (check-rejected (poo-flow-temporal-proof-support "derivation" a s proposal receipt 512 32
+        (check-rejected (agentic-ai-lab-temporal-proof-support "derivation" a s proposal receipt 512 32
           root out (cons (car bindings) bindings) j) )
-        (check-rejected (poo-flow-temporal-proof-support "derivation" a s proposal receipt 512 32
-          root (poo-flow-temporal-mrr-fact-content "output" "foreign-generation" "path-id" "path" '(1 3)) bindings j) )
-        (check-rejected (poo-flow-temporal-proof-support "derivation" a s proposal receipt 512 32
-          root out bindings (poo-flow-temporal-evidence-journal "wrong" "txn"
-            (map (lambda (f) (poo-flow-temporal-evidence-revision (.ref f 'identity) (.ref f 'identity)
-              'assert #f (at 1) (poo-flow-temporal-interval "v" (at 0) (at 10) #t #f) "unbound-content")) facts))) )
-        (check-rejected (poo-flow-temporal-proof-support-replay
+        (check-rejected (agentic-ai-lab-temporal-proof-support "derivation" a s proposal receipt 512 32
+          root (agentic-ai-lab-temporal-mrr-fact-content "output" "foreign-generation" "path-id" "path" '(1 3)) bindings j) )
+        (check-rejected (agentic-ai-lab-temporal-proof-support "derivation" a s proposal receipt 512 32
+          root out bindings (agentic-ai-lab-temporal-evidence-journal "wrong" "txn"
+            (map (lambda (f) (agentic-ai-lab-temporal-evidence-revision (.ref f 'identity) (.ref f 'identity)
+              'assert #f (at 1) (agentic-ai-lab-temporal-interval "v" (at 0) (at 10) #t #f) "unbound-content")) facts))) )
+        (check-rejected (agentic-ai-lab-temporal-proof-support-replay
           (.o (:: @ bound) output: (.o (:: @ (.ref bound 'output)) row: '(9 9)))
           a s proposal receipt 512 32 out bindings j) )
-        (check-rejected (poo-flow-temporal-proof-support-replay
+        (check-rejected (agentic-ai-lab-temporal-proof-support-replay
           (.o (:: @ bound) support: (.o (:: @ (.ref bound 'support)) proof-identity: "forged"))
           a s proposal receipt 512 32 out bindings j) )))
     (yuanxu-test-case "fact digest rejects unsupported scalar types and forged content"
-      (let (f (poo-flow-temporal-mrr-fact-content "id" "generation" "relation" "edge" '(1 #t)))
-        (check-rejected (poo-flow-temporal-mrr-fact-content "id" "generation" "relation" "edge" '(1.0)) )
-        (check-rejected (poo-flow-temporal-mrr-fact-content "id" "generation" "relation" "edge" '()) )
-        (check-rejected (poo-flow-temporal-mrr-fact-content-replay (.o (:: @ f) row: '(2 #t))) )))
+      (let (f (agentic-ai-lab-temporal-mrr-fact-content "id" "generation" "relation" "edge" '(1 #t)))
+        (check-rejected (agentic-ai-lab-temporal-mrr-fact-content "id" "generation" "relation" "edge" '(1.0)) )
+        (check-rejected (agentic-ai-lab-temporal-mrr-fact-content "id" "generation" "relation" "edge" '()) )
+        (check-rejected (agentic-ai-lab-temporal-mrr-fact-content-replay (.o (:: @ f) row: '(2 #t))) )))
     (yuanxu-test-case "original MRR fact and Derivation fixture binds to native proof leaves"
       (let* ((cases (call-with-input-file "t/qualification/temporal-library-basic/fact-binding-v1/typed-facts.ss"
                       (lambda (p) (read-line p) (read-line p) (scheme-wire-read (read-line p)))))
              (facts (map (lambda (c) (let (r (hash-ref c "request"))
-                       (poo-flow-temporal-mrr-fact-content (hash-ref r "identity") (hash-ref r "generation")
+                       (agentic-ai-lab-temporal-mrr-fact-content (hash-ref r "identity") (hash-ref r "generation")
                          (hash-ref r "relationId") (hash-ref r "evaluatorRelation") (hash-ref r "row")))) cases))
              (inputs (list (car facts) (cadr facts))) (out (caddr facts))
              (origin (hash-ref (caddr cases) "originalDerivation"))
@@ -457,12 +457,12 @@
              (nodes (filter (lambda (n) (eq? (proof-node-kind n) 'source)) (positive-proof-nodes proof)))
              (bindings (map (lambda (f)
                (let (node (car (filter (lambda (n) (equal? (proof-node-row n) (.ref f 'row))) nodes)))
-                 (poo-flow-temporal-proof-source-binding (proof-node-id node) f (.ref f 'identity) (.ref f 'identity)))) inputs))
-             (j (poo-flow-temporal-evidence-journal "typed" "txn"
-                  (map (lambda (f) (poo-flow-temporal-evidence-revision (.ref f 'identity) (.ref f 'identity)
-                    'assert #f (at 1) (poo-flow-temporal-interval "v" (at 0) (at 10) #t #f)
+                 (agentic-ai-lab-temporal-proof-source-binding (proof-node-id node) f (.ref f 'identity) (.ref f 'identity)))) inputs))
+             (j (agentic-ai-lab-temporal-evidence-journal "typed" "txn"
+                  (map (lambda (f) (agentic-ai-lab-temporal-evidence-revision (.ref f 'identity) (.ref f 'identity)
+                    'assert #f (at 1) (agentic-ai-lab-temporal-interval "v" (at 0) (at 10) #t #f)
                     (.ref f 'semantic-digest))) inputs)))
-             (bound (poo-flow-temporal-proof-support (hash-ref origin "identity") a s proposal receipt 512 32
+             (bound (agentic-ai-lab-temporal-proof-support (hash-ref origin "identity") a s proposal receipt 512 32
                       (car (positive-proof-roots proof)) out bindings j))
              (support (.ref bound 'support)))
         (for-each (lambda (c f) (check (.ref f 'semantic-digest) => (hash-ref (hash-ref c "expected") "contentDigest"))) cases facts)
@@ -476,30 +476,30 @@
 
 ;;; Inert original-owner projection fixture; the normal API is native POO values.
 (def (mrr-rule-program-fixture)
-  (let* ((data (call-with-input-file (or (getenv "POO_FLOW_MRR_RULE_ORACLE" #f)
+  (let* ((data (call-with-input-file (or (getenv "AGENTIC_AI_LAB_MRR_RULE_ORACLE" #f)
                     "t/qualification/temporal-library-basic/rule-correspondence-v1/typed-rules.ss")
                  (lambda (p) (scheme-wire-read (read-line p)))))
          (term (lambda (t) (if (equal? (hash-ref t "kind") "variable")
-                 (poo-flow-temporal-rule-variable (hash-ref t "name"))
-                 (poo-flow-temporal-rule-literal (hash-ref t "value")))))
-         (atom (lambda (a) (poo-flow-temporal-rule-atom (hash-ref a "relationId") (map term (hash-ref a "terms")))))
-         (relations (map (lambda (r) (poo-flow-temporal-rule-relation (hash-ref r "identity") (hash-ref r "predicate")
+                 (agentic-ai-lab-temporal-rule-variable (hash-ref t "name"))
+                 (agentic-ai-lab-temporal-rule-literal (hash-ref t "value")))))
+         (atom (lambda (a) (agentic-ai-lab-temporal-rule-atom (hash-ref a "relationId") (map term (hash-ref a "terms")))))
+         (relations (map (lambda (r) (agentic-ai-lab-temporal-rule-relation (hash-ref r "identity") (hash-ref r "predicate")
                        (map string->symbol (hash-ref r "columns")))) (hash-ref data "relations")))
-         (rules (map (lambda (r) (poo-flow-temporal-rule (hash-ref r "identity") (atom (hash-ref r "head"))
+         (rules (map (lambda (r) (agentic-ai-lab-temporal-rule (hash-ref r "identity") (atom (hash-ref r "head"))
                    (map atom (hash-ref r "body")))) (hash-ref data "rules"))))
-    (poo-flow-temporal-rule-program (hash-ref data "identity") (hash-ref data "catalogDigest")
+    (agentic-ai-lab-temporal-rule-program (hash-ref data "identity") (hash-ref data "catalogDigest")
       (hash-ref data "generation") (hash-ref data "ascentGeneration") relations rules)))
 
 (def (mrr-derivation-fixture)
-  (let* ((data (call-with-input-file (or (getenv "POO_FLOW_MRR_DERIVATION_ORACLE" #f)
+  (let* ((data (call-with-input-file (or (getenv "AGENTIC_AI_LAB_MRR_DERIVATION_ORACLE" #f)
                    "t/qualification/temporal-library-basic/derivation-authority-v1/typed-derivations.ss")
                 (lambda (p) (scheme-wire-read (read-line p)))))
          (p (mrr-rule-program-fixture))
          (facts (map (lambda (row) (let (f (hash-ref row "content"))
-                  (poo-flow-temporal-mrr-fact-content (hash-ref f "identity") (hash-ref f "generation")
+                  (agentic-ai-lab-temporal-mrr-fact-content (hash-ref f "identity") (hash-ref f "generation")
                     (hash-ref f "relationId") (hash-ref f "evaluatorRelation") (hash-ref f "row")))) (hash-ref data "facts")))
          (get-fact (lambda (id) (car (filter (lambda (f) (equal? (.ref f 'identity) id)) facts))))
-         (ds (map (lambda (d) (poo-flow-temporal-mrr-derivation (hash-ref d "identity") (hash-ref d "rule")
+         (ds (map (lambda (d) (agentic-ai-lab-temporal-mrr-derivation (hash-ref d "identity") (hash-ref d "rule")
                (hash-ref d "generation") (get-fact (hash-ref d "output")) (hash-ref d "supports"))) (hash-ref data "derivations")))
          (s (source 1)) (r (reasoning-attempt s proposal 512)) (a (admit s proposal r))
          (nodes (positive-proof-nodes (reasoning-receipt-proof r)))
@@ -507,41 +507,41 @@
                      (let* ((node (car (filter (lambda (n) (and (equal? (proof-node-row n) (.ref f 'row))
                                   (equal? (symbol->string (proof-node-relation n)) (.ref f 'evaluator-relation)))) nodes)))
                             (d (find (lambda (d) (equal? (.ref (.ref d 'output) 'identity) (.ref f 'identity))) ds)))
-                       (poo-flow-temporal-proof-node-fact (proof-node-id node) f d))) facts))
+                       (agentic-ai-lab-temporal-proof-node-fact (proof-node-id node) f d))) facts))
          (leaves (filter (lambda (b) (not (.ref b 'derivation))) bindings))
          (source-bindings (map (lambda (b) (let (f (.ref b 'fact))
-                   (poo-flow-temporal-proof-source-binding (.ref b 'node) f (.ref f 'identity) (.ref f 'identity)))) leaves))
-         (j (poo-flow-temporal-evidence-journal "original-lineage" "txn"
-              (map (lambda (b) (let (f (.ref b 'fact)) (poo-flow-temporal-evidence-revision (.ref f 'identity) (.ref f 'identity)
-                'assert #f (at 1) (poo-flow-temporal-interval "v" (at 0) (at 10) #t #f) (.ref f 'semantic-digest)))) leaves)))
+                   (agentic-ai-lab-temporal-proof-source-binding (.ref b 'node) f (.ref f 'identity) (.ref f 'identity)))) leaves))
+         (j (agentic-ai-lab-temporal-evidence-journal "original-lineage" "txn"
+              (map (lambda (b) (let (f (.ref b 'fact)) (agentic-ai-lab-temporal-evidence-revision (.ref f 'identity) (.ref f 'identity)
+                'assert #f (at 1) (agentic-ai-lab-temporal-interval "v" (at 0) (at 10) #t #f) (.ref f 'semantic-digest)))) leaves)))
          (out (get-fact (hash-ref data "rootFact")))
          (root (car (positive-proof-roots (reasoning-receipt-proof r))))
          (root-d (find (lambda (d) (equal? (.ref (.ref d 'output) 'identity) (.ref out 'identity))) ds))
-         (bound (poo-flow-temporal-proof-support (.ref root-d 'identity) a s proposal r 512 32 root out source-bindings j))
-         (c (poo-flow-temporal-rule-correspondence-from-ascent p a s proposal r 512 32)))
+         (bound (agentic-ai-lab-temporal-proof-support (.ref root-d 'identity) a s proposal r 512 32 root out source-bindings j))
+         (c (agentic-ai-lab-temporal-rule-correspondence-from-ascent p a s proposal r 512 32)))
     (unless (and (equal? (.ref p 'catalog-digest) (hash-ref (hash-ref data "program") "catalogDigest"))
                  (equal? (.ref p 'generation) (.ref out 'generation))) (error "original fixture program mismatch"))
     (list p c bound a s r bindings out source-bindings j)))
 (def (derive-selected ctx bindings)
   (apply (lambda (p c b a s r original out sources j)
-    (poo-flow-temporal-mrr-derivation-from-ascent "qualified" p c b a s proposal r 512 32 bindings out sources j)) ctx))
+    (agentic-ai-lab-temporal-mrr-derivation-from-ascent "qualified" p c b a s proposal r 512 32 bindings out sources j)) ctx))
 (def (replay-selected held ctx bindings)
   (apply (lambda (p c b a s r original out sources j)
-    (poo-flow-temporal-mrr-derivation-admission-replay held p c b a s proposal r 512 32 bindings out sources j)) ctx))
+    (agentic-ai-lab-temporal-mrr-derivation-admission-replay held p c b a s proposal r 512 32 bindings out sources j)) ctx))
 
 (def (selected-context ctx)
   (apply (lambda (p c b a s r bindings out sources j)
-    (poo-flow-temporal-derivation-context (derive-selected ctx bindings) p c b a s proposal r 512 32 bindings out sources j)) ctx))
+    (agentic-ai-lab-temporal-derivation-context (derive-selected ctx bindings) p c b a s proposal r 512 32 bindings out sources j)) ctx))
 (def (register-selected host snapshot ctx)
-  (poo-flow-temporal-proof-host-register! host "source" (.ref snapshot 'semantic-digest) (selected-context ctx) "policy"))
+  (agentic-ai-lab-temporal-proof-host-register! host "source" (.ref snapshot 'semantic-digest) (selected-context ctx) "policy"))
 (def (proof-current host registration state-generation policy-generation p)
-  (poo-flow-temporal-proof-host-current host (.ref registration 'identity) state-generation policy-generation (.ref p 'semantic-digest) 128))
+  (agentic-ai-lab-temporal-proof-host-current host (.ref registration 'identity) state-generation policy-generation (.ref p 'semantic-digest) 128))
 (def (corrected-journal j)
   (let (first (car (.ref j 'revisions)))
-    (poo-flow-temporal-evidence-journal (.ref j 'identity) (.ref j 'admission-domain-identity)
-      (append (.ref j 'revisions) (list (poo-flow-temporal-evidence-revision "late-correction"
+    (agentic-ai-lab-temporal-evidence-journal (.ref j 'identity) (.ref j 'admission-domain-identity)
+      (append (.ref j 'revisions) (list (agentic-ai-lab-temporal-evidence-revision "late-correction"
         (.ref first 'subject-identity) 'correct (.ref first 'identity) (at 2)
-        (poo-flow-temporal-interval "v2" (at 0) (at 10) #t #f) "changed"))))))
+        (agentic-ai-lab-temporal-interval "v2" (at 0) (at 10) #t #f) "changed"))))))
 
 ;;; Context owner enrollment associates its source-relative Task with the retained
 ;;; Temporal proof. This fixture does not assert Org-to-Fact source refinement.
@@ -550,21 +550,21 @@
   destination: "provider" session: "session" turn: 0))
 (def context-source "* TODO Work\n:PROPERTIES:\n:ID: work\n:END:\n")
 (def (context-proof-setup)
-  (let* ((ctx (mrr-derivation-fixture)) (ph (poo-flow-temporal-support-policy-host))
-         (proof-host (poo-flow-temporal-proof-host ph)) (p (policy "v1"))
-         (snapshot (poo-flow-temporal-proof-host-refresh! proof-host "source" 1 (car ctx) (list-ref ctx 9)))
+  (let* ((ctx (mrr-derivation-fixture)) (ph (agentic-ai-lab-temporal-support-policy-host))
+         (proof-host (agentic-ai-lab-temporal-proof-host ph)) (p (policy "v1"))
+         (snapshot (agentic-ai-lab-temporal-proof-host-refresh! proof-host "source" 1 (car ctx) (list-ref ctx 9)))
          (registration (register-selected proof-host snapshot ctx))
-         (grants (poo-flow-context-use-host)) (context-host (poo-flow-ai-agentic-context-session-host grants ph #t))
-         (contract (poo-flow-context-use-contract "actor" "task" "context-policy" '() '() #t)))
-    (poo-flow-temporal-support-policy-host-refresh! ph p 1 (at 1))
-    (poo-flow-context-use-host-refresh! grants
-      (poo-flow-context-use-grant "grant" 1 "manifest" "admission" contract "policy" (.ref p 'semantic-digest) '(display) #t))
-    (poo-flow-ai-agentic-context-session-host-enroll! context-host 0 context-source context-scope
-      (poo-flow-context-restriction "domain" '("actor") '("provider") '("org") 0 8)
-      (poo-flow-ai-agentic-context-profile #f) 0 '("work") "grant" 1)
+         (grants (agentic-ai-lab-context-use-host)) (context-host (agentic-ai-lab-ai-agentic-context-session-host grants ph #t))
+         (contract (agentic-ai-lab-context-use-contract "actor" "task" "context-policy" '() '() #t)))
+    (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 1 (at 1))
+    (agentic-ai-lab-context-use-host-refresh! grants
+      (agentic-ai-lab-context-use-grant "grant" 1 "manifest" "admission" contract "policy" (.ref p 'semantic-digest) '(display) #t))
+    (agentic-ai-lab-ai-agentic-context-session-host-enroll! context-host 0 context-source context-scope
+      (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 8)
+      (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant" 1)
     (values context-host proof-host ph registration p ctx)))
 (def (context-bind host proof-host registration p revision source-generation state-generation policy-generation)
-  (poo-flow-ai-agentic-context-session-host-require-proof! host "session" revision source-generation
+  (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host "session" revision source-generation
     proof-host (.ref registration 'identity) state-generation policy-generation (.ref p 'semantic-digest) 128))
 (def (context-claim host revision source-generation)
-  (poo-flow-ai-agentic-context-session-host-claim! host "session" revision source-generation "attempt" "request"))
+  (agentic-ai-lab-ai-agentic-context-session-host-claim! host "session" revision source-generation "attempt" "request"))

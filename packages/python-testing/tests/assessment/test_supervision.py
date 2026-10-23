@@ -10,13 +10,13 @@ import time
 import unittest
 from unittest.mock import patch
 
-from poo_flow_testing.assessment_studies.supervision import proc_group_cpu, darwin_process_cpu
+from agentic_ai_lab_testing.assessment_studies.supervision import proc_group_cpu, darwin_process_cpu
 
 
 class BuildActivity(unittest.TestCase):
     def run_child(self, code):
         return subprocess.run(
-            [sys.executable, str(Path(__import__('poo_flow_testing.assessment_studies.supervision',fromlist=['x']).__file__)),
+            [sys.executable, str(Path(__import__('agentic_ai_lab_testing.assessment_studies.supervision',fromlist=['x']).__file__)),
              '--cpu-progress', '--startup-seconds', '2', '--idle-seconds', '2',
              '--', sys.executable, '-c', code],
             capture_output=True, text=True, timeout=15)
@@ -69,8 +69,8 @@ class BuildActivity(unittest.TestCase):
             return 0
         for scale in (125 / 3 / 1e9, 1 / 1e9):
             with self.subTest(scale=scale), \
-                 patch('poo_flow_testing.assessment_studies.supervision.darwin_rusage', return_value=read), \
-                 patch('poo_flow_testing.assessment_studies.supervision.darwin_cpu_seconds_per_tick', return_value=scale):
+                 patch('agentic_ai_lab_testing.assessment_studies.supervision.darwin_rusage', return_value=read), \
+                 patch('agentic_ai_lab_testing.assessment_studies.supervision.darwin_cpu_seconds_per_tick', return_value=scale):
                 self.assertAlmostEqual(darwin_process_cpu(42), 24000000 * scale)
 
     @unittest.skipUnless(sys.platform == 'darwin', 'Darwin native CPU clock')
@@ -98,7 +98,7 @@ class BuildActivity(unittest.TestCase):
 class SeparateStreams(unittest.TestCase):
     def run_child(self, code):
         return subprocess.run(
-            [sys.executable, str(Path(__import__('poo_flow_testing.assessment_studies.supervision',fromlist=['x']).__file__)),
+            [sys.executable, str(Path(__import__('agentic_ai_lab_testing.assessment_studies.supervision',fromlist=['x']).__file__)),
              '--separate-stderr', '--startup-seconds', '.5', '--idle-seconds', '.5',
              '--', sys.executable, '-c', code],
             capture_output=True, timeout=5)

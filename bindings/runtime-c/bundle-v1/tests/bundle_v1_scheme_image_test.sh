@@ -14,7 +14,7 @@ core_package=$5
 GERBIL_LOADPATH=$PWD:$(dirname "$core_package"):$(dirname "$clan_package")${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}
 export GERBIL_LOADPATH
 
-temporary=${TEST_TMPDIR:-${TMPDIR:-/tmp}}/poo-flow-bundle-v1.$$
+temporary=${TEST_TMPDIR:-${TMPDIR:-/tmp}}/agentic-ai-lab-bundle-v1.$$
 descriptor=$temporary.descriptor.bin
 arena=$temporary.arena.bin
 trap 'rm -f "$descriptor" "$arena"' EXIT HUP INT TERM

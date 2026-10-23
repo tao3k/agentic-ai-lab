@@ -1,12 +1,12 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+title: POO Flow Nix C API Binding Qualification
+#+title: Agentic AI Lab Nix C API Binding Qualification
 #+language: en
 
 * Boundary
 
-The C binding and process bootstrap belong to POO Flow, never Yuanxu.
+The C binding and process bootstrap belong to Agentic AI Lab, never Yuanxu.
 =call-with-flake-session= parses a reference, strictly checks its lock and
 selects an output function using =libflake-c=. =session-query= calls that
 function in the same EvalState. Scope/lifetime are explicit; no evaluation
@@ -68,7 +68,7 @@ just --justfile bindings/nix-c-api/Justfile test
 
 The real product suite has matched =product-native= and =product-cli= modes in
 the same Just entrypoint. Supply the existing real Provider fixture's
-=POO_FLOW_OPENTOFU_FLAKE_ARTIFACT= and =POO_FLOW_NIX_TEST_TOOLS=. These modes use
+=AGENTIC_AI_LAB_OPENTOFU_FLAKE_ARTIFACT= and =AGENTIC_AI_LAB_NIX_TEST_TOOLS=. These modes use
 pure evaluation and the same startup libraries. The CLI control includes the
 strict root-lock preflight required when an override would enable virtual
 locking. Unsupported native override shapes use that same strict CLI path;
@@ -118,7 +118,7 @@ cold latency. See [[file:../../docs/10-19-design/10.08-config-languages/16-nix-c
 
 The profile backend additionally records thread CPU, Nix GC allocation/time
 and process rusage counters. These counters are disabled in ordinary runs.
-Use =POO_FLOW_NIX_PROFILE_LOG=/absolute/local/path= to retain the partial
+Use =AGENTIC_AI_LAB_NIX_PROFILE_LOG=/absolute/local/path= to retain the partial
 Harness transcript through existing Ops logging. Completed query timings are
 flushed; stalled calls retain the same idle deadline. See
 [[file:../../docs/10-19-design/10.08-config-languages/17-nix-c-api-wait-attribution.org][the wait-attribution report]] for host-contention controls and measurement limits.

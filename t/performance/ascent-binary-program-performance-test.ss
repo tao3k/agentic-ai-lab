@@ -11,11 +11,11 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-binary-program
-                 poo-flow-ascent-binary-relation
-                 poo-flow-ascent-binary-copy-rule
-                 poo-flow-ascent-binary-join-rule
-                 poo-flow-ascent-evaluate-binary-program))
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-binary-program
+                 agentic-ai-lab-ascent-binary-relation
+                 agentic-ai-lab-ascent-binary-copy-rule
+                 agentic-ai-lab-ascent-binary-join-rule
+                 agentic-ai-lab-ascent-evaluate-binary-program))
 
 (export ascent-binary-program-performance-test)
 
@@ -30,17 +30,17 @@
 (def program
   (.o (radix width)
       (relations
-       (list (poo-flow-ascent-binary-relation 'edge edges)
-             (poo-flow-ascent-binary-relation 'reach
+       (list (agentic-ai-lab-ascent-binary-relation 'edge edges)
+             (agentic-ai-lab-ascent-binary-relation 'reach
                                              (.ref UIntTrieSet '.empty))))
       (rules
-       (list (poo-flow-ascent-binary-copy-rule 'reach 'edge)
-             (poo-flow-ascent-binary-join-rule 'reach 'reach 'edge)))
+       (list (agentic-ai-lab-ascent-binary-copy-rule 'reach 'edge)
+             (agentic-ai-lab-ascent-binary-join-rule 'reach 'reach 'edge)))
       (max-input-facts 19) (max-derived-pairs 400)
       (max-output-pairs 400)))
 
 (def (candidate-evaluation)
-  (poo-flow-ascent-evaluate-binary-program program))
+  (agentic-ai-lab-ascent-evaluate-binary-program program))
 
 (def (expected-chain-pairs)
   (let from-loop ((from 0) (acc []))
@@ -60,6 +60,6 @@
         (let (reach ((.ref actual 'pair-list-of) 'reach))
           (check-equal? (length reach) 190)
           (check-equal? reach (expected-chain-pairs)))
-        (display "[poo-flow-benchmark] ascent-binary-program p95=")
+        (display "[agentic-ai-lab-benchmark] ascent-binary-program p95=")
         (displayln (benchmark-fixture-ref receipt 'elapsed))
         (check-equal? (benchmark-receipt-pass? receipt) #t)))))

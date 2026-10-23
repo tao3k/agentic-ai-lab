@@ -19,14 +19,14 @@
    :yuanxu/graph/types-core
    :yuanxu/graph/types-contracts
    :yuanxu/graph/types
-   :poo-flow/modules/temporal-causality/types
-   :poo-flow/modules/temporal-causality/objects
-   :poo-flow/modules/temporal-causality/funs
-   :poo-flow/modules/temporal-causality/time/types
-   :poo-flow/modules/temporal-causality/time/objects
-   :poo-flow/modules/temporal-causality/time/uncertainty-types
-   :poo-flow/modules/temporal-causality/time/uncertainty-objects
-   :poo-flow/modules/temporal-causality/time/uncertainty-funs
+   :agentic-ai-lab/modules/temporal-causality/types
+   :agentic-ai-lab/modules/temporal-causality/objects
+   :agentic-ai-lab/modules/temporal-causality/funs
+   :agentic-ai-lab/modules/temporal-causality/time/types
+   :agentic-ai-lab/modules/temporal-causality/time/objects
+   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-objects
+   :agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs
    :gerbil-ascent/core/binary-relation
    :gerbil-ascent/table/expression
    :gerbil-ascent/table/funs
@@ -81,6 +81,6 @@
    :gerbil-ascent/temporal/graph
    :gerbil-ascent/temporal/lens
    :gerbil-ascent/interface/request
-   :poo-flow/modules/temporal-causality/ascent-exchange
+   :agentic-ai-lab/modules/temporal-causality/ascent-exchange
    :gerbil/tools/gxtest))
 (eval '(exit (gerbil/tools/gxtest#main "-v" "5" "t/ascent-temporal-lens-test.ss")))

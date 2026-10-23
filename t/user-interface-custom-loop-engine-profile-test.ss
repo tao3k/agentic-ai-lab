@@ -12,9 +12,9 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
         (only-in "../user-interface/custom/my-module/profiles/loops"
-                 poo-flow-custom-my-module-loops-module))
+                 agentic-ai-lab-custom-my-module-loops-module))
 
 (export user-interface-custom-loop-engine-profile-test)
 
@@ -44,7 +44,7 @@
 ;;; shape that downstream agents see before runtime manifest expansion.
 ;; : Symbol
 (def expected-loop-engine-profile-human-audit-result-contract
-  'poo-flow.loop-governor.profile-human-audit-decision.v1)
+  'agentic-ai-lab.loop-governor.profile-human-audit-decision.v1)
 
 ;; : [Symbol]
 (def expected-loop-engine-profile-required-result-fields
@@ -54,7 +54,7 @@
 ;;; the same module-selection path a downstream user configuration would use.
 ;; : (-> PooUserModuleSelection POOObject)
 (def (custom-loop-presentation module-bundle)
-  (pooFlowUserConfigPresentation
+  (agenticAiLabUserConfigPresentation
    (yuanxuUserConfig
     (yuanxu-user-module-bundles->modules (list module-bundle))
     (yuanxu-settings))))
@@ -66,7 +66,7 @@
   (yuanxu-test-case "projects custom loop-engine profile use cases"
     (let* ((presentation
             (custom-loop-presentation
-             poo-flow-custom-my-module-loops-module))
+             agentic-ai-lab-custom-my-module-loops-module))
            (intent
             (car (.ref presentation 'loop-engine-intents)))
            (result-contract
@@ -147,15 +147,15 @@
                     'before-release-approval)
       (check-equal? (test-ref intent 'result)
                     '((default
-                       . poo-flow.loop-governor.profile-node-result.v1)
+                       . agentic-ai-lab.loop-governor.profile-node-result.v1)
                       (auditor
-                       . poo-flow.loop-governor.profile-audit-result.v1)
+                       . agentic-ai-lab.loop-governor.profile-audit-result.v1)
                       (verifier
-                       . poo-flow.loop-governor.profile-review-result.v1)
+                       . agentic-ai-lab.loop-governor.profile-review-result.v1)
                       (governor
-                       . poo-flow.loop-governor.profile-governor-result.v1)
+                       . agentic-ai-lab.loop-governor.profile-governor-result.v1)
                       (human-audit
-                       . poo-flow.loop-governor.profile-human-audit-decision.v1)
+                       . agentic-ai-lab.loop-governor.profile-human-audit-decision.v1)
                       (format . structured-alist)
                       (required-fields
                        decision
@@ -185,5 +185,5 @@
 ;;; into ABI descriptor assembly.
 ;; : TestSuite
 (def user-interface-custom-loop-engine-profile-test
-  (test-suite "poo-flow custom loop-engine profile declarations"
+  (test-suite "agentic-ai-lab custom loop-engine profile declarations"
     (user-interface-custom-loop-engine-profile-case)))

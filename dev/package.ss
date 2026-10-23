@@ -6,7 +6,7 @@
 ;;; -*- Gerbil -*-
 ;;; Development-only policy declaration for the production package.
 
-(export poo-flow-package-spec poo-flow-native-spec)
+(export agentic-ai-lab-package-spec agentic-ai-lab-native-spec)
 
 (import (only-in :std/source this-source-file)
         ;; Native package declaration only needs the latency-bounded PackageSpec
@@ -17,7 +17,7 @@
                  asp-gerbil-scheme-library-package-prototype
                  default-exclude-dirs))
 
-(def +poo-flow-build-exclude-dirs+
+(def +agentic-ai-lab-build-exclude-dirs+
   (append '("packages/lambda-episteme"
             "core"
             "bindings"
@@ -52,9 +52,9 @@
    (else '(gxc: "modules/workflow/runtime/semantic"))))
 
 (asp-gerbil-scheme-package-spec!
- (poo-flow-package-spec
+ (agentic-ai-lab-package-spec
  @ asp-gerbil-scheme-library-package-prototype)
- (spec poo-flow-native-spec)
+ (spec agentic-ai-lab-native-spec)
  (public-entry-modules
   '("init.ss"
     "modules/workflow/scenario/bundle-v1-projection.ss"
@@ -106,7 +106,7 @@
     "modules/workflow/runtime/temporal-proof.ss"
     "modules/workflow/runtime/temporal-proof-host.ss"
 ))
- (exclude-dirs +poo-flow-build-exclude-dirs+)
+ (exclude-dirs +agentic-ai-lab-build-exclude-dirs+)
  (exclude-modules '("modules/nono-sandbox/_nono.ss"
                     "modules/workflow/runtime/runtime-v0-native.ss"
                     "modules/workflow/runtime/semantic.ss"

@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-name = "POOFlowCompositionProofs"
+name = "AgenticAILabCompositionProofs"
 version = "0.1.0"
-defaultTargets = ["PooFlowComposition", "SearchAttempt", "SearchTemporal", "SearchReadiness", "SearchDag", "SearchEvidence", "SearchEvidenceHistory"]
+defaultTargets = ["AgenticAILabComposition", "SearchAttempt", "SearchTemporal", "SearchReadiness", "SearchDag", "SearchEvidence", "SearchEvidenceHistory"]
 moreLeanArgs = ["-DautoImplicit=false", "-DwarningAsError=true"]
 
 [[require]]
@@ -12,7 +12,7 @@ git = "https://github.com/tao3k/lean-poo.git"
 rev = "0a111f6c5de43b261de5bba9287b48540d9f7c2e"
 
 [[lean_lib]]
-name = "PooFlowComposition"
+name = "AgenticAILabComposition"
 
 [[lean_lib]]
 name = "SearchAttempt"

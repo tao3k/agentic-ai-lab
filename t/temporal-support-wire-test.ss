@@ -1,9 +1,9 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test (only-in :poo-flow/testing-api yuanxu-test-case)
-        :poo-flow/modules/workflow/runtime/scheme-wire
-        :poo-flow/modules/workflow/runtime/temporal-support :poo-flow/modules/workflow/runtime/temporal-policy)
+(import :std/test (only-in :agentic-ai-lab/testing-api yuanxu-test-case)
+        :agentic-ai-lab/modules/workflow/runtime/scheme-wire
+        :agentic-ai-lab/modules/workflow/runtime/temporal-support :agentic-ai-lab/modules/workflow/runtime/temporal-policy)
 (export temporal-support-wire-test)
 (def (wire x) (scheme-wire-read (scheme-wire-write x)))
 (def (revision id op predecessor n)
@@ -11,7 +11,7 @@
     (admitted n) (validRange (if (equal? op "retract") #f '(0 10)))
     (content (if (equal? op "retract") #f id))))
 (def (task n)
-  (hash (schema "poo-flow.temporal-support-request.v1")
+  (hash (schema "agentic-ai-lab.temporal-support-request.v1")
     (program (hash (identity "named-wire") (policy "named-wire-policy") (complete #t)
       (conclusions '("claim" "child" "empty"))
       (supports (list
@@ -26,11 +26,11 @@
   (hash (identity (number->string n)) (domain "policy-clock") (coordinate n)
     (provenance "host") (modality "observed")))
 (def (refresh generation now)
-  (temporal-policy-refresh (wire (hash (schema "poo-flow.temporal-policy-refresh-request.v1")
+  (temporal-policy-refresh (wire (hash (schema "agentic-ai-lab.temporal-policy-refresh-request.v1")
     (policy (hash (identity "named-wire-policy") (revision "v1") (start (instant 1)) (end (instant 3))))
     (generation generation) (effectiveAt (instant now))))))
 (def (query registered n expected)
-  (wire (hash (schema "poo-flow.temporal-support-claim-request.v1")
+  (wire (hash (schema "agentic-ai-lab.temporal-support-claim-request.v1")
     (expectedGeneration (hash-ref registered 'generation))
     (expectedPolicyDigest (hash-ref registered 'policyDigest))
     (task (task n)) (claim "child") (expectedContextBinding expected))))
@@ -38,7 +38,7 @@
   (test-suite "named support wire projection"
     (yuanxu-test-case "reverse projection and Context selection use native owners"
       (let* ((revision (temporal-support-revise-call
-                        (wire (hash (schema "poo-flow.temporal-support-revision-request.v1") (task (task 2)) (previousAsOf 1)))))
+                        (wire (hash (schema "agentic-ai-lab.temporal-support-revision-request.v1") (task (task 2)) (previousAsOf 1)))))
              (registered (refresh 1 1))
              (first (temporal-policy-claim-call (query registered 1 #f)))
              (stale (temporal-policy-claim-call (query registered 2 (hash-ref first 'bindingDigest)))))

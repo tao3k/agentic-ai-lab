@@ -9,7 +9,7 @@
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :poo-flow/modules/services/opentofu/objects OpenTofuScope. poo-flow-opentofu-provider-from-directory poo-flow-opentofu-block-contract) (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. agentic-ai-lab-opentofu-provider-from-directory agentic-ai-lab-opentofu-block-contract) (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
         (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
         :yuanxu/types :clan/poo/object)
 (export opentofu-indexed-inputs-test)
@@ -37,7 +37,7 @@
        (.get result diagnostics)))
 
 (def (verify-input directory name candidate unselected data-name data-candidate version)
-  (def Scope (poo-flow-opentofu-provider-from-directory directory))
+  (def Scope (agentic-ai-lab-opentofu-provider-from-directory directory))
   (def Artifact (.get Scope artifact))
   (assert 'manifest-only-ready (eq? (.get Scope status) 'ready))
   (assert 'no-kind-index-loaded-on-open
@@ -68,7 +68,7 @@
   (def whole (yuanxu-json-schema-read-file (string-append directory "/schema.json")))
   (def original (ref (ref (ref whole 'provider_schemas)
                         (string->symbol (.get Scope provider))) 'resource_schemas))
-  (def Baseline (poo-flow-opentofu-block-contract 'whole-export-control
+  (def Baseline (agentic-ai-lab-opentofu-block-contract 'whole-export-control
                    (ref (ref original name) 'block)))
   (assert 'whole-vs-indexed-contract-shape-equal (equal? (.get Baseline schema) (.get Contract schema)))
   (assert 'whole-vs-indexed-valid-admission-equal
@@ -93,7 +93,7 @@
       (copy-file (string-append directory "/indexes/resource.json") (path "indexes/resource.json"))
       (copy-file (string-append directory "/" relative) (path relative))
       (def (selected)
-        (.call (poo-flow-opentofu-provider-from-directory tmp) .contract name))
+        (.call (agentic-ai-lab-opentofu-provider-from-directory tmp) .contract name))
       (assert 'real-admission-without-whole-export
         (and (not (file-exists? (path "schema.json")))
              (accepted? (.call (selected) .admit candidate #f))))

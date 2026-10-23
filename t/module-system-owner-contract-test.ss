@@ -18,22 +18,22 @@
                  test-suite)
         (only-in :clan/poo/object .o .ref)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/module-authoring/module-interface
+        :agentic-ai-lab/modules/module-authoring/module-interface
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/module-authoring/module-descriptor
+        :agentic-ai-lab/modules/module-authoring/module-descriptor
         :yuanxu/module-system/authoring/syntax
-        :poo-flow/modules/module-authoring/module-option-projection
-        :poo-flow/modules/workflow/scenario/configuration/module-runtime-presentation
+        :agentic-ai-lab/modules/module-authoring/module-option-projection
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
         :yuanxu/module-system/catalog/values
         :yuanxu/module-system/projection/option-objects
         :yuanxu/module-system/projection/option-validation
         :yuanxu/module-system/source/imports
         :yuanxu/module-system/source/objects
         :yuanxu/module-system/funs
-        :poo-flow/modules/workflow/scenario/configuration/module-activation
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
         :yuanxu/module-system/catalog/objects
-        :poo-flow/modules/workflow/scenario/configuration/presentation-config
-        :poo-flow/modules/workflow/scenario/configuration/interface)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface)
 
 (export module-system-owner-contract-test)
 
@@ -61,7 +61,7 @@
 ;;; This suite exercises direct owner imports without an aggregate module API.
 ;; : TestSuite
 (def module-system-owner-contract-test
-  (test-suite "poo-flow module owner contracts"
+  (test-suite "agentic-ai-lab module owner contracts"
     (yuanxu-test-case "keeps the Core module entry independent of product imports"
       (check-equal?
        (call-with-input-file
@@ -69,34 +69,34 @@
         (lambda (port)
           (source-port-has-module-prefix?
            port
-           ":poo-flow/modules/"
+           ":agentic-ai-lab/modules/"
            ":yuanxu/")))
        #f)
       (check-equal?
        (source-datum-has-module-prefix?
-        '(import :poo-flow/modules/funflow/interface)
-        ":poo-flow/modules/" ":yuanxu/")
+        '(import :agentic-ai-lab/modules/funflow/interface)
+        ":agentic-ai-lab/modules/" ":yuanxu/")
        #t))
     (yuanxu-test-case "builds Marlin-style interface config descriptors"
       (let* ((interface
               (yuanxu-module-interface
                "WorkspaceProfile"
                (.o workspace-root: (yuanxu-string-default "workspace")
-                   surface: (yuanxu-string-constant "poo-flow"))
-               '((owner . "poo-flow") (surface . "module-system"))))
+                   surface: (yuanxu-string-constant "agentic-ai-lab"))
+               '((owner . "agentic-ai-lab") (surface . "module-system"))))
              (source (yuanxu-local-source "modules/workspace.ss"))
              (derived-interface
               (.o (:: @ interface)
                   schemas: (.o derived-only:
                                 (yuanxu-string-constant "derived"))))
              (module
-              (poo-flow-modules
+              (agentic-ai-lab-modules
                interface
                (.o id: 'workspace
                    imports: '()
                    config:
                    (.o workspace-root: "demo"
-                       surface: "poo-flow")
+                       surface: "agentic-ai-lab")
                    extensions: (yuanxu-extensions 'workspace-extension)
                    scripts: (list 'workspace-script)
                    metadata: '((layer . "base"))
@@ -112,18 +112,18 @@
                    '((before-init . (prepare-workspace))
                      (after-config . (publish-workspace)))
                    source-ref: source)))
-             (schemas (poo-flow-module-option-schemas module))
-             (configs (poo-flow-module-option-configs module))
-             (receipts (poo-flow-module-option-validation-receipts module)))
-        (check-equal? (poo-flow-module-descriptor? module) #t)
-        (check-equal? (poo-flow-module-name module) 'workspace)
+             (schemas (agentic-ai-lab-module-option-schemas module))
+             (configs (agentic-ai-lab-module-option-configs module))
+             (receipts (agentic-ai-lab-module-option-validation-receipts module)))
+        (check-equal? (agentic-ai-lab-module-descriptor? module) #t)
+        (check-equal? (agentic-ai-lab-module-name module) 'workspace)
         (check-equal? (yuanxu-module-interface?
-                       (poo-flow-module-interface-object module))
+                       (agentic-ai-lab-module-interface-object module))
                       #t)
         (check-equal?
          (.ref (yuanxu-module-interface-schema-spec interface "surface")
                'constant)
-         "poo-flow")
+         "agentic-ai-lab")
         (check-equal?
          (yuanxu-module-interface-schema-spec interface "missing")
          #f)
@@ -138,24 +138,24 @@
           derived-interface
           "surface")
          #f)
-        (check-equal? (cdr (assoc 'workspace-root (poo-flow-module-options module)))
+        (check-equal? (cdr (assoc 'workspace-root (agentic-ai-lab-module-options module)))
                       "demo")
-        (check-equal? (poo-flow-module-extensions module) '(workspace-extension))
-        (check-equal? (poo-flow-module-scripts module) '(workspace-script))
-        (check-equal? (poo-flow-module-metadata module) '((layer . "base")))
-        (check-equal? (poo-flow-module-group module) 'tools)
-        (check-equal? (poo-flow-module-flags module) '(+fast +gerbil))
-        (check-equal? (poo-flow-module-features module) '(poo c4))
+        (check-equal? (agentic-ai-lab-module-extensions module) '(workspace-extension))
+        (check-equal? (agentic-ai-lab-module-scripts module) '(workspace-script))
+        (check-equal? (agentic-ai-lab-module-metadata module) '((layer . "base")))
+        (check-equal? (agentic-ai-lab-module-group module) 'tools)
+        (check-equal? (agentic-ai-lab-module-flags module) '(+fast +gerbil))
+        (check-equal? (agentic-ai-lab-module-features module) '(poo c4))
         (check-equal? (yuanxu-module-depth-value module 'init) -10)
         (check-equal? (yuanxu-module-depth-value module 'config) 10)
         (check-equal? (yuanxu-module-phase-file module 'config) "config.ss")
         (check-equal? (yuanxu-module-hook-values module 'before-init)
                       '(prepare-workspace))
         (check-equal? (yuanxu-module-flag-enabled? module '+fast) #t)
-        (check-equal? (poo-flow-module-active? module '+fast '-slow) #t)
-        (check-equal? (poo-flow-module-active? module '+missing) #f)
+        (check-equal? (agentic-ai-lab-module-active? module '+fast '-slow) #t)
+        (check-equal? (agentic-ai-lab-module-active? module '+missing) #f)
         (check-equal? (yuanxu-module-source-ref=?
-                       (poo-flow-module-descriptor-source-ref module)
+                       (agentic-ai-lab-module-descriptor-source-ref module)
                        source)
                       #t)
         (check-equal? (length schemas) 2)
@@ -170,7 +170,7 @@
                                            'rust-or-external-runtime
                                            'submit))
              (child
-              (make-poo-flow-module-descriptor
+              (make-agentic-ai-lab-module-descriptor
                'child
                '()
                (make-task-family-registry 'child-tasks (list child-task))
@@ -180,53 +180,53 @@
               (yuanxu-module-interface
                "RootProfile"
                (.o surface: (yuanxu-string-default "root"))
-               '((owner . "poo-flow"))))
+               '((owner . "agentic-ai-lab"))))
              (root
-              (poo-flow-modules
+              (agentic-ai-lab-modules
                interface
                (.o id: 'root
                    imports:
                    (yuanxu-imports
-                    (yuanxu-import ":poo-flow/modules/root#child" child))
+                    (yuanxu-import ":agentic-ai-lab/modules/root#child" child))
                    config: (.o surface: "root")
                    flags: '(+root)
                    depth: (cons 10 10)
                    hooks: '((before-init . (root-hook)))
                    extensions: (yuanxu-extensions 'root-extension)
                    scripts: (list 'root-script))))
-             (activation (activate-poo-flow-modules (list root)))
+             (activation (activate-agentic-ai-lab-modules (list root)))
              (catalog (yuanxuModuleCatalog root))
-             (eval-result (poo-flow-eval-modules catalog 'root '("runtime-hook")))
-             (evaluation (poo-flow-module-evaluate root))
-             (presentation (poo-flow-module-system-presentation
+             (eval-result (agentic-ai-lab-eval-modules catalog 'root '("runtime-hook")))
+             (evaluation (agentic-ai-lab-module-evaluate root))
+             (presentation (agentic-ai-lab-module-system-presentation
                             catalog
                             'root
                             '("runtime-hook"))))
-        (check-equal? (poo-flow-module-names
-                       (poo-flow-module-activation-modules activation))
+        (check-equal? (agentic-ai-lab-module-names
+                       (agentic-ai-lab-module-activation-modules activation))
                       '(root child))
         (check-equal? (task-family-name
                        (task-family-for-kind-in
-                        (poo-flow-module-activation-task-registry activation)
+                        (agentic-ai-lab-module-activation-task-registry activation)
                         'inline-job))
                       'inline-job)
         (check-equal? (.ref eval-result 'module-count) 2)
         (check-equal? (.ref eval-result 'hook-count) 1)
         (check-equal? (.ref evaluation 'init-module-ids) '(child root))
-        (check-equal? (poo-flow-module-value-catalog-active? catalog 'root '+root) #t)
-        (check-equal? (poo-flow-module-value-catalog-active? catalog 'root '+missing) #f)
+        (check-equal? (agentic-ai-lab-module-value-catalog-active? catalog 'root '+root) #t)
+        (check-equal? (agentic-ai-lab-module-value-catalog-active? catalog 'root '+missing) #f)
         (check-equal? (.ref eval-result 'extension-count) 1)
-        (check-equal? (poo-flow-module-group root) poo-flow-brand-group)
-        (check-equal? (.ref eval-result 'brand-name) poo-flow-brand-name)
+        (check-equal? (agentic-ai-lab-module-group root) agentic-ai-lab-brand-group)
+        (check-equal? (.ref eval-result 'brand-name) agentic-ai-lab-brand-name)
         (check-equal? (.ref eval-result 'scheme-owner)
-                      poo-flow-scheme-owner)
+                      agentic-ai-lab-scheme-owner)
         (check-equal? (.ref presentation 'kind)
-                      poo-flow-module-system-presentation-kind)
-        (check-equal? (.ref presentation 'brand-name) poo-flow-brand-name)
+                      agentic-ai-lab-module-system-presentation-kind)
+        (check-equal? (.ref presentation 'brand-name) agentic-ai-lab-brand-name)
         (check-equal? (.ref presentation 'import-graph-owner)
-                      "poo-flow-module-system")
+                      "agentic-ai-lab-module-system")
         (check-equal? (.ref presentation 'runtime-capability-projection-kind)
-                      "poo-flow.modules.runtime-capability-projection.v1")
+                      "agentic-ai-lab.modules.runtime-capability-projection.v1")
         (check-equal? (.ref presentation 'runtime-object-family-count) 8)
         (check-equal? (.ref presentation 'runtime-object-families)
                       '(agent-profile

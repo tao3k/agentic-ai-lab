@@ -7,16 +7,16 @@
 ;;; actions. The caller owns domain claim names and step topology.
 (import (only-in :clan/poo/object .o .ref object?)
         (only-in :std/list/list every find)
-        (only-in :poo-flow/modules/query/scheme-select
-                 poo-flow-query-select-scheme-nodes)
+        (only-in :agentic-ai-lab/modules/query/scheme-select
+                 agentic-ai-lab-query-select-scheme-nodes)
         (only-in :gerbil-ascent/program/interface
                  relational-program gerbil-ascent-evaluate-program))
 
-(export poo-flow-evidence-assessment-evaluate
-        poo-flow-evidence-hypothesis-result
-        poo-flow-evidence-assessment-explore)
+(export agentic-ai-lab-evidence-assessment-evaluate
+        agentic-ai-lab-evidence-hypothesis-result
+        agentic-ai-lab-evidence-assessment-explore)
 
-(def (poo-flow-evidence-hypothesis-result receipt hypothesis-id)
+(def (agentic-ai-lab-evidence-hypothesis-result receipt hypothesis-id)
   (let (result
         (find (lambda (item)
                 (eq? (.ref item 'identity) hypothesis-id))
@@ -26,7 +26,7 @@
 (def (evidence-reference? reference source)
   (and (object? reference)
        (eq? (.ref reference 'kind)
-            'poo-flow.evidence-assessment.evidence-reference)
+            'agentic-ai-lab.evidence-assessment.evidence-reference)
        (eq? (.ref reference 'source) source)
        (string? (.ref reference 'uri))
        (> (string-length (.ref reference 'uri)) 0)
@@ -37,7 +37,7 @@
 
 (def (claim? value allowed)
   (and (object? value)
-       (eq? (.ref value 'kind) 'poo-flow.evidence-assessment.claim)
+       (eq? (.ref value 'kind) 'agentic-ai-lab.evidence-assessment.claim)
        (symbol? (.ref value 'identity))
        (memq (.ref value 'identity) allowed)
        (symbol? (.ref value 'value))
@@ -70,7 +70,7 @@
 
 (def (step? value allowed)
   (and (object? value)
-       (eq? (.ref value 'kind) 'poo-flow.evidence-assessment.step)
+       (eq? (.ref value 'kind) 'agentic-ai-lab.evidence-assessment.step)
        (symbol? (.ref value 'from))
        (symbol? (.ref value 'to))
        (memq (.ref value 'first) allowed)
@@ -79,7 +79,7 @@
 
 (def (hypothesis? value allowed)
   (and (object? value)
-       (eq? (.ref value 'kind) 'poo-flow.evidence-assessment.hypothesis)
+       (eq? (.ref value 'kind) 'agentic-ai-lab.evidence-assessment.hypothesis)
        (symbol? (.ref value 'identity))
        (symbol? (.ref value 'from))
        (symbol? (.ref value 'to))
@@ -88,10 +88,10 @@
        (every (lambda (claim) (memq claim allowed))
               (.ref value 'required-claims))))
 
-(def (poo-flow-evidence-assessment-evaluate case-value)
+(def (agentic-ai-lab-evidence-assessment-evaluate case-value)
   (unless (and (object? case-value)
                (eq? (.ref case-value 'kind)
-                    'poo-flow.evidence-assessment.case))
+                    'agentic-ai-lab.evidence-assessment.case))
     (error "reverse evidence requires a POO Case" case-value))
   (let* ((claims (.ref case-value 'claims))
          (steps (.ref case-value 'steps))
@@ -114,7 +114,7 @@
                        value: (.ref claim 'value)
                        evidenceSource: (.ref claim 'source)))
                  claims))
-           (query-result (poo-flow-query-select-scheme-nodes query nodes))
+           (query-result (agentic-ai-lab-query-select-scheme-nodes query nodes))
            (selected (.ref query-result 'rows))
            (presence-steps
             (map (lambda (step)
@@ -222,7 +222,7 @@
                                   (pair? relevant-conflicts)) 'conflicted)
                              ((and route-reachable? (null? absent)) 'supported)
                              (else 'needs-evidence))))
-                 (.o kind: 'poo-flow.evidence-assessment.hypothesis-result
+                 (.o kind: 'agentic-ai-lab.evidence-assessment.hypothesis-result
                      identity: (.ref hypothesis 'identity)
                      status: result-status
                      reachable?: route-reachable?
@@ -236,7 +236,7 @@
                      equality-mismatches: relevant-mismatches
                      value-conflicts: relevant-conflicts)))
              hypotheses)))
-      (.o kind: 'poo-flow.evidence-assessment.receipt
+      (.o kind: 'agentic-ai-lab.evidence-assessment.receipt
           query-selected-claims: selected
           query-source-identity: (.ref query-result 'query-source-identity)
           query-executed-in-scheme?: #t
@@ -273,7 +273,7 @@
 (def (inference-branch? branch-value allowed)
   (and (object? branch-value)
        (eq? (.ref branch-value 'kind)
-            'poo-flow.evidence-assessment.branch)
+            'agentic-ai-lab.evidence-assessment.branch)
        (symbol? (.ref branch-value 'identity))
        (symbol? (.ref branch-value 'reason))
        (let ((proposed (.ref branch-value 'proposed-claims))
@@ -292,7 +292,7 @@
           (and (not (memq id seen))
                (loop (cdr pending) (cons id seen)))))))
 
-(def (poo-flow-evidence-assessment-explore case-value branch-values)
+(def (agentic-ai-lab-evidence-assessment-explore case-value branch-values)
   (let (allowed (.ref (.ref case-value 'query)
                       'selected-element-identities))
     (unless (and (list? branch-values) (pair? branch-values)
@@ -302,7 +302,7 @@
                         branch-values)
                  (unique-branch-identities? branch-values))
       (error "invalid bounded evidence assessment branches" branch-values)))
-  (let* ((baseline (poo-flow-evidence-assessment-evaluate case-value))
+  (let* ((baseline (agentic-ai-lab-evidence-assessment-evaluate case-value))
          (explored
           (map
            (lambda (branch-value)
@@ -313,7 +313,7 @@
                         (not (memq (.ref claim 'identity) withheld)))
                       (.ref case-value 'claims)))
                     (branch-receipt
-                     (poo-flow-evidence-assessment-evaluate
+                     (agentic-ai-lab-evidence-assessment-evaluate
                       (.o (:: @ case-value)
                           claims:
                           (append remaining
@@ -323,12 +323,12 @@
                       (lambda (old-result)
                         (let* ((id (.ref old-result 'identity))
                                (new-result
-                                (poo-flow-evidence-hypothesis-result
+                                (agentic-ai-lab-evidence-hypothesis-result
                                  branch-receipt id))
                                (old-status (.ref old-result 'status))
                                (new-status (.ref new-result 'status)))
                           (.o kind:
-                              'poo-flow.evidence-assessment.branch-transition
+                              'agentic-ai-lab.evidence-assessment.branch-transition
                               hypothesis: id
                               before-status: old-status
                               after-status: new-status
@@ -337,7 +337,7 @@
                               missing-claims: (.ref new-result
                                                     'missing-claims))))
                       (.ref baseline 'hypothesis-results))))
-               (.o kind: 'poo-flow.evidence-assessment.branch-result
+               (.o kind: 'agentic-ai-lab.evidence-assessment.branch-result
                    identity: (.ref branch-value 'identity)
                    reason: (.ref branch-value 'reason)
                    proposed-claims: (.ref branch-value 'proposed-claims)
@@ -349,7 +349,7 @@
                    hypothetical?: #t
                    action-authority?: #f)))
            branch-values)))
-    (.o kind: 'poo-flow.evidence-assessment.exploration
+    (.o kind: 'agentic-ai-lab.evidence-assessment.exploration
         baseline-receipt: baseline
         branch-results: explored
         historical-attribution-verified?: #f

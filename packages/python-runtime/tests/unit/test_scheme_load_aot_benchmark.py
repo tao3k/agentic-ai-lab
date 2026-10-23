@@ -8,11 +8,11 @@ from pathlib import Path
 
 import pytest
 
-from poo_flow_runtime.benchmarks import scheme_load_aot as benchmark
-from poo_flow_runtime.benchmarks import _scheme_load_aot_cases as benchmark_cases
-from poo_flow_runtime.benchmarks import __main__ as benchmark_main
-from poo_flow_runtime import _scheme_load_artifact as scheme_artifact
-from poo_flow_runtime import _scheme_load_cache as scheme_cache
+from agentic_ai_lab_runtime.benchmarks import scheme_load_aot as benchmark
+from agentic_ai_lab_runtime.benchmarks import _scheme_load_aot_cases as benchmark_cases
+from agentic_ai_lab_runtime.benchmarks import __main__ as benchmark_main
+from agentic_ai_lab_runtime import _scheme_load_artifact as scheme_artifact
+from agentic_ai_lab_runtime import _scheme_load_cache as scheme_cache
 
 
 def _runtime_projection_fixture(root: Path) -> Path:
@@ -150,7 +150,7 @@ def test_scheme_load_aot_benchmark_receipt_is_line_oriented() -> None:
 
     receipt = result.receipt()
 
-    assert 'schema: "poo-flow.scheme-load-aot-benchmark.v1"' in receipt
+    assert 'schema: "agentic-ai-lab.scheme-load-aot-benchmark.v1"' in receipt
     assert 'scenario: "scheme-load-in-process-aot-reuse"' in receipt
     assert "samples-us: (10 20 30)" in receipt
     assert "median-us: 20.000" in receipt
@@ -205,7 +205,7 @@ def test_scheme_load_aot_benchmark_cli_emits_receipts(
     )
 
     output = capsys.readouterr().out
-    assert output.count("poo-flow.scheme-load-aot-benchmark.v1") == 2
+    assert output.count("agentic-ai-lab.scheme-load-aot-benchmark.v1") == 2
 
 
 def test_benchmark_dispatcher_runs_scheme_load_aot_suite(
@@ -242,4 +242,4 @@ def test_benchmark_dispatcher_runs_scheme_load_aot_suite(
     )
 
     output = capsys.readouterr().out
-    assert output.count("poo-flow.scheme-load-aot-benchmark.v1") == 2
+    assert output.count("agentic-ai-lab.scheme-load-aot-benchmark.v1") == 2

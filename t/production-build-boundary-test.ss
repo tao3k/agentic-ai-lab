@@ -5,7 +5,7 @@
         (only-in :std/error Error? Error-message)
         (only-in :gerbil/expander core-import-module expander-context-id)
         (only-in :yuanxu/module-system/building/source-closure for-each-build-module)
-        (only-in "../build-spec.ss" poo-flow-library-spec))
+        (only-in "../build-spec.ss" agentic-ai-lab-library-spec))
 (export production-build-boundary-test)
 (def (dependencies path)
   (cadr (memq 'depend: (call-with-input-file path read))))
@@ -35,8 +35,8 @@
           ;; Synthetic namespace only: the real compiler creates the context.
           (call-with-output-file source
             (lambda (port)
-              (display "package: poo-flow/dev\n(export value)\n(def value 1)\n" port)))
-          (check-exception (poo-flow-library-spec (list source))
+              (display "package: agentic-ai-lab/dev\n(export value)\n(def value 1)\n" port)))
+          (check-exception (agentic-ai-lab-library-spec (list source))
             (lambda (failure)
               (and (Error? failure)
                    (equal? (Error-message failure) "production build imports a development module")))))))))

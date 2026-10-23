@@ -27,9 +27,9 @@ export function runBazel(
 ) {
   // npm prepends package-local executable directories. Keep Bazel's declared
   // toolchain environment identical to the preceding dependency build.
-  const bazelEnv = env.POO_FLOW_BAZEL_PATH === undefined
+  const bazelEnv = env.AGENTIC_AI_LAB_BAZEL_PATH === undefined
     ? env
-    : { ...env, PATH: env.POO_FLOW_BAZEL_PATH };
+    : { ...env, PATH: env.AGENTIC_AI_LAB_BAZEL_PATH };
   const configuredBazel = env.BAZEL;
   if (configuredBazel !== undefined) {
     const executable = configuredBazel.trim();

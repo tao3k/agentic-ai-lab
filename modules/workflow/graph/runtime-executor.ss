@@ -9,34 +9,34 @@
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
         :yuanxu/graph/types-core)
 
-(export +poo-flow-graph-branch-choice-kind+
-        +poo-flow-graph-runtime-policy-kind+
-        +poo-flow-graph-runtime-receipt-kind+
-        poo-flow-graph-runtime-lean-fact-keys
-        poo-flow-graph-branch-choice
-        poo-flow-graph-branch-choice?
-        poo-flow-graph-runtime-policy
-        poo-flow-graph-runtime-policy?
-        poo-flow-graph-runtime-receipt?
-        poo-flow-graph-runtime-receipt-ref
-        poo-flow-graph-runtime-execute
-        poo-flow-graph-runtime-receipt->lean-facts
-        poo-flow-graph-runtime-receipt->lean-module
-        poo-flow-graph-runtime-lean-fact-contract-complete?)
+(export +agentic-ai-lab-graph-branch-choice-kind+
+        +agentic-ai-lab-graph-runtime-policy-kind+
+        +agentic-ai-lab-graph-runtime-receipt-kind+
+        agentic-ai-lab-graph-runtime-lean-fact-keys
+        agentic-ai-lab-graph-branch-choice
+        agentic-ai-lab-graph-branch-choice?
+        agentic-ai-lab-graph-runtime-policy
+        agentic-ai-lab-graph-runtime-policy?
+        agentic-ai-lab-graph-runtime-receipt?
+        agentic-ai-lab-graph-runtime-receipt-ref
+        agentic-ai-lab-graph-runtime-execute
+        agentic-ai-lab-graph-runtime-receipt->lean-facts
+        agentic-ai-lab-graph-runtime-receipt->lean-module
+        agentic-ai-lab-graph-runtime-lean-fact-contract-complete?)
 
 ;; : Symbol
-(def +poo-flow-graph-branch-choice-kind+
-  'poo-flow.graph.branch-choice.v1)
+(def +agentic-ai-lab-graph-branch-choice-kind+
+  'agentic-ai-lab.graph.branch-choice.v1)
 
 ;; : Symbol
-(def +poo-flow-graph-runtime-policy-kind+
-  'poo-flow.graph.runtime-policy.v1)
+(def +agentic-ai-lab-graph-runtime-policy-kind+
+  'agentic-ai-lab.graph.runtime-policy.v1)
 
 ;; : Symbol
-(def +poo-flow-graph-runtime-receipt-kind+
-  'poo-flow.graph.runtime-receipt.v1)
+(def +agentic-ai-lab-graph-runtime-receipt-kind+
+  'agentic-ai-lab.graph.runtime-receipt.v1)
 
-(defstruct poo-flow-graph-runtime-receipt-record
+(defstruct agentic-ai-lab-graph-runtime-receipt-record
   (kind
    schema
    graph-id
@@ -61,47 +61,47 @@
    runtime-executed)
   transparent: #t)
 
-;; : (-> PooFlowGraphRuntimeReceipt Symbol Datum)
-(def (poo-flow-graph-runtime-receipt-ref receipt key)
-  (if (poo-flow-graph-runtime-receipt-record? receipt)
+;; : (-> AgenticAILabGraphRuntimeReceipt Symbol Datum)
+(def (agentic-ai-lab-graph-runtime-receipt-ref receipt key)
+  (if (agentic-ai-lab-graph-runtime-receipt-record? receipt)
     (case key
-      ((kind) (poo-flow-graph-runtime-receipt-record-kind receipt))
-      ((schema) (poo-flow-graph-runtime-receipt-record-schema receipt))
-      ((graph-id) (poo-flow-graph-runtime-receipt-record-graph-id receipt))
-      ((policy-name) (poo-flow-graph-runtime-receipt-record-policy-name receipt))
-      ((entry-id) (poo-flow-graph-runtime-receipt-record-entry-id receipt))
-      ((finish-id) (poo-flow-graph-runtime-receipt-record-finish-id receipt))
-      ((trace) (poo-flow-graph-runtime-receipt-record-trace receipt))
-      ((fuel-before) (poo-flow-graph-runtime-receipt-record-fuel-before receipt))
-      ((fuel-after) (poo-flow-graph-runtime-receipt-record-fuel-after receipt))
-      ((current-id) (poo-flow-graph-runtime-receipt-record-current-id receipt))
-      ((finished) (poo-flow-graph-runtime-receipt-record-finished receipt))
+      ((kind) (agentic-ai-lab-graph-runtime-receipt-record-kind receipt))
+      ((schema) (agentic-ai-lab-graph-runtime-receipt-record-schema receipt))
+      ((graph-id) (agentic-ai-lab-graph-runtime-receipt-record-graph-id receipt))
+      ((policy-name) (agentic-ai-lab-graph-runtime-receipt-record-policy-name receipt))
+      ((entry-id) (agentic-ai-lab-graph-runtime-receipt-record-entry-id receipt))
+      ((finish-id) (agentic-ai-lab-graph-runtime-receipt-record-finish-id receipt))
+      ((trace) (agentic-ai-lab-graph-runtime-receipt-record-trace receipt))
+      ((fuel-before) (agentic-ai-lab-graph-runtime-receipt-record-fuel-before receipt))
+      ((fuel-after) (agentic-ai-lab-graph-runtime-receipt-record-fuel-after receipt))
+      ((current-id) (agentic-ai-lab-graph-runtime-receipt-record-current-id receipt))
+      ((finished) (agentic-ai-lab-graph-runtime-receipt-record-finished receipt))
       ((loop-fuel-contained)
-       (poo-flow-graph-runtime-receipt-record-loop-fuel-contained receipt))
+       (agentic-ai-lab-graph-runtime-receipt-record-loop-fuel-contained receipt))
       ((handoff-reached)
-       (poo-flow-graph-runtime-receipt-record-handoff-reached receipt))
+       (agentic-ai-lab-graph-runtime-receipt-record-handoff-reached receipt))
       ((sandbox-scope-contained)
-       (poo-flow-graph-runtime-receipt-record-sandbox-scope-contained receipt))
+       (agentic-ai-lab-graph-runtime-receipt-record-sandbox-scope-contained receipt))
       ((tool-permissions-contained)
-       (poo-flow-graph-runtime-receipt-record-tool-permissions-contained receipt))
+       (agentic-ai-lab-graph-runtime-receipt-record-tool-permissions-contained receipt))
       ((checkpoint-persisted)
-       (poo-flow-graph-runtime-receipt-record-checkpoint-persisted receipt))
+       (agentic-ai-lab-graph-runtime-receipt-record-checkpoint-persisted receipt))
       ((human-approval-required)
-       (poo-flow-graph-runtime-receipt-record-human-approval-required receipt))
+       (agentic-ai-lab-graph-runtime-receipt-record-human-approval-required receipt))
       ((human-approved)
-       (poo-flow-graph-runtime-receipt-record-human-approved receipt))
+       (agentic-ai-lab-graph-runtime-receipt-record-human-approved receipt))
       ((human-approval-sound)
-       (poo-flow-graph-runtime-receipt-record-human-approval-sound receipt))
+       (agentic-ai-lab-graph-runtime-receipt-record-human-approval-sound receipt))
       ((subagents-parented)
-       (poo-flow-graph-runtime-receipt-record-subagents-parented receipt))
-      ((diagnostics) (poo-flow-graph-runtime-receipt-record-diagnostics receipt))
+       (agentic-ai-lab-graph-runtime-receipt-record-subagents-parented receipt))
+      ((diagnostics) (agentic-ai-lab-graph-runtime-receipt-record-diagnostics receipt))
       ((runtime-executed)
-       (poo-flow-graph-runtime-receipt-record-runtime-executed receipt))
+       (agentic-ai-lab-graph-runtime-receipt-record-runtime-executed receipt))
       (else #f))
     (.ref receipt key)))
 
 ;; : [Symbol]
-(def poo-flow-graph-runtime-lean-fact-keys
+(def agentic-ai-lab-graph-runtime-lean-fact-keys
   '(graph.runtime/executed
     graph.runtime/finished
     graph.runtime/loop-fuel-contained
@@ -114,22 +114,22 @@
     graph.runtime/diagnostics-empty
     graph.runtime/reusable-production-case))
 
-;; : (-> Object Object PooFlowGraphBranchChoice)
-(def (poo-flow-graph-branch-choice from to)
+;; : (-> Object Object AgenticAILabGraphBranchChoice)
+(def (agentic-ai-lab-graph-branch-choice from to)
   (let ((from-value from)
         (to-value to))
-    (.o (kind +poo-flow-graph-branch-choice-kind+)
+    (.o (kind +agentic-ai-lab-graph-branch-choice-kind+)
         (from from-value)
         (to to-value))))
 
 ;; : (-> Object Boolean)
-(def (poo-flow-graph-branch-choice? value)
+(def (agentic-ai-lab-graph-branch-choice? value)
   (and (object? value)
        (eq? (.ref value 'kind)
-            +poo-flow-graph-branch-choice-kind+)))
+            +agentic-ai-lab-graph-branch-choice-kind+)))
 
-;; : (-> Symbol Object Object [PooFlowGraphBranchChoice] Nat Boolean Boolean Boolean Boolean Boolean Boolean Boolean PooFlowGraphRuntimePolicy)
-(def (poo-flow-graph-runtime-policy name
+;; : (-> Symbol Object Object [AgenticAILabGraphBranchChoice] Nat Boolean Boolean Boolean Boolean Boolean Boolean Boolean AgenticAILabGraphRuntimePolicy)
+(def (agentic-ai-lab-graph-runtime-policy name
                                     entry-id
                                     finish-id
                                     branch-choices
@@ -155,7 +155,7 @@
         (handoff-required-value handoff-required?))
     (object<-alist
      (list
-      (cons 'kind +poo-flow-graph-runtime-policy-kind+)
+      (cons 'kind +agentic-ai-lab-graph-runtime-policy-kind+)
       (cons 'name name-value)
       (cons 'entry-id entry-id-value)
       (cons 'finish-id finish-id-value)
@@ -170,20 +170,20 @@
       (cons 'handoff-required handoff-required-value)))))
 
 ;; : (-> Object Boolean)
-(def (poo-flow-graph-runtime-policy? value)
+(def (agentic-ai-lab-graph-runtime-policy? value)
   (and (object? value)
        (eq? (.ref value 'kind)
-            +poo-flow-graph-runtime-policy-kind+)))
+            +agentic-ai-lab-graph-runtime-policy-kind+)))
 
 ;; : (-> Object Boolean)
-(def (poo-flow-graph-runtime-receipt? value)
-  (or (poo-flow-graph-runtime-receipt-record? value)
+(def (agentic-ai-lab-graph-runtime-receipt? value)
+  (or (agentic-ai-lab-graph-runtime-receipt-record? value)
       (and (object? value)
            (eq? (.ref value 'kind)
-                +poo-flow-graph-runtime-receipt-kind+))))
+                +agentic-ai-lab-graph-runtime-receipt-kind+))))
 
-;; : (-> YuanxuGraph PooFlowGraphRuntimePolicy PooFlowGraphRuntimeReceipt)
-(def (poo-flow-graph-runtime-execute graph-value policy)
+;; : (-> YuanxuGraph AgenticAILabGraphRuntimePolicy AgenticAILabGraphRuntimeReceipt)
+(def (agentic-ai-lab-graph-runtime-execute graph-value policy)
   (let* ((fuel (.ref policy 'fuel))
          (max-steps (+ 1 (* (+ fuel 1)
                             (+ 1 (length (yuanxu-graph-edges graph-value)))))))
@@ -197,7 +197,7 @@
                   max-steps
                   '())))
 
-;; : (-> YuanxuGraph PooFlowGraphRuntimePolicy Object [PooFlowGraphBranchChoice] Nat [Object] Nat Nat Alist PooFlowGraphRuntimeReceipt)
+;; : (-> YuanxuGraph AgenticAILabGraphRuntimePolicy Object [AgenticAILabGraphBranchChoice] Nat [Object] Nat Nat Alist AgenticAILabGraphRuntimeReceipt)
 (def (runtime-walk graph-value
                    policy
                    current-id
@@ -269,7 +269,7 @@
                         max-steps
                         diagnostics-rev))))))))
 
-;; : (-> Object [YuanxuGraphEdge] [PooFlowGraphBranchChoice] [MaybeEdge [PooFlowGraphBranchChoice] MaybeDiagnostic])
+;; : (-> Object [YuanxuGraphEdge] [AgenticAILabGraphBranchChoice] [MaybeEdge [AgenticAILabGraphBranchChoice] MaybeDiagnostic])
 (def (runtime-select-edge current-id edges branch-choices)
   (let* ((outgoing (runtime-outgoing-edges current-id edges))
          (choice-result
@@ -280,19 +280,19 @@
      ((null? outgoing)
       (list #f branch-choices (cons 'dead-end current-id)))
      (choice
-      (let ((edge (runtime-edge-to (poo-flow-graph-branch-choice-to choice)
+      (let ((edge (runtime-edge-to (agentic-ai-lab-graph-branch-choice-to choice)
                                    outgoing)))
         (if edge
           (list edge branch-choices* #f)
           (list #f branch-choices*
                 (cons 'missing-branch-target
-                      (poo-flow-graph-branch-choice-to choice))))))
+                      (agentic-ai-lab-graph-branch-choice-to choice))))))
      ((runtime-has-conditional-edge? outgoing)
       (list #f branch-choices (cons 'missing-branch-choice current-id)))
      (else
       (list (car outgoing) branch-choices #f)))))
 
-;; : (-> YuanxuGraph PooFlowGraphRuntimePolicy [Object] Nat Object Boolean Alist PooFlowGraphRuntimeReceipt)
+;; : (-> YuanxuGraph AgenticAILabGraphRuntimePolicy [Object] Nat Object Boolean Alist AgenticAILabGraphRuntimeReceipt)
 (def (runtime-receipt graph-value
                       policy
                       trace
@@ -337,9 +337,9 @@
           (human-approval-sound-value human-approval-sound?)
           (subagents-parented-value (.ref policy 'subagents-parented))
           (diagnostics-value diagnostics*))
-      (make-poo-flow-graph-runtime-receipt-record
-       +poo-flow-graph-runtime-receipt-kind+
-       'poo-flow.graph.runtime-receipt.v1
+      (make-agentic-ai-lab-graph-runtime-receipt-record
+       +agentic-ai-lab-graph-runtime-receipt-kind+
+       'agentic-ai-lab.graph.runtime-receipt.v1
        graph-id-value
        policy-name-value
        entry-id-value
@@ -361,7 +361,7 @@
        diagnostics-value
        #t))))
 
-;; : (-> Alist PooFlowGraphRuntimePolicy Boolean Boolean Alist)
+;; : (-> Alist AgenticAILabGraphRuntimePolicy Boolean Boolean Alist)
 (def (runtime-diagnostic-prepend diagnostics ok? code policy-name)
   (if ok?
     diagnostics
@@ -411,11 +411,11 @@
     diagnostics))
 
 ;; : (forall (v) (-> v [(Pair Symbol Object)]))
-;; : (-> PooFlowGraphRuntimeReceipt Alist)
-(def (poo-flow-graph-runtime-receipt->lean-facts receipt)
+;; : (-> AgenticAILabGraphRuntimeReceipt Alist)
+(def (agentic-ai-lab-graph-runtime-receipt->lean-facts receipt)
   (let* ((receipt-ref
           (lambda (key)
-            (poo-flow-graph-runtime-receipt-ref receipt key)))
+            (agentic-ai-lab-graph-runtime-receipt-ref receipt key)))
          (diagnostics-empty? (null? (receipt-ref 'diagnostics)))
          (reusable-production-case?
           (and (receipt-ref 'runtime-executed)
@@ -451,28 +451,28 @@
 
 ;; : (forall (v) (-> [(Pair Symbol v)] Boolean))
 ;; : (-> Alist Boolean)
-(def (poo-flow-graph-runtime-lean-fact-contract-complete? facts)
+(def (agentic-ai-lab-graph-runtime-lean-fact-contract-complete? facts)
   (and (andmap (lambda (key)
                  (and (assq key facts) #t))
-               poo-flow-graph-runtime-lean-fact-keys)
+               agentic-ai-lab-graph-runtime-lean-fact-keys)
        (andmap (lambda (fact)
                  (and (pair? fact)
                       (memq (car fact)
-                            poo-flow-graph-runtime-lean-fact-keys)
+                            agentic-ai-lab-graph-runtime-lean-fact-keys)
                       #t))
                facts)))
 
-;; : (-> PooFlowGraphRuntimeReceipt [String] String)
-(def (poo-flow-graph-runtime-receipt->lean-module receipt
+;; : (-> AgenticAILabGraphRuntimeReceipt [String] String)
+(def (agentic-ai-lab-graph-runtime-receipt->lean-module receipt
                                                   . maybe-namespace)
   (let* ((namespace (if (null? maybe-namespace)
-                     "PooFlowProof.Generated.LangChainLangGraphRuntime"
+                     "AgenticAILabProof.Generated.LangChainLangGraphRuntime"
                      (car maybe-namespace)))
-         (facts (poo-flow-graph-runtime-receipt->lean-facts receipt)))
+         (facts (agentic-ai-lab-graph-runtime-receipt->lean-facts receipt)))
     (string-append
-     "import PooFlowProof.PooC4.LangChainLangGraph\n\n"
+     "import AgenticAILabProof.PooC4.LangChainLangGraph\n\n"
      "namespace " namespace "\n\n"
-     "open PooFlowProof.PooC4.LangChainLangGraph\n\n"
+     "open AgenticAILabProof.PooC4.LangChainLangGraph\n\n"
      "def generatedRuntimeFactRows : List (String × Bool) :=\n"
      (runtime-lean-fact-rows-source facts)
      "\n\n"
@@ -546,7 +546,7 @@
 ;; : (-> Alist String)
 (def (runtime-lean-fact-rows-source facts)
   (runtime-lean-fact-rows-source-loop
-   poo-flow-graph-runtime-lean-fact-keys
+   agentic-ai-lab-graph-runtime-lean-fact-keys
    facts
    #t))
 
@@ -574,8 +574,8 @@
      "\n"
      (runtime-lean-fact-rows-source-loop keys facts #f)))))
 
-;; : (-> PooFlowGraphBranchChoice Object)
-(def (poo-flow-graph-branch-choice-to choice)
+;; : (-> AgenticAILabGraphBranchChoice Object)
+(def (agentic-ai-lab-graph-branch-choice-to choice)
   (.ref choice 'to))
 
 ;; : (-> Object [YuanxuGraphEdge] [YuanxuGraphEdge])
@@ -615,11 +615,11 @@
    (else
     (runtime-has-conditional-edge? (cdr edges)))))
 
-;; : (-> Object [PooFlowGraphBranchChoice] [MaybeChoice [PooFlowGraphBranchChoice]])
+;; : (-> Object [AgenticAILabGraphBranchChoice] [MaybeChoice [AgenticAILabGraphBranchChoice]])
 (def (runtime-next-branch-choice current-id branch-choices)
   (runtime-next-branch-choice/rev current-id branch-choices '()))
 
-;; : (-> Object [PooFlowGraphBranchChoice] [PooFlowGraphBranchChoice] [MaybeChoice [PooFlowGraphBranchChoice]])
+;; : (-> Object [AgenticAILabGraphBranchChoice] [AgenticAILabGraphBranchChoice] [MaybeChoice [AgenticAILabGraphBranchChoice]])
 (def (runtime-next-branch-choice/rev current-id branch-choices prefix-rev)
   (cond
    ((null? branch-choices)

@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Contract: JSON Schema bridge emits executable POO Flow slot contracts.
+;;; Contract: JSON Schema bridge emits executable Agentic AI Lab slot contracts.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
@@ -244,7 +244,7 @@
                json-schema-bridge-test-schema
                '((source-ref . json-schema-contract-bridge-test)
                  (owner . contract)
-                 (object-kind . PooFlowJsonSchemaBridgeTest)
+                 (object-kind . AgenticAILabJsonSchemaBridgeTest)
                  (object-key . json-schema/bridge-test))))
              (receipt
               (yuanxu-json-schema-contract-artifact->alist artifact))
@@ -321,7 +321,7 @@
                json-schema-bridge-invalid-constraint-schema
                '((source-ref . json-schema-invalid-constraint-test)
                  (owner . contract)
-                 (object-kind . PooFlowJsonSchemaInvalidConstraintTest)
+                 (object-kind . AgenticAILabJsonSchemaInvalidConstraintTest)
                  (object-key . json-schema/invalid-constraint-test))))
              (receipt
               (yuanxu-json-schema-contract-artifact->alist artifact))
@@ -340,7 +340,7 @@
                json-schema-bridge-recursive-map-schema
                '((source-ref . json-schema-recursive-map-test)
                  (owner . funflow)
-                 (object-kind . PooFlowCustomStageContract)
+                 (object-kind . AgenticAILabCustomStageContract)
                  (object-key . funflow/custom-stage))))
              (valid-receipt
               (yuanxu-json-schema-object-contract-validation->alist
@@ -378,7 +378,7 @@
                json-schema-bridge-additional-recursive-map-schema
                '((source-ref . json-schema-recursive-additional-map-test)
                  (owner . funflow)
-                 (object-kind . PooFlowCustomProfileContract)
+                 (object-kind . AgenticAILabCustomProfileContract)
                  (object-key . funflow/custom-profile))))
              (valid-receipt
               (yuanxu-json-schema-object-contract-validation->alist

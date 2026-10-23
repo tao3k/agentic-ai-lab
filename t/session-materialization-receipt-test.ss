@@ -11,7 +11,7 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-materialization-receipt-test)
 
@@ -22,10 +22,10 @@
 
 ;; : TestSuite
 (def session-materialization-receipt-test
-  (test-suite "poo-flow session materialization receipts"
+  (test-suite "agentic-ai-lab session materialization receipts"
     (yuanxu-test-case "projects pending runtime materialization receipt"
       (let* ((receipt
-              (poo-flow-session-runtime-materialization-receipt
+              (agentic-ai-lab-session-runtime-materialization-receipt
                'runtime/request-1
                'project/materialization
                'session/root
@@ -38,25 +38,25 @@
                #f
                '((case . unit))))
              (row
-              (poo-flow-session-materialization-receipt->alist receipt)))
-        (check-equal? (poo-flow-session-materialization-receipt? receipt)
+              (agentic-ai-lab-session-materialization-receipt->alist receipt)))
+        (check-equal? (agentic-ai-lab-session-materialization-receipt? receipt)
                       #t)
         (check-equal?
-         (poo-flow-session-materialization-receipt-request-id receipt)
+         (agentic-ai-lab-session-materialization-receipt-request-id receipt)
          'runtime/request-1)
         (check-equal?
-         (poo-flow-session-materialization-receipt-state receipt)
+         (agentic-ai-lab-session-materialization-receipt-state receipt)
          'pending)
         (check-equal?
-         (poo-flow-session-materialization-receipt-parent-session-refs
+         (agentic-ai-lab-session-materialization-receipt-parent-session-refs
           receipt)
          '(session/root session/build-system))
         (check-equal?
-         (poo-flow-session-materialization-receipt-sandbox-handle-ref
+         (agentic-ai-lab-session-materialization-receipt-sandbox-handle-ref
           receipt)
          'sandbox/build-handle)
         (check-equal? (test-ref row 'kind)
-                      'poo-flow.session.materialization-receipt)
+                      'agentic-ai-lab.session.materialization-receipt)
         (check-equal? (test-ref row 'materialization-state) 'pending)
         (check-equal? (test-ref row 'handoff-required) #t)
         (check-equal? (test-ref row 'runtime-owner)
@@ -64,7 +64,7 @@
         (check-equal? (test-ref row 'runtime-executed) #f)))
     (yuanxu-test-case "projects materialized token usage without executing runtime"
       (let* ((receipt
-              (poo-flow-session-runtime-materialization-receipt
+              (agentic-ai-lab-session-runtime-materialization-receipt
                'runtime/request-2
                'project/materialization
                'session/root
@@ -78,7 +78,7 @@
                  (total-tokens . 20))
                #f))
              (row
-              (poo-flow-session-materialization-receipt->alist receipt)))
+              (agentic-ai-lab-session-materialization-receipt->alist receipt)))
         (check-equal? (test-ref row 'materialization-state)
                       'materialized)
         (check-equal? (test-ref (test-ref row 'token-usage-summary)
@@ -88,7 +88,7 @@
         (check-equal? (test-ref row 'runtime-executed) #f)))
     (yuanxu-test-case "projects failed materialization error summary"
       (let* ((receipt
-              (poo-flow-session-runtime-materialization-receipt
+              (agentic-ai-lab-session-runtime-materialization-receipt
                'runtime/request-3
                'project/materialization
                'session/root
@@ -102,7 +102,7 @@
                  (message . "kaboom")
                  (recoverable? . #f))))
              (row
-              (poo-flow-session-materialization-receipt->alist receipt)))
+              (agentic-ai-lab-session-materialization-receipt->alist receipt)))
         (check-equal? (test-ref row 'materialization-state) 'failed)
         (check-equal? (test-ref row 'sandbox-handle-ref) #f)
         (check-equal? (test-ref (test-ref row 'error-summary)

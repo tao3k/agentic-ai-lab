@@ -8,11 +8,11 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .all-slots .o .ref .slot?)
         (only-in :std/test check-equal? test-suite)
-        (only-in :poo-flow/modules/module-authoring/fragment-syntax load!)
-        (only-in :poo-flow/modules/workflow/scenario/case
-                 poo-flow-scenario-case?)
-        :poo-flow/modules/workflow/scenario/accessors
-        :poo-flow/user-interface/scenarios/crewai/scenario)
+        (only-in :agentic-ai-lab/modules/module-authoring/fragment-syntax load!)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/case
+                 agentic-ai-lab-scenario-case?)
+        :agentic-ai-lab/modules/workflow/scenario/accessors
+        :agentic-ai-lab/user-interface/scenarios/crewai/scenario)
 
 
 (def crewai-composition
@@ -24,14 +24,14 @@
 (def crewai-user-composition-test
  (test-suite "crewai user composition"
   (yuanxu-test-case "crewai declares one reusable production composition"
-    (let* ((stage-space (poo-flow-scenario-case-stages crewai-composition))
+    (let* ((stage-space (agentic-ai-lab-scenario-case-stages crewai-composition))
            (stage (.ref stage-space 'production))
            (compose-payload
-            (poo-flow-scenario-case-profiles crewai-composition))
+            (agentic-ai-lab-scenario-case-profiles crewai-composition))
            (loop-value (.ref stage 'loop)))
-      (check-equal? (poo-flow-scenario-case? crewai-composition) #t)
-      (check-equal? (poo-flow-scenario-case-name crewai-composition) 'crewai)
-      (check-equal? (length (poo-flow-scenario-case-modules
+      (check-equal? (agentic-ai-lab-scenario-case? crewai-composition) #t)
+      (check-equal? (agentic-ai-lab-scenario-case-name crewai-composition) 'crewai)
+      (check-equal? (length (agentic-ai-lab-scenario-case-modules
                              crewai-composition))
                     1)
       (check-equal? (.all-slots stage-space) '(production))

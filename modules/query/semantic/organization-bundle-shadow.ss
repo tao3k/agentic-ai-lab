@@ -7,22 +7,22 @@
 (export #t)
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :poo-flow/modules/query/semantic/organization-bundle
-        :poo-flow/modules/query/semantic/funcs)
+        :agentic-ai-lab/modules/query/semantic/organization-bundle
+        :agentic-ai-lab/modules/query/semantic/funcs)
 
-(def +poo-flow-organization-shadow-receipt-schema+
-  'poo-flow.organization-bundle-shadow-receipt.draft.1)
+(def +agentic-ai-lab-organization-shadow-receipt-schema+
+  'agentic-ai-lab.organization-bundle-shadow-receipt.draft.1)
 
 (def +shadow-facet-order+
   '(organization authority context protocol evidence))
 
-(def (poo-flow-organization-shadow-fact facet-value path-value key-value value)
-  (.o (kind 'poo-flow.organization-shadow-fact.draft.1)
+(def (agentic-ai-lab-organization-shadow-fact facet-value path-value key-value value)
+  (.o (kind 'agentic-ai-lab.organization-shadow-fact.draft.1)
       (facet facet-value) (path path-value) (key key-value)
       (semantic-value value)))
 
-(def (poo-flow-organization-shadow-profile entries-value)
-  (.o (kind 'poo-flow.organization-shadow-profile.draft.1)
+(def (agentic-ai-lab-organization-shadow-profile entries-value)
+  (.o (kind 'agentic-ai-lab.organization-shadow-profile.draft.1)
       (entries entries-value)))
 
 (def (shadow-write value)
@@ -63,7 +63,7 @@
 
 (def (shadow-section-facts facet section values)
   (map (lambda (value)
-         (poo-flow-organization-shadow-fact
+         (agentic-ai-lab-organization-shadow-fact
           facet (list section value) 'value value))
        values))
 
@@ -74,13 +74,13 @@
         (relations (cadddr canonical))
         (constraints (car (cddddr canonical))))
     (append
-     (list (poo-flow-organization-shadow-fact
+     (list (agentic-ai-lab-organization-shadow-fact
             facet '(schema) 'schema (cadr schema)))
      (shadow-section-facts facet 'entities (cdr entities))
      (shadow-section-facts facet 'relations (cdr relations))
      (shadow-section-facts facet 'constraints (cdr constraints)))))
 
-(def (poo-flow-organization-bundle-shadow-facts state)
+(def (agentic-ai-lab-organization-bundle-shadow-facts state)
   (unless (and (object? state) (memq (.ref state 'phase) '(validated advanced)))
     (error "shadow projection requires validated Bundle Kernel state" state))
   (let (canonical (.ref state 'canonical-payload))
@@ -92,8 +92,8 @@
                               (list-ref canonical 5)
                               (list-ref canonical 6)))))))
 
-(def (poo-flow-organization-shadow-profile/all facts)
-  (poo-flow-organization-shadow-profile
+(def (agentic-ai-lab-organization-shadow-profile/all facts)
+  (agentic-ai-lab-organization-shadow-profile
    (map (lambda (fact) (list (.ref fact 'facet) (.ref fact 'path))) facts)))
 
 (def (shadow-profile-covers? profile fact)
@@ -116,15 +116,15 @@
     (reverse (cdr previous+duplicates))))
 
 (def (shadow-diagnostic code-value path-value expected-value observed-value)
-  (.o (kind 'poo-flow.organization-shadow-diagnostic.draft.1)
+  (.o (kind 'agentic-ai-lab.organization-shadow-diagnostic.draft.1)
       (code code-value) (path path-value)
       (expected expected-value) (observed observed-value)))
 
 (def (shadow-receipt state-value accepted-value? equivalent-value?
                      compared-value matched-value missing-current-value
                      missing-bundle-value mismatches-value diagnostics-value)
-  (.o (kind 'poo-flow.organization-bundle-shadow-receipt)
-      (schema +poo-flow-organization-shadow-receipt-schema+)
+  (.o (kind 'agentic-ai-lab.organization-bundle-shadow-receipt)
+      (schema +agentic-ai-lab-organization-shadow-receipt-schema+)
       (bundle-identity (.ref state-value 'identity))
       (bundle-epoch (.ref state-value 'epoch))
       (compared-facets compared-value)
@@ -136,11 +136,11 @@
       (v1-conformant? #f) (diagnostics diagnostics-value)))
 
 ;;; Comparison boundary: report duplicate, missing, and mismatched facts without mutating shadow state.
-(def (poo-flow-organization-bundle-shadow-compare state current-facts profile)
-  (let* ((bundle-facts (poo-flow-organization-bundle-shadow-facts state))
+(def (agentic-ai-lab-organization-bundle-shadow-compare state current-facts profile)
+  (let* ((bundle-facts (agentic-ai-lab-organization-bundle-shadow-facts state))
          (all-facts (append current-facts bundle-facts))
          (profile-entry-index
-          (poo-flow-semantic-index-by (lambda (entry) entry)
+          (agentic-ai-lab-semantic-index-by (lambda (entry) entry)
                                       (.ref profile 'entries)))
          (invalid-facts
           (filter (lambda (fact) (not (shadow-valid-fact? fact)))
@@ -187,9 +187,9 @@
       (let ((missing-current '()) (missing-bundle '())
             (mismatches '()) (matched '()))
         (let ((current-index
-               (poo-flow-semantic-index-by shadow-fact-identity current-facts))
+               (agentic-ai-lab-semantic-index-by shadow-fact-identity current-facts))
               (bundle-index
-               (poo-flow-semantic-index-by shadow-fact-identity bundle-facts)))
+               (agentic-ai-lab-semantic-index-by shadow-fact-identity bundle-facts)))
         (for-each
          (lambda (bundle-fact)
            (let (current (hash-get current-index

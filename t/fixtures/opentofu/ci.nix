@@ -25,7 +25,7 @@ let
     mkdir -p "$out"
     unzip -p "$archive" terraform-provider-aws_v5.100.0_x5 > "$out/provider"
   '';
-  tools = pkgs.writeText "poo-flow-nix-test-tools.json" (builtins.toJSON {
+  tools = pkgs.writeText "agentic-ai-lab-nix-test-tools.json" (builtins.toJSON {
     shell = toString pkgs.bash;
     tools = toString pkgs.coreutils;
     system = pkgs.stdenv.hostPlatform.system;

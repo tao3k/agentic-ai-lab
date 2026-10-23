@@ -15,7 +15,7 @@
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection-flag-entry)
         (only-in "../user-interface/custom/my-module/cases/session-agent-param"
-                 poo-flow-custom-my-module-session-agent-param-case))
+                 agentic-ai-lab-custom-my-module-session-agent-param-case))
 
 (export user-interface-custom-session-agent-param-test)
 
@@ -33,18 +33,18 @@
 
 ;; : TestSuite
 (def user-interface-custom-session-agent-param-test
-  (test-suite "poo-flow custom user-interface session-agent-param case"
+  (test-suite "agentic-ai-lab custom user-interface session-agent-param case"
     (yuanxu-test-case "projects custom AgentParam contract without runtime work"
       (let* ((selection
-              (car poo-flow-custom-my-module-session-agent-param-case))
+              (car agentic-ai-lab-custom-my-module-session-agent-param-case))
              (row
               (car
                (module-config-rows
-                poo-flow-custom-my-module-session-agent-param-case))))
+                agentic-ai-lab-custom-my-module-session-agent-param-case))))
         (check-equal? (yuanxu-user-module-selection-key selection)
                       '(session . session))
         (check-equal? (test-ref row 'kind)
-                      'poo-flow.session.agent-param-contract)
+                      'agentic-ai-lab.session.agent-param-contract)
         (check-equal? (test-ref row 'contract-id)
                       'agent-param/custom-build)
         (check-equal? (test-ref row 'agent-id) 'agent/build)

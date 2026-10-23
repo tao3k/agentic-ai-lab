@@ -3,9 +3,9 @@
 ;;; digest for the cross-language differential gate.
 
 (import (only-in :std/encoding/hex hex-encode)
-        :poo-flow/src/proof/generated/proof-case-vector-v1
-        :poo-flow/src/proof/proof-case-vector
-        :poo-flow/t/scenarios/proof-case-vector-test)
+        "../../../../modules/proof/projections/generated/proof-case-vector-v1.ss"
+        "../../../../modules/proof/projections/proof-case-vector.ss"
+        "../../../../t/scenarios/proof-case-vector-test.ss")
 
 (export main)
 
@@ -13,11 +13,11 @@
 ;;; byte vector, then both bytes and digest are written to standard output.
 ;; : (-> Unit Void)
 (def (main)
-  (let (vector (make-u8vector poo-flow-proof-case-vector-size 0))
-    (poo-flow-proof-case-vector-write! canonical-proof-case vector)
+  (let (vector (make-u8vector agentic-ai-lab-proof-case-vector-size 0))
+    (agentic-ai-lab-proof-case-vector-write! canonical-proof-case vector)
     (display "vector=")
     (display (hex-encode vector))
     (newline)
     (display "digest=")
-    (display (poo-flow-proof-case-vector-digest vector))
+    (display (agentic-ai-lab-proof-case-vector-digest vector))
     (newline)))

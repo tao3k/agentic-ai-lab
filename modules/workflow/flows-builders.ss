@@ -16,7 +16,7 @@
         (only-in :yuanxu/modules/funflow/control-plane/runtime-command-descriptor
                  make-stdout-runtime-command-descriptor)
         :yuanxu/modules/funflow/control-plane/projection-syntax
-        :poo-flow/modules/docker/funs
+        :agentic-ai-lab/modules/docker/funs
         :yuanxu/modules/funflow/store)
 
 (export make-docker-store-run-config

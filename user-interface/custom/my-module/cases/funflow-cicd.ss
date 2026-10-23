@@ -8,12 +8,12 @@
 
 (import (only-in :clan/poo/object .def)
         (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
-        (only-in :poo-flow/modules/workflow/funflow-config poo-flow-funflow-configs))
+        (only-in :agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-configs))
 
-(export poo-flow-custom-my-module-funflow-cicd-case)
+(export agentic-ai-lab-custom-my-module-funflow-cicd-case)
 
-(def poo-flow-custom-my-module-funflow-cicd-case
-  (poo-flow-funflow-configs
+(def agentic-ai-lab-custom-my-module-funflow-cicd-case
+  (agentic-ai-lab-funflow-configs
   (.def (funflow/build @ funflow-check
                        check-name profile-ref command-vector
                        artifact-outputs cache-intents result-protocol

@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/modules/agent-sandbox/resource)
+        :agentic-ai-lab/modules/agent-sandbox/resource)
 
 (export sandbox-resource-test)
 

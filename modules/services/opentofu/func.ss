@@ -13,8 +13,8 @@
         (only-in :yuanxu/modules/json-schema/json-schema-validation-core
                  yuanxu-json-schema-candidate-rows)
         (only-in :yuanxu/modules/json-schema/json-schema-values yuanxu-json-schema-null?))
-(export poo-flow-opentofu-cty->schema poo-flow-opentofu-block->schema
-        poo-flow-opentofu-block-normalization poo-flow-opentofu-block-obligations
+(export agentic-ai-lab-opentofu-cty->schema agentic-ai-lab-opentofu-block->schema
+        agentic-ai-lab-opentofu-block-normalization agentic-ai-lab-opentofu-block-obligations
         opentofu-service-configuration)
 
 ;; Derive demand and input from the final declared configuration. Admission
@@ -44,7 +44,7 @@
                       '((min_items . minItems) (max_items . maxItems)))))
 
 ;; cty is a different source format, not another JSON Schema evaluator.
-(def (poo-flow-opentofu-cty->schema type)
+(def (agentic-ai-lab-opentofu-cty->schema type)
   (cond
    ((member type '("string" "number" "bool"))
     `((type . ,(if (equal? type "bool") "boolean" type))))
@@ -52,17 +52,17 @@
     (let ((kind (car type)) (child (cadr type)))
       (cond
        ((member kind '("list" "set"))
-        `((type . "array") (items . ,(poo-flow-opentofu-cty->schema child))))
+        `((type . "array") (items . ,(agentic-ai-lab-opentofu-cty->schema child))))
        ((equal? kind "map")
-        `((type . "object") (additionalProperties . ,(poo-flow-opentofu-cty->schema child))))
+        `((type . "object") (additionalProperties . ,(agentic-ai-lab-opentofu-cty->schema child))))
        ((equal? kind "tuple")
         `((type . "array")
-          (items . ,(if (null? child) #f (map poo-flow-opentofu-cty->schema child)))
+          (items . ,(if (null? child) #f (map agentic-ai-lab-opentofu-cty->schema child)))
           (minItems . ,(length child)) (maxItems . ,(length child))))
        ((equal? kind "object")
         `((type . "object") (additionalProperties . #f)
           (properties . ,(map (lambda (row)
-                                (cons (car row) (nullable (poo-flow-opentofu-cty->schema (cdr row))))) child))))
+                                (cons (car row) (nullable (agentic-ai-lab-opentofu-cty->schema (cdr row))))) child))))
        (else (error "unsupported cty constructor" type)))))
    (else (error "unsupported cty type" type))))
 
@@ -83,11 +83,11 @@
   (let* ((nested (ref attr 'nested_type))
          (schema (if nested
                    (collection-schema (ref nested 'nesting_mode)
-                     (poo-flow-opentofu-block->schema nested) nested)
-                   (poo-flow-opentofu-cty->schema (ref attr 'type)))))
+                     (agentic-ai-lab-opentofu-block->schema nested) nested)
+                   (agentic-ai-lab-opentofu-cty->schema (ref attr 'type)))))
     (if (ref attr 'required) schema (nullable schema))))
 
-(def (poo-flow-opentofu-block->schema block)
+(def (agentic-ai-lab-opentofu-block->schema block)
   (let ((attributes (filter (lambda (row) (input-attribute? (cdr row)))
                             (ref block 'attributes '())))
         (blocks (ref block 'block_types '())))
@@ -102,7 +102,7 @@
         (map (lambda (row)
                (cons (car row)
                  (collection-schema (ref (cdr row) 'nesting_mode)
-                   (poo-flow-opentofu-block->schema (ref (cdr row) 'block)) (cdr row)))) blocks))))))
+                   (agentic-ai-lab-opentofu-block->schema (ref (cdr row) 'block)) (cdr row)))) blocks))))))
 
 (def (issue code location)
   (.o reason: code path: location))
@@ -190,12 +190,12 @@
             value child-path nested-block #f admission? verify normalize))
          (else (error "shape must be admitted before normalization" child-path)))))))
 
-(def (poo-flow-opentofu-block-normalization block candidate (normalize #f))
+(def (agentic-ai-lab-opentofu-block-normalization block candidate (normalize #f))
   (let (result (walk-block block candidate '() #f #f normalize))
     (.o value: (car result)
         diagnostics: (filter (lambda (diagnostic)
                                (not (eq? (.get diagnostic reason) 'set-normalization-required)))
                              (cdr result)))))
 
-(def (poo-flow-opentofu-block-obligations block candidate context (verify #f))
+(def (agentic-ai-lab-opentofu-block-obligations block candidate context (verify #f))
   (cdr (walk-block block candidate '() #t verify)))

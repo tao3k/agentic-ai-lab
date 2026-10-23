@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO Flow resolution admission and Task/Flow activation lowering.
+;;; Boundary: Agentic AI Lab resolution admission and Task/Flow activation lowering.
 ;;; Invariant: Core Catalog matches existing values by SourceRef.
 ;;; It never evaluates, imports, or opens the source ref payload.
 ;;; Intent: agents can trust resolver receipts as replayable evidence of selection order.
@@ -20,117 +20,117 @@
         :yuanxu/modules/funflow/control-plane/config
         :yuanxu/module-system/source/imports
         :yuanxu/module-system/source/objects
-        :poo-flow/modules/module-authoring/module-descriptor
-        :poo-flow/modules/workflow/scenario/configuration/module-diagnostics
+        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
         :yuanxu/module-system/catalog/objects
         (only-in :yuanxu/object-family/syntax
                  defpoo-object-family)
         :yuanxu/utilities/final-projection-syntax)
 
-(export resolve-poo-flow-module-source
-        resolve-poo-flow-module-sources
-        poo-flow-module-resolve-doctor
-        poo-flow-module-resolve-and-activate
-        poo-flow-module-resolve-and-activate-with-base
-        poo-flow-module-activation-prototype
-        make-poo-flow-module-activation
-        poo-flow-module-activation?
-        poo-flow-module-activation-modules
-        poo-flow-module-activation-task-registry
-        poo-flow-module-activation-flow-registry
-        poo-flow-module-activation-options
-        activate-poo-flow-modules
-        activate-poo-flow-modules-with-base
-        poo-flow-module-activation->run-config)
+(export resolve-agentic-ai-lab-module-source
+        resolve-agentic-ai-lab-module-sources
+        agentic-ai-lab-module-resolve-doctor
+        agentic-ai-lab-module-resolve-and-activate
+        agentic-ai-lab-module-resolve-and-activate-with-base
+        agentic-ai-lab-module-activation-prototype
+        make-agentic-ai-lab-module-activation
+        agentic-ai-lab-module-activation?
+        agentic-ai-lab-module-activation-modules
+        agentic-ai-lab-module-activation-task-registry
+        agentic-ai-lab-module-activation-flow-registry
+        agentic-ai-lab-module-activation-options
+        activate-agentic-ai-lab-modules
+        activate-agentic-ai-lab-modules-with-base
+        agentic-ai-lab-module-activation->run-config)
 
 ;;; Boundary: missing catalog source is a typed config failure, not a loader miss.
 ;; : (-> PooModuleCatalog PooModuleSourceRef PooModuleDescriptor)
-(def (resolve-poo-flow-module-source catalog source-ref)
+(def (resolve-agentic-ai-lab-module-source catalog source-ref)
   (let (module (resolve-yuanxu-module-source/default catalog source-ref #f))
     (if module
       module
       (raise-control-plane-failure
        'module-system
        'missing-module-source
-       "poo-flow module source was not found in catalog"
+       "agentic-ai-lab module source was not found in catalog"
        (yuanxu-product-field-rows
         (catalog (yuanxu-module-catalog-name catalog))
         (source (yuanxu-module-source-ref->alist source-ref)))))))
 
 ;;; Boundary: multi-source resolution preserves requested source order.
 ;; : (-> PooModuleCatalog [PooModuleSourceRef] [PooModuleDescriptor])
-(def (resolve-poo-flow-module-sources catalog source-refs)
+(def (resolve-agentic-ai-lab-module-sources catalog source-refs)
   (if (null? source-refs)
     '()
-    (cons (resolve-poo-flow-module-source catalog (car source-refs))
-          (resolve-poo-flow-module-sources catalog (cdr source-refs)))))
+    (cons (resolve-agentic-ai-lab-module-source catalog (car source-refs))
+          (resolve-agentic-ai-lab-module-sources catalog (cdr source-refs)))))
 
 ;;; Boundary: resolve-doctor validates source selection before activation.
 ;; : (-> PooModuleCatalog [PooModuleSourceRef] PooModuleDoctorReport)
-(def (poo-flow-module-resolve-doctor catalog source-refs)
-  (poo-flow-module-doctor
-   (resolve-poo-flow-module-sources catalog source-refs)))
+(def (agentic-ai-lab-module-resolve-doctor catalog source-refs)
+  (agentic-ai-lab-module-doctor
+   (resolve-agentic-ai-lab-module-sources catalog source-refs)))
 
 ;;; Boundary: base activation allows callers to preserve existing registries.
 ;; : (-> PooModuleCatalog [PooModuleSourceRef] TaskFamilyRegistry FlowDeclarationRegistry ModuleOptionAlist PooModuleActivation)
-(def (poo-flow-module-resolve-and-activate-with-base catalog source-refs base-task-registry base-flow-registry base-options)
-  (activate-poo-flow-modules-with-base
-   (resolve-poo-flow-module-sources catalog source-refs)
+(def (agentic-ai-lab-module-resolve-and-activate-with-base catalog source-refs base-task-registry base-flow-registry base-options)
+  (activate-agentic-ai-lab-modules-with-base
+   (resolve-agentic-ai-lab-module-sources catalog source-refs)
    base-task-registry
    base-flow-registry
    base-options))
 
 ;;; Boundary: source-selected activation uses the same activation path as direct modules.
 ;; : (-> PooModuleCatalog [PooModuleSourceRef] PooModuleActivation)
-(def (poo-flow-module-resolve-and-activate catalog source-refs)
-  (activate-poo-flow-modules
-   (resolve-poo-flow-module-sources catalog source-refs)))
+(def (agentic-ai-lab-module-resolve-and-activate catalog source-refs)
+  (activate-agentic-ai-lab-modules
+   (resolve-agentic-ai-lab-module-sources catalog source-refs)))
 
 ;;; Boundary: activation appends descriptor contributions without mutation.
 ;; : (-> [PooModuleDescriptor] TaskFamilyRegistry FlowDeclarationRegistry ModuleOptionAlist PooModuleActivation)
 (defpoo-object-family
-  (prototype poo-flow-module-activation-prototype
+  (prototype agentic-ai-lab-module-activation-prototype
              activation?
-             poo-flow-module-activation?)
-  (constructor make-poo-flow-module-activation
+             agentic-ai-lab-module-activation?)
+  (constructor make-agentic-ai-lab-module-activation
                (modules-value modules)
                (task-registry-value task-registry)
                (flow-registry-value flow-registry)
                (options-value options))
   (accessors
-   (poo-flow-module-activation-modules modules)
-   (poo-flow-module-activation-task-registry task-registry)
-   (poo-flow-module-activation-flow-registry flow-registry)
-   (poo-flow-module-activation-options options))
+   (agentic-ai-lab-module-activation-modules modules)
+   (agentic-ai-lab-module-activation-task-registry task-registry)
+   (agentic-ai-lab-module-activation-flow-registry flow-registry)
+   (agentic-ai-lab-module-activation-options options))
   (projections))
 
 ;;; Boundary: activation validates closure then appends base-first registries.
 ;;; Intent: runtime-visible registries are deterministic snapshots of module data.
 ;; : (-> [PooModuleDescriptor] TaskFamilyRegistry FlowDeclarationRegistry ModuleOptionAlist PooModuleActivation)
-(def (activate-poo-flow-modules-with-base modules base-task-registry base-flow-registry base-options)
-  (let (closed-modules (poo-flow-module-closure modules))
+(def (activate-agentic-ai-lab-modules-with-base modules base-task-registry base-flow-registry base-options)
+  (let (closed-modules (agentic-ai-lab-module-closure modules))
     ;; Import validation must see the same closure that registry aggregation uses.
     (validate-yuanxu-module-imports closed-modules)
-    (make-poo-flow-module-activation
+    (make-agentic-ai-lab-module-activation
      closed-modules
      (make-task-family-registry
       (task-family-registry-name base-task-registry)
       ;; Base descriptors stay first so existing lookup behavior is preserved.
       (append (task-family-registry-descriptors base-task-registry)
-              (poo-flow-module-all-task-descriptors closed-modules)))
+              (agentic-ai-lab-module-all-task-descriptors closed-modules)))
      (make-flow-declaration-registry
       (flow-declaration-registry-name base-flow-registry)
       (append (flow-declaration-registry-descriptors base-flow-registry)
-             (poo-flow-module-all-flow-descriptors closed-modules)))
+             (agentic-ai-lab-module-all-flow-descriptors closed-modules)))
      (append base-options
-             (poo-flow-module-all-options closed-modules)
-             (list (cons 'poo-flow-modules
-                         (poo-flow-module-names closed-modules)))))))
+             (agentic-ai-lab-module-all-options closed-modules)
+             (list (cons 'agentic-ai-lab-modules
+                         (agentic-ai-lab-module-names closed-modules)))))))
 
 ;;; Boundary: default activation uses project default task and flow registries.
 ;; : (-> [PooModuleDescriptor] PooModuleActivation)
-(def (activate-poo-flow-modules modules)
-  (activate-poo-flow-modules-with-base
+(def (activate-agentic-ai-lab-modules modules)
+  (activate-agentic-ai-lab-modules-with-base
    modules
    default-task-family-registry
    default-flow-declaration-registry
@@ -138,10 +138,10 @@
 
 ;;; Boundary: run-config lowering keeps modules outside runner internals.
 ;; : (-> Symbol Strategy RuntimeAdapter PooModuleActivation RunConfig)
-(def (poo-flow-module-activation->run-config name strategy adapter activation)
+(def (agentic-ai-lab-module-activation->run-config name strategy adapter activation)
   (make-run-config name
                    strategy
                    adapter
-                   (poo-flow-module-activation-options activation)
-                   (poo-flow-module-activation-task-registry activation)
-                   (poo-flow-module-activation-flow-registry activation)))
+                   (agentic-ai-lab-module-activation-options activation)
+                   (agentic-ai-lab-module-activation-task-registry activation)
+                   (agentic-ai-lab-module-activation-flow-registry activation)))

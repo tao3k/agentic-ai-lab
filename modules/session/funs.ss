@@ -9,51 +9,51 @@
 (import "funs-attempt.ss"
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/module-authoring/module-config-syntax)
+        :agentic-ai-lab/modules/module-authoring/module-config-syntax)
 
-(export (import: "funs-attempt.ss") +poo-flow-session-config-kind+
+(export (import: "funs-attempt.ss") +agentic-ai-lab-session-config-kind+
         session-config
-        poo-flow-session-poo-config?
-        poo-flow-session-poo-config->rows
-        poo-flow-session-poo-configs->rows
-        poo-flow-session-poo-config-flags)
+        agentic-ai-lab-session-poo-config?
+        agentic-ai-lab-session-poo-config->rows
+        agentic-ai-lab-session-poo-configs->rows
+        agentic-ai-lab-session-poo-config-flags)
 
-(def (poo-flow-session-config-rows/tail rows tail)
+(def (agentic-ai-lab-session-config-rows/tail rows tail)
   (append rows tail))
 
-(def +poo-flow-session-config-kind+ 'poo-flow.session.config)
+(def +agentic-ai-lab-session-config-kind+ 'agentic-ai-lab.session.config)
 
 (defpoo-module-config-prototype
   session-config
-  (slots ((kind +poo-flow-session-config-kind+)
+  (slots ((kind +agentic-ai-lab-session-config-kind+)
           (rows '())
           (metadata '())
           (runtime-owner "marlin-agent-core")
           (runtime-executed #f))))
 
 (defpoo-module-config-kind-predicate
-  poo-flow-session-poo-config?
-  +poo-flow-session-config-kind+)
+  agentic-ai-lab-session-poo-config?
+  +agentic-ai-lab-session-config-kind+)
 
-(def (poo-flow-session-poo-config->rows config)
+(def (agentic-ai-lab-session-poo-config->rows config)
   (let (rows (.ref config 'rows))
     (if (list? rows)
       rows
       (error "session config rows must be a list" rows))))
 
-(def (poo-flow-session-poo-configs->rows configs)
+(def (agentic-ai-lab-session-poo-configs->rows configs)
   (cond
    ((null? configs) '())
    ((pair? configs)
-    (poo-flow-session-config-rows/tail
-     (poo-flow-session-poo-config->rows (car configs))
-     (poo-flow-session-poo-configs->rows (cdr configs))))
+    (agentic-ai-lab-session-config-rows/tail
+     (agentic-ai-lab-session-poo-config->rows (car configs))
+     (agentic-ai-lab-session-poo-configs->rows (cdr configs))))
    (else
     (error "session POO configs must be a list" configs))))
 
-(def (poo-flow-session-poo-config-flags prototypes user-config)
-  (let* ((configs (filter poo-flow-session-poo-config? prototypes))
-         (rows (poo-flow-session-poo-configs->rows configs)))
+(def (agentic-ai-lab-session-poo-config-flags prototypes user-config)
+  (let* ((configs (filter agentic-ai-lab-session-poo-config? prototypes))
+         (rows (agentic-ai-lab-session-poo-configs->rows configs)))
     (list '+policy
           '+typed-receipts
           (cons ':config rows)

@@ -11,7 +11,7 @@
         (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
         (only-in :yuanxu/module-system/authoring/roles yuanxu-semantic-module)
         :yuanxu/profile-composition/selection-syntax
-        :poo-flow/modules/workflow/scenario/composition-syntax
+        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
         :yuanxu/profile-composition/profile-bundle)
 
 (export profile-composition-test)

@@ -6,8 +6,8 @@
 ;;; Boundary: agent-sandbox profile data records and accessors.
 ;;; Invariant: this owner has no descriptor inheritance or validation side effects.
 
-(import :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/projection-syntax)
+(import :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/agent-sandbox/projection-syntax)
 
 (export +agent-sandbox-profile-schema+
         +agent-sandbox-profile-runtime-summary-schema+
@@ -23,15 +23,15 @@
         agent-sandbox-profile-list-count)
 
 ;; : (-> Unit Symbol)
-(def +agent-sandbox-profile-schema+ 'poo-flow.agent-sandbox-profile.v1)
+(def +agent-sandbox-profile-schema+ 'agentic-ai-lab.agent-sandbox-profile.v1)
 
 ;; : (-> Unit Symbol)
 (def +agent-sandbox-profile-runtime-summary-schema+
-  'poo-flow.agent-sandbox-profile.runtime-summary.v1)
+  'agentic-ai-lab.agent-sandbox-profile.runtime-summary.v1)
 
 ;; : (-> Unit Symbol)
 (def +agent-sandbox-profile-handoff-summary-schema+
-  'poo-flow.agent-sandbox-profile.handoff-summary.v1)
+  'agentic-ai-lab.agent-sandbox-profile.handoff-summary.v1)
 
 
 ;;; Backend profiles package reusable runtime defaults without choosing the

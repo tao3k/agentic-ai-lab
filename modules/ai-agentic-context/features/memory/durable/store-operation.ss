@@ -12,37 +12,37 @@
         (only-in :yuanxu/modules/funflow/control-plane/runtime-command-descriptor
                  runtime-command-fields->manifest)
         :yuanxu/utilities/final-projection-syntax
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/store-backend)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend)
 
-(export +poo-flow-durable-runtime-store-operation-receipt-kind+
-        +poo-flow-durable-runtime-store-operation-receipt-schema+
-        +poo-flow-durable-runtime-store-operation-handoff-schema+
-        +poo-flow-durable-runtime-store-operation-specs+
-        make-poo-flow-durable-runtime-store-operation-receipt
-        poo-flow-durable-runtime-store-operation-receipt?
-        poo-flow-durable-runtime-store-operation-receipt-valid?
-        poo-flow-durable-runtime-store-operation-receipt-diagnostics
-        poo-flow-durable-runtime-store-operation
-        poo-flow-durable-runtime-store-operation-receipts
-        poo-flow-durable-runtime-store-operation-receipt->alist
-        poo-flow-durable-runtime-store-operation-receipts->alists
-        poo-flow-durable-runtime-store-operations->marlin-handoff)
-
-;; : Symbol
-(def +poo-flow-durable-runtime-store-operation-receipt-kind+
-  'poo-flow.durable.runtime-store-operation-receipt)
+(export +agentic-ai-lab-durable-runtime-store-operation-receipt-kind+
+        +agentic-ai-lab-durable-runtime-store-operation-receipt-schema+
+        +agentic-ai-lab-durable-runtime-store-operation-handoff-schema+
+        +agentic-ai-lab-durable-runtime-store-operation-specs+
+        make-agentic-ai-lab-durable-runtime-store-operation-receipt
+        agentic-ai-lab-durable-runtime-store-operation-receipt?
+        agentic-ai-lab-durable-runtime-store-operation-receipt-valid?
+        agentic-ai-lab-durable-runtime-store-operation-receipt-diagnostics
+        agentic-ai-lab-durable-runtime-store-operation
+        agentic-ai-lab-durable-runtime-store-operation-receipts
+        agentic-ai-lab-durable-runtime-store-operation-receipt->alist
+        agentic-ai-lab-durable-runtime-store-operation-receipts->alists
+        agentic-ai-lab-durable-runtime-store-operations->marlin-handoff)
 
 ;; : Symbol
-(def +poo-flow-durable-runtime-store-operation-receipt-schema+
-  'poo-flow.module-system.durable-runtime-store-operation.receipt.v1)
+(def +agentic-ai-lab-durable-runtime-store-operation-receipt-kind+
+  'agentic-ai-lab.durable.runtime-store-operation-receipt)
 
 ;; : Symbol
-(def +poo-flow-durable-runtime-store-operation-handoff-schema+
-  'poo-flow.module-system.durable-runtime-store-operation.marlin-handoff.v1)
+(def +agentic-ai-lab-durable-runtime-store-operation-receipt-schema+
+  'agentic-ai-lab.module-system.durable-runtime-store-operation.receipt.v1)
+
+;; : Symbol
+(def +agentic-ai-lab-durable-runtime-store-operation-handoff-schema+
+  'agentic-ai-lab.module-system.durable-runtime-store-operation.marlin-handoff.v1)
 
 ;; OperationSpec = (Kind LedgerKind CapabilityFlag TargetSlot)
 ;; : [DurableRuntimeStoreOperationSpec]
-(def +poo-flow-durable-runtime-store-operation-specs+
+(def +agentic-ai-lab-durable-runtime-store-operation-specs+
   '((append-fact fact-log append-fact fact-log-ref)
     (write-checkpoint checkpoint write-checkpoint checkpoint-store-ref)
     (rebuild-index derived-index rebuild-index derived-index-ref)
@@ -63,13 +63,13 @@
 ;; : (-> Symbol (U #f Alist))
 (def (durable-runtime-store-operation-spec operation-kind)
   (find (lambda (spec) (eq? (car spec) operation-kind))
-        +poo-flow-durable-runtime-store-operation-specs+))
+        +agentic-ai-lab-durable-runtime-store-operation-specs+))
 
 ;; : (-> Symbol Symbol Value Alist)
 (def (durable-runtime-store-operation-diagnostic code slot value)
-  (list (cons 'kind 'poo-flow.durable.runtime-store-operation.diagnostic)
+  (list (cons 'kind 'agentic-ai-lab.durable.runtime-store-operation.diagnostic)
         (cons 'schema
-              'poo-flow.module-system.durable-runtime-store-operation.diagnostic.v1)
+              'agentic-ai-lab.module-system.durable-runtime-store-operation.diagnostic.v1)
         (cons 'code code)
         (cons 'phase 'durable-runtime-store-operation)
         (cons 'slot slot)
@@ -92,7 +92,7 @@
 ;;; Runtime store operation receipts are fixed structs; handoff helpers project
 ;;; them into alists only at the Marlin boundary.
 ;; : PooDurableRuntimeStoreOperationReceipt
-(defstruct poo-flow-durable-runtime-store-operation-receipt
+(defstruct agentic-ai-lab-durable-runtime-store-operation-receipt
   (operation-id
    operation-kind
    store-id
@@ -157,15 +157,15 @@
     causal-refs)))
 
 ;; : (-> Symbol Symbol PooDurableRuntimeStoreNegotiationReceipt Datum [Alist] PooDurableRuntimeStoreOperationReceipt)
-(def (poo-flow-durable-runtime-store-operation operation-id
+(def (agentic-ai-lab-durable-runtime-store-operation operation-id
                                                operation-kind
                                                negotiation
                                                payload-summary
                                                . maybe-options)
   (let* ((options (if (null? maybe-options) '() (car maybe-options)))
          (negotiation-row
-          (if (poo-flow-durable-runtime-store-negotiation-receipt? negotiation)
-            (poo-flow-durable-runtime-store-negotiation-receipt->alist
+          (if (agentic-ai-lab-durable-runtime-store-negotiation-receipt? negotiation)
+            (agentic-ai-lab-durable-runtime-store-negotiation-receipt->alist
              negotiation)
             negotiation))
          (contract-row
@@ -192,7 +192,7 @@
            negotiation-row
            target-ref
            causal-refs)))
-    (make-poo-flow-durable-runtime-store-operation-receipt
+    (make-agentic-ai-lab-durable-runtime-store-operation-receipt
      operation-id
      operation-kind
      (durable-runtime-store-ref negotiation-row 'store-id #f)
@@ -218,11 +218,11 @@
 
 ;; : (forall (k v) (-> PooDurableRuntimeStoreNegotiationReceipt [(Pair k v)] [PooDurableRuntimeStoreOperationReceipt]))
 ;; : (-> PooDurableRuntimeStoreNegotiationReceipt [Alist] [PooDurableRuntimeStoreOperationReceipt])
-(def (poo-flow-durable-runtime-store-operation-receipts negotiation
+(def (agentic-ai-lab-durable-runtime-store-operation-receipts negotiation
                                                          . maybe-options)
   (let ((options (if (null? maybe-options) '() (car maybe-options))))
     (map (lambda (spec)
-           (poo-flow-durable-runtime-store-operation
+           (agentic-ai-lab-durable-runtime-store-operation
             (car spec)
             (car spec)
             negotiation
@@ -231,67 +231,67 @@
              'payload-summary
              (list (cons 'operation-kind (car spec))))
             options))
-         +poo-flow-durable-runtime-store-operation-specs+)))
+         +agentic-ai-lab-durable-runtime-store-operation-specs+)))
 
 ;; : (-> PooDurableRuntimeStoreOperationReceipt Alist)
 (defpoo-final-projection
-  poo-flow-durable-runtime-store-operation-receipt->alist (receipt)
+  agentic-ai-lab-durable-runtime-store-operation-receipt->alist (receipt)
   (bindings ((diagnostics
-              (poo-flow-durable-runtime-store-operation-receipt-diagnostics
+              (agentic-ai-lab-durable-runtime-store-operation-receipt-diagnostics
                receipt))))
-  (fields ((kind +poo-flow-durable-runtime-store-operation-receipt-kind+)
-           (schema +poo-flow-durable-runtime-store-operation-receipt-schema+)
+  (fields ((kind +agentic-ai-lab-durable-runtime-store-operation-receipt-kind+)
+           (schema +agentic-ai-lab-durable-runtime-store-operation-receipt-schema+)
            (operation-id
-            (poo-flow-durable-runtime-store-operation-receipt-operation-id
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-operation-id
              receipt))
            (operation-kind
-            (poo-flow-durable-runtime-store-operation-receipt-operation-kind
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-operation-kind
              receipt))
            (store-id
-            (poo-flow-durable-runtime-store-operation-receipt-store-id receipt))
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-store-id receipt))
            (backend-id
-            (poo-flow-durable-runtime-store-operation-receipt-backend-id
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-backend-id
              receipt))
            (project-id
-            (poo-flow-durable-runtime-store-operation-receipt-project-id
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-project-id
              receipt))
            (root-session-id
-            (poo-flow-durable-runtime-store-operation-receipt-root-session-id
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-root-session-id
              receipt))
            (session-id
-            (poo-flow-durable-runtime-store-operation-receipt-session-id
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-session-id
              receipt))
            (ledger-kind
-            (poo-flow-durable-runtime-store-operation-receipt-ledger-kind
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-ledger-kind
              receipt))
            (capability-flag
-            (poo-flow-durable-runtime-store-operation-receipt-capability-flag
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-capability-flag
              receipt))
            (target-ref
-            (poo-flow-durable-runtime-store-operation-receipt-target-ref
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-target-ref
              receipt))
            (payload-summary
-            (poo-flow-durable-runtime-store-operation-receipt-payload-summary
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-payload-summary
              receipt))
            (causal-refs
-            (poo-flow-durable-runtime-store-operation-receipt-causal-refs
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-causal-refs
              receipt))
            (watermark
-            (poo-flow-durable-runtime-store-operation-receipt-watermark
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-watermark
              receipt))
            (valid?
-            (poo-flow-durable-runtime-store-operation-receipt-valid? receipt))
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-valid? receipt))
            (diagnostics diagnostics)
            (metadata
-            (poo-flow-durable-runtime-store-operation-receipt-metadata receipt))
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-metadata receipt))
            (runtime-owner
-            (poo-flow-durable-runtime-store-operation-receipt-runtime-owner
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-runtime-owner
              receipt))
            (handoff-required
-            (poo-flow-durable-runtime-store-operation-receipt-handoff-required
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-handoff-required
              receipt))
            (runtime-executed
-            (poo-flow-durable-runtime-store-operation-receipt-runtime-executed
+            (agentic-ai-lab-durable-runtime-store-operation-receipt-runtime-executed
              receipt))
            (diagnostic-count (length diagnostics)))))
 
@@ -303,25 +303,25 @@
 
 ;; : (-> [PooDurableRuntimeStoreOperationReceipt] [Alist])
 (defpoo-final-projection-batch
-  poo-flow-durable-runtime-store-operation-receipts->alists (receipts)
-  (projector poo-flow-durable-runtime-store-operation-receipt->alist)
+  agentic-ai-lab-durable-runtime-store-operation-receipts->alists (receipts)
+  (projector agentic-ai-lab-durable-runtime-store-operation-receipt->alist)
   (error-message
    "durable runtime store operation receipt serialization requires a list"))
 
 ;; : (-> PooDurableRuntimeStoreNegotiationReceipt [PooDurableRuntimeStoreOperationReceipt] Alist)
-(def (poo-flow-durable-runtime-store-operations->marlin-handoff negotiation
+(def (agentic-ai-lab-durable-runtime-store-operations->marlin-handoff negotiation
                                                                   receipts
                                                                   . maybe-options)
   (let* ((options (if (null? maybe-options) '() (car maybe-options)))
          (negotiation-row
-          (if (poo-flow-durable-runtime-store-negotiation-receipt? negotiation)
-            (poo-flow-durable-runtime-store-negotiation-receipt->alist
+          (if (agentic-ai-lab-durable-runtime-store-negotiation-receipt? negotiation)
+            (agentic-ai-lab-durable-runtime-store-negotiation-receipt->alist
              negotiation)
             negotiation))
          (backend-row
           (durable-runtime-store-ref negotiation-row 'backend-row '()))
          (operation-rows
-          (poo-flow-durable-runtime-store-operation-receipts->alists receipts))
+          (agentic-ai-lab-durable-runtime-store-operation-receipts->alists receipts))
          (operation
           (durable-runtime-store-ref options
                                      'manifest-operation
@@ -339,7 +339,7 @@
                                      'protocol
                                      'stdout-s-expression))
          (command-metadata
-          (list (cons 'source 'poo-flow.durable.runtime-store.operation)
+          (list (cons 'source 'agentic-ai-lab.durable.runtime-store.operation)
                 (cons 'operation-count (length operation-rows))
                 (cons 'runtime-executed #f)))
          (envelope
@@ -347,7 +347,7 @@
                 (cons 'runtime 'marlin)
                 (cons 'operation operation)
                 (cons 'request-id
-                      (list 'poo-flow.durable.runtime-store.operations
+                      (list 'agentic-ai-lab.durable.runtime-store.operations
                             (durable-runtime-store-ref negotiation-row
                                                        'store-id
                                                        #f)))
@@ -378,8 +378,8 @@
            command-metadata
            envelope)))
     (list
-     (cons 'kind 'poo-flow.durable.runtime-store.operation-handoff)
-     (cons 'schema +poo-flow-durable-runtime-store-operation-handoff-schema+)
+     (cons 'kind 'agentic-ai-lab.durable.runtime-store.operation-handoff)
+     (cons 'schema +agentic-ai-lab-durable-runtime-store-operation-handoff-schema+)
      (cons 'request-schema +runtime-request-schema+)
      (cons 'operation operation)
      (cons 'request-id (durable-runtime-store-ref manifest 'request-id #f))

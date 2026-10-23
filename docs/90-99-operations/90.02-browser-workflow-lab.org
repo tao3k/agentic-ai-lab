@@ -3,16 +3,16 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 #+title: Browser Workflow Lab
-#+subtitle: Poo Flow runtime projection, graph, and LaTeX integration
-#+author: Poo Flow
+#+subtitle: Agentic AI Lab runtime projection, graph, and LaTeX integration
+#+author: Agentic AI Lab
 #+filetags: :workflow:wasm:documents:
 
 * Browser Workflow Lab
 :PROPERTIES:
-:ID:       poo-flow-browser-workflow-lab
+:ID:       agentic-ai-lab-browser-workflow-lab
 :END:
 
-This document is an executable presentation surface for the Poo Flow browser
+This document is an executable presentation surface for the Agentic AI Lab browser
 runtime.  The Scheme source remains the canonical workflow definition; the web
 view projects runtime events into an interactive graph without embedding a
 Scheme compiler in the WASM runtime.
@@ -51,7 +51,7 @@ The source is kept visible so the graph never becomes an opaque replacement for
 the actual Scheme program.
 
 #+name: browser-contribution
-#+attr_html: :data-poo-flow true
+#+attr_html: :data-agentic-ai-lab true
 #+begin_src scheme
 (workflow browser-contribution
   (step receive-request
@@ -74,7 +74,7 @@ the actual Scheme program.
 #+end_src
 
 #+begin_export html
-<script type="application/vnd.poo-flow.projection+json">
+<script type="application/vnd.agentic-ai-lab.projection+json">
 {
   "events": [
     { "id": "receive-request", "label": "Receive request", "kind": "request-received", "state": "completed" },

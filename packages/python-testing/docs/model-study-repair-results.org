@@ -11,7 +11,7 @@ Four user-authorized DeepSeek =deepseek-flash= Responses calls used the
 reviewed preview in
 =/private/tmp/poo-scheme-repair-preview-head-e738a431=.
 ASCENT head was =f80c9dc7cf5e4ed42a806b0d78c847e52be09de6= and
-POO Flow head was =e738a431b15d06ac2118b9d67ea59237cb0076b4=.
+Agentic AI Lab head was =e738a431b15d06ac2118b9d67ea59237cb0076b4=.
 The task source SHA256 was
 =c14feca1c4fd066e783677a4852ea78ef3b17cb00a8f449b21ba1dd991de6466=.
 The exact two control source digests and dynamic feedback templates
@@ -60,7 +60,7 @@ The earlier four-call authorization was exhausted before the revised run.
 
 The user separately authorized the immutable repair-only preview at
 =/private/tmp/poo-scheme-repair-diagnostic-preview-head-5939b39f=,
-bound to POO Flow =5939b39f= and the same ASCENT =f80c9dc=. The preview
+bound to Agentic AI Lab =5939b39f= and the same ASCENT =f80c9dc=. The preview
 contained only the revised Scheme task and a bounded repair template;
 it did not resend the two unchanged controls. Two DeepSeek calls were
 made, with no retries. Raw candidates, native receipts, response IDs,

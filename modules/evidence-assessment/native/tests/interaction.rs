@@ -1,4 +1,4 @@
-use poo_flow_reasoning::{
+use agentic_ai_lab_reasoning::{
     Data, DatalogRequest, EvidenceInteraction, EvidenceOperation, Runtime, evaluate_datalog,
     read_datalog,
 };
@@ -182,7 +182,7 @@ fn native_datalog_types_preserve_boolean_integer_and_text_distinctions() {
 #[test]
 fn journal_batch_rolls_back_receipts_when_checkpoint_is_invalid() {
     let engine = Runtime::new(1).unwrap();
-    let mut ledger = poo_flow_reasoning::Trajectory::new(&engine, "task", "source").unwrap();
+    let mut ledger = agentic_ai_lab_reasoning::Trajectory::new(&engine, "task", "source").unwrap();
     let before = ledger.snapshot().unwrap();
     let receipt = Data::object([
         ("id", "evidence".into()),
@@ -210,7 +210,7 @@ fn journal_batch_rolls_back_receipts_when_checkpoint_is_invalid() {
 #[test]
 fn trajectory_exploration_is_read_only_and_open_world() {
     let engine = Runtime::new(1).unwrap();
-    let mut ledger = poo_flow_reasoning::Trajectory::new(&engine, "task", "source-a").unwrap();
+    let mut ledger = agentic_ai_lab_reasoning::Trajectory::new(&engine, "task", "source-a").unwrap();
     let attempt = Data::object([
         ("id", "attempt-1".into()),
         ("kind", "attempt".into()),
@@ -225,7 +225,7 @@ fn trajectory_exploration_is_read_only_and_open_world() {
     ledger.append(attempt).unwrap();
     let context = ledger.context().unwrap();
     assert!(ledger.exploration_current(&context).unwrap());
-    let mut other = poo_flow_reasoning::Trajectory::new(&engine, "task", "source-a").unwrap();
+    let mut other = agentic_ai_lab_reasoning::Trajectory::new(&engine, "task", "source-a").unwrap();
     other
         .append(Data::object([
             ("id", "attempt-1".into()),
@@ -354,7 +354,7 @@ fn trajectory_exploration_is_read_only_and_open_world() {
 #[test]
 fn trajectory_brief_reports_bound_changes_without_attempt_payloads() {
     let engine = Runtime::new(1).unwrap();
-    let mut ledger = poo_flow_reasoning::Trajectory::new(&engine, "task", "source-a").unwrap();
+    let mut ledger = agentic_ai_lab_reasoning::Trajectory::new(&engine, "task", "source-a").unwrap();
     let first = ledger.brief(None).unwrap();
     assert_eq!(
         first.field("readSurfaces").unwrap(),
@@ -397,7 +397,7 @@ fn trajectory_brief_reports_bound_changes_without_attempt_payloads() {
     };
     fields.insert("prefixIdentity".into(), "wrong".into());
     assert!(ledger.brief(Some(&forged)).is_err());
-    let foreign = poo_flow_reasoning::Trajectory::new(&engine, "other", "source-a").unwrap();
+    let foreign = agentic_ai_lab_reasoning::Trajectory::new(&engine, "other", "source-a").unwrap();
     assert!(foreign.brief(Some(&changed)).is_err());
     ledger
         .append(Data::object([
@@ -421,7 +421,7 @@ fn trajectory_brief_reports_bound_changes_without_attempt_payloads() {
 #[test]
 fn trajectory_focus_and_exact_prefix_bind_caller_selected_reads() {
     let engine = Runtime::new(1).unwrap();
-    let mut ledger = poo_flow_reasoning::Trajectory::new(&engine, "task", "source-a").unwrap();
+    let mut ledger = agentic_ai_lab_reasoning::Trajectory::new(&engine, "task", "source-a").unwrap();
     let candidate = Data::object([
         ("questionIdentity", "q".into()),
         ("operationIdentity", "probe".into()),
@@ -478,7 +478,7 @@ fn trajectory_focus_and_exact_prefix_bind_caller_selected_reads() {
 #[test]
 fn trajectory_exploration_reference_requires_current_successful_review() {
     let engine = Runtime::new(1).unwrap();
-    let mut ledger = poo_flow_reasoning::Trajectory::new(&engine, "task", "source").unwrap();
+    let mut ledger = agentic_ai_lab_reasoning::Trajectory::new(&engine, "task", "source").unwrap();
     let event = |id: &str, kind: &str, fields: Vec<(&str, Data)>| {
         let mut base = vec![
             ("id", id.into()),
@@ -521,7 +521,7 @@ fn trajectory_exploration_reference_requires_current_successful_review() {
         ("inputIdentity", "input".into()),
         ("contractIdentity", "contract".into()),
     ]);
-    let reference = |ledger: &poo_flow_reasoning::Trajectory| {
+    let reference = |ledger: &agentic_ai_lab_reasoning::Trajectory| {
         ledger
             .explore(&candidate)
             .unwrap()
@@ -561,7 +561,7 @@ fn trajectory_exploration_reference_requires_current_successful_review() {
     assert_eq!(reference(&ledger), Data::from("result"));
     let reviewed_packet = ledger.explore(&candidate).unwrap();
     assert!(ledger.exploration_current(&reviewed_packet).unwrap());
-    let mut other = poo_flow_reasoning::Trajectory::new(&engine, "task", "source").unwrap();
+    let mut other = agentic_ai_lab_reasoning::Trajectory::new(&engine, "task", "source").unwrap();
     for recorded in ledger
         .snapshot()
         .unwrap()
@@ -614,7 +614,7 @@ fn trajectory_exploration_reference_requires_current_successful_review() {
 fn observed_set_equality_preserves_types_multiplicity_and_tuple_shape() {
     let one = list([list([Data::Integer(1.into())])]);
     assert!(
-        poo_flow_reasoning::rows_equal(
+        agentic_ai_lab_reasoning::rows_equal(
             &one,
             &list([
                 list([Data::Integer(1.into())]),
@@ -623,14 +623,14 @@ fn observed_set_equality_preserves_types_multiplicity_and_tuple_shape() {
         )
         .unwrap()
     );
-    assert!(!poo_flow_reasoning::rows_equal(&one, &list([list([true.into()])])).unwrap());
-    assert!(!poo_flow_reasoning::rows_equal(&one, &list([list(["1".into()])])).unwrap());
-    assert!(poo_flow_reasoning::rows_equal(&one, &list([list([]), list(["x".into()])])).is_err());
+    assert!(!agentic_ai_lab_reasoning::rows_equal(&one, &list([list([true.into()])])).unwrap());
+    assert!(!agentic_ai_lab_reasoning::rows_equal(&one, &list([list(["1".into()])])).unwrap());
+    assert!(agentic_ai_lab_reasoning::rows_equal(&one, &list([list([]), list(["x".into()])])).is_err());
 }
 
 #[test]
 fn restored_provider_history_keeps_opaque_items_and_rejects_duplicate_or_unpaired_tools() {
-    use poo_flow_reasoning::{Data, ResponseHistory};
+    use agentic_ai_lab_reasoning::{Data, ResponseHistory};
     let question = Data::object([
         ("role", Data::from("user")),
         ("content", Data::from("original")),

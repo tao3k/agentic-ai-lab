@@ -4,9 +4,9 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/modules/proof/projections/proof-fact-wire
-        :poo-flow/modules/proof/projections/proof-gate-receipts
-        :poo-flow/modules/proof/projections/proof-gate-bundle)
+        :agentic-ai-lab/modules/proof/projections/proof-fact-wire
+        :agentic-ai-lab/modules/proof/projections/proof-gate-receipts
+        :agentic-ai-lab/modules/proof/projections/proof-gate-bundle)
 
 (def proof-gate-receipts-test
   (test-suite "proof gate receipts"
@@ -21,16 +21,16 @@
     (error "proof gate receipt expected true" label value)))
 
 (def accepted-bundle
-  (poo-flow-langgraph-user-interface-proof-gate-bundle))
+  (agentic-ai-lab-langgraph-user-interface-proof-gate-bundle))
 
 (assert-true 'accepted-receipt-bundle-valid
-             (poo-flow-proof-gate-bundle-valid? accepted-bundle))
+             (agentic-ai-lab-proof-gate-bundle-valid? accepted-bundle))
 (assert-equal 'accepted-receipt-bundle-result
-              (poo-flow-proof-fact-ref 'accepted? accepted-bundle)
+              (agentic-ai-lab-proof-fact-ref 'accepted? accepted-bundle)
               #t)
 
 (def bad-override-receipts
-  (let ((receipts (poo-flow-langgraph-user-interface-proof-receipts)))
+  (let ((receipts (agentic-ai-lab-langgraph-user-interface-proof-receipts)))
     (list (assq 'schema receipts)
           (cons 'composition
                 (list (cons 'fact-id 'langgraph-bad-override-composition)
@@ -43,21 +43,21 @@
           (assq 'handoff receipts))))
 
 (def bad-override-bundle
-  (poo-flow-proof-gate-receipts->bundle bad-override-receipts))
+  (agentic-ai-lab-proof-gate-receipts->bundle bad-override-receipts))
 
 (assert-true 'bad-override-bundle-valid
-             (poo-flow-proof-gate-bundle-valid? bad-override-bundle))
+             (agentic-ai-lab-proof-gate-bundle-valid? bad-override-bundle))
 (assert-equal 'bad-override-rejected
-              (poo-flow-proof-fact-ref 'accepted? bad-override-bundle)
+              (agentic-ai-lab-proof-fact-ref 'accepted? bad-override-bundle)
               #f)
 (assert-equal 'bad-override-rule
-              (poo-flow-proof-fact-ref
+              (agentic-ai-lab-proof-fact-ref
                'rejection-rule
-               (poo-flow-proof-fact-ref 'composition bad-override-bundle))
+               (agentic-ai-lab-proof-fact-ref 'composition bad-override-bundle))
               'composition-rejected-by-override-scope)
 
 (def missing-capability-receipts
-  (let ((receipts (poo-flow-langgraph-user-interface-proof-receipts)))
+  (let ((receipts (agentic-ai-lab-langgraph-user-interface-proof-receipts)))
     (list (assq 'schema receipts)
           (assq 'composition receipts)
           (cons 'scenario
@@ -68,21 +68,21 @@
           (assq 'handoff receipts))))
 
 (def missing-capability-bundle
-  (poo-flow-proof-gate-receipts->bundle missing-capability-receipts))
+  (agentic-ai-lab-proof-gate-receipts->bundle missing-capability-receipts))
 
 (assert-true 'missing-capability-bundle-valid
-             (poo-flow-proof-gate-bundle-valid? missing-capability-bundle))
+             (agentic-ai-lab-proof-gate-bundle-valid? missing-capability-bundle))
 (assert-equal 'missing-capability-rejected
-              (poo-flow-proof-fact-ref 'accepted? missing-capability-bundle)
+              (agentic-ai-lab-proof-fact-ref 'accepted? missing-capability-bundle)
               #f)
 (assert-equal 'missing-capability-rule
-              (poo-flow-proof-fact-ref
+              (agentic-ai-lab-proof-fact-ref
                'rejection-rule
-               (poo-flow-proof-fact-ref 'scenario missing-capability-bundle))
+               (agentic-ai-lab-proof-fact-ref 'scenario missing-capability-bundle))
               'runtime-row-rejected-by-accepted)
 
 (def runtime-owner-receipts
-  (let ((receipts (poo-flow-langgraph-user-interface-proof-receipts)))
+  (let ((receipts (agentic-ai-lab-langgraph-user-interface-proof-receipts)))
     (list (assq 'schema receipts)
           (assq 'composition receipts)
           (assq 'scenario receipts)
@@ -96,15 +96,15 @@
                       (cons 'artifacts-declared #t))))))
 
 (def runtime-owner-bundle
-  (poo-flow-proof-gate-receipts->bundle runtime-owner-receipts))
+  (agentic-ai-lab-proof-gate-receipts->bundle runtime-owner-receipts))
 
 (assert-true 'runtime-owner-bundle-valid
-             (poo-flow-proof-gate-bundle-valid? runtime-owner-bundle))
+             (agentic-ai-lab-proof-gate-bundle-valid? runtime-owner-bundle))
 (assert-equal 'runtime-owner-rejected
-              (poo-flow-proof-fact-ref 'accepted? runtime-owner-bundle)
+              (agentic-ai-lab-proof-fact-ref 'accepted? runtime-owner-bundle)
               #f)
 (assert-equal 'runtime-boundary-failed
-              (poo-flow-proof-fact-ref
+              (agentic-ai-lab-proof-fact-ref
                'runtime-boundary-ok?
                runtime-owner-bundle)
               #f))))

@@ -11,34 +11,34 @@
         :yuanxu/object-family/role-syntax
         (only-in :std/list/list fold fold-right))
 
-(def +poo-flow-versioned-capability-slots+ '(schema-id schema-version))
-(def +poo-flow-revision-bound-capability-slots+ '(source-revision))
-(def +poo-flow-owner-bound-capability-slots+ '(owner-artifacts))
-(def +poo-flow-evidence-bound-capability-slots+
+(def +agentic-ai-lab-versioned-capability-slots+ '(schema-id schema-version))
+(def +agentic-ai-lab-revision-bound-capability-slots+ '(source-revision))
+(def +agentic-ai-lab-owner-bound-capability-slots+ '(owner-artifacts))
+(def +agentic-ai-lab-evidence-bound-capability-slots+
   '(symbol-receipt version-receipt legacy-guards external-blocker))
-(def +poo-flow-decision-state-capability-slots+
+(def +agentic-ai-lab-decision-state-capability-slots+
   '(decision-required? abi-v1-frozen? deletion-authorized? ready?))
 
-(def poo-flow-versioned-capability-prototype
+(def agentic-ai-lab-versioned-capability-prototype
   (poo-core-role-object
    (slots ((qualification/versioned? #t)
            (schema-id #f)
            (schema-version #f)))
    (supers)))
 
-(def poo-flow-revision-bound-capability-prototype
+(def agentic-ai-lab-revision-bound-capability-prototype
   (poo-core-role-object
    (slots ((qualification/revision-bound? #t)
            (source-revision #f)))
    (supers)))
 
-(def poo-flow-owner-bound-capability-prototype
+(def agentic-ai-lab-owner-bound-capability-prototype
   (poo-core-role-object
    (slots ((qualification/owner-bound? #t)
            (owner-artifacts '())))
    (supers)))
 
-(def poo-flow-evidence-bound-capability-prototype
+(def agentic-ai-lab-evidence-bound-capability-prototype
   (poo-core-role-object
    (slots ((qualification/evidence-bound? #t)
            (symbol-receipt #f)
@@ -47,7 +47,7 @@
            (external-blocker #f)))
    (supers)))
 
-(def poo-flow-decision-state-capability-prototype
+(def agentic-ai-lab-decision-state-capability-prototype
   (poo-core-role-object
    (slots ((qualification/decision-state? #t)
            (decision-required? #t)
@@ -56,23 +56,23 @@
            (ready? #f)))
    (supers)))
 
-(def (poo-flow-versioned-capability schema-id-value schema-version-value)
+(def (agentic-ai-lab-versioned-capability schema-id-value schema-version-value)
   (poo-core-role-object
    (slots ((schema-id schema-id-value)
            (schema-version schema-version-value)))
-   (supers poo-flow-versioned-capability-prototype)))
+   (supers agentic-ai-lab-versioned-capability-prototype)))
 
-(def (poo-flow-revision-bound-capability source-revision-value)
+(def (agentic-ai-lab-revision-bound-capability source-revision-value)
   (poo-core-role-object
    (slots ((source-revision source-revision-value)))
-   (supers poo-flow-revision-bound-capability-prototype)))
+   (supers agentic-ai-lab-revision-bound-capability-prototype)))
 
-(def (poo-flow-owner-bound-capability owner-artifacts-value)
+(def (agentic-ai-lab-owner-bound-capability owner-artifacts-value)
   (poo-core-role-object
    (slots ((owner-artifacts owner-artifacts-value)))
-   (supers poo-flow-owner-bound-capability-prototype)))
+   (supers agentic-ai-lab-owner-bound-capability-prototype)))
 
-(def (poo-flow-evidence-bound-capability symbol-receipt-value
+(def (agentic-ai-lab-evidence-bound-capability symbol-receipt-value
                                          version-receipt-value
                                          legacy-guards-value
                                          external-blocker-value)
@@ -81,9 +81,9 @@
            (version-receipt version-receipt-value)
            (legacy-guards legacy-guards-value)
            (external-blocker external-blocker-value)))
-   (supers poo-flow-evidence-bound-capability-prototype)))
+   (supers agentic-ai-lab-evidence-bound-capability-prototype)))
 
-(def (poo-flow-decision-state-capability decision-required-value?
+(def (agentic-ai-lab-decision-state-capability decision-required-value?
                                          abi-v1-frozen-value?
                                          deletion-authorized-value?
                                          ready-value?)
@@ -92,13 +92,13 @@
            (abi-v1-frozen? abi-v1-frozen-value?)
            (deletion-authorized? deletion-authorized-value?)
            (ready? ready-value?)))
-   (supers poo-flow-decision-state-capability-prototype)))
+   (supers agentic-ai-lab-decision-state-capability-prototype)))
 
 (def (qualification-capability-slot/default value slot default)
   (with-catch (lambda (_failure) default)
               (lambda () (.ref value slot))))
 
-(def (poo-flow-versioned-capability-valid? value)
+(def (agentic-ai-lab-versioned-capability-valid? value)
   (and (qualification-capability-slot/default
         value 'qualification/versioned? #f)
        (let ((schema-id
@@ -109,7 +109,7 @@
               (exact-integer? schema-version)
               (> schema-version 0)))))
 
-(def (poo-flow-revision-bound-capability-valid? value)
+(def (agentic-ai-lab-revision-bound-capability-valid? value)
   (and (qualification-capability-slot/default
         value 'qualification/revision-bound? #f)
        (let (revision
@@ -117,7 +117,7 @@
               value 'source-revision #f))
          (and (string? revision) (> (string-length revision) 0)))))
 
-(def (poo-flow-owner-bound-capability-valid? value)
+(def (agentic-ai-lab-owner-bound-capability-valid? value)
   (and (qualification-capability-slot/default
         value 'qualification/owner-bound? #f)
        (let (owners
@@ -125,7 +125,7 @@
               value 'owner-artifacts #f))
          (and (list? owners) (pair? owners)))))
 
-(def (poo-flow-evidence-bound-capability-valid? value)
+(def (agentic-ai-lab-evidence-bound-capability-valid? value)
   (and (qualification-capability-slot/default
         value 'qualification/evidence-bound? #f)
        (qualification-capability-slot/default value 'symbol-receipt #f)
@@ -134,7 +134,7 @@
                value 'legacy-guards #f))
        (qualification-capability-slot/default value 'external-blocker #f)))
 
-(def (poo-flow-decision-state-capability-valid? value)
+(def (agentic-ai-lab-decision-state-capability-valid? value)
   (and (qualification-capability-slot/default
         value 'qualification/decision-state? #f)
        (boolean? (qualification-capability-slot/default
@@ -146,10 +146,10 @@
        (boolean? (qualification-capability-slot/default
                   value 'ready? 'missing))))
 
-(def (poo-flow-qualification-capabilities-valid? value validators)
+(def (agentic-ai-lab-qualification-capabilities-valid? value validators)
   (andmap (lambda (validator) (validator value)) validators))
 
-(def (poo-flow-qualification-capability-composition-diagnostics descriptors)
+(def (agentic-ai-lab-qualification-capability-composition-diagnostics descriptors)
   (let loop ((rest descriptors) (ids '()) (owned '()) (diagnostics '()))
     (if (null? rest)
         (reverse diagnostics)
@@ -174,9 +174,9 @@
                 (fold cons owned slots)
                 diagnostics)))))
 
-(def (poo-flow-qualification-capability-composition-assert! descriptors)
+(def (agentic-ai-lab-qualification-capability-composition-assert! descriptors)
   (let (diagnostics
-        (poo-flow-qualification-capability-composition-diagnostics descriptors))
+        (agentic-ai-lab-qualification-capability-composition-diagnostics descriptors))
     (unless (null? diagnostics)
       (error "invalid qualification capability composition" diagnostics))
     #t))

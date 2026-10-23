@@ -11,7 +11,7 @@
         :yuanxu/modules/funflow/control-plane/roles
         :yuanxu/modules/funflow/control-plane/failure
         :yuanxu/object-family/role-syntax
-        :poo-flow/modules/loop-engine/control/descriptor)
+        :agentic-ai-lab/modules/loop-engine/control/descriptor)
 
 (export +loop-strategy-plan-schema+
         +loop-local-validation-default+
@@ -47,7 +47,7 @@
 
 ;;; Boundary: schema id is the stable contract name exported to Marlin.
 ;; : (-> Unit Symbol)
-(def +loop-strategy-plan-schema+ 'poo-flow.loop-strategy-plan.v1)
+(def +loop-strategy-plan-schema+ 'agentic-ai-lab.loop-strategy-plan.v1)
 
 ;;; Boundary: local validation defaults keep repository execution harness-only.
 ;;; Intent: tests and probes may run locally without claiming production loop ownership.
@@ -64,7 +64,7 @@
 (def +loop-runtime-handoff-default+
   '((target . marlin-agent-core)
     (transport . scheme-abi)
-    (contract . poo-flow.loop-pattern.v1)))
+    (contract . agentic-ai-lab.loop-pattern.v1)))
 
 ;;; Boundary: engine role marks this file as policy composition, not execution.
 ;;; Boundary: root strategy role identifies Scheme as the policy owner while

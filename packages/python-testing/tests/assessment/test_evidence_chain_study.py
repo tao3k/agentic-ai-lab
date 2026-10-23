@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-from poo_flow_testing.assessment_studies.evidence_chain_study import live, loose_json
+from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import live, loose_json
 
 
 class EvidenceChainStudy(unittest.TestCase):
@@ -17,7 +17,7 @@ class EvidenceChainStudy(unittest.TestCase):
     def test_synthetic_plan_cannot_start_paid_primary_calls(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp); (root / 'plan.json').write_text(json.dumps({'corpusKind': 'synthetic-mechanism-regression'}))
-            with patch('poo_flow_testing.assessment_studies.evidence_chain_study.provider') as provider:
+            with patch('agentic_ai_lab_testing.assessment_studies.evidence_chain_study.provider') as provider:
                 with self.assertRaisesRegex(ValueError, 'external-source'):
                     live(root, root / 'paid')
                 provider.assert_not_called()

@@ -7,13 +7,13 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from poo_flow_testing.model_study.runner import build_graph, corpus, grade
-from poo_flow_testing.model_study.paired import typed_observation
-from poo_flow_testing.model_study.protocol import (
+from agentic_ai_lab_testing.model_study.runner import build_graph, corpus, grade
+from agentic_ai_lab_testing.model_study.paired import typed_observation
+from agentic_ai_lab_testing.model_study.protocol import (
     guard_answer, proof_observation, require_pinned_ascent,
 )
-from poo_flow_testing.model_study.scheme import readable_answer
-from poo_flow_testing.temporal.authority import gate_model_answer, guarded_runtime
+from agentic_ai_lab_testing.model_study.scheme import readable_answer
+from agentic_ai_lab_testing.temporal.authority import gate_model_answer, guarded_runtime
 
 
 def test_frozen_corpus_and_strict_score() -> None:
@@ -79,7 +79,7 @@ def test_typed_observation_preserves_boolean_and_scope() -> None:
 
 def test_runtime_guard_withholds_native_denied_model_claims() -> None:
     closed = typed_observation("temporal.closed-cut", {
-        "source": "poo-flow.temporal-causality",
+        "source": "agentic-ai-lab.temporal-causality",
         "status": "bounded-temporal-classification",
         "release-authorized?": "#f",
         "unknown": "()",
@@ -98,7 +98,7 @@ def test_runtime_guard_withholds_native_denied_model_claims() -> None:
         "claim": "classification_no_authority",
     }
     opened = typed_observation("temporal.open-parent", {
-        "source": "poo-flow.temporal-causality",
+        "source": "agentic-ai-lab.temporal-causality",
         "release-authorized?": "#f",
         "unknown": '("missing-administration")',
     })
@@ -132,7 +132,7 @@ def test_stratified_observation_keeps_candidate_scope_and_guards_model_claim() -
 
 
 def test_live_study_requires_exact_ascent_dependency_pin(tmp_path, monkeypatch) -> None:
-    from poo_flow_testing.model_study import protocol
+    from agentic_ai_lab_testing.model_study import protocol
 
     ascent = tmp_path / "ascent"
     poo = tmp_path / "poo"

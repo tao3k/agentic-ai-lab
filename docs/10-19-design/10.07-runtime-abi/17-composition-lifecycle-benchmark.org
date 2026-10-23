@@ -2,18 +2,18 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+title: POO Flow Composition Lifecycle Benchmark
+#+title: Agentic AI Lab Composition Lifecycle Benchmark
 
 * Status
 
-This document is the normative version 1 design baseline for the POO Flow
+This document is the normative version 1 design baseline for the Agentic AI Lab
 execution group lifecycle benchmark.  It defines a workload and evidence model for
 dynamic groups of short-lived agents.  It does not add a new runtime ABI and
 does not model language-model inference quality.
 
 * Decision
 
-POO Flow SHALL add a dedicated execution group lifecycle benchmark rather than stretch
+Agentic AI Lab SHALL add a dedicated execution group lifecycle benchmark rather than stretch
 the burst lifecycle benchmark into a product-specific collective-agent simulator.
 
 The benchmark has two explicit scales:
@@ -88,7 +88,7 @@ flowchart LR
 
 ** Generic composition multiplicity and benchmark projection
 
-The core model is not an execution-group object.  A =poo-flow.composition= already is the
+The core model is not an execution-group object.  A =agentic-ai-lab.composition= already is the
 POO-native combination of profiles, policies, roles, and stages.  Multiplicity
 associates a positive cardinality with that reusable composition.  A workload
 folds distinct multiplicities into an immutable vector of half-open launch
@@ -125,7 +125,7 @@ must not duplicate composition, contract, profile, or policy ownership.
 ** Python validation runtime lazy multiplicity view
 
 The Python validation runtime must validate the lowering contract without
-becoming a second semantic owner.  POO Flow Scheme continues to own profile
+becoming a second semantic owner.  Agentic AI Lab Scheme continues to own profile
 composition, multiplicity, launch-range lowering, and the runtime ABI.  The
 Python planner consumes the same compact shape and projects benchmark-specific
 =PlannedAgent= values only when a runner asks for them.
@@ -293,7 +293,7 @@ metric is reported as unavailable rather than fabricated as zero.
 
 * Receipt schema
 
-The schema identifier is =poo-flow.composition-lifecycle-benchmark.v1=.  The version 1
+The schema identifier is =agentic-ai-lab.composition-lifecycle-benchmark.v1=.  The version 1
 receipt contains these top-level groups:
 
 - =run=: schema, implementation, clock, and host identity;
@@ -369,7 +369,7 @@ barriers or aggregation as accidental list positions.
 * External reference mapping
 
 The names =Kimi-style agent swarms= and =AgentSwarm= below are external
-reference vocabulary only.  POO Flow's normative model remains composition
+reference vocabulary only.  Agentic AI Lab's normative model remains composition
 lifecycle plus explicit execution groups.
 
 This design is product-neutral, but its parameters cover the public behavior of
@@ -390,7 +390,7 @@ Kimi-style agent swarms:
 
 These sources justify configurable populations, budgets, ramp schedules,
 barriers, aggregation, timeouts, and critical-path metrics.  They do not justify
-copying a current product limit into the POO Flow runtime ABI.
+copying a current product limit into the Agentic AI Lab runtime ABI.
 
 * Historical eager-planner evidence
 

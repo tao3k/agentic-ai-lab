@@ -15,11 +15,11 @@
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-settings
                  yuanxuUserConfig)
-        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
-                 pooFlowUserConfigPresentation)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation)
         (only-in "../../user-interface/custom/my-module/cases/cicd-owner"
-                 poo-flow-custom-my-module-cicd-module
-                 poo-flow-custom-my-module-funflow-cicd-case))
+                 agentic-ai-lab-custom-my-module-cicd-module
+                 agentic-ai-lab-custom-my-module-funflow-cicd-case))
 
 (export workflow-presentation-native-projection-performance-test)
 
@@ -30,10 +30,10 @@
 
 (def (workflow-presentation-native-projection-summary)
   (let (presentation
-        (pooFlowUserConfigPresentation
+        (agenticAiLabUserConfigPresentation
          (yuanxuUserConfig
-          (append poo-flow-custom-my-module-cicd-module
-                  poo-flow-custom-my-module-funflow-cicd-case)
+          (append agentic-ai-lab-custom-my-module-cicd-module
+                  agentic-ai-lab-custom-my-module-funflow-cicd-case)
           (yuanxu-settings))))
     (list
      (cons 'pipeline-count
@@ -79,7 +79,7 @@
         (check-equal?
          (workflow-presentation-native-projection-ref summary 'runtime-executed)
          #f)
-        (display "[poo-flow-benchmark] workflow-presentation-native-projection ")
+        (display "[agentic-ai-lab-benchmark] workflow-presentation-native-projection ")
         (write receipt)
         (newline)
         (force-output)

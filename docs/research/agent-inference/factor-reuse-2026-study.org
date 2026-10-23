@@ -35,7 +35,7 @@ tasks, judges, annotations and failed receipts remain unchanged.
 The subject is external assistance to a frozen model's trained reasoning:
 ASCENT evaluates admitted relations and supplies checked computational
 consequences. It does not own the complete search, model training, a serving
-cache or POO Flow's authority and Temporal Causality. Lean specifications and
+cache or Agentic AI Lab's authority and Temporal Causality. Lean specifications and
 Quint protocol models constrain particular Library behaviors; they do not
 prove that an LLM will use a supplied premise or stop deriving it again.
 

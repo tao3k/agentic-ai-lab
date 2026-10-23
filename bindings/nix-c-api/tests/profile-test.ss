@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Phase measurements are qualification projections, not a configuration DSL.
 (import :std/test :clan/poo/object "./cases.ss"
-        :poo-flow/bindings/nix-c-api/binding
+        :agentic-ai-lab/bindings/nix-c-api/binding
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/process run-process)
         (only-in :std/misc/ports read-all-as-string)
@@ -51,7 +51,7 @@
 (def profile-test
   (test-suite "Flake first-demand attribution and CLI persistent-cache controls"
     (test-case "three matched rounds, baseline versus explicit lazy force points"
-      (call-with-temporary-directory "poo-flow-nix-profile"
+      (call-with-temporary-directory "agentic-ai-lab-nix-profile"
         (lambda (temporary)
           (displayln "NIX-METRIC-FIELDS thread-cpu-seconds full-gc-milliseconds gc-cycles allocated-bytes minor-faults major-faults input-blocks output-blocks voluntary-switches involuntary-switches")
           (def base (path-normalize temporary))
@@ -69,7 +69,7 @@
           (write-input stamp "1")
           ;; Prepared once by the existing product qualification owner. Both
           ;; backends inherit the same fresh cache directory before startup.
-          (def package-set (getenv "POO_FLOW_NIX_PROFILE_PACKAGE_SET"))
+          (def package-set (getenv "AGENTIC_AI_LAB_NIX_PROFILE_PACKAGE_SET"))
           (assert 'prepared-package-is-store-path
             (and (string-prefix? "/nix/store/" package-set) (file-exists? package-set)))
           (write-input flake

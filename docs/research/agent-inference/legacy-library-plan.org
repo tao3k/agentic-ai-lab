@@ -119,7 +119,7 @@ leaves native completion intact. General Why-Not semantics remain open.
 | Positive derivation | Replayable proof DAG for the checked positive clauses | No complete provenance for all derivations |
 | Ground positive nonmembership | Finite closed-relation certificate and independent rule-closure checker | No open-world absence or general Why-Not cause |
 | Negation and reduction | Opt-in receipt certificate, bounded producer and independent checker for founded nodes and exact groups | No complete lineage or general Why-Not |
-| Model usefulness | Two five-task paired pilots, one typed/founded observation study, and a three-source Scheme pilot in POO Flow Python Testing | No general benefit, deployed result or causal explanation |
+| Model usefulness | Two five-task paired pilots, one typed/founded observation study, and a three-source Scheme pilot in Agentic AI Lab Python Testing | No general benefit, deployed result or causal explanation |
 
 The finite verifier is independent of the native planner and solver, but its
 certificate generator and verifier share the separate replay semantics. The
@@ -255,7 +255,7 @@ native/candidate finite-model gate are in
    on budget exhaustion.
 6. The first deterministic transcript covers located rejection, valid
    wrong formalization, corrected finite-model result, generation change
-   and hypothetical source overlay. A separate POO Flow Python Testing
+   and hypothetical source overlay. A separate Agentic AI Lab Python Testing
    caller then pre-registered five finite tasks, source fixtures, two arms,
    three paired repeats per arm, fixed model settings, a 30-request cap
    per pilot and separate choice/boundary scores before each run. The v1
@@ -263,11 +263,11 @@ native/candidate finite-model gate are in
    scores were 11/15 and 9/15. The v2 old/typed observation choice scores
    were 15/15 in both arms; boundary scores were 9/15 and 12/15. All six
    v2 closed-cut responses still claimed release authority despite the
-   native denial. POO Flow's Testing Runtime guard withholds that claim;
+   native denial. Agentic AI Lab's Testing Runtime guard withholds that claim;
    it does not repair the model. Protocols, individual failures and
-   receipts are in the POO Flow Python Testing documents
+   receipts are in the Agentic AI Lab Python Testing documents
    =model-study-baseline-results.org= and =model-study-typed-results.org=
-   on [[https://github.com/tao3k/poo-flow/pull/34][POO Flow PR #34]]. These pilots did not include a separate search arm,
+   on [[https://github.com/tao3k/agentic-ai-lab/pull/34][Agentic AI Lab PR #34]]. These pilots did not include a separate search arm,
    repair-turn score or a deployment test. They do not establish a general
    model advantage.
    A later typed/founded JSON observation study scored choice 15/15 and
@@ -277,7 +277,7 @@ native/candidate finite-model gate are in
    documented post-hoc syntax correction, but 0/9 exact row sets. It did
    not send the imported Library implementation or use a native receipt
    as feedback. Later Scheme-source studies are recorded separately in
-   POO Flow Python Testing. The latest five-call run sent existing pinned
+   Agentic AI Lab Python Testing. The latest five-call run sent existing pinned
    ASCENT module source, one question per contract, and no answer key.
    All five responses were readable; three matched the fixed answer
    exactly. One body-diagnostic answer had the right code and zero-based
@@ -285,7 +285,7 @@ native/candidate finite-model gate are in
    =complete=, the receipt/evidence status, instead of the verifier's
    =valid= verdict. Exact prompts, raw responses and scores are in
    =model-study-scheme-source-questions.org= on
-   [[https://github.com/tao3k/poo-flow/pull/34][POO Flow PR #34]]. One answer per question cannot establish general
+   [[https://github.com/tao3k/agentic-ai-lab/pull/34][Agentic AI Lab PR #34]]. One answer per question cannot establish general
    Scheme comprehension, and source questions do not test actual
    model-to-Library tool use.
 
@@ -325,7 +325,7 @@ does not substitute for the others.
 |-------+-----------------+-----------------+---------------|
 | Relational semantics | ASCENT Scheme direct/fragment/candidate paths; pinned Rust 0.8.0 where the behavior is defined; independent finite model | Complete row sets match after initial solve, alternate-support withdrawal, last-support withdrawal and source replacement; old snapshots stay immutable | The known =eqrel= split-producer Rust 0.8.0 divergence is a discriminator, not behavior to copy into Scheme |
 | Evidence semantics | ASCENT receipt bound to the same snapshot, candidate and budget | =complete= answer, =valid= finite verifier verdict and founded proof verdict are asserted independently; stale generation and changed candidate fail | One support is not all derivations; a complete finite closure does not certify source completeness or intent |
-| Model behavior | POO Flow Python Testing reads existing ASCENT source and invokes its public boundary; prompts, held-out source cases and expected native results are frozen before calls | Report execution correctness, diagnostic use, receipt-verdict interpretation and unsupported claims per task, with raw responses, budget and hashes | No conclusion about internal cognition, general model benefit or permission to act follows from a small sample |
+| Model behavior | Agentic AI Lab Python Testing reads existing ASCENT source and invokes its public boundary; prompts, held-out source cases and expected native results are frozen before calls | Report execution correctness, diagnostic use, receipt-verdict interpretation and unsupported claims per task, with raw responses, budget and hashes | No conclusion about internal cognition, general model benefit or permission to act follows from a small sample |
 
 The [[file:research/scheme-dsl/rule-planning.org][Ascent paper]] and
 [[file:related-work-matrix.org][BYODS comparison]] motivate the Rust oracle
@@ -361,7 +361,7 @@ compares the reference output of
 corpus. This is a finite differential gate, not a retained Rust
 deletion algorithm.
 
-The approved POO Flow pair ran four =deepseek-flash= calls at POO Flow
+The approved Agentic AI Lab pair ran four =deepseek-flash= calls at Agentic AI Lab
 =f2f2315a= and ASCENT =d2b2eb5=, after both exact heads passed CI.
 The immutable preview manifest SHA256 is
 =780f9e96cd466c1f6e07c4d55ecf2d0abc668cb6b45384470165358461ec6283=.
@@ -378,7 +378,7 @@ it changed the operator to addition, but its flat where clause still
 failed as =invalid-filter= at =(clause 8 body 4)=. This is an observed
 local change without an admitted final program. It does not establish
 feedback benefit or failure of the qualified evaluator. The raw request,
-response, usage and native receipts are recorded by POO Flow in
+response, usage and native receipts are recorded by Agentic AI Lab in
 =model-study-support-candidates.org= and the external result directory
 =/private/tmp/poo-support-candidate-live-head-f2f2315a/=.
 
@@ -400,7 +400,7 @@ blocked pairs and odd source weights, and require a valid original
 receipt before evaluating stale generation. These remain new design and
 qualification tasks; no additional model calls were authorized or made.
 
-Run native and Rust checks first, then freeze the POO Flow protocol
+Run native and Rust checks first, then freeze the Agentic AI Lab protocol
 against the exact qualified ASCENT head. Python Testing should
 orchestrate real model calls and preserve their results; ASCENT owns
 Scheme programs, reference outputs and qualification. A new paid run
@@ -415,7 +415,7 @@ time, but Rust Ascent 0.8.0 has no oracle for this proposed lens. Its
 finite reference must test valid time, knowledge generation, closed cuts,
 late events and two independent supports before a model sees a temporal
 receipt. The source owner supplies clock conversion and cut identity;
-ASCENT cannot infer them from arrival order. POO Flow's observed
+ASCENT cannot infer them from arrival order. Agentic AI Lab's observed
 closed-cut release-claim failures remain a model boundary result, not
 evidence for the separate finite point-time lens implemented below.
 
@@ -441,7 +441,7 @@ allowed, weighted and summary sets and the exact native adapter projection.
 The retained support-withdrawal and valid-old-receipt generation tests remain.
 
 ASCENT also owns two erroneous syntax seeds, projected as inert data through
-=candidate-repair-seed=. POO Flow's new shared-seed repair protocol gives each
+=candidate-repair-seed=. Agentic AI Lab's new shared-seed repair protocol gives each
 arm the same contract, task and seed; only one receives initial-source native
 feedback. Two tasks alternate arm order at one call per arm/task (four calls).
 This measures bounded syntax repair conditional on seeds, not end-to-end
@@ -450,7 +450,7 @@ The generation and evidence gates run before any paid call. A new immutable
 preview, exact-head CI and explicit budget approval were satisfied for the
 completed four-call run recorded below.
 
-The earlier model study's temporary evidence paths are gone. POO Flow retains
+The earlier model study's temporary evidence paths are gone. Agentic AI Lab retains
 four original response texts recovered only where bytes match their recorded
 hashes; original JSON, requests, preview and native records remain unavailable.
 No missing original records are reconstructed. New live runs require durable,
@@ -467,7 +467,7 @@ These are local receipts; current-head remote CI is a separate required gate.
 
 * Completed shared-seed repair gate (2026-10-03)
 
-At qualified ASCENT =cd6f60f= and POO Flow =0b7a6c52=, the approved final
+At qualified ASCENT =cd6f60f= and Agentic AI Lab =0b7a6c52=, the approved final
 manifest =8974b1c55a150a8595f56a2c70f977116db7c428ab09997e098265890b6cb781=
 produced exactly four completed requests, with zero retries. Both self and
 native repaired both supplied syntax-error seeds into the same candidate.
@@ -477,7 +477,7 @@ the equal-answer next generation. The durable archive contains 23 verified
 original files (manifest SHA256
 =8843adf26bc2873635ab9910ea37fa44b095f2ed1aba9520ad95bec328278550=).
 
-POO Flow's =model-study-shared-seed-repair.org= and committed result inventory
+Agentic AI Lab's =model-study-shared-seed-repair.org= and committed result inventory
 record request/response IDs, usage, timings, hashes and per-state scores.
 This closes this bounded repair protocol. Native feedback showed no observed
 correctness advantage in these two selected task pairs. General model benefit,

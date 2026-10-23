@@ -8,25 +8,25 @@
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every)
-        (only-in :poo-flow/modules/temporal-causality/time/types
-                 poo-flow-temporal-instant?))
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+                 agentic-ai-lab-temporal-instant?))
 
-(export poo-flow-temporal-bounded-observation-kind
-        poo-flow-temporal-duration-assessment-kind
-        PooFlowTemporalBoundedObservation PooFlowTemporalDurationAssessment
-        poo-flow-temporal-bounded-observation?
-        poo-flow-temporal-duration-assessment?)
+(export agentic-ai-lab-temporal-bounded-observation-kind
+        agentic-ai-lab-temporal-duration-assessment-kind
+        AgenticAILabTemporalBoundedObservation AgenticAILabTemporalDurationAssessment
+        agentic-ai-lab-temporal-bounded-observation?
+        agentic-ai-lab-temporal-duration-assessment?)
 
-(def poo-flow-temporal-bounded-observation-kind
-  'poo-flow.temporal-causality.bounded-time-observation)
-(def poo-flow-temporal-duration-assessment-kind
-  'poo-flow.temporal-causality.duration-assessment)
+(def agentic-ai-lab-temporal-bounded-observation-kind
+  'agentic-ai-lab.temporal-causality.bounded-time-observation)
+(def agentic-ai-lab-temporal-duration-assessment-kind
+  'agentic-ai-lab.temporal-causality.duration-assessment)
 
 (def (text? value)
   (and (string? value) (> (string-length value) 0)))
 
 (def (observed? value)
-  (and (poo-flow-temporal-instant? value)
+  (and (agentic-ai-lab-temporal-instant? value)
        (eq? (.ref value 'modality) 'observed)))
 
 (def (observation-shape? value)
@@ -36,7 +36,7 @@
                      earliest latest precision acquisition-instant
                      receipt-identity attestation-identity attempt-identity
                      schema-identity))
-       (eq? (.ref value 'kind) poo-flow-temporal-bounded-observation-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-temporal-bounded-observation-kind)
        (every text? (list (.ref value 'identity)
                           (.ref value 'semantic-digest)
                           (.ref value 'source-identity)
@@ -56,17 +56,17 @@
        (exact-integer? (.ref value 'precision))
        (>= (.ref value 'precision) 0)))
 
-(define-type (PooFlowTemporalBoundedObservation @ Type.)
+(define-type (AgenticAILabTemporalBoundedObservation @ Type.)
   .element?: observation-shape?)
-(def (poo-flow-temporal-bounded-observation? value)
-  (element? PooFlowTemporalBoundedObservation value))
+(def (agentic-ai-lab-temporal-bounded-observation? value)
+  (element? AgenticAILabTemporalBoundedObservation value))
 
 (def (duration-shape? value)
   (and (object? value)
        (every (lambda (name) (.slot? value name))
               '(kind identity semantic-digest status start-observation-digest
                      end-observation-digest domain-identity minimum maximum))
-       (eq? (.ref value 'kind) poo-flow-temporal-duration-assessment-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-temporal-duration-assessment-kind)
        (every text? (list (.ref value 'identity)
                           (.ref value 'semantic-digest)
                           (.ref value 'start-observation-digest)
@@ -84,7 +84,7 @@
          (and (not (.ref value 'minimum))
               (not (.ref value 'maximum))))))
 
-(define-type (PooFlowTemporalDurationAssessment @ Type.)
+(define-type (AgenticAILabTemporalDurationAssessment @ Type.)
   .element?: duration-shape?)
-(def (poo-flow-temporal-duration-assessment? value)
-  (element? PooFlowTemporalDurationAssessment value))
+(def (agentic-ai-lab-temporal-duration-assessment? value)
+  (element? AgenticAILabTemporalDurationAssessment value))

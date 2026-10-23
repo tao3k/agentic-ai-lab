@@ -7,8 +7,8 @@ import subprocess
 import sys
 
 import pytest
-from poo_flow_runtime.temporal_publication import TemporalPublicationStore, TemporalPublicationError
-from poo_flow_runtime._native._temporal_store import ffi, lib
+from agentic_ai_lab_runtime.temporal_publication import TemporalPublicationStore, TemporalPublicationError
+from agentic_ai_lab_runtime._native._temporal_store import ffi, lib
 from test_temporal_admission import source_scope
 from test_temporal_family import family_task
 
@@ -64,12 +64,12 @@ def test_source_and_authorization_fences(runtime, tmp_path):
             grant(store, fence=2, enabled=False)
         # Independent host advances the shared durable source fence; this
         # process's valid native admission must still fail at transaction time.
-        assert lib.poo_flow_temporal_store_source(store._handle[0],
+        assert lib.agentic_ai_lab_temporal_store_source(store._handle[0],
             scope['identity'].encode(), ('sha256:' + 'f'*64).encode(), 2) == 0
         with pytest.raises(TemporalPublicationError) as error:
             store.publish(runtime, task, **dict(args, authorization_fence=2))
         assert error.value.status == 4
-        assert lib.poo_flow_temporal_store_source(store._handle[0],
+        assert lib.agentic_ai_lab_temporal_store_source(store._handle[0],
             scope['identity'].encode(), args['source_digest'].encode(), 1) == 4
         assert store.pointer('release', 'release-evidence') == (0, '')
 
@@ -91,7 +91,7 @@ def test_failed_receipt_write_rolls_back_pointer(runtime, tmp_path):
 
 
 def basis():
-    value = ffi.new('poo_flow_temporal_basis *')
+    value = ffi.new('agentic_ai_lab_temporal_basis *')
     for name in ['admission', 'source_digest', 'revision', 'proof']:
         setattr(value[0], name, ('sha256:' + 'a'*64).encode())
     value.source = b'fixture'; value.subject = b'release'
@@ -100,15 +100,15 @@ def basis():
 
 
 def raw_commit(store, key):
-    out = ffi.new('poo_flow_temporal_commit_receipt *')
-    return lib.poo_flow_temporal_store_commit(store._handle[0], basis(), key.encode(),
+    out = ffi.new('agentic_ai_lab_temporal_commit_receipt *')
+    return lib.agentic_ai_lab_temporal_store_commit(store._handle[0], basis(), key.encode(),
         ('sha256:' + 'b'*64).encode(), 0, b'', 1, out)
 
 
 def test_two_independent_c_handles_compete_once(tmp_path):
     with TemporalPublicationStore(tmp_path / 'state.db') as one, TemporalPublicationStore(tmp_path / 'state.db') as two:
         grant(one)
-        assert lib.poo_flow_temporal_store_source(one._handle[0], b'fixture', basis().source_digest, 1) == 0
+        assert lib.agentic_ai_lab_temporal_store_source(one._handle[0], b'fixture', basis().source_digest, 1) == 0
         with concurrent.futures.ThreadPoolExecutor(2) as pool:
             a = pool.submit(raw_commit, one, 'one'); b = pool.submit(raw_commit, two, 'two')
             assert sorted([a.result(), b.result()]) == [0, 2]
@@ -120,16 +120,16 @@ def test_sigkill_after_commit_recovers_without_native_runtime(tmp_path):
     # Trusted C fixture isolates process-crash recovery from semantic admission.
     script = '''
 import sys
-from poo_flow_runtime.temporal_publication import TemporalPublicationStore
-from poo_flow_runtime._native._temporal_store import ffi, lib
+from agentic_ai_lab_runtime.temporal_publication import TemporalPublicationStore
+from agentic_ai_lab_runtime._native._temporal_store import ffi, lib
 s=TemporalPublicationStore(sys.argv[1])
 s.authorize_selection(subject='release',scope='release-evidence',policy='policy-1',authority='host-policy',fence=1)
-b=ffi.new('poo_flow_temporal_basis *')
+b=ffi.new('agentic_ai_lab_temporal_basis *')
 for n in ['admission','source_digest','revision','proof']: setattr(b[0],n,('sha256:'+'a'*64).encode())
 b.source=b'fixture';b.subject=b'release';b.scope=b'release-evidence';b.policy=b'policy-1';b.generation=1
-assert lib.poo_flow_temporal_store_source(s._handle[0],b.source,b.source_digest,1)==0
-o=ffi.new('poo_flow_temporal_commit_receipt *')
-assert lib.poo_flow_temporal_store_commit(s._handle[0],b,b'crash',('sha256:'+'b'*64).encode(),0,b'',1,o)==0
+assert lib.agentic_ai_lab_temporal_store_source(s._handle[0],b.source,b.source_digest,1)==0
+o=ffi.new('agentic_ai_lab_temporal_commit_receipt *')
+assert lib.agentic_ai_lab_temporal_store_commit(s._handle[0],b,b'crash',('sha256:'+'b'*64).encode(),0,b'',1,o)==0
 print('COMMITTED',flush=True)
 import signal
 while True: signal.pause()

@@ -1,12 +1,12 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+title: POO Flow Composition Mathematics (Version 1)
+#+title: Agentic AI Lab Composition Mathematics (Version 1)
 #+language: en
 
 * Ownership
 
-=PooFlowComposition.lean= consumes actual LeanPoo C3/C4 certificates and proves
+=AgenticAILabComposition.lean= consumes actual LeanPoo C3/C4 certificates and proves
 role-source agreement, mapped identity/precedence properties and typed sequential
 associativity. Stage and parallel composition have no MRR binding or ASP scenario
 dependency. =CompositionChecks.lean= exercises actual certificate algorithms,
@@ -34,7 +34,7 @@ MRR has qualified immutable-source materialization and its consumer proofs from
 an empty dependency cache. Its retained publication Quint model remains MRR-owned.
 Producer mathematics and consumer admission are separate gates; this package's
 CI cannot establish downstream consumer CI, Scheme source refinement or release
-integration. The producer review is [[https://github.com/tao3k/poo-flow/pull/34][PR 34]].
+integration. The producer review is [[https://github.com/tao3k/agentic-ai-lab/pull/34][PR 34]].
 
 
 * Search Engine and Temporal assurance contract
@@ -50,7 +50,7 @@ Scheme, Lean and Quint advance together over the same named transitions:
 
 | Producer contract | Scheme implementation | Lean model and LeanPoo reuse | Quint model |
 |-------------------+-----------------------+------------------------------+-------------|
-| Typed composition and stage prerequisites | search-engine/funs.ss, engine.ss | PooFlowComposition; LeanPoo C3/C4 certificates | SearchDag DependencyOrder |
+| Typed composition and stage prerequisites | search-engine/funs.ss, engine.ss | AgenticAILabComposition; LeanPoo C3/C4 certificates | SearchDag DependencyOrder |
 | Exact request identity and cancellation | search-engine/attempt.ss, engine.ss | SearchAttempt admission, cancellation and revision laws | SearchAttempt safety and cancelAny control |
 | Predecessor completion admission | search-engine/attempt.ss, engine.ss | SearchReadiness, SearchDag frontier_exact | SearchReadiness presence, freshness and scope controls |
 | Selective descendant invalidation | search-engine/engine.ss | SearchTemporal; LeanPoo CertifiedInvalidation; SearchDag descendant settlement rejection | SearchDag FreshResults and BranchRetention |

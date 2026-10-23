@@ -23,7 +23,7 @@ admission diagnostics, and finite/founded receipt scope.
 Send each of the three exact preview payloads once to =deepseek-flash=,
 non-thinking, =temperature=0=, =max_output_tokens=512=, timeout 45
 seconds, no retries. Generate native expected answers at the pinned
-ASCENT and committed POO Flow heads. Keep expected answers out of the
+ASCENT and committed Agentic AI Lab heads. Keep expected answers out of the
 prompt. The same native Scheme scorer admits only a single =answer= datum;
 row-set fields are unordered, while status and diagnostic fields are
 compared exactly. Report response completion, readability, and exactness

@@ -4,9 +4,9 @@
 from types import SimpleNamespace
 
 import pytest
-from poo_flow_testing.model_study import archive
-from poo_flow_testing.model_study import shared_repair as repair
-from poo_flow_testing.model_study.support_native import score
+from agentic_ai_lab_testing.model_study import archive
+from agentic_ai_lab_testing.model_study import shared_repair as repair
+from agentic_ai_lab_testing.model_study.support_native import score
 
 REFERENCE = '\n'.join([
     *(f'{g}\tcomplete\t((0 {n}))\tvalid\tvalid\ttask-shape\t()'

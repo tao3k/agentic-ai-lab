@@ -10,10 +10,10 @@
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/agent-sandbox/config
-        :poo-flow/modules/nono-sandbox/config
-        :poo-flow/modules/nono-sandbox/objects
-        :poo-flow/modules/sandbox-core/profile)
+        :agentic-ai-lab/modules/agent-sandbox/config
+        :agentic-ai-lab/modules/nono-sandbox/config
+        :agentic-ai-lab/modules/nono-sandbox/objects
+        :agentic-ai-lab/modules/sandbox-core/profile)
 
 ;;; Fixture alist reads stay local to the derivation receipt assertions so the
 ;;; test does not depend on profile projection internals for metadata lookup.
@@ -49,38 +49,38 @@
  (test-suite "sandbox-core profile derivation"
    (yuanxu-test-case "derives session and task profiles through POO extensions"
      (let* ((project-profile
-             (poo-flow-nono-sandbox-profile-config
+             (agentic-ai-lab-nono-sandbox-profile-config
               'project/dev
               '((capabilities :append filesystem-read)
                 (metadata (project . marlin)))))
             (session-profile
-             (poo-flow-sandbox-profile-object-derive
-              poo-flow-nono-sandbox-profile-object
+             (agentic-ai-lab-sandbox-profile-object-derive
+              agentic-ai-lab-nono-sandbox-profile-object
               project-profile
               'session/dev
               '((capabilities :append filesystem-write)
                 (metadata (session . "s-1")))
               '((scope . session) (scope-ref . "s-1"))))
             (task-profile
-             (poo-flow-sandbox-profile-object-derive
-              poo-flow-nono-sandbox-profile-object
+             (agentic-ai-lab-sandbox-profile-object-derive
+              agentic-ai-lab-nono-sandbox-profile-object
               session-profile
               'task/build
               '((capabilities :append process-run)
                 (capabilities :remove filesystem-read)
                 (metadata (task . build)))
               '((scope . task) (scope-ref . build))))
-            (metadata (poo-flow-sandbox-profile-metadata task-profile))
+            (metadata (agentic-ai-lab-sandbox-profile-metadata task-profile))
             (lineage
              (derivation-test-alist-ref metadata 'derivation-path '()))
             (last-step (derivation-test-last lineage)))
-       (check-equal? (poo-flow-sandbox-profile-name task-profile)
+       (check-equal? (agentic-ai-lab-sandbox-profile-name task-profile)
                      'task/build)
-       (check-equal? (poo-flow-sandbox-profile-backend-kind task-profile)
+       (check-equal? (agentic-ai-lab-sandbox-profile-backend-kind task-profile)
                      'nono)
-       (check-equal? (poo-flow-sandbox-profile-backend-ref task-profile)
+       (check-equal? (agentic-ai-lab-sandbox-profile-backend-ref task-profile)
                      'task/build)
-       (check-equal? (poo-flow-sandbox-profile-capabilities task-profile)
+       (check-equal? (agentic-ai-lab-sandbox-profile-capabilities task-profile)
                      '(process filesystem tmpdir filesystem-write process-run))
        (check-equal? (length lineage) 2)
        (check-equal? (derivation-test-alist-ref last-step
@@ -95,28 +95,28 @@
                      #f)))
    (yuanxu-test-case "rejects backend rows during derivation"
      (let (project-profile
-           (poo-flow-nono-sandbox-profile-config
+           (agentic-ai-lab-nono-sandbox-profile-config
             'project/dev
             '((metadata (project . marlin)))))
        (check-equal?
         (derivation-test-error?
          (lambda ()
-           (poo-flow-sandbox-profile-object-derive
-            poo-flow-nono-sandbox-profile-object
+           (agentic-ai-lab-sandbox-profile-object-derive
+            agentic-ai-lab-nono-sandbox-profile-object
             project-profile
             'session/bad
             '((backend docker)))))
         #t)))
    (yuanxu-test-case "rejects non-symbol names before profile resolution"
      (let (project-profile
-           (poo-flow-nono-sandbox-profile-config
+           (agentic-ai-lab-nono-sandbox-profile-config
             'project/dev
             '((metadata (project . marlin)))))
        (check-equal?
         (derivation-test-error?
          (lambda ()
-           (poo-flow-sandbox-profile-object-derive
-            poo-flow-nono-sandbox-profile-object
+           (agentic-ai-lab-sandbox-profile-object-derive
+            agentic-ai-lab-nono-sandbox-profile-object
             project-profile
             "session/bad"
             '((metadata (session . bad))))))
@@ -124,7 +124,7 @@
        (check-equal?
         (derivation-test-error?
          (lambda ()
-           (poo-flow-nono-sandbox-profile-config
+           (agentic-ai-lab-nono-sandbox-profile-config
             "project/bad"
             '((metadata (project . bad))))))
         #t)))
@@ -132,36 +132,36 @@
      (check-equal?
       (derivation-test-error?
        (lambda ()
-         (poo-flow-sandbox-profile-object-derive
-          poo-flow-nono-sandbox-profile-object
+         (agentic-ai-lab-sandbox-profile-object-derive
+          agentic-ai-lab-nono-sandbox-profile-object
           'not-a-profile
           'session/bad-parent
           '((metadata (session . bad-parent))))))
       #t))
    (yuanxu-test-case "rejects unknown rows through POO field validation"
      (let (project-profile
-           (poo-flow-nono-sandbox-profile-config
+           (agentic-ai-lab-nono-sandbox-profile-config
             'project/dev
             '((metadata (project . marlin)))))
        (check-equal?
         (derivation-test-error?
          (lambda ()
-           (poo-flow-sandbox-profile-object-derive
-            poo-flow-nono-sandbox-profile-object
+           (agentic-ai-lab-sandbox-profile-object-derive
+            agentic-ai-lab-nono-sandbox-profile-object
             project-profile
             'session/unknown-row
             '((unknown-row value)))))
         #t)))
    (yuanxu-test-case "rejects unsafe filesystem resources before runtime handoff"
      (let (project-profile
-           (poo-flow-nono-sandbox-profile-config
+           (agentic-ai-lab-nono-sandbox-profile-config
             'project/dev
             '((metadata (project . marlin)))))
        (check-equal?
         (derivation-test-error?
          (lambda ()
-           (poo-flow-sandbox-profile-object-derive
-            poo-flow-nono-sandbox-profile-object
+           (agentic-ai-lab-sandbox-profile-object-derive
+            agentic-ai-lab-nono-sandbox-profile-object
             project-profile
             'session/unsafe-filesystem
             '((resources filesystem)))))

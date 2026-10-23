@@ -3,21 +3,21 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; AOT semantic projection: inert Scheme data enters existing Scheme owners.
-(import (only-in :poo-flow/modules/workflow/runtime/context-use context-use-refresh context-use-observe)
-        (only-in :poo-flow/modules/workflow/runtime/context-restriction context-restriction-compose-call context-flow-evaluate-call)
-        (only-in :poo-flow/modules/workflow/runtime/temporal-proof-host temporal-proof-state-refresh temporal-proof-register temporal-proof-current)
-        (only-in :poo-flow/modules/temporal-causality/evaluator/fact poo-flow-temporal-mrr-fact-content)
+(import (only-in :agentic-ai-lab/modules/workflow/runtime/context-use context-use-refresh context-use-observe)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/context-restriction context-restriction-compose-call context-flow-evaluate-call)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-proof-host temporal-proof-state-refresh temporal-proof-register temporal-proof-current)
+        (only-in :agentic-ai-lab/modules/temporal-causality/evaluator/fact agentic-ai-lab-temporal-mrr-fact-content)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/workflow/runtime/temporal-support temporal-support-call temporal-support-revise-call)
-        (only-in :poo-flow/modules/workflow/runtime/temporal-proof temporal-derivation-admit)
-        (only-in :poo-flow/modules/workflow/runtime/temporal-policy temporal-policy-refresh temporal-policy-guard-call temporal-policy-claim-call)
-        :std/ffi (only-in :poo-flow/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
-        (only-in :poo-flow/modules/workflow/runtime/temporal-admission
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-support temporal-support-call temporal-support-revise-call)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-proof temporal-derivation-admit)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-policy temporal-policy-refresh temporal-policy-guard-call temporal-policy-claim-call)
+        :std/ffi (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-admission
                  temporal-source-register temporal-family-admit-call temporal-family-current-call
                  temporal-family-revision-root-call temporal-family-revision-change-call temporal-family-journal-call)
-        (only-in :poo-flow/modules/workflow/runtime/temporal-archive
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-archive
                  temporal-family-archive-export-call temporal-family-archive-replay-call)
-        (only-in :poo-flow/modules/workflow/runtime/temporal-family
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-family
                  temporal-family-call temporal-family-observe)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
@@ -83,7 +83,7 @@
          (binding (hex-encode (sha256 (string->utf8
                                       (call-with-output-string
                                        (lambda (port) (write projection port))))))))
-    (hash (schema "poo-flow.semantic-result")
+    (hash (schema "agentic-ai-lab.semantic-result")
           (operation "temporal.solve") (status (symbol->string (temporal-status answer)))
           (rows (wire (temporal-rows answer)))
           (frontier (wire (temporal-frontier answer)))
@@ -116,7 +116,7 @@
                        (observed (hash-get candidate "status"))))
                 (else (row-difference (hash-get answer 'rows)
                                       (hash-get candidate "rows") 0)))))
-    (hash (schema "poo-flow.semantic-observation") (operation "temporal.observe")
+    (hash (schema "agentic-ai-lab.semantic-observation") (operation "temporal.observe")
           (verdict (if difference "contradicted" "consistent"))
           (candidateValid valid) (difference difference)
           (bindingDigest (hash-get answer 'bindingDigest))
@@ -127,12 +127,12 @@
   (let (object (scheme-wire-read payload))
     (cond ((string=? operation "temporal.fact.content")
            (unless (and (= (hash-length object) 6)
-                        (equal? (required object "schema") "poo-flow.mrr-fact-request.v1"))
+                        (equal? (required object "schema") "agentic-ai-lab.mrr-fact-request.v1"))
              (error "invalid fact request fields/schema"))
-           (let (fact (poo-flow-temporal-mrr-fact-content (required object "identity")
+           (let (fact (agentic-ai-lab-temporal-mrr-fact-content (required object "identity")
                         (required object "generation") (required object "relationId")
                         (required object "evaluatorRelation") (required object "row")))
-             (scheme-wire-write (hash (schema "poo-flow.mrr-fact-result.v1") (abiVersion 1)
+             (scheme-wire-write (hash (schema "agentic-ai-lab.mrr-fact-result.v1") (abiVersion 1)
                (contentDigest (.ref fact 'semantic-digest)) (identity (.ref fact 'identity))
                (generation (.ref fact 'generation)) (relationId (.ref fact 'relation-identity))
                (evaluatorRelation (.ref fact 'evaluator-relation)) (row (.ref fact 'row))
@@ -191,14 +191,14 @@
                                 (equal? (hash-get candidate "status") (hash-get answer 'status))
                                 (equal? (hash-get candidate "rows") (hash-get answer 'rows)))))
              (scheme-wire-write
-              (hash (schema "poo-flow.semantic-result") (operation "temporal.verify")
+              (hash (schema "agentic-ai-lab.semantic-result") (operation "temporal.verify")
                     (verdict (if matches "consistent" "contradicted"))
                     (status (hash-get answer 'status))
                     (bindingDigest (hash-get answer 'bindingDigest))
                     (verification (hash-get answer 'verification))))))
           ((string=? operation "descriptor")
            (scheme-wire-write
-            (hash (schema "poo-flow.semantic-descriptor") (abiVersion 1) (wireFormat "scheme-datum-v1")
+            (hash (schema "agentic-ai-lab.semantic-descriptor") (abiVersion 1) (wireFormat "scheme-datum-v1")
                   (operations ["context.use.observe" "temporal.solve" "graph.admit" "temporal.verify" "graph.targets" "temporal.observe" "temporal.family.classify" "temporal.family.observe" "temporal.family.admit" "temporal.family.current" "temporal.family.revision.root" "temporal.family.revision.change" "temporal.family.journal" "temporal.family.archive.export" "temporal.family.archive.replay" "temporal.support.evaluate" "temporal.support.revise" "temporal.support.claim" "context.restriction.compose" "context.flow.evaluate" "temporal.fact.content" "temporal.support.guard" "temporal.proof.current"]) (maximumInputBytes 1048576)
                   (maximumTemporalEvents 128) (maximumTemporalParents 256)
                   (maximumTemporalHorizon 1024)
@@ -276,10 +276,10 @@
            (digest (hex-encode (sha256 (string->utf8 payload)))))
       (for-each (lambda (id) (hash-put! successors id (yuanxu-graph-outgoing-ids graph id))) ids)
       (for-each (lambda (id) (hash-put! static-successors id (yuanxu-graph-outgoing-ids static-graph id))) ids)
-      (hash (schema "poo-flow.semantic-result") (operation "graph.admit")
+      (hash (schema "agentic-ai-lab.semantic-result") (operation "graph.admit")
             (status "admitted") (planDigest digest) (successors successors)
             (staticSuccessors static-successors)
-            (receipt (string-append "poo-flow-receipt.v1\nkind=scheme-graph-admission\nplan-digest="
+            (receipt (string-append "agentic-ai-lab-receipt.v1\nkind=scheme-graph-admission\nplan-digest="
                                     digest "\n"))))))
 
 (def (graph-targets-call object)
@@ -323,12 +323,12 @@
                              label)
                            (required routes label))) labels))))
              (else (error "unknown graph transition mode"))))))
-    (hash (schema "poo-flow.semantic-result") (operation "graph.targets")
+    (hash (schema "agentic-ai-lab.semantic-result") (operation "graph.targets")
           (planDigest digest) (targets targets) (verification "valid"))))
 
 (def (semantic-error exception)
   (scheme-wire-write
-   (hash (schema "poo-flow.semantic-error")
+   (hash (schema "agentic-ai-lab.semantic-error")
          (message (call-with-output-string
                    (lambda (p) (display-exception exception p)))))))
 
@@ -337,11 +337,11 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-typedef struct { int32_t status; uint8_t *data; size_t length; } poo_flow_semantic_result;
+typedef struct { int32_t status; uint8_t *data; size_t length; } agentic_ai_lab_semantic_result;
 C
 )
-(def-C-type poo_flow_semantic_result "poo_flow_semantic_result")
-(def-C-type result-pointer (pointer poo_flow_semantic_result (result-pointer)))
+(def-C-type agentic_ai_lab_semantic_result "agentic_ai_lab_semantic_result")
+(def-C-type result-pointer (pointer agentic_ai_lab_semantic_result (result-pointer)))
 (def-C-lambda set-result! (result-pointer int32 scheme-object) int32 #<<C
 size_t length = U8_LEN(___arg3);
 uint8_t *bytes = (uint8_t *)malloc(length + 1);
@@ -354,9 +354,9 @@ C
 (begin-foreign
 (c-define (native-evaluate operation payload result)
   (UTF-8-string UTF-8-string result-pointer) int32
-  "poo_flow_semantic_evaluate" "extern"
+  "agentic_ai_lab_semantic_evaluate" "extern"
   (with-exception-catcher
    (lambda (exception)
-     (poo-flow/modules/workflow/runtime/semantic#set-result! result 4 (string->utf8
-                    (poo-flow/modules/workflow/runtime/semantic#semantic-error exception))))
-   (lambda () (poo-flow/modules/workflow/runtime/semantic#set-result! result 0 (string->utf8 (poo-flow/modules/workflow/runtime/semantic#semantic-call operation payload)))))))
+     (agentic-ai-lab/modules/workflow/runtime/semantic#set-result! result 4 (string->utf8
+                    (agentic-ai-lab/modules/workflow/runtime/semantic#semantic-error exception))))
+   (lambda () (agentic-ai-lab/modules/workflow/runtime/semantic#set-result! result 0 (string->utf8 (agentic-ai-lab/modules/workflow/runtime/semantic#semantic-call operation payload)))))))

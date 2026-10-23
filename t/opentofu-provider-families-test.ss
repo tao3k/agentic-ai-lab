@@ -4,7 +4,7 @@
 (import :std/test
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
-        (only-in :poo-flow/modules/services/opentofu/objects OpenTofuScope.)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
         (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
         :yuanxu/types :clan/poo/object)
 (export opentofu-provider-families-test)

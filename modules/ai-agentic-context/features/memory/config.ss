@@ -9,36 +9,36 @@
 (import
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/module-authoring/module-config-syntax
-        :poo-flow/modules/ai-agentic-context/features/memory/objects)
+        :agentic-ai-lab/modules/module-authoring/module-config-syntax
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects)
 
-(export (import: :poo-flow/modules/ai-agentic-context/features/memory/objects)
+(export (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects)
         memory-store-spec
         memory-catalog
         memory-catalog-validation
         memory-catalog-validation-row
-        poo-flow-ai-agentic-context-memory-poo-store-spec?
-        poo-flow-ai-agentic-context-memory-poo-catalog?
-        poo-flow-ai-agentic-context-memory-poo-store-spec->store-spec
-        poo-flow-ai-agentic-context-memory-poo-catalog->catalog
-        poo-flow-ai-agentic-context-memory-prototype-super
-        poo-flow-ai-agentic-context-memory-poo-config-flags
-        poo-flow-memory-configs
-        poo-flow-ai-agentic-context-memory-module-bundles)
+        agentic-ai-lab-ai-agentic-context-memory-poo-store-spec?
+        agentic-ai-lab-ai-agentic-context-memory-poo-catalog?
+        agentic-ai-lab-ai-agentic-context-memory-poo-store-spec->store-spec
+        agentic-ai-lab-ai-agentic-context-memory-poo-catalog->catalog
+        agentic-ai-lab-ai-agentic-context-memory-prototype-super
+        agentic-ai-lab-ai-agentic-context-memory-poo-config-flags
+        agentic-ai-lab-memory-configs
+        agentic-ai-lab-ai-agentic-context-memory-module-bundles)
 
-(defsyntax (poo-flow-memory-configs stx)
+(defsyntax (agentic-ai-lab-memory-configs stx)
   (syntax-case stx ()
     ((_ config-form ...)
      (syntax
-      (poo-flow-module-configs
+      (agentic-ai-lab-module-configs
        ai-agentic-context
-       poo-flow-ai-agentic-context-memory-poo-config-flags
+       agentic-ai-lab-ai-agentic-context-memory-poo-config-flags
        (quoted :config config-form ...)
        config-form ...)))))
 
 (defpoo-module-config-prototype
   memory-store-spec
-  (slots ((kind +poo-flow-ai-agentic-context-memory-store-spec-kind+)
+  (slots ((kind +agentic-ai-lab-ai-agentic-context-memory-store-spec-kind+)
           (store-ref #f)
           (store-kind 'custom)
           (namespace 'session)
@@ -54,7 +54,7 @@
 
 (defpoo-module-config-prototype
   memory-catalog
-  (slots ((kind +poo-flow-ai-agentic-context-memory-catalog-kind+)
+  (slots ((kind +agentic-ai-lab-ai-agentic-context-memory-catalog-kind+)
           (catalog-ref 'memory-core/catalog)
           (stores '())
           (metadata '())
@@ -79,24 +79,24 @@
   ((_ validation-id catalog
       (intent ...)
       (metadata metadata-entry ...))
-   (poo-flow-memory-policy-catalog-validation-receipt
+   (agentic-ai-lab-memory-policy-catalog-validation-receipt
     'validation-id
     catalog
     (list intent ...)
     '(metadata-entry ...)))
   ((_ validation-id catalog
       (intent ...))
-   (poo-flow-memory-policy-catalog-validation-receipt
+   (agentic-ai-lab-memory-policy-catalog-validation-receipt
     'validation-id
     catalog
     (list intent ...))))
 
 ;; : (-> PooMemoryPolicyCatalogValidationReceipt Alist)
 (def (memory-catalog-validation-row receipt)
-  (poo-flow-memory-policy-catalog-validation-receipt->alist receipt))
+  (agentic-ai-lab-memory-policy-catalog-validation-receipt->alist receipt))
 
 ;; : (-> Symbol POOObject)
-(def (poo-flow-ai-agentic-context-memory-prototype-super name)
+(def (agentic-ai-lab-ai-agentic-context-memory-prototype-super name)
   (cond
    ((eq? name 'memory-store-spec) memory-store-spec)
    ((eq? name 'memory-catalog) memory-catalog)
@@ -105,18 +105,18 @@
 
 ;; : (-> POOObject Boolean)
 (defpoo-module-config-kind-predicate
-  poo-flow-ai-agentic-context-memory-poo-store-spec?
-  +poo-flow-ai-agentic-context-memory-store-spec-kind+)
+  agentic-ai-lab-ai-agentic-context-memory-poo-store-spec?
+  +agentic-ai-lab-ai-agentic-context-memory-store-spec-kind+)
 
 ;; : (-> POOObject Boolean)
 (defpoo-module-config-kind-predicate
-  poo-flow-ai-agentic-context-memory-poo-catalog?
-  +poo-flow-ai-agentic-context-memory-catalog-kind+)
+  agentic-ai-lab-ai-agentic-context-memory-poo-catalog?
+  +agentic-ai-lab-ai-agentic-context-memory-catalog-kind+)
 
 ;; : (-> PooMemoryStoreSpecPrototype PooMemoryStoreSpec)
 (defpoo-module-config-converter
-  poo-flow-ai-agentic-context-memory-poo-store-spec->store-spec (spec)
-  (constructor poo-flow-memory-store-spec)
+  agentic-ai-lab-ai-agentic-context-memory-poo-store-spec->store-spec (spec)
+  (constructor agentic-ai-lab-memory-store-spec)
   (arguments (slot store-ref)
              (slot store-kind)
              (slot namespace)
@@ -130,68 +130,68 @@
              (slot metadata)))
 
 ;; : (-> [PooMemoryStoreSpecPrototype] [PooMemoryStoreSpec])
-(def (poo-flow-ai-agentic-context-memory-poo-store-specs->store-specs specs)
+(def (agentic-ai-lab-ai-agentic-context-memory-poo-store-specs->store-specs specs)
   (cond
    ((null? specs) '())
    ((pair? specs)
-    (cons (poo-flow-ai-agentic-context-memory-poo-store-spec->store-spec (car specs))
-          (poo-flow-ai-agentic-context-memory-poo-store-specs->store-specs
+    (cons (agentic-ai-lab-ai-agentic-context-memory-poo-store-spec->store-spec (car specs))
+          (agentic-ai-lab-ai-agentic-context-memory-poo-store-specs->store-specs
            (cdr specs))))
    (else
     (error "Context Memory Feature POO store specs must be a list" specs))))
 
 ;; : (-> PooMemoryCatalogPrototype [PooMemoryStoreSpec] PooMemoryCatalog)
 (defpoo-module-config-converter
-  poo-flow-ai-agentic-context-memory-poo-catalog->catalog (catalog specs)
-  (constructor poo-flow-memory-catalog)
+  agentic-ai-lab-ai-agentic-context-memory-poo-catalog->catalog (catalog specs)
+  (constructor agentic-ai-lab-memory-catalog)
   (arguments (slot catalog-ref)
              (value specs)
              (slot metadata)))
 
 ;; : (-> [POOObject] [POOObject])
-(def (poo-flow-ai-agentic-context-memory-poo-config-store-specs prototypes)
-  (filter poo-flow-ai-agentic-context-memory-poo-store-spec? prototypes))
+(def (agentic-ai-lab-ai-agentic-context-memory-poo-config-store-specs prototypes)
+  (filter agentic-ai-lab-ai-agentic-context-memory-poo-store-spec? prototypes))
 
 ;; : (-> [POOObject] [POOObject])
-(def (poo-flow-ai-agentic-context-memory-poo-config-catalogs prototypes)
-  (filter poo-flow-ai-agentic-context-memory-poo-catalog? prototypes))
+(def (agentic-ai-lab-ai-agentic-context-memory-poo-config-catalogs prototypes)
+  (filter agentic-ai-lab-ai-agentic-context-memory-poo-catalog? prototypes))
 
 ;; : (-> PooMemoryStoreSpec Alist)
-(def (poo-flow-ai-agentic-context-memory-catalog-manifest spec)
-  (poo-flow-memory-handoff-manifest->alist
-   (poo-flow-memory-handoff-manifest
+(def (agentic-ai-lab-ai-agentic-context-memory-catalog-manifest spec)
+  (agentic-ai-lab-memory-handoff-manifest->alist
+   (agentic-ai-lab-memory-handoff-manifest
     (string->symbol
      (string-append
       "memory/request/"
-      (symbol->string (poo-flow-memory-store-spec-ref spec))))
+      (symbol->string (agentic-ai-lab-memory-store-spec-ref spec))))
     spec)))
 
 ;; : (-> [PooMemoryStoreSpec] [Alist] [Alist])
-(def (poo-flow-ai-agentic-context-memory-catalog-manifests/rev specs manifests-rev)
+(def (agentic-ai-lab-ai-agentic-context-memory-catalog-manifests/rev specs manifests-rev)
   (if (null? specs)
     manifests-rev
-    (poo-flow-ai-agentic-context-memory-catalog-manifests/rev
+    (agentic-ai-lab-ai-agentic-context-memory-catalog-manifests/rev
      (cdr specs)
-     (cons (poo-flow-ai-agentic-context-memory-catalog-manifest (car specs))
+     (cons (agentic-ai-lab-ai-agentic-context-memory-catalog-manifest (car specs))
            manifests-rev))))
 
 ;; : (-> PooMemoryCatalog [Alist])
-(def (poo-flow-ai-agentic-context-memory-catalog-manifests catalog)
+(def (agentic-ai-lab-ai-agentic-context-memory-catalog-manifests catalog)
   (reverse
-   (poo-flow-ai-agentic-context-memory-catalog-manifests/rev
+   (agentic-ai-lab-ai-agentic-context-memory-catalog-manifests/rev
     (.ref catalog 'stores)
     '())))
 
 ;; : (-> [POOObject] Alist [UserModuleFlagEntry])
 (def (memory-config-payload prototypes user-config)
   (let* ((store-specs
-          (poo-flow-ai-agentic-context-memory-poo-store-specs->store-specs
-           (poo-flow-ai-agentic-context-memory-poo-config-store-specs prototypes)))
-         (catalogs (poo-flow-ai-agentic-context-memory-poo-config-catalogs prototypes))
+          (agentic-ai-lab-ai-agentic-context-memory-poo-store-specs->store-specs
+           (agentic-ai-lab-ai-agentic-context-memory-poo-config-store-specs prototypes)))
+         (catalogs (agentic-ai-lab-ai-agentic-context-memory-poo-config-catalogs prototypes))
          (catalog
           (if (null? catalogs)
-            (poo-flow-memory-catalog 'memory-core/user store-specs)
-            (poo-flow-ai-agentic-context-memory-poo-catalog->catalog
+            (agentic-ai-lab-memory-catalog 'memory-core/user store-specs)
+            (agentic-ai-lab-ai-agentic-context-memory-poo-catalog->catalog
              (car catalogs)
              store-specs))))
     (list '+catalog
@@ -200,14 +200,14 @@
           (cons ':config (list catalog))
           (cons ':memory-catalog catalog)
           (cons ':memory-manifests
-                (poo-flow-ai-agentic-context-memory-catalog-manifests catalog))
+                (agentic-ai-lab-ai-agentic-context-memory-catalog-manifests catalog))
           (cons ':user-config user-config))))
 
 ;; : [[PooUserModuleSelection]]
-(def poo-flow-ai-agentic-context-memory-module-bundles
+(def agentic-ai-lab-ai-agentic-context-memory-module-bundles
   (list
    (yuanxu-user-module-bundle
     (agentic ai-agentic-context +memory +catalog +typed-receipts +runtime-manifest))))
 
-(def (poo-flow-ai-agentic-context-memory-poo-config-flags prototypes user-config)
+(def (agentic-ai-lab-ai-agentic-context-memory-poo-config-flags prototypes user-config)
   (cons '+memory (memory-config-payload prototypes user-config)))

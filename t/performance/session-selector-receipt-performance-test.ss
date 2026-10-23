@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-selector-receipt-performance-test)
 
@@ -34,7 +34,7 @@
 
 ;; : (-> Alist Void)
 (def (selector-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] session-selector-receipt ")
+  (display "[agentic-ai-lab-benchmark] session-selector-receipt ")
   (write receipt)
   (newline)
   (force-output))
@@ -58,7 +58,7 @@
 
 ;; : (-> Integer PooSessionSelectorCandidate)
 (def (selector-performance-candidate index)
-  (poo-flow-session-selector-candidate
+  (agentic-ai-lab-session-selector-candidate
    (selector-performance-candidate-id index)
    (selector-performance-candidate-kind index)
    (selector-performance-target-ref index)
@@ -80,7 +80,7 @@
 (def (selector-performance-target-refs candidate-count candidate-kind)
   (filter
    (lambda (ref) ref)
-   (poo-flow-performance-build-list
+   (agentic-ai-lab-performance-build-list
     candidate-count
     (lambda (index)
       (and (eq? (selector-performance-candidate-kind index) candidate-kind)
@@ -89,7 +89,7 @@
 ;; : (-> Integer Alist)
 (def (selector-performance-summary candidate-count)
   (let* ((candidates
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            candidate-count
            selector-performance-candidate))
          (selection-policy
@@ -107,7 +107,7 @@
                                                    'agent-param))
            (cons 'external-fallback-refs '(empty-workflow))))
          (receipt
-          (poo-flow-session-selector-receipt
+          (agentic-ai-lab-session-selector-receipt
            'selector/performance
            'project/selector
            'session/root
@@ -115,7 +115,7 @@
            candidates
            selection-policy
            'empty-workflow))
-         (row (poo-flow-session-selector-receipt->alist receipt))
+         (row (agentic-ai-lab-session-selector-receipt->alist receipt))
          (projected-candidates (selector-performance-ref row 'candidates)))
     (list (cons 'candidate-count
                 (selector-performance-ref row 'candidate-count))

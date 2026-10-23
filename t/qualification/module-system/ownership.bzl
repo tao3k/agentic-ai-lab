@@ -4,7 +4,7 @@
 
 """Single source of truth for RFC45 module-system qualification ownership."""
 
-OWNER_MAP_SCHEMA = "poo-flow.module-system-qualification-ownership.v1"
+OWNER_MAP_SCHEMA = "agentic-ai-lab.module-system-qualification-ownership.v1"
 
 DESCENDANT_BOUNDARIES = [
     "packages/lambda-aitia",
@@ -26,7 +26,7 @@ OWNER_MAP_ROWS = [
         "row_id": "rfc45-02-g0-decision",
         "rfc": "45-02",
         "source_path": "modules/workflow/qualification/module-system/g0.ss",
-        "source_symbol": "poo-flow-g0-resolve",
+        "source_symbol": "agentic-ai-lab-g0-resolve",
         "source_kind": "function",
         "test_path": "t/qualification/module-system/owner-contract-test.ss",
         "test_symbol": "owner-contract-test",
@@ -36,7 +36,7 @@ OWNER_MAP_ROWS = [
         "row_id": "rfc45-03-runtime-context-recovery",
         "rfc": "45-03",
         "source_path": "modules/session/runtime-context-recovery.ss",
-        "source_symbol": "poo-flow-runtime-context",
+        "source_symbol": "agentic-ai-lab-runtime-context",
         "source_kind": "function",
         "test_path": "t/qualification/module-system/owner-contract-test.ss",
         "test_symbol": "owner-contract-test",
@@ -56,7 +56,7 @@ OWNER_MAP_ROWS = [
         "row_id": "rfc45-06-gerbil-poo-consumption",
         "rfc": "45-06",
         "source_path": "modules/workflow/qualification/module-system/gerbil-poo-consumption.ss",
-        "source_symbol": "poo-flow-gerbil-poo-consumption-manifest",
+        "source_symbol": "agentic-ai-lab-gerbil-poo-consumption-manifest",
         "source_kind": "function",
         "test_path": "t/qualification/module-system/owner-contract-test.ss",
         "test_symbol": "owner-contract-test",

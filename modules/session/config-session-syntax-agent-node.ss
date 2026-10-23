@@ -6,7 +6,7 @@
 ;;; surface for child agent graph nodes.
 ;;; Invariant: macro expansion must preserve session id ancestry without
 ;;; materializing runtime agents during configuration parsing.
-(import :poo-flow/modules/session/config-session-runtime)
+(import :agentic-ai-lab/modules/session/config-session-runtime)
 
 (export session-agent-node
         session-agent-graph
@@ -45,7 +45,7 @@
       (role role-value)
       (result result-contract)
       (metadata metadata-entry ...))
-   (poo-flow-session-syntax-agent-node
+   (agentic-ai-lab-session-syntax-agent-node
     'agent-id
     'project-ref
     'root-session-ref
@@ -87,7 +87,7 @@
       (sandbox sandbox-profile-ref)
       (role role-value)
       (result result-contract))
-   (poo-flow-session-syntax-agent-node
+   (agentic-ai-lab-session-syntax-agent-node
     'agent-id
     'project-ref
     'root-session-ref
@@ -127,7 +127,7 @@
       registry-receipt
       communication-receipts
       metadata)
-   (poo-flow-session-syntax-agent-graph
+   (agentic-ai-lab-session-syntax-agent-graph
     'project-id
     'root-session-ref
     agent-nodes
@@ -141,7 +141,7 @@
       session-values
       registry-receipt
       communication-receipts)
-   (poo-flow-session-syntax-agent-graph
+   (agentic-ai-lab-session-syntax-agent-graph
     'project-id
     'root-session-ref
     agent-nodes
@@ -167,7 +167,7 @@
       streaming-policy
       event-policy
       metadata)
-   (poo-flow-session-syntax-agent-param-contract
+   (agentic-ai-lab-session-syntax-agent-param-contract
     'contract-id
     agent-node
     validation-receipt
@@ -181,7 +181,7 @@
       provider-ref
       streaming-policy
       event-policy)
-   (poo-flow-session-syntax-agent-param-contract
+   (agentic-ai-lab-session-syntax-agent-param-contract
     'contract-id
     agent-node
     validation-receipt

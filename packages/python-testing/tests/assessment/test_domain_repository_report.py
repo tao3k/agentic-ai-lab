@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import unittest
-from poo_flow_testing.assessment_studies.domain_repository_report import candidate_repair
+from agentic_ai_lab_testing.assessment_studies.domain_repository_report import candidate_repair
 
 
 def turn(n,tokens,actions,correct=False):

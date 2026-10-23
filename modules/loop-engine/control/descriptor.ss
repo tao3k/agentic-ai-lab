@@ -65,7 +65,7 @@
         loop-pattern-descriptor->contract)
 
 ;; : (-> Unit Symbol)
-(def +loop-pattern-schema+ 'poo-flow.loop-pattern.v1)
+(def +loop-pattern-schema+ 'agentic-ai-lab.loop-pattern.v1)
 
 ;; : (-> Unit [Symbol])
 (def +loop-levels+ '(l1 l2 l2+ l3))

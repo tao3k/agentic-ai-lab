@@ -35,10 +35,10 @@ There are no sibling standalone Cargo packages under =bindings/=. A member
 must not add its own =Cargo.lock= or profile tables.
 
 The workspace metadata names four explicit outer-build inputs. Cargo produces
-=POO_FLOW_CEDAR_RUNTIME_CORE_ARCHIVE=; Lake links that archive and the Cedar
-Lean object graph once into =POO_FLOW_CEDAR_RUNTIME_HOST=. The runtime owner
-provides =POO_FLOW_CEDAR_RUNTIME_SOCKET=. The separate
-=POO_FLOW_CEDAR_NATIVE_PROBE= remains a diagnostic qualification artifact.
+=AGENTIC_AI_LAB_CEDAR_RUNTIME_CORE_ARCHIVE=; Lake links that archive and the Cedar
+Lean object graph once into =AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST=. The runtime owner
+provides =AGENTIC_AI_LAB_CEDAR_RUNTIME_SOCKET=. The separate
+=AGENTIC_AI_LAB_CEDAR_NATIVE_PROBE= remains a diagnostic qualification artifact.
 Nix, Bazel, or another outer build owns every store/runfile path. No member
 derives a repository root, =target= directory, or Lake cache path.
 
@@ -51,7 +51,7 @@ just build-cedar-runtime-host "$out/bin/cedarRuntimeHost"
 The command builds the Cargo archive, gives it to Lake as an explicit input,
 then copies the single linked Host to the requested output. Cargo and Lake
 build directories are private builder state; neither is embedded as a runtime
-path. =CARGO_TARGET_DIR= and =POO_FLOW_CEDAR_BUILD_PROFILE= (=dev= or
+path. =CARGO_TARGET_DIR= and =AGENTIC_AI_LAB_CEDAR_BUILD_PROFILE= (=dev= or
 =release=) remain ordinary builder controls. The generated devenv profile
 supplies Cargo, Rust, elan, and just without entering a shell;
 =lean-toolchain= selects the exact Lean release.
@@ -71,7 +71,7 @@ just test-cedar-case CASE.json "$out/bin/cedarRuntimeHost" POLICY.cedar
 
 This command is a diagnostic shortcut for case replay. It does not replace the
 normal application path: downstream Lean code compiles to a =.cedar= artifact;
-Scheme loads that artifact with =poo-flow-cedar-policy-file=, composes an
+Scheme loads that artifact with =agentic-ai-lab-cedar-policy-file=, composes an
 admitted POO authority snapshot, and passes its projection through the native
 Gerbil binding to the Runtime Host. =lean-poo= itself is a Lake package without
 a Rust crate. =cedar-poo-spec='s Rust bridge is a pinned dependency of this

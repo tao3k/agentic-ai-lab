@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: upstream kernel profile data for built-in POO Flow modules.
+;;; Boundary: upstream kernel profile data for built-in Agentic AI Lab modules.
 ;;; Invariant: importing the kernel never loads presentation or doctor owners.
 
 (import "core.ss")

@@ -8,15 +8,15 @@
         (only-in :std/misc/ports read-all-as-string)
         (only-in :std/string/path path-expand)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/lambda-episteme/modules/healthcare/standards/fhir/config
+        (only-in :agentic-ai-lab/lambda-episteme/modules/healthcare/standards/fhir/config
                  FHIRValidationCapabilities)
-        (only-in :poo-flow/lambda-episteme/modules/healthcare/standards/fhir/source
-                 poo-flow-fhir-json-constraints
-                 poo-flow-fhir-json-ref
-                 poo-flow-fhir-load-fixed-source
-                 poo-flow-fhir-parse-json-structure-definition)
-        (only-in :poo-flow/lambda-episteme/modules/healthcare/standards/fhir/sources
-                 +poo-flow-fhir-au-core-patient-source-identity+)
+        (only-in :agentic-ai-lab/lambda-episteme/modules/healthcare/standards/fhir/source
+                 agentic-ai-lab-fhir-json-constraints
+                 agentic-ai-lab-fhir-json-ref
+                 agentic-ai-lab-fhir-load-fixed-source
+                 agentic-ai-lab-fhir-parse-json-structure-definition)
+        (only-in :agentic-ai-lab/lambda-episteme/modules/healthcare/standards/fhir/sources
+                 +agentic-ai-lab-fhir-au-core-patient-source-identity+)
         (only-in :gerbil-parser/languages/fhirpath/v2.0.0/parser
                  +fhirpath-antlr4-digest+
                  +fhirpath-standard-version+
@@ -66,18 +66,18 @@
          fixture-paths)))
     (yuanxu-test-case "syntax fixtures are exact expressions from the locked AU source"
       (let-values (((_entry _receipt bytes)
-                    (poo-flow-fhir-load-fixed-source
-                     +poo-flow-fhir-au-core-patient-source-identity+)))
-        (let* ((decoded (poo-flow-fhir-parse-json-structure-definition bytes))
+                    (agentic-ai-lab-fhir-load-fixed-source
+                     +agentic-ai-lab-fhir-au-core-patient-source-identity+)))
+        (let* ((decoded (agentic-ai-lab-fhir-parse-json-structure-definition bytes))
                (official
                 (filter-map
                  (lambda (constraint)
-                   (and (member (poo-flow-fhir-json-ref constraint "key")
+                   (and (member (agentic-ai-lab-fhir-json-ref constraint "key")
                                 '("au-core-pat-01"
                                   "au-core-pat-02"
                                   "au-core-pat-03"))
-                        (poo-flow-fhir-json-ref constraint "expression")))
-                 (poo-flow-fhir-json-constraints decoded)))
+                        (agentic-ai-lab-fhir-json-ref constraint "expression")))
+                 (agentic-ai-lab-fhir-json-constraints decoded)))
                (retained
                 (map (lambda (path)
                        (without-trailing-newline

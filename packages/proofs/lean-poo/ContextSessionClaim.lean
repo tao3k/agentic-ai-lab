@@ -1,7 +1,7 @@
 -- SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import Lean
-namespace PooFlowContextSessionClaimProof
+namespace AgenticAILabContextSessionClaimProof
 -- Metadata freshness only, never Scheme refinement or authenticated-source proof.
 def quintSourceDigest : String := "sha256:e0c6d46354ca44a3e79b9cbc61b42c789dc544e01d69033fcb191d25e088e9bf"
 def quintInvariantNames : List String := ["ExactOwner", "ExactSource", "CurrentGrant",
@@ -55,7 +55,7 @@ theorem missing_anchor_refused (g : Gates) (missing : g.currentAnchor = false) :
     claim g = none := by simp [claim, admissible, missing]
 theorem pending_or_active_refused (g : Gates) (busy : g.idle = false) :
     claim g = none := by simp [claim, admissible, busy]
-end PooFlowContextSessionClaimProof
+end AgenticAILabContextSessionClaimProof
 
 open Lean Elab Command in
 run_cmd do
@@ -63,18 +63,18 @@ run_cmd do
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let mut count : Nat := 0
   for (name, info) in environment.constants.toList do
-    if (`PooFlowContextSessionClaimProof).isPrefixOf name then
+    if (`AgenticAILabContextSessionClaimProof).isPrefixOf name then
       if info.isTheorem then count := count + 1
       for axiomName in (← collectAxioms name) do
         unless allowed.contains axiomName do throwError "Disallowed claim axiom: {axiomName}"
-  for required in #[`PooFlowContextSessionClaimProof.accepted_has_all_current_gates,
-      `PooFlowContextSessionClaimProof.accepted_increments_owner,
-      `PooFlowContextSessionClaimProof.stale_owner_refused,
-      `PooFlowContextSessionClaimProof.stale_source_refused,
-      `PooFlowContextSessionClaimProof.stale_grant_refused,
-      `PooFlowContextSessionClaimProof.revoked_grant_refused,
-      `PooFlowContextSessionClaimProof.expired_clock_refused,
-      `PooFlowContextSessionClaimProof.missing_anchor_refused,
-      `PooFlowContextSessionClaimProof.pending_or_active_refused] do
+  for required in #[`AgenticAILabContextSessionClaimProof.accepted_has_all_current_gates,
+      `AgenticAILabContextSessionClaimProof.accepted_increments_owner,
+      `AgenticAILabContextSessionClaimProof.stale_owner_refused,
+      `AgenticAILabContextSessionClaimProof.stale_source_refused,
+      `AgenticAILabContextSessionClaimProof.stale_grant_refused,
+      `AgenticAILabContextSessionClaimProof.revoked_grant_refused,
+      `AgenticAILabContextSessionClaimProof.expired_clock_refused,
+      `AgenticAILabContextSessionClaimProof.missing_anchor_refused,
+      `AgenticAILabContextSessionClaimProof.pending_or_active_refused] do
     unless environment.contains required do throwError "Missing claim theorem: {required}"
   logInfo m!"CONTEXT-SESSION-CLAIM-AXIOM-AUDIT-OK: {count} theorems; standard Lean axioms only"

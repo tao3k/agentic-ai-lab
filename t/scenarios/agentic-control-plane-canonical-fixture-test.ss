@@ -5,11 +5,11 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/modules/workflow/qualification/agentic-control-plane-fixture)
+        :agentic-ai-lab/modules/workflow/qualification/agentic-control-plane-fixture)
 
 
 (def canonical-fixture
-  (poo-flow-agentic-control-plane-canonical-fixture))
+  (agentic-ai-lab-agentic-control-plane-canonical-fixture))
 
 (def agentic-control-plane-canonical-fixture-test
   (test-suite "AC-10 S3 canonical vertical fixture"
@@ -34,7 +34,7 @@
         (check (cdr (assq 'required-evidence-bits fields)) => 255)))
     (yuanxu-test-case "negative family rejects every required mutation"
       (let (negative
-            (poo-flow-agentic-control-plane-negative-fixtures
+            (agentic-ai-lab-agentic-control-plane-negative-fixtures
              canonical-fixture))
         (check (map (lambda (value) (.ref value 'mutation)) negative)
                => '(deny replay revocation binding-substitution stale-proof))

@@ -11,8 +11,8 @@
         (only-in :clan/poo/trie UIntTrieSet)
         (only-in :clan/poo/support/base until))
 
-(export poo-flow-ascent-table-expression-prototype
-        poo-flow-ascent-relation-closure-bounded)
+(export agentic-ai-lab-ascent-table-expression-prototype
+        agentic-ai-lab-ascent-relation-closure-bounded)
 
 (def (relation-index pairs radix)
   (unless (and (exact-integer? radix) (> radix 1))
@@ -139,7 +139,7 @@
                 (if dense? (= (u8vector-ref bits pair) 1)
                     (hash-get sparse pair))))))))
 
-(def (poo-flow-ascent-relation-closure-bounded source radix max-pairs)
+(def (agentic-ai-lab-ascent-relation-closure-bounded source radix max-pairs)
   (relation-closure source (relation-index source radix) radix max-pairs))
 
 ;;; The selected unit-weight Ascent path lattice: Dual<usize> joins competing
@@ -188,7 +188,7 @@
            (and (exact-integer? pair) (<= 0 pair) (< pair (* radix radix))
                 (lookup-distance pair)))))))
 
-(def poo-flow-ascent-table-expression-prototype
+(def agentic-ai-lab-ascent-table-expression-prototype
   (.o (:: self [] source-pairs radix)
       (right-index (relation-index source-pairs radix))
       (compose-left

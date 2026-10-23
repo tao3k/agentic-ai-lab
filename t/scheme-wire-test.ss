@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test (only-in :poo-flow/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write))
+(import :std/test (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write))
 (export scheme-wire-test)
 (def (rejects? text)
   (with-catch (lambda (_) #t) (lambda () (scheme-wire-read text) #f)))

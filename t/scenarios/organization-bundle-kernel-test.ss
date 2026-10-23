@@ -4,36 +4,36 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :clan/poo/object :std/test
-        :poo-flow/modules/query/semantic/organization-bundle
-        :poo-flow/modules/query/semantic/organization-bundle-kernel)
+        :agentic-ai-lab/modules/query/semantic/organization-bundle
+        :agentic-ai-lab/modules/query/semantic/organization-bundle-kernel)
 
 
 (def (bundle epoch child-authority)
-  (poo-flow-organization-bundle
+  (agentic-ai-lab-organization-bundle
    epoch
-   (poo-flow-organization-organization-facet
-    (list (poo-flow-organization-principal 'pp)
-          (poo-flow-organization-principal 'pc)
-          (poo-flow-organization-role 'rp)
-          (poo-flow-organization-role 'rc)
-          (poo-flow-organization-agent 'parent 'pp 'rp #f
+   (agentic-ai-lab-organization-organization-facet
+    (list (agentic-ai-lab-organization-principal 'pp)
+          (agentic-ai-lab-organization-principal 'pc)
+          (agentic-ai-lab-organization-role 'rp)
+          (agentic-ai-lab-organization-role 'rc)
+          (agentic-ai-lab-organization-agent 'parent 'pp 'rp #f
                                        '(write search) '(public private))
-          (poo-flow-organization-agent 'child 'pc 'rc 'parent
+          (agentic-ai-lab-organization-agent 'child 'pc 'rc 'parent
                                        child-authority '(public))))
-   (poo-flow-organization-authority-facet
-    (list (poo-flow-organization-capability 'write #t)
-          (poo-flow-organization-capability 'search #t))
-    (list (poo-flow-organization-delegation 'parent 'child 'search)))
-   (poo-flow-organization-context-facet
-    (list (poo-flow-organization-context-projection 'child '(public))))
-   (poo-flow-organization-protocol-facet
-    (list (poo-flow-organization-tool-effect 'tool 'search 'external-tool)) '())
-   (poo-flow-organization-empty-evidence-facet)))
+   (agentic-ai-lab-organization-authority-facet
+    (list (agentic-ai-lab-organization-capability 'write #t)
+          (agentic-ai-lab-organization-capability 'search #t))
+    (list (agentic-ai-lab-organization-delegation 'parent 'child 'search)))
+   (agentic-ai-lab-organization-context-facet
+    (list (agentic-ai-lab-organization-context-projection 'child '(public))))
+   (agentic-ai-lab-organization-protocol-facet
+    (list (agentic-ai-lab-organization-tool-effect 'tool 'search 'external-tool)) '())
+   (agentic-ai-lab-organization-empty-evidence-facet)))
 
 (def (open+validate value)
   (let-values (((candidate _open)
-                (poo-flow-organization-bundle-kernel-open value)))
-    (poo-flow-organization-bundle-kernel-validate candidate)))
+                (agentic-ai-lab-organization-bundle-kernel-open value)))
+    (agentic-ai-lab-organization-bundle-kernel-validate candidate)))
 
 (def organization-bundle-kernel-test
   (test-suite
@@ -46,7 +46,7 @@
    (yuanxu-test-case "advance increments and preserves previous state"
      (let-values (((state initial-receipt) (open+validate (bundle 7 '(search)))))
        (let-values (((next receipt)
-                     (poo-flow-organization-bundle-kernel-advance
+                     (agentic-ai-lab-organization-bundle-kernel-advance
                       state (.ref state 'identity) 0 (bundle 8 '(search)))))
          (check-equal? (.ref receipt 'code) 'kernel-advanced)
          (check-equal? (.ref next 'epoch) 1)
@@ -55,7 +55,7 @@
    (yuanxu-test-case "noop preserves state and epoch"
      (let-values (((state initial-receipt) (open+validate (bundle 7 '(search)))))
        (let-values (((next receipt)
-                     (poo-flow-organization-bundle-kernel-advance
+                     (agentic-ai-lab-organization-bundle-kernel-advance
                       state (.ref state 'identity) 0 (bundle 7 '(search)))))
          (check-eq? next state)
          (check-equal? (.ref receipt 'code) 'kernel-noop)
@@ -64,30 +64,30 @@
      (let-values (((state initial-receipt) (open+validate (bundle 7 '(search))))
                   ((other other-receipt) (open+validate (bundle 8 '(search)))))
        (let-values (((next identity-receipt)
-                     (poo-flow-organization-bundle-kernel-advance
+                     (agentic-ai-lab-organization-bundle-kernel-advance
                       state (.ref other 'identity) 0 '#(unstable))))
          (check-equal? next #f)
          (check-equal? (.ref identity-receipt 'code) 'kernel-identity-conflict))
        (let-values (((next epoch-receipt)
-                     (poo-flow-organization-bundle-kernel-advance
+                     (agentic-ai-lab-organization-bundle-kernel-advance
                       state (.ref state 'identity) 9 '#(unstable))))
          (check-equal? next #f)
          (check-equal? (.ref epoch-receipt 'code) 'kernel-stale-epoch))))
    (yuanxu-test-case "invalid next Bundle carries validation rejection"
      (let-values (((state initial-receipt) (open+validate (bundle 7 '(search)))))
        (let-values (((next receipt)
-                     (poo-flow-organization-bundle-kernel-advance
+                     (agentic-ai-lab-organization-bundle-kernel-advance
                       state (.ref state 'identity) 0
                       (bundle 8 '(write search)))))
          (check-equal? next #f)
          (check-equal? (.ref receipt 'code) 'kernel-next-bundle-rejected)
-         (check-equal? (poo-flow-organization-validation-accepted?
+         (check-equal? (agentic-ai-lab-organization-validation-accepted?
                         (.ref receipt 'validation-receipt)) #f))))
    (yuanxu-test-case "invalid phase fails closed"
-     (let-values (((candidate open-receipt) (poo-flow-organization-bundle-kernel-open
+     (let-values (((candidate open-receipt) (agentic-ai-lab-organization-bundle-kernel-open
                                   (bundle 7 '(search)))))
        (let-values (((next receipt)
-                     (poo-flow-organization-bundle-kernel-advance
+                     (agentic-ai-lab-organization-bundle-kernel-advance
                       candidate (.ref candidate 'identity) 0
                       (bundle 8 '(search)))))
          (check-equal? next #f)

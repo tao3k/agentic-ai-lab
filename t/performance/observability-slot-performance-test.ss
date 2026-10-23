@@ -46,7 +46,7 @@
                         fixture)))))
 
 (def (display-micro-kernel-receipt receipt)
-  (display "[poo-flow-micro-kernel] ")
+  (display "[agentic-ai-lab-micro-kernel] ")
   (write
    (map (lambda (key)
           (cons key (benchmark-fixture-ref receipt key)))
@@ -93,7 +93,7 @@
                        fixture
                        observability-slot-performance-scenario)))
           (poo-performance-display-receipt gate)
-          (display "[poo-flow-benchmark] observability-slot ")
+          (display "[agentic-ai-lab-benchmark] observability-slot ")
           (write (observability-slot-performance-receipt-sexp receipt))
           (newline)
           (force-output)

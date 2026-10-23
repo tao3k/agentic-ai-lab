@@ -20,7 +20,7 @@
 (def +prototype-iterations+ 20)
 (def +warm-iterations+ 1000)
 (def ObservabilitySlotPerformanceReceipt.
-  (.o kind: 'poo-flow.observability-slot-performance.v1
+  (.o kind: 'agentic-ai-lab.observability-slot-performance.v1
       runtime-executed?: #t))
 
 (def (source index) (.o payload: (+ index 1)))

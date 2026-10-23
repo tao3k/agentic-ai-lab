@@ -12,8 +12,8 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/workflow/scenario/configuration/interface
-        :poo-flow/modules/workflow/scenario/configuration/init-syntax)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
 (export user-interface-custom-loop-engine-result-contract-test)
 
@@ -63,7 +63,7 @@
 ;;; calling result-contract validators directly.
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation module-bundle)
-  (pooFlowUserConfigPresentation
+  (agenticAiLabUserConfigPresentation
    (yuanxuUserConfig
     (yuanxu-user-module-bundles->modules (list module-bundle))
     (yuanxu-settings))))
@@ -99,5 +99,5 @@
 
 ;; : TestSuite
 (def user-interface-custom-loop-engine-result-contract-test
-  (test-suite "poo-flow custom loop-engine result contract"
+  (test-suite "agentic-ai-lab custom loop-engine result contract"
     (user-interface-custom-loop-engine-invalid-result-case)))

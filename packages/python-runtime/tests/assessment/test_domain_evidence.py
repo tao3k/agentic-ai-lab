@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Exact Rust checks, atomic observations and immutable compiled checker identity."""
 import unittest
-from poo_flow_runtime.reasoning import ReasoningRuntime
-from poo_flow_runtime.reasoning import DomainEvidence, domain_check, domain_checker_version
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime
+from agentic_ai_lab_runtime.reasoning import DomainEvidence, domain_check, domain_checker_version
 
 
 class DomainEvidenceIntegration(unittest.TestCase):

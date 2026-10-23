@@ -11,21 +11,21 @@
         :yuanxu/graph/types
         :yuanxu/graph/algorithms
         :yuanxu/graph/control-analysis
-        :poo-flow/modules/workflow/graph/runtime-executor
-        :poo-flow/modules/workflow/scenario/configuration/init-syntax
-        (only-in :poo-flow/modules/workflow/scenario/composition-syntax
+        :agentic-ai-lab/modules/workflow/graph/runtime-executor
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        (only-in :agentic-ai-lab/modules/workflow/scenario/composition-syntax
                  user-composition)
         :yuanxu/profile-composition/profile-bundle
         (rename-in
          (only-in :yuanxu/profile-composition/selection-syntax
                   use-module)
          (use-module use-profile-module))
-        :poo-flow/modules/workflow/scenario/accessors
-        (only-in :poo-flow/modules/workflow/scenario/case poo-flow-scenario-case?)
-        :poo-flow/user-interface/profiles/langchain
-        :poo-flow/user-interface/profiles/langgraph
-        :poo-flow/user-interface/scenarios/langchain/scenario
-        :poo-flow/user-interface/scenarios/langgraph/scenario)
+        :agentic-ai-lab/modules/workflow/scenario/accessors
+        (only-in :agentic-ai-lab/modules/workflow/scenario/case agentic-ai-lab-scenario-case?)
+        :agentic-ai-lab/user-interface/profiles/langchain
+        :agentic-ai-lab/user-interface/profiles/langgraph
+        :agentic-ai-lab/user-interface/scenarios/langchain/scenario
+        :agentic-ai-lab/user-interface/scenarios/langgraph/scenario)
 
 
 (def langchain-composition
@@ -117,12 +117,12 @@
          (cons 'finish-ids '(runtime-handoff)))))
 
 (def langgraph-production-runtime-policy
-  (poo-flow-graph-runtime-policy
+  (agentic-ai-lab-graph-runtime-policy
    'langgraph-production-runtime
    'session
    'runtime-handoff
-   (list (poo-flow-graph-branch-choice 'router 'retriever)
-         (poo-flow-graph-branch-choice 'router 'agent-node))
+   (list (agentic-ai-lab-graph-branch-choice 'router 'retriever)
+         (agentic-ai-lab-graph-branch-choice 'router 'agent-node))
    8
    #t
    #t
@@ -133,12 +133,12 @@
    #t))
 
 (def langgraph-human-approval-missing-policy
-  (poo-flow-graph-runtime-policy
+  (agentic-ai-lab-graph-runtime-policy
    'langgraph-production-runtime
    'session
    'runtime-handoff
-   (list (poo-flow-graph-branch-choice 'router 'retriever)
-         (poo-flow-graph-branch-choice 'router 'agent-node))
+   (list (agentic-ai-lab-graph-branch-choice 'router 'retriever)
+         (agentic-ai-lab-graph-branch-choice 'router 'agent-node))
    8
    #t
    #t
@@ -178,7 +178,7 @@
    (else #f)))
 
 (def (single-stage composition)
-  (.ref (poo-flow-scenario-case-stages composition) 'production))
+  (.ref (agentic-ai-lab-scenario-case-stages composition) 'production))
 
 (def (profile-identity profile)
   (.ref profile (if (.slot? profile 'identity) 'identity 'name)))
@@ -188,12 +188,12 @@
   (yuanxu-test-case "langchain linear chain declares one production stage"
     (let* ((stage (single-stage langchain-composition))
            (compose-payload
-            (poo-flow-scenario-case-profiles langchain-composition))
+            (agentic-ai-lab-scenario-case-profiles langchain-composition))
            (loop-value (.ref stage 'loop)))
-      (check-equal? (poo-flow-scenario-case? langchain-composition) #t)
-      (check-equal? (poo-flow-scenario-case-name langchain-composition)
+      (check-equal? (agentic-ai-lab-scenario-case? langchain-composition) #t)
+      (check-equal? (agentic-ai-lab-scenario-case-name langchain-composition)
                     'langchain)
-      (check-equal? (length (poo-flow-scenario-case-modules
+      (check-equal? (length (agentic-ai-lab-scenario-case-modules
                              langchain-composition))
                     1)
       (check-equal? (length compose-payload) 6)
@@ -226,10 +226,10 @@
   (yuanxu-test-case "local composition preserves source module and selected profiles"
     (let* ((stage (single-stage audited-langchain-composition))
            (compose-payload
-            (poo-flow-scenario-case-profiles
+            (agentic-ai-lab-scenario-case-profiles
              audited-langchain-composition))
            (module-binding
-            (car (poo-flow-scenario-case-modules
+            (car (agentic-ai-lab-scenario-case-modules
                   audited-langchain-composition)))
            (module (.ref module-binding 'module)))
       (check-equal? (length compose-payload) 6)
@@ -241,12 +241,12 @@
   (yuanxu-test-case "langgraph state graph declares bounded loop and handoff"
     (let* ((stage (single-stage langgraph-composition))
            (compose-payload
-            (poo-flow-scenario-case-profiles langgraph-composition))
+            (agentic-ai-lab-scenario-case-profiles langgraph-composition))
            (loop-value (.ref stage 'loop)))
-      (check-equal? (poo-flow-scenario-case? langgraph-composition) #t)
-      (check-equal? (poo-flow-scenario-case-name langgraph-composition)
+      (check-equal? (agentic-ai-lab-scenario-case? langgraph-composition) #t)
+      (check-equal? (agentic-ai-lab-scenario-case-name langgraph-composition)
                     'langgraph)
-      (check-equal? (length (poo-flow-scenario-case-modules
+      (check-equal? (length (agentic-ai-lab-scenario-case-modules
                              langgraph-composition))
                     1)
       (check-equal? (length compose-payload) 8)
@@ -291,15 +291,15 @@
 
   (yuanxu-test-case "runtime executor records a production LangGraph path"
     (let* ((receipt
-            (poo-flow-graph-runtime-execute
+            (agentic-ai-lab-graph-runtime-execute
              langgraph-production-runtime-graph
              langgraph-production-runtime-policy))
-           (facts (poo-flow-graph-runtime-receipt->lean-facts receipt))
+           (facts (agentic-ai-lab-graph-runtime-receipt->lean-facts receipt))
            (lean-source
-            (poo-flow-graph-runtime-receipt->lean-module receipt)))
-      (check-equal? (poo-flow-graph-runtime-receipt-ref receipt 'runtime-executed) #t)
-      (check-equal? (poo-flow-graph-runtime-receipt-ref receipt 'finished) #t)
-      (check-equal? (poo-flow-graph-runtime-receipt-ref receipt 'trace)
+            (agentic-ai-lab-graph-runtime-receipt->lean-module receipt)))
+      (check-equal? (agentic-ai-lab-graph-runtime-receipt-ref receipt 'runtime-executed) #t)
+      (check-equal? (agentic-ai-lab-graph-runtime-receipt-ref receipt 'finished) #t)
+      (check-equal? (agentic-ai-lab-graph-runtime-receipt-ref receipt 'trace)
                     '(session
                       sandbox
                       router
@@ -310,8 +310,8 @@
                       checkpoint
                       human-approval
                       runtime-handoff))
-      (check-equal? (poo-flow-graph-runtime-receipt-ref receipt 'fuel-after) 7)
-      (check-equal? (poo-flow-graph-runtime-receipt-ref receipt 'diagnostics) '())
+      (check-equal? (agentic-ai-lab-graph-runtime-receipt-ref receipt 'fuel-after) 7)
+      (check-equal? (agentic-ai-lab-graph-runtime-receipt-ref receipt 'diagnostics) '())
       (check-equal? (alist-value facts 'graph.runtime/executed) #t)
       (check-equal? (alist-value facts 'graph.runtime/finished) #t)
       (check-equal? (alist-value facts 'graph.runtime/handoff-reached) #t)
@@ -322,7 +322,7 @@
       (check-equal? (alist-value facts
                                  'graph.runtime/reusable-production-case)
                     #t)
-      (check-equal? (poo-flow-graph-runtime-lean-fact-contract-complete?
+      (check-equal? (agentic-ai-lab-graph-runtime-lean-fact-contract-complete?
                      facts)
                     #t)
       (check-equal? (string-contains?
@@ -336,12 +336,12 @@
 
   (yuanxu-test-case "runtime executor rejects missing human approval"
     (let* ((receipt
-            (poo-flow-graph-runtime-execute
+            (agentic-ai-lab-graph-runtime-execute
              langgraph-production-runtime-graph
              langgraph-human-approval-missing-policy))
-           (facts (poo-flow-graph-runtime-receipt->lean-facts receipt)))
-      (check-equal? (poo-flow-graph-runtime-receipt-ref receipt 'finished) #t)
-      (check-equal? (alist-value (poo-flow-graph-runtime-receipt-ref receipt 'diagnostics)
+           (facts (agentic-ai-lab-graph-runtime-receipt->lean-facts receipt)))
+      (check-equal? (agentic-ai-lab-graph-runtime-receipt-ref receipt 'finished) #t)
+      (check-equal? (alist-value (agentic-ai-lab-graph-runtime-receipt-ref receipt 'diagnostics)
                                  'human-approval-missing)
                     'langgraph-production-runtime)
       (check-equal? (alist-value facts 'graph.runtime/human-approval-sound)
@@ -349,6 +349,6 @@
       (check-equal? (alist-value facts
                                  'graph.runtime/reusable-production-case)
                     #f)
-      (check-equal? (poo-flow-graph-runtime-lean-fact-contract-complete?
+      (check-equal? (agentic-ai-lab-graph-runtime-lean-fact-contract-complete?
                      facts)
                     #t)))))

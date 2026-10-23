@@ -9,7 +9,7 @@
 ;;; Invariant: this module never starts a sandbox, opens ports, mounts paths, or
 ;;; resolves store items; it only preserves declarative resource intent.
 
-(import :poo-flow/modules/agent-sandbox/projection-syntax)
+(import :agentic-ai-lab/modules/agent-sandbox/projection-syntax)
 
 (export +sandbox-volume-modes+
         +sandbox-port-protocols+

@@ -12,7 +12,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-SCHEMA = "poo-flow.module-system-qualification-ownership.v1"
+SCHEMA = "agentic-ai-lab.module-system-qualification-ownership.v1"
 ROW_IDS = tuple(
     f"rfc45-{index:02d}-{suffix}"
     for index, suffix in (

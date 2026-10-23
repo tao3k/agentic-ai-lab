@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :clan/poo/object .ref)
-        :poo-flow/modules/ai-agentic-context/clue-query
+        :agentic-ai-lab/modules/ai-agentic-context/clue-query
         (only-in :gerbil-ascent/rules/declaration rule-module-program)
         (only-in :gerbil-ascent/program/session gerbil-ascent-open-session
           gerbil-ascent-session-run gerbil-ascent-session-replace-source!))

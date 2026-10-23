@@ -2,11 +2,11 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :clan/poo/object
-        (only-in "../../../init.ss" poo-flow.init.exports)
+        (only-in "../../../init.ss" agentic-ai-lab.init.exports)
         (only-in :yuanxu/profile-composition/selection-syntax use-module))
 (export Ops)
 ;; One admitted scope from the maintained Core selection; no operation starts here.
-(def OpsScope (.get poo-flow.init.exports Core ops scope))
+(def OpsScope (.get agentic-ai-lab.init.exports Core ops scope))
 (def Ops
   (use-module OpsScope as ops
     (with-slots (Script) (.get ops prototypes)

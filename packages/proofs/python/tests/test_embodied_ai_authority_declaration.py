@@ -4,14 +4,14 @@
 
 from dataclasses import replace
 
-from poo_flow_proof.embodied_ai_authority_declaration import (
+from agentic_ai_lab_proof.embodied_ai_authority_declaration import (
     AuthorityAct,
     AuthorityIssuerKind,
     _provider_fields_match_countermodel,
     _roles_populated_countermodel,
     evaluate_authority_declaration_admission,
 )
-from poo_flow_proof.embodied_ai_authority_declaration_replay import canonical_request
+from agentic_ai_lab_proof.embodied_ai_authority_declaration_replay import canonical_request
 
 
 def test_role_and_provider_fields_do_not_confer_authority() -> None:

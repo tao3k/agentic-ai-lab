@@ -5,14 +5,14 @@ import asyncio
 from copy import deepcopy
 import json
 import pytest
-from poo_flow_runtime import scheme_wire as wire
-from poo_flow_runtime.semantic_tools import invoke_temporal_tool, ainvoke_temporal_tool
-from poo_flow_runtime.semantic_runtime import SemanticRuntimeError
+from agentic_ai_lab_runtime import scheme_wire as wire
+from agentic_ai_lab_runtime.semantic_tools import invoke_temporal_tool, ainvoke_temporal_tool
+from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
 from semantic_cases import temporal_request
 
 
 def _call(task):
-    return {'type': 'function_call', 'name': 'poo_flow_temporal_solve',
+    return {'type': 'function_call', 'name': 'agentic_ai_lab_temporal_solve',
             'call_id': 'actual-call', 'arguments': json.dumps({'datum': wire.dumps(task)})}
 
 

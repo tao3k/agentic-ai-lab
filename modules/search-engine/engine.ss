@@ -5,34 +5,34 @@
 (import (only-in :clan/poo/object .ref object?)
         (only-in :std/list/list every filter ormap)
         :yuanxu/object-family/role-syntax
-        :poo-flow/modules/search-engine/funs
-        :poo-flow/modules/search-engine/attempt
-        (only-in :poo-flow/modules/temporal-causality/types poo-flow-causal-event?)
-        (only-in :poo-flow/modules/temporal-causality/objects
-                 poo-flow-temporal-observation poo-flow-causal-event)
-        (only-in :poo-flow/modules/temporal-causality/funs poo-flow-causal-event-graph))
-(export poo-flow-search-engine poo-flow-search-engine-frontier
-        poo-flow-search-engine-issue poo-flow-search-engine-complete
-        poo-flow-search-engine-revise poo-flow-search-engine-node
-        poo-flow-search-engine-cancel
-        poo-flow-search-engine-require-evidence poo-flow-search-engine-observe
-        poo-flow-search-engine-inputs)
+        :agentic-ai-lab/modules/search-engine/funs
+        :agentic-ai-lab/modules/search-engine/attempt
+        (only-in :agentic-ai-lab/modules/temporal-causality/types agentic-ai-lab-causal-event?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/objects
+                 agentic-ai-lab-temporal-observation agentic-ai-lab-causal-event)
+        (only-in :agentic-ai-lab/modules/temporal-causality/funs agentic-ai-lab-causal-event-graph))
+(export agentic-ai-lab-search-engine agentic-ai-lab-search-engine-frontier
+        agentic-ai-lab-search-engine-issue agentic-ai-lab-search-engine-complete
+        agentic-ai-lab-search-engine-revise agentic-ai-lab-search-engine-node
+        agentic-ai-lab-search-engine-cancel
+        agentic-ai-lab-search-engine-require-evidence agentic-ai-lab-search-engine-observe
+        agentic-ai-lab-search-engine-inputs)
 
 ;;; Private lowering protocol; the public engine and nodes are POO objects.
 (defstruct lowered (nodes terminals))
 (def (lower-search node parents generation configuration source-cut)
   (cond
-   ((poo-flow-search-stage? node)
+   ((agentic-ai-lab-search-stage? node)
     (let (name (.ref node 'name))
       (unless (symbol? name) (error "Search stage requires a symbolic identity"))
       (make-lowered
        (list (poo-core-role-object
               (slots ((kind 'search-engine-node) (name name) (stage node)
                       (dependencies (map values parents))
-                      (state (poo-flow-search-attempt-state node generation configuration source-cut))
+                      (state (agentic-ai-lab-search-attempt-state node generation configuration source-cut))
                       (request #f) (completion #f) (evidence #f))) (supers)))
        (list name))))
-   ((poo-flow-search-composition? node)
+   ((agentic-ai-lab-search-composition? node)
     (let ((children (.ref node 'children)) (mode (.ref node 'mode)))
       (unless (and (list? children) (pair? children)
                    (memq mode '(sequential parallel merge)))
@@ -50,8 +50,8 @@
                     (lowered-terminals part))))))))
    (else (error "expected a Search stage or composition"))))
 
-(def (poo-flow-search-engine strategy generation configuration source-cut)
-  (unless (poo-flow-search-strategy? strategy) (error "expected Search strategy"))
+(def (agentic-ai-lab-search-engine strategy generation configuration source-cut)
+  (unless (agentic-ai-lab-search-strategy? strategy) (error "expected Search strategy"))
   (let* ((lowered (lower-search (.ref strategy 'root) '() generation configuration source-cut))
          (nodes (lowered-nodes lowered)))
     ;; Lowering is parent-first. Require unique identities and earlier references.
@@ -68,7 +68,7 @@
 (def (require-engine engine)
   (unless (and (object? engine) (eq? (.ref engine 'kind) 'search-engine))
     (error "expected Search engine")))
-(def (poo-flow-search-engine-node engine name)
+(def (agentic-ai-lab-search-engine-node engine name)
   (require-engine engine)
   (or (let loop ((nodes (.ref engine 'nodes)))
         (and (pair? nodes)
@@ -77,17 +77,17 @@
 
 (def (node-ready? engine node)
   (let* ((state (.ref node 'state))
-         (parents (map (lambda (name) (poo-flow-search-engine-node engine name))
+         (parents (map (lambda (name) (agentic-ai-lab-search-engine-node engine name))
                        (.ref node 'dependencies))))
     (and (not (.ref state 'retired?)) (not (.ref state 'active))
          (not (.ref node 'completion))
          (or (not (.ref engine 'evidence-required?))
              (every (lambda (parent) (.ref parent 'evidence)) parents))
-         (poo-flow-search-attempt-ready? state
+         (agentic-ai-lab-search-attempt-ready? state
            (map (lambda (parent) (.ref parent 'request)) parents)
            (map (lambda (parent) (.ref parent 'completion)) parents)))))
 
-(def (poo-flow-search-engine-frontier engine)
+(def (agentic-ai-lab-search-engine-frontier engine)
   (require-engine engine)
   (map (lambda (node) (.ref node 'name))
        (filter (lambda (node) (node-ready? engine node)) (.ref engine 'nodes))))
@@ -99,10 +99,10 @@
                           replacement node)) (.ref engine 'nodes)))))
    (supers engine)))
 
-(def (poo-flow-search-engine-issue engine name)
-  (let (node (poo-flow-search-engine-node engine name))
+(def (agentic-ai-lab-search-engine-issue engine name)
+  (let (node (agentic-ai-lab-search-engine-node engine name))
     (unless (node-ready? engine node) (error "Search stage is not ready" name))
-    (let* ((issued (poo-flow-search-attempt-issue (.ref node 'state)))
+    (let* ((issued (agentic-ai-lab-search-attempt-issue (.ref node 'state)))
            (request (.ref issued 'request))
            (next (poo-core-role-object
                   (slots ((state (.ref issued 'state)) (request request))) (supers node))))
@@ -111,21 +111,21 @@
                (request request))) (supers)))))
 
 (def (complete-node engine name request)
-  (let* ((node (poo-flow-search-engine-node engine name))
-         (completion (poo-flow-search-attempt-complete (.ref node 'state) request))
+  (let* ((node (agentic-ai-lab-search-engine-node engine name))
+         (completion (agentic-ai-lab-search-attempt-complete (.ref node 'state) request))
          (next (poo-core-role-object
                 (slots ((state (.ref completion 'state)) (completion completion))) (supers node))))
     (replace-node engine next)))
 
 
 ;;; Select the evidence contract before issuing any work. This is a pure POO refinement.
-(def (poo-flow-search-engine-require-evidence engine)
+(def (agentic-ai-lab-search-engine-require-evidence engine)
   (require-engine engine)
   (unless (every (lambda (node) (= (.ref (.ref node 'state) 'next-attempt) 0)) (.ref engine 'nodes))
     (error "Search evidence contract must be selected before execution"))
   (poo-core-role-object (slots ((evidence-required? #t))) (supers engine)))
 
-(def (poo-flow-search-engine-complete engine name request)
+(def (agentic-ai-lab-search-engine-complete engine name request)
   (when (.ref engine 'evidence-required?)
     (error "Search evidence contract requires an admitted Temporal observation"))
   (complete-node engine name request))
@@ -133,10 +133,10 @@
 ;;; Snapshot text identities so later mutation of caller-owned strings cannot change evidence.
 (def (snapshot-event event)
   (let (observation (.ref event 'observation))
-    (poo-flow-causal-event
+    (agentic-ai-lab-causal-event
      (string-copy (.ref event 'identity)) (string-copy (.ref event 'subject))
      (.ref event 'event-kind)
-     (poo-flow-temporal-observation
+     (agentic-ai-lab-temporal-observation
       (string-copy (.ref observation 'identity)) (.ref observation 'clock-role)
       (.ref observation 'logical-position)
       (string-copy (.ref observation 'provenance-identity)))
@@ -146,25 +146,25 @@
 
 ;;; Read evidence through the owner contract and return detached snapshots.
 ;;; Consumers must not mutate retained evidence through their input values.
-(def (poo-flow-search-engine-inputs engine name request)
-  (let (node (poo-flow-search-engine-node engine name))
+(def (agentic-ai-lab-search-engine-inputs engine name request)
+  (let (node (agentic-ai-lab-search-engine-node engine name))
     (unless (and (.ref engine 'evidence-required?)
-                 (poo-flow-search-attempt-current? (.ref node 'state) request))
+                 (agentic-ai-lab-search-attempt-current? (.ref node 'state) request))
       (error "Search inputs require a current evidence-bound attempt"))
     (map (lambda (parent)
-           (let (event (.ref (poo-flow-search-engine-node engine parent) 'evidence))
+           (let (event (.ref (agentic-ai-lab-search-engine-node engine parent) 'evidence))
              (unless event (error "missing Search predecessor evidence"))
              (snapshot-event event)))
          (.ref node 'dependencies))))
 
-(def (poo-flow-search-engine-observe engine name request event)
-  (let* ((node (poo-flow-search-engine-node engine name))
+(def (agentic-ai-lab-search-engine-observe engine name request event)
+  (let* ((node (agentic-ai-lab-search-engine-node engine name))
          (state (.ref node 'state))
-         (parents (map (lambda (parent) (poo-flow-search-engine-node engine parent))
+         (parents (map (lambda (parent) (agentic-ai-lab-search-engine-node engine parent))
                        (.ref node 'dependencies))))
     (unless (and (.ref engine 'evidence-required?)
-                 (poo-flow-search-attempt-current? state request)
-                 (poo-flow-causal-event? event)
+                 (agentic-ai-lab-search-attempt-current? state request)
+                 (agentic-ai-lab-causal-event? event)
                  (not (member (.ref event 'identity) (.ref engine 'event-identities)))
                  (.ref event 'committed?)
                  (memq (.ref event 'modality) '(observed derived))
@@ -185,12 +185,12 @@
       (let* ((retained (filter values (map (lambda (entry) (.ref entry 'evidence))
                                           (.ref engine 'nodes))))
              (snapshot (snapshot-event event))
-             (graph (poo-flow-causal-event-graph (.ref request 'generation)
+             (graph (agentic-ai-lab-causal-event-graph (.ref request 'generation)
                                                 (cons snapshot retained))))
         (unless (.ref graph 'complete?)
           (error "Search observation has missing or temporally invalid causal parents"))
         (let* ((completed (complete-node engine name request))
-               (next (poo-flow-search-engine-node completed name)))
+               (next (agentic-ai-lab-search-engine-node completed name)))
           (poo-core-role-object
            (slots ((event-identities (cons (string-copy (.ref snapshot 'identity))
                                           (.ref engine 'event-identities)))))
@@ -199,10 +199,10 @@
 
 ;;; Logical cancellation belongs to the generic engine, not its Rust consumer.
 ;;; An old request is a no-op; exact cancellation invalidates descendants too.
-(def (poo-flow-search-engine-cancel engine name request)
-  (let (node (poo-flow-search-engine-node engine name))
-    (if (poo-flow-search-attempt-current? (.ref node 'state) request)
-      (poo-flow-search-engine-revise engine (list name) (.ref request 'source-cut))
+(def (agentic-ai-lab-search-engine-cancel engine name request)
+  (let (node (agentic-ai-lab-search-engine-node engine name))
+    (if (agentic-ai-lab-search-attempt-current? (.ref node 'state) request)
+      (agentic-ai-lab-search-engine-revise engine (list name) (.ref request 'source-cut))
       engine)))
 
 ;;; Same finite reverse-edge propagation as LeanPoo invalidatedNodes:
@@ -219,17 +219,17 @@
                      acc (cons name acc))))
                affected nodes)))))
 
-(def (poo-flow-search-engine-revise engine changed source-cut)
+(def (agentic-ai-lab-search-engine-revise engine changed source-cut)
   (require-engine engine)
   (unless (list? changed) (error "expected changed Search stage identities"))
-  (for-each (lambda (name) (poo-flow-search-engine-node engine name)) changed)
+  (for-each (lambda (name) (agentic-ai-lab-search-engine-node engine name)) changed)
   (let (affected (affected-names (.ref engine 'nodes) changed))
     (poo-core-role-object
      (slots ((nodes
               (map (lambda (node)
                      (if (memq (.ref node 'name) affected)
                        (poo-core-role-object
-                        (slots ((state (poo-flow-search-attempt-revise (.ref node 'state) source-cut))
+                        (slots ((state (agentic-ai-lab-search-attempt-revise (.ref node 'state) source-cut))
                                 (request #f) (completion #f) (evidence #f))) (supers node))
                        node)) (.ref engine 'nodes)))))
      (supers engine))))

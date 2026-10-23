@@ -21,12 +21,12 @@
                  yuanxu-settings
                  yuanxu-user-module-bundles->modules
                  yuanxuUserConfig)
-        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
-                 pooFlowUserConfigPresentation)
-        (only-in :poo-flow/modules/loop-engine/runtime
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation)
+        (only-in :agentic-ai-lab/modules/loop-engine/runtime
                  loop-engine-capability-receipt?)
         (only-in "../../user-interface/custom/my-module/cases/loop-engine-owner"
-                 poo-flow-custom-my-module-loop-engine-case))
+                 agentic-ai-lab-custom-my-module-loop-engine-case))
 
 (export user-interface-presentation-performance-test)
 
@@ -70,14 +70,14 @@
 
 ;; : (-> Integer [[PooUserModuleSelection]])
 (def (user-interface-presentation-module-bundles count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    (lambda (_index)
-     poo-flow-custom-my-module-loop-engine-case)))
+     agentic-ai-lab-custom-my-module-loop-engine-case)))
 
 ;; : (-> Integer UserInterfacePresentationObject)
 (def (user-interface-presentation-build count)
-  (pooFlowUserConfigPresentation
+  (agenticAiLabUserConfigPresentation
    (yuanxuUserConfig
     (yuanxu-user-module-bundles->modules
      (user-interface-presentation-module-bundles count))
@@ -118,7 +118,7 @@
 
 ;; : (-> UserInterfacePresentationSummary ReceiptDisplayResult)
 (def (user-interface-presentation-display-receipt receipt)
-  (display "[poo-flow-benchmark] user-interface-presentation-batch-projection ")
+  (display "[agentic-ai-lab-benchmark] user-interface-presentation-batch-projection ")
   (write receipt)
   (newline)
   (force-output))

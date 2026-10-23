@@ -9,19 +9,19 @@
 
 (import :yuanxu/module-system/selection/objects)
 
-(export poo-flow-user-module-selection-session?
-        poo-flow-user-module-selection-session-intent
-        poo-flow-user-config-session-intents)
+(export agentic-ai-lab-user-module-selection-session?
+        agentic-ai-lab-user-module-selection-session-intent
+        agentic-ai-lab-user-config-session-intents)
 
 ;; : (-> PooUserModuleSelection Boolean)
-(def (poo-flow-user-module-selection-session? selection)
+(def (agentic-ai-lab-user-module-selection-session? selection)
   (equal? (yuanxu-user-module-selection-key selection)
           '(session . session)))
 
 ;; : (-> PooUserModuleSelection Alist)
-(def (poo-flow-user-module-selection-session-intent selection)
+(def (agentic-ai-lab-user-module-selection-session-intent selection)
   (let (flags (yuanxu-user-module-selection-flags selection))
-    (list (cons 'kind 'poo-flow.session.intent)
+    (list (cons 'kind 'agentic-ai-lab.session.intent)
           (cons 'key (yuanxu-user-module-selection-key selection))
           (cons 'flags flags)
           (cons 'lineage-enabled?
@@ -45,29 +45,29 @@
 ;;; for module-system, core behavior, keeping validation, lookup, or projection
 ;;; responsibilities centralized for callers.
 ;; : (-> [PooUserModuleSelection] [Alist] [Alist])
-(def (poo-flow-user-config-session-intents/add-rev selections
+(def (agentic-ai-lab-user-config-session-intents/add-rev selections
                                                            intents-rev)
   (if (null? selections)
     intents-rev
     (let (intent
-          (poo-flow-user-config-session-intent (car selections)))
-      (poo-flow-user-config-session-intents/add-rev
+          (agentic-ai-lab-user-config-session-intent (car selections)))
+      (agentic-ai-lab-user-config-session-intents/add-rev
        (cdr selections)
        (if intent
          (cons intent intents-rev)
          intents-rev)))))
 
 ;; : (-> [PooUserModuleSelection] [Alist])
-(def (poo-flow-user-config-session-intents/add selections)
+(def (agentic-ai-lab-user-config-session-intents/add selections)
   (reverse
-   (poo-flow-user-config-session-intents/add-rev selections '())))
+   (agentic-ai-lab-user-config-session-intents/add-rev selections '())))
 
 ;; : (-> PooUserModuleSelection MaybeAlist)
-(def (poo-flow-user-config-session-intent selection)
-  (and (poo-flow-user-module-selection-session? selection)
-       (poo-flow-user-module-selection-session-intent selection)))
+(def (agentic-ai-lab-user-config-session-intent selection)
+  (and (agentic-ai-lab-user-module-selection-session? selection)
+       (agentic-ai-lab-user-module-selection-session-intent selection)))
 
 ;; : (-> PooUserConfig [Alist])
-(def (poo-flow-user-config-session-intents config)
-  (poo-flow-user-config-session-intents/add
+(def (agentic-ai-lab-user-config-session-intents config)
+  (agentic-ai-lab-user-config-session-intents/add
    (yuanxu-user-config-modules config)))

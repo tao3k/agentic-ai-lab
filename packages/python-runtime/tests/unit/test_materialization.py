@@ -6,12 +6,12 @@ from __future__ import annotations
 
 import pytest
 
-from poo_flow_runtime.materialization import (
+from agentic_ai_lab_runtime.materialization import (
     RuntimeGraphBindings,
     describe_runtime_graph_plan,
 )
-from poo_flow_runtime.receipts import parse_runtime_receipt
-from poo_flow_runtime.runtime_graph import linear_plan
+from agentic_ai_lab_runtime.receipts import parse_runtime_receipt
+from agentic_ai_lab_runtime.runtime_graph import linear_plan
 
 
 def test_domain_description_is_deterministic_without_c_abi() -> None:

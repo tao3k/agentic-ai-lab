@@ -6,7 +6,7 @@ import pytest
 import anyio
 from types import SimpleNamespace
 
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime import (
     END,
     START,
     MemoryRuntimeGraphStore,

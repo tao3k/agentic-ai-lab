@@ -9,9 +9,9 @@ from types import SimpleNamespace
 
 import pytest
 
-from poo_flow_testing import CaseEvidence
-from poo_flow_testing.checks import quint
-from poo_flow_testing.checks.quint_cases import QuintCase
+from agentic_ai_lab_testing import CaseEvidence
+from agentic_ai_lab_testing.checks import quint
+from agentic_ai_lab_testing.checks.quint_cases import QuintCase
 
 
 @pytest.mark.parametrize("change", ["unchanged", "added", "modified", "deleted"])
@@ -41,7 +41,7 @@ def test_model_source_cut_controls_receipt_publication(monkeypatch, change):
         monkeypatch.setattr(quint, "check_quint", verifier)
         if change == "unchanged":
             assert quint.main() == 0
-            assert '"poo-flow.quint-proof.v1"' in receipt.read_text()
+            assert '"agentic-ai-lab.quint-proof.v1"' in receipt.read_text()
         else:
             with pytest.raises(AssertionError, match="changed during qualification"):
                 quint.main()

@@ -1416,7 +1416,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "poo-flow-cedar-authority"
+name = "agentic-ai-lab-cedar-authority"
 version = "0.1.0"
 dependencies = [
  "cedar-policy",
@@ -1432,14 +1432,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "poo-flow-cedar-gerbil"
+name = "agentic-ai-lab-cedar-gerbil"
 version = "0.1.0"
 dependencies = [
  "cedar-poo-bridge",
  "gerbil-scheme",
  "gerbil-scheme-native-build",
  "gerbil-scheme-sys",
- "poo-flow-cedar-authority",
+ "agentic-ai-lab-cedar-authority",
  "serde",
  "serde_json",
  "tempfile",

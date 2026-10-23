@@ -11,12 +11,12 @@ mod artifact;
 
 use cedar_poo_bridge::ValidatedManifest;
 use gerbil_scheme::{GerbilRuntime, LinkedStringExport};
-use poo_flow_cedar_authority::authority::{
+use agentic_ai_lab_cedar_authority::authority::{
     Authority, AuthorityInfo, AuthorizationResult, ConsumedHandoff, Grant, Signed,
 };
-use poo_flow_cedar_authority::projection::{Bootstrap, Proposal};
-use poo_flow_cedar_authority::runtime::Deployment;
-use poo_flow_cedar_authority::{Error, Result, canonical};
+use agentic_ai_lab_cedar_authority::projection::{Bootstrap, Proposal};
+use agentic_ai_lab_cedar_authority::runtime::Deployment;
+use agentic_ai_lab_cedar_authority::{Error, Result, canonical};
 use serde::de::DeserializeOwned;
 
 /// Runtime-bound authorization owner. Native projections remain borrowed from

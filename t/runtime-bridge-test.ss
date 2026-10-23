@@ -29,7 +29,7 @@
     (yuanxu-test-case "rust submit envelope carries schema and correlation ids"
       (let* ((flow (external-flow 'compile
                                   'rust-build
-                                  '((crate . "poo-flow"))
+                                  '((crate . "agentic-ai-lab"))
                                   'artifact
                                   'artifact))
              (result (run-flow-with-config (make-store-rust-run-config)
@@ -94,7 +94,7 @@
                         (list (cons 'runtime-command runtime-command))))
                (flow (external-flow 'compile
                                     'rust-build
-                                    '((crate . "poo-flow"))
+                                    '((crate . "agentic-ai-lab"))
                                     'artifact
                                     'artifact))
                (result (run-flow-with-config config flow 'input-artifact))
@@ -130,7 +130,7 @@
                       (list (cons 'runtime-command runtime-command))))
              (flow (external-flow 'compile
                                   'rust-build
-                                  '((crate . "poo-flow"))
+                                  '((crate . "agentic-ai-lab"))
                                   'artifact
                                   'artifact))
              (result (run-flow-with-config config flow 'input-artifact))
@@ -162,7 +162,7 @@
                       (list (cons 'runtime-command runtime-command))))
              (flow (external-flow 'compile
                                   'rust-build
-                                  '((crate . "poo-flow"))
+                                  '((crate . "agentic-ai-lab"))
                                   'artifact
                                   'artifact))
              (result (run-flow-with-config config flow 'input-artifact))
@@ -192,7 +192,7 @@
                       (list (cons 'runtime-command runtime-command))))
              (flow (external-flow 'descriptor-compile
                                   'rust-build
-                                  '((crate . "poo-flow"))
+                                  '((crate . "agentic-ai-lab"))
                                   'artifact
                                   'artifact))
              (result (run-flow-with-config config flow 'input-artifact))
@@ -213,7 +213,7 @@
                       (list (cons 'runtime-command command))))
              (flow (external-flow 'compile
                                   'rust-build
-                                  '((crate . "poo-flow"))
+                                  '((crate . "agentic-ai-lab"))
                                   'artifact
                                   'artifact))
              (result (run-flow-with-config config flow 'input-artifact))
@@ -226,7 +226,7 @@
                       (list (cons 'runtime-command '(not-a-runtime-command)))))
              (flow (external-flow 'compile
                                   'rust-build
-                                  '((crate . "poo-flow"))
+                                  '((crate . "agentic-ai-lab"))
                                   'artifact
                                   'artifact))
              (result (run-flow-with-config config flow 'input-artifact))

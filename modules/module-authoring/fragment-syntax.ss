@@ -13,7 +13,7 @@
         (only-in :gerbil/expander/stx stx-source))
 
 (export load!
-        poo-flow-load-profile-module-binding)
+        agentic-ai-lab-load-profile-module-binding)
 
 (begin-syntax
   (include "load-binding-syntax-core.inc")
@@ -22,19 +22,19 @@
   ;; Engineering note: policy-sensitive helpers in this owner keep explicit
   ;; contracts adjacent to definitions so downstream reports stay actionable.
   ;; : (-> Any Any)
-  (def (poo-flow-load-source-path value)
+  (def (agentic-ai-lab-load-source-path value)
     (cond
      ((string? value) value)
      ((and (pair? value) (string? (car value))) (car value))
      (else #f)))
 
   ;; : (-> Any Any)
-  (def (poo-flow-load-absolute-path? value)
+  (def (agentic-ai-lab-load-absolute-path? value)
     (and (> (string-length value) 0)
          (char=? (string-ref value 0) #\/)))
 
   ;; : (-> Any Any)
-  (def (poo-flow-load-drop-prefix prefix value)
+  (def (agentic-ai-lab-load-drop-prefix prefix value)
     (let ((prefix-length (string-length prefix))
           (value-length (string-length value)))
       (if (and (>= value-length prefix-length)
@@ -43,7 +43,7 @@
         value)))
 
   ;; : (-> Any Any)
-  (def (poo-flow-load-drop-suffix suffix value)
+  (def (agentic-ai-lab-load-drop-suffix suffix value)
     (let ((value-length (string-length value))
           (suffix-length (string-length suffix)))
       (if (and (>= value-length suffix-length)
@@ -55,12 +55,12 @@
         value)))
 
   ;; : (-> Any Any)
-  (def (poo-flow-load-last-segment segments fallback)
+  (def (agentic-ai-lab-load-last-segment segments fallback)
     (let loop ((rest segments) (last fallback))
       (if (null? rest) last (loop (cdr rest) (car rest)))))
 
   ;; : (-> Any Any)
-  (def (poo-flow-load-segment-member? names segments)
+  (def (agentic-ai-lab-load-segment-member? names segments)
     (let loop ((rest segments))
       (cond
        ((null? rest) #f)
@@ -68,15 +68,15 @@
        (else (loop (cdr rest))))))
 
   ;; : (-> Any Any)
-  (def (poo-flow-load-object-fragment-path? segments)
-    (poo-flow-load-segment-member? ["objects" "objects.ss"] segments))
+  (def (agentic-ai-lab-load-object-fragment-path? segments)
+    (agentic-ai-lab-load-segment-member? ["objects" "objects.ss"] segments))
 
   ;; : (-> Any Any)
-  (def (poo-flow-load-case-fragment-path? segments)
-    (poo-flow-load-segment-member? ["cases" "cases.ss"] segments))
+  (def (agentic-ai-lab-load-case-fragment-path? segments)
+    (agentic-ai-lab-load-segment-member? ["cases" "cases.ss"] segments))
 
   ;; : (-> Any Any)
-  (def (poo-flow-load-include-source-path path-value)
+  (def (agentic-ai-lab-load-include-source-path path-value)
     (let (path-length
           (and (string? path-value) (string-length path-value)))
       (cond
@@ -92,9 +92,9 @@
         (string-append path-value ".ss")))))
 
   ;; : (-> Any Any)
-  (def (poo-flow-load-candidate-fragment-paths include-source-path
+  (def (agentic-ai-lab-load-candidate-fragment-paths include-source-path
                                                call-source-path)
-    (if (poo-flow-load-absolute-path? include-source-path)
+    (if (agentic-ai-lab-load-absolute-path? include-source-path)
       [include-source-path]
       (let* ((source-base
               (path-directory (or call-source-path (current-directory))))
@@ -103,16 +103,16 @@
              (cwd-path
               (path-expand include-source-path (current-directory)))
              (root-parent-path
-              (and (poo-flow-load-binding-string-prefix? "../"
+              (and (agentic-ai-lab-load-binding-string-prefix? "../"
                                                          include-source-path)
                    (path-expand
-                    (poo-flow-load-drop-prefix "../" include-source-path)
+                    (agentic-ai-lab-load-drop-prefix "../" include-source-path)
                     (current-directory)))))
         (append [owner-path cwd-path]
                 (if root-parent-path [root-parent-path] [])))))
 
   ;; : (-> Any Any)
-  (def (poo-flow-load-first-existing-path candidates)
+  (def (agentic-ai-lab-load-first-existing-path candidates)
     (let loop ((rest candidates))
       (cond
        ((null? rest) (car candidates))
@@ -120,56 +120,56 @@
        (else (loop (cdr rest))))))
 
   ;; : (-> Any Any)
-  (def (poo-flow-load-fragment-info path-value
+  (def (agentic-ai-lab-load-fragment-info path-value
                                     path-source
                                     form-source)
     (let* ((include-source-path
-            (poo-flow-load-include-source-path path-value))
+            (agentic-ai-lab-load-include-source-path path-value))
            (call-source-path/raw
-            (or (poo-flow-load-source-path path-source)
-                (poo-flow-load-source-path form-source)
-                (poo-flow-load-binding-module-context-source-path)))
+            (or (agentic-ai-lab-load-source-path path-source)
+                (agentic-ai-lab-load-source-path form-source)
+                (agentic-ai-lab-load-binding-module-context-source-path)))
            (call-source-path
             (and call-source-path/raw
                  (path-expand call-source-path/raw (current-directory))))
            (fragment-source-path
-            (poo-flow-load-first-existing-path
-             (poo-flow-load-candidate-fragment-paths include-source-path
+            (agentic-ai-lab-load-first-existing-path
+             (agentic-ai-lab-load-candidate-fragment-paths include-source-path
                                                      call-source-path)))
            (source-segments
             (if call-source-path
-              (poo-flow-load-binding-path-segments call-source-path)
-              (poo-flow-load-binding-path-segments fragment-source-path)))
+              (agentic-ai-lab-load-binding-path-segments call-source-path)
+              (agentic-ai-lab-load-binding-path-segments fragment-source-path)))
            (custom-tail
-            (poo-flow-load-binding-member-tail "custom" source-segments))
+            (agentic-ai-lab-load-binding-member-tail "custom" source-segments))
            (custom-module-name
             (if (and custom-tail (pair? (cdr custom-tail)))
               (cadr custom-tail)
               "module"))
            (load-name
-            (poo-flow-load-drop-suffix
+            (agentic-ai-lab-load-drop-suffix
              ".ss"
-             (poo-flow-load-last-segment
-              (poo-flow-load-binding-path-segments include-source-path)
+             (agentic-ai-lab-load-last-segment
+              (agentic-ai-lab-load-binding-path-segments include-source-path)
               "config")))
            (include-segments
-            (poo-flow-load-binding-path-segments include-source-path))
+            (agentic-ai-lab-load-binding-path-segments include-source-path))
            (objects-fragment?
-            (or (poo-flow-load-object-fragment-path? source-segments)
-                (poo-flow-load-object-fragment-path? include-segments)
+            (or (agentic-ai-lab-load-object-fragment-path? source-segments)
+                (agentic-ai-lab-load-object-fragment-path? include-segments)
                 (string=? load-name "objects")))
            (case-fragment?
-            (or (poo-flow-load-case-fragment-path? source-segments)
-                (poo-flow-load-case-fragment-path? include-segments)))
+            (or (agentic-ai-lab-load-case-fragment-path? source-segments)
+                (agentic-ai-lab-load-case-fragment-path? include-segments)))
            (binding-name
-            (poo-flow-load-binding-fragment-name custom-module-name
+            (agentic-ai-lab-load-binding-fragment-name custom-module-name
                                                 load-name
                                                 case-fragment?)))
       (list binding-name
             objects-fragment?
             fragment-source-path))))
 
-;; poo-flow-load-profile-module-binding
+;; agentic-ai-lab-load-profile-module-binding
 ;; : (-> Syntax Syntax)
 ;; | doc m%
 ;;   Resolves a profile fragment name to the binding generated by
@@ -177,13 +177,13 @@
 ;;   load! binding naming in one owner.
 ;;   # Examples
 ;;   ```scheme
-;;   (poo-flow-load-profile-module-binding langchain)
-;;   ;; => poo-flow-custom-<module>-langchain-module
+;;   (agentic-ai-lab-load-profile-module-binding langchain)
+;;   ;; => agentic-ai-lab-custom-<module>-langchain-module
 ;;   ```
-(defsyntax (poo-flow-load-profile-module-binding stx)
+(defsyntax (agentic-ai-lab-load-profile-module-binding stx)
   (syntax-case stx ()
     ((ctx profile-name)
-     (poo-flow-load-binding-profile-module-syntax
+     (agentic-ai-lab-load-binding-profile-module-syntax
       (syntax ctx)
       (syntax profile-name)))))
 
@@ -200,7 +200,7 @@
 ;;
 ;;       ```scheme
 ;;       (load! "profiles/session")
-;;       ;; => exports poo-flow-custom-<module>-session-module
+;;       ;; => exports agentic-ai-lab-custom-<module>-session-module
 ;;       ```
 ;;     %
 (defsyntax (load! stx)
@@ -208,7 +208,7 @@
     ((ctx path)
      (let* ((path-value (syntax->datum (syntax path)))
             (fragment-info
-             (poo-flow-load-fragment-info path-value
+             (agentic-ai-lab-load-fragment-info path-value
                                           (stx-source (syntax path))
                                           (stx-source stx)))
             (binding-name (car fragment-info))

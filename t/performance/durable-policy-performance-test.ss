@@ -17,7 +17,7 @@
                  benchmark-run)
         (only-in :clan/poo/object object?)
         "../support/performance"
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/policy)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy)
 
 (export durable-policy-performance-test)
 
@@ -41,7 +41,7 @@
 (def (durable-policy-performance-all-receipts? values)
   (cond
    ((null? values) #t)
-   ((poo-flow-durable-policy-receipt? (car values))
+   ((agentic-ai-lab-durable-policy-receipt? (car values))
     (durable-policy-performance-all-receipts? (cdr values)))
    (else #f)))
 
@@ -52,16 +52,16 @@
    ((and (pair? (car values))
          (not (object? (car values)))
          (eq? (durable-policy-performance-ref (car values) 'schema)
-              +poo-flow-durable-policy-receipt-schema+))
+              +agentic-ai-lab-durable-policy-receipt-schema+))
     (durable-policy-performance-all-bounded-alists? (cdr values)))
    (else #f)))
 
 ;; : (-> Integer [PooDurablePolicy])
 (def (durable-policy-performance-policies count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    (lambda (index)
-     (poo-flow-durable-policy
+     (agentic-ai-lab-durable-policy
       (string->symbol (string-append "durable/batch-" (number->string index)))
       'session/performance
       (list
@@ -74,8 +74,8 @@
 ;; : (-> Integer DurablePolicyPerformanceSummary)
 (def (durable-policy-performance-summary count)
   (let* ((policies (durable-policy-performance-policies count))
-         (receipts (poo-flow-durable-policies->receipts policies))
-         (rows (poo-flow-durable-policy-receipts->alists receipts)))
+         (receipts (agentic-ai-lab-durable-policies->receipts policies))
+         (rows (agentic-ai-lab-durable-policy-receipts->alists receipts)))
     (list
      (cons 'policy-count (length policies))
      (cons 'receipt-count (length receipts))
@@ -88,7 +88,7 @@
 
 ;; : (-> DurablePolicyPerformanceSummary ReceiptDisplayResult)
 (def (durable-policy-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] durable-policy-batch-projection ")
+  (display "[agentic-ai-lab-benchmark] durable-policy-batch-projection ")
   (write receipt)
   (newline)
   (force-output))

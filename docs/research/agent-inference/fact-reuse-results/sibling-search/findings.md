@@ -116,7 +116,7 @@ passes. `raw.tar.gz` contains solver requests, SSE, thinking, real tool packets,
 usage and annotations. `audit.json` independently checks the protocol and
 scores without calling the provider. `integrity.json` binds published files.
 Quint/Lean/native proof checks establish their stated computational scopes;
-they do not certify natural-language annotation or model behavior. POO Flow
+they do not certify natural-language annotation or model behavior. Agentic AI Lab
 retains consumer authority and real temporal trust decisions.
 
 The published `replay.py` was executed in a fresh directory: all archived

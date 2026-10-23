@@ -12,7 +12,7 @@ SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 This record resolves the engine design choices left open across
 [[file:framework.org][the semantic framework]], RFC 161 and RFC 45-70/45-72/45-73.
-It audits source at POO Flow =3101deb8b0ac2b99d01840ac9b04e075aff442e4=.
+It audits source at Agentic AI Lab =3101deb8b0ac2b99d01840ac9b04e075aff442e4=.
 The decisions below are normative for subsequent implementation. A decision
 being accepted does not mean its executable gate has passed.
 
@@ -232,7 +232,7 @@ coverage/conversion and general behavior refinement remain implementation work.
 * Delivered: finite-family Runtime C/Python bridge (2026-10-04)
 
 =src/ffi/temporal-family.ss= projects bounded JSON onto the existing POO
-constructors and =poo-flow-temporal-model-classify=. The generic C ABI now
+constructors and =agentic-ai-lab-temporal-model-classify=. The generic C ABI now
 exposes =temporal.family.classify= and =temporal.family.observe=. Python adds
 sync/async helpers without implementing classification. Model identity binds
 canonical observations, provenance, family mode and completeness; execution
@@ -267,7 +267,7 @@ root conclusion. Its proof identity binds source scope, evidence, assumptions,
 query and explored frontier. Revision identity binds request identity and proof;
 the same request under changed proof cannot reuse the earlier revision identity.
 
-=poo_flow_semantic_source_register= is a distinct C host control entrypoint.
+=agentic_ai_lab_semantic_source_register= is a distinct C host control entrypoint.
 The generic semantic operation router rejects the reserved host prefix before
 Scheme dispatch, and Python registration uses the dedicated C function on the
 existing owner thread. Registration canonicalizes the domain/observation

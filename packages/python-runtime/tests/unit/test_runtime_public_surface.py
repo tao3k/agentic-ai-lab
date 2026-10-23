@@ -8,7 +8,7 @@ import ast
 import inspect
 from pathlib import Path
 
-import poo_flow_runtime as runtime
+import agentic_ai_lab_runtime as runtime
 
 
 RUNTIME_DOMAIN_EXPORTS = {
@@ -91,8 +91,8 @@ def test_runtime_domain_public_exports_are_declared() -> None:
 def test_retired_graph_abi_exports_are_absent() -> None:
     exported = set(runtime.__all__)
 
-    assert "PooFlowRuntimeBinding" not in exported
-    assert "PooFlowRuntimeCffiBinding" not in exported
+    assert "AgenticAILabRuntimeBinding" not in exported
+    assert "AgenticAILabRuntimeCffiBinding" not in exported
     assert "materialize_runtime_graph_plan" not in exported
 
 

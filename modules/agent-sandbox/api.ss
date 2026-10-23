@@ -5,7 +5,7 @@
 
 ;;; Owner: Agent sandbox facade and task/flow opt-in live here.
 ;;; Boundary: profile, request, and bridge contracts live in leaf modules.
-;;; Import contract: users opt in through =:poo-flow/modules/agent-sandbox= exports.
+;;; Import contract: users opt in through =:agentic-ai-lab/modules/agent-sandbox= exports.
 ;;; Runtime contract: Marlin or another runtime owns real sandbox execution.
 ;;; Runtime contract: LLM calls, API/R surfaces, and C bindings stay out of Scheme.
 ;;; Policy evidence: tests should validate this facade plus leaf contracts.
@@ -25,21 +25,21 @@
         (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
         (only-in :yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry task-flow)
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/agent-sandbox/profile-candidate
-        :poo-flow/modules/agent-sandbox/request
-        :poo-flow/modules/agent-sandbox/request-macro
-        :poo-flow/modules/agent-sandbox/bridge
-        :poo-flow/modules/agent-sandbox/marlin-interface)
+        :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/agent-sandbox/profile
+        :agentic-ai-lab/modules/agent-sandbox/profile-candidate
+        :agentic-ai-lab/modules/agent-sandbox/request
+        :agentic-ai-lab/modules/agent-sandbox/request-macro
+        :agentic-ai-lab/modules/agent-sandbox/bridge
+        :agentic-ai-lab/modules/agent-sandbox/marlin-interface)
 
-(export (import: :poo-flow/modules/agent-sandbox/alist)
-        (import: :poo-flow/modules/agent-sandbox/profile)
-        (import: :poo-flow/modules/agent-sandbox/profile-candidate)
-        (import: :poo-flow/modules/agent-sandbox/request)
-        (import: :poo-flow/modules/agent-sandbox/request-macro)
-        (import: :poo-flow/modules/agent-sandbox/bridge)
-        (import: :poo-flow/modules/agent-sandbox/marlin-interface)
+(export (import: :agentic-ai-lab/modules/agent-sandbox/alist)
+        (import: :agentic-ai-lab/modules/agent-sandbox/profile)
+        (import: :agentic-ai-lab/modules/agent-sandbox/profile-candidate)
+        (import: :agentic-ai-lab/modules/agent-sandbox/request)
+        (import: :agentic-ai-lab/modules/agent-sandbox/request-macro)
+        (import: :agentic-ai-lab/modules/agent-sandbox/bridge)
+        (import: :agentic-ai-lab/modules/agent-sandbox/marlin-interface)
         agent-sandbox-task-family-descriptor
         make-agent-sandbox-task-family-registry
         agent-sandbox-enable-strategy

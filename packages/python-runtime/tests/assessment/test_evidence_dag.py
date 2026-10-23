@@ -5,8 +5,8 @@ import copy
 import os
 import unittest
 
-from poo_flow_runtime.reasoning import ReasoningRuntime, ReasoningError
-from poo_flow_runtime.reasoning import EvidenceChain, components, canonical_rule, evidence_graph, slice_program
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime, ReasoningError
+from agentic_ai_lab_runtime.reasoning import EvidenceChain, components, canonical_rule, evidence_graph, slice_program
 
 
 def atom(name, variable='x'):

@@ -16,7 +16,7 @@
   (inputs
     ("bindings/runtime-c/tools/build-semantic.py" "cbede0980eb687babe5248890a05bffd22fe1116bb3a730a30a66f481d17ee79")
     ("bindings/runtime-c/src/semantic_host.c" "d6d4e34aaf8dedd1568ca3b2b3ad1eb55649e57ac739b1ace662a2ccf319dd13")
-    ("bindings/runtime-c/include/poo_flow/semantic.h" "fe2fb11d489aef2cfb5bb6fd8a71559a959d81879da1bd73bef1656bc746587c")
+    ("bindings/runtime-c/include/agentic_ai_lab/semantic.h" "fe2fb11d489aef2cfb5bb6fd8a71559a959d81879da1bd73bef1656bc746587c")
     ("bindings/rust-runtime/Cargo.toml" "bfb67a357db3e4598ab1c71ce333c25da9cb2492ee603f285d7101e0a45b7f02")
     ("bindings/rust-runtime/Cargo.lock" "de01f3c30fa2d9016e1d24b8e296d964737ab61c87ab6490f37e8d1f517fa3fe")
     ("bindings/rust-runtime/src/mrr.rs" "26a4630b8736e1a4788ef2a936d7c46c5b4893115ec73745bd184fb025a73617")

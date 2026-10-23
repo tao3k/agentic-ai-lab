@@ -17,12 +17,12 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
         :yuanxu/graph/interface
         :yuanxu/module-system/schema/interface
-        :poo-flow/modules/sandbox-core/shared-object
-        :poo-flow/modules/nono-sandbox/objects
-        :poo-flow/modules/cubeSandbox/objects)
+        :agentic-ai-lab/modules/sandbox-core/shared-object
+        :agentic-ai-lab/modules/nono-sandbox/objects
+        :agentic-ai-lab/modules/cubeSandbox/objects)
 
 (export module-extension-test)
 
@@ -35,7 +35,7 @@
 ;;; without introducing a second module-system surface.
 ;; : TestSuite
 (def module-extension-resolution-test
-  (test-suite "poo-flow module extension resolution"
+  (test-suite "agentic-ai-lab module extension resolution"
     (yuanxu-test-case "applies slot and child-node operations to a stable object graph"
       (let* ((build-node
               (yuanxu-graph-rooted
@@ -156,7 +156,7 @@
 ;;; slot-level resolution tests above.
 ;; : TestSuite
 (def module-extension-object-inheritance-test
-  (test-suite "poo-flow module object inheritance"
+  (test-suite "agentic-ai-lab module object inheritance"
     (yuanxu-test-case "inherits shared sandbox module objects for nono and cube"
       (let* ((shared-sandbox-object
               (yuanxu-module-object
@@ -297,7 +297,7 @@
 ;;; merging apart from the inheritance examples.
 ;; : TestSuite
 (def module-extension-object-merge-test
-  (test-suite "poo-flow module object merge"
+  (test-suite "agentic-ai-lab module object merge"
     (yuanxu-test-case "rejects inconsistent gerbil-poo C4 module object graphs"
       (let* ((root-object
               (yuanxu-module-object
@@ -346,20 +346,20 @@
 
     (yuanxu-test-case "merges real module objects under the objects namespace"
       (let* ((objects
-              (append poo-flow-shared-module-objects
-                      poo-flow-nono-sandbox-module-objects
-                      poo-flow-cubeSandbox-module-objects))
+              (append agentic-ai-lab-shared-module-objects
+                      agentic-ai-lab-nono-sandbox-module-objects
+                      agentic-ai-lab-cubeSandbox-module-objects))
              (result
               (yuanxu-module-objects-resolve-contributions
                objects
                (append
                 (yuanxu-module-object-contributions
-                 poo-flow-nono-sandbox-object
+                 agentic-ai-lab-nono-sandbox-object
                  '((flags . (doctor nono))
                    (runtime-args . ("--trace-nono"))
                    (binding . c)))
                 (yuanxu-module-object-contributions
-                 poo-flow-cubeSandbox-object
+                 agentic-ai-lab-cubeSandbox-object
                  '((flags . (doctor cube))
                    (runtime-args . ("--trace-cube"))
                    (profile . strict))))))
@@ -393,7 +393,7 @@
 ;;; the parser sees smaller suite owners.
 ;; : TestSuite
 (def module-extension-test
-  (test-suite "poo-flow module extension"
+  (test-suite "agentic-ai-lab module extension"
     module-extension-resolution-test
     module-extension-object-inheritance-test
     module-extension-object-merge-test))

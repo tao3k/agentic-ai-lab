@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import pytest
 
-from poo_flow_testing import CaseRegistry, CaseSpec, ModulePart
-from poo_flow_testing.catalog import build_catalog
+from agentic_ai_lab_testing import CaseRegistry, CaseSpec, ModulePart
+from agentic_ai_lab_testing.catalog import build_catalog
 
 def test_catalog_selects_single_part_and_cross_module_cases() -> None:
     catalog = build_catalog()

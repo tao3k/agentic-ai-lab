@@ -66,11 +66,11 @@
         loop-human-audit->runtime-snapshot
         loop-human-audit->contract)
 
-(import :poo-flow/modules/loop-engine/control/human-audit-value-support)
+(import :agentic-ai-lab/modules/loop-engine/control/human-audit-value-support)
 
 ;;; Boundary: schema names the human audit review contract.
 ;; : (-> Unit Symbol)
-(def +loop-human-audit-schema+ 'poo-flow.loop-human-audit.v1)
+(def +loop-human-audit-schema+ 'agentic-ai-lab.loop-human-audit.v1)
 
 ;;; Boundary: decision values are review state, not config comments.
 ;; : (-> Unit [Symbol])
@@ -197,13 +197,13 @@
 (def (loop-human-audit-slot audit slot default)
   (role-slot/default audit slot default))
 
-;; : (-> PooFlowValue Boolean)
+;; : (-> AgenticAILabValue Boolean)
 (def (loop-human-audit-decision-entry? value)
   (and (pair? value)
        (symbol? (car value))
        (loop-human-audit-decision? (cdr value))))
 
-;; : (-> PooFlowValue Boolean)
+;; : (-> AgenticAILabValue Boolean)
 (def (loop-human-audit-decision-list? value)
   (loop-human-audit-list-of? loop-human-audit-decision-entry? value))
 
@@ -220,7 +220,7 @@
   (yuanxu-native-contract->alist +loop-human-audit-type-contract+))
 
 ;; loop-human-audit-check-slot!
-;;   : (-> YuanxuSlotContract PooFlowValue PooFlowValue)
+;;   : (-> YuanxuSlotContract AgenticAILabValue AgenticAILabValue)
 ;;   | doc m%
 ;;       Execute one human-audit slot contract through utilities.
 ;;       # Examples

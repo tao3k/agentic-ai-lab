@@ -8,8 +8,8 @@ import asyncio
 
 import pytest
 
-from poo_flow_proof import axle_closure_verify
-from poo_flow_proof.lean_declaration_closure import LeanClosureError
+from agentic_ai_lab_proof import axle_closure_verify
+from agentic_ai_lab_proof.lean_declaration_closure import LeanClosureError
 
 
 def test_complete_axle_closure_operation_has_a_hard_deadline(

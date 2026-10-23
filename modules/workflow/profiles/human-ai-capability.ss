@@ -47,7 +47,7 @@
 
 (def HumanAICapabilityModule
   (yuanxu-semantic-module
-   (yuanxu-semantic-identity 'poo-flow 'human-ai-capability)
+   (yuanxu-semantic-identity 'agentic-ai-lab 'human-ai-capability)
    profiles:
    (yuanxu-module-profiles
     (yuanxu-profile-export 'access AccessProfile)

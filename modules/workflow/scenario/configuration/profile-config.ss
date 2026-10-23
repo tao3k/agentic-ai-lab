@@ -7,20 +7,20 @@
 ;;; Invariant: profile objects, diagnostics, and presentations live in leaf owners.
 
 (import :yuanxu/module-system/selection/objects
-        :poo-flow/modules/sandbox-core/profile-catalog
-        :poo-flow/modules/sandbox-core/backend-capability-catalog
-        :poo-flow/modules/workflow/cicd-config
-        :poo-flow/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/sandbox-core/profile-catalog
+        :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
+        :agentic-ai-lab/modules/workflow/cicd-config
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         :yuanxu/profile-composition/user-profile
         :yuanxu/profile-composition/gate
         :yuanxu/profile-composition/policy
-        :poo-flow/modules/workflow/scenario/configuration/profile-presentation-config)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/profile-presentation-config)
 
 (export (import: :yuanxu/module-system/selection/objects)
-        (import: :poo-flow/modules/sandbox-core/profile-catalog)
-        (import: :poo-flow/modules/sandbox-core/backend-capability-catalog)
-        (import: :poo-flow/modules/workflow/cicd-config)
-        (import: :poo-flow/modules/workflow/scenario/configuration/presentation-config)
+        (import: :agentic-ai-lab/modules/sandbox-core/profile-catalog)
+        (import: :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog)
+        (import: :agentic-ai-lab/modules/workflow/cicd-config)
+        (import: :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config)
         yuanxu-user-profile-kind
         yuanxu-user-profile-set-kind
         yuanxu-user-profile-diagnostic-kind
@@ -46,8 +46,8 @@
         yuanxuUserConfigFromProfile
         yuanxu-user-profile-policy-admit
         yuanxu-user-profile-set-policy-admit
-        pooFlowUserProfilePresentation
-        pooFlowUserProfileSetPresentation
+        agenticAiLabUserProfilePresentation
+        agenticAiLabUserProfileSetPresentation
         yuanxu-user-profile-policy-admitted?
         yuanxu-user-profile-set-policy-admitted?
         yuanxu-user-profile?

@@ -58,7 +58,7 @@
                               :yuanxu/observability/types :yuanxu/observability/funcs
                               :yuanxu/observability/slot-debug :yuanxu/observability/debug
                               :yuanxu/observability/testing-case
-                              :yuanxu/modules/json-schema/contracts :poo-flow/scenarios/aws/types
+                              :yuanxu/modules/json-schema/contracts :agentic-ai-lab/scenarios/aws/types
                               :yuanxu/module-system/selection/init-syntax "init.ss"
                               :yuanxu/module-system/source/admission))
                           (eval-syntax
@@ -80,12 +80,12 @@
                                      ((file-read)
                                       (when (and (eq? (cadr kind) 'publication-current) (pair? guard-origins))
                                         (hash-update! guard-counts (list (car guard-origins) 'reads) (cut + <> amount) 0))))))))
-                          (measure 'init-namespace (lambda () (eval-syntax '(.get poo-flow.init.exports Scenarios))))
+                          (measure 'init-namespace (lambda () (eval-syntax '(.get agentic-ai-lab.init.exports Scenarios))))
                           (measure 'test-discovery
-                            (lambda () (eval-syntax '(.get poo-flow.init.exports Scenarios aws tests source spec))))
+                            (lambda () (eval-syntax '(.get agentic-ai-lab.init.exports Scenarios aws tests source spec))))
                           (measure 'test-executor-import
-                            (lambda () (eval-syntax '(.get poo-flow.init.exports Scenarios aws tests execution))))
-                          (check-equal? (eval-syntax '(.ref/cached (.get poo-flow.init.exports Scenarios aws) 'scope)) #f)
+                            (lambda () (eval-syntax '(.get agentic-ai-lab.init.exports Scenarios aws tests execution))))
+                          (check-equal? (eval-syntax '(.ref/cached (.get agentic-ai-lab.init.exports Scenarios aws) 'scope)) #f)
                           (displayln "SOURCE-PHASE "
                             (eval-syntax '(filter (lambda (row) (symbol? (car row))) (hash->list source-counts))))
                           (displayln "PUBLICATION-GUARDS " (eval-syntax '(hash->list guard-counts)))

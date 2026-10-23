@@ -12,7 +12,7 @@ from contextlib import redirect_stdout
 from io import StringIO
 from unittest.mock import patch
 
-from poo_flow_testing.checks import quint
+from agentic_ai_lab_testing.checks import quint
 from source_binding import check_binding
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -59,7 +59,7 @@ class GateTest(unittest.TestCase):
 
     def test_quint_change_invalidates_lean_source_binding(self):
         source = ROOT / 'packages/proofs/quint/HealthcareStandardMigration.qnt'
-        lean = ROOT / 'packages/proofs/lean/PooFlowProof/Vertical/Healthcare/StandardMigrationRefinement.lean'
+        lean = ROOT / 'packages/proofs/lean/AgenticAILabProof/Vertical/Healthcare/StandardMigrationRefinement.lean'
         check_binding(source, lean)
         with tempfile.TemporaryDirectory() as work:
             changed = Path(work) / source.name

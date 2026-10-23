@@ -12,20 +12,20 @@
         (only-in :std/encoding/hex hex-encode)
         "funcs.ss")
 
-(def +poo-flow-organization-bundle-schema+
-  'poo-flow.organization-bundle.draft.3)
-(def +poo-flow-organization-facet-schema+
-  'poo-flow.organization-facet.draft.3)
+(def +agentic-ai-lab-organization-bundle-schema+
+  'agentic-ai-lab.organization-bundle.draft.3)
+(def +agentic-ai-lab-organization-facet-schema+
+  'agentic-ai-lab.organization-facet.draft.3)
 
-(def +poo-flow-organization-bundle-digest-algorithm+ 'sha256)
+(def +agentic-ai-lab-organization-bundle-digest-algorithm+ 'sha256)
 
-(def (poo-flow-organization-principal principal-id-value)
+(def (agentic-ai-lab-organization-principal principal-id-value)
   (.o (kind 'principal) (id principal-id-value)))
 
-(def (poo-flow-organization-role role-id-value)
+(def (agentic-ai-lab-organization-role role-id-value)
   (.o (kind 'role) (id role-id-value)))
 
-(def (poo-flow-organization-agent agent-id-value principal-id-value role-id-value
+(def (agentic-ai-lab-organization-agent agent-id-value principal-id-value role-id-value
                                   parent-id-value authorities-value
                                   context-visible-value)
   (.o (kind 'agent)
@@ -36,12 +36,12 @@
       (authorities authorities-value)
       (context-visible context-visible-value)))
 
-(def (poo-flow-organization-capability capability-id-value delegable-value?)
+(def (agentic-ai-lab-organization-capability capability-id-value delegable-value?)
   (.o (kind 'capability)
       (id capability-id-value)
       (delegable? delegable-value?)))
 
-(def (poo-flow-organization-delegation parent-id-value child-id-value
+(def (agentic-ai-lab-organization-delegation parent-id-value child-id-value
                                        capability-id-value)
   (.o (kind 'delegation)
       (id (list parent-id-value child-id-value capability-id-value))
@@ -49,20 +49,20 @@
       (child-id child-id-value)
       (capability-id capability-id-value)))
 
-(def (poo-flow-organization-context-projection agent-id-value visible-value)
+(def (agentic-ai-lab-organization-context-projection agent-id-value visible-value)
   (.o (kind 'context-projection)
       (id agent-id-value)
       (agent-id agent-id-value)
       (visible visible-value)))
 
-(def (poo-flow-organization-tool-effect effect-id-value capability-id-value
+(def (agentic-ai-lab-organization-tool-effect effect-id-value capability-id-value
                                         effect-kind-value)
   (.o (kind 'tool-effect)
       (id effect-id-value)
       (capability-id capability-id-value)
       (effect-kind effect-kind-value)))
 
-(def (poo-flow-organization-protocol-transition transition-id-value
+(def (agentic-ai-lab-organization-protocol-transition transition-id-value
                                                 participants-value
                                                 capability-id-value)
   (.o (kind 'protocol-transition)
@@ -70,7 +70,7 @@
       (participants participants-value)
       (capability-id capability-id-value)))
 
-(def (poo-flow-organization-evidence-obligation obligation-id-value
+(def (agentic-ai-lab-organization-evidence-obligation obligation-id-value
                                                 subject-id-value
                                                 target-kind-value
                                                 target-id-value)
@@ -80,52 +80,52 @@
       (target-kind target-kind-value)
       (target-id target-id-value)))
 
-(def (poo-flow-organization-facet facet-name-value entities-value relations-value
+(def (agentic-ai-lab-organization-facet facet-name-value entities-value relations-value
                                   constraints-value)
   (.o (kind (case facet-name-value
-              ((organization) 'poo-flow.organization-facet.organization)
-              ((authority) 'poo-flow.organization-facet.authority)
-              ((context) 'poo-flow.organization-facet.context)
-              ((protocol) 'poo-flow.organization-facet.protocol)
-              ((evidence) 'poo-flow.organization-facet.evidence)
+              ((organization) 'agentic-ai-lab.organization-facet.organization)
+              ((authority) 'agentic-ai-lab.organization-facet.authority)
+              ((context) 'agentic-ai-lab.organization-facet.context)
+              ((protocol) 'agentic-ai-lab.organization-facet.protocol)
+              ((evidence) 'agentic-ai-lab.organization-facet.evidence)
               (else (error "unknown organization facet" facet-name-value))))
-      (schema +poo-flow-organization-facet-schema+)
+      (schema +agentic-ai-lab-organization-facet-schema+)
       (facet-name facet-name-value)
       (entities entities-value)
       (relations relations-value)
       (constraints constraints-value)))
 
-(def (poo-flow-organization-organization-facet entities . rest)
-  (poo-flow-organization-facet 'organization entities
+(def (agentic-ai-lab-organization-organization-facet entities . rest)
+  (agentic-ai-lab-organization-facet 'organization entities
                                (if (pair? rest) (car rest) '())
                                (if (and (pair? rest) (pair? (cdr rest)))
                                  (cadr rest) '())))
-(def (poo-flow-organization-authority-facet entities relations . constraints)
-  (poo-flow-organization-facet 'authority entities relations
+(def (agentic-ai-lab-organization-authority-facet entities relations . constraints)
+  (agentic-ai-lab-organization-facet 'authority entities relations
                                (if (pair? constraints) (car constraints) '())))
-(def (poo-flow-organization-context-facet entities . constraints)
-  (poo-flow-organization-facet 'context entities '()
+(def (agentic-ai-lab-organization-context-facet entities . constraints)
+  (agentic-ai-lab-organization-facet 'context entities '()
                                (if (pair? constraints) (car constraints) '())))
-(def (poo-flow-organization-protocol-facet entities relations . constraints)
-  (poo-flow-organization-facet 'protocol entities relations
+(def (agentic-ai-lab-organization-protocol-facet entities relations . constraints)
+  (agentic-ai-lab-organization-facet 'protocol entities relations
                                (if (pair? constraints) (car constraints) '())))
-(def (poo-flow-organization-evidence-facet entities relations . constraints)
-  (poo-flow-organization-facet 'evidence entities relations
+(def (agentic-ai-lab-organization-evidence-facet entities relations . constraints)
+  (agentic-ai-lab-organization-facet 'evidence entities relations
                                (if (pair? constraints) (car constraints) '())))
-(def (poo-flow-organization-empty-organization-facet)
-  (poo-flow-organization-organization-facet '()))
-(def (poo-flow-organization-empty-authority-facet)
-  (poo-flow-organization-authority-facet '() '()))
-(def (poo-flow-organization-empty-context-facet)
-  (poo-flow-organization-context-facet '()))
-(def (poo-flow-organization-empty-protocol-facet)
-  (poo-flow-organization-protocol-facet '() '()))
-(def (poo-flow-organization-empty-evidence-facet)
-  (poo-flow-organization-evidence-facet '() '()))
+(def (agentic-ai-lab-organization-empty-organization-facet)
+  (agentic-ai-lab-organization-organization-facet '()))
+(def (agentic-ai-lab-organization-empty-authority-facet)
+  (agentic-ai-lab-organization-authority-facet '() '()))
+(def (agentic-ai-lab-organization-empty-context-facet)
+  (agentic-ai-lab-organization-context-facet '()))
+(def (agentic-ai-lab-organization-empty-protocol-facet)
+  (agentic-ai-lab-organization-protocol-facet '() '()))
+(def (agentic-ai-lab-organization-empty-evidence-facet)
+  (agentic-ai-lab-organization-evidence-facet '() '()))
 
-(def (poo-flow-organization-bundle epoch-value organization-value authority-value
+(def (agentic-ai-lab-organization-bundle epoch-value organization-value authority-value
                                    context-value protocol-value evidence-value)
-  (.o (kind +poo-flow-organization-bundle-schema+)
+  (.o (kind +agentic-ai-lab-organization-bundle-schema+)
       (epoch epoch-value)
       (organization organization-value)
       (authority authority-value)
@@ -133,16 +133,16 @@
       (protocol protocol-value)
       (evidence evidence-value)))
 
-(def (poo-flow-organization-object? value expected-kind)
+(def (agentic-ai-lab-organization-object? value expected-kind)
   (and (object? value)
        (with-catch
         (lambda (_failure) #f)
         (lambda () (eq? (.ref value 'kind) expected-kind)))))
 
-(def (poo-flow-organization-bundle? value)
-  (poo-flow-organization-object? value +poo-flow-organization-bundle-schema+))
+(def (agentic-ai-lab-organization-bundle? value)
+  (agentic-ai-lab-organization-object? value +agentic-ai-lab-organization-bundle-schema+))
 
-(def (poo-flow-organization-object-id value)
+(def (agentic-ai-lab-organization-object-id value)
   (.ref value 'id))
 
 (def (semantic-id-string value)
@@ -155,8 +155,8 @@
       (get-output-string port)))))
 
 (def (semantic-object<? left right)
-  (string<? (semantic-id-string (poo-flow-organization-object-id left))
-            (semantic-id-string (poo-flow-organization-object-id right))))
+  (string<? (semantic-id-string (agentic-ai-lab-organization-object-id left))
+            (semantic-id-string (agentic-ai-lab-organization-object-id right))))
 
 (def (semantic-sort objects)
   (list-sort semantic-object<? (append objects '())))
@@ -167,14 +167,14 @@
              (append values '())))
 
 (def (principal->canonical value)
-  (list 'principal (poo-flow-organization-object-id value)))
+  (list 'principal (agentic-ai-lab-organization-object-id value)))
 
 (def (role->canonical value)
-  (list 'role (poo-flow-organization-object-id value)))
+  (list 'role (agentic-ai-lab-organization-object-id value)))
 
 (def (agent->canonical value)
   (list 'agent
-        (poo-flow-organization-object-id value)
+        (agentic-ai-lab-organization-object-id value)
         (list 'principal (.ref value 'principal-id))
         (list 'role (.ref value 'role-id))
         (list 'parent (.ref value 'parent-id))
@@ -184,7 +184,7 @@
 
 (def (capability->canonical value)
   (list 'capability
-        (poo-flow-organization-object-id value)
+        (agentic-ai-lab-organization-object-id value)
         (list 'delegable? (.ref value 'delegable?))))
 
 (def (delegation->canonical value)
@@ -200,15 +200,15 @@
 
 (def (tool-effect->canonical value)
   (list 'tool-effect
-        (poo-flow-organization-object-id value)
+        (agentic-ai-lab-organization-object-id value)
         (list 'capability (.ref value 'capability-id))
         (list 'effect-kind (.ref value 'effect-kind))))
 (def (protocol-transition->canonical value)
-  (list 'protocol-transition (poo-flow-organization-object-id value)
+  (list 'protocol-transition (agentic-ai-lab-organization-object-id value)
         (cons 'participants (semantic-symbol-sort (.ref value 'participants)))
         (list 'capability (.ref value 'capability-id))))
 (def (evidence-obligation->canonical value)
-  (list 'evidence-obligation (poo-flow-organization-object-id value)
+  (list 'evidence-obligation (agentic-ai-lab-organization-object-id value)
         (list 'subject (.ref value 'subject-id))
         (list 'target-kind (.ref value 'target-kind))
         (list 'target (.ref value 'target-id))))
@@ -247,10 +247,10 @@
                    (semantic-sort (.ref facet 'relations))))
         (cons 'constraints (semantic-symbol-sort (.ref facet 'constraints)))))
 
-(def (poo-flow-organization-bundle-normalize/object bundle)
-  (unless (poo-flow-organization-bundle? bundle)
+(def (agentic-ai-lab-organization-bundle-normalize/object bundle)
+  (unless (agentic-ai-lab-organization-bundle? bundle)
     (error "expected POO organization Bundle" bundle))
-  (list +poo-flow-organization-bundle-schema+
+  (list +agentic-ai-lab-organization-bundle-schema+
         (list 'epoch (.ref bundle 'epoch))
         (facet->canonical (.ref bundle 'organization))
         (facet->canonical (.ref bundle 'authority))
@@ -260,41 +260,41 @@
         '(outcomes start allow deny timeout retry cancellation checkpoint
                    restore stale-epoch evidence)))
 
-(def (poo-flow-organization-bundle-normalize bundle)
+(def (agentic-ai-lab-organization-bundle-normalize bundle)
   (if (and (pair? bundle)
-           (eq? (car bundle) +poo-flow-organization-bundle-schema+))
+           (eq? (car bundle) +agentic-ai-lab-organization-bundle-schema+))
     (begin
       (unless (stable-semantic-value? bundle)
         (error "canonical Bundle contains unstable values" bundle))
       bundle)
-    (poo-flow-organization-bundle-normalize/object bundle)))
+    (agentic-ai-lab-organization-bundle-normalize/object bundle)))
 
-(def (poo-flow-organization-canonical->string canonical)
+(def (agentic-ai-lab-organization-canonical->string canonical)
   (let (port (open-output-string))
     (write canonical port)
     (get-output-string port)))
 
-(def (poo-flow-organization-digest canonical . maybe-algorithm)
+(def (agentic-ai-lab-organization-digest canonical . maybe-algorithm)
   (let (algorithm (if (pair? maybe-algorithm)
                      (car maybe-algorithm)
-                     +poo-flow-organization-bundle-digest-algorithm+))
+                     +agentic-ai-lab-organization-bundle-digest-algorithm+))
     (case algorithm
       ((sha256)
        (hex-encode
         (sha256
          (string->utf8
-          (poo-flow-organization-canonical->string canonical)))))
+          (agentic-ai-lab-organization-canonical->string canonical)))))
       (else (error "unsupported Bundle digest algorithm" algorithm)))))
 
-(def (poo-flow-organization-bundle-identity bundle)
-  (let* ((canonical (poo-flow-organization-bundle-normalize bundle))
-         (digest-value (poo-flow-organization-digest canonical)))
-    (.o (kind 'poo-flow.organization-bundle.identity.v1)
-        (algorithm +poo-flow-organization-bundle-digest-algorithm+)
+(def (agentic-ai-lab-organization-bundle-identity bundle)
+  (let* ((canonical (agentic-ai-lab-organization-bundle-normalize bundle))
+         (digest-value (agentic-ai-lab-organization-digest canonical)))
+    (.o (kind 'agentic-ai-lab.organization-bundle.identity.v1)
+        (algorithm +agentic-ai-lab-organization-bundle-digest-algorithm+)
         (digest digest-value)
         (epoch (.ref bundle 'epoch)))))
 
-(def (poo-flow-organization-bundle-identity->alist identity)
+(def (agentic-ai-lab-organization-bundle-identity->alist identity)
   (list (cons 'algorithm (.ref identity 'algorithm))
         (cons 'digest (.ref identity 'digest))
         (cons 'epoch (.ref identity 'epoch))))
@@ -309,15 +309,15 @@
    (else #f)))
 
 (def (semantic-index objects)
-  (poo-flow-semantic-index-by poo-flow-organization-object-id objects))
+  (agentic-ai-lab-semantic-index-by agentic-ai-lab-organization-object-id objects))
 
 (def (semantic-duplicate-ids objects)
-  (poo-flow-semantic-adjacent-duplicate-identities
-   poo-flow-organization-object-id (semantic-sort objects)))
+  (agentic-ai-lab-semantic-adjacent-duplicate-identities
+   agentic-ai-lab-organization-object-id (semantic-sort objects)))
 
-(def semantic-subset? poo-flow-semantic-subset?)
+(def semantic-subset? agentic-ai-lab-semantic-subset?)
 
-(def semantic-unique-count poo-flow-semantic-unique-count)
+(def semantic-unique-count agentic-ai-lab-semantic-unique-count)
 
 (def (semantic-proper-subset? child parent)
   (and (semantic-subset? child parent)
@@ -331,7 +331,7 @@
         (cons 'observed observed)))
 
 ;;; Validation boundary: collect cross-facet diagnostics against one canonical bundle identity.
-(def (poo-flow-organization-bundle-validate/unsafe bundle . maybe-identity)
+(def (agentic-ai-lab-organization-bundle-validate/unsafe bundle . maybe-identity)
   (let* ((organization (.ref bundle 'organization))
          (authority (.ref bundle 'authority))
          (context-facet (.ref bundle 'context))
@@ -366,7 +366,7 @@
          (epoch (.ref bundle 'epoch))
          (identity-value (if (pair? maybe-identity)
                            (car maybe-identity)
-                           (poo-flow-organization-bundle-identity bundle)))
+                           (agentic-ai-lab-organization-bundle-identity bundle)))
          (diagnostic-values '()))
     (def (reject! code path expected observed)
       (set! diagnostic-values
@@ -376,7 +376,7 @@
        (let ((name (car entry)) (facet (cdr entry)))
          (unless (and (object? facet)
                       (eq? (.ref facet 'schema)
-                           +poo-flow-organization-facet-schema+)
+                           +agentic-ai-lab-organization-facet-schema+)
                       (eq? (.ref facet 'facet-name) name))
            (reject! 'invalid-facet (list 'facets name)
                     'typed-facet 'invalid))))
@@ -526,26 +526,26 @@
                    target-kind target-id))))
      obligations)
     (unless (stable-semantic-value?
-             (poo-flow-organization-bundle-normalize bundle))
+             (agentic-ai-lab-organization-bundle-normalize bundle))
       (reject! 'unstable-semantic-value '(bundle) 'canonical 'unstable))
-    (let (computed (poo-flow-organization-bundle-identity bundle))
+    (let (computed (agentic-ai-lab-organization-bundle-identity bundle))
       (unless (and (eq? (.ref identity-value 'algorithm)
-                        +poo-flow-organization-bundle-digest-algorithm+)
+                        +agentic-ai-lab-organization-bundle-digest-algorithm+)
                    (equal? (.ref identity-value 'digest) (.ref computed 'digest))
                    (equal? (.ref identity-value 'epoch) epoch))
         (reject! 'bundle-identity-mismatch '(identity)
-                 (poo-flow-organization-bundle-identity->alist computed)
-                 (poo-flow-organization-bundle-identity->alist identity-value))))
+                 (agentic-ai-lab-organization-bundle-identity->alist computed)
+                 (agentic-ai-lab-organization-bundle-identity->alist identity-value))))
     (set! diagnostic-values (reverse diagnostic-values))
-    (.o (kind 'poo-flow.organization-bundle.validation-receipt.v1)
+    (.o (kind 'agentic-ai-lab.organization-bundle.validation-receipt.v1)
         (identity identity-value)
         (accepted? (null? diagnostic-values))
         (diagnostics diagnostic-values))))
 
-(def (poo-flow-organization-bundle-validate bundle . maybe-identity)
+(def (agentic-ai-lab-organization-bundle-validate bundle . maybe-identity)
   (with-catch
    (lambda (_failure)
-     (.o (kind 'poo-flow.organization-bundle.validation-receipt.v1)
+     (.o (kind 'agentic-ai-lab.organization-bundle.validation-receipt.v1)
          (identity #f)
          (accepted? #f)
          (diagnostics
@@ -554,12 +554,12 @@
                             'canonical
                             'unstable)))))
    (lambda ()
-     (apply poo-flow-organization-bundle-validate/unsafe
+     (apply agentic-ai-lab-organization-bundle-validate/unsafe
             bundle
             maybe-identity))))
 
-(def (poo-flow-organization-validation-accepted? receipt)
+(def (agentic-ai-lab-organization-validation-accepted? receipt)
   (.ref receipt 'accepted?))
 
-(def (poo-flow-organization-validation-diagnostics receipt)
+(def (agentic-ai-lab-organization-validation-diagnostics receipt)
   (.ref receipt 'diagnostics))

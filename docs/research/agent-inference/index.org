@@ -135,7 +135,7 @@ papers, maps the MRR boundary, and states the remaining Lean/Quint gates.
 The [[file:wikidata-scoped-exclusion.org][Wikidata scoped exclusion finite KG fixture]] pins Wikidata entity revisions and tests
 branch-scoped exclusion against an independent set walk; it has no
 model-generated proposal yet.
-The first concrete checker is =gerbil-ascent=; POO Flow owns workflow
+The first concrete checker is =gerbil-ascent=; Agentic AI Lab owns workflow
 composition, tool selection and runtime handoff.
 The implementation priority is the direct Library contract for LLM
 candidate reasoning alongside the internal Datalog core.  Serving
@@ -199,7 +199,7 @@ The response must distinguish =rejected=, =complete=, =partial=,
 names its input snapshot, program identity, limits, and whether its
 support is complete.  In =gerbil-ascent= these are *candidate* facts
 and explanations.  MRR retains semantic admission and canonical lineage;
-POO Flow owns caller context and effect handoff.  The Library does not
+Agentic AI Lab owns caller context and effect handoff.  The Library does not
 ask a model to mutate the fixed-point state during one solve.
 
 * First executable discriminator
@@ -229,25 +229,25 @@ Do not infer a change to the model's learned reward function from an
 improved deployed answer: the intervention is external evidence and
 feedback at inference time.
 
-* POO Flow workflow and optional framework connection
+* Agentic AI Lab workflow and optional framework connection
 :PROPERTIES:
 :CUSTOM_ID: agent-inference-workflow
 :END:
 
-POO Flow already separates workflow declarations and strategy/runner
+Agentic AI Lab already separates workflow declarations and strategy/runner
 execution through POO objects.  Its tutorial includes a composed
 TensorFlow train/infer *external task descriptor*, which shows a
 workflow can carry training tasks without making Scheme the trainer.
-For our deployment-time case, a proposed POO Flow workflow would:
+For our deployment-time case, a proposed Agentic AI Lab workflow would:
 
 #+NAME: agent-reasoning-workflow
 | Step | Owner | Output |
 |------+-------+--------|
-| Select task, capability, budget and sources | POO Flow | Scoped request |
+| Select task, capability, budget and sources | Agentic AI Lab | Scoped request |
 | Search or observe | Source/tool owner | Versioned candidate evidence |
 | Propose a reasoning step | LLM/model caller | Candidate facts, rules, query, plan or hypothesis |
 | Inspect and execute | Gerbil Ascent for relational case; other named checkers otherwise | Typed diagnostic, bounded result, completion status |
-| Explain and decide next step | Checker returns witness/gap; model caller judges; POO Flow routes | Revised attempt, abstention or bounded answer |
+| Explain and decide next step | Checker returns witness/gap; model caller judges; Agentic AI Lab routes | Revised attempt, abstention or bounded answer |
 | Admit or hand off | MRR/source owner and separate runtime policy where needed | Admitted evidence or authorized effect receipt |
 
 This is a workflow *proposal*, not an implemented cross-repository
@@ -260,7 +260,7 @@ why weighted provenance and gradient semantics would be required.
 An FFI or tensor conversion alone does not supply those semantics.
 
 For the SGLang/vLLM serving ecosystem, the first path is an external
-tool adapter in the POO Flow application loop.  Both servers expose
+tool adapter in the Agentic AI Lab application loop.  Both servers expose
 tool-call proposals through their OpenAI-compatible chat interfaces;
 the application executes the Library call and returns its observation.
 The [[file:serving-sglang-vllm.org][serving interface study]] records official
@@ -298,7 +298,7 @@ The sample does not establish reduced model thinking or improved quality.
 * Native evidence interaction
 
 The current [[file:evidence-interaction.org][native evidence interaction contract]] keeps ASCENT Scheme a
-Library. Computational relation/proof APIs are separate from POO Flow temporal
+Library. Computational relation/proof APIs are separate from Agentic AI Lab temporal
 ownership, MRR/Rust integration and the research consumer's branch controller.
 Its [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/evidence-store-local-receipt.json][local qualification receipt]] covers the native feature. The new
 [[file:evidence-interaction-results/report.md][frozen three-treatment model study]] and [[file:evidence-interaction-results/interpretation.md][diagnostic interpretation]] retain

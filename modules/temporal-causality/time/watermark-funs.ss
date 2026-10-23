@@ -8,20 +8,20 @@
 (import (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/modules/temporal-causality/time/types
-                 poo-flow-temporal-instant?)
-        (only-in :poo-flow/modules/temporal-causality/time/uncertainty-types
-                 poo-flow-temporal-bounded-observation?)
-        (only-in :poo-flow/modules/temporal-causality/time/uncertainty-funs
-                 poo-flow-temporal-bounded-observation-replay)
-        (only-in :poo-flow/modules/temporal-causality/time/watermark-types
-                 poo-flow-temporal-watermark?)
-        (only-in :poo-flow/modules/temporal-causality/time/watermark-objects
-                 poo-flow-temporal-watermark-value))
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+                 agentic-ai-lab-temporal-instant?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-types
+                 agentic-ai-lab-temporal-bounded-observation?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs
+                 agentic-ai-lab-temporal-bounded-observation-replay)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/watermark-types
+                 agentic-ai-lab-temporal-watermark?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/watermark-objects
+                 agentic-ai-lab-temporal-watermark-value))
 
-(export poo-flow-temporal-watermark
-        poo-flow-temporal-watermark-replay
-        poo-flow-temporal-watermark-cut-claim)
+(export agentic-ai-lab-temporal-watermark
+        agentic-ai-lab-temporal-watermark-replay
+        agentic-ai-lab-temporal-watermark-cut-claim)
 
 (def (digest datum)
   (string-append
@@ -31,27 +31,27 @@
              (call-with-output-string
               (lambda (port) (write datum port))))))))
 
-(def (poo-flow-temporal-watermark
+(def (agentic-ai-lab-temporal-watermark
       identity-value source-value partition-value first-value last-value
       observation-value issuer-value coverage-value policy-value receipt-value)
-  (unless (poo-flow-temporal-bounded-observation? observation-value)
+  (unless (agentic-ai-lab-temporal-bounded-observation? observation-value)
     (error "watermark requires a bounded time observation"))
-  (let* ((observation (poo-flow-temporal-bounded-observation-replay observation-value))
+  (let* ((observation (agentic-ai-lab-temporal-bounded-observation-replay observation-value))
          (semantic
-          (digest (list 'poo-flow.temporal-watermark.v1 identity-value
+          (digest (list 'agentic-ai-lab.temporal-watermark.v1 identity-value
                         source-value partition-value first-value last-value
                         (.ref observation 'semantic-digest) issuer-value
                         coverage-value policy-value receipt-value))))
-    (poo-flow-temporal-watermark-value
+    (agentic-ai-lab-temporal-watermark-value
      identity-value semantic source-value partition-value first-value
      last-value observation issuer-value coverage-value policy-value
      receipt-value)))
 
-(def (poo-flow-temporal-watermark-replay watermark)
-  (unless (poo-flow-temporal-watermark? watermark)
+(def (agentic-ai-lab-temporal-watermark-replay watermark)
+  (unless (agentic-ai-lab-temporal-watermark? watermark)
     (error "invalid temporal watermark"))
   (let (canonical
-        (poo-flow-temporal-watermark
+        (agentic-ai-lab-temporal-watermark
          (.ref watermark 'identity) (.ref watermark 'source-identity)
          (.ref watermark 'partition-identity)
          (.ref watermark 'first-sequence) (.ref watermark 'last-sequence)
@@ -67,14 +67,14 @@
 ;;; 'coverage-claimed is deliberately weaker than a closed cut. An issuer's
 ;;; coverage identity must be verified separately, and late events may still
 ;;; require correction or reconciliation under the named policy.
-(def (poo-flow-temporal-watermark-cut-claim
+(def (agentic-ai-lab-temporal-watermark-cut-claim
       watermark source partition sequence boundary)
   (unless (and (string? source) (string? partition)
                (exact-integer? sequence) (>= sequence 0)
-               (poo-flow-temporal-instant? boundary)
+               (agentic-ai-lab-temporal-instant? boundary)
                (eq? (.ref boundary 'modality) 'observed))
     (error "invalid watermark cut query"))
-  (poo-flow-temporal-watermark-replay watermark)
+  (agentic-ai-lab-temporal-watermark-replay watermark)
   (cond
    ((or (not (equal? source (.ref watermark 'source-identity)))
         (not (equal? partition (.ref watermark 'partition-identity)))

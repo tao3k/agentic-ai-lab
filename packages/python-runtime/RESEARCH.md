@@ -1,7 +1,7 @@
 # Application reasoning qualification
 
 Application Evidence, Clue, Trajectory and model interaction are exposed through
-`poo_flow_runtime.reasoning`. ASCENT supplies the generic rule evaluator and
+`agentic_ai_lab_runtime.reasoning`. ASCENT supplies the generic rule evaluator and
 provenance. See [ownership and validation](../../modules/evidence-assessment/migration.org).
 
 Build the native extension from this Python project with the existing maturin
@@ -17,7 +17,7 @@ The offline installed-consumer gate is:
 PYTHONPATH=packages/python-testing/src python -m unittest discover -s packages/python-runtime/tests/assessment
 ```
 
-The existing study code lives in `poo_flow_testing.assessment_studies`.
+The existing study code lives in `agentic_ai_lab_testing.assessment_studies`.
 Historical reports and failed/truncated runs retain their source identities in
 `docs/research/agent-inference`. Their plans do not qualify the migrated package.
 No provider call is part of the migration qualification gates.

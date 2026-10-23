@@ -11,8 +11,8 @@
                  check-equal?
                  test-suite)
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/workflow/scenario/configuration/interface
-        :poo-flow/modules/workflow/scenario/configuration/init-syntax)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
 (export user-interface-custom-loop-engine-slot-contract-test)
 
@@ -78,7 +78,7 @@
 ;;; are only reachable through downstream-style `use-module` declarations.
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation module-bundle)
-  (pooFlowUserConfigPresentation
+  (agenticAiLabUserConfigPresentation
    (yuanxuUserConfig
     (yuanxu-user-module-bundles->modules (list module-bundle))
     (yuanxu-settings))))
@@ -124,7 +124,7 @@
 
 ;; : TestSuite
 (def user-interface-custom-loop-engine-slot-contract-test
-  (test-suite "poo-flow custom loop-engine slot contracts"
+  (test-suite "agentic-ai-lab custom loop-engine slot contracts"
     (user-interface-custom-loop-engine-invalid-poo-slot-case)
     (user-interface-custom-loop-engine-invalid-memory-slot-case)
     (user-interface-custom-loop-engine-invalid-compression-slot-case)))

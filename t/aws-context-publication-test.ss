@@ -5,7 +5,7 @@
         (only-in :clan/poo/object .get .call .ref/cached)
         (only-in :std/io/tempfile make-temporary-file-name clear-temporary-file!)
         (only-in :yuanxu/observability/testing-fixture with-yuanxu-fixture)
-        (only-in "../init.ss" poo-flow.init.exports))
+        (only-in "../init.ss" agentic-ai-lab.init.exports))
 (export aws-context-publication-test)
 ;; The surviving parent owns the worker's temporary directory, so an Ops
 ;; deadline can still release it when the worker cannot unwind its own fixture.
@@ -21,9 +21,9 @@
   (test-suite "AWS tests are owned by the selected module namespace"
     (test-case "one init projection runs the real Schema transition with observation off and on"
       (with-yuanxu-fixture (workspace Workspace)
-        (def module (.get poo-flow.init.exports Scenarios aws))
+        (def module (.get agentic-ai-lab.init.exports Scenarios aws))
         (check-equal? (.ref/cached module 'scope) #f)
-        (check-equal? (map path-strip-directory (.get (.call (.get poo-flow.init.exports tests) .select '(aws)) spec)) '("atomic-test.ss"))
+        (check-equal? (map path-strip-directory (.get (.call (.get agentic-ai-lab.init.exports tests) .select '(aws)) spec)) '("atomic-test.ss"))
         ;; Test-source discovery must not resolve the root configuration Graph.
         ;; Explicit Graph identity is qualified separately by the source-admission
         ;; suite; demanding it here would expand every unrelated root before .run.

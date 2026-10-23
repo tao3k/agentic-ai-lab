@@ -7,16 +7,16 @@
 (export #t)
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :poo-flow/modules/query/semantic/organization-bundle
-        :poo-flow/modules/query/semantic/organization-bundle-kernel
+        :agentic-ai-lab/modules/query/semantic/organization-bundle
+        :agentic-ai-lab/modules/query/semantic/organization-bundle-kernel
         (only-in ./runtime-v0-abi-schema
-                 +poo-flow-runtime-v0-abi-schema+))
+                 +agentic-ai-lab-runtime-v0-abi-schema+))
 
-(def +poo-flow-runtime-v0-control-packet-schema+
-  'poo-flow.runtime-v0.control-packet.1)
+(def +agentic-ai-lab-runtime-v0-control-packet-schema+
+  'agentic-ai-lab.runtime-v0.control-packet.1)
 
-;; : (-> PooFlowBundleKernelState PooFlowRuntimeV0ControlPacket)
-(def (poo-flow-runtime-v0-control-packet state)
+;; : (-> AgenticAILabBundleKernelState AgenticAILabRuntimeV0ControlPacket)
+(def (agentic-ai-lab-runtime-v0-control-packet state)
   (unless (object? state)
     (error "runtime v0 control packet requires validated Bundle Kernel state"
            state))
@@ -24,10 +24,10 @@
     ((validated advanced)
      (let ((identity (.ref state 'identity))
            (bundle (.ref state 'bundle)))
-       (.o (kind +poo-flow-runtime-v0-control-packet-schema+)
-           (abi-major (.ref +poo-flow-runtime-v0-abi-schema+ 'abi-major))
-           (abi-minor (.ref +poo-flow-runtime-v0-abi-schema+ 'abi-minor))
-           (bundle-schema +poo-flow-organization-bundle-schema+)
+       (.o (kind +agentic-ai-lab-runtime-v0-control-packet-schema+)
+           (abi-major (.ref +agentic-ai-lab-runtime-v0-abi-schema+ 'abi-major))
+           (abi-minor (.ref +agentic-ai-lab-runtime-v0-abi-schema+ 'abi-minor))
+           (bundle-schema +agentic-ai-lab-organization-bundle-schema+)
            (digest-algorithm (.ref identity 'algorithm))
            (bundle-digest (.ref identity 'digest))
            (bundle-epoch (.ref bundle 'epoch))
@@ -38,8 +38,8 @@
      (error "runtime v0 control packet requires validated Bundle Kernel state"
             state))))
 
-;; : (-> PooFlowRuntimeV0ControlPacket Alist)
-(def (poo-flow-runtime-v0-control-packet->alist packet)
+;; : (-> AgenticAILabRuntimeV0ControlPacket Alist)
+(def (agentic-ai-lab-runtime-v0-control-packet->alist packet)
   (map (lambda (slot) (cons slot (.ref packet slot)))
        '(kind
          abi-major

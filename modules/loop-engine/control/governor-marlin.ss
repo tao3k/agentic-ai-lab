@@ -8,10 +8,10 @@
 ;;; Responsibility: publish Marlin request envelopes for =govern-loop=.
 ;;; Responsibility: publish L1 report receipts with no write effects.
 ;;; Responsibility: publish runtime discovery manifests for Marlin.
-;;; Import boundary: this module may depend on =:poo-flow/modules/loop-engine/control/governor=.
+;;; Import boundary: this module may depend on =:agentic-ai-lab/modules/loop-engine/control/governor=.
 ;;; Import boundary: this module may depend on =:yuanxu/modules/funflow/control-plane/failure=.
 ;;; Import boundary: the core governor must not import Marlin wrappers.
-;;; Export boundary: =:poo-flow/modules/loop-engine/control/agent= re-exports this owner for callers.
+;;; Export boundary: =:agentic-ai-lab/modules/loop-engine/control/agent= re-exports this owner for callers.
 ;;; Runtime boundary: this module never polls or schedules loops.
 ;;; Runtime boundary: this module never locks or writes state.
 ;;; Runtime boundary: this module never executes connectors or starts loops.
@@ -19,16 +19,16 @@
 ;;; Policy evidence: tests assert schemas, envelopes, receipts, and manifests.
 
 (import :yuanxu/modules/funflow/control-plane/failure
-        (only-in :poo-flow/modules/loop-engine/core
-                 +poo-flow-user-loop-engine-handoff-contracts+
-                 +poo-flow-user-loop-engine-receipt-contracts+
-                 +poo-flow-user-loop-engine-runtime-command-arguments+
-                 +poo-flow-user-loop-engine-runtime-command-contract+
-                 +poo-flow-user-loop-engine-runtime-command-executable+
-                 +poo-flow-user-loop-engine-runtime-command-name+
-                 +poo-flow-user-loop-engine-runtime-object-families+
-                 +poo-flow-user-loop-engine-runtime-packet-contracts+)
-        :poo-flow/modules/loop-engine/control/governor)
+        (only-in :agentic-ai-lab/modules/loop-engine/core
+                 +agentic-ai-lab-user-loop-engine-handoff-contracts+
+                 +agentic-ai-lab-user-loop-engine-receipt-contracts+
+                 +agentic-ai-lab-user-loop-engine-runtime-command-arguments+
+                 +agentic-ai-lab-user-loop-engine-runtime-command-contract+
+                 +agentic-ai-lab-user-loop-engine-runtime-command-executable+
+                 +agentic-ai-lab-user-loop-engine-runtime-command-name+
+                 +agentic-ai-lab-user-loop-engine-runtime-object-families+
+                 +agentic-ai-lab-user-loop-engine-runtime-packet-contracts+)
+        :agentic-ai-lab/modules/loop-engine/control/governor)
 
 (export +loop-governor-marlin-request-schema+
         +loop-governor-marlin-abi-schema+
@@ -47,31 +47,31 @@
 ;;; Intent: keep the nested governor contract stable and separately typed.
 ;; : (-> Unit LoopGovernorMarlinRequestSchema)
 (def +loop-governor-marlin-request-schema+
-  'poo-flow.loop-governor.marlin-request.v1)
+  'agentic-ai-lab.loop-governor.marlin-request.v1)
 
 ;;; Boundary: ABI schema names Rust-side discovery, not a request instance.
 ;;; Intent: Marlin can pin fields without executing or constructing Scheme data.
 ;; : (-> Unit LoopGovernorMarlinAbiSchema)
 (def +loop-governor-marlin-abi-schema+
-  'poo-flow.loop-governor.marlin-abi.v1)
+  'agentic-ai-lab.loop-governor.marlin-abi.v1)
 
 ;;; Boundary: L1 receipts are report-only proof objects.
 ;;; Invariant: the receipt records handoff readiness without state writes.
 ;; : (-> Unit LoopGovernorL1RunReceiptSchema)
 (def +loop-governor-l1-run-receipt-schema+
-  'poo-flow.loop-governor.l1-run-receipt.v1)
+  'agentic-ai-lab.loop-governor.l1-run-receipt.v1)
 
 ;;; Boundary: runtime manifest schema is the Marlin discovery entry.
 ;;; Intent: consumers bind to data fields instead of guessing Scheme constructors.
 ;; : (-> Unit LoopGovernorMarlinRuntimeManifestSchema)
 (def +loop-governor-marlin-runtime-manifest-schema+
-  'poo-flow.loop-governor.marlin-runtime-manifest.v1)
+  'agentic-ai-lab.loop-governor.marlin-runtime-manifest.v1)
 
 ;;; Boundary: loop-engine discovery is metadata for Marlin handoff consumers.
 ;;; Intent: consumers find receipt families without guessing Scheme internals.
 ;; : (-> Unit LoopGovernorMarlinLoopEngineDiscoverySchema)
 (def +loop-governor-marlin-loop-engine-discovery-schema+
-  'poo-flow.loop-engine.marlin-discovery.v1)
+  'agentic-ai-lab.loop-engine.marlin-discovery.v1)
 
 ;;; Boundary: Marlin projections keep alist probing local to avoid exporting
 ;;; core governor internals only for ABI wrapper assembly.
@@ -104,21 +104,21 @@
    (cons 'kind 'loop-engine-marlin-discovery)
    (cons 'operation 'loop-engine-runtime-handoff)
    (cons 'runtime-command-contract
-         +poo-flow-user-loop-engine-runtime-command-contract+)
+         +agentic-ai-lab-user-loop-engine-runtime-command-contract+)
    (cons 'runtime-command-name
-         +poo-flow-user-loop-engine-runtime-command-name+)
+         +agentic-ai-lab-user-loop-engine-runtime-command-name+)
    (cons 'runtime-command-executable
-         +poo-flow-user-loop-engine-runtime-command-executable+)
+         +agentic-ai-lab-user-loop-engine-runtime-command-executable+)
    (cons 'runtime-command-arguments
-         +poo-flow-user-loop-engine-runtime-command-arguments+)
+         +agentic-ai-lab-user-loop-engine-runtime-command-arguments+)
    (cons 'handoff-contracts
-         +poo-flow-user-loop-engine-handoff-contracts+)
+         +agentic-ai-lab-user-loop-engine-handoff-contracts+)
    (cons 'object-families
-         +poo-flow-user-loop-engine-runtime-object-families+)
+         +agentic-ai-lab-user-loop-engine-runtime-object-families+)
    (cons 'receipt-contracts
-         +poo-flow-user-loop-engine-receipt-contracts+)
+         +agentic-ai-lab-user-loop-engine-receipt-contracts+)
    (cons 'runtime-packet-contracts
-         +poo-flow-user-loop-engine-runtime-packet-contracts+)
+         +agentic-ai-lab-user-loop-engine-runtime-packet-contracts+)
    (cons 'control-owner 'gerbil)
    (cons 'execution-owner 'marlin-agent-core)
    (cons 'runtime-executed #f)))
@@ -128,7 +128,7 @@
 ;; : (-> Unit Alist)
 (def (loop-governor-marlin-abi-manifest)
   (list (cons 'schema +loop-governor-marlin-abi-schema+)
-        (cons 'producer 'poo-flow)
+        (cons 'producer 'agentic-ai-lab)
         (cons 'consumer 'marlin-agent-core)
         (cons 'transport 'scheme-abi)
         (cons 'operation 'govern-loop)
@@ -364,7 +364,7 @@
     (list (cons 'schema +loop-governor-marlin-runtime-manifest-schema+)
           (cons 'kind 'loop-governor-runtime-manifest)
           (cons 'bridge 'runtime-manifest)
-          (cons 'producer 'poo-flow)
+          (cons 'producer 'agentic-ai-lab)
           (cons 'consumer 'marlin-agent-core)
           (cons 'operation 'govern-loop)
           (cons 'request-id request-id)
@@ -376,11 +376,11 @@
           (cons 'loop-engine-discovery
                 (loop-governor-marlin-loop-engine-discovery))
           (cons 'object-families
-                +poo-flow-user-loop-engine-runtime-object-families+)
+                +agentic-ai-lab-user-loop-engine-runtime-object-families+)
           (cons 'receipt-contracts
-                +poo-flow-user-loop-engine-receipt-contracts+)
+                +agentic-ai-lab-user-loop-engine-receipt-contracts+)
           (cons 'runtime-command-contract
-                +poo-flow-user-loop-engine-runtime-command-contract+)
+                +agentic-ai-lab-user-loop-engine-runtime-command-contract+)
           (cons 'receipt-schema +loop-governor-l1-run-receipt-schema+)
           (cons 'target
                 (loop-governor-marlin-alist-ref envelope 'target #f))

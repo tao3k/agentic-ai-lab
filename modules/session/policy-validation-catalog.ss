@@ -6,134 +6,134 @@
 ;;; Boundary: tool, memory, and diagnostic catalog checks for session policy validation.
 
 (import (only-in :std/list/list fold)
-        :poo-flow/modules/session/policy
-        :poo-flow/modules/session/policy-validation-support
-        :poo-flow/modules/session/policy-validation-communication)
+        :agentic-ai-lab/modules/session/policy
+        :agentic-ai-lab/modules/session/policy-validation-support
+        :agentic-ai-lab/modules/session/policy-validation-communication)
 
-(export poo-flow-session-agent-tool-attempt-allowed?
-        poo-flow-session-hook-tool-attempt-allowed?
-        poo-flow-session-tool-attempt-diagnostic
-        poo-flow-session-tool-catalog-validation
-        poo-flow-session-tool-catalog-validation-present?
-        poo-flow-session-tool-catalog-validation-ref
-        poo-flow-session-policy-attempt-tool-refs/rev
-        poo-flow-session-policy-attempt-tool-refs
-        poo-flow-session-policy-catalog-attempt-ref-partition
-        poo-flow-session-memory-catalog-validation
-        poo-flow-session-memory-catalog-validation-present?
-        poo-flow-session-memory-catalog-validation-ref
-        poo-flow-session-denied-ref-diagnostics/rev
-        poo-flow-session-tool-attempt-diagnostics/rev
-        poo-flow-session-communication-receipt-diagnostic
-        poo-flow-session-communication-channel-receipt-diagnostic
-        poo-flow-session-communication-channel-receipt-diagnostics/rev
-        poo-flow-session-communication-channel-diagnostics/rev
-        poo-flow-session-communication-target-diagnostics/rev
-        poo-flow-session-hook-inheritance-diagnostics/rev)
-
-;; : (-> PooSessionPolicy PooSessionToolAttempt Boolean)
-(def (poo-flow-session-agent-tool-attempt-allowed? policy attempt)
-  (poo-flow-session-tool-permission-policy-allows?
-   policy
-   (poo-flow-session-policy-tool-attempt-tool-ref attempt)
-   (poo-flow-session-policy-tool-attempt-action attempt)))
+(export agentic-ai-lab-session-agent-tool-attempt-allowed?
+        agentic-ai-lab-session-hook-tool-attempt-allowed?
+        agentic-ai-lab-session-tool-attempt-diagnostic
+        agentic-ai-lab-session-tool-catalog-validation
+        agentic-ai-lab-session-tool-catalog-validation-present?
+        agentic-ai-lab-session-tool-catalog-validation-ref
+        agentic-ai-lab-session-policy-attempt-tool-refs/rev
+        agentic-ai-lab-session-policy-attempt-tool-refs
+        agentic-ai-lab-session-policy-catalog-attempt-ref-partition
+        agentic-ai-lab-session-memory-catalog-validation
+        agentic-ai-lab-session-memory-catalog-validation-present?
+        agentic-ai-lab-session-memory-catalog-validation-ref
+        agentic-ai-lab-session-denied-ref-diagnostics/rev
+        agentic-ai-lab-session-tool-attempt-diagnostics/rev
+        agentic-ai-lab-session-communication-receipt-diagnostic
+        agentic-ai-lab-session-communication-channel-receipt-diagnostic
+        agentic-ai-lab-session-communication-channel-receipt-diagnostics/rev
+        agentic-ai-lab-session-communication-channel-diagnostics/rev
+        agentic-ai-lab-session-communication-target-diagnostics/rev
+        agentic-ai-lab-session-hook-inheritance-diagnostics/rev)
 
 ;; : (-> PooSessionPolicy PooSessionToolAttempt Boolean)
-(def (poo-flow-session-hook-tool-attempt-allowed? policy attempt)
-  (poo-flow-session-hook-tool-permission-policy-allows?
+(def (agentic-ai-lab-session-agent-tool-attempt-allowed? policy attempt)
+  (agentic-ai-lab-session-tool-permission-policy-allows?
    policy
-   (poo-flow-session-policy-tool-attempt-trigger-ref attempt)
-   (poo-flow-session-policy-tool-attempt-tool-ref attempt)
-   (poo-flow-session-policy-tool-attempt-action attempt)))
+   (agentic-ai-lab-session-policy-tool-attempt-tool-ref attempt)
+   (agentic-ai-lab-session-policy-tool-attempt-action attempt)))
+
+;; : (-> PooSessionPolicy PooSessionToolAttempt Boolean)
+(def (agentic-ai-lab-session-hook-tool-attempt-allowed? policy attempt)
+  (agentic-ai-lab-session-hook-tool-permission-policy-allows?
+   policy
+   (agentic-ai-lab-session-policy-tool-attempt-trigger-ref attempt)
+   (agentic-ai-lab-session-policy-tool-attempt-tool-ref attempt)
+   (agentic-ai-lab-session-policy-tool-attempt-action attempt)))
 
 ;; : (-> Symbol PooSessionToolAttempt Alist)
-(def (poo-flow-session-tool-attempt-diagnostic code attempt)
-  (poo-flow-session-policy-diagnostic
+(def (agentic-ai-lab-session-tool-attempt-diagnostic code attempt)
+  (agentic-ai-lab-session-policy-diagnostic
    code
-   (poo-flow-session-policy-tool-attempt-principal-ref attempt)
+   (agentic-ai-lab-session-policy-tool-attempt-principal-ref attempt)
    (list (cons 'attempt-id
-               (poo-flow-session-policy-tool-attempt-id attempt))
+               (agentic-ai-lab-session-policy-tool-attempt-id attempt))
          (cons 'trigger-ref
-               (poo-flow-session-policy-tool-attempt-trigger-ref attempt))
+               (agentic-ai-lab-session-policy-tool-attempt-trigger-ref attempt))
          (cons 'tool-ref
-               (poo-flow-session-policy-tool-attempt-tool-ref attempt))
+               (agentic-ai-lab-session-policy-tool-attempt-tool-ref attempt))
          (cons 'action
-               (poo-flow-session-policy-tool-attempt-action attempt))
+               (agentic-ai-lab-session-policy-tool-attempt-action attempt))
          (cons 'resource-ref
-               (poo-flow-session-policy-tool-attempt-resource-ref attempt)))))
+               (agentic-ai-lab-session-policy-tool-attempt-resource-ref attempt)))))
 
 ;; : (-> Alist MaybeToolCatalogValidationRow)
-(def (poo-flow-session-tool-catalog-validation metadata)
-  (poo-flow-session-validation-alist-ref metadata 'tool-catalog-validation #f))
+(def (agentic-ai-lab-session-tool-catalog-validation metadata)
+  (agentic-ai-lab-session-validation-alist-ref metadata 'tool-catalog-validation #f))
 
 ;; : (-> MaybeToolCatalogValidationRow Boolean)
-(def (poo-flow-session-tool-catalog-validation-present? validation-row)
+(def (agentic-ai-lab-session-tool-catalog-validation-present? validation-row)
   (if validation-row #t #f))
 
 ;; : (-> MaybeToolCatalogValidationRow Symbol Object)
-(def (poo-flow-session-tool-catalog-validation-ref validation-row key default)
-  (if (poo-flow-session-tool-catalog-validation-present? validation-row)
-    (poo-flow-session-validation-row-ref validation-row key default)
+(def (agentic-ai-lab-session-tool-catalog-validation-ref validation-row key default)
+  (if (agentic-ai-lab-session-tool-catalog-validation-present? validation-row)
+    (agentic-ai-lab-session-validation-row-ref validation-row key default)
     default))
 
 ;; : (-> [PooSessionToolAttempt] [Symbol] [Symbol])
-(def (poo-flow-session-policy-attempt-tool-refs/rev attempts refs-rev)
+(def (agentic-ai-lab-session-policy-attempt-tool-refs/rev attempts refs-rev)
   (cond
    ((null? attempts) refs-rev)
    (else
     (let (tool-ref
-          (poo-flow-session-policy-tool-attempt-tool-ref (car attempts)))
-      (poo-flow-session-policy-attempt-tool-refs/rev
+          (agentic-ai-lab-session-policy-tool-attempt-tool-ref (car attempts)))
+      (agentic-ai-lab-session-policy-attempt-tool-refs/rev
        (cdr attempts)
        (if (member tool-ref refs-rev)
          refs-rev
          (cons tool-ref refs-rev)))))))
 
 ;; : (-> [PooSessionToolAttempt] [PooSessionToolAttempt] [Symbol])
-(def (poo-flow-session-policy-attempt-tool-refs agent-attempts
+(def (agentic-ai-lab-session-policy-attempt-tool-refs agent-attempts
                                                 hook-attempts)
   (reverse
-   (poo-flow-session-policy-attempt-tool-refs/rev
+   (agentic-ai-lab-session-policy-attempt-tool-refs/rev
     hook-attempts
-    (poo-flow-session-policy-attempt-tool-refs/rev agent-attempts '()))))
+    (agentic-ai-lab-session-policy-attempt-tool-refs/rev agent-attempts '()))))
 
 ;; : (-> MaybeToolCatalogValidationRow [Symbol] SessionValidationPartition)
-(def (poo-flow-session-policy-catalog-attempt-ref-partition
+(def (agentic-ai-lab-session-policy-catalog-attempt-ref-partition
       tool-catalog-validation
       attempt-tool-refs)
-  (if (poo-flow-session-tool-catalog-validation-present?
+  (if (agentic-ai-lab-session-tool-catalog-validation-present?
        tool-catalog-validation)
-    (poo-flow-session-policy-partition-refs
+    (agentic-ai-lab-session-policy-partition-refs
      attempt-tool-refs
-     (poo-flow-session-tool-catalog-validation-ref
+     (agentic-ai-lab-session-tool-catalog-validation-ref
       tool-catalog-validation
       'resolved-tool-refs
       '()))
     (list '() '())))
 
 ;; : (-> Alist MaybeMemoryCatalogValidationRow)
-(def (poo-flow-session-memory-catalog-validation metadata)
-  (poo-flow-session-validation-alist-ref metadata 'memory-catalog-validation #f))
+(def (agentic-ai-lab-session-memory-catalog-validation metadata)
+  (agentic-ai-lab-session-validation-alist-ref metadata 'memory-catalog-validation #f))
 
 ;; : (-> MaybeMemoryCatalogValidationRow Boolean)
-(def (poo-flow-session-memory-catalog-validation-present? validation-row)
+(def (agentic-ai-lab-session-memory-catalog-validation-present? validation-row)
   (if validation-row #t #f))
 
 ;; : (-> MaybeMemoryCatalogValidationRow Symbol Object)
-(def (poo-flow-session-memory-catalog-validation-ref validation-row key default)
-  (if (poo-flow-session-memory-catalog-validation-present? validation-row)
-    (poo-flow-session-validation-row-ref validation-row key default)
+(def (agentic-ai-lab-session-memory-catalog-validation-ref validation-row key default)
+  (if (agentic-ai-lab-session-memory-catalog-validation-present? validation-row)
+    (agentic-ai-lab-session-validation-row-ref validation-row key default)
     default))
 
 ;; : (forall (r d) (-> Symbol Symbol [r] [d] [d]))
 ;; : (-> Symbol Symbol [Symbol] [Alist] [Alist])
-(def (poo-flow-session-denied-ref-diagnostics/rev code
+(def (agentic-ai-lab-session-denied-ref-diagnostics/rev code
                                                    scope-ref
                                                    refs
                                                    diagnostics-rev)
   (fold
    (lambda (ref diagnostics)
-     (cons (poo-flow-session-policy-diagnostic
+     (cons (agentic-ai-lab-session-policy-diagnostic
             code
             scope-ref
             (list (cons 'ref ref)))
@@ -143,72 +143,72 @@
 
 ;; : (forall (a d) (-> Symbol [a] [d] [d]))
 ;; : (-> Symbol [PooSessionToolAttempt] [Alist] [Alist])
-(def (poo-flow-session-tool-attempt-diagnostics/rev code
+(def (agentic-ai-lab-session-tool-attempt-diagnostics/rev code
                                                      attempts
                                                      diagnostics-rev)
   (fold
    (lambda (attempt diagnostics)
-     (cons (poo-flow-session-tool-attempt-diagnostic code attempt)
+     (cons (agentic-ai-lab-session-tool-attempt-diagnostic code attempt)
            diagnostics))
    diagnostics-rev
    attempts))
 
 ;; : (-> Symbol Symbol Alist Alist)
-(def (poo-flow-session-communication-receipt-diagnostic code
+(def (agentic-ai-lab-session-communication-receipt-diagnostic code
                                                         scope-ref
                                                         row)
-  (poo-flow-session-policy-diagnostic
+  (agentic-ai-lab-session-policy-diagnostic
    code
    scope-ref
    (list (cons 'relation-kind
-               (poo-flow-session-validation-row-ref row 'relation-kind #f))
+               (agentic-ai-lab-session-validation-row-ref row 'relation-kind #f))
          (cons 'source-session-id
-               (poo-flow-session-validation-row-ref row
+               (agentic-ai-lab-session-validation-row-ref row
                                                     'source-session-id
                                                     #f))
          (cons 'target-session-id
-               (poo-flow-session-validation-row-ref row
+               (agentic-ai-lab-session-validation-row-ref row
                                                     'target-session-id
                                                     #f))
          (cons 'channel-id
-               (poo-flow-session-validation-row-ref row 'channel-id #f))
+               (agentic-ai-lab-session-validation-row-ref row 'channel-id #f))
          (cons 'message-kind
-               (poo-flow-session-validation-row-ref row 'message-kind #f)))))
+               (agentic-ai-lab-session-validation-row-ref row 'message-kind #f)))))
 
 ;; : (-> Symbol Symbol Alist Alist)
-(def (poo-flow-session-communication-channel-receipt-diagnostic code
+(def (agentic-ai-lab-session-communication-channel-receipt-diagnostic code
                                                                 scope-ref
                                                                 row)
-  (poo-flow-session-policy-diagnostic
+  (agentic-ai-lab-session-policy-diagnostic
    code
    scope-ref
    (list (cons 'relation-kind
-               (poo-flow-session-validation-row-ref row 'relation-kind #f))
+               (agentic-ai-lab-session-validation-row-ref row 'relation-kind #f))
          (cons 'source-session-id
-               (poo-flow-session-validation-row-ref row
+               (agentic-ai-lab-session-validation-row-ref row
                                                     'source-session-id
                                                     #f))
          (cons 'target-session-id
-               (poo-flow-session-validation-row-ref row
+               (agentic-ai-lab-session-validation-row-ref row
                                                     'target-session-id
                                                     #f))
          (cons 'channel-id
-               (poo-flow-session-validation-row-ref row 'channel-id #f)))))
+               (agentic-ai-lab-session-validation-row-ref row 'channel-id #f)))))
 
 ;; : (forall (r d) (-> Symbol PooSessionPolicy [r] [d] [d]))
 ;; : (-> Symbol PooSessionPolicy [Alist] [Alist] [Alist])
-(def (poo-flow-session-communication-channel-receipt-diagnostics/rev
+(def (agentic-ai-lab-session-communication-channel-receipt-diagnostics/rev
       scope-ref
       policy
       rows
       diagnostics-rev)
   (fold
    (lambda (row diagnostics)
-     (if (poo-flow-session-policy-communication-channel-receipt-allowed?
+     (if (agentic-ai-lab-session-policy-communication-channel-receipt-allowed?
           policy
           row)
        diagnostics
-       (cons (poo-flow-session-communication-channel-receipt-diagnostic
+       (cons (agentic-ai-lab-session-communication-channel-receipt-diagnostic
               'communication-channel-receipt-not-granted
               scope-ref
               row)
@@ -218,17 +218,17 @@
 
 ;; : (forall (r d) (-> Symbol PooSessionPolicy [r] [d] [d]))
 ;; : (-> Symbol PooSessionPolicy [Alist] [Alist] [Alist])
-(def (poo-flow-session-communication-channel-diagnostics/rev scope-ref
+(def (agentic-ai-lab-session-communication-channel-diagnostics/rev scope-ref
                                                              policy
                                                              rows
                                                              diagnostics-rev)
   (fold
    (lambda (row diagnostics)
-     (if (poo-flow-session-policy-communication-receipt-channel-allowed?
+     (if (agentic-ai-lab-session-policy-communication-receipt-channel-allowed?
           policy
           row)
        diagnostics
-       (cons (poo-flow-session-communication-receipt-diagnostic
+       (cons (agentic-ai-lab-session-communication-receipt-diagnostic
               'communication-receipt-channel-not-granted
               scope-ref
               row)
@@ -238,17 +238,17 @@
 
 ;; : (forall (r d) (-> Symbol PooSessionPolicy [r] [d] [d]))
 ;; : (-> Symbol PooSessionPolicy [Alist] [Alist] [Alist])
-(def (poo-flow-session-communication-target-diagnostics/rev scope-ref
+(def (agentic-ai-lab-session-communication-target-diagnostics/rev scope-ref
                                                             policy
                                                             rows
                                                             diagnostics-rev)
   (fold
    (lambda (row diagnostics)
-     (if (poo-flow-session-policy-communication-receipt-target-allowed?
+     (if (agentic-ai-lab-session-policy-communication-receipt-target-allowed?
           policy
           row)
        diagnostics
-       (cons (poo-flow-session-communication-receipt-diagnostic
+       (cons (agentic-ai-lab-session-communication-receipt-diagnostic
               'communication-receipt-target-not-granted
               scope-ref
               row)
@@ -258,15 +258,15 @@
 
 ;; : (forall (a d) (-> PooSessionPolicy [a] [d] [d]))
 ;; : (-> PooSessionPolicy [PooSessionToolAttempt] [Alist] [Alist])
-(def (poo-flow-session-hook-inheritance-diagnostics/rev agent-tool-policy
+(def (agentic-ai-lab-session-hook-inheritance-diagnostics/rev agent-tool-policy
                                                         denied-hook-attempts
                                                         diagnostics-rev)
   (fold
    (lambda (attempt diagnostics)
-     (if (poo-flow-session-agent-tool-attempt-allowed?
+     (if (agentic-ai-lab-session-agent-tool-attempt-allowed?
           agent-tool-policy
           attempt)
-       (cons (poo-flow-session-tool-attempt-diagnostic
+       (cons (agentic-ai-lab-session-tool-attempt-diagnostic
               'hook-tool-agent-permission-not-inherited
               attempt)
              diagnostics)

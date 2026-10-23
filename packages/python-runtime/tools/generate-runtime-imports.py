@@ -23,14 +23,14 @@ def main():
         '(import :gerbil/compiler/driver :gerbil/expander)', '-e', expression],
         cwd=ROOT, check=True, capture_output=True, text=True, timeout=60)
     modules = list(dict.fromkeys(name for name in result.stdout.splitlines()
-        if name.startswith(('clan/', 'yuanxu/', 'poo-flow/')) and ' ' not in name))
+        if name.startswith(('clan/', 'yuanxu/', 'agentic-ai-lab/')) and ' ' not in name))
     for name in ['yuanxu/profile-composition/selection-syntax',
-                 'poo-flow/modules/workflow/scenario/composition-syntax',
-                 'poo-flow/modules/funflow/profile-library']:
+                 'agentic-ai-lab/modules/workflow/scenario/composition-syntax',
+                 'agentic-ai-lab/modules/funflow/profile-library']:
         if name not in modules:
             modules.append(name)
-    target = ROOT / 'packages/python-runtime/src/poo_flow_runtime/projections/runtime_load_imports.json'
-    target.write_text(json.dumps({'schema': 'poo-flow.runtime-authoring-imports.v1',
+    target = ROOT / 'packages/python-runtime/src/agentic_ai_lab_runtime/projections/runtime_load_imports.json'
+    target.write_text(json.dumps({'schema': 'agentic-ai-lab.runtime-authoring-imports.v1',
         'owner': 'Gerbil compiler runtime dependency closure', 'roots': ROOTS,
         'modules': modules}, indent=2) + '\n')
     sys.stdout.write(f'GENERATED {len(modules)} actual import phases\n')

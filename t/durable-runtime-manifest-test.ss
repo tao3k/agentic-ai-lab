@@ -4,10 +4,10 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/policy
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/store
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/store-backend
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/runtime-manifest)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/runtime-manifest)
 
 (export durable-runtime-manifest-test)
 
@@ -18,15 +18,15 @@
 
 ;; : TestSuite
 (def durable-runtime-manifest-test
-  (test-suite "poo-flow durable runtime manifest envelope"
+  (test-suite "agentic-ai-lab durable runtime manifest envelope"
     (yuanxu-test-case "projects policy store backend and operations into one envelope"
       (let ((manifest
-             (poo-flow-durable-runtime-manifest-alist
-              poo-flow-durable-policy/default
-              poo-flow-durable-runtime-store-contract/default
-              poo-flow-durable-runtime-store-backend/default)))
+             (agentic-ai-lab-durable-runtime-manifest-alist
+              agentic-ai-lab-durable-policy/default
+              agentic-ai-lab-durable-runtime-store-contract/default
+              agentic-ai-lab-durable-runtime-store-backend/default)))
         (check-equal? (test-ref manifest 'schema)
-                      +poo-flow-durable-runtime-envelope-schema+)
+                      +agentic-ai-lab-durable-runtime-envelope-schema+)
         (check-equal? (test-ref manifest 'owner) 'scheme)
         (check-equal? (test-ref manifest 'policy-id) 'durable/default)
         (check-equal? (test-ref manifest 'store-id) 'runtime-store/default)
@@ -57,15 +57,15 @@
         (check-equal? (test-ref manifest 'runtime-executed) #f)))
     (yuanxu-test-case "emits byte carrier for runtime languages"
       (let* ((payload
-              (poo-flow-durable-runtime-manifest-string
-               (poo-flow-durable-policy 'durable/runtime 'shared)
-               poo-flow-durable-runtime-store-contract/default
-               poo-flow-durable-runtime-store-backend/default))
+              (agentic-ai-lab-durable-runtime-manifest-string
+               (agentic-ai-lab-durable-policy 'durable/runtime 'shared)
+               agentic-ai-lab-durable-runtime-store-contract/default
+               agentic-ai-lab-durable-runtime-store-backend/default))
              (bytes
-              (poo-flow-durable-runtime-manifest-bytes
-               (poo-flow-durable-policy 'durable/runtime 'shared)
-               poo-flow-durable-runtime-store-contract/default
-               poo-flow-durable-runtime-store-backend/default)))
+              (agentic-ai-lab-durable-runtime-manifest-bytes
+               (agentic-ai-lab-durable-policy 'durable/runtime 'shared)
+               agentic-ai-lab-durable-runtime-store-contract/default
+               agentic-ai-lab-durable-runtime-store-backend/default)))
         (check-equal? (string? payload) #t)
         (check-equal? (u8vector? bytes) #t)
         (check-equal? (> (u8vector-length bytes) 0) #t)))))

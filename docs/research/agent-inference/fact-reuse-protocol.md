@@ -1,6 +1,6 @@
 # Library cross-path Fact and proof-fragment pilot
 
-This is a bounded consumer test of `candidate/evidence-store.ss`, not a Library search API. The Library returns verified ground Facts, ancestor-closed proof fragments, and finite-absence partitions. The consumer owns the objective, branch bookkeeping and budget; an independent raw-source BFS and exhaustive enumeration judge feasibility and quality. No POO Flow workflow dependency is added.
+This is a bounded consumer test of `candidate/evidence-store.ss`, not a Library search API. The Library returns verified ground Facts, ancestor-closed proof fragments, and finite-absence partitions. The consumer owns the objective, branch bookkeeping and budget; an independent raw-source BFS and exhaustive enumeration judge feasibility and quality. No Agentic AI Lab workflow dependency is added.
 
 Two immutable tasks contain eight choice stages, shared directed-path prerequisites, cost/risk constraints and pair bonuses. Each treatment starts with the same feasible solution of value 79; exhaustive optima are 289 and 304. Every model action extends one supplied parent by one child. Parent options remain available until tried. Invalid choices and branches remain recorded. Baseline receives the raw source; Fact-only adds verified branch-relevant ground outcomes; Scheme adds the corresponding shared support DAG and Library finite-absence partition. Scheme does not rank choices or reveal the optimum. This combined treatment does not isolate proof visibility from pruning.
 

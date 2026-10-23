@@ -110,14 +110,14 @@
 
 ;; : (-> Alist Void)
 (def (object-family-syntax-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] poo-object-family-syntax ")
+  (display "[agentic-ai-lab-benchmark] poo-object-family-syntax ")
   (write (object-family-syntax-performance-receipt-summary receipt))
   (newline)
   (force-output))
 
 ;; : (-> Symbol TestingReceipt Void)
 (def (object-family-syntax-performance-display-phase phase receipt)
-  (display "[poo-flow-benchmark-phase] ")
+  (display "[agentic-ai-lab-benchmark-phase] ")
   (write phase)
   (display " ")
   (write (.ref receipt 'details))

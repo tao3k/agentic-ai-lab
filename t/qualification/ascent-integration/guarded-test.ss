@@ -36,7 +36,7 @@
        (max-output-pairs 64))))
 
 (def ascent-integration-test
-  (test-suite "POO Flow consumes gerbil-ascent"
+  (test-suite "Agentic AI Lab consumes gerbil-ascent"
     (yuanxu-test-case "guarded copy and join preserve source snapshots"
       (let* ((first (evaluate '(10 19 20 37 29)))
              (withdrawn (evaluate '(10 19 20 29)))

@@ -29,7 +29,7 @@
 
 (def AgenticResearchModule
   (yuanxu-semantic-module
-   (yuanxu-semantic-identity 'poo-flow 'agentic-research)
+   (yuanxu-semantic-identity 'agentic-ai-lab 'agentic-research)
    profiles:
    (yuanxu-module-profiles
     (yuanxu-profile-export 'researcher ResearcherProfile)

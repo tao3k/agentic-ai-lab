@@ -7,11 +7,11 @@
         (only-in :gerbil-ascent/candidate/checked-program reasoning-receipt-proof)
         (only-in :gerbil-ascent/candidate/provenance positive-proof-nodes proof-node-kind
                  proof-node-inputs proof-node-relation proof-node-row)
-        (only-in :poo-flow/modules/temporal-causality/truth-maintenance/support/interface poo-flow-temporal-support)
+        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface agentic-ai-lab-temporal-support)
         "fact.ss" "binding.ss" "rule.ss")
-(export poo-flow-temporal-mrr-derivation poo-flow-temporal-mrr-derivation-replay
-        poo-flow-temporal-proof-node-fact poo-flow-temporal-mrr-derivation-from-ascent
-        poo-flow-temporal-mrr-derivation-admission-replay)
+(export agentic-ai-lab-temporal-mrr-derivation agentic-ai-lab-temporal-mrr-derivation-replay
+        agentic-ai-lab-temporal-proof-node-fact agentic-ai-lab-temporal-mrr-derivation-from-ascent
+        agentic-ai-lab-temporal-mrr-derivation-admission-replay)
 (def (text? x) (and (string? x) (< 0 (string-length x) 257)))
 (def (tag? x k) (and (object? x) (.slot? x 'kind) (eq? (.ref x 'kind) k)))
 (def (digest x) (string-append "sha256:" (hex-encode (sha256 (string->utf8
@@ -19,12 +19,12 @@
 (def (unique! xs)
   (let (seen (make-hash-table)) (for-each (lambda (x)
     (when (hash-get seen x) (error "duplicate lineage correspondence")) (hash-put! seen x #t)) xs)))
-(def (poo-flow-temporal-mrr-derivation id-value rule-value generation-value output-value supports-value)
+(def (agentic-ai-lab-temporal-mrr-derivation id-value rule-value generation-value output-value supports-value)
   (unless (and (text? id-value) (text? rule-value) (text? generation-value)
     (list? supports-value) (<= 1 (length supports-value) 128) (andmap text? supports-value))
     (error "invalid MRR derivation declaration"))
   (unique! supports-value)
-  (let ((owned-output (poo-flow-temporal-mrr-fact-content-replay output-value))
+  (let ((owned-output (agentic-ai-lab-temporal-mrr-fact-content-replay output-value))
         (owned-supports (map string-copy supports-value)))
     (unless (and (equal? generation-value (.ref owned-output 'generation))
                  (not (member (.ref owned-output 'identity) owned-supports)))
@@ -33,31 +33,31 @@
         output: owned-output supports: owned-supports semantic-digest:
         (digest (list 'temporal.mrr-derivation.v1 id-value rule-value generation-value
           (.ref owned-output 'semantic-digest) owned-supports)))))
-(def (poo-flow-temporal-mrr-derivation-replay held)
+(def (agentic-ai-lab-temporal-mrr-derivation-replay held)
   (unless (tag? held 'temporal.mrr-derivation.v1) (error "invalid derivation kind"))
-  (let (canonical (poo-flow-temporal-mrr-derivation (.ref held 'identity) (.ref held 'rule-identity)
+  (let (canonical (agentic-ai-lab-temporal-mrr-derivation (.ref held 'identity) (.ref held 'rule-identity)
                    (.ref held 'generation) (.ref held 'output) (.ref held 'supports)))
     (unless (equal? (.ref held 'semantic-digest) (.ref canonical 'semantic-digest))
       (error "derivation content replay mismatch")) canonical))
-(def (poo-flow-temporal-proof-node-fact node-value fact-value derivation-value)
+(def (agentic-ai-lab-temporal-proof-node-fact node-value fact-value derivation-value)
   (unless (and (exact-integer? node-value) (<= 0 node-value 127)) (error "invalid proof node binding"))
-  (let* ((owned-fact (poo-flow-temporal-mrr-fact-content-replay fact-value))
-         (owned-derivation (and derivation-value (poo-flow-temporal-mrr-derivation-replay derivation-value))))
+  (let* ((owned-fact (agentic-ai-lab-temporal-mrr-fact-content-replay fact-value))
+         (owned-derivation (and derivation-value (agentic-ai-lab-temporal-mrr-derivation-replay derivation-value))))
     (when (and owned-derivation
       (not (equal? (.ref (.ref owned-derivation 'output) 'semantic-digest) (.ref owned-fact 'semantic-digest))))
       (error "derivation output differs from bound original fact"))
     (.o kind: 'temporal.proof-node-fact.v1 node: node-value fact: owned-fact derivation: owned-derivation)))
 (def (node-binding-row b)
   (unless (tag? b 'temporal.proof-node-fact.v1) (error "invalid node binding kind"))
-  (let* ((canonical (poo-flow-temporal-proof-node-fact (.ref b 'node) (.ref b 'fact) (.ref b 'derivation)))
+  (let* ((canonical (agentic-ai-lab-temporal-proof-node-fact (.ref b 'node) (.ref b 'fact) (.ref b 'derivation)))
          (f (.ref canonical 'fact)) (d (.ref canonical 'derivation)))
     (list (.ref canonical 'node) (.ref f 'identity) (.ref f 'semantic-digest) (and d (.ref d 'semantic-digest)))))
-(def (poo-flow-temporal-mrr-derivation-from-ascent id-value program correspondence bound admission snapshot candidate receipt
+(def (agentic-ai-lab-temporal-mrr-derivation-from-ascent id-value program correspondence bound admission snapshot candidate receipt
                                                 steps max-nodes node-bindings output source-bindings journal)
   (unless (and (text? id-value) (list? node-bindings) (<= 1 (length node-bindings) 128))
     (error "invalid selected lineage declaration"))
-  (let* ((verified-rules (poo-flow-temporal-rule-correspondence-replay correspondence program admission snapshot candidate receipt steps max-nodes))
-         (verified-bound (poo-flow-temporal-proof-support-replay bound admission snapshot candidate receipt steps max-nodes output source-bindings journal))
+  (let* ((verified-rules (agentic-ai-lab-temporal-rule-correspondence-replay correspondence program admission snapshot candidate receipt steps max-nodes))
+         (verified-bound (agentic-ai-lab-temporal-proof-support-replay bound admission snapshot candidate receipt steps max-nodes output source-bindings journal))
          (nodes-value (positive-proof-nodes (reasoning-receipt-proof receipt)))
          (root-value (.ref verified-bound 'root))
          (rows-value (list-sort (lambda (a b) (< (car a) (car b))) (map node-binding-row node-bindings)))
@@ -70,7 +70,7 @@
         (unless (< -1 n (length nodes-value)) (error "unbound original proof node"))
         (let* ((node-value (list-ref nodes-value n)) (binding-value (hash-get by-node n)))
           (unless binding-value (error "missing direct premise fact"))
-          (let* ((fact-value (poo-flow-temporal-mrr-fact-content-replay (.ref binding-value 'fact)))
+          (let* ((fact-value (agentic-ai-lab-temporal-mrr-fact-content-replay (.ref binding-value 'fact)))
                  (derivation-value (.ref binding-value 'derivation))
                  (relation-value (find (lambda (r) (equal? (.ref r 'identity) (.ref fact-value 'relation-identity))) (.ref program 'relations))))
             (unless (and relation-value
@@ -87,7 +87,7 @@
                   (error "source leaf differs from exact revision binding")))
               ((rule)
                 (unless derivation-value (error "rule node lacks original derivation authority"))
-                (let* ((d (poo-flow-temporal-mrr-derivation-replay derivation-value))
+                (let* ((d (agentic-ai-lab-temporal-mrr-derivation-replay derivation-value))
                        (application (assv n (.ref verified-rules 'applications)))
                        (inputs-value (proof-node-inputs node-value)))
                   (unless (and application (equal? (.ref d 'rule-identity) (cadr application)))
@@ -102,7 +102,7 @@
     (unique! derivation-ids)
     (unless (= (hash-length seen) (length node-bindings)) (error "unused original fact correspondence"))
     (let* ((root-binding (hash-ref by-node root-value))
-           (root-derivation (and (.ref root-binding 'derivation) (poo-flow-temporal-mrr-derivation-replay (.ref root-binding 'derivation))))
+           (root-derivation (and (.ref root-binding 'derivation) (agentic-ai-lab-temporal-mrr-derivation-replay (.ref root-binding 'derivation))))
            (bound-digest-value (.ref verified-bound 'semantic-digest))
            (rules-digest-value (.ref verified-rules 'semantic-digest)))
       (unless (and root-derivation
@@ -110,7 +110,7 @@
         (equal? (.ref root-derivation 'identity) (.ref verified-bound 'identity)))
         (error "selected root/output/Derivation identity mismatch"))
       (let* ((fingerprint-value (digest (list 'temporal.mrr-derivation-admission.v1 id-value bound-digest-value rules-digest-value rows-value)))
-             (support-value (poo-flow-temporal-support (.ref root-derivation 'identity) (.ref (.ref root-binding 'fact) 'identity)
+             (support-value (agentic-ai-lab-temporal-support (.ref root-derivation 'identity) (.ref (.ref root-binding 'fact) 'identity)
                fingerprint-value (.ref (.ref verified-bound 'support) 'premises) '())))
       (.o kind: 'temporal.mrr-derivation-admission.v1 identity: id-value root: root-value
           derivation-identity: (.ref root-derivation 'identity) rule-identity: (.ref root-derivation 'rule-identity)
@@ -118,10 +118,10 @@
           semantic-digest: fingerprint-value
           support: support-value derivation-correspondence-verified?: #t mrr-rule-equivalence-verified?: #t
           source-authenticated?: #f selection-admitted?: #f action-authorized?: #f durable?: #f)))))
-(def (poo-flow-temporal-mrr-derivation-admission-replay held program correspondence bound admission snapshot candidate receipt
+(def (agentic-ai-lab-temporal-mrr-derivation-admission-replay held program correspondence bound admission snapshot candidate receipt
                                                      steps max-nodes node-bindings output source-bindings journal)
   (unless (tag? held 'temporal.mrr-derivation-admission.v1) (error "invalid derivation admission kind"))
-  (let (canonical (poo-flow-temporal-mrr-derivation-from-ascent (.ref held 'identity) program correspondence bound admission
+  (let (canonical (agentic-ai-lab-temporal-mrr-derivation-from-ascent (.ref held 'identity) program correspondence bound admission
                     snapshot candidate receipt steps max-nodes node-bindings output source-bindings journal))
     (unless (andmap (lambda (slot) (and (.slot? held slot) (equal? (.ref held slot) (.ref canonical slot))))
       '(root derivation-identity rule-identity node-bindings support-binding-digest rule-correspondence-digest semantic-digest

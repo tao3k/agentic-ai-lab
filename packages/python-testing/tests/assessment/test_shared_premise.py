@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Fail-closed answer and literal annotation admission for the diagnostic."""
 import unittest
-from poo_flow_testing.assessment_studies.evidence_chain_study import (
+from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import (
     shared_action, shared_validate_label, shared_tasks, shared_truth,
     branch_tasks, branch_candidates, branch_grade, branch_input_reservation)
 
@@ -85,7 +85,7 @@ if __name__ == '__main__': unittest.main()
 
 class BranchEntryTest(unittest.TestCase):
     def test_partial_output_preserves_reasoning_and_rejects_unpaired_calls(self):
-        from poo_flow_testing.assessment_studies.evidence_chain_study import branch_partial_output
+        from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_partial_output
         t={'status':'incomplete','incomplete_details':{'reason':'max_output_tokens'},
            'output':[{'type':'reasoning','content':[{'type':'reasoning_text','text':'literal trace'}]}]}
         self.assertEqual(branch_partial_output(t),t['output'])
@@ -93,7 +93,7 @@ class BranchEntryTest(unittest.TestCase):
         with self.assertRaises(AssertionError):branch_partial_output(t)
 
     def test_full_text_partition_and_cross_branch_chain_without_hidden_premises(self):
-        from poo_flow_testing.assessment_studies.evidence_chain_study import branch_literal_episodes
+        from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_literal_episodes
         task=branch_tasks()[0];atom=['path',0,5]
         raw='Check 0->1->2->3->4->5.\npath(0,5) is valid.\nScore = 182.\n'
         a=branch_literal_episodes(raw,task,[atom],[],0,0)
@@ -105,7 +105,7 @@ class BranchEntryTest(unittest.TestCase):
         self.assertFalse(false['episodes']);self.assertEqual(false['unresolvedSemanticLines'],1)
 
     def test_literal_edge_list_and_via_encoding_deduplicate_overlaps(self):
-        from poo_flow_testing.assessment_studies.evidence_chain_study import branch_literal_episodes
+        from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_literal_episodes
         task=branch_tasks()[0]
         for text in ('[0,1],[1,2],[2,3],[3,4],[4,5] => path 0 to 5.',
                      '0->5 via 0,1,2,3,4,5.', '[2,5] exists via [2,3],[3,4],[4,5].'):
@@ -114,13 +114,13 @@ class BranchEntryTest(unittest.TestCase):
             self.assertEqual(r['episodes'][0]['atom'],['path',2 if text.startswith('[2,5]') else 0,5])
 
     def test_submission_rejects_duplicate_keys_and_boolean_ids(self):
-        from poo_flow_testing.assessment_studies.evidence_chain_study import branch_payload
+        from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_payload
         for arguments in ('{"selected":[0,1,2,3],"selected":[0,1,2,4]}','{"selected":[true,1,2,3]}'):
             with self.assertRaises(AssertionError):branch_payload({'output':[{'type':'function_call','name':'submit_selection','arguments':arguments}]})
 
     def test_branch_delta_requires_identical_evidence_and_common_context(self):
         import json
-        from poo_flow_testing.assessment_studies.evidence_chain_study import branch_entry_reservation
+        from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_entry_reservation
         ctx={'task':'x'*20000,'branch':{'id':0},'nativeEvidence':{'scope':1}}
         old={'model':'m','input':[{'role':'user','content':json.dumps(ctx)}]}
         ctx['branch']={'id':1};new={'model':'m','input':[{'role':'user','content':json.dumps(ctx)}]}
@@ -130,7 +130,7 @@ class BranchEntryTest(unittest.TestCase):
         self.assertGreater(branch_entry_reservation(new,old,5000,256),20000)
 
     def test_non_thinking_submission_contains_exact_visible_trace_without_new_prompt(self):
-        from poo_flow_testing.assessment_studies.evidence_chain_study import branch_submission_context
+        from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_submission_context
         raw='literal first\nsecond fragment'
         terminal={'status':'incomplete','incomplete_details':{'reason':'max_output_tokens'},
                   'output':[{'type':'reasoning','content':[{'type':'reasoning_text','text':raw}]}]}
@@ -138,7 +138,7 @@ class BranchEntryTest(unittest.TestCase):
         self.assertEqual(output,[{'type':'message','role':'assistant','content':[{'type':'output_text','text':raw}]}])
 
     def test_qualification_request_identity_and_completed_message_projection(self):
-        from poo_flow_testing.assessment_studies.evidence_chain_study import branch_submission_context,branch_qualification_request
+        from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_submission_context,branch_qualification_request
         terminal={'status':'completed','output':[{'type':'message','content':[{'type':'output_text','text':'literal answer'}]}]}
         self.assertEqual(branch_submission_context(terminal)[0]['content'][0]['text'],'literal answer')
         fixture={'request':{'model':'m','input':[{'role':'user','content':'unchanged question'}]},'terminal':terminal}
@@ -150,7 +150,7 @@ class BranchEntryTest(unittest.TestCase):
 class EvidenceProjectionTest(unittest.TestCase):
     def test_columns_preserve_unknown_scope_and_shared_parents(self):
         import copy,json
-        from poo_flow_runtime.reasoning import compact_observation,expand_observation
+        from agentic_ai_lab_runtime.reasoning import compact_observation,expand_observation
         packet={'scope':{'generation':7,'source-digest':'source'},'observations':[
             {'conclusion':{'status':'verified','atom':['path',0,2],'handle':9},'support':{'roots':[3]}},
             {'conclusion':{'status':'unknown','atom':['path',2,0],'handle':9}}],
@@ -162,14 +162,14 @@ class EvidenceProjectionTest(unittest.TestCase):
         self.assertEqual(packet,original)
 
     def test_heterogeneous_native_fields_are_not_erased(self):
-        from poo_flow_runtime.reasoning import compact_observation,expand_observation
+        from agentic_ai_lab_runtime.reasoning import compact_observation,expand_observation
         packet={'observations':[{'conclusion':{'status':'unknown'}},{'conclusion':{'status':'verified','atom':['path',0,1]}}]}
         self.assertEqual(expand_observation(compact_observation(packet)),packet)
 
 
 class SemanticCoverageTest(unittest.TestCase):
     def test_missing_lines_cannot_be_called_complete(self):
-        from poo_flow_testing.assessment_studies.evidence_chain_study import branch_semantic_validate
+        from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_semantic_validate
         text='Native path exists.\n\nChoose a resource feasible set.\n'
         with self.assertRaises(AssertionError):branch_semantic_validate(text,{'lineCategories':['premise_use'],'episodes':[]})
         spans=branch_semantic_validate(text,{'lineCategories':['premise_use','other','optimization'],'episodes':[]})
@@ -191,7 +191,7 @@ class NegativeEvidenceAnnotationTest(unittest.TestCase):
 
 class SemanticQuoteCoverageTest(unittest.TestCase):
     def test_block_review_requires_every_code_owned_id_and_retains_unclear(self):
-        from poo_flow_testing.assessment_studies.evidence_chain_study import branch_semantic_blocks,branch_semantic_block_admit
+        from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_semantic_blocks,branch_semantic_block_admit
         text='Evidence used.\n' * 12
         blocks=branch_semantic_blocks(text,40)
         self.assertEqual(''.join(b['text'] for b in blocks),text)
@@ -201,7 +201,7 @@ class SemanticQuoteCoverageTest(unittest.TestCase):
                     [{'id':0,'tags':['invented']}],[]):
             with self.assertRaises(AssertionError):branch_semantic_block_admit(blocks,bad)
     def test_negative_statement_and_unreviewed_text_cannot_be_zero_repetition(self):
-        from poo_flow_testing.assessment_studies.evidence_chain_study import branch_semantic_summary
+        from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_semantic_summary
         text='path(2,0) is absent. More optimization follows.'
         quote='path(2,0) is absent.'
         proposal={'quote':quote,'occurrence':0,'category':'absence_recheck',
@@ -216,7 +216,7 @@ class SemanticQuoteCoverageTest(unittest.TestCase):
 
     def test_support_projection_preserves_absence_and_heterogeneous_predicates(self):
         import json
-        from poo_flow_runtime.reasoning import compact_observation,expand_observation
+        from agentic_ai_lab_runtime.reasoning import compact_observation,expand_observation
         packet={'observations':[
             {'conclusion':{'atom':['path',0,2],'support-nodes':[3]},'support':{'roots':[3]}},
             {'conclusion':{'atom':['path',2,0],'support-nodes':[]}}],
@@ -230,7 +230,7 @@ class SemanticQuoteCoverageTest(unittest.TestCase):
         self.assertEqual(expand_observation(mixed),packet)
 
     def test_unmatched_text_is_explicitly_unreviewed_not_semantically_covered(self):
-        from poo_flow_testing.assessment_studies.evidence_chain_study import branch_semantic_partition
+        from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_semantic_partition
         text='unknown prefix. native path(0,2). unknown suffix.'
         quote='native path(0,2)';start=text.index(quote)
         result=branch_semantic_partition(text,[{'quote':quote,'span':[start,start+len(quote)]}])

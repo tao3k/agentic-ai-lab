@@ -4,6 +4,6 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Search declarations are report-only and execute only in consumer runtimes.
-(export +poo-flow-search-schema+)
+(export +agentic-ai-lab-search-schema+)
 
-(def +poo-flow-search-schema+ 'poo-flow.search-framework.v1)
+(def +agentic-ai-lab-search-schema+ 'agentic-ai-lab.search-framework.v1)

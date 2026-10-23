@@ -14,7 +14,7 @@ clan_package=${5:-}
 # Source discovery must not depend on the removed product src/ directory.
 GERBIL_LOADPATH=$PWD${clan_package:+:$(dirname "$clan_package")}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}
 export GERBIL_LOADPATH
-temporary=${TEST_TMPDIR:-${TMPDIR:-/tmp}}/poo-flow-runtime-symbols.$$
+temporary=${TEST_TMPDIR:-${TMPDIR:-/tmp}}/agentic-ai-lab-runtime-symbols.$$
 actual=$temporary.actual
 trap 'rm -f "$actual"' EXIT HUP INT TERM
 
@@ -37,7 +37,7 @@ case "$(uname -s)" in
 esac \
   | awk '{print $NF}' \
   | sed 's/^_//' \
-  | awk '/^poo_flow_runtime_v0_/ || /^poo_flow_proof_/' \
+  | awk '/^agentic_ai_lab_runtime_v0_/ || /^agentic_ai_lab_proof_/' \
   | LC_ALL=C sort -u >"$actual"
 
 exec "$gxi" -:max-heap=1G,debug=q "$validator" "$manifest" "$actual" < /dev/null

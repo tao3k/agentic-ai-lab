@@ -7,38 +7,38 @@
 ;;; grant file, WorkTree, Session, temporal, or effect authority.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :clan/poo/mop validate)
-        (only-in :poo-flow/modules/query/semantic/orgize-source-interface
+        (only-in :agentic-ai-lab/modules/query/semantic/orgize-source-interface
                  org-source-headline-elements
                  org-source-headline-elements?
                  org-source-headline-parser-identity)
         (only-in "objects.ss"
-                 PooFlowQuery. PooFlowSchemeGqlQueryLanguage.
-                 PooFlowGqlQueryProgram.
+                 AgenticAILabQuery. AgenticAILabSchemeGqlQueryLanguage.
+                 AgenticAILabGqlQueryProgram.
                  GraphSyntaxPath. GraphSyntaxNode. GraphSyntaxEquals.
                  GraphSyntaxProperty. GraphSyntaxLiteral. GraphSyntaxProjection.
-                 poo-flow-query-element-space
-                 poo-flow-query-result-contract)
-        (only-in "types.ss" PooFlowQuery)
-        (only-in "funs.ss" poo-flow-query-admit)
-        (only-in "gql.ss" poo-flow-query->gql)
-        (only-in "scheme-select.ss" poo-flow-query-select-scheme-nodes)
+                 agentic-ai-lab-query-element-space
+                 agentic-ai-lab-query-result-contract)
+        (only-in "types.ss" AgenticAILabQuery)
+        (only-in "funs.ss" agentic-ai-lab-query-admit)
+        (only-in "gql.ss" agentic-ai-lab-query->gql)
+        (only-in "scheme-select.ss" agentic-ai-lab-query-select-scheme-nodes)
         (only-in "results/funs.ss"
-                 poo-flow-query-result-cell poo-flow-query-result-row
-                 poo-flow-query-result-set poo-flow-query-result-set-replay)
+                 agentic-ai-lab-query-result-cell agentic-ai-lab-query-result-row
+                 agentic-ai-lab-query-result-set agentic-ai-lab-query-result-set-replay)
         :yuanxu/poo-clos/interface)
 
-(export poo-flow-query-orgize-open-headlines-incremental
-        poo-flow-query-orgize-open-headlines
-        poo-flow-query-orgize-open-headlines-replay
-        poo-flow-query-orgize-source-observation?)
+(export agentic-ai-lab-query-orgize-open-headlines-incremental
+        agentic-ai-lab-query-orgize-open-headlines
+        agentic-ai-lab-query-orgize-open-headlines-replay
+        agentic-ai-lab-query-orgize-source-observation?)
 
 (def OrgOpenHeadlineResult
-  (poo-flow-query-result-contract
+  (agentic-ai-lab-query-result-contract
    'orgize/open-headline-row-v1 'relation-row
    '(source-sha256 byte-start byte-end title todo-type) 256))
 
 (def OrgOpenHeadlineProgram
-  (.o (:: @ PooFlowGqlQueryProgram.)
+  (.o (:: @ AgenticAILabGqlQueryProgram.)
       identity: 'orgize/open-headlines-v1
       match:
       (.o (:: @ GraphSyntaxPath.)
@@ -85,13 +85,13 @@
 (def (query-row->result-row values digest)
   (unless (= (length values) 5)
     (error "Org Query projection returned an invalid row" values))
-  (poo-flow-query-result-row
+  (agentic-ai-lab-query-result-row
    (car values)
-   (list (poo-flow-query-result-cell 'source-sha256 digest)
-         (poo-flow-query-result-cell 'byte-start (cadr values))
-         (poo-flow-query-result-cell 'byte-end (caddr values))
-         (poo-flow-query-result-cell 'title (cadddr values))
-         (poo-flow-query-result-cell 'todo-type (car (cddddr values))))))
+   (list (agentic-ai-lab-query-result-cell 'source-sha256 digest)
+         (agentic-ai-lab-query-result-cell 'byte-start (cadr values))
+         (agentic-ai-lab-query-result-cell 'byte-end (caddr values))
+         (agentic-ai-lab-query-result-cell 'title (cadddr values))
+         (agentic-ai-lab-query-result-cell 'todo-type (car (cddddr values))))))
 
 (def (open-headlines source previous)
   (let* ((projection (org-source-headline-elements source)))
@@ -104,28 +104,28 @@
            (elements (.ref projection 'elements))
            (space-id (string-append digest ":org-headlines"))
            (space
-            (poo-flow-query-element-space
+            (agentic-ai-lab-query-element-space
              space-id digest
              (map (lambda (element) (.ref element 'identity)) elements)
              #t))
            (query-value
             (validate
-             PooFlowQuery
-             (.o (:: @ PooFlowQuery.)
+             AgenticAILabQuery
+             (.o (:: @ AgenticAILabQuery.)
                  identity: 'orgize/open-headlines-v1
                  version: "1"
                  semantic-revision: digest
                  element-space-identity: space-id
                  selected-element-identities:
                  (.ref space 'element-identities)
-                 language: PooFlowSchemeGqlQueryLanguage.
+                 language: AgenticAILabSchemeGqlQueryLanguage.
                  program: OrgOpenHeadlineProgram
                  result-bound: 256
                  completeness-requirement: 'complete
                  evidence-requirements: '()
                  visibility-request: 'restricted
                  result-contract: OrgOpenHeadlineResult)))
-           (admission-value (poo-flow-query-admit query-value space)))
+           (admission-value (agentic-ai-lab-query-admit query-value space)))
       (unless (.ref admission-value 'accepted?)
         (error "source-derived Org Query failed ElementSpace admission"))
       (let* ((nodes (source-elements->query-nodes elements digest))
@@ -142,7 +142,7 @@
              (reusable? (lambda (node)
                (equal? (hash-get old-inputs (.ref node 'byteStart)) (snapshot node))))
              (changed (filter (lambda (node) (not (reusable? node))) nodes))
-             (selection (poo-flow-query-select-scheme-nodes query-value changed))
+             (selection (agentic-ai-lab-query-select-scheme-nodes query-value changed))
              (changed-rows (make-hash-table test: equal?))
              (_rows (for-each (lambda (v) (hash-put! changed-rows (cadr v) v)) (.ref selection 'rows)))
              (selected-values
@@ -153,11 +153,11 @@
               (map (lambda (values) (query-row->result-row values digest))
                    selected-values))
              (result
-              (poo-flow-query-result-set
+              (agentic-ai-lab-query-result-set
                (string-append digest ":open-headlines-result")
                OrgOpenHeadlineResult
                (.ref query-value 'identity) (.ref query-value 'version) digest rows #t)))
-        (.o kind: 'poo-flow.query.orgize-source-observation
+        (.o kind: 'agentic-ai-lab.query.orgize-source-observation
             node-snapshots: (map snapshot nodes) selection-rows: selected-values
             evaluated-node-count: (length changed) reused-node-count: (- (length nodes) (length changed))
             dependency-profile: 'orgize/local-open-headline-v1
@@ -173,17 +173,17 @@
             session-admitted?: #f
             action-authority?: #f)))))
 
-(def (poo-flow-query-orgize-open-headlines source)
+(def (agentic-ai-lab-query-orgize-open-headlines source)
   (open-headlines source #f))
-(def (poo-flow-query-orgize-open-headlines-incremental base-source observed source)
+(def (agentic-ai-lab-query-orgize-open-headlines-incremental base-source observed source)
   ;; Rebuild the cache from source replay; caller-supplied cache slots are never trusted.
-  (let (verified (poo-flow-query-orgize-open-headlines-replay base-source observed))
+  (let (verified (agentic-ai-lab-query-orgize-open-headlines-replay base-source observed))
     (open-headlines source verified)))
 
-(def (poo-flow-query-orgize-source-observation? value)
+(def (agentic-ai-lab-query-orgize-source-observation? value)
   (and (object? value) (.slot? value 'kind)
        (eq? (.ref value 'kind)
-            'poo-flow.query.orgize-source-observation)))
+            'agentic-ai-lab.query.orgize-source-observation)))
 
 (def (same-slots? left right names)
   (and (object? left) (object? right)
@@ -197,14 +197,14 @@
 ;;; Replay always re-parses the supplied current bytes through Orgize and
 ;;; re-executes the fixed canonical Query. A digest-valid forged row or altered
 ;;; Query program still has to match the fresh source-derived result exactly.
-(def (poo-flow-query-orgize-open-headlines-replay source observed)
-  (unless (poo-flow-query-orgize-source-observation? observed)
+(def (agentic-ai-lab-query-orgize-open-headlines-replay source observed)
+  (unless (agentic-ai-lab-query-orgize-source-observation? observed)
     (error "invalid Org source Query observation"))
-  (let* ((current (poo-flow-query-orgize-open-headlines source))
+  (let* ((current (agentic-ai-lab-query-orgize-open-headlines source))
          (expected-query (.ref current 'query))
          (observed-query (.ref observed 'query))
          (observed-set
-          (poo-flow-query-result-set-replay
+          (agentic-ai-lab-query-result-set-replay
            (.ref observed 'result-set) OrgOpenHeadlineResult)))
     (unless
       (and (same-slots?
@@ -228,8 +228,8 @@
             (.ref observed-query 'result-contract)
             (.ref expected-query 'result-contract)
             '(identity result-kind required-fields max-results))
-           (equal? (poo-flow-query->gql observed-query)
-                   (poo-flow-query->gql expected-query))
+           (equal? (agentic-ai-lab-query->gql observed-query)
+                   (agentic-ai-lab-query->gql expected-query))
            (same-slots?
             (.ref observed 'element-space) (.ref current 'element-space)
             '(identity semantic-revision element-identities complete?))

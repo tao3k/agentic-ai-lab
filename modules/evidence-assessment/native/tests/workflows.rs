@@ -1,4 +1,4 @@
-use poo_flow_reasoning::{
+use agentic_ai_lab_reasoning::{
     Cancellation, ComputationalEvidence, Data, EvidenceChain, FactLimits, Reachability, Runtime,
     Value, evidence_graph,
 };
@@ -314,7 +314,7 @@ fn checked_receipts_are_owner_source_generation_and_candidate_bound() {
     let handle = u64::try_from(resolved.field("handle").unwrap().index().unwrap()).unwrap();
     let atom = list(["path".into(), 0usize.into(), 2usize.into()]);
     let observed = a
-        .observe(&poo_flow_reasoning::ObservationRequest {
+        .observe(&agentic_ai_lab_reasoning::ObservationRequest {
             source: &source,
             candidate: &candidate,
             handle,
@@ -324,8 +324,8 @@ fn checked_receipts_are_owner_source_generation_and_candidate_bound() {
         .unwrap();
     assert_ne!(observed.field("supportNodes").unwrap().list().unwrap(), []);
     assert_eq!(
-        poo_flow_reasoning::expand_observation(
-            &poo_flow_reasoning::compact_observation(&observed).unwrap()
+        agentic_ai_lab_reasoning::expand_observation(
+            &agentic_ai_lab_reasoning::compact_observation(&observed).unwrap()
         )
         .unwrap(),
         observed

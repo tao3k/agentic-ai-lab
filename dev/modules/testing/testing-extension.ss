@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO Flow owns test-operation observation while ASP retains the
+;;; Boundary: Agentic AI Lab owns test-operation observation while ASP retains the
 ;;; native Gerbil test runner.  Enablement and cadence are POO profile slots;
 ;;; process environment is transport, not policy.
 
@@ -19,34 +19,34 @@
                  yuanxu-debug-call-policy
                  call-with-yuanxu-debug-trace))
 
-(export poo-flow-native-observability-enabled?
-        poo-flow-testing-observability-profile-prototype
-        make-poo-flow-testing-observability-profile
-        poo-flow-testing-observability-profile?
-        poo-flow-testing-observability-profile-identity
-        poo-flow-testing-observability-profile-heartbeat-interval-seconds
-        poo-flow-testing-observability-profile-source-load-paths
-        +poo-flow-testing-import-footprint-profile+
-        poo-flow-default-testing-observability-profile
-        poo-flow-current-testing-observability-profile
-        poo-flow-observe-testing-operation
-        poo-flow-testing-observability-extension)
+(export agentic-ai-lab-native-observability-enabled?
+        agentic-ai-lab-testing-observability-profile-prototype
+        make-agentic-ai-lab-testing-observability-profile
+        agentic-ai-lab-testing-observability-profile?
+        agentic-ai-lab-testing-observability-profile-identity
+        agentic-ai-lab-testing-observability-profile-heartbeat-interval-seconds
+        agentic-ai-lab-testing-observability-profile-source-load-paths
+        +agentic-ai-lab-testing-import-footprint-profile+
+        agentic-ai-lab-default-testing-observability-profile
+        agentic-ai-lab-current-testing-observability-profile
+        agentic-ai-lab-observe-testing-operation
+        agentic-ai-lab-testing-observability-extension)
 
-(def +poo-flow-testing-observation-policy+
+(def +agentic-ai-lab-testing-observation-policy+
   (yuanxu-debug-call-policy 'native-gerbil-testing 8))
 
 ;;; ASP derives closure ownership from Gerbil's resident module registry.  POO
 ;;; Flow declares only the policy slots: what counts as a large closure, how
 ;;; much non-platform overlap is acceptable, and whether a violation rejects.
-(def +poo-flow-testing-import-footprint-profile+
+(def +agentic-ai-lab-testing-import-footprint-profile+
   ;; Reuse ASP's registry policy defaults instead of copying numeric limits
-  ;; into the downstream package.  POO Flow contributes only its admission
+  ;; into the downstream package.  Agentic AI Lab contributes only its admission
   ;; action; ASP owns the resident-module algorithm and calibrated defaults.
   (testing-import-footprint-profile [] 0 'reject))
 
 ;;; Heartbeat timing is a POO profile so CI, a user profile, or an atomic test
 ;;; can refine observation cadence without patching the observer.
-(def poo-flow-testing-observability-profile-prototype
+(def agentic-ai-lab-testing-observability-profile-prototype
   (.o (testing-observability-profile? #t)
       (identity 'testing/default)
       (enabled? #t)
@@ -59,7 +59,7 @@
       ;; library path remains runtime-owned and is projected separately.
       (source-load-paths '("."))))
 
-(def (poo-flow-testing-observability-profile? value)
+(def (agentic-ai-lab-testing-observability-profile? value)
   (and (object? value)
        (.slot? value 'testing-observability-profile?)
        (.ref value 'testing-observability-profile?)
@@ -80,32 +80,32 @@
                  (and (string? path) (> (string-length path) 0)))
                (.ref value 'source-load-paths))))
 
-(def (make-poo-flow-testing-observability-profile identity-value
+(def (make-agentic-ai-lab-testing-observability-profile identity-value
                                                    heartbeat-interval-value)
   (let (profile
-        (.o (:: @ poo-flow-testing-observability-profile-prototype)
+        (.o (:: @ agentic-ai-lab-testing-observability-profile-prototype)
             (identity identity-value)
             (trace-enabled? #t)
             (heartbeat-enabled? #t)
             (heartbeat-interval-seconds heartbeat-interval-value)))
-    (unless (poo-flow-testing-observability-profile? profile)
-      (error "invalid POO Flow testing observability profile" profile))
+    (unless (agentic-ai-lab-testing-observability-profile? profile)
+      (error "invalid Agentic AI Lab testing observability profile" profile))
     profile))
 
-(def (poo-flow-testing-observability-profile-identity profile)
+(def (agentic-ai-lab-testing-observability-profile-identity profile)
   (.ref profile 'identity))
 
-(def (poo-flow-testing-observability-profile-heartbeat-interval-seconds profile)
+(def (agentic-ai-lab-testing-observability-profile-heartbeat-interval-seconds profile)
   (.ref profile 'heartbeat-interval-seconds))
 
-(def (poo-flow-testing-observability-profile-source-load-paths profile)
+(def (agentic-ai-lab-testing-observability-profile-source-load-paths profile)
   (.ref profile 'source-load-paths))
 
-(def poo-flow-default-testing-observability-profile
-  (.o (:: @ poo-flow-testing-observability-profile-prototype)))
+(def agentic-ai-lab-default-testing-observability-profile
+  (.o (:: @ agentic-ai-lab-testing-observability-profile-prototype)))
 
-(def poo-flow-current-testing-observability-profile
-  (make-parameter poo-flow-default-testing-observability-profile))
+(def agentic-ai-lab-current-testing-observability-profile
+  (make-parameter agentic-ai-lab-default-testing-observability-profile))
 
 ;;; ASP 3f5fb71c59d5ebb3232d9c0cca1f463ccae72062 starts one native
 ;;; `gerbil test` process per selected batch.
@@ -113,10 +113,10 @@
 ;;; Gerbil's documented child-process load-path transport before workers start.
 ;;; This lets an atomic test import its precise source owner without widening
 ;;; the production PackageSpec to every qualification and scenario module.
-(def (poo-flow-testing-prepare-source-load-path! profile)
+(def (agentic-ai-lab-testing-prepare-source-load-path! profile)
   (let (paths
         (map path-expand
-             (poo-flow-testing-observability-profile-source-load-paths profile)))
+             (agentic-ai-lab-testing-observability-profile-source-load-paths profile)))
     (when (pair? paths)
       (let ((current
              (or (getenv "GERBIL_LOADPATH" #f)
@@ -128,21 +128,21 @@
                   projected))))))
 
 ;; : (-> Integer Natural)
-(def (poo-flow-testing-elapsed-nanoseconds started-jiffy)
+(def (agentic-ai-lab-testing-elapsed-nanoseconds started-jiffy)
   (quotient (* (- (current-jiffy) started-jiffy) 1000000000)
             (jiffies-per-second)))
 
 ;; : (forall (a) (-> Symbol (-> a) a))
-(def (poo-flow-call-with-testing-heartbeat operation thunk)
-  (if (not (and (poo-flow-native-observability-enabled?)
-                (.ref (poo-flow-current-testing-observability-profile)
+(def (agentic-ai-lab-call-with-testing-heartbeat operation thunk)
+  (if (not (and (agentic-ai-lab-native-observability-enabled?)
+                (.ref (agentic-ai-lab-current-testing-observability-profile)
                       'heartbeat-enabled?)))
     (thunk)
     (let* ((started-jiffy (current-jiffy))
            (port (current-error-port))
            (interval
-            (poo-flow-testing-observability-profile-heartbeat-interval-seconds
-             (poo-flow-current-testing-observability-profile)))
+            (agentic-ai-lab-testing-observability-profile-heartbeat-interval-seconds
+             (agentic-ai-lab-current-testing-observability-profile)))
            (heartbeat
             (make-thread
              (lambda ()
@@ -151,9 +151,9 @@
                  (parameterize ((current-output-port port)
                                 (current-error-port port))
                    (yuanxu-write-observation-line!
-                    "[poo-flow-testing] phase=operation-heartbeat operation=%a elapsedNs=%a"
+                    "[agentic-ai-lab-testing] phase=operation-heartbeat operation=%a elapsedNs=%a"
                     operation
-                    (poo-flow-testing-elapsed-nanoseconds started-jiffy)))
+                    (agentic-ai-lab-testing-elapsed-nanoseconds started-jiffy)))
                  (loop))))))
       (thread-start! heartbeat)
       (dynamic-wind
@@ -162,36 +162,36 @@
         (lambda () (thread-terminate! heartbeat))))))
 
 ;; : (-> Boolean)
-(def (poo-flow-native-observability-enabled?)
-  (.ref (poo-flow-current-testing-observability-profile) 'enabled?))
+(def (agentic-ai-lab-native-observability-enabled?)
+  (.ref (agentic-ai-lab-current-testing-observability-profile) 'enabled?))
 
 ;; : (forall (a) (-> Symbol (-> a) a))
-(def (poo-flow-observe-testing-operation operation thunk)
+(def (agentic-ai-lab-observe-testing-operation operation thunk)
   (call-with-yuanxu-debug-trace
-   +poo-flow-testing-observation-policy+
+   +agentic-ai-lab-testing-observation-policy+
    operation
    (lambda ()
-     (poo-flow-call-with-testing-heartbeat operation thunk))
+     (agentic-ai-lab-call-with-testing-heartbeat operation thunk))
    '()
-   emit?: (and (poo-flow-native-observability-enabled?)
-               (.ref (poo-flow-current-testing-observability-profile)
+   emit?: (and (agentic-ai-lab-native-observability-enabled?)
+               (.ref (agentic-ai-lab-current-testing-observability-profile)
                      'trace-enabled?))))
 
 ;;; Extend the ASP POO value with behavior only. ASP calls the optional slot
 ;;; without owning its policy, receipt schema, presentation, or enablement.
 ;; : (-> TestingInterface TestingInterface)
-(def (poo-flow-testing-observability-extension testing . maybe-profile)
+(def (agentic-ai-lab-testing-observability-extension testing . maybe-profile)
   (let (profile
         (if (null? maybe-profile)
-          poo-flow-default-testing-observability-profile
+          agentic-ai-lab-default-testing-observability-profile
           (car maybe-profile)))
-    (unless (poo-flow-testing-observability-profile? profile)
-      (error "invalid POO Flow testing observability extension profile" profile))
-    (poo-flow-testing-prepare-source-load-path! profile)
+    (unless (agentic-ai-lab-testing-observability-profile? profile)
+      (error "invalid Agentic AI Lab testing observability extension profile" profile))
+    (agentic-ai-lab-testing-prepare-source-load-path! profile)
     (.cc (testing-interface-add-profile
-          testing +poo-flow-testing-import-footprint-profile+)
+          testing +agentic-ai-lab-testing-import-footprint-profile+)
          around-operation:
          (lambda (operation thunk)
            (parameterize
-               ((poo-flow-current-testing-observability-profile profile))
-             (poo-flow-observe-testing-operation operation thunk))))))
+               ((agentic-ai-lab-current-testing-observability-profile profile))
+             (agentic-ai-lab-observe-testing-operation operation thunk))))))

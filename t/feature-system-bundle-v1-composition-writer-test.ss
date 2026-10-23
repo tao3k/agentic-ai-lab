@@ -11,11 +11,11 @@
         :yuanxu/modules/funflow/control-plane/graph
         (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
         :yuanxu/module-system/authoring/roles
-        (only-in :poo-flow/modules/module-authoring/semantic-module UserConfigSourceRole. poo-flow-user-root-module-authoring-profile)
+        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
         :yuanxu/profile-composition/selection-syntax
-        :poo-flow/modules/workflow/scenario/composition-syntax
+        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
         :yuanxu/profile-composition/profile-bundle
-        :poo-flow/modules/workflow/scenario/bundle-v1-projection
+        :agentic-ai-lab/modules/workflow/scenario/bundle-v1-projection
         :yuanxu/feature-system/bundle-v1-lowering)
 
 (.def WriterSourceProfile
@@ -58,7 +58,7 @@
    (yuanxu-test-case
     "arbitrary POO composition lowers with symbols and dependency edges"
     (let-values (((plan image)
-                  (poo-flow-scenario-case->bundle-v1-image
+                  (agentic-ai-lab-scenario-case->bundle-v1-image
                    writer-test-composition 'writer-test-bundle 3)))
       (let* ((descriptor (.ref image 'descriptor))
              (no-adapter (feature-bundle-v1-lower-compact-id
@@ -66,7 +66,7 @@
              (no-projection (feature-bundle-v1-lower-compact-id
                              'projection +feature-bundle-v1-no-projection-id+))
              (no-policy (feature-bundle-v1-lower-compact-id
-                         'policy 'poo-flow.policy.none)))
+                         'policy 'agentic-ai-lab.policy.none)))
         (check (.ref image 'accepted?) => #t)
         (check (length (execution-plan-nodes plan)) => 4)
         (check (length (.ref descriptor 'symbol-rows)) => 7)

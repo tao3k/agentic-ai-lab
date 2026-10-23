@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test :poo-flow/modules/evidence-assessment/ascent-dag)
+(import :std/test :agentic-ai-lab/modules/evidence-assessment/ascent-dag)
 (export evidence-dag-test)
 (def (atom name) (hash ("relation" name) ("terms" [(hash ("var" "x"))])))
 (def (relation name source (rows []))

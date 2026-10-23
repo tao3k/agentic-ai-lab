@@ -9,12 +9,12 @@
 
 Directory source Contracts, source-role structure, native lazy tree projection,
 interface publication and generic selected build views are owned by the
-[[file:../../../core/module-system/design/README.org][Core Module System design]] in the poo-flow-core submodule. The earlier generic
+[[file:../../../core/module-system/design/README.org][Core Module System design]] in the agentic-ai-lab-core submodule. The earlier generic
 proposal here has been separated by ownership; do not evolve a second copy.
 
-* POO Flow responsibilities
+* Agentic AI Lab responsibilities
 
-POO Flow owns yuanxu! syntax, default source/authoring policy, the existing
+Agentic AI Lab owns yuanxu! syntax, default source/authoring policy, the existing
 yuanxu-load-modules product facade and its integration with Core protocols,
 product Feature System, JsonSchema bridge, contribution Profiles/Scenarios and
 runtime/build providers. Those implementation owners are not moved by this work.

@@ -7,7 +7,7 @@
 
 * Provenance
 
-The [[file:model-study-module-answer-followup.org][follow-up protocol]] and prompt bytes were committed at POO Flow
+The [[file:model-study-module-answer-followup.org][follow-up protocol]] and prompt bytes were committed at Agentic AI Lab
 =d23829a621e24b39706e274a88ac80c8430774b6= with pinned ASCENT
 =f80c9dc7cf5e4ed42a806b0d78c847e52be09de6=. Preview manifest
 =/private/tmp/poo-scheme-module-answer-preview-head-d23829a/manifest.tsv=

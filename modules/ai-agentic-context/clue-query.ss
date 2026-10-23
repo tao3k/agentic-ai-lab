@@ -5,4 +5,4 @@
 (export make-clue-query-evidence)
 
 ;; The same declaration is loaded by the Rust Evidence runtime.
-(include "../../packages/python-runtime/src/poo_flow_runtime/reasoning_rules/clue_query_rules.ss")
+(include "../../packages/python-runtime/src/agentic_ai_lab_runtime/reasoning_rules/clue_query_rules.ss")

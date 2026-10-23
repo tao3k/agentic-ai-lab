@@ -5,70 +5,70 @@
 ;;; Boundary: validates protocol-person promotion messages at the Runtime v0 ABI edge.
 ;;; Invariant: only schema-valid requests and receipts cross the runtime boundary.
 (import (only-in :clan/poo/object .o .ref object?)
-        :poo-flow/modules/governance/policy/protocol-person-promotion
-        :poo-flow/modules/workflow/contracts/runtime-v0-abi-schema)
+        :agentic-ai-lab/modules/governance/policy/protocol-person-promotion
+        :agentic-ai-lab/modules/workflow/contracts/runtime-v0-abi-schema)
 
-(export +poo-flow-runtime-language-promotion-request-schema+
-        +poo-flow-runtime-language-promotion-receipt-schema+
-        +poo-flow-runtime-language-promotion-required-capabilities+
-        +poo-flow-runtime-language-promotion-outcomes+
-        poo-flow-runtime-language-promotion-idempotency-key
-        poo-flow-runtime-language-promotion-idempotency-key->alist
-        poo-flow-runtime-language-promotion-request
-        poo-flow-runtime-language-promotion-request->alist
-        poo-flow-runtime-language-promotion-request->vector
-        poo-flow-runtime-language-promotion-abi->c-header
-        poo-flow-runtime-language-promotion-capabilities-cover?
-        poo-flow-runtime-language-promotion-epochs-current?
-        poo-flow-runtime-language-promotion-receipt
-        poo-flow-runtime-language-promotion-receipt-failures
-        poo-flow-runtime-language-promotion-receipt-valid?
-        poo-flow-runtime-language-promotion-receipt-active?
-        poo-flow-runtime-language-promotion-receipt->alist
-        poo-flow-runtime-language-promotion-receipts-exactly-once?
-        +poo-flow-runtime-language-source-query-receipt-schema+
-        +poo-flow-runtime-language-admission-receipt-schema+
-        +poo-flow-contract-artifact-projection-receipt-schema+
-        +poo-flow-runtime-language-source-representations+
-        +poo-flow-contract-artifact-kinds+
-        +poo-flow-runtime-language-admission-outcomes+
-        poo-flow-runtime-language-source-query-receipt
-        poo-flow-runtime-language-source-query-receipt-failures
-        poo-flow-runtime-language-source-query-receipt-valid?
-        poo-flow-runtime-language-source-query-receipt->alist
-        poo-flow-runtime-language-admission-receipt
-        poo-flow-runtime-language-admission-receipt-failures
-        poo-flow-runtime-language-admission-receipt-valid?
-        poo-flow-runtime-language-admission-receipt-admitted?
-        poo-flow-runtime-language-admission-receipt->alist
-        poo-flow-contract-artifact-projection-receipt
-        poo-flow-contract-artifact-projection-receipt-failures
-        poo-flow-contract-artifact-projection-receipt-valid?
-        poo-flow-contract-artifact-projection-receipt->alist)
+(export +agentic-ai-lab-runtime-language-promotion-request-schema+
+        +agentic-ai-lab-runtime-language-promotion-receipt-schema+
+        +agentic-ai-lab-runtime-language-promotion-required-capabilities+
+        +agentic-ai-lab-runtime-language-promotion-outcomes+
+        agentic-ai-lab-runtime-language-promotion-idempotency-key
+        agentic-ai-lab-runtime-language-promotion-idempotency-key->alist
+        agentic-ai-lab-runtime-language-promotion-request
+        agentic-ai-lab-runtime-language-promotion-request->alist
+        agentic-ai-lab-runtime-language-promotion-request->vector
+        agentic-ai-lab-runtime-language-promotion-abi->c-header
+        agentic-ai-lab-runtime-language-promotion-capabilities-cover?
+        agentic-ai-lab-runtime-language-promotion-epochs-current?
+        agentic-ai-lab-runtime-language-promotion-receipt
+        agentic-ai-lab-runtime-language-promotion-receipt-failures
+        agentic-ai-lab-runtime-language-promotion-receipt-valid?
+        agentic-ai-lab-runtime-language-promotion-receipt-active?
+        agentic-ai-lab-runtime-language-promotion-receipt->alist
+        agentic-ai-lab-runtime-language-promotion-receipts-exactly-once?
+        +agentic-ai-lab-runtime-language-source-query-receipt-schema+
+        +agentic-ai-lab-runtime-language-admission-receipt-schema+
+        +agentic-ai-lab-contract-artifact-projection-receipt-schema+
+        +agentic-ai-lab-runtime-language-source-representations+
+        +agentic-ai-lab-contract-artifact-kinds+
+        +agentic-ai-lab-runtime-language-admission-outcomes+
+        agentic-ai-lab-runtime-language-source-query-receipt
+        agentic-ai-lab-runtime-language-source-query-receipt-failures
+        agentic-ai-lab-runtime-language-source-query-receipt-valid?
+        agentic-ai-lab-runtime-language-source-query-receipt->alist
+        agentic-ai-lab-runtime-language-admission-receipt
+        agentic-ai-lab-runtime-language-admission-receipt-failures
+        agentic-ai-lab-runtime-language-admission-receipt-valid?
+        agentic-ai-lab-runtime-language-admission-receipt-admitted?
+        agentic-ai-lab-runtime-language-admission-receipt->alist
+        agentic-ai-lab-contract-artifact-projection-receipt
+        agentic-ai-lab-contract-artifact-projection-receipt-failures
+        agentic-ai-lab-contract-artifact-projection-receipt-valid?
+        agentic-ai-lab-contract-artifact-projection-receipt->alist)
 
-(import :poo-flow/modules/workflow/contracts/protocol-person-promotion-abi)
+(import :agentic-ai-lab/modules/workflow/contracts/protocol-person-promotion-abi)
 
-(def +poo-flow-runtime-language-source-query-receipt-schema+
+(def +agentic-ai-lab-runtime-language-source-query-receipt-schema+
   (string->symbol
-   (.ref +poo-flow-runtime-v0-abi-schema+ 'source-query-receipt-schema)))
+   (.ref +agentic-ai-lab-runtime-v0-abi-schema+ 'source-query-receipt-schema)))
 
-(def +poo-flow-runtime-language-admission-receipt-schema+
+(def +agentic-ai-lab-runtime-language-admission-receipt-schema+
   (string->symbol
-   (.ref +poo-flow-runtime-v0-abi-schema+ 'runtime-admission-receipt-schema)))
+   (.ref +agentic-ai-lab-runtime-v0-abi-schema+ 'runtime-admission-receipt-schema)))
 
-(def +poo-flow-contract-artifact-projection-receipt-schema+
+(def +agentic-ai-lab-contract-artifact-projection-receipt-schema+
   (string->symbol
-   (.ref +poo-flow-runtime-v0-abi-schema+
+   (.ref +agentic-ai-lab-runtime-v0-abi-schema+
          'contract-artifact-projection-receipt-schema)))
 
-(def +poo-flow-runtime-language-source-representations+
+(def +agentic-ai-lab-runtime-language-source-representations+
   '(json ast-data))
 
-(def +poo-flow-contract-artifact-kinds+
+(def +agentic-ai-lab-contract-artifact-kinds+
   '(abi-vector c-header json-schema python-type rust-type gerbil-poo
     lean-proposition))
 
-(def +poo-flow-runtime-language-admission-outcomes+
+(def +agentic-ai-lab-runtime-language-admission-outcomes+
   '(admitted rejected))
 
 (def (runtime-language-identity-present? value)
@@ -80,7 +80,7 @@
   (and (string? value)
        (runtime-language-identity-present? value)))
 
-(def (poo-flow-runtime-language-source-query-receipt
+(def (agentic-ai-lab-runtime-language-source-query-receipt
       source-language-value
       source-content-id-value
       source-version-value
@@ -92,7 +92,7 @@
       representation-value
       provenance-root-value
       result-digest-value)
-  (.o (kind +poo-flow-runtime-language-source-query-receipt-schema+)
+  (.o (kind +agentic-ai-lab-runtime-language-source-query-receipt-schema+)
       (source-language source-language-value)
       (source-content-id source-content-id-value)
       (source-version source-version-value)
@@ -105,13 +105,13 @@
       (provenance-root provenance-root-value)
       (result-digest result-digest-value)))
 
-(def (poo-flow-runtime-language-source-query-receipt-failures receipt)
+(def (agentic-ai-lab-runtime-language-source-query-receipt-failures receipt)
   (let ((failures '()))
     (def (fail! code)
       (set! failures (cons code failures)))
     (unless (and (object? receipt)
                  (eq? (.ref receipt 'kind)
-                      +poo-flow-runtime-language-source-query-receipt-schema+))
+                      +agentic-ai-lab-runtime-language-source-query-receipt-schema+))
       (fail! 'invalid-source-query-receipt-schema))
     (when (object? receipt)
       (unless (runtime-language-identity-present?
@@ -136,7 +136,7 @@
       (unless (pair? (.ref receipt 'selected-node-identities))
         (fail! 'missing-selected-node-identities))
       (unless (member (.ref receipt 'representation)
-                      +poo-flow-runtime-language-source-representations+)
+                      +agentic-ai-lab-runtime-language-source-representations+)
         (fail! 'unsupported-source-representation))
       (unless (runtime-language-identity-present?
                (.ref receipt 'provenance-root))
@@ -146,10 +146,10 @@
         (fail! 'missing-query-result-digest)))
     (reverse failures)))
 
-(def (poo-flow-runtime-language-source-query-receipt-valid? receipt)
-  (null? (poo-flow-runtime-language-source-query-receipt-failures receipt)))
+(def (agentic-ai-lab-runtime-language-source-query-receipt-valid? receipt)
+  (null? (agentic-ai-lab-runtime-language-source-query-receipt-failures receipt)))
 
-(def (poo-flow-runtime-language-source-query-receipt->alist receipt)
+(def (agentic-ai-lab-runtime-language-source-query-receipt->alist receipt)
   (list
    (cons 'kind (.ref receipt 'kind))
    (cons 'source-language (.ref receipt 'source-language))
@@ -165,11 +165,11 @@
    (cons 'provenance-root (.ref receipt 'provenance-root))
    (cons 'result-digest (.ref receipt 'result-digest))
    (cons 'valid
-         (poo-flow-runtime-language-source-query-receipt-valid? receipt))
+         (agentic-ai-lab-runtime-language-source-query-receipt-valid? receipt))
    (cons 'failures
-         (poo-flow-runtime-language-source-query-receipt-failures receipt))))
+         (agentic-ai-lab-runtime-language-source-query-receipt-failures receipt))))
 
-(def (poo-flow-runtime-language-admission-receipt
+(def (agentic-ai-lab-runtime-language-admission-receipt
       source-query-receipt-value
       contract-id-value
       contract-version-value
@@ -179,7 +179,7 @@
       normalized-semantic-digest-value
       admission-outcome-value
       failure-codes-value)
-  (.o (kind +poo-flow-runtime-language-admission-receipt-schema+)
+  (.o (kind +agentic-ai-lab-runtime-language-admission-receipt-schema+)
       (source-query-receipt source-query-receipt-value)
       (source-query-result-digest
        (and (object? source-query-receipt-value)
@@ -193,16 +193,16 @@
       (admission-outcome admission-outcome-value)
       (failure-codes failure-codes-value)))
 
-(def (poo-flow-runtime-language-admission-receipt-failures receipt)
+(def (agentic-ai-lab-runtime-language-admission-receipt-failures receipt)
   (let ((failures '()))
     (def (fail! code)
       (set! failures (cons code failures)))
     (unless (and (object? receipt)
                  (eq? (.ref receipt 'kind)
-                      +poo-flow-runtime-language-admission-receipt-schema+))
+                      +agentic-ai-lab-runtime-language-admission-receipt-schema+))
       (fail! 'invalid-admission-receipt-schema))
     (when (object? receipt)
-      (unless (poo-flow-runtime-language-source-query-receipt-valid?
+      (unless (agentic-ai-lab-runtime-language-source-query-receipt-valid?
                (.ref receipt 'source-query-receipt))
         (fail! 'invalid-source-query-receipt))
       (unless (runtime-language-identity-present? (.ref receipt 'contract-id))
@@ -219,7 +219,7 @@
                (.ref receipt 'target-language))
         (fail! 'missing-target-language))
       (unless (member (.ref receipt 'admission-outcome)
-                      +poo-flow-runtime-language-admission-outcomes+)
+                      +agentic-ai-lab-runtime-language-admission-outcomes+)
         (fail! 'unsupported-admission-outcome))
       (when (eq? (.ref receipt 'admission-outcome) 'admitted)
         (unless (runtime-language-identity-present?
@@ -232,14 +232,14 @@
           (fail! 'rejected-projection-missing-failures))))
     (reverse failures)))
 
-(def (poo-flow-runtime-language-admission-receipt-valid? receipt)
-  (null? (poo-flow-runtime-language-admission-receipt-failures receipt)))
+(def (agentic-ai-lab-runtime-language-admission-receipt-valid? receipt)
+  (null? (agentic-ai-lab-runtime-language-admission-receipt-failures receipt)))
 
-(def (poo-flow-runtime-language-admission-receipt-admitted? receipt)
-  (and (poo-flow-runtime-language-admission-receipt-valid? receipt)
+(def (agentic-ai-lab-runtime-language-admission-receipt-admitted? receipt)
+  (and (agentic-ai-lab-runtime-language-admission-receipt-valid? receipt)
        (eq? (.ref receipt 'admission-outcome) 'admitted)))
 
-(def (poo-flow-runtime-language-admission-receipt->alist receipt)
+(def (agentic-ai-lab-runtime-language-admission-receipt->alist receipt)
   (list
    (cons 'kind (.ref receipt 'kind))
    (cons 'source-query-result-digest
@@ -254,12 +254,12 @@
    (cons 'admission-outcome (.ref receipt 'admission-outcome))
    (cons 'failure-codes (.ref receipt 'failure-codes))
    (cons 'valid
-         (poo-flow-runtime-language-admission-receipt-valid? receipt))
+         (agentic-ai-lab-runtime-language-admission-receipt-valid? receipt))
    (cons 'admitted
-         (poo-flow-runtime-language-admission-receipt-admitted? receipt))
+         (agentic-ai-lab-runtime-language-admission-receipt-admitted? receipt))
    (cons 'failures
-         (poo-flow-runtime-language-admission-receipt-failures receipt))))
-(def (poo-flow-contract-artifact-projection-receipt
+         (agentic-ai-lab-runtime-language-admission-receipt-failures receipt))))
+(def (agentic-ai-lab-contract-artifact-projection-receipt
       projection-id-value
       contract-id-value
       contract-version-value
@@ -269,7 +269,7 @@
       artifact-kind-value
       artifact-id-value
       output-digest-value)
-  (.o (kind +poo-flow-contract-artifact-projection-receipt-schema+)
+  (.o (kind +agentic-ai-lab-contract-artifact-projection-receipt-schema+)
       (projection-id projection-id-value)
       (contract-id contract-id-value)
       (contract-version contract-version-value)
@@ -280,13 +280,13 @@
       (artifact-id artifact-id-value)
       (output-digest output-digest-value)))
 
-(def (poo-flow-contract-artifact-projection-receipt-failures receipt)
+(def (agentic-ai-lab-contract-artifact-projection-receipt-failures receipt)
   (let ((failures '()))
     (def (fail! code)
       (set! failures (cons code failures)))
     (unless (and (object? receipt)
                  (eq? (.ref receipt 'kind)
-                      +poo-flow-contract-artifact-projection-receipt-schema+))
+                      +agentic-ai-lab-contract-artifact-projection-receipt-schema+))
       (fail! 'invalid-artifact-projection-receipt-schema))
     (when (object? receipt)
       (unless (runtime-language-identity-present?
@@ -306,7 +306,7 @@
                (.ref receipt 'projector-version))
         (fail! 'missing-projector-version))
       (unless (member (.ref receipt 'artifact-kind)
-                      +poo-flow-contract-artifact-kinds+)
+                      +agentic-ai-lab-contract-artifact-kinds+)
         (fail! 'unsupported-artifact-kind))
       (unless (runtime-language-identity-present? (.ref receipt 'artifact-id))
         (fail! 'missing-artifact-id))
@@ -314,10 +314,10 @@
         (fail! 'missing-output-digest)))
     (reverse failures)))
 
-(def (poo-flow-contract-artifact-projection-receipt-valid? receipt)
-  (null? (poo-flow-contract-artifact-projection-receipt-failures receipt)))
+(def (agentic-ai-lab-contract-artifact-projection-receipt-valid? receipt)
+  (null? (agentic-ai-lab-contract-artifact-projection-receipt-failures receipt)))
 
-(def (poo-flow-contract-artifact-projection-receipt->alist receipt)
+(def (agentic-ai-lab-contract-artifact-projection-receipt->alist receipt)
   (list
    (cons 'kind (.ref receipt 'kind))
    (cons 'projection-id (.ref receipt 'projection-id))
@@ -330,6 +330,6 @@
    (cons 'artifact-id (.ref receipt 'artifact-id))
    (cons 'output-digest (.ref receipt 'output-digest))
    (cons 'valid
-         (poo-flow-contract-artifact-projection-receipt-valid? receipt))
+         (agentic-ai-lab-contract-artifact-projection-receipt-valid? receipt))
    (cons 'failures
-         (poo-flow-contract-artifact-projection-receipt-failures receipt))))
+         (agentic-ai-lab-contract-artifact-projection-receipt-failures receipt))))

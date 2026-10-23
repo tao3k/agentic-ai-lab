@@ -10,8 +10,8 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :poo-flow/modules/workflow/qualification/ascent-closure-candidates
-                 poo-flow-ascent-closure-candidates))
+        (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-closure-candidates
+                 agentic-ai-lab-ascent-closure-candidates))
 
 (export ascent-shortest-candidates-performance-test)
 
@@ -25,7 +25,7 @@
        (iota 19)))
 
 (def (candidate-evaluation)
-  (poo-flow-ascent-closure-candidates facts radix 19 400 400))
+  (agentic-ai-lab-ascent-closure-candidates facts radix 19 400 400))
 
 (def ascent-shortest-candidates-performance-test
   (test-suite "ASCENT Scheme shortest candidates performance"
@@ -40,5 +40,5 @@
           (check-equal? (.ref (list-ref items 18) 'distance) 19)
           (check-equal? (.ref (list-ref items 18) 'support) (iota 19)))
         (check-equal? (benchmark-receipt-pass? receipt) #t)
-        (display "[poo-flow-benchmark] ascent-shortest-candidates p95=")
+        (display "[agentic-ai-lab-benchmark] ascent-shortest-candidates p95=")
         (displayln (benchmark-fixture-ref receipt 'elapsed))))))

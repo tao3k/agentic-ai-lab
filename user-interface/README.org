@@ -4,7 +4,7 @@
 
 * User Interface Contribution Library
 
-This directory models the downstream surface that users and agents read before writing POO Flow configuration. Stable policy objects live in =profiles/=, and reusable workflow compositions live in =scenarios/<name>/scenario.ss=.
+This directory models the downstream surface that users and agents read before writing Agentic AI Lab configuration. Stable policy objects live in =profiles/=, and reusable workflow compositions live in =scenarios/<name>/scenario.ss=.
 
 * Reusable Profiles
 

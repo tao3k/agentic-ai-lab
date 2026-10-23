@@ -4,27 +4,27 @@ from copy import deepcopy
 import os
 from pathlib import Path
 import pytest
-from poo_flow_runtime.scheme_wire import loads, dumps
-from poo_flow_runtime.semantic_runtime import SemanticRuntimeError
+from agentic_ai_lab_runtime.scheme_wire import loads, dumps
+from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
 
 @pytest.fixture
 def registered(runtime, request):
-    task = deepcopy(loads(Path(os.environ['POO_FLOW_NATIVE_DERIVATION_ORACLE']).read_text())['request'])
+    task = deepcopy(loads(Path(os.environ['AGENTIC_AI_LAB_NATIVE_DERIVATION_ORACLE']).read_text())['request'])
     task['journal']['validDomain'] = task['journal']['admissionDomain']
     identity = 'wire-' + request.node.name
     def instant(n):
         return dict(identity=str(n), domain='txn', coordinate=n, provenance='host-clock', modality='observed')
-    policy = dict(schema='poo-flow.temporal-policy-refresh-request.v1',
+    policy = dict(schema='agentic-ai-lab.temporal-policy-refresh-request.v1',
         policy=dict(identity=identity, revision='v1', start=instant(1), end=instant(4)),
         generation=1, effectiveAt=instant(1))
     p = runtime.refresh_temporal_policy(policy)
-    state = dict(schema='poo-flow.temporal-proof-state-refresh-request.v1', identity=identity, generation=1,
+    state = dict(schema='agentic-ai-lab.temporal-proof-state-refresh-request.v1', identity=identity, generation=1,
         program=deepcopy(task['projection']['program']), journal=deepcopy(task['journal']))
     s = runtime.refresh_temporal_proof_state(state)
-    registration = dict(schema='poo-flow.temporal-proof-register-request.v1', stateIdentity=identity,
+    registration = dict(schema='agentic-ai-lab.temporal-proof-register-request.v1', stateIdentity=identity,
         expectedStateDigest=s['stateDigest'], policyIdentity=identity, task=task)
     proof = runtime.register_temporal_proof(registration)
-    current = dict(schema='poo-flow.temporal-proof-current-request.v1', registration=proof['registration'],
+    current = dict(schema='agentic-ai-lab.temporal-proof-current-request.v1', registration=proof['registration'],
         expectedStateGeneration=1, expectedPolicyGeneration=1, expectedPolicyDigest=p['policyDigest'], budget=128)
     return state, policy, registration, current, proof
 
@@ -106,7 +106,7 @@ def test_forged_control_or_current_state_rejected_without_mutation(runtime, regi
     previous = runtime.current_temporal_proof(current)
     payload = deepcopy(current)
     operation = runtime.current_temporal_proof
-    if case == 'current_schema': payload['schema'] = 'poo-flow.temporal-proof-current-request.v2'
+    if case == 'current_schema': payload['schema'] = 'agentic-ai-lab.temporal-proof-current-request.v2'
     elif case == 'clock': payload['effectiveAt'] = 0
     elif case == 'journal': payload['journal'] = state['journal']
     elif case == 'proof_flag': payload['proofAdmitted'] = True
@@ -129,15 +129,15 @@ def test_forged_control_or_current_state_rejected_without_mutation(runtime, regi
 
 def test_control_hidden_from_ordinary_tools_and_wrong_thread(runtime, registered):
     state, policy, registration, current, proof = registered
-    for operation, payload, entry in [('$host.temporal.proof.state.refresh',state,runtime._lib.poo_flow_python_semantic_proof_state_refresh),
-        ('$host.temporal.proof.register',registration,runtime._lib.poo_flow_python_semantic_proof_register)]:
+    for operation, payload, entry in [('$host.temporal.proof.state.refresh',state,runtime._lib.agentic_ai_lab_python_semantic_proof_state_refresh),
+        ('$host.temporal.proof.register',registration,runtime._lib.agentic_ai_lab_python_semantic_proof_register)]:
         assert operation not in runtime.descriptor['operations']
         with pytest.raises(ValueError, match='host control'): runtime.call(operation, payload)
         raw = dumps(payload).encode()
-        result = runtime._ffi.new('poo_flow_semantic_result *')
+        result = runtime._ffi.new('agentic_ai_lab_semantic_result *')
         try:
-            assert runtime._submit_host(lambda:runtime._lib.poo_flow_python_semantic_call(operation.encode(),raw,len(raw),result)).result() == 3
+            assert runtime._submit_host(lambda:runtime._lib.agentic_ai_lab_python_semantic_call(operation.encode(),raw,len(raw),result)).result() == 3
             assert entry(raw,len(raw),result) == 2
-        finally: runtime._lib.poo_flow_python_semantic_release(result)
+        finally: runtime._lib.agentic_ai_lab_python_semantic_release(result)
     assert 'temporal.proof.current' in runtime.descriptor['operations']
     assert runtime.current_temporal_proof(current)['current']

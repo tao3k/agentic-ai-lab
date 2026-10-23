@@ -5,7 +5,7 @@
         (only-in :std/encoding/json write-json)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
-        (only-in :poo-flow/modules/services/opentofu/objects OpenTofuScope.) :yuanxu/types :clan/poo/object)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) :yuanxu/types :clan/poo/object)
 (export opentofu-reselected-artifact-test)
 (def (assert label value)
   (unless value (error "assertion failed" label))
@@ -28,13 +28,13 @@
         (equal? (.get Demand providers) '("aws" "null")))
       (assert 'old-collection-rejects-new-provider
         (not (accepted? (.call ParentContract .admit Release #f))))
-      (let (output (getenv "POO_FLOW_OPENTOFU_TEST_SELECTION" #f))
+      (let (output (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_SELECTION" #f))
         (when output
           (call-with-output-file output
             (lambda (port)
               (write-json port (list->hash-table
                 (list (cons 'providers (list->vector (.get Demand providers))))))))))
-      (let (rebuilt (getenv "POO_FLOW_OPENTOFU_TEST_REBUILT" #f))
+      (let (rebuilt (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_REBUILT" #f))
         (when rebuilt
           (let ()
             (.def (Updated @ OpenTofuScope.)

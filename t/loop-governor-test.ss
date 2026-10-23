@@ -18,7 +18,7 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/loop-engine/control/agent)
+        :agentic-ai-lab/modules/loop-engine/control/agent)
 
 (export loop-governor-test)
 
@@ -184,7 +184,7 @@
                       +loop-governor-marlin-request-schema+)
         (check-equal? (test-ref manifest 'governor-schema)
                       +loop-governor-schema+)
-        (check-equal? (test-ref manifest 'producer) 'poo-flow)
+        (check-equal? (test-ref manifest 'producer) 'agentic-ai-lab)
         (check-equal? (test-ref manifest 'consumer) 'marlin-agent-core)
         (check-equal? (test-ref manifest 'operation) 'govern-loop)
         (check-equal? (test-ref manifest 'required-fields)
@@ -216,7 +216,7 @@
                                   (test-ref manifest 'loop-engine-discovery)
                                   'receipt-contracts)
                                 'memory-receipt)
-                      'poo-flow.loop-engine.memory-receipt.v1)
+                      'agentic-ai-lab.loop-engine.memory-receipt.v1)
         (check-equal? (test-ref manifest 'required-fields)
                       '(schema governor-schema operation target transport
                         governor))
@@ -288,12 +288,12 @@
         (check-equal? (test-ref manifest 'receipt-schema)
                       +loop-governor-l1-run-receipt-schema+)
         (check-equal? (test-ref manifest 'runtime-command-contract)
-                      'poo-flow.loop-governor.runtime-command-manifest.v1)
+                      'agentic-ai-lab.loop-governor.runtime-command-manifest.v1)
         (check-equal? (test-ref manifest 'receipt-contracts)
                       (test-ref discovery 'receipt-contracts))
         (check-equal? (test-ref (test-ref manifest 'receipt-contracts)
                                 'memory-receipt)
-                      'poo-flow.loop-engine.memory-receipt.v1)
+                      'agentic-ai-lab.loop-engine.memory-receipt.v1)
         (check-equal?
          (test-symbol-member? 'memory-receipt
                               (test-ref manifest 'object-families))

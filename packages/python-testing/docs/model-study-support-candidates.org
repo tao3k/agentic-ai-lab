@@ -56,7 +56,7 @@ cap and SHA256 for each file. The reference is checked before preview
 publication. Follow-up templates are frozen; their inserted first
 response and native observation necessarily depend on the approved run.
 
-Live execution requires clean checkouts, the exact POO Flow ASCENT pin,
+Live execution requires clean checkouts, the exact Agentic AI Lab ASCENT pin,
 unchanged preview and the approved manifest SHA256. Preview reads no API
 key. Each call records the complete outgoing messages, request hash,
 response JSON, raw text, usage and elapsed time outside the repository.
@@ -76,7 +76,7 @@ exhaustive provenance, external authorization or effects.
 * Entrypoint
 
 #+begin_src sh
-python -m poo_flow_testing.model_study.support \
+python -m agentic_ai_lab_testing.model_study.support \
   --ascent-root ASCENT --poo-root POO --gerbil-path GERBIL_PATH \
   --preview-dir NEW_EXTERNAL_PREVIEW
 #+end_src
@@ -92,8 +92,8 @@ The approved preview is
 its =manifest.json= SHA256 is
 =780f9e96cd466c1f6e07c4d55ecf2d0abc668cb6b45384470165358461ec6283=.
 It binds ASCENT =d2b2eb501fdb1c3b9ab6a1edc8141ef1d77ba0ad= and
-POO Flow =f2f2315aaf4cb4fc592018c3d7bbc5bc81ed0575=. Both exact
-heads passed CI before calls: ASCENT 4 successes; POO Flow 25 successes
+Agentic AI Lab =f2f2315aaf4cb4fc592018c3d7bbc5bc81ed0575=. Both exact
+heads passed CI before calls: ASCENT 4 successes; Agentic AI Lab 25 successes
 and 5 conditional skips. Both checkouts remained at these heads through
 the completed run. Raw files are in
 =/private/tmp/poo-support-candidate-live-head-f2f2315a/=.

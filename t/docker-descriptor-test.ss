@@ -18,8 +18,8 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/docker/interface
-        :poo-flow/modules/agent-sandbox/resource)
+        :agentic-ai-lab/modules/docker/interface
+        :agentic-ai-lab/modules/agent-sandbox/resource)
 
 (export docker-descriptor-test)
 

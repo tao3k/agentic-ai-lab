@@ -37,6 +37,6 @@ Only actual completed native-admitted prefixes measure depth; full seed-suffix c
 Unused ceiling is not savings. Matched checkpoints credit only observed completed calls before the common gross-token boundary.
 Positive repeated labels require exact quotes, literal IDs/endpoints, independently true atoms and native-qualified explicit edge-chain/conjunction support. This narrow metric omits unsupported/negative/ambiguous derivations.
 Same-provider extraction is partially blind but not independently validated for completeness or semantic category accuracy. Counts are qualified labels, not cognitive ground truth.
-This is a Library consumer test, not a Library Search/Fact workflow API or MRR integration. POO Flow revision projection and reevaluation planning are exercised before model calls at fixed cuts; live revision during the model dialogue remains unqualified.
+This is a Library consumer test, not a Library Search/Fact workflow API or MRR integration. Agentic AI Lab revision projection and reevaluation planning are exercised before model calls at fixed cuts; live revision during the model dialogue remains unqualified.
 Retained Session publication is checked against independently replayed finite evidence. Proof replay costs are additional; no cross-generation retained-proof algorithm or source authentication is claimed.
 Native proof builds/hits are not end-to-end speed or model-thinking savings. Negative and failed outcomes remain in all records.

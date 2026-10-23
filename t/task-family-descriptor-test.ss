@@ -41,7 +41,7 @@
             (pure (make-pure-task 'inc (lambda (x) (+ x 1)) 'number 'number))
             (put (make-store-task 'put-cache 'put 'cache-handle 'artifact 'artifact))
             (get (make-store-task 'get-cache 'get 'cache-handle 'artifact 'artifact))
-            (external (make-external-task 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact)))
+            (external (make-external-task 'compile 'rust-build '((crate . "agentic-ai-lab")) 'artifact 'artifact)))
         (check-equal? (task-family-name (task-descriptor pure)) 'pure)
         (check-equal? (task-capability-in registry put) 'store)
         (check-equal? (task-route pure) 'local)

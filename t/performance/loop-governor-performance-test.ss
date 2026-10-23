@@ -15,13 +15,13 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :poo-flow/modules/loop-engine/control/descriptor
+        (only-in :agentic-ai-lab/modules/loop-engine/control/descriptor
                  make-loop-pattern-descriptor)
-        (only-in :poo-flow/modules/loop-engine/control/strategy
+        (only-in :agentic-ai-lab/modules/loop-engine/control/strategy
                  make-loop-strategy-plan)
-        (only-in :poo-flow/modules/loop-engine/control/governor-core
+        (only-in :agentic-ai-lab/modules/loop-engine/control/governor-core
                  make-loop-governor)
-        (only-in :poo-flow/modules/loop-engine/control/governor-policy
+        (only-in :agentic-ai-lab/modules/loop-engine/control/governor-policy
                  loop-governor->contract))
 
 (export loop-governor-performance-test)
@@ -40,7 +40,7 @@
 
 ;; : (-> Alist Void)
 (def (loop-governor-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] loop-governor-contract-projection ")
+  (display "[agentic-ai-lab-benchmark] loop-governor-contract-projection ")
   (write receipt)
   (newline)
   (force-output))
@@ -63,20 +63,20 @@
 
 ;; : (-> Integer [LoopPatternDescriptor])
 (def (loop-governor-performance-patterns count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    loop-governor-performance-pattern))
 
 ;; : (-> Integer Integer [String])
 (def (loop-governor-performance-action-keys start count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    (lambda (offset)
      (loop-governor-performance-action-key (+ start offset)))))
 
 ;; : (-> Integer Integer [Alist])
 (def (loop-governor-performance-states start count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    (lambda (offset)
      (list (cons 'acting_on

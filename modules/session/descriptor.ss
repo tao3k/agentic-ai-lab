@@ -3,13 +3,13 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Inert descriptor owned by the independent Session Module.
 (import (only-in :clan/poo/object .o)
-        (only-in :poo-flow/modules/module-authoring/module-interface yuanxu-module-interface)
-        (only-in :poo-flow/modules/module-authoring/module-descriptor pooFlowModules))
-(export +poo-flow-session-default-flags+ poo-flow-session-module)
-(def +poo-flow-session-default-flags+
+        (only-in :agentic-ai-lab/modules/module-authoring/module-interface yuanxu-module-interface)
+        (only-in :agentic-ai-lab/modules/module-authoring/module-descriptor agenticAiLabModules))
+(export +agentic-ai-lab-session-default-flags+ agentic-ai-lab-session-module)
+(def +agentic-ai-lab-session-default-flags+
   '(+lineage +placement +handoff +graph +transform +doctor))
-(def (poo-flow-session-module)
-  (pooFlowModules
+(def (agentic-ai-lab-session-module)
+  (agenticAiLabModules
     (yuanxu-module-interface 'session (.o) '())
     (.o id: 'session group: 'session
-        flags: +poo-flow-session-default-flags+)))
+        flags: +agentic-ai-lab-session-default-flags+)))

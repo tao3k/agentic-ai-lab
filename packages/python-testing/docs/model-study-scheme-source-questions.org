@@ -39,7 +39,7 @@ about the documented native contract, not a new Python-owned semantics.
 
 Preview generation copies the outgoing prompt bytes, expected answer,
 SHA256 hashes, and both Git heads to a new external directory. The live
-runner requires clean checkouts, the exact POO Flow ASCENT dependency pin,
+runner requires clean checkouts, the exact Agentic AI Lab ASCENT dependency pin,
 and unchanged preview bytes. It reads no API key during preview.
 
 With separate approval, each prompt was sent once to =deepseek-flash= via
@@ -61,8 +61,8 @@ The immutable preview is
 its =manifest.tsv= SHA256 is
 =b1b8a53e90a0b17552074ed2357ca87c823195a1153fe651238a1917fb39def3=.
 It binds ASCENT =f80c9dc7cf5e4ed42a806b0d78c847e52be09de6= and
-POO Flow =c3abe535addc78363b1c0d10005e497638d53e8d=. The five-call
-run used a clean detached checkout at that POO Flow commit. Its raw
+Agentic AI Lab =c3abe535addc78363b1c0d10005e497638d53e8d=. The five-call
+run used a clean detached checkout at that Agentic AI Lab commit. Its raw
 responses and response IDs are in
 =/private/tmp/poo-ascent-source-questions-live-head-c3abe53/=;
 the output =manifest.tsv= SHA256 is

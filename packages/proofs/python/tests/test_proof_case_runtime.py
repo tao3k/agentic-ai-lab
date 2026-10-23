@@ -12,10 +12,10 @@ from struct import pack_into
 
 import pytest
 
-from poo_flow_proof.generated.proof_case_vector import FIELD_OFFSETS, VECTOR_SIZE
-from poo_flow_proof.proof_case_emit import generated_artifacts
-from poo_flow_proof.proof_case_manifest import load_proof_case_schema
-from poo_flow_proof.proof_case_runtime import (
+from agentic_ai_lab_proof.generated.proof_case_vector import FIELD_OFFSETS, VECTOR_SIZE
+from agentic_ai_lab_proof.proof_case_emit import generated_artifacts
+from agentic_ai_lab_proof.proof_case_manifest import load_proof_case_schema
+from agentic_ai_lab_proof.proof_case_runtime import (
     NativeProofCaseRuntime,
     ProofCaseError,
     ProofStatus,
@@ -34,7 +34,7 @@ PROOF_ROOT = Path(__file__).parents[2]
 @pytest.fixture(scope="session")
 def native_runtime(tmp_path_factory: pytest.TempPathFactory) -> NativeProofCaseRuntime:
     output = tmp_path_factory.mktemp("runtime-c") / (
-        "libpoo_flow_proof.dylib" if sys.platform == "darwin" else "libpoo_flow_proof.so"
+        "libagentic_ai_lab_proof.dylib" if sys.platform == "darwin" else "libagentic_ai_lab_proof.so"
     )
     link_mode = "-dynamiclib" if sys.platform == "darwin" else "-shared"
     subprocess.run(
@@ -64,27 +64,13 @@ def positive_vector() -> bytes:
 
 def scheme_vector() -> tuple[bytes, bytes]:
     env = os.environ.copy()
-    env["GERBIL_PATH"] = str(REPO_ROOT / ".gerbil")
-    env["GERBIL_LOADPATH"] = ":".join(
-        str(path)
-        for path in (
-            REPO_ROOT.parent,
-            REPO_ROOT / "core",
-            REPO_ROOT / ".gerbil/lib",
-            REPO_ROOT,
-        )
-    )
-    command_line_sdk = Path("/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk")
-    homebrew = Path("/opt/homebrew/bin")
-    if sys.platform == "darwin" and command_line_sdk.is_dir() and homebrew.is_dir():
-        env["SDKROOT"] = str(command_line_sdk)
-        env["PATH"] = ":".join(
-            [str(homebrew), "/usr/bin", "/bin", "/usr/sbin", "/sbin"]
-        )
+    env.setdefault("GERBIL_PATH", str(REPO_ROOT / ".gerbil"))
+    env.setdefault("GERBIL_LOADPATH", ":".join(
+        (str(Path(env["GERBIL_PATH"]) / "lib"), str(REPO_ROOT / "core"), str(REPO_ROOT))))
     completed = subprocess.run(
         [
-            "gxi",
-            "packages/proofs/t/fixtures/emit-proof-case-vector.ss",
+            "just",
+            "emit-proof-case-vector",
         ],
         cwd=REPO_ROOT,
         env=env,

@@ -7,7 +7,7 @@
         (only-in :std/text/pregexp pregexp-match)
         (only-in :std/encoding/json read-json)
         (only-in :std/list/walist waref)
-        (only-in :poo-flow/modules/nix/objects NixSource.)
+        (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :yuanxu/module-system/source/link yuanxu-load-modules)
         (only-in :yuanxu/observability/testing-fixture call-with-yuanxu-fixture)
         (only-in :yuanxu/observability/testing-case yuanxu-test-checkpoint)
@@ -84,9 +84,9 @@
           (lambda (port)
             (for-each (lambda (form) (write form port) (newline port))
               `((import :clan/poo/object
-                   (rename-in (only-in :poo-flow/modules/services/opentofu/config
+                   (rename-in (only-in :agentic-ai-lab/modules/services/opentofu/config
                                 Config OpenTofuProviderConfig) (Config Defaults))
-                   (only-in :poo-flow/modules/nix/objects NixSource.))
+                   (only-in :agentic-ai-lab/modules/nix/objects NixSource.))
                 (export Config OpenTofuProviderConfig)
                 (.def (Config @ Defaults)
                   source: (.o (:: @ NixSource.)

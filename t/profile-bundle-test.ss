@@ -11,8 +11,8 @@
         (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
         (only-in :yuanxu/module-system/authoring/roles yuanxu-semantic-module)
         :yuanxu/profile-composition/profile-bundle
-        (only-in :poo-flow/modules/workflow/scenario/profile-root
-                 poo-flow-profile-bundle-root))
+        (only-in :agentic-ai-lab/modules/workflow/scenario/profile-root
+                 agentic-ai-lab-profile-bundle-root))
 
 (export profile-bundle-test)
 
@@ -180,7 +180,7 @@
         '(primary secondary))))
    (yuanxu-test-case "root projection happens exactly after value composition"
      (let* ((bundle (compose profiles audit-profile governed-profile))
-            (root (poo-flow-profile-bundle-root 'assurance-root bundle)))
+            (root (agentic-ai-lab-profile-bundle-root 'assurance-root bundle)))
        (check-equal? (.ref root 'name) 'assurance-root)
        (check-equal? (.ref root 'profiles)
                      (list audit-profile governed-profile))
@@ -199,7 +199,7 @@
             (refined-profile
              (.o identity: 'refined-stage-profile stages: refined-stages))
             (bundle (compose profiles base-profile refined-profile))
-            (case-value (poo-flow-profile-bundle-root 'clinical-case bundle))
+            (case-value (agentic-ai-lab-profile-bundle-root 'clinical-case bundle))
             (effective-stages (.ref case-value 'stages))
             (sources
              (.o effective: (.o prototype: effective-stages

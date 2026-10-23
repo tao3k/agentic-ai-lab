@@ -10,7 +10,7 @@
         (only-in "./scheme/conformance-build-runtime"
                  cedar-conformance-build!))
 
-;; This is a bounded native projection of the parent POO Flow package, not a
+;; This is a bounded native projection of the parent Agentic AI Lab package, not a
 ;; new package or source-catalog authority. Dependencies come from the parent
 ;; gerbil.pkg, including ASP's declarative build API.
 (asp-gerbil-scheme-package-spec!

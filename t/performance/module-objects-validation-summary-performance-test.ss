@@ -52,7 +52,7 @@
 
 ;; : (-> Integer [POOObject])
 (def (module-objects-validation-summary-validations count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    module-objects-validation-summary-validation))
 
@@ -99,7 +99,7 @@
 
 ;; : (-> Alist Unit)
 (def (module-objects-validation-summary-display-receipt receipt)
-  (display "[poo-flow-benchmark] module-objects-validation-summary ")
+  (display "[agentic-ai-lab-benchmark] module-objects-validation-summary ")
   (write receipt)
   (newline)
   (force-output))

@@ -97,7 +97,7 @@
                    (lambda (_index)
                      (poo-clos-class-precedence-list pedalo))
                    +sample-count+)))
-      (display "schema=poo-flow.poo-clos-native-c4.v1\n")
+      (display "schema=agentic-ai-lab.poo-clos-native-c4.v1\n")
       (display "sample-count=") (display +sample-count+) (newline)
       (display "class-count=") (display (length projected)) (newline)
       (display "native-metaobject-identity=#t\n")

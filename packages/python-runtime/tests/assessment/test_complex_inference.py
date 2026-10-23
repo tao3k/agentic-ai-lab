@@ -4,7 +4,7 @@ import os
 import subprocess
 import sys
 import unittest
-from poo_flow_testing.assessment_studies.inference_reuse_study import ROOT
+from agentic_ai_lab_testing.assessment_studies.inference_reuse_study import ROOT
 
 
 class CompoundInferenceQualification(unittest.TestCase):
@@ -12,8 +12,8 @@ class CompoundInferenceQualification(unittest.TestCase):
         code='''
 import copy,os
 from ascent import Engine
-from poo_flow_testing.assessment_studies import complex_inference_workload as c
-from poo_flow_testing.assessment_studies import inference_reuse_study as s
+from agentic_ai_lab_testing.assessment_studies import complex_inference_workload as c
+from agentic_ai_lab_testing.assessment_studies import inference_reuse_study as s
 with Engine() as engine:
   def evaluate(case,source,contract):
     with engine.open(s.program(source,contract)) as session:

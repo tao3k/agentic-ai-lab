@@ -8,12 +8,12 @@
         (only-in :clan/poo/mop define-type Type. element?)
         (only-in :std/list/list every))
 
-(export PooFlowTemporalConclusionRevision PooFlowTemporalConclusionJournal
-        PooFlowTemporalSelectionObservation PooFlowTemporalSelectionPlan
-        poo-flow-temporal-conclusion-revision?
-        poo-flow-temporal-conclusion-journal?
-        poo-flow-temporal-selection-observation?
-        poo-flow-temporal-selection-plan?)
+(export AgenticAILabTemporalConclusionRevision AgenticAILabTemporalConclusionJournal
+        AgenticAILabTemporalSelectionObservation AgenticAILabTemporalSelectionPlan
+        agentic-ai-lab-temporal-conclusion-revision?
+        agentic-ai-lab-temporal-conclusion-journal?
+        agentic-ai-lab-temporal-selection-observation?
+        agentic-ai-lab-temporal-selection-plan?)
 
 (def (text? value) (and (string? value) (> (string-length value) 0)))
 (def (natural? value)
@@ -27,7 +27,7 @@
                              generation-identity
                              operation predecessor-identity result-identity
                              proof-identity invalidation-index-digest))
-       (eq? (.ref value 'kind) 'poo-flow.temporal-causality.conclusion-revision)
+       (eq? (.ref value 'kind) 'agentic-ai-lab.temporal-causality.conclusion-revision)
        (every text? (list (.ref value 'identity) (.ref value 'subject-identity)
                           (.ref value 'scope-identity) (.ref value 'cut-digest)
                           (.ref value 'projection-digest)
@@ -48,37 +48,37 @@
                (not (.ref value 'result-identity))
                (text? (.ref value 'invalidation-index-digest))))
          (else #f))))
-(define-type (PooFlowTemporalConclusionRevision @ Type.)
+(define-type (AgenticAILabTemporalConclusionRevision @ Type.)
   .element?: revision-shape?)
-(def (poo-flow-temporal-conclusion-revision? value)
-  (element? PooFlowTemporalConclusionRevision value))
+(def (agentic-ai-lab-temporal-conclusion-revision? value)
+  (element? AgenticAILabTemporalConclusionRevision value))
 
 (def (journal-shape? value)
   (and (slots? value '(kind identity semantic-digest revisions))
-       (eq? (.ref value 'kind) 'poo-flow.temporal-causality.conclusion-journal)
+       (eq? (.ref value 'kind) 'agentic-ai-lab.temporal-causality.conclusion-journal)
        (text? (.ref value 'identity))
        (text? (.ref value 'semantic-digest))
        (list? (.ref value 'revisions))
-       (every poo-flow-temporal-conclusion-revision?
+       (every agentic-ai-lab-temporal-conclusion-revision?
               (.ref value 'revisions))))
-(define-type (PooFlowTemporalConclusionJournal @ Type.)
+(define-type (AgenticAILabTemporalConclusionJournal @ Type.)
   .element?: journal-shape?)
-(def (poo-flow-temporal-conclusion-journal? value)
-  (element? PooFlowTemporalConclusionJournal value))
+(def (agentic-ai-lab-temporal-conclusion-journal? value)
+  (element? AgenticAILabTemporalConclusionJournal value))
 
 (def (observation-shape? value)
   (and (slots? value '(kind identity subject-identity scope-identity
                              version selected-revision-identity))
-       (eq? (.ref value 'kind) 'poo-flow.temporal-causality.selection-observation)
+       (eq? (.ref value 'kind) 'agentic-ai-lab.temporal-causality.selection-observation)
        (every text? (list (.ref value 'identity) (.ref value 'subject-identity)
                           (.ref value 'scope-identity)))
        (natural? (.ref value 'version))
        (or (not (.ref value 'selected-revision-identity))
            (text? (.ref value 'selected-revision-identity)))))
-(define-type (PooFlowTemporalSelectionObservation @ Type.)
+(define-type (AgenticAILabTemporalSelectionObservation @ Type.)
   .element?: observation-shape?)
-(def (poo-flow-temporal-selection-observation? value)
-  (element? PooFlowTemporalSelectionObservation value))
+(def (agentic-ai-lab-temporal-selection-observation? value)
+  (element? AgenticAILabTemporalSelectionObservation value))
 
 (def (plan-shape? value)
   (and (slots? value '(kind journal-digest observation-identity
@@ -88,7 +88,7 @@
                              proposed-version proposed-revision-identity
                              change-proof-identity status
                              requires-atomic-cas? runtime-executed?))
-       (eq? (.ref value 'kind) 'poo-flow.temporal-causality.selection-plan)
+       (eq? (.ref value 'kind) 'agentic-ai-lab.temporal-causality.selection-plan)
        (every text? (list (.ref value 'journal-digest)
                           (.ref value 'observation-identity)
                           (.ref value 'subject-identity)
@@ -108,7 +108,7 @@
          (not (.ref value 'proposed-version)))
        (eq? (.ref value 'requires-atomic-cas?) #t)
        (eq? (.ref value 'runtime-executed?) #f)))
-(define-type (PooFlowTemporalSelectionPlan @ Type.)
+(define-type (AgenticAILabTemporalSelectionPlan @ Type.)
   .element?: plan-shape?)
-(def (poo-flow-temporal-selection-plan? value)
-  (element? PooFlowTemporalSelectionPlan value))
+(def (agentic-ai-lab-temporal-selection-plan? value)
+  (element? AgenticAILabTemporalSelectionPlan value))

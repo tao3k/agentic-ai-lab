@@ -10,9 +10,9 @@
         (only-in :yuanxu/module-system/source/admission call-with-module-source-read-cache
                  module-source-admit-current!)
         ;; Build-tool native owners, not a second runtime facade or Loader.
-        (only-in :poo-flow/modules/nix/types NixFlakeSourceContract)
+        (only-in :agentic-ai-lab/modules/nix/types NixFlakeSourceContract)
         (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
-        (only-in :poo-flow/modules/nix/func poo-flow-nix-source-inputs))
+        (only-in :agentic-ai-lab/modules/nix/func agentic-ai-lab-nix-source-inputs))
 ;; The native outer module slot keeps source/config refinements receiver-local.
 (.def Build
   module: OpenTofuScope.
@@ -46,7 +46,7 @@
                              (cons 'configuration-source path)
                              (cons 'configuration-sha256 source-digest)
                              (cons 'binding "Config")
-                             (cons 'source-inputs (poo-flow-nix-source-inputs observed)))))))))
+                             (cons 'source-inputs (agentic-ai-lab-nix-source-inputs observed)))))))))
       (def (current!)
         ;; Both are source-only observations of this same prepared request.
         ;; Keep its full requirements while sharing bytes inside this check;

@@ -10,8 +10,8 @@ class ExecutionPolicy(unittest.TestCase):
     def tearDown(self): self.engine.shutdown()
 
     def test_original_execution_evidence_module_and_source_permissions(self):
-        module=':poo-flow/modules/evidence-assessment/execution'
-        source=files('poo_flow_runtime').joinpath('reasoning_rules/execution.ss').read_text()
+        module=':agentic-ai-lab/modules/evidence-assessment/execution'
+        source=files('agentic_ai_lab_runtime').joinpath('reasoning_rules/execution.ss').read_text()
         self.engine.register_module(module, source, trusted=True)
         with self.engine.open_module(module,'make-execution-evidence') as session:
             sources={r['name'] for r in session.descriptors if r['source']}

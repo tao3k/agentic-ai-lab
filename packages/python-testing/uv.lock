@@ -432,7 +432,7 @@ wheels = [
 ]
 
 [[package]]
-name = "poo-flow-runtime"
+name = "agentic-ai-lab-runtime"
 version = "0.1.0"
 source = { directory = "../python-runtime" }
 dependencies = [
@@ -455,7 +455,7 @@ dev = [
 ]
 
 [[package]]
-name = "poo-flow-testing"
+name = "agentic-ai-lab-testing"
 version = "0.1.0"
 source = { editable = "." }
 
@@ -465,7 +465,7 @@ live = [
     { name = "openai" },
 ]
 runtime = [
-    { name = "poo-flow-runtime" },
+    { name = "agentic-ai-lab-runtime" },
 ]
 
 [package.dev-dependencies]
@@ -478,7 +478,7 @@ dev = [
 requires-dist = [
     { name = "httpx", marker = "extra == 'live'", specifier = ">=0.28,<0.29" },
     { name = "openai", marker = "extra == 'live'", specifier = ">=2.29,<3" },
-    { name = "poo-flow-runtime", marker = "extra == 'runtime'", directory = "../python-runtime" },
+    { name = "agentic-ai-lab-runtime", marker = "extra == 'runtime'", directory = "../python-runtime" },
 ]
 provides-extras = ["live", "runtime"]
 

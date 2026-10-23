@@ -14,13 +14,13 @@
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-key
                  yuanxu-user-module-selection-flag-entry)
-        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
-                 pooFlowUserConfigPresentation)
-        (only-in :poo-flow/modules/workflow/cicd-config
-                 poo-flow-user-config-cicd-intents
-                 poo-flow-user-workflow-cicd-marlin-handoff-receipt-bundle)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation)
+        (only-in :agentic-ai-lab/modules/workflow/cicd-config
+                 agentic-ai-lab-user-config-cicd-intents
+                 agentic-ai-lab-user-workflow-cicd-marlin-handoff-receipt-bundle)
         (only-in "../user-interface/custom/my-module/cases/cicd"
-                 poo-flow-custom-my-module-cicd-case)
+                 agentic-ai-lab-custom-my-module-cicd-case)
         (only-in "./support/user-interface-cicd-runtime-fixture"
                  user-interface-cicd-runtime-fixture-config))
 
@@ -43,10 +43,10 @@
 ;;; This suite keeps CI/CD user-interface assembly separate from runtime
 ;;; execution.
 (def user-interface-cicd-test
-  (test-suite "poo-flow user interface cicd payload"
+  (test-suite "agentic-ai-lab user interface cicd payload"
     (yuanxu-test-case "presents Funflow CI/CD payload as user intent data"
       (let* ((intents
-              (poo-flow-user-config-cicd-intents
+              (agentic-ai-lab-user-config-cicd-intents
                (user-interface-cicd-runtime-fixture-config)))
              (intent (car intents)))
         (check-equal? (length intents) 1)
@@ -64,7 +64,7 @@
                       "marlin-agent-core")
         (check-equal? (alist-value 'runtime-executed intent) #f)))
     (yuanxu-test-case "imports downstream CI/CD case through its module owner"
-      (let* ((selection (car poo-flow-custom-my-module-cicd-case))
+      (let* ((selection (car agentic-ai-lab-custom-my-module-cicd-case))
              (inherits
               (yuanxu-user-module-selection-flag-entry selection ':inherits))
              (command
@@ -84,7 +84,7 @@
                         (audit . disabled)))))
     (yuanxu-test-case "traces CI/CD presentation projection without runtime work"
       (let* ((presentation
-              (pooFlowUserConfigPresentation
+              (agenticAiLabUserConfigPresentation
                (user-interface-cicd-runtime-fixture-config)))
              (trace (.ref presentation 'presentation-trace))
              (cicd-step
@@ -103,7 +103,7 @@
         (check-equal? (alist-value 'count dag-step) 1)))
     (yuanxu-test-case "presents Funflow pipeline and functional DAG"
       (let* ((presentation
-              (pooFlowUserConfigPresentation
+              (agenticAiLabUserConfigPresentation
                (user-interface-cicd-runtime-fixture-config)))
              (dags (.ref presentation 'workflow-cicd-functional-dags))
              (dag (car dags))
@@ -142,7 +142,7 @@
         (check-equal? (alist-value 'to edge) 'test)))
     (yuanxu-test-case "projects user config into Marlin runtime handoff ABI"
       (let* ((presentation
-              (pooFlowUserConfigPresentation
+              (agenticAiLabUserConfigPresentation
                (user-interface-cicd-runtime-fixture-config)))
              (abis (.ref presentation
                          'workflow-cicd-marlin-runtime-handoff-abis))
@@ -165,7 +165,7 @@
                             'workflow-cicd-marlin-runtime-handoff-summary-count)
                       1)
         (check-equal? (alist-value 'kind abi)
-                      'poo-flow.workflow.cicd.marlin-runtime-handoff-abi)
+                      'agentic-ai-lab.workflow.cicd.marlin-runtime-handoff-abi)
         (check-equal? (alist-value 'runtime-owner abi)
                       "marlin-agent-core")
         (check-equal? (alist-value 'runtime-executed abi) #f)
@@ -196,7 +196,7 @@
         (check-equal? (alist-value 'checkpoint-ref entry)
                       '(workflow-cicd-check build))
         (check-equal? (alist-value 'kind request)
-                      'poo-flow.workflow.cicd.runtime-manifest-ready)
+                      'agentic-ai-lab.workflow.cicd.runtime-manifest-ready)
         (check-equal? (alist-value 'kind summary)
                       'workflow-cicd-marlin-runtime-handoff-abi-summary)
         (check-equal? (alist-value 'entry-count summary) 3)
@@ -218,7 +218,7 @@
         (check-equal? (alist-value 'runtime-executed bundle) #f)))
     (yuanxu-test-case "projects empty Marlin handoff bundle entry count"
       (let ((bundle
-             (poo-flow-user-workflow-cicd-marlin-handoff-receipt-bundle
+             (agentic-ai-lab-user-workflow-cicd-marlin-handoff-receipt-bundle
               '()
               '()
               '((valid? . #t)

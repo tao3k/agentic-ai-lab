@@ -8,24 +8,24 @@
 
 (import (only-in :clan/poo/object .o object<-alist))
 
-(export +poo-flow-user-loop-engine-use-case-prototype-kind+
-        +poo-flow-user-loop-engine-governor-prototype-kind+
-        +poo-flow-user-loop-engine-agent-judges-prototype-kind+
-        +poo-flow-user-loop-engine-human-audit-prototype-kind+
-        +poo-flow-user-loop-engine-schedule-prototype-kind+
-        +poo-flow-user-loop-engine-state-prototype-kind+
-        +poo-flow-user-loop-engine-sandbox-prototype-kind+
-        +poo-flow-user-loop-engine-budget-prototype-kind+
-        +poo-flow-user-loop-engine-result-prototype-kind+
-        +poo-flow-user-loop-engine-observability-prototype-kind+
-        +poo-flow-user-loop-engine-runtime-prototype-kind+
-        +poo-flow-user-loop-engine-lineage-policy-prototype-kind+
-        +poo-flow-user-loop-engine-selector-policy-prototype-kind+
-        +poo-flow-user-loop-engine-resource-policy-prototype-kind+
-        +poo-flow-user-loop-engine-capability-policy-prototype-kind+
-        +poo-flow-user-loop-engine-memory-policy-prototype-kind+
-        +poo-flow-user-loop-engine-compression-policy-prototype-kind+
-        +poo-flow-user-loop-engine-profile-prototype-kind+
+(export +agentic-ai-lab-user-loop-engine-use-case-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-governor-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-agent-judges-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-human-audit-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-schedule-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-state-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-sandbox-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-budget-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-result-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-observability-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-runtime-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-lineage-policy-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-selector-policy-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-resource-policy-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-capability-policy-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-memory-policy-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-compression-policy-prototype-kind+
+        +agentic-ai-lab-user-loop-engine-profile-prototype-kind+
         loop-engine-use-case
         loop-engine-governor
         loop-engine-agent-judges
@@ -49,82 +49,82 @@
 ;;; validation and report lowering. They are intentionally separate from schema
 ;;; contract ids consumed by Marlin.
 ;; : Symbol
-(def +poo-flow-user-loop-engine-use-case-prototype-kind+
-  'poo-flow.loop-engine.use-case.prototype)
+(def +agentic-ai-lab-user-loop-engine-use-case-prototype-kind+
+  'agentic-ai-lab.loop-engine.use-case.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-governor-prototype-kind+
-  'poo-flow.loop-engine.governor.prototype)
+(def +agentic-ai-lab-user-loop-engine-governor-prototype-kind+
+  'agentic-ai-lab.loop-engine.governor.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-agent-judges-prototype-kind+
-  'poo-flow.loop-engine.agent-judges.prototype)
+(def +agentic-ai-lab-user-loop-engine-agent-judges-prototype-kind+
+  'agentic-ai-lab.loop-engine.agent-judges.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-human-audit-prototype-kind+
-  'poo-flow.loop-engine.human-audit.prototype)
+(def +agentic-ai-lab-user-loop-engine-human-audit-prototype-kind+
+  'agentic-ai-lab.loop-engine.human-audit.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-schedule-prototype-kind+
-  'poo-flow.loop-engine.schedule.prototype)
+(def +agentic-ai-lab-user-loop-engine-schedule-prototype-kind+
+  'agentic-ai-lab.loop-engine.schedule.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-state-prototype-kind+
-  'poo-flow.loop-engine.state.prototype)
+(def +agentic-ai-lab-user-loop-engine-state-prototype-kind+
+  'agentic-ai-lab.loop-engine.state.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-sandbox-prototype-kind+
-  'poo-flow.loop-engine.sandbox.prototype)
+(def +agentic-ai-lab-user-loop-engine-sandbox-prototype-kind+
+  'agentic-ai-lab.loop-engine.sandbox.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-budget-prototype-kind+
-  'poo-flow.loop-engine.budget.prototype)
+(def +agentic-ai-lab-user-loop-engine-budget-prototype-kind+
+  'agentic-ai-lab.loop-engine.budget.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-result-prototype-kind+
-  'poo-flow.loop-engine.result.prototype)
+(def +agentic-ai-lab-user-loop-engine-result-prototype-kind+
+  'agentic-ai-lab.loop-engine.result.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-observability-prototype-kind+
-  'poo-flow.loop-engine.observability.prototype)
+(def +agentic-ai-lab-user-loop-engine-observability-prototype-kind+
+  'agentic-ai-lab.loop-engine.observability.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-runtime-prototype-kind+
-  'poo-flow.loop-engine.runtime.prototype)
+(def +agentic-ai-lab-user-loop-engine-runtime-prototype-kind+
+  'agentic-ai-lab.loop-engine.runtime.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-lineage-policy-prototype-kind+
-  'poo-flow.loop-engine.lineage-policy.prototype)
+(def +agentic-ai-lab-user-loop-engine-lineage-policy-prototype-kind+
+  'agentic-ai-lab.loop-engine.lineage-policy.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-selector-policy-prototype-kind+
-  'poo-flow.loop-engine.selector-policy.prototype)
+(def +agentic-ai-lab-user-loop-engine-selector-policy-prototype-kind+
+  'agentic-ai-lab.loop-engine.selector-policy.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-resource-policy-prototype-kind+
-  'poo-flow.loop-engine.resource-policy.prototype)
+(def +agentic-ai-lab-user-loop-engine-resource-policy-prototype-kind+
+  'agentic-ai-lab.loop-engine.resource-policy.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-capability-policy-prototype-kind+
-  'poo-flow.loop-engine.capability-policy.prototype)
+(def +agentic-ai-lab-user-loop-engine-capability-policy-prototype-kind+
+  'agentic-ai-lab.loop-engine.capability-policy.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-memory-policy-prototype-kind+
-  'poo-flow.loop-engine.memory-policy.prototype)
+(def +agentic-ai-lab-user-loop-engine-memory-policy-prototype-kind+
+  'agentic-ai-lab.loop-engine.memory-policy.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-compression-policy-prototype-kind+
-  'poo-flow.loop-engine.compression-policy.prototype)
+(def +agentic-ai-lab-user-loop-engine-compression-policy-prototype-kind+
+  'agentic-ai-lab.loop-engine.compression-policy.prototype)
 
 ;; : Symbol
-(def +poo-flow-user-loop-engine-profile-prototype-kind+
-  'poo-flow.loop-engine.profile.prototype)
+(def +agentic-ai-lab-user-loop-engine-profile-prototype-kind+
+  'agentic-ai-lab.loop-engine.profile.prototype)
 
 ;;; A use-case object is the named work item in a loop profile. The workflow ref
 ;;; stays optional because not every loop is backed by a Funflow DAG yet.
-;; : PooFlowLoopEngineUseCasePrototype
+;; : AgenticAILabLoopEngineUseCasePrototype
 (def loop-engine-use-case
-  (.o kind: +poo-flow-user-loop-engine-use-case-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-use-case-prototype-kind+
       name: #f
       level: #f
       mode: #f
@@ -134,17 +134,17 @@
       runtime-executed: #f))
 
 ;;; Governor capabilities are strategy knobs. They are not executable handlers.
-;; : PooFlowLoopEngineGovernorPrototype
+;; : AgenticAILabLoopEngineGovernorPrototype
 (def loop-engine-governor
-  (.o kind: +poo-flow-user-loop-engine-governor-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-governor-prototype-kind+
       capabilities: '()
       metadata: '()
       runtime-executed: #f))
 
 ;;; Agent judge objects name roles and profile refs used by Marlin later.
-;; : PooFlowLoopEngineAgentJudgesPrototype
+;; : AgenticAILabLoopEngineAgentJudgesPrototype
 (def loop-engine-agent-judges
-  (.o kind: +poo-flow-user-loop-engine-agent-judges-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-agent-judges-prototype-kind+
       auditor: #f
       verifier: #f
       reviewer: #f
@@ -152,24 +152,24 @@
       metadata: '()
       runtime-executed: #f))
 
-;; : PooFlowLoopEngineHumanAuditPrototype
+;; : AgenticAILabLoopEngineHumanAuditPrototype
 (def loop-engine-human-audit
-  (.o kind: +poo-flow-user-loop-engine-human-audit-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-human-audit-prototype-kind+
       actions: '()
       metadata: '()
       runtime-executed: #f))
 
-;; : PooFlowLoopEngineSchedulePrototype
+;; : AgenticAILabLoopEngineSchedulePrototype
 (def loop-engine-schedule
-  (.o kind: +poo-flow-user-loop-engine-schedule-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-schedule-prototype-kind+
       trigger: #f
       cadence: #f
       entries: '()
       runtime-executed: #f))
 
-;; : PooFlowLoopEngineStatePrototype
+;; : AgenticAILabLoopEngineStatePrototype
 (def loop-engine-state
-  (.o kind: +poo-flow-user-loop-engine-state-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-state-prototype-kind+
       store: #f
       path: #f
       acting-on: #f
@@ -177,9 +177,9 @@
       runtime-executed: #f))
 
 ;;; Sandbox refs can be global profile refs or per-use-case profile refs.
-;; : PooFlowLoopEngineSandboxPrototype
+;; : AgenticAILabLoopEngineSandboxPrototype
 (def loop-engine-sandbox
-  (.o kind: +poo-flow-user-loop-engine-sandbox-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-sandbox-prototype-kind+
       profile: #f
       isolation: #f
       profile-refs: '()
@@ -187,18 +187,18 @@
       entries: '()
       runtime-executed: #f))
 
-;; : PooFlowLoopEngineBudgetPrototype
+;; : AgenticAILabLoopEngineBudgetPrototype
 (def loop-engine-budget
-  (.o kind: +poo-flow-user-loop-engine-budget-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-budget-prototype-kind+
       max-actionable: #f
       max-attempts: #f
       weekly-runs: #f
       entries: '()
       runtime-executed: #f))
 
-;; : PooFlowLoopEngineResultPrototype
+;; : AgenticAILabLoopEngineResultPrototype
 (def loop-engine-result
-  (.o kind: +poo-flow-user-loop-engine-result-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-result-prototype-kind+
       default: #f
       auditor: #f
       verifier: #f
@@ -210,17 +210,17 @@
       entries: '()
       runtime-executed: #f))
 
-;; : PooFlowLoopEngineObservabilityPrototype
+;; : AgenticAILabLoopEngineObservabilityPrototype
 (def loop-engine-observability
-  (.o kind: +poo-flow-user-loop-engine-observability-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-observability-prototype-kind+
       receipt: #f
       run-log: #f
       entries: '()
       runtime-executed: #f))
 
-;; : PooFlowLoopEngineRuntimePrototype
+;; : AgenticAILabLoopEngineRuntimePrototype
 (def loop-engine-runtime
-  (.o kind: +poo-flow-user-loop-engine-runtime-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-runtime-prototype-kind+
       capabilities: '(+manifest-handoff)
       handoff: 'loop-governor-marlin-runtime-manifest
       owner: "marlin-agent-core"
@@ -229,9 +229,9 @@
 
 ;;; Lineage policy mirrors OpenRath's session-first audit trail without making
 ;;; Scheme persist sessions. It only describes the report-only receipt shape.
-;; : PooFlowLoopEngineLineagePolicyPrototype
+;; : AgenticAILabLoopEngineLineagePolicyPrototype
 (def loop-engine-lineage-policy
-  (.o kind: +poo-flow-user-loop-engine-lineage-policy-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-lineage-policy-prototype-kind+
       parent-session-refs: '()
       lineage-kind: #f
       lineage-operator: #f
@@ -242,9 +242,9 @@
 
 ;;; Selector policy keeps branch selection inspectable while model scoring and
 ;;; runtime routing stay Marlin-owned.
-;; : PooFlowLoopEngineSelectorPolicyPrototype
+;; : AgenticAILabLoopEngineSelectorPolicyPrototype
 (def loop-engine-selector-policy
-  (.o kind: +poo-flow-user-loop-engine-selector-policy-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-selector-policy-prototype-kind+
       candidates: '()
       judge-inputs: '()
       fallback: #f
@@ -254,9 +254,9 @@
 
 ;;; Resource policy models OpenRath-style resource keys as declaration data.
 ;;; The Scheme side may project serial/parallel groups but never schedules them.
-;; : PooFlowLoopEngineResourcePolicyPrototype
+;; : AgenticAILabLoopEngineResourcePolicyPrototype
 (def loop-engine-resource-policy
-  (.o kind: +poo-flow-user-loop-engine-resource-policy-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-resource-policy-prototype-kind+
       tool-refs: '()
       resource-keys: '()
       collision-classes: '()
@@ -266,9 +266,9 @@
 
 ;;; Capability policy declares backend and sandbox capability expectations.
 ;;; Marlin owns probing and enforcement; Scheme only projects report receipts.
-;; : PooFlowLoopEngineCapabilityPolicyPrototype
+;; : AgenticAILabLoopEngineCapabilityPolicyPrototype
 (def loop-engine-capability-policy
-  (.o kind: +poo-flow-user-loop-engine-capability-policy-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-capability-policy-prototype-kind+
       backend: #f
       isolation: #f
       required: '()
@@ -279,9 +279,9 @@
 
 ;;; Memory policy declares recall/commit intent as report-only loop facts.
 ;;; Marlin owns storage, ranking, retention, and all memory mutation.
-;; : PooFlowLoopEngineMemoryPolicyPrototype
+;; : AgenticAILabLoopEngineMemoryPolicyPrototype
 (def loop-engine-memory-policy
-  (.o kind: +poo-flow-user-loop-engine-memory-policy-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-memory-policy-prototype-kind+
       use-case: #f
       store: #f
       state-path: #f
@@ -295,9 +295,9 @@
 
 ;;; Compression policy declares summary/session compaction expectations as
 ;;; report-only facts. Marlin owns transcript compression and session creation.
-;; : PooFlowLoopEngineCompressionPolicyPrototype
+;; : AgenticAILabLoopEngineCompressionPolicyPrototype
 (def loop-engine-compression-policy
-  (.o kind: +poo-flow-user-loop-engine-compression-policy-prototype-kind+
+  (.o kind: +agentic-ai-lab-user-loop-engine-compression-policy-prototype-kind+
       strategy: #f
       trigger: #f
       summary-format: #f
@@ -308,11 +308,11 @@
 
 ;;; The profile object is the single public root accepted by loop-engine
 ;;; `:config`; all other objects feed slots on this profile.
-;; : PooFlowLoopEngineProfilePrototype
+;; : AgenticAILabLoopEngineProfilePrototype
 (def loop-engine-profile
   (object<-alist
    (list
-    (cons 'kind +poo-flow-user-loop-engine-profile-prototype-kind+)
+    (cons 'kind +agentic-ai-lab-user-loop-engine-profile-prototype-kind+)
     (cons 'profile-name #f)
     (cons 'use-case #f)
     (cons 'use-cases '())

@@ -5,8 +5,8 @@
 ;;; Recovery reconciliation cannot be inferred from a provider completion.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :std/list/list every) "types.ss" "objects-attempt.ss")
-(export poo-flow-session-schedule poo-flow-session-claim poo-flow-session-complete
-        poo-flow-session-recover poo-flow-session-reconcile poo-flow-session-close)
+(export agentic-ai-lab-session-schedule agentic-ai-lab-session-claim agentic-ai-lab-session-complete
+        agentic-ai-lab-session-recover agentic-ai-lab-session-reconcile agentic-ai-lab-session-close)
 (def (name? value) (and (string? value) (< 0 (string-length value) 257)))
 (def (freeze-input value)
   (let* ((consumer-value (string-copy (.ref value 'consumer-session)))
@@ -21,10 +21,10 @@
         receipt-ref: (list-ref fields 9) consumer-session: consumer-value
         consumer-turn: turn-value complete?: #t)))
 (def (receipt accepted-value reason-value state-value)
-  (.o kind: 'poo-flow.session.transition-intent.v1 accepted?: accepted-value reason: reason-value
+  (.o kind: 'agentic-ai-lab.session.transition-intent.v1 accepted?: accepted-value reason: reason-value
       schedule: state-value runtime-published?: #f action-authorized?: #f durable?: #f))
 (def (guard state expected operation)
-  (cond ((not (poo-flow-session-schedule-shape? state)) (receipt #f 'invalid-schedule #f))
+  (cond ((not (agentic-ai-lab-session-schedule-shape? state)) (receipt #f 'invalid-schedule #f))
         ((not (equal? expected (.ref state 'revision))) (receipt #f 'stale-revision state))
         ((eq? (.ref state 'status) 'closed) (receipt #f 'closed state))
         ((or (= (.ref state 'revision) 65535) (= (.ref state 'generation) 65535))
@@ -35,13 +35,13 @@
     (.o (:: @ SessionSchedule.) identity: id-value revision: revision-value
         generation: generation-value status: status-value active: active-value
         obligations: obligations-value completed: completed-value)))
-(def (poo-flow-session-schedule identity-value)
+(def (agentic-ai-lab-session-schedule identity-value)
   (unless (name? identity-value) (error "Session identity must be bounded text"))
   (let (id-value (string-copy identity-value)) (.o (:: @ SessionSchedule.) identity: id-value)))
-(def (poo-flow-session-claim state expected task-value attempt-id request-id turn-value)
+(def (agentic-ai-lab-session-claim state expected task-value attempt-id request-id turn-value)
   (guard state expected (lambda ()
     (cond ((not (eq? (.ref state 'status) 'idle)) (receipt #f 'not-idle state))
-          ((not (and (poo-flow-session-task-shape? task-value) (name? attempt-id) (name? request-id)
+          ((not (and (agentic-ai-lab-session-task-shape? task-value) (name? attempt-id) (name? request-id)
                      (exact-integer? turn-value) (<= 0 turn-value 65535))) (receipt #f 'invalid-claim state))
           ((or (not (equal? (.ref (.ref task-value 'input) 'consumer-session) (.ref state 'identity)))
                (not (= (.ref (.ref task-value 'input) 'consumer-turn) turn-value)))
@@ -65,24 +65,24 @@
   (and (object? right)
        (every (lambda (key) (and (.slot? right key) (equal? (.ref left key) (.ref right key))))
               '(kind session task task-revision identity generation turn request anchor-refs))
-       (.slot? right 'input) (poo-flow-session-input-ref-shape? (.ref right 'input))
+       (.slot? right 'input) (agentic-ai-lab-session-input-ref-shape? (.ref right 'input))
        (every (lambda (key) (equal? (.ref (.ref left 'input) key) (.ref (.ref right 'input) key)))
               '(producer contract identity digest scope-digest source-vector-digest query-digest
                 restriction-digest profile-digest receipt-ref complete? consumer-session consumer-turn))))
-(def (poo-flow-session-complete state expected attempt-value)
+(def (agentic-ai-lab-session-complete state expected attempt-value)
   (guard state expected (lambda ()
     (if (and (eq? (.ref state 'status) 'running) (same-attempt? (.ref state 'active) attempt-value))
       (receipt #t 'completion-proposed (next-state state 'idle #f '()
         (cons (string-copy (.ref attempt-value 'identity)) (.ref state 'completed)) (.ref state 'generation)))
       (receipt #f 'wrong-attempt state)))))
-(def (poo-flow-session-recover state expected)
+(def (agentic-ai-lab-session-recover state expected)
   (guard state expected (lambda ()
     (let ((pending (if (.ref state 'active) (cons (.ref state 'active) (.ref state 'obligations))
                       (.ref state 'obligations)))
           (generation-value (+ 1 (.ref state 'generation))))
       (receipt #t 'recovery-proposed (next-state state (if (null? pending) 'idle 'recovering)
         #f pending (.ref state 'completed) generation-value))))))
-(def (poo-flow-session-reconcile state expected attempt-value)
+(def (agentic-ai-lab-session-reconcile state expected attempt-value)
   ;; This is an intent for trusted terminal/isolation receipt resolution, never an acknowledgment by itself.
   (guard state expected (lambda ()
     (if (and (eq? (.ref state 'status) 'recovering)
@@ -91,7 +91,7 @@
       (receipt #t 'reconciliation-proposed (next-state state 'idle #f '()
         (cons (string-copy (.ref attempt-value 'identity)) (.ref state 'completed)) (.ref state 'generation)))
       (receipt #f 'wrong-obligation state)))))
-(def (poo-flow-session-close state expected)
+(def (agentic-ai-lab-session-close state expected)
   (guard state expected (lambda ()
     (if (eq? (.ref state 'status) 'idle)
       (receipt #t 'close-proposed (next-state state 'closed #f '() (.ref state 'completed) (.ref state 'generation)))

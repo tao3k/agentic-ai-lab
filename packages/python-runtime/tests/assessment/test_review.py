@@ -6,8 +6,8 @@ import os
 from pathlib import Path
 import unittest
 
-from poo_flow_runtime.reasoning import ReasoningRuntime
-from poo_flow_runtime.reasoning import EvidenceReview, review_sources as sources
+from agentic_ai_lab_runtime.reasoning import ReasoningRuntime
+from agentic_ai_lab_runtime.reasoning import EvidenceReview, review_sources as sources
 
 
 def facts():

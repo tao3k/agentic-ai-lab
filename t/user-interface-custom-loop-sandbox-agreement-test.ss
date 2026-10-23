@@ -16,12 +16,12 @@
                  yuanxu-settings
                  yuanxu-user-module-bundles->modules
                  yuanxu-user-module-selection)
-        (only-in :poo-flow/modules/agent-sandbox/config
-                 poo-flow-sandbox-profile-config)
-        (only-in :poo-flow/modules/workflow/scenario/configuration/presentation-config
-                 pooFlowUserConfigPresentation)
+        (only-in :agentic-ai-lab/modules/agent-sandbox/config
+                 agentic-ai-lab-sandbox-profile-config)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation)
         (only-in "../user-interface/custom/my-module/cases/loop-engine-owner"
-                 poo-flow-custom-my-module-loop-engine-case))
+                 agentic-ai-lab-custom-my-module-loop-engine-case))
 
 (export user-interface-custom-loop-sandbox-agreement-test)
 
@@ -42,7 +42,7 @@
 ;;; keeps fixture construction separate from the assertions about receipts.
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation/bundles module-bundles)
-  (pooFlowUserConfigPresentation
+  (agenticAiLabUserConfigPresentation
    (yuanxuUserConfig
     (yuanxu-user-module-bundles->modules module-bundles)
     (yuanxu-settings))))
@@ -68,7 +68,7 @@
 
 ;; : (-> PooSandboxProfile)
 (def (custom-loop-sandbox-profile)
-  (poo-flow-sandbox-profile-config
+  (agentic-ai-lab-sandbox-profile-config
    'ci/build
    (list '(backend nono)
          '(network deny-network)
@@ -99,7 +99,7 @@
 
 ;; : (-> PooSandboxProfile)
 (def (custom-loop-invalid-sandbox-profile)
-  (poo-flow-sandbox-profile-config
+  (agentic-ai-lab-sandbox-profile-config
    'ci/build
    (list '(backend nono)
          '(network deny-network)
@@ -124,7 +124,7 @@
     (let* ((presentation
             (custom-loop-presentation/bundles
              (list custom-loop-sandbox-profile-module
-                   poo-flow-custom-my-module-loop-engine-case)))
+                   agentic-ai-lab-custom-my-module-loop-engine-case)))
            (intent
             (car (.ref presentation 'loop-engine-intents)))
            (runtime-manifest
@@ -147,7 +147,7 @@
       (check-equal? (test-ref intent 'sandbox-profile-refs) '(ci/build))
       (check-equal? (test-ref intent 'sandbox-unresolved-profile-refs) '())
       (check-equal? (test-ref sandbox-runtime-summary 'schema)
-                    'poo-flow.agent-sandbox-profile.runtime-summary.v1)
+                    'agentic-ai-lab.agent-sandbox-profile.runtime-summary.v1)
       (check-equal? (test-ref sandbox-runtime-summary 'profile-name)
                     'ci/build)
       (check-equal? (test-ref sandbox-runtime-summary 'backend-kind) 'nono)
@@ -155,7 +155,7 @@
       (check-equal? (test-ref sandbox-filesystem 'path-count) 1)
       (check-equal? (test-ref sandbox-filesystem 'scope) 'project-workspace)
       (check-equal? (test-ref sandbox-handoff-summary 'schema)
-                    'poo-flow.agent-sandbox-profile.handoff-summary.v1)
+                    'agentic-ai-lab.agent-sandbox-profile.handoff-summary.v1)
       (check-equal? (test-ref sandbox-handoff-summary 'profile-name)
                     'ci/build)
       (check-equal? (test-ref sandbox-agreement 'valid?) #t)
@@ -191,7 +191,7 @@
     (let* ((presentation
             (custom-loop-presentation/bundles
              (list custom-loop-invalid-sandbox-profile-module
-                   poo-flow-custom-my-module-loop-engine-case)))
+                   agentic-ai-lab-custom-my-module-loop-engine-case)))
            (intent
             (car (.ref presentation 'loop-engine-intents)))
            (runtime-manifest
@@ -228,6 +228,6 @@
 
 ;; : TestSuite
 (def user-interface-custom-loop-sandbox-agreement-test
-  (test-suite "poo-flow custom user-interface loop sandbox agreement"
+  (test-suite "agentic-ai-lab custom user-interface loop sandbox agreement"
     (user-interface-custom-loop-engine-sandbox-case)
     (user-interface-custom-loop-engine-invalid-sandbox-case)))

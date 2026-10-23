@@ -6,27 +6,27 @@
 ;;; Invariant: resolution records missing evidence and never treats absence as acceptance.
 (import (only-in :clan/poo/object .ref object<-alist object?))
 
-(export poo-flow-g0-requirement-prototype
-        poo-flow-g0-observation-prototype
-        poo-flow-g0-policy-prototype
-        poo-flow-g0-decision-prototype
-        poo-flow-g0-resolve
-        poo-flow-g0-decision?)
+(export agentic-ai-lab-g0-requirement-prototype
+        agentic-ai-lab-g0-observation-prototype
+        agentic-ai-lab-g0-policy-prototype
+        agentic-ai-lab-g0-decision-prototype
+        agentic-ai-lab-g0-resolve
+        agentic-ai-lab-g0-decision?)
 
-(def poo-flow-g0-requirement-prototype
+(def agentic-ai-lab-g0-requirement-prototype
   (object<-alist '((kind . g0-requirement))))
 
-(def poo-flow-g0-observation-prototype
+(def agentic-ai-lab-g0-observation-prototype
   (object<-alist '((kind . g0-observation))))
 
-(def poo-flow-g0-policy-prototype
+(def agentic-ai-lab-g0-policy-prototype
   (object<-alist '((kind . g0-policy))))
 
-(def poo-flow-g0-decision-prototype
+(def agentic-ai-lab-g0-decision-prototype
   (object<-alist '((kind . g0-decision))))
 
-;; : (-> PooFlowRequirementId Boolean Boolean PooFlowG0Decision)
-(def (poo-flow-g0-resolve requirement-id observed? authorized?)
+;; : (-> AgenticAILabRequirementId Boolean Boolean AgenticAILabG0Decision)
+(def (agentic-ai-lab-g0-resolve requirement-id observed? authorized?)
   (object<-alist
    `((kind . g0-decision)
      (requirement-id . ,requirement-id)
@@ -42,7 +42,7 @@
                   (else 'admitted))))))
 
 ;; : (-> Object Boolean)
-(def (poo-flow-g0-decision? value)
+(def (agentic-ai-lab-g0-decision? value)
   (and (object? value)
        (with-catch
         (lambda (_failure) #f)

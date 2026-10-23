@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import unittest
-from poo_flow_runtime.reasoning import compact_feedback, expand_feedback
+from agentic_ai_lab_runtime.reasoning import compact_feedback, expand_feedback
 
 
 class FeedbackEncoding(unittest.TestCase):

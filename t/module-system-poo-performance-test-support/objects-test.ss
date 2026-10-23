@@ -25,7 +25,7 @@
 
 ;; : (-> Alist Unit)
 (def (module-system-poo-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] ")
+  (display "[agentic-ai-lab-benchmark] ")
   (write (benchmark-fixture-ref receipt 'feature))
   (display " ")
   (write receipt)
@@ -204,7 +204,7 @@
 
 ;; : TestSuite
 (def objects-test
-  (test-suite "poo-flow module system POO object performance"
+  (test-suite "agentic-ai-lab module system POO object performance"
     (module-system-poo-performance-construction-case)
     (module-system-poo-performance-materialization-case)
     (module-system-poo-performance-validation-case)

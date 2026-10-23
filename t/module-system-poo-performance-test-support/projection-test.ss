@@ -22,7 +22,7 @@
 
 ;; : (-> Alist Unit)
 (def (module-system-poo-performance-projection-display-receipt receipt)
-  (display "[poo-flow-benchmark] ")
+  (display "[agentic-ai-lab-benchmark] ")
   (write (benchmark-fixture-ref receipt 'feature))
   (display " ")
   (write receipt)
@@ -88,5 +88,5 @@
 
 ;; : TestSuite
 (def projection-test
-  (test-suite "poo-flow module system POO projection performance"
+  (test-suite "agentic-ai-lab module system POO projection performance"
     (module-system-poo-performance-fixed-slot-projection-case)))

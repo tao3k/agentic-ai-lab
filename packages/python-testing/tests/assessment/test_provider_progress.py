@@ -7,7 +7,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from poo_flow_testing.assessment_studies import model_study
+from agentic_ai_lab_testing.assessment_studies import model_study
 
 
 class ProviderProgress(unittest.TestCase):

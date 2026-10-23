@@ -8,52 +8,52 @@
 ;;; event persistence, replay, repair jobs, leases, and side effects.
 
 (import :yuanxu/utilities/final-projection-syntax
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/recovery-support)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-support)
 
-(export +poo-flow-durable-recovery-scenario-kind+
-        +poo-flow-durable-recovery-scenario-schema+
-        +poo-flow-durable-recovery-scenario-diagnostic-schema+
-        +poo-flow-durable-recovery-observability-schema+
-        +poo-flow-durable-recovery-stages+
-        make-poo-flow-durable-recovery-scenario-receipt
-        poo-flow-durable-recovery-scenario-receipt?
-        poo-flow-durable-recovery-scenario-receipt-scenario-id
-        poo-flow-durable-recovery-scenario-receipt-project-id
-        poo-flow-durable-recovery-scenario-receipt-root-session-id
-        poo-flow-durable-recovery-scenario-receipt-session-id
-        poo-flow-durable-recovery-scenario-receipt-failure-kind
-        poo-flow-durable-recovery-scenario-receipt-recovery-mode
-        poo-flow-durable-recovery-scenario-receipt-runtime-store-row
-        poo-flow-durable-recovery-scenario-receipt-session-graph-row
-        poo-flow-durable-recovery-scenario-receipt-communication-rows
-        poo-flow-durable-recovery-scenario-receipt-memory-job-rows
-        poo-flow-durable-recovery-scenario-receipt-workflow-task-rows
-        poo-flow-durable-recovery-scenario-receipt-sandbox-refs
-        poo-flow-durable-recovery-scenario-receipt-checkpoint-ref
-        poo-flow-durable-recovery-scenario-receipt-repair-policy-ref
-        poo-flow-durable-recovery-scenario-receipt-event-log-ref
-        poo-flow-durable-recovery-scenario-receipt-derived-index-ref
-        poo-flow-durable-recovery-scenario-receipt-job-lease-ref
-        poo-flow-durable-recovery-scenario-receipt-repair-journal-ref
-        poo-flow-durable-recovery-scenario-receipt-deterministic-replay?
-        poo-flow-durable-recovery-scenario-receipt-observability-rows
-        poo-flow-durable-recovery-scenario-receipt-valid?
-        poo-flow-durable-recovery-scenario-receipt-diagnostics
-        poo-flow-durable-recovery-scenario-receipt-metadata
-        poo-flow-durable-recovery-scenario
-        poo-flow-durable-recovery-scenario->alist
-        poo-flow-durable-recovery-scenarios->alists)
+(export +agentic-ai-lab-durable-recovery-scenario-kind+
+        +agentic-ai-lab-durable-recovery-scenario-schema+
+        +agentic-ai-lab-durable-recovery-scenario-diagnostic-schema+
+        +agentic-ai-lab-durable-recovery-observability-schema+
+        +agentic-ai-lab-durable-recovery-stages+
+        make-agentic-ai-lab-durable-recovery-scenario-receipt
+        agentic-ai-lab-durable-recovery-scenario-receipt?
+        agentic-ai-lab-durable-recovery-scenario-receipt-scenario-id
+        agentic-ai-lab-durable-recovery-scenario-receipt-project-id
+        agentic-ai-lab-durable-recovery-scenario-receipt-root-session-id
+        agentic-ai-lab-durable-recovery-scenario-receipt-session-id
+        agentic-ai-lab-durable-recovery-scenario-receipt-failure-kind
+        agentic-ai-lab-durable-recovery-scenario-receipt-recovery-mode
+        agentic-ai-lab-durable-recovery-scenario-receipt-runtime-store-row
+        agentic-ai-lab-durable-recovery-scenario-receipt-session-graph-row
+        agentic-ai-lab-durable-recovery-scenario-receipt-communication-rows
+        agentic-ai-lab-durable-recovery-scenario-receipt-memory-job-rows
+        agentic-ai-lab-durable-recovery-scenario-receipt-workflow-task-rows
+        agentic-ai-lab-durable-recovery-scenario-receipt-sandbox-refs
+        agentic-ai-lab-durable-recovery-scenario-receipt-checkpoint-ref
+        agentic-ai-lab-durable-recovery-scenario-receipt-repair-policy-ref
+        agentic-ai-lab-durable-recovery-scenario-receipt-event-log-ref
+        agentic-ai-lab-durable-recovery-scenario-receipt-derived-index-ref
+        agentic-ai-lab-durable-recovery-scenario-receipt-job-lease-ref
+        agentic-ai-lab-durable-recovery-scenario-receipt-repair-journal-ref
+        agentic-ai-lab-durable-recovery-scenario-receipt-deterministic-replay?
+        agentic-ai-lab-durable-recovery-scenario-receipt-observability-rows
+        agentic-ai-lab-durable-recovery-scenario-receipt-valid?
+        agentic-ai-lab-durable-recovery-scenario-receipt-diagnostics
+        agentic-ai-lab-durable-recovery-scenario-receipt-metadata
+        agentic-ai-lab-durable-recovery-scenario
+        agentic-ai-lab-durable-recovery-scenario->alist
+        agentic-ai-lab-durable-recovery-scenarios->alists)
 
-;; : PooFlowDurableRecoveryScenarioKind
-(def +poo-flow-durable-recovery-scenario-kind+
-  'poo-flow.durable.recovery-scenario)
+;; : AgenticAILabDurableRecoveryScenarioKind
+(def +agentic-ai-lab-durable-recovery-scenario-kind+
+  'agentic-ai-lab.durable.recovery-scenario)
 
-;; : PooFlowDurableRecoveryScenarioSchemaId
-(def +poo-flow-durable-recovery-scenario-schema+
-  'poo-flow.module-system.durable-recovery-scenario.v1)
+;; : AgenticAILabDurableRecoveryScenarioSchemaId
+(def +agentic-ai-lab-durable-recovery-scenario-schema+
+  'agentic-ai-lab.module-system.durable-recovery-scenario.v1)
 
 ;; : PooDurableRecoveryScenarioReceiptStruct
-(defstruct poo-flow-durable-recovery-scenario-receipt
+(defstruct agentic-ai-lab-durable-recovery-scenario-receipt
   (scenario-id
    project-id
    root-session-id
@@ -86,7 +86,7 @@
 ;;; boundary so tests can cover replay and repair handoff without executing
 ;;; runtime side effects.
 ;; : (-> PooDurableRecoveryScenarioId PooDurableRecoveryProjectId PooDurableRecoveryRootSessionId PooDurableRecoverySessionId PooDurableRecoveryFailureKind PooDurableRecoveryRuntimeStoreRow [PooDurableRecoverySessionGraphRow] [PooDurableRecoveryCommunicationRow] [PooDurableRecoveryMemoryJobRow] [PooDurableRecoverySandboxRef] [PooDurableRecoveryWorkflowTaskRow] PooDurableRecoveryScenarioReceipt)
-(def (poo-flow-durable-recovery-scenario scenario-id
+(def (agentic-ai-lab-durable-recovery-scenario scenario-id
                                           project-id
                                           root-session-id
                                           session-id
@@ -99,61 +99,61 @@
                                           . maybe-options)
   (let* ((options (if (null? maybe-options) '() (car maybe-options)))
          (runtime-store-row
-          (poo-flow-durable-recovery-runtime-store-row runtime-store-receipt))
+          (agentic-ai-lab-durable-recovery-runtime-store-row runtime-store-receipt))
          (failure-kind
-          (poo-flow-durable-recovery-option
+          (agentic-ai-lab-durable-recovery-option
            options
            'failure-kind
            'process-crash))
          (recovery-mode
-          (poo-flow-durable-recovery-option options 'recovery-mode 'replay))
+          (agentic-ai-lab-durable-recovery-option options 'recovery-mode 'replay))
          (event-log-ref
-          (poo-flow-durable-recovery-option
+          (agentic-ai-lab-durable-recovery-option
            options
            'event-log-ref
-           (poo-flow-durable-recovery-runtime-store-ref runtime-store-row
+           (agentic-ai-lab-durable-recovery-runtime-store-ref runtime-store-row
                                                         'fact-log-ref)))
          (checkpoint-ref
-          (poo-flow-durable-recovery-option
+          (agentic-ai-lab-durable-recovery-option
            options
            'checkpoint-ref
-           (poo-flow-durable-recovery-runtime-store-ref
+           (agentic-ai-lab-durable-recovery-runtime-store-ref
             runtime-store-row
             'checkpoint-store-ref)))
          (derived-index-ref
-          (poo-flow-durable-recovery-option
+          (agentic-ai-lab-durable-recovery-option
            options
            'derived-index-ref
-           (poo-flow-durable-recovery-runtime-store-ref
+           (agentic-ai-lab-durable-recovery-runtime-store-ref
             runtime-store-row
             'derived-index-ref)))
          (job-lease-ref
-          (poo-flow-durable-recovery-option
+          (agentic-ai-lab-durable-recovery-option
            options
            'job-lease-ref
-           (poo-flow-durable-recovery-runtime-store-ref runtime-store-row
+           (agentic-ai-lab-durable-recovery-runtime-store-ref runtime-store-row
                                                         'job-store-ref)))
          (repair-journal-ref
-          (poo-flow-durable-recovery-option
+          (agentic-ai-lab-durable-recovery-option
            options
            'repair-journal-ref
-           (poo-flow-durable-recovery-runtime-store-ref
+           (agentic-ai-lab-durable-recovery-runtime-store-ref
             runtime-store-row
             'repair-journal-ref)))
          (repair-policy-ref
-          (poo-flow-durable-recovery-option
+          (agentic-ai-lab-durable-recovery-option
            options
            'repair-policy-ref
            'repair/fail-closed))
          (metadata
-          (poo-flow-durable-recovery-option options 'metadata '()))
+          (agentic-ai-lab-durable-recovery-option options 'metadata '()))
          (runtime-owner
-          (poo-flow-durable-recovery-option
+          (agentic-ai-lab-durable-recovery-option
            options
            'runtime-owner
            "marlin-agent-core"))
          (diagnostics
-          (poo-flow-durable-recovery-diagnostics
+          (agentic-ai-lab-durable-recovery-diagnostics
            scenario-id
            project-id
            root-session-id
@@ -165,14 +165,14 @@
            sandbox-refs))
          (valid? (null? diagnostics))
          (observability-rows
-          (poo-flow-durable-recovery-observability-rows
+          (agentic-ai-lab-durable-recovery-observability-rows
            scenario-id
            (if valid? 'ready 'blocked)
            (list (cons 'failure-kind failure-kind)
                  (cons 'recovery-mode recovery-mode)
                  (cons 'diagnostic-count (length diagnostics)))
            runtime-owner)))
-    (make-poo-flow-durable-recovery-scenario-receipt
+    (make-agentic-ai-lab-durable-recovery-scenario-receipt
      scenario-id
      project-id
      root-session-id
@@ -202,81 +202,81 @@
 
 ;; : (-> PooDurableRecoveryScenarioReceipt PooDurableRecoveryScenarioReceiptRow)
 (defpoo-final-projection
-  poo-flow-durable-recovery-scenario->alist (receipt)
+  agentic-ai-lab-durable-recovery-scenario->alist (receipt)
   (bindings ((diagnostics
-              (poo-flow-durable-recovery-scenario-receipt-diagnostics
+              (agentic-ai-lab-durable-recovery-scenario-receipt-diagnostics
                receipt))))
-  (fields ((kind +poo-flow-durable-recovery-scenario-kind+)
-           (schema +poo-flow-durable-recovery-scenario-schema+)
+  (fields ((kind +agentic-ai-lab-durable-recovery-scenario-kind+)
+           (schema +agentic-ai-lab-durable-recovery-scenario-schema+)
            (scenario-id
-            (poo-flow-durable-recovery-scenario-receipt-scenario-id receipt))
+            (agentic-ai-lab-durable-recovery-scenario-receipt-scenario-id receipt))
            (project-id
-            (poo-flow-durable-recovery-scenario-receipt-project-id receipt))
+            (agentic-ai-lab-durable-recovery-scenario-receipt-project-id receipt))
            (root-session-id
-            (poo-flow-durable-recovery-scenario-receipt-root-session-id
+            (agentic-ai-lab-durable-recovery-scenario-receipt-root-session-id
              receipt))
            (session-id
-            (poo-flow-durable-recovery-scenario-receipt-session-id receipt))
+            (agentic-ai-lab-durable-recovery-scenario-receipt-session-id receipt))
            (failure-kind
-            (poo-flow-durable-recovery-scenario-receipt-failure-kind receipt))
+            (agentic-ai-lab-durable-recovery-scenario-receipt-failure-kind receipt))
            (recovery-mode
-            (poo-flow-durable-recovery-scenario-receipt-recovery-mode receipt))
+            (agentic-ai-lab-durable-recovery-scenario-receipt-recovery-mode receipt))
            (runtime-store
-            (poo-flow-durable-recovery-scenario-receipt-runtime-store-row
+            (agentic-ai-lab-durable-recovery-scenario-receipt-runtime-store-row
              receipt))
            (session-graph
-            (poo-flow-durable-recovery-scenario-receipt-session-graph-row
+            (agentic-ai-lab-durable-recovery-scenario-receipt-session-graph-row
              receipt))
            (communication-rows
-            (poo-flow-durable-recovery-scenario-receipt-communication-rows
+            (agentic-ai-lab-durable-recovery-scenario-receipt-communication-rows
              receipt))
            (memory-job-rows
-            (poo-flow-durable-recovery-scenario-receipt-memory-job-rows
+            (agentic-ai-lab-durable-recovery-scenario-receipt-memory-job-rows
              receipt))
            (workflow-task-rows
-            (poo-flow-durable-recovery-scenario-receipt-workflow-task-rows
+            (agentic-ai-lab-durable-recovery-scenario-receipt-workflow-task-rows
              receipt))
            (sandbox-refs
-            (poo-flow-durable-recovery-scenario-receipt-sandbox-refs receipt))
+            (agentic-ai-lab-durable-recovery-scenario-receipt-sandbox-refs receipt))
            (checkpoint-ref
-            (poo-flow-durable-recovery-scenario-receipt-checkpoint-ref
+            (agentic-ai-lab-durable-recovery-scenario-receipt-checkpoint-ref
              receipt))
            (repair-policy-ref
-            (poo-flow-durable-recovery-scenario-receipt-repair-policy-ref
+            (agentic-ai-lab-durable-recovery-scenario-receipt-repair-policy-ref
              receipt))
            (event-log-ref
-            (poo-flow-durable-recovery-scenario-receipt-event-log-ref receipt))
+            (agentic-ai-lab-durable-recovery-scenario-receipt-event-log-ref receipt))
            (derived-index-ref
-            (poo-flow-durable-recovery-scenario-receipt-derived-index-ref
+            (agentic-ai-lab-durable-recovery-scenario-receipt-derived-index-ref
              receipt))
            (job-lease-ref
-            (poo-flow-durable-recovery-scenario-receipt-job-lease-ref receipt))
+            (agentic-ai-lab-durable-recovery-scenario-receipt-job-lease-ref receipt))
            (repair-journal-ref
-            (poo-flow-durable-recovery-scenario-receipt-repair-journal-ref
+            (agentic-ai-lab-durable-recovery-scenario-receipt-repair-journal-ref
              receipt))
            (deterministic-replay?
-            (poo-flow-durable-recovery-scenario-receipt-deterministic-replay?
+            (agentic-ai-lab-durable-recovery-scenario-receipt-deterministic-replay?
              receipt))
            (observability-rows
-            (poo-flow-durable-recovery-scenario-receipt-observability-rows
+            (agentic-ai-lab-durable-recovery-scenario-receipt-observability-rows
              receipt))
            (valid?
-            (poo-flow-durable-recovery-scenario-receipt-valid? receipt))
+            (agentic-ai-lab-durable-recovery-scenario-receipt-valid? receipt))
            (diagnostics diagnostics)
            (diagnostic-count (length diagnostics))
            (metadata
-            (poo-flow-durable-recovery-scenario-receipt-metadata receipt))
+            (agentic-ai-lab-durable-recovery-scenario-receipt-metadata receipt))
            (runtime-owner
-            (poo-flow-durable-recovery-scenario-receipt-runtime-owner receipt))
+            (agentic-ai-lab-durable-recovery-scenario-receipt-runtime-owner receipt))
            (handoff-required
-            (poo-flow-durable-recovery-scenario-receipt-handoff-required
+            (agentic-ai-lab-durable-recovery-scenario-receipt-handoff-required
              receipt))
            (runtime-executed
-            (poo-flow-durable-recovery-scenario-receipt-runtime-executed
+            (agentic-ai-lab-durable-recovery-scenario-receipt-runtime-executed
              receipt)))))
 
 ;; : (-> [PooDurableRecoveryScenarioReceipt] [PooDurableRecoveryScenarioReceiptRow])
 (defpoo-final-projection-batch
-  poo-flow-durable-recovery-scenarios->alists (receipts)
-  (projector poo-flow-durable-recovery-scenario->alist)
+  agentic-ai-lab-durable-recovery-scenarios->alists (receipts)
+  (projector agentic-ai-lab-durable-recovery-scenario->alist)
   (error-message "durable recovery scenario serialization requires a list"))

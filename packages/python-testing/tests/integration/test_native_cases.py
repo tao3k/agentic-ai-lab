@@ -10,8 +10,8 @@ from pathlib import Path
 
 import pytest
 
-from poo_flow_testing import CaseContext
-from poo_flow_testing.catalog import build_catalog
+from agentic_ai_lab_testing import CaseContext
+from agentic_ai_lab_testing.catalog import build_catalog
 
 ROOT = Path(__file__).resolve().parents[4]
 CATALOG = build_catalog()

@@ -28,7 +28,7 @@
        (required . ("name"))
        (properties . ((name . ((type . "string"))))))
      '((owner . contract-test)
-       (object-kind . PooFlowJsonSchemaNativeFixture)
+       (object-kind . AgenticAILabJsonSchemaNativeFixture)
        (object-key . json-schema/native-fixture)))))
 
 (unless

@@ -11,7 +11,7 @@ import contextlib
 import io
 
 sys.path.insert(0, str(Path(__file__).parents[1] / 'src'))
-from poo_flow_testing.assessment_studies import model_study as study
+from agentic_ai_lab_testing.assessment_studies import model_study as study
 
 class ProviderByteContext(unittest.TestCase):
     def test_request_context_difference_is_only_real_computed_feedback(self):

@@ -18,10 +18,10 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :poo-flow/modules/agent-sandbox/api
-        :poo-flow/modules/agent-sandbox/nono
-        :poo-flow/modules/agent-sandbox/cube
-        :poo-flow/modules/nono-sandbox/c-binding)
+        :agentic-ai-lab/modules/agent-sandbox/api
+        :agentic-ai-lab/modules/agent-sandbox/nono
+        :agentic-ai-lab/modules/agent-sandbox/cube
+        :agentic-ai-lab/modules/nono-sandbox/c-binding)
 
 (export nono-sandbox-c-binding-test)
 
@@ -45,14 +45,14 @@
         (check-equal? (test-ref contract 'package) "nono-ffi")
         (check-equal? (test-ref contract 'library) "nono_ffi")
         (check-equal? (test-ref contract 'adapter-header)
-                      "poo_flow_nono_binding.h")
+                      "agentic_ai_lab_nono_binding.h")
         (check-equal? (test-ref contract 'adapter-include-ref)
-                      "bindings/nono-c/poo_flow_nono_binding.h")
+                      "bindings/nono-c/agentic_ai_lab_nono_binding.h")
         (check-equal? (test-ref contract 'header) "nono.h")
         (check-equal? (test-ref contract 'include-ref)
                       "bindings/nono-c/nono.h")
         (check-equal? (test-ref contract 'probe-ref)
-                      "bindings/nono-c/poo_flow_nono_binding_probe.c")
+                      "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c")
         (check-equal? (and (memq 'NonoDiagnosticCode
                                  (test-ref contract 'types))
                            #t)
@@ -111,7 +111,7 @@
         (check-equal? (test-ref contract 'include-dirs)
                       '("bindings/nono-c"))
         (check-equal? (test-ref contract 'probe-ref)
-                      "bindings/nono-c/poo_flow_nono_binding_probe.c")
+                      "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c")
         (check-equal? (map (lambda (input)
                              (test-ref input 'kind))
                            required-inputs)
@@ -126,7 +126,7 @@
                         "-Werror"
                         "-fsyntax-only"
                         "-Ibindings/nono-c"
-                        "bindings/nono-c/poo_flow_nono_binding_probe.c"))
+                        "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c"))
         (check-equal? (nono-c-binding-build-compiler override) "cc")
         (check-equal? (nono-c-binding-build-upstream-include-dirs override)
                       '("/opt/nono/include"))

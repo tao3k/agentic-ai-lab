@@ -12,8 +12,8 @@
                  check-equal?
                  )
         (only-in :clan/poo/object .ref object?)
-        :poo-flow/modules/agent-sandbox/config
-        :poo-flow/modules/workflow/interface)
+        :agentic-ai-lab/modules/agent-sandbox/config
+        :agentic-ai-lab/modules/workflow/interface)
 
 (export workflow-cicd-check-map-test)
 
@@ -62,7 +62,7 @@
 ;;; filesystem/resource policy parsing.
 ;; : (-> Unit [PooSandboxProfile])
 (def cicd-test-sandbox-profiles
-  (poo-flow-sandbox-profiles
+  (agentic-ai-lab-sandbox-profiles
    (ci/build
     (backend nono)
     (network allowlisted "github.com" "crates.io")
@@ -127,7 +127,7 @@
         (check-equal? (.ref check-map 'runtime-executed) #f)))
     (yuanxu-test-case "projects check receipts without running runtime work"
       (let* ((check-map (cicd-test-check-map))
-             (receipts (poo-flow-cicd-check-map->receipts check-map))
+             (receipts (agentic-ai-lab-cicd-check-map->receipts check-map))
              (build-receipt (car receipts))
              (test-receipt (cadr receipts))
              (runtime-ready
@@ -176,7 +176,7 @@
     (yuanxu-test-case "resolves sandbox profile summaries when catalog is provided"
       (let* ((check-map (cicd-test-check-map))
              (receipts
-              (poo-flow-cicd-check-map->receipts
+              (agentic-ai-lab-cicd-check-map->receipts
                check-map
                cicd-test-sandbox-profiles))
              (build-receipt (car receipts))
@@ -199,7 +199,7 @@
                                            'sandbox-unresolved-profile-refs)
                       '())
         (check-equal? (cicd-test-alist-ref build-summary 'schema)
-                      'poo-flow.agent-sandbox-profile.runtime-summary.v1)
+                      'agentic-ai-lab.agent-sandbox-profile.runtime-summary.v1)
         (check-equal? (cicd-test-alist-ref build-summary 'profile-name)
                       'ci/build)
         (check-equal? (cicd-test-alist-ref build-summary 'valid?) #t)
@@ -207,7 +207,7 @@
                       'project-workspace)
         (check-equal? (cicd-test-alist-ref build-filesystem 'path-count) 1)
         (check-equal? (cicd-test-alist-ref build-handoff 'schema)
-                      'poo-flow.agent-sandbox-profile.handoff-summary.v1)
+                      'agentic-ai-lab.agent-sandbox-profile.handoff-summary.v1)
         (check-equal? (cicd-test-alist-ref build-receipt
                                            'sandbox-runtime-summaries)
                       sandbox-summaries)))))

@@ -39,7 +39,7 @@ remains a separate atomicity gate.
 * Current implementation and remaining authority gates
 
 The current delivery authority is [[file:next-delivery-plan-v1.org][the fixed-v1 delivery ledger]].
-POO Flow owns Temporal interpretation, proof replay, immutable evidence history,
+Agentic AI Lab owns Temporal interpretation, proof replay, immutable evidence history,
 current applicability and IFC semantics. MRR owns original typed identities,
 query/result admission and production orchestration. MRR Data owns physical
 execution, Backend/Protocols, conditional transactions and recovery.
@@ -292,7 +292,7 @@ dependency closure. Context selection checks applicability for its actor/task/
 policy and destination before materialization and again where required at use.
 A source update invalidates eligibility for future reuse; it cannot erase bytes
 already disclosed to a model. IFC labels, provenance, leases and declassification
-need an explicit POO flow decision. Context evidence admission, Temporal proof
+need an explicit Agentic AI Lab decision. Context evidence admission, Temporal proof
 admission and information-flow permission are separate checks bound to one
 payload; none can be inferred from a model's agreement with tool output.
 
@@ -349,7 +349,7 @@ a current permit merely because its historical commit receipt still exists.
 - [[file:design-audit.org][D1--D8 design decisions and remaining implementation gates]]
 - [[file:integration-readiness-audit.org][Pinned runtime and real-model qualification boundaries]]
 - [[https://github.com/tao3k/meta-relational-reasoning/tree/feat/property-query-executor/runtime][MRR native Rust adapter]]
-- [[file:../../bindings/runtime-c/include/poo_flow/temporal_store.h][Current first-root publication ABI]]
+- [[file:../../bindings/runtime-c/include/agentic_ai_lab/temporal_store.h][Current first-root publication ABI]]
 
 * Direct Legacy removal
 

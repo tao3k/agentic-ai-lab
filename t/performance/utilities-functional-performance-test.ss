@@ -34,7 +34,7 @@
           (cons 'last-duplicate (car (reverse duplicates))))))
 
 (def (functional-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] functional-stable-duplicates ")
+  (display "[agentic-ai-lab-benchmark] functional-stable-duplicates ")
   (write receipt)
   (newline)
   (force-output))

@@ -3,7 +3,7 @@
 """Generate current installed-Python/native fixtures; run in a separate process."""
 import argparse
 import hashlib
-from poo_flow_runtime.scheme_wire import dumps
+from agentic_ai_lab_runtime.scheme_wire import dumps
 from pathlib import Path
 import sys
 
@@ -14,7 +14,7 @@ args = parser.parse_args()
 root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(root / 'packages/python-runtime/tests/unit'))
 from test_temporal_family import family_task
-from poo_flow_runtime.semantic_runtime import SemanticRuntime
+from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntime
 
 cases = []
 with SemanticRuntime(args.library, expected_digest=hashlib.sha256(args.library.read_bytes()).hexdigest()) as runtime:

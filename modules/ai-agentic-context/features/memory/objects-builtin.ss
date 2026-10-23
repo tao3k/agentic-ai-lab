@@ -5,15 +5,15 @@
 
 ;;; Boundary: builtin memory stores and default catalog.
 
-(import :poo-flow/modules/ai-agentic-context/features/memory/objects-core
-        :poo-flow/modules/ai-agentic-context/features/memory/objects-catalog)
+(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-catalog)
 
-(export poo-flow-ai-agentic-context-memory-local-session-store
-        poo-flow-ai-agentic-context-memory-durable-project-store
-        poo-flow-ai-agentic-context-memory-default-catalog)
+(export agentic-ai-lab-ai-agentic-context-memory-local-session-store
+        agentic-ai-lab-ai-agentic-context-memory-durable-project-store
+        agentic-ai-lab-ai-agentic-context-memory-default-catalog)
 
-(def poo-flow-ai-agentic-context-memory-local-session-store
-  (poo-flow-memory-store-spec
+(def agentic-ai-lab-ai-agentic-context-memory-local-session-store
+  (agentic-ai-lab-memory-store-spec
    'memory/local-session
    'local-session
    'session
@@ -26,8 +26,8 @@
    'marlin-memory-adapter
    '((builtin . #t))))
 
-(def poo-flow-ai-agentic-context-memory-durable-project-store
-  (poo-flow-memory-store-spec
+(def agentic-ai-lab-ai-agentic-context-memory-durable-project-store
+  (agentic-ai-lab-memory-store-spec
    'memory/durable-project
    'durable-project
    'project
@@ -40,10 +40,10 @@
    'marlin-memory-adapter
    '((builtin . #t))))
 
-(def poo-flow-ai-agentic-context-memory-default-catalog
-  (poo-flow-memory-catalog
+(def agentic-ai-lab-ai-agentic-context-memory-default-catalog
+  (agentic-ai-lab-memory-catalog
    'memory-core/default
-   (list poo-flow-ai-agentic-context-memory-local-session-store
-         poo-flow-ai-agentic-context-memory-durable-project-store)
-   '((source . poo-flow-memory-core)
+   (list agentic-ai-lab-ai-agentic-context-memory-local-session-store
+         agentic-ai-lab-ai-agentic-context-memory-durable-project-store)
+   '((source . agentic-ai-lab-memory-core)
      (runtime-executed . #f))))

@@ -5,46 +5,46 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/modules/workflow/contracts/release-assurance-manifest
+        :agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
         :yuanxu/object-family/role-syntax
-        :poo-flow/modules/workflow/qualification/capability-prototypes)
+        :agentic-ai-lab/modules/workflow/qualification/capability-prototypes)
 
 
 (def tcb
-  (poo-flow-assurance-tcb
+  (agentic-ai-lab-assurance-tcb
    'bundle-semantic 'bundle-semantic '(digest validator canonical-schema)))
 (def evidence-a
-  (poo-flow-assurance-evidence-reference
+  (agentic-ai-lab-assurance-evidence-reference
    'bundle-receipt 'scheme "receipts/bundle" "digest-a"))
 (def evidence-b
-  (poo-flow-assurance-evidence-reference
+  (agentic-ai-lab-assurance-evidence-reference
    'proof-receipt 'lean "receipts/proof" "digest-b"))
 (def claim-a
-  (poo-flow-assurance-claim
+  (agentic-ai-lab-assurance-claim
    'bundle-valid 'l1-conformant 'scheme tcb (list evidence-a)
    '(out-of-band-effects) 'fail-closed))
 (def claim-b
-  (poo-flow-assurance-claim
+  (agentic-ai-lab-assurance-claim
    'proof-linked 'l4-formally-linked 'lean tcb (list evidence-b)
    '(actual-effect-mediation) 'reject-proof))
 (def gate-a
-  (poo-flow-assurance-gate-result
+  (agentic-ai-lab-assurance-gate-result
    'scheme-owner 'scheme 'passed evidence-a))
 (def gate-b
-  (poo-flow-assurance-gate-result
+  (agentic-ai-lab-assurance-gate-result
    'lean-owner 'lean 'passed evidence-b))
-(def abi (poo-flow-assurance-abi-decision 'runtime-v0.1 #f 'ac10-review))
+(def abi (agentic-ai-lab-assurance-abi-decision 'runtime-v0.1 #f 'ac10-review))
 
 (def (manifest claims gates tcbs)
-  (poo-flow-release-assurance-manifest
+  (agentic-ai-lab-release-assurance-manifest
    'rc-1 "revision-1" 'macos-arm64
    '((gerbil . "0.18.2") (lean . "4"))
    '((bundle . "bundle-digest") (proof-vector . "vector-digest"))
    tcbs claims gates abi))
 
 (def (manifest-local-shell value)
-  (list (cons 'kind +poo-flow-release-assurance-manifest-schema+)
-        (cons 'schema +poo-flow-release-assurance-manifest-schema+)
+  (list (cons 'kind +agentic-ai-lab-release-assurance-manifest-schema+)
+        (cons 'schema +agentic-ai-lab-release-assurance-manifest-schema+)
         (cons 'release (.ref value 'release))
         (cons 'environment (.ref value 'environment))
         (cons 'assurance (.ref value 'assurance))
@@ -53,32 +53,32 @@
 (def (manifest-with-capabilities value schema-id-value schema-version-value
                                  revision-value)
   (poo-core-role-object
-   (slots ((kind +poo-flow-release-assurance-manifest-schema+)
-           (schema +poo-flow-release-assurance-manifest-schema+)
+   (slots ((kind +agentic-ai-lab-release-assurance-manifest-schema+)
+           (schema +agentic-ai-lab-release-assurance-manifest-schema+)
            (release (.ref value 'release))
            (environment (.ref value 'environment))
            (assurance (.ref value 'assurance))
            (abi-decision (.ref value 'abi-decision))))
    (supers
-    (poo-flow-versioned-capability
+    (agentic-ai-lab-versioned-capability
      schema-id-value schema-version-value)
-    (poo-flow-revision-bound-capability revision-value))))
+    (agentic-ai-lab-revision-bound-capability revision-value))))
 
 (def release-assurance-manifest-test
   (test-suite "AC-10 S1 ReleaseAssuranceManifest v1"
     (yuanxu-test-case "POO-native object family and complete manifest validate"
       (let (value (manifest (list claim-a claim-b)
                             (list gate-a gate-b) (list tcb)))
-        (let (receipt (poo-flow-release-assurance-manifest-validate value))
-          (check (poo-flow-release-assurance-manifest? value) => #t)
-          (check (poo-flow-assurance-claim? claim-a) => #t)
-          (check (poo-flow-assurance-tcb? tcb) => #t)
-          (check (poo-flow-assurance-evidence-reference? evidence-a) => #t)
-          (check (poo-flow-assurance-gate-result? gate-a) => #t)
-          (check (poo-flow-assurance-abi-decision? abi) => #t)
+        (let (receipt (agentic-ai-lab-release-assurance-manifest-validate value))
+          (check (agentic-ai-lab-release-assurance-manifest? value) => #t)
+          (check (agentic-ai-lab-assurance-claim? claim-a) => #t)
+          (check (agentic-ai-lab-assurance-tcb? tcb) => #t)
+          (check (agentic-ai-lab-assurance-evidence-reference? evidence-a) => #t)
+          (check (agentic-ai-lab-assurance-gate-result? gate-a) => #t)
+          (check (agentic-ai-lab-assurance-abi-decision? abi) => #t)
           (check (.ref value 'qualification/versioned?) => #t)
           (check (.ref value 'schema-id)
-                 => +poo-flow-release-assurance-manifest-schema+)
+                 => +agentic-ai-lab-release-assurance-manifest-schema+)
           (check (.ref value 'schema-version) => 1)
           (check (.ref value 'qualification/revision-bound?) => #t)
           (check (.ref value 'source-revision) => "revision-1")
@@ -86,7 +86,7 @@
           (check (.ref receipt 'diagnostics) => '()))))
     (yuanxu-test-case "capability instances are isolated"
       (let ((left (manifest (list claim-a) (list gate-a) (list tcb)))
-            (right (poo-flow-release-assurance-manifest
+            (right (agentic-ai-lab-release-assurance-manifest
                     'rc-2 "revision-2" 'macos-arm64
                     '((gerbil . "0.18.2"))
                     '((bundle . "bundle-digest"))
@@ -100,62 +100,62 @@
              (flat (object<-alist (manifest-local-shell valid)))
              (wrong-schema
               (manifest-with-capabilities
-               valid 'poo-flow.release-assurance-manifest.other 2
+               valid 'agentic-ai-lab.release-assurance-manifest.other 2
                "revision-1"))
              (divergent
               (manifest-with-capabilities
-               valid +poo-flow-release-assurance-manifest-schema+ 1
+               valid +agentic-ai-lab-release-assurance-manifest-schema+ 1
                "other-revision")))
         (check (map (lambda (entry) (cdr (assq 'code entry)))
-                    (.ref (poo-flow-release-assurance-manifest-validate flat)
+                    (.ref (agentic-ai-lab-release-assurance-manifest-validate flat)
                           'diagnostics))
                => '(invalid-capability-composition))
         (check (map (lambda (entry) (cdr (assq 'code entry)))
                     (.ref
-                     (poo-flow-release-assurance-manifest-validate wrong-schema)
+                     (agentic-ai-lab-release-assurance-manifest-validate wrong-schema)
                      'diagnostics))
                => '(capability-schema-mismatch))
         (check (map (lambda (entry) (cdr (assq 'code entry)))
                     (.ref
-                     (poo-flow-release-assurance-manifest-validate divergent)
+                     (agentic-ai-lab-release-assurance-manifest-validate divergent)
                      'diagnostics))
                => '(capability-revision-mismatch))))
     (yuanxu-test-case "construction order does not change canonical identity"
       (let* ((left (manifest (list claim-a claim-b)
                              (list gate-a gate-b) (list tcb)))
-             (right (poo-flow-release-assurance-manifest
+             (right (agentic-ai-lab-release-assurance-manifest
                      'rc-1 "revision-1" 'macos-arm64
                      '((lean . "4") (gerbil . "0.18.2"))
                      '((proof-vector . "vector-digest")
                        (bundle . "bundle-digest"))
                      (list tcb) (list claim-b claim-a)
                      (list gate-b gate-a) abi)))
-        (check (poo-flow-release-assurance-manifest-normalize left)
-               => (poo-flow-release-assurance-manifest-normalize right))
-        (check (.ref (poo-flow-release-assurance-manifest-identity left) 'digest)
-               => (.ref (poo-flow-release-assurance-manifest-identity right)
+        (check (agentic-ai-lab-release-assurance-manifest-normalize left)
+               => (agentic-ai-lab-release-assurance-manifest-normalize right))
+        (check (.ref (agentic-ai-lab-release-assurance-manifest-identity left) 'digest)
+               => (.ref (agentic-ai-lab-release-assurance-manifest-identity right)
                         'digest))
-        (check (.ref (poo-flow-release-assurance-manifest-identity left) 'digest)
+        (check (.ref (agentic-ai-lab-release-assurance-manifest-identity left) 'digest)
                => "871e2303fcabbaffb4b3a95dfbafdef4fb65768ad9a5ae4c75e409b20bd73de5")))
     (yuanxu-test-case "identity changes when bound release evidence changes"
       (let* ((left (manifest (list claim-a) (list gate-a) (list tcb)))
-             (changed (poo-flow-release-assurance-manifest
+             (changed (agentic-ai-lab-release-assurance-manifest
                        'rc-1 "revision-2" 'macos-arm64
                        '((gerbil . "0.18.2") (lean . "4"))
                        '((bundle . "bundle-digest")
                          (proof-vector . "vector-digest"))
                        (list tcb) (list claim-a) (list gate-a) abi)))
-        (check (equal? (.ref (poo-flow-release-assurance-manifest-identity left)
+        (check (equal? (.ref (agentic-ai-lab-release-assurance-manifest-identity left)
                              'digest)
-                       (.ref (poo-flow-release-assurance-manifest-identity changed)
+                       (.ref (agentic-ai-lab-release-assurance-manifest-identity changed)
                              'digest))
                => #f)))
     (yuanxu-test-case "missing identities, claims, gates, and ABI review fail closed"
-      (let* ((invalid-abi (poo-flow-assurance-abi-decision 'runtime-v0.1 #f ""))
-             (value (poo-flow-release-assurance-manifest
+      (let* ((invalid-abi (agentic-ai-lab-assurance-abi-decision 'runtime-v0.1 #f ""))
+             (value (agentic-ai-lab-release-assurance-manifest
                      'rc-1 "revision-1" 'macos-arm64 '() '()
                      (list tcb) '() '() invalid-abi))
-             (receipt (poo-flow-release-assurance-manifest-validate value)))
+             (receipt (agentic-ai-lab-release-assurance-manifest-validate value)))
         (check (.ref receipt 'accepted?) => #f)
         (check (map (lambda (entry) (cdr (assq 'code entry)))
                     (.ref receipt 'diagnostics))
@@ -163,32 +163,32 @@
                     invalid-abi-decision))))
     (yuanxu-test-case "duplicate semantic owners are rejected deterministically"
       (let* ((duplicate-tcb
-              (poo-flow-assurance-tcb
+              (agentic-ai-lab-assurance-tcb
                'bundle-semantic 'authorization '(cedar evaluator)))
              (duplicate-claim
-              (poo-flow-assurance-claim
+              (agentic-ai-lab-assurance-claim
                'bundle-valid 'l2-evidenced 'cedar tcb (list evidence-b)
                '() 'fail-closed))
              (duplicate-gate
-              (poo-flow-assurance-gate-result
+              (agentic-ai-lab-assurance-gate-result
                'scheme-owner 'other 'passed evidence-b))
              (value (manifest (list claim-a duplicate-claim)
                               (list gate-a duplicate-gate)
                               (list tcb duplicate-tcb)))
-             (receipt (poo-flow-release-assurance-manifest-validate value)))
+             (receipt (agentic-ai-lab-release-assurance-manifest-validate value)))
         (check (.ref receipt 'accepted?) => #f)
         (check (map (lambda (entry) (cdr (assq 'code entry)))
                     (.ref receipt 'diagnostics))
                => '(duplicate-tcb-id duplicate-claim-id duplicate-gate-id))))
     (yuanxu-test-case "incomplete claim and invalid evidence reference fail closed"
       (let* ((incomplete
-              (poo-flow-assurance-claim
+              (agentic-ai-lab-assurance-claim
                'incomplete 'l2-evidenced "" tcb '() '() ""))
              (bad-gate
-              (poo-flow-assurance-gate-result
+              (agentic-ai-lab-assurance-gate-result
                'bad 'scheme 'passed (.o (kind 'not-evidence))))
              (value (manifest (list incomplete) (list bad-gate) (list tcb)))
-             (receipt (poo-flow-release-assurance-manifest-validate value)))
+             (receipt (agentic-ai-lab-release-assurance-manifest-validate value)))
         (check (.ref receipt 'accepted?) => #f)
         (check (map (lambda (entry) (cdr (assq 'code entry)))
                     (.ref receipt 'diagnostics))

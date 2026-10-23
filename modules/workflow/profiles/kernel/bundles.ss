@@ -1,4 +1,4 @@
-(import (only-in :poo-flow/modules/workflow/funflow-config poo-flow-funflow-module-bundles poo-upstream-flow-funflow-module-bundles))
+(import (only-in :agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-module-bundles poo-upstream-flow-funflow-module-bundles))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -10,33 +10,33 @@
 
 (import (only-in :yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-cicd-default-payload)
-        (only-in :poo-flow/modules/session/config
-                 +poo-flow-session-default-flags+
-                 poo-flow-session-module-bundles)
-        (only-in :poo-flow/modules/governor/config
-                 poo-flow-loop-governor-module-bundles)
-        (only-in :poo-flow/modules/nono-sandbox/config
-                 poo-flow-nono-sandbox-module-bundles)
-        (only-in :poo-flow/modules/cubeSandbox/config
-                 poo-flow-cubeSandbox-module-bundles)
-        (only-in :poo-flow/modules/docker-sandbox/config
-                 poo-flow-docker-sandbox-module-bundles))
+        (only-in :agentic-ai-lab/modules/session/config
+                 +agentic-ai-lab-session-default-flags+
+                 agentic-ai-lab-session-module-bundles)
+        (only-in :agentic-ai-lab/modules/governor/config
+                 agentic-ai-lab-loop-governor-module-bundles)
+        (only-in :agentic-ai-lab/modules/nono-sandbox/config
+                 agentic-ai-lab-nono-sandbox-module-bundles)
+        (only-in :agentic-ai-lab/modules/cubeSandbox/config
+                 agentic-ai-lab-cubeSandbox-module-bundles)
+        (only-in :agentic-ai-lab/modules/docker-sandbox/config
+                 agentic-ai-lab-docker-sandbox-module-bundles))
 
 (export yuanxu-funflow-cicd-default-payload
-        poo-flow-kernel-module-bundles
-        poo-flow-funflow-module-bundles
+        agentic-ai-lab-kernel-module-bundles
+        agentic-ai-lab-funflow-module-bundles
         poo-upstream-flow-funflow-module-bundles
-        +poo-flow-session-default-flags+
-        poo-flow-session-module-bundles
-        poo-flow-loop-governor-module-bundles
-        poo-flow-nono-sandbox-module-bundles
-        poo-flow-cubeSandbox-module-bundles
-        poo-flow-docker-sandbox-module-bundles)
+        +agentic-ai-lab-session-default-flags+
+        agentic-ai-lab-session-module-bundles
+        agentic-ai-lab-loop-governor-module-bundles
+        agentic-ai-lab-nono-sandbox-module-bundles
+        agentic-ai-lab-cubeSandbox-module-bundles
+        agentic-ai-lab-docker-sandbox-module-bundles)
 
-(def poo-flow-kernel-module-bundles
-  (append poo-flow-funflow-module-bundles
-          poo-flow-session-module-bundles
-          poo-flow-loop-governor-module-bundles
-          poo-flow-nono-sandbox-module-bundles
-          poo-flow-cubeSandbox-module-bundles
-          poo-flow-docker-sandbox-module-bundles))
+(def agentic-ai-lab-kernel-module-bundles
+  (append agentic-ai-lab-funflow-module-bundles
+          agentic-ai-lab-session-module-bundles
+          agentic-ai-lab-loop-governor-module-bundles
+          agentic-ai-lab-nono-sandbox-module-bundles
+          agentic-ai-lab-cubeSandbox-module-bundles
+          agentic-ai-lab-docker-sandbox-module-bundles))

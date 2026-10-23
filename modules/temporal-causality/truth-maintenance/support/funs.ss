@@ -7,13 +7,13 @@
         (only-in :std/list/list every delete-duplicates/hash)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/modules/temporal-causality/revisions/funs
-                 poo-flow-temporal-evidence-as-of)
-        (only-in :poo-flow/modules/temporal-causality/truth-maintenance/objects poo-flow-temporal-derivation)
-        (only-in :poo-flow/modules/temporal-causality/truth-maintenance/funs
-                 poo-flow-temporal-dependency-index poo-flow-temporal-reverse-dependency-plan-from-cuts))
-(export poo-flow-temporal-support-program poo-flow-temporal-support-inventory
-        poo-flow-temporal-support-evaluate poo-flow-temporal-support-reverse-plan)
+        (only-in :agentic-ai-lab/modules/temporal-causality/revisions/funs
+                 agentic-ai-lab-temporal-evidence-as-of)
+        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/objects agentic-ai-lab-temporal-derivation)
+        (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/funs
+                 agentic-ai-lab-temporal-dependency-index agentic-ai-lab-temporal-reverse-dependency-plan-from-cuts))
+(export agentic-ai-lab-temporal-support-program agentic-ai-lab-temporal-support-inventory
+        agentic-ai-lab-temporal-support-evaluate agentic-ai-lab-temporal-support-reverse-plan)
 (def (text? x) (and (string? x) (< 0 (string-length x) 257)))
 (def (unique? xs) (= (length xs) (length (delete-duplicates/hash xs))))
 (def (digest x)
@@ -23,13 +23,13 @@
   (and (object? x) (every (lambda (name) (.slot? x name)) names)))
 (def (premise-row x)
   (unless (and (slots? x '(kind subject-identity revision-identity))
-               (eq? (.ref x 'kind) 'poo-flow.temporal-causality.support-premise)
+               (eq? (.ref x 'kind) 'agentic-ai-lab.temporal-causality.support-premise)
                (text? (.ref x 'subject-identity)) (text? (.ref x 'revision-identity)))
     (error "invalid native support premise"))
   (list (.ref x 'subject-identity) (.ref x 'revision-identity)))
 (def (support-row x)
   (unless (and (slots? x '(kind identity conclusion-identity proof-identity premises conclusion-premises))
-               (eq? (.ref x 'kind) 'poo-flow.temporal-causality.support)
+               (eq? (.ref x 'kind) 'agentic-ai-lab.temporal-causality.support)
                (every text? (list (.ref x 'identity) (.ref x 'conclusion-identity) (.ref x 'proof-identity)))
                (list? (.ref x 'premises)) (<= (length (.ref x 'premises)) 128)
                (list? (.ref x 'conclusion-premises)) (<= (length (.ref x 'conclusion-premises)) 128)
@@ -42,10 +42,10 @@
     (list (.ref x 'identity) (.ref x 'conclusion-identity) (.ref x 'proof-identity)
           (list-sort (lambda (a b) (string<? (car a) (car b))) premises)
           (list-sort string<? (.ref x 'conclusion-premises)))))
-(def (poo-flow-temporal-support-program id policy complete? supports)
-  (poo-flow-temporal-support-inventory id policy complete?
+(def (agentic-ai-lab-temporal-support-program id policy complete? supports)
+  (agentic-ai-lab-temporal-support-inventory id policy complete?
     (delete-duplicates/hash (map (lambda (s) (.ref s 'conclusion-identity)) supports)) supports))
-(def (poo-flow-temporal-support-inventory id policy complete? conclusions supports)
+(def (agentic-ai-lab-temporal-support-inventory id policy complete? conclusions supports)
   (unless (and (text? id) (text? policy) (boolean? complete?)
                (list? conclusions) (<= 1 (length conclusions) 128)
                (every text? conclusions) (unique? conclusions)
@@ -72,26 +72,26 @@
          (hash-put! colors id 'done))))
     (for-each visit conclusions)
     (let* ((canonical (list-sort (lambda (a b) (string<? (car a) (car b))) rows))
-           (fingerprint (digest (list 'poo-flow.temporal-support-program.v1 id policy complete? conclusions canonical)))
+           (fingerprint (digest (list 'agentic-ai-lab.temporal-support-program.v1 id policy complete? conclusions canonical)))
            (owned (map (lambda (row)
-             (.o kind: 'poo-flow.temporal-causality.support
+             (.o kind: 'agentic-ai-lab.temporal-causality.support
                  identity: (car row) conclusion-identity: (cadr row) proof-identity: (caddr row)
                  premises: (map (lambda (p)
-                   (.o kind: 'poo-flow.temporal-causality.support-premise
+                   (.o kind: 'agentic-ai-lab.temporal-causality.support-premise
                        subject-identity: (car p) revision-identity: (cadr p))) (list-ref row 3))
                  conclusion-premises: (list-ref row 4))) canonical)))
-      (validate PooFlowTemporalSupportProgram (.o kind: 'poo-flow.temporal-causality.support-program
+      (validate AgenticAILabTemporalSupportProgram (.o kind: 'agentic-ai-lab.temporal-causality.support-program
           identity: id policy-identity: policy inventory-complete?: complete?
           conclusion-identities: conclusions supports: owned semantic-digest: fingerprint)))))
-(def (poo-flow-temporal-support-evaluate program journal as-of valid-at budget)
+(def (agentic-ai-lab-temporal-support-evaluate program journal as-of valid-at budget)
   (unless (and (slots? program '(kind identity policy-identity inventory-complete? conclusion-identities supports semantic-digest))
-               (eq? (.ref program 'kind) 'poo-flow.temporal-causality.support-program)
+               (eq? (.ref program 'kind) 'agentic-ai-lab.temporal-causality.support-program)
                (integer? budget) (exact? budget) (<= 0 budget 128))
     (error "invalid support evaluation input"))
-  (let* ((canonical (poo-flow-temporal-support-inventory (.ref program 'identity)
+  (let* ((canonical (agentic-ai-lab-temporal-support-inventory (.ref program 'identity)
                      (.ref program 'policy-identity) (.ref program 'inventory-complete?)
                      (.ref program 'conclusion-identities) (.ref program 'supports)))
-         (snapshot (poo-flow-temporal-evidence-as-of journal as-of valid-at))
+         (snapshot (agentic-ai-lab-temporal-evidence-as-of journal as-of valid-at))
          (rows (map support-row (.ref canonical 'supports)))
          (revisions (make-hash-table)) (active (make-hash-table))
          (states (make-hash-table)) (support-states (make-hash-table))
@@ -132,11 +132,11 @@
                (.o identity: id status: state
                    active-support-identities: (map car (filter (lambda (r)
                      (and (equal? (cadr r) id) (eq? (hash-get support-states (car r)) 'supported))) rows))))) ids))
-           (result-digest (digest (list 'poo-flow.temporal-support-evaluation.v1
+           (result-digest (digest (list 'agentic-ai-lab.temporal-support-evaluation.v1
              (.ref canonical 'semantic-digest) (.ref snapshot 'cut-digest) (.ref snapshot 'projection-digest)
              budget (map (lambda (r) (list (.ref r 'identity) (.ref r 'status)
                                           (.ref r 'active-support-identities))) results)))))
-      (validate PooFlowTemporalSupportEvaluation (.o kind: 'poo-flow.temporal-causality.support-evaluation
+      (validate AgenticAILabTemporalSupportEvaluation (.o kind: 'agentic-ai-lab.temporal-causality.support-evaluation
           semantic-digest: result-digest program-digest: (.ref canonical 'semantic-digest)
           cut-digest: (.ref snapshot 'cut-digest) projection-digest: (.ref snapshot 'projection-digest)
           conclusions: results evaluated-support-count: (- budget remaining)
@@ -144,22 +144,22 @@
 
 ;;; Group alternatives by their original conclusion identity before using the
 ;;; existing reverse scheduler. A support ID is never a conclusion ID.
-(def (poo-flow-temporal-support-reverse-plan program journal previous-as-of revised-as-of valid-at)
-  (let* ((owned (poo-flow-temporal-support-inventory (.ref program 'identity)
+(def (agentic-ai-lab-temporal-support-reverse-plan program journal previous-as-of revised-as-of valid-at)
+  (let* ((owned (agentic-ai-lab-temporal-support-inventory (.ref program 'identity)
                   (.ref program 'policy-identity) (.ref program 'inventory-complete?)
                   (.ref program 'conclusion-identities) (.ref program 'supports)))
-         (snapshot (poo-flow-temporal-evidence-as-of journal previous-as-of valid-at))
+         (snapshot (agentic-ai-lab-temporal-evidence-as-of journal previous-as-of valid-at))
          (cut (.ref snapshot 'cut-digest)) (projection (.ref snapshot 'projection-digest))
          (rows (map support-row (.ref owned 'supports)))
          (entries (map (lambda (id)
            (let (alternatives (filter (lambda (row) (equal? (cadr row) id)) rows))
-             (poo-flow-temporal-derivation id cut projection (.ref owned 'policy-identity)
+             (agentic-ai-lab-temporal-derivation id cut projection (.ref owned 'policy-identity)
                (delete-duplicates/hash (apply append (map (lambda (row) (map car (list-ref row 3))) alternatives)))
                (delete-duplicates/hash (apply append (map (lambda (row) (list-ref row 4)) alternatives))))))
            (.ref owned 'conclusion-identities)))
-         (index (poo-flow-temporal-dependency-index (.ref owned 'identity) cut projection
+         (index (agentic-ai-lab-temporal-dependency-index (.ref owned 'identity) cut projection
                   (.ref owned 'inventory-complete?) entries)))
     (unless (equal? (.ref owned 'semantic-digest) (.ref program 'semantic-digest))
       (error "support reverse plan digest mismatch"))
-    (poo-flow-temporal-reverse-dependency-plan-from-cuts
+    (agentic-ai-lab-temporal-reverse-dependency-plan-from-cuts
       index journal previous-as-of revised-as-of valid-at)))

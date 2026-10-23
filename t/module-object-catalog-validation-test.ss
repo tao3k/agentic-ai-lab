@@ -13,12 +13,12 @@
                  check-equal?)
         :yuanxu/module-system/schema/interface
         :yuanxu/module-system/schema/validation
-        :poo-flow/modules/sandbox-core/shared-object
-        :poo-flow/modules/sandbox-core/objects
-        :poo-flow/modules/workflow/scenario/configuration/root-objects
-        :poo-flow/modules/nono-sandbox/objects
-        :poo-flow/modules/cubeSandbox/objects
-        :poo-flow/modules/docker-sandbox/objects)
+        :agentic-ai-lab/modules/sandbox-core/shared-object
+        :agentic-ai-lab/modules/sandbox-core/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/root-objects
+        :agentic-ai-lab/modules/nono-sandbox/objects
+        :agentic-ai-lab/modules/cubeSandbox/objects
+        :agentic-ai-lab/modules/docker-sandbox/objects)
 
 (export module-object-catalog-validation-test)
 
@@ -28,15 +28,15 @@
 
 ;; : TestSuite
 (def module-object-catalog-validation-test
-  (test-suite "poo-flow module object catalog validation"
+  (test-suite "agentic-ai-lab module object catalog validation"
     (yuanxu-test-case "validates real module object sets"
       (let* ((objects
-              (append poo-flow-shared-module-objects
-                      poo-flow-sandbox-core-module-objects
-                      poo-flow-user-interface-root-module-objects
-                      poo-flow-nono-sandbox-module-objects
-                      poo-flow-cubeSandbox-module-objects
-                      poo-flow-docker-sandbox-module-objects))
+              (append agentic-ai-lab-shared-module-objects
+                      agentic-ai-lab-sandbox-core-module-objects
+                      agentic-ai-lab-user-interface-root-module-objects
+                      agentic-ai-lab-nono-sandbox-module-objects
+                      agentic-ai-lab-cubeSandbox-module-objects
+                      agentic-ai-lab-docker-sandbox-module-objects))
              (validations
               (yuanxu-module-objects-validation objects)))
         (check-equal? (length validations) 9)
@@ -77,7 +77,7 @@
 
     (yuanxu-test-case "pins nono sandbox object binding to native FFI"
       (let ((binding-field
-             (yuanxu-module-object-field poo-flow-nono-sandbox-object
+             (yuanxu-module-object-field agentic-ai-lab-nono-sandbox-object
                                            'binding)))
         (check-equal? (not (not binding-field)) #t)
         (check-equal? (yuanxu-module-field-contract-default binding-field)

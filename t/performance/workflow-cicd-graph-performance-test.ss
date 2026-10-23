@@ -11,7 +11,7 @@
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-elapsed-us)
         "../support/performance"
-        :poo-flow/modules/workflow/interface)
+        :agentic-ai-lab/modules/workflow/interface)
 
 (export workflow-cicd-graph-performance-test)
 
@@ -36,7 +36,7 @@
 (def (workflow-cicd-graph-performance-map count)
   (yuanxu-cicd-check-map
    (string->symbol (string-append "scale/" (number->string count)))
-   (poo-flow-performance-build-list
+   (agentic-ai-lab-performance-build-list
     count workflow-cicd-graph-performance-check)))
 
 (def (workflow-cicd-graph-performance-project check-map)
@@ -101,7 +101,7 @@
            (large-us
             (workflow-cicd-graph-performance-ref timings 'large-median-us))
            (ratio (if (zero? small-us) 0 (/ large-us small-us))))
-      (display "[poo-flow-benchmark] workflow-cicd-indexed-graph ")
+      (display "[agentic-ai-lab-benchmark] workflow-cicd-indexed-graph ")
       (write (list (cons 'small-count small-count)
                    (cons 'large-count large-count)
                    (cons 'small-samples-us

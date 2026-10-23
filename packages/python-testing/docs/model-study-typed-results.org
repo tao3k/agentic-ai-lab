@@ -12,7 +12,7 @@
 first typed request. The frozen case corpus SHA256 remained
 =7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
 ASCENT head was =00930e20f382516d78d2d2f2df084b89322162ae=;
-POO Flow checkout head was
+Agentic AI Lab checkout head was
 =d3efbe7ec22c5ab6e59d0eb140dcb1fa38ae74a5=. All 30 requests
 completed with no API error or incomplete response. Raw records stay
 outside the repository at

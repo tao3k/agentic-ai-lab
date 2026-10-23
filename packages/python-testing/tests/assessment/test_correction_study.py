@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 import json
 import unittest
-from poo_flow_testing.assessment_studies.correction_study import corpus, holdout_corpus
-from poo_flow_testing.assessment_studies.trajectory_study import closure
+from agentic_ai_lab_testing.assessment_studies.correction_study import corpus, holdout_corpus
+from agentic_ai_lab_testing.assessment_studies.trajectory_study import closure
 
 
 class CorrectionStudyIntent(unittest.TestCase):

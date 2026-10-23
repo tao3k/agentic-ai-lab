@@ -13,9 +13,9 @@ import time
 
 root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(root / 'packages/python-testing/src'))
-from poo_flow_testing.model_study.semantic_config import configuration
-from poo_flow_runtime import scheme_wire as wire
-from poo_flow_testing.model_study.semantic_provider import predict
+from agentic_ai_lab_testing.model_study.semantic_config import configuration
+from agentic_ai_lab_runtime import scheme_wire as wire
+from agentic_ai_lab_testing.model_study.semantic_provider import predict
 
 def report_progress(*parts: object, end: str = '\n') -> None:
     """Emit this CLI's bounded progress on its owned stdout channel."""
@@ -38,7 +38,7 @@ if len(cases) != 1:
 model = config.get('DEEPSEEK_MODEL', config.get('ANTHROPIC_MODEL', 'deepseek-v4-pro'))
 artifact_digest = sha(a.library)
 with a.output.open("x") as claim:
-    claim.write(wire.dumps({"schema":"poo-flow.provider-family-case.v1", "case":a.case, "passed":False, "state":"claimed", "maximumCalls":2, "retries":0}) + "\n")
+    claim.write(wire.dumps({"schema":"agentic-ai-lab.provider-family-case.v1", "case":a.case, "passed":False, "state":"claimed", "maximumCalls":2, "retries":0}) + "\n")
 
 async def run():
     records=[]
@@ -48,13 +48,13 @@ async def run():
         task=case['payload']
         request=dict(model=model,reasoning={'effort':'none'},temperature=0.0,max_output_tokens=4096,stream=True,
             input=[dict(role='user',content='Invoke the read-only tool once. Copy this exact Scheme datum into the datum string parameter:\n'+wire.dumps(task))],
-            tools=[dict(type='function',name='poo_flow_temporal_family_classify',description='Read-only finite hypothesis family classification.',
+            tools=[dict(type='function',name='agentic_ai_lab_temporal_family_classify',description='Read-only finite hypothesis family classification.',
                         parameters=dict(type='object',properties={'datum':dict(type='string')},required=['datum'],additionalProperties=False))],
-            tool_choice=dict(type='function',name='poo_flow_temporal_family_classify'))
+            tool_choice=dict(type='function',name='agentic_ai_lab_temporal_family_classify'))
         try:
             await predict(request,config['DEEPSEEK_API_KEY'],r['tool'],emit=lambda _:report_progress('.',end=''),content_event='response.function_call_arguments.delta')
             calls=r['tool'].get('toolCalls',[])
-            if len(calls)!=1 or calls[0].get('name')!='poo_flow_temporal_family_classify':raise ValueError('wrong tool call')
+            if len(calls)!=1 or calls[0].get('name')!='agentic_ai_lab_temporal_family_classify':raise ValueError('wrong tool call')
             call=calls[0]
             # Duplicate keys rejected before equality checking.
             def unique(pairs):
@@ -67,7 +67,7 @@ async def run():
             if set(arguments) != {'datum'} or not isinstance(arguments['datum'], str):raise ValueError('wrong provider envelope')
             bound_task = wire.loads(arguments['datum'])
             if wire.dumps(bound_task)!=wire.dumps(task):raise ValueError('tool changed bound task')
-            env=dict(os.environ,POO_FLOW_SEMANTIC_LIBRARY=str(a.library),POO_FLOW_SEMANTIC_SHA256=artifact_digest)
+            env=dict(os.environ,AGENTIC_AI_LAB_SEMANTIC_LIBRARY=str(a.library),AGENTIC_AI_LAB_SEMANTIC_SHA256=artifact_digest)
             start=time.monotonic()
             child=await asyncio.create_subprocess_exec(str(a.binary),stdin=asyncio.subprocess.PIPE,stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.PIPE,env=env)
             try:
@@ -95,7 +95,7 @@ async def run():
             metrics = r[phase]
             r[phase] = {k:metrics[k] for k in ('responseId','responseStatus','seconds',
                 'firstContentSeconds','contentGapsSeconds','usage','progressKind') if k in metrics}
-        r.update(schema='poo-flow.provider-family-case.v1', model=model,
+        r.update(schema='agentic-ai-lab.provider-family-case.v1', model=model,
                  nativeArtifactSha256=artifact_digest, retries=0)
         a.output.write_text(wire.dumps(r) + '\n')
         report_progress(' RESULT',r['passed'],r.get('failure',''))

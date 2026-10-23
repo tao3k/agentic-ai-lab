@@ -8,71 +8,71 @@
 ;;; owns storage, locking, leases, fsync, backfill, replay, and side effects.
 
 (import (only-in :clan/poo/object .o .ref .slot? object? object<-alist)
-        :poo-flow/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
         :yuanxu/utilities/final-projection-syntax)
 
-(export +poo-flow-durable-runtime-store-contract-kind+
-        +poo-flow-durable-runtime-store-contract-schema+
-        +poo-flow-durable-runtime-store-contract-receipt-schema+
-        +poo-flow-durable-runtime-store-diagnostic-schema+
-        +poo-flow-durable-runtime-store-ledger-kinds+
-        +poo-flow-durable-runtime-store-capability-flags+
-        make-poo-flow-durable-runtime-store-contract-receipt
-        poo-flow-durable-runtime-store-contract-receipt?
-        poo-flow-durable-runtime-store-contract-receipt-store-id
-        poo-flow-durable-runtime-store-contract-receipt-store-owner
-        poo-flow-durable-runtime-store-contract-receipt-durable-policy-ref
-        poo-flow-durable-runtime-store-contract-receipt-project-id
-        poo-flow-durable-runtime-store-contract-receipt-root-session-id
-        poo-flow-durable-runtime-store-contract-receipt-session-id
-        poo-flow-durable-runtime-store-contract-receipt-runtime-owner
-        poo-flow-durable-runtime-store-contract-receipt-schema-version
-        poo-flow-durable-runtime-store-contract-receipt-fact-log-ref
-        poo-flow-durable-runtime-store-contract-receipt-checkpoint-store-ref
-        poo-flow-durable-runtime-store-contract-receipt-derived-index-ref
-        poo-flow-durable-runtime-store-contract-receipt-job-store-ref
-        poo-flow-durable-runtime-store-contract-receipt-repair-journal-ref
-        poo-flow-durable-runtime-store-contract-receipt-artifact-store-ref
-        poo-flow-durable-runtime-store-contract-receipt-communication-ledger-ref
-        poo-flow-durable-runtime-store-contract-receipt-sandbox-ledger-ref
-        poo-flow-durable-runtime-store-contract-receipt-ledger-kinds
-        poo-flow-durable-runtime-store-contract-receipt-capability-flags
-        poo-flow-durable-runtime-store-contract-receipt-valid?
-        poo-flow-durable-runtime-store-contract-receipt-diagnostics
-        poo-flow-durable-runtime-store-contract-receipt-metadata
-        poo-flow-durable-runtime-store-contract
-        poo-flow-durable-runtime-store-contract/default
-        poo-flow-durable-runtime-store-contract?
-        poo-flow-durable-runtime-store-contract-name
-        poo-flow-durable-runtime-store-contract-diagnostics
-        poo-flow-durable-runtime-store-contract-valid?
-        poo-flow-durable-runtime-store-contract->receipt
-        poo-flow-durable-runtime-store-contract-receipt->alist
-        poo-flow-durable-runtime-store-contracts->receipts
-        poo-flow-durable-runtime-store-contract-receipts->alists)
+(export +agentic-ai-lab-durable-runtime-store-contract-kind+
+        +agentic-ai-lab-durable-runtime-store-contract-schema+
+        +agentic-ai-lab-durable-runtime-store-contract-receipt-schema+
+        +agentic-ai-lab-durable-runtime-store-diagnostic-schema+
+        +agentic-ai-lab-durable-runtime-store-ledger-kinds+
+        +agentic-ai-lab-durable-runtime-store-capability-flags+
+        make-agentic-ai-lab-durable-runtime-store-contract-receipt
+        agentic-ai-lab-durable-runtime-store-contract-receipt?
+        agentic-ai-lab-durable-runtime-store-contract-receipt-store-id
+        agentic-ai-lab-durable-runtime-store-contract-receipt-store-owner
+        agentic-ai-lab-durable-runtime-store-contract-receipt-durable-policy-ref
+        agentic-ai-lab-durable-runtime-store-contract-receipt-project-id
+        agentic-ai-lab-durable-runtime-store-contract-receipt-root-session-id
+        agentic-ai-lab-durable-runtime-store-contract-receipt-session-id
+        agentic-ai-lab-durable-runtime-store-contract-receipt-runtime-owner
+        agentic-ai-lab-durable-runtime-store-contract-receipt-schema-version
+        agentic-ai-lab-durable-runtime-store-contract-receipt-fact-log-ref
+        agentic-ai-lab-durable-runtime-store-contract-receipt-checkpoint-store-ref
+        agentic-ai-lab-durable-runtime-store-contract-receipt-derived-index-ref
+        agentic-ai-lab-durable-runtime-store-contract-receipt-job-store-ref
+        agentic-ai-lab-durable-runtime-store-contract-receipt-repair-journal-ref
+        agentic-ai-lab-durable-runtime-store-contract-receipt-artifact-store-ref
+        agentic-ai-lab-durable-runtime-store-contract-receipt-communication-ledger-ref
+        agentic-ai-lab-durable-runtime-store-contract-receipt-sandbox-ledger-ref
+        agentic-ai-lab-durable-runtime-store-contract-receipt-ledger-kinds
+        agentic-ai-lab-durable-runtime-store-contract-receipt-capability-flags
+        agentic-ai-lab-durable-runtime-store-contract-receipt-valid?
+        agentic-ai-lab-durable-runtime-store-contract-receipt-diagnostics
+        agentic-ai-lab-durable-runtime-store-contract-receipt-metadata
+        agentic-ai-lab-durable-runtime-store-contract
+        agentic-ai-lab-durable-runtime-store-contract/default
+        agentic-ai-lab-durable-runtime-store-contract?
+        agentic-ai-lab-durable-runtime-store-contract-name
+        agentic-ai-lab-durable-runtime-store-contract-diagnostics
+        agentic-ai-lab-durable-runtime-store-contract-valid?
+        agentic-ai-lab-durable-runtime-store-contract->receipt
+        agentic-ai-lab-durable-runtime-store-contract-receipt->alist
+        agentic-ai-lab-durable-runtime-store-contracts->receipts
+        agentic-ai-lab-durable-runtime-store-contract-receipts->alists)
 
-;; : PooFlowDurableRuntimeStoreContractKind
-(def +poo-flow-durable-runtime-store-contract-kind+
-  'poo-flow.durable.runtime-store-contract)
+;; : AgenticAILabDurableRuntimeStoreContractKind
+(def +agentic-ai-lab-durable-runtime-store-contract-kind+
+  'agentic-ai-lab.durable.runtime-store-contract)
 
-;; : PooFlowDurableRuntimeStoreContractSchemaId
-(def +poo-flow-durable-runtime-store-contract-schema+
-  'poo-flow.module-system.durable-runtime-store-contract.v1)
+;; : AgenticAILabDurableRuntimeStoreContractSchemaId
+(def +agentic-ai-lab-durable-runtime-store-contract-schema+
+  'agentic-ai-lab.module-system.durable-runtime-store-contract.v1)
 
-;; : PooFlowDurableRuntimeStoreContractReceiptSchemaId
-(def +poo-flow-durable-runtime-store-contract-receipt-schema+
-  'poo-flow.module-system.durable-runtime-store-contract.receipt.v1)
+;; : AgenticAILabDurableRuntimeStoreContractReceiptSchemaId
+(def +agentic-ai-lab-durable-runtime-store-contract-receipt-schema+
+  'agentic-ai-lab.module-system.durable-runtime-store-contract.receipt.v1)
 
-;; : PooFlowDurableRuntimeStoreDiagnosticSchemaId
-(def +poo-flow-durable-runtime-store-diagnostic-schema+
-  'poo-flow.module-system.durable-runtime-store-contract.diagnostic.v1)
+;; : AgenticAILabDurableRuntimeStoreDiagnosticSchemaId
+(def +agentic-ai-lab-durable-runtime-store-diagnostic-schema+
+  'agentic-ai-lab.module-system.durable-runtime-store-contract.diagnostic.v1)
 
-;; : [PooFlowDurableRuntimeStoreLedgerKind]
-(def +poo-flow-durable-runtime-store-ledger-kinds+
+;; : [AgenticAILabDurableRuntimeStoreLedgerKind]
+(def +agentic-ai-lab-durable-runtime-store-ledger-kinds+
   '(fact-log checkpoint derived-index job repair artifact communication sandbox))
 
-;; : [PooFlowDurableRuntimeStoreCapabilityFlag]
-(def +poo-flow-durable-runtime-store-capability-flags+
+;; : [AgenticAILabDurableRuntimeStoreCapabilityFlag]
+(def +agentic-ai-lab-durable-runtime-store-capability-flags+
   '(append-fact
     write-checkpoint
     rebuild-index
@@ -83,57 +83,57 @@
     attach-sandbox-handle))
 
 ;; : (forall (a) (-> PooDurableRuntimeStoreOptionRows PooDurableRuntimeStoreOptionKey a a))
-(def (poo-flow-durable-runtime-store-option options key default-value)
+(def (agentic-ai-lab-durable-runtime-store-option options key default-value)
   (let (entry (assoc key options))
     (if entry (cdr entry) default-value)))
 
 ;; : (forall (a) (-> PooDurableRuntimeStoreSourceObject PooDurableRuntimeStoreSlotKey a a))
-(def (poo-flow-durable-runtime-store-slot object key default-value)
+(def (agentic-ai-lab-durable-runtime-store-slot object key default-value)
   (if (and (object? object) (.slot? object key))
     (.ref object key)
     default-value))
 
 ;; : (forall (a) (-> PooDurableRuntimeStoreIdentityRows PooDurableRuntimeStoreIdentityKey a a))
-(def (poo-flow-durable-runtime-store-identity-ref identity key default-value)
+(def (agentic-ai-lab-durable-runtime-store-identity-ref identity key default-value)
   (let (entry (assoc key identity))
     (if entry (cdr entry) default-value)))
 
 ;; : (-> PooDurableRuntimeStorePredicate PooDurableRuntimeStoreValueList Bool)
-(def (poo-flow-durable-runtime-store-every? predicate values)
+(def (agentic-ai-lab-durable-runtime-store-every? predicate values)
   (cond
    ((null? values) #t)
    ((predicate (car values))
-    (poo-flow-durable-runtime-store-every? predicate (cdr values)))
+    (agentic-ai-lab-durable-runtime-store-every? predicate (cdr values)))
    (else #f)))
 
 ;; : (forall (a) (-> a (List a) Bool))
-(def (poo-flow-durable-runtime-store-member? value values)
+(def (agentic-ai-lab-durable-runtime-store-member? value values)
   (if (member value values) #t #f))
 
 ;; : (-> Datum Bool)
-(def (poo-flow-durable-runtime-store-symbol-list? values)
+(def (agentic-ai-lab-durable-runtime-store-symbol-list? values)
   (and (list? values)
-       (poo-flow-durable-runtime-store-every? symbol? values)))
+       (agentic-ai-lab-durable-runtime-store-every? symbol? values)))
 
 ;; : (-> PooDurableRuntimeStoreDiagnosticCode PooDurableRuntimeStoreDiagnosticSlot PooDurableRuntimeStoreDiagnosticSeverity PooDurableRuntimeStoreDiagnosticPayload PooDurableRuntimeStoreDiagnosticRow)
-(def (poo-flow-durable-runtime-store-diagnostic code slot severity payload)
+(def (agentic-ai-lab-durable-runtime-store-diagnostic code slot severity payload)
   (list
-   (cons 'kind +poo-flow-durable-runtime-store-diagnostic-schema+)
-   (cons 'schema +poo-flow-durable-runtime-store-diagnostic-schema+)
+   (cons 'kind +agentic-ai-lab-durable-runtime-store-diagnostic-schema+)
+   (cons 'schema +agentic-ai-lab-durable-runtime-store-diagnostic-schema+)
    (cons 'code code)
    (cons 'phase 'durable-runtime-store-contract)
    (cons 'slot slot)
    (cons 'severity severity)
    (cons 'payload payload)
    (cons 'recoverable?
-         (poo-flow-durable-runtime-store-option
+         (agentic-ai-lab-durable-runtime-store-option
           payload
           'recoverable?
           #t))))
 
 ;; : (-> PooDurableRuntimeStoreDiagnosticCode PooDurableRuntimeStoreDiagnosticSlot PooDurableRuntimeStoreDiagnosticValue PooDurableRuntimeStoreDiagnosticRow)
-(def (poo-flow-durable-runtime-store-value-diagnostic code slot value)
-  (poo-flow-durable-runtime-store-diagnostic
+(def (agentic-ai-lab-durable-runtime-store-value-diagnostic code slot value)
+  (agentic-ai-lab-durable-runtime-store-diagnostic
    code
    slot
    'error
@@ -144,63 +144,63 @@
 ;;; defaults before backend negotiation while keeping validation and receipt
 ;;; projection as separate cheap stages.
 ;; : (-> PooDurableRuntimeStoreId PooDurableRuntimeOwner PooDurablePolicy [PooDurableRuntimeStoreOptionRow] PooDurableRuntimeStoreContract)
-(def (poo-flow-durable-runtime-store-contract store-id
+(def (agentic-ai-lab-durable-runtime-store-contract store-id
                                               store-owner
                                               durable-policy
                                               . maybe-options)
   (let* ((options (if (null? maybe-options) '() (car maybe-options)))
          (schema-version
-          (poo-flow-durable-runtime-store-option options 'schema-version 1))
+          (agentic-ai-lab-durable-runtime-store-option options 'schema-version 1))
          (fact-log-ref
-          (poo-flow-durable-runtime-store-option options
+          (agentic-ai-lab-durable-runtime-store-option options
                                                 'fact-log-ref
                                                 'runtime/fact-log))
          (checkpoint-store-ref
-          (poo-flow-durable-runtime-store-option options
+          (agentic-ai-lab-durable-runtime-store-option options
                                                 'checkpoint-store-ref
                                                 'runtime/checkpoint-store))
          (derived-index-ref
-          (poo-flow-durable-runtime-store-option options
+          (agentic-ai-lab-durable-runtime-store-option options
                                                 'derived-index-ref
                                                 'runtime/derived-index))
          (job-store-ref
-          (poo-flow-durable-runtime-store-option options
+          (agentic-ai-lab-durable-runtime-store-option options
                                                 'job-store-ref
                                                 'runtime/job-store))
          (repair-journal-ref
-          (poo-flow-durable-runtime-store-option options
+          (agentic-ai-lab-durable-runtime-store-option options
                                                 'repair-journal-ref
                                                 'runtime/repair-journal))
          (artifact-store-ref
-          (poo-flow-durable-runtime-store-option options
+          (agentic-ai-lab-durable-runtime-store-option options
                                                 'artifact-store-ref
                                                 'runtime/artifact-store))
          (communication-ledger-ref
-          (poo-flow-durable-runtime-store-option options
+          (agentic-ai-lab-durable-runtime-store-option options
                                                 'communication-ledger-ref
                                                 'runtime/communication-ledger))
          (sandbox-ledger-ref
-          (poo-flow-durable-runtime-store-option options
+          (agentic-ai-lab-durable-runtime-store-option options
                                                 'sandbox-ledger-ref
                                                 'runtime/sandbox-ledger))
          (ledger-kinds
-          (poo-flow-durable-runtime-store-option
+          (agentic-ai-lab-durable-runtime-store-option
            options
            'ledger-kinds
-           +poo-flow-durable-runtime-store-ledger-kinds+))
+           +agentic-ai-lab-durable-runtime-store-ledger-kinds+))
          (capability-flags
-          (poo-flow-durable-runtime-store-option
+          (agentic-ai-lab-durable-runtime-store-option
            options
            'capability-flags
-           +poo-flow-durable-runtime-store-capability-flags+))
+           +agentic-ai-lab-durable-runtime-store-capability-flags+))
          (metadata
-          (poo-flow-durable-runtime-store-option options 'metadata '())))
+          (agentic-ai-lab-durable-runtime-store-option options 'metadata '())))
     (object<-alist
      (list
       (cons 'durable-runtime-store-kind
-            +poo-flow-durable-runtime-store-contract-kind+)
+            +agentic-ai-lab-durable-runtime-store-contract-kind+)
       (cons 'durable-runtime-store-schema
-            +poo-flow-durable-runtime-store-contract-schema+)
+            +agentic-ai-lab-durable-runtime-store-contract-schema+)
       (cons 'runtime-store-id store-id)
       (cons 'runtime-store-owner store-owner)
       (cons 'runtime-store-durable-policy durable-policy)
@@ -219,27 +219,27 @@
       (cons 'runtime-executed #f)))))
 
 ;; : PooDurableRuntimeStoreContract
-(def poo-flow-durable-runtime-store-contract/default
-  (poo-flow-durable-runtime-store-contract
+(def agentic-ai-lab-durable-runtime-store-contract/default
+  (agentic-ai-lab-durable-runtime-store-contract
    'runtime-store/default
    'marlin-runtime-store
-   poo-flow-durable-policy/default
+   agentic-ai-lab-durable-policy/default
    '((metadata . ((scope . shared)
                   (runtime-executed . #f))))))
 
 ;; : (-> Datum Boolean)
-(def (poo-flow-durable-runtime-store-contract? value)
+(def (agentic-ai-lab-durable-runtime-store-contract? value)
   (and (object? value)
        (.slot? value 'durable-runtime-store-kind)
        (eq? (.ref value 'durable-runtime-store-kind)
-            +poo-flow-durable-runtime-store-contract-kind+)))
+            +agentic-ai-lab-durable-runtime-store-contract-kind+)))
 
 ;; : (-> PooDurableRuntimeStoreContract PooDurableRuntimeStoreContractName)
-(def (poo-flow-durable-runtime-store-contract-name contract)
-  (poo-flow-durable-runtime-store-slot contract 'runtime-store-id #f))
+(def (agentic-ai-lab-durable-runtime-store-contract-name contract)
+  (agentic-ai-lab-durable-runtime-store-slot contract 'runtime-store-id #f))
 
 ;; : (-> PooDurableRuntimeStoreContract PooDurableRuntimeStoreRequiredSlot PooDurableRuntimeStoreRequiredValue [PooDurableRuntimeStoreDiagnosticRow])
-(def (poo-flow-durable-runtime-store-required-symbol-diagnostics contract
+(def (agentic-ai-lab-durable-runtime-store-required-symbol-diagnostics contract
                                                                   slot
                                                                   code
                                                                   value)
@@ -247,231 +247,231 @@
    ((symbol? value) '())
    (else
     (list
-     (poo-flow-durable-runtime-store-diagnostic
+     (agentic-ai-lab-durable-runtime-store-diagnostic
       code
       slot
       'error
       (list (cons 'store-id
-                  (poo-flow-durable-runtime-store-contract-name contract))
+                  (agentic-ai-lab-durable-runtime-store-contract-name contract))
             (cons 'value value)
             (cons 'expected 'symbol)
             (cons 'recoverable? #t)))))))
 
 ;; : (-> PooDurableRuntimeStoreContract [PooDurableRuntimeStoreDiagnosticRow])
-(def (poo-flow-durable-runtime-store-ledger-kind-diagnostics contract)
+(def (agentic-ai-lab-durable-runtime-store-ledger-kind-diagnostics contract)
   (let (ledger-kinds
-        (poo-flow-durable-runtime-store-slot
+        (agentic-ai-lab-durable-runtime-store-slot
          contract
          'runtime-store-ledger-kinds
          #f))
     (cond
-     ((not (poo-flow-durable-runtime-store-symbol-list? ledger-kinds))
+     ((not (agentic-ai-lab-durable-runtime-store-symbol-list? ledger-kinds))
       (list
-       (poo-flow-durable-runtime-store-value-diagnostic
+       (agentic-ai-lab-durable-runtime-store-value-diagnostic
         'invalid-ledger-kinds
         'ledger-kinds
         ledger-kinds)))
-     ((poo-flow-durable-runtime-store-every?
+     ((agentic-ai-lab-durable-runtime-store-every?
        (lambda (ledger-kind)
-         (poo-flow-durable-runtime-store-member?
+         (agentic-ai-lab-durable-runtime-store-member?
           ledger-kind
-          +poo-flow-durable-runtime-store-ledger-kinds+))
+          +agentic-ai-lab-durable-runtime-store-ledger-kinds+))
        ledger-kinds)
       '())
      (else
       (list
-       (poo-flow-durable-runtime-store-diagnostic
+       (agentic-ai-lab-durable-runtime-store-diagnostic
         'unsupported-ledger-kind
         'ledger-kinds
         'error
         (list (cons 'store-id
-                    (poo-flow-durable-runtime-store-contract-name contract))
+                    (agentic-ai-lab-durable-runtime-store-contract-name contract))
               (cons 'value ledger-kinds)
-              (cons 'allowed +poo-flow-durable-runtime-store-ledger-kinds+)
+              (cons 'allowed +agentic-ai-lab-durable-runtime-store-ledger-kinds+)
               (cons 'recoverable? #t))))))))
 
 ;; : (-> PooDurableRuntimeStoreContract [PooDurableRuntimeStoreDiagnosticRow])
-(def (poo-flow-durable-runtime-store-capability-diagnostics contract)
+(def (agentic-ai-lab-durable-runtime-store-capability-diagnostics contract)
   (let (capability-flags
-        (poo-flow-durable-runtime-store-slot
+        (agentic-ai-lab-durable-runtime-store-slot
          contract
          'runtime-store-capability-flags
          #f))
     (cond
-     ((not (poo-flow-durable-runtime-store-symbol-list? capability-flags))
+     ((not (agentic-ai-lab-durable-runtime-store-symbol-list? capability-flags))
       (list
-       (poo-flow-durable-runtime-store-value-diagnostic
+       (agentic-ai-lab-durable-runtime-store-value-diagnostic
         'invalid-capability-flags
         'capability-flags
         capability-flags)))
-     ((poo-flow-durable-runtime-store-every?
+     ((agentic-ai-lab-durable-runtime-store-every?
        (lambda (capability-flag)
-         (poo-flow-durable-runtime-store-member?
+         (agentic-ai-lab-durable-runtime-store-member?
           capability-flag
-          +poo-flow-durable-runtime-store-capability-flags+))
+          +agentic-ai-lab-durable-runtime-store-capability-flags+))
        capability-flags)
       '())
      (else
       (list
-       (poo-flow-durable-runtime-store-diagnostic
+       (agentic-ai-lab-durable-runtime-store-diagnostic
         'unsupported-capability-flag
         'capability-flags
         'error
         (list (cons 'store-id
-                    (poo-flow-durable-runtime-store-contract-name contract))
+                    (agentic-ai-lab-durable-runtime-store-contract-name contract))
               (cons 'value capability-flags)
               (cons 'allowed
-                    +poo-flow-durable-runtime-store-capability-flags+)
+                    +agentic-ai-lab-durable-runtime-store-capability-flags+)
               (cons 'recoverable? #t))))))))
 
 ;; : (-> PooDurableRuntimeStoreContract [PooDurableRuntimeStoreDiagnosticRow])
-(def (poo-flow-durable-runtime-store-required-contract-diagnostics contract)
+(def (agentic-ai-lab-durable-runtime-store-required-contract-diagnostics contract)
   (append
-   (poo-flow-durable-runtime-store-required-symbol-diagnostics
+   (agentic-ai-lab-durable-runtime-store-required-symbol-diagnostics
     contract
     'runtime-store-id
     'missing-store-id
-    (poo-flow-durable-runtime-store-slot contract 'runtime-store-id #f))
-   (poo-flow-durable-runtime-store-required-symbol-diagnostics
+    (agentic-ai-lab-durable-runtime-store-slot contract 'runtime-store-id #f))
+   (agentic-ai-lab-durable-runtime-store-required-symbol-diagnostics
     contract
     'runtime-store-owner
     'missing-store-owner
-    (poo-flow-durable-runtime-store-slot contract 'runtime-store-owner #f))
-   (poo-flow-durable-runtime-store-required-symbol-diagnostics
+    (agentic-ai-lab-durable-runtime-store-slot contract 'runtime-store-owner #f))
+   (agentic-ai-lab-durable-runtime-store-required-symbol-diagnostics
     contract
     'fact-log-ref
     'missing-fact-log-ref
-    (poo-flow-durable-runtime-store-slot
+    (agentic-ai-lab-durable-runtime-store-slot
      contract
      'runtime-store-fact-log-ref
      #f))
-   (poo-flow-durable-runtime-store-required-symbol-diagnostics
+   (agentic-ai-lab-durable-runtime-store-required-symbol-diagnostics
     contract
     'checkpoint-store-ref
     'missing-checkpoint-store-ref
-    (poo-flow-durable-runtime-store-slot
+    (agentic-ai-lab-durable-runtime-store-slot
      contract
      'runtime-store-checkpoint-store-ref
      #f))
-   (poo-flow-durable-runtime-store-required-symbol-diagnostics
+   (agentic-ai-lab-durable-runtime-store-required-symbol-diagnostics
     contract
     'derived-index-ref
     'missing-derived-index-ref
-    (poo-flow-durable-runtime-store-slot
+    (agentic-ai-lab-durable-runtime-store-slot
      contract
      'runtime-store-derived-index-ref
      #f))
-   (poo-flow-durable-runtime-store-required-symbol-diagnostics
+   (agentic-ai-lab-durable-runtime-store-required-symbol-diagnostics
     contract
     'job-store-ref
     'missing-job-store-ref
-    (poo-flow-durable-runtime-store-slot
+    (agentic-ai-lab-durable-runtime-store-slot
      contract
      'runtime-store-job-store-ref
      #f))
-   (poo-flow-durable-runtime-store-required-symbol-diagnostics
+   (agentic-ai-lab-durable-runtime-store-required-symbol-diagnostics
     contract
     'repair-journal-ref
     'missing-repair-journal-ref
-    (poo-flow-durable-runtime-store-slot
+    (agentic-ai-lab-durable-runtime-store-slot
      contract
      'runtime-store-repair-journal-ref
      #f))
-   (poo-flow-durable-runtime-store-required-symbol-diagnostics
+   (agentic-ai-lab-durable-runtime-store-required-symbol-diagnostics
     contract
     'artifact-store-ref
     'missing-artifact-store-ref
-    (poo-flow-durable-runtime-store-slot
+    (agentic-ai-lab-durable-runtime-store-slot
      contract
      'runtime-store-artifact-store-ref
      #f))
-   (poo-flow-durable-runtime-store-required-symbol-diagnostics
+   (agentic-ai-lab-durable-runtime-store-required-symbol-diagnostics
     contract
     'communication-ledger-ref
     'missing-communication-ledger-ref
-    (poo-flow-durable-runtime-store-slot
+    (agentic-ai-lab-durable-runtime-store-slot
      contract
      'runtime-store-communication-ledger-ref
      #f))
-   (poo-flow-durable-runtime-store-required-symbol-diagnostics
+   (agentic-ai-lab-durable-runtime-store-required-symbol-diagnostics
     contract
     'sandbox-ledger-ref
     'missing-sandbox-ledger-ref
-    (poo-flow-durable-runtime-store-slot
+    (agentic-ai-lab-durable-runtime-store-slot
      contract
      'runtime-store-sandbox-ledger-ref
      #f))))
 
 ;; : (-> PooDurableRuntimeStoreContract [PooDurableRuntimeStoreDiagnosticRow])
-(def (poo-flow-durable-runtime-store-schema-version-diagnostics contract)
+(def (agentic-ai-lab-durable-runtime-store-schema-version-diagnostics contract)
   (let (schema-version
-        (poo-flow-durable-runtime-store-slot
+        (agentic-ai-lab-durable-runtime-store-slot
          contract
          'runtime-store-schema-version
          #f))
     (if (integer? schema-version)
       '()
       (list
-       (poo-flow-durable-runtime-store-value-diagnostic
+       (agentic-ai-lab-durable-runtime-store-value-diagnostic
         'invalid-schema-version
         'schema-version
         schema-version)))))
 
 ;; : (-> PooDurableRuntimeStoreContract PooDurablePolicyValue [PooDurableRuntimeStoreDiagnosticRow])
-(def (poo-flow-durable-runtime-store-policy-diagnostics contract durable-policy)
+(def (agentic-ai-lab-durable-runtime-store-policy-diagnostics contract durable-policy)
   (append
-   (if (poo-flow-durable-policy? durable-policy)
+   (if (agentic-ai-lab-durable-policy? durable-policy)
      '()
      (list
-      (poo-flow-durable-runtime-store-value-diagnostic
+      (agentic-ai-lab-durable-runtime-store-value-diagnostic
        'invalid-durable-policy
        'durable-policy
        durable-policy)))
-   (if (and (poo-flow-durable-policy? durable-policy)
-            (poo-flow-durable-policy-valid? durable-policy))
+   (if (and (agentic-ai-lab-durable-policy? durable-policy)
+            (agentic-ai-lab-durable-policy-valid? durable-policy))
      '()
      (list
-      (poo-flow-durable-runtime-store-diagnostic
+      (agentic-ai-lab-durable-runtime-store-diagnostic
        'invalid-durable-policy-receipt
        'durable-policy
        'error
        (list (cons 'store-id
-                   (poo-flow-durable-runtime-store-contract-name
+                   (agentic-ai-lab-durable-runtime-store-contract-name
                     contract))
              (cons 'recoverable? #t)))))))
 
 ;; : (-> PooDurableRuntimeStoreContract [PooDurableRuntimeStoreDiagnosticRow])
-(def (poo-flow-durable-runtime-store-contract-diagnostics contract)
-  (if (poo-flow-durable-runtime-store-contract? contract)
+(def (agentic-ai-lab-durable-runtime-store-contract-diagnostics contract)
+  (if (agentic-ai-lab-durable-runtime-store-contract? contract)
     (let ((durable-policy
-           (poo-flow-durable-runtime-store-slot
+           (agentic-ai-lab-durable-runtime-store-slot
             contract
             'runtime-store-durable-policy
             #f)))
       (append
-       (poo-flow-durable-runtime-store-required-contract-diagnostics contract)
-       (poo-flow-durable-runtime-store-schema-version-diagnostics contract)
-       (poo-flow-durable-runtime-store-policy-diagnostics contract
+       (agentic-ai-lab-durable-runtime-store-required-contract-diagnostics contract)
+       (agentic-ai-lab-durable-runtime-store-schema-version-diagnostics contract)
+       (agentic-ai-lab-durable-runtime-store-policy-diagnostics contract
                                                           durable-policy)
-       (poo-flow-durable-runtime-store-ledger-kind-diagnostics contract)
-       (poo-flow-durable-runtime-store-capability-diagnostics contract)))
+       (agentic-ai-lab-durable-runtime-store-ledger-kind-diagnostics contract)
+       (agentic-ai-lab-durable-runtime-store-capability-diagnostics contract)))
     (list
-     (poo-flow-durable-runtime-store-value-diagnostic
+     (agentic-ai-lab-durable-runtime-store-value-diagnostic
       'invalid-runtime-store-contract
       'runtime-store-contract
       contract))))
 
 ;; : (-> PooDurableRuntimeStoreContract Bool)
-(def (poo-flow-durable-runtime-store-contract-valid? contract)
-  (null? (poo-flow-durable-runtime-store-contract-diagnostics contract)))
+(def (agentic-ai-lab-durable-runtime-store-contract-valid? contract)
+  (null? (agentic-ai-lab-durable-runtime-store-contract-diagnostics contract)))
 
-;; poo-flow-durable-runtime-store-contract-receipt
+;; agentic-ai-lab-durable-runtime-store-contract-receipt
 ;;   : PooDurableRuntimeStoreContractReceiptStruct
 ;;   | doc m%
 ;;       Runtime store contract receipts stay fixed structs; projection helpers
 ;;       own the ABI alist shape.
 ;;     %
-(defstruct poo-flow-durable-runtime-store-contract-receipt
+(defstruct agentic-ai-lab-durable-runtime-store-contract-receipt
   (store-id
    store-owner
    durable-policy-ref
@@ -496,172 +496,172 @@
   transparent: #t)
 
 ;; : (forall (a) (-> a PooDurableRuntimeStoreIdentityRows (U #f PooDurablePolicyReceipt)))
-(def (poo-flow-durable-runtime-store-policy->receipt durable-policy identity)
-  (and (poo-flow-durable-policy? durable-policy)
-       (poo-flow-durable-policy->receipt durable-policy identity)))
+(def (agentic-ai-lab-durable-runtime-store-policy->receipt durable-policy identity)
+  (and (agentic-ai-lab-durable-policy? durable-policy)
+       (agentic-ai-lab-durable-policy->receipt durable-policy identity)))
 
 ;; : (-> (U #f PooDurablePolicyReceipt) (U #f PooDurablePolicyId))
-(def (poo-flow-durable-runtime-store-policy-receipt-policy-id receipt)
+(def (agentic-ai-lab-durable-runtime-store-policy-receipt-policy-id receipt)
   (and receipt
-       (poo-flow-durable-policy-receipt-policy-id receipt)))
+       (agentic-ai-lab-durable-policy-receipt-policy-id receipt)))
 
 ;; : (-> (U #f PooDurablePolicyReceipt) (U #f PooDurableRuntimeOwner))
-(def (poo-flow-durable-runtime-store-policy-receipt-runtime-owner receipt)
+(def (agentic-ai-lab-durable-runtime-store-policy-receipt-runtime-owner receipt)
   (and receipt
-       (poo-flow-durable-policy-receipt-runtime-owner receipt)))
+       (agentic-ai-lab-durable-policy-receipt-runtime-owner receipt)))
 
 ;; : (-> PooDurableRuntimeStoreContract [PooDurableRuntimeStoreIdentityRow] PooDurableRuntimeStoreContractReceipt)
-(def (poo-flow-durable-runtime-store-contract->receipt contract
+(def (agentic-ai-lab-durable-runtime-store-contract->receipt contract
                                                         . maybe-identity)
   (let* ((identity (if (null? maybe-identity) '() (car maybe-identity)))
          (durable-policy
-          (poo-flow-durable-runtime-store-slot
+          (agentic-ai-lab-durable-runtime-store-slot
            contract
            'runtime-store-durable-policy
            #f))
          (durable-policy-receipt
-          (poo-flow-durable-runtime-store-policy->receipt durable-policy
+          (agentic-ai-lab-durable-runtime-store-policy->receipt durable-policy
                                                           identity))
          (diagnostics
-          (poo-flow-durable-runtime-store-contract-diagnostics contract))
+          (agentic-ai-lab-durable-runtime-store-contract-diagnostics contract))
          (valid? (null? diagnostics)))
-    (make-poo-flow-durable-runtime-store-contract-receipt
-     (poo-flow-durable-runtime-store-slot contract 'runtime-store-id #f)
-     (poo-flow-durable-runtime-store-slot contract 'runtime-store-owner #f)
-     (poo-flow-durable-runtime-store-policy-receipt-policy-id
+    (make-agentic-ai-lab-durable-runtime-store-contract-receipt
+     (agentic-ai-lab-durable-runtime-store-slot contract 'runtime-store-id #f)
+     (agentic-ai-lab-durable-runtime-store-slot contract 'runtime-store-owner #f)
+     (agentic-ai-lab-durable-runtime-store-policy-receipt-policy-id
       durable-policy-receipt)
-     (poo-flow-durable-runtime-store-identity-ref identity 'project-id #f)
-     (poo-flow-durable-runtime-store-identity-ref identity
+     (agentic-ai-lab-durable-runtime-store-identity-ref identity 'project-id #f)
+     (agentic-ai-lab-durable-runtime-store-identity-ref identity
                                                  'root-session-id
                                                  #f)
-     (poo-flow-durable-runtime-store-identity-ref identity 'session-id #f)
-     (poo-flow-durable-runtime-store-policy-receipt-runtime-owner
+     (agentic-ai-lab-durable-runtime-store-identity-ref identity 'session-id #f)
+     (agentic-ai-lab-durable-runtime-store-policy-receipt-runtime-owner
       durable-policy-receipt)
-     (poo-flow-durable-runtime-store-slot
+     (agentic-ai-lab-durable-runtime-store-slot
       contract
       'runtime-store-schema-version
       #f)
-     (poo-flow-durable-runtime-store-slot
+     (agentic-ai-lab-durable-runtime-store-slot
       contract
       'runtime-store-fact-log-ref
       #f)
-     (poo-flow-durable-runtime-store-slot
+     (agentic-ai-lab-durable-runtime-store-slot
       contract
       'runtime-store-checkpoint-store-ref
       #f)
-     (poo-flow-durable-runtime-store-slot
+     (agentic-ai-lab-durable-runtime-store-slot
       contract
       'runtime-store-derived-index-ref
       #f)
-     (poo-flow-durable-runtime-store-slot
+     (agentic-ai-lab-durable-runtime-store-slot
       contract
       'runtime-store-job-store-ref
       #f)
-     (poo-flow-durable-runtime-store-slot
+     (agentic-ai-lab-durable-runtime-store-slot
       contract
       'runtime-store-repair-journal-ref
       #f)
-     (poo-flow-durable-runtime-store-slot
+     (agentic-ai-lab-durable-runtime-store-slot
       contract
       'runtime-store-artifact-store-ref
       #f)
-     (poo-flow-durable-runtime-store-slot contract
+     (agentic-ai-lab-durable-runtime-store-slot contract
                                          'runtime-store-communication-ledger-ref
                                          #f)
-     (poo-flow-durable-runtime-store-slot
+     (agentic-ai-lab-durable-runtime-store-slot
       contract
       'runtime-store-sandbox-ledger-ref
       #f)
-     (poo-flow-durable-runtime-store-slot
+     (agentic-ai-lab-durable-runtime-store-slot
       contract
       'runtime-store-ledger-kinds
       '())
-     (poo-flow-durable-runtime-store-slot
+     (agentic-ai-lab-durable-runtime-store-slot
       contract
       'runtime-store-capability-flags
       '())
      valid?
      diagnostics
-     (poo-flow-durable-runtime-store-slot
+     (agentic-ai-lab-durable-runtime-store-slot
       contract
       'runtime-store-metadata
       '()))))
 
 ;; : (-> PooDurableRuntimeStoreContractReceipt PooDurableRuntimeStoreContractReceiptRow)
 (defpoo-final-projection
-  poo-flow-durable-runtime-store-contract-receipt->alist (receipt)
+  agentic-ai-lab-durable-runtime-store-contract-receipt->alist (receipt)
   (bindings ((diagnostics
-              (poo-flow-durable-runtime-store-contract-receipt-diagnostics
+              (agentic-ai-lab-durable-runtime-store-contract-receipt-diagnostics
                receipt))))
-  (fields ((kind 'poo-flow.durable.runtime-store-contract-receipt)
-           (schema +poo-flow-durable-runtime-store-contract-receipt-schema+)
+  (fields ((kind 'agentic-ai-lab.durable.runtime-store-contract-receipt)
+           (schema +agentic-ai-lab-durable-runtime-store-contract-receipt-schema+)
            (store-id
-            (poo-flow-durable-runtime-store-contract-receipt-store-id receipt))
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-store-id receipt))
            (store-owner
-            (poo-flow-durable-runtime-store-contract-receipt-store-owner
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-store-owner
              receipt))
            (durable-policy-ref
-            (poo-flow-durable-runtime-store-contract-receipt-durable-policy-ref
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-durable-policy-ref
              receipt))
            (project-id
-            (poo-flow-durable-runtime-store-contract-receipt-project-id receipt))
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-project-id receipt))
            (root-session-id
-            (poo-flow-durable-runtime-store-contract-receipt-root-session-id
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-root-session-id
              receipt))
            (session-id
-            (poo-flow-durable-runtime-store-contract-receipt-session-id
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-session-id
              receipt))
            (runtime-owner
-            (poo-flow-durable-runtime-store-contract-receipt-runtime-owner
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-runtime-owner
              receipt))
            (schema-version
-            (poo-flow-durable-runtime-store-contract-receipt-schema-version
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-schema-version
              receipt))
            (fact-log-ref
-            (poo-flow-durable-runtime-store-contract-receipt-fact-log-ref
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-fact-log-ref
              receipt))
            (checkpoint-store-ref
-            (poo-flow-durable-runtime-store-contract-receipt-checkpoint-store-ref
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-checkpoint-store-ref
              receipt))
            (derived-index-ref
-            (poo-flow-durable-runtime-store-contract-receipt-derived-index-ref
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-derived-index-ref
              receipt))
            (job-store-ref
-            (poo-flow-durable-runtime-store-contract-receipt-job-store-ref
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-job-store-ref
              receipt))
            (repair-journal-ref
-            (poo-flow-durable-runtime-store-contract-receipt-repair-journal-ref
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-repair-journal-ref
              receipt))
            (artifact-store-ref
-            (poo-flow-durable-runtime-store-contract-receipt-artifact-store-ref
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-artifact-store-ref
              receipt))
            (communication-ledger-ref
-            (poo-flow-durable-runtime-store-contract-receipt-communication-ledger-ref
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-communication-ledger-ref
              receipt))
            (sandbox-ledger-ref
-            (poo-flow-durable-runtime-store-contract-receipt-sandbox-ledger-ref
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-sandbox-ledger-ref
              receipt))
            (ledger-kinds
-            (poo-flow-durable-runtime-store-contract-receipt-ledger-kinds
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-ledger-kinds
              receipt))
            (capability-flags
-            (poo-flow-durable-runtime-store-contract-receipt-capability-flags
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-capability-flags
              receipt))
            (valid?
-            (poo-flow-durable-runtime-store-contract-receipt-valid? receipt))
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-valid? receipt))
            (diagnostics diagnostics)
            (diagnostic-count (length diagnostics))
            (metadata
-            (poo-flow-durable-runtime-store-contract-receipt-metadata receipt))
+            (agentic-ai-lab-durable-runtime-store-contract-receipt-metadata receipt))
            (runtime-executed #f))))
 
 ;; : (-> [PooDurableRuntimeStoreContract] [PooDurableRuntimeStoreContractReceipt])
-(def (poo-flow-durable-runtime-store-contracts->receipts contracts)
+(def (agentic-ai-lab-durable-runtime-store-contracts->receipts contracts)
   (cond
    ((null? contracts) '())
    ((pair? contracts)
-    (cons (poo-flow-durable-runtime-store-contract->receipt (car contracts))
-          (poo-flow-durable-runtime-store-contracts->receipts
+    (cons (agentic-ai-lab-durable-runtime-store-contract->receipt (car contracts))
+          (agentic-ai-lab-durable-runtime-store-contracts->receipts
            (cdr contracts))))
    (else
     (error "durable runtime store contract batch projection requires a list"
@@ -669,7 +669,7 @@
 
 ;; : (-> [PooDurableRuntimeStoreContractReceipt] [PooDurableRuntimeStoreContractReceiptRow])
 (defpoo-final-projection-batch
-  poo-flow-durable-runtime-store-contract-receipts->alists (receipts)
-  (projector poo-flow-durable-runtime-store-contract-receipt->alist)
+  agentic-ai-lab-durable-runtime-store-contract-receipts->alists (receipts)
+  (projector agentic-ai-lab-durable-runtime-store-contract-receipt->alist)
   (error-message
    "durable runtime store contract receipt serialization requires a list"))

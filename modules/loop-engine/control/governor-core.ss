@@ -20,7 +20,7 @@
                  yuanxu-contract-value-type
                  yuanxu-native-contract
                  yuanxu-native-contract->alist)
-        :poo-flow/modules/loop-engine/control/governor-core-slot-rows)
+        :agentic-ai-lab/modules/loop-engine/control/governor-core-slot-rows)
 
 (export +loop-governor-schema+
         +loop-governor-node-schema+
@@ -93,12 +93,12 @@
 ;;; handle. Keeping it domain-named prevents schema constants from collapsing
 ;;; into generic symbols in policy reports.
 ;; : (-> Unit LoopGovernorSchema)
-(def +loop-governor-schema+ 'poo-flow.loop-governor.v1)
+(def +loop-governor-schema+ 'agentic-ai-lab.loop-governor.v1)
 
 ;;; Node schema names one participant in the governor chain.
 ;;; Agent and human nodes share the same projection surface.
 ;; : (-> Unit LoopGovernorNodeSchema)
-(def +loop-governor-node-schema+ 'poo-flow.loop-governor.node.v1)
+(def +loop-governor-node-schema+ 'agentic-ai-lab.loop-governor.node.v1)
 
 ;;; The state-key default names the runtime field that Marlin should persist
 ;;; before an action loop mutates a branch, ticket, file set, or connector item.
@@ -146,7 +146,7 @@
 (def +loop-governor-default-handoff+
   '((target . marlin-agent-core)
     (transport . scheme-abi)
-    (contract . poo-flow.loop-governor.v1)))
+    (contract . agentic-ai-lab.loop-governor.v1)))
 
 ;;; Boundary: root governor role owns multi-loop policy composition only.
 ;;; The runtime observes this role as data before it schedules anything.
@@ -395,7 +395,7 @@
 ;; : (-> Alist Symbol AlistValue AlistValue)
 
 ;; loop-governor-alist?
-;;   : (-> PooFlowValue Boolean)
+;;   : (-> AgenticAILabValue Boolean)
 ;;   | doc m%
 ;;       Recognize the alist contract shape used by governor policy slots.
 ;;       # Examples
@@ -405,7 +405,7 @@
 ;;     %
 
 ;; loop-governor-list-of?
-;;   : (-> (-> PooFlowValue Boolean) PooFlowValue Boolean)
+;;   : (-> (-> AgenticAILabValue Boolean) AgenticAILabValue Boolean)
 ;;   | doc m%
 ;;       Recognize proper governor lists whose elements satisfy a predicate.
 ;;       # Examples
@@ -414,13 +414,13 @@
 ;;       #t when every element satisfies the supplied predicate.
 ;;     %
 
-;; : (-> PooFlowValue Boolean)
+;; : (-> AgenticAILabValue Boolean)
 
-;; : (-> PooFlowValue Boolean)
+;; : (-> AgenticAILabValue Boolean)
 
-;; : (-> PooFlowValue Boolean)
+;; : (-> AgenticAILabValue Boolean)
 
-;; : (-> PooFlowValue Boolean)
+;; : (-> AgenticAILabValue Boolean)
 
 ;; loop-governor-node-type-contract->alist
 ;;   : (-> Unit Alist)
@@ -443,7 +443,7 @@
 ;;     %
 
 ;; loop-governor-check-slot!
-;;   : (-> YuanxuSlotContract PooFlowValue PooFlowValue)
+;;   : (-> YuanxuSlotContract AgenticAILabValue AgenticAILabValue)
 ;;   | doc m%
 ;;       Execute one governor slot contract through the utilities layer.
 ;;       # Examples

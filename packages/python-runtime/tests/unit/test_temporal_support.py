@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 from copy import deepcopy
 import pytest
-from poo_flow_runtime.semantic_runtime import SemanticRuntimeError
+from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
 
 def request():
     def rev(identity, subject, op, predecessor, admitted):
         return dict(identity=identity, subject=subject, operation=op, predecessor=predecessor,
                     admitted=admitted, validRange=False if op == 'retract' else [0, 10],
                     content=False if op == 'retract' else identity)
-    return dict(schema='poo-flow.temporal-support-request.v1',
+    return dict(schema='agentic-ai-lab.temporal-support-request.v1',
         program=dict(identity='supports', policy='read-only', complete=True, supports=[
             dict(identity=s, conclusion='claim', proof='declared-proof-'+s,
                  premises=[dict(subject=s, revision=s+'1')], parents=[]) for s in ['a','b']]),
@@ -44,7 +44,7 @@ def test_native_support_uncertainty(runtime,mode):
 @pytest.mark.parametrize('mode',['schema','extra','cycle','foreign','budget','reorder'])
 def test_native_support_rejects_unqualified_input(runtime,mode):
     p=request()
-    if mode=='schema':p['schema']='poo-flow.temporal-support-request.v2'
+    if mode=='schema':p['schema']='agentic-ai-lab.temporal-support-request.v2'
     if mode=='extra':p['publish']=True
     if mode=='cycle':p['program']['supports'][0]['parents']=['claim']
     if mode=='foreign':p['program']['supports'][0]['premises'][0]['subject']='foreign'
@@ -55,8 +55,8 @@ def test_native_support_rejects_unqualified_input(runtime,mode):
 def test_original_mrr_scheme_oracle(runtime):
     import os
     from pathlib import Path
-    from poo_flow_runtime.scheme_wire import loads
-    oracle = os.environ.get('POO_FLOW_MRR_SUPPORT_ORACLE')
+    from agentic_ai_lab_runtime.scheme_wire import loads
+    oracle = os.environ.get('AGENTIC_AI_LAB_MRR_SUPPORT_ORACLE')
     if not oracle:
         pytest.skip('original MRR oracle must be configured')
     receipt = loads(Path(oracle).read_text())
@@ -66,8 +66,8 @@ def test_original_mrr_scheme_oracle(runtime):
 def test_original_mrr_named_claim_revision_oracles(runtime):
     import os
     from pathlib import Path
-    from poo_flow_runtime.scheme_wire import loads
-    path = os.environ.get('POO_FLOW_MRR_CLAIM_ORACLE')
+    from agentic_ai_lab_runtime.scheme_wire import loads
+    path = os.environ.get('AGENTIC_AI_LAB_MRR_CLAIM_ORACLE')
     if not path:
         pytest.skip('original MRR claim oracle must be configured')
     rows = loads(Path(path).read_text())
@@ -82,7 +82,7 @@ def test_named_empty_claim_and_reverse_frontier(runtime):
     p['program']['supports'].append(dict(identity='child', conclusion='downstream',
         proof='child-proof', premises=[], parents=['claim']))
     result = runtime.revise_temporal_support(dict(
-        schema='poo-flow.temporal-support-revision-request.v1', task=p, previousAsOf=0))
+        schema='agentic-ai-lab.temporal-support-revision-request.v1', task=p, previousAsOf=0))
     assert result['affectedConclusions'] == ['claim', 'downstream']
     assert result['changedSubjects'] == ['a', 'b']
     rows = {r['identity']: r for r in result['current']['conclusions']}

@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Orgize owns Org Element and Contract semantics. POO Flow publishes the
+;;; Orgize owns Org Element and Contract semantics. Agentic AI Lab publishes the
 ;;; parser-independent POO runtime as a dependency-backed semantic boundary.
 (import :orgize/languages/org/modules/org-elements/runtime-interface
         :orgize/languages/org/modules/org-contract/runtime-interface)

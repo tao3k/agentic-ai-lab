@@ -7,7 +7,7 @@
 
 * Provenance
 
-The seven-case [[file:model-study-module-capabilities.org][protocol]] and source were committed at POO Flow
+The seven-case [[file:model-study-module-capabilities.org][protocol]] and source were committed at Agentic AI Lab
 =21d11b91564186e033bac9bd82de75d4eb35d07f= with pinned ASCENT
 =f80c9dc7cf5e4ed42a806b0d78c847e52be09de6=. The exact preview is
 =/private/tmp/poo-scheme-module-preview-head-21d11b9/manifest.tsv=,

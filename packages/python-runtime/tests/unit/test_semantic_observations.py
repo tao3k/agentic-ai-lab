@@ -4,11 +4,11 @@
 import asyncio
 from copy import deepcopy
 import pytest
-from poo_flow_runtime.semantic_runtime import SemanticRuntimeError
+from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
 from semantic_cases import temporal_request
 
 def test_direct_prediction_receives_task_and_native_difference(runtime):
-    from poo_flow_runtime import scheme_wire as wire
+    from agentic_ai_lab_runtime import scheme_wire as wire
     task = temporal_request()
     calls = []
     def predict(supplied):

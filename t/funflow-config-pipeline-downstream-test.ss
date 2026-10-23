@@ -9,14 +9,14 @@
         (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
         :yuanxu/module-system/selection/objects
-        :poo-flow/modules/workflow/scenario/configuration/interface
-        :poo-flow/modules/workflow/scenario/configuration/init-syntax
-        :poo-flow/modules/agent-sandbox/config
-        :poo-flow/modules/workflow/interface)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/agent-sandbox/config
+        :agentic-ai-lab/modules/workflow/interface)
 
 (export funflow-config-pipeline-downstream-test)
 
-'poo-flow-import-side-effect-test-suite?
+'agentic-ai-lab-import-side-effect-test-suite?
 
 ;; : (-> List Symbol Object)
 (def (funflow-config-downstream-alist-ref alist key)
@@ -80,7 +80,7 @@
 
 ;; : (-> Unit [PooSandboxProfile])
 (def (funflow-config-downstream-sandbox-profiles)
-  (poo-flow-sandbox-profiles
+  (agentic-ai-lab-sandbox-profiles
    (ci/build
     (backend nono)
     (network allowlisted "github.com" "crates.io")
@@ -124,7 +124,7 @@
            (yuanxu-user-module-selection-flags selection)
            ':workflow-pipeline))
          (readiness
-          (poo-flow-cicd-check-map->runtime-manifest-readiness
+          (agentic-ai-lab-cicd-check-map->runtime-manifest-readiness
            pipeline
            (funflow-config-downstream-sandbox-profiles)))
          (dependency-graph
@@ -183,6 +183,6 @@
     'ok))
 
 (def funflow-config-pipeline-downstream-test
-  (test-suite "poo-flow Funflow downstream config pipeline"
+  (test-suite "agentic-ai-lab Funflow downstream config pipeline"
     (yuanxu-test-case "lowers downstream Funflow POO config to readiness facts"
       (check-equal? (run-funflow-config-pipeline-downstream-checks) 'ok))))

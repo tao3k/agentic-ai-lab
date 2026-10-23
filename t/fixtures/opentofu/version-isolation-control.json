@@ -12,7 +12,7 @@
         "version": "5.100.0"
       },
       "manifest": {
-        "format": "poo-flow/provider-schema-v1",
+        "format": "agentic-ai-lab/provider-schema-v1",
         "provider": "registry.opentofu.org/hashicorp/aws",
         "version": "5.100.0",
         "schema-sha256": "7e4fc064120609e23bc317629f1308d72891b7241993fbf68be523f03b6c633c"
@@ -30,7 +30,7 @@
         "version": "5.99.0"
       },
       "manifest": {
-        "format": "poo-flow/provider-schema-v1",
+        "format": "agentic-ai-lab/provider-schema-v1",
         "provider": "registry.opentofu.org/hashicorp/aws",
         "version": "5.99.0",
         "schema-sha256": "4be90d628d38051610695d62058f6699c6e4e39322b591494a73f1e5f6b93d9b"
