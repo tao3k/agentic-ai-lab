@@ -7,7 +7,6 @@
   core:
   (.o requires: (.o Nix: (.o module-id: 'nix contract: NixScopeContract)
                     JsonSchema: (.o module-id: 'json-schema contract: JsonSchemaScopeContract)
-                    Ops: (.o module-id: 'ops contract: OpsScopeContract)
                     Funflow: (.o module-id: 'funflow contract: FunflowScopeContract))
       scope-contract: OpenTofuScopeContract
       exports: OpenTofuScope.

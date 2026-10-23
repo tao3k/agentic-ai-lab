@@ -12,13 +12,12 @@
         (only-in :yuanxu/types YuanxuContract. yuanxu-predicate-contract yuanxu-validation-evidence-accepted?)
         (only-in :agentic-ai-lab/modules/nix/types NixSourceContract NixFlakeSourceContract NixScopeContract)
         (only-in :yuanxu/modules/json-schema/types JsonSchemaScopeContract)
-        (only-in :yuanxu/ops/types OpsScopeContract)
         (only-in :yuanxu/modules/funflow/types FunflowScopeContract)
         (only-in :yuanxu/modules/json-schema/json-schema-contract yuanxu-json-schema->contract))
 (export ProviderArtifactContract ProviderTypeIndexContract ProviderSelectionContract ConfigurationEnvelopeContract
         NullContract OpenTofuContract ServicesContract
         execution-admission CollectionAuthorityType CollectionReceiptType OpenTofuConfigContract OpenTofuScopeContract
-        NixScopeContract JsonSchemaScopeContract OpsScopeContract FunflowScopeContract)
+        NixScopeContract JsonSchemaScopeContract FunflowScopeContract)
 
 ;; Only the OpenTofu configuration envelope belongs here. Field constraints
 ;; come from each demanded Provider Contract, not a second maintained table.
