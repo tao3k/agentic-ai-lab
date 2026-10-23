@@ -101,3 +101,42 @@ parent checkout: its Temporal library and Cedar authorization refinement both
 build against the locked Agentic AI Lab/Yuanxu sources. Its Lean toolchain and
 C4 imports follow that published package; no old-namespace theorem alias is
 introduced.
+
+* Current-head CI recovery (2026-10-23)
+
+The native Cedar launchers must use Lake's generated, package-qualified
+initializer symbols. The namespace gate also rejects the encoded old package
+spelling, not just Scheme/Python/Rust spellings. The corrected AOT Runtime Host
+build completes all 199 targets; the three Rust integration binaries pass 14
+cases using the newly linked host. A sandbox-denied Unix-socket run is retained
+separately and is not interpreted as an authorization-policy failure.
+
+Quint preparation and verification share =QUINT_HOME=. A separate local Quint
+home successfully runs all four TestPublicationReuse controls, including the
+expected counterexamples; no model result is cached. Core's full regression was
+started and its idle failure retained before focused trace diagnosis. Focused
+module discovery, Harness launch and multi-owner isolation then pass through
+the maintained Just entrypoints. This does not yet establish full-suite or
+remote current-head CI closure.
+
+The approved-publication producer starts before its first approved packet
+exists. Its fixture Source therefore explicitly declares that the initial
+=null= recipe is unavailable. It does not catch or downgrade a recovery error:
+selected, available publications still traverse the existing restore and
+currentness boundary. Joint-replacement and source-change controls must pass
+before this fixture adjustment is qualified.
+
+** Cache cleanup and current-head qualification boundary
+
+The Python cache reset used =uv clean= (8,614 files, 1.9 GiB), followed by
+removal of 28 project-owned bytecode/pytest cache directories. The four changed
+Scheme-load Python unit modules then passed all 22 checks in 2.22 seconds,
+including the existing Harness. The automation suite passed 29 checks. These
+receipts do not qualify Gerbil compilation, Nix recovery or remote CI.
+
+Gerbil cleanup waits for the serial Core regression to finish. Its failures are
+retained, not repaired by editing generated files. Current-head Core CI still
+reports scale-memory, compilation-idle, generated-object and source-boundary
+failures. Ops builtin ownership and fixture/suite separation are being prepared
+without modifying the sources under that running baseline. Timeout, memory and
+admission policies remain unchanged.

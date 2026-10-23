@@ -8,8 +8,8 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[3]
-ROOTS = ['modules/workflow/scenario/composition-syntax.ss', 'modules/funflow/profile-library.ss',
-         'modules/funflow/runtime-load-projection.ss']
+ROOTS = ['modules/workflow/scenario/composition-syntax.ss', 'modules/workflow/profiles/funflow-library.ss',
+         'modules/workflow/scenario/runtime-funflow.ss']
 
 
 def main():
@@ -26,7 +26,7 @@ def main():
         if name.startswith(('clan/', 'yuanxu/', 'agentic-ai-lab/')) and ' ' not in name))
     for name in ['yuanxu/profile-composition/selection-syntax',
                  'agentic-ai-lab/modules/workflow/scenario/composition-syntax',
-                 'agentic-ai-lab/modules/funflow/profile-library']:
+                 'agentic-ai-lab/modules/workflow/profiles/funflow-library']:
         if name not in modules:
             modules.append(name)
     target = ROOT / 'packages/python-runtime/src/agentic_ai_lab_runtime/projections/runtime_load_imports.json'

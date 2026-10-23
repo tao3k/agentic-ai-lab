@@ -27,7 +27,7 @@ admission and exact negative-property/exit checks. The transferred Lean target i
 identity obligations remain with ASCENT.
 
 Installed Python regression tests live under
-=packages/python-runtime/tests/assessment=. Offline study tests live under
+=packages/python-runtime/tests/scenarios=. Offline study tests live under
 =packages/python-testing/tests/assessment=. Neither gate sends provider requests.
 The native assessment gate is:
 
@@ -53,13 +53,13 @@ Review is application policy, not a rule-engine primitive. Its native owner and
 rule source are =native/src/review/{mod,owner,policy}.rs= and
 =policies/review-rules.scm=; its Python binding is =native/src/python/review.rs=.
 =agentic_ai_lab_runtime.reasoning.EvidenceReview= and =review_sources= are the public
-Python entry. =packages/python-runtime/tests/assessment/test_review.py= checks
+Python entry. =packages/python-runtime/tests/scenarios/test_review.py= checks
 source identity, withdrawal, failed receipts and engine failure.
 
 Catalog, Review, History, investigation and lifecycle declarations used as real
 consumer scenarios now live under =native/tests/fixtures/evidence=. Five native
 scenario tests are in =native/tests/scenarios.rs=; installed rule/C-ABI consumer
-tests are in =packages/python-runtime/tests/assessment=. Generic declaration,
+tests are in =packages/python-runtime/tests/scenarios=. Generic declaration,
 query, cancellation, typed value and provenance tests remain in ASCENT.
 
 =migration-inventory.json= accounts for every one of the 294 deleted producer

@@ -25,7 +25,11 @@
         (string-append
           "(import (only-in :std/source this-source-file) (only-in :agentic-ai-lab/modules/nix/objects NixSource.) (only-in \"./config.ss\" Config))\n(export ReleaseSource)\n"
           "(.def (ReleaseSource @ NixSource.) expression: "
-          "(path-expand (.get Config expression) (path-directory (this-source-file))))\n"))
+          "(path-expand (.get Config expression) (path-directory (this-source-file)))\n"
+          ;; A publisher bootstraps before its first approved packet exists.
+          ;; The explicit unavailable state is fixture policy, not an exception
+          ;; swallowed by the production recovery or currentness boundary.
+          " .available?: (lambda () (not (equal? (call-with-input-file expression read-line) \"null\"))))\n"))
       (write-source (path-expand "types.ss" owner)
         "(import (only-in :yuanxu/types yuanxu-predicate-contract))\n(export ScopeContract)\n(def ScopeContract (yuanxu-predicate-contract 'release/scope (lambda (v) (and (object? v) (.slot? v 'Source))) (lambda (_v _c) '())))\n")
       (write-source (path-expand "interface.ss" owner)

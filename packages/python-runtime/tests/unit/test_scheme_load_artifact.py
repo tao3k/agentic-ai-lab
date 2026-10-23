@@ -16,7 +16,7 @@ from agentic_ai_lab_runtime import scheme_projection_artifact
 
 
 def _runtime_projection_fixture(root: Path) -> Path:
-    projection = root / "modules" / "funflow" / "runtime-load-projection.ss"
+    projection = root / "modules" / "workflow" / "scenario" / "runtime-funflow.ss"
     projection.parent.mkdir(parents=True)
     projection.write_text(";; projection fixture\n", encoding="utf-8")
     return projection

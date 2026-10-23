@@ -17,17 +17,17 @@ _SCHEME_LOAD_CACHE_RUNNER_VERSION = 3
 _SCHEME_LOAD_CACHE_LOCK = threading.RLock()
 _SCHEME_LOAD_CACHE: dict[tuple[Any, ...], SchemeRows] = {}
 _SCHEME_LOAD_DEPENDENCIES = (
-    Path("src/user-interface/init-syntax.ss"),
-    Path("modules/funflow/runtime-load-projection.ss"),
+    Path("modules/workflow/scenario/configuration/init-syntax.ss"),
+    Path("modules/workflow/scenario/runtime-funflow.ss"),
     Path("core/profile-composition/selection-syntax.ss"),
-    Path("src/scenario/composition-syntax.ss"),
+    Path("modules/workflow/scenario/composition-syntax.ss"),
     Path("core/profile-composition/profile-bundle.ss"),
     Path("core/profile-composition/bindings.ss"),
-    Path("src/scenario/profile-root.ss"),
-    Path("src/scenario/case.ss"),
-    Path("src/scenario/accessors.ss"),
-    Path("modules/funflow/config.ss"),
-    Path("modules/funflow/config-prototypes.ss"),
+    Path("modules/workflow/scenario/profile-root.ss"),
+    Path("modules/workflow/scenario/case.ss"),
+    Path("modules/workflow/scenario/accessors.ss"),
+    Path("core/modules/funflow/config.ss"),
+    Path("core/modules/funflow/config-prototypes.ss"),
 )
 
 
@@ -75,7 +75,7 @@ def clear_load_cache() -> None:
 
 
 def _project_root_from_projection(projection_path: Path) -> Path:
-    return projection_path.parents[2]
+    return projection_path.parents[3]
 
 
 def _file_fingerprint(path: Path) -> tuple[str, int, int]:

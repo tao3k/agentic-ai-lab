@@ -13,9 +13,9 @@ import json
 import sys
 from pathlib import Path
 
-from check_license_contract import ROOT, project_files, git_output
+from check_license_contract import ROOT, project_files, git_output, submodule_paths
 
-OBSOLETE = re.compile(r"poo[-_ ]?flow", re.IGNORECASE)
+OBSOLETE = re.compile(r"poo(?:[-_ ]|_x2d)?flow|(?<![A-Za-z0-9_/]):co[r]e/", re.IGNORECASE)
 EVIDENCE_SUFFIXES = {".log", ".receipt", ".snapshot", ".gz"}
 SOURCE_SUFFIXES = {
     ".ss", ".scm", ".pkg", ".py", ".rs", ".c", ".cc", ".h", ".pc",
@@ -30,8 +30,8 @@ def evidence(path: Path) -> bool:
     return path.suffix in EVIDENCE_SUFFIXES or "evidence" in path.parts or dated_qualification
 
 
-def issues(path: Path) -> list[str]:
-    relative = path.relative_to(ROOT)
+def issues(path: Path, owner: Path | None = None) -> list[str]:
+    relative = path.relative_to(ROOT if owner is None else owner)
     if evidence(relative):
         return []
     failures = []
@@ -43,6 +43,13 @@ def issues(path: Path) -> list[str]:
         text = path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
         return failures
+    if path.name == "runtime_load_imports.json":
+        manifest = json.loads(text)
+        if any(name.startswith("core/") for name in manifest["modules"]):
+            failures.append(f"{relative}: obsolete compiler module identity")
+        for source in manifest["roots"]:
+            if not (ROOT / source).is_file():
+                failures.append(f"{relative}: missing compiler root {source}")
     for number, line in enumerate(text.splitlines(), 1):
         # An existing PR's Git ref is immutable identity, not an import/export.
         line = line.replace("research/ascent-" + "poo" + "-flow", "existing-pr-ref")
@@ -54,6 +61,14 @@ def issues(path: Path) -> list[str]:
 def main() -> int:
     files = set(project_files())
     failures = [issue for path in sorted(files) for issue in issues(path)]
+    for name in submodule_paths():
+        owner = ROOT / name
+        if not (owner / ".git").exists():
+            continue
+        for relative in git_output("-C", str(owner), "ls-files").splitlines():
+            path = owner / relative
+            if path.is_file():
+                failures.extend(f"{name}/{issue}" for issue in issues(path, owner))
     core_revision = git_output("ls-files", "--stage", "core").split()[1]
     failures.extend(proof_pin_issues(
         core_revision,

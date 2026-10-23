@@ -14,7 +14,7 @@ extension files. Mismatches fail admission.
 The offline installed-consumer gate is:
 
 ```sh
-PYTHONPATH=packages/python-testing/src python -m unittest discover -s packages/python-runtime/tests/assessment
+PYTHONPATH=packages/python-testing/src python -m unittest discover -s packages/python-runtime/tests/scenarios
 ```
 
 The existing study code lives in `agentic_ai_lab_testing.assessment_studies`.

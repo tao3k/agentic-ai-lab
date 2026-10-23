@@ -13,7 +13,7 @@
 
 extern void lean_initialize(void);
 extern void lean_set_exit_on_panic(bool);
-extern lean_object *initialize_poo_x2dflow_x2dproof_AgenticAILabProof_Runtime_CedarRuntimeHost(uint8_t);
+extern lean_object *initialize_agentic_x2dai_x2dlab_x2dproof_AgenticAILabProof_Runtime_CedarRuntimeHost(uint8_t);
 extern lean_object *agentic_ai_lab_cedar_authorize_native(lean_object *);
 extern int agentic_ai_lab_cedar_runtime_host_main(int argc, const char *const *argv);
 
@@ -24,7 +24,7 @@ static int initialize_lean(void) {
   lean_initialize();
   lean_set_exit_on_panic(true);
   lean_object *initialized =
-      initialize_poo_x2dflow_x2dproof_AgenticAILabProof_Runtime_CedarRuntimeHost(1);
+      initialize_agentic_x2dai_x2dlab_x2dproof_AgenticAILabProof_Runtime_CedarRuntimeHost(1);
   if (lean_io_result_is_error(initialized)) {
     lean_io_result_show_error(initialized);
     lean_dec(initialized);

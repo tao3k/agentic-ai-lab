@@ -117,7 +117,7 @@ are not opened. =std/make= still owns compilation and currentness.
 The pinned upstream packages remain separate evidence:
 
 - Parser =78507e68b1275be1be748be465d6354f596d9063= declares ASP and an older
-  Core in =gerbil.pkg=; its =language-support/entry.ss= imports =:core/types=.
+  Core in =gerbil.pkg=; its =language-support/entry.ss= imports the retired Core package namespace.
 - Ascent =0f99da9e3a3baf1a272ba58fe0769ed8278ae746= declares ASP and an older
   Core, and its own =build.ss= still uses the ASP Building API.
 - The cached Ascent checkout =86ad9ae3469565bea6229b71ef1d9197c6a82d63= does

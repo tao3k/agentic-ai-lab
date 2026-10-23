@@ -16,7 +16,7 @@ from agentic_ai_lab_runtime import _scheme_load_runner as scheme_runner
 
 
 def _runtime_projection_fixture(root: Path) -> None:
-    projection = root / "modules" / "funflow" / "runtime-load-projection.ss"
+    projection = root / "modules" / "workflow" / "scenario" / "runtime-funflow.ss"
     projection.parent.mkdir(parents=True)
     projection.write_text(";; projection fixture\n", encoding="utf-8")
 
@@ -41,7 +41,7 @@ def _fake_scheme_run(calls: list[tuple[str, ...]]):
 
 
 def _cache_key(root: Path, source: Path) -> tuple[object, ...]:
-    projection = root / "modules" / "funflow" / "runtime-load-projection.ss"
+    projection = root / "modules" / "workflow" / "scenario" / "runtime-funflow.ss"
     return scheme_cache.scheme_load_cache_key(
         source.resolve(),
         root.resolve(),
@@ -85,7 +85,7 @@ def test_scheme_projection_cache_invalidates_when_source_changes(
 
 
 def test_scheme_projection_cache_tracks_direct_profile_owner(tmp_path) -> None:
-    projection = tmp_path / "modules" / "funflow" / "runtime-load-projection.ss"
+    projection = tmp_path / "modules" / "workflow" / "scenario" / "runtime-funflow.ss"
     _runtime_projection_fixture(tmp_path)
     source = _source_fixture(tmp_path)
     owner = tmp_path / "core" / "profile-composition" / "profile-bundle.ss"

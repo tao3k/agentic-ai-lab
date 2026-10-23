@@ -66,7 +66,7 @@ def aot_runner_source(module_path: Path, projection_path: Path) -> str:
         "        :agentic-ai-lab/modules/workflow/scenario/composition-syntax\n"
         "        :yuanxu/profile-composition/profile-bundle\n"
         "        :agentic-ai-lab/modules/workflow/scenario/profile-root\n"
-        "        :agentic-ai-lab/modules/funflow/profile-library)\n"
+        "        :agentic-ai-lab/modules/workflow/profiles/funflow-library)\n"
         f"(include {projection_source_path})\n"
         "(export main)\n"
         "(def (main . args)\n"
@@ -79,12 +79,12 @@ def runtime_projection_source(workdir: Path) -> Path:
     candidate = find_runtime_projection_source(workdir)
     if candidate is not None:
         return candidate
-    relative_path = Path("modules/funflow/runtime-load-projection.ss")
+    relative_path = Path("modules/workflow/scenario/runtime-funflow.ss")
     raise FileNotFoundError(f"cannot find Scheme runtime load projection: {relative_path}")
 
 
 def find_runtime_projection_source(workdir: Path) -> Path | None:
-    relative_path = Path("modules/funflow/runtime-load-projection.ss")
+    relative_path = Path("modules/workflow/scenario/runtime-funflow.ss")
     candidates = (
         workdir / relative_path,
         Path(__file__).resolve().parents[4] / relative_path,

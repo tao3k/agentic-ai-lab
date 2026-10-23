@@ -133,7 +133,6 @@ gerbil_project_compile(
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_ascent_sources//:source_resolution_receipt"],
     deps = [
-        ":asp_gerbil_scheme_package",
         ":yuanxu_package",
     ],
 )
