@@ -2,11 +2,10 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :clan/poo/object
-        (only-in "../../../init.ss" agentic-ai-lab.init.exports)
+        (rename-in (only-in :yuanxu/ops/interface Ops) (Ops OpsScope))
         (only-in :yuanxu/profile-composition/selection-syntax use-module))
 (export Ops)
-;; One admitted scope from the maintained Core selection; no operation starts here.
-(def OpsScope (.get agentic-ai-lab.init.exports Core ops scope))
+;; One admitted scope from the built-in Core library; no operation starts here.
 (def Ops
   (use-module OpsScope as ops
     (with-slots (Script) (.get ops prototypes)

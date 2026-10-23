@@ -73,7 +73,11 @@
       (def tools-literal
         (call-with-output-string (cut write-json <> (getenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS"))))
       (def (release-recipe packet-directory)
-        (string-append "let tools = builtins.fromJSON " tools-literal "; in "
+        (string-append "let raw = builtins.fromJSON " tools-literal "; "
+          ;; JSON paths have no Nix string context. Restore the qualified Store
+          ;; dependencies so sandboxed builds receive both shell and utilities.
+          "tools = raw // { shell = builtins.storePath raw.shell; "
+          "tools = builtins.storePath raw.tools; }; in "
           "builtins.derivation { name = import ./release-name.nix; "
           "preferLocalBuild = true; allowSubstitutes = false; "
           "inherit (tools) system; builder = tools.shell + \"/bin/bash\"; "

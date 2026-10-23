@@ -21,7 +21,7 @@
   (test-suite "AWS tests are owned by the selected module namespace"
     (test-case "one init projection runs the real Schema transition with observation off and on"
       (with-yuanxu-fixture (workspace Workspace)
-        (def module (.get agentic-ai-lab.init.exports Scenarios aws))
+        (def module (.get agentic-ai-lab.init.exports scenarios aws))
         (check-equal? (.ref/cached module 'scope) #f)
         (check-equal? (map path-strip-directory (.get (.call (.get agentic-ai-lab.init.exports tests) .select '(aws)) spec)) '("atomic-test.ss"))
         ;; Test-source discovery must not resolve the root configuration Graph.

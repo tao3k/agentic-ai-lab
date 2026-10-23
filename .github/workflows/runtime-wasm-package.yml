@@ -115,7 +115,8 @@ jobs:
         timeout-minutes: 2
         shell: bash
         run: |
-          test -n "$(bazelisk query 'somepath(//:compile, //:asp_gerbil_scheme_package)')"
+          test -z "$(bazelisk query 'somepath(//:compile, //dev:asp_gerbil_scheme_package)')"
+          test -n "$(bazelisk query 'somepath(//dev:asp_gerbil_scheme_package, //:gerbil_poo_package)')"
           test -n "$(bazelisk query 'somepath(//:compile, //:gerbil_poo_package)')"
           test -n "$(bazelisk query 'somepath(//:compile, //:gerbil_parser_package)')"
           test -n "$(bazelisk query 'somepath(//:gerbil_parser_package, //:yuanxu_package)')"

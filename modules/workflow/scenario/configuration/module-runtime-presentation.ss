@@ -7,7 +7,7 @@
 ;;; Invariant: projection returns inspectable Scheme values, not runtime handles.
 
 (import (only-in :clan/poo/object .@ .o .ref)
-        :yuanxu/modules/funflow/control-plane/agent-harness-vocabulary
+        (only-in :yuanxu/modules/funflow/objects FunflowModule.)
         :agentic-ai-lab/modules/module-authoring/module-interface
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         :yuanxu/module-system/funs
@@ -128,8 +128,8 @@
         workflow-run
         dispatch-receipt
         runtime-snapshot)
-      operation-kinds: +yuanxu-agent-operation-kinds+
-      snapshot-statuses: +yuanxu-runtime-snapshot-statuses+
+      operation-kinds: (.get FunflowModule. runtime-vocabulary operation-kinds)
+      snapshot-statuses: (.get FunflowModule. runtime-vocabulary snapshot-statuses)
       handoff-contracts:
       '(start-workflow-run
         admit-dispatch

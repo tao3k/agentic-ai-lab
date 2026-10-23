@@ -202,7 +202,6 @@
                 (write `(yuanxu! mode: explicit
                           (json-schema @ ,(path-expand "modules/json-schema" (current-directory)))
                           (nix @ ,(path-expand "modules/nix" (current-directory)))
-                          (ops @ ,(path-expand "ops" (current-directory)))
                           (funflow @ ,(path-expand "modules/funflow" (current-directory)))
                           :services (opentofu @ ,upstream)
                           :app (infrastructure) :unused (bomb disable: #t)) port))))

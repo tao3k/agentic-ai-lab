@@ -70,7 +70,6 @@
                     (write `(yuanxu! mode: explicit
                               (json-schema @ ,(path-expand "../core/modules/json-schema" maintained))
                               (nix @ ,(path-expand "nix" maintained))
-                              (ops @ ,(path-expand "../core/ops" maintained))
                               (funflow @ ,(path-expand "../core/modules/funflow" maintained))
                               ,@(if consumer? '(:app (infrastructure)) '())
                               :services (opentofu @ ,(path-expand "services/opentofu" maintained))) port)))))

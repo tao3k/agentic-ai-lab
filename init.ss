@@ -8,5 +8,8 @@
   :load-modules "./core/modules" mode: explicit rename: Core
   (json-schema)
   (funflow)
-  (ops @ "./core/ops")
-  :load-modules "./modules" mode: auto)
+  :load-modules "./modules" mode: auto
+  :load-modules "./scenarios" mode: explicit rename: scenarios
+  (null)
+  (aws-validation)
+  (aws))

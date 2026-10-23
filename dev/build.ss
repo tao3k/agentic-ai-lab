@@ -11,11 +11,11 @@
 (export main)
 (def (compile-development . args)
   (defbuild-script
-   '("testing/testing-extension"
-     "testing/source-admission"
-     "testing/module-system-live-case-object"
-     "testing/module-system-live-case"
-     "testing/interface"
+   '("modules/testing/testing-extension"
+     "modules/testing/source-admission"
+     "modules/testing/module-system-live-case-object"
+     "modules/testing/module-system-live-case"
+     "modules/testing/interface"
      "testing-api"))
   (apply main args))
 (def (main . args)

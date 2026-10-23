@@ -140,3 +140,39 @@ reports scale-memory, compilation-idle, generated-object and source-boundary
 failures. Ops builtin ownership and fixture/suite separation are being prepared
 without modifying the sources under that running baseline. Timeout, memory and
 admission policies remain unchanged.
+
+The next Linux Nix run exposed a distinct recipe defect: paths recovered from
+JSON had lost Nix string context. The approved-publication fixture now restores
+its qualified shell and coreutils paths with =builtins.storePath=. A pinned Nix
+2.34.4+1 comparison observed zero derivation inputs before the correction and
+two after it; the corrected local derivation built successfully. Full approved
+recovery remains a separate remote/native gate, not implied by that input-graph
+check. No lock or source-currentness check was weakened.
+
+* CI closure and built-in Ops (2026-10-23)
+
+Ops is an ordinary Yuanxu library, not a root selection. Agentic AI Lab omits
+Ops from =init.ss= and imports its published scope for explicit operations.
+The product owns the =scenarios= window; Core no longer supplies product AWS
+or Null Scenarios. Funflow publishes its inert runtime vocabulary through its
+public object, so isolated Bazel builds need no undeclared implementation import.
+
+The dependency cohort is pinned consistently through Parser, Ascent, Orgize,
+the Core gitlink and Lake. CI now selects the immutable published Gerbil
+=1cfb032= artifacts used by the installed local runtime, with digest and release
+manifest checks. Inspection of the previous =2591dcd= release metadata confirmed
+that its compiler executor did not export the producer-registry operations
+required by the Ascent build. No Gerbil compiler sources are modified.
+
+Production does not depend on optional ASP. The development package owns its
+single ASP target and receipt; production exclusion and development dependency
+queries both remain checked. The Nix recovery recipe restores string context
+for locked shell/tool store paths after JSON decoding, preserving actual
+sandbox build inputs instead of relying on ambient host executables.
+
+Local receipts retain earlier failures. A clean Core build and focused Ops,
+publication and real Gitea/PostgreSQL suites passed. The complete serial Core
+regression and exact-commit CI are separate gates; neither is implied by these
+focused results. Existing deadlines, memory limits and rejection controls remain
+unchanged. Concurrent uncommitted dependency/type work in the original checkout
+is outside this isolated qualification cohort and is preserved.
