@@ -8,6 +8,11 @@
 ("init.ss"
     "modules/workflow/scenario/bundle-v1-projection.ss"
     "testing-api.ss"
+    ;; Public extension facades must be available after native installation.
+    "modules/custom-task/interface.ss"
+    "modules/docker/interface.ss"
+    "modules/text/interface.ss"
+    "modules/agent-sandbox/api.ss"
 
     "modules/module-authoring/module-descriptor.ss"
     "modules/workflow/scenario/configuration/module-activation.ss"
