@@ -42,9 +42,11 @@ deps-dev:
     python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "{{ agentic_ai_lab_dev_gerbil_path }}/pkg"
     cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} gerbil env gxi ../packages/automation/native-dependencies.ss
 
-# Compile the optional test runtime against the SDK-selected shared dependency.
+# Compile installed test dependencies against the SDK-selected shared library.
+# Dependency acquisition belongs to deps-dev, as production acquisition belongs
+# to deps. Running tests must not reinstall POO into a second library prefix.
 [group('build')]
-build-testing: deps-dev
+build-testing:
     GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} gxpkg build github.com/tao3k/asp-gerbil-scheme
     cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} gerbil build
 
