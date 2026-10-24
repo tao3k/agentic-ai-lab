@@ -19,10 +19,18 @@
     (native (list test) (watched command) 45 count (list file watch) lines))
   (case (string->symbol name)
     ((package)
-     (.cc (qualification-script '("dev/unit-tests.ss")
-            (list "gerbil" vm "env" "gxi" vm "./dev/unit-tests.ss") 1200
-            inputs: (list (this-source-file) "t/qualification/testing/package-result.ss"))
+     (.cc (qualification-script '("unit-tests.ss")
+            (list "gerbil" vm "env" "gxi" vm "./unit-tests.ss") 1200
+            inputs: (list (this-source-file) "t/qualification/testing/package-result.ss"
+                          "unit-tests.ss" "dev/testing-profiles.ss"))
+       'log (absolute ".gerbil/test-results/package.log")
        '.admit-result admit-package-batches))
+    ((package-file)
+     (let (file (car arguments))
+       (.cc (qualification-script (list file)
+              (list "gerbil" vm "test" "-v" "3" file) 1200
+              inputs: (list (this-source-file)))
+         'log (absolute ".gerbil/test-results/package-file.log"))))
     ((gerbil-runtime)
      (native '("t/gerbil-runtime-import-test.ss")
        (list "gerbil" vm "test" "t/gerbil-runtime-import-test.ss") 90 #f))

@@ -19,8 +19,8 @@
       (eval '(import "./core/modules/json-schema/json-schema-receipt.ss"))
       (eval '(import "./core/modules/json-schema/json-schema-validate.ss"))
       (eval '(import :yuanxu/module-system/schema/slot-contracts))
-      (eval '(import "./core/type-facts/objects.ss"))
-      (eval '(import :clan/poo/mop))
+      (eval '(import :yuanxu/object-types/facts))
+      (eval '(import :clan/poo/mop :clan/poo/object))
       (json-schema-native-eval
  '(def +json-schema-native-artifact+
     (yuanxu-json-schema->contract-artifact
@@ -37,10 +37,10 @@
          (yuanxu-json-schema-contract-artifact-object-contract
           +json-schema-native-artifact+))
      (and (element? Type contract)
-          (element? contract '((name . "flow")))
-          (not (element? contract '((name . 42))))
-          (= (length (yuanxu-native-contract->type-facts contract)) 1)
-          (= (length (yuanxu-native-contract->lean-fact-contracts contract))
+          (element? contract (.o name: "flow"))
+          (not (element? contract (.o name: 42)))
+          (= (length (yuanxu-object-contract->type-facts contract)) 1)
+          (= (length (yuanxu-object-contract->lean-fact-contracts contract))
              1))))
  (error "JSON Schema should emit a native Contract with proof projections"))
 

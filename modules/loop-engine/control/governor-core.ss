@@ -18,8 +18,8 @@
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
                  yuanxu-contract-value-type
-                 yuanxu-native-contract
-                 yuanxu-native-contract->alist)
+                 yuanxu-object-contract
+                 yuanxu-object-contract->alist)
         :agentic-ai-lab/modules/loop-engine/control/governor-core-slot-rows)
 
 (export +loop-governor-schema+
@@ -576,11 +576,10 @@
         +loop-governor-node-execution-owner-contract+
         +loop-governor-node-metadata-contract+))
 (def +loop-governor-node-type-contract+
-  (yuanxu-native-contract
+  (yuanxu-object-contract
    'loop-governor/node 'loops 'LoopGovernorNode loop-governor-node?
    +loop-governor-node-slot-contracts+
-   (lambda (candidate slot) (and (object? candidate) (.slot? candidate slot)))
-   (lambda (candidate slot) (.ref candidate slot))
+
    '((boundary . loop-governor) (projection . governance-node))))
 
 (def +loop-governor-name-contract+
@@ -645,9 +644,8 @@
         +loop-governor-execution-owner-contract+
         +loop-governor-metadata-contract+))
 (def +loop-governor-type-contract+
-  (yuanxu-native-contract
+  (yuanxu-object-contract
    'loop-governor 'loops 'LoopGovernor loop-governor?
    +loop-governor-slot-contracts+
-   (lambda (candidate slot) (and (object? candidate) (.slot? candidate slot)))
-   (lambda (candidate slot) (.ref candidate slot))
+
    '((boundary . loop-governor) (projection . marlin-contract))))

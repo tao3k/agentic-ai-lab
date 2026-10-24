@@ -16,7 +16,7 @@
                  string->json)
         (only-in :yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-slot-name
-                 yuanxu-native-contract-slots)
+                 yuanxu-object-contract-slots)
         (only-in :yuanxu/modules/json-schema/json-schema-source
                  yuanxu-json-schema-read-file)
         (only-in :yuanxu/modules/json-schema/json-schema-receipt
@@ -125,7 +125,7 @@
              (slots
               (map
                yuanxu-contract-slot-name
-               (yuanxu-native-contract-slots
+               (yuanxu-object-contract-slots
                 (yuanxu-json-schema-contract-artifact-object-contract
                  artifact)))))
         (check-equal? (funflow-github-ci-test-ref receipt 'valid?) #t)

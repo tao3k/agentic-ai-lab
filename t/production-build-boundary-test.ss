@@ -5,13 +5,17 @@
         (only-in :std/error Error? Error-message)
         (only-in :gerbil/expander core-import-module expander-context-id)
         (only-in :yuanxu/module-system/building/source-closure for-each-build-module)
-        (only-in "../build-spec.ss" agentic-ai-lab-library-spec))
+        (only-in "../build-spec.ss" agentic-ai-lab-build-spec agentic-ai-lab-public-build-roots)
+        (only-in "../build-modules.ss" agentic-ai-lab-library-modules))
 (export production-build-boundary-test)
 (def (dependencies path)
   (cadr (memq 'depend: (call-with-input-file path read))))
 (def (asp? text) (string-prefix? "github.com/tao3k/asp-gerbil-scheme@" text))
 (def production-build-boundary-test
   (test-suite "Production build and optional development policy boundary"
+    (test-case "init owns selection and is not a library build root"
+      (check-equal? (member "init.ss" agentic-ai-lab-public-build-roots) #f)
+      (check-equal? (member "init.ss" agentic-ai-lab-library-modules) #f))
     (test-case "ASP is declared only by the development package"
       (check-equal? (any asp? (dependencies "gerbil.pkg")) #f)
       (check-equal? (length (filter asp? (dependencies "dev/gerbil.pkg"))) 1))
@@ -36,7 +40,7 @@
           (call-with-output-file source
             (lambda (port)
               (display "package: agentic-ai-lab/dev\n(export value)\n(def value 1)\n" port)))
-          (check-exception (agentic-ai-lab-library-spec (list source))
+          (check-exception (agentic-ai-lab-build-spec (list source))
             (lambda (failure)
               (and (Error? failure)
                    (equal? (Error-message failure) "production build imports a development module")))))))))

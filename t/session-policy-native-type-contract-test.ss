@@ -91,7 +91,37 @@
       (trigger-refs . (agent-turn))
       (metadata)
       (runtime-executed . not-a-boolean))))
- (error "native session tool grant contract should reject invalid slots"))
+ (error "native session tool grant contract should reject wire rows"))
+
+(when
+ (session-policy-eval
+  '(element? AgenticAILabSessionToolGrantContract
+     (.o kind: 'agentic-ai-lab.session.tool-grant
+         schema: 'agentic-ai-lab.modules.session.tool-grant.v1
+         grant-id: 'grant/read tool-ref: 'read-workspace-file
+         actions: '(read) resource-refs: '(project-workspace)
+         trigger-refs: '(agent-turn) metadata: '()
+         runtime-executed: 'not-a-boolean)))
+ (error "native session tool grant contract should reject invalid typed fields"))
+
+(unless
+ (session-policy-eval
+  '(let* ((grant (agentic-ai-lab-session-tool-grant 'grant/read 'read-workspace-file
+                   '(read) '(project-workspace) '(agent-turn)))
+          (wire (agentic-ai-lab-session-tool-grant->alist grant))
+          (policy (agentic-ai-lab-session-tool-permission-policy
+                    'policy/native-contract 'session/native-contract (list grant) '() 'deny))
+          (policy-wire (agentic-ai-lab-session-policy->alist policy)))
+     (and (object? grant) (list? wire)
+          (equal? (cdr (assq 'tool-grants policy-wire)) (list wire))
+          (equal? (cdr (assq 'tool-grants (cdr (assq 'policy-slots policy-wire)))) (list wire))
+          (equal? wire
+            '((kind . agentic-ai-lab.session.tool-grant)
+              (schema . agentic-ai-lab.modules.session.tool-grant.v1)
+              (grant-id . grant/read) (tool-ref . read-workspace-file)
+              (actions . (read)) (resource-refs . (project-workspace))
+              (trigger-refs . (agent-turn)) (metadata) (runtime-executed . #f))))))
+ (error "semantic grants should be native and wire projections retain their fields"))
 
 (when
  (session-policy-eval

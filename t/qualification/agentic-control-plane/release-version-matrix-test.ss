@@ -8,6 +8,8 @@
         :agentic-ai-lab/modules/workflow/qualification/release-version-matrix)
 
 
+(export release-version-matrix-test)
+
 (def release-version-matrix-test
   (test-suite "AC-11 release version matrix"
     (yuanxu-test-case "current qualified owners bind without freezing ABI v1"

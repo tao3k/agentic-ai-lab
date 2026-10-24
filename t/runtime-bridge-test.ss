@@ -3,6 +3,12 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :clan/poo/mop TypeError?))
+(import (only-in :yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: runtime bridge tests cover schema envelopes, not real Rust IO.
 ;;; Invariant: Scheme emits deterministic request/response data for adapters.
 
@@ -27,11 +33,11 @@
 (def runtime-bridge-test
   (test-suite "runtime bridge schema"
     (yuanxu-test-case "rust submit envelope carries schema and correlation ids"
-      (let* ((flow (external-flow 'compile
-                                  'rust-build
-                                  '((crate . "agentic-ai-lab"))
-                                  'artifact
-                                  'artifact))
+      (let* ((flow (external-flow
+		    'compile
+		    'rust-build
+		    '((crate . "agentic-ai-lab"))
+		    (Fun AdapterResult <- Any)))
              (result (run-flow-with-config (make-store-rust-run-config)
                                            flow
                                            'input-artifact))
@@ -44,11 +50,11 @@
         (check-equal? (cdr (assoc 'artifact-handle envelope))
                       '(rust-artifact compile (node compile 0 external compile)))))
     (yuanxu-test-case "rust store put envelope preserves operation"
-      (let* ((flow (store-flow 'put-cache
-                               'put
-                               '((path . "target"))
-                               'artifact
-                               'artifact))
+      (let* ((flow (store-flow
+		    'put-cache
+		    'put
+		    '((path . "target"))
+		    (Fun AdapterResult <- Any)))
              (result (run-flow-with-config (make-store-rust-run-config)
                                            flow
                                            'input-artifact))
@@ -92,11 +98,11 @@
                                                 '((test . runtime-bridge))))
                (config (make-rust-run-config
                         (list (cons 'runtime-command runtime-command))))
-               (flow (external-flow 'compile
-                                    'rust-build
-                                    '((crate . "agentic-ai-lab"))
-                                    'artifact
-                                    'artifact))
+               (flow (external-flow
+		      'compile
+		      'rust-build
+		      '((crate . "agentic-ai-lab"))
+		      (Fun AdapterResult <- Any)))
                (result (run-flow-with-config config flow 'input-artifact))
                (adapter-result (run-result-value result)))
           (check-equal? (cdr (assoc 'operation seen)) 'submit)
@@ -128,11 +134,11 @@
                '((test . runtime-bridge))))
              (config (make-rust-run-config
                       (list (cons 'runtime-command runtime-command))))
-             (flow (external-flow 'compile
-                                  'rust-build
-                                  '((crate . "agentic-ai-lab"))
-                                  'artifact
-                                  'artifact))
+             (flow (external-flow
+		    'compile
+		    'rust-build
+		    '((crate . "agentic-ai-lab"))
+		    (Fun AdapterResult <- Any)))
              (result (run-flow-with-config config flow 'input-artifact))
              (adapter-result (run-result-value result)))
         (check-equal? (runtime-command-kind runtime-command) 'process)
@@ -160,11 +166,11 @@
                '((test . runtime-bridge))))
              (config (make-rust-run-config
                       (list (cons 'runtime-command runtime-command))))
-             (flow (external-flow 'compile
-                                  'rust-build
-                                  '((crate . "agentic-ai-lab"))
-                                  'artifact
-                                  'artifact))
+             (flow (external-flow
+		    'compile
+		    'rust-build
+		    '((crate . "agentic-ai-lab"))
+		    (Fun AdapterResult <- Any)))
              (result (run-flow-with-config config flow 'input-artifact))
              (adapter-result (run-result-value result)))
         (check-equal? (runtime-command-kind runtime-command) 'process)
@@ -190,11 +196,11 @@
              (runtime-command (runtime-command-descriptor->command descriptor))
              (config (make-rust-run-config
                       (list (cons 'runtime-command runtime-command))))
-             (flow (external-flow 'descriptor-compile
-                                  'rust-build
-                                  '((crate . "agentic-ai-lab"))
-                                  'artifact
-                                  'artifact))
+             (flow (external-flow
+		    'descriptor-compile
+		    'rust-build
+		    '((crate . "agentic-ai-lab"))
+		    (Fun AdapterResult <- Any)))
              (result (run-flow-with-config config flow 'input-artifact))
              (adapter-result (run-result-value result)))
         (check-equal? (runtime-command-descriptor-protocol descriptor)
@@ -210,27 +216,29 @@
     (yuanxu-test-case "invalid runtime command response fails through adapter result"
       (let* ((command (lambda (envelope) 'not-a-runtime-response))
              (config (make-rust-run-config
-                      (list (cons 'runtime-command command))))
-             (flow (external-flow 'compile
-                                  'rust-build
-                                  '((crate . "agentic-ai-lab"))
-                                  'artifact
-                                  'artifact))
+                      (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
+             (flow (external-flow
+		    'compile
+		    'rust-build
+		    '((crate . "agentic-ai-lab"))
+		    (Fun AdapterResult <- Any)))
              (result (run-flow-with-config config flow 'input-artifact))
              (adapter-result (run-result-value result)))
         (check-equal? (adapter-result-status adapter-result) 'failed)
         (check-equal? (cdr (assoc 'code (adapter-result-error adapter-result)))
-                      'invalid-runtime-response)))
+                      'runtime-command-error)
+        (check (TypeError? (runtime-alist-ref (adapter-result-error adapter-result) 'error #f)) => #t)))
     (yuanxu-test-case "invalid runtime command descriptor fails through adapter result"
       (let* ((config (make-rust-run-config
                       (list (cons 'runtime-command '(not-a-runtime-command)))))
-             (flow (external-flow 'compile
-                                  'rust-build
-                                  '((crate . "agentic-ai-lab"))
-                                  'artifact
-                                  'artifact))
+             (flow (external-flow
+		    'compile
+		    'rust-build
+		    '((crate . "agentic-ai-lab"))
+		    (Fun AdapterResult <- Any)))
              (result (run-flow-with-config config flow 'input-artifact))
              (adapter-result (run-result-value result)))
         (check-equal? (adapter-result-status adapter-result) 'failed)
         (check-equal? (cdr (assoc 'code (adapter-result-error adapter-result)))
-                      'invalid-runtime-command)))))
+                      'runtime-command-error)
+        (check (TypeError? (runtime-alist-ref (adapter-result-error adapter-result) 'error #f)) => #t)))))

@@ -9,7 +9,7 @@
         (only-in "./fixtures.ss"
                  Workspace prepare-aws-selection! realize-aws-selection write-aws-version!)
         (only-in :yuanxu/admission/publication AdmissionPublication.)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (prefix-in :clan/poo/declarative-metadata metadata.))
 (export aws-context-publication-test)
 

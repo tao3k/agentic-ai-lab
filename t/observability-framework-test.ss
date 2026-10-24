@@ -29,7 +29,7 @@
                  yuanxu-observation-explain
                  yuanxu-observation-summary
                  yuanxu-observability-diagnostic-record)
-        (only-in :yuanxu/types
+        (only-in :yuanxu/object-types/contracts
                  yuanxu-contract-admit yuanxu-predicate-contract)
         (only-in :yuanxu/module-system/schema/relations
                  SemanticImports. yuanxu-semantic-identity
@@ -346,7 +346,7 @@
               (with-exception-catcher
                (lambda (failure) failure)
                (lambda ()
-                 (call-with-agentic-ai-lab-debug-trace
+                 (call-with-yuanxu-debug-trace
                   policy 'unique-symbols-return shadowed-values '(seen values)
                   port: port)))))
         (check-equal? (YuanxuDebugCallAnomaly? captured) #t)
@@ -367,7 +367,7 @@
              (result
               (call-with-values
                 (lambda ()
-                  (call-with-agentic-ai-lab-debug-trace
+                  (call-with-yuanxu-debug-trace
                    policy 'return-pair
                    (lambda (left right) (values left right))
                    '(left right)
@@ -385,10 +385,10 @@
         (with-catch
          (lambda (failure) (set! captured failure))
          (lambda ()
-           (call-with-agentic-ai-lab-debug-trace
+           (call-with-yuanxu-debug-trace
             policy 'cycle-edge
             (lambda ()
-              (call-with-agentic-ai-lab-debug-trace
+              (call-with-yuanxu-debug-trace
                policy 'cycle-edge (lambda () 'unreachable) '()
                port: port))
             '()
@@ -406,7 +406,7 @@
               (with-exception-catcher
                (lambda (failure) failure)
                (lambda ()
-                 (call-with-agentic-ai-lab-debug-trace
+                 (call-with-yuanxu-debug-trace
                   policy 'raises
                   (lambda () (raise private-marker))
                   '()
@@ -416,10 +416,10 @@
               (with-exception-catcher
                (lambda (failure) failure)
                (lambda ()
-                 (call-with-agentic-ai-lab-debug-trace
+                 (call-with-yuanxu-debug-trace
                   policy 'outer
                   (lambda ()
-                    (call-with-agentic-ai-lab-debug-trace
+                    (call-with-yuanxu-debug-trace
                      policy 'inner (lambda () 'unreachable) '()
                      port: depth-port))
                   '()
@@ -586,7 +586,7 @@
              (port (open-output-string)))
         (call-with-values
           (lambda ()
-            (call-with-agentic-ai-lab-debug-memory-span
+            (call-with-yuanxu-debug-memory-span
              policy 'native-span (lambda () 'completed) port: port emit?: #t))
           (lambda (value receipt)
             (check-equal? value 'completed)
@@ -605,7 +605,7 @@
              (port (open-output-string)))
         (call-with-values
           (lambda ()
-            (call-with-agentic-ai-lab-debug-memory-monitor
+            (call-with-yuanxu-debug-memory-monitor
              policy
              'native-monitor
              (lambda () (thread-sleep! 0.01) 'completed)
@@ -630,7 +630,7 @@
         (with-catch
          (lambda (failure) (set! captured failure))
          (lambda ()
-           (call-with-agentic-ai-lab-debug-memory-monitor
+           (call-with-yuanxu-debug-memory-monitor
             policy
             'native-monitor-rejected
             (lambda ()
@@ -658,7 +658,7 @@
         (with-catch
          (lambda (failure) (set! captured failure))
          (lambda ()
-           (call-with-agentic-ai-lab-debug-memory-monitor
+           (call-with-yuanxu-debug-memory-monitor
             policy
             'poo-self-slot-cycle
             (lambda ()

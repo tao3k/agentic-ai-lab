@@ -5,8 +5,7 @@
 (export agentic-ai-lab-library-modules agentic-ai-lab-native-spec)
 
 (def agentic-ai-lab-library-modules
-  '("init.ss"
-    "modules/workflow/scenario/plan-projection.ss"
+  '("modules/workflow/scenario/plan-projection.ss"
     "modules/workflow/scenario/bundle-v1-projection.ss"
     "modules/module-authoring/module-interface.ss"
     "modules/module-authoring/module-descriptor.ss"

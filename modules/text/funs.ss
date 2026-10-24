@@ -3,6 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit validate)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Owner: WordCount tutorial alignment lives in this module.
 ;;; Boundary: core provides descriptor, strategy, runner, and adapter protocols.
 ;;; Import contract: users opt in through the module config/interface exports.
@@ -13,7 +17,7 @@
 
 (import (only-in :yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
-                 default-task-family-registry make-task task-kind
+                 default-task-family-registry make-task TaskContract task-kind
                  task-request-operation task-request-payload)
         (only-in :yuanxu/modules/funflow/control-plane/strategy
                  make-strategy strategy-name strategy-capabilities
@@ -22,7 +26,7 @@
         (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter make-request-only-adapter)
         (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
         (only-in :yuanxu/modules/funflow/control-plane/flow
-                 default-flow-declaration-registry task-flow)
+                 default-flow-declaration-registry FlowContract task-flow)
         :yuanxu/modules/funflow/control-plane/projection-syntax)
 
 (export text-task-family-descriptor
@@ -329,19 +333,17 @@
 ;;; Boundary:
 ;;; - Text task request data records the WordCount operation.
 ;;; - The executor stays the pure =word-count-summary= pipeline.
-;; : (-> Symbol Contract Contract Task)
-(def (make-word-count-task name input-contract output-contract)
-  (make-task name
-             'text
-             (list 'text 'word-count '((format . lines)))
-             input-contract
-             output-contract
-             word-count-summary))
+;; : (-> Symbol Task)
+(def make-word-count-task
+  (validate (Fun TaskContract <- Symbol)
+    (lambda (name)
+      (make-task name 'text (list 'text 'word-count '((format . lines)))
+        (Fun String <- String) word-count-summary))))
 
 ;;; Boundary:
 ;;; - Public workflow construction hides the task record shape.
 ;;; - Descriptor tests can still inspect the underlying task via flow steps.
-;; : (-> Symbol Contract Contract Flow)
-(def (word-count-flow name input-contract output-contract)
-  (task-flow name
-             (make-word-count-task name input-contract output-contract)))
+;; : (-> Symbol Flow)
+(def word-count-flow
+  (validate (Fun FlowContract <- Symbol)
+    (lambda (name) (task-flow name (make-word-count-task name)))))

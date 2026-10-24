@@ -8,7 +8,7 @@
          (only-in :std/test test-suite check-equal? check-exception)
         (only-in :clan/poo/object .o .cc .ref .mix)
         (only-in :clan/poo/mop element? validate TypeError? define-type)
-        :yuanxu/types)
+        :yuanxu/object-types/contracts)
 (export type-contract-foundation-test)
 
 (define-type (NamedContract @ YuanxuObjectContract.)

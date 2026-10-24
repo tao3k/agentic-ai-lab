@@ -30,8 +30,8 @@
 
 (def (poo-clos-owned-sources)
   (append
-   (scheme-files "yuanxu/poo-clos" (lambda (_name) #t))
-   (scheme-files "yuanxu/t"
+   (scheme-files "core/poo-clos" (lambda (_name) #t))
+   (scheme-files "core/t"
                  (lambda (name) (string-prefix? "poo-clos-" name)))
    (scheme-files "t"
                  (lambda (name) (string-prefix? "poo-clos-" name)))
@@ -70,7 +70,7 @@
 (def (suite-test-case-forms suite-form)
   (filter (lambda (form)
             (and (pair? form)
-                 (memq (car form) '(yuanxu-test-case yuanxu-test-case))
+                 (memq (car form) '(yuanxu-test-case test-case))
                  (pair? (cdr form)) (string? (cadr form))))
           (cddr (caddr suite-form))))
 

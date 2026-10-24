@@ -8,6 +8,8 @@
 
 (import (only-in :std/test test-suite))
 
+(export langgraph-scenario-gap-intent-test)
+
 (def langgraph-scenario-gap-intent-test
   (test-suite "LangGraph scenario gap intent"
     (yuanxu-test-case "projects exact runtime and Lean facts"

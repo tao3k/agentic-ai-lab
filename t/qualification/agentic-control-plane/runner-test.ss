@@ -17,6 +17,8 @@
    (list (cons 'kind 'gerbil-bazel.action-receipt.v1)
          (cons 'gate-id gate-id))))
 
+(export runner-test)
+
 (def runner-test
   (test-suite "AC-10 S4 cross-language qualification receipts"
     (yuanxu-test-case "registry declares exact release owners and installed gates"

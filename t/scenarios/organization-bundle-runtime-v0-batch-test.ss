@@ -9,6 +9,8 @@
 
 (def (id high low) (agentic-ai-lab-runtime-v0-compact-id high low))
 
+(export organization-bundle-runtime-v0-batch-test)
+
 (def organization-bundle-runtime-v0-batch-test
   (test-suite
    "runtime v0 hot/bulk typed projection"

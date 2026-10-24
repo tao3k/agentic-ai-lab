@@ -9,6 +9,8 @@
         :agentic-ai-lab/modules/workflow/graph/control-plane-handoff-facts
         :agentic-ai-lab/modules/workflow/graph/scenario-gap-rejection-facts)
 
+(export proof-fact-wire-test)
+
 (def proof-fact-wire-test
   (test-suite "proof fact wire"
     (yuanxu-test-case "validates composition handoff and scenario wires"

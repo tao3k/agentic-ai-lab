@@ -7,10 +7,10 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode))
 
-(export poo-flow-batched-evidence-leaf
-        poo-flow-batched-merkle-root
-        poo-flow-batched-merkle-proof
-        poo-flow-batched-merkle-proof-verify?)
+(export agentic-ai-lab-batched-evidence-leaf
+        agentic-ai-lab-batched-merkle-root
+        agentic-ai-lab-batched-merkle-proof
+        agentic-ai-lab-batched-merkle-proof-verify?)
 
 ;; : (-> Object String)
 (def (canonical-field value)
@@ -36,7 +36,7 @@
   (hex-encode (sha256 (string->utf8 (canonical-packet domain fields)))))
 
 ;; : (-> Symbol Integer String Integer Integer String String String String Symbol PooBatchedEvidenceLeaf)
-(def (poo-flow-batched-evidence-leaf
+(def (agentic-ai-lab-batched-evidence-leaf
       identity leaf-index token-nonce first-seq last-seq payload-hash
       semantic-hash previous-root observation-hash effect-outcome)
   (let* ((canonical
@@ -81,7 +81,7 @@
    (else (root-digest (next-level digests)))))
 
 ;; : (-> [PooBatchedEvidenceLeaf] PooBatchedMerkleRoot)
-(def (poo-flow-batched-merkle-root leaves)
+(def (agentic-ai-lab-batched-merkle-root leaves)
   (let* ((digests (map (lambda (leaf) (.ref leaf 'digest)) leaves))
          (root-hash (root-digest digests)))
     (.o (kind 'poo-flow-batched-merkle-root)
@@ -105,19 +105,19 @@
     (proof-step (if right? 'right 'left)
                 (list-ref digests sibling-index))))
 
-;; poo-flow-batched-merkle-proof
+;; agentic-ai-lab-batched-merkle-proof
 ;;   : (-> [PooBatchedEvidenceLeaf] Integer PooBatchedMerkleProof)
 ;;   | doc m%
-;;       `poo-flow-batched-merkle-proof` derives the sibling path and root for one leaf.
+;;       `agentic-ai-lab-batched-merkle-proof` derives the sibling path and root for one leaf.
 ;;
 ;;       # Examples
 ;;
 ;;       ```scheme
-;;       (poo-flow-batched-merkle-proof leaves 0)
+;;       (agentic-ai-lab-batched-merkle-proof leaves 0)
 ;;       ;; => proof for the first leaf
 ;;       ```
 ;;     %
-(def (poo-flow-batched-merkle-proof leaves target-index)
+(def (agentic-ai-lab-batched-merkle-proof leaves target-index)
   (let (leaf-count (length leaves))
     (unless (and (integer? target-index)
                  (>= target-index 0)
@@ -139,7 +139,7 @@
           (steps proof-steps) (root-digest proof-root))))))
 
 ;; : (-> PooBatchedEvidenceLeaf PooBatchedMerkleProof Boolean)
-(def (poo-flow-batched-merkle-proof-verify? leaf proof)
+(def (agentic-ai-lab-batched-merkle-proof-verify? leaf proof)
   (let ((computed
          (foldl
           (lambda (step current)

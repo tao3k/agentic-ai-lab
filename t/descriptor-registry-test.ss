@@ -3,6 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: descriptor registries are policy extension surfaces.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
@@ -22,6 +26,8 @@
 ;;; This suite keeps descriptor registry lookup behavior separate from concrete
 ;;; workflow execution.
 ;; : TestSuite
+(export descriptor-registry-test)
+
 (def descriptor-registry-test
   (test-suite "descriptor registries"
     (yuanxu-test-case "extends task family descriptors without editing defaults"
@@ -33,12 +39,12 @@
              (registry (task-family-registry-extend
                         default-task-family-registry
                         custom))
-             (task (make-task 'build
-                              'custom-runtime
-                              '(custom build)
-                              'artifact
-                              'artifact
-                              #f)))
+             (task (make-task
+		    'build
+		    'custom-runtime
+		    '(custom build)
+		    (Fun Any <- Any)
+		    #f)))
         (check-equal? (task-family-registry? registry) #t)
         (check-equal? (task-family-name
                        (task-family-for-kind-in registry 'custom-runtime))
@@ -62,7 +68,10 @@
              (registry (flow-declaration-registry-extend
                         default-flow-declaration-registry
                         remote))
-             (inc (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
+             (inc (pure-flow
+		   'inc
+		   (Fun Number <- Number)
+		   (lambda (x) (+ x 1))))
              (planner (strategy-planner-for-flow-in
                        (make-local-eager-strategy)
                        registry

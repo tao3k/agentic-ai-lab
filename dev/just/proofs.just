@@ -1,6 +1,11 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+# The default workspace entry checks the complete Core-owned proof catalog.
+[group('proof')]
+proofs:
+    cd "{{ justfile_directory() }}/core" && just proofs
+
 # Build one Lean module and exactly its import closure.  This is the normal
 # proof-development gate; it never traverses the AgenticAILabProof aggregate root.
 [group('check')]

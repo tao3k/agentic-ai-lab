@@ -5,7 +5,7 @@
 ;;; Package input: manifest -> kind index -> one hashed Contract input.
 ;;; schema.json is an audit export, never a runtime input. No legacy fallback.
 (import :clan/poo/object
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)

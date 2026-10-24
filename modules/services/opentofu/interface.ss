@@ -7,15 +7,16 @@
   core:
   (.o requires: (.o Nix: (.o module-id: 'nix contract: NixScopeContract)
                     JsonSchema: (.o module-id: 'json-schema contract: JsonSchemaScopeContract)
-                    Ops: (.o module-id: 'ops contract: OpsScopeContract)
                     Funflow: (.o module-id: 'funflow contract: FunflowScopeContract))
       scope-contract: OpenTofuScopeContract
-      exports: OpenTofuScope.
-      configuration-build: Build
-      ;; A configured service can realize its own publication, using the same
-      ;; builder that downstream configurations already consume.
-      projections: (if (opentofu-service-configuration (.get OpenTofuScope. config))
-                     (list (.cc Build 'configuration-projection opentofu-service-configuration)) '())
+      ;; Join this publication's role values once. Reusable prototypes can have
+      ;; compiled imports from another context; those are not the role bindings.
+      scope: (.cc OpenTofuScope. config: Config)
+      exports: scope
+      configuration-build: (.cc Build module: scope)
+      projections: (if (opentofu-service-configuration (.get scope config))
+                     (list (.cc Build module: scope
+                               configuration-projection: opentofu-service-configuration)) '())
       admissions: (.o Config: (.o export-path: '(config) contract-path: '(types config))
                       Null: (.o export-path: '(Null) contract-path: '(types Null))))
   features: (.o))

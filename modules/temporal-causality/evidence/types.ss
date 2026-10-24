@@ -9,10 +9,10 @@
 (export PooFlowEvidenceRetrieval PooFlowEvidenceUse PooFlowEvidenceAssessment
         PooFlowEvidenceDependency PooFlowEvidenceLineage
         PooFlowEvidenceUseAudit PooFlowEvidenceImpactFrontier
-        poo-flow-evidence-retrieval? poo-flow-evidence-use?
-        poo-flow-evidence-assessment?
-        poo-flow-evidence-dependency? poo-flow-evidence-lineage?
-        poo-flow-evidence-use-audit? poo-flow-evidence-impact-frontier?)
+        agentic-ai-lab-evidence-retrieval? agentic-ai-lab-evidence-use?
+        agentic-ai-lab-evidence-assessment?
+        agentic-ai-lab-evidence-dependency? agentic-ai-lab-evidence-lineage?
+        agentic-ai-lab-evidence-use-audit? agentic-ai-lab-evidence-impact-frontier?)
 
 (def (text? value) (and (string? value) (> (string-length value) 0)))
 (def (texts? value) (and (list? value) (every text? value)))
@@ -29,7 +29,7 @@
            '(query-identity evidence-identity source-digest)))
 (define-type (PooFlowEvidenceRetrieval @ Type.)
   .element?: retrieval-shape?)
-(def (poo-flow-evidence-retrieval? value)
+(def (agentic-ai-lab-evidence-retrieval? value)
   (element? PooFlowEvidenceRetrieval value))
 
 (def (use-shape? value)
@@ -38,7 +38,7 @@
                                       claim-digest))))
 (define-type (PooFlowEvidenceUse @ Type.)
   .element?: use-shape?)
-(def (poo-flow-evidence-use? value)
+(def (agentic-ai-lab-evidence-use? value)
   (element? PooFlowEvidenceUse value))
 
 (def (assessment-shape? value)
@@ -49,7 +49,7 @@
        (memq (.ref value 'verdict) '(supports refutes uncertain))))
 (define-type (PooFlowEvidenceAssessment @ Type.)
   .element?: assessment-shape?)
-(def (poo-flow-evidence-assessment? value)
+(def (agentic-ai-lab-evidence-assessment? value)
   (element? PooFlowEvidenceAssessment value))
 
 (def (dependency-shape? value)
@@ -57,7 +57,7 @@
            '(source-claim-identity dependent-claim-identity)))
 (define-type (PooFlowEvidenceDependency @ Type.)
   .element?: dependency-shape?)
-(def (poo-flow-evidence-dependency? value)
+(def (agentic-ai-lab-evidence-dependency? value)
   (element? PooFlowEvidenceDependency value))
 
 (def (lineage-shape? value)
@@ -67,13 +67,13 @@
        (list? (.ref value 'uses))
        (list? (.ref value 'assessments))
        (list? (.ref value 'dependencies))
-       (every poo-flow-evidence-retrieval? (.ref value 'retrievals))
-       (every poo-flow-evidence-use? (.ref value 'uses))
-       (every poo-flow-evidence-assessment? (.ref value 'assessments))
-       (every poo-flow-evidence-dependency? (.ref value 'dependencies))))
+       (every agentic-ai-lab-evidence-retrieval? (.ref value 'retrievals))
+       (every agentic-ai-lab-evidence-use? (.ref value 'uses))
+       (every agentic-ai-lab-evidence-assessment? (.ref value 'assessments))
+       (every agentic-ai-lab-evidence-dependency? (.ref value 'dependencies))))
 (define-type (PooFlowEvidenceLineage @ Type.)
   .element?: lineage-shape?)
-(def (poo-flow-evidence-lineage? value)
+(def (agentic-ai-lab-evidence-lineage? value)
   (element? PooFlowEvidenceLineage value))
 
 (def (audit-shape? value)
@@ -92,7 +92,7 @@
        (memq (.ref value 'status) '(declared-reviewed needs-review))))
 (define-type (PooFlowEvidenceUseAudit @ Type.)
   .element?: audit-shape?)
-(def (poo-flow-evidence-use-audit? value)
+(def (agentic-ai-lab-evidence-use-audit? value)
   (element? PooFlowEvidenceUseAudit value))
 
 (def (frontier-shape? value)
@@ -105,5 +105,5 @@
        (eq? (.ref value 'actual-impact-admitted?) #f)))
 (define-type (PooFlowEvidenceImpactFrontier @ Type.)
   .element?: frontier-shape?)
-(def (poo-flow-evidence-impact-frontier? value)
+(def (agentic-ai-lab-evidence-impact-frontier? value)
   (element? PooFlowEvidenceImpactFrontier value))

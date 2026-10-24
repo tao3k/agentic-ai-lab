@@ -9,6 +9,8 @@
         :agentic-ai-lab/modules/workflow/qualification/capability-prototypes)
 
 
+(export capability-prototypes-test)
+
 (def capability-prototypes-test
   (test-suite "qualification POO capability prototypes"
     (yuanxu-test-case "multiple parents preserve orthogonal inherited slots"

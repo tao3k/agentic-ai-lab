@@ -14,10 +14,10 @@
                  yuanxu-contract-slot-name
                  yuanxu-contract-slot-type
                  yuanxu-contract-value-type
-                 yuanxu-native-contract
-                 yuanxu-native-contract->alist)
+                 yuanxu-object-contract
+                 yuanxu-object-contract->alist)
         :yuanxu/utilities/final-projection-syntax
-        :yuanxu/type-facts/objects)
+        :yuanxu/object-types/facts)
 
 (export agentic-ai-lab-runtime-filesystem-prototype
         agentic-ai-lab-runtime-volume-filesystem-prototype
@@ -89,14 +89,13 @@
         AgenticAILabSandboxTimeoutSlot))
 
 (def AgenticAILabSandboxResourcesPrototypeContract
-  (yuanxu-native-contract
+  (yuanxu-object-contract
    'sandbox/resources
    'sandbox-core
    'PooSandboxResourcesPrototype
    object?
    AgenticAILabSandboxResourceSlotContracts
-   (lambda (resources slot) (and (object? resources) (.slot? resources slot)))
-   (lambda (resources slot) (.ref resources slot))
+
    '((scope . sandbox-core) (projection . resource-contract))))
 
 ;; : (-> List List List)
@@ -159,7 +158,7 @@
 
 ;; : (-> Alist)
 (def (agentic-ai-lab-sandbox-resources-prototype-type-contract->alist)
-  (yuanxu-native-contract->alist AgenticAILabSandboxResourcesPrototypeContract))
+  (yuanxu-object-contract->alist AgenticAILabSandboxResourcesPrototypeContract))
 
 ;; : (-> Symbol String Dyn POOObject)
 (def (agentic-ai-lab-sandbox-resources-prototype-diagnostic code message value)

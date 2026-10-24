@@ -5,7 +5,7 @@
         (only-in :std/encoding/json write-json)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
-        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata) :yuanxu/types :clan/poo/object)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata) :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-build-selection-test)
 (def (assert label value)
   (unless value (error "assertion failed" label))
@@ -53,20 +53,23 @@
       ;; Second phase runs against the real AWS-only Nix output.
       (when (getenv "AGENTIC_AI_LAB_OPENTOFU_ARTIFACT" #f)
        (let ()
-        (def Contract (.get OpenTofuScope. types configuration))
+        (.def (SelectedScope @ OpenTofuScope.)
+          config: =>.+
+          (.o artifact: (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_AWS_ONLY_ARTIFACT")))
+        (def Contract (.get SelectedScope types configuration))
         (def parent (.call Contract .admit Configuration #f))
         (assert 'real-aws-admitted (accepted? parent))
-        (assert 'only-aws-built (equal? (.all-slots (.get OpenTofuScope. modules)) '(aws)))
+        (assert 'only-aws-built (equal? (.all-slots (.get SelectedScope modules)) '(aws)))
         (.def (WithGroup @ Configuration)
           resource: =>.+ (.o aws_iam_group: (.o release: (.o name: "release"))))
         (assert 'same-provider-new-type-keeps-build-selection (equal? (providers WithGroup) '("aws")))
         (assert 'cached-contract-admits-final-child
           (accepted? (.call Contract .admit WithGroup #f)))
         (assert 'parent-children-unchanged (= (length (.get parent classification children)) 1))
-        (def artifact (.get OpenTofuScope. modules aws provider artifact))
+        (def artifact (.get SelectedScope modules aws provider artifact))
         (assert 'new-type-input-read-once (= (.call artifact .entry-read-count 'aws_iam_group 'resource) 1))
         (assert 'unselected-type-unread (= (.call artifact .entry-read-count 'aws_s3_bucket 'resource) 0))
-        (def sg (.call (.get OpenTofuScope. modules aws provider) .contract 'aws_security_group 'resource))
+        (def sg (.call (.get SelectedScope modules aws provider) .contract 'aws_security_group 'resource))
         (assert 'version-lock-preserved (equal? (.get sg version) "5.100.0"))
         (assert 'source-lock-preserved
           (equal? (.get sg schema-digest) "7e4fc064120609e23bc317629f1308d72891b7241993fbf68be523f03b6c633c"))

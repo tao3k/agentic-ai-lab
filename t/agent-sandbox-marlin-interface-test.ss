@@ -3,6 +3,8 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures Fun Integer Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: Marlin interface tests cover backend dispatch envelopes.
 ;;; Invariant: tests do not execute nono, Cube, or Marlin runtime code.
 
@@ -87,18 +89,17 @@
                       'cube.process.exec)))
     (yuanxu-test-case "projects execution requests into Marlin admission envelopes"
       (let* ((task (make-profiled-agent-sandbox-task
-                    'marlin-cube-admission
-                    (make-cube-agent-sandbox-profile 'python-template)
-                    "python"
-                    '("-c" "print('admit')")
-                    '((PYTHONUNBUFFERED . "1"))
-                    "/workspace"
-                    '(((path . "/workspace")
+		    'marlin-cube-admission
+		    (make-cube-agent-sandbox-profile 'python-template)
+		    "python"
+		    '("-c" "print('admit')")
+		    '((PYTHONUNBUFFERED . "1"))
+		    "/workspace"
+		    '(((path . "/workspace")
                        (mode . read-write)))
-                    'artifact
-                    'unit
-                    'artifact
-                    '((metadata . ((purpose . marlin-admission))))))
+		    'artifact
+		    (Fun AdapterResult <- Unit)
+		    '((metadata . ((purpose . marlin-admission))))))
              (request (task-adapter-request
                        task
                        'input

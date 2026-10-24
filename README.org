@@ -300,8 +300,10 @@ machinery; Agentic AI Lab retains its domain modules, test cases, and performanc
 contracts. There is no package-local CLI support or testing framework wrapper.
 
 The default =just clean/deps/build/test= recipes call Gerbil's native package
-commands. =just rebuild= runs clean, dependency installation, build, and the
-unit suite sequentially, stopping at the first failure. =just check= runs the
+commands. =just build= incrementally compiles Core and the product library.
+=just clean-core= explicitly removes Core outputs. =just rebuild= cleans both
+packages, installs dependencies, builds, and runs the unit suite sequentially,
+stopping at the first failure. =just check= runs the
 native build and unit suite; neither command invokes Bazel.
 
 Run the single native test entrypoint and Scheme scripts through the package

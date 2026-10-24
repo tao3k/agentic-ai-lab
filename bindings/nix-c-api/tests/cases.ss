@@ -9,7 +9,7 @@
         (only-in :yuanxu/module-system/source/admission
                  module-source-read module-source-admit-current!)
         (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         "../compatibility.ss")
 (export nix-api-suite root nix demand field admit provider-expression
         write-input assert rejected? timed checked-query observe-inputs AwsOnly AwsNull

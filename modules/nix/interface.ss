@@ -7,11 +7,14 @@
   core:
   (.o requires: (.o)
       scope-contract: NixScopeContract
+      admissions: (.o Config: (.o export-path: '(config) contract-path: '(types Config)))
       exports:
       (.o config: NixConfig
-          types: (.o Source: NixSourceContract
+          types: (.o Config: NixConfigContract
+                     Source: NixSourceContract
                      FlakeSource: NixFlakeSourceContract)
-          prototypes: (.o Source: (.cc NixSource. 'config config)
+          prototypes: (.o Config: NixConfigContract
+                     Source: (.cc NixSource. 'config config)
                           FlakeSource: (.cc NixFlakeSource. 'config config))
           source-inputs: agentic-ai-lab-nix-source-inputs
           admit-generation: agentic-ai-lab-nix-admit-generation))

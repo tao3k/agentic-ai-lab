@@ -11,7 +11,7 @@
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :yuanxu/module-system/source/admission module-source-admit-current! module-source-read)
         (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
-        (only-in :yuanxu/t/qualification/service-publication/fixtures ServicesFixture write-source))
+        (only-in "../core/t/qualification/service-publication/fixtures.ss" ServicesFixture write-source))
 (export nix-profile-effect-boundary-test)
 
 ;; Only the admitted, selected domain plan is packaged. Not all module fields.

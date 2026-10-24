@@ -6,6 +6,8 @@
          (only-in :std/test test-suite)
         :agentic-ai-lab/modules/workflow/graph/control-plane-handoff-facts)
 
+(export control-plane-handoff-facts-test)
+
 (def control-plane-handoff-facts-test
   (test-suite "control-plane handoff facts"
     (yuanxu-test-case "projects accepted and rejected handoff facts"

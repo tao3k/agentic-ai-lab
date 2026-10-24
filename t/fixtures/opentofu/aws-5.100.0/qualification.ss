@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import :clan/poo/object
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/feature-system/source-lock-feature
                  sources-lock-value sources-lock? sources-lock-ref
                  source-lock-verify-payload)
@@ -13,7 +13,7 @@
         (only-in :std/encoding/json read-json JSONReadOptions current-json-read-options)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
-        :agentic-ai-lab/modules/services/opentofu/types "./release.ss"
+        :agentic-ai-lab/opentofu-contracts "./release.ss"
         :agentic-ai-lab/modules/services/opentofu/collections :agentic-ai-lab/modules/services/opentofu/objects
         "./request-types.ss")
 (export AwsProviderBinaryContract AwsProviderSourceContract agentic-ai-lab-opentofu-aws-sources-lock agentic-ai-lab-opentofu-aws-provider)

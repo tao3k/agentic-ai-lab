@@ -3,6 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: Store tests align Scheme declarations with Funflow CAS concepts.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
@@ -45,15 +49,15 @@
              (put-task (car (flow-steps put)))
              (get-task (car (flow-steps get))))
         (check-equal? (flow-name put) 'put-source-dir)
-        (check-equal? (flow-input-contract put) 'abs-dir)
-        (check-equal? (flow-output-contract put) 'cas-item)
+        (check-equal? (flow-input-contract put) String)
+        (check-equal? (flow-output-contract put) AdapterResult)
         (check-equal? (task-store-operation put-task) 'put)
         (check-equal? (task-store-put? put-task) #t)
         (check-equal? (store-test-payload-ref 'store-task
                                               (task-store-payload put-task))
                       'put-dir)
-        (check-equal? (flow-input-contract get) 'cas-item)
-        (check-equal? (flow-output-contract get) 'abs-dir)
+        (check-equal? (flow-input-contract get) String)
+        (check-equal? (flow-output-contract get) AdapterResult)
         (check-equal? (task-store-operation get-task) 'get)
         (check-equal? (task-store-get? get-task) #t)
         (check-equal? (store-test-payload-ref 'content-kind
@@ -73,9 +77,9 @@
         (check-equal? (store-content-address-receipt-operation receipt)
                       'put)
         (check-equal? (store-content-address-receipt-input-contract receipt)
-                      'abs-dir)
+                      'String)
         (check-equal? (store-content-address-receipt-output-contract receipt)
-                      'cas-item)
+                      'AdapterResult)
         (check-equal? (store-content-address-receipt-address-algorithm receipt)
                       'sha256)
         (check-equal? (store-content-address-receipt-content-address receipt)
@@ -128,11 +132,11 @@
                      (cons 'config-source
                            (list (cons 'file '())
                                  (cons 'env '()))))))
-             (flow (external-flow 'config-runtime-proof
-                                  'docker-echo
-                                  '((image . "alpine:latest"))
-                                  'unit
-                                  'unit))
+             (flow (external-flow
+		    'config-runtime-proof
+		    'docker-echo
+		    '((image . "alpine:latest"))
+		    (Fun AdapterResult <- Unit)))
              (failure
               (store-test-capture-failure
                (lambda ()

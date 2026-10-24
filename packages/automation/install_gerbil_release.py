@@ -15,17 +15,17 @@ import subprocess
 from pathlib import Path
 
 
-REVISION = "2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb"
+REVISION = "1cfb032c7a1612637da6205f5f8a15683eba3ba0"
 RELEASES = {
     ("Linux", "x86_64"): (
         "linux", "x86_64",
-        f"gerbil-v0.19-{REVISION}-linux-x86_64-portable-full-single-host-unlimited-patchf5cedd8168cb",
-        "9844ba362fdf6f1c5e8a4411e462a466d52dee0d541f8e84f61091cec0e5e740",
+        f"gerbil-v0.19-{REVISION}-linux-x86_64-portable-full-single-host-unlimited-multiple-vms-patch9599b09b82f8",
+        "143c691fee5af4f9f631fd339f69a66f562e42e0bfc1d4ee2cda5fa8d35c35ee",
     ),
     ("Darwin", "arm64"): (
         "darwin", "aarch64",
-        f"gerbil-v0.19-{REVISION}-darwin-aarch64-gcc16-arm64-aot-tools-single-host-unlimited-patchf5cedd8168cb",
-        "8d9c88434aed6301eaebb719bf52472f05c2368eafc630e8a9f1d67cc9895a21",
+        f"gerbil-v0.19-{REVISION}-darwin-aarch64-gcc16-arm64-aot-tools-single-host-unlimited-multiple-vms-patch618d76f9eb72",
+        "0e18d063f888a73d9f9692d441fb3776898114e8440eada6876937d289578183",
     ),
 }
 

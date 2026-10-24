@@ -51,7 +51,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - toolchain: v0.19-2591dcd
+          - toolchain: v0.19-1cfb032
     env:
       GERBIL_RELEASE_ROOT: ${{ github.workspace }}/.ci/gerbil-release/${{ matrix.toolchain }}
     steps:
@@ -99,7 +99,7 @@ jobs:
         env:
           GERBIL_BUILD_VERBOSE: "1"
           GERBIL_SOURCE_REF: ${{ matrix.toolchain }}
-          UPSTREAM_SHA: 2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb
+          UPSTREAM_SHA: 1cfb032c7a1612637da6205f5f8a15683eba3ba0
           WARM_BUDGET_SECONDS: "30"
         run: gxi ./run.ss
 

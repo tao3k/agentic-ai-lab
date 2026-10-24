@@ -11,7 +11,7 @@
         (only-in :agentic-ai-lab/modules/services/opentofu/objects agentic-ai-lab-opentofu-provider-from-directory)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
         (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
-        :yuanxu/types :clan/poo/object)
+        :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-provider-artifact-test)
 
 (def opentofu-provider-artifact-test

@@ -4,12 +4,12 @@
 (import :std/test
         (only-in :std/source this-source-file)
         (only-in :std/io/tempfile call-with-temporary-directory)
-        (only-in :clan/poo/object .def .get .call .slot? .ref/cached object?)
-        (only-in :clan/poo/mop call-with-slot-read-observer)
+        (only-in :clan/poo/object .def .get .call .cc .slot? .ref/cached object?)
+        (only-in :clan/poo/mop call-with-slot-read-observer validate TypeError?)
         (only-in :clan/poo/object object-protocol-set! .o)
         (only-in :yuanxu/module-system/source/admission module-source-operation-resume)
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/module-system/interface yuanxu-load-modules))
 (export module-nix-publication-test)
@@ -51,6 +51,13 @@
                    (scope (.get view modules nix))
                    (prototype (.get scope prototypes Source)))
               (check-equal? (object? prototype) #t)
+              ;; The selected Module publishes its own native Config Type.
+              (check-equal?
+                (.get (validate (.get scope types Config) (.get scope config)) nix)
+                (.get scope config nix))
+              (check-exception
+                (validate (.get scope types Config) (.cc (.get scope config) nix: 7))
+                TypeError?)
               (check-equal? (.slot? prototype '.build) #t)
               (check-equal? (.slot? (.get scope types) 'FlakeSource) #t)
               (check-equal? (.slot? (.get scope prototypes FlakeSource) '.prepare) #t)

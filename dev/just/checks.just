@@ -9,6 +9,7 @@ query:
 # Run the cold native lifecycle in order; stop on the first failure.
 [group('check')]
 rebuild:
+    just clean-core
     just clean
     just deps
     just build

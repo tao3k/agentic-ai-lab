@@ -7,6 +7,7 @@
         :clan/poo/object
         :agentic-ai-lab/modules/governance/evidence/batched-merkle)
 
+(export batched-merkle-evidence-test)
 
 (def (leaf index)
   (agentic-ai-lab-batched-evidence-leaf

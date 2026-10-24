@@ -155,11 +155,12 @@
             attribute: "packages.aarch64-darwin.resolved"
             inputs: (.o catalog: stored))
           (def expected #f)
+          ;; Capture the independent root-lock check and the actual derivation query.
           (def (query source)
             (call-with-output-string
               (lambda (port)
                 (parameterize ((current-error-port port)
-                               (current-module-process-trace-budget (box 1)))
+                               (current-module-process-trace-budget (box 2)))
                   (let (value (.call source .instantiate))
                     (if expected (check-equal? value expected)
                       (set! expected value)))))))

@@ -135,10 +135,10 @@
   (loop-strategy-plan? value))
 
 (def (loop-governor-node-type-contract->alist)
-  (yuanxu-native-contract->alist +loop-governor-node-type-contract+))
+  (yuanxu-object-contract->alist +loop-governor-node-type-contract+))
 
 (def (loop-governor-type-contract->alist)
-  (yuanxu-native-contract->alist +loop-governor-type-contract+))
+  (yuanxu-object-contract->alist +loop-governor-type-contract+))
 
 (def (loop-governor-check-slot! contract value)
   (yuanxu-contract-check-slot! contract value))

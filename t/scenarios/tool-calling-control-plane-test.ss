@@ -9,6 +9,8 @@
         :agentic-ai-lab/user-interface/profiles/tool-calling
         :agentic-ai-lab/user-interface/scenarios/tool-calling-agent-loop/scenario)
 
+(export tool-calling-control-plane-test)
+
 (def tool-calling-control-plane-test
   (test-suite "tool calling control plane"
     (yuanxu-test-case "validates tool call plan and receipt facts"

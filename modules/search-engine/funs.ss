@@ -3,6 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Search composition is declarative; execution remains consumer-owned.
 (import (only-in :clan/poo/object .ref object?)
         :yuanxu/object-family/role-syntax
@@ -79,7 +83,13 @@
                    (and (null? (cdr maybe-metadata))
                         (list? (car maybe-metadata)))))
     (error "invalid POO Search stage" name operation input-domain output-domain))
-  (let (flow (external-flow name operation arguments input-domain output-domain))
+  ;; Search domain tags describe evidence policy. The handoff carries arbitrary
+  ;; input and an actual AdapterResult; tags never masquerade as callable Types.
+  (let (flow (external-flow
+	      name
+	      operation
+	      arguments
+	      (Fun AdapterResult <- Any)))
     (poo-core-role-object
      (slots ((name name)
              (operation operation)
@@ -95,8 +105,13 @@
    (slots ((name name)
            (mode mode)
            (children children)
-           (input-domain (flow-input-contract flow))
-           (output-domain (flow-output-contract flow))
+           (input-domain (agentic-ai-lab-search-node-input-domain (car children)))
+           (output-domain
+             (if (eq? mode 'parallel)
+               (foldl (lambda (child domains)
+                        (list 'pair domains (agentic-ai-lab-search-node-output-domain child)))
+                      (agentic-ai-lab-search-node-output-domain (car children)) (cdr children))
+               (agentic-ai-lab-search-node-output-domain (car (reverse children)))))
            (flow flow)
            (metadata metadata)))
    (supers agentic-ai-lab-search-composition-prototype)))

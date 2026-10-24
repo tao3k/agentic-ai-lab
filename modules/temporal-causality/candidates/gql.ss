@@ -98,10 +98,8 @@
   (let (result-set
         (agentic-ai-lab-query-result-set-replay
          result-set (.ref query 'result-contract)))
-    (unless (and (>= (string-length (.ref candidate-receipt 'result-digest)) 29)
-                 (string=?
-                  (substring (.ref candidate-receipt 'result-digest) 0 29)
-                  "agentic-ai-lab.query.scalar-row-v1:")
+    (unless (and (string-prefix? "agentic-ai-lab.query.scalar-row-v1:"
+                                (.ref candidate-receipt 'result-digest))
                  (eq? (.ref candidate-receipt 'provider-identity) 'gql)
                  (equal? (.ref candidate-receipt 'request-digest)
                          (agentic-ai-lab-query-source-content-identity query))

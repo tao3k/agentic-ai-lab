@@ -15,7 +15,7 @@
         :yuanxu/utilities/final-projection-syntax)
 
 (export agentic-ai-lab-sandbox-profile-kind AgenticAILabSandboxProfileContract
-        agentic-ai-lab-sandbox-profile-contract-admission agentic-ai-lab-sandbox-profile-contract-admitted?
+        agentic-ai-lab-sandbox-profile-contract-admitted?
         agentic-ai-lab-sandbox-profile-type-contract->alist agentic-ai-lab-require-sandbox-profile-contract!
         agentic-ai-lab-sandbox-profiles-presentation-kind agentic-ai-lab-sandbox-profile agentic-ai-lab-sandbox-profiles
         agentic-ai-lab-sandbox-profile-config agentic-ai-lab-sandbox-profile? agentic-ai-lab-sandbox-profile-name

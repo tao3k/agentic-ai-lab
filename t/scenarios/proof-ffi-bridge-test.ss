@@ -8,6 +8,8 @@
         :agentic-ai-lab/modules/proof/projections/proof-ffi-bridge
         :agentic-ai-lab/modules/proof/projections/proof-gate-receipts)
 
+(export proof-ffi-bridge-test)
+
 (def proof-ffi-bridge-test
   (test-suite "proof FFI bridge"
     (yuanxu-test-case "projects the accepted proof payload"

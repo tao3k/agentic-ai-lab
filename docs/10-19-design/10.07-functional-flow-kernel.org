@@ -26,6 +26,46 @@ the semantic object system.
 
 Functional programming is the preferred implementation style for the Scheme kernel. Funflow was introduced to keep the kernel centered on Category/Arrow-style composition, pure flow values, hygienic Gerbil authoring macros, and POO metadata for strategy selection. POO + functional programming is the non-negotiable core of this project; imperative schedulers, mutable runtime state, and backend-specific execution logic stay outside this Scheme layer.
 
+** Current native Function boundary
+
+The implementation lives in =core/modules/funflow/control-plane/=. Task and Flow
+are extensible POO values. An operation owns one native Function Type; its input
+and output views are derived from that descriptor. The former symbolic
+=name proc input-contract output-contract= API is removed.
+
+#+begin_src scheme
+(import :yuanxu/modules/funflow/control-plane/api)
+
+(def increment
+  (flow-arr 'increment (Fun Integer <- Integer) (lambda (value) (+ value 1))))
+(def double
+  (flow-arr 'double (Fun Integer <- Integer) (lambda (value) (* value 2))))
+(def pipeline (flow-then 'pipeline increment double))
+#+end_src
+
+Native =ObjectContract.= and =refine= validate Flow routes. Category operation
+slots, submitted functions, dynamic binders, recovery handlers and runtime
+callbacks retain native Function boundaries. Conditional selection uses native
+=Observation. .bind=; Try uses native =Sum=. Type descriptions in DAG and Store
+reports are data projections, while runtime execution keeps actual Types.
+
+Fixed-domain module constructors state their signatures in their own definitions:
+=(custom-repeat-flow name text count)= and =(word-count-flow name)= need no
+caller-supplied contract labels. Docker and Sandbox constructors accept one
+native operation signature and return the actual adapter result envelope.
+
+Current verification uses the heap-fenced workspace entrypoints:
+
+#+begin_src sh
+just test-core
+just test-file t/tutorial-feature-batch-test.ss
+just test-file t/runtime-bridge-test.ss
+just proofs
+#+end_src
+
+The numbered landing notes below describe the evolution of the kernel. They do
+not replace the current API or the current workspace acceptance results.
+
 ** 10.07.10 Reference Evidence
 
 The local Gerbil POO checkout at =.data/gerbil-poo/fun.ss= defines functional
@@ -51,7 +91,7 @@ syntax.
 
 ** 10.07.20 Code Landing
 
-The current landing keeps =src/core/flow.ss= as the owner because that file
+The current landing keeps =core/modules/funflow/control-plane/flow.ss= as the owner because that file
 already owns the stable =flow= declaration structure and descriptor
 classification.
 
@@ -68,25 +108,24 @@ Implemented functional kernel surface:
 - =flow-category-compose=, =flow-category-identity=, =flow-category-arr=,
   =flow-category-map=, and =flow-category-fanout= call the selected POO
   category operations.
-- =src/core/flow-syntax.ss= owns hygienic Gerbil authoring macros:
-  =defagentic-ai-lab-arr=, =defagentic-ai-lab-identity=, =defagentic-ai-lab-compose=,
-  =defyuanxu-map=, =defagentic-ai-lab-fanout=, =defagentic-ai-lab-first=, and
-  =defagentic-ai-lab-second=.
+- =core/modules/funflow/control-plane/flow-syntax.ss= owns hygienic Gerbil authoring macros:
+  =defyuanxu-arr=, =defyuanxu-identity=, =defyuanxu-compose=,
+  =defyuanxu-map=, =defyuanxu-fanout=, =defyuanxu-first=, and
+  =defyuanxu-second=.
 
-The stable =flow= struct is unchanged. The POO category object is metadata and
-operation selection over existing declarations, not a replacement runtime
-representation.
+Flow declarations and Category operations are native POO values. The Category
+selects typed functional operations; the runner owns execution and receipts.
 
 ** 10.07.30 Boundary Rules
 
-1. Category/Arrow composition stays in =src/core/flow.ss=.
-2. Planning stays in =src/core/plan.ss= and strategy-owned planner selection.
-3. Local execution proofs stay in =src/core/runner.ss=.
+1. Category/Arrow composition stays in =core/modules/funflow/control-plane/flow.ss=.
+2. Planning stays in =core/modules/funflow/control-plane/graph.ss= and strategy-owned planner selection.
+3. Local execution proofs stay in =core/modules/funflow/control-plane/runner.ss=.
 4. Runtime handoff stays behind runtime adapters and extension descriptors.
 5. Authoring conveniences may use hygienic Gerbil macros later, but those
    macros must expand to the functional kernel and POO objects. They must not
    define a new alist/record DSL.
-6. The landed =defagentic-ai-lab-*= macros define Gerbil bindings over existing
+6. The landed =defyuanxu-*= macros define Gerbil bindings over existing
    combinators. Flow names become quoted symbolic names; procedures, contracts,
    and source flows remain caller expressions.
 
@@ -95,7 +134,7 @@ representation.
 Proof command:
 
 #+begin_src sh
-GERBIL_LOADPATH=src:t gxtest t/functional-flow-kernel-test.ss
+just test-core
 #+end_src
 
 The test covers:
@@ -113,11 +152,11 @@ The hygienic macro authoring layer is now implemented.
 
 Current proof:
 
-- =defagentic-ai-lab-arr= authors pure arrows.
-- =defagentic-ai-lab-compose= authors sequential composition.
+- =defyuanxu-arr= authors pure arrows.
+- =defyuanxu-compose= authors sequential composition.
 - =defyuanxu-map= authors output mapping.
-- =defagentic-ai-lab-fanout= authors branch/fanout declarations.
-- =defagentic-ai-lab-first= and =defagentic-ai-lab-second= author pair-shaped Arrow
+- =defyuanxu-fanout= authors branch/fanout declarations.
+- =defyuanxu-first= and =defyuanxu-second= author pair-shaped Arrow
   projections.
 - =t/functional-flow-kernel-test.ss= proves that macro-authored flows run
   through the same runner path as direct function-authored flows.
@@ -159,8 +198,8 @@ Implemented workflow constructor surface:
 Proof commands:
 
 #+begin_src sh
-GERBIL_LOADPATH=src:t gxtest t/tutorial-feature-batch-test.ss
-GERBIL_LOADPATH=src:t gxtest t/tutorial-makefile-runtime-test.ss
+just test-file t/tutorial-feature-batch-test.ss
+just test-file t/tutorial-makefile-runtime-test.ss
 #+end_src
 
 Boundary result:
@@ -184,7 +223,7 @@ This slice makes the POO category object cover the Arrow pair projections,
 not only arr/map/fanout.
 
 - Code:
-  - =src/core/flow.ss= now stores =first= and =second= operations in
+  - =core/modules/funflow/control-plane/flow.ss= now stores =first= and =second= operations in
     =flow-category-prototype=.
   - =flow-category-first= and =flow-category-second= expose those operations
     through the same category object used for arr/map/fanout.
@@ -203,7 +242,7 @@ This slice exposes arrow graphs as report-only DAG receipts for strategy and
 Marlin-facing consumers.
 
 - Code:
-  - =src/core/plan.ss= now exports =flow-dag-receipt-kind=,
+  - =core/modules/funflow/control-plane/graph.ss= now exports =flow-dag-receipt-kind=,
     =execution-plan-root-node-ids=, =execution-plan-terminal-node-ids=,
     =plan-node->dag-entry=, =execution-plan->dag-receipt=, and
     =flow->dag-receipt=.
@@ -223,7 +262,7 @@ agent-sandbox extension constructors need matching authoring macros.
 ** 10.07.110 DAG Runtime Manifest Discovery Landing
 This slice puts the Arrow DAG receipt behind the same report-only discovery
 shape used by Marlin-facing runtime manifests.
-- =src/core/plan.ss= now exports =+flow-dag-runtime-manifest-schema+=,
+- =core/modules/funflow/control-plane/graph.ss= now exports =+flow-dag-runtime-manifest-schema+=,
   =execution-plan->dag-runtime-manifest=, and =flow->dag-runtime-manifest=.
 - The manifest exposes =schema=, =bridge=, =producer=, =consumer=,
   =operation=, =receipt-schema=, =dag-receipt=, topology summaries, and
@@ -237,7 +276,7 @@ shape used by Marlin-facing runtime manifests.
   execution at =marlin-agent-core=.
 Proof:
 #+begin_src sh
-GERBIL_LOADPATH=src:t gxtest t/functional-flow-kernel-test.ss
+just test-core
 #+end_src
 Boundary result:
 - The manifest wraps the report-only DAG receipt.
@@ -246,32 +285,32 @@ Boundary result:
 ** 10.07.120 User-Facing Functional DAG Authoring Landing
 This slice exposes a compact Gerbil macro surface for users who want to write a
 Funflow-style DAG through functional composition.
-- =defagentic-ai-lab-dag= defines a DAG flow as Arrow fanout over two already-defined
+- =defyuanxu-dag= defines a DAG flow as Arrow fanout over two already-defined
   flow expressions.
-- =defagentic-ai-lab-dag-artifacts= names the report-only DAG receipt and Marlin
+- =defyuanxu-dag-artifacts= names the report-only DAG receipt and Marlin
   runtime manifest for that flow.
 - Both macros expand to public =flow= and =plan= combinators. They do not
   introduce an alist/record workflow language.
 Example:
 #+begin_src scheme
-(defagentic-ai-lab-arr parse-input
+(defyuanxu-arr parse-input
   parse-input
   (lambda (x) x)
   'text
   'tokens)
 
-(defagentic-ai-lab-arr score-input
+(defyuanxu-arr score-input
   score-input
   (lambda (x) x)
   'text
   'score)
 
-(defagentic-ai-lab-dag analyze-input
+(defyuanxu-dag analyze-input
   analyze-input
   parse-input
   score-input)
 
-(defagentic-ai-lab-dag-artifacts analyze-input-receipt
+(defyuanxu-dag-artifacts analyze-input-receipt
   analyze-input-manifest
   analyze-input
   'analyze-input-request)
@@ -303,7 +342,7 @@ The Scheme implementation now models that shape as POO metadata:
 Boundary:
 - Strands are declaration/policy objects, not runners.
 - Store and Docker remain adapter/runtime-owned.
-- Function composition stays in =src/core/flow.ss= through Category/Arrow
+- Function composition stays in =core/modules/funflow/control-plane/flow.ss= through Category/Arrow
   operations; extension ownership is represented through POO object slots and
   C4-compatible descriptor supers.
 
@@ -314,17 +353,17 @@ Proof:
 This slice adds value-dependent flow composition to the Functional + POO kernel.
 
 Code landing:
-- =src/core/flow.ss= owns =kleisli-step=, =flow-bind=, and =flow-kleisli=.
+- =core/modules/funflow/control-plane/flow.ss= owns =kleisli-step=, =flow-bind=, and =flow-kleisli=.
 - =flow-category-prototype= now stores =bind= as a POO category slot, and
   =flow-category-bind= dispatches through the selected category object.
-- =src/core/plan.ss= projects bind as a =kleisli= DAG node. It does not
+- =core/modules/funflow/control-plane/graph.ss= projects bind as a =kleisli= DAG node. It does not
   statically expand the binder because the next flow depends on the source
   value.
-- =src/core/runner.ss= interprets the =kleisli= node by running the source flow,
+- =core/modules/funflow/control-plane/runner.ss= interprets the =kleisli= node by running the source flow,
   calling the binder with the source value, validating that the binder returns a
   =flow=, and then running the returned flow.
-- =src/core/flow-syntax.ss= exposes =defagentic-ai-lab-bind= and
-  =defagentic-ai-lab-kleisli= for compact authoring.
+- =core/modules/funflow/control-plane/flow-syntax.ss= exposes =defyuanxu-bind= and
+  =defyuanxu-kleisli= for compact authoring.
 
 Boundary result:
 - Static =flow-then= remains the Category compose operation.

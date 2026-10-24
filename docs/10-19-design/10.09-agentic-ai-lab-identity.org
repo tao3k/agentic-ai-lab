@@ -140,3 +140,11 @@ reports scale-memory, compilation-idle, generated-object and source-boundary
 failures. Ops builtin ownership and fixture/suite separation are being prepared
 without modifying the sources under that running baseline. Timeout, memory and
 admission policies remain unchanged.
+
+The next Linux Nix run exposed a distinct recipe defect: paths recovered from
+JSON had lost Nix string context. The approved-publication fixture now restores
+its qualified shell and coreutils paths with =builtins.storePath=. A pinned Nix
+2.34.4+1 comparison observed zero derivation inputs before the correction and
+two after it; the corrected local derivation built successfully. Full approved
+recovery remains a separate remote/native gate, not implied by that input-graph
+check. No lock or source-currentness check was weakened.

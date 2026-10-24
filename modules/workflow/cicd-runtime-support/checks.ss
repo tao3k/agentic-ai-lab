@@ -9,7 +9,7 @@
 (import (only-in :clan/poo/object .ref)
         (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol
                  +runtime-request-schema+)
-        (only-in :yuanxu/modules/funflow/control-plane/runtime-command-descriptor
+        (only-in :yuanxu/modules/funflow/func
                  runtime-command-fields->manifest)
         :yuanxu/modules/funflow/check-types
         :yuanxu/modules/funflow/check-objects

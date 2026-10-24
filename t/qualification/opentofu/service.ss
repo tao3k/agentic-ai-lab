@@ -100,7 +100,6 @@
             (write `(yuanxu! :load-modules "./modules" mode: explicit
                       (json-schema @ ,(path-expand "core/modules/json-schema" project))
                       (nix @ ,(path-expand "modules/nix" project))
-                      (ops @ ,(path-expand "core/ops" project))
                       (funflow @ ,(path-expand "core/modules/funflow" project))
                       :services (opentofu)) port))))
       (displayln "PHASE source-selection at=" (real-time)) (force-output)

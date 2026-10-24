@@ -13,12 +13,12 @@
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
                  yuanxu-contract-value-type
-                 yuanxu-native-contract
-                 yuanxu-native-contract->alist
-                 yuanxu-native-contract-slots)
-        (only-in :yuanxu/type-facts/objects
-                 yuanxu-native-contract->type-facts
-                 yuanxu-native-contract->lean-fact-contracts)
+                 yuanxu-object-contract
+                 yuanxu-object-contract->alist
+                 yuanxu-object-contract-slots)
+        (only-in :yuanxu/object-types/facts
+                 yuanxu-object-contract->type-facts
+                 yuanxu-object-contract->lean-fact-contracts)
         (only-in :agentic-ai-lab/modules/session/policy
                  AgenticAILabSessionPolicyContract
                  AgenticAILabSessionToolGrantContract
@@ -61,7 +61,7 @@
 
 ;; : (-> Integer YuanxuObjectTypeContract)
 (def (type-contract-performance-object-contract slot-count)
-  (yuanxu-native-contract
+  (yuanxu-object-contract
    'type-contract/performance
    'type-contract-performance
    'AgenticAILabTypeContractPerformanceObject
@@ -69,8 +69,7 @@
    (agentic-ai-lab-performance-build-list
     slot-count
     type-contract-performance-slot-contract)
-   (lambda (_candidate _slot) #f)
-   (lambda (_candidate _slot) #f)
+
    '((projection . performance))))
 
 ;; : (-> Integer [Symbol])
@@ -95,7 +94,7 @@
 ;;     %
 (def (type-contract-performance-check-slots-once object-contract values)
   (for-each yuanxu-contract-check-slot!
-            (yuanxu-native-contract-slots object-contract)
+            (yuanxu-object-contract-slots object-contract)
             values)
   (length values))
 
@@ -151,7 +150,7 @@
      (lambda ()
        (length
         (cdr (assoc 'slots
-                    (yuanxu-native-contract->alist
+                    (yuanxu-object-contract->alist
                      object-contract))))))))
 
 ;; : (-> Integer Integer Integer)
@@ -162,7 +161,7 @@
      rounds
      (lambda ()
        (length
-        (yuanxu-native-contract->type-facts object-contract))))))
+        (yuanxu-object-contract->type-facts object-contract))))))
 
 ;; : (-> Integer Integer Integer)
 (def (type-contract-performance-lean-facts-rounds slot-count rounds)
@@ -172,7 +171,7 @@
      rounds
      (lambda ()
        (length
-        (yuanxu-native-contract->lean-fact-contracts
+        (yuanxu-object-contract->lean-fact-contracts
          object-contract))))))
 
 ;;; Boundary: cached projections model agent-loop hot paths. Contract facts are
@@ -181,7 +180,7 @@
 ;; : (-> Integer Integer Integer)
 (def (type-contract-performance-cached-type-facts-rounds slot-count rounds)
   (let (facts
-        (yuanxu-native-contract->type-facts
+        (yuanxu-object-contract->type-facts
          (type-contract-performance-object-contract slot-count)))
     (type-contract-performance-repeat
      rounds
@@ -194,7 +193,7 @@
    rounds
    (lambda ()
      (length
-      (yuanxu-native-contract->alist
+      (yuanxu-object-contract->alist
        AgenticAILabSessionPolicyContract)))))
 
 ;; : (-> Integer Integer)
@@ -203,7 +202,7 @@
    rounds
    (lambda ()
      (length
-      (yuanxu-native-contract->alist
+      (yuanxu-object-contract->alist
        AgenticAILabSessionToolGrantContract)))))
 
 ;; : (-> Integer Integer)

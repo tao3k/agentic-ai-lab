@@ -8,6 +8,8 @@
         :agentic-ai-lab/modules/proof/projections/proof-gate-decision
         :agentic-ai-lab/modules/proof/projections/proof-gate-receipts)
 
+(export proof-gate-decision-test)
+
 (def proof-gate-decision-test
   (test-suite "proof gate decision"
     (yuanxu-test-case "derives accepted and rejected decisions"

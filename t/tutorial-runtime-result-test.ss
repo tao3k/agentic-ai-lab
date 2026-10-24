@@ -3,6 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: runtime tutorial stages prove Docker/Store handoff behavior.
 ;;; Invariant: these tests keep heavy runtime semantics behind command output.
 
@@ -120,17 +124,17 @@
                  '((tutorial . stage-7))))
                (config (make-docker-run-config
                         (list (cons 'runtime-command runtime-command))))
-               (flow (docker-flow 'compile-c
-                                  "gcc:9.3.0"
-                                  "gcc"
-                                  '("/example/double.c" "/example/main.c" "-o" "/output/main")
-                                  '(((store-item . example-src)
-                                     (mount-path . "/example"))
-                                    ((store-item . output-dir)
-                                     (mount-path . "/output")))
-                                  'process-handle
-                                  'integer
-                                  'integer))
+               (flow (docker-flow
+		      'compile-c
+		      "gcc:9.3.0"
+		      "gcc"
+		      '("/example/double.c" "/example/main.c" "-o" "/output/main")
+		      '(((store-item . example-src)
+                         (mount-path . "/example"))
+                        ((store-item . output-dir)
+                         (mount-path . "/output")))
+		      'process-handle
+		      (Fun AdapterResult <- Integer)))
                (result (run-result-value
                         (run-flow-with-config config flow 3)))
                (docker (runtime-docker-config seen-request)))
@@ -161,24 +165,24 @@
                (config (make-docker-store-run-config
                         (list (cons 'runtime-command runtime-command))))
                (compile-flow
-                (docker-flow 'compile-c-stage-8
-                             "gcc:9.3.0"
-                             "gcc"
-                             '("/example/double.c" "/example/main.c" "-o" "/output/main")
-                             '(((store-item . example-src)
-                                (mount-path . "/example"))
-                               ((store-item . output-dir)
-                                (mount-path . "/output")))
-                             'process-handle
-                             'integer
-                             'process-handle))
+                (docker-flow
+		 'compile-c-stage-8
+		 "gcc:9.3.0"
+		 "gcc"
+		 '("/example/double.c" "/example/main.c" "-o" "/output/main")
+		 '(((store-item . example-src)
+                    (mount-path . "/example"))
+                   ((store-item . output-dir)
+                    (mount-path . "/output")))
+		 'process-handle
+		 (Fun AdapterResult <- Integer)))
                (store-output
-                (store-flow 'store-c-binary
-                            'put
-                            '((store-item . c-binary)
-                              (path . "/output/main"))
-                            'process-handle
-                            'artifact-manifest))
+                (store-flow
+		 'store-c-binary
+		 'put
+		 '((store-item . c-binary)
+                   (path . "/output/main"))
+		 (Fun AdapterResult <- Any)))
                (flow (flow-then 'compile-and-store compile-flow store-output))
                (result (run-result-value
                         (run-flow-with-config config flow 3)))
@@ -215,24 +219,24 @@
                (config (make-docker-store-run-config
                         (list (cons 'runtime-command runtime-command))))
                (compile-flow
-                (docker-flow 'compile-c-stage-9
-                             "gcc:9.3.0"
-                             "gcc"
-                             '("/example/double.c" "/example/main.c" "-o" "/output/main")
-                             '(((store-item . example-src)
-                                (mount-path . "/example"))
-                               ((store-item . output-dir)
-                                (mount-path . "/output")))
-                             'process-handle
-                             'integer
-                             'process-handle))
+                (docker-flow
+		 'compile-c-stage-9
+		 "gcc:9.3.0"
+		 "gcc"
+		 '("/example/double.c" "/example/main.c" "-o" "/output/main")
+		 '(((store-item . example-src)
+                    (mount-path . "/example"))
+                   ((store-item . output-dir)
+                    (mount-path . "/output")))
+		 'process-handle
+		 (Fun AdapterResult <- Integer)))
                (store-output
-                (store-flow 'store-c-binary-stage-9
-                            'put
-                            '((store-item . c-binary-stage-9)
-                              (path . "/output/main"))
-                            'process-handle
-                            'artifact-manifest))
+                (store-flow
+		 'store-c-binary-stage-9
+		 'put
+		 '((store-item . c-binary-stage-9)
+                   (path . "/output/main"))
+		 (Fun AdapterResult <- Any)))
                (flow (flow-then 'compile-and-store-stage-9
                                 compile-flow
                                 store-output))

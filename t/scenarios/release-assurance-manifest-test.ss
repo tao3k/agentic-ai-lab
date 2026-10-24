@@ -5,6 +5,8 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
+        (only-in :std/crypto/digest sha256)
+        (only-in :std/encoding/hex hex-encode)
         :agentic-ai-lab/modules/workflow/contracts/release-assurance-manifest
         :yuanxu/object-family/role-syntax
         :agentic-ai-lab/modules/workflow/qualification/capability-prototypes)
@@ -35,6 +37,35 @@
    'lean-owner 'lean 'passed evidence-b))
 (def abi (agentic-ai-lab-assurance-abi-decision 'runtime-v0.1 #f 'ac10-review))
 
+(def expected-canonical-manifest
+  '(agentic-ai-lab.release-assurance-manifest.v1
+    (release-id rc-1) (source-revision "revision-1") (host macos-arm64)
+    (toolchains (gerbil . "0.18.2") (lean . "4"))
+    (identities (bundle . "bundle-digest") (proof-vector . "vector-digest"))
+    (tcbs (tcb bundle-semantic bundle-semantic
+               (components canonical-schema digest validator)))
+    (claims
+     (claim bundle-valid (level l1-conformant) (owner scheme) (tcb bundle-semantic)
+       (evidence (evidence bundle-receipt (owner scheme)
+                    (artifact "receipts/bundle") (digest "digest-a")))
+       (exclusions out-of-band-effects) (failure-state fail-closed))
+     (claim proof-linked (level l4-formally-linked) (owner lean) (tcb bundle-semantic)
+       (evidence (evidence proof-receipt (owner lean)
+                    (artifact "receipts/proof") (digest "digest-b")))
+       (exclusions actual-effect-mediation) (failure-state reject-proof)))
+    (gates
+     (gate lean-owner (owner lean) (status passed)
+       (evidence (evidence proof-receipt (owner lean)
+                    (artifact "receipts/proof") (digest "digest-b"))))
+     (gate scheme-owner (owner scheme) (status passed)
+       (evidence (evidence bundle-receipt (owner scheme)
+                    (artifact "receipts/bundle") (digest "digest-a")))))
+    (abi-decision (version runtime-v0.1) (frozen? #f) (review ac10-review))))
+
+(def (canonical-datum-sha256 datum)
+  (hex-encode (sha256 (string->utf8
+    (call-with-output-string (lambda (port) (write datum port)))))))
+
 (def (manifest claims gates tcbs)
   (agentic-ai-lab-release-assurance-manifest
    'rc-1 "revision-1" 'macos-arm64
@@ -63,6 +94,8 @@
     (agentic-ai-lab-versioned-capability
      schema-id-value schema-version-value)
     (agentic-ai-lab-revision-bound-capability revision-value))))
+
+(export release-assurance-manifest-test)
 
 (def release-assurance-manifest-test
   (test-suite "AC-10 S1 ReleaseAssuranceManifest v1"
@@ -132,10 +165,17 @@
                      (list gate-b gate-a) abi)))
         (check (agentic-ai-lab-release-assurance-manifest-normalize left)
                => (agentic-ai-lab-release-assurance-manifest-normalize right))
+        (check (agentic-ai-lab-release-assurance-manifest-normalize left)
+               => expected-canonical-manifest)
         (check (.ref (agentic-ai-lab-release-assurance-manifest-identity left) 'digest)
                => (.ref (agentic-ai-lab-release-assurance-manifest-identity right)
                         'digest))
         (check (.ref (agentic-ai-lab-release-assurance-manifest-identity left) 'digest)
+               => "217c6f70084e874e0aa6b0575d6a6e557978975500b4505cec6e7642ccf3faa5")
+        ;; Preserve the pre-f30b858b golden as a namespace-only control.
+        (check (canonical-datum-sha256
+                (cons 'poo-flow.release-assurance-manifest.v1
+                      (cdr expected-canonical-manifest)))
                => "871e2303fcabbaffb4b3a95dfbafdef4fb65768ad9a5ae4c75e409b20bd73de5")))
     (yuanxu-test-case "identity changes when bound release evidence changes"
       (let* ((left (manifest (list claim-a) (list gate-a) (list tcb)))

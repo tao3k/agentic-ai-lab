@@ -6,6 +6,8 @@
          (only-in :std/test test-suite)
         :agentic-ai-lab/modules/proof/projections/composition-facts)
 
+(export composition-proof-facts-test)
+
 (def composition-proof-facts-test
   (test-suite "composition proof facts"
     (yuanxu-test-case "projects accepted and rejected composition facts"

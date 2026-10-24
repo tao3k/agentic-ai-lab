@@ -33,8 +33,8 @@
                    (else '())))) (directory-files directory))))
 (def (scheme-file? name) (string-suffix? ".ss" name))
 (def (snapshots (flake #f))
-  (let* ((owners '("modules/nix" "modules/services/opentofu" "modules/json-schema"
-                   "module-system/source" "module-system/building" "ops" "t/qualification/opentofu"))
+  (let* ((owners '("modules/nix" "modules/services/opentofu" "core/modules/json-schema"
+                   "core/module-system/source" "core/module-system/building" "core/object-types" "core/ops" "t/qualification/opentofu"))
          (files (append
            (foldr append '()
              (map (lambda (dir)
@@ -46,14 +46,14 @@
            (regular-files (path-expand "t/fixtures/opentofu" root)
              (lambda (name) (or (string-suffix? ".nix" name) (string-suffix? ".nix.in" name))) #t)
            (map (cut path-expand <> root)
-             '("init.ss" "types.ss" "core-spec.ss" "gerbil.pkg" "modules/gerbil.pkg" "Justfile" "build.ss"
-               "module-system/observability/presentation.ss" "module-system/authoring/roles.ss"
-               "t/module-source-admission-test.ss" "t/module-configuration-build-test.ss"
-               "t/module-config-role-test.ss" "t/module-build-role-test.ss"
-               "t/module-explicit-sources-test.ss" "t/opentofu-publication-test.ss"
-               "t/module-build-graph-test.ss" "t/module-publication-test.ss"
-               "t/ops-functional-test.ss" "t/ops-process-script-test.ss" "t/ops-rounds-test.ss"
-               "t/ops-selected-packages-test.ss" "t/ops-module-publication-test.ss" "t/nix-flake-source-test.ss"))
+             '("init.ss" "core/init.ss" "core/build.ss" "core/gerbil.pkg" "core/prelude.ss" "core/core-spec.ss" "gerbil.pkg" "modules/gerbil.pkg" "Justfile" "build.ss" "build-spec.ss"
+               "core/module-system/observability/presentation.ss" "core/module-system/authoring/roles.ss"
+               "core/t/module-source-admission-test.ss" "core/t/module-configuration-build-test.ss"
+               "core/t/module-config-role-test.ss" "core/t/module-build-role-test.ss"
+               "core/t/module-explicit-sources-test.ss" "t/opentofu-publication-test.ss"
+               "core/t/module-build-graph-test.ss" "core/t/module-publication-test.ss"
+               "core/t/ops-functional-test.ss" "core/t/ops-process-script-test.ss" "t/ops-rounds-test.ss"
+               "t/ops-selected-packages-test.ss" "core/t/ops-module-publication-test.ss" "t/nix-flake-source-test.ss"))
            (if flake (regular-files flake (lambda (_) #t) #t) '()))))
     (map (lambda (path)
            (cons path (hex-encode (sha256 (call-with-input-file path read-all-as-u8vector)))))

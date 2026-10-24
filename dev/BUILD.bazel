@@ -8,7 +8,7 @@ exports_files([
 ])
 filegroup(
     name = "sources",
-    srcs = ["gerbil.pkg"] + glob(["*.ss", "testing/*.ss"]),
+    srcs = ["gerbil.pkg"] + glob(["*.ss", "modules/testing/*.ss"]),
     visibility = ["//visibility:public"],
 )
 

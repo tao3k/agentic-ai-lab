@@ -65,7 +65,7 @@
     (yuanxu-test-case "keeps the Core module entry independent of product imports"
       (check-equal?
        (call-with-input-file
-        "yuanxu/module-system/interface.ss"
+        "core/module-system/interface.ss"
         (lambda (port)
           (source-port-has-module-prefix?
            port

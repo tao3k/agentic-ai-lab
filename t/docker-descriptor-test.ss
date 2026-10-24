@@ -1,3 +1,6 @@
+(import (only-in :yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures Fun Integer Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -48,18 +51,18 @@
                           (set! seen-request (cdr (assoc 'request envelope)))
                           (runtime-result 15 '(artifact ccompilation-output))))
                (config (make-docker-run-config
-                        (list (cons 'runtime-command command))))
-               (flow (docker-flow 'compile-c
-                                  "gcc:9.3.0"
-                                  "gcc"
-                                  '("/example/double.c" "/example/main.c" "-o" "/output/main")
-                                  '(((store-item . example-src)
+                        (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
+               (flow (docker-flow
+  'compile-c
+  "gcc:9.3.0"
+  "gcc"
+  '("/example/double.c" "/example/main.c" "-o" "/output/main")
+  '(((store-item . example-src)
                                      (mount-path . "/example"))
                                     ((store-item . output-dir)
                                      (mount-path . "/output")))
-                                  'process-handle
-                                  'integer
-                                  'process-handle))
+  'process-handle
+  (Fun AdapterResult <- Integer)))
                (result (run-result-value
                         (run-flow-with-config config flow 3)))
                (docker (request-config seen-request)))
@@ -84,15 +87,15 @@
                           (runtime-result "Hello from the flow.yaml I'm from an env var! hello-from-placeholder"
                                           '(artifact external-config-output))))
                (config (make-docker-run-config
-                        (list (cons 'runtime-command command))))
-               (flow (docker-flow 'configured-echo
-                                  "alpine:latest"
-                                  "echo"
-                                  rendered
-                                  '()
-                                  'empty-store-item
-                                  'unit
-                                  'artifact))
+                        (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
+               (flow (docker-flow
+  'configured-echo
+  "alpine:latest"
+  "echo"
+  rendered
+  '()
+  'empty-store-item
+  (Fun AdapterResult <- Unit)))
                (result (run-result-value
                         (run-flow-with-config config flow #!void)))
                (docker (request-config seen-request)))
@@ -145,8 +148,8 @@
                      (list (make-sandbox-volume-binding 'script-item "/script" 'read))
                      (list (cons 'message "hello"))))
              (receipt (docker-flow->task-input-receipt flow input)))
-        (check-equal? (task-input-contract task) 'docker-task-input)
-        (check-equal? (task-output-contract task) 'cas-item)
+        (check-equal? (task-input-contract task) DockerTaskInput)
+        (check-equal? (task-output-contract task) AdapterResult)
         (check-equal? (task-docker-volumes task) '())
         (check-equal? (docker-task-input-receipt-schema receipt)
                       +docker-task-input-receipt-schema+)
@@ -175,7 +178,7 @@
                           (set! seen-request (cdr (assoc 'request envelope)))
                           (runtime-result '(cas item out) '(artifact docker-output))))
                (config (make-docker-run-config
-                        (list (cons 'runtime-command command))))
+                        (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
                (flow (docker-task-flow 'docker-input-flow
                                        "alpine:latest"
                                        "cat"

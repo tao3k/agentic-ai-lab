@@ -3,6 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: Agentic AI Lab Scenario projection from a closed Case into its
 ;;; product-owned ExecutionPlan.
 ;;; Invariant: internal traversal records are compact structs; public Plan
@@ -342,10 +346,10 @@
            (make-composition-plan-state (list root-descriptor) '())
            roots))
       (make-execution-plan
-       name
-       (composition-plan-make-nodes
+  name
+  (composition-plan-make-nodes
         name
         (reverse (composition-plan-state-descriptors descriptors+edges))
         (reverse (composition-plan-state-edges descriptors+edges)))
-       #f
-       #f))))
+  Any
+  Any))))

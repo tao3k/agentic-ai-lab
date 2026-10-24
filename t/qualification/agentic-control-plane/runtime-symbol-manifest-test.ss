@@ -14,6 +14,8 @@
 (def valid-json
   "{\"schema\":\"agentic-ai-lab.runtime-symbol-manifest.v1\",\"schemaVersion\":1,\"abi\":\"runtime-v0.1\",\"requiredSymbols\":[\"agentic_ai_lab_runtime_v0_open\"],\"forbiddenFragments\":[\"graph\",\"compat\",\"legacy\"],\"owners\":[\"runtime_v0.h\"]}")
 
+(export runtime-symbol-manifest-test)
+
 (def runtime-symbol-manifest-test
   (test-suite "AC-11 runtime symbol JSON manifest"
     (yuanxu-test-case "valid manifest and exact symbols pass"

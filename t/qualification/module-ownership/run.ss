@@ -6,7 +6,7 @@
         (only-in :agentic-ai-lab/t/control-plane-role-test control-plane-role-test)
         (only-in :agentic-ai-lab/t/feature-system-bundle-v1-composition-writer-test feature-system-bundle-v1-composition-writer-test)
         (only-in :agentic-ai-lab/t/funflow-public-module-test funflow-public-module-test)
-        (only-in :agentic-ai-lab/t/funflow-native-publication-test funflow-native-publication-test)
+        (only-in "../../../core/t/functional-flow-kernel-test.ss" functional-flow-kernel-test)
         (only-in :agentic-ai-lab/t/json-schema-contract-bridge-test json-schema-contract-bridge-test)
         (only-in :agentic-ai-lab/t/json-schema-native-contract-test json-schema-native-contract-test)
         (only-in :agentic-ai-lab/t/funflow-github-ci-json-schema-contract-test funflow-github-ci-json-schema-contract-test))
@@ -16,7 +16,7 @@
        (list control-plane-role-test
              feature-system-bundle-v1-composition-writer-test
              funflow-public-module-test
-             funflow-native-publication-test
+             functional-flow-kernel-test
              json-schema-contract-bridge-test
              json-schema-native-contract-test
              funflow-github-ci-json-schema-contract-test)))

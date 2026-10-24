@@ -13,10 +13,11 @@
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
                  yuanxu-contract-value-type
-                 yuanxu-native-contract
-                 yuanxu-native-contract->alist))
+                 yuanxu-object-contract
+                 yuanxu-object-contract->alist))
 
-(export agentic-ai-lab-session-policy-ref?
+(export agentic-ai-lab-session-tool-grant->alist
+        agentic-ai-lab-session-policy-ref?
         agentic-ai-lab-session-policy-alist?
         agentic-ai-lab-session-policy-ref-list?
         agentic-ai-lab-session-symbol-list?
@@ -48,6 +49,10 @@
         agentic-ai-lab-session-policy-require-slots!)
 
 ;; : (-> Datum Boolean)
+(def (agentic-ai-lab-session-tool-grant->alist grant)
+  (map (lambda (name) (cons name (.ref grant name)))
+       '(kind schema grant-id tool-ref actions resource-refs trigger-refs metadata runtime-executed)))
+
 (def (agentic-ai-lab-session-policy-ref? value)
   (or (symbol? value) (string? value)))
 
@@ -179,7 +184,13 @@
          (tool-grants
           (agentic-ai-lab-session-policy-slot-row policy-slots
                                             'tool-grants
-                                            '())))
+                                            '()))
+         (wire-tool-grants (map agentic-ai-lab-session-tool-grant->alist tool-grants))
+         (wire-policy-slots
+           (map (lambda (entry)
+                  (if (eq? (car entry) 'tool-grants)
+                    (cons 'tool-grants (map agentic-ai-lab-session-tool-grant->alist (cdr entry)))
+                    entry)) policy-slots)))
     (agentic-ai-lab-session-policy-rows/tail
      (list
       (cons 'kind (.ref policy 'kind))
@@ -188,7 +199,7 @@
       (cons 'policy-name (.ref policy 'policy-name))
       (cons 'scope-ref (.ref policy 'scope-ref))
       (cons 'default-action (.ref policy 'default-action))
-      (cons 'policy-slots policy-slots)
+      (cons 'policy-slots wire-policy-slots)
       (cons 'agent-ref
             (agentic-ai-lab-session-policy-slot-row policy-slots 'agent-ref #f))
       (cons 'session-ref
@@ -242,7 +253,7 @@
              policy-slots
              'resource-policy-ref
              #f))
-      (cons 'tool-grants tool-grants)
+      (cons 'tool-grants wire-tool-grants)
       (cons 'tool-grant-count (length tool-grants))
       (cons 'denied-tool-refs
             (agentic-ai-lab-session-policy-slot-row
@@ -408,14 +419,13 @@
         AgenticAILabSessionPolicyRuntimeExecutedSlot))
 
 (def AgenticAILabSessionPolicyContract
-  (yuanxu-native-contract
+  (yuanxu-object-contract
    'session/policy
    'session
    'PooSessionPolicy
    agentic-ai-lab-session-policy?
    AgenticAILabSessionPolicySlots
-   (lambda (policy slot) (and (object? policy) (.slot? policy slot)))
-   (lambda (policy slot) (.ref policy slot))
+
    '((boundary . session-policy) (runtime . marlin-agent-core))))
 
 ;; agentic-ai-lab-session-policy-type-contract->alist
@@ -429,7 +439,7 @@
 ;;     %
 ;; : (-> Unit Alist)
 (def (agentic-ai-lab-session-policy-type-contract->alist)
-  (yuanxu-native-contract->alist AgenticAILabSessionPolicyContract))
+  (yuanxu-object-contract->alist AgenticAILabSessionPolicyContract))
 
 ;; : (-> YuanxuSlotContract AgenticAILabValue AgenticAILabValue)
 (def (agentic-ai-lab-session-policy-check-slot! contract value)

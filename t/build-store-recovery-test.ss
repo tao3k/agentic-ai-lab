@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; The orchestrator retains a selected store path, NEVER a Core issuance map.
 (import :std/test :clan/poo/object
-        (only-in :yuanxu/t/qualification/build-publication/projection write-artifact-bytes)
+        (only-in "../core/t/qualification/build-publication/projection.ss" write-artifact-bytes)
         (only-in :std/string/path path-force-extension)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-u8vector)
@@ -13,8 +13,8 @@
         (only-in :yuanxu/ops/config Config)
         (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in :yuanxu/ops/progress execution-progress!)
-        (only-in :yuanxu/t/qualification/service-publication/fixtures DirectoryFixture write-source)
-        :yuanxu/t/qualification/build-publication/store)
+        (only-in "../core/t/qualification/service-publication/fixtures.ss" DirectoryFixture write-source)
+        "../core/t/qualification/build-publication/store.ss")
 (export build-store-recovery-test test-cleanup!)
 (def observations '())
 (def completed 0)
@@ -70,7 +70,7 @@
       (cut delete-file static-path)
       (cut worker "missing-static" "recover-reject" selected
         "STORE-REFUSED build-required: selected compiler static output is missing" #f)
-      (cut put static-path static-bytes))
+      (cut write-artifact-bytes static-path static-bytes))
     (call-with-temporary-directory "core-linked-issuance"
       (lambda (directory)
         (create-symbolic-link record (path-expand "issuance.ss" directory))
@@ -127,7 +127,7 @@
       (cut write-source source "(export answer) (def answer 99)\n")
       (cut worker "source-change" "recover-reject" selected
         "STORE-REFUSED Core build handoff does not match selected projection" #f)
-      (cut put source source-bytes))
+      (cut write-artifact-bytes source source-bytes))
     (set! completed (+ completed 1))))))
 (def (test-cleanup!)
   (check-equal? completed 1)

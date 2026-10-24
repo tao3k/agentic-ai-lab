@@ -39,6 +39,8 @@
      symbol-revision symbol-receipt version-revision version-receipt
      guards blocker decision? frozen? deletion?)))
 
+(export cutover-readiness-test)
+
 (def cutover-readiness-test
   (test-suite "AC-11 cutover readiness preflight"
     (yuanxu-test-case "qualified evidence is ready only for release decision"

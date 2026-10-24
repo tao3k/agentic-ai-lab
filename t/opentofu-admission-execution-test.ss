@@ -9,7 +9,7 @@
         (only-in :std/encoding/json read-json)
         (only-in :std/list/walist waref)
         (only-in :std/misc/ports read-all-as-string)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/module-system/source/link yuanxu-load-modules)
         (only-in :yuanxu/module-system/source/admission module-source-read)
         (only-in :yuanxu/ops/objects ProcessScript.))
@@ -31,8 +31,10 @@
 (def (rejects? message thunk)
   (with-catch
     (lambda (exception)
-      (pregexp-match message
-        (call-with-output-string (cut display-exception exception <>))))
+      (def description (call-with-output-string (cut display-exception exception <>)))
+      (def matched (pregexp-match message description))
+      (unless matched (displayln "UNEXPECTED-REJECTION " description))
+      matched)
     (lambda () (thunk) #f)))
 (def (run-step base root name args)
   (.def (step @ base)
@@ -139,21 +141,24 @@
       (def changed-work (path-expand "null-source-change" root))
       (create-directory changed-work)
       (def original-config (module-source-read (path-expand "modules/null/config.ss" project)))
-      (def apply-task (.get Changing tasks apply))
-      (def changed-tasks
-        (.cc (.get Changing tasks) 'apply
-          (.cc apply-task '.run
-            (lambda ()
-              (def applied (.call (.cc apply-task 'directory changed-work) .run))
-              (write-text (path-expand "modules/null/config.ss" project)
-                (string-append original-config "\n;; changed during execution\n"))
-              applied))))
-      (def SourceChange (.cc Changing 'tasks changed-tasks))
+      (def applied-before-source-change? #f)
+      (.def (SourceChange @ Changing)
+        tasks: =>.+
+        (.o apply: =>.+
+          (.o (.run (inherited)
+                (lambda ()
+                  (def applied ((inherited)))
+                  (set! applied-before-source-change? #t)
+                  (write-text (path-expand "modules/null/config.ss" project)
+                    (string-append original-config "\n;; changed during execution\n"))
+                  applied)))))
       (dynamic-wind void
         (lambda ()
-          (assert 'source-change-blocks-next-node
+          (def source-change-rejected?
             (rejects? "stale|changed|refused"
               (lambda () (.call SourceChange .run changed-work))))
+          (assert 'source-change-injected-after-real-apply applied-before-source-change?)
+          (assert 'source-change-blocks-next-node source-change-rejected?)
           (assert 'real-null-cleanup-after-source-change (empty-state? changed-work)))
         (lambda () (write-text (path-expand "modules/null/config.ss" project) original-config)))
 

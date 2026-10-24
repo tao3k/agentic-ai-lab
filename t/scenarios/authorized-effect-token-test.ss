@@ -22,6 +22,8 @@
                                               'strict 1 'scheme-control "sig"))
 (def context (agentic-ai-lab-token-validation-context root binding 15 4 '()))
 
+(export authorized-effect-token-test)
+
 (def authorized-effect-token-test
   (test-suite "AC-08 AuthorizedEffectToken"
     (yuanxu-test-case "valid token reserves and commits deterministic root"

@@ -2,14 +2,14 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Qualification driver: production selection/publishing, temporary sources.
 (import :clan/poo/object
-        (only-in :yuanxu/t/qualification/service-publication/fixtures ServicesFixture write-source)
+        (only-in "../../../core/t/qualification/service-publication/fixtures.ss" ServicesFixture write-source)
         (only-in :yuanxu/module-system/source/link yuanxu-load-modules)
         (only-in :yuanxu/module-system/building/artifacts
           call-with-build-artifact-issuance run-build-artifact-process build-artifact-handoff)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/encoding/json write-json)
-        (only-in :yuanxu/t/qualification/build-publication/projection probe-projection probe-build)
-        (only-in :yuanxu/t/qualification/build-publication/store store-add)
+        (only-in "../../../core/t/qualification/build-publication/projection.ss" probe-projection probe-build)
+        (only-in "../../../core/t/qualification/build-publication/store.ss" store-add)
         (only-in :yuanxu/ops/progress call-with-execution-progress execution-progress!))
 (export main)
 ;; Both the interpreter and the compiled SDK executable pass only user arguments.
@@ -31,7 +31,7 @@
           ;; swallowed by the production recovery or currentness boundary.
           " .available?: (lambda () (not (equal? (call-with-input-file expression read-line) \"null\"))))\n"))
       (write-source (path-expand "types.ss" owner)
-        "(import (only-in :yuanxu/types yuanxu-predicate-contract))\n(export ScopeContract)\n(def ScopeContract (yuanxu-predicate-contract 'release/scope (lambda (v) (and (object? v) (.slot? v 'Source))) (lambda (_v _c) '())))\n")
+        "(import (only-in :yuanxu/object-types/contracts yuanxu-predicate-contract))\n(export ScopeContract)\n(def ScopeContract (yuanxu-predicate-contract 'release/scope (lambda (v) (and (object? v) (.slot? v 'Source))) (lambda (_v _c) '())))\n")
       (write-source (path-expand "interface.ss" owner)
         "(.def Release identity: 'building/release core: (.o requires: (.o) build-publication: ReleaseSource scope-contract: ScopeContract exports: (.o Source: ReleaseSource)) features: (.o))\n")
       (write-source (path-expand "init.ss" workspace)
@@ -73,7 +73,11 @@
       (def tools-literal
         (call-with-output-string (cut write-json <> (getenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS"))))
       (def (release-recipe packet-directory)
-        (string-append "let tools = builtins.fromJSON " tools-literal "; in "
+        (string-append "let raw = builtins.fromJSON " tools-literal "; "
+          ;; JSON paths have no Nix string context. Restore the qualified Store
+          ;; dependencies so sandboxed builds receive both shell and utilities.
+          "tools = raw // { shell = builtins.storePath raw.shell; "
+          "tools = builtins.storePath raw.tools; }; in "
           "builtins.derivation { name = import ./release-name.nix; "
           "preferLocalBuild = true; allowSubstitutes = false; "
           "inherit (tools) system; builder = tools.shell + \"/bin/bash\"; "

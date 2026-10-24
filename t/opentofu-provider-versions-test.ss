@@ -5,7 +5,7 @@
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
         (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuModule.)
-        :yuanxu/types :clan/poo/object)
+        :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-provider-versions-test)
 
 (def (assert label value)

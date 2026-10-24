@@ -3,6 +3,9 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures Fun Integer Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: agent-sandbox profile tests cover profile descriptors and defaults.
 ;;; Invariant: backend execution stays outside Scheme tests.
 
@@ -358,19 +361,18 @@
                          (set! seen-request (cdr (assoc 'request envelope)))
                          (runtime-result 'profiled '(artifact profiled-output))))
               (config (make-agent-sandbox-run-config
-                       (list (cons 'runtime-command command))))
+                       (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
               (flow (profiled-agent-sandbox-flow
-                     'profiled-agent
-                     profile
-                     "opencode"
-                     '("--print" "hello")
-                     '()
-                     "/workspace"
-                     '(((path . ".") (mode . read-write)))
-                     'artifact
-                     'unit
-                     'artifact
-                     (list (cons 'network-policy '((mode . blocked)))
+		     'profiled-agent
+		     profile
+		     "opencode"
+		     '("--print" "hello")
+		     '()
+		     "/workspace"
+		     '(((path . ".") (mode . read-write)))
+		     'artifact
+		     (Fun AdapterResult <- Unit)
+		     (list (cons 'network-policy '((mode . blocked)))
                            (cons 'resource-policy '((task-timeout-ms . 30000)))
                            (cons 'metadata '((task . profiled-agent))))))
               (result (run-result-value

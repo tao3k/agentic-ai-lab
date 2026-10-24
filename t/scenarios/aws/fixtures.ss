@@ -143,7 +143,6 @@
         (write `(yuanxu! mode: explicit source: ,(path-expand "modules" repository)
                   (aws @ ,(path-expand "scenarios/aws" repository))
                   (nix @ ,(path-expand "modules/nix" repository))
-                  (ops @ ,(path-expand "core/ops" repository))
                   (funflow @ ,(path-expand "core/modules/funflow" repository))
                   (json-schema @ ,(path-expand "core/modules/json-schema" repository))
                   :services (opentofu @ ,(path-expand "modules/services/opentofu" repository))) port))))

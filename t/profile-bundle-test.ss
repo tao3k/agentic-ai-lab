@@ -203,7 +203,7 @@
             (effective-stages (.ref case-value 'stages))
             (sources
              (.o effective: (.o prototype: effective-stages
-                                source-path: "yuanxu/profile-composition/profile-bundle.ss"
+                                source-path: "core/profile-composition/profile-bundle.ss"
                                 source-line: 236)
                  base: (.o prototype: base-stages
                            source-path: "t/profile-bundle-test.ss"

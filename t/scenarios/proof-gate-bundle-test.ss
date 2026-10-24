@@ -7,6 +7,8 @@
         :agentic-ai-lab/modules/proof/projections/proof-fact-wire
         :agentic-ai-lab/modules/proof/projections/proof-gate-bundle)
 
+(export proof-gate-bundle-test)
+
 (def proof-gate-bundle-test
   (test-suite "proof gate bundle"
     (yuanxu-test-case "validates accepted and rejected bundles"

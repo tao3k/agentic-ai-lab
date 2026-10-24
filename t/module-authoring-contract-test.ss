@@ -434,7 +434,7 @@
       (yuanxu-poo-slot-authoring-diagnostics
        (yuanxu-poo-slot-authoring-file-observations
         'module-authoring-contract
-        "yuanxu/module-system/authoring/admission.ss"))
+        "core/module-system/authoring/admission.ss"))
       '()))
 
    (yuanxu-test-case "Core slot presentation blocks lazy self-reference regression"
@@ -442,7 +442,7 @@
       (yuanxu-poo-slot-authoring-diagnostics
        (yuanxu-poo-slot-authoring-file-observations
         'core-slot-presentation
-        "yuanxu/observability/slot-presentation.ss"))
+        "core/observability/slot-presentation.ss"))
       '()))
 
    (yuanxu-test-case "profile composition conflict receipts have no lazy self-reference"
@@ -450,5 +450,5 @@
       (yuanxu-poo-slot-authoring-diagnostics
        (yuanxu-poo-slot-authoring-file-observations
         'profile-composition
-        "yuanxu/profile-composition/profile-bundle.ss"))
+        "core/profile-composition/profile-bundle.ss"))
       '()))))

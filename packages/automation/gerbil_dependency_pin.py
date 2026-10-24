@@ -6,8 +6,9 @@
 
 ``gerbil.pkg`` and ``dev/gerbil.pkg`` own production and optional development
 pins respectively. This tool does not resolve dependencies; gxpkg and Bazel retain
-that responsibility.  It only updates and checks the equivalent Bazel source
-projection required by isolated builds.
+that responsibility. It projects the equivalent Bazel source declarations and
+materializes exact native checkouts. Development builds explicitly share the
+production POO selection, as the Bazel development dependency already does.
 """
 
 from __future__ import annotations
@@ -329,15 +330,65 @@ def ensure_native_commit(url: str, revision: str, target: Path) -> None:
     print(f"gerbil-native-pin: ready {revision}", flush=True)
 
 
-def prepare_native_pins(package_root: Path, root: Path = ROOT) -> None:
-    """Materialize declared SHA objects; gxpkg still owns tag resolution/builds."""
-    for repository, revision in parse_package_pins((root / "gerbil.pkg").read_text()).values():
+def share_native_poo(package_root: Path, shared_package_root: Path, root: Path = ROOT) -> None:
+    """Use the production POO source/manifest for the optional native runtime.
+
+    This is the same explicit parent POO selection as dev/BUILD.bazel. gxpkg
+    still builds ASP; no old transitive POO tag is fetched into a second runtime.
+    Existing stores are never silently replaced.
+    """
+    if package_root.resolve() == shared_package_root.resolve():
+        raise ValueError("development package store must differ from production")
+    repository, revision = parse_package_pins((root / "gerbil.pkg").read_text())["gerbil-poo"]
+    installed_source = shared_package_root / repository
+    source = installed_source.resolve()
+    head = subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip()
+    if head != revision:
+        raise ValueError(f"shared POO head differs from gerbil.pkg: {head} != {revision}")
+    version = subprocess.check_output(["git", "-C", str(source), "describe", "--tags", "--always"], text=True).strip()
+    manifest = installed_source.with_name(installed_source.name + ".manifest")
+    observed = re.search(r'\("' + re.escape(repository) + r'"\s+\.\s+"([^\"]+)"\)',
+                         manifest.read_text() if manifest.is_file() else "")
+    if observed is None or observed.group(1) != version:
+        raise ValueError(f"shared POO manifest differs from source HEAD; rebuild production POO: {manifest}")
+    tag = installed_source.with_name(installed_source.name + ".tag")
+    if not tag.is_file() or json.loads(tag.read_text()) != revision:
+        raise ValueError(f"shared POO tag differs from gerbil.pkg: {tag}")
+    destination = package_root / repository
+    links = [(installed_source, destination)]
+    for suffix in (".manifest", ".tag"):
+        origin = installed_source.with_name(installed_source.name + suffix)
+        if not origin.is_file():
+            raise ValueError(f"build the production POO dependency first: missing {origin}")
+        links.append((origin, destination.with_name(destination.name + suffix)))
+    for origin, target in links:
+        if (target.exists() or target.is_symlink()) and target.resolve() != origin.resolve():
+            raise ValueError(f"development cache conflicts with shared POO: {target}")
+    for origin, target in links:
+        if not target.is_symlink():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.symlink_to(origin, target_is_directory=origin.is_dir())
+    print(f"gerbil-native-pin: development shares production POO {revision}", flush=True)
+
+
+def prepare_native_pins(package_root: Path, root: Path = ROOT, *,
+                        owner: str = "production", require_head: bool = False,
+                        shared_package_root: Path | None = None) -> None:
+    """Materialize declared SHA objects; gxpkg retains native build ownership."""
+    declaration = root / ("dev/gerbil.pkg" if owner == "development" else "gerbil.pkg")
+    for repository, revision in parse_package_pins(declaration.read_text()).values():
         if not re.fullmatch(r"[0-9a-f]{40}", revision):
             continue
         target = (package_root / repository).resolve()
         if not target.is_relative_to(package_root.resolve()):
             raise ValueError("native package pin escapes package root")
         ensure_native_commit(f"https://{repository}.git", revision, target)
+        if require_head:
+            head = subprocess.check_output(["git", "-C", str(target), "rev-parse", "HEAD"], text=True).strip()
+            if head != revision:
+                raise ValueError(f"native package head differs from {declaration}: {head} != {revision}")
+    if owner == "development":
+        share_native_poo(package_root, shared_package_root or root / ".gerbil/pkg", root)
 
 
 def main() -> int:
@@ -351,11 +402,15 @@ def main() -> int:
     subparsers.add_parser("sync-lock", help="copy the native lock projection across platforms")
     prepare_parser = subparsers.add_parser("prepare-native", help="fetch immutable commit objects for gxpkg")
     prepare_parser.add_argument("--package-root", type=Path, required=True)
+    prepare_parser.add_argument("--owner", choices=("production", "development"), default="production")
+    prepare_parser.add_argument("--require-head", action="store_true")
+    prepare_parser.add_argument("--shared-package-root", type=Path)
     args = parser.parse_args()
 
     try:
         if args.command == "prepare-native":
-            prepare_native_pins(args.package_root)
+            prepare_native_pins(args.package_root, owner=args.owner, require_head=args.require_head,
+                                shared_package_root=args.shared_package_root)
         elif args.command == "pin":
             project_pin(args.package, args.revision)
         elif args.command == "sync-lock":

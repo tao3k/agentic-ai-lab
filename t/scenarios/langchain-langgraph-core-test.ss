@@ -183,6 +183,8 @@
 (def (profile-identity profile)
   (.ref profile (if (.slot? profile 'identity) 'identity 'name)))
 
+(export langchain-langgraph-core-test)
+
 (def langchain-langgraph-core-test
  (test-suite "langchain and langgraph user compositions"
   (yuanxu-test-case "langchain linear chain declares one production stage"
@@ -192,7 +194,7 @@
            (loop-value (.ref stage 'loop)))
       (check-equal? (agentic-ai-lab-scenario-case? langchain-composition) #t)
       (check-equal? (agentic-ai-lab-scenario-case-name langchain-composition)
-                    'langchain)
+                    'langchain-scenario)
       (check-equal? (length (agentic-ai-lab-scenario-case-modules
                              langchain-composition))
                     1)
@@ -245,7 +247,7 @@
            (loop-value (.ref stage 'loop)))
       (check-equal? (agentic-ai-lab-scenario-case? langgraph-composition) #t)
       (check-equal? (agentic-ai-lab-scenario-case-name langgraph-composition)
-                    'langgraph)
+                    'langgraph-scenario)
       (check-equal? (length (agentic-ai-lab-scenario-case-modules
                              langgraph-composition))
                     1)

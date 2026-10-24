@@ -364,8 +364,9 @@
        (check (.ref row 'semantic-digest)
               => (.ref reordered 'semantic-digest))
        (check (.ref rows 'result-count) => 1)
-       (check (substring (.ref rows 'result-digest) 0 29)
-              => "agentic-ai-lab.query.scalar-row-v1:")
+       (check (string-prefix? "agentic-ai-lab.query.scalar-row-v1:"
+                             (.ref rows 'result-digest))
+              => #t)
        (check (.ref row-check 'verdict) => 'valid)
        (check (.ref exchange 'status) => 'reviewable)
        (check (.ref exchange 'admitted?) => #f)

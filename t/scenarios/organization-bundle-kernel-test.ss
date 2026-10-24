@@ -35,6 +35,8 @@
                 (agentic-ai-lab-organization-bundle-kernel-open value)))
     (agentic-ai-lab-organization-bundle-kernel-validate candidate)))
 
+(export organization-bundle-kernel-test)
+
 (def organization-bundle-kernel-test
   (test-suite
    "immutable organization Bundle kernel"

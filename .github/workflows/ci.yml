@@ -54,9 +54,9 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            gerbil-label: release-v0.19-2591dcd
+            gerbil-label: release-v0.19-1cfb032
           - os: macos-26
-            gerbil-label: release-v0.19-2591dcd
+            gerbil-label: release-v0.19-1cfb032
     env:
       GERBIL_RELEASE_ROOT: ${{ github.workspace }}/.ci/gerbil-release/${{ matrix.gerbil-label }}
     steps:
@@ -255,7 +255,7 @@ jobs:
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
         run: |
           set -euo pipefail
-          gerbil env ./dev/unit-tests.ss 2>&1 | tee "$RUNNER_TEMP/agentic-ai-lab-unit-tests.log"
+          gerbil env just test-root 2>&1 | tee "$RUNNER_TEMP/agentic-ai-lab-unit-tests.log"
 
       - name: Build Scheme semantic AOT byte boundary
         env:
@@ -612,7 +612,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            gerbil-label: release-v0.19-2591dcd
+            gerbil-label: release-v0.19-1cfb032
             gerbil-install: release
             dependency-timeout-minutes: 12
             compile-timeout-minutes: 12
@@ -1063,7 +1063,7 @@ jobs:
       matrix:
         include:
           - os: macos-26
-            gerbil-label: release-v0.19-2591dcd
+            gerbil-label: release-v0.19-1cfb032
             gerbil-install: release
             dependency-timeout-minutes: 12
             external-module-mode: analysis

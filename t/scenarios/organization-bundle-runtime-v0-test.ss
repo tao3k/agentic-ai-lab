@@ -37,6 +37,8 @@
     (let-values (((state _) (agentic-ai-lab-organization-bundle-kernel-validate candidate)))
       state)))
 
+(export organization-bundle-runtime-v0-test)
+
 (def organization-bundle-runtime-v0-test
   (test-suite
    "organization Bundle runtime v0 control packet"

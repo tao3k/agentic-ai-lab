@@ -4,11 +4,11 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-         (only-in :std/test test-suite check-equal?)
+        (only-in :std/test test-suite check-equal? check-exception)
         (only-in :std/misc/ports read-all-as-string)
-        (only-in :clan/poo/object .o .get .ref/cached)
+        (only-in :clan/poo/object .o .get .ref/cached NoApplicableMethod?)
         (only-in :gerbil/expander core-import-module module-context-path)
-        :yuanxu/init
+        "../core/init.ss"
         "../init.ss"
         (only-in :agentic-ai-lab/modules/building/build-config
                  agentic-ai-lab-default-build-observability-policy)
@@ -28,10 +28,12 @@
   (test-suite "POO PackageSpec projection observability"
     (yuanxu-test-case "native package init entries coexist without forcing either graph"
       (yuanxu-write-observation-line! "init-entry source=%s"
-        (module-context-path (core-import-module ':yuanxu/init)))
+        (module-context-path (core-import-module (path-expand "core/init.ss"))))
       (check-equal? (eq? yuanxu.init.exports agentic-ai-lab.init.exports) #f)
       (check-equal? (.ref/cached yuanxu.init.exports 'Modules) #f)
       (check-equal? (.ref/cached agentic-ai-lab.init.exports 'Core) #f)
+      (check-exception (.get yuanxu.init.exports std-make-run) NoApplicableMethod?)
+      (check-exception (.get agentic-ai-lab.init.exports std-make-run) NoApplicableMethod?)
       (check-equal? (.ref/cached (.get yuanxu.init.exports tests) 'selected-graph) #f)
       (check-equal? (.ref/cached (.get agentic-ai-lab.init.exports tests) 'selected-graph) #f))
     (yuanxu-test-case "native package catalog reaches the supplied projector unchanged"
@@ -57,10 +59,10 @@
       (let ((source (call-with-input-file "build.ss" read-all-as-string))
             (projection (call-with-input-file "build-spec.ss" read-all-as-string)))
         (check-equal? (contains? source ":asp-gerbil-scheme/") #f)
-        (check-equal? (contains? source ":std/build-script") #t)
+        (check-equal? (contains? source ":yuanxu/module-system/building/script") #t)
         ;; Core passes its admitted value into the unchanged SDK macro.
-        (check-equal? (contains? source "(defbuild-script spec)") #t)
-        (check-equal? (contains? source "(.get agentic-ai-lab.init.exports std-make-run) retained-spec") #t)
+        (check-equal? (contains? source "(defbuild-script (modules-spec (agentic-ai-lab-build-spec)))") #t)
+        (check-equal? (contains? source "std-make-run") #f)
         (check-equal? (contains? projection "package-library-spec") #t)))
 
     (yuanxu-test-case "Bazel stages one package surface without owning the module graph"
@@ -98,12 +100,12 @@
         (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_MAX_HEAP\", \"1G\")") #t)
         (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_DEBUG\", \"q\")") #t)
         (check-equal? (contains? testing "gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss package") #t)
-        (check-equal? (contains? driver "(list \"gerbil\" vm \"env\" \"gxi\" vm \"./dev/unit-tests.ss\")") #t)
+        (check-equal? (contains? driver "(list \"gerbil\" vm \"env\" \"gxi\" vm \"./unit-tests.ss\")") #t)
         (check-equal? (contains? testing ".devenv/devenv-profile-exec") #f)
         (check-equal? (contains? testing "rm -rf") #f)))
 
     (yuanxu-test-case "unit tests inherit the Agentic AI Lab default testing policy"
-      (let (source (call-with-input-file "dev/unit-tests.ss" read-all-as-string))
+      (let (source (call-with-input-file "dev/testing-profiles.ss" read-all-as-string))
         (check-equal?
          (contains? source ":agentic-ai-lab/dev/testing-api")
          #t)

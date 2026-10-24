@@ -3,20 +3,23 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: session tool grant rows, contracts, and grant matching.
+;;; Boundary: POO session grants, wire projection and grant matching.
 
-(import :agentic-ai-lab/modules/session/objects
+(import (only-in :clan/poo/object .o .ref .slot? object?)
+        (only-in :clan/poo/mop element?)
+        :agentic-ai-lab/modules/session/objects
         :agentic-ai-lab/modules/session/policy-syntax
         :agentic-ai-lab/modules/session/policy-core
         (only-in :yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
                  yuanxu-contract-value-type
-                 yuanxu-native-contract
-                 yuanxu-native-contract->alist))
+                 yuanxu-object-contract
+                 yuanxu-object-contract->alist))
 
 (export AgenticAILabSessionToolGrantContract
         agentic-ai-lab-session-tool-grant
+        agentic-ai-lab-session-tool-grant->alist
         agentic-ai-lab-session-tool-grant?
         agentic-ai-lab-session-tool-grant-type-contract->alist
         agentic-ai-lab-session-tool-grant-check-slot!
@@ -63,38 +66,28 @@
      trigger-refs
      metadata
      #f)
-    (list
-     (cons 'kind 'agentic-ai-lab.session.tool-grant)
-     (cons 'schema 'agentic-ai-lab.modules.session.tool-grant.v1)
-     (cons 'grant-id grant-id)
-     (cons 'tool-ref tool-ref)
-     (cons 'actions actions)
-     (cons 'resource-refs resource-refs)
-     (cons 'trigger-refs trigger-refs)
-     (cons 'metadata metadata)
-     (cons 'runtime-executed #f))))
+    (.o bind-these: #f
+        kind: 'agentic-ai-lab.session.tool-grant
+        schema: 'agentic-ai-lab.modules.session.tool-grant.v1
+        grant-id: grant-id
+        tool-ref: tool-ref
+        actions: actions
+        resource-refs: resource-refs
+        trigger-refs: trigger-refs
+        metadata: metadata
+        runtime-executed: #f)))
 
-;; : (-> Datum Boolean)
+;; The semantic grant is POO-native; wire rows are produced only by projection.
+(def (session-tool-grant-object? value)
+  (and (object? value) (.slot? value 'kind)
+       (eq? (.ref value 'kind) 'agentic-ai-lab.session.tool-grant)))
 (def (agentic-ai-lab-session-tool-grant? value)
-  (and (list? value)
-       (eq? (agentic-ai-lab-session-alist-ref value 'kind #f)
-            'agentic-ai-lab.session.tool-grant)))
-
-;;; Boundary: generated tool-grant accessors keep the alist receipt API stable.
-(def (agentic-ai-lab-session-tool-grant-id grant)
-  (agentic-ai-lab-session-alist-ref grant 'grant-id #f))
-
-(def (agentic-ai-lab-session-tool-grant-tool-ref grant)
-  (agentic-ai-lab-session-alist-ref grant 'tool-ref #f))
-
-(def (agentic-ai-lab-session-tool-grant-actions grant)
-  (agentic-ai-lab-session-alist-ref grant 'actions '()))
-
-(def (agentic-ai-lab-session-tool-grant-resource-refs grant)
-  (agentic-ai-lab-session-alist-ref grant 'resource-refs '()))
-
-(def (agentic-ai-lab-session-tool-grant-trigger-refs grant)
-  (agentic-ai-lab-session-alist-ref grant 'trigger-refs '()))
+  (element? AgenticAILabSessionToolGrantContract value))
+(def (agentic-ai-lab-session-tool-grant-id grant) (.ref grant 'grant-id))
+(def (agentic-ai-lab-session-tool-grant-tool-ref grant) (.ref grant 'tool-ref))
+(def (agentic-ai-lab-session-tool-grant-actions grant) (.ref grant 'actions))
+(def (agentic-ai-lab-session-tool-grant-resource-refs grant) (.ref grant 'resource-refs))
+(def (agentic-ai-lab-session-tool-grant-trigger-refs grant) (.ref grant 'trigger-refs))
 
 (def AgenticAILabSessionToolGrantKindType
   (yuanxu-contract-value-type
@@ -163,14 +156,13 @@
         AgenticAILabSessionToolGrantRuntimeExecutedSlot))
 
 (def AgenticAILabSessionToolGrantContract
-  (yuanxu-native-contract
+  (yuanxu-object-contract
    'session/tool-grant
    'session
    'PooSessionToolGrant
-   agentic-ai-lab-session-tool-grant?
+   session-tool-grant-object?
    AgenticAILabSessionToolGrantSlots
-   (lambda (grant slot) (if (assoc slot grant) #t #f))
-   (lambda (grant slot) (agentic-ai-lab-session-alist-ref grant slot #f))
+
    '((boundary . session-policy) (runtime . marlin-agent-core))))
 
 ;; agentic-ai-lab-session-tool-grant-type-contract->alist
@@ -184,7 +176,7 @@
 ;;     %
 ;; : (-> Unit Alist)
 (def (agentic-ai-lab-session-tool-grant-type-contract->alist)
-  (yuanxu-native-contract->alist AgenticAILabSessionToolGrantContract))
+  (yuanxu-object-contract->alist AgenticAILabSessionToolGrantContract))
 
 ;; : (-> YuanxuSlotContract AgenticAILabValue AgenticAILabValue)
 (def (agentic-ai-lab-session-tool-grant-check-slot! contract value)

@@ -13,12 +13,16 @@ build:
 build-library:
     GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
 
-# Compile the pinned local Core, replacing any transitive bootstrap artifacts.
-# Cleaning is confined to the Core package; dependency source checkouts stay intact.
+# Compile the pinned local Core using the SDK's incremental outputs.
+# Explicit cleanup remains available when replacing a bootstrap artifact cohort.
 [group('build')]
 build-core:
-    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil clean
     cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
+
+# Clean only Core outputs; dependency source checkouts stay intact.
+[group('build')]
+clean-core:
+    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil clean
 
 # Clean only native Gerbil package build artifacts.
 [group('build')]

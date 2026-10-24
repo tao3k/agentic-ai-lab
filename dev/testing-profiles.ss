@@ -1,12 +1,10 @@
-#!/usr/bin/env gxi
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(export main)
+(export +agentic-ai-lab-project-testing-interface+)
 
 (import (only-in :clan/poo/object .cc)
-        (only-in :std/cli/multicall call-entry-point)
         (only-in :asp-gerbil-scheme/testing-api
                  +testing-discovery-profile+
                  +testing-process-isolation-profile+
@@ -14,8 +12,6 @@
                  testing-test-selector
                  testing-interface-add-profile
                  testing-interface-map-profile)
-        (only-in :asp-gerbil-scheme/testing-runner-api
-                 init-profiled-test-environment!)
         (only-in :agentic-ai-lab/dev/testing-api
                  +agentic-ai-lab-testing-interface+))
 
@@ -62,9 +58,3 @@
    +agentic-ai-lab-serial-testing-interface+
    +testing-process-isolation-profile+))
 
-(init-profiled-test-environment! +agentic-ai-lab-project-testing-interface+)
-
-;; The ASP declaration installs the selected entry point.  V19's script
-;; launcher looks up a caller-visible `main`, so expose that trampoline here.
-(def (main . args)
-  (apply call-entry-point args))

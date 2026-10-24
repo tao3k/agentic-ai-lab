@@ -6,7 +6,7 @@
         (only-in :yuanxu/observability/testing-script admit-testing-process-result))
 (export admit-package-batches)
 (def (admit-package-batches result)
-  (admit-testing-process-result result '("dev/unit-tests.ss"))
+  (admit-testing-process-result result '("unit-tests.ss"))
   (def lines (string-split (.get result output) #\newline))
   (def discoveries
     (filter-map

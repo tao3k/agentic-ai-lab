@@ -3,6 +3,8 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures Fun Integer Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: descriptor tests cover facade-level task family and accessors.
 ;;; Invariant: backend profile and bridge envelope behavior live in sibling tests.
 
@@ -45,21 +47,20 @@
     (yuanxu-test-case "declares adapter-routed task family policy"
       (let* ((registry (make-agent-sandbox-task-family-registry))
              (task (make-agent-sandbox-task
-                    'agent-run
-                    'nono
-                    'local-profile
-                    "opencode"
-                    '("--print" "hello")
-                    '()
-                    "/workspace"
-                    '()
-                    '((mode . blocked))
-                    '()
-                    '((timeout-ms . 30000))
-                    'artifact
-                    '((agent . opencode))
-                    'unit
-                    'artifact)))
+		    'agent-run
+		    'nono
+		    'local-profile
+		    "opencode"
+		    '("--print" "hello")
+		    '()
+		    "/workspace"
+		    '()
+		    '((mode . blocked))
+		    '()
+		    '((timeout-ms . 30000))
+		    'artifact
+		    '((agent . opencode))
+		    (Fun AdapterResult <- Unit))))
         (check-equal? (task-family-name agent-sandbox-task-family-descriptor)
                       'agent-sandbox)
         (check-equal? (task-family-capability agent-sandbox-task-family-descriptor)
@@ -82,21 +83,20 @@
         (check-equal? (adapter-supports? adapter 'agent-sandbox) #t)))
     (yuanxu-test-case "exposes request field accessors"
       (let ((task (make-agent-sandbox-task
-                   'cube-agent
-                   'cube
-                   'template-python
-                   "python"
-                   '("-c" "print('ok')")
-                   '((PYTHONUNBUFFERED . "1"))
-                   "/workspace"
-                   '(((path . "/workspace") (mode . read-write)))
-                   '((mode . allow-all))
-                   '((network . egress-filtered))
-                   '((snapshot . forkable))
-                   'artifact
-                   '((backend . cube))
-                   'unit
-                   'artifact)))
+		   'cube-agent
+		   'cube
+		   'template-python
+		   "python"
+		   '("-c" "print('ok')")
+		   '((PYTHONUNBUFFERED . "1"))
+		   "/workspace"
+		   '(((path . "/workspace") (mode . read-write)))
+		   '((mode . allow-all))
+		   '((network . egress-filtered))
+		   '((snapshot . forkable))
+		   'artifact
+		   '((backend . cube))
+		   (Fun AdapterResult <- Unit))))
         (check-equal? (task-agent-sandbox-backend-kind task) 'cube)
         (check-equal? (task-agent-sandbox-schema task)
                       +agent-sandbox-request-schema+)

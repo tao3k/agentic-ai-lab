@@ -10,8 +10,8 @@
         (only-in :yuanxu/module-system/source/admission call-with-module-source-read-cache
                  module-source-admit-current!)
         ;; Build-tool native owners, not a second runtime facade or Loader.
-        (only-in :agentic-ai-lab/modules/nix/types NixFlakeSourceContract)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :agentic-ai-lab/nix-contracts NixFlakeSourceContract)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :agentic-ai-lab/modules/nix/func agentic-ai-lab-nix-source-inputs))
 ;; The native outer module slot keeps source/config refinements receiver-local.
 (.def Build

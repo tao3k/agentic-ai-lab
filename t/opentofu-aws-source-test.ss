@@ -8,11 +8,11 @@
         (only-in :yuanxu/feature-system/source-lock-feature sources-lock-value)
         (only-in :agentic-ai-lab/modules/services/opentofu/objects agentic-ai-lab-opentofu-configuration-contract)
         (only-in :agentic-ai-lab/modules/services/opentofu/aws-hash agentic-ai-lab-opentofu-aws-string-hash agentic-ai-lab-opentofu-aws-rule-hash)
-        (only-in :agentic-ai-lab/modules/services/opentofu/types ProviderSelectionContract)
+        (only-in :agentic-ai-lab/opentofu-contracts ProviderSelectionContract)
         (only-in :agentic-ai-lab/modules/services/opentofu/aws-hash agentic-ai-lab-opentofu-aws-rule-key)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
         (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
-        :yuanxu/types
+        :yuanxu/object-types/contracts
         :clan/poo/object)
 (export opentofu-aws-source-test)
 

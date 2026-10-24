@@ -3,6 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: config tests cover preflight policy without reading real secrets.
 ;;; Invariant: failure details expose missing key identity, never config values.
 
@@ -57,7 +61,10 @@
                                       (make-local-eager-strategy)
                                       (make-request-only-adapter)
                                       options))
-             (flow (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
+             (flow (pure-flow
+		    'inc
+		    (Fun Number <- Number)
+		    (lambda (x) (+ x 1))))
              (result (run-flow-with-config config flow 1)))
         (check-equal? (config-preflight-ok? (run-config-preflight config)) #t)
         (check-equal? (run-result-value result) 2)))
@@ -68,7 +75,11 @@
                       (make-local-eager-strategy)
                       (make-request-only-adapter)
                       (list (cons 'config-requirements (list requirement)))))
-             (flow (external-flow 'remote 'submit '((payload . value)) 'value 'value))
+             (flow (external-flow
+		    'remote
+		    'submit
+		    '((payload . value))
+		    (Fun AdapterResult <- Any)))
              (failure (capture-config-failure
                        (lambda ()
                          (run-flow-with-config config flow 'input))))

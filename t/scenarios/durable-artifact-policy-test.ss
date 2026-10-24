@@ -225,6 +225,8 @@
       (scope '(external workspace))
       (artifact-grants '(report/artifact-1))))
 
+(export durable-artifact-policy-test)
+
 (def durable-artifact-policy-test
   (test-suite "durable artifact policy"
     (yuanxu-test-case "artifact profile macro creates reusable POO objects"
@@ -384,7 +386,7 @@
              (loop-value (.ref stage 'loop)))
         (check-equal? (agentic-ai-lab-scenario-case? artifact-composition) #t)
         (check-equal? (agentic-ai-lab-scenario-case-name artifact-composition)
-                      'agent-artifacts)
+                      'artifact-composition)
         (check-equal? (length (agentic-ai-lab-scenario-case-modules
                                artifact-composition))
                       1)

@@ -23,7 +23,7 @@
   (test-suite "type-facts-contract-projection-test"
     (yuanxu-test-case "validates the native contract"
       (eval '(import :yuanxu/module-system/schema/slot-contracts))
-      (eval '(import "./core/type-facts/objects.ss"))
+      (eval '(import :yuanxu/object-types/facts))
       (eval '(import :clan/poo/object :clan/poo/mop))
       (type-facts-projection-eval
  '(begin
@@ -42,21 +42,20 @@
        #f
        '((slot . tags))))
     (def +type-facts-fixture-contract+
-      (yuanxu-native-contract
+      (yuanxu-object-contract
        'type-facts/fixture
        'type-facts
        'AgenticAILabTypeFactsFixture
        object?
        (list +type-facts-fixture-name-slot+
              +type-facts-fixture-tags-slot+)
-       (lambda (candidate slot) (.slot? candidate slot))
-       (lambda (candidate slot) (.ref candidate slot))
+
        '((projection . type-facts-test))))))
 
 (let* ((rows
         (type-facts-projection-eval
          '(map yuanxu-type-fact-contract->alist
-               (yuanxu-native-contract->type-facts
+               (yuanxu-object-contract->type-facts
                 +type-facts-fixture-contract+))))
        (name-row (car rows))
        (tags-row (cadr rows))
@@ -75,7 +74,7 @@
 (let* ((rows
         (type-facts-projection-eval
          '(map yuanxu-lean-fact-contract->alist
-               (yuanxu-native-contract->lean-fact-contracts
+               (yuanxu-object-contract->lean-fact-contracts
                 +type-facts-fixture-contract+))))
        (name-row (car rows))
        (tags-row (cadr rows)))

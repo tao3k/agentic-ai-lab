@@ -3,6 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: failure tests cover typed control-plane payloads.
 ;;; Invariant: tests inspect failure structs, not exception message text.
 
@@ -99,7 +103,10 @@
              (registry (make-flow-declaration-registry
                         'unsupported-flow-declarations
                         (list descriptor)))
-             (flow (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
+             (flow (pure-flow
+		    'inc
+		    (Fun Number <- Number)
+		    (lambda (x) (+ x 1))))
              (failure (capture-control-plane-failure
                        (lambda ()
                          (strategy-planner-for-flow-in
@@ -112,14 +119,21 @@
         (check-equal? (cdr (assoc 'planner (execution-failure-detail failure)))
                       'unsupported-planner)))
     (yuanxu-test-case "raises structured failure for missing dependency value"
-      (let* ((task (make-pure-task 'inc (lambda (x) (+ x 1)) 'number 'number))
+      (let* ((task (make-pure-task
+  'inc
+  (Fun Number <- Number)
+  (lambda (x) (+ x 1))))
              (node (make-plan-node '(node malformed 0 pure inc)
                                    0
                                    task
                                    'pure
                                    'inc
                                    '((node missing 99 pure missing))))
-             (plan (make-execution-plan 'malformed (list node) 'number 'number))
+             (plan (make-execution-plan
+  'malformed
+  (list node)
+  Number
+  Number))
              (strategy (make-strategy 'malformed-plan
                                       '(pure graph-frontier)
                                       'no-cache
@@ -129,7 +143,10 @@
                                       strategy
                                       (make-request-only-adapter)
                                       '((runtime . request-only))))
-             (flow (pure-flow 'ignored (lambda (x) x) 'number 'number))
+             (flow (pure-flow
+		    'ignored
+		    (Fun Number <- Number)
+		    (lambda (x) x)))
              (failure (capture-control-plane-failure
                        (lambda ()
                          (run-flow-with-config config flow 1)))))
@@ -149,13 +166,16 @@
                         (failure-test-values/tail
                          task-family-descriptors
                          (list descriptor))))
-             (task (make-task 'remote-custom
-                              'custom
-                              '(remote custom)
-                              'value
-                              'value
-                              #f))
-             (flow (flow-compose 'custom-flow (list task) 'value 'value))
+             (task (make-task
+		    'remote-custom
+		    'custom
+		    '(remote custom)
+		    (Fun Any <- Any)
+		    #f))
+             (flow (flow-compose
+		    'custom-flow
+		    (list task)
+		    (Fun Any <- Any)))
              (config (make-run-config 'custom-dispatch
                                       (make-local-eager-strategy)
                                       (make-request-only-adapter)
@@ -171,7 +191,11 @@
         (check-equal? (cdr (assoc 'operation (execution-failure-detail failure)))
                       'custom-dispatch)))
     (yuanxu-test-case "wraps adapter result errors in receipt failures"
-      (let* ((flow (external-flow 'remote 'submit '((payload . value)) 'value 'value))
+      (let* ((flow (external-flow
+		    'remote
+		    'submit
+		    '((payload . value))
+		    (Fun AdapterResult <- Any)))
              (config (make-run-config 'failing
                                       (make-local-eager-strategy)
                                       (make-failing-adapter)
@@ -188,17 +212,21 @@
     (yuanxu-test-case "projects local and adapter failures into try-result values"
       (let* ((runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
-             (flow (throw-string-flow 'throw-demo
-                                      "try-result local failure"
-                                      'unit
-                                      'unit))
+             (flow (throw-string-flow
+		    'throw-demo
+		    "try-result local failure"
+		    (Fun Unit <- Unit)))
              (result (runner-run-either runner flow #!void))
              (failure (try-result-value result)))
         (check-equal? (try-left? result) #t)
         (check-equal? (execution-failure-code failure) 'thrown-string)
         (check-equal? (execution-failure-message failure)
                       "try-result local failure"))
-      (let* ((flow (external-flow 'remote 'submit '((payload . value)) 'value 'value))
+      (let* ((flow (external-flow
+		    'remote
+		    'submit
+		    '((payload . value))
+		    (Fun AdapterResult <- Any)))
              (config (make-run-config 'failing
                                       (make-local-eager-strategy)
                                       (make-failing-adapter)
@@ -210,7 +238,10 @@
         (check-equal? (try-left? result) #t)
         (check-equal? (execution-failure-owner failure) 'runtime-adapter)
         (check-equal? (execution-failure-code failure) 'adapter-failure))
-      (let* ((flow (pure-flow 'ok (lambda (value) value) 'value 'value))
+      (let* ((flow (pure-flow
+		    'ok
+		    (Fun Any <- Any)
+		    (lambda (value) value)))
              (result (runner-run-either (make-runner (make-local-eager-strategy)
                                                      (make-request-only-adapter))
                                         flow

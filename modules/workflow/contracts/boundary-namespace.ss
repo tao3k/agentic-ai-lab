@@ -37,7 +37,7 @@
                  agentic-ai-lab-namespace-descriptor->alist
                  agentic-ai-lab-boundary-namespace
                  agentic-ai-lab-category-module-namespace)
-        (only-in "../../../core/type-facts/objects.ss"
+        (only-in :yuanxu/object-types/facts
                  yuanxu-type-fact
                  yuanxu-type-fact-contract->alist
                  yuanxu-lean-fact

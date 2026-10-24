@@ -81,6 +81,8 @@
    (agentic-ai-lab-organization-protocol-facet effects '())
    (agentic-ai-lab-organization-empty-evidence-facet)))
 
+(export canonical-organization-bundle-test)
+
 (def canonical-organization-bundle-test
   (test-suite
    "canonical organization Bundle vertical slice"

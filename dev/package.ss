@@ -29,7 +29,8 @@
 (def +nono-c-include-option+
   (string-append
    "-I"
-   (path-normalize (path-expand "../bindings/nono-c" (path-directory (this-source-file))))))
+   (path-strip-trailing-directory-separator
+     (path-normalize (path-expand "../bindings/nono-c" (path-directory (this-source-file)))))))
 
 (def +nono-c-link-option+
   (cond-expand
@@ -56,8 +57,7 @@
  @ asp-gerbil-scheme-library-package-prototype)
  (spec agentic-ai-lab-native-spec)
  (public-entry-modules
-  '("init.ss"
-    "modules/workflow/scenario/bundle-v1-projection.ss"
+  '("modules/workflow/scenario/bundle-v1-projection.ss"
 
     "modules/module-authoring/module-descriptor.ss"
     "modules/workflow/scenario/configuration/module-activation.ss"

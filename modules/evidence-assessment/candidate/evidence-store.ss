@@ -6,7 +6,7 @@
 ;;; the caller. Private receipts never escape; all published pair trees detach.
 (import (only-in :clan/poo/object .o .ref object? .slot?)
         (only-in :clan/poo/mop define-type validate)
-        (only-in :yuanxu/types YuanxuObjectContract. yuanxu-predicate-contract)
+        (only-in :yuanxu/object-types/contracts YuanxuObjectContract. yuanxu-predicate-contract)
         (only-in :std/error exception->string)
         (only-in :gerbil-ascent/candidate/datum reasoning-bounded-data?)
         (only-in :gerbil-ascent/candidate/types reasoning-snapshot-valid? reasoning-snapshot-relations)

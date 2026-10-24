@@ -51,6 +51,8 @@
   (map (lambda (entry) (cdr (assq 'code entry)))
        (agentic-ai-lab-organization-validation-diagnostics receipt)))
 
+(export organization-bundle-five-facets-test)
+
 (def organization-bundle-five-facets-test
   (test-suite
    "five typed organization facets"

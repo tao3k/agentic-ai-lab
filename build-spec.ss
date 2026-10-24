@@ -1,13 +1,22 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Public library roots projected through Core's installed native import graph.
+;;; init.ss owns the selected Module spec through init.exports; it is not a
+;;; library target or an import-graph root here.
 (import (only-in :gerbil/expander expander-context-id)
         (only-in :yuanxu/module-system/building/source-closure package-library-spec))
-(export agentic-ai-lab-public-build-roots agentic-ai-lab-library-spec)
-(def agentic-ai-lab-public-build-roots '
-("init.ss"
-    "modules/workflow/scenario/bundle-v1-projection.ss"
+(export agentic-ai-lab-public-build-roots agentic-ai-lab-build-spec)
+(def agentic-ai-lab-public-build-roots
+  '("modules/workflow/scenario/bundle-v1-projection.ss"
     "testing-api.ss"
+    "services.ss"
+    "nix-contracts.ss"
+    "opentofu-contracts.ss"
+
+    ;; These public user APIs must ship their native import closures too.
+    "modules/agent-sandbox/interface.ss"
+    "modules/loop-engine/interface.ss"
+    "modules/workflow/scenario/configuration/interface.ss"
 
     "modules/module-authoring/module-descriptor.ss"
     "modules/workflow/scenario/configuration/module-activation.ss"
@@ -36,6 +45,7 @@
     "modules/authorization/interface.ss"
     "modules/authorization/providers/cedar/interface.ss"
     "modules/governance/interface.ss"
+    "modules/governance/evidence/batched-merkle.ss"
     "modules/proof/interface.ss"
     "modules/ai-agentic-context/use-host.ss"
     "modules/ai-agentic-context/session-host.ss"
@@ -55,7 +65,11 @@
     "modules/workflow/runtime/context-use.ss"
     "modules/workflow/runtime/temporal-proof.ss"
     "modules/workflow/runtime/temporal-proof-host.ss"
-))
+    ;; Special compiler options replace these targets below. Their imports
+    ;; still belong to the native library closure.
+    "modules/nono-sandbox/_nono.ss"
+    "modules/workflow/runtime/runtime-v0-native.ss"
+    "modules/workflow/runtime/semantic.ss"))
 
 (def special-targets '("modules/nono-sandbox/_nono"
                       "modules/workflow/runtime/runtime-v0-native"
@@ -67,6 +81,15 @@
       (error "production build imports the development-only ASP package" identity))
     (when (and name (string-prefix? "agentic-ai-lab/dev/" name))
       (error "production build imports a development module" identity))))
-(def (agentic-ai-lab-library-spec (roots agentic-ai-lab-public-build-roots))
-  (package-library-spec (current-directory) 'agentic-ai-lab roots
-    admit-context: admit-production-build-context exclude: special-targets))
+(def (agentic-ai-lab-build-spec (roots agentic-ai-lab-public-build-roots))
+  (def ffi-options
+    (cond-expand (darwin '("-ld-options" "-Wl,-undefined,dynamic_lookup")) (else '())))
+  (append
+    `((gxc: "modules/nono-sandbox/_nono"
+            "-cc-options" ,(string-append "-I" (path-expand "bindings/nono-c" (current-directory)))
+            "-ld-options" ,(cond-expand (darwin "-Wl,-undefined,dynamic_lookup") (else "-ldl"))))
+    (package-library-spec (current-directory) 'agentic-ai-lab roots
+      admit-context: admit-production-build-context exclude: special-targets)
+    ;; The process/AOT consumer supplies runtime symbols at final link time.
+    `((gxc: "modules/workflow/runtime/runtime-v0-native" ,@ffi-options)
+      (gxc: "modules/workflow/runtime/semantic" ,@ffi-options))))

@@ -51,3 +51,6 @@ packages/python-runtime/build/
 # Quint dependencies and compiler/backend generated artifacts.
 node_modules/
 _apalache-out/
+
+# Native package publication coordination; no source or receipt authority.
+/.gerbil.publication.lock

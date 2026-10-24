@@ -13,7 +13,7 @@
         (only-in :gerbil/expander eval-syntax current-expander-context make-top-context syntax->list)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/observability/debug YuanxuDebugDurationAnomaly? YuanxuDebugMemoryAnomaly?)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
         (only-in :yuanxu/modules/json-schema/json-schema-validate yuanxu-json-schema-validation-diagnostic-metadata)
@@ -61,6 +61,7 @@
   (yuanxu-load-modules
     (.cc context
       'publication-inputs (.get reader inputs)
+      'publication-preparation (.get reader preparation)
       'current? (lambda (generation)
                   (.call reader admit-current)
                   (.call context current? generation)))))
@@ -200,14 +201,13 @@
             (call-with-output-string
               (lambda (port)
                 (write `(yuanxu! mode: explicit
-                          (json-schema @ ,(path-expand "modules/json-schema" (current-directory)))
+                          (json-schema @ ,(path-expand "core/modules/json-schema" (current-directory)))
                           (nix @ ,(path-expand "modules/nix" (current-directory)))
-                          (ops @ ,(path-expand "ops" (current-directory)))
-                          (funflow @ ,(path-expand "modules/funflow" (current-directory)))
+                          (funflow @ ,(path-expand "core/modules/funflow" (current-directory)))
                           :services (opentofu @ ,upstream)
                           :app (infrastructure) :unused (bomb disable: #t)) port))))
           (write-source (path-expand "types.ss" owner)
-                        "(import :clan/poo/object (only-in :yuanxu/types yuanxu-predicate-contract)) (def Scope (yuanxu-predicate-contract 'scope object? (lambda (_v _c) '()))) (export Scope)")
+                        "(import :clan/poo/object (only-in :yuanxu/object-types/contracts yuanxu-predicate-contract)) (def Scope (yuanxu-predicate-contract 'scope object? (lambda (_v _c) '()))) (export Scope)")
           (write-source (path-expand "objects.ss" owner)
                         "(import :clan/poo/object) (def Defaults (.o)) (export Defaults)")
           (write-source config (if invalid-only?
@@ -228,7 +228,7 @@
                   (map (lambda (path) (cons path (module-source-read path)))
                        (list expression-path catalog-path collector-path checker))))))
           (write-source (path-expand "types.ss" owner)
-            (string-append "(import (only-in :agentic-ai-lab/modules/services/opentofu/types OpenTofuScopeContract)) "
+            (string-append "(import (only-in :agentic-ai-lab/opentofu-contracts OpenTofuScopeContract)) "
                            (string-subst (module-source-read (path-expand "types.ss" owner)) "(export Scope)" "(export Scope OpenTofuScopeContract)")))
           (write-source (path-expand "interface.ss" owner)
             "(.def Infrastructure identity: 'app/infrastructure core: (.o requires: (.o Tofu: (.o module-id: 'services/opentofu contract: OpenTofuScopeContract)) scope-contract: Scope exports: (.o config: Config)) features: (.o))")
@@ -258,14 +258,23 @@
             (not (file-exists? (path-expand "modules/services/opentofu" root))))
           (assert 'selected-dependency-order
             (equal? (.get parent-view dependency-order)
-                    '(json-schema nix ops funflow services/opentofu app/infrastructure)))
+                    '(json-schema nix funflow services/opentofu app/infrastructure)))
           (let* ((records (.get parent-view selected-records))
                  (json-schema (find (lambda (record) (eq? (.get record identity) 'json-schema)) records))
                  (nix (find (lambda (record) (eq? (.get record identity) 'nix)) records))
                  (tofu (find (lambda (record) (eq? (.get record identity) 'services/opentofu)) records)))
-            (assert 'json-schema-contract-identity-shared
-              (eq? (.get json-schema publication core scope-contract)
+            (def json-schema-requirement (.get tofu dependency-records JsonSchema))
+            (assert 'json-schema-provider-record-shared
+              (eq? (.get json-schema-requirement provider) json-schema))
+            (assert 'json-schema-producer-contract-retained
+              (eq? (.get json-schema scope-evidence admission-contract)
+                   (.get json-schema publication core scope-contract)))
+            (assert 'json-schema-requirement-contract-retained
+              (eq? (.get json-schema-requirement requirement-evidence admission-contract)
                    (.get tofu publication core requires JsonSchema contract)))
+            (assert 'json-schema-requirement-admitted
+              (yuanxu-validation-evidence-accepted?
+                (.get json-schema-requirement requirement-evidence)))
             (assert 'nix-contract-identity-shared
               (eq? (.get nix publication core scope-contract)
                    (.get tofu publication core requires Nix contract))))

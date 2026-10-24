@@ -40,6 +40,8 @@
          (identity (agentic-ai-lab-organization-bundle-identity bundle)))
     (kernel-state 'validated bundle canonical identity 0 #f 'validate #f)))
 
+(export organization-bundle-shadow-test)
+
 (def organization-bundle-shadow-test
   (test-suite
    "read-only organization Bundle shadow projection"

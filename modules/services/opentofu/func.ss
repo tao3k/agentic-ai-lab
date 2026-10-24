@@ -6,7 +6,7 @@
 ;;; public results and diagnostics are native POO objects. No process or Loader.
 (import :clan/poo/object
         (only-in "./types.ss" OpenTofuConfigContract)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         :std/text/pregexp
         (only-in :std/list/list delete-duplicates/hash)
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref yuanxu-contract-key->symbol)

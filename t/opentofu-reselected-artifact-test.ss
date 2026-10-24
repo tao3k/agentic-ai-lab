@@ -5,7 +5,7 @@
         (only-in :std/encoding/json write-json)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
-        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) :yuanxu/types :clan/poo/object)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-reselected-artifact-test)
 (def (assert label value)
   (unless value (error "assertion failed" label))
@@ -16,14 +16,17 @@
     (yuanxu-test-case "cached AWS parent, explicit rebuild, new native child scope"
       (.def Configuration
         resource: (.o aws_security_group: (.o web: (.o name: "web"))))
-      (def ParentContract (.get OpenTofuScope. types configuration))
+      (.def (ParentScope @ OpenTofuScope.)
+        config: =>.+
+        (.o artifact: (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_AWS_ONLY_ARTIFACT")))
+      (def ParentContract (.get ParentScope types configuration))
       (def parent-result (.call ParentContract .admit Configuration #f))
       (assert 'parent-admitted-before-reselection (accepted? parent-result))
-      (def ParentAWS (.get OpenTofuScope. modules aws provider))
+      (def ParentAWS (.get ParentScope modules aws provider))
       (.def (Release @ Configuration)
         resource: =>.+
         (.o null_resource: (.o smoke: (.o triggers: (.o release: "smoke")))))
-      (def Demand (.call OpenTofuScope. .build-inputs Release))
+      (def Demand (.call ParentScope .build-inputs Release))
       (assert 'final-demand-includes-new-provider
         (equal? (.get Demand providers) '("aws" "null")))
       (assert 'old-collection-rejects-new-provider
@@ -37,7 +40,7 @@
       (let (rebuilt (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_REBUILT" #f))
         (when rebuilt
           (let ()
-            (.def (Updated @ OpenTofuScope.)
+            (.def (Updated @ ParentScope)
               config: =>.+ (.o artifact: rebuilt))
             (assert 'child-module-registry-initially-lazy (not (.ref/cached Updated 'modules)))
             (def result
@@ -54,7 +57,7 @@
                          .entry-read-count 'null_resource 'resource) 1))
             (assert 'null-data-unread
               (not (.call (.get Updated modules null provider artifact) .index-loaded? 'data)))
-            (assert 'parent-contract-still-cached (eq? ParentContract (.get OpenTofuScope. types configuration)))
-            (assert 'parent-provider-still-cached (eq? ParentAWS (.get OpenTofuScope. modules aws provider)))
-            (assert 'parent-still-aws-only (not (.slot? (.get OpenTofuScope. modules) 'null)))
+            (assert 'parent-contract-still-cached (eq? ParentContract (.get ParentScope types configuration)))
+            (assert 'parent-provider-still-cached (eq? ParentAWS (.get ParentScope modules aws provider)))
+            (assert 'parent-still-aws-only (not (.slot? (.get ParentScope modules) 'null)))
             (assert 'parent-admission-unchanged (= (length (.get parent-result classification children)) 1))))))))

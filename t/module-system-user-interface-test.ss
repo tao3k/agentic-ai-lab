@@ -153,13 +153,13 @@
   (yuanxuModuleCatalog user-root-module invalid-user-module))
 
 ;; : (-> Unit PooModuleValueCatalog)
-(defagentic-ai-lab-module-set user-macro-catalog
+(defyuanxu-module-set user-macro-catalog
   (modules user-root-module)
   (yuanxu-module-when #t user-child-module)
   (yuanxu-module-when #f invalid-user-module))
 
 ;; : (-> Identifier Syntax)
-(defagentic-ai-lab-module-object-block agentic-ai-lab-module-user-block)
+(defyuanxu-module-object-block agentic-ai-lab-module-user-block)
 
 ;; : (-> Unit POOObject)
 (def user-generated-poo-block

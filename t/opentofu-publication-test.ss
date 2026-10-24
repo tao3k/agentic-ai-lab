@@ -12,7 +12,7 @@
         (only-in :yuanxu/module-system/source/preparation yuanxu-prepare-module-build-source)
         (only-in :yuanxu/module-system/observability/presentation
                  yuanxu-poo-slot-authoring-self-reference?)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/module-system/interface yuanxu-load-modules))
 (export opentofu-publication-test)
 (def (assert name value)
@@ -70,7 +70,6 @@
                     (write `(yuanxu! mode: explicit
                               (json-schema @ ,(path-expand "../core/modules/json-schema" maintained))
                               (nix @ ,(path-expand "nix" maintained))
-                              (ops @ ,(path-expand "../core/ops" maintained))
                               (funflow @ ,(path-expand "../core/modules/funflow" maintained))
                               ,@(if consumer? '(:app (infrastructure)) '())
                               :services (opentofu @ ,(path-expand "services/opentofu" maintained))) port)))))
@@ -101,7 +100,7 @@
                           (.get prepared source-dependencies)))))
               (let (consumer (path-expand "modules/app/infrastructure" root))
                 (write-source (path-expand "types.ss" consumer)
-                  "(import (only-in :agentic-ai-lab/modules/services/opentofu/types OpenTofuScopeContract)) (export OpenTofuScopeContract)")
+                  "(import (only-in :agentic-ai-lab/opentofu-contracts OpenTofuScopeContract)) (export OpenTofuScopeContract)")
                 (write-source (path-expand "objects.ss" consumer)
                   "(import :clan/poo/object) (def Defaults (.o)) (export Defaults)")
                 (write-source (path-expand "config.ss" consumer) "(def Config (.o))")

@@ -8,6 +8,8 @@
         :agentic-ai-lab/modules/proof/projections/proof-gate-receipts
         :agentic-ai-lab/modules/proof/projections/proof-gate-bundle)
 
+(export proof-gate-receipts-test)
+
 (def proof-gate-receipts-test
   (test-suite "proof gate receipts"
     (yuanxu-test-case "assembles accepted and rejected receipt bundles"

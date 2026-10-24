@@ -8,7 +8,7 @@
   (test-suite "AWS atomic endpoint"
     (test-case "cold discovery and repeated execution leave integration and scope cold"
       (def started (real-time))
-      (def module (.get agentic-ai-lab.init.exports Scenarios aws))
+      (def module (.get agentic-ai-lab.init.exports scenarios aws))
       (def tests (.get module tests))
       (check-equal? (.ref/cached module 'scope) #f)
       (check-equal? (.ref/cached tests 'integration) #f)
@@ -26,7 +26,7 @@
       (check-equal? (.ref/cached tests 'qualification) #f)
       (check-equal? (.ref/cached module 'scope) #f))
     (test-case "integration is an explicit lazy projection of the same Graph"
-      (def module (.get agentic-ai-lab.init.exports Scenarios aws))
+      (def module (.get agentic-ai-lab.init.exports scenarios aws))
       (def tests (.get module tests))
       (def integration (.get tests integration))
       (check-equal? (eq? (.get tests selected-graph) (.get integration selected-graph)) #t)

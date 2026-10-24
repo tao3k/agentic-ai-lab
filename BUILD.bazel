@@ -75,14 +75,6 @@ gerbil_project_compile(
     source_resolution_receipts = ["@gerbil_poo_sources//:source_resolution_receipt"],
 )
 
-gerbil_project_compile(
-    name = "asp_gerbil_scheme_package",
-    srcs = ["@asp_gerbil_scheme_sources//:sources"],
-    build_script = "@asp_gerbil_scheme_sources//:build_script",
-    require_library_output = True,
-    source_resolution_receipts = ["@asp_gerbil_scheme_sources//:source_resolution_receipt"],
-    deps = [":gerbil_poo_package"],
-)
 
 gerbil_project_compile(
     name = "orgize_package",
@@ -152,7 +144,6 @@ filegroup(
     filegroup(name = name, srcs = [project], output_group = "receipt")
     for name, project in [
         ("gerbil_poo_package_receipt", ":gerbil_poo_package"),
-        ("asp_gerbil_scheme_package_receipt", ":asp_gerbil_scheme_package"),
         ("orgize_package_receipt", ":orgize_package"),
         ("yuanxu_package_receipt", ":yuanxu_package"),
         ("gerbil_parser_package_receipt", ":gerbil_parser_package"),
@@ -164,7 +155,6 @@ filegroup(
     filegroup(name = name, srcs = [project], output_group = "project_root")
     for name, project in [
         ("gerbil_poo_package_project_root", ":gerbil_poo_package"),
-        ("asp_gerbil_scheme_package_project_root", ":asp_gerbil_scheme_package"),
         ("orgize_package_project_root", ":orgize_package"),
     ]
 ]

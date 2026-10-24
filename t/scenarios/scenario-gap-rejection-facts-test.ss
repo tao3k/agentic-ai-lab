@@ -6,6 +6,8 @@
          (only-in :std/test test-suite)
         :agentic-ai-lab/modules/workflow/graph/scenario-gap-rejection-facts)
 
+(export scenario-gap-rejection-facts-test)
+
 (def scenario-gap-rejection-facts-test
   (test-suite "scenario gap rejection facts"
     (yuanxu-test-case "projects each rejection class"
