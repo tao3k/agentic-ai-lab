@@ -6,6 +6,6 @@
  agentic-ai-lab
 depend:
  ("github.com/tao3k/gerbil-poo@40c61fe6afc8313f297599da0e511f96e3a23dcf"
-  "github.com/tao3k/gerbil-parser@ca06d38e1389bc75d4d477b2583bb381b0c8b2f7"
-  "github.com/tao3k/orgize@7a788105ae37b9ecc6e1a0bb25cd0ae4f8296301"
-  "github.com/tao3k/gerbil-ascent@76d4b507327ec38460a086fad5bbed6651cd6219"))
+  "github.com/tao3k/gerbil-parser@6ce63086c1cb43e50edb8b751892b697bfd1d7e2"
+  "github.com/tao3k/orgize@ce568f0de12ffcdcb4df06185dfda9ac28c73b1d"
+  "github.com/tao3k/gerbil-ascent@21eba228ec9e529f2b2527ff21157f9651787990"))
