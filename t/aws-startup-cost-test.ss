@@ -54,7 +54,7 @@
                               (measure module (lambda ()
                                 (eval-syntax `(import ,(if (string? module)
                                                           (path-expand module) module))))))
-                            '(:gerbil/core :std/test :clan/poo/object :clan/poo/mop :yuanxu/types
+                            '(:gerbil/core :std/test :clan/poo/object :clan/poo/mop :yuanxu/object-types/contracts
                               :yuanxu/observability/types :yuanxu/observability/funcs
                               :yuanxu/observability/slot-debug :yuanxu/observability/debug
                               :yuanxu/observability/testing-case

@@ -42,7 +42,7 @@
        #f
        '((slot . tags))))
     (def +type-facts-fixture-contract+
-      (yuanxu-native-contract
+      (yuanxu-object-contract
        'type-facts/fixture
        'type-facts
        'AgenticAILabTypeFactsFixture
@@ -56,7 +56,7 @@
 (let* ((rows
         (type-facts-projection-eval
          '(map yuanxu-type-fact-contract->alist
-               (yuanxu-native-contract->type-facts
+               (yuanxu-object-contract->type-facts
                 +type-facts-fixture-contract+))))
        (name-row (car rows))
        (tags-row (cadr rows))
@@ -75,7 +75,7 @@
 (let* ((rows
         (type-facts-projection-eval
          '(map yuanxu-lean-fact-contract->alist
-               (yuanxu-native-contract->lean-fact-contracts
+               (yuanxu-object-contract->lean-fact-contracts
                 +type-facts-fixture-contract+))))
        (name-row (car rows))
        (tags-row (cadr rows)))

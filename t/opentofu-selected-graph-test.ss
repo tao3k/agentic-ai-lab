@@ -13,7 +13,7 @@
         (only-in :gerbil/expander eval-syntax current-expander-context make-top-context syntax->list)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/observability/debug YuanxuDebugDurationAnomaly? YuanxuDebugMemoryAnomaly?)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
         (only-in :yuanxu/modules/json-schema/json-schema-validate yuanxu-json-schema-validation-diagnostic-metadata)
@@ -206,7 +206,7 @@
                           :services (opentofu @ ,upstream)
                           :app (infrastructure) :unused (bomb disable: #t)) port))))
           (write-source (path-expand "types.ss" owner)
-                        "(import :clan/poo/object (only-in :yuanxu/types yuanxu-predicate-contract)) (def Scope (yuanxu-predicate-contract 'scope object? (lambda (_v _c) '()))) (export Scope)")
+                        "(import :clan/poo/object (only-in :yuanxu/object-types/contracts yuanxu-predicate-contract)) (def Scope (yuanxu-predicate-contract 'scope object? (lambda (_v _c) '()))) (export Scope)")
           (write-source (path-expand "objects.ss" owner)
                         "(import :clan/poo/object) (def Defaults (.o)) (export Defaults)")
           (write-source config (if invalid-only?

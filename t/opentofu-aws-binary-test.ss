@@ -4,7 +4,7 @@
 (import :std/test
         "./fixtures/opentofu/aws-5.100.0/qualification.ss"
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-         :yuanxu/types :clan/poo/object)
+         :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-aws-binary-test)
 
 (def opentofu-aws-binary-test

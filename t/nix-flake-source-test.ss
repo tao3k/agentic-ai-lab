@@ -11,7 +11,7 @@
         (only-in :std/encoding/json write-json read-json)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :agentic-ai-lab/modules/nix/objects NixFlakeSource.)
         (only-in :agentic-ai-lab/modules/nix/types NixFlakeSourceContract)
         (only-in :agentic-ai-lab/modules/nix/func current-nix-process-observer)

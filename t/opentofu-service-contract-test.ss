@@ -5,7 +5,7 @@
         (only-in :clan/poo/object-contract ObjectContract.)
         (only-in :clan/poo/mop TypeError?)
         (only-in :clan/poo/type String)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/module-system/source/admission admit-module-configuration!)
         (only-in :agentic-ai-lab/modules/services/opentofu/types

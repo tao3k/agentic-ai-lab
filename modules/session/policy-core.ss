@@ -13,8 +13,8 @@
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
                  yuanxu-contract-value-type
-                 yuanxu-native-contract
-                 yuanxu-native-contract->alist))
+                 yuanxu-object-contract
+                 yuanxu-object-contract->alist))
 
 (export agentic-ai-lab-session-policy-ref?
         agentic-ai-lab-session-policy-alist?
@@ -408,7 +408,7 @@
         AgenticAILabSessionPolicyRuntimeExecutedSlot))
 
 (def AgenticAILabSessionPolicyContract
-  (yuanxu-native-contract
+  (yuanxu-object-contract
    'session/policy
    'session
    'PooSessionPolicy
@@ -429,7 +429,7 @@
 ;;     %
 ;; : (-> Unit Alist)
 (def (agentic-ai-lab-session-policy-type-contract->alist)
-  (yuanxu-native-contract->alist AgenticAILabSessionPolicyContract))
+  (yuanxu-object-contract->alist AgenticAILabSessionPolicyContract))
 
 ;; : (-> YuanxuSlotContract AgenticAILabValue AgenticAILabValue)
 (def (agentic-ai-lab-session-policy-check-slot! contract value)

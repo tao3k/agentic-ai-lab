@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import :clan/poo/object
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/feature-system/source-lock-feature
                  sources-lock-value sources-lock? sources-lock-ref
                  source-lock-verify-payload)

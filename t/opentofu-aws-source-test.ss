@@ -12,7 +12,7 @@
         (only-in :agentic-ai-lab/modules/services/opentofu/aws-hash agentic-ai-lab-opentofu-aws-rule-key)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
         (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
-        :yuanxu/types
+        :yuanxu/object-types/contracts
         :clan/poo/object)
 (export opentofu-aws-source-test)
 

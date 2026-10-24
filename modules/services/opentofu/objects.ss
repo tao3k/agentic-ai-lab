@@ -5,7 +5,7 @@
 (import :clan/poo/object
         (only-in :std/list/list-builder with-list-builder)
         (only-in "./execution.ss" OpenTofuExecution. NullExecution. opentofu-execution)
-        (only-in :yuanxu/types YuanxuContract. yuanxu-classification-evidence
+        (only-in :yuanxu/object-types/contracts YuanxuContract. yuanxu-classification-evidence
                  yuanxu-classification-evidence-accepted? yuanxu-validation-evidence-accepted?)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :yuanxu/modules/json-schema/json-schema-contract yuanxu-json-schema->contract)

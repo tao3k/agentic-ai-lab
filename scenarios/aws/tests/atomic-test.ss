@@ -4,7 +4,7 @@
 (import :std/test :clan/poo/object :clan/poo/object-contract
         (only-in :clan/poo/mop validate TypeError?)
         (only-in :yuanxu/modules/json-schema/contracts schema-value-contract)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/module-system/source/publication module-publication?)
         (only-in :agentic-ai-lab/scenarios/aws/types AWSProfileContract.

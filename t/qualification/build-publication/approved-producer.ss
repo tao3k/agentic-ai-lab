@@ -31,7 +31,7 @@
           ;; swallowed by the production recovery or currentness boundary.
           " .available?: (lambda () (not (equal? (call-with-input-file expression read-line) \"null\"))))\n"))
       (write-source (path-expand "types.ss" owner)
-        "(import (only-in :yuanxu/types yuanxu-predicate-contract))\n(export ScopeContract)\n(def ScopeContract (yuanxu-predicate-contract 'release/scope (lambda (v) (and (object? v) (.slot? v 'Source))) (lambda (_v _c) '())))\n")
+        "(import (only-in :yuanxu/object-types/contracts yuanxu-predicate-contract))\n(export ScopeContract)\n(def ScopeContract (yuanxu-predicate-contract 'release/scope (lambda (v) (and (object? v) (.slot? v 'Source))) (lambda (_v _c) '())))\n")
       (write-source (path-expand "interface.ss" owner)
         "(.def Release identity: 'building/release core: (.o requires: (.o) build-publication: ReleaseSource scope-contract: ScopeContract exports: (.o Source: ReleaseSource)) features: (.o))\n")
       (write-source (path-expand "init.ss" workspace)

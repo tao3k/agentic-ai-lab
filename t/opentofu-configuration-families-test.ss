@@ -7,7 +7,7 @@
         :yuanxu/profile-composition/selection-syntax
         (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. agentic-ai-lab-opentofu-configuration-from-types)
         (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
-        :yuanxu/types :clan/poo/object)
+        :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-configuration-families-test)
 
 (def (assert label value)

@@ -15,7 +15,7 @@
                  yuanxu-contract-slot-predicate-key
                  yuanxu-contract-slot-report-kind
                  yuanxu-contract-slot-type
-                 yuanxu-native-contract-slots)
+                 yuanxu-object-contract-slots)
         (only-in :yuanxu/modules/json-schema/json-schema-receipt
                  yuanxu-json-schema->contract-artifact
                  yuanxu-json-schema-contract-artifact-object-contract
@@ -56,7 +56,7 @@
   (let (slot (find (lambda (candidate)
                      (eq? (yuanxu-contract-slot-name candidate)
                           slot-name))
-                   (yuanxu-native-contract-slots object-contract)))
+                   (yuanxu-object-contract-slots object-contract)))
     (if slot
       slot
       (error "missing generated JSON Schema slot" slot-name))))

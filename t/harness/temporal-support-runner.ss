@@ -8,7 +8,7 @@
   (displayln "IMPORT-OK " module) (force-output))
  '( :clan/poo/object
     :clan/poo/mop
-    :yuanxu/types
+    :yuanxu/object-types/contracts
     :yuanxu/module-system/schema/slot-contracts
     :yuanxu/observability/types
     :yuanxu/observability/funcs

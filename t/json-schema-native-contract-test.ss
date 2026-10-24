@@ -39,8 +39,8 @@
      (and (element? Type contract)
           (element? contract '((name . "flow")))
           (not (element? contract '((name . 42))))
-          (= (length (yuanxu-native-contract->type-facts contract)) 1)
-          (= (length (yuanxu-native-contract->lean-fact-contracts contract))
+          (= (length (yuanxu-object-contract->type-facts contract)) 1)
+          (= (length (yuanxu-object-contract->lean-fact-contracts contract))
              1))))
  (error "JSON Schema should emit a native Contract with proof projections"))
 

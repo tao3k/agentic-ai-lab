@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :clan/poo/object
         (only-in :std/text/pregexp pregexp-match)
-        (only-in :yuanxu/types yuanxu-predicate-contract))
+        (only-in :yuanxu/object-types/contracts yuanxu-predicate-contract))
 (export NixSourceContract NixFlakeSourceContract NixScopeContract)
 (def (nix-arguments? value)
   (and (object? value)

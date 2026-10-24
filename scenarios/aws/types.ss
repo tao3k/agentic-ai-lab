@@ -6,7 +6,7 @@
         (only-in :clan/poo/type True)
         (only-in :yuanxu/modules/json-schema/contracts ProjectionContract.)
         (only-in :agentic-ai-lab/modules/services/opentofu/types OpenTofuScopeContract)
-        (only-in :yuanxu/types YuanxuContract. yuanxu-classification-evidence))
+        (only-in :yuanxu/object-types/contracts YuanxuContract. yuanxu-classification-evidence))
 (export AWSProfileContract. AWSScenarioContract. AWSAdmissionContract.
         AWSProfileAdmissionContract. AWSInterfaceContract aws-scenario-contract
         OpenTofuScopeContract)

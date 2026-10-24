@@ -9,7 +9,7 @@
         (only-in :std/encoding/json read-json)
         (only-in :std/list/walist waref)
         (only-in :std/misc/ports read-all-as-string)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/module-system/source/link yuanxu-load-modules)
         (only-in :yuanxu/module-system/source/admission module-source-read)
         (only-in :yuanxu/ops/objects ProcessScript.))

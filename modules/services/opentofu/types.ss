@@ -9,7 +9,7 @@
         (only-in :clan/poo/type String Symbol OrFalse Union)
         (only-in :agentic-ai-lab/modules/services/types Services)
         (only-in :yuanxu/modules/json-schema/contracts ProjectionContract.)
-        (only-in :yuanxu/types YuanxuContract. yuanxu-predicate-contract yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts YuanxuContract. yuanxu-predicate-contract yuanxu-validation-evidence-accepted?)
         (only-in :agentic-ai-lab/modules/nix/types NixSourceContract NixFlakeSourceContract NixScopeContract)
         (only-in :yuanxu/modules/json-schema/types JsonSchemaScopeContract)
         (only-in :yuanxu/modules/funflow/types FunflowScopeContract)

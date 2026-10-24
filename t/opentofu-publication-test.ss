@@ -12,7 +12,7 @@
         (only-in :yuanxu/module-system/source/preparation yuanxu-prepare-module-build-source)
         (only-in :yuanxu/module-system/observability/presentation
                  yuanxu-poo-slot-authoring-self-reference?)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/module-system/interface yuanxu-load-modules))
 (export opentofu-publication-test)
 (def (assert name value)

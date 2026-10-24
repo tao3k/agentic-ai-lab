@@ -5,7 +5,7 @@
         (only-in :std/encoding/json write-json)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
-        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) :yuanxu/types :clan/poo/object)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-reselected-artifact-test)
 (def (assert label value)
   (unless value (error "assertion failed" label))

@@ -10,9 +10,9 @@
         (only-in :yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-slot
                  yuanxu-contract-value-type
-                 yuanxu-native-contract
-                 yuanxu-native-contract->alist)
-        (only-in :yuanxu/types
+                 yuanxu-object-contract
+                 yuanxu-object-contract->alist)
+        (only-in :yuanxu/object-types/contracts
                  yuanxu-contract-admit
                  yuanxu-validation-evidence-accepted?))
 
@@ -90,7 +90,7 @@
     '((scope . agent-sandbox) (projection . metadata)))))
 
 (def AgenticAILabSandboxProfileContract
-  (yuanxu-native-contract
+  (yuanxu-object-contract
    'PooSandboxProfileContract
    'agent-sandbox
    'PooSandboxProfile
@@ -116,7 +116,7 @@
 
 ;; : (-> Alist)
 (def (agentic-ai-lab-sandbox-profile-type-contract->alist)
-  (yuanxu-native-contract->alist AgenticAILabSandboxProfileContract))
+  (yuanxu-object-contract->alist AgenticAILabSandboxProfileContract))
 
 ;; : (-> PooSandboxProfile PooSandboxProfile)
 (def (agentic-ai-lab-require-sandbox-profile-contract! profile)

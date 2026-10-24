@@ -22,8 +22,8 @@
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
                  yuanxu-contract-value-type
-                 yuanxu-native-contract
-                 yuanxu-native-contract->alist))
+                 yuanxu-object-contract
+                 yuanxu-object-contract->alist))
 
 (export +loop-human-audit-schema+
         +loop-human-audit-decisions+
@@ -217,7 +217,7 @@
 ;;       An alist representation for doctor, graph explanation, and manifests.
 ;;     %
 (def (loop-human-audit-type-contract->alist)
-  (yuanxu-native-contract->alist +loop-human-audit-type-contract+))
+  (yuanxu-object-contract->alist +loop-human-audit-type-contract+))
 
 ;; loop-human-audit-check-slot!
 ;;   : (-> YuanxuSlotContract AgenticAILabValue AgenticAILabValue)
@@ -622,7 +622,7 @@
         +loop-human-audit-execution-owner-contract+
         +loop-human-audit-metadata-contract+))
 (def +loop-human-audit-type-contract+
-  (yuanxu-native-contract
+  (yuanxu-object-contract
    'loop-human-audit 'loops 'LoopHumanAudit loop-human-audit?
    +loop-human-audit-slot-contracts+
    (lambda (candidate slot) (and (object? candidate) (.slot? candidate slot)))

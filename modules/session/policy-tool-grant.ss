@@ -12,8 +12,8 @@
                  yuanxu-contract-check-slot!
                  yuanxu-contract-slot
                  yuanxu-contract-value-type
-                 yuanxu-native-contract
-                 yuanxu-native-contract->alist))
+                 yuanxu-object-contract
+                 yuanxu-object-contract->alist))
 
 (export AgenticAILabSessionToolGrantContract
         agentic-ai-lab-session-tool-grant
@@ -163,7 +163,7 @@
         AgenticAILabSessionToolGrantRuntimeExecutedSlot))
 
 (def AgenticAILabSessionToolGrantContract
-  (yuanxu-native-contract
+  (yuanxu-object-contract
    'session/tool-grant
    'session
    'PooSessionToolGrant
@@ -184,7 +184,7 @@
 ;;     %
 ;; : (-> Unit Alist)
 (def (agentic-ai-lab-session-tool-grant-type-contract->alist)
-  (yuanxu-native-contract->alist AgenticAILabSessionToolGrantContract))
+  (yuanxu-object-contract->alist AgenticAILabSessionToolGrantContract))
 
 ;; : (-> YuanxuSlotContract AgenticAILabValue AgenticAILabValue)
 (def (agentic-ai-lab-session-tool-grant-check-slot! contract value)

@@ -9,7 +9,7 @@
         (only-in :clan/poo/object object-protocol-set! .o)
         (only-in :yuanxu/module-system/source/admission module-source-operation-resume)
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/module-system/interface yuanxu-load-modules))
 (export module-nix-publication-test)

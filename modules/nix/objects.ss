@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :clan/poo/object "./config.ss" "./types.ss" "./func.ss" "./build-publication.ss"
-        (only-in :yuanxu/types yuanxu-validation-evidence-accepted?)
+        (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/module-system/source/admission module-source-admit-current! module-source-type module-source-read
                  module-source-checked-operation module-source-operation-procedure))
 (export NixSource. NixFlakeSource. agentic-ai-lab-nix-admit-generation
