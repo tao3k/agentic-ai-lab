@@ -57,10 +57,10 @@
       (let ((source (call-with-input-file "build.ss" read-all-as-string))
             (projection (call-with-input-file "build-spec.ss" read-all-as-string)))
         (check-equal? (contains? source ":asp-gerbil-scheme/") #f)
-        (check-equal? (contains? source ":std/build-script") #t)
+        (check-equal? (contains? source ":yuanxu/module-system/building/script") #t)
         ;; Core passes its admitted value into the unchanged SDK macro.
-        (check-equal? (contains? source "(defbuild-script spec)") #t)
-        (check-equal? (contains? source "(.get agentic-ai-lab.init.exports std-make-run) retained-spec") #t)
+        (check-equal? (contains? source "(defbuild-script (modules-spec retained-spec))") #t)
+        (check-equal? (contains? source "std-make-run") #f)
         (check-equal? (contains? projection "package-library-spec") #t)))
 
     (yuanxu-test-case "Bazel stages one package surface without owning the module graph"

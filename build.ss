@@ -9,7 +9,7 @@
   (register-module-build-source! (path-directory (this-source-file)) 'agentic-ai-lab))
 
 (import (only-in :clan/poo/object .get)
-        (only-in :std/build-script defbuild-script)
+        (only-in :yuanxu/module-system/building/script defbuild-script)
         (only-in "./init.ss" agentic-ai-lab.init.exports)
         (only-in "./build-spec.ss" agentic-ai-lab-library-spec))
 
@@ -49,16 +49,6 @@
 
 (def retained-spec (agentic-ai-lab-spec))
 
-;; Use the admitted specification directly; std/build-script owns dispatch.
-(def (package-main spec args)
-  (let ()
-    (defbuild-script spec)
-    (apply main args)))
-(def (main . args)
-  ;; Package compilation returns no module-publication authority. Keep its
-  ;; source guards and let the SDK reuse its own incremental output cohort.
-  (if (and (pair? args) (equal? (car args) "clean"))
-    ((.get agentic-ai-lab.init.exports std-make-run) retained-spec package-main args)
-    (let (spec ((.get agentic-ai-lab.init.exports std-make-spec) retained-spec))
-      (begin0 (package-main spec args)
-        ((.get agentic-ai-lab.init.exports admit-current))))))
+;; Core retains source/currentness guards; the SDK owns native dispatch.
+(def modules-spec (.get agentic-ai-lab.init.exports std-make-spec))
+(defbuild-script (modules-spec retained-spec))
