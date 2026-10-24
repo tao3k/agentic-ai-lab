@@ -5,7 +5,7 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :poo-flow/modules/temporal-causality/evidence/types
+        (only-in :agentic-ai-lab/modules/temporal-causality/evidence/types
                  PooFlowEvidenceRetrieval PooFlowEvidenceUse
                  PooFlowEvidenceAssessment
                  PooFlowEvidenceDependency PooFlowEvidenceLineage

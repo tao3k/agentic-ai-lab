@@ -9,11 +9,11 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :poo-flow/modules/temporal-causality/evidence/types
+        (only-in :agentic-ai-lab/modules/temporal-causality/evidence/types
                  poo-flow-evidence-retrieval? poo-flow-evidence-use?
                  poo-flow-evidence-assessment?
                  poo-flow-evidence-dependency? poo-flow-evidence-lineage?)
-        (only-in :poo-flow/modules/temporal-causality/evidence/objects
+        (only-in :agentic-ai-lab/modules/temporal-causality/evidence/objects
                  poo-flow-evidence-retrieval-value poo-flow-evidence-use-value
                  poo-flow-evidence-assessment-value
                  poo-flow-evidence-dependency-value poo-flow-evidence-lineage-value
