@@ -4,8 +4,13 @@
 (import (only-in :gerbil/expander expander-context-id)
         (only-in :yuanxu/module-system/building/source-closure package-library-spec))
 (export agentic-ai-lab-public-build-roots agentic-ai-lab-library-spec)
-(def agentic-ai-lab-public-build-roots '
-("init.ss"
+(def special-targets '("modules/nono-sandbox/_nono"
+                      "modules/workflow/runtime/runtime-v0-native"
+                      "modules/workflow/runtime/semantic"))
+(def agentic-ai-lab-public-build-roots
+  ;; Visit FFI imports too; only the FFI targets' compiler options are special.
+  (append (map (lambda (target) (string-append target ".ss")) special-targets)
+   '("init.ss"
     "modules/workflow/scenario/bundle-v1-projection.ss"
     "testing-api.ss"
     ;; Public extension facades must be available after native installation.
@@ -15,6 +20,7 @@
     "modules/agent-sandbox/api.ss"
     ;; Shared public Type used by the OpenTofu Module must be installed.
     "modules/services/types.ss"
+    "modules/ai-agentic-context/clue-exchange.ss"
 
     "modules/module-authoring/module-descriptor.ss"
     "modules/workflow/scenario/configuration/module-activation.ss"
@@ -62,11 +68,8 @@
     "modules/workflow/runtime/context-use.ss"
     "modules/workflow/runtime/temporal-proof.ss"
     "modules/workflow/runtime/temporal-proof-host.ss"
-))
+)))
 
-(def special-targets '("modules/nono-sandbox/_nono"
-                      "modules/workflow/runtime/runtime-v0-native"
-                      "modules/workflow/runtime/semantic"))
 (def (admit-production-build-context context)
   (let* ((identity (expander-context-id context))
          (name (and (symbol? identity) (symbol->string identity))))

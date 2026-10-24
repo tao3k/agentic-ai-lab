@@ -5,6 +5,8 @@
         (only-in :clan/poo/type String)
         (only-in :clan/poo/number Integer)
         (only-in :agentic-ai-lab/modules/services/types Services)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/runtime-v0-native native-abi-version)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/semantic semantic-call)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/modules/funflow/control-plane/task
                  task-input-contract task-output-contract task-executor)
@@ -20,6 +22,9 @@
 (export task-signature-test)
 (def task-signature-test
   (test-suite "Extension native Task boundaries"
+    (yuanxu-test-case "installed FFI facades load through their complete native import closure"
+      (check-equal? (procedure? native-abi-version) #t)
+      (check-equal? (procedure? semantic-call) #t))
     (yuanxu-test-case "the installed shared Services boundary is a native Type"
       (check-eq? (validate Type Services) Services))
     (yuanxu-test-case "local executors enforce actual input and output Types"
