@@ -10,8 +10,8 @@
         (only-in :agentic-ai-lab/modules/text/funs make-word-count-task)
         (only-in :agentic-ai-lab/modules/docker/funs make-docker-task)
         (only-in :agentic-ai-lab/modules/agent-sandbox/api make-agent-sandbox-task))
-(export task-native-signature-test)
-(def task-native-signature-test
+(export task-signature-test)
+(def task-signature-test
   (test-suite "Extension native Task boundaries"
     (yuanxu-test-case "local executors enforce actual input and output Types"
       (def repeat (make-custom-repeat-task 'repeat "." 2 String String))
