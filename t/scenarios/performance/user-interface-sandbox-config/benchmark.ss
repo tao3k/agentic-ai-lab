@@ -15,7 +15,7 @@
  (iterations . 3)
  (unit . "ms")
  (sourcePath . "t/scenarios/performance/user-interface-sandbox-config/benchmark.ss")
- (rule . POO-FLOW-USER-INTERFACE-PERFORMANCE-003)
+ (rule . AGENTIC-AI-LAB-USER-INTERFACE-PERFORMANCE-003)
  (feature . user-interface-sandbox-config)
  (optimizationFocus . "sandbox module feature lookup and default sandbox profile presentation without descriptor realization or backend execution")
  (inputShape . "kernel user profile selecting nono, cube, and docker sandbox modules plus default sandbox profile presentation")

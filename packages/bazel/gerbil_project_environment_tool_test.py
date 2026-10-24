@@ -31,7 +31,7 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
             declaration_receipt = root / "environment.receipt.json"
             project_receipt = root / "project.receipt.json"
 
-            (gerbil_path / "lib" / "poo-flow").mkdir(parents=True)
+            (gerbil_path / "lib" / "agentic-ai-lab").mkdir(parents=True)
             (dependency_project / ".gerbil" / "lib").mkdir(parents=True)
             dependency_marker.parent.mkdir(parents=True)
             dependency_marker.write_text("libraries\n", encoding="utf-8")
@@ -51,9 +51,9 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
                 "  'gerbil_path': os.environ['GERBIL_PATH'],\n"
                 "  'gerbil_loadpath': os.environ['GERBIL_LOADPATH'],\n"
                 "  'path': os.environ['PATH'],\n"
-                "  'declaration': os.environ['POO_FLOW_GERBIL_ENV_RECEIPT'],\n"
-                "  'project': os.environ['POO_FLOW_GERBIL_PROJECT_RECEIPT'],\n"
-                "  'runtime': os.environ['POO_FLOW_GERBIL_ENV_RECEIPT_JSON'],\n"
+                "  'declaration': os.environ['AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT'],\n"
+                "  'project': os.environ['AGENTIC_AI_LAB_GERBIL_PROJECT_RECEIPT'],\n"
+                "  'runtime': os.environ['AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT_JSON'],\n"
                 "  'cwd': os.getcwd(),\n"
                 "}))\n",
                 encoding="utf-8",

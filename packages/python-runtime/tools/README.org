@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Python Runtime qualification tools
+
+The Python Runtime is =packages/python-runtime/src/agentic_ai_lab_runtime=.
+These tools exercise that package and the shared native Scheme/C ABI.
+MRR =runtime/= owns Rust ABI code, assertions and consumer CI. MRR consumes
+POO through its declared Gerbil dependency; POO CI does not check out MRR.
+MRR Data owns physical backends.
+
+| Python entrypoint | Responsibility |
+|-------------------+----------------|
+| =differential.py= | Call the installed Python Runtime and the native Scheme artifact; emit 21 original Scheme results for Rust to compare. |
+| =deepseek_adapter.py= | Perform model HTTP IO and invoke the supplied native consumer executable; preserve bounded Scheme task/result records. |
+| =watch.py= | Supervise the supplied command; five seconds without genuine output fails. |
+| =generate-runtime-imports.py= | Generate the Python package's runtime import projection. |
+
+The differential entrypoint uses the existing Python test scenarios. Run it
+with an interpreter that has this package and its test dependencies installed:
+
+#+begin_src sh
+python packages/python-runtime/tools/differential.py \
+  --library /absolute/path/to/qualified-native-library \
+  --output /absolute/path/to/oracle.ss
+#+end_src
+
+=just qualify-temporal-model= remains the ASP Scheme-owned measurement entry.
+The provider adapter implements IO; ASP owns case selection, measurement and
+receipts. Qualification uses fixed Scheme v1 protocol records, the existing
+five-second genuine-progress limit and a 45-second native runtime deadline.

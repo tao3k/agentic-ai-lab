@@ -1,0 +1,136 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Agentic AI Lab Developer Entrypoints
+
+* Organization
+
+The root Justfile imports ordinary Just recipe files and retains the existing
+command namespace and root working directory.
+
+- =environment.just=: shared package paths, compiler and VM settings.
+- =build.just=: product compilation and artifact preparation.
+- =testing.just=: ordinary tests and qualification entrypoints.
+- =runtime-tests.just=: runtime, ABI and temporal qualifications.
+- =contributions.just=: contribution-owned build and test entrypoints.
+- =proofs.just=: Lean, Quint and proof correspondence gates.
+- =dependencies.just=: dependency maintenance.
+- =checks.just=: remaining source and integration checks.
+
+* Reuse
+
+=just test-file PATH= calls the Core
+[[file:../../core/t/qualification/testing/run.ss][TestingScript projection]].
+It supplies the product source root, the existing VM options and the existing
+120-second budget.  Core Ops executes the process; Core test admission checks
+status, error markers and exact native harness completion.  The product does
+not maintain another copy of this ordinary per-file log gate.
+
+Nix adapter preparation and qualification remain product-owned under
+[[file:../../t/qualification/nix/Justfile][the Nix qualification entrypoint]] and
+[[file:../../bindings/nix-c-api/Justfile][the C API binding entrypoint]].
+They consume the same maintained Ops and TestingScript objects.
+
+The initial recipe split preserved the parsed command definitions.  Specialized
+historical gates have been relocated, not silently replaced or declared green.
+
+* Focused verification
+
+The Core TestingScript regression passed through both =just test-file= entrypoints
+with the installed Gerbil and the existing compiled Core dependency environment.
+Both runs completed with exit zero, exact =MODULE-OK= and =HARNESS-OK= lines,
+a final =OK=, and no harness/heap/stack failure markers.  Core's existing seven
+test partitions remained complete and disjoint (172 files).  This is a focused
+runner verification, not a claim that every relocated qualification was run.
+
+* Specialized execution consolidation
+
+The source and compiled-Gerbil qualifications now declare their command and
+receipt requirements through
+[[file:../../t/qualification/testing/specialized.ss][the qualification entry projection]]
+and the existing Core =TestingScript.=.  Core owns process execution, status,
+error markers, source Fixture cleanup and exact native harness completion.
+The qualification source includes the selected suite and selected runner inputs;
+unselected suites are not imported or read by the selector.
+
+| Entry | Original total budget | Retained receipt obligation |
+|-------+-----------------------+-----------------------------|
+| Interpreter/tool | 90 seconds | Exact module and native harness |
+| Runtime FFI | 120 seconds per existing phase | Exact compiled module/harness |
+| Query source/native | 45 seconds | 4 / 24 Case receipts |
+| Temporal native/support/evaluator | 45 seconds | 13 / 9 / 28 Case receipts |
+| Context/Temporal | 45 seconds | 69 Case receipts, all six modules |
+| ASCENT temporal | 45 seconds | Both named semantic controls |
+| Module ownership | 120 seconds | Existing aggregator identity |
+| Whole product | 1200 seconds | ASP discovery/batch completion and observed modules |
+
+Watched commands retain the existing five-second byte-progress watchdog and
+failure-only stack capture.  The Scheme projection does not widen the outer
+watchdog or replace real progress with timer output.  Gates which previously
+had no idle cutoff retain that property.  Their total budgets remain bounded.
+
+[[file:../../t/qualification/testing/package-result.ss][ASP completion admission]]
+consumes the actual discovery and batch-start receipts.  It does not introduce
+another discovery list or another scheduler.
+
+Passing synthetic receipt controls qualifies admission logic, not a Query,
+Temporal, Rust ABI or full-package run.  Compiled artifact entrypoints still
+require their original producer outputs; absence is a failure, never a skip.
+
+* Development-only policy dependency
+
+=dev/gerbil.pkg= owns the optional ASP pin. =just deps-dev= installs it;
+=dev/testing-api.ss= composes the policy interface and =dev/unit-tests.ss=
+owns the package test entry. Production =build.ss= uses Core's native import
+closure and build projection. It rejects a dependency on =agentic-ai-lab/dev/= or
+=asp-gerbil-scheme/= rather than silently building development modules.
+CI installs the optional development dependency after the library build.
+
+The development package store is =dev/.gerbil=, separate from the production
+store. Test commands search production libraries first, then the development
+store. Installing ASP must not replace the production MOP implementation.
+The shared =gerbil-poo= pin is aligned with =core/gerbil.pkg=, with its archive
+digest evaluated by Bazel and synchronized to both platform lock projections.
+
+** Namespace and negative-process repairs
+
+Product adapters now call the actual =yuanxu= source/catalog/option constructors.
+The earlier unbound =resolve-agentic-ai-lab-module-source/default= and constructor
+failures are retained as historical local failures, not current interfaces.
+=check-production-build= uses native =build.ss spec=: =--help= is not a supported
+=std/build-script= operation on this runtime.
+
+The missing-file negative case runs the real ASP batch in a bounded Ops child.
+It asserts exit 70, the missing path, native =collect-files= diagnosis,
+=call-raised= and =batch-failed= terminals, and absence of a success terminal.
+Its raw child diagnostics remain in the receipt instead of being written into
+the outer harness's success stream. The strict failure-marker gate is unchanged.
+The repaired policy suite passed with the installed runtime.
+
+** Upstream dependency boundary
+
+The production build and Parser's local Bazel entry both use Core's
+=package-library-spec= over the native context graph. ASP owns no library
+source collector or build executor. Shared imports are visited once, excluded
+targets are still inspected for dependency admission, and unselected sources
+are not opened. =std/make= still owns compilation and currentness.
+
+The pinned upstream packages remain separate evidence:
+
+- Parser =78507e68b1275be1be748be465d6354f596d9063= declares ASP and an older
+  Core in =gerbil.pkg=; its =language-support/entry.ss= imports the retired Core package namespace.
+- Ascent =0f99da9e3a3baf1a272ba58fe0769ed8278ae746= declares ASP and an older
+  Core, and its own =build.ss= still uses the ASP Building API.
+- The cached Ascent checkout =86ad9ae3469565bea6229b71ef1d9197c6a82d63= does
+  not match the requested pin. Validation extracted the requested Git objects
+  into an independent directory; it did not reset that checkout or another
+  session's upstream work.
+
+Removing the product import does not remove these upstream package-install
+requirements. Their native executable/artifact build behavior must not be
+silently discarded merely to remove a dependency edge.
+
+Installed Gerbil invokes a script's =main= itself. Qualification entry scripts
+therefore define =main= without also calling it at top level. The new counter
+fixture verifies one actual subprocess launch. The real Gitea/PostgreSQL
+publication suite then completed its 11 cases once within the existing bound;
+the earlier duplicate-run timeout remains a failed local artifact.

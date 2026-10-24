@@ -21,7 +21,7 @@ EXCLUDED = {
 }
 FORBIDDEN = (
     re.compile(r"make -C bindings/runtime-c"),
-    re.compile(r"bindings/runtime-c/build/libpoo_flow_runtime_v0"),
+    re.compile(r"bindings/runtime-c/build/libagentic_ai_lab_runtime_v0"),
     re.compile(r"subprocess\.run\(\[\"make\""),
 )
 

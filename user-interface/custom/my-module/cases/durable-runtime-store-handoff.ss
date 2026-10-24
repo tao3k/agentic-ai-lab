@@ -7,15 +7,15 @@
 ;;; Invariant: this declares backend negotiation data only; Marlin owns the
 ;;; store implementation and all durable side effects.
 
-(import :poo-flow/modules/memory-core/durable/policy
-        :poo-flow/modules/memory-core/durable/store
-        :poo-flow/modules/memory-core/durable/store-backend)
+(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend)
 
-(export poo-flow-custom-my-module-durable-runtime-store-handoff-case)
+(export agentic-ai-lab-custom-my-module-durable-runtime-store-handoff-case)
 
-(def poo-flow-custom-my-module-durable-runtime-store-handoff-case
+(def agentic-ai-lab-custom-my-module-durable-runtime-store-handoff-case
   (let* ((durable-policy
-        (poo-flow-durable-policy
+        (agentic-ai-lab-durable-policy
          'durable/custom-runtime-store
          'objects.shared.durable
          '((journal-owner . runtime/fact-log)
@@ -24,27 +24,27 @@
            (repair-mode . rebuild)
            (action-classes . (replayable idempotent compensatable)))))
        (runtime-store
-        (poo-flow-durable-runtime-store-contract
+        (agentic-ai-lab-durable-runtime-store-contract
          'runtime-store/custom-project
          'marlin-runtime-store
          durable-policy
          '((metadata . ((source . user-interface)
                         (case . durable-runtime-store-handoff))))))
        (contract-receipt
-        (poo-flow-durable-runtime-store-contract->receipt
+        (agentic-ai-lab-durable-runtime-store-contract->receipt
          runtime-store
          '((project-id . custom/project)
            (root-session-id . custom/root-session)
            (session-id . custom/root-session))))
        (backend-receipt
-        (poo-flow-durable-runtime-store-backend->receipt
-         poo-flow-durable-runtime-store-backend/default))
+        (agentic-ai-lab-durable-runtime-store-backend->receipt
+         agentic-ai-lab-durable-runtime-store-backend/default))
        (negotiation
-        (poo-flow-durable-runtime-store-backend-negotiation
+        (agentic-ai-lab-durable-runtime-store-backend-negotiation
          contract-receipt
          backend-receipt
          '((metadata . ((source . user-interface)
                         (case . durable-runtime-store-handoff)))))))
   (list
-   (poo-flow-durable-runtime-store-negotiation-receipt->alist negotiation)
-    (poo-flow-durable-runtime-store-negotiation->marlin-handoff negotiation))))
+   (agentic-ai-lab-durable-runtime-store-negotiation-receipt->alist negotiation)
+    (agentic-ai-lab-durable-runtime-store-negotiation->marlin-handoff negotiation))))

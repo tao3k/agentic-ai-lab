@@ -1,0 +1,125 @@
+{
+  "case": "one-horizon",
+  "raw": "{\"status\":\"complete\",\"rows\":[[\"k\",\"m\"]]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.3024529580000035
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.30270166700006484
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.8330264999999599
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.8330547919999844
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8330781669999396
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9302390830000604
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9448667499998464
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9449209580000115
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9620190829998592
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9620694579998599
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9620943749998787
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.972934916999975
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9729832499999702
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9730077499998515
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9730292499998541
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9730503329999465
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9730707920000441
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9926322500000424
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.993657833000043
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.9936690829999861
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.9936784999999873
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.9937505420000434
+    }
+  ],
+  "contentGapsSeconds": [
+    0.8330781669999396,
+    0.09716091600012078,
+    0.014627666999786015,
+    5.42080001650902e-05,
+    0.01709812499984764,
+    5.0375000000713044e-05,
+    2.491700001883146e-05,
+    0.01084054200009632,
+    4.8332999995182035e-05,
+    2.4499999881300027e-05,
+    2.1500000002561137e-05,
+    2.108300009240338e-05,
+    2.045900009761681e-05,
+    0.01956145799999831
+  ],
+  "responseId": "8084e68c-5d2b-489f-a1ab-3449eeb93056",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9654,
+    "input_tokens_details": {
+      "cached_tokens": 9344
+    },
+    "output_tokens": 14,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9668
+  },
+  "seconds": 0.9937525000000278
+}

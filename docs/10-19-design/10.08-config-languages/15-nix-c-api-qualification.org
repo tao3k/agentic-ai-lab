@@ -1,0 +1,402 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: 10.08.15 Product-Owned Nix C API Qualification
+#+language: en
+
+* Ownership and purpose
+
+The C binding, evaluator lifetime and process startup belong to Agentic AI Lab.
+Yuanxu remains the library providing POO, Contracts, source admission and
+module/build protocols. This experiment changes no Yuanxu files, does not
+replace its existing Nix Source, and neither modifies nor rebuilds Gerbil.
+
+The executable owner is
+[[file:../../../bindings/nix-c-api/Justfile][the qualification Justfile]].
+
+The question is whether a reusable evaluator reduces repeated expression
+evaluation cost without dropping final-configuration selection, currentness
+or receiver-local cache behavior. It is not an end-to-end build benchmark.
+
+* Dependency policy
+
+The compatibility floor compares =(major, minor) >= (2, 34)= numerically.
+The patch component is not a minimum-version condition. Tests accept =2.34=,
+=2.34.0=, =2.34.3= and later minor versions, and reject =2.33.99= and malformed
+versions. A version check alone is not proof of API availability: compiling,
+linking, starting the evaluator and invoking its functions remain required.
+
+[[file:../../../bindings/nix-c-api/dependencies.json][dependencies.json]]
+records the resolved =2.34.4+1= CLI and C-library derivations for this
+=aarch64-darwin= qualification. A resolved benchmark lock is not an equality
+restriction on the public compatibility policy. Both backends must report
+the same actual version for a matched comparison. There is no channel update,
+implicit =flake.lock= update or global package installation.
+
+The existing Core nixpkgs fixture pins revision
+=9eac87a12312b8f60dd52e1c6e1a265f6fc7f5fc= and its NAR hash. Existing real
+provider fixtures pin AWS =5.100.0= and Null =3.2.4= with platform archive
+hashes. This experiment consumes these maintained functions, not a synthetic
+provider catalog.
+
+* The same user configuration and existing consumers
+
+#+begin_src scheme
+(.def AwsOnly
+  provider: (.o aws: (list (.o region: "us-east-1")))
+  resource: (.o aws_security_group: (.o web: (.o name: "web"))))
+
+(.def (AwsNull @ AwsOnly)
+  provider: =>.+ (.o null: (list (.o)))
+  resource: =>.+
+  (.o null_resource: (.o smoke: (.o triggers: (.o release: "smoke")))))
+#+end_src
+
+The existing =OpenTofuScope. .build-inputs= derives provider demand from the
+final candidate. Neither backend maintains a second provider list. The same
+Nix function calls the existing =provider-artifacts.nix= with the real lazy
+schema catalog. An =awscc= throw branch makes accidental selection a failure.
+
+Both backends must return identical derivation, output, selected providers,
+Nix version and source stamp. The output is passed to a derived
+=OpenTofuScope.=, whose existing ConfigurationContract performs real =.admit=
+against the original candidate. Evaluation does not deploy cloud resources.
+The selected schema outputs must already have been realized; the test does
+not silently substitute schema fixtures or time downloads as evaluation.
+
+* Historical expression qualification (superseded by the Flake result below)
+
+The following failure and worker measurements describe the earlier expression
+experiment. They are retained as history; the current direct-embedding result
+and default entrypoint are recorded in the 2026-10-22 section below.
+
+** Two execution arrangements, with the failed control retained
+
+** Direct shared-process FFI
+
+[[file:../../../bindings/nix-c-api/binding.ss][binding.ss]] uses the
+installed Gerbil compiler and =std/ffi= to expose the small C bridge.
+On this host direct loading terminated with =nix::SysError= / =No child
+processes= before the test cases ran. This is a failed control, not a passing
+embedding result. No signal handler was rebound to hide the failure.
+
+Gambit's upstream =sigchld_signal_handler= reaps children with
+=waitpid(-1, ..., WNOHANG)=; Nix's =Pid::wait= expects to reap its own child.
+These source mechanisms explain a possible ownership conflict, but the
+experiment does not establish a full native backtrace of the loader failure.
+
+** A product-owned reusable worker
+
+[[file:../../../bindings/nix-c-api/worker.c][worker.c]] owns one Store,
+one EvalState and one parsed function per session. Gerbil starts it explicitly
+through the installed =std/misc/process= API and sends bounded private JSON
+requests. Four measured queries reuse that evaluator; they do not spawn four
+Nix CLIs. Two additional queries verify the separate POO plan projections.
+Importing =session.ss= starts no worker. The native reference-counted
+values and state are released on exit; the process lifecycle checks exit
+status on success and closes its ports on failure.
+
+This is a worker-mediated C API result, not evidence of successful direct FFI.
+The worker does not introduce a public configuration language or run on
+ordinary module import. Its line protocol is a private qualification boundary;
+production concurrency, cancellation, input-size enforcement before allocation
+and crash supervision require further work.
+
+* Cache and source boundaries
+
+The test binds one reusable session behind receiver-local POO slots:
+
+#+begin_src scheme
+(.def (Parent receiver [])
+  candidate: AwsOnly
+  plan: (query (demand candidate))
+  .preview: (lambda ()
+              (checked-query observations (lambda () plan))))
+
+(def parent (.call Parent .preview)) ; force and retain the parent plan
+(.def (Child @ Parent) candidate: AwsNull)
+(def child (.call Child .preview))  ; must select Null from the final receiver
+#+end_src
+
+=query= brackets C API access with the production
+=module-source-admit-current!=; =.preview= repeats that bracket even when
+the POO plan slot is already cached. The experiment supplies a finite explicit
+input closure. It has not implemented automatic C API dependency discovery.
+Pinned nixpkgs inputs are immutable; every mutable fixture import is observed.
+
+The negative control changes an imported source stamp after the evaluator has
+read it. A raw call to that same evaluator demonstrates the stale imported
+value. Guarded parent preview, child query and CLI query must instead reject
+with the actual stale-selected-input diagnostic, before another backend call.
+A fresh evaluator must see the new value. Reusing a session is therefore not
+permission to reuse an old source approval.
+
+These are synchronous pre/post checks, not an atomic filesystem transaction.
+They do not prove rejection of external ABA changes wholly between reads or
+conditional deployment effects. Existing publication and effect protections
+are not replaced by this experiment.
+
+* Measurement interpretation
+
+The CLI control uses the existing expression Source's =nix-instantiate --eval
+--raw= mode. A first attempt with =nix eval= failed because its pure-evaluation
+default rejects mutable absolute source paths; that failure is retained. The
+comparison does not add =--impure= to a production Flake Source or weaken its
+lock behavior.
+
+Each round records session opening, first AWS query, repeated AWS query, first
+Null selection and repeated Null query. The latter requests call the C API
+again rather than returning a cached Scheme result. CLI hot queries still
+start fresh CLI processes. Backend order alternates (C first, CLI first, C
+first). Both timing paths include the same pre/post source checks. Additional
+POO plan projection and Contract admission run outside the query timings.
+Counts refer to backend entries: one measured C worker and four measured API
+calls versus four CLI evaluations, not all internal Nix helper or daemon
+processes. Each measured C worker also serves two unmeasured POO plan checks.
+The initialization probe and post-source-change fresh session are separate.
+
+OS page caches, store contents and native cache databases are not cleared.
+"Cold" means a new evaluator or first selection in that session, not a clean
+machine. Runtime import, C compilation, downloads, actual provider planning
+and cloud deployment are outside the reported query timings. These results
+cannot establish speedup over the persistent Flake evaluation-cache route.
+
+** Recorded run, 2026-10-21
+
+The final three-round run from =bindings/nix-c-api/= passed =MODULE-OK=,
+=HARNESS-OK= and final =OK=,
+with no failure markers. The host had concurrent compiler work; these are
+observed ranges, not an isolated performance qualification or a latency SLO.
+
+| Operation | Reusable C API worker, seconds | Fresh CLI, seconds |
+|-----------+--------------------------------+--------------------|
+| Worker/session opening | 0.152–0.260 | included in each CLI query |
+| First AWS evaluation per session | 6.616–8.903 | 1.097–1.750 |
+| Repeated AWS evaluation | 0.00200–0.01841 | 0.590–1.694 |
+| First Null selection after AWS | 0.00429–0.11028 | 0.933–1.699 |
+| Repeated Null selection | 0.00210–0.01502 | 0.820–1.807 |
+
+An earlier balanced run observed first-AWS ranges of 9.054–11.654 seconds
+for C API and 2.961–5.402 seconds for CLI. These earlier observations are
+retained, rather than selecting only the faster rerun. Neither run was a
+quiet-host benchmark.
+
+The first C API evaluation was slower. The evidence supports reuse for
+subsequent demands, not a claim that embedding improves cold startup.
+All rounds checked equal results, real AWS/Null Contract admission, no awscc
+selection and receiver-local parent/child plans. The final round additionally
+demonstrated stale unguarded import caching, rejected guarded source changes
+and confirmed that a fresh session observes the changed bytes.
+
+The earlier direct-embedding abort and the pure-CLI protocol mismatch remain
+failed controls. Local logs stay outside source control; this document retains
+the structured outcome and executable gates instead of raw logs.
+
+* Historical reproduction and remaining work
+
+Run serially with the installed Gerbil and a =GERBIL_PATH= containing the
+compiled current Yuanxu/gerbil-poo dependency closure:
+
+#+begin_src sh
+just --justfile bindings/nix-c-api/Justfile dependencies
+just --justfile bindings/nix-c-api/Justfile test
+#+end_src
+
+The first recipe acquires the pinned C development outputs. The second compiles
+only the product bridge, then runs the Scheme tests with a pre-import 2 GiB
+heap fence and the existing 120-second worker deadline. Real schema outputs
+from the existing provider qualification must already be in the Nix store;
+missing artifacts are not replaced with synthetic data. This initial lock is
+explicitly for =aarch64-darwin=, not a claim of cross-platform qualification.
+
+The opt-in direct control is =just --justfile bindings/nix-c-api/Justfile test
+embedded=. On this host it fails; the recipe does not translate an abort into
+a successful harness receipt.
+
+Remaining work includes automatic complete input discovery, Flake API/locking
+correspondence, Nix cancellation and worker supervision, and resource budgets
+for the foreign process. None of these can be inferred from a fast repeated
+expression call. The current CLI/publishing path remains intact.
+
+* References and reflection
+
+- [[https://hydra.nixos.org/build/350320552/download/1/html/][User-supplied Nix C API documentation]]:
+  Store, EvalState, function calls and value lifetime. Its experimental status
+  makes a resolved lock plus executable API probes necessary.
+- [[https://github.com/NixOS/nix/blob/2.34.4/src/libutil/unix/processes.cc][Nix 2.34.4 child-process waiting]]:
+  process ownership must be considered before claiming an in-process FFI win.
+- [[https://github.com/gambit/gambit/blob/master/lib/os_io.c][Gambit child-process handler]]:
+  upstream explanatory source, not a pinned proof of this installed runtime.
+- The C headers and libraries actually linked are the immutable derivations
+  recorded in =dependencies.json=. Installed Gerbil remains unchanged.
+
+The useful design boundary is reusable evaluation under explicit lifetime and
+source authority, not "C is always faster". POO supplies receiver isolation;
+it does not invalidate a foreign evaluator's file cache automatically. POO
+Flow must own that runtime boundary while Yuanxu remains a reusable library.
+
+* 2026-10-22: direct Gerbil embedding with libflake-c
+
+** Ownership and native interface
+
+This implementation lives entirely in =agentic-ai-lab/bindings/nix-c-api=. Yuanxu
+neither links Nix nor gains a Nix dependency. The installed Gerbil and Gambit
+executables/sources are unchanged. The existing product PR is #34; no new
+branch or PR is introduced.
+
+=dependencies.json= retains the numeric floor =2.34= and pins CLI, expr,
+store, util, fetchers and Flake C development outputs to =2.34.4+1= on
+=aarch64-darwin=. The native compiler/linker probes the actual interfaces;
+the version floor alone is not a capability claim.
+
+The new bridge follows the public C API, with reference-counted Nix values
+and explicit cleanup on both success and Scheme exceptions:
+
+#+begin_src c
+s->lock_flags = nix_flake_lock_flags_new(s->ctx, s->flakes);
+nix_flake_lock_flags_set_mode_check(s->ctx, s->lock_flags);
+/* Optional locked input overrides preserve mode_check. */
+nix_flake_lock_flags_add_input_override(s->ctx, s->lock_flags, name, input);
+locked = nix_flake_lock(s->ctx, s->fetchers, s->flakes,
+                       s->state, s->lock_flags, s->reference);
+value = nix_locked_flake_get_output_attrs(s->ctx, s->flakes, s->state, locked);
+#+end_src
+
+Every operation checks the C context before using its result. Attribute
+selection uses native =nix_get_attr_byname=, and query calls reuse the same
+EvalState/function. No Scheme implementation of lock parsing, lock merging,
+=--override-input= semantics or =builtins.getFlake= is substituted.
+The separate attribute argument rejects fragments in the reference instead
+of silently discarding them. The fragment callback is mandatory even for an
+empty fragment; passing NULL caused the first new bridge's SIGSEGV and was
+corrected, with the failed run retained locally.
+
+The functional interface is:
+
+#+begin_src scheme
+(call-with-flake-session reference directory "lib.providerArtifacts"
+  locked-inputs
+  (lambda (session)
+    (session-query session (demand AwsOnly))
+    (session-query session (demand AwsNull))))
+#+end_src
+
+=locked-inputs= is an ordinary POO mapping (or =(.o)=); the existing OpenTofu
+object layer derives demand from final provider/resource/data configuration.
+No second user-maintained Provider list is introduced. The real AWS 5.100.0
+and Null 3.2.4 schema artifacts and generated ConfigurationContract remain
+the consumers. The product module is now under =modules/services/opentofu=;
+that separately ongoing module relocation is not folded into this binding
+change. A throwing awscc branch remains unselected.
+
+** Crash diagnosis and constrained startup repair
+
+The saved macOS crash report gives the actual late-loading chain:
+
+#+begin_example
+Gambit ___dynamic_load / dyld dlopen
+  -> libnixstore _GLOBAL__sub_I_globals.cc
+  -> Settings::Settings -> getDefaultExtraPlatforms
+  -> runProgram -> Pid::wait -> SIGABRT (ECHILD)
+#+end_example
+
+The corresponding Nix source probes Rosetta with
+=arch -arch x86_64 /usr/bin/true=. Gambit's SIGCHLD handler reaps children;
+late Nix initialization can then fail to reap its own probe. This is native
+library initialization before =nix_libexpr_init=, not slow Flake evaluation.
+
+The existing product launcher now preloads =libnixflakec.dylib= before
+starting the actual installed =current/bin/gxtest= binary, before Gambit's
+handler is installed. No signal handler is disabled/rebound and no Gerbil
+source/compiler/runtime is rebuilt. The =embedded= late-load control remains
+available and must fail visibly if it aborts. The default is
+=embedded-preload=, using direct FFI, not the worker. The wrapper binary path
+matters because an intermediate system-interpreter launcher can discard the
+DYLD environment.
+
+This repair establishes the startup order on this host. It does not prove
+safe ownership of arbitrary later Nix-spawned subprocesses, remote builders,
+realization, all signals, cancellation, concurrency or other operating systems.
+Preloading itself executes Nix initializers and the native platform probe;
+ordinary declarations do not create an EvalState or execute a provider query.
+
+** Matched cold/hot results and safety controls
+
+The successful native Harness used the installed Gerbil =1cfb032= / Gambit
+=ea114fc=, compiled gerbil-poo =80b590b15c6d4bde7717f5fd85d5b98dbf230bd8=
+and the current Core 013b89f consumer prefix. Earlier trials using the older
+f956f4c prefix are not the qualification result. Product source imports and
+provider projection use the current worktree; there is no compatibility shim.
+
+Three serial rounds alternate which backend goes first. Each C API round
+opens a fresh EvalState and locks once, then reuses it; CLI evaluation opens
+a separate process each time. Cold means first demand in that session, not
+an empty OS/Nix cache. No cache flush or download is timed. Query timing
+includes the same explicit source-currentness guards on both routes; session
+startup is measured separately. Values, derivation/output, selected Providers,
+source stamp and Nix version are checked equal, not merely timing compared.
+
+| Round | API open (ms) | AWS first (ms) | AWS hot (ms) | Null first (ms) | Null hot (ms) | CLI AWS first/hot (ms) | CLI Null first/hot (ms) |
+|-------+---------------+----------------+--------------+-----------------+---------------+------------------------+-------------------------|
+| 1 | 40.369 | 1565.745 | 1.033 | 4.005 | 0.895 | 685.967 / 698.017 | 760.571 / 856.268 |
+| 2 | 9.403 | 591.423 | 0.849 | 1.776 | 0.660 | 835.404 / 805.847 | 1037.748 / 685.581 |
+| 3 | 11.134 | 626.214 | 0.696 | 1.915 | 0.686 | 674.684 / 714.208 | 707.532 / 731.102 |
+
+Each round asserts six actual API function calls (four measured requests and
+two POO plan projections). Its one reusable evaluation session is compared
+with four measured CLI evaluation launches. CLI lock creation is explicit fixture setup, outside
+the timed evaluation; package realization is also outside these measurements.
+This supports a repeated-query benefit. The first API AWS demand is slower
+than CLI in round 1, so this is not a universal cold-start improvement claim.
+
+The passing controls are:
+
+- Force the AWS parent plan; derive an AWS+Null child and independently admit
+  each candidate against real generated Contracts. The parent stays AWS-only.
+- Modify an observed source after caching: parent preview, child query and CLI
+  are refused before the API call count changes. A new session with fresh
+  observations reads the new source. No admission verdict is cached.
+- Permit an override constructed from the actual Nix lock's immutable input
+  reference. An unlocked input is refused by the native API; do not relax its
+  default restriction just to make an override positive pass.
+- Add an input without updating the lock: native check mode rejects it both
+  with and without a locked override; CLI check-only mode also rejects it.
+  The lock bytes remain unchanged after all failures.
+- Reuse the expression comparison and its separate registration-mode control;
+  retain the throwing unselected awscc branch and both provider admissions.
+
+Four real CASE-OK lines, MODULE-OK, HARNESS-OK and final OK were verified, with
+no ERROR CASE/CHECK/HARNESS/MODULE, undefined-binding, heap or stack overflow
+markers. The separate three-Case worker regression also passed. The final late-load
+control still exits with native SIGABRT 134 (Ops/Just reports failure), confirming
+that errors are not suppressed. The initial accidental empty nested suite was rejected as evidence;
+the final TestingScript requires an exact Case count and the final lock
+negative's assertion. The existing 2 GiB heap fence, 120-second preparation
+and Harness limits and 60-second Harness idle limit are unchanged.
+
+Failed trials remain local artifacts: late-load ECHILD, a symlinked temporary
+path rejected by Nix, NULL fragment callback, a POO fixture variable shadowed
+by its =policy= slot, and an unlocked override. They are not relabeled as
+passing controls, and raw logs/crash reports are not committed.
+
+** Reflection and remaining boundary
+
+Native Flake locking eliminates a second lock implementation and the CLI
+flag interaction where =--override-input= can suppress refusal of an in-memory
+lock update. It does not authenticate our deployment configuration, discover
+all mutable source inputs or authorize execution. The bounded test explicitly
+observes its known source closure using the existing Core consumer; automatic
+general Flake provenance and production-source integration remain separate
+work. This change qualifies the product binding, not replacement of every
+published Source or deployment/execution path.
+
+- [[https://github.com/NixOS/nix/blob/2.34.4/src/libflake-c/nix_api_flake.h][Nix 2.34.4 public Flake C API]]: strict mode, overrides, parsing and output lifetime.
+- [[https://github.com/NixOS/nix/blob/2.34.4/src/libstore/globals.cc][Nix 2.34.4 library settings]]: native platform-probe initialization.
+- [[https://github.com/NixOS/nix/blob/2.34.4/src/libcmd/installables.cc][Nix 2.34.4 CLI installable arguments]]: override/write-lock interaction.
+
+* First-demand attribution follow-up
+
+See [[file:16-nix-c-api-first-demand.org][10.08.16 First-Demand Attribution]] for native wall/CPU phase measurements,
+the corrected CLI persistent-cache conclusion, shared-cache controls and the
+prepared immutable-reference experiment. The cold-start cache explanation
+must follow that source/experimental result rather than speculation.

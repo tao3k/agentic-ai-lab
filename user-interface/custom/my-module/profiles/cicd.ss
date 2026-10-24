@@ -6,11 +6,11 @@
 ;;; Boundary: CI/CD downstream sandbox profile declarations.
 ;;; Invariant: standalone module; it does not execute workflows.
 
-(import :poo-flow/src/user-interface/init-syntax)
+(import :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
-(export poo-flow-custom-my-module-cicd-module)
+(export agentic-ai-lab-custom-my-module-cicd-module)
 
-(def poo-flow-custom-my-module-cicd-module
+(def agentic-ai-lab-custom-my-module-cicd-module
   (let ((check-capabilities
        '(process-run filesystem-read tmpdir))
       (build-capabilities

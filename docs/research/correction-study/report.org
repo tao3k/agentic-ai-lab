@@ -1,0 +1,93 @@
+#+title: Whole-Task Thinking, Taint Diagnosis and Cross-Round Correction
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+
+* Objective and prior taint diagnosis
+
+The primary endpoint is cumulative actual provider thinking until the entire task first passes both independent query obligations, including all earlier failures and repairs. A subgoal or shorter second answer is not task completion. Only local tests and model requests were performed.
+
+Previously the taint control used 4,783 + 2,842 = 7,625 thinking tokens, and native evidence used 5,821 + 2,550 = 8,371. The 746 increase decomposes into +1,038 before any native evidence exposure and -292 after exposure. The two first requests are byte-identical. That observation does not identify an engine regression or prove a negative causal effect of the evidence packet. It is one sampled pair with unequal first-call thinking.
+
+This study shares ONE actual initial response between the paired policies. Both whole-task trajectories charge its entire observed usage; actual experimental expenditure counts the request once. This is a control for initial sampling variation. It does not reduce deployed first-call cost and is not itself a runtime optimization.
+
+* Implementation and intervention
+
+EvidenceChain.intermediates(reference, names) projects completed native facts under current source identity, native component fingerprints and path/result reference. It refuses final answer relations, unknown/incomplete components, duplicates and stale references. It scans native materialization rather than computing closures in Python. Only selected flow/permit or balanced relations are exposed to the model; no final answer set is supplied.
+
+Native Trajectory verification now has task/subgoal scope. Subgoal success records a completed obligation and clears the adapter repair link, but cannot freeze whole-task first-success cost. Only a successful independently graded task event freezes that prefix. Unknown scope is rejected atomically. This avoids charging ordinary continuation as repair after a subgoal is repaired.
+
+Both conditions keep actual provider reasoning/message history opaquely. After a real failed completed response, both receive the same scalar correction instruction; the treatment also receives applicable checked intermediates. After a successful first obligation, only the treatment receives those intermediates before the second query. All calls until both obligations pass belong to the primary endpoint. The first prompt is shared, conditions alternate continuation order, maximum three attempts per obligation, high reasoning, 131072 output-token cap, no server-side output schema.
+
+* Task sources, complexity and independent validation
+
+The finite tagged dataflow tasks adapt program-analysis use cases; scoped balanced-path tasks adapt the realizable-path motivation in [[https://doi.org/10.1145/199448.199462][Reps, Horwitz and Sagiv: precise interprocedural dataflow analysis via graph reachability]]. Recursive execution and mutation-sensitive oracles are informed by [[https://arxiv.org/abs/2609.37233][DatalogBench]]. These are newly generated experiments, not official benchmark reproductions or complete IFDS implementations. Fresh entities/structures do not prove training exclusion.
+
+Tagged tasks join four node/tag requirements under tag-local sanitizers and conversion rules. The mutual variant has a flow/permit SCC. Balanced tasks require matching bracket labels, concatenation, context-local denied edges, supplied epsilon pairs, two simultaneous path conditions and scoped exclusions. Their state space, recursive joins and 96 requested classifications distinguish complexity from raw node count. The largest checked intermediate has over 1,200 rows. Independent oracle convergence takes up to 15 rounds.
+
+Half the requested classifications are constructed using satisfiable intermediate tuples to avoid an all-negative task; the rest are randomly sampled. Requests are shuffled, but job identifiers retain construction indices. This construction correlation is a limitation: results are paired protocol observations, not a blind general benchmark of model intelligence. Complete-set grading still requires every requested classification, and the final query has different rules and expected sets.
+
+All eight obligations agreed between an independently implemented Python fixed-point oracle and actual Scheme before model requests. A mutation replacing balanced paths with ordinary unlabeled graph reachability changes the oracle answers. One preflight source-wire issue (tuple rows versus canonical JSON arrays) was caught by source-authority admission and fixed before paid calls; admission was not weakened.
+
+| Case | Complexity | First gold rows | Second gold rows |
+|------+------------+-----------------+------------------|
+| tag-scoped-taint-2026103301 | {"nodes":64,"tags":4,"edges":142,"blockedStates":62,"conversions":78,"oracleRounds":11,"intermediateRows":182,"requests":96} | 48 | 33 |
+| mutual-permission-taint-2026103302 | {"nodes":72,"tags":4,"edges":157,"blockedStates":72,"conversions":89,"oracleRounds":15,"intermediateRows":254,"requests":96} | 42 | 30 |
+| context-balanced-paths-2026103303 | {"nodes":24,"contexts":2,"openingEdges":34,"closingEdges":33,"oracleRounds":7,"intermediateRows":537,"requests":96} | 47 | 40 |
+| context-balanced-paths-2026103304 | {"nodes":28,"contexts":3,"openingEdges":38,"closingEdges":37,"oracleRounds":11,"intermediateRows":1262,"requests":96} | 53 | 41 |
+
+[[file:../../../.cache/ascent/archived-runs/docs/research/correction-study/questions.org][Complete prompts, sources and follow-up rules]]; [[file:../../../.cache/ascent/archived-runs/docs/research/correction-study/visible-answers.org][every actual visible answer]]; [[file:../../../.cache/ascent/archived-runs/docs/research/correction-study/plan.json][frozen plan and independent grader sets]].
+
+* Whole-task results and retained failures
+
+| Condition | Correct / planned tasks | Started / censored | Whole-task first thinking (successful tasks only) | All observed thinking | Calls charged to trajectories | Failed checks | Repair calls / thinking |
+|-----------+-------------------------+--------------------+--------------------------------------------------+-----------------------+-------------------------------+---------------+-------------------------|
+| reflection | 1/4 | 4 / 3 | 120563 | 1157801 | 15 | 10 | 7 / 556032 |
+| checked-intermediates | 3/4 | 4 / 1 | 290465 | 681172 | 12 | 5 | 4 / 247966 |
+
+First-correct aggregates are comparable only for matched successful tasks with complete usage. A censored task has no observed first-correct cost; its recorded expenditure is a lower bound on eventual completion cost, not a successful cheaper trajectory.
+
+| Task | Baseline path (stage:attempt:thinking:verdict) | Evidence path | Baseline first-correct thinking | Evidence first-correct thinking | Reduction |
+|------+----------------------------------------------+---------------+--------------------------------+--------------------------------+-----------|
+| tag-scoped-taint-2026103301 | 1:1:52486:correct ; 2:1:68077:correct | 1:1:52486:correct ; 2:1:23342:correct | 120563 | 75828 | 37.11 |
+| mutual-permission-taint-2026103302 | 1:1:62547:correct ; 2:1:74195:semantic ; 2:2:63043:semantic ; 2:3:68320:semantic | 1:1:62547:correct ; 2:1:45057:correct | censored/not started | 107604 | undefined |
+| context-balanced-paths-2026103303 | 1:1:64811:correct ; 2:1:77022:semantic ; 2:2:82018:semantic ; 2:3:73364:semantic | 1:1:64811:correct ; 2:1:42222:correct | censored/not started | 107033 | undefined |
+| context-balanced-paths-2026103304 | 1:1:102783:semantic ; 1:2:88744:correct ; 2:1:99848:semantic ; 2:2:82561:semantic ; 2:3:97982:semantic | 1:1:102783:semantic ; 1:2:76503:semantic ; 1:3:46878:correct ; 2:1:39958:semantic ; 2:2:67456:semantic ; 2:3:57129:semantic | censored/not started | censored/not started | undefined |
+
+Matched complete pairs: 1/4. Their whole-task first-correct thinking is 120563 baseline versus 75828 treatment: 37.11% observed reduction. This is the primary metric; stage-two reductions are not substituted for it. Shared initial usage is included fully on both sides. Four pairs, alternating order and sampled continuation histories do not establish stable population savings.
+
+* Failure and repair detail
+
+| Task / condition | Failed round / kind | Missing / extra symbols | Next actual call | Repair thinking |
+|------------------+---------------------+-------------------------+------------------+-----------------|
+| mutual-permission-taint-2026103302 / reflection | 2 / semantic | 2 / 0 | mutual-permission-taint-2026103302-reflection:2-2 | 63043 |
+| mutual-permission-taint-2026103302 / reflection | 3 / semantic | 28 / 0 | mutual-permission-taint-2026103302-reflection:2-3 | 68320 |
+| mutual-permission-taint-2026103302 / reflection | 4 / semantic | 6 / 0 | no repair before censoring | not observed |
+| context-balanced-paths-2026103303 / reflection | 2 / semantic | 1 / 3 | context-balanced-paths-2026103303-reflection:2-2 | 82018 |
+| context-balanced-paths-2026103303 / reflection | 3 / semantic | 5 / 0 | context-balanced-paths-2026103303-reflection:2-3 | 73364 |
+| context-balanced-paths-2026103303 / reflection | 4 / semantic | 11 / 2 | no repair before censoring | not observed |
+| context-balanced-paths-2026103304 / checked-intermediates | 1 / semantic | 1 / 0 | context-balanced-paths-2026103304-checked-intermediates:1-2 | 76503 |
+| context-balanced-paths-2026103304 / checked-intermediates | 2 / semantic | 3 / 9 | context-balanced-paths-2026103304-checked-intermediates:1-3 | 46878 |
+| context-balanced-paths-2026103304 / checked-intermediates | 4 / semantic | 41 / 41 | context-balanced-paths-2026103304-checked-intermediates:2-2 | 67456 |
+| context-balanced-paths-2026103304 / checked-intermediates | 5 / semantic | 3 / 10 | context-balanced-paths-2026103304-checked-intermediates:2-3 | 57129 |
+| context-balanced-paths-2026103304 / checked-intermediates | 6 / semantic | 0 / 16 | no repair before censoring | not observed |
+| context-balanced-paths-2026103304 / reflection | 1 / semantic | 1 / 0 | context-balanced-paths-2026103304-reflection:1-2 | 88744 |
+| context-balanced-paths-2026103304 / reflection | 3 / semantic | 41 / 84 | context-balanced-paths-2026103304-reflection:2-2 | 82561 |
+| context-balanced-paths-2026103304 / reflection | 4 / semantic | 41 / 40 | context-balanced-paths-2026103304-reflection:2-3 | 97982 |
+| context-balanced-paths-2026103304 / reflection | 5 / semantic | 0 / 43 | no repair before censoring | not observed |
+
+Failures are classified separately as semantic, answer-format or transport/terminal failures. A refused request is not evidence of a semantic mistake. The scalar grader verifies complete answer-set equality; native facts are trusted only under current source applicability. Model self-reflection is not a proof. Repair tokens are actual calls linked to failed verdict events; continuation after a successful subgoal is not labeled repair.
+
+* Experimental expenditure and scope
+
+Actual distinct provider requests: 23, including 4 shared initial requests. Actual thinking expenditure: 1556346; reported thinking usage complete: True. Errors: 0; non-completed responses: 0; unstarted condition tasks: 0. Shared requests occur in both policy trajectories but only once in this expenditure total. Thinking is reported from reasoning_tokens, not inferred from answer bytes, and not added twice to output_tokens. No dollar savings or invoice estimate is claimed.
+
+* Local ABI/API, Scheme, Lean and Quint qualification
+
+Actual ABI and compiled API each passed five Trajectory/projection tests and nine Evidence DAG tests: 28 binding integration cases. Six direct Scheme ledger cases and seven experiment-intent tests passed. Lean verifies subgoal success does not freeze the task, alongside prefix accounting and invalidation. Quint healthy simulation passes 10,000 traces at up to 30 steps, seed 13; five weakened variants fail, including premature admission. This is bounded simulation and selected executable correspondence, not exhaustive exploration or universal native-source refinement.
+
+No remote CI or publication was used. Package and API producer inputs bind the new scope implementation; API output hashes separately record Darwin signing/install-name transformation. Concurrent unrelated rule-source API changes are outside the frozen artifact used by this study and are reported as current-worktree drift if present. The study qualifies its artifact and selected tests, not every concurrent working-tree feature.
+
+* Artifacts and reproduction
+
+Run the normal native build, package/API builders and existing Scheme/pytest/formal entry points. Run ascent_test_support.correction_study with --live and a fresh output directory. Credentials are read internally and never saved in reports. [[file:../../../.cache/ascent/archived-runs/docs/research/correction-study/records.json][Full native trajectories and evidence packets]], [[file:../../../.cache/ascent/archived-runs/docs/research/correction-study/actual-calls.json][distinct call observations]], [[file:../../../.cache/ascent/archived-runs/docs/research/correction-study/provider-audit.json][request/response/answer hashes and provider usage]], [[file:../../../.cache/ascent/archived-runs/docs/research/correction-study/results.json][aggregate results]] and [[file:../../../.cache/ascent/archived-runs/docs/features/correction-qualification.json][qualification receipt]] retain denominators, censored paths and source identity.

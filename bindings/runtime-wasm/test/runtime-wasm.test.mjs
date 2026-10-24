@@ -7,7 +7,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const loadRuntime = async () => {
-  const bytes = await readFile(new URL("../dist/poo_flow_runtime.wasm", import.meta.url));
+  const bytes = await readFile(new URL("../dist/agentic_ai_lab_runtime.wasm", import.meta.url));
   const { instance } = await WebAssembly.instantiate(bytes, {
     env: { emscripten_notify_memory_growth: () => undefined },
   });
@@ -98,12 +98,12 @@ test("workflow cursor advances, saturates, resets, and releases", async () => {
 });
 
 test("ESM runtime exposes Bundle v1 topology and its cursor", async () => {
-  const [{ loadPooFlowWasmRuntime, PFW_BUNDLE_SYMBOL_KIND_POLICY }, bytes, fixture] = await Promise.all([
+  const [{ loadAgenticAILabWasmRuntime, PFW_BUNDLE_SYMBOL_KIND_POLICY }, bytes, fixture] = await Promise.all([
     import("../dist/index.mjs"),
-    readFile(new URL("../dist/poo_flow_runtime.wasm", import.meta.url)),
+    readFile(new URL("../dist/agentic_ai_lab_runtime.wasm", import.meta.url)),
     loadTopologyFixture(),
   ]);
-  const runtime = await loadPooFlowWasmRuntime({ bytes });
+  const runtime = await loadAgenticAILabWasmRuntime({ bytes });
   const descriptorBacking = new Uint8Array(fixture.descriptor.byteLength + 4);
   const arenaBacking = new Uint8Array(fixture.arena.byteLength + 4);
   descriptorBacking.set(fixture.descriptor, 2);

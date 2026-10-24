@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+load("@gerbil_bazel//gerbil:defs.bzl", "gerbil_project_compile")
+
+exports_files([
+    "build.ss",
+    "gerbil-dependencies.MODULE.bazel",
+])
+filegroup(
+    name = "sources",
+    srcs = ["gerbil.pkg"] + glob(["*.ss", "modules/testing/*.ss"]),
+    visibility = ["//visibility:public"],
+)
+
+gerbil_project_compile(
+    name = "asp_gerbil_scheme_package",
+    visibility = ["//visibility:public"],
+    srcs = ["@asp_gerbil_scheme_sources//:sources"],
+    build_script = "@asp_gerbil_scheme_sources//:build_script",
+    require_library_output = True,
+    source_resolution_receipts = ["@asp_gerbil_scheme_sources//:source_resolution_receipt"],
+    deps = ["//:gerbil_poo_package"],
+)
+
+filegroup(
+    name = "asp_gerbil_scheme_package_receipt",
+    srcs = [":asp_gerbil_scheme_package"],
+    output_group = "receipt",
+    visibility = ["//visibility:public"],
+)

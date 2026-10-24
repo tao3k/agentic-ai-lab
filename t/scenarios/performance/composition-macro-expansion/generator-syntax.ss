@@ -6,9 +6,9 @@
 ;;; Boundary: declarative fixture generator for composition expansion gates.
 
 (import (only-in :clan/poo/object .def)
-        :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
-        (only-in :core/profile-composition/profile-bundle
+        :yuanxu/profile-composition/selection-syntax
+        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
+        (only-in :yuanxu/profile-composition/profile-bundle
                  compose profiles)
         (for-syntax
          (only-in :gerbil/core/expander stx-identifier)))

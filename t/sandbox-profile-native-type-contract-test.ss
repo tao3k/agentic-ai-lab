@@ -6,7 +6,7 @@
 ;;; Contract: sandbox profile recipes are admitted by one native POO Contract.
 ;;; This root is self-contained; unrelated test sources are not runfile inputs.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
 (def (sandbox-profile-contract-eval expression)
@@ -20,12 +20,12 @@
 
 (def sandbox-profile-native-type-contract-test
   (test-suite "sandbox-profile-native-type-contract-test"
-    (poo-flow-test-case "validates the native contract"
+    (yuanxu-test-case "validates the native contract"
       (eval '(import "./modules/agent-sandbox/config.ss"))
       (eval '(import :clan/poo/mop :clan/poo/object))
       (let (contract-row
       (sandbox-profile-contract-eval
-       '(poo-flow-sandbox-profile-type-contract->alist)))
+       '(agentic-ai-lab-sandbox-profile-type-contract->alist)))
   (unless
    (and
     (eq? (alist-ref/default contract-row 'object-kind #f)
@@ -40,25 +40,25 @@
 
 (unless
  (sandbox-profile-contract-eval
-  '(let (profile (poo-flow-sandbox-profile
+  '(let (profile (agentic-ai-lab-sandbox-profile
                   agent/native
                   (backend nono nono-sandbox)
                   (network deny-by-default)
                   (capabilities process-run filesystem-read)
                   (resources (cpu . 2))
                   (metadata (runtime-executed . #f))))
-     (and (element? Type PooFlowSandboxProfileContract)
-          (poo-flow-sandbox-profile? profile)
-          (poo-flow-sandbox-profile-contract-admitted? profile)
-          (eq? (poo-flow-sandbox-profile-name
-                (poo-flow-require-sandbox-profile-contract! profile))
+     (and (element? Type AgenticAILabSandboxProfileContract)
+          (agentic-ai-lab-sandbox-profile? profile)
+          (agentic-ai-lab-sandbox-profile-contract-admitted? profile)
+          (eq? (agentic-ai-lab-sandbox-profile-name
+                (agentic-ai-lab-require-sandbox-profile-contract! profile))
                'agent/native))))
  (error "native sandbox profile contract should admit valid POO recipes"))
 
 (when
  (sandbox-profile-contract-eval
-  '(poo-flow-sandbox-profile-contract-admitted?
-    (.o kind: poo-flow-sandbox-profile-kind
+  '(agentic-ai-lab-sandbox-profile-contract-admitted?
+    (.o kind: agentic-ai-lab-sandbox-profile-kind
         name: 'agent/invalid
         backend-kind: 'nono
         backend-ref: 'nono-sandbox
@@ -70,8 +70,8 @@
 
 (when
  (sandbox-profile-contract-eval
-  '(poo-flow-sandbox-profile-contract-admitted?
-    (.o kind: poo-flow-sandbox-profile-kind
+  '(agentic-ai-lab-sandbox-profile-contract-admitted?
+    (.o kind: agentic-ai-lab-sandbox-profile-kind
         name: 'agent/missing
         backend-kind: 'nono
         backend-ref: 'nono-sandbox
@@ -85,8 +85,8 @@
   '(with-catch
     (lambda (_failure) #f)
     (lambda ()
-      (poo-flow-sandbox-profile->descriptor
-       (.o kind: poo-flow-sandbox-profile-kind
+      (agentic-ai-lab-sandbox-profile->descriptor
+       (.o kind: agentic-ai-lab-sandbox-profile-kind
            name: 'agent/invalid-handoff
            backend-kind: 'nono
            backend-ref: 'nono-sandbox

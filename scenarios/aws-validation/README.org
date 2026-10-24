@@ -1,0 +1,62 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: AWS Credential-free Funflow Validation Job
+#+language: en
+
+* User configuration
+
+The platform supplies the bound AWS Job. The ordinary user changes one value:
+
+#+begin_src scheme
+(.def (Production @ AWS)
+  instance_type: "t3.medium")
+(.call Production .run "./work/aws")
+#+end_src
+
+The maintained Scenario projects instance_type into its inherited Profile, then
+uses that same effective Profile as the resource input. Advanced users can still
+refine profile through ordinary POO. They do not create another Validation object
+or manually invoke a validation callback.
+
+* Publication and selected package
+
+The shared [[file:../init.ss][init.ss]] selects null and aws-validation. The existing platform
+binding is =opentofu-execution selection 'aws-validation 'Scenario command=;
+workspace is not captured there. The test supplies the pinned AWS 5.100.0 Schema
+and its corresponding provider-mirror OpenTofu engine. Automatic realized-package
+rebinding is not completed; these inputs are not secretly inferred or loaded by
+field access. No runtime Loader is used.
+
+[[file:objects.ss][The maintained defaults]] reuse the AWS Web Profile. Its example AMI has valid
+syntax, without claiming an image exists. The actual Schema Type checks the final
+projected Profile. Existing responsibilities check profile/resource identity;
+Core publication binds the actual contract, final subject and source/Schema
+Context. Operational Job fields are not AWS Schema fields. Profile spelling
+errors are rejected by the actual Schema. The operational Scenario remains an
+open extension object; this does not claim exhaustive top-level typo detection.
+
+* Declarative Graph
+
+#+begin_src text
+init -> validate
+#+end_src
+
+The common Funflow Job entry runs these nodes through the functional Flow runner
+and Ops. AWS targets outside init/validate are rejected before rendering. No
+apply or cleanup-deployment workflow is selected. Forward effects recheck source
+and Schema currentness before and after each process; validation success cannot
+make stale admission evidence current again.
+
+The Scenario clears standard AWS access-key/session variables, ignores shared
+credentials/config files and disables EC2 metadata lookup. The workspace must
+already exist and be empty. Validation does not inspect a cloud account or prove
+AMI existence, permissions, quota, connectivity or deployment feasibility.
+=validate= checks configuration, not deployment; no AWS resource is created.
+
+* Actual qualification
+
+=just test-opentofu-admission-execution= exercises both maintained Jobs in one
+native Scheme test. It covers actual AWS Schema version change, old evidence
+refusal, parent caching and final child values, spelling-error refusal before
+rendering, source invalidation, real OpenTofu validate success, and no apply or
+state file. Null additionally qualifies real local effects and finalization.

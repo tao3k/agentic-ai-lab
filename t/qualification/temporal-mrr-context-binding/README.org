@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Original MRR Context / receipt / current Source binding
+
+Compile the Rust =mrr= integration test with =--locked --release --features
+mrr-context --no-run= through the pinned MRR devenv profile. Run the exact
+fresh executable with:
+#+begin_src sh
+just test-temporal-mrr-context "$fresh_executable" "$native_library" \
+  "$verified_native_sha256" "$archive_directory"
+#+end_src
+
+The recipe uses the original five-second genuine-progress watchdog and
+45-second runtime deadline. It requires parent and fresh child test passes,
+archive/replay outputs, and completion receipts for both real Context checks
+and rejection of stale Source after correction. Omitting the Context feature
+cannot qualify this gate. Rust owns all semantic assertions; Python supervises
+the process only. No new paid model call or benchmark is part of this gate.
+
+The parent constructs a real MRR source catalog and Context receipt fact, binds
+the native Context against the source, re-admits original MRR rows/receipt and
+asks Scheme to recheck current Source. It rejects substituted payload, missing
+temporal reference, wrong policy, foreign generation and source bundle. A
+subsequent native Source correction makes the original Context evidence stale.
+The remaining existing proof-bound correction/retraction/journal and fresh
+process archive checks execute in the same test.
+
+=build-freeze.ss= retains source/binary/log hashes and limits. Generated raw logs
+remain local and do not by themselves qualify another source cut. The immutable
+Scheme native artifact is the archive-qualified library, reused because no
+Scheme or C ABI implementation changed in this slice.
+
+This gate closes the Library adapter's structural/current binding checks only.
+It does not authenticate providers, interpret Context actor/task policy, grant
+effects, commit an atomic disclosure, persist an authoritative journal or execute
+MRR Data current-pointer CAS. The Context result is a point-in-time check; all
+authority/effect/durability flags remain false. Detached historical archives
+remain incapable of restoring current Source/admission handles.

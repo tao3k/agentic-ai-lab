@@ -5,10 +5,10 @@
 
 ;;; Boundary: static module config declarations lower to native POO objects.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/object .all-slots .ref .slot? object?)
-        :poo-flow/src/authoring/module-config-syntax)
+        :agentic-ai-lab/modules/module-authoring/module-config-syntax)
 
 (export module-config-prototype-syntax-test)
 
@@ -28,7 +28,7 @@
 
 (def module-config-prototype-syntax-test
   (test-suite "module config prototype syntax"
-    (poo-flow-test-case "lowers bounded constant rows to one native POO object"
+    (yuanxu-test-case "lowers bounded constant rows to one native POO object"
       (check-equal? (object? module-config-prototype-syntax-fixture) #t)
       (check-equal? (.ref module-config-prototype-syntax-fixture 'kind)
                     'module-config-prototype-syntax-fixture)

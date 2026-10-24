@@ -23,7 +23,7 @@ and row digests, requires every contract field in each row, rejects duplicate
 row identities and enforces the contract's result bound.  Cell order and row
 order are canonicalized.  The versioned result digest covers Query identity,
 version, semantic revision, contract identity, completion bit and sorted row
-digests.  Its label is =poo-flow.query.scalar-row-v1:sha256:=.  A Provider
+digests.  Its label is =agentic-ai-lab.query.scalar-row-v1:sha256:=.  A Provider
 claiming this profile must compute exactly that digest over the same rows.
 
 MRR already owns a *different* typed result-admission contract:
@@ -48,7 +48,7 @@ incomplete.
 | =invalid= | Supplied rows disagree with the candidate result metadata | Which of the two assertions is correct |
 | =unknown= | Supplied rows match an incomplete result | Exhaustive nonmembership or complete source coverage |
 
-The Temporal bridge's =poo-flow-gql-candidate-row-check= binds the exact
+The Temporal bridge's =agentic-ai-lab-gql-candidate-row-check= binds the exact
 Query source hash, Query identity/version/revision and result contract before
 issuing a separate =CandidateCheck=.  Even with a =valid= row check, the
 exchange may only become =reviewable=, and its =admitted?= slot remains =#f=.

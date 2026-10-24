@@ -22,7 +22,7 @@
                  .ref
                  .setslot!
                  $constant-slot-spec)
-        :core/object-family/indexed)
+        :yuanxu/object-family/indexed)
 
 (export poo-performance-fixture-policy-contract-pass?
         poo-performance-display-receipt
@@ -145,7 +145,7 @@
 
 ;; : (-> Alist Unit)
 (def (poo-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] ")
+  (display "[agentic-ai-lab-benchmark] ")
   (write (benchmark-fixture-ref receipt 'feature))
   (display " ")
   (write receipt)
@@ -254,17 +254,17 @@
 ;; : PooObject
 (def +poo-performance-benchmark-receipt-family+
   (poo-performance-family 'poo-performance-benchmark-receipt-family
-                          'poo-flow.performance.benchmark))
+                          'agentic-ai-lab.performance.benchmark))
 
 ;; : PooObject
 (def +poo-performance-large-runtime-profile-family+
   (poo-performance-family 'poo-performance-large-runtime-profile-family
-                          'poo-flow.performance.large-runtime-profile))
+                          'agentic-ai-lab.performance.large-runtime-profile))
 
 ;; : PooObject
 (def +poo-performance-fixed-slot-projection-family+
   (poo-performance-family 'poo-performance-fixed-slot-projection-family
-                          'poo-flow.performance.fixed-slot-projection))
+                          'agentic-ai-lab.performance.fixed-slot-projection))
 
 ;; : (-> PooObject Alist Alist)
 (def (poo-performance-family-alist family alist)
@@ -400,7 +400,7 @@
 (def +poo-performance-large-runtime-profile-layout+
   (poo-performance-indexed-family
    'poo-performance-large-runtime-profile-family
-   'poo-flow.performance.large-runtime-profile
+   'agentic-ai-lab.performance.large-runtime-profile
    (map car +poo-performance-large-profile-projection-specs+)))
 
 ;; : Vector

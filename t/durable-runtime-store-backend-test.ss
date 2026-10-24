@@ -7,16 +7,16 @@
 ;;; Invariant: tests validate backend selection and ABI projection only; no
 ;;; runtime store process is started.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o object?)
-        :poo-flow/src/core/runtime-protocol
-        :poo-flow/src/core/runtime-adapter
-        :poo-flow/modules/memory-core/durable/policy
-        :poo-flow/modules/memory-core/durable/store
-        :poo-flow/modules/memory-core/durable/store-backend)
+        :yuanxu/modules/funflow/control-plane/runtime-protocol
+        :yuanxu/modules/funflow/control-plane/runtime-adapter
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend)
 
 (export durable-runtime-store-backend-test)
 
@@ -35,11 +35,11 @@
 
 ;; : (-> PooDurableRuntimeStoreContractReceipt)
 (def (test-runtime-store-contract-receipt)
-  (poo-flow-durable-runtime-store-contract->receipt
-   (poo-flow-durable-runtime-store-contract
+  (agentic-ai-lab-durable-runtime-store-contract->receipt
+   (agentic-ai-lab-durable-runtime-store-contract
     'runtime-store/project
     'marlin-runtime-store
-    (poo-flow-durable-policy
+    (agentic-ai-lab-durable-policy
      'durable/runtime-store
      'objects.shared.durable
      '((journal-owner . runtime/fact-log)
@@ -47,38 +47,38 @@
        (resume-identity . session-id)
        (repair-mode . rebuild)
        (action-classes . (replayable idempotent compensatable)))))
-   '((project-id . project/poo-flow)
+   '((project-id . project/agentic-ai-lab)
      (root-session-id . session/root)
      (session-id . session/root))))
 
 ;; : TestSuite
 (def durable-runtime-store-backend-test
-  (test-suite "poo-flow durable runtime store backend"
-    (poo-flow-test-case "selects a Marlin backend and emits runtime command handoff"
+  (test-suite "agentic-ai-lab durable runtime store backend"
+    (yuanxu-test-case "selects a Marlin backend and emits runtime command handoff"
       (let* ((contract-receipt (test-runtime-store-contract-receipt))
              (backend-receipt
-              (poo-flow-durable-runtime-store-backend->receipt
-               poo-flow-durable-runtime-store-backend/default))
+              (agentic-ai-lab-durable-runtime-store-backend->receipt
+               agentic-ai-lab-durable-runtime-store-backend/default))
              (negotiation
-              (poo-flow-durable-runtime-store-backend-negotiation
+              (agentic-ai-lab-durable-runtime-store-backend-negotiation
                contract-receipt
                backend-receipt
                '((metadata . ((case . runtime-store-backend))))))
              (row
-              (poo-flow-durable-runtime-store-negotiation-receipt->alist
+              (agentic-ai-lab-durable-runtime-store-negotiation-receipt->alist
                negotiation))
              (handoff
-              (poo-flow-durable-runtime-store-negotiation->marlin-handoff
+              (agentic-ai-lab-durable-runtime-store-negotiation->marlin-handoff
                negotiation))
              (manifest (test-ref handoff 'runtime-command-manifest)))
-        (check-equal? (poo-flow-durable-runtime-store-backend?
-                       poo-flow-durable-runtime-store-backend/default)
+        (check-equal? (agentic-ai-lab-durable-runtime-store-backend?
+                       agentic-ai-lab-durable-runtime-store-backend/default)
                       #t)
         (check-equal?
-         (poo-flow-durable-runtime-store-backend-receipt? backend-receipt)
+         (agentic-ai-lab-durable-runtime-store-backend-receipt? backend-receipt)
          #t)
         (check-equal?
-         (poo-flow-durable-runtime-store-negotiation-receipt? negotiation)
+         (agentic-ai-lab-durable-runtime-store-negotiation-receipt? negotiation)
          #t)
         (check-equal? (object? row) #f)
         (check-equal? (test-ref row 'valid?) #t)
@@ -92,7 +92,7 @@
         (check-equal? (test-ref row 'unsupported-operation-kinds) '())
         (check-equal? (test-ref row 'diagnostic-count) 0)
         (check-equal? (test-ref handoff 'kind)
-                      'poo-flow.durable.runtime-store.marlin-handoff)
+                      'agentic-ai-lab.durable.runtime-store.marlin-handoff)
         (check-equal? (test-ref handoff 'operation)
                       'durable-runtime-store-negotiate)
         (check-equal? (test-ref handoff 'request-schema)
@@ -111,12 +111,12 @@
         (check-equal? (test-ref handoff 'scheme-manufactures-runtime-handlers)
                       #f)))
 
-    (poo-flow-test-case "declares Turso concurrency and AI backend capabilities"
+    (yuanxu-test-case "declares Turso concurrency and AI backend capabilities"
       (let* ((backend-receipt
-              (poo-flow-durable-runtime-store-backend->receipt
-               poo-flow-durable-runtime-store-backend/turso))
+              (agentic-ai-lab-durable-runtime-store-backend->receipt
+               agentic-ai-lab-durable-runtime-store-backend/turso))
              (row
-              (poo-flow-durable-runtime-store-backend-receipt->alist
+              (agentic-ai-lab-durable-runtime-store-backend-receipt->alist
                backend-receipt))
              (metadata (test-ref row 'metadata)))
         (check-equal? (test-ref row 'backend-id) 'runtime-backend/turso)
@@ -145,9 +145,9 @@
                       'libsql_vector_idx)
         (check-equal? (test-ref metadata 'vector-query) 'vector_top_k)))
 
-    (poo-flow-test-case "rejects a backend that cannot satisfy durable store contract"
+    (yuanxu-test-case "rejects a backend that cannot satisfy durable store contract"
       (let* ((backend
-              (poo-flow-durable-runtime-store-backend
+              (agentic-ai-lab-durable-runtime-store-backend
                'runtime-backend/weak
                'marlin-runtime-store
                "marlin-runtime-store"
@@ -156,11 +156,11 @@
                '(append-fact)
                '(append-fact)))
              (negotiation
-              (poo-flow-durable-runtime-store-backend-negotiation
+              (agentic-ai-lab-durable-runtime-store-backend-negotiation
                (test-runtime-store-contract-receipt)
-               (poo-flow-durable-runtime-store-backend->receipt backend)))
+               (agentic-ai-lab-durable-runtime-store-backend->receipt backend)))
              (row
-              (poo-flow-durable-runtime-store-negotiation-receipt->alist
+              (agentic-ai-lab-durable-runtime-store-negotiation-receipt->alist
                negotiation))
              (diagnostics (test-ref row 'diagnostics)))
         (check-equal? (test-ref row 'valid?) #f)
@@ -183,15 +183,15 @@
          (diagnostic-code-present? diagnostics 'unsupported-operation-kinds)
          #t)))
 
-    (poo-flow-test-case "keeps invalid store contracts out of backend selection"
+    (yuanxu-test-case "keeps invalid store contracts out of backend selection"
       (let* ((invalid-contract
               (.o durable-runtime-store-kind:
-                  +poo-flow-durable-runtime-store-contract-kind+
+                  +agentic-ai-lab-durable-runtime-store-contract-kind+
                   durable-runtime-store-schema:
-                  +poo-flow-durable-runtime-store-contract-schema+
+                  +agentic-ai-lab-durable-runtime-store-contract-schema+
                   runtime-store-id: 'runtime-store/invalid
                   runtime-store-owner: #f
-                  runtime-store-durable-policy: poo-flow-durable-policy/default
+                  runtime-store-durable-policy: agentic-ai-lab-durable-policy/default
                   runtime-store-schema-version: 1
                   runtime-store-fact-log-ref: 'runtime/fact-log
                   runtime-store-checkpoint-store-ref: 'runtime/checkpoint-store
@@ -203,20 +203,20 @@
                   'runtime/communication-ledger
                   runtime-store-sandbox-ledger-ref: 'runtime/sandbox-ledger
                   runtime-store-ledger-kinds:
-                  +poo-flow-durable-runtime-store-ledger-kinds+
+                  +agentic-ai-lab-durable-runtime-store-ledger-kinds+
                   runtime-store-capability-flags:
-                  +poo-flow-durable-runtime-store-capability-flags+
+                  +agentic-ai-lab-durable-runtime-store-capability-flags+
                   runtime-store-metadata: '()))
              (contract-receipt
-              (poo-flow-durable-runtime-store-contract->receipt
+              (agentic-ai-lab-durable-runtime-store-contract->receipt
                invalid-contract))
              (negotiation
-              (poo-flow-durable-runtime-store-backend-negotiation
+              (agentic-ai-lab-durable-runtime-store-backend-negotiation
                contract-receipt
-               (poo-flow-durable-runtime-store-backend->receipt
-                poo-flow-durable-runtime-store-backend/default)))
+               (agentic-ai-lab-durable-runtime-store-backend->receipt
+                agentic-ai-lab-durable-runtime-store-backend/default)))
              (row
-              (poo-flow-durable-runtime-store-negotiation-receipt->alist
+              (agentic-ai-lab-durable-runtime-store-negotiation-receipt->alist
                negotiation))
              (diagnostics (test-ref row 'diagnostics)))
         (check-equal? (test-ref row 'valid?) #f)

@@ -1,0 +1,100 @@
+{
+  "case": "open-cut",
+  "raw": "{\"status\":\"partial\",\"rows\":[]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.1996852500001296
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.19984770800010665
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.45531454199999644
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.45534262500018485
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.4553655830000025
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5338547080000353
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5445652920000157
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5446185830001014
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5558845830000791
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5559302080000634
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5559552920001352
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5707454580001468
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5707939580001948
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.5708217500000501
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.5708434170001055
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.5708682080000926
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.5711525420001635
+    }
+  ],
+  "contentGapsSeconds": [
+    0.4553655830000025,
+    0.0784891250000328,
+    0.010710583999980372,
+    5.3291000085664564e-05,
+    0.011265999999977794,
+    4.562499998428393e-05,
+    2.508400007172895e-05,
+    0.014790166000011595,
+    4.850000004807953e-05
+  ],
+  "responseId": "98ac8db4-5f72-405c-b5ec-9672cc185c6d",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9650,
+    "input_tokens_details": {
+      "cached_tokens": 9344
+    },
+    "output_tokens": 9,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9659
+  },
+  "seconds": 0.5711564170001111
+}

@@ -11,12 +11,12 @@
 
 ;;; Native nono C binding runtime manifest projection.
 ;;; - Keep sandbox manifests validated before runtime dry-run, smoke, or live receipts are emitted.
-(import (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/agent-sandbox/bridge
-        :poo-flow/modules/nono-sandbox/c-binding-build
-        :poo-flow/modules/nono-sandbox/c-binding-descriptor
+(import (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/agent-sandbox/profile
+        :agentic-ai-lab/modules/agent-sandbox/bridge
+        :agentic-ai-lab/modules/nono-sandbox/c-binding-build
+        :agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor
         (only-in :std/misc/process run-process))
 
 (export +nono-c-binding-dry-run-receipt-schema+
@@ -64,19 +64,19 @@
 ;;; manifest can be projected, but they do not load a native library or apply a sandbox.
 ;; : (-> Unit Symbol)
 (def +nono-c-binding-dry-run-receipt-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.dry-run.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.dry-run.v1)
 
 ;;; Smoke receipts add an opt-in process probe over the dry-run receipt while
 ;;; keeping irreversible nono sandbox application outside Scheme.
 ;; : (-> Unit Symbol)
 (def +nono-c-binding-smoke-test-receipt-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.smoke-test.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.smoke-test.v1)
 
 ;;; Live receipts are PATH-gated. They run a harmless installed `nono` probe
 ;;; when available, and otherwise record a skip instead of failing package tests.
 ;; : (-> Unit Symbol)
 (def +nono-c-binding-live-test-receipt-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.live-test.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.live-test.v1)
 
 ;;; Mount validation is deliberately stricter than the neutral request schema:
 ;;; the C ABI needs a UTF-8 path and one of the generated access constants.

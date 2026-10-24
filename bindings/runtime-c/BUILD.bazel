@@ -12,14 +12,15 @@ load(":runtime_contract.bzl", "runtime_contract")
 package(default_visibility = ["//visibility:public"])
 
 exports_files([
-    "pkgconfig/poo-flow-runtime-v0.pc",
-    "include/poo_flow/scheme_native_v1.h",
+    "pkgconfig/agentic-ai-lab-runtime-v0.pc",
+    "include/agentic_ai_lab/scheme_native_v1.h",
+    "include/agentic_ai_lab/semantic.h",
     "t/validate-runtime-v0-symbol-surface.ss",
 ])
 
 cc_library(
     name = "scheme_native_v1_headers",
-    hdrs = ["include/poo_flow/scheme_native_v1.h"],
+    hdrs = ["include/agentic_ai_lab/scheme_native_v1.h"],
     strip_include_prefix = "include",
 )
 
@@ -35,7 +36,7 @@ runtime_contract(
 runtime_contract_parity_test(
     name = "runtime_v0_contract_parity_test",
     checked_event_vector = "tests/vectors/runtime_v0_event_1.txt",
-    checked_header = "include/poo_flow/runtime_v0_contract.h",
+    checked_header = "include/agentic_ai_lab/runtime_v0_contract.h",
     checked_vector = "tests/vectors/runtime_v0_contract.txt",
     generated_event_vector = ":runtime_v0_event_vector",
     generated_header = ":runtime_v0_contract_header",
@@ -68,7 +69,7 @@ cc_library(
 
 cc_library(
     name = "runtime_v0_headers",
-    hdrs = ["include/poo_flow/runtime_v0.h"],
+    hdrs = ["include/agentic_ai_lab/runtime_v0.h"],
     strip_include_prefix = "include",
     deps = [":runtime_v0_contract_headers"],
 )
@@ -76,8 +77,8 @@ cc_library(
 cc_library(
     name = "proof_case_v1_headers",
     hdrs = [
-        "include/poo_flow/proof_case_v1.h",
-        "include/poo_flow/proof_case_vector_v1.h",
+        "include/agentic_ai_lab/proof_case_v1.h",
+        "include/agentic_ai_lab/proof_case_vector_v1.h",
     ],
     strip_include_prefix = "include",
 )
@@ -130,7 +131,7 @@ cc_test(
 runtime_gerbil_benchmark_test(
     name = "runtime_v0_gerbil_ffi_benchmark",
     contract_header = ":runtime_v0_contract_header",
-    header = "include/poo_flow/runtime_v0.h",
+    header = "include/agentic_ai_lab/runtime_v0.h",
     library = ":runtime_c_shared",
     package_file = "//:gerbil.pkg",
     source = "benchmarks/runtime-v0-gerbil-ffi-benchmark.ss",
@@ -346,4 +347,13 @@ test_suite(
         ":runtime_v0_vector_harness",
         ":scheme_native_v1_header_harness",
     ],
+)
+
+# Temporal local first-root selection; requires the platform SQLite development library.
+cc_library(
+    name = "temporal_store",
+    srcs = ["src/temporal_store.c"],
+    hdrs = ["include/agentic_ai_lab/temporal_store.h"],
+    strip_include_prefix = "include",
+    linkopts = ["-lsqlite3", "-lpthread"],
 )

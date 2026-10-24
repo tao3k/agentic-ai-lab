@@ -3,15 +3,15 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: user-owned POO Flow init entrypoint.
+;;; Boundary: user-owned Agentic AI Lab init entrypoint.
 ;;; Invariant: this file lists enabled modules only; projections live upstream.
 
-(import :poo-flow/src/user-interface/init-declaration-syntax)
+(import :yuanxu/module-system/selection/init-syntax)
 
 ;;; Doom-style init shape: module categories and optional feature patches only.
 ;;; Profile binding, settings, projection, package sync, export wiring, and
 ;;; runtime loading are upstream concerns.
-(poo-flow!
+(yuanxu!
  :workflow
  (funflow
   (+cicd

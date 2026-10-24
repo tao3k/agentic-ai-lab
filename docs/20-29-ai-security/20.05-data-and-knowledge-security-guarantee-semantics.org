@@ -8,10 +8,10 @@
 * Status
 
 - Status: initial RFC and Lean closure implemented
-- Owner: =poo-flow=
+- Owner: =agentic-ai-lab=
 - Scope: composable data and knowledge assurance semantics
-- Engine boundary: this is a semantic package composed by POO Flow, not a
-  fixed POO Flow layer architecture
+- Engine boundary: this is a semantic package composed by Agentic AI Lab, not a
+  fixed Agentic AI Lab layer architecture
 
 * Research finding
 
@@ -44,7 +44,7 @@ resilience, and compliance.  OWASP's Agentic Security Initiative focuses on
 autonomous agents and multi-step workflows, where live tool and data access
 make continuity across steps essential.
 
-These frameworks provide source coordinates.  They do not define the POO Flow
+These frameworks provide source coordinates.  They do not define the Agentic AI Lab
 engine ontology.
 
 * Semantic package boundary
@@ -120,7 +120,7 @@ policy root, and evidence root without hidden session state.
 
 * Action and evidence projection
 
-The package projects into the existing POO Flow separation:
+The package projects into the existing Agentic AI Lab separation:
 
 - =ObservationEvent= records observed reads, transformations, memory writes,
   movement, disclosure, expiry, and erasure evidence;
@@ -131,7 +131,7 @@ The package projects into the existing POO Flow separation:
   and accountable owner;
 - an independent replay bundle reconstructs the decision.
 
-POO Flow does not parse vendor logs directly.  Cursor, Claude, Codex, data
+Agentic AI Lab does not parse vendor logs directly.  Cursor, Claude, Codex, data
 warehouses, vector databases, MCP servers, and policy engines project into the
 shared action/evidence envelope through provider-specific adapters.
 
@@ -139,7 +139,7 @@ shared action/evidence envelope through provider-specific adapters.
 
 Implemented in:
 
-- =packages/proofs/lean/PooFlowProof/Enterprise/AISecurityDataKnowledgeGuaranteeClosure.lean=
+- =packages/proofs/lean/AgenticAILabProof/Enterprise/AISecurityDataKnowledgeGuaranteeClosure.lean=
 
 The proof unit closes:
 

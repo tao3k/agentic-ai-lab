@@ -3,13 +3,13 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import :clan/poo/object
-        :poo-flow/src/feature-system/bundle-v1-lowering
-        :poo-flow/src/utilities/functional)
+        :yuanxu/feature-system/bundle-v1-lowering
+        :yuanxu/utilities/functional)
 
 (def +agent-count+ 1000)
 
 (def (make-components count)
-  (poo-flow-map
+  (yuanxu-map
    (lambda (index)
      (feature-bundle-v1-component
       1 index
@@ -26,14 +26,14 @@
    (iota count)))
 
 (def (make-edges count)
-  (poo-flow-map
+  (yuanxu-map
    (lambda (index)
      (feature-bundle-v1-edge
       1 (- index 1) index 'depends-on (- index 1)))
    (iota (max 0 (- count 1)) 1)))
 
 (def (make-evidence count)
-  (poo-flow-map
+  (yuanxu-map
    (lambda (index)
      (feature-bundle-v1-evidence
       1 index
@@ -57,7 +57,7 @@
 
 (def descriptor (.ref plan 'descriptor))
 
-(display "schema=poo-flow.bundle-v1.scheme-lowering-benchmark.1\n")
+(display "schema=agentic-ai-lab.bundle-v1.scheme-lowering-benchmark.1\n")
 (display "agents=")
 (display +agent-count+)
 (newline)

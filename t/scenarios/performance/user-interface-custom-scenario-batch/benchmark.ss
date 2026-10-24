@@ -15,7 +15,7 @@
  (iterations . 3)
  (unit . "ms")
  (sourcePath . "t/scenarios/performance/user-interface-custom-scenario-batch/benchmark.ss")
- (rule . POO-FLOW-USER-INTERFACE-PERFORMANCE-002)
+ (rule . AGENTIC-AI-LAB-USER-INTERFACE-PERFORMANCE-002)
  (feature . user-interface-custom-scenario-batch)
  (optimizationFocus . "batch aggregation of custom user-interface scenario rows without executing runtime, sandbox, provider, tool, or durable store work")
  (inputShape . "custom/my-module scenarios spanning cicd, funflow, loop-engine, session transform/policy/topology/materialization, durable session memory, tool-core, memory-core, and durable recovery/store handoff cases")

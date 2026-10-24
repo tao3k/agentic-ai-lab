@@ -9,20 +9,24 @@ gxi=$1
 fixture=$2
 harness=$3
 clan_package=$4
+core_package=$5
 
-if [ -z "${GERBIL_LOADPATH:-}" ]; then
-  GERBIL_LOADPATH=$PWD:$(dirname "$clan_package")
-  export GERBIL_LOADPATH
-fi
+GERBIL_LOADPATH=$PWD:$(dirname "$core_package"):$(dirname "$clan_package")${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}
+export GERBIL_LOADPATH
 
-temporary=${TEST_TMPDIR:-${TMPDIR:-/tmp}}/poo-flow-bundle-v1.$$
+temporary=${TEST_TMPDIR:-${TMPDIR:-/tmp}}/agentic-ai-lab-bundle-v1.$$
 descriptor=$temporary.descriptor.bin
 arena=$temporary.arena.bin
 trap 'rm -f "$descriptor" "$arena"' EXIT HUP INT TERM
 
-POO_FLOW_BUNDLE_V1_DESCRIPTOR_OUT=$descriptor
-POO_FLOW_BUNDLE_V1_ARENA_OUT=$arena
-export POO_FLOW_BUNDLE_V1_DESCRIPTOR_OUT POO_FLOW_BUNDLE_V1_ARENA_OUT
+YUANXU_BUNDLE_V1_DESCRIPTOR_OUT=$descriptor
+YUANXU_BUNDLE_V1_ARENA_OUT=$arena
+export YUANXU_BUNDLE_V1_DESCRIPTOR_OUT YUANXU_BUNDLE_V1_ARENA_OUT
+YUANXU_BUNDLE_V1_CORE_SOURCE=$(dirname "$core_package")
+export YUANXU_BUNDLE_V1_CORE_SOURCE
 
-"$gxi" "$fixture"
+"$gxi" -:max-heap=1G,debug=q \
+  -e '(import (only-in :yuanxu/module-system/building/source-package register-yuanxu-build-source!))' \
+  -e '(register-yuanxu-build-source! (getenv "YUANXU_BUNDLE_V1_CORE_SOURCE"))' \
+  "$fixture" < /dev/null
 "$harness" "$descriptor" "$arena"

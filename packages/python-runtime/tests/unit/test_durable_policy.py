@@ -6,9 +6,9 @@ from __future__ import annotations
 
 import pytest
 
-from poo_flow_runtime.checkpoints import RuntimeGraphCheckpoint
-from poo_flow_runtime.durable import TursoRuntimeGraphCheckpointer
-from poo_flow_runtime.durable_policy import (
+from agentic_ai_lab_runtime.checkpoints import RuntimeGraphCheckpoint
+from agentic_ai_lab_runtime.durable import TursoRuntimeGraphCheckpointer
+from agentic_ai_lab_runtime.durable_policy import (
     RuntimeDurablePolicyError,
     RuntimeDurablePolicyManifest,
     coerce_runtime_durable_policy_manifest,
@@ -17,7 +17,7 @@ from poo_flow_runtime.durable_policy import (
 
 def test_runtime_durable_policy_manifest_parses_scheme_bytes() -> None:
     manifest = coerce_runtime_durable_policy_manifest(
-        b"policy-id=poo-flow-durable-policy.v1\n"
+        b"policy-id=agentic-ai-lab-durable-policy.v1\n"
         b"owner=scheme\n"
         b"checkpoint-id-strategy=provided\n"
         b"require-plan-digest-match=true\n"

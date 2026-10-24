@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 #+title: 20.01 AI Enterprise Security Architecture Semantics Catalog
-#+author: POO Flow
+#+author: Agentic AI Lab
 #+startup: overview
 
 * Status
@@ -12,13 +12,13 @@ DRAFT — architecture-semantics discovery owner.
 
 This document is non-normative.  It collects architecture semantics from
 enterprise practice, standards, papers, incidents, blogs, and issue reports.
-Normative POO Flow composition rules belong to
+Normative Agentic AI Lab composition rules belong to
 =20.02-composable-ai-security-architecture-package=.
 
 * Decision
 
-POO Flow does not adopt one external layer model as its own architecture.
-POO Flow is the engine that composes architecture design semantics.
+Agentic AI Lab does not adopt one external layer model as its own architecture.
+Agentic AI Lab is the engine that composes architecture design semantics.
 
 External three-layer, seven-layer, ten-layer, lifecycle, control-plane, and
 threat-taxonomy models are evidence sources.  Their concepts are normalized
@@ -33,15 +33,15 @@ The catalog therefore answers:
 4. What evidence supports the mapping?
 5. Which semantics can be reused, specialized, replaced, or remain missing?
 
-* POO Flow engine boundary
+* Agentic AI Lab engine boundary
 
 This catalog MUST NOT:
 
-- redefine POO Flow as a control plane or a particular security architecture;
+- redefine Agentic AI Lab as a control plane or a particular security architecture;
 - add a new public module DSL or raw record/alist architecture DSL;
 - widen the public =compose=, =profiles=, =use-module=, or =use-composition=
   surface;
-- make external taxonomies semantic owners of POO Flow;
+- make external taxonomies semantic owners of Agentic AI Lab;
 - collapse policy, observation, proof, runtime admission, and effects into one
   authority;
 - treat an LLM-generated mapping as verified architecture evidence.
@@ -76,7 +76,7 @@ A proof is not runtime admission.  Runtime admission is not effect completion.
 | ADR | Sensor, Detector, Explorer | production observability, hierarchical detection, red-team feedback | detection-first; vendor log reconstruction and LLM judgment remain non-authoritative |
 | NIST AI Agent Standards Initiative | identity, authorization, interoperability, evaluation | standards and enterprise identity frontier | evolving guidance, not an implementation contract |
 | OWASP Agentic Top 10 | ten operational risk families | attack and control discovery | risk list does not define semantic composition |
-| Microsoft Agent security | identity, data governance, tool protection, lifecycle, audit | enterprise integration and data-label inheritance | product control ownership differs from POO Flow ownership |
+| Microsoft Agent security | identity, data governance, tool protection, lifecycle, audit | enterprise integration and data-label inheritance | product control ownership differs from Agentic AI Lab ownership |
 
 * Source references
 
@@ -247,7 +247,7 @@ Names alone never establish =exact=.
 
 * Initial crosswalk
 
-| External concept | Candidate POO Flow semantic | Mapping status |
+| External concept | Candidate Agentic AI Lab semantic | Mapping status |
 |------------------+-----------------------------+----------------|
 | Snowflake data layer | data/knowledge semantic family plus enterprise-owned data controls | partial |
 | Snowflake model layer | model/provider identity plus model-security package | partial, model semantics missing |
@@ -301,7 +301,7 @@ For each new source:
 9. What runtime receipt could demonstrate enforcement?
 10. What new unknown/escalation population does the change create?
 
-* Current POO Flow owner classification
+* Current Agentic AI Lab owner classification
 
 | Semantic cluster | Classification | Existing owner |
 |------------------+----------------+----------------|
@@ -334,7 +334,7 @@ For each new source:
 
 * Acceptance criteria
 
-- [X] POO Flow remains an architecture-semantics composition engine.
+- [X] Agentic AI Lab remains an architecture-semantics composition engine.
 - [X] External layer models are evidence sources, not engine owners.
 - [X] Coordinate kinds and mapping statuses are explicit.
 - [X] Policy, proof, runtime admission, and effect completion stay separate.
@@ -350,4 +350,4 @@ For each new source:
 The next owner is =20.02-composable-ai-security-architecture-package=.
 It defines how catalog semantics become POO-native packages, how multiple
 architectures compose, and how profiles project obligations without changing
-the POO Flow public engine surface.
+the Agentic AI Lab public engine surface.

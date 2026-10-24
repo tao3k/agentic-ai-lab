@@ -8,21 +8,21 @@
 ;;; hidden behind an ordinary POO lazy slot reference.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/hash/misc hash-remove!)
-        (only-in :poo-flow/src/utilities/functional poo-flow-find)
+        (only-in :yuanxu/utilities/functional yuanxu-find)
         "types.ss"
         "objects.ss")
 
-(export poo-flow-standard-materialization-context
-        poo-flow-standard-load-source
-        poo-flow-standard-materialize
-        poo-flow-standard-evict!
-        poo-flow-standard-materialization-stats)
+(export agentic-ai-lab-standard-materialization-context
+        agentic-ai-lab-standard-load-source
+        agentic-ai-lab-standard-materialize
+        agentic-ai-lab-standard-evict!
+        agentic-ai-lab-standard-materialization-stats)
 
-(def +poo-flow-standard-unknown-generation+
+(def +agentic-ai-lab-standard-unknown-generation+
   "sha256:0000000000000000000000000000000000000000000000000000000000000000")
 
-(def (poo-flow-standard-materialization-context identity-value artifact-refs)
-  (unless (and (poo-flow-standard-text? identity-value)
+(def (agentic-ai-lab-standard-materialization-context identity-value artifact-refs)
+  (unless (and (agentic-ai-lab-standard-text? identity-value)
                (list? artifact-refs))
     (error "invalid Standard materialization context" identity-value))
   (let ((artifact-index (make-hash-table))
@@ -44,7 +44,7 @@
         (artifact-reference-count 0))
     (for-each
      (lambda (artifact-ref)
-       (unless (poo-flow-standard-artifact-ref? artifact-ref)
+       (unless (agentic-ai-lab-standard-artifact-ref? artifact-ref)
          (error "invalid Standard artifact ref" artifact-ref))
        (let (identity (.ref artifact-ref 'identity))
          ;; Artifact refs are truthy POO objects; one native lookup is enough.
@@ -62,12 +62,12 @@
       (let* ((artifact-ref (hash-get artifact-index identity))
              (generation
               (if artifact-ref (.ref artifact-ref 'generation)
-                  +poo-flow-standard-unknown-generation+)))
-        (poo-flow-standard-materialization-receipt
+                  +agentic-ai-lab-standard-unknown-generation+)))
+        (agentic-ai-lab-standard-materialization-receipt
          identity artifact outcome generation load-receipt failures-value
          (current-load-count) executed?)))
     (def (terminal-failure identity code detail path)
-      (poo-flow-standard-failure code identity detail path))
+      (agentic-ai-lab-standard-failure code identity detail path))
     (def (publish-source! cache-key source load-receipt state)
       (mutex-lock! lock)
       (when source
@@ -101,9 +101,9 @@
                    identity 'standard-dependency-missing
                    "source artifact was absent from the context"
                    (list identity)))
-              (poo-flow-standard-load-receipt
-               identity identity +poo-flow-standard-unknown-generation+
-               +poo-flow-standard-unknown-generation+ 0 'failed
+              (agentic-ai-lab-standard-load-receipt
+               identity identity +agentic-ai-lab-standard-unknown-generation+
+               +agentic-ai-lab-standard-unknown-generation+ 0 'failed
                (list failure) #f)))
            (else
             (hash-put! source-states cache-key 'loading)
@@ -115,7 +115,7 @@
                         identity 'standard-load-failed load-error
                         (list identity)))
                       (load-receipt
-                       (poo-flow-standard-load-receipt
+                       (agentic-ai-lab-standard-load-receipt
                         identity cache-key (.ref artifact-ref 'generation)
                         (.ref artifact-ref 'digest) 0 'failed
                         (list failure) #t)))
@@ -123,7 +123,7 @@
              (lambda ()
                (let* ((source ((.ref artifact-ref 'source-loader)))
                       (source-valid?
-                       (and (poo-flow-standard-artifact-source? source)
+                       (and (agentic-ai-lab-standard-artifact-source? source)
                             (string=? (.ref source 'artifact-identity) identity)
                             (string=? (.ref source 'digest)
                                      (.ref artifact-ref 'digest))
@@ -137,7 +137,7 @@
                  (if source-valid?
                    (publish-source!
                     cache-key source
-                    (poo-flow-standard-load-receipt
+                    (agentic-ai-lab-standard-load-receipt
                      identity cache-key (.ref artifact-ref 'generation)
                      (.ref source 'digest) (.ref source 'size-bytes)
                      'loaded '() #t)
@@ -148,7 +148,7 @@
                             "loaded source identity, digest, representation, or size mismatch"
                             (list identity)))
                           (load-receipt
-                           (poo-flow-standard-load-receipt
+                           (agentic-ai-lab-standard-load-receipt
                             identity cache-key (.ref artifact-ref 'generation)
                             (.ref artifact-ref 'digest) 0 'failed
                             (list failure) #t)))
@@ -218,7 +218,7 @@
                            (load-one dependency (cons identity path)))
                          (.ref artifact-ref 'dependencies)))
                 (let (dependency-failure
-                      (poo-flow-find
+                      (yuanxu-find
                        (lambda (candidate)
                          (not (.ref candidate 'valid?)))
                        dependency-receipts))
@@ -253,7 +253,7 @@
                                       (cons identity
                                             (active-materializations))))
                                     ((.ref artifact-ref 'materializer) source)))
-                               (if (and (poo-flow-standard-artifact? artifact)
+                               (if (and (agentic-ai-lab-standard-artifact? artifact)
                                         (string=? (.ref artifact 'identity) identity)
                                         (string=? (.ref artifact 'digest)
                                                  (.ref artifact-ref 'digest))
@@ -333,29 +333,29 @@
                   eviction-count: eviction-count-value)))
         (mutex-unlock! lock)
         value))
-    (.o kind: +poo-flow-standard-materialization-context-kind+
+    (.o kind: +agentic-ai-lab-standard-materialization-context-kind+
         identity: identity-value
         load-source: load-source-one
         materialize: load-one
         evict!: evict-one!
         stats: stats-value)))
 
-(def (poo-flow-standard-load-source context artifact-identity)
-  (unless (poo-flow-standard-materialization-context? context)
+(def (agentic-ai-lab-standard-load-source context artifact-identity)
+  (unless (agentic-ai-lab-standard-materialization-context? context)
     (error "invalid Standard materialization context" context))
   ((.ref context 'load-source) artifact-identity))
 
-(def (poo-flow-standard-materialize context artifact-identity)
-  (unless (poo-flow-standard-materialization-context? context)
+(def (agentic-ai-lab-standard-materialize context artifact-identity)
+  (unless (agentic-ai-lab-standard-materialization-context? context)
     (error "invalid Standard materialization context" context))
   ((.ref context 'materialize) artifact-identity '()))
 
-(def (poo-flow-standard-evict! context artifact-identity)
-  (unless (poo-flow-standard-materialization-context? context)
+(def (agentic-ai-lab-standard-evict! context artifact-identity)
+  (unless (agentic-ai-lab-standard-materialization-context? context)
     (error "invalid Standard materialization context" context))
   ((.ref context 'evict!) artifact-identity))
 
-(def (poo-flow-standard-materialization-stats context)
-  (unless (poo-flow-standard-materialization-context? context)
+(def (agentic-ai-lab-standard-materialization-stats context)
+  (unless (agentic-ai-lab-standard-materialization-context? context)
     (error "invalid Standard materialization context" context))
   ((.ref context 'stats)))

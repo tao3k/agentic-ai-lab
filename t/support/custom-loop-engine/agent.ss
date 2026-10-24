@@ -7,7 +7,7 @@
 
 (import (only-in :std/test check-equal?)
         (only-in :clan/poo/object object?)
-        (only-in :poo-flow/modules/loop-engine/runtime
+        (only-in :agentic-ai-lab/modules/loop-engine/runtime
                  loop-engine-capability-receipt?)
         "./fixtures")
 
@@ -23,12 +23,12 @@
                                             agent-harnesses
                                             agent-sessions)
   (check-equal? (test-ref handoff 'contract)
-                'poo-flow.loop-governor.runtime-handoff.v1)
+                'agentic-ai-lab.loop-governor.runtime-handoff.v1)
   (check-equal? (test-ref handoff 'workflow-ref) 'funflow-cicd)
   (check-equal? (test-field-values agent-profiles 'name)
                 expected-loop-engine-agent-names)
   (check-equal? (test-ref result-contract 'contract)
-                'poo-flow.loop-governor.result-contract.v1)
+                'agentic-ai-lab.loop-governor.result-contract.v1)
   (check-equal? (test-ref result-contract 'valid?) #t)
   (check-equal? (test-ref result-contract 'diagnostic-count) 0)
   (check-equal? (test-ref result-contract 'diagnostics) '())
@@ -46,7 +46,7 @@
                 '(unresolved-sandbox-profile-refs))
   (check-equal? (test-ref (test-ref (car agent-profiles) 'loop-policy)
                           'result-contract)
-                'poo-flow.loop-governor.audit-result.v1)
+                'agentic-ai-lab.loop-governor.audit-result.v1)
   (check-equal? (test-ref (test-ref (car agent-profiles) 'loop-policy)
                           'topology-source)
                 'session-agent-graph)
@@ -60,7 +60,7 @@
 ;; : (-> Alist)
 (def (check-custom-loop-session-agent-graph! session-agent-graph)
   (check-equal? (test-ref session-agent-graph 'kind)
-                'poo-flow.session.agent-graph)
+                'agentic-ai-lab.session.agent-graph)
   (check-equal? (test-ref session-agent-graph 'root-session-ref)
                 'incoming-ci-request-session)
   (check-equal? (test-ref session-agent-graph 'agent-count) 4)

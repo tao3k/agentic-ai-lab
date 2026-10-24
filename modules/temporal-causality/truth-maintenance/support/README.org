@@ -1,0 +1,95 @@
+#+title: Bounded acyclic support applicability
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+Native public values are =agentic-ai-lab-temporal-support-premise= and
+=agentic-ai-lab-temporal-support=. Assemble them with
+=agentic-ai-lab-temporal-support-program= and apply the named pure
+=agentic-ai-lab-temporal-support-evaluate= to an original evidence journal, admission
+cut, optional valid-time instant and work budget. Import the parent
+=truth-maintenance/interface.ss=; public values are POO objects.
+
+A premise names both subject and exact revision. A support combines premises
+and parent conclusions with AND; distinct supports for one conclusion combine
+with OR. The immutable program validates an acyclic graph and canonicalizes
+identities. Actual journal replay determines current premise applicability.
+Results retain program/cut/projection digests, active support identities,
+scoped status and budget consumption. An omitted valid-time parameter queries
+admission-time applicability only, following the existing evidence Library.
+
+There are at most 128 supports, each with at most 128 source/parent premises;
+the evaluation budget is 0--128 supports. A valid applicable alternative is
+supported. No remaining alternative is unsupported only within a declared
+complete inventory; partial inventory or unknown/exhausted work stays unknown.
+Conflicting evidence heads do not select an arbitrary winner. Historical cuts
+are pure queries and never mutate later or earlier results.
+
+Proof labels and inventory completeness are caller declarations. This function
+does not admit theorem proofs, prove closed causal coverage, infer absence,
+select a durable current pointer, authorize effects or retract historical
+admissions. The output's proof-admitted?, action-authorized? and durable? slots
+are false. Cycles require a separately qualified recursive profile.
+
+Build: =just build-temporal-support=. Qualify:
+=just test-temporal-support=, using the package-qualified Gerbil environment.
+The test entry retains heap fencing, original gxtest Cases and the five-second
+idle / 45-second total watchdog with actual import-boundary output.
+
+* Declared policy window and replay guard
+
+=agentic-ai-lab-temporal-support-policy(identity, revision, start, end)= constructs a
+native POO policy value with a nonempty half-open [start,end) window. Instants
+must have observed integer coordinates in one declared domain. The digest binds
+policy identity/revision and each instant's identity/domain/coordinate/provenance
+and modality. These labels are caller declarations, not authenticated clock or
+policy authority.
+
+=agentic-ai-lab-temporal-support-guard(program, journal, as-of, valid-at, budget, policy,
+expected-policy-digest, effective-at)= recomputes the original support projection.
+The policy identity must match the program and effective-at must share its time
+domain. A changed digest yields stale-policy; early and end-or-later instants
+yield not-yet-effective and expired-policy. Only the exact declared binding
+inside the window yields applicable. Policy applicability is reported separately
+from support applicability, preserving historical evidence when a policy expires.
+
+=agentic-ai-lab-temporal-support-guard-replay(receipt, program, journal, policy)=
+recomputes the historical cut and declared effective instant and checks the
+receipt binding. Policy replacement, evidence/cut changes and tampered fields
+reject. It returns a reconstructed native value. Replay does not refresh a current
+policy pointer or clock; callers must supply authoritative current inputs for a
+new guard query.
+
+proof-admitted?, source-authenticated?, selection-admitted?, action-authorized?
+and durable? remain false in every guard. A policy-applicable? true result is
+only the policy check; it is not an admitted current selection or publish permit.
+This new guard is qualified as a Scheme Library API. ABI v1 support evaluation
+continues to expose applicability only; no guard/proof/policy mutation ABI or
+MRR host grant is introduced.
+
+* Explicit Host policy control
+
+Import =support/policy-host.ss= at the runtime boundary. The named
+=agentic-ai-lab-temporal-support-policy-host= constructs a native capability with
+opaque in-process state. =agentic-ai-lab-temporal-support-policy-host-refresh!= is an
+explicit effectful control call; it registers the canonical policy, generation
+and Host-supplied observed clock snapshot. The application owns this capability
+and serializes refresh/use. It is not exported through semantic wire dispatch.
+
+Policy revision identities are immutable, generations and observed coordinates
+cannot roll back, and an exact same-generation registration is idempotent.
+Current policies and historical revision identities each have a 128-entry cap.
+Failed registration changes neither current nor history state. Separate Host
+capabilities have isolated registries.
+
+=agentic-ai-lab-temporal-support-policy-host-guard= reads the registered policy/time,
+requires the expected generation and compares the expected policy digest. Query
+inputs contain no replacement policy or effective time. The guard remains an
+applicability result with false proof/selection/effect/durability flags.
+
+The registered clock is a declared Host observation, not an automatically
+refreshed or authenticated wall clock. The application must refresh it from its
+authoritative policy/clock owner before current use. This qualifies the local
+control-state transition and stale-generation refusal; it does not qualify
+provider refresh, concurrency/CAS, persistence, or C/Python/Rust control bindings.

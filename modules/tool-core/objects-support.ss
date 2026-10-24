@@ -6,35 +6,35 @@
 ;;; Internal support shared by semantic tool-core object owners.
 
 (import (only-in :clan/poo/object .ref)
-        :poo-flow/modules/session/objects)
+        :agentic-ai-lab/modules/session/objects)
 
-(export poo-flow-tool-field-rows
-        poo-flow-tool-slot
-        poo-flow-tool-ref?
-        poo-flow-tool-symbol-list?
-        poo-flow-tool-alist?
-        poo-flow-tool-valid-sandbox-profile-ref?)
+(export agentic-ai-lab-tool-field-rows
+        agentic-ai-lab-tool-slot
+        agentic-ai-lab-tool-ref?
+        agentic-ai-lab-tool-symbol-list?
+        agentic-ai-lab-tool-alist?
+        agentic-ai-lab-tool-valid-sandbox-profile-ref?)
 
-(def (poo-flow-tool-field-rows . rows)
+(def (agentic-ai-lab-tool-field-rows . rows)
   rows)
 
-(def (poo-flow-tool-slot object key default-value)
+(def (agentic-ai-lab-tool-slot object key default-value)
   (with-catch
    (lambda (_failure) default-value)
    (lambda ()
      (.ref object key))))
 
-(def (poo-flow-tool-ref? value)
+(def (agentic-ai-lab-tool-ref? value)
   (symbol? value))
 
-(def (poo-flow-tool-symbol-list? values)
+(def (agentic-ai-lab-tool-symbol-list? values)
   (and (list? values)
-       (poo-flow-session-every? symbol? values)))
+       (agentic-ai-lab-session-every? symbol? values)))
 
-(def (poo-flow-tool-alist? value)
+(def (agentic-ai-lab-tool-alist? value)
   (list? value))
 
-(def (poo-flow-tool-valid-sandbox-profile-ref? sandbox-required?
+(def (agentic-ai-lab-tool-valid-sandbox-profile-ref? sandbox-required?
                                                sandbox-profile-ref)
   (or (not sandbox-required?)
       (symbol? sandbox-profile-ref)))

@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Full Family premise archive and detached native replay
+
+This qualification uses the original MRR Rust Query/Candidate/Receipt values,
+then native Family admission, assert/correct/retract history and archive export.
+A separate process opens the exact rebuilt native library, parses Scheme bytes
+and replays against the independently retained original archive digest. It
+recomputes Model/Query/Source/proof/revision/journal bindings in Scheme. It
+checks that original admission handles remain unknown after replay, rejects
+proof/query/Source/Frontier tampering, cycles, missing parents and duplicates,
+and accepts reversed entry order with the same canonical replay receipt.
+
+=archive.ss= retains full Family premises; =replayed.ss= is the native read-only
+receipt. =native-artifact.ss= is the compiler-owned build manifest.
+=build-freeze.ss= freezes compiler inputs, binaries, archive/replay bytes and raw
+local logs. Generated logs remain outside the source checkout. Hashes alone
+cannot recheck their output or qualify another source cut. Re-run the original
+Rust test rather than treating a frozen historical receipt as a fresh pass.
+
+* Reproduction
+
+Build the native library with =bindings/runtime-c/tools/build-semantic.py= and
+compile the Rust =mrr= integration test with =--release --features mrr-transport=.
+Use the MRR devenv profile, immutable pins from =.ci/mrr-runtime/runtime/Cargo.lock=,
+and clean Gerbil compiler/SDK flags. Run the fresh executable through the project
+entrypoint (all paths are absolute):
+#+begin_src sh
+just test-temporal-family-archive "$fresh_executable" "$native_library" \
+  "$verified_artifact_sha256" "$archive_directory"
+#+end_src
+The parent passes the expected digest separately to the child test process.
+Both parent and child must execute one real test and finish successfully. The
+watchdog requires genuine completed work within five seconds, including native
+loader hash progress. No timer output or deadline widening is used.
+
+The public POO cases use =yuanxu-test-case= and the original upstream gxtest
+runner. Compile changed modules/tests and the existing native entry before
+linking with official =compile-exe=. Run =just test-temporal-family-native
+/absolute/fresh-native-executable=. It applies =gerbil_test_runtime_options= before
+imports, passes =-v 5= and absolute test paths, and requires exactly 13 Case passes
+plus both Module passes, final OK, and no error markers under the same deadlines. A default-verbosity run with only Module/OK
+output is insufficient to qualify individual cases; earlier such local runs
+remain unqualified in the freeze.
+
+* Evidence boundary
+
+This is complete relative to Family premises. It does not archive/re-admit the
+original physical MRR provider/candidate/receipt identity, authenticate the
+Source or dependency index, select current Source, restore runtime handles,
+commit MRR Data history/current CAS or authorize effects. All authority/effect
+and durability flags remain false. MRR Context and MRR Data transaction gates
+remain open. No new paid model call or performance benchmark is claimed.

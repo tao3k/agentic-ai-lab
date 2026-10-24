@@ -3,14 +3,14 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :std/misc/ports read-all-as-string)
         (only-in :clan/poo/object .ref)
-        :poo-flow/modules/standards/interface
-        :poo-flow/lambda-episteme/modules/healthcare/standards/interface
-        :poo-flow/lambda-episteme/modules/ontology/interface
-        (only-in :poo-flow/lambda-episteme/user-interface/scenarios/healthcare/cases/au-legacy-interface-fhir-migration/case
+        :agentic-ai-lab/modules/standards/interface
+        :agentic-ai-lab/lambda-episteme/modules/healthcare/standards/interface
+        :agentic-ai-lab/lambda-episteme/modules/ontology/interface
+        (only-in :agentic-ai-lab/lambda-episteme/user-interface/scenarios/healthcare/cases/au-legacy-interface-fhir-migration/case
                  AULegacyInterfaceFHIRMigrationCase)
         (only-in :gerbil-parser/languages/hl7/v2-2.5.1/parser
                  parse-hl7v2)
@@ -26,35 +26,35 @@
   "packages/lambda-episteme/modules/healthcare/standards/migration/fixtures/au-adt-a08-patient.hl7")
 
 (def migration-terminology-snapshot
-  (poo-flow-standard-digest 'au-hl7v2-end-to-end-terminology))
+  (agentic-ai-lab-standard-digest 'au-hl7v2-end-to-end-terminology))
 
 (def (materialized-au-core-patient-constraints)
   (let* ((resolution
-          (poo-flow-standard-resolve
+          (agentic-ai-lab-standard-resolve
            FHIRStandardsCatalog '("hl7.fhir.au.core@1.0.0")
-           poo-flow-standard-default-budget migration-terminology-snapshot))
-         (bundle (poo-flow-standard-resolution-receipt-bundle resolution))
+           agentic-ai-lab-standard-default-budget migration-terminology-snapshot))
+         (bundle (agentic-ai-lab-standard-resolution-receipt-bundle resolution))
          (context
-          (poo-flow-standard-materialization-context
+          (agentic-ai-lab-standard-materialization-context
            "qualification/healthcare/hl7v2-migration/materialization"
            (.ref bundle 'artifacts)))
          (receipt
-          (poo-flow-standard-materialize
-           context +poo-flow-fhir-au-core-patient-artifact-identity+)))
-    (poo-flow-fhir-au-core-patient-constraints
-     (poo-flow-standard-materialization-receipt-artifact receipt))))
+          (agentic-ai-lab-standard-materialize
+           context +agentic-ai-lab-fhir-au-core-patient-artifact-identity+)))
+    (agentic-ai-lab-fhir-au-core-patient-constraints
+     (agentic-ai-lab-standard-materialization-receipt-artifact receipt))))
 
 (def (validate-au-core-patient candidate)
   (let* ((resolution
-          (poo-flow-standard-resolve
+          (agentic-ai-lab-standard-resolve
            FHIRStandardsCatalog '("hl7.fhir.au.core@1.0.0")
-           poo-flow-standard-default-budget migration-terminology-snapshot))
-         (bundle (poo-flow-standard-resolution-receipt-bundle resolution))
+           agentic-ai-lab-standard-default-budget migration-terminology-snapshot))
+         (bundle (agentic-ai-lab-standard-resolution-receipt-bundle resolution))
          (closure
-          (poo-flow-standard-make-validation-closure
+          (agentic-ai-lab-standard-make-validation-closure
            (.ref FHIRAUCorePatientStandardProfile 'identity)
-           bundle +poo-flow-fhir-provider-identity+ 'fhir-json
-           (poo-flow-standard-digest candidate)
+           bundle +agentic-ai-lab-fhir-provider-identity+ 'fhir-json
+           (agentic-ai-lab-standard-digest candidate)
            (materialized-au-core-patient-constraints)))
          (conformance
           (healthcare-standard-validate
@@ -64,7 +64,7 @@
 
 (def healthcare-hl7v2-parser-receipt-test
   (test-suite "Healthcare HL7v2 parser receipt qualification"
-    (poo-flow-test-case "parser-owned projection exactly binds the Lambda migration Case"
+    (yuanxu-test-case "parser-owned projection exactly binds the Lambda migration Case"
       (let* ((source (call-with-input-file fixture-path read-all-as-string))
              (artifact (parse-hl7v2 source))
              (projection (hl7v2-adt-a08-patient-projection artifact)))
@@ -77,15 +77,15 @@
                         'source-snapshot-digest))
         (check (parse-artifact-ref artifact 'grammarDigest)
                => (.ref AULegacyHL7v2PatientSubject 'parser-grammar-digest))
-        (check (poo-flow-standard-digest projection)
+        (check (agentic-ai-lab-standard-digest projection)
                => (.ref AULegacyHL7v2PatientMigrationCase
                         'parser-receipt-digest))
         (check
-         (poo-flow-standard-digest
+         (agentic-ai-lab-standard-digest
           (list 'gerbil-parser-hl7v2-qualification
                 (parse-artifact-ref artifact 'sourceDigest)
                 (parse-artifact-ref artifact 'grammarDigest)
-                (poo-flow-standard-digest projection)))
+                (agentic-ai-lab-standard-digest projection)))
          => (.ref AULegacyHL7v2PatientMigrationCase
                   'source-qualification-digest))
         (check (.ref AULegacyHL7v2PatientMigrationCase

@@ -7,12 +7,12 @@
 ;;; Invariant: policies are declarative authorization objects; Scheme never
 ;;; runs tools or hooks.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o .ref)
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-policy-contract-test)
 
@@ -24,7 +24,7 @@
 ;; : (-> Alist)
 (def (make-session-policy-contract-context)
   (let* ((read-grant
-          (poo-flow-session-tool-grant
+          (agentic-ai-lab-session-tool-grant
            'grant/project-read
            'read-workspace-file
            '(read)
@@ -33,7 +33,7 @@
            '((scope . session)
              (owner . root-agent))))
          (build-grant
-          (poo-flow-session-tool-grant
+          (agentic-ai-lab-session-tool-grant
            'grant/project-build
            'run-build-command
            '(run)
@@ -42,7 +42,7 @@
            '((scope . child-session)
              (owner . build-agent))))
          (main-agent-tool-policy
-          (poo-flow-session-tool-permission-policy
+          (agentic-ai-lab-session-tool-permission-policy
            'policy/main-agent-tools
            'custom/session-root
            (list read-grant)
@@ -50,7 +50,7 @@
            'deny
            '((principal . main-agent))))
          (build-agent-tool-policy
-          (poo-flow-session-tool-permission-policy
+          (agentic-ai-lab-session-tool-permission-policy
            'policy/build-agent-tools
            'custom/session-build-child
            (list read-grant build-grant)
@@ -58,7 +58,7 @@
            'deny
            '((principal . build-agent))))
          (hook-tool-policy
-          (poo-flow-session-hook-tool-permission-policy
+          (agentic-ai-lab-session-hook-tool-permission-policy
            'policy/pre-check-hook-tools
            'custom/session-root
            '(hook/pre-check)
@@ -68,7 +68,7 @@
            '((principal . hook/pre-check)
              (inherits-agent-tools? . #f))))
          (model-policy
-          (poo-flow-session-model-policy
+          (agentic-ai-lab-session-model-policy
            'policy/build-agent-model
            'custom/session-build-child
            'marlin/provider
@@ -76,14 +76,14 @@
            '(tool-calling structured-output)
            'budget/build-agent))
          (prompt-policy
-          (poo-flow-session-prompt-policy
+          (agentic-ai-lab-session-prompt-policy
            'policy/build-agent-prompt
            'custom/session-build-child
            'custom/session-build-system
            '(system-instruction build-contract)
            'parent-summary-only))
          (resource-policy
-          (poo-flow-session-resource-sharing-policy
+          (agentic-ai-lab-session-resource-sharing-policy
            'policy/build-agent-resources
            'custom/session-build-child
            '((project-workspace
@@ -94,7 +94,7 @@
               (accounting . child-session)))
            'deny))
          (execution-policy
-          (poo-flow-session-agent-execution-policy
+          (agentic-ai-lab-session-agent-execution-policy
            'policy/build-agent-execution
            'agent/build
            'custom/session-build-child
@@ -109,21 +109,21 @@
           (cons 'hook-tool-policy hook-tool-policy)
           (cons 'execution-policy execution-policy)
           (cons 'presentation
-                (list (poo-flow-session-policy->alist
+                (list (agentic-ai-lab-session-policy->alist
                        main-agent-tool-policy)
-                      (poo-flow-session-policy->alist
+                      (agentic-ai-lab-session-policy->alist
                        build-agent-tool-policy)
-                      (poo-flow-session-policy->alist hook-tool-policy)
-                      (poo-flow-session-policy->alist model-policy)
-                      (poo-flow-session-policy->alist prompt-policy)
-                      (poo-flow-session-policy->alist resource-policy)
-                      (poo-flow-session-policy->alist
+                      (agentic-ai-lab-session-policy->alist hook-tool-policy)
+                      (agentic-ai-lab-session-policy->alist model-policy)
+                      (agentic-ai-lab-session-policy->alist prompt-policy)
+                      (agentic-ai-lab-session-policy->alist resource-policy)
+                      (agentic-ai-lab-session-policy->alist
                        execution-policy))))))
 
 ;; : (-> Void)
 (def (check-session-tool-permission-policy!)
   (let* ((read-grant
-          (poo-flow-session-tool-grant
+          (agentic-ai-lab-session-tool-grant
            'grant/read
            'read-workspace-file
            '(read)
@@ -131,35 +131,35 @@
            '(agent-turn)
            '((case . unit))))
          (policy
-          (poo-flow-session-tool-permission-policy
+          (agentic-ai-lab-session-tool-permission-policy
            'policy/test-agent-tools
            'session/test
            (list read-grant)
            '(write-workspace-file)
            'deny
            '((case . unit))))
-         (row (poo-flow-session-policy->alist policy)))
-    (check-equal? (poo-flow-session-tool-grant? read-grant) #t)
-    (check-equal? (poo-flow-session-policy? policy) #t)
-    (check-equal? (poo-flow-session-policy-kind policy)
+         (row (agentic-ai-lab-session-policy->alist policy)))
+    (check-equal? (agentic-ai-lab-session-tool-grant? read-grant) #t)
+    (check-equal? (agentic-ai-lab-session-policy? policy) #t)
+    (check-equal? (agentic-ai-lab-session-policy-kind policy)
                   'agent-tool-permission)
-    (check-equal? (poo-flow-session-policy-name policy)
+    (check-equal? (agentic-ai-lab-session-policy-name policy)
                   'policy/test-agent-tools)
-    (check-equal? (poo-flow-session-policy-scope-ref policy)
+    (check-equal? (agentic-ai-lab-session-policy-scope-ref policy)
                   'session/test)
     (check-equal? (test-ref row 'tool-grant-count) 1)
     (check-equal? (test-ref row 'runtime-executed) #f)
-    (check-equal? (poo-flow-session-tool-permission-policy-allows?
+    (check-equal? (agentic-ai-lab-session-tool-permission-policy-allows?
                    policy
                    'read-workspace-file
                    'read)
                   #t)
-    (check-equal? (poo-flow-session-tool-permission-policy-allows?
+    (check-equal? (agentic-ai-lab-session-tool-permission-policy-allows?
                    policy
                    'read-workspace-file
                    'write)
                   #f)
-    (check-equal? (poo-flow-session-tool-permission-policy-allows?
+    (check-equal? (agentic-ai-lab-session-tool-permission-policy-allows?
                    policy
                    'write-workspace-file
                    'write)
@@ -173,24 +173,24 @@
          (hook-tool-policy (test-ref context 'hook-tool-policy))
          (main-agent-tool-policy
           (test-ref context 'main-agent-tool-policy)))
-    (check-equal? (poo-flow-session-tool-permission-policy-allows?
+    (check-equal? (agentic-ai-lab-session-tool-permission-policy-allows?
                    build-agent-tool-policy
                    'run-build-command
                    'run)
                   #t)
-    (check-equal? (poo-flow-session-hook-tool-permission-policy-allows?
+    (check-equal? (agentic-ai-lab-session-hook-tool-permission-policy-allows?
                    hook-tool-policy
                    'hook/pre-check
                    'run-build-command
                    'run)
                   #f)
-    (check-equal? (poo-flow-session-hook-tool-permission-policy-allows?
+    (check-equal? (agentic-ai-lab-session-hook-tool-permission-policy-allows?
                    hook-tool-policy
                    'hook/pre-check
                    'read-workspace-file
                    'read)
                   #t)
-    (check-equal? (poo-flow-session-tool-permission-policy-allows?
+    (check-equal? (agentic-ai-lab-session-tool-permission-policy-allows?
                    main-agent-tool-policy
                    'run-build-command
                    'run)
@@ -199,7 +199,7 @@
 ;; : (-> Void)
 (def (check-session-policy-poo-inheritance!)
   (let* ((base-model
-          (poo-flow-session-model-policy
+          (agentic-ai-lab-session-model-policy
            'policy/base-model
            'session/root
            'marlin/provider
@@ -212,12 +212,12 @@
               policy-name: 'policy/child-model
               scope-ref: 'session/child
               model-ref: 'marlin/model/child)))
-    (check-equal? (poo-flow-session-policy? child-model) #t)
-    (check-equal? (poo-flow-session-policy-kind child-model)
+    (check-equal? (agentic-ai-lab-session-policy? child-model) #t)
+    (check-equal? (agentic-ai-lab-session-policy-kind child-model)
                   'agent-model)
-    (check-equal? (poo-flow-session-policy-name child-model)
+    (check-equal? (agentic-ai-lab-session-policy-name child-model)
                   'policy/child-model)
-    (check-equal? (poo-flow-session-policy-scope-ref child-model)
+    (check-equal? (agentic-ai-lab-session-policy-scope-ref child-model)
                   'session/child)
     (check-equal? (.ref child-model 'provider-ref) 'marlin/provider)
     (check-equal? (.ref child-model 'model-ref)
@@ -226,14 +226,14 @@
 ;; : (-> Void)
 (def (check-generated-session-policy-families!)
   (let* ((context-policy
-          (poo-flow-session-context-policy
+          (agentic-ai-lab-session-context-policy
            'policy/build-agent-context
            'custom/session-build-child
            'parent-summary-only
            '(custom/session-root custom/session-review)
            '((case . generated-family))))
          (isolation-policy
-          (poo-flow-session-isolation-policy
+          (agentic-ai-lab-session-isolation-policy
            'policy/build-agent-isolation
            'custom/session-build-child
            'strict
@@ -241,26 +241,26 @@
            'append-summary
            'via-supervisor))
          (sandbox-policy
-          (poo-flow-session-sandbox-policy
+          (agentic-ai-lab-session-sandbox-policy
            'policy/build-agent-sandbox
            'custom/session-build-child
            'sandbox/nono-build
            'parent-profile
            'isolated-filesystem))
          (history-policy
-          (poo-flow-session-history-policy
+          (agentic-ai-lab-session-history-policy
            'policy/build-agent-history
            'custom/session-build-child
            'bounded
            '(record/last-failure record/build-log)))
          (communication-policy
-          (poo-flow-session-communication-policy
+          (agentic-ai-lab-session-communication-policy
            'policy/build-agent-communication
            'custom/session-build-child
            '(channel/build-root channel/build-audit)
            '(custom/session-root custom/session-review)))
          (sharing-policy
-          (poo-flow-session-sharing-policy
+          (agentic-ai-lab-session-sharing-policy
            'policy/build-agent-sharing
            'custom/session-build-child
            '(memory/project)
@@ -268,38 +268,38 @@
            '(tool-result/test-summary)
            '("build/" "reports/")))
          (resource-policy
-          (poo-flow-session-resource-policy
+          (agentic-ai-lab-session-resource-policy
            'policy/build-agent-budget
            'custom/session-build-child
            '(budget/build-agent)
            '(capability/cache-read capability/cache-write)
            'session/build))
-         (context-row (poo-flow-session-policy->alist context-policy))
+         (context-row (agentic-ai-lab-session-policy->alist context-policy))
          (context-slots (test-ref context-row 'policy-slots))
          (isolation-row
-          (poo-flow-session-policy->alist isolation-policy))
+          (agentic-ai-lab-session-policy->alist isolation-policy))
          (isolation-slots (test-ref isolation-row 'policy-slots))
          (sandbox-row
-          (poo-flow-session-policy->alist sandbox-policy))
+          (agentic-ai-lab-session-policy->alist sandbox-policy))
          (sandbox-slots (test-ref sandbox-row 'policy-slots))
          (history-row
-          (poo-flow-session-policy->alist history-policy))
+          (agentic-ai-lab-session-policy->alist history-policy))
          (history-slots (test-ref history-row 'policy-slots))
          (communication-row
-          (poo-flow-session-policy->alist communication-policy))
+          (agentic-ai-lab-session-policy->alist communication-policy))
          (communication-slots
           (test-ref communication-row 'policy-slots))
          (sharing-row
-          (poo-flow-session-policy->alist sharing-policy))
+          (agentic-ai-lab-session-policy->alist sharing-policy))
          (sharing-slots (test-ref sharing-row 'policy-slots))
-         (resource-row (poo-flow-session-policy->alist resource-policy))
+         (resource-row (agentic-ai-lab-session-policy->alist resource-policy))
          (resource-slots (test-ref resource-row 'policy-slots)))
-    (check-equal? (poo-flow-session-policy? context-policy) #t)
-    (check-equal? (poo-flow-session-policy-kind context-policy)
+    (check-equal? (agentic-ai-lab-session-policy? context-policy) #t)
+    (check-equal? (agentic-ai-lab-session-policy-kind context-policy)
                   'session-context)
-    (check-equal? (poo-flow-session-policy-name context-policy)
+    (check-equal? (agentic-ai-lab-session-policy-name context-policy)
                   'policy/build-agent-context)
-    (check-equal? (poo-flow-session-policy-scope-ref context-policy)
+    (check-equal? (agentic-ai-lab-session-policy-scope-ref context-policy)
                   'custom/session-build-child)
     (check-equal? (test-ref context-slots 'visibility)
                   'parent-summary-only)
@@ -311,32 +311,32 @@
     (check-equal? (test-ref context-row 'runtime-owner)
                   "marlin-agent-core")
     (check-equal? (test-ref context-row 'runtime-executed) #f)
-    (check-equal? (poo-flow-session-policy-kind isolation-policy)
+    (check-equal? (agentic-ai-lab-session-policy-kind isolation-policy)
                   'session-isolation)
     (check-equal? (test-ref isolation-slots 'mode) 'strict)
     (check-equal? (test-ref isolation-slots 'parent-write)
                   'append-summary)
-    (check-equal? (poo-flow-session-policy-kind sandbox-policy)
+    (check-equal? (agentic-ai-lab-session-policy-kind sandbox-policy)
                   'session-sandbox)
     (check-equal? (test-ref sandbox-slots 'profile-ref)
                   'sandbox/nono-build)
     (check-equal? (test-ref sandbox-slots 'inheritance-mode)
                   'parent-profile)
-    (check-equal? (poo-flow-session-policy-kind history-policy)
+    (check-equal? (agentic-ai-lab-session-policy-kind history-policy)
                   'session-history)
     (check-equal? (test-ref history-slots 'allowed-records)
                   '(record/last-failure record/build-log))
-    (check-equal? (poo-flow-session-policy-kind communication-policy)
+    (check-equal? (agentic-ai-lab-session-policy-kind communication-policy)
                   'session-communication)
     (check-equal? (test-ref communication-slots 'channel-refs)
                   '(channel/build-root channel/build-audit))
-    (check-equal? (poo-flow-session-policy-kind sharing-policy)
+    (check-equal? (agentic-ai-lab-session-policy-kind sharing-policy)
                   'session-sharing)
     (check-equal? (test-ref sharing-slots 'memory-refs)
                   '(memory/project))
     (check-equal? (test-ref sharing-slots 'workspace-paths)
                   '("build/" "reports/"))
-    (check-equal? (poo-flow-session-policy-kind resource-policy)
+    (check-equal? (agentic-ai-lab-session-policy-kind resource-policy)
                   'session-resource)
     (check-equal? (test-ref resource-slots 'budget-refs)
                   '(budget/build-agent))
@@ -346,7 +346,7 @@
 ;; : (-> Void)
 (def (check-session-durable-policy-receipt!)
   (let* ((durable-policy
-          (poo-flow-durable-policy
+          (agentic-ai-lab-durable-policy
            'durable/test
            'session/root
            '((journal-owner . runtime/fact-log)
@@ -355,7 +355,7 @@
              (repair-mode . fail-closed)
              (action-classes . (replayable idempotent compensatable)))))
          (execution-policy
-          (poo-flow-session-agent-execution-policy
+          (agentic-ai-lab-session-agent-execution-policy
            'policy/durable-execution
            'agent/build
            'session/child
@@ -366,11 +366,11 @@
            'policy/context
            'policy/resources))
          (durable-execution-policy
-          (poo-flow-session-policy-attach-durable
+          (agentic-ai-lab-session-policy-attach-durable
            execution-policy
            durable-policy))
          (receipt
-          (poo-flow-session-policy-durable-receipt
+          (agentic-ai-lab-session-policy-durable-receipt
            durable-execution-policy
            '((project-id . project/test)
              (root-session-id . session/root)
@@ -378,20 +378,20 @@
              (parent-session-id . session/root)
              (loop-run-id . loop/test))))
          (receipt-row
-          (poo-flow-durable-policy-receipt->alist receipt))
+          (agentic-ai-lab-durable-policy-receipt->alist receipt))
          (policy-row
-          (poo-flow-session-policy->alist
+          (agentic-ai-lab-session-policy->alist
            durable-execution-policy))
          (embedded-durable-row
           (test-ref policy-row 'durable-policy)))
-    (check-equal? (poo-flow-session-policy?
+    (check-equal? (agentic-ai-lab-session-policy?
                    durable-execution-policy)
                   #t)
-    (check-equal? (poo-flow-durable-policy?
+    (check-equal? (agentic-ai-lab-durable-policy?
                    durable-execution-policy)
                   #t)
-    (check-equal? (poo-flow-durable-policy-receipt? receipt) #t)
-    (check-equal? (poo-flow-durable-policy-receipt-valid? receipt) #t)
+    (check-equal? (agentic-ai-lab-durable-policy-receipt? receipt) #t)
+    (check-equal? (agentic-ai-lab-durable-policy-receipt-valid? receipt) #t)
     (check-equal? (test-ref receipt-row 'policy-id) 'durable/test)
     (check-equal? (test-ref receipt-row 'session-id) 'session/child)
     (check-equal? (test-ref receipt-row 'journal-owner)
@@ -401,26 +401,26 @@
                   'durable/test)
     (check-equal? (test-ref policy-row 'durable-valid?) #t)
     (check-equal? (test-ref embedded-durable-row 'schema)
-                  +poo-flow-durable-policy-receipt-schema+)))
+                  +agentic-ai-lab-durable-policy-receipt-schema+)))
 
 ;; : (-> Void)
 (def (check-invalid-session-durable-policy!)
   (let* ((invalid-policy
-          (.o durable-kind: +poo-flow-durable-policy-kind+
-              durable-schema: +poo-flow-durable-policy-schema+
+          (.o durable-kind: +agentic-ai-lab-durable-policy-kind+
+              durable-schema: +agentic-ai-lab-durable-policy-schema+
               durable-policy-name: 'durable/invalid
               durable-scope-ref: 'session/invalid
               repair-mode: 'teleport
               action-classes: '(replayable impossible)
               runtime-owner: 'not-a-runtime-owner))
          (receipt
-          (poo-flow-durable-policy->receipt invalid-policy))
+          (agentic-ai-lab-durable-policy->receipt invalid-policy))
          (receipt-row
-          (poo-flow-durable-policy-receipt->alist receipt))
+          (agentic-ai-lab-durable-policy-receipt->alist receipt))
          (diagnostics
           (test-ref receipt-row 'diagnostics)))
-    (check-equal? (poo-flow-durable-policy? invalid-policy) #t)
-    (check-equal? (poo-flow-durable-policy-receipt-valid? receipt) #f)
+    (check-equal? (agentic-ai-lab-durable-policy? invalid-policy) #t)
+    (check-equal? (agentic-ai-lab-durable-policy-receipt-valid? receipt) #f)
     (check-equal? (test-ref receipt-row 'valid?) #f)
     (check-equal? (> (test-ref receipt-row 'diagnostic-count) 0) #t)
     (check-equal? (list? diagnostics) #t)
@@ -431,21 +431,21 @@
 (def (check-session-durable-policy-batch!)
   (let* ((policies
           (list
-           (poo-flow-durable-policy
+           (agentic-ai-lab-durable-policy
             'durable/batch-root
             'session/root)
-           (poo-flow-durable-policy
+           (agentic-ai-lab-durable-policy
             'durable/batch-child
             'session/child
             '((repair-mode . retry)
               (action-classes . (replayable idempotent))))))
          (receipts
-          (poo-flow-durable-policies->receipts policies))
+          (agentic-ai-lab-durable-policies->receipts policies))
          (rows
-          (poo-flow-durable-policy-receipts->alists receipts)))
+          (agentic-ai-lab-durable-policy-receipts->alists receipts)))
     (check-equal? (length receipts) 2)
-    (check-equal? (poo-flow-durable-policy-receipt? (car receipts)) #t)
-    (check-equal? (poo-flow-durable-policy-receipt? (cadr receipts)) #t)
+    (check-equal? (agentic-ai-lab-durable-policy-receipt? (car receipts)) #t)
+    (check-equal? (agentic-ai-lab-durable-policy-receipt? (cadr receipts)) #t)
     (check-equal? (test-ref (car rows) 'policy-id)
                   'durable/batch-root)
     (check-equal? (test-ref (cadr rows) 'policy-id)
@@ -459,7 +459,7 @@
   (let* ((context (make-session-policy-contract-context))
          (presentation (test-ref context 'presentation))
          (execution-row
-          (poo-flow-session-policy->alist
+          (agentic-ai-lab-session-policy->alist
            (test-ref context 'execution-policy))))
     (check-equal? (length presentation) 7)
     (check-equal? (test-ref execution-row 'policy-kind)
@@ -475,20 +475,20 @@
 
 ;; : TestSuite
 (def session-policy-contract-test
-  (test-suite "poo-flow session policy contracts"
-    (poo-flow-test-case "declares POO-native tool permission policies"
+  (test-suite "agentic-ai-lab session policy contracts"
+    (yuanxu-test-case "declares POO-native tool permission policies"
       (check-session-tool-permission-policy!))
-    (poo-flow-test-case "keeps hook-triggered tools separate from agent tools"
+    (yuanxu-test-case "keeps hook-triggered tools separate from agent tools"
       (check-session-hook-tool-separation!))
-    (poo-flow-test-case "uses native POO inheritance for policy refinement"
+    (yuanxu-test-case "uses native POO inheritance for policy refinement"
       (check-session-policy-poo-inheritance!))
-    (poo-flow-test-case "projects generated foundational policy families"
+    (yuanxu-test-case "projects generated foundational policy families"
       (check-generated-session-policy-families!))
-    (poo-flow-test-case "projects durable policy receipts from session policy composition"
+    (yuanxu-test-case "projects durable policy receipts from session policy composition"
       (check-session-durable-policy-receipt!))
-    (poo-flow-test-case "reports invalid durable policies through receipt diagnostics"
+    (yuanxu-test-case "reports invalid durable policies through receipt diagnostics"
       (check-invalid-session-durable-policy!))
-    (poo-flow-test-case "batch projects durable policies as struct receipts before alists"
+    (yuanxu-test-case "batch projects durable policies as struct receipts before alists"
       (check-session-durable-policy-batch!))
-    (poo-flow-test-case "exposes custom-shaped policy presentation"
+    (yuanxu-test-case "exposes custom-shaped policy presentation"
       (check-session-policy-presentation!))))

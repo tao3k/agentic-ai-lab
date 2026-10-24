@@ -8,15 +8,15 @@ from pathlib import Path
 
 import pytest
 
-from poo_flow_runtime.benchmarks import scheme_load_aot as benchmark
-from poo_flow_runtime.benchmarks import _scheme_load_aot_cases as benchmark_cases
-from poo_flow_runtime.benchmarks import __main__ as benchmark_main
-from poo_flow_runtime import _scheme_load_artifact as scheme_artifact
-from poo_flow_runtime import _scheme_load_cache as scheme_cache
+from agentic_ai_lab_runtime.benchmarks import scheme_load_aot as benchmark
+from agentic_ai_lab_runtime.benchmarks import _scheme_load_aot_cases as benchmark_cases
+from agentic_ai_lab_runtime.benchmarks import __main__ as benchmark_main
+from agentic_ai_lab_runtime import _scheme_load_artifact as scheme_artifact
+from agentic_ai_lab_runtime import _scheme_load_cache as scheme_cache
 
 
 def _runtime_projection_fixture(root: Path) -> Path:
-    projection = root / "modules" / "funflow" / "runtime-load-projection.ss"
+    projection = root / "modules" / "workflow" / "scenario" / "runtime-funflow.ss"
     projection.parent.mkdir(parents=True)
     projection.write_text(";; projection fixture\n", encoding="utf-8")
     return projection
@@ -61,7 +61,7 @@ def test_scheme_load_aot_benchmark_reports_exact_samples(
         assert projection_artifact is False
         assert compile_aot is False
         calls.append((cache, aot))
-        return (("schema", "poo-flow.funflow-plan-projection.v1"),)
+        return (("schema", "yuanxu.funflow-plan-projection.v1"),)
 
     monkeypatch.setattr(
         benchmark_cases, "load_projection_rows", fake_load_projection_rows
@@ -103,7 +103,7 @@ def test_scheme_load_aot_benchmark_can_include_projection_artifact(
         ),
         module_path=source,
         projection_path=projection,
-        rows=(("schema", "poo-flow.funflow-plan-projection.v1"),),
+        rows=(("schema", "yuanxu.funflow-plan-projection.v1"),),
     )
 
     def fake_load_projection_rows(
@@ -119,8 +119,8 @@ def test_scheme_load_aot_benchmark_can_include_projection_artifact(
         assert Path(cwd).resolve() == tmp_path.resolve()
         assert compile_aot is False
         if projection_artifact and not aot:
-            return (("schema", "poo-flow.funflow-plan-projection.v1"),)
-        return (("schema", "poo-flow.funflow-plan-projection.v1"),)
+            return (("schema", "yuanxu.funflow-plan-projection.v1"),)
+        return (("schema", "yuanxu.funflow-plan-projection.v1"),)
 
     monkeypatch.setattr(
         benchmark_cases, "load_projection_rows", fake_load_projection_rows
@@ -150,7 +150,7 @@ def test_scheme_load_aot_benchmark_receipt_is_line_oriented() -> None:
 
     receipt = result.receipt()
 
-    assert 'schema: "poo-flow.scheme-load-aot-benchmark.v1"' in receipt
+    assert 'schema: "agentic-ai-lab.scheme-load-aot-benchmark.v1"' in receipt
     assert 'scenario: "scheme-load-in-process-aot-reuse"' in receipt
     assert "samples-us: (10 20 30)" in receipt
     assert "median-us: 20.000" in receipt
@@ -183,7 +183,7 @@ def test_scheme_load_aot_benchmark_cli_emits_receipts(
         _path: str | Path,
         **_kwargs: object,
     ) -> tuple[tuple[str, str]]:
-        return (("schema", "poo-flow.funflow-plan-projection.v1"),)
+        return (("schema", "yuanxu.funflow-plan-projection.v1"),)
 
     monkeypatch.setattr(
         benchmark_cases, "load_projection_rows", fake_load_projection_rows
@@ -205,7 +205,7 @@ def test_scheme_load_aot_benchmark_cli_emits_receipts(
     )
 
     output = capsys.readouterr().out
-    assert output.count("poo-flow.scheme-load-aot-benchmark.v1") == 2
+    assert output.count("agentic-ai-lab.scheme-load-aot-benchmark.v1") == 2
 
 
 def test_benchmark_dispatcher_runs_scheme_load_aot_suite(
@@ -219,7 +219,7 @@ def test_benchmark_dispatcher_runs_scheme_load_aot_suite(
         _path: str | Path,
         **_kwargs: object,
     ) -> tuple[tuple[str, str]]:
-        return (("schema", "poo-flow.funflow-plan-projection.v1"),)
+        return (("schema", "yuanxu.funflow-plan-projection.v1"),)
 
     monkeypatch.setattr(
         benchmark_cases, "load_projection_rows", fake_load_projection_rows
@@ -242,4 +242,4 @@ def test_benchmark_dispatcher_runs_scheme_load_aot_suite(
     )
 
     output = capsys.readouterr().out
-    assert output.count("poo-flow.scheme-load-aot-benchmark.v1") == 2
+    assert output.count("agentic-ai-lab.scheme-load-aot-benchmark.v1") == 2

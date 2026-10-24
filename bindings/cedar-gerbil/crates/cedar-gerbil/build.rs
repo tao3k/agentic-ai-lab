@@ -91,8 +91,8 @@ fn main() {
         gerbil_scheme_native_build::ProgramArchiveRequest {
             manifest: &output.join("program.json"),
             gsc: &PathBuf::from(gsc),
-            archive_name: "poo_flow_cedar_program",
-            linker_name: "poo_flow_cedar_linker",
+            archive_name: "agentic_ai_lab_cedar_program",
+            linker_name: "agentic_ai_lab_cedar_linker",
             out_dir: &output,
         },
     )

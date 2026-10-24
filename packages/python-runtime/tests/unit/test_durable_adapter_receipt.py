@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from poo_flow_runtime import RuntimeDurableAdapter
+from agentic_ai_lab_runtime import RuntimeDurableAdapter
 
 
 def _receipt_fields(payload: bytes) -> dict[str, str]:
@@ -28,7 +28,7 @@ def test_durable_adapter_receipt_carries_scheme_policy_manifest_fields() -> None
 
     fields = _receipt_fields(adapter.receipt())
 
-    assert fields["manifest-schema"] == "poo-flow.durable.runtime-policy-manifest.v1"
+    assert fields["manifest-schema"] == "agentic-ai-lab.durable.runtime-policy-manifest.v1"
     assert fields["policy-id"] == "durable/runtime"
     assert fields["owner"] == "scheme"
     assert fields["backend"] == "turso"
@@ -36,7 +36,7 @@ def test_durable_adapter_receipt_carries_scheme_policy_manifest_fields() -> None
     assert fields["repair-mode"] == "fail-closed"
     assert fields["action-classes"] == "replayable,idempotent,compensatable"
     assert fields["runtime-owner"] == "marlin-agent-core"
-    assert fields["receipt-schema"] == "poo-flow.module-system.durable-policy.receipt.v1"
-    assert fields["receipt-kind"] == "poo-flow.durable.policy"
+    assert fields["receipt-schema"] == "agentic-ai-lab.module-system.durable-policy.receipt.v1"
+    assert fields["receipt-kind"] == "agentic-ai-lab.durable.policy"
     assert fields["receipt-valid"] == "true"
     assert fields["receipt-diagnostic-count"] == "0"

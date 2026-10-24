@@ -7,30 +7,30 @@
 ;;; Invariant: graph construction is declarative; Scheme does not run agents or
 ;;; deliver messages.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-multi-agent-graph-test)
 
 ;; : (-> Symbol Symbol PooSession)
 (def (make-agent-graph-session session-id parent-id)
-  (poo-flow-session-value
+  (agentic-ai-lab-session-value
    session-id
-   (list (poo-flow-session-chunk session-id 'assistant "agent graph node"))
-   (poo-flow-session-lineage
+   (list (agentic-ai-lab-session-chunk session-id 'assistant "agent graph node"))
+   (agentic-ai-lab-session-lineage
     session-id
     (if parent-id (list parent-id) '())
     (if parent-id 'child-agent 'root))
-   (poo-flow-session-placement 'agent/nono)))
+   (agentic-ai-lab-session-placement 'agent/nono)))
 
 ;; : TestSuite
 (def session-multi-agent-graph-test
-  (test-suite "poo-flow multi-agent session graph"
-    (poo-flow-test-case "unifies child agent sessions through shared topology"
+  (test-suite "agentic-ai-lab multi-agent session graph"
+    (yuanxu-test-case "unifies child agent sessions through shared topology"
       (let* ((root-session
               (make-agent-graph-session 'graph/root #f))
              (build-session
@@ -38,7 +38,7 @@
              (audit-session
               (make-agent-graph-session 'graph/audit 'graph/root))
              (build-node
-              (poo-flow-session-agent-node
+              (agentic-ai-lab-session-agent-node
                'agent/build
                'project/graph
                'graph/root
@@ -58,9 +58,9 @@
                '(session/memory)
                'agent/nono
                'builder
-               'poo-flow.session.agent.build-result.v1))
+               'agentic-ai-lab.session.agent.build-result.v1))
              (audit-node
-              (poo-flow-session-agent-node
+              (agentic-ai-lab-session-agent-node
                'agent/audit
                'project/graph
                'graph/root
@@ -80,30 +80,30 @@
                '(session/memory)
                'agent/nono
                'auditor
-               'poo-flow.session.agent.audit-result.v1))
+               'agentic-ai-lab.session.agent.audit-result.v1))
              (root-entry
-              (poo-flow-session-registry-entry
+              (agentic-ai-lab-session-registry-entry
                root-session
                'agent/root
                '()
                '((isolation . root))))
              (build-entry
-              (poo-flow-session-agent-node->registry-entry
+              (agentic-ai-lab-session-agent-node->registry-entry
                build-node
                build-session))
              (audit-entry
-              (poo-flow-session-agent-node->registry-entry
+              (agentic-ai-lab-session-agent-node->registry-entry
                audit-node
                audit-session))
              (registry
-              (poo-flow-session-registry-receipt
+              (agentic-ai-lab-session-registry-receipt
                'project/graph
                '(graph/root)
                '(graph/build graph/audit)
                'graph/root
                (list root-entry build-entry audit-entry)))
              (build-audit-channel
-              (poo-flow-session-communication-channel-receipt
+              (agentic-ai-lab-session-communication-channel-receipt
                'project/graph
                'channel/build-audit
                'sibling
@@ -114,7 +114,7 @@
                '(artifact)
                '(declared-channel-only)))
              (audit-root-channel
-              (poo-flow-session-communication-channel-receipt
+              (agentic-ai-lab-session-communication-channel-receipt
                'project/graph
                'channel/audit-root
                'child-parent
@@ -125,7 +125,7 @@
                '(receipt)
                '(receipt-only)))
              (build-audit-message
-              (poo-flow-session-communication-receipt
+              (agentic-ai-lab-session-communication-receipt
                'project/graph
                'sibling
                'graph/root
@@ -139,7 +139,7 @@
                '((artifact . build-report))
                'declared-channel-only))
              (audit-root-message
-              (poo-flow-session-communication-receipt
+              (agentic-ai-lab-session-communication-receipt
                'project/graph
                'child-parent
                'graph/root
@@ -153,7 +153,7 @@
                '((receipt . audit-result))
                'receipt-only))
              (graph
-              (poo-flow-session-agent-graph
+              (agentic-ai-lab-session-agent-graph
                'project/graph
                'graph/root
                (list build-node audit-node)
@@ -164,25 +164,25 @@
                            (list build-audit-channel
                                  audit-root-channel)))))
              (registry-row
-              (poo-flow-session-registry-receipt->alist
-               (poo-flow-session-agent-graph-registry-receipt graph))))
-        (check-equal? (poo-flow-session-agent-node? build-node) #t)
-        (check-equal? (poo-flow-session-agent-node-agent-id build-node)
+              (agentic-ai-lab-session-registry-receipt->alist
+               (agentic-ai-lab-session-agent-graph-registry-receipt graph))))
+        (check-equal? (agentic-ai-lab-session-agent-node? build-node) #t)
+        (check-equal? (agentic-ai-lab-session-agent-node-agent-id build-node)
                       'agent/build)
-        (check-equal? (poo-flow-session-agent-node-output-session-ref
+        (check-equal? (agentic-ai-lab-session-agent-node-output-session-ref
                        build-node)
                       'graph/build)
         (check-equal? (.ref build-node 'tool-permission-policy-ref)
                       'policy/build-tools)
-        (check-equal? (poo-flow-session-agent-node-durable-policy-ref
+        (check-equal? (agentic-ai-lab-session-agent-node-durable-policy-ref
                        build-node)
                       'durable/graph)
         (check-equal? (.ref audit-node 'peer-session-refs)
                       '(graph/build))
-        (check-equal? (poo-flow-session-agent-graph? graph) #t)
-        (check-equal? (poo-flow-session-agent-graph-agent-ids graph)
+        (check-equal? (agentic-ai-lab-session-agent-graph? graph) #t)
+        (check-equal? (agentic-ai-lab-session-agent-graph-agent-ids graph)
                       '(agent/build agent/audit))
-        (check-equal? (poo-flow-session-agent-graph-session-ids graph)
+        (check-equal? (agentic-ai-lab-session-agent-graph-session-ids graph)
                       '(graph/root graph/build graph/audit))
         (check-equal? (.ref graph 'lineage-edge-pairs)
                       '((graph/root . graph/build)
@@ -191,12 +191,12 @@
                       '(durable/graph durable/graph))
         (check-equal? (.ref graph 'communication-receipt-count) 2)
         (check-equal? (.ref graph 'communication-channel-receipt-count) 2)
-        (check-equal? (map poo-flow-session-communication-channel-receipt-channel-id
-                           (poo-flow-session-agent-graph-communication-channel-receipts
+        (check-equal? (map agentic-ai-lab-session-communication-channel-receipt-channel-id
+                           (agentic-ai-lab-session-agent-graph-communication-channel-receipts
                             graph))
                       '(channel/build-audit channel/audit-root))
-        (check-equal? (map poo-flow-session-communication-receipt-relation-kind
-                           (poo-flow-session-agent-graph-communication-receipts
+        (check-equal? (map agentic-ai-lab-session-communication-receipt-relation-kind
+                           (agentic-ai-lab-session-agent-graph-communication-receipts
                             graph))
                       '(sibling child-parent))
         (check-equal? (cdr (assoc 'entry-count registry-row))

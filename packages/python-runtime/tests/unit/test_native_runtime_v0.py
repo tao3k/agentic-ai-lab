@@ -10,16 +10,17 @@ from typing import NoReturn
 
 import pytest
 
-from poo_flow_runtime._native.errors import NativeRuntimeError, NativeRuntimeLoadError
-from poo_flow_runtime._native.evidence import NativeEvidenceSink
-from poo_flow_runtime._native.loader import RUNTIME_LIBRARY_ENV, probe_native_runtime
-from poo_flow_runtime._native.session import (
+from agentic_ai_lab_runtime._native.errors import NativeRuntimeError, NativeRuntimeLoadError
+from agentic_ai_lab_runtime._native.evidence import NativeEvidenceSink
+from agentic_ai_lab_runtime._native.loader import RUNTIME_LIBRARY_ENV, probe_native_runtime
+from agentic_ai_lab_runtime._native.session import (
     NativeBundleDescriptor,
     NativeRuntimeSession,
 )
-from poo_flow_runtime._native.arena import NativeEvent, NativeMediation
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime._native.arena import NativeEvent, NativeMediation
+from agentic_ai_lab_runtime import (
     RuntimeGraphProgram,
+    RuntimeGraphError,
     RuntimeGraphRegistries,
     RuntimeGraphRuntime,
     TursoAuthorizedEffectEvidenceStore,
@@ -39,7 +40,7 @@ def _failing_evidence_sink(_invocation: object) -> NoReturn:
 
 
 def test_native_runtime_override_negotiates_runtime_v0() -> None:
-    pytest.importorskip("poo_flow_runtime._native._runtime_v0_cffi")
+    pytest.importorskip("agentic_ai_lab_runtime._native._runtime_v0_cffi")
     library = _repo_library()
     if not library.is_file():
         pytest.skip("focused runtime-C build has not run")
@@ -49,13 +50,13 @@ def test_native_runtime_override_negotiates_runtime_v0() -> None:
 
 
 def test_native_runtime_missing_library_fails_closed(tmp_path: Path) -> None:
-    pytest.importorskip("poo_flow_runtime._native._runtime_v0_cffi")
+    pytest.importorskip("agentic_ai_lab_runtime._native._runtime_v0_cffi")
     with pytest.raises(NativeRuntimeLoadError, match="absent"):
         probe_native_runtime(library_path=tmp_path / "missing-runtime")
 
 
 def test_native_runtime_session_owns_and_closes_full_control_chain() -> None:
-    pytest.importorskip("poo_flow_runtime._native._runtime_v0_cffi")
+    pytest.importorskip("agentic_ai_lab_runtime._native._runtime_v0_cffi")
     library = _repo_library()
     if not library.is_file():
         pytest.skip("focused runtime-C build has not run")
@@ -77,7 +78,7 @@ def test_native_bundle_descriptor_rejects_noncanonical_shape() -> None:
 
 
 def test_native_arena_roundtrip_is_batched_zero_copy_and_recyclable() -> None:
-    pytest.importorskip("poo_flow_runtime._native._runtime_v0_cffi")
+    pytest.importorskip("agentic_ai_lab_runtime._native._runtime_v0_cffi")
     library = _repo_library()
     if not library.is_file():
         pytest.skip("focused runtime-C build has not run")
@@ -127,8 +128,8 @@ def test_native_arena_roundtrip_is_batched_zero_copy_and_recyclable() -> None:
         evidence.close()
 
 
-def test_runtime_graph_program_binds_execution_to_negotiated_native_context() -> None:
-    pytest.importorskip("poo_flow_runtime._native._runtime_v0_cffi")
+def test_native_control_session_does_not_claim_scheme_graph_execution() -> None:
+    pytest.importorskip("agentic_ai_lab_runtime._native._runtime_v0_cffi")
     library = _repo_library()
     if not library.is_file():
         pytest.skip("focused runtime-C build has not run")
@@ -143,14 +144,12 @@ def test_runtime_graph_program_binds_execution_to_negotiated_native_context() ->
             runtime=runtime,
         )
 
-        execution = program.invoke_with_trace({"value": 1})
-
-        assert execution.state == {"value": 2}
-        assert execution.plan_digest is not None
+        with pytest.raises(RuntimeGraphError, match="native graph execution is unavailable"):
+            program.invoke_with_trace({"value": 1})
 
 
 def test_native_mediation_replay_and_root_fork_fail_closed() -> None:
-    pytest.importorskip("poo_flow_runtime._native._runtime_v0_cffi")
+    pytest.importorskip("agentic_ai_lab_runtime._native._runtime_v0_cffi")
     library = _repo_library()
     if not library.is_file():
         pytest.skip("focused runtime-C build has not run")

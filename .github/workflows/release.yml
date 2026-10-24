@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-name: Release poo-flow binary
+name: Release agentic-ai-lab binary
 
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
             gerbil-install: homebrew
             gerbil-formula: tao3k/gerbil/gerbil-scheme
     env:
-      BINARY: poo-flow
+      BINARY: agentic-ai-lab
       CCACHE_DIR: ${{ github.workspace }}/.ci/ccache
       CCACHE_MAXSIZE: 2G
       GERBIL_ARCH_PROFILE: portable
@@ -52,7 +52,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag || github.ref_name }}
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@v7.0.0
 
       - name: Ensure release tag
@@ -281,9 +281,9 @@ jobs:
         run: |
           set -euo pipefail
           gxpkg env ./build.ss compile --release --optimized
-          test -x .gerbil/bin/poo-flow
-          .gerbil/bin/poo-flow --help >/tmp/poo-flow-help.txt
-          test -s /tmp/poo-flow-help.txt
+          test -x .gerbil/bin/agentic-ai-lab
+          .gerbil/bin/agentic-ai-lab --help >/tmp/agentic-ai-lab-help.txt
+          test -s /tmp/agentic-ai-lab-help.txt
 
       - name: Package provider binary
         shell: bash
@@ -292,7 +292,7 @@ jobs:
           target="$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)"
           rm -rf package
           mkdir -p package/bin package/src
-          cp .gerbil/bin/poo-flow package/bin/poo-flow
+          cp .gerbil/bin/agentic-ai-lab package/bin/agentic-ai-lab
           cp -R src/. package/src/
           cp build.ss gerbil.pkg package/
           chmod +x "package/bin/${BINARY}"
@@ -314,6 +314,6 @@ jobs:
         run: |
           set -euo pipefail
           gh release view "$RELEASE_TAG" >/dev/null 2>&1 \
-            || gh release create "$RELEASE_TAG" --verify-tag --title "$RELEASE_TAG" --notes "POO Flow binary release $RELEASE_TAG" \
+            || gh release create "$RELEASE_TAG" --verify-tag --title "$RELEASE_TAG" --notes "Agentic AI Lab binary release $RELEASE_TAG" \
             || gh release view "$RELEASE_TAG" >/dev/null
           gh release upload "$RELEASE_TAG" "$ASSET" "${ASSET}.sha256" --clobber

@@ -6,13 +6,13 @@
 ;;; Boundary: durable runtime store contract receipts for Rust/Marlin handoff.
 ;;; Invariant: tests validate receipt projection only; no runtime store runs.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o object?)
-        :poo-flow/modules/memory-core/durable/policy
-        :poo-flow/modules/memory-core/durable/store)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store)
 
 (export durable-runtime-store-contract-test)
 
@@ -31,10 +31,10 @@
 
 ;; : TestSuite
 (def durable-runtime-store-contract-test
-  (test-suite "poo-flow durable runtime store contract"
-    (poo-flow-test-case "projects runtime store contract as struct receipt then alist"
+  (test-suite "agentic-ai-lab durable runtime store contract"
+    (yuanxu-test-case "projects runtime store contract as struct receipt then alist"
       (let* ((durable-policy
-              (poo-flow-durable-policy
+              (agentic-ai-lab-durable-policy
                'durable/runtime-store
                'objects.shared.durable
                '((journal-owner . runtime/fact-log)
@@ -43,32 +43,32 @@
                  (repair-mode . rebuild)
                  (action-classes . (replayable idempotent compensatable)))))
              (contract
-              (poo-flow-durable-runtime-store-contract
+              (agentic-ai-lab-durable-runtime-store-contract
                'runtime-store/project
                'marlin-runtime-store
                durable-policy
                '((metadata . ((case . durable-runtime-store-contract))))))
              (receipt
-              (poo-flow-durable-runtime-store-contract->receipt
+              (agentic-ai-lab-durable-runtime-store-contract->receipt
                contract
-               '((project-id . project/poo-flow)
+               '((project-id . project/agentic-ai-lab)
                  (root-session-id . session/root)
                  (session-id . session/root))))
              (row
-              (poo-flow-durable-runtime-store-contract-receipt->alist
+              (agentic-ai-lab-durable-runtime-store-contract-receipt->alist
                receipt)))
-        (check-equal? (poo-flow-durable-runtime-store-contract? contract) #t)
+        (check-equal? (agentic-ai-lab-durable-runtime-store-contract? contract) #t)
         (check-equal?
-         (poo-flow-durable-runtime-store-contract-receipt? receipt)
+         (agentic-ai-lab-durable-runtime-store-contract-receipt? receipt)
          #t)
         (check-equal?
-         (poo-flow-durable-runtime-store-contract-receipt-valid? receipt)
+         (agentic-ai-lab-durable-runtime-store-contract-receipt-valid? receipt)
          #t)
         (check-equal? (test-ref row 'store-id) 'runtime-store/project)
         (check-equal? (test-ref row 'store-owner) 'marlin-runtime-store)
         (check-equal? (test-ref row 'durable-policy-ref)
                       'durable/runtime-store)
-        (check-equal? (test-ref row 'project-id) 'project/poo-flow)
+        (check-equal? (test-ref row 'project-id) 'project/agentic-ai-lab)
         (check-equal? (test-ref row 'runtime-owner) "marlin-agent-core")
         (check-equal? (test-ref row 'schema-version) 1)
         (check-equal? (test-ref row 'fact-log-ref) 'runtime/fact-log)
@@ -77,16 +77,16 @@
         (check-equal? (test-ref row 'derived-index-ref)
                       'runtime/derived-index)
         (check-equal? (test-ref row 'ledger-kinds)
-                      +poo-flow-durable-runtime-store-ledger-kinds+)
+                      +agentic-ai-lab-durable-runtime-store-ledger-kinds+)
         (check-equal? (test-ref row 'capability-flags)
-                      +poo-flow-durable-runtime-store-capability-flags+)
+                      +agentic-ai-lab-durable-runtime-store-capability-flags+)
         (check-equal? (test-ref row 'diagnostic-count) 0)
         (check-equal? (test-ref row 'runtime-executed) #f)))
 
-    (poo-flow-test-case "reports missing store owner and unsupported store vocabulary"
+    (yuanxu-test-case "reports missing store owner and unsupported store vocabulary"
       (let* ((invalid-policy
-              (.o durable-kind: +poo-flow-durable-policy-kind+
-                  durable-schema: +poo-flow-durable-policy-schema+
+              (.o durable-kind: +agentic-ai-lab-durable-policy-kind+
+                  durable-schema: +agentic-ai-lab-durable-policy-schema+
                   durable-policy-name: 'durable/invalid-runtime-store
                   durable-scope-ref: 'objects.shared.durable
                   repair-mode: 'teleport
@@ -94,9 +94,9 @@
                   runtime-owner: 'not-runtime-owner))
              (contract
               (.o durable-runtime-store-kind:
-                  +poo-flow-durable-runtime-store-contract-kind+
+                  +agentic-ai-lab-durable-runtime-store-contract-kind+
                   durable-runtime-store-schema:
-                  +poo-flow-durable-runtime-store-contract-schema+
+                  +agentic-ai-lab-durable-runtime-store-contract-schema+
                   runtime-store-id: 'runtime-store/invalid
                   runtime-store-durable-policy: invalid-policy
                   runtime-store-schema-version: 'v1
@@ -112,13 +112,13 @@
                   runtime-store-capability-flags: '(append-fact impossible-capability)
                   runtime-store-metadata: '((case . invalid-runtime-store))))
              (receipt
-              (poo-flow-durable-runtime-store-contract->receipt contract))
+              (agentic-ai-lab-durable-runtime-store-contract->receipt contract))
              (row
-              (poo-flow-durable-runtime-store-contract-receipt->alist
+              (agentic-ai-lab-durable-runtime-store-contract-receipt->alist
                receipt))
              (diagnostics (test-ref row 'diagnostics)))
         (check-equal?
-         (poo-flow-durable-runtime-store-contract-receipt-valid? receipt)
+         (agentic-ai-lab-durable-runtime-store-contract-receipt-valid? receipt)
          #f)
         (check-equal? (test-ref row 'valid?) #f)
         (check-equal? (> (test-ref row 'diagnostic-count) 0) #t)
@@ -138,31 +138,31 @@
          (diagnostic-code-present? diagnostics 'unsupported-capability-flag)
          #t)))
 
-    (poo-flow-test-case "batch projection keeps runtime boundary bounded"
+    (yuanxu-test-case "batch projection keeps runtime boundary bounded"
       (let* ((contracts
               (list
-               poo-flow-durable-runtime-store-contract/default
-               (poo-flow-durable-runtime-store-contract
+               agentic-ai-lab-durable-runtime-store-contract/default
+               (agentic-ai-lab-durable-runtime-store-contract
                 'runtime-store/ci
                 'marlin-runtime-store
-                (poo-flow-durable-policy
+                (agentic-ai-lab-durable-policy
                  'durable/ci
                  'objects.workflow.cicd
                  '((repair-mode . compensate)
                    (action-classes . (idempotent compensatable)))))))
              (receipts
-              (poo-flow-durable-runtime-store-contracts->receipts
+              (agentic-ai-lab-durable-runtime-store-contracts->receipts
                contracts))
              (rows
-              (poo-flow-durable-runtime-store-contract-receipts->alists
+              (agentic-ai-lab-durable-runtime-store-contract-receipts->alists
                receipts)))
         (check-equal? (length receipts) 2)
         (check-equal? (length rows) 2)
         (check-equal?
-         (poo-flow-durable-runtime-store-contract-receipt? (car receipts))
+         (agentic-ai-lab-durable-runtime-store-contract-receipt? (car receipts))
          #t)
         (check-equal? (object? (car rows)) #f)
         (check-equal? (test-ref (car rows) 'schema)
-                      +poo-flow-durable-runtime-store-contract-receipt-schema+)
+                      +agentic-ai-lab-durable-runtime-store-contract-receipt-schema+)
         (check-equal? (test-ref (cadr rows) 'store-id) 'runtime-store/ci)
         (check-equal? (test-ref (cadr rows) 'runtime-executed) #f)))))

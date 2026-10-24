@@ -1,0 +1,69 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Finite reasoning baseline pilot results
+#+STATUS: completed bounded pilot; no general benefit claim
+#+DATE: 2026-10-01
+#+FILETAGS: :testing:ascent:temporal:llm:results:
+
+* Identity and execution
+
+The protocol and answer key were fixed in [[file:model-study-baseline.org][the pre-registration]]
+before the first API request. Corpus SHA256:
+=7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
+ASCENT head =00930e20f382516d78d2d2f2df084b89322162ae=, Agentic AI Lab
+checkout head =a3ed9f9c3ebcacdd8d4edea3191cc422b85b2427=. The
+runner and native fixture files were uncommitted during execution, so
+the Agentic AI Lab head alone is not a complete source receipt. Their SHA256s
+were recorded immediately after the run: runner
+=cd57a4381595b8801efd328ae93b91f1398ec5fe1c0f065ab16864233dbf416c=,
+ASCENT fixture
+=5a80a53c4f5e4cfdf70cbfa39fe175f19fed6919aa5705ba44deaa0937faa42e=,
+temporal fixture
+=a0f3514ab1db6f7c7a2484549c271a3c183a80d9b59551cbae126d65559a26f4=.
+The raw JSONL remains outside the repository at
+=/private/tmp/poo-model-study-baseline-2026-10-01.jsonl=, SHA256
+=2ed9f122b7aaed5a87c71cf3fe59af4171616b1dc5c6ae608a4ffadb2d6ff6c1=.
+It contains no API key. All 30 requests completed; no API failure or
+incomplete response occurred.
+
+* Predeclared scores
+
+#+NAME: model-study-baseline-scores
+| Task | Baseline choice / 3 | Tool choice / 3 | Baseline claim / 3 | Tool claim / 3 |
+|------+---------------------+-----------------+--------------------+----------------|
+| ASCENT withdrawal | 3 | 3 | 3 | 3 |
+| ASCENT wrong join | 3 | 3 | 0 | 0 |
+| ASCENT negation and count | 0 | 3 | 2 | 3 |
+| Temporal closed cut | 3 | 3 | 3 | 0 |
+| Temporal open parent | 3 | 3 | 3 | 3 |
+| Total | 12 / 15 | 15 / 15 | 11 / 15 | 9 / 15 |
+
+The tool arm corrected the three negation/count choices in this tiny
+corpus, but the boundary score fell. All six wrong-join responses
+selected =verified_intent= even though the tool only checked candidate
+rows. All three tool-arm closed-cut responses selected
+=release_authorized= while the module receipt had
+=release-authorized? #f=; all three baseline responses selected the
+no-authority label. This is a concrete interface and comprehension gap,
+not evidence that the temporal module itself authorized release.
+
+Median model call time was 0.672 s baseline and 0.605 s tool; this
+excludes tool setup. The dry-run tool observations took 34.809 s for
+the shared path worker, 33.099 s for finite evidence and 13.546 s for
+the temporal fixture on this macOS checkout. These cold costs were
+amortized across tasks; no end-to-end latency improvement is claimed.
+Reported input tokens totalled 1,845 baseline and 2,862 tool; output
+tokens totalled 193 and 189 respectively.
+
+* Repair hypothesis and next test
+
+The Python Testing adapter transported Scheme =#f= as a JSON string
+and sent complete candidate rows without an explicit intent boundary.
+The next adapter should preserve boolean =false= as a JSON boolean and
+carry typed =intent_verified=false= and =release_authorized=false=
+fields. Keep the native module semantics unchanged. Freeze that new
+observation shape as the typed protocol before another model request, and compare the
+old and new tool observations on the same five tasks with the same
+model and request budget. This is an interface hypothesis; the baseline
+scores do not establish that the repair will help.

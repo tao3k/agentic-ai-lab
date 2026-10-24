@@ -1,0 +1,252 @@
+{
+  "case": "unknown-time",
+  "api": "sync",
+  "index": 22,
+  "planSha256": "77419c82cce1e2bcb07a92d0abe174bab31983131d1f9c54641fc7ec688919e7",
+  "artifactSha256": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",
+  "passed": false,
+  "raw": "{\"status\":\"complete\",\"rows\":[[\"r7\",\"s4\"],[\"r7\",\"t9\"]]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.23391795799989268
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.23398725000015475
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.8488554159998785
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.8488663749999432
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8488748330000817
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.882465707999927
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8939687910001339
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8939847080000618
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9072950409999976
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9073107499998514
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9073210410001593
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9243811249998544
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9243997079997825
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9244092909998471
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9244188329998906
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9244422910001049
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9244678330001079
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9350088749997667
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9350287910001498
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9350382080001509
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9350455829999191
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9350538329999836
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9350630829999318
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9520935000000463
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9521059160001641
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9521139580001545
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9521214579999651
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.952130582999871
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.9521392500000729
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.9521944160001112
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.9522173330001351
+    }
+  ],
+  "contentGapsSeconds": [
+    0.8488748330000817,
+    0.033590874999845255,
+    0.01150308300020697,
+    1.5916999927867437e-05,
+    0.013310332999935781,
+    1.570899985381402e-05,
+    1.0291000307915965e-05,
+    0.017060083999695053,
+    1.8582999928185018e-05,
+    9.583000064594671e-06,
+    9.542000043438748e-06,
+    2.3458000214304775e-05,
+    2.554200000304263e-05,
+    0.010541041999658773,
+    1.991600038309116e-05,
+    9.417000001121778e-06,
+    7.374999768217094e-06,
+    8.25000006443588e-06,
+    9.249999948224286e-06,
+    0.01703041700011454,
+    1.2416000117809745e-05,
+    8.041999990382465e-06,
+    7.499999810534064e-06
+  ],
+  "responseId": "8ce74aa9-72b8-4d67-8d8e-954ed386eed4",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9688,
+    "input_tokens_details": {
+      "cached_tokens": 9344
+    },
+    "output_tokens": 23,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9711
+  },
+  "seconds": 0.9522190409998075,
+  "deliveredObservation": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "r7",
+          "s4"
+        ],
+        [
+          "r7",
+          "t9"
+        ]
+      ]
+    },
+    "receipt": {
+      "operation": "temporal.observe",
+      "requestDigest": "a4a9751664fbaa73f25dc04cc3818691b36b594f3c62b22cbbcab212feeb1c92",
+      "difference": {
+        "observed": "complete",
+        "expected": "partial",
+        "kind": "status-mismatch"
+      },
+      "candidateValid": true,
+      "verdict": "contradicted",
+      "schema": "poo-flow.semantic-observation",
+      "bindingDigest": "04e0892a10f23deecbb55adf72560e7eca015c7d6c00466859f7901a1276fad1",
+      "verification": "invalid"
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "nativeObservationSeconds": 0.001081583000086539,
+  "result": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "r7",
+          "s4"
+        ],
+        [
+          "r7",
+          "t9"
+        ]
+      ]
+    },
+    "receipt": {
+      "operation": "temporal.observe",
+      "requestDigest": "a4a9751664fbaa73f25dc04cc3818691b36b594f3c62b22cbbcab212feeb1c92",
+      "difference": {
+        "observed": "complete",
+        "expected": "partial",
+        "kind": "status-mismatch"
+      },
+      "candidateValid": true,
+      "verdict": "contradicted",
+      "schema": "poo-flow.semantic-observation",
+      "bindingDigest": "04e0892a10f23deecbb55adf72560e7eca015c7d6c00466859f7901a1276fad1",
+      "verification": "invalid"
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "sourceRebinding": {
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "partial"
+    },
+    "operation": "temporal.observe",
+    "candidateValid": true,
+    "bindingDigest": "5b08b1248aed7124cd0e9ca03492d5f5adebd6c812099589db0b41ec9a2ad864",
+    "verdict": "contradicted",
+    "schema": "poo-flow.semantic-observation",
+    "verification": "invalid",
+    "requestDigest": "e2c133e66fbc25baf72e4c1bc95f0972c01f66f15f66afdb9123e0e814171e39"
+  },
+  "failure": "native semantic contradiction",
+  "callSeconds": 0.954121166999812
+}

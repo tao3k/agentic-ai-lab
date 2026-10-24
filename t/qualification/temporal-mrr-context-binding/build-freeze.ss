@@ -1,0 +1,33 @@
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+(mrr-context-temporal-binding-qualification
+  (source-base "0e17fca5033e382d438e9bb3252c1b15e0b52976")
+  (mrr-pin "d5beb4030bf875fa851cddc27789030c551154c3")
+  (feature mrr-context) (recipe test-temporal-mrr-context)
+  (idle-seconds 5) (wall-seconds 45) (runtime-wall-seconds 6.81)
+  (parent-tests 1) (fresh-child-tests 1) (exit-status 0)
+  (checks original-receipt current-context-source query-binding exact-receipt-fact policy-map native-current-source)
+  (rejects changed-payload missing-reference wrong-policy foreign-generation foreign-bundle stale-source-after-correction)
+  (native-library reused-immutable-archive-qualified-artifact)
+  (source-authenticated? #f) (action-authorized? #f) (runtime-executed? #f) (durable? #f)
+  (atomic-disclosure? #f) (data-current-cas? #f) (benchmark-claim? #f)
+  (inputs
+    ("bindings/rust-runtime/Cargo.toml" "b15d85ef2cfdfc0edfc09bb8ab124195985b916f13922e5f2ba81ff0e54ae845")
+    ("bindings/rust-runtime/Cargo.lock" "f287a6305dfacc1fda2c294b47152199a30bd56cdc9d362eaa417cb868e82dc3")
+    ("bindings/rust-runtime/src/mrr.rs" "3065b5839bb746cabc17619cd5ab7b1903d6292ce5517c00764595b28e05ab40")
+    ("bindings/rust-runtime/tests/mrr.rs" "ce43e781be995d798e100afa96d327b8309602864ca9baf5d43903e4fbb7b154")
+    ("bindings/rust-runtime/README.org" "78c51ec10200e12657862dec4f3aa18eb575cf71ceeddf0a25add9475249662b")
+    ("bindings/rust-runtime/tools/watch.py" "bef8e506ed4834d48420e3e908da5f389d3462a50f7f8a4f20aa13360e2e4098")
+    ("justfile" "88383ed7bf68258b7181393fd276ceafa2a24b11cb0fb7a435cb0d9fc8c92647")
+    (".github/workflows/python-runtime-wheel.yml" "ce279502c13ef8f09713bbc0918de6b177f6ebe074985ebca680f5d28ce357a3")
+  )
+  (local-artifacts-and-logs
+    ("/private/tmp/mrr-data-temporal-target/release/deps/mrr-34a0ac54bf61199f" "3f5ec7d2c3a6e369a311719288d6f35ba3f451c6be38d6eb6e71515c6aafdb65")
+    ("/private/tmp/poo-archive-abi/libsemantic.dylib" "26f6d64aac221968899ae57194498e5483f84c8b37862682674ad704fa5f70b8")
+    ("/private/tmp/poo-context-runtime.log" "a1bd80053409e6400f3d0552501240746feb382395f52ea2411bfdbedb1ddec7")
+    ("/private/tmp/poo-context-clippy.log" "df2ef4704c83a7c09b18729e5756becfc23749e11ee9f26891093de13f2d706d")
+    ("/private/tmp/poo-context-transport-clippy.log" "0610d5a5409eb03d1f2f4880eacb7041ec288b81baec386dcfd7c99304a2bab0")
+    ("/private/tmp/poo-context-release-build.log" "285afdbefe134156f78fae56f5ee7a6b787c7d9e13f4eab1837d19a63dc0c9e6")
+    ("/private/tmp/poo-context-qualified-run/archive.ss" "e04d394436a9d518bb87e6f2f62c092d36dab1c3c7adb2d76c2a7771de910efa")
+    ("/private/tmp/poo-context-qualified-run/replayed.ss" "b8f76ff490472acadaa58f18aa163af65cb0bdfd61005e7144b9c4e1306881b2")
+  ))

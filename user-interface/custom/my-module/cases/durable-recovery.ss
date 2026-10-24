@@ -7,17 +7,17 @@
 ;;; Invariant: this is crash/replay/repair handoff data only; Scheme does not
 ;;; replay event logs, claim leases, repair state, or run workflow commands.
 
-(import :poo-flow/modules/memory-core/config
-        :poo-flow/modules/memory-core/durable/policy
-        :poo-flow/modules/memory-core/durable/store
-        :poo-flow/modules/memory-core/durable/recovery-scenario
-        :poo-flow/modules/session/config)
+(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-scenario
+        :agentic-ai-lab/modules/session/config)
 
-(export poo-flow-custom-my-module-durable-recovery-case)
+(export agentic-ai-lab-custom-my-module-durable-recovery-case)
 
-(def poo-flow-custom-my-module-durable-recovery-case
+(def agentic-ai-lab-custom-my-module-durable-recovery-case
   (let* ((durable-policy
-        (poo-flow-durable-policy
+        (agentic-ai-lab-durable-policy
          'durable/custom-recovery
          'objects.shared.durable
          '((journal-owner . runtime/fact-log)
@@ -26,33 +26,33 @@
            (repair-mode . rebuild)
            (action-classes . (replayable idempotent compensatable)))))
        (runtime-store
-        (poo-flow-durable-runtime-store-contract
+        (agentic-ai-lab-durable-runtime-store-contract
          'runtime-store/custom-project
          'marlin-runtime-store
          durable-policy
          '((metadata . ((source . user-interface)
                         (case . durable-recovery))))))
        (runtime-store-receipt
-        (poo-flow-durable-runtime-store-contract->receipt
+        (agentic-ai-lab-durable-runtime-store-contract->receipt
          runtime-store
          '((project-id . custom/project)
            (root-session-id . custom/root-session)
            (session-id . custom/audit-session))))
        (memory-intent
-        (poo-flow-session-memory-intent
+        (agentic-ai-lab-session-memory-intent
          'memory/recovery-context
          'memory/durable-project
          'project
          '("last-40-turns")
          'review-only))
        (memory-job
-        (poo-flow-memory-recall-job-receipt
+        (agentic-ai-lab-memory-recall-job-receipt
          'memory-job/custom-recovery-context
          'custom/project
          'custom/root-session
          'custom/audit-session
          'agent/audit
-         poo-flow-memory-core-default-catalog
+         agentic-ai-lab-ai-agentic-context-memory-default-catalog
          memory-intent
          (list (cons 'durable-policy durable-policy)
                (cons 'source-watermark 'turn/40)
@@ -60,7 +60,7 @@
                (cons 'metadata '((source . user-interface)
                                  (case . durable-recovery))))))
        (session-graph-row
-        '((kind . poo-flow.session.agent-graph)
+        '((kind . agentic-ai-lab.session.agent-graph)
           (project-id . custom/project)
           (root-session-ref . custom/root-session)
           (agent-ids . (agent/build agent/audit))
@@ -70,7 +70,7 @@
                                  (custom/root-session . custom/audit-session)))
           (runtime-executed . #f)))
        (communication-rows
-        '(((kind . poo-flow.session.communication-receipt)
+        '(((kind . agentic-ai-lab.session.communication-receipt)
            (project-id . custom/project)
            (relation-kind . sibling)
            (source-session-id . custom/build-session)
@@ -81,7 +81,7 @@
            (valid? . #t)
            (runtime-executed . #f))))
        (workflow-task-rows
-        '(((kind . poo-flow.workflow.cicd.check-receipt)
+        '(((kind . agentic-ai-lab.workflow.cicd.check-receipt)
            (check . build)
            (durable-task-id . workflow/custom-build)
            (action-class . idempotent)
@@ -91,7 +91,7 @@
            (valid? . #t)
            (runtime-executed . #f))))
        (scenario
-        (poo-flow-durable-recovery-scenario
+        (agentic-ai-lab-durable-recovery-scenario
          'recovery-scenario/custom-build-audit
          'custom/project
          'custom/root-session
@@ -99,9 +99,9 @@
          runtime-store-receipt
          session-graph-row
          communication-rows
-         (poo-flow-memory-durable-job-receipts->alists (list memory-job))
+         (agentic-ai-lab-memory-durable-job-receipts->alists (list memory-job))
          workflow-task-rows
          '(agent/nono)
          '((metadata . ((source . user-interface)
                         (case . durable-recovery)))))))
-    (poo-flow-durable-recovery-scenario->alist scenario)))
+    (agentic-ai-lab-durable-recovery-scenario->alist scenario)))

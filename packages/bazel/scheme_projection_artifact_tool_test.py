@@ -63,12 +63,12 @@ class SchemeProjectionArtifactToolTest(unittest.TestCase):
             project_dependency_root = root / "package"
             loadpath_capture = root / "loadpath.txt"
             runner_capture = root / "runner.ss"
-            output = root / "flow.ss.poo-flow-projection.sexp"
+            output = root / "flow.ss.agentic-ai-lab-projection.sexp"
             fake_gxi = root / "gxi"
 
             source.write_text("(use-composition smoke)\n", encoding="utf-8")
             projection.write_text(";; projection\n", encoding="utf-8")
-            (compiled_root / "lib" / "poo-flow").mkdir(parents=True)
+            (compiled_root / "lib" / "agentic-ai-lab").mkdir(parents=True)
             dependency_marker.parent.mkdir(parents=True)
             dependency_marker.write_text("dependencies\n", encoding="utf-8")
             (project_dependency_root / ".gerbil" / "lib").mkdir(parents=True)
@@ -135,23 +135,23 @@ class SchemeProjectionArtifactToolTest(unittest.TestCase):
             )
             runner_source = runner_capture.read_text(encoding="utf-8")
             self.assertIn(
-                ":core/profile-composition/selection-syntax",
+                ":yuanxu/profile-composition/selection-syntax",
                 runner_source,
             )
             self.assertIn(
-                ":core/profile-composition/profile-bundle",
+                ":yuanxu/profile-composition/profile-bundle",
                 runner_source,
             )
             self.assertIn(
-                ":poo-flow/src/scenario/profile-root",
+                ":agentic-ai-lab/modules/workflow/scenario/profile-root",
                 runner_source,
             )
             self.assertIn(
-                ":poo-flow/modules/funflow/profile-library",
+                ":agentic-ai-lab/modules/funflow/profile-library",
                 runner_source,
             )
             self.assertNotIn(
-                ":poo-flow/src/user-interface/init-syntax",
+                ":agentic-ai-lab/src/user-interface/init-syntax",
                 runner_source,
             )
 

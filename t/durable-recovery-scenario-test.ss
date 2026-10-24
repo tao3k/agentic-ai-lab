@@ -6,16 +6,16 @@
 ;;; Boundary: crash/replay/repair scenario receipts for durable policy.
 ;;; Invariant: tests validate scenario projection only; no runtime recovery runs.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object object?)
-        :poo-flow/modules/memory-core/durable/policy
-        :poo-flow/modules/memory-core/durable/store
-        :poo-flow/modules/memory-core/durable/recovery-scenario
-        :poo-flow/modules/session/config
-        :poo-flow/modules/memory-core/config)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-scenario
+        :agentic-ai-lab/modules/session/config
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
 
 (export durable-recovery-scenario-test)
 
@@ -34,39 +34,39 @@
 
 ;; : (-> PooDurableRuntimeStoreContractReceipt)
 (def (test-runtime-store-receipt)
-  (poo-flow-durable-runtime-store-contract->receipt
-   poo-flow-durable-runtime-store-contract/default
-   '((project-id . project/poo-flow)
+  (agentic-ai-lab-durable-runtime-store-contract->receipt
+   agentic-ai-lab-durable-runtime-store-contract/default
+   '((project-id . project/agentic-ai-lab)
      (root-session-id . session/root)
      (session-id . session/child))))
 
 ;; : (-> [Alist])
 (def (test-memory-job-rows)
   (let* ((intent
-          (poo-flow-session-memory-intent
+          (agentic-ai-lab-session-memory-intent
            'memory/recovery-context
            'memory/durable-project
            'project
            '("last-40-turns")
            'review-only))
          (job
-          (poo-flow-memory-recall-job-receipt
+          (agentic-ai-lab-memory-recall-job-receipt
            'memory-job/recovery-context
-           'project/poo-flow
+           'project/agentic-ai-lab
            'session/root
            'session/child
            'agent/audit
-           poo-flow-memory-core-default-catalog
+           agentic-ai-lab-ai-agentic-context-memory-default-catalog
            intent
-           (list (cons 'durable-policy poo-flow-durable-policy/default)
+           (list (cons 'durable-policy agentic-ai-lab-durable-policy/default)
                  (cons 'source-watermark 'turn/40)
                  (cons 'target-watermark 'memory/index/40)))))
-    (poo-flow-memory-durable-job-receipts->alists (list job))))
+    (agentic-ai-lab-memory-durable-job-receipts->alists (list job))))
 
 ;; : Alist
 (def test-session-graph-row
-  '((kind . poo-flow.session.agent-graph)
-    (project-id . project/poo-flow)
+  '((kind . agentic-ai-lab.session.agent-graph)
+    (project-id . project/agentic-ai-lab)
     (root-session-ref . session/root)
     (agent-ids . (agent/build agent/audit))
     (session-ids . (session/root session/child))
@@ -74,8 +74,8 @@
 
 ;; : [Alist]
 (def test-communication-rows
-  '(((kind . poo-flow.session.communication-receipt)
-     (project-id . project/poo-flow)
+  '(((kind . agentic-ai-lab.session.communication-receipt)
+     (project-id . project/agentic-ai-lab)
      (source-session-id . session/root)
      (target-session-id . session/child)
      (channel-id . channel/root-child)
@@ -84,7 +84,7 @@
 
 ;; : [Alist]
 (def test-workflow-task-rows
-  '(((kind . poo-flow.workflow.cicd.check-receipt)
+  '(((kind . agentic-ai-lab.workflow.cicd.check-receipt)
      (check . build)
      (durable-task-id . workflow/build)
      (action-class . idempotent)
@@ -96,12 +96,12 @@
 
 ;; : TestSuite
 (def durable-recovery-scenario-test
-  (test-suite "poo-flow durable recovery scenario"
-    (poo-flow-test-case "projects crash replay recovery with observability stages"
+  (test-suite "agentic-ai-lab durable recovery scenario"
+    (yuanxu-test-case "projects crash replay recovery with observability stages"
       (let* ((receipt
-              (poo-flow-durable-recovery-scenario
+              (agentic-ai-lab-durable-recovery-scenario
                'recovery-scenario/build-audit
-               'project/poo-flow
+               'project/agentic-ai-lab
                'session/root
                'session/child
                (test-runtime-store-receipt)
@@ -111,13 +111,13 @@
                test-workflow-task-rows
                '(agent/nono)
                '((metadata . ((case . durable-recovery-scenario))))))
-             (row (poo-flow-durable-recovery-scenario->alist receipt))
+             (row (agentic-ai-lab-durable-recovery-scenario->alist receipt))
              (observability-rows (test-ref row 'observability-rows)))
-        (check-equal? (poo-flow-durable-recovery-scenario-receipt? receipt)
+        (check-equal? (agentic-ai-lab-durable-recovery-scenario-receipt? receipt)
                       #t)
         (check-equal? (object? row) #f)
         (check-equal? (test-ref row 'kind)
-                      +poo-flow-durable-recovery-scenario-kind+)
+                      +agentic-ai-lab-durable-recovery-scenario-kind+)
         (check-equal? (test-ref row 'scenario-id)
                       'recovery-scenario/build-audit)
         (check-equal? (test-ref row 'failure-kind) 'process-crash)
@@ -136,15 +136,15 @@
         (check-equal? (length observability-rows) 6)
         (check-equal? (map (lambda (row) (test-ref row 'stage))
                            observability-rows)
-                      +poo-flow-durable-recovery-stages+)
+                      +agentic-ai-lab-durable-recovery-stages+)
         (check-equal? (map (lambda (row) (test-ref row 'runtime-executed))
                            observability-rows)
                       '(#f #f #f #f #f #f))
         (check-equal? (test-ref row 'runtime-executed) #f)))
 
-    (poo-flow-test-case "rejects unsafe replay without memory durable jobs"
+    (yuanxu-test-case "rejects unsafe replay without memory durable jobs"
       (let* ((unsafe-task-rows
-              '(((kind . poo-flow.workflow.cicd.check-receipt)
+              '(((kind . agentic-ai-lab.workflow.cicd.check-receipt)
                  (check . release)
                  (durable-task-id . workflow/release)
                  (action-class . manual)
@@ -153,9 +153,9 @@
                  (sandbox-refs agent/nono)
                  (valid? . #t))))
              (receipt
-              (poo-flow-durable-recovery-scenario
+              (agentic-ai-lab-durable-recovery-scenario
                'recovery-scenario/unsafe-release
-               'project/poo-flow
+               'project/agentic-ai-lab
                'session/root
                'session/child
                (test-runtime-store-receipt)
@@ -164,7 +164,7 @@
                '()
                unsafe-task-rows
                '()))
-             (row (poo-flow-durable-recovery-scenario->alist receipt))
+             (row (agentic-ai-lab-durable-recovery-scenario->alist receipt))
              (diagnostics (test-ref row 'diagnostics)))
         (check-equal? (test-ref row 'valid?) #f)
         (check-equal? (test-ref row 'deterministic-replay?) #f)
@@ -186,16 +186,16 @@
          (diagnostic-code-present? diagnostics 'unresolved-sandbox-ref)
          #t)))
 
-    (poo-flow-test-case "reports invalid durable memory job rows"
+    (yuanxu-test-case "reports invalid durable memory job rows"
       (let* ((invalid-memory-rows
-              '(((kind . poo-flow.memory-core.durable-job-receipt)
+              '(((kind . agentic-ai-lab.memory-core.durable-job-receipt)
                  (job-id . memory-job/fake)
                  (valid? . #f)
                  (diagnostics . (((code . memory-store-not-durable)))))))
              (receipt
-              (poo-flow-durable-recovery-scenario
+              (agentic-ai-lab-durable-recovery-scenario
                'recovery-scenario/invalid-memory
-               'project/poo-flow
+               'project/agentic-ai-lab
                'session/root
                'session/child
                (test-runtime-store-receipt)
@@ -204,7 +204,7 @@
                invalid-memory-rows
                test-workflow-task-rows
                '(agent/nono)))
-             (row (poo-flow-durable-recovery-scenario->alist receipt))
+             (row (agentic-ai-lab-durable-recovery-scenario->alist receipt))
              (diagnostics (test-ref row 'diagnostics)))
         (check-equal? (test-ref row 'valid?) #f)
         (check-equal?

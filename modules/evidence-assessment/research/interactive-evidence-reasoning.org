@@ -1,0 +1,223 @@
+#+title: Interactive Evidence Reasoning
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+* Research objective
+
+The model receives the original problem and explores candidate reasoning paths.
+During exploration it calls Scheme to check local connections and conditions,
+retrieve applicable derivation fragments, and record newly supported fragments.
+It continues reasoning with those observations. The intervention must help the
+model's ongoing exploration rather than require translation of the entire
+question into a predetermined ASCENT query.
+
+This design contract is implemented by =ascent_engine.interaction= over the
+Scheme Evidence DAG query kernel and Trajectory ledger. The real-model study
+and its source-bound qualification are recorded separately; existing closed-query
+consumption tests do not qualify the interactive controller's efficacy.
+
+The [[file:evidence-responsibilities.org][responsibility contract]] distinguishes
+Evidence Chain, Evidence DAG, and Trajectory. Evidence validity and temporal
+observation remain separately typed in the formal models.
+
+* Interaction boundary
+
+The model can use evidence tools from the first reasoning round. A checkpoint
+can contain several candidate branches, local claims, entity bindings, and
+source references. The model need not publish private reasoning or a final
+answer. The controller resumes the provider conversation after executing the
+requested tools; whether the provider resumes an internal reasoning state or
+starts another inference invocation must be established for that provider.
+
+Tool descriptions explain available capabilities and required arguments. They
+must not inject the solution, a preferred branch, or a task-specific final query.
+Arguments still need an executable boundary: a domain operation or a supported
+local predicate with explicit bindings. A free-form claim remains unverified
+until it has a supported interpretation and grounded evidence. Mechanical
+checks do not establish equivalence of arbitrary natural-language statements.
+
+* Library contract and ownership
+
+Applications import =EvidenceOperation=, =EvidenceInteraction=, and
+=EvidenceConversation= from =ascent_engine.interaction=. The Library does not
+depend on a provider SDK, a particular question family, or a final-answer grader.
+The application registers trusted finite local predicates and a domain-completion
+assumption. Models supply operation names and scalar bindings through
+=check_branches=; they cannot submit arbitrary Scheme code or alter registered
+rules. Responses use =ascent.branch-feedback.v1= and are scoped to local predicates.
+
+| Owner | Input | Output and obligation |
+|-------+-------+-----------------------|
+| Application | Sources, domain rules, completion scope and task | Register capability descriptions; keep grader/gold out of model feedback |
+| Model | Original problem, tools, prior observations | Select branches and bindings; request checks, extend or revise reasoning |
+| Scheme evaluator | Registered predicates and model-selected bindings | Evaluate finite relational checks and bind current result references |
+| Evidence Chain | Source identity, component fingerprints, completion | Admit applicable reuse and revoke references on replacement |
+| Trajectory | Actual model calls and branch feedback | Record references, uncertainty, repairs, cost and independently supplied verdicts |
+| Provider adapter | Stateless conversation and paired tool outputs | Preserve all opaque reasoning items; record actual usage and transport outcomes |
+
+=EvidenceConversation.accept= records the completed provider response and pairs
+every function call with an output. It never declares task success. Incomplete
+provider responses retain observed usage and are not treated as complete tool
+requests. Unsupported arguments and failed checks return unknown outcomes;
+strict server output-schema enforcement is disabled.
+
+=EvidenceInteraction.check= batches up to 128 candidates per call. A candidate
+can specify one local operation or a conjunction of up to sixteen conditions.
+All conditions in a conjunction must belong to the same registered domain
+program. Scheme evaluates the conjunction; absence requires every condition's
+declared completeness scope before being reported as a contradiction. Missing
+or mixed-domain conditions remain unknown.
+
+Candidate checks sharing a domain program are grouped and split according to
+the native rule capacity, including space for materialized-alias rules. This
+avoids opening a retained Session for every branch. Native output rows identify supported branches; Python only
+projects those returned identifiers into feedback. It does not compute a
+relational closure. The branch =reference= binds operation, arguments, trusted
+program and source; =resultReference= identifies the native batch result.
+Requesting reuse rechecks current applicability through the native query path.
+
+Source replacement invalidates evidence references and native certificates.
+The application then exposes the updated sources to the model conversation.
+Historical events remain observations of their original source generation.
+Provider-call totals across source generations must be summed for a whole-task
+endpoint; an individual source epoch's first-correct counter is insufficient.
+
+* Branch feedback
+
+For example, after reaching A, the model proposes continuations through B, D,
+or H. Scheme can report that A-D-E is already supported under the current source
+generation, that the A-B connection violates a checked constraint, and that
+A-H lacks evidence. The model can extend D-E toward F-G, repair B's assumptions,
+or investigate H. A checked fragment is conditional support for continuing the
+search; it does not certify that F-G solves the original question.
+
+| Observation | Required basis | Consequence |
+|-------------+----------------+-------------|
+| Supported | Applicable, current grounded support and a completed check | Reuse the fragment under its stated conditions |
+| Contradicted | Checked conflicting evidence or a violated domain constraint | Reject or revise that local branch under those assumptions |
+| Unknown | Missing support, incomplete search, unsupported interpretation, or exhausted checker budget | Preserve the branch as unresolved |
+
+Lack of a matching graph path is not a contradiction. Prior model failure and
+search timeout are not logical reasons to prune a branch. Negative results
+require their explicit completeness and domain assumptions.
+
+Each feedback packet should bind a checkpoint and branch ID to current source
+identity, the checked operation and bindings, support references, preconditions,
+status, missing obligations, and invalidation dependencies. Arbitrary model
+statements cannot become verified facts merely by being recorded.
+
+* Evidence DAG and Trajectory
+
+The Evidence DAG owns the supported dependencies of facts and derivation
+fragments. Recursive dependencies remain inside atomic components; fact-level
+provenance supplies the grounding that a structural component graph lacks.
+
+Trajectory records the temporal interaction: candidate branches, actual tool
+requests and returned observations, references the model later exposes as used,
+corrections, invalidation, and provider usage. It cannot claim that the model
+consumed an observation internally simply because that observation was returned.
+
+The existing source-bound component reuse and provenance maintenance are
+implementation foundations. The closed-query =consume= operation is useful
+for explicit execution requests but does not itself implement this interactive
+reasoning loop or demonstrate enhanced model thinking.
+
+* Integrated qualification plan
+
+Scheme must check applicability before returning a retained fragment, preserve
+unknown outcomes, reject unsupported admission, and withdraw affected support
+after source or assumption changes. Lean should specify these admission and
+withdrawal obligations. Quint should explore branching interaction, stale
+feedback, correction, and repeated checkpoint transitions. Neither formal
+layer proves arbitrary model intent or guarantees that a model follows advice.
+
+The real-model study needs independent complex problems with multiple plausible
+branches, failures that require correction, and source changes that invalidate
+previous support. Compare the same model and ordinary domain tools against the
+same tools plus retained checked evidence. Both arms must be able to interact
+during exploration; forcing only one arm to enumerate a result manually would
+confound this comparison with answer execution offloading.
+
+Record every actual provider call and tool checkpoint through the first
+independently correct whole-task answer. Report cumulative reasoning tokens,
+input/output usage, failed-branch and repair costs, tool latency, evidence
+exposure, observable reuse, source invalidation, and unresolved trajectories.
+Provider token discounts and prefix caching must be reported separately from
+avoided reasoning. A lower final-output size is not the target metric.
+
+The pending =consumption_study.py= query-translation experiment measures a
+different intervention. Its results, if produced separately, must not be used
+to claim that this interactive reasoning architecture has been validated.
+
+* Paper correspondence and scientific claims
+
+| Research foundation | Transfer in this Library | Boundary |
+|---------------------+--------------------------+----------|
+| [[https://arxiv.org/abs/2210.03629][ReAct]] | Interleave model exploration and external actions from the first round | This study does not reproduce ReAct's benchmarks or attribute its results to ASCENT |
+| [[https://www.cs.ucdavis.edu/~green/papers/pods07.pdf][Provenance Semirings]] | Distinguish dependent support from a temporal record of observations | Current component receipts are not a complete semiring provenance implementation |
+| [[https://proceedings.kr.org/2022/10/kr2022-0010-bourgaux-et-al.pdf][Revisiting Semiring Provenance for Datalog]] | Treat recursive support and provenance interpretation as separate obligations | An SCC structure alone does not enumerate or prove every derivation tree |
+| [[file:../research/agent-inference/scoped-witness.org][Scoped-witness reading]] | Context/branch-sensitive exclusions in local checks | Tool invocation does not prove arbitrary question interpretation |
+
+The falsifiable questions are whether checked feedback preserves task quality,
+whether retained feedback reduces total pre-success thinking relative to the
+same fresh tools, and whether stale evidence is rejected after changes. One
+successful model sample is an observation. Independent instances with opaque
+identifiers reduce direct memorization of an instance; they do not establish
+that its algorithmic pattern was absent from model training.
+
+Fresh and retained runs both have tools from the first request. A source-only
+arm separately tests the additional capability of derived checks. It is an
+ablation with a different capability set, not a pure retention comparison.
+
+* Local implementation and real-model results
+
+[[file:../../.cache/ascent/archived-runs/docs/features/interactive-evidence-qualification.json][The source-bound qualification]] records actual ABI/API checks, direct Scheme
+tests, Lean compilation and bounded Quint simulations. [[file:../research/interactive-evidence-study/report.org][The complete English report]]
+includes independent inputs, every policy trajectory, failed-answer repairs,
+interrupted requests, local feedback audits and physical provider usage.
+
+The native multi-premise capability is implemented, but no model in the new
+cohort selected a multi-condition branch. Retained evidence did not consistently
+reduce whole-task thinking. Correct local support was sometimes omitted when
+the model composed the final result. These limitations are experimental findings,
+not covered by the semantic or lifecycle qualifications.
+
+* Path consumption interface correction
+
+The [[file:../research/interactive-evidence-study/report.org][initial real study]] found correct local evidence followed by incorrect result
+composition. An optional conjunction field was never selected by the model;
+large per-branch metadata also burdened subsequent input. These observations
+motivate the following provider-independent interface correction, whose actual
+model effect must be evaluated independently:
+
+- =check_branches= describes each candidate as an ID and a required list of local
+  conditions. Registered operation names appear in the schema. It specifies a
+  capability, not the necessary conditions for solving a particular question.
+- =reuse_paths= rechecks current registered conditions by a short opaque reference.
+  It does not interpret a new utterance as the same intent.
+- =extend_paths= combines the current referenced path's original prerequisites
+  with model-selected additional conditions. It cannot discard the original
+  prerequisites; old-generation references remain unknown after replacement.
+- Feedback uses lossless =ascent.path-feedback.v1= grouping with shared native
+  provenance and explicit path =id= / =status= / =reference= / =conditions=
+  objects. A column-format pilot used a Boolean presence mask that the model
+  misread as condition truth; that pilot is retained and the mask is removed.
+  Full raw feedback remains in audit records. Encoding does not change a
+  verdict or discard a support field. Short aliases are process-local and never reused after source
+  replacement; they are not externally verifiable certificates.
+
+Legacy single-operation tool arguments are still parsed for replaying immutable
+experimental prefixes, but are not advertised as the primary path contract.
+The comparison separates old-interface retained execution, new-interface fresh
+execution, and new-interface retained execution. All alternatives are charged
+for the same actual first response. A lower feedback size is not reported as a
+reduction in reasoning; actual provider usage through first whole-task success
+and failed-answer repair is the efficacy endpoint.
+
+The [[file:../research/path-consumption-study/report.org][path-consumption repair study]] qualifies the actual changed interface against
+shared first responses. Six primary trajectories over two independent tasks
+completed all three goals; old retained thinking totaled 80126 and readable
+retained 44064, an observed 45.01% reduction. Readable fresh totaled 72624, and
+its balanced case increased relative to the old interface. The report separates
+format effects, retained reuse, actual tool adoption, a real failed-prefix repair,
+physical prefix caching, and the small-sample/adaptive limitations.

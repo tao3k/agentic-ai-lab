@@ -1,0 +1,20 @@
+#+title: Native proof Host ABI v1 qualification
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+The executable gates are the Python temporal proof Host tests, the original
+Rust MRR Derivation test, and =just test-temporal-evaluator=. The structured
+summary records this bounded run, source identity and artifact identity.
+Raw build and execution logs belong to local or CI artifacts and are not stored
+in Git. A source change requires a fresh gate; this summary cannot qualify it.
+
+The new dedicated Host controls register a complete native catalog/journal and
+an original proof context. Ordinary current queries reference retained handles
+and expected generations. The original typed Rust MRR graph is registered through
+the real native Library; Rust does not implement a solver. Late correction and
+history erasure tests exercise native temporal authority, including ordinary
+control rejection and conservative effect flags. All transport remains inert
+bounded Scheme datum v1. Provider authentication, final publication fence and
+MRR Data durable conditional publication remain open.

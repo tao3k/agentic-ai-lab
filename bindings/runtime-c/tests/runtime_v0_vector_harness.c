@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#include "poo_flow/runtime_v0.h"
+#include "agentic_ai_lab/runtime_v0.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -23,8 +23,8 @@ int main(int argc, char **argv) {
   size_t count = fread(text, 1, sizeof(text) - 1, input);
   fclose(input);
   text[count] = '\0';
-  assert(strstr(text, "schema=poo-flow.runtime-v0.native-event-vector.1\n") != NULL);
-  poo_flow_runtime_v0_event_header header = {0};
+  assert(strstr(text, "schema=agentic-ai-lab.runtime-v0.native-event-vector.1\n") != NULL);
+  agentic_ai_lab_runtime_v0_event_header header = {0};
   header.layout_version = (uint16_t)field(text, "layout-version");
   header.event_kind = (uint16_t)field(text, "event-kind");
   header.flags = (uint32_t)field(text, "flags");
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
   header.required_evidence_bits = (uint32_t)field(text, "required-evidence-bits");
   header.reserved0 = (uint32_t)field(text, "reserved0");
   assert(field(text, "header-bytes") == sizeof(header));
-  assert(header.layout_version == POO_FLOW_RUNTIME_V0_LAYOUT_VERSION);
+  assert(header.layout_version == AGENTIC_AI_LAB_RUNTIME_V0_LAYOUT_VERSION);
   assert(header.sequence == 7);
   assert(header.authorization_identity.high == 5);
   assert(header.authorization_identity.low == 6);

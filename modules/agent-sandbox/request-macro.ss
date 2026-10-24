@@ -15,7 +15,7 @@
 ;;; Policy evidence:
 ;;; - Profile tests assert named-field construction and typo failures.
 
-(import :poo-flow/modules/agent-sandbox/request-builder)
+(import :agentic-ai-lab/modules/agent-sandbox/request-builder)
 
 (export agent-sandbox-request)
 

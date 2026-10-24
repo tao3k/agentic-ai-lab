@@ -6,7 +6,7 @@
 ;;; Boundary: loop descriptor performance gates cover POO slot projection.
 ;;; Invariant: descriptor contract projection stays data-only and bounded.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :poo-flow/src/loops/descriptor
+        (only-in :agentic-ai-lab/modules/loop-engine/control/descriptor
                  make-loop-pattern-descriptor
                  loop-pattern-descriptor->contract))
 
@@ -69,7 +69,7 @@
 
 ;; : (-> Integer [LoopPatternDescriptor])
 (def (loop-descriptor-performance-descriptors count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    loop-descriptor-performance-descriptor))
 
@@ -79,7 +79,7 @@
 
 ;; : (-> Alist Void)
 (def (loop-descriptor-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] loop-descriptor-contract-projection ")
+  (display "[agentic-ai-lab-benchmark] loop-descriptor-contract-projection ")
   (write receipt)
   (newline)
   (force-output))
@@ -111,13 +111,13 @@
 ;; : TestSuite
 (def loop-agent-descriptor-performance-test
   (test-suite "loop-agent descriptor performance"
-    (poo-flow-test-case "keeps loop descriptor performance fixture inside benchmark contract"
+    (yuanxu-test-case "keeps loop descriptor performance fixture inside benchmark contract"
       (check-equal?
        (benchmark-fixture-contract-pass?
         loop-descriptor-contract-projection-fixture)
        #t))
 
-    (poo-flow-test-case "projects many loop descriptor contracts with one slot sampling pass"
+    (yuanxu-test-case "projects many loop descriptor contracts with one slot sampling pass"
       (let* ((descriptor-count 1200)
              (descriptors
               (loop-descriptor-performance-descriptors descriptor-count))

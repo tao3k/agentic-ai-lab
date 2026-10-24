@@ -6,7 +6,7 @@
 ;;; Boundary: module object performance gates cover sparse List slot merging.
 ;;; Invariant: object merges stay descriptor data and never execute runtime work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,17 +15,17 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :core/extension-graph/interface
-                 poo-flow-module-extension-node-slots)
-        (only-in :core/module-system/schema/interface
-                 PooFlowModuleListType
-                 poo-flow-module-field-resolution-result-root
-                 poo-flow-module-field-contract
-                 poo-flow-module-field-contribution
-                 poo-flow-module-object
-                 poo-flow-module-objects-resolve-contributions/node
-                 poo-flow-module-objects-node
-                 poo-flow-module-objects-ref))
+        (only-in :yuanxu/graph/interface
+                 yuanxu-graph-root-payload)
+        (only-in :yuanxu/module-system/schema/interface
+                 YuanxuModuleListType
+                 yuanxu-module-field-resolution-result-root
+                 yuanxu-module-field-contract
+                 yuanxu-module-field-contribution
+                 yuanxu-module-object
+                 yuanxu-module-objects-resolve-contributions/node
+                 yuanxu-module-objects-node
+                 yuanxu-module-objects-ref))
 
 (export module-object-list-merge-performance-test)
 
@@ -39,19 +39,19 @@
 
 ;; : PooModuleFieldContract
 (def module-object-list-merge-field
-  (poo-flow-module-field-contract 'capabilities PooFlowModuleListType 'append '() '()))
+  (yuanxu-module-field-contract 'capabilities YuanxuModuleListType 'append '() '()))
 
 ;; : PooModuleObject
 (def module-object-list-merge-object
-  (poo-flow-module-object
+  (yuanxu-module-object
    'large.module.object
    '()
    (list module-object-list-merge-field)
    '()))
 
-;; : PooModuleExtensionNode
+;; : YuanxuGraph
 (def module-object-list-merge-objects-node
-  (poo-flow-module-objects-node (list module-object-list-merge-object)))
+  (yuanxu-module-objects-node (list module-object-list-merge-object)))
 
 ;; : (-> Alist Symbol Value)
 (def (module-object-list-merge-ref alist key)
@@ -59,7 +59,7 @@
 
 ;; : (-> Alist Void)
 (def (module-object-list-merge-display-receipt receipt)
-  (display "[poo-flow-benchmark] module-object-list-merge ")
+  (display "[agentic-ai-lab-benchmark] module-object-list-merge ")
   (write receipt)
   (newline)
   (force-output))
@@ -70,7 +70,7 @@
 
 ;; : (-> Integer Integer Integer [Integer])
 (def (module-object-list-merge-batch start size step)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    size
    (lambda (index)
      (module-object-list-merge-capability
@@ -78,10 +78,10 @@
 
 ;; : (-> Integer Integer Integer [PooModuleFieldContribution])
 (def (module-object-list-merge-contributions batch-count batch-size overlap-step)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    batch-count
    (lambda (batch-index)
-     (poo-flow-module-field-contribution
+     (yuanxu-module-field-contribution
       'large.module.object
       module-object-list-merge-field
       (module-object-list-merge-batch
@@ -98,12 +98,12 @@
 ;; : (-> [PooModuleFieldContribution] Alist)
 (def (module-object-list-merge-summary/from-contributions contributions)
   (let* ((result
-          (poo-flow-module-objects-resolve-contributions/node
+          (yuanxu-module-objects-resolve-contributions/node
            module-object-list-merge-objects-node
            contributions))
-         (root (poo-flow-module-field-resolution-result-root result))
-         (node (poo-flow-module-objects-ref root 'large.module.object))
-         (slots (poo-flow-module-extension-node-slots node))
+         (root (yuanxu-module-field-resolution-result-root result))
+         (node (yuanxu-module-objects-ref root 'large.module.object))
+         (slots (yuanxu-graph-root-payload node))
          (capabilities
           (module-object-list-merge-ref slots 'capabilities)))
     (list (cons 'capability-count (length capabilities))
@@ -122,7 +122,7 @@
 ;; : TestSuite
 (def module-object-list-merge-performance-test
   (test-suite "module object list merge performance"
-    (poo-flow-test-case "keeps repeated sparse list appends inside benchmark contract"
+    (yuanxu-test-case "keeps repeated sparse list appends inside benchmark contract"
       (let* ((batch-count 240)
              (batch-size 48)
              (overlap-step 24)

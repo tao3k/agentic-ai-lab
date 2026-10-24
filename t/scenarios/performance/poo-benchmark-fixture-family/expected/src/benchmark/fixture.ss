@@ -10,7 +10,7 @@
 (def benchmark-fixture-family
   (.o (kind 'benchmark-fixture-family)
       (name 'benchmark-fixture-family)
-      (source 'poo-flow.performance.benchmark-fixture)))
+      (source 'agentic-ai-lab.performance.benchmark-fixture)))
 
 (def (benchmark-fixture feature-value rss-value metric-value unit-value target-value observed-value)
   (.o (family 'benchmark-fixture-family)

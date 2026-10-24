@@ -3,26 +3,26 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Contract: JSON Schema bridge emits executable POO Flow slot contracts.
+;;; Contract: JSON Schema bridge emits executable Agentic AI Lab slot contracts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/mop element?)
-        (only-in :core/module-system/schema/slot-contracts
-                 poo-flow-contract-slot-name
-                 poo-flow-contract-slot-predicate-key
-                 poo-flow-contract-slot-report-kind
-                 poo-flow-contract-slot-type
-                 poo-flow-native-contract-slots)
-        (only-in :poo-flow/src/contract/json-schema-receipt
-                 poo-flow-json-schema->contract-artifact
-                 poo-flow-json-schema-contract-artifact-object-contract
-                 poo-flow-json-schema-contract-artifact->alist)
-        (only-in :poo-flow/src/contract/json-schema-validate
-                 poo-flow-json-schema-contract-artifact-validate
-                 poo-flow-json-schema-object-contract-validation->alist))
+        (only-in :yuanxu/module-system/schema/slot-contracts
+                 yuanxu-contract-slot-name
+                 yuanxu-contract-slot-predicate-key
+                 yuanxu-contract-slot-report-kind
+                 yuanxu-contract-slot-type
+                 yuanxu-object-contract-slots)
+        (only-in :yuanxu/modules/json-schema/json-schema-receipt
+                 yuanxu-json-schema->contract-artifact
+                 yuanxu-json-schema-contract-artifact-object-contract
+                 yuanxu-json-schema-contract-artifact->alist)
+        (only-in :yuanxu/modules/json-schema/json-schema-validate
+                 yuanxu-json-schema-contract-artifact-validate
+                 yuanxu-json-schema-object-contract-validation->alist))
 
 (export json-schema-contract-bridge-test)
 
@@ -41,7 +41,7 @@
   (cdr (assoc key rows)))
 
 ;; json-schema-bridge-test-slot
-;;   : (-> PooFlowObjectTypeContract Symbol PooFlowSlotContract)
+;;   : (-> YuanxuObjectTypeContract Symbol YuanxuSlotContract)
 ;;   | result: generated slot contract whose slot matches SLOT-NAME
 ;;   | doc m%
 ;;       Find one generated slot contract by slot name so assertions exercise
@@ -54,16 +54,16 @@
 ;;     %
 (def (json-schema-bridge-test-slot object-contract slot-name)
   (let (slot (find (lambda (candidate)
-                     (eq? (poo-flow-contract-slot-name candidate)
+                     (eq? (yuanxu-contract-slot-name candidate)
                           slot-name))
-                   (poo-flow-native-contract-slots object-contract)))
+                   (yuanxu-object-contract-slots object-contract)))
     (if slot
       slot
       (error "missing generated JSON Schema slot" slot-name))))
 
 (def (json-schema-bridge-test-slot-predicate slot-contract)
   (lambda (value)
-    (element? (poo-flow-contract-slot-type slot-contract) value)))
+    (element? (yuanxu-contract-slot-type slot-contract) value)))
 
 ;; json-schema-bridge-test-schema
 ;;   : JsonLikeSchema
@@ -238,18 +238,18 @@
 ;; : TestSuite
 (def json-schema-contract-bridge-test
   (test-suite "json schema contract bridge"
-    (poo-flow-test-case "emits executable slot predicates for items and oneOf"
+    (yuanxu-test-case "emits executable slot predicates for items and oneOf"
       (let* ((artifact
-              (poo-flow-json-schema->contract-artifact
+              (yuanxu-json-schema->contract-artifact
                json-schema-bridge-test-schema
                '((source-ref . json-schema-contract-bridge-test)
                  (owner . contract)
-                 (object-kind . PooFlowJsonSchemaBridgeTest)
+                 (object-kind . AgenticAILabJsonSchemaBridgeTest)
                  (object-key . json-schema/bridge-test))))
              (receipt
-              (poo-flow-json-schema-contract-artifact->alist artifact))
+              (yuanxu-json-schema-contract-artifact->alist artifact))
              (object-contract
-              (poo-flow-json-schema-contract-artifact-object-contract artifact))
+              (yuanxu-json-schema-contract-artifact-object-contract artifact))
              (tags-slot
               (json-schema-bridge-test-slot object-contract 'tags))
              (name-slot
@@ -285,10 +285,10 @@
         (check-equal? (json-schema-bridge-test-ref receipt 'valid?) #t)
         (check-equal? (json-schema-bridge-test-ref receipt 'diagnostic-count) 0)
         (check-equal? (length (json-schema-bridge-test-ref receipt 'type-facts)) 8)
-        (check-equal? (poo-flow-contract-slot-report-kind tags-slot) 'List)
+        (check-equal? (yuanxu-contract-slot-report-kind tags-slot) 'List)
         (check-equal?
-         (poo-flow-contract-slot-predicate-key choice-slot)
-         'poo-flow-json-schema-one-of-generated?)
+         (yuanxu-contract-slot-predicate-key choice-slot)
+         'yuanxu-json-schema-one-of-generated?)
         (check-equal? (tags? '("a" "b")) #t)
         (check-equal? (tags? '("a" 1)) #f)
         (check-equal? (tags? '((name . "object-shaped"))) #f)
@@ -315,16 +315,16 @@
         (check-equal? (maybe? 'json-null) #t)
         (check-equal? (maybe? "ok") #t)
         (check-equal? (maybe? 7) #f)))
-    (poo-flow-test-case "reports invalid supported constraint values"
+    (yuanxu-test-case "reports invalid supported constraint values"
       (let* ((artifact
-              (poo-flow-json-schema->contract-artifact
+              (yuanxu-json-schema->contract-artifact
                json-schema-bridge-invalid-constraint-schema
                '((source-ref . json-schema-invalid-constraint-test)
                  (owner . contract)
-                 (object-kind . PooFlowJsonSchemaInvalidConstraintTest)
+                 (object-kind . AgenticAILabJsonSchemaInvalidConstraintTest)
                  (object-key . json-schema/invalid-constraint-test))))
              (receipt
-              (poo-flow-json-schema-contract-artifact->alist artifact))
+              (yuanxu-json-schema-contract-artifact->alist artifact))
              (diagnostics
               (json-schema-bridge-test-ref receipt 'diagnostics))
              (diagnostic
@@ -334,27 +334,27 @@
         (check-equal?
          (json-schema-bridge-test-ref diagnostic 'reason)
          'invalid-constraint-value)))
-    (poo-flow-test-case "recursively validates generic map-value contracts"
+    (yuanxu-test-case "recursively validates generic map-value contracts"
       (let* ((artifact
-              (poo-flow-json-schema->contract-artifact
+              (yuanxu-json-schema->contract-artifact
                json-schema-bridge-recursive-map-schema
                '((source-ref . json-schema-recursive-map-test)
                  (owner . funflow)
-                 (object-kind . PooFlowCustomStageContract)
+                 (object-kind . AgenticAILabCustomStageContract)
                  (object-key . funflow/custom-stage))))
              (valid-receipt
-              (poo-flow-json-schema-object-contract-validation->alist
-               (poo-flow-json-schema-contract-artifact-validate
+              (yuanxu-json-schema-object-contract-validation->alist
+               (yuanxu-json-schema-contract-artifact-validate
                 artifact
                 json-schema-bridge-recursive-map-valid-value)))
              (missing-command-receipt
-              (poo-flow-json-schema-object-contract-validation->alist
-               (poo-flow-json-schema-contract-artifact-validate
+              (yuanxu-json-schema-object-contract-validation->alist
+               (yuanxu-json-schema-contract-artifact-validate
                 artifact
                 json-schema-bridge-recursive-map-missing-command)))
              (invalid-stage-key-receipt
-              (poo-flow-json-schema-object-contract-validation->alist
-               (poo-flow-json-schema-contract-artifact-validate
+              (yuanxu-json-schema-object-contract-validation->alist
+               (yuanxu-json-schema-contract-artifact-validate
                 artifact
                 json-schema-bridge-recursive-map-invalid-stage-key))))
         (check-equal?
@@ -372,22 +372,22 @@
         (check-equal?
          (json-schema-bridge-test-ref invalid-stage-key-receipt 'invalid-slots)
          '(stages/build))))
-    (poo-flow-test-case "recursively validates generic additionalProperties maps"
+    (yuanxu-test-case "recursively validates generic additionalProperties maps"
       (let* ((artifact
-              (poo-flow-json-schema->contract-artifact
+              (yuanxu-json-schema->contract-artifact
                json-schema-bridge-additional-recursive-map-schema
                '((source-ref . json-schema-recursive-additional-map-test)
                  (owner . funflow)
-                 (object-kind . PooFlowCustomProfileContract)
+                 (object-kind . AgenticAILabCustomProfileContract)
                  (object-key . funflow/custom-profile))))
              (valid-receipt
-              (poo-flow-json-schema-object-contract-validation->alist
-               (poo-flow-json-schema-contract-artifact-validate
+              (yuanxu-json-schema-object-contract-validation->alist
+               (yuanxu-json-schema-contract-artifact-validate
                 artifact
                 json-schema-bridge-additional-recursive-map-valid-value)))
              (missing-value-receipt
-              (poo-flow-json-schema-object-contract-validation->alist
-               (poo-flow-json-schema-contract-artifact-validate
+              (yuanxu-json-schema-object-contract-validation->alist
+               (yuanxu-json-schema-contract-artifact-validate
                 artifact
                 json-schema-bridge-additional-recursive-map-missing-value))))
         (check-equal?

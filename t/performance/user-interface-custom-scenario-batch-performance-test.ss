@@ -6,7 +6,7 @@
 ;;; Boundary: custom user-interface scenarios keep a real performance fixture.
 ;;; Invariant: user modules stay POO-native; benchmark contracts live under t/.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,48 +15,48 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-module-selection?
-                 poo-flow-user-module-selection-flag-entry)
-        :poo-flow/modules/session/config
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection?
+                 yuanxu-user-module-selection-flag-entry)
+        :agentic-ai-lab/modules/session/config
         (only-in "../../user-interface/custom/my-module/cases/cicd"
-                 poo-flow-custom-my-module-cicd-case)
+                 agentic-ai-lab-custom-my-module-cicd-case)
         (only-in "../../user-interface/custom/my-module/cases/loop-engine-owner"
-                 poo-flow-custom-my-module-loop-engine-case)
+                 agentic-ai-lab-custom-my-module-loop-engine-case)
         (only-in "../../user-interface/custom/my-module/cases/funflow-cicd"
-                 poo-flow-custom-my-module-funflow-cicd-case)
+                 agentic-ai-lab-custom-my-module-funflow-cicd-case)
         (only-in "../../user-interface/custom/my-module/cases/poo-introspection"
-                 poo-flow-custom-my-module-poo-introspection-case)
+                 agentic-ai-lab-custom-my-module-poo-introspection-case)
         (only-in "../../user-interface/custom/my-module/cases/tool-core"
-                 poo-flow-custom-my-module-tool-core-case)
+                 agentic-ai-lab-custom-my-module-tool-core-case)
         (only-in "../../user-interface/custom/my-module/cases/memory-core"
-                 poo-flow-custom-my-module-memory-core-case)
+                 agentic-ai-lab-custom-my-module-memory-core-case)
         (only-in "../../user-interface/custom/my-module/cases/durable-recovery"
-                 poo-flow-custom-my-module-durable-recovery-case)
+                 agentic-ai-lab-custom-my-module-durable-recovery-case)
         (only-in "../../user-interface/custom/my-module/cases/durable-runtime-store-handoff"
-                 poo-flow-custom-my-module-durable-runtime-store-handoff-case)
+                 agentic-ai-lab-custom-my-module-durable-runtime-store-handoff-case)
         (only-in "../../user-interface/custom/my-module/cases/durable-runtime-store-operations"
-                 poo-flow-custom-my-module-durable-runtime-store-operations-case)
+                 agentic-ai-lab-custom-my-module-durable-runtime-store-operations-case)
         (only-in "../../user-interface/custom/my-module/cases/durable-operation-bridge"
-                 poo-flow-custom-my-module-durable-operation-bridge-case)
+                 agentic-ai-lab-custom-my-module-durable-operation-bridge-case)
         (only-in "../../user-interface/custom/my-module/cases/session-transform"
-                 poo-flow-custom-my-module-session-transform-case)
+                 agentic-ai-lab-custom-my-module-session-transform-case)
         (only-in "../../user-interface/custom/my-module/cases/session-policy"
-                 poo-flow-custom-my-module-session-policy-case)
+                 agentic-ai-lab-custom-my-module-session-policy-case)
         (only-in "../../user-interface/custom/my-module/cases/session-registry"
-                 poo-flow-custom-my-module-session-registry-case)
+                 agentic-ai-lab-custom-my-module-session-registry-case)
         (only-in "../../user-interface/custom/my-module/cases/session-agent-graph"
-                 poo-flow-custom-my-module-session-agent-graph-case)
+                 agentic-ai-lab-custom-my-module-session-agent-graph-case)
         (only-in "../../user-interface/custom/my-module/cases/session-communication"
-                 poo-flow-custom-my-module-session-communication-case)
+                 agentic-ai-lab-custom-my-module-session-communication-case)
         (only-in "../../user-interface/custom/my-module/cases/session-selector"
-                 poo-flow-custom-my-module-session-selector-case)
+                 agentic-ai-lab-custom-my-module-session-selector-case)
         (only-in "../../user-interface/custom/my-module/cases/session-materialization"
-                 poo-flow-custom-my-module-session-materialization-case)
+                 agentic-ai-lab-custom-my-module-session-materialization-case)
         (only-in "../../user-interface/custom/my-module/cases/session-agent-param"
-                 poo-flow-custom-my-module-session-agent-param-case)
+                 agentic-ai-lab-custom-my-module-session-agent-param-case)
         (only-in "../../user-interface/custom/my-module/cases/session-memory-durable"
-                 poo-flow-custom-my-module-session-memory-durable-case))
+                 agentic-ai-lab-custom-my-module-session-memory-durable-case))
 
 (export user-interface-custom-scenario-batch-performance-test)
 
@@ -71,32 +71,32 @@
 ;; : [CustomScenarioCasePair]
 (def (custom-user-interface-scenario-cases)
   (list
-   (cons 'cicd poo-flow-custom-my-module-cicd-case)
-   (cons 'funflow-cicd poo-flow-custom-my-module-funflow-cicd-case)
-   (cons 'loop-engine poo-flow-custom-my-module-loop-engine-case)
-   (cons 'poo-introspection poo-flow-custom-my-module-poo-introspection-case)
-   (cons 'session-transform poo-flow-custom-my-module-session-transform-case)
-   (cons 'session-policy poo-flow-custom-my-module-session-policy-case)
-   (cons 'session-registry poo-flow-custom-my-module-session-registry-case)
-   (cons 'session-agent-graph poo-flow-custom-my-module-session-agent-graph-case)
+   (cons 'cicd agentic-ai-lab-custom-my-module-cicd-case)
+   (cons 'funflow-cicd agentic-ai-lab-custom-my-module-funflow-cicd-case)
+   (cons 'loop-engine agentic-ai-lab-custom-my-module-loop-engine-case)
+   (cons 'poo-introspection agentic-ai-lab-custom-my-module-poo-introspection-case)
+   (cons 'session-transform agentic-ai-lab-custom-my-module-session-transform-case)
+   (cons 'session-policy agentic-ai-lab-custom-my-module-session-policy-case)
+   (cons 'session-registry agentic-ai-lab-custom-my-module-session-registry-case)
+   (cons 'session-agent-graph agentic-ai-lab-custom-my-module-session-agent-graph-case)
    (cons 'session-communication
-         poo-flow-custom-my-module-session-communication-case)
-   (cons 'session-selector poo-flow-custom-my-module-session-selector-case)
+         agentic-ai-lab-custom-my-module-session-communication-case)
+   (cons 'session-selector agentic-ai-lab-custom-my-module-session-selector-case)
    (cons 'session-materialization
-         poo-flow-custom-my-module-session-materialization-case)
+         agentic-ai-lab-custom-my-module-session-materialization-case)
    (cons 'session-agent-param
-         poo-flow-custom-my-module-session-agent-param-case)
+         agentic-ai-lab-custom-my-module-session-agent-param-case)
    (cons 'session-memory-durable
-         poo-flow-custom-my-module-session-memory-durable-case)
-   (cons 'tool-core poo-flow-custom-my-module-tool-core-case)
-   (cons 'memory-core poo-flow-custom-my-module-memory-core-case)
-   (cons 'durable-recovery poo-flow-custom-my-module-durable-recovery-case)
+         agentic-ai-lab-custom-my-module-session-memory-durable-case)
+   (cons 'tool-core agentic-ai-lab-custom-my-module-tool-core-case)
+   (cons 'memory-core agentic-ai-lab-custom-my-module-memory-core-case)
+   (cons 'durable-recovery agentic-ai-lab-custom-my-module-durable-recovery-case)
    (cons 'durable-runtime-store-handoff
-         poo-flow-custom-my-module-durable-runtime-store-handoff-case)
+         agentic-ai-lab-custom-my-module-durable-runtime-store-handoff-case)
    (cons 'durable-runtime-store-operations
-         poo-flow-custom-my-module-durable-runtime-store-operations-case)
+         agentic-ai-lab-custom-my-module-durable-runtime-store-operations-case)
    (cons 'durable-operation-bridge
-         poo-flow-custom-my-module-durable-operation-bridge-case)))
+         agentic-ai-lab-custom-my-module-durable-operation-bridge-case)))
 
 ;; : (-> CustomScenarioRowValue Bool)
 (def (custom-scenario-alist-row? value)
@@ -123,9 +123,9 @@
 ;; : (-> CustomScenarioRowValue MaybeList)
 (def (custom-scenario-module-config-rows value)
   (if (and (pair? value)
-           (poo-flow-user-module-selection? (car value)))
+           (yuanxu-user-module-selection? (car value)))
     (let (entry
-          (poo-flow-user-module-selection-flag-entry (car value) ':config))
+          (yuanxu-user-module-selection-flag-entry (car value) ':config))
       (and entry (cdr entry)))
     #f))
 
@@ -215,7 +215,7 @@
 
 ;; : (-> CustomScenarioBatchSummary ReceiptDisplayResult)
 (def (custom-scenario-display-receipt receipt)
-  (display "[poo-flow-benchmark] user-interface-custom-scenario-batch ")
+  (display "[agentic-ai-lab-benchmark] user-interface-custom-scenario-batch ")
   (write receipt)
   (newline)
   (force-output))
@@ -223,7 +223,7 @@
 ;; : TestSuite
 (def user-interface-custom-scenario-batch-performance-test
   (test-suite "custom user-interface scenario batch performance"
-    (poo-flow-test-case "keeps custom scenario aggregation inside benchmark contract"
+    (yuanxu-test-case "keeps custom scenario aggregation inside benchmark contract"
       (let* ((summary (custom-user-interface-scenario-batch-summary))
              (receipt
               (benchmark-run
@@ -245,7 +245,7 @@
          #f)
         (custom-scenario-display-receipt receipt)
         (check-equal? (benchmark-receipt-pass? receipt) #t)))
-    (poo-flow-test-case "ignores dotted selection-count rows as runtime flags"
+    (yuanxu-test-case "ignores dotted selection-count rows as runtime flags"
       (check-equal?
        (custom-scenario-runtime-flags '((memory/project) . 1))
        '()))))

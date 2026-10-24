@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 module(
-    name = "poo_flow",
+    name = "agentic_ai_lab",
     version = "0.1.0",
 )
 
@@ -23,12 +23,12 @@ single_version_override(
 
 include("//:gerbil-bazel.MODULE.bazel")
 
-GERBIL_LINUX_REVISION = "2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb"
+GERBIL_LINUX_REVISION = "1cfb032c7a1612637da6205f5f8a15683eba3ba0"
 
-GERBIL_LINUX_SHA256 = "9844ba362fdf6f1c5e8a4411e462a466d52dee0d541f8e84f61091cec0e5e740"
+GERBIL_LINUX_SHA256 = "143c691fee5af4f9f631fd339f69a66f562e42e0bfc1d4ee2cda5fa8d35c35ee"
 
 GERBIL_LINUX_URLS = [
-    "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patchf5cedd8168cb/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patchf5cedd8168cb.tar.gz",
+    "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-1cfb032c7a1612637da6205f5f8a15683eba3ba0-linux-x86_64-portable-full-single-host-unlimited-multiple-vms-patch9599b09b82f8/gerbil-v0.19-1cfb032c7a1612637da6205f5f8a15683eba3ba0-linux-x86_64-portable-full-single-host-unlimited-multiple-vms-patch9599b09b82f8.tar.gz",
 ]
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
@@ -38,8 +38,10 @@ python.toolchain(python_version = "3.12")
 gerbil = use_extension("@gerbil_bazel//gerbil:extensions.bzl", "gerbil")
 gerbil.auto(
     name = "local_gerbil",
+    # Bound each native std/make executor; Bazel may schedule two projects.
+    environment = {"GERBIL_BUILD_CORES": "2"},
     expected_version_prefixes = [
-        "Gerbil 2591dcd",
+        "Gerbil 1cfb032",
     ],
     linux_prebuilt_arch = "x86_64",
     linux_prebuilt_manifest_path = "gerbil-toolchain-release.json",

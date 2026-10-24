@@ -1,0 +1,1 @@
+((schema . poo-flow.asp-temporal-model-acceptance.v2) (measurement-owner . asp-gerbil-scheme/benchmark-api) (maximum-provider-calls . 2) (retries . 0) (freeze-intact . #t) (passed . #t) (cases ((case . "physical-gql-necessary") (passed . #t) (elapsed-ms . 3606521/1000) (failure . #f))))

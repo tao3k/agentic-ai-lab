@@ -2,11 +2,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+TITLE: POO Flow Schema Registry
+#+TITLE: Agentic AI Lab Schema Registry
 
 * Purpose
 
-This directory stores versioned external schemas that POO Flow contracts study or
+This directory stores versioned external schemas that Agentic AI Lab contracts study or
 project into Scheme-side contracts. =.data= remains a research/cache area; schema
 files that affect shipped contracts belong here.
 

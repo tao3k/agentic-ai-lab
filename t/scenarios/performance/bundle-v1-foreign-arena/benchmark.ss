@@ -4,12 +4,12 @@
 
 (import :gerbil/runtime/gambit
         :clan/poo/object
-        :poo-flow/src/utilities/functional
-        :poo-flow/src/feature-system/bundle-v1-lowering
-        :poo-flow/src/feature-system/bundle-v1-foreign-arena)
+        :yuanxu/utilities/functional
+        :yuanxu/feature-system/bundle-v1-lowering
+        :yuanxu/feature-system/bundle-v1-foreign-arena)
 
 (def +benchmark-schema+
-  'poo-flow.bundle-v1-foreign-arena.benchmark.v1)
+  'agentic-ai-lab.bundle-v1-foreign-arena.benchmark.v1)
 
 (def (environment-positive-integer name default-value)
   (let* ((raw (getenv name))
@@ -51,10 +51,10 @@
 (def (run-benchmark)
   (let* ((component-count
           (environment-positive-integer
-           "POO_FLOW_BUNDLE_V1_BENCH_COMPONENTS" 4096))
+           "AGENTIC_AI_LAB_BUNDLE_V1_BENCH_COMPONENTS" 4096))
          (generation-started (now-seconds))
          (components
-          (poo-flow-map benchmark-component (iota component-count)))
+          (yuanxu-map benchmark-component (iota component-count)))
          (generation-ms (elapsed-milliseconds generation-started))
          (lowering-started (now-seconds))
          (plan

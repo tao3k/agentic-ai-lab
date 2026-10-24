@@ -5,17 +5,18 @@
 
 ;;; Boundary: downstream-shaped Funflow POO config lowers to readiness facts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax
-        :poo-flow/modules/agent-sandbox/config
-        :poo-flow/modules/workflow/interface)
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/agent-sandbox/config
+        :agentic-ai-lab/modules/workflow/interface)
 
 (export funflow-config-pipeline-downstream-test)
 
-'poo-flow-import-side-effect-test-suite?
+'agentic-ai-lab-import-side-effect-test-suite?
 
 ;; : (-> List Symbol Object)
 (def (funflow-config-downstream-alist-ref alist key)
@@ -79,7 +80,7 @@
 
 ;; : (-> Unit [PooSandboxProfile])
 (def (funflow-config-downstream-sandbox-profiles)
-  (poo-flow-sandbox-profiles
+  (agentic-ai-lab-sandbox-profiles
    (ci/build
     (backend nono)
     (network allowlisted "github.com" "crates.io")
@@ -120,10 +121,10 @@
   (let* ((selection (car (funflow-config-downstream-selection)))
          (pipeline
           (funflow-config-downstream-alist-ref
-           (poo-flow-user-module-selection-flags selection)
+           (yuanxu-user-module-selection-flags selection)
            ':workflow-pipeline))
          (readiness
-          (poo-flow-cicd-check-map->runtime-manifest-readiness
+          (agentic-ai-lab-cicd-check-map->runtime-manifest-readiness
            pipeline
            (funflow-config-downstream-sandbox-profiles)))
          (dependency-graph
@@ -139,9 +140,9 @@
          (build-summary (car build-summaries))
          (build-filesystem
           (funflow-config-downstream-alist-ref build-summary 'filesystem)))
-    (check-equal? (poo-flow-user-module-selection-key selection)
+    (check-equal? (yuanxu-user-module-selection-key selection)
                   '(flow . funflow))
-    (check-equal? (poo-flow-cicd-check-map-name pipeline) 'default)
+    (check-equal? (yuanxu-cicd-check-map-name pipeline) 'default)
     (check-equal? (length entries) 3)
     (check-equal? (funflow-config-downstream-alist-ref dependency-graph
                                                       'nodes)
@@ -182,6 +183,6 @@
     'ok))
 
 (def funflow-config-pipeline-downstream-test
-  (test-suite "poo-flow Funflow downstream config pipeline"
-    (poo-flow-test-case "lowers downstream Funflow POO config to readiness facts"
+  (test-suite "agentic-ai-lab Funflow downstream config pipeline"
+    (yuanxu-test-case "lowers downstream Funflow POO config to readiness facts"
       (check-equal? (run-funflow-config-pipeline-downstream-checks) 'ok))))

@@ -1,0 +1,27 @@
+;;; -*- Gerbil -*-
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+;;; Consumer API roots only. Native imports own closure; std/make owns execution.
+(import (only-in :std/source this-source-file)
+        (only-in :std/make make)
+        (only-in :yuanxu/module-system/building/source-package register-module-build-source!)
+        (only-in :yuanxu/module-system/building/source-closure package-library-spec))
+(export main)
+(def dependency-source-root
+  (path-expand "@SOURCE_ROOT@"
+               (path-expand "@BACKTRACK@" (path-directory (this-source-file)))))
+(def public-entry-modules '(@ENTRIES@))
+(def dependency-package
+  (let (properties (call-with-input-file
+                     (path-expand "gerbil.pkg" dependency-source-root) read))
+    (cadr (memq 'package: properties))))
+(register-module-build-source! dependency-source-root dependency-package)
+(def (dependency-build-spec)
+  (package-library-spec dependency-source-root dependency-package public-entry-modules))
+(def (main . args)
+  (current-directory dependency-source-root)
+  (match args
+    ([] (make (dependency-build-spec) srcdir: dependency-source-root))
+    (["spec"] (pretty-print (dependency-build-spec)))
+    (["compile"] (make (dependency-build-spec) srcdir: dependency-source-root))
+    (else (error "dependency entry expects no arguments, spec or compile" args))))

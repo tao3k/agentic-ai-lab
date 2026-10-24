@@ -2,11 +2,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+title: LangChain/LangGraph/CrewAI vs POO Flow Benchmark Report
+#+title: LangChain/LangGraph/CrewAI vs Agentic AI Lab Benchmark Report
 #+startup: overview
 
 * Scope
-This benchmark compares native LangChain/LangGraph/CrewAI orchestration with semantically aligned POO Flow executor surfaces.
+This benchmark compares native LangChain/LangGraph/CrewAI orchestration with semantically aligned Agentic AI Lab executor surfaces.
 
 It does not measure real LLM latency, network tools, or durable storage IO. The deterministic actions model control-plane costs for policy routing, graph edges, dynamic handoff, reducers, checkpoint interrupt/resume, long graph scale, and stream/event consumption.
 
@@ -14,7 +14,7 @@ It does not measure real LLM latency, network tools, or durable storage IO. The 
 - LangChain: =../../.data/langchain/libs/core=
 - LangGraph: =../../.data/langgraph/libs/langgraph=
 - CrewAI: =../../.data/crewai/lib/crewai=
-- POO Flow runtime: current =packages/python-runtime= workspace
+- Agentic AI Lab runtime: current =packages/python-runtime= workspace
 
 * Command
 #+begin_src sh
@@ -22,7 +22,7 @@ uv run \
   --with-editable ../../.data/langgraph/libs/langgraph \
   --with-editable ../../.data/langchain/libs/core \
   --with-editable ../../.data/crewai/lib/crewai \
-  python -m poo_flow_benchmarks \
+  python -m agentic_ai_lab_benchmarks \
   --iterations 2000 \
   --warmup 200 \
   --progress \
@@ -41,12 +41,12 @@ uv run \
 - GC during measurement: =false=
 
 * Summary
-- POO Flow runtime surfaces are 20.64x to 20.64x faster than the measured LangChain native orchestration cases in this run.
-- POO Flow runtime surfaces are 34.72x to 99.49x faster than the measured LangGraph native orchestration cases in this run.
-- POO Flow runtime surfaces are 691.65x to 691.65x faster than the measured CrewAI native orchestration cases in this run.
+- Agentic AI Lab runtime surfaces are 20.64x to 20.64x faster than the measured LangChain native orchestration cases in this run.
+- Agentic AI Lab runtime surfaces are 34.72x to 99.49x faster than the measured LangGraph native orchestration cases in this run.
+- Agentic AI Lab runtime surfaces are 691.65x to 691.65x faster than the measured CrewAI native orchestration cases in this run.
 - All comparison rows report deterministic control-plane latency only; they do not include LLM, network, or durable storage IO.
 
-| comparison | native mean ms | poo-flow mean ms | speedup |
+| comparison | native mean ms | agentic-ai-lab mean ms | speedup |
 |-
 | LangChain branch/tool route | 0.2386 | 0.0116 | 20.64x |
 | LangGraph router | 0.4535 | 0.0116 | 39.22x |
@@ -67,15 +67,15 @@ uv run \
 | langgraph-long-graph-native | langgraph-native | state-graph, long-graph, scale, linear-graph | 3.1973 | 2.8896 | 4.7452 | 2.7896 | 11.6980 | 341567 |
 | langgraph-router-agent-native | langgraph-native | state-graph, conditional-edge, policy-router, agent-state | 0.4535 | 0.4395 | 0.5386 | 0.4189 | 0.6797 | 431648 |
 | langgraph-router-stream-native | langgraph-native | state-graph, stream, events, conditional-edge | 0.4170 | 0.4048 | 0.5061 | 0.3933 | 0.6411 | 372039 |
-| poo-flow-executor-crewai-sequential | poo-flow-executor | runtime-graph, crewai-sequential, executor-only | 0.0160 | 0.0157 | 0.0168 | 0.0147 | 0.0598 | 910496 |
-| poo-flow-executor-handoff-reducer | poo-flow-executor | runtime-graph, handoff-reducer, executor-only | 0.0222 | 0.0220 | 0.0225 | 0.0211 | 0.0709 | 110844 |
-| poo-flow-executor-interrupt-resume | poo-flow-executor | runtime-graph, interrupt-resume, executor-only | 0.0138 | 0.0137 | 0.0140 | 0.0129 | 0.0470 | 552858 |
-| poo-flow-executor-long-graph | poo-flow-executor | runtime-graph, long-graph, executor-only | 0.0847 | 0.0843 | 0.0869 | 0.0808 | 0.1253 | 876351 |
-| poo-flow-executor-router-agent | poo-flow-executor | runtime-graph, conditional-edge, executor-only | 0.0116 | 0.0115 | 0.0118 | 0.0110 | 0.0143 | 819897 |
-| poo-flow-executor-router-stream-events | poo-flow-executor | runtime-graph, stream-events, executor-only | 0.0087 | 0.0087 | 0.0089 | 0.0084 | 0.0573 | 486065 |
+| agentic-ai-lab-executor-crewai-sequential | agentic-ai-lab-executor | runtime-graph, crewai-sequential, executor-only | 0.0160 | 0.0157 | 0.0168 | 0.0147 | 0.0598 | 910496 |
+| agentic-ai-lab-executor-handoff-reducer | agentic-ai-lab-executor | runtime-graph, handoff-reducer, executor-only | 0.0222 | 0.0220 | 0.0225 | 0.0211 | 0.0709 | 110844 |
+| agentic-ai-lab-executor-interrupt-resume | agentic-ai-lab-executor | runtime-graph, interrupt-resume, executor-only | 0.0138 | 0.0137 | 0.0140 | 0.0129 | 0.0470 | 552858 |
+| agentic-ai-lab-executor-long-graph | agentic-ai-lab-executor | runtime-graph, long-graph, executor-only | 0.0847 | 0.0843 | 0.0869 | 0.0808 | 0.1253 | 876351 |
+| agentic-ai-lab-executor-router-agent | agentic-ai-lab-executor | runtime-graph, conditional-edge, executor-only | 0.0116 | 0.0115 | 0.0118 | 0.0110 | 0.0143 | 819897 |
+| agentic-ai-lab-executor-router-stream-events | agentic-ai-lab-executor | runtime-graph, stream-events, executor-only | 0.0087 | 0.0087 | 0.0089 | 0.0084 | 0.0573 | 486065 |
 
 * Retired Graph ABI
-The legacy graph-specific C ABI rows and validation gates are intentionally absent. POO Flow runtime-v0 C ABI performance is qualified by the separate runtime ABI benchmark; it is not presented as graph orchestration equivalence.
+The legacy graph-specific C ABI rows and validation gates are intentionally absent. Agentic AI Lab runtime-v0 C ABI performance is qualified by the separate runtime ABI benchmark; it is not presented as graph orchestration equivalence.
 
 | name | status | features | error | receipt summary |
 |-

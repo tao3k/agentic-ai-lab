@@ -6,9 +6,9 @@
 ;;; Boundary: hygienic macros for repeated sandbox backend module object families.
 ;;; Invariant: macros expand to ordinary POO module objects and field contracts.
 
-(import :core/module-system/schema/interface
-        :poo-flow/modules/sandbox-core/shared-object
-        :poo-flow/modules/sandbox-core/objects)
+(import :yuanxu/module-system/schema/interface
+        :agentic-ai-lab/modules/sandbox-core/shared-object
+        :agentic-ai-lab/modules/sandbox-core/objects)
 
 (export defpoo-sandbox-backend-object-family)
 
@@ -20,8 +20,8 @@
 ;;       contract value; the macro removes only the repeated POO construction
 ;;       frame shared by nono, CubeSandbox, and Docker backend modules.
 ;;
-;;       The generated code is normal =poo-flow-module-object= and
-;;       =poo-flow-module-field-contract= data. It is not a user-facing DSL.
+;;       The generated code is normal =yuanxu-module-object= and
+;;       =yuanxu-module-field-contract= data. It is not a user-facing DSL.
 ;;     %
 ;; defpoo-sandbox-backend-object-family
 ;; : (-> SandboxBackendObjectFamilySyntax SandboxBackendObjectFamilyExpansionSyntax)
@@ -53,11 +53,11 @@
      ;; contracts adjacent to definitions so downstream reports stay actionable.
      ;; : Any
      (def sandbox-object
-       (poo-flow-module-object
+       (yuanxu-module-object
         'sandbox-identity
-        (list poo-flow-shared-sandbox-object)
+        (list agentic-ai-lab-shared-sandbox-object)
         (list
-         (poo-flow-module-field-contract
+         (yuanxu-module-field-contract
           'sandbox-field sandbox-type 'sandbox-merge
           sandbox-default
           sandbox-metadata)
@@ -72,22 +72,22 @@
 
      ;; : Any
      (def backend-capability-registry
-       (poo-flow-sandbox-backend-capability-registry
+       (agentic-ai-lab-sandbox-backend-capability-registry
         (list (cons 'backend-key backend-capability))
         registry-metadata))
 
      ;; : Any
      (def profile-object
-       (poo-flow-module-object
+       (yuanxu-module-object
         'profile-identity
 	        (list profile-super ...)
 	        (list
-	         (poo-flow-module-field-contract
-	          'backend PooFlowModuleSymbolType 'override
+	         (yuanxu-module-field-contract
+	          'backend YuanxuModuleSymbolType 'override
 	          'backend-key
 	          '((scope . backend-key)
 	            (owned-by . module-config)))
-	         (poo-flow-module-field-contract
+	         (yuanxu-module-field-contract
 	          'profile-field profile-type 'profile-merge
 	          profile-default
           profile-metadata)

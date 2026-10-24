@@ -7,80 +7,80 @@
 ;;; Invariant: syntax modules expand to these pure constructors, not directly
 ;;; to the wider session object graph.
 
-(import (only-in :poo-flow/modules/agent-sandbox/config
-                 poo-flow-default-sandbox-profiles)
-        :poo-flow/modules/session/agent
-        :poo-flow/modules/session/agent-param
-        :poo-flow/modules/session/communication
-        :poo-flow/modules/session/materialization
-        :poo-flow/modules/session/objects-core
-        :poo-flow/modules/session/objects-handoff
-        :poo-flow/modules/session/objects-graph
-        :poo-flow/modules/session/registry
-        :poo-flow/modules/session/selector)
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/config
+                 agentic-ai-lab-default-sandbox-profiles)
+        :agentic-ai-lab/modules/session/agent
+        :agentic-ai-lab/modules/session/agent-param
+        :agentic-ai-lab/modules/session/communication
+        :agentic-ai-lab/modules/session/materialization
+        :agentic-ai-lab/modules/session/objects-core
+        :agentic-ai-lab/modules/session/objects-handoff
+        :agentic-ai-lab/modules/session/objects-graph
+        :agentic-ai-lab/modules/session/registry
+        :agentic-ai-lab/modules/session/selector)
 
-(export poo-flow-session-syntax-chunk
-        poo-flow-session-syntax-lineage
-        poo-flow-session-syntax-default-placement
-        poo-flow-session-syntax-value
-        poo-flow-session-default-placement
-        poo-flow-session-syntax-graph-presentation
-        poo-flow-session-syntax-registry-entry
-        poo-flow-session-syntax-registry
+(export agentic-ai-lab-session-syntax-chunk
+        agentic-ai-lab-session-syntax-lineage
+        agentic-ai-lab-session-syntax-default-placement
+        agentic-ai-lab-session-syntax-value
+        agentic-ai-lab-session-default-placement
+        agentic-ai-lab-session-syntax-graph-presentation
+        agentic-ai-lab-session-syntax-registry-entry
+        agentic-ai-lab-session-syntax-registry
         session-communication-channel-row
-        poo-flow-session-syntax-communication-channel-rows
-        poo-flow-session-syntax-communication-channel
+        agentic-ai-lab-session-syntax-communication-channel-rows
+        agentic-ai-lab-session-syntax-communication-channel
         session-communication-row
-        poo-flow-session-syntax-communication-rows
-        poo-flow-session-syntax-communication
-        poo-flow-session-syntax-selector-candidate
+        agentic-ai-lab-session-syntax-communication-rows
+        agentic-ai-lab-session-syntax-communication
+        agentic-ai-lab-session-syntax-selector-candidate
         session-selector-row
-        poo-flow-session-syntax-selector
+        agentic-ai-lab-session-syntax-selector
         session-materialization-row
-        poo-flow-session-syntax-materialization
-        poo-flow-session-syntax-agent-node
+        agentic-ai-lab-session-syntax-materialization
+        agentic-ai-lab-session-syntax-agent-node
         session-agent-node-registry-entry
-        poo-flow-session-syntax-agent-graph
-        poo-flow-session-syntax-agent-param-contract
+        agentic-ai-lab-session-syntax-agent-graph
+        agentic-ai-lab-session-syntax-agent-param-contract
         session-agent-param-row)
 
 ;; : (-> Symbol Symbol String Alist)
-(def (poo-flow-session-syntax-chunk chunk-id role content)
-  (poo-flow-session-chunk chunk-id role content))
+(def (agentic-ai-lab-session-syntax-chunk chunk-id role content)
+  (agentic-ai-lab-session-chunk chunk-id role content))
 
 ;; : (-> Symbol [Symbol] Symbol PooSessionLineage)
-(def (poo-flow-session-syntax-lineage session-id parent-session-ids branch-kind)
-  (poo-flow-session-lineage session-id parent-session-ids branch-kind))
+(def (agentic-ai-lab-session-syntax-lineage session-id parent-session-ids branch-kind)
+  (agentic-ai-lab-session-lineage session-id parent-session-ids branch-kind))
 
 ;; : (-> Symbol [Alist] PooSessionPlacement)
-(def (poo-flow-session-syntax-default-placement profile-ref . maybe-metadata)
-  (apply poo-flow-session-default-placement profile-ref maybe-metadata))
+(def (agentic-ai-lab-session-syntax-default-placement profile-ref . maybe-metadata)
+  (apply agentic-ai-lab-session-default-placement profile-ref maybe-metadata))
 
 ;; : (-> Symbol [Alist] PooSessionLineage PooSessionPlacement [Alist] PooSessionValue)
-(def (poo-flow-session-syntax-value session-id chunks lineage placement . metadata)
-  (apply poo-flow-session-value session-id chunks lineage placement metadata))
+(def (agentic-ai-lab-session-syntax-value session-id chunks lineage placement . metadata)
+  (apply agentic-ai-lab-session-value session-id chunks lineage placement metadata))
 
 ;;; The default user-facing placement resolves against the maintained sandbox
 ;;; catalog. It remains report-only and never realizes a runtime descriptor.
 ;; : (-> Symbol [Alist] PooSessionPlacement)
-(def (poo-flow-session-default-placement profile-ref . maybe-metadata)
-  (apply poo-flow-session-placement-resolve
+(def (agentic-ai-lab-session-default-placement profile-ref . maybe-metadata)
+  (apply agentic-ai-lab-session-placement-resolve
          profile-ref
-         poo-flow-default-sandbox-profiles
+         agentic-ai-lab-default-sandbox-profiles
          maybe-metadata))
 
 ;; : (-> [PooSessionValue] PooSessionGraphPresentation)
-(def (poo-flow-session-syntax-graph-presentation session-values)
-  (pooFlowSessionGraphPresentation session-values))
+(def (agentic-ai-lab-session-syntax-graph-presentation session-values)
+  (agenticAiLabSessionGraphPresentation session-values))
 
 ;; : (-> PooSession Symbol [Symbol] Alist [Alist] PooSessionRegistryEntry)
-(def (poo-flow-session-syntax-registry-entry session-value
+(def (agentic-ai-lab-session-syntax-registry-entry session-value
                                              agent-id
                                              channel-ids
                                              policies
                                              .
                                              maybe-metadata)
-  (apply poo-flow-session-registry-entry
+  (apply agentic-ai-lab-session-registry-entry
          session-value
          agent-id
          channel-ids
@@ -88,14 +88,14 @@
          maybe-metadata))
 
 ;; : (-> Symbol [Symbol] [Symbol] Symbol [PooSessionRegistryEntry] [Alist] PooSessionRegistryReceipt)
-(def (poo-flow-session-syntax-registry project-id
+(def (agentic-ai-lab-session-syntax-registry project-id
                                        root-session-ids
                                        child-session-ids
                                        active-session-ref
                                        entries
                                        .
                                        maybe-metadata)
-  (apply poo-flow-session-registry-receipt
+  (apply agentic-ai-lab-session-registry-receipt
          project-id
          root-session-ids
          child-session-ids
@@ -105,14 +105,14 @@
 
 ;; : (-> PooSessionCommunicationChannelReceipt Alist)
 (def (session-communication-channel-row receipt)
-  (poo-flow-session-communication-channel-receipt->alist receipt))
+  (agentic-ai-lab-session-communication-channel-receipt->alist receipt))
 
 ;; : (-> [PooSessionCommunicationChannelReceipt] [Alist])
-(def (poo-flow-session-syntax-communication-channel-rows receipts)
-  (poo-flow-session-communication-channel-receipts->alists receipts))
+(def (agentic-ai-lab-session-syntax-communication-channel-rows receipts)
+  (agentic-ai-lab-session-communication-channel-receipts->alists receipts))
 
 ;; : (-> Symbol Symbol Symbol Symbol Symbol Symbol Symbol [Symbol] [Symbol] [Alist] PooSessionCommunicationChannelReceipt)
-(def (poo-flow-session-syntax-communication-channel project-id
+(def (agentic-ai-lab-session-syntax-communication-channel project-id
                                                     channel-id
                                                     relation-kind
                                                     source-session-id
@@ -123,7 +123,7 @@
                                                     delivery-policies
                                                     .
                                                     maybe-metadata)
-  (apply poo-flow-session-communication-channel-receipt
+  (apply agentic-ai-lab-session-communication-channel-receipt
          project-id
          channel-id
          relation-kind
@@ -137,14 +137,14 @@
 
 ;; : (-> PooSessionCommunicationReceipt Alist)
 (def (session-communication-row receipt)
-  (poo-flow-session-communication-receipt->alist receipt))
+  (agentic-ai-lab-session-communication-receipt->alist receipt))
 
 ;; : (-> [PooSessionCommunicationReceipt] [Alist])
-(def (poo-flow-session-syntax-communication-rows receipts)
-  (poo-flow-session-communication-receipts->alists receipts))
+(def (agentic-ai-lab-session-syntax-communication-rows receipts)
+  (agentic-ai-lab-session-communication-receipts->alists receipts))
 
 ;; : (-> Symbol Symbol Symbol Symbol Symbol Symbol Symbol Symbol Symbol Symbol Symbol Symbol [Alist] PooSessionCommunicationReceipt)
-(def (poo-flow-session-syntax-communication project-id
+(def (agentic-ai-lab-session-syntax-communication project-id
                                             relation-kind
                                             source-root-session-id
                                             target-root-session-id
@@ -158,7 +158,7 @@
                                             delivery-policy
                                             .
                                             maybe-metadata)
-  (apply poo-flow-session-communication-receipt
+  (apply agentic-ai-lab-session-communication-receipt
          project-id
          relation-kind
          source-root-session-id
@@ -174,14 +174,14 @@
          maybe-metadata))
 
 ;; : (-> Symbol Symbol Symbol Symbol [Symbol] [Alist] PooSessionSelectorCandidate)
-(def (poo-flow-session-syntax-selector-candidate candidate-id
+(def (agentic-ai-lab-session-syntax-selector-candidate candidate-id
                                                  candidate-kind
                                                  target-ref
                                                  description-value
                                                  required-receipt-fields
                                                  .
                                                  maybe-metadata)
-  (apply poo-flow-session-selector-candidate
+  (apply agentic-ai-lab-session-selector-candidate
          candidate-id
          candidate-kind
          target-ref
@@ -191,10 +191,10 @@
 
 ;; : (-> PooSessionSelectorReceipt Alist)
 (def (session-selector-row receipt)
-  (poo-flow-session-selector-receipt->alist receipt))
+  (agentic-ai-lab-session-selector-receipt->alist receipt))
 
 ;; : (-> Symbol Symbol Symbol Symbol [PooSessionSelectorCandidate] Alist Symbol [Alist] PooSessionSelectorReceipt)
-(def (poo-flow-session-syntax-selector selector-id
+(def (agentic-ai-lab-session-syntax-selector selector-id
                                        project-id
                                        root-session-ref
                                        input-session-ref
@@ -203,7 +203,7 @@
                                        fallback-ref
                                        .
                                        maybe-metadata)
-  (apply poo-flow-session-selector-receipt
+  (apply agentic-ai-lab-session-selector-receipt
          selector-id
          project-id
          root-session-ref
@@ -215,10 +215,10 @@
 
 ;; : (-> PooSessionMaterializationReceipt Alist)
 (def (session-materialization-row receipt)
-  (poo-flow-session-materialization-receipt->alist receipt))
+  (agentic-ai-lab-session-materialization-receipt->alist receipt))
 
 ;; : (-> Symbol Symbol Symbol Symbol [Symbol] Symbol Symbol Symbol Alist Symbol [Alist] PooSessionMaterializationReceipt)
-(def (poo-flow-session-syntax-materialization request-id
+(def (agentic-ai-lab-session-syntax-materialization request-id
                                              project-id
                                              root-session-ref
                                              session-ref
@@ -230,7 +230,7 @@
                                              error-summary
                                              .
                                              maybe-metadata)
-  (apply poo-flow-session-runtime-materialization-receipt
+  (apply agentic-ai-lab-session-runtime-materialization-receipt
          request-id
          project-id
          root-session-ref
@@ -244,7 +244,7 @@
          maybe-metadata))
 
 ;; : (-> Symbol Symbol Symbol Symbol Symbol Symbol Symbol [Symbol] [Symbol] Symbol Symbol Symbol Symbol Symbol Symbol [Symbol] [Symbol] Symbol Symbol Symbol [Alist] PooSessionAgentNode)
-(def (poo-flow-session-syntax-agent-node agent-id
+(def (agentic-ai-lab-session-syntax-agent-node agent-id
                                         project-ref
                                         root-session-ref
                                         parent-session-ref
@@ -266,7 +266,7 @@
                                         result-contract
                                         .
                                         maybe-metadata)
-  (apply poo-flow-session-agent-node
+  (apply agentic-ai-lab-session-agent-node
          agent-id
          project-ref
          root-session-ref
@@ -291,10 +291,10 @@
 
 ;; : (-> PooSessionAgentNode PooSession PooSessionRegistryEntry)
 (def (session-agent-node-registry-entry node session-value)
-  (poo-flow-session-agent-node->registry-entry node session-value))
+  (agentic-ai-lab-session-agent-node->registry-entry node session-value))
 
 ;; : (-> Alist Symbol Object Object)
-(def (poo-flow-session-syntax-agent-graph-metadata-ref metadata
+(def (agentic-ai-lab-session-syntax-agent-graph-metadata-ref metadata
                                                         key
                                                         default-value)
   (if (list? metadata)
@@ -303,14 +303,14 @@
     default-value))
 
 ;; : (-> [Object] Alist Alist)
-(def (poo-flow-session-syntax-agent-graph-topology-metadata agent-nodes
+(def (agentic-ai-lab-session-syntax-agent-graph-topology-metadata agent-nodes
                                                             metadata)
   (let (channel-receipts
-        (poo-flow-session-syntax-agent-graph-metadata-ref
+        (agentic-ai-lab-session-syntax-agent-graph-metadata-ref
          metadata
          'communication-channel-receipts
          '()))
-    (poo-flow-session-topology->handoff-metadata
+    (agentic-ai-lab-session-topology->handoff-metadata
      (list
       (cons 'agent-registered?
             (and (pair? agent-nodes) #t))
@@ -323,7 +323,7 @@
      metadata)))
 
 ;; : (-> Symbol Symbol [PooSessionAgentNode] [PooSession] PooSessionRegistryReceipt [PooSessionCommunicationReceipt] [Alist] PooSessionAgentGraph)
-(def (poo-flow-session-syntax-agent-graph project-id
+(def (agentic-ai-lab-session-syntax-agent-graph project-id
                                           root-session-ref
                                           agent-nodes
                                           session-values
@@ -335,10 +335,10 @@
                      '()
                      (car maybe-metadata)))
          (handoff-metadata
-          (poo-flow-session-syntax-agent-graph-topology-metadata
+          (agentic-ai-lab-session-syntax-agent-graph-topology-metadata
            agent-nodes
            metadata)))
-    (poo-flow-session-agent-graph
+    (agentic-ai-lab-session-agent-graph
      project-id
      root-session-ref
      agent-nodes
@@ -348,7 +348,7 @@
      handoff-metadata)))
 
 ;; : (-> Symbol PooSessionAgentNode PooSessionAgentParamValidationReceipt Symbol Symbol Symbol [Alist] PooSessionAgentParamContract)
-(def (poo-flow-session-syntax-agent-param-contract contract-id
+(def (agentic-ai-lab-session-syntax-agent-param-contract contract-id
                                                    agent-node
                                                    validation-receipt
                                                    provider-ref
@@ -356,7 +356,7 @@
                                                    event-policy
                                                    .
                                                    maybe-metadata)
-  (apply poo-flow-session-agent-param-contract
+  (apply agentic-ai-lab-session-agent-param-contract
          contract-id
          agent-node
          validation-receipt
@@ -367,4 +367,4 @@
 
 ;; : (-> PooSessionAgentParamContract Alist)
 (def (session-agent-param-row contract)
-  (poo-flow-session-agent-param-contract->alist contract))
+  (agentic-ai-lab-session-agent-param-contract->alist contract))

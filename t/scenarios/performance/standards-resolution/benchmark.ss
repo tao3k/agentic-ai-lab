@@ -15,7 +15,7 @@
  (iterations . 1)
  (unit . "ms")
  (sourcePath . "t/scenarios/performance/standards-resolution/benchmark.ss")
- (rule . POO-FLOW-STANDARDS-PERFORMANCE-001)
+ (rule . AGENTIC-AI-LAB-STANDARDS-PERFORMANCE-001)
  (feature . standards-resolution)
  (optimizationFocus . "catalog-identity admission, indexed edition lookup, bounded dependency traversal and one immutable bundle digest")
  (inputShape . "10,000 exact Standard roots with no artifact bodies or runtime Provider execution")

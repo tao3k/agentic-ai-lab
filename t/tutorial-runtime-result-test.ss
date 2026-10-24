@@ -3,10 +3,14 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: runtime tutorial stages prove Docker/Store handoff behavior.
 ;;; Invariant: these tests keep heavy runtime semantics behind command output.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,10 +21,10 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/modules/docker/interface
-        :poo-flow/modules/workflow/store
-        :poo-flow/modules/workflow/flows)
+        :yuanxu/modules/funflow/control-plane/api
+        :agentic-ai-lab/modules/docker/interface
+        :yuanxu/modules/funflow/store
+        :agentic-ai-lab/modules/workflow/flows)
 
 (export tutorial-runtime-result-test)
 
@@ -102,7 +106,7 @@
 ;; : TestSuite
 (def tutorial-runtime-result-test
   (test-suite "funflow tutorial runtime result ladder"
-    (poo-flow-test-case "stage 7 docker process runtime command returns CCompilation visible result"
+    (yuanxu-test-case "stage 7 docker process runtime command returns CCompilation visible result"
       (let (seen-request #f)
         (let* ((runtime-command
                 (make-stdout-runtime-command
@@ -120,17 +124,17 @@
                  '((tutorial . stage-7))))
                (config (make-docker-run-config
                         (list (cons 'runtime-command runtime-command))))
-               (flow (docker-flow 'compile-c
-                                  "gcc:9.3.0"
-                                  "gcc"
-                                  '("/example/double.c" "/example/main.c" "-o" "/output/main")
-                                  '(((store-item . example-src)
-                                     (mount-path . "/example"))
-                                    ((store-item . output-dir)
-                                     (mount-path . "/output")))
-                                  'process-handle
-                                  'integer
-                                  'integer))
+               (flow (docker-flow
+		      'compile-c
+		      "gcc:9.3.0"
+		      "gcc"
+		      '("/example/double.c" "/example/main.c" "-o" "/output/main")
+		      '(((store-item . example-src)
+                         (mount-path . "/example"))
+                        ((store-item . output-dir)
+                         (mount-path . "/output")))
+		      'process-handle
+		      (Fun AdapterResult <- Integer)))
                (result (run-result-value
                         (run-flow-with-config config flow 3)))
                (docker (runtime-docker-config seen-request)))
@@ -145,7 +149,7 @@
           (check-equal? (docker-config-ref docker 'image #f) "gcc:9.3.0")
           (check-equal? (docker-config-ref docker 'output-policy #f)
                         'process-handle))))
-    (poo-flow-test-case "stage 8 docker artifact feeds store manifest"
+    (yuanxu-test-case "stage 8 docker artifact feeds store manifest"
       (let ((seen-docker #f)
             (seen-store #f))
         (let* ((runtime-command
@@ -161,24 +165,24 @@
                (config (make-docker-store-run-config
                         (list (cons 'runtime-command runtime-command))))
                (compile-flow
-                (docker-flow 'compile-c-stage-8
-                             "gcc:9.3.0"
-                             "gcc"
-                             '("/example/double.c" "/example/main.c" "-o" "/output/main")
-                             '(((store-item . example-src)
-                                (mount-path . "/example"))
-                               ((store-item . output-dir)
-                                (mount-path . "/output")))
-                             'process-handle
-                             'integer
-                             'process-handle))
+                (docker-flow
+		 'compile-c-stage-8
+		 "gcc:9.3.0"
+		 "gcc"
+		 '("/example/double.c" "/example/main.c" "-o" "/output/main")
+		 '(((store-item . example-src)
+                    (mount-path . "/example"))
+                   ((store-item . output-dir)
+                    (mount-path . "/output")))
+		 'process-handle
+		 (Fun AdapterResult <- Integer)))
                (store-output
-                (store-flow 'store-c-binary
-                            'put
-                            '((store-item . c-binary)
-                              (path . "/output/main"))
-                            'process-handle
-                            'artifact-manifest))
+                (store-flow
+		 'store-c-binary
+		 'put
+		 '((store-item . c-binary)
+                   (path . "/output/main"))
+		 (Fun AdapterResult <- Any)))
                (flow (flow-then 'compile-and-store compile-flow store-output))
                (result (run-result-value
                         (run-flow-with-config config flow 3)))
@@ -197,7 +201,7 @@
           (check-equal? (execution-request-kind seen-store) 'store)
           (check-equal? (runtime-command-name runtime-command)
                         'stage-8-docker-store))))
-    (poo-flow-test-case "stage 9 descriptor command drives docker store workflow"
+    (yuanxu-test-case "stage 9 descriptor command drives docker store workflow"
       (let ((seen-docker #f)
             (seen-store #f))
         (let* ((descriptor
@@ -215,24 +219,24 @@
                (config (make-docker-store-run-config
                         (list (cons 'runtime-command runtime-command))))
                (compile-flow
-                (docker-flow 'compile-c-stage-9
-                             "gcc:9.3.0"
-                             "gcc"
-                             '("/example/double.c" "/example/main.c" "-o" "/output/main")
-                             '(((store-item . example-src)
-                                (mount-path . "/example"))
-                               ((store-item . output-dir)
-                                (mount-path . "/output")))
-                             'process-handle
-                             'integer
-                             'process-handle))
+                (docker-flow
+		 'compile-c-stage-9
+		 "gcc:9.3.0"
+		 "gcc"
+		 '("/example/double.c" "/example/main.c" "-o" "/output/main")
+		 '(((store-item . example-src)
+                    (mount-path . "/example"))
+                   ((store-item . output-dir)
+                    (mount-path . "/output")))
+		 'process-handle
+		 (Fun AdapterResult <- Integer)))
                (store-output
-                (store-flow 'store-c-binary-stage-9
-                            'put
-                            '((store-item . c-binary-stage-9)
-                              (path . "/output/main"))
-                            'process-handle
-                            'artifact-manifest))
+                (store-flow
+		 'store-c-binary-stage-9
+		 'put
+		 '((store-item . c-binary-stage-9)
+                   (path . "/output/main"))
+		 (Fun AdapterResult <- Any)))
                (flow (flow-then 'compile-and-store-stage-9
                                 compile-flow
                                 store-output))
@@ -258,11 +262,11 @@
           (check-equal? (execution-request-kind seen-store) 'store)
           (check-equal? (runtime-command-name runtime-command)
                         'stage-9-docker-store-runtime))))
-    (poo-flow-test-case "stage 10 descriptor manifest exposes rust cli handoff"
+    (yuanxu-test-case "stage 10 descriptor manifest exposes rust cli handoff"
       (let* ((descriptor
               (make-stdout-runtime-command-descriptor
                'stage-10-rust-cli
-               "/usr/bin/poo-flow-runtime"
+               "/usr/bin/agentic-ai-lab-runtime"
                (lambda (envelope)
                  (list "run"
                        "--request-id"
@@ -284,7 +288,7 @@
         (check-equal? (cdr (assoc 'name manifest)) 'stage-10-rust-cli)
         (check-equal? (cdr (assoc 'protocol manifest)) 'stdout-s-expression)
         (check-equal? (cdr (assoc 'executable manifest))
-                      "/usr/bin/poo-flow-runtime")
+                      "/usr/bin/agentic-ai-lab-runtime")
         (check-equal? (cdr (assoc 'arguments manifest))
                       '("run"
                         "--request-id"
@@ -292,7 +296,7 @@
                         "--response-protocol"
                         "stdout-s-expression"))
         (check-equal? (cdr (assoc 'argv manifest))
-                      '("/usr/bin/poo-flow-runtime"
+                      '("/usr/bin/agentic-ai-lab-runtime"
                         "run"
                         "--request-id"
                         "stage-10-request"

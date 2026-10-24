@@ -1,0 +1,67 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Scheme source comprehension pilot
+#+STATUS: completed bounded pilot; native regrade documented
+#+DATE: 2026-10-02
+
+This page records the completed historical pilot. The current =scheme.py=
+entry point runs the [[file:model-study-scheme-source-questions.org][ASCENT source-question protocol]]. The three-case
+pilot remains reproducible from its recorded Git commit.
+
+* Question
+
+Can the model read actual Gerbil Scheme source for a finite ASCENT
+candidate and predict the single S-expression written by =main=? This
+pilot tests the program text directly. The completed founded study sent
+JSON observations and therefore did not answer this question.
+
+* Fixed inputs and answer rule
+
+The three inputs in =model_study/scheme_source= are =withdrawal.ss=,
+=wrong_join.ss=, and =negation_count.ss=. Their source bytes, including
+Scheme comments that request one output datum, are the entire user
+message. No JSON observation, English case description, tool receipt, or
+computed answer is sent. The source invokes the pinned ASCENT public
+=reasoning-source-snapshot= and =reasoning-attempt= API. The third input
+uses negation, an even-weight guard, computation, and =count=.
+
+Before model calls, execute the same three files with Gerbil on the
+committed checkouts to obtain expected S-expressions. The expected files
+stay outside the repository and are never sent to the model. Save raw
+model text as separate =.sexp= files. Reject text outside the restricted
+answer alphabet or above 2048 bytes. The native Scheme scorer only reads
+the returned datum; it never evaluates it. It checks =answer= shape and
+compares each row set independent of row order. Report valid syntax and
+correct rows separately.
+
+Use DeepSeek =deepseek-flash= through the Responses API, non-thinking,
+=temperature=0=, =max_output_tokens=512=, timeout 45 seconds, no retries.
+Run three fresh calls per case, nine calls maximum. Each call sends one
+source file as a single user message. This pilot has no paired receipt arm;
+the outcome is exact row-set prediction on each of the three programs.
+Record both Git heads, source SHA256, response status and ID, native score,
+and model wall time. Keep raw output outside the repository. Do not infer
+general Scheme comprehension from nine calls.
+
+* Execution gate
+
+The preview command writes the exact outgoing source files, expected
+native answers in a separate subdirectory, and a manifest to an external
+directory. Review the three outgoing files before authorizing any paid
+call. The live runner requires clean committed checkouts, the exact POO
+Flow dependency pin, and unchanged preview hashes and Git heads.
+
+#+begin_src sh
+python -m agentic_ai_lab_testing.model_study.scheme \
+  --ascent-root /path/to/gerbil-ascent \
+  --poo-root /path/to/agentic-ai-lab \
+  --gerbil-path /path/to/agentic-ai-lab/.gerbil \
+  --preview-dir /private/tmp/poo-scheme-preview
+#+end_src
+
+After review and authorization, the live command adds =--env-file= and
+=--output-dir=. The output directory must be new and external.
+
+The completed result and the correction to the initial syntax filter are
+in [[file:model-study-scheme-results.org][the result receipt]].

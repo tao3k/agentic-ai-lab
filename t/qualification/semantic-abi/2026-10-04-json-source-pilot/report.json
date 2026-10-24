@@ -1,0 +1,49 @@
+{
+  "schema": "poo-flow.semantic-abi-live-receipt",
+  "version": 1,
+  "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+  "artifactSha256": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c",
+  "descriptor": {
+    "sourceAuthority": "caller-declared-not-authenticated",
+    "maximumTemporalParents": 256,
+    "maximumTemporalHorizon": 1024,
+    "schema": "poo-flow.semantic-descriptor",
+    "threading": "single-owner-thread",
+    "operations": [
+      "temporal.solve",
+      "graph.admit",
+      "temporal.verify",
+      "graph.targets",
+      "temporal.observe"
+    ],
+    "maximumTemporalEvents": 128,
+    "abiVersion": 1,
+    "maximumInputBytes": 1048576
+  },
+  "nativeColdSeconds": 0.17103654200036544,
+  "runtimeModule": "/private/tmp/poo-pr34-semantic-live-env-20261003/lib/python3.13/site-packages/poo_flow_runtime/semantic_runtime.py",
+  "attempts": 24,
+  "plannedCalls": 24,
+  "unattempted": 0,
+  "passed": 3,
+  "failed": 21,
+  "retries": 0,
+  "transportCompleted": 24,
+  "abiObserved": 24,
+  "sourceReboundCases": 24,
+  "negativeControls": 13,
+  "scope": "finite Temporal prediction through current Python/CFFI/Scheme ABI; not full Scheme understanding, real-time teaching, effect authorization or a control ABI freeze",
+  "sourceFreezeIntact": true,
+  "sync": {
+    "attempts": 12,
+    "passed": 0,
+    "medianCallSeconds": 1.1840934159990866
+  },
+  "async": {
+    "attempts": 12,
+    "passed": 3,
+    "medianCallSeconds": 0.9886825414941995
+  },
+  "firstContentMaxSeconds": 1.278647582992562,
+  "contentGapMaxSeconds": 0.31053345900727436
+}

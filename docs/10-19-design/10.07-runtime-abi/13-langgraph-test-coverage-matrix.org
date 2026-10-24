@@ -7,10 +7,10 @@
 * Local Test Inventory
 
 The local checkout at =.data/langgraph= currently exposes 168 Python test files.
-The useful split for POO Flow is not "copy all tests", but "extract portable
+The useful split for Agentic AI Lab is not "copy all tests", but "extract portable
 runtime semantics and benchmark stronger composition".
 
-| LangGraph area | Files | POO Flow stance |
+| LangGraph area | Files | Agentic AI Lab stance |
 |----------------+-------+-----------------|
 | =libs/langgraph/tests= | 49 | Runtime graph semantics: align and benchmark |
 | =libs/checkpoint/tests= | 6 | Checkpointer semantics: align |
@@ -45,7 +45,7 @@ The current Python runtime package covers the portable LangGraph-local surface:
 The executable benchmark control surface is:
 
 #+begin_src sh
-uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks langgraph-alignment \
+uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks langgraph-alignment \
   --iterations 250 --fanout 24
 #+end_src
 
@@ -57,7 +57,7 @@ It emits one line receipt per scenario:
 - =thread-state-facade=
 
 These scenarios are deliberately stronger than simple API parity. They verify
-that POO Flow can compose graph construction, dynamic fan-out, subgraphs, and
+that Agentic AI Lab can compose graph construction, dynamic fan-out, subgraphs, and
 durable state access without importing LangGraph or moving policy semantics out
 of Scheme.
 
@@ -69,6 +69,6 @@ When adapting a LangGraph test:
 2. If it checks backend-specific checkpoint storage, map it to the durable
    adapter contract instead of copying SQLite/Postgres behavior.
 3. If it checks SDK, server, Cloud, CLI deploy, LangSmith, or model-provider
-   behavior, document it as outside the POO Flow runtime ABI boundary.
+   behavior, document it as outside the Agentic AI Lab runtime ABI boundary.
 4. If it reveals a stronger composition pattern, add it to the benchmark
    receipt surface rather than copying framework-specific setup.

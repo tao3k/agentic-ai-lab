@@ -4,11 +4,14 @@
 
 load("@rules_python//python:py_binary.bzl", "py_binary")
 load("@rules_python//python:py_test.bzl", "py_test")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load(":gerbil_dependency_entry.bzl", "gerbil_dependency_entry")
 
 exports_files([
     "bundle_v1.bzl",
     "gerbil_project_environment.bzl",
     "gerbil_projection.bzl",
+    "gerbil_dependency_entry.bzl",
 ])
 
 py_binary(
@@ -34,7 +37,7 @@ py_binary(
     srcs = ["gerbil_environment.py", "scheme_projection_artifact_tool.py"],
     main = "scheme_projection_artifact_tool.py",
     python_version = "3.12",
-    deps = ["//packages/python-runtime/src/poo_flow_runtime:scheme_datum_tool"],
+    deps = ["//packages/python-runtime/src/agentic_ai_lab_runtime:scheme_datum_tool"],
 )
 
 py_test(
@@ -46,5 +49,59 @@ py_test(
     ],
     main = "scheme_projection_artifact_tool_test.py",
     python_version = "3.12",
-    deps = ["//packages/python-runtime/src/poo_flow_runtime:scheme_datum_tool"],
+    deps = ["//packages/python-runtime/src/agentic_ai_lab_runtime:scheme_datum_tool"],
+)
+
+# These are the Parser APIs consumed by this product and its Orgize dependency,
+# not a list of transitive implementation files or all upstream language cases.
+gerbil_dependency_entry(
+    name = "parser_dependency_build",
+    source_build = "@gerbil_parser_sources//:build_script",
+    entry_modules = [
+        "graph-projection-support.ss",
+        "graph-query-support.ss",
+        "language-support.ss",
+        "language-support/grammar.ss",
+        "rust-runtime-event-support.ss",
+        "rust-runtime-support.ss",
+        "src/compiler/event-fold-runtime.ss",
+        "src/compiler/event-fold-scheme-build.ss",
+        "src/compiler/event-fold-scheme-modules.ss",
+        "src/compiler/machine.ss",
+        "src/compiler/rust-pure-aot.ss",
+        "src/compiler/rust-syntax.ss",
+        "src/language/descriptor.ss",
+        "src/modules/parser/graph-projection-objects.ss",
+        "src/modules/parser/graph-syntax.ss",
+        "src/modules/parser/interface.ss",
+        "src/modules/parser/line-structure-objects.ss",
+        "src/runtime/artifact.ss",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "parser_dependency_entry_test",
+    size = "small",
+    timeout = "short",
+    srcs = ["parser-dependency-entry-test.sh"],
+    args = [
+        "$(location @local_gerbil//:gxi)",
+        "$(location :parser-dependency-entry-check.ss)",
+        "$(location :parser_dependency_build)",
+        "$(location @orgize_sources//:build_script)",
+        "$(location @gerbil_parser_sources//:build_script)",
+        "$(location //:gerbil.pkg)",
+    ],
+    data = [
+        ":parser-dependency-entry-check.ss",
+        ":parser_dependency_build",
+        "@local_gerbil//:gxi",
+        "@orgize_sources//:build_script",
+        "@gerbil_parser_sources//:build_script",
+        "//:gerbil.pkg",
+        "@orgize_sources//:sources",
+        "@gerbil_parser_sources//:sources",
+        "//:gerbil_package_sources",
+    ],
 )

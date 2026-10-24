@@ -11,16 +11,16 @@
         (only-in :gerbil/runtime/hash
                  list->hash-table)
         (only-in "./performance.ss"
-                 poo-flow-performance-build-list)
-        (only-in :poo-flow/src/contract/json-schema-ir
-                 poo-flow-json-schema-normalization-schema)
-        (only-in :poo-flow/src/contract/json-schema-receipt
-                 poo-flow-json-schema-contract-artifact-normalization)
-        (only-in :poo-flow/src/contract/json-schema-valid
-                 poo-flow-json-schema-node-valid?)
-        (only-in :poo-flow/modules/funflow/github-ci-contract
-                 poo-flow-funflow-github-ci-contract-artifact
-                 poo-flow-funflow-github-ci-validate-workflow->alist))
+                 agentic-ai-lab-performance-build-list)
+        (only-in :yuanxu/modules/json-schema/json-schema-ir
+                 yuanxu-json-schema-normalization-schema)
+        (only-in :yuanxu/modules/json-schema/json-schema-receipt
+                 yuanxu-json-schema-contract-artifact-normalization)
+        (only-in :yuanxu/modules/json-schema/json-schema-valid
+                 yuanxu-json-schema-node-valid?)
+        (only-in :agentic-ai-lab/modules/workflow/profiles/github-ci-contract
+                 agentic-ai-lab-funflow-github-ci-contract-artifact
+                 agentic-ai-lab-funflow-github-ci-validate-workflow->alist))
 
 (export json-schema-contract-performance-ref
         json-schema-contract-performance-step
@@ -45,7 +45,7 @@
   (list
    (cons 'id
          (string-append "step_" (number->string index)))
-   (cons 'run "echo poo-flow-json-schema-contract")))
+   (cons 'run "echo agentic-ai-lab-json-schema-contract")))
 
 ;; : (-> Integer Integer Pair)
 (def (json-schema-contract-performance-job index step-count)
@@ -55,17 +55,17 @@
    (list
     (cons 'runs-on "ubuntu-latest")
     (cons 'steps
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            step-count
            json-schema-contract-performance-step)))))
 
 ;; : (-> Integer Integer Alist)
 (def (json-schema-contract-performance-workflow job-count step-count)
   (list
-   (cons 'name "POO Flow recursive contract benchmark")
+   (cons 'name "Agentic AI Lab recursive contract benchmark")
    (cons 'on "push")
    (cons 'jobs
-         (poo-flow-performance-build-list
+         (agentic-ai-lab-performance-build-list
           job-count
           (lambda (index)
             (json-schema-contract-performance-job index step-count))))))
@@ -76,7 +76,7 @@
    (list
     (cons "id"
           (string-append "step_" (number->string index)))
-    (cons "run" "echo poo-flow-json-schema-contract"))))
+    (cons "run" "echo agentic-ai-lab-json-schema-contract"))))
 
 ;; : (-> Integer Integer Pair)
 (def (json-schema-contract-performance-native-job index step-count)
@@ -86,7 +86,7 @@
     (list
      (cons "runs-on" "ubuntu-latest")
      (cons "steps"
-           (poo-flow-performance-build-list
+           (agentic-ai-lab-performance-build-list
             step-count
             json-schema-contract-performance-native-step))))))
 
@@ -96,18 +96,18 @@
 (def (json-schema-contract-performance-native-workflow job-count step-count)
   (list->hash-table
    (list
-    (cons "name" "POO Flow recursive contract benchmark")
+    (cons "name" "Agentic AI Lab recursive contract benchmark")
     (cons "on" "push")
     (cons "jobs"
           (list->hash-table
-           (poo-flow-performance-build-list
+           (agentic-ai-lab-performance-build-list
             job-count
             (lambda (index)
               (json-schema-contract-performance-native-job
                index
                step-count))))))))
 
-;; : (-> Integer Integer PooFlowObject)
+;; : (-> Integer Integer AgenticAILabObject)
 (def (json-schema-contract-performance-poo-workflow job-count step-count)
   (object<-alist
    (json-schema-contract-performance-workflow job-count step-count)))
@@ -132,19 +132,19 @@
    rounds
    (lambda ()
      (if (json-schema-contract-performance-valid-receipt?
-          (poo-flow-funflow-github-ci-validate-workflow->alist workflow))
+          (agentic-ai-lab-funflow-github-ci-validate-workflow->alist workflow))
        1
        0))))
 
 ;; : (-> Object Integer Integer)
 (def (json-schema-contract-performance-fast-validate-rounds workflow rounds)
   (let (root-node
-        (poo-flow-json-schema-normalization-schema
-         (poo-flow-json-schema-contract-artifact-normalization
-          poo-flow-funflow-github-ci-contract-artifact)))
+        (yuanxu-json-schema-normalization-schema
+         (yuanxu-json-schema-contract-artifact-normalization
+          agentic-ai-lab-funflow-github-ci-contract-artifact)))
     (json-schema-contract-performance-repeat
      rounds
      (lambda ()
-       (if (poo-flow-json-schema-node-valid? root-node workflow)
+       (if (yuanxu-json-schema-node-valid? root-node workflow)
          1
          0)))))

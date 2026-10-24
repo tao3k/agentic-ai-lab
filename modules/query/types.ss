@@ -9,47 +9,47 @@
         (only-in :clan/poo/mop Type. define-type element?)
         (only-in :gerbil/core hash-get hash-put!)
         (only-in :std/list/list every)
-        (only-in :core/poo-clos/interface
+        (only-in :yuanxu/poo-clos/interface
                  poo-clos-instance?))
 
-(export poo-flow-query-kind
-        poo-flow-query-language-kind
-        poo-flow-query-program-kind
-        poo-flow-query-element-space-kind
-        poo-flow-query-result-contract-kind
-        poo-flow-query-admission-receipt-kind
-        poo-flow-query-provider-kind
-        poo-flow-query-execution-candidate-kind
-        poo-flow-source-query-receipt-kind
-        PooFlowQuery
-        PooFlowQueryLanguage
-        PooFlowQueryProgram
-        PooFlowQueryElementSpace
-        PooFlowQueryResultContract
-        PooFlowQueryAdmissionReceipt
-        PooFlowQueryProvider
-        PooFlowQueryExecutionCandidate
-        PooFlowSourceQueryReceipt
-        poo-flow-query?
-        poo-flow-query-language?
-        poo-flow-query-program?
-        poo-flow-query-element-space?
-        poo-flow-query-result-contract?
-        poo-flow-query-admission-receipt?
-        poo-flow-query-provider?
-        poo-flow-query-execution-candidate?
-        poo-flow-source-query-receipt?)
+(export agentic-ai-lab-query-kind
+        agentic-ai-lab-query-language-kind
+        agentic-ai-lab-query-program-kind
+        agentic-ai-lab-query-element-space-kind
+        agentic-ai-lab-query-result-contract-kind
+        agentic-ai-lab-query-admission-receipt-kind
+        agentic-ai-lab-query-provider-kind
+        agentic-ai-lab-query-execution-candidate-kind
+        agentic-ai-lab-source-query-receipt-kind
+        AgenticAILabQuery
+        AgenticAILabQueryLanguage
+        AgenticAILabQueryProgram
+        AgenticAILabQueryElementSpace
+        AgenticAILabQueryResultContract
+        AgenticAILabQueryAdmissionReceipt
+        AgenticAILabQueryProvider
+        AgenticAILabQueryExecutionCandidate
+        AgenticAILabSourceQueryReceipt
+        agentic-ai-lab-query?
+        agentic-ai-lab-query-language?
+        agentic-ai-lab-query-program?
+        agentic-ai-lab-query-element-space?
+        agentic-ai-lab-query-result-contract?
+        agentic-ai-lab-query-admission-receipt?
+        agentic-ai-lab-query-provider?
+        agentic-ai-lab-query-execution-candidate?
+        agentic-ai-lab-source-query-receipt?)
 
-(def poo-flow-query-kind 'poo-flow.query)
-(def poo-flow-query-language-kind 'poo-flow.query.language)
-(def poo-flow-query-program-kind 'poo-flow.query.program)
-(def poo-flow-query-element-space-kind 'poo-flow.query.element-space)
-(def poo-flow-query-result-contract-kind 'poo-flow.query.result-contract)
-(def poo-flow-query-admission-receipt-kind 'poo-flow.query.admission-receipt)
-(def poo-flow-query-provider-kind 'poo-flow.query.provider)
-(def poo-flow-query-execution-candidate-kind
-  'poo-flow.query.execution-candidate)
-(def poo-flow-source-query-receipt-kind 'poo-flow.query.source-receipt)
+(def agentic-ai-lab-query-kind 'agentic-ai-lab.query)
+(def agentic-ai-lab-query-language-kind 'agentic-ai-lab.query.language)
+(def agentic-ai-lab-query-program-kind 'agentic-ai-lab.query.program)
+(def agentic-ai-lab-query-element-space-kind 'agentic-ai-lab.query.element-space)
+(def agentic-ai-lab-query-result-contract-kind 'agentic-ai-lab.query.result-contract)
+(def agentic-ai-lab-query-admission-receipt-kind 'agentic-ai-lab.query.admission-receipt)
+(def agentic-ai-lab-query-provider-kind 'agentic-ai-lab.query.provider)
+(def agentic-ai-lab-query-execution-candidate-kind
+  'agentic-ai-lab.query.execution-candidate)
+(def agentic-ai-lab-source-query-receipt-kind 'agentic-ai-lab.query.source-receipt)
 
 (def (query-stable-identity? value)
   (or (symbol? value)
@@ -81,7 +81,7 @@
   (and (query-has-slots?
         value '(kind identity result-kind required-fields max-results
                      immutable?))
-       (eq? (.ref value 'kind) poo-flow-query-result-contract-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-query-result-contract-kind)
        (query-stable-identity? (.ref value 'identity))
        (symbol? (.ref value 'result-kind))
        (query-symbol-list? (.ref value 'required-fields))
@@ -89,14 +89,14 @@
        (> (.ref value 'max-results) 0)
        (eq? (.ref value 'immutable?) #t)))
 
-(define-type (PooFlowQueryResultContract @ Type.)
+(define-type (AgenticAILabQueryResultContract @ Type.)
   .element?: query-result-contract-shape?)
 
 (def (query-element-space-shape? value)
   (and (query-has-slots?
         value '(kind identity semantic-revision element-identities complete?
                      immutable? runtime-executed?))
-       (eq? (.ref value 'kind) poo-flow-query-element-space-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-query-element-space-kind)
        (query-stable-identity? (.ref value 'identity))
        (query-revision? (.ref value 'semantic-revision))
        (query-identity-list? (.ref value 'element-identities))
@@ -105,7 +105,7 @@
        (eq? (.ref value 'immutable?) #t)
        (eq? (.ref value 'runtime-executed?) #f)))
 
-(define-type (PooFlowQueryElementSpace @ Type.)
+(define-type (AgenticAILabQueryElementSpace @ Type.)
   .element?: query-element-space-shape?)
 
 (def (query-language-shape? value)
@@ -113,7 +113,7 @@
         value '(kind identity representation authoring-surface source-surface
                      execution-boundary runtime-owner parser-owner syntax-contract .program?
                      raw-source-allowed? action-authority? runtime-executed?))
-       (eq? (.ref value 'kind) poo-flow-query-language-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-query-language-kind)
        (symbol? (.ref value 'identity))
        (symbol? (.ref value 'representation))
        (symbol? (.ref value 'authoring-surface))
@@ -130,19 +130,19 @@
        (eq? (.ref value 'action-authority?) #f)
        (eq? (.ref value 'runtime-executed?) #f)))
 
-(define-type (PooFlowQueryLanguage @ Type.)
+(define-type (AgenticAILabQueryLanguage @ Type.)
   .element?: query-language-shape?)
 
 (def (query-program-shape? value)
   (and (query-has-slots?
         value '(kind identity language-identity representation immutable?))
-       (eq? (.ref value 'kind) poo-flow-query-program-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-query-program-kind)
        (query-stable-identity? (.ref value 'identity))
        (symbol? (.ref value 'language-identity))
        (symbol? (.ref value 'representation))
        (eq? (.ref value 'immutable?) #t)))
 
-(define-type (PooFlowQueryProgram @ Type.)
+(define-type (AgenticAILabQueryProgram @ Type.)
   .element?: query-program-shape?)
 
 (def (query-shape? value)
@@ -153,15 +153,15 @@
                      result-bound completeness-requirement
                      evidence-requirements visibility-request result-contract
                      mutation-authority? action-authority? runtime-executed?))
-       (eq? (.ref value 'kind) poo-flow-query-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-query-kind)
        (query-stable-identity? (.ref value 'identity))
        (query-revision? (.ref value 'version))
        (query-revision? (.ref value 'semantic-revision))
        (query-stable-identity? (.ref value 'element-space-identity))
        (query-identity-list? (.ref value 'selected-element-identities))
        (query-unique-identities? (.ref value 'selected-element-identities))
-       (element? PooFlowQueryLanguage (.ref value 'language))
-       (element? PooFlowQueryProgram (.ref value 'program))
+       (element? AgenticAILabQueryLanguage (.ref value 'language))
+       (element? AgenticAILabQueryProgram (.ref value 'program))
        (eq? (.ref (.ref value 'program) 'language-identity)
             (.ref (.ref value 'language) 'identity))
        ((.ref (.ref value 'language) '.program?) (.ref value 'program))
@@ -171,14 +171,14 @@
              '(complete bounded partial-allowed))
        (query-symbol-list? (.ref value 'evidence-requirements))
        (symbol? (.ref value 'visibility-request))
-       (element? PooFlowQueryResultContract (.ref value 'result-contract))
+       (element? AgenticAILabQueryResultContract (.ref value 'result-contract))
        (<= (.ref value 'result-bound)
            (.ref (.ref value 'result-contract) 'max-results))
        (eq? (.ref value 'mutation-authority?) #f)
        (eq? (.ref value 'action-authority?) #f)
        (eq? (.ref value 'runtime-executed?) #f)))
 
-(define-type (PooFlowQuery @ Type.)
+(define-type (AgenticAILabQuery @ Type.)
   .element?: query-shape?)
 
 (def (query-admission-receipt-shape? value)
@@ -187,7 +187,7 @@
                      element-space-identity language-identity
                      accepted? diagnostics
                      mutation-authority? action-authority? runtime-executed?))
-       (eq? (.ref value 'kind) poo-flow-query-admission-receipt-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-query-admission-receipt-kind)
        (query-stable-identity? (.ref value 'query-identity))
        (query-revision? (.ref value 'query-version))
        (query-revision? (.ref value 'semantic-revision))
@@ -200,14 +200,14 @@
        (eq? (.ref value 'action-authority?) #f)
        (eq? (.ref value 'runtime-executed?) #f)))
 
-(define-type (PooFlowQueryAdmissionReceipt @ Type.)
+(define-type (AgenticAILabQueryAdmissionReceipt @ Type.)
   .element?: query-admission-receipt-shape?)
 
 (def (query-provider-shape? value)
   (and (query-has-slots?
         value '(kind identity supported-languages runtime-owner
                      receipt-executor runtime-executed? action-authority?))
-       (eq? (.ref value 'kind) poo-flow-query-provider-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-query-provider-kind)
        (query-stable-identity? (.ref value 'identity))
        (query-symbol-list? (.ref value 'supported-languages))
        (query-unique-identities? (.ref value 'supported-languages))
@@ -216,7 +216,7 @@
        (eq? (.ref value 'runtime-executed?) #f)
        (eq? (.ref value 'action-authority?) #f)))
 
-(define-type (PooFlowQueryProvider @ Type.)
+(define-type (AgenticAILabQueryProvider @ Type.)
   .element?: query-provider-shape?)
 
 (def (query-execution-candidate-shape? value)
@@ -225,7 +225,7 @@
                      semantic-revision source-content-identity parser-identity
                      provenance-root result-digest result-count complete?
                      runtime-executed? mutation-authority? action-authority?))
-       (eq? (.ref value 'kind) poo-flow-query-execution-candidate-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-query-execution-candidate-kind)
        (query-stable-identity? (.ref value 'provider-identity))
        (query-stable-identity? (.ref value 'query-identity))
        (query-revision? (.ref value 'query-version))
@@ -241,7 +241,7 @@
        (eq? (.ref value 'mutation-authority?) #f)
        (eq? (.ref value 'action-authority?) #f)))
 
-(define-type (PooFlowQueryExecutionCandidate @ Type.)
+(define-type (AgenticAILabQueryExecutionCandidate @ Type.)
   .element?: query-execution-candidate-shape?)
 
 (def (source-query-receipt-shape? value)
@@ -251,7 +251,7 @@
                      provenance-root result-digest result-count complete?
                      result-contract-identity admitted? diagnostics
                      runtime-executed? mutation-authority? action-authority?))
-       (eq? (.ref value 'kind) poo-flow-source-query-receipt-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-source-query-receipt-kind)
        (query-stable-identity? (.ref value 'provider-identity))
        (query-stable-identity? (.ref value 'query-identity))
        (query-revision? (.ref value 'query-version))
@@ -271,32 +271,32 @@
        (eq? (.ref value 'mutation-authority?) #f)
        (eq? (.ref value 'action-authority?) #f)))
 
-(define-type (PooFlowSourceQueryReceipt @ Type.)
+(define-type (AgenticAILabSourceQueryReceipt @ Type.)
   .element?: source-query-receipt-shape?)
 
-(def (poo-flow-query? value)
-  (element? PooFlowQuery value))
+(def (agentic-ai-lab-query? value)
+  (element? AgenticAILabQuery value))
 
-(def (poo-flow-query-language? value)
-  (element? PooFlowQueryLanguage value))
+(def (agentic-ai-lab-query-language? value)
+  (element? AgenticAILabQueryLanguage value))
 
-(def (poo-flow-query-program? value)
-  (element? PooFlowQueryProgram value))
+(def (agentic-ai-lab-query-program? value)
+  (element? AgenticAILabQueryProgram value))
 
-(def (poo-flow-query-element-space? value)
-  (element? PooFlowQueryElementSpace value))
+(def (agentic-ai-lab-query-element-space? value)
+  (element? AgenticAILabQueryElementSpace value))
 
-(def (poo-flow-query-result-contract? value)
-  (element? PooFlowQueryResultContract value))
+(def (agentic-ai-lab-query-result-contract? value)
+  (element? AgenticAILabQueryResultContract value))
 
-(def (poo-flow-query-admission-receipt? value)
-  (element? PooFlowQueryAdmissionReceipt value))
+(def (agentic-ai-lab-query-admission-receipt? value)
+  (element? AgenticAILabQueryAdmissionReceipt value))
 
-(def (poo-flow-query-provider? value)
-  (element? PooFlowQueryProvider value))
+(def (agentic-ai-lab-query-provider? value)
+  (element? AgenticAILabQueryProvider value))
 
-(def (poo-flow-query-execution-candidate? value)
-  (element? PooFlowQueryExecutionCandidate value))
+(def (agentic-ai-lab-query-execution-candidate? value)
+  (element? AgenticAILabQueryExecutionCandidate value))
 
-(def (poo-flow-source-query-receipt? value)
-  (element? PooFlowSourceQueryReceipt value))
+(def (agentic-ai-lab-source-query-receipt? value)
+  (element? AgenticAILabSourceQueryReceipt value))

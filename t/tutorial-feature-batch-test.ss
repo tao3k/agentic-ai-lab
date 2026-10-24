@@ -3,10 +3,15 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit Union)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: tutorial feature batch tests public APIs, not test-local helpers.
 ;;; Invariant: each case maps to a visible Funflow notebook result or descriptor.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,12 +22,12 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/modules/custom-task/interface
-        :poo-flow/modules/docker/interface
-        :poo-flow/modules/text/interface
-        :poo-flow/modules/workflow/flows
-        :poo-flow/modules/workflow/store)
+        :yuanxu/modules/funflow/control-plane/api
+        :agentic-ai-lab/modules/custom-task/interface
+        :agentic-ai-lab/modules/docker/interface
+        :agentic-ai-lab/modules/text/interface
+        :agentic-ai-lab/modules/workflow/flows
+        :yuanxu/modules/funflow/store)
 
 ;; : (-> RunConfig Flow Input Value)
 (def (configured-run config flow input)
@@ -41,7 +46,7 @@
 ;; does not require a second macro language or a compile-time binding layer.
 ;; : Flow
 (def macro-custom-repeat
-  (custom-repeat-flow 'macro-custom-repeat "woop!" 7 'string 'string))
+  (custom-repeat-flow 'macro-custom-repeat "woop!" 7))
 
 ;; : Flow
 (def macro-docker-compile
@@ -55,8 +60,7 @@
      ((store-item . output-dir)
       (mount-path . "/output")))
    'process-handle
-   'integer
-   'process-handle))
+   (Fun AdapterResult <- Integer)))
 
 ;; : Flow
 (def macro-store-put
@@ -65,8 +69,7 @@
    'put
    '((store-item . macro-output)
      (path . "/output/main"))
-   'process-handle
-   'artifact-manifest))
+   (Fun AdapterResult <- Any)))
 
 ;; : Flow
 (def macro-ccompilation-store
@@ -84,14 +87,14 @@
 
 (def tutorial-feature-batch-test
   (test-suite "funflow tutorial feature batch"
-    (poo-flow-test-case "stage 11 quick reference conditional and cached increment run"
+    (yuanxu-test-case "stage 11 quick reference conditional and cached increment run"
       (let* ((limited-increment
-              (conditional-flow 'limited-increment
-                                (lambda (n) (< n 10))
-                                (lambda (n) (+ n 1))
-                                (lambda (_n) 0)
-                                'number
-                                'number))
+              (conditional-flow
+	       'limited-increment
+	       (Fun Number <- Number)
+	       (lambda (n) (< n 10))
+	       (lambda (n) (+ n 1))
+	       (lambda (_n) 0)))
              (limited-three
               (flow-then 'limited-three
                          (flow-then 'limited-two
@@ -100,19 +103,19 @@
                          limited-increment)))
         (check-equal? (local-run limited-three 9) 1))
       (let (increments 0)
-        (let* ((reset (pure-flow 'reset
-                                 (lambda (_input) 0)
-                                 'number
-                                 'number))
+        (let* ((reset (pure-flow
+		       'reset
+		       (Fun Number <- Number)
+		       (lambda (_input) 0)))
                (cached-increment
                 (cached-scheme-flow
-                 'cached-increment
-                 (lambda (input) input)
-                 (lambda (input)
+		 'cached-increment
+		 (Fun Number <- Number)
+		 Number
+		 (lambda (input) input)
+		 (lambda (input)
                    (set! increments (+ increments 1))
-                   (+ input 1))
-                 'number
-                 'number))
+                   (+ input 1))))
                (flow (flow-then 'cached-twice
                                 (flow-then 'reset-then-cache
                                            reset
@@ -122,13 +125,11 @@
                                            cached-increment))))
           (check-equal? (local-run flow 99) 1)
           (check-equal? increments 1))))
-    (poo-flow-test-case "stage 12 tutorial2 custom task interpreter runs through extension"
+    (yuanxu-test-case "stage 12 tutorial2 custom task interpreter runs through extension"
       (let* ((config (make-custom-run-config))
              (flow (custom-repeat-flow 'custom-repeat
                                        "woop!"
-                                       7
-                                       'string
-                                       'string))
+                                       7))
              (task (car (flow-steps flow)))
              (payload (task-custom-payload task)))
         (check-equal? (configured-run config flow "Kangaroo goes ")
@@ -136,14 +137,14 @@
         (check-equal? (task-kind task) 'custom)
         (check-equal? (task-custom-repeat? task) #t)
         (check-equal? (custom-repeat-spec-count payload) 7)))
-    (poo-flow-test-case "stage 13 word count extension returns notebook counts"
+    (yuanxu-test-case "stage 13 word count extension returns notebook counts"
       (let* ((sample "a and it try words a and it try words a and it try words
 Lets This count give pipeline should Lets This count give pipeline should
 FILE WordCount.hs complex-words numbers 123 punctuation!")
              (counts (word-counts sample))
              (lines (format-word-counts counts))
              (config (make-text-run-config))
-             (flow (word-count-flow 'word-count 'text 'summary))
+             (flow (word-count-flow 'word-count))
              (summary (configured-run config flow sample)))
         (check-equal? (word-count-ref counts "a") 3)
         (check-equal? (word-count-ref counts "and") 3)
@@ -154,7 +155,7 @@ FILE WordCount.hs complex-words numbers 123 punctuation!")
         (check-equal? (and (member "Lets: 2" lines) #t) #t)
         (check-equal? (and (member "FILE: 1" lines) #t) #t)
         (check-equal? summary (word-count-summary sample))))
-    (poo-flow-test-case "stage 14 ccompilation and tensorflow workflow descriptors are public"
+    (yuanxu-test-case "stage 14 ccompilation and tensorflow workflow descriptors are public"
       (let* ((compile-flow (make-ccompilation-flow 'compile-c))
              (compile-task (car (flow-steps compile-flow)))
              (compile-config (cadr (task-request compile-task)))
@@ -185,17 +186,18 @@ FILE WordCount.hs complex-words numbers 123 punctuation!")
         (check-equal? (execution-plan-node-ids tf-plan)
                       '((node tensorflow-demo 0 docker train-mnist)
                         (node tensorflow-demo 1 docker infer-mnist)))))
-    (poo-flow-test-case "stage 15 error handling recovers local throw and adapter failure"
+    (yuanxu-test-case "stage 15 error handling recovers local throw and adapter failure"
       (let* ((runner (make-runner (make-local-eager-strategy)
                                   (make-request-only-adapter)))
-             (flow (throw-string-flow 'throw-demo
-                                      "Nothing has been done"
-                                      'unit
-                                      'unit))
+             (flow (throw-string-flow
+		    'throw-demo
+		    "Nothing has been done"
+		    (Fun Unit <- Unit)))
              (result (runner-run-value-or-recover
                       runner
                       flow
                       #!void
+                      (Union Unit (List Any) AdapterResult)
                       (lambda (failure)
                         (if (execution-failure? failure)
                           (list 'caught
@@ -215,16 +217,17 @@ FILE WordCount.hs complex-words numbers 123 punctuation!")
                       (cons 'error '((code . bad-image)))
                       (cons 'metadata '((tutorial . error-handling))))))
              (config (make-rust-run-config
-                      (list (cons 'runtime-command command))))
-             (flow (external-flow 'bad-docker
-                                  'submit
-                                  '((image . "badImageName"))
-                                  'unit
-                                  'artifact))
+                      (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
+             (flow (external-flow
+		    'bad-docker
+		    'submit
+		    '((image . "badImageName"))
+		    (Fun AdapterResult <- Unit)))
              (result (runner-run-value-or-recover
                       (run-config->runner config)
                       flow
                       #!void
+                      (Union Unit (List Any) AdapterResult)
                       (lambda (failure-or-receipt)
                         (if (receipt-failed? failure-or-receipt)
                           (list 'failed
@@ -245,13 +248,13 @@ FILE WordCount.hs complex-words numbers 123 punctuation!")
                                      (image . "badImageName")))
                       (cons 'metadata '((tutorial . error-handling))))))
              (config (make-rust-run-config
-                      (list (cons 'runtime-command command))))
-             (flow (external-flow 'bad-docker-try
-                                  'submit
-                                  '((image . "badImageName")
-                                    (command . "badCommand"))
-                                  'unit
-                                  'artifact))
+                      (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
+             (flow (external-flow
+		    'bad-docker-try
+		    'submit
+		    '((image . "badImageName")
+                      (command . "badCommand"))
+		    (Fun AdapterResult <- Unit)))
              (result (runner-run-either (run-config->runner config)
                                         flow
                                         #!void))
@@ -264,7 +267,7 @@ FILE WordCount.hs complex-words numbers 123 punctuation!")
         (check-equal? (cdr (assoc 'error (execution-failure-detail failure)))
                       '((code . bad-image)
                         (image . "badImageName")))))
-    (poo-flow-test-case "stage 16 makefile tool workflow descriptor is public"
+    (yuanxu-test-case "stage 16 makefile tool workflow descriptor is public"
       (let* ((workflow (make-makefile-tool-workflow 'makefile-tool-demo))
              (plan (runner-plan
                     (run-config->runner (make-rust-run-config))
@@ -286,7 +289,7 @@ FILE WordCount.hs complex-words numbers 123 punctuation!")
                       '((target . "hello")
                         (binary . "./hello")
                         (expected-output . process-output)))))
-    (poo-flow-test-case "authors extension-owned workflows with Gerbil macros"
+    (yuanxu-test-case "authors extension-owned workflows with Gerbil macros"
       (let* ((custom-task (car (flow-steps macro-custom-repeat)))
              (docker-task (car (flow-steps macro-docker-compile)))
              (store-task (car (flow-steps macro-store-put)))

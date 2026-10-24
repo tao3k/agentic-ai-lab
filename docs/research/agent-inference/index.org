@@ -1,0 +1,351 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Deployment-time LLM reasoning Library research index
+#+STATUS: research synthesis; no LLM-facing API implemented by this document
+#+DATE: 2026-09-30
+#+FILETAGS: :research:llm:inference:
+
+* Active repository scope (2026-10-11)
+
+The research subject is the ASCENT Scheme Library: Datalog meaning,
+evaluation, Provider contracts, retained Session behavior and bounded
+computational evidence. Model experiments test those existing contracts.
+They do not define a Search framework, generic Fact lifecycle, workflow
+engine, serving platform or cross-repository integration project.
+Earlier broad studies below remain evidence and related reading; they are
+not the current implementation agenda. Their negative outcomes are retained.
+
+Every active experiment must identify one paper lesson, an existing Library
+owner, an independent semantic oracle and one measurable model hypothesis.
+Use the existing consumer IO for a small fixture with explicit rule/query
+and data schemas. No instruction asks the solver to avoid repeated thinking.
+
+| Paper lesson | Existing Library owner | Small verification question |
+|--------------+------------------------+-----------------------------|
+| [[https://thomas.gilray.org/pdf/seamless-deductive.pdf][Ascent]] rule/fixed-point execution; [[https://arxiv.org/html/2609.37233v1][DatalogBench]] execution-based evaluation | =program/=; =candidate/feedback.ss= | Does a frozen model proposal derive exactly the expected rows on held-out finite inputs, including a compiling wrong join? |
+| Datalog consequences and scoped computational proof reuse; [[file:proof-height.org][provenance reading]] | =candidate/provenance.ss=; =candidate/evidence-store.ss=; =program/session.ss= | Across a few queries sharing a derived premise, does Library assistance preserve answers and reduce directly observed rederivation? Do source replacement and stale handles remain correct? |
+| [[https://kmicinski.com/assets/byods.pdf][BYODS]] concretization, delta visibility and index agreement | =table/storage.ss=; =table/eqrel.ss=; =table/trrel.ss=; =table/provider.ss= | Does a frozen proposal consume every newly implied fact? Compare the declared concrete relation and downstream results with an independent finite model. |
+
+BYODS storage/iteration checks qualify the native backend first. Representation
+cost and model thinking are separate measurements. A Set-backed comparison
+must represent the same declared concrete relation; raw input tuples are not
+an equivalence closure. Do not transfer paper speedups or infer model savings
+from native cache hits. [[https://www.vldb.org/pvldb/vol19/p361-zhao.pdf][FlowLog]] is relevant engine/plan reading, not an instruction
+to add Differential Dataflow or reproduce a whole engine in a model fixture.
+
+Freeze tasks, independent grading, source/build identity and annotation rules.
+Charge input plus all output, including thinking and failed calls; unused
+budget is not savings. A repetition claim needs a validated baseline signal
+and literal supported spans. A missing or unvalidated measurement is not zero.
+Lean expresses specified semantic laws; Quint checks bounded protocols; native
+receipts establish tested correspondence; model outcomes remain empirical.
+Changes belong to the existing feature owner, with no copied round modules.
+
+The [[file:factor-reuse-2026-study.org][October 11 paper-to-Library synthesis]] returns to Ascent/BYODS semantics,
+FlowLog subplan reuse and DatalogBench's independent execution checks, with
+2026 program-cache, semantic-answer-cache and KV-cache comparators. It separates
+native reuse from model reuse and proposes a small shared-premise diagnostic
+before another optimization claim. The [[file:fact-reuse-results/shared-premise-diagnostic/findings.md][shared-premise diagnostic]] now has frozen source/build identities,
+Quint correspondence, public Python API/ABI receipts, real model calls and a
+published archive that replays in a fresh directory. Native reuse passes, but
+model cost grows and the baseline repetition signal is missing; thinking and
+quality benefits remain unestablished. Existing failed tasks remain unchanged.
+
+The next [[file:fact-reuse-protocol.md][Library cross-path pilot]] ran baseline, Fact-only and Scheme support/partition
+against two fixed shared-path tasks. All six responses exhausted the single-call
+output cap before expanding a branch; depth and quality benefits are unmeasured.
+The [[file:fact-reuse-results/report.md][raw results]] retain failures and a disclosed post-freeze annotation-judge
+correction. A prelinked dependency closure with the actual evidence module
+dynamically reloaded exits cleanly; full Gxi dyld cleanup remains a recorded
+external-runtime failure, not a repaired global runtime claim.
+
+The [[file:fact-reuse-results/complete-branch-reuse/report.md][latest proof-frame and model-interaction results]] bind the current captured
+Library source, pass native/full-Gxi qualification, and retain both earlier
+interaction failures. All 14 final responses complete without truncation;
+one prose response still fails the action contract. At task 0's matched 32,768
+input-plus-all-output checkpoint, baseline / Fact / Scheme depths are 0 / 1 / 2.
+Completed-solution quality stays at the common seed value 79. Exact-quote labels
+do not establish reduced repetition, and the external traces do not cover
+alternative search branches. The [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/fact-reuse-results/complete-branch-reuse/audit.json][audit]] preserves all attempt costs, rejected
+labels, current source bindings and the remaining evidence limits; no global
+dyld fix or general model benefit is claimed.
+
+The [[file:candidate-model-results/report.md][finite candidate-feedback gate]] now binds a consistently captured Library source
+closure, a successful =std/make= build and independent full-row grading.
+Private contract refinements now retain the parent prototype. Native and dynamic
+execution each pass 448 checks without weakening admission. The same frozen
+tasks, judge and input-plus-all-output budget produced three real model calls:
+two proposals match all 60 held-out graphs each; one malformed submission is
+retained as a failure without repair. No paired revision was triggered, so
+thinking, reuse and exploration benefits remain unmeasured. The
+[[file:history/candidate-model-rules-rejected/report.md][previous denied gate]] and all build and qualification failures are retained.
+
+Primary Ascent, BYODS, FlowLog and DatalogBench sources were checked on
+2026-10-11. The [[file:../paper-coverage.org][coverage audit]] still separates reading, implementation,
+native qualification and full paper replication. The finite model gate does
+not establish paper replication or an extended formal proof.
+
+The [[file:factor-reuse-2026-study.org][2026 fact and derivation reuse method study]]
+reads six closely related methods, maps their verification boundaries to live
+ASCENT owners, and supplies a four-arm [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/factor-reuse-pilot-plan.json][pilot design]]
+for repeated-check reduction and productive exploration at equal budgets.
+
+The [[file:verified-reasoning-cache.org][verified reasoning caching study]] separates
+external model assistance from temporal and search reuse, screens 2025--2026
+reasoning memory and KV-cache work, and proposes matched search, optimization,
+compaction and source-revision tests.
+It records a research hypothesis rather than an established token-saving result.
+
+Dedicated [[file:withholding.org][BRINK method reading]] connects whole-batch evidence protection to
+[[file:../../features/withholding/acceptance.org][native snapshot withholding and finite qualification]].
+
+The [[file:repository-evidence-study.md][Fresh Repository Evidence Study]] applies
+SWE-rebench and LiveCodeBench collection methods to recent public changes,
+records executable source qualification, and specifies the matched evidence
+retention comparison. The [[file:real-repository-experiment-report.md][real repository experiment report]]
+records actual model calls, cumulative thinking, hidden acceptance and repair cost.
+The [[file:repository-task-quality.md][task quality and complexity audit]] connects
+source defects, reasoning obligations, grader coverage and Scheme mechanism gaps.
+
+The [[file:domain-evidence-architecture.md][cross-round domain evidence implementation]]
+connects executed graph and series constraints to Scheme memory, Lean contracts
+and Quint invalidation. Its [[file:domain-repository-experiment-report.md][independent-root real comparison]]
+records uniform-budget trajectories, cumulative thinking and candidate repair cost.
+
+The [[file:factor-reuse-real-pilot-report.md][frozen factor and derivation reuse real-model pilot]] records
+current-build scope, native/Quint/Lean correspondence, independent grading,
+charged costs and preserved censored outcomes.
+
+* Question and scope
+:PROPERTIES:
+:CUSTOM_ID: agent-inference-research
+:END:
+
+How can this *deployment-time* Datalog Library assist a frozen LLM through
+checked relational consequences, scoped derivations and execution feedback?
+The unit of study is a named finite input, admitted candidate/query, completed
+Library observation and bounded explanation. The
+[[file:../../scheme-relational-dsl-design.org][Scheme DSL overview]] describes the internal relational language;
+this ledger studies the *interaction protocol* around the Library.
+The sources below use different logics and workloads.  Their results
+are design evidence, not proof that our Library already has the API.
+The [[file:reasoning-language-formal-agenda.org][reasoning-language and formal agenda]] ranks the ASCENT/PL language
+papers, maps the MRR boundary, and states the remaining Lean/Quint gates.
+The [[file:wikidata-scoped-exclusion.org][Wikidata scoped exclusion finite KG fixture]] pins Wikidata entity revisions and tests
+branch-scoped exclusion against an independent set walk; it has no
+model-generated proposal yet.
+The first concrete checker is =gerbil-ascent=; Agentic AI Lab owns workflow
+composition, tool selection and runtime handoff.
+The implementation priority is the direct Library contract for LLM
+candidate reasoning alongside the internal Datalog core.  Serving
+adapters such as [[file:serving-sglang-vllm.org][SGLang/vLLM]] follow that
+contract; they are lower priority than its executable Scheme fixture.
+
+#+NAME: agent-source-ledger
+| Feature | Primary source | Our note | Applicable question |
+|-----+----------------+----------+---------------------|
+| scoped witness execution | [[https://proceedings.mlr.press/v306/miao26e.html][LLM-MatLogic, ICML 2026]] | [[file:scoped-witness.org][reading]] | Can model-specified graph negation keep its branch scope and witness through execution? |
+| candidate execution feedback | [[https://arxiv.org/abs/2609.37233][DatalogBench, arXiv v1]] | [[file:candidate-feedback.org][reading]] | Can LLM-written recursive rules pass execution tests, not just parsing? |
+| recursive physical planning | [[https://www.vldb.org/pvldb/vol19/p361-zhao.pdf][FlowLog, PVLDB 2025 / VLDB 2026]] | [[file:../scheme-dsl/recursive-physical-planning.org][reading]] | Which plan/physical choices preserve a recursive result while reducing work on real graphs? |
+| Provider concretization | [[https://kmicinski.com/assets/byods.pdf][BYODS, OOPSLA 2023]] | [[file:../scheme-dsl/provider-concretization.org][reading]] | Do specialized relation Providers expose every new fact through delta? |
+| monotone containers | [[https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ECOOP.2025.33][Mono Types, ECOOP 2025]] | [[file:../scheme-dsl/monotone-containers.org][reading]] | Can first-class container observations preserve a finite fixed point after lowering? |
+| taint path qualification | [[https://proceedings.iclr.cc/paper_files/paper/2025/file/582d4e27fa24168f3af1f4582655034b-Paper-Conference.pdf][IRIS, ICLR 2025]] | [[file:taint-paths.org][dedicated reading and finite transfer]] | Does a generated source/sink specification improve real-code analysis without hiding false alerts? |
+| why/why-not explanation | [[https://arxiv.org/abs/1808.05752][PUG extended paper]] | [[file:why-not-explanations.org][reading]] | What is a bounded why/why-not explanation? |
+| weighted provenance | [[https://doi.org/10.1145/3591280][Scallop, PLDI]] | [[file:weighted-provenance.org][reading]] | What extra semantics would a differentiable training integration require? |
+| Serve | [[https://docs.sglang.io/docs/advanced_features/tool_parser][SGLang]] / [[https://docs.vllm.ai/en/latest/features/tool_calling/][vLLM]] official docs | [[file:serving-sglang-vllm.org][interface study]] | How does a deployed model call and observe the Library? |
+
+* Cross-source inference
+:PROPERTIES:
+:CUSTOM_ID: agent-inference-synthesis
+:END:
+
+The [[file:2026-logic-ai-screen.org][code-anchored research screen]] joins the Ascent, BYODS and Datafun
+lineage to real knowledge-graph questions, candidate-rule synthesis and
+the actual Scheme owners. It puts semantic scope, independent results
+and workload quality before publication year.
+
+The first model comparison preserves the raw, frozen =propose= output,
+then measures =inspect=, =execute= and =explain= as separate outcomes.
+A later revision is a separate experimental condition, not evidence
+that the model understood the rule on its first attempt. The general
+workflow can use =observe -> propose -> check -> explain -> choose
+another step or stop=. This is our synthesis, not an API these papers
+jointly prescribe. candidate execution feedback shows that fixing syntax and declarations can
+still leave recursive semantic errors; scoped witness execution shows that executable
+constraints can also be specified with the wrong scope.
+why/why-not explanation shows why explanations are a separate query over provenance rather
+than a natural-language retelling of the returned row.
+The Library supplies evidence and checks at inference time; model
+judgment remains distinct from a checker result. Preserve the raw first
+proposal before evaluating any optional follow-up attempt. No model
+retraining or modification to its learned reward mechanism is claimed.
+
+#+NAME: agent-library-contract-draft
+| Stage | Library input | Library output | Limit of the claim |
+|-------+---------------+----------------+--------------------|
+| Inspect | Candidate declarations plus named source snapshot | Structured syntax, schema, mode, dependency and bound diagnostics | A valid program can still express the wrong intent |
+| Execute | Accepted candidate program, exact snapshot and budget | Complete rows or typed partial/failure status | Completion proves the declared program's result only |
+| Explain | Result/goal, snapshot, rule program and bounds | Supporting witness or finite-graph absence/cut with status | One witness is not all provenance; general recursive Why-Not needs explicit semantics |
+| Revise | New candidate against same or explicitly changed snapshot | New diagnostics and result, linked to attempt | No automatic promotion to source authority |
+
+Other reasoning modes use the same attempt/result envelope, but each
+checker declares its own semantics, supported goal types, bounds and
+explanation limits.  Datalog is the first backend, not a claim that
+every model thought has a Datalog encoding.
+
+The response must distinguish =rejected=, =complete=, =partial=,
+=unknown=, and =unsupported=.  Every returned answer or explanation
+names its input snapshot, program identity, limits, and whether its
+support is complete.  In =gerbil-ascent= these are *candidate* facts
+and explanations.  MRR retains semantic admission and canonical lineage;
+Agentic AI Lab owns caller context and effect handoff.  The Library does not
+ask a model to mutate the fixed-point state during one solve.
+
+* First executable discriminator
+:PROPERTIES:
+:CUSTOM_ID: agent-inference-gate
+:END:
+
+Use one graph task with two source generations and an LLM-like
+proposal transcript: (1) a valid base + recursive reachability rule,
+(2) an invented undeclared helper relation, (3) a wrong recursive join
+that compiles, (4) a query for present and absent pairs, and (5) a
+source edge withdrawal.  Check field-specific diagnostics; exact
+complete rows against an independent finite graph model; one
+supporting path and, after complete closure, finite-graph absence/cut
+evidence; unchanged
+old snapshots; and no candidate-to-admitted promotion.  Record
+repair turns, token-sized feedback, wall time and model-independent
+semantic outcomes separately.  Only a later model experiment can
+claim that the interface is friendly to LLMs.
+
+For that later experiment, freeze the same model, task corpus, search
+index, source revisions and tool budget.  Compare =search + model=
+against =search + Library inspect/execute/explain + model=.  Score
+answer correctness, cited-source coverage, unsupported conclusions,
+why/why-not fidelity, abstention, repair turns, latency and cost.
+Do not infer a change to the model's learned reward function from an
+improved deployed answer: the intervention is external evidence and
+feedback at inference time.
+
+* Agentic AI Lab workflow and optional framework connection
+:PROPERTIES:
+:CUSTOM_ID: agent-inference-workflow
+:END:
+
+Agentic AI Lab already separates workflow declarations and strategy/runner
+execution through POO objects.  Its tutorial includes a composed
+TensorFlow train/infer *external task descriptor*, which shows a
+workflow can carry training tasks without making Scheme the trainer.
+For our deployment-time case, a proposed Agentic AI Lab workflow would:
+
+#+NAME: agent-reasoning-workflow
+| Step | Owner | Output |
+|------+-------+--------|
+| Select task, capability, budget and sources | Agentic AI Lab | Scoped request |
+| Search or observe | Source/tool owner | Versioned candidate evidence |
+| Propose a reasoning step | LLM/model caller | Candidate facts, rules, query, plan or hypothesis |
+| Inspect and execute | Gerbil Ascent for relational case; other named checkers otherwise | Typed diagnostic, bounded result, completion status |
+| Explain and decide next step | Checker returns witness/gap; model caller judges; Agentic AI Lab routes | Revised attempt, abstention or bounded answer |
+| Admit or hand off | MRR/source owner and separate runtime policy where needed | Admitted evidence or authorized effect receipt |
+
+This is a workflow *proposal*, not an implemented cross-repository
+integration.  It does not turn the Library into a model-step scheduler or
+the training framework.  If a training/inference framework is chosen,
+first test a discrete adapter that consumes complete, bounded candidate
+outputs and explanations under exact source/program identities.  A
+differentiable layer is a separate research path: [[file:weighted-provenance.org][Scallop]] shows
+why weighted provenance and gradient semantics would be required.
+An FFI or tensor conversion alone does not supply those semantics.
+
+For the SGLang/vLLM serving ecosystem, the first path is an external
+tool adapter in the Agentic AI Lab application loop.  Both servers expose
+tool-call proposals through their OpenAI-compatible chat interfaces;
+the application executes the Library call and returns its observation.
+The [[file:serving-sglang-vllm.org][serving interface study]] records official
+documentation, owner boundaries and an experiment that compares the
+same candidate protocol on both backends.  Model-serving support does
+not itself validate LLM-proposed facts, rule meaning or evidence admission.
+
+* Reading order
+
+Start with the [[file:2026-logic-ai-screen.org][core screen]] and [[file:scoped-witness.org][scoped witness execution]] for real-KG
+scope and witnesses, then [[file:candidate-feedback.org][candidate execution feedback]] for generated rule correctness. Read
+[[file:../scheme-dsl/provider-concretization.org][Provider concretization]] and [[file:../scheme-dsl/recursive-physical-planning.org][recursive physical planning]] beside the Scheme Provider, planner and Session
+code, followed by the [[file:../scheme-dsl/functional-fixed-points.org][functional fixed points]]/[[file:../scheme-dsl/higher-order-change.org][higher-order change]] functional boundary. The
+[[file:../scheme-dsl/monotone-containers.org][monotone containers]] reading tests whether a first-class container can preserve that boundary.
+[[file:why-not-explanations.org][why/why-not explanation]] gives the separate explanation semantics; [[file:weighted-provenance.org][weighted provenance]]
+frames the optional training-framework question.
+For an actual deployed-model interface, read
+[[file:serving-sglang-vllm.org][SGLang/vLLM serving research]].
+
+* Minimum-height proof fragment reading
+
+The [[file:proof-height.org][proof height method study]] distinguishes minimal-height annotations and
+fragments from current witnesses, complete ground graphs and natural counts.
+
+* Matched Fact packets under a gross inference budget
+
+The [[file:factor-total-budget-report.md][matched-evidence native-cache pilot]] freezes identical Fact/derivation
+packets, 14/16-job tasks with fixed adjacent transition penalties, an
+independent Scheme subset-plus-last grader, and a common input-plus-thinking
+budget. It retains all calibration/censoring outcomes and separates native
+proof reuse, any-time candidate quality, model submission and exploration
+proxies. The [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/factor-total-budget-ledger.json][complete ledger]] includes every paid response, usage and raw-file hash.
+The sample does not establish reduced model thinking or improved quality.
+
+* Native evidence interaction
+
+The current [[file:evidence-interaction.org][native evidence interaction contract]] keeps ASCENT Scheme a
+Library. Computational relation/proof APIs are separate from Agentic AI Lab temporal
+ownership, MRR/Rust integration and the research consumer's branch controller.
+Its [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/evidence-store-local-receipt.json][local qualification receipt]] covers the native feature. The new
+[[file:evidence-interaction-results/report.md][frozen three-treatment model study]] and [[file:evidence-interaction-results/interpretation.md][diagnostic interpretation]] retain
+failures and do not establish thinking savings, greater depth or better quality.
+
+The numbered cross-path studies below are historical frozen protocols, not
+ASCENT releases or graph versions. Their removed research modules and tests
+are preserved in [[file:history/README.md][the source archive]]; they are no longer an active Python API.
+
+* Historical cross-path Fact reuse with an evidence-free baseline
+
+Completed 18 real-model phases with frozen native grading and direct thinking spans.
+See [[file:crosspath-next-round.md][completed experiment and negative results]],
+[[file:crosspath-search-v2-report.md][eligibility-oracle-free replay]], and
+[[file:crosspath-thinking-span-review.md][paired source-anchored derivation audit]].
+All failures and raw streams are retained; no quality/depth improvement established.
+
+* Historical explicit branch search with common feasible seeds
+
+- [[file:crosspath-branch-protocol.md][Frozen v3 protocol, budget and evidence boundaries]]
+- [[file:crosspath-search-v3-report.md][Real-model v3 results and matched-spend checkpoints]]
+- [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/crosspath-v3-thinking-annotations.md][Exact returned-thinking spans and repeated deductions]]
+
+* Historical deep-branch truncation repair
+
+- [[file:crosspath-branch-v4-protocol.md][Frozen v4 protocol and adversarial calibration]]
+- [[file:crosspath-search-v4-report.md][Real-model v4 results at common gross-token checkpoints]]
+- [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/crosspath-v4-thinking-annotations.md][Anchored v4 thinking derivation labels]]
+
+* Historical branch round conclusion and bounded measurement repair
+
+- [[file:crosspath-branch-round-summary.md][Output repair passed; cognitive benefit remains unproved]]
+- [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/crosspath-branch-round-summary.json][Matched-spend metrics, cost ledger and semantic label diagnostics]]
+- [[file:crosspath-search-v4-bounded-report.md][Fixed two-call extraction and retained original failures]]
+- [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/crosspath-v4-bounded-thinking-annotations.md][Exact positive-repeat links and rejected labels]]
+
+* Clean Library consumer and sibling-search diagnostic (2026-10-11)
+
+[[file:fact-reuse-results/sibling-search/findings.md][Mechanism diagnosis, clean source reproduction and retained negative results]]
+aligns the existing Python Project, native computational evidence store,
+finite Quint/Lean scope, frozen independent grader and actual model tool IO.
+The clean bundle rebuild and offline receipt replay pass. Evidence consumption
+works after transport repair; cognitive benefit remains unproved. All solver,
+annotation and engineering failures are retained.
+
+* Source-qualified branch-entry diagnostic
+[[file:fact-reuse-results/branch-entry/findings.md][Current Library result and reproducible evidence chain]] records native pre-thinking evidence, the frozen three-arm comparison, literal annotation coverage, costs and retained failures. Explicit reconstruction decreased; deeper exploration and general quality improvements remain open.
+
+* Complete thinking and lossless evidence projection
+[[file:fact-reuse-results/branch-complete/findings.md][Frozen three-arm results, semantic coverage failures and reproducible evidence]] bind the experiment to f6c36359. Thinking is no longer forced into a 2048-token checkpoint. Native columns preserve full statuses and proof ancestors. All remaining budget truncations, infeasible outputs, semantic annotation failures and research costs are retained. General depth/semantic-repetition gains remain unestablished.

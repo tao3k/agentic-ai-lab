@@ -6,25 +6,25 @@
 ;;; POO-native tool specification owner and runtime-boundary projection.
 
 (import (only-in :clan/poo/object .ref object? object<-alist)
-        :poo-flow/src/utilities/final-projection-syntax
-        :poo-flow/modules/session/objects
-        :poo-flow/modules/session/policy
-        :poo-flow/modules/tool-core/objects-support)
+        :yuanxu/utilities/final-projection-syntax
+        :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/policy
+        :agentic-ai-lab/modules/tool-core/objects-support)
 
-(export +poo-flow-tool-core-spec-kind+
-        poo-flow-tool-spec
-        poo-flow-tool-spec?
-        poo-flow-tool-spec-ref
-        poo-flow-tool-spec-tool-kind
-        poo-flow-tool-spec-actions
-        poo-flow-tool-spec-sandbox-required?
-        poo-flow-tool-spec-sandbox-profile-ref
-        poo-flow-tool-spec->alist
-        poo-flow-tool-specs->alists)
+(export +agentic-ai-lab-tool-core-spec-kind+
+        agentic-ai-lab-tool-spec
+        agentic-ai-lab-tool-spec?
+        agentic-ai-lab-tool-spec-ref
+        agentic-ai-lab-tool-spec-tool-kind
+        agentic-ai-lab-tool-spec-actions
+        agentic-ai-lab-tool-spec-sandbox-required?
+        agentic-ai-lab-tool-spec-sandbox-profile-ref
+        agentic-ai-lab-tool-spec->alist
+        agentic-ai-lab-tool-specs->alists)
 
-(def +poo-flow-tool-core-spec-kind+ 'poo-flow.tool-core.spec)
+(def +agentic-ai-lab-tool-core-spec-kind+ 'agentic-ai-lab.tool-core.spec)
 
-(def (poo-flow-tool-spec tool-ref
+(def (agentic-ai-lab-tool-spec tool-ref
                          tool-kind
                          actions
                          input-schema
@@ -35,37 +35,37 @@
                          sandbox-profile-ref
                          runtime-backend
                          . maybe-metadata)
-  (poo-flow-session-require "tool spec ref must be a symbol"
+  (agentic-ai-lab-session-require "tool spec ref must be a symbol"
                             (symbol? tool-ref)
                             tool-ref)
-  (poo-flow-session-require "tool spec kind must be a symbol"
+  (agentic-ai-lab-session-require "tool spec kind must be a symbol"
                             (symbol? tool-kind)
                             tool-kind)
-  (poo-flow-session-require "tool spec actions must be symbols"
-                            (poo-flow-tool-symbol-list? actions)
+  (agentic-ai-lab-session-require "tool spec actions must be symbols"
+                            (agentic-ai-lab-tool-symbol-list? actions)
                             actions)
-  (poo-flow-session-require "tool spec input schema must be an alist"
-                            (poo-flow-tool-alist? input-schema)
+  (agentic-ai-lab-session-require "tool spec input schema must be an alist"
+                            (agentic-ai-lab-tool-alist? input-schema)
                             input-schema)
-  (poo-flow-session-require "tool spec output schema must be an alist"
-                            (poo-flow-tool-alist? output-schema)
+  (agentic-ai-lab-session-require "tool spec output schema must be an alist"
+                            (agentic-ai-lab-tool-alist? output-schema)
                             output-schema)
-  (poo-flow-session-require "tool spec runtime owner must be a string"
+  (agentic-ai-lab-session-require "tool spec runtime owner must be a string"
                             (string? runtime-owner)
                             runtime-owner)
-  (poo-flow-session-require "tool spec handoff operation must be a symbol"
+  (agentic-ai-lab-session-require "tool spec handoff operation must be a symbol"
                             (symbol? handoff-operation)
                             handoff-operation)
-  (poo-flow-session-require "tool spec sandbox-required? must be boolean"
+  (agentic-ai-lab-session-require "tool spec sandbox-required? must be boolean"
                             (boolean? sandbox-required?)
                             sandbox-required?)
-  (poo-flow-session-require "tool spec runtime backend must be a symbol"
+  (agentic-ai-lab-session-require "tool spec runtime backend must be a symbol"
                             (symbol? runtime-backend)
                             runtime-backend)
   (object<-alist
    (list
-    (cons 'kind +poo-flow-tool-core-spec-kind+)
-    (cons 'schema 'poo-flow.modules.tool-core.spec.v1)
+    (cons 'kind +agentic-ai-lab-tool-core-spec-kind+)
+    (cons 'schema 'agentic-ai-lab.modules.tool-core.spec.v1)
     (cons 'tool-ref tool-ref)
     (cons 'tool-kind tool-kind)
     (cons 'actions actions)
@@ -81,32 +81,32 @@
                       '()
                       (car maybe-metadata))))))
 
-(def (poo-flow-tool-spec? value)
+(def (agentic-ai-lab-tool-spec? value)
   (and (object? value)
-       (eq? (poo-flow-tool-slot value 'kind #f)
-            +poo-flow-tool-core-spec-kind+)))
+       (eq? (agentic-ai-lab-tool-slot value 'kind #f)
+            +agentic-ai-lab-tool-core-spec-kind+)))
 
-(def (poo-flow-tool-spec-ref spec)
+(def (agentic-ai-lab-tool-spec-ref spec)
   (.ref spec 'tool-ref))
 
-(def (poo-flow-tool-spec-tool-kind spec)
+(def (agentic-ai-lab-tool-spec-tool-kind spec)
   (.ref spec 'tool-kind))
 
-(def (poo-flow-tool-spec-actions spec)
+(def (agentic-ai-lab-tool-spec-actions spec)
   (.ref spec 'actions))
 
-(def (poo-flow-tool-spec-sandbox-required? spec)
+(def (agentic-ai-lab-tool-spec-sandbox-required? spec)
   (.ref spec 'sandbox-required?))
 
-(def (poo-flow-tool-spec-sandbox-profile-ref spec)
+(def (agentic-ai-lab-tool-spec-sandbox-profile-ref spec)
   (.ref spec 'sandbox-profile-ref))
 
 (defpoo-final-projection
-  poo-flow-tool-spec->alist (spec)
+  agentic-ai-lab-tool-spec->alist (spec)
   (bindings ((checked-spec
-              (poo-flow-session-require
+              (agentic-ai-lab-session-require
                "tool spec projection requires a tool spec"
-               (poo-flow-tool-spec? spec)
+               (agentic-ai-lab-tool-spec? spec)
                spec))))
   (fields ((kind (.ref checked-spec 'kind))
            (schema (.ref checked-spec 'schema))
@@ -124,6 +124,6 @@
            (metadata (.ref checked-spec 'metadata)))))
 
 (defpoo-final-projection-batch
-  poo-flow-tool-specs->alists (specs)
-  (projector poo-flow-tool-spec->alist)
+  agentic-ai-lab-tool-specs->alists (specs)
+  (projector agentic-ai-lab-tool-spec->alist)
   (error-message "tool spec serialization requires a list"))

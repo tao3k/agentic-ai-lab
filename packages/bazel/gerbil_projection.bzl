@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""POO Flow artifact projections from a shared Gerbil project build."""
+"""Agentic AI Lab artifact projections from a shared Gerbil project build."""
 
 load(
     "@gerbil_bazel//gerbil:defs.bzl",
@@ -12,7 +12,7 @@ load(
 )
 
 GerbilProjectionInfo = provider(
-    doc = "One POO Flow projection artifact derived from a Gerbil project.",
+    doc = "One Agentic AI Lab projection artifact derived from a Gerbil project.",
     fields = {
         "artifact": "Packaged no-Gerbil projection artifact.",
         "project": "Shared Gerbil project provider used by the action.",
@@ -45,7 +45,7 @@ def _gerbil_project_projection_impl(ctx):
     environment = dict(toolchain.environment)
     environment.update({
         "GERBIL_BAZEL_NATIVE_ABI": toolchain.native_abi_fingerprint,
-        "POO_FLOW_GERBIL_NATIVE_ABI": toolchain.native_abi_fingerprint,
+        "AGENTIC_AI_LAB_GERBIL_NATIVE_ABI": toolchain.native_abi_fingerprint,
     })
     ctx.actions.run(
         arguments = [arguments],
@@ -121,7 +121,7 @@ def _gerbil_project_contract_projection_impl(ctx):
             ] +
             [toolchain.dependency_library_root.path],
         ),
-        "POO_FLOW_GERBIL_NATIVE_ABI": toolchain.native_abi_fingerprint,
+        "AGENTIC_AI_LAB_GERBIL_NATIVE_ABI": toolchain.native_abi_fingerprint,
     })
     ctx.actions.run(
         arguments = [arguments],

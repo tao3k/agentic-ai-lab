@@ -8,13 +8,13 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/types
-                 poo-flow-temporal-trajectory-series?)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/funs
-                 poo-flow-temporal-trajectory-replay)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/delta-objects
-                 poo-flow-temporal-trajectory-delta-value))
-(export poo-flow-temporal-trajectory-delta)
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/types
+                 agentic-ai-lab-temporal-trajectory-series?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/funs
+                 agentic-ai-lab-temporal-trajectory-replay)
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/delta-objects
+                 agentic-ai-lab-temporal-trajectory-delta-value))
+(export agentic-ai-lab-temporal-trajectory-delta)
 
 (def (text? value) (and (string? value) (> (string-length value) 0)))
 (def (digest datum)
@@ -52,17 +52,17 @@
                                  (sample-row (car new)))
                        changed (cons a changed))))))))))
 
-(def (poo-flow-temporal-trajectory-delta identity previous revised)
+(def (agentic-ai-lab-temporal-trajectory-delta identity previous revised)
   (unless (and (text? identity)
-               (poo-flow-temporal-trajectory-series? previous)
-               (poo-flow-temporal-trajectory-series? revised)
+               (agentic-ai-lab-temporal-trajectory-series? previous)
+               (agentic-ai-lab-temporal-trajectory-series? revised)
                (every (lambda (slot)
                         (equal? (.ref previous slot) (.ref revised slot)))
                       '(subject-identity scenario-identity outcome-identity
                         unit-identity time-domain-identity modality)))
     (error "trajectory delta requires one series context"))
-  (let* ((previous (poo-flow-temporal-trajectory-replay previous))
-         (revised (poo-flow-temporal-trajectory-replay revised))
+  (let* ((previous (agentic-ai-lab-temporal-trajectory-replay previous))
+         (revised (agentic-ai-lab-temporal-trajectory-replay revised))
          (old-digest (.ref previous 'semantic-digest))
          (new-digest (.ref revised 'semantic-digest)))
     (when (and (equal? (.ref previous 'identity) (.ref revised 'identity))
@@ -89,10 +89,10 @@
                   (else 'identity-only)))
            (semantic-digest
             (digest
-             (list 'poo-flow.temporal-causality.trajectory-delta.v1
+             (list 'agentic-ai-lab.temporal-causality.trajectory-delta.v1
                    identity old-digest new-digest added removed changed
                    status))))
-      (poo-flow-temporal-trajectory-delta-value
+      (agentic-ai-lab-temporal-trajectory-delta-value
        identity semantic-digest previous revised old-digest new-digest
        (.ref previous 'source-cut-digest) (.ref revised 'source-cut-digest)
        (.ref previous 'source-projection-digest)

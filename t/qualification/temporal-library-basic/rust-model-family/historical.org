@@ -1,0 +1,24 @@
+#+title: Historical ABI v1 qualification
+
+This records the historical run before the Scheme ABI v2 migration. It does
+not qualify the new ABI. JSON transcripts have been removed from the working
+tree by user direction; the original evidence remains in Git commit
+=9ad77d307dfcd83cf6e503aa57c29cce6c0f1ce5=. New qualification is owned by
+=:asp-gerbil-scheme/benchmark-api= and emits Scheme receipts.
+
+The historical forced read-only family batch passed 4/4 roundtrips with
+8 completed provider responses and no retries. Maximum first content was
+1.5116587499996967s; maximum content gap 0.4755849590001162s; maximum
+native call 0.2776202500008367s. Five-second genuine-content limit.
+No MRR physical execution, authorization or IFC claim follows.
+
+| Removed artifact | Historical SHA-256 |
+|------------------+--------------------|
+| 00.json | 7fe65cea9f38d6e2910138e3b850d3834c54b576acb0020b6972d4f982d3249a |
+| 01.json | 40fc44aa0089290340f98be190d9182685ba5a4664ba044cd3eb76da799d8a3e |
+| 02.json | b945e1fcc488e8cbdcf1c1afdc7f87b661f1debc49aed0fe05b20ba528ece1d4 |
+| 03.json | 868ed826e847cb766c45d44a73d61e07102a2142f0dd8c47f618756fff98f484 |
+| paid-batch-claim.json | 40565c0ce8736fae13ccce88af7bd36d0d37dd9d0b2adbacc19cd831160fb832 |
+| plan.json | 9074d2dc747756d5a9be50fcac84db24a3d88473ebaadbc530bf4add8215f231 |
+| report.json | 35bef6959aa5e3302dd4a27971bed6a7080620853e58fcfaa5d31d31d61e2386 |
+| summary.json | 1a5f2876c7b7f07565a76cfa0bca47323457a3694efea67271f08516dab8859f |

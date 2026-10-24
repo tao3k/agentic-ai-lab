@@ -7,12 +7,12 @@
 ;;; Invariant: forms create POO policy, validation, memory, and transform
 ;;; values only; runtime execution remains outside Scheme.
 
-(import :poo-flow/modules/memory-core/durable/policy
-        (only-in :poo-flow/modules/session/config-session-syntax
-                 poo-flow-session-syntax-chunk)
-        :poo-flow/modules/session/policy
-        :poo-flow/modules/session/policy-validation
-        :poo-flow/modules/session/transform)
+(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        (only-in :agentic-ai-lab/modules/session/config-session-syntax
+                 agentic-ai-lab-session-syntax-chunk)
+        :agentic-ai-lab/modules/session/policy
+        :agentic-ai-lab/modules/session/policy-validation
+        :agentic-ai-lab/modules/session/transform)
 
 (export session-tool-grant
         session-tool-policy
@@ -45,7 +45,7 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-tool-grant build shell (read write) (workspace) (manual) (ci))
-;;       ;; => poo-flow-session-tool-grant
+;;       ;; => agentic-ai-lab-session-tool-grant
 ;;       ```
 ;;     %
 (defrules session-tool-grant ()
@@ -54,7 +54,7 @@
       (resource-ref ...)
       (trigger-ref ...)
       (metadata-entry ...))
-   (poo-flow-session-tool-grant
+   (agentic-ai-lab-session-tool-grant
     'grant-id
     'tool-ref
     '(action ...)
@@ -70,7 +70,7 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-tool-policy default project (build) (dangerous-tool) deny (ci))
-;;       ;; => poo-flow-session-tool-permission-policy
+;;       ;; => agentic-ai-lab-session-tool-permission-policy
 ;;       ```
 ;;     %
 (defrules session-tool-policy ()
@@ -79,7 +79,7 @@
       (denied-tool-ref ...)
       default-action
       (metadata-entry ...))
-   (poo-flow-session-tool-permission-policy
+   (agentic-ai-lab-session-tool-permission-policy
     'policy-name
     'scope-ref
     (list grant ...)
@@ -95,7 +95,7 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-hook-tool-policy hooks project (pre-run) (build) review deny (ci))
-;;       ;; => poo-flow-session-hook-tool-permission-policy
+;;       ;; => agentic-ai-lab-session-hook-tool-permission-policy
 ;;       ```
 ;;     %
 (defrules session-hook-tool-policy ()
@@ -105,7 +105,7 @@
       escalation-policy
       default-action
       (metadata-entry ...))
-   (poo-flow-session-hook-tool-permission-policy
+   (agentic-ai-lab-session-hook-tool-permission-policy
     'policy-name
     'scope-ref
     '(hook-event ...)
@@ -122,7 +122,7 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-model-policy default project openai gpt (tool-use) budget (ci))
-;;       ;; => poo-flow-session-model-policy
+;;       ;; => agentic-ai-lab-session-model-policy
 ;;       ```
 ;;     %
 (defrules session-model-policy ()
@@ -130,7 +130,7 @@
       (model-capability ...)
       budget-ref
       (metadata-entry ...))
-   (poo-flow-session-model-policy
+   (agentic-ai-lab-session-model-policy
     'policy-name
     'scope-ref
     'provider-ref
@@ -147,7 +147,7 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-prompt-policy default project prompt-session (system) scoped (ci))
-;;       ;; => poo-flow-session-prompt-policy
+;;       ;; => agentic-ai-lab-session-prompt-policy
 ;;       ```
 ;;     %
 (defrules session-prompt-policy ()
@@ -155,7 +155,7 @@
       (prompt-chunk-ref ...)
       context-mode
       (metadata-entry ...))
-   (poo-flow-session-prompt-policy
+   (agentic-ai-lab-session-prompt-policy
     'policy-name
     'scope-ref
     'prompt-session-ref
@@ -171,14 +171,14 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-isolation-policy strict project private deny gated (ci))
-;;       ;; => poo-flow-session-isolation-policy
+;;       ;; => agentic-ai-lab-session-isolation-policy
 ;;       ```
 ;;     %
 (defrules session-isolation-policy ()
   ((_ policy-name scope-ref mode sibling-context parent-write
       peer-communication
       (metadata-entry ...))
-   (poo-flow-session-isolation-policy
+   (agentic-ai-lab-session-isolation-policy
     'policy-name
     'scope-ref
     'mode
@@ -195,13 +195,13 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-sandbox-policy nono project nono-default inherit isolated (ci))
-;;       ;; => poo-flow-session-sandbox-policy
+;;       ;; => agentic-ai-lab-session-sandbox-policy
 ;;       ```
 ;;     %
 (defrules session-sandbox-policy ()
   ((_ policy-name scope-ref profile-ref inheritance-mode sharing-mode
       (metadata-entry ...))
-   (poo-flow-session-sandbox-policy
+   (agentic-ai-lab-session-sandbox-policy
     'policy-name
     'scope-ref
     'profile-ref
@@ -217,14 +217,14 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-context-policy default project parent-only (root) (ci))
-;;       ;; => poo-flow-session-context-policy
+;;       ;; => agentic-ai-lab-session-context-policy
 ;;       ```
 ;;     %
 (defrules session-context-policy ()
   ((_ policy-name scope-ref visibility
       (allowed-session-ref ...)
       (metadata-entry ...))
-   (poo-flow-session-context-policy
+   (agentic-ai-lab-session-context-policy
     'policy-name
     'scope-ref
     'visibility
@@ -239,14 +239,14 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-history-policy default project durable (plan checkpoint) (ci))
-;;       ;; => poo-flow-session-history-policy
+;;       ;; => agentic-ai-lab-session-history-policy
 ;;       ```
 ;;     %
 (defrules session-history-policy ()
   ((_ policy-name scope-ref retention
       (allowed-record ...)
       (metadata-entry ...))
-   (poo-flow-session-history-policy
+   (agentic-ai-lab-session-history-policy
     'policy-name
     'scope-ref
     'retention
@@ -261,7 +261,7 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-communication-policy default project (inbox) (worker) (ci))
-;;       ;; => poo-flow-session-communication-policy
+;;       ;; => agentic-ai-lab-session-communication-policy
 ;;       ```
 ;;     %
 (defrules session-communication-policy ()
@@ -269,7 +269,7 @@
       (channel-ref ...)
       (target-session-ref ...)
       (metadata-entry ...))
-   (poo-flow-session-communication-policy
+   (agentic-ai-lab-session-communication-policy
     'policy-name
     'scope-ref
     '(channel-ref ...)
@@ -284,7 +284,7 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-sharing-policy default project (mem) (artifact) (tool) (workspace) (ci))
-;;       ;; => poo-flow-session-sharing-policy
+;;       ;; => agentic-ai-lab-session-sharing-policy
 ;;       ```
 ;;     %
 (defrules session-sharing-policy ()
@@ -294,7 +294,7 @@
       (tool-result-ref ...)
       (workspace-path ...)
       (metadata-entry ...))
-   (poo-flow-session-sharing-policy
+   (agentic-ai-lab-session-sharing-policy
     'policy-name
     'scope-ref
     '(memory-ref ...)
@@ -311,7 +311,7 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-resource-policy default project (tokens) (network) accountant (ci))
-;;       ;; => poo-flow-session-resource-policy
+;;       ;; => agentic-ai-lab-session-resource-policy
 ;;       ```
 ;;     %
 (defrules session-resource-policy ()
@@ -320,7 +320,7 @@
       (capability-ref ...)
       accounting-owner
       (metadata-entry ...))
-   (poo-flow-session-resource-policy
+   (agentic-ai-lab-session-resource-policy
     'policy-name
     'scope-ref
     '(budget-ref ...)
@@ -336,7 +336,7 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-resource-sharing-policy default project (network) deny (ci))
-;;       ;; => poo-flow-session-resource-sharing-policy
+;;       ;; => agentic-ai-lab-session-resource-sharing-policy
 ;;       ```
 ;;     %
 (defrules session-resource-sharing-policy ()
@@ -344,7 +344,7 @@
       (resource-grant ...)
       default-action
       (metadata-entry ...))
-   (poo-flow-session-resource-sharing-policy
+   (agentic-ai-lab-session-resource-sharing-policy
     'policy-name
     'scope-ref
     '(resource-grant ...)
@@ -359,14 +359,14 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-agent-execution-policy default agent session model prompt tools hooks context resources (ci))
-;;       ;; => poo-flow-session-agent-execution-policy
+;;       ;; => agentic-ai-lab-session-agent-execution-policy
 ;;       ```
 ;;     %
 (defrules session-agent-execution-policy ()
   ((_ policy-name agent-ref session-ref model-policy-ref prompt-policy-ref
       tool-policy-ref hook-policy-ref context-policy-ref resource-policy-ref
       (metadata-entry ...))
-   (poo-flow-session-agent-execution-policy
+   (agentic-ai-lab-session-agent-execution-policy
     'policy-name
     'agent-ref
     'session-ref
@@ -380,11 +380,11 @@
 
 ;; : (-> PooSessionPolicy PooDurablePolicy PooSessionPolicy)
 (def (session-policy-with-durable policy durable-policy)
-  (poo-flow-session-policy-attach-durable policy durable-policy))
+  (agentic-ai-lab-session-policy-attach-durable policy durable-policy))
 
 ;; : (-> PooSessionPolicy Alist)
 (def (session-policy-row policy)
-  (poo-flow-session-policy->alist policy))
+  (agentic-ai-lab-session-policy->alist policy))
 
 ;; session-policy-tool-attempt
 ;;   : (-> Syntax PooSessionToolAttempt)
@@ -394,13 +394,13 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-policy-tool-attempt build hook shell read workspace agent (ci))
-;;       ;; => poo-flow-session-policy-tool-attempt
+;;       ;; => agentic-ai-lab-session-policy-tool-attempt
 ;;       ```
 ;;     %
 (defrules session-policy-tool-attempt ()
   ((_ attempt-id trigger-ref tool-ref action resource-ref principal-ref
       (metadata-entry ...))
-   (poo-flow-session-policy-tool-attempt
+   (agentic-ai-lab-session-policy-tool-attempt
     'attempt-id
     'trigger-ref
     'tool-ref
@@ -409,7 +409,7 @@
     'principal-ref
     '(metadata-entry ...)))
   ((_ attempt-id trigger-ref tool-ref action resource-ref principal-ref)
-   (poo-flow-session-policy-tool-attempt
+   (agentic-ai-lab-session-policy-tool-attempt
     'attempt-id
     'trigger-ref
     'tool-ref
@@ -425,7 +425,7 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-policy-validation v project model prompt iso sandbox context history comm sharing resources tools hooks () () () () () () ())
-;;       ;; => poo-flow-session-policy-validation-receipt
+;;       ;; => agentic-ai-lab-session-policy-validation-receipt
 ;;       ```
 ;;     %
 (defrules session-policy-validation ()
@@ -440,7 +440,7 @@
       (agent-tool-attempt ...)
       (hook-tool-attempt ...)
       metadata)
-   (poo-flow-session-policy-validation-receipt
+   (agentic-ai-lab-session-policy-validation-receipt
     'validation-id
     'scope-ref
     model-policy
@@ -464,7 +464,7 @@
 
 ;; : (-> PooSessionPolicyValidationReceipt Alist)
 (def (session-policy-validation-row receipt)
-  (poo-flow-session-policy-validation-receipt->alist receipt))
+  (agentic-ai-lab-session-policy-validation-receipt->alist receipt))
 
 ;; session-memory-intent
 ;;   : (-> Syntax PooSessionMemoryIntent)
@@ -479,7 +479,7 @@
 ;;         (scope current-session)
 ;;         (recall prior-task)
 ;;         (commit review-only))
-;;       ;; => poo-flow-session-memory-intent
+;;       ;; => agentic-ai-lab-session-memory-intent
 ;;       ```
 ;;     %
 (defrules session-memory-intent (store scope recall commit metadata)
@@ -489,7 +489,7 @@
       (recall recall-key ...)
       (commit commit-policy)
       (metadata metadata-entry ...))
-   (poo-flow-session-memory-intent
+   (agentic-ai-lab-session-memory-intent
     'intent-name
     'store-ref
     'scope-value
@@ -501,7 +501,7 @@
       (scope scope-value)
       (recall recall-key ...)
       (commit commit-policy))
-   (poo-flow-session-memory-intent
+   (agentic-ai-lab-session-memory-intent
     'intent-name
     'store-ref
     'scope-value
@@ -520,7 +520,7 @@
 ;;         (intent review-session)
 ;;         (description "Review the session")
 ;;         (capabilities search query))
-;;       ;; => poo-flow-session-transform
+;;       ;; => agentic-ai-lab-session-transform
 ;;       ```
 ;;     %
 (defrules session-transform (intent description capabilities memory-intents metadata)
@@ -530,7 +530,7 @@
       (capabilities capability ...)
       (memory-intents memory-intent ...)
       (metadata metadata-entry ...))
-   (poo-flow-session-transform
+   (agentic-ai-lab-session-transform
     'transform-name
     'intent-value
     description-value
@@ -542,7 +542,7 @@
       (description description-value)
       (capabilities capability ...)
       (memory-intents memory-intent ...))
-   (poo-flow-session-transform
+   (agentic-ai-lab-session-transform
     'transform-name
     'intent-value
     description-value
@@ -553,7 +553,7 @@
       (description description-value)
       (capabilities capability ...)
       (metadata metadata-entry ...))
-   (poo-flow-session-transform
+   (agentic-ai-lab-session-transform
     'transform-name
     'intent-value
     description-value
@@ -563,7 +563,7 @@
       (intent intent-value)
       (description description-value)
       (capabilities capability ...))
-   (poo-flow-session-transform
+   (agentic-ai-lab-session-transform
     'transform-name
     'intent-value
     description-value
@@ -579,7 +579,7 @@
 ;;       ```scheme
 ;;       (transform-session review root-session reviewed-session
 ;;         (chunk review assistant "Reviewed."))
-;;       ;; => poo-flow-session-transform-receipt
+;;       ;; => agentic-ai-lab-session-transform-receipt
 ;;       ```
 ;;     %
 (defrules transform-session (chunk metadata)
@@ -587,17 +587,17 @@
       (chunk chunk-id role content)
       ...
       (metadata metadata-entry ...))
-   (poo-flow-session-transform-apply
+   (agentic-ai-lab-session-transform-apply
     transform
     source-session
     'derived-session-id
-    (list (poo-flow-session-syntax-chunk 'chunk-id 'role content) ...)
+    (list (agentic-ai-lab-session-syntax-chunk 'chunk-id 'role content) ...)
     '(metadata-entry ...)))
   ((_ transform source-session derived-session-id
       (chunk chunk-id role content)
       ...)
-   (poo-flow-session-transform-apply
+   (agentic-ai-lab-session-transform-apply
     transform
     source-session
     'derived-session-id
-    (list (poo-flow-session-syntax-chunk 'chunk-id 'role content) ...))))
+    (list (agentic-ai-lab-session-syntax-chunk 'chunk-id 'role content) ...))))

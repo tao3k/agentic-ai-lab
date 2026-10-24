@@ -6,14 +6,14 @@
 ;;; Boundary: focused user-interface loop-engine result contract diagnostics.
 ;;; Invariant: invalid result contracts are reported, never executed.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax)
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
 (export user-interface-custom-loop-engine-result-contract-test)
 
@@ -63,16 +63,16 @@
 ;;; calling result-contract validators directly.
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation module-bundle)
-  (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules (list module-bundle))
-    (poo-flow-settings))))
+  (agenticAiLabUserConfigPresentation
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules (list module-bundle))
+    (yuanxu-settings))))
 
 ;;; Invalid result contracts remain reportable config data: presentation and
 ;;; runtime manifests surface diagnostics, but no runtime work is executed.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-invalid-result-case)
-  (poo-flow-test-case "diagnoses invalid loop-engine result contract"
+  (yuanxu-test-case "diagnoses invalid loop-engine result contract"
     (let* ((presentation
             (custom-loop-presentation custom-loop-invalid-result-module))
            (intent
@@ -99,5 +99,5 @@
 
 ;; : TestSuite
 (def user-interface-custom-loop-engine-result-contract-test
-  (test-suite "poo-flow custom loop-engine result contract"
+  (test-suite "agentic-ai-lab custom loop-engine result contract"
     (user-interface-custom-loop-engine-invalid-result-case)))

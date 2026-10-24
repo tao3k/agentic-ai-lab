@@ -10,11 +10,11 @@ from typing import Any
 
 import anyio
 
-from poo_flow_runtime.benchmarks._composition_lifecycle_arrival import (
+from agentic_ai_lab_runtime.benchmarks._composition_lifecycle_arrival import (
     BENCHMARK_ELIGIBLE_AT_NS,
     run_arrival_batch,
 )
-from poo_flow_runtime.benchmarks._composition_lifecycle_workload import ArrivalSchedule
+from agentic_ai_lab_runtime.benchmarks._composition_lifecycle_workload import ArrivalSchedule
 
 
 class _ObservedProgram:

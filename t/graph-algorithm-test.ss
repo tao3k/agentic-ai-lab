@@ -6,175 +6,175 @@
 ;;; Boundary: shared graph algorithms remain report-only POO projections.
 ;;; Invariant: graph tests must not schedule, run adapters, or write state.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .def .o .ref .slot?)
-        :poo-flow/src/graph/types
-        :poo-flow/src/graph/algorithms)
+        :yuanxu/graph/types
+        :yuanxu/graph/algorithms)
 
 (export graph-algorithm-test)
 
-;; : PooFlowGraph
+;; : YuanxuGraph
 (def graph-algorithm-sample
-  (poo-flow-graph
+  (yuanxu-graph
    'build-pipeline
-   (list (poo-flow-graph-node 'build)
-         (poo-flow-graph-node 'test)
-         (poo-flow-graph-node 'package)
-         (poo-flow-graph-node 'docs))
-   (list (poo-flow-graph-edge 'build 'test)
-         (poo-flow-graph-edge 'test 'package)
-         (poo-flow-graph-edge 'build 'docs))))
+   (list (yuanxu-graph-node 'build)
+         (yuanxu-graph-node 'test)
+         (yuanxu-graph-node 'package)
+         (yuanxu-graph-node 'docs))
+   (list (yuanxu-graph-edge 'build 'test)
+         (yuanxu-graph-edge 'test 'package)
+         (yuanxu-graph-edge 'build 'docs))))
 
-;; : PooFlowGraph
+;; : YuanxuGraph
 (def graph-algorithm-cycle-sample
-  (poo-flow-graph
+  (yuanxu-graph
    'cycle-sample
-   (list (poo-flow-graph-node 'a)
-         (poo-flow-graph-node 'b)
-         (poo-flow-graph-node 'c))
-   (list (poo-flow-graph-edge 'a 'b)
-         (poo-flow-graph-edge 'b 'c)
-         (poo-flow-graph-edge 'c 'a))))
+   (list (yuanxu-graph-node 'a)
+         (yuanxu-graph-node 'b)
+         (yuanxu-graph-node 'c))
+   (list (yuanxu-graph-edge 'a 'b)
+         (yuanxu-graph-edge 'b 'c)
+         (yuanxu-graph-edge 'c 'a))))
 
-;; : PooFlowGraph
+;; : YuanxuGraph
 (def graph-algorithm-self-loop-sample
-  (poo-flow-graph
+  (yuanxu-graph
    'self-loop-sample
-   (list (poo-flow-graph-node 'a)
-         (poo-flow-graph-node 'b))
-   (list (poo-flow-graph-edge 'a 'a)
-         (poo-flow-graph-edge 'a 'b))))
+   (list (yuanxu-graph-node 'a)
+         (yuanxu-graph-node 'b))
+   (list (yuanxu-graph-edge 'a 'a)
+         (yuanxu-graph-edge 'a 'b))))
 
 ;; Two SCCs with two concrete edges that project to one condensation edge.
 (def graph-algorithm-condensation-dedup-sample
-  (poo-flow-graph
+  (yuanxu-graph
    'condensation-dedup-sample
-   (list (poo-flow-graph-node 'a)
-         (poo-flow-graph-node 'b)
-         (poo-flow-graph-node 'c)
-         (poo-flow-graph-node 'd))
-   (list (poo-flow-graph-edge 'a 'b)
-         (poo-flow-graph-edge 'b 'a)
-         (poo-flow-graph-edge 'c 'd)
-         (poo-flow-graph-edge 'd 'c)
-         (poo-flow-graph-edge 'a 'c)
-         (poo-flow-graph-edge 'b 'd))))
+   (list (yuanxu-graph-node 'a)
+         (yuanxu-graph-node 'b)
+         (yuanxu-graph-node 'c)
+         (yuanxu-graph-node 'd))
+   (list (yuanxu-graph-edge 'a 'b)
+         (yuanxu-graph-edge 'b 'a)
+         (yuanxu-graph-edge 'c 'd)
+         (yuanxu-graph-edge 'd 'c)
+         (yuanxu-graph-edge 'a 'c)
+         (yuanxu-graph-edge 'b 'd))))
 
-;; : PooFlowGraph
+;; : YuanxuGraph
 (.def (graph-declarative-slot-sample @ graph)
   (graph-id 'declarative-slot-graph)
   (node-declarations =>.+
-   (.o source: (poo-flow-graph-node 'source 'Source)
-       target: (poo-flow-graph-node 'target 'Target)))
+   (.o source: (yuanxu-graph-node 'source 'Source)
+       target: (yuanxu-graph-node 'target 'Target)))
   (edge-declarations =>.+
    (.o source-declares-target:
-       (poo-flow-graph-edge 'source 'target 'declares))))
+       (yuanxu-graph-edge 'source 'target 'declares))))
 
 ;; : TestSuite
 (def graph-algorithm-test
-  (test-suite "poo-flow graph algorithms"
-    (poo-flow-test-case "Graph derives algorithm values from declarative POO slots"
+  (test-suite "agentic-ai-lab graph algorithms"
+    (yuanxu-test-case "Graph derives algorithm values from declarative POO slots"
       (check-equal? (.slot? graph-declarative-slot-sample
                             'node-declarations)
                     #t)
-      (check-equal? (poo-flow-graph-node-ids graph-declarative-slot-sample)
+      (check-equal? (yuanxu-graph-node-ids graph-declarative-slot-sample)
                     '(source target))
-      (check-equal? (poo-flow-graph-edge-pairs graph-declarative-slot-sample)
+      (check-equal? (yuanxu-graph-edge-pairs graph-declarative-slot-sample)
                     '((source target)))
       (check-equal?
-       (poo-flow-graph-nodes
-        (poo-flow-graph 'declarative-slot-graph '() '()))
+       (yuanxu-graph-nodes
+        (yuanxu-graph 'declarative-slot-graph '() '()))
        '()))
 
-    (poo-flow-test-case "projects adjacency, frontiers, reachability, and topology"
-      (let ((analysis (poo-flow-graph-analysis-receipt
+    (yuanxu-test-case "projects adjacency, frontiers, reachability, and topology"
+      (let ((analysis (yuanxu-graph-analysis-receipt
                        graph-algorithm-sample)))
-        (check-equal? (poo-flow-graph? graph-algorithm-sample) #t)
-        (check-equal? (poo-flow-graph-node-ids graph-algorithm-sample)
+        (check-equal? (yuanxu-graph? graph-algorithm-sample) #t)
+        (check-equal? (yuanxu-graph-node-ids graph-algorithm-sample)
                       '(build test package docs))
-        (check-equal? (poo-flow-graph-edge-pairs graph-algorithm-sample)
+        (check-equal? (yuanxu-graph-edge-pairs graph-algorithm-sample)
                       '((build test) (test package) (build docs)))
-        (check-equal? (poo-flow-graph-outgoing-ids
+        (check-equal? (yuanxu-graph-outgoing-ids
                        graph-algorithm-sample
                        'build)
                       '(test docs))
-        (check-equal? (poo-flow-graph-incoming-ids
+        (check-equal? (yuanxu-graph-incoming-ids
                        graph-algorithm-sample
                        'package)
                       '(test))
-        (check-equal? (poo-flow-graph-outgoing-map
+        (check-equal? (yuanxu-graph-outgoing-map
                        graph-algorithm-sample)
                       '((build test docs)
                         (test package)
                         (package)
                         (docs)))
-        (check-equal? (poo-flow-graph-incoming-map
+        (check-equal? (yuanxu-graph-incoming-map
                        graph-algorithm-sample)
                       '((build)
                         (test build)
                         (package test)
                         (docs build)))
-        (check-equal? (poo-flow-graph-root-ids graph-algorithm-sample)
+        (check-equal? (yuanxu-graph-root-ids graph-algorithm-sample)
                       '(build))
-        (check-equal? (poo-flow-graph-terminal-ids graph-algorithm-sample)
+        (check-equal? (yuanxu-graph-terminal-ids graph-algorithm-sample)
                       '(package docs))
-        (check-equal? (poo-flow-graph-reachable-ids
+        (check-equal? (yuanxu-graph-reachable-ids
                        graph-algorithm-sample
                        '(build))
                       '(build test docs package))
-        (check-equal? (poo-flow-graph-dependency-cone
+        (check-equal? (yuanxu-graph-dependency-cone
                        graph-algorithm-sample
                        '(package))
                       '(package test build))
-        (check-equal? (poo-flow-graph-topological-order
+        (check-equal? (yuanxu-graph-topological-order
                        graph-algorithm-sample)
                       '(build test docs package))
-        (check-equal? (poo-flow-graph-analysis? analysis) #t)
+        (check-equal? (yuanxu-graph-analysis? analysis) #t)
         (check-equal? (.ref analysis 'root-ids) '(build))
         (check-equal? (.ref analysis 'terminal-ids) '(package docs))
         (check-equal? (.ref analysis 'acyclic?) #t)
         (check-equal? (.ref analysis 'runtime-executed) #f)))
-    (poo-flow-test-case "detects cycle paths without producing a topological order"
-      (let ((analysis (poo-flow-graph-analysis-receipt
+    (yuanxu-test-case "detects cycle paths without producing a topological order"
+      (let ((analysis (yuanxu-graph-analysis-receipt
                        graph-algorithm-cycle-sample)))
-        (check-equal? (poo-flow-graph-cycle-path
+        (check-equal? (yuanxu-graph-cycle-path
                        graph-algorithm-cycle-sample)
                       '(a b c a))
-        (check-equal? (poo-flow-graph-acyclic?
+        (check-equal? (yuanxu-graph-acyclic?
                        graph-algorithm-cycle-sample)
                       #f)
-        (check-equal? (poo-flow-graph-topological-order
+        (check-equal? (yuanxu-graph-topological-order
                        graph-algorithm-cycle-sample)
                       #f)
         (check-equal? (.ref analysis 'cycle-path) '(a b c a))
         (check-equal? (.ref analysis 'acyclic?) #f)
         (check-equal? (.ref analysis 'diagnostics)
                       '((cycle-path a b c a)))))
-    (poo-flow-test-case "keeps indexed cycle traversal state local and deterministic"
-      (check-equal? (poo-flow-graph-cycle-path
+    (yuanxu-test-case "keeps indexed cycle traversal state local and deterministic"
+      (check-equal? (yuanxu-graph-cycle-path
                      graph-algorithm-cycle-sample)
                     '(a b c a))
-      (check-equal? (poo-flow-graph-cycle-path
+      (check-equal? (yuanxu-graph-cycle-path
                      graph-algorithm-sample)
                     #f)
-      (check-equal? (poo-flow-graph-cycle-path
+      (check-equal? (yuanxu-graph-cycle-path
                      graph-algorithm-cycle-sample)
                     '(a b c a)))
-    (poo-flow-test-case "emits POO loop analysis receipts for DAGs"
-      (let ((analysis (poo-flow-graph-loop-analysis-receipt
+    (yuanxu-test-case "emits POO loop analysis receipts for DAGs"
+      (let ((analysis (yuanxu-graph-loop-analysis-receipt
                        graph-algorithm-sample)))
-        (check-equal? (poo-flow-graph-loop-analysis? analysis) #t)
+        (check-equal? (yuanxu-graph-loop-analysis? analysis) #t)
         (check-equal? (.ref analysis 'components)
                       '((build) (test) (package) (docs)))
         (check-equal? (.ref analysis 'cyclic-components) '())
         (check-equal? (.ref analysis 'condensation-edges)
                       '((0 1) (1 2) (0 3)))
         (check-equal? (.ref analysis 'diagnostics) '())))
-    (poo-flow-test-case "emits cyclic components before condensation"
-      (let ((analysis (poo-flow-graph-loop-analysis-receipt
+    (yuanxu-test-case "emits cyclic components before condensation"
+      (let ((analysis (yuanxu-graph-loop-analysis-receipt
                        graph-algorithm-cycle-sample)))
         (check-equal? (.ref analysis 'component-count) 1)
         (check-equal? (.ref analysis 'cyclic-component-count) 1)
@@ -183,15 +183,15 @@
         (check-equal? (.ref analysis 'condensation-edges) '())
         (check-equal? (.ref analysis 'diagnostics)
                       '((cyclic-components (a b c))))))
-    (poo-flow-test-case "treats self loops as cyclic singleton components"
-      (let ((analysis (poo-flow-graph-loop-analysis-receipt
+    (yuanxu-test-case "treats self loops as cyclic singleton components"
+      (let ((analysis (yuanxu-graph-loop-analysis-receipt
                        graph-algorithm-self-loop-sample)))
         (check-equal? (.ref analysis 'components) '((a) (b)))
         (check-equal? (.ref analysis 'cyclic-components) '((a)))
         (check-equal? (.ref analysis 'condensation-edges) '((0 1)))))
-    (poo-flow-test-case "deduplicates projected condensation edges"
+    (yuanxu-test-case "deduplicates projected condensation edges"
       (let ((analysis
-             (poo-flow-graph-loop-analysis-receipt
+             (yuanxu-graph-loop-analysis-receipt
               graph-algorithm-condensation-dedup-sample)))
         (check-equal? (.ref analysis 'components) '((a b) (c d)))
         (check-equal? (.ref analysis 'cyclic-components) '((a b) (c d)))

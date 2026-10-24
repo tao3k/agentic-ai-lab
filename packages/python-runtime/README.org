@@ -4,7 +4,13 @@
 
 #+title: Python Runtime Package
 
-This package is the Python runtime consumer for POO Flow runtime bindings.
+This package is the Python runtime consumer for Agentic AI Lab runtime bindings.
+
+Python runtime code lives in =src/agentic_ai_lab_runtime=, Python tests in =tests=,
+and cross-language/model qualification entrypoints in =tools=. The Rust ABI
+consumer lives separately in =runtime/= in the MRR repository. Both callers use the
+shared =bindings/runtime-c= boundary; Temporal semantics stay in Scheme.
+See [[file:tools/README.org][Python qualification tools]] for the entrypoints.
 
 It does not own the ABI. The C surface lives under =bindings/runtime-c=.
 Production code compiles and loads that binding through out-of-line CFFI API
@@ -14,49 +20,100 @@ surface is ABI v0.1 and is not an ABI v1 freeze claim.
 
 The package is managed by =uv=. It provides a Python API and a command-line
 probe for the current C ABI. Future ALALEX validation runtime code should plug
-into this package and consume the same =poo_flow_runtime= API.
+into this package and consume the same =agentic_ai_lab_runtime= API.
 
-The validation runtime API is intentionally small and dependency-free. It
-validates a manifest, plans a runtime handoff, and returns receipts from the
-upstream C ABI binding. Scheme remains the owner of flow, graph, policy-family,
-and strategy-combinator semantics.
+Scheme owns flow composition, graph, policy-family and strategy-combinator
+semantics. The installed runtime-v0 C ABI owns the control lane: negotiation,
+sessions, arenas, mediation and evidence. It has no graph-plan handle API.
 
-The package also includes a dependency-free runtime graph executor. It models
-the compiled-plan execution substrate that Scheme can target: START/END,
-node actions, edges, conditional routing, reducers, and step limits. It is not
-the public graph authoring UI. Cross-language runtime handoff remains owned by
-the C ABI, including opaque graph plan handles.
+Python owns production scheduling, action IO, reducers, cancellation and durable
+storage. =RuntimeGraphProgram.reference()= remains available with a local Python
+domain receipt. Native programs require an actual runtime-v0 session plus a
+=SemanticRuntime= context. The latter loads a compiler-produced Scheme AOT
+library through out-of-line CFFI, admits the graph through existing POO objects,
+and binds the full projection to a Scheme receipt before actions run. Static
+successors come from Scheme graph algorithms. Conditional labels and dynamic
+jump/send targets are resolved or checked by =graph.targets= against the same
+immutable plan digest. A bare low-level executor uses reference mode; configured
+native execution requires both the Scheme binding and a real control session.
 
-Typed Python runtime plans are materialized into C ABI graph handles before
-validation or handoff. This keeps Python's execution model aligned with the
-upstream ABI instead of creating a parallel graph protocol.
+=SemanticRuntime.call("temporal.solve", task)= evaluates the existing finite
+ASCENT temporal semantics. =observe_model_answer(task, output)= parses inert
+Scheme data and recomputes Scheme evidence, returning =consistent= or =contradicted=.
+=predict_temporal_answer(task, predictor)= and its async counterpart pass only
+the task to model IO and return its candidate with a fresh Scheme observation.
+A contradiction is reported as evidence, without retry or effect authorization.
+The historical prompted answer-supply experiment is withdrawn as design
+acceptance; no-Prompt model integration and real-time teaching remain open.
+Caller-declared source labels are not authenticated. Admission and answer
+consistency do not grant effect authorization.
 
-C ABI receipt bytes are parsed through the package receipt API before runtime
-code inspects fields such as =kind=, =nodes=, or =plan-digest=. Higher-level
-runtime APIs expose typed receipt helpers while preserving raw bytes for low
-level ABI checks.
+The finite hypothesis-family engine is a separate native profile.
+=classify_temporal_family(task)= and =aclassify_temporal_family(task)= invoke
+=temporal.family.classify=; =observe_temporal_family(task, candidate)= and its
+async counterpart replay the whole current result through Scheme. The task
+contains =profile: finite-hypothesis-family=, a model with =identity=,
+=domains=, =observations=, =hypotheses=, =complete= and =mode=, and a query
+with =identity=, =target= and =limit=. Wire objects are projections of existing
+POO values, not an alternative engine. =limit: false= exhausts the finite
+family; a positive integer permits an unexplored frontier. Model mode is
+=exclusive-explanations= or =overlapping-mechanisms=. The native descriptor
+publishes inventory bounds. Extra fields and unsupported profiles/relations
+fail closed. Receipt classification is assumption-relative; source authenticity
+and action authorization remain false. The exact supported projection and
+local qualification are in [[file:../../modules/temporal-causality/design-audit.org][the engine delivery record]].
 
-The local C probe build is cached when the compiled shared library is newer
-than the ABI header and probe source. The command-line probe forces a rebuild so
-manual smoke checks always exercise the current C source.
+Host-pinned source admission is a separate control operation.
+=register_temporal_source(scope, task)= registers canonical domain/observation
+bytes using =agentic_ai_lab_semantic_v1_source_register=, not the semantic operation
+router. Do not expose registration as a model tool. The scope binds source
+identity, authority, subject, scope, cut, projection, policy and generation.
+A conflicting registration at the same generation or a rollback is rejected;
+a higher generation retires the old snapshot's applicability. At most 128
+source identities are retained in this process-local registry.
+
+=admit_temporal_family(task, source_identity=..., source_digest=...,
+conclusion_identity=...)= and its async counterpart select the current
+registered snapshot, replay observations and native classification, and return
+an inert immutable root conclusion with generated proof and content-bound revision identities. The
+caller conclusion identity is a request key; a changed proof produces a distinct
+revision identity even for the same request key. Unknown
+classification is rejected. Hypothesis-family completeness is still a caller
+assumption; admission does not prove complete source coverage, causal truth,
+external issuer authenticity or effect authority. The receipt states
+=sourceVerified: true= relative to =host-registered-snapshot=, while
+=sourceAuthenticated= and =actionAuthorized= remain false. Registration is
+volatile and does not implement a durable pointer, correction CAS or recovery.
+
+The semantic runtime has one process-wide lifetime and one owning thread,
+bounded input and queue sizes, explicit native result ownership, and terminal
+cleanup. Each artifact is checked against an expected SHA256 before loading.
+The optional wheel producer bundles the AOT library and its closure manifest;
+this adds semantic ABI v1 operations without declaring the whole v0 control
+surface frozen.
+The architecture correction and delivery gates are recorded in
+[[file:../../docs/10-19-design/10.06-poo-module-system/python-scheme-runtime-foundation.org][Python/Scheme Runtime foundation]].
 
 Runtime graph programs can return an execution trace for local debugging and
 ALALEX validation. The trace is process-local observability; it does not replace
 the C ABI receipt boundary.
 
-Each runtime graph execution carries the C ABI graph validation receipt used for
-that run. The typed execution result exposes the receipt and plan digest next to
-the local trace.
+Each reference graph execution carries its local domain receipt and plan digest
+next to the local trace. These identify the reference plan, not native execution
+or authenticated source data.
 
 Run:
 
 #+begin_src sh
-uv run --project packages/python-runtime poo-flow-runtime-probe
-uv run --project packages/python-runtime poo-flow-runtime-validate
-uv run --project packages/python-runtime poo-flow-runtime-program-probe
-uv run --project packages/python-runtime poo-flow-jsonschema-contract --help
+uv run --project packages/python-runtime agentic-ai-lab-jsonschema-contract --help
 uv run --project packages/python-runtime pytest packages/python-runtime/tests
 #+end_src
+
+* Python module testing
+
+The separate [[file:../python-testing/README.org][python-testing]] package
+registers module-part and cross-module cases. It consumes this Runtime API
+and owns optional model SDKs and native Scheme test workers.
 
 * JSON Schema contract generation
 
@@ -64,7 +121,7 @@ Users can bring a JSON Schema file and generate a Scheme contract artifact for
 a Funflow stage or profile:
 
 #+begin_src sh
-uv run --project packages/python-runtime poo-flow-jsonschema-contract \
+uv run --project packages/python-runtime agentic-ai-lab-jsonschema-contract \
   schemas/json/custom-stage.json \
   --name custom-stage \
   --object-key funflow/custom-stage \
@@ -87,27 +144,27 @@ precompiled.
 Precompile a user module explicitly during CI, install, or runtime warmup:
 
 #+begin_src sh
-uv run --project packages/python-runtime python -m poo_flow_runtime.scheme_load_aot \
+uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.scheme_load_aot \
   precompile packages/python-runtime/t/fixtures/funflow_user_module.ss \
   --cwd .
 #+end_src
 
-The command prints a single =poo-flow.scheme-load-aot.v1= receipt containing the
+The command prints a single =agentic-ai-lab.scheme-load-aot.v1= receipt containing the
 source path, workspace root, binary path, rebuild flag, and elapsed time. Normal
 =load(...)= calls reuse a matching AOT runner when present but do not compile
 one synchronously unless the caller passes =compile_aot=True= or sets
-=POO_FLOW_SCHEME_LOAD_AOT_COMPILE=1=.
+=AGENTIC_AI_LAB_SCHEME_LOAD_AOT_COMPILE=1=.
 
 Run the exact AOT benchmark after precompile:
 
 #+begin_src sh
-uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks \
+uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks \
   scheme-load-aot --iterations 10 \
   --source packages/python-runtime/t/fixtures/funflow_user_module.ss \
   --cwd .
 #+end_src
 
-The benchmark emits =poo-flow.scheme-load-aot-benchmark.v1= receipts with
+The benchmark emits =agentic-ai-lab.scheme-load-aot-benchmark.v1= receipts with
 per-sample timings: =samples-us=, =min-us=, =median-us=, =mean-us=, =p95-us=,
 and =max-us=. The default scenarios measure in-process cache hits,
 in-process AOT reuse, and fresh Python process AOT reuse. Add
@@ -118,12 +175,12 @@ For downstream users that should not install Gerbil, publish a preprojected
 Scheme datum artifact from a Gerbil-enabled authoring/release lane:
 
 #+begin_src sh
-uv run --project packages/python-runtime python -m poo_flow_runtime.scheme_projection_artifact \
+uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.scheme_projection_artifact \
   export packages/python-runtime/t/fixtures/funflow_user_module.ss \
   --cwd .
 #+end_src
 
-The artifact is =SOURCE.poo-flow-projection.sexp= by default and stores the
+The artifact is =SOURCE.agentic-ai-lab-projection.sexp= by default and stores the
 normalized projection rows plus source/projection digests. Runtime =load(...)=
 checks this artifact before AOT or Gerbil fallback, so an installed package can
 run an already-published flow without =gxi= or =gxc=.
@@ -131,7 +188,7 @@ run an already-published flow without =gxi= or =gxc=.
 Benchmark the artifact path explicitly:
 
 #+begin_src sh
-uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks \
+uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks \
   scheme-load-aot --iterations 10 --include-artifact --preproject-artifact \
   --source packages/python-runtime/t/fixtures/funflow_user_module.ss \
   --cwd .
@@ -141,7 +198,7 @@ uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks \
 
 The GitHub wheel workflow keeps this boundary explicit:
 
-1. =projection-artifact= runs with Gerbil and =ccache=, builds the POO Flow
+1. =projection-artifact= runs with Gerbil and =ccache=, builds the Agentic AI Lab
    package, exports real packaged projection artifacts, and uploads them.
 2. =wheel= runs without Gerbil, downloads those artifacts, builds the Python
    wheel, installs it, and loads the packaged artifact from package resources.
@@ -151,7 +208,7 @@ artifact has been placed next to its Scheme source:
 
 #+begin_src sh
 bazel build //bindings/runtime-c:runtime_c_shared
-POO_FLOW_RUNTIME_V0_LIBRARY="$PWD/bazel-bin/bindings/runtime-c/libruntime_c_shared.dylib" \
+AGENTIC_AI_LAB_RUNTIME_V0_LIBRARY="$PWD/bazel-bin/bindings/runtime-c/libruntime_c_shared.dylib" \
   uv build --project packages/python-runtime --wheel \
     --out-dir dist/python-runtime-wheel
 #+end_src
@@ -163,19 +220,19 @@ or discovers a source-tree =bindings/runtime-c/build= directory.
 Install and smoke test the built wheel in a clean environment:
 
 #+begin_src sh
-python -m venv /tmp/poo-flow-runtime-wheel-smoke
-/tmp/poo-flow-runtime-wheel-smoke/bin/python -m pip install \
+python -m venv /tmp/agentic-ai-lab-runtime-wheel-smoke
+/tmp/agentic-ai-lab-runtime-wheel-smoke/bin/python -m pip install \
   dist/python-runtime-wheel/*.whl
-/tmp/poo-flow-runtime-wheel-smoke/bin/python -m poo_flow_runtime.scheme_projection_artifact --help
-/tmp/poo-flow-runtime-wheel-smoke/bin/python -m poo_flow_runtime.benchmarks scheme-load-aot --help
+/tmp/agentic-ai-lab-runtime-wheel-smoke/bin/python -m agentic_ai_lab_runtime.scheme_projection_artifact --help
+/tmp/agentic-ai-lab-runtime-wheel-smoke/bin/python -m agentic_ai_lab_runtime.benchmarks scheme-load-aot --help
 #+end_src
 
 The wheel build validates the downstream runtime package shape. Gerbil stays in
 the authoring/release lane when source Scheme fragments need to be projected
-into =*.poo-flow-projection.sexp= artifacts.
+into =*.agentic-ai-lab-projection.sexp= artifacts.
 To ship built-in flows, generate each projection artifact before =uv build= and
-place the source plus adjacent =*.poo-flow-projection.sexp= under the package
-tree, for example =src/poo_flow_runtime/projections/=. Hatch includes those
+place the source plus adjacent =*.agentic-ai-lab-projection.sexp= under the package
+tree, for example =src/agentic_ai_lab_runtime/projections/=. Hatch includes those
 package data files in the wheel. The no-Gerbil wheel CI lane must only consume
 and verify these files; it must not generate real projection artifacts.
 
@@ -220,7 +277,7 @@ Use the file checkpointer when the Python runtime needs a local durable
 snapshot:
 
 #+begin_src python
-checkpointer = FileRuntimeGraphCheckpointer("/tmp/poo-flow-runtime")
+checkpointer = FileRuntimeGraphCheckpointer("/tmp/agentic-ai-lab-runtime")
 #+end_src
 
 The file backend stores trusted Python runtime snapshots and uses hashed
@@ -251,7 +308,7 @@ the C ABI validation/materialization unit.
 Use runtime stores for cross-thread, namespace-addressed memory:
 
 #+begin_src python
-store = FileRuntimeGraphStore("/tmp/poo-flow-store")
+store = FileRuntimeGraphStore("/tmp/agentic-ai-lab-store")
 store.put(("users", "alice"), "profile", {"name": "Alice"})
 profile = store.get(("users", "alice"), "profile")
 items = store.search(("users",))
@@ -322,6 +379,19 @@ executor = create_tool_call_loop(
 )
 #+end_src
 
+* Scheme observations after model predictions
+
+The optional semantic AOT artifact supports =temporal.observe=.
+=SemanticRuntime.predict_temporal_answer(task, predictor)= passes a detached
+task to caller-owned model IO. =apredict_temporal_answer= supports async IO.
+No solved answer is supplied to the predictor. After IO, Scheme recomputes
+against the current task and returns a digest-bound status/row difference.
+
+The returned candidate and observation remain data. A contradiction supplies
+current computation evidence, grants no effects and causes no model retry.
+Provider inputs and any later feedback transfer remain the caller's explicit
+IO. Model learning must be measured separately from receipt correctness.
+
 * Runtime C ABI cache
 
 The runtime C ABI probe shared library is cached outside the package-local
@@ -331,8 +401,117 @@ developer cleans local build artifacts.
 Override the cache location when needed:
 
 #+begin_src sh
-POO_FLOW_RUNTIME_C_ABI_BUILD_DIR=/path/to/cache uv run poo-flow-runtime-probe
+AGENTIC_AI_LAB_RUNTIME_C_ABI_BUILD_DIR=/path/to/cache uv run agentic-ai-lab-runtime-probe
 #+end_src
 
 The runtime tests include gates for hot binding load, steady rebuild, repeated
 program invocation, and resume-path binding reuse.
+
+* MRR native typed handoff
+
+The Legacy =MrrSnapshotResource= static-edge worker adapter has been removed.
+Use the original MRR Scheme v1 result handoff and the native Rust Temporal bridge
+for the qualified read-only event/position path. The physical roundtrip fixture
+is in =runtime/qualification/physical-roundtrip= in MRR. Python has no
+replacement remote snapshot publication or outbox API in this slice.
+
+Typed Python runtime plans are materialized into C ABI graph handles before
+validation or handoff. This keeps Python's execution model aligned with the
+upstream ABI instead of creating a parallel graph protocol.
+
+* Current semantic ABI live receipt
+
+The [[file:../../t/qualification/semantic-abi/README.org][2026-10-04 installed Library qualification]]
+uses the current ABI, with the retired Temporal study code and old copied
+source archive removed. All 34 focused installed Runtime/producer checks pass.
+48 real DeepSeek responses meet the five-second content gate, but only 4/48
+predictions match native semantics. The model correctness gate is FAILED;
+ABI rejection and transport success do not close it.
+
+The subsequent failure-repair qualification builds and installs a fresh wheel:
+41 installed Runtime/producer checks pass without skips, and a new 24-call
+DeepSeek batch exercises both current prediction APIs and observation sinks.
+Fourteen answers are correct; ten semantic errors are rejected by the native
+ABI. The model gate remains FAILED. The five-second content deadline and zero
+retry rule remain unchanged; see
+[[file:../../t/qualification/semantic-abi/README.org][the retained qualification evidence]].
+
+* Bound read-only model tool calls
+=agentic_ai_lab_runtime.semantic_tools= exposes =temporal_tool_definition=,
+=invoke_temporal_tool= and =ainvoke_temporal_tool=. The model submits a structured
+function call for the caller's current task. The Library validates operation,
+argument identity and exact task data before executing native =temporal.solve=.
+Stale source generations, replacement facts, duplicate JSON keys and added
+fields are rejected. The helper returns the actual engine result and artifact
+digest, suitable for a paired provider =function_call_output=.
+
+The installed-wheel real DeepSeek qualification passes 24/24 sync/async tool
+roundtrips and 48/48 provider responses. Model final output preserves the actual
+status, rows and source binding. This qualifies a forced read-only tool route;
+unaided source prediction remains FAILED and autonomous tool choice is untested.
+See [[file:../../t/qualification/semantic-abi/README.org][the bounded receipts and deadlines]].
+
+* Temporal durable first-root selection
+
+=agentic_ai_lab_runtime.temporal_publication.TemporalPublicationStore= is a trusted
+host port backed by the Runtime C SQLite transaction library. Build requires
+SQLite development headers and library. Create a store at an absolute local
+file, =register_source(runtime, scope, task)=, then install an explicit
+=authorize_selection(subject=..., scope=..., policy=..., authority=...,
+fence=...)= host grant. =publish(runtime, task, source_identity=...,
+source_digest=..., conclusion_identity=..., idempotency_key=...,
+authorization_fence=...)= replays native POO admission and selects its first root.
+
+Source digest/generation, scoped policy/fence, empty predecessor and version zero
+are checked in one C transaction with pointer version increment and immutable
+receipt insertion. =recover(key)= works without Scheme; an identical committed
+request returns its original receipt after later revocation. A different request
+under the same key fails. The receipt authorizes local selection only and keeps
+=externalEffectAuthorized= false. Close stores explicitly or use a context manager.
+
+The host APIs must not be offered to models as tools. Source authenticity,
+Cedar/signed external permits, correction/retraction, external effects and general
+POO/Quint refinement remain outside this first-root profile. SQLite WAL with FULL
+synchronous mode and process-crash recovery are exercised; power-loss/storage
+hardware behavior is not qualified by these local tests.
+
+* Temporal support applicability
+
+=SemanticRuntime.evaluate_temporal_support(request)= calls the original Scheme
+support Library through ABI v1. Supply the bounded declared program and temporal
+journal described in =bindings/runtime-c/semantic-wire.org=. The helper does not
+admit proofs, authenticate sources or authorize effects. MRR identity projection
+belongs to the Rust consumer; Python can replay its inert Scheme request/receipt.
+
+=SemanticRuntime.canonical_mrr_fact_content(request)= calls the fixed ABI v1
+content projection. It does not reconstruct MRR owner records or admit proof,
+source or correspondence. The qualification replays original typed Rust Fact
+receipts and rejects unsupported scalar/range/schema fields.
+
+* Registered Host policy through fixed ABI v1
+
+=SemanticRuntime.refresh_temporal_policy(request)= uses the dedicated C Host
+control entrypoint; =guard_temporal_support(request)= evaluates support against
+the registered policy and observed time. Do not expose refresh as a model tool.
+The strict Scheme v1 schemas, monotonic/idempotent registry rules, conservative
+flags and lifecycle requirements are specified in
+=bindings/runtime-c/README.org=, section Registered Host policy. The configured
+native artifact must provide the added policy-refresh symbol.
+
+* Trusted original Derivation admission
+
+=SemanticRuntime.admit_temporal_derivation(request)= calls the trusted ABI v1
+Host entrypoint for source-relative native proof and exact lineage admission.
+Python replays the original Rust request/result without rebuilding owner types.
+Do not expose this method as a model tool.
+
+Schemas, bounds and remaining current-state/effect requirements are specified in
+=bindings/runtime-c/README.org=, section Trusted original Derivation admission.
+Qualification is in =t/qualification/temporal-library-basic/proof-control-abi-v1/=.
+
+* External Rust consumer
+
+Rust orchestration and its tests belong to MRR =runtime/=. POO contains no Rust
+runtime implementation. Its CI checks out the immutable MRR owner to compare
+that external consumer with this Python Library on the same native artifact.
+Python implementation and model IO remain under this package.

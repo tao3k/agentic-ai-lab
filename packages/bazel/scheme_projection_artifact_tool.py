@@ -18,7 +18,7 @@ from _scheme_datum import parse_scheme_datum, write_scheme_datum
 from packages.bazel.gerbil_environment import build_gerbil_environment
 
 
-SCHEMA = "poo-flow.scheme-load-projection-artifact.v1"
+SCHEMA = "agentic-ai-lab.scheme-load-projection-artifact.v1"
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -88,13 +88,13 @@ def _load_projection_rows(
     project_dependency_roots: tuple[Path, ...],
 ) -> tuple[object, ...]:
     runner_source = (
-        "(import :core/profile-composition/selection-syntax\n"
-        "        :poo-flow/src/scenario/composition-syntax\n"
-        "        :core/profile-composition/profile-bundle\n"
-        "        :poo-flow/src/scenario/profile-root\n"
-        "        :poo-flow/modules/funflow/profile-library)\n"
+        "(import :yuanxu/profile-composition/selection-syntax\n"
+        "        :agentic-ai-lab/modules/workflow/scenario/composition-syntax\n"
+        "        :yuanxu/profile-composition/profile-bundle\n"
+        "        :agentic-ai-lab/modules/workflow/scenario/profile-root\n"
+        "        :agentic-ai-lab/modules/funflow/profile-library)\n"
         f"(include {_scheme_string(str(projection))})\n"
-        "(poo-flow-runtime-load-write!\n"
+        "(agentic-ai-lab-runtime-load-write!\n"
         f" (begin (include {_scheme_string(str(source))})))\n"
     )
     with tempfile.NamedTemporaryFile(

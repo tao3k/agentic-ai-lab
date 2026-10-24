@@ -6,7 +6,7 @@
 ;;; Boundary: module object validation gates cover catalog summary aggregation.
 ;;; Invariant: summary aggregation stays report-only and never realizes runtime descriptors.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :gerbil/runtime/gambit
         (only-in :clan/poo/object .o .ref object?)
         (only-in :std/test
@@ -17,8 +17,8 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :core/module-system/schema/validation
-                 poo-flow-module-objects-validation-summary))
+        (only-in :yuanxu/module-system/schema/validation
+                 yuanxu-module-objects-validation-summary))
 
 (export module-objects-validation-summary-performance-test)
 
@@ -52,7 +52,7 @@
 
 ;; : (-> Integer [POOObject])
 (def (module-objects-validation-summary-validations count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    module-objects-validation-summary-validation))
 
@@ -99,7 +99,7 @@
 
 ;; : (-> Alist Unit)
 (def (module-objects-validation-summary-display-receipt receipt)
-  (display "[poo-flow-benchmark] module-objects-validation-summary ")
+  (display "[agentic-ai-lab-benchmark] module-objects-validation-summary ")
   (write receipt)
   (newline)
   (force-output))
@@ -107,7 +107,7 @@
 ;; : TestSuite
 (def module-objects-validation-summary-performance-test
   (test-suite "module objects validation summary performance"
-    (poo-flow-test-case "keeps large catalog validation summary inside benchmark contract"
+    (yuanxu-test-case "keeps large catalog validation summary inside benchmark contract"
       (let* ((validation-count 5000)
              (validations
               (module-objects-validation-summary-validations validation-count))
@@ -116,13 +116,13 @@
              ;; than first-use POO instantiation and heap growth.
              (summary
               (module-objects-validation-summary-snapshot
-               (poo-flow-module-objects-validation-summary validations)))
+               (yuanxu-module-objects-validation-summary validations)))
              (receipt
               (benchmark-run
                module-objects-validation-summary-fixture
                (lambda ()
                   (module-objects-validation-summary-snapshot
-                   (poo-flow-module-objects-validation-summary validations))))))
+                   (yuanxu-module-objects-validation-summary validations))))))
         (check-equal? (andmap object? validations) #t)
         (check-equal?
          (benchmark-fixture-contract-pass? module-objects-validation-summary-fixture)

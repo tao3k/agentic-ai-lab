@@ -6,13 +6,13 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from poo_flow_runtime import scheme_load_aot
-from poo_flow_runtime import _scheme_load_aot as scheme_aot
-from poo_flow_runtime import _scheme_load_cache as scheme_cache
+from agentic_ai_lab_runtime import scheme_load_aot
+from agentic_ai_lab_runtime import _scheme_load_aot as scheme_aot
+from agentic_ai_lab_runtime import _scheme_load_cache as scheme_cache
 
 
 def _runtime_projection_fixture(root: Path) -> None:
-    projection = root / "modules" / "funflow" / "runtime-load-projection.ss"
+    projection = root / "modules" / "workflow" / "scenario" / "runtime-funflow.ss"
     projection.parent.mkdir(parents=True)
     projection.write_text(";; projection fixture\n", encoding="utf-8")
 
@@ -24,7 +24,7 @@ def _source_fixture(root: Path) -> Path:
 
 
 def _aot_artifact_binary(root: Path, source: Path) -> Path:
-    projection = root / "modules" / "funflow" / "runtime-load-projection.ss"
+    projection = root / "modules" / "workflow" / "scenario" / "runtime-funflow.ss"
     cache_key = scheme_cache.scheme_load_cache_key(
         source.resolve(),
         root.resolve(),
@@ -59,7 +59,7 @@ def test_scheme_load_aot_precompile_command_emits_receipt(
 
     captured = capsys.readouterr()
     assert exit_code == 0
-    assert 'schema: "poo-flow.scheme-load-aot.v1"' in captured.out
+    assert 'schema: "agentic-ai-lab.scheme-load-aot.v1"' in captured.out
     assert 'action: "precompile"' in captured.out
     assert f'binary: "{expected_binary}"' in captured.out
     assert "rebuilt?: #t" in captured.out

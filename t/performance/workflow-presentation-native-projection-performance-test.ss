@@ -5,21 +5,21 @@
 
 ;;; Boundary: workflow presentation uses one native POO projection constructor.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run/result)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-settings
-                 pooFlowUserConfig)
-        (only-in :poo-flow/src/user-interface/presentation-config
-                 pooFlowUserConfigPresentation)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-settings
+                 yuanxuUserConfig)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation)
         (only-in "../../user-interface/custom/my-module/cases/cicd-owner"
-                 poo-flow-custom-my-module-cicd-module
-                 poo-flow-custom-my-module-funflow-cicd-case))
+                 agentic-ai-lab-custom-my-module-cicd-module
+                 agentic-ai-lab-custom-my-module-funflow-cicd-case))
 
 (export workflow-presentation-native-projection-performance-test)
 
@@ -30,11 +30,11 @@
 
 (def (workflow-presentation-native-projection-summary)
   (let (presentation
-        (pooFlowUserConfigPresentation
-         (pooFlowUserConfig
-          (append poo-flow-custom-my-module-cicd-module
-                  poo-flow-custom-my-module-funflow-cicd-case)
-          (poo-flow-settings))))
+        (agenticAiLabUserConfigPresentation
+         (yuanxuUserConfig
+          (append agentic-ai-lab-custom-my-module-cicd-module
+                  agentic-ai-lab-custom-my-module-funflow-cicd-case)
+          (yuanxu-settings))))
     (list
      (cons 'pipeline-count
            (.ref presentation 'workflow-cicd-pipeline-count))
@@ -55,7 +55,7 @@
 
 (def workflow-presentation-native-projection-performance-test
   (test-suite "workflow presentation native projection performance"
-    (poo-flow-test-case "keeps one native workflow projection inside the fixed gate"
+    (yuanxu-test-case "keeps one native workflow projection inside the fixed gate"
       (let-values (((receipt summary)
                     (benchmark-run/result
                      workflow-presentation-native-projection-fixture
@@ -79,7 +79,7 @@
         (check-equal?
          (workflow-presentation-native-projection-ref summary 'runtime-executed)
          #f)
-        (display "[poo-flow-benchmark] workflow-presentation-native-projection ")
+        (display "[agentic-ai-lab-benchmark] workflow-presentation-native-projection ")
         (write receipt)
         (newline)
         (force-output)

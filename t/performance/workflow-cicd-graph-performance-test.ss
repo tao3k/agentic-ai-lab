@@ -7,11 +7,11 @@
 ;;; Invariant: fixtures are constructed before timing; samples measure only
 ;;; Scheme control-plane graph analysis and never execute workflow commands.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-elapsed-us)
         "../support/performance"
-        :poo-flow/modules/workflow/interface)
+        :agentic-ai-lab/modules/workflow/interface)
 
 (export workflow-cicd-graph-performance-test)
 
@@ -24,7 +24,7 @@
 
 (def (workflow-cicd-graph-performance-check index)
   (let (name (workflow-cicd-graph-performance-name index))
-    (poo-flow-cicd-check
+    (yuanxu-cicd-check
      name 'ci/check '("true") '() '() '() '() '() '(read :lines)
      'manifest-handoff
      (list
@@ -34,13 +34,13 @@
               (list (workflow-cicd-graph-performance-name (- index 1)))))))))
 
 (def (workflow-cicd-graph-performance-map count)
-  (poo-flow-cicd-check-map
+  (yuanxu-cicd-check-map
    (string->symbol (string-append "scale/" (number->string count)))
-   (poo-flow-performance-build-list
+   (agentic-ai-lab-performance-build-list
     count workflow-cicd-graph-performance-check)))
 
 (def (workflow-cicd-graph-performance-project check-map)
-  (let (graph (poo-flow-cicd-check-map->dependency-graph check-map))
+  (let (graph (yuanxu-cicd-check-map->dependency-graph check-map))
     (list
      (cons 'node-count
            (length (workflow-cicd-graph-performance-ref graph 'nodes)))
@@ -85,7 +85,7 @@
 (def workflow-cicd-graph-performance-test
   (test-suite
    "workflow cicd indexed graph performance"
-   (poo-flow-test-case
+   (yuanxu-test-case
     "2000-node chain remains bounded and scales below quadratic growth"
     (let* ((small-count 1000)
            (large-count 2000)
@@ -101,7 +101,7 @@
            (large-us
             (workflow-cicd-graph-performance-ref timings 'large-median-us))
            (ratio (if (zero? small-us) 0 (/ large-us small-us))))
-      (display "[poo-flow-benchmark] workflow-cicd-indexed-graph ")
+      (display "[agentic-ai-lab-benchmark] workflow-cicd-indexed-graph ")
       (write (list (cons 'small-count small-count)
                    (cons 'large-count large-count)
                    (cons 'small-samples-us

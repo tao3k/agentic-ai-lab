@@ -6,12 +6,12 @@
 ;;; Boundary: focused tests for loop-engine POO-native policy extensions.
 ;;; Invariant: extension receipts are report-only and runtime-owned by Marlin.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .o)
-        :poo-flow/modules/loop-engine/policy-extension)
+        :agentic-ai-lab/modules/loop-engine/policy-extension)
 
 (export loop-engine-policy-extension-test)
 
@@ -36,7 +36,7 @@
 ;;; and presentation tests.
 ;; : (-> [Alist])
 (def (custom-loop-policy-extension-receipts)
-  (poo-flow-user-loop-engine-poo-policy-extensions->receipts
+  (agentic-ai-lab-user-loop-engine-poo-policy-extensions->receipts
    (list
     (.o (:: @ loop-engine-coordination-policy-extension)
         name: 'repo-loop-coordination
@@ -94,19 +94,19 @@
 
 ;;; Malformed extension slots fail before runtime manifests can carry ambiguous
 ;;; policy receipts.
-;; : (-> PooFlowLoopEnginePolicyExtensionPrototype)
+;; : (-> AgenticAILabLoopEnginePolicyExtensionPrototype)
 (def (custom-loop-invalid-policy-extension)
   (.o (:: @ loop-engine-policy-extension)
       name: 'invalid-policy-extension
       receipt-kind: 'coordination-receipt
-      contract: 'poo-flow.loop-engine.coordination-receipt.v1
+      contract: 'agentic-ai-lab.loop-engine.coordination-receipt.v1
       priority: 'bad-priority))
 
 ;;; Coordination coverage proves cross-loop ownership and collision facts are
 ;;; carried as inert policy receipts rather than Scheme locks.
 ;; : TestCase
 (def (loop-engine-policy-extension-coordination-case)
-  (poo-flow-test-case "projects loop-engine coordination policy receipt"
+  (yuanxu-test-case "projects loop-engine coordination policy receipt"
     (let* ((receipts (custom-loop-policy-extension-receipts))
            (coordination-receipt
             (test-row-by-field receipts 'kind 'coordination-receipt))
@@ -122,7 +122,7 @@
       (check-equal? (test-ref safety-receipt 'kind)
                     'safety-receipt)
       (check-equal? (test-ref coordination-receipt 'contract)
-                    'poo-flow.loop-engine.coordination-receipt.v1)
+                    'agentic-ai-lab.loop-engine.coordination-receipt.v1)
       (check-equal? (test-ref coordination-receipt 'priority)
                     '(ci-sweeper
                       dependency-sweeper
@@ -151,12 +151,12 @@
 ;;; declared as receipt data while Marlin retains execution control.
 ;; : TestCase
 (def (loop-engine-policy-extension-observability-case)
-  (poo-flow-test-case "projects loop-engine observability policy receipt"
+  (yuanxu-test-case "projects loop-engine observability policy receipt"
     (let* ((receipts (custom-loop-policy-extension-receipts))
            (observability-receipt
             (test-row-by-field receipts 'kind 'observability-receipt)))
       (check-equal? (test-ref observability-receipt 'contract)
-                    'poo-flow.loop-engine.observability-receipt.v1)
+                    'agentic-ai-lab.loop-engine.observability-receipt.v1)
       (check-equal? (test-ref observability-receipt 'run-log)
                     "loop-run-log.md")
       (check-equal? (test-ref observability-receipt 'metric-keys)
@@ -171,12 +171,12 @@
 ;;; visible without enabling Scheme-side mutations.
 ;; : TestCase
 (def (loop-engine-policy-extension-safety-case)
-  (poo-flow-test-case "projects loop-engine safety policy receipt"
+  (yuanxu-test-case "projects loop-engine safety policy receipt"
     (let* ((receipts (custom-loop-policy-extension-receipts))
            (safety-receipt
             (test-row-by-field receipts 'kind 'safety-receipt)))
       (check-equal? (test-ref safety-receipt 'contract)
-                    'poo-flow.loop-engine.safety-receipt.v1)
+                    'agentic-ai-lab.loop-engine.safety-receipt.v1)
       (check-equal? (test-ref safety-receipt 'denylist-paths)
                     '(".env"
                       ".env.local"
@@ -194,7 +194,7 @@
 ;;; that every extension receipt is lowered through the generic receipt list.
 ;; : TestCase
 (def (loop-engine-policy-extension-collection-case)
-  (poo-flow-test-case "lowers policy-extension receipts through the generic collection"
+  (yuanxu-test-case "lowers policy-extension receipts through the generic collection"
     (let (receipts (custom-loop-policy-extension-receipts))
       (check-equal? (map (lambda (receipt) (test-ref receipt 'kind))
                          receipts)
@@ -212,12 +212,12 @@
 ;;; values must fail before any runtime handoff row can be assembled.
 ;; : TestCase
 (def (loop-engine-policy-extension-invalid-slot-case)
-  (poo-flow-test-case "rejects invalid loop-engine policy-extension slot types"
+  (yuanxu-test-case "rejects invalid loop-engine policy-extension slot types"
     (check-equal?
      (with-catch
       (lambda (_) #t)
       (lambda ()
-        (poo-flow-user-loop-engine-poo-policy-extensions->receipts
+        (agentic-ai-lab-user-loop-engine-poo-policy-extensions->receipts
          (list (custom-loop-invalid-policy-extension)))
         #f))
      #t)))

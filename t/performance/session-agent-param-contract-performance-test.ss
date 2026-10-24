@@ -6,7 +6,7 @@
 ;;; Boundary: AgentParam contract performance gate.
 ;;; Invariant: batch AgentParam projection stays bounded and report-only.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -16,8 +16,8 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        :poo-flow/modules/session/config
-        :poo-flow/modules/memory-core/config)
+        :agentic-ai-lab/modules/session/config
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
 
 (export session-agent-param-contract-performance-test)
 
@@ -36,14 +36,14 @@
 
 ;; : (-> Alist Void)
 (def (agent-param-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] session-agent-param-contract ")
+  (display "[agentic-ai-lab-benchmark] session-agent-param-contract ")
   (write receipt)
   (newline)
   (force-output))
 
 ;; : (-> PooSessionAgentNode)
 (def (agent-param-performance-node)
-  (poo-flow-session-agent-node
+  (agentic-ai-lab-session-agent-node
    'agent/perf
    'project/agent-param
    'session/root
@@ -63,19 +63,19 @@
    '(memory/perf)
    'agent/nono
    'builder
-   'poo-flow.session.agent.perf-result.v1))
+   'agentic-ai-lab.session.agent.perf-result.v1))
 
 ;; : (-> PooSessionPolicyValidationReceipt)
 (def (agent-param-performance-validation)
   (let* ((read-grant
-          (poo-flow-session-tool-grant
+          (agentic-ai-lab-session-tool-grant
            'grant/read
            'read-workspace-file
            '(read)
            '(project-workspace)
            '(agent-turn hook/pre-check)))
          (model-policy
-          (poo-flow-session-model-policy
+          (agentic-ai-lab-session-model-policy
            'policy/perf-model
            'session/perf
            'marlin/provider
@@ -83,14 +83,14 @@
            '(tool-calling)
            'budget/perf))
          (prompt-policy
-          (poo-flow-session-prompt-policy
+          (agentic-ai-lab-session-prompt-policy
            'policy/perf-prompt
            'session/perf
            'session/perf-system
            '(system)
            'parent-summary-only))
          (isolation-policy
-          (poo-flow-session-isolation-policy
+          (agentic-ai-lab-session-isolation-policy
            'policy/perf-isolation
            'session/perf
            'child-isolated
@@ -98,32 +98,32 @@
            'denied
            'declared-channel-only))
          (sandbox-policy
-          (poo-flow-session-sandbox-policy
+          (agentic-ai-lab-session-sandbox-policy
            'policy/perf-sandbox
            'session/perf
            'agent/nono
            'parent-profile
            'isolated-filesystem))
          (context-policy
-          (poo-flow-session-context-policy
+          (agentic-ai-lab-session-context-policy
            'policy/perf-context
            'session/perf
            'parent-summary
            '(session/root)))
          (history-policy
-          (poo-flow-session-history-policy
+          (agentic-ai-lab-session-history-policy
            'policy/perf-history
            'session/perf
            'bounded
            '(record/last-failure)))
          (communication-policy
-          (poo-flow-session-communication-policy
+          (agentic-ai-lab-session-communication-policy
            'policy/perf-communication
            'session/perf
            '(channel/perf-root)
            '(session/root)))
          (root-communication
-          (poo-flow-session-communication-receipt
+          (agentic-ai-lab-session-communication-receipt
            'project/agent-param
            'child-parent
            'session/root
@@ -137,7 +137,7 @@
            '((summary . "perf result ready"))
            'receipt-only))
          (sharing-policy
-          (poo-flow-session-resource-sharing-policy
+          (agentic-ai-lab-session-resource-sharing-policy
            'policy/perf-sharing
            'session/perf
            '((project-workspace
@@ -145,21 +145,21 @@
               (accounting . session/root)))
            'deny))
          (resource-policy
-          (poo-flow-session-resource-policy
+          (agentic-ai-lab-session-resource-policy
            'policy/perf-resource
            'session/perf
            '(budget/perf)
            '(project-workspace)
            'session/perf))
          (agent-tool-policy
-          (poo-flow-session-tool-permission-policy
+          (agentic-ai-lab-session-tool-permission-policy
            'policy/perf-tools
            'session/perf
            (list read-grant)
            '(write-workspace-file)
            'deny))
          (hook-tool-policy
-          (poo-flow-session-hook-tool-permission-policy
+          (agentic-ai-lab-session-hook-tool-permission-policy
            'policy/perf-hooks
            'session/perf
            '(hook/pre-check)
@@ -167,7 +167,7 @@
            'human-approval-on-escalation
            'deny))
          (memory-store
-          (poo-flow-memory-store-spec
+          (agentic-ai-lab-memory-store-spec
            'memory/perf
            'durable-project
            'project
@@ -179,23 +179,23 @@
            #t
            'marlin-memory-adapter))
          (memory-catalog
-          (poo-flow-memory-catalog
+          (agentic-ai-lab-memory-catalog
            'memory-core/perf-agent-param
            (list memory-store)))
          (memory-intent
-          (poo-flow-session-memory-intent
+          (agentic-ai-lab-session-memory-intent
            'intent/perf-agent-param-memory
            'memory/perf
            'project
            '(current-ticket)
            'append))
          (memory-catalog-validation-row
-          (poo-flow-memory-policy-catalog-validation-receipt->alist
-           (poo-flow-memory-policy-catalog-validation-receipt
+          (agentic-ai-lab-memory-policy-catalog-validation-receipt->alist
+           (agentic-ai-lab-memory-policy-catalog-validation-receipt
             'validation/perf-agent-param-memory-catalog
             memory-catalog
             (list memory-intent)))))
-    (poo-flow-session-policy-validation-receipt
+    (agentic-ai-lab-session-policy-validation-receipt
      'validation/perf-agent-param
      'session/perf
      model-policy
@@ -214,7 +214,7 @@
      '(channel/perf-root)
      '(project-workspace)
      (list
-      (poo-flow-session-policy-tool-attempt
+      (agentic-ai-lab-session-policy-tool-attempt
        'attempt/perf-read
        'agent-turn
        'read-workspace-file
@@ -222,7 +222,7 @@
        'project-workspace
        'agent/perf))
      (list
-      (poo-flow-session-policy-tool-attempt
+      (agentic-ai-lab-session-policy-tool-attempt
        'attempt/perf-hook-read
        'hook/pre-check
        'read-workspace-file
@@ -242,7 +242,7 @@
 
 ;; : (-> PooSessionAgentNode PooSessionPolicyValidationReceipt Integer PooSessionAgentParamContract)
 (def (agent-param-performance-contract node validation index)
-  (poo-flow-session-agent-param-contract
+  (agentic-ai-lab-session-agent-param-contract
    (agent-param-performance-contract-id index)
    node
    validation
@@ -253,12 +253,12 @@
 ;; : (-> PooSessionAgentNode PooSessionPolicyValidationReceipt Integer Alist)
 (def (agent-param-performance-summary node validation count)
   (let* ((contracts
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            count
            (lambda (index)
              (agent-param-performance-contract node validation index))))
          (rows
-          (poo-flow-session-agent-param-contracts->alists contracts)))
+          (agentic-ai-lab-session-agent-param-contracts->alists contracts)))
     (map (lambda (entry)
            (cons (car entry) ((cdr entry))))
          (list
@@ -314,7 +314,7 @@
 ;; : TestSuite
 (def session-agent-param-contract-performance-test
   (test-suite "session AgentParam contract performance"
-    (poo-flow-test-case "keeps AgentParam contract batch projection inside benchmark contract"
+    (yuanxu-test-case "keeps AgentParam contract batch projection inside benchmark contract"
       (let* ((contract-count 200)
              (node (agent-param-performance-node))
              (validation (agent-param-performance-validation))

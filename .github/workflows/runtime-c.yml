@@ -10,7 +10,7 @@ on:
       - main
     paths:
       - bindings/runtime-c/**
-      - src/contract/runtime-v0-abi-schema.ss
+      - modules/workflow/contracts/runtime-v0-abi-schema.ss
       - MODULE.bazel
       - MODULE.bazel.lock
       - .github/workflows/runtime-c.yml
@@ -18,7 +18,7 @@ on:
   pull_request:
     paths:
       - bindings/runtime-c/**
-      - src/contract/runtime-v0-abi-schema.ss
+      - modules/workflow/contracts/runtime-v0-abi-schema.ss
       - MODULE.bazel
       - MODULE.bazel.lock
       - .github/workflows/runtime-c.yml
@@ -59,7 +59,13 @@ jobs:
           repository-cache: true
       - name: Test portable C ABI
         run: |
-          bazelisk test --test_output=errors \
+          platform_flags=()
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            # This job qualifies the runner ABI; old deployment targets need a
+            # separate SDK compatibility matrix, not the macos-26 system SDK.
+            platform_flags+=("--macos_minimum_os=$(sw_vers -productVersion)")
+          fi
+          bazelisk test "${platform_flags[@]}" --test_output=errors \
             //bindings/runtime-c:runtime_c_tests \
             //bindings/runtime-c/bundle-v1:bundle_v1_tests
       - name: Test Linux sanitizer boundary

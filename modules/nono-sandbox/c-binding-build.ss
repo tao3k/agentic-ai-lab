@@ -11,12 +11,12 @@
 ;;; - Keep compiler/include policy explicit before any probe command is materialized.
 (import :gerbil/core
         (only-in :clan/poo/object .ref object?)
-        (only-in :poo-flow/src/core/roles execution-policy-role)
-        (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        :poo-flow/src/core/object-syntax
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/nono-sandbox/c-binding-descriptor)
+        (only-in :yuanxu/modules/funflow/control-plane/roles execution-policy-role)
+        (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        :yuanxu/object-family/role-syntax
+        :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/agent-sandbox/profile
+        :agentic-ai-lab/modules/nono-sandbox/c-binding-descriptor)
 
 (export +nono-c-binding-build-schema+
         +nono-c-binding-default-adapter-include-dirs+
@@ -71,7 +71,7 @@
 ;;; native surface; this object names the package-managed host probe policy.
 ;; : Symbol
 (def +nono-c-binding-build-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.build.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.build.v1)
 
 ;; : (List String)
 (def +nono-c-binding-default-adapter-include-dirs+
@@ -147,7 +147,7 @@
            (include-dirs
             +nono-c-binding-default-include-dirs+)
            (probe-ref
-            "bindings/nono-c/poo_flow_nono_binding_probe.c")
+            "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c")
            (validator
             (lambda (build)
               (nono-c-binding-validate-build build)))))

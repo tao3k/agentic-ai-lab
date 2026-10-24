@@ -10,7 +10,7 @@
 (def strategy-profile-family
   (.o (kind 'strategy-profile-family)
       (name 'strategy-profile-family)
-      (source 'poo-flow.performance.strategy-profile)))
+      (source 'agentic-ai-lab.performance.strategy-profile)))
 
 (def (strategy-profile profile-name tool-policy-value memory-value handoff-value)
   (.o (family 'strategy-profile-family)

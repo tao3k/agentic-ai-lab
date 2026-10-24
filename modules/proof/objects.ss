@@ -8,17 +8,17 @@
         (only-in :clan/poo/mop validate)
         "types.ss")
 
-(export poo-flow-proof-artifact
-        poo-flow-proof-receipt
-        poo-flow-proof-impact-binding
-        poo-flow-proof-refinement-binding)
+(export agentic-ai-lab-proof-artifact
+        agentic-ai-lab-proof-receipt
+        agentic-ai-lab-proof-impact-binding
+        agentic-ai-lab-proof-refinement-binding)
 
-(def (poo-flow-proof-artifact identity-value engine-value language-value
+(def (agentic-ai-lab-proof-artifact identity-value engine-value language-value
                               path-value content-digest-value
                               declaration-values metadata-value)
   (validate
-   PooFlowProofArtifact
-   (.o kind: +poo-flow-proof-artifact-kind+
+   AgenticAILabProofArtifact
+   (.o kind: +agentic-ai-lab-proof-artifact-kind+
        identity: identity-value
        engine: engine-value
        language: language-value
@@ -28,12 +28,12 @@
        metadata: metadata-value
        runtime-executed?: #f)))
 
-(def (poo-flow-proof-receipt identity-value artifact-value engine-value
+(def (agentic-ai-lab-proof-receipt identity-value artifact-value engine-value
                              certification-values evidence-digest-value
                              admitted-value)
   (validate
-   PooFlowProofReceipt
-   (.o kind: +poo-flow-proof-receipt-kind+
+   AgenticAILabProofReceipt
+   (.o kind: +agentic-ai-lab-proof-receipt-kind+
        identity: identity-value
        artifact-identity: (.ref artifact-value 'identity)
        artifact-content-digest: (.ref artifact-value 'content-digest)
@@ -43,12 +43,12 @@
        admitted?: (if admitted-value #t #f)
        runtime-executed?: #f)))
 
-(def (poo-flow-proof-impact-binding
+(def (agentic-ai-lab-proof-impact-binding
       identity-value upstream-artifact-value downstream-artifact-value
       impact-map-value)
   (validate
-   PooFlowProofImpactBinding
-   (.o kind: +poo-flow-proof-impact-binding-kind+
+   AgenticAILabProofImpactBinding
+   (.o kind: +agentic-ai-lab-proof-impact-binding-kind+
        identity: identity-value
        upstream-artifact-identity: (.ref upstream-artifact-value 'identity)
        upstream-content-digest:
@@ -61,12 +61,12 @@
        stale-downstream-policy: 'reject
        runtime-executed?: #f)))
 
-(def (poo-flow-proof-refinement-binding
+(def (agentic-ai-lab-proof-refinement-binding
       identity-value upstream-artifact-value downstream-artifact-value
       receipt-value impact-binding-value)
   (validate
-   PooFlowProofRefinementBinding
-   (.o kind: +poo-flow-proof-refinement-binding-kind+
+   AgenticAILabProofRefinementBinding
+   (.o kind: +agentic-ai-lab-proof-refinement-binding-kind+
        identity: identity-value
        upstream-artifact-identity: (.ref upstream-artifact-value 'identity)
        upstream-content-digest:

@@ -16,19 +16,19 @@ Benchmarks are package module surfaces, not pyproject script expansion.
 The benchmark layer must prove two things:
 
 - LangGraph-compatible runtime semantics are covered by executable tests.
-- POO Flow can go beyond parity through stronger functional composition, durable policy integration, nested subgraph projection, and measured C ABI hot paths.
+- Agentic AI Lab can go beyond parity through stronger functional composition, durable policy integration, nested subgraph projection, and measured C ABI hot paths.
 
 * Commands
 
 #+begin_src sh
-uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks langgraph-alignment \
+uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks langgraph-alignment \
   --iterations 25 --fanout 8
 
-uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks composition \
+uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks composition \
   --iterations 10 --fanout 8
-/usr/bin/time -p uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks anyio-runtime --observations-per-side 10000
-/usr/bin/time -p uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks burst-lifecycle
-/usr/bin/time -p uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks burst-lifecycle --population 10000 --max-concurrency 48 --trace-memory
+/usr/bin/time -p uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks anyio-runtime --observations-per-side 10000
+/usr/bin/time -p uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks burst-lifecycle
+/usr/bin/time -p uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks burst-lifecycle --population 10000 --max-concurrency 48 --trace-memory
 #+end_src
 
 * Composition suite
@@ -52,14 +52,14 @@ cache.  The immediately preceding same-semantics failing receipt is retained
 below as the before baseline.
 
 The canonical micro receipt uses schema
-=poo-flow.anyio-runtime-benchmark.v1= and a native AnyIO bounded-concurrent
+=agentic-ai-lab.anyio-runtime-benchmark.v1= and a native AnyIO bounded-concurrent
 reference with the same capacity and action as the
 =RuntimeGraphProgram.abatch= candidate.  The earlier 83.08-second serial-sleeper
 receipt is rejected because it compared unequal execution semantics and spent
 most of its wall time in synthetic sleep.
 
 #+begin_src sh
-/usr/bin/time -p uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks anyio-runtime --observations-per-side 10000
+/usr/bin/time -p uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks anyio-runtime --observations-per-side 10000
 #+end_src
 
 | Process metric | Value | Unit |
@@ -125,7 +125,7 @@ cache.  Live worker tasks remain =O(capacity)=, while inputs and ordered results
 remain =O(N)=.
 
 #+begin_src sh
-/usr/bin/time -p uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks burst-lifecycle
+/usr/bin/time -p uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks burst-lifecycle
 #+end_src
 
 | Process metric | Value | Unit |
@@ -160,7 +160,7 @@ from 1768.417 to 3389.913 cases/s, about 91.7 percent; startup p99 fell from
 Memory tracing remains a separate profile:
 
 #+begin_src sh
-/usr/bin/time -p uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks burst-lifecycle --population 10000 --max-concurrency 48 --trace-memory
+/usr/bin/time -p uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks burst-lifecycle --population 10000 --max-concurrency 48 --trace-memory
 #+end_src
 
 | Population (cases) | Capacity (live tasks) | Python traced peak (bytes) | Makespan (ms) | Throughput (cases/s) | real (s) | user (s) | sys (s) |
@@ -188,7 +188,7 @@ flowchart TD
 ** Before baselines
 
 The production-shaped owner uses schema
-=poo-flow.burst-lifecycle-benchmark.v1=.  Its case mix supports serial-only,
+=agentic-ai-lab.burst-lifecycle-benchmark.v1=.  Its case mix supports serial-only,
 parallel-only, and hybrid cases.  Parallel work is action-internal fanout/join;
 this receipt does not claim graph-native parallel fanout.  The measured arrival
 profile is instant submission.
@@ -201,7 +201,7 @@ private sentinel.
 ** Automatic throughput run
 
 #+begin_src sh
-/usr/bin/time -p uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks burst-lifecycle
+/usr/bin/time -p uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks burst-lifecycle
 #+end_src
 
 | Process metric | Value | Unit |
@@ -235,7 +235,7 @@ remains bounded by the calibration range.
 ** Separate memory profile
 
 #+begin_src sh
-/usr/bin/time -p uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks burst-lifecycle --population 10000 --max-concurrency 1000 --trace-memory
+/usr/bin/time -p uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks burst-lifecycle --population 10000 --max-concurrency 1000 --trace-memory
 #+end_src
 
 | Population (cases) | Capacity (live tasks) | Python traced peak (bytes) | Makespan (ms) | Throughput (cases/s) | real (s) | user (s) | sys (s) |
@@ -282,16 +282,16 @@ flowchart LR
 The canonical matrix fixes 5,000 target observations per side, capacity 12, and 16 logical bytes per payload field. Each command produces 5,040 actual observations per side because it completes whole 24-item timing pairs.
 
 #+begin_src sh
-/usr/bin/time -p direnv exec . uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks large-state-copy --observations-per-side 5000 --max-concurrency 12 --payload-field-count 64 --payload-field-bytes 16
-/usr/bin/time -p direnv exec . uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks large-state-copy --observations-per-side 5000 --max-concurrency 12 --payload-field-count 256 --payload-field-bytes 16
-/usr/bin/time -p direnv exec . uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks large-state-copy --observations-per-side 5000 --max-concurrency 12 --payload-field-count 1024 --payload-field-bytes 16
-/usr/bin/time -p direnv exec . uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks large-state-copy --observations-per-side 5000 --max-concurrency 12 --payload-field-count 4096 --payload-field-bytes 16
+/usr/bin/time -p direnv exec . uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks large-state-copy --observations-per-side 5000 --max-concurrency 12 --payload-field-count 64 --payload-field-bytes 16
+/usr/bin/time -p direnv exec . uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks large-state-copy --observations-per-side 5000 --max-concurrency 12 --payload-field-count 256 --payload-field-bytes 16
+/usr/bin/time -p direnv exec . uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks large-state-copy --observations-per-side 5000 --max-concurrency 12 --payload-field-count 1024 --payload-field-bytes 16
+/usr/bin/time -p direnv exec . uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks large-state-copy --observations-per-side 5000 --max-concurrency 12 --payload-field-count 4096 --payload-field-bytes 16
 #+end_src
 
 ** Final canonical JSON receipts
 *** 64 payload fields
 #+begin_src json
-{"absolute-saved-ns-per-item":1595.479,"actual-observations-per-side":5040,"anyio-limiter-capacity":40,"available-cpus":12,"candidate-faster":true,"candidate-median-ns-per-item":42837.688,"candidate-mode":"owned-transfer","candidate-p95-ns-per-item":204701.375,"capacity-source":"fixed","copy-boundary":"program-executor","copy-kind":"shallow-root-dict","detail":"payload bytes are logical retained payload only; the measured shallow root copy scales with field count","gate-purpose":"same-run-no-regression","gated":true,"input-root-dictionaries-per-pair":48,"input-root-references-per-pair":3168,"items-per-pair":24,"passed":true,"payload-field-bytes":16,"payload-field-count":64,"payload-logical-bytes-per-state":1024,"phase":"steady-fresh-state","qualification-volume-met":true,"ratio":0.964093,"reference-median-ns-per-item":44433.167,"reference-mode":"public-defensive-copy","reference-p95-ns-per-item":273262.167,"root-field-count":66,"schema":"poo-flow.large-state-copy-benchmark.v1","selected-capacity":12,"semantics-verified":true,"target-observations-per-side":5000,"template-physical-bytes-estimate":1024,"template-physical-bytes-estimate-excludes-object-overhead":true,"threshold-ratio":2.010295,"time-unit":"ns/item","timing-pairs":210}
+{"absolute-saved-ns-per-item":1595.479,"actual-observations-per-side":5040,"anyio-limiter-capacity":40,"available-cpus":12,"candidate-faster":true,"candidate-median-ns-per-item":42837.688,"candidate-mode":"owned-transfer","candidate-p95-ns-per-item":204701.375,"capacity-source":"fixed","copy-boundary":"program-executor","copy-kind":"shallow-root-dict","detail":"payload bytes are logical retained payload only; the measured shallow root copy scales with field count","gate-purpose":"same-run-no-regression","gated":true,"input-root-dictionaries-per-pair":48,"input-root-references-per-pair":3168,"items-per-pair":24,"passed":true,"payload-field-bytes":16,"payload-field-count":64,"payload-logical-bytes-per-state":1024,"phase":"steady-fresh-state","qualification-volume-met":true,"ratio":0.964093,"reference-median-ns-per-item":44433.167,"reference-mode":"public-defensive-copy","reference-p95-ns-per-item":273262.167,"root-field-count":66,"schema":"agentic-ai-lab.large-state-copy-benchmark.v1","selected-capacity":12,"semantics-verified":true,"target-observations-per-side":5000,"template-physical-bytes-estimate":1024,"template-physical-bytes-estimate-excludes-object-overhead":true,"threshold-ratio":2.010295,"time-unit":"ns/item","timing-pairs":210}
 #+end_src
 #+begin_example
 real 2.29
@@ -301,7 +301,7 @@ sys 0.06
 
 *** 256 payload fields
 #+begin_src json
-{"absolute-saved-ns-per-item":6022.562,"actual-observations-per-side":5040,"anyio-limiter-capacity":40,"available-cpus":12,"candidate-faster":true,"candidate-median-ns-per-item":46780.375,"candidate-mode":"owned-transfer","candidate-p95-ns-per-item":266366.333,"capacity-source":"fixed","copy-boundary":"program-executor","copy-kind":"shallow-root-dict","detail":"payload bytes are logical retained payload only; the measured shallow root copy scales with field count","gate-purpose":"same-run-no-regression","gated":true,"input-root-dictionaries-per-pair":48,"input-root-references-per-pair":12384,"items-per-pair":24,"passed":true,"payload-field-bytes":16,"payload-field-count":256,"payload-logical-bytes-per-state":4096,"phase":"steady-fresh-state","qualification-volume-met":true,"ratio":0.885943,"reference-median-ns-per-item":52802.938,"reference-mode":"public-defensive-copy","reference-p95-ns-per-item":436541.667,"root-field-count":258,"schema":"poo-flow.large-state-copy-benchmark.v1","selected-capacity":12,"semantics-verified":true,"target-observations-per-side":5000,"template-physical-bytes-estimate":4096,"template-physical-bytes-estimate-excludes-object-overhead":true,"threshold-ratio":2.029576,"time-unit":"ns/item","timing-pairs":210}
+{"absolute-saved-ns-per-item":6022.562,"actual-observations-per-side":5040,"anyio-limiter-capacity":40,"available-cpus":12,"candidate-faster":true,"candidate-median-ns-per-item":46780.375,"candidate-mode":"owned-transfer","candidate-p95-ns-per-item":266366.333,"capacity-source":"fixed","copy-boundary":"program-executor","copy-kind":"shallow-root-dict","detail":"payload bytes are logical retained payload only; the measured shallow root copy scales with field count","gate-purpose":"same-run-no-regression","gated":true,"input-root-dictionaries-per-pair":48,"input-root-references-per-pair":12384,"items-per-pair":24,"passed":true,"payload-field-bytes":16,"payload-field-count":256,"payload-logical-bytes-per-state":4096,"phase":"steady-fresh-state","qualification-volume-met":true,"ratio":0.885943,"reference-median-ns-per-item":52802.938,"reference-mode":"public-defensive-copy","reference-p95-ns-per-item":436541.667,"root-field-count":258,"schema":"agentic-ai-lab.large-state-copy-benchmark.v1","selected-capacity":12,"semantics-verified":true,"target-observations-per-side":5000,"template-physical-bytes-estimate":4096,"template-physical-bytes-estimate-excludes-object-overhead":true,"threshold-ratio":2.029576,"time-unit":"ns/item","timing-pairs":210}
 #+end_src
 #+begin_example
 real 2.59
@@ -311,7 +311,7 @@ sys 0.05
 
 *** 1,024 payload fields
 #+begin_src json
-{"absolute-saved-ns-per-item":7857.646,"actual-observations-per-side":5040,"anyio-limiter-capacity":40,"available-cpus":12,"candidate-faster":true,"candidate-median-ns-per-item":73619.792,"candidate-mode":"owned-transfer","candidate-p95-ns-per-item":674574.667,"capacity-source":"fixed","copy-boundary":"program-executor","copy-kind":"shallow-root-dict","detail":"payload bytes are logical retained payload only; the measured shallow root copy scales with field count","gate-purpose":"same-run-no-regression","gated":true,"input-root-dictionaries-per-pair":48,"input-root-references-per-pair":49248,"items-per-pair":24,"passed":true,"payload-field-bytes":16,"payload-field-count":1024,"payload-logical-bytes-per-state":16384,"phase":"steady-fresh-state","qualification-volume-met":true,"ratio":0.90356,"reference-median-ns-per-item":81477.438,"reference-mode":"public-defensive-copy","reference-p95-ns-per-item":1155276.042,"root-field-count":1026,"schema":"poo-flow.large-state-copy-benchmark.v1","selected-capacity":12,"semantics-verified":true,"target-observations-per-side":5000,"template-physical-bytes-estimate":16384,"template-physical-bytes-estimate-excludes-object-overhead":true,"threshold-ratio":1.976466,"time-unit":"ns/item","timing-pairs":210}
+{"absolute-saved-ns-per-item":7857.646,"actual-observations-per-side":5040,"anyio-limiter-capacity":40,"available-cpus":12,"candidate-faster":true,"candidate-median-ns-per-item":73619.792,"candidate-mode":"owned-transfer","candidate-p95-ns-per-item":674574.667,"capacity-source":"fixed","copy-boundary":"program-executor","copy-kind":"shallow-root-dict","detail":"payload bytes are logical retained payload only; the measured shallow root copy scales with field count","gate-purpose":"same-run-no-regression","gated":true,"input-root-dictionaries-per-pair":48,"input-root-references-per-pair":49248,"items-per-pair":24,"passed":true,"payload-field-bytes":16,"payload-field-count":1024,"payload-logical-bytes-per-state":16384,"phase":"steady-fresh-state","qualification-volume-met":true,"ratio":0.90356,"reference-median-ns-per-item":81477.438,"reference-mode":"public-defensive-copy","reference-p95-ns-per-item":1155276.042,"root-field-count":1026,"schema":"agentic-ai-lab.large-state-copy-benchmark.v1","selected-capacity":12,"semantics-verified":true,"target-observations-per-side":5000,"template-physical-bytes-estimate":16384,"template-physical-bytes-estimate-excludes-object-overhead":true,"threshold-ratio":1.976466,"time-unit":"ns/item","timing-pairs":210}
 #+end_src
 #+begin_example
 real 4.96
@@ -321,7 +321,7 @@ sys 0.07
 
 *** 4,096 payload fields
 #+begin_src json
-{"absolute-saved-ns-per-item":42346.354,"actual-observations-per-side":5040,"anyio-limiter-capacity":40,"available-cpus":12,"candidate-faster":true,"candidate-median-ns-per-item":177712.667,"candidate-mode":"owned-transfer","candidate-p95-ns-per-item":1737168.375,"capacity-source":"fixed","copy-boundary":"program-executor","copy-kind":"shallow-root-dict","detail":"payload bytes are logical retained payload only; the measured shallow root copy scales with field count","gate-purpose":"same-run-no-regression","gated":true,"input-root-dictionaries-per-pair":48,"input-root-references-per-pair":196704,"items-per-pair":24,"passed":true,"payload-field-bytes":16,"payload-field-count":4096,"payload-logical-bytes-per-state":65536,"phase":"steady-fresh-state","qualification-volume-met":true,"ratio":0.807568,"reference-median-ns-per-item":220059.021,"reference-mode":"public-defensive-copy","reference-p95-ns-per-item":1540557.292,"root-field-count":4098,"schema":"poo-flow.large-state-copy-benchmark.v1","selected-capacity":12,"semantics-verified":true,"target-observations-per-side":5000,"template-physical-bytes-estimate":65536,"template-physical-bytes-estimate-excludes-object-overhead":true,"threshold-ratio":2.469326,"time-unit":"ns/item","timing-pairs":210}
+{"absolute-saved-ns-per-item":42346.354,"actual-observations-per-side":5040,"anyio-limiter-capacity":40,"available-cpus":12,"candidate-faster":true,"candidate-median-ns-per-item":177712.667,"candidate-mode":"owned-transfer","candidate-p95-ns-per-item":1737168.375,"capacity-source":"fixed","copy-boundary":"program-executor","copy-kind":"shallow-root-dict","detail":"payload bytes are logical retained payload only; the measured shallow root copy scales with field count","gate-purpose":"same-run-no-regression","gated":true,"input-root-dictionaries-per-pair":48,"input-root-references-per-pair":196704,"items-per-pair":24,"passed":true,"payload-field-bytes":16,"payload-field-count":4096,"payload-logical-bytes-per-state":65536,"phase":"steady-fresh-state","qualification-volume-met":true,"ratio":0.807568,"reference-median-ns-per-item":220059.021,"reference-mode":"public-defensive-copy","reference-p95-ns-per-item":1540557.292,"root-field-count":4098,"schema":"agentic-ai-lab.large-state-copy-benchmark.v1","selected-capacity":12,"semantics-verified":true,"target-observations-per-side":5000,"template-physical-bytes-estimate":65536,"template-physical-bytes-estimate-excludes-object-overhead":true,"threshold-ratio":2.469326,"time-unit":"ns/item","timing-pairs":210}
 #+end_src
 #+begin_example
 real 13.04

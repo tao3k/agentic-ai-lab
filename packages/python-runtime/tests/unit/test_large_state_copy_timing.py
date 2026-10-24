@@ -9,8 +9,8 @@ from typing import Any
 
 import anyio
 
-from poo_flow_runtime.benchmarks import _large_state_copy_runner as runner
-from poo_flow_runtime.benchmarks import _large_state_copy_sampling as sampling
+from agentic_ai_lab_runtime.benchmarks import _large_state_copy_runner as runner
+from agentic_ai_lab_runtime.benchmarks import _large_state_copy_sampling as sampling
 
 
 def test_invocation_pair_uses_same_executor_and_owned_public_routes() -> None:

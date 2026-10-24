@@ -6,25 +6,25 @@
 ;;; Boundary: tests verify concrete loop-engine runtime manifest projection.
 ;;; Invariant: manifest rows are inert Marlin handoff data, not execution.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax
-        (only-in :poo-flow/src/loops/governor-marlin
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        (only-in :agentic-ai-lab/modules/loop-engine/control/governor-marlin
                  +loop-governor-marlin-loop-engine-discovery-schema+
                  loop-governor-marlin-loop-engine-discovery)
-        (only-in :poo-flow/modules/cubeSandbox/config
-                 poo-flow-cubeSandbox-module-bundles)
-        (only-in :poo-flow/modules/nono-sandbox/config
-                 poo-flow-nono-sandbox-module-bundles)
+        (only-in :agentic-ai-lab/modules/cubeSandbox/config
+                 agentic-ai-lab-cubeSandbox-module-bundles)
+        (only-in :agentic-ai-lab/modules/nono-sandbox/config
+                 agentic-ai-lab-nono-sandbox-module-bundles)
         (only-in "./support/loop-engine-runtime-manifest-receipts"
                  check-custom-loop-runtime-manifest-request-receipts)
         (only-in "../user-interface/custom/my-module/cases/loop-engine-owner"
-                 poo-flow-custom-my-module-loop-engine-case))
+                 agentic-ai-lab-custom-my-module-loop-engine-case))
 
 (export user-interface-custom-loop-engine-runtime-manifest-test)
 
@@ -77,50 +77,50 @@
 ;; : Alist
 (def expected-loop-engine-receipt-contracts
   '((lineage-receipt
-     . poo-flow.loop-engine.lineage-receipt.v1)
+     . agentic-ai-lab.loop-engine.lineage-receipt.v1)
     (selector-receipt
-     . poo-flow.loop-engine.selector-receipt.v1)
+     . agentic-ai-lab.loop-engine.selector-receipt.v1)
     (session-agent-graph
-     . poo-flow.modules.session.agent-graph.v1)
+     . agentic-ai-lab.modules.session.agent-graph.v1)
     (resource-dispatch-receipt
-     . poo-flow.loop-engine.resource-dispatch-receipt.v1)
+     . agentic-ai-lab.loop-engine.resource-dispatch-receipt.v1)
     (capability-receipt
-     . poo-flow.loop-engine.capability-receipt.v1)
+     . agentic-ai-lab.loop-engine.capability-receipt.v1)
     (memory-receipt
-     . poo-flow.loop-engine.memory-receipt.v1)
+     . agentic-ai-lab.loop-engine.memory-receipt.v1)
     (compression-receipt
-     . poo-flow.loop-engine.compression-receipt.v1)
+     . agentic-ai-lab.loop-engine.compression-receipt.v1)
     (policy-extension-receipt
-     . poo-flow.loop-engine.policy-extension-receipt.v1)
+     . agentic-ai-lab.loop-engine.policy-extension-receipt.v1)
     (spec-evolution-review
-     . poo-flow.spec-evolution.review-item.v1)
+     . agentic-ai-lab.spec-evolution.review-item.v1)
     (spec-evolution-runtime-manifest-row
-     . poo-flow.spec-evolution.runtime-manifest-row.v1)
+     . agentic-ai-lab.spec-evolution.runtime-manifest-row.v1)
     (runtime-capability-descriptor
-     . poo-flow.runtime.capability-descriptor.v1)
+     . agentic-ai-lab.runtime.capability-descriptor.v1)
     (policy-profile-packet
-     . poo-flow.runtime.policy-profile-packet.v1)
+     . agentic-ai-lab.runtime.policy-profile-packet.v1)
     (runtime-action-packet
-     . poo-flow.runtime.action-packet.v1)
+     . agentic-ai-lab.runtime.action-packet.v1)
     (runtime-receipt-batch
-     . poo-flow.runtime.receipt-batch.v1)
+     . agentic-ai-lab.runtime.receipt-batch.v1)
     (sandbox-handoff-agreement
-     . poo-flow.loop-engine.sandbox-handoff-agreement.v1)))
+     . agentic-ai-lab.loop-engine.sandbox-handoff-agreement.v1)))
 
 ;; : Alist
 (def expected-loop-engine-runtime-packet-contracts
   '((runtime-capability-descriptor
-     . poo-flow.runtime.capability-descriptor.v1)
+     . agentic-ai-lab.runtime.capability-descriptor.v1)
     (policy-profile-packet
-     . poo-flow.runtime.policy-profile-packet.v1)
+     . agentic-ai-lab.runtime.policy-profile-packet.v1)
     (runtime-action-packet
-     . poo-flow.runtime.action-packet.v1)
+     . agentic-ai-lab.runtime.action-packet.v1)
     (runtime-receipt-batch
-     . poo-flow.runtime.receipt-batch.v1)))
+     . agentic-ai-lab.runtime.receipt-batch.v1)))
 
 ;; : Symbol
 (def expected-loop-engine-human-audit-result-contract
-  'poo-flow.loop-governor.human-audit-decision.v1)
+  'agentic-ai-lab.loop-governor.human-audit-decision.v1)
 
 ;; : Symbol
 (def expected-loop-engine-spec-evolution-proposal-id
@@ -130,13 +130,13 @@
 ;;; must be discoverable from normal `use-module` configuration.
 ;; : (-> PooUserModuleSelection POOObject)
 (def (custom-loop-presentation module-bundle)
-  (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules
-     (append poo-flow-nono-sandbox-module-bundles
-             poo-flow-cubeSandbox-module-bundles
+  (agenticAiLabUserConfigPresentation
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules
+     (append agentic-ai-lab-nono-sandbox-module-bundles
+             agentic-ai-lab-cubeSandbox-module-bundles
              (list module-bundle)))
-    (poo-flow-settings))))
+    (yuanxu-settings))))
 
 ;;; Manifest descriptor assertions prove the adapter row is inert command data,
 ;;; not evidence that Scheme launched Marlin.
@@ -144,20 +144,20 @@
 (def (check-custom-loop-runtime-manifest-descriptor runtime-manifest
                                                     runtime-manifest-summary)
   (check-equal? (test-ref runtime-manifest 'schema)
-                'poo-flow.runtime-command-descriptor.v1)
+                'yuanxu.runtime-command-descriptor.v1)
   (check-equal? (test-ref runtime-manifest 'request-schema)
-                'poo-flow.runtime-request.v1)
+                'yuanxu.runtime-request.v1)
   (check-equal? (test-ref runtime-manifest 'operation)
                 'loop-engine-handoff)
   (check-equal? (test-ref runtime-manifest 'executable)
                 "marlin-agent-core")
   (check-equal? (test-ref runtime-manifest 'argv)
                 '("marlin-agent-core"
-                  "poo-flow"
+                  "agentic-ai-lab"
                   "runtime"
                   "loop-engine-handoff"))
   (check-equal? (test-ref (test-ref runtime-manifest 'metadata) 'contract)
-                'poo-flow.loop-governor.runtime-command-manifest.v1)
+                'agentic-ai-lab.loop-governor.runtime-command-manifest.v1)
   (check-equal? (test-ref runtime-manifest-summary 'kind)
                 'runtime-command-manifest-summary)
   (check-equal? (test-ref runtime-manifest-summary 'operation)
@@ -217,7 +217,7 @@
   (check-equal? (test-ref runtime-manifest-request 'kind)
                 'loop-engine-runtime-handoff-request)
   (check-equal? (test-ref runtime-manifest-request 'contract)
-                'poo-flow.loop-governor.runtime-command-manifest.v1)
+                'agentic-ai-lab.loop-governor.runtime-command-manifest.v1)
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'result-contract)
                           'human-audit)
@@ -259,7 +259,7 @@
           (test-ref runtime-manifest-request
                     'runtime-receipt-batch-template)))
     (check-equal? (test-ref runtime-capability-descriptor 'contract)
-                  'poo-flow.runtime.capability-descriptor.v1)
+                  'agentic-ai-lab.runtime.capability-descriptor.v1)
     (check-equal? (test-ref runtime-capability-descriptor 'runtime-language)
                   'rust)
     (check-equal? (test-ref runtime-capability-descriptor 'transport-class)
@@ -274,7 +274,7 @@
                             'runtime-executed)
                   #f)
     (check-equal? (test-ref policy-profile-packet 'contract)
-                  'poo-flow.runtime.policy-profile-packet.v1)
+                  'agentic-ai-lab.runtime.policy-profile-packet.v1)
     (check-equal? (test-ref policy-profile-packet 'profile-id)
                   'loop-engine/current-system-build-loop/policy-profile)
     (check-equal? (test-ref policy-profile-packet 'source-refs)
@@ -286,7 +286,7 @@
     (check-equal? (test-ref policy-profile-packet 'runtime-executed)
                   #f)
     (check-equal? (test-ref runtime-action-packet 'contract)
-                  'poo-flow.runtime.action-packet.v1)
+                  'agentic-ai-lab.runtime.action-packet.v1)
     (check-equal? (test-ref runtime-action-packet 'action-kind)
                   'ask-owner)
     (check-equal? (test-ref runtime-action-packet 'profile-id)
@@ -303,7 +303,7 @@
     (check-equal? (test-ref runtime-action-packet 'runtime-executed)
                   #f)
     (check-equal? (test-ref runtime-receipt-batch-template 'contract)
-                  'poo-flow.runtime.receipt-batch.v1)
+                  'agentic-ai-lab.runtime.receipt-batch.v1)
     (check-equal? (test-ref runtime-receipt-batch-template 'status)
                   'not-executed)
     (check-equal? (test-ref runtime-receipt-batch-template
@@ -329,11 +329,11 @@
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'session-agent-graph)
                           'kind)
-                'poo-flow.session.agent-graph)
+                'agentic-ai-lab.session.agent-graph)
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'session-agent-graph)
                           'schema)
-                'poo-flow.modules.session.agent-graph.v1)
+                'agentic-ai-lab.modules.session.agent-graph.v1)
   (check-equal? (test-ref (test-ref runtime-manifest-request
                                      'session-agent-graph)
                           'agent-count)
@@ -386,7 +386,7 @@
     (check-equal? (test-ref runtime-handoff-facts 'kind)
                   'loop-engine-runtime-handoff)
     (check-equal? (test-ref runtime-handoff-facts 'contract)
-                  'poo-flow.loop-governor.runtime-handoff.v1)
+                  'agentic-ai-lab.loop-governor.runtime-handoff.v1)
     (check-equal? (test-ref runtime-handoff-facts 'runtime-owner)
                   "marlin-agent-core")
     (check-equal? (test-ref runtime-handoff-facts 'runtime-handoff)
@@ -404,7 +404,7 @@
     (check-equal? (test-ref (test-ref runtime-handoff-facts
                                        'runtime-capability-descriptor)
                             'contract)
-                  'poo-flow.runtime.capability-descriptor.v1)
+                  'agentic-ai-lab.runtime.capability-descriptor.v1)
     (check-equal? (test-ref (test-ref runtime-handoff-facts
                                        'policy-profile-packet)
                             'profile-id)
@@ -418,7 +418,7 @@
     (check-equal? (test-ref (test-ref runtime-handoff-facts
                                        'lineage-receipt)
                             'contract)
-                  'poo-flow.loop-engine.lineage-receipt.v1)
+                  'agentic-ai-lab.loop-engine.lineage-receipt.v1)
     (check-equal? (test-ref (test-ref runtime-handoff-facts
                                        'selector-receipt)
                             'candidates)
@@ -480,7 +480,7 @@
                    'runtime-executed)
                   '(#f))
     (check-equal? (test-ref sandbox-handoff-agreement 'contract)
-                  'poo-flow.loop-engine.sandbox-handoff-agreement.v1)
+                  'agentic-ai-lab.loop-engine.sandbox-handoff-agreement.v1)
     (check-equal? (test-ref sandbox-handoff-agreement 'handoff-ready?)
                   #f)
     (check-equal? (test-ref runtime-handoff-facts
@@ -507,7 +507,7 @@
     (check-equal? (test-ref proof-manifest 'kind)
                   'loop-engine-proof-manifest)
     (check-equal? (test-ref proof-manifest 'contract)
-                  'poo-flow.loop-engine.proof-manifest.v1)
+                  'agentic-ai-lab.loop-engine.proof-manifest.v1)
     (check-equal? (test-ref proof-manifest 'source)
                   'user-config-loop-engine)
     (check-equal? (test-ref proof-manifest 'proof-owner) 'lean)
@@ -515,7 +515,7 @@
     (check-equal? (test-ref proof-manifest 'runtime-owner)
                   "marlin-agent-core")
     (check-equal? (test-ref proof-manifest 'scheme-projection)
-                  'poo-flow-user-loop-engine-intent-runtime-command-manifest)
+                  'agentic-ai-lab-user-loop-engine-intent-runtime-command-manifest)
     (check-equal? (test-ref proof-manifest 'proof-scope)
                   '(user-interface profile policy strategy workflow sandbox
                                    runtime-handoff))
@@ -575,10 +575,10 @@
 ;;; guessing the loop-engine entrypoint or request shape.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-runtime-manifest-case)
-  (poo-flow-test-case "projects custom loop-engine runtime manifest"
+  (yuanxu-test-case "projects custom loop-engine runtime manifest"
     (let* ((presentation
             (custom-loop-presentation
-             poo-flow-custom-my-module-loop-engine-case))
+             agentic-ai-lab-custom-my-module-loop-engine-case))
            (intent
             (car (.ref presentation 'loop-engine-intents)))
            (runtime-manifest
@@ -631,5 +631,5 @@
 ;;; changes in Marlin-facing request shape are reviewed against their own case.
 ;; : TestSuite
 (def user-interface-custom-loop-engine-runtime-manifest-test
-  (test-suite "poo-flow custom loop-engine runtime manifest"
+  (test-suite "agentic-ai-lab custom loop-engine runtime manifest"
     (user-interface-custom-loop-engine-runtime-manifest-case)))

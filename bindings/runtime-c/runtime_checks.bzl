@@ -188,7 +188,7 @@ env -u CPATH -u C_INCLUDE_PATH -u LIBRARY_PATH \
   DYLD_LIBRARY_PATH="$library_dir" \
   LD_LIBRARY_PATH="$library_dir" \
   GERBIL_PATH="$output_root" \
-  "$gxi" -e '(begin (import :poo-flow/bindings/runtime-c/benchmarks/runtime-v0-gerbil-ffi-benchmark) (main))'
+  "$gxi" -e '(begin (import :agentic-ai-lab/bindings/runtime-c/benchmarks/runtime-v0-gerbil-ffi-benchmark) (main))'
 """ % (
             ctx.file.source.short_path,
             ctx.file.header.short_path,

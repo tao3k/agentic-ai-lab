@@ -3,10 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import :core/poo-clos/interface
-        (only-in :poo-flow/modules/authorization/objects
+(import :yuanxu/poo-clos/interface
+        (only-in :agentic-ai-lab/modules/authorization/objects
                  AuthorizationCapabilityContractExecutor
-                 poo-flow-authorization-provider))
+                 agentic-ai-lab-authorization-provider))
 
 (export CedarCapabilityContractExecutor
         CedarCapabilityContractProjector
@@ -21,8 +21,8 @@
   (poo-clos-make-instance CedarCapabilityContractExecutor))
 
 (def CedarAuthorizationProvider
-  (poo-flow-authorization-provider
-   "poo-flow/authorization/cedar"
+  (agentic-ai-lab-authorization-provider
+   "agentic-ai-lab/authorization/cedar"
    '("cedar-rust" "cedar-lean")
    'strict-lockstep
    CedarCapabilityContractProjector

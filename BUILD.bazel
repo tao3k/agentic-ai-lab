@@ -14,7 +14,7 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files([
     "gerbil-dependencies.MODULE.bazel",
-    "t/feature-system-bundle-v1-foreign-arena-fixture.ss",
+    "core/t/feature-system-bundle-v1-foreign-arena-fixture.ss",
     "t/module-system-observability-test.ss",
     "t/profile-binding-syntax-test.ss",
     "t/profile-bundle-test.ss",
@@ -23,7 +23,7 @@ exports_files([
 
 filegroup(
     name = "runtime_v0_schema",
-    srcs = ["src/contract/runtime-v0-abi-schema.ss"],
+    srcs = ["modules/workflow/contracts/runtime-v0-abi-schema.ss"],
 )
 
 filegroup(
@@ -34,8 +34,7 @@ filegroup(
         "*.ss",
         "bindings/nono-c/**/*.h",
         "modules/**/*.ss",
-        "src/**/*.inc",
-        "src/**/*.ss",
+        "modules/**/*.inc",
         "user-interface/**/*.ss",
     ]),
 )
@@ -76,14 +75,6 @@ gerbil_project_compile(
     source_resolution_receipts = ["@gerbil_poo_sources//:source_resolution_receipt"],
 )
 
-gerbil_project_compile(
-    name = "asp_gerbil_scheme_package",
-    srcs = ["@asp_gerbil_scheme_sources//:sources"],
-    build_script = "@asp_gerbil_scheme_sources//:build_script",
-    require_library_output = True,
-    source_resolution_receipts = ["@asp_gerbil_scheme_sources//:source_resolution_receipt"],
-    deps = [":gerbil_poo_package"],
-)
 
 gerbil_project_compile(
     name = "orgize_package",
@@ -97,12 +88,18 @@ gerbil_project_compile(
     ],
 )
 
-gerbil_project_compile(
-    name = "poo_flow_core_package",
-    srcs = ["core/gerbil.pkg"] + glob(
-        ["core/*.ss", "core/**/*.ss"],
-        exclude = ["core/t/**"],
+# Core is versioned as a submodule and consumed as ordinary checkout files.
+filegroup(
+    name = "core_module_sources",
+    srcs = glob(
+        ["core/*.ss", "core/**/*.ss", "core/**/gerbil.pkg"],
+        exclude = ["core/t/**", "core/design/**", "core/module-system/design/**", "core/dev/proofs/**"],
     ),
+)
+
+gerbil_project_compile(
+    name = "yuanxu_package",
+    srcs = [":core_module_sources"],
     build_script = "core/build.ss",
     require_library_output = True,
     deps = [":gerbil_poo_package"],
@@ -111,23 +108,35 @@ gerbil_project_compile(
 gerbil_project_compile(
     name = "gerbil_parser_package",
     srcs = ["@gerbil_parser_sources//:sources"],
-    build_script = "@gerbil_parser_sources//:build_script",
+    # Compile the native closure of consumed APIs, not every upstream language
+    # and optional FFI product. Source revision/receipt admission is unchanged.
+    build_script = "//packages/bazel:parser_dependency_build",
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_parser_sources//:source_resolution_receipt"],
     deps = [
-        ":asp_gerbil_scheme_package",
-        ":poo_flow_core_package",
+        ":yuanxu_package",
+    ],
+)
+
+gerbil_project_compile(
+    name = "gerbil_ascent_package",
+    srcs = ["@gerbil_ascent_sources//:sources"],
+    build_script = "@gerbil_ascent_sources//:build_script",
+    require_library_output = True,
+    source_resolution_receipts = ["@gerbil_ascent_sources//:source_resolution_receipt"],
+    deps = [
+        ":yuanxu_package",
     ],
 )
 
 filegroup(
     name = "dependency_packages",
     srcs = [
-        ":asp_gerbil_scheme_package",
         ":gerbil_parser_package",
+        ":gerbil_ascent_package",
         ":gerbil_poo_package",
         ":orgize_package",
-        ":poo_flow_core_package",
+        ":yuanxu_package",
     ],
 )
 
@@ -135,10 +144,10 @@ filegroup(
     filegroup(name = name, srcs = [project], output_group = "receipt")
     for name, project in [
         ("gerbil_poo_package_receipt", ":gerbil_poo_package"),
-        ("asp_gerbil_scheme_package_receipt", ":asp_gerbil_scheme_package"),
         ("orgize_package_receipt", ":orgize_package"),
-        ("poo_flow_core_package_receipt", ":poo_flow_core_package"),
+        ("yuanxu_package_receipt", ":yuanxu_package"),
         ("gerbil_parser_package_receipt", ":gerbil_parser_package"),
+        ("gerbil_ascent_package_receipt", ":gerbil_ascent_package"),
     ]
 ]
 
@@ -146,7 +155,6 @@ filegroup(
     filegroup(name = name, srcs = [project], output_group = "project_root")
     for name, project in [
         ("gerbil_poo_package_project_root", ":gerbil_poo_package"),
-        ("asp_gerbil_scheme_package_project_root", ":asp_gerbil_scheme_package"),
         ("orgize_package_project_root", ":orgize_package"),
     ]
 ]
@@ -157,7 +165,7 @@ gerbil_project_compile(
     args = ["compile"],
     build_script = ":build.ss",
     env = {"GERBIL_BUILD_VERBOSE": "1"},
-    deps = [":gerbil_parser_package", ":orgize_package"],
+    deps = [":gerbil_parser_package", ":orgize_package", ":gerbil_ascent_package"],
 )
 
 gerbil_project_environment(
@@ -171,7 +179,7 @@ gerbil_project_dev(
     args = ["compile"],
     build_script = ":build.ss",
     tags = ["local", "manual"],
-    deps = [":gerbil_parser_package", ":orgize_package"],
+    deps = [":gerbil_parser_package", ":orgize_package", ":gerbil_ascent_package"],
 )
 
 filegroup(name = "project_root", srcs = [":compile"], output_group = "project_root")
@@ -179,8 +187,8 @@ filegroup(name = "compile_log", srcs = [":compile"], output_group = "log")
 
 gerbil_project_projection(
     name = "wheel_smoke_projection_artifact",
-    output_name = "wheel_smoke.ss.poo-flow-projection.sexp",
+    output_name = "wheel_smoke.ss.agentic-ai-lab-projection.sexp",
     project = ":compile",
     projection_source = ":runtime_load_projection_source",
-    source = "//packages/python-runtime/src/poo_flow_runtime:wheel_smoke_projection_source",
+    source = "//packages/python-runtime/src/agentic_ai_lab_runtime:wheel_smoke_projection_source",
 )

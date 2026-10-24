@@ -183,13 +183,13 @@ fn materialize_context_schema(mut schema: Value) -> Result<Value> {
                         "context attributes must be an object",
                     )
                 })?;
-            if fields.contains_key("poo_flow") {
+            if fields.contains_key("agentic_ai_lab") {
                 return Err(Error::new(
                     "reserved-authority-context",
-                    "schema cannot redefine context.poo_flow",
+                    "schema cannot redefine context.agentic_ai_lab",
                 ));
             }
-            fields.insert("poo_flow".into(), json!({"type": "Record", "attributes": {
+            fields.insert("agentic_ai_lab".into(), json!({"type": "Record", "attributes": {
                 "intentDigest": {"type": "String"}, "handoffDigest": {"type": "String"}, "runtimeContext": {"type": "String"},
                 "runtimeGeneration": {"type": "Long"}, "bundleEpoch": {"type": "Long"}, "runtimeBundleDigest": {"type": "String"},
                 "profileBundleDigest": {"type": "String"}, "capabilityContractDigest": {"type": "String"}, "revocationEpoch": {"type": "Long"},
@@ -202,9 +202,9 @@ fn materialize_context_schema(mut schema: Value) -> Result<Value> {
 
 impl Snapshot {
     pub fn new(bootstrap: Bootstrap) -> Result<Self> {
-        if bootstrap.schema_id != "poo-flow.cedar-authority-snapshot.v1"
+        if bootstrap.schema_id != "agentic-ai-lab.cedar-authority-snapshot.v1"
             || bootstrap.object_kind != "cedar-authority-snapshot"
-            || bootstrap.producer != "poo-flow.scheme-control"
+            || bootstrap.producer != "agentic-ai-lab.scheme-control"
             || bootstrap.source != "modules/authorization/providers/cedar/objects.ss"
         {
             return Err(Error::new(
@@ -398,9 +398,9 @@ impl Snapshot {
         if capabilities.is_empty() {
             return Err(Error::new("capability-invalid", "no admitted actions"));
         }
-        let policy_digest = canonical::digest("poo-flow/cedar/policy-set", &by_id)?;
-        let entity_digest = canonical::digest("poo-flow/cedar/entity-store", &canonical_entities)?;
-        let schema_digest = canonical::digest("poo-flow/cedar/schema-revision", &schema_json)?;
+        let policy_digest = canonical::digest("agentic-ai-lab/cedar/policy-set", &by_id)?;
+        let entity_digest = canonical::digest("agentic-ai-lab/cedar/entity-store", &canonical_entities)?;
+        let schema_digest = canonical::digest("agentic-ai-lab/cedar/schema-revision", &schema_json)?;
         Ok(Self {
             bootstrap,
             schema,
@@ -414,7 +414,7 @@ impl Snapshot {
     }
 
     pub fn prepare(&self, proposal: &Proposal) -> Result<PreparedRequest> {
-        if proposal.schema_id != "poo-flow.cedar-authorization-request.v1" {
+        if proposal.schema_id != "agentic-ai-lab.cedar-authorization-request.v1" {
             return Err(Error::new("request-schema-invalid", &proposal.schema_id));
         }
         canonical::check_digest(&proposal.intent_digest)?;
@@ -443,24 +443,24 @@ impl Snapshot {
         let fields = context_json
             .as_object_mut()
             .ok_or_else(|| Error::new("cedar-context-invalid", "context must be a record"))?;
-        if fields.contains_key("poo_flow") {
+        if fields.contains_key("agentic_ai_lab") {
             return Err(Error::new(
                 "reserved-authority-context",
-                "caller cannot supply context.poo_flow",
+                "caller cannot supply context.agentic_ai_lab",
             ));
         }
         // POO-native preflight projections are caller-editable input. Until a
         // Runtime-owned source admission exists, even a permissive Cedar
         // policy must not turn one into an effect grant.
-        if fields.contains_key("poo_flow_preflight_only") {
+        if fields.contains_key("agentic_ai_lab_preflight_only") {
             return Err(Error::new(
                 "runtime-source-admission-required",
                 "preflight-only context has no Runtime source admission",
             ));
         }
-        fields.insert("poo_flow".into(), json!({
+        fields.insert("agentic_ai_lab".into(), json!({
             "intentDigest": proposal.intent_digest,
-            "handoffDigest": canonical::digest("poo-flow/cedar/runtime-handoff", &proposal.handoff)?,
+            "handoffDigest": canonical::digest("agentic-ai-lab/cedar/runtime-handoff", &proposal.handoff)?,
             "runtimeContext": self.bootstrap.runtime_context_id,
             "runtimeGeneration": self.bootstrap.runtime_generation,
             "bundleEpoch": self.bootstrap.bundle_epoch,
@@ -477,7 +477,7 @@ impl Snapshot {
         let request_json = json!({"principal": principal.to_string(), "action": action.to_string(), "resource": resource.to_string(),
             "context": context.to_json_value().map_err(cedar_error("cedar-context-invalid"))?});
         let subject = AuthorizationSubject {
-            request_digest: canonical::digest("poo-flow/cedar/request", &request_json)?,
+            request_digest: canonical::digest("agentic-ai-lab/cedar/request", &request_json)?,
             policy_set_digest: self.policy_digest.clone(),
             entity_store_digest: self.entity_digest.clone(),
             independent_declaration_bundle_digest: self.bootstrap.independent_bundle_digest.clone(),
@@ -490,7 +490,7 @@ impl Snapshot {
             epoch: self.bootstrap.bundle_epoch,
         };
         let policy_input_digest = canonical::digest(
-            "poo-flow/cedar/policy-input",
+            "agentic-ai-lab/cedar/policy-input",
             &json!([
                 wire::CEDAR_VERSION,
                 wire::LEAN_REVISION,

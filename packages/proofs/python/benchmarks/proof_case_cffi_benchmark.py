@@ -10,12 +10,12 @@ from pathlib import Path
 from struct import pack_into
 from time import perf_counter_ns
 
-from poo_flow_proof.generated.proof_case_vector import (
+from agentic_ai_lab_proof.generated.proof_case_vector import (
     DURABILITY_PROFILES,
     FIELD_OFFSETS,
     VECTOR_SIZE,
 )
-from poo_flow_proof.proof_case_runtime import NativeProofCaseRuntime
+from agentic_ai_lab_proof.proof_case_runtime import NativeProofCaseRuntime
 
 
 def percentile(samples: list[int], numerator: int) -> int:
@@ -57,7 +57,7 @@ def main() -> None:
                 for output in outputs:
                     runtime.validate_and_write(vector, output)
                 samples.append(perf_counter_ns() - started)
-            print("schema=poo-flow.proof-case-cffi.benchmark.1")
+            print("schema=agentic-ai-lab.proof-case-cffi.benchmark.1")
             print("path=installed-wheel-caller-owned")
             print(f"profile={profile}")
             print(f"batch={batch_size}")

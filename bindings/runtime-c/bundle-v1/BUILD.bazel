@@ -11,7 +11,7 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "bundle_v1_headers",
-    hdrs = ["include/poo_flow/bundle_v1.h"],
+    hdrs = ["include/agentic_ai_lab/bundle_v1.h"],
     strip_include_prefix = "include",
 )
 
@@ -80,13 +80,15 @@ runtime_gerbil_script_test(
     name = "bundle_v1_scheme_image_harness",
     size = "small",
     arguments = [
-        "//:t/feature-system-bundle-v1-foreign-arena-fixture.ss",
+        "//:core/t/feature-system-bundle-v1-foreign-arena-fixture.ss",
         ":bundle_v1_scheme_image_harness_bin",
         "@gerbil_poo_sources//:gerbil.pkg",
+        "//:core/gerbil.pkg",
     ],
     data = [
         "//:gerbil_package_sources",
         "@gerbil_poo_sources//:sources",
+        "//:core_module_sources",
     ],
     script = "tests/bundle_v1_scheme_image_test.sh",
 )

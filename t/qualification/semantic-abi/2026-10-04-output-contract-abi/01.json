@@ -1,0 +1,239 @@
+{
+  "case": "chain",
+  "api": "async",
+  "index": 1,
+  "planSha256": "77419c82cce1e2bcb07a92d0abe174bab31983131d1f9c54641fc7ec688919e7",
+  "artifactSha256": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",
+  "passed": true,
+  "raw": "{\"status\":\"complete\",\"rows\":[[\"r7\",\"s4\"],[\"r7\",\"t9\"]]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.20184891700000662
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.20206499999994776
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.7097830420002538
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.7097961670001496
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7098052920000555
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8101902920002431
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8102380000000267
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8102622090000295
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8135195840000051
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8135391670002718
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8135480000000825
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8289694999998574
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8289922500002831
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8290014590002102
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8290093750001688
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8290174590001698
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8290249589999803
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8923031670001365
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8923255419999805
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8923351250000451
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8923434590001307
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8923512920000576
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8923585000002277
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8924182499999915
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8924285420002889
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.892436292000184
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.892443749999984
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.8924521670001013
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.8924606250002398
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.8925174589999187
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.892539625000154
+    }
+  ],
+  "contentGapsSeconds": [
+    0.7098052920000555,
+    0.10038500000018757,
+    4.770799978359719e-05,
+    2.420900000288384e-05,
+    0.003257374999975582,
+    1.9583000266720774e-05,
+    8.832999810692854e-06,
+    0.015421499999774824,
+    2.2750000425730832e-05,
+    9.208999927068362e-06,
+    7.915999958640896e-06,
+    8.084000000962988e-06,
+    7.499999810534064e-06,
+    0.06327820800015616,
+    2.2374999844032573e-05,
+    9.583000064594671e-06,
+    8.334000085596927e-06,
+    7.83299992690445e-06,
+    7.208000170066953e-06,
+    5.9749999763880624e-05,
+    1.0292000297340564e-05,
+    7.749999895168003e-06,
+    7.457999799953541e-06
+  ],
+  "responseId": "738e899c-bd66-4c70-a44d-2c197e045a5a",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9683,
+    "input_tokens_details": {
+      "cached_tokens": 9472
+    },
+    "output_tokens": 23,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9706
+  },
+  "seconds": 0.8925424170001861,
+  "deliveredObservation": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "r7",
+          "s4"
+        ],
+        [
+          "r7",
+          "t9"
+        ]
+      ]
+    },
+    "receipt": {
+      "verdict": "consistent",
+      "schema": "poo-flow.semantic-observation",
+      "bindingDigest": "d036028733ce2553548bed9dd8e6dab0c88cd3260d003555a53cdd4bead4ed35",
+      "verification": "valid",
+      "operation": "temporal.observe",
+      "requestDigest": "6fdb9fb70257005c4c1f850c6463eebe677e9d8d77b39f2408dc6e4e0a567b58",
+      "difference": false,
+      "candidateValid": true
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "nativeObservationSeconds": 0.057247917000040616,
+  "result": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "r7",
+          "s4"
+        ],
+        [
+          "r7",
+          "t9"
+        ]
+      ]
+    },
+    "receipt": {
+      "verdict": "consistent",
+      "schema": "poo-flow.semantic-observation",
+      "bindingDigest": "d036028733ce2553548bed9dd8e6dab0c88cd3260d003555a53cdd4bead4ed35",
+      "verification": "valid",
+      "operation": "temporal.observe",
+      "requestDigest": "6fdb9fb70257005c4c1f850c6463eebe677e9d8d77b39f2408dc6e4e0a567b58",
+      "difference": false,
+      "candidateValid": true
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "sourceRebinding": {
+    "requestDigest": "0883aba32c4628184f9346b8f7f2dc067985c4db1261c03a3e5e2e97a45c5b92",
+    "difference": false,
+    "operation": "temporal.observe",
+    "candidateValid": true,
+    "bindingDigest": "761353d8113611051ab2c7b7973f1c58640fd155d33a4dbd93a4e290f81f99b2",
+    "verdict": "consistent",
+    "schema": "poo-flow.semantic-observation",
+    "verification": "valid"
+  },
+  "callSeconds": 0.9981698749998031
+}

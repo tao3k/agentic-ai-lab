@@ -2,14 +2,19 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+TITLE: poo-flow
+#+TITLE: agentic-ai-lab
 #+OPTIONS: toc:2
 
 * GitHub Description
 Scheme-driven higher-order strategy control plane built on functional composition and Gerbil POO prototype objects for agent loops, workflows, CI/CD, deploy, sandbox, session, policy, and proof-backed flow systems.
 
+* Identity
+
+Repository, package and cross-language identities follow
+[[file:docs/10-19-design/10.09-agentic-ai-lab-identity.org][the Agentic AI Lab namespace contract]]. Yuanxu remains an independent library.
+
 * Overview
-=poo-flow= is a Gerbil Scheme control plane for higher-order strategy systems. It combines functional flow composition with Gerbil POO prototype objects so policies, profiles, modules, workflows, sessions, and loop descriptors can be expressed as inspectable values before they are projected to heavier runtimes.
+=agentic-ai-lab= is a Gerbil Scheme control plane for higher-order strategy systems. It combines functional flow composition with Gerbil POO prototype objects so policies, profiles, modules, workflows, sessions, and loop descriptors can be expressed as inspectable values before they are projected to heavier runtimes.
 
 The project is not only an agent-loop or workflow-configuration library. Its intended surface is broader:
 
@@ -34,8 +39,8 @@ Public extension APIs should stay POO-native. Raw alist DSLs, ad hoc patch langu
 
 * Enterprise Security Governance
 
-Governance is a first-class POO Flow module, not a Cedar wrapper and not a
-documentation label.  A =PooFlowGovernanceProfile.= carries typed Sources,
+Governance is a first-class Agentic AI Lab module, not a Cedar wrapper and not a
+documentation label.  A =AgenticAILabGovernanceProfile.= carries typed Sources,
 preconditions, threats and a ThreatModel.  Its assessment is an inert value:
 an active =high= or =critical= threat in the =exposed= or =realized= phase
 blocks Provider handoff, while the assessment itself never executes an action
@@ -47,37 +52,36 @@ silently claim another tool's guarantee:
 | Layer | Owner | What it establishes | What it cannot establish |
 | POO Governance | =modules/governance/= | Typed Profile, threat, precondition, assessment and handoff readiness. | Runtime authorization or execution. |
 | Cedar Provider | =modules/authorization/providers/cedar/= and the independent Runtime Host | Exact composition/assessment/proof identity binding and policy authorization. | Mathematical proof of the whole control plane. |
-| TLA+ / TLC | =packages/proofs/tla/GovernanceCore.tla= | Finite-state transition safety, terminal-state reachability and model-checking counterexamples. | General theorems outside the checked state space. |
-| Lean | =packages/proofs/lean/PooFlowProof/= | General Governance, authority, separation-of-duties and enterprise-assurance theorems. | A fresh runtime decision or an external fact that was never supplied. |
+| Quint | [[file:packages/proofs/quint/README.org][Finite proof inventory]] | Finite-state transition safety, terminal-state reachability and model-checking counterexamples. | General theorems outside the checked state space. |
+| Lean | =packages/proofs/lean/AgenticAILabProof/= | General Governance, authority, separation-of-duties and enterprise-assurance theorems. | A fresh runtime decision or an external fact that was never supplied. |
 
 The intended evidence chain is:
 
 #+begin_src text
 Lambda Scenario / Profile / Case declarations
-  -> POO Flow typed Governance assessment
-  -> TLA+ transition-model qualification
+  -> Agentic AI Lab typed Governance assessment
+  -> Quint transition-model qualification
   -> Lean enterprise assurance obligations
   -> identity-bound Cedar Provider handoff
   -> independent runtime authorization or rejection
 #+end_src
 
-These arrows are admission boundaries, not authority inheritance.  TLA+ does
+These arrows are admission boundaries, not authority inheritance.  Quint does
 not authorize a Cedar request; Lean does not manufacture observations; Cedar
 does not reinterpret the Profile or threat graph; and a Scheme assessment
 always reports =runtime-executed?: #f=.  The enterprise Lean closure makes
 this explicit in
-[[file:packages/proofs/lean/PooFlowProof/Enterprise/GovernanceThreatAssuranceClosure.lean][GovernanceThreatAssuranceClosure]]:
+[[file:packages/proofs/lean/AgenticAILabProof/Enterprise/GovernanceThreatAssuranceClosure.lean][GovernanceThreatAssuranceClosure]]:
 typed security-graph closure, threat-intelligence provenance, snapshot
 identity and separation of duties are required, and an active critical threat
 contradicts Provider-handoff eligibility.
 
-The executable model gate is =just check-governance-model=.  Gerbil Parser
-owns TLA+ syntax and byte-exact round-trip qualification; official TLC owns
-state exploration.  The checked receipt is written to
-=.ci/governance/tlc-receipt.ss= with source, configuration, tool and output
-digests plus state counts, graph depth and the final admission bit.  A parser
-success, a TLC banner, or a zero exit status alone is not accepted as model
-closure.
+The executable model gate is =just check-governance-model=. Quint owns the
+finite model and its verification entry point. The shared checker pins Quint
+0.33.0 and backend distribution 0.62.1, checks declared properties and binds
+all local model sources, versions, state counts and output identity into an
+inert Scheme v1 receipt. Receipts are local or CI artifacts. Admission requires
+explicit completion and an empty state frontier.
 
 * AI Strategy/Policy Boundary
 The problem this project targets is AI strategy/policy rigor. This should not be described as a worker-execution problem. A worker can execute a unit of work, but the hard part is deciding whether an AI-generated strategy is allowed to start, which policy it refines, which sandbox it may use, which session facts it depends on, and which loop state it may advance.
@@ -89,18 +93,18 @@ In this repository, =agent-core= should be read through three control-plane axes
 | Sandbox | Tool, file, capability, and backend placement policy. | Does the selected profile stay within allowed scope? |
 | Loop | Strategy selection, progress, retries, completion, and runtime unlock. | Does the next strategy step preserve policy and state invariants? |
 
-This is why =poo-flow= is stronger than a generic worker runner. It does not only start work. It builds and checks the strategy/policy contract that says whether the work should be allowed to exist.
+This is why =agentic-ai-lab= is stronger than a generic worker runner. It does not only start work. It builds and checks the strategy/policy contract that says whether the work should be allowed to exist.
 
 * POO/C4 Linearization
 
 C4 linearization prepares composed POO facts and deterministic definition
 precedence.  It is not a private graph or loop-engine algorithm layer.  Loop
 and dependency-graph validation is consumed through the public =src/graph=
-POO API, especially =poo-flow-graph-loop-analysis= receipts for cycle,
+POO API, especially =yuanxu-graph-loop-analysis= receipts for cycle,
 strong-component, condensation, topological-order, and diagnostic questions.
 Downstream workflow and loop modules project their facts into that API instead
 of maintaining separate graph semantics.
-=poo-flow= relies on Gerbil POO and C4-style deterministic linearization for descriptor inheritance and role precedence. This matters when several independently-authored policy fragments apply to the same object and the system must know which inherited slot wins.
+=agentic-ai-lab= relies on Gerbil POO and C4-style deterministic linearization for descriptor inheritance and role precedence. This matters when several independently-authored policy fragments apply to the same object and the system must know which inherited slot wins.
 
 The important boundary is:
 
@@ -126,7 +130,7 @@ POO prototype objects
 #+end_src
 
 Gerbil v0.19 is the project baseline. =gerbil-poo= delegates prototype
-precedence to the native =c4-linearize= implementation; POO Flow projects
+precedence to the native =c4-linearize= implementation; Agentic AI Lab projects
 that order and does not implement another linearizer.
 
 * Proof Direction
@@ -161,10 +165,10 @@ The current Lean proof package lives under =packages/proofs/lean=. The active Po
 | =ScenarioProof= | Scenario-level proof shape for user-interface cases. |
 
 * Reference Evidence Boundary
-Production systems such as OpenRATH are useful references, but they are not proof authorities for =poo-flow=. They can suggest real control-plane cases, lifecycle shapes, and missing checks. They cannot by themselves prove a POO flow claim.
+Production systems such as OpenRATH are useful references, but they are not proof authorities for =agentic-ai-lab=. They can suggest real control-plane cases, lifecycle shapes, and missing checks. They cannot by themselves prove a Agentic AI Lab claim.
 
 #+begin_src typst
-$ upright("PooFlowOwnedFact")(C) => C
+$ upright("AgenticAILabOwnedFact")(C) => C
   upright("ReferenceObservation")(R, C) =>.not C
   upright("VerifiedFromReference")(r) => upright("AdoptionCertificate")(r)
   upright("AdoptionCertificate")(r) => C $
@@ -205,7 +209,7 @@ This keeps language responsibilities clear. Scheme is used where Lisp and POO ar
 Runtime handoff should be explicit. Scheme should not pretend to execute runtime effects that belong to Marlin or Rust, and runtime code should not manufacture Scheme-side proof facts.
 
 * Agent Contract
-Agents that write or edit =poo-flow= policy, strategy, workflow, session, or UI configuration should treat the proof layer as a contract.
+Agents that write or edit =agentic-ai-lab= policy, strategy, workflow, session, or UI configuration should treat the proof layer as a contract.
 
 | Agent Question | Required Evidence |
 | Which module starts next? | =CanStart= or a theorem implying it. |
@@ -223,22 +227,22 @@ General coding agents and harness frameworks are useful, but they solve a differ
 | System Class | What It Gives | What It Does Not Prove By Default |
 | Codex / Claude-style coding agents | Code generation, tool calls, repository edits, reasoning traces. | Project-specific AI strategy/policy refinement, session lifecycle safety, and sandbox subset proofs. |
 | Pi / Flue-style harnesses | Sessions, tools, skills, instructions, filesystem access, sandboxed execution, durability. | POO/C4-linearized policy objects and Lean-dischargeable proof obligations. |
-| OpenRATH-style session frameworks | Explicit multi-agent, multi-session runtime state; session, sandbox, memory, workflow, selector concepts. | POO flow correctness unless adopted through this project's proof boundary. |
+| OpenRATH-style session frameworks | Explicit multi-agent, multi-session runtime state; session, sandbox, memory, workflow, selector concepts. | Agentic AI Lab correctness unless adopted through this project's proof boundary. |
 
 OpenRATH and Flue are valuable reference frameworks because they expose real production shapes: session graphs, sandbox placement, durable execution, tools, skills, workflows, and selectors. They should influence our cases and tests. They should not be treated as verification authorities.
 
 Concrete references:
-- [[https://github.com/Rath-Team/OpenRath][OpenRATH]] shows a production-oriented vocabulary where session, sandbox, memory, tool, agent, workflow, and selector are explicit runtime objects. POO Flow should use that as reference evidence for cases, not as a source of proof facts.
-- [[https://flueframework.com/][Flue]] shows the harness side: durable sessions, tools, skills, filesystem access, sandbox runtime, and deployable agent workflows. POO Flow should use that to sharpen session/sandbox/loop obligations, not to replace Lean discharge.
+- [[https://github.com/Rath-Team/OpenRath][OpenRATH]] shows a production-oriented vocabulary where session, sandbox, memory, tool, agent, workflow, and selector are explicit runtime objects. Agentic AI Lab should use that as reference evidence for cases, not as a source of proof facts.
+- [[https://flueframework.com/][Flue]] shows the harness side: durable sessions, tools, skills, filesystem access, sandbox runtime, and deployable agent workflows. Agentic AI Lab should use that to sharpen session/sandbox/loop obligations, not to replace Lean discharge.
 
-The detailed evidence record lives in [[file:docs/10-19-design/10.06-poo-module-system/56-ai-strategy-policy-support-evidence.org][10.06.56 AI Strategy/Policy Support Evidence]]. It separates external observations, candidate cases, Scheme facts, Lean discharges, and runtime accept gates.
+The detailed evidence record lives in [[file:core/module-system/design/56-ai-strategy-policy-support-evidence.org][10.06.56 AI Strategy/Policy Support Evidence]]. It separates external observations, candidate cases, Scheme facts, Lean discharges, and runtime accept gates.
 
-The =user-interface/= tree is also a community profile library, not only an example folder. See [[file:docs/10-19-design/10.06-poo-module-system/57-user-interface-profile-library.org][10.06.57 User Interface Profile Library]] for the contribution model: users contribute reusable profiles, strategies, policies, and scenarios; downstream users import them through the library and extend them with POO objects. Core and community profiles must pass tests and carry Lean proof status before they are treated as public reusable library surface.
+The =user-interface/= tree is also a community profile library, not only an example folder. See [[file:core/module-system/design/57-user-interface-profile-library.org][10.06.57 User Interface Profile Library]] for the contribution model: users contribute reusable profiles, strategies, policies, and scenarios; downstream users import them through the library and extend them with POO objects. Core and community profiles must pass tests and carry Lean proof status before they are treated as public reusable library surface.
 * Project Shape
 The important source areas are:
 
-- =src/core/= for flow, task, plan, role, policy, receipt, runtime protocol, and runner concepts;
-- =core/module-system/= for reusable POO module contracts, catalog, lazy loading, and projection mechanisms; =src/authoring/= and =src/user-interface/= for POO Flow module policy and user-facing adapters;
+- =modules/workflow/control-plane/= for flow, task, plan, role, policy, receipt, runtime protocol, and runner concepts;
+- =core/module-system/= for reusable POO module contracts, catalog, lazy loading, and projection mechanisms; =modules/module-authoring/= and =modules/user-interface/= for Agentic AI Lab module policy and user-facing adapters;
 - =modules/= for concrete workflow, sandbox, session, loop, and backend modules;
 - =user-interface/= for example downstream configuration surfaces;
 - =packages/proofs/lean/= for the Lean proof package;
@@ -249,13 +253,13 @@ The important source areas are:
 Common focused checks:
 
 #+begin_src shell
-just check-lean-module PooFlowProof.PooC4.TemporalCausality
+just check-lean-module AgenticAILabProof.PooC4.TemporalCausality
 just check-healthcare-lean
 #+end_src
 
 Lean validation is module-atomic by default: each command builds only the named
 module or Lake-declared module bundle and its native import closure.  The full
-=PooFlowProof.lean= aggregate is an explicit integration qualification,
+=AgenticAILabProof.lean= aggregate is an explicit integration qualification,
 available as =just check-lean-all=; ordinary pull requests do not compile all
 proof families merely because one Case-owned theorem changed.
 
@@ -263,24 +267,24 @@ Proof-bearing POO owners map directly to native Lake libraries:
 
 | POO owner | Lake library target |
 |-----------+---------------------|
-| =module-system= | =PooFlowModuleSystemProof= |
-| =governance= | =PooFlowModuleGovernanceProof= |
-| =temporal-causality= | =PooFlowModuleTemporalCausalityProof= |
-| =authorization= | =PooFlowModuleAuthorizationProof= |
-| =loop-engine= | =PooFlowModuleLoopEngineProof= |
-| =session= | =PooFlowModuleSessionProof= |
-| =sandbox-core= | =PooFlowModuleSandboxCoreProof= |
-| =funflow= | =PooFlowModuleFunflowProof= |
-| =workflow= | =PooFlowModuleWorkflowProof= |
-| =memory-core= | =PooFlowModuleMemoryCoreProof= |
+| =module-system= | =AgenticAILabModuleSystemProof= |
+| =governance= | =AgenticAILabModuleGovernanceProof= |
+| =temporal-causality= | =AgenticAILabModuleTemporalCausalityProof= |
+| =authorization= | =AgenticAILabModuleAuthorizationProof= |
+| =loop-engine= | =AgenticAILabModuleLoopEngineProof= |
+| =session= | =AgenticAILabModuleSessionProof= |
+| =sandbox-core= | =AgenticAILabModuleSandboxCoreProof= |
+| =funflow= | =AgenticAILabModuleFunflowProof= |
+| =workflow= | =AgenticAILabModuleWorkflowProof= |
+| =memory-core= | =AgenticAILabModuleMemoryCoreProof= |
 
 Modules without a Lean-owned contract do not receive placeholder proof
 libraries.  A Scenario composes module libraries; it does not become the owner
 of their proof graph.
 
 #+begin_src shell
-asp org lint docs/10-19-design/10.06-poo-module-system/55-pooc4-proof-architecture.org
-asp org lint docs/10-19-design/10.06-poo-module-system/60-pooc4-policy-composition-proof.org
+asp org lint core/module-system/design/55-pooc4-proof-architecture.org
+asp org lint core/module-system/design/60-pooc4-policy-composition-proof.org
 #+end_src
 
 #+begin_src shell
@@ -292,24 +296,29 @@ The package =build.ss= declares native targets through the =exclude-modules=
 and =extra-spec= POO slots of =:asp-gerbil-scheme/building-api=. The upstream
 catalog owns discovery; there is no downstream =native-spec-projector= or
 second source scan. ASP Scheme owns shared build and testing
-machinery; POO Flow retains its domain modules, test cases, and performance
+machinery; Agentic AI Lab retains its domain modules, test cases, and performance
 contracts. There is no package-local CLI support or testing framework wrapper.
 
 The default =just clean/deps/build/test= recipes call Gerbil's native package
-commands. =just rebuild= runs clean, dependency installation, build, and the
-unit suite sequentially, stopping at the first failure. =just check= runs the
+commands. =just build= incrementally compiles Core and the product library.
+=just clean-core= explicitly removes Core outputs. =just rebuild= cleans both
+packages, installs dependencies, builds, and runs the unit suite sequentially,
+stopping at the first failure. =just check= runs the
 native build and unit suite; neither command invokes Bazel.
 
 Run the single native test entrypoint and Scheme scripts through the package
 environment:
 
 #+begin_src shell
+just deps-dev
 just test
-gerbil env ./unit-tests.ss
 gerbil env gerbil interactive t/fixtures/cli-run-smoke.ss 3
 #+end_src
 
-=unit-tests.ss= is the only package test interface. It applies ASP Scheme's
+=dev/unit-tests.ss= is the optional package test interface. Its ASP dependency
+is owned by =dev/gerbil.pkg=; the library build uses Core's source closure and
+native build interface without importing ASP. =just deps-dev= installs the
+development dependencies separately. It applies ASP Scheme's
 default POO Testing profile to the current Gambit runtime, initializes
 =clan/testing=, and leaves recursive =*-test.ss= discovery to that upstream
 framework. =just test= and =just test-performance= fail closed before Scheme
@@ -337,19 +346,19 @@ remaining tag conflict.
 The design record lives under =docs/10-19-design=. Use these as entry points:
 
 - [[file:docs/10-19-design/10.01-gerbil-poo-funflow-control-plane.org][10.01 Gerbil POO Funflow Control Plane]]
-- [[file:docs/10-19-design/10.06-poo-module-system/00-index.org][10.06 poo-flow Module System]]
-- [[file:docs/10-19-design/10.06-poo-module-system/03-gerbil-scheme-c4-foundation.org][10.06.03 Gerbil Scheme C4 Foundation]]
-- [[file:docs/10-19-design/10.06-poo-module-system/29-gerbil-poo-programming-guidelines.org][10.06.29 Gerbil POO Programming Guidelines]]
-- [[file:docs/10-19-design/10.06-poo-module-system/44-current-project-programming-style.org][10.06.44 Current Project Programming Style]]
-- [[file:docs/10-19-design/10.06-poo-module-system/55-pooc4-proof-architecture.org][10.06.55 PooC4 Proof Architecture]]
-- [[file:docs/10-19-design/10.06-poo-module-system/56-pooc4-formal-semantics.org][10.06.56 PooC4 Formal Semantics]]
-- [[file:docs/10-19-design/10.06-poo-module-system/57-pooc4-lean-proof-implementation.org][10.06.57 PooC4 Lean Proof Implementation]]
-- [[file:docs/10-19-design/10.06-poo-module-system/58-pooc4-session-lifecycle-proof-link.org][10.06.58 PooC4 Session Lifecycle Proof Link]]
-- [[file:docs/10-19-design/10.06-poo-module-system/59-pooc4-typed-fact-contract.org][10.06.59 PooC4 Typed Fact Contract]]
-- [[file:docs/10-19-design/10.06-poo-module-system/60-pooc4-policy-composition-proof.org][10.06.60 PooC4 Policy Composition Proof]]
+- [[file:core/module-system/design/00-index.org][10.06 agentic-ai-lab Module System]]
+- [[file:core/module-system/design/03-gerbil-scheme-c4-foundation.org][10.06.03 Gerbil Scheme C4 Foundation]]
+- [[file:core/module-system/design/29-gerbil-poo-programming-guidelines.org][10.06.29 Gerbil POO Programming Guidelines]]
+- [[file:core/module-system/design/44-current-project-programming-style.org][10.06.44 Current Project Programming Style]]
+- [[file:core/module-system/design/55-pooc4-proof-architecture.org][10.06.55 PooC4 Proof Architecture]]
+- [[file:core/module-system/design/56-pooc4-formal-semantics.org][10.06.56 PooC4 Formal Semantics]]
+- [[file:core/module-system/design/57-pooc4-lean-proof-implementation.org][10.06.57 PooC4 Lean Proof Implementation]]
+- [[file:core/module-system/design/58-pooc4-session-lifecycle-proof-link.org][10.06.58 PooC4 Session Lifecycle Proof Link]]
+- [[file:core/module-system/design/59-pooc4-typed-fact-contract.org][10.06.59 PooC4 Typed Fact Contract]]
+- [[file:core/module-system/design/60-pooc4-policy-composition-proof.org][10.06.60 PooC4 Policy Composition Proof]]
 
 * Non-Goals
-=poo-flow= should not become:
+=agentic-ai-lab= should not become:
 
 - a shell-script collection;
 - a raw data DSL with POO hidden behind it;

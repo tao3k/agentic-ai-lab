@@ -6,16 +6,16 @@
 
 * Purpose
 
-This document records how a runtime language should integrate with POO Flow.
+This document records how a runtime language should integrate with Agentic AI Lab.
 The goal is to make Python, Rust, Marlin, and future runtimes cheap to attach
 without asking them to reinvent policy, strategy, or validation semantics.
 
-Runtime languages implement the execution substrate. They do not own POO Flow
+Runtime languages implement the execution substrate. They do not own Agentic AI Lab
 policy semantics.
 
 * Ownership Boundary
 
-POO Flow keeps semantic authority in the upstream control plane:
+Agentic AI Lab keeps semantic authority in the upstream control plane:
 
 - Scheme / POO owns policy families, strategy combinators, object extension,
   and policy-native composition.
@@ -39,14 +39,14 @@ surfaces.
 
 A runtime language adapter should provide these capabilities:
 
-- Load and call the stable POO Flow C ABI.
+- Load and call the stable Agentic AI Lab C ABI.
 - Validate graph plans through C ABI receipts, not through language-local
   schema models.
 - Execute graph nodes and stream typed runtime chunks.
 - Persist checkpoints, event logs, state, and replay cursors.
 - Support async execution, cancellation, backpressure, and task supervision
   where the runtime language supports it.
-- Expose conformance tests that prove the adapter obeys the POO Flow runtime
+- Expose conformance tests that prove the adapter obeys the Agentic AI Lab runtime
   contract.
 
 The adapter may use mature runtime libraries when they improve substrate
@@ -186,7 +186,7 @@ baseline are documented in
 [[file:14-runtime-benchmark-surface.org::*AnyIO micro qualification][RFC14 AnyIO and burst benchmark evidence]].
 
 #+begin_src sh
-/usr/bin/time -p uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks anyio-runtime --observations-per-side 10000
+/usr/bin/time -p uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks anyio-runtime --observations-per-side 10000
 #+end_src
 
 | Phase | Candidate median (ns/item) | Native reference median (ns/item) | Ratio | Threshold | Result |
@@ -220,7 +220,7 @@ semantic change is introduced here.
 *** Large-state Program-to-executor copy boundary
 The canonical Python runtime qualification command is:
 #+begin_src sh
-/usr/bin/time -p direnv exec . uv run --project packages/python-runtime python -m poo_flow_runtime.benchmarks large-state-copy --observations-per-side 5000 --max-concurrency 12 --payload-field-count 1024 --payload-field-bytes 16
+/usr/bin/time -p direnv exec . uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks large-state-copy --observations-per-side 5000 --max-concurrency 12 --payload-field-count 1024 --payload-field-bytes 16
 #+end_src
 
 This qualifies the Python runtime's async Program-to-executor ownership-transfer boundary. It is not a C ABI benchmark, does not define a JSON handoff protocol, and does not make JSON part of the ABI. The complete matrix, canonical receipts, memory model, and interpretation are owned by =14-runtime-benchmark-surface.org= under =Large-state Program-to-executor copy qualification=.
@@ -246,7 +246,7 @@ runtime selection completed with =189 passed, 8 skipped, 6 deselected in
 The full suite is not repository-wide green: it completed with =190 passed, 7
 skipped, 6 failed=.  All six failures are caused by the current dirty
 module-system state, where =gxi= cannot load
-=:poo-flow/src/user-interface/init-syntax= or the durable modules.  This receipt
+=:agentic-ai-lab/src/user-interface/init-syntax= or the durable modules.  This receipt
 therefore qualifies the Python async/cancellation/backpressure substrate only;
 it does not introduce a second runtime, change C ABI semantics, or claim full
 repository acceptance.
@@ -261,14 +261,14 @@ Runtime adapters must not:
 - make JSON the ABI
 - make a durable database define graph semantics
 - bind users to LangGraph, LangChain, Temporal, Turso, or any other external
-  framework as the POO Flow semantic owner
+  framework as the Agentic AI Lab semantic owner
 
 * Python Package Shape
 
 Recommended layout:
 
 #+begin_src text
-packages/python-runtime/src/poo_flow_runtime/
+packages/python-runtime/src/agentic_ai_lab_runtime/
   bindings.py              # default C ABI backend
   bindings_cffi.py         # optional cffi backend
   runtime_graph.py         # zero-dependency graph executor

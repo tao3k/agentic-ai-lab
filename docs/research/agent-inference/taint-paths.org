@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: taint path qualification IRIS: specifications, paths and separate triage
+#+DATE: 2026-10-09
+#+STATUS: dedicated method reading; finite graph transfer implemented
+
+* Primary method and evidence
+
+Ziyang Li, Saikat Dutta and Mayur Naik, IRIS, ICLR 2025
+([[https://proceedings.iclr.cc/paper_files/paper/2025/file/582d4e27fa24168f3af1f4582655034b-Paper-Conference.pdf][primary paper]]). Section 3.1 defines source/sink pairs with a path whose
+vertices avoid sanitizer nodes. Sections 3.2–3.5 separate specification mining,
+CodeQL analysis and contextual triage. Table 1 reports 55/120 detections with
+GPT-4 versus CodeQL's 27/120, with AvgFDR 84.82% versus 90.03%; section 5.2
+explains that this label-based FDR is coarse. These results concern Java and
+the paper's pipeline, not this Scheme application.
+
+Section 3.2 identifies specifications by node type, API signature/position and
+role. Section 3.3 infers source/sink labels, explicitly excluding sanitizer
+inference. Our caller-supplied sanitizer replacement is an executor stress
+control, not a replication of model-generated sanitizer labels. A future API
+adapter must preserve argument/parameter position rather than label an entire
+method indiscriminately.
+
+* Transfer implemented here
+
+[[file:../../../applications/taint-paths.ss][taint-paths.ss]] constructs an ordinary Program from caller-supplied finite
+edges, source labels, sink labels and sanitizers. Source seeding requires an
+unsanitized source. Each recursive step requires an unsanitized target, so an
+interior sanitizer cannot be lost by projecting source/sink pairs. An alternative
+clean path remains eligible. A source that is also a sink has a zero-edge witness
+when it is not sanitized. The resulting =taint_alert= denotes a graph/specification
+observation; it is not a validated security vulnerability.
+
+[[file:../../../packages/proofs/lean/UnsanitizedPaths.lean][UnsanitizedPaths]] proves clean endpoints, conversion in both directions to
+reachability over filtered edges, their equivalence, sanitizer antitonicity and
+edge monotonicity. Sanitizer replacement can withdraw answers, so the application
+uses existing stratified Session recomputation. Existing SessionTransaction
+Quint owns candidate source admission, refusal and publication; it is checked
+alongside this application without a second Session state-machine replica.
+
+[[file:../../../t/qualification/ascent-taint-paths-test.ss][Native qualification]] checks all 64 non-self-edge three-node graphs and all
+eight sanitizer sets against independent graph search. Interior blocking,
+bypass paths, zero-edge witnesses, source replacement, zero-budget refusal and
+held results are separate controls. These are 512 finite semantic comparisons,
+not the paper's real-Java benchmark.
+
+* Architecture work still required
+
+A real-code integration must supply source-bound graph extraction and explicit
+API-position specifications, retain raw model labels separately from accepted
+facts, and compare raw alert paths before contextual triage. Graph generation,
+CWE labels, CodeQL compatibility and human vulnerability assessment each need
+their own evidence. This application admits none of those capabilities yet.

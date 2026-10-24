@@ -2,11 +2,11 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/proof/generated/proof-case-vector-v1
-        :poo-flow/src/proof/proof-case-vector)
+        :agentic-ai-lab/modules/proof/projections/generated/proof-case-vector-v1
+        :agentic-ai-lab/modules/proof/projections/proof-case-vector)
 
 (export proof-case-vector-test
         canonical-proof-case)
@@ -21,7 +21,7 @@
     (apply string-append (make-list 32 pair))))
 
 (def (make-proof-case token-digest-value)
-  (.o (kind 'poo-flow-authorized-effect-proof-case)
+  (.o (kind 'agentic-ai-lab-authorized-effect-proof-case)
       (token-digest token-digest-value)
       (policy-revision (digest-byte #x22))
       (effect-digest (digest-byte #x33))
@@ -46,36 +46,36 @@
 
 (def proof-case-vector-test
   (test-suite "AC-09 Scheme native proof vector"
-    (poo-flow-test-case "caller-owned write follows the canonical layout"
-      (let ((vector (make-u8vector poo-flow-proof-case-vector-size #xff))
-            (repeated (make-u8vector poo-flow-proof-case-vector-size #x5a)))
-        (check (poo-flow-proof-case-vector-write! canonical-proof-case vector)
+    (yuanxu-test-case "caller-owned write follows the canonical layout"
+      (let ((vector (make-u8vector agentic-ai-lab-proof-case-vector-size #xff))
+            (repeated (make-u8vector agentic-ai-lab-proof-case-vector-size #x5a)))
+        (check (agentic-ai-lab-proof-case-vector-write! canonical-proof-case vector)
                => vector)
-        (poo-flow-proof-case-vector-write! canonical-proof-case repeated)
+        (agentic-ai-lab-proof-case-vector-write! canonical-proof-case repeated)
         (check vector => repeated)
-        (check (poo-flow-proof-case-vector-digest vector)
-               => (poo-flow-proof-case-vector-digest repeated))
+        (check (agentic-ai-lab-proof-case-vector-digest vector)
+               => (agentic-ai-lab-proof-case-vector-digest repeated))
         (check (u8vector-length vector) => 424)
-        (check (u8vector-ref vector poo-flow-proof-field-abi-version-offset) => 1)
-        (check (u8vector-ref vector poo-flow-proof-field-case-kind-offset) => 1)
-        (check (u8vector-ref vector poo-flow-proof-field-token-digest-offset)
+        (check (u8vector-ref vector agentic-ai-lab-proof-field-abi-version-offset) => 1)
+        (check (u8vector-ref vector agentic-ai-lab-proof-field-case-kind-offset) => 1)
+        (check (u8vector-ref vector agentic-ai-lab-proof-field-token-digest-offset)
                => #x11)
-        (check (u8vector-ref vector poo-flow-proof-field-subject-binding-offset)
+        (check (u8vector-ref vector agentic-ai-lab-proof-field-subject-binding-offset)
                => #x66)
-        (check (u8vector-ref vector poo-flow-proof-field-resource-binding-offset)
+        (check (u8vector-ref vector agentic-ai-lab-proof-field-resource-binding-offset)
                => #x77)
-        (check (u8vector-ref vector poo-flow-proof-field-action-binding-offset)
+        (check (u8vector-ref vector agentic-ai-lab-proof-field-action-binding-offset)
                => #x88)
-        (check (u8vector-ref vector poo-flow-proof-field-reserved-offset) => 0)
-        (check (poo-flow-proof-case-vector-digest vector)
+        (check (u8vector-ref vector agentic-ai-lab-proof-field-reserved-offset) => 0)
+        (check (agentic-ai-lab-proof-case-vector-digest vector)
                => "970eaffbfaae38970e2107b89fa11258c6211a5c293a1e400a464527b7a0e44a")))
-    (poo-flow-test-case "wrong target size and malformed digests fail closed"
+    (yuanxu-test-case "wrong target size and malformed digests fail closed"
       (let* ((short-target (make-u8vector 423 0))
              (wrong-size
               (with-catch
                (lambda (failure) 'rejected)
                (lambda ()
-                 (poo-flow-proof-case-vector-write!
+                 (agentic-ai-lab-proof-case-vector-write!
                   canonical-proof-case short-target)
                  'accepted)))
              (malformed (make-proof-case (make-string 62 #\1)))
@@ -83,7 +83,7 @@
               (with-catch
                (lambda (failure) 'rejected)
                (lambda ()
-                 (poo-flow-proof-case-vector-write!
+                 (agentic-ai-lab-proof-case-vector-write!
                   malformed (make-u8vector 424 0))
                  'accepted))))
         (check wrong-size => 'rejected)

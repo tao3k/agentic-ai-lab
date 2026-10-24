@@ -1,0 +1,191 @@
+#+title: Context restriction and Data publication contract v1
+#+date: [2026-10-08]
+#+property: STATUS bounded-library-profile-implemented-publication-open
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Implemented Library slice
+
+[[file:../../src/semantic/context-restriction.ss][Context restriction]] implements RFC 91's equivalent restriction model as native
+POO objects and pure functions. Its finite profile names permitted readers and
+permitted destinations independently; disclosure requires membership in both.
+It does not express arbitrary reader/destination pair correlations. Empty sets
+mean no permitted disclosure. A common declared domain supplies the scope and
+lease-coordinate interpretation. Inputs from different domains cannot compose.
+The source Host must assign domains consistently; domain names do not authenticate
+source owners or clocks.
+
+Composition intersects readers and destinations, unions provenance identities,
+and intersects half-open lease intervals. Disjoint intervals reject. Refinement
+must retain all parent provenance, narrow both disclosure sets and narrow the
+lease. Widening cannot be disguised as inheritance or refinement. Declassification
+has no executable operation in this profile; it needs separate Authority and
+Evidence admission before implementation. Redaction and integrity-label semantics
+also remain outside this finite profile.
+
+The native flow decision binds restriction digest, exact source/content digests,
+principal, destination and declared evaluation coordinate. Eligible means those
+declared restrictions permit the flow at that coordinate. It does not authorize
+IO: source-authenticated, flow-admitted, action-authorized and durable remain
+false. A changed source/content changes the decision binding, but only a Host or
+Data coordinator can establish which source is current and fence later use.
+
+Six native cases, run from freshly compiled Gerbil package modules through the
+existing heap-fenced Just entry and unchanged five-second watchdog, cover restrictive composition, canonical ordering and algebra,
+widening/provenance/lease rejection, empty intersections and incomparable domains,
+lease boundaries and destination/principal denial, and material substitution or
+forged digest rejection. These are scoped executable controls, not a general
+Quint refinement proof or end-to-end IFC/publication qualification.
+
+* Fixed-v1 ABI and original consumer gate
+
+Runtime C dispatches =context.restriction.compose= and =context.flow.evaluate=
+through the existing Scheme byte boundary. Rust registers both operations;
+Python exposes =compose_context_restrictions= and
+=evaluate_declared_context_flow=. Requests have exact field sets and fixed v1
+schemas. =expectedRestrictionDigest= binds retained composition; changed or
+widened declarations with that retained digest reject. A false expectation asks
+for a fresh declaration evaluation and supplies no inherited authority.
+=declaredAt= is a caller-declared coordinate, never an effective Host clock.
+Extra authority or clock fields reject.
+
+The original MRR consumer composes restrictions carrying original Fact identities
+and binds source/output digests to native canonical original MRR Fact content.
+Seven flows cover lease, reader and destination boundaries and changed source
+or output content. Substituted material changes the decision identity; eligibility
+alone does not reject an unauthenticated material declaration. The original Fact
+and derivation remain in the Scheme oracle, which Python replays through the same
+native artifact. These are original Fact content bindings, not an authenticated
+Temporal source vector or Data frontier. All admission flags remain false.
+
+The existing consumer CI requires this oracle before Python replay. Fourteen
+Python cases cover composition, denial, exact-field rejection and original oracle
+replay. No new CI job, installer or protocol version is introduced. Native wire
+execution passed the existing five-second watchdog with final OK; fresh AOT Rust
+execution and Python oracle replay on the delivered head remain the closure gate.
+
+* Ownership of the next executable boundary
+
+| Owner | Required work |
+|-------+---------------|
+| Agentic AI Lab Library | Replay original proof; compare current applicability; canonicalize restrictions; emit a material-bound flow decision |
+| MRR runtime | Preserve original identities and typed candidate; invoke Library; transport exact immutable material and decision to Data |
+| MRR Data Backend/Protocols | Resolve protected material; own durable source/policy/grant frontier; recheck fences and lease in one conditional commit; persist pointer/history/outbox; recover |
+| Python Runtime | Exercise the Library and adapter contract; provider IO remains separate |
+
+Data =534afe6c= already supplies the shared conditional Backend with mandatory
+transactional authority generations, exact history and held-transaction Host
+validation. =SnapshotPublication= separately acknowledges physical closure
+transfer; it does not publish a mutable discovery pointer. The new Data source
+cut =844a1d74= adds atomic publication delivery and exact historical ACKs to that
+same Backend. Neither API grants IFC authority by itself. Host authentication,
+exact grant enrollment and synchronized native/source fences remain required.
+The Runtime C first-root store has a local pointer transaction but no unified
+Data protected-material/IFC commit. Neither is sufficient for this boundary.
+Do not introduce a second durable backend in MRR runtime or infer permission from
+B2's declared support inventory or native cut-binding selection.
+
+* Proposed typed commit input, still v1
+
+The Data owner must introduce a bounded typed protocol rather than accepting raw
+query JSON or a tool-supplied Boolean permit. The protocol carries:
+
+- immutable operation identity and complete request digest;
+- subject/scope, operation (replace or tombstone), expected pointer version and
+  exact predecessor receipt;
+- protected immutable candidate root, content digest and resolvable proof/journal
+  references; replacement must resolve material before selection;
+- the admitted dependency source vector with each original source identity,
+  digest and monotonic owner generation;
+- exact policy/grant generations and revocation fences;
+- restriction and flow-decision identities, actor, destination and lease;
+- the native proof/current-applicability binding and fixed-v1 transport identity.
+
+The source vector, policy/grant generations and effective clock come from trusted
+owner state. An ordinary model/query request cannot supply new registry state,
+advance a clock, create grants or declare itself authenticated. A tombstone needs
+its own authorized withdrawal intent; it is not an unsupported proof relabeled
+as successful publication. Proof admission, information-flow admission and
+conditional selection are separate decisions bound to one material payload.
+
+* Commit and recovery obligations
+
+1. Stage immutable blocks and proof material as unselected. Verify complete
+   resolution and content identity; staging grants no current selection.
+2. Under Data's coordinator transaction, read source/policy/grant frontier,
+   predecessor and effective clock. Check the source vector, pointer CAS, lease,
+   admitted IFC/authority and exact payload/actor/destination bindings. Stale,
+   conflicted, unavailable or denied inputs cannot select material.
+3. Atomically persist the new pointer or tombstone, immutable receipt and durable
+   outbox entry. Source/grant advancement must serialize against this same
+   coordinator; independent databases cannot provide this atomic boundary.
+4. Replaying the same operation/request returns the original receipt. Reusing
+   its identity with another payload rejects. Reordered delivery cannot regress
+   the selected frontier. Recovery preserves an unselected staged snapshot or
+   the entire committed receipt/pointer/outbox tuple, never a partial selection.
+5. The effect/disclosure executor consumes or rechecks this exact capability at
+   use. A read-current result is not permission for a later external effect.
+   Remote owners require their own lease/fence contract; local coordinator CAS
+   does not establish distributed instantaneous freshness.
+
+* Remaining acceptance gate
+
+Use the actual Data backend with matched original identities. Exercise concurrent
+source advance/grant revocation against commit, replacement and tombstone CAS,
+material/actor/destination substitution, expiry between check and use, unresolved
+proofs, duplicate/reordered outbox and crash/restart at every durable boundary.
+Rust owns backend semantic assertions; Python remains Library/adapter glue.
+Quint checks the bounded coordinator model and native/Data traces must replay
+that exact transition relation before a refinement claim. Keep five-second real
+progress, fixed versions and package-managed build/test entries. No logs belong
+in Git. Until these gates pass, B3 remains open.
+
+Local source and compiled-module startup attempts also failed the unchanged
+five-second gate before HARNESS. The compiled-module run passed once with
+MODULE-OK, HARNESS-OK, final OK and exit zero, but later attempts failed; this is
+not stable local startup qualification. Diagnostics found a concurrently changed
+global Homebrew runtime and active native compilation. No external processes or
+SDK installation were changed and no timeout was widened. Final-source native
+execution must qualify in the fixed SDK CI environment before delivery closes.
+
+* Executable publication stage
+
+The optional Rust =data-publication= adapter retains the original MRR family
+admission and an immutable Scheme v1 plan. A Host-enrolled grant CID commits to
+scope, operation, expected head, physical payload root, proof admission and full
+Context restriction/actor/destination declarations. Only necessary admissions
+with the exact source and physical content digest can construct a plan. Current
+proof and fresh Host-clock lease evaluation happen inside Data's held transaction.
+The Host advances Data fences before native source refresh; direct native changes
+that bypass that protocol are outside this synchronization guarantee.
+
+The original physical producer now executes native-to-Turso commit, exact replay
+without another clock read, delivery ACK, expired lease refusal, actual source
+correction, stale and refuted refusal and restart. These are required in the
+existing physical job. Their execution and delivered-head CI remain separate
+from adapter compilation and the isolated Data provider tests. A historical ACK
+never grants another external effect. Tombstones and declassification remain
+separate design/implementation gates.
+
+Publication requires distinct grant and source authority identities. Inside the
+held transaction, the source authority commitment must equal the Raw CID of the
+native current source digest. Missing guards and the interval after Data fence
+advance but before native source refresh refuse without a delivery. The physical
+producer requires an explicit mixed-source refusal marker. Turso internal
+registry versions match the original Data owner's lock; the resolved graph gate
+rejects provider version drift before execution.
+
+* Durable grant retirement and historical recovery
+
+MRR's native/Data qualification holds source proof and flow eligibility constant
+while the durable grant changes. Full authority generation prevents same-byte
+ABA. Retirement is terminal for its stable authority ID and stays mandatory
+for that home; a newly enrolled alias cannot bypass it. Refusal happens before
+fresh native validation, and creates neither replacement nor delivery.
+
+After restart and source correction, historical operation replay/ACK remains
+recoverable without fresh clock or validation. This recovers the exact original
+transaction, not permission to execute an external effect again. Authenticated
+grant issuance and content tombstone selection remain independent gates.

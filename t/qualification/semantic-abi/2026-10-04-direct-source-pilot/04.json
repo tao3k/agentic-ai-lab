@@ -1,0 +1,321 @@
+{
+  "case": "withdrawal",
+  "api": "sync",
+  "index": 4,
+  "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+  "artifactSha256": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c",
+  "passed": false,
+  "raw": "{\"status\": \"complete\", \"rows\": [[\"status\", \"complete\"], [\"rows\", \"[['k', 'm'], ['k', 'q']]\"]]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.29766654199920595
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.2976895830070134
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.5854151670064311
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.5854437079979107
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5854663750069449
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6315567499987083
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6366507079947041
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6595296250015963
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6595649170049
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.659583417000249
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6595995829993626
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6596166670060484
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6596329169988167
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6686626250011614
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6686849999969127
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.668698207999114
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6687109579943353
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6836376249993918
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6836606249999022
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6836739580030553
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6836852499982342
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6836968330026139
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6837085830047727
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7024426249990938
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.702479667001171
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7146002079971367
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7146919999941019
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7147356670029694
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7147746249975171
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7185827079956653
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7336012919986388
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7336286670033587
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7336432919983054
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7336564580036793
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7336680419975892
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7439101670024684
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7439412499952596
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7439611250010785
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.743976500001736
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.7607470000075409
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.7607910829974571
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.7608163749973755
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.7611593750043539
+    }
+  ],
+  "contentGapsSeconds": [
+    0.5854663750069449,
+    0.04609037499176338,
+    0.005093957995995879,
+    0.022878917006892152,
+    3.529200330376625e-05,
+    1.8499995348975062e-05,
+    1.6165999113582075e-05,
+    1.7084006685763597e-05,
+    1.6249992768280208e-05,
+    0.009029708002344705,
+    2.2374995751306415e-05,
+    1.3208002201281488e-05,
+    1.274999522138387e-05,
+    0.014926667005056515,
+    2.300000051036477e-05,
+    1.333300315309316e-05,
+    1.129199517890811e-05,
+    1.158300437964499e-05,
+    1.1750002158805728e-05,
+    0.01873404199432116,
+    3.704200207721442e-05,
+    0.012120540995965712,
+    9.179199696518481e-05,
+    4.366700886748731e-05,
+    3.895799454767257e-05,
+    0.0038080829981481656,
+    0.015018584002973512,
+    2.7375004719942808e-05,
+    1.462499494664371e-05,
+    1.3166005373932421e-05,
+    1.1583993909880519e-05,
+    0.010242125004879199,
+    3.1082992791198194e-05,
+    1.9875005818903446e-05,
+    1.5375000657513738e-05
+  ],
+  "responseId": "66b09957-e273-45b5-bffd-5d4e0c79df45",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9539,
+    "input_tokens_details": {
+      "cached_tokens": 9216
+    },
+    "output_tokens": 35,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9574
+  },
+  "seconds": 0.7611641670082463,
+  "deliveredObservation": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "complete"
+        ],
+        [
+          "rows",
+          "[['k', 'm'], ['k', 'q']]"
+        ]
+      ]
+    },
+    "receipt": {
+      "operation": "temporal.observe",
+      "requestDigest": "97632d69acb7150ce7b635718fa86e278a4f51e64d5c2fbc20aadf67a0fc2af6",
+      "difference": {
+        "index": 0,
+        "kind": "extra-row",
+        "observed": [
+          "status",
+          "complete"
+        ]
+      },
+      "candidateValid": true,
+      "verdict": "contradicted",
+      "schema": "poo-flow.semantic-observation",
+      "bindingDigest": "3ac3258f18bc480a3f90d4f1ddd376f72d4c4f61a53989786ed45e65062506c3",
+      "verification": "valid"
+    },
+    "artifactDigest": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c"
+  },
+  "nativeObservationSeconds": 0.22359908299404196,
+  "result": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "complete"
+        ],
+        [
+          "rows",
+          "[['k', 'm'], ['k', 'q']]"
+        ]
+      ]
+    },
+    "receipt": {
+      "operation": "temporal.observe",
+      "requestDigest": "97632d69acb7150ce7b635718fa86e278a4f51e64d5c2fbc20aadf67a0fc2af6",
+      "difference": {
+        "index": 0,
+        "kind": "extra-row",
+        "observed": [
+          "status",
+          "complete"
+        ]
+      },
+      "candidateValid": true,
+      "verdict": "contradicted",
+      "schema": "poo-flow.semantic-observation",
+      "bindingDigest": "3ac3258f18bc480a3f90d4f1ddd376f72d4c4f61a53989786ed45e65062506c3",
+      "verification": "valid"
+    },
+    "artifactDigest": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c"
+  },
+  "sourceRebinding": {
+    "verdict": "contradicted",
+    "schema": "poo-flow.semantic-observation",
+    "bindingDigest": "1862e2be14016ed0cefe488e55f4ed8c53bcab5e961d5fbf0ab058795bf8a79e",
+    "verification": "valid",
+    "operation": "temporal.observe",
+    "requestDigest": "76d13ccaeeb7e943df2dcaa2e691fcaa1b5995144448b8ba4aaeaf2c4f4736a2",
+    "difference": {
+      "observed": [
+        "status",
+        "complete"
+      ],
+      "index": 0,
+      "kind": "extra-row"
+    },
+    "candidateValid": true
+  },
+  "failure": "native semantic contradiction",
+  "callSeconds": 1.1701046249945648
+}

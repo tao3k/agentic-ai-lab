@@ -3,6 +3,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit validate)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Owner: Tutorial2 custom task alignment lives in this module.
 ;;; Boundary: core provides descriptor, strategy, runner, and adapter protocols.
 ;;; Import contract: users opt in through the module config/interface exports.
@@ -11,19 +15,19 @@
 ;;; Runtime contract: scheduler and plan semantics stay out of this extension.
 ;;; Policy evidence: tests should assert registry, task shape, and interpreter result.
 
-(import (only-in :poo-flow/src/core/task
+(import (only-in :yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
-                 default-task-family-registry make-task task-kind
+                 default-task-family-registry make-task TaskContract task-kind
                  task-request-operation task-request-payload)
-        (only-in :poo-flow/src/core/strategy
+        (only-in :yuanxu/modules/funflow/control-plane/strategy
                  make-strategy strategy-name strategy-capabilities
                  strategy-cache-policy strategy-failure-policy strategy-planner
                  make-local-eager-strategy)
-        (only-in :poo-flow/src/core/runtime-adapter make-request-only-adapter)
-        (only-in :poo-flow/src/core/config make-run-config)
-        (only-in :poo-flow/src/core/flow
-                 default-flow-declaration-registry task-flow)
-        :poo-flow/src/core/projection-syntax)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter make-request-only-adapter)
+        (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
+        (only-in :yuanxu/modules/funflow/control-plane/flow
+                 default-flow-declaration-registry FlowContract task-flow)
+        :yuanxu/modules/funflow/control-plane/projection-syntax)
 
 (export custom-task-family-descriptor
         make-custom-task-family-registry
@@ -93,7 +97,7 @@
     (make-run-config 'custom-local
                      (make-custom-enabled-strategy)
                      (make-request-only-adapter)
-                     (poo-flow-product-field-rows/tail
+                     (yuanxu-product-field-rows/tail
                       options
                       (runtime 'gerbil)
                       (extension 'custom-task))
@@ -143,28 +147,21 @@
 ;;; Boundary:
 ;;; - Custom task declarations remain request data.
 ;;; - This extension owns the Tutorial2 interpreter weave point.
-;; : (-> Symbol String Nat Contract Contract Task)
-(def (make-custom-repeat-task name text count input-contract output-contract)
-  (let (spec (make-custom-repeat-spec text count))
-    (make-task name
-               'custom
-               (list 'custom 'repeat spec)
-               input-contract
-               output-contract
-               (lambda (input)
-                 (string-append input
-                                (repeat-string
-                                 (custom-repeat-spec-text spec)
-                                 (custom-repeat-spec-count spec)))))))
+;; : (-> Symbol String Integer Task)
+(def make-custom-repeat-task
+  (validate (Fun TaskContract <- Symbol String Integer)
+    (lambda (name text count)
+      (def spec (make-custom-repeat-spec text count))
+      (make-task name 'custom (list 'custom 'repeat spec) (Fun String <- String)
+        (lambda (input)
+          (string-append input
+            (repeat-string (custom-repeat-spec-text spec) (custom-repeat-spec-count spec))))))))
 
 ;;; Boundary:
 ;;; - Public users construct a flow, not the raw custom task.
 ;;; - The task descriptor remains inspectable through =flow-steps=.
-;; : (-> Symbol String Nat Contract Contract Flow)
-(def (custom-repeat-flow name text count input-contract output-contract)
-  (task-flow name
-             (make-custom-repeat-task name
-                                      text
-                                      count
-                                      input-contract
-                                      output-contract)))
+;; : (-> Symbol String Integer Flow)
+(def custom-repeat-flow
+  (validate (Fun FlowContract <- Symbol String Integer)
+    (lambda (name text count)
+      (task-flow name (make-custom-repeat-task name text count)))))

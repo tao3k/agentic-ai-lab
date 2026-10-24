@@ -1,0 +1,78 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: Registered Host policy control through C/Python/Rust ABI v1
+
+* Qualified boundary
+
+The dedicated C Host entry registers native POO policy/observed-time snapshots.
+The read-only support guard consumes the registered snapshot using expected
+generation and policy digest. C rejects ordinary =$host.= calls with status 3
+before dispatch; Python also rejects them before enqueueing. The descriptor
+advertises the guard only. No policy/clock replacement or admission flags are
+accepted in ordinary guard requests. The opaque native registry validates all
+updates before mutation. Actual tests retain the previous guard result after
+rejected clock/generation rollback, revision conflict and malformed refreshes.
+
+The policy's [start,end) boundaries are exercised before start, at start and at
+end. Old generations reject; stale digests return stale-policy. Actual Rust and
+Python replay the same inert =typed-policy.ss= fixture against the same fresh
+semantic AOT library and produce identical registration and expiry results.
+The fixture is a policy projection, not a proof or authenticated provider claim.
+
+* Executed gates
+
+=qualification.ss= records 16 exact source hashes, the fresh artifact digest,
+three compiler-generated SCM hashes, owner revisions, counts and gate durations.
+=native-artifact.ss= is the full compiler closure manifest. Its module hashes
+refer to generated SCM, not original .ss sources. The retained SCM bytes match
+those manifest hashes. Gerbil is v0.19; transport and all schemas remain v1.
+
+The build used =bindings/runtime-c/tools/build-semantic.py --output
+/private/tmp/poo-host-policy-v1-aot/libsemantic-v1.dylib= in the qualified private
+SDK. The fresh library SHA256 is
+=96e4562c34ec9e44bbef56a4c54eb0558773392c563324125273832992f352a3=.
+The Python CFFI shim was rebuilt from the current sources with an existing
+cached setuptools build dependency, without changing the runtime dependency set.
+
+All tests used the existing =packages/python-runtime/tools/watch.py= with
+five seconds without actual command output and an outer 45-second timeout.
+Actual native completion and completed parser/test work provide progress.
+No fake heartbeat, relaxed deadline or retry inside the harness was introduced.
+
+- Python: 99 passed, zero skipped, 3.27 seconds wall. The six suites cover
+  semantic_runtime, temporal_family, temporal_admission, temporal_support,
+  mrr_fact_content and temporal_policy. Native/control artifacts and all original
+  Rust fact/support/policy oracle paths were explicitly configured.
+- Rust policy: 1 passed, 2.09 seconds, actual new native library.
+- Rust MRR support: 3 passed, 2.07 seconds, actual new native library, generated
+  original Fact/support fixtures used by the Python parity checks.
+- Rust Rule projection: 2 passed, 0.54 seconds, original typed owner records.
+- Rust Derivation projection: 2 passed, 0.63 seconds, original typed owner graph.
+  These last two suites validate Rust projections, not native proof execution.
+
+Rust binaries were built with =cargo test --manifest-path
+.ci/mrr-runtime/runtime/Cargo.toml --locked --offline --features mrr-transport
+--test temporal_policy --test mrr_support --test mrr_rule --test mrr_derivation
+--no-run= and then run with =--nocapture --test-threads=1= under the watchdog.
+Compiler SDK lookup warnings remain in the raw successful build log.
+
+Four failed attempts are retained: missing setuptools in the Python 3.13 venv,
+Rust test datum integer-vector conversion, moved Rust fixture value and an
+incorrect Python expected C status. The final source fixes and cached build
+input resolved these without changing any acceptance deadline. Existing
+historical receipts remain unchanged.
+
+* Integration and remaining work
+
+Local acceptance was performed on parent f2db9c9f plus the source hashes above.
+The concurrent PR commit 08ab14a9 changes the independent Org Query path and is
+retained during integration. These receipts qualify the listed source/artifact
+boundary, not remote CI or an entire repository head.
+
+This registers Host observations; it does not authenticate their provider or
+refresh the current clock automatically. Support remains declared and all proof,
+source, selection, action and durability flags remain false. The separate
+positive-proof/Rule/Derivation native admission needs a trusted proof ABI entry.
+Final authoritative source/catalog/clock refresh and MRR Data conditional
+publication/CAS remain required. No real model, benchmark or native gxtest suite
+ran in this qualification; historical native proof tests are separate receipts.

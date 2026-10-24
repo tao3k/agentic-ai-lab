@@ -5,7 +5,7 @@
 
 ;;; Boundary: profile-set cases validate selection through Testing Policy.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -18,12 +18,12 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         "user-interface-fixtures.ss"
-        (only-in :poo-flow/testing-api
-                 +poo-flow-testing-interface+
-                 poo-flow-testing-admit-user-profile-set!
-                 poo-flow-testing-check-user-profile-set)
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/profile-config)
+        (only-in :agentic-ai-lab/dev/testing-api
+                 +agentic-ai-lab-testing-interface+
+                 agentic-ai-lab-testing-admit-user-profile-set!
+                 agentic-ai-lab-testing-check-user-profile-set)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/profile-config)
 
 (export user-interface-profile-set-case-test)
 
@@ -31,55 +31,55 @@
 ;;; This suite protects profile-set configuration as a downstream case composed
 ;;; from upstream module contracts.
 (def user-interface-profile-set-case-test
-  (test-suite "poo-flow user interface profile sets"
-    (poo-flow-test-case "manages Doom-style profile sets before realization"
+  (test-suite "agentic-ai-lab user interface profile sets"
+    (yuanxu-test-case "manages Doom-style profile sets before realization"
       (let* ((selected-profile
-              (poo-flow-user-profile-set-default-profile
-               test-poo-flow-user-profile-set))
+              (yuanxu-user-profile-set-default-profile
+               test-agentic-ai-lab-user-profile-set))
              (presentation
-              (pooFlowUserProfileSetPresentation
-               test-poo-flow-user-profile-set)))
-        (check-equal? (poo-flow-user-profile-set?
-                       test-poo-flow-user-profile-set)
+              (agenticAiLabUserProfileSetPresentation
+               test-agentic-ai-lab-user-profile-set)))
+        (check-equal? (yuanxu-user-profile-set?
+                       test-agentic-ai-lab-user-profile-set)
                       #t)
-        (check-equal? (poo-flow-user-profile-set-name
-                       test-poo-flow-user-profile-set)
+        (check-equal? (yuanxu-user-profile-set-name
+                       test-agentic-ai-lab-user-profile-set)
                       'workspace)
-        (check-equal? (poo-flow-user-profile-set-default-profile-name
-                       test-poo-flow-user-profile-set)
+        (check-equal? (yuanxu-user-profile-set-default-profile-name
+                       test-agentic-ai-lab-user-profile-set)
                       'developer)
-        (check-equal? (poo-flow-user-profile-set-profile-names
-                       test-poo-flow-user-profile-set)
+        (check-equal? (yuanxu-user-profile-set-profile-names
+                       test-agentic-ai-lab-user-profile-set)
                       '(developer custom-developer))
-        (check-equal? (poo-flow-user-profile-name selected-profile) 'developer)
+        (check-equal? (yuanxu-user-profile-name selected-profile) 'developer)
         (check-equal? (.ref presentation 'kind)
-                      poo-flow-user-profile-set-presentation-kind)
+                      yuanxu-user-profile-set-presentation-kind)
         (check-equal? (.ref presentation 'profile-count) 2)
         (check-equal? (.ref presentation 'selected-profile-name)
                       'developer)
         (check-equal? (.ref presentation 'selected-profile?) #t)
         (check-equal? (not
                        (not
-                        (member "poo-flow-profile-set"
+                        (member "agentic-ai-lab-profile-set"
                                 (.ref presentation 'user-entrypoints))))
                       #t)
         (check-equal? (not
                        (not
-                        (member "pooFlowUserProfileSetPresentation"
+                        (member "agenticAiLabUserProfileSetPresentation"
                                 (.ref presentation 'api-entrypoints))))
                       #t)
         (check-equal? (.ref presentation 'package-management?) #f)
         (check-equal? (.ref presentation 'descriptor-realized?) #f)
         (check-equal? (.ref presentation 'runtime-executed) #f)))
-    (poo-flow-test-case "admits profile sets through the POO testing policy"
+    (yuanxu-test-case "admits profile sets through the POO testing policy"
       (let* ((valid-report
-              (poo-flow-testing-admit-user-profile-set!
-               +poo-flow-testing-interface+
-               test-poo-flow-user-profile-set))
+              (agentic-ai-lab-testing-admit-user-profile-set!
+               +agentic-ai-lab-testing-interface+
+               test-agentic-ai-lab-user-profile-set))
              (rejected-receipt
-              (poo-flow-testing-check-user-profile-set
-               +poo-flow-testing-interface+
-               test-poo-flow-user-broken-profile-set))
+              (agentic-ai-lab-testing-check-user-profile-set
+               +agentic-ai-lab-testing-interface+
+               test-agentic-ai-lab-user-broken-profile-set))
              (diagnostics (.ref rejected-receipt 'profile-diagnostics)))
         (check-equal? (.ref valid-report 'admitted?) #t)
         (check-equal? (.ref valid-report 'diagnostic-count) 0)

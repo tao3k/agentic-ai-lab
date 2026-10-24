@@ -6,7 +6,7 @@
 ;;; session graph and child-agent addressing.
 ;;; Invariant: selector expansion must keep fallback and parent-child ancestry
 ;;; visible to policy validation.
-(import :poo-flow/modules/session/config-session-runtime)
+(import :agentic-ai-lab/modules/session/config-session-runtime)
 
 (export session-selector-candidate
         session-selector)
@@ -34,7 +34,7 @@
       (description description-value)
       (requires required-receipt-field ...)
       (metadata metadata-entry ...))
-   (poo-flow-session-syntax-selector-candidate
+   (agentic-ai-lab-session-syntax-selector-candidate
     'candidate-id
     'candidate-kind
     'target-ref
@@ -46,7 +46,7 @@
       (target target-ref)
       (description description-value)
       (requires required-receipt-field ...))
-   (poo-flow-session-syntax-selector-candidate
+   (agentic-ai-lab-session-syntax-selector-candidate
     'candidate-id
     'candidate-kind
     'target-ref
@@ -79,7 +79,7 @@
       (policy policy-entry ...)
       (fallback fallback-ref)
       (metadata metadata-entry ...))
-   (poo-flow-session-syntax-selector
+   (agentic-ai-lab-session-syntax-selector
     'selector-id
     'project-id
     'root-session-ref
@@ -95,7 +95,7 @@
       (candidates candidate ...)
       (policy policy-entry ...)
       (fallback fallback-ref))
-   (poo-flow-session-syntax-selector
+   (agentic-ai-lab-session-syntax-selector
     'selector-id
     'project-id
     'root-session-ref

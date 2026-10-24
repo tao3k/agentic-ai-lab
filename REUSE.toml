@@ -10,6 +10,8 @@ path = [
   "**/LICENSE",
   "LICENSES/**",
   ".bazelversion",
+  "core/.github/workflows/ci.yml",
+  "core/.gitignore",
   "VERSION",
   "ORG_ZHIXING_REV",
   "*.lock",
@@ -25,6 +27,267 @@ path = [
   "**/static/**",
   "packages/proofs/lean/lean-toolchain",
   "packages/proofs/lean-poo/lean-toolchain",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
+SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
+
+[[annotations]]
+path = ["docs/10-19-design/10.06-poo-module-system/evidence/direct-scheme-understanding-20261003/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
+SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
+
+[[annotations]]
+path = ["docs/10-19-design/10.06-poo-module-system/evidence/python-scheme-runtime-20261003/*.jsonl"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
+SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
+
+[[annotations]]
+path = [
+  "t/qualification/semantic-abi/**/*.xml",
+  "t/qualification/semantic-abi/**/*.json.gz",
+    "t/qualification/semantic-abi/**/paid-batch-claim",
+  "t/qualification/temporal-library-basic/integration/tests.xml",
+  "t/qualification/temporal-library-basic/rule-correspondence-v1/typed-rules.ss",
+  "t/qualification/temporal-library-basic/registered-proof-host-v1/*.scm.gz",
+  "t/qualification/temporal-library-basic/registered-proof-host-v1/native-artifact.ss",
+  "t/qualification/temporal-library-basic/proof-control-abi-v1/*.scm.gz",
+  "t/qualification/temporal-library-basic/proof-control-abi-v1/typed-native-proof.ss",
+  "t/qualification/temporal-library-basic/proof-control-abi-v1/native-artifact.ss",
+  "t/qualification/temporal-library-basic/host-policy-abi-v1/*.scm.gz",
+  "t/qualification/temporal-library-basic/host-policy-abi-v1/typed-policy.ss",
+  "t/qualification/temporal-library-basic/host-policy-abi-v1/native-artifact.ss",
+  "t/qualification/temporal-library-basic/derivation-authority-v1/typed-derivations.ss",
+  "t/qualification/temporal-library-basic/support-policy-v1/*.scm.gz",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
+SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
+
+# Keep immutable acceptance receipts and historical records byte-for-byte intact.
+[[annotations]]
+path = [
+  "bindings/runtime-c/semantic-wire.org",
+  "t/qualification/temporal-library-basic/rust-model-family/historical.org",
+  "t/qualification/temporal-library-basic/rust-mrr-runtime/historical.org",
+  "t/qualification/temporal-library-basic/scheme-abi-v2/README.org",
+  "t/qualification/temporal-library-basic/scheme-abi-v2/model/*.ss",
+  "t/qualification/temporal-library-basic/scheme-abi-v2/mrr-cold-benchmark.ss",
+  "t/qualification/temporal-physical-native/evidence/*",
+  "t/qualification/temporal-current-source/native-build-freeze.ss",
+  "t/qualification/temporal-current-source/physical-pinned-receipt.ss",
+  "t/qualification/temporal-current-source/physical-pinned-oracle.ss",
+  "t/qualification/temporal-family-lifecycle-abi/native-artifact.ss",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
+SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
+
+[[annotations]]
+path = [
+  "t/qualification/temporal-family-proof-archive/archive.ss",
+  "t/qualification/temporal-family-proof-archive/replayed.ss",
+  "t/qualification/temporal-family-proof-archive/native-artifact.ss",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
+SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
+
+[[annotations]]
+path = [
+  "packages/proofs/lean-poo/AgenticAILabSessionProof/*.lean",
+  "packages/proofs/quint/package*.json",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
+SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
+
+[[annotations]]
+path = ["proofs/Composition/lean-toolchain"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
+SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
+
+# Preserve transferred ASCENT source and historical reports without rewriting bytes.
+[[annotations]]
+path = [
+  "docs/research/agent-inference/candidate-model-results/repair-notes.md",
+  "docs/research/agent-inference/candidate-model-results/report.md",
+  "docs/research/agent-inference/candidate-transport-results/report.md",
+  "docs/research/agent-inference/crosspath-branch-protocol.md",
+  "docs/research/agent-inference/crosspath-branch-round-summary.md",
+  "docs/research/agent-inference/crosspath-branch-v4-protocol.md",
+  "docs/research/agent-inference/crosspath-next-round.md",
+  "docs/research/agent-inference/crosspath-search-report.md",
+  "docs/research/agent-inference/crosspath-search-v2-report.md",
+  "docs/research/agent-inference/crosspath-search-v3-report.md",
+  "docs/research/agent-inference/crosspath-search-v4-bounded-report.md",
+  "docs/research/agent-inference/crosspath-search-v4-report.md",
+  "docs/research/agent-inference/crosspath-thinking-span-review.md",
+  "docs/research/agent-inference/evidence-interaction-results/interpretation.md",
+  "docs/research/agent-inference/evidence-interaction-results/report.md",
+  "docs/research/agent-inference/evidence-interaction.org",
+  "docs/research/agent-inference/fact-reuse-protocol.md",
+  "docs/research/agent-inference/fact-reuse-results/branch-complete/findings.md",
+  "docs/research/agent-inference/fact-reuse-results/branch-complete/protocol.md",
+  "docs/research/agent-inference/fact-reuse-results/branch-complete/report.md",
+  "docs/research/agent-inference/fact-reuse-results/branch-complete/semantic-review/findings.md",
+  "docs/research/agent-inference/fact-reuse-results/branch-compressed/findings.md",
+  "docs/research/agent-inference/fact-reuse-results/branch-compressed/protocol.md",
+  "docs/research/agent-inference/fact-reuse-results/branch-compressed/report.md",
+  "docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md",
+  "docs/research/agent-inference/fact-reuse-results/branch-entry/protocol.md",
+  "docs/research/agent-inference/fact-reuse-results/branch-entry/report.md",
+  "docs/research/agent-inference/fact-reuse-results/complete-branch-reuse/report.md",
+  "docs/research/agent-inference/fact-reuse-results/measurement-erratum.md",
+  "docs/research/agent-inference/fact-reuse-results/model-dialogue-reuse/report.md",
+  "docs/research/agent-inference/fact-reuse-results/remaining-budget-reuse/report.md",
+  "docs/research/agent-inference/fact-reuse-results/report.md",
+  "docs/research/agent-inference/fact-reuse-results/shared-premise-diagnostic/findings.md",
+  "docs/research/agent-inference/fact-reuse-results/shared-premise-diagnostic/report.md",
+  "docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md",
+  "docs/research/agent-inference/fact-reuse-results/sibling-search/history/initial-transport/report.md",
+  "docs/research/agent-inference/fact-reuse-results/sibling-search/report.md",
+  "docs/research/agent-inference/factor-reuse-real-pilot-report.md",
+  "docs/research/agent-inference/factor-total-budget-report.md",
+  "docs/research/agent-inference/history/README.md",
+  "docs/research/agent-inference/history/candidate-model-rules-rejected/report.md",
+  "docs/research/agent-inference/legacy-python-reproduction.md",
+  "docs/research/agent-inference/legacy-python-review.md",
+  "modules/ai-agentic-context/clues/native/cells.rs",
+  "modules/ai-agentic-context/clues/native/deferred.rs",
+  "modules/ai-agentic-context/clues/native/exchange.rs",
+  "modules/ai-agentic-context/clues/native/family.rs",
+  "modules/ai-agentic-context/clues/native/hypotheses.rs",
+  "modules/ai-agentic-context/clues/native/mod.rs",
+  "modules/ai-agentic-context/clues/native/projection.rs",
+  "modules/ai-agentic-context/clues/native/request.rs",
+  "modules/ai-agentic-context/clues/native/slices.rs",
+  "modules/ai-agentic-context/clues/native/tests/capacity.rs",
+  "modules/ai-agentic-context/clues/native/tests/deferred.rs",
+  "modules/ai-agentic-context/interaction/native/feedback.rs",
+  "modules/ai-agentic-context/interaction/native/mod.rs",
+  "modules/ai-agentic-context/interaction/native/owner.rs",
+  "modules/ai-agentic-context/interaction/native/paths.rs",
+  "modules/ai-agentic-context/interaction/native/registry.rs",
+  "modules/ai-agentic-context/interaction/native/tools.rs",
+  "modules/evidence-assessment/migration.org",
+  "modules/evidence-assessment/native/Cargo.toml",
+  "modules/evidence-assessment/native/build.rs",
+  "modules/evidence-assessment/native/src/computational/lowering.rs",
+  "modules/evidence-assessment/native/src/computational/mod.rs",
+  "modules/evidence-assessment/native/src/computational/observations.rs",
+  "modules/evidence-assessment/native/src/computational/owner.rs",
+  "modules/evidence-assessment/native/src/computational/support.rs",
+  "modules/evidence-assessment/native/src/conversation.rs",
+  "modules/evidence-assessment/native/src/derivations.rs",
+  "modules/evidence-assessment/native/src/domain.rs",
+  "modules/evidence-assessment/native/src/domain_memory.rs",
+  "modules/evidence-assessment/native/src/evidence_graph/continuation.rs",
+  "modules/evidence-assessment/native/src/evidence_graph/mod.rs",
+  "modules/evidence-assessment/native/src/evidence_graph/reuse.rs",
+  "modules/evidence-assessment/native/src/evidence_graph/slice.rs",
+  "modules/evidence-assessment/native/src/evidence_graph/structure.rs",
+  "modules/evidence-assessment/native/src/evidence_store/admission.rs",
+  "modules/evidence-assessment/native/src/evidence_store/mod.rs",
+  "modules/evidence-assessment/native/src/evidence_store/owner.rs",
+  "modules/evidence-assessment/native/src/lib.rs",
+  "modules/evidence-assessment/native/src/observations/compact.rs",
+  "modules/evidence-assessment/native/src/observations/expand.rs",
+  "modules/evidence-assessment/native/src/observations/mod.rs",
+  "modules/evidence-assessment/native/src/provider.rs",
+  "modules/evidence-assessment/native/src/python/clues.rs",
+  "modules/evidence-assessment/native/src/python/computational.rs",
+  "modules/evidence-assessment/native/src/python/context.rs",
+  "modules/evidence-assessment/native/src/python/conversation.rs",
+  "modules/evidence-assessment/native/src/python/derivations.rs",
+  "modules/evidence-assessment/native/src/python/domain.rs",
+  "modules/evidence-assessment/native/src/python/evidence_conversation.rs",
+  "modules/evidence-assessment/native/src/python/interaction.rs",
+  "modules/evidence-assessment/native/src/python/mod.rs",
+  "modules/evidence-assessment/native/src/python/review.rs",
+  "modules/evidence-assessment/native/src/python/sources.rs",
+  "modules/evidence-assessment/native/src/python/trajectory.rs",
+  "modules/evidence-assessment/native/src/python/transport.rs",
+  "modules/evidence-assessment/native/src/review/mod.rs",
+  "modules/evidence-assessment/native/src/review/owner.rs",
+  "modules/evidence-assessment/native/src/review/policy.rs",
+  "modules/evidence-assessment/native/src/runtime.rs",
+  "modules/evidence-assessment/native/tests/assessment.rs",
+  "modules/evidence-assessment/native/tests/clues/exchange/authority.rs",
+  "modules/evidence-assessment/native/tests/clues/exchange/checkpoint.rs",
+  "modules/evidence-assessment/native/tests/clues/exchange/mod.rs",
+  "modules/evidence-assessment/native/tests/clues/exchange/slicing.rs",
+  "modules/evidence-assessment/native/tests/clues/exchange/support.rs",
+  "modules/evidence-assessment/native/tests/clues/mod.rs",
+  "modules/evidence-assessment/native/tests/clues/requests.rs",
+  "modules/evidence-assessment/native/tests/evidence_checkpoint.rs",
+  "modules/evidence-assessment/native/tests/interaction.rs",
+  "modules/evidence-assessment/native/tests/scenarios.rs",
+  "modules/evidence-assessment/native/tests/workflows.rs",
+  "modules/evidence-assessment/policies/catalog-rules.scm",
+  "modules/evidence-assessment/policies/history-rules.scm",
+  "modules/evidence-assessment/policies/review-rules.scm",
+  "modules/evidence-assessment/relational-runtime.ss",
+  "modules/evidence-assessment/research/anchored-evidence-slices.org",
+  "modules/evidence-assessment/research/clue-exchange.org",
+  "modules/evidence-assessment/research/evidence-checkpoint.org",
+  "modules/evidence-assessment/research/legacy/docs/features/qualification/evidence-protocols.org",
+  "modules/evidence-assessment/research/legacy/docs/features/trajectory-exploration.org",
+  "modules/evidence-assessment/research/legacy/docs/trajectory-slice-capacity.md",
+  "modules/evidence-assessment/research/legacy/docs/trajectory-supervision-feedback.md",
+  "modules/evidence-assessment/research/legacy/evidence/README.md",
+  "modules/temporal-causality/trajectory/native/events.rs",
+  "modules/temporal-causality/trajectory/native/exploration.rs",
+  "modules/temporal-causality/trajectory/native/mod.rs",
+  "modules/temporal-causality/trajectory/native/owner.rs",
+  "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/AnchoredEvidenceSlice.lean",
+  "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/ClueSubmission.lean",
+  "packages/proofs/quint/AnchoredEvidenceSlice.qnt",
+  "packages/proofs/quint/CheckpointProjection.qnt",
+  "packages/proofs/quint/ClueQueryResume.qnt",
+  "packages/proofs/quint/ClueSubmission.qnt",
+  "packages/proofs/quint/ModelApplicability.qnt",
+  "packages/proofs/quint/ProgressiveEvidenceRead.qnt",
+  "packages/python-runtime/RESEARCH.md",
+  "packages/python-runtime/src/agentic_ai_lab_runtime/reasoning.py",
+  "packages/python-runtime/tests/scenarios/test_clue_exchange.py",
+  "packages/python-runtime/tests/scenarios/test_core_c_abi.py",
+  "packages/python-runtime/tests/scenarios/test_datalog_reuse.py",
+  "packages/python-runtime/tests/scenarios/test_library_boundary.py",
+  "packages/python-runtime/tests/scenarios/test_movie_contract.py",
+  "packages/python-runtime/tests/scenarios/test_native_derivations.py",
+  "packages/python-runtime/tests/scenarios/test_rule_scenarios.py",
+  "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/__init__.py",
+  "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget.py",
+  "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget_report.py",
+  "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot.py",
+  "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot_report.py",
+  "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot_snapshot.py",
+  "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interface_tests.py",
+  "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/supervision.py",
+  "packages/python-testing/src/agentic_ai_lab_testing/checks/assessment_models.py",
+  "packages/python-testing/tests/assessment/test_factor_budget.py",
+  "packages/python-testing/tests/assessment/test_formal.py",
+  "packages/python-testing/tests/assessment/test_formal_inventory.py",
+  "packages/python-testing/tests/assessment/test_migration_inventory.py",
+  "t/research/factor-budget-build.ss",
+  "t/research/factor-budget-oracle.ss",
+  "t/research/factor-budget.ss",
+  "t/research/factor-pilot-build.ss",
+  "t/research/factor-pilot.ss",
+  "t/research/reproduce-clean.sh",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
+SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
+
+[[annotations]]
+path = [
+  "tools/ci/patches/gerbil-gxtest-runtime-init.patch",
+  "tools/ci/patches/gerbil-homebrew-release-compiler.patch",
 ]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 tao3k team and Contributors"

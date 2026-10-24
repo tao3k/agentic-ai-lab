@@ -6,7 +6,7 @@
 ;;; Boundary: module object validation gates cover inheritance chain projection.
 ;;; Invariant: validation metadata projection stays descriptor-only.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,10 +15,10 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :core/module-system/schema/interface
-                 poo-flow-module-object)
-        (only-in :core/module-system/schema/validation
-                 poo-flow-module-object-inheritance-chain))
+        (only-in :yuanxu/module-system/schema/interface
+                 yuanxu-module-object)
+        (only-in :yuanxu/module-system/schema/validation
+                 yuanxu-module-object-inheritance-chain))
 
 (export module-object-inheritance-chain-performance-test)
 
@@ -36,7 +36,7 @@
 
 ;; : (-> Alist Void)
 (def (module-object-inheritance-chain-display-receipt receipt)
-  (display "[poo-flow-benchmark] module-object-inheritance-chain ")
+  (display "[agentic-ai-lab-benchmark] module-object-inheritance-chain ")
   (write receipt)
   (newline)
   (force-output))
@@ -49,13 +49,13 @@
 ;; : (-> Integer PooModuleObject)
 (def (module-object-inheritance-chain-build count)
   (fold (lambda (index parent)
-          (poo-flow-module-object
+          (yuanxu-module-object
            (module-object-inheritance-chain-name index)
            (if parent (list parent) '())
            '()
            '()))
         #f
-        (poo-flow-performance-build-list count (lambda (index) index))))
+        (agentic-ai-lab-performance-build-list count (lambda (index) index))))
 
 ;; : (-> [Object] Object)
 (def (module-object-inheritance-chain-last values)
@@ -65,7 +65,7 @@
 
 ;; : (-> PooModuleObject Alist)
 (def (module-object-inheritance-chain-summary object)
-  (let (chain (poo-flow-module-object-inheritance-chain object))
+  (let (chain (yuanxu-module-object-inheritance-chain object))
     (list (cons 'chain-count (length chain))
           (cons 'first-node (car chain))
           (cons 'last-node
@@ -74,7 +74,7 @@
 ;; : TestSuite
 (def module-object-inheritance-chain-performance-test
   (test-suite "module object inheritance chain performance"
-    (poo-flow-test-case "keeps large inheritance chain projection inside benchmark contract"
+    (yuanxu-test-case "keeps large inheritance chain projection inside benchmark contract"
       (let* ((object-count 1600)
              (object (module-object-inheritance-chain-build object-count))
              (receipt

@@ -9,14 +9,14 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from poo_flow_runtime import _scheme_load as scheme_load
-from poo_flow_runtime import _scheme_load_artifact as scheme_artifact
-from poo_flow_runtime import _scheme_load_runner as scheme_runner
-from poo_flow_runtime import scheme_projection_artifact
+from agentic_ai_lab_runtime import _scheme_load as scheme_load
+from agentic_ai_lab_runtime import _scheme_load_artifact as scheme_artifact
+from agentic_ai_lab_runtime import _scheme_load_runner as scheme_runner
+from agentic_ai_lab_runtime import scheme_projection_artifact
 
 
 def _runtime_projection_fixture(root: Path) -> Path:
-    projection = root / "modules" / "funflow" / "runtime-load-projection.ss"
+    projection = root / "modules" / "workflow" / "scenario" / "runtime-funflow.ss"
     projection.parent.mkdir(parents=True)
     projection.write_text(";; projection fixture\n", encoding="utf-8")
     return projection
@@ -30,7 +30,7 @@ def _source_fixture(root: Path) -> Path:
 
 def _projection_rows(name: str) -> tuple[tuple[str, str], tuple[str, str]]:
     return (
-        ("schema", "poo-flow.funflow-plan-projection.v1"),
+        ("schema", "yuanxu.funflow-plan-projection.v1"),
         ("name", name),
     )
 
@@ -53,7 +53,7 @@ def test_scheme_projection_loads_adjacent_artifact_without_subprocess(
     def fail_subprocess(*_args: object, **_kwargs: object) -> None:
         raise AssertionError("artifact load should not start Gerbil")
 
-    monkeypatch.setattr(scheme_runner.subprocess, "run", fail_subprocess)
+    monkeypatch.setattr(scheme_runner, "_run_with_native_progress", fail_subprocess)
 
     loaded = scheme_load.load_projection_rows(source, cwd=tmp_path, cache=False)
 
@@ -80,7 +80,7 @@ def test_scheme_projection_loads_adjacent_artifact_without_projection_source(
         raise AssertionError("standalone artifact load should not start Gerbil")
 
     monkeypatch.setattr(scheme_load, "find_runtime_projection_source", lambda _cwd: None)
-    monkeypatch.setattr(scheme_runner.subprocess, "run", fail_subprocess)
+    monkeypatch.setattr(scheme_runner, "_run_with_native_progress", fail_subprocess)
 
     loaded = scheme_load.load_projection_rows(source, cwd=tmp_path, cache=False)
 
@@ -115,13 +115,14 @@ def test_scheme_projection_ignores_stale_artifact_and_falls_back(
             args,
             0,
             stdout=(
-                '(("schema" "poo-flow.funflow-plan-projection.v1") '
+                '(("schema" "yuanxu.funflow-plan-projection.v1") '
                 '("name" "fresh"))\n'
             ),
             stderr="",
         )
 
-    monkeypatch.setattr(scheme_runner.subprocess, "run", fake_run)
+    monkeypatch.setattr(scheme_runner, "_run_with_native_progress",
+                        lambda command, workdir: fake_run(command.argv))
 
     loaded = scheme_load.load_projection_rows(source, cwd=tmp_path, cache=False)
 
@@ -142,13 +143,14 @@ def test_preproject_load_writes_projection_artifact(tmp_path, monkeypatch) -> No
             args,
             0,
             stdout=(
-                '(("schema" "poo-flow.funflow-plan-projection.v1") '
+                '(("schema" "yuanxu.funflow-plan-projection.v1") '
                 '("name" "built"))\n'
             ),
             stderr="",
         )
 
-    monkeypatch.setattr(scheme_runner.subprocess, "run", fake_run)
+    monkeypatch.setattr(scheme_runner, "_run_with_native_progress",
+                        lambda command, workdir: fake_run(command.argv))
 
     artifact = scheme_load.preproject_load(source, cwd=tmp_path)
     loaded = scheme_load.load_projection_rows(source, cwd=tmp_path, cache=False)
@@ -199,6 +201,6 @@ def test_scheme_projection_artifact_command_emits_receipt(
 
     output = capsys.readouterr().out
     assert exit_code == 0
-    assert 'schema: "poo-flow.scheme-load-projection-artifact.v1"' in output
+    assert 'schema: "agentic-ai-lab.scheme-load-projection-artifact.v1"' in output
     assert 'action: "export"' in output
     assert f'artifact: "{artifact.resolve()}"' in output

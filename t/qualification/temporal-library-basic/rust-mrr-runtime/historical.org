@@ -1,0 +1,16 @@
+#+title: Historical ABI v1 qualification
+
+This records the historical run before the Scheme ABI v2 migration. It does
+not qualify the new ABI. JSON transcripts have been removed from the working
+tree by user direction; the original evidence remains in Git commit
+=9ad77d307dfcd83cf6e503aa57c29cce6c0f1ce5=. New qualification is owned by
+=:asp-gerbil-scheme/benchmark-api= and emits Scheme receipts.
+
+The historical release run passed both integration tests, 21 differential
+results, and clippy with warnings denied. Native MRR scenario: 0.24s; native
+regression: 0.90s. The fixture did not execute a physical MRR Data query.
+Original MRR pin: =3ce31dac2dc58ab780ed06fa88103de501355692=.
+
+| Removed artifact | Historical SHA-256 |
+|------------------+--------------------|
+| receipt.json | 7e957c5e158a95cb54b3859d2bcf90f7f37f97232ffe4f2bf372d39002f5db29 |

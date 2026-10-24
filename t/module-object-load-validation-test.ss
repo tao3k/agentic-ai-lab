@@ -6,13 +6,13 @@
 ;;; Boundary: load! fixture module objects are integration validation cases.
 ;;; Invariant: unit receipt-shape tests do not import fixture packages.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref object?)
         (only-in :std/test
                  test-suite
                  check-equal?)
-        :core/module-system/schema/interface
-        :core/module-system/schema/validation
+        :yuanxu/module-system/schema/interface
+        :yuanxu/module-system/schema/validation
         "./fixtures/object-load-valid/objects")
 
 (export module-object-load-validation-test)
@@ -23,11 +23,11 @@
 
 ;; : TestSuite
 (def module-object-load-validation-test
-  (test-suite "poo-flow module object load validation"
-    (poo-flow-test-case "validates loaded objects with native Core contracts"
-      (let* ((objects poo-flow-custom-module-object1-module)
+  (test-suite "agentic-ai-lab module object load validation"
+    (yuanxu-test-case "validates loaded objects with native Core contracts"
+      (let* ((objects agentic-ai-lab-custom-module-object1-module)
              (validation
-              (poo-flow-module-object-validation (car objects)))
+              (yuanxu-module-object-validation (car objects)))
              (field-validations
               (receipt-ref validation 'fieldContractValidations))
              (typed-field-validation
@@ -35,13 +35,13 @@
              (value-kind
               (receipt-ref typed-field-validation 'valueKind)))
         (check-equal? (length objects) 1)
-        (check-equal? (poo-flow-module-object-identity (car objects))
+        (check-equal? (yuanxu-module-object-identity (car objects))
                       'objects.fixture.loaded)
-        (check-equal? (poo-flow-module-object-validation-valid? validation)
+        (check-equal? (yuanxu-module-object-validation-valid? validation)
                       #t)
         (check-equal? (and (object? validation)
                            (andmap object? field-validations)
-                           (poo-flow-module-field-contract-validation-valid?
+                           (yuanxu-module-field-contract-validation-valid?
                             typed-field-validation))
                       #t)
         (check-equal? value-kind 'List)))))

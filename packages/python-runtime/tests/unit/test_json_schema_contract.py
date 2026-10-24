@@ -7,7 +7,7 @@ from __future__ import annotations
 import io
 import json
 
-from poo_flow_runtime.json_schema_contract import (
+from agentic_ai_lab_runtime.json_schema_contract import (
     json_schema_to_scheme_contract,
     main,
 )
@@ -40,11 +40,11 @@ def test_json_schema_to_scheme_contract_projects_map_value_schema() -> None:
         _stage_schema(),
         name="custom-stage",
         source_ref="schemas/json/custom-stage.json",
-        object_kind="PooFlowCustomStage",
+        object_kind="AgenticAILabCustomStage",
         object_key="funflow/custom-stage",
     )
 
-    assert "(import (only-in :poo-flow/src/contract/json-schema-receipt" in source
+    assert "(import (only-in :yuanxu/modules/json-schema/interface" in source
     assert "(export custom-stage-schema" in source
     assert '("type" . "object")' in source
     assert '("patternProperties" .' in source

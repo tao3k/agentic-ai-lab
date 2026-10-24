@@ -1,0 +1,150 @@
+{
+  "case": "open-cut",
+  "raw": "{\"status\":\"partial\",\"rows\":[[\"k\",\"m\"],[\"k\",\"q\"]]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.23329291700019894
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.23331625000014355
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.8226665420002064
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.8226779999999962
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8226865000001453
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9089890830000513
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.922067583000171
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9355397920000996
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.935559708000028
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9355693750001137
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9355782080001518
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9505448750001051
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9505676670000867
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9505770830000984
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9505843330000516
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9505922920000103
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.950601375000133
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9631482080001206
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9631649170000856
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9631789580000714
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9631866670001727
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9631937080000625
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9632025830001112
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.9768106250000983
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.9768200830001206
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.9768288750001375
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.9768902920000073
+    }
+  ],
+  "contentGapsSeconds": [
+    0.8226865000001453,
+    0.08630258299990601,
+    0.013078500000119675,
+    0.013472208999928625,
+    1.9915999928343808e-05,
+    9.667000085755717e-06,
+    8.83300003806653e-06,
+    0.014966666999953304,
+    2.2791999981564004e-05,
+    9.416000011697179e-06,
+    7.2499999532738e-06,
+    7.958999958646018e-06,
+    9.083000122700469e-06,
+    0.0125468329999876,
+    1.67089999649761e-05,
+    1.4040999985809322e-05,
+    7.709000101385755e-06,
+    7.040999889795785e-06,
+    8.875000048647053e-06
+  ],
+  "responseId": "6432a645-4045-4243-b090-9c92fae3aae8",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9623,
+    "input_tokens_details": {
+      "cached_tokens": 9344
+    },
+    "output_tokens": 19,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9642
+  },
+  "seconds": 0.9768918750000921
+}

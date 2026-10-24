@@ -8,15 +8,15 @@ import test from "node:test";
 
 import {
   PFW_WASM_STATUS_INVALID_SLOT,
-  PooFlowRuntime,
-  PooFlowRuntimeError,
+  AgenticAILabRuntime,
+  AgenticAILabRuntimeError,
 } from "../src/runtime.ts";
 import { runRuntimeBatch } from "../src/batch.ts";
 
-const wasmUrl = new URL("../../runtime-wasm/dist/poo_flow_runtime.wasm", import.meta.url);
+const wasmUrl = new URL("../../runtime-wasm/dist/agentic_ai_lab_runtime.wasm", import.meta.url);
 
 test("TypeScript runtime owns instance slots and normalizes status values", async () => {
-  const runtime = await PooFlowRuntime.instantiate(await readFile(wasmUrl));
+  const runtime = await AgenticAILabRuntime.instantiate(await readFile(wasmUrl));
   assert.equal(runtime.handleCapacity, 1023);
 
   const slot = runtime.createInstance();
@@ -26,12 +26,12 @@ test("TypeScript runtime owns instance slots and normalizes status values", asyn
   assert.throws(
     () => runtime.releaseInstance(slot),
     (error) =>
-      error instanceof PooFlowRuntimeError && error.status === PFW_WASM_STATUS_INVALID_SLOT,
+      error instanceof AgenticAILabRuntimeError && error.status === PFW_WASM_STATUS_INVALID_SLOT,
   );
 });
 
 test("TypeScript runtime opens and closes a negotiated session", async () => {
-  const runtime = await PooFlowRuntime.instantiate(await readFile(wasmUrl));
+  const runtime = await AgenticAILabRuntime.instantiate(await readFile(wasmUrl));
   const instance = runtime.createInstance();
   const negotiation = runtime.negotiate(instance, { runtimeIdentity: "runtime-ts-test" });
   assert.equal(negotiation.abiMajor, 0);
@@ -48,7 +48,7 @@ test("TypeScript runtime opens and closes a negotiated session", async () => {
 });
 
 test("TypeScript runtime publishes, polls, submits, and acknowledges events", async () => {
-  const runtime = await PooFlowRuntime.instantiate(await readFile(wasmUrl));
+  const runtime = await AgenticAILabRuntime.instantiate(await readFile(wasmUrl));
   const instance = runtime.createInstance();
   const negotiation = runtime.negotiate(instance);
   const bundle = runtime.openBundle(instance, negotiation.profileSlot);
@@ -76,7 +76,7 @@ test("TypeScript runtime publishes, polls, submits, and acknowledges events", as
 });
 
 test("batch failure releases its registered arena before returning the error", async () => {
-  const runtime = await PooFlowRuntime.instantiate(await readFile(wasmUrl));
+  const runtime = await AgenticAILabRuntime.instantiate(await readFile(wasmUrl));
   const instance = runtime.createInstance();
   assert.throws(
     () =>
@@ -84,7 +84,7 @@ test("batch failure releases its registered arena before returning the error", a
         { sequence: 1n, payload: new Uint8Array([1, 2, 3]) },
       ]),
     (error) =>
-      error instanceof PooFlowRuntimeError && error.status === PFW_WASM_STATUS_INVALID_SLOT,
+      error instanceof AgenticAILabRuntimeError && error.status === PFW_WASM_STATUS_INVALID_SLOT,
   );
   runtime.releaseInstance(instance);
 });

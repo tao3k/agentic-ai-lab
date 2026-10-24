@@ -1,0 +1,174 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: 10.08.17 Nix Import and Derivation Wait Attribution
+#+language: en
+
+* Scope and comparison
+
+This follows [[file:16-nix-c-api-first-demand.org][the matched first-demand qualification]]. It uses the same pinned
+Nix 2.34.4+1 libraries, installed Gerbil, AWS 5.100.0 / Null 3.2.4 artifacts,
+final-config Provider demand, strict Flake check mode and receiver-local POO
+plans. No Gerbil source, Yuanxu dependency, lock update policy or admission
+cache is changed. A fresh process and EvalState are cold; the filesystem and
+Store daemon are not forcibly cold. No system-wide cache purge is performed.
+
+The existing Just entrypoint still uses a 2 GiB heap, 120-second preparation
+and Harness budgets, 60-second idle limit and 240-second outer limit. Tests
+run serially. Sampling and unsampled timing runs are separate. Raw logs and
+stack samples remain local artifacts, not committed source.
+
+* Measurement boundary
+
+Only the explicit profile backend enables additional counters. Ordinary
+qualification does not call the additional GC or rusage counters. Every native
+force point records:
+
+- monotonic wall, process CPU and current-thread CPU seconds;
+- Nix's already loaded Boehm collector: full-collection milliseconds, completed
+  collection count, allocated bytes and incremental mode;
+- process rusage: minor/major fault fields, block input/output operations and
+  voluntary/involuntary context switches.
+
+The bridge resolves public GC symbols from the already loaded library; it
+never loads a second collector. Missing counters fail qualification rather
+than becoming apparent zeros. The fixed Nix executable links Boehm 8.2.12.
+The installed =gc/gc.h= documents full-GC timing in milliseconds and states
+that it excludes incremental collection work. Incremental mode must therefore
+be reported alongside timing. Gambit's collector is separate: these counters
+measure Nix allocations during native calls, not Scheme allocation outside
+them. Native wall/CPU brackets likewise exclude Scheme result processing.
+
+Darwin's SDK marks =ru_minflt= and =ru_majflt= with =(NU)=; retain them as raw
+observations, not portable page-I/O evidence. Block counters are not read(2)
+counts, and zero block counts do not establish absence of cached file reads.
+Thread/process CPU and context switches cannot partition every waiting
+millisecond into disk, daemon, run queue or synchronization time.
+
+References:
+
+- [[https://github.com/ivmai/bdwgc/blob/v8.2.12/include/gc.h][Boehm 8.2.12 public measurement API]].
+- [[https://github.com/NixOS/nix/blob/2.34.4/src/libexpr/eval.cc][Nix 2.34.4 evaluator statistics use the same full-GC counter]].
+- Installed macOS SDK =sys/resource.h= and the selected Store library dependency
+  paths provide the host-specific counter and linkage evidence.
+
+* Observed host interference and failed runs
+
+One targeted eight-second =sample= run observed only the identified test
+process. That run failed the unchanged idle limit. Its stack sample includes
+Nix expression evaluation and =WorkerProto::BasicClientConnection= reads from
+the Store daemon; those reads must not be labeled filesystem reads. The sample
+also contains filesystem directory traversal. Stack occurrences are not
+exclusive time percentages: recursive frames overlap and blocked threads are
+sampled too. Sampling does not supply an exact disk-wait attribution.
+
+The host load average reached approximately 40--49 initially, subsequently above 100 on 12 logical CPUs. A read-only process census
+showed a separate multicore runtime workload above 600% CPU alongside other
+compilation/proof work. Those processes belong to other sessions and were not
+stopped, reprioritized or modified. Subsequent unsampled attempts also hit the
+idle limit. Both failures are retained; neither is converted into a pass by
+changing deadlines. A diagnostic lexical slot/name collision from the initial
+instrumentation attempt is retained as a separate failed run and corrected.
+
+* Passing unsampled observation
+
+The first passing instrumented run completed all three AWS-only / AWS+Null
+rounds and all marker/currentness/Contract controls. Its first-session values
+illustrate why elapsed time alone is insufficient:
+
+| Force point | Wall ms | Process CPU ms | Full GC ms | Collections | Nix allocation bytes | Voluntary / involuntary switches |
+|-------------+---------+----------------+------------+-------------+----------------------+-----------------------------------|
+| imports WHNF | 9255.344 | 584.011 | 0 | 0 | 66436624 | 2773 / 1173 |
+| derive + residual | 6387.777 | 402.101 | 0 | 0 | 36778384 | 2416 / 902 |
+| round 1 fresh-state imports | 377.868 | 290.273 | 0 | 0 | 66403424 | 1530 / 139 |
+| round 2 fresh-state imports | 391.465 | 305.869 | 0 | 0 | 66383280 | 1517 / 277 |
+
+The passing run's three ordinary query comparisons are in milliseconds:
+
+| Round | API AWS cold / hot | API added Null cold / hot | CLI AWS cold / repeat | CLI AWS+Null cold / repeat |
+|-------+--------------------+---------------------------+-----------------------+---------------------------|
+| 1 | 4800.404 / 0.863 | 3.927 / 0.826 | 789.378 / 734.274 | 745.476 / 721.648 |
+| 2 | 605.384 / 1.060 | 2.251 / 0.765 | 707.680 / 720.918 | 702.947 / 710.408 |
+| 3 | 632.696 / 0.950 | 3.687 / 0.966 | 807.061 / 714.993 | 698.344 / 677.775 |
+
+CLI repeats launch new evaluators; API repeats reuse their session. Round 1's
+large native cold outlier remains in the table. No outlier is dropped or
+relabelled as an equivalent clean-host comparison. Profiling overhead is not
+subtracted from timings.
+
+Round 1 derivation recorded one collection / 36 ms full-GC time; thus the GC
+probe has an observed nonzero case. The later mode-enabled probes report incremental GC disabled (=0=).
+The measured first-import delay has no
+corresponding completed collection or full-GC time. Host contention and native
+waits are demonstrated, but their exact shares remain unmeasured. These data
+must not be presented as an intrinsic API regression versus CLI.
+
+* Repeated work and safe convergence
+
+The existing same-EvalState import cache is already effective: hot imports
+force the existing thunk with zero additional Nix allocation. Adding Null in
+the same session also leaves the import force allocation at zero. Fresh
+EvalStates repeat approximately 66 MB of import allocation plus approximately
+37 MB of derivation/residual allocation. That is a session-boundary cost, not
+proof that the hot path repeatedly parses the same files.
+
+Therefore keep the current explicit session lifetime and shared native thunks;
+do not create an EvalState per query. Do not add a global result cache, cache
+Contract admission, omit source checks or share mutable receiver plans to
+hide this cost. Small remaining hot package/receipt allocations do not justify
+an additional cache protocol on this evidence. The prepared immutable package
+reference remains a separate input/preparation optimization, not an established
+cold-import speedup.
+
+Collection time overlaps wall/CPU intervals; it must not be added to CPU time
+or subtracted from the wall-minus-CPU gap as an independent duration. Round 3
+imports recorded 64 ms full-GC wall time, with 345.655 ms process CPU versus
+291.126 ms thread CPU, illustrating that parallel helper CPU is distinct.
+
+The diagnostic implementation also avoids additional counter collection when
+profiling is disabled. It flushes completed force-point observations and can
+use existing Ops logging to preserve partial transcripts on failure; neither
+is a synthetic heartbeat or an alternate execution system.
+
+* Reflection and open evidence
+
+The useful result is a bounded explanation, not a speedup claim: substantial
+first-call wall/CPU separation can occur without a corresponding full GC, and
+already-hot imports allocate nothing even during the same comparison. A
+cleaner host and targeted filesystem/daemon tracing are still required to
+partition the residual waits. Timing improvements must be demonstrated with
+matched workload/order and unchanged strict locking, source rejection and
+parent-cache controls; neither a lower allocation count nor fewer processes
+alone proves faster end-to-end evaluation.
+
+* Validation receipt and remaining gate
+
+Local artifacts are under =/private/tmp/agentic-ai-lab-nix-wait-20261023=:
+
+| Run | Result | Interpretation |
+|-----+--------+----------------|
+| profile-1 | Harness failure | Diagnostic lexical binding collided with the metrics slot; corrected. |
+| profile-2 + targeted sample | idle timeout | Stack evidence only; no passing timing qualification. |
+| profile-3 | one CASE-OK, MODULE-OK, HARNESS-OK, final OK | Complete three-round comparison and original admission/currentness/parent controls. |
+| profile-4 / profile-5 | idle timeout | Retained incomplete attempts under rising host load; not performance passes. |
+| profile-6, final instrumentation | idle timeout | Compiled and emitted native mode/counter observations; complete regression gate remains open. |
+| ordinary regression, final instrumentation | idle timeout | Profiling disabled; not a passing four-case regression receipt. |
+
+The final probes additionally handle missing counter symbols through the
+existing initialization error path, read the actual incremental mode, and
+flush completed query timings. The complete passing run predates these small
+diagnostic refinements. Do not present that run as a full pass of the final
+source. Subsequent native observations report incremental mode zero, but do
+not close the final-source regression gate. The ordinary four-case and worker
+three-case passes in the preceding report belong to the preceding revision.
+
+No timeout was widened, assertion removed, host workload stopped, admission
+conclusion cached or Gerbil/compiler source changed. A clean-host repeat of
+the final complete profile and ordinary regression remains required before
+claiming a qualified performance improvement. There is no demonstrated new
+cold-import optimization in this change.
+
+The subsequent [[file:18-nix-session-reuse-validation.org][stable-host session-reuse validation]] closes this final-runtime
+rerun gate, preserves these historical failures, and measures an actual
+fresh-EvalState negative cost control. It distinguishes proven session reuse
+from a new runtime optimization and retains the limits of filesystem tracing.

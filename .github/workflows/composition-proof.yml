@@ -1,0 +1,39 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+name: Composition proof
+on:
+  push:
+    branches: [main]
+    paths: ['proofs/Composition/**', '.github/workflows/composition-proof.yml']
+  pull_request:
+    paths: ['proofs/Composition/**', '.github/workflows/composition-proof.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: composition-proof-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  composition-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Install the declared Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Verify immutable LeanPoo source and composition mathematics
+        working-directory: proofs/Composition
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 pin_dependency.py .
+          lake build
+          lake env lean --run CompositionChecks.lean
+          lake env lean --run SearchTemporalChecks.lean
+          lake env lean --run SearchReadinessChecks.lean
+          lake env lean --run SearchDagChecks.lean
+          lake env lean CompositionAxioms.lean

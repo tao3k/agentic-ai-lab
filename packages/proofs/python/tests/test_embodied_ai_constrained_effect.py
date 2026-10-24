@@ -4,7 +4,7 @@
 
 from dataclasses import replace
 
-from poo_flow_proof.embodied_ai_constrained_effect import (
+from agentic_ai_lab_proof.embodied_ai_constrained_effect import (
     EffectObligation,
     EffectOutcome,
     EffectReversibility,
@@ -12,7 +12,7 @@ from poo_flow_proof.embodied_ai_constrained_effect import (
     _authorization_only_countermodel,
     evaluate_constrained_effect,
 )
-from poo_flow_proof.embodied_ai_constrained_effect_replay import canonical_request
+from agentic_ai_lab_proof.embodied_ai_constrained_effect_replay import canonical_request
 
 
 def test_authorization_only_does_not_close_effect_domain() -> None:

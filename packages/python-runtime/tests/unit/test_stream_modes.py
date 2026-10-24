@@ -2,14 +2,14 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-from poo_flow_runtime import RuntimeGraphBuilder, RuntimeGraphCommand
-from poo_flow_runtime.checkpoints import (
+from agentic_ai_lab_runtime import RuntimeGraphBuilder, RuntimeGraphCommand
+from agentic_ai_lab_runtime.checkpoints import (
     MemoryRuntimeGraphCheckpointer,
     RuntimeGraphCheckpointError,
 )
-from poo_flow_runtime.messages import ai_message
-from poo_flow_runtime.runtime import RuntimeGraphRuntime
-from poo_flow_runtime.runtime_graph import (
+from agentic_ai_lab_runtime.messages import ai_message
+from agentic_ai_lab_runtime.runtime import RuntimeGraphRuntime
+from agentic_ai_lab_runtime.runtime_graph import (
     END,
     START,
     RuntimeGraphEdge,
@@ -170,9 +170,9 @@ def test_program_stream_hides_internal_runtime_plan_state():
 
     for mode, chunk in chunks:
         if mode == "values":
-            assert "_poo_flow_runtime_graph_plan" not in chunk
+            assert "_agentic_ai_lab_runtime_graph_plan" not in chunk
         if mode == "events" and chunk.kind == "complete":
-            assert "_poo_flow_runtime_graph_plan" not in chunk.detail["state"]
+            assert "_agentic_ai_lab_runtime_graph_plan" not in chunk.detail["state"]
 
 def test_program_stream_checkpoints_hide_internal_runtime_plan_state():
     checkpointer = MemoryRuntimeGraphCheckpointer()
@@ -189,4 +189,4 @@ def test_program_stream_checkpoints_hide_internal_runtime_plan_state():
     )
 
     assert len(checkpoints) == 1
-    assert "_poo_flow_runtime_graph_plan" not in checkpoints[0].state
+    assert "_agentic_ai_lab_runtime_graph_plan" not in checkpoints[0].state

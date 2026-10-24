@@ -12,11 +12,11 @@ py_test(
     args = [
         "$(rlocationpath @local_gerbil//:toolchain.receipt.json)",
         "$(rlocationpath //:gerbil_poo_package_receipt)",
-        "$(rlocationpath //:asp_gerbil_scheme_package_receipt)",
+        "$(rlocationpath //dev:asp_gerbil_scheme_package_receipt)",
         "$(rlocationpath //:orgize_package_receipt)",
     ],
     data = [
-        "//:asp_gerbil_scheme_package_receipt",
+        "//dev:asp_gerbil_scheme_package_receipt",
         "//:gerbil_poo_package_receipt",
         "//:orgize_package_receipt",
         "@local_gerbil//:toolchain.receipt.json",

@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+# Projected from dev/gerbil.pkg; ignored by non-development consumers.
+gerbil_dependency_sources = use_extension(
+    "@gerbil_bazel//gerbil:extensions.bzl",
+    "gerbil",
+    dev_dependency = True,
+)
+gerbil_dependency_sources.source_package(
+    name = "asp_gerbil_scheme_sources",
+    canonical_uri = "https://github.com/tao3k/asp-gerbil-scheme",
+    package = "asp-gerbil-scheme",
+    revision = "9ae9bc377cbab4b84de52b512a2c03375a36d6c9",
+    sha256 = "27f4cfef9406c300a70efe4d90b72314b3e558a058892fc0604346d77ded7bbe",
+    strip_prefix = "asp-gerbil-scheme-9ae9bc377cbab4b84de52b512a2c03375a36d6c9",
+    urls = [
+        "https://github.com/tao3k/asp-gerbil-scheme/archive/9ae9bc377cbab4b84de52b512a2c03375a36d6c9.tar.gz",
+    ],
+)
+
+use_repo(gerbil_dependency_sources, "asp_gerbil_scheme_sources")

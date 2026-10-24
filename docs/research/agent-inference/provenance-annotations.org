@@ -1,0 +1,68 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: Provenance semirings and bounded all-tree natural annotations
+#+DATE: 2026-10-09
+
+* Primary method reading
+
+[[https://www.cs.ucdavis.edu/~green/papers/pods07.pdf][Green, Karvounarakis and Tannen, PODS 2007]] gives a common positive
+relational algebra over semiring annotations. Alternative derivations add;
+joined premises multiply. Natural numbers retain multiplicity, Boolean
+annotations retain membership, and polynomial annotations retain source tokens.
+Sections 5--6 extend recursion to fixed-point equations and potentially infinite
+formal power series. A finite relation does not imply finite annotation values.
+
+[[https://proceedings.kr.org/2022/10/kr2022-0010-bourgaux-et-al.pdf][Bourgaux et al., KR 2022, Revisiting Semiring Provenance for Datalog]] distinguishes all-tree,
+non-recursive-tree and minimum-depth semantics, among others. Sections 2--3
+make the choice observable: equal sets of result facts do not imply equal
+annotations. We explicitly choose all founded finite derivation trees with
+unit leaf weights for this transfer. We do not silently substitute the existing
+one-witness proof or minimum-depth evidence for that meaning.
+
+* Scheme architecture and implementation
+
+=candidate/annotations.ss= consumes the existing complete grounded provenance
+builder through =candidate-positive-counts=. The snapshot, inspected program,
+digest, native status and rows remain inputs to that builder's closure replay.
+Only a complete graph enters numeric evaluation. No arbitrary caller-provided
+edge list or annotation callback is admitted by this entry.
+
+Each source occurrence and candidate fact contributes one. A rule occurrence
+contributes the product of the previous round's input counts; all alternatives
+for an output are summed in a fresh table. Repeated body occurrences multiply
+separately, and distinct rule/source occurrences add separately. Starting at
+zero counts enumerates increasing proof-tree depths. The former founded support
+maintenance remains Boolean membership; it is not a numeric annotation store.
+This repository's graph distinguishes rule positions and source occurrences,
+including identical rule text and duplicate source rows. Its occurrence-sensitive
+count is not a claim that duplicated syntax changes set-based Datalog rules.
+
+A complete unchanged round publishes detached query rows with counts. Every
+edge, input occurrence and node comparison charges the numeric work budget.
+Count overflow or exhausted work returns =bounded= with no rows. Graph refusal
+also publishes no counts. Numeric limits cap intermediate arithmetic as well as
+final values; they are not clipped answers or estimates. Evaluation currently
+requires the entire grounded graph to stabilize, so an unrelated productive
+cycle may conservatively refuse an otherwise finite query annotation.
+
+* Native and formal checks
+
+The native Suite computes =m*n + m*m= independently for all 16 source
+multiplicity pairs. It also checks duplicate rule alternatives, productive
+=x=1+x= recursion refusal, unseeded recursion, exact work exhaustion, count
+and edge caps, and detached output rows. Rules are inspected and executed by
+the real Scheme candidate path before complete provenance replay.
+
+Lean =DerivationCounts= proves the Cartesian product's length matches body
+counts, alternative tree-union cardinality, repeated-body multiplication,
+alternative addition and stability of fixed-point iteration. Its graph
+completeness and source correspondence premises remain native obligations.
+Quint checks private work/cap failure and stable publication on finite recursive
+and acyclic equations; early completion, failed-result leakage and accumulating
+old counts again must produce counterexamples.
+
+This is the natural-number specialization at unit leaf weights. It does not
+return provenance polynomials, infinity, arbitrary weighted semirings,
+probabilities, differentiation or annotations for negation/aggregation. Bounded
+refusal does not prove that an annotation is infinite. No paper-scale workload
+or universal native extraction is claimed.

@@ -7,103 +7,103 @@
 ;;; Invariant: receipts describe runtime state and handoff identity only;
 ;;; Scheme never waits on runtime futures, opens sandbox handles, or replays IO.
 
-(import :poo-flow/modules/session/objects
-        :poo-flow/modules/session/receipt-syntax)
+(import :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/receipt-syntax)
 
-(export +poo-flow-session-materialization-states+
-        poo-flow-session-materialization-state?
-        make-poo-flow-session-materialization-receipt
-        poo-flow-session-materialization-receipt?
-        poo-flow-session-materialization-receipt-request-id
-        poo-flow-session-materialization-receipt-project-id
-        poo-flow-session-materialization-receipt-root-session-ref
-        poo-flow-session-materialization-receipt-session-ref
-        poo-flow-session-materialization-receipt-parent-session-refs
-        poo-flow-session-materialization-receipt-state
-        poo-flow-session-materialization-receipt-pending-runtime-ref
-        poo-flow-session-materialization-receipt-sandbox-handle-ref
-        poo-flow-session-materialization-receipt-token-usage-summary
-        poo-flow-session-materialization-receipt-error-summary
-        poo-flow-session-materialization-receipt-declaration-checked?
-        poo-flow-session-materialization-receipt-declared-session-refs
-        poo-flow-session-materialization-receipt-declared-parent-session-refs
-        poo-flow-session-materialization-receipt-declared-sandbox-handle-refs
-        poo-flow-session-materialization-receipt-root-session-declared?
-        poo-flow-session-materialization-receipt-session-declared?
-        poo-flow-session-materialization-receipt-undeclared-session-refs
-        poo-flow-session-materialization-receipt-undeclared-parent-session-refs
-        poo-flow-session-materialization-receipt-sandbox-handle-declared?
-        poo-flow-session-materialization-receipt-valid?
-        poo-flow-session-materialization-receipt-diagnostic-count
-        poo-flow-session-materialization-receipt-diagnostics
-        poo-flow-session-materialization-receipt-runtime-owner
-        poo-flow-session-materialization-receipt-runtime-executed?
-        poo-flow-session-runtime-materialization-receipt
-        poo-flow-session-materialization-receipt->alist)
+(export +agentic-ai-lab-session-materialization-states+
+        agentic-ai-lab-session-materialization-state?
+        make-agentic-ai-lab-session-materialization-receipt
+        agentic-ai-lab-session-materialization-receipt?
+        agentic-ai-lab-session-materialization-receipt-request-id
+        agentic-ai-lab-session-materialization-receipt-project-id
+        agentic-ai-lab-session-materialization-receipt-root-session-ref
+        agentic-ai-lab-session-materialization-receipt-session-ref
+        agentic-ai-lab-session-materialization-receipt-parent-session-refs
+        agentic-ai-lab-session-materialization-receipt-state
+        agentic-ai-lab-session-materialization-receipt-pending-runtime-ref
+        agentic-ai-lab-session-materialization-receipt-sandbox-handle-ref
+        agentic-ai-lab-session-materialization-receipt-token-usage-summary
+        agentic-ai-lab-session-materialization-receipt-error-summary
+        agentic-ai-lab-session-materialization-receipt-declaration-checked?
+        agentic-ai-lab-session-materialization-receipt-declared-session-refs
+        agentic-ai-lab-session-materialization-receipt-declared-parent-session-refs
+        agentic-ai-lab-session-materialization-receipt-declared-sandbox-handle-refs
+        agentic-ai-lab-session-materialization-receipt-root-session-declared?
+        agentic-ai-lab-session-materialization-receipt-session-declared?
+        agentic-ai-lab-session-materialization-receipt-undeclared-session-refs
+        agentic-ai-lab-session-materialization-receipt-undeclared-parent-session-refs
+        agentic-ai-lab-session-materialization-receipt-sandbox-handle-declared?
+        agentic-ai-lab-session-materialization-receipt-valid?
+        agentic-ai-lab-session-materialization-receipt-diagnostic-count
+        agentic-ai-lab-session-materialization-receipt-diagnostics
+        agentic-ai-lab-session-materialization-receipt-runtime-owner
+        agentic-ai-lab-session-materialization-receipt-runtime-executed?
+        agentic-ai-lab-session-runtime-materialization-receipt
+        agentic-ai-lab-session-materialization-receipt->alist)
 
 ;; : [Symbol]
-(def +poo-flow-session-materialization-states+
+(def +agentic-ai-lab-session-materialization-states+
   '(pending materialized failed dropped))
 
 ;; : (-> Symbol Boolean)
-(def (poo-flow-session-materialization-state? value)
+(def (agentic-ai-lab-session-materialization-state? value)
   (and (symbol? value)
-       (if (member value +poo-flow-session-materialization-states+)
+       (if (member value +agentic-ai-lab-session-materialization-states+)
          #t
          #f)))
 
 ;; : (-> Alist Symbol Object)
-(def (poo-flow-session-materialization-metadata-ref metadata key)
-  (poo-flow-session-alist-ref metadata key #f))
+(def (agentic-ai-lab-session-materialization-metadata-ref metadata key)
+  (agentic-ai-lab-session-alist-ref metadata key #f))
 
 ;; : (-> [Alist] Alist)
-(def (poo-flow-session-materialization-request-metadata maybe-metadata)
+(def (agentic-ai-lab-session-materialization-request-metadata maybe-metadata)
   (if (null? maybe-metadata) '() (car maybe-metadata)))
 
 ;; : (-> Object Object Object)
-(def (poo-flow-session-materialization-selected-refs refs fallback)
+(def (agentic-ai-lab-session-materialization-selected-refs refs fallback)
   (if refs refs fallback))
 
 ;; : (-> Object [Object])
-(def (poo-flow-session-materialization-required-refs refs)
+(def (agentic-ai-lab-session-materialization-required-refs refs)
   (if refs refs '()))
 
 ;; : (-> Object Boolean)
-(def (poo-flow-session-materialization-declaration-checked? refs)
+(def (agentic-ai-lab-session-materialization-declaration-checked? refs)
   (if refs #t #f))
 
 ;; : (-> Object Boolean)
-(def (poo-flow-session-materialization-maybe-symbol-list? value)
+(def (agentic-ai-lab-session-materialization-maybe-symbol-list? value)
   (or (not value)
-      (poo-flow-session-every? symbol? value)))
+      (agentic-ai-lab-session-every? symbol? value)))
 
 ;; : (-> Symbol [Symbol] Boolean)
-(def (poo-flow-session-materialization-member? value declared-refs)
+(def (agentic-ai-lab-session-materialization-member? value declared-refs)
   (if (member value declared-refs) #t #f))
 
 ;; : (-> Alist Alist Alist)
-(def (poo-flow-session-materialization-rows/tail rows tail)
+(def (agentic-ai-lab-session-materialization-rows/tail rows tail)
   (foldr cons tail rows))
 
 ;;; Boundary: materialization callers construct explicit receipt field pairs.
 ;; : (-> (List (Pair Symbol Object)) (List (Pair Symbol Object)))
-(def (poo-flow-session-materialization-field-rows . rows)
+(def (agentic-ai-lab-session-materialization-field-rows . rows)
   rows)
 
 ;; : (-> [Symbol] Object [Symbol])
-(def (poo-flow-session-materialization-undeclared-refs refs declared-refs)
+(def (agentic-ai-lab-session-materialization-undeclared-refs refs declared-refs)
   (if declared-refs
     (filter
      (lambda (ref)
-       (not (poo-flow-session-materialization-member? ref declared-refs)))
+       (not (agentic-ai-lab-session-materialization-member? ref declared-refs)))
      refs)
     '()))
 
 ;; : (-> Symbol Symbol Object Alist)
-(def (poo-flow-session-materialization-diagnostic code request-id detail)
-  (poo-flow-session-materialization-field-rows
-   (cons 'kind 'poo-flow.session.materialization.diagnostic)
-   (cons 'schema 'poo-flow.modules.session.materialization.diagnostic.v1)
+(def (agentic-ai-lab-session-materialization-diagnostic code request-id detail)
+  (agentic-ai-lab-session-materialization-field-rows
+   (cons 'kind 'agentic-ai-lab.session.materialization.diagnostic)
+   (cons 'schema 'agentic-ai-lab.modules.session.materialization.diagnostic.v1)
    (cons 'code code)
    (cons 'request-id request-id)
    (cons 'detail detail)
@@ -111,78 +111,78 @@
    (cons 'runtime-executed #f)))
 
 ;; : (-> Symbol Symbol [Symbol] [Alist] [Alist])
-(def (poo-flow-session-materialization-session-diagnostics/rev request-id
+(def (agentic-ai-lab-session-materialization-session-diagnostics/rev request-id
                                                                code
                                                                session-refs
                                                                diagnostics-rev)
   (if (null? session-refs)
     diagnostics-rev
-    (poo-flow-session-materialization-session-diagnostics/rev
+    (agentic-ai-lab-session-materialization-session-diagnostics/rev
      request-id
      code
      (cdr session-refs)
-     (cons (poo-flow-session-materialization-diagnostic
+     (cons (agentic-ai-lab-session-materialization-diagnostic
             code
             request-id
-            (poo-flow-session-materialization-field-rows
+            (agentic-ai-lab-session-materialization-field-rows
              (cons 'session-ref (car session-refs))))
            diagnostics-rev))))
 
 ;; : (-> Symbol Symbol [Symbol] [Alist])
-(def (poo-flow-session-materialization-session-diagnostics request-id
+(def (agentic-ai-lab-session-materialization-session-diagnostics request-id
                                                            code
                                                            session-refs)
   (reverse
-   (poo-flow-session-materialization-session-diagnostics/rev
+   (agentic-ai-lab-session-materialization-session-diagnostics/rev
     request-id
     code
     session-refs
     '())))
 
 ;; : (-> Symbol Symbol Object [Alist])
-(def (poo-flow-session-materialization-sandbox-diagnostics request-id
+(def (agentic-ai-lab-session-materialization-sandbox-diagnostics request-id
                                                            sandbox-handle-ref
                                                            declared-refs)
   (if (and declared-refs
            sandbox-handle-ref
-           (not (poo-flow-session-materialization-member?
+           (not (agentic-ai-lab-session-materialization-member?
                  sandbox-handle-ref
                  declared-refs)))
     (list
-     (poo-flow-session-materialization-diagnostic
+     (agentic-ai-lab-session-materialization-diagnostic
       'materialization-sandbox-handle-not-declared
       request-id
-      (poo-flow-session-materialization-field-rows
+      (agentic-ai-lab-session-materialization-field-rows
        (cons 'sandbox-handle-ref sandbox-handle-ref))))
     '()))
 
 ;; : (-> Symbol Symbol Object Object [Alist])
-(def (poo-flow-session-materialization-state-diagnostics request-id
+(def (agentic-ai-lab-session-materialization-state-diagnostics request-id
                                                          state
                                                          sandbox-handle-ref
                                                          error-summary)
-  (poo-flow-session-materialization-rows/tail
+  (agentic-ai-lab-session-materialization-rows/tail
    (if (and (or (eq? state 'pending)
                 (eq? state 'materialized))
             (not sandbox-handle-ref))
      (list
-      (poo-flow-session-materialization-diagnostic
+      (agentic-ai-lab-session-materialization-diagnostic
        'materialization-sandbox-handle-required
        request-id
-       (poo-flow-session-materialization-field-rows
+       (agentic-ai-lab-session-materialization-field-rows
         (cons 'state state))))
      '())
    (if (and (eq? state 'failed)
             (not error-summary))
      (list
-      (poo-flow-session-materialization-diagnostic
+      (agentic-ai-lab-session-materialization-diagnostic
        'materialization-failed-missing-error-summary
        request-id
        '()))
      '())))
 
 ;; : (-> RequestId ProjectId RootSessionRef SessionRef ParentSessionRefs State PendingRuntimeRef SandboxHandleRef TokenUsageSummary ErrorSummary RuntimeOwner RuntimeExecuted Metadata PooSessionMaterializationReceipt)
-(defstruct poo-flow-session-materialization-receipt
+(defstruct agentic-ai-lab-session-materialization-receipt
   (request-id
    project-id
    root-session-ref
@@ -213,7 +213,7 @@
 ;;; Boundary: runtime materialization receipts bind checkpoint ids, runtime
 ;;; owner, and session metadata without executing durable runtime work.
 ;; : (-> Symbol Symbol Symbol Symbol [Symbol] Symbol Symbol MaybeSymbol Alist MaybeAlist [Alist] PooSessionMaterializationReceipt)
-(def (poo-flow-session-runtime-materialization-receipt request-id
+(def (agentic-ai-lab-session-runtime-materialization-receipt request-id
                                                        project-id
                                                        root-session-ref
                                                        session-ref
@@ -224,124 +224,124 @@
                                                        token-usage-summary
                                                        error-summary
                                                        . maybe-metadata)
-  (poo-flow-session-require "session materialization request id must be a symbol"
+  (agentic-ai-lab-session-require "session materialization request id must be a symbol"
                             (symbol? request-id)
                             request-id)
-  (poo-flow-session-require "session materialization project id must be a symbol"
+  (agentic-ai-lab-session-require "session materialization project id must be a symbol"
                             (symbol? project-id)
                             project-id)
-  (poo-flow-session-require "session materialization root ref must be a symbol"
+  (agentic-ai-lab-session-require "session materialization root ref must be a symbol"
                             (symbol? root-session-ref)
                             root-session-ref)
-  (poo-flow-session-require "session materialization session ref must be a symbol"
+  (agentic-ai-lab-session-require "session materialization session ref must be a symbol"
                             (symbol? session-ref)
                             session-ref)
-  (poo-flow-session-require
+  (agentic-ai-lab-session-require
    "session materialization parent refs must be symbols"
-   (poo-flow-session-every? symbol? parent-session-refs)
+   (agentic-ai-lab-session-every? symbol? parent-session-refs)
    parent-session-refs)
-  (poo-flow-session-require
+  (agentic-ai-lab-session-require
    "session materialization state must be pending, materialized, failed, or dropped"
-   (poo-flow-session-materialization-state? state)
+   (agentic-ai-lab-session-materialization-state? state)
    state)
-  (poo-flow-session-require
+  (agentic-ai-lab-session-require
    "session materialization pending runtime ref must be a symbol"
    (symbol? pending-runtime-ref)
    pending-runtime-ref)
-  (poo-flow-session-require
+  (agentic-ai-lab-session-require
    "session materialization sandbox handle ref must be a symbol or #f"
    (or (symbol? sandbox-handle-ref) (not sandbox-handle-ref))
    sandbox-handle-ref)
-  (poo-flow-session-require
+  (agentic-ai-lab-session-require
    "session materialization token usage summary must be an alist"
    (list? token-usage-summary)
    token-usage-summary)
-  (poo-flow-session-require
+  (agentic-ai-lab-session-require
    "session materialization error summary must be an alist or #f"
    (or (list? error-summary) (not error-summary))
    error-summary)
   (let* ((metadata
-          (poo-flow-session-materialization-request-metadata maybe-metadata))
+          (agentic-ai-lab-session-materialization-request-metadata maybe-metadata))
          (declared-session-refs
-          (poo-flow-session-materialization-metadata-ref
+          (agentic-ai-lab-session-materialization-metadata-ref
            metadata
            'declared-session-refs))
          (declared-parent-session-refs0
-          (poo-flow-session-materialization-metadata-ref
+          (agentic-ai-lab-session-materialization-metadata-ref
            metadata
            'declared-parent-session-refs))
          (declared-parent-session-refs
-          (poo-flow-session-materialization-selected-refs
+          (agentic-ai-lab-session-materialization-selected-refs
            declared-parent-session-refs0
            declared-session-refs))
          (declared-sandbox-handle-refs
-          (poo-flow-session-materialization-metadata-ref
+          (agentic-ai-lab-session-materialization-metadata-ref
            metadata
            'declared-sandbox-handle-refs)))
-    (poo-flow-session-require
+    (agentic-ai-lab-session-require
      "session materialization declared session refs must be symbols"
-     (poo-flow-session-materialization-maybe-symbol-list?
+     (agentic-ai-lab-session-materialization-maybe-symbol-list?
       declared-session-refs)
      declared-session-refs)
-    (poo-flow-session-require
+    (agentic-ai-lab-session-require
      "session materialization declared parent refs must be symbols"
-     (poo-flow-session-materialization-maybe-symbol-list?
+     (agentic-ai-lab-session-materialization-maybe-symbol-list?
       declared-parent-session-refs)
      declared-parent-session-refs)
-    (poo-flow-session-require
+    (agentic-ai-lab-session-require
      "session materialization declared sandbox handle refs must be symbols"
-     (poo-flow-session-materialization-maybe-symbol-list?
+     (agentic-ai-lab-session-materialization-maybe-symbol-list?
       declared-sandbox-handle-refs)
      declared-sandbox-handle-refs)
     (let* ((declaration-checked?
-            (poo-flow-session-materialization-declaration-checked?
+            (agentic-ai-lab-session-materialization-declaration-checked?
              declared-session-refs))
            (root-session-declared?
             (or (not declared-session-refs)
-                (poo-flow-session-materialization-member?
+                (agentic-ai-lab-session-materialization-member?
                  root-session-ref
                  declared-session-refs)))
            (session-declared?
             (or (not declared-session-refs)
-                (poo-flow-session-materialization-member?
+                (agentic-ai-lab-session-materialization-member?
                  session-ref
                  declared-session-refs)))
            (undeclared-session-refs
-            (poo-flow-session-materialization-undeclared-refs
+            (agentic-ai-lab-session-materialization-undeclared-refs
              (list root-session-ref session-ref)
              declared-session-refs))
            (undeclared-parent-session-refs
-            (poo-flow-session-materialization-undeclared-refs
+            (agentic-ai-lab-session-materialization-undeclared-refs
              parent-session-refs
              declared-parent-session-refs))
            (sandbox-handle-declared?
             (or (not declared-sandbox-handle-refs)
                 (not sandbox-handle-ref)
-                (poo-flow-session-materialization-member?
+                (agentic-ai-lab-session-materialization-member?
                  sandbox-handle-ref
                  declared-sandbox-handle-refs)))
            (diagnostics
-            (poo-flow-session-materialization-rows/tail
-             (poo-flow-session-materialization-session-diagnostics
+            (agentic-ai-lab-session-materialization-rows/tail
+             (agentic-ai-lab-session-materialization-session-diagnostics
               request-id
               'materialization-session-not-declared
               undeclared-session-refs)
-             (poo-flow-session-materialization-rows/tail
-              (poo-flow-session-materialization-session-diagnostics
+             (agentic-ai-lab-session-materialization-rows/tail
+              (agentic-ai-lab-session-materialization-session-diagnostics
                request-id
                'materialization-parent-session-not-declared
                undeclared-parent-session-refs)
-              (poo-flow-session-materialization-rows/tail
-               (poo-flow-session-materialization-sandbox-diagnostics
+              (agentic-ai-lab-session-materialization-rows/tail
+               (agentic-ai-lab-session-materialization-sandbox-diagnostics
                 request-id
                 sandbox-handle-ref
                 declared-sandbox-handle-refs)
-               (poo-flow-session-materialization-state-diagnostics
+               (agentic-ai-lab-session-materialization-state-diagnostics
                 request-id
                 state
                 sandbox-handle-ref
                 error-summary))))))
-      (make-poo-flow-session-materialization-receipt
+      (make-agentic-ai-lab-session-materialization-receipt
        request-id
        project-id
        root-session-ref
@@ -353,10 +353,10 @@
        token-usage-summary
        error-summary
        declaration-checked?
-       (poo-flow-session-materialization-required-refs declared-session-refs)
-       (poo-flow-session-materialization-required-refs
+       (agentic-ai-lab-session-materialization-required-refs declared-session-refs)
+       (agentic-ai-lab-session-materialization-required-refs
         declared-parent-session-refs)
-       (poo-flow-session-materialization-required-refs
+       (agentic-ai-lab-session-materialization-required-refs
         declared-sandbox-handle-refs)
        root-session-declared?
        session-declared?
@@ -372,78 +372,78 @@
 
 ;; : (-> PooSessionMaterializationReceipt Alist)
 (defpoo-session-receipt-projection
-  poo-flow-session-materialization-receipt->alist
+  agentic-ai-lab-session-materialization-receipt->alist
   (receipt)
-  (require poo-flow-session-require
+  (require agentic-ai-lab-session-require
            "session materialization projection requires a receipt"
-           (poo-flow-session-materialization-receipt? receipt)
+           (agentic-ai-lab-session-materialization-receipt? receipt)
            receipt)
   (bindings ())
   (fields
-   (('kind 'poo-flow.session.materialization-receipt)
-    ('schema 'poo-flow.modules.session.materialization-receipt.v1)
+   (('kind 'agentic-ai-lab.session.materialization-receipt)
+    ('schema 'agentic-ai-lab.modules.session.materialization-receipt.v1)
     ('request-id
-     (poo-flow-session-materialization-receipt-request-id receipt))
+     (agentic-ai-lab-session-materialization-receipt-request-id receipt))
     ('project-id
-     (poo-flow-session-materialization-receipt-project-id receipt))
+     (agentic-ai-lab-session-materialization-receipt-project-id receipt))
     ('root-session-ref
-     (poo-flow-session-materialization-receipt-root-session-ref receipt))
+     (agentic-ai-lab-session-materialization-receipt-root-session-ref receipt))
     ('session-ref
-     (poo-flow-session-materialization-receipt-session-ref receipt))
+     (agentic-ai-lab-session-materialization-receipt-session-ref receipt))
     ('parent-session-refs
-     (poo-flow-session-materialization-receipt-parent-session-refs
+     (agentic-ai-lab-session-materialization-receipt-parent-session-refs
       receipt))
     ('materialization-state
-     (poo-flow-session-materialization-receipt-state receipt))
+     (agentic-ai-lab-session-materialization-receipt-state receipt))
     ('pending-runtime-ref
-     (poo-flow-session-materialization-receipt-pending-runtime-ref
+     (agentic-ai-lab-session-materialization-receipt-pending-runtime-ref
       receipt))
     ('sandbox-handle-ref
-     (poo-flow-session-materialization-receipt-sandbox-handle-ref
+     (agentic-ai-lab-session-materialization-receipt-sandbox-handle-ref
       receipt))
     ('token-usage-summary
-     (poo-flow-session-materialization-receipt-token-usage-summary
+     (agentic-ai-lab-session-materialization-receipt-token-usage-summary
       receipt))
     ('error-summary
-     (poo-flow-session-materialization-receipt-error-summary receipt))
+     (agentic-ai-lab-session-materialization-receipt-error-summary receipt))
     ('declaration-checked?
-     (poo-flow-session-materialization-receipt-declaration-checked?
+     (agentic-ai-lab-session-materialization-receipt-declaration-checked?
       receipt))
     ('declared-session-refs
-     (poo-flow-session-materialization-receipt-declared-session-refs
+     (agentic-ai-lab-session-materialization-receipt-declared-session-refs
       receipt))
     ('declared-parent-session-refs
-     (poo-flow-session-materialization-receipt-declared-parent-session-refs
+     (agentic-ai-lab-session-materialization-receipt-declared-parent-session-refs
       receipt))
     ('declared-sandbox-handle-refs
-     (poo-flow-session-materialization-receipt-declared-sandbox-handle-refs
+     (agentic-ai-lab-session-materialization-receipt-declared-sandbox-handle-refs
       receipt))
     ('root-session-declared?
-     (poo-flow-session-materialization-receipt-root-session-declared?
+     (agentic-ai-lab-session-materialization-receipt-root-session-declared?
       receipt))
     ('session-declared?
-     (poo-flow-session-materialization-receipt-session-declared?
+     (agentic-ai-lab-session-materialization-receipt-session-declared?
       receipt))
     ('undeclared-session-refs
-     (poo-flow-session-materialization-receipt-undeclared-session-refs
+     (agentic-ai-lab-session-materialization-receipt-undeclared-session-refs
       receipt))
     ('undeclared-parent-session-refs
-     (poo-flow-session-materialization-receipt-undeclared-parent-session-refs
+     (agentic-ai-lab-session-materialization-receipt-undeclared-parent-session-refs
       receipt))
     ('sandbox-handle-declared?
-     (poo-flow-session-materialization-receipt-sandbox-handle-declared?
+     (agentic-ai-lab-session-materialization-receipt-sandbox-handle-declared?
       receipt))
     ('valid?
-     (poo-flow-session-materialization-receipt-valid? receipt))
+     (agentic-ai-lab-session-materialization-receipt-valid? receipt))
     ('diagnostic-count
-     (poo-flow-session-materialization-receipt-diagnostic-count receipt))
+     (agentic-ai-lab-session-materialization-receipt-diagnostic-count receipt))
     ('diagnostics
-     (poo-flow-session-materialization-receipt-diagnostics receipt))
+     (agentic-ai-lab-session-materialization-receipt-diagnostics receipt))
     ('runtime-owner
-     (poo-flow-session-materialization-receipt-runtime-owner receipt))
+     (agentic-ai-lab-session-materialization-receipt-runtime-owner receipt))
     ('runtime-executed
-     (poo-flow-session-materialization-receipt-runtime-executed?
+     (agentic-ai-lab-session-materialization-receipt-runtime-executed?
       receipt))
     ('handoff-required #t)
     ('metadata
-     (poo-flow-session-materialization-receipt-metadata receipt)))))
+     (agentic-ai-lab-session-materialization-receipt-metadata receipt)))))

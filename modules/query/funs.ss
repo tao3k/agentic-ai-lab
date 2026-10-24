@@ -10,12 +10,12 @@
         (only-in :gerbil/core hash-get hash-put!)
         (only-in :std/list/list filter)
         (only-in "types.ss"
-                 poo-flow-query-admission-receipt-kind
-                 PooFlowQueryAdmissionReceipt
-                 poo-flow-query?
-                 poo-flow-query-element-space?))
+                 agentic-ai-lab-query-admission-receipt-kind
+                 AgenticAILabQueryAdmissionReceipt
+                 agentic-ai-lab-query?
+                 agentic-ai-lab-query-element-space?))
 
-(export poo-flow-query-admit)
+(export agentic-ai-lab-query-admit)
 
 (def (query-element-index element-identities)
   (let (index (make-hash-table))
@@ -55,18 +55,18 @@
             (cons '(incomplete-element-space) diagnostics)))
     (reverse diagnostics)))
 
-(def (poo-flow-query-admit query element-space)
-  (unless (poo-flow-query? query)
+(def (agentic-ai-lab-query-admit query element-space)
+  (unless (agentic-ai-lab-query? query)
     (error "invalid canonical Query" query))
-  (unless (poo-flow-query-element-space? element-space)
+  (unless (agentic-ai-lab-query-element-space? element-space)
     (error "invalid canonical Query ElementSpace" element-space))
   ;; Keep the lexical binding distinct from the public slot name.  In native
   ;; POO object syntax an identifier matching a slot is a self reference; using
   ;; `diagnostics` here would therefore define the slot in terms of itself.
   (let (diagnostic-values (query-admission-diagnostics query element-space))
     (validate
-     PooFlowQueryAdmissionReceipt
-     (.o kind: poo-flow-query-admission-receipt-kind
+     AgenticAILabQueryAdmissionReceipt
+     (.o kind: agentic-ai-lab-query-admission-receipt-kind
          query-identity: (.ref query 'identity)
          query-version: (.ref query 'version)
          semantic-revision: (.ref query 'semantic-revision)

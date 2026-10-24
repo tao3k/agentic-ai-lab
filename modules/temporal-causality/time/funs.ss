@@ -6,14 +6,15 @@
 ;;; Pure partial comparison. Unknown means evidence is declared rather than
 ;;; observed; incomparable means distinct clock domains without conversion.
 (import (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/temporal-causality/time/types
-                 poo-flow-temporal-instant? poo-flow-temporal-interval?))
+        (only-in :agentic-ai-lab/modules/temporal-causality/time/types
+                 agentic-ai-lab-temporal-instant? agentic-ai-lab-temporal-interval?))
 
-(export poo-flow-temporal-compare poo-flow-temporal-interval-contains?)
+(export agentic-ai-lab-temporal-compare agentic-ai-lab-temporal-interval-contains?
+        agentic-ai-lab-temporal-interval-extent-relation)
 
-(def (poo-flow-temporal-compare left right)
-  (unless (and (poo-flow-temporal-instant? left)
-               (poo-flow-temporal-instant? right))
+(def (agentic-ai-lab-temporal-compare left right)
+  (unless (and (agentic-ai-lab-temporal-instant? left)
+               (agentic-ai-lab-temporal-instant? right))
     (error "temporal comparison requires two instants"))
   (cond
    ((not (equal? (.ref left 'domain-identity)
@@ -24,9 +25,9 @@
    ((> (.ref left 'coordinate) (.ref right 'coordinate)) 'after)
    (else 'equal)))
 
-(def (poo-flow-temporal-interval-contains? interval instant)
-  (unless (and (poo-flow-temporal-interval? interval)
-               (poo-flow-temporal-instant? instant))
+(def (agentic-ai-lab-temporal-interval-contains? interval instant)
+  (unless (and (agentic-ai-lab-temporal-interval? interval)
+               (agentic-ai-lab-temporal-instant? instant))
     (error "interval membership requires an interval and instant"))
   (let ((start (.ref interval 'start)) (end (.ref interval 'end)))
     (cond
@@ -43,3 +44,45 @@
                (<= lower position) (< lower position))
              (if (.ref interval 'end-closed?)
                (<= position upper) (< position upper))))))))
+
+;;; Allen's thirteen endpoint relations apply only to proper, observed
+;;; intervals. Endpoint closure is a separate membership concern. A point or
+;;; empty interval has no Allen extent and is reported as 'degenerate.
+(def (agentic-ai-lab-temporal-interval-extent-relation left right)
+  (unless (and (agentic-ai-lab-temporal-interval? left)
+               (agentic-ai-lab-temporal-interval? right))
+    (error "interval relation requires two intervals"))
+  (let* ((left-start (.ref left 'start))
+         (left-end (.ref left 'end))
+         (right-start (.ref right 'start))
+         (right-end (.ref right 'end)))
+    (cond
+     ((not (equal? (.ref left-start 'domain-identity)
+                   (.ref right-start 'domain-identity))) 'incomparable)
+     ((not (and (eq? (.ref left-start 'modality) 'observed)
+                (eq? (.ref left-end 'modality) 'observed)
+                (eq? (.ref right-start 'modality) 'observed)
+                (eq? (.ref right-end 'modality) 'observed))) 'unknown)
+     (else
+      (let ((a (.ref left-start 'coordinate))
+            (b (.ref left-end 'coordinate))
+            (c (.ref right-start 'coordinate))
+            (d (.ref right-end 'coordinate)))
+        (cond
+         ((or (= a b) (= c d)) 'degenerate)
+         ((< a c)
+          (cond ((< b c) 'before)
+                ((= b c) 'meets)
+                ((< b d) 'overlaps)
+                ((= b d) 'finished-by)
+                (else 'contains)))
+         ((= a c)
+          (cond ((< b d) 'starts)
+                ((= b d) 'equal)
+                (else 'started-by)))
+         (else
+          (cond ((> a d) 'after)
+                ((= a d) 'met-by)
+                ((< b d) 'during)
+                ((= b d) 'finishes)
+                (else 'overlapped-by)))))))))

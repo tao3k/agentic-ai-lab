@@ -29,7 +29,7 @@
  (iterations . 1)
  (unit . "ms")
  (sourcePath . "t/scenarios/performance/sources-lock/benchmark.ss")
- (rule . POO-FLOW-SOURCES-LOCK-PERFORMANCE-001)
+ (rule . AGENTIC-AI-LAB-SOURCES-LOCK-PERFORMANCE-001)
  (feature . sources-lock)
  (optimizationFocus . "one constructor-owned native hash index and constant-time identity lookup")
  (inputShape . "10,000 reversed admitted SourceLockEntry values and 10,000 precomputed exact identities")

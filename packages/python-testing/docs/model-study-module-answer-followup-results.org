@@ -1,0 +1,56 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Three-case Scheme module answer-format result
+#+DATE: 2026-10-02
+#+STATUS: completed bounded run
+
+* Provenance
+
+The [[file:model-study-module-answer-followup.org][follow-up protocol]] and prompt bytes were committed at Agentic AI Lab
+=d23829a621e24b39706e274a88ac80c8430774b6= with pinned ASCENT
+=f80c9dc7cf5e4ed42a806b0d78c847e52be09de6=. Preview manifest
+=/private/tmp/poo-scheme-module-answer-preview-head-d23829a/manifest.tsv=
+has SHA256 =25843a9e36d02bccae753679399f9fd55ecfc8bba117f05a83f95135ae0b4a22=.
+The expected-answer hashes match the first seven-case run. The user
+separately authorized three paid calls; all three were sent once to
+=deepseek-flash= with no retries. Expected answers were not sent.
+
+Raw responses and the run manifest are in
+=/private/tmp/poo-scheme-module-answer-live-head-d23829a=. Manifest
+SHA256 is =f611383a1dcceb60cd3e37ba0ed10016f146e8cebf3d7e8eddc00853eacdca4c=.
+
+* Results
+
+| Case | API status | Run filter readable | Native exact | Raw response SHA256 |
+|------+------------+---------------------+--------------+---------------------|
+| =module_fragment= | completed | yes | yes | =7eb3300564bb7d78031f613663e66b7fd2774fbae4e9fa9c359184f6239e7c7b= |
+| =module_diagnostic= | completed | no | no | =86bae8ff55b9c3f49e8f4f3fd9d53792820fb7f89cdd9b73eb639326236fef4e= |
+| =receipt_boundary= | completed | yes | no | =a368e49f5ff0cae75ec4bea64845be1d1615b5136218fa117a00c5c455dedfdf= |
+
+The fragment answer was the exact three-row set, in a different row
+order. The diagnostic answer used =missing-relation= and
+=unbound-head-variable= with source expressions as paths; the native
+answer uses =invalid-body (rule 0 body 1)= and
+=invalid-head (rule 0 head 0)=. The receipt answer returned
+=(complete complete complete)= where the native answer is
+=(complete valid valid)=, while its rows and stale-generation outcome
+matched. These are concrete semantic errors in this run.
+
+The diagnostic response was a Scheme datum containing =?y= and =?x=.
+The run's narrow text filter excluded =?=, so its manifest reports
+=valid=false=. An offline call to the same native Scheme scorer accepted
+the raw datum as =valid #t= and scored =correct #f=. The filter now admits
+=?= for later offline regrades; the original run manifest is preserved.
+
+* Interpretation
+
+Placing the short answer-only instruction after the source changed all
+three outputs from prose to S-expressions. One of the three became exact.
+This paired observation concerns three programs and one model call per
+condition; it does not isolate stochastic variation or prove a general
+prompting effect. The remaining errors identify testable distinctions:
+an alias export versus an absent relation, admission diagnostic code/path,
+and receipt status versus verifier result. A next study should sample
+independent programs in those categories and score them without another
+repair loop. No additional model calls are implied by this receipt.

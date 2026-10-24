@@ -9,13 +9,13 @@
 ;;; Policy evidence: Cube interface tests assert descriptor override and gates.
 
 (import (only-in :clan/poo/object .ref object?)
-        (only-in :poo-flow/src/core/roles execution-policy-role)
-        (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        :poo-flow/src/core/object-syntax
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/projection-syntax
-        :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/agent-sandbox/bridge)
+        (only-in :yuanxu/modules/funflow/control-plane/roles execution-policy-role)
+        (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        :yuanxu/object-family/role-syntax
+        :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :agentic-ai-lab/modules/agent-sandbox/profile
+        :agentic-ai-lab/modules/agent-sandbox/bridge)
 
 (export +cube-interface-schema+
         +cube-interface-api-compatibilities+
@@ -44,7 +44,7 @@
 ;;; Cube interface schema is separate from the neutral runtime manifest because
 ;;; Marlin needs backend lifecycle semantics, not only process/filesystem fields.
 ;; : Symbol
-(def +cube-interface-schema+ 'poo-flow.agent-sandbox-cube-interface.v1)
+(def +cube-interface-schema+ 'agentic-ai-lab.agent-sandbox-cube-interface.v1)
 
 ;;; API compatibility names the runtime surface Marlin should bind to. Today it
 ;;; is E2B-compatible; future Cube-native APIs can override this descriptor slot.

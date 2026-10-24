@@ -2,11 +2,11 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         (only-in :clan/poo/mop element?)
-        :poo-flow/modules/model-core/interface)
+        :agentic-ai-lab/modules/model-core/interface)
 
 (def (model-core-test-row-ref row key)
   (let (entry (assq key row))
@@ -16,83 +16,83 @@
 
 (def model-core-test
   (test-suite "model core"
-    (poo-flow-test-case "model specs expose POO-native accessors and projections"
-      (check-equal? (element? PooFlowModelSpec
-                              poo-flow-model-core-tool-json-model)
+    (yuanxu-test-case "model specs expose POO-native accessors and projections"
+      (check-equal? (element? AgenticAILabModelSpec
+                              agentic-ai-lab-model-core-tool-json-model)
                     #t)
       (check-equal?
-       (element? PooFlowModelSpec
-                 (.o kind: +poo-flow-model-core-spec-kind+
+       (element? AgenticAILabModelSpec
+                 (.o kind: +agentic-ai-lab-model-core-spec-kind+
                      model-ref: 'missing-contract-fields))
        #f)
-      (check-equal? (poo-flow-model-spec-ref poo-flow-model-core-tool-json-model)
+      (check-equal? (agentic-ai-lab-model-spec-ref agentic-ai-lab-model-core-tool-json-model)
                     'tool-json)
-      (check-equal? (poo-flow-model-spec-provider poo-flow-model-core-tool-json-model)
+      (check-equal? (agentic-ai-lab-model-spec-provider agentic-ai-lab-model-core-tool-json-model)
                     'runtime-local)
-      (check-equal? (poo-flow-model-spec-model-id poo-flow-model-core-tool-json-model)
+      (check-equal? (agentic-ai-lab-model-spec-model-id agentic-ai-lab-model-core-tool-json-model)
                     "local-tool-json")
-      (check-equal? (poo-flow-model-spec-capabilities poo-flow-model-core-tool-json-model)
+      (check-equal? (agentic-ai-lab-model-spec-capabilities agentic-ai-lab-model-core-tool-json-model)
                     '(chat text json tool-calling))
       (check-equal? (model-core-test-row-ref
-                     (poo-flow-model-spec->alist
-                      poo-flow-model-core-tool-json-model)
+                     (agentic-ai-lab-model-spec->alist
+                      agentic-ai-lab-model-core-tool-json-model)
                      'runtime-executed)
                     #f))
-    (poo-flow-test-case "model catalog summarizes refs without runtime execution"
-      (check-equal? (element? PooFlowModelCatalog
-                              poo-flow-model-core-default-catalog)
+    (yuanxu-test-case "model catalog summarizes refs without runtime execution"
+      (check-equal? (element? AgenticAILabModelCatalog
+                              agentic-ai-lab-model-core-default-catalog)
                     #t)
-      (check-equal? (poo-flow-model-catalog-ref poo-flow-model-core-default-catalog)
+      (check-equal? (agentic-ai-lab-model-catalog-ref agentic-ai-lab-model-core-default-catalog)
                     'model-core-default)
-      (check-equal? (poo-flow-model-catalog-model-refs
-                     poo-flow-model-core-default-catalog)
+      (check-equal? (agentic-ai-lab-model-catalog-model-refs
+                     agentic-ai-lab-model-core-default-catalog)
                     '(fast-text tool-json))
-      (check-equal? (poo-flow-model-catalog-model-count
-                     poo-flow-model-core-default-catalog)
+      (check-equal? (agentic-ai-lab-model-catalog-model-count
+                     agentic-ai-lab-model-core-default-catalog)
                     2)
-      (check-equal? (poo-flow-model-spec-ref
-                     (poo-flow-model-catalog-find
-                      poo-flow-model-core-default-catalog
+      (check-equal? (agentic-ai-lab-model-spec-ref
+                     (agentic-ai-lab-model-catalog-find
+                      agentic-ai-lab-model-core-default-catalog
                       'fast-text))
                     'fast-text))
-    (poo-flow-test-case "selection policy chooses the first compatible model"
-      (check-equal? (element? PooFlowModelSelectionPolicy
-                              poo-flow-model-core-default-selection-policy)
+    (yuanxu-test-case "selection policy chooses the first compatible model"
+      (check-equal? (element? AgenticAILabModelSelectionPolicy
+                              agentic-ai-lab-model-core-default-selection-policy)
                     #t)
       (def receipt
-        (poo-flow-model-select
-         poo-flow-model-core-default-selection-policy
-         poo-flow-model-core-default-catalog))
-      (check-equal? (poo-flow-model-selection-receipt-valid? receipt)
+        (agentic-ai-lab-model-select
+         agentic-ai-lab-model-core-default-selection-policy
+         agentic-ai-lab-model-core-default-catalog))
+      (check-equal? (agentic-ai-lab-model-selection-receipt-valid? receipt)
                     #t)
-      (check-equal? (element? PooFlowModelSelectionReceipt receipt) #t)
-      (check-equal? (poo-flow-model-selection-receipt-selected-model-ref receipt)
+      (check-equal? (element? AgenticAILabModelSelectionReceipt receipt) #t)
+      (check-equal? (agentic-ai-lab-model-selection-receipt-selected-model-ref receipt)
                     'tool-json)
-      (check-equal? (poo-flow-model-selection-receipt-diagnostics receipt)
+      (check-equal? (agentic-ai-lab-model-selection-receipt-diagnostics receipt)
                     '())
       (check-equal? (model-core-test-row-ref
-                     (poo-flow-model-selection-receipt->alist receipt)
+                     (agentic-ai-lab-model-selection-receipt->alist receipt)
                      'runtime-executed)
                     #f))
-    (poo-flow-test-case "selection policy records diagnostics before fallback"
+    (yuanxu-test-case "selection policy records diagnostics before fallback"
       (def small-catalog
-        (poo-flow-model-catalog
+        (agentic-ai-lab-model-catalog
          'small
-         (list poo-flow-model-core-fast-text-model)))
+         (list agentic-ai-lab-model-core-fast-text-model)))
       (def policy
-        (poo-flow-model-selection-policy
+        (agentic-ai-lab-model-selection-policy
          'needs-json
          '(missing tool-json)
          'fast-text
          '(chat text)
          'first-compatible
          '()))
-      (def receipt (poo-flow-model-select policy small-catalog))
-      (check-equal? (poo-flow-model-selection-receipt-valid? receipt)
+      (def receipt (agentic-ai-lab-model-select policy small-catalog))
+      (check-equal? (agentic-ai-lab-model-selection-receipt-valid? receipt)
                     #t)
-      (check-equal? (poo-flow-model-selection-receipt-selected-model-ref receipt)
+      (check-equal? (agentic-ai-lab-model-selection-receipt-selected-model-ref receipt)
                     'fast-text)
       (check-equal? (model-core-test-row-ref
-                     (car (poo-flow-model-selection-receipt-diagnostics receipt))
+                     (car (agentic-ai-lab-model-selection-receipt-diagnostics receipt))
                      'reason)
                     'missing-model))))

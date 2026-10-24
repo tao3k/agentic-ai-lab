@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+name: Nix adapters
+on:
+  pull_request:
+    paths: ['modules/nix/**', 'modules/services/**', 'bindings/nix-c-api/**', 'scenarios/**', 't/**', 'core', '.github/workflows/nix.yml', '.github/actions/setup-gerbil/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  adapters:
+    name: Nix / OpenTofu (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    env:
+      GERBIL_PATH: ${{ github.workspace }}/.gerbil
+      GERBIL_BUILD_CORES: '2'
+      GERBIL_TEST_MAX_HEAP: 2G
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          submodules: true
+      - uses: ./.github/actions/setup-gerbil
+      - name: Build the library and selected product adapters
+        run: |
+          (cd core && gerbil deps --install && just build)
+          just --justfile t/qualification/nix/Justfile build
+      - name: Realize locked Provider qualification inputs
+        run: |
+          inputs=$(nix-build --no-out-link t/fixtures/opentofu/ci.nix)
+          families=$(readlink -f "$inputs/families")
+          {
+            echo "AGENTIC_AI_LAB_OPENTOFU_TEST_INPUTS=$inputs"
+            echo "AGENTIC_AI_LAB_OPENTOFU_ARTIFACT=$families"
+            echo "AGENTIC_AI_LAB_OPENTOFU_FLAKE_ARTIFACT=$families"
+            echo "YUANXU_JSON_SCHEMA_AWS_EXPORT=$families/aws/schema.json"
+            echo "AGENTIC_AI_LAB_OPENTOFU_TEST_PARENT_ARTIFACT=$(readlink -f "$inputs/parent")"
+            echo "AGENTIC_AI_LAB_OPENTOFU_TEST_CHILD_ARTIFACT=$(readlink -f "$inputs/child")"
+            echo "YUANXU_AWS_BINARY=$(readlink -f "$inputs/binary")/provider"
+            echo "AGENTIC_AI_LAB_NIX_TEST_TOOLS=$(cat "$inputs/tools")"
+          } >> "$GITHUB_ENV"
+      - name: Serial product adapter regressions
+        run: just --justfile t/qualification/nix/Justfile test-all

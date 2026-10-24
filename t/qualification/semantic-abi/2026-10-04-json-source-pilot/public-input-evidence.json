@@ -1,0 +1,20 @@
+[
+  {
+    "repo": "tao3k/poo-flow",
+    "private": false,
+    "path": "src/ffi/semantic.ss",
+    "ref": "5105dbde2d8fb280a5809709dd02e15647c9d60d",
+    "sha256": "7166c015985948748065bbdb3d236f375bb1a5b316a8cb612f4f25e827267c0e",
+    "publicSourceMatchesExactly": true,
+    "htmlUrl": "https://github.com/tao3k/poo-flow/blob/5105dbde2d8fb280a5809709dd02e15647c9d60d/src/ffi/semantic.ss"
+  },
+  {
+    "repo": "tao3k/gerbil-ascent",
+    "private": false,
+    "path": "temporal/lens.ss",
+    "ref": "0176c061877ff364e0037ce56d7d085848a9ad60",
+    "sha256": "0230ac68b8010344d5f14d1e97f9da5a88da78987bfc89c842c0da80b0344d59",
+    "publicSourceMatchesExactly": true,
+    "htmlUrl": "https://github.com/tao3k/gerbil-ascent/blob/0176c061877ff364e0037ce56d7d085848a9ad60/temporal/lens.ss"
+  }
+]

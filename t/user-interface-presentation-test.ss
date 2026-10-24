@@ -6,22 +6,22 @@
 ;;; Boundary: tests verify user-interface presentation receipts.
 ;;; Invariant: presentations stay report-only and never realize descriptors.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/authoring/module-interface
-                 poo-flow-brand-group
-                 poo-flow-brand-name)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-config-presentation-kind)
-        (only-in :poo-flow/src/user-interface/presentation-config
-                 pooFlowUserConfigPresentation)
-        (only-in :poo-flow/src/user-interface/profile-core
-                 poo-flow-user-profile-presentation-kind)
-        (only-in :poo-flow/src/user-interface/profile-presentation-config
-                 pooFlowUserProfilePresentation)
+        (only-in :agentic-ai-lab/modules/module-authoring/module-interface
+                 agentic-ai-lab-brand-group
+                 agentic-ai-lab-brand-name)
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-config-presentation-kind)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation)
+        (only-in :yuanxu/profile-composition/user-profile
+                 yuanxu-user-profile-presentation-kind)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/profile-presentation-config
+                 agenticAiLabUserProfilePresentation)
         "user-interface-fixtures.ss")
 
 (export user-interface-presentation-test)
@@ -33,7 +33,7 @@
   '(selected-modules
     feature-facts
     sandbox-profile-derivations
-    session-core-intents
+    session-intents
     cicd-intents
     workflow-cicd-pipelines
     workflow-cicd-functional-dags
@@ -63,10 +63,10 @@
 ;;; switches, CI/CD handoff rows, loop-engine rows, and ownership boundaries.
 ;; : (-> Unit TestSuite)
 (def (user-interface-config-presentation-test)
-  (poo-flow-test-case "presents downstream config without descriptor realization"
+  (yuanxu-test-case "presents downstream config without descriptor realization"
       (let* ((presentation
-              (pooFlowUserConfigPresentation
-               test-poo-flow-user-config
+              (agenticAiLabUserConfigPresentation
+               test-agentic-ai-lab-user-config
                '(surface
                  profile
                  flow-mode
@@ -84,11 +84,11 @@
              (trace (.ref presentation 'presentation-trace))
              (settings (.ref presentation 'settings)))
         (check-equal? (.ref presentation 'kind)
-                      poo-flow-user-config-presentation-kind)
+                      yuanxu-user-config-presentation-kind)
         (check-equal? (.ref presentation 'module-count) 7)
         (check-equal? (.ref presentation 'module-keys)
                       '((flow . funflow)
-                        (session . session-core)
+                        (session . session)
                         (loop . governor)
                         (sandbox . nono-sandbox)
                         (sandbox . cubeSandbox)
@@ -99,22 +99,22 @@
                       0)
         (check-equal? (.ref presentation 'sandbox-profile-derivations)
                       '())
-        (check-equal? (.ref presentation 'session-core-intent-count) 1)
+        (check-equal? (.ref presentation 'session-intent-count) 1)
         (check-equal? (alist-value 'key
                                    (car (.ref presentation
-                                             'session-core-intents)))
-                      '(session . session-core))
+                                             'session-intents)))
+                      '(session . session))
         (check-equal? (alist-value 'flags
                                    (car (.ref presentation
-                                             'session-core-intents)))
+                                             'session-intents)))
                       '(+lineage +placement +handoff +graph +transform +doctor))
         (check-equal? (alist-value 'transform-enabled?
                                    (car (.ref presentation
-                                             'session-core-intents)))
+                                             'session-intents)))
                       #t)
         (check-equal? (alist-value 'runtime-executed
                                    (car (.ref presentation
-                                             'session-core-intents)))
+                                             'session-intents)))
                       #f)
         (check-equal? (alist-value 'declaration-index
                                    (car feature-facts))
@@ -192,10 +192,10 @@
         (check-equal? (alist-value 'runtime-handoff loop-engine-intent)
                       'loop-governor-marlin-runtime-manifest)
         (check-equal? (alist-value 'contract loop-engine-result-contract)
-                      'poo-flow.loop-governor.result-contract.v1)
+                      'agentic-ai-lab.loop-governor.result-contract.v1)
         (check-equal? (alist-value 'valid? loop-engine-result-contract) #t)
         (check-equal? (alist-value 'human-audit loop-engine-result-contract)
-                      'poo-flow.loop-governor.node-result.v1)
+                      'agentic-ai-lab.loop-governor.node-result.v1)
         (check-equal? (alist-value 'required-fields
                                    loop-engine-result-contract)
                       '(decision summary evidence))
@@ -213,11 +213,11 @@
                       '(#f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f))
         (check-equal? (alist-value 'profile settings)
                       "developer")
-        (check-equal? (.ref presentation 'brand-name) poo-flow-brand-name)
-        (check-equal? (.ref presentation 'brand-group) poo-flow-brand-group)
+        (check-equal? (.ref presentation 'brand-name) agentic-ai-lab-brand-name)
+        (check-equal? (.ref presentation 'brand-group) agentic-ai-lab-brand-group)
         (check-equal? (not
                        (not
-                        (member "poo-flow!"
+                        (member "yuanxu!"
                                 (.ref presentation 'user-entrypoints))))
                       #t)
         (check-equal? (not
@@ -227,17 +227,17 @@
                       #t)
         (check-equal? (not
                        (not
-                        (member "pooFlowUserConfigPresentation"
+                        (member "agenticAiLabUserConfigPresentation"
                                 (.ref presentation 'api-entrypoints))))
                       #t)
         (check-equal? (not
                        (not
-                        (member "poo-flow-user-config-feature?"
+                        (member "yuanxu-user-config-feature?"
                                 (.ref presentation 'api-entrypoints))))
                       #t)
         (check-equal? (not
                        (not
-                        (member "pooFlowSandboxProfilesPresentation"
+                        (member "agenticAiLabSandboxProfilesPresentation"
                                 (.ref presentation 'api-entrypoints))))
                       #t)
         (check-equal? (alist-value 'runtime-owner
@@ -260,27 +260,27 @@
 ;;; higher-level Doom-style profile fields users inspect.
 ;; : (-> Unit TestSuite)
 (def (user-interface-profile-presentation-case-test)
-  (poo-flow-test-case "presents profile without descriptor realization"
+  (yuanxu-test-case "presents profile without descriptor realization"
       (let* ((presentation
-              (pooFlowUserProfilePresentation test-poo-flow-user-profile)))
+              (agenticAiLabUserProfilePresentation test-agentic-ai-lab-user-profile)))
         (check-equal? (.ref presentation 'kind)
-                      poo-flow-user-profile-presentation-kind)
+                      yuanxu-user-profile-presentation-kind)
         (check-equal? (.ref presentation 'profile-name) 'developer)
         (check-equal? (.ref presentation 'module-bundle-count) 7)
         (check-equal? (.ref presentation 'module-count) 7)
         (check-equal? (.ref presentation 'config-presentation-kind)
-                      poo-flow-user-config-presentation-kind)
+                      yuanxu-user-config-presentation-kind)
         (check-equal? (.ref presentation 'config-module-count) 7)
         (check-equal? (.ref presentation 'feature-count) 7)
         (check-equal? (.ref presentation 'sandbox-profile-derivation-count)
                       0)
         (check-equal? (.ref presentation 'sandbox-profile-derivations)
                       '())
-        (check-equal? (.ref presentation 'session-core-intent-count) 1)
+        (check-equal? (.ref presentation 'session-intent-count) 1)
         (check-equal? (alist-value 'key
                                    (car (.ref presentation
-                                             'session-core-intents)))
-                      '(session . session-core))
+                                             'session-intents)))
+                      '(session . session))
         (check-equal? (.ref presentation 'cicd-intent-count) 1)
         (check-equal? (.ref presentation
                             'workflow-cicd-runtime-command-manifest-agreement-valid?)
@@ -326,10 +326,10 @@
                       '(flow . funflow))
         (check-equal? (not
                        (not
-                        (member "poo-flow-profile"
+                        (member "agentic-ai-lab-profile"
                                 (.ref presentation 'user-entrypoints))))
                       #t)
-        (check-equal? (.ref presentation 'brand-name) poo-flow-brand-name)
+        (check-equal? (.ref presentation 'brand-name) agentic-ai-lab-brand-name)
         (check-equal? (.ref presentation 'descriptor-realized?) #f)
         (check-equal? (.ref presentation 'runtime-executed) #f))))
 
@@ -337,6 +337,6 @@
 ;;; This suite keeps presentation output aligned with the declarative user
 ;;; interface contract while each case remains a separately inspectable owner.
 (def user-interface-presentation-test
-  (test-suite "poo-flow user interface presentation"
+  (test-suite "agentic-ai-lab user interface presentation"
     (user-interface-config-presentation-test)
     (user-interface-profile-presentation-case-test)))

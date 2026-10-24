@@ -1,0 +1,122 @@
+#+title: ASCENT application ownership migration
+
+* Owners
+ASCENT remains the producer of generic rules, queries, source maintenance and
+provenance. This module owns computational Evidence and application assessment.
+=modules/ai-agentic-context/clues/native= owns Clue submission and selection;
+=modules/ai-agentic-context/interaction/native= owns model/tool interaction;
+=modules/temporal-causality/trajectory/native= owns ordered application history
+and cost accounting. Their native implementation shares a POO runtime owner,
+which delegates execution to the producer Library.
+
+The existing Python runtime package exposes =agentic_ai_lab_runtime.reasoning=.
+=ReasoningRuntime= owns application lifetime; application Evidence, Clue,
+Trajectory and conversation types require that owner. Generic declarations use
+=Engine.rules= from ASCENT when no application owner is needed.
+
+The Scheme computational store is an internal POO-native owner. The existing
+Case objects and functional assessment helpers remain the ordinary Scheme API.
+Candidate syntax and packet dispatchers stay behind internal native transport;
+they are not added to the module facade. There is no old ASCENT import facade.
+
+* Formal and executable closure
+The transferred Quint configurations and negative controls live in the existing
+Python testing package; =just check-assessment-quint= retains exhaustive TLC
+admission and exact negative-property/exit checks. The transferred Lean target is
+=just check-assessment-lean=. Generic source/result/provenance lifecycle and cache
+identity obligations remain with ASCENT.
+
+Installed Python regression tests live under
+=packages/python-runtime/tests/scenarios=. Offline study tests live under
+=packages/python-testing/tests/assessment=. Neither gate sends provider requests.
+The native assessment gate is:
+
+#+begin_src sh
+cargo test --locked --manifest-path modules/evidence-assessment/native/Cargo.toml --lib --test assessment
+#+end_src
+
+* Research history and current binding
+Existing reports and failures retain their bytes and old source identities under
+=docs/research/agent-inference=. The migrated study modules are source history and
+consumer qualification code, not a new search framework. Historical plans do not
+qualify the new module layout.
+
+The native build receipt freezes POO source inputs and the resolved producer's
+source hashes into the extension. Current study admission compares these producer
+hashes with the independently installed ASCENT extension, then binds both actual
+extension files. This is content binding; caller authority and applicability are
+separate application obligations. Old compiled-Scheme study plans require their
+original producer and are not silently admitted against the new package.
+
+* Review and remaining consumer policies
+Review is application policy, not a rule-engine primitive. Its native owner and
+rule source are =native/src/review/{mod,owner,policy}.rs= and
+=policies/review-rules.scm=; its Python binding is =native/src/python/review.rs=.
+=agentic_ai_lab_runtime.reasoning.EvidenceReview= and =review_sources= are the public
+Python entry. =packages/python-runtime/tests/scenarios/test_review.py= checks
+source identity, withdrawal, failed receipts and engine failure.
+
+Catalog, Review, History, investigation and lifecycle declarations used as real
+consumer scenarios now live under =native/tests/fixtures/evidence=. Five native
+scenario tests are in =native/tests/scenarios.rs=; installed rule/C-ABI consumer
+tests are in =packages/python-runtime/tests/scenarios=. Generic declaration,
+query, cancellation, typed value and provenance tests remain in ASCENT.
+
+=migration-inventory.json= accounts for every one of the 294 deleted producer
+paths at =923610340c4890bb56f51a7264355a91e05d44ab=: 293 paths have explicit POO
+targets with source and target hashes; the unused duplicate Python wrapper is
+explicitly retired. Generic in-repository renames are not application transfers.
+Historical research reports retain their original bytes. The inventory check
+verifies target existence and content; it is not a semantic equivalence proof.
+
+* Reproduction and current validation
+Cargo and =gerbil.pkg= both consume ASCENT
+=0f99da9e3a3baf1a272ba58fe0769ed8278ae746=. No local path dependency or old
+ASCENT application import facade is provided. The source receipt records the
+resolved Git source and 63 producer inputs; the independent installed ASCENT
+wheel must match every input before study admission.
+
+Fresh source checkouts built both native Python extensions. A fresh virtual
+environment installed their wheels and passed 139 ASCENT and 112 POO installed
+consumer tests. POO's standalone native crate passed 3 unit and 54 integration
+tests against the Git-pinned producer. The offline application study and
+inventory suite passed 152 tests. No provider request was sent.
+
+The existing Python wheel CI now tests the installed assessment consumers against
+the exact producer revision. Existing CI Quint and Lean jobs include the migrated
+protocols and the =AgenticAILabModuleEvidenceAssessmentProof= target. Full wheel
+assembly with the existing Bazel C-runtime handoffs remains a distinct CI gate;
+the local extension-wheel check does not claim that unrelated runtime handoff
+completed.
+
+* Retained failures and corrected assumptions
+- Missing explicit Gerbil HOME caused dynamic expander module lookup failures.
+  Binding the installed SDK and using the existing nextest process-isolation
+  entry passed 63 native producer tests, with no skipped tests, forced shutdown,
+  leaked process or checkpoint-transport failure markers.
+- A direct serial diagnostic was cut off at 120 seconds. It is incomplete, not
+  successful. The final run uses the repository's existing CI nextest route;
+  no existing test deadline or assertion was relaxed.
+- Newly mounted legacy consumer tests lacked a committed component manifest and
+  assumed expired calls could return cached answers. The fixture is explicit;
+  expired calls must fail under the current producer contract, including cached
+  calls. No arbitrary-code fallback was added.
+- A legacy consumer expected a historical explanation to become unreadable after
+  replacement. It now verifies the existing contract: the recorded explanation
+  keeps its original generation and content while =current= is false. It does
+  not promote that explanation into a current proof.
+- Sandboxed process-observation and dependency-download failures remain failed
+  attempts. Authorized reruns used the same checks and fixed environments.
+
+Raw local logs remain outside source control under /private/tmp; CI retains its
+own artifacts. These checks qualify ownership, bindings and execution. They do
+not establish a reduction in model thinking or improved search quality.
+
+The first migration CI also exposed missing transferred licensing metadata, a
+stale Bazel producer projection, and the real Core/ASP dependency conflict
+(gerbil-poo 099b381 versus fdeadfa). Explicit REUSE annotations preserve original
+source/report bytes. The native workspace declares the existing license.
+ASP PR #12 changes only its dependency pin and passed its original native build
+and 17-module parent test suite; its intentional child failure controls remain
+active. Both consumers use that immutable source. Bazel projections are derived
+with the existing pin/lock tool and its contract; no tag override is introduced.

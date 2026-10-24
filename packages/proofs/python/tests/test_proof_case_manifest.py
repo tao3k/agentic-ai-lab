@@ -8,9 +8,9 @@ from pathlib import Path
 
 import pytest
 
-from poo_flow_proof.cli import main
-from poo_flow_proof.proof_case_emit import generated_artifacts
-from poo_flow_proof.proof_case_manifest import load_proof_case_schema
+from agentic_ai_lab_proof.cli import main
+from agentic_ai_lab_proof.proof_case_emit import generated_artifacts
+from agentic_ai_lab_proof.proof_case_manifest import load_proof_case_schema
 
 
 PROOF_ROOT = Path(__file__).parents[2]
@@ -27,7 +27,7 @@ def test_manifest_has_stable_native_layout() -> None:
     assert len(schema.fingerprint) == 32
     assert (
         schema.fingerprint_hex
-        == "bad9c5d0781d0a99e2f8d58cb94abae9dfc2eda4c71a01009897f7fc5419e0e7"
+        == "1627b834b99c2b23e4ee0019d38c672dfb86d6bfc44d55afaf18ad501160853a"
     )
     assert schema.required_obligation_mask == 0xFF
     assert schema.proof_identity.digest_algorithm == "sha256"

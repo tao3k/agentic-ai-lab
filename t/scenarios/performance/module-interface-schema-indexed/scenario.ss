@@ -13,18 +13,18 @@
                  benchmark-receipt-pass?
                  benchmark-run/result)
         (only-in :clan/poo/object .o .ref object<-alist)
-        (only-in :poo-flow/src/authoring/module-interface
-                 poo-flow-module-interface
-                 poo-flow-module-interface-schema-spec)
-        (only-in :poo-flow/src/authoring/module-descriptor
-                 poo-flow-modules)
-        (only-in :core/module-system/projection/option-objects
-                 poo-flow-module-option-schema-id
-                 poo-flow-module-option-schema-value)
-        (only-in :poo-flow/src/authoring/module-option-projection
-                 poo-flow-module-option-schemas)
-        (only-in :core/module-system/projection/option-validation
-                 poo-flow-module-find-schema))
+        (only-in :agentic-ai-lab/modules/module-authoring/module-interface
+                 yuanxu-module-interface
+                 yuanxu-module-interface-schema-spec)
+        (only-in :agentic-ai-lab/modules/module-authoring/module-descriptor
+                 agentic-ai-lab-modules)
+        (only-in :yuanxu/module-system/projection/option-objects
+                 yuanxu-module-option-schema-id
+                 yuanxu-module-option-schema-value)
+        (only-in :agentic-ai-lab/modules/module-authoring/module-option-projection
+                 agentic-ai-lab-module-option-schemas)
+        (only-in :yuanxu/module-system/projection/option-validation
+                 yuanxu-module-find-schema))
 
 (def +schema-count+ 1000)
 (def fixture
@@ -45,26 +45,26 @@
              rows-rev)))))
 
 (def interface
-  (poo-flow-module-interface
+  (yuanxu-module-interface
    "IndexedSchemaProfile"
    (object<-alist schema-rows)
-   '((owner . "poo-flow"))))
+   '((owner . "agentic-ai-lab"))))
 
 (def module
-  (poo-flow-modules interface (.o id: 'indexed-schema config: (.o))))
+  (agentic-ai-lab-modules interface (.o id: 'indexed-schema config: (.o))))
 
-(def schemas (poo-flow-module-option-schemas module))
-(def option-ids (map poo-flow-module-option-schema-id schemas))
+(def schemas (agentic-ai-lab-module-option-schemas module))
+(def option-ids (map yuanxu-module-option-schema-id schemas))
 
 (def (baseline-values)
   (map (lambda (option-id)
-         (poo-flow-module-option-schema-value
-          (poo-flow-module-find-schema schemas option-id)))
+         (yuanxu-module-option-schema-value
+          (yuanxu-module-find-schema schemas option-id)))
        option-ids))
 
 (def (candidate-values)
   (map (lambda (option-id)
-         (.ref (poo-flow-module-interface-schema-spec interface option-id)
+         (.ref (yuanxu-module-interface-schema-spec interface option-id)
                'constant))
        option-ids))
 
@@ -84,7 +84,7 @@
                (benchmark-fixture-ref baseline-receipt 'elapsedNs))
       (error "Interface schema index did not improve repeated lookup"
              baseline-receipt candidate-receipt))
-    (display "[poo-flow-benchmark] module-interface-schema-indexed baseline=")
+    (display "[agentic-ai-lab-benchmark] module-interface-schema-indexed baseline=")
     (write baseline-receipt)
     (display " candidate=")
     (write candidate-receipt)

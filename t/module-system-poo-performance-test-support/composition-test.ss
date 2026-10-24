@@ -5,7 +5,7 @@
 
 ;;; Boundary: POO composition macro and native extension performance gates.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -24,7 +24,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-profile-declaration-case)
-  (poo-flow-test-case "gates inline profile declarations as native POO objects"
+  (yuanxu-test-case "gates inline profile declarations as native POO objects"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
              poo-performance-composition-profile-declaration-gate-receipt))
@@ -38,7 +38,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-profiles-bulk-case)
-  (poo-flow-test-case "gates grouped profiles import and compose syntax"
+  (yuanxu-test-case "gates grouped profiles import and compose syntax"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
              poo-performance-composition-profiles-bulk-gate-receipt))
@@ -51,7 +51,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-local-override-case)
-  (poo-flow-test-case "gates local native POO override profiles"
+  (yuanxu-test-case "gates local native POO override profiles"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
              poo-performance-composition-local-override-gate-receipt))
@@ -64,7 +64,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-hook-override-case)
-  (poo-flow-test-case "gates reusable profile hook overrides"
+  (yuanxu-test-case "gates reusable profile hook overrides"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
              poo-performance-composition-hook-override-gate-receipt))
@@ -77,7 +77,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-native-object-reuse-case)
-  (poo-flow-test-case "gates direct native POO object reuse"
+  (yuanxu-test-case "gates direct native POO object reuse"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
              poo-performance-composition-native-object-reuse-gate-receipt))
@@ -91,7 +91,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-native-object-reuse-large-library-case)
-  (poo-flow-test-case "gates 2048 native POO profiles plus hook variants"
+  (yuanxu-test-case "gates 2048 native POO profiles plus hook variants"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
              poo-performance-composition-native-object-reuse-large-library-gate-receipt))
@@ -105,7 +105,7 @@
       (check-equal? (benchmark-receipt-pass? receipt) #t))))
 
 (def (module-system-poo-performance-composition-lazy-demand-case)
-  (poo-flow-test-case "gates POO composition lazy demand object reuse"
+  (yuanxu-test-case "gates POO composition lazy demand object reuse"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
              poo-performance-composition-lazy-demand-gate-receipt))
@@ -119,7 +119,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-native-object-list-indexed-family-case)
-  (poo-flow-test-case "gates Project Harness-style POO object-list indexed family"
+  (yuanxu-test-case "gates Project Harness-style POO object-list indexed family"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
              poo-performance-native-object-list-indexed-family-gate-receipt))
@@ -133,7 +133,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-macro-style-matrix-case)
-  (poo-flow-test-case "gates high-performance composition macro styles"
+  (yuanxu-test-case "gates high-performance composition macro styles"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
              poo-performance-composition-macro-style-matrix-gate-receipt))
@@ -147,7 +147,7 @@
 
 ;; : TestSuite
 (def composition-test
-  (test-suite "poo-flow composition macro POO performance"
+  (test-suite "agentic-ai-lab composition macro POO performance"
     (module-system-poo-performance-profile-declaration-case)
     (module-system-poo-performance-profiles-bulk-case)
     (module-system-poo-performance-local-override-case)

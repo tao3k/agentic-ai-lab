@@ -1,0 +1,77 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Founded receipt model pilot results
+#+STATUS: completed bounded pilot; no observed gain over typed observation
+#+DATE: 2026-10-02
+#+FILETAGS: :testing:ascent:temporal:llm:results:
+
+* Receipt and source identity
+
+This was a JSON-observation interface study. The model did not read the
+Gerbil Scheme program, and these scores are not evidence of Scheme
+source comprehension. The separate [[file:model-study-scheme.org][Scheme source pilot]] tests that question.
+
+The [[file:model-study-protocol.org][founded protocol]] and its five-task answer key were fixed
+before any request. The corpus SHA256 was
+=7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
+ASCENT head was =80fee6f0860ff71aaea27ebd08c36b195d4a225f= and POO
+Flow head was =518b2973a725ade0dce04576dd5275d5e69e4641=. Both
+checkouts were clean; their exact-head CI had passed. The native
+fixture returned =summary(1,1)= with valid finite and founded receipt
+verdicts. An external request preview listed the ten case/arm payloads
+and the thirty-call order before the user approved their disclosure to
+DeepSeek. No key was included in that preview or in the response receipt.
+
+All 30 DeepSeek =deepseek-flash= Responses requests completed, with no
+API error, incomplete response or invalid JSON answer. The raw JSONL
+is outside the repository at
+=/private/tmp/poo-ascent-founded-live-2026-10-02.jsonl=, SHA256
+=ae4bff5d9199194ef404f848c030d22187c70a6bf43a6526b5fda54e2268c9d2=.
+Each record matched the frozen order, source heads, corpus digest and
+case/arm observation digest. The raw output retains the original model
+text and the separate Runtime guard decision.
+
+* Predeclared scores
+
+#+NAME: model-study-founded-scores
+| Task | Typed choice / 3 | Proof choice / 3 | Typed claim / 3 | Proof claim / 3 |
+|------+------------------+------------------+-----------------+-----------------|
+| ASCENT withdrawal | 3 | 3 | 3 | 3 |
+| ASCENT wrong join | 3 | 3 | 3 | 3 |
+| ASCENT negation and count | 3 | 3 | 3 | 3 |
+| Temporal closed cut | 3 | 3 | 0 | 0 |
+| Temporal open parent | 3 | 3 | 3 | 3 |
+| Total | 15 / 15 | 15 / 15 | 12 / 15 | 12 / 15 |
+
+The proof arm changed only the negation/count observation. That task
+already scored 3/3 on both choice and bounded claim in the typed arm,
+and all three proof responses matched it. The other four tasks were
+unchanged controls with identical typed and proof observations. This
+pilot therefore shows *no observed improvement* from adding the
+founded receipt on this fixed corpus; it cannot rule out a benefit on a
+different task or prompt.
+
+All six closed-cut answers still said =release_authorized= even though
+the native temporal receipt denied release. The guard recorded
+=withheld / native-denies-release= for those six outputs, three in each
+arm. It recorded =observation-only= for the other 24. Guard containment
+does not make the six model claims correct and is not effect authority.
+
+* Cost, timing and limits
+
+The typed arm used 3,228 input and 195 output tokens; the proof arm
+used 3,396 input and 195 output tokens. Total reported use was 7,014
+tokens. Median model-call times were 0.575 s typed and 0.505 s proof;
+one typed call took 5.458 s. These small, sequential samples do not
+establish a latency advantage. Native preparation was shared across
+requests and excluded from those model times. The live JSONL recorded
+the earlier source-fixture times, but not the separate founded-receipt
+construction time, so it cannot support a complete end-to-end timing
+comparison.
+
+Five finite questions and three calls per arm do not establish general
+model benefit, complete Rust Ascent parity, caller intent, source
+authenticity, temporal causation, release authority or deployed
+behavior. The closed-cut failure remains a concrete reason to keep the
+deterministic output guard at the consumption boundary.

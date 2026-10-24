@@ -1,0 +1,31 @@
+--- a/gxtest.ss
++++ b/gxtest.ss
+@@ -1,7 +1,8 @@
+ ;;; -*- Gerbil -*-
+ ;;; © vyzo
+ ;;; tool to run tests without the need of glue code
+-(import :gerbil/expander
++(import (only-in :gerbil/runtime gerbil-load-expander!)
++        :gerbil/expander
+         :std/cli/getopt
+         :std/iter
+         :std/hash/misc
+@@ -14,6 +15,7 @@
+   (map string->symbol (string-split features #\,)))
+ 
+ (def (main . args)
++  (gerbil-load-expander!)
+   (call-with-getopt gxtest-main args
+     program: "gxtest"
+     help: "run Gerbil tests"
+--- a/build-aot.ss
++++ b/build-aot.ss
+@@ -24,7 +24,7 @@
+     (if config-enable-zlib (ldflags "zlib" "-lz") "")))
+ 
+ (def (aot-tool tool)
+-  (list optimized-exe: tool
++  (list (if (string=? tool "gxtest") exe: optimized-exe:) tool
+         "-cc-options" aot-cc-options
+         "-ld-options" aot-ld-options))
+ 

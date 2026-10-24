@@ -1,0 +1,3251 @@
+{
+  "sourceRepository": "https://github.com/tao3k/gerbil-ascent",
+  "sourceRevision": "923610340c4890bb56f51a7264355a91e05d44ab",
+  "status": "source-inventory",
+  "deletions": [
+    {
+      "source": "applications/domain-evidence.ss",
+      "sourceSha256": "ffda42ad1b25f51d68339a9c0ce95cf5859b8ee9b8d24ff642586c71773b80df",
+      "targets": [
+        "modules/evidence-assessment/domain-checks.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/domain-checks.ss": "ffda42ad1b25f51d68339a9c0ce95cf5859b8ee9b8d24ff642586c71773b80df"
+      }
+    },
+    {
+      "source": "candidate/evidence-store.ss",
+      "sourceSha256": "cb303c496c8c12c6353608ad23d380c02289e5be99dbe95e92fde56920e377f9",
+      "targets": [
+        "modules/evidence-assessment/candidate/evidence-store.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/candidate/evidence-store.ss": "daf2981a1a5132a31d87eefa19b153a8ff54671142917a5731d7f3bdd8706634"
+      }
+    },
+    {
+      "source": "docs/evidence/README.org",
+      "sourceSha256": "f747cef451ffb08e97096aff5f9b882c6cec3a27fe209dfa11cfd946d6fabbe9",
+      "targets": [
+        "modules/evidence-assessment/research/legacy/docs/evidence/README.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/legacy/docs/evidence/README.org": "f747cef451ffb08e97096aff5f9b882c6cec3a27fe209dfa11cfd946d6fabbe9"
+      }
+    },
+    {
+      "source": "docs/features/anchored-evidence-slices.org",
+      "sourceSha256": "24f9961296559dc79bfe15be5c334852b59e5ce703d99a2a0e0f714b92501ac9",
+      "targets": [
+        "modules/evidence-assessment/research/anchored-evidence-slices.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/anchored-evidence-slices.org": "24f9961296559dc79bfe15be5c334852b59e5ce703d99a2a0e0f714b92501ac9"
+      }
+    },
+    {
+      "source": "docs/features/clue-exchange.org",
+      "sourceSha256": "1c82b6b3b5c7f4fe9faf3560b0b94a736b19723efd82d18dd518ff5fac46d3d5",
+      "targets": [
+        "modules/evidence-assessment/research/clue-exchange.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/clue-exchange.org": "1c82b6b3b5c7f4fe9faf3560b0b94a736b19723efd82d18dd518ff5fac46d3d5"
+      }
+    },
+    {
+      "source": "docs/features/evidence-checkpoint.org",
+      "sourceSha256": "3e119edd34c01eb0cb09e8a8957daa8dd68c68fe2d85147b1a35a0c3d61b96ee",
+      "targets": [
+        "modules/evidence-assessment/research/evidence-checkpoint.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/evidence-checkpoint.org": "3e119edd34c01eb0cb09e8a8957daa8dd68c68fe2d85147b1a35a0c3d61b96ee"
+      }
+    },
+    {
+      "source": "docs/features/evidence-dag-and-trajectory.org",
+      "sourceSha256": "51dbdcc64cb8e93d4cd633134a6083e7007fde3debaa16b194df87f5225898fb",
+      "targets": [
+        "modules/evidence-assessment/research/legacy/docs/features/evidence-dag-and-trajectory.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/legacy/docs/features/evidence-dag-and-trajectory.org": "51dbdcc64cb8e93d4cd633134a6083e7007fde3debaa16b194df87f5225898fb"
+      }
+    },
+    {
+      "source": "docs/features/evidence-responsibilities.org",
+      "sourceSha256": "f2577f355bc8617d531abf97545534395f5f1b96e8620572451e523b508e833a",
+      "targets": [
+        "modules/evidence-assessment/research/evidence-responsibilities.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/evidence-responsibilities.org": "f2577f355bc8617d531abf97545534395f5f1b96e8620572451e523b508e833a"
+      }
+    },
+    {
+      "source": "docs/features/interactive-evidence-reasoning.org",
+      "sourceSha256": "ae780990644c8fd3def4d980683e2cf9d78640814e12ff2b12905bb124184ae0",
+      "targets": [
+        "modules/evidence-assessment/research/interactive-evidence-reasoning.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/interactive-evidence-reasoning.org": "ae780990644c8fd3def4d980683e2cf9d78640814e12ff2b12905bb124184ae0"
+      }
+    },
+    {
+      "source": "docs/features/qualification/evidence-protocols.org",
+      "sourceSha256": "7ff85826d8ed55e10d5a2321ba36e8b6974c77b77b99f8238dce700bf9a8b20e",
+      "targets": [
+        "modules/evidence-assessment/research/legacy/docs/features/qualification/evidence-protocols.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/legacy/docs/features/qualification/evidence-protocols.org": "7ff85826d8ed55e10d5a2321ba36e8b6974c77b77b99f8238dce700bf9a8b20e"
+      }
+    },
+    {
+      "source": "docs/features/trajectory-exploration.org",
+      "sourceSha256": "6d7c815cd47a9d72222487e1c30188b4bff56c275fce235c4d42dd7eb2596ed1",
+      "targets": [
+        "modules/evidence-assessment/research/legacy/docs/features/trajectory-exploration.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/legacy/docs/features/trajectory-exploration.org": "6d7c815cd47a9d72222487e1c30188b4bff56c275fce235c4d42dd7eb2596ed1"
+      }
+    },
+    {
+      "source": "docs/features/trajectory.org",
+      "sourceSha256": "40d56f4f190c1159746d2ea6d1f980486ebabbe42b0664057412c7d12e745a18",
+      "targets": [
+        "modules/evidence-assessment/research/legacy/docs/features/trajectory.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/legacy/docs/features/trajectory.org": "40d56f4f190c1159746d2ea6d1f980486ebabbe42b0664057412c7d12e745a18"
+      }
+    },
+    {
+      "source": "docs/llm-reasoning-library-plan.org",
+      "sourceSha256": "0818ff9149737b8a7ff5e434f8c2b54a84b6ef80d0665bef38cbbbc505222e6e",
+      "targets": [
+        "docs/research/agent-inference/legacy-library-plan.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/legacy-library-plan.org": "0818ff9149737b8a7ff5e434f8c2b54a84b6ef80d0665bef38cbbbc505222e6e"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/2026-logic-ai-screen.org",
+      "sourceSha256": "27dc31917340a1422b5d652c738a35a2c7e6a6769f19647a122c37e37ce127f3",
+      "targets": [
+        "docs/research/agent-inference/2026-logic-ai-screen.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/2026-logic-ai-screen.org": "27dc31917340a1422b5d652c738a35a2c7e6a6769f19647a122c37e37ce127f3"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/candidate-model-results/repair-notes.md",
+      "sourceSha256": "2f104b0c12803e427015943db7c4130e5bc4fc2355334a1eaab10c197a2b5544",
+      "targets": [
+        "docs/research/agent-inference/candidate-model-results/repair-notes.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/candidate-model-results/repair-notes.md": "2f104b0c12803e427015943db7c4130e5bc4fc2355334a1eaab10c197a2b5544"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/candidate-model-results/report.md",
+      "sourceSha256": "739721006258b4bc1c1ccb3b1d44853af1c3e0574db253812f0b0abec0598f99",
+      "targets": [
+        "docs/research/agent-inference/candidate-model-results/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/candidate-model-results/report.md": "739721006258b4bc1c1ccb3b1d44853af1c3e0574db253812f0b0abec0598f99"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/candidate-transport-results/report.md",
+      "sourceSha256": "8c9024c8f6aa51134312240235152eb84063d939ef6bc76ca54dc920ad90d069",
+      "targets": [
+        "docs/research/agent-inference/candidate-transport-results/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/candidate-transport-results/report.md": "8c9024c8f6aa51134312240235152eb84063d939ef6bc76ca54dc920ad90d069"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/crosspath-branch-protocol.md",
+      "sourceSha256": "9c664cfee4d8bbaeb0bd1d5ba4f00a901fdc4edc917d958004bded1b084ab29a",
+      "targets": [
+        "docs/research/agent-inference/crosspath-branch-protocol.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/crosspath-branch-protocol.md": "9c664cfee4d8bbaeb0bd1d5ba4f00a901fdc4edc917d958004bded1b084ab29a"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/crosspath-branch-round-summary.md",
+      "sourceSha256": "7de50f306d0de4c0672337ab965825341e36728b12a1e6bc3dae84db453099f3",
+      "targets": [
+        "docs/research/agent-inference/crosspath-branch-round-summary.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/crosspath-branch-round-summary.md": "7de50f306d0de4c0672337ab965825341e36728b12a1e6bc3dae84db453099f3"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/crosspath-branch-v4-protocol.md",
+      "sourceSha256": "50b0ac2dde245b65fa83fde6b70ce32f03458316f59de63eb9f90422ca6d1c95",
+      "targets": [
+        "docs/research/agent-inference/crosspath-branch-v4-protocol.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/crosspath-branch-v4-protocol.md": "50b0ac2dde245b65fa83fde6b70ce32f03458316f59de63eb9f90422ca6d1c95"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/crosspath-next-round.md",
+      "sourceSha256": "ad76f0fade98ef8d29772d59f033c48fd795612fefe610c9dbe03f02fcef73ef",
+      "targets": [
+        "docs/research/agent-inference/crosspath-next-round.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/crosspath-next-round.md": "ad76f0fade98ef8d29772d59f033c48fd795612fefe610c9dbe03f02fcef73ef"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/crosspath-search-report.md",
+      "sourceSha256": "a004384b13bce1fa5c8a1337730df1758e1321b8f51e62fd66959f9453a44744",
+      "targets": [
+        "docs/research/agent-inference/crosspath-search-report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/crosspath-search-report.md": "a004384b13bce1fa5c8a1337730df1758e1321b8f51e62fd66959f9453a44744"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/crosspath-search-v2-report.md",
+      "sourceSha256": "ba3b9e246cc91423ef2f6aa31611213bbf6ae93bced1bc976c0ffdfcd473320d",
+      "targets": [
+        "docs/research/agent-inference/crosspath-search-v2-report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/crosspath-search-v2-report.md": "ba3b9e246cc91423ef2f6aa31611213bbf6ae93bced1bc976c0ffdfcd473320d"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/crosspath-search-v3-report.md",
+      "sourceSha256": "8225f6b93d17a7f99070598586763f04596b4177398a5af5f0eaa52e1b20b1c5",
+      "targets": [
+        "docs/research/agent-inference/crosspath-search-v3-report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/crosspath-search-v3-report.md": "8225f6b93d17a7f99070598586763f04596b4177398a5af5f0eaa52e1b20b1c5"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/crosspath-search-v4-bounded-report.md",
+      "sourceSha256": "1c9182c1dc4a5608a561056369cfa70a06e4e7c4620d4cb151af0b6da5abc8ff",
+      "targets": [
+        "docs/research/agent-inference/crosspath-search-v4-bounded-report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/crosspath-search-v4-bounded-report.md": "1c9182c1dc4a5608a561056369cfa70a06e4e7c4620d4cb151af0b6da5abc8ff"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/crosspath-search-v4-report.md",
+      "sourceSha256": "12ed3db961a1dc803764106782b2204d58a5eae2e2d6a9474485509b7d85407c",
+      "targets": [
+        "docs/research/agent-inference/crosspath-search-v4-report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/crosspath-search-v4-report.md": "12ed3db961a1dc803764106782b2204d58a5eae2e2d6a9474485509b7d85407c"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/crosspath-thinking-span-review.md",
+      "sourceSha256": "df62a2ac1b32b9825769f71da03a1a8d8283e6b7cfa82d03d4fb1b4776ac3bfd",
+      "targets": [
+        "docs/research/agent-inference/crosspath-thinking-span-review.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/crosspath-thinking-span-review.md": "df62a2ac1b32b9825769f71da03a1a8d8283e6b7cfa82d03d4fb1b4776ac3bfd"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/domain-evidence-architecture.md",
+      "sourceSha256": "fc056188a11f48ab363fb9568af65452c3d3c8bdbb9a82e115fb67b0c096ea4b",
+      "targets": [
+        "docs/research/agent-inference/domain-evidence-architecture.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/domain-evidence-architecture.md": "fc056188a11f48ab363fb9568af65452c3d3c8bdbb9a82e115fb67b0c096ea4b"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/domain-repository-experiment-report.md",
+      "sourceSha256": "e2c8a5a719ffc1f09ace15dc1069a37b4e2fbfd4e009079fb4d0aa363e38cce9",
+      "targets": [
+        "docs/research/agent-inference/domain-repository-experiment-report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/domain-repository-experiment-report.md": "e2c8a5a719ffc1f09ace15dc1069a37b4e2fbfd4e009079fb4d0aa363e38cce9"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/evidence-interaction-results/interpretation.md",
+      "sourceSha256": "ba65a02314dfdeae67dc0ed1aac2ebc9af49d601326a0af03587c73ca0d01685",
+      "targets": [
+        "docs/research/agent-inference/evidence-interaction-results/interpretation.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/evidence-interaction-results/interpretation.md": "ba65a02314dfdeae67dc0ed1aac2ebc9af49d601326a0af03587c73ca0d01685"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/evidence-interaction-results/report.md",
+      "sourceSha256": "d7b79d13dfbe116cc50a6bc26078688d64f2e5e4c1814131e074eb973bec6f8e",
+      "targets": [
+        "docs/research/agent-inference/evidence-interaction-results/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/evidence-interaction-results/report.md": "d7b79d13dfbe116cc50a6bc26078688d64f2e5e4c1814131e074eb973bec6f8e"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/evidence-interaction.org",
+      "sourceSha256": "690f1d21c07177961059f8ea6f0b7eb89b82c87a8fa295b215a87b50c1db2551",
+      "targets": [
+        "docs/research/agent-inference/evidence-interaction.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/evidence-interaction.org": "690f1d21c07177961059f8ea6f0b7eb89b82c87a8fa295b215a87b50c1db2551"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-protocol.md",
+      "sourceSha256": "cc90ca0a68f8e867dae1a279ae82890be66f9f5c60eef4951a740d99d30382b5",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-protocol.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-protocol.md": "cc90ca0a68f8e867dae1a279ae82890be66f9f5c60eef4951a740d99d30382b5"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/branch-complete/findings.md",
+      "sourceSha256": "20b660ea13445bb6db710f9f2c52610fb2a482b07712dc454d158188cc906bfd",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/branch-complete/findings.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/branch-complete/findings.md": "20b660ea13445bb6db710f9f2c52610fb2a482b07712dc454d158188cc906bfd"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/branch-complete/protocol.md",
+      "sourceSha256": "ffe7d3556a9027d944d791a015506459be09f724b13751565c07472480c35963",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/branch-complete/protocol.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/branch-complete/protocol.md": "ffe7d3556a9027d944d791a015506459be09f724b13751565c07472480c35963"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/branch-complete/report.md",
+      "sourceSha256": "b8e88acd49f984bc376adcaea67e5a3d183a09ea47ab4540b8298f267459b9bd",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/branch-complete/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/branch-complete/report.md": "b8e88acd49f984bc376adcaea67e5a3d183a09ea47ab4540b8298f267459b9bd"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/branch-complete/semantic-review/findings.md",
+      "sourceSha256": "ea65465c08bc0578a563e1445d608e1ac785fe42a126681fdef7a2cc4ed10143",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/branch-complete/semantic-review/findings.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/branch-complete/semantic-review/findings.md": "ea65465c08bc0578a563e1445d608e1ac785fe42a126681fdef7a2cc4ed10143"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/branch-compressed/findings.md",
+      "sourceSha256": "11dcffb7ad0eab28b651b39375e6a336c8a94b25286c8438e8f4e378a6a5ecee",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/branch-compressed/findings.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/branch-compressed/findings.md": "11dcffb7ad0eab28b651b39375e6a336c8a94b25286c8438e8f4e378a6a5ecee"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/branch-compressed/protocol.md",
+      "sourceSha256": "68ccf8976752edcf7c75f105bcfa39cf7749b84b056b9d8fa993b9802adb2afc",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/branch-compressed/protocol.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/branch-compressed/protocol.md": "68ccf8976752edcf7c75f105bcfa39cf7749b84b056b9d8fa993b9802adb2afc"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/branch-compressed/report.md",
+      "sourceSha256": "781c522866e139ae1428e8a5cd998452bdfcbaaf32651f8bb84afd5e877b877e",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/branch-compressed/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/branch-compressed/report.md": "781c522866e139ae1428e8a5cd998452bdfcbaaf32651f8bb84afd5e877b877e"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md",
+      "sourceSha256": "c44561e5cfeb1b932619f57b5aa617c483076231cd07fe9a2e48d7b4b67cbda0",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md": "c44561e5cfeb1b932619f57b5aa617c483076231cd07fe9a2e48d7b4b67cbda0"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/branch-entry/protocol.md",
+      "sourceSha256": "1d947034d207c4e91a48f8beb9c0f51337ec680074984a0a436a9ea32ce12375",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/branch-entry/protocol.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/branch-entry/protocol.md": "1d947034d207c4e91a48f8beb9c0f51337ec680074984a0a436a9ea32ce12375"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/branch-entry/report.md",
+      "sourceSha256": "8f3063eb5de15996df8692d6a3ee378723ac45712f72fd5c1374517fcbd73df3",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/branch-entry/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/branch-entry/report.md": "8f3063eb5de15996df8692d6a3ee378723ac45712f72fd5c1374517fcbd73df3"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/complete-branch-reuse/report.md",
+      "sourceSha256": "fce7bbf0f6ed6b8bbd434228c63cacc0e9c7eca3b5b1f439c050c98c6689f487",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/complete-branch-reuse/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/complete-branch-reuse/report.md": "fce7bbf0f6ed6b8bbd434228c63cacc0e9c7eca3b5b1f439c050c98c6689f487"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/measurement-erratum.md",
+      "sourceSha256": "ec2efe4f1630e8cef4dc078ec2b6693dc528024791038ed75696c03a591221ec",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/measurement-erratum.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/measurement-erratum.md": "ec2efe4f1630e8cef4dc078ec2b6693dc528024791038ed75696c03a591221ec"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/model-dialogue-reuse/report.md",
+      "sourceSha256": "e1818c81b40736f96ceaf55d4ff9bb15163d929c4a4bd6bbf6482e9ea66d99bb",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/model-dialogue-reuse/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/model-dialogue-reuse/report.md": "e1818c81b40736f96ceaf55d4ff9bb15163d929c4a4bd6bbf6482e9ea66d99bb"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/remaining-budget-reuse/report.md",
+      "sourceSha256": "35e46dd1c66d5d6ff8d04a8b4ce9aeb93d99bd40cf9689b0d4faeebf902684f8",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/remaining-budget-reuse/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/remaining-budget-reuse/report.md": "35e46dd1c66d5d6ff8d04a8b4ce9aeb93d99bd40cf9689b0d4faeebf902684f8"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/report.md",
+      "sourceSha256": "dd31c55786e287ba7a990193f81ff863f7a03b87585dadf4a3127cda0ad1f3ff",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/report.md": "dd31c55786e287ba7a990193f81ff863f7a03b87585dadf4a3127cda0ad1f3ff"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/shared-premise-diagnostic/findings.md",
+      "sourceSha256": "e72138bab29174e42cf21c1940f8b8136b7997a2a23b790b8e882b9f70de7f0a",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/shared-premise-diagnostic/findings.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/shared-premise-diagnostic/findings.md": "e72138bab29174e42cf21c1940f8b8136b7997a2a23b790b8e882b9f70de7f0a"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/shared-premise-diagnostic/report.md",
+      "sourceSha256": "8dda2b23d386a7cfa35539f83112eec14663af3edaf910383e66bb913106040e",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/shared-premise-diagnostic/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/shared-premise-diagnostic/report.md": "8dda2b23d386a7cfa35539f83112eec14663af3edaf910383e66bb913106040e"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md",
+      "sourceSha256": "b5efab56257474e6e96d161c57f8482957c4e02010de78c17a2ee744b7482055",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md": "b5efab56257474e6e96d161c57f8482957c4e02010de78c17a2ee744b7482055"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/sibling-search/history/initial-transport/report.md",
+      "sourceSha256": "ad53b39b662963635b346c66fa4cea879a236920b39e88238ac7f082210e0a76",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/sibling-search/history/initial-transport/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/sibling-search/history/initial-transport/report.md": "ad53b39b662963635b346c66fa4cea879a236920b39e88238ac7f082210e0a76"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/fact-reuse-results/sibling-search/report.md",
+      "sourceSha256": "202531519f34ef8aedcb9f64881549f7b972c4daa355ce7ef42c35bcc610ed74",
+      "targets": [
+        "docs/research/agent-inference/fact-reuse-results/sibling-search/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/fact-reuse-results/sibling-search/report.md": "202531519f34ef8aedcb9f64881549f7b972c4daa355ce7ef42c35bcc610ed74"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/factor-reuse-2026-study.org",
+      "sourceSha256": "b10a33b9d23b76b3c3e0ee9b8d07f028521d9e3570647211e9a05a714d5a34dc",
+      "targets": [
+        "docs/research/agent-inference/factor-reuse-2026-study.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/factor-reuse-2026-study.org": "b10a33b9d23b76b3c3e0ee9b8d07f028521d9e3570647211e9a05a714d5a34dc"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/factor-reuse-real-pilot-report.md",
+      "sourceSha256": "aa71ac2611efb2b5368d7f2ebf36b998e74ecacc6bb0a109d4e49dcbaf976103",
+      "targets": [
+        "docs/research/agent-inference/factor-reuse-real-pilot-report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/factor-reuse-real-pilot-report.md": "aa71ac2611efb2b5368d7f2ebf36b998e74ecacc6bb0a109d4e49dcbaf976103"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/factor-total-budget-report.md",
+      "sourceSha256": "1561b784cf68946696f90fc94d17ab7d6b745ae37d5bccb32f5ad88a9fdc9f47",
+      "targets": [
+        "docs/research/agent-inference/factor-total-budget-report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/factor-total-budget-report.md": "1561b784cf68946696f90fc94d17ab7d6b745ae37d5bccb32f5ad88a9fdc9f47"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/history/README.md",
+      "sourceSha256": "3edaa695dd2b7867f759194eeb8bea31049b1a8c455516077bc5e1b6b3135082",
+      "targets": [
+        "docs/research/agent-inference/history/README.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/history/README.md": "3edaa695dd2b7867f759194eeb8bea31049b1a8c455516077bc5e1b6b3135082"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/history/candidate-model-rules-rejected/report.md",
+      "sourceSha256": "68ea0e43cbd091d6297df76bc4e500f5396a4e2e67a59d4ed01eb103c4af0263",
+      "targets": [
+        "docs/research/agent-inference/history/candidate-model-rules-rejected/report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/history/candidate-model-rules-rejected/report.md": "68ea0e43cbd091d6297df76bc4e500f5396a4e2e67a59d4ed01eb103c4af0263"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/index.org",
+      "sourceSha256": "4b553d31e663cf629e46b4df34ff20b985a38fb72bf0fb3fd90a8fbe2610fe2e",
+      "targets": [
+        "docs/research/agent-inference/index.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/index.org": "4b553d31e663cf629e46b4df34ff20b985a38fb72bf0fb3fd90a8fbe2610fe2e"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/movie-reasoning-study.org",
+      "sourceSha256": "16fa8974d368b9d7313e81abc367ad8fcbd8adf7d058f40e78f8b9d9e9e9795d",
+      "targets": [
+        "docs/research/agent-inference/movie-reasoning-study.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/movie-reasoning-study.org": "16fa8974d368b9d7313e81abc367ad8fcbd8adf7d058f40e78f8b9d9e9e9795d"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/provenance-annotations.org",
+      "sourceSha256": "15f466f3e9b68eb66eacbd7adcbf92a4e7b3a2a374e70304c37322268dc62cd1",
+      "targets": [
+        "docs/research/agent-inference/provenance-annotations.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/provenance-annotations.org": "15f466f3e9b68eb66eacbd7adcbf92a4e7b3a2a374e70304c37322268dc62cd1"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/real-repository-experiment-report.md",
+      "sourceSha256": "8b34f4115a9c7dad9af34e9cfadf782a2600ccf0712c9cf1a1a7d56febe708b9",
+      "targets": [
+        "docs/research/agent-inference/real-repository-experiment-report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/real-repository-experiment-report.md": "8b34f4115a9c7dad9af34e9cfadf782a2600ccf0712c9cf1a1a7d56febe708b9"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/reasoning-language-formal-agenda.org",
+      "sourceSha256": "895f17e149acc17959405e415a8fe570ed907f64626b0827cf21dafc27336198",
+      "targets": [
+        "docs/research/agent-inference/reasoning-language-formal-agenda.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/reasoning-language-formal-agenda.org": "895f17e149acc17959405e415a8fe570ed907f64626b0827cf21dafc27336198"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/repository-evidence-study.md",
+      "sourceSha256": "559706d299e55c279f4b8c07a60388fdd0df2f3c64429539ec861298fa2e4062",
+      "targets": [
+        "docs/research/agent-inference/repository-evidence-study.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/repository-evidence-study.md": "559706d299e55c279f4b8c07a60388fdd0df2f3c64429539ec861298fa2e4062"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/repository-task-quality.md",
+      "sourceSha256": "11ae1f07a48c1a8e556937456113806c8968b25a91afc8a62746db0b847c0e51",
+      "targets": [
+        "docs/research/agent-inference/repository-task-quality.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/repository-task-quality.md": "11ae1f07a48c1a8e556937456113806c8968b25a91afc8a62746db0b847c0e51"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/scheme-thinking-experiment-report.md",
+      "sourceSha256": "81de91f58ea47746d3912d03058f83ff651901d36718d27c3b767049afdda240",
+      "targets": [
+        "docs/research/agent-inference/scheme-thinking-experiment-report.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/scheme-thinking-experiment-report.md": "81de91f58ea47746d3912d03058f83ff651901d36718d27c3b767049afdda240"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/serving-sglang-vllm.org",
+      "sourceSha256": "7352198f770d6e8d2b221df87dd7d2df8597df83b9ecc94af85a178bd6351a36",
+      "targets": [
+        "docs/research/agent-inference/serving-sglang-vllm.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/serving-sglang-vllm.org": "7352198f770d6e8d2b221df87dd7d2df8597df83b9ecc94af85a178bd6351a36"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/taint-paths.org",
+      "sourceSha256": "c1e7993fa75e06c1b9de901a7720fbe92c88bb69eaf2cdc98aed2ada20b2b4c2",
+      "targets": [
+        "docs/research/agent-inference/taint-paths.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/taint-paths.org": "c1e7993fa75e06c1b9de901a7720fbe92c88bb69eaf2cdc98aed2ada20b2b4c2"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/verified-reasoning-cache.org",
+      "sourceSha256": "0fa9b0e2e8c9952a040c4989a98321a5b1b1998a41e523f4206150d7d7a6bf1c",
+      "targets": [
+        "docs/research/agent-inference/verified-reasoning-cache.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/verified-reasoning-cache.org": "0fa9b0e2e8c9952a040c4989a98321a5b1b1998a41e523f4206150d7d7a6bf1c"
+      }
+    },
+    {
+      "source": "docs/research/agent-inference/wikidata-scoped-exclusion.org",
+      "sourceSha256": "f4478986d93c6a6d4f65feb80a2a567befa1dc65fe3d66d8ff3251ce50db3fa3",
+      "targets": [
+        "docs/research/agent-inference/wikidata-scoped-exclusion.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/wikidata-scoped-exclusion.org": "f4478986d93c6a6d4f65feb80a2a567befa1dc65fe3d66d8ff3251ce50db3fa3"
+      }
+    },
+    {
+      "source": "docs/research/correction-study/report.org",
+      "sourceSha256": "52043f0b634152c4afc045b9f340f4c8be98f89d11ba44e78b91c00002107660",
+      "targets": [
+        "docs/research/correction-study/report.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/correction-study/report.org": "52043f0b634152c4afc045b9f340f4c8be98f89d11ba44e78b91c00002107660"
+      }
+    },
+    {
+      "source": "docs/research/interactive-evidence-study/report.org",
+      "sourceSha256": "581c32eac6f0120e4260eeb3ab6eb22c7582b2bccfef464a6b1329c8959c62f1",
+      "targets": [
+        "modules/evidence-assessment/research/legacy/docs/research/interactive-evidence-study/report.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/legacy/docs/research/interactive-evidence-study/report.org": "581c32eac6f0120e4260eeb3ab6eb22c7582b2bccfef464a6b1329c8959c62f1"
+      }
+    },
+    {
+      "source": "docs/research/trajectory-study/report.org",
+      "sourceSha256": "bc52271ec706e41e83523fb49cb279efd532265b5a73735b94198e921cbb89c5",
+      "targets": [
+        "docs/research/trajectory-study/report.org"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/trajectory-study/report.org": "bc52271ec706e41e83523fb49cb279efd532265b5a73735b94198e921cbb89c5"
+      }
+    },
+    {
+      "source": "docs/trajectory-slice-capacity.md",
+      "sourceSha256": "425ae3918d8c4006e23fe807fc86a6539e36ccde187312f48b277c4e6100fef8",
+      "targets": [
+        "modules/evidence-assessment/research/legacy/docs/trajectory-slice-capacity.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/legacy/docs/trajectory-slice-capacity.md": "425ae3918d8c4006e23fe807fc86a6539e36ccde187312f48b277c4e6100fef8"
+      }
+    },
+    {
+      "source": "docs/trajectory-supervision-feedback.md",
+      "sourceSha256": "c1bf4e606587666161a3694b4b8f6fbb8a2f2768e2ce891274318aed02bb54bf",
+      "targets": [
+        "modules/evidence-assessment/research/legacy/docs/trajectory-supervision-feedback.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/legacy/docs/trajectory-supervision-feedback.md": "c1bf4e606587666161a3694b4b8f6fbb8a2f2768e2ce891274318aed02bb54bf"
+      }
+    },
+    {
+      "source": "evidence/README.md",
+      "sourceSha256": "f56feed4fe546a3a7d1fceb9ad93142a6d15d2f4284fc2774a37e475c4d85055",
+      "targets": [
+        "modules/evidence-assessment/research/legacy/evidence/README.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/research/legacy/evidence/README.md": "f56feed4fe546a3a7d1fceb9ad93142a6d15d2f4284fc2774a37e475c4d85055"
+      }
+    },
+    {
+      "source": "evidence/agent/catalog-rules.scm",
+      "sourceSha256": "5d7988d0e145d6cd447149ee138a56108d9daaba24da899e4db013dfab7c13b9",
+      "targets": [
+        "modules/evidence-assessment/policies/catalog-rules.scm"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/policies/catalog-rules.scm": "5d7988d0e145d6cd447149ee138a56108d9daaba24da899e4db013dfab7c13b9"
+      }
+    },
+    {
+      "source": "evidence/agent/history-rules.scm",
+      "sourceSha256": "fa9ea48c9ad92e8f389fbf1bf04386e87f4279837bd1de5bafb0cb85dd766ef1",
+      "targets": [
+        "modules/evidence-assessment/policies/history-rules.scm"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/policies/history-rules.scm": "fa9ea48c9ad92e8f389fbf1bf04386e87f4279837bd1de5bafb0cb85dd766ef1"
+      }
+    },
+    {
+      "source": "evidence/agent/review-rules.scm",
+      "sourceSha256": "b26971f851087819dae19d42ce9a9240f8a100018f1e991526941a3fa3496802",
+      "targets": [
+        "modules/evidence-assessment/policies/review-rules.scm"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/policies/review-rules.scm": "b26971f851087819dae19d42ce9a9240f8a100018f1e991526941a3fa3496802"
+      }
+    },
+    {
+      "source": "evidence/checkpoint.ss",
+      "sourceSha256": "d47e4bc19ec349170f1099c3ee9592c8503057b62d1828106775d818a13f869c",
+      "targets": [
+        "modules/temporal-causality/trajectory/ascent-checkpoint.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/temporal-causality/trajectory/ascent-checkpoint.ss": "70625eefe7387a1a893deb3494c0df753bc13cd1f986210c92a33d4f21780e5f"
+      }
+    },
+    {
+      "source": "evidence/clue-query.ss",
+      "sourceSha256": "a5eef922976bf6295deb4397850340388c6ebb98281409a939146e8cb77ddefa",
+      "targets": [
+        "modules/ai-agentic-context/clue-query.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clue-query.ss": "4800537190107cbd4f431b6dd6fbbc44684febdab0cf02d8dc6fdc3101052ef4"
+      }
+    },
+    {
+      "source": "packages/proofs/lean/AccountingAbstraction.lean",
+      "sourceSha256": "32829beabb5b05a83ee67969fc87fbae5fd8121dcb6284d1d5800c00bc4910dc",
+      "targets": [
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/AccountingAbstraction.lean"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/AccountingAbstraction.lean": "925438f525674a994646bd5fd441676919b67c3af2cb7065b8aed7e99932f71a"
+      }
+    },
+    {
+      "source": "packages/proofs/lean/AnchoredEvidenceSlice.lean",
+      "sourceSha256": "c9fe5e7a534c4e629890872d5423c0dfbc6426a89b6f4566de8f5dd831cb1ab1",
+      "targets": [
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/AnchoredEvidenceSlice.lean"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/AnchoredEvidenceSlice.lean": "43b80a91f9ef8a26502d84e3a0465a4ddd40798c83e90662d0596b83c3f56c81"
+      }
+    },
+    {
+      "source": "packages/proofs/lean/ClueSubmission.lean",
+      "sourceSha256": "bdb5d923e62b38e62bfb7273dc3412db9d36231c80d963e13e8a5642b661a430",
+      "targets": [
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/ClueSubmission.lean"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/ClueSubmission.lean": "bdb5d923e62b38e62bfb7273dc3412db9d36231c80d963e13e8a5642b661a430"
+      }
+    },
+    {
+      "source": "packages/proofs/lean/DomainEvidence.lean",
+      "sourceSha256": "3b2cd2839d4cfab86ce17e7022e668da04a29cc0bb1800d93605eb2ccf89755d",
+      "targets": [
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/DomainEvidence.lean"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/DomainEvidence.lean": "bf9a5ae6d66b32fa4b8835a518a2d932e42b33bd84b3bfeb96c73ed3eb51782a"
+      }
+    },
+    {
+      "source": "packages/proofs/lean/EvidenceCheckpoint.lean",
+      "sourceSha256": "928873c9cb82bcb9105b14d8175bc7d8cdfb761075dee512e194d153c8460e12",
+      "targets": [
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/EvidenceCheckpoint.lean"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/EvidenceCheckpoint.lean": "54262eab1beea340f5e554cea255d240661280f59520c3cc7ce82f2020b4bb5c"
+      }
+    },
+    {
+      "source": "packages/proofs/lean/EvidenceInteraction.lean",
+      "sourceSha256": "122815db1fcecca2f926ad333759c8cc88af89f88b1bf9417d57c5a39ea0c633",
+      "targets": [
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/EvidenceInteraction.lean"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/EvidenceInteraction.lean": "a39b1e50783e14a6cd03a4781104886c2adfffd6d624cc20b910ff8ab0844ed4"
+      }
+    },
+    {
+      "source": "packages/proofs/lean/Trajectory.lean",
+      "sourceSha256": "91883211c6e1d08d49a894eb580e6ef107330989bc623674dc102753a0292b2d",
+      "targets": [
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/Trajectory.lean"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/Trajectory.lean": "6aab91ec3bdd9d3631da0e55da0257438558f9c04f038404ff9b8ff1e82bb9f0"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/AccountingAbstraction.qnt",
+      "sourceSha256": "fa443622f2c81950b50f02a47416ae1640f0f5bf4dde7e70ca3796e448b69e77",
+      "targets": [
+        "packages/proofs/quint/AccountingAbstraction.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/AccountingAbstraction.qnt": "fa443622f2c81950b50f02a47416ae1640f0f5bf4dde7e70ca3796e448b69e77"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/AnchoredEvidenceSlice.qnt",
+      "sourceSha256": "7d8e1068d6def851425f00bc0e238fe6592fac287c525bfbc35f2a3b85ea7672",
+      "targets": [
+        "packages/proofs/quint/AnchoredEvidenceSlice.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/AnchoredEvidenceSlice.qnt": "7d8e1068d6def851425f00bc0e238fe6592fac287c525bfbc35f2a3b85ea7672"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/CheckpointProjection.qnt",
+      "sourceSha256": "45bb041476e30693bba237949bb65d38c3f63dc896dbf01e9e7bfdbf4a16e614",
+      "targets": [
+        "packages/proofs/quint/CheckpointProjection.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/CheckpointProjection.qnt": "45bb041476e30693bba237949bb65d38c3f63dc896dbf01e9e7bfdbf4a16e614"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/ClosedEvidenceScope.qnt",
+      "sourceSha256": "5ea3adb475bc48df176aad9d0862e50edb0f92e5c1778adf4ad43ac80b4c1761",
+      "targets": [
+        "packages/proofs/quint/ClosedEvidenceScope.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/ClosedEvidenceScope.qnt": "5ea3adb475bc48df176aad9d0862e50edb0f92e5c1778adf4ad43ac80b4c1761"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/ClueQueryResume.qnt",
+      "sourceSha256": "ae2963758df576f6bd29bd7f48f9425a2691a51e4d6b6da216b3b13459803986",
+      "targets": [
+        "packages/proofs/quint/ClueQueryResume.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/ClueQueryResume.qnt": "ae2963758df576f6bd29bd7f48f9425a2691a51e4d6b6da216b3b13459803986"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/ClueSubmission.qnt",
+      "sourceSha256": "ef2dac6d09504e0d20d9d04a7234a25fd74d1b7362570c5cb6b19aa1acd560f1",
+      "targets": [
+        "packages/proofs/quint/ClueSubmission.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/ClueSubmission.qnt": "ef2dac6d09504e0d20d9d04a7234a25fd74d1b7362570c5cb6b19aa1acd560f1"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/DomainEvidence.qnt",
+      "sourceSha256": "c5989613fbb9207cecff0e250612ca3c0bc9a38fdd9b034dad44b101a5c660c8",
+      "targets": [
+        "packages/proofs/quint/DomainEvidence.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/DomainEvidence.qnt": "c5989613fbb9207cecff0e250612ca3c0bc9a38fdd9b034dad44b101a5c660c8"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/EvidenceCheckpoint.qnt",
+      "sourceSha256": "88c05dc8e4006c06da0055024eb9d73a0b3f57295f81944b16d9e48bfdb5cc0b",
+      "targets": [
+        "packages/proofs/quint/EvidenceCheckpoint.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/EvidenceCheckpoint.qnt": "88c05dc8e4006c06da0055024eb9d73a0b3f57295f81944b16d9e48bfdb5cc0b"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/EvidenceConsumption.qnt",
+      "sourceSha256": "ec9fe511c1e71deba8968f9b21a072976db7f64885f11e37172fb4559b3ce215",
+      "targets": [
+        "packages/proofs/quint/EvidenceConsumption.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/EvidenceConsumption.qnt": "ec9fe511c1e71deba8968f9b21a072976db7f64885f11e37172fb4559b3ce215"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/EvidenceInteraction.qnt",
+      "sourceSha256": "15ef8b3757e7df92c37e35651ebba29c4a8ef5abe41693d69e679da970fa467c",
+      "targets": [
+        "packages/proofs/quint/EvidenceInteraction.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/EvidenceInteraction.qnt": "15ef8b3757e7df92c37e35651ebba29c4a8ef5abe41693d69e679da970fa467c"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/ModelApplicability.qnt",
+      "sourceSha256": "a2cee154180657fd82c55ff0840475702461e0b00e428243a64173210244a7ba",
+      "targets": [
+        "packages/proofs/quint/ModelApplicability.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/ModelApplicability.qnt": "a2cee154180657fd82c55ff0840475702461e0b00e428243a64173210244a7ba"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/ProgressiveEvidenceRead.qnt",
+      "sourceSha256": "1db4bf12d871a1678476f66f8e30195b6579063b3be611d1d9ffd217df11b804",
+      "targets": [
+        "packages/proofs/quint/ProgressiveEvidenceRead.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/ProgressiveEvidenceRead.qnt": "1db4bf12d871a1678476f66f8e30195b6579063b3be611d1d9ffd217df11b804"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/SharedPremiseReuse.qnt",
+      "sourceSha256": "5aa2f7e9401e6109c0a46e2d6305a00fc965c3fe6dfb3ef1571ab0c952b8d326",
+      "targets": [
+        "packages/proofs/quint/SharedPremiseReuse.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/SharedPremiseReuse.qnt": "5aa2f7e9401e6109c0a46e2d6305a00fc965c3fe6dfb3ef1571ab0c952b8d326"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/Trajectory.qnt",
+      "sourceSha256": "2b1ec62eba45920da0c91db6c0c22a144e0c306080f3d8fcfbf9bb2ccd72af98",
+      "targets": [
+        "packages/proofs/quint/Trajectory.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/Trajectory.qnt": "2b1ec62eba45920da0c91db6c0c22a144e0c306080f3d8fcfbf9bb2ccd72af98"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/TrajectoryClueScope.qnt",
+      "sourceSha256": "4b0f74d408026454c2a9cc00e1e10d0f3deaea151babab7654d8cb28d60e4f9d",
+      "targets": [
+        "packages/proofs/quint/TrajectoryClueScope.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/TrajectoryClueScope.qnt": "4b0f74d408026454c2a9cc00e1e10d0f3deaea151babab7654d8cb28d60e4f9d"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/TrajectoryEvidenceChain.qnt",
+      "sourceSha256": "434739b5ada065cb2fbf9ad74929d9a7778aaae99b23feb7a7ac94e0d52149cf",
+      "targets": [
+        "packages/proofs/quint/TrajectoryEvidenceChain.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/TrajectoryEvidenceChain.qnt": "434739b5ada065cb2fbf9ad74929d9a7778aaae99b23feb7a7ac94e0d52149cf"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/TrajectoryExploration.qnt",
+      "sourceSha256": "e2f62cd2ca6514fe36eb29e6ecb7bf0175142190e3226bff6d8a8f6b518704b1",
+      "targets": [
+        "packages/proofs/quint/TrajectoryExploration.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/TrajectoryExploration.qnt": "e2f62cd2ca6514fe36eb29e6ecb7bf0175142190e3226bff6d8a8f6b518704b1"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/TrajectoryProgressiveAccess.qnt",
+      "sourceSha256": "ec711b44ee7b14dddf9c79c5a9af05b7593b94e3f87aa1948298bd929944abb8",
+      "targets": [
+        "packages/proofs/quint/TrajectoryProgressiveAccess.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/TrajectoryProgressiveAccess.qnt": "ec711b44ee7b14dddf9c79c5a9af05b7593b94e3f87aa1948298bd929944abb8"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/TrajectoryRuleEvolution.qnt",
+      "sourceSha256": "da7c710b508f7bdf50ee7bc38a9d1f290d427cd7bb36623321a9c4c25b34b382",
+      "targets": [
+        "packages/proofs/quint/TrajectoryRuleEvolution.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/TrajectoryRuleEvolution.qnt": "da7c710b508f7bdf50ee7bc38a9d1f290d427cd7bb36623321a9c4c25b34b382"
+      }
+    },
+    {
+      "source": "packages/proofs/quint/VerifiedCandidate.qnt",
+      "sourceSha256": "9cab2a1da91e0bc6b4f4769c6e0608d7abbbf3ed922d898bca8aecf76eeafea3",
+      "targets": [
+        "packages/proofs/quint/VerifiedCandidate.qnt"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/proofs/quint/VerifiedCandidate.qnt": "9cab2a1da91e0bc6b4f4769c6e0608d7abbbf3ed922d898bca8aecf76eeafea3"
+      }
+    },
+    {
+      "source": "program/clue-exchange.ss",
+      "sourceSha256": "219c8c8c46f515118e75030957fdedfe160a0b0e7eb7d66a762dd881c925be63",
+      "targets": [
+        "modules/ai-agentic-context/clue-exchange.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clue-exchange.ss": "aea9b96b2d99726b041cc3a318d0fde854cbb491417e201b0eb14c46403b9d01"
+      }
+    },
+    {
+      "source": "program/evidence-dag.ss",
+      "sourceSha256": "c4f1a0c3130c1898df9739b4b9996875cc37eaf8a7d6b1a3878b288fa68bf612",
+      "targets": [
+        "modules/evidence-assessment/ascent-dag.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/ascent-dag.ss": "c4f1a0c3130c1898df9739b4b9996875cc37eaf8a7d6b1a3878b288fa68bf612"
+      }
+    },
+    {
+      "source": "program/trajectory.ss",
+      "sourceSha256": "28c679ac427705650f1846dc36b74847c2d4690abafabc62c6550c19377316ea",
+      "targets": [
+        "modules/temporal-causality/trajectory/ascent-ledger.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/temporal-causality/trajectory/ascent-ledger.ss": "28c679ac427705650f1846dc36b74847c2d4690abafabc62c6550c19377316ea"
+      }
+    },
+    {
+      "source": "python/RESEARCH.md",
+      "sourceSha256": "544ed39c3e9fe2db77b34b69cc1a0f4fbf509ef5f69542e2c82ca37756604ef0",
+      "targets": [
+        "docs/research/agent-inference/legacy-python-reproduction.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/legacy-python-reproduction.md": "544ed39c3e9fe2db77b34b69cc1a0f4fbf509ef5f69542e2c82ca37756604ef0"
+      }
+    },
+    {
+      "source": "python/REVIEW.md",
+      "sourceSha256": "ed113ba2b6f6824ddf175a20e3e010d65680756560c010f7c29a503e20418289",
+      "targets": [
+        "docs/research/agent-inference/legacy-python-review.md"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "docs/research/agent-inference/legacy-python-review.md": "ed113ba2b6f6824ddf175a20e3e010d65680756560c010f7c29a503e20418289"
+      }
+    },
+    {
+      "source": "python/src/ascent/checkpoint_rules.ss",
+      "sourceSha256": "43c9150940b74508b9f5b47982e6688ebb782b3887277a62f2ff49a7f916ed09",
+      "targets": [
+        "packages/python-runtime/src/agentic_ai_lab_runtime/reasoning_rules/checkpoint_rules.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/src/agentic_ai_lab_runtime/reasoning_rules/checkpoint_rules.ss": "76b8ab78ce52d3d800aee0ff5d3c4eeaa3e5fd1dc2c1dccf7356728ac70c2027"
+      }
+    },
+    {
+      "source": "python/src/ascent/clue_query_rules.ss",
+      "sourceSha256": "6702257dcfd2dd0c9c557e2f51453d1ad53144bac94cbe942c7348adbf7487d1",
+      "targets": [
+        "packages/python-runtime/src/agentic_ai_lab_runtime/reasoning_rules/clue_query_rules.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/src/agentic_ai_lab_runtime/reasoning_rules/clue_query_rules.ss": "5faf51e940c5f7907b50f104fa660d0e57ad6ca591601190147576a7961a6a84"
+      }
+    },
+    {
+      "source": "python/tests/test_checkpoint_contract.py",
+      "sourceSha256": "7e8d68b5e1b53370657f112da12ed66269e6ea2a6c5b548e8addec33fed26725",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_checkpoint_contract.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_checkpoint_contract.py": "7034dc95e88286949ff5dd015ce8919abd0cf4be30040e5e7af2a7c06351b970"
+      }
+    },
+    {
+      "source": "python/tests/test_conversation.py",
+      "sourceSha256": "ed8f0f34401fecbe1b3529143e4ab6ca773a3c543210e615cff8aeefd179f3f3",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_native_conversation.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_native_conversation.py": "feeb59170a99cff0f99938c97fd5bc5e1e35442c889b2dc5d3725f758714f26a"
+      }
+    },
+    {
+      "source": "python/tests/test_derivations.py",
+      "sourceSha256": "7949a944e4224baf92658dbb8dcba34681617ea5fbb855cfcb8bdcf5fd242c3e",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_derivations.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_derivations.py": "b502068811c16b5355b61216ceb1b66a11669ca3b0a3f8682434057b19ad2ab2"
+      }
+    },
+    {
+      "source": "python/tests/test_interaction_feedback.py",
+      "sourceSha256": "1a2963a5d4fe40b09168429adfa20006f3ee579d53169b537f61d27c0a0905a1",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_native_interaction_feedback.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_native_interaction_feedback.py": "cc94e6758bcb90df6ecb8735e947dd7e543e2ec74b187944aa68a197caf17dbe"
+      }
+    },
+    {
+      "source": "rust/ascent-python/src/api/computational.rs",
+      "sourceSha256": "16664138cada4c04f11a184e44f9402c4e0f4ec57870e9c8a7b008eae839642b",
+      "targets": [
+        "modules/evidence-assessment/native/src/python/computational.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/python/computational.rs": "776bdf74970e7cc9fde40ef9eaa6613bd8ab86ec3c890ea40e2cc470f36d1ea9"
+      }
+    },
+    {
+      "source": "rust/ascent-python/src/api/conversation.rs",
+      "sourceSha256": "f86de1eb8a404ac1b96122c5fd1a1800acb6fa14981697e307376019c8364cad",
+      "targets": [
+        "modules/evidence-assessment/native/src/python/conversation.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/python/conversation.rs": "ec08ef56a34323bd30664149d47b9015adf8e440e5c55f293fe10ddcaa6a329c"
+      }
+    },
+    {
+      "source": "rust/ascent-python/src/api/derivations.rs",
+      "sourceSha256": "355cca2997468f731cbe1e22cfbf478cfebdc7f395402ac9c3eb1711ac17c679",
+      "targets": [
+        "modules/evidence-assessment/native/src/python/derivations.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/python/derivations.rs": "242a7c361ffc50376233e55b8e4c730233144267bdb196ba58ddb39941df43f5"
+      }
+    },
+    {
+      "source": "rust/ascent-python/src/api/domain.rs",
+      "sourceSha256": "04c17214cbec0646dceff883d998f3c25c8c3c4b261009fef6a077a24d41c1da",
+      "targets": [
+        "modules/evidence-assessment/native/src/python/domain.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/python/domain.rs": "25a97ffa24bd61d8544e6c2cdde838fecc94d59858d7e713e10de226b8f661e8"
+      }
+    },
+    {
+      "source": "rust/ascent-python/src/api/evidence_conversation.rs",
+      "sourceSha256": "1832049578c24319b464519b8362eae7532f3ac2e75753a66f62d06c419d0baf",
+      "targets": [
+        "modules/evidence-assessment/native/src/python/evidence_conversation.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/python/evidence_conversation.rs": "3cacbeb94ee96656a2372cc97fa531e5ed5aec5d4d3dc40b18d2c97a2ebd2539"
+      }
+    },
+    {
+      "source": "rust/ascent-python/src/api/interaction.rs",
+      "sourceSha256": "781a5ff8a01ea6ecda871a1ea28f47c87822f753d7a1290c525d2512949f5d53",
+      "targets": [
+        "modules/evidence-assessment/native/src/python/interaction.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/python/interaction.rs": "c91da69bcacb30113b328492afc435ff49ab8b1662b2e18111793b19a98f62c3"
+      }
+    },
+    {
+      "source": "rust/ascent-python/src/api/review.rs",
+      "sourceSha256": "9812b5195a2392783dca2360a0534b96cad56897ecb2469d637546d04f558b35",
+      "targets": [
+        "modules/evidence-assessment/native/src/python/review.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/python/review.rs": "50c580bda1f5785d8a01dca7fef86fbf0b15af49b122077297e324c4bdecb4c8"
+      }
+    },
+    {
+      "source": "rust/ascent-python/src/api/trajectory.rs",
+      "sourceSha256": "ed1cc5b06c825907dd12becd8b8bf28654e80c3fafa7e747a54be152d6def413",
+      "targets": [
+        "modules/evidence-assessment/native/src/python/trajectory.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/python/trajectory.rs": "2bc819f910d6ea2c018a1cfa042563e58e41e8fd25b9a390e58f5a7bb4ed8f97"
+      }
+    },
+    {
+      "source": "rust/ascent-python/src/rust_clues.rs",
+      "sourceSha256": "7150ed8615ec3938e5da215749dba461bf6707caf14defbc484a16a97c144310",
+      "targets": [
+        "modules/evidence-assessment/native/src/python/clues.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/python/clues.rs": "d852502ee4f83bb4566e8e586ccd672462148aa0964827d79510a3c9e6941276"
+      }
+    },
+    {
+      "source": "rust/ascent-python/src/rust_sources.rs",
+      "sourceSha256": "d388c9e2fd860eae9aae105bfacc3e4685abe90e81f904301afabc8bce9041e3",
+      "targets": [],
+      "disposition": "Removed unused duplicate Python wrapper; generic source API remains in ASCENT rust/ascent-python/src/api/sources.rs."
+    },
+    {
+      "source": "rust/ascent-python/tests/test_core_c_abi.py",
+      "sourceSha256": "bbf8cfc013aca84a621c15e0adc7ea03b1770a57ee81f597d08c45ef080d6caf",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_core_c_abi.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_core_c_abi.py": "b01bd2b330509021748eea910a23e8d07b4e269ccdf331f07477762917e85223"
+      }
+    },
+    {
+      "source": "rust/ascent-python/tests/test_rust_evidence.py",
+      "sourceSha256": "cdd9d6c5edda2dd48e7d1d5661951058d917db0d93dfba4b73099ffc213c8a68",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_rule_scenarios.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_rule_scenarios.py": "1b347856e7a81b8dca7152d2ff94fcf76bbe5cbd619c722ea11e82b2db67840d"
+      }
+    },
+    {
+      "source": "rust/ascent/src/clues/cells.rs",
+      "sourceSha256": "fdeb9706514dff2e72c542db57a8700196e22cd0d92ab31d9d8183bc2a2ab001",
+      "targets": [
+        "modules/ai-agentic-context/clues/native/cells.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clues/native/cells.rs": "fdeb9706514dff2e72c542db57a8700196e22cd0d92ab31d9d8183bc2a2ab001"
+      }
+    },
+    {
+      "source": "rust/ascent/src/clues/deferred.rs",
+      "sourceSha256": "725616e9bb1fa5b0dc0b8e11c839bb60b01483576e9e1764e662921c8b2cc30c",
+      "targets": [
+        "modules/ai-agentic-context/clues/native/deferred.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clues/native/deferred.rs": "5769aac145999f8a037ace976742921f5c32a61d565fc644b7bf2ef849b6f7b1"
+      }
+    },
+    {
+      "source": "rust/ascent/src/clues/exchange.rs",
+      "sourceSha256": "e1ea8db23cb0487d5105762d78ba59ab9affce5c26acda1da4d9672dbaad12c8",
+      "targets": [
+        "modules/ai-agentic-context/clues/native/exchange.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clues/native/exchange.rs": "034722ec51b72c307e43f3b5390eff07d44899eaa1c796449a1b3e62711ccc49"
+      }
+    },
+    {
+      "source": "rust/ascent/src/clues/family.rs",
+      "sourceSha256": "e0a1536e5e1853ad8e4702f382148e1d925504dae1aa816625dec0333b12c26c",
+      "targets": [
+        "modules/ai-agentic-context/clues/native/family.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clues/native/family.rs": "e0a1536e5e1853ad8e4702f382148e1d925504dae1aa816625dec0333b12c26c"
+      }
+    },
+    {
+      "source": "rust/ascent/src/clues/hypotheses.rs",
+      "sourceSha256": "13e9413b5fee3783af584f9af8fceb56cfb2d8149e348478d429916a4b9ec40e",
+      "targets": [
+        "modules/ai-agentic-context/clues/native/hypotheses.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clues/native/hypotheses.rs": "13e9413b5fee3783af584f9af8fceb56cfb2d8149e348478d429916a4b9ec40e"
+      }
+    },
+    {
+      "source": "rust/ascent/src/clues/mod.rs",
+      "sourceSha256": "a212de8bf4258dc35741fa81ef517bd9fe95216058d0e26edbb43970737c35fe",
+      "targets": [
+        "modules/ai-agentic-context/clues/native/mod.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clues/native/mod.rs": "a212de8bf4258dc35741fa81ef517bd9fe95216058d0e26edbb43970737c35fe"
+      }
+    },
+    {
+      "source": "rust/ascent/src/clues/projection.rs",
+      "sourceSha256": "00e1895425efc607e5c6520df115a2a88ae7f0d1f84bf62662991100ece76192",
+      "targets": [
+        "modules/ai-agentic-context/clues/native/projection.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clues/native/projection.rs": "00e1895425efc607e5c6520df115a2a88ae7f0d1f84bf62662991100ece76192"
+      }
+    },
+    {
+      "source": "rust/ascent/src/clues/request.rs",
+      "sourceSha256": "6d0756921c5be246e1b08bdee5ee52ddce659489ce700bff4dd30e33b137ba1f",
+      "targets": [
+        "modules/ai-agentic-context/clues/native/request.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clues/native/request.rs": "0f6bc09b76223098a44f7f8d5bfa071ccdd5ac77355bb1c640571d9995df5cb6"
+      }
+    },
+    {
+      "source": "rust/ascent/src/clues/slices.rs",
+      "sourceSha256": "9c1483f430049b597de9d919b2c11a7879e8a7ae117ce358ab08b63892991d8d",
+      "targets": [
+        "modules/ai-agentic-context/clues/native/slices.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clues/native/slices.rs": "a4f83464d6e81766ee7bc584e6aad970433f19729de7c337ec5b20b7dc76ac98"
+      }
+    },
+    {
+      "source": "rust/ascent/src/computational/lowering.rs",
+      "sourceSha256": "8269a5b1a8298f517e1fb59b5c23e9be2f1671ef9ae4867075f47bca6599688a",
+      "targets": [
+        "modules/evidence-assessment/native/src/computational/lowering.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/computational/lowering.rs": "8269a5b1a8298f517e1fb59b5c23e9be2f1671ef9ae4867075f47bca6599688a"
+      }
+    },
+    {
+      "source": "rust/ascent/src/computational/mod.rs",
+      "sourceSha256": "c3c6666d876debc1fd982126a55e95644c8b81148c54158ff6890835b75dd835",
+      "targets": [
+        "modules/evidence-assessment/native/src/computational/mod.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/computational/mod.rs": "c3c6666d876debc1fd982126a55e95644c8b81148c54158ff6890835b75dd835"
+      }
+    },
+    {
+      "source": "rust/ascent/src/computational/observations.rs",
+      "sourceSha256": "7289f3b9235ef2a841f3e4f35169ab5926f8015a8c212cc68796e824ea431580",
+      "targets": [
+        "modules/evidence-assessment/native/src/computational/observations.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/computational/observations.rs": "7289f3b9235ef2a841f3e4f35169ab5926f8015a8c212cc68796e824ea431580"
+      }
+    },
+    {
+      "source": "rust/ascent/src/computational/owner.rs",
+      "sourceSha256": "73bf970a772b2a40d162cc02bd94aae2a545f59c315f3f4cae4ca48783b2ead7",
+      "targets": [
+        "modules/evidence-assessment/native/src/computational/owner.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/computational/owner.rs": "73bf970a772b2a40d162cc02bd94aae2a545f59c315f3f4cae4ca48783b2ead7"
+      }
+    },
+    {
+      "source": "rust/ascent/src/computational/support.rs",
+      "sourceSha256": "67310db77ba60631dae7865072bc96645d68fee4177e562d9e996a8a8fa7d35d",
+      "targets": [
+        "modules/evidence-assessment/native/src/computational/support.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/computational/support.rs": "67310db77ba60631dae7865072bc96645d68fee4177e562d9e996a8a8fa7d35d"
+      }
+    },
+    {
+      "source": "rust/ascent/src/conversation.rs",
+      "sourceSha256": "bc93877a143dcb9e6bbced57f1be04edc2f9e3815a3c9c5668b03e2888f892e7",
+      "targets": [
+        "modules/evidence-assessment/native/src/conversation.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/conversation.rs": "bc93877a143dcb9e6bbced57f1be04edc2f9e3815a3c9c5668b03e2888f892e7"
+      }
+    },
+    {
+      "source": "rust/ascent/src/derivations.rs",
+      "sourceSha256": "29b7d9bd73563c93c86350956c7fa3c51ec20cc8dc50e6b15fe69216a3d38797",
+      "targets": [
+        "modules/evidence-assessment/native/src/derivations.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/derivations.rs": "29b7d9bd73563c93c86350956c7fa3c51ec20cc8dc50e6b15fe69216a3d38797"
+      }
+    },
+    {
+      "source": "rust/ascent/src/domain.rs",
+      "sourceSha256": "a107f4ac0b266c95ebeabfaa41197d0ea6978532a6a9a547de6b9aff8acb5292",
+      "targets": [
+        "modules/evidence-assessment/native/src/domain.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/domain.rs": "a107f4ac0b266c95ebeabfaa41197d0ea6978532a6a9a547de6b9aff8acb5292"
+      }
+    },
+    {
+      "source": "rust/ascent/src/domain_memory.rs",
+      "sourceSha256": "d317198e000fa37259fb0934654b5e46d76a8d0e0bbf84668fd146e676807322",
+      "targets": [
+        "modules/evidence-assessment/native/src/domain_memory.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/domain_memory.rs": "7428a6341db7d571c8921577f10d7bad117cdb4f738dcbfd097c5cad22eb596d"
+      }
+    },
+    {
+      "source": "rust/ascent/src/evidence_graph/continuation.rs",
+      "sourceSha256": "673fca4597d6b659d51edbab12f006fdac11ac9ec014d2e98aa1ce2904fb0315",
+      "targets": [
+        "modules/evidence-assessment/native/src/evidence_graph/continuation.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/evidence_graph/continuation.rs": "673fca4597d6b659d51edbab12f006fdac11ac9ec014d2e98aa1ce2904fb0315"
+      }
+    },
+    {
+      "source": "rust/ascent/src/evidence_graph/mod.rs",
+      "sourceSha256": "f436262cdd74fc43830772eb4cb3351bccfd6e563e8033872aae6a2bec118833",
+      "targets": [
+        "modules/evidence-assessment/native/src/evidence_graph/mod.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/evidence_graph/mod.rs": "f436262cdd74fc43830772eb4cb3351bccfd6e563e8033872aae6a2bec118833"
+      }
+    },
+    {
+      "source": "rust/ascent/src/evidence_graph/reuse.rs",
+      "sourceSha256": "170c1b2188dad973e6e668e81c65fc70b04e18b55c68afe1b02c89a0318f20f3",
+      "targets": [
+        "modules/evidence-assessment/native/src/evidence_graph/reuse.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/evidence_graph/reuse.rs": "170c1b2188dad973e6e668e81c65fc70b04e18b55c68afe1b02c89a0318f20f3"
+      }
+    },
+    {
+      "source": "rust/ascent/src/evidence_graph/slice.rs",
+      "sourceSha256": "31a257ca4937a2f504616f4530e86ce447af511b94c5d8ef7fa31e67ba287bfc",
+      "targets": [
+        "modules/evidence-assessment/native/src/evidence_graph/slice.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/evidence_graph/slice.rs": "757d29c589264fe1b93dbcc396536486fee4ea2b72eb824a9264891e6516b8a9"
+      }
+    },
+    {
+      "source": "rust/ascent/src/evidence_graph/structure.rs",
+      "sourceSha256": "0316cdcd4bedc7df3c2bc6c94b81d7955eb3809970ee0d3cc5824e7769c5dfe7",
+      "targets": [
+        "modules/evidence-assessment/native/src/evidence_graph/structure.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/evidence_graph/structure.rs": "0316cdcd4bedc7df3c2bc6c94b81d7955eb3809970ee0d3cc5824e7769c5dfe7"
+      }
+    },
+    {
+      "source": "rust/ascent/src/evidence_store/admission.rs",
+      "sourceSha256": "49ffe664d8f42d2250ae1b3585a53a73a57a31440d5cae678a45b9600e0a3e03",
+      "targets": [
+        "modules/evidence-assessment/native/src/evidence_store/admission.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/evidence_store/admission.rs": "49ffe664d8f42d2250ae1b3585a53a73a57a31440d5cae678a45b9600e0a3e03"
+      }
+    },
+    {
+      "source": "rust/ascent/src/evidence_store/mod.rs",
+      "sourceSha256": "eca666c2e2be38320fdf3a32a905bfef8f277fe6dc6c8dd8cc653605c6f1137a",
+      "targets": [
+        "modules/evidence-assessment/native/src/evidence_store/mod.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/evidence_store/mod.rs": "eca666c2e2be38320fdf3a32a905bfef8f277fe6dc6c8dd8cc653605c6f1137a"
+      }
+    },
+    {
+      "source": "rust/ascent/src/evidence_store/owner.rs",
+      "sourceSha256": "1b6b611932d777b3899d3cfa0648903d90f156a5e33d87de4e6d9a0e6a678431",
+      "targets": [
+        "modules/evidence-assessment/native/src/evidence_store/owner.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/evidence_store/owner.rs": "1b6b611932d777b3899d3cfa0648903d90f156a5e33d87de4e6d9a0e6a678431"
+      }
+    },
+    {
+      "source": "rust/ascent/src/interaction/feedback.rs",
+      "sourceSha256": "d5905bedd86ab82279db5dd1480f5a71edfa819ad90bdaa64961c6cc6a8dd6da",
+      "targets": [
+        "modules/ai-agentic-context/interaction/native/feedback.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/interaction/native/feedback.rs": "d5905bedd86ab82279db5dd1480f5a71edfa819ad90bdaa64961c6cc6a8dd6da"
+      }
+    },
+    {
+      "source": "rust/ascent/src/interaction/mod.rs",
+      "sourceSha256": "49dbf41be64ce06b64d1dfb0e6ae1cf07dd7b579b595c70e8724e0717faa90ce",
+      "targets": [
+        "modules/ai-agentic-context/interaction/native/mod.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/interaction/native/mod.rs": "49dbf41be64ce06b64d1dfb0e6ae1cf07dd7b579b595c70e8724e0717faa90ce"
+      }
+    },
+    {
+      "source": "rust/ascent/src/interaction/owner.rs",
+      "sourceSha256": "1cfe3b4dfdf08ca5b03b79aa1589909ed9fb2bc9bafe96a1ad3290296017701b",
+      "targets": [
+        "modules/ai-agentic-context/interaction/native/owner.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/interaction/native/owner.rs": "1cfe3b4dfdf08ca5b03b79aa1589909ed9fb2bc9bafe96a1ad3290296017701b"
+      }
+    },
+    {
+      "source": "rust/ascent/src/interaction/paths.rs",
+      "sourceSha256": "5435ae89943812455e26f474913a7ea6319c34f13ce91500953fd2b544468bae",
+      "targets": [
+        "modules/ai-agentic-context/interaction/native/paths.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/interaction/native/paths.rs": "5435ae89943812455e26f474913a7ea6319c34f13ce91500953fd2b544468bae"
+      }
+    },
+    {
+      "source": "rust/ascent/src/interaction/registry.rs",
+      "sourceSha256": "02ee6f70136efc90744a9db49e2942f1789c7982a8483129d12343b33c6c8d34",
+      "targets": [
+        "modules/ai-agentic-context/interaction/native/registry.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/interaction/native/registry.rs": "265f69cdaa89971ff38ab201b7ce40625c51798072ef18db05a694a88b6503fe"
+      }
+    },
+    {
+      "source": "rust/ascent/src/interaction/tools.rs",
+      "sourceSha256": "8c36787647feb0ed95de61597266fabb18b4c637d4d4497d93df5a69578c9126",
+      "targets": [
+        "modules/ai-agentic-context/interaction/native/tools.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/interaction/native/tools.rs": "8c36787647feb0ed95de61597266fabb18b4c637d4d4497d93df5a69578c9126"
+      }
+    },
+    {
+      "source": "rust/ascent/src/observations/compact.rs",
+      "sourceSha256": "b7e3eb1b4ad7d1d27faccd5030cef0c82e72e65b9e5fe8461c130eb39a84b58f",
+      "targets": [
+        "modules/evidence-assessment/native/src/observations/compact.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/observations/compact.rs": "b7e3eb1b4ad7d1d27faccd5030cef0c82e72e65b9e5fe8461c130eb39a84b58f"
+      }
+    },
+    {
+      "source": "rust/ascent/src/observations/expand.rs",
+      "sourceSha256": "079f85e1af267c3d75015e5e7327b72df895e540d2c5cdcac0b094b2d26f5a2c",
+      "targets": [
+        "modules/evidence-assessment/native/src/observations/expand.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/observations/expand.rs": "079f85e1af267c3d75015e5e7327b72df895e540d2c5cdcac0b094b2d26f5a2c"
+      }
+    },
+    {
+      "source": "rust/ascent/src/observations/mod.rs",
+      "sourceSha256": "c26889eda20751019759c290de2480252c63ce35783dbf994ed75f30d999a637",
+      "targets": [
+        "modules/evidence-assessment/native/src/observations/mod.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/observations/mod.rs": "c26889eda20751019759c290de2480252c63ce35783dbf994ed75f30d999a637"
+      }
+    },
+    {
+      "source": "rust/ascent/src/provider.rs",
+      "sourceSha256": "1a373ba95362ceb83b75de7a2d6f8af26b68805206a42d9475fdd2a0cba9aef8",
+      "targets": [
+        "modules/evidence-assessment/native/src/provider.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/provider.rs": "1a373ba95362ceb83b75de7a2d6f8af26b68805206a42d9475fdd2a0cba9aef8"
+      }
+    },
+    {
+      "source": "rust/ascent/src/review/mod.rs",
+      "sourceSha256": "10a0d083c954206a0a651fb2973911fb69fbbbb5140d8a79bdc72c97a72790ca",
+      "targets": [
+        "modules/evidence-assessment/native/src/review/mod.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/review/mod.rs": "10a0d083c954206a0a651fb2973911fb69fbbbb5140d8a79bdc72c97a72790ca"
+      }
+    },
+    {
+      "source": "rust/ascent/src/review/owner.rs",
+      "sourceSha256": "77ed9c3da069b4423c4c54f8230c9f2f88eb0f180df32b4fe07929cc7a97e098",
+      "targets": [
+        "modules/evidence-assessment/native/src/review/owner.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/review/owner.rs": "77ed9c3da069b4423c4c54f8230c9f2f88eb0f180df32b4fe07929cc7a97e098"
+      }
+    },
+    {
+      "source": "rust/ascent/src/review/policy.rs",
+      "sourceSha256": "b53bc1eb7b777ec7eb8e99c8ab3e2619cb0dfbf3ec655a89dacd586196a06a95",
+      "targets": [
+        "modules/evidence-assessment/native/src/review/policy.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/src/review/policy.rs": "b53bc1eb7b777ec7eb8e99c8ab3e2619cb0dfbf3ec655a89dacd586196a06a95"
+      }
+    },
+    {
+      "source": "rust/ascent/src/trajectory/events.rs",
+      "sourceSha256": "3d5c6bddc30b625d86282f00a38468a5f16b7f30d7ebce65796d1ccd8e2c559c",
+      "targets": [
+        "modules/temporal-causality/trajectory/native/events.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/temporal-causality/trajectory/native/events.rs": "4353db601ba8af9e7d3283777a050e8e6030ada92980e33e54a7041427436841"
+      }
+    },
+    {
+      "source": "rust/ascent/src/trajectory/exploration.rs",
+      "sourceSha256": "181dd90663500e540e5100defa1a2db7410e76aa990586dfd51b321afc479db4",
+      "targets": [
+        "modules/temporal-causality/trajectory/native/exploration.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/temporal-causality/trajectory/native/exploration.rs": "9bd18fb8ca25737b7fbceb52c6ad6364ce260d234782e4d1a6a412d13cff1d89"
+      }
+    },
+    {
+      "source": "rust/ascent/src/trajectory/mod.rs",
+      "sourceSha256": "5f96ddcf39af522acea84e2e6db274d8edbe6ebd06b25b0935d50f7cbef93eca",
+      "targets": [
+        "modules/temporal-causality/trajectory/native/mod.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/temporal-causality/trajectory/native/mod.rs": "5f96ddcf39af522acea84e2e6db274d8edbe6ebd06b25b0935d50f7cbef93eca"
+      }
+    },
+    {
+      "source": "rust/ascent/src/trajectory/owner.rs",
+      "sourceSha256": "09eef06a17ab8884c09ae011f59c9ece7dab5520e56d9859819323c2dbc61e18",
+      "targets": [
+        "modules/temporal-causality/trajectory/native/owner.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/temporal-causality/trajectory/native/owner.rs": "1f9a00a1324c75705adad014ee4a537e4ba4db515124b0e3999a8bca2be9812a"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/fixtures/evidence/actions.ss",
+      "sourceSha256": "cb94f541958ab1fe63cac26753de24d6c6b777f21a920cb55501d8282bd8f276",
+      "targets": [
+        "modules/evidence-assessment/native/tests/fixtures/evidence/actions.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/fixtures/evidence/actions.ss": "01a1206985da441aafaa674ae9027c8879a40b1ee92290494335d56687ff801c"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/fixtures/evidence/catalog.ss",
+      "sourceSha256": "6ff424f6f11e851992388e5af37909313fdd05464ca46c5a55c2932a4201de3a",
+      "targets": [
+        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog.ss": "775ca467261de82df5e0a9c87a6570aeb2d88afbb9edb5f66c86a045008d77f2"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/fixtures/evidence/catalog/observations.ss",
+      "sourceSha256": "f3ceabbff8758d09851d3e9589f0ada6b7495e52eecb2f198e6a275c45c2e421",
+      "targets": [
+        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/observations.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/observations.ss": "f3ceabbff8758d09851d3e9589f0ada6b7495e52eecb2f198e6a275c45c2e421"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/fixtures/evidence/catalog/protocols.ss",
+      "sourceSha256": "de79ce09be2c8d2e8ccc74c41eb4128cf55d5f303c3c0c7ca330842ba7731b81",
+      "targets": [
+        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/protocols.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/protocols.ss": "de79ce09be2c8d2e8ccc74c41eb4128cf55d5f303c3c0c7ca330842ba7731b81"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/fixtures/evidence/catalog/reports.ss",
+      "sourceSha256": "1e81ecf71e0571ec826445a949e7d3043ee13c29196d773f5b098ce8894cd607",
+      "targets": [
+        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/reports.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/reports.ss": "1e81ecf71e0571ec826445a949e7d3043ee13c29196d773f5b098ce8894cd607"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/fixtures/evidence/dependency.ss",
+      "sourceSha256": "736e370d86daefaee26176003da13185da55adb518d80be4a5feae324544a0c1",
+      "targets": [
+        "modules/evidence-assessment/native/tests/fixtures/evidence/dependency.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/fixtures/evidence/dependency.ss": "736e370d86daefaee26176003da13185da55adb518d80be4a5feae324544a0c1"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/fixtures/evidence/history.ss",
+      "sourceSha256": "a52b374f567e7d4e2735485fb509931180b52ca88364fac2160be7fda4e7b9e8",
+      "targets": [
+        "modules/evidence-assessment/native/tests/fixtures/evidence/history.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/fixtures/evidence/history.ss": "e188545c5b06ede74f674eb421eb865701d2f9e06cd711c78696f22767e1c0d0"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/fixtures/evidence/investigation.ss",
+      "sourceSha256": "948721403430c2f1238d6183a40f04aff3cad3cf8534696ebf469f82a13fee5e",
+      "targets": [
+        "modules/evidence-assessment/native/tests/fixtures/evidence/investigation.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/fixtures/evidence/investigation.ss": "d718ca2875b8e2821f2b633c5b01f93d5603420b5e2865d0cbe5a017a97d0a57"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/fixtures/evidence/lifecycle.ss",
+      "sourceSha256": "67550c71ffd4162dabf48495d8e8ca3a1c0f033377118cc2bed850d47875c533",
+      "targets": [
+        "modules/evidence-assessment/native/tests/fixtures/evidence/lifecycle.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/fixtures/evidence/lifecycle.ss": "58105a9bb782f921f2aaea316694fec567414aff8fee757a0389bcba21d45e73"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/fixtures/evidence/review.ss",
+      "sourceSha256": "39720b0719253024809bee0fe3d3b1182a9d35dda39594e265d4f5a6af4587fd",
+      "targets": [
+        "modules/evidence-assessment/native/tests/fixtures/evidence/review.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/fixtures/evidence/review.ss": "e381cb62a0e228d58d43763120b68eb535dcfdf5d2e54b6c47005b8353ce0c1a"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/fixtures/evidence/review/receipts.ss",
+      "sourceSha256": "08c0518f569b9c58296779f7d048bef7ddedf2d913cf7d9360ad36502d280106",
+      "targets": [
+        "modules/evidence-assessment/native/tests/fixtures/evidence/review/receipts.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/fixtures/evidence/review/receipts.ss": "08c0518f569b9c58296779f7d048bef7ddedf2d913cf7d9360ad36502d280106"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/integration/clues/exchange/authority.rs",
+      "sourceSha256": "418325c45c9540207c25eb6012577fbf8fbd8b42978ff9dbb7b16267f52ef186",
+      "targets": [
+        "modules/evidence-assessment/native/tests/clues/exchange/authority.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/clues/exchange/authority.rs": "a930855529b50f6715c04abaf37130b447afbbead8d32cce6ac66907f09974cc"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/integration/clues/exchange/checkpoint.rs",
+      "sourceSha256": "97917825fe716f1cbf328c332170fa342d9cc0a77d49e5c4e46f0e016affc93c",
+      "targets": [
+        "modules/evidence-assessment/native/tests/clues/exchange/checkpoint.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/clues/exchange/checkpoint.rs": "9ef5be1ac10da4a184e396f8fa8c2d6b2a1272612b76ac05c07c790d8adab5b5"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/integration/clues/exchange/mod.rs",
+      "sourceSha256": "b8d6bda3a9539495e0b6dfd19a5f43ef84d8b2e538eba5a0add822856d3675a1",
+      "targets": [
+        "modules/evidence-assessment/native/tests/clues/exchange/mod.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/clues/exchange/mod.rs": "b3cd9c768ae27a7e92b5062f7d6ccb44141a906de06102cfa6be03ed41400a38"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/integration/clues/exchange/slicing.rs",
+      "sourceSha256": "c3cdd5a2a416f5e7b4b1c724194d403a7508d993402bb122c47372c0750d683f",
+      "targets": [
+        "modules/evidence-assessment/native/tests/clues/exchange/slicing.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/clues/exchange/slicing.rs": "a16822fd9b485d636cdfb370438f38c3e6174cac8e1a3bf171c9f87f619203cb"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/integration/clues/exchange/support.rs",
+      "sourceSha256": "e29ff1af57672949de09db8ef22705bea8ba368b2c583570cfa32826b2fff91f",
+      "targets": [
+        "modules/evidence-assessment/native/tests/clues/exchange/support.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/clues/exchange/support.rs": "219dacacff35ebc4ce19c0e6d19e12d884780c3c5eb457e8bed57446696241ea"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/integration/clues/mod.rs",
+      "sourceSha256": "70753bdaab1a5019b47c76fe606bf88d83e556b5355707f61dee182c481ca302",
+      "targets": [
+        "modules/evidence-assessment/native/tests/clues/mod.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/clues/mod.rs": "70753bdaab1a5019b47c76fe606bf88d83e556b5355707f61dee182c481ca302"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/integration/clues/requests.rs",
+      "sourceSha256": "c0d003ebf6cf79b6769ee88a7165771db07b6633450fdd57690ac15206ecea3d",
+      "targets": [
+        "modules/evidence-assessment/native/tests/clues/requests.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/clues/requests.rs": "61cba68e30252a15e796d84f08ec61a0111e282e79ac15417e6e265802094123"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/integration/evidence_checkpoint.rs",
+      "sourceSha256": "73c7f609e38eb337592ef0c607bc3ef51d9c6d83ef1d1eaf765b4170b1e1b376",
+      "targets": [
+        "modules/evidence-assessment/native/tests/evidence_checkpoint.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/evidence_checkpoint.rs": "00f2dd01b77f37a609f9b23a2a072a4607ead035778d783a21858b3767c6391b"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/integration/interaction.rs",
+      "sourceSha256": "47f53de00d5f26cf5699d337315e8d935453f34b78aced666ab4e0e63d03652d",
+      "targets": [
+        "modules/evidence-assessment/native/tests/interaction.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/interaction.rs": "01bb2efb920f47b724f0d348a4be10dbb9b53047d723266b2cd0d1cb7293f7a4"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/integration/workflows.rs",
+      "sourceSha256": "1bd7f581a5f1cc0ecec29e341669e8d57ed3b62cc6979429629fdd8968298beb",
+      "targets": [
+        "modules/evidence-assessment/native/tests/workflows.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/evidence-assessment/native/tests/workflows.rs": "2f4390f177b4d7eccb5f253bb8165f86619277c5d1a21941bf8e9ef92b11ef90"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/unit/clues/capacity.rs",
+      "sourceSha256": "e58020bb60f8d87e6c5db5cad7ad56e0fb4145cc4cf8e9b4b4bb9eb7c081a0ac",
+      "targets": [
+        "modules/ai-agentic-context/clues/native/tests/capacity.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clues/native/tests/capacity.rs": "e58020bb60f8d87e6c5db5cad7ad56e0fb4145cc4cf8e9b4b4bb9eb7c081a0ac"
+      }
+    },
+    {
+      "source": "rust/ascent/tests/unit/clues/deferred.rs",
+      "sourceSha256": "7414d8060063e46158d9359fd5da9354a5e018a2266b92fbf414613c4547bfff",
+      "targets": [
+        "modules/ai-agentic-context/clues/native/tests/deferred.rs"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "modules/ai-agentic-context/clues/native/tests/deferred.rs": "7414d8060063e46158d9359fd5da9354a5e018a2266b92fbf414613c4547bfff"
+      }
+    },
+    {
+      "source": "t/qualification/ascent-domain-evidence-test.ss",
+      "sourceSha256": "9f1f3979fa41de990a61e9d82867d93be7a7a7f81ca7a3b3342ee4c22e9f6776",
+      "targets": [
+        "t/ascent-domain-evidence-test.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/ascent-domain-evidence-test.ss": "b88f08ea0c1152231b9f3d01801fdb0e9fcd6013a4480fe687c3fc9ff145ae33"
+      }
+    },
+    {
+      "source": "t/qualification/ascent-evidence-store-test.ss",
+      "sourceSha256": "0f1b53bec2260657d82a50007eee5c230a2d0b89de1b8ac7c92a6b98ce06ec42",
+      "targets": [
+        "t/ascent-evidence-store-test.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/ascent-evidence-store-test.ss": "289f6e7897a44fe5cd47be5a77eb2b18df1298b8885212371be6e1baa8254f99"
+      }
+    },
+    {
+      "source": "t/qualification/clue-exchange-test.ss",
+      "sourceSha256": "ac76729cd11860dc772931cabf9ce7091c5fbdd1c963588c590875a631bd2d74",
+      "targets": [
+        "t/clue-exchange-test.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/clue-exchange-test.ss": "609c3a40736d2cddb7e262132609aea719f4a27e450e8e8e47fbc10355f0a0cd"
+      }
+    },
+    {
+      "source": "t/qualification/clue-query-test.ss",
+      "sourceSha256": "eeb2e1dc32fcaa7140f1d198d656b42089fd1e90f98251ea77afc3f1d84e6e97",
+      "targets": [
+        "t/clue-query-test.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/clue-query-test.ss": "60a62322684ba1d6636d9f27d906c923c601fbae8e8d0bc9ee5866643812cf50"
+      }
+    },
+    {
+      "source": "t/qualification/evidence-dag-test.ss",
+      "sourceSha256": "6950f6193162382f38e8c296bc069cdd71a6baa3d59f287894073e5ba4d39c6f",
+      "targets": [
+        "t/evidence-dag-test.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/evidence-dag-test.ss": "77141fcc8214ca3c401ad59fe7a8a0a65cd1d0dc5988cd70aa7bbcca82447676"
+      }
+    },
+    {
+      "source": "t/qualification/trajectory-test.ss",
+      "sourceSha256": "ebc2bec21aaae63756f1122e00b95e4c0a9159d537e5228bddedced2211010f2",
+      "targets": [
+        "t/trajectory-test.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/trajectory-test.ss": "1e08cc8d9ea3adf94aebbc466fc40587d96319a27cb83dc41d7e3d8760279ecd"
+      }
+    },
+    {
+      "source": "t/research/candidate-interaction.ss",
+      "sourceSha256": "d441fea03cfbc354c7a14f082759f7ea5829ce0ef858d63fdfb7fe97cf0ad36b",
+      "targets": [
+        "t/research/candidate-interaction.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/research/candidate-interaction.ss": "5f170b7e9c9c382a469a4cfc49f4dcd6d64d3fd8e7e5ff590ae379a84b5e692f"
+      }
+    },
+    {
+      "source": "t/research/evidence-search.ss",
+      "sourceSha256": "e0de47a40d58d0a4b4cf95ace696e66bf93cc1b8e88e83c716945b5b3df7a666",
+      "targets": [
+        "t/research/evidence-search.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/research/evidence-search.ss": "426bb7aa8612f357e3345a53a3281a79eaa186a923e3c64a7eceaef10157e724"
+      }
+    },
+    {
+      "source": "t/research/factor-budget-build.ss",
+      "sourceSha256": "0413a95edeae7c34302840be98803a649b3012a011b3079e1ca6842bc0fcd50a",
+      "targets": [
+        "t/research/factor-budget-build.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/research/factor-budget-build.ss": "0413a95edeae7c34302840be98803a649b3012a011b3079e1ca6842bc0fcd50a"
+      }
+    },
+    {
+      "source": "t/research/factor-budget-oracle.ss",
+      "sourceSha256": "7970eee02151265adf0d030284099d5bbc832a8d194056b2651066c32ab4a25f",
+      "targets": [
+        "t/research/factor-budget-oracle.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/research/factor-budget-oracle.ss": "7970eee02151265adf0d030284099d5bbc832a8d194056b2651066c32ab4a25f"
+      }
+    },
+    {
+      "source": "t/research/factor-budget.ss",
+      "sourceSha256": "abfc9ba8e52536c187180b2bb612b050e312ef8ff6d0bfdad319fb6f3632ed9a",
+      "targets": [
+        "t/research/factor-budget.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/research/factor-budget.ss": "dd28ab4b645bddeae77b5c68bb32d5e10a1dcc306b5378a1296489369a11833f"
+      }
+    },
+    {
+      "source": "t/research/factor-pilot-build.ss",
+      "sourceSha256": "e00b1526da9b3642f7e5e6369ce60be57d78a634ea41ce4b9ea9210180eb164d",
+      "targets": [
+        "t/research/factor-pilot-build.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/research/factor-pilot-build.ss": "e00b1526da9b3642f7e5e6369ce60be57d78a634ea41ce4b9ea9210180eb164d"
+      }
+    },
+    {
+      "source": "t/research/factor-pilot.ss",
+      "sourceSha256": "b8393dc12f3790fa447ed925f56f0d38d94428ef87fb0ba8ab0e6c0cda4fbebb",
+      "targets": [
+        "t/research/factor-pilot.ss"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/research/factor-pilot.ss": "58900652b6566a8f9503528b307a0d901f5c7f3bf08bc3ec37b7bfca6f1b7349"
+      }
+    },
+    {
+      "source": "t/research/output-check-fixture.json",
+      "sourceSha256": "65caf06287e97cec421713eb0de6df9ae5e8578cfb5c008421fc87a103e517bb",
+      "targets": [
+        "t/research/output-check-fixture.json"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/research/output-check-fixture.json": "65caf06287e97cec421713eb0de6df9ae5e8578cfb5c008421fc87a103e517bb"
+      }
+    },
+    {
+      "source": "t/research/reproduce-clean.sh",
+      "sourceSha256": "952186008a924952f2353738f6e8c6bbe9f935c740ed4c5aa9bfcdaf525f9d6c",
+      "targets": [
+        "t/research/reproduce-clean.sh"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "t/research/reproduce-clean.sh": "952186008a924952f2353738f6e8c6bbe9f935c740ed4c5aa9bfcdaf525f9d6c"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_clue_exchange.py",
+      "sourceSha256": "238d45cfb29ffa09041a2d64bd2e6280e672b4ac11dc5f85406150a86dfa5e27",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_clue_exchange.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_clue_exchange.py": "9ec4efd81888f783124aa7870aa057dce651302b5dd3285be01b80a2967095de"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_complex_inference.py",
+      "sourceSha256": "1b7b69473cee4add5c92c6633ed56f6560682f498c0d6c394e5d2344df503259",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_complex_inference.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_complex_inference.py": "60c145c7a0af1e3c6519c193ff873e1321ef5522cd04fe71cda9dd1d92187fee"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_complex_movie.py",
+      "sourceSha256": "0f43c8898bf616381db322a5ec82f5761d44e2d2d54cb67783fffd927b6c0c28",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_complex_movie.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_complex_movie.py": "2c40aae5ab69e16d894bf71a7c1baacac344581e31eae9fe6f033147f8924022"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_computational_evidence.py",
+      "sourceSha256": "cf0ab0c40e954f33a9da02686a82ce01b9755bb1a649de43e00a2038e8938ef0",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_computational_evidence.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_computational_evidence.py": "8abfab0ad37f4d617e83c74b31f5a483c8104b0feabea0eb281db95493bd87d7"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_derivations.py",
+      "sourceSha256": "eaaba01c3dc570438475cd17509a358e3cbd203acdc14f7701afa6b5093776ae",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_derivations.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_derivations.py": "b502068811c16b5355b61216ceb1b66a11669ca3b0a3f8682434057b19ad2ab2"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_domain_evidence.py",
+      "sourceSha256": "f7774f609e8a5c7a0a2cd2a36354e04da72c7a2b80a6bd39436a19ad5119d493",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_domain_evidence.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_domain_evidence.py": "0fdd830a83d7cccbc852a310991ca599f031e9648a11e2299112713ab64bb6f4"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_evidence.py",
+      "sourceSha256": "2fcf27f696f2c755c17258f0c0a28ff777f039c92c1e58a6b14161349611726d",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_evidence.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_evidence.py": "e7cd01ffae3f0de5ba7ba2dd0b1e55c92f6d74a674af5143074261dfacb01f9f"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_evidence_dag.py",
+      "sourceSha256": "8af768721ac43a50e413253579c22abfee66c0e8d463cbe0c40daddaa1331820",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_evidence_dag.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_evidence_dag.py": "e2f98c51bbef03d63fb0921c6ce991baeaea65e78e7946a1c4cfcabed8b03b60"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_inference_reuse.py",
+      "sourceSha256": "749eda046ea1919582499424a910aaab6e3522f6eb8700a30935ba1a08b61660",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_inference_reuse.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_inference_reuse.py": "506a4a1a103427cfc8ae5c8134325c6602ff33f9302665833b8a4a3a9c774d77"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_interaction.py",
+      "sourceSha256": "95128d8ed7049842254d27a60076d2e25571be061bfe2fa05c25a4c01df790e3",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_interaction.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_interaction.py": "bb66a07d111ed075fa84875d0156c4f691919a6e072d64c7d4d428ca663cc941"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_process_status.py",
+      "sourceSha256": "9d9cbac1eb8534ee158f10a9a33f25b1209565b907d72c551f63244c0ab666d9",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_process_status.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_process_status.py": "53c67ef7b4ace94f59a6147f4137d04d0332aaa33a539185ea72a7bf5064eb20"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_review.py",
+      "sourceSha256": "3d25540558a73915e025b64eeaaa8f629e35475e06a6f1096bd603f172a8ffb8",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_review.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_review.py": "24633d4b78a76472ac32e57d75de5da0b2891ba3f3cfdcf1a1c0a4f268043366"
+      }
+    },
+    {
+      "source": "workbench/engine_tests/test_trajectory.py",
+      "sourceSha256": "682d6d674931eab21ac5163ece5a1d8e150dcaabee70fa0dcdf3f2982a9d2659",
+      "targets": [
+        "packages/python-runtime/tests/assessment/test_trajectory.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-runtime/tests/assessment/test_trajectory.py": "da36ef5dcb08cb835d62bdc3afb3d35b1d1c5797ab677a06fd12f8e2b8403211"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/candidate_model.py",
+      "sourceSha256": "141c202e4210803f488f28b3089363ba7923f3e5efaf0c2335fb95583f301db4",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model.py": "60711c0a52634048f8967cdffbd3bd37e8a62172bdec3fbe0775f0fc87716551"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/complex_inference_workload.py",
+      "sourceSha256": "f3b03617187a261e79ec2b39eb21c8a290c3e38ae68100938435e9ae8527e18f",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_inference_workload.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_inference_workload.py": "f3b03617187a261e79ec2b39eb21c8a290c3e38ae68100938435e9ae8527e18f"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/complex_movie_study.py",
+      "sourceSha256": "d0e8dfd1f2fbc43dc8a3a31538c1e23e8c7d4a3c654870931c3403afd7d35f66",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study.py": "0db84ffe5371bde2e707eec794f5b4b77be3ed878c820525e01c75769032e36c"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/complex_movie_validation.py",
+      "sourceSha256": "11e051ef3b8cdb69afeac22f8958317446015a12866d976e1b987bafeff05608",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation.py": "45214cbf4732d7856d18e866146da1d6442649b241d682f88b66e6999ed11a92"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/compound_inference_recovery.py",
+      "sourceSha256": "c1ad1f9b1f502f4d71fc5c3da4fe14b6227d4d6fe84696ae0615f96d344fe30a",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/compound_inference_recovery.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/compound_inference_recovery.py": "6e7a5cee24b732d017cd0a279c4885bdec9da1fecab10771fd2c2f58ec7eedbd"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/compound_inference_report.py",
+      "sourceSha256": "087da32c6b71912a2c6cfff4b21ea5ce3eaf8b6283cb6776a3044a547d75bb63",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/compound_inference_report.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/compound_inference_report.py": "087da32c6b71912a2c6cfff4b21ea5ce3eaf8b6283cb6776a3044a547d75bb63"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/consumption_study.py",
+      "sourceSha256": "ad93f7bb5caf4b770dcf75b7b165d74bad631f08a2584cf86ad3ca88c88f9651",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study.py": "f208882c619b37946a97182975ef0c18cc0147eaa425558504dd1b18624ff70b"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/correction_study.py",
+      "sourceSha256": "51e8d295483b270a19b66eb212cbe081380afb0fd57190a1eced850f53c1d4c5",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study.py": "ce5a16eec8f606570b4bba10d148aa316b015d90364ca55e50bda7224eb64891"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/domain_conformance.py",
+      "sourceSha256": "38ea91e59890f09ac37989e0a44d8f2f70f5a2bd3cc67c9e6cf48702d0b0be55",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_conformance.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_conformance.py": "38ea91e59890f09ac37989e0a44d8f2f70f5a2bd3cc67c9e6cf48702d0b0be55"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/domain_observations.py",
+      "sourceSha256": "8f0ec3078a9ebddd2fa070898f4396a3af3a3ae0c169b7f435ca1ac19e0b42e9",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_observations.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_observations.py": "8f0ec3078a9ebddd2fa070898f4396a3af3a3ae0c169b7f435ca1ac19e0b42e9"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/domain_repository_report.py",
+      "sourceSha256": "f6a2c86f6ba43d1797cd0260ada60841522561c0ea7597e9afe29c29321ace3d",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_repository_report.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_repository_report.py": "f6a2c86f6ba43d1797cd0260ada60841522561c0ea7597e9afe29c29321ace3d"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/domain_repository_study.py",
+      "sourceSha256": "94ea258ceeeef6b984ab2fb95236eb709edc419380f3f2d2d41a6eb8a8598fd8",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_repository_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_repository_study.py": "995bca26da460128eb70c14873f50e5d6abdfe084616de7742f49c9ba04d4e27"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/evidence_chain_study.py",
+      "sourceSha256": "41f74a1f86f15454a4767e3c4106509fe96ab62efa18130b9e31318857426619",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study.py": "651944aff136f8955778b0a67304cc55a9d22bffaff6ff762707ecb5e015b8d9"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/evidence_chain_workload.py",
+      "sourceSha256": "bd2f963a0e62d2078099f4ee3379c5dfd3982380fb22597d20a4548eff98b40b",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_workload.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_workload.py": "bd2f963a0e62d2078099f4ee3379c5dfd3982380fb22597d20a4548eff98b40b"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/evidence_interaction.py",
+      "sourceSha256": "7000bc32052f0a74ae2d2709c4c4267a5da8ce7a39afd21e1916b29fef72d6ae",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction.py": "7a4a8838c99d6cb3315816ce8d4aa41d00e8c1d6a972ce250899ab719aa22f5b"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/factor_budget.py",
+      "sourceSha256": "5f2b1ffd5bd2b8d78d8c6b38161f3f9ddd3abd67a0121b5bd9bae43eaf7481c8",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget.py": "674ef76e5abf2d3e184225eab8d85e86f14eb0515f5b0f056a768c50363df553"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/factor_budget_report.py",
+      "sourceSha256": "4521ddfc318e879e0c634722a3e5a107d2d41086d058c915e6356480f2ebd3ba",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget_report.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget_report.py": "d99448571d8924eb3da5b92b929246a27ad9ca5000c41f410709a4bed6924923"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/factor_pilot.py",
+      "sourceSha256": "20ce93182c667a9928b3270869ba448fa5761c6d8322f2527c9d5f031efbf558",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot.py": "67ef5cf76844b5906c85855f621d7033a46305b01e33982d6571d03e03104457"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/factor_pilot_report.py",
+      "sourceSha256": "a2826759fdbebcf6d514558b2f1a64eca5790d5917ef1eabfd8ff42080be6f8d",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot_report.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot_report.py": "a2826759fdbebcf6d514558b2f1a64eca5790d5917ef1eabfd8ff42080be6f8d"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/factor_pilot_snapshot.py",
+      "sourceSha256": "507a43642c12c57b71140264c4055636873795adc488392508b70f284e268919",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot_snapshot.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot_snapshot.py": "507a43642c12c57b71140264c4055636873795adc488392508b70f284e268919"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/inference_effort.py",
+      "sourceSha256": "c77a8c72df02b7300a60a1f10210d40b137dfef2b07cd8a6ffb15442c1894a78",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_effort.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_effort.py": "c77a8c72df02b7300a60a1f10210d40b137dfef2b07cd8a6ffb15442c1894a78"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/inference_recovery.py",
+      "sourceSha256": "183c32d9ff619074abd85fd25bc98fd2ac4225954496f6d9863d2e00f25f1f32",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_recovery.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_recovery.py": "183c32d9ff619074abd85fd25bc98fd2ac4225954496f6d9863d2e00f25f1f32"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/inference_reflection.py",
+      "sourceSha256": "ffceb546f8315eef3e305d1acc5ae7c2b8ec892364544ea989705c693aa5b946",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reflection.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reflection.py": "ffceb546f8315eef3e305d1acc5ae7c2b8ec892364544ea989705c693aa5b946"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/inference_reuse_study.py",
+      "sourceSha256": "8fd9aa2099702f800b4059e1766fb8f02cb59460ce845ea54978dd08d2232dbb",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study.py": "8fd9aa2099702f800b4059e1766fb8f02cb59460ce845ea54978dd08d2232dbb"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/interactive_report.py",
+      "sourceSha256": "6e13b12a952c6917d74aada1fb8dbf98eaaa53c719bca7cb37d43ae356da4d96",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_report.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_report.py": "074777f1a607f9755028b4806c8ee5b1698d6f7781fab0e677b4c032156863c4"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/interactive_study.py",
+      "sourceSha256": "a1981a7da8528e520907cc743b06d938f8a0e5df9da62c968cc9a0f4811acb3a",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study.py": "9bfb2388edecb6186997472433f460da05c069a0e4ae29645ee0e21a1f4d5db8"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/iterative_evidence_recovery.py",
+      "sourceSha256": "ae44a60a0c77458be96f6145cf8cb3c64180e75c157eb6cba207a7c79e67ce46",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_evidence_recovery.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_evidence_recovery.py": "fbca860812224360a97e1cd572f3c7d8235ba0abc3dd95adf50fc937da481ddb"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/iterative_inference_study.py",
+      "sourceSha256": "2c435dac84011985e5d52351e1686c7a35623876715f8428b71499549fd94b8c",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study.py": "c43f2d55600fb9032a29d2ebada2017c9ea0f43fac94020557eefe0ecb60cc64"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/iterative_tool_inference_study.py",
+      "sourceSha256": "7e2f037e0eb6b5e58a8ed376967a2cfd43f48b489ade93f75a202efcd4d65421",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study.py": "0fffaf9c7d3b529f16c91b50cba6708626c1fe932ee8551930840549bbf39974"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/model_study.py",
+      "sourceSha256": "5a0381db6791bcd5c01e83e7fc7d5374c071f158d35f594e6e48547343583247",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study.py": "4bc7dd181125cdcd9632fd0b34da411bdbde45cbcdbe56c9457923d6266e5ee6"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/movie_study.py",
+      "sourceSha256": "8bdacd8ebd7f5d6762898de12f804253da9c2b99b62d0567a936c56978a0833d",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study.py": "870ad577cb7db38c38ad64ec42b569fc8c7e4872ec3576c64e9ccb4c8cf279c5"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/path_consumption_report.py",
+      "sourceSha256": "44833d4e0d59321ae2075966cd7d8ee60ad44e96079355471a007ae4e3bb7aca",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/path_consumption_report.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/path_consumption_report.py": "f7f99f5f2a185273636b0cf97dec5587a9e8c9c972471928cd30d5ec46cfa8ed"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/query_contract.py",
+      "sourceSha256": "3c15a9a3cf03e42953787b20614067a5b960550f3ca8bcd1ed5eb38af27e61ba",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/query_contract.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/query_contract.py": "3c15a9a3cf03e42953787b20614067a5b960550f3ca8bcd1ed5eb38af27e61ba"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/repair_study.py",
+      "sourceSha256": "88bd8f88d270dfbbc7889bedb7014b069ac09299b507182ea038739b4dcee305",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repair_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repair_study.py": "4da6320549d5c50397986f87732ade65a4cfec60235180ab2214de02e86b9993"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/repository_candidate_audit.py",
+      "sourceSha256": "b406e06e9d1acb88b8c0b9508f491038e25c16f5b835ec34857efa330409fa1d",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_candidate_audit.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_candidate_audit.py": "b406e06e9d1acb88b8c0b9508f491038e25c16f5b835ec34857efa330409fa1d"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/repository_continuation.py",
+      "sourceSha256": "852fabcb71c3a21d98f12bf5bab00197698f021b936a6e82b700e1715d8c36d2",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_continuation.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_continuation.py": "1ee3cdb678808ec5cb587f09caa5a330d6207c033fde02aa76f9d1aace8635b6"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/repository_corpus.py",
+      "sourceSha256": "a86badec8f3180ac02b37f31cddf59e459377c1442a79f9fbe03252c65858a8c",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_corpus.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_corpus.py": "a86badec8f3180ac02b37f31cddf59e459377c1442a79f9fbe03252c65858a8c"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/repository_metrics.py",
+      "sourceSha256": "669ded19abf7ea1ed499884e2155083004b072fb10660ede4b8b167cd823afa1",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_metrics.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_metrics.py": "669ded19abf7ea1ed499884e2155083004b072fb10660ede4b8b167cd823afa1"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/repository_model_study.py",
+      "sourceSha256": "0d5b55433967d36252c32475cf1c58ee90362a9de564de5a7cc0d26c30deea77",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study.py": "1e2b32086cec44d6b4c2e89b52d3e2dcc019baa1f65c164fe45740508cd23e87"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/repository_recovery.py",
+      "sourceSha256": "d642347174d02db4ed7b494cb7b1b6b69b3846c664d9de550817173549273a31",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_recovery.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_recovery.py": "d642347174d02db4ed7b494cb7b1b6b69b3846c664d9de550817173549273a31"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/repository_statistics.py",
+      "sourceSha256": "72b1801c191bcfc4b83eeb9df7facceb3f1c08822f3f2ee84386ee5b81a6e4bf",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_statistics.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_statistics.py": "72b1801c191bcfc4b83eeb9df7facceb3f1c08822f3f2ee84386ee5b81a6e4bf"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/retained_inference.py",
+      "sourceSha256": "262e544d22faa79fcec69550e35167c1dba959f1e48eb4668625228ac4d90f29",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/retained_inference.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/retained_inference.py": "f3a74e8c727978f9c3b12bdfc801b04d1f7488760110b18bf9d222fb11bfa987"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/tool_inference_recovery.py",
+      "sourceSha256": "a692ce3d9478f255d8f70ac9d766c24e5283ec60a8b520fcd688eaf593387db4",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/tool_inference_recovery.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/tool_inference_recovery.py": "e096c32927420c7c47688ef32f1942f11d3f149e434687fc44115f4dbcb70b96"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/trajectory_study.py",
+      "sourceSha256": "d7f1b2f0a76265f4f1fa4c5ebea426c74abf0bcbfbf02265fc98feb597a6e8a3",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study.py": "7dab9a638a36034fc49dd5806d0f5736470473146c7379c7592a8be2fb330519"
+      }
+    },
+    {
+      "source": "workbench/src/ascent_workbench/trajectory_transfer_study.py",
+      "sourceSha256": "3196fecece7efe8f0b7ddf56388114cba5f4d18d490e2c91195652622a0f0f38",
+      "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study.py": "a305f982e1d835759b7cfbbbe19efff0c2612d0fd892a22e96ea92936c3d1374"
+      }
+    },
+    {
+      "source": "workbench/tests/test_candidate_transport.py",
+      "sourceSha256": "496ec2d262ffa8dd8edf80660252355fca923926c2eec06abbb12bc9d28be336",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_candidate_transport.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_candidate_transport.py": "8d0e1ffc5d2f77c2698fb724f971ed78c7e84ddae5f0fd4b5bd7332aab042419"
+      }
+    },
+    {
+      "source": "workbench/tests/test_compound_inference_recovery.py",
+      "sourceSha256": "364dc6c60698fdf274b77af93d45bfd493aaf348ed7b013610f79bd5347682f7",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_compound_inference_recovery.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_compound_inference_recovery.py": "2b4791c757a2502a1fe525c33f3455c94112586041f6781c133fed2236d4a19e"
+      }
+    },
+    {
+      "source": "workbench/tests/test_compound_inference_report.py",
+      "sourceSha256": "85c98ee79e2ed2771e67377340e4494c21d5e2d4d86f9b6cf04dc3538a786d6b",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_compound_inference_report.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_compound_inference_report.py": "f69b6b558e11d6472c88e3f6cf063c940bb6ba905f2991c53283928863d10651"
+      }
+    },
+    {
+      "source": "workbench/tests/test_correction_study.py",
+      "sourceSha256": "9ae7759124d7f66bd23f3965ab3a4b1e4210f53d9e7dd61ba2cf5215f3d75c5c",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_correction_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_correction_study.py": "64e06d8b49b839c45e01b4ab09dd9a1744c8df1335da466ecd95369e5e757230"
+      }
+    },
+    {
+      "source": "workbench/tests/test_domain_observations.py",
+      "sourceSha256": "87bb3b7852758e122a8ecf9100cb93b1bc0d2d08068c1852a6f20968500c79c6",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_domain_observations.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_domain_observations.py": "09909e0ac01b51b6704f63fe3bc34d43395455659a1ce698beb6f01ca0b5fcb8"
+      }
+    },
+    {
+      "source": "workbench/tests/test_domain_repository_report.py",
+      "sourceSha256": "dc32ebcc3096a077ee1bb714b1a7ca0018d547aeeeaf0cbab42cb10a20a86217",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_domain_repository_report.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_domain_repository_report.py": "95ff150943583f61f309265e0a1e0a8470ae435a02a4d5ab192f4d532802b6f8"
+      }
+    },
+    {
+      "source": "workbench/tests/test_evidence_chain_study.py",
+      "sourceSha256": "9b95bf99ac99069e313e68c9f3aabe3b3d1324c89317d845a70ca9818fc4781a",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_evidence_chain_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_evidence_chain_study.py": "05958b34e7887179f237f1717db730e0e951a627443627017a0da2aad78c0ac7"
+      }
+    },
+    {
+      "source": "workbench/tests/test_factor_budget.py",
+      "sourceSha256": "4c9ce69eef759213e47e0ef8ebfb44f733b5a16b56605aa8f8578c570fd7e7da",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_factor_budget.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_factor_budget.py": "70b69b91f9fb5b5c70a4353a1b21fd44bb261f04837f04b63b073a7b275b973a"
+      }
+    },
+    {
+      "source": "workbench/tests/test_inference_effort.py",
+      "sourceSha256": "aa431424dbcc69a42e8c03cc69f952c303d49bb6db18ff87d6708e54cc95ec23",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_inference_effort.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_inference_effort.py": "772437a0389cfa4f1e594e4e2b89ea936c61db6a864408dd7dcc90b6dc6f76cb"
+      }
+    },
+    {
+      "source": "workbench/tests/test_interactive_study.py",
+      "sourceSha256": "bad86c88123a237f01458fbbc1cf520f046e8f7d80a09d12875ed18f3d8621f0",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_interactive_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_interactive_study.py": "7eb8f92a3ff20c3981aca0c5924f1eedb84fdebd85be2104e69c8ddbf5d8f5fc"
+      }
+    },
+    {
+      "source": "workbench/tests/test_iterative_inference.py",
+      "sourceSha256": "700d5fb0ff9169e030cfd90bb25a138da0089c5471d5e53a3c99309e65325197",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_iterative_inference.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_iterative_inference.py": "87a02239b90c83e01be62802b3345bd5964079be948fa89099844c60b63e136d"
+      }
+    },
+    {
+      "source": "workbench/tests/test_iterative_tool_inference.py",
+      "sourceSha256": "0400763f61b649b182bba689faef67ab4a04773654ecef0e3f49b5ac5d4c933c",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_iterative_tool_inference.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_iterative_tool_inference.py": "ca637f565b12b7d4620e71a002e142bde4c2e46c6fd6090f42fa038cf8fa796d"
+      }
+    },
+    {
+      "source": "workbench/tests/test_model_context.py",
+      "sourceSha256": "e31ba8c399ac6d09f26dc7f24afcca7830c6a32e37799b0a630e1a47bbe2c054",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_model_context.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_model_context.py": "9fc69d23e04e4059bd9611e4441174d6c005c5a888edd8d2e4323922b1550a26"
+      }
+    },
+    {
+      "source": "workbench/tests/test_movie_study.py",
+      "sourceSha256": "5a7f551db3a315974ee1a0c8333f954f75e0ce5379155681e387c7c669f9f57d",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_movie_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_movie_study.py": "147af8e8a97b3f0857358ca0d132511a53e6036cc77b511989c5cd7128de2133"
+      }
+    },
+    {
+      "source": "workbench/tests/test_provider_progress.py",
+      "sourceSha256": "6285f309ea6452bfafb8fd05c34aa2ede45befd8bb70d39d2fabfe8788be489d",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_provider_progress.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_provider_progress.py": "d29b7aacfabbf1d38c2811f28b2b39a7c2446dae68a4064f25aba84b4e6595c5"
+      }
+    },
+    {
+      "source": "workbench/tests/test_repository_candidate_audit.py",
+      "sourceSha256": "96b58321e4623cef94c2c3cf790c19086591304dc23bfa8ec7389bc519ba3948",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_repository_candidate_audit.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_repository_candidate_audit.py": "8c995c6511b799c8edc5a5dbb8256c2b24c55971d0071aea3f777d9a8f2da17b"
+      }
+    },
+    {
+      "source": "workbench/tests/test_repository_continuation.py",
+      "sourceSha256": "a80da55dd19db5f7e181eb3b6b64d6a303a253cac029268d21563be41216376c",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_repository_continuation.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_repository_continuation.py": "f39eca4d92dea10990ba9b16bbdda2b45d0015412d3f0db6dbe0182723bcf422"
+      }
+    },
+    {
+      "source": "workbench/tests/test_repository_corpus.py",
+      "sourceSha256": "5d3ac82c7d3ca0c878c5f286f183b97159e9b0f105e3efb9d0baef9187d2c9af",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_repository_corpus.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_repository_corpus.py": "be83c1346b715e8a1f613b2948ccabb8b625a391f5591ee9e8ef2e752935c0e2"
+      }
+    },
+    {
+      "source": "workbench/tests/test_repository_model_study.py",
+      "sourceSha256": "aad552ff02d023faff57987e4284003e502d6599b4bbbe1a0cb234af74be134a",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_repository_model_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_repository_model_study.py": "b927827d0dd23e5ddc789f8e7b8397ae15ed69edac824b8954610101c4df15a1"
+      }
+    },
+    {
+      "source": "workbench/tests/test_repository_recovery.py",
+      "sourceSha256": "b6c740bdb6d99c10b9118380a3f29172482e8f901ad9874f3b83e979d9d0e08c",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_repository_recovery.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_repository_recovery.py": "e037c8f9f29b79c4aaa17615c6eb09214d92d4ee83afd48164a9f859cfcec132"
+      }
+    },
+    {
+      "source": "workbench/tests/test_repository_statistics.py",
+      "sourceSha256": "528e697c734bd2bb6ab7e71b752d6a70873b395fb919373e57720522f7d9606e",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_repository_statistics.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_repository_statistics.py": "cd4da963efff4a4fe747593090a0f3610b0b965a66bda7f0ce9afe2eb8a1247a"
+      }
+    },
+    {
+      "source": "workbench/tests/test_shared_premise.py",
+      "sourceSha256": "632b8d9a57bda499e818673875002c47ed9409031fe1c385383bdb0bc46cfb13",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_shared_premise.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_shared_premise.py": "f7e68a0cbc3c324069e23a29badf70a1f4300e8928057394de23a09ad921f14c"
+      }
+    },
+    {
+      "source": "workbench/tests/test_tool_inference_recovery.py",
+      "sourceSha256": "fcbc49158961332a42539223d0303f4dc7bc70ecd85e871a23c49222a3fb296e",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_tool_inference_recovery.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_tool_inference_recovery.py": "61ae0b3c852d5f0a124daa24d58148e692eb02229d03a3e68b07631f0d59d2c9"
+      }
+    },
+    {
+      "source": "workbench/tests/test_trajectory_study.py",
+      "sourceSha256": "a5a790f57e3f7fed95ac89960b9b45a5636a66ddb8479d9c1e8b97921d0905b0",
+      "targets": [
+        "packages/python-testing/tests/assessment/test_trajectory_study.py"
+      ],
+      "disposition": "moved-to-agentic-ai-lab",
+      "targetSha256": {
+        "packages/python-testing/tests/assessment/test_trajectory_study.py": "d57b5e825941657e9fcd3c62c4db03b2f3f5fbb247cf74af8dbb005a892ef48f"
+      }
+    }
+  ],
+  "producerRevision": "0f99da9e3a3baf1a272ba58fe0769ed8278ae746",
+  "splits": [
+    {
+      "source": "rust/ascent/tests/integration/program_definitions.rs",
+      "retained": "generic declaration tests",
+      "moved": "modules/evidence-assessment/native/tests/scenarios.rs",
+      "testCount": 5
+    },
+    {
+      "source": "workbench/tests/test_formal.py",
+      "retained": "generic protocol obligations",
+      "moved": "packages/python-testing/tests/assessment/test_formal.py",
+      "note": "exact model and negative-control inventory also frozen separately in both owners"
+    }
+  ]
+}

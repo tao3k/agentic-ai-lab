@@ -7,7 +7,7 @@
 ;;; Invariant: capability backends name registry backend-kind values, never
 ;;; runtime owners.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -16,12 +16,12 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         (only-in :clan/poo/object .ref .slot? object?)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/presentation-config
-        (only-in :poo-flow/modules/loop-engine/runtime
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        (only-in :agentic-ai-lab/modules/loop-engine/runtime
                  loop-engine-capability-receipt?
-                 poo-flow-user-loop-engine-capability-receipt-ref)
-        :poo-flow/src/user-interface/init-syntax)
+                 agentic-ai-lab-user-loop-engine-capability-receipt-ref)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
 (export user-interface-custom-loop-engine-capability-test)
 
@@ -34,7 +34,7 @@
 (def (test-ref value key)
   (cond
    ((loop-engine-capability-receipt? value)
-    (poo-flow-user-loop-engine-capability-receipt-ref value key #f))
+    (agentic-ai-lab-user-loop-engine-capability-receipt-ref value key #f))
    ((and (object? value) (.slot? value key)) (.ref value key))
    ((pair? value)
     (let (entry (assoc key value))
@@ -81,10 +81,10 @@
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation module-bundle)
   (let* ((modules
-          (poo-flow-user-module-bundles->modules (list module-bundle)))
+          (yuanxu-user-module-bundles->modules (list module-bundle)))
          (config
-          (pooFlowUserConfig modules (poo-flow-settings))))
-    (pooFlowUserConfigPresentation config)))
+          (yuanxuUserConfig modules (yuanxu-settings))))
+    (agenticAiLabUserConfigPresentation config)))
 
 ;; : (-> Alist)
 (def (custom-loop-invalid-capability-summary)
@@ -99,7 +99,7 @@
 
 ;; : (-> Alist Void)
 (def (display-invalid-capability-benchmark receipt)
-  (display "[poo-flow-benchmark] loop-engine-invalid-capability-presentation ")
+  (display "[agentic-ai-lab-benchmark] loop-engine-invalid-capability-presentation ")
   (write receipt)
   (newline)
   (force-output))
@@ -109,7 +109,7 @@
 ;;; capability value.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-invalid-capability-case)
-  (poo-flow-test-case "diagnoses invalid loop-engine capability backend"
+  (yuanxu-test-case "diagnoses invalid loop-engine capability backend"
     (let* ((presentation
             (custom-loop-presentation custom-loop-invalid-capability-module))
            (intent
@@ -145,7 +145,7 @@
 
 ;; : TestCase
 (def (user-interface-custom-loop-engine-invalid-capability-performance-case)
-  (poo-flow-test-case "keeps invalid capability presentation inside benchmark contract"
+  (yuanxu-test-case "keeps invalid capability presentation inside benchmark contract"
     (let* ((summary
             (custom-loop-invalid-capability-summary))
            (receipt
@@ -163,6 +163,6 @@
 
 ;; : TestSuite
 (def user-interface-custom-loop-engine-capability-test
-  (test-suite "poo-flow custom loop-engine capability policy"
+  (test-suite "agentic-ai-lab custom loop-engine capability policy"
     (user-interface-custom-loop-engine-invalid-capability-case)
     (user-interface-custom-loop-engine-invalid-capability-performance-case)))

@@ -1,0 +1,234 @@
+#+title: Original evaluator positive proof admission
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Owner adapter
+
+Import =evaluator/interface.ss=. Public admission and replay results are native
+POO values of =AgenticAILabTemporalPositiveProof=. The named interop helper
+=agentic-ai-lab-temporal-positive-proof-from-ascent(identity, snapshot, candidate,
+receipt, work-steps, max-nodes)= is an advanced owner boundary consuming original
+ASCENT values. It does not introduce a public proposal DSL or accept arbitrary
+wire data. Native owner data in tests exercises that explicit boundary.
+
+Admission checks original snapshot/candidate binding and native completion,
+copies the source/proposal, inspects the original program, then recomputes the
+native query once. Its completed rows must match the held receipt and the
+original positive proof must pass =candidate-verify-positive-proof= against the
+fresh rows. The fresh proof producer must also complete within its work budget.
+There is no repair, retry, fallback proof or conversion of bounded into complete.
+
+The source-only profile rejects hypothetical candidate facts/nodes and empty
+positive query roots. Bounds: 32 source/derived relations, 32 rules, 128 source
+rows, candidate relation limits no larger than 128, 1--4096 proof steps and
+1--128 verification nodes. Original ASCENT owns positive rule semantics and the
+finite proof DAG, including recursive positive derivations. Temporal does not
+implement another evaluator.
+
+The result binds source identity/generation/digest, candidate digest, query,
+canonical native query row set, original node/root proof digest and both work limits. Its
+=proof-admitted?= true flag means verified positive query evidence relative to
+that source/proposal. It does not authenticate the source, establish exhaustive
+provenance or absence, bind arbitrary Temporal conclusions/MRR fact IDs, or
+admit current selection, authorization or durable effects. Those flags stay
+false. Type/shape or a flag alone is not proof validation.
+
+=agentic-ai-lab-temporal-positive-proof-replay= repeats the owner checks and requires
+all projected fields to equal the held admission. The returned value is freshly
+reconstructed. Original proof-node tamper rejects even with unchanged receipt
+binding and native rows. There is no serialized archive or proof ABI here.
+
+* Qualification
+
+Build with =just build-temporal-evaluator= and execute
+=just test-temporal-evaluator= in the package-qualified environment. The heap
+fence and five-second idle / 45-second total watchdog remain unchanged.
+Completed import boundaries and native Cases supply actual progress.
+
+* Fact content and exact proof-root correspondence
+
+=agentic-ai-lab-temporal-mrr-fact-content= is a native value for original fact identity,
+MRR generation, original relation identity, explicit evaluator relation name and
+a 1--32 integer/boolean row. Integers retain signed 64-bit semantics; unsupported
+types are rejected without coercion. The digest hashes a fixed inert Scheme v1
+list spelling shared with the typed Rust consumer.
+
+=agentic-ai-lab-temporal-proof-source-binding= names an original proof source-node ID,
+fact content, subject and revision. The advanced owner adapter
+=agentic-ai-lab-temporal-proof-support= replays the original admission, selects an
+actual query root, and requires the output relation/row to match the fact.
+Bindings must cover exactly its transitive source leaves, without repeated
+node/fact/subject/revision identities. Every source row must match its original
+proof node; all MRR generations must agree. The original journal is reconstructed
+and each bound assert/correct revision must have the matching subject and exact
+fact content digest. Missing, extra, mismatched or forged correspondence rejects.
+
+The result contains an ordinary native support value for normal support
+composition. Its proof label binds the verified admission/root, output content,
+source correspondence and exact journal snapshot. Replay reconstructs the
+result and checks the embedded support. Source correction makes that old
+exact-revision support inapplicable at the new cut, while historical support
+and the original scoped proof remain intact.
+
+binding-verified? and proof-admitted? true describe this source-relative row
+correspondence. MRR rule/catalog equivalence and provider/source authentication
+are not established; mrr-rule-equivalence-verified?, source-authenticated?,
+selection-admitted?, action-authorized? and durable? remain false. A rebind to a
+different journal snapshot requires a new binding receipt.
+
+The fixed ABI v1 =temporal.fact.content= projects only canonical fact content.
+It admits neither proof nor correspondence. Rust retains original Fact values
+and requires the original MRR RelationCatalog to validate relation/field shape,
+context/completeness/validity before projection. Its evaluator relation name
+comes from that catalog predicate. The bounded Rust catalog profile rejects
+alias collisions, nullable/unsupported fields and cross-row constraints; each
+call rechecks the supplied catalog digest. These are Rust owner checks, not
+Scheme admission of the original MRR rule or provider authenticity. Python replays the
+original typed Rust Scheme receipt; the native proof test consumes the same Fact
+and Derivation identities. The full proof/control ABI and authoritative MRR rule
+mapping remain separate gates.
+
+* Original MRR Rule content correspondence
+
+The normal Scheme API uses native POO values: =agentic-ai-lab-temporal-rule-relation=,
+=...-rule-variable=, =...-rule-literal=, =...-rule-atom=, =...-rule= and
+=...-rule-program=. The program retains the declared catalog digest and original
+MRR generation ID plus an explicit correspondence to ASCENT's numeric snapshot
+generation. A matching declared generation is not a provider-authenticated cut.
+
+The bounded profile contains at most 32 relations/rules, at most 32 atoms per
+rule body and 1--32 columns per atom. Predicate and variable names use bounded
+ASCII identifiers. Columns and literals are integer/boolean, with signed 64-bit
+integers. Programs reject duplicate IDs/predicates, absent relation IDs, wrong
+arity, unsafe head variables, inconsistent variable types and literal types.
+
+The named owner adapter =agentic-ai-lab-temporal-rule-correspondence-from-ascent=
+replays the original positive-proof admission with the actual Scheme evaluator.
+It requires the exact source/derived relation inventory, checks source row types,
+and compares each original projected rule's complete head/body/terms to the
+inspected candidate rule at the same position. It then resolves each verified
+rule proof-node's original clause label to the corresponding original RuleId.
+The receipt binds program/proof digests, generation and node/RuleId applications.
+=...-rule-correspondence-replay= recomputes it and rejects modified applications,
+digests or effect flags.
+
+Rust =mrr_rule::MrrRuleProgramProjection= retains original MRR Rule values,
+re-admits owner rule safety, uses the original bounded RelationCatalog, and
+checks schema/term correspondence before projecting inert Scheme v1 data.
+It implements no evaluator. The qualification uses actual original base and
+recursive Rules, then consumes that exact projection through native POO
+constructors and verifies their actual Scheme proof nodes.
+
+=rule-correspondence-verified?= describes exact content correspondence to the
+supplied projected program, relative to a verified original source/proposal.
+It does not authenticate RuleId/catalog issuers or connect an MRR Derivation's
+Rule authority to a selected proof root. Existing fact/support binding's
+=mrr-rule-equivalence-verified?= remains false on the low-level fact/support
+binding. The joint derivation admission below establishes it for its bounded
+selected-root profile. Source authentication, current selection, authorization and
+durability remain false. The proof/control ABI and authoritative provider
+refresh are still separate gates. No new wire operation is exposed here.
+
+
+* Selected original Derivation and direct premise admission
+
+=agentic-ai-lab-temporal-mrr-derivation= and =...-proof-node-fact= are native POO values.
+The named original-owner adapter =...-mrr-derivation-from-ascent= joins a replayed
+Rule correspondence and exact fact/revision support binding with original
+Derivation declarations for every reachable rule node of the selected query root.
+Each node retains a distinct original FactId and complete content. Every rule
+node must have an original Derivation with the verified RuleId, matching output,
+generation and exact direct input FactId set. A source node cannot declare rule
+authority. Missing, duplicate and unused node/fact/Derivation bindings reject.
+The selected root must match the output fact and support binding's DerivationId.
+
+Direct MRR support is distinct from transitive Temporal leaves. The recursive
+fixture's root directly supports path(1,2) and edge(2,3); its intermediate
+Derivation supports edge(1,2). Temporal premises remain the exact edge source
+revisions. The ordinary support proof label hashes the combined rule/content/
+node/revision admission, so it retains the verified Rule authority correspondence.
+Source correction invalidates that support at the new cut, while historical
+support and source-relative proof remain replayable.
+
+=...-mrr-derivation-admission-replay= reconstructs the full admission, all effect
+flags and embedded support. It rejects changed node bindings, forged action
+claims and replaced support proof labels. The new receipt sets
+=derivation-correspondence-verified?= and =mrr-rule-equivalence-verified?= true
+for this declared, bounded positive DAG. The low-level binding remains a
+conservative independent value. Issuer/provider authentication, current
+selection, action authorization and durability remain false.
+
+Rust =mrr_derivation::MrrDerivationProjection= retains original Fact/Derivation
+values, re-admits the owner's context/authority/provenance/generation checks,
+validates content against the same original Catalog and Rule program, and
+projects the exact selected support graph. It rejects missing/unused/duplicate
+facts, unknown rules, wrong output identity/content, cyclic dependencies and
+unsupported authority forms. This profile admits one original Derivation per
+derived FactId, at most 128 facts/Derivations, and no exhaustive-provenance claim.
+It performs no rule evaluation. The actual Scheme replay remains the truth gate.
+
+The raw joint receipts and executed controls are in
+=t/qualification/temporal-library-basic/derivation-authority-v1/=. No proof or
+Host policy control wire entry is exposed by this module. Those trusted ABI v1
+controls, authoritative current-provider refresh and Data expected-head
+publication remain the next integration boundaries.
+
+* Registered proof current applicability (Library v1)
+
+=agentic-ai-lab-temporal-derivation-context= is a pure named owner adapter retaining
+original native replay inputs. =agentic-ai-lab-temporal-proof-host= is an explicit,
+process-local Host capability composed with the existing policy Host. The Host
+serializes registration, refresh and queries on its owner thread.
+
+=...-proof-host-refresh!= registers one source scope's complete native rule
+program and evidence journal at a nonnegative monotonic Host generation. The
+128-scope registry validates every refresh before mutation. Same-generation
+replays must be exact; prior journal revision identities and contents cannot
+be removed or rewritten. A catalog may change at a newer generation.
+
+=...-proof-host-register!= replays the joint native Derivation admission and
+requires its exact program/journal to match the registered state digest. It
+retains up to 128 immutable registrations identified by a v1 digest binding
+scope, original state, proof and policy identity. It accepts neither proof
+flags nor a caller's replacement current snapshot.
+
+=...-proof-host-current= selects a retained registration and Host current
+state, requires the expected state/policy generations, and repeats original
+proof replay. It compares the complete native rule-program digest and evaluates
+its qualified support under the registered current policy and observed clock.
+The policy Host selects both admission-time cut and valid-at instant from that
+clock. If validity uses another clock domain, native uncertainty remains
+conservative; this adapter supplies no implicit conversion. Queries cannot
+choose a historical cut to bypass a correction. Results bind proof, original
+state, current state, generations, support guard and status in a v1 digest.
+
+Possible results include =current=, =stale-catalog=, =stale-policy=,
+=not-yet-effective=, =expired-policy=, =unsupported= and =unknown=. A catalog
+change takes precedence over other status failures. Invalid/stale generations,
+unknown registrations and tampered originals raise before producing a result.
+Budget exhaustion remains =unknown=. Historical proof replay stays available
+independently of current support.
+
+The native Library now projects through dedicated C ABI v1
+=agentic_ai_lab_semantic_v1_proof_state_refresh= and =..._proof_register= controls.
+Python exposes =refresh_temporal_proof_state= and =register_temporal_proof=;
+Rust exposes =refresh_proof_state= and =register_proof= on the existing native
+owner thread. Ordinary =temporal.proof.current= accepts only a registered handle,
+expected generations, expected policy digest and budget. Both runtimes expose
+named read-only helpers. Host controls are absent from descriptor operations and
+ordinary C calls reject them before Scheme dispatch. All transport remains
+bounded inert Scheme datum v1. Exact fields reject replacement clocks/journals,
+proof flags and schema-version changes. Host-declared journal/catalog/policy state is not provider
+authentication. =proof-admitted?= means original proof replay passed;
+=current?= only describes this owner-thread observation. Source authentication,
+selection admission, action authorization and durability remain false. A final
+authoritative provider refresh, publication fence and MRR Data conditional CAS
+are still required for effects.
+
+The evaluator gate uses explicit rejection assertions with the assertion
+outside the exception catch. Gerbil v0.19 =check-exception expr true= can catch
+its own missing-exception TestError, so it is not used for this gate's negative
+controls. The normal-return sentinel verifies this distinction. Receipts are
+in =t/qualification/temporal-library-basic/registered-proof-host-v1/=.

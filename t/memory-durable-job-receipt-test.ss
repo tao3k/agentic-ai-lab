@@ -7,14 +7,14 @@
 ;;; Invariant: Scheme validates and projects memory jobs only; it never recalls,
 ;;; commits, consolidates, persists, or repairs memory stores.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object object?)
-        :poo-flow/modules/memory-core/durable/policy
-        :poo-flow/modules/session/config
-        :poo-flow/modules/memory-core/config)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/session/config
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
 
 (export memory-durable-job-receipt-test)
 
@@ -33,10 +33,10 @@
 
 ;; : TestSuite
 (def memory-durable-job-receipt-test
-  (test-suite "poo-flow memory durable job receipts"
-    (poo-flow-test-case "projects recall, write, consolidation, stale, and repair jobs"
+  (test-suite "agentic-ai-lab memory durable job receipts"
+    (yuanxu-test-case "projects recall, write, consolidation, stale, and repair jobs"
       (let* ((durable-policy
-              (poo-flow-durable-policy
+              (agentic-ai-lab-durable-policy
                'durable/memory
                'objects.shared.memory
                '((journal-owner . runtime/fact-log)
@@ -45,21 +45,21 @@
                  (repair-mode . rebuild)
                  (action-classes . (replayable idempotent compensatable)))))
              (parent-summary
-              (poo-flow-session-memory-intent
+              (agentic-ai-lab-session-memory-intent
                'memory/parent-summary
                'memory/durable-project
                'parent-summary
                '(parent-summary)
                'review-only))
              (child-write
-              (poo-flow-session-memory-intent
+              (agentic-ai-lab-session-memory-intent
                'memory/child-write-back
                'memory/durable-project
                'current-session
                '()
                'append))
              (bounded-transcript
-              (poo-flow-session-memory-intent
+              (agentic-ai-lab-session-memory-intent
                'memory/bounded-transcript
                'memory/durable-project
                'project
@@ -73,65 +73,65 @@
                     (cons 'metadata '((case . memory-durable-job)))))
              (jobs
               (list
-               (poo-flow-memory-recall-job-receipt
+               (agentic-ai-lab-memory-recall-job-receipt
                 'memory-job/parent-summary
-                'project/poo-flow
+                'project/agentic-ai-lab
                 'session/root
                 'session/child
                 'agent/reviewer
-                poo-flow-memory-core-default-catalog
+                agentic-ai-lab-ai-agentic-context-memory-default-catalog
                 parent-summary
                 options)
-               (poo-flow-memory-write-job-receipt
+               (agentic-ai-lab-memory-write-job-receipt
                 'memory-job/child-write
-                'project/poo-flow
+                'project/agentic-ai-lab
                 'session/root
                 'session/child
                 'agent/reviewer
-                poo-flow-memory-core-default-catalog
+                agentic-ai-lab-ai-agentic-context-memory-default-catalog
                 child-write
                 options)
-               (poo-flow-memory-consolidation-job-receipt
+               (agentic-ai-lab-memory-consolidation-job-receipt
                 'memory-job/consolidate
-                'project/poo-flow
+                'project/agentic-ai-lab
                 'session/root
                 'session/child
                 #f
-                poo-flow-memory-core-default-catalog
+                agentic-ai-lab-ai-agentic-context-memory-default-catalog
                 bounded-transcript
                 options)
-               (poo-flow-memory-stale-source-job-receipt
+               (agentic-ai-lab-memory-stale-source-job-receipt
                 'memory-job/stale-source
-                'project/poo-flow
+                'project/agentic-ai-lab
                 'session/root
                 'session/child
                 #f
-                poo-flow-memory-core-default-catalog
+                agentic-ai-lab-ai-agentic-context-memory-default-catalog
                 bounded-transcript
                 (cons (cons 'stale-source? #t) options))
-               (poo-flow-memory-repair-job-receipt
+               (agentic-ai-lab-memory-repair-job-receipt
                 'memory-job/repair
-                'project/poo-flow
+                'project/agentic-ai-lab
                 'session/root
                 'session/child
                 #f
-                poo-flow-memory-core-default-catalog
+                agentic-ai-lab-ai-agentic-context-memory-default-catalog
                 bounded-transcript
                 (cons (cons 'job-state 'repair-required) options))))
              (rows
-              (poo-flow-memory-durable-job-receipts->alists jobs))
+              (agentic-ai-lab-memory-durable-job-receipts->alists jobs))
              (recall-row (car rows))
              (repair-row (car (cddddr rows))))
         (check-equal? (length jobs) 5)
         (check-equal? (length rows) 5)
-        (check-equal? (poo-flow-memory-durable-job-receipt? (car jobs))
+        (check-equal? (agentic-ai-lab-memory-durable-job-receipt? (car jobs))
                       #t)
         (check-equal? (object? recall-row) #f)
         (check-equal? (test-ref recall-row 'kind)
-                      +poo-flow-memory-core-durable-job-receipt-kind+)
+                      +agentic-ai-lab-ai-agentic-context-memory-durable-job-receipt-kind+)
         (check-equal? (map (lambda (row) (test-ref row 'job-kind)) rows)
                       '(recall write consolidation stale-source repair))
-        (check-equal? (test-ref recall-row 'project-id) 'project/poo-flow)
+        (check-equal? (test-ref recall-row 'project-id) 'project/agentic-ai-lab)
         (check-equal? (test-ref recall-row 'root-session-id) 'session/root)
         (check-equal? (test-ref recall-row 'session-id) 'session/child)
         (check-equal? (test-ref recall-row 'agent-id) 'agent/reviewer)
@@ -151,26 +151,26 @@
         (check-equal? (test-ref repair-row 'job-state) 'repair-required)
         (check-equal? (test-ref repair-row 'runtime-executed) #f)))
 
-    (poo-flow-test-case "rejects fake durable memory jobs without durable store policy"
+    (yuanxu-test-case "rejects fake durable memory jobs without durable store policy"
       (let* ((local-intent
-              (poo-flow-session-memory-intent
+              (agentic-ai-lab-session-memory-intent
                'memory/local-fake
                'memory/local-session
                'current-session
                '(last-turn)
                'append))
              (receipt
-              (poo-flow-memory-recall-job-receipt
+              (agentic-ai-lab-memory-recall-job-receipt
                'memory-job/local-fake
-               'project/poo-flow
+               'project/agentic-ai-lab
                'session/root
                'session/child
                #f
-               poo-flow-memory-core-default-catalog
+               agentic-ai-lab-ai-agentic-context-memory-default-catalog
                local-intent))
-             (row (poo-flow-memory-durable-job-receipt->alist receipt))
+             (row (agentic-ai-lab-memory-durable-job-receipt->alist receipt))
              (diagnostics (test-ref row 'diagnostics)))
-        (check-equal? (poo-flow-memory-durable-job-receipt-valid? receipt)
+        (check-equal? (agentic-ai-lab-memory-durable-job-receipt-valid? receipt)
                       #f)
         (check-equal? (test-ref row 'valid?) #f)
         (check-equal? (> (test-ref row 'diagnostic-count) 0) #t)

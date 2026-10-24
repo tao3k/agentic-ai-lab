@@ -6,7 +6,7 @@
 ;;; Boundary: runtime manifest tests cover durable CLI handoff consumption.
 ;;; Invariant: manifests remain request-bound so Rust can run the same argv.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api)
+        :yuanxu/modules/funflow/control-plane/api)
 
 (export runtime-manifest-test)
 
@@ -26,11 +26,11 @@
 ;; : TestSuite
 (def runtime-manifest-test
   (test-suite "runtime command manifest"
-    (poo-flow-test-case "runtime command descriptor exports cli manifest"
+    (yuanxu-test-case "runtime command descriptor exports cli manifest"
       (let* ((descriptor
               (make-stdout-runtime-command-descriptor
                'manifest-runtime-command
-               "/usr/bin/poo-flow-runtime"
+               "/usr/bin/agentic-ai-lab-runtime"
                (lambda (envelope)
                  (list "--request-id"
                        (symbol->string (cdr (assoc 'request-id envelope)))))
@@ -50,14 +50,14 @@
                       '(artifact manifest-output))
         (check-equal? (cdr (assoc 'protocol manifest)) 'stdout-s-expression)
         (check-equal? (cdr (assoc 'executable manifest))
-                      "/usr/bin/poo-flow-runtime")
+                      "/usr/bin/agentic-ai-lab-runtime")
         (check-equal? (cdr (assoc 'arguments manifest))
                       '("--request-id" "manifest-request"))
         (check-equal? (cdr (assoc 'argv manifest))
-                      '("/usr/bin/poo-flow-runtime"
+                      '("/usr/bin/agentic-ai-lab-runtime"
                         "--request-id"
                         "manifest-request"))))
-    (poo-flow-test-case "runtime command manifest consumer executes stdout protocol"
+    (yuanxu-test-case "runtime command manifest consumer executes stdout protocol"
       (let* ((envelope
               (list (cons 'schema +runtime-request-schema+)
                     (cons 'operation 'submit)
@@ -99,7 +99,7 @@
         (check-equal? (adapter-result-artifact-handle adapter-result)
                       '(artifact manifest-consumer-output))
         (check-equal? (adapter-result-status command-result) 'completed)))
-    (poo-flow-test-case "runtime command manifest rejects unsupported protocol"
+    (yuanxu-test-case "runtime command manifest rejects unsupported protocol"
       (let* ((manifest
               (list (cons 'schema +runtime-command-descriptor-schema+)
                     (cons 'request-schema +runtime-request-schema+)

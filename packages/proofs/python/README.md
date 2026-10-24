@@ -3,30 +3,30 @@ SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 -->
 
-# poo-flow-proof
+# agentic-ai-lab-proof
 
-Typed Lean artifact generator for poo-flow proof manifests.
+Typed Lean artifact generator for agentic-ai-lab proof manifests.
 
 This package emits Lean declarations that use constructors from
-`PooFlowProof.Manifest`.
+`AgenticAILabProof.Manifest`.
 
 ```sh
-uv run poo-flow-proof emit-lean --output ../lean/PooFlowProof/Generated/LoopEngine.lean
+uv run agentic-ai-lab-proof emit-lean --output ../lean/AgenticAILabProof/Generated/LoopEngine.lean
 ```
 
 ## Native proof runtime
 
 `NativeProofCaseRuntime` is the production-capable Python adapter for the
-stable `poo_flow_proof_case_v1` C ABI. It consumes the generated native Scheme
+stable `agentic_ai_lab_proof_case_v1` C ABI. It consumes the generated native Scheme
 type projection directly; JSON is not part of this boundary.
 
 ```python
-from poo_flow_proof.proof_case_runtime import (
+from agentic_ai_lab_proof.proof_case_runtime import (
     NativeProofCaseRuntime,
     assert_native_differential,
 )
 
-runtime = NativeProofCaseRuntime("/path/to/libpoo_flow_runtime.dylib")
+runtime = NativeProofCaseRuntime("/path/to/libagentic_ai_lab_runtime.dylib")
 layout = assert_native_differential(runtime, native_vector)
 ```
 

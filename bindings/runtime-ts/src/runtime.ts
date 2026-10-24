@@ -49,12 +49,12 @@ export interface RuntimeBundleOptions {
   bundleEpoch?: bigint;
 }
 
-export class PooFlowRuntimeError extends Error {
+export class AgenticAILabRuntimeError extends Error {
   readonly status: number;
 
   constructor(status: number, operation: string) {
     super(`${operation} failed with runtime status 0x${status.toString(16).padStart(8, "0")}`);
-    this.name = "PooFlowRuntimeError";
+    this.name = "AgenticAILabRuntimeError";
     this.status = status;
   }
 }
@@ -64,34 +64,34 @@ export const unsignedRuntimeStatus = (status: number): number => status >>> 0;
 export const assertRuntimeStatus = (status: number, operation: string): void => {
   const normalized = unsignedRuntimeStatus(status);
   if (normalized !== 0) {
-    throw new PooFlowRuntimeError(normalized, operation);
+    throw new AgenticAILabRuntimeError(normalized, operation);
   }
 };
 
-export class PooFlowRuntime {
+export class AgenticAILabRuntime {
   readonly exports: RuntimeExports;
 
   private constructor(exports: RuntimeExports) {
     this.exports = exports;
   }
 
-  static async instantiate(bytes: BufferSource): Promise<PooFlowRuntime> {
+  static async instantiate(bytes: BufferSource): Promise<AgenticAILabRuntime> {
     const { instance } = await WebAssembly.instantiate(bytes, {
       env: { emscripten_notify_memory_growth: () => undefined },
     });
     const exports = instance.exports as RuntimeExports;
     if (!(exports.memory instanceof WebAssembly.Memory)) {
-      throw new TypeError("poo-flow runtime does not export WebAssembly memory");
+      throw new TypeError("agentic-ai-lab runtime does not export WebAssembly memory");
     }
-    return new PooFlowRuntime(exports);
+    return new AgenticAILabRuntime(exports);
   }
 
-  static async fetch(url: string | URL): Promise<PooFlowRuntime> {
+  static async fetch(url: string | URL): Promise<AgenticAILabRuntime> {
     const response = await globalThis.fetch(url);
     if (!response.ok) {
-      throw new Error(`failed to fetch poo-flow runtime: ${response.status}`);
+      throw new Error(`failed to fetch agentic-ai-lab runtime: ${response.status}`);
     }
-    return PooFlowRuntime.instantiate(await response.arrayBuffer());
+    return AgenticAILabRuntime.instantiate(await response.arrayBuffer());
   }
 
   get handleCapacity(): number {
@@ -104,7 +104,7 @@ export class PooFlowRuntime {
       for (const size of sizes) {
         const pointer = this.exports.malloc(size);
         if (pointer === 0) {
-          throw new RangeError(`poo-flow runtime could not allocate ${size} bytes`);
+          throw new RangeError(`agentic-ai-lab runtime could not allocate ${size} bytes`);
         }
         pointers.push(pointer);
       }
@@ -126,7 +126,7 @@ export class PooFlowRuntime {
   createInstance(): number {
     const slotPointer = this.exports.malloc(4);
     if (slotPointer === 0) {
-      throw new RangeError("poo-flow runtime could not allocate an instance slot pointer");
+      throw new RangeError("agentic-ai-lab runtime could not allocate an instance slot pointer");
     }
     try {
       assertRuntimeStatus(this.exports.pfw_instance_create(slotPointer), "instance-create");
@@ -142,7 +142,7 @@ export class PooFlowRuntime {
 
   negotiate(instanceSlot: number, options: RuntimeNegotiationOptions = {}): RuntimeNegotiation {
     const encoder = new TextEncoder();
-    const schema = encoder.encode(options.bundleSchema ?? "poo-flow.organization-bundle.draft.3");
+    const schema = encoder.encode(options.bundleSchema ?? "agentic-ai-lab.organization-bundle.draft.3");
     const identity = encoder.encode(options.runtimeIdentity ?? "runtime-ts");
     const pointers = this.allocateMany([72, 56, 4, schema.byteLength, identity.byteLength]);
     const [requestPointer, resultPointer, profileSlotPointer, schemaPointer, identityPointer] = pointers;
@@ -154,7 +154,7 @@ export class PooFlowRuntime {
       identityPointer === undefined
     ) {
       this.freeMany(pointers);
-      throw new RangeError("poo-flow runtime allocation plan was incomplete");
+      throw new RangeError("agentic-ai-lab runtime allocation plan was incomplete");
     }
     try {
       const bytes = new Uint8Array(this.exports.memory.buffer);
@@ -199,11 +199,11 @@ export class PooFlowRuntime {
 
   openBundle(instanceSlot: number, profileSlot: number, options: RuntimeBundleOptions = {}): number {
     const encoder = new TextEncoder();
-    const schema = encoder.encode(options.schema ?? "poo-flow.organization-bundle.draft.3");
+    const schema = encoder.encode(options.schema ?? "agentic-ai-lab.organization-bundle.draft.3");
     const packet = options.canonicalPacket ?? encoder.encode("bundle");
     const digest = options.digest ?? new Uint8Array(32).fill(0x44);
     if (digest.byteLength !== 32) {
-      throw new RangeError("poo-flow bundle digest must contain exactly 32 bytes");
+      throw new RangeError("agentic-ai-lab bundle digest must contain exactly 32 bytes");
     }
     const pointers = this.allocateMany([88, 4, schema.byteLength, packet.byteLength]);
     const [descriptorPointer, bundleSlotPointer, schemaPointer, packetPointer] = pointers;
@@ -214,7 +214,7 @@ export class PooFlowRuntime {
       packetPointer === undefined
     ) {
       this.freeMany(pointers);
-      throw new RangeError("poo-flow bundle allocation plan was incomplete");
+      throw new RangeError("agentic-ai-lab bundle allocation plan was incomplete");
     }
     try {
       const bytes = new Uint8Array(this.exports.memory.buffer);
@@ -249,7 +249,7 @@ export class PooFlowRuntime {
     const [descriptorPointer, sessionSlotPointer] = pointers;
     if (descriptorPointer === undefined || sessionSlotPointer === undefined) {
       this.freeMany(pointers);
-      throw new RangeError("poo-flow session allocation plan was incomplete");
+      throw new RangeError("agentic-ai-lab session allocation plan was incomplete");
     }
     try {
       const bytes = new Uint8Array(this.exports.memory.buffer);

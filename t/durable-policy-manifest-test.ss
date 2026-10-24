@@ -2,10 +2,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
-        :poo-flow/modules/memory-core/durable/policy
-        :poo-flow/modules/memory-core/durable/policy-manifest)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy-manifest)
 
 (export durable-policy-manifest-test)
 
@@ -16,13 +16,13 @@
 
 ;; : TestSuite
 (def durable-policy-manifest-test
-  (test-suite "poo-flow durable policy runtime manifest"
-    (poo-flow-test-case "projects Scheme durable policy receipt into runtime manifest"
+  (test-suite "agentic-ai-lab durable policy runtime manifest"
+    (yuanxu-test-case "projects Scheme durable policy receipt into runtime manifest"
       (let ((manifest
-             (poo-flow-durable-policy-runtime-manifest-alist
-              poo-flow-durable-policy/default)))
+             (agentic-ai-lab-durable-policy-runtime-manifest-alist
+              agentic-ai-lab-durable-policy/default)))
         (check-equal? (test-ref manifest 'schema)
-                      +poo-flow-durable-runtime-policy-manifest-schema+)
+                      +agentic-ai-lab-durable-runtime-policy-manifest-schema+)
         (check-equal? (test-ref manifest 'owner) 'scheme)
         (check-equal? (test-ref manifest 'policy-id) 'durable/default)
         (check-equal? (test-ref manifest 'checkpoint-id-strategy)
@@ -36,19 +36,19 @@
         (check-equal? (test-ref manifest 'runtime-owner)
                       "marlin-agent-core")
         (check-equal? (test-ref manifest 'receipt-schema)
-                      +poo-flow-durable-policy-receipt-schema+)
+                      +agentic-ai-lab-durable-policy-receipt-schema+)
         (check-equal? (test-ref manifest 'receipt-kind)
-                      +poo-flow-durable-policy-kind+)
+                      +agentic-ai-lab-durable-policy-kind+)
         (check-equal? (test-ref manifest 'receipt-valid) #t)
         (check-equal? (test-ref manifest 'receipt-diagnostic-count) 0)))
-    (poo-flow-test-case "emits byte carrier for FFI runtime adapters"
-      (let* ((policy (poo-flow-durable-policy 'durable/runtime 'shared))
+    (yuanxu-test-case "emits byte carrier for FFI runtime adapters"
+      (let* ((policy (agentic-ai-lab-durable-policy 'durable/runtime 'shared))
              (manifest
-              (poo-flow-durable-policy-runtime-manifest-alist policy))
+              (agentic-ai-lab-durable-policy-runtime-manifest-alist policy))
              (payload
-              (poo-flow-durable-policy-runtime-manifest-string policy))
+              (agentic-ai-lab-durable-policy-runtime-manifest-string policy))
              (bytes
-              (poo-flow-durable-policy-runtime-manifest-bytes policy)))
+              (agentic-ai-lab-durable-policy-runtime-manifest-bytes policy)))
         (check-equal? (test-ref manifest 'policy-id) 'durable/runtime)
         (check-equal? (string? payload) #t)
         (check-equal? (u8vector? bytes) #t)

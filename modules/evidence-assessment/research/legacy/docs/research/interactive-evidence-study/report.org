@@ -1,0 +1,95 @@
+#+title: Interactive Evidence Reasoning: Local Implementation and Real-Model Study
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+* Objective and Library architecture
+
+The model receives a natural-language domain specification and finite sources. Evidence tools are available from the first provider request. The model chooses candidate paths and local bindings; Scheme checks the registered domain predicates. No model-generated whole-question relational query is required. Evidence Chain manages source-bound support and completed component reuse; Trajectory records observed interactions and provider usage. Local support never certifies task correctness. See [[file:../../features/interactive-evidence-reasoning.org][the Library design]] and [[file:../../features/evidence-responsibilities.org][responsibility contract]].
+
+* Research foundations and corpus
+
+[[https://arxiv.org/abs/2210.03629][ReAct]] motivates interleaving exploration and external observations. The provenance readings in the feature design motivate distinct support and temporal-observation owners. These are transfers of design principles, not replications of the papers' benchmark results. Four independent generated instances span context-specific balanced recursion and mutually recursive flow/permission. Balanced paths require matching labels, recursive concatenation, epsilon and scoped denied edges. Flow requires tuple-specific blocking, tag conversions, explicit permission and mutually recursive grants. Each instance contains 40 opaque job candidates. Each task has three obligations: original goal, same-intent paraphrase on unchanged sources, and a changed-source goal requiring invalidation and rechecking. Complete inputs and gold are in [[file:../../../.cache/ascent/archived-runs/docs/research/interactive-evidence-study/questions.org][Questions]], but gold never enters the model requests or feedback. Algorithms may have appeared in training; opaque independent instances are not proof of training exclusion.
+
+* Experimental protocol
+
+Fresh and retained arms expose identical local-check tools from the first request. No new efficacy calls remain in flight. The host-aborted mutual retained run was recovered from its completed response; the host-aborted balanced fresh run was recovered from four completed checkpoints. Source-only is a separate capability ablation: it can inspect ground source membership, but not derived paths. Provider: deepseek-flash, high reasoning effort, streaming Responses API, max_output_tokens=131072, tool_choice=auto, strict=false. Complete opaque reasoning output items and paired tool outputs are forwarded. Format errors, independent answer failures, provider errors and budget exhaustion are separate outcomes. Up to eight provider calls and three final-answer failures per stage were declared. All completed calls, failures, tool rounds and repairs count through whole-task correctness; output bytes are not a cost proxy. No network CI or remote publication was performed.
+
+Across all cohorts there are 20 recorded policy trajectories over four independent instances: 18 finished within their declared protocol, two were host-aborted; 16 of the 18 finished trajectories ultimately satisfied the complete task. There are 25 observed incorrect final-answer attempts. These overlapping/adaptive policy branches are not 20 independent benchmark questions. The first exploratory runs had unequal first-response thinking before any feedback. Their outcomes are retained, but do not establish a retention effect. Subsequent shared-prefix pairs uniformly reuse the original fresh-arm first response in both policies; it is charged in full to both policy ledgers and paid only once physically. This is an adaptive confirmation design, not a preregistered population estimate. The new independent multi-premise cohort uses the same sharing rule. Failed-prefix repair retains the first real wrong answer and all its actual preceding usage; no replacement initial answer is sampled.
+
+The benchmark declares stages 0 and 1 to have the same finite source and goal contract. A later correct stage-1 answer repairs an earlier stage-0 error, while a stage-0 answer cannot pre-answer the later paraphrase. A changed-source stage-2 answer cannot repair earlier-source obligations. This endpoint rule was corrected during audit and tested with three regression cases. Immutable run ledgers retain their historical runtime endpoint; this report recomputes full-task admission from independent verdicts, and flags differences explicitly in results.json. No natural-language-equivalence theorem is claimed.
+
+* Shared-prefix whole-task comparison
+
+| Cohort / case | Fresh thinking | Retained thinking | Observed reduction | Quality |
+|---------------+----------------+-------------------+--------------------+---------|
+| single-condition / context-balanced-paths-2026106301 | 43285 | 130977 | -202.59% | 3/3 vs 3/3 |
+| single-condition / mutual-permission-taint-2026106302 | 61991 | 58754 | 5.22% | 3/3 vs 3/3 |
+| multi-premise / context-balanced-paths-2026106401 | 41543 | 74862 | -80.20% | 3/3 vs 3/3 |
+| multi-premise / mutual-permission-taint-2026106402 | 32910 | 45430 | -38.04% | 3/3 vs 3/3 |
+
+* Every trajectory and failed-repair cost
+
+Repair costs are calls after an observed incorrect final answer, through the next verified correction. The triggering failed call remains in total pre-success thinking. Repair and failed-attempt costs overlap; do not add them as disjoint categories. Runtime source replacement starts a ledger epoch, so whole-task cost here sums actual provider calls across epochs. A censored total is expenditure, not an invented first-correct cost.
+
+| Run | Accepted obligations | Calls | First-whole-correct thinking | Observed spending | Failed answers | Repair thinking | Branch checks / reused |
+|-----+----------------------+-------+------------------------------+-------------------+----------------+-----------------+------------------------|
+| composition-repair-balanced | 3/3 | 6 | 122996 | 122996 | 1 | 7144 | 56 / 0 |
+| conjunction-balanced-fresh | 0/3 | 4 | not observed | 33880 | 0 | 0 | 106 / 0 |
+| conjunction-balanced-fresh-resumed | 3/3 | 8 | 41543 | 41543 | 0 | 0 | 162 / 0 |
+| conjunction-balanced-retained | 3/3 | 6 | 74862 | 74862 | 0 | 0 | 119 / 7 |
+| conjunction-mutual-fresh | 3/3 | 6 | 32910 | 32910 | 0 | 0 | 221 / 0 |
+| conjunction-mutual-retained | 3/3 | 7 | 45430 | 45430 | 0 | 0 | 226 / 113 |
+| live-balanced-fresh | 3/3 | 9 | 29776 | 29776 | 0 | 0 | 157 / 0 |
+| live-balanced-retained | 3/3 | 5 | 13066 | 13066 | 0 | 0 | 112 / 110 |
+| live-balanced-source | 1/3 | 9 | not observed | 226950 | 7 | 149863 | 17 / 0 |
+| live-mutual-fresh | 1/3 | 12 | not observed | 208046 | 6 | 165835 | 165 / 0 |
+| live-mutual-fresh-batched | 3/3 | 5 | 62862 | 62862 | 0 | 0 | 112 / 0 |
+| live-mutual-retained | 0/3 | 1 | not observed | 6126 | 0 | 0 | 0 / 0 |
+| live-mutual-retained-batched | 3/3 | 6 | 33123 | 33123 | 0 | 0 | 221 / 3 |
+| live-mutual-source | 3/3 | 3 | 79948 | 79948 | 0 | 0 | 0 / 0 |
+| repair-mutual-fresh | 3/3 | 9 | 206169 | 206169 | 5 | 147613 | 111 / 0 |
+| repair-mutual-retained | 3/3 | 10 | 202566 | 202566 | 5 | 137954 | 137 / 29 |
+| shared-balanced-fresh | 3/3 | 6 | 43285 | 43285 | 0 | 0 | 127 / 0 |
+| shared-balanced-retained | 3/3 | 8 | 130977 | 130977 | 1 | 15125 | 132 / 48 |
+| shared-mutual-fresh | 3/3 | 6 | 61991 | 61991 | 0 | 0 | 227 / 0 |
+| shared-mutual-retained | 3/3 | 6 | 58754 | 58754 | 0 | 0 | 225 / 5 |
+
+* Mechanism audit and negative results
+
+The single-condition shared balanced retained run omitted two jobs whose two required local predicates were already supported before the failed answer. Its whole-task thinking rose to 130977 versus fresh 43285; repair alone required 15125 thinking tokens after the failure. Every audited exposed local verdict matched the independent oracle. This distinguishes correct engine support from incorrect model composition/consumption. Returning evidence is not proof that the model used it correctly.
+
+The corrective interface adds model-selected conjunctions: a branch declares up to sixteen local prerequisites. Scheme evaluates their conjunction and returns the candidate branch identifier only when every declared prerequisite holds. It does not choose the prerequisites, infer arbitrary natural-language intent, select the final task answer, or certify that the model omitted no required condition. Fresh and retained both receive this capability. The subsequent independent cohort tests this actual repair; all negative results above remain part of the record.
+
+The first large mutual retained checkpoint exhausted the 64 native Session cap because the initial controller opened a Session for every branch. The response was complete and provider usage was preserved. Batching fixed the root cause without widening native limits. A second boundary test found the 128-rule cap: batches now reserve rule slots for registered rules and possible materialized-alias rules. Up to 128 candidate checks are split safely. Unknown outcomes remain unknown rather than silently pruning branches.
+
+* Native load and execution diagnosis
+
+The observed eight-minute process was doing streamed HTTPS model inference, not dlopen. A one-second process sample showed SSL read/poll, and the event log continued receiving response.reasoning_text.delta. The successful isolated load receipt measured Python import 0.0732 s, validation/load/runtime initialization 0.5212 s, first native describe request 0.000889 s, total including shutdown 0.5960 s. A separate load observation was 1.3123 s. These are single local observations, not a cold-start population estimate. See load-phases.jsonl. They do not qualify another consumer's trusted DSL expansion path: a separately observed expander timeout is an independent open gate.
+
+The 128-candidate fixture completed first check in 1.4281 s and repeated check in 0.6075 s; each used two result references and retained only two native Sessions. All 64 supported and 64 contradicted outcomes were correct. The repeated check reused components for all 128 candidates. Native time savings do not themselves demonstrate model thinking savings.
+
+* Local qualification and scientific limits
+
+Actual C ABI and compiled CFFI API suites each pass 14 cases, including first-round function-call pairing, complete reasoning preservation, uncertainty, native multi-premise conjunction, 128-candidate capacity, source invalidation, model-call binding and whole-task scope. Direct Scheme Trajectory suite passes eight cases. Lean EvidenceInteraction and Trajectory compile. Quint EvidenceInteraction passes 10000 sampled traces of 30 steps with seed 13; unknown, observation, stale and missing-condition mutants all violate the invariant. These bounded models specify trusted-checker abstractions and do not prove the native compiler, provider, grader or arbitrary model intent correct.
+
+Qualification is bound to the frozen local artifact and selected source hashes, not every later concurrent workspace change. The exact source drift and receipts appear in the feature qualification JSON. Reported reductions are complete-case observations with very small denominators. Adaptive repairs and sequential generation can affect results. Prefix-cache tokens, physical requests and policy usage are listed separately. No stable 40–50% reduction, end-to-end dollar saving, training exclusion, or generalized problem-solving guarantee is established.
+
+* Physical provider audit
+
+Unique observed provider response records: 109; usage-bearing records: 109; physically reported thinking: 1358064. Replayed response IDs are counted once physically and charged to each alternative policy prefix. Runs without final result files remain host-aborted observations. Provider request/response files remain under .cache/ascent/interactive; records, plans and unique usage audit are retained here. The audit includes aborted and superseded controllers, not merely successful runs.
+
+Full per-call usage, decisions, tool arguments and final outputs are in [[file:../../../.cache/ascent/archived-runs/docs/research/interactive-evidence-study/records.json][records.json]], [[file:../../../.cache/ascent/archived-runs/docs/research/interactive-evidence-study/provider-audit.json][provider-audit.json]], and [[file:../../../.cache/ascent/archived-runs/docs/research/interactive-evidence-study/visible-answers.org][visible answers]].
+
+* Final comparison and repair interpretation
+
+The new multi-premise-capable cohort completed four policy trajectories (two independent task instances, three obligations each). Both arms passed all six obligations. Mutual thinking was fresh 32910 versus retained 45430: a 38.04% increase. Balanced thinking was fresh 41543 versus retained 74862: an 80.20% increase. Combined thinking was fresh 74453 versus retained 120292: a 61.57% increase. The balanced fresh process was interrupted between completed checkpoints; its recovered continuation is not an uninterrupted latency or total-physical-spend comparison. The interrupted request has unknown usage and is retained separately.
+
+No model selected a multi-condition candidate in this cohort or in the composition-repair fork. Native multi-premise checks are implemented and actually tested through both bindings, but their model efficacy has not been observed. The negative retention result must not be re-labelled a successful conjunction enhancement.
+
+The real composition failure was resumed at its first incorrect changed-source answer with the complete original usage prefix. One new model call corrected the two omitted jobs, spending 7144 additional thinking tokens; entire task cost was 122996. The earlier single-condition repair cost was 15125. The observed 52.77% difference concerns only this adaptive repair segment; the new model did not invoke a joint-condition tool. It is not a causal conjunction-effect result or a 52.77% whole-task saving.
+
+Earlier mutual failed-prefix forks later solved the same unchanged intent at the paraphrase stage. The corrected whole-task endpoint therefore admits them (fresh 206169, retained 202566; repair thinking 147613 and 137954). Their raw historical result files had wrongly kept the original obligation permanently censored. The report reconciles this grader/accounting defect explicitly without erasing the repeated wrong answers. The source-only balanced run remains genuinely censored because later-source correctness cannot repair an old-source failure.
+
+Interrupted request streams without terminal usage: 1. Their unobserved usage is not included in the known physical thinking sum and is not assumed zero. See interrupted-requests.json.
+
+The benchmark question source is fully declared finite semantics with independent random instances. It evaluates correct use and composition of tool observations under recursion, negation and source change; it is not a general open-world reasoning benchmark. A complete mechanization could solve these tasks without a model. This limits the efficacy claim and motivates future independently sourced, partially observed domain tasks while retaining exact local oracle checks.

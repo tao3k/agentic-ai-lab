@@ -7,12 +7,12 @@
 ;;; Invariant: communication rows are report-only; Scheme does not deliver
 ;;; messages, mutate sessions, or open runtime channels.
 
-(import :poo-flow/modules/session/syntax)
+(import :agentic-ai-lab/modules/session/syntax)
 
-(export poo-flow-custom-my-module-session-communication-case)
+(export agentic-ai-lab-custom-my-module-session-communication-case)
 
-(def poo-flow-custom-my-module-session-communication-case
-  (poo-flow-session-cases
+(def agentic-ai-lab-custom-my-module-session-communication-case
+  (agentic-ai-lab-session-cases
   (session-case custom-session-communication-case
     (metadata (source . user-interface)
               (case . session-communication))

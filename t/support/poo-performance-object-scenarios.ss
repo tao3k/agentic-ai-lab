@@ -6,9 +6,9 @@
 ;;; Boundary: reusable native POO object scenarios for performance gates.
 
 (import (only-in :clan/poo/object .ref)
-        :core/module-system/schema/interface
-        :core/extension-graph/interface
-        :core/module-system/schema/validation)
+        :yuanxu/module-system/schema/interface
+        :yuanxu/graph/interface
+        :yuanxu/module-system/schema/validation)
 
 (export poo-performance-slot-ref/default
         poo-performance-build-list
@@ -60,9 +60,9 @@
 
 ;; : (-> Integer PooModuleFieldContract)
 (def (poo-performance-field-contract index)
-  (poo-flow-module-field-contract
+  (yuanxu-module-field-contract
    (poo-performance-field-name index)
-   PooFlowModuleAnyType
+   YuanxuModuleAnyType
    'override
    index
    '((scenario . poo-performance))))
@@ -73,7 +73,7 @@
 
 ;; : (-> Integer PooModuleObject)
 (def (poo-performance-module-object field-count)
-  (poo-flow-module-object
+  (yuanxu-module-object
    'performance-object
    '()
    (poo-performance-field-contracts field-count)
@@ -82,7 +82,7 @@
 ;; : (-> Integer Integer [PooModuleObject])
 (def (poo-performance-module-object-catalog object-count field-count)
   (let (base-object
-        (poo-flow-module-object
+        (yuanxu-module-object
          'performance-base
          '()
          (poo-performance-field-contracts field-count)
@@ -90,7 +90,7 @@
     (poo-performance-build-list
      object-count
      (lambda (index)
-       (poo-flow-module-object
+       (yuanxu-module-object
         (string->symbol
          (string-append "performance-child-"
                         (number->string index)))
@@ -136,7 +136,7 @@
      (cdr objects)
      entries
      (poo-performance-values/rev-onto
-      (poo-flow-module-object-contributions (car objects) entries)
+      (yuanxu-module-object-contributions (car objects) entries)
       contributions-rev))))
 
 ;; : (-> [PooModuleObject] Integer [PooModuleFieldContribution])
@@ -169,7 +169,7 @@
   (* rounds (apply + (map cdr slots))))
 
 ;; poo-performance-object-node-lookup-count
-;;   : (-> PooModuleExtensionNode [Symbol] Integer Integer)
+;;   : (-> YuanxuGraph [Symbol] Integer Integer)
 ;;   | doc m%
 ;;       `poo-performance-object-node-lookup-count objects-node identities
 ;;       rounds` counts indexed object hits once, then scales by benchmark rounds.
@@ -177,7 +177,7 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (poo-performance-object-node-lookup-count
-;;        (poo-flow-module-objects-node
+;;        (yuanxu-module-objects-node
 ;;         (poo-performance-module-object-catalog 2 1))
 ;;        '(performance-child-0 missing)
 ;;        3)
@@ -185,11 +185,11 @@
 ;;       ```
 ;;     %
 (def (poo-performance-object-node-lookup-count objects-node identities rounds)
-  (let (objects-index (poo-flow-module-objects-index objects-node))
+  (let (objects-index (yuanxu-module-objects-index objects-node))
     (* rounds
        (length
         (filter (lambda (identity)
-                  (poo-flow-module-objects-ref/index objects-index identity))
+                  (yuanxu-module-objects-ref/index objects-index identity))
                 identities)))))
 
 ;; : (-> Integer Symbol)
@@ -197,34 +197,34 @@
   (string->symbol
    (string-append "extension-child-" (number->string index))))
 
-;; : (-> Integer Integer PooModuleExtensionNode)
+;; : (-> Integer Integer YuanxuGraph)
 (def (poo-performance-extension-child index slot-offset)
-  (poo-flow-module-extension-node
+  (yuanxu-graph-rooted
    (poo-performance-extension-child-name index)
    (list (cons 'value (+ slot-offset index)))
    '()))
 
-;; : (-> Integer Integer [PooModuleExtensionNode])
+;; : (-> Integer Integer [YuanxuGraph])
 (def (poo-performance-extension-children count slot-offset)
   (poo-performance-build-list
    count
    (lambda (index)
      (poo-performance-extension-child index slot-offset))))
 
-;; : (-> Integer PooModuleExtensionNode)
+;; : (-> Integer YuanxuGraph)
 (def (poo-performance-extension-merge-root count)
-  (poo-flow-module-extension-node
+  (yuanxu-graph-rooted
    'extension-root
    '((kind . extension-merge-root))
    (poo-performance-extension-children count 1000)))
 
-;; : (-> Integer Integer [PooModuleExtensionOperation])
+;; : (-> Integer Integer [PooGraphOperation])
 (def (poo-performance-extension-node-extend-operations count key-span)
   (poo-performance-build-list
    count
    (lambda (index)
-     (poo-flow-module-extension-node-extend
-      (poo-flow-module-extension-node
+     (yuanxu-graph-node-extend
+      (yuanxu-graph-rooted
        (poo-performance-extension-child-name (modulo index key-span))
        (list (cons 'value (+ 2000 index)))
        '())))))
@@ -234,31 +234,31 @@
   (string->symbol
    (string-append "cross-contribution-child-" (number->string index))))
 
-;; : (-> Integer PooModuleExtensionNode)
+;; : (-> Integer YuanxuGraph)
 (def (poo-performance-cross-contribution-child index)
-  (poo-flow-module-extension-node
+  (yuanxu-graph-rooted
    (poo-performance-cross-contribution-child-name index)
    (list (cons 'created-order index))
    '()))
 
-;; : (-> Integer [PooModuleExtensionOperation])
+;; : (-> Integer [PooGraphOperation])
 (def (poo-performance-cross-contribution-create-operations count)
   (poo-performance-build-list
    count
    (lambda (index)
-     (poo-flow-module-extension-node-extend
+     (yuanxu-graph-node-extend
       (poo-performance-cross-contribution-child index)))))
 
 ;; : (-> PooObject Symbol Value Value)
-(def (poo-flow-performance-ref object key default)
+(def (agentic-ai-lab-performance-ref object key default)
   (try
     (.ref object key)
     (catch (e) default)))
 
 ;; : (-> PooObject Value)
 (def (poo-performance-object-index-identity object)
-  (or (poo-flow-performance-ref object 'identity #f)
-      (poo-flow-performance-ref object 'name #f)))
+  (or (agentic-ai-lab-performance-ref object 'identity #f)
+      (agentic-ai-lab-performance-ref object 'name #f)))
 
 ;; : (-> [PooObject] HashTable)
 (def (poo-performance-object-list-index objects)
@@ -273,40 +273,40 @@
     index))
 
 ;; : (-> PooModuleObjectsNode HashTable)
-(def (poo-flow-module-objects-index objects)
+(def (yuanxu-module-objects-index objects)
   (if (list? objects)
     (poo-performance-object-list-index objects)
-    (let ((objects-index (poo-flow-performance-ref objects 'objects-index #f)))
+    (let ((objects-index (agentic-ai-lab-performance-ref objects 'objects-index #f)))
       (if objects-index
         objects-index
-        (let ((index (poo-flow-performance-ref objects 'index #f)))
+        (let ((index (agentic-ai-lab-performance-ref objects 'index #f)))
           (if index
             index
-            (let ((children (poo-flow-performance-ref objects 'children #f)))
+            (let ((children (agentic-ai-lab-performance-ref objects 'children #f)))
               (if children
                 (poo-performance-object-list-index children)
                 (poo-performance-object-list-index
-                 (poo-flow-performance-ref objects 'modules []))))))))))
+                 (agentic-ai-lab-performance-ref objects 'modules []))))))))))
 
-;; : (-> Integer Symbol [PooModuleExtensionContribution])
+;; : (-> Integer Symbol [PooGraphContribution])
 (def (poo-performance-cross-contribution-targeting-contributions child-count target)
   (list
-   (poo-flow-module-extension-contribution
+   (yuanxu-graph-contribution
     'extension-root
     (poo-performance-cross-contribution-create-operations child-count))
-   (poo-flow-module-extension-contribution
+   (yuanxu-graph-contribution
     target
-    (list (poo-flow-module-extension-slot-override 'targeted? #t)
-          (poo-flow-module-extension-slot-override 'target-phase 'same-pass)))))
+    (list (yuanxu-graph-slot-override 'targeted? #t)
+          (yuanxu-graph-slot-override 'target-phase 'same-pass)))))
 
-;; : (-> Symbol Integer [PooModuleExtensionContribution])
+;; : (-> Symbol Integer [PooGraphContribution])
 (def (poo-performance-local-slot-contributions target count)
   (poo-performance-build-list
    count
    (lambda (index)
-     (poo-flow-module-extension-contribution
+     (yuanxu-graph-contribution
       target
       (list
-       (poo-flow-module-extension-slot-override
+       (yuanxu-graph-slot-override
         (poo-performance-field-name index)
         index))))))

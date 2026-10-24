@@ -1,3 +1,4 @@
+(import (only-in :agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-pipeline-runtime-command-manifests))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -5,20 +6,19 @@
 
 ;;; Boundary: direct Funflow POO config lowers to CI/CD runtime facts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax
-        :poo-flow/modules/workflow/cicd-config
-        :poo-flow/modules/agent-sandbox/config
-        (only-in :poo-flow/modules/funflow/config
-                 poo-flow-funflow-pipeline-runtime-command-manifests)
-        :poo-flow/modules/workflow/interface)
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/workflow/cicd-config
+        :agentic-ai-lab/modules/agent-sandbox/config
+        :agentic-ai-lab/modules/workflow/interface)
 
 (export funflow-config-pipeline-direct-test)
 
-'poo-flow-import-side-effect-test-suite?
+'agentic-ai-lab-import-side-effect-test-suite?
 
 ;; : (-> List Symbol Object)
 (def (funflow-config-direct-alist-ref alist key)
@@ -68,7 +68,7 @@
 
 ;; : (-> Unit [PooSandboxProfile])
 (def (funflow-config-direct-sandbox-profiles)
-  (poo-flow-sandbox-profiles
+  (agentic-ai-lab-sandbox-profiles
    (ci/build
     (backend nono)
     (network allowlisted "github.com" "crates.io")
@@ -107,18 +107,18 @@
 ;; : (-> Unit Symbol)
 (def (run-funflow-config-pipeline-direct-checks)
   (let* ((selection (car (funflow-config-direct-selection)))
-         (flags (poo-flow-user-module-selection-flags selection))
+         (flags (yuanxu-user-module-selection-flags selection))
          (pipeline
           (funflow-config-direct-alist-ref flags ':workflow-pipeline))
-         (checks (poo-flow-cicd-check-map-checks pipeline))
+         (checks (yuanxu-cicd-check-map-checks pipeline))
          (integration-check (cadr checks))
          (receipts
-          (poo-flow-cicd-check-map->receipts
+          (agentic-ai-lab-cicd-check-map->receipts
            pipeline
            (funflow-config-direct-sandbox-profiles)))
          (integration-receipt (cadr receipts))
          (manifest-map
-          (poo-flow-funflow-pipeline-runtime-command-manifests
+          (agentic-ai-lab-funflow-pipeline-runtime-command-manifests
            pipeline
            (funflow-config-direct-sandbox-profiles)))
          (dependency-graph
@@ -131,19 +131,19 @@
          (integration-request
           (funflow-config-direct-alist-ref integration-manifest 'request))
          (manifest-summaries
-          (poo-flow-user-workflow-cicd-runtime-command-manifest-summaries
+          (agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-summaries
            (list manifest-map)))
          (integration-summary (cadr manifest-summaries)))
-    (check-equal? (poo-flow-user-module-selection-key selection)
+    (check-equal? (yuanxu-user-module-selection-key selection)
                   '(flow . funflow))
-    (check-equal? (poo-flow-cicd-check-map? pipeline) #t)
-    (check-equal? (poo-flow-cicd-check-map-name pipeline) 'default)
+    (check-equal? (yuanxu-cicd-check-map? pipeline) #t)
+    (check-equal? (yuanxu-cicd-check-map-name pipeline) 'default)
     (check-equal? (length checks) 2)
-    (check-equal? (poo-flow-cicd-check-name integration-check)
+    (check-equal? (yuanxu-cicd-check-name integration-check)
                   'integration)
-    (check-equal? (poo-flow-cicd-check-profile integration-check)
+    (check-equal? (yuanxu-cicd-check-profile integration-check)
                   '(ci/check agent/poo-object-extension))
-    (check-equal? (poo-flow-cicd-check-dependency-refs integration-check)
+    (check-equal? (yuanxu-cicd-check-dependency-refs integration-check)
                   '(build))
     (check-equal? (funflow-config-direct-alist-ref dependency-graph 'nodes)
                   '(build integration))
@@ -164,7 +164,7 @@
                    'sandbox-unresolved-profile-refs)
                   '(agent/poo-object-extension))
     (check-equal? (funflow-config-direct-alist-ref manifest-map 'kind)
-                  'poo-flow.workflow.cicd.runtime-command-manifest-map)
+                  'agentic-ai-lab.workflow.cicd.runtime-command-manifest-map)
     (check-equal? (funflow-config-direct-alist-ref manifest-map
                                                   'runtime-executed)
                   #f)
@@ -194,6 +194,6 @@
     'ok))
 
 (def funflow-config-pipeline-direct-test
-  (test-suite "poo-flow Funflow direct config pipeline"
-    (poo-flow-test-case "lowers direct Funflow POO config to CI/CD runtime facts"
+  (test-suite "agentic-ai-lab Funflow direct config pipeline"
+    (yuanxu-test-case "lowers direct Funflow POO config to CI/CD runtime facts"
       (check-equal? (run-funflow-config-pipeline-direct-checks) 'ok))))

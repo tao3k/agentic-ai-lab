@@ -7,7 +7,7 @@
 ;;; Invariant: projection stays report-only and does not duplicate topology
 ;;; outside the session module graph owner.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,10 +15,10 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :poo-flow/modules/loop-engine/runtime-agent
-                 poo-flow-user-loop-engine-intent-session-agent-topology-trace)
-        (only-in :poo-flow/modules/loop-engine/session-agent-graph
-                 poo-flow-user-loop-engine-intent-session-agent-graph))
+        (only-in :agentic-ai-lab/modules/loop-engine/runtime-agent
+                 agentic-ai-lab-user-loop-engine-intent-session-agent-topology-trace)
+        (only-in :agentic-ai-lab/modules/loop-engine/session-agent-graph
+                 agentic-ai-lab-user-loop-engine-intent-session-agent-graph))
 
 (export loop-engine-session-agent-graph-performance-test)
 
@@ -37,7 +37,7 @@
 
 ;; : (-> Alist Void)
 (def (loop-engine-session-agent-graph-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] loop-engine-session-agent-graph ")
+  (display "[agentic-ai-lab-benchmark] loop-engine-session-agent-graph ")
   (write receipt)
   (newline)
   (force-output))
@@ -61,22 +61,22 @@
     (sandbox-profile-refs . (ci/build))
     (memory-policies . (((use-case . current-system-build-loop)
                          (store . project-memory))))
-    (result . ((default . poo-flow.loop-governor.node-result.v1)
-               (auditor . poo-flow.loop-governor.audit-result.v1)
-               (verifier . poo-flow.loop-governor.review-result.v1)
-               (governor . poo-flow.loop-governor.governor-result.v1)
+    (result . ((default . agentic-ai-lab.loop-governor.node-result.v1)
+               (auditor . agentic-ai-lab.loop-governor.audit-result.v1)
+               (verifier . agentic-ai-lab.loop-governor.review-result.v1)
+               (governor . agentic-ai-lab.loop-governor.governor-result.v1)
                (human-audit
-                . poo-flow.loop-governor.human-audit-decision.v1)))
+                . agentic-ai-lab.loop-governor.human-audit-decision.v1)))
     (runtime-owner . "marlin-agent-core")
     (runtime-executed . #f)))
 
 ;; : (-> Alist)
 (def (loop-engine-session-agent-graph-performance-summary)
   (let* ((graph
-          (poo-flow-user-loop-engine-intent-session-agent-graph
+          (agentic-ai-lab-user-loop-engine-intent-session-agent-graph
            loop-engine-session-agent-graph-performance-intent))
          (topology-trace
-          (poo-flow-user-loop-engine-intent-session-agent-topology-trace
+          (agentic-ai-lab-user-loop-engine-intent-session-agent-topology-trace
            loop-engine-session-agent-graph-performance-intent)))
     (list
      (cons 'agent-count
@@ -125,7 +125,7 @@
 
 (def loop-engine-session-agent-graph-performance-test
   (test-suite "loop-engine session-agent graph performance"
-    (poo-flow-test-case "keeps loop-engine topology projection inside benchmark contract"
+    (yuanxu-test-case "keeps loop-engine topology projection inside benchmark contract"
       (let-values (((receipt summary)
                     (benchmark-run/result
                      loop-engine-session-agent-graph-performance-fixture

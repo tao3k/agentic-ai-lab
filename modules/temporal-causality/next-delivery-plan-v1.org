@@ -1,0 +1,324 @@
+#+title: Temporal production delivery ledger
+#+date: [2026-10-08]
+#+property: STATUS audited-current-consumer-gates
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Fixed owners and versions
+
+| Owner | Responsibility |
+|-------+----------------|
+| Agentic AI Lab Scheme Library | Temporal semantics, proof replay, revisions, applicability and IFC meaning |
+| Scheme ASCENT | Bounded relational evaluation and native proof production |
+| Runtime C | Bounded ABI v1 and explicit trusted Host controls |
+| Python Runtime | Library consumers, scheduling and provider IO |
+| MRR Rust | Original typed admission, identity and production orchestration |
+| MRR Data Backend/Protocols | Physical execution, conditional commit and recovery |
+
+Scheme transport and ABI remain v1; configured Gerbil remains v0.19. No Rust
+Temporal solver or duplicate Data backend belongs in the adapters. Model tools
+remain read-only; source/policy/proof registration uses separate Host controls.
+
+The active graph is MRR =ffde2798a5246a61f4d6f0e66d7f05156e55e38f= and Data
+=513d67812c45875bfa991b5b0032f37cffcb5998=. Data's original workspace declares
+that same MRR revision. Its native build owner is =1e4f1f65c7ff8e95fe764f2e8549fa9d92275db4=.
+The graph checker verifies manifests, both actual Cargo locks and, with resolved
+metadata, the original Data checkout and its workspace dependency declarations.
+This is dependency identity evidence, not source authentication or execution proof.
+
+* Implemented scope and evidence ledger
+
+| Slice | Implemented capability | Evidence boundary |
+|-------+------------------------+-------------------|
+| Quint migration | 42 sources; 33 finite cases with positive and mutant controls | Current finite checks pass; general native/Quint state and trace refinement remains open |
+| Original physical exchange | GQL compilation, Arrow restoration, original result handoff, correction/re-query and historical archive | Fresh locked physical producer executes in Linux native CI; acceptance requires its original receipt, correction markers and exit zero. Prior receipts retain their recorded source cuts |
+| Support applicability | Conjunctive premises, alternative supports, downstream acyclic evaluation and historical cuts | Declared inventory; completeness and recursive/absence semantics are not proved |
+| Original positive proof | ASCENT replay, MRR rule/catalog and Derivation mapping, exact source leaf/revision content | Scoped positive source-relative proof; issuer authority and exhaustive support inventory remain open |
+| Registered current proof | Retained original proof, append-only journal, current catalog, policy and observed clock | ABI v1 controls implemented; no selection, effect or durability grant |
+| Local publication | C SQLite source/grant checks and immutable first-root CAS receipt | Initial local selection only; replacement, tombstone and unified Data transaction remain open |
+| Python delivery | Quint output is an explicit callback; CLI preserves real child progress | Local project gate: 47 tests; Quint gate: 6 tests; exact-head wheel acceptance is required |
+
+Historical source/artifact-bound summaries remain under
+=t/qualification/temporal-library-basic/=, including =rule-correspondence-v1=,
+=derivation-authority-v1=, =registered-proof-host-v1= and =proof-host-abi-v1=.
+They document the original runs and do not qualify a new native artifact.
+
+* This stage: coherent dependency and native consumers
+
+1. Generate both locks from the immutable owner sources, retaining one MRR type
+   universe across POO and Data. Reject divergent pins, stale lock entries and
+   duplicate producer revisions through =check_mrr_dependency_graph.py=.
+2. Rebuild the native Scheme Library in CI. Download that exact run's semantic
+   artifact and Runtime C producer, and verify semantic source/header/host hashes.
+3. Compile original Rust MRR consumers before the execution deadline. Run the
+   original result, support, rule, Derivation and policy tests serially through
+   the five-second idle / 45-second total gate. Preserve actual Scheme oracles.
+4. Install the Python Library consumer and replay those original Rust oracles
+   against the same native artifact. Qualify correction, historical truth,
+   current journal/catalog/policy guards and control-lane rejection. Required
+   oracles must exist; an absent producer cannot turn into a passing skip.
+5. Close the exact delivered-head CI, including the Python wheel. Report native
+   consumer qualification separately from updated physical Data execution.
+
+The executable CI owner is =Temporal MRR Library consumers=. Raw logs and
+original emitted Scheme oracles are local or CI artifacts, never Git logs.
+No new model call or benchmark win is implied by this stage.
+
+* Qualified native consumer source cut
+
+[[https://github.com/tao3k/agentic-ai-lab/actions/runs/37769701506/job/113291895168][The original consumer CI run]] passed at POO source cut
+=0a7a2c3c22775cbcd657a250e00f75a541a5b5b4= with the immutable graph above.
+Ten original Rust tests and a separate fresh-process archive replay passed.
+Installed Python replay passed 63 tests with no skips. Both consumers used the
+same fresh native artifact, SHA-256
+=1ccd75e33df51f92dfc52f602ec28a0449c336d9050990e17792828409ff19ae=.
+Clippy passed with warnings denied. Execution kept the five-second idle and
+45-second total gates. The first consumer CI attempt failed before tests because
+the minimal Rust toolchain lacked Clippy; that failure is not a semantic pass.
+
+Original Scheme oracles remain in that run's artifact, not Git. This qualifies
+bounded original-proof/current-state read-only consumers for that source cut.
+No physical Data roundtrip, provider authentication, complete support inventory,
+Data commit/IFC authority, new model call or performance gain follows from it.
+The stronger implicit-HEAD rejection changes dependency tooling only; final-head
+CI must still pass before calling the delivered stage closed.
+
+* Physical producer delivery gate
+
+Linux native CI compiles the locked =qualification/physical-roundtrip= package
+with the configured Gerbil v0.19 SDK, Rust 1.95.0 and warnings-denied Clippy.
+=just qualify-temporal-physical= then runs original GQL, DataFusion, immutable
+Arrow restoration and native Temporal correction against the same job's AOT
+Library. Original and corrected transports and admissions remain in the
+=temporal-physical-original-evidence= CI artifact. The producer must exit zero,
+emit all original protocol/correction/final markers and write both receipt and
+oracle. Five-second idle and 45-second total gates remain unchanged.
+
+This executable gate implements B1. Its exact-head CI result determines whether
+B2 can proceed; dependency metadata or historical receipts cannot substitute for
+physical execution. B3's authoritative Data commit and IFC remain separate.
+
+* Qualified B1 source cut
+
+[[https://github.com/tao3k/agentic-ai-lab/actions/runs/37778052826][The complete CI run]] passed at
+=6c275f1701b397ea798283d9c976446a66b9e93d= with the fixed graph above.
+The Linux producer executed the original physical query and changed-root
+correction. Ten Rust tests plus fresh-process replay and 63 Python tests with
+no skips consumed the same AOT Library, SHA-256
+=ddf21752b4b9c18cbac9028304bd04acf1552939f1cbb5d17b8b92221c29e5fd=.
+Original Scheme receipts remain CI artifacts. This qualifies B1 for that source
+cut; it does not qualify a later artifact or B3 publication.
+
+* B2 implementation and delivery gate
+
+The Library exposes named acyclic support inventories, including claims with
+zero supports. Alternative supports project to the original conclusion identity
+before the existing reverse scheduler computes affected downstream conclusions.
+Complete declared inventories produce unsupported after the last support is
+withdrawn; partial inventories preserve unknown. Unsupported is support
+applicability, not logical refutation or proof admission.
+
+MRR preserves original Fact/Derivation identities and output content, admits
+named inventories and calls the Library's reverse and claim-selection operations.
+The Rust consumer emits original =claims.ss= revision oracles; the installed
+Python Library replays them against the same native artifact. Acceptance covers
+two supports to one to none, downstream propagation, zero-support parents,
+late correction, conflict, historical cuts and host policy expiry.
+
+Claim selection is relative to the caller-declared journal cut and inventory.
+A retained native binding from a different cut yields stale Context and unknown.
+This is a native cut-binding check, distinct from the existing MRR admitted
+agentic Context family's source/catalog controls. Only the registered policy
+Host supplies policy and evaluation time. No authoritative current-source
+registry, complete provenance inventory or effect permission is established;
+proof/source/selection/effect/durable admission flags remain false.
+
+The shared package-managed entry is
+=gerbil env bash runtime/tools/qualify-library.sh POO_PACKAGE OUTPUT= in MRR.
+Cargo validates the locked graph, builds and lints; the existing bounded native
+recipe performs execution. CI keys Cargo's dependency/build cache by SDK/toolchain and immutable package
+locks; Cargo owns source invalidation. The native AOT artifact is freshly built
+and execution always runs. CI calls
+that same entry, without another installer or job. Gerbil dependencies continue
+through =gerbil deps=, Rust through rustup/Cargo and Python through uv. Builds
+stay outside execution deadlines; cache hits never replace fresh execution.
+B2 delivery requires the new producer oracle, Python replay with no skips and
+all checks on the delivered head. General Quint/native refinement remains B4.
+
+* B2 execution failure retained
+
+At =f0cf5577ebb62439ac325d281a2967bd110b75ce= both native Gerbil jobs and
+original physical correction passed in [[https://github.com/tao3k/agentic-ai-lab/actions/runs/37788179600][CI]]. The Rust consumer failed before
+its new native revision call: the Rust operation whitelist omitted
+=temporal.support.revise= and =temporal.support.claim= and returned InvalidInput.
+The missing operations are now registered; a new delivered-head consumer run
+is required. This failure is not a model timeout or a successful B2 receipt.
+
+* B3 first Library slice
+
+[[file:context-publication-contract-v1.org][The Context/Data contract]] specifies the single Data commit boundary and its
+remaining gates. The implemented native =src/semantic/context-restriction.ss=
+provides finite reader/destination intersection, provenance preservation,
+half-open lease composition and non-widening refinement. Material-bound flow
+eligibility carries no IO authority. Native tests cover algebra and rejection
+controls; Data commit fencing, admitted declassification, redaction and formal
+native/Data refinement remain open. No new installer, CI job or ABI version is
+needed for this pure Library slice. Fixed-v1 Context composition and declared
+flow evaluation now project through Runtime C, the Rust operation registry and
+Python Library methods. The existing MRR consumer emits original Fact-bound
+flow evidence and Python requires/replays that oracle. Fresh artifact execution
+on the delivered head is still required; declared eligibility cannot close the
+Data conditional-commit or IFC admission gate.
+
+* Next stages in dependency order
+
+| Order | Work | Acceptance gate |
+|-------+------+-----------------|
+| B1 physical producer requalification | Execute the original GQL/DataFusion/Temporal roundtrip on the new graph | Original source/query/root/catalog/result binding; tamper, empty-profile and wire-budget rejection; genuine changed root and correction; original exit and final markers |
+| B2 general conclusion lifecycle | Reverse claim projection, complete named acyclic support inventories and current/as-of selection | Two supports -> one -> none; late correction, stale Context, policy expiry and conflict; preserve historical proof and explicit unknown |
+| B3 authoritative publication and IFC | Bind admitted source/proof/policy/grant fences to Data's protected conditional commit | Concurrent source/grant changes cannot commit stale permission; replacement, tombstone, duplicate/reordered outbox and crash/recovery controls |
+| B4 recursive and absence profiles | Explicit SCC/external-support and bounded coverage semantics | Incremental/full equivalence; unsupported negation rejects; isolated cycles cannot sustain themselves; budget exhaustion preserves dirty/unknown |
+| B5 real-model lifecycle | Actual DeepSeek consumes original physical/proof/revision tools | Fresh artifact and coherent pins; correction/re-query, unknown/refuted/stale outcomes; raw responses and failures; separately qualified publication capability |
+
+Read-only real-model acceptance may proceed after B1/B2 without claiming B3.
+Production effect acceptance requires B3. No model agreement can establish
+source authenticity, coverage, formal refinement or effect authority.
+
+* Acceptance rules
+
+Five seconds without genuine completed-work output is failure. Native execution
+keeps the 45-second total bound. Build/dependency preparation, local semantics,
+exact-head CI, real-model behavior and performance are distinct evidence.
+No synthetic heartbeat, timeout widening, hidden retry or repair closes a gate.
+New measurements and native qualification receipts use ASP Scheme's benchmark
+API; receipt/ABI versions remain v1. Source control retains gates and bounded
+structured summaries, not raw or compressed logs.
+
+* Atomic delivery stage source cut
+
+Data =844a1d74da301b10638d02ee272e4a19a6c90ecb= extends the existing shared
+Backend with atomic head/operation/delivery, exact recovery and historical ACK.
+The optional Rust adapter and original physical producer now depend on that
+same immutable Data revision; earlier receipts above retain their earlier pins.
+Turso 18 and DuckDB 20 cases passed with strict five-second progress / 45-second
+execution gates, including six actual process-death points. Strict Data Clippy
+passed. The first DuckDB invocation waited on a preparing Cargo lock and failed
+the watchdog; only the subsequent explicitly prepared execution qualifies.
+
+The publication Quint positive exhausts 1,980 states; the omitted-delivery
+mutation produces a required counterexample. This is a finite atomic contract
+model, not native refinement. Rust adapter Clippy passed. The expanded original
+physical producer must execute the new native/Data markers and pass exact-head
+CI before this stage is qualified end to end. Declassification, tombstones,
+issuer authentication and full native/Quint refinement remain open.
+
+Data =513d67812c45875bfa991b5b0032f37cffcb5998= additionally refuses a fresh
+replacement when selected head history lacks its exact operation/delivery tuple.
+Both provider suites and strict Clippy passed this added refusal. Current manifests
+and both locks select this newer cut; historical results retain their source cuts.
+
+* Local native publication acceptance
+
+The official AOT builder passed after removing executable =-static= linkage
+from module compilation. Gerbil remains v0.19; ABI and Scheme transport remain
+v1. The executed artifact SHA-256 is
+=36c5c6f2c305109cc227db5caa4a10839d0288e28c6b1daf9bac67043e8d1a3b=.
+The original GQL/Arrow/MRR/native producer passed commit, exact replay, delivery
+ACK, missing source fence, actor/payload substitution, expired lease, mixed
+source cut, corrected-source stale/refuted refusal and native Turso restart.
+Original Scheme receipt and oracle remain local artifacts. The first run failed
+because payload digest omitted the native =sha256:= prefix; that failure is
+retained and the adapter now validates the Data SHA256 CID profile and prefix.
+
+Ten original Rust Library cases plus independent archive replay passed against
+that same artifact, producing all eight original Scheme oracles. Installed
+Python Library replay passed 80 tests with no skips. Six dependency graph cases
+passed, including provider-version drift rejection. Physical producer and Data
+strict Clippy passed. Turso internal components match Data's original 0.8.1 lock;
+registry upgrades cannot be hidden behind a matching Data source revision.
+
+These are local code/artifact-bound receipts. Required CI on the final delivered
+head is still a separate gate; queued or empty checks do not establish success.
+No new model sample, full issuer authentication, declassification/tombstone,
+external effect exactly-once guarantee or general native refinement is claimed.
+
+* MRR runtime ownership closure (2026-10-09)
+
+MRR owner commit =0d792ceb67b27276eaf5255057943830643faa72= contains the
+Rust transport, bounded owner-thread lifecycle, typed MRR/source/proof adapters,
+Data publication orchestration, tests, two release-pair locks and physical
+producer. POO removes the entire =bindings/rust-runtime= source package without
+an alias or shim. The old JSON Rust qualification receipt/oracle are removed.
+Historical Scheme build freezes retain their original source/artifact scope.
+
+POO retains Scheme semantic modules, C ABI, Python Library and cross-repository
+acceptance. Existing Library/wheel/physical jobs check out the fixed MRR owner
+from =packages/automation/mrr-runtime.toml=. Source-only Orgize Rust tests move
+to MRR CI; no CI job or installer is added to POO. MRR runtime does not implement
+a database; its optional publication adapter delegates to Data Backend.
+
+The semantic producer remains MRR =ffde2798= and Data =513d6781= with matching
+Turso 0.8.1 family and native builder =1e4f1f65=. Runtime implementation owner
+and immutable typed producer are distinct identities. Updating the producer
+pair requires requalifying Data and all consumer locks. Protocol/ABI stays v1.
+
+Migrated local acceptance uses the same official native artifact
+=36c5c6f2c305109cc227db5caa4a10839d0288e28c6b1daf9bac67043e8d1a3b=.
+Fifteen Rust parent cases plus fresh-process replay passed. Eight actual MRR
+oracles replayed through Python: 80 passed, no skips. Strict Clippy passed for
+runtime and physical producer. Six semantic graph guards passed, including
+duplicate owner and provider drift rejection. The original physical/native/Data
+commit, replay, ACK, lease, mixed-source, stale/refuted and restart gate passed
+with the existing five-second idle and 45-second wall deadlines.
+
+These are local executable receipts; exact delivered-head CI remains separate.
+No new real model call or external business side effect was performed. General
+source authentication, revocation and cross-engine refinement remain open as
+listed above. Raw logs and native artifacts are not committed.
+
+* B3 durable grant retirement slice (2026-10-09)
+
+Current MRR runtime owner is =5594fc121e1e5942964f4863c9571818c8d5e0cc=.
+The typed producer, Data and native builder pins remain unchanged. The MRR
+ASCII policy failure is repaired by equivalent Unicode escapes, with the actual
+repository policy test and Unicode datum roundtrip passing.
+
+The original physical/native producer now qualifies an independent home while
+its original proof, physical root and flow remain current and eligible. Rotating
+the grant away and back to identical commitment bytes rejects a captured old
+generation. Retiring the current grant rejects a fresh publication before
+native validation. The same stable authority cannot be resurrected, and a
+differently named grant cannot omit the retired mandatory home authority.
+No revision-two delivery appears.
+
+After actual provider shutdown/reopen and genuine physical source correction,
+the retired authority and acknowledged original delivery remain durable. Exact
+old operation replay succeeds even though its native proof is now stale; it
+does not read a fresh clock, rerun semantic validation or create an effect.
+The actual physical gate requires both grant/refusal and recovery markers.
+Strict physical Clippy and the unchanged five-second idle / 45-second execution
+gate passed using the original official artifact =36c5c6f2...8d1a3b=.
+
+The new bounded authority model exhausts 51 states. Its generation mutation
+requires restored matching commitment bytes and produces a counterexample
+(32 states); ignoring retirement also produces a counterexample (19 states).
+The existing atomic tuple model still exhausts 1,980 states and missing-delivery
+control fails as expected. All five publication cases pass their required
+positive/negative gates. The initial backend attempt was sandbox-denied while
+binding its local gRPC port; the explicitly permitted execution qualifies.
+
+This closes the named durable retirement/ABA acceptance slice. It does not
+close content tombstone selection, authenticated grant issuance, declassification
+or external effect execution. A historical delivery is not current authority
+to re-dispatch an effect. Required CI on these delivered heads remains separate.
+
+* 2026-10-09 dependency direction correction
+
+The earlier POO CI runtime-owner checkout plan is superseded. MRR consumes
+Agentic AI Lab; POO CI must not check out or pin MRR. POO removes all three reverse
+checkout sites, the runtime pin descriptor/guard and the consumer-owned physical
+build entrypoints. MRR CI owns native Rust/Python comparison and Data physical
+acceptance, using its declared Gerbil POO dependency and existing SDK/toolchains.
+The immutable typed MRR/Data producer pair and Scheme ABI v1 remain unchanged.

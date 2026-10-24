@@ -4,24 +4,24 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         (only-in :clan/poo/object .ref)
         (only-in :std/encoding/json
                  JSONReadOptions
                  current-json-read-options
                  string->json)
-        (only-in :poo-flow/src/ffi/runtime-v0-native
+        (only-in :agentic-ai-lab/modules/workflow/runtime/runtime-v0-native
                  native-abi-version
                  native-descriptor-payload
                  native-query-execution-candidate->json
                  native-query-execution-candidate<-json
                  native-validate-payload
                  native-c-round-trip)
-        (only-in :poo-flow/modules/query/objects
-                 poo-flow-query-execution-candidate)
-        (only-in :poo-flow/modules/query/types
-                 poo-flow-query-execution-candidate?))
+        (only-in :agentic-ai-lab/modules/query/objects
+                 agentic-ai-lab-query-execution-candidate)
+        (only-in :agentic-ai-lab/modules/query/types
+                 agentic-ai-lab-query-execution-candidate?))
 
 (export runtime-v0-native-ffi-test)
 
@@ -37,29 +37,29 @@ JSON
   )
 
 (def valid-query-execution-candidate
-  (poo-flow-query-execution-candidate
+  (agentic-ai-lab-query-execution-candidate
    'mrr 'healthcare-impact "1" "healthcare-1" "sha256:source"
    'gerbil-parser "sha256:provenance" "sha256:result" 0 #f))
 
 (def runtime-v0-native-ffi-test
   (test-suite "Runtime v0 Scheme-native C ABI"
-    (poo-flow-test-case "descriptor is versioned and bounded"
+    (yuanxu-test-case "descriptor is versioned and bounded"
       (check (native-abi-version) => 1)
       (let (descriptor (runtime-test-json-object (native-descriptor-payload)))
         (check (hash-get descriptor "schema")
-               => "poo-flow.scheme-native-descriptor.v1")
+               => "agentic-ai-lab.scheme-native-descriptor.v1")
         (check (hash-get descriptor "runtimeAbiMajor") => 0)
         (check (hash-get descriptor "runtimeAbiMinor") => 1)
         (check (hash-get descriptor "maximumInputBytes") => (* 16 1024 1024))
         (check (length (hash-get descriptor "contracts")) => 4)))
-    (poo-flow-test-case "valid POO contract crosses as a validation receipt"
+    (yuanxu-test-case "valid POO contract crosses as a validation receipt"
       (let (receipt
             (runtime-test-json-object
              (native-validate-payload "source-query-receipt"
                                       valid-source-query)))
         (check (hash-get receipt "valid") => #t)
         (check (length (hash-get receipt "failures")) => 0)))
-    (poo-flow-test-case "MRR execution candidate becomes the canonical Query object"
+    (yuanxu-test-case "MRR execution candidate becomes the canonical Query object"
       (let* ((wire
               (native-query-execution-candidate->json
                valid-query-execution-candidate))
@@ -69,23 +69,23 @@ JSON
               (runtime-test-json-object
                (native-validate-payload "query-execution-candidate"
                                         wire))))
-        (check (poo-flow-query-execution-candidate? candidate) => #t)
+        (check (agentic-ai-lab-query-execution-candidate? candidate) => #t)
         (check (.ref candidate 'query-identity) => 'healthcare-impact)
         (check (.ref candidate 'complete?) => #f)
         (check (hash-get receipt "valid") => #t)
         (check (length (hash-get receipt "failures")) => 0)))
-    (poo-flow-test-case "execution candidate rejects invalid runtime evidence"
+    (yuanxu-test-case "execution candidate rejects invalid runtime evidence"
       (check-exception
        (native-validate-payload
         "query-execution-candidate"
         "{\"provider-identity\":\"mrr\",\"query-identity\":\"q1\",\"query-version\":\"1\",\"semantic-revision\":\"r1\",\"source-content-identity\":\"sha256:source\",\"parser-identity\":\"gerbil-parser\",\"provenance-root\":\"sha256:provenance\",\"result-digest\":\"sha256:result\",\"result-count\":-1,\"complete\":false}")
        true))
-    (poo-flow-test-case "qualification receipt cannot substitute for execution evidence"
+    (yuanxu-test-case "qualification receipt cannot substitute for execution evidence"
       (check-exception
        (native-validate-payload "query-execution-candidate"
                                 valid-source-query)
        true))
-    (poo-flow-test-case "semantic failure remains typed rather than exceptional"
+    (yuanxu-test-case "semantic failure remains typed rather than exceptional"
       (let* ((invalid
               (string-append
                "{\"source-language\":\"scheme\",\"source-content-id\":\"sha256:source\","
@@ -99,8 +99,8 @@ JSON
         (check (hash-get receipt "valid") => #f)
         (check (car (hash-get receipt "failures"))
                => "unsupported-source-representation")))
-    (poo-flow-test-case "unknown contract fails closed"
+    (yuanxu-test-case "unknown contract fails closed"
       (check-exception
        (native-validate-payload "unknown" "{}") true))
-    (poo-flow-test-case "C consumer observes the exported ABI and releases its result"
+    (yuanxu-test-case "C consumer observes the exported ABI and releases its result"
       (check (native-c-round-trip) => 0))))

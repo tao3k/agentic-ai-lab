@@ -20,13 +20,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      POO_FLOW_RUNTIME_V0_LIBRARY: ${{ github.workspace }}/.ci/runtime-c/libpoo_flow_runtime_v0.so
+      AGENTIC_AI_LAB_RUNTIME_V0_LIBRARY: ${{ github.workspace }}/.ci/runtime-c/libagentic_ai_lab_runtime_v0.so
+      AGENTIC_AI_LAB_SEMANTIC_LIBRARY: ${{ github.workspace }}/.ci/semantic/libagentic_ai_lab_semantic.so
       PROJECTION_HANDOFF_DIR: .ci/python-wheel-projection
-      PROJECTION_ARTIFACT: .ci/python-wheel-projection/wheel_smoke.ss.poo-flow-projection.sexp
+      PROJECTION_ARTIFACT: .ci/python-wheel-projection/wheel_smoke.ss.agentic-ai-lab-projection.sexp
 
     steps:
-      - name: Checkout poo-flow
+      - name: Checkout agentic-ai-lab
         uses: actions/checkout@v7.0.0
+
+      - name: Initialize Core source directory
+        run: git submodule update --init core
+
+      - name: Install SQLite development headers
+        run: sudo apt-get update && sudo apt-get install -y libsqlite3-dev
 
       - name: Set up Python
         uses: actions/setup-python@v6.0.0
@@ -48,8 +55,29 @@ jobs:
       - name: Download runtime-C producer handoff
         uses: actions/download-artifact@v8
         with:
-          name: poo-flow-runtime-native-library
+          name: agentic-ai-lab-runtime-native-library
           path: .ci/runtime-c
+
+      - name: Download semantic AOT producer handoff
+        uses: actions/download-artifact@v8
+        with:
+          name: agentic-ai-lab-semantic-native-linux
+          path: .ci/semantic
+
+      - name: Verify semantic artifact and source binding
+        run: |
+          python3 - <<'PY'
+          import hashlib, os, sys
+          sys.path.insert(0, "packages/python-runtime/src/agentic_ai_lab_runtime")
+          from scheme_wire import loads
+          from pathlib import Path
+          library = Path(os.environ['AGENTIC_AI_LAB_SEMANTIC_LIBRARY'])
+          manifest = loads(Path(str(library) + '.ss').read_text())
+          assert hashlib.sha256(library.read_bytes()).hexdigest() == manifest['artifactSha256']
+          assert hashlib.sha256(Path('modules/workflow/runtime/semantic.ss').read_bytes()).hexdigest() == manifest['sourceSha256']
+          assert hashlib.sha256(Path('bindings/runtime-c/src/semantic_host.c').read_bytes()).hexdigest() == manifest['hostSha256']
+          assert hashlib.sha256(Path('bindings/runtime-c/include/agentic_ai_lab/semantic.h').read_bytes()).hexdigest() == manifest['headerSha256']
+          PY
 
       - name: Verify producer handoffs
         id: producer-handoffs
@@ -59,7 +87,7 @@ jobs:
           projection_receipt="$PROJECTION_HANDOFF_DIR/producer-receipt.json"
           runtime_receipt="$GITHUB_WORKSPACE/.ci/runtime-c/producer-receipt.json"
           runtime_acceptance="$GITHUB_WORKSPACE/.ci/runtime-c/acceptance-receipt.json"
-          runtime_library="$POO_FLOW_RUNTIME_V0_LIBRARY"
+          runtime_library="$AGENTIC_AI_LAB_RUNTIME_V0_LIBRARY"
           consumer_receipt="$GITHUB_WORKSPACE/.ci/python-wheel-consumer-receipt.json"
 
           test -s "$PROJECTION_ARTIFACT"
@@ -69,7 +97,7 @@ jobs:
           test -s "$runtime_acceptance"
 
           jq -e --arg head "$GITHUB_SHA" '
-            .schema == "poo-flow.ci.scheme-projection-handoff.v1" and
+            .schema == "agentic-ai-lab.ci.scheme-projection-handoff.v1" and
             .producerJob == "native-linux" and
             .compileOwner == "//:compile" and
             .currentHeadSha == $head and
@@ -81,7 +109,7 @@ jobs:
           test "$projection_digest" = "$(jq -r '.artifactDigest' "$projection_receipt")"
 
           jq -e --arg head "$GITHUB_SHA" '
-            .schema == "poo-flow.ci.runtime-c-handoff.v1" and
+            .schema == "agentic-ai-lab.ci.runtime-c-handoff.v1" and
             .producerJob == "native-linux" and
             .producerTarget == "//bindings/runtime-c:runtime_c_shared" and
             .currentHeadSha == $head and
@@ -107,14 +135,14 @@ jobs:
           test "$acceptance_digest" = "$(jq -r '.acceptanceReceiptDigest' "$runtime_receipt")"
           test "$symbols_digest" = "$(jq -r '.exportedSymbolsDigest' "$runtime_receipt")"
 
-          package_projection_dir="packages/python-runtime/src/poo_flow_runtime/projections"
+          package_projection_dir="packages/python-runtime/src/agentic_ai_lab_runtime/projections"
           mkdir -p "$package_projection_dir"
           cp "$PROJECTION_ARTIFACT" "$package_projection_dir/"
 
           jq -n \
-            --arg schema "poo-flow.ci.python-wheel-handoff-consumer.v1" \
+            --arg schema "agentic-ai-lab.ci.python-wheel-handoff-consumer.v1" \
             --arg projectionArtifact "python-wheel-scheme-projection-producer" \
-            --arg runtimeArtifact "poo-flow-runtime-native-library" \
+            --arg runtimeArtifact "agentic-ai-lab-runtime-native-library" \
             --arg transport "github-actions-artifact" \
             --arg projectionDigest "$projection_digest" \
             --arg expectedDigest "$expected_runtime_digest" \
@@ -144,7 +172,25 @@ jobs:
         run: |
           set -euo pipefail
           uv run --project packages/python-runtime pytest \
-            packages/python-runtime/tests/unit/test_native_runtime_v0.py
+            packages/python-runtime/tests/unit/test_native_runtime_v0.py \
+            packages/python-runtime/tests/unit/test_semantic_runtime.py \
+            packages/python-runtime/tests/unit/test_semantic_observations.py \
+            packages/python-runtime/tests/unit/test_semantic_tools.py \
+            packages/python-runtime/tests/unit/test_temporal_family.py \
+            packages/python-runtime/tests/unit/test_temporal_admission.py \
+            packages/python-runtime/tests/unit/test_context_use.py \
+            packages/python-runtime/tests/unit/test_temporal_publication.py
+
+      - name: Test Python module case catalog
+        run: |
+          set -euo pipefail
+          uv run --locked --project packages/python-testing --extra runtime --group dev pytest -q \
+            packages/python-testing/tests/unit
+          uv run --locked --project packages/python-testing --extra runtime agentic-ai-lab-test-cases \
+            coverage > .ci/python-testing-coverage.tsv
+
+      - name: Qualify migrated assessment and Review native semantics
+        run: cargo test --locked --manifest-path modules/evidence-assessment/native/Cargo.toml --lib --test assessment
 
       - name: Build wheel
         run: |
@@ -155,38 +201,89 @@ jobs:
             --out-dir dist/python-runtime-wheel
           ls -l dist/python-runtime-wheel
 
+      - name: Test installed assessment against the exact ASCENT producer
+        run: |
+          set -euo pipefail
+          python -m venv "$RUNNER_TEMP/agentic-ai-lab-reasoning-smoke"
+          py="$RUNNER_TEMP/agentic-ai-lab-reasoning-smoke/bin/python"
+          producer="$(python - <<'PYTHON'
+          import tomllib
+          from pathlib import Path
+          dep = tomllib.loads(Path('modules/evidence-assessment/native/Cargo.toml').read_text())['dependencies']['gerbil-ascent']
+          assert set(('git', 'rev')).issubset(dep) and 'path' not in dep
+          print('git+' + dep['git'] + '@' + dep['rev'] + '#subdirectory=python')
+          PYTHON
+          )"
+          "$py" -m pip install dist/python-runtime-wheel/*.whl "$producer"
+          PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" "$py" -m unittest discover -s packages/python-runtime/tests/scenarios -v
+          PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" "$py" -m unittest discover -s packages/python-testing/tests/assessment -v
+
       - name: Install wheel in clean environment
         run: |
           set -euo pipefail
-          python -m venv "$RUNNER_TEMP/poo-flow-runtime-wheel-smoke"
-          "$RUNNER_TEMP/poo-flow-runtime-wheel-smoke/bin/python" -m pip install \
+          unset AGENTIC_AI_LAB_RUNTIME_V0_LIBRARY AGENTIC_AI_LAB_SEMANTIC_LIBRARY
+          python -m venv "$RUNNER_TEMP/agentic-ai-lab-runtime-wheel-smoke"
+          "$RUNNER_TEMP/agentic-ai-lab-runtime-wheel-smoke/bin/python" -m pip install \
             dist/python-runtime-wheel/*.whl
-          "$RUNNER_TEMP/poo-flow-runtime-wheel-smoke/bin/python" -m \
-            poo_flow_benchmarks --list
-          "$RUNNER_TEMP/poo-flow-runtime-wheel-smoke/bin/python" -m \
-            poo_flow_runtime.scheme_projection_artifact --help
-          "$RUNNER_TEMP/poo-flow-runtime-wheel-smoke/bin/python" -m \
-            poo_flow_runtime.benchmarks scheme-load-aot --help
-          "$RUNNER_TEMP/poo-flow-runtime-wheel-smoke/bin/python" - <<'PY'
-          from poo_flow_runtime._native.loader import probe_native_runtime
+          "$RUNNER_TEMP/agentic-ai-lab-runtime-wheel-smoke/bin/python" -m \
+            agentic_ai_lab_benchmarks --list
+          "$RUNNER_TEMP/agentic-ai-lab-runtime-wheel-smoke/bin/python" -m \
+            agentic_ai_lab_runtime.scheme_projection_artifact --help
+          "$RUNNER_TEMP/agentic-ai-lab-runtime-wheel-smoke/bin/python" -m \
+            agentic_ai_lab_runtime.benchmarks scheme-load-aot --help
+          "$RUNNER_TEMP/agentic-ai-lab-runtime-wheel-smoke/bin/python" - <<'PY'
+          from agentic_ai_lab_runtime._native.loader import probe_native_runtime
 
           health = probe_native_runtime()
           assert (health.abi_major, health.abi_minor) == (0, 1)
           print("packaged Bazel runtime-v0 negotiation: ok")
           PY
-          "$RUNNER_TEMP/poo-flow-runtime-wheel-smoke/bin/python" - <<'PY'
+          "$RUNNER_TEMP/agentic-ai-lab-runtime-wheel-smoke/bin/python" - <<'PY'
+          import shutil
+          from agentic_ai_lab_runtime import scheme_wire as wire
+          from agentic_ai_lab_runtime import (SemanticRuntime, RuntimeGraphProgram,
+              RuntimeGraphRuntime, RuntimeGraphRegistries, linear_plan)
+          from agentic_ai_lab_runtime._native.session import NativeRuntimeSession, NativeBundleDescriptor
+          assert shutil.which('gxi') is None
+          task = {'lens': {'generation': 1, 'clock': 'c', 'start': 0, 'end': 5,
+                          'asOf': 5, 'cut': 'cut', 'members': ['a', 'b'],
+                          'horizon': 8, 'closed': True},
+                  'source': {'identity': 'source', 'generation': 1, 'clock': 'c',
+                             'events': [['a', 1, 1], ['b', 2, 2]],
+                             'parents': [['a', 'b']]}, 'root': 'a'}
+          with SemanticRuntime.bundled() as runtime:
+              answer = runtime.call('temporal.solve', task)
+              assert answer['rows'] == [['a', 'b']]
+              predicted = runtime.predict_temporal_answer(task, lambda supplied: wire.dumps(
+                  {'status': 'complete', 'rows': [['a', 'b']]}))
+              assert predicted['receipt']['verdict'] == 'consistent'
+              assert runtime.observe_model_answer(task, wire.dumps(
+                  {'status': 'complete', 'rows': [['a', 'b']]}))['verdict'] == 'consistent'
+              assert runtime.observe_model_answer(task,
+                  wire.dumps({'status': 'complete', 'rows': []}))['verdict'] == 'contradicted'
+              with NativeRuntimeSession(NativeBundleDescriptor(bytes(32), 1, b'bundle')) as session:
+                  program = RuntimeGraphProgram(plan=linear_plan('act'),
+                      runtime=RuntimeGraphRuntime.native(session, semantic_context=runtime),
+                      registries=RuntimeGraphRegistries(actions={
+                          'act': lambda state: {'answer': state['value'] + 1}}))
+                  execution = program.invoke_with_trace({'value': 41})
+                  assert execution.state['answer'] == 42
+                  assert execution.validation.kind == 'scheme-graph-admission'
+          print('packaged no-Gerbil semantic solve and final gate: ok')
+          PY
+          "$RUNNER_TEMP/agentic-ai-lab-runtime-wheel-smoke/bin/python" - <<'PY'
           import shutil
           from importlib.resources import as_file, files
           from pathlib import Path
 
-          from poo_flow_runtime._scheme_load import load_projection_rows
+          from agentic_ai_lab_runtime._scheme_load import load_projection_rows
 
           for name in ("gxi", "gxc", "gxpkg"):
               assert shutil.which(name) is None, (name, shutil.which(name))
 
-          resource = files("poo_flow_runtime").joinpath("projections/wheel_smoke.ss")
-          artifact_resource = files("poo_flow_runtime").joinpath(
-              "projections/wheel_smoke.ss.poo-flow-projection.sexp"
+          resource = files("agentic_ai_lab_runtime").joinpath("projections/wheel_smoke.ss")
+          artifact_resource = files("agentic_ai_lab_runtime").joinpath(
+              "projections/wheel_smoke.ss.agentic-ai-lab-projection.sexp"
           )
           assert resource.is_file()
           assert artifact_resource.is_file()
@@ -201,7 +298,7 @@ jobs:
           plan = {}
           for row in rows["plan"]:
               plan[str(row[0])] = row[1] if len(row) == 2 else tuple(row[1:])
-          assert rows["schema"] == "poo-flow.funflow-plan-projection.v1"
+          assert rows["schema"] == "yuanxu.funflow-plan-projection.v1"
           assert rows["origin"] == "user-composition-funflow"
           assert plan["name"] == "wheel-smoke"
           print("packaged no-gerbil artifact load: ok")
@@ -210,6 +307,6 @@ jobs:
       - name: Upload wheel artifact
         uses: actions/upload-artifact@v7
         with:
-          name: poo-flow-runtime-wheel
+          name: agentic-ai-lab-runtime-wheel
           path: dist/python-runtime-wheel/*.whl
           if-no-files-found: error

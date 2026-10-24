@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Physical Temporal evidence retention
+
+Raw execution logs are local or CI artifacts and are not stored in Git.
+The historical structured summaries preserve outcomes and source identities.
+A new source or dependency cut requires a fresh executable gate; an old hash
+or passing line cannot establish current runtime behavior.

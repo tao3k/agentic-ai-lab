@@ -9,20 +9,20 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every delete-duplicates/hash)
-        (only-in :poo-flow/modules/temporal-causality/evidence/types
-                 poo-flow-evidence-retrieval? poo-flow-evidence-use?
-                 poo-flow-evidence-assessment?
-                 poo-flow-evidence-dependency? poo-flow-evidence-lineage?)
-        (only-in :poo-flow/modules/temporal-causality/evidence/objects
-                 poo-flow-evidence-retrieval-value poo-flow-evidence-use-value
-                 poo-flow-evidence-assessment-value
-                 poo-flow-evidence-dependency-value poo-flow-evidence-lineage-value
-                 poo-flow-evidence-use-audit-value
-                 poo-flow-evidence-impact-frontier-value))
-(export poo-flow-evidence-retrieval poo-flow-evidence-use
-        poo-flow-evidence-assessment
-        poo-flow-evidence-dependency poo-flow-evidence-lineage
-        poo-flow-evidence-use-audit poo-flow-evidence-impact-frontier)
+        (only-in :agentic-ai-lab/modules/temporal-causality/evidence/types
+                 agentic-ai-lab-evidence-retrieval? agentic-ai-lab-evidence-use?
+                 agentic-ai-lab-evidence-assessment?
+                 agentic-ai-lab-evidence-dependency? agentic-ai-lab-evidence-lineage?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/evidence/objects
+                 agentic-ai-lab-evidence-retrieval-value agentic-ai-lab-evidence-use-value
+                 agentic-ai-lab-evidence-assessment-value
+                 agentic-ai-lab-evidence-dependency-value agentic-ai-lab-evidence-lineage-value
+                 agentic-ai-lab-evidence-use-audit-value
+                 agentic-ai-lab-evidence-impact-frontier-value))
+(export agentic-ai-lab-evidence-retrieval agentic-ai-lab-evidence-use
+        agentic-ai-lab-evidence-assessment
+        agentic-ai-lab-evidence-dependency agentic-ai-lab-evidence-lineage
+        agentic-ai-lab-evidence-use-audit agentic-ai-lab-evidence-impact-frontier)
 
 (def (text? value) (and (string? value) (> (string-length value) 0)))
 (def (texts? value) (and (list? value) (every text? value)))
@@ -38,53 +38,53 @@
   (list-sort (lambda (a b) (string<? (.ref a 'identity) (.ref b 'identity)))
              items))
 
-(def (poo-flow-evidence-retrieval id query evidence source)
+(def (agentic-ai-lab-evidence-retrieval id query evidence source)
   (unless (every text? (list id query evidence source))
     (error "invalid evidence retrieval"))
-  (poo-flow-evidence-retrieval-value
+  (agentic-ai-lab-evidence-retrieval-value
    id (digest (list 'poo-flow.evidence-retrieval.v1 id query evidence source))
    query evidence source))
 
-(def (poo-flow-evidence-use id evidence claim source claim-digest)
+(def (agentic-ai-lab-evidence-use id evidence claim source claim-digest)
   (unless (every text? (list id evidence claim source claim-digest))
     (error "invalid evidence use"))
-  (poo-flow-evidence-use-value
+  (agentic-ai-lab-evidence-use-value
    id (digest (list 'poo-flow.evidence-use.v1 id evidence claim source
                     claim-digest))
    evidence claim source claim-digest))
 
-(def (poo-flow-evidence-assessment id use assessor method verdict basis)
-  (unless (and (text? id) (poo-flow-evidence-use? use)
+(def (agentic-ai-lab-evidence-assessment id use assessor method verdict basis)
+  (unless (and (text? id) (agentic-ai-lab-evidence-use? use)
                (every text? (list assessor method basis))
                (memq verdict '(supports refutes uncertain)))
     (error "invalid evidence assessment"))
-  (let (replayed (poo-flow-evidence-use
+  (let (replayed (agentic-ai-lab-evidence-use
                  (.ref use 'identity) (.ref use 'evidence-identity)
                  (.ref use 'claim-identity) (.ref use 'source-digest)
                  (.ref use 'claim-digest)))
     (unless (equal? (.ref use 'semantic-digest)
                     (.ref replayed 'semantic-digest))
       (error "evidence assessment use digest mismatch"))
-    (poo-flow-evidence-assessment-value
+    (agentic-ai-lab-evidence-assessment-value
      id (digest (list 'poo-flow.evidence-assessment.v1 id
                       (.ref use 'identity) (.ref use 'semantic-digest)
                       assessor method verdict basis))
      (.ref use 'identity) (.ref use 'semantic-digest)
      assessor method verdict basis)))
 
-(def (poo-flow-evidence-dependency id source dependent)
+(def (agentic-ai-lab-evidence-dependency id source dependent)
   (unless (and (every text? (list id source dependent))
                (not (equal? source dependent)))
     (error "invalid evidence dependency"))
-  (poo-flow-evidence-dependency-value
+  (agentic-ai-lab-evidence-dependency-value
    id (digest (list 'poo-flow.evidence-dependency.v1 id source dependent))
    source dependent))
 
 (def (replay-retrieval item)
-  (unless (poo-flow-evidence-retrieval? item)
+  (unless (agentic-ai-lab-evidence-retrieval? item)
     (error "invalid evidence retrieval object"))
   (let (replayed
-        (poo-flow-evidence-retrieval
+        (agentic-ai-lab-evidence-retrieval
          (.ref item 'identity) (.ref item 'query-identity)
          (.ref item 'evidence-identity) (.ref item 'source-digest)))
     (unless (equal? (.ref item 'semantic-digest)
@@ -92,10 +92,10 @@
       (error "evidence retrieval digest mismatch"))
     replayed))
 (def (replay-use item)
-  (unless (poo-flow-evidence-use? item)
+  (unless (agentic-ai-lab-evidence-use? item)
     (error "invalid evidence use object"))
   (let (replayed
-        (poo-flow-evidence-use
+        (agentic-ai-lab-evidence-use
          (.ref item 'identity) (.ref item 'evidence-identity)
          (.ref item 'claim-identity) (.ref item 'source-digest)
          (.ref item 'claim-digest)))
@@ -104,7 +104,7 @@
       (error "evidence use digest mismatch"))
     replayed))
 (def (replay-assessment item use-by-id)
-  (unless (poo-flow-evidence-assessment? item)
+  (unless (agentic-ai-lab-evidence-assessment? item)
     (error "invalid evidence assessment object"))
   (let (use (hash-get use-by-id (.ref item 'use-identity)))
     (unless (and use
@@ -112,7 +112,7 @@
                          (.ref item 'use-digest)))
       (error "evidence assessment names an absent or revised use"))
     (let (replayed
-          (poo-flow-evidence-assessment
+          (agentic-ai-lab-evidence-assessment
            (.ref item 'identity) use (.ref item 'assessor-identity)
            (.ref item 'method-identity) (.ref item 'verdict)
            (.ref item 'basis-digest)))
@@ -121,10 +121,10 @@
         (error "evidence assessment digest mismatch"))
       replayed)))
 (def (replay-dependency item)
-  (unless (poo-flow-evidence-dependency? item)
+  (unless (agentic-ai-lab-evidence-dependency? item)
     (error "invalid evidence dependency object"))
   (let (replayed
-        (poo-flow-evidence-dependency
+        (agentic-ai-lab-evidence-dependency
          (.ref item 'identity) (.ref item 'source-claim-identity)
          (.ref item 'dependent-claim-identity)))
     (unless (equal? (.ref item 'semantic-digest)
@@ -132,7 +132,7 @@
       (error "evidence dependency digest mismatch"))
     replayed))
 
-(def (poo-flow-evidence-lineage id retrievals uses assessments dependencies)
+(def (agentic-ai-lab-evidence-lineage id retrievals uses assessments dependencies)
   (unless (and (text? id) (list? retrievals) (list? uses)
                (list? assessments) (list? dependencies))
     (error "invalid evidence lineage input"))
@@ -171,7 +171,7 @@
              (error "one claim identity has conflicting claim digests"))
            (hash-put! claim-by-id claim claim-digest)))
        uses)
-      (poo-flow-evidence-lineage-value
+      (agentic-ai-lab-evidence-lineage-value
        id (digest (list 'poo-flow.evidence-lineage.v2 id
                         (map (lambda (item) (.ref item 'semantic-digest)) retrievals)
                         (map (lambda (item) (.ref item 'semantic-digest)) uses)
@@ -182,10 +182,10 @@
        retrievals uses assessments dependencies))))
 
 (def (replay-lineage lineage)
-  (unless (poo-flow-evidence-lineage? lineage)
+  (unless (agentic-ai-lab-evidence-lineage? lineage)
     (error "invalid evidence lineage object"))
   (let (replayed
-        (poo-flow-evidence-lineage
+        (agentic-ai-lab-evidence-lineage
          (.ref lineage 'identity) (.ref lineage 'retrievals)
          (.ref lineage 'uses) (.ref lineage 'assessments)
          (.ref lineage 'dependencies)))
@@ -202,7 +202,7 @@
         ((member 'refutes verdicts) 'refuted)
         (else 'supported)))
 
-(def (poo-flow-evidence-use-audit id lineage)
+(def (agentic-ai-lab-evidence-use-audit id lineage)
   (unless (text? id) (error "invalid evidence use audit identity"))
   (let* ((lineage (replay-lineage lineage))
          (retrieved (delete-duplicates/hash
@@ -247,12 +247,12 @@
                         (.ref lineage 'semantic-digest)
                         unused unretrieved unreviewed supported refuted
                         uncertain contested status))))
-    (poo-flow-evidence-use-audit-value
+    (agentic-ai-lab-evidence-use-audit-value
      id semantic (.ref lineage 'semantic-digest)
      unused unretrieved unreviewed supported refuted uncertain contested
      status)))
 
-(def (poo-flow-evidence-impact-frontier id lineage seed-evidence)
+(def (agentic-ai-lab-evidence-impact-frontier id lineage seed-evidence)
   (unless (and (text? id) (texts? seed-evidence) (pair? seed-evidence)
                (unique? seed-evidence))
     (error "invalid evidence impact seed"))
@@ -298,5 +298,5 @@
            (semantic
             (digest (list 'poo-flow.evidence-impact-frontier.v1 id
                           (.ref lineage 'semantic-digest) seeds claims))))
-      (poo-flow-evidence-impact-frontier-value
+      (agentic-ai-lab-evidence-impact-frontier-value
        id semantic (.ref lineage 'semantic-digest) seeds claims))))

@@ -10,9 +10,9 @@
 ;;; Native nono dynamic-library selection and live-test receipts.
 ;;; - Keep FFI handles isolated while the Scheme layer reports bounded sandbox receipts.
 (import :gerbil/core
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/nono-sandbox/c-binding-runtime
-        :poo-flow/src/user-interface/module-selection
+        :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
+        :yuanxu/module-system/selection/objects
         (only-in ./_nono
                  nono_native_apply_null
                  nono_native_capability_roundtrip
@@ -38,11 +38,11 @@
 
 ;; : Symbol
 (def +nono-c-binding-native-live-test-receipt-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.native-live-test.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.native-live-test.v1)
 
 ;; : Symbol
 (def +nono-c-binding-selection-live-test-receipt-schema+
-  'poo-flow.sandbox.nono-sandbox.c-binding.selection-live-test.v1)
+  'agentic-ai-lab.sandbox.nono-sandbox.c-binding.selection-live-test.v1)
 
 ;; : Integer
 (def +nono-c-binding-native-apply-null-error-code+ -12)
@@ -118,12 +118,12 @@
 ;;; responsibilities centralized for callers.
 ;; : (-> PooUserModuleSelection Symbol)
 (def (nono-c-binding-selection-binding selection)
-  (let (entry (poo-flow-user-module-selection-flag-entry selection ':binding))
+  (let (entry (yuanxu-user-module-selection-flag-entry selection ':binding))
     (cond
      ((and entry (pair? entry)) (cdr entry))
-     ((poo-flow-user-module-selection-has-flag? selection '+native-ffi)
+     ((yuanxu-user-module-selection-has-flag? selection '+native-ffi)
       'native-ffi)
-     ((poo-flow-user-module-selection-has-flag? selection '+cli)
+     ((yuanxu-user-module-selection-has-flag? selection '+cli)
       'cli)
      (else 'native-ffi))))
 
@@ -132,9 +132,9 @@
   (list (cons 'binding-source 'use-module)
         (cons 'selection-binding binding)
         (cons 'selection-key
-              (poo-flow-user-module-selection-key selection))
+              (yuanxu-user-module-selection-key selection))
         (cons 'selection-flags
-              (poo-flow-user-module-selection-flags selection))))
+              (yuanxu-user-module-selection-flags selection))))
 
 ;; : (-> PooUserModuleSelection Symbol RuntimeManifest Alist)
 (def (nono-c-binding-selection-unsupported-receipt selection

@@ -6,7 +6,7 @@
 ;;; Boundary: durable recovery scenario projection performance gate.
 ;;; Invariant: crash/replay/repair receipts stay bounded and report-only.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,11 +15,11 @@
                  benchmark-receipt-pass?
                  benchmark-run/result)
         "../support/performance"
-        :poo-flow/modules/memory-core/durable/policy
-        :poo-flow/modules/memory-core/durable/store
-        :poo-flow/modules/memory-core/durable/recovery-scenario
-        :poo-flow/modules/session/transform
-        :poo-flow/modules/memory-core/objects)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-scenario
+        :agentic-ai-lab/modules/session/transform
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects)
 
 (export durable-recovery-scenario-performance-test)
 
@@ -38,7 +38,7 @@
 
 ;; : (-> Alist Void)
 (def (durable-recovery-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] durable-recovery-scenario ")
+  (display "[agentic-ai-lab-benchmark] durable-recovery-scenario ")
   (write receipt)
   (newline)
   (force-output))
@@ -50,8 +50,8 @@
 
 ;; : (-> PooDurableRuntimeStoreContractReceipt)
 (def (durable-recovery-performance-runtime-store)
-  (poo-flow-durable-runtime-store-contract->receipt
-   poo-flow-durable-runtime-store-contract/default
+  (agentic-ai-lab-durable-runtime-store-contract->receipt
+   agentic-ai-lab-durable-runtime-store-contract/default
    '((project-id . project/performance)
      (root-session-id . session/root)
      (session-id . session/recovery))))
@@ -59,29 +59,29 @@
 ;; : (-> [Alist])
 (def (durable-recovery-performance-memory-job-rows)
   (let* ((intent
-          (poo-flow-session-memory-intent
+          (agentic-ai-lab-session-memory-intent
            'memory/performance-recovery
            'memory/durable-project
            'project
            '("last-40-turns")
            'review-only))
          (job
-          (poo-flow-memory-recall-job-receipt
+          (agentic-ai-lab-memory-recall-job-receipt
            'memory-job/performance-recovery
            'project/performance
            'session/root
            'session/recovery
            'agent/audit
-           poo-flow-memory-core-default-catalog
+           agentic-ai-lab-ai-agentic-context-memory-default-catalog
            intent
-           (list (cons 'durable-policy poo-flow-durable-policy/default)
+           (list (cons 'durable-policy agentic-ai-lab-durable-policy/default)
                  (cons 'source-watermark 'turn/40)
                  (cons 'target-watermark 'memory/index/40)))))
-    (poo-flow-memory-durable-job-receipts->alists (list job))))
+    (agentic-ai-lab-memory-durable-job-receipts->alists (list job))))
 
 ;; : Alist
 (def durable-recovery-performance-session-graph-row
-  '((kind . poo-flow.session.agent-graph)
+  '((kind . agentic-ai-lab.session.agent-graph)
     (project-id . project/performance)
     (root-session-ref . session/root)
     (agent-ids . (agent/build agent/audit))
@@ -90,7 +90,7 @@
 
 ;; : [Alist]
 (def durable-recovery-performance-communication-rows
-  '(((kind . poo-flow.session.communication-receipt)
+  '(((kind . agentic-ai-lab.session.communication-receipt)
      (project-id . project/performance)
      (source-session-id . session/build)
      (target-session-id . session/recovery)
@@ -101,7 +101,7 @@
 ;; : (-> Integer Alist)
 (def (durable-recovery-performance-workflow-task-row index)
   (list
-   (cons 'kind 'poo-flow.workflow.cicd.check-receipt)
+   (cons 'kind 'agentic-ai-lab.workflow.cicd.check-receipt)
    (cons 'check (durable-recovery-performance-symbol "check" index))
    (cons 'durable-task-id
          (durable-recovery-performance-symbol "workflow/task" index))
@@ -115,8 +115,8 @@
 
 ;; : (-> PooDurableRuntimeStoreContractReceipt [Alist] Integer Alist)
 (def (durable-recovery-performance-row runtime-store memory-job-rows index)
-  (poo-flow-durable-recovery-scenario->alist
-   (poo-flow-durable-recovery-scenario
+  (agentic-ai-lab-durable-recovery-scenario->alist
+   (agentic-ai-lab-durable-recovery-scenario
     (durable-recovery-performance-symbol "recovery/perf" index)
     'project/performance
     'session/root
@@ -133,7 +133,7 @@
   (let* ((runtime-store (durable-recovery-performance-runtime-store))
          (memory-job-rows (durable-recovery-performance-memory-job-rows))
          (rows
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            count
            (lambda (index)
              (durable-recovery-performance-row
@@ -166,7 +166,7 @@
 ;; : TestSuite
 (def durable-recovery-scenario-performance-test
   (test-suite "durable recovery scenario performance"
-    (poo-flow-test-case "keeps recovery scenario batch projection inside benchmark contract"
+    (yuanxu-test-case "keeps recovery scenario batch projection inside benchmark contract"
       (let* ((scenario-count 96))
         (let-values (((receipt summary)
                       (benchmark-run/result

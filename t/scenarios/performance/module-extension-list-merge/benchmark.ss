@@ -8,7 +8,7 @@
  (regression_budget . 75ms)
  (expected_over_input_budget . 5ms)
  (sampleCount . 20)
- (targetRationale . "Pinned to the current poo-flow gxtest receipt after root-local slot append accumulation.")
+ (targetRationale . "Pinned to the current agentic-ai-lab gxtest receipt after root-local slot append accumulation.")
  (maxRssMb . 136)
  (memoryMetric . resident-set-size)
  (memoryUnit . "MB")

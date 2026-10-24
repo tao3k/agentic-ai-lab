@@ -3,9 +3,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: Store tests align Scheme declarations with Funflow CAS concepts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -16,8 +20,8 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/modules/workflow/store)
+        :yuanxu/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/store)
 
 (export store-funflow-alignment-test)
 
@@ -39,27 +43,27 @@
 ;; : TestSuite
 (def store-funflow-alignment-test
   (test-suite "store funflow alignment"
-    (poo-flow-test-case "declares Funflow-style directory store arrows"
+    (yuanxu-test-case "declares Funflow-style directory store arrows"
       (let* ((put (put-dir-flow 'put-source-dir))
              (get (get-dir-flow 'get-source-dir))
              (put-task (car (flow-steps put)))
              (get-task (car (flow-steps get))))
         (check-equal? (flow-name put) 'put-source-dir)
-        (check-equal? (flow-input-contract put) 'abs-dir)
-        (check-equal? (flow-output-contract put) 'cas-item)
+        (check-equal? (flow-input-contract put) String)
+        (check-equal? (flow-output-contract put) AdapterResult)
         (check-equal? (task-store-operation put-task) 'put)
         (check-equal? (task-store-put? put-task) #t)
         (check-equal? (store-test-payload-ref 'store-task
                                               (task-store-payload put-task))
                       'put-dir)
-        (check-equal? (flow-input-contract get) 'cas-item)
-        (check-equal? (flow-output-contract get) 'abs-dir)
+        (check-equal? (flow-input-contract get) String)
+        (check-equal? (flow-output-contract get) AdapterResult)
         (check-equal? (task-store-operation get-task) 'get)
         (check-equal? (task-store-get? get-task) #t)
         (check-equal? (store-test-payload-ref 'content-kind
                                               (task-store-payload get-task))
                       'directory)))
-    (poo-flow-test-case "projects report-only content-address evidence"
+    (yuanxu-test-case "projects report-only content-address evidence"
       (let* ((flow (put-dir-flow 'snapshot-source))
              (receipt (store-flow->content-address-receipt
                        flow
@@ -73,16 +77,16 @@
         (check-equal? (store-content-address-receipt-operation receipt)
                       'put)
         (check-equal? (store-content-address-receipt-input-contract receipt)
-                      'abs-dir)
+                      'String)
         (check-equal? (store-content-address-receipt-output-contract receipt)
-                      'cas-item)
+                      'AdapterResult)
         (check-equal? (store-content-address-receipt-address-algorithm receipt)
                       'sha256)
         (check-equal? (store-content-address-receipt-content-address receipt)
                       'hash-abc123)
         (check-equal? (store-content-address-receipt-runtime-executed receipt)
                       #f)))
-    (poo-flow-test-case "aligns Funflow external config preflight and rendering"
+    (yuanxu-test-case "aligns Funflow external config preflight and rendering"
       (let* ((arguments
               (list (make-config-argument 'literal "echo" #f)
                     (make-config-argument 'file 'ourMessage #f)
@@ -114,7 +118,7 @@
                         "Hello from file"
                         "and env"
                         ((placeholder . par3))))))
-    (poo-flow-test-case "fails before runtime work when Funflow config keys are missing"
+    (yuanxu-test-case "fails before runtime work when Funflow config keys are missing"
       (let* ((arguments
               (list (make-config-argument 'file 'ourMessage #f)
                     (make-config-argument 'env 'SECOND_GREETING #f)))
@@ -128,11 +132,11 @@
                      (cons 'config-source
                            (list (cons 'file '())
                                  (cons 'env '()))))))
-             (flow (external-flow 'config-runtime-proof
-                                  'docker-echo
-                                  '((image . "alpine:latest"))
-                                  'unit
-                                  'unit))
+             (flow (external-flow
+		    'config-runtime-proof
+		    'docker-echo
+		    '((image . "alpine:latest"))
+		    (Fun AdapterResult <- Unit)))
              (failure
               (store-test-capture-failure
                (lambda ()

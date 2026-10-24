@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 #+title: 20.02 Composable AI Security Architecture Package
-#+author: POO Flow
+#+author: Agentic AI Lab
 #+startup: overview
 
 * Status
@@ -12,7 +12,7 @@ DRAFT — architecture-semantics package boundary.
 
 This RFC defines how an AI enterprise security architecture is represented as
 POO-native composable semantics.  It does not define a universal AI security
-architecture and does not extend the public POO Flow engine API.
+architecture and does not extend the public Agentic AI Lab engine API.
 
 * Problem
 
@@ -21,12 +21,12 @@ three-layer data/model/agent models, ten-layer reference architectures,
 perceive/reason/act stages, service topologies, threat taxonomies, lifecycle
 controls, and detector feedback loops.
 
-Copying one taxonomy into POO Flow would incorrectly make the engine own a
+Copying one taxonomy into Agentic AI Lab would incorrectly make the engine own a
 particular architecture.  Treating every source as unrelated documentation
 would prevent composition, enterprise specialization, proof, and runtime
 projection.
 
-POO Flow needs a bounded architecture package semantic that:
+Agentic AI Lab needs a bounded architecture package semantic that:
 
 - preserves each architecture's identity and ownership;
 - reuses POO-native composition and profiles;
@@ -306,7 +306,7 @@ For example:
 
 - ADR Detector maps to a semantic risk-observation projection, not proof.
 - Snowflake data controls remain owned by the data platform package.
-- AWS =act= maps partially to action/effect semantics; POO Flow coordinator
+- AWS =act= maps partially to action/effect semantics; Agentic AI Lab coordinator
   admission is a refinement, not an asserted equivalence.
 - OWASP risks generate counterexample classifications, not capabilities.
 - NIST identity semantics refine principal/delegation obligations.
@@ -373,7 +373,7 @@ not justify a monolithic new proof owner.
 The first admitted implementation is an isolated Lean model:
 
 - owner:
-  =PooFlowProof.Enterprise.AISecurityArchitectureCompositionClosure=;
+  =AgenticAILabProof.Enterprise.AISecurityArchitectureCompositionClosure=;
 - engine impact: none;
 - public API impact: none;
 - Scheme runtime impact: none;
@@ -396,10 +396,10 @@ The parser-owned recovery path remains blocked before an owner-side source
 projection can be trusted. Owner-workspace health confirms that the installed
 binary receipt is current at digest
 =664942dfd309d1ff34c6c76ea0a86daf5f46d4241de890ba26a25c685b11df6b=,
-and =asp hook doctor= confirms that the =poo-flow= hook contract and binary
+and =asp hook doctor= confirms that the =agentic-ai-lab= hook contract and binary
 fingerprint match. The remaining failure is resident-control state:
 =asp healthcheck= reports a global transport-contract mismatch, and after the
-old global daemon and unreachable =poo-flow= resident were terminated with
+old global daemon and unreachable =agentic-ai-lab= resident were terminated with
 =TERM=, a new workspace resident was started but exact query still reported
 that its elected-owner endpoint was not reachable. Until the resident
 control-plane owner reconciles this endpoint state, this package must not infer
@@ -471,14 +471,14 @@ increase, or duplicate local evidence predicate is admitted.
 
 - Standardize the industry on one architecture.
 - Reproduce every vendor product object.
-- Make POO Flow own enterprise data or model platforms.
+- Make Agentic AI Lab own enterprise data or model platforms.
 - Replace NIST, OWASP, CSA, SOC, DLP, IAM, or model evaluation systems.
 - Prove general maliciousness or model alignment.
 - Treat source edits, an RFC, or isolated Lean compilation as runtime closure.
 
 * Acceptance criteria
 
-- [X] POO Flow remains the general composition engine.
+- [X] Agentic AI Lab remains the general composition engine.
 - [X] Architecture packages are POO-native values, not a new DSL.
 - [X] Existing =identity/imports/capabilities/profiles= slots are sufficient.
 - [X] Cross-architecture equivalence requires evidence.

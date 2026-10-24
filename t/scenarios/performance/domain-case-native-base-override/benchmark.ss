@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ((benchmarkKind . scenario-ab)
- (schema . poo-flow.domain-case-native-base-override.v1)
+ (schema . agentic-ai-lab.domain-case-native-base-override.v1)
  (sourcePath . "t/scenarios/performance/domain-case-native-base-override/scenario.ss")
  (feature . domain-case-instance-composition)
  (baseline . "native Gerbil POO three-parent .mix")

@@ -35,7 +35,7 @@ python3 t/scenarios/performance/poo-dynamic-slot-binding-leak/matrix.py --run
 
 This downstream scenario is the first proof lane. A failure here does not by
 itself prove an upstream defect. Upstream changes are allowed only after the
-matrix shows the leak is independent of POO Flow scenario code and cannot be
+matrix shows the leak is independent of Agentic AI Lab scenario code and cannot be
 repaired by a valid downstream POO style change.
 
 * Test Policy

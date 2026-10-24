@@ -12,7 +12,7 @@
         "funflow-cicd"
         "poo-introspection")
 
-(export poo-flow-custom-my-module-cicd-module
+(export agentic-ai-lab-custom-my-module-cicd-module
         (import: "cicd")
         (import: "funflow-cicd")
         (import: "poo-introspection"))

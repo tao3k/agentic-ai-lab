@@ -1,0 +1,205 @@
+#+title: Trajectory, Evidence DAG and Native Reasoning Reuse
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+* Why ASCENT needs both structures
+
+Evidence DAG answers which source facts and completed derivations support a
+result, and which dependencies must be recomputed or invalidated. Trajectory
+answers what happened over time: which actual model calls occurred, which
+native evidence was exposed, which independent checks failed, which repair
+followed, and how much work preceded the first verified correct answer.
+
+ASCENT already evaluates finite relational programs and retains materialized
+components. A graph alone cannot tell whether a model recomputed a known
+closure, whether a failed attempt consumed tokens, or whether apparent savings
+came from a later replay. The native trajectory ledger connects those temporal
+observations to source identities, native path/result references and component
+fingerprints. It gives the reasoning engine an executable protocol for reuse
+measurement and failure diagnosis; it does not change model weights.
+
+* Implementation and protocol
+
+=program/trajectory.ss= owns the state and transitions. =trajectory= is a
+public engine operation with =open=, =append=, =snapshot= and =close= actions.
+Python's =Trajectory= transports observations. =EvidenceChain= accepts an
+optional trajectory and records actual native evidence, result-reference use
+and successful source replacements. SCC discovery, query admission, evidence
+evaluation and ledger accounting remain in Scheme.
+
+| Event | Native effect |
+|-------+---------------|
+| model-call | Charge one actual request and its reported input/output/thinking usage; associate a repair with an earlier failed verdict |
+| verification | Record an independent grader identity, Boolean verdict and task/subgoal scope; only task success freezes the first-correct prefix |
+| evidence | Retain a current-generation native path/result reference and fresh/reused component descriptors |
+| direct-answer | Require a previously observed, non-invalidated result reference; count a concrete evidence-path retrieval |
+| invalidate | Start a new generation/cost epoch and revoke current references and repair links while retaining historical observations |
+
+The ledger enforces unique event IDs, nondecreasing rounds, nonnegative known
+usage, valid failure links, source-bound observations, a 64-owner capacity and
+4,096-event capacity. Append validates a fresh state copy before publishing it;
+a rejected event cannot partially charge usage. Close returns the full history
+and releases the native owner. An unverified closed epoch is censored.
+
+Unknown usage is explicitly marked incomplete. Observed zero tokens are not
+substituted for missing provider data. =outputTokens= includes thinking where
+the provider reports it that way; thinking is not added a second time to total
+model tokens. =throughFirstCorrect= freezes all preceding calls and repairs.
+Later work appears in =postSuccess=. Invalidation creates a separate epoch
+rather than rewriting historical first-correct observations.
+
+=scope="subgoal"= records a query obligation without admitting the whole task.
+A successful subgoal clears the Python adapter's automatic repair link but
+does not freeze =throughFirstCorrect=. The default =scope="task"= admits a
+complete independently graded task. Unknown scopes are rejected atomically.
+This distinction lets a failed first query be repaired and followed by a new
+query while keeping all calls in the complete task's first-success prefix.
+
+=EvidenceChain.intermediates(reference, names)= projects only selected
+completed native components. It binds the packet to the current source,
+result/path reference and native component fingerprints, and refuses requested
+answer relations, unknown components, duplicates and stale references. It
+does not recompute closure in Python. This is the runtime delivery feature;
+sharing one observed initial call between paired policies is an experimental
+control, not a claimed runtime optimization.
+
+The host supplies provider usage and independently computed grader verdicts.
+Those observations are trust premises, not facts inferred from model prose.
+The ledger checks reference lifecycle and accounting; it does not itself prove
+that the host's provider or grader is honest. Only the host exposes verified
+native feedback to the model. No trajectory-writing tool is offered to it.
+
+* Quint: transition design and counterexamples
+
+=packages/proofs/quint/Trajectory.qnt= models source generations, evidence
+reference lifetime, known/unknown usage, failures, repairs, first-success
+freezing and rejected-event atomicity. It is registered in the existing model
+checker entry point. This local qualification uses the Quint TypeScript
+simulator with seed 13, 10,000 sampled traces and up to 30 steps per trace.
+It is bounded simulation, not exhaustive TLC exploration.
+
+| Deliberately weakened variant | Invariant violated | Native regression |
+|------------------------------+--------------------+-------------------|
+| drift | Later calls overwrite first-success cost | 80 + 30 prefix remains 110 after a further 50 |
+| stale | Source replacement retains old reference | Old reference rejected after replacement |
+| reject | Rejected observation changes cost | Bad usage/duplicate/failure link leaves totals unchanged |
+| unknown | Missing usage is treated as known zero | Missing provider usage remains incomplete and censored |
+| premature | Subgoal success admits the entire task | All subsequent obligations still belong to the first-success cost prefix |
+
+The healthy model passes; all five variants yield counterexamples. Those
+counterexamples motivate protocol controls and corresponding native cases;
+they are not claims that five bugs exist in the current Scheme implementation.
+The model abstracts token counts and generations. Arbitrary rules, source
+truth, provider billing, hash collision resistance and runtime/compiler
+refinement are outside this model.
+
+* Lean: why a trajectory is part of the formal design
+
+=packages/proofs/lean/Trajectory.lean= defines the ordered observation ledger
+and proves that calls after first success cannot replace that prefix, preceding
+failed and repair calls are included, source invalidation clears the reference
+and starts a new cost epoch, current-generation evidence is reusable, and
+missing usage stays unknown. The file is registered as a normal Lake root and
+compiles with the pinned Lean toolchain.
+
+The statements concern transitions under explicit provider/grader premises.
+They do not establish arbitrary model correctness or a universal refinement
+of Scheme source bytes into Lean. A trajectory matters here because prefix
+cost and temporal invalidation cannot be specified using a final DAG snapshot
+alone. The native test mapping is an executable correspondence at selected
+boundaries, alongside the conditional mathematical results.
+
+* Literature and concrete use cases
+
+** DatalogBench: recursive and program-analysis reasoning
+
+[[https://arxiv.org/abs/2609.37233][DatalogBench]] evaluates text-to-Datalog tasks by execution on held-out inputs
+and uses mutation analysis to validate its oracle. Its reported residual
+semantic difficulties include recursive tasks. Our study adapts those design
+lessons: fresh finite instances, a separately implemented fixed-point oracle,
+actual Scheme execution, and mutation-sensitive intent tests. The generated
+instances are not official DatalogBench tasks or a reproduction of its scores.
+
+Concrete uses include scoped reachability, taint propagation across sanitizer
+boundaries, conjunctive dependency availability and bidirectional impact
+analysis. Each has a finite executable meaning. Trajectory records failed
+candidate answers and repairs; Evidence DAG supplies reusable closure
+components and checks current source applicability.
+
+** Reflexion: failure feedback and subsequent repair
+
+[[https://arxiv.org/abs/2303.11366][Reflexion]] uses feedback and verbal reflection across trials. This motivates
+recording a failed attempt and the subsequent repair as separate observations,
+and retaining their costs. The reflection-only condition receives scalar
+independent feedback. The native condition additionally receives source-bound
+Scheme evidence after a real failed attempt. Neither condition turns a model's
+self-reflection into a proof.
+
+** Agentic Plan Caching: reuse of prior computation
+
+[[https://arxiv.org/abs/2506.14852][Cost-Efficient Serving of LLM Agents via Test-Time Plan Caching]] studies
+reuse of structured planning templates across tasks. Our reusable object is an
+applicable native derivation component or checked result path. The repeat
+control therefore makes a fresh actual model call in the reflection condition
+and follows an already checked result reference in the native condition.
+Observed call avoidance on an exact repeat is reported separately from first
+correct-answer thinking and from transfer to a different query.
+
+* Qualification and experiment
+
+The [[file:../../.cache/ascent/archived-runs/docs/features/trajectory-qualification.json][local qualification receipt]] records the native library, compiled API,
+source hashes, logs and formal checks. Both actual ABI and compiled API modes
+passed three Trajectory tests and nine Evidence DAG tests each in fresh
+processes. Five direct Scheme ledger cases passed. Four experiment intent
+unit tests passed; the independent oracle and actual Scheme agreed for all
+eight fresh cases before paid calls.
+
+The live experiment retains all actual requests, provider responses, visible
+answers, grader outcomes and native trajectories. It uses four families, two
+independent generated entity/structure instances per family, up to three
+attempts per condition, and alternating condition order. Each graph has 36–48
+nodes and 109–145 edges, with recursive rules, joins and scoped exclusions.
+Provider output is not constrained by a server-side schema; explanations and
+Markdown are accepted around the final answer object.
+
+Thinking reduction can be estimated only for matched successful trajectories
+with complete usage. Failures and censored trajectories remain in the overall
+denominators. When both conditions pass on their first identical prompt, the
+native condition has not exposed any evidence yet: a token difference is
+sampling variation, not evidence of a native reasoning improvement. Exact
+repeat call avoidance, fresh-query transfer, source invalidation and correction
+are separate measurements with explicit exposure and validity boundaries.
+
+The complete English experiment report and Chinese screen summary provide
+actual counts, per-question paths, cumulative first-correct thinking, repair
+costs, repeated-call results and retained negative evidence.
+
+The [[file:../research/trajectory-study/report.org][integrated experiment report]] includes a second, predeclared transfer
+experiment: four independent two-query bundles. Both conditions retain their
+actual model history; only the evidence condition receives checked =reach=/
+=back= intermediates for the next query. Its final answer is withheld until
+the model has answered. Bundle completion requires both queries, so stage-one
+cost is included in the first-success prefix. The full frozen questions,
+visible model answers and native trajectories are linked from that report.
+
+* Whole-task correction and independent holdout
+
+The [[file:../research/correction-holdout/report.org][complete correction report]] extends the study with larger tagged-taint and
+context-sensitive balanced-path tasks, independent opaque job identifiers,
+actual failed prefixes and matched repair continuations. It charges the shared
+initial response and every failed attempt to each alternative task policy.
+Physical API expenditure counts shared prefixes once. Censored tasks retain
+their expenditure without an invented first-correct cost.
+
+The DAG establishes which completed relational components remain applicable.
+Trajectory establishes when those facts were exposed, which subgoal or whole
+task was checked, and what actual provider usage preceded acceptance. A correct
+subgoal cannot freeze a whole-task prefix. The Lean statement and Quint
+premature-admission mutation cover this distinction; actual Scheme and both
+CFFI binding modes exercise the corresponding runtime events.
+
+The [[file:../../.cache/ascent/archived-runs/docs/features/correction-qualification.json][correction qualification receipt]] binds the frozen artifact and selected local
+checks: five Trajectory/projection and nine DAG cases in each ABI/API mode,
+six direct Scheme cases, seven experiment-intent cases and the formal checks.
+The report separates native component reuse from model correctness and keeps
+recursive negative results alongside successful taint and repair observations.

@@ -1,0 +1,157 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: scoped witness execution reading: executable scoped negation on knowledge graphs
+#+STATUS: finite scope executor and same-source proposal comparison implemented; model KGQA pending
+#+DATE: 2026-10-10
+#+FILETAGS: :research:knowledge-graph:negation:llm:datalog:
+
+* Source and why it is core
+
+Dezhuang Miao et al., [[https://proceedings.mlr.press/v306/miao26e.html][LLM-MatLogic: Executable Exchange Contracts for
+Knowledge-Graph Query Answering with Scoped Negation]], ICML 2026;
+[[https://raw.githubusercontent.com/mlresearch/v306/main/assets/miao26e/miao26e.pdf][paper PDF]]. It studies an AI specifier paired with a deterministic
+graph executor on knowledge-graph tasks. The problem is central to
+ASCENT: a model can specify the wrong graph logic even when the engine
+executes that logic correctly, and a returned entity may need a
+checkable witness with exclusion scope intact.
+
+The paper's matrix executor and exchange contract are *not* Datalog
+semantics. Its result still directly informs the candidate-program,
+snapshot, query and evidence boundary in this repository.
+
+* Evidence ledger
+
+| Locator | Paper observation | Interpretation for ASCENT |
+|---------+-------------------+---------------------------|
+| §§2–3 and Appendix A | Scope-local exclusions are applied to intermediate witnesses before projection and branch merging. The executor can retain predecessor pointers for an answer. | A source-level =not= or final endpoint filter is insufficient when a question excludes only one path/branch. Preserve the needed intermediate relation and scope until negation is checked. |
+| §4.1, Appendix H | Structured CQA uses FB15k-237 and NELL995 over 14 query patterns, with generated natural-language renderings. End-to-end KGQA samples 1,000 test questions from each of CWQ and WebQSP over Freebase; all compared methods use the same retrieved subgraphs. | Both structured and natural-language paths matter. The CQA templates are synthetic even though the graphs are real; subgraph retrieval bounds the answer universe. |
+| §4.2, Table 3 | On CWQ the system reports 63.5 Hits@1 with 3.0 average LLM calls, versus MFC's 62.8 with 9.7 calls. On WebQSP it reports 76.7 with 3.0 calls versus MFC's 78.9 with 7.5 calls. | The end-to-end comparison is mixed; do not claim universal accuracy superiority or a local ASCENT benefit. |
+| §4.3, Table 5 | Keeping the executor fixed, supplying known exclusion constraints instead of model-generated ones raises average MRR from 0.199 to 0.369 over five negation patterns. | Semantic specification is a measurable bottleneck. Separate specifier, admission, execution and final-answer errors. |
+
+* Executable transfer
+
+The [[file:wikidata-scoped-exclusion.org][Wikidata scoped exclusion fixture]] already checks branch-scoped exclusion on pinned finite
+Wikidata claims. The [[file:../../features/candidate-feedback/acceptance.org][candidate feedback contract]] now adds
+=reasoning-compare-attempts=: compare submitted and gold program receipts only
+after independent same-source/content binding, completion and exact full query
+agreement. Frozen scope controls produce exact missing/extra rows under the
+same native executor, with Lean qualification premises and Quint fault controls.
+This makes gold-versus-proposal grading available without rerunning execution.
+The feedback transfer now has a shared 1,024-state finite corpus: Quint's actual
+transition evaluator exports it, Lean checks current/frozen results against a
+kernel-checked executable grader, and Scheme replays public APIs with real
+native receipts while checking the input abstraction premises. CI rejects
+regeneration or native result drift. This strengthens result correspondence;
+it does not change the model-experiment or arbitrary-source proof boundary.
+It does not supply a model proposal, certify gold intent, implement MatLogic's
+matrix schedule or reproduce its benchmark. Raw response capture, model/request
+identity, retrieval provenance and the actual model study remain open.
+
+* Code correspondence and missing boundary
+
+The [[file:../../features/scoped-witness/acceptance.org][scoped-witness application]] now makes the section 2.1 timing example
+executable: retain =(start,middle,target)=, exclude only the middle before
+projection, and preserve separate direct support. Two allowed/blocked
+alternatives to one answer exercise information lost by answer-only filtering.
+A shared 256-input corpus checks the actual Scheme Program/Session, Quint
+transition evaluator and executable Lean semantics; four named faults test
+late/global filtering, alternative loss and missing witness output. This is
+an explicit two-hop scope contract, not the full EEC or sparse-matrix schedule.
+
+The branch-scoped extension now addresses the section 2.1 Movie-A/Movie-B
+disjunction example and section 2.2's scoped exclusion requirement. Shared graph
+edges join scope-tagged endpoint selections; intermediate masks retain that
+scope in witness and answer rows before a separate union projection. The
+shared 1,024-input BranchScopedWitness corpus tests both independent masks,
+two alternative paths and each branch's direct support through Scheme, Lean
+and Quint. Lean establishes locality over arbitrary scope/vertex types; the
+native tests use caller-supplied symbolic identities and retained source updates.
+This transfer implements two-hop disjunctive composition. The subsequent
+[[file:../../features/scoped-witness/composition.org][scoped composition]] layer implements group-local OR and required-group AND
+over the same endpoint pairs, following Algorithm 1 lines 19–30. Its shared
+512-input corpus qualifies group membership, empty groups, candidate boundaries
+and published evidence; Lean relates stratified missing-group negation to the
+declarative universal/existential condition. The unified
+[[file:../../features/scoped-witness/query.org][bounded scoped query]] now compiles K-hop layers, structural masks, group
+composition and shortest-path traces as one Program. Its 1,536 complete
+requests share Scheme execution, independent Lean grading and Quint transitions.
+Pair relations do not replicate the paper's general typed evidence-space joins
+or its sparse-matrix implementation.
+
+| Paper stage | Relevant code | What the code currently establishes |
+|-------------+---------------+-------------------------------------|
+| Model's executable request | [[file:../../../candidate/program.ss][=candidate/program.ss=]] | Parses and inspects inert proposed relations, facts, rules, query and limits; checks binding safety and declared negative atoms. It does not know whether the model chose the intended graph predicate or exclusion scope. |
+| Fixed graph and program | [[file:../../../candidate/reasoning.ss][=candidate/reasoning.ss=]], [[file:../../../program/scheme-language.ss][=program/scheme-language.ss=]], [[file:../../../applications/scoped-witness.ss][scoped witness Program]] | Binds an attempt to a copied source snapshot and checked Scheme rule program. Explicit intermediate exclusion precedes projection in the two-hop application. Whole-program dependency checks and stratified negation belong to admission; no MatLogic matrix execution is implemented. |
+| Answer plus witness | [[file:../../../candidate/reasoning.ss][=candidate/reasoning.ss=]], [[file:../../../candidate/stratified-provenance.ss][=candidate/stratified-provenance.ss=]], [[file:../../../candidate/nonmembership.ss][=candidate/nonmembership.ss=]] | The direct path/cut receipt is limited to an exact two-rule graph case. Optional, budgeted stratified replay can represent grounded alternatives after finite-closure verification; ground absence is relative to a closed finite model. None certifies that Freebase or a retrieved subgraph contains every real-world fact. |
+| Graph storage and repeated queries | [[file:../../../table/storage.ss][=table/storage.ss=]], [[file:../../../table/provider.ss][=table/provider.ss=]], [[file:../../../program/session.ss][=program/session.ss=]] | Provider and Session boundaries can be tested for exact graph rows and immutable result generations. BYODS specialization is eligible only when its relation meaning matches the task; =eqrel= is not directed reachability. |
+
+* Concrete discriminator
+
+Choose one frozen Freebase-derived or similarly licensed real KG
+snapshot with known entity/relation mappings and independently
+constructed structured queries. Include (a) a positive multi-hop
+query, (b) two branches where an exclusion applies to only one branch,
+(c) a witness that disappears if negation is delayed until after
+projection, and (d) a source triple withdrawal. Keep retrieved-subgraph
+membership separate from the complete source snapshot.
+
+For each query, record the raw model proposal before feedback, the
+admitted Scheme program, full answer relation, per-answer witness,
+typed rejection/unsupported/budget status, source generation and the
+gold query's result under the same finite snapshot. Score proposal
+validity, exact answer sets, exclusion-scope fidelity, witness replay,
+and natural-language answer separately. Compare a gold structured
+request with the model-generated request under the same executor to
+measure specification loss. Repeat eligible positive paths through
+Set and =trrel= storage only after both are independently proved to
+denote the same relation on that fixture.
+
+The end-to-end model study remains proposed. Wikidata scoped exclusion and the shared scope/feedback
+corpora already implement its finite executor controls; they do not establish
+that ASCENT runs the paper's benchmark. Full KG truth, NL intent, and incomplete-subgraph
+answers remain distinct from finite Datalog closure.
+
+[[file:index.org][Agent inference index]]; [[file:2026-logic-ai-screen.org][code-anchored screen]].
+
+* Structural mask semantics and executable distinction
+
+[[file:../../features/scoped-witness/reachability-mask.org][Scoped structural reachability masks]] transfers section 3.1's explicit
+=pre(z)⊗suf(z)= formula into recursive Scheme relations and the same group
+composer. Lean and Scheme check the diamond counterexample; Quint detects
+clean-path substitution on the shared three-node cycle corpus, which is also
+graded by Lean and replayed by Scheme. These are two concrete presentations of
+the same contract distinction: structural pair exclusion and existential
+clean-path survival differ. The
+finite least-closure producer retains its own contract. The unified bounded
+request entry additionally implements K-hop production and shortest predecessor
+publication. Its revised contract bounds the *sum* of exclusion prefix and suffix
+lengths by the request K. The paper's independently bounded sides remain an
+explicit comparison control, rather than the default bounded query semantics.
+
+* Proof-guided total-hop experiment
+
+The transferable design points are scope ownership, evidence before projection,
+and a unified production/mask/composition/trace schedule. We do not infer that
+our executor has higher KGQA accuracy or throughput from its architecture.
+
+For a fixed directed graph, =Via(K,s,z,t)= means there exist exact prefix/suffix
+walks of lengths p and q with p+q≤K. =via_iff_shortest= proves this iff the
+shortest segment lengths satisfy the same sum bound. =exact_append= proves the
+segments concatenate into an actual bounded producer walk; =zero_via= rules
+out removing an identity pair through an unrelated returning cycle at K=0.
+These laws justify using existing shortest relations in the Scheme mask rule.
+
+Quint independently enumerates exact segment lengths in its expected predicate,
+while actual transitions and Scheme use shortest distances. All 1,536 request
+observations remain linked to Lean grading, scope/group tables and final traces.
+The =independentSides= mutation reinstates the paper formula and must produce a
+counterexample to the total-hop invariant. On the same census, 156 observations
+change. This establishes a reproducible semantic difference, not a superiority
+claim or replication of the paper's natural-language benchmark.
+
+Structural exclusion still rejects a pair when any *in-bound* banned walk
+exists, even if a clean alternative exists. The least-closure producer retains
+its separate unbounded structural contract. This experiment does not truncate
+the general ASCENT fixed-point engine or replace the remaining typed evidence
+join/interface/projection architecture work.

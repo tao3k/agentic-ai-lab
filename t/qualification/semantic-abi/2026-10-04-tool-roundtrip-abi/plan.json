@@ -1,0 +1,673 @@
+{
+  "schema": "poo-flow.semantic-tool-live-plan",
+  "version": 1,
+  "head": "128ead00fd64086d2138e0e051578d0d03211d49",
+  "artifactSha256": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",
+  "cases": [
+    {
+      "id": "chain",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 89,
+          "asOf": 89,
+          "cut": "tool-cut-chain",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "tool-chain",
+          "generation": 181,
+          "clock": "clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              81,
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": [
+            [
+              "x",
+              "y"
+            ],
+            [
+              "y",
+              "z"
+            ]
+          ]
+        },
+        "root": "x"
+      }
+    },
+    {
+      "id": "branch",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 89,
+          "asOf": 89,
+          "cut": "tool-cut-branch",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "tool-branch",
+          "generation": 181,
+          "clock": "clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              81,
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": [
+            [
+              "x",
+              "y"
+            ],
+            [
+              "x",
+              "z"
+            ]
+          ]
+        },
+        "root": "x"
+      }
+    },
+    {
+      "id": "withdrawal",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 89,
+          "asOf": 89,
+          "cut": "tool-cut-withdrawal",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "tool-withdrawal",
+          "generation": 181,
+          "clock": "clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              81,
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": []
+        },
+        "root": "x"
+      }
+    },
+    {
+      "id": "open-cut",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 89,
+          "asOf": 89,
+          "cut": "tool-cut-open-cut",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 8,
+          "closed": false
+        },
+        "source": {
+          "identity": "tool-open-cut",
+          "generation": 181,
+          "clock": "clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              81,
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": [
+            [
+              "x",
+              "y"
+            ],
+            [
+              "y",
+              "z"
+            ]
+          ]
+        },
+        "root": "x"
+      }
+    },
+    {
+      "id": "late-ingestion",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 89,
+          "asOf": 80,
+          "cut": "tool-cut-late-ingestion",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "tool-late-ingestion",
+          "generation": 181,
+          "clock": "clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              81,
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": [
+            [
+              "x",
+              "y"
+            ],
+            [
+              "y",
+              "z"
+            ]
+          ]
+        },
+        "root": "x"
+      }
+    },
+    {
+      "id": "interval",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 89,
+          "asOf": 89,
+          "cut": "tool-cut-interval",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "tool-interval",
+          "generation": 181,
+          "clock": "clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              [
+                "between",
+                79,
+                99
+              ],
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": [
+            [
+              "x",
+              "y"
+            ],
+            [
+              "y",
+              "z"
+            ]
+          ]
+        },
+        "root": "x"
+      }
+    },
+    {
+      "id": "zero-horizon",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 89,
+          "asOf": 89,
+          "cut": "tool-cut-zero-horizon",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 0,
+          "closed": true
+        },
+        "source": {
+          "identity": "tool-zero-horizon",
+          "generation": 181,
+          "clock": "clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              81,
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": [
+            [
+              "x",
+              "y"
+            ],
+            [
+              "y",
+              "z"
+            ]
+          ]
+        },
+        "root": "x"
+      }
+    },
+    {
+      "id": "one-horizon",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 89,
+          "asOf": 89,
+          "cut": "tool-cut-one-horizon",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 1,
+          "closed": true
+        },
+        "source": {
+          "identity": "tool-one-horizon",
+          "generation": 181,
+          "clock": "clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              81,
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": [
+            [
+              "x",
+              "y"
+            ],
+            [
+              "y",
+              "z"
+            ]
+          ]
+        },
+        "root": "x"
+      }
+    },
+    {
+      "id": "clock-mismatch",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 89,
+          "asOf": 89,
+          "cut": "tool-cut-clock-mismatch",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "tool-clock-mismatch",
+          "generation": 181,
+          "clock": "other-clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              81,
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": [
+            [
+              "x",
+              "y"
+            ],
+            [
+              "y",
+              "z"
+            ]
+          ]
+        },
+        "root": "x"
+      }
+    },
+    {
+      "id": "generation-mismatch",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 89,
+          "asOf": 89,
+          "cut": "tool-cut-generation-mismatch",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "tool-generation-mismatch",
+          "generation": 182,
+          "clock": "clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              81,
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": [
+            [
+              "x",
+              "y"
+            ],
+            [
+              "y",
+              "z"
+            ]
+          ]
+        },
+        "root": "x"
+      }
+    },
+    {
+      "id": "window-end",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 82,
+          "asOf": 89,
+          "cut": "tool-cut-window-end",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "tool-window-end",
+          "generation": 181,
+          "clock": "clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              81,
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": [
+            [
+              "x",
+              "y"
+            ],
+            [
+              "y",
+              "z"
+            ]
+          ]
+        },
+        "root": "x"
+      }
+    },
+    {
+      "id": "unknown-time",
+      "request": {
+        "lens": {
+          "generation": 181,
+          "clock": "clock",
+          "start": 79,
+          "end": 89,
+          "asOf": 89,
+          "cut": "tool-cut-unknown-time",
+          "members": [
+            "x",
+            "y",
+            "z"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "tool-unknown-time",
+          "generation": 181,
+          "clock": "clock",
+          "events": [
+            [
+              "x",
+              80,
+              80
+            ],
+            [
+              "y",
+              "unknown",
+              81
+            ],
+            [
+              "z",
+              82,
+              82
+            ]
+          ],
+          "parents": [
+            [
+              "x",
+              "y"
+            ],
+            [
+              "y",
+              "z"
+            ]
+          ]
+        },
+        "root": "x"
+      }
+    }
+  ],
+  "model": "deepseek-v4-flash",
+  "sources": {
+    "/private/tmp/poo-pr34-failure-fix/packages/python-testing/src/poo_flow_testing/model_study/semantic_tool_live.py": "3193b2a19c7114fd52f86fb0bd4f84f5c1e3f521ff7af5c67c751f6ba181a475",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-testing/src/poo_flow_testing/model_study/semantic_cases.py": "39926fac7914c576768ade21c691909afbd406c2553e80711ee2533e7f40c4c0",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-testing/src/poo_flow_testing/model_study/semantic_provider.py": "c62c404e786ad4495e95ab3a804bf82966b511aedee5baf315e17c32cf71ff75",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-testing/src/poo_flow_testing/model_study/semantic_reporting.py": "5d251a3099d71ed68b67b3e14f3207ccbad88b56322ea9fdea3a1dde9fd22468",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-testing/src/poo_flow_testing/model_study/semantic_plan.py": "4e3f20a9239c97531aad31d0e7ec8797ac3217a4be6158d73b9b74a19e9f6a24",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-runtime/src/poo_flow_runtime/semantic_runtime.py": "288997572632cba6ac2cb555f62712e6877ff51c70a3182072c65a950e4ef48a",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-runtime/src/poo_flow_runtime/semantic_tools.py": "6e24022e3ac88c06bfc48378fd3660379c688f46bddd764ed95a41c29c762219"
+  },
+  "maximumCalls": 48,
+  "retries": 0,
+  "contentIdleSeconds": 5,
+  "toolArgumentProgressKind": "response.function_call_arguments.delta",
+  "finalProgressKind": "response.output_text.delta",
+  "temperature": 0.0,
+  "tool": {
+    "type": "function",
+    "name": "poo_flow_temporal_solve",
+    "description": "Evaluate the supplied caller task through the Temporal Library.",
+    "parameters": {
+      "type": "object",
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "task": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "scope": "forced read-only tool argument fidelity, current-task binding, sync/async native execution and model consumption of actual tool output; not unaided source comprehension, autonomous tool choice or business IO"
+}

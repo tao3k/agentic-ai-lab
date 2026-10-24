@@ -1,0 +1,10 @@
+--- a/gerbil-scheme@0.19.rb
++++ b/gerbil-scheme@0.19.rb
+@@ -36,6 +36,7 @@
+         #!/bin/bash
+         export GERBIL_PREFIX="#{prefix}"
+         export GERBIL_HOME="#{prefix}/current"
++        export GERBIL_GCC="${GERBIL_GCC:-/opt/homebrew/bin/gcc-16}"
+         gerbil_runtime_options="~~=$GERBIL_HOME,~~bin=$GERBIL_HOME/bin,~~lib=$GERBIL_HOME/lib"
+         export GAMBOPT="${GAMBOPT:+$GAMBOPT,}$gerbil_runtime_options"
+         exec "$GERBIL_HOME/bin/#{command}" "$@"

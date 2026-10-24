@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime import (
     END,
     RuntimeGraphBuilder,
     RuntimeGraphToolCall,

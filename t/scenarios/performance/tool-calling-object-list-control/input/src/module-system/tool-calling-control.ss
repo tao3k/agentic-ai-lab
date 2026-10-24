@@ -9,13 +9,13 @@
 ;;; rebuilds index data at the same object boundary.  In Gerbil POO this can
 ;;; force expansion/runtime lookup onto a pathological path.
 
-(def (poo-flow-tool-call-entry key value)
-  (.o (kind 'poo-flow-tool-call-entry)
+(def (agentic-ai-lab-tool-call-entry key value)
+  (.o (kind 'agentic-ai-lab-tool-call-entry)
       (key key)
       (value value)))
 
-(def (poo-flow-tool-call-plan name entries)
-  (.o (kind 'poo-flow-tool-call-plan)
+(def (agentic-ai-lab-tool-call-plan name entries)
+  (.o (kind 'agentic-ai-lab-tool-call-plan)
       (name name)
       (entries entries)
       (index (map (lambda (entry)
@@ -23,8 +23,8 @@
                           (.ref entry 'value)))
                   entries))))
 
-(def (poo-flow-tool-call-fact-set name entries)
-  (.o (kind 'poo-flow-tool-call-fact-set)
+(def (agentic-ai-lab-tool-call-fact-set name entries)
+  (.o (kind 'agentic-ai-lab-tool-call-fact-set)
       (name name)
       (entries entries)
       (index (map (lambda (entry)

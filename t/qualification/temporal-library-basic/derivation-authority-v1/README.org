@@ -1,0 +1,55 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: Selected original MRR Derivation authority and exact Temporal leaves
+
+* Original owner data and native truth gate
+
+=typed-derivations.ss= is the exact inert Scheme v1 Rust projection. Its four
+original Facts are edge(1,2), edge(2,3), intermediate path(1,2) and root path(1,3).
+The two original Derivations retain owner Rule authority, Derivation provenance,
+generation, output content and support IDs. Root direct support is the
+intermediate path FactId plus the edge(2,3) FactId. Intermediate direct support
+is edge(1,2). Rust re-admits owner contexts and Catalog field shape, then requires
+an acyclic exact rooted graph. This is shape admission, not a Rust rule solver.
+
+The native POO adapter replays the original Scheme positive proof, its Rule
+content/node correspondence and exact source leaf/revision binding. Each
+reachable proof node requires exactly one original fact; rule nodes require
+exact original Derivation RuleIds and direct input FactId sets. The selected
+root/output/support DerivationId must agree. Missing, repeated or unused
+correspondences, source rule authority and unsupported node kinds reject.
+
+=admission.ss= records the actual selected root DerivationId/RuleId, four node
+bindings and combined digests. The ordinary support's proof label equals the
+combined admission digest. Temporal premises are the two source revisions,
+which differ from the root's two direct MRR inputs. Late source correction
+invalidates current support while the old cut stays supported.
+
+Joint replay recomputes all native evidence and checks held fields, conservative
+effect flags and the embedded ordinary support. Executed controls reject root
+rule replacement by another known RuleId, direct support replacement by source
+leaves, missing or duplicate bindings, absent derivation authority, changed node
+records, forged authorization and replaced support proof labels. Rust also
+rejects unknown rules, cyclic support, stale generation and unused graph facts.
+
+* Qualification and remaining boundaries
+
+=qualification.ss= binds exact sources and compiled native module hashes. The
+private SDK build used =just build-temporal-evaluator=; the native 1G heap-fenced
+Just gate passed 17 Cases with MODULE-OK, HARNESS-OK, final OK and exit zero
+(10.34 seconds wall). The five-second idle and 45-second total gates remained.
+
+Locked/offline Rust builds produced the current derivation/rule/support test
+binaries. They passed 2 / 2 / 3 tests, all through the same bounded actual-output
+watchdog. Support tests used the unchanged fact-binding-v1 semantic artifact;
+there was no fresh semantic AOT build. The failed native test exit 70 and raw
+log remain: its same-name support override caused recursion and was rejected
+by the existing debug memory policy. Naming was fixed without changing gates.
+
+The new joint flags qualify bounded, source-relative positive rule/derivation
+correspondence. There is one original Derivation per derived FactId; this is
+neither alternative-support completeness nor issuer authentication. No Python
+suite, real model or benchmark ran. This module does not expose proof/Host
+control ABI entries, obtain an authoritative current clock/source/catalog, or
+publish Data. Source authentication, selection, action authorization, durability
+and current remote CI qualification remain separate, unqualified gates.

@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Qualify POO Flow as a clean external Bzlmod consumer without shell logic."""
+"""Qualify Agentic AI Lab as a clean external Bzlmod consumer without shell logic."""
 
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ class ExternalModuleConfig:
             raise ExternalModuleError("Bazel command is empty")
         if self.output_base is not None and not self.output_base.is_absolute():
             raise ExternalModuleError(
-                f"POO_FLOW_EXTERNAL_BAZEL_OUTPUT_BASE must be an absolute path: {self.output_base}"
+                f"AGENTIC_AI_LAB_EXTERNAL_BAZEL_OUTPUT_BASE must be an absolute path: {self.output_base}"
             )
 
 
@@ -76,9 +76,9 @@ def _write_consumer_module(
     consumer: Path, exported: Path, include_override: bool
 ) -> None:
     module = (
-        'module(name = "poo_flow_external_consumer", version = "0.0.0")\n\n'
-        'bazel_dep(name = "poo_flow", version = "0.1.0")\n'
-        f'local_path_override(module_name = "poo_flow", path = "{exported}")\n'
+        'module(name = "agentic_ai_lab_external_consumer", version = "0.0.0")\n\n'
+        'bazel_dep(name = "agentic_ai_lab", version = "0.1.0")\n'
+        f'local_path_override(module_name = "agentic_ai_lab", path = "{exported}")\n'
     )
     if include_override:
         module += (exported / "gerbil-bazel.MODULE.bazel").read_text(encoding="utf-8")
@@ -116,15 +116,15 @@ def run_external_module(
     temporary = (
         None
         if config.keep_root
-        else tempfile.TemporaryDirectory(prefix="poo-flow-external-")
+        else tempfile.TemporaryDirectory(prefix="agentic-ai-lab-external-")
     )
     test_root = (
-        Path(tempfile.mkdtemp(prefix="poo-flow-external-"))
+        Path(tempfile.mkdtemp(prefix="agentic-ai-lab-external-"))
         if temporary is None
         else Path(temporary.name)
     )
     try:
-        exported = test_root / "poo-flow"
+        exported = test_root / "agentic-ai-lab"
         consumer = test_root / "consumer"
         bazel_tmp = test_root / "tmp"
         exported.mkdir()
@@ -133,7 +133,7 @@ def run_external_module(
         _export_tracked_tree(repo_root, exported)
         if (exported / ".gerbil").exists():
             raise ExternalModuleError(
-                "external POO Flow export unexpectedly contains .gerbil"
+                "external Agentic AI Lab export unexpectedly contains .gerbil"
             )
 
         _write_consumer_module(consumer, exported, include_override=False)
@@ -142,12 +142,12 @@ def run_external_module(
             consumer,
             bazel_tmp,
             [f"--output_user_root={test_root / 'bazel-no-root-override'}"],
-            ["query", "--lockfile_mode=off", "@poo_flow//:compile"],
+            ["query", "--lockfile_mode=off", "@agentic_ai_lab//:compile"],
             capture_output=True,
         )
         if missing_override.returncode == 0:
             raise ExternalModuleError(
-                "external POO Flow consumer unexpectedly succeeded without a root gerbil_bazel override"
+                "external Agentic AI Lab consumer unexpectedly succeeded without a root gerbil_bazel override"
             )
         print(
             "external module requires root gerbil_bazel override until the source-package API is released",
@@ -156,7 +156,7 @@ def run_external_module(
 
         _write_consumer_module(consumer, exported, include_override=True)
         (consumer / "BUILD.bazel").write_text(
-            'alias(\n    name = "poo_flow_compile",\n    actual = "@poo_flow//:compile",\n)\n',
+            'alias(\n    name = "agentic_ai_lab_compile",\n    actual = "@agentic_ai_lab//:compile",\n)\n',
             encoding="utf-8",
         )
         output_args = (
@@ -169,16 +169,16 @@ def run_external_module(
             consumer,
             bazel_tmp,
             output_args,
-            ["query", "--lockfile_mode=off", "@poo_flow//:compile"],
+            ["query", "--lockfile_mode=off", "@agentic_ai_lab//:compile"],
         )
         if query.returncode != 0:
             raise ExternalModuleError(
                 f"external Bazel query failed with status {query.returncode}"
             )
-        build_args = ["build"]
+        build_args = ["build", "--jobs=2"]
         if config.mode == "analysis":
             build_args.append("--nobuild")
-        build_args.extend(["--lockfile_mode=off", "//:poo_flow_compile"])
+        build_args.extend(["--lockfile_mode=off", "//:agentic_ai_lab_compile"])
         build = _run_bazel(config, consumer, bazel_tmp, output_args, build_args)
         if build.returncode != 0:
             raise ExternalModuleError(
@@ -186,14 +186,14 @@ def run_external_module(
             )
 
         return {
-            "schema": "poo-flow.external-bazel-module.v1",
+            "schema": "agentic-ai-lab.external-bazel-module.v1",
             "mode": config.mode,
             "ambientGerbil": False,
             "configured": True,
             "requiresRootGerbilBazelOverride": True,
             "compiled": config.mode == "full",
             "receiptOwner": "gerbil-bazel",
-            "pooFlowReceiptValidator": False,
+            "agenticAiLabReceiptValidator": False,
         }
     finally:
         if temporary is not None:
@@ -204,12 +204,12 @@ def run_external_module(
 
 def config_from_environment() -> ExternalModuleConfig:
     bazel = tuple(shlex.split(os.environ.get("BAZEL", "bazelisk")))
-    output_base_value = os.environ.get("POO_FLOW_EXTERNAL_BAZEL_OUTPUT_BASE")
+    output_base_value = os.environ.get("AGENTIC_AI_LAB_EXTERNAL_BAZEL_OUTPUT_BASE")
     return ExternalModuleConfig(
         bazel_command=bazel,
-        mode=os.environ.get("POO_FLOW_EXTERNAL_TEST_MODE", "full"),
+        mode=os.environ.get("AGENTIC_AI_LAB_EXTERNAL_TEST_MODE", "full"),
         output_base=Path(output_base_value) if output_base_value else None,
-        keep_root=os.environ.get("POO_FLOW_EXTERNAL_TEST_KEEP_ROOT") == "1",
+        keep_root=os.environ.get("AGENTIC_AI_LAB_EXTERNAL_TEST_KEEP_ROOT") == "1",
     )
 
 

@@ -1,0 +1,161 @@
+{
+  "case": "one-horizon",
+  "api": "async",
+  "index": 15,
+  "planSha256": "d9410d6712adb4ca82a650b8777002065be7546fd05b340b80bddfe3e75adde5",
+  "artifactSha256": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",
+  "passed": true,
+  "raw": "{\"status\": \"partial\", \"rows\": []}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.5205476250002903
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.5205664579998484
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.7668079170002784
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.7668368330000703
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7668467080002301
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.837983124999937
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8487951669999347
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8488155420000112
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.848825042000044
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8691354170000523
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8691517080001177
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8691613750002034
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.869169083000088
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8691767079999408
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8843183750000208
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.884365291999984
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.8843879999999444
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.8844117920002645
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.884456875000069
+    }
+  ],
+  "contentGapsSeconds": [
+    0.7668467080002301,
+    0.07113641699970685,
+    0.010812041999997746,
+    2.0375000076455763e-05,
+    9.500000032858225e-06,
+    0.020310375000008207,
+    1.6291000065393746e-05,
+    9.667000085755717e-06,
+    7.70799988458748e-06,
+    7.624999852851033e-06,
+    0.015141667000079906
+  ],
+  "responseId": "33d405d7-9a52-497a-a291-810df984a9dc",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 92562,
+    "input_tokens_details": {
+      "cached_tokens": 92416
+    },
+    "output_tokens": 11,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 92573
+  },
+  "seconds": 0.8844609580000906,
+  "deliveredObservation": {
+    "candidate": {
+      "status": "partial",
+      "rows": []
+    },
+    "receipt": {
+      "bindingDigest": "30b7dd22ee42ed45ca3eb5be399d2e80e86367e5169c939cd15ee27a9a162051",
+      "verdict": "consistent",
+      "schema": "poo-flow.semantic-observation",
+      "verification": "invalid",
+      "requestDigest": "2c75e81a6b205169762587793e2a54d81e4891f85cd317b36e3791750c368ca2",
+      "difference": false,
+      "operation": "temporal.observe",
+      "candidateValid": true
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "nativeObservationSeconds": 0.0025937919999705628,
+  "result": {
+    "candidate": {
+      "status": "partial",
+      "rows": []
+    },
+    "receipt": {
+      "bindingDigest": "30b7dd22ee42ed45ca3eb5be399d2e80e86367e5169c939cd15ee27a9a162051",
+      "verdict": "consistent",
+      "schema": "poo-flow.semantic-observation",
+      "verification": "invalid",
+      "requestDigest": "2c75e81a6b205169762587793e2a54d81e4891f85cd317b36e3791750c368ca2",
+      "difference": false,
+      "operation": "temporal.observe",
+      "candidateValid": true
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "sourceRebinding": {
+    "bindingDigest": "d3ddd1093e0aaebe34d71624657ec7690e2cc3addca175f5d9d26bd1901ad053",
+    "verdict": "consistent",
+    "schema": "poo-flow.semantic-observation",
+    "verification": "invalid",
+    "requestDigest": "ff46d47568f2f7813c172d9e31708256a3bc69be4b15e381868133a790af67d8",
+    "difference": false,
+    "operation": "temporal.observe",
+    "candidateValid": true
+  },
+  "callSeconds": 0.888706084000205
+}

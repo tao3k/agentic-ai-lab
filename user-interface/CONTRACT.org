@@ -21,17 +21,17 @@ and Scenarios remain separately importable modules; the root does not scan or
 re-export them and does not declare a stage, graph, loop, proof, handoff,
 Provider or runtime DSL.
 
-This directory models the downstream repository surface that a POO Flow user
-would maintain. It is intentionally root-level and separate from =src=. POO Flow
+This directory models the downstream repository surface that a Agentic AI Lab user
+would maintain. It is intentionally root-level and separate from =src=. Agentic AI Lab
 is the brand name. Bare =poo= remains only a Scheme/API prefix for Gerbil POO
 helpers and should not be used as the user-visible product or module group
 identity.
 
-The downstream surface follows the project invariant: POO Flow is 100% POO-native and functional-first. Users extend upstream-owned objects and functional flow constructors; they do not author a parallel alist/record DSL, expose raw merge code, or maintain direct =(lambda (self super) ...)= compute hooks as normal configuration.
+The downstream surface follows the project invariant: Agentic AI Lab is 100% POO-native and functional-first. Users extend upstream-owned objects and functional flow constructors; they do not author a parallel alist/record DSL, expose raw merge code, or maintain direct =(lambda (self super) ...)= compute hooks as normal configuration.
 
 The files here stay declarative:
 
-- =init.ss= lists optional feature patches/custom modules through =poo-flow!= category rows.
+- =init.ss= lists optional feature patches/custom modules through =yuanxu!= category rows.
 - =config.ss= uses the thin =user-composition= binding and directly composes
   maintained Profile and Standard values with explicit imports; operational
   responsibilities remain owned by those values.
@@ -46,7 +46,7 @@ The implementation stays upstream:
 - =src/user-interface/root-objects.ss= owns user-interface object contracts.
 - =src/user-interface/root-profile.ss= owns profile/config projection helpers.
 - =src/user-interface/declaration-case.ss= owns declaration case contracts for tools and tests.
-- reusable descriptor and loader mechanisms live in =core/module-system/=; POO Flow descriptors, source policy, activation, and presentation live in =src/authoring/= and =src/user-interface/=, with domain behavior in =modules/=.
+- reusable descriptor and loader mechanisms live in =core/module-system/=; Agentic AI Lab descriptors, source policy, activation, and presentation live in =src/authoring/= and =src/user-interface/=, with domain behavior in =modules/=.
 
 * Public Entry Points
 
@@ -79,7 +79,7 @@ observability data for catching lazy POO projection recursion; they must keep
 - Runtime-owned: backend execution and handler lifecycle in =marlin-agent-core=.
 
 Every downstream presentation must keep =runtime-executed = #f=. Kernel profile
-module groups and presentation fields should expose =poo-flow= as the brand
+module groups and presentation fields should expose =agentic-ai-lab= as the brand
 identity.
 
 * Doom-Style Init Shape
@@ -87,7 +87,7 @@ identity.
 =init.ss= is intentionally closer to Doom's =init.el= than to an implementation
 module:
 
-- enable required workflow, loop, and sandbox modules through =poo-flow!=;
+- enable required workflow, loop, and sandbox modules through =yuanxu!=;
 - group optional feature patches by category, such as =:workflow= and =:custom=;
 - attach user-toggleable module features with =+feature= flags;
 - keep object contracts, sandbox recipes, settings, and facade exports out of =init.ss=;

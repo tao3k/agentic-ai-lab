@@ -2,13 +2,15 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/src/proof/composition-facts)
+        :agentic-ai-lab/modules/proof/projections/composition-facts)
+
+(export composition-proof-facts-test)
 
 (def composition-proof-facts-test
   (test-suite "composition proof facts"
-    (poo-flow-test-case "projects accepted and rejected composition facts"
+    (yuanxu-test-case "projects accepted and rejected composition facts"
 
 (def (alist-ref key alist)
   (let ((entry (assq key alist)))
@@ -21,7 +23,7 @@
     (error "composition proof fact mismatch" label actual expected)))
 
 (def accepted-facts
-  (poo-flow-composition-contract->proof-facts
+  (agentic-ai-lab-composition-contract->proof-facts
    'generated-langgraph-composition-receipt
    #t
    #t
@@ -32,7 +34,7 @@
 
 (assert-equal 'schema
               (alist-ref 'schema accepted-facts)
-              'poo-flow.proof.composition.receipt)
+              'agentic-ai-lab.proof.composition.receipt)
 (assert-equal 'fact-id
               (alist-ref 'fact-id accepted-facts)
               'generated-langgraph-composition-receipt)
@@ -48,7 +50,7 @@
 (assert-equal 'ffi-ready? (alist-ref 'ffi-ready? accepted-facts) #t)
 
 (def bad-profile-refs-facts
-  (poo-flow-composition-contract->proof-facts
+  (agentic-ai-lab-composition-contract->proof-facts
    'generated-composition-bad-profile-refs
    #f
    #t
@@ -62,7 +64,7 @@
               'composition-rejected-by-profile-refs)
 
 (def bad-override-facts
-  (poo-flow-composition-contract->proof-facts
+  (agentic-ai-lab-composition-contract->proof-facts
    'generated-composition-bad-override
    #t
    #f
@@ -76,7 +78,7 @@
               'composition-rejected-by-override-scope)
 
 (def bad-module-order-facts
-  (poo-flow-composition-contract->proof-facts
+  (agentic-ai-lab-composition-contract->proof-facts
    'generated-composition-bad-module-order
    #t
    #t
@@ -90,7 +92,7 @@
               'composition-rejected-by-module-order)
 
 (def bad-scenario-gate-facts
-  (poo-flow-composition-contract->proof-facts
+  (agentic-ai-lab-composition-contract->proof-facts
    'generated-composition-bad-scenario-gate
    #t
    #t
@@ -104,7 +106,7 @@
               'composition-rejected-by-scenario-gate)
 
 (def runtime-execution-facts
-  (poo-flow-composition-contract->proof-facts
+  (agentic-ai-lab-composition-contract->proof-facts
    'generated-composition-runtime-execution
    #t
    #t

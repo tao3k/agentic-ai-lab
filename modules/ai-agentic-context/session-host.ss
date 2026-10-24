@@ -1,0 +1,211 @@
+;;; -*- Gerbil -*-
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+;;; Explicit in-process coordinator. Its serialized owner enrolls source snapshots.
+;;; Local claim publication is neither provider disclosure nor MRR/Data admission.
+(import (only-in :clan/poo/object .o .ref .slot? object? object<-alist)
+        (only-in :std/list/list every)
+        (only-in :agentic-ai-lab/modules/session/funs-attempt agentic-ai-lab-session-schedule
+                 agentic-ai-lab-session-claim agentic-ai-lab-session-recover)
+        (only-in :agentic-ai-lab/modules/temporal-causality/evaluator/proof-host agentic-ai-lab-temporal-proof-host-current)
+        "funs-scope.ss" "funs-features.ss" "funs-projection.ss" "funs-session.ss" "use-host.ss"
+        (only-in :agentic-ai-lab/modules/query/semantic/context-restriction agentic-ai-lab-context-flow-decision))
+(export agentic-ai-lab-ai-agentic-context-session-host
+        agentic-ai-lab-ai-agentic-context-session-host-enroll!
+        agentic-ai-lab-ai-agentic-context-session-host-refresh!
+        agentic-ai-lab-ai-agentic-context-session-host-current
+        agentic-ai-lab-ai-agentic-context-session-host-claim!
+        agentic-ai-lab-ai-agentic-context-session-host-observe
+        agentic-ai-lab-ai-agentic-context-session-host-require-proof!
+        agentic-ai-lab-ai-agentic-context-session-host-revalidate!)
+(defstruct session-owner-state (entries owner grants policies proofs proof-required?))
+(defstruct source-entry (generation source scope restriction profile task-revision ids
+                        projection task schedule grant-id grant-generation))
+(defstruct proof-binding (host registration state-generation policy-generation policy-digest budget source-generation digest))
+(def (text? x) (and (string? x) (< 0 (string-length x) 257)))
+(def (coordinate? x) (and (exact-integer? x) (<= 0 x 65535)))
+(def (agentic-ai-lab-ai-agentic-context-session-host grants policies proof-required-value)
+  (unless (boolean? proof-required-value) (error "Context proof requirement must be explicit"))
+  (let (runtime-value (make-session-owner-state (make-hash-table test: equal?)
+                         (current-thread) grants policies (make-hash-table test: equal?) proof-required-value))
+    (.o kind: 'agentic-ai-lab.ai-agentic-context.session-host.v1 private-runtime-state: runtime-value)))
+(def (state host)
+  (unless (and (object? host) (.slot? host 'kind)
+               (eq? (.ref host 'kind) 'agentic-ai-lab.ai-agentic-context.session-host.v1)
+               (.slot? host 'private-runtime-state)
+               (session-owner-state? (.ref host 'private-runtime-state))) (error "Invalid Context Session Host"))
+  (let (runtime-value (.ref host 'private-runtime-state))
+    (unless (eq? (session-owner-state-owner runtime-value) (current-thread))
+      (error "Context Session Host requires its serialized owner thread")) runtime-value))
+(def (entry runtime-value session-id)
+  (or (hash-get (session-owner-state-entries runtime-value) session-id) (error "Unknown enrolled Session")))
+;;; Snapshot only closed native schemas. No live object/string aliases escape.
+(def (copy-value value)
+  (cond ((string? value) (string-copy value))
+        ((pair? value) (map copy-value value))
+        ((object? value)
+         (let (keys (case (.ref value 'kind)
+           ((agentic-ai-lab.session.schedule.v1) '(kind identity revision generation status active obligations completed))
+           ((agentic-ai-lab.session.attempt.v1) '(kind session task task-revision identity generation turn request input anchor-refs))
+           ((agentic-ai-lab.session.input-ref.v1) '(kind producer contract identity digest scope-digest source-vector-digest
+              query-digest restriction-digest profile-digest receipt-ref complete? consumer-session consumer-turn))
+           ((agentic-ai-lab.session.task.v1) '(kind identity revision input anchor-refs anchor-bindings))
+           ((agentic-ai-lab.ai-agentic-context.org-anchor.v1) '(kind org-id container-kind container-start value-start value-end
+              source-digest parser-identity projection-digest scope-digest session turn semantic-digest
+              source-authenticated? action-authorized?))
+           (else (error "Unsupported Host snapshot schema"))))
+           (object<-alist (map (lambda (key) (cons key (copy-value (.ref value key)))) keys))))
+        (else value)))
+(def (view row accepted-value reason-value published-value)
+  (let ((schedule-value (copy-value (source-entry-schedule row)))
+        (task-value (and (source-entry-task row) (copy-value (source-entry-task row))))
+        (source-generation-value (source-entry-generation row)))
+    (.o kind: 'agentic-ai-lab.ai-agentic-context.session-host-receipt.v1 accepted?: accepted-value reason: reason-value
+        source-generation: source-generation-value schedule: schedule-value task: task-value
+        runtime-published?: published-value source-authenticated?: #f action-authorized?: #f
+        provider-disclosed?: #f provider-result-admitted?: #f durable?: #f)))
+(def (build-task source scope restriction profile revision ids grant-id grant-generation (proof-digest #f))
+  (let* ((projection-value (agentic-ai-lab-ai-agentic-context-org-project scope source restriction profile))
+         (receipt-value (agentic-ai-lab-ai-agentic-context-digest
+             (list 'session-host-producer-reference-v1 (.ref projection-value 'semantic-digest)
+                   grant-id grant-generation revision ids proof-digest)))
+         (task-value (agentic-ai-lab-ai-agentic-context-session-task source projection-value scope receipt-value revision ids)))
+    (values projection-value task-value)))
+(def (observe-grant runtime-value row)
+  (let* ((observation-value (agentic-ai-lab-context-use-host-observe (session-owner-state-grants runtime-value)
+           (session-owner-state-policies runtime-value) (source-entry-grant-id row)
+           (source-entry-grant-generation row) 'display))
+         (contract-value (.ref (.ref observation-value 'grant) 'contract))
+         (scope-value (source-entry-scope row))
+         (projection-value (source-entry-projection row))
+         (flow-value (agentic-ai-lab-context-flow-decision (source-entry-restriction row)
+           (.ref projection-value 'source-digest) (.ref projection-value 'semantic-digest)
+           (.ref scope-value 'actor) (.ref scope-value 'destination)
+           (.ref (.ref (.ref observation-value 'policy-snapshot) 'effective-at) 'coordinate))))
+    (and (eq? (.ref flow-value 'status) 'eligible)
+         (eq? (.ref observation-value 'decision) 'allowed)
+         (equal? (.ref contract-value 'actor) (.ref scope-value 'actor))
+         (equal? (.ref contract-value 'task) (.ref scope-value 'task)))))
+(def (agentic-ai-lab-ai-agentic-context-session-host-enroll! host source-generation source scope restriction profile
+                                                      task-revision ids grant-id grant-generation)
+  (unless (and (coordinate? source-generation) (string? source) (text? grant-id)
+               (coordinate? grant-generation) (> grant-generation 0)) (error "Invalid Session source enrollment"))
+  (let* ((runtime-value (state host)) (scope-value (agentic-ai-lab-ai-agentic-context-scope-admit scope))
+         (session-value (.ref scope-value 'session)) (source-value (string-copy source))
+         (ids-value (map string-copy ids)) (grant-value (string-copy grant-id)))
+    (unless (and (text? session-value) (not (hash-get (session-owner-state-entries runtime-value) session-value))
+                 (< (hash-length (session-owner-state-entries runtime-value)) 128)) (error "Session enrollment conflict or capacity"))
+    (let-values (((projection-value task-value) (build-task source-value scope-value restriction profile
+                         task-revision ids-value grant-value grant-generation)))
+      (let (row (make-source-entry source-generation source-value scope-value
+                       (.ref projection-value 'restriction)
+                       (agentic-ai-lab-ai-agentic-context-profile (if (memq 'ai-agentic-context/memory (.ref projection-value 'feature-ids)) #t #f)) task-revision ids-value projection-value task-value
+                       (agentic-ai-lab-session-schedule session-value) grant-value grant-generation))
+        (unless (observe-grant runtime-value row) (error "Session enrollment requires current matching registered grant"))
+        (hash-put! (session-owner-state-entries runtime-value) session-value row)
+        (view row #t 'enrolled #t)))))
+(def (agentic-ai-lab-ai-agentic-context-session-host-current host session-id)
+  (view (entry (state host) session-id) #t 'current #f))
+(def (agentic-ai-lab-ai-agentic-context-session-host-refresh! host session-id expected-source-generation
+                                                      new-source-generation source new-scope)
+  (let* ((runtime-value (state host)) (old (entry runtime-value session-id))
+         (scope-value (agentic-ai-lab-ai-agentic-context-scope-admit new-scope)))
+    (unless (and (equal? expected-source-generation (source-entry-generation old))
+                 (coordinate? new-source-generation) (> new-source-generation expected-source-generation)
+                 (string? source)) (error "Stale or invalid source revision"))
+    (unless (every (lambda (key) (equal? (.ref scope-value key) (.ref (source-entry-scope old) key)))
+                '(bundle organization epoch project worktree actor task destination session turn))
+      (error "Source refresh cannot retarget consumer Scope"))
+    (let* ((source-value (string-copy source))
+           (schedule-value (source-entry-schedule old))
+           (recovery (and (.ref schedule-value 'active)
+                      (agentic-ai-lab-session-recover schedule-value (.ref schedule-value 'revision)))))
+      (when (and recovery (not (.ref recovery 'accepted?))) (error "Recovery coordinate exhausted; source refresh refused"))
+      ;; Source removal/invalidity must invalidate old input, even when no new Task can be constructed.
+      (let-values (((projection-value task-value)
+        (with-catch (lambda (exception) (values #f #f))
+          (lambda () (build-task source-value scope-value (source-entry-restriction old) (source-entry-profile old)
+                           (source-entry-task-revision old) (source-entry-ids old)
+                           (source-entry-grant-id old) (source-entry-grant-generation old))))))
+        (let (row (make-source-entry new-source-generation source-value scope-value
+                         (source-entry-restriction old) (source-entry-profile old)
+                         (source-entry-task-revision old) (source-entry-ids old) projection-value task-value
+                         (if recovery (.ref recovery 'schedule) schedule-value)
+                         (source-entry-grant-id old) (source-entry-grant-generation old)))
+          (hash-put! (session-owner-state-entries runtime-value) session-id row)
+          (view row #t (if task-value 'source-refreshed 'source-blocked) #t))))))
+(def (agentic-ai-lab-ai-agentic-context-session-host-observe host session-id expected-revision expected-source-generation)
+  (let* ((runtime-value (state host)) (row (entry runtime-value session-id)))
+    (cond ((not (equal? expected-revision (.ref (source-entry-schedule row) 'revision))) (view row #f 'stale-revision #f))
+          ((not (equal? expected-source-generation (source-entry-generation row))) (view row #f 'stale-source #f))
+          ((not (source-entry-task row)) (view row #f 'source-blocked #f))
+          ((not (observe-proof runtime-value row session-id)) (view row #f 'temporal-proof-denied #f))
+          ((not (observe-grant runtime-value row)) (view row #f 'current-grant-denied #f))
+          (else (view row #t 'current-input-eligible #f)))))
+(def (agentic-ai-lab-ai-agentic-context-session-host-claim! host session-id expected-revision expected-source-generation
+                                                    attempt-id request-id)
+  (let* ((runtime-value (state host)) (row (entry runtime-value session-id))
+         (observed (agentic-ai-lab-ai-agentic-context-session-host-observe host session-id expected-revision expected-source-generation)))
+    (if (not (.ref observed 'accepted?)) observed
+      (let (proposal (agentic-ai-lab-session-claim (source-entry-schedule row) expected-revision (source-entry-task row)
+                        attempt-id request-id (.ref (source-entry-scope row) 'turn)))
+        (if (not (.ref proposal 'accepted?)) (view row #f (.ref proposal 'reason) #f)
+          (begin (set! (source-entry-schedule row) (.ref proposal 'schedule))
+                 (view row #t 'claim-published #t)))))))
+
+;;; Proof requirements are owner-enrolled capabilities, never wire verdicts.
+;;; A binding change fences prepared claims through the same Session revision CAS.
+(def (current-proof binding)
+  (agentic-ai-lab-temporal-proof-host-current (proof-binding-host binding)
+    (proof-binding-registration binding) (proof-binding-state-generation binding)
+    (proof-binding-policy-generation binding) (proof-binding-policy-digest binding)
+    (proof-binding-budget binding)))
+(def (observe-proof runtime-value row session-id)
+  (let (binding (hash-get (session-owner-state-proofs runtime-value) session-id))
+    (or (and (not binding) (not (session-owner-state-proof-required? runtime-value)))
+        (and binding (= (source-entry-generation row) (proof-binding-source-generation binding))
+             (with-catch (lambda (exception) #f)
+               (lambda () (.ref (current-proof binding) 'current?)))))))
+(def (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host session-id expected-revision
+        expected-source-generation proof-host registration state-generation policy-generation policy-digest budget)
+  (unless (and (text? registration) (text? policy-digest) (coordinate? state-generation)
+               (coordinate? policy-generation) (exact-integer? budget) (<= 0 budget 4096))
+    (error "Invalid Context proof requirement"))
+  (let* ((runtime-value (state host)) (row (entry runtime-value session-id))
+         (schedule-value (source-entry-schedule row)))
+    (unless (and (= expected-revision (.ref schedule-value 'revision))
+                 (= expected-source-generation (source-entry-generation row))
+                 (eq? (.ref schedule-value 'status) 'idle) (source-entry-task row)
+                 (observe-grant runtime-value row))
+      (error "Proof binding requires current idle Session input"))
+    (let* ((binding (make-proof-binding proof-host (string-copy registration) state-generation
+                      policy-generation (string-copy policy-digest) budget expected-source-generation #f))
+           (applicability (current-proof binding)))
+      (unless (.ref applicability 'current?) (error "Context requires current original Temporal proof"))
+      (set! (proof-binding-digest binding)
+        (agentic-ai-lab-ai-agentic-context-digest (list 'context-temporal-binding-v1
+          (.ref (source-entry-scope row) 'semantic-digest) expected-source-generation
+          (.ref (.ref (source-entry-task row) 'input) 'digest)
+          (.ref applicability 'semantic-digest))))
+      (let-values (((projection-value task-value)
+        (build-task (source-entry-source row) (source-entry-scope row) (source-entry-restriction row)
+          (source-entry-profile row) (source-entry-task-revision row) (source-entry-ids row)
+          (source-entry-grant-id row) (source-entry-grant-generation row) (proof-binding-digest binding))))
+        (let (fence (agentic-ai-lab-session-recover schedule-value expected-revision))
+          (unless (.ref fence 'accepted?) (error "Proof binding coordinate exhausted"))
+          ;; No mutation occurs until proof replay, task replay and fencing all succeed.
+          (hash-put! (session-owner-state-proofs runtime-value) (string-copy session-id) binding)
+          (set! (source-entry-projection row) projection-value)
+          (set! (source-entry-task row) task-value)
+          (set! (source-entry-schedule row) (.ref fence 'schedule))
+          (view row #t 'proof-bound #t))))))
+(def (agentic-ai-lab-ai-agentic-context-session-host-revalidate! host session-id expected-revision expected-source-generation)
+  (let* ((runtime-value (state host)) (row (entry runtime-value session-id))
+         (observed (agentic-ai-lab-ai-agentic-context-session-host-observe host session-id expected-revision expected-source-generation)))
+    (if (and (memq (.ref observed 'reason) '(temporal-proof-denied current-grant-denied source-blocked))
+             (.ref (source-entry-schedule row) 'active))
+      (let (fence (agentic-ai-lab-session-recover (source-entry-schedule row) expected-revision))
+        (unless (.ref fence 'accepted?) (error "Invalidation coordinate exhausted"))
+        (set! (source-entry-schedule row) (.ref fence 'schedule))
+        (view row #f (.ref observed 'reason) #t))
+      observed)))

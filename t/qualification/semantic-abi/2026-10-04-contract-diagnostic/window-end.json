@@ -1,0 +1,150 @@
+{
+  "case": "window-end",
+  "raw": "{\"status\":\"complete\",\"rows\":[[\"k\",\"m\"],[\"k\",\"q\"]]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.21671008299995265
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.21677924999994502
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.7011303749998206
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.7011414159999276
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7011502499999551
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7986715829999866
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.846804832999851
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8468280409999807
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8468378329998814
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8468459159998929
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8468537079997986
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8468612909998683
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8469270409998444
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8469387909999568
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8469469579999895
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8469546659998741
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8469629999999597
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8520113749998472
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8520319579999978
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8520414579998032
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8520490409998729
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8707105409998803
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8707333749998725
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.8707451660000061
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.8707557499999439
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.8707653329997811
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.8709469579998768
+    }
+  ],
+  "contentGapsSeconds": [
+    0.7011502499999551,
+    0.09752133300003152,
+    0.04813324999986435,
+    2.3208000129670836e-05,
+    9.791999900699011e-06,
+    8.083000011538388e-06,
+    7.791999905748526e-06,
+    7.583000069644186e-06,
+    6.574999997610576e-05,
+    1.1750000112442649e-05,
+    8.167000032699434e-06,
+    7.70799988458748e-06,
+    8.334000085596927e-06,
+    0.005048374999887528,
+    2.058300015050918e-05,
+    9.499999805484549e-06,
+    7.583000069644186e-06,
+    0.018661500000007436,
+    2.2833999992144527e-05
+  ],
+  "responseId": "bc61c779-3a14-4d7e-920f-6cfa1ce22336",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9625,
+    "input_tokens_details": {
+      "cached_tokens": 9216
+    },
+    "output_tokens": 19,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9644
+  },
+  "seconds": 0.8709487499997977
+}

@@ -1,0 +1,113 @@
+#+title: Semantic ABI v1 Scheme Datum Boundary
+
+* Version and ownership
+
+Scheme wire and ABI versions are fixed at v1. A representation migration does
+not authorize a version bump.
+
+The public ABI v1 consists of =agentic_ai_lab_semantic_v1_open/call/source_register/close=
+and =agentic_ai_lab_semantic_v1_result_release=. Result layout and owner-thread lifetime
+are unchanged. Native POO objects remain inside Scheme; this encoding is an inert
+FFI projection, not a semantic DSL or an evaluator. Legacy symbols and JSON
+payloads are rejected. The descriptor reports version 1 and scheme-datum-v1.
+
+* Inert grammar
+
+#+begin_example
+datum  := string | decimal | #t | #f | null
+        | (list datum ...)
+        | (object (string datum) ...)
+decimal := -?(0|[1-9][0-9]*)(.[0-9]+)?([eE][+-]?[0-9]+)?
+
+(object ("operation" "descriptor") ("payload" (object)))
+#+end_example
+
+Strings are UTF-8; escapes are only backslash, quote, n, r and t. Unescaped
+control characters are forbidden. Object keys are unique strings. Encoders sort
+keys; original MRR typed-row order remains unchanged. Integers fit signed 128
+bits; decimal tokens have at most 64 characters and finite real values. null
+is distinct from false and an empty list/object. Unsupported numeric types,
+reader extensions, comments, quote/eval, dotted pairs and cyclic/shared reader
+labels are rejected. Exactly one complete datum is consumed; trailing data fails.
+
+The C host validates UTF-8, input size and parenthesis depth before Scheme entry.
+Scheme validates the lexical subset before its reader, then validates constructor
+shapes and duplicate keys. Python and Rust use non-evaluating bounded decoders.
+Maximum input is 1 MiB, structural nesting 64, decoded nodes 262144 and Rust/Python
+consumed output 16 MiB. Semantic profiles retain their tighter domain bounds.
+
+* Acceptance and claims
+
+=t/scheme-wire-test.ss= and Python/Rust wire tests exercise inert parsing and
+negative inputs. Installed Python/C/Rust differential acceptance checks semantic
+results on the rebuilt artifact. ASP Scheme owns the MRR benchmark and model
+batch receipts. Old ABI results remain historical; re-encoding their receipts
+would not qualify the new ABI. Required DeepSeek HTTP JSON is confined to the
+provider adapter and is decoded before crossing project interfaces.
+
+Publication request digests use the domain =agentic-ai-lab.temporal-publication-request.v1=
+and canonical Scheme bytes. Existing historical database receipts retain their
+original identities. Reusing a legacy JSON idempotency key with a native Scheme request fails as
+a mismatch; there is no silent rewrite or JSON replay fallback. Historical lookup
+remains distinct from a new commit. This qualification uses fresh native Scheme v1 stores.
+
+* Read-only support applicability, v1
+
+=temporal.support.evaluate= accepts =agentic-ai-lab.temporal-support-request.v1=.
+Exact top-level fields are schema, program, journal, asOf, validAt and budget.
+Program fields: identity, policy, complete, supports. Each support has identity,
+conclusion, proof, premises (subject/revision pairs), and parents (conclusion IDs).
+Journal fields: identity, admissionDomain, validDomain, revisions. Each revision
+has identity, subject, operation (assert/correct/retract), predecessor (#f or ID),
+admitted (integer), validRange (#f or [start,end)), content (#f or content ID).
+=validAt= is #f or an integer. Inventory bounds are 128; budget is 0--128.
+Native POO constructors and the original temporal journal enforce admission.
+
+The result schema is =agentic-ai-lab.temporal-support-result.v1=, ABI 1, with program,
+binding, cut and projection digests, evaluatedSupports, budgetExhausted and
+conclusions (identity, status, activeSupports). proofAdmitted, sourceAuthenticated,
+actionAuthorized and durable are always #f. Caller-declared completeness and
+opaque proof identities cannot establish exhaustive support or proof validity.
+Transport remains bounded inert Scheme datum v1. No host registry is mutated.
+
+* Original fact content projection, v1
+
+=temporal.fact.content= requires exactly schema, identity, generation, relationId,
+evaluatorRelation and row. Schema is =agentic-ai-lab.mrr-fact-request.v1=. Row contains
+1--32 signed 64-bit integers or booleans; evaluatorRelation is an ASCII
+alphanumeric/underscore name. Identifiers are bounded nonempty strings.
+Result =agentic-ai-lab.mrr-fact-result.v1= retains those fields, ABI 1 and contentDigest.
+proofAdmitted, bindingVerified, sourceAuthenticated, actionAuthorized and durable
+are false. This endpoint cannot validate MRR owner provenance or rule equivalence.
+
+The digest is SHA-256 of the inert Scheme v1 spelling of the list
+["agentic-ai-lab.mrr-fact-content.v1", identity, generation, relationId,
+evaluatorRelation, row]. Rust uses =wire::to_vec= on this typed list; the Scheme
+constructor writes the identical list/list-tag projection. No general reader or
+JSON transport is added.
+
+* Registered Context use
+
+The Host-only =agentic_ai_lab_semantic_v1_context_use_refresh= control registers
+=agentic-ai-lab.context-use-refresh-request.v1=: identity, positive generation,
+manifestDigest, admissionDigest, contract, policyIdentity, policyDigest,
+purposes (display/action) and enabled. The inert contract carries actor, task,
+policyDigest, required, temporalReceipts and requireComplete. MRR owns their
+original identity parsing and equality; POO retains the registered declaration.
+Enabled registration requires a current native family admission and a registered
+policy. Disabled registration can retire a stale source. Same-generation changes,
+rollback and resurrection of a retired identity reject before mutation; the
+registry retains at most 128 identities.
+
+The public read =context.use.observe= accepts only schema
+=agentic-ai-lab.context-use-observe-request.v1=, identity, expectedGeneration, purpose
+and admissionDigest. It observes the retained contract and the existing policy
+Host clock, then rechecks the actual native family Source in the same native call.
+It returns the original registered manifest/contract plus allowed, denied,
+revoked or expired. Extra fields, foreign admissions and unknown identities reject.
+The model call lane cannot refresh grants, replace contracts or supply a clock.
+
+This is a Host-relative point-in-time observation. It does not authenticate an
+external issuer or perform atomic disclosure, action execution or durable commit.
+MRR's runtime owns original Context/source/Query re-admission and mandatory use
+checks; its consumer CI qualifies this Library across Rust and installed Python.

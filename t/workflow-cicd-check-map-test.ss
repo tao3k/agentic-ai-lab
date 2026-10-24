@@ -6,14 +6,14 @@
 ;;; Boundary: workflow CI/CD check maps are inert POO control-plane data.
 ;;; Invariant: tests prove receipts and runtime readiness without execution.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  test-suite
                  check-equal?
                  )
         (only-in :clan/poo/object .ref object?)
-        :poo-flow/modules/agent-sandbox/config
-        :poo-flow/modules/workflow/interface)
+        :agentic-ai-lab/modules/agent-sandbox/config
+        :agentic-ai-lab/modules/workflow/interface)
 
 (export workflow-cicd-check-map-test)
 
@@ -26,12 +26,12 @@
 
 ;;; The fixture mirrors user-interface CI/CD profile names but remains inert:
 ;;; no sandbox backend is resolved and no command is executed.
-;; : (-> Unit PooFlowCicdCheckMap)
+;; : (-> Unit YuanxuCicdCheckMap)
 (def (cicd-test-check-map)
-  (poo-flow-cicd-check-map
+  (yuanxu-cicd-check-map
    'default
    (list
-    (poo-flow-cicd-check
+    (yuanxu-cicd-check
      'build
      'ci/build
      '("gerbil" "build")
@@ -43,7 +43,7 @@
      '(read :lines)
      'manifest-handoff
      '((stage . build)))
-    (poo-flow-cicd-check
+    (yuanxu-cicd-check
      'test
      'ci/check
      '("gerbil" "env" "./unit-tests.ss")
@@ -62,7 +62,7 @@
 ;;; filesystem/resource policy parsing.
 ;; : (-> Unit [PooSandboxProfile])
 (def cicd-test-sandbox-profiles
-  (poo-flow-sandbox-profiles
+  (agentic-ai-lab-sandbox-profiles
    (ci/build
     (backend nono)
     (network allowlisted "github.com" "crates.io")
@@ -103,31 +103,31 @@
 ;; : TestSuite
 (def workflow-cicd-check-map-test
   (test-suite "workflow cicd check map"
-    (poo-flow-test-case "constructs named POO checks and check maps"
+    (yuanxu-test-case "constructs named POO checks and check maps"
       (let* ((check-map (cicd-test-check-map))
-             (checks (poo-flow-cicd-check-map-checks check-map))
+             (checks (yuanxu-cicd-check-map-checks check-map))
              (build-check (car checks))
              (test-check (cadr checks)))
         (check-equal? (object? check-map) #t)
-        (check-equal? (poo-flow-cicd-check-map? check-map) #t)
+        (check-equal? (yuanxu-cicd-check-map? check-map) #t)
         (check-equal? (.ref check-map 'kind)
-                      (poo-flow-cicd-check-map-kind))
-        (check-equal? (poo-flow-cicd-check-map-name check-map) 'default)
+                      (yuanxu-cicd-check-map-kind))
+        (check-equal? (yuanxu-cicd-check-map-name check-map) 'default)
         (check-equal? (length checks) 2)
-        (check-equal? (poo-flow-cicd-check? build-check) #t)
-        (check-equal? (poo-flow-cicd-check? test-check) #t)
-        (check-equal? (poo-flow-cicd-check-name build-check) 'build)
-        (check-equal? (poo-flow-cicd-check-profile build-check) 'ci/build)
-        (check-equal? (poo-flow-cicd-check-command test-check)
+        (check-equal? (yuanxu-cicd-check? build-check) #t)
+        (check-equal? (yuanxu-cicd-check? test-check) #t)
+        (check-equal? (yuanxu-cicd-check-name build-check) 'build)
+        (check-equal? (yuanxu-cicd-check-profile build-check) 'ci/build)
+        (check-equal? (yuanxu-cicd-check-command test-check)
                       '("gerbil" "env" "./unit-tests.ss"))
-        (check-equal? (poo-flow-cicd-check-dependency-refs build-check)
+        (check-equal? (yuanxu-cicd-check-dependency-refs build-check)
                       '())
-        (check-equal? (poo-flow-cicd-check-dependency-refs test-check)
+        (check-equal? (yuanxu-cicd-check-dependency-refs test-check)
                       '(build))
         (check-equal? (.ref check-map 'runtime-executed) #f)))
-    (poo-flow-test-case "projects check receipts without running runtime work"
+    (yuanxu-test-case "projects check receipts without running runtime work"
       (let* ((check-map (cicd-test-check-map))
-             (receipts (poo-flow-cicd-check-map->receipts check-map))
+             (receipts (agentic-ai-lab-cicd-check-map->receipts check-map))
              (build-receipt (car receipts))
              (test-receipt (cadr receipts))
              (runtime-ready
@@ -138,7 +138,7 @@
                                     'runtime-manifest-ready)))
         (check-equal? (length receipts) 2)
         (check-equal? (cicd-test-alist-ref build-receipt 'schema)
-                      +poo-flow-cicd-check-receipt-schema+)
+                      +yuanxu-cicd-check-receipt-schema+)
         (check-equal? (cicd-test-alist-ref build-receipt 'check) 'build)
         (check-equal? (cicd-test-alist-ref build-receipt 'profile) 'ci/build)
         (check-equal? (cicd-test-alist-ref build-receipt 'command)
@@ -173,10 +173,10 @@
                       '(ci/build))
         (check-equal? (cicd-test-alist-ref runtime-ready 'argv)
                       '("gerbil" "build"))))
-    (poo-flow-test-case "resolves sandbox profile summaries when catalog is provided"
+    (yuanxu-test-case "resolves sandbox profile summaries when catalog is provided"
       (let* ((check-map (cicd-test-check-map))
              (receipts
-              (poo-flow-cicd-check-map->receipts
+              (agentic-ai-lab-cicd-check-map->receipts
                check-map
                cicd-test-sandbox-profiles))
              (build-receipt (car receipts))
@@ -199,7 +199,7 @@
                                            'sandbox-unresolved-profile-refs)
                       '())
         (check-equal? (cicd-test-alist-ref build-summary 'schema)
-                      'poo-flow.agent-sandbox-profile.runtime-summary.v1)
+                      'agentic-ai-lab.agent-sandbox-profile.runtime-summary.v1)
         (check-equal? (cicd-test-alist-ref build-summary 'profile-name)
                       'ci/build)
         (check-equal? (cicd-test-alist-ref build-summary 'valid?) #t)
@@ -207,7 +207,7 @@
                       'project-workspace)
         (check-equal? (cicd-test-alist-ref build-filesystem 'path-count) 1)
         (check-equal? (cicd-test-alist-ref build-handoff 'schema)
-                      'poo-flow.agent-sandbox-profile.handoff-summary.v1)
+                      'agentic-ai-lab.agent-sandbox-profile.handoff-summary.v1)
         (check-equal? (cicd-test-alist-ref build-receipt
                                            'sandbox-runtime-summaries)
                       sandbox-summaries)))))

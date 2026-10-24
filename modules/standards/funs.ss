@@ -9,25 +9,25 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list filter)
         (only-in :std/encoding/hex hex-encode)
-        (only-in :poo-flow/src/utilities/functional
-                 poo-flow-all? poo-flow-map)
+        (only-in :yuanxu/utilities/functional
+                 yuanxu-all? yuanxu-map)
         "types.ss"
         "objects.ss"
         "resolution-objects.ss")
 
-(export poo-flow-standard-digest
-        poo-flow-standard-catalog-find-edition
-        poo-flow-standard-catalog-find-artifact
-        poo-flow-standard-catalog-observe
-        poo-flow-standard-resolve
-        poo-flow-standard-compose-profiles
-        poo-flow-standard-make-validation-closure
-        poo-flow-standard-make-validation-closure-receipt
-        poo-flow-standard-admit-case
-        poo-flow-standard-make-reference-observation
-        poo-flow-standard-compare-reference-observation)
+(export agentic-ai-lab-standard-digest
+        agentic-ai-lab-standard-catalog-find-edition
+        agentic-ai-lab-standard-catalog-find-artifact
+        agentic-ai-lab-standard-catalog-observe
+        agentic-ai-lab-standard-resolve
+        agentic-ai-lab-standard-compose-profiles
+        agentic-ai-lab-standard-make-validation-closure
+        agentic-ai-lab-standard-make-validation-closure-receipt
+        agentic-ai-lab-standard-admit-case
+        agentic-ai-lab-standard-make-reference-observation
+        agentic-ai-lab-standard-compare-reference-observation)
 
-(def (poo-flow-standard-digest value)
+(def (agentic-ai-lab-standard-digest value)
   (string-append
    "sha256:"
    (hex-encode
@@ -36,19 +36,19 @@
       (call-with-output-string
        (lambda (port) (write value port))))))))
 
-(def (poo-flow-standard-catalog-find-edition catalog identity)
+(def (agentic-ai-lab-standard-catalog-find-edition catalog identity)
   (hash-get (.ref catalog 'edition-index) identity))
 
-(def (poo-flow-standard-catalog-find-artifact catalog identity)
+(def (agentic-ai-lab-standard-catalog-find-artifact catalog identity)
   (hash-get (.ref catalog 'artifact-index) identity))
 
-(def (poo-flow-standard-catalog-observe catalog)
-  (unless (poo-flow-standard-catalog? catalog)
+(def (agentic-ai-lab-standard-catalog-observe catalog)
+  (unless (agentic-ai-lab-standard-catalog? catalog)
     (error "invalid Standard catalog" catalog))
-  (poo-flow-standard-catalog-receipt catalog))
+  (agentic-ai-lab-standard-catalog-receipt catalog))
 
 (def (standard-resolution-failure code subject detail path)
-  (poo-flow-standard-failure code subject detail path))
+  (agentic-ai-lab-standard-failure code subject detail path))
 
 (def (standard-budget-exceeded subject budget-name actual limit path)
   (standard-resolution-failure
@@ -59,30 +59,30 @@
    path))
 
 (def (standard-resolution-bundle-digest editions artifacts terminology-digest)
-  (poo-flow-standard-digest
+  (agentic-ai-lab-standard-digest
    (list
-    'poo-flow.standard-bundle.v1
-    (poo-flow-map
+    'agentic-ai-lab.standard-bundle.v1
+    (yuanxu-map
      (lambda (edition)
        (list (.ref edition 'identity)
              (.ref edition 'canonical-uri)
              (.ref edition 'version)
              (.ref edition 'digest)))
      editions)
-    (poo-flow-map
+    (yuanxu-map
      (lambda (artifact)
        (list (.ref artifact 'identity) (.ref artifact 'digest)))
      artifacts)
     terminology-digest)))
 
-;;; `poo-flow-standard-catalog` recursively admits every edition and constructs
+;;; `agentic-ai-lab-standard-catalog` recursively admits every edition and constructs
 ;;; these immutable indexes. Repeating the full member-shape traversal for each
 ;;; Case selection is redundant; resolution checks the admitted catalog shell
 ;;; and then reads only indexed members from it.
 (def (standard-resolution-catalog? value)
   (and (object? value)
        (.slot? value 'kind)
-       (eq? (.ref value 'kind) +poo-flow-standard-catalog-kind+)
+       (eq? (.ref value 'kind) +agentic-ai-lab-standard-catalog-kind+)
        (.slot? value 'edition-index)
        (hash-table? (.ref value 'edition-index))
        (.slot? value 'canonical-version-index)
@@ -93,13 +93,13 @@
        (integer? (.ref value 'edition-count))
        (>= (.ref value 'edition-count) 0)))
 
-(def (poo-flow-standard-resolve catalog root-identities budget
+(def (agentic-ai-lab-standard-resolve catalog root-identities budget
                                 terminology-snapshot-digest)
   (unless (and (standard-resolution-catalog? catalog)
                (pair? root-identities)
-               (poo-flow-all? poo-flow-standard-text? root-identities)
-               (poo-flow-standard-budget? budget)
-               (poo-flow-standard-digest? terminology-snapshot-digest))
+               (yuanxu-all? agentic-ai-lab-standard-text? root-identities)
+               (agentic-ai-lab-standard-budget? budget)
+               (agentic-ai-lab-standard-digest? terminology-snapshot-digest))
     (error "invalid Standard resolution request"
            catalog root-identities budget terminology-snapshot-digest))
   (let ((edition-index (.ref catalog 'edition-index))
@@ -240,7 +240,7 @@
           (.ref edition 'root-artifacts)))
        (reverse editions-rev)))
     (if failure
-      (poo-flow-standard-resolution-receipt
+      (agentic-ai-lab-standard-resolution-receipt
        root-identities #f (list failure))
       (let* ((editions (reverse editions-rev))
              (artifacts (reverse artifacts-rev))
@@ -254,14 +254,14 @@
                byte-count maximum-depth operation-count closure-digest)))
         (standard-resolution-admitted-receipt root-identities bundle)))))
 
-(def (poo-flow-standard-compose-profiles
+(def (agentic-ai-lab-standard-compose-profiles
       case-identity profiles catalog budget terminology-snapshot-digest)
-  (unless (and (poo-flow-standard-text? case-identity)
+  (unless (and (agentic-ai-lab-standard-text? case-identity)
                (pair? profiles)
-               (poo-flow-all? poo-flow-standard-constraint-profile? profiles)
-               (poo-flow-standard-catalog? catalog)
-               (poo-flow-standard-budget? budget)
-               (poo-flow-standard-digest? terminology-snapshot-digest))
+               (yuanxu-all? agentic-ai-lab-standard-constraint-profile? profiles)
+               (agentic-ai-lab-standard-catalog? catalog)
+               (agentic-ai-lab-standard-budget? budget)
+               (agentic-ai-lab-standard-digest? terminology-snapshot-digest))
     (error "invalid Standard Profile composition request"
            case-identity profiles catalog budget terminology-snapshot-digest))
   (let ((profile-revisions (make-hash-table))
@@ -292,7 +292,7 @@
                 (not (string=? accepted-revision revision)))
            (unless profile-failure
              (set! profile-failure
-                   (poo-flow-standard-failure
+                   (agentic-ai-lab-standard-failure
                     'standard-profile-revision-conflict identity
                     (list accepted-revision revision)
                     (list case-identity identity)))))
@@ -326,15 +326,15 @@
            (terminology-dependencies (reverse terminology-dependencies-rev))
            (resolution
             (and (not profile-failure)
-                 (poo-flow-standard-resolve
+                 (agentic-ai-lab-standard-resolve
                   catalog base-editions budget terminology-snapshot-digest)))
            (failures
             (if profile-failure
               (list profile-failure)
               (.ref resolution 'failures)))
            (composition-digest
-            (poo-flow-standard-digest
-             (list 'poo-flow.standard-profile-composition.v1
+            (agentic-ai-lab-standard-digest
+             (list 'agentic-ai-lab.standard-profile-composition.v1
                    case-identity
                    (map (lambda (profile)
                           (list (.ref profile 'identity)
@@ -345,43 +345,43 @@
                         (.ref resolution 'bundle)
                         (.ref (.ref resolution 'bundle) 'closure-digest))
                    (map (lambda (failure) (.ref failure 'code)) failures)))))
-      (poo-flow-standard-profile-composition-receipt
+      (agentic-ai-lab-standard-profile-composition-receipt
        case-identity selected-profiles profile-identities base-editions
        constraints artifact-dependencies terminology-dependencies resolution
        failures composition-digest))))
 
-(def (poo-flow-standard-make-validation-closure
+(def (agentic-ai-lab-standard-make-validation-closure
       identity bundle provider-identity subject-kind subject-snapshot-digest
       constraints)
-  (unless (and (poo-flow-standard-bundle? bundle)
-               (poo-flow-standard-text? identity)
-               (poo-flow-standard-text? provider-identity)
+  (unless (and (agentic-ai-lab-standard-bundle? bundle)
+               (agentic-ai-lab-standard-text? identity)
+               (agentic-ai-lab-standard-text? provider-identity)
                (symbol? subject-kind)
-               (poo-flow-standard-digest? subject-snapshot-digest)
+               (agentic-ai-lab-standard-digest? subject-snapshot-digest)
                (list? constraints))
     (error "invalid Standard validation closure input" identity))
   (let (validation-closure-digest
-        (poo-flow-standard-digest
-         (list 'poo-flow.standard-validation-closure.v1
+        (agentic-ai-lab-standard-digest
+         (list 'agentic-ai-lab.standard-validation-closure.v1
                identity
                (.ref bundle 'closure-digest)
                provider-identity
                subject-kind
                subject-snapshot-digest
-               (poo-flow-map
+               (yuanxu-map
                 (lambda (constraint)
                   (if (and (object? constraint) (.slot? constraint 'identity))
                     (.ref constraint 'identity)
                     constraint))
                 constraints))))
-    (poo-flow-standard-validation-closure
+    (agentic-ai-lab-standard-validation-closure
      identity bundle provider-identity subject-kind subject-snapshot-digest
      constraints validation-closure-digest)))
 
-(def (poo-flow-standard-make-validation-closure-receipt validation-closure engine-identity engine-version)
-  (unless (and (poo-flow-standard-validation-closure? validation-closure)
-               (poo-flow-standard-text? engine-identity)
-               (poo-flow-standard-text? engine-version))
+(def (agentic-ai-lab-standard-make-validation-closure-receipt validation-closure engine-identity engine-version)
+  (unless (and (agentic-ai-lab-standard-validation-closure? validation-closure)
+               (agentic-ai-lab-standard-text? engine-identity)
+               (agentic-ai-lab-standard-text? engine-version))
     (error "invalid Standard validation-closure receipt input" validation-closure))
   (let* ((bundle (.ref validation-closure 'bundle))
          (unsupported-count
@@ -393,23 +393,23 @@
                    (eq? (.ref constraint 'support-state) 'unsupported)))
             (.ref validation-closure 'constraints))))
          (generation
-          (poo-flow-standard-digest
-           (list 'poo-flow.standard-validation-closure-generation.v1
+          (agentic-ai-lab-standard-digest
+           (list 'agentic-ai-lab.standard-validation-closure-generation.v1
                  (.ref bundle 'closure-digest)
                  (.ref bundle 'terminology-snapshot-digest)
                  engine-identity engine-version))))
-    (poo-flow-standard-validation-closure-receipt
+    (agentic-ai-lab-standard-validation-closure-receipt
      validation-closure (.ref bundle 'closure-digest)
      (.ref bundle 'terminology-snapshot-digest)
      engine-identity engine-version unsupported-count 'compiled generation
      '() #t)))
 
-(def (poo-flow-standard-admit-case case-identity conformance-receipts
+(def (agentic-ai-lab-standard-admit-case case-identity conformance-receipts
                                    evidence-digests)
-  (unless (and (poo-flow-standard-text? case-identity)
-               (poo-flow-all? poo-flow-standard-conformance-receipt?
+  (unless (and (agentic-ai-lab-standard-text? case-identity)
+               (yuanxu-all? agentic-ai-lab-standard-conformance-receipt?
                               conformance-receipts)
-               (poo-flow-all? poo-flow-standard-digest? evidence-digests))
+               (yuanxu-all? agentic-ai-lab-standard-digest? evidence-digests))
     (error "invalid Standard Case admission input" case-identity))
   (let* ((failures
           (apply append
@@ -419,45 +419,45 @@
           (map (lambda (receipt) (.ref receipt 'conformance-digest))
                conformance-receipts))
          (admission-digest
-          (poo-flow-standard-digest
-           (list 'poo-flow.standard-case-admission.v1 case-identity
+          (agentic-ai-lab-standard-digest
+           (list 'agentic-ai-lab.standard-case-admission.v1 case-identity
                  conformance-digests evidence-digests
                  (map (lambda (failure) (.ref failure 'code)) failures)))))
-    (poo-flow-standard-case-admission-receipt
+    (agentic-ai-lab-standard-case-admission-receipt
      case-identity conformance-digests evidence-digests failures
      admission-digest)))
 
-(def (poo-flow-standard-make-reference-observation
+(def (agentic-ai-lab-standard-make-reference-observation
       validator-identity validator-version validator-binary-digest
       fixture-identity subject-snapshot-digest profile-identities outcome issues
       output-digest metadata)
-  (unless (and (poo-flow-standard-text? validator-identity)
-               (poo-flow-standard-text? validator-version)
-               (poo-flow-standard-digest? validator-binary-digest)
-               (poo-flow-standard-text? fixture-identity)
-               (poo-flow-standard-digest? subject-snapshot-digest)
-               (poo-flow-all? poo-flow-standard-text? profile-identities)
+  (unless (and (agentic-ai-lab-standard-text? validator-identity)
+               (agentic-ai-lab-standard-text? validator-version)
+               (agentic-ai-lab-standard-digest? validator-binary-digest)
+               (agentic-ai-lab-standard-text? fixture-identity)
+               (agentic-ai-lab-standard-digest? subject-snapshot-digest)
+               (yuanxu-all? agentic-ai-lab-standard-text? profile-identities)
                (memq outcome '(valid invalid not-evaluated))
-               (poo-flow-all? poo-flow-standard-text? issues)
-               (poo-flow-standard-digest? output-digest)
+               (yuanxu-all? agentic-ai-lab-standard-text? issues)
+               (agentic-ai-lab-standard-digest? output-digest)
                (list? metadata))
     (error "invalid Standard reference observation input" fixture-identity))
   (let (observation-digest
-        (poo-flow-standard-digest
-         (list 'poo-flow.standard-reference-observation.v1
+        (agentic-ai-lab-standard-digest
+         (list 'agentic-ai-lab.standard-reference-observation.v1
                validator-identity validator-version validator-binary-digest
                fixture-identity subject-snapshot-digest profile-identities
                outcome issues output-digest metadata)))
-    (poo-flow-standard-reference-observation
+    (agentic-ai-lab-standard-reference-observation
      validator-identity validator-version validator-binary-digest
      fixture-identity subject-snapshot-digest profile-identities outcome issues
      output-digest observation-digest metadata)))
 
-(def (poo-flow-standard-compare-reference-observation
+(def (agentic-ai-lab-standard-compare-reference-observation
       validation-closure conformance-receipt reference-observation)
-  (unless (and (poo-flow-standard-validation-closure? validation-closure)
-               (poo-flow-standard-conformance-receipt? conformance-receipt)
-               (poo-flow-standard-reference-observation?
+  (unless (and (agentic-ai-lab-standard-validation-closure? validation-closure)
+               (agentic-ai-lab-standard-conformance-receipt? conformance-receipt)
+               (agentic-ai-lab-standard-reference-observation?
                 reference-observation))
     (error "invalid Standard reference comparison input"))
   (let ((discrepancies-rev '())
@@ -465,7 +465,7 @@
     (def (disagree! code subject detail)
       (set! discrepancies-rev (cons code discrepancies-rev))
       (set! failures-rev
-            (cons (poo-flow-standard-failure code subject detail '())
+            (cons (agentic-ai-lab-standard-failure code subject detail '())
                   failures-rev)))
     (unless (string=? (.ref validation-closure 'validation-closure-digest)
                       (.ref conformance-receipt 'validation-closure-digest))
@@ -511,12 +511,12 @@
     (let* ((discrepancies (reverse discrepancies-rev))
            (failures (reverse failures-rev))
            (comparison-digest
-            (poo-flow-standard-digest
-             (list 'poo-flow.standard-comparison-receipt.v1
+            (agentic-ai-lab-standard-digest
+             (list 'agentic-ai-lab.standard-comparison-receipt.v1
                    (.ref conformance-receipt 'conformance-digest)
                    (.ref reference-observation 'observation-digest)
                    discrepancies))))
-      (poo-flow-standard-comparison-receipt
+      (agentic-ai-lab-standard-comparison-receipt
        (null? discrepancies)
        (.ref conformance-receipt 'provider-identity)
        (.ref reference-observation 'validator-identity)

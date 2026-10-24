@@ -8,55 +8,56 @@
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :clan/poo/mop validate)
         (only-in :std/list/list every)
-        (only-in :gerbil-parser/languages/gql/iso-39075-2024/query-syntax
-                 GqlQueryNode.
-                 GqlQueryStep.
-                 GqlQueryPath.
-                 GqlQueryProperty.
-                 GqlQueryLiteral.
-                 GqlQueryEquals.
-                 GqlQueryProjection.
-                 GqlQueryProgram.
-                 gql-query-program?)
+        (only-in :gerbil-parser/src/modules/parser/graph-syntax
+                 GraphSyntaxNode.
+                 GraphSyntaxStep.
+                 GraphSyntaxPath.
+                 GraphSyntaxProperty.
+                 GraphSyntaxLiteral.
+                 GraphSyntaxEquals.
+                 GraphSyntaxProjection.
+                 GraphSyntaxProgram.
+                 graph-syntax-program?)
         (only-in "types.ss"
-                 poo-flow-query-kind
-                 poo-flow-query-language-kind
-                 poo-flow-query-program-kind
-                 poo-flow-query-element-space-kind
-                 poo-flow-query-result-contract-kind
-                 poo-flow-query-provider-kind
-                 poo-flow-query-execution-candidate-kind
-                 poo-flow-source-query-receipt-kind
-                 PooFlowQuery PooFlowQueryLanguage PooFlowQueryProgram
-                 PooFlowQueryElementSpace
-                 PooFlowQueryResultContract
-                 PooFlowQueryProvider
-                 PooFlowQueryExecutionCandidate
-                 PooFlowSourceQueryReceipt)
-        :core/poo-clos/interface)
+                 agentic-ai-lab-query-kind
+                 agentic-ai-lab-query-language-kind
+                 agentic-ai-lab-query-program-kind
+                 agentic-ai-lab-query-element-space-kind
+                 agentic-ai-lab-query-result-contract-kind
+                 agentic-ai-lab-query-provider-kind
+                 agentic-ai-lab-query-execution-candidate-kind
+                 agentic-ai-lab-source-query-receipt-kind
+                 AgenticAILabQuery AgenticAILabQueryLanguage AgenticAILabQueryProgram
+                 AgenticAILabQueryElementSpace
+                 AgenticAILabQueryResultContract
+                 AgenticAILabQueryProvider
+                 AgenticAILabQueryExecutionCandidate
+                 AgenticAILabSourceQueryReceipt)
+        :yuanxu/poo-clos/interface)
 
-(export PooFlowQuery.
-        PooFlowQueryLanguage.
-        PooFlowGqlQueryLanguage.
-        PooFlowQueryProgram.
-        GqlQueryNode.
-        GqlQueryStep.
-        GqlQueryPath.
-        GqlQueryProperty.
-        GqlQueryLiteral.
-        GqlQueryEquals.
-        GqlQueryProjection.
-        GqlQueryProgram.
-        PooFlowGqlQueryProgram.
-        PooFlowQueryElementSpace.
-        PooFlowQueryResultContract.
+(export AgenticAILabQuery.
+        AgenticAILabQueryLanguage.
+        AgenticAILabGqlQueryLanguage.
+        AgenticAILabSchemeGqlQueryLanguage.
+        AgenticAILabQueryProgram.
+        GraphSyntaxNode.
+        GraphSyntaxStep.
+        GraphSyntaxPath.
+        GraphSyntaxProperty.
+        GraphSyntaxLiteral.
+        GraphSyntaxEquals.
+        GraphSyntaxProjection.
+        GraphSyntaxProgram.
+        AgenticAILabGqlQueryProgram.
+        AgenticAILabQueryElementSpace.
+        AgenticAILabQueryResultContract.
         QueryReceiptBindingExecutor
-        poo-flow-query-element-space
-        poo-flow-gql-query-program?
-        poo-flow-query-result-contract
-        poo-flow-query-provider
-        poo-flow-query-execution-candidate
-        poo-flow-source-query-receipt)
+        agentic-ai-lab-query-element-space
+        agentic-ai-lab-gql-query-program?
+        agentic-ai-lab-query-result-contract
+        agentic-ai-lab-query-provider
+        agentic-ai-lab-query-execution-candidate
+        agentic-ai-lab-source-query-receipt)
 
 ;;; Provider packages specialize this executor class and publish their binding
 ;;; methods through an owned bundle.  The Query core never invokes a runtime.
@@ -67,41 +68,41 @@
   (and (object? value)
        (every (lambda (slot) (.slot? value slot)) slots)))
 
-(def (poo-flow-gql-query-program? value)
-  (and (gql-query-program? value)
+(def (agentic-ai-lab-gql-query-program? value)
+  (and (graph-syntax-program? value)
        (query-program-has-slots?
         value '(kind identity language-identity representation
                      immutable?))
-       (eq? (.ref value 'kind) poo-flow-query-program-kind)
+       (eq? (.ref value 'kind) agentic-ai-lab-query-program-kind)
        (eq? (.ref value 'language-identity) 'gql)
        (eq? (.ref value 'representation) 'poo-gql-ast)
        (eq? (.ref value 'immutable?) #t)))
 
-(def PooFlowQueryProgram.
-  (.o kind: poo-flow-query-program-kind
+(def AgenticAILabQueryProgram.
+  (.o kind: agentic-ai-lab-query-program-kind
       identity: #f
       language-identity: #f
       representation: 'poo-object
       immutable?: #t))
 
-(def PooFlowGqlQueryProgram.
-  (.o (:: @ GqlQueryProgram.)
-      kind: poo-flow-query-program-kind
+(def AgenticAILabGqlQueryProgram.
+  (.o (:: @ GraphSyntaxProgram.)
+      kind: agentic-ai-lab-query-program-kind
       identity: #f
       language-identity: 'gql
       representation: 'poo-gql-ast
       immutable?: #t))
 
-(def PooFlowQueryResultContract.
-  (.o kind: poo-flow-query-result-contract-kind
+(def AgenticAILabQueryResultContract.
+  (.o kind: agentic-ai-lab-query-result-contract-kind
       identity: #f
       result-kind: 'query-result
       required-fields: '()
       max-results: 1
       immutable?: #t))
 
-(def PooFlowQueryElementSpace.
-  (.o kind: poo-flow-query-element-space-kind
+(def AgenticAILabQueryElementSpace.
+  (.o kind: agentic-ai-lab-query-element-space-kind
       identity: #f
       semantic-revision: #f
       element-identities: '()
@@ -109,8 +110,8 @@
       immutable?: #t
       runtime-executed?: #f))
 
-(def PooFlowQueryLanguage.
-  (.o kind: poo-flow-query-language-kind
+(def AgenticAILabQueryLanguage.
+  (.o kind: agentic-ai-lab-query-language-kind
       identity: #f
       representation: 'poo-object
       authoring-surface: 'scheme-poo
@@ -126,8 +127,8 @@
 
 ;;; There is one semantic language.  Scheme is the host syntax used to author
 ;;; this GQL-aligned POO AST; it is not a competing Query language.
-(def PooFlowGqlQueryLanguage.
-  (.o (:: @ PooFlowQueryLanguage.)
+(def AgenticAILabGqlQueryLanguage.
+  (.o (:: @ AgenticAILabQueryLanguage.)
       identity: 'gql
       representation: 'poo-gql-ast
       authoring-surface: 'scheme-poo
@@ -136,60 +137,65 @@
       runtime-owner: 'mrr
       parser-owner: 'gerbil-parser
       syntax-contract: "iso-iec-39075-2024.opengql-1.9.0-syntax.v1"
-      .program?: poo-flow-gql-query-program?))
+      .program?: agentic-ai-lab-gql-query-program?))
 
-(def PooFlowQuery.
-  (.o kind: poo-flow-query-kind
+(def AgenticAILabSchemeGqlQueryLanguage.
+  (.o (:: @ AgenticAILabGqlQueryLanguage.)
+      execution-boundary: 'pure-control-plane
+      runtime-owner: 'agentic-ai-lab))
+
+(def AgenticAILabQuery.
+  (.o kind: agentic-ai-lab-query-kind
       identity: #f
       version: #f
       semantic-revision: #f
       element-space-identity: #f
       selected-element-identities: '()
-      language: PooFlowGqlQueryLanguage.
+      language: AgenticAILabGqlQueryLanguage.
       program:
-      (.o (:: @ PooFlowGqlQueryProgram.)
+      (.o (:: @ AgenticAILabGqlQueryProgram.)
           identity: 'unbound-query-program
           match:
-          (.o (:: @ GqlQueryPath.)
-              start: (.o (:: @ GqlQueryNode.) binding: 'x label: 'Element))
+          (.o (:: @ GraphSyntaxPath.)
+              start: (.o (:: @ GraphSyntaxNode.) binding: 'x label: 'Element))
           project:
-          (.o (:: @ GqlQueryProjection.)
+          (.o (:: @ GraphSyntaxProjection.)
               expression:
-              (.o (:: @ GqlQueryProperty.) binding: 'x property: 'identity)))
+              (.o (:: @ GraphSyntaxProperty.) binding: 'x property: 'identity)))
       result-bound: 1
       completeness-requirement: 'bounded
       evidence-requirements: '()
       visibility-request: 'restricted
-      result-contract: PooFlowQueryResultContract.
+      result-contract: AgenticAILabQueryResultContract.
       mutation-authority?: #f
       action-authority?: #f
       runtime-executed?: #f))
 
-(def (poo-flow-query-element-space identity-value semantic-revision-value
+(def (agentic-ai-lab-query-element-space identity-value semantic-revision-value
                                    element-identities-value complete?-value)
   (validate
-   PooFlowQueryElementSpace
-   (.o (:: @ PooFlowQueryElementSpace.)
+   AgenticAILabQueryElementSpace
+   (.o (:: @ AgenticAILabQueryElementSpace.)
        identity: identity-value
        semantic-revision: semantic-revision-value
        element-identities: element-identities-value
        complete?: complete?-value)))
 
-(def (poo-flow-query-result-contract identity-value result-kind-value
+(def (agentic-ai-lab-query-result-contract identity-value result-kind-value
                                      required-fields-value max-results-value)
   (validate
-   PooFlowQueryResultContract
-   (.o (:: @ PooFlowQueryResultContract.)
+   AgenticAILabQueryResultContract
+   (.o (:: @ AgenticAILabQueryResultContract.)
        identity: identity-value
        result-kind: result-kind-value
        required-fields: required-fields-value
        max-results: max-results-value)))
 
-(def (poo-flow-query-provider identity-value supported-languages-value
+(def (agentic-ai-lab-query-provider identity-value supported-languages-value
                               runtime-owner-value receipt-executor-value)
   (validate
-   PooFlowQueryProvider
-   (.o kind: poo-flow-query-provider-kind
+   AgenticAILabQueryProvider
+   (.o kind: agentic-ai-lab-query-provider-kind
        identity: identity-value
        supported-languages: supported-languages-value
        runtime-owner: runtime-owner-value
@@ -197,14 +203,14 @@
        runtime-executed?: #f
        action-authority?: #f)))
 
-(def (poo-flow-query-execution-candidate
+(def (agentic-ai-lab-query-execution-candidate
       provider-identity-value query-identity-value query-version-value
       semantic-revision-value source-content-identity-value
       parser-identity-value provenance-root-value result-digest-value
       result-count-value complete?-value)
   (validate
-   PooFlowQueryExecutionCandidate
-   (.o kind: poo-flow-query-execution-candidate-kind
+   AgenticAILabQueryExecutionCandidate
+   (.o kind: agentic-ai-lab-query-execution-candidate-kind
        provider-identity: provider-identity-value
        query-identity: query-identity-value
        query-version: query-version-value
@@ -219,11 +225,11 @@
        mutation-authority?: #f
        action-authority?: #f)))
 
-(def (poo-flow-source-query-receipt candidate result-contract-identity-value
+(def (agentic-ai-lab-source-query-receipt candidate result-contract-identity-value
                                     diagnostic-values)
   (validate
-   PooFlowSourceQueryReceipt
-   (.o kind: poo-flow-source-query-receipt-kind
+   AgenticAILabSourceQueryReceipt
+   (.o kind: agentic-ai-lab-source-query-receipt-kind
        provider-identity: (.ref candidate 'provider-identity)
        query-identity: (.ref candidate 'query-identity)
        query-version: (.ref candidate 'query-version)

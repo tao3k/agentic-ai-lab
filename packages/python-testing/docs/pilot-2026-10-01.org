@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Interactive ASCENT candidate pilot with DeepSeek, 2026-10-01
+#+status: bounded live observation
+
+The Agentic AI Lab Runtime graph ran =model= and =candidate= nodes in sequence.
+The model transport was the official OpenAI Python SDK pointed at DeepSeek's
+Responses endpoint, using =deepseek-flash= (documented as V4.1-Flash),
+non-thinking mode and a 4096-token output cap. No system/developer message
+or stored task prompt was sent; the experimenter entered each user turn.
+The Scheme node used the current gerbil-ascent PR #1 checkout, with immutable
+=edge/2= snapshots: generation 1 =(0 1) (1 2)=, generation 2 =(0 1)=.
+
+The first model candidate contained the correct base and recursive rules but
+selected =(limits 2 3 3)=. The Scheme receipt for generation 1 was =unknown=
+with =solve-failed=, while generation 2 was =complete= with =((0 1))=.
+After that feedback, the model repeated the identical candidate; the same
+candidate digest and =unknown= result made that failure visible. A further
+interactive correction led to =(limits 8 32 32)=, but the model first sent
+it with surrounding prose, so the bounded candidate node did not execute it.
+When asked to return only the candidate, it did so. Both snapshots then
+returned =complete= with rows =((0 1) (1 2) (0 2))= and =((0 1))= and empty
+diagnostics. The final content digest differed from the previous one.
+
+Across these turns, first-token latency was 1.489–2.437 s and completed
+model-turn latency was 1.806–2.746 s. The first Scheme check took 6.231 s;
+checks in the same worker took 0.060 s, 0.000 s when no candidate was
+recognized, and 0.158 s. These measurements include local process and
+transport overhead and are not a matched throughput benchmark. The only
+verified semantic claim is agreement with these two finite snapshots. The
+independent snapshot checks do not establish a retained deletion algorithm,
+general proof soundness, or model reliability across tasks.
+
+The local Agentic AI Lab integration branch updates the PR #34 dependency pin to gerbil-ascent
+=955b1784aed504f5096ddf40106619705de876b3=. The dependency projection
+check and Python integration checks passed. The isolated =gerbil deps --install=
+gate was attempted twice. GitHub HTTPS first disconnected while fetching
+=gerbil-parser= and then timed out while fetching =gerbil-poo=. The subsequent
+=just build= compiled Core but failed because the pinned
+=gerbil-ascent.manifest= had not been installed. The full Agentic AI Lab build and
+its pinned Ascent integration test remain unverified. A focused
+=just test-file t/qualification/ascent-integration/guarded-test.ss= run with
+the local ASCENT PR checkout on =GERBIL_LOADPATH= passed with =MODULE-OK=,
+=HARNESS-OK= and final =OK=. This confirms local source interface
+compatibility, not the pinned gxpkg installation.
+
+Official references: [[https://developers.openai.com/api/docs/quickstart][OpenAI Python SDK]],
+[[https://api-docs.deepseek.com/guides/responses_api/][DeepSeek Responses API]],
+[[https://api-docs.deepseek.com/quick_start/pricing/][DeepSeek model alias]].

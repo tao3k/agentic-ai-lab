@@ -2,45 +2,45 @@
 //
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-export type PooFlowWasmLoadOptions = {
+export type AgenticAILabWasmLoadOptions = {
   readonly bytes?: BufferSource;
   readonly fetch?: typeof globalThis.fetch;
   readonly url?: string | URL;
 };
 
-export type PooFlowCompactId = {
+export type AgenticAILabCompactId = {
   readonly high: bigint;
   readonly low: bigint;
   readonly key: string;
 };
 
-export type PooFlowTopologyComponent = {
-  readonly caseId: PooFlowCompactId;
-  readonly componentId: PooFlowCompactId;
-  readonly objectId: PooFlowCompactId;
-  readonly typeId: PooFlowCompactId;
-  readonly contractId: PooFlowCompactId;
-  readonly roleId: PooFlowCompactId;
-  readonly capabilityId: PooFlowCompactId;
-  readonly policyId: PooFlowCompactId;
-  readonly strategyId: PooFlowCompactId;
-  readonly adapterId: PooFlowCompactId;
-  readonly projectionId: PooFlowCompactId;
+export type AgenticAILabTopologyComponent = {
+  readonly caseId: AgenticAILabCompactId;
+  readonly componentId: AgenticAILabCompactId;
+  readonly objectId: AgenticAILabCompactId;
+  readonly typeId: AgenticAILabCompactId;
+  readonly contractId: AgenticAILabCompactId;
+  readonly roleId: AgenticAILabCompactId;
+  readonly capabilityId: AgenticAILabCompactId;
+  readonly policyId: AgenticAILabCompactId;
+  readonly strategyId: AgenticAILabCompactId;
+  readonly adapterId: AgenticAILabCompactId;
+  readonly projectionId: AgenticAILabCompactId;
   readonly compositionOrder: bigint;
   readonly flags: number;
 };
 
-export type PooFlowTopologyEdge = {
-  readonly caseId: PooFlowCompactId;
-  readonly sourceComponentId: PooFlowCompactId;
-  readonly targetComponentId: PooFlowCompactId;
-  readonly relationId: PooFlowCompactId;
+export type AgenticAILabTopologyEdge = {
+  readonly caseId: AgenticAILabCompactId;
+  readonly sourceComponentId: AgenticAILabCompactId;
+  readonly targetComponentId: AgenticAILabCompactId;
+  readonly relationId: AgenticAILabCompactId;
   readonly compositionOrder: bigint;
   readonly flags: number;
 };
 
-export type PooFlowTopologySymbol = {
-  readonly id: PooFlowCompactId;
+export type AgenticAILabTopologySymbol = {
+  readonly id: AgenticAILabCompactId;
   readonly value: string;
   readonly kind: number;
   readonly flags: number;
@@ -60,31 +60,31 @@ export interface WorkflowCursorSession {
   release(): void;
 }
 
-export declare class PooFlowTopology {
+export declare class AgenticAILabTopology {
   constructor(exports: WebAssembly.Exports, handle: number);
   readonly released: boolean;
   readonly componentCount: number;
   readonly edgeCount: number;
   readonly symbolCount: number;
-  componentAt(index: number): PooFlowTopologyComponent;
-  edgeAt(index: number): PooFlowTopologyEdge;
-  symbolAt(index: number): PooFlowTopologySymbol;
-  components(): readonly PooFlowTopologyComponent[];
-  edges(): readonly PooFlowTopologyEdge[];
-  symbols(): readonly PooFlowTopologySymbol[];
-  policyForComponent(component: PooFlowTopologyComponent): PooFlowTopologySymbol | null;
+  componentAt(index: number): AgenticAILabTopologyComponent;
+  edgeAt(index: number): AgenticAILabTopologyEdge;
+  symbolAt(index: number): AgenticAILabTopologySymbol;
+  components(): readonly AgenticAILabTopologyComponent[];
+  edges(): readonly AgenticAILabTopologyEdge[];
+  symbols(): readonly AgenticAILabTopologySymbol[];
+  policyForComponent(component: AgenticAILabTopologyComponent): AgenticAILabTopologySymbol | null;
   openCursor(): WorkflowCursorSession;
   release(): void;
 }
 
-export declare class PooFlowWasmRuntime {
+export declare class AgenticAILabWasmRuntime {
   constructor(exports: WebAssembly.Exports);
   readonly handleCapacity: number;
   readonly workflowCursorCapacity: number;
   openTopology(input: {
     readonly descriptor: BufferSource;
     readonly arena: BufferSource;
-  }): PooFlowTopology;
+  }): AgenticAILabTopology;
 }
 
 export declare const PFW_BUNDLE_SYMBOL_KIND_COMPONENT = 1;
@@ -94,6 +94,6 @@ export declare const PFW_WASM_STATUS_INVALID_ARGUMENT = 0xffff0001;
 export declare const PFW_WASM_STATUS_INVALID_SLOT = 0xffff0002;
 export declare const PFW_WASM_STATUS_SLOT_EXHAUSTED = 0xffff0003;
 
-export declare const loadPooFlowWasmRuntime: (
-  options?: PooFlowWasmLoadOptions,
-) => Promise<PooFlowWasmRuntime>;
+export declare const loadAgenticAILabWasmRuntime: (
+  options?: AgenticAILabWasmLoadOptions,
+) => Promise<AgenticAILabWasmRuntime>;

@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 
 pub const CEDAR_VERSION: &str = "4.12.0";
 pub const LEAN_REVISION: &str = "e9fa9c1e6b636f29b0897d8706bd7aa5eaf06f9a";
-pub const OUTCOME_SCHEMA: &str = "poo-flow.cedar-engine-outcome.v1";
+pub const OUTCOME_SCHEMA: &str = "agentic-ai-lab.cedar-engine-outcome.v1";
 
 #[derive(Clone, PartialEq, Message)]
 pub struct AuthorizationRequest {

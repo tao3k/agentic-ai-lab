@@ -1,0 +1,201 @@
+#+title: Anchored Incremental Evidence Slices
+
+* Conditional First-Hit Contract
+
+A first-hit obligation is not a claim about arbitrary natural language. Its
+premises are: an existing applicable chain; current source/receipt bindings;
+the query exposes factors in the caller's declared association relation; that
+relation covers the matching chain; completed evaluation; and enough display
+capacity for a self-describing evidence unit or its bound expandable summary.
+Under these premises the first request must expose the matching chain, without
+catalog discovery or a mandatory query sequence. Undeclared associations,
+missing applicability, stale sources and interrupted evaluation are distinct
+gaps, not proof that no evidence exists. Factor extraction from arbitrary model
+reasoning is outside the theorem.
+
+The relational reference semantics uses three separate domains: exposed
+factors F, chains C and witnesses W. A caller-owned association A relates F to
+C; applicability P filters C; membership B relates C to W. The anchor relation
+is Q(c) = P(c) and exists f: E(f) and A(f,c). The logical slice is
+S(w) = exists c: Q(c) and B(c,w). Consequently an exposed, associated,
+applicable chain with a witness contributes that witness on the first completed
+query. Conversely every returned witness has an exposed factor, applicable
+chain and membership path. Both polarities use the same membership relation.
+
+Current source identity, bound receipts, satisfied conditions, completed
+evaluation and sufficient presentation are independent validity premises.
+Neither the existence of a historical chain nor a matching word supplies those
+premises. Missing anchor, missing association, inapplicable chain, stale source,
+missing receipt, unmet condition, incomplete evaluation and insufficient
+presentation have distinct outcomes. A gap must never be reported as global
+absence. The finite QNT model explores these premises and checks the first
+Query transition; it does not assume eventual scheduling or prove runtime
+termination. Lean checks the relational inclusion and trace laws. Neither
+establishes that the native evaluator implements these relations; that requires
+the shared Scheme DSL's source-bound tests and real consumer trials.
+
+The association relation may itself be derived by caller rules, including
+conjunctions and recursive paths. This small protocol model takes the completed
+association relation as input; it does not prove the caller's rules complete or
+their facts true. The application must expose the association witness and its
+source/conditions. Library and consumer tests must cover those derivations
+separately, rather than adding an unproved natural-language matching oracle.
+
+* One Protocol, Existing Owners
+
+The application declares factor association, entry anchors and relevance in
+Scheme Evidence. ASCENT's existing SourceSession evaluates those declarations.
+The Library's shared Clue rules derive scoped witnesses, both polarities,
+conditional hypotheses, unknowns, boundary edges and exact set deltas. Rust
+packages and pages those results; Python only binds inputs, invokes the native
+owner and transports opaque read checkpoints. No downstream Scheme compiler,
+Python relevance algorithm, new database or action-selection service is added.
+
+* Scope And Presentation
+
+An anchor yields seed claims. Explicit expansion claims enlarge the read
+window; unseen claims and arbitrary new factors remain allowed. Links at the
+window's boundary are references, not recommended actions. Claim families keep
+support and counterevidence together. No shortest-proof or global-minimum
+claim is made. The initial view is a compact family slice, not a full graph.
+
+Display capacity belongs to the caller and is independent of inference and
+exploration. Paging uses stable content order, not a relevance ranking. A
+collapsed family must retain polarity counts and a source-bound expansion
+reference. Truncation is explicitly incomplete; it cannot imply absence,
+refutation or permission denial. A capacity too small for an honest unit is a
+presentation error, not an unknown claim.
+
+* Incremental Reads
+
+Checkpoints bind source, shared rules, the last query anchor and displayed
+families. Scheme rules derive added, removed and retained items in the current
+scope. Same-cardinality replacement is still a change; leaving a scope is not
+an evidence retraction. A different selector or scope is explicitly =rescope=:
+association is re-evaluated but same-source displayed families are not replayed.
+Source or shared-rule replacement resets acknowledgement. A checkpoint is a
+read hint, never an admission receipt, and callers can explicitly start a fresh
+read without one.
+
+Acknowledgement is display-unit-local. A unit is a complete evidence family or
+a complete caller-derived relation result; derived results never mint attested
+observations. A folded page can acknowledge the complete units actually returned,
+never the details behind collapsed references.
+The next read shows unacknowledged units without replaying the displayed ones.
+Checkpoints retain same-source acknowledgement outside the current scope,
+so widening, narrowing and returning remain possible without erasing history.
+No production scope limit, automatic action or investigation order is imposed.
+
+Optional trace outputs share the display budget rather than crowding out all
+family summaries. =deferredRelations= binds each hidden result to the source,
+selector, relation name and content digest; =retainedRelations= identifies exact
+results already displayed. Tiny/empty results can be cheaper to inline than to
+reference. A caller can expose a deferred result by retaining its selector and
+checkpoint with suitable presentation capacity, or compose a different query.
+This is presentation, not a mandatory query sequence or a recommendation.
+Both acknowledgement domains use the same Scheme declaration and checkpoint;
+Python does not compute relation differences or add another read-state store.
+
+The =ProgressiveEvidenceRead= QNT model composes repeated reads, arbitrary
+scope selection and source changes. Six mutation controls cover replay,
+acknowledging hidden details, lost read history, stale reuse, false retraction
+and closed exploration. Progress is conditional on a returned full family;
+the model does not promise progress when presentation capacity fits only
+references. Lean adds family-local acknowledgement, preservation, rescoping
+and pending-family laws. The single-query model retains its whole-page
+completeness law; an opaque checkpoint is not a whole-page completion receipt.
+
+Python consumers can persist the opaque native read hint in their existing
+cache and expose a short content-addressed token across processes. Cache loss
+must be explicit and cause safe replay, never absence or native-progress loss.
+Corrupt bytes must be rejected. This transport does not infer associations or
+promote cached read state into Evidence.
+
+* Acceptance Matrix
+
+- Existing applicable chain and exposed/mapped factors: first request hits.
+- Existing but unmapped factors: association gap, never a fabricated hit.
+- Partial or stale evaluation: no completed-hit or absence claim.
+- Unrelated graph growth: no unrelated initial payload.
+- Matching positive and counter witnesses: neither polarity is hidden.
+- Expansion and new factors: remain available independently of initial scope.
+- Cyclic graph: finite one-hop boundary; no automatic traversal loop.
+- Failed path: exact bound premise and reason, not a global retry ban.
+- Changed condition/source: recompute applicability; old results stay history.
+- Same-count changes: exact added/removed delta, not unchanged.
+- Display collapse: explicit incompleteness and expandable family reference.
+- No next action, ranking mandate or execution/native admission.
+
+QNT checks the finite protocol and mutation controls. Lean proves conditional
+first-hit and slicing/delta laws, not arbitrary-language extraction or native
+SMP correctness. Native tests bind the shared Scheme rules to these cases.
+Only a real Grok task without a prescribed query sequence can qualify actual
+entry discovery; first-hit measurements count the first related evidence
+request separately from unrelated instruction/file reads.
+
+* Reproduction
+
+Run the registered exhaustive model and all its mutation controls through the
+existing runner:
+
+#+begin_src sh
+PYTHONPATH=workbench/src python3 -m ascent_workbench.formal quint AnchoredEvidenceSlice
+just check-lean-file AnchoredEvidenceSlice.lean
+PYTHONPATH=workbench/src python3 -m unittest discover -s workbench/tests -p test_formal.py
+#+end_src
+
+These checks qualify a reference contract only. Production DSL binding, compact
+native slices and cold Grok first-associated-query acceptance remain separate
+obligations; this document does not claim those complete paths have passed.
+
+The native integration tests in =rust/ascent/tests/integration/clues/= bind
+the existing =read_selected= operation to a caller-declared factor association
+and applicability rule. The first read preserves both polarities, distinct
+receipts and a boundary reference without unrelated witnesses. Separate cases
+check association and applicability gaps. This qualifies that small declaration,
+not every downstream selector, compact checkpoint algorithm or Grok discovery.
+
+* Local Qualification Boundary
+
+The current local display-unit extension passed the complete native integration
+suite (85/85) and strict core Clippy with warnings denied. The two registered
+models passed healthy exhaustive exploration and detected all 19 mutation
+controls; the guarded Lean file checked 17 laws. The downstream SMP suite
+passed 81/81, including process-boundary token reuse and partial-read progress.
+
+In a real read-only SMP task, Grok's first related query was actual tool call
+two. At call three it independently reused the token, changed its Scheme
+selector and expanded seven unresolved references. The returned families were
+seven unknowns, not replayed observation bodies; the scoped delta was 7 added,
+0 removed and 46 retained. Hypotheses remained caller-owned and no native SMP
+pass was claimed. Full receipts, retained failed trials and source-binding
+limits live in the downstream =docs/smp-trajectory-application.md=.
+
+These are local candidate results, not remote CI or a proof of universally
+better Agent reasoning. A supervisor explicitly requested the final public
+conclusion after collection; natural task termination is not qualified by that
+audit. The Library does not force callers to use checkpoints, ban fresh reads
+or choose their investigative direction.
+
+Before the folded-page acknowledgement extension, on 2026-10-18 the registered
+healthy QNT model completed exhaustive exploration:
+3,840 distinct states, zero states left, depth 8. All eleven mutation controls
+produced the expected invariant violation and exit 12. LeanPoo Guard checked
+all eight relational laws with exit zero. The five formal-runner tests passed;
+the complete native integration suite passed 80/80, including seven Clue
+tests. These are local results, not remote CI, Grok cold-entry acceptance or
+native SMP repair. No claim of lower reasoning cost follows from them.
+
+The current extension completed exhaustive exploration of 7,680 distinct states
+with zero states left and depth 9; all twelve controls were detected. The
+guarded Lean file now checks ten relational laws. The full native integration
+suite passed 82/82. ClueSubmission and TrajectoryClueScope also passed their
+healthy models and all fifteen controls. These checks do not establish that an
+unprompted Agent will discover or choose the Library: first-hit is conditional
+on a related query reaching this interface, not a theorem of tool choice.
+
+The SMP adapter's direct relation-query path uses its existing Evidence view
+registry; it does not require a Context, an implicit Navigator or a default
+topic. Caller-authored selectors can join clue, factor, link and attested source
+relations. Normal help and API documentation expose these signatures. There
+is no startup workflow prompt or automatic selection of an investigation.

@@ -6,15 +6,15 @@
 ;;; Boundary: bridge existing durable rows into runtime store operation rows.
 ;;; Invariant: bridge tests validate projection only; no runtime store runs.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/memory-core/durable/policy
-        :poo-flow/modules/memory-core/durable/store
-        :poo-flow/modules/memory-core/durable/store-backend
-        :poo-flow/modules/memory-core/durable/store-operation
-        :poo-flow/modules/memory-core/durable/store-operation-bridge)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation-bridge)
 
 (export durable-runtime-store-operation-bridge-test)
 
@@ -33,30 +33,30 @@
 ;; : (-> Alist)
 (def (test-negotiation)
   (let* ((contract
-          (poo-flow-durable-runtime-store-contract
+          (agentic-ai-lab-durable-runtime-store-contract
            'runtime-store/project
            'marlin-runtime-store
-           (poo-flow-durable-policy
+           (agentic-ai-lab-durable-policy
             'durable/bridge
             'objects.shared.durable
             '((repair-mode . rebuild)
               (action-classes . (replayable idempotent compensatable))))))
          (contract-receipt
-          (poo-flow-durable-runtime-store-contract->receipt
+          (agentic-ai-lab-durable-runtime-store-contract->receipt
            contract
-           '((project-id . project/poo-flow)
+           '((project-id . project/agentic-ai-lab)
              (root-session-id . session/root)
              (session-id . session/child))))
          (backend-receipt
-          (poo-flow-durable-runtime-store-backend->receipt
-           poo-flow-durable-runtime-store-backend/default)))
-    (poo-flow-durable-runtime-store-backend-negotiation contract-receipt
+          (agentic-ai-lab-durable-runtime-store-backend->receipt
+           agentic-ai-lab-durable-runtime-store-backend/default)))
+    (agentic-ai-lab-durable-runtime-store-backend-negotiation contract-receipt
                                                         backend-receipt)))
 
 ;; : Alist
 (def test-session-graph-row
-  '((kind . poo-flow.session.agent-graph)
-    (project-id . project/poo-flow)
+  '((kind . agentic-ai-lab.session.agent-graph)
+    (project-id . project/agentic-ai-lab)
     (root-session-ref . session/root)
     (agent-ids . (agent/build agent/audit))
     (session-ids . (session/root session/child))
@@ -64,8 +64,8 @@
 
 ;; : [Alist]
 (def test-communication-rows
-  '(((kind . poo-flow.session.communication-receipt)
-     (project-id . project/poo-flow)
+  '(((kind . agentic-ai-lab.session.communication-receipt)
+     (project-id . project/agentic-ai-lab)
      (relation-kind . parent-child)
      (source-session-id . session/root)
      (target-session-id . session/child)
@@ -78,11 +78,11 @@
 
 ;; : [Alist]
 (def test-memory-job-rows
-  '(((kind . poo-flow.memory-core.durable-job-receipt)
+  '(((kind . agentic-ai-lab.memory-core.durable-job-receipt)
      (job-id . memory-job/recovery-context)
      (job-kind . recall)
      (job-state . planned)
-     (project-id . project/poo-flow)
+     (project-id . project/agentic-ai-lab)
      (root-session-id . session/root)
      (session-id . session/child)
      (source-ref . memory/recovery-context)
@@ -93,7 +93,7 @@
 
 ;; : [Alist]
 (def test-workflow-task-rows
-  '(((kind . poo-flow.workflow.cicd.check-receipt)
+  '(((kind . agentic-ai-lab.workflow.cicd.check-receipt)
      (check . build)
      (durable-task-id . workflow/build)
      (action-class . idempotent)
@@ -105,11 +105,11 @@
 
 ;; : TestSuite
 (def durable-runtime-store-operation-bridge-test
-  (test-suite "poo-flow durable runtime store operation bridge"
-    (poo-flow-test-case "bridges session memory workflow artifact and sandbox rows"
+  (test-suite "agentic-ai-lab durable runtime store operation bridge"
+    (yuanxu-test-case "bridges session memory workflow artifact and sandbox rows"
       (let* ((negotiation (test-negotiation))
              (operations
-              (poo-flow-durable-runtime-store-operations-from-rows
+              (agentic-ai-lab-durable-runtime-store-operations-from-rows
                negotiation
                test-session-graph-row
                test-communication-rows
@@ -117,10 +117,10 @@
                test-workflow-task-rows
                '(agent/nono)))
              (rows
-              (poo-flow-durable-runtime-store-operation-receipts->alists
+              (agentic-ai-lab-durable-runtime-store-operation-receipts->alists
                operations))
              (handoff
-              (poo-flow-durable-runtime-store-operations->marlin-handoff
+              (agentic-ai-lab-durable-runtime-store-operations->marlin-handoff
                negotiation
                operations)))
         (check-equal? (length rows) 7)
@@ -147,20 +147,20 @@
         (check-equal? (test-ref handoff 'operation-count) 7)
         (check-equal? (test-ref handoff 'runtime-executed) #f)))
 
-    (poo-flow-test-case "preserves operation diagnostics from invalid source rows"
+    (yuanxu-test-case "preserves operation diagnostics from invalid source rows"
       (let* ((operations
-              (poo-flow-durable-runtime-store-operations-from-rows
+              (agentic-ai-lab-durable-runtime-store-operations-from-rows
                (test-negotiation)
                #f
                '()
-               '(((kind . poo-flow.memory-core.durable-job-receipt)
+               '(((kind . agentic-ai-lab.memory-core.durable-job-receipt)
                   (job-id . memory-job/bad)
                   (job-store-ref . "bad-target")
                   (valid? . #f)))
                '()
                '()))
              (rows
-              (poo-flow-durable-runtime-store-operation-receipts->alists
+              (agentic-ai-lab-durable-runtime-store-operation-receipts->alists
                operations))
              (row (car rows)))
         (check-equal? (length rows) 1)

@@ -3,9 +3,14 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: task-family descriptor tests stay separate from flow execution.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import :yuanxu/composition/roles
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -16,15 +21,17 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/modules/workflow/store)
+        :yuanxu/modules/funflow/control-plane/api
+        :yuanxu/modules/funflow/store)
 
 ;;; This suite keeps task-family routing policy executable without invoking
 ;;; runtime adapters, so descriptor regressions fail at the control-plane edge.
 ;; : TestSuite
+(export task-family-descriptor-test)
+
 (def task-family-descriptor-test
   (test-suite "task family descriptors"
-    (poo-flow-test-case "declares POO-backed task family policy"
+    (yuanxu-test-case "declares POO-backed task family policy"
       (check-equal? (task-family-descriptor? pure-task-family-descriptor) #t)
       (check-equal? (role-object? store-task-family-descriptor) #t)
       (check-equal? (task-family-name scheme-task-family-descriptor) 'scheme)
@@ -35,12 +42,27 @@
                     'rust-or-external-runtime)
       (check-equal? (task-family-adapter-dispatch external-task-family-descriptor)
                     'submit))
-    (poo-flow-test-case "routes tasks through descriptor policy"
+    (yuanxu-test-case "routes tasks through descriptor policy"
       (let ((registry (make-store-task-family-registry))
-            (pure (make-pure-task 'inc (lambda (x) (+ x 1)) 'number 'number))
-            (put (make-store-task 'put-cache 'put 'cache-handle 'artifact 'artifact))
-            (get (make-store-task 'get-cache 'get 'cache-handle 'artifact 'artifact))
-            (external (make-external-task 'compile 'rust-build '((crate . "poo-flow")) 'artifact 'artifact)))
+            (pure (make-pure-task
+  'inc
+  (Fun Number <- Number)
+  (lambda (x) (+ x 1))))
+            (put (make-store-task
+		  'put-cache
+		  'put
+		  'cache-handle
+		  (Fun AdapterResult <- Any)))
+            (get (make-store-task
+		  'get-cache
+		  'get
+		  'cache-handle
+		  (Fun AdapterResult <- Any)))
+            (external (make-external-task
+		       'compile
+		       'rust-build
+		       '((crate . "agentic-ai-lab"))
+		       (Fun AdapterResult <- Any))))
         (check-equal? (task-family-name (task-descriptor pure)) 'pure)
         (check-equal? (task-capability-in registry put) 'store)
         (check-equal? (task-route pure) 'local)

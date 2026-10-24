@@ -1,0 +1,115 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+name: Set up Gerbil prerequisites
+description: Activate the immutable gerbil-bazel release and required tools.
+runs:
+  using: composite
+  steps:
+    - name: Install Linux dependencies
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential ca-certificates git jq libsqlite3-dev libssl-dev openssl pkg-config sqlite3 zlib1g-dev
+    - name: Install macOS dependencies
+      if: runner.os == 'macOS'
+      env:
+        HOMEBREW_NO_AUTO_UPDATE: 1
+        HOMEBREW_NO_INSTALL_CLEANUP: 1
+      shell: bash
+      run: |
+        brew list --formula ghostscript >/dev/null 2>&1 && brew unlink ghostscript || true
+        brew install gcc jq openssl pkg-config sqlite zlib
+        gcc_prefix="$(brew --prefix gcc)"
+        gcc_bin="$(find "$gcc_prefix/bin" -maxdepth 1 -type f -name 'gcc-[0-9]*' | awk -F- '{print $NF "\t" $0}' | sort -n | tail -n 1 | cut -f2-)"
+        test -x "$gcc_bin"
+        echo "GERBIL_GCC=$gcc_bin" >> "$GITHUB_ENV"
+        openssl_prefix="$(brew --prefix openssl@3 2>/dev/null || brew --prefix openssl)"
+        echo "PKG_CONFIG_PATH=$openssl_prefix/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}" >> "$GITHUB_ENV"
+    - name: Install pinned Nix daemon for publication tests
+      uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31
+      with:
+        install_url: https://releases.nixos.org/nix/nix-2.34.4/install
+        enable_kvm: false
+    - name: Resolve pinned qualification dependencies through Nix
+      shell: bash
+      run: |
+        package_set=$(nix-instantiate --eval --strict --json --attr outPath t/fixtures/nixpkgs.nix | jq -er .)
+        test -d "$package_set"
+        echo "NIX_PATH=nixpkgs=$package_set" >> "$GITHUB_ENV"
+        coreutils=$(NIX_PATH="nixpkgs=$package_set" nix-build --no-out-link '<nixpkgs>' -A coreutils)
+        test -x "$coreutils/bin/timeout"
+        echo "$coreutils/bin" >> "$GITHUB_PATH"
+    - name: Verify required Nix commands and store access
+      shell: bash
+      run: |
+        nix-store --version
+        nix-instantiate --version
+        nix-build --version
+        command -v nix-store
+        nix-store --version
+        probe=$(mktemp -d "${TMPDIR:-/tmp}/yuanxu-nix-store.XXXXXX")
+        trap 'rm -rf "$probe"' EXIT
+        printf '%s\n' 'Yuanxu publication store probe' > "$probe/receipt"
+        store_root=$(timeout 120 nix-store --store daemon --add "$probe")
+        timeout 120 nix-store --store daemon --check-validity "$store_root"
+        timeout 120 nix-store --store daemon --verify-path "$store_root"
+        cmp "$probe/receipt" "$store_root/receipt"
+        printf 'NIX-STORE-OK %s\n' "$store_root"
+    - name: Install the supported Just CLI
+      uses: extractions/setup-just@f8a3cce218d9f83db3a2ecd90e41ac3de6cdfd9b # v3
+      with:
+        just-version: '1.56.0'
+    - name: Record the selected Just CLI
+      shell: bash
+      run: just --version
+    - name: Install immutable Gerbil release
+      shell: bash
+      run: |
+        set -euo pipefail
+        release_root="$GITHUB_WORKSPACE/.ci/gerbil-release/v0.19-2591dcd"
+        revision=2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb
+
+        case "$(uname -s)-$(uname -m)" in
+          Linux-x86_64)
+            release_os=linux
+            release_arch=x86_64
+            tag=gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patchf5cedd8168cb
+            sha256=9844ba362fdf6f1c5e8a4411e462a466d52dee0d541f8e84f61091cec0e5e740
+            ;;
+          Darwin-arm64)
+            release_os=darwin
+            release_arch=aarch64
+            tag=gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-darwin-aarch64-gcc16-arm64-aot-tools-single-host-unlimited-patchf5cedd8168cb
+            sha256=8d9c88434aed6301eaebb719bf52472f05c2368eafc630e8a9f1d67cc9895a21
+            ;;
+          *)
+            printf 'unsupported Gerbil release host: %s-%s\n' "$(uname -s)" "$(uname -m)" >&2
+            exit 64
+            ;;
+        esac
+
+        archive="$tag.tar.gz"
+        download="${RUNNER_TEMP:?}/$archive"
+        mkdir -p "$release_root"
+        curl --fail --location --retry 3 --output "$download" \
+          "https://github.com/tao3k/gerbil-bazel/releases/download/$tag/$archive"
+        echo "$sha256  $download" | shasum -a 256 --check
+        tar -xzf "$download" -C "$release_root" --strip-components=1
+
+        jq -e --arg revision "$revision" --arg os "$release_os" --arg arch "$release_arch" \
+          '.schema == "gerbil-bazel.toolchain-release.v1" and
+           .upstreamRevision == $revision and
+           .platform.os == $os and .platform.arch == $arch' \
+          "$release_root/gerbil-toolchain-release.json" >/dev/null
+
+        source "$release_root/activate"
+        echo "$GERBIL_PREFIX/bin" >> "${GITHUB_PATH:?}"
+        {
+          echo "GERBIL_PREFIX=$GERBIL_PREFIX"
+          echo "GERBIL_HOME=$GERBIL_HOME"
+          echo "GAMBOPT=$GAMBOPT"
+        } >> "${GITHUB_ENV:?}"
+
+        "$GERBIL_PREFIX/bin/gerbil" --version
+        "$GERBIL_PREFIX/bin/gerbil" interactive -e '(displayln "gerbil-ready")'

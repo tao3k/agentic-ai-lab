@@ -9,9 +9,9 @@
         (only-in :std/iter for in-range))
 (export main)
 
-(C-include "\"poo_flow/runtime_v0.h\"")
+(C-include "\"agentic_ai_lab/runtime_v0.h\"")
 (def-C-lambda runtime-v0-status-name/native (unsigned-int) char-string
-  "poo_flow_runtime_v0_status_name")
+  "agentic_ai_lab_runtime_v0_status_name")
 
 ;;; Measurement boundary:
 ;;; - This executable measures the conversion-heavy control path only.
@@ -37,7 +37,7 @@
       (unless (equal? (runtime-v0-status-name/native 0) "ok")
         (error "unexpected runtime v0 status name")))
     (let (elapsed (- (real-time) started))
-      (display "schema=poo-flow.runtime-v0.gerbil-ffi-benchmark.1\n")
+      (display "schema=agentic-ai-lab.runtime-v0.gerbil-ffi-benchmark.1\n")
       (display "path=gerbil-char-string-control\n")
       (display "iterations=") (display iterations) (newline)
       (display "elapsed-seconds=") (display elapsed) (newline)

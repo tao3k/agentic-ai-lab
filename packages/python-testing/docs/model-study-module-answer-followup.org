@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Three-case Scheme module answer-format follow-up
+#+DATE: 2026-10-02
+#+STATUS: completed bounded run
+
+The completed result is in [[file:model-study-module-answer-followup-results.org][the follow-up receipt]].
+
+* Reason for follow-up
+
+In the [[file:model-study-module-capabilities-results.org][seven-case result]], all three module-source responses were
+explanatory prose rather than one answer datum; two reached the 512-token
+output cap. The prior source comments requested one datum, but appeared
+before long module text. This follow-up moves one short answer-only
+instruction to the end of the same module source and calling program.
+It does not change native programs, answer keys, model, scoring, or
+output cap. The three tasks remain separate: fragment export/query,
+admission diagnostics, and finite/founded receipt scope.
+
+* Fixed rule
+
+Send each of the three exact preview payloads once to =deepseek-flash=,
+non-thinking, =temperature=0=, =max_output_tokens=512=, timeout 45
+seconds, no retries. Generate native expected answers at the pinned
+ASCENT and committed Agentic AI Lab heads. Keep expected answers out of the
+prompt. The same native Scheme scorer admits only a single =answer= datum;
+row-set fields are unordered, while status and diagnostic fields are
+compared exactly. Report response completion, readability, and exactness
+separately, preserving raw responses outside the repository.
+
+The preview directory and its manifest bind exact outgoing bytes, native
+answers, and both Git heads. Model calls require separate authorization
+after the preview is generated and inspected. A failure here remains
+bounded evidence about these three programs and this prompt; it cannot
+establish the model's internal reasoning or general Scheme competence.

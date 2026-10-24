@@ -16,7 +16,7 @@ from pathlib import Path
 from packages.bazel.gerbil_environment import build_gerbil_environment
 
 
-RUNTIME_SCHEMA = "poo-flow.gerbil-project-environment-runtime.v1"
+RUNTIME_SCHEMA = "agentic-ai-lab.gerbil-project-environment-runtime.v1"
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -57,13 +57,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     }
     environment.update(
         {
-            "POO_FLOW_GERBIL_ENV_RECEIPT": str(declaration_receipt),
-            "POO_FLOW_GERBIL_ENV_RECEIPT_JSON": json.dumps(
+            "AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT": str(declaration_receipt),
+            "AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT_JSON": json.dumps(
                 runtime_receipt,
                 separators=(",", ":"),
                 sort_keys=True,
             ),
-            "POO_FLOW_GERBIL_PROJECT_RECEIPT": str(project_receipt),
+            "AGENTIC_AI_LAB_GERBIL_PROJECT_RECEIPT": str(project_receipt),
         }
     )
     native_command = (
@@ -86,9 +86,9 @@ def _forwarded_environment_names() -> tuple[str, ...]:
         "GERBIL_PATH",
         "GERBIL_LOADPATH",
         "PATH",
-        "POO_FLOW_GERBIL_ENV_RECEIPT",
-        "POO_FLOW_GERBIL_ENV_RECEIPT_JSON",
-        "POO_FLOW_GERBIL_PROJECT_RECEIPT",
+        "AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT",
+        "AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT_JSON",
+        "AGENTIC_AI_LAB_GERBIL_PROJECT_RECEIPT",
     )
 
 

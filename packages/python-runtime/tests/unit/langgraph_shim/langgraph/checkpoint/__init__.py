@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Test-only LangGraph checkpoint package backed by POO Flow compat."""
+"""Test-only LangGraph checkpoint package backed by Agentic AI Lab compat."""
 
 from .memory import InMemorySaver, MemorySaver
 

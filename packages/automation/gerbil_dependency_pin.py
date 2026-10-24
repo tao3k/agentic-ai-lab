@@ -4,8 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Project native Gerbil dependency pins into Bazel declarations and locks.
 
-``gerbil.pkg`` remains the sole human-maintained authority for direct Gerbil
-dependencies.  This tool does not resolve dependencies; gxpkg and Bazel retain
+``gerbil.pkg`` and ``dev/gerbil.pkg`` own production and optional development
+pins respectively. This tool does not resolve dependencies; gxpkg and Bazel retain
 that responsibility.  It only updates and checks the equivalent Bazel source
 projection required by isolated builds.
 """
@@ -17,16 +17,16 @@ import hashlib
 import json
 import platform
 import re
+import subprocess
 import sys
 import urllib.request
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-GERBIL_PACKAGE = ROOT / "gerbil.pkg"
 BAZEL_SOURCES = ROOT / "gerbil-dependencies.MODULE.bazel"
 BAZEL_LOCK = ROOT / "MODULE.bazel.lock"
-REVISION = re.compile(r"[0-9a-f]{40}")
+REVISION = re.compile(r"(?:[0-9a-f]{40}|v\d+(?:\.\d+)+)")
 EXTENSION_ID = "@@gerbil_bazel+//gerbil:extensions.bzl%gerbil"
 SOURCE_PACKAGE_RULE = (
     "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository"
@@ -45,7 +45,7 @@ def parse_package_pins(text: str) -> dict[str, tuple[str, str]]:
     pins: dict[str, tuple[str, str]] = {}
     pattern = re.compile(
         r'"(?P<repository>github\.com/[^/@\s]+/(?P<package>[^/@\s]+))'
-        r'@(?P<revision>[0-9a-f]{40})"'
+        r'@(?P<revision>[0-9a-f]{40}|v\d+(?:\.\d+)+)"'
     )
     for match in pattern.finditer(text):
         package = match.group("package")
@@ -53,6 +53,19 @@ def parse_package_pins(text: str) -> dict[str, tuple[str, str]]:
             raise ValueError(f"gerbil.pkg repeats direct dependency {package!r}")
         pins[package] = (match.group("repository"), match.group("revision"))
     return pins
+
+
+def package_pin_owners(root: Path) -> dict[str, tuple[Path, tuple[str, str]]]:
+    owners: dict[str, tuple[Path, tuple[str, str]]] = {}
+    for relative in ("gerbil.pkg", "dev/gerbil.pkg"):
+        path = root / relative
+        if not path.exists():
+            continue
+        for package, pin in parse_package_pins(path.read_text(encoding="utf-8")).items():
+            if package in owners:
+                raise ValueError(f"duplicate dependency authority for {package!r}")
+            owners[package] = (path, pin)
+    return owners
 
 
 def source_block(text: str, repository_name: str) -> tuple[re.Match[str], str]:
@@ -94,11 +107,12 @@ def field(body: str, name: str) -> str:
 
 def expected_projection(repository: str, package: str, revision: str) -> dict[str, object]:
     canonical_uri = f"https://{repository}"
+    archive_revision = revision[1:] if revision.startswith("v") else revision
     return {
         "canonical_uri": canonical_uri,
         "package": package,
         "revision": revision,
-        "strip_prefix": f"{package}-{revision}",
+        "strip_prefix": f"{package}-{archive_revision}",
         "urls": [f"{canonical_uri}/archive/{revision}.tar.gz"],
     }
 
@@ -120,10 +134,9 @@ def declared_projection(text: str, repository_name: str) -> dict[str, object]:
 
 def collect_errors(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
-    package_text = (root / "gerbil.pkg").read_text(encoding="utf-8")
     sources_text = (root / "gerbil-dependencies.MODULE.bazel").read_text(encoding="utf-8")
     lock = json.loads((root / "MODULE.bazel.lock").read_text(encoding="utf-8"))
-    pins = parse_package_pins(package_text)
+    pins = {package: pin for package, (_path, pin) in package_pin_owners(root).items()}
     repositories = direct_source_repositories(sources_text)
     declared_repository_names = set(repositories.values())
     extension = lock.get("moduleExtensions", {}).get(EXTENSION_ID, {})
@@ -172,7 +185,7 @@ def collect_errors(root: Path = ROOT) -> list[str]:
 
 def archive_digest(url: str) -> str:
     digest = hashlib.sha256()
-    request = urllib.request.Request(url, headers={"User-Agent": "poo-flow-pin/1"})
+    request = urllib.request.Request(url, headers={"User-Agent": "agentic-ai-lab-pin/1"})
     with urllib.request.urlopen(request) as response:
         while chunk := response.read(1024 * 1024):
             digest.update(chunk)
@@ -193,14 +206,17 @@ def replace_field(body: str, name: str, value: str) -> str:
 
 def project_pin(package: str, revision: str, root: Path = ROOT) -> None:
     if REVISION.fullmatch(revision) is None:
-        raise ValueError("revision must be a full lowercase 40-character Git object ID")
+        raise ValueError("revision must be a full Git object ID or v-prefixed version tag")
 
-    package_path = root / "gerbil.pkg"
+    owners = package_pin_owners(root)
+    if package not in owners:
+        raise ValueError(f"declared direct dependency {package!r} is absent")
+    package_path, _pin = owners[package]
     sources_path = root / "gerbil-dependencies.MODULE.bazel"
     package_text = package_path.read_text(encoding="utf-8")
     pins = parse_package_pins(package_text)
     if package not in pins:
-        raise ValueError(f"gerbil.pkg direct dependency {package!r} is absent")
+        raise ValueError(f"root/development package dependency {package!r} is absent")
     repository, old_revision = pins[package]
     projection = expected_projection(repository, package, revision)
     url = projection["urls"][0]
@@ -278,6 +294,53 @@ def sync_lock(root: Path = ROOT) -> None:
     print("gerbil-dependency-pin: synchronized cross-platform Bazel lock projections")
 
 
+def ensure_native_commit(url: str, revision: str, target: Path) -> None:
+    """Fetch an exact commit without resetting an existing package checkout."""
+    if not re.fullmatch(r"[0-9a-f]{40}", revision):
+        raise ValueError("native prefetch requires a full commit SHA")
+    created = not target.exists()
+    if created:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run(["git", "init", "--quiet", str(target)], check=True)
+        subprocess.run(["git", "-C", str(target), "remote", "add", "origin", url], check=True)
+    elif not (target / ".git").exists():
+        raise ValueError(f"native package path is not a Git checkout: {target}")
+    present = subprocess.run(
+        ["git", "-C", str(target), "cat-file", "-e", f"{revision}^{{commit}}"],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    ).returncode == 0
+    if not present:
+        print(f"gerbil-native-pin: fetching {revision} into {target}", flush=True)
+        subprocess.run(
+            ["git", "-C", str(target), "fetch", "--no-tags", "--depth=1", url, revision],
+            check=True,
+        )
+    # A failed first fetch leaves an initialized but unborn checkout. Complete
+    # only that new checkout; existing branches and local edits remain intact.
+    unborn = subprocess.run(
+        ["git", "-C", str(target), "rev-parse", "--verify", "HEAD"],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    ).returncode != 0
+    if created or unborn:
+        subprocess.run(["git", "-C", str(target), "checkout", "--quiet", "--detach", revision], check=True)
+        # gxpkg reads this adjacent Scheme datum to distinguish an installed
+        # immutable pin from an untagged detached branch (whose name is empty).
+        target.with_name(target.name + ".tag").write_text(json.dumps(revision) + "\n")
+    print(f"gerbil-native-pin: ready {revision}", flush=True)
+
+
+def prepare_native_pins(package_root: Path, root: Path = ROOT, manifest: Path | None = None) -> None:
+    """Materialize declared SHA objects; gxpkg still owns tag resolution/builds."""
+    package_manifest = manifest if manifest is not None else root / "gerbil.pkg"
+    for repository, revision in parse_package_pins(package_manifest.read_text()).values():
+        if not re.fullmatch(r"[0-9a-f]{40}", revision):
+            continue
+        target = (package_root / repository).resolve()
+        if not target.is_relative_to(package_root.resolve()):
+            raise ValueError("native package pin escapes package root")
+        ensure_native_commit(f"https://{repository}.git", revision, target)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -287,10 +350,15 @@ def main() -> int:
     pin_parser.add_argument("package")
     pin_parser.add_argument("revision")
     subparsers.add_parser("sync-lock", help="copy the native lock projection across platforms")
+    prepare_parser = subparsers.add_parser("prepare-native", help="fetch immutable commit objects for gxpkg")
+    prepare_parser.add_argument("--package-root", type=Path, required=True)
+    prepare_parser.add_argument("--manifest", type=Path, help="authoritative package manifest (defaults to root gerbil.pkg)")
     args = parser.parse_args()
 
     try:
-        if args.command == "pin":
+        if args.command == "prepare-native":
+            prepare_native_pins(args.package_root, manifest=args.manifest)
+        elif args.command == "pin":
             project_pin(args.package, args.revision)
         elif args.command == "sync-lock":
             sync_lock()
@@ -301,7 +369,7 @@ def main() -> int:
                     print(f"gerbil-dependency-contract: {error}", file=sys.stderr)
                 return 1
             print("gerbil-dependency-contract: ok")
-    except (KeyError, OSError, ValueError, json.JSONDecodeError) as error:
+    except (KeyError, OSError, ValueError, json.JSONDecodeError, subprocess.CalledProcessError) as error:
         print(f"gerbil-dependency-pin: {error}", file=sys.stderr)
         return 1
     return 0

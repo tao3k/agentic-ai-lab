@@ -8,40 +8,40 @@
 ;;; selection contract without importing the user-interface aggregate.
 
 (import (only-in :clan/poo/object object<-alist)
-        (only-in :poo-flow/src/user-interface/module-selection-contract
-                 poo-flow-modules-system-use-module/contract)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
+                 agentic-ai-lab-product-use-module)
         "funs.ss"
-        :poo-flow/modules/memory-core/durable/policy
-        :poo-flow/modules/session/agent
-        :poo-flow/modules/session/agent-param
-        :poo-flow/modules/session/communication
-        :poo-flow/modules/session/materialization
-        :poo-flow/modules/session/objects
-        :poo-flow/modules/session/policy
-        :poo-flow/modules/session/policy-validation
-        :poo-flow/modules/session/registry
-        :poo-flow/modules/session/selector
-        :poo-flow/modules/session/transform
-        :poo-flow/modules/session/config-session-syntax
-        :poo-flow/modules/session/config-policy-syntax)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/session/agent
+        :agentic-ai-lab/modules/session/agent-param
+        :agentic-ai-lab/modules/session/communication
+        :agentic-ai-lab/modules/session/materialization
+        :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/policy
+        :agentic-ai-lab/modules/session/policy-validation
+        :agentic-ai-lab/modules/session/registry
+        :agentic-ai-lab/modules/session/selector
+        :agentic-ai-lab/modules/session/transform
+        :agentic-ai-lab/modules/session/config-session-syntax
+        :agentic-ai-lab/modules/session/config-policy-syntax)
 
 (export (import: "funs.ss")
-        (import: :poo-flow/modules/memory-core/durable/policy)
-        (import: :poo-flow/modules/session/agent)
-        (import: :poo-flow/modules/session/agent-param)
-        (import: :poo-flow/modules/session/communication)
-        (import: :poo-flow/modules/session/materialization)
-        (import: :poo-flow/modules/session/objects)
-        (import: :poo-flow/modules/session/policy)
-        (import: :poo-flow/modules/session/policy-validation)
-        (import: :poo-flow/modules/session/registry)
-        (import: :poo-flow/modules/session/selector)
-        (import: :poo-flow/modules/session/transform)
-        (import: :poo-flow/modules/session/config-session-syntax)
-        (import: :poo-flow/modules/session/config-policy-syntax)
-        poo-flow-session-cases)
+        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy)
+        (import: :agentic-ai-lab/modules/session/agent)
+        (import: :agentic-ai-lab/modules/session/agent-param)
+        (import: :agentic-ai-lab/modules/session/communication)
+        (import: :agentic-ai-lab/modules/session/materialization)
+        (import: :agentic-ai-lab/modules/session/objects)
+        (import: :agentic-ai-lab/modules/session/policy)
+        (import: :agentic-ai-lab/modules/session/policy-validation)
+        (import: :agentic-ai-lab/modules/session/registry)
+        (import: :agentic-ai-lab/modules/session/selector)
+        (import: :agentic-ai-lab/modules/session/transform)
+        (import: :agentic-ai-lab/modules/session/config-session-syntax)
+        (import: :agentic-ai-lab/modules/session/config-policy-syntax)
+        agentic-ai-lab-session-cases)
 
-(defsyntax (poo-flow-session-cases stx)
+(defsyntax (agentic-ai-lab-session-cases stx)
   (syntax-case stx (session-case metadata objects rows row-groups)
     ((_ (session-case case-name
           (metadata metadata-entry ...)
@@ -61,9 +61,9 @@
                   (cons 'metadata '(metadata-entry ...)))
                  supers: session-config)))
              ...)
-        (poo-flow-modules-system-use-module/contract
-         'session-core
-         (poo-flow-session-core-poo-config-flags
+        (agentic-ai-lab-product-use-module
+         'session
+         (agentic-ai-lab-session-poo-config-flags
           (list case-name ...)
           '(:config
             (session-case case-name
@@ -86,9 +86,9 @@
                   (cons 'metadata '(metadata-entry ...)))
                  supers: session-config)))
              ...)
-        (poo-flow-modules-system-use-module/contract
-         'session-core
-         (poo-flow-session-core-poo-config-flags
+        (agentic-ai-lab-product-use-module
+         'session
+         (agentic-ai-lab-session-poo-config-flags
           (list case-name ...)
           '(:config
             (session-case case-name

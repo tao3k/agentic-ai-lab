@@ -3,10 +3,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures Fun Integer Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: bridge tests cover request envelopes and runtime command handoff.
 ;;; Invariant: profile descriptor defaults are tested in the profile owner.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,8 +20,8 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/modules/agent-sandbox/api)
+        :yuanxu/modules/funflow/control-plane/api
+        :agentic-ai-lab/modules/agent-sandbox/api)
 
 (export agent-sandbox-bridge-test)
 
@@ -41,7 +44,7 @@
 ;; : TestSuite
 (def agent-sandbox-bridge-test
   (test-suite "agent sandbox bridge request"
-    (poo-flow-test-case "treats non-alist optional metadata as absent"
+    (yuanxu-test-case "treats non-alist optional metadata as absent"
       (check-equal? (agent-sandbox-alist-ref 'profile-default 'timeout-ms 30000)
                     30000)
       (check-equal? (agent-sandbox-alist-ref '((timeout-ms . 10000))
@@ -51,33 +54,32 @@
       (check-equal? (agent-sandbox-merge-alists 'task-local
                                                 '((timeout-ms . 30000)))
                     '((timeout-ms . 30000))))
-    (poo-flow-test-case "captures backend-neutral request contract"
+    (yuanxu-test-case "captures backend-neutral request contract"
       (let (seen-request #f)
         (let* ((command (lambda (envelope)
                           (set! seen-request (cdr (assoc 'request envelope)))
                           (bridge-runtime-result 'ok '(artifact agent-output))))
                (config (make-agent-sandbox-run-config
-                        (list (cons 'runtime-command command))))
+                        (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
                (flow (agent-sandbox-flow
-                      'agent-run
-                      'nono
-                      'always-further/opencode
-                      "opencode"
-                      '("--print" "hello")
-                      '((OPENAI_API_KEY . redacted))
-                      "/workspace"
-                      '(((path . ".") (mode . read-write)))
-                      '((mode . proxy-only)
+		      'agent-run
+		      'nono
+		      'always-further/opencode
+		      "opencode"
+		      '("--print" "hello")
+		      '((OPENAI_API_KEY . redacted))
+		      "/workspace"
+		      '(((path . ".") (mode . read-write)))
+		      '((mode . proxy-only)
                         (allow-hosts . ("api.openai.com")))
-                      '((filesystem . scoped)
+		      '((filesystem . scoped)
                         (credentials . injected))
-                      '((timeout-ms . 30000)
+		      '((timeout-ms . 30000)
                         (memory-mb . 512))
-                      'artifact
-                      '((agent . opencode)
+		      'artifact
+		      '((agent . opencode)
                         (backend . nono))
-                      'unit
-                      'artifact))
+		      (Fun AdapterResult <- Unit)))
                (result (run-result-value
                         (run-flow-with-config config flow #!void)))
                (sandbox (bridge-request-config seen-request)))
@@ -98,7 +100,7 @@
           (check-equal? (cdr (assoc 'resource-policy sandbox))
                         '((timeout-ms . 30000)
                           (memory-mb . 512))))))
-    (poo-flow-test-case "projects execution requests into bridge envelopes"
+    (yuanxu-test-case "projects execution requests into bridge envelopes"
       (let ((seen-request #f)
             (seen-envelope #f))
         (let* ((command (lambda (envelope)
@@ -106,24 +108,23 @@
                           (set! seen-request (cdr (assoc 'request envelope)))
                           (bridge-runtime-result 'bridged '(artifact bridge-output))))
                (config (make-agent-sandbox-run-config
-                        (list (cons 'runtime-command command))))
+                        (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
                (flow (agent-sandbox-flow
-                      'agent-bridge
-                      'cube
-                      'python-template
-                      "python"
-                      '("-c" "print('bridge')")
-                      '((PYTHONUNBUFFERED . "1"))
-                      "/workspace"
-                      '(((path . "/workspace") (mode . read-write)))
-                      '((mode . egress-filtered))
-                      '((isolation . kvm))
-                      '((snapshot . clone))
-                      'artifact
-                      '((backend . cube)
+		      'agent-bridge
+		      'cube
+		      'python-template
+		      "python"
+		      '("-c" "print('bridge')")
+		      '((PYTHONUNBUFFERED . "1"))
+		      "/workspace"
+		      '(((path . "/workspace") (mode . read-write)))
+		      '((mode . egress-filtered))
+		      '((isolation . kvm))
+		      '((snapshot . clone))
+		      'artifact
+		      '((backend . cube)
                         (purpose . bridge-test))
-                      'unit
-                      'artifact))
+		      (Fun AdapterResult <- Unit)))
                (_result (run-result-value
                          (run-flow-with-config config flow #!void)))
                (sandbox (bridge-request-config seen-request))
@@ -164,12 +165,12 @@
                         '((snapshot . clone)))
           (check-equal? (agent-sandbox-request? '()) #f)
           (check-equal? (agent-sandbox-execution-request? #f) #f))))
-    (poo-flow-test-case "rejects non sandbox execution requests before bridge projection"
+    (yuanxu-test-case "rejects non sandbox execution requests before bridge projection"
       (let* ((request
               (make-execution-request
                'compile
                'external
-               '(external rust-build ((crate . "poo-flow")))
+               '(external rust-build ((crate . "agentic-ai-lab")))
                'input-artifact
                'artifact
                'artifact

@@ -1,0 +1,696 @@
+{
+  "status": "passed",
+  "requested_rounds": 3,
+  "rounds": [
+    {
+      "child-types": [
+        [
+          "aws",
+          1,
+          1
+        ],
+        [
+          "null",
+          1,
+          1
+        ]
+      ],
+      "parent-types": [
+        [
+          "aws",
+          1,
+          1
+        ]
+      ],
+      "phases": [
+        {
+          "realize": 1,
+          "type-compiles": 1,
+          "type-reads": 1,
+          "phase": "aws-build",
+          "instantiate": 3,
+          "seconds": 3.3569390773773193
+        },
+        {
+          "type-compiles": 0,
+          "realize": 0,
+          "type-reads": 0,
+          "instantiate": 0,
+          "seconds": 8.821487426757812e-06,
+          "phase": "aws-first-admission"
+        },
+        {
+          "type-reads": 0,
+          "type-compiles": 0,
+          "realize": 0,
+          "phase": "aws-hot-slots",
+          "instantiate": 0,
+          "seconds": 3.0994415283203125e-06
+        },
+        {
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0,
+          "instantiate": 1,
+          "seconds": 0.8506720066070557,
+          "phase": "aws-explicit-recheck"
+        },
+        {
+          "seconds": 3.278601884841919,
+          "instantiate": 3,
+          "phase": "aws-null-build",
+          "realize": 1,
+          "type-reads": 2,
+          "type-compiles": 2
+        },
+        {
+          "instantiate": 0,
+          "seconds": 5.9604644775390625e-06,
+          "phase": "aws-null-first-admission",
+          "type-compiles": 0,
+          "realize": 0,
+          "type-reads": 0
+        },
+        {
+          "instantiate": 0,
+          "seconds": 4.0531158447265625e-06,
+          "phase": "aws-null-hot-slots",
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0
+        },
+        {
+          "type-compiles": 0,
+          "realize": 0,
+          "type-reads": 0,
+          "seconds": 0.6808478832244873,
+          "instantiate": 1,
+          "phase": "aws-null-explicit-recheck"
+        }
+      ],
+      "round": 1,
+      "assertions": 70
+    },
+    {
+      "child-types": [
+        [
+          "aws",
+          1,
+          1
+        ],
+        [
+          "null",
+          1,
+          1
+        ]
+      ],
+      "parent-types": [
+        [
+          "aws",
+          1,
+          1
+        ]
+      ],
+      "phases": [
+        {
+          "instantiate": 3,
+          "seconds": 3.2020530700683594,
+          "phase": "aws-build",
+          "realize": 1,
+          "type-reads": 1,
+          "type-compiles": 1
+        },
+        {
+          "realize": 0,
+          "type-compiles": 0,
+          "type-reads": 0,
+          "phase": "aws-first-admission",
+          "instantiate": 0,
+          "seconds": 2.4080276489257812e-05
+        },
+        {
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0,
+          "instantiate": 0,
+          "seconds": 3.814697265625e-06,
+          "phase": "aws-hot-slots"
+        },
+        {
+          "phase": "aws-explicit-recheck",
+          "seconds": 1.089468002319336,
+          "instantiate": 1,
+          "type-compiles": 0,
+          "realize": 0,
+          "type-reads": 0
+        },
+        {
+          "realize": 1,
+          "type-reads": 2,
+          "type-compiles": 2,
+          "phase": "aws-null-build",
+          "seconds": 2.43334698677063,
+          "instantiate": 3
+        },
+        {
+          "seconds": 1.5020370483398438e-05,
+          "instantiate": 0,
+          "phase": "aws-null-first-admission",
+          "type-compiles": 0,
+          "realize": 0,
+          "type-reads": 0
+        },
+        {
+          "type-compiles": 0,
+          "realize": 0,
+          "type-reads": 0,
+          "seconds": 4.0531158447265625e-06,
+          "instantiate": 0,
+          "phase": "aws-null-hot-slots"
+        },
+        {
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0,
+          "phase": "aws-null-explicit-recheck",
+          "seconds": 0.8907139301300049,
+          "instantiate": 1
+        }
+      ],
+      "round": 2,
+      "assertions": 70
+    },
+    {
+      "parent-types": [
+        [
+          "aws",
+          1,
+          1
+        ]
+      ],
+      "phases": [
+        {
+          "type-compiles": 1,
+          "realize": 1,
+          "type-reads": 1,
+          "phase": "aws-build",
+          "seconds": 2.6878700256347656,
+          "instantiate": 3
+        },
+        {
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0,
+          "seconds": 1.0013580322265625e-05,
+          "instantiate": 0,
+          "phase": "aws-first-admission"
+        },
+        {
+          "instantiate": 0,
+          "seconds": 2.86102294921875e-06,
+          "phase": "aws-hot-slots",
+          "type-compiles": 0,
+          "realize": 0,
+          "type-reads": 0
+        },
+        {
+          "phase": "aws-explicit-recheck",
+          "instantiate": 1,
+          "seconds": 0.7818877696990967,
+          "realize": 0,
+          "type-compiles": 0,
+          "type-reads": 0
+        },
+        {
+          "phase": "aws-null-build",
+          "seconds": 2.7309138774871826,
+          "instantiate": 3,
+          "type-compiles": 2,
+          "realize": 1,
+          "type-reads": 2
+        },
+        {
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0,
+          "instantiate": 0,
+          "seconds": 6.9141387939453125e-06,
+          "phase": "aws-null-first-admission"
+        },
+        {
+          "seconds": 4.0531158447265625e-06,
+          "instantiate": 0,
+          "phase": "aws-null-hot-slots",
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0
+        },
+        {
+          "seconds": 0.7371160984039307,
+          "instantiate": 1,
+          "phase": "aws-null-explicit-recheck",
+          "realize": 0,
+          "type-reads": 0,
+          "type-compiles": 0
+        }
+      ],
+      "child-types": [
+        [
+          "aws",
+          1,
+          1
+        ],
+        [
+          "null",
+          1,
+          1
+        ]
+      ],
+      "round": 3,
+      "assertions": 70
+    }
+  ],
+  "flake_rounds": [],
+  "runtime": "default Gerbil; separate heap-fenced process per serial round",
+  "cold": "fresh Scheme process/scope; existing Nix store (not download/build cold)",
+  "hot": "five cached receiver accesses; currentness measured separately",
+  "process_scope": "owned Nix CLI starts, not descendant process totals",
+  "evaluators": {
+    "selected": "nix eval --apply",
+    "flake": "nix eval --raw output.drvPath"
+  },
+  "selected_flake": "/private/tmp/opentofu-selected-flake-20261017-c",
+  "excluded_setup": "fixture construction, explicit flake lock creation, and package-tool lookup; not download cold",
+  "type_scope": "successful indexed type input reads and Contract compilations",
+  "source_sha256": {
+    "core/module-system/authoring/roles.ss": "f63e3153d8ed50ce026d2a9dddab4eff928c87f61726c3d9e52b29b31b333919",
+    "core/module-system/source/admission.ss": "c3cb8e783785542f3cd49f112cc5da08ad4dbb33adabde533079f2c596ee576b",
+    "core/module-system/source/build.ss": "bf80a7e54eb9d02fa2496988854f4dde9478e3d988b20af864cb8f6d052e66ad",
+    "core/module-system/source/collection.ss": "830fe5b8cea77536ecb67f02e5e7208692586700b05bbdda38dbe202aaa7adc9",
+    "core/module-system/source/declaration.ss": "f5dd10b6b7cf6dd24ca039c6e01f9646b69f2db3ed4b97d90bf475dec39546bc",
+    "core/module-system/source/directory.ss": "6643b09c3543e21258cb7dbaf71e16aa50bcce0d3f40bda5c99539545d18979d",
+    "core/module-system/source/imports.ss": "64a80fb71ce1c9a5bde2c618400bbf1862484e7b9d007308da252bf0d67ebfb9",
+    "core/module-system/source/init.ss": "37daf559a1c2cac81d65ab9cdd04bbbf6478fd396cc4026e90877774ab6976a1",
+    "core/module-system/source/interface.ss": "c90f38e937800acc4db1d1f3c092f1748a64cf4a92e3a833c06c380648cd6bf0",
+    "core/module-system/source/link.ss": "b6197c537f92f75d023fdd85f507f0d57f25e9de9bfed0c229b3fe17aa5646b9",
+    "core/module-system/source/objects.ss": "049eade9883529993d45c4e791fdf814ef420bb4fa378478cc9e3ef634a3550c",
+    "core/module-system/source/preparation.ss": "d07275173b11fe2ead7a3b932b3830476b65e7514df1e66e99aa03cb30135a69",
+    "core/module-system/source/projection.ss": "c15f786fb4aa9c3c45aa94d87c45125d26b301a1037173592201f6b25762210f",
+    "core/module-system/source/publication.ss": "8372c49da69135b3466f2030c9a9c1b12f41bd7eef3e5d1eafa6ea2c32cedb35",
+    "core/module-system/source/reader.ss": "3f9fa2546f36f3d4d249e05a31d3521b896b462f3baac0376220eecf2095c1eb",
+    "core/module-system/source/selection.ss": "91e39ec654c96cdb6ef7bdbed55958e0eee60bdecd4d7d3081244d61e73c683d",
+    "core/modules/building/bootstrap.ss": "7407be41c2643ec062b9ba2174b8fe568e663f9520547dbda416487bbb7861f9",
+    "core/modules/building/build-projection.ss": "0db0324f9467811e4fdf42a396bced467d05622bc7dd8627007f14d9d5ab5686",
+    "core/modules/building/configuration-source.ss": "d27053f4002ba4e7a29d9c866ce29ef8350f743afd8d743694505624b0619ab0",
+    "core/modules/nix/config.ss": "9b6c436dd3d738aff84b6e4579259bb5effe244ac1b77f11f91e5bce32ab5463",
+    "core/modules/nix/func.ss": "e238856fb31551110222f17e30941290ad8845f643e86cc44523b9bdcca3d394",
+    "core/modules/nix/interface.ss": "0dfc03f78ce06e3208954a42c057c9513c75a4296f6028cc4517114b3318ece5",
+    "core/modules/nix/objects.ss": "bea8614fb89adb10b9799b7db73566f0d86064c20f0f11ad5a8fba90b129af29",
+    "core/modules/nix/types.ss": "1e34f1ba11b8a092455afb0ecde4c3c558ea91aa0270934a6fe7ffe43b8a57eb",
+    "core/modules/services/opentofu/aws-hash.ss": "6cbcdfadbf4516cc1dadb49da4ae193068e5effa6317031f5f8d7f2132f6976d",
+    "core/modules/services/opentofu/build.ss": "58db1c081789dfc4557ddb564bc1769eae68111c302ce20cd0cf6fef85dcfada",
+    "core/modules/services/opentofu/collections.ss": "f0e466988014a8f370a9a5bdf84c59e6adfb07bfb5c4fb28de6d8ce747227092",
+    "core/modules/services/opentofu/config.ss": "732dd43b0bf1f228980c49674a5ae6d002dbd552e990b5c0e752a40ef40a9642",
+    "core/modules/services/opentofu/func.ss": "fd96d93832f734df7f0546bb7f1599cd606ef40bb4221e78f8c6e14f1b638350",
+    "core/modules/services/opentofu/interface.ss": "7a838bedfe0fc94b3dafbcf7318e3c3c22bb904dd2cf2aae745d80f7545d0e27",
+    "core/modules/services/opentofu/nix/provider-artifacts.nix": "8ba0bba1bef010dc8149c2dbef681bd682a753af5c738d068bebd46c0659e0f8",
+    "core/modules/services/opentofu/nix/provider-schema.nix": "2762638b06c25846989a7a2cb9b94bbb631011311bb4fd2877698e70f6d7b7a9",
+    "core/modules/services/opentofu/nix/selected-provider-artifacts-flake.nix": "a01193763cfa7a8e0a3af560fcae5eaee56913f3c5c2a0a75c11fa942806d452",
+    "core/modules/services/opentofu/nix/selected-provider-artifacts.nix": "585e569a08e04e0b07fb133b3e0fa532ace6b3c7d88f6373836229348bdce398",
+    "core/modules/services/opentofu/objects.ss": "ac40a84174664394e35ea8746857ac7d107dad79c86c1fc2810ce66fe50fb704",
+    "core/modules/services/opentofu/source.ss": "11cdc2d0de9853cb5f03398113d851836c6d9b81589ac91e21c6f550bc142826",
+    "core/modules/services/opentofu/types.ss": "f45768956a86d8818bbfebc1ee17da14503fb41f0b6645e51c7b2891842a28f3",
+    "core/t/module-build-role-test.ss": "a92f6b2f96223fc44eeed9e3b5393ad8a47ce9e2674688c6441318e74107aadd",
+    "justfile": "459b1dc3121601f1a8cc0446a26efe6e1e1b5d1b8a0939a914fcac368796d7f7",
+    "t/fixtures/opentofu/aws-5.100.0/package.nix": "3cc1ae6842c1181e5d8cbbe71fcf32b07886bedd201a9eceb23696ed560fd049",
+    "t/fixtures/opentofu/build-selection-checks.nix": "503b3f547e89eeddfad22dd69b36fd2566d69cc646cbf6c85d8a98518c3fd9a4",
+    "t/fixtures/opentofu/family-artifacts.nix": "21a3f908be79674cc449aaf5592edb16d836611df8c61ad0ea93b0f194fa35b0",
+    "t/fixtures/opentofu/family-schemas.nix": "2a047830f93e32858ac28197863e3535fba17cdd77e583c96b3bf6b44b924be1",
+    "t/fixtures/opentofu/hashicorp-package.nix": "62541949065465b35a7c87545cd6735d722768b24bdc87fa661195899b3851dc",
+    "t/fixtures/opentofu/selected-artifacts.nix": "073588db1b5106281a4e01b1df364d05eadafb21a07fa49990e0356fad47f242",
+    "t/fixtures/opentofu/selected-flake/flake.nix.in": "8888937db9c097a6ec8e17c8bb5d78a784b03dae201348a82385dd26ac373582",
+    "t/fixtures/opentofu/selected-flake/providers.nix": "d27f6a6448ba80ee3b70c73cc04b5d7205cd74be78028955f2502e5b0f6b645f",
+    "t/fixtures/opentofu/versioned-schemas.nix": "8d916467759520fee9484c7b0921fc0e65ec6e436aa7bdff5923a96244ef59e0",
+    "t/nix-flake-source-test.ss": "4ba86fbdcc72f580673dfecbb6321fd25e961c0287e53c62845b5c510111f9fa",
+    "t/opentofu-selected-graph-test.ss": "2133d81d1ea1faee99bc9016f1be94e20162c1166ba18097415807339231210f",
+    "tools/qualification/opentofu-rounds.py": "cf10f05aa423a6285c1189c4f76357837440aee81ce32dbac8e7466cebeb5050",
+    "tools/qualification/prepare-opentofu-flake.py": "23a3bd1cfb2e6b7119997989ea7b200070838b42e6c55bcc009896753a472f95",
+    "/private/tmp/opentofu-selected-flake-20261017-c/aws-package.nix": "3cc1ae6842c1181e5d8cbbe71fcf32b07886bedd201a9eceb23696ed560fd049",
+    "/private/tmp/opentofu-selected-flake-20261017-c/flake.lock": "17fe1e2b3113e1402e3870b9fe0de68d670e000a7f498c8ed9f151c0fcc4ccb4",
+    "/private/tmp/opentofu-selected-flake-20261017-c/flake.nix": "7e2efc8a2295b0c76efa85a95bb27431973cf834fdcb64ec0b3cf7f5e85b8631",
+    "/private/tmp/opentofu-selected-flake-20261017-c/hashicorp-package.nix": "62541949065465b35a7c87545cd6735d722768b24bdc87fa661195899b3851dc",
+    "/private/tmp/opentofu-selected-flake-20261017-c/lib/provider-artifacts.nix": "8ba0bba1bef010dc8149c2dbef681bd682a753af5c738d068bebd46c0659e0f8",
+    "/private/tmp/opentofu-selected-flake-20261017-c/lib/provider-schema.nix": "2762638b06c25846989a7a2cb9b94bbb631011311bb4fd2877698e70f6d7b7a9",
+    "/private/tmp/opentofu-selected-flake-20261017-c/lib/selected-provider-artifacts-flake.nix": "a01193763cfa7a8e0a3af560fcae5eaee56913f3c5c2a0a75c11fa942806d452",
+    "/private/tmp/opentofu-selected-flake-20261017-c/lib/selected-provider-artifacts.nix": "585e569a08e04e0b07fb133b3e0fa532ace6b3c7d88f6373836229348bdce398",
+    "/private/tmp/opentofu-selected-flake-20261017-c/providers.nix": "d27f6a6448ba80ee3b70c73cc04b5d7205cd74be78028955f2502e5b0f6b645f"
+  },
+  "nix_version": "nix (Nix) 2.34.4+1",
+  "nixpkgs": "/nix/store/cx86xlxyvlai8iwr7hkmg3pri4zynbyc-cb2gvzqf4lc8qzlrw1ywwviw7phvjyl5-source",
+  "flake_artifact": null,
+  "aggregate": {
+    "aws-build": {
+      "samples": 3,
+      "seconds": {
+        "min": 2.6878700256347656,
+        "median": 3.2020530700683594,
+        "max": 3.3569390773773193
+      },
+      "instantiate": [
+        3,
+        3,
+        3
+      ],
+      "realize": [
+        1,
+        1,
+        1
+      ],
+      "type-reads": [
+        1,
+        1,
+        1
+      ],
+      "type-compiles": [
+        1,
+        1,
+        1
+      ]
+    },
+    "aws-first-admission": {
+      "samples": 3,
+      "seconds": {
+        "min": 8.821487426757812e-06,
+        "median": 1.0013580322265625e-05,
+        "max": 2.4080276489257812e-05
+      },
+      "instantiate": [
+        0,
+        0,
+        0
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    },
+    "aws-hot-slots": {
+      "samples": 3,
+      "seconds": {
+        "min": 2.86102294921875e-06,
+        "median": 3.0994415283203125e-06,
+        "max": 3.814697265625e-06
+      },
+      "instantiate": [
+        0,
+        0,
+        0
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    },
+    "aws-explicit-recheck": {
+      "samples": 3,
+      "seconds": {
+        "min": 0.7818877696990967,
+        "median": 0.8506720066070557,
+        "max": 1.089468002319336
+      },
+      "instantiate": [
+        1,
+        1,
+        1
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    },
+    "aws-null-build": {
+      "samples": 3,
+      "seconds": {
+        "min": 2.43334698677063,
+        "median": 2.7309138774871826,
+        "max": 3.278601884841919
+      },
+      "instantiate": [
+        3,
+        3,
+        3
+      ],
+      "realize": [
+        1,
+        1,
+        1
+      ],
+      "type-reads": [
+        2,
+        2,
+        2
+      ],
+      "type-compiles": [
+        2,
+        2,
+        2
+      ]
+    },
+    "aws-null-first-admission": {
+      "samples": 3,
+      "seconds": {
+        "min": 5.9604644775390625e-06,
+        "median": 6.9141387939453125e-06,
+        "max": 1.5020370483398438e-05
+      },
+      "instantiate": [
+        0,
+        0,
+        0
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    },
+    "aws-null-hot-slots": {
+      "samples": 3,
+      "seconds": {
+        "min": 4.0531158447265625e-06,
+        "median": 4.0531158447265625e-06,
+        "max": 4.0531158447265625e-06
+      },
+      "instantiate": [
+        0,
+        0,
+        0
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    },
+    "aws-null-explicit-recheck": {
+      "samples": 3,
+      "seconds": {
+        "min": 0.6808478832244873,
+        "median": 0.7371160984039307,
+        "max": 0.8907139301300049
+      },
+      "instantiate": [
+        1,
+        1,
+        1
+      ],
+      "realize": [
+        0,
+        0,
+        0
+      ],
+      "type-reads": [
+        0,
+        0,
+        0
+      ],
+      "type-compiles": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "source_unchanged": true,
+  "schema": "agentic-ai-lab/module-build-role-control/v1",
+  "purpose": "Optional module build.ss wrapping, phase-isolated Build publication and final domain admission before Core write-build-entry returns; no product Loader.",
+  "admission_accounting": "Build now includes 3 Nix evaluations, 1 realization call and 1/2 selected type reads/compiles. Returned admission access costs zero. Previously build=2 and first-admission=1: no increase through first completed admission.",
+  "provider_versions": {
+    "aws": "5.100.0",
+    "null": "3.2.4"
+  },
+  "selected_flake_lock": {
+    "nodes": {
+      "nixpkgs": {
+        "flake": false,
+        "locked": {
+          "lastModified": 1781454065,
+          "narHash": "sha256-d2xfDjnfRuf/xYGdu9VVRHiav/2w5hDL/5cw2TuVAXw=",
+          "owner": "NixOS",
+          "repo": "nixpkgs",
+          "rev": "9eac87a12312b8f60dd52e1c6e1a265f6fc7f5fc",
+          "type": "github"
+        },
+        "original": {
+          "narHash": "sha256-d2xfDjnfRuf/xYGdu9VVRHiav/2w5hDL/5cw2TuVAXw=",
+          "owner": "NixOS",
+          "repo": "nixpkgs",
+          "rev": "9eac87a12312b8f60dd52e1c6e1a265f6fc7f5fc",
+          "type": "github"
+        }
+      },
+      "root": {
+        "inputs": {
+          "nixpkgs": "nixpkgs"
+        }
+      }
+    },
+    "root": "root",
+    "version": 7
+  },
+  "regressions": [
+    {
+      "name": "build-role-controls",
+      "status": "passed",
+      "explicit_assertions": 15,
+      "log_sha256": "dc377a19e21354227651584aedc52d4f588c2d864a4e30431d2975265147b324"
+    },
+    {
+      "name": "publication",
+      "status": "passed",
+      "explicit_assertions": 0,
+      "log_sha256": "2d4c4d9247b22a113bfdfcf6262375ca9b63c5cd5bf4445e2a7f3f86fda4bd1b"
+    },
+    {
+      "name": "module-build-graph",
+      "status": "passed",
+      "explicit_assertions": 0,
+      "log_sha256": "2ae48ff57aee06d8ed33ba4d4594668fd3dcc09b32e9b8c03b12269fec0eb18e"
+    },
+    {
+      "name": "module-source-admission",
+      "status": "passed",
+      "explicit_assertions": 0,
+      "log_sha256": "11ebd14ced45c189b2ba74ab0ddaffb1042073793370b7eac687b98b31d2d7e7"
+    },
+    {
+      "name": "module-directory",
+      "status": "passed",
+      "explicit_assertions": 0,
+      "log_sha256": "85f03e9370a818654c141d5f4dee7ef86d6c387a029413f66127dc4869640530"
+    },
+    {
+      "name": "module-configuration-source",
+      "status": "passed",
+      "explicit_assertions": 0,
+      "log_sha256": "ef25d90bd00b93039ad2b29c601942ce2039dbcc86951001daed98211d6fe51e"
+    },
+    {
+      "name": "module-source",
+      "status": "passed",
+      "explicit_assertions": 0,
+      "log_sha256": "8e28a1e55dac62becd7a3f960870bc216330f367c955bbd64fed73683bcf060e"
+    },
+    {
+      "name": "module-nix-phase",
+      "status": "passed",
+      "explicit_assertions": 0,
+      "log_sha256": "a040062800da034abc4db20bde8f3d8dd0827d43b450f93442ef150a77fd3fb9"
+    },
+    {
+      "name": "module-nix-publication",
+      "status": "passed",
+      "explicit_assertions": 0,
+      "log_sha256": "db5abb0a5650a485f2f53c0ac5f75d03522ac9cf8b23cd559b2c57b8f04b91df"
+    }
+  ],
+  "retained_development_failures": [
+    {
+      "case": "build-bytes-in-currentness",
+      "reason": "Fixture compared raw /./ path spelling; source bytes were present. Native path normalization corrected the assertion."
+    },
+    {
+      "case": "ordinary compiler expansion",
+      "reason": "Test passed a module context to core-expand, which expects syntax. Corrected to native core-import-module source expansion."
+    }
+  ],
+  "boundary": {
+    "root_reentry": "Build phase rejects root selection and recursive root build invocation; owner-confined source imports reject root init imports.",
+    "cached_build": "Dynamic phase check is before cached POO slot reads.",
+    "source_role": "Optional Build presence/absence tracked; build is not an ordinary runtime compiler root.",
+    "domain_admission": "Every provided admission slot must hold accepted native evidence; OpenTofu provides this slot.",
+    "not_claimed": [
+      "product Loader",
+      "general root command-line launcher",
+      "filesystem watcher",
+      "Provider RPC plan/apply",
+      "full Core build",
+      "arbitrary Scheme sandbox",
+      "cold Nix downloads",
+      "serialization of arbitrary admission closures"
+    ]
+  }
+}

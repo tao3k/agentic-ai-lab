@@ -14,11 +14,15 @@ devenv.local.yaml
 # pre-commit
 .pre-commit-config.yaml
 .data
-# Gerbil std/make output for the poo-flow executable.
+# Gerbil std/make output for the agentic-ai-lab executable.
 .bin
 .gerbil
 manifest.ss
 version.ss
+
+# Build, test, and qualification output belongs in local/CI artifacts.
+*.log
+*.log.*
 
 # Bazel convenience symlinks and output trees.
 /bazel-*
@@ -33,9 +37,20 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 *.so
+/packages/python-runtime/src/agentic_ai_lab_runtime/_native/_semantic_cffi.c
+/packages/python-runtime/src/agentic_ai_lab_runtime/_native/_semantic_cffi.o
 
 # Generated runtime-WASM bundle artifacts are build outputs, not sources.
 /bindings/runtime-wasm/workflows/*.bin
 /bindings/runtime-wasm/workflows/.human-capability.*.tmp
 /bindings/runtime-wasm/workflows/*.backup
 /bindings/runtime-wasm/workflows/.human-capability.publication.json*
+
+packages/python-runtime/build/
+
+# Quint dependencies and compiler/backend generated artifacts.
+node_modules/
+_apalache-out/
+
+# Native package publication coordination; no source or receipt authority.
+/.gerbil.publication.lock

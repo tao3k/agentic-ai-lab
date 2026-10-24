@@ -1,56 +1,33 @@
-;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
-;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+;;; Core-native test declarations and profile admission; no optional policy engine.
+(import (only-in :clan/poo/object .call .slot?)
+        :yuanxu/observability/testing-case
+        (only-in :yuanxu/profile-composition/policy
+                 yuanxu-user-profile-policy-admitted?
+                 yuanxu-user-profile-set-policy-admitted?))
+(export (import: :yuanxu/observability/testing-case)
+        agentic-ai-lab-testing-check-user-profile agentic-ai-lab-testing-check-user-profile-set
+        agentic-ai-lab-testing-admit-user-profile! agentic-ai-lab-testing-admit-user-profile-set!)
 
-;;; Public POO Flow testing policy interface.
-;;; ASP owns native gxtest execution and generic profile algebra. POO Flow
-;;; extends that one interface once with its package policies; downstream
-;;; packages only refine the resulting POO value with local Profiles.
-
-(import (only-in :clan/poo/object .call .cc .slot?)
-        (only-in :asp-gerbil-scheme/testing-api +asp-testing-interface+)
-        "./src/testing/testing-extension"
-        :core/observability/testing-case
-        (only-in "./src/user-interface/profile-policy"
-                 poo-flow-user-profile-policy-admit
-                 poo-flow-user-profile-set-policy-admit
-                 poo-flow-user-profile-policy-admitted?
-                 poo-flow-user-profile-set-policy-admitted?))
-
-(export (import: "./src/testing/testing-extension")
-        (import: :core/observability/testing-case)
-        +poo-flow-testing-interface+
-        poo-flow-testing-check-user-profile
-        poo-flow-testing-check-user-profile-set
-        poo-flow-testing-admit-user-profile!
-        poo-flow-testing-admit-user-profile-set!)
-
-;;; One public object owns the ASP -> POO Flow policy extension. Package-local
-;;; test interfaces inherit this value instead of rebuilding the chain.
-(def +poo-flow-testing-interface+
-  (.cc (poo-flow-testing-observability-extension +asp-testing-interface+)
-       .check-user-profile: poo-flow-user-profile-policy-admit
-       .check-user-profile-set: poo-flow-user-profile-set-policy-admit))
-
-(def (poo-flow-testing-check-user-profile testing profile)
+(def (agentic-ai-lab-testing-check-user-profile testing profile)
   (unless (.slot? testing '.check-user-profile)
     (error "testing interface has no user profile policy" testing))
   (.call testing .check-user-profile profile))
 
-(def (poo-flow-testing-check-user-profile-set testing profile-set)
+(def (agentic-ai-lab-testing-check-user-profile-set testing profile-set)
   (unless (.slot? testing '.check-user-profile-set)
     (error "testing interface has no user profile-set policy" testing))
   (.call testing .check-user-profile-set profile-set))
 
-(def (poo-flow-testing-admit-user-profile! testing profile)
-  (let (receipt (poo-flow-testing-check-user-profile testing profile))
-    (unless (poo-flow-user-profile-policy-admitted? receipt)
-      (error "POO Flow user profile policy rejected declaration" receipt))
+(def (agentic-ai-lab-testing-admit-user-profile! testing profile)
+  (let (receipt (agentic-ai-lab-testing-check-user-profile testing profile))
+    (unless (yuanxu-user-profile-policy-admitted? receipt)
+      (error "Agentic AI Lab user profile policy rejected declaration" receipt))
     receipt))
 
-(def (poo-flow-testing-admit-user-profile-set! testing profile-set)
-  (let (receipt (poo-flow-testing-check-user-profile-set testing profile-set))
-    (unless (poo-flow-user-profile-set-policy-admitted? receipt)
-      (error "POO Flow user profile-set policy rejected declaration" receipt))
+(def (agentic-ai-lab-testing-admit-user-profile-set! testing profile-set)
+  (let (receipt (agentic-ai-lab-testing-check-user-profile-set testing profile-set))
+    (unless (yuanxu-user-profile-set-policy-admitted? receipt)
+      (error "Agentic AI Lab user profile-set policy rejected declaration" receipt))
     receipt))

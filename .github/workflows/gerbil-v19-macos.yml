@@ -14,7 +14,10 @@ on:
       - packages/automation/install_gerbil_release.py
       - build.ss
       - gerbil.pkg
-      - src/**
+      - dev/gerbil.pkg
+      - init.ss
+      - modules/**
+      - core
       - t/qualification/darwin-gerbil-build-scenario.ss
       - t/qualification/darwin-native-std-make/**
       - t/funflow-github-ci-json-schema-contract-test.ss
@@ -24,7 +27,10 @@ on:
       - packages/automation/install_gerbil_release.py
       - build.ss
       - gerbil.pkg
-      - src/**
+      - dev/gerbil.pkg
+      - init.ss
+      - modules/**
+      - core
       - t/qualification/darwin-gerbil-build-scenario.ss
       - t/qualification/darwin-native-std-make/**
       - t/funflow-github-ci-json-schema-contract-test.ss
@@ -45,14 +51,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - toolchain: v0.19-2591dcd
+          - toolchain: v0.19-1cfb032
     env:
       GERBIL_RELEASE_ROOT: ${{ github.workspace }}/.ci/gerbil-release/${{ matrix.toolchain }}
     steps:
-      - name: Checkout POO Flow
+      - name: Checkout Agentic AI Lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - name: Check out Core source owner
+      - name: Initialize Core source directory
         run: git submodule update --init core
 
       - name: Install shared Darwin dependencies
@@ -93,7 +99,7 @@ jobs:
         env:
           GERBIL_BUILD_VERBOSE: "1"
           GERBIL_SOURCE_REF: ${{ matrix.toolchain }}
-          UPSTREAM_SHA: 2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb
+          UPSTREAM_SHA: 1cfb032c7a1612637da6205f5f8a15683eba3ba0
           WARM_BUDGET_SECONDS: "30"
         run: gxi ./run.ss
 
@@ -113,12 +119,18 @@ jobs:
           set -euo pipefail
           mkdir -p "$HOME/.gerbil/pkg"
           gerbil pkg dir --add git.cons.io/mighty-gerbils/gerbil-directory
+          python3 packages/automation/gerbil_dependency_pin.py prepare-native --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
           if [[ "${{ steps.dependency-cache.outputs.cache-hit }}" == "true" ]]; then
             gerbil env gerbil interactive -e \
-              '(begin (import :asp-gerbil-scheme/benchmark-api) (displayln "asp-benchmark-cache-ready"))'
+              '(begin (import :clan/poo/object) (displayln "library-cache-ready"))'
           else
-            gerbil deps --install
+            gerbil env gerbil interactive packages/automation/native-dependencies.ss
           fi
+          # The measurement harness is development tooling, not a library input.
+          python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "$GITHUB_WORKSPACE/dev/.gerbil/pkg"
+          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/native-dependencies.ss)
+          export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
+          echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
           gerbil env gerbil interactive -e \
             '(begin (import :asp-gerbil-scheme/benchmark-api) (displayln "asp-benchmark-ready"))'
 
@@ -132,18 +144,22 @@ jobs:
             .gerbil/bin
           key: darwin-gerbil-build-v1-${{ runner.os }}-${{ runner.arch }}-${{ matrix.toolchain }}-${{ hashFiles('gerbil.pkg') }}
 
-      - name: Measure cold POO Flow build
+      - name: Measure cold Agentic AI Lab build
         env:
           TOOLCHAIN: ${{ matrix.toolchain }}
         shell: bash
         run: |
           set -euo pipefail
-          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil build)
+          # Dependency packages may have compiled an older :core namespace into
+          # this shared GERBIL_PATH. Replace those artifacts before the measured
+          # product build; mtimes cannot qualify this checkout's export identity.
+          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" gerbil clean)
+          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" gerbil build)
           gerbil clean
           gerbil env gxi t/qualification/darwin-gerbil-build-scenario.ss \
             cold "$TOOLCHAIN" "$RUNNER_TEMP/cold-build.ss"
 
-      - name: Measure warm POO Flow build
+      - name: Measure warm Agentic AI Lab build
         env:
           TOOLCHAIN: ${{ matrix.toolchain }}
         shell: bash

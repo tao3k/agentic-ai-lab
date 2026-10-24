@@ -9,7 +9,7 @@ use std::process::Command;
 
 #[test]
 fn cedar_case_cli_rejects_aligned_evaluation_error() {
-    let host = std::env::var_os("POO_FLOW_CEDAR_RUNTIME_HOST")
+    let host = std::env::var_os("AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST")
         .expect("qualification requires the AOT Runtime Host artifact");
     let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../fixtures/atomic-case");
     let output = Command::new(env!("CARGO_BIN_EXE_cedar-case-check"))

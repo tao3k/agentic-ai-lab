@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ((benchmarkKind . scenario)
- (schema . poo-flow.poo-clos-native-c4.v1)
+ (schema . agentic-ai-lab.poo-clos-native-c4.v1)
  (sourcePath . "t/scenarios/performance/poo-clos-native-c4/scenario.ss")
  (feature . poo-clos-native-metaobject-precedence)
  (sampleCount . 40)

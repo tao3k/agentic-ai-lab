@@ -3,33 +3,38 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :clan/poo/object .cc)
+        (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit Type. validate)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Owner: Docker tutorial alignment lives in this module.
 ;;; Boundary: core provides descriptor, strategy, runner, and adapter protocols.
 ;;; Import contract: users opt in through the module config/interface exports.
 ;;; Runtime contract: this module emits request data only.
 ;;; Runtime contract: image pulls and mounts stay behind runtime commands.
 ;;; Runtime contract: process control and CAS writes stay out of Scheme.
-;;; Dependency: generic sandbox resources live in =:poo-flow/modules/agent-sandbox/resource=.
+;;; Dependency: generic sandbox resources live in =:agentic-ai-lab/modules/agent-sandbox/resource=.
 ;;; Policy evidence: tests should trust the installed module registry.
 
-(import (only-in :poo-flow/src/core/task
+(import (only-in :yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task task? task-kind
                  task-request)
-        (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        (only-in :poo-flow/src/core/strategy
+        (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        (only-in :yuanxu/modules/funflow/control-plane/strategy
                  make-strategy strategy-name strategy-capabilities
                  strategy-cache-policy strategy-failure-policy strategy-planner
                  make-local-eager-strategy)
-        (only-in :poo-flow/src/core/runtime-adapter
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter
                  make-runtime-adapter runtime-adapter-name
                  runtime-adapter-capabilities runtime-adapter-submitter
                  runtime-adapter-fetcher runtime-adapter-store-putter
                  runtime-adapter-store-getter make-rust-adapter)
-        (only-in :poo-flow/src/core/config make-run-config)
-        (only-in :poo-flow/src/core/flow
+        (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
+        (only-in :yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry task-flow flow-name flow-steps)
-        (only-in :poo-flow/modules/agent-sandbox/resource
+        (only-in :agentic-ai-lab/modules/agent-sandbox/resource
                  sandbox-volume-bindings->request
                  sandbox-volume-bindings-merge))
 
@@ -41,6 +46,7 @@
         make-docker-enabled-adapter
         make-docker-run-config
         make-docker-task-input
+        DockerTaskInput
         docker-task-input?
         docker-task-input-input-bindings
         docker-task-input-args-vals
@@ -77,7 +83,7 @@
 ;;; can discover report-only handoff data without guessing task entrypoints.
 ;; : (-> Unit Symbol)
 (def +docker-task-input-receipt-schema+
-  'poo-flow.extensions.docker-task-input-receipt.v1)
+  'agentic-ai-lab.extensions.docker-task-input-receipt.v1)
 
 ;;; Docker task input mirrors Funflow's DockerTaskInput: inputBindings plus
 ;;; placeholder argument values. It is input data to the flow, not task config.
@@ -86,6 +92,8 @@
   (input-bindings
    args-vals)
   transparent: #t)
+
+(def DockerTaskInput (.cc Type. sexp: 'DockerTaskInput '.element? docker-task-input?))
 
 ;;; Report-only evidence for the Docker input/config boundary. It does not mean
 ;;; a container ran, an image was pulled, or a CAS output was written.
@@ -252,19 +260,19 @@
 
 ;;; Docker tasks are first-class extension request data for the runtime
 ;;; boundary. Rust owns image pulls, mounts, process control, and CAS output.
-;; : (-> Symbol Image Command [Arg] [SandboxVolumeBinding] OutputPolicy Contract Contract Task)
-(def (make-docker-task name image command args volumes output-policy input-contract output-contract)
-  (make-task name
-             'docker
-             (list 'docker
-                   (list (cons 'image image)
-                         (cons 'command command)
-                         (cons 'args args)
-                         (cons 'volumes volumes)
-                         (cons 'output-policy output-policy)))
-             input-contract
-             output-contract
-             #f))
+;; : (-> Symbol Image Command [Arg] [SandboxVolumeBinding] OutputPolicy Function Task)
+(def (make-docker-task name image command args volumes output-policy signature)
+  (make-task
+   name
+   'docker
+   (list 'docker
+         (list (cons 'image image)
+               (cons 'command command)
+               (cons 'args args)
+               (cons 'volumes volumes)
+               (cons 'output-policy output-policy)))
+   signature
+   #f))
 
 ;;; Task config extraction refuses non-Docker tasks instead of assuming the
 ;;; request payload shape belongs to this extension.
@@ -307,30 +315,30 @@
 (def (task-docker-output-policy task)
   (task-docker-config-ref task 'output-policy #f))
 
-;; : (-> Symbol Image Command [Arg] [SandboxVolumeBinding] OutputPolicy Contract Contract Flow)
-(def (docker-flow name image command args volumes output-policy input-contract output-contract)
+;; : (-> Symbol Image Command [Arg] [SandboxVolumeBinding] OutputPolicy Function Flow)
+(def (docker-flow name image command args volumes output-policy signature)
   (task-flow name
-             (make-docker-task name
-                               image
-                               command
-                               args
-                               volumes
-                               output-policy
-                               input-contract
-                               output-contract)))
+             (make-docker-task
+	      name
+	      image
+	      command
+	      args
+	      volumes
+	      output-policy
+	      signature)))
 
-;;; Funflow's dockerFlow takes DockerTaskConfig and returns a flow from
-;;; DockerTaskInput to a CAS item. This constructor preserves that boundary.
+;;; The input is the actual DockerTaskInput value. The runtime adapter returns
+;;; an AdapterResult carrying the CAS reference; Scheme does not execute Docker.
 ;; : (-> Symbol Image Command [Arg] Flow)
 (def (docker-task-flow name image command args)
-  (docker-flow name
-               image
-               command
-               args
-               '()
-               'cas-item
-               'docker-task-input
-               'cas-item))
+  (docker-flow
+   name
+   image
+   command
+   args
+   '()
+   'cas-item
+   (Fun AdapterResult <- DockerTaskInput)))
 
 ;;; Boundary: receipt helpers validate that the flow is backed by a Docker task
 ;;; before projecting report-only handoff data.

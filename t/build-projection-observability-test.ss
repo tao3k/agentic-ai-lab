@@ -3,18 +3,21 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
-         (only-in :std/test test-suite check-equal?)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :std/test test-suite check-equal? check-exception)
         (only-in :std/misc/ports read-all-as-string)
-        (only-in :clan/poo/object .o)
-        (only-in :poo-flow/src/building/build-config
-                 poo-flow-default-build-observability-policy)
-        (only-in :poo-flow/src/building/build-projection
-                 poo-flow-make-observed-package-spec-projector
-                 poo-flow-observe-build-projection
-                 poo-flow-build-elapsed-milliseconds)
-        (only-in :core/observability/output
-                 poo-flow-write-observation-line!))
+        (only-in :clan/poo/object .o .get .ref/cached NoApplicableMethod?)
+        (only-in :gerbil/expander core-import-module module-context-path)
+        "../core/init.ss"
+        "../init.ss"
+        (only-in :agentic-ai-lab/modules/building/build-config
+                 agentic-ai-lab-default-build-observability-policy)
+        (only-in :agentic-ai-lab/modules/building/build-projection
+                 agentic-ai-lab-make-observed-package-spec-projector
+                 agentic-ai-lab-observe-build-projection
+                 agentic-ai-lab-build-elapsed-milliseconds)
+        (only-in :yuanxu/observability/output
+                 yuanxu-write-observation-line!))
 
 (export build-projection-observability-test)
 
@@ -23,16 +26,26 @@
 
 (def build-projection-observability-test
   (test-suite "POO PackageSpec projection observability"
-    (poo-flow-test-case "native package catalog reaches the ASP projector unchanged"
+    (yuanxu-test-case "native package init entries coexist without forcing either graph"
+      (yuanxu-write-observation-line! "init-entry source=%s"
+        (module-context-path (core-import-module (path-expand "core/init.ss"))))
+      (check-equal? (eq? yuanxu.init.exports agentic-ai-lab.init.exports) #f)
+      (check-equal? (.ref/cached yuanxu.init.exports 'Modules) #f)
+      (check-equal? (.ref/cached agentic-ai-lab.init.exports 'Core) #f)
+      (check-exception (.get yuanxu.init.exports std-make-run) NoApplicableMethod?)
+      (check-exception (.get agentic-ai-lab.init.exports std-make-run) NoApplicableMethod?)
+      (check-equal? (.ref/cached (.get yuanxu.init.exports tests) 'selected-graph) #f)
+      (check-equal? (.ref/cached (.get agentic-ai-lab.init.exports tests) 'selected-graph) #f))
+    (yuanxu-test-case "native package catalog reaches the supplied projector unchanged"
       (let ((projected? #f)
             (port (open-output-string))
             (package-spec (.o)))
         (parameterize ((current-output-port port))
-          ((poo-flow-make-observed-package-spec-projector
+          ((agentic-ai-lab-make-observed-package-spec-projector
             (lambda (_package-spec)
               (set! projected? #t)
-              '("src/core/api.ss" "src/authoring/module-descriptor.ss"))
-            poo-flow-default-build-observability-policy)
+              '("modules/workflow/control-plane/api.ss" "modules/module-authoring/module-descriptor.ss"))
+            agentic-ai-lab-default-build-observability-policy)
            package-spec))
         (let (output (get-output-string port))
           (check-equal? projected? #t)
@@ -42,43 +55,17 @@
           (check-equal? (contains? output "phase=executor-handoff") #t)
           (check-equal? (contains? output "phase=executor-active") #f))))
 
-    (poo-flow-test-case "package build delegates the native public closure to ASP"
-      (let (source (call-with-input-file "build.ss" read-all-as-string))
-        (check-equal? (contains? source
-                                 ":asp-gerbil-scheme/building-api")
-                      #t)
-        (check-equal? (contains? source
-                                 ":asp-gerbil-scheme/build-api")
-                      #f)
-        (check-equal? (contains? source
-                                 ":asp-gerbil-scheme/src/build-api/")
-                      #f)
-        (check-equal? (contains? source ":clan/building") #f)
-        (check-equal? (contains? source
-                                 "(public-entry-modules")
-                      #t)
-        (check-equal? (contains? source "\"src/core/api.ss\"") #t)
-        (check-equal? (contains? source
-                                 "\"src/authoring/module-descriptor.ss\"")
-                      #t)
-        (check-equal? (contains? source
-                                 "\"src/authoring/module-interface.ss\"")
-                      #f)
-        (check-equal? (contains? source
-                                 "\"src/feature-system/interface.ss\"")
-                      #t)
-        (check-equal? (contains? source
-                                 "(modules ")
-                      #f)
-        (check-equal? (contains? source "poo-flow-load-modules") #f)
-        (check-equal? (contains? source "all-gerbil-modules") #f)
-        (check-equal? (contains? source
-                                 "(exclude-dirs +poo-flow-build-exclude-dirs+)")
-                      #t)
-        (check-equal? (contains? source "\"performance-tests.ss\"") #t)
-        (check-equal? (contains? source "\"run-contribute-test.ss\"") #t)))
+    (yuanxu-test-case "package build delegates selection and execution to Core and std/make"
+      (let ((source (call-with-input-file "build.ss" read-all-as-string))
+            (projection (call-with-input-file "build-spec.ss" read-all-as-string)))
+        (check-equal? (contains? source ":asp-gerbil-scheme/") #f)
+        (check-equal? (contains? source ":yuanxu/module-system/building/script") #t)
+        ;; Core passes its admitted value into the unchanged SDK macro.
+        (check-equal? (contains? source "(defbuild-script (modules-spec retained-spec))") #t)
+        (check-equal? (contains? source "std-make-run") #f)
+        (check-equal? (contains? projection "package-library-spec") #t)))
 
-    (poo-flow-test-case "Bazel stages one package surface without owning the module graph"
+    (yuanxu-test-case "Bazel stages one package surface without owning the module graph"
       (let ((root-build
              (call-with-input-file "BUILD.bazel" read-all-as-string)))
         (check-equal? (contains? root-build
@@ -94,84 +81,78 @@
                                  "build_script = \":build.ss\"")
                       #t)))
 
-    (poo-flow-test-case "performance suite consumes the public POO testing interface"
+    (yuanxu-test-case "performance suite consumes the public POO testing interface"
       (let (performance-source
-            (call-with-input-file "performance-tests.ss" read-all-as-string))
+            (call-with-input-file "dev/performance-tests.ss" read-all-as-string))
         (check-equal?
          (contains?
           performance-source
-          "+poo-flow-testing-interface+")
+          "+agentic-ai-lab-testing-interface+")
          #t)
         (check-equal?
          (contains? performance-source "+asp-testing-interface+")
          #f)))
 
-    (poo-flow-test-case "Just test launch is fail-closed before Profile loading"
-      (let (source (call-with-input-file "justfile" read-all-as-string))
-        (check-equal?
-         (contains? source
-                    "env_var_or_default(\"GERBIL_TEST_MAX_HEAP\", \"1G\")")
-         #t)
-        (check-equal?
-         (contains? source
-                    "env_var_or_default(\"GERBIL_TEST_DEBUG\", \"q\")")
-         #t)
-        (check-equal?
-         (contains? source
-                    "gerbil {{ gerbil_test_runtime_options }} env ./unit-tests.ss")
-         #t)
-        (check-equal? (contains? source ".devenv/devenv-profile-exec") #f)
-        (check-equal? (contains? source "rm -rf") #f)))
+    (yuanxu-test-case "Just test launch is fail-closed before Profile loading"
+      (let ((environment (call-with-input-file "dev/just/environment.just" read-all-as-string))
+            (testing (call-with-input-file "dev/just/testing.just" read-all-as-string))
+            (driver (call-with-input-file "t/qualification/testing/specialized.ss" read-all-as-string)))
+        (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_MAX_HEAP\", \"1G\")") #t)
+        (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_DEBUG\", \"q\")") #t)
+        (check-equal? (contains? testing "gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss package") #t)
+        (check-equal? (contains? driver "(list \"gerbil\" vm \"env\" \"gxi\" vm \"./unit-tests.ss\")") #t)
+        (check-equal? (contains? testing ".devenv/devenv-profile-exec") #f)
+        (check-equal? (contains? testing "rm -rf") #f)))
 
-    (poo-flow-test-case "unit tests inherit the POO Flow default testing policy"
-      (let (source (call-with-input-file "unit-tests.ss" read-all-as-string))
+    (yuanxu-test-case "unit tests inherit the Agentic AI Lab default testing policy"
+      (let (source (call-with-input-file "dev/testing-profiles.ss" read-all-as-string))
         (check-equal?
-         (contains? source ":poo-flow/testing-api")
+         (contains? source ":agentic-ai-lab/dev/testing-api")
          #t)
         (check-equal?
-         (contains? source "+poo-flow-testing-interface+")
+         (contains? source "+agentic-ai-lab-testing-interface+")
          #t)
         (check-equal? (contains? source "+asp-testing-interface+") #f)
         (check-equal? (contains? source "maxHeapMiB: 1024") #f)))
 
-    (poo-flow-test-case "default policy measures catalog size without an invented limit"
+    (yuanxu-test-case "default policy measures catalog size without an invented limit"
       (let (port (open-output-string))
         (parameterize ((current-output-port port))
-          (poo-flow-observe-build-projection
-           poo-flow-default-build-observability-policy 601 3))
+          (agentic-ai-lab-observe-build-projection
+           agentic-ai-lab-default-build-observability-policy 601 3))
         (let (output (get-output-string port))
-          (check-equal? (string-prefix? "\n[poo-flow]" output) #t)
+          (check-equal? (string-prefix? "\n[agentic-ai-lab]" output) #t)
           (check-equal? (contains? output "phase=spec-projected") #t)
           (check-equal? (contains? output "target-count=601") #t)
           (check-equal? (contains? output "reason=target-count") #f))))
 
-    (poo-flow-test-case "derived POO policy overrides the budget without environment state"
+    (yuanxu-test-case "derived POO policy overrides the budget without environment state"
       (let ((port (open-output-string))
             (policy
-             (.o (:: @ poo-flow-default-build-observability-policy)
+             (.o (:: @ agentic-ai-lab-default-build-observability-policy)
                  (id 'build-projection/test)
                  (target-budget 700))))
         (parameterize ((current-output-port port))
-          (poo-flow-observe-build-projection policy 257 3))
+          (agentic-ai-lab-observe-build-projection policy 257 3))
         (let (output (get-output-string port))
           (check-equal? (contains? output "phase=spec-projected") #t)
           (check-equal? (contains? output "phase=spec-budget-exceeded") #f))))
 
-    (poo-flow-test-case "derived POO policy can admit against measured package evidence"
+    (yuanxu-test-case "derived POO policy can admit against measured package evidence"
       (let ((port (open-output-string))
             (policy
-             (.o (:: @ poo-flow-default-build-observability-policy)
+             (.o (:: @ agentic-ai-lab-default-build-observability-policy)
                  (id 'build-projection/qualification)
                  (target-budget 256)
                  (target-budget-action 'observe))))
         (parameterize ((current-output-port port))
-          (poo-flow-observe-build-projection policy 257 3))
+          (agentic-ai-lab-observe-build-projection policy 257 3))
         (let (output (get-output-string port))
           (check-equal? (contains? output "phase=spec-budget-exceeded") #t)
           (check-equal? (contains? output "reason=target-count") #t)
           (check-equal? (contains? output "budget=256") #t))))
 
-    (poo-flow-test-case "concurrent Owner receipts remain complete line records"
+    (yuanxu-test-case "concurrent Owner receipts remain complete line records"
       (let* ((worker-count 12)
              (records-per-worker 40)
              (port (open-output-string))
@@ -182,8 +163,8 @@
                         (parameterize ((current-output-port port))
                           (let loop ((sequence 0))
                             (when (< sequence records-per-worker)
-                              (poo-flow-write-observation-line!
-                               "[poo-flow-test] worker=%a sequence=%a"
+                              (yuanxu-write-observation-line!
+                               "[agentic-ai-lab-test] worker=%a sequence=%a"
                                worker-id sequence)
                               (loop (+ sequence 1))))))))
                    (iota worker-count))))
@@ -194,14 +175,14 @@
           (check-equal? (length records) (* worker-count records-per-worker))
           (check-equal?
            (andmap (lambda (line)
-                     (and (string-prefix? "[poo-flow-test] worker=" line)
+                     (and (string-prefix? "[agentic-ai-lab-test] worker=" line)
                           (contains? line " sequence=")))
                    records)
            #t))))
 
-    (poo-flow-test-case "Owner elapsed time is sampled from the wall clock"
+    (yuanxu-test-case "Owner elapsed time is sampled from the wall clock"
       (let (started-jiffy (current-jiffy))
         (thread-sleep! 0.03)
         (check-equal?
-         (>= (poo-flow-build-elapsed-milliseconds started-jiffy) 20)
+         (>= (agentic-ai-lab-build-elapsed-milliseconds started-jiffy) 20)
          #t)))))

@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Hermetic Bundle v1 images generated from downstream POO Flow Scheme."""
+"""Hermetic Bundle v1 images generated from downstream Agentic AI Lab Scheme."""
 
 load(
     "@gerbil_bazel//gerbil:defs.bzl",
@@ -11,17 +11,17 @@ load(
     "resolved_gerbil_toolchain",
 )
 
-PooFlowBundleV1Info = provider(
+AgenticAILabBundleV1Info = provider(
     doc = "Declared Bundle v1 descriptor and arena generated from Scheme.",
     fields = {
         "arena": "Bundle v1 immutable arena image.",
         "descriptor": "Bundle v1 descriptor image.",
-        "project_receipt": "Receipt for the compiled POO Flow Scheme project.",
+        "project_receipt": "Receipt for the compiled Agentic AI Lab Scheme project.",
         "source": "Downstream Scheme composition entrypoint.",
     },
 )
 
-def _poo_flow_bundle_v1_impl(ctx):
+def _agentic_ai_lab_bundle_v1_impl(ctx):
     project = ctx.attr.project[GerbilProjectInfo]
     toolchain = resolved_gerbil_toolchain(ctx)
     descriptor = ctx.outputs.descriptor_out
@@ -46,17 +46,17 @@ def _poo_flow_bundle_v1_impl(ctx):
     arguments.add("env")
     arguments.add("GERBIL_PATH=" + gerbil_path)
     arguments.add("GERBIL_LOADPATH=" + ":".join(load_path))
-    arguments.add("POO_FLOW_BUNDLE_V1_ID=" + ctx.attr.bundle_id)
-    arguments.add("POO_FLOW_BUNDLE_V1_EPOCH=" + str(ctx.attr.bundle_epoch))
-    arguments.add("POO_FLOW_BUNDLE_V1_DESCRIPTOR_OUT=" + descriptor.path)
-    arguments.add("POO_FLOW_BUNDLE_V1_ARENA_OUT=" + arena.path)
+    arguments.add("AGENTIC_AI_LAB_BUNDLE_V1_ID=" + ctx.attr.bundle_id)
+    arguments.add("AGENTIC_AI_LAB_BUNDLE_V1_EPOCH=" + str(ctx.attr.bundle_epoch))
+    arguments.add("YUANXU_BUNDLE_V1_DESCRIPTOR_OUT=" + descriptor.path)
+    arguments.add("YUANXU_BUNDLE_V1_ARENA_OUT=" + arena.path)
     arguments.add(toolchain.gxi.executable.path)
     arguments.add(ctx.file.src.path)
 
     environment = dict(toolchain.environment)
     environment.update({
         "GERBIL_BAZEL_NATIVE_ABI": toolchain.native_abi_fingerprint,
-        "POO_FLOW_GERBIL_NATIVE_ABI": toolchain.native_abi_fingerprint,
+        "AGENTIC_AI_LAB_GERBIL_NATIVE_ABI": toolchain.native_abi_fingerprint,
     })
     ctx.actions.run(
         arguments = [arguments],
@@ -77,15 +77,15 @@ def _poo_flow_bundle_v1_impl(ctx):
                 toolchain.runfiles,
             ],
         ),
-        mnemonic = "PooFlowBundleV1",
+        mnemonic = "AgenticAILabBundleV1",
         outputs = [descriptor, arena],
-        progress_message = "Lowering POO Flow Scheme Bundle v1 %{label}",
+        progress_message = "Lowering Agentic AI Lab Scheme Bundle v1 %{label}",
         tools = [toolchain.gxi, toolchain.native_scheme_env],
     )
 
     return [
         DefaultInfo(files = depset([descriptor, arena])),
-        PooFlowBundleV1Info(
+        AgenticAILabBundleV1Info(
             arena = arena,
             descriptor = descriptor,
             project_receipt = project.receipt,
@@ -97,8 +97,8 @@ def _poo_flow_bundle_v1_impl(ctx):
         ),
     ]
 
-poo_flow_bundle_v1 = rule(
-    implementation = _poo_flow_bundle_v1_impl,
+agentic_ai_lab_bundle_v1 = rule(
+    implementation = _agentic_ai_lab_bundle_v1_impl,
     attrs = {
         "arena_out": attr.output(mandatory = True),
         "bundle_epoch": attr.int(default = 1),

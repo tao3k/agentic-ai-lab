@@ -1,0 +1,159 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Shared-seed candidate repair with a parser-owned contract
+#+DATE: 2026-10-02
+#+STATUS: completed bounded four-call repair study
+
+* Question and ownership
+
+Given one fixed erroneous inert candidate and the same parser-owned syntax
+contract, does initial-source native feedback help repair that candidate?
+This is a syntax-repair comparison conditional on a supplied seed. It does
+not estimate end-to-end program generation, internal reasoning, general
+feedback benefit or model interpretation of verifier verdicts.
+
+ASCENT owns the grammar/operator description, two frozen erroneous seeds,
+seven-state corpus, independent matrix model, Scheme qualification and
+Rust 0.8.0 differential reference. Python Testing reads these native data
+projections, freezes prompts, records API results and compares output and
+evidence scores. Python adds no Scheme evaluator or owned Scheme fixture.
+
+* Native qualification before preview
+
+The parser description advertises nested where/compute/reduce forms,
+closed operator names and arities, prior-bound operator inputs, fresh
+compute/reduction output bindings and one-based candidate diagnostic paths.
+The operator/reducer registry is shared with admission. Public description
+values are detached copies. Positive and negative forms are checked through
+real native attempts; the description does not replace schema, binding,
+planner, finite-domain or budget admission checks.
+
+The first four states retain support withdrawal/replacement totals
+=20,20,8,12=. Three further states independently discriminate a blocked pair
+(total 8), an odd original weight (12) and equal weighted values under set
+semantics (8). Missing negation, missing original-weight guard and checking
+evenness after doubling must all complete and verify natively, yet disagree
+with the independent intended output on at least one state. Scheme direct,
+fragment and candidate results and the Rust full relation sets are qualified.
+The first valid receipt must fail against the equal-answer next generation;
+a rejected original receipt cannot test generation binding.
+
+* Frozen four-call comparison
+
+| Task | Shared erroneous seed | Order | Calls per arm |
+|------+-----------------------+-------+---------------|
+| compute | flat compute arguments; invalid-computation | self then native | 1 |
+| filter | flat where arguments; invalid-filter | native then self | 1 |
+
+Both arms receive byte-identical task, candidate contract and seed for the
+same task. Neither receives a prior model-generated candidate. Only native
+receives the seed's initial-source observation, frozen during preview.
+Each call is a fresh conversation and emits only one candidate datum.
+No update/discriminator source rows, reference outputs or correctness scores
+are included. Order is alternated across the two tasks, not randomized.
+The two selected syntax mistakes and two task pairs cannot estimate causal
+benefit reliably; report each repair and avoid significance claims.
+
+Settings: =deepseek-flash=, non-thinking, temperature 0, at most 1024 output
+tokens, 45-second timeout, zero retries. Maximum four paid requests; any API
+failure stops the run and preserves partial records. Temperature 0 is not a
+determinism guarantee. API duration excludes native evaluation and archiving.
+
+* Scores and evidence retention
+
+Report API completion, inert readability, each state's native completion,
+finite/founded validity, task shape and exact query-row agreement separately.
+Final success requires all seven outputs, valid current receipts and a
+meaningful stale-generation rejection. Native validity proves the proposed
+program's bounded execution, not its agreement with the task. The wrong-rule
+qualification cases demonstrate this distinction before any paid call.
+
+Preview freezes all four complete prompts, both seeds, canonical description,
+reference TSV, source heads, package pin, settings, order and SHA256 inventory.
+Live execution requires clean exact-head checkouts, unchanged approved preview
+and manifest digest, a new external output directory and a new durable archive
+directory outside temporary storage. Each request/response, usage, elapsed time,
+raw candidate and native TSV is retained. Both completed and failed runs are
+sealed with a file inventory and verified hashes before returning. Archive
+integrity is consistency evidence, not source authentication.
+
+The earlier four-call study has a [[file:evidence/support-candidates-f2f2315a/recovery.json][partial original-text recovery]]:
+all four recovered texts match recorded hashes, but full original JSON,
+requests, preview and native records are unavailable. It remains a bounded
+historical result with incomplete audit retention; missing records are not
+reconstructed or presented as originals.
+
+* Entrypoint and pre-run authorization gate
+
+#+begin_src sh
+python -m agentic_ai_lab_testing.model_study.shared_repair \
+  --ascent-root ASCENT --poo-root POO --gerbil-path GERBIL_PATH \
+  --preview-dir NEW_EXTERNAL_PREVIEW
+#+end_src
+
+A live run additionally requires =--output-dir=, =--archive-dir=,
+=--approved-manifest-sha256= and an API key or =--env-file=. Both current
+qualified heads must pass CI before live execution. The previous four-call
+approval is exhausted. A new immutable preview and explicit four-call budget
+must be approved before this protocol sends requests. The completed run and exhausted budget are recorded below. Temporal lens
+qualification remains separate.
+
+* Local qualification receipt
+
+The implementation pins ASCENT =cd6f60fe75cc12db6a0e5118fe8c71ff09e4b52b=;
+the Bazel archive SHA256 is
+=f5431b31b233a0238e02c93a8079b80376a3b99fae3eba14e720db645c454a07=.
+All 23 Python unit/harness checks passed, including preview-tamper rejection,
+feedback isolation, seven-state evidence/output scoring, archive-tamper
+rejection and archive destination checks. The license contract passed for
+2629 project files; four dependency-projection automation tests and the
+native/Bazel contract and error-mode lock check passed. These were pre-run local checks; exact-head CI and explicit approval were
+subsequently satisfied before the completed run below.
+
+The earlier implementation head =b3d960c= passed Scheme and byods CI, but
+failed Rust Clippy's type-complexity gate. =cd6f60f= names the unchanged case
+tuple type; local Clippy for all targets passed with =-D warnings=. No gate
+was relaxed. The initial preview at POO =b0c093e3= is marked superseded,
+with zero model calls. The final approved preview below superseded that preliminary preview.
+
+* Completed four-call receipt (2026-10-03)
+
+The user approved the final preview and four-call budget after exact-head CI:
+ASCENT =cd6f60fe75cc12db6a0e5118fe8c71ff09e4b52b= (4 successful checks) and
+Agentic AI Lab =0b7a6c52e376dc78ac71c539eeac32319951f11f= (25 successful checks,
+5 conditional skips). Approved manifest SHA256:
+=8974b1c55a150a8595f56a2c70f977116db7c428ab09997e098265890b6cb781=.
+One launch stopped before sending any request because the captured environment
+had no API key; loading the existing environment file allowed the approved run.
+Exactly four requests completed with zero retries and no remaining call budget.
+
+| Call order | Task/arm | API seconds | Input tokens | Output tokens | Matched states | Current finite/founded | Stale rejection |
+|------------+----------+-------------+--------------+---------------+----------------+------------------------+-----------------|
+| 1 | compute.self | 2.392 | 597 | 181 | 7/7 | valid/valid on all 7 | applicable; invalid/invalid |
+| 2 | compute.native | 1.263 | 642 | 181 | 7/7 | valid/valid on all 7 | applicable; invalid/invalid |
+| 3 | filter.native | 1.329 | 640 | 181 | 7/7 | valid/valid on all 7 | applicable; invalid/invalid |
+| 4 | filter.self | 1.028 | 596 | 181 | 7/7 | valid/valid on all 7 | applicable; invalid/invalid |
+
+All responses completed and were inert-readable. All 28 current attempts
+completed, passed task shape, verified and matched the independent query rows
+(totals =20,20,8,12,8,12,8=). All four candidates are byte-identical and preserve
+negation, the original-weight guard and set aggregation. Total usage was
+2475 input and 724 output tokens, with zero reasoning tokens. Durations are
+API transport times, not full solve latency or a matched performance result.
+
+Both self and native repaired both supplied syntax-error seeds. This run
+shows bounded repair success for these two selected tasks; it provides no
+observed correctness advantage for native feedback. It cannot establish
+causal or general model benefit, generation competence, verifier-interpretation
+competence, temporal lens qualification or release/deployment authority.
+
+[[file:evidence/shared-seed-repair-0b7a6c52/receipt.json][The committed result inventory]] records exact IDs, usage, request/record/candidate
+hashes, per-state scores and all 23 original archive file hashes. Four unchanged
+candidate texts accompany it. Full original requests, response JSON, native
+TSV, scores and frozen preview are retained in the durable archive:
+=/Users/guangtao/ghq/github.com/tao3k/meta-relational-reasoning/.data/research-evidence/shared-seed-repair-0b7a6c52/archive=.
+Its manifest SHA256 is
+=8843adf26bc2873635ab9910ea37fa44b095f2ed1aba9520ad95bec328278550=;
+all 23 file hashes were independently rechecked after sealing. The committed
+inventory is a projection, not a replacement for those original records.

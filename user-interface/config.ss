@@ -5,13 +5,13 @@
 
 ;;; Final User Composition: one thin binding over maintained Profiles.
 
-(import (only-in :core/profile-composition/profile-bundle
+(import (only-in :yuanxu/profile-composition/profile-bundle
                  profiles compose)
-        :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
-        :poo-flow/src/user-interface/default-agent-control-plane-profile
-        :poo-flow/user-interface/profiles/langgraph
-        :poo-flow/user-interface/profiles/tool-calling)
+        :yuanxu/profile-composition/selection-syntax
+        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
+        :agentic-ai-lab/modules/workflow/scenario/configuration/default-agent-control-plane-profile
+        :agentic-ai-lab/user-interface/profiles/langgraph
+        :agentic-ai-lab/user-interface/profiles/tool-calling)
 
 (export default-agent-control-plane)
 

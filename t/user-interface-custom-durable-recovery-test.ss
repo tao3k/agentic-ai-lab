@@ -7,12 +7,12 @@
 ;;; Invariant: recovery rows describe crash/replay/repair handoff data only;
 ;;; Scheme never replays logs, claims leases, repairs state, or runs workflow.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in "../user-interface/custom/my-module/cases/durable-recovery"
-                 poo-flow-custom-my-module-durable-recovery-case))
+                 agentic-ai-lab-custom-my-module-durable-recovery-case))
 
 (export user-interface-custom-durable-recovery-test)
 
@@ -23,12 +23,12 @@
 
 ;; : TestSuite
 (def user-interface-custom-durable-recovery-test
-  (test-suite "poo-flow custom user-interface durable-recovery case"
-    (poo-flow-test-case "projects custom durable recovery handoff row"
-      (let* ((row poo-flow-custom-my-module-durable-recovery-case)
+  (test-suite "agentic-ai-lab custom user-interface durable-recovery case"
+    (yuanxu-test-case "projects custom durable recovery handoff row"
+      (let* ((row agentic-ai-lab-custom-my-module-durable-recovery-case)
              (observability-rows (test-ref row 'observability-rows)))
         (check-equal? (test-ref row 'kind)
-                      'poo-flow.durable.recovery-scenario)
+                      'agentic-ai-lab.durable.recovery-scenario)
         (check-equal? (test-ref row 'scenario-id)
                       'recovery-scenario/custom-build-audit)
         (check-equal? (test-ref row 'valid?) #t)

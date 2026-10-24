@@ -5,11 +5,12 @@
 
 ;;; Boundary: POO role descriptors are control-plane metadata, not runtime work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import :yuanxu/composition/roles
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/src/core/api)
+        :yuanxu/modules/funflow/control-plane/api)
 
 (export control-plane-role-test)
 
@@ -18,7 +19,7 @@
 ;; : TestSuite
 (def control-plane-role-test
   (test-suite "poo role descriptors"
-    (poo-flow-test-case "declares control-plane roles as Gerbil POO objects"
+    (yuanxu-test-case "declares control-plane roles as Gerbil POO objects"
       (check-equal? (role-object? flow-role) #t)
       (check-equal? (role-name flow-role) 'flow)
       (check-equal? (role-kind branch-role) 'composition)
@@ -36,7 +37,7 @@
       (check-equal? (role-responsibility replay-role) 'audit-validation)
       (check-equal? (role-responsibility receipt-role)
                     'execution-explanation))
-    (poo-flow-test-case "composes role prototypes with leftmost precedence"
+    (yuanxu-test-case "composes role prototypes with leftmost precedence"
       (let ((composed (role-compose runtime-adapter-role flow-role)))
         (check-equal? (role-object? composed) #t)
         (check-equal? (role-name composed) 'runtime-adapter)
