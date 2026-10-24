@@ -1,8 +1,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Exercise extension executors and inert external requests through real Types.
 (import :std/test
-        (only-in :clan/poo/mop TypeError?)
+        (only-in :clan/poo/mop Type TypeError? validate)
         (only-in :clan/poo/type String Integer)
+        (only-in :agentic-ai-lab/modules/services/types Services)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/modules/funflow/control-plane/task
                  task-input-contract task-output-contract task-executor)
@@ -18,6 +19,8 @@
 (export task-signature-test)
 (def task-signature-test
   (test-suite "Extension native Task boundaries"
+    (yuanxu-test-case "the installed shared Services boundary is a native Type"
+      (check-eq? (validate Type Services) Services))
     (yuanxu-test-case "local executors enforce actual input and output Types"
       (def repeat (make-custom-repeat-task 'repeat "." 2 String String))
       (check-equal? ((task-executor repeat) "a") "a..")

@@ -13,6 +13,8 @@
     "modules/docker/interface.ss"
     "modules/text/interface.ss"
     "modules/agent-sandbox/api.ss"
+    ;; Shared public Type used by the OpenTofu Module must be installed.
+    "modules/services/types.ss"
 
     "modules/module-authoring/module-descriptor.ss"
     "modules/workflow/scenario/configuration/module-activation.ss"
