@@ -3,5 +3,5 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (package: agentic-ai-lab
- depend: ("github.com/tao3k/orgize@d593345960b54e13e391dac703b7a7487e0cabfb"
-          "github.com/tao3k/gerbil-ascent@12e9f80ddca32f4c6e4ead4f42581b126bc24b01"))
+ depend: ("github.com/tao3k/orgize@2c2785f28fb583c2d6d61f27c194f27101c2b96b"
+          "github.com/tao3k/gerbil-ascent@b6a8e3490bdef42da91b484326a2613e86465caf"))
