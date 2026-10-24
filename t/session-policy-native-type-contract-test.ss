@@ -78,6 +78,21 @@
       '(agent-turn)))))
  (error "session policy contracts should be native Types and admit valid grants"))
 
+;; Wire rows are a projection, never a substitute for the native grant value.
+(unless
+ (session-policy-eval
+  '(let (grant (agentic-ai-lab-session-tool-grant
+                'grant/read 'read-workspace-file '(read) '(project-workspace) '(agent-turn)))
+     (and (equal? (map car (agentic-ai-lab-session-tool-grant->alist grant))
+                  '(kind schema grant-id tool-ref actions resource-refs trigger-refs metadata runtime-executed))
+          (not (element? AgenticAILabSessionToolGrantContract
+                         (agentic-ai-lab-session-tool-grant->alist grant)))
+          (not (element? AgenticAILabSessionToolGrantContract
+                         (.cc grant 'actions '(read 42))))
+          (not (element? AgenticAILabSessionToolGrantContract
+                         (.o kind: 'agentic-ai-lab.session.tool-grant))))))
+ (error "native grant admission and canonical wire projection must retain their boundaries"))
+
 (when
  (session-policy-eval
   '(element?

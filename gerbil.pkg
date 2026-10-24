@@ -2,11 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(package:
- agentic-ai-lab
+(package: agentic-ai-lab
  prelude: :tao3k/yuanxu/prelude
-depend:
- ("github.com/tao3k/gerbil-poo@40c61fe6afc8313f297599da0e511f96e3a23dcf"
-  "github.com/tao3k/gerbil-parser@602011139e671cabd99fa98048bcd7b03968c9b8"
-  "github.com/tao3k/orgize@addcbd58e7a476888d4b9e3fb2db2421e33b764a"
-  "github.com/tao3k/gerbil-ascent@fda77d40a6e058587bc17d7b0a418367bfd497eb"))
+ depend: ("github.com/tao3k/orgize@862a8cfcddae41b5a9d6f1748f18c043b635eb89"
+          "github.com/tao3k/gerbil-ascent@2a8406761265643b6e7342dc5c62145f34fc19ce"))

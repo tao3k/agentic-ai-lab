@@ -9,10 +9,21 @@
   (register-module-build-source! (path-directory (this-source-file)) 'agentic-ai-lab))
 
 (import (only-in :clan/poo/object .get)
+        (only-in :std/source this-source-file)
+        (only-in :std/misc/process run-process)
         (only-in :yuanxu/module-system/building/script defbuild-script)
         (only-in "./init.ss" agentic-ai-lab.init.exports)
         (only-in "./build-spec.ss" agentic-ai-lab-build-spec))
 
+;; Native package clones acquire the declared Core gitlink before source lowering.
+(def retained-spec
+  (begin
+    (run-process
+      (list "git" "-C" (path-directory (this-source-file))
+            "submodule" "update" "--init" "--depth" "1" "--" "core")
+      stdin-redirection: #f stdout-redirection: #f)
+    (agentic-ai-lab-build-spec)))
+
 ;; The selected init owns source lowering; the SDK owns Make and dispatch.
 (def modules-spec (.get agentic-ai-lab.init.exports std-make-spec))
-(defbuild-script (modules-spec (agentic-ai-lab-build-spec)))
+(defbuild-script (modules-spec retained-spec))

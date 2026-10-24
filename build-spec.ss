@@ -9,6 +9,11 @@
 (def agentic-ai-lab-public-build-roots
   '("modules/workflow/scenario/bundle-v1-projection.ss"
     "testing-api.ss"
+    "modules/custom-task/interface.ss"
+    "modules/docker/interface.ss"
+    "modules/text/interface.ss"
+    "modules/agent-sandbox/api.ss"
+    "modules/ai-agentic-context/clue-exchange.ss"
     "services.ss"
     "nix-contracts.ss"
     "opentofu-contracts.ss"

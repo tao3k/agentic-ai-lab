@@ -39,10 +39,10 @@ mod-tidy:
 # Optional ASP policy probes belong to the development package, not the library.
 [group('dependency')]
 deps-dev:
-    python3 packages/automation/gerbil_dependency_pin.py prepare-native --owner development --require-head --package-root "{{ agentic_ai_lab_dev_gerbil_path }}/pkg" --shared-package-root "{{ agentic_ai_lab_gerbil_path }}/pkg"
+    python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "{{ agentic_ai_lab_dev_gerbil_path }}/pkg"
+    cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} gerbil env gxi ../packages/automation/native-dependencies.ss
 
-# Compile the optional test runtime in its own store, consuming production POO.
-# No --deps fetch may rewrite that explicit parent selection.
+# Compile the optional test runtime against the SDK-selected shared dependency.
 [group('build')]
 build-testing: deps-dev
     GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} gxpkg build github.com/tao3k/asp-gerbil-scheme

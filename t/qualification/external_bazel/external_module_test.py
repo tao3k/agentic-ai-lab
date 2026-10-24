@@ -86,7 +86,7 @@ raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:
         self.assertTrue(invocations[0][0].startswith("--output_user_root="))
         self.assertIn("bazel-no-root-override", invocations[0][0])
         self.assertEqual(invocations[1][1], "query")
-        self.assertEqual(invocations[2][1:3], ["build", "--nobuild"])
+        self.assertEqual(invocations[2][1:4], ["build", "--jobs=2", "--nobuild"])
         self.assertFalse(receipt["compiled"])
 
     def test_stable_output_base_and_full_build(self) -> None:
@@ -95,7 +95,7 @@ raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:
         invocations = self.invocations()
         self.assertEqual(len(invocations), 3)
         self.assertTrue(invocations[1][0].startswith("--output_base="))
-        self.assertEqual(invocations[2][1], "build")
+        self.assertEqual(invocations[2][1:3], ["build", "--jobs=2"])
         self.assertNotIn("--nobuild", invocations[2])
         self.assertTrue(output_base.is_dir())
         self.assertTrue(receipt["compiled"])

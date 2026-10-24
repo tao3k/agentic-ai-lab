@@ -64,7 +64,7 @@ jobs:
           brew list --formula ghostscript >/dev/null 2>&1 && brew unlink ghostscript || true
           brew install gcc jq openssl pkg-config sqlite zlib emscripten binaryen bazelisk
           test -x /opt/homebrew/bin/gcc-16
-          python3 packages/automation/install_gerbil_release.py "$GITHUB_WORKSPACE/.ci/gerbil-release/v0.19-2591dcd"
+          python3 packages/automation/install_gerbil_release.py "$GITHUB_WORKSPACE/.ci/gerbil-release/v0.19-1cfb032"
 
       - name: Declare Bazel disk-cache generation
         shell: bash
@@ -123,7 +123,7 @@ jobs:
 
       - name: Build declared Gerbil dependency projects
         timeout-minutes: 12
-        run: bazelisk build //:dependency_packages
+        run: bazelisk build --jobs=2 //:dependency_packages
 
       - name: Build, test, and pack the package
         # Dependency actions are materialized and attributed by the preceding

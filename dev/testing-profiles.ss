@@ -57,4 +57,3 @@
   (testing-interface-add-profile
    +agentic-ai-lab-serial-testing-interface+
    +testing-process-isolation-profile+))
-

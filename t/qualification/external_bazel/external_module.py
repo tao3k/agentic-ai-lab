@@ -175,7 +175,7 @@ def run_external_module(
             raise ExternalModuleError(
                 f"external Bazel query failed with status {query.returncode}"
             )
-        build_args = ["build"]
+        build_args = ["build", "--jobs=2"]
         if config.mode == "analysis":
             build_args.append("--nobuild")
         build_args.extend(["--lockfile_mode=off", "//:agentic_ai_lab_compile"])

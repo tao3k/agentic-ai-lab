@@ -61,7 +61,7 @@
         (check-equal? (contains? source ":asp-gerbil-scheme/") #f)
         (check-equal? (contains? source ":yuanxu/module-system/building/script") #t)
         ;; Core passes its admitted value into the unchanged SDK macro.
-        (check-equal? (contains? source "(defbuild-script (modules-spec (agentic-ai-lab-build-spec)))") #t)
+        (check-equal? (contains? source "(defbuild-script (modules-spec retained-spec))") #t)
         (check-equal? (contains? source "std-make-run") #f)
         (check-equal? (contains? projection "package-library-spec") #t)))
 

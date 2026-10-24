@@ -316,7 +316,7 @@ dependencies = [
 [[package]]
 name = "cedar-poo-bridge"
 version = "0.1.0"
-source = "git+https://github.com/tao3k/cedar-poo-spec?rev=c8d1a0641120cf65e299e8a98f9fe7666ca96ab5#c8d1a0641120cf65e299e8a98f9fe7666ca96ab5"
+source = "git+https://github.com/hardenedlinux/cedar-poo-spec?rev=c8d1a0641120cf65e299e8a98f9fe7666ca96ab5#c8d1a0641120cf65e299e8a98f9fe7666ca96ab5"
 dependencies = [
  "cedar-policy",
  "serde",

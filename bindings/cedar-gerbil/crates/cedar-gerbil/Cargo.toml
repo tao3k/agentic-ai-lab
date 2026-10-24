@@ -14,7 +14,7 @@ license.workspace = true
 conformance = []
 
 [dependencies]
-cedar-poo-bridge = { git = "https://github.com/tao3k/cedar-poo-spec", rev = "c8d1a0641120cf65e299e8a98f9fe7666ca96ab5", features = ["cedar-runtime"] }
+cedar-poo-bridge = { git = "https://github.com/hardenedlinux/cedar-poo-spec", rev = "c8d1a0641120cf65e299e8a98f9fe7666ca96ab5", features = ["cedar-runtime"] }
 gerbil-scheme.workspace = true
 gerbil-scheme-sys.workspace = true
 agentic-ai-lab-cedar-authority.workspace = true
