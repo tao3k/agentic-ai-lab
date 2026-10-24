@@ -2,7 +2,8 @@
 ;;; Exercise extension executors and inert external requests through real Types.
 (import :std/test
         (only-in :clan/poo/mop Type TypeError? validate)
-        (only-in :clan/poo/type String Integer)
+        (only-in :clan/poo/type String)
+        (only-in :clan/poo/number Integer)
         (only-in :agentic-ai-lab/modules/services/types Services)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/modules/funflow/control-plane/task
