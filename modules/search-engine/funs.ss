@@ -5,6 +5,7 @@
 
 ;;; Search composition is declarative; execution remains consumer-owned.
 (import (only-in :clan/poo/object .ref object?)
+        (only-in :clan/poo/mop Function)
         :yuanxu/object-family/role-syntax
         :agentic-ai-lab/modules/search-engine/objects
         (only-in :yuanxu/modules/funflow/control-plane/flow
@@ -79,7 +80,8 @@
                    (and (null? (cdr maybe-metadata))
                         (list? (car maybe-metadata)))))
     (error "invalid POO Search stage" name operation input-domain output-domain))
-  (let (flow (external-flow name operation arguments input-domain output-domain))
+  (let (flow (external-flow name operation arguments
+                           (Function (list output-domain) (list input-domain))))
     (poo-core-role-object
      (slots ((name name)
              (operation operation)
@@ -104,7 +106,7 @@
 (def (agentic-ai-lab-search-chain name children . maybe-metadata)
   (unless (and (symbol? name) (pair? children))
     (error "Search chain requires a name and at least one node" name children))
-  (let loop ((remaining children) (combined #f) (previous #f))
+  (let loop ((remaining children) (combined #f))
     (if (null? remaining)
       (agentic-ai-lab-search-composition
        name 'sequential children combined
@@ -112,17 +114,10 @@
       (let (node (car remaining))
         (unless (agentic-ai-lab-search-node? node)
           (error "Search chain child is not a POO Search node" node))
-        (when (and previous
-                   (not (equal? (agentic-ai-lab-search-node-output-domain previous)
-                                (agentic-ai-lab-search-node-input-domain node))))
-          (error "Search chain domain mismatch"
-                 (agentic-ai-lab-search-node-output-domain previous)
-                 (agentic-ai-lab-search-node-input-domain node)))
         (loop (cdr remaining)
               (if combined
                 (flow-then name combined (agentic-ai-lab-search-node-flow node))
-                (agentic-ai-lab-search-node-flow node))
-              node)))))
+                (agentic-ai-lab-search-node-flow node)))))))
 
 (def (agentic-ai-lab-search-parallel name children . maybe-metadata)
   (unless (and (symbol? name) (pair? children) (pair? (cdr children)))

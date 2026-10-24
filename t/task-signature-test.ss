@@ -9,7 +9,12 @@
         (only-in :agentic-ai-lab/modules/custom-task/funs make-custom-repeat-task)
         (only-in :agentic-ai-lab/modules/text/funs make-word-count-task)
         (only-in :agentic-ai-lab/modules/docker/funs make-docker-task)
-        (only-in :agentic-ai-lab/modules/agent-sandbox/api make-agent-sandbox-task))
+        (only-in :agentic-ai-lab/modules/agent-sandbox/api make-agent-sandbox-task)
+        (only-in :agentic-ai-lab/modules/workflow/flows-builders
+                 make-ccompilation-store-workflow make-tensorflow-workflow make-makefile-tool-workflow)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-input-contract flow-output-contract)
+        (only-in :agentic-ai-lab/modules/search-engine/funs agentic-ai-lab-search-stage agentic-ai-lab-search-chain)
+        (only-in :agentic-ai-lab/modules/search-engine/objects agentic-ai-lab-search-acquisition-role))
 (export task-signature-test)
 (def task-signature-test
   (test-suite "Extension native Task boundaries"
@@ -33,4 +38,23 @@
           (check-eq? (task-input-contract task) String)
           (check-eq? (task-output-contract task) String)
           (check-equal? (task-executor task) #f))
-        (list docker sandbox)))))
+        (list docker sandbox)))
+    (yuanxu-test-case "workflow composition consumes caller-selected boundary Types"
+      ;; These are type-composition controls; no Docker or makefile effect runs.
+      (for-each
+        (lambda (build)
+          (def flow (build 'typed String Integer String))
+          (check-eq? (flow-input-contract flow) String)
+          (check-eq? (flow-output-contract flow) String))
+        (list make-ccompilation-store-workflow make-tensorflow-workflow make-makefile-tool-workflow)))
+    (yuanxu-test-case "Search delegates actual Type edge admission to Core"
+      (def stage
+        (agentic-ai-lab-search-stage 'source 'acquire '() String Integer
+                                    agentic-ai-lab-search-acquisition-role))
+      (def wrong
+        (agentic-ai-lab-search-stage 'other 'acquire '() String String
+                                    agentic-ai-lab-search-acquisition-role))
+      (check-exception (agentic-ai-lab-search-chain 'wrong (list stage wrong)) error?)
+      (check-exception
+        (agentic-ai-lab-search-stage 'source 'acquire '() 'source 'result
+                                    agentic-ai-lab-search-acquisition-role) TypeError?))))

@@ -321,16 +321,16 @@
 
 ;;; Funflow's dockerFlow takes DockerTaskConfig and returns a flow from
 ;;; DockerTaskInput to a CAS item. This constructor preserves that boundary.
-;; : (-> Symbol Image Command [Arg] Flow)
-(def (docker-task-flow name image command args)
+;; : (-> Symbol Image Command [Arg] Type Type Flow)
+(def (docker-task-flow name image command args input-type output-type)
   (docker-flow name
                image
                command
                args
                '()
                'cas-item
-               'docker-task-input
-               'cas-item))
+               input-type
+               output-type))
 
 ;;; Boundary: receipt helpers validate that the flow is backed by a Docker task
 ;;; before projecting report-only handoff data.

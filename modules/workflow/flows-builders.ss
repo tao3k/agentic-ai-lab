@@ -6,7 +6,8 @@
 ;;; Boundary: composed workflow builders for Docker, Store, Tensorflow, and makefile examples.
 ;;; Invariant: builders produce descriptors and runtime command manifests only.
 
-(import (only-in :yuanxu/modules/funflow/control-plane/task
+(import (only-in :clan/poo/mop Function)
+        (only-in :yuanxu/modules/funflow/control-plane/task
                  execution-request-request execution-request-plan-id)
         (only-in :yuanxu/modules/funflow/control-plane/strategy make-local-eager-strategy)
         (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter make-rust-adapter)
@@ -109,8 +110,9 @@
 ;;; CCompilation's public Scheme result is a descriptor-shaped Docker flow.
 ;;; The runtime command owns image pulls, volume realization, compilation, and
 ;;; process handles; this constructor owns the tutorial's stable request shape.
-;; : (-> Symbol Flow)
-(def (make-ccompilation-flow name)
+;; Callers select actual boundary Types; runtime artifact labels stay metadata.
+;; : (-> Symbol Type Type Flow)
+(def (make-ccompilation-flow name input-type result-type)
   (docker-flow name
                "gcc:9.3.0"
                "gcc"
@@ -124,24 +126,23 @@
                  ((store-item . ccompilation-output)
                   (mount-path . "/output")))
                'process-handle
-               'integer
-               'process-handle))
+               input-type
+               result-type))
 
 ;;; The store handoff mirrors the tutorial's post-compile artifact boundary:
 ;;; Docker produces a process/artifact result, Store records a durable manifest.
-;; : (-> Symbol Flow)
-(def (make-ccompilation-store-workflow name)
+;; : (-> Symbol Type Type Type Flow)
+(def (make-ccompilation-store-workflow name input-type result-type manifest-type)
   (flow-then name
-             (make-ccompilation-flow 'compile-c)
+             (make-ccompilation-flow 'compile-c input-type result-type)
              (store-flow 'store-c-binary
                          'put
                          '((store-item . c-binary)
                            (path . "/output/main"))
-                         'process-handle
-                         'artifact-manifest)))
+                         (Function (list manifest-type) (list result-type)))))
 
-;; : (-> Symbol Flow)
-(def (make-tensorflow-train-flow name)
+;; : (-> Symbol Type Type Flow)
+(def (make-tensorflow-train-flow name input-type model-type)
   (docker-flow name
                "tensorflow/tensorflow:2.3.0"
                "bash"
@@ -152,11 +153,11 @@
                  ((store-item . trained-model-output)
                   (mount-path . "/model-output")))
                'trained-model
-               'unit
-               'trained-model))
+               input-type
+               model-type))
 
-;; : (-> Symbol Flow)
-(def (make-tensorflow-inference-flow name)
+;; : (-> Symbol Type Type Flow)
+(def (make-tensorflow-inference-flow name model-type result-type)
   (docker-flow name
                "tensorflow/tensorflow:2.3.0"
                "bash"
@@ -169,52 +170,50 @@
                  ((store-item . tensorflow-summary-output)
                   (mount-path . "/summary-output")))
                'summary-image
-               'trained-model
-               'summary-image))
+               model-type
+               result-type))
 
 ;;; TensorflowDocker is represented as a two-step external workflow. It keeps
 ;;; the visible training/inference milestones inspectable while leaving model
 ;;; training, image rendering, and filesystem writes to the runtime owner.
-;; : (-> Symbol Flow)
-(def (make-tensorflow-workflow name)
+;; : (-> Symbol Type Type Type Flow)
+(def (make-tensorflow-workflow name input-type model-type result-type)
   (flow-then name
-             (make-tensorflow-train-flow 'train-mnist)
-             (make-tensorflow-inference-flow 'infer-mnist)))
+             (make-tensorflow-train-flow 'train-mnist input-type model-type)
+             (make-tensorflow-inference-flow 'infer-mnist model-type result-type)))
 
 ;;; Boundary:
 ;;; - makefile-tool parsing is a runtime-owned external task.
 ;;; - Scheme owns only the tutorial-visible project descriptor.
-;; : (-> Symbol Flow)
-(def (make-makefile-tool-parse-flow name)
+;; : (-> Symbol Type Type Flow)
+(def (make-makefile-tool-parse-flow name input-type plan-type)
   (external-flow name
                  'makefile-tool-parse
                  '((makefile . "Makefile")
                    (working-directory . "funflow-examples/makefile-tool/test")
                    (sources . ("main.cpp" "hello.cpp" "factorial.cpp")))
-                 'makefile-project
-                 'makefile-plan))
+                 (Function (list plan-type) (list input-type))))
 
 ;;; Boundary:
 ;;; - makefile-tool execution is a runtime-owned external task.
 ;;; - The output contract models the notebook's process-output result.
-;; : (-> Symbol Flow)
-(def (make-makefile-tool-run-flow name)
+;; : (-> Symbol Type Type Flow)
+(def (make-makefile-tool-run-flow name plan-type result-type)
   (external-flow name
                  'makefile-tool-run
                  '((target . "hello")
                    (binary . "./hello")
                    (expected-output . process-output))
-                 'makefile-plan
-                 'process-output))
+                 (Function (list result-type) (list plan-type))))
 
 ;;; Boundary:
 ;;; - This workflow preserves the tutorial's parse-then-run milestone shape.
 ;;; - Rust or another adapter owns Makefile execution and filesystem effects.
-;; : (-> Symbol Flow)
-(def (make-makefile-tool-workflow name)
+;; : (-> Symbol Type Type Type Flow)
+(def (make-makefile-tool-workflow name input-type plan-type result-type)
   (flow-then name
-             (make-makefile-tool-parse-flow 'makefile-tool-parse)
-             (make-makefile-tool-run-flow 'makefile-tool-run)))
+             (make-makefile-tool-parse-flow 'makefile-tool-parse input-type plan-type)
+             (make-makefile-tool-run-flow 'makefile-tool-run plan-type result-type)))
 
 ;;; Boundary:
 ;;; - This argument builder is the Rust CLI handoff for makefile-tool requests.
