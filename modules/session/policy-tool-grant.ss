@@ -6,6 +6,10 @@
 ;;; Boundary: session tool grant rows, contracts, and grant matching.
 
 (import :agentic-ai-lab/modules/session/objects
+        (only-in :clan/poo/object object? object<-alist)
+        (only-in :clan/poo/mop element?)
+        (only-in :std/list/list delete-duplicates/hash)
+        (only-in :yuanxu/object-types/contracts yuanxu-predicate-type)
         :agentic-ai-lab/modules/session/policy-syntax
         :agentic-ai-lab/modules/session/policy-core
         (only-in :yuanxu/module-system/schema/slot-contracts
@@ -162,16 +166,25 @@
         AgenticAILabSessionToolGrantMetadataSlot
         AgenticAILabSessionToolGrantRuntimeExecutedSlot))
 
-(def AgenticAILabSessionToolGrantContract
+(def SessionToolGrantFields
   (yuanxu-object-contract
    'session/tool-grant
    'session
    'PooSessionToolGrant
-   agentic-ai-lab-session-tool-grant?
+   object?
    AgenticAILabSessionToolGrantSlots
-   (lambda (grant slot) (if (assoc slot grant) #t #f))
-   (lambda (grant slot) (agentic-ai-lab-session-alist-ref grant slot #f))
    '((boundary . session-policy) (runtime . marlin-agent-core))))
+
+;; This boundary consumes serialized grant rows. Field semantics belong to the
+;; same native Record used by receipt projection; duplicate wire keys refuse.
+(def AgenticAILabSessionToolGrantContract
+  (yuanxu-predicate-type 'session/tool-grant
+    (lambda (value)
+      (and (list? value)
+           (andmap (lambda (row) (and (pair? row) (symbol? (car row)))) value)
+           (= (length value) (length (delete-duplicates/hash (map car value))))
+           (agentic-ai-lab-session-tool-grant? value)
+           (element? SessionToolGrantFields (object<-alist value))))))
 
 ;; agentic-ai-lab-session-tool-grant-type-contract->alist
 ;;   | contract: adjacent machine contract below defines the projection.
@@ -184,7 +197,7 @@
 ;;     %
 ;; : (-> Unit Alist)
 (def (agentic-ai-lab-session-tool-grant-type-contract->alist)
-  (yuanxu-object-contract->alist AgenticAILabSessionToolGrantContract))
+  (yuanxu-object-contract->alist SessionToolGrantFields))
 
 ;; : (-> YuanxuSlotContract AgenticAILabValue AgenticAILabValue)
 (def (agentic-ai-lab-session-tool-grant-check-slot! contract value)

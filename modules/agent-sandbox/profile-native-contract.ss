@@ -6,13 +6,15 @@
 ;;; Boundary: native Type/Contract owner for inert sandbox profile recipes.
 ;;; Invariant: profile objects are semantic POO values; rows are projections.
 
-(import (only-in :clan/poo/object .ref .slot? object?)
+(import (only-in :clan/poo/object .cc .ref .slot? object?)
+        (only-in :clan/poo/mop element?)
         (only-in :yuanxu/module-system/schema/slot-contracts
                  yuanxu-contract-slot
                  yuanxu-contract-value-type
                  yuanxu-object-contract
                  yuanxu-object-contract->alist)
         (only-in :yuanxu/object-types/contracts
+                 YuanxuContract.
                  yuanxu-contract-admit
                  yuanxu-validation-evidence-accepted?))
 
@@ -36,14 +38,6 @@
 ;; : (-> Object Boolean)
 (def (agentic-ai-lab-sandbox-profile-kind-value? value)
   (equal? value agentic-ai-lab-sandbox-profile-kind))
-
-;; : (-> POOObject Symbol Boolean)
-(def (agentic-ai-lab-sandbox-profile-slot-present? candidate slot)
-  (.slot? candidate slot))
-
-;; : (-> POOObject Symbol Object)
-(def (agentic-ai-lab-sandbox-profile-slot-ref candidate slot)
-  (.ref candidate slot))
 
 (def AgenticAILabSandboxProfileKindType
   (yuanxu-contract-value-type
@@ -96,23 +90,26 @@
    'PooSandboxProfile
    agentic-ai-lab-sandbox-profile-object?
    +agentic-ai-lab-sandbox-profile-slots+
-   agentic-ai-lab-sandbox-profile-slot-present?
-   agentic-ai-lab-sandbox-profile-slot-ref
    '((semantic-owner . agent-sandbox)
      (runtime-executed . #f)
      (projection . sandbox-profile-recipe))))
 
+;; Native Record validation owns the value; contextual admission owns evidence.
+(def SandboxProfileAdmissionContract
+  (.cc YuanxuContract.
+       'identity 'PooSandboxProfileContract
+       'value-contract AgenticAILabSandboxProfileContract))
+
 ;; : (-> PooSandboxProfile PooValidationEvidence)
 (def (agentic-ai-lab-sandbox-profile-contract-admission profile)
   (yuanxu-contract-admit
-   AgenticAILabSandboxProfileContract
+   SandboxProfileAdmissionContract
    profile
    'sandbox-profile-recipe))
 
 ;; : (-> PooSandboxProfile Boolean)
 (def (agentic-ai-lab-sandbox-profile-contract-admitted? profile)
-  (yuanxu-validation-evidence-accepted?
-   (agentic-ai-lab-sandbox-profile-contract-admission profile)))
+  (element? AgenticAILabSandboxProfileContract profile))
 
 ;; : (-> Alist)
 (def (agentic-ai-lab-sandbox-profile-type-contract->alist)
@@ -122,5 +119,5 @@
 (def (agentic-ai-lab-require-sandbox-profile-contract! profile)
   (let (evidence (agentic-ai-lab-sandbox-profile-contract-admission profile))
     (if (yuanxu-validation-evidence-accepted? evidence)
-      profile
+      (.ref evidence 'candidate)
       (error "sandbox profile failed native contract admission" evidence))))

@@ -95,8 +95,6 @@
    'PooSandboxResourcesPrototype
    object?
    AgenticAILabSandboxResourceSlotContracts
-   (lambda (resources slot) (and (object? resources) (.slot? resources slot)))
-   (lambda (resources slot) (.ref resources slot))
    '((scope . sandbox-core) (projection . resource-contract))))
 
 ;; : (-> List List List)

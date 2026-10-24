@@ -12,7 +12,8 @@
 ;;; Dependency: generic sandbox resources live in =:agentic-ai-lab/modules/agent-sandbox/resource=.
 ;;; Policy evidence: tests should trust the installed module registry.
 
-(import (only-in :yuanxu/modules/funflow/control-plane/task
+(import (only-in :clan/poo/mop Function)
+        (only-in :yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task task? task-kind
                  task-request)
@@ -262,8 +263,7 @@
                          (cons 'args args)
                          (cons 'volumes volumes)
                          (cons 'output-policy output-policy)))
-             input-contract
-             output-contract
+             (Function (list output-contract) (list input-contract))
              #f))
 
 ;;; Task config extraction refuses non-Docker tasks instead of assuming the

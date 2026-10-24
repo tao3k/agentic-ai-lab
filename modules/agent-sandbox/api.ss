@@ -10,7 +10,8 @@
 ;;; Runtime contract: LLM calls, API/R surfaces, and C bindings stay out of Scheme.
 ;;; Policy evidence: tests should validate this facade plus leaf contracts.
 
-(import (only-in :yuanxu/modules/funflow/control-plane/task
+(import (only-in :clan/poo/mop Function)
+        (only-in :yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task)
         (only-in :yuanxu/modules/funflow/control-plane/strategy
@@ -218,8 +219,7 @@
     (make-task name
                'agent-sandbox
                (list 'agent-sandbox request)
-               input-contract
-               output-contract
+               (Function (list output-contract) (list input-contract))
                #f)))
 
 ;;; The flow helper keeps user code declaration-shaped: every backend detail is

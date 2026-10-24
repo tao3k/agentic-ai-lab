@@ -11,7 +11,8 @@
 ;;; Runtime contract: file IO remains caller/runtime-owned.
 ;;; Policy evidence: tests should assert parsing, formatting, and task flow result.
 
-(import (only-in :yuanxu/modules/funflow/control-plane/task
+(import (only-in :clan/poo/mop Function)
+        (only-in :yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task task-kind
                  task-request-operation task-request-payload)
@@ -334,8 +335,7 @@
   (make-task name
              'text
              (list 'text 'word-count '((format . lines)))
-             input-contract
-             output-contract
+             (Function (list output-contract) (list input-contract))
              word-count-summary))
 
 ;;; Boundary:

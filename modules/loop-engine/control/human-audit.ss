@@ -625,6 +625,4 @@
   (yuanxu-object-contract
    'loop-human-audit 'loops 'LoopHumanAudit loop-human-audit?
    +loop-human-audit-slot-contracts+
-   (lambda (candidate slot) (and (object? candidate) (.slot? candidate slot)))
-   (lambda (candidate slot) (.ref candidate slot))
    '((boundary . loop-human-audit) (projection . human-review-loop))))

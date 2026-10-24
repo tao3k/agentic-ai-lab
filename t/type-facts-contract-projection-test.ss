@@ -49,8 +49,6 @@
        object?
        (list +type-facts-fixture-name-slot+
              +type-facts-fixture-tags-slot+)
-       (lambda (candidate slot) (.slot? candidate slot))
-       (lambda (candidate slot) (.ref candidate slot))
        '((projection . type-facts-test))))))
 
 (let* ((rows

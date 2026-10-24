@@ -11,7 +11,8 @@
 ;;; Runtime contract: scheduler and plan semantics stay out of this extension.
 ;;; Policy evidence: tests should assert registry, task shape, and interpreter result.
 
-(import (only-in :yuanxu/modules/funflow/control-plane/task
+(import (only-in :clan/poo/mop Function)
+        (only-in :yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task task-kind
                  task-request-operation task-request-payload)
@@ -149,8 +150,7 @@
     (make-task name
                'custom
                (list 'custom 'repeat spec)
-               input-contract
-               output-contract
+               (Function (list output-contract) (list input-contract))
                (lambda (input)
                  (string-append input
                                 (repeat-string

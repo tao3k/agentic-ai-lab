@@ -414,8 +414,6 @@
    'PooSessionPolicy
    agentic-ai-lab-session-policy?
    AgenticAILabSessionPolicySlots
-   (lambda (policy slot) (and (object? policy) (.slot? policy slot)))
-   (lambda (policy slot) (.ref policy slot))
    '((boundary . session-policy) (runtime . marlin-agent-core))))
 
 ;; agentic-ai-lab-session-policy-type-contract->alist

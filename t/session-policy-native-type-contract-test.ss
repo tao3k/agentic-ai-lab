@@ -78,6 +78,17 @@
       '(agent-turn)))))
  (error "session policy contracts should be native Types and admit valid grants"))
 
+;; Wire projection must not erase a conflicting field before native admission.
+(when
+ (session-policy-eval
+  '(let (grant (agentic-ai-lab-session-tool-grant
+                'grant/read 'read-workspace-file '(read) '(project-workspace) '(agent-turn)))
+     (or (element? AgenticAILabSessionToolGrantContract
+                   (cons '(runtime-executed . #t) grant))
+         (element? AgenticAILabSessionToolGrantContract '(malformed-row))
+         (element? AgenticAILabSessionToolGrantContract '((kind . agentic-ai-lab.session.tool-grant))))))
+ (error "native grant admission must reject duplicate, malformed and incomplete rows"))
+
 (when
  (session-policy-eval
   '(element?

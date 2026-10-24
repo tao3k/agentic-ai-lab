@@ -69,8 +69,6 @@
    (agentic-ai-lab-performance-build-list
     slot-count
     type-contract-performance-slot-contract)
-   (lambda (_candidate _slot) #f)
-   (lambda (_candidate _slot) #f)
    '((projection . performance))))
 
 ;; : (-> Integer [Symbol])

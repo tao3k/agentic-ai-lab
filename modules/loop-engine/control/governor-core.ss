@@ -579,8 +579,6 @@
   (yuanxu-object-contract
    'loop-governor/node 'loops 'LoopGovernorNode loop-governor-node?
    +loop-governor-node-slot-contracts+
-   (lambda (candidate slot) (and (object? candidate) (.slot? candidate slot)))
-   (lambda (candidate slot) (.ref candidate slot))
    '((boundary . loop-governor) (projection . governance-node))))
 
 (def +loop-governor-name-contract+
@@ -648,6 +646,4 @@
   (yuanxu-object-contract
    'loop-governor 'loops 'LoopGovernor loop-governor?
    +loop-governor-slot-contracts+
-   (lambda (candidate slot) (and (object? candidate) (.slot? candidate slot)))
-   (lambda (candidate slot) (.ref candidate slot))
    '((boundary . loop-governor) (projection . marlin-contract))))
