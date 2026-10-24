@@ -1,8 +1,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Exercise extension executors and inert external requests through real Types.
 (import :std/test
-        (only-in :clan/poo/mop Fun Type TypeError? validate)
-        (only-in :clan/poo/type String Any Unit)
+        (only-in :clan/poo/mop Fun Type Any TypeError? validate)
+        (only-in :clan/poo/type String Unit)
         (only-in :clan/poo/number Integer)
         (only-in :agentic-ai-lab/services Services)
         (only-in :agentic-ai-lab/modules/workflow/runtime/runtime-v0-native native-abi-version)
@@ -17,8 +17,9 @@
         (only-in :agentic-ai-lab/modules/workflow/flows-builders
                  make-ccompilation-store-workflow make-tensorflow-workflow make-makefile-tool-workflow)
         (only-in :yuanxu/modules/funflow/control-plane/flow flow-input-contract flow-output-contract)
-        (only-in :agentic-ai-lab/modules/search-engine/funs agentic-ai-lab-search-stage agentic-ai-lab-search-chain)
-        (only-in :agentic-ai-lab/modules/search-engine/objects agentic-ai-lab-search-acquisition-role agentic-ai-lab-search-node-flow)
+        (only-in :agentic-ai-lab/modules/search-engine/funs
+                 agentic-ai-lab-search-stage agentic-ai-lab-search-chain agentic-ai-lab-search-node-flow)
+        (only-in :agentic-ai-lab/modules/search-engine/objects agentic-ai-lab-search-acquisition-role)
         (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 (export task-signature-test)
 (def task-signature-test
