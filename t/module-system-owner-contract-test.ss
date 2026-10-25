@@ -5,7 +5,8 @@
 
 ;;; Boundary: module owner contracts stay separate from activation tests.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :clan/poo/type Record String List)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -31,9 +32,7 @@
         :yuanxu/module-system/source/objects
         :yuanxu/module-system/funs
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
-        :yuanxu/module-system/catalog/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface)
+        :yuanxu/module-system/catalog/objects)
 
 (export module-system-owner-contract-test)
 
@@ -81,14 +80,14 @@
       (let* ((interface
               (yuanxu-module-interface
                "WorkspaceProfile"
-               (.o workspace-root: (yuanxu-string-default "workspace")
-                   surface: (yuanxu-string-constant "agentic-ai-lab"))
+               (Record workspace-root: [String default: "workspace"]
+                   surface: [String constant: "agentic-ai-lab"])
                '((owner . "agentic-ai-lab") (surface . "module-system"))))
              (source (yuanxu-local-source "modules/workspace.ss"))
              (derived-interface
               (.o (:: @ interface)
-                  schemas: (.o derived-only:
-                                (yuanxu-string-constant "derived"))))
+                  schemas: (Record derived-only:
+                                [String constant: "derived"])))
              (module
               (agentic-ai-lab-modules
                interface
@@ -179,7 +178,7 @@
              (interface
               (yuanxu-module-interface
                "RootProfile"
-               (.o surface: (yuanxu-string-default "root"))
+               (Record surface: [String default: "root"])
                '((owner . "agentic-ai-lab"))))
              (root
               (agentic-ai-lab-modules

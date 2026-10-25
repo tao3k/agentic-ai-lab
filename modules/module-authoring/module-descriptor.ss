@@ -7,7 +7,8 @@
 ;;; Invariant: descriptors are POO values and never load module sources.
 
 (import :yuanxu/composition/roles
-        (only-in :clan/poo/object .o .@ .ref object?)
+        (only-in :clan/poo/type Record)
+        (only-in :clan/poo/object .o .@ .ref .mix object? object<-alist)
         :yuanxu/modules/funflow/control-plane/roles
         :yuanxu/modules/funflow/control-plane/failure
         :yuanxu/object-family/role-syntax
@@ -108,7 +109,7 @@
             (make-flow-declaration-registry 'empty-module-flow-declarations '()))
            (options '())
            (config (.o))
-           (schemas (.o))
+           (schemas (Record))
            (metadata '())
            (source-ref #f)
            (extension-policy 'agentic-ai-lab-module-descriptor)))
@@ -207,7 +208,7 @@
    flow-registry
    options
    #f
-   (.o)
+   (Record)
    (.o)
    '()
    '()
@@ -227,12 +228,16 @@
 ;;; Intent: preserve Marlin's interface/config split without importing its runtime.
 ;; : (-> PooModuleInterface POOObject PooModuleDescriptor)
 (def (agentic-ai-lab-modules interface module-config)
-  (let* ((config-values
+  (let* ((supplied-config
           ;; Config may be supplied under Marlin's `config` slot or as option data.
           (yuanxu-module-object-ref/default
            module-config
            'config
            (yuanxu-module-object-ref/default module-config 'options (.o))))
+         (config-values
+          (.mix (if (object? supplied-config) supplied-config
+                    (object<-alist supplied-config))
+                (.ref (yuanxu-module-interface-schemas interface) 'proto)))
          (module-id-value
           ;; Missing ids inherit the interface id so sparse configs stay valid.
           (yuanxu-module-object-ref/default

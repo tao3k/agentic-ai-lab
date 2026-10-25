@@ -3,7 +3,8 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :clan/poo/type Record)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .cc .o .ref)
         (only-in :clan/poo/mop TypeError?)
         (only-in :std/test check-equal? check-exception test-suite)
@@ -36,13 +37,13 @@
 (def test-module-interface
   (yuanxu-module-interface
    "test-module"
-   (.o)
+   (Record)
    '((owner . module-authoring-contract-test))))
 
 (def user-root-module-interface
   (yuanxu-module-interface
    "user-root-config"
-   (.o)
+   (Record)
    '((owner . user))
    authoring: (agentic-ai-lab-user-root-module-authoring-profile)))
 
@@ -149,7 +150,7 @@
             (interface
              (.o (:: @ ClinicalModuleInterface.)
                  id: "clinical-module"
-                 schemas: (.o)
+                 schemas: (Record)
                  authoring: authoring
                  metadata: '()))
             (generic
@@ -172,7 +173,7 @@
    (yuanxu-test-case "Interface rejects an invalid authoring Profile immediately"
      (check-exception
       (yuanxu-module-interface
-       "invalid-authoring" (.o) '() authoring: (.o))
+       "invalid-authoring" (Record) '() authoring: (.o))
       TypeError?))
 
    (yuanxu-test-case "admits native noun slots and leaves algorithms open"

@@ -56,8 +56,8 @@ test-core-file path:
 
 # Run one root-owned Scheme test with the same pre-import heap fence.
 [group('test')]
-test-file path: build-test-workers prepare-test-inputs
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} "{{ justfile_directory() }}/core/t/qualification/testing/run.ss" "{{ path }}" "{{ gerbil_test_runtime_options }}" 120 false
+test-file path observe="false": build-test-workers prepare-test-inputs
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} "{{ justfile_directory() }}/core/t/qualification/testing/run.ss" "{{ path }}" "{{ gerbil_test_runtime_options }}" 120 "{{ observe }}"
 
 # Use the maintained Nix integration gate and its existing pre-import fences.
 [group('test')]

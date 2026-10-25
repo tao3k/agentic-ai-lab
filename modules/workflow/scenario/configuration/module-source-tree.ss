@@ -6,7 +6,8 @@
 ;;; Boundary: Agentic AI Lab root and user module tree loading over Core lazy plans.
 ;;; Invariant: static entrypoint metadata lives in module-registry and stays loader-free.
 
-(import (only-in :clan/poo/object .o)
+(import (only-in :clan/poo/type Record)
+        (only-in :clan/poo/object .o)
         :yuanxu/modules/funflow/control-plane/failure
         (only-in :agentic-ai-lab/modules/module-authoring/module-interface
                  yuanxu-module-interface)
@@ -68,7 +69,7 @@
          (path (yuanxu-module-source-ref-value source-ref))
          (interface
           (yuanxu-module-interface
-           "user-root-config" (.o)
+           "user-root-config" (Record)
            '((source-owner . user))
            authoring: (agentic-ai-lab-user-root-module-authoring-profile)))
          (admission

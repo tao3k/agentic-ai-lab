@@ -7,7 +7,9 @@
 ;;; Invariant: Loader, resolver, diagnostics, and projection APIs expose
 ;;; prototype-composable objects rather than parallel Scheme records.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :clan/poo/type Record)
+        (only-in :clan/poo/mop Bool)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref object?)
         (only-in :std/test check-equal? test-suite)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
@@ -57,7 +59,7 @@
                "enabled" #t 'example '()))
              (option-schema
               (make-yuanxu-module-option-schema
-               "enabled" 'example 'Boolean 'default #t '()))
+               "enabled" 'example (.ref (.ref (Record enabled: [Bool default: #t]) 'effective-slots) 'enabled) '()))
              (option-receipt
               (make-yuanxu-module-option-validation-receipt
                "enabled" 'example #t 'valid '() '()))

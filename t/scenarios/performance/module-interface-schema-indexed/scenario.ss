@@ -12,7 +12,9 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :clan/poo/object .o .ref object<-alist)
+        (only-in :clan/poo/object .o .cc .ref object<-alist)
+        (only-in :clan/poo/type Record RecordSlot)
+        (only-in :clan/poo/number Integer)
         (only-in :agentic-ai-lab/modules/module-authoring/module-interface
                  yuanxu-module-interface
                  yuanxu-module-interface-schema-spec)
@@ -41,13 +43,13 @@
              (cons
               (string->symbol
                (string-append "option-" (number->string index)))
-              (.o type: 'Integer constant: index))
+              (RecordSlot Integer constant: index))
              rows-rev)))))
 
 (def interface
   (yuanxu-module-interface
    "IndexedSchemaProfile"
-   (object<-alist schema-rows)
+   (.cc (Record) 'slots (object<-alist schema-rows))
    '((owner . "agentic-ai-lab"))))
 
 (def module

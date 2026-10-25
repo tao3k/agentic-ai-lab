@@ -6,7 +6,8 @@
 ;;; Boundary: this integration test imports precise Module System and User
 ;;; Interface owners without a module-system aggregate.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :clan/poo/type Record String List)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -37,8 +38,7 @@
         :yuanxu/module-system/funs
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
         :yuanxu/module-system/catalog/objects
-        :yuanxu/module-system/authoring/syntax
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface)
+        :yuanxu/module-system/authoring/syntax)
 
 (export module-system-user-interface-test)
 
@@ -46,12 +46,12 @@
 (def user-child-interface
   (yuanxu-module-interface
    "UserChildProfile"
-   (yuanxu-module-option-block
-    surface: (yuanxu-string-constant "agentic-ai-lab")
-    child-mode: (yuanxu-string-default "helper")
-    layers: (yuanxu-option-append 'List '("base"))
-    priority: (yuanxu-option-override 'String "base")
-    mode-lock: (yuanxu-option-conflict 'String))
+   (Record
+    surface: [String constant: "agentic-ai-lab"]
+    child-mode: [String default: "helper"]
+    layers: [(List String) policy: 'append default: '("base")]
+    priority: [String policy: 'override default: "base"]
+    mode-lock: [String policy: 'conflict])
    '((audience . user))))
 
 ;; : (-> Unit PooModuleDescriptor)
@@ -78,12 +78,12 @@
 (def user-root-interface
   (yuanxu-module-interface
    "UserRootProfile"
-   (yuanxu-module-option-block
-    surface: (yuanxu-string-constant "agentic-ai-lab")
-    mode: (yuanxu-string-default "interactive")
-    layers: (yuanxu-option-append 'List '("base"))
-    priority: (yuanxu-option-override 'String "base")
-    mode-lock: (yuanxu-option-conflict 'String))
+   (Record
+    surface: [String constant: "agentic-ai-lab"]
+    mode: [String default: "interactive"]
+    layers: [(List String) policy: 'append default: '("base")]
+    priority: [String policy: 'override default: "base"]
+    mode-lock: [String policy: 'conflict])
    '((audience . user)
      (surface . module-system))))
 
@@ -254,7 +254,10 @@
               (agentic-ai-lab-module-option-validation-receipts invalid-user-module))
              (codes
               (map yuanxu-module-option-validation-receipt-code receipts)))
-        (check-equal? (length receipts) 2)
+        (check-equal? (length receipts) 5)
+        (check-equal? (length (filter (lambda (receipt)
+                                      (not (yuanxu-module-option-validation-receipt-valid? receipt)))
+                                    receipts)) 2)
         (check-equal? (has-member? 'constant-mismatch codes) #t)
         (check-equal? (has-member? 'missing-schema codes) #t)))
     (yuanxu-test-case "loads source refs into catalogs before resolver activation"
