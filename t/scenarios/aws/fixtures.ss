@@ -91,21 +91,38 @@
   (unless (and (string? nar-hash) (string-prefix? "sha256-" nar-hash))
     (error "Nix store metadata lacks the immutable NAR identity"))
   (phase 'package-set-identified)
-  ;; Nix's path-input fast path requires the store basename to be exactly
-  ;; "source". A prefixed source name is recopied even with a pinned NAR hash.
-  ;; builtins.path checks the native content-addressed store identity first;
-  ;; the known hash permits reuse without rescanning an existing canonical tree.
+  ;; Resolve Nix's content-addressed source name from its native NAR identity.
+  ;; Reuse an existing immutable object only after querying its recorded hash;
+  ;; fetchTree otherwise rescans a large path even when that object exists.
   (def canonical-package-set
-    (find (cut string-prefix? "/nix/store/" <>)
-      (string-split
+    (call-with-input-string
+      (.get (run-script (.cc NixSetup 'command
+               (list "nix-store" "--print-fixed-path" "--recursive"
+                     "sha256" nar-hash "source"))) output) read-line))
+  (unless (file-exists? canonical-package-set)
+    (let (published
+      (call-with-input-string
         (.get (run-script (.cc NixSetup 'command
                  (list "nix" "--extra-experimental-features" "nix-command flakes"
-                       "eval" "--raw" "--expr"
-                       (string-append "builtins.path { path = " (object->string package-set)
-                         "; name = \"source\"; sha256 = " (object->string nar-hash) "; }")))
-                 output-port: (current-error-port)) output) #\newline)))
-  (unless (and canonical-package-set (file-exists? canonical-package-set))
-    (error "Nix did not publish the canonical immutable package set"))
+                       "eval" "--offline" "--raw" "--expr"
+                       (string-append "(builtins.fetchTree { type = \"path\"; path = "
+                         (object->string package-set) "; narHash = "
+                         (object->string nar-hash) "; }).outPath")))
+                 output-port: (current-error-port)) output) read-line))
+      (unless (equal? published canonical-package-set)
+        (error "Nix published a different content-addressed package set"))))
+  (def canonical-metadata
+    (call-with-input-string
+      (.get (run-script (.cc NixSetup 'command
+               (list "nix" "--extra-experimental-features" "nix-command flakes"
+                     "path-info" "--offline" "--json" canonical-package-set))
+               stderr-redirection: #f) output)
+      (lambda (port) (read-json port key-as-symbol: #f object-as-hash: #t))))
+  (unless (and (hash-table? canonical-metadata) (= (hash-length canonical-metadata) 1)
+               (hash-table? (hash-get canonical-metadata canonical-package-set))
+               (equal? (hash-get (hash-ref canonical-metadata canonical-package-set) "narHash")
+                       nar-hash))
+    (error "canonical package set does not retain the locked NAR identity"))
   (phase 'package-set-published)
   (write-source (path-expand "demand/selection.json" project) "{\"providers\":[]}")
   (def system

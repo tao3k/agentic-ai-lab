@@ -24,7 +24,7 @@ def build_catalog() -> CaseRegistry:
     )
     catalog.register(
         CaseSpec("ascent.source-withdrawal",
-                 (ModulePart("gerbil-ascent", "candidate/reasoning"),), "native"),
+                 (ModulePart("gerbil-ascent", "candidate/checked-program"),), "native"),
         native_withdrawal,
     )
     catalog.register(
@@ -35,7 +35,7 @@ def build_catalog() -> CaseRegistry:
     catalog.register(
         CaseSpec("runtime-ascent.candidate-graph",
                  (ModulePart("python-runtime", "graph/execution"),
-                  ModulePart("gerbil-ascent", "candidate/reasoning")), "native"),
+                  ModulePart("gerbil-ascent", "candidate/checked-program")), "native"),
         runtime_ascent_candidate,
     )
     catalog.register(

@@ -15,8 +15,9 @@
                (relation? evaluator-relation-value) (list? row-value) (<= 1 (length row-value) 32)
                (andmap scalar? row-value)) (error "unsupported MRR fact content profile"))
   (let* ((owned-row (map identity row-value))
-         ;; Same inert Scheme datum v1 list spelling used by Rust/Python wire.
-         (data (list 'list "agentic-ai-lab.mrr-fact-content.v1" identity-value generation-value
+         ;; The original MRR v1 hash domain is a wire identity, independent of
+         ;; this module's namespace. Keep the producer's canonical datum.
+         (data (list 'list "poo-flow.mrr-fact-content.v1" identity-value generation-value
                      relation-id-value evaluator-relation-value (cons 'list owned-row)))
          (fingerprint (string-append "sha256:" (hex-encode (sha256 (string->utf8
            (call-with-output-string (lambda (p) (write data p)))))))))

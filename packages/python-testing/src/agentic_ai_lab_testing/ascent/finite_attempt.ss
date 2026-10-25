@@ -5,7 +5,7 @@
 
 ;;; Fixed, pre-registered model-study fixture. No model text is evaluated.
 (import (only-in :gerbil-ascent/candidate/program candidate-inspect)
-        (only-in :gerbil-ascent/candidate/reasoning
+        (only-in :gerbil-ascent/candidate/checked-program
                  reasoning-source-snapshot reasoning-attempt
                  reasoning-receipt-status reasoning-receipt-rows
                  reasoning-receipt-candidate-digest)

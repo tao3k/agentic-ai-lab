@@ -9,7 +9,7 @@
         :agentic-ai-lab/modules/query/semantic/context-restriction
         :std/test (only-in :clan/poo/object .o .ref)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :gerbil-ascent/candidate/reasoning
+        (only-in :gerbil-ascent/candidate/checked-program
                  reasoning-source-snapshot reasoning-attempt reasoning-receipt-status reasoning-receipt-proof
                  reasoning-receipt-rows reasoning-receipt-bound?)
         (only-in :gerbil-ascent/candidate/provenance positive-proof-status positive-proof-nodes positive-proof-roots proof-node-id proof-node-kind proof-node-row proof-node-relation)

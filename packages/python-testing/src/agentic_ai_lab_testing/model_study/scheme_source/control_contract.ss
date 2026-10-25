@@ -8,7 +8,7 @@
 ;;; variables. Recursive rules iterate to a finite fixed point. Query
 ;;; variables determine the output columns. Output rows are bare tuples;
 ;;; relation names are not included in those tuples.
-(import (only-in :gerbil-ascent/candidate/reasoning
+(import (only-in :gerbil-ascent/candidate/checked-program
                  reasoning-source-snapshot reasoning-attempt
                  reasoning-receipt-rows))
 (export main)

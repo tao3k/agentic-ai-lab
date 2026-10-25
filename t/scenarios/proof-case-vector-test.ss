@@ -4,6 +4,8 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
+        (only-in :std/source this-source-file)
+        (only-in :std/encoding/hex hex-decode)
         :clan/poo/object
         :agentic-ai-lab/modules/proof/projections/generated/proof-case-vector-v1
         :agentic-ai-lab/modules/proof/projections/proof-case-vector)
@@ -47,12 +49,19 @@
 (def proof-case-vector-test
   (test-suite "AC-09 Scheme native proof vector"
     (yuanxu-test-case "caller-owned write follows the canonical layout"
-      (let ((vector (make-u8vector agentic-ai-lab-proof-case-vector-size #xff))
+      (let ((canonical
+             (hex-decode
+              (call-with-input-file
+               (path-expand "../../packages/proofs/vectors/proof_case_vector_v1_positive.hex"
+                            (path-directory (this-source-file)))
+               read-line)))
+            (vector (make-u8vector agentic-ai-lab-proof-case-vector-size #xff))
             (repeated (make-u8vector agentic-ai-lab-proof-case-vector-size #x5a)))
         (check (agentic-ai-lab-proof-case-vector-write! canonical-proof-case vector)
                => vector)
         (agentic-ai-lab-proof-case-vector-write! canonical-proof-case repeated)
         (check vector => repeated)
+        (check vector => canonical)
         (check (agentic-ai-lab-proof-case-vector-digest vector)
                => (agentic-ai-lab-proof-case-vector-digest repeated))
         (check (u8vector-length vector) => 424)
@@ -68,7 +77,7 @@
                => #x88)
         (check (u8vector-ref vector agentic-ai-lab-proof-field-reserved-offset) => 0)
         (check (agentic-ai-lab-proof-case-vector-digest vector)
-               => "970eaffbfaae38970e2107b89fa11258c6211a5c293a1e400a464527b7a0e44a")))
+               => "41c5ef60ac9296a28e045f7e26d975cf46a34cab69f56dc7ab4d7091fe1ff557")))
     (yuanxu-test-case "wrong target size and malformed digests fail closed"
       (let* ((short-target (make-u8vector 423 0))
              (wrong-size

@@ -12,7 +12,7 @@ from agentic_ai_lab_testing.catalog import build_catalog
 
 def test_catalog_selects_single_part_and_cross_module_cases() -> None:
     catalog = build_catalog()
-    selected = catalog.select(module="gerbil-ascent", part="candidate/reasoning")
+    selected = catalog.select(module="gerbil-ascent", part="candidate/checked-program")
     assert {case.spec.identity for case in selected} == {
         "ascent.source-withdrawal", "runtime-ascent.candidate-graph"
     }
@@ -33,7 +33,7 @@ def test_session_native_cases_register_the_two_quint_models() -> None:
 
 
 def test_registry_rejects_ambiguous_declarations() -> None:
-    target = ModulePart("gerbil-ascent", "candidate/reasoning")
+    target = ModulePart("gerbil-ascent", "candidate/checked-program")
     with pytest.raises(ValueError, match="distinct"):
         CaseSpec("duplicate.targets", (target, target))
     with pytest.raises(ValueError, match="module"):

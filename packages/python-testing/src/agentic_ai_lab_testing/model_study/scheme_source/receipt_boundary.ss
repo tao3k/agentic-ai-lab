@@ -5,7 +5,7 @@
 ;;; Read this bounded native receipt check. Return only the
 ;;; S-expression written by main. A complete receipt concerns one
 ;;; source generation and candidate; it does not prove user intent.
-(import (only-in :gerbil-ascent/candidate/reasoning
+(import (only-in :gerbil-ascent/candidate/checked-program
                  reasoning-source-snapshot reasoning-attempt
                  reasoning-receipt-status reasoning-receipt-rows
                  reasoning-verify-finite-receipt

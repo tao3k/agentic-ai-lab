@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;;
 ;;; Experiment-only native tool. Candidate input is read as inert data.
-(import (only-in :gerbil-ascent/candidate/reasoning
+(import (only-in :gerbil-ascent/candidate/checked-program
                  reasoning-source-snapshot reasoning-attempt
                  reasoning-receipt-status reasoning-receipt-rows
                  reasoning-receipt-diagnostics

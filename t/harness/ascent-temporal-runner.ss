@@ -77,7 +77,7 @@
    :gerbil-ascent/candidate/finite-evidence
    :gerbil-ascent/candidate/stratified-proof
    :gerbil-ascent/candidate/stratified-producer
-   :gerbil-ascent/candidate/reasoning
+   :gerbil-ascent/candidate/checked-program
    :gerbil-ascent/temporal/graph
    :gerbil-ascent/temporal/lens
    :gerbil-ascent/interface/request

@@ -7,6 +7,7 @@
 
 (import (only-in :std/list/list delete-duplicates/hash)
         (only-in :std/list/list filter map)
+        (only-in :clan/poo/object .ref .slot?)
         :agentic-ai-lab/modules/session/objects
         :agentic-ai-lab/modules/session/policy)
 
@@ -22,10 +23,11 @@
 
 ;; : (-> PooSessionPolicy [PooSessionToolGrant])
 (def (agentic-ai-lab-tool-policy-grants policy)
-  (agentic-ai-lab-session-alist-ref
-   (agentic-ai-lab-session-policy->alist policy)
-   'tool-grants
-   '()))
+  (agentic-ai-lab-session-require
+   "tool policy reference collection requires a policy"
+   (agentic-ai-lab-session-policy-fast-policy? policy)
+   policy)
+  (if (.slot? policy 'tool-grants) (.ref policy 'tool-grants) '()))
 
 ;; : (-> [Symbol] [Symbol] [Symbol])
 (def (agentic-ai-lab-tool-unique-symbols values seen)

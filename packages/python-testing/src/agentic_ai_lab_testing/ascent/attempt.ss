@@ -4,7 +4,7 @@
 
 ;;; Experiment-only process boundary. Python permits only a small ASCII
 ;;; S-expression alphabet before sending a candidate to this reader.
-(import (only-in :gerbil-ascent/candidate/reasoning
+(import (only-in :gerbil-ascent/candidate/checked-program
                  reasoning-source-snapshot reasoning-attempt
                  reasoning-receipt-status reasoning-receipt-rows
                  reasoning-receipt-diagnostics reasoning-receipt-bound?

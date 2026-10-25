@@ -4,7 +4,7 @@
 ;;;
 ;;; Read this Gerbil Scheme program. Return only the one S-expression
 ;;; written by main, with no prose or Markdown.
-(import (only-in :gerbil-ascent/candidate/reasoning
+(import (only-in :gerbil-ascent/candidate/checked-program
                  reasoning-source-snapshot reasoning-attempt
                  reasoning-receipt-rows))
 (export main)
