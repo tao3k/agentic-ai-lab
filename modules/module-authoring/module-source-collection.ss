@@ -6,7 +6,7 @@
         :yuanxu/module-system/source/collection
         (only-in :agentic-ai-lab/modules/module-authoring/source-policy
                  AgenticAILabModuleStylePolicy))
-(export agentic-ai-lab-maintained-module-source agentic-ai-lab-maintained-integration-directories agentic-ai-lab-default-module-load-path
+(export agentic-ai-lab-maintained-module-source agentic-ai-lab-maintained-service-source agentic-ai-lab-maintained-integration-directories agentic-ai-lab-default-module-load-path
         make-agentic-ai-lab-contribution-module-load-path)
 
 (def agentic-ai-lab-maintained-integration-directories
@@ -16,7 +16,13 @@
   (.o (:: @ (make-yuanxu-module-source-collection
    'agentic-ai-lab-maintained 'agentic-ai-lab "." "modules"
    style-policy: AgenticAILabModuleStylePolicy))
-      excluded-directories: agentic-ai-lab-maintained-integration-directories))
+      excluded-directories: (cons "services" agentic-ai-lab-maintained-integration-directories)))
+
+;; Services is a source collection container; its children own the role files.
+(def agentic-ai-lab-maintained-service-source
+  (make-yuanxu-module-source-collection
+   'agentic-ai-lab-services 'agentic-ai-lab "." "modules/services"
+   style-policy: AgenticAILabModuleStylePolicy))
 
 (def (make-agentic-ai-lab-contribution-module-load-path identity-value
                                                   source-root-value)
@@ -32,4 +38,5 @@
 (def agentic-ai-lab-default-module-load-path
   (make-yuanxu-module-load-path
    'agentic-ai-lab-default
-   (list agentic-ai-lab-maintained-module-source)))
+   (list agentic-ai-lab-maintained-module-source
+         agentic-ai-lab-maintained-service-source)))

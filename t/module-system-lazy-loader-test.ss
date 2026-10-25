@@ -31,7 +31,7 @@
         :yuanxu/graph/interface
         :yuanxu/module-system/loader/objects
         :yuanxu/module-system/source/collection
-        (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source agentic-ai-lab-maintained-integration-directories)
+        (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source agentic-ai-lab-maintained-service-source agentic-ai-lab-maintained-integration-directories)
         :agentic-ai-lab/modules/building/official-contributions
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-source-selection
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-source-tree)
@@ -236,7 +236,10 @@
            (length plans)
            (+ (length
                (yuanxu-module-source-collection-interfaces agentic-ai-lab-maintained-module-source))
+              (length
+               (yuanxu-module-source-collection-interfaces agentic-ai-lab-maintained-service-source))
               (length (agentic-ai-lab-module-system-source-refs))))
+          (check-equal? (and (member (path-expand "modules/services/opentofu/interface.ss") source-values) #t) #t)
           (check-equal? (car source-values)
                         (path-expand "modules/agent-sandbox/interface.ss"))
           ;; Integration facades remain present, but cannot advertise the
@@ -417,7 +420,7 @@
           (yuanxu-module-load-path-collections
            (make-agentic-ai-lab-contribution-module-load-path
             'example-contribution ".")))
-     '(example-contribution agentic-ai-lab-maintained))
+     '(example-contribution agentic-ai-lab-maintained agentic-ai-lab-services))
     (check-equal?
      (map yuanxu-module-source-collection-identity
           agentic-ai-lab-official-contribution-sources)

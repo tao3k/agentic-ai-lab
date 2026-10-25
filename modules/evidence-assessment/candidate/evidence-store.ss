@@ -40,6 +40,9 @@
   (.o .operations: (yuanxu-predicate-contract 'ascent/evidence-operations
                     evidence-operations? (lambda (_v _c) []))))
 
+(def ComputationalEvidenceStore.
+  (.ref AgenticAILabComputationalEvidenceStoreContract 'proto))
+
 (def (detached value)
   (cond ((pair? value) (cons (detached (car value)) (detached (cdr value))))
         ((string? value) (string-copy value))
@@ -190,7 +193,7 @@
             (detached (list (list 'status 'verified) (list 'fact answer)
                             (list 'roots roots) (list 'nodes (reverse selected))))))))
     (validate AgenticAILabComputationalEvidenceStoreContract
-      (.o (:: @ (.ref AgenticAILabComputationalEvidenceStoreContract 'proto))
+      (.o (:: @ ComputationalEvidenceStore.)
           .operations:
           (.o .resolve: (lambda (snapshot candidate) (serialized (lambda () (resolve snapshot candidate))))
           .claim: (lambda (snapshot candidate handle row) (serialized (lambda () (claim snapshot candidate handle row))))

@@ -28,7 +28,7 @@ test:
 
 # Keep the root package's native entry independently callable during repairs.
 [group('test')]
-test-root: build-testing build-test-workers prepare-test-inputs
+test-root: build-testing build-native-test-tool build-test-workers prepare-test-inputs build-library
     mkdir -p "{{ justfile_directory() }}/.gerbil/test-results"
     @echo "[agentic-ai-lab-test-runtime] maxHeap={{ gerbil_test_max_heap }} debug={{ gerbil_test_debug }} scope=worker-process"
     GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss package "{{ gerbil_test_runtime_options }}"
@@ -120,3 +120,18 @@ test-query-orgize-source:
 # Source-level ownership controls; heap fence applies before any imports.
 test-module-ownership:
     timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss module-ownership "{{ gerbil_test_runtime_options }}"
+
+# Native SDK gxtest with the common POO/Core modules linked into one image.
+[group('build')]
+build-native-test-tool:
+    just build-gerbil-test-tool "{{ agentic_ai_lab_gerbil_path }}/tools/project-test" dev/testing-preload.ss
+
+# Same fresh process, heap fence and per-file wall budget as test-file.
+[group('test')]
+test-native-file path:
+    GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil env "{{ agentic_ai_lab_gerbil_path }}/tools/project-test/gxtest" {{ gerbil_test_runtime_options }} "{{ path }}"
+
+# Interpreter control for the same native SDK executor and source inputs.
+[group('test')]
+test-sdk-file path:
+    GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil env gxi {{ gerbil_test_runtime_options }} -e '(import :gerbil/tools/gxtest) (exit (apply main (cdddr (command-line))))' "{{ path }}"

@@ -1,23 +1,16 @@
 --- a/gxtest.ss
 +++ b/gxtest.ss
-@@ -1,7 +1,8 @@
- ;;; -*- Gerbil -*-
- ;;; © vyzo
- ;;; tool to run tests without the need of glue code
+@@ -4 +4,2 @@
 -(import :gerbil/expander
 +(import (only-in :gerbil/runtime gerbil-load-expander!)
 +        :gerbil/expander
-         :std/cli/getopt
-         :std/iter
-         :std/hash/misc
-@@ -14,6 +15,7 @@
-   (map string->symbol (string-split features #\,)))
- 
- (def (main . args)
+@@ -17 +18,2 @@
+-  (call-with-getopt gxtest-main args
 +  (gerbil-load-expander!)
-   (call-with-getopt gxtest-main args
-     program: "gxtest"
-     help: "run Gerbil tests"
++  (exit (call-with-getopt gxtest-main args
+@@ -33 +35 @@
+-                    help: "test files or directories to execute tests in; appending /... to a directory will recursively execute or tests in it. If no arguments are passed, all tests in the current directory are executed.")))
++                    help: "test files or directories to execute tests in; appending /... to a directory will recursively execute or tests in it. If no arguments are passed, all tests in the current directory are executed."))))
 --- a/build-aot.ss
 +++ b/build-aot.ss
 @@ -24,7 +24,7 @@

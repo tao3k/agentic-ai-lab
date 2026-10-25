@@ -71,7 +71,7 @@ build-temporal-evaluator:
 # Build the installed upstream gxtest source without whole-program elimination:
 # dynamic eval requires runtime globals that cannot be inferred statically.
 [group('build')]
-build-gerbil-test-tool output:
+build-gerbil-test-tool output preload="":
     #!/usr/bin/env bash
     set -euo pipefail
     tool_home="$(gerbil env bash -c 'printf %s "$GERBIL_HOME"')"
@@ -81,6 +81,7 @@ build-gerbil-test-tool output:
     cp "$tool_home/src/tools/env.ss" "{{ output }}/source/env.ss"
     patch --batch -d "{{ output }}/source" -p1 < tools/ci/patches/gerbil-gxtest-runtime-init.patch
     printf '(package: gerbil/tools)\n' > "{{ output }}/source/gerbil.pkg"
-    export GERBIL_LOADPATH="{{ output }}/lib${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}"
+    if [[ -n "{{ preload }}" ]]; then cat "{{ preload }}" >> "{{ output }}/source/gxtest.ss"; fi
+    export GERBIL_LOADPATH="{{ output }}/lib:{{ agentic_ai_lab_library_path }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}"
     {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 180s gerbil compile -s -d "{{ output }}/lib" "{{ output }}/source/env.ss"
     {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 180s gerbil compile -exe -s -d "{{ output }}/lib" -o "{{ output }}/gxtest" "{{ output }}/source/gxtest.ss"

@@ -5,7 +5,10 @@
 (export +agentic-ai-lab-project-testing-interface+)
 
 (import (only-in :clan/poo/object .cc)
+        (only-in :clan/poo/mop validate)
+        (only-in :std/source this-source-file)
         (only-in :asp-gerbil-scheme/testing-api
+                 TestingCommand
                  +testing-discovery-profile+
                  +testing-process-isolation-profile+
                  +testing-serial-resource-profile+
@@ -50,10 +53,19 @@
                                 "t/module-system-poo-performance-test-support")))
     +agentic-ai-lab-serial-test-selectors+))
 
+(def +agentic-ai-lab-native-test-command+
+  (validate TestingCommand
+    (lambda (runtime-options arguments)
+      (append
+        (list (path-expand "../.gerbil/tools/project-test/gxtest"
+                           (path-directory (this-source-file))))
+        runtime-options arguments))))
+
 (def +agentic-ai-lab-project-testing-interface+
   ;; A repository-sized batch retains all imported test modules in one VM.
   ;; Keep each file within the original 1 GiB worker allowance; ASP still
   ;; owns discovery, bounded concurrency, serial-resource policy and gxtest.
   (testing-interface-add-profile
-   +agentic-ai-lab-serial-testing-interface+
+   (.cc +agentic-ai-lab-serial-testing-interface+
+     command: +agentic-ai-lab-native-test-command+)
    +testing-process-isolation-profile+))

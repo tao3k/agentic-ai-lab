@@ -33,48 +33,48 @@
         agentic-ai-lab-session-tool-grants-allow?)
 
 ;; : (-> Symbol Symbol [Symbol] [Symbol/String] [Symbol] [Alist] PooSessionToolGrant)
-(def (agentic-ai-lab-session-tool-grant grant-id
-                                  tool-ref
-                                  actions
-                                  resource-refs
-                                  trigger-refs
+(def (agentic-ai-lab-session-tool-grant grant-id-value
+                                  tool-ref-value
+                                  actions-value
+                                  resource-refs-value
+                                  trigger-refs-value
                                   . maybe-metadata)
   (agentic-ai-lab-session-require "session tool grant id must be a symbol"
-                            (symbol? grant-id)
-                            grant-id)
+                            (symbol? grant-id-value)
+                            grant-id-value)
   (agentic-ai-lab-session-require "session tool grant tool ref must be a symbol"
-                            (symbol? tool-ref)
-                            tool-ref)
+                            (symbol? tool-ref-value)
+                            tool-ref-value)
   (agentic-ai-lab-session-require "session tool grant actions must be symbols"
-                            (agentic-ai-lab-session-symbol-list? actions)
-                            actions)
+                            (agentic-ai-lab-session-symbol-list? actions-value)
+                            actions-value)
   (agentic-ai-lab-session-require
    "session tool grant resource refs must be symbols or strings"
-   (agentic-ai-lab-session-policy-ref-list? resource-refs)
-   resource-refs)
+   (agentic-ai-lab-session-policy-ref-list? resource-refs-value)
+   resource-refs-value)
   (agentic-ai-lab-session-require "session tool grant trigger refs must be symbols"
-                            (agentic-ai-lab-session-symbol-list? trigger-refs)
-                            trigger-refs)
-  (let (metadata (if (null? maybe-metadata) '() (car maybe-metadata)))
+                            (agentic-ai-lab-session-symbol-list? trigger-refs-value)
+                            trigger-refs-value)
+  (let (metadata-value (if (null? maybe-metadata) '() (car maybe-metadata)))
     (agentic-ai-lab-session-tool-grant-require-slots!
      'agentic-ai-lab.session.tool-grant
      'agentic-ai-lab.modules.session.tool-grant.v1
-     grant-id
-     tool-ref
-     actions
-     resource-refs
-     trigger-refs
-     metadata
+     grant-id-value
+     tool-ref-value
+     actions-value
+     resource-refs-value
+     trigger-refs-value
+     metadata-value
      #f)
     (.o bind-these: #f
         kind: 'agentic-ai-lab.session.tool-grant
         schema: 'agentic-ai-lab.modules.session.tool-grant.v1
-        grant-id: grant-id
-        tool-ref: tool-ref
-        actions: actions
-        resource-refs: resource-refs
-        trigger-refs: trigger-refs
-        metadata: metadata
+        grant-id: grant-id-value
+        tool-ref: tool-ref-value
+        actions: actions-value
+        resource-refs: resource-refs-value
+        trigger-refs: trigger-refs-value
+        metadata: metadata-value
         runtime-executed: #f)))
 
 ;; The semantic grant is POO-native; wire rows are produced only by projection.

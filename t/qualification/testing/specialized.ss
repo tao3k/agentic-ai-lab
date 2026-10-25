@@ -4,11 +4,26 @@
 (import :clan/poo/object
         (only-in "./qualification.ss" qualification-script)
         (only-in "./package-result.ss" admit-package-batches)
+        (only-in "../../../build-modules.ss" agentic-ai-lab-library-modules)
+        (only-in :asp-gerbil-scheme/testing-runner-api testing-interface-test-files)
+        (only-in :agentic-ai-lab/dev/testing-profiles +agentic-ai-lab-project-testing-interface+)
         (only-in :std/source this-source-file))
 (def root (path-expand "../../.." (path-directory (this-source-file))))
 (def watch "packages/python-runtime/tools/watch.py")
 (def (watched command) (append (list "python3" watch) command))
 (def (absolute file) (path-expand file root))
+
+;; The native owners supply production and test inventories. This is an input
+;; projection for the existing Script source cut, not another discovery graph.
+(def (package-inputs)
+  (append
+    '("build.ss" "build-modules.ss" "build-spec.ss" "gerbil.pkg" "dev/gerbil.pkg")
+    agentic-ai-lab-library-modules
+    '("modules/nono-sandbox/_nono.ss"
+      "modules/workflow/runtime/runtime-v0-native.ss"
+      "modules/workflow/runtime/semantic.ss")
+    (testing-interface-test-files +agentic-ai-lab-project-testing-interface+
+                                  (absolute "unit-tests.ss"))))
 
 (def (selected-script name vm arguments)
   (def (interpreted file) (list "gxi" vm file))
@@ -21,8 +36,9 @@
     ((package)
      (.cc (qualification-script '("unit-tests.ss")
             (list "gerbil" vm "env" "gxi" vm "./unit-tests.ss") 1200
-            inputs: (list (this-source-file) "t/qualification/testing/package-result.ss"
-                          "unit-tests.ss" "dev/testing-profiles.ss"))
+            inputs: (append (list (this-source-file) "t/qualification/testing/package-result.ss"
+                                  "unit-tests.ss" "dev/testing-profiles.ss")
+                            (package-inputs)))
        'log (absolute ".gerbil/test-results/package.log")
        '.admit-result admit-package-batches))
     ((package-file)
