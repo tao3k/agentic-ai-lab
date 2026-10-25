@@ -17,7 +17,9 @@
 ;; projection for the existing Script source cut, not another discovery graph.
 (def (package-inputs)
   (append
-    '("build.ss" "build-modules.ss" "build-spec.ss" "gerbil.pkg" "dev/gerbil.pkg")
+    '("build.ss" "build-modules.ss" "build-spec.ss" "gerbil.pkg" "dev/gerbil.pkg"
+      "dev/testing-preload.ss" "dev/just/build.just" "dev/just/testing.just"
+      "tools/ci/patches/gerbil-gxtest-runtime-init.patch")
     agentic-ai-lab-library-modules
     '("modules/nono-sandbox/_nono.ss"
       "modules/workflow/runtime/runtime-v0-native.ss"
