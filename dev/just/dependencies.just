@@ -10,7 +10,7 @@ deps:
 # Rebuild one installed source without fetching or changing its dependencies.
 [group('dependency')]
 build-dependency package:
-    {{ gerbil_darwin_env }} gxpkg build "{{ package }}"
+    {{ gerbil_darwin_env }} gerbil env gxpkg build "{{ package }}"
 
 # Verify that dependency resolution is represented by the tracked lock.
 [group('dependency')]
