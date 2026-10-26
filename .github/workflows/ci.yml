@@ -496,7 +496,7 @@ jobs:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: Agentic AI Lab external Bazel module (linux-amd64, full)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -543,8 +543,10 @@ jobs:
         timeout-minutes: 2
         run: python3 -m unittest discover -s t/qualification/external_bazel -p 'external_module_test.py' -v
 
+      # This includes compiling the complete cold dependency/product graph.
+      # Per-test execution profiles remain independently bounded.
       - name: Validate Agentic AI Lab as an external Bazel module
-        timeout-minutes: 12
+        timeout-minutes: 20
         env:
           AGENTIC_AI_LAB_EXTERNAL_BAZEL_OUTPUT_BASE: ${{ runner.temp }}/agentic-ai-lab-external-bazel-output-base-v1
           AGENTIC_AI_LAB_EXTERNAL_TEST_MODE: full

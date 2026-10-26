@@ -147,7 +147,7 @@ class SchemeProjectionArtifactToolTest(unittest.TestCase):
                 runner_source,
             )
             self.assertIn(
-                ":agentic-ai-lab/modules/funflow/profile-library",
+                ":agentic-ai-lab/modules/workflow/profiles/funflow-library",
                 runner_source,
             )
             self.assertNotIn(

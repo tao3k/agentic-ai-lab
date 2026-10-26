@@ -52,7 +52,7 @@ filegroup(
 
 filegroup(
     name = "runtime_load_projection_source",
-    srcs = ["modules/funflow/runtime-load-projection.ss"],
+    srcs = ["modules/workflow/scenario/runtime-funflow.ss"],
 )
 
 filegroup(

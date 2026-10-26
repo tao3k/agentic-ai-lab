@@ -92,7 +92,7 @@ def _load_projection_rows(
         "        :agentic-ai-lab/modules/workflow/scenario/composition-syntax\n"
         "        :yuanxu/profile-composition/profile-bundle\n"
         "        :agentic-ai-lab/modules/workflow/scenario/profile-root\n"
-        "        :agentic-ai-lab/modules/funflow/profile-library)\n"
+        "        :agentic-ai-lab/modules/workflow/profiles/funflow-library)\n"
         f"(include {_scheme_string(str(projection))})\n"
         "(agentic-ai-lab-runtime-load-write!\n"
         f" (begin (include {_scheme_string(str(source))})))\n"

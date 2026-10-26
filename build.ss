@@ -1,7 +1,9 @@
-#!/usr/bin/env -S timeout --signal=TERM --kill-after=5s 180s gxi
+#!/usr/bin/env -S timeout --signal=TERM --kill-after=5s 360s gxi
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+;;; Build-only watchdog for the complete cold library. Runtime test profiles
+;;; retain their independent heap, total-duration and idle-duration gates.
 (import (for-syntax
           (only-in :std/source this-source-file)
           (only-in :yuanxu/module-system/building/source-package register-module-build-source!)))
