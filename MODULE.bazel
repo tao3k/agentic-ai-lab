@@ -38,8 +38,8 @@ python.toolchain(python_version = "3.12")
 gerbil = use_extension("@gerbil_bazel//gerbil:extensions.bzl", "gerbil")
 gerbil.auto(
     name = "local_gerbil",
-    # Bound each native std/make executor; Bazel may schedule two projects.
-    environment = {"GERBIL_BUILD_CORES": "2"},
+    # The SDK and provider resource guard own CPU/RSS admission. Do not cap
+    # every cold dependency executor at two workers regardless of capacity.
     expected_version_prefixes = [
         "Gerbil 1cfb032",
     ],

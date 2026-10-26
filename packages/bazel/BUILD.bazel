@@ -106,3 +106,53 @@ sh_test(
         "//:gerbil_package_sources",
     ],
 )
+
+# The consumer needs Scheme APIs, not upstream standalone C ABI executables.
+# API roots are direct imports; Core discovers their actual transitive closure.
+gerbil_dependency_entry(
+    name = "ascent_dependency_build",
+    source_build = "@gerbil_ascent_sources//:build_script",
+    compiler_options_module = "@gerbil_ascent_sources//:build-modules.ss",
+    compiler_options_binding = "gerbil-ascent-compiler-options",
+    entry_modules = [
+        "candidate/checked-program.ss",
+        "candidate/datum.ss",
+        "candidate/finite-evidence.ss",
+        "candidate/funs.ss",
+        "candidate/program.ss",
+        "candidate/provenance.ss",
+        "candidate/types.ss",
+        "interface/engine-api.ss",
+        "program/interface.ss",
+        "program/session.ss",
+        "rules/declaration.ss",
+        "rules/interface.ss",
+        "temporal/lens.ss",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "ascent_dependency_entry_test",
+    size = "small",
+    timeout = "short",
+    srcs = ["parser-dependency-entry-test.sh"],
+    args = [
+        "$(location @local_gerbil//:gxi)",
+        "$(location :parser-dependency-entry-check.ss)",
+        "$(location :ascent_dependency_build)",
+        "-",
+        "$(location @gerbil_ascent_sources//:build_script)",
+        "$(location //:gerbil.pkg)",
+        ":gerbil-ascent/",
+    ],
+    data = [
+        ":parser-dependency-entry-check.ss",
+        ":ascent_dependency_build",
+        "@local_gerbil//:gxi",
+        "@gerbil_ascent_sources//:sources",
+        "@gerbil_ascent_sources//:build_script",
+        "//:gerbil.pkg",
+        "//:gerbil_package_sources",
+    ],
+)

@@ -127,7 +127,7 @@ gerbil_project_compile(
 gerbil_project_compile(
     name = "gerbil_ascent_package",
     srcs = ["@gerbil_ascent_sources//:sources"],
-    build_script = "@gerbil_ascent_sources//:build_script",
+    build_script = "//packages/bazel:ascent_dependency_build",
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_ascent_sources//:source_resolution_receipt"],
     deps = [

@@ -38,6 +38,8 @@ jobs:
             echo "AGENTIC_AI_LAB_OPENTOFU_ARTIFACT=$families"
             echo "AGENTIC_AI_LAB_OPENTOFU_FLAKE_ARTIFACT=$families"
             echo "YUANXU_JSON_SCHEMA_AWS_EXPORT=$families/aws/schema.json"
+            echo "AGENTIC_AI_LAB_OPENTOFU_TEST_AWS_ONLY_ARTIFACT=$(readlink -f "$inputs/awsOnly")"
+            echo "AGENTIC_AI_LAB_OPENTOFU_TEST_REBUILT=$(readlink -f "$inputs/awsNull")"
             echo "AGENTIC_AI_LAB_OPENTOFU_TEST_PARENT_ARTIFACT=$(readlink -f "$inputs/parent")"
             echo "AGENTIC_AI_LAB_OPENTOFU_TEST_CHILD_ARTIFACT=$(readlink -f "$inputs/child")"
             echo "YUANXU_AWS_BINARY=$(readlink -f "$inputs/binary")/provider"

@@ -5,7 +5,8 @@
 (import (only-in :std/source this-source-file)
         (only-in :std/make make)
         (only-in :yuanxu/module-system/building/source-package register-module-build-source!)
-        (only-in :yuanxu/module-system/building/source-closure package-library-spec))
+        (only-in :yuanxu/module-system/building/source-closure package-library-spec)
+        @COMPILER_OPTIONS_IMPORT@)
 (export main)
 (def dependency-source-root
   (path-expand "@SOURCE_ROOT@"
@@ -17,7 +18,8 @@
     (cadr (memq 'package: properties))))
 (register-module-build-source! dependency-source-root dependency-package)
 (def (dependency-build-spec)
-  (package-library-spec dependency-source-root dependency-package public-entry-modules))
+  (map (lambda (target) (append (list gxc: target) @COMPILER_OPTIONS@))
+       (package-library-spec dependency-source-root dependency-package public-entry-modules)))
 (def (main . args)
   (current-directory dependency-source-root)
   (match args
