@@ -56,7 +56,7 @@ int32_t agentic_ai_lab_semantic_v1_open(void) {
   params.version = ___VERSION;
   params.linker = AGENTIC_AI_LAB_SEMANTIC_LINKER;
   params.parallelism_level = 1;
-  params.max_heap = 1024 * 1024 * 1024;
+  params.max_heap = (___SIZE_T)2 * 1024 * 1024 * 1024;
   params.debug_settings = ___DEBUG_SETTINGS_INITIAL;
   if (___setup(&params) != ___FIX(___NO_ERR)) {
     pthread_mutex_unlock(&lock); return 1;
@@ -111,6 +111,13 @@ int32_t agentic_ai_lab_semantic_v1_close(void) {
   pthread_mutex_lock(&lock);
   if (state != 1) { pthread_mutex_unlock(&lock); return 1; }
   if (!pthread_equal(owner, pthread_self())) { pthread_mutex_unlock(&lock); return 2; }
+  /* Native Context drain is part of close, before VM teardown. Failure must
+   * keep the VM available rather than discard a live owner or its journal. */
+  agentic_ai_lab_semantic_result drained = {0, NULL, 0};
+  int32_t status = agentic_ai_lab_semantic_evaluate(
+      "$host.context.lifecycle.shutdown", "(object)", &drained);
+  free(drained.data);
+  if (status != 0) { pthread_mutex_unlock(&lock); return status; }
   ___cleanup(); state = 2;
   pthread_mutex_unlock(&lock);
   return 0;
@@ -131,4 +138,9 @@ int32_t agentic_ai_lab_semantic_v1_proof_register(const uint8_t *input, size_t l
 int32_t agentic_ai_lab_semantic_v1_context_use_refresh(const uint8_t *input, size_t length,
     agentic_ai_lab_semantic_result *result) {
   return semantic_call("$host.context.use.refresh", input, length, result, 1);
+}
+
+int32_t agentic_ai_lab_semantic_v1_context_command(const uint8_t *input, size_t length,
+    agentic_ai_lab_semantic_result *result) {
+  return semantic_call("$host.context.lifecycle.command", input, length, result, 1);
 }

@@ -8,7 +8,9 @@
         (only-in :gerbil-ascent/candidate/provenance positive-proof-nodes proof-node-kind
                  proof-node-inputs proof-node-relation proof-node-row)
         (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface agentic-ai-lab-temporal-support)
-        "fact.ss" "binding.ss" "rule.ss")
+        "fact.ss" "binding.ss" "rule.ss" "positive-proof.ss"
+        (only-in "private/rule-kernel.ss" rule-correspondence-replay/verified)
+        (only-in "private/binding-kernel.ss" proof-support-replay/verified))
 (export agentic-ai-lab-temporal-mrr-derivation agentic-ai-lab-temporal-mrr-derivation-replay
         agentic-ai-lab-temporal-proof-node-fact agentic-ai-lab-temporal-mrr-derivation-from-ascent
         agentic-ai-lab-temporal-mrr-derivation-admission-replay)
@@ -56,8 +58,14 @@
                                                 steps max-nodes node-bindings output source-bindings journal)
   (unless (and (text? id-value) (list? node-bindings) (<= 1 (length node-bindings) 128))
     (error "invalid selected lineage declaration"))
-  (let* ((verified-rules (agentic-ai-lab-temporal-rule-correspondence-replay correspondence program admission snapshot candidate receipt steps max-nodes))
-         (verified-bound (agentic-ai-lab-temporal-proof-support-replay bound admission snapshot candidate receipt steps max-nodes output source-bindings journal))
+  ;; One original ASCENT replay supplies both rule and support correspondence.
+  ;; Nothing survives this call: current/source-change entrypoints replay anew.
+  (let* ((verified-positive (agentic-ai-lab-temporal-positive-proof-replay
+                              admission snapshot candidate receipt steps max-nodes))
+         (verified-rules (rule-correspondence-replay/verified
+                           correspondence program verified-positive snapshot candidate receipt))
+         (verified-bound (proof-support-replay/verified
+                           bound verified-positive receipt output source-bindings journal))
          (nodes-value (positive-proof-nodes (reasoning-receipt-proof receipt)))
          (root-value (.ref verified-bound 'root))
          (rows-value (list-sort (lambda (a b) (< (car a) (car b))) (map node-binding-row node-bindings)))

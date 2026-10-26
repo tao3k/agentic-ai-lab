@@ -7,7 +7,8 @@
 ;;; Path joins and external source admission are outside this small API.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :yuanxu/utilities/functional
-                 yuanxu-all? yuanxu-filter-map yuanxu-map)
+                 yuanxu-all?)
+        (only-in :std/list/list filter-map map)
         (only-in "types.ss" agentic-ai-lab-query?)
         (only-in "contracts.ss" agentic-ai-lab-query-source-content-identity))
 
@@ -33,7 +34,7 @@
          (expressions
           (projection-expressions (.ref program 'project)))
          (properties
-          (yuanxu-map (lambda (expression) (.ref expression 'property))
+          (map (lambda (expression) (.ref expression 'property))
                         expressions)))
     (unless (and (not (.ref path 'next))
                  (yuanxu-all?
@@ -45,7 +46,7 @@
                           binding)))
       (error "unsupported Scheme GQL syntax: expected one node"))
     (let ((rows-value
-           (yuanxu-filter-map
+           (filter-map
             (lambda (node)
               (and (.slot? node 'label)
                    (eq? (.ref node 'label) (.ref start 'label))
@@ -59,7 +60,7 @@
                               (lambda (name) (.slot? node name))
                               properties)
                        (error "Scheme GQL node lacks projected property"))
-                     (yuanxu-map (lambda (name) (.ref node name))
+                     (map (lambda (name) (.ref node name))
                                    properties))))
             nodes)))
       (when (> (length rows-value) (.ref query 'result-bound))

@@ -1,0 +1,173 @@
+#+title: Context Runtime Framework: Shards, Authority Fences and Independent Session Endpoints
+#+language: en
+:PROPERTIES:
+:ID: context-distributed-runtime-framework
+:STATUS: proposed-distributed-contract-native-local-refinements
+:END:
+
+* Scope and implementation boundary
+
+This extends [[file:00-design-map.org][the existing evidence-driven Context design]] and
+[[file:24-native-runtime-cost.org][the separately measured cold and steady runtime]]. Context manages source
+admission, working views, proof/support lineage, invalidation and knowledge
+recall. Session remains an independent module with its own endpoint, Attempt
+and terminal lifecycle. Org Property ID identifies an evidence element;
+Session identity identifies an interaction lifetime. Neither substitutes for
+the other, and their identities are not duplicated into another registry.
+
+The present Scheme implementation is a local Actor runtime with SQLite
+journal fencing. It is not a distributed deployment. The framework below is a
+proposed allocation with executable safety contracts. No cluster throughput,
+network partition tolerance, distributed consensus or temporal liveness is
+claimed from local tests or finite models.
+
+* Parallelism and consistency domains
+
+The serialization unit is a Context consistency domain, not the entire system
+and not an implicit global Session lock. Independent domains may progress on
+different nodes and journals. Within a domain, one current epoch serializes
+authority-sensitive transitions; worker computation can occur outside that
+serialized commit boundary. Moving an owner increments its durable epoch.
+Neither an old process nor a late callback can retain write authority from a
+local Actor reference or a previously current proof.
+
+Evidence blobs, Org Elements and original ASCENT proof inputs are immutable,
+content-addressed data. They can be shared without sharing authority decisions.
+The reverse support index routes invalidation to affected consumers and active
+Attempts across Sessions. An unrelated consumer has no edge to that authority
+and must remain able to progress while an affected shard is partitioned.
+
+Only indexed affected vertices/edges should be traversed during propagation.
+This algorithmic target does not establish distributed latency or make network
+delivery, consensus and storage costs linear in Context size. No whole-system
+scan, global worker mutex or global journal file belongs on independent shards'
+ordinary execution path.
+
+* Authority, propagation and actual result publication
+
+Source/grant/policy owners publish versioned durable events, with an outbox and
+idempotent inbox. Receipt, materialized invalidation, effective revocation and
+acknowledgement are different states. Duplicates and arbitrary delivery order
+must preserve newer versions. Recovery replays the original event bytes and
+rebuilds subscriptions before accepting new effects.
+
+A revocation barrier acknowledges completion only after affected live
+consumers have invalidated their captured versions or their old owner epochs
+have been fenced. Independent consumers are not participants in that barrier.
+During a partition an affected consumer cannot infer current authority from a
+stale local view; its publication boundary must refuse until it has the required
+authoritative fence. Background propagation remains mandatory. A query-time
+predicate alone does not update materialized Context or cancel active work.
+
+Actual result publication requires the current owner epoch, current Attempt
+revision and current source/grant/policy cut at its linearization point. A
+durable completion intent is insufficient. Session's actual terminal CAS and
+its effect receipt must correspond to that decision; cancellation, recovery,
+duplicate callbacks and owner migration cannot erase or overwrite a terminal.
+
+The local SQLite adapter holds a fenced transaction around its native decision.
+A cluster provider cannot hold that local assumption across an arbitrary remote
+effect. It must supply an explicit atomic authority/terminal boundary or a
+fenced, idempotent endpoint protocol whose actual acknowledgement is journaled.
+Selecting or implementing that provider remains open. A message transport's
+delivery guarantee is not an exactly-once publication proof.
+
+* Runtime providers and resource ownership
+
+The intended provider responsibilities are:
+
+| Provider/owner | Responsibility | Current implementation |
+|----------------+----------------+------------------------|
+| Evidence Provider | Original bytes, Org ID/version, native parser/Query provenance | Local Org/GQL adapter |
+| Authority Provider | Linearizable epoch/version CAS and effective revocation fence | Local journal/policy owners |
+| Journal Provider | Durable inbox, decisions, terminal evidence and original inputs | SQLite per local domain |
+| Transport Provider | Replayable duplicate/late delivery, acknowledgements, backpressure | Bounded local ingress and coalesced wake in 28; remote transport open |
+| Scheduler Provider | Long-lived owners, bounded admission, fair control delivery | Gambit Actors with local bounded ingress in 28; distributed scheduling open |
+| Clock Provider | Versioned deadlines and failover re-admission | Native host-monotonic clock |
+| Session endpoint | Independent Attempt execution and actual terminal CAS | Native Session module |
+
+These are responsibilities for POO-native provider composition, not new raw
+alist/record DSLs or a second module registry. Existing entrypoints remain the
+native path. Runtime acquisition must be explicit and lazy; import/selection
+does not acquire timers, connections, workers or subscriptions.
+
+The installed Gerbil SDK already exposes =std/actor='s =ActorHost= interface
+and envelope interactions: local destinations use =thread-send=; handle/group
+destinations delegate to the current host. The intended transport adapter should
+use that existing actor/ensemble boundary rather than invent another remote RPC
+runtime. The inspected SDK owners are =src/std/actor/host.ss= and
+=src/std/actor/interaction.ss=. This capability has not yet been connected to
+Context's persistent fencing protocol. An Actor handle is a route, not Context
+identity, Session identity or evidence/authorization authority. The native local
+path also uses =thread-send= directly; adopting envelopes alone would not add
+bounded admission, consensus, current-proof verification or exactly-once effects.
+
+Bootstrap ownership transfers only after its resources are returned. Anchor
+failure then belongs to the runtime: abort uncommitted work, retain original
+evidence and pending input, detach subscriptions, close the journal and join
+the failed owner before propagating the error. Normal shutdown also joins the
+timer and retires the clock capability. Independent Session endpoints are not
+invented, terminated or given synthetic terminals during controller disposal.
+
+A refused old-owner evidence write must release its short transaction's lock.
+Refusing a stale write while blocking the successor is a real concurrency bug,
+even when no wrong bytes were committed. The native two-Actor regression uses
+two actual connections to one journal and checks successor progress after the
+refusal. It is a specific local takeover regression, not full cluster coverage.
+
+* Deadlines, performance and KV reuse
+
+The host boot identity and CLOCK_MONOTONIC coordinate cannot be transferred to
+another node as a universal timestamp. A cluster Clock Provider must re-admit
+deadlines in an explicit clock domain and reject uncertain/stale tickets.
+Policy/source/owner generations remain mandatory even after a timer has fired.
+
+Cold reconstruction includes imports, Context construction, durable recovery,
+resource release, dynamic unloading and normal process exit. Steady use measures
+a long-lived owner separately. Worker count, admission capacity, queue depth,
+affected fanout, journal cost and time to first event require independent
+receipts. Passing a single-owner workload does not qualify cluster capacity.
+
+Scheduling may exploit immutable evidence/prompt-prefix locality. Actual KV
+reuse additionally requires identical model/tokenization/runtime, identical
+token prefix and appropriate tenant/authority isolation. A linear Context
+algorithm alone does not guarantee KV compatibility. Original evidence and
+proofs remain intact; view construction never replaces them with compression.
+
+* Executable contracts and remaining work
+
+[[file:26-context-runtime.qnt][The Quint model]] explores owner takeover, cancellation request/observation,
+recovery, source withdrawal, delayed/duplicate propagation, policy replacement,
+stale expiry, repeated result delivery and an independent consumer. Six broken
+variants omit owner fencing, trust cached authority, revive a previous Attempt,
+publish duplicate terminals, apply an old ticket or retain a refused writer's
+lock. The model assumes an abstract linearizable Authority Provider; it does
+not implement or prove a consensus protocol. Fair delivery and eventual recovery
+are explicit liveness obligations still to be modeled and qualified.
+The finite TLC run checks all reachable states of this bounded instance rather
+than two selected schedules. Separate =run= scenarios retain the broken and
+corrected paths as ITF traces using Quint's documented
+[[https://github.com/quint-co/quint/blob/main/docs/content/docs/builtin.md][then/expect run semantics]]. Neither those replay paths nor randomized
+simulation replace exhaustive checking of the declared finite instance.
+
+[[file:26-distributed-runtime.sysml][The SysML allocation]] separates nodes, shards, authority, evidence, journal,
+support index, scheduler, clock and independent Session endpoints. It is a
+structural proposal. The existing SysML event/owner models remain executable
+behavioral checks; [[file:25-bootstrap-lifecycle.sysml][the acquisition-failure model]] adds rollback, close, join,
+pending-input and original-evidence obligations with negative replay.
+
+Distributed transport, consensus-backed authority, a bounded production
+scheduler policy, cross-node terminal publication and clock failover are not
+implemented by this design document. Native local corrections and receipts
+must be reported separately from these proposed responsibilities.
+
+The first bounded-scheduler refinement is [[file:27-bounded-scheduling.org][27]]. It defines native POO admission
+and selection values and checks their projected handoffs with SysML, QNT and
+Scheme. Its Actor adapter is a qualification fixture; the production owner
+cutover, durable overflow retry, multi-node transport and coupled authority /
+scheduling verification remain open.
+
+[[file:28-hybrid-runtime.org][28]] implements the local owner ingress cutover and checks its composition
+with authority and foreign-call lifetime. Its Rust/Tokio consumer validates
+fixed-owner transport and root lifetime against an upstream test image. It does
+not yet provide the production Context AOT export or a multi-node deployment.

@@ -1,0 +1,231 @@
+{
+  "schema": "context.hybrid.validation.v1",
+  "status": "local-owner-integrated-boundary-qualified-production-aot-open",
+  "distributed_runtime_implemented": false,
+  "production_context_aot_export": false,
+  "throughput_accepted": false,
+  "native_limits": {
+    "heap": "2G",
+    "minimum_heap": "1G",
+    "watchdog_seconds": 150,
+    "no_chunking": true,
+    "no_forced_success_exit": true
+  },
+  "native": {
+    "complete_paths": 360,
+    "runs": [
+      {
+        "label": "qualification",
+        "receipt": {
+          "path": "/private/tmp/context-hybrid-optimized-20261026/qualified/owner-receipt.json",
+          "sha256": "75734400cb43b206a49bf4e0a75c5690825e650092469d3c1c402f1b32017c41"
+        },
+        "profiles": [
+          {
+            "profile": "legacy-cut",
+            "exit": 0,
+            "elapsed_seconds": 82.58548237499781,
+            "actual_closes": 60
+          },
+          {
+            "profile": "canonical",
+            "exit": 0,
+            "elapsed_seconds": 78.12915308299125,
+            "actual_closes": 60
+          },
+          {
+            "profile": "legacy-missing",
+            "exit": 0,
+            "elapsed_seconds": 77.64054279099219,
+            "actual_closes": 60
+          }
+        ]
+      },
+      {
+        "label": "whole-replay",
+        "receipt": {
+          "path": "/private/tmp/context-hybrid-optimized-20261026/replay/owner-receipt.json",
+          "sha256": "ae2edf6b727577de1fc76c78e53fcf644eefd9fe88040a2c1d5f2e0fad1ece3f"
+        },
+        "profiles": [
+          {
+            "profile": "legacy-cut",
+            "exit": 0,
+            "elapsed_seconds": 68.32594879201497,
+            "actual_closes": 60
+          },
+          {
+            "profile": "canonical",
+            "exit": 0,
+            "elapsed_seconds": 69.08710383300786,
+            "actual_closes": 60
+          },
+          {
+            "profile": "legacy-missing",
+            "exit": 0,
+            "elapsed_seconds": 63.288133541995194,
+            "actual_closes": 60
+          }
+        ]
+      }
+    ],
+    "audit": {
+      "path": "/private/tmp/context-hybrid-optimized-20261026/qualified-audit.json",
+      "sha256": "bc46bdeb6c084dcce82d36a2c6f934810e7bab86987938f6928511652ec84c67"
+    },
+    "replay_audit": {
+      "path": "/private/tmp/context-hybrid-optimized-20261026/replay-audit.json",
+      "sha256": "573308056ec6cc64696793fbf9ff26f38f771aad208fb36f90cbc7f35cdd1e13"
+    },
+    "steady": {
+      "path": "/private/tmp/context-hybrid-optimized-20261026/steady/cost-receipt.json",
+      "sha256": "759dc9ce2a2a8faaefc29139077ffa3f8dcf7999285e95f04e171a481e4b79d0"
+    },
+    "standalone_scheduler": {
+      "path": "/private/tmp/context-hybrid-optimized-20261026/scheduling-native/process.json",
+      "sha256": "313cb8af2965e63efadad79f59969dfbf00cde69572794a4c47b6b3ab8afcd54"
+    }
+  },
+  "quint": {
+    "summary": {
+      "path": "/private/tmp/context-hybrid-optimized-20261026/hybrid-quint/summary.json",
+      "sha256": "3c51772bd0b997acac3683a01d03cb5584f4b757195e3117dfeded2c7a024f73"
+    },
+    "generated_states": 688641,
+    "reachable_states": 73268,
+    "broken_families": 4,
+    "itf_paths": 30,
+    "real_progress_option": "-Dtlc2.TLC.progressInterval=1",
+    "native_refinement_proved": false,
+    "liveness_proved": false
+  },
+  "sysml": {
+    "summary": {
+      "path": "/private/tmp/context-hybrid-optimized-20261026/hybrid-sysml/summary.json",
+      "sha256": "e548da99967bbac76b0ef9af813cbf14f8f9bf39378f78c1dd2fce9ae40914c2"
+    },
+    "replay": {
+      "path": "/private/tmp/context-hybrid-optimized-20261026/hybrid-sysml-replay/summary.json",
+      "sha256": "e548da99967bbac76b0ef9af813cbf14f8f9bf39378f78c1dd2fce9ae40914c2"
+    },
+    "paths_per_run": 54,
+    "expected_unsafe_per_run": 4,
+    "unexpected": 0
+  },
+  "standalone_scheduler": {
+    "quint": {
+      "path": "/private/tmp/context-hybrid-optimized-20261026/scheduling-quint/summary.json",
+      "sha256": "40d93db62b085a9b7bad9d85d86d204c798d33729167e368eea9e2f964dbf232"
+    },
+    "sysml": {
+      "path": "/private/tmp/context-hybrid-optimized-20261026/scheduling-sysml/summary.json",
+      "sha256": "ca67d3eef2818e24bd3d36b32bb77ffb07dd4ec4535b91a9f06e38273266959d"
+    }
+  },
+  "rust": {
+    "summary": {
+      "path": "/private/tmp/context-hybrid-20261026/rust-final/summary.json",
+      "sha256": "32117e581566441b996dcf013256ee0b6e9cf1dbdb5619f1e9ca11eb4d12c0ff"
+    },
+    "transport_boundary_only": true,
+    "roots_escape_compile_control": true,
+    "upstream_revision": "f2c8ccfaaaa88eededad2dfef45eac1760fb4408",
+    "pre_setup_heap_policy_exposed": false,
+    "old_image_source_provenance_claim": false,
+    "production_context_export": false
+  },
+  "custody": {
+    "path": "/private/tmp/context-hybrid-optimized-20261026/custody/manifest.json",
+    "sha256": "5a3c94801ab702731087baedc85ad9f565480a6c3549f8266bc30b3f892aa7d3"
+  },
+  "matched_crash": {
+    "path": "/private/tmp/context-hybrid-optimized-20261026/matched-crash/crash-receipt.json",
+    "sha256": "282d3bb765ecb605459088a4fdc97b218e75aa68a5e41aede224264befcc2cba"
+  },
+  "allocation": {
+    "receipt": {
+      "path": "/private/tmp/context-hybrid-optimized-20261026/hybrid-allocation.json",
+      "sha256": "fdc472274d5eff8c01680c4419fff0373d6d54ecd6807ab2795aa18f8fc42e70"
+    },
+    "scope": "structural proposal only"
+  },
+  "rejected_cost_run": {
+    "steady": {
+      "path": "/private/tmp/context-hybrid-20261026/steady/cost-receipt.json",
+      "sha256": "c734d63a39b1f6bb3d001e02d704aa2046d5805ff5504d6f38140dbbec80ae09"
+    },
+    "custody": {
+      "path": "/private/tmp/context-hybrid-20261026/pre-optimization-custody/manifest.json",
+      "sha256": "ae1a8c199343205e1293730cad4ec6696f41a562ac29f4573f9d1263cbe8ab15"
+    },
+    "status": "functional pass; unnecessary per-transition POO allocation rejected"
+  },
+  "preserved_failures": [
+    {
+      "path": "/private/tmp/context-hybrid-20261026/qualified/legacy-missing/process.json",
+      "sha256": "526d7c72aa1202b714ebe666d79add7a86a1656aa8705fa2d775f2baa9971c4d"
+    },
+    {
+      "path": "/private/tmp/context-hybrid-20261026/qualified/whole-replay.json",
+      "sha256": "50dfabb690b05a1468d07f114ce22bb8dc3bdec2b0b24aa5ab4fe664f5489f90"
+    },
+    {
+      "path": "/private/tmp/context-hybrid-20261026/qualified.log",
+      "sha256": "9bf01fd8349a625e3c5cd7b66284d4d38da9574e437b3e2a1e2d4040609867ce"
+    },
+    {
+      "path": "/private/tmp/context-hybrid-20261026/whole-replay.log",
+      "sha256": "4d4c9497fed6f6d2f469ebf95d40bfe60e07f4ba521c6abd356adc7354cda3cf"
+    },
+    {
+      "path": "/private/tmp/context-hybrid-20261026/quint.log",
+      "sha256": "24e233c51b89829a69beb1f77658b2a1374f31bbd9797b7590281db0d86c85d9"
+    },
+    {
+      "path": "/private/tmp/context-hybrid-20261026/quint-final.log",
+      "sha256": "b04fdfe914a715a9113dc3bddd4915900bf864da8329c8f3223346f9b48734c5"
+    },
+    {
+      "path": "/private/tmp/context-hybrid-20261026/rust-build.log",
+      "sha256": "17b57e1c9614d271c702624079b43657d0777b8816d348101d861d7eb6b3e0e1"
+    },
+    {
+      "path": "/private/tmp/context-hybrid-20261026/rust-qualified.log",
+      "sha256": "ad50e978c7ea6b723714b6025dc2bda4312d57ec39d661a105188d3826b123ef"
+    },
+    {
+      "path": "/private/tmp/context-hybrid-20261026/rust-native.log",
+      "sha256": "80a04610203727f1ff7fe467ef38f64c16e74e8979db8fbbaabc274b4d754a0a"
+    },
+    {
+      "path": "/private/tmp/context-hybrid-20261026/rust-owner-native.log",
+      "sha256": "ede7b192fac32329384b38058f4f62f42e66fbbd2d2b6c418243a9aaf990253c"
+    },
+    {
+      "path": "/private/tmp/context-hybrid-20261026/unit.log",
+      "sha256": "1b4d6ce2d16b075cd1e52e25a8ca21bacd00a28e78154868ba7631d82d5df81c"
+    }
+  ],
+  "rpc_microbenchmark": {
+    "count": 20000,
+    "before": {
+      "count": 20000.0,
+      "wall": 7.014244079589844,
+      "cpu": 3.8262230000000006,
+      "gc-cpu": 0.48701600000000345,
+      "gcs": 10.0,
+      "allocated": 28177157544.0
+    },
+    "after": {
+      "count": 20000.0,
+      "wall": 0.22075915336608887,
+      "cpu": 0.06465600000000049,
+      "gc-cpu": 0.0,
+      "gcs": 0.0,
+      "allocated": 657552704.0
+    },
+    "allocated_bytes_reduction_fraction": 0.976663625386159,
+    "general_throughput_claim": false,
+    "original_proof_replay_and_journal_checks_retained": true
+  }
+}

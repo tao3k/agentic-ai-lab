@@ -1,0 +1,216 @@
+#+title: Native authority, policy and deadline propagation
+#+language: en
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Owning design and responsibilities
+
+This extends [[file:11-native-eager-propagation.org][the source/support propagation slice]], following
+=core/module-system/design/context-temporal-lifecycle-policy-system-design.org=,
+especially its independent lifecycle axes and accept-result / invalidate /
+reconcile transitions. Context coordinates admitted information and derived
+working inputs. Session still owns its pure schedule, Attempt and obligation
+reducers; Session does not import an authority graph or own a clock.
+
+The use Host owns canonical immutable grant generations. The policy Host owns
+canonical policy revisions and observed effective clocks. The native proof Host
+retains original ASCENT derivations, support and append-only journals. Context
+captures both original proof and exact grant/policy references in a version,
+then captures parent VERSIONS rather than mutable Session heads. A later grant
+or head cannot bless an older dependency. Revocation never edits source facts,
+historical derivations, provider observations or already recorded terminals.
+
+* Prepare before publication, push before reuse
+
+The new internal =runtime/change-feed.ss= provides a serialized owner barrier:
+
+1. Canonicalize and validate the proposed authority change and monotonicity.
+2. Construct an event retaining both original and replacement owner values.
+3. Ask every enrolled native POO observer to prepare its affected frontier.
+4. If preparation fails, publish neither authority nor Context changes.
+5. Install the pending barrier and publish the registered owner value.
+6. Synchronously deliver prepared native batches. Context fences affected active
+   Attempts into recovery obligations and materializes invalidation in cached
+   Context views. Unaffected active Attempts keep their original revisions.
+7. On delivery failure, leave the new authority and pending barrier in place.
+   Block authority reads/final result admission until explicit owner drain.
+   Retry against actual cancellation/recovery/terminal state; do not restore a
+   saved prepared schedule. Repeated delivery is idempotent.
+
+Default eager enrollment subscribes to use/policy owners before inserting the
+first Context. Proof binding also subscribes to that proof's actual policy
+owner before publishing its new input. Enabling propagation on an existing
+owner visits retained parent versions as well as current heads. Current-use
+checks remain additional fences; they are not the mechanism that materializes
+normal invalidation. A cached =current= read performs no proof/use query.
+
+Authority dependencies and source support are separate edges. A grant update
+invalidates captures of its old generation. A policy revision or nonapplicable
+window invalidates matching grant uses. Any policy-generation change fences
+original proof captures expecting that generation. The latter is deliberately
+conservative: this slice does not certify unaffected proofs across a clock-only
+generation advance inside the same policy window. Such proofs require fresh
+admission. Consumers using a different unchanged policy are unaffected unless
+they depend on an affected Context version.
+
+* What can be known in advance
+
+A deadline is known at policy registration. =policy-host-deadlines= exposes
+half-open window end tickets with policy identity and expected generation.
+=policy-host-fire-deadline!= rejects an early ticket, a stale generation, a
+foreign clock domain or an unobserved instant. A trusted owner scheduler supplies
+the actual observed instant; firing routes through the same preflight and push
+barrier as policy replacement. At the exact end coordinate the window is closed.
+
+The native fixture proves ticket registration before expiry and actual expiry
+push without querying any consumer. This is not an autonomous OS timer or a
+wall-clock delivery-latency qualification. No process can predict an arbitrary
+future withdrawal event. For an unannounced revocation, "before" means prepare
+the dependent frontier before the new authority state becomes usable, with a
+barrier covering partial delivery.
+
+The reverse planner constructs subject/conclusion adjacency and expands each
+visited conclusion once using hash sets and a queue. Its graph traversal is
+expected O(V+E), including cycles; it does not search permutations of consumers.
+This does not establish end-to-end linear time: canonical sorting, index
+validation/digests, original proof replay, allocating receipts and rebuilding
+this owner-local graph have separate costs. This slice makes no throughput or
+latency claim and has no retained incremental-index or deadline-heap benchmark.
+The substantive advantage demonstrated here is explicit dependency knowledge
+and proactive fencing rather than waiting for a later retrieval to notice loss.
+
+* Executable scenarios and native evidence
+
+=12-authority-propagation.sysml= is an executed contract fixture, not a native
+concurrency proof. It covers revoke, policy replacement and observed expiry,
+early expiry, independent C, retained originals and four named unsafe modes:
+query-only invalidation, blanket invalidation, recovery clearing the latch and
+duplicate terminal publication. =run-authority-scenarios.py= requires actual
+run-engine verdicts, retains failing traces and replays an unsafe/safe pair.
+
+The Scheme fixture starts real A, B and C worker threads. A uses the changed
+grant/policy and native original ASCENT proof. B uses an independent safe grant,
+policy and proof but captures A's exact Context version. C uses B's safe
+authority/proof with no dependency on A. Each native event must immediately
+materialize invalidation in cached A/B views, remove their active schedules,
+and leave C's original active revision and final result publication intact.
+
+For EACH of grant revocation, policy replacement and deadline expiry, the native
+corpus enumerates all 280 linear extensions of seven owner operations:
+
+| Event | Actual native operation | Happens before |
+|-------+-------------------------+----------------|
+| 1 | A worker returns; real join creates opaque observation | 2 |
+| 2 | capture current A revision for result proposal | 3 |
+| 3 | A final result publication through current owner | |
+| 4 | authority owner publishes and pushes invalidation | |
+| 5 | A cancellation publishes an obligation | 6, 7 |
+| 6 | actual join and reconciliation at cancellation revision | |
+| 7 | A recovery publishes against actual current revision | |
+
+After EVERY step, cached invalidation and at-most-one terminal are checked.
+Historical successful completion may remain recorded but must lose current-use
+eligibility after event 4. B's late result is refused and actual termination
+resolves its pending obligation. C's exact original Attempt completes. This
+is exhaustive only for this bounded operation alphabet and happens-before
+relation; it is not every joint two-Attempt/provider/thread-machine schedule.
+The native path is substantially more than completion intent or a finite model:
+it executes original ASCENT derivation replay, support/policy/journal guards,
+Context version propagation, actual worker observations and final publication.
+
+Three native missing-subscription controls intentionally omit eager enrollment.
+Their cached A/B remain admitted/active after each authority event, demonstrating
+the defect in query-only handling. The independent final guard still denies the
+late result; these controls do not claim successful stale publication. Three
+fault cases reject preflight atomically, then fail delivery after owner publish,
+verify admission is blocked, cancel/reconcile a real worker, drain, and verify
+that the existing terminal and unaffected C survive.
+
+Every native path emits commitments to its authority event, Context reverse
+index, original journal and original ASCENT proof. Owner event histories retain
+old and revised grants/policy snapshots in memory. Logs and path artifacts stay
+outside source control. =run-native-authority.py= checks all Case/harness/final
+markers and failure markers, exact path corpus, negative controls, artifact
+hashes, source hashes and current declared/installed ASCENT and Orgize pins.
+It refuses stale or tampered receipts. Source-owner and older owner-CAS tests
+remain regression lanes in the same process (eight sampled paths each).
+
+* Reproduction and qualification
+
+#+begin_src sh
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-authority-scenarios.py --artifacts /private/tmp/context-authority/sysml
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-authority.py --exhaustive --artifacts /private/tmp/context-authority/native
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-authority.py --order 4,5,7,1,2,3,6 --artifacts /private/tmp/context-authority/replay
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-authority.py --check-receipt /private/tmp/context-authority/native/authority-receipt.json
+#+end_src
+
+Native qualification results are recorded below only after the current source
+cut passes; an interrupted build/test is not a passed receipt. These are
+owner-local in-memory guarantees, not persistent crash recovery, distributed
+CAS, provider revocation, authenticated sources, arbitrary negative-query
+support completeness, task quality or comparative compression benchmarks.
+
+The existing closed propagation receipt retains its legacy field names. For an
+=authority-change= event, =source= is a namespaced authority identity, the
+=cut/program= fields commit to old/new authority snapshots, and =proof-index=
+is the authority event commitment, not a newly computed ASCENT source-proof
+index. =context-index= is the actual native version/consumer dependency index.
+The separately retained original proof and journal commitments identify the
+ASCENT/support evidence; authority loss does not fabricate a source retraction.
+
+The new exhaustive entrypoint has a 2700-second aggregate budget for three
+280-path native corpora, with a 2520-second Case ceiling and real completed-path
+progress. It does not change existing source/owner-CAS budgets or semantic
+assertions. Earlier partial diagnostics, an interrupted 900-second corpus and
+transient dependency-build failures remain unqualified local logs.
+
+Cross-Session edges in this slice are explicit admitted =depend-on!= captures.
+Automatic propagation traverses those captured edges and native original support;
+it does not discover undeclared dependencies in arbitrary natural-language
+memory, and it does not repair a missing admission edge after the fact.
+
+* Qualified local result: 2026-10-25
+
+The current source cut passed =qualified-v3/authority-receipt.json= under
+=/private/tmp/context-authority-20261025/=. ASCENT was declared/installed at
+=1855e89d998930e67705c5a83141142723196242=; Orgize at
+=c8a092899c6eb4cf164d5007e6da48d647fb4031=. The receipt commits to 1,247
+installed ASCENT/Orgize compiler/runtime artifacts as well as maintained source
+inputs and raw native/build/path artifacts. Its current-cut verifier passed.
+
+| Gate | Actual result |
+|------+---------------|
+| Native module/harness/final markers | 53 Cases; MODULE-OK, HARNESS-OK, final OK; no failure markers |
+| Revoke / policy replacement / expiry | 280 legal owner paths EACH, 840 total |
+| A outcome per event kind | 8 historical completed; 136 cancelled; 136 pending |
+| B indirect consumer | 280 real reconciliations per kind; stale result refused |
+| C independent consumer | 280 exact original Attempts complete per kind; still current |
+| Missing eager subscriptions | 3 native retained counterexamples, one per kind |
+| Prepare/delivery failure and cancellation retry | 3 native cases; terminal preserved; duplicate drain idempotent |
+| Existing source regression | 8 source paths plus 6 two-Session result/source orders |
+| Existing owner-CAS regression | 8 sampled native paths |
+| Receipt acceptance controls | 7 malformed evidence/cut/exit/path receipts rejected |
+| SysML run engine | 30 executed; 20 expected unsafe verdicts; no unexpected failure |
+| SysML exact unsafe/safe replay | 2 executed; 1 expected unsafe verdict |
+
+A pending A is an intentionally retained obligation when its captured cleanup
+revision loses to recovery. It is not reported as a completed/cancelled Attempt
+or released resource. The corpus verifies at most one terminal, not eventual
+termination of every possible schedule. A later valid cleanup requires the
+actual current revision and the matching native worker observation.
+
+The old source-only receipts remain historical and do not qualify the new
+runtime or these new dependency pins. Failed/interrupted diagnostics were not
+promoted into this receipt. This is local targeted qualification; no remote CI
+or whole-project/native-package SDK qualification is claimed.
+
+The exact =4,5,7,1,2,3,6= replay also passed all 53 Cases, with one actual
+path for each authority kind (3 total), under =exact-replay/authority-receipt.json=.
+This orders invalidation, cancellation and recovery before the delayed result
+observation/proposal, and preserves the pending stale-cleanup outcome without
+reactivation. Both full and replay receipts passed the current-cut verifier
+after replay. =evidence-index.json= commits to the native receipts/path files,
+seven validator controls and executed SysML summaries. All reside under the
+local artifact directory above; raw logs are not source-controlled.

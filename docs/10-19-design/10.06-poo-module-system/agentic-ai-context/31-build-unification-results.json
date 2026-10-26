@@ -1,0 +1,155 @@
+{
+  "schema": "agentic-ai-lab.context-build-unification.v1",
+  "date": "2026-10-26",
+  "authority": {
+    "production": "agentic-ai-lab.init.exports.std-make-spec",
+    "tests": "agentic-ai-lab.init.exports.tests",
+    "specializedAliasesRemoved": 39,
+    "rustBindingAdded": false
+  },
+  "sources": {
+    "bindings/runtime-c/include/agentic_ai_lab/semantic.h": "f1f768347991f2ee7a5f946421a1440d6c028a46a73d9c1ba4fae44550992d31",
+    "bindings/runtime-c/src/semantic_host.c": "0e805a5a7c168d6123f9d10acf42c1291d3b2c4d167cafd1c14765f3b1c63380",
+    "bindings/runtime-c/tools/build-semantic.py": "a3b4e5f95092ddcc2f83ea267a8587bce61f8d184c28e3f3e0cfe309319b26f0",
+    "build-spec.ss": "045f877cc857a4b2fbd52c2e0182a6cbf0f3afc5dd3b7371aff1051a1dbc23af",
+    "build.ss": "efb3ae32e15afedb757c2004b4e38cf11d16e8f1bc44455e2e3f166c6b283c2c",
+    "dev/build.ss": "87fab0710aa6cff7c90ca1079f7807c73b2edef9c7b3caf3a2781f48eeea4e40",
+    "dev/just/build.just": "be7eb40e71774303097887f833256b3d1ef1a90bdac36eb79de50b2c1344382d",
+    "dev/just/runtime-tests.just": "137a5e80902cc20db22b4291af0956b8fd7b6030c41fbc33efa3e4be26a8315a",
+    "dev/tests.ss": "d2f029b6ce87bf3afa972027ba7d2d2ca537c8e242851b151d373c6bafe15e19",
+    "init.ss": "f829f91dc9397dab67657f831e2a57945c63f5eb7b7a840d7436c921926344f0",
+    "modules/ai-agentic-context/clue-exchange.ss": "2c94b8d32ccf7be63391a0150988ad6747b0d8be1710b67f4482dff08c36052f",
+    "modules/ai-agentic-context/clue-query.ss": "767da61f31209646a22e92b13eea002bd83e54f85f5d9fcbf03580a1d6cdf891",
+    "modules/ai-agentic-context/config.ss": "c4dbfebd7845a7f7d4470bac6a2b130d9ff757b5af9af80765db4824b511c655",
+    "modules/ai-agentic-context/durable-owner.ss": "9a9a04fd233060fe594848ab0398d1167380ac63162b13c2346f5562df506561",
+    "modules/ai-agentic-context/funs-anchors.ss": "7be1f04bf18e0c0c68ff7f9d0105764d17a1cce68746e004ef86208f6d72ec52",
+    "modules/ai-agentic-context/funs-delta.ss": "ee41a49c24bfb1e590fef4a64e2e8b64cdd638b4bdcd6b500a7e85150704c47b",
+    "modules/ai-agentic-context/funs-features.ss": "6612aea2a5abc644a445cf92daed4a5ea541191ff2b90fc5894571fee6e72432",
+    "modules/ai-agentic-context/funs-projection.ss": "51ad97ce4c229353db460a09d1239b96adb164bc96dbd6b74f28eaa696ce2de1",
+    "modules/ai-agentic-context/funs-scope.ss": "a5d9efdc62599264ccae20d3ad07ee7264a0192c01134c9e1be18d8b106cea5b",
+    "modules/ai-agentic-context/funs-session.ss": "2e2b39ee1d641e5063441ec11fa64cb1284d95befb518f370e5b304d27713d83",
+    "modules/ai-agentic-context/funs-temporal.ss": "7e7a36c73e974436b55d6db875a972df04bea798cc42a149802bb63cab19e376",
+    "modules/ai-agentic-context/funs.ss": "d24159723fbec99c2bc968184bc88c8ddd23ead1593dfedd067540067df1c9da",
+    "modules/ai-agentic-context/interface.ss": "868043da57a4b431e86ab65e686b0d968ec80262811d6ae45646ae07a2974689",
+    "modules/ai-agentic-context/objects.ss": "cd11953e63a733702383509eb107a315b390f97afa7aa50a7730de0c7d08fbc9",
+    "modules/ai-agentic-context/query-provider.ss": "c41690d9ce9baf8ebd529f5d6c24d4a4428d238f88e9aa64ed1c080102c4142b",
+    "modules/ai-agentic-context/runtime-service.ss": "4f368d1abc017af50ae802e260fc16961b248f7bb2bc5b9ebd17d45a76e0046d",
+    "modules/ai-agentic-context/selection-adapter.ss": "53ee390ddf81e6e7f7df8eeaca39d5fcd887d7331f7ebde96d72242297d01bfb",
+    "modules/ai-agentic-context/session-host.ss": "d3721af659c9c65b73e0031fac2ee3227a541a69472008e3d30afda848895832",
+    "modules/ai-agentic-context/types.ss": "5228f4512516d76cffebd1b56817e598f90f8564878e02643512cf76a311bb36",
+    "modules/ai-agentic-context/use-host.ss": "806a6d6352296d236a9e3f73c9558cd0ed03ac4709a12909299610cb833ee623",
+    "modules/temporal-causality/runtime/change-feed.ss": "99765ec568b00d45de2834d8d1d6e3390a8ce32ee6152be5428ae28ba3ddc516",
+    "modules/temporal-causality/runtime/durable-journal.ss": "ef991fbf34ed9141606fa0d1fd24e0143c531e5e97fab6ac8b120a252f05acff",
+    "modules/temporal-causality/runtime/monotonic-clock.ss": "43e5924ffd834c338c3c2630be0cd01f6a800ccb52f25ab14844ef155fac84b4",
+    "modules/temporal-causality/runtime/owner-ingress.ss": "bc9506947fa7085712e830398909869196a63cee56d9ada09d3ce8b02bec8886",
+    "modules/temporal-causality/runtime/policy-clock.ss": "cf554fe9fc78b217a1f763a476f00b87ebcc515364b9a11603f26dd82367f91f",
+    "modules/temporal-causality/runtime/private/scheduling-kernel.ss": "33f6cb22f5508d9f6213a360dc36fdeb539e96e242253f824a2d8a668c71339b",
+    "modules/temporal-causality/runtime/scheduling.ss": "be15e176a25e4105e6565fa8cb21766314619bdd9c610df9ae495cc9122f38d7",
+    "modules/workflow/runtime/context-lifecycle.ss": "b0f143cee2ea30f0addc0a3f5797e9b38cc1323611d3b4d15a60b4717568e370",
+    "modules/workflow/runtime/semantic.ss": "0a6c155079799661a80228881ece7b67d03f3976115666dcca9fb8be4efa86d9",
+    "packages/python-runtime/tests/unit/test_semantic_runtime.py": "493d53981cfa0dc322ee9d6ee867c41aca28ab4dbe6504f874d48d8469716634",
+    "t/context-durable-owner.ss": "2a9008f5f020cf1245a7ea2703ea7fd7e8e7a011e85cde86245b9a47b0e3ee59",
+    "t/context-service-test.ss": "195b884813260bc003d012fb92c46e1f1061c2a83718fd9c8e4705b509526cce",
+    "t/harness/context-service-driver.ss": "2481e027993191e18c05f59112a8ca3b0e70a227b2bdc82a1efa43b2f89d6133",
+    "t/production-build-boundary-test.ss": "b7ec8a30de590439ec4d75246adf6d10d51ddc88c00e804ecc6fa85567c447d1",
+    "t/qualification/context-temporal/semantic-c-smoke.c": "8427f534bad5948f5907b8bd84ef23d7dad91e9a4c2f48fec42aea9c8e070129",
+    "t/temporal-evaluator-test.ss": "ea57da59f05d5d2d860156e4884ca2acb248165ac4df712088008193b7591e0c"
+  },
+  "artifact": {
+    "path": "/private/tmp/context-unified-cabi/libagentic_ai_lab_semantic.dylib",
+    "sha256": "88f1ce0c067c819a1417a76b9c8253fb5322092bae60d66ccfcb51cd704a7cb0",
+    "manifestPath": "/private/tmp/context-unified-cabi/libagentic_ai_lab_semantic.dylib.ss",
+    "manifestSha256": "c27e2af2291343b8f9bc148999c96e385a0614deef832c7e7ad402814635178a",
+    "sdkClosureEntries": 461,
+    "materializedUserUnits": 328
+  },
+  "checks": {
+    "packageBuild": {
+      "status": "pass",
+      "log": "/private/tmp/context-unified-cabi-build-3.log",
+      "logSha256": "4ba24376266097814190360fb6dde0362f8ccb2e3c15e9ddce88622eee938347"
+    },
+    "actualCAbi": {
+      "status": "pass",
+      "log": "/private/tmp/context-unified-cabi-smoke.log",
+      "logSha256": "a90d45c76c1d3e6b9035e67b4fa733714ec99a59ee8c592a3a6c52601c557b23"
+    },
+    "testCompilation": {
+      "status": "pass",
+      "log": "/private/tmp/context-unified-build-test.log",
+      "logSha256": "b8434734cd8ce08d75bcfbb2b076c6be39cb4c9321a85e5da75acf00ff1454c9"
+    },
+    "nativeService": {
+      "status": "pass",
+      "log": "/private/tmp/context-unified-service.log",
+      "logSha256": "ea348f6163a8ea5cd00757409144a9dbdf826bc93cde9f883e1575fbdfa1ddf2"
+    },
+    "buildBoundary": {
+      "status": "pass",
+      "log": "/private/tmp/context-unified-boundary.log",
+      "logSha256": "50ec41be8e7a922c0197ca79482eb99a1df8ead6f5162ec3406769db3e035dc5"
+    },
+    "pythonDescriptor": {
+      "status": "pass",
+      "log": "/private/tmp/context-unified-python-descriptor-final.log",
+      "logSha256": "9f83937f1b687f77a1ae40d1c662501f6f47344f5d445fa3693511bfbddaae39",
+      "scope": "One descriptor regression plus the project harness check; two pytest passes."
+    }
+  },
+  "nativeService": {
+    "heap": "2G",
+    "watchdogSeconds": 150,
+    "terminalCount": 1,
+    "historicalRetry": true,
+    "substitutionRefused": true,
+    "revocationPropagated": true,
+    "unaffectedConsumerRetained": true,
+    "recoveryNoRevival": true,
+    "ownerJoined": true,
+    "evidence": {
+      "journal": "sha256:8dc4f698b52ea8f0aba32b9d6b168fbfcfc449b571b698eb2f9bdab5cceb6a27",
+      "proof": "sha256:4e35c0f59fe1973642e4dd2faa0d8a58073886e9fb78a2655e3a6c29a983ab24",
+      "event": "sha256:2c41d3e2b358f52cc058cc6eedfd8fd3f7d06e3075317caeff5c1ab02890836d",
+      "context-index": "sha256:807496b8c8d2d06bc9cdd4ed8f52435ac669b16442443f4fc9310b3bc224b241"
+    },
+    "journalPath": "/private/tmp/context-unified-service.sqlite"
+  },
+  "standaloneC": {
+    "actualSdkSetupAndCleanup": true,
+    "heapGiB": 2,
+    "watchdogSeconds": 150,
+    "foreignThreadRefused": true,
+    "controlLaneRefused": true,
+    "trailingDatumRefused": true,
+    "resultReleased": true,
+    "reopenRefused": true,
+    "activeContextInstalled": false
+  },
+  "priorFailedAttempts": [
+    {
+      "status": "failed",
+      "reason": "direct-script-missing-package-environment",
+      "log": "/private/tmp/context-unified-cabi-build.log",
+      "logSha256": "900cb3a9b2fdfbf023041149a97d0aca5c3f53134c67716602e389acb13af167"
+    },
+    {
+      "status": "failed",
+      "reason": "static-query-missing-package-environment",
+      "log": "/private/tmp/context-unified-cabi-build-2.log",
+      "logSha256": "5019c0e9ba1df0aff8e10049bdf7fffc8c0f0b8dd134869b0bf5a1855e8784b7"
+    },
+    {
+      "status": "failed",
+      "reason": "python-missing-cffi-shim",
+      "log": "/private/tmp/context-unified-python-descriptor-raw.log",
+      "logSha256": "8c1488462c0fa26a596b05e498f3080e9ff90d3b79c4c7874eb3849f40420989"
+    }
+  ],
+  "notQualified": [
+    "complete-60-case-replay",
+    "runtime-performance",
+    "distributed-runtime",
+    "exact-head-ci"
+  ],
+  "sourceCoverage": "Selected authored inputs; the artifact manifest retains the complete SDK static closure."
+}

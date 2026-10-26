@@ -1,0 +1,38 @@
+#+title: Context Org Contract Templates
+:PROPERTIES:
+:ID: context-org-contract-template-catalog
+:END:
+
+* Evidence source profile
+
+[[file:evidence-source.org][evidence-source.org]] is the executable source fixture and starter template.
+[[file:consumer-context.org][consumer-context.org]] represents a Context consumer document. Its ID is a content anchor; SESSION_ID
+is a reference to the independent Session owner. They have different roles.
+Keep a document-local ID drawer and nonempty CONTRACT_ID / CONTRACT_REVISION
+properties on the OrgFile. Selected content uses explicit local Property IDs.
+The Provider qualifies each ID by its registered source identity. Different
+sources may use the same local ID; duplicate local IDs in one source are refused.
+
+Register original UTF-8 Org bytes at a monotonically increasing source version.
+Changing content while preserving an ID requires a new admitted source version.
+Retraction appends evidence; it never deletes the original bytes or proof.
+Never put credentials in a template or treat a source block as executable code.
+
+* Consumer boundary
+
+The catalog's :ID: is an Org document anchor, not a runtime Session identity.
+Session owners derive SESSION_ID with =agentic-ai-lab-session-identity= from
+their persisted namespace/creation key. Context does not regenerate that ID
+when source bytes change. A binding digest separately includes Session scope,
+Query result and source/Contract versions. Runtime consumer documents may use
+=SESSION_ID= and the existing detached =receipt-ref= / digest for binding
+evidence. No second Session identity or Session-binding registry is introduced. Do not embed a binding's own hash in the source bytes being hashed.
+Template placeholders do not constitute an admitted runtime binding.
+
+Author ordinary Query values with AgenticAILabQuery and the existing GQL POO AST.
+The initial Provider supports the existing bounded single-node GQL Scheme
+slice over property-bearing Org Elements. Context Session tasks additionally
+require document roots or open headline anchors accepted by the existing native
+Context profile. Unsupported paths, incomplete results and unbound source cuts
+are refused. GQL, Org Contract, ASCENT proof, authority and Session are distinct
+contracts; none is a substitute for the others.

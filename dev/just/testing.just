@@ -13,7 +13,7 @@ test-standards-resolution-performance:
 test-sources-lock-performance:
     GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=3s 90s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/performance/sources-lock-performance-test.ss
 
-# Run the package's single native Scheme test entrypoint.
+# Run Core and product tests through their init-owned publications.
 [group('test')]
 test:
     #!/usr/bin/env bash
@@ -28,16 +28,34 @@ test:
 
 # Keep the root package's native entry independently callable during repairs.
 [group('test')]
-test-root: build-testing build-native-test-tool build-test-workers prepare-test-inputs build-library
-    mkdir -p "{{ justfile_directory() }}/.gerbil/test-results"
-    @echo "[agentic-ai-lab-test-runtime] maxHeap={{ gerbil_test_max_heap }} debug={{ gerbil_test_debug }} scope=worker-process"
-    GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss package "{{ gerbil_test_runtime_options }}"
+test-root: build-testing build-test-workers prepare-test-inputs build-library
+    #!/usr/bin/env bash
+    set -euo pipefail
+    manifest=$(mktemp)
+    trap 'rm -f "$manifest"' EXIT
+    just test-files > "$manifest"
+    # Preparation above is shared, not repeated by every file. The external
+    # loop owns isolation; each native Harness retains its own heap and budget.
+    python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- timeout --signal=TERM --kill-after=5s 1200s bash -euo pipefail -c '
+      failed=0
+      while IFS= read -r file; do
+        [[ -n "$file" ]] || continue
+        [[ -f "$file" && "$file" == *-test.ss ]] || { echo "invalid test input: $file" >&2; exit 64; }
+        if ! just _test-file "$file"; then failed=1; fi
+      done < "$1"
+      exit "$failed"
+    ' -- "$manifest"
+
+# Keep the existing declarative inclusion policy, not a second file scanner.
+[private]
+test-files:
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 60s gxi {{ gerbil_test_runtime_options }} dev/tests.ss list
 
 # Diagnose a long native file with the full package's unchanged process budget.
 [group('test')]
 test-package-file path: build-test-workers prepare-test-inputs
     mkdir -p "{{ justfile_directory() }}/.gerbil/test-results"
-    GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss package-file "{{ gerbil_test_runtime_options }}" "{{ path }}"
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} dev/tests.ss run "{{ path }}" "{{ gerbil_test_runtime_options }}" 1200 false
 
 # Keep ASP's per-phase test receipts and add process wall/user/system timing.
 [group('test')]
@@ -56,8 +74,11 @@ test-core-file path:
 
 # Run one root-owned Scheme test with the same pre-import heap fence.
 [group('test')]
-test-file path observe="false": build-test-workers prepare-test-inputs
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} "{{ justfile_directory() }}/core/t/qualification/testing/run.ss" "{{ path }}" "{{ gerbil_test_runtime_options }}" 120 "{{ observe }}"
+test-file path observe="false": (_test-file path observe)
+
+[private]
+_test-file path observe="false":
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/tests.ss run "{{ path }}" "{{ gerbil_test_runtime_options }}" 120 "{{ observe }}"
 
 # Use the maintained Nix integration gate and its existing pre-import fences.
 [group('test')]
@@ -120,18 +141,3 @@ test-query-orgize-source:
 # Source-level ownership controls; heap fence applies before any imports.
 test-module-ownership:
     timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss module-ownership "{{ gerbil_test_runtime_options }}"
-
-# Native SDK gxtest with the common POO/Core modules linked into one image.
-[group('build')]
-build-native-test-tool:
-    just build-gerbil-test-tool "{{ agentic_ai_lab_gerbil_path }}/tools/project-test" dev/testing-preload.ss
-
-# Same fresh process, heap fence and per-file wall budget as test-file.
-[group('test')]
-test-native-file path:
-    GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil env "{{ agentic_ai_lab_gerbil_path }}/tools/project-test/gxtest" {{ gerbil_test_runtime_options }} "{{ path }}"
-
-# Interpreter control for the same native SDK executor and source inputs.
-[group('test')]
-test-sdk-file path:
-    GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil env gxi {{ gerbil_test_runtime_options }} -e '(import :gerbil/tools/gxtest) (exit (apply main (cdddr (command-line))))' "{{ path }}"

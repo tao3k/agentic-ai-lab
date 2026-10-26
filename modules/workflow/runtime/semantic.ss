@@ -4,6 +4,8 @@
 
 ;;; AOT semantic projection: inert Scheme data enters existing Scheme owners.
 (import (only-in :agentic-ai-lab/modules/workflow/runtime/context-use context-use-refresh context-use-observe)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/context-lifecycle
+                 context-lifecycle-command context-lifecycle-inspect context-lifecycle-shutdown)
         (only-in :agentic-ai-lab/modules/workflow/runtime/context-restriction context-restriction-compose-call context-flow-evaluate-call)
         (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-proof-host temporal-proof-state-refresh temporal-proof-register temporal-proof-current)
         (only-in :agentic-ai-lab/modules/temporal-causality/evaluator/fact agentic-ai-lab-temporal-mrr-fact-content)
@@ -139,6 +141,12 @@
                (proofAdmitted #f) (bindingVerified #f) (sourceAuthenticated #f)
                (actionAuthorized #f) (durable #f)))))
           ((string=? operation "$host.context.use.refresh") (scheme-wire-write (context-use-refresh object)))
+          ((string=? operation "$host.context.lifecycle.command")
+           (scheme-wire-write (context-lifecycle-command object)))
+          ((string=? operation "$host.context.lifecycle.shutdown")
+           (scheme-wire-write (context-lifecycle-shutdown object)))
+          ((string=? operation "context.lifecycle.inspect")
+           (scheme-wire-write (context-lifecycle-inspect object)))
           ((string=? operation "context.use.observe") (scheme-wire-write (context-use-observe object)))
           ((string=? operation "context.restriction.compose")
            (scheme-wire-write (context-restriction-compose-call object)))
@@ -199,7 +207,7 @@
           ((string=? operation "descriptor")
            (scheme-wire-write
             (hash (schema "agentic-ai-lab.semantic-descriptor") (abiVersion 1) (wireFormat "scheme-datum-v1")
-                  (operations ["context.use.observe" "temporal.solve" "graph.admit" "temporal.verify" "graph.targets" "temporal.observe" "temporal.family.classify" "temporal.family.observe" "temporal.family.admit" "temporal.family.current" "temporal.family.revision.root" "temporal.family.revision.change" "temporal.family.journal" "temporal.family.archive.export" "temporal.family.archive.replay" "temporal.support.evaluate" "temporal.support.revise" "temporal.support.claim" "context.restriction.compose" "context.flow.evaluate" "temporal.fact.content" "temporal.support.guard" "temporal.proof.current"]) (maximumInputBytes 1048576)
+                  (operations ["context.lifecycle.inspect" "context.use.observe" "temporal.solve" "graph.admit" "temporal.verify" "graph.targets" "temporal.observe" "temporal.family.classify" "temporal.family.observe" "temporal.family.admit" "temporal.family.current" "temporal.family.revision.root" "temporal.family.revision.change" "temporal.family.journal" "temporal.family.archive.export" "temporal.family.archive.replay" "temporal.support.evaluate" "temporal.support.revise" "temporal.support.claim" "context.restriction.compose" "context.flow.evaluate" "temporal.fact.content" "temporal.support.guard" "temporal.proof.current"]) (maximumInputBytes 1048576)
                   (maximumTemporalEvents 128) (maximumTemporalParents 256)
                   (maximumTemporalHorizon 1024)
                   (temporalProfiles ["ascent-finite-lens" "finite-hypothesis-family"])

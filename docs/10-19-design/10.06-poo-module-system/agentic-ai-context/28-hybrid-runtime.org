@@ -1,0 +1,370 @@
+#+title: Scheme Context Authority with gerbil-scheme-rust Runtime Adapters
+#+language: en
+:PROPERTIES:
+:ID: context-hybrid-runtime
+:STATUS: bounded-native-owner-integrated-rust-boundary-qualified-context-aot-export-open
+:END:
+
+[[file:28-hybrid-allocation.sysml][The SysML allocation]] separates Tokio, bounded host input, fixed VM owners,
+Scheme Context authorities, journal, evidence and independent Session endpoints.
+Its unimplemented Context export, pre-setup heap policy and end-to-end host
+control reserve are explicitly marked false. This structural allocation is
+separate from the executable handoff model and native measurements below.
+
+* Architectural ownership
+
+This implements the local owner cutover from [[file:27-bounded-scheduling.org][27]], composing it with
+[[file:26-distributed-runtime.org][26's authority, support propagation and independent Session terminal]].
+The Scheme POO contract is the semantic owner. ASCENT proof admission,
+temporal-causality, source/policy versions, support edges, Context views and
+Session's actual terminal CAS remain native Scheme operations. Original Org,
+facts, rules and proof inputs remain retained evidence.
+
+Rust is a downstream runtime adapter, reusing =gerbil-scheme-rust= rather than
+reimplementing Context rules. The existing C/AOT boundary remains the portable
+runtime interface; a Rust adapter consumes versioned owned inputs and outputs.
+Neither a Rust enum, async completion, routing handle nor Tokio cancellation
+becomes evidence authority or an Attempt terminal.
+
+| Layer | Owns | Must not own |
+|-------+------+--------------|
+| Scheme POO / ASCENT | Admission, support graph, policy/owner CAS, replay decisions | Tokio scheduling or remote storage availability |
+| Gambit VM / Gerbil Actor | VM-local heap, continuations, green-thread scheduling, short Context owner transitions | A global lock across independent Context domains |
+| gerbil-scheme-rust fixed owner | Foreign entry, strong-root lifetime, copied result, native cleanup and owner join | Moving a Scheme root to another native thread/VM |
+| Tokio | IO readiness, bounded host admission, asynchronous result observation, arrival/deadline delivery | Entering a VM from arbitrary executor workers |
+| Rust compute adapter | Optional bounded CPU work over owned immutable inputs | Authenticating its own result or mutating Session state |
+| C/AOT interface | Versioned envelope, explicit ownership and error/release boundary | A second Context semantic model |
+
+Independent Context domains can be pinned to different fixed VM owners. A
+stateful domain must not use round-robin submission on each call. Tokio worker
+count does not resize a Gambit VM, prove multi-core Scheme execution or make
+roots =Send=. CPU-heavy host work needs an explicitly bounded compute pool;
+this change does not add or benchmark Rayon. Across nodes, the same envelope
+must include Context identity, owner epoch, Attempt revision, source/grant/
+policy cut and replay identity. Transport routing does not replace them.
+
+* Production local owner ingress
+
+=modules/temporal-causality/runtime/owner-ingress.ss= projects 27's pure
+scheduling contract behind an explicit local runtime boundary. A producer
+reserves a credit while retaining its payload in an amortized FIFO. Separate
+data and control queues preserve reserved capacity. One capacity-one wake
+channel coalesces notifications. Payloads no longer enter the production
+owner's unbounded mailbox. The selected handler retains its credit until its
+completion, including exception unwinding.
+
+The existing =policy-clock-owner= entrypoint preserves its compiled eight-
+argument ABI and defaults to 64 data / 16 control / burst 2. The named
+=policy-clock-owner/scheduled= entrypoint accepts a POO scheduling contract.
+Result commands and ordinary calls use data credits. Policy/source/grant,
+cancel/recover and clock controls use control credits. Trusted raw call hooks
+remain the old explicit internal capability; they are not a new public DSL.
+
+Overflow refuses before enqueue and is not a durable ACK. Callers retain their
+original command identity and bytes for retry. Generic external producers do
+not gain a durable outbox merely by calling this API. The real timer retains
+its already journaled ticket during control backpressure, checks stop while
+retrying, and never waits while holding the client mutex. Recovery admits a
+pending journal delivery at most once per owner turn instead of refilling an
+unbounded mailbox. The existing calendar remains bounded to 256 registrations;
+paused deliveries remain a separately bounded-by-calendar concern, not a
+claim of whole-process constant memory.
+
+Stop first closes producer admission, then drains accepted handlers before
+retiring the timer, clock, subscriptions, Context and journal, and joining the
+owner. A separate one-shot lifecycle handoff cannot be excluded by full work
+credits. Pending durable recovery inputs remain journal obligations when not
+admitted; disposal never invents their Session terminals. This does not make
+all handlers short: existing trusted callbacks and native proof work can still
+block an owner. Service-time measurement and off-owner compute decomposition
+remain performance obligations.
+
+* Capacity and locality across the two execution layers
+
+Use a small long-lived pool of fixed VMs, with multiple Context domains/Actors
+inside each as appropriate. Do not allocate one VM or OS thread per Session.
+A node-level budget must admit the sum of configured VM heaps plus native IO,
+journal/cache and retained-result memory before opening another owner. A
+per-VM cap is not an aggregate process cap. The Rust fixture's missing
+pre-setup heap policy is therefore a deployment admission gap, not merely an
+optional tuning knob.
+
+Native-call capacity and accepted Context-work capacity have different
+lifetimes. A short service submit can return its foreign-entry slot while the
+Scheme service still retains the accepted task; that task keeps its separate
+work/result credit until collection or an explicit close/cancel protocol.
+An outer observation timeout releases neither executing native credit nor
+accepted semantic work. The service bridge must expose these two receipts
+rather than treat FFI return as Context completion.
+
+Count credits alone do not bound bytes. A production byte boundary must check
+request/reply sizes before copying and bound retained-result bytes. Large
+original Org/proof/evidence blobs belong in the immutable Evidence Provider,
+referenced by admitted identity/version/hash, rather than copied into every
+consumer queue. Provider storage/retention quota and per-node memory admission
+remain distinct from the current local count-only ingress contract. References
+never replace original evidence with lossy compression or turn an unverified
+hash into source authority.
+
+Pin Context domains for owner/root locality and, where valid, immutable
+prompt-prefix reuse. Rebalancing creates a new owner epoch and re-admits the
+journal/evidence cut; it cannot migrate live roots or continuations. Independent
+Sessions retain their own identities and endpoint lifecycle across that move.
+Actual KV reuse still requires the exact model/tokenizer/runtime and token
+prefix plus appropriate tenant/authority isolation from 26.
+
+* Compute versus proof authority
+
+Off-owner work may propose retrievals, plans and model results over owned
+immutable inputs. It cannot transfer an owner-local ASCENT seal or cached
+current-authority verdict between VMs. Native proof capabilities still obey
+the existing foreign-owner refusal. A copied digest is evidence identity, not
+a portable grant to publish. This change neither invents such a grant nor
+moves heavy native proof evaluation to an unverified Rust worker.
+
+Long-lived Contexts can retain the already admitted original proof and its
+native owner credential while support/source/policy guards maintain current
+validity. New evidence or a changed proof still needs the admitted verifier
+path. Splitting that work into cooperative turns, or introducing a separately
+admitted portable-certificate verifier, requires its own contract and native
+qualification. Until then, existing expensive trusted callbacks remain a
+service-time limit even though queue admission itself is now constant work.
+
+* Production service-cycle allocation
+
+The production Rust adapter should use the existing Scheme service ABI
+=open / submit / take / ready / wait / prepare-close / drain / close=. A
+submit call admits an inert envelope and returns promptly; the native service
+retains its Actor task and roots until collection or close. It must not turn
+a long-running Context operation into one blocking foreign frame that prevents
+its VM owner from delivering control input.
+
+The inspected upstream =SchemeServiceRequest= separates owner-local
+construction/entry from owned result projection. =SchemeServiceCyclePolicy=
+and =SchemeWorkExecutionPolicy= already describe native Actor/service turns
+and cooperative work spans. The adapter should compose those existing controls
+with Context admission, rather than start another Scheme scheduler or infer
+work charges from wall time. A cooperative quantum is not arbitrary-code
+preemption; a long uninterrupted native span still delays control handling.
+
+Reserved control capacity must hold across BOTH the host service feed and the
+Scheme ingress. Using ordinary =submit_native_async_on= for every production
+message would leave controls behind the same saturated Rust capacity fence;
+Scheme's reserved queue cannot repair an event that never reaches it. The
+current Rust probe deliberately verifies the data-call boundary only. A
+production export must bind bounded host control admission to the existing
+service wake/source protocol, retain refused durable inputs upstream and check
+control latency under a saturated data feed. This end-to-end control reserve
+is still an implementation/qualification obligation. Neither the short/bulk
+routing class nor a Tokio task priority is an authorization classification.
+
+* Foreign-call, timeout and shutdown contract
+
+The inspected local =gerbil-scheme-rust= revision is
+=f2c8ccfaaaa88eededad2dfef45eac1760fb4408=. Its existing =InstancePool=,
+=InstanceDispatcher=, =submit_native_async_on=, =configure_owner_capacity=,
+=NativeSession=, =AsyncInstanceTicket= and shutdown receipts own the adapter
+boundary. =tokio-dispatch= is an explicit feature over =isolated-instances=;
+the inspected isolated image implementation is Darwin-specific. This is not
+a claim that the same image backend works on Linux.
+
+An accepted call retains native credit until it actually returns. A host wait
+timeout only ends observation; it does not cancel Scheme execution, reclaim
+credit, dispose a root, terminate an Actor or publish a Session terminal.
+The Rust probe retains a pinned observation future across the outer timeout,
+then observes its actual completion. Actual cancellation must be a versioned
+Context/Session command. Dropped receiver behavior and result retention differ
+between upstream APIs and must not be conflated with this retained-future test.
+
+Only owned byte/string projections leave =NativeSession=. A compile-fail
+control attempts to return =NativeRoot= and must fail its =Send + 'static=
+bound. A native return produces candidate data, not an authority receipt.
+Scheme's current owner/source/policy/Attempt checks still precede publication.
+Shutdown must drain/quiesce native calls, retire roots and join owners before
+image retirement. Image unloading needs the upstream code-lease and callback
+quiescence contract; this probe does not opt into unload-after-join.
+
+* SysML / QNT / Scheme / Rust evidence
+
+[[file:28-hybrid-runtime.qnt][The QNT composition]] imports the existing authority and bounded scheduler
+models. It adds a fixed-owner foreign call, observation timeout, copied result,
+queued result, drain and join. The authoritative withdrawal may race a result
+already dispatched. Delivery can be refused/retried while its pending edge is
+retained. The existing source, cancel/recover, owner takeover and old policy
+ticket transitions remain available. The full finite instance is not two
+selected schedules. Broken =receipt=, =credit=, =join= and =terminal= variants
+retain actual model-checker counterexamples.
+
+The first product exploration hit the unchanged 45-second/5-second real-output
+fence. That failure remains in the artifacts. Replay-only operation labels
+were then made explicitly optional in 27: they never affect semantic decisions.
+Exhaustive hybrid checking disables this diagnostic state; ITF replay enables
+labels. No authority/queue transition, invariant or verifier limit was removed.
+This avoids multiplying semantic states by unused diagnostic labels. The
+standalone 27 runner keeps them enabled and is requalified separately.
+
+A final same-source rerun also exposed TLC's default 60-second progress-report
+interval conflicting with the existing five-second real-output fence on a
+larger product. The runner now selects the installed TLC engine's
+=tlc2.TLC.progressInterval=1= option. Its real reports contain generated/distinct
+state counts and remaining queue size, not a synthetic heartbeat. The 45-second
+case, five-second silence, one worker and 1 GiB verifier heap remain unchanged.
+Both the diagnostic-label reduction and real-progress configuration are
+recorded in source; failed runs remain separate evidence.
+
+[[file:28-hybrid-runtime.sysml][SysML]] executes the actual event-labelled Quint replay paths and corrected
+counterparts, checking lifecycle, credit, queue and authority scalars. Its
+16-step replay bound is not an exhaustive concurrency proof. QNT owns the
+finite exhaustive product; native correspondence and real effects remain
+separate obligations. These JSON receipts do not claim the Core-wide formal
+closure/Lean refinement protocol is complete.
+
+=t/context-hybrid-owner-test.ss= exercises the production owner with actual
+ASCENT inputs, cross-Session support state, SQLite journal and real host clock:
+
+- an executing data handler plus a queued result fills data credits;
+- overflow is refused, while reserved control admission remains available;
+- journaled grant revocation precedes the queued result;
+- actual background expiry produces the same automatic invalidation without
+  a consumer query causing catch-up;
+- A/B become invalidated, independent C still publishes, and cancel/recover
+  cannot revive the obsolete result;
+- stop while duplicate timer delivery is backpressured joins both timer/owner.
+
+These directed native paths supplement the exhaustive finite product; they do
+not prove every native execution refines it. Existing complete 60-path queues,
+negative cleanup controls, actual crash recovery and steady workloads regress
+the integration separately under their unchanged 2 GiB/150-second native fence.
+
+=t/qualification/context-hybrid-rust= is a downstream Rust consumer, not a
+second runtime implementation. Its reproducible runner takes explicit upstream
+source and image paths, records exact hashes, compiles through the upstream
+native build gates, runs/replays two fixed VM owners and checks the deliberate
+root-escape compiler refusal. The admitted upstream image is a native
+qualification fixture; its old image provenance is not asserted to match the
+current source and it contains no production Context AOT export.
+
+A fresh downstream dependency build hit its separate 180-second build deadline;
+that failure is retained. The reproducible runner accepts an explicit Cargo
+artifact cache, with normal source-based Cargo rebuilding. Runtime tests still
+start fresh processes and are never replaced by build-cache timing. Build
+failure cleanup is scoped to the owned process group and cannot count as a
+successful native exit.
+
+The upstream =InstanceConfig= does not expose a pre-setup Scheme heap cap.
+Therefore the Rust boundary test has a 150-second watchdog but is not admitted
+as the 2 GiB Context capacity gate. That gate is the separate heap-fenced native
+Scheme run. A production Context AOT image must expose/admit the same heap
+policy before its runtime setup; this is an explicit remaining integration
+requirement, not silently widened capacity.
+
+* Reproduction and next integration boundary
+
+Run the maintained local owner gates through Just:
+
+#+begin_src sh
+GERBIL_PATH="$PWD/.gerbil" GERBIL_LOADPATH="$PWD/.gerbil/lib:$PWD:$PWD/dev/.gerbil/lib" just build-library build-test t/context-hybrid-owner-test.ss
+GERBIL_TEST_MAX_HEAP=2G just test-context-hybrid-owner /private/tmp/context-hybrid-NEW/journal
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-hybrid-runtime-quint.py --artifacts /private/tmp/context-hybrid-quint-NEW
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-hybrid-runtime-sysml.py --quint /private/tmp/context-hybrid-quint-NEW --artifacts /private/tmp/context-hybrid-sysml-NEW
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-context-rust-boundary.py --source /explicit/gerbil-scheme-rust --image /explicit/owner_instance.dylib --artifacts /private/tmp/context-hybrid-rust-NEW
+#+end_src
+
+Next, build/admit the real Context AOT service export through the existing
+Gerbil compiler-owned program manifest and upstream native-image builder;
+connect its service submit/take/drain protocol to this bounded ingress. The
+export must provide pre-setup heap policy, exact source/image provenance and
+return actual Context/Session decision receipts rather than the echo fixture.
+Then qualify sustained open-loop event arrival, p95/p99, queue depth, support
+fanout and multi-owner scaling. Distributed consensus-backed authority, remote
+transport, cross-node clock re-admission and production end-to-end liveness
+remain open. Cold reconstruction is regression evidence, not their performance
+acceptance metric.
+
+Structured receipts and original failures are linked in
+[[file:28-hybrid-results.json][28-hybrid-results.json]]. Raw logs/images remain local artifacts.
+
+* Preserved whole-queue watchdog failure
+
+The first full integration qualification passed the legacy-cut and canonical
+60-world processes (84.778 and 132.940 seconds). The legacy-missing process
+reached 44 reported paths and 43 actual closes before the 155-second supervisor
+escalation, with its original 150-second Just watchdog unchanged. It is a failed
+qualification, not an admitted partial queue. Its last resource samples retain
+roughly 1.2 GiB RSS, 6--8 descriptors and about 30 seconds of child CPU; those
+observations do not identify the missing wall time or establish a heap fault.
+No cause is inferred solely from host load. The failed source cut, journal,
+resource samples and logs remain in the local =qualified/= artifact root.
+A fresh same-source full-queue retry is recorded separately; it cannot erase
+this failure, substitute a warm run, partition the workload or widen limits.
+
+* Message hot-path correction
+
+The first bounded production adapter passed its directed correctness checks but
+made 20,000 owner RPCs cost 7.014 seconds / 3.826 CPU seconds, allocating
+28,177,157,544 cumulative bytes. This is retained as a rejected hot-path cost,
+not hidden behind cold reconstruction or an unrelated Actor echo benchmark.
+Every scheduling event/decision and intermediate state rebuilt public POO
+objects, which is unnecessary runtime projection work.
+
+The selected design has one private pure transition kernel in
+=modules/temporal-causality/runtime/private/scheduling-kernel.ss=. The public
+POO facade projects ordinary state/contract fields into that kernel and returns
+ordinary POO decisions. The production adapter consumes the same algorithm's
+compact private frame and native multiple values. It does not allocate a
+public event/decision per enqueue, dispatch, completion or idle wake. No
+semantic branch, authority check, proof replay or journal commit is removed.
+Public refinements are read before projection; no cached private frame can
+silently ignore an overridden POO field.
+
+The first corrected diagnostic run reduces the same 20,000 owner RPCs to
+0.114 seconds / 0.051 CPU seconds and 683,957,952 cumulative allocated bytes.
+These are per-phase totals, not peak live memory and not cluster throughput.
+The original source/objects are sealed under the pre-optimization custody
+manifest. Final source-bound qualification/replay and steady measurements are
+reported separately in the structured results, with all original failures.
+
+* Final selected-cut qualification
+
+The final shared-kernel source/object cut completes three unsplit 60-world
+processes and repeats all three entire queues: 360 native paths, with 60 actual
+owner closes per process. Native pre-import limits remain min-heap 1 GiB,
+max-heap 2 GiB and a 150-second watchdog. Lifecycle, stale-writer fencing,
+production saturation/real expiry, cleanup negative controls and a separately
+matched-budget SIGKILL recovery/replay control pass. Earlier deadline and
+orchestration failures remain linked and are not reclassified as passes.
+
+At that same cut, 20,000 owner RPCs take 0.221 seconds / 0.065 CPU seconds and
+allocate 657,552,704 cumulative bytes, versus the preserved 7.014 seconds /
+3.826 CPU seconds and 28,177,157,544 bytes before the shared kernel. The
+allocation reduction is about 97.7 percent for this RPC microbenchmark.
+A diagnostic run's 0.114 seconds is retained separately and does not replace
+the final source-bound measurement.
+
+Sixty complete current-proof Context uses take 0.807 seconds in memory and
+1.888 seconds with journal; eight local Actors complete 480 uses in 6.599
+seconds and all eight close. Those phases are not evidence of overall
+throughput improvement; proof, source and durable work remain separate costs.
+No sustained-arrival latency, multi-core scaling or cluster capacity gate has
+been passed by this change.
+
+The final QNT composition exhausts 73,268 distinct states (688,641 generated,
+empty queue), retains four broken-contract families and 30 labelled ITF paths.
+SysML executes 54 corresponding positive/negative handoffs and repeats them,
+with four expected unsafe paths and zero unexpected outcomes per run. The
+standalone scheduler retains its separate finite QNT, SysML and native
+traversal/replay qualification. A structural allocation check is not counted
+as behavioral execution.
+
+The Rust boundary fixture's two fresh native processes pass, both fixed owners
+join with zero outstanding roots, and the root-escape compiler control fails
+for the expected Send/lifetime boundary. Its receipt and copied test image are
+preserved independently from the native Context's 2 GiB capacity gate.
+
+See [[file:28-hybrid-results.json][the structured evidence index]] for original/corrected measurements,
+process and audit receipts, positive/negative replay references and source /
+native-object custody. Raw artifacts remain under
+=/private/tmp/context-hybrid-optimized-20261026/= and the separately linked
+=/private/tmp/context-hybrid-20261026/= originals. No raw logs/images are added
+to source control. Production Context AOT export, pre-setup/aggregate memory
+admission, host control-feed reservation and multi-node deployment remain open.

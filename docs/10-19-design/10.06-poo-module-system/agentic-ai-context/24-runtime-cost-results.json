@@ -1,0 +1,166 @@
+{
+  "schema": "context.runtime.cost-results.v1",
+  "capacity_status": "qualified-with-exact-whole-queue-replay",
+  "actor_throughput_status": "further-investigation-requested",
+  "runtime_backend": "gambit-thread-mailbox-actor",
+  "heap": "2G",
+  "minimum_heap": "1G",
+  "native_watchdog_seconds": 150,
+  "whole_native_paths": 360,
+  "no_chunking": true,
+  "no_forced_gc": true,
+  "runs": [
+    {
+      "label": "primary",
+      "receipt": {
+        "path": "/private/tmp/context-runtime-reserved-qualified-20261026/owner-receipt.json",
+        "sha256": "3f3fcf5c5999954f403fae655d0ba7efce5bb7ab1a10ea886b0a9dc08122f4d7"
+      },
+      "audit": {
+        "path": "/private/tmp/context-runtime-reserved-qualified-audit-20261026.json",
+        "sha256": "676078ef62726495b4bf009c14f99937a818ba1f5a8a87ed7bbdb3614213723c"
+      },
+      "processes": [
+        {
+          "profile": "legacy-cut",
+          "native_pid": "65182",
+          "paths": 60,
+          "elapsed_seconds": 52.256006916984916,
+          "closed_owners": 60
+        },
+        {
+          "profile": "canonical",
+          "native_pid": "66219",
+          "paths": 60,
+          "elapsed_seconds": 50.562083416007226,
+          "closed_owners": 60
+        },
+        {
+          "profile": "legacy-missing",
+          "native_pid": "67126",
+          "paths": 60,
+          "elapsed_seconds": 52.580172749992926,
+          "closed_owners": 60
+        }
+      ]
+    },
+    {
+      "label": "replay",
+      "receipt": {
+        "path": "/private/tmp/context-runtime-reserved-replay-20261026/owner-receipt.json",
+        "sha256": "f8f027c6d63378062d667850ca9078060b29d49fdf568d2008ab985fff16c3c5"
+      },
+      "audit": {
+        "path": "/private/tmp/context-runtime-reserved-replay-audit-20261026.json",
+        "sha256": "aba4e613926d2f9df74664ceb5716f488d1817bf7e5677b26f20cf5d16c8e942"
+      },
+      "processes": [
+        {
+          "profile": "legacy-cut",
+          "native_pid": "74695",
+          "paths": 60,
+          "elapsed_seconds": 74.63420537501224,
+          "closed_owners": 60
+        },
+        {
+          "profile": "canonical",
+          "native_pid": "77735",
+          "paths": 60,
+          "elapsed_seconds": 116.5554618340102,
+          "closed_owners": 60
+        },
+        {
+          "profile": "legacy-missing",
+          "native_pid": "81171",
+          "paths": 60,
+          "elapsed_seconds": 87.21792229198036,
+          "closed_owners": 60
+        }
+      ]
+    }
+  ],
+  "models": [
+    {
+      "name": "credential",
+      "summary": {
+        "path": "/private/tmp/context-runtime-credential-model-20261026/summary.json",
+        "sha256": "338927eec90dba5c2b5dfe5bb2af7620e6952d29fd8245ce41c398621cd0a314"
+      },
+      "executed": 960,
+      "expected_unsafe": 520,
+      "unexpected": 0,
+      "model_sha256": "ce497d2666e215201160902d1c6ee2776ea6667b201fe1a38b4237212bbf06a7",
+      "runner_sha256": "a8f0d73b14eed8e7d257f8b04c28f8fe334481cc92fdf9e9d1d45eea52080c3e",
+      "native_refinement_proved": false
+    },
+    {
+      "name": "migration",
+      "summary": {
+        "path": "/private/tmp/context-runtime-migration-model-20261026/summary.json",
+        "sha256": "afaab89564a3ca46d259283abdcbb67d22804bd846400323b8751d40de48f11e"
+      },
+      "executed": 2520,
+      "expected_unsafe": 818,
+      "unexpected": 0,
+      "model_sha256": "202e40d0d87d3387986223c8167c500df7a8a04ba5eccd2f0470c0cf08ee8c04",
+      "runner_sha256": "cb82cf5083c8b80201a1e212c9981dc2ad6972bb226363a2a7d1669af7cdbeca",
+      "native_refinement_proved": false
+    },
+    {
+      "name": "owner",
+      "summary": {
+        "path": "/private/tmp/context-runtime-owner-model-20261026/summary.json",
+        "sha256": "ebc16c2a2b7fa850921699886e03ee5066e10642aa63528a4f591e84e21e75d5"
+      },
+      "executed": 1920,
+      "expected_unsafe": 251,
+      "unexpected": 0,
+      "model_sha256": "a3d3ebba312d1f7fbf789e6d0955099ffb3703671feba72651dca486d65711db",
+      "runner_sha256": "2d42240148d19eb3476329a8e977edd50c28ecf2c21104d703ef0736f741783a",
+      "native_refinement_proved": false
+    }
+  ],
+  "model_case_count": 5400,
+  "expected_unsafe": 1589,
+  "model_replay_cases": 32,
+  "matched_crash": {
+    "path": "/private/tmp/context-runtime-matched-crash-v2-20261026/crash-receipt.json",
+    "sha256": "926c378d085ba4e433de3bc42cd3260ff39efefd256f08cbbc43d2af49ba7599"
+  },
+  "budget_negative": {
+    "path": "/private/tmp/context-runtime-budget-negative-20261026/summary.json",
+    "sha256": "2ad7c2b2f937a811f4177855ae8d876ef954c49a645e65111975993bdc1c9590"
+  },
+  "custody": {
+    "path": "/private/tmp/context-runtime-reserved-custody-20261026/manifest.json",
+    "sha256": "ddaa0f36b8aa828f7464ebca4e9494fc3170068c986b5b8c60fefa673c5cdeaf"
+  },
+  "failure_artifacts": [
+    "/private/tmp/context-owner-capacity-single-port-20261026",
+    "/private/tmp/context-owner-single-port-replay-20261026",
+    "/private/tmp/context-2g-baseline-20261026",
+    "/private/tmp/context-runtime-2g-qualified-20261026"
+  ],
+  "cost_transcripts": [
+    {
+      "path": "/private/tmp/context-runtime-cost-before-20261026/native.log",
+      "sha256": "fe9d673b9f317cc1cfdb258b68500278dbb526a2eac7628e9c201bf6cd502302"
+    },
+    {
+      "path": "/private/tmp/context-runtime-cost-after-20261026/native.log",
+      "sha256": "19db15b20efc9992df67acb1509fdd4d418cfc3fb8e91d39b93632d35e1bbe1c"
+    },
+    {
+      "path": "/private/tmp/context-runtime-gc-steady-default-20261026/native.log",
+      "sha256": "d38b8feb8df32e0b06546c471d5895abe7981098064172f49a9d64abe75447c1"
+    },
+    {
+      "path": "/private/tmp/context-runtime-gc-steady-reserved-20261026/native.log",
+      "sha256": "921d77d9d703b0e02feb2156a1299d3132c186b60bf964788fbeaa22502c9220"
+    }
+  ],
+  "follow_up": {
+    "path": "24-dual-runtime-results.json",
+    "purpose": "Separate cold reconstruction and steady current-proof use; new qualified source/object cut."
+  }
+}

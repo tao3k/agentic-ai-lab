@@ -1,0 +1,137 @@
+#+title: Bounded Context Scheduling: Native Contract and Executable Correspondence
+#+language: en
+:PROPERTIES:
+:ID: context-bounded-scheduling
+:STATUS: pure-native-kernel-and-reference-adapter-qualified-production-integration-open
+:END:
+
+* Ownership and contract
+
+This refines [[file:26-distributed-runtime.org][26: distributed Runtime allocation]]. Runtime performance means
+steady event throughput, queue/service latency, affected-edge propagation and
+scaling across cores/nodes. Cold import/reconstruction remains a separate
+measurement. The present saturation fixture is a correctness test, not a
+throughput benchmark.
+
+The semantic owner is the native POO =context.scheduling-contract.v1= value,
+identity =context-bounded-scheduling=, semantic revision 1, constructed in
+=modules/temporal-causality/runtime/scheduling.ss=. The pure step consumes a
+native event and returns a POO decision containing next state, admission result
+and selection. It acquires no Actor, timer, connection or subscription. Scalars
+in formal models and replay files are named diagnostic projections, not a
+second public DSL or another authority registry.
+
+| Boundary | Obligation |
+|----------+------------|
+| Producer to admission | Reserve a class credit before retaining a payload or posting it to a mailbox; refuse overflow explicitly |
+| Admission to owner | Separate bounded data and control queues; no unbounded queue of credit-waiting producer threads |
+| Owner to handler | One short non-preemptive handler per domain; executing work retains its credit |
+| Handler completion | Release only that completed handler's credit; long computation belongs outside the owner |
+| Control selection | Prefer queued controls, with at most two consecutive controls while data waits |
+| Drain to close | Reject new offers; retain and complete already admitted work; acknowledge close only when queues and active handler are empty |
+
+A control offer is scheduling admission, not an effective-revocation
+acknowledgement. A full control queue returns refusal. The source owner must
+retain its durable outbox item and retry under bounded upstream admission;
+otherwise authority delivery could be lost. An unbounded retry backlog would
+merely move the memory problem. Production outbox admission and this scheduler
+are not yet connected.
+
+There is no preemption of an executing handler. A maximum number of selections
+does not bound elapsed latency without bounded service time and a runnable
+owner. Slow IO, proof evaluation and model calls must remain outside the short
+owner transition. Cancellation/revocation may fence such external work without
+waiting for its physical completion; final publication still uses the owner,
+Attempt and source-version rules in 26.
+
+* SysML and QNT design
+
+[[file:27-bounded-scheduling.sysml][SysML]] executes scheduling and drain handoffs. The runner consumes actual
+Quint ITF paths, executes both broken and corrected variants, checks engine
+results and original-path final scalar states. Idle padding leaves state
+unchanged. This is behavioral execution, separate from 26's structural topology.
+
+[[file:27-bounded-scheduling.qnt][QNT]] projects capacity 2 data, 1 control, burst 2 and one active handler.
+It explores offers, dispatch, completion, drain and close in arbitrary order.
+Closed/idle waiting is an explicit state, with deadlock checking retained.
+Safety requires credits include in-flight work, control priority respects the
+burst, and closed means no outstanding work. Four broken contracts are kept:
+
+- =capacity=: over-admit data, including while a previous item executes;
+- =priority=: select data ahead of a waiting control before the burst limit;
+- =close=: acknowledge closure with queued or active work;
+- =burst=: let continuous controls exclude a waiting data item.
+
+This finite check proves neither scheduler fairness nor wall-clock liveness.
+It does not prove arbitrary capacities, multiple simultaneous handlers,
+distributed transport or refinement of the production Context owner. Coupling
+these scheduling transitions with 26's authority/terminal transitions remains
+an explicit composition obligation.
+
+* Native verification
+
+=t/context-scheduling-test.ss= traverses the reachable native scalar states and
+checks every outgoing operation. It also replays actual Quint paths, compares
+every prefix on safe paths and confirms that the corrected native kernel
+blocks each broken path. This is executable correspondence, not an unbounded
+refinement theorem.
+
+The reference Actor adapter has eight real producer threads and separate data
+and control queues. Admission and payload retention share a short mutex; no
+producer payload enters the Actor mailbox. One explicit drain handoff releases
+the owner after the producers finish, making saturation counts independent of
+sleep timing. The owner drains 32 data and 8 control credits, executes each
+accepted payload once, closes and joins. This validates pre-mailbox bounds;
+it is not an integration of the existing policy-clock owner and does not
+replace Gerbil's ActorHost transport.
+
+The native regression caught a POO lexical-slot self-reference in the first
+candidate. Parameters now have distinct value names. Failed build, sandbox and
+native logs are retained beside the qualified artifacts; successful model
+checks from before that correction are not admitted as the final source cut.
+
+* Commands and evidence
+
+Run from the repository root, with the configured Gerbil package environment:
+
+#+begin_src sh
+GERBIL_PATH="$PWD/.gerbil" GERBIL_LOADPATH="$PWD/.gerbil/lib:$PWD:$PWD/dev/.gerbil/lib" just build-test t/context-scheduling-test.ss
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-scheduling-quint.py --artifacts /private/tmp/context-scheduling-quint-REPLAY
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-scheduling-sysml.py --cases /private/tmp/context-scheduling-quint-REPLAY/native-cases.json --artifacts /private/tmp/context-scheduling-sysml-REPLAY
+GERBIL_TEST_MAX_HEAP=2G just test-context-scheduling /private/tmp/context-scheduling-quint-REPLAY/native-cases.scm
+#+end_src
+
+Native imports are heap-fenced at 2 GiB, with a 150-second watchdog and normal
+process exit. The QNT backend retains its pinned versions and existing real
+output/watchdog limits. No benchmark improvement is inferred from these passes.
+Structured evidence belongs in [[file:27-scheduling-results.json][27-scheduling-results.json]]; raw traces,
+logs and compiled objects remain local artifacts.
+
+The final source cut is retained under
+=/private/tmp/context-scheduling-final-20261026/=:
+
+| Evidence plane | Final result |
+|----------------+--------------|
+| QNT/TLC | 2,185 generated states, 312 distinct reachable states, empty queue |
+| Deliberately broken QNT contracts | All four produce actual counterexamples |
+| Quint deterministic replay | 25 ITF paths, including five unsafe paths across four fault families |
+| SysML actual execution | 45 paths, five expected failures, zero unexpected outcomes; complete replay also passes |
+| Native finite traversal | 59 scalar states and 413 outgoing transitions |
+| Native ITF correspondence | 25 paths / 130 prefix steps; all safe prefixes agree, five unsafe paths are blocked |
+| Reference Actor saturation | Eight producers, 800 offers, 40 accepted, 760 refused, 40 completed; owner closed/joined |
+| Source/object-bound native rerun | Entire traversal, ITF corpus and Actor probe repeated; both processes exit normally |
+
+QNT includes operation/proof bookkeeping in its state, so its state count is
+not the native scalar-state count. Native replay is executed correspondence,
+not a claimed mathematical refinement proof. The selected-source/object
+custody manifest and failed-candidate references are linked from the structured
+results. No raw logs or ITF traces are committed to the repository.
+
+* Local production integration follow-up
+
+[[file:28-hybrid-runtime.org][28]] now connects this kernel to the existing policy-clock / durable Context
+owner through a bounded FIFO ingress and coalesced wake channel. The original
+27 results above remain the reference-adapter qualification at their recorded
+source cut; 28 owns the new production saturation, timer, journal and terminal
+regressions. Distributed admission, Context's Rust AOT service export and
+end-to-end liveness are still separate obligations.

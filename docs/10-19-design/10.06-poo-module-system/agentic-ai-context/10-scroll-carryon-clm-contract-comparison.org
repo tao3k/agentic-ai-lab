@@ -1,0 +1,263 @@
+#+title: Scroll, CarryOn and CLM: From Context Representation to Evidence-Governed Use
+#+date: [2026-10-25 Sun]
+
+* Question and authority
+
+The concrete problem is accepting information under changing semantic and
+execution owners. A representation may retain the exact bytes, refer to the
+right object version and carry a convincing explanation, while the original
+support has been withdrawn, the consumer is unauthorized, or the Attempt no
+longer owns publication. These are different facts, with different authorities.
+
+This document inherits the following decisions rather than inventing a new
+manager above the existing modules:
+
+| Existing Org owner | Inherited decision | Executable boundary here |
+|--------------------+--------------------+--------------------------|
+| [[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][Context / Temporal joint lifecycle: Primary ASCENT-backed semantic architecture; joint envelope]] | Original proof DAG, Rule/Derivation/direct-premise identity, current support/journal/policy, independent owner fences | External withdrawal can invalidate use without changing the candidate or Session revision |
+| [[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][Context / Session contracts: Decision and evidence boundary]] | Context composes independent Session; content and Memory stay with Context | New Session input/consumer admission and exact Attempt ownership; no transcript/file ownership shortcut |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/01-agent-context-lifecycle.org][43.01: Formation/use; reassessment; consolidation]] | Consumer-local interpretation, actual outcomes, alternatives and defeaters | Recall re-admits a new consumer; preserving history does not transfer authority |
+| [[file:../../../../core/module-system/design/167-temporal-revisit-evidence-design.org][167: Independent evidence, revisit and retention axes]] | Retention/age, evidence support and revisitation are independent | Exact retention and historical admission can coexist with current refusal |
+
+The user rejects compression as the architectural route. Originals, revisions,
+proof/support lineage and counterevidence remain available. Working views select
+what a consumer needs. Long-term knowledge is a separately scoped interpretation
+with evidence and counterexamples, not a summary that replaces its sources.
+
+* Primary-source mechanisms: credit before comparison
+
+** Scroll
+
+[[https://arxiv.org/html/2608.21690v1][Scroll, v1 (2026-08-21), Sections 2.1–2.4]] uses a cross-session append-only
+SQLite event log, exact payload references and a persistent sandboxed Python
+namespace. Programs locate, recover and compute over information; explicit
+print exposes a working projection. Eviction changes the view while retaining
+addressable originals. The sandbox restricts capabilities. We therefore do not
+claim that lossless history, cross-session storage, provenance or controlled
+exposure is unique to this project. Its printed view and log ordering do not
+by themselves specify our selected ASCENT support/journal and Attempt contract.
+
+** CarryOn
+
+[[https://arxiv.org/html/2610.18784v2][CarryOn, v2 (2026-10-14), Section 3 and Appendix A]] maintains versioned carriers,
+execution context and a live tail. Tracker requests bind evidence; Grounder
+performs scoped read-only checks; Compiler proposes updates. Runtime validates
+candidate/carrier versions and authorized evidence before atomic commitment;
+installation failure has a separate recovery path. Original interactions remain
+logged. This is close prior art. Versioned objects, evidence checks, atomic
+updates, unresolved obligations and recovery are not exclusive contributions.
+Its checks are not task-correctness proofs; our additional obligation is exact
+native inference/support applicability plus consumer/Attempt publication.
+
+** CLM
+
+[[https://arxiv.org/html/2609.37725v1][CLM, v1 (2026-09-29), Sections 4.1 and 6]] gives the model an editable live
+context file and lets it define context-management functions. Multiple files
+support multi-agent workflows. The paper also identifies persistent injection
+risks. Its key contribution is flexible learned control of context transitions;
+it should not be reduced to a fixed summarizer. In our design such edits can
+propose a working view, but text cannot mint proof registration, grant or native
+worker-observation authority. This boundary does not prove a model will reason
+correctly over the admitted view.
+
+* Exact questions instead of a feature checklist
+
+| Contract question | What representation alone leaves undecided | Our declared contract and current limit |
+|-------------------+--------------------------------------------+----------------------------------------|
+| Can an original be recovered? | Recovery does not establish current support or permission | Preserve original source/identity; Query and consumer admission remain separate |
+| Does this result follow from the selected original inference? | A source citation or equal output does not specify a proof root and required direct premises | ASCENT original replay and Rule/Derivation/support correspondence; source-relative bounded positive profile |
+| Is the proof applicable now? | A once-successful check or unchanged candidate revision does not resolve changed external support | Registered current program/journal/policy/support at the required cut; historical proof survives withdrawal |
+| May this consumer use it? | Cross-session storage and shared text do not transfer a grant or worker receipt | Scope, actor/task grant, consumer Session/Turn and Host-issued capabilities |
+| May this Attempt publish now? | A finished worker or successful representation installation is not the current Attempt owner | Expected revision/source, exact frozen input and one terminal publication through the native owner |
+| Does the generated answer actually use its admitted evidence? | Even complete retention and correct admission do not guarantee correct model selection/reasoning | Remains a separate end-to-end evaluation; not closed by these native tests |
+
+These are contract differences to investigate, not evidence that an untested
+paper implementation lacks every corresponding safeguard. In particular, we do
+not claim CarryOn fails a stale-grounder race or that Scroll cannot implement
+current-use checks. They are not executed or mutated in this experiment.
+
+The mechanisms can coexist: programmatic retrieval can construct proposals,
+object carriers can expose scoped reusable progress, and learned editing can
+choose a view. ASCENT / temporal-causality and consumer owners remain responsible
+for admitted semantics and effects regardless of how a view was proposed.
+
+* Why the ownership split matters
+
+Context retains and relates source information, interpretations, proofs, current
+support and memory/revisit products across consumers. Session independently
+owns interaction routing, Task/Attempt/Turn identity, revision and cleanup
+obligations. Closing or replacing a Session does not make it the owner of all
+knowledge. Recalling knowledge does not revive that Session's worker receipt.
+
+A later event is not automatically a superior fact. The journal records its
+relation to the original premise; current support is evaluated under the named
+cut and policy. A proof can remain historically admitted while current use is
+unsupported. A new owner binding can change the input contract even when proof
+bytes and the derived conclusion are equal. This removes reliance on an Agent
+remembering a warning in its prompt: the native publication boundary refuses
+an invalid use even when the proposed view says it is allowed.
+
+* Executable contract-omission matrix
+
+[[file:10-evidence-contract-comparison.sysml][The SysML v2 scenario]] executes four stages: retain originals, capture a
+working context/revision, change independent owners, then attempt publication.
+The model's candidate/view revision remains fixed when external support, grants
+or consumer/Attempt bindings change; it is not the native Session owner revision.
+In the native withdrawal case, the Session revision also happens to remain
+unchanged until revalidation detects the external change. Four Boolean inputs cover withdrawal, revocation, foreign consumer and
+rebound Attempt. All 16 combinations run under the safe contract and four
+intentionally weakened contracts, for 80 executions.
+
+| Mode | Deliberately omitted distinction | Executed expected counterexamples |
+|------+----------------------------------+-----------------------------------|
+| 0 | None: required current proof, grant, consumer, Attempt and revision | 0 / 16; one accepted positive, 15 refusals |
+| 1 | Recoverable archive / historical proof treated as current permission | 15 / 16 |
+| 2 | Candidate revision treated as sufficient despite external-owner changes | 3 / 16 |
+| 3 | Model-authored allow claims treated as authority | 15 / 16 |
+| 4 | Valid content/proof/grant treated as transferable consumer/Attempt authority | 3 / 16 |
+
+[[file:run-contract-comparison.py][The driver]] requires executed run-engine verdicts, all four processed stages,
+retained history, complete coverage and unreached resource bounds. Each unsafe
+mode saves a concrete counterexample. Replay runs that same input under the
+unsafe mode and safe counterpart. These modes are OUR CONTRACT ABLATIONS, not
+Scroll/CarryOn/CLM replicas or measurements of their failure rates.
+
+The first CLI attempt had an unbound verification subject and was refused by
+the driver. The subject now explicitly defaults to its fixture. Only the bound
+80-case run and its four paired replays count as passes.
+
+* Native scenarios: actual stored outcomes
+
+Four new cases in [[file:../../../../t/temporal-evaluator-test.ss][the native suite]] call real original ASCENT proof replay,
+proof/support/journal owners, registered grants, independent Session transitions,
+actual worker joins and the final native Context Host publication API.
+
+| Native scenario | Positive / retained facts | Adversarial operation and actual stored result |
+|-----------------+---------------------------+-----------------------------------------------|
+| archive | Original Context bytes, exact input digest and Session revision unchanged; original proof still historically admitted | Withdraw a required premise in the native journal. Current proof becomes ineligible; native result commit leaves no terminal result; matching actual cleanup publishes reconciled |
+| editable-view | Genuine worker observation is available | A POO view copied from it with allow/proof flags is not an issued observation. Forgery throws before publication; the genuine observation also cannot bypass a revoked grant. Actual cleanup still publishes |
+| recall | Two Sessions share the same original registered inference | Borrowed actor/task grant is refused without enrollment; issue a fresh consumer grant, input and Attempt. Foreign receipt is refused; each genuine worker can publish independently. Later source withdrawal removes current use in BOTH histories |
+| rebind | Proof digest and result bytes remain equal | Register the same proof under another source owner. Rebind only while idle. Old terminal stays historical/ineligible and old observation cannot commit. A fresh Attempt under the new binding publishes; each Attempt has one terminal |
+
+The archive case also performs a deliberately unsafe TEST-LOCAL publication into
+a separate mutable head using archive presence, historical admission and equal
+revision alone. The weak head contains an actual result payload; the production
+native owner refuses the same result after withdrawal. This is stronger than
+showing a completion intent, but is not a native production-code mutant and not
+a paper runtime. Its printed counterexample is retained separately from the
+older pure old-snapshot completion-intent counterexample.
+
+The rebind case changes proof registration/owner identity, not the selected proof
+DAG. It does not claim to test every alternative derivation. The existing suite
+separately tests exact original premise/Rule/Derivation correspondence.
+
+These fixtures declare Fact/source correspondence; no real MRR producer, model
+provider, physical source authentication or arbitrary language-to-Fact mapping
+was established. The completed native boundary is local and serialized, not a
+durable distributed transaction or a proof of source truth.
+
+* Reproduction and evidence
+
+#+begin_src sh
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-contract-comparison.py
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-contract-comparison.py --replay /absolute/path/counterexample-2.json
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-replay.py --exhaustive
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-replay.py --check-receipt /absolute/path/native-receipt.json
+#+end_src
+
+The native receipt validator now requires the four NATIVE-COMPARISON observations
+and the actual test-local publication counterexample, in addition to the prior
+owner-CAS observations, all Case/Module/Harness/final markers, unchanged runtime
+source/pin cuts and exact requested path coverage. The suite contains 41 Cases.
+No paper benchmark, trained model or comparative inference-cost experiment ran.
+
+The focused native run passed 41 Cases and eight regression orders. The extended
+exhaustive run is reported below only after completion and receipt inspection.
+Raw execution logs remain local; source control holds scenarios, assertions,
+runners and this scoped result summary.
+
+* Delivered boundary and remaining design
+
+The delivered native result is an executable refusal/publication contract for
+the selected positive-proof profile. It removes specific substitutions: bytes
+for current support, candidate revision for external applicability, edited text
+for registered authority, and a recalled result for a current Attempt. That is
+more precise than claiming the Agent now understands truth or causality.
+
+The full Org design additionally composes temporal lenses, hypothesis-family
+assessment, reverse support/dependency plans and trajectory/Impact refresh. The
+new tests do not close all of that integration. In particular, the two-Session
+withdrawal check uses fresh current-use queries; it is not a qualification of
+an eager dependency-index fanout invalidating every cached consumer. Source
+correspondence/authentication, arbitrary language-to-Fact grounding, general
+knowledge consolidation quality and distributed durable publication remain open.
+A source-only positive proof cannot establish an undeclared absence or necessary
+classification over every competing hypothesis.
+
+The recall fixture changes actor/task, so it requires an independently issued
+matching grant. This does not require every Session to mint a new grant identity:
+a declared policy may legitimately authorize the same actor/task across Sessions.
+What cannot transfer implicitly is an old consumer binding or worker receipt.
+The native owner and opaque capabilities are trusted in-process coordination;
+these tests are not a sandbox for arbitrary reflective Scheme code.
+
+The 80 comparison executions enumerate state combinations, not every concurrent
+schedule. The separate native owner replay retains the eight-event / 2,240-order
+corpus from 08. The new two-Session case is a selected consumer-independence and
+withdrawal scenario, not exhaustive two-Session concurrency verification.
+
+One exhaustive attempt was interrupted after concurrent dependency changes were
+detected. The working tree's ASCENT and Orgize pins and installed checkouts had
+advanced; that partial run is not qualified as either the old or new dependency
+combination. The driver now records/checks BOTH installed checkout heads against
+the declared package pins before/after execution and on saved-receipt validation.
+The concurrent dependency edits were preserved. Current-cut results below use
+ASCENT a1feea38b6106c0910b79d42a48ce62115ee43b5 and Orgize
+bffe77af99f1263c97475b2a859ea2ee8c43fa07 only after a fresh completed run.
+
+* Completed current-cut measurements
+
+The fresh run under the ASCENT / Orgize heads above completed with exit zero,
+41 CASE-OK markers, MODULE-OK, HARNESS-OK and final OK, no failure markers, all
+four comparison observations, both counterexample observations and all 2,240
+ordered native paths. Runtime source and both dependency cuts were unchanged
+across the run. The saved receipt check passed.
+
+| Current-cut measurement | Result |
+|-------------------------+--------|
+| Native Cases, including the four comparison cases | 41 passed |
+| Eight-event legal native orders | 2,240 passed |
+| Duplicate terminal / stale reactivation violations | 0 / 0 |
+| Historical completed outcomes after withdrawal/revocation | 40; current-use=false |
+| Cancelled terminal outcomes | 1,100 |
+| Pending cleanup obligations | 1,100; not counted as completion or liveness success |
+| Executed SysML comparison combinations | 80; safe mode 0 failures |
+| Expected unsafe omissions | 15 / 3 / 15 / 3 failures |
+| Saved unsafe input plus safe-counterpart replays | Four pairs reproduced |
+| Receipt controls: missing comparison row, missing actual ablation publication, stale reactivation, old dependency receipt | All four refused |
+
+The original-bound-subject CLI failure and the interrupted changing-dependency
+native attempt are preserved outside these pass counts. The new native cases
+needed no change to the production publication implementation: they exercise its
+existing original-proof, grant, exact consumer and Attempt guards.
+
+Current native receipt:
+=/private/tmp/context-research-comparison-20261025/native-current-dependencies/native-receipt.json=.
+SysML summary and counterexamples:
+=/private/tmp/context-research-comparison-20261025/sysml-final/=.
+Both directories retain raw results and their source/model commitments. The
+single-order native replay is recorded separately after completion.
+
+The current-cut native order R Q S P G C T H was also actually replayed in a
+fresh process: 41 Cases, one exact owner order and both counterexample
+observations passed. Its receipt check succeeded. A coupled local artifact index
+with hashes of the native, native-replay, SysML and validator-control receipts is
+=/private/tmp/context-research-comparison-20261025/comparison-receipt.json=.
+This index explicitly records that paper implementations were not executed and
+that no complete model-to-native refinement proof was established.
+
+* Later source-driven refinement
+
+[[file:11-native-eager-propagation.org][11]] extends the read-time boundary above with materialized native source
+propagation. Its runtime source cut and larger Case count are qualified
+separately; this document retains its 41-case measurements as historical evidence.

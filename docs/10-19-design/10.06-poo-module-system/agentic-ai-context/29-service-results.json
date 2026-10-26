@@ -1,0 +1,138 @@
+{
+  "schema": "context.scheme-service.delivery.v1",
+  "status": "Scope corrected: Scheme-only service; canonical 60 passed; whole-queue replay and new C export remain open",
+  "bindings_changed": false,
+  "rust_delivery_withdrawn": true,
+  "duplicate_json_protocol_removed": true,
+  "context_lifecycle_c_export_implemented": false,
+  "native_source_sha256": {
+    "modules/ai-agentic-context/runtime-service.ss": "4f368d1abc017af50ae802e260fc16961b248f7bb2bc5b9ebd17d45a76e0046d",
+    "modules/ai-agentic-context/durable-owner.ss": "9a9a04fd233060fe594848ab0398d1167380ac63162b13c2346f5562df506561",
+    "modules/ai-agentic-context/session-host.ss": "d3721af659c9c65b73e0031fac2ee3227a541a69472008e3d30afda848895832",
+    "t/context-service-test.ss": "4da4ad7f48001a9647069f1b37ead68456b373fff02dbaaa7c09a03d6875d419",
+    "t/context-durable-owner.ss": "2a9008f5f020cf1245a7ea2703ea7fd7e8e7a011e85cde86245b9a47b0e3ee59",
+    "t/temporal-evaluator-test.ss": "ea57da59f05d5d2d860156e4884ca2acb248165ac4df712088008193b7591e0c",
+    "t/context-policy-migration-test.ss": "08d267716bb68ba6443405ac3dd3a3279760fdf301c2cccc22e17d6abeac760a",
+    "t/harness/context-service-driver.ss": "2481e027993191e18c05f59112a8ca3b0e70a227b2bdc82a1efa43b2f89d6133"
+  },
+  "scheme": {
+    "name": "service",
+    "admitted": true,
+    "exit": 0,
+    "elapsed_seconds": 52.26858158400864,
+    "command": [
+      "just",
+      "test-context-service",
+      "/private/tmp/context-service-20261026/final-scheme/service.sqlite"
+    ],
+    "actual_owner_closes": 0,
+    "log": "/private/tmp/context-service-20261026/final-scheme/service.log",
+    "log_sha256": "53ff8de70111dc8a874f346e51940395e3fb0466c9fe8a57d15b0db9e732b46e",
+    "heap": "2G",
+    "native_watchdog_seconds": 150,
+    "unsplit_single_process": true
+  },
+  "canonical_sixty": {
+    "name": "canonical",
+    "admitted": true,
+    "exit": 0,
+    "elapsed_seconds": 96.34456558298552,
+    "command": [
+      "just",
+      "test-context-policy-migration",
+      "/private/tmp/context-service-20261026/final-scheme/canonical",
+      "canonical",
+      "all"
+    ],
+    "actual_owner_closes": 60,
+    "log": "/private/tmp/context-service-20261026/final-scheme/canonical.log",
+    "log_sha256": "62135d0d6f84f2a2e3aac75160d10a0e451678bd2c638e73b620ca9263e19ee5",
+    "heap": "2G",
+    "native_watchdog_seconds": 150,
+    "unsplit_single_process": true
+  },
+  "failed_whole_replay": {
+    "name": "whole-replay",
+    "admitted": false,
+    "exit": 137,
+    "elapsed_seconds": 155.21170716697816,
+    "command": [
+      "just",
+      "test-context-policy-migration",
+      "/private/tmp/context-service-20261026/final-scheme/whole-replay",
+      "canonical",
+      "all"
+    ],
+    "actual_owner_closes": 48,
+    "log": "/private/tmp/context-service-20261026/final-scheme/whole-replay.log",
+    "log_sha256": "20d58a78c946416556bdc8ab7b1c1c4c7ad7699182d3352fc8c505d285d81446",
+    "heap": "2G",
+    "native_watchdog_seconds": 150,
+    "unsplit_single_process": true
+  },
+  "resource_limits": {
+    "maximum_heap": "2G",
+    "native_watchdog_seconds": 150,
+    "cohort_split": false
+  },
+  "fixture_extraction": {
+    "withdrawn": true,
+    "original_source_restored_sha256": "ea57da59f05d5d2d860156e4884ca2acb248165ac4df712088008193b7591e0c",
+    "pre_extraction_source_sha256": "ea57da59f05d5d2d860156e4884ca2acb248165ac4df712088008193b7591e0c",
+    "compatibility_failure": {
+      "name": "canonical",
+      "admitted": false,
+      "exit": 139,
+      "elapsed_seconds": 53.0883576250053,
+      "command": [
+        "just",
+        "test-context-policy-migration",
+        "/private/tmp/context-service-20261026/scheme-regression/canonical",
+        "canonical",
+        "all"
+      ],
+      "actual_owner_closes": 0,
+      "log": "/private/tmp/context-service-20261026/scheme-regression/canonical.log",
+      "log_sha256": "1a2bf5978bde58e24764102e511abdfb50183a2fa390aabc0ac83e1b0a83cc0f",
+      "native_watchdog_seconds": 150,
+      "heap": "2G",
+      "unsplit_single_process": true
+    }
+  },
+  "withdrawn_experiment_archive": "/private/tmp/context-service-20261026/deferred-rust-integration",
+  "rust_experiment_results_admitted_for_current_delivery": false,
+  "throughput_claim": false,
+  "timing_variability_resolved": false,
+  "repeated_whole_replay": {
+    "name": "whole-replay-check",
+    "admitted": false,
+    "exit": 137,
+    "elapsed_seconds": 155.26085458300076,
+    "child_user_seconds": 26.693794,
+    "child_system_seconds": 2.909703,
+    "peak_child_rss_bytes": 741834752,
+    "actual_owner_closes": 34,
+    "heap": "2G",
+    "native_watchdog_seconds": 150,
+    "unsplit_single_process": true,
+    "command": [
+      "just",
+      "test-context-policy-migration",
+      "/private/tmp/context-service-20261026/final-scheme/whole-replay-check",
+      "canonical",
+      "all"
+    ],
+    "log": "/private/tmp/context-service-20261026/final-scheme/whole-replay-check.log",
+    "log_sha256": "22e6c0bd15d2658adb0097229f77b1a89fd6c65d5f4b18be2b476529dfcd5920",
+    "prior_timeout_retained": true,
+    "timing_variability_resolved": false
+  },
+  "complete_whole_queue_replay_admitted": false,
+  "native_replay_issue_closed": false,
+  "unresolved": [
+    "New Context lifecycle service has not been connected to the existing C ABI.",
+    "Whole-queue replay exceeded the fixed watchdog twice; cause not established."
+  ],
+  "diagnostic_note": "Repeated replay recorded about 29.6 child CPU seconds, 155.3 wall seconds including watchdog grace, and 741834752 peak child RSS bytes. These observations do not establish the waiting/scheduling cause.",
+  "service_and_canonical_runs_are_not_throughput_evidence": true
+}

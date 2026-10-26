@@ -1,0 +1,185 @@
+#+title: Native ASCENT Proof, Support and Context Lifecycle Correspondence
+#+date: [2026-10-25]
+#+language: en
+#+property: STATUS native-library-and-thread-paths-executed-provider-publication-open
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Historical qualification boundary
+
+This document preserves the initial 31-case intent-only result.
+[[file:08-native-owner-cas-publication.org][08: Native owner CAS publication]] supersedes its missing local publication
+boundary with actual native result/terminal publication and bounded schedule
+replay. External provider and durable/distributed publication remain unqualified.
+The current replay driver builds the Host and checks the extended suite.
+
+* Scope and inherited contracts
+
+This connects the selected [[file:05-concurrent-evidence-lifecycle.org][SysML concurrent evidence lifecycle]] observations
+to actual Scheme and ASCENT implementation calls. It follows the existing
+[[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][ASCENT-centered joint lifecycle contract]],
+[[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][Session/Memory protocol contracts]] and the original native evaluator tests.
+It is a native execution receipt for selected paths, not an automatic proof of
+bisimulation for all 2,240 SysML interleavings.
+
+Three added Cases in
+[[file:../../../../t/temporal-evaluator-test.ss][temporal-evaluator-test.ss]] reuse its original-owner fixtures:
+
+- =reasoning-attempt= runs the installed ASCENT path program over edges (1,2)
+  and (2,3), producing path (1,3) with a complete positive-proof receipt.
+- Native positive-proof admission, original Rule/Fact/Derivation correspondence
+  and direct-premise support bind that real proof DAG to the journal.
+- Registered proof Host/current support evaluation and serialized Context Host
+  enrollment/revalidation operate on native POO values and real Host state.
+- A real Scheme thread waits for a cancellation message, then returns the old
+  Attempt. The owner actually joins it before proposing reconciliation.
+
+The MRR Rule/Fact/Derivation files are inert original-owner projection fixtures;
+no MRR server or producer was started. Fact/source correspondence is declared
+and checked within those fixtures, not authenticated physical-world evidence.
+The Context fixture explicitly does not establish Org-to-Fact authority
+refinement. Actual proof replay is source-relative, not a proof that the input
+sources are true or that an effect is authorized.
+
+* Model event to native owner mapping
+
+| Model boundary | Native operations exercised | Evidence and remaining boundary |
+|----------------+-----------------------------+---------------------------------|
+| Original proof / Q | =reasoning-attempt=; =temporal-positive-proof-from-ascent=; =temporal-mrr-derivation-from-ascent=; proof Host register/current; Context require-proof/observe | Complete original proof, verified Derivation/direct support and current input observed. No provider disclosure |
+| S: required premise withdrawal | =temporal-evidence-revision= with =retract=; journal append; =temporal-support-evaluate= at cuts 1 and 2; proof Host refresh/current | Same selected proof retained; original cut supported, current support unsupported. Old journal rollback refused |
+| Late response / P | =session-complete= against an old immutable schedule versus the current recovering schedule | Old snapshot yields a pure completion intent; current schedule rejects the old Attempt. Actual result-publication Host CAS remains absent |
+| C / T | Real =thread-send= cancellation message and =thread-join!= result | Join actually observes this test worker ending and preserves its exact late Attempt reference. This is cooperative Scheme-thread cancellation, not provider/OS-process termination |
+| H: preserve/reconcile | Context revalidate; =session-recover= repeated; foreign and matching =session-reconcile=; close/recover | One pending obligation survives; foreign request and late completion refused; matching reconciliation is a pure intent, closed Session cannot recover |
+| One terminal identity | Repeated native completion/reconciliation against successor schedules | Completed identity appears once, old completion cannot be reused. This does not qualify a missing physical owner-CAS implementation |
+
+Current proof, grant/policy and Scope remain independent checks. A retained
+=proof-admitted?= observation remains true after withdrawal while current
+status becomes =unsupported=. Reading historical admission without current
+applicability is precisely the unsafe bypass the model must reject.
+
+* Native positive and negative observations
+
+The current-source run reported the following measured values:
+
+| Observation | Actual native result |
+|-------------+----------------------|
+| Original ASCENT execution / correspondence | complete; Derivation and MRR-rule correspondence verified; two direct support premises |
+| Before / after journal withdrawal | current -> unsupported |
+| Historical proof identity | unchanged proof commitment, still retained/admitted historically |
+| Current input completion | eligible=true; completion-intent=true; runtime-published=false; repeated-completion=false |
+| Invalidated active Attempt | active removed; exactly one pending obligation retained |
+| Late response after cancellation message and actual thread join | current recovering schedule refuses completion |
+| Reconciliation | matching intent succeeds; runtime-published=false; foreign request refused |
+| Successor identity / closure | one completed identity; closed recovery returns closed |
+
+The observed proof commitment is
+=sha256:53384e419386d3dd49ddbe90f47b8b14b9a484b9eb8ab816d84d6b047ef88442=;
+the withdrawn journal commitment is
+=sha256:bb6368fadc4a5390f3f40df0bccab16db99976e56507ed12fafb1fda1dc9a70c=.
+Commitments identify these local values; they do not authenticate sources.
+
+The retained native bypass counterexample is intentional and important:
+=session-complete(old-schedule, old-revision, old-attempt)= still produces an
+accepted *pure intent* after the proof owner has withdrawn a premise. Session
+owns interaction identity, not the current Context proof registry. The native
+Context owner rejects current consumption and revalidation moves the actual
+active Attempt into recovery obligations. A caller cannot publish the old
+intent merely because its local function returned accepted.
+
+Thus the counterexample confirms the need for current-owner publication and
+also identifies an unclosed implementation boundary. It is not represented as
+an observed unauthorized provider effect or as an already fixed production CAS.
+No new result-publication capability or fake terminal receipt was introduced.
+
+* Replay and gate
+
+The added Just recipe preserves the ordinary focused-file total budget of
+120 seconds and the pre-import =gerbil_test_runtime_options= heap fence:
+
+#+begin_src sh
+just test-context-evidence-native
+
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-replay.py
+#+end_src
+
+It uses the maintained =t/harness/temporal-evaluator-runner.ss= import-progress
+and native test harness. The previous specialized entry retains its original
+45-second / five-second byte-idle policy; its expected Case count was updated
+from 28 to 31, and the combined context catalog from 69 to 72.
+
+[[file:run-native-replay.py][The replay driver]] executes that Just recipe, hashes the owning sources before
+and after execution, and requires:
+
+- Exit 0, exact native Case count, MODULE-OK, HARNESS-OK and final OK.
+- No ERROR CASE/CHECK/HARNESS/MODULE, Heap overflow or Stack overflow.
+- Three actual NATIVE-CONTEXT-OBSERVE rows, including native proof/journal
+  commitments, current/withdrawn support, late-result and publication boundaries.
+- The explicit old-snapshot bypass counterexample.
+
+The observed current-source run completed all 31 Cases successfully, including
+all three new native paths. Local artifacts are retained under
+=/private/tmp/context-native-20261025/=. The admitted receipt is
+=native-receipt.json=, with raw output in
+=temporal-evaluator-native-observed.log= and per-owner source SHA-256 values.
+The installed ASCENT checkout HEAD was inspected as
+=9573529ad043a7a23983c65f94df3334f8ed8df8=, matching =gerbil.pkg=; historical
+qualification records referencing another revision were not reused as current
+execution evidence.
+
+The replay driver's default fresh-execution path was then exercised as well:
+31 native Cases, three observed paths and one bypass counterexample passed,
+with owning-source hashes stable across execution and the installed ASCENT HEAD
+matching the package pin. Its final receipt is
+=/private/tmp/context-native-_eqjlzt4/native-receipt.json=; raw output is
+=native.log= in that same directory. Fresh receipt revalidation passed; a changed
+source commitment in its =stale-source-negative-control.json= was refused.
+
+To check this final local receipt against current source and log commitments:
+
+#+begin_src sh
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-replay.py \
+  --check-receipt /private/tmp/context-native-_eqjlzt4/native-receipt.json
+#+end_src
+
+That receipt-check path passed. A deliberately changed =gerbil.pkg= commitment
+in =stale-source-negative-control.json= was refused with exit 1. Checking a
+saved local receipt does not rerun native code or make the receipt an authority
+token. The driver default is the fresh-execution replay entrypoint.
+
+* Retained failed attempts
+
+- =temporal-evaluator-baseline.log=: direnv could not reach the sandboxed Nix
+  daemon. The ordinary entry also began unrelated Nix worker prerequisites;
+  that build was interrupted after completing its worker construction.
+- =temporal-evaluator-focused.log=: the ordinary focused-file init/selection
+  route exceeded its execution budget before producing a qualifying result.
+- =temporal-evaluator-specialized.log=: the specialized gate returned failure
+  after its five-second idle watchdog stopped cold dependency import at the
+  ASCENT evaluator. No Case result was qualified from that attempt.
+- =temporal-evaluator-native-replay.log=: the dedicated bounded native entry
+  then passed 31 Cases; =temporal-evaluator-native-observed.log= reran the source
+  with actual observation rows and passed the same 31 Cases.
+
+The dedicated entry changes startup/idle routing, not assertions or required
+success markers; its managed heap and total timeout remain enforced. Raw logs
+remain local artifacts. Failed startup attempts are not described as native
+semantic counterexamples or silently counted as passes.
+
+* Remaining implementation and research obligations
+
+The real proof/support/journal and Scheme-thread paths are now exercised; the
+following remain open and must not be inferred from those passes:
+
+1. Provider result receipt authentication, exact payload/producer admission and
+   publication through a current-owner CAS or transaction.
+2. Native cross-owner atomicity for simultaneous result/cancellation publication,
+   durable outbox/restart, real external effect ambiguity and resource release.
+3. Authenticated Org-to-Fact/premise mapping and complete reverse-dependency /
+   absence coverage for general incremental invalidation.
+4. Automatic replay of every saved SysML trace against one qualified native
+   reducer. This run maps selected paths and exposes the missing P publication
+   boundary; it is not full model-to-native refinement.
+5. Task-quality/cost comparison with CLM or other memory systems. See the
+   [[file:07-context-literature-comparison.org][primary-source literature comparison and controlled experiment design]].

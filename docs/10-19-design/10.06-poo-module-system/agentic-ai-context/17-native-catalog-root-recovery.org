@@ -1,0 +1,143 @@
+#+title: Context Catalog Roots and Recovery Readiness
+#+language: en
+:PROPERTIES:
+:ID: context-native-catalog-root-recovery
+:STATUS: native-catalog-replay-qualified-owner-integration-open
+:END:
+
+* Inherited owners and implemented slice
+
+This refines [[file:16-query-durable-owner-handoff.org][16: durable Query source handoff]], using the Provider and
+[[file:15-unified-query-provider.org][Org Contract responsibilities]] already established. It does not move Context
+into Session. Sources exist before interaction; retaining a source must not
+require creating a Session, Task, Query result or invented observation.
+
+The native =context-query-export= now accepts an omitted observation. Its
+existing =context.query-recovery.v2= value retains the complete ordered source
+history and canonical Query journal, with =observation-ref: #f=. No second root
+identity, Session registry, receipt format or journal is introduced. A completely
+empty Provider and an unqueried admitted source are both legitimate snapshots.
+
+=context-query-restore= returns the Provider and either the selected original
+observation or =#f= for a catalog root. Original observations are reconstructed
+through native Org/GQL/ASCENT replay. A supplied shared Provider must match both
+the full source history and Query journal. Equal empty Query journals cannot
+hide different source generations. A mismatch refuses without changing that
+shared owner; restoring a capsule never overwrites its current source head.
+
+Context consumer restoration requires a nonempty original observation reference.
+A catalog root cannot silently become an admitted consumer input. The content
+Org ID, independent SESSION_ID and existing observation digest retain their
+different responsibilities.
+
+* Recovery readiness protocol
+
+These are sequencing obligations for the existing durable owner, not a second
+persisted lifecycle or independent set of mutable readiness flags.
+
+| Boundary | Required evidence and owner action | Work still blocked |
+|----------+------------------------------------+--------------------|
+| Writer acquisition | Existing journal verifies its chain and grants the current owner epoch | All Context result publication |
+| Catalog reconstruction | Restore the last committed Provider root, even with zero consumers; replay original source and Query records | Current-use claims derived only from historical capsules |
+| Consumer reconstruction | Resolve original observation refs; rebuild captured parent versions and source subscriptions against that same root | Pending result processing and new Attempt admission |
+| Pending input recovery | Reconcile existing inbox source/authority changes and persist resulting invalidation and obligations under the owner transaction | Opening the owner while a required fence is missing |
+| Owner reopening | Commit a coherent catalog/consumer cut; retain worker obligations until matching evidence is observed | Old-epoch writers and obsolete proof/Attempt publication |
+
+An empty consumer set makes consumer reconstruction empty work. It does not
+waive catalog persistence or allow source history to be inferred from Session
+entries. A missing source or unknown observation stops recovery rather than
+creating an empty replacement catalog.
+
+The root codec is not a freshness authority. Creating a separate Provider from
+an old retained snapshot is useful for historical replay but does not prove
+that it is the current durable head. The durable owner must select its committed
+root under the existing writer fence. External authenticity and privileged
+storage rollback remain separate obligations.
+
+* Version and dependency boundaries
+
+Retraction and later re-admission preserve the original Org IDs and bytes but
+create different source generations, evidence subjects and applicability cuts.
+A fresh Query may become usable; an old Query observation and captured parent
+remain invalid. Receiving another Session's observation does not transfer that
+Session's authority, grant or current-use admission.
+
+Do not infer shared ownership from equal IDs, empty Query sets or matching
+document bytes. The current implementation refuses shared restoration unless
+the original complete histories match. This is intentionally conservative; it
+does not claim incremental source merging or minimal changed-element impact.
+
+* Executable native gate
+
+[[file:run-native-query-catalog.py][The focused runner]] launches five serial heap-fenced Scheme processes via
+Just. It uses the real SQLite journal and original Org template, retains the
+source before any Query or Session exists, then reconstructs and queries it.
+It retracts the source, re-admits identical IDs/bytes at generation 3, retains
+both actual native observations and verifies old/fresh support in another
+process. It also replays the original saved zero-observation database image,
+rather than rebuilding an equivalent fixture.
+
+Negatives cover a missing observation ref, equal empty Query journals with
+different source heads, and a delayed old root applied to a newer shared owner.
+The existing consumer smoke gate additionally restores an unchanged consumer
+checkpoint and refuses the same checkpoint with its observation ref removed.
+Original proof/history are kept, not replaced by a compressed summary.
+
+#+begin_src sh
+just build-test t/context-query-catalog-test.ss
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-native-query-catalog.py" --artifacts /private/tmp/context-query-catalog-run
+just test-context-query smoke
+#+end_src
+
+The native catalog gate drives journal transactions explicitly. Automatic
+=context-durable-adapter= catalog storage, named source-command recovery,
+crash injection during invalidation and atomic consumer/catalog publication
+remain the integration gates in section 16. Catalog replay is not a substitute
+for them. Earlier native receipts remain tied to their original source/object
+cuts; this source change requires its own evidence.
+
+* Qualified local results: 2026-10-25
+
+The focused native gate passed all five separate Scheme processes with
+MODULE-OK, HARNESS-OK, final OK and exit zero. Its immutable initial database
+contains an admitted source and no Query observation or Session. A separate
+replay queried that retained source, withdrew generation 1, re-admitted
+generation 3, and another process reconstructed both original observations.
+The saved initial database image was replayed and verified again in independent
+processes. Old support remained false and fresh support remained true.
+
+The same native object cut also passed a targeted Context/Session regression:
+two scripted source-first owner orders, one for replacement and one for
+withdrawal, plus one observed mailbox-arrival path per kind. In this execution,
+the arrivals processed A/B results before the source change. Those completions
+remained historical while current applicability was fenced. Both kinds also
+checked actual unaffected C completion, fresh same-Session completion and the
+captured old-parent fence. This is four bounded native executions, not a new
+qualification of all 122 earlier paths or every OS schedule.
+
+That process also restored the positive consumer checkpoint and refused its
+observation-free mutation. All paths passed strict harness markers. Source and
+all recorded native object variants matched the catalog gate before and after
+the regression. A first regression aggregation attempt used an incorrect
+whole-log regular-expression match; its successful native log remains a
+diagnostic. A separate rerun used per-line full matches, recorded exit zero and
+produced the regression receipt. The diagnostic was not promoted into a pass.
+
+Receipts and originals are under
+=/private/tmp/context-query-catalog-qualified-20261025/=:
+=catalog-receipt.json=, =consumer-receipt.json=,
+=original-unqueried.sqlite=, =replayed-original.sqlite= and the separate logs.
+The combined index is
+=/private/tmp/context-query-catalog-evidence-20261025.json=.
+
+Reproduce the targeted native Context/Session paths with:
+
+#+begin_src sh
+just test-context-query all '(1 2 3 4 5)'
+#+end_src
+
+The section-16 SysML contract and its existing 2,700-case / eight-replay results
+are unchanged. They still abstract storage and worker evidence. The new results
+above are native catalog/consumer evidence, not a promotion of that model to
+automatic durable source-command recovery.

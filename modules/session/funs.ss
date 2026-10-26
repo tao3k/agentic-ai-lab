@@ -6,12 +6,12 @@
 ;;; Boundary: session config data and linear row projection functions.
 ;;; Invariant: functions stay below syntax/config and perform no runtime work.
 
-(import "funs-attempt.ss"
+(import "funs-attempt.ss" "funs-identity.ss"
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/module-authoring/module-config-syntax)
 
-(export (import: "funs-attempt.ss") +agentic-ai-lab-session-config-kind+
+(export (import: "funs-attempt.ss") (import: "funs-identity.ss") +agentic-ai-lab-session-config-kind+
         session-config
         agentic-ai-lab-session-poo-config?
         agentic-ai-lab-session-poo-config->rows

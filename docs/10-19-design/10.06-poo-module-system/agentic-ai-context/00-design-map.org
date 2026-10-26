@@ -1,0 +1,257 @@
+#+title: Agentic AI Context: Existing Org Design to SysML Allocation
+#+date: [2026-10-25]
+#+language: en
+#+property: STATUS source-traceability-for-architecture-review
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Scope and reading rule
+
+This map records inspected repository designs, not new claims of their runtime
+qualification. The user's direction is overall Agent Context management across
+content, interaction history and short-/long-term knowledge, while Session
+remains independent. Existing Org contracts supply the architecture; SysML
+organizes their responsibilities and selected lifecycles.
+
+Read explicit ownership/status/supersession sections before treating old paths
+or examples as target architecture. The contracts are overlapping views, not a
+chronological sequence in which every newer file replaces every older file.
+Existing qualification receipts remain scoped to their own cuts and claims;
+they were not rerun by this documentation change.
+
+* Source allocation
+
+| Inspected source and section | Existing decision retained | SysML allocation |
+|------------------------------+----------------------------+------------------|
+| [[file:../../../../core/module-system/design/agentic-ai-context-system-design.org][System design: Decision; System structure; Module and Feature contract]] | Context owns the content/context system; independent Session dependency; optional Memory Feature; no single global mutable head | =ContextModule=, =SessionModule=, =Memory= and external owners in 01 |
+| [[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][Session/Memory contracts: Dependency direction; input boundary; transitions; Memory operations]] | Context imports Session descriptor and owns adapters; Session consumes its own generic input refs and never imports Context implementation; active Session not required for source projection/recall | =SessionBoundaryContracts=, directed composition in 01; Session/Attempt and retention activities in 02 |
+| [[file:../../../../core/module-system/design/ai-agentic-context-implementation-plan.org][Implementation plan: Accepted direction; reuse/migrate]] | Reuse existing module/feature closure and semantic owners; migration inventory is not target ownership | No extra manager Module, resolver, Memory registry or parser |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/01-agent-context-lifecycle.org][43.01: Formation/use; reassessment; consolidation; composition boundaries; cross-document composition]] | Context is bounded versioned information/relations for a question; prompt is a selected projection; long-term interpretation binds real outcomes, alternatives and defeaters; consumer-local assessment and grants do not transfer | =GraphContextComposition= and =ContextProjection= in 01; six lifecycle activities and orthogonal assessments in 02 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/09-graph-context-research.org][43.09: Core; Three orders; Topology]] | POO/LeanPOO C3/C4 composition; composition precedence, revision provenance and prompt order differ | =GraphContextComposition=, =DistinctGraphRelations= in 01 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/11-context-query-boundary.org][43.11: Decision; Owners and windows; Query/composition distinction]] | Unified POO Query/GQL; ORG Elements is the content window, including explicit external-artifact references; C3/C4 is not retrieval | =Query=, =Content= and graph/projection separation in 01 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery/12-git-project-context-model.org][43.12: Fundamental distinction]] | Git source, Context composition and consumer graphs differ; Worktree is a situated Project derivation, not a Session-owned store | Relation roles and Project/Worktree/domain/task scope in 01 |
+| [[file:../../../../core/module-system/design/166-session-memory-orgize-boundary.org][166: Opening status; Org-native source and selection; Scope]] | Preserve Orgize source identity, Query admission and cross-Worktree constraints; old memory-core/store ownership is historical | Source-qualified Content and current-use requirements in 01 |
+| [[file:../../../../core/module-system/design/167-temporal-revisit-evidence-design.org][167: Status; Three axes; Pure contract; Short observation to durable insight]] | Evidence, revisit and retention are independent; long-term is not age/storage/read count; consolidation creates new scoped versioned claims/procedures; revisit uses actual outcomes | Memory parts in 01; orthogonal enums, =RevisitLifecycle= and =Consolidate= in 02 |
+| [[file:../../../../core/module-system/design/session-org-id-subagent-scheduling-design.org][Session IDs: Decision; Identity vocabulary; Org association]] | Session owns interaction identity/scheduling; Context owns many-to-many source bindings and participant projections | Independent Session and history integration in 01 |
+| [[file:../../../../core/module-system/design/session-scheduling-granularity-design.org][Scheduling granularity: Decision; Units; Context granularity]] | Task/Attempt/Turn differ; retry does not implicitly create child Session; transcript is an optional bounded input; Context edits require fresh admission | Session contract notes in 01; Attempt lifecycle and fresh-retry boundary in 02 |
+| [[file:../../../../core/module-system/design/context-delta-lean-quint-model-design.org][Context Delta: Decision; Initial restrictions; Pure reference semantics]] | Exact immutable base/target bindings; incomplete coverage requires full reconstruction/refusal; delta success is not permission | Projection revision notes in 01/02; full Delta algorithm stays with its existing owner |
+| [[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][Context/Temporal lifecycle: Orthogonal axes; ASCENT architecture; Strategy composition; Joint envelope; Transitions]] | Separate source/projection/evidence/strategy/Session/Attempt/effect/head/Memory states; original proof/applicability and dependency-directed invalidation; exact current-envelope dispatch, result and publication fences | External semantic owners in 01; selected state axes and owner-event preconditions in 02; remaining axes explicitly referenced |
+| [[file:../../../../core/module-system/design/45-127-higher-order-capability-materialization-poo-lifecycle-object-and-runtime-policy-prototype-algebra.org][45-127: Scope; Central decision]] | Immutable POO lifecycle values, pure policy proposals, adapter-owned handles, actual reconciliation and conditional head publication | Host boundary in 01; recovery/closure receipt requirements in 02 |
+| [[file:../../../../core/module-system/design/43-session-memory-recovery-rfc.org][RFC 43: Opening ownership/status corrections]] | Historical store/session-first examples do not define Context; generic lifecycle and Org source contracts supply the corrected direction | No store-first or Session-owned Context model |
+
+* Corrections to the first discussion draft
+
+The first draft incorrectly presented static dependency direction as an open
+choice for an additional upper manager. The existing contracts and inspected
+=modules/ai-agentic-context/config.ss= already compose the independent Session
+descriptor; =modules/session/descriptor.ss= is independently owned. The updated
+model preserves that direction. Session's consumption of an opaque input ref
+is a data contract, not a reverse import.
+
+The first draft also underrepresented the already designed Graph Context,
+ORG-only Query window, consumer-local interpretation and short-to-long
+consolidation. They are restored here as inherited design, not newly invented
+features. The user's clarification emphasizes the overall system meaning of
+Context and the short-/long-term knowledge distinction within it.
+
+* Connected process
+
+[[file:03-information-to-recall.org][Information to recall]] maps these existing contracts into a connected activity
+with typed inputs/products and explicit independent Session handoffs. Its
+[[file:03-information-to-recall.sysml][SysML model]] retains the historical-result and no-generalization branches,
+then reenters working Context formation under an independently supplied new
+Demand. It adds architectural control/data flows, not new semantic owners.
+
+* Executable refinement
+
+[[file:04-executable-scenarios.org][Executable admission/handoff scenarios]] refine the four selected crossings
+using the same linked Org owners. Explicit verification verdicts and literal
+expected outputs distinguish current acceptance, refusal, preserved history,
+pending recovery and failed unsafe controls. [[file:run-scenarios.py][The runner]] executes the SysML
+model rather than interpreting the domain policy in Python.
+
+* Evidence-driven concurrent refinement
+
+[[file:05-concurrent-evidence-lifecycle.org][Concurrent evidence lifecycle]] follows the ASCENT-centered joint design,
+registered original proof/current support Host and existing SessionAttempt /
+ContextTemporalLifecycle contracts. Its [[file:05-concurrent-evidence-lifecycle.sysml][executable SysML reducer]] binds original
+premises, source/journal and grant invalidation to terminal publication and
+recovery. [[file:run-concurrency.py][The runner]] enumerates all 2,240 linearizations of its declared eight
+events and executes them in SysML, with per-prefix monitors and exact replay.
+This is a finite cross-owner scenario, not a replacement proof/inference owner.
+
+* Native correspondence and literature comparison
+
+[[file:06-native-proof-support-replay.org][Native replay correspondence]] maps original ASCENT proof, current support,
+journal withdrawal and selected Context/Session paths to actual Scheme calls,
+including a real thread join and an explicit old-snapshot bypass counterexample.
+Its initial qualification distinguishes pure intents from publication;
+[[file:08-native-owner-cas-publication.org][08]] extends this to the native final owner publication boundary.
+[[file:07-context-literature-comparison.org][CLM and related memory research]] compares primary-source mechanisms with the
+intended evidence-governed design, current local evidence and unmeasured claims.
+
+[[file:09-context-research-2026-july-october.org][Research after July 2026]] adds primary-source comparisons and the explicit
+no-lossy-replacement constraint.
+
+* Remaining model scope
+
+01 allocates responsibilities and dependencies. 02 expands projection,
+Session, Attempt and revisit axes and names formation, use, reassessment,
+consolidation, retrieval and revision activities. These are not a single
+mandatory pipeline. Source bootstrap, governed replacement, cross-Session
+competition, full ASCENT proof/support/retraction, strategy algebra, Data
+transactions and external-effect/resource reconciliation remain with their
+linked Org owners; the SysML subset does not replace or qualify them.
+
+* No-compression constraint
+
+Context retains original information, source versions, interaction history and
+proof/support/journal lineage. Working Context is a demand- and admission-bound
+selection/projection with explicit source references. Long-term knowledge
+integration creates a separately scoped derived claim with origins,
+alternatives and counterexamples; it does not replace its source with a summary.
+The research comparison in 09 applies this constraint to each recent method.
+
+* Mechanism-level comparison and executable omissions
+
+[[file:10-scroll-carryon-clm-contract-comparison.org][Scroll / CarryOn / CLM contract comparison]] connects the inherited Org owners
+to 80 executed SysML combinations, four new native scenarios and explicitly
+labeled contract ablations. Paper mechanisms and untested paper guarantees are
+kept distinct from actual native results.
+
+* Materialized source-driven invalidation
+
+[[file:11-native-eager-propagation.org][11]] connects original proof/support reverse plans to native Context dependency
+fanout, sticky invalidation and actual Session obligations. It records selective
+unaffected continuation, failed-delivery recovery, scoped concurrency paths and
+the disabled-subscription counterexample.
+
+* Authority event propagation extension
+
+[[file:12-native-authority-propagation.org][12: native authority/policy/deadline propagation]] extends the retained
+source/support graph to exact grant and policy dependencies of immutable
+Context versions. It preserves Session independence and original proof/journal
+history. Its executed SysML contracts, native owner paths, missing-subscription
+counterexamples and qualification commands are documented separately from the
+source-only slice; prior receipts do not qualify this new runtime cut.
+
+
+* Autonomous deadline extension
+
+[[file:13-native-background-clock.org][13: own Context lifecycle algorithm and background clock]] adds the native
+monotonic timer and serialized owner reactor, live-clock final-use fences,
+old-ticket isolation, original-evidence preservation, real worker result and
+recovery races, and executed SysML contract counterexamples. Its qualification
+is distinct from the manual-owner-event 12-series and from C3/C4 composition.
+
+* Durable recovery and Org Contract binding
+
+[[file:14-native-durable-recovery.org][14: durable native owner recovery]] binds the original Org Contract/Element
+cut, ASCENT proof/support/source journal, timer calendar, received inputs,
+Context publications and Attempt terminals to a local durable transaction.
+Real process-death gates and retained native counterexamples distinguish it
+from the bounded executed SysML contract. Session remains an independent reducer.
+
+* Unified GQL Provider and maintained Org Contracts
+
+[[file:15-unified-query-provider.org][15: bounded native GQL to Context Provider]] connects the unified POO Query
+model to source-qualified Org Elements, actual ASCENT membership proofs,
+versioned support/journal and eager captured-version invalidation. Its maintained
+Org Contract templates keep content IDs separate from Session identity and
+reuse existing receipt references. Executed native and SysML evidence is scoped
+separately from full GQL/Org completeness and external source authentication.
+
+[[file:16-query-durable-owner-handoff.org][16: durable Query source handoff]] specifies the remaining named-command
+recovery boundary between Provider source changes and the existing durable
+Context owner, including catalog persistence without a consumer. It reuses
+current identities and journal ownership. Executed SysML interleavings and
+saved unsafe/corrected replays qualify the bounded contract; native source
+command and crash integration remain open.
+
+[[file:17-native-catalog-root-recovery.org][17: native catalog roots and recovery readiness]] separates source retention
+from observation selection within the existing recovery value. It specifies
+owner reopening, rejects mismatched shared source histories and prevents a
+catalog-only root from becoming a consumer observation. Its focused native gate
+uses real SQLite and independent process replay; automatic owner integration
+remains a separate obligation.
+
+[[file:18-native-durable-source-commands.org][18: native durable source commands]] connects source replacement/withdrawal
+to the existing owner transaction, committed catalog reconstruction and pending
+input recovery. It keeps original evidence, shares one Provider across restored
+consumers and checks immutable command bytes before historical ACKs. Native
+process-death gates and retained unsafe controls qualify their recorded cuts.
+
+[[file:19-repeated-owner-recovery.org][19: repeated owner recovery and current readiness]] checks recovery itself
+being killed repeatedly, exact worker obligations and a fresh readiness commit
+per owner epoch. Original source-prefix images remain historical inputs; new
+native recovery chains and SysML cut combinations carry separate evidence.
+
+[[file:20-native-grant-revocation.org][20: production Scheme grant revocation]] adds a pure retirement proposal,
+immutable named owner command, exact grant-cut CAS and pending-input replay.
+The existing authority dependency graph invalidates A/B while source proof
+support and unrelated C remain intact. Native crash/result/control prefixes
+and a separate executed SysML contract qualify their recorded cuts.
+
+* Durable policy transition implementation
+
+[[file:21-native-policy-transition.org][21: Native durable policy transition]] implements the pure POO command,
+registered generation/digest CAS, native Policy Host handoff and original-inbox
+recovery. Its native and SysML gates distinguish authority retirement from
+source evidence preservation and retain stale-command/deadline controls.
+
+* Legacy policy migration and interleavings
+
+[[file:22-native-policy-migration.org][22: Policy replacement migration]] removes the alternate recovery branch,
+centralizes policy effects in owner dispatch, migrates callers to version CAS,
+and supplies bounded all-order native/clock and executable SysML exploration.
+
+* Native owner lifetime and unpartitioned capacity
+
+[[file:23-native-owner-lifecycle.org][23: Native owner lifecycle]] addresses the monolithic watchdog failure with
+explicit teardown and indexed inbox access. Its final gate retains one process
+for all 60 scenarios under the original heap/watchdog, with actual resource
+predicates, negative controls and whole-process replay.
+
+* Native Actor runtime costs and historical proof credentials
+
+See [[file:24-native-runtime-cost.org][24: Actor runtime costs and sealed historical proof credentials]] for the
+user-authorized 2 GiB profile, measured checkpoint replay fix, native controls
+and complete-process qualification/replay evidence. Earlier 1 GiB results remain separate.
+Its dual acceptance section records cold reconstruction and long-lived Context
+current-proof use independently, source-bound Org replay costs, and rejected
+experiments. [[file:24-dual-runtime-results.json][The current structured results]] retain receipt and custody hashes.
+
+* Native runtime correction and partition contracts
+
+[[file:25-native-runtime-corrections.org][25]] records measured cold costs, native replay sharing, failed-anchor
+rollback/release, stale-writer lock release and Core issuer admission, with the
+original failures kept separate. [[file:26-distributed-runtime.org][26]] allocates the proposed multi-node/shard
+runtime and its QNT owner/authority/publication contract. Local Scheme, complete
+SysML behavior execution, finite QNT verification and distributed implementation
+are separate evidence dimensions; none substitutes for another.
+
+* Bounded Runtime scheduling correspondence
+
+[[file:27-bounded-scheduling.org][27]] refines 26 with a pure native POO scheduling contract, executable
+SysML handoffs, finite QNT interleavings and actual ITF-to-Scheme replay.
+The reference Actor adapter verifies reserved admission credits before mailbox
+entry. Production Context owner integration and distributed scheduling remain
+separate from this qualified contract.
+
+* Scheme authority and Rust runtime ecosystem
+
+[[file:28-hybrid-runtime.org][28]] integrates bounded ingress into the existing local Context owner and
+composes authority, scheduling and foreign-call lifetime in QNT/SysML. The
+Rust consumer reuses gerbil-scheme-rust fixed VM owners and Tokio, preserving
+Scheme semantics and the C/AOT boundary. Native Context qualification and the
+upstream-image transport fixture are separate; the production Context AOT
+service export and multi-node runtime remain explicit integration work.
+
+* Native Context service and the C ABI boundary
+
+[[file:29-production-service.org][29]] implements the native POO service, durable original decisions and
+close-before-work behavior. Scheme retains all lifecycle semantics; Bindings
+retain the existing C ABI responsibilities. Premature Rust integration was
+withdrawn. The new lifecycle service's C export remains explicitly open.

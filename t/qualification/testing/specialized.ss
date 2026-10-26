@@ -3,29 +3,12 @@
 ;;; Entry projection only: installed native harnesses still own the suites.
 (import :clan/poo/object
         (only-in "./qualification.ss" qualification-script)
-        (only-in "./package-result.ss" admit-package-batches)
-        (only-in "../../../build-modules.ss" agentic-ai-lab-library-modules)
-        (only-in :asp-gerbil-scheme/testing-runner-api testing-interface-test-files)
-        (only-in :agentic-ai-lab/dev/testing-profiles +agentic-ai-lab-project-testing-interface+)
+        (only-in "../../../init.ss" agentic-ai-lab.init.exports)
         (only-in :std/source this-source-file))
 (def root (path-expand "../../.." (path-directory (this-source-file))))
 (def watch "packages/python-runtime/tools/watch.py")
 (def (watched command) (append (list "python3" watch) command))
 (def (absolute file) (path-expand file root))
-
-;; The native owners supply production and test inventories. This is an input
-;; projection for the existing Script source cut, not another discovery graph.
-(def (package-inputs)
-  (append
-    '("build.ss" "build-modules.ss" "build-spec.ss" "gerbil.pkg" "dev/gerbil.pkg"
-      "dev/testing-preload.ss" "dev/just/build.just" "dev/just/testing.just"
-      "tools/ci/patches/gerbil-gxtest-runtime-init.patch")
-    agentic-ai-lab-library-modules
-    '("modules/nono-sandbox/_nono.ss"
-      "modules/workflow/runtime/runtime-v0-native.ss"
-      "modules/workflow/runtime/semantic.ss")
-    (testing-interface-test-files +agentic-ai-lab-project-testing-interface+
-                                  (absolute "unit-tests.ss"))))
 
 (def (selected-script name vm arguments)
   (def (interpreted file) (list "gxi" vm file))
@@ -35,20 +18,6 @@
   (def (runner file test count (lines '()) (command (interpreted file)))
     (native (list test) (watched command) 45 count (list file watch) lines))
   (case (string->symbol name)
-    ((package)
-     (.cc (qualification-script '("unit-tests.ss")
-            (list "gerbil" vm "env" "gxi" vm "./unit-tests.ss") 1200
-            inputs: (append (list (this-source-file) "t/qualification/testing/package-result.ss"
-                                  "unit-tests.ss" "dev/testing-profiles.ss")
-                            (package-inputs)))
-       'log (absolute ".gerbil/test-results/package.log")
-       '.admit-result admit-package-batches))
-    ((package-file)
-     (let (file (car arguments))
-       (.cc (qualification-script (list file)
-              (list "gerbil" vm "test" "-v" "3" file) 1200
-              inputs: (list (this-source-file)))
-         'log (absolute ".gerbil/test-results/package-file.log"))))
     ((gerbil-runtime)
      (native '("t/gerbil-runtime-import-test.ss")
        (list "gerbil" vm "test" "t/gerbil-runtime-import-test.ss") 90 #f))
@@ -86,22 +55,22 @@
      (runner "t/harness/temporal-support-runner.ss" "t/temporal-support-test.ss" 9 '()
        (list "gerbil" vm "env" "gerbil" vm "t/harness/temporal-support-runner.ss")))
     ((temporal-evaluator)
-     (runner "t/harness/temporal-evaluator-runner.ss" "t/temporal-evaluator-test.ss" 28))
+     (runner "t/harness/temporal-evaluator-runner.ss" "t/temporal-evaluator-test.ss" 58))
     ((ascent-temporal)
      (runner "t/harness/ascent-temporal-runner.ss" "t/ascent-temporal-lens-test.ss" #f
        '("CASE-OK POO values keep native evidence separate from cut authority"
          "CASE-OK explicit cut bridge preserves uncertainty and original identity binding")
        (list "gerbil" vm "env" "gerbil" vm "t/harness/ascent-temporal-runner.ss")))
     ((context-temporal)
-     (let* ((runner "t/harness/context-temporal-runner.ss")
-            (progress "t/harness/scheme-progress.ss")
-            (files (map (lambda (name)
-                          (absolute (string-append ".gerbil/lib/agentic-ai-lab/t/" name "-test.ssi")))
-                     '("temporal-evaluator" "ai-agentic-context-session-host"
-                       "ai-agentic-context-delta" "session-attempt"
-                       "ai-agentic-context-org-anchors" "query-orgize-source"))))
-       (native files (watched (append (interpreted runner) files))
-         45 69 (list runner progress watch))))
+     (let* ((demand
+              (.call (.get agentic-ai-lab.init.exports tests) .for-files
+                (list (absolute "t/qualification/context-temporal/interface.ss"))
+                (list (this-source-file) (absolute watch))))
+            (files (.get demand spec)))
+       (.cc (.get demand execution)
+         'runtime-options (list vm)
+         'command (watched (append (list "gerbil" vm "test" "-v" "5") files))
+         'timeout 45 'idle-timeout #f 'case-count 99)))
     (else (error "unknown specialized qualification" name))))
 
 (def (main name vm . arguments)

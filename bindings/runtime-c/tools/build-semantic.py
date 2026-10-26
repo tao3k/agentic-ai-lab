@@ -48,6 +48,11 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    # Preserve the selected package frontend before changing C-tool PATH.
+    # Its build command supplies the native package environment to build.ss.
+    frontend = shutil.which("gerbil")
+    if frontend is None:
+        raise RuntimeError("selected Gerbil package frontend is unavailable")
     # Resolve the selected package SDK before platform C-tool PATH adjustments.
     home = Path(run(["gxi", "-e", "(displayln (gerbil-home))"], capture=True).strip())
     if platform.system() == 'Darwin':
@@ -65,59 +70,19 @@ def main() -> None:
     stage.mkdir(parents=True, exist_ok=True)
     gsc = str(home / "bin/gsc")
     os.environ["GAMBOPT"] = f"~~={home},~~bin={home / 'bin'},~~lib={home / 'lib'}"
-    compiler = [str(home / "bin/gxc"), "-:max-heap=1G,debug=q"]
-    # Module compilation already emits compiler-owned static sources.
-    # -static controls executable dependency linkage and cannot link Darwin dylibs.
-    for source in ["yuanxu/utilities/product-syntax.ss", "yuanxu/utilities/final-projection-syntax.ss",
-                   "yuanxu/graph/types-core.ss", "yuanxu/graph/algorithms-list-support.ss",
-                   "yuanxu/graph/algorithms.ss", "modules/temporal-causality/types.ss",
-                   "modules/temporal-causality/objects.ss", "modules/temporal-causality/funs.ss",
-                   "modules/workflow/runtime/temporal-family.ss", "modules/temporal-causality/truth-maintenance/types.ss",
-                   "modules/temporal-causality/conclusions/types.ss",
-                   "modules/temporal-causality/conclusions/objects.ss",
-                   "modules/temporal-causality/conclusions/funs.ss",
-                   "modules/temporal-causality/admission/interface.ss",
-                   "modules/temporal-causality/applicability/types.ss",
-                   "modules/temporal-causality/applicability/objects.ss",
-                   "modules/temporal-causality/applicability/funs.ss",
-                   "modules/temporal-causality/applicability/interface.ss",
-                   "modules/temporal-causality/truth-maintenance/objects.ss",
-                   "modules/temporal-causality/lifecycle/types.ss",
-                   "modules/temporal-causality/lifecycle/objects.ss",
-                   "modules/temporal-causality/lifecycle/funs.ss",
-                   "modules/temporal-causality/lifecycle/interface.ss",
-                   "modules/query/semantic/context-restriction.ss", "modules/workflow/runtime/context-restriction.ss",
-                   "modules/workflow/runtime/temporal-admission.ss", "modules/workflow/runtime/scheme-wire.ss", "modules/workflow/runtime/temporal-archive.ss",
-                   "modules/temporal-causality/time/types.ss", "modules/temporal-causality/time/objects.ss",
-                   "modules/temporal-causality/time/funs.ss",
-                   "modules/temporal-causality/revisions/types.ss", "modules/temporal-causality/revisions/objects.ss",
-                   "modules/temporal-causality/revisions/funs.ss", "modules/temporal-causality/revisions/interface.ss",
-                   "modules/temporal-causality/truth-maintenance/funs.ss",
-                   "modules/temporal-causality/truth-maintenance/support/types.ss",
-                   "modules/temporal-causality/truth-maintenance/support/objects.ss",
-                   "modules/temporal-causality/truth-maintenance/support/funs.ss",
-                   "modules/temporal-causality/truth-maintenance/support/policy.ss",
-                   "modules/temporal-causality/truth-maintenance/support/interface.ss",
-                   "modules/temporal-causality/truth-maintenance/support/policy-host.ss",
-                   "modules/ai-agentic-context/use-host.ss",
-                   "modules/temporal-causality/evaluator/fact.ss", "modules/workflow/runtime/temporal-support.ss",
-                   "modules/temporal-causality/evaluator/positive-proof.ss",
-                   "modules/temporal-causality/evaluator/binding.ss",
-                   "modules/temporal-causality/evaluator/rule.ss",
-                   "modules/temporal-causality/evaluator/derivation.ss",
-                   "modules/temporal-causality/evaluator/proof-host.ss",
-                   "modules/temporal-causality/evaluator/interface.ss", "modules/workflow/runtime/temporal-proof.ss", "modules/workflow/runtime/temporal-policy.ss", "modules/workflow/runtime/temporal-proof-host.ss", "modules/workflow/runtime/context-use.ss"]:
-        run([*compiler, "-O", source])
-    run([*compiler, "-O",
-         "-ld-options", "-Wl,-undefined,dynamic_lookup" if platform.system() == "Darwin" else "-ldl",
-         "modules/workflow/runtime/semantic.ss"])
+    # Compile Scheme modules through the product's single init-owned Make spec.
+    # This consumer only materializes C objects from the SDK-emitted static
+    # closure below; it never maintains a module list or compiler-order policy.
+    run([frontend, "build"])
     expression = '''(let* ((ctx (import-module "modules/workflow/runtime/semantic.ss"))
                            (deps (gxc#find-runtime-module-deps ctx)))
                       (for-each (lambda (dep)
                         (displayln (expander-context-id dep) "\\t"
                                    (gxc#find-static-module-file dep))) deps)
                       (displayln "ROOT\\t" (gxc#find-static-module-file ctx)))'''
-    closure = run([str(home / "bin/gxi"), "-:max-heap=1G,debug=q", "-e", "(import :gerbil/compiler/driver :gerbil/expander)",
+    # Resolve the compiler's static closure in that same native package
+    # environment, rather than guessing GERBIL_PATH/LOADPATH in Python.
+    closure = run([frontend, "env", str(home / "bin/gxi"), "-:max-heap=1G,debug=q", "-e", "(import :gerbil/compiler/driver :gerbil/expander)",
                    "-e", expression], capture=True)
     system, user, inputs = [], [], []
     seen = set()

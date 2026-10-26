@@ -18,11 +18,17 @@
 ;; Native package clones acquire the declared Core gitlink before source lowering.
 (def retained-spec
   (begin
-    (run-process
-      (list "git" "-C" (path-directory (this-source-file))
-            "submodule" "update" "--init" "--depth" "1" "--" "core")
-      stdin-redirection: #f stdout-redirection: #f)
-    (agentic-ai-lab-build-spec)))
+    ;; Bootstrap a missing checkout only. An existing Core may contain an
+    ;; intentional revision or local work and must not be reset by a build.
+    (unless (file-exists? (path-expand "core/gerbil.pkg" (path-directory (this-source-file))))
+      (run-process
+        (list "git" "-C" (path-directory (this-source-file))
+              "submodule" "update" "--init" "--depth" "1" "--" "core")
+        stdin-redirection: #f stdout-redirection: #f))
+    ;; Compatibility consumers may start in dev/. Retained library paths
+    ;; are always resolved against this product entry, never the caller's cwd.
+    (parameterize ((current-directory (path-directory (this-source-file))))
+      (agentic-ai-lab-build-spec))))
 
 ;; The selected init owns source lowering; the SDK owns Make and dispatch.
 (def modules-spec (.get agentic-ai-lab.init.exports std-make-spec))

@@ -1,0 +1,163 @@
+#+title: Repeated Owner Recovery and Current Readiness
+#+language: en
+:PROPERTIES:
+:ID: context-repeated-owner-recovery
+:STATUS: selected-native-recovery-chains-qualified
+:END:
+
+* Inherited boundary and new obligation
+
+This refines [[file:18-native-durable-source-commands.org][18: native durable source commands]]. That gate killed an initial
+owner and recovered it. It did not establish behavior when recovery itself
+dies repeatedly. The runtime protocol is unchanged in this slice; executable
+native probes enter the existing replay and readiness commit boundaries.
+
+The source command keeps its existing input identity and expected source cut.
+Every new owner acquires a new durable epoch. Session identity and original
+Attempt identity remain unchanged. Source applicability, current writer epoch,
+historical completion and outstanding worker obligations remain separate axes.
+
+* Readiness is current-epoch evidence
+
+A committed old =owner-recovery:<epoch>= record proves a historical decision.
+It does not certify the next owner or authorize opening before replay. A failed
+old readiness input must not be relabeled as an applied decision. Each new
+owner must complete its own reconstruction/replay and commit its own readiness
+before its reactor can return bootstrap success.
+
+Older failed readiness inputs remain historical bookkeeping in the retained
+inbox. They are not pending source/authority commands and cannot grant effects.
+Their cleanup/archival is separate from worker reconciliation. Removing such
+metadata cannot be used as evidence that an old worker terminated.
+
+| Recovery cut | Committed source state | Next owner's duty |
+|--------------+------------------------+-------------------|
+| Before source decision commit, repeatedly | Original source cut and original pending input | Reconstruct subscribers and retry the original command |
+| After source decision commit | Retired source, affected Context fences and obligations committed together | Retain that decision; do not rerun or overwrite it |
+| Before readiness commit | Source decision may already be committed; old readiness did not succeed | Retain fences and commit the new owner's readiness |
+| After readiness commit but before bootstrap returns | Historical ready decision exists for the dead owner | Acquire a new epoch and commit a fresh readiness decision |
+
+No result is published in these failed boots. The final successful boot still
+uses native Context/Session checks. Portable old worker data cannot recreate an
+observation capability. A/B lose current applicability, while unrelated C keeps
+its actual completed result. Source re-admission cannot restore the original
+proof or the captured original parent version.
+
+* Exact recovery obligations
+
+Recovering a live Attempt creates one unresolved obligation. Recovering a
+schedule that already contains that obligation must retain it once, not append
+another copy. Historical completed Attempts acquire no new worker obligation.
+Every injected native cut checks exact fixture obligation counts and at most
+one terminal per A/B Attempt. SQLite independently retains original terminal
+payload hashes through all failed recoveries and the final successful owner.
+
+The counts in this fixture are not a universal one-obligation limit for every
+Session. They follow from one original Attempt per participating Session. The
+production Session reducer continues to own scheduling/reconciliation.
+
+* Native original-image recovery chains
+
+[[file:run-native-query-recovery.py][The native gate]] uses three section-18 saved images: A/B pending with C
+completed, A/B/C already completed, and a source with no consumers or Query
+observations. It verifies image hashes and unchanged runtime/native dependencies;
+only the new crash-probe driver differs from the historical qualification.
+Historical seed receipts are not relabeled as current-build receipts.
+
+Each chain kills five independent recovery processes: source before-commit
+twice, source after-commit, readiness before-commit, readiness after-commit.
+A sixth owner must open successfully using its own ready decision. Every cut
+retains its original database image. The gate distinguishes provisional state
+read by a writer inside its transaction from the committed crash image checked
+after SIGKILL. This is crucial: a private invalidation is not durable delivery.
+
+[[file:audit-recovery-chains.py][The independent corpus audit]] requires all three profiles, identical current
+source/object cuts, immutable seed references and a current-epoch ready record.
+It checks that old failed readiness was not retroactively authorized and old
+committed readiness remains historical. It does not turn unexecuted suffixes
+from the source-prefix corpus into new concurrent executions.
+
+#+begin_src sh
+just build-test t/context-query-durable-test.ss
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-native-query-recovery.py" --seed-receipt /private/tmp/context-query-source-owner-final-20261025/query-durable-receipt.json --artifacts /private/tmp/context-query-recovery-run
+#+end_src
+
+Exact durable replay requires the seed's boot/clock enrollment. Process-death
+recovery on the same boot does not qualify host reboot or clock re-admission.
+The gate uses serial Just processes with the existing pre-import heap fence.
+
+* Executed SysML contract
+
+[[file:19-repeated-recovery.sysml][The SysML v2 model]] enumerates five failed boots with three abstract cuts per
+boot, three consumer profiles and five algorithm modes. It checks exactly one
+source decision, current-epoch readiness, A's exact pending obligation and B's
+captured-parent fence. Native probes additionally check B's worker obligation.
+Terminal bytes and raw evidence are immutable inputs in this bounded model;
+actual persistence and original proof replay remain native obligations.
+
+[[file:run-recovery-scenarios.py][The CLI runner]] checks actual execution outputs against independent trigger
+conditions and retains each unsafe witness with corrected replay. These are
+recovery-cut combinations, not all OS interleavings, source authenticity or a
+mechanical refinement proof of the Scheme implementation.
+
+#+begin_src sh
+python3 "$slice/run-recovery-scenarios.py" --artifacts /private/tmp/context-query-recovery-model
+python3 "$slice/run-recovery-scenarios.py" --replay /private/tmp/context-query-recovery-model/counterexample-0004.json --artifacts /private/tmp/context-query-recovery-model-replay
+#+end_src
+
+The full source/policy/grant/expiry event product, remote worker reconciliation,
+and physical checkpoint normalization remain open. Finite repeated crashes
+establish selected safety observations; eventual progress assumes that a writer
+eventually remains alive long enough to finish recovery.
+
+* Qualified local results: 2026-10-25
+
+All three final native chains passed: pending A/B, historically completed A/B,
+and zero consumers. Each chain contains five actual SIGKILLs during recovery
+and a sixth owner that completes normal startup. The native probes checked
+exact A/B obligation counts at every injected cut. Terminal payload digests and
+original evidence remained unchanged; the source input produced exactly one
+durable source decision across all six owner epochs.
+
+The independent audit confirmed that the failed old readiness was not marked
+applied, the committed old readiness remained historical, and the final owner
+committed its own ready record under its new epoch. Reopening the databases for
+that audit left every retained artifact hash unchanged.
+
+Final native evidence is
+=/private/tmp/context-query-recovery-final-20261025/recovery-receipt.json= and
+=corpus-audit.json=. The current runtime/native dependency cut matches the
+historical seed cut; only the crash-probe driver and gates changed. Each of the
+15 intermediate committed images remains independently retained.
+
+A current-build native unsafe control also restored the original pending-source
+image while omitting source replay. Cached A remained admitted, reproducing
+the missed-invalidation failure. It is retained separately at
+=/private/tmp/context-query-recovery-final-counter-20261025/counter-receipt.json=.
+This is a cached-invalidation witness, not a claim that an old endpoint
+capability survived process death.
+
+The SysML CLI executed 3,645 cases: 243 five-cut sequences, three profiles and
+five algorithm modes. All 729 safe-mode cases held. Of 2,916 unsafe-mode probes,
+2,087 exposed their expected violation and 829 lacked its triggering condition.
+There were zero unexpected verdicts. Four saved unsafe witnesses and their
+mode-zero corrections added eight executed replay cases, with four expected
+failures. The evidence is under
+=/private/tmp/context-query-recovery-model-v2-20261025/= and
+=/private/tmp/context-query-recovery-model-replay-20261025/=.
+
+The first assertion-successful native runs were rejected at artifact audit:
+their receipts included transient SQLite =-wal= / =-shm= coordination files.
+Final capture explicitly closes inspection handles, checkpoints committed data
+into self-contained WAL-mode main files, verifies that checkpointing preserves
+the logical committed state, and excludes transient files. Original application
+bytes and journal payload hashes are retained. The initial receipts remain
+capture diagnostics; they were not relabeled as final qualification. An early
+SysML reserved-word syntax diagnostic is likewise separate from executed cases.
+
+The combined index is
+=/private/tmp/context-query-recovery-evidence-20261025.json=.
+These are selected repeated-recovery observations and a bounded model. They do
+not establish all possible crash lengths or the complete concurrent product of
+source, authorization, strategy and expiry changes.

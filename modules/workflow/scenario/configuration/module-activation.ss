@@ -14,7 +14,8 @@
 ;;; Run-config lowering is the only place this owner touches core config values.
 ;;; Parser policy should treat this file as the resolver/activation owner.
 
-(import :yuanxu/modules/funflow/control-plane/failure
+(import (only-in :clan/poo/object .get)
+        :yuanxu/modules/funflow/control-plane/failure
         :yuanxu/modules/funflow/control-plane/task
         :yuanxu/modules/funflow/control-plane/flow
         :yuanxu/modules/funflow/control-plane/config
@@ -23,8 +24,7 @@
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
         :yuanxu/module-system/catalog/objects
-        (only-in :yuanxu/object-family/syntax
-                 defpoo-object-family)
+        (prefix-in "./module-composition.ss" composition.)
         :yuanxu/utilities/final-projection-syntax)
 
 (export resolve-agentic-ai-lab-module-source
@@ -54,7 +54,7 @@
        'missing-module-source
        "agentic-ai-lab module source was not found in catalog"
        (yuanxu-product-field-rows
-        (catalog (yuanxu-module-catalog-name catalog))
+        (catalog (.get catalog name))
         (source (yuanxu-module-source-ref->alist source-ref)))))))
 
 ;;; Boundary: multi-source resolution preserves requested source order.
@@ -86,55 +86,25 @@
   (activate-agentic-ai-lab-modules
    (resolve-agentic-ai-lab-module-sources catalog source-refs)))
 
-;;; Boundary: activation appends descriptor contributions without mutation.
-;; : (-> [PooModuleDescriptor] TaskFamilyRegistry FlowDeclarationRegistry ModuleOptionAlist PooModuleActivation)
-(defpoo-object-family
-  (prototype agentic-ai-lab-module-activation-prototype
-             activation?
-             agentic-ai-lab-module-activation?)
-  (constructor make-agentic-ai-lab-module-activation
-               (modules-value modules)
-               (task-registry-value task-registry)
-               (flow-registry-value flow-registry)
-               (options-value options))
-  (accessors
-   (agentic-ai-lab-module-activation-modules modules)
-   (agentic-ai-lab-module-activation-task-registry task-registry)
-   (agentic-ai-lab-module-activation-flow-registry flow-registry)
-   (agentic-ai-lab-module-activation-options options))
-  (projections))
-
-;;; Boundary: activation validates closure then appends base-first registries.
-;;; Intent: runtime-visible registries are deterministic snapshots of module data.
-;; : (-> [PooModuleDescriptor] TaskFamilyRegistry FlowDeclarationRegistry ModuleOptionAlist PooModuleActivation)
-(def (activate-agentic-ai-lab-modules-with-base modules base-task-registry base-flow-registry base-options)
-  (let (closed-modules (agentic-ai-lab-module-closure modules))
-    ;; Import validation must see the same closure that registry aggregation uses.
-    (validate-yuanxu-module-imports closed-modules)
-    (make-agentic-ai-lab-module-activation
-     closed-modules
-     (make-task-family-registry
-      (task-family-registry-name base-task-registry)
-      ;; Base descriptors stay first so existing lookup behavior is preserved.
-      (append (task-family-registry-descriptors base-task-registry)
-              (agentic-ai-lab-module-all-task-descriptors closed-modules)))
-     (make-flow-declaration-registry
-      (flow-declaration-registry-name base-flow-registry)
-      (append (flow-declaration-registry-descriptors base-flow-registry)
-             (agentic-ai-lab-module-all-flow-descriptors closed-modules)))
-     (append base-options
-             (agentic-ai-lab-module-all-options closed-modules)
-             (list (cons 'agentic-ai-lab-modules
-                         (agentic-ai-lab-module-names closed-modules)))))))
-
-;;; Boundary: default activation uses project default task and flow registries.
-;; : (-> [PooModuleDescriptor] PooModuleActivation)
-(def (activate-agentic-ai-lab-modules modules)
-  (activate-agentic-ai-lab-modules-with-base
-   modules
-   default-task-family-registry
-   default-flow-declaration-registry
-   '()))
+;;; Retain the established runtime bindings for compiled callers.
+(def agentic-ai-lab-module-activation-prototype
+  composition.agentic-ai-lab-module-activation-prototype)
+(def make-agentic-ai-lab-module-activation
+  composition.make-agentic-ai-lab-module-activation)
+(def agentic-ai-lab-module-activation?
+  composition.agentic-ai-lab-module-activation?)
+(def agentic-ai-lab-module-activation-modules
+  composition.agentic-ai-lab-module-activation-modules)
+(def agentic-ai-lab-module-activation-task-registry
+  composition.agentic-ai-lab-module-activation-task-registry)
+(def agentic-ai-lab-module-activation-flow-registry
+  composition.agentic-ai-lab-module-activation-flow-registry)
+(def agentic-ai-lab-module-activation-options
+  composition.agentic-ai-lab-module-activation-options)
+(def activate-agentic-ai-lab-modules
+  composition.activate-agentic-ai-lab-modules)
+(def activate-agentic-ai-lab-modules-with-base
+  composition.activate-agentic-ai-lab-modules-with-base)
 
 ;;; Boundary: run-config lowering keeps modules outside runner internals.
 ;; : (-> Symbol Strategy RuntimeAdapter PooModuleActivation RunConfig)

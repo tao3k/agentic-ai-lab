@@ -13,6 +13,7 @@ from semantic_cases import temporal_request
 
 def test_semantic_native_descriptor(runtime):
     assert runtime.descriptor['operations'] == [
+        'context.lifecycle.inspect',
         'context.use.observe',
         'temporal.solve',
         'graph.admit',

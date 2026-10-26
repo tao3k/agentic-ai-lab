@@ -1,0 +1,165 @@
+#+title: Native Durable Grant Revocation
+#+language: en
+:PROPERTIES:
+:ID: context-native-durable-grant-revocation
+:STATUS: production-scheme-selected-native-prefixes-qualified
+:END:
+
+* Production change and inherited owners
+
+This implements the authorization-control seam left open by
+[[file:18-native-durable-source-commands.org][18: durable source commands]] and [[file:19-repeated-owner-recovery.org][19: repeated recovery]]. It changes
+production Scheme, not only models or test fixtures.
+
+| Implementation | Responsibility |
+|----------------+----------------|
+| =modules/ai-agentic-context/use-host.ss= | Pure POO revocation proposal preserving exact grant contract/provenance; existing authority Host owns publication and irreversible retirement |
+| =modules/ai-agentic-context/durable-owner.ss= | Frozen named command, expected-cut check, active-input binding, durable decision and pending-input recovery |
+| Existing Session Host authority observer | Dependency-directed A/B invalidation and worker obligations; independent C remains usable |
+| Existing journal/owner reactor | Writer epoch, immutable input identity, commit-before-ACK and unique terminal ledger |
+
+There is no second grant registry or propagation algorithm. Org IDs identify
+content; SESSION_ID references the independent Session owner. The command uses
+the existing transport/inbox identity for delivery deduplication.
+
+* Native functional and runtime APIs
+
+=agentic-ai-lab-context-use-grant-revoke= validates an original enabled grant
+and returns the next generation with =enabled?: #f=. Identity, manifest,
+admission, contract, policy and purposes are preserved. The function performs no
+authority publication. It refuses a forged or already retired input.
+
+=context-durable-revoke-command= freezes that proposal and its original expected
+digest into the existing =context.durable-command.v1= protocol. The data-only
+wire copy prevents caller-owned mutable strings from changing the handed-off
+command. Constructing the command never grants tool/effect authority.
+
+Trusted owner handoff uses the existing named-command route:
+
+#+begin_src scheme
+(def revoke-intent
+  (context-durable-revoke-command input-id admitted-grant))
+
+(policy-clock-command!
+ clock revoke-intent
+ (lambda (resource)
+   (.call adapter .revoke-grant! adapter revoke-intent)))
+#+end_src
+
+The adapter requires the exact active input bytes and operation under the
+existing writer transaction. The current grant digest must match the expected
+cut, and the proposed grant must equal the canonical pure retirement of that
+current grant. A stale cut or different proposal records a refused decision.
+An unknown grant cannot be created by sending a revocation.
+
+After comparing the received bytes, both source and grant handlers consume the
+adapter's detached inbox copy. They do not reread the caller-owned proposal to
+choose the effect. This preserves the received-input/effect binding even when
+the caller retains mutable values in its original command object.
+
+The grant snapshot, native Context invalidation, pending worker obligations,
+original terminal records and decision commit together before ACK. Pending
+revocation inputs replay through the same implementation before the owner
+opens. Same-ID retries check original bytes before returning a historical ACK.
+The ACK reports processing history; it does not itself assert current authority
+or that every proposal was accepted. The original accepted/refused decision is
+retained in the existing journal state/version history.
+
+* Authority withdrawal is not evidence deletion
+
+The registered source and original Org/GQL/ASCENT membership proof remain valid
+evidence when a consumer loses its grant. Revocation changes the applicability
+of a use under captured authority. It must not retract the source merely to
+force a use check to fail.
+
+The fixture distinguishes direct consumer A, consumer B whose own source/grant
+is still valid but which captured A's old authority, and independent C. Native
+cached A/B invalidation is checked before independent source-support queries.
+All three original Query observations remain supported; A/B current use is
+denied, while C's actual completed result remains current.
+
+A grant retired under its registered identity cannot be re-enabled by claiming
+a higher generation. New authorization is a separate admitted authority, not
+revival of the old receipt. Historical completion remains immutable; cancellation
+and owner recovery do not fabricate endpoint termination or another terminal.
+
+* Executable gates and scope
+
+[[file:run-native-grant-revocation.py][The native gate]] runs real return workers and independent source/control
+producer notifications. It distinguishes actual arrival from selected owner
+prefixes. It kills the owner at after-inbox, before-decision-commit and
+after-commit/before-ACK boundaries, then restarts another native process.
+Actual pre-crash A/B completions are checked against an independent positional
+oracle and the SQLite terminal ledger. Planned events after the killed command
+are recorded as unexecuted suffixes.
+
+The gate checks pure command detachment, mismatched expected cuts while the
+grant is enabled, one decision/application after recovery, duplicate delivery,
+same ID with another body, a delayed revocation and a canonical attempt to
+resurrect the retired grant. It preserves source/Query history and all original
+terminal digests. Original crash-image recovery and a native missing-replay
+counterexample remain separate executable paths.
+
+#+begin_src sh
+just build-test t/context-grant-durable-test.ss
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-native-grant-revocation.py" --artifacts /private/tmp/context-grant-run
+python3 "$slice/run-grant-scenarios.py" --artifacts /private/tmp/context-grant-model
+#+end_src
+
+The native gate uses the existing pre-import heap fence and the real boot
+identity. Timer dispatch is disabled for this authority-specific fixture; the
+complete joint source/policy/grant/expiry product remains open. The existing
+Source owner path is regressed on this production cut because the active-input
+guard and pending control replay are now shared.
+
+[[file:20-grant-revocation.sysml][The SysML contract]] separately executes expected-cut admission, immutable
+input retries, pushed consumer fences, preservation of source support and
+irreversible retirement. It is not a source-refinement proof or exhaustive
+native concurrency verification.
+
+* Qualified local results: 2026-10-26
+
+The final production Scheme build passed five actual process-death prefixes:
+after inbox receipt with revocation first, before commit with A's actual result
+first, after commit with cancellation/recovery first, and two observed-arrival
+prefixes at before/after commit. Every case used SIGKILL and another native
+owner process. The original saved case-00 image also passed a separate positive
+recovery and exposed a native omitted-replay counterexample with cached A still
+admitted. These are selected crash prefixes, not complete five-event traces or
+an exhaustive proof of OS scheduling.
+
+Each corrected recovery retained immutable terminal payloads, exactly one
+original revocation decision, A/B invalidation and C's actual completion. All
+three original Query observations remained source-supported. The tests also
+passed caller-string detachment, expected-cut refusal while still enabled,
+historical retry, changed-body refusal, rejection outside a transaction, delayed
+revocation refusal and canonical higher-generation resurrection refusal.
+
+The final receipt is
+=/private/tmp/context-grant-sealed-final-20261026/grant-receipt.json=.
+Its independent =grant-audit.json= rechecked real traces, committed images,
+the positional terminal oracle and every artifact hash after SQL reopening.
+The same final source/object cut passed the existing source-withdrawal
+before-commit crash path with an actual A result before the source change;
+its receipt is
+=/private/tmp/context-grant-sealed-source-regression-20261026/source-regression-receipt.json=.
+
+An earlier native pass is retained under =context-grant-final-20261026/= as a
+prior cut. The handlers were subsequently tightened to consume only their
+detached inbox copy after byte validation, then production Scheme was rebuilt
+and both grant and source gates were run again. That earlier pass was not
+relabeled as final qualification.
+
+The actual SysML CLI executed 192 contract cases. All 32 safe-mode cases held;
+29 of 160 unsafe-mode probes exposed their expected violations, with zero
+unexpected verdicts. Five saved unsafe witnesses and their corrected paths
+added ten actual replay executions and five expected failures. This compact
+contract tests authority/source separation and command admission; worker races
+and persistence are native evidence, not established by the Boolean model.
+
+The combined evidence/replay index is
+=/private/tmp/context-grant-evidence-20261026.json=.
+The complete combined source/policy/grant/expiry event product, grant-replay
+process death at every recovery cut and remote endpoint reconciliation remain
+open. Earlier broad clock/recovery receipts retain their historical cuts.

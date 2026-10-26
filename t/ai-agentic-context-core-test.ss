@@ -7,7 +7,7 @@
         (only-in :clan/poo/object .o .ref)
         :agentic-ai-lab/modules/ai-agentic-context/interface
         :agentic-ai-lab/modules/query/semantic/context-restriction
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-composition
         :yuanxu/module-system/selection/contract
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         :yuanxu/feature-system/model
@@ -21,8 +21,15 @@
 (def restriction (agentic-ai-lab-context-restriction "domain:1" '("actor:1") '("provider:1") '("org:1") 0 10))
 (def (project (profile (agentic-ai-lab-ai-agentic-context-profile #f)))
   (agentic-ai-lab-ai-agentic-context-org-project scope source restriction profile))
+;; Catch only the operation. A failed assertion must never be caught as the
+;; expected exception; otherwise a missing refusal can silently pass the gate.
+(def (rejected? operation)
+  (with-catch (lambda (failure) #t) (lambda () (operation) #f)))
 (def ai-agentic-context-core-test
   (test-suite "AI Agentic-context source and Feature boundaries"
+    (test-case "refusal control cannot catch its own failed assertion"
+      (check (rejected? (lambda () #t)) => #f)
+      (check (rejected? (lambda () (error "controlled refusal"))) => #t))
     (test-case "public module publication closes the selection adapter build input"
       (let (sources (asp-gerbil-scheme-native-import-closure
                      (current-directory)
@@ -62,26 +69,152 @@
         (check (length (agentic-ai-lab-module-closure (list descriptor))) => 2))
       (check (length (agentic-ai-lab-modules-system-use-module/ai 'session '(+lineage))) => 1))
     (yuanxu-test-case "source edit refuses reuse of an admitted projection"
-      (check-exception
-        (agentic-ai-lab-ai-agentic-context-org-replay "* DONE Review source evidence\n" (project) scope) true))
+      (check
+        (rejected?
+          (lambda ()
+            (agentic-ai-lab-ai-agentic-context-org-replay
+              "* DONE Review source evidence\n"
+              (project)
+              scope)))
+        => #t))
+    (yuanxu-test-case "same-source replay refuses substituted native observation provenance"
+      ;; Reusing the native replay result inside one call must not turn the
+      ;; caller's embedded observation into an already-admitted artifact.
+      (let* ((p (project)) (observation (.ref p 'observation)))
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay
+                source
+                (.o
+                  (:: @ p)
+                  observation:
+                  (.o (:: @ observation) source-sha256: "forged-source-cut"))
+                scope)))
+          => #t)
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay
+                source
+                (.o (:: @ p) observation: (.o (:: @ observation) parser-identity: "foreign-parser"))
+                scope)))
+          => #t)
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay
+                source
+                (.o
+                  (:: @ p)
+                  observation:
+                  (.o
+                    (:: @ observation)
+                    query:
+                    (.o (:: @ (.ref observation 'query)) identity: "foreign-query")))
+                scope)))
+          => #t)))
     (yuanxu-test-case "same bytes cannot cross actor Session destination or epoch"
       (let (p (project))
-        (check-exception (agentic-ai-lab-ai-agentic-context-org-replay source p (.o (:: @ scope) actor: "actor:2")) true)
-        (check-exception (agentic-ai-lab-ai-agentic-context-org-replay source p (.o (:: @ scope) session: "session:2" turn: 0)) true)
-        (check-exception (agentic-ai-lab-ai-agentic-context-org-replay source p (.o (:: @ scope) destination: "provider:2")) true)
-        (check-exception (agentic-ai-lab-ai-agentic-context-org-replay source p (.o (:: @ scope) epoch: 2)) true)))
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay
+                source
+                p
+                (.o (:: @ scope) actor: "actor:2"))))
+          => #t)
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay
+                source
+                p
+                (.o (:: @ scope) session: "session:2" turn: 0))))
+          => #t)
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay
+                source
+                p
+                (.o (:: @ scope) destination: "provider:2"))))
+          => #t)
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay source p (.o (:: @ scope) epoch: 2))))
+          => #t)))
     (yuanxu-test-case "partial budgets cannot publish complete Context"
-      (check-exception (agentic-ai-lab-ai-agentic-context-org-project scope source restriction (agentic-ai-lab-ai-agentic-context-profile #f) 0) true)
-      (check-exception (agentic-ai-lab-ai-agentic-context-org-project scope source restriction (agentic-ai-lab-ai-agentic-context-profile #f) 256 2) true))
+      (check
+        (rejected?
+          (lambda ()
+            (agentic-ai-lab-ai-agentic-context-org-project
+              scope
+              source
+              restriction
+              (agentic-ai-lab-ai-agentic-context-profile #f)
+              0)))
+        => #t)
+      (check
+        (rejected?
+          (lambda ()
+            (agentic-ai-lab-ai-agentic-context-org-project
+              scope
+              source
+              restriction
+              (agentic-ai-lab-ai-agentic-context-profile #f)
+              256
+              2)))
+        => #t))
     (yuanxu-test-case "content restriction Feature and authority substitution reject"
       (let (p (project))
-        (check-exception (agentic-ai-lab-ai-agentic-context-org-replay source (.o (:: @ p) content: '()) scope) true)
-        (check-exception (agentic-ai-lab-ai-agentic-context-org-replay source
-          (.o (:: @ p) scope: (.o (:: @ (.ref p 'scope)) actor: "actor:2")) scope) true)
-        (check-exception (agentic-ai-lab-ai-agentic-context-org-replay source (.o (:: @ p) feature-ids: '(ai-agentic-context/core ai-agentic-context/memory)) scope) true)
-        (check-exception (agentic-ai-lab-ai-agentic-context-org-replay source (.o (:: @ p) action-authorized?: #t) scope) true)
-        (check-exception (agentic-ai-lab-ai-agentic-context-org-replay source (.o (:: @ p) restriction:
-           (agentic-ai-lab-context-restriction "domain:1" '("actor:1" "actor:2") '("provider:1") '("org:1") 0 10)) scope) true)))
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay source (.o (:: @ p) content: '()) scope)))
+          => #t)
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay
+                source
+                (.o (:: @ p) scope: (.o (:: @ (.ref p 'scope)) actor: "actor:2"))
+                scope)))
+          => #t)
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay
+                source
+                (.o (:: @ p) feature-ids: '(ai-agentic-context/core ai-agentic-context/memory))
+                scope)))
+          => #t)
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay
+                source
+                (.o (:: @ p) action-authorized?: #t)
+                scope)))
+          => #t)
+        (check
+          (rejected?
+            (lambda ()
+              (agentic-ai-lab-ai-agentic-context-org-replay
+                source
+                (.o
+                  (:: @ p)
+                  restriction:
+                  (agentic-ai-lab-context-restriction
+                    "domain:1"
+                    '("actor:1" "actor:2")
+                    '("provider:1")
+                    '("org:1")
+                    0
+                    10))
+                scope)))
+          => #t)))
     (yuanxu-test-case "Scope admission freezes caller strings"
       (let* ((actor-input (string-copy "actor:1"))
              (owned (agentic-ai-lab-ai-agentic-context-scope-admit (.o (:: @ scope) actor: actor-input))))

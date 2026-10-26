@@ -6,7 +6,8 @@
         (only-in :gerbil/expander core-import-module expander-context-id)
         (only-in :yuanxu/module-system/building/source-closure for-each-build-module)
         (only-in "../build-spec.ss" agentic-ai-lab-build-spec agentic-ai-lab-public-build-roots)
-        (only-in "../build-modules.ss" agentic-ai-lab-library-modules))
+        (only-in :clan/poo/object .get)
+        (only-in "../init.ss" agentic-ai-lab.init.exports))
 (export production-build-boundary-test)
 (def (dependencies path)
   (cadr (memq 'depend: (call-with-input-file path read))))
@@ -15,7 +16,9 @@
   (test-suite "Production build and optional development policy boundary"
     (test-case "init owns selection and is not a library build root"
       (check-equal? (member "init.ss" agentic-ai-lab-public-build-roots) #f)
-      (check-equal? (member "init.ss" agentic-ai-lab-library-modules) #f))
+      ;; Obtaining the compiler projection remains inert; invoking it belongs
+      ;; to the build entry, with the original selected-source admission.
+      (check-equal? (procedure? (.get agentic-ai-lab.init.exports std-make-spec)) #t))
     (test-case "ASP is declared only by the development package"
       (check-equal? (any asp? (dependencies "gerbil.pkg")) #f)
       (check-equal? (length (filter asp? (dependencies "dev/gerbil.pkg"))) 1))

@@ -132,7 +132,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: native-gerbil-pkg-portable-v2-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg') }}
+          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Initialize Core submodule
         run: git submodule update --init core
@@ -165,7 +165,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: native-gerbil-pkg-portable-v2-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg') }}
+          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Build native Gerbil package
         run: GERBIL_BUILD_VERBOSE=1 gerbil build
@@ -178,78 +178,16 @@ jobs:
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
           gerbil env gerbil interactive -e '(begin (import :asp-gerbil-scheme/benchmark-api :asp-gerbil-scheme/testing-api) (displayln "development-dependencies-ready"))'
 
-      - name: Compile AI Agentic-context module test
-        run: gerbil env gxc -O t/ai-agentic-context-core-test.ss
-
-      - name: Compile Context Delta reference regression
-        run: gerbil env gxc -O t/ai-agentic-context-delta-test.ss
-
-      - name: Check Context Delta reference admission
-        env:
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-        run: gerbil env just test-file t/ai-agentic-context-delta-test.ss
-
-      - name: Compile Session Attempt regression
-        run: gerbil env gxc -O t/session-attempt-test.ss
-
-      - name: Check Session Attempt routing and recovery
-        env:
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-        run: gerbil env just test-file t/session-attempt-test.ss
-
-      - name: Check AI Agentic-context module composition and source replay
-        env:
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-        run: gerbil env just test-file t/ai-agentic-context-core-test.ss
-
-      - name: Compile parser-backed Context Org anchor regression
-        run: gerbil env gxc -O t/ai-agentic-context-org-anchors-test.ss
-
-      - name: Check Context Org ID admission and Session binding
-        env:
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-        run: gerbil env just test-file t/ai-agentic-context-org-anchors-test.ss
-
-      - name: Compile current-input Session Host regression
-        run: gerbil env gxc -O t/ai-agentic-context-session-host-test.ss
-
-      - name: Check current-input claim publication and source invalidation
-        env:
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-        run: gerbil env just test-file t/ai-agentic-context-session-host-test.ss
-
-      - name: Compile original Context and Temporal suites
-        run: gerbil env gxc t/temporal-evaluator-test.ss t/ai-agentic-context-session-host-test.ss t/ai-agentic-context-delta-test.ss t/session-attempt-test.ss t/ai-agentic-context-org-anchors-test.ss t/query-orgize-source-test.ss
+      # Ordinary regressions are discovered once by the native package entry
+      # below. Keep this independent process-boundary qualification explicit.
+      - name: Prepare published Context and Temporal TestSuites
+        run: gerbil env just compile-context-temporal-tests
 
       - name: Check original Temporal proof binding and Session invalidation
         env:
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
           AGENTIC_AI_LAB_TEST_STALL_DIAGNOSTICS: ${{ runner.temp }}/agentic-ai-lab-test-stalls
         run: gerbil env just test-context-temporal
-
-      - name: Compile Context temporal window policy regression
-        run: gerbil env gxc -O t/ai-agentic-context-temporal-test.ss
-
-      - name: Check Context policy clock domains and conservative windows
-        env:
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-        run: gerbil env just test-file t/ai-agentic-context-temporal-test.ss
-
-      - name: Compile registered Context use Host test
-        run: gerbil env gxc -O t/context-use-host-test.ss
-
-      - name: Check registered Context use Host
-        env:
-          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
-        run: |
-          set -euo pipefail
-          test_module=.gerbil/lib/agentic-ai-lab/t/context-use-host-test.ssi
-          test -f "$test_module"
-          gerbil env python3 packages/python-runtime/tools/watch.py \
-            gxtest -v 3 "$test_module" 2>&1 | tee /tmp/context-use-host-test.log
-          grep -F "MODULE-OK $test_module" /tmp/context-use-host-test.log
-          grep -x 'OK' /tmp/context-use-host-test.log
-          ! grep -E 'ERROR|Heap overflow|Stack overflow' /tmp/context-use-host-test.log
 
       - name: Run the single native unit-test entrypoint
         env:

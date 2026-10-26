@@ -27,6 +27,13 @@ int32_t agentic_ai_lab_semantic_v1_source_register(const uint8_t *input, size_t 
  * existing policy Host clock determine use eligibility; no external effect grant. */
 int32_t agentic_ai_lab_semantic_v1_context_use_refresh(const uint8_t *input, size_t length,
                                                agentic_ai_lab_semantic_result *result);
+/* Trusted lifecycle command lane into an application-attached native Context
+ * service. Scheme owns the actual Session CAS, proof/support and journal.
+ * Copied observation references cannot manufacture native capabilities.
+ * Ordinary tools may use context.lifecycle.inspect, never this control lane.
+ * The application retires its independent Session endpoints before close. */
+int32_t agentic_ai_lab_semantic_v1_context_command(const uint8_t *input, size_t length,
+                                                agentic_ai_lab_semantic_result *result);
 /* Trusted host policy/observed-clock registration. Ordinary semantic calls
  * cannot access this control lane. No provider authentication or effect grant. */
 int32_t agentic_ai_lab_semantic_v1_policy_refresh(const uint8_t *input, size_t length,

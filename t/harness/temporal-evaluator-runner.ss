@@ -103,6 +103,8 @@
    :agentic-ai-lab/modules/temporal-causality/evaluator/derivation
    :agentic-ai-lab/modules/temporal-causality/evaluator/proof-host
    :agentic-ai-lab/modules/temporal-causality/evaluator/interface
+   :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
+   :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
    :gerbil/tools/gxtest))
 ;;; Resolve the Context/Orgize closure with the compiler's real dependency order.
 ;;; No timer emits progress and no hand-written parser dependency list is kept.

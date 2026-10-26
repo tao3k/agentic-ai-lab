@@ -58,30 +58,14 @@ toolchain:
 build-semantic-native output:
     python3 bindings/runtime-c/tools/build-semantic.py --output "{{ output }}"
 
-# Compile the bounded acyclic support kernel before native runtime qualification.
+# Compile one explicit test demand through init.exports.tests, as test-file does.
+# Core owns its support closure, native options, source admission and artifacts.
+# This prepares the test without starting its Cases or Harness.
 [group('build')]
-build-temporal-support:
-    gxc -:max-heap=1G,debug=q -V -O modules/temporal-causality/revisions/types.ss modules/temporal-causality/revisions/objects.ss modules/temporal-causality/revisions/funs.ss modules/temporal-causality/revisions/interface.ss modules/temporal-causality/truth-maintenance/support/types.ss modules/temporal-causality/truth-maintenance/support/objects.ss modules/temporal-causality/truth-maintenance/support/funs.ss modules/temporal-causality/truth-maintenance/support/policy.ss modules/temporal-causality/truth-maintenance/support/interface.ss modules/temporal-causality/truth-maintenance/interface.ss
+build-test path:
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/tests.ss compile "{{ path }}" "{{ gerbil_test_runtime_options }}"
 
-# Named original ASCENT positive-proof adapter and host policy boundary.
+# An explicit AOT caller consumes the published library; it owns no module list.
 [group('build')]
-build-temporal-evaluator:
-    gxc -:max-heap=1G,debug=q -V -O modules/temporal-causality/truth-maintenance/support/policy-host.ss modules/temporal-causality/evaluator/positive-proof.ss modules/temporal-causality/evaluator/fact.ss modules/temporal-causality/evaluator/binding.ss modules/temporal-causality/evaluator/rule.ss modules/temporal-causality/evaluator/derivation.ss modules/temporal-causality/evaluator/proof-host.ss modules/temporal-causality/evaluator/interface.ss
-
-# Build the installed upstream gxtest source without whole-program elimination:
-# dynamic eval requires runtime globals that cannot be inferred statically.
-[group('build')]
-build-gerbil-test-tool output preload="":
-    #!/usr/bin/env bash
-    set -euo pipefail
-    tool_home="$(gerbil env bash -c 'printf %s "$GERBIL_HOME"')"
-    mkdir -p "{{ output }}/source" "{{ output }}/lib"
-    cp "$tool_home/src/tools/gxtest.ss" "{{ output }}/source/gxtest.ss"
-    cp "$tool_home/src/tools/build-aot.ss" "{{ output }}/source/build-aot.ss"
-    cp "$tool_home/src/tools/env.ss" "{{ output }}/source/env.ss"
-    patch --batch -d "{{ output }}/source" -p1 < tools/ci/patches/gerbil-gxtest-runtime-init.patch
-    printf '(package: gerbil/tools)\n' > "{{ output }}/source/gerbil.pkg"
-    if [[ -n "{{ preload }}" ]]; then cat "{{ preload }}" >> "{{ output }}/source/gxtest.ss"; fi
-    export GERBIL_LOADPATH="{{ output }}/lib:{{ agentic_ai_lab_library_path }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}"
-    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 180s gerbil compile -s -d "{{ output }}/lib" "{{ output }}/source/env.ss"
-    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 180s gerbil compile -exe -s -d "{{ output }}/lib" -o "{{ output }}/gxtest" "{{ output }}/source/gxtest.ss"
+build-context-actor-native executable:
+    {{ gerbil_darwin_env }} gxc -:max-heap=1G,debug=q -O -exe -o '{{executable}}' t/harness/context-actor-native-driver.ss
