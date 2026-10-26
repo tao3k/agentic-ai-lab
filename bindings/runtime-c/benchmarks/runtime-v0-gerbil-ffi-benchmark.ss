@@ -5,6 +5,9 @@
 ;;; Benchmark owner: this file isolates one conversion-heavy FFI control path
 ;;; so its receipt cannot be mistaken for the production payload data plane.
 
+;; This standalone C FFI control uses only the SDK, before Core installation.
+prelude: :gerbil/polydactyl
+
 (import (only-in :std/ffi C-include def-C-lambda)
         (only-in :std/iter for in-range))
 (export main)
