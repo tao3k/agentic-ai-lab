@@ -13,6 +13,7 @@ projection required by isolated builds.
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import platform
@@ -132,6 +133,40 @@ def declared_projection(text: str, repository_name: str) -> dict[str, object]:
     }
 
 
+def toolchain_lock_errors(extension: dict, root: Path) -> list[str]:
+    """Compare SDK declarations without evaluating or manufacturing Bazel specs."""
+    tree = ast.parse((root / "MODULE.bazel").read_text(encoding="utf-8"))
+    constants = {}
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
+            if node.targets[0].id.startswith("GERBIL_LINUX_"):
+                constants[node.targets[0].id] = ast.literal_eval(node.value)
+    calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)
+             and isinstance(node.func, ast.Attribute) and node.func.attr == "auto"
+             and isinstance(node.func.value, ast.Name) and node.func.value.id == "gerbil"]
+    if len(calls) != 1:
+        raise ValueError("expected one authoritative gerbil.auto declaration")
+    values = {
+        keyword.arg: (constants[keyword.value.id] if isinstance(keyword.value, ast.Name)
+                      else ast.literal_eval(keyword.value))
+        for keyword in calls[0].keywords
+    }
+    common = {name: values[name] for name in ("expected_version_prefixes", "environment")
+              if name in values}
+    linux = {name.removeprefix("linux_prebuilt_"): value
+             for name, value in values.items()
+             if name.startswith("linux_prebuilt_") and name != "linux_prebuilt_arch"}
+    errors = []
+    for platform_key, entry in extension.items():
+        specification = entry.get("generatedRepoSpecs", {}).get("local_gerbil", {})
+        attributes = specification.get("attributes", {})
+        expected = common | (linux if "os:linux," in platform_key else {})
+        for name, value in expected.items():
+            if attributes.get(name) != value:
+                errors.append(f"{platform_key}: SDK local_gerbil.{name} is stale")
+    return errors
+
+
 def collect_errors(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
     sources_text = (root / "gerbil-dependencies.MODULE.bazel").read_text(encoding="utf-8")
@@ -140,6 +175,7 @@ def collect_errors(root: Path = ROOT) -> list[str]:
     repositories = direct_source_repositories(sources_text)
     declared_repository_names = set(repositories.values())
     extension = lock.get("moduleExtensions", {}).get(EXTENSION_ID, {})
+    errors.extend(toolchain_lock_errors(extension, root))
 
     for platform_key, platform_lock in extension.items():
         generated = platform_lock.get("generatedRepoSpecs", {})
@@ -282,6 +318,11 @@ def sync_lock(root: Path = ROOT) -> None:
     extension = lock.get("moduleExtensions", {}).get(EXTENSION_ID)
     if not isinstance(extension, dict) or not extension:
         raise ValueError("Gerbil Bazel extension lock is absent")
+    # A new digest cannot bless old platform-specific SDK repository specs.
+    # Native Bazel evaluation owns those specs; refuse before changing the lock.
+    sdk_errors = toolchain_lock_errors(extension, root)
+    if sdk_errors:
+        raise ValueError("; ".join(sdk_errors) + "; run the native lock refresh workflow")
     native = extension[host_lock_key(extension)]
     native_repositories = native["generatedRepoSpecs"]
     repositories_by_package = direct_source_repositories(
@@ -300,6 +341,16 @@ def sync_lock(root: Path = ROOT) -> None:
             repositories[repository_name] = native_repositories[repository_name]
     lock_path.write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")
     print("gerbil-dependency-pin: synchronized cross-platform Bazel lock projections")
+
+
+def refresh_native_lock(root: Path = ROOT) -> None:
+    """Invalidate only this host's cached extension result before native evaluation."""
+    lock_path = root / "MODULE.bazel.lock"
+    lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    extension = lock["moduleExtensions"][EXTENSION_ID]
+    del extension[host_lock_key(extension)]
+    lock_path.write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")
+    print("gerbil-dependency-pin: removed native cached evaluation; Bazel must regenerate it")
 
 
 def ensure_native_commit(url: str, revision: str, target: Path) -> None:
@@ -358,6 +409,7 @@ def main() -> int:
     pin_parser.add_argument("package")
     pin_parser.add_argument("revision")
     subparsers.add_parser("sync-lock", help="copy the native lock projection across platforms")
+    subparsers.add_parser("refresh-native-lock", help="invalidate the native cached extension result")
     prepare_parser = subparsers.add_parser("prepare-native", help="fetch immutable commit objects for gxpkg")
     prepare_parser.add_argument("--package-root", type=Path, required=True)
     prepare_parser.add_argument("--manifest", type=Path, help="authoritative package manifest (defaults to root gerbil.pkg)")
@@ -368,6 +420,8 @@ def main() -> int:
             prepare_native_pins(args.package_root, manifest=args.manifest)
         elif args.command == "pin":
             project_pin(args.package, args.revision)
+        elif args.command == "refresh-native-lock":
+            refresh_native_lock()
         elif args.command == "sync-lock":
             sync_lock()
         else:

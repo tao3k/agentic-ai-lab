@@ -8,6 +8,16 @@
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in "../init.ss" agentic-ai-lab.init.exports))
 (export aws-context-publication-test)
+;; Relay real child boundaries so the enclosing fixed watchdog identifies
+;; preparation, ordinary execution and observed execution separately.
+(def (run-qualification tests mode)
+  (def started (time->seconds (current-time)))
+  (displayln "PHASE aws-context-start mode=" mode) (force-output)
+  (def result (.call tests .run))
+  (displayln "PHASE aws-context-end mode=" mode " elapsed-s="
+    (- (time->seconds (current-time)) started))
+  (force-output)
+  result)
 ;; The surviving parent owns the worker's temporary directory, so an Ops
 ;; deadline can still release it when the worker cannot unwind its own fixture.
 (.def Workspace
@@ -44,7 +54,7 @@
         (check-equal? (eq? (.get Default source) source) #t)
         (check-equal? (eq? (.get Default execution source) source) #t)
         (check-equal? (eq? (.get Default admit-current) guard) #t)
-        (def ordinary (.call Default .run))
+        (def ordinary (run-qualification Default 'ordinary))
         (check-equal? (and (string-contains (.get ordinary output) "test-work case=") #t) #f)
         (check-equal? (directory-files workspace) '())
 
@@ -55,7 +65,7 @@
         (check-equal? (eq? (.get Observed execution source) source) #t)
         (check-equal? (eq? (.get Observed admit-current) guard) #t)
         (check-equal? (.get tests execution profile emit?) #f)
-        (def result (.call Observed .run))
+        (def result (run-qualification Observed 'observed))
         (check-equal? (and (string-contains (.get result output) "test-work case=") #t) #t)
         (for-each
           (lambda (counter)

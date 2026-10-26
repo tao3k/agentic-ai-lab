@@ -67,6 +67,7 @@ class GerbilDependencyPinTest(unittest.TestCase):
                 module.EXTENSION_ID: {native_key: native, target_key: target}}}))
             (root / "gerbil-dependencies.MODULE.bazel").write_text("")
             with patch.object(module, "host_lock_key", return_value=native_key), \
+                 patch.object(module, "toolchain_lock_errors", return_value=[]), \
                  patch.object(module, "direct_source_repositories",
                               return_value={"orgize": "orgize_sources"}):
                 module.sync_lock(root)
@@ -76,6 +77,49 @@ class GerbilDependencyPinTest(unittest.TestCase):
             self.assertEqual(actual[target_key]["generatedRepoSpecs"]["orgize_sources"], source)
             self.assertEqual(actual[target_key]["generatedRepoSpecs"]["local_gerbil"],
                              {"platform": "linux"})
+
+    def test_shared_digest_cannot_bless_a_stale_linux_sdk(self) -> None:
+        module = pin_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "MODULE.bazel").write_text(
+                'GERBIL_LINUX_REVISION = "current-sdk"\n'
+                'gerbil.auto(name="local_gerbil", expected_version_prefixes=["Current"], '
+                'linux_prebuilt_release_revision=GERBIL_LINUX_REVISION)\n')
+            native = {"generatedRepoSpecs": {"local_gerbil": {"attributes": {
+                "expected_version_prefixes": ["Current"]}}}}
+            linux = {"generatedRepoSpecs": {"local_gerbil": {"attributes": {
+                "expected_version_prefixes": ["Current"], "release_revision": "current-sdk"}}}}
+            extension = {"os:osx,arch:aarch64": native, "os:linux,arch:amd64": linux}
+            self.assertEqual(module.toolchain_lock_errors(extension, root), [])
+            # Model the real failure: equal digests and current host SDK, but a
+            # foreign platform still points to a different native ABI release.
+            for entry in extension.values():
+                entry.update(bzlTransitiveDigest="same-code", usagesDigest="same-usage")
+            linux["generatedRepoSpecs"]["local_gerbil"]["attributes"]["release_revision"] = "old-sdk"
+            self.assertIn("os:linux,arch:amd64: SDK local_gerbil.release_revision is stale",
+                          module.toolchain_lock_errors(extension, root))
+            lock = root / "MODULE.bazel.lock"
+            lock.write_text(json.dumps({"moduleExtensions": {module.EXTENSION_ID: extension}}))
+            before = lock.read_bytes()
+            with self.assertRaisesRegex(ValueError, "native lock refresh"):
+                module.sync_lock(root)
+            self.assertEqual(lock.read_bytes(), before)
+
+    def test_native_refresh_preserves_foreign_platform_evaluation(self) -> None:
+        from unittest.mock import patch
+        module = pin_module()
+        linux, darwin = "os:linux,arch:amd64", "os:osx,arch:aarch64"
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            lock = root / "MODULE.bazel.lock"
+            foreign = {"generatedRepoSpecs": {"local_gerbil": {"platform": "darwin"}}}
+            lock.write_text(json.dumps({"moduleExtensions": {module.EXTENSION_ID: {
+                linux: {"stale": True}, darwin: foreign}}}))
+            with patch.object(module, "host_lock_key", return_value=linux):
+                module.refresh_native_lock(root)
+            self.assertEqual(json.loads(lock.read_text())["moduleExtensions"][module.EXTENSION_ID],
+                             {darwin: foreign})
 
     def test_release_tag_projects_github_archive_prefix(self) -> None:
         module = pin_module()

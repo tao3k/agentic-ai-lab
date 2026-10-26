@@ -1048,6 +1048,7 @@ jobs:
 
       - name: Generate the Linux module-extension evaluation
         run: |
+          python3 packages/automation/gerbil_dependency_pin.py refresh-native-lock
           bazelisk mod deps --lockfile_mode=update
           bazelisk mod deps --lockfile_mode=error
 
@@ -1084,6 +1085,7 @@ jobs:
       - name: Merge the Darwin module-extension evaluation
         run: |
           cp .ci/lock-linux/MODULE.bazel.lock MODULE.bazel.lock
+          python3 packages/automation/gerbil_dependency_pin.py refresh-native-lock
           bazelisk mod deps --lockfile_mode=update
           bazelisk mod deps --lockfile_mode=error
 
