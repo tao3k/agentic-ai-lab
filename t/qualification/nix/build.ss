@@ -43,9 +43,10 @@
           ;; one target while retaining the SDK's dependency traversal order.
           (when (and source (not (member source sources)))
             (set! sources (cons source sources))))) seen))
-  ;; AWS validation consumes this public native contract without constructing
-  ;; the AWS scope. Its import closure must be available in the fresh worker.
-  '("scenarios/aws/types.ss" "modules/nix/objects.ss" "modules/services/opentofu/objects.ss"
+  ;; AWS validation consumes native Types and object declarations without
+  ;; constructing the AWS scope. Compile their complete import closure for the
+  ;; fresh worker; source fallback must not hide an incomplete publication.
+  '("scenarios/aws/types.ss" "scenarios/aws/objects.ss" "modules/nix/objects.ss" "modules/services/opentofu/objects.ss"
     "core/t/qualification/service-publication/fixtures.ss"
     "core/t/qualification/build-publication/projection.ss"
     "core/t/qualification/build-publication/store.ss"
