@@ -57,7 +57,10 @@ deps-dev:
 [group('build')]
 build-testing:
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} gxpkg build github.com/tao3k/asp-gerbil-scheme
-    cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} gerbil build
+    # Dependencies were admitted in the shared root prefix above. Invoke the
+    # existing init-owned build launcher without requesting a second package
+    # registration in the development output prefix.
+    cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} gxi build.ss
 
 # Reuse the maintained, hash-locked qualification inputs; retain a GC root.
 [group('dependency')]
