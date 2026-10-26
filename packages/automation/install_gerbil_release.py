@@ -66,7 +66,8 @@ def main() -> int:
     root = args.release_root.resolve()
     root.mkdir(parents=True, exist_ok=True)
     subprocess.run(
-        ["curl", "--fail", "--location", "--retry", "3", "--output", str(archive),
+        ["curl", "--fail", "--location", "--retry", "3", "--retry-all-errors",
+         "--output", str(archive),
          f"https://github.com/tao3k/gerbil-bazel/releases/download/{tag}/{archive.name}"],
         check=True,
     )

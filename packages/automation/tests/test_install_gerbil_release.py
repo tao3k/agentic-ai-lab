@@ -20,6 +20,15 @@ SPEC.loader.exec_module(installer)
 
 
 class InstallGerbilReleaseTest(unittest.TestCase):
+    def test_shared_qualification_action_uses_the_same_installer(self) -> None:
+        # Avoid a second hand-maintained release selection in the Nix action.
+        root = SCRIPT.parents[2]
+        action = (root / ".github/actions/setup-gerbil/action.yml").read_text()
+        self.assertIn("python3 packages/automation/install_gerbil_release.py", action)
+        self.assertNotIn("revision=", action)
+        self.assertNotIn("sha256=", action)
+        self.assertNotIn("2591dcd", action)
+
     def test_activation_reads_nonexported_upstream_values(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             activation = Path(temporary) / "activate"
