@@ -4,12 +4,14 @@
 (import (only-in :std/make make pkg-config-libs)
         (only-in :gerbil/expander core-import-module expander-context-id)
         (only-in :std/source this-source-file)
-        (only-in :yuanxu/module-system/building/source-package register-module-build-source!)
+        (only-in :yuanxu/module-system/building/source-package register-module-build-source! register-yuanxu-build-source!)
         (only-in :yuanxu/module-system/building/source-closure for-each-build-module))
 ;; The compiler resolves public application imports through its package prefix.
 ;; Register application sources, while keeping Core and the SDK compiled.
 (def root (path-normalize (path-expand "../../.." (path-directory (this-source-file)))))
 (register-module-build-source! root 'agentic-ai-lab)
+;; Core qualification helpers are source-owned, not installed production APIs.
+(register-yuanxu-build-source! (path-expand "core" root))
 (def output (path-expand "lib" (getenv "GERBIL_PATH")))
 (def seen (make-hash-table-eq))
 ;; The existing Core traversal selects roots; std/make owns all compilation.

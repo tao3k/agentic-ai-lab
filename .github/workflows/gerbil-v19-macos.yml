@@ -77,7 +77,8 @@ jobs:
           {
             echo "PKG_CONFIG_PATH=$openssl_prefix/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
             echo "LIBRARY_PATH=$openssl_prefix/lib${LIBRARY_PATH:+:$LIBRARY_PATH}"
-            echo "GERBIL_BUILD_CORES=$(sysctl -n hw.logicalcpu)"
+            # Bound native compiler workers consistently with the shared CI job.
+            echo "GERBIL_BUILD_CORES=2"
           } >> "$GITHUB_ENV"
           cc --version
 

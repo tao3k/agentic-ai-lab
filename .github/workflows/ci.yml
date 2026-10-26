@@ -58,6 +58,9 @@ jobs:
           - os: macos-26
             gerbil-label: release-v0.19-1cfb032
     env:
+      # std/make defaults to serial builds. Use this two-core runner's native
+      # scheduler without changing dependency build deadlines or test budgets.
+      GERBIL_BUILD_CORES: '2'
       GERBIL_RELEASE_ROOT: ${{ github.workspace }}/.ci/gerbil-release/${{ matrix.gerbil-label }}
     steps:
       - name: Checkout agentic-ai-lab

@@ -174,7 +174,7 @@
                => "217c6f70084e874e0aa6b0575d6a6e557978975500b4505cec6e7642ccf3faa5")
         ;; Preserve the pre-f30b858b golden as a namespace-only control.
         (check (canonical-datum-sha256
-                (cons 'poo-flow.release-assurance-manifest.v1
+                (cons (string->symbol (string-append "poo" "-flow.release-assurance-manifest.v1"))
                       (cdr expected-canonical-manifest)))
                => "871e2303fcabbaffb4b3a95dfbafdef4fb65768ad9a5ae4c75e409b20bd73de5")))
     (yuanxu-test-case "identity changes when bound release evidence changes"

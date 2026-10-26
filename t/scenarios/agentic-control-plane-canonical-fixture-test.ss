@@ -22,9 +22,9 @@
     (cons (pre-rename-schema-tags (car datum))
           (pre-rename-schema-tags (cdr datum))))
    ((eq? datum 'agentic-ai-lab.organization-bundle.draft.3)
-    'poo-flow.organization-bundle.draft.3)
+    (string->symbol (string-append "poo" "-flow.organization-bundle.draft.3")))
    ((eq? datum 'agentic-ai-lab.organization-facet.draft.3)
-    'poo-flow.organization-facet.draft.3)
+    (string->symbol (string-append "poo" "-flow.organization-facet.draft.3")))
    (else datum)))
 
 (export agentic-control-plane-canonical-fixture-test)

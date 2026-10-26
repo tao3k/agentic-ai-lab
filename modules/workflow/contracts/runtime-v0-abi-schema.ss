@@ -1,3 +1,6 @@
+;;; This inert ABI schema is read before a Core package can be built.
+;;; Use the SDK language explicitly; its public values remain native POO.
+prelude: :gerbil/polydactyl
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later

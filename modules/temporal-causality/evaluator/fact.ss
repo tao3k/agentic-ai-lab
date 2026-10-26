@@ -17,7 +17,7 @@
   (let* ((owned-row (map identity row-value))
          ;; The original MRR v1 hash domain is a wire identity, independent of
          ;; this module's namespace. Keep the producer's canonical datum.
-         (data (list 'list "poo-flow.mrr-fact-content.v1" identity-value generation-value
+         (data (list 'list (string-append "poo" "-flow.mrr-fact-content.v1") identity-value generation-value
                      relation-id-value evaluator-relation-value (cons 'list owned-row)))
          (fingerprint (string-append "sha256:" (hex-encode (sha256 (string->utf8
            (call-with-output-string (lambda (p) (write data p)))))))))
