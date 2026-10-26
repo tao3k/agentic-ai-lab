@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import subprocess
 import sys
 import tempfile
@@ -45,6 +46,36 @@ class GerbilDependencyPinTest(unittest.TestCase):
         self.assertNotIn("asp-gerbil-scheme", pins)
         owners = module.package_pin_owners(ROOT)
         self.assertEqual(owners["asp-gerbil-scheme"][0], ROOT / "dev" / "gerbil.pkg")
+
+    def test_lock_sync_updates_code_identity_without_copying_host_toolchain(self) -> None:
+        from unittest.mock import patch
+        module = pin_module()
+        native_key = "os:osx,arch:aarch64"
+        target_key = "os:linux,arch:amd64"
+        source = {"repoRuleId": module.SOURCE_PACKAGE_RULE,
+                  "attributes": {"revision": "current"}}
+        native = {"bzlTransitiveDigest": "current-code", "usagesDigest": "current-usage",
+                  "generatedRepoSpecs": {"orgize_sources": source,
+                                        "local_gerbil": {"platform": "darwin"}}}
+        target = {"bzlTransitiveDigest": "old-code", "usagesDigest": "old-usage",
+                  "generatedRepoSpecs": {"orgize_sources": source,
+                                        "local_gerbil": {"platform": "linux"}}}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            lock = root / "MODULE.bazel.lock"
+            lock.write_text(json.dumps({"moduleExtensions": {
+                module.EXTENSION_ID: {native_key: native, target_key: target}}}))
+            (root / "gerbil-dependencies.MODULE.bazel").write_text("")
+            with patch.object(module, "host_lock_key", return_value=native_key), \
+                 patch.object(module, "direct_source_repositories",
+                              return_value={"orgize": "orgize_sources"}):
+                module.sync_lock(root)
+            actual = json.loads(lock.read_text())["moduleExtensions"][module.EXTENSION_ID]
+            self.assertEqual(actual[target_key]["bzlTransitiveDigest"], "current-code")
+            self.assertEqual(actual[target_key]["usagesDigest"], "current-usage")
+            self.assertEqual(actual[target_key]["generatedRepoSpecs"]["orgize_sources"], source)
+            self.assertEqual(actual[target_key]["generatedRepoSpecs"]["local_gerbil"],
+                             {"platform": "linux"})
 
     def test_release_tag_projects_github_archive_prefix(self) -> None:
         module = pin_module()

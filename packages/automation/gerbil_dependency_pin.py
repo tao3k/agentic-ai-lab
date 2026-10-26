@@ -180,6 +180,11 @@ def collect_errors(root: Path = ROOT) -> list[str]:
     }
     if len(usage_digests) > 1:
         errors.append("Bazel extension usagesDigest differs across platform lock entries")
+    implementation_digests = {
+        entry.get("bzlTransitiveDigest") for entry in extension.values()
+    }
+    if len(implementation_digests) > 1:
+        errors.append("Bazel extension implementation differs across platform lock entries")
     return errors
 
 
@@ -284,6 +289,9 @@ def sync_lock(root: Path = ROOT) -> None:
     )
     repository_names = set(repositories_by_package.values())
     for platform_lock in extension.values():
+        # Extension code and declarations are platform independent. Keep each
+        # platform's toolchain repositories, but update both shared identities.
+        platform_lock["bzlTransitiveDigest"] = native["bzlTransitiveDigest"]
         platform_lock["usagesDigest"] = native["usagesDigest"]
         repositories = platform_lock["generatedRepoSpecs"]
         for repository_name in locked_source_package_names(repositories) - repository_names:

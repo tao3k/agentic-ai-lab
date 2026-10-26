@@ -30,12 +30,18 @@ filegroup(
     name = "gerbil_package_sources",
     # This is only the Bazel sandbox projection. gerbil.pkg owns dependency
     # identity and build.ss owns the module graph compiled from these files.
-    srcs = ["gerbil.pkg"] + glob([
+    srcs = [
+        "gerbil.pkg",
+        ":core_module_sources",
+        "//packages/python-runtime/src/agentic_ai_lab_runtime:reasoning_rule_sources",
+    ] + glob([
         "*.ss",
         "bindings/nono-c/**/*.h",
         "modules/**/*.ss",
         "modules/**/*.inc",
         "user-interface/**/*.ss",
+        "scenarios/**/*.ss",
+        "schemas/**/*.json",
     ]),
 )
 

@@ -7,8 +7,10 @@
         (only-in :yuanxu/module-system/building/source-closure package-library-spec))
 (export agentic-ai-lab-public-build-roots agentic-ai-lab-build-spec)
 (def agentic-ai-lab-public-build-roots
-  ;; Every maintained Module and Feature interface is a public library root.
-  ;; Core projects their shared native import closure without duplicate targets.
+  ;; Native library facades only. Nix and OpenTofu interface declarations
+  ;; require the selected role wrappers owned by init.exports.std-make-spec;
+  ;; importing those authored declarations as standalone libraries is invalid.
+  ;; Core projects the shared native import closure without duplicate targets.
   '("modules/agent-sandbox/interface.ss"
     "modules/ai-agentic-context/features/memory/interface.ss"
     "modules/ai-agentic-context/interface.ss"
@@ -25,14 +27,12 @@
     "modules/loop-engine/interface.ss"
     "modules/model-core/interface.ss"
     "modules/module-authoring/interface.ss"
-    "modules/nix/interface.ss"
     "modules/nono-sandbox/interface.ss"
     "modules/proof/interface.ss"
     "modules/query/interface.ss"
     "modules/query/results/interface.ss"
     "modules/sandbox-core/interface.ss"
     "modules/search-engine/interface.ss"
-    "modules/services/opentofu/interface.ss"
     "modules/session/interface.ss"
     "modules/standards/interface.ss"
     "modules/temporal-causality/admission/interface.ss"
