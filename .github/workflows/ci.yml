@@ -151,6 +151,7 @@ jobs:
           mkdir -p "$HOME/.gerbil/pkg"
           gerbil pkg dir --add git.cons.io/mighty-gerbils/gerbil-directory
           python3 packages/automation/gerbil_dependency_pin.py prepare-native --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
+          gerbil env just bootstrap-native-poo
           if [ "${{ steps.native-gerbil-pkg-cache.outputs.cache-hit }}" = "true" ]; then
             if ! gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "native-dependency-cache-ready"))' >/tmp/native-gerbil-dependency-cache-check.log 2>&1; then
               echo "::notice::Exact native dependency cache is incomplete; refreshing declared revisions"

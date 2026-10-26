@@ -120,6 +120,7 @@ jobs:
           mkdir -p "$HOME/.gerbil/pkg"
           gerbil pkg dir --add git.cons.io/mighty-gerbils/gerbil-directory
           python3 packages/automation/gerbil_dependency_pin.py prepare-native --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
+          gerbil env just bootstrap-native-poo
           if [[ "${{ steps.dependency-cache.outputs.cache-hit }}" == "true" ]]; then
             gerbil env gerbil interactive -e \
               '(begin (import :clan/poo/object) (displayln "library-cache-ready"))'

@@ -2,6 +2,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Opt-in measurement of the maintained path, not a runner or another publisher.
 (import :std/test :clan/poo/object
+        (only-in :std/error Error? Error-message)
+        (only-in :std/encoding/json read-json write-json)
         (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in :agentic-ai-lab/modules/nix/func current-nix-process-completion-observer)
         (only-in :yuanxu/module-system/source/admission current-module-source-observer current-module-source-phase)
@@ -13,6 +15,32 @@
 (export aws-publication-cost-test)
 (def aws-publication-cost-test
   (test-suite "Selected AWS publication cost"
+    (yuanxu-test-fixture "locked receipt is authenticated independently of ambient NIX_PATH"
+      (root Workspace)
+      (def original (getenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS"))
+      (def original-path (getenv "NIX_PATH" #f))
+      (def tools
+        (call-with-input-string original
+          (lambda (port) (read-json port key-as-symbol: #f object-as-hash: #t))))
+      ;; Keep a valid real store path but forge its claimed NAR identity. The
+      ;; metadata mismatch must be the refusal, rather than an ambient lookup.
+      (hash-put! tools "nixpkgsHash" "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+      (def forged (call-with-output-string (lambda (port) (write-json port tools))))
+      (dynamic-wind
+        (lambda ()
+          (setenv "NIX_PATH" "nixpkgs=/context-ci-absent-package-set")
+          (setenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS" forged))
+        (lambda ()
+          (check-exception (prepare-aws-selection! root)
+            (lambda (failure)
+              (and (Error? failure)
+                   (string=? (Error-message failure)
+                     "Nix store metadata differs from the locked package receipt")))))
+        (lambda ()
+          (setenv "NIX_PATH" original-path)
+          (setenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS" original)))
+      (check-equal? (getenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS") original)
+      (check-equal? (getenv "NIX_PATH" #f) original-path))
     (yuanxu-test-fixture "same Graph and cached provider; Nix versus Scheme cost"
       (root Workspace)
       (def calls (make-hash-table))

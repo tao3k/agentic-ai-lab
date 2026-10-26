@@ -14,6 +14,10 @@
   (def started (time->seconds (current-time)))
   (displayln "PHASE aws-context-start mode=" mode) (force-output)
   (def result (.call tests .run))
+  (for-each
+    (lambda (line)
+      (when (string-prefix? "PHASE aws-atomic " line) (displayln line)))
+    (string-split (.get result output) #\newline))
   (displayln "PHASE aws-context-end mode=" mode " elapsed-s="
     (- (time->seconds (current-time)) started))
   (force-output)

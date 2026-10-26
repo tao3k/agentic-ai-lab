@@ -62,17 +62,19 @@
            ("modules/services/opentofu/nix/provider-artifacts.nix" . "provider-artifacts.nix")
            ("modules/services/opentofu/nix/selected-provider-artifacts-flake.nix" . "selected-provider-artifacts-flake.nix"))))
   (phase 'closure-published)
-  ;; Resolve the existing locked package set once. Never use <nixpkgs> or impure
-  ;; imports inside the published final derivation.
-  (def package-set
-    (find (cut string-prefix? "/nix/store/" <>)
-      (string-split
-        (.get (run-script (.cc NixSetup 'command
-                       '("nix-instantiate" "--find-file" "nixpkgs"
-                         "--log-format" "internal-json" "--verbose"))
-                 output-port: (current-error-port)) output) #\newline)))
-  (unless (and (string-prefix? "/nix/store/" package-set) (file-exists? package-set))
-    (error "AWS qualification requires the existing locked package set" package-set))
+  ;; The realized fixture owns the package set. Ambient NIX_PATH may select a
+  ;; different revision and rebuild providers outside that qualified closure.
+  (def tools
+    (call-with-input-string (getenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS")
+      (lambda (port) (read-json port key-as-symbol: #f object-as-hash: #t))))
+  (def package-set (and (hash-table? tools) (hash-get tools "nixpkgs")))
+  (def nar-hash (and (hash-table? tools) (hash-get tools "nixpkgsHash")))
+  (def system (and (hash-table? tools) (hash-get tools "system")))
+  (unless (and (string? package-set) (string-prefix? "/nix/store/" package-set)
+               (file-exists? package-set)
+               (string? nar-hash) (string-prefix? "sha256-" nar-hash)
+               (string? system) (not (string-empty? system)))
+    (error "AWS qualification requires the realized locked package receipt"))
   (phase 'package-set-resolved)
   ;; Pin the existing immutable store input with Nix's own NAR metadata. A bare
   ;; path input makes flake lock rescan/copy the entire package set each time.
@@ -87,9 +89,8 @@
   (unless (and (hash-table? metadata) (= (hash-length metadata) 1)
                (hash-table? (hash-get metadata package-set)))
     (error "Nix store metadata did not identify one package set"))
-  (def nar-hash (hash-get (hash-ref metadata package-set) "narHash"))
-  (unless (and (string? nar-hash) (string-prefix? "sha256-" nar-hash))
-    (error "Nix store metadata lacks the immutable NAR identity"))
+  (unless (equal? (hash-get (hash-ref metadata package-set) "narHash") nar-hash)
+    (error "Nix store metadata differs from the locked package receipt"))
   (phase 'package-set-identified)
   ;; Resolve Nix's content-addressed source name from its native NAR identity.
   ;; Reuse an existing immutable object only after querying its recorded hash;
@@ -125,11 +126,6 @@
     (error "canonical package set does not retain the locked NAR identity"))
   (phase 'package-set-published)
   (write-source (path-expand "demand/selection.json" project) "{\"providers\":[]}")
-  (def system
-    (call-with-input-string
-      (.get (run-script (.cc NixSetup 'command
-                '("nix-instantiate" "--eval" "--json" "--expr" "builtins.currentSystem"))) output)
-      read-json))
   (write-source (path-expand "flake.nix" project)
     (string-append
       "{ inputs.nixpkgs = { type = \"path\"; path = \"" canonical-package-set "\";\n"
