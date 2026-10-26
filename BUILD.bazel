@@ -180,6 +180,26 @@ gerbil_project_environment(
     working_directory = "packages/python-runtime",
 )
 
+# Adapter qualification consumes the same pinned, receipt-bound POO/Core
+# projects as the product. Its build script selects the native adapter/helper
+# closure; tests still run separately through the heap-fenced Just entrypoint.
+gerbil_project_compile(
+    name = "nix_adapters",
+    srcs = [":gerbil_package_sources"] + glob([
+        "core/t/**/*.ss",
+        "t/qualification/build-publication/**/*.ss",
+        "t/qualification/nix/**/*.ss",
+    ]),
+    build_script = "t/qualification/nix/build.ss",
+    require_library_output = True,
+    deps = [":yuanxu_package"],
+)
+
+gerbil_project_environment(
+    name = "nix_adapter_test_environment",
+    project = ":nix_adapters",
+)
+
 gerbil_project_dev(
     name = "dev_compile",
     args = ["compile"],

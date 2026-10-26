@@ -6,7 +6,8 @@
 ;;; Example owner: this composition keeps human authority and evidence return
 ;;; explicit across every stage before bundle publication.
 
-(import :agentic-ai-lab/modules/workflow/control-plane/plan
+;; Plan semantics belong to Core after the workflow module convergence.
+(import :yuanxu/modules/funflow/control-plane/graph
         :yuanxu/profile-composition/selection-syntax
         :agentic-ai-lab/modules/workflow/scenario/composition-syntax
         :yuanxu/profile-composition/profile-bundle
