@@ -37,15 +37,21 @@
       (fixture DirectoryFixture)
       (with-slots (root) fixture
         (def processes 0)
-        (def (run arguments)
+        (def (run label arguments)
+          ;; Real subprocess boundaries, including the native cold workers.
+          ;; These measurements never emit synthetic watchdog progress.
+          (def started (real-time))
+          (displayln "PHASE approved-start mode=" label) (force-output)
           (def output (.get (run-script (.cc Config command: arguments timeout: 120
                                             progress: make-test-progress-reader)
                             output-port: (current-error-port)) output))
+          (displayln "PHASE approved-end mode=" label " elapsed-s=" (- (real-time) started))
+          (force-output)
           (set! processes (+ processes 1))
           (execution-progress! 'approved-processes processes)
           output)
         (check-equal? (not (not (string-contains
-          (run (list "just" "-f" "t/qualification/nix/Justfile" "approved-producer" root)) "APPROVED-SOURCE-PUBLISHED"))) #t)
+          (run "producer" (list "just" "-f" "t/qualification/nix/Justfile" "approved-producer" root)) "APPROVED-SOURCE-PUBLISHED"))) #t)
         ;; Capture the sole original record BEFORE warm workers create their
         ;; own records. This path is fault injection input, never approval.
         (def record (path-expand
@@ -69,7 +75,7 @@
                     (call-with-output-file (list path: source truncate: #t)
                       (cut display "(export answer) (def answer 99)\n" <>))))
                 (lambda ()
-                  (def action (cut run (list "just" "-f" "t/qualification/nix/Justfile" "approved-worker" root label)))
+                  (def action (cut run label (list "just" "-f" "t/qualification/nix/Justfile" "approved-worker" root label)))
                   (if (equal? label "cold-joint") (with-replaced-products root record action) (action)))
                 (lambda ()
                   (when original-policy (write-artifact-bytes policy original-policy))

@@ -130,12 +130,13 @@
                (not (string-index (substring path 11 (string-length path)) #\/))
                (eq? (module-source-type path) 'directory))
     (error "approved release must be an exact Nix store directory" path))
-  (for-each
-    (lambda (operation)
-      (def argv (list executable operation path))
-      (when (current-nix-process-observer) ((current-nix-process-observer) argv))
-      (call-with-package-process-observation argv (cut run-nix-process <> #t)))
-    '("--check-validity" "--verify-path")))
+  ;; Nix 2.34 --verify-path first queries registered path metadata, then
+  ;; compares the current NAR hash. A separate --check-validity process repeats
+  ;; that database check. Keep one cryptographic check at EVERY call boundary;
+  ;; no successful result or registration claim is cached between callers.
+  (def argv (list executable "--verify-path" path))
+  (when (current-nix-process-observer) ((current-nix-process-observer) argv))
+  (call-with-package-process-observation argv (cut run-nix-process <> #t)))
 
 (def (agentic-ai-lab-nix-instantiate executable expression arguments
                                    (store-command (lambda () "nix-store")))

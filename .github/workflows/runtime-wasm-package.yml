@@ -43,7 +43,7 @@ concurrency:
 jobs:
   source-build:
     runs-on: macos-26
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - name: Check out source
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -121,8 +121,10 @@ jobs:
           test -n "$(bazelisk query 'somepath(//:compile, //:gerbil_parser_package)')"
           test -n "$(bazelisk query 'somepath(//:gerbil_parser_package, //:yuanxu_package)')"
 
+      # The source job includes the full cold Scheme dependency graph before
+      # its separately bounded WebAssembly compile/link phase.
       - name: Build declared Gerbil dependency projects
-        timeout-minutes: 12
+        timeout-minutes: 20
         run: bazelisk build --jobs=2 //:dependency_packages
 
       - name: Build, test, and pack the package
