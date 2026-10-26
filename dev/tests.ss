@@ -2,6 +2,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; CLI policy only; init.exports owns discovery, preparation and execution.
 (import :clan/poo/object
+        (only-in "../build-spec.ss" agentic-ai-lab-native-build-spec)
+        (only-in :std/source this-source-file)
         (only-in "../init.ss" agentic-ai-lab.init.exports))
 (def tests (.get agentic-ai-lab.init.exports tests))
 ;; These retain the previous ordinary-suite exclusions. Their dedicated
@@ -17,7 +19,13 @@
   (def budget (string->number seconds))
   (unless (and (exact-integer? budget) (> budget 0))
     (error "test budget must be a positive number of seconds" seconds))
-  (def demand (.call tests .for-files (list file)))
+  (def root (path-expand ".." (path-directory (this-source-file))))
+  ;; Bind both the compiler declaration and its foreign header to the same
+  ;; source epoch as the selected suite; changed bytes require a fresh demand.
+  (def demand
+    (.call tests .for-files (list file)
+      (map (cut path-expand <> root) '("build-spec.ss" "bindings/nono-c/nono.h"))
+      (agentic-ai-lab-native-build-spec)))
   (.def (Test @ (.get demand execution))
     runtime-options: (list vm-options)
     profile: =>.+

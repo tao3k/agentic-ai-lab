@@ -4,8 +4,10 @@
 ;;; init.ss owns the selected Module spec through init.exports; it is not a
 ;;; library target or an import-graph root here.
 (import (only-in :gerbil/expander expander-context-id)
+        (only-in :std/source this-source-file)
         (only-in :yuanxu/module-system/building/source-closure package-library-spec))
-(export agentic-ai-lab-public-build-roots agentic-ai-lab-build-spec)
+(export agentic-ai-lab-public-build-roots agentic-ai-lab-build-spec
+        agentic-ai-lab-native-build-spec)
 (def agentic-ai-lab-public-build-roots
   ;; Native library facades only. Nix and OpenTofu interface declarations
   ;; require the selected role wrappers owned by init.exports.std-make-spec;
@@ -116,15 +118,20 @@
       (error "production build imports the development-only ASP package" identity))
     (when (and name (string-prefix? "agentic-ai-lab/dev/" name))
       (error "production build imports a development module" identity))))
-(def (agentic-ai-lab-build-spec (roots agentic-ai-lab-public-build-roots))
+(def (agentic-ai-lab-native-build-spec)
+  ;; Production and native test support share these exact FFI declarations.
+  ;; Resolve against this owner, independently of a caller's working directory.
   (def ffi-options
     (cond-expand (darwin '("-ld-options" "-Wl,-undefined,dynamic_lookup")) (else '())))
-  (append
-    `((gxc: "modules/nono-sandbox/_nono"
-            "-cc-options" ,(string-append "-I" (path-expand "bindings/nono-c" (current-directory)))
-            "-ld-options" ,(cond-expand (darwin "-Wl,-undefined,dynamic_lookup") (else "-ldl"))))
+  `((gxc: "modules/nono-sandbox/_nono"
+      "-cc-options" ,(string-append "-I" (path-expand "bindings/nono-c" (path-directory (this-source-file))))
+      "-ld-options" ,(cond-expand (darwin "-Wl,-undefined,dynamic_lookup") (else "-ldl")))
+    ;; The process/AOT consumer supplies these symbols at final link time.
+    (gxc: "modules/workflow/runtime/runtime-v0-native" ,@ffi-options)
+    (gxc: "modules/workflow/runtime/semantic" ,@ffi-options)))
+(def (agentic-ai-lab-build-spec (roots agentic-ai-lab-public-build-roots))
+  (def native (agentic-ai-lab-native-build-spec))
+  (append (list (car native))
     (package-library-spec (current-directory) 'agentic-ai-lab roots
       admit-context: admit-production-build-context exclude: special-targets)
-    ;; The process/AOT consumer supplies runtime symbols at final link time.
-    `((gxc: "modules/workflow/runtime/runtime-v0-native" ,@ffi-options)
-      (gxc: "modules/workflow/runtime/semantic" ,@ffi-options))))
+    (cdr native)))
