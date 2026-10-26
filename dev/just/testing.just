@@ -35,8 +35,9 @@ test-native-harness-progress:
     results="{{ agentic_ai_lab_gerbil_path }}/test-results/native-harness"
     mkdir -p "$results"
     {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 20s python3 packages/python-runtime/tools/watch.py gxi {{ gerbil_test_runtime_options }} t/qualification/testing/native-harness.ss -v 5 t/qualification/testing/native-progress-positive.ss > "$results/positive.log" 2>&1
-    for marker in '^MODULE-OK ' '^HARNESS-OK ' '^OK$'; do rg -q "$marker" "$results/positive.log"; done
-    if rg -q 'ERROR CASE|ERROR CHECK|ERROR HARNESS|Heap overflow|Stack overflow' "$results/positive.log"; then cat "$results/positive.log"; exit 1; fi
+    # CI runners provide POSIX grep; progress admission needs no ripgrep install.
+    for marker in '^MODULE-OK ' '^HARNESS-OK ' '^OK$'; do grep -Eq "$marker" "$results/positive.log"; done
+    if grep -Eq 'ERROR CASE|ERROR CHECK|ERROR HARNESS|Heap overflow|Stack overflow' "$results/positive.log"; then cat "$results/positive.log"; exit 1; fi
     if {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 20s python3 packages/python-runtime/tools/watch.py gxi {{ gerbil_test_runtime_options }} t/qualification/testing/native-harness.ss -v 5 t/qualification/testing/native-progress-idle.ss > "$results/idle.log" 2>&1; then
         echo 'cached-import stall unexpectedly passed' >&2
         exit 1
@@ -44,7 +45,7 @@ test-native-harness-progress:
         status=$?
         test "$status" -eq 124
     fi
-    rg -q '^FAIL: five seconds without test progress$' "$results/idle.log"
+    grep -Eq '^FAIL: five seconds without test progress$' "$results/idle.log"
     echo 'NATIVE-HARNESS-PROGRESS-OK positive=passed cached-import-idle=refused'
 
 # Keep the root package's native entry independently callable during repairs.
