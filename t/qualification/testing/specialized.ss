@@ -65,14 +65,27 @@
      (let* ((demand
               (.call (.get agentic-ai-lab.init.exports tests) .for-files
                 (list (absolute "t/qualification/context-temporal/interface.ss"))
-                (list (this-source-file) (absolute watch))))
+                (list (this-source-file) (absolute watch)
+                      (absolute "t/qualification/testing/native-harness.ss"))))
             (files (.get demand spec)))
        (.cc (.get demand execution)
          'runtime-options (list vm)
-         'command (watched (append (list "gerbil" vm "test" "-v" "5") files))
-         'timeout 45 'idle-timeout #f 'case-count 99)))
+         'command
+         (watched (append
+           (list "gxi" vm (absolute "t/qualification/testing/native-harness.ss") "-v" "5") files))
+         ;; Includes every real timer interleaving. Use the agreed complete
+         ;; Context runtime envelope; the five-second output gate stays active.
+         'timeout 150 'idle-timeout #f 'case-count 99)))
     (else (error "unknown specialized qualification" name))))
 
 (def (main name vm . arguments)
-  (display (.get (.call (selected-script name vm arguments) .run) output)))
+  (def compile? (and (pair? arguments) (equal? (car arguments) "--compile")))
+  (def script (selected-script name vm (if compile? (cdr arguments) arguments)))
+  (if compile?
+    (begin
+      ;; Prepare the exact same source demand, inputs and compiler association
+      ;; that execution will admit; a parallel file-only demand has another key.
+      (.call script .compile)
+      (displayln "TEST-COMPILE-OK " name))
+    (display (.get (.call script .run) output))))
 ;; gxi invokes main after loading the script; never invoke it again here.

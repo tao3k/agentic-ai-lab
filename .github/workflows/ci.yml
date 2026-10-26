@@ -58,8 +58,8 @@ jobs:
           - os: macos-26
             gerbil-label: release-v0.19-1cfb032
     env:
-      # std/make defaults to serial builds. Use this two-core runner's native
-      # scheduler without changing dependency build deadlines or test budgets.
+      # A fallback until the setup steps select actual native CPU capacity.
+      # Compiler allocation is separate from each runtime Case budget.
       GERBIL_BUILD_CORES: '2'
       GERBIL_RELEASE_ROOT: ${{ github.workspace }}/.ci/gerbil-release/${{ matrix.gerbil-label }}
     steps:
@@ -194,7 +194,9 @@ jobs:
       # Ordinary regressions are discovered once by the native package entry
       # below. Keep this independent process-boundary qualification explicit.
       - name: Prepare published Context and Temporal TestSuites
-        run: gerbil env just compile-context-temporal-tests
+        run: |
+          gerbil env just test-native-harness-progress
+          gerbil env just compile-context-temporal-tests
 
       - name: Check original Temporal proof binding and Session invalidation
         env:

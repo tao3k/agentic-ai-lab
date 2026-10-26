@@ -10,7 +10,9 @@ export GERBIL_BUILD_CORES := env_var_or_default("GERBIL_BUILD_CORES", "2")
 # Test processes are bounded before any Scheme profile module can load. The
 # ASP POO Testing profile remains the policy and receipt owner inside the
 # process; this launch option is the fail-closed pre-import boundary.
-gerbil_test_max_heap := env_var_or_default("GERBIL_TEST_MAX_HEAP", "1G")
+# Match the native Case policy and the agreed 2 GiB Context runtime envelope.
+# Keep this pre-import cap explicit; serialized files never multiply it.
+gerbil_test_max_heap := env_var_or_default("GERBIL_TEST_MAX_HEAP", "2G")
 
 gerbil_test_debug := env_var_or_default("GERBIL_TEST_DEBUG", "q")
 

@@ -26,6 +26,27 @@ test:
     just test-core
     just test-root
 
+# Exercise actual SDK progress and an intentional cached-import stall. These
+# control fixtures are outside ordinary *-test.ss discovery by design.
+[group('test')]
+test-native-harness-progress:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    results="{{ agentic_ai_lab_gerbil_path }}/test-results/native-harness"
+    mkdir -p "$results"
+    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 20s python3 packages/python-runtime/tools/watch.py gxi {{ gerbil_test_runtime_options }} t/qualification/testing/native-harness.ss -v 5 t/qualification/testing/native-progress-positive.ss > "$results/positive.log" 2>&1
+    for marker in '^MODULE-OK ' '^HARNESS-OK ' '^OK$'; do rg -q "$marker" "$results/positive.log"; done
+    if rg -q 'ERROR CASE|ERROR CHECK|ERROR HARNESS|Heap overflow|Stack overflow' "$results/positive.log"; then cat "$results/positive.log"; exit 1; fi
+    if {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 20s python3 packages/python-runtime/tools/watch.py gxi {{ gerbil_test_runtime_options }} t/qualification/testing/native-harness.ss -v 5 t/qualification/testing/native-progress-idle.ss > "$results/idle.log" 2>&1; then
+        echo 'cached-import stall unexpectedly passed' >&2
+        exit 1
+    else
+        status=$?
+        test "$status" -eq 124
+    fi
+    rg -q '^FAIL: five seconds without test progress$' "$results/idle.log"
+    echo 'NATIVE-HARNESS-PROGRESS-OK positive=passed cached-import-idle=refused'
+
 # Keep the root package's native entry independently callable during repairs.
 [group('test')]
 test-root: build-testing build-test-workers prepare-test-inputs build-library
@@ -36,12 +57,18 @@ test-root: build-testing build-test-workers prepare-test-inputs build-library
     just test-files > "$manifest"
     # Preparation above is shared, not repeated by every file. The external
     # loop owns isolation; each native Harness retains its own heap and budget.
-    python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- timeout --signal=TERM --kill-after=5s 1200s bash -euo pipefail -c '
+    # The init-owned inventory contains 315 serial files. This outer queue
+    # envelope includes process/setup work; each _test-file still owns its
+    # unchanged 120-second fence and each dedicated Context gate keeps 150s.
+    python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- timeout --signal=TERM --kill-after=5s 7200s bash -euo pipefail -c '
       failed=0
       while IFS= read -r file; do
         [[ -n "$file" ]] || continue
         [[ -f "$file" && "$file" == *-test.ss ]] || { echo "invalid test input: $file" >&2; exit 64; }
-        if ! just _test-file "$file"; then failed=1; fi
+        started=$SECONDS
+        printf "TEST-FILE-START file=%s\n" "$file"
+        if just _test-file "$file"; then status=0; else status=$?; failed=1; fi
+        printf "TEST-FILE-END status=%s elapsed-s=%s file=%s\n" "$status" "$((SECONDS - started))" "$file"
       done < "$1"
       exit "$failed"
     ' -- "$manifest"
