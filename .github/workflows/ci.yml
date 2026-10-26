@@ -133,6 +133,10 @@ jobs:
         shell: bash
         run: python3 packages/automation/install_gerbil_release.py "$GERBIL_RELEASE_ROOT"
 
+      # Restore and save must hash the same manifest set, including Core.
+      - name: Initialize Core submodule
+        run: git submodule update --init core
+
       - name: Restore native Gerbil package cache
         id: native-gerbil-pkg-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -142,9 +146,6 @@ jobs:
             .gerbil/lib
             .gerbil/bin
           key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
-
-      - name: Initialize Core submodule
-        run: git submodule update --init core
 
       - name: Install native Gerbil package dependencies
         run: |
