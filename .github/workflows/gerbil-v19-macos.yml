@@ -127,8 +127,9 @@ jobs:
             gerbil env gerbil interactive packages/automation/native-dependencies.ss
           fi
           # The measurement harness is development tooling, not a library input.
-          python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "$GITHUB_WORKSPACE/dev/.gerbil/pkg"
-          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/native-dependencies.ss)
+          # Keep optional tooling in the same native POO ABI as the library.
+          python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
+          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/native-dependencies.ss)
           export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
           gerbil env gerbil interactive -e \

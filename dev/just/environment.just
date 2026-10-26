@@ -66,7 +66,8 @@ agentic_ai_lab_gerbil_path := env_var_or_default("GERBIL_PATH", justfile_directo
 
 agentic_ai_lab_library_path := env_var_or_default("GERBIL_LOADPATH", agentic_ai_lab_gerbil_path + "/lib")
 
-# Optional development packages must never rewrite the production package store.
+# Product-owned development modules have their own output directory. Native
+# dependencies share the root prefix so POO macros and runtime retain one ABI.
 agentic_ai_lab_dev_gerbil_path := justfile_directory() + "/dev/.gerbil"
 agentic_ai_lab_dev_library_path := agentic_ai_lab_library_path + ":" + agentic_ai_lab_dev_gerbil_path + "/lib"
 

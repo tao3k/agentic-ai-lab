@@ -181,8 +181,10 @@ jobs:
 
       - name: Install optional development policy dependencies
         run: |
-          python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "$GITHUB_WORKSPACE/dev/.gerbil/pkg"
-          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/native-dependencies.ss)
+          # The dev manifest owns ASP's pin; the native package prefix stays
+          # shared so its POO macros and runtime use the same installed ABI.
+          python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
+          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/native-dependencies.ss)
           export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
           gerbil env gerbil interactive -e '(begin (import :asp-gerbil-scheme/benchmark-api :asp-gerbil-scheme/testing-api) (displayln "development-dependencies-ready"))'
@@ -262,7 +264,9 @@ jobs:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: Quint finite proof models
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Include backend setup, complete typechecking and both proof inventories
+    # plus receipt upload. Per-case 45-second/5-second-idle fences are unchanged.
+    timeout-minutes: 25
     steps:
       - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -693,7 +697,15 @@ jobs:
 
       - name: Build declared Gerbil dependency projects
         timeout-minutes: ${{ matrix.dependency-timeout-minutes }}
-        run: bazel build //:dependency_packages
+        run: |
+          arguments=()
+          if [[ "$RUNNER_OS" == macOS ]]; then
+            # Each Scheme action uses the full native compiler allocation.
+            # Serialize actions on this runner to avoid overlapping CPU/RSS
+            # budgets; std/make still schedules compilation within each action.
+            arguments+=(--jobs=1)
+          fi
+          bazel build "${arguments[@]}" //:dependency_packages
 
       - name: Validate shared Gerbil provider
         run: bazel test --test_output=errors //t/qualification/gerbil-bazel:tests
@@ -1015,13 +1027,13 @@ jobs:
           - os: macos-26
             gerbil-label: release-v0.19-1cfb032
             gerbil-install: release
-            dependency-timeout-minutes: 12
+            dependency-timeout-minutes: 20
             external-module-mode: analysis
             compile-timeout-minutes: 25
             compile-runaway-timeout-seconds: 1440
             acceptance-timeout-minutes: 15
             acceptance-runaway-timeout-seconds: 840
-            job-timeout-minutes: 45
+            job-timeout-minutes: 60
     steps: *native-steps
 
   python-runtime-wheel:

@@ -3,12 +3,26 @@
 ;;; Current native store verification, never a cached registration claim.
 (import :std/test
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :yuanxu/module-system/source/admission current-module-source-observer)
+        (only-in :yuanxu/t/qualification/build-publication/store store-verify)
         (only-in :agentic-ai-lab/modules/nix/func
                  agentic-ai-lab-nix-verify-store current-nix-process-observer))
 (export nix-store-verification-test)
 
 (def nix-store-verification-test
   (test-suite "Each approval boundary verifies native registered contents"
+    (yuanxu-test-case "Core recovery repeats fresh native verification without duplicate processes"
+      (def root (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_INPUTS"))
+      (def calls '())
+      (parameterize ((current-module-source-observer
+                      (lambda (event _amount)
+                        (when (and (pair? event) (eq? (car event) 'native-store-process))
+                          (set! calls (cons (cadr event) calls))))))
+        (store-verify root)
+        (store-verify root))
+      (check-equal? (reverse calls)
+        (list (list "nix-store" "--store" "daemon" "--verify-path" root)
+              (list "nix-store" "--store" "daemon" "--verify-path" root))))
     (yuanxu-test-case "independent calls both perform cryptographic verification"
       (def root (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_INPUTS"))
       (def calls '())
