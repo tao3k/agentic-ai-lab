@@ -15,6 +15,50 @@ from packages.bazel import gerbil_project_environment_tool as environment_tool
 
 
 class GerbilProjectEnvironmentToolTest(unittest.TestCase):
+    def test_writable_runtime_preserves_producer_and_cleans_after_command_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            producer = root / "producer"
+            workspace = root / "workspace"
+            library = producer / ".gerbil" / "lib"
+            library.mkdir(parents=True)
+            (producer / ".gerbil" / "bin").mkdir()
+            marker = library / "source.marker"
+            marker.write_text("compiled-source")
+            workspace.mkdir()
+            wrapper = root / "native-env"
+            wrapper.write_text('#!/bin/sh\nexec "$@"\n')
+            wrapper.chmod(0o755)
+            capture = root / "capture.json"
+            command = root / "command"
+            command.write_text(
+                '#!/usr/bin/env python3\n'
+                'import json, os\nfrom pathlib import Path\n'
+                'runtime = Path(os.environ["GERBIL_PATH"])\n'
+                '(runtime / "lib" / "scratch").write_text("mutable")\n'
+                'libraries = os.environ["GERBIL_LOADPATH"].split(os.pathsep)\n'
+                'assert (Path(libraries[1]) / "source.marker").read_text() == "compiled-source"\n'
+                'assert (runtime / "bin").is_dir()\n'
+                'Path(os.environ["CAPTURE"]).write_text(json.dumps(str(runtime)))\n'
+                'raise SystemExit(int(os.environ["COMMAND_STATUS"]))\n'
+            )
+            command.chmod(0o755)
+            arguments = [
+                "--gxi", str(root / "gxi"), "--native-scheme-env", str(wrapper),
+                "--project-root", str(producer), "--project-receipt", str(root / "receipt"),
+                "--dependency-root-marker", str(root / "dependency" / ".root"),
+                "--workspace", str(workspace), "--declaration-receipt", str(root / "declaration"),
+                "--runtime-directory", ".runtimes", "--", str(command),
+            ]
+            for status in (0, 7):
+                with self.subTest(status=status), patch.dict(
+                    os.environ, {"CAPTURE": str(capture), "COMMAND_STATUS": str(status)}
+                ):
+                    self.assertEqual(environment_tool.main(arguments), status)
+                    self.assertFalse(Path(json.loads(capture.read_text())).exists())
+                    self.assertEqual(marker.read_text(), "compiled-source")
+                    self.assertFalse((library / "scratch").exists())
+
     def test_main_launches_command_with_declared_project_environment(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

@@ -198,6 +198,7 @@ gerbil_project_compile(
 gerbil_project_environment(
     name = "nix_adapter_test_environment",
     project = ":nix_adapters",
+    runtime_directory = ".gerbil/nix-adapter-runtimes",
 )
 
 gerbil_project_dev(

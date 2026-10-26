@@ -57,6 +57,7 @@ def _gerbil_project_environment_impl(ctx):
         "project": str(ctx.attr.project.label),
         "nativeAbi": toolchain.native_abi_fingerprint,
         "workingDirectory": ctx.attr.working_directory,
+        "runtimeDirectory": ctx.attr.runtime_directory,
         "loadPathOrder": [
             "project",
             "project-dependencies",
@@ -96,6 +97,7 @@ arguments=(
   --dependency-root-marker "$dependency_root_marker"
   --workspace "$workspace"
   --working-directory {working_directory}
+  --runtime-directory {runtime_directory}
   --declaration-receipt "$declaration_receipt"
 )
 {dependency_arguments}
@@ -111,6 +113,7 @@ exec "$runner" "${{arguments[@]}}" -- "$@"
             runfiles_init = _runfiles_init(),
             runner_key = repr(_runfile_key(ctx, runner.executable)),
             working_directory = repr(ctx.attr.working_directory),
+            runtime_directory = repr(ctx.attr.runtime_directory),
         ),
     )
 
@@ -152,6 +155,9 @@ gerbil_project_environment = rule(
             providers = [GerbilProjectInfo],
         ),
         "working_directory": attr.string(),
+        # Optional command-owned writable prefix; compiled project outputs
+        # remain immutable library inputs and are never modified by tests.
+        "runtime_directory": attr.string(),
         "_runner": attr.label(
             cfg = "exec",
             default = Label("//packages/bazel:gerbil_project_environment_tool"),
