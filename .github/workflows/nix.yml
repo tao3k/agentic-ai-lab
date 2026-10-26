@@ -3,7 +3,31 @@
 name: Nix adapters
 on:
   pull_request:
-    paths: ['modules/nix/**', 'modules/services/**', 'bindings/nix-c-api/**', 'scenarios/**', 't/**', 'core', '.github/workflows/nix.yml', '.github/actions/setup-gerbil/**']
+    paths:
+      - 'modules/nix/**'
+      - 'modules/services/**'
+      - 'bindings/nix-c-api/**'
+      - 'scenarios/**'
+      - 't/**'
+      - 'core'
+      # These inputs own the shared native dependency and adapter projection.
+      - '.bazelrc'
+      - '.bazelversion'
+      - 'BUILD.bazel'
+      - 'MODULE.bazel'
+      - 'MODULE.bazel.lock'
+      - 'gerbil-*.MODULE.bazel'
+      - 'packages/bazel/**'
+      - 'packages/automation/install_gerbil_release.py'
+      - 'gerbil.pkg'
+      - 'build.ss'
+      - 'build-spec.ss'
+      - 'init.ss'
+      - 'services.ss'
+      - 'nix-contracts.ss'
+      - 'opentofu-contracts.ss'
+      - '.github/workflows/nix.yml'
+      - '.github/actions/setup-gerbil/**'
   workflow_dispatch:
 permissions:
   contents: read
