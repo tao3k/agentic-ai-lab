@@ -24,7 +24,8 @@
          ((string=? "agentic-ai-lab/services" name) "services.ss")
          ((string=? "agentic-ai-lab/nix-contracts" name) "nix-contracts.ss")
          ((string=? "agentic-ai-lab/opentofu-contracts" name) "opentofu-contracts.ss")
-         ((or (string-prefix? "agentic-ai-lab/modules/nix/" name)
+         ((or (string-prefix? "agentic-ai-lab/scenarios/aws/" name)
+              (string-prefix? "agentic-ai-lab/modules/nix/" name)
               (string-prefix? "agentic-ai-lab/modules/services/" name)
               (string-prefix? "agentic-ai-lab/t/qualification/build-publication/" name))
           (string-append
@@ -42,7 +43,9 @@
           ;; one target while retaining the SDK's dependency traversal order.
           (when (and source (not (member source sources)))
             (set! sources (cons source sources))))) seen))
-  '("modules/nix/objects.ss" "modules/services/opentofu/objects.ss"
+  ;; AWS validation consumes this public native contract without constructing
+  ;; the AWS scope. Its import closure must be available in the fresh worker.
+  '("scenarios/aws/types.ss" "modules/nix/objects.ss" "modules/services/opentofu/objects.ss"
     "core/t/qualification/service-publication/fixtures.ss"
     "core/t/qualification/build-publication/projection.ss"
     "core/t/qualification/build-publication/store.ss"

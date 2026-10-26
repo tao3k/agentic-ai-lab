@@ -36,33 +36,33 @@ gerbil_dependency_sources.source_package(
     name = "gerbil_parser_sources",
     canonical_uri = "https://github.com/tao3k/gerbil-parser",
     package = "gerbil-parser",
-    revision = "2afad27d8feda65739e7f8ceea56ed15dc3b1304",
-    sha256 = "67db6fbfaaad5e680a48023f9cbd07d4ccd20b915dd70b0697330b7ff1b83220",
-    strip_prefix = "gerbil-parser-2afad27d8feda65739e7f8ceea56ed15dc3b1304",
+    revision = "461fa6f5f232f854fb6dc7da82ed27caed7f50a6",
+    sha256 = "ddce012f9b7400c68975afa6485053ad77a28ad3d932a4dbda9a5e0682ab92c1",
+    strip_prefix = "gerbil-parser-461fa6f5f232f854fb6dc7da82ed27caed7f50a6",
     urls = [
-        "https://github.com/tao3k/gerbil-parser/archive/2afad27d8feda65739e7f8ceea56ed15dc3b1304.tar.gz",
+        "https://github.com/tao3k/gerbil-parser/archive/461fa6f5f232f854fb6dc7da82ed27caed7f50a6.tar.gz",
     ],
 )
 gerbil_dependency_sources.source_package(
     name = "gerbil_ascent_sources",
     canonical_uri = "https://github.com/tao3k/gerbil-ascent",
     package = "gerbil-ascent",
-    revision = "6b1ec87d6d8639c348ba79c5400ee08bc2223526",
-    sha256 = "fc9eeeec945da3f816a76c5680d843aa35601ca7ba8829656a9be82dc8093dae",
-    strip_prefix = "gerbil-ascent-6b1ec87d6d8639c348ba79c5400ee08bc2223526",
+    revision = "db58b5fd8c7655f4ff14e22ccb9f9018f932a44a",
+    sha256 = "3aedce9ca6d8b7936ade11a10fbbdd9c0a9f4378c088305c270a350be7f8e81e",
+    strip_prefix = "gerbil-ascent-db58b5fd8c7655f4ff14e22ccb9f9018f932a44a",
     urls = [
-        "https://github.com/tao3k/gerbil-ascent/archive/6b1ec87d6d8639c348ba79c5400ee08bc2223526.tar.gz",
+        "https://github.com/tao3k/gerbil-ascent/archive/db58b5fd8c7655f4ff14e22ccb9f9018f932a44a.tar.gz",
     ],
 )
 gerbil_dependency_sources.source_package(
     name = "orgize_sources",
     canonical_uri = "https://github.com/tao3k/orgize",
     package = "orgize",
-    revision = "734b338fdf77c4fab00739f2accd34c6a48d091a",
-    sha256 = "1b7b8c1ac66b5e6284e7be8bbebf521e58ec9accef565e4579920d3d613a6c8f",
-    strip_prefix = "orgize-734b338fdf77c4fab00739f2accd34c6a48d091a",
+    revision = "5154a28714299a584da88a2d88b12dfea96378b7",
+    sha256 = "448d5c0df8ca2467deedf4e648fc04b3b5f34864cd02e6fbe326a9a593f8f77b",
+    strip_prefix = "orgize-5154a28714299a584da88a2d88b12dfea96378b7",
     urls = [
-        "https://github.com/tao3k/orgize/archive/734b338fdf77c4fab00739f2accd34c6a48d091a.tar.gz",
+        "https://github.com/tao3k/orgize/archive/5154a28714299a584da88a2d88b12dfea96378b7.tar.gz",
     ],
 )
 use_repo(

@@ -99,6 +99,7 @@ jobs:
         run: |
           brew list --formula ghostscript >/dev/null 2>&1 && brew unlink ghostscript || true
           brew install coreutils gcc jq openssl pkg-config sqlite zlib
+          echo "GERBIL_BUILD_CORES=$(sysctl -n hw.logicalcpu)" >> "$GITHUB_ENV"
           echo "$(brew --prefix coreutils)/libexec/gnubin" >> "$GITHUB_PATH"
           "$(brew --prefix coreutils)/libexec/gnubin/timeout" --version
 
