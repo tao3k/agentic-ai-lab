@@ -153,17 +153,17 @@
               ],
               "environment": {},
               "expected_version_prefixes": [
-                "Gerbil 2591dcd"
+                "Gerbil 1cfb032"
               ],
               "install_digest": "",
               "manifest_path": "gerbil-toolchain-release.json",
-              "release_revision": "2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb",
+              "release_revision": "1cfb032c7a1612637da6205f5f8a15683eba3ba0",
               "project_library_relative_path": ".gerbil/lib",
               "project_root_marker": "@@//:gerbil.pkg",
-              "sha256": "9844ba362fdf6f1c5e8a4411e462a466d52dee0d541f8e84f61091cec0e5e740",
+              "sha256": "143c691fee5af4f9f631fd339f69a66f562e42e0bfc1d4ee2cda5fa8d35c35ee",
               "strip_prefix": "gerbil-v0.19-linux-x86_64",
               "urls": [
-                "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patchf5cedd8168cb/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patchf5cedd8168cb.tar.gz"
+                "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-1cfb032c7a1612637da6205f5f8a15683eba3ba0-linux-x86_64-portable-full-single-host-unlimited-multiple-vms-patch9599b09b82f8/gerbil-v0.19-1cfb032c7a1612637da6205f5f8a15683eba3ba0-linux-x86_64-portable-full-single-host-unlimited-multiple-vms-patch9599b09b82f8.tar.gz"
               ]
             }
           },
@@ -209,20 +209,6 @@
               ]
             }
           },
-          "orgize_sources": {
-            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
-            "attributes": {
-              "build_script": "build.ss",
-              "canonical_uri": "https://github.com/tao3k/orgize",
-              "package": "orgize",
-              "revision": "bc9f51aedd22a019198b9978492ddd90090fdba9",
-              "sha256": "58c204c594d0a5d3e04a3a2ffd63eb960749c160d7ca9d032aa75f8d758947ba",
-              "strip_prefix": "orgize-bc9f51aedd22a019198b9978492ddd90090fdba9",
-              "urls": [
-                "https://github.com/tao3k/orgize/archive/bc9f51aedd22a019198b9978492ddd90090fdba9.tar.gz"
-              ]
-            }
-          },
           "gerbil_ascent_sources": {
             "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
             "attributes": {
@@ -234,6 +220,20 @@
               "strip_prefix": "gerbil-ascent-db58b5fd8c7655f4ff14e22ccb9f9018f932a44a",
               "urls": [
                 "https://github.com/tao3k/gerbil-ascent/archive/db58b5fd8c7655f4ff14e22ccb9f9018f932a44a.tar.gz"
+              ]
+            }
+          },
+          "orgize_sources": {
+            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
+            "attributes": {
+              "build_script": "build.ss",
+              "canonical_uri": "https://github.com/tao3k/orgize",
+              "package": "orgize",
+              "revision": "bc9f51aedd22a019198b9978492ddd90090fdba9",
+              "sha256": "58c204c594d0a5d3e04a3a2ffd63eb960749c160d7ca9d032aa75f8d758947ba",
+              "strip_prefix": "orgize-bc9f51aedd22a019198b9978492ddd90090fdba9",
+              "urls": [
+                "https://github.com/tao3k/orgize/archive/bc9f51aedd22a019198b9978492ddd90090fdba9.tar.gz"
               ]
             }
           }
