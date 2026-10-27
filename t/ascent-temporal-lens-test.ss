@@ -3,6 +3,10 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Consumer qualification of the pinned package; no new POO causal authority.
+;; The official Harness feature observes genuine cold imports as well as Cases.
+(import (for-syntax
+          (only-in :yuanxu/observability/testing-source install-test-source-observation!)))
+(begin-syntax (install-test-source-observation!))
 (import (only-in :std/error Error?)
         (only-in :agentic-ai-lab/modules/temporal-causality/objects agentic-ai-lab-causal-event agentic-ai-lab-temporal-observation)
         (only-in :agentic-ai-lab/modules/temporal-causality/funs agentic-ai-lab-causal-event-graph agentic-ai-lab-causal-cut)

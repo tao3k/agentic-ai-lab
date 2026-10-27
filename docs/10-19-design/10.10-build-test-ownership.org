@@ -275,3 +275,38 @@ are not established by these checks. Failed package-environment attempts and
 the missing Python CFFI attempt remain local evidence, distinct from passes.
 See [[file:10.06-poo-module-system/agentic-ai-context/31-build-unification-results.json][the source-bound structured receipt]]. Raw build logs, binaries and journals
 remain local artifacts.
+
+
+* Native import closure and store-output reuse qualification
+
+The compiler's own dependency graph qualifies Query and Context imports. Their
+CLOS contracts use existing owning modules; Parser semantic dispatch imports the
+existing generic syntax owner. A positive closure test excludes the aggregate
+CLOS facade, while an intentional facade import must still be detected. This
+reduces unnecessary dynamic modules without suppressing native cleanup.
+
+Nix realization resolves the current derivation's outputs through the native
+store on every call. Exactly one currently registered output may be reused.
+Missing, unresolved and multiple outputs retain native realization. No Scheme
+mapping or registration result is cached. Source/currentness and publication
+checks still bracket realization, including the registered-output branch.
+The real cold-build, repeated-registration, registration-refusal, multiple-output
+and failing-native-command controls are maintained in =t/nix-output-reuse-test.ss=.
+The Selected Graph tamper injection covers both output lookup and realization.
+
+ASCENT now uses the official Gerbil test entry and its existing worker progress
+watchdog. CI no longer duplicates that watcher around the preparation command.
+The worker retains its five-second silence gate; the Just command retains its
+45-second total cap. Actual cached-import silence and failed-Case controls must
+still be refused. The handwritten ASCENT import runner has been removed.
+
+Candidate local receipts on 2026-10-28 record two natural-exit Context runs of
+99 Cases each: preparation 21.508 / 5.340 seconds, Cases 56.113 / 56.242 seconds.
+The complete AWS observation-off/on Case passed in 62.118 seconds, with 2.201
+seconds before its Harness. These are focused candidate observations, not
+cold-store benchmarks or remote-CI acceptance. The unchanged resource limits,
+source withdrawal, expiry, cancellation/recovery and tamper controls remain
+required. Complete final-cohort file-queue and exact-head CI evidence must be
+reported separately; the previously published ecf15ec7 queue admitted 314/315
+files and its macOS Context worker failed during native unload after final OK.
+Raw logs, native journals and failure samples remain local or CI artifacts.

@@ -3,15 +3,26 @@
 ;;; Entry projection only: installed native harnesses still own the suites.
 (import :clan/poo/object
         (only-in "./qualification.ss" qualification-script)
-        (only-in "../../../init.ss" agentic-ai-lab.init.exports)
         (only-in :yuanxu/module-system/building/test-projection module-test-execution)
         (only-in "../../../dev/modules/testing/native-test-observation.ss"
                  make-native-test-progress-reader)
+        (only-in :gerbil/expander current-expander-context make-top-context eval-syntax)
         (only-in :std/source this-source-file))
 (def root (path-expand "../../.." (path-directory (this-source-file))))
 (def watch "packages/python-runtime/tools/watch.py")
 (def (watched command) (append (list "python3" watch) command))
 (def (absolute file) (path-expand file root))
+
+;; Only the Context demand needs the product init. Other qualifications consume
+;; published libraries and must not eagerly lower the complete module selection.
+;; Resolve the same init-owned tests value through the native expander once.
+(def context-exports
+  (delay
+    (parameterize ((current-expander-context (make-top-context)))
+      (eval-syntax '(import :gerbil/core))
+      (eval-syntax
+        `(import (only-in ,(absolute "init.ss") agentic-ai-lab.init.exports)))
+      (eval-syntax 'agentic-ai-lab.init.exports))))
 
 (def (selected-script name vm arguments)
   (def (interpreted file) (list "gxi" vm file))
@@ -60,13 +71,18 @@
     ((temporal-evaluator)
      (runner "t/harness/temporal-evaluator-runner.ss" "t/temporal-evaluator-test.ss" 58))
     ((ascent-temporal)
-     (runner "t/harness/ascent-temporal-runner.ss" "t/ascent-temporal-lens-test.ss" #f
-       '("CASE-OK POO values keep native evidence separate from cut authority"
-         "CASE-OK explicit cut bridge preserves uncertainty and original identity binding")
-       (list "gerbil" vm "env" "gerbil" vm "t/harness/ascent-temporal-runner.ss")))
+     (let (file (absolute "t/ascent-temporal-lens-test.ss"))
+       ;; The native Harness owns imports, Suite discovery and exit status.
+       ;; Preserve both original Cases and the existing worker deadlines.
+       (native (list file)
+         (watched (list "gerbil" vm "test" "-v" "5" "-D"
+                        "yuanxu-module-test-observation" file))
+         45 2 (list (absolute watch))
+         '("CASE-OK POO values keep native evidence separate from cut authority"
+           "CASE-OK explicit cut bridge preserves uncertainty and original identity binding"))))
     ((context-temporal)
      (let* ((demand
-              (.call (.get agentic-ai-lab.init.exports tests) .for-files
+              (.call (.get (force context-exports) tests) .for-files
                 (list (absolute "t/qualification/context-temporal/interface.ss"))
                 (list (this-source-file) (absolute watch)
                       (absolute "dev/modules/testing/native-test-observation.ss"))))
@@ -90,8 +106,7 @@
   (def script (selected-script name vm (if compile? (cdr arguments) arguments)))
   (if compile?
     (begin
-      ;; Prepare the exact same source demand, inputs and compiler association
-      ;; that execution will admit; a parallel file-only demand has another key.
+      ;; Preparation and execution consume the same init-owned demand.
       (.call script .compile)
       (displayln "TEST-COMPILE-OK " name))
     (display (.get (.call script .run) output))))

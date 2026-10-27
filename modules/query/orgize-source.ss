@@ -24,8 +24,7 @@
         (only-in "scheme-select.ss" agentic-ai-lab-query-select-scheme-nodes)
         (only-in "results/funs.ss"
                  agentic-ai-lab-query-result-cell agentic-ai-lab-query-result-row
-                 agentic-ai-lab-query-result-set agentic-ai-lab-query-result-set-replay)
-        :yuanxu/poo-clos/interface)
+                 agentic-ai-lab-query-result-set agentic-ai-lab-query-result-set-replay))
 
 (export agentic-ai-lab-query-orgize-open-headlines-incremental
         agentic-ai-lab-query-orgize-open-headlines

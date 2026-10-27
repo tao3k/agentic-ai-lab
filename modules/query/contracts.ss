@@ -9,7 +9,15 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list filter-map)
-        :yuanxu/poo-clos/interface
+        ;; Binding uses the owned generic kernel and declaration-only bundle
+        ;; syntax. Reflection, evolution and class declaration syntax stay lazy.
+        (only-in :yuanxu/poo-clos/objects
+                 poo-clos-generic-protocol poo-clos-generic-function
+                 poo-clos-method poo-clos-class-specializer
+                 poo-clos-any-specializer poo-clos-prototype-specializer
+                 poo-clos-compose-method-bundle)
+        (only-in :yuanxu/poo-clos/dispatch poo-clos-call)
+        (only-in :yuanxu/poo-clos/method-bundle-syntax .defmethod-bundle)
         (only-in "types.ss"
                  agentic-ai-lab-query?
                  agentic-ai-lab-query-provider?

@@ -5,7 +5,15 @@
  (only-in :clan/poo/object .o .ref .slot? .call object? object<-alist .alist/sort)
  (only-in :clan/poo/mop validate)
  (only-in :std/list/list find every delete-duplicates/hash)
- :yuanxu/poo-clos/interface
+ ;; Keep the executor's native class and binding behavior without importing
+ ;; unrelated reflection/evolution or the aggregate declaration language.
+ (only-in :yuanxu/poo-clos/classes poo-clos-class)
+ (only-in :yuanxu/poo-clos/lifecycle poo-clos-make-instance)
+ (only-in :yuanxu/poo-clos/objects
+          poo-clos-method poo-clos-class-specializer poo-clos-eql-specializer
+          poo-clos-prototype-specializer poo-clos-any-specializer
+          poo-clos-compose-method-bundle)
+ (only-in :yuanxu/poo-clos/method-bundle-syntax .defmethod-bundle)
  :agentic-ai-lab/modules/query/objects
  (only-in :agentic-ai-lab/modules/query/types AgenticAILabQuery agentic-ai-lab-query?)
  :agentic-ai-lab/modules/query/contracts

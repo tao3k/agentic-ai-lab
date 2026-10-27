@@ -50,6 +50,8 @@
       (def registrations 0)
       (def queries 0)
       (def realizations 0)
+      (def output-queries 0)
+      (def output-validations 0)
       (def started (real-time))
       (def (phase name)
         (displayln "AWS phase " name ": elapsed=" (- (real-time) started)
@@ -69,6 +71,10 @@
                  (set! queries (1+ queries))))
              (when (member "--realise" argv)
                (set! realizations (1+ realizations)))
+             (when (member "--outputs" argv)
+               (set! output-queries (1+ output-queries)))
+             (when (member "--check-validity" argv)
+               (set! output-validations (1+ output-validations)))
              (set! nix-seconds (+ nix-seconds seconds))
              (displayln "Nix " (path-strip-directory (car argv)) " repeat=" (hash-ref calls argv)
                         " seconds=" seconds " completed=" completed?
@@ -134,7 +140,12 @@
         ;; The real fixture is a FlakeSource: path-info owns native drv
         ;; registration, with no separate --read-write-mode process.
         (check-equal? registrations 0)
-        (check-equal? realizations 1)
+        ;; The native input transport has already realized this immutable
+        ;; fixture. Reuse still requires a fresh output mapping and registration
+        ;; check; missing and multiple outputs have separate real-build controls.
+        (check-equal? output-queries 1)
+        (check-equal? output-validations 1)
+        (check-equal? realizations 0)
         (check-equal? queries (+ 1 4))
         (check-equal? (.get next resource instance_type) "t3.medium")
         (check-equal? (.get cached instance_type) "t3.small")))))

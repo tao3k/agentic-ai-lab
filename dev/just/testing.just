@@ -59,7 +59,7 @@ test-root: build-testing build-test-workers prepare-test-inputs build-library
     just test-files > "$manifest"
     # Preparation above is shared, not repeated by every file. The external
     # loop owns isolation; each native Harness retains its own heap and budget.
-    # The init-owned inventory contains 315 serial files. This outer queue
+    # The init-owned inventory supplies every serial file. This outer queue
     # envelope includes process/setup work; each native worker retains its
     # 120-second fence and each dedicated Context gate keeps 150s.
     python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- timeout --signal=TERM --kill-after=5s 7200s bash -euo pipefail -c '

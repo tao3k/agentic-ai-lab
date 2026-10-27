@@ -104,6 +104,7 @@
         types: (types (lambda (_result) '())))
   (let* ((before-instantiate (process-count evaluator))
          (before-realize (process-count 'realize))
+         (before-output-query (process-count 'output-query))
          (before-register (process-count 'register))
          (before-validity (process-count 'store-validity))
          (before-types (types #f))
@@ -119,6 +120,7 @@
                     (cons 'type-compiles (- (count-total after-types 1) (count-total before-types 1)))
                     (cons 'instantiate (- (process-count evaluator) before-instantiate))
                     (cons 'realize (- (process-count 'realize) before-realize))
+                    (cons 'output-query (- (process-count 'output-query) before-output-query))
                     (cons 'register (- (process-count 'register) before-register))
                     (cons 'store-validity (- (process-count 'store-validity) before-validity))
                     (cons 'nix-seconds (- nix-seconds before-nix))
@@ -136,12 +138,20 @@
     (assert (string-append label "-registration-budget")
       (<= (cdr (assq 'register row)) (if (string-suffix? "-build" label) 1 0)))
     (assert (string-append label "-store-validity-budget")
-      (<= (cdr (assq 'store-validity row)) (if (string-suffix? "-build" label) 1 0)))
+      ;; Each single-output lookup adds one native registration check. The
+      ;; original construction check retains its independent one-call budget.
+      (and (>= (cdr (assq 'store-validity row)) (cdr (assq 'output-query row)))
+           (<= (cdr (assq 'store-validity row))
+             (+ (cdr (assq 'output-query row))
+                (if (string-suffix? "-build" label) 1 0)))))
     (assert (string-append label "-process-budget")
       (= (cdr (assq 'instantiate row))
          (+ expected-instantiations (cdr (assq 'register row)))))
     (assert (string-append label "-realization-budget")
-      (= (cdr (assq 'realize row)) (if (string-suffix? "-build" label) 1 0)))
+      ;; Every build resolves its current native output; a missing output may
+      ;; construct once. Cold/multiple-output controls verify that fallback.
+      (and (= (cdr (assq 'output-query row)) (if (string-suffix? "-build" label) 1 0))
+           (<= (cdr (assq 'realize row)) (if (string-suffix? "-build" label) 1 0))))
     (let (expected-types (cond ((equal? label "aws-build") 1)
                                ((equal? label "aws-null-build") 2) (else 0)))
       (assert (string-append label "-type-budget")
@@ -176,6 +186,7 @@
                          (hash-update! processes (path-strip-directory (car argv)) 1+ 0)
                          (cond
                           ((member "--realise" argv) (hash-update! processes 'realize 1+ 0))
+                          ((member "--outputs" argv) (hash-update! processes 'output-query 1+ 0))
                           ((member "--read-write-mode" argv) (hash-update! processes 'register 1+ 0))
                           ((member "--check-validity" argv) (hash-update! processes 'store-validity 1+ 0))))))
       (call-with-temporary-directory (if flake-root "opentofu-${literal}-\"λ-graph" "opentofu-selected-graph")
@@ -409,7 +420,8 @@
                             (lambda (argv)
                               (original-observer argv)
                               (when (and (equal? (path-strip-directory (car argv)) "nix-store")
-                                         (member "--realise" argv))
+                                         (or (member "--outputs" argv)
+                                             (member "--realise" argv)))
                                 (write-source (path-expand "guard.ss" interrupted-output) "tampered")))))
               (rejects? "stale selected build input"
                 (lambda () (run-selected-packages child-view interrupted-output)))))
