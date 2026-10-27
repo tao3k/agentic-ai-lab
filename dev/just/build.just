@@ -63,7 +63,7 @@ build-semantic-native output:
 # This prepares the test without starting its Cases or Harness.
 [group('build')]
 build-test path:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/tests.ss compile "{{ path }}" "{{ gerbil_test_runtime_options }}"
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/tests.ss compile "{{ path }}" "{{ gerbil_test_runtime_options }}"
 
 # An explicit AOT caller consumes the published library; it owns no module list.
 [group('build')]

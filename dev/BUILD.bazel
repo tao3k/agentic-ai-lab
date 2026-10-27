@@ -3,7 +3,6 @@
 load("@gerbil_bazel//gerbil:defs.bzl", "gerbil_project_compile")
 
 exports_files([
-    "build.ss",
     "gerbil-dependencies.MODULE.bazel",
 ])
 filegroup(

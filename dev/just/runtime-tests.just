@@ -213,20 +213,20 @@ test-temporal-evaluator:
 # preserve the normal focused-file total budget and pre-import heap fence.
 [group('test')]
 test-context-evidence-native:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
 
 # Opt-in exhaustive native replay; ordinary focused runs keep eight matched paths.
 # This is an aggregate qualification budget, not a relaxed semantic assertion.
 [group('test')]
 test-context-owner-cas:
-    AGENTIC_CONTEXT_NATIVE_CAS_EXHAUSTIVE=1 GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
+    AGENTIC_CONTEXT_NATIVE_CAS_EXHAUSTIVE=1 GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
 
 # Original Context/Temporal suites through installed Scheme and upstream gxtest.
 [group('build')]
 compile-context-temporal-tests:
     # Core still owns the 120-second preparation gate. The external guard
     # additionally covers loading the source-owned CLI before preparation.
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}" --compile
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}" --compile
 
 [group('test')]
 test-context-temporal:
@@ -243,74 +243,74 @@ test-gerbil-runtime:
 # All seven-event eager propagation orders, with three real consumer Attempts.
 [group('test')]
 test-context-push:
-    AGENTIC_CONTEXT_PUSH_EXHAUSTIVE=1 GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
+    AGENTIC_CONTEXT_PUSH_EXHAUSTIVE=1 GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
 
 # Grant/policy/observed-deadline events: 3 x 280 actual owner paths.
 [group('test')]
 test-context-authority:
-    AGENTIC_CONTEXT_AUTHORITY_EXHAUSTIVE=1 GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 2700s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
+    AGENTIC_CONTEXT_AUTHORITY_EXHAUSTIVE=1 GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 2700s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
 
 # Same current native gate with a focused/replay corpus and cold import budget.
 [group('test')]
 test-context-authority-focused:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
 
 # Real monotonic timer/owner reactor, native proof/current-use and replay corpus.
 [group('test')]
 test-context-clock:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
 
 [group('test')]
 test-context-clock-primitive:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 30s gxi {{ gerbil_test_runtime_options }} -e '(import :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock)' -e '(displayln (native-monotonic-seconds))'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 30s gxi {{ gerbil_test_runtime_options }} -e '(import :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock)' -e '(displayln (native-monotonic-seconds))'
 
 # Each process is heap fenced before importing the persistent native owner.
 [group('test')]
 test-context-durable-worker db mode order stage profile:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 90s gxi {{ gerbil_test_runtime_options }} t/harness/context-durable-driver.ss '{{db}}' '{{mode}}' '{{order}}' '{{stage}}' '{{profile}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 90s gxi {{ gerbil_test_runtime_options }} t/harness/context-durable-driver.ss '{{db}}' '{{mode}}' '{{order}}' '{{stage}}' '{{profile}}'
 
 # Native Query/Context scenarios use the same pre-import heap fence.
 [group('test')]
 test-context-query mode="all" order="all":
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/context-query-driver.ss '{{mode}}' '{{order}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/context-query-driver.ss '{{mode}}' '{{order}}'
 
 # Separate invocations prepare and replay the same real durable journal.
 [group('test')]
 test-context-query-catalog db mode:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/harness/context-query-catalog-driver.ss '{{db}}' '{{mode}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/harness/context-query-catalog-driver.ss '{{db}}' '{{mode}}'
 
 [group('test')]
 test-context-query-durable db mode order stage profile:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-query-durable-driver.ss '{{db}}' '{{mode}}' '{{order}}' '{{stage}}' '{{profile}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-query-durable-driver.ss '{{db}}' '{{mode}}' '{{order}}' '{{stage}}' '{{profile}}'
 
 [group('test')]
 test-context-grant-durable db mode order stage:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-grant-durable-driver.ss '{{db}}' '{{mode}}' '{{order}}' '{{stage}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-grant-durable-driver.ss '{{db}}' '{{mode}}' '{{order}}' '{{stage}}'
 
 [group('test')]
 test-context-policy-durable db mode order stage:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-policy-durable-driver.ss '{{db}}' '{{mode}}' '{{order}}' '{{stage}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-policy-durable-driver.ss '{{db}}' '{{mode}}' '{{order}}' '{{stage}}'
 
 [group('test')]
 test-context-policy-migration folder profile order:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-policy-migration-driver.ss '{{folder}}' '{{profile}}' '{{order}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-policy-migration-driver.ss '{{folder}}' '{{profile}}' '{{order}}'
 
 [group('test')]
 test-context-policy-migration-crash db mode order stage profile:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-policy-durable-driver.ss '{{db}}' '{{mode}}' '{{order}}' '{{stage}}' '{{profile}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-policy-durable-driver.ss '{{db}}' '{{mode}}' '{{order}}' '{{stage}}' '{{profile}}'
 
 [group('test')]
 test-context-owner-lifecycle db:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-owner-lifecycle-driver.ss '{{db}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-owner-lifecycle-driver.ss '{{db}}'
 
 # Diagnostic counters retain the selected pre-import runtime heap and watchdog.
 [group('test')]
 test-context-runtime-cost:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-runtime-cost-driver.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-runtime-cost-driver.ss
 
 [group('test')]
 test-context-actor-cost directory:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-actor-cost-driver.ss '{{directory}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-actor-cost-driver.ss '{{directory}}'
 
 [group('test')]
 test-context-actor-native executable directory:
@@ -320,25 +320,25 @@ test-context-actor-native executable directory:
 # The enclosing fence includes init, selection, child execution and teardown.
 [group('test')]
 test-context-core observe="false":
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_gerbil_path }}/lib:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} core/t/qualification/testing/run.ss t/ai-agentic-context-core-test.ss '{{ gerbil_test_runtime_options }}' 150 '{{observe}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_gerbil_path }}/lib:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} core/t/qualification/testing/run.ss t/ai-agentic-context-core-test.ss '{{ gerbil_test_runtime_options }}' 150 '{{observe}}'
 
 [group('test')]
 test-context-runtime-fencing path:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-runtime-fencing-driver.ss '{{path}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-runtime-fencing-driver.ss '{{path}}'
 
 # Admission/selection conformance, ITF replay and bounded reference Actor.
 [group('test')]
 test-context-scheduling traces:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-scheduling-driver.ss '{{traces}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-scheduling-driver.ss '{{traces}}'
 
 [group('test')]
 test-context-hybrid-owner path:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-hybrid-owner-driver.ss '{{path}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-hybrid-owner-driver.ss '{{path}}'
 
 [group('test')]
 test-context-service path:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{justfile_directory()}}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-service-driver.ss '{{path}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{justfile_directory()}}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-service-driver.ss '{{path}}'
 
 [group('test')]
 test-context-c-abi path mode="run":
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{justfile_directory()}}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-c-abi-driver.ss '{{path}}' '{{mode}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{justfile_directory()}}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-c-abi-driver.ss '{{path}}' '{{mode}}'

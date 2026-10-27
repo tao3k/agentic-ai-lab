@@ -85,9 +85,10 @@ closure and build projection. It rejects a dependency on =agentic-ai-lab/dev/= o
 =asp-gerbil-scheme/= rather than silently building development modules.
 CI installs the optional development dependency after the library build.
 
-The development package store is =dev/.gerbil=, separate from the production
-store. Test commands search production libraries first, then the development
-store. Installing ASP must not replace the production MOP implementation.
+Native dependencies share the root package store and one POO ABI. The root
+=gerbil build= entry consumes =init.exports.std-make-spec= once. Development
+does not forward another build into a second production-library prefix;
+test demands compile their selected development support through init.exports.
 The shared =gerbil-poo= pin is aligned with =core/gerbil.pkg=, with its archive
 digest evaluated by Bazel and synchronized to both platform lock projections.
 
