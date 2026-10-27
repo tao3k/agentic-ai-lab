@@ -4,7 +4,8 @@
 ;; Use the official Gerbil package script API. Installation, recursive
 ;; dependencies, tags and native builds remain owned by the Gerbil package manager. Editor TAGS generation
 ;; is separate tooling: it is not part of compilation or dependency admission.
-(import (only-in :gerbil/tools/gxpkg pkg-install with-pkg-build-env))
+(import (only-in :gerbil/tools/gxpkg
+          pkg-install pkg-update pkg-root-dir with-pkg-build-env))
 (export main)
 (def (main)
   (def properties (call-with-input-file "gerbil.pkg" read))
@@ -12,4 +13,14 @@
   (unless (and (list? dependencies) (andmap string? dependencies))
     (error "expected native package dependency strings" "gerbil.pkg"))
   (with-pkg-build-env
-    (for-each pkg-install dependencies)))
+    (for-each
+      (lambda (dependency)
+        (let (package (car (string-split dependency #\@)))
+          ;; Prefetch does not move an existing checkout. Gerbil's update API
+          ;; owns its exact revision/tag transition before installation checks.
+          ;; Call the native APIs directly: v0.19's deps --update forwards the
+          ;; tagged spelling to a directory lookup after updating it.
+          (when (file-exists? (path-expand package (pkg-root-dir)))
+            (pkg-update dependency))
+          (pkg-install dependency)))
+      dependencies)))

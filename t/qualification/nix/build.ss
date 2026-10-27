@@ -30,8 +30,10 @@
               (string-prefix? "agentic-ai-lab/t/qualification/build-publication/" name))
           (string-append
             (substring name (string-length "agentic-ai-lab/") (string-length name)) ".ss"))
-         ((or (string-prefix? "yuanxu/t/qualification/service-publication/" name)
-              (string-prefix? "yuanxu/t/qualification/build-publication/" name))
+         ;; Follow every actually imported qualification helper, including the
+         ;; directory owner used by publication Fixtures. This filters the
+         ;; compiler graph; it does not maintain another helper inventory.
+         ((string-prefix? "yuanxu/t/qualification/" name)
           (string-append "core/" (substring name 7 (string-length name)) ".ss"))
          (else #f))))))
 (for-each

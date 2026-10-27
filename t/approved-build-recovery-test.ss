@@ -6,7 +6,7 @@
         (only-in :yuanxu/ops/config Config)
         (only-in :yuanxu/ops/progress execution-progress! make-test-progress-reader)
         (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
-        (only-in "../core/t/qualification/service-publication/fixtures.ss" DirectoryFixture)
+        (only-in "../core/t/qualification/testing/directory.ss" DirectoryFixture)
         (only-in :std/encoding/json write-json)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)

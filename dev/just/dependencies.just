@@ -36,14 +36,13 @@ pin-gerbil-dependency package revision:
 mod-tidy:
     {{ bazel }} mod tidy --lockfile_mode=update
 
-# Build the immutable Core dependency with an explicit cold-build envelope.
-# Gerbil pkg-install subsequently owns registration and incremental verification.
-# The dependency's 180-second executable shebang cannot fit its full cold
-# library on a three-CPU runner; runtime/test budgets are separate and unchanged.
+# Let Gerbil update and build the dependencies declared by Core. Prefetch only
+# supplies immutable objects; it deliberately never moves an existing checkout.
+# The official update owns both checkout/tag coherence and incremental builds.
 [group('dependency')]
 bootstrap-native-poo:
     python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest core/gerbil.pkg --package-root "{{ agentic_ai_lab_gerbil_path }}/pkg"
-    cd "{{ agentic_ai_lab_gerbil_path }}/pkg/github.com/tao3k/gerbil-poo" && /usr/bin/time -p {{ gerbil_darwin_env }} timeout --verbose --signal=TERM --kill-after=5s 600s gxi build.ss compile
+    cd "{{ justfile_directory() }}/core" && GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" /usr/bin/time -p {{ gerbil_darwin_env }} timeout --verbose --signal=TERM --kill-after=5s 600s gerbil interactive ../packages/automation/native-dependencies.ss
 
 # Optional ASP policy probes belong to the development package, not the library.
 [group('dependency')]

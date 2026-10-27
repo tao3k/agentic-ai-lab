@@ -13,7 +13,7 @@
         (only-in :yuanxu/ops/config Config)
         (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in :yuanxu/ops/progress execution-progress!)
-        (only-in "../core/t/qualification/service-publication/fixtures.ss" DirectoryFixture write-source)
+        (only-in "../core/t/qualification/testing/directory.ss" DirectoryFixture write-source)
         "../core/t/qualification/build-publication/store.ss")
 (export build-store-recovery-test test-cleanup!)
 (def observations '())

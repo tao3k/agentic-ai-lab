@@ -2,7 +2,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Qualification driver: production selection/publishing, temporary sources.
 (import :clan/poo/object
-        (only-in "../../../core/t/qualification/service-publication/fixtures.ss" ServicesFixture write-source)
+        (only-in "../../../core/t/qualification/service-publication/fixtures.ss" ServicesFixture)
+        ;; File mutation belongs to the existing directory Fixture owner.
+        (only-in "../../../core/t/qualification/testing/directory.ss" write-source)
         (only-in :yuanxu/module-system/source/link yuanxu-load-modules)
         (only-in :yuanxu/module-system/building/artifacts
           call-with-build-artifact-issuance run-build-artifact-process build-artifact-handoff)
