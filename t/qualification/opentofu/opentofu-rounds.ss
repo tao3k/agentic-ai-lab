@@ -46,7 +46,7 @@
            (regular-files (path-expand "t/fixtures/opentofu" root)
              (lambda (name) (or (string-suffix? ".nix" name) (string-suffix? ".nix.in" name))) #t)
            (map (cut path-expand <> root)
-             '("init.ss" "core/init.ss" "core/build.ss" "core/gerbil.pkg" "core/prelude.ss" "core/core-spec.ss" "gerbil.pkg" "modules/gerbil.pkg" "Justfile" "build.ss" "build-spec.ss"
+             '("init.ss" "core/init.ss" "core/build.ss" "core/gerbil.pkg" "core/prelude.ss" "core/core-spec.ss" "gerbil.pkg" "modules/gerbil.pkg" "justfile" "build.ss" "build-spec.ss"
                "core/module-system/observability/presentation.ss" "core/module-system/authoring/roles.ss"
                "core/t/module-source-admission-test.ss" "core/t/module-configuration-build-test.ss"
                "core/t/module-config-role-test.ss" "core/t/module-build-role-test.ss"

@@ -37,9 +37,20 @@
       (write-json port (hash ("postgresql" (.get plan postgresql port))
                             ("gitea" (.get plan gitea database-port))))))
   (def expression (path-expand "release.nix" directory))
+  ;; Use the same locked, realized fixture as the other native Nix Cases.
+  ;; CI need not install a user channel and ambient NIX_PATH is not authority.
+  (def tools
+    (call-with-input-string (getenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS")
+      (lambda (port) (read-json port key-as-symbol: #f object-as-hash: #t))))
+  (def package-set (and (hash-table? tools) (hash-get tools "nixpkgs")))
+  (unless (and (string? package-set) (string-prefix? "/nix/store/" package-set)
+               (file-exists? package-set))
+    (error "Nix profile qualification requires its realized locked package set"))
   (write-source expression
     (string-append
-      "let pkgs = import <nixpkgs> {}; in pkgs.runCommand \"yuanxu-head-" label "\"\n"
+      "let pkgs = import (builtins.storePath "
+      (call-with-output-string (cut write package-set <>))
+      ") {}; in pkgs.runCommand \"yuanxu-head-" label "\"\n"
       "{ src = ./payload; } \"mkdir $out; cp $src/plan.json $out/plan.json\"\n"))
   (def source (.cc NixSource. 'expression expression))
   (def observations (.get source source-inputs))

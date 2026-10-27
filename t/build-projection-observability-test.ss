@@ -3,7 +3,11 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :yuanxu/observability/testing-case
+                 yuanxu-test-case yuanxu-default-testing-case-profile)
+        (rename-in
+          (only-in :agentic-ai-lab/testing-api yuanxu-default-testing-case-profile)
+          (yuanxu-default-testing-case-profile product-default-testing-profile))
         (only-in :std/test test-suite check-equal? check-exception)
         (only-in :std/misc/ports read-all-as-string)
         (only-in :clan/poo/object .o .get .ref/cached NoApplicableMethod?)
@@ -111,16 +115,18 @@
         (check-equal? (contains? testing ".devenv/devenv-profile-exec") #f)
         (check-equal? (contains? testing "rm -rf") #f)))
 
-    (yuanxu-test-case "unit tests inherit the Agentic AI Lab default testing policy"
-      (let (source (call-with-input-file "dev/testing-profiles.ss" read-all-as-string))
-        (check-equal?
-         (contains? source ":agentic-ai-lab/dev/testing-api")
-         #t)
-        (check-equal?
-         (contains? source "+agentic-ai-lab-testing-interface+")
-         #t)
-        (check-equal? (contains? source "+asp-testing-interface+") #f)
-        (check-equal? (contains? source "maxHeapMiB: 1024") #f)))
+    (yuanxu-test-case "product declarations retain the Core default policy without optional tooling"
+      ;; Check the public native value, not a deleted private profile source.
+      (check-equal? (eq? product-default-testing-profile
+                        yuanxu-default-testing-case-profile) #t)
+      (check-equal? (.get product-default-testing-profile heap-limit-bytes) 2147483648)
+      (check-equal? (.get product-default-testing-profile emit?) #f)
+      (let (observed (.o (:: @ product-default-testing-profile) emit?: #t))
+        (check-equal? (.get observed emit?) #t)
+        (check-equal? (.get product-default-testing-profile emit?) #f))
+      (let (source (call-with-input-file "testing-api.ss" read-all-as-string))
+        (check-equal? (contains? source ":yuanxu/observability/testing-case") #t)
+        (check-equal? (contains? source ":asp-gerbil-scheme/") #f)))
 
     (yuanxu-test-case "default policy measures catalog size without an invented limit"
       (let (port (open-output-string))

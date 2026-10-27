@@ -9,6 +9,7 @@ the existing Core/ASP worker retains its heap, watchdog and result protocol.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 from pathlib import Path
 
@@ -16,7 +17,12 @@ from pathlib import Path
 def fixture_environment(inputs: Path) -> dict[str, str]:
     root = inputs.resolve(strict=True)
     families = (root / "families").resolve(strict=True)
+    tools = (root / "tools").read_text().strip()
+    # Legacy Nix expression Fixtures use the standard search path. Bind it to
+    # the same realized source as the existing receipt, never a user channel.
+    package_set = json.loads(tools)["nixpkgs"]
     return {
+        "NIX_PATH": f"nixpkgs={package_set}",
         "AGENTIC_AI_LAB_OPENTOFU_TEST_INPUTS": str(root),
         "AGENTIC_AI_LAB_OPENTOFU_ARTIFACT": str(families),
         "AGENTIC_AI_LAB_OPENTOFU_FLAKE_ARTIFACT": str(families),
@@ -26,7 +32,7 @@ def fixture_environment(inputs: Path) -> dict[str, str]:
         "AGENTIC_AI_LAB_OPENTOFU_TEST_PARENT_ARTIFACT": str((root / "parent").resolve(strict=True)),
         "AGENTIC_AI_LAB_OPENTOFU_TEST_CHILD_ARTIFACT": str((root / "child").resolve(strict=True)),
         "YUANXU_AWS_BINARY": str((root / "binary/provider").resolve(strict=True)),
-        "AGENTIC_AI_LAB_NIX_TEST_TOOLS": (root / "tools").read_text().strip(),
+        "AGENTIC_AI_LAB_NIX_TEST_TOOLS": tools,
     }
 
 

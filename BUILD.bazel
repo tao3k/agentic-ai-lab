@@ -45,6 +45,7 @@ filegroup(
         # must exist inside the sandbox just as they do in a checkout. This
         # projects inputs only; build.ss still owns which targets compile.
         "t/**/*.ss",
+        "t/**/gerbil.pkg",
         "t/qualification/context-temporal/*.c",
         "modules/**/*.ss",
         "modules/**/*.inc",

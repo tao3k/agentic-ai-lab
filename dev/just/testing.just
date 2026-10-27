@@ -51,7 +51,7 @@ test-native-harness-progress:
 
 # Keep the root package's native entry independently callable during repairs.
 [group('test')]
-test-root: build-testing build-test-workers prepare-test-inputs build-library
+test-root: build-testing build-test-workers prepare-test-inputs build-library build-module-qualification
     #!/usr/bin/env bash
     set -euo pipefail
     manifest=$(mktemp)

@@ -50,6 +50,9 @@
         (check-equal? (eq? (.call tests .select '(aws)) tests) #t)
         (def guard (.get tests admit-current))
         (def source (.get tests source))
+        ;; The enclosing Harness may observe this Case. Child off/on policies
+        ;; must preserve the exact inherited policy, whatever that input was.
+        (def initial-observation? (.get tests execution profile emit?))
         ;; Make both observation controls explicit: the outer Harness may
         ;; already observe this Case. Retain inherited resource limits and
         ;; source identity while the parent owns the worker's workspace.
@@ -70,7 +73,7 @@
         (check-equal? (eq? (.get Observed source) source) #t)
         (check-equal? (eq? (.get Observed execution source) source) #t)
         (check-equal? (eq? (.get Observed admit-current) guard) #t)
-        (check-equal? (.get tests execution profile emit?) #f)
+        (check-equal? (.get tests execution profile emit?) initial-observation?)
         (def result (run-qualification Observed 'observed))
         (check-equal? (and (string-contains (.get result output) "test-work case=") #t) #t)
         (for-each
@@ -78,5 +81,5 @@
             (check-equal? (and (string-contains (.get result output) counter) #t) #t))
           '("(publication-fault-boundary . 3)" "(publication-fault-refused . 3)"))
         (check-equal? (directory-files workspace) '())
-        (check-equal? (.get tests execution profile emit?) #f)
+        (check-equal? (.get tests execution profile emit?) initial-observation?)
         (check-equal? (.ref/cached module 'scope) #f)))))

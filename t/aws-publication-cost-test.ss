@@ -37,7 +37,9 @@
                    (string=? (Error-message failure)
                      "Nix store metadata differs from the locked package receipt")))))
         (lambda ()
-          (setenv "NIX_PATH" original-path)
+          ;; Gambit removes an absent variable with the one-argument form.
+          ;; Cleanup must finish before restoring the forged receipt below.
+          (if original-path (setenv "NIX_PATH" original-path) (setenv "NIX_PATH"))
           (setenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS" original)))
       (check-equal? (getenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS") original)
       (check-equal? (getenv "NIX_PATH" #f) original-path))

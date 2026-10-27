@@ -62,6 +62,12 @@ build-testing: build-library
 prepare-test-inputs:
     nix-build --out-link "{{ agentic_ai_lab_gerbil_path }}/test-inputs" t/fixtures/opentofu/ci.nix
 
+# Init owns module qualification discovery/support; the official compiler
+# prepares the signed publication before the existing native Harness runs.
+[group('build')]
+build-module-qualification: build-library
+    cd "{{ justfile_directory() }}/t/qualification/native-module-support" && GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} build
+
 # These existing recovery tests execute native workers rather than mocks.
 [group('build')]
 build-test-workers:

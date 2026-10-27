@@ -113,6 +113,53 @@ The product retains that same deadline on the existing Bazel project process
 guard. Consuming the official native build entry cannot silently relax the
 cold-build acceptance budget or substitute for a measured improvement.
 
+* Qualification preparation ownership
+
+The 23 failures from the complete 315-file baseline now have passing focused
+native receipts, including the actual C caller Suite. This is per-file repair
+evidence; it does not replace another complete-queue run on the repaired cohort.
+The public Schema admission boundary retains POO diagnostics, while an explicit
+private Schema IR test still reads its original opaque backend record. Derived
+observation policies preserve the actual inherited parent policy and test both
+explicit child settings; they do not assume that an observing Harness is off.
+
+[[file:../../../../t/qualification/native-module-support/build.ss][The ordinary qualification package]] consumes only the existing
+=init.exports.tests.qualification.std-make-spec=. Official =gerbil build=
+owns compilation and signed publication before TestingScript imports Cases.
+The main Just queue prepares it once. The Nix adapter queue prepares it in its
+own command-owned writable prefix, because a publication in the ordinary root
+prefix cannot admit a consumer in an independent runtime. The existing init
+publication owns source discovery and currentness; there is no second source
+inventory, private compiler runner or new configuration protocol.
+
+The first isolated-prefix preparation hit its existing 120-second timeout.
+A subsequent fresh-prefix preparation exited naturally within that same fence.
+A native process sample confirmed Fixture compilation and GC; buffered CLI
+output did not establish a CLI startup deadlock. This failure remains evidence:
+a subsequent focused pass alone cannot establish cold-preparation reliability.
+The full queue, current Context replay and exact-head remote CI remain open.
+
+* Cross-platform native controls
+
+Ubuntu CI exposed an actual missing =NIX_PATH= cleanup case: Gambit rejects
+=(setenv name #f)=, so cleanup must use its one-argument removal form when the
+original variable was absent. The forged NAR receipt is restored afterwards;
+the metadata-mismatch refusal remains mandatory. The existing fixture transport
+now binds the standard =NIX_PATH= to the same realized locked package set, so
+legacy expression Fixtures do not depend on an installed user channel. The
+profile recovery Fixture explicitly imports that realized source too.
+
+The C qualification leaf keeps its callback in its own shared object. Linux
+must resolve that symbol while loading the macro-phase object, before another
+module's runtime C export is available. The callback delegates to the original
+production =native-evaluate= Scheme procedure; dispatch, error conversion,
+result allocation and Context/Session decisions are not duplicated. Production
+C ABI declarations and ownership rules remain unchanged. Actual Linux CI must
+confirm this linkage; a Darwin pass cannot establish ELF loader behavior.
+
+Operational source snapshots use the tracked lowercase =justfile=, preserving
+the same byte-change controls on case-sensitive filesystems.
+
 * Native implementation
 
 [[file:../../../../modules/ai-agentic-context/runtime-service.ss][The POO-native service]] reuses the existing Context owner and independent

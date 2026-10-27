@@ -21,7 +21,7 @@ class NativeTestInputsTest(unittest.TestCase):
                 (artifact / name).mkdir(parents=True)
             (artifact / "families/aws/schema.json").write_text("{}")
             (artifact / "binary/provider").write_bytes(b"recorded bytes")
-            tools = '{"shell":"/store/bash","system":"fixture"}'
+            tools = '{"shell":"/store/bash","system":"fixture","nixpkgs":"/nix/store/fixture-package-set"}'
             (artifact / "tools").write_text(tools + "\n")
             alias = root / "inputs"
             alias.symlink_to(artifact, target_is_directory=True)
@@ -35,6 +35,7 @@ class NativeTestInputsTest(unittest.TestCase):
             self.assertEqual(Path(env["YUANXU_AWS_BINARY"]).read_bytes(), b"recorded bytes")
             self.assertEqual(Path(env["YUANXU_JSON_SCHEMA_AWS_EXPORT"]).read_text(), "{}")
             self.assertEqual(env["AGENTIC_AI_LAB_NIX_TEST_TOOLS"], tools)
+            self.assertEqual(env["NIX_PATH"], "nixpkgs=/nix/store/fixture-package-set")
 
     def test_incomplete_inputs_refuse_before_any_native_command(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -25,9 +25,14 @@ static void context_test_cleanup(void) {}
 #define AGENTIC_AI_LAB_SEMANTIC_LINKER context_test_linker
 #define ___setup context_test_setup
 #define ___cleanup context_test_cleanup
+/* Shared objects resolve symbols eagerly on Linux. The local callback below
+ * delegates to the original Gambit native-evaluate procedure, without requiring
+ * another module's C symbol to be globally visible during macro import. */
+#define agentic_ai_lab_semantic_evaluate context_test_evaluate
 #include "../../../bindings/runtime-c/src/semantic_host.c"
 #undef ___setup
 #undef ___cleanup
+#undef agentic_ai_lab_semantic_evaluate
 
 static int context_check(agentic_ai_lab_semantic_result *result, int32_t status,
                          int32_t expected_status, const char *fragment, int code) {
