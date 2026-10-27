@@ -6,7 +6,8 @@
  (only-in :clan/poo/object .o .ref .call)
  (only-in :std/list/list every find)
  (prefix-in :agentic-ai-lab/t/context-query-provider-test query.)
- (only-in :agentic-ai-lab/t/temporal-evaluator-test authority-fixture context-scope)
+ (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+                 authority-fixture)
  :agentic-ai-lab/modules/ai-agentic-context/query-provider
  :agentic-ai-lab/modules/ai-agentic-context/durable-owner
  :agentic-ai-lab/modules/ai-agentic-context/session-host

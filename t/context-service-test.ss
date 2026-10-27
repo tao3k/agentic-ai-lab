@@ -2,7 +2,9 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Actual Context/Session/journal decisions through the production service.
 (import (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/t/temporal-evaluator-test
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+                 authority-fixture clock-original-context push-join! context-source
+                 context-scope clock-check-originals!)
         (prefix-in :agentic-ai-lab/t/context-durable-owner originals.)
         :agentic-ai-lab/modules/ai-agentic-context/runtime-service
         :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal

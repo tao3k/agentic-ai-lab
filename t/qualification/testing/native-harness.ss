@@ -5,6 +5,7 @@
                  current-expander-module-eval current-expander-eval
                  current-expander-context current-expander-phi
                  module-context? expander-context-id)
+        (only-in :std/sync/threads thread-group->thread-list*)
         (rename-in (only-in :gerbil/tools/gxtest main) (main native-test-main)))
 (export main)
 
@@ -52,4 +53,14 @@
     ;; The SDK still discovers, prepares and runs every original Suite/Case.
     ;; Propagate its failure while leaving successful VM shutdown natural.
     (let (status (apply native-test-main arguments))
-      (unless (zero? status) (error "native SDK Harness failed" status)))))
+      (unless (zero? status) (error "native SDK Harness failed" status))
+      (when (getenv "AGENTIC_AI_LAB_HARNESS_DIAGNOSTICS" #f)
+        ;; Inspect live resources only after the SDK returns. This neither
+        ;; terminates a worker nor converts a hung shutdown into a passing exit.
+        (for-each
+          (lambda (thread)
+            (displayln "NATIVE-HARNESS-THREAD name=" (thread-name thread)
+                       " current?=" (eq? thread (current-thread))
+                       " state=" (thread-state thread)))
+          (thread-group->thread-list* (thread-thread-group (current-thread))))
+        (force-output)))))

@@ -3,7 +3,10 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :clan/poo/object .o .ref .call)
         (only-in :std/list/list find every)
-        :agentic-ai-lab/t/temporal-evaluator-test
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+                 authority-fixture clock-original-context push-row push-revision
+                 push-join! context-source context-scope at
+                 policy clock-check-originals!)
         :agentic-ai-lab/modules/ai-agentic-context/durable-owner
         :agentic-ai-lab/modules/ai-agentic-context/session-host
         :agentic-ai-lab/modules/ai-agentic-context/use-host

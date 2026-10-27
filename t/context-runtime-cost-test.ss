@@ -3,7 +3,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Diagnostic execution costs are process-wide counters, never admission facts.
 (import (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/t/temporal-evaluator-test
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+                 authority-fixture clock-original-context policy)
         :agentic-ai-lab/modules/ai-agentic-context/session-host
         :agentic-ai-lab/modules/temporal-causality/evaluator/proof-host
         :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal

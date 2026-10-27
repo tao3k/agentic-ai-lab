@@ -3,7 +3,9 @@
 ;;; Native teardown boundaries: exact leases, closed handles and durable rollback.
 (import (only-in :clan/poo/object .o .ref .call object? .alist/sort)
         (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-write)
-        :agentic-ai-lab/t/temporal-evaluator-test
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+                 authority-fixture clock-original-context push-row at
+                 policy)
         (prefix-in :agentic-ai-lab/t/context-durable-owner old.)
         :agentic-ai-lab/modules/ai-agentic-context/durable-owner
         :agentic-ai-lab/modules/ai-agentic-context/session-host

@@ -11,7 +11,7 @@
         :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
         :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
         :agentic-ai-lab/modules/session/funs-identity
-        (only-in :agentic-ai-lab/t/temporal-evaluator-test
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
                  authority-fixture context-scope))
 (export context-query-driver fixture sid row revision attach joined commit outcomes assert-push)
 

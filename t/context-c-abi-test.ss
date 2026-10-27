@@ -9,7 +9,8 @@
         :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
         :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
         :agentic-ai-lab/t/context-service-test
-        (only-in :agentic-ai-lab/t/temporal-evaluator-test push-join! clock-check-originals!))
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+                 push-join!))
 (export context-c-abi-probe)
 (C-declare "#include \"t/qualification/context-temporal/context-c-caller.c\"")
 (def-C-lambda c-roundtrip (int UTF-8-string) int "context_c_roundtrip")

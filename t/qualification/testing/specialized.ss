@@ -4,6 +4,8 @@
 (import :clan/poo/object
         (only-in "./qualification.ss" qualification-script)
         (only-in "../../../init.ss" agentic-ai-lab.init.exports)
+        (only-in "../../../dev/modules/testing/native-harness-entry.ss"
+                 make-native-harness-progress-reader)
         (only-in :std/source this-source-file))
 (def root (path-expand "../../.." (path-directory (this-source-file))))
 (def watch "packages/python-runtime/tools/watch.py")
@@ -66,13 +68,15 @@
               (.call (.get agentic-ai-lab.init.exports tests) .for-files
                 (list (absolute "t/qualification/context-temporal/interface.ss"))
                 (list (this-source-file) (absolute watch)
-                      (absolute "t/qualification/testing/native-harness.ss"))))
+                      (absolute "t/qualification/testing/native-harness.ss")
+                      (absolute "dev/modules/testing/native-harness-entry.ss"))))
             (files (.get demand spec)))
        (.cc (.get demand execution)
          ;; Emit actual preparation timing so a compiler refusal remains
          ;; distinguishable from the independently bounded runtime worker.
          'profile (.cc (.get demand execution profile) 'emit? #t)
          'runtime-options (list vm)
+         'progress make-native-harness-progress-reader
          'command
          (watched (append
            (list "gxi" vm (absolute "t/qualification/testing/native-harness.ss") "-v" "5") files))

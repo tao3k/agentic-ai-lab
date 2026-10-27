@@ -69,7 +69,7 @@ test-root: build-testing build-test-workers prepare-test-inputs build-library
         [[ -f "$file" && "$file" == *-test.ss ]] || { echo "invalid test input: $file" >&2; exit 64; }
         started=$SECONDS
         printf "TEST-FILE-START file=%s\n" "$file"
-        if just _test-file "$file"; then status=0; else status=$?; failed=1; fi
+        if just _test-file "$file" true; then status=0; else status=$?; failed=1; fi
         printf "TEST-FILE-END status=%s elapsed-s=%s file=%s\n" "$status" "$((SECONDS - started))" "$file"
       done < "$1"
       exit "$failed"
