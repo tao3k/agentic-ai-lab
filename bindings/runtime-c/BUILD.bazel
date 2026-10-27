@@ -15,6 +15,8 @@ exports_files([
     "pkgconfig/agentic-ai-lab-runtime-v0.pc",
     "include/agentic_ai_lab/scheme_native_v1.h",
     "include/agentic_ai_lab/semantic.h",
+    # Original C source consumed by the official in-host qualification build.
+    "src/semantic_host.c",
     "t/validate-runtime-v0-symbol-surface.ss",
 ])
 

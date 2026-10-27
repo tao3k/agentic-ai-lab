@@ -6,6 +6,7 @@ load(
     "@gerbil_bazel//gerbil:defs.bzl",
     "gerbil_project_compile",
     "gerbil_project_dev",
+    "gerbil_project_execution_policy",
 )
 load("//packages/bazel:gerbil_project_environment.bzl", "gerbil_project_environment")
 load("//packages/bazel:gerbil_projection.bzl", "gerbil_project_projection")
@@ -33,12 +34,13 @@ filegroup(
     srcs = [
         "gerbil.pkg",
         ":core_module_sources",
+        # Cross the existing Bazel package boundary through exported sources.
+        "//bindings/runtime-c:include/agentic_ai_lab/semantic.h",
+        "//bindings/runtime-c:src/semantic_host.c",
         "//packages/python-runtime/src/agentic_ai_lab_runtime:reasoning_rule_sources",
     ] + glob([
         "*.ss",
         "bindings/nono-c/**/*.h",
-        "bindings/runtime-c/**/*.h",
-        "bindings/runtime-c/**/*.c",
         # Retained native Suite libraries and their source-relative imports
         # must exist inside the sandbox just as they do in a checkout. This
         # projects inputs only; build.ss still owns which targets compile.
@@ -86,7 +88,7 @@ gerbil_project_compile(
     build_script = "@gerbil_poo_sources//:build_script",
     # Upstream removed its embedded 180-second shell cutoff. Preserve that
     # acceptance budget in the existing project guard, independently of pins.
-    process_guard_timeout_seconds = 180,
+    execution_policy = gerbil_project_execution_policy(timeout_seconds = 180),
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_poo_sources//:source_resolution_receipt"],
 )
