@@ -7,7 +7,7 @@
         (only-in :agentic-ai-lab/modules/nix/progress make-nix-test-progress-reader)
         (only-in :yuanxu/module-system/source/admission module-source-read module-source-admit-current!))
 ;; Resolve test inputs from the maintained product root, independent of cwd.
-(def root (path-expand "../../.." (path-directory (this-source-file))))
+(def root (path-normalize (path-expand "../../.." (path-directory (this-source-file)))))
 ;; Preserve the complete existing adapter selection, including recovery gates.
 (def (selected? name)
   (and (string-suffix? "-test.ss" name)

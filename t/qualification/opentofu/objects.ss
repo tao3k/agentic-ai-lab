@@ -13,15 +13,15 @@
           tests:
           (.o SelectedGraph:
               (.o (:: @ Script)
-                command: '("/usr/bin/time" "-p" "just" "test-opentofu-selected-graph")
-                timeout: 145 check-status: #f)
-              SelectedFlake:
-              (.o (:: @ Script)
-                command: '("/usr/bin/time" "-p" "just" "test-opentofu-selected-flake")
+                command: '("/usr/bin/time" "-p" "just"
+                           "--justfile" "t/qualification/nix/Justfile"
+                           "test" "t/opentofu-selected-graph-test.ss")
                 timeout: 145 check-status: #f)
               FlakeSource:
               (.o (:: @ Script)
-                command: '("/usr/bin/time" "-p" "just" "test-nix-flake")
+                command: '("/usr/bin/time" "-p" "just"
+                           "--justfile" "t/qualification/nix/Justfile"
+                           "test" "t/nix-flake-source-test.ss")
                 timeout: 145 check-status: #f))
           tools:
           (.o PackageSet:

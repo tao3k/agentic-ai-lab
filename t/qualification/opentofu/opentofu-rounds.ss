@@ -14,6 +14,7 @@
         (only-in :std/encoding/hex hex-encode)
         (only-in :yuanxu/module-system/source/admission module-source-admit-current!)
         (only-in :yuanxu/module-system/source/build unique-build-inputs)
+        (only-in :yuanxu/observability/testing-script admit-testing-result)
         (only-in "../../../init.ss" agentic-ai-lab.init.exports)
         :std/encoding/json)
 (export main aggregate snapshots publication-observations assert-control)
@@ -106,14 +107,13 @@
                   (load_samples (reverse samples))
                   (scope "host load; /usr/bin/time waited-for test cohort, excluding Nix daemon workers"))))))))
 (def (assert-control result log test)
-  (let ((text (call-with-input-file log read-all-as-string))
-        (lines (call-with-input-file log read-all-as-lines)))
-    (unless (and (= (.get result status) 0) (member "OK" lines)
-                 (member (string-append "MODULE-OK " test) lines)
-                 (find (cut string-prefix? "HARNESS-OK" <>) lines)
-                 (not (pregexp-match "ERROR (CASE|CHECK|HARNESS)|Heap overflow|Stack overflow" text)))
-      (error "qualification round failed; retained log" log (.get result status)))
-    (length (filter (cut string-prefix? "ASSERT-OK" <>) lines))))
+  (def text (call-with-input-file log read-all-as-string))
+  ;; Core owns process status, exact Module/Harness completion and every native
+  ;; error marker. This operational summary only counts admitted assertions.
+  (admit-testing-result (.cc result 'output text)
+    (list (path-expand test root)))
+  (length (filter (cut string-prefix? "ASSERT-OK" <>)
+            (string-split text #\newline))))
 (def (qualify options)
   (let* ((output (hash-get options 'output)) (round-count (hash-ref options 'rounds))
          (flake (hash-get options 'selected-flake)) (artifact (hash-get options 'flake-artifact)))
@@ -151,15 +151,25 @@
                (metrics (path-expand (string-append prefix ".json") output))
                (log (path-expand (string-append prefix ".log") output))
                (host (path-expand (string-append prefix "-host.json") output))
-               (env (.o NIX_PATH: (string-append "nixpkgs=" (hash-ref report 'nixpkgs))))
-               (env (if flake-test? (.cc env 'AGENTIC_AI_LAB_NIX_FLAKE_METRICS metrics)
-                      (.cc env 'AGENTIC_AI_LAB_OPENTOFU_GRAPH_METRICS metrics
-                        'AGENTIC_AI_LAB_OPENTOFU_GRAPH_TRACE (path-expand (string-append prefix ".jsonl") output))))
-               (base (cond (flake-test? (.get Ops tests FlakeSource))
-                           (flake (.get Ops tests SelectedFlake)) (else (.get Ops tests SelectedGraph))))
+               (base-env (.o NIX_PATH: (string-append "nixpkgs=" (hash-ref report 'nixpkgs))))
+               ;; Reuse inputs already owned by the actual native Cases. These
+               ;; are data bindings, not another test selector or argv protocol.
+               (input-env
+                 (cond (flake-test?
+                        (.cc base-env 'AGENTIC_AI_LAB_OPENTOFU_FLAKE_ARTIFACT artifact))
+                       (flake
+                        (.cc base-env 'AGENTIC_AI_LAB_OPENTOFU_GRAPH_FLAKE flake))
+                       (else base-env)))
+               (env (if flake-test?
+                      (.cc input-env 'AGENTIC_AI_LAB_NIX_FLAKE_METRICS metrics)
+                      (.cc input-env 'AGENTIC_AI_LAB_OPENTOFU_GRAPH_METRICS metrics
+                        'AGENTIC_AI_LAB_OPENTOFU_GRAPH_TRACE
+                        (path-expand (string-append prefix ".jsonl") output))))
+               (base (if flake-test? (.get Ops tests FlakeSource)
+                                    (.get Ops tests SelectedGraph)))
                (script (.cc base 'directory root 'environment env 'log log))
                (_log-recorded (hash-put! report 'last_control_log log))
-               (result (observe-control script (cond (flake-test? (list artifact)) (flake (list flake)) (else '())) host))
+               (result (observe-control script '() host))
                (assertions (assert-control result log (if flake-test? "t/nix-flake-source-test.ss" "t/opentofu-selected-graph-test.ss")))
                (value (json-file metrics)))
           (hash-put! value 'round index) (hash-put! value 'assertions assertions)

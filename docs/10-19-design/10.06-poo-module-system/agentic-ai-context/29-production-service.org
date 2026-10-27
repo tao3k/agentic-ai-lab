@@ -239,3 +239,81 @@ The interrupted =3dafa8c1= product queue completed 47 of 315 files before the
 requested layout/source-ownership correction. Its natural signal exit is 143;
 it is not a completed queue or a passing receipt. A new full queue and the
 Context replay remain required on the final published source cohort.
+
+* Complete native queue after source-ownership repair
+
+The frozen product =177ac1c448aa846345cde7a1538ab6f788548692= / Core
+=e77698c35bc0e9a0a01458447fa61c720ee59290= queue naturally completed
+315/315 files in 4232.49 seconds under the existing resource envelopes. Every
+file had MODULE-OK, HARNESS-OK and final OK, with no native error or heap/stack
+overflow marker. The Harness measured 1230 actual Cases; 20 helper files had
+zero Cases and qualify import only. The 3454 tracked source fingerprints were
+unchanged throughout this run. Local raw-log SHA-256:
+=c7f611b0192c154617505255480b12663cfb1d182a4eba73e6a9f83b9c9483fb=.
+
+This is the completed baseline before the following sandbox-interface repair,
+not a complete queue receipt for a later dependency cohort, current Context
+99-Case replay, standalone VM installation or exact-head remote CI.
+
+Bazel sandboxes expose native dependency =.ssi= files as symlinks. Their reader
+must preserve the original interface path and bytes while the live projection
+guards the followed target identity. Ordinary source roles remain regular-file
+only. Core's 23-Case native build-graph Suite passes the added same-byte target
+replacement, tamper, disappearance, directory-target and restoration controls.
+
+The C caller's in-process Fixture supplies setup-parameter initialization for
+its already-running host and reads the real heap limit through Gambit's native
+=___EXT= dynamic-extension linkage. Its actual Case still crosses the unchanged
+production C facade and Scheme Context/Session admission. This Fixture does not
+qualify standalone VM bootstrap; Linux eager symbol resolution remains an
+independent remote gate.
+
+The existing complete Bazel Nix queue on Core =9cfcbc4= and its coherent
+POO/Parser/Orgize/ASCENT cohort naturally passed all 38 selected files and 718
+explicit assertions. All selected files retained their exact MODULE-OK,
+HARNESS-OK and final OK markers, with no native error/overflow markers. Raw-log
+SHA-256: =066918b4c72f7c3bc1f73c51ff69169ddf799614575c3a0f709d4fe6d8ce6636=.
+This is not the full Root queue or the separate =//:compile= consumer gate.
+
+The preceding cold command-owned preparation timed out at the unchanged
+120-second fence before any Case. Another fresh command-owned prefix completed
+in 37.27 seconds, compiling only the AWS Fixture support target, with
+1,709,359,104 peak RSS bytes. A three-second native sample observed file reads,
+GC and dynamic-module cleanup/dlclose. This locates real preparation costs but
+does not establish the first timeout's cause. Fresh writable prefixes do not
+reset the OS file cache. The failed run remains evidence; neither a later pass
+nor host-load speculation closes cold-preparation variability.
+
+* Executable operational summary and final native replay
+
+The operational round declarations referenced three removed Just recipes.
+They now invoke the existing Nix Justfile's =test <file>= entry directly.
+Selected Graph and selected-flake data use the same Script prototype; the
+existing native Case input binds the optional flake. No test package, new
+selector, environment protocol or compiler/worker runner is added.
+
+Core =admit-testing-result= now owns operational receipt admission instead of
+another copy of marker parsing. The four native summary Cases preserve a valid
+receipt, nonzero exit, native check/module failures, exact Harness ownership,
+original source observations, unobserved-file independence and restoration.
+The Nix runner derives one canonical product root for those native paths.
+
+Actual execution in the existing Bazel environment completed three Selected
+Graph rounds with 90 assertions each and three Flake Source rounds with 33
+each. The original source observation set remained current. These are actual
+Case executions through the existing Just/Harness boundary, not command-shape
+assertions. Final installed-cohort Core build-graph (23 Cases), C caller (one)
+and operational summary (four) all retained strict native completion markers.
+
+The final installed cohort's complete 99-Case Context run and unsplit whole
+queue replay both exited naturally within 2 GiB, 150 seconds and the existing
+five-second progress watchdog. First run: loading 10.1016 seconds, Cases
+57.2234, native total 67.3263. Replay: loading 5.5449, Cases 57.4928, total
+63.0632. They do not qualify cold package compilation or distributed throughput.
+
+The current C caller source is also bound to executed QNT and SysML receipts.
+Normal QNT explored 46,945 generated / 4,312 distinct states; all three intended
+broken models retained counterexamples. SysML CLI executed 42 replay paths,
+with three expected unsafe results and no unexpected result. These bounded
+models do not prove native refinement or an unbounded distributed runtime.
+The final published-head full product CI remains its own acceptance gate.

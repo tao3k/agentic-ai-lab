@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later */
 #include <gambit.h>
 #include <stdio.h>
+#include <string.h>
 #include <agentic_ai_lab/semantic.h>
 
 /* This caller runs inside the heap-fenced gxi test host. Only Gambit runtime setup and
@@ -14,15 +15,23 @@ ___mod_or_lnk context_test_linker(___global_state_struct *state) {
   return 0;
 }
 static ___SCMOBJ context_test_setup(___setup_params_struct *params) {
+  /* Read the real host limit through Gambit's dynamic-extension linkage. */
   if (params->max_heap != (___SIZE_T)2 * 1024 * 1024 * 1024 ||
       params->parallelism_level != 1 ||
-      ___get_max_heap() != (___SIZE_T)2 * 1024 * 1024 * 1024)
+      ___EXT(___get_max_heap)() != (___SIZE_T)2 * 1024 * 1024 * 1024)
     return ___FIX(___UNKNOWN_ERR);
   ++context_test_setups;
   return ___FIX(___NO_ERR);
 }
+/* This host already owns the VM. Only the explicit parameters checked by the
+ * setup Fixture above are consumed; no second VM is initialized. Linux Gerbil
+ * does not export the standalone setup-parameter initializer to dynamic leaves. */
+static void context_test_setup_params_reset(___setup_params_struct *params) {
+  memset(params, 0, sizeof(*params));
+}
 static void context_test_cleanup(void) {}
 #define AGENTIC_AI_LAB_SEMANTIC_LINKER context_test_linker
+#define ___setup_params_reset context_test_setup_params_reset
 #define ___setup context_test_setup
 #define ___cleanup context_test_cleanup
 /* Shared objects resolve symbols eagerly on Linux. The local callback below
@@ -30,6 +39,7 @@ static void context_test_cleanup(void) {}
  * another module's C symbol to be globally visible during macro import. */
 #define agentic_ai_lab_semantic_evaluate context_test_evaluate
 #include "../../../bindings/runtime-c/src/semantic_host.c"
+#undef ___setup_params_reset
 #undef ___setup
 #undef ___cleanup
 #undef agentic_ai_lab_semantic_evaluate

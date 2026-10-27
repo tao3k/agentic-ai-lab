@@ -4,6 +4,6 @@
 
 (package: agentic-ai-lab
  prelude: :tao3k/yuanxu/prelude
- depend: ("github.com/tao3k/gerbil-parser@d981befb0c0bd6a84bc71366c77fddf26c29acdd"
-          "github.com/tao3k/orgize@16c9602e1dbc3cc764eaf8c115e2f015ae222aa2"
-          "github.com/tao3k/gerbil-ascent@0d1f89ec991f90b265bb48c66875019844684fbc"))
+ depend: ("github.com/tao3k/gerbil-parser@0f5122aa936a795a5f48e10d9cb97ebcd035a026"
+          "github.com/tao3k/orgize@4eda11a2ea077f0afb3b95a6f60714150410f7b1"
+          "github.com/tao3k/gerbil-ascent@5ec21328e3485695be2ac7353cddfef95bd082e0"))

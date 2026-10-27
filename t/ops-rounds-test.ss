@@ -23,14 +23,31 @@
     (yuanxu-test-case "a nonzero exit or native error marker cannot become a passing receipt"
       (call-with-temporary-directory "ops-failed-control"
         (lambda (root)
-          (let (log (path-expand "round.log" root))
-            (def (write-log text)
-              (call-with-output-file (list path: log truncate: #t) (cut display text <>)))
-            (write-log "MODULE-OK fixture.ss\nHARNESS-OK fixture.ss\nOK\n")
-            (check-exception (assert-control (.o status: 7) log "fixture.ss") error?)
-            (write-log "MODULE-OK fixture.ss\nHARNESS-OK fixture.ss\nERROR CHECK failed\nOK\n")
-            (check-exception (assert-control (.o status: 0) log "fixture.ss") error?)
-            (check-equal? (file-exists? log) #t)))))
+          (def log (path-expand "round.log" root))
+          (def fixture (path-expand "fixture.ss" root))
+          (def (write-log suffix (files (list fixture)))
+            (call-with-output-file (list path: log truncate: #t)
+              (lambda (port)
+                (display "MODULE-OK " port)
+                (display fixture port)
+                (newline port)
+                (display "HARNESS-OK " port)
+                (write files port)
+                (newline port)
+                (display suffix port)
+                (display "OK\n" port))))
+          (write-log "")
+          (check-equal? (assert-control (.o status: 0) log fixture) 0)
+          (check-exception (assert-control (.o status: 7) log fixture) error?)
+          (write-log "ERROR CHECK failed\n")
+          (check-exception (assert-control (.o status: 0) log fixture) error?)
+          (write-log "ERROR MODULE imported.ss\n")
+          (check-exception (assert-control (.o status: 0) log fixture) error?)
+          ;; Exact native Harness ownership matters even with a successful
+          ;; target Module marker; another file's completion is insufficient.
+          (write-log "" (list (path-expand "other.ss" root)))
+          (check-exception (assert-control (.o status: 0) log fixture) error?)
+          (check-equal? (file-exists? log) #t))))
     (yuanxu-test-case "summary inputs come from the native test publication"
       (def tests
         (.call (.get agentic-ai-lab.init.exports tests) .for-files
