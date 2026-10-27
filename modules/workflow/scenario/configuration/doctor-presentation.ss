@@ -15,13 +15,6 @@
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         "module-diagnostics.ss"
         :yuanxu/utilities/final-projection-syntax
-        (only-in :yuanxu/module-system/projection/option-objects
-                 yuanxu-module-option-validation-receipt-id
-                 yuanxu-module-option-validation-receipt-source-module
-                 yuanxu-module-option-validation-receipt-valid?
-                 yuanxu-module-option-validation-receipt-code
-                 yuanxu-module-option-validation-receipt-messages
-                 yuanxu-module-option-validation-receipt-metadata)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
                  agentic-ai-lab-module-evaluate
                  agentic-ai-lab-module-value-catalog-root)
@@ -49,15 +42,15 @@
 (defpoo-final-projection
   agentic-ai-lab-module-validation-receipt->alist (receipt)
   (bindings ())
-  (fields ((id (yuanxu-module-option-validation-receipt-id receipt))
+  (fields ((id (.get receipt id))
            (source-module
-            (yuanxu-module-option-validation-receipt-source-module receipt))
-           (valid? (yuanxu-module-option-validation-receipt-valid? receipt))
-           (code (yuanxu-module-option-validation-receipt-code receipt))
+            (.get receipt source-module))
+           (valid? (.get receipt valid?))
+           (code (.get receipt code))
            (messages
-            (yuanxu-module-option-validation-receipt-messages receipt))
+            (.get receipt messages))
            (metadata
-            (yuanxu-module-option-validation-receipt-metadata receipt)))))
+            (.get receipt metadata)))))
 
 ;;; Boundary: import profiles are summarized without resolving source refs.
 ;; : (-> ModuleImportProfile Value)
@@ -116,7 +109,7 @@
 (def (agentic-ai-lab-module-load-receipts-all-loaded? receipts)
   (cond
    ((null? receipts) #t)
-   ((yuanxu-module-load-receipt-loaded? (car receipts))
+   ((.get (car receipts) loaded?)
     (agentic-ai-lab-module-load-receipts-all-loaded? (cdr receipts)))
    (else #f)))
 
@@ -125,7 +118,7 @@
 (def (agentic-ai-lab-module-load-receipts-missing-count receipts)
   (cond
    ((null? receipts) 0)
-   ((yuanxu-module-load-receipt-loaded? (car receipts))
+   ((.get (car receipts) loaded?)
     (agentic-ai-lab-module-load-receipts-missing-count (cdr receipts)))
    (else
     (+ 1 (agentic-ai-lab-module-load-receipts-missing-count (cdr receipts))))))
@@ -188,8 +181,8 @@
 (def (agentic-ai-lab-module-loaded-modules-from-receipts receipts)
   (cond
    ((null? receipts) '())
-   ((yuanxu-module-load-receipt-loaded? (car receipts))
-    (cons (yuanxu-module-load-receipt-module (car receipts))
+   ((.get (car receipts) loaded?)
+    (cons (.get (car receipts) module)
           (agentic-ai-lab-module-loaded-modules-from-receipts (cdr receipts))))
    (else
     (agentic-ai-lab-module-loaded-modules-from-receipts (cdr receipts)))))

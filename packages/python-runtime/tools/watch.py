@@ -7,6 +7,7 @@ import selectors
 import signal
 import subprocess
 import sys
+import time
 
 
 def report_failure(message):
@@ -41,9 +42,22 @@ def main(argv):
     try:
         with selectors.DefaultSelector() as ready:
             ready.register(child.stdout, selectors.EVENT_READ)
+            deadline = time.monotonic() + 5
             while True:
-                if not ready.select(timeout=5):
+                remaining = max(0, deadline - time.monotonic())
+                if not ready.select(timeout=remaining):
+                    now = time.monotonic()
+                    # KqueueSelector also returns [] on InterruptedError.
+                    # Retry only the ORIGINAL deadline's remaining time; an
+                    # empty wakeup is neither progress nor proof of expiry.
+                    if now < deadline:
+                        continue
                     report_failure('five seconds without test progress')
+                    # Separate a live/hung worker from an exited worker whose
+                    # output pipe remains open. This never overrides failure.
+                    sys.stderr.write(f'WATCHDOG-STATE pid={child.pid} child-exit={child.poll()} '
+                                     f'silent-seconds={now - deadline + 5:.6f}\n')
+                    sys.stderr.flush()
                     # This is failure-only work, never extra time to earn a pass.
                     capture_failed_process(child.pid)
                     if child.poll() is None:
@@ -55,6 +69,7 @@ def main(argv):
                     break
                 sys.stdout.buffer.write(data)
                 sys.stdout.flush()
+                deadline = time.monotonic() + 5
         return child.wait()
     finally:
         if child.poll() is None:
@@ -63,4 +78,10 @@ def main(argv):
 
 
 if __name__ == '__main__':
+    # The outer native timeout cancels this process with TERM. Unwind main's
+    # existing finally so the independently grouped worker cannot be orphaned.
+    def cancel_watch(signum, _frame):
+        raise SystemExit(128 + signum)
+
+    signal.signal(signal.SIGTERM, cancel_watch)
     sys.exit(main(sys.argv[1:]))

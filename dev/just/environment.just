@@ -68,7 +68,7 @@ agentic_ai_lab_gerbil_path := env_var_or_default("GERBIL_PATH", justfile_directo
 
 agentic_ai_lab_library_path := env_var_or_default("GERBIL_LOADPATH", agentic_ai_lab_gerbil_path + "/lib")
 
-# Development dependencies use the same SDK-owned prefix and native POO ABI.
+# Development dependencies use the same Gerbil package prefix and native POO ABI.
 # Test demands compile their selected development support through init.exports.
 
 # gerbil.pkg is the parser revision authority.  Resolve source-owned fixtures

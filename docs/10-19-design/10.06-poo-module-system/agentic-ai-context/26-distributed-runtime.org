@@ -91,11 +91,11 @@ alist/record DSLs or a second module registry. Existing entrypoints remain the
 native path. Runtime acquisition must be explicit and lazy; import/selection
 does not acquire timers, connections, workers or subscriptions.
 
-The installed Gerbil SDK already exposes =std/actor='s =ActorHost= interface
+The installed Gerbil standard library already exposes =std/actor='s =ActorHost= interface
 and envelope interactions: local destinations use =thread-send=; handle/group
 destinations delegate to the current host. The intended transport adapter should
 use that existing actor/ensemble boundary rather than invent another remote RPC
-runtime. The inspected SDK owners are =src/std/actor/host.ss= and
+runtime. The inspected Gerbil library modules are =src/std/actor/host.ss= and
 =src/std/actor/interaction.ss=. This capability has not yet been connected to
 Context's persistent fencing protocol. An Actor handle is a route, not Context
 identity, Session identity or evidence/authorization authority. The native local

@@ -22,7 +22,7 @@
         :agentic-ai-lab/modules/temporal-causality/revisions/interface
         :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
         :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
-(import "./fixtures.ss")
+(import :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures)
 (export register-evaluator-cases-7!)
 
 (def (register-evaluator-cases-7!)

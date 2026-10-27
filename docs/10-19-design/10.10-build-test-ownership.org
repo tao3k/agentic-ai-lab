@@ -131,7 +131,7 @@ the installed =gerbil test= on those compiled interfaces directly, rather than
 loading gxtest inside another Scheme test program. That runtime attempt reaches
 the unchanged five-second no-progress refusal before Harness output. Build
 success is not runtime qualification; the refusal remains open. No longer
-timeout, fabricated progress or locally patched SDK binary replaces this result.
+timeout, fabricated progress or locally patched Gerbil binary replaces this result.
 
 ** Native startup diagnosis
 
@@ -164,13 +164,13 @@ open.
 ** Bounded file-demand measurements
 
 The 2026-10-26 local source snapshot exposed two avoidable dependencies:
-=.cc= arguments acquired the selected graph eagerly, and SDK-only progress /
+=.cc= arguments acquired the selected graph eagerly, and Gerbil-only progress /
 role metadata utilities inherited the package POO prelude. Native lazy slots
 now defer graph acquisition; those two utility modules explicitly select
 =:gerbil/core=. Export-name calculation lives with role metadata, rather than
 requiring the selection parser merely to obtain a symbol.
 
-The same minimal SDK test, through default Core =just test-file=, passed with
+The same minimal Gerbil test, through default Core =just test-file=, passed with
 =MODULE-OK=, =HARNESS-OK= and final =OK=. After the lazy-slot change its wall
 time was 55.71 seconds; after the utility import changes it was 30.13 seconds,
 then 24.57 seconds in a separate process on unchanged sources. The last two
@@ -244,10 +244,10 @@ not publish a second module catalog. The numbered-object cleanup script is also
 removed. Historical JSON receipts keep their original commands and verdicts.
 
 The C artifact materializer uses the selected =gerbil build= frontend, then
-=gerbil env= for SDK static-dependency resolution. Both steps retain the native
+=gerbil env= for Gerbil static-dependency resolution. Both steps retain the native
 package environment; Python does not invent module order or dependency paths.
-The successful artifact materializes 328 SDK-emitted user units. A plain C
-consumer loads that artifact and exercises actual SDK setup/cleanup, descriptor
+The successful artifact materializes 328 compiler-emitted user units. A plain C
+consumer loads that artifact and exercises actual Gambit setup/cleanup, descriptor
 projection, result release, foreign-thread refusal, control-lane refusal,
 trailing-datum rejection, absent-service refusal and terminal close/reopen.
 No setup/cleanup mocks, forced process exit or Rust binding is involved.

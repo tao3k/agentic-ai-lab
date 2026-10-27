@@ -204,7 +204,7 @@ actual current revision and the matching native worker observation.
 The old source-only receipts remain historical and do not qualify the new
 runtime or these new dependency pins. Failed/interrupted diagnostics were not
 promoted into this receipt. This is local targeted qualification; no remote CI
-or whole-project/native-package SDK qualification is claimed.
+or whole-project or native Gerbil package qualification is claimed.
 
 The exact =4,5,7,1,2,3,6= replay also passed all 53 Cases, with one actual
 path for each authority kind (3 total), under =exact-replay/authority-receipt.json=.

@@ -180,7 +180,7 @@ policy replacement plus fresh Context, actual old result commit, cancel, recover
 (with cancel before recover). This is bounded native operation coverage, not
 all OS schedules. Process-death qualification is not hardware power-loss,
 filesystem anti-rollback, malicious writer resistance, cross-host replication,
-external-provider effect recovery or a full product/standard-SDK acceptance.
+external-provider effect recovery or a full product acceptance through the standard Gerbil tools.
 The native resolver profile is explicit; arbitrary additional producer families
 need their own preserved input/replay adapter. No raw build/test logs are Git
 content; executable gates and this scoped summary are maintained here.

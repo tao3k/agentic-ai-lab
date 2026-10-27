@@ -77,7 +77,7 @@ benchmark-poo-clos-native-c4:
 test-runtime-v0-native-ffi: build-library
     just test-file t/runtime-v0-native-ffi-test.ss
 
-# A plain C consumer loads the packaged artifact with its actual SDK VM.
+# A plain C consumer loads the packaged artifact with its actual Gambit VM.
 # The facade fences the heap at 2 GiB before setup; the watchdog covers dlopen,
 # initialization, calls and shutdown. This does not install a Context service.
 [group('test')]
@@ -223,17 +223,17 @@ test-context-owner-cas:
 
 # Original Context/Temporal suites through installed Scheme and upstream gxtest.
 [group('build')]
-compile-context-temporal-tests:
+compile-context-temporal-tests: build-library
     # Core still owns the 120-second preparation gate. The external guard
     # additionally covers loading the source-owned CLI before preparation.
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}" --compile
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}" --compile
 
 [group('test')]
 test-context-temporal:
     # Source/compiled-artifact admission precedes the native worker. Its own
     # TestingScript owns the agreed 150-second runtime and five-second silence
     # gates. The outer envelope also covers its separate native preparation.
-    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 300s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}"
+    GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 300s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}"
 
 # Qualify the default interpreter dispatcher independently of the AOT tool.
 [group('test')]

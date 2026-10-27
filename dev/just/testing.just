@@ -26,7 +26,7 @@ test:
     just test-core
     just test-root
 
-# Exercise actual SDK progress and an intentional cached-import stall. These
+# Exercise actual Gerbil progress and an intentional cached-import stall. These
 # control fixtures are outside ordinary *-test.ss discovery by design.
 [group('test')]
 test-native-harness-progress:
@@ -34,11 +34,11 @@ test-native-harness-progress:
     set -euo pipefail
     results="{{ agentic_ai_lab_gerbil_path }}/test-results/native-harness"
     mkdir -p "$results"
-    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 20s python3 packages/python-runtime/tools/watch.py gxi {{ gerbil_test_runtime_options }} t/qualification/testing/native-harness.ss -v 5 t/qualification/testing/native-progress-positive.ss > "$results/positive.log" 2>&1
+    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 20s python3 packages/python-runtime/tools/watch.py gerbil {{ gerbil_test_runtime_options }} test -v 5 -D yuanxu-module-test-observation t/qualification/testing/native-progress-positive.ss > "$results/positive.log" 2>&1
     # CI runners provide POSIX grep; progress admission needs no ripgrep install.
     for marker in '^MODULE-OK ' '^HARNESS-OK ' '^OK$'; do grep -Eq "$marker" "$results/positive.log"; done
     if grep -Eq 'ERROR CASE|ERROR CHECK|ERROR HARNESS|Heap overflow|Stack overflow' "$results/positive.log"; then cat "$results/positive.log"; exit 1; fi
-    if {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 20s python3 packages/python-runtime/tools/watch.py gxi {{ gerbil_test_runtime_options }} t/qualification/testing/native-harness.ss -v 5 t/qualification/testing/native-progress-idle.ss > "$results/idle.log" 2>&1; then
+    if {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 20s python3 packages/python-runtime/tools/watch.py gerbil {{ gerbil_test_runtime_options }} test -v 5 -D yuanxu-module-test-observation t/qualification/testing/native-progress-idle.ss > "$results/idle.log" 2>&1; then
         echo 'cached-import stall unexpectedly passed' >&2
         exit 1
     else
@@ -103,28 +103,28 @@ test-core-file path:
 
 # Run one root-owned Scheme test with the same pre-import heap fence.
 [group('test')]
-test-file path observe="false": (_test-file path observe)
+test-file path observe="false": build-library (_test-file path observe)
 
-# Diagnose the SDK's actual support dependencies without replacing its scheduler.
+# Diagnose the Gerbil's actual support dependencies without replacing its scheduler.
 [group('test')]
 test-build-inspection path:
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/tests.ss inspect "{{ path }}" "{{ gerbil_test_runtime_options }}"
 
-# Keep native loader diagnosis outside source preparation and the SDK Harness.
+# Keep native loader diagnosis outside source preparation and the Gerbil Harness.
 [group('test')]
 test-native-object path mode="map":
     {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 30s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/native-object-load.ss "{{ path }}" "{{ mode }}"
 
-# Compare the unmodified SDK entry against the instrumented entry on one file.
+# Compare the unmodified Gerbil entry against the instrumented entry on one file.
 [group('test')]
-test-native-sdk-harness path:
+test-native-gerbil-harness path:
     {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} test "{{ path }}"
 
 [private]
 _test-file path observe="false":
     # Preparation and the native worker each retain their own 120-second
     # budget. This outer guard also covers CLI loading and natural shutdown.
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gxi {{ gerbil_test_runtime_options }} dev/tests.ss run "{{ path }}" "{{ gerbil_test_runtime_options }}" 120 "{{ observe }}"
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gxi {{ gerbil_test_runtime_options }} dev/tests.ss run "{{ path }}" "{{ gerbil_test_runtime_options }}" 120 "{{ observe }}"
 
 # Use the maintained Nix integration gate and its existing pre-import fences.
 [group('test')]

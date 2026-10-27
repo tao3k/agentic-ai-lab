@@ -4,14 +4,14 @@
 ;;; Preserve the published Suite; shared fixtures have their own owner.
 ;;; Compiler units register every original Case into this native lifecycle.
 (import :std/test
-        (only-in "./qualification/context-temporal/evaluator/cases-1.ss" register-evaluator-cases-1!)
-        (only-in "./qualification/context-temporal/evaluator/cases-2.ss" register-evaluator-cases-2!)
-        (only-in "./qualification/context-temporal/evaluator/cases-3.ss" register-evaluator-cases-3!)
-        (only-in "./qualification/context-temporal/evaluator/cases-4.ss" register-evaluator-cases-4!)
-        (only-in "./qualification/context-temporal/evaluator/cases-5.ss" register-evaluator-cases-5!)
-        (only-in "./qualification/context-temporal/evaluator/cases-6.ss" register-evaluator-cases-6!)
-        (only-in "./qualification/context-temporal/evaluator/cases-7.ss" register-evaluator-cases-7!)
-        (only-in "./qualification/context-temporal/evaluator/cases-8.ss" register-evaluator-cases-8!))
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-1 register-evaluator-cases-1!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-2 register-evaluator-cases-2!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-3 register-evaluator-cases-3!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-4 register-evaluator-cases-4!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-5 register-evaluator-cases-5!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-6 register-evaluator-cases-6!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-7 register-evaluator-cases-7!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-8 register-evaluator-cases-8!))
 (export temporal-evaluator-test)
 
 (def temporal-evaluator-test

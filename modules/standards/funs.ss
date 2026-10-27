@@ -10,7 +10,7 @@
         (only-in :std/list/list filter)
         (only-in :std/encoding/hex hex-encode)
         (only-in :yuanxu/utilities/functional
-                 yuanxu-all? yuanxu-map)
+                 yuanxu-all?)
         "types.ss"
         "objects.ss"
         "resolution-objects.ss")
@@ -62,14 +62,14 @@
   (agentic-ai-lab-standard-digest
    (list
     'agentic-ai-lab.standard-bundle.v1
-    (yuanxu-map
+    (map
      (lambda (edition)
        (list (.ref edition 'identity)
              (.ref edition 'canonical-uri)
              (.ref edition 'version)
              (.ref edition 'digest)))
      editions)
-    (yuanxu-map
+    (map
      (lambda (artifact)
        (list (.ref artifact 'identity) (.ref artifact 'digest)))
      artifacts)
@@ -368,7 +368,7 @@
                provider-identity
                subject-kind
                subject-snapshot-digest
-               (yuanxu-map
+               (map
                 (lambda (constraint)
                   (if (and (object? constraint) (.slot? constraint 'identity))
                     (.ref constraint 'identity)

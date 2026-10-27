@@ -184,4 +184,4 @@ Original failed runs, raw logs, native objects and original proof inputs remain
 local artifacts. The structured results link their receipts and a SHA-256
 custody manifest under
 =/private/tmp/context-runtime-framework-custody-20261026/=. The snapshot requires
-the original SDK/native libraries and OS; it is not a hermetic executable image.
+the original Gerbil/Gambit runtime libraries and OS; it is not a hermetic executable image.

@@ -321,7 +321,7 @@ and no old terminal revival. Its receipt is under
 =/private/tmp/context-projection-matched-crash-20261026/=.
 Verified custody of 16353 source/native object files (793695534 bytes) is under
 =/private/tmp/context-projection-custody-20261026/manifest.json=. Restoration
-requires the original operating system and Gerbil/Gambit SDK; this is not a
+requires the original operating system and Gerbil/Gambit runtime libraries; this is not a
 hermetic runtime image.
 
 ** Experiments that were not selected

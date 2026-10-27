@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <agentic_ai_lab/semantic.h>
 
-/* This caller runs inside the heap-fenced gxi test host. Only SDK setup and
+/* This caller runs inside the heap-fenced gxi test host. Only Gambit runtime setup and
  * teardown are supplied by that host; the production C facade, native Scheme
  * entry, Context/Session CAS, journal and result ownership all run unchanged.
  * This does not claim standalone AOT VM/bootstrap qualification. */

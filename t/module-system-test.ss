@@ -5,7 +5,8 @@
 
 ;;; Boundary: module-system tests cover descriptor activation, not loading.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :clan/poo/mop element? make-instance)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -249,12 +250,12 @@
                                           (list task-descriptor))
                (make-flow-declaration-registry 'catalog-flows '())
                (list (cons 'source source))))
-             (entry (make-yuanxu-module-catalog-entry source module))
-             (catalog (make-yuanxu-module-catalog 'test-catalog (list entry)))
+             (entry (make-instance ModuleSourceBinding source: source module: module))
+             (catalog (make-instance ModuleCatalog name: 'test-catalog entries: (list entry)))
              (doctor (agentic-ai-lab-module-resolve-doctor catalog (list source)))
              (activation (agentic-ai-lab-module-resolve-and-activate catalog (list source)))
              (catalog-shape (yuanxu-module-catalog->alist catalog)))
-        (check-equal? (yuanxu-module-catalog? catalog) #t)
+        (check-equal? (element? ModuleCatalog catalog) #t)
         (check-equal? (cdr (assoc 'module (yuanxu-module-catalog-entry->alist entry)))
                       'remote-runtime)
         (check-equal? (yuanxu-module-doctor-report-status doctor) 'ok)
@@ -265,7 +266,7 @@
                       'catalog-job)
         (check-equal? (cdr (assoc 'name catalog-shape)) 'test-catalog)))
     (yuanxu-test-case "raises typed failure for missing catalog sources"
-      (let* ((catalog (make-yuanxu-module-catalog 'empty-catalog '()))
+      (let* ((catalog (make-instance ModuleCatalog name: 'empty-catalog entries: '()))
              (source (make-yuanxu-module-local-source "missing.ss"))
              (failure (capture-module-failure
                        (lambda ()

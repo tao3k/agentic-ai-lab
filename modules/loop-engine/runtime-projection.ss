@@ -4,7 +4,8 @@
 
 ;;; Boundary: projects user loop-engine configuration into runtime-owned inputs.
 ;;; Invariant: projection is pure and leaves execution to the runtime handoff boundary.
-(import (only-in :yuanxu/modules/funflow/graph-projection
+(import (only-in :std/list/list fold fold-right)
+        (only-in :yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-workflow-agreement)
         :yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/sandbox-core/profile-catalog
@@ -66,7 +67,7 @@
 (def (agentic-ai-lab-user-loop-engine-memory-policy-use-cases/rev
       memory-policies
       use-cases-rev)
-  (yuanxu-fold-left
+  (fold
    (lambda (memory-policy use-cases)
      (cons (agentic-ai-lab-user-loop-engine-intent-ref
             memory-policy
@@ -222,7 +223,7 @@
           request 'runtime-snapshot '())))))
 
 (def (agentic-ai-lab-user-loop-engine-intents-field-values intents field)
-  (yuanxu-fold-right
+  (fold-right
    (lambda (intent values)
      (cons (agentic-ai-lab-user-loop-engine-intent-ref intent field #f)
            values))
@@ -376,7 +377,7 @@
 (def (agentic-ai-lab-user-config-loop-engine-intents/project-rev project-selection
                                                            selected-modules
                                                            intents-rev)
-  (yuanxu-fold-left
+  (fold
    (lambda (selection intents)
      (let (intent (project-selection selection))
        (if intent

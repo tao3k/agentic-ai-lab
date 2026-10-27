@@ -21,7 +21,6 @@
         (only-in :agentic-ai-lab/modules/module-authoring/module-descriptor
                  agentic-ai-lab-modules)
         (only-in :yuanxu/module-system/projection/option-objects
-                 yuanxu-module-option-schema-id
                  yuanxu-module-option-schema-value)
         (only-in :agentic-ai-lab/modules/module-authoring/module-option-projection
                  agentic-ai-lab-module-option-schemas)
@@ -56,7 +55,7 @@
   (agentic-ai-lab-modules interface (.o id: 'indexed-schema config: (.o))))
 
 (def schemas (agentic-ai-lab-module-option-schemas module))
-(def option-ids (map yuanxu-module-option-schema-id schemas))
+(def option-ids (map (cut .get <> id) schemas))
 
 (def (baseline-values)
   (map (lambda (option-id)

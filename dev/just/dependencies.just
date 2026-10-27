@@ -37,7 +37,7 @@ mod-tidy:
     {{ bazel }} mod tidy --lockfile_mode=update
 
 # Build the immutable Core dependency with an explicit cold-build envelope.
-# SDK pkg-install subsequently owns registration and incremental verification.
+# Gerbil pkg-install subsequently owns registration and incremental verification.
 # The dependency's 180-second executable shebang cannot fit its full cold
 # library on a three-CPU runner; runtime/test budgets are separate and unchanged.
 [group('dependency')]
@@ -51,7 +51,7 @@ deps-dev:
     python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "{{ agentic_ai_lab_gerbil_path }}/pkg"
     cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} gerbil env gxi ../packages/automation/native-dependencies.ss
 
-# Compile installed test dependencies against the SDK-selected shared library.
+# Compile installed test dependencies against the Gerbil-selected shared library.
 # Dependency acquisition belongs to deps-dev, as production acquisition belongs
 # to deps. Running tests must not reinstall POO into a second library prefix.
 [group('build')]

@@ -8,7 +8,7 @@
 ;;; hidden behind an ordinary POO lazy slot reference.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/hash/misc hash-remove!)
-        (only-in :yuanxu/utilities/functional yuanxu-find)
+        (only-in :std/list/list find)
         "types.ss"
         "objects.ss")
 
@@ -218,7 +218,7 @@
                            (load-one dependency (cons identity path)))
                          (.ref artifact-ref 'dependencies)))
                 (let (dependency-failure
-                      (yuanxu-find
+                      (find
                        (lambda (candidate)
                          (not (.ref candidate 'valid?)))
                        dependency-receipts))

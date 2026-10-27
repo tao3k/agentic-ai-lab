@@ -193,6 +193,14 @@ jobs:
 
       # Ordinary regressions are discovered once by the native package entry
       # below. Keep this independent process-boundary qualification explicit.
+      # The ordinary queue's declared OpenTofu fixture uses nix-build. Native
+      # Gerbil installation does not supply Nix (the separate adapter job does).
+      - name: Install Nix for native unit-test inputs
+        uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.34.4/install
+          enable_kvm: false
+
       - name: Prepare published Context and Temporal TestSuites
         run: |
           gerbil env just test-native-harness-progress

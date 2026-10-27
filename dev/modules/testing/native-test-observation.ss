@@ -1,20 +1,21 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Adapt the existing SDK argv and relay completed native imports to Core.
-(import (only-in :yuanxu/ops/progress make-test-progress-reader execution-progress!))
-(export native-harness-command make-native-harness-progress-reader)
+;;; Observe the Gerbil test command without replacing its dispatcher.
+(import (only-in :yuanxu/ops/progress make-test-progress-reader))
+(export native-test-command make-native-test-progress-reader)
 
-(def (native-harness-command inherited vm harness)
-  ;; Keep every SDK feature and selected file supplied by TestingScript.
+(def (native-test-command inherited vm)
+  ;; Keep every Gerbil feature and selected file supplied by TestingScript.
   ;; Refuse a different command shape rather than dropping unknown arguments.
   (unless (and (list? inherited) (>= (length inherited) 3)
                (equal? (car inherited) "gerbil")
                (equal? (cadr inherited) vm)
                (equal? (caddr inherited) "test"))
-    (error "native Harness adapter requires the declared SDK test command" inherited))
-  ;; SDK Case notices provide real begin/end boundaries, including Cases that
-  ;; use std/test directly. They do not change discovery or assertion policy.
-  (append (list "gxi" vm harness "-v" "5") (cdddr inherited)))
+    (error "native Harness adapter requires the declared Gerbil test command" inherited))
+  ;; The official dispatcher owns package setup, discovery and execution.
+  ;; Verbosity exposes its real Case boundaries; it must never be rewritten
+  ;; into an interpreter invocation of a private replacement Harness.
+  (append (take inherited 3) '("-v" "5") (cdddr inherited)))
 
 (def (make-native-phase-reader)
   (def started (real-time))
@@ -25,7 +26,7 @@
   (def consistent? #t)
   (def emitted? #f)
   (lambda (raw)
-    ;; Ops preserves line terminators in the captured SDK transcript.
+    ;; Ops preserves line terminators in the captured Gerbil transcript.
     (def line
       (let trim ((end (string-length raw)))
         (if (and (> end 0) (memv (string-ref raw (- end 1)) '(#\newline #\return)))
@@ -60,7 +61,7 @@
       ((and (not emitted?) (equal? line "OK"))
        (set! emitted? #t)
        ;; This is diagnostic data, never a progress event or pass receipt.
-       ;; The parent still admits the original SDK output and natural exit.
+       ;; The parent still admits the original Gerbil output and natural exit.
        (parameterize ((current-output-port (current-error-port)))
          (displayln
            "test-native-phases before-harness-seconds=" prepared
@@ -69,16 +70,8 @@
            " complete-spans?=" (and consistent? (null? active)))
          (force-output))))))
 
-(def (make-native-harness-progress-reader)
-  (def completed 0)
-  (def invocation (gensym 'native-harness))
-  (def phases (make-native-phase-reader))
-  (make-test-progress-reader
-    phases
-    (lambda (line)
-      ;; The SDK-only entry deduplicates exact contexts and phases. Repeated
-      ;; cached imports produce no event; ordinary Core Case frames still pass
-      ;; through the original reader unchanged.
-      (when (string-prefix? "NATIVE-MODULE-OK " line)
-        (set! completed (+ completed 1))
-        (execution-progress! invocation completed)))))
+(def (make-native-test-progress-reader)
+  ;; Observe the Gerbil's own Case boundaries and existing Core progress records.
+  ;; The Gerbil callback observer reports completed cold imports separately;
+  ;; this reader owns no dispatcher, import interception or synthetic events.
+  (make-test-progress-reader (make-native-phase-reader)))

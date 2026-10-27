@@ -22,12 +22,22 @@ Earlier 28 evidence retains its original scope and is not silently promoted.
 [[file:../../../../bindings/runtime-c/include/agentic_ai_lab/semantic.h][semantic.h]] already defines the versioned inert-byte call, trusted Host lanes,
 thread-affine open/close and owner-side result release. The optional
 [[file:../../../../bindings/runtime-c/include/agentic_ai_lab/scheme_native_v1.h][Scheme-native header]] defines copied result ownership for AOT-linked consumers.
-[[file:../../../../bindings/runtime-c/README.org][The existing SDK contract]] is authoritative. This change adds no binding file
+[[file:../../../../bindings/runtime-c/README.org][The existing C ABI contract]] is authoritative. This change adds no binding file
 and does not introduce another JSON wire protocol or VM bootstrap framework.
 
-The new Context lifecycle service is not yet exported through that C ABI.
-That integration remains open; native Scheme tests are not evidence of a
-completed C export, Rust integration or distributed runtime.
+The Context lifecycle declaration and Scheme dispatch now use that existing
+C ABI: =agentic_ai_lab_semantic_v1_context_command= is the trusted mutation
+lane and =context.lifecycle.inspect= is the ordinary read-only operation.
+[[file:../../../../modules/workflow/runtime/context-lifecycle.ss][The native adapter]] accepts an application-installed service capability; inert
+request bytes cannot install a service or reconstruct an observation.
+
+Qualification has two distinct boundaries. [[file:../../../../t/context-c-abi-test.ss][The in-process C caller]] exercises
+active Context/Session decisions inside a heap-fenced Gerbil host, whose setup
+and teardown are supplied by that host. The standalone packaged-artifact probe
+exercises actual Gambit setup/cleanup but installs no live Context. Neither
+alone qualifies a standalone artifact with active Context service installation,
+Rust integration or distributed execution. Current-source complete-queue and
+remote CI admission remain required.
 
 * Native implementation
 
@@ -72,9 +82,9 @@ The existing [[file:28-hybrid-runtime.org][28 concurrency work]] and inherited O
 no new finite-resource model is claimed as implementation refinement or as
 proof that the pending C lifecycle export is complete.
 
-* Current qualification boundary
+* Historical qualification boundary
 
-The restored-module service run passed in 52.3 seconds. One unsplit canonical
+The earlier restored-module service run passed in 52.3 seconds. One unsplit canonical
 60-order run passed in 96.3 seconds with 60 actual owner/timer/journal closes.
 Whole-queue replay did not pass the fixed watchdog: the two retained attempts
 closed 48 and 34 owners before exit 137, each around 155 seconds including the

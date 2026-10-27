@@ -4,8 +4,9 @@
 (import :clan/poo/object
         (only-in "./qualification.ss" qualification-script)
         (only-in "../../../init.ss" agentic-ai-lab.init.exports)
-        (only-in "../../../dev/modules/testing/native-harness-entry.ss"
-                 make-native-harness-progress-reader)
+        (only-in :yuanxu/module-system/building/test-projection module-test-execution)
+        (only-in "../../../dev/modules/testing/native-test-observation.ss"
+                 make-native-test-progress-reader)
         (only-in :std/source this-source-file))
 (def root (path-expand "../../.." (path-directory (this-source-file))))
 (def watch "packages/python-runtime/tools/watch.py")
@@ -68,18 +69,17 @@
               (.call (.get agentic-ai-lab.init.exports tests) .for-files
                 (list (absolute "t/qualification/context-temporal/interface.ss"))
                 (list (this-source-file) (absolute watch)
-                      (absolute "t/qualification/testing/native-harness.ss")
-                      (absolute "dev/modules/testing/native-harness-entry.ss"))))
+                      (absolute "dev/modules/testing/native-test-observation.ss"))))
             (files (.get demand spec)))
-       (.cc (.get demand execution)
+       (.cc (module-test-execution (.get demand source))
          ;; Emit actual preparation timing so a compiler refusal remains
          ;; distinguishable from the independently bounded runtime worker.
-         'profile (.cc (.get demand execution profile) 'emit? #t)
+         'profile (.cc (.get (module-test-execution (.get demand source)) profile) 'emit? #t)
          'runtime-options (list vm)
-         'progress make-native-harness-progress-reader
+         'progress make-native-test-progress-reader
          'command
          (watched (append
-           (list "gxi" vm (absolute "t/qualification/testing/native-harness.ss") "-v" "5") files))
+           (list "gerbil" vm "test" "-v" "5" "-D" "yuanxu-module-test-observation") files))
          ;; Includes every real timer interleaving. Use the agreed complete
          ;; Context runtime envelope; the five-second output gate stays active.
          'timeout 150 'idle-timeout #f 'case-count 99)))

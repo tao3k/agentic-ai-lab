@@ -6,7 +6,8 @@
 ;;; Boundary: lazy loader tests cover deferred source loading only.
 ;;; Invariant: lazy plans never call loader handlers until explicitly forced.
 
-(import :yuanxu/module-system/source/projection
+(import (only-in :clan/poo/mop make-instance)
+        :yuanxu/module-system/source/projection
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
@@ -69,15 +70,15 @@
 ;;; library module source.
 ;; : (-> Unit PooModuleLoaderBackend)
 (def user-standard-library-loader
-  (make-yuanxu-module-loader-backend
-   'user-standard-library-loader
-   'standard-library
-   (lambda (source-ref)
+  (make-instance ModuleLoaderBackend
+   name: 'user-standard-library-loader
+   source-kind: 'standard-library
+   load: (lambda (source-ref)
      (set! lazy-loader-call-count (+ lazy-loader-call-count 1))
      (if (yuanxu-module-source-ref=? source-ref loader-standard-library-source)
        loader-standard-library-module
        #f))
-   '((library . standard))))
+   metadata: '((library . standard))))
 
 ;;; Plan predicate keeps assertions about deferred receipts compact and local to
 ;;; the lazy-loader policy owner.
@@ -85,9 +86,9 @@
 (def (lazy-loader-plans-deferred? plans)
   (cond
    ((null? plans) #t)
-   ((and (not (yuanxu-lazy-load-plan-forced? (car plans)))
-         (eq? (yuanxu-module-load-receipt-code
-               (yuanxu-lazy-load-plan-receipt (car plans)))
+   ((and (not (.get (car plans) forced?))
+         (eq? (.get
+               (.get (car plans) receipt) code)
               'deferred))
     (lazy-loader-plans-deferred? (cdr plans)))
    (else #f)))
@@ -160,31 +161,31 @@
                  loader-standard-library-source
                  '((owner . standard-library))))
                (deferred-metadata
-                (yuanxu-module-load-receipt-metadata deferred)))
+                (.get deferred metadata)))
           (check-equal? (yuanxu-module-source-ref-kind loader-standard-library-source)
                         'standard-library)
-          (check-equal? (yuanxu-module-load-receipt-code deferred)
+          (check-equal? (.get deferred code)
                         'deferred)
-          (check-equal? (yuanxu-module-load-receipt-loaded? deferred)
+          (check-equal? (.get deferred loaded?)
                         #f)
           (check-equal? (cdr (assoc 'mode deferred-metadata))
                         'lazy)
           (check-equal? (cdr (assoc 'enabled? deferred-metadata))
                         #f)
           (check-equal? lazy-loader-call-count 0)
-          (check-equal? (yuanxu-lazy-load-plan-forced? plan)
+          (check-equal? (.get plan forced?)
                         #f)
           (let* ((forced-plan
                   (yuanxu-force-lazy-load-plan plan))
                  (forced-receipt
-                  (yuanxu-lazy-load-plan-receipt forced-plan)))
-            (check-equal? (yuanxu-lazy-load-plan-forced? forced-plan)
+                  (.get forced-plan receipt)))
+            (check-equal? (.get forced-plan forced?)
                           #t)
             (check-equal? lazy-loader-call-count 1)
-            (check-equal? (yuanxu-module-load-receipt-code forced-receipt)
+            (check-equal? (.get forced-receipt code)
                           'loaded)
             (check-equal? (agentic-ai-lab-module-name
-                           (yuanxu-module-load-receipt-module forced-receipt))
+                           (.get forced-receipt module))
                           'standard-kernel)))))
 
 ;; : TestCase
@@ -209,9 +210,9 @@
           (check-equal? (cdr (assoc 'entrypoint-role interface-metadata))
                         'interface)
           (check-equal? (length plans) 1)
-          (check-equal? (yuanxu-lazy-load-plan-forced? (car plans)) #f)
-          (check-equal? (yuanxu-module-load-receipt-code
-                         (yuanxu-lazy-load-plan-receipt (car plans)))
+          (check-equal? (.get (car plans) forced?) #f)
+          (check-equal? (.get
+                         (.get (car plans) receipt) code)
                         'deferred)
           (check-equal? lazy-loader-call-count 0))))
 
@@ -226,12 +227,12 @@
                (source-values
                 (map (lambda (plan)
                        (yuanxu-module-source-ref-value
-                        (yuanxu-lazy-load-plan-source plan)))
+                        (.get plan source)))
                      plans))
                (first-receipt
-                (yuanxu-lazy-load-plan-receipt (car plans)))
+                (.get (car plans) receipt))
                (first-metadata
-                (yuanxu-module-load-receipt-metadata first-receipt)))
+                (.get first-receipt metadata)))
           (check-equal?
            (length plans)
            (+ (length
@@ -253,7 +254,7 @@
                 (cons 'custom (string->symbol name))) '())
              (for-each
               (lambda (plan)
-                (def source (yuanxu-lazy-load-plan-source plan))
+                (def source (.get plan source))
                 (when (equal? (yuanxu-module-source-ref-value source) path)
                   (let (metadata (yuanxu-module-source-ref-metadata source))
                     (check-equal? (cdr (assoc 'kind metadata)) 'framework-entrypoint)
@@ -380,8 +381,8 @@
                          'module-switch)
                         #f)
           (check-equal? (length plans) 2)
-          (check-equal? (yuanxu-module-load-receipt-code
-                         (yuanxu-lazy-load-plan-receipt (car plans)))
+          (check-equal? (.get
+                         (.get (car plans) receipt) code)
                         'deferred)
           (check-equal? lazy-loader-call-count 0))))
 

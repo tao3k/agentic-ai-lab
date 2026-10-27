@@ -1,5 +1,5 @@
 ;;; This inert ABI schema is read before a Core package can be built.
-;;; Use the SDK language explicitly; its public values remain native POO.
+;;; Use the Gerbil language explicitly; its public values remain native POO.
 prelude: :gerbil/polydactyl
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;

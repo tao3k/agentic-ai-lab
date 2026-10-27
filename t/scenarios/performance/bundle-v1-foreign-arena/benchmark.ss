@@ -54,7 +54,7 @@
            "AGENTIC_AI_LAB_BUNDLE_V1_BENCH_COMPONENTS" 4096))
          (generation-started (now-seconds))
          (components
-          (yuanxu-map benchmark-component (iota component-count)))
+          (map benchmark-component (iota component-count)))
          (generation-ms (elapsed-milliseconds generation-started))
          (lowering-started (now-seconds))
          (plan

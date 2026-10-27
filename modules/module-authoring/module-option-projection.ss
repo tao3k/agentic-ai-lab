@@ -9,7 +9,8 @@
 ;; | PooModuleOptionSchemaCandidate = Value
 ;; | PooModuleOptionValidationReceiptCandidate = Value
 
-(import (only-in :clan/poo/object .all-slots .ref .slot?)
+(import (only-in :clan/poo/mop make-instance)
+        (only-in :clan/poo/object .all-slots .ref .slot?)
         :agentic-ai-lab/modules/module-authoring/module-interface
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         :yuanxu/module-system/projection/option-objects
@@ -30,16 +31,21 @@
 ;;; Effective native Slot descriptors own Type, presence, defaults and constants.
 ;;; The receipt adds only the contributing module and diagnostic metadata.
 (def (agentic-ai-lab-module-schema-from-spec module-id-value option-id-value field)
-  (make-yuanxu-module-option-schema option-id-value module-id-value field
-    (yuanxu-module-object-ref/default field 'metadata '())))
+  ;; Preserve the effective Slot itself; its Type/default/metadata stay native.
+  (make-instance ModuleOptionSchema
+    id: option-id-value
+    source-module: module-id-value
+    field: field))
 
 ;;; Project final POO fields in their native order; receipts add source identity.
 (def (agentic-ai-lab-module-option-configs module)
   (def owner (agentic-ai-lab-module-name module))
   (def config (agentic-ai-lab-module-config module))
   (map (lambda (entry)
-         (make-yuanxu-module-option-config
-           (agentic-ai-lab-module-option-id (car entry)) (cdr entry) owner '()))
+         (.o id: (agentic-ai-lab-module-option-id (car entry))
+             value: (cdr entry)
+             source-module: owner
+             metadata: '()))
        (if (object? config) (yuanxu-module-object->alist config)
            (agentic-ai-lab-module-options module))))
 
@@ -75,7 +81,7 @@
               (for-each
                (lambda (schema)
                  (hash-put! index
-                            (yuanxu-module-option-schema-id schema)
+                            (.get schema id)
                             schema))
                schemas)
               (lambda (option-id) (hash-get index option-id))))))

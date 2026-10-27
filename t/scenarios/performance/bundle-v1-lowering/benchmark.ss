@@ -9,7 +9,7 @@
 (def +agent-count+ 1000)
 
 (def (make-components count)
-  (yuanxu-map
+  (map
    (lambda (index)
      (feature-bundle-v1-component
       1 index
@@ -26,14 +26,14 @@
    (iota count)))
 
 (def (make-edges count)
-  (yuanxu-map
+  (map
    (lambda (index)
      (feature-bundle-v1-edge
       1 (- index 1) index 'depends-on (- index 1)))
    (iota (max 0 (- count 1)) 1)))
 
 (def (make-evidence count)
-  (yuanxu-map
+  (map
    (lambda (index)
      (feature-bundle-v1-evidence
       1 index

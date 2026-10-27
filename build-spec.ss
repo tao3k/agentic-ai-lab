@@ -7,7 +7,13 @@
         (only-in :std/source this-source-file)
         (only-in :yuanxu/module-system/building/source-closure package-library-spec))
 (export agentic-ai-lab-public-build-roots agentic-ai-lab-build-spec
-        agentic-ai-lab-native-build-spec)
+        agentic-ai-lab-native-build-spec agentic-ai-lab-test-exclusions)
+(def agentic-ai-lab-test-exclusions
+  ;; One ordinary-suite inventory serves Gerbil build declarations and execution.
+  '("qualification/ascent-integration" "qualification/temporal-mrr-native"
+    "performance" "qualification/healthcare-fhir-reference-validator"
+    "qualification/healthcare-fhirpath-syntax" "qualification/healthcare-hl7v2-migration"
+    "qualification/standards-multi-industry" "module-system-poo-performance-test-support"))
 (def agentic-ai-lab-public-build-roots
   ;; Native library facades only. Nix and OpenTofu interface declarations
   ;; require the selected role wrappers owned by init.exports.std-make-spec;

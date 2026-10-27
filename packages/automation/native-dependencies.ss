@@ -1,8 +1,8 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;; Use the SDK's documented package script API. Installation, recursive
-;; dependencies, tags and native builds remain SDK-owned. Editor TAGS generation
+;; Use the official Gerbil package script API. Installation, recursive
+;; dependencies, tags and native builds remain owned by the Gerbil package manager. Editor TAGS generation
 ;; is separate tooling: it is not part of compilation or dependency admission.
 (import (only-in :gerbil/tools/gxpkg pkg-install with-pkg-build-env))
 (export main)

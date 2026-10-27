@@ -6,7 +6,8 @@
 ;;; Boundary: this integration test imports precise Module System and User
 ;;; Interface owners without a module-system aggregate.
 
-(import (only-in :clan/poo/type Record String List)
+(import (only-in :clan/poo/mop make-instance)
+        (only-in :clan/poo/type Record String List)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
@@ -143,10 +144,10 @@
   (yuanxu-module-static-loader
    'user-static-loader
    'local
-   (list (make-yuanxu-module-loader-entry loader-root-source
-                                            loader-root-module)
-         (make-yuanxu-module-loader-entry loader-child-source
-                                            loader-child-module))))
+   (list (make-instance ModuleSourceBinding source: loader-root-source
+                                            module: loader-root-module)
+         (make-instance ModuleSourceBinding source: loader-child-source
+                                            module: loader-child-module))))
 
 ;; : (-> Unit PooModuleValueCatalog)
 (def user-catalog
@@ -253,10 +254,10 @@
       (let* ((receipts
               (agentic-ai-lab-module-option-validation-receipts invalid-user-module))
              (codes
-              (map yuanxu-module-option-validation-receipt-code receipts)))
+              (map (cut .get <> code) receipts)))
         (check-equal? (length receipts) 5)
         (check-equal? (length (filter (lambda (receipt)
-                                      (not (yuanxu-module-option-validation-receipt-valid? receipt)))
+                                      (not (.get receipt valid?)))
                                     receipts)) 2)
         (check-equal? (has-member? 'constant-mismatch codes) #t)
         (check-equal? (has-member? 'missing-schema codes) #t)))
@@ -273,11 +274,11 @@
               (agentic-ai-lab-module-resolve-doctor catalog sources))
              (activation
               (agentic-ai-lab-module-resolve-and-activate catalog sources)))
-        (check-equal? (map yuanxu-module-load-receipt-code receipts)
+        (check-equal? (map (cut .get <> code) receipts)
                       '(loaded loaded))
-        (check-equal? (map yuanxu-module-load-receipt-backend-name receipts)
+        (check-equal? (map (cut .get <> backend-name) receipts)
                       '(user-static-loader user-static-loader))
-        (check-equal? (yuanxu-module-catalog-name catalog)
+        (check-equal? (.get catalog name)
                       'loaded-user-catalog)
         (check-equal? (map agentic-ai-lab-module-name
                            (yuanxu-module-catalog-modules catalog))

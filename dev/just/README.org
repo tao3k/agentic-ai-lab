@@ -18,12 +18,29 @@ command namespace and root working directory.
 
 * Reuse
 
-=just test-file PATH= calls the Core
-[[file:../../core/t/qualification/testing/run.ss][TestingScript projection]].
-It supplies the product source root, the existing VM options and the existing
-120-second budget.  Core Ops executes the process; Core test admission checks
-status, error markers and exact native harness completion.  The product does
-not maintain another copy of this ordinary per-file log gate.
+=gxc= is the Gerbil compiler. =gerbil build= consumes the existing build
+declaration, with =std/make= owning dependency scheduling and compiler jobs.
+=gerbil test= owns native test discovery and execution through =std/test=.
+The Gerbil expander handles macro expansion; the Gambit runtime owns threads,
+GC, clocks and dynamic code loading. These responsibilities are distinct.
+
+=just test-file PATH= first uses the root =gerbil build= declaration and then
+runs the official =gerbil test= through the existing Core resource/receipt
+policy. The full queue builds once and reuses its private no-build file entry.
+Built libraries precede the source fallback in =GERBIL_LOADPATH=; otherwise
+source interpretation can bypass native FFI products and repeat cold expansion.
+
+=init.exports.std-make-spec= owns the compilation declaration. TestingScript
+never invokes a compiler: an explicit support association must already have an
+admitted gerbil build publication. Its source, status, error-marker and exact native
+Harness checks remain active. The deleted private gxtest main wrappers are not
+part of execution. Case profiling resolves Gerbil features at runtime even for
+compiled Suite libraries, and no test verdict is cached.
+
+The existing Gerbil test observation feature enables bounded expander completion
+callbacks before Harness preparation. Only newly completed imports/evaluations
+advance progress; cached imports, timer ticks and diagnostic formatting do not.
+The gerbil test still owns discovery, assertion semantics and natural process shutdown.
 
 Nix adapter preparation and qualification remain product-owned under
 [[file:../../t/qualification/nix/Justfile][the Nix qualification entrypoint]] and
@@ -57,11 +74,11 @@ unselected suites are not imported or read by the selector.
 | Interpreter/tool | 90 seconds | Exact module and native harness |
 | Runtime FFI | 120 seconds per existing phase | Exact compiled module/harness |
 | Query source/native | 45 seconds | 4 / 24 Case receipts |
-| Temporal native/support/evaluator | 45 seconds | 13 / 9 / 28 Case receipts |
-| Context/Temporal | 45 seconds | 69 Case receipts, all six modules |
+| Temporal native/support/evaluator | 45 seconds | 13 / 9 / 58 Case receipts |
+| Context/Temporal | 150 seconds, 2 GiB | 99 original Case receipts, one Gerbil worker |
 | ASCENT temporal | 45 seconds | Both named semantic controls |
 | Module ownership | 120 seconds | Existing aggregator identity |
-| Whole product | 1200 seconds | ASP discovery/batch completion and observed modules |
+| Whole product | 7200-second queue; 120 seconds per worker | All 315 declared files, Gerbil Module/Harness and final OK |
 
 Watched commands retain the existing five-second byte-progress watchdog and
 failure-only stack capture.  The Scheme projection does not widen the outer
@@ -88,7 +105,8 @@ CI installs the optional development dependency after the library build.
 Native dependencies share the root package store and one POO ABI. The root
 =gerbil build= entry consumes =init.exports.std-make-spec= once. Development
 does not forward another build into a second production-library prefix;
-test demands compile their selected development support through init.exports.
+the Gerbil build declares selected support through init.exports, and test demands
+authenticate its existing publication.
 The shared =gerbil-poo= pin is aligned with =core/gerbil.pkg=, with its archive
 digest evaluated by Bazel and synchronized to both platform lock projections.
 

@@ -13,7 +13,7 @@ build:
 build-library:
     GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
 
-# Compile the pinned local Core using the SDK's incremental outputs.
+# Compile the pinned local Core using the Gerbil's incremental outputs.
 # Explicit cleanup remains available when replacing a bootstrap artifact cohort.
 [group('build')]
 build-core:
@@ -62,7 +62,7 @@ build-semantic-native output:
 # Core owns its support closure, native options, source admission and artifacts.
 # This prepares the test without starting its Cases or Harness.
 [group('build')]
-build-test path:
+build-test path: build-library
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/tests.ss compile "{{ path }}" "{{ gerbil_test_runtime_options }}"
 
 # An explicit AOT caller consumes the published library; it owns no module list.

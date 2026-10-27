@@ -159,7 +159,7 @@
                       #t)
         (check-equal? (length schemas) 2)
         (check-equal? (length configs) 2)
-        (check-equal? (map yuanxu-module-option-validation-receipt-code receipts)
+        (check-equal? (map (cut .get <> code) receipts)
                       '(ok ok))))
     (yuanxu-test-case "inline imports join activation closure and workflow receipts"
       (let* ((child-task

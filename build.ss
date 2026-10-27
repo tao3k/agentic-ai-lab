@@ -15,7 +15,7 @@
         (only-in :std/misc/process run-process)
         (only-in :yuanxu/module-system/building/script defbuild-script)
         (only-in "./init.ss" agentic-ai-lab.init.exports)
-        (only-in "./build-spec.ss" agentic-ai-lab-build-spec))
+        (only-in "./build-spec.ss" agentic-ai-lab-build-spec agentic-ai-lab-public-build-roots))
 
 ;; Native package clones acquire the declared Core gitlink before source lowering.
 (def retained-spec
@@ -30,8 +30,27 @@
     ;; Compatibility consumers may start in dev/. Retained library paths
     ;; are always resolved against this product entry, never the caller's cwd.
     (parameterize ((current-directory (path-directory (this-source-file))))
-      (agentic-ai-lab-build-spec))))
+      ;; These published Suite libraries were already native targets of the
+      ;; former preparation path. Declare them here for the official Gerbil build;
+      ;; gerbil test still discovers/runs every Case and never reuses a verdict.
+      (agentic-ai-lab-build-spec
+        (append agentic-ai-lab-public-build-roots
+          '("t/qualification/context-temporal/evaluator/fixtures.ss"
+            "t/qualification/context-temporal/evaluator/cases-1.ss"
+            "t/qualification/context-temporal/evaluator/cases-2.ss"
+            "t/qualification/context-temporal/evaluator/cases-3.ss"
+            "t/qualification/context-temporal/evaluator/cases-4.ss"
+            "t/qualification/context-temporal/evaluator/cases-5.ss"
+            "t/qualification/context-temporal/evaluator/cases-6.ss"
+            "t/qualification/context-temporal/evaluator/cases-7.ss"
+            "t/qualification/context-temporal/evaluator/cases-8.ss"
+            "t/temporal-evaluator-test.ss"
+            "t/ai-agentic-context-session-host-test.ss"
+            "t/ai-agentic-context-delta-test.ss"
+            "t/session-attempt-test.ss"
+            "t/ai-agentic-context-org-anchors-test.ss"
+            "t/query-orgize-source-test.ss"))))))
 
-;; The selected init owns source lowering; the SDK owns Make and dispatch.
+;; The selected init owns source lowering; the Gerbil owns Make and dispatch.
 (def modules-spec (.get agentic-ai-lab.init.exports std-make-spec))
 (defbuild-script (modules-spec retained-spec))

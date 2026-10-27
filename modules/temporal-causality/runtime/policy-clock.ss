@@ -7,7 +7,10 @@
         (only-in :std/crypto/digest sha256) (only-in :std/encoding/hex hex-encode)
         (only-in :agentic-ai-lab/modules/temporal-causality/time/objects agentic-ai-lab-temporal-instant)
         :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
-        "monotonic-clock.ss" "scheduling.ss" "owner-ingress.ss")
+        ;; The platform primitive is a compiled library. A source-path import
+        ;; would ask the interpreter to evaluate its C-declare forms.
+        :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock
+        "scheduling.ss" "owner-ingress.ss")
 (export policy-clock-owner policy-clock-owner/scheduled policy-clock-call! policy-clock-await-events!
         policy-clock-pause! policy-clock-resume! policy-clock-retry!
         policy-clock-audit policy-clock-stop! policy-clock-observed policy-clock-command! policy-clock-replace-policy! policy-clock-stop-receipt policy-clock-resource-state policy-clock-admission-state)

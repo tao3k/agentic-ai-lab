@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-/* This caller loads the packaged artifact and exercises its actual SDK VM.
+/* This caller loads the packaged artifact and exercises its actual Gambit VM.
  * It replaces no setup/cleanup functions and installs no native Context.
  * Active Context/Session CAS remains covered by context-c-caller.c. */
 typedef struct {

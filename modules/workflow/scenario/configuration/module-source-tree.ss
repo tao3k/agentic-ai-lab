@@ -6,7 +6,8 @@
 ;;; Boundary: Agentic AI Lab root and user module tree loading over Core lazy plans.
 ;;; Invariant: static entrypoint metadata lives in module-registry and stays loader-free.
 
-(import (only-in :clan/poo/type Record)
+(import (only-in :clan/poo/mop make-instance)
+        (only-in :clan/poo/type Record)
         (only-in :clan/poo/object .o)
         :yuanxu/modules/funflow/control-plane/failure
         (only-in :agentic-ai-lab/modules/module-authoring/module-interface
@@ -118,8 +119,8 @@
 ;; : (-> [PooModuleLoaderBackend] PooModuleSourceRef PooModuleDescriptor)
 (def (agentic-ai-lab-module-load-source backends source-ref)
   (let (receipt (yuanxu-module-load-source-receipt backends source-ref))
-    (if (yuanxu-module-load-receipt-loaded? receipt)
-      (yuanxu-module-load-receipt-module receipt)
+    (if (.get receipt loaded?)
+      (.get receipt module)
       (raise-control-plane-failure
        'module-system
        'missing-module-loader
@@ -138,8 +139,10 @@
 ;;; Boundary: loaded catalogs hand descriptor data to the existing resolver owner.
 ;; : (-> CatalogName [PooModuleLoaderBackend] [PooModuleSourceRef] PooModuleCatalog)
 (def (agentic-ai-lab-module-load-catalog catalog-name backends source-refs)
-  (make-yuanxu-module-catalog
-   catalog-name
-   (map make-yuanxu-module-catalog-entry
-        source-refs
-        (agentic-ai-lab-module-load-sources backends source-refs))))
+  (make-instance ModuleCatalog
+    name: catalog-name
+    entries:
+    (map (lambda (source module)
+           (make-instance ModuleSourceBinding source: source module: module))
+         source-refs
+         (agentic-ai-lab-module-load-sources backends source-refs))))
