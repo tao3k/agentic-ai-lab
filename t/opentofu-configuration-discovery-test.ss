@@ -5,7 +5,6 @@
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
         (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. OpenTofuConfiguration.)
-        (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata yuanxu-json-schema-validation-diagnostic-reason)
         :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-configuration-discovery-test)
 
@@ -15,8 +14,7 @@
 (def (accepted? result) (yuanxu-validation-evidence-accepted? result))
 (def (diagnostic-at result path)
   (find (lambda (diagnostic)
-          (equal? (cdr (assoc 'path
-                         (yuanxu-json-schema-validation-diagnostic-metadata diagnostic))) path))
+          (equal? (.get diagnostic path) path))
         (.get result diagnostics)))
 (def (cached? module name kind)
   (.call (.get module provider) .contract-cached? name kind))
@@ -115,8 +113,7 @@
           (.o web: =>.+ (.o ingress: (list (.o from_port: "wrong"))))))
       (def failure (reject-at WrongAWS '(resource aws_security_group web ingress 0 from_port)))
       (assert 'field-error-retains-provider-source
-        (eq? (cdr (assoc 'source (yuanxu-json-schema-validation-diagnostic-metadata
-                       (diagnostic-at failure '(resource aws_security_group web ingress 0 from_port)))))
+        (eq? (.get (diagnostic-at failure '(resource aws_security_group web ingress 0 from_port)) source)
              (.get AWS source)))
       (.def (WrongAWSCC @ Configuration)
         resource: =>.+ (.o awscc_ec2_security_group: =>.+
@@ -140,8 +137,7 @@
         (reject-at (.o resource: (.o aws_not_a_real_type: (.o x: (.o))))
                    '(resource aws_not_a_real_type)))
       (assert 'unknown-type-reason
-        (eq? (yuanxu-json-schema-validation-diagnostic-reason
-               (diagnostic-at missing '(resource aws_not_a_real_type))) 'provider-type-not-found))
+        (eq? (.get (diagnostic-at missing '(resource aws_not_a_real_type)) reason) 'provider-type-not-found))
       (reject-at (.o resource: (.o absent_resource: (.o x: (.o)))) '(resource absent_resource))
       (assert 'unselected-binding-never-demanded
         (not (.ref/cached (.get Infrastructure modules) 'unused)))

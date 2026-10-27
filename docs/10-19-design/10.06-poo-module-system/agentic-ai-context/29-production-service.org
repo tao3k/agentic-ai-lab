@@ -74,6 +74,45 @@ bounded Actor owner from 28. Cross-node authority and liveness require their
 own executable QNT/SysML correspondence and native qualification. Rust remains
 a downstream C ABI consumer after this boundary.
 
+* Executed queue baseline and repair boundary
+
+The complete product queue on =5ef56938= / Core =d27b63d= completed all
+315 discovered files naturally: 292 passed and 23 failed in 3594.62 seconds.
+No file was removed to obtain that baseline. Raw output and the SHA-bound
+per-file failure receipt are local execution artifacts, not repository logs.
+
+The failures exposed distinct engineering boundaries:
+
+- Schema value admission must run before contextual classification/discovery.
+  Calling =.classify= alone cannot establish native value validity.
+- Native refusal evidence retains its original TypeError and POO diagnostic
+  objects. OpenTofu extends their original paths and SourceRefs; it must not
+  cast them back into private Schema records or accept malformed envelopes.
+- POO map projections have no ordering contract. Exact keys, counts and values
+  remain required; arbitrary iteration order is not a semantic assertion.
+- The official Harness imports an AOT C qualification leaf and executes an
+  exported TestSuite. The C probe must not fabricate Harness success markers.
+  Its original C/header sources are native =std/make extra-inputs= and remain
+  in retained compilation, test publication and byte-currentness guards.
+  A Scheme wrapper cache cannot authenticate a changed C implementation.
+- Every declared retained library and its source-relative imports must exist
+  in the Bazel sandbox. Projecting files does not create another build graph.
+- Core owns its POO pin in =core/gerbil.pkg=. The same existing dependency
+  checker must compare that pin with Bazel, alongside product/development pins.
+  The baseline checker missed a real =e281ad2= versus =29c58aa= divergence.
+
+The earlier 99-Case Context run and whole-queue replay both passed at the
+existing 2 GiB / 150-second envelope. The first native run separated 47.387
+seconds of loading from 57.024 seconds of Cases; replay separated 5.577 from
+57.489 seconds. These results do not qualify a repaired cohort, complete
+product CI, standalone active-service installation or cross-node execution.
+The repaired full queue and exact published-head CI remain separate gates.
+
+The parallel POO package update removes its embedded 180-second cutoff.
+The product retains that same deadline on the existing Bazel project process
+guard. Consuming the official native build entry cannot silently relax the
+cold-build acceptance budget or substitute for a measured improvement.
+
 * Native implementation
 
 [[file:../../../../modules/ai-agentic-context/runtime-service.ss][The POO-native service]] reuses the existing Context owner and independent

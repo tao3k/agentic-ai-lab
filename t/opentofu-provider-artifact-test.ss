@@ -10,7 +10,6 @@
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :agentic-ai-lab/modules/services/opentofu/objects agentic-ai-lab-opentofu-provider-from-directory)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
-        (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
         :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-provider-artifact-test)
 
@@ -38,7 +37,7 @@
       (assert 'wrong-port-rejected (not (accepted? wrong)))
       (assert 'wrong-port-path
         (find (lambda (d)
-                (equal? (cdr (assoc 'path (yuanxu-json-schema-validation-diagnostic-metadata d)))
+                (equal? (.get d path)
                         '(ingress 0 from_port)))
               (.get wrong diagnostics)))
       (assert 'spelling-rejected

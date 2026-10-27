@@ -12,7 +12,6 @@
         (only-in :yuanxu/modules/json-schema/json-schema-validate yuanxu-json-schema-node-validate yuanxu-json-schema-object-contract-validation-valid?)
         (only-in :yuanxu/modules/json-schema/json-schema-ir yuanxu-json-schema-normalization-schema)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
-        (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
         (only-in :yuanxu/modules/json-schema/json-schema-ir
                  yuanxu-json-schema-normalization-schema)
         :yuanxu/object-types/contracts
@@ -120,9 +119,7 @@
               '((outputs . (((name . "a")) ((name . "a")))))))))
         (assert 'tuple-vector (valid? tuple-schema '#("x" 2)))
         (assert 'tuple-index-path
-          (equal? (cdr (assoc 'path
-            (yuanxu-json-schema-validation-diagnostic-metadata
-              (car (yuanxu-json-schema-node-validate (node tuple-schema) '("x" "bad") '(pair))))))
+          (equal? (.get (car (yuanxu-json-schema-node-validate (node tuple-schema) '("x" "bad") '(pair))) path)
             '(pair 1)))
         (assert 'tuple-reference
           (valid? '((type . "array") (items . ((($ref . "#/$defs/Name")) ((type . "number"))))
@@ -131,8 +128,7 @@
         (assert 'computed-optional-retained (accepted? AwsContract '((id . "sg-123"))))
         (def wrong (.call AwsccContract .admit '((assume_role . ((duration . 900)))) #f))
         (assert 'native-error-path
-          (equal? (cdr (assoc 'path (yuanxu-json-schema-validation-diagnostic-metadata
-                                     (car (.get wrong diagnostics))))) '(assume_role duration)))
+          (equal? (.get (car (.get wrong diagnostics)) path) '(assume_role duration)))
         (assert 'normalize-malformed-safe
           (pair? (.get (agentic-ai-lab-opentofu-normalize-block awscc
                           '((assume_role . ((duration . 900))))) diagnostics)))

@@ -249,7 +249,7 @@
 
     (yuanxu-test-case "source-owned obligation code survives without a central code registry"
       (let* ((contract (yuanxu-predicate-contract
-                        'domain-specific symbol? (lambda (_c _x) '(domain-policy-denied))))
+                        'domain-specific symbol? (lambda (_c _x) (list (.o code: 'domain-policy-denied)))))
              (event (yuanxu-observe-contract-admission (framework-context) contract 'value))
              (explanation (yuanxu-observation-explain event))
              (failure (car (.ref explanation 'failures))))
@@ -307,7 +307,7 @@
          (yuanxu-observe-contract-admission (.o) SemanticModuleContract (framework-module)) TypeError?)))
 
     (yuanxu-test-case "cyclic supplied evidence is incomplete inspection, not a Module cycle verdict"
-      (let* ((contract (yuanxu-predicate-contract 'denied symbol? (lambda (_c _x) '(denied))))
+      (let* ((contract (yuanxu-predicate-contract 'denied symbol? (lambda (_c _x) (list (.o code: 'denied)))))
              (receipt (yuanxu-contract-admit contract 'value #f))
              (cyclic (.o (:: self receipt) responsibility: 'cycle
                          (responsibility-evidence (list self))))

@@ -5,7 +5,8 @@
         (only-in :std/encoding/json write-json)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
-        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.) (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata) :yuanxu/object-types/contracts :clan/poo/object)
+        (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
+        :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-build-selection-test)
 (def (assert label value)
   (unless value (error "assertion failed" label))
@@ -79,7 +80,7 @@
         (assert 'invalid-port-rejected (not (accepted? bad)))
         (assert 'full-error-path
           (find (lambda (diagnostic)
-                  (equal? (cdr (assoc 'path (yuanxu-json-schema-validation-diagnostic-metadata diagnostic)))
+                  (equal? (.get diagnostic path)
                           '(resource aws_security_group web ingress 0 from_port)))
                 (.get bad diagnostics)))
         (.def (NeedsNull @ Configuration)

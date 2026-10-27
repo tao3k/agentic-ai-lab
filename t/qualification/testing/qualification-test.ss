@@ -3,8 +3,7 @@
 ;;; Receipt controls use explicit synthetic output; real gates run separately.
 (import :std/test :clan/poo/object
         (only-in :std/error Error? Error-message Error-irritants)
-        (only-in :yuanxu/observability/testing-script TestingScript.)
-        (only-in "./package-result.ss" admit-package-batches))
+        (only-in :yuanxu/observability/testing-script TestingScript.))
 (export qualification-test)
 (def files '("specialized-fixture-test.ss"))
 (def (output count)
@@ -54,24 +53,24 @@
         (lambda (text) (check-exception (.call configured .admit-result (receipt text)) error?))
         '("MODULE-OK another.ss\nHARNESS-OK custom 7 suites\nOK\n"
           "MODULE-OK specialized-fixture-test.ss\nHARNESS-OK custom 6 suites\nOK\n")))
-    (test-case "package batching retains discovery, batch completion and every observed module"
+    ;; The official Harness owns module discovery/completion. Preserve the
+    ;; multi-module and missing-marker counterexamples without a deleted
+    ;; private batching receipt protocol.
+    (test-case "official Harness requires every module and exact invocation identity"
+      (def selected '("one-test.ss" "two-test.ss"))
+      (def configured
+        (.cc Suite 'case-count #f 'source (.o spec: selected admit-current: void)))
       (def text
-        (string-append
-          "[asp-testing] phase=discovery-complete directory=t fileCount=1\n"
-          "[asp-testing] phase=batch-start fileCount=1 firstFile=one-test.ss\n"
-          "MODULE-OK one-test.ss\nHARNESS-OK (\"one-test.ss\")\n"
-          "[asp-testing] phase=all-batches-complete fileCount=1\nOK\n"))
+        "MODULE-OK one-test.ss\nMODULE-OK two-test.ss\nHARNESS-OK (\"one-test.ss\" \"two-test.ss\")\nOK\n")
       (def result (receipt text))
-      (check-equal? (eq? (admit-package-batches result) result) #t)
+      (check-equal? (eq? (.call configured .admit-result result) result) #t)
       (for-each
         (lambda (missing)
           (def reduced
             (string-join (filter (lambda (line) (not (string-prefix? missing line)))
                                 (string-split text #\newline)) "\n"))
-          (check-exception (admit-package-batches (receipt reduced)) error?))
-        '("[asp-testing] phase=discovery-complete"
-          "[asp-testing] phase=all-batches-complete"
-          "MODULE-OK" "HARNESS-OK")))
+          (check-exception (.call configured .admit-result (receipt reduced)) error?))
+        '("MODULE-OK one-test.ss" "MODULE-OK two-test.ss" "HARNESS-OK" "OK")))
     (test-case "Ops execution and a failed specialized obligation preserve final source checking"
       (def checks 0)
       (def configured

@@ -4,9 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Project native Gerbil dependency pins into Bazel declarations and locks.
 
-``gerbil.pkg`` and ``dev/gerbil.pkg`` own production and optional development
-pins respectively. This tool does not resolve dependencies; gxpkg and Bazel retain
-that responsibility.  It only updates and checks the equivalent Bazel source
+The product, optional development and checked-in Core ``gerbil.pkg`` files
+own their respective dependency pins. This tool does not resolve dependencies;
+gxpkg and Bazel retain that responsibility.  It only updates and checks the equivalent Bazel source
 projection required by isolated builds.
 """
 
@@ -58,7 +58,10 @@ def parse_package_pins(text: str) -> dict[str, tuple[str, str]]:
 
 def package_pin_owners(root: Path) -> dict[str, tuple[Path, tuple[str, str]]]:
     owners: dict[str, tuple[Path, tuple[str, str]]] = {}
-    for relative in ("gerbil.pkg", "dev/gerbil.pkg"):
+    # Core is a tracked first-party subtree, not an external Bazel package.
+    # Its POO dependency still has one native authority and must match the
+    # Bazel source projection; checking only product-direct pins misses drift.
+    for relative in ("gerbil.pkg", "dev/gerbil.pkg", "core/gerbil.pkg"):
         path = root / relative
         if not path.exists():
             continue

@@ -46,6 +46,27 @@ class GerbilDependencyPinTest(unittest.TestCase):
         self.assertNotIn("asp-gerbil-scheme", pins)
         owners = module.package_pin_owners(ROOT)
         self.assertEqual(owners["asp-gerbil-scheme"][0], ROOT / "dev" / "gerbil.pkg")
+        self.assertEqual(owners["gerbil-poo"][0], ROOT / "core" / "gerbil.pkg")
+
+    def test_core_pin_cannot_drift_from_bazel_while_product_pins_match(self) -> None:
+        module = pin_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in ("gerbil.pkg", "dev/gerbil.pkg", "core/gerbil.pkg",
+                             "MODULE.bazel", "MODULE.bazel.lock",
+                             "gerbil-dependencies.MODULE.bazel"):
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes((ROOT / relative).read_bytes())
+            manifest = root / "core" / "gerbil.pkg"
+            pins = module.parse_package_pins(manifest.read_text())
+            repository, revision = pins["gerbil-poo"]
+            manifest.write_text(manifest.read_text().replace(revision, "0" * 40))
+            errors = module.collect_errors(root)
+            self.assertTrue(any("gerbil_poo_sources.revision" in error for error in errors),
+                            errors)
+            # The checker must never silently rewrite the owning manifest.
+            self.assertIn(repository + "@" + "0" * 40, manifest.read_text())
 
     def test_lock_sync_updates_code_identity_without_copying_host_toolchain(self) -> None:
         from unittest.mock import patch

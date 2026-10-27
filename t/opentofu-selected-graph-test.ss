@@ -16,7 +16,6 @@
         (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
-        (only-in :yuanxu/modules/json-schema/json-schema-validate yuanxu-json-schema-validation-diagnostic-metadata)
         (only-in :yuanxu/module-system/interface yuanxu-load-modules)
         (only-in :yuanxu/module-system/source/admission module-source-read current-module-source-observer)
         (only-in :yuanxu/module-system/source/reader module-publication-reader)
@@ -360,7 +359,7 @@
             (not (yuanxu-validation-evidence-accepted? rejected)))
           (assert 'complete-error-path-preserved
             (find (lambda (diagnostic)
-                    (equal? (cdr (assoc 'path (yuanxu-json-schema-validation-diagnostic-metadata diagnostic)))
+                    (equal? (.get diagnostic path)
                             '(resource aws_security_group web name)))
                   (.get rejected diagnostics)))
           (when flake-root

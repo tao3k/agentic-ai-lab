@@ -14,16 +14,8 @@
         (only-in :clan/poo/mop element?)
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref
                  yuanxu-contract-key->symbol yuanxu-contract-json-array->list)
-        (only-in :yuanxu/modules/json-schema/json-schema-diagnostics
-                 make-yuanxu-json-schema-validation-diagnostic
-                 yuanxu-json-schema-validation-diagnostic-severity
-                 yuanxu-json-schema-validation-diagnostic-reason
-                 yuanxu-json-schema-validation-diagnostic-message
-                 yuanxu-json-schema-validation-diagnostic-value
-                 yuanxu-json-schema-validation-diagnostic-contract
-                 yuanxu-json-schema-validation-diagnostic-metadata)
         (only-in :yuanxu/modules/json-schema/json-schema-validation-core
-                 yuanxu-json-schema-candidate-rows yuanxu-json-schema-path->symbol
+                 yuanxu-json-schema-candidate-rows
                  yuanxu-json-schema-candidate-slot))
 (export agentic-ai-lab-opentofu-block-contract agentic-ai-lab-opentofu-configuration-contract
         agentic-ai-lab-opentofu-configuration-from-types
@@ -64,15 +56,15 @@
            (lambda (candidate context) (.get (walk candidate context #f 0) diagnostics)))
          '.prove
          (lambda (candidate (lifetime 300))
-           (let (shape (.call shape-contract .classify candidate #f))
-             (if (yuanxu-classification-evidence-accepted? shape)
-               (walk candidate #f #t lifetime)
+           (let (shape (.call shape-contract .admit candidate #f))
+             (if (yuanxu-validation-evidence-accepted? shape)
+               (walk (.get shape candidate) #f #t lifetime)
                (.o receipts: '() diagnostics: (.get shape diagnostics)))))
          '.normalize
          (lambda (candidate)
-           (let (evidence (.call shape-contract .classify candidate #f))
-             (if (yuanxu-classification-evidence-accepted? evidence)
-               (agentic-ai-lab-opentofu-block-normalization block candidate
+           (let (evidence (.call shape-contract .admit candidate #f))
+             (if (yuanxu-validation-evidence-accepted? evidence)
+               (agentic-ai-lab-opentofu-block-normalization block (.get evidence candidate)
                  (lambda (path values)
                    (let (binding (authority-for path))
                      (if (and binding (.has? (car binding) .normalize-values))
@@ -243,26 +235,18 @@
   source: (.get provider source)
   types: (.get provider types))
 
-;; Diagnostic composition preserves the child's exact path/constraint and adds
-;; its original package SourceRef. It does not re-evaluate the candidate.
-(def (configuration-diagnostic reason message path value source)
-  (make-yuanxu-json-schema-validation-diagnostic
-    'error reason message (yuanxu-json-schema-path->symbol path) value '()
-    `((owner . opentofu/configuration) (path . ,path) (source . ,source))))
+;; Diagnostic composition stays POO-native. It adds the original package
+;; SourceRef and full path without recasting or revalidating the child.
+(def (configuration-diagnostic reason-value message-value path-value candidate-value source-value)
+  (.o kind: 'opentofu/configuration-rejected reason: reason-value
+      message: message-value path: path-value value: candidate-value source: source-value))
 
 (def (configuration-child-diagnostic diagnostic prefix contract)
-  (let* ((metadata (yuanxu-json-schema-validation-diagnostic-metadata diagnostic))
-         (path (append prefix (yuanxu-contract-object-ref metadata 'path '()))))
-    (make-yuanxu-json-schema-validation-diagnostic
-      (yuanxu-json-schema-validation-diagnostic-severity diagnostic)
-      (yuanxu-json-schema-validation-diagnostic-reason diagnostic)
-      (yuanxu-json-schema-validation-diagnostic-message diagnostic)
-      (yuanxu-json-schema-path->symbol path)
-      (yuanxu-json-schema-validation-diagnostic-value diagnostic)
-      (yuanxu-json-schema-validation-diagnostic-contract diagnostic)
-      (append `((path . ,path) (source . ,(.get contract source))
-                (contract-identity . ,(.get contract identity)))
-              (filter (lambda (row) (not (memq (car row) '(path source contract-identity)))) metadata)))))
+  ;; Native Schema issues already carry their original backend diagnostic as
+  ;; an opaque reference. Refinement retains that issue and its full lineage.
+  (.cc diagnostic 'path (append prefix (.get diagnostic path))
+      'source (.get contract source)
+      'contract-identity (.get contract identity)))
 
 ;; The local scope name owns its type prefix (aws_*, awscc_*, null_*).
 ;; Never probe every bound module to discover an owner. Provider alias and
@@ -301,10 +285,9 @@
         demands: requested-inputs)))
 
 (def (configuration-classify bindings candidate context)
-  (let (envelope (.call ConfigurationEnvelopeContract .classify candidate context))
-    (if (not (yuanxu-classification-evidence-accepted? envelope))
-      (.cc envelope 'type-identity 'opentofu/configuration 'children '())
-      (let ((failures '()) (children '()))
+  ;; The enclosing Contract has already validated the envelope exactly once.
+  ;; Contextual discovery only demands Providers named by this final value.
+  (let ((failures '()) (children '()))
         (def (reject reason message path value source)
           (set! failures (cons (configuration-diagnostic reason message path value source) failures)))
         (def (resolve kind name)
@@ -351,7 +334,7 @@
         (for-each visit '(provider resource data))
         (.cc (yuanxu-classification-evidence 'opentofu/configuration candidate
                (null? failures) (reverse failures) context)
-             'children (reverse children))))))
+             'children (reverse children))))
 
 ;; A module-level native Contract; each admission discovers only the current
 ;; candidate's names. No SelectedTypes list or whole-catalog compilation.
@@ -361,6 +344,7 @@
   types:
   (.o configuration:
       (.cc YuanxuContract. 'identity 'opentofu/configuration
+           'value-contract (.get ConfigurationEnvelopeContract value-contract)
            '.classify (cut configuration-classify modules <> <>))))
 
 ;; Enumerate only collection names. Creating/finding a leaf object never reads

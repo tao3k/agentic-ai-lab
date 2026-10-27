@@ -23,8 +23,12 @@
           (def selected-config (.get source-scope config))
           (for-each
             (lambda (invalid)
-              (check-exception
-                (.call (.get source-scope types config) .admit invalid #f) TypeError?))
+              ;; Native value refusal preserves its original TypeError and
+              ;; diagnostics; accepting a malformed configuration is forbidden.
+              (def refused (.call (.get source-scope types config) .admit invalid #f))
+              (check-equal? (.get refused accepted?) #f)
+              (check-equal? (pair? (.get refused diagnostics)) #t)
+              (check-equal? (TypeError? (.get refused cause)) #t))
             (list
               (.cc selected-config 'services (.o opentofu: (.o Null: (.o message: 123))))
               (.cc selected-config 'services

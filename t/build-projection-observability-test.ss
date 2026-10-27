@@ -96,11 +96,18 @@
     (yuanxu-test-case "Just test launch is fail-closed before Profile loading"
       (let ((environment (call-with-input-file "dev/just/environment.just" read-all-as-string))
             (testing (call-with-input-file "dev/just/testing.just" read-all-as-string))
-            (driver (call-with-input-file "t/qualification/testing/specialized.ss" read-all-as-string)))
-        (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_MAX_HEAP\", \"1G\")") #t)
+            (driver (call-with-input-file "dev/tests.ss" read-all-as-string))
+            (adapter (call-with-input-file
+                       "dev/modules/testing/native-test-observation.ss" read-all-as-string)))
+        (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_MAX_HEAP\", \"2G\")") #t)
         (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_DEBUG\", \"q\")") #t)
-        (check-equal? (contains? testing "gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss package") #t)
-        (check-equal? (contains? driver "(list \"gerbil\" vm \"env\" \"gxi\" vm \"./unit-tests.ss\")") #t)
+        ;; The pre-import VM fence precedes the maintained CLI. The observer
+        ;; preserves the official Gerbil dispatcher, not a private Harness.
+        (check-equal? (contains? testing "gxi {{ gerbil_test_runtime_options }} dev/tests.ss run") #t)
+        (check-equal? (contains? driver "module-test-execution") #t)
+        (check-equal? (contains? adapter "(equal? (caddr inherited) \"test\")") #t)
+        (check-equal? (contains? driver "unit-tests.ss") #f)
+        (check-equal? (contains? driver "GERBIL_BUILD_TEST_SPEC") #f)
         (check-equal? (contains? testing ".devenv/devenv-profile-exec") #f)
         (check-equal? (contains? testing "rm -rf") #f)))
 

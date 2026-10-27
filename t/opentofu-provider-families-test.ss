@@ -5,7 +5,6 @@
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
         (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope.)
-        (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
         :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-provider-families-test)
 
@@ -16,7 +15,7 @@
 (def (different? a b c) (and (not (eq? a b)) (not (eq? a c)) (not (eq? b c))))
 (def (path? result expected)
   (find (lambda (d)
-          (equal? (cdr (assoc 'path (yuanxu-json-schema-validation-diagnostic-metadata d))) expected))
+          (equal? (.get d path) expected))
         (.get result diagnostics)))
 (def (verify-publication module contract address version directory)
   (assert 'contract-provider (equal? (.get contract provider) address))

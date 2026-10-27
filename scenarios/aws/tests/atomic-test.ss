@@ -43,10 +43,18 @@
       (check-equal? (.get evidence candidate resource instance_type) "t3.medium")
       (check-equal? (.get parent-cached instance_type) "t3.small")
       (.def (Stale @ Child) resource: parent-cached)
-      (check-exception (.call Contract .admit Stale #f) TypeError?)
-      ;; Equal scalar fields alone do not authorize an independently cached object.
+      ;; Value admission preserves the original native TypeError in refusal
+      ;; evidence. It must reject BOTH stale and independently copied values;
+      ;; source/publication exceptions remain outside this value boundary.
       (.def (Copied @ Child) resource: (.o instance_type: "t3.medium"))
-      (check-exception (.call Contract .admit Copied #f) TypeError?))
+      (for-each
+        (lambda (candidate)
+          (def refused (.call Contract .admit candidate #f))
+          (check-equal? (yuanxu-validation-evidence-accepted? refused) #f)
+          (check-equal? (pair? (.get refused diagnostics)) #t)
+          (check-equal? (TypeError? (.get refused cause)) #t)
+          (check-equal? (eq? (.get refused admission-contract) Contract) #t))
+        (list Stale Copied)))
     (yuanxu-test-case "interface declaration inspection leaves payloads cold"
       (def signature (.get AWSInterfaceContract value-contract))
       (check-equal? (diagnose signature

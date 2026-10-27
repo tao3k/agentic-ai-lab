@@ -39,10 +39,11 @@
       (let* ((prototype (.ref NamedContract 'proto))
              (candidate (.o (:: @ prototype) name: 'flow))
              (refined (.cc NamedContract 'proto prototype '.obligations
-                           (lambda (_candidate _context) '(cross-field-denied))))
+                           (lambda (_candidate _context) (list (.o code: 'cross-field-denied)))))
              (evidence (yuanxu-contract-admit refined candidate 'context)))
         (check-equal? (.ref evidence 'accepted?) #f)
-        (check-equal? (.ref evidence 'obligation-evidence) '(cross-field-denied))
+        (check-equal? (map (cut .ref <> 'code) (.ref evidence 'obligation-evidence))
+                      '(cross-field-denied))
         (check-exception (validate refined candidate) TypeError?)))
     (yuanxu-test-case "object classifier must return bound complete evidence"
       (let* ((prototype (.ref NamedContract 'proto))
@@ -93,7 +94,7 @@
               (.cc base '.classify
                    (lambda (candidate context)
                      (yuanxu-classification-evidence
-                      'symbol candidate #f '(refinement-rejected) context)))))
+                      'symbol candidate #f (list (.o code: 'refinement-rejected)) context)))))
         (check-equal? (element? base 'flow) #t)
         (check-equal? (element? refined 'flow) #f)
         (check-exception (validate refined 'flow) TypeError?)
@@ -109,7 +110,7 @@
     (yuanxu-test-case "obligation failure and forged success remain rejected"
       (let* ((contract
               (yuanxu-predicate-contract
-               'symbol symbol? (lambda (_candidate _context) '(obligation-denied))))
+               'symbol symbol? (lambda (_candidate _context) (list (.o code: 'obligation-denied)))))
              (evidence (yuanxu-contract-admit contract 'flow 'context)))
         (check-equal? (yuanxu-validation-evidence? evidence) #t)
         (check-equal? (.ref evidence 'accepted?) #f)

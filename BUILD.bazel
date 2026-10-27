@@ -37,6 +37,13 @@ filegroup(
     ] + glob([
         "*.ss",
         "bindings/nono-c/**/*.h",
+        "bindings/runtime-c/**/*.h",
+        "bindings/runtime-c/**/*.c",
+        # Retained native Suite libraries and their source-relative imports
+        # must exist inside the sandbox just as they do in a checkout. This
+        # projects inputs only; build.ss still owns which targets compile.
+        "t/**/*.ss",
+        "t/qualification/context-temporal/*.c",
         "modules/**/*.ss",
         "modules/**/*.inc",
         "user-interface/**/*.ss",
@@ -77,6 +84,9 @@ gerbil_project_compile(
     name = "gerbil_poo_package",
     srcs = ["@gerbil_poo_sources//:sources"],
     build_script = "@gerbil_poo_sources//:build_script",
+    # Upstream removed its embedded 180-second shell cutoff. Preserve that
+    # acceptance budget in the existing project guard, independently of pins.
+    process_guard_timeout_seconds = 180,
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_poo_sources//:source_resolution_receipt"],
 )

@@ -84,10 +84,13 @@
                 (assert 'default-source-unconfigured (not (.get scope config source)))
                 (assert 'native-schema-function
                   (equal? (.call (.get scope schema) type "string") '((type . "string"))))
-                (check-exception
-                  (.call (.get scope types config) .admit
-                    (.cc (.get scope config) 'source "path:/not-a-source") #f)
-                  TypeError?)
+                (let (refused
+                       (.call (.get scope types config) .admit
+                         (.cc (.get scope config) 'source "path:/not-a-source") #f))
+                  (assert 'invalid-source-refused
+                    (not (yuanxu-validation-evidence-accepted? refused)))
+                  (assert 'original-native-type-error (TypeError? (.get refused cause)))
+                  (assert 'refusal-diagnostics-retained (pair? (.get refused diagnostics))))
                 (assert 'builder-alone-does-not-prepare (null? (.get view build-graph external-packages)))
                 (assert 'scope-and-selection-start-no-nix (zero? starts))
                 (let (prepared (.call view prepare-publication 'services/opentofu))

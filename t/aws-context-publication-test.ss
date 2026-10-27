@@ -50,10 +50,12 @@
         (check-equal? (eq? (.call tests .select '(aws)) tests) #t)
         (def guard (.get tests admit-current))
         (def source (.get tests source))
-        ;; The original default policy stays off. Only the workspace changes,
-        ;; so the surviving parent can clean up a terminated worker as well.
+        ;; Make both observation controls explicit: the outer Harness may
+        ;; already observe this Case. Retain inherited resource limits and
+        ;; source identity while the parent owns the worker's workspace.
         (.def (Default @ tests)
-          execution.environment.TMPDIR: workspace)
+          execution.environment.TMPDIR: workspace
+          execution.profile.emit?: #f)
         (check-equal? (.get Default execution profile emit?) #f)
         (check-equal? (eq? (.get Default source) source) #t)
         (check-equal? (eq? (.get Default execution source) source) #t)
