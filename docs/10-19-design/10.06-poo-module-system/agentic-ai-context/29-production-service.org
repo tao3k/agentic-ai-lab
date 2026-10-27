@@ -39,6 +39,41 @@ alone qualifies a standalone artifact with active Context service installation,
 Rust integration or distributed execution. Current-source complete-queue and
 remote CI admission remain required.
 
+* Integration closure order, 2026-10-27
+
+The next delivery boundary is the existing product PR, with one coherent Core,
+Parser, Orgize and ASCENT source cohort. Parser owns its declaration and graph
+facades. Product GQL and Orgize consume those owners directly; deleted
+=src/modules/parser= paths must not be recreated as compatibility aliases.
+Recovery workers acquire the actual caller-owned service source root through
+the existing Scheme parameter. A compiler sandbox path is not that capability.
+
+| Gate | Required evidence |
+|------+-------------------|
+| Preparation | Official Gerbil builds from init-owned declarations; separate preparation and Case timing |
+| Admission | Original source-change, approval-change and artifact-tamper refusals; restored sources work again |
+| Native integration | GQL/Org Elements and independent-process Nix recovery execute actual Cases |
+| Complete queues | All discovered Core and product files execute; retain every failure and natural-exit result |
+| Context | The complete 99-Case queue and whole-queue replay meet the existing 2 GiB / 150-second gate |
+| Remote delivery | CI passes for the published PR head; local or model results cannot substitute |
+
+Core =66f945d697329d955538e12b57689cd96a543125= passed the native
+preparation regression, including the semantically inert approval-edit refusal.
+Its separate 10,000-declaration gate still failed with heap overflow: the last
+completed 100-entry checkpoint was 2,000 declarations, with 1,837,118,560 bytes
+live at the last GC. The approval-retention fix does not close that gate.
+The raw failure and 20 scalar measurements remain local execution artifacts.
+This declaration-capacity failure is independent of steady Context event
+throughput; neither metric substitutes for the other.
+
+After these gates, qualify the existing C ABI with an installed active Context
+service in a standalone native artifact. Then combine saturation, revocation,
+result publication and owner restart in the same native scenario, preserving
+unaffected consumers and original proof/support/journal evidence. Reuse the
+bounded Actor owner from 28. Cross-node authority and liveness require their
+own executable QNT/SysML correspondence and native qualification. Rust remains
+a downstream C ABI consumer after this boundary.
+
 * Native implementation
 
 [[file:../../../../modules/ai-agentic-context/runtime-service.ss][The POO-native service]] reuses the existing Context owner and independent

@@ -8,7 +8,7 @@
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :clan/poo/mop validate)
         (only-in :std/list/list every)
-        (only-in :gerbil-parser/src/modules/parser/graph-syntax
+        (only-in :gerbil-parser/graph-syntax-support
                  GraphSyntaxNode.
                  GraphSyntaxStep.
                  GraphSyntaxPath.

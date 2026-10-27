@@ -7,7 +7,7 @@
 ;;; Gerbil Parser owns the syntax graph and source renderer; this module only
 ;;; adapts a governed Agentic AI Lab Query to that language boundary.
 (import (only-in :clan/poo/object .ref)
-        (only-in :gerbil-parser/src/modules/parser/graph-syntax
+        (only-in :gerbil-parser/graph-syntax-support
                  graph-syntax-program->source)
         (only-in "objects.ss" agentic-ai-lab-gql-query-program?))
 

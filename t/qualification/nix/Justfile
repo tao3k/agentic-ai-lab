@@ -3,8 +3,6 @@
 # Product adapter roots; dependency traversal belongs to Core, not shell lists.
 set shell := ["bash", "-euo", "pipefail", "-c"]
 root := justfile_directory() + "/../../.."
-# One runtime source binding reaches the harness and every fresh worker.
-export YUANXU_SERVICE_PUBLICATION_SOURCE_ROOT := root + "/core/scenarios/gitea-postgresql"
 
 build:
     cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 240s gxi -:max-heap=2G,debug=q t/qualification/nix/build.ss

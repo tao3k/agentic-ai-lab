@@ -38,7 +38,7 @@
      :clan/poo/mop
      :asp-gerbil-scheme/testing-api :yuanxu/observability/testing-case
      :agentic-ai-lab/testing-api
-     :gerbil-parser/src/modules/parser/graph-syntax
+     :gerbil-parser/graph-syntax-support
      :agentic-ai-lab/modules/query/interface
      :agentic-ai-lab/modules/query/orgize-source
      :agentic-ai-lab/modules/evidence-assessment/interface))

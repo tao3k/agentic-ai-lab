@@ -2,6 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Real local Nix profile effects; no default/user profile is touched.
 (import :std/test :clan/poo/object
+        (only-in :std/source this-source-file)
         (only-in :std/error Error?)
         (only-in :std/encoding/json write-json read-json)
         (only-in :std/list/walist waref)
@@ -11,9 +12,21 @@
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :yuanxu/module-system/source/admission module-source-admit-current! module-source-read)
         (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
-        (only-in "../core/t/qualification/service-publication/fixtures.ss" ServicesFixture)
+        (only-in "../core/t/qualification/service-publication/fixtures.ss"
+                 ServicesFixture current-service-source-root)
         (only-in "../core/t/qualification/testing/directory.ss" write-source))
 (export nix-profile-effect-boundary-test)
+
+;; The integration owner binds real domain sources at acquisition. A compiled
+;; Core Fixture cannot use its build sandbox as the product's runtime source.
+(def (bind-product-service-sources prepare)
+  (lambda (workspace)
+    (parameterize ((current-service-source-root
+                     (path-expand "../core/scenarios/gitea-postgresql"
+                       (path-directory (this-source-file)))))
+      (prepare workspace))))
+(.def (ProductServicesFixture @ ServicesFixture)
+  (.prepare => bind-product-service-sources))
 
 ;; Only the admitted, selected domain plan is packaged. Not all module fields.
 (def (plan-release root label plan)
@@ -40,7 +53,7 @@
 (def nix-profile-effect-boundary-test
   (test-suite "Real Nix profile persistence is not conditional deployment"
     (yuanxu-test-fixture "fresh process recovery and stale saved effects use immutable releases"
-      (fixture ServicesFixture)
+      (fixture ProductServicesFixture)
       (with-slots (root selection publication) fixture
         (def parent (.get publication value))
         (def cached (.get parent plan))
@@ -83,7 +96,7 @@
         (check-equal? (.get cached postgresql port) 5432)
         (check-equal? (.get next plan postgresql port) 5433)))
     (yuanxu-test-fixture "real conflicting domain requirements still prevent admission"
-      (fixture (.cc ServicesFixture postgres-ports: '(5433) gitea-ports: '(5440)))
+      (fixture (.cc ProductServicesFixture postgres-ports: '(5433) gitea-ports: '(5440)))
       (with-slots (publication) fixture
         (def parent (.get publication value))
         (.def (Release @ parent)
