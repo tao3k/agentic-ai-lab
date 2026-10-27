@@ -224,7 +224,9 @@ test-context-owner-cas:
 # Original Context/Temporal suites through installed Scheme and upstream gxtest.
 [group('build')]
 compile-context-temporal-tests:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}" --compile
+    # Core still owns the 120-second preparation gate. The external guard
+    # additionally covers loading the source-owned CLI before preparation.
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}" --compile
 
 [group('test')]
 test-context-temporal:

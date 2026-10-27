@@ -47,6 +47,7 @@ test-native-harness-progress:
     fi
     grep -Eq '^FAIL: five seconds without test progress$' "$results/idle.log"
     echo 'NATIVE-HARNESS-PROGRESS-OK positive=passed cached-import-idle=refused'
+    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 90s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/native-progress-admission.ss "{{ gerbil_test_runtime_options }}"
 
 # Keep the root package's native entry independently callable during repairs.
 [group('test')]
@@ -59,8 +60,8 @@ test-root: build-testing build-test-workers prepare-test-inputs build-library
     # Preparation above is shared, not repeated by every file. The external
     # loop owns isolation; each native Harness retains its own heap and budget.
     # The init-owned inventory contains 315 serial files. This outer queue
-    # envelope includes process/setup work; each _test-file still owns its
-    # unchanged 120-second fence and each dedicated Context gate keeps 150s.
+    # envelope includes process/setup work; each native worker retains its
+    # 120-second fence and each dedicated Context gate keeps 150s.
     python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- timeout --signal=TERM --kill-after=5s 7200s bash -euo pipefail -c '
       failed=0
       while IFS= read -r file; do
@@ -104,9 +105,26 @@ test-core-file path:
 [group('test')]
 test-file path observe="false": (_test-file path observe)
 
+# Diagnose the SDK's actual support dependencies without replacing its scheduler.
+[group('test')]
+test-build-inspection path:
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/tests.ss inspect "{{ path }}" "{{ gerbil_test_runtime_options }}"
+
+# Keep native loader diagnosis outside source preparation and the SDK Harness.
+[group('test')]
+test-native-object path mode="map":
+    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 30s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/native-object-load.ss "{{ path }}" "{{ mode }}"
+
+# Compare the unmodified SDK entry against the instrumented entry on one file.
+[group('test')]
+test-native-sdk-harness path:
+    {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} test "{{ path }}"
+
 [private]
 _test-file path observe="false":
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/tests.ss run "{{ path }}" "{{ gerbil_test_runtime_options }}" 120 "{{ observe }}"
+    # Preparation and the native worker each retain their own 120-second
+    # budget. This outer guard also covers CLI loading and natural shutdown.
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gxi {{ gerbil_test_runtime_options }} dev/tests.ss run "{{ path }}" "{{ gerbil_test_runtime_options }}" 120 "{{ observe }}"
 
 # Use the maintained Nix integration gate and its existing pre-import fences.
 [group('test')]

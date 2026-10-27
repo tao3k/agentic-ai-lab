@@ -69,6 +69,9 @@
                       (absolute "t/qualification/testing/native-harness.ss"))))
             (files (.get demand spec)))
        (.cc (.get demand execution)
+         ;; Emit actual preparation timing so a compiler refusal remains
+         ;; distinguishable from the independently bounded runtime worker.
+         'profile (.cc (.get demand execution profile) 'emit? #t)
          'runtime-options (list vm)
          'command
          (watched (append

@@ -162,8 +162,10 @@
 ;;       ;; => sandbox selection
 ;;       ```
 ;;     %
+;; Bound the nested sandbox matcher at the same native compiler boundary.
 (defsyntax (agentic-ai-lab-use-module-sandbox-profile-config stx)
-  (syntax-case stx (profile-arguments quoted .def)
+  (begin-annotation @no-optimize-syntax-case
+   (syntax-case stx (profile-arguments quoted .def)
     ((ctx module-key config-flags
           (profile-arguments config-arg ...)
           (quoted quoted-form ...)
@@ -200,7 +202,7 @@
               config-arg ...
               (agentic-ai-lab-sandbox-profile-prototypes
                (profile-name profile-name) ...)
-              '(quoted-form ...))))))))))
+              '(quoted-form ...)))))))))))
 
 ;; use-module
 ;;   : (-> Symbol UserModuleFlagEntry... [PooUserModuleSelection])
@@ -213,8 +215,12 @@
 ;;       ;; => sandbox module selection bundle
 ;;       ```
 ;;     %
+;; Repeated hygienic substitutions in the native syntax-case optimizer exceed
+;; the preparation idle budget for this matcher. Skip that optional rewrite
+;; for this transformer; its emitted runtime syntax stays fully optimized.
 (defsyntax (use-module stx)
-  (syntax-case stx (:config :rows :metadata profiles binding workflow funflow session tool-core ai-agentic-context :memory loop-engine nono-sandbox cubeSandbox docker-sandbox
+  (begin-annotation @no-optimize-syntax-case
+   (syntax-case stx (:config :rows :metadata profiles binding workflow funflow session tool-core ai-agentic-context :memory loop-engine nono-sandbox cubeSandbox docker-sandbox
                     session-case metadata objects rows row-groups
                     .def
                     :inherits :isolation :environment :command :nono)
@@ -423,7 +429,7 @@
      (error "use-module :config DSL has been removed; module configs use native POO .def forms"))
     ((_ module flag ...)
      (syntax
-      (agentic-ai-lab-modules-system-use-module/ai 'module (list 'flag ...))))))
+      (agentic-ai-lab-modules-system-use-module/ai 'module (list 'flag ...)))))))
 
 ;;; Module bundle lists are the direct analogue of Doom's module rows: each row
 ;;; stays a separate bundle so diagnostics can preserve declaration order.
