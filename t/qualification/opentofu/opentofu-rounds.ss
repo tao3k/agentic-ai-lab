@@ -7,14 +7,16 @@
         (only-in :yuanxu/profile-composition/selection-syntax use-module)
         (only-in :std/error Error? Error-message)
         (only-in :std/source this-source-file)
-        (only-in :std/misc/ports read-all-as-string read-all-as-lines read-all-as-u8vector)
+        (only-in :std/misc/ports read-all-as-string read-all-as-lines)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :std/string/misc string-trim)
-        (only-in :std/list/list delete-duplicates/hash)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
+        (only-in :yuanxu/module-system/source/admission module-source-admit-current!)
+        (only-in :yuanxu/module-system/source/build unique-build-inputs)
+        (only-in "../../../init.ss" agentic-ai-lab.init.exports)
         :std/encoding/json)
-(export main aggregate snapshots assert-control)
+(export main aggregate snapshots publication-observations assert-control)
 (def root (path-normalize (path-expand "../../.." (path-directory (this-source-file)))))
 (def (json-file path)
   (parameterize ((current-json-read-options (JSONReadOptions key-as-symbol: #t object-as-hash: #t)))
@@ -24,47 +26,30 @@
 (def (write-json-file path value)
   (call-with-output-file (list path: path truncate: #t)
     (lambda (port) (write-json port value) (newline port))))
-(def (regular-files directory accept? (recursive? #f))
-  (foldr append '()
-    (map (lambda (name)
-           (let* ((path (path-expand name directory)) (kind (file-info-type (file-info path #f))))
-             (cond ((and recursive? (eq? kind 'directory)) (regular-files path accept? #t))
-                   ((and (eq? kind 'regular) (accept? name)) (list path))
-                   (else '())))) (directory-files directory))))
-(def (scheme-file? name) (string-suffix? ".ss" name))
-(def (snapshots (flake #f))
-  (let* ((owners '("modules/nix" "modules/services/opentofu" "core/modules/json-schema"
-                   "core/module-system/source" "core/module-system/building" "core/object-types" "core/ops" "t/qualification/opentofu"))
-         (files (append
-           (foldr append '()
-             (map (lambda (dir)
-                    (regular-files (path-expand dir root)
-                      (lambda (name) (or (scheme-file? name) (string=? name "gerbil.pkg"))))) owners))
-           (regular-files (path-expand "modules/services/opentofu/nix" root) (cut string-suffix? ".nix" <>))
-           (regular-files (path-expand "t" root)
-             (lambda (name) (and (scheme-file? name) (string-prefix? "opentofu" name))))
-           (regular-files (path-expand "t/fixtures/opentofu" root)
-             (lambda (name) (or (string-suffix? ".nix" name) (string-suffix? ".nix.in" name))) #t)
-           (map (cut path-expand <> root)
-             '("init.ss" "core/init.ss" "core/build.ss" "core/gerbil.pkg" "core/prelude.ss" "core/core-spec.ss" "gerbil.pkg" "modules/gerbil.pkg" "justfile" "build.ss" "build-spec.ss"
-               "core/module-system/observability/presentation.ss" "core/module-system/authoring/roles.ss"
-               "core/t/module-source-admission-test.ss" "core/t/module-configuration-build-test.ss"
-               "core/t/module-config-role-test.ss" "core/t/module-build-role-test.ss"
-               "core/t/module-explicit-sources-test.ss" "t/opentofu-publication-test.ss"
-               "core/t/module-build-graph-test.ss" "core/t/module-publication-test.ss"
-               "core/t/ops-functional-test.ss" "core/t/ops-process-script-test.ss" "t/ops-rounds-test.ss"
-               "t/ops-selected-packages-test.ss" "core/t/ops-module-publication-test.ss" "t/nix-flake-source-test.ss"))
-           (if flake (regular-files flake (lambda (_) #t) #t) '()))))
-    (map (lambda (path)
-           (cons path (hex-encode (sha256 (call-with-input-file path read-all-as-u8vector)))))
-         (list-sort string<? (delete-duplicates/hash files)))))
+(def (snapshots observations)
+  ;; These are original native publication observations, not a guessed source
+  ;; roster. The existing source guard authenticates bytes and absent inputs.
+  (module-source-admit-current! observations)
+  (map (lambda (entry)
+         (cons (car entry)
+           (and (cdr entry) (hex-encode (sha256 (string->utf8 (cdr entry)))))))
+    (list-sort (lambda (left right) (string<? (car left) (car right))) observations)))
+(def (publication-observations tests build)
+  ;; Suite bytes and compiler support have distinct native owners. Preserve
+  ;; both sets through the existing conflict-checking observation projection.
+  (unique-build-inputs
+    (append (.get tests source source-inputs) (.get build source-inputs))))
+(def (sources-current? tests build initial)
+  (with-catch (lambda (_) #f)
+    (lambda ()
+      ((.get tests source admit-current))
+      ((.get build admit-current))
+      (equal? (snapshots (publication-observations tests build)) initial))))
 (def (stats values)
   (let* ((ordered (list-sort < values)) (n (length ordered)) (middle (quotient n 2)))
     (hash (min (car ordered)) (max (car (last-pair ordered)))
           (median (if (odd? n) (list-ref ordered middle)
                     (/ (+ (list-ref ordered (- middle 1)) (list-ref ordered middle)) 2.))))))
-(def (sources-current? initial flake)
-  (with-catch (lambda (_) #f) (lambda () (equal? (snapshots flake) initial))))
 (def (aggregate rounds)
   (let (labels (map (cut hash-ref <> 'phase) (hash-ref (car rounds) 'phases)))
     (unless (every (lambda (round) (equal? labels (map (cut hash-ref <> 'phase) (hash-ref round 'phases)))) rounds)
@@ -136,10 +121,22 @@
       (error "provide --output and 3..20 serial rounds"))
     (when (file-exists? output) (error "qualification output must be fresh" output))
     (create-directory* output)
-    (let* ((initial (snapshots flake)) (rounds '()) (flake-rounds '())
+    ;; Select actual Suite inputs through the existing init owner. Its compiler
+    ;; projection owns imported support, package headers and native C inputs.
+    ;; Each external Nix Source retains its own transitive currentness checks
+    ;; inside the actual Cases; this summary does not impersonate that owner.
+    (def tests
+      (.call (.get agentic-ai-lab.init.exports tests) .for-files
+        (map (cut path-expand <> root)
+          (append '("t/opentofu-selected-graph-test.ss")
+            (if artifact '("t/nix-flake-source-test.ss") '())))))
+    (def build (.get tests build))
+    ((.get build admit-current))
+    (let* ((initial (snapshots (publication-observations tests build))) (rounds '()) (flake-rounds '())
            (report (hash (status "incomplete") (requested_rounds round-count)
                          (runtime "default Gerbil; native Ops scripts invoke heap-fenced Just tests")
                          (source_sha256 (list->hash-table initial))
+                         (source_scope "native test publication inputs; actual Nix Cases own external transitive data")
                          (cpu_count (string->number (tool-text (.get Ops tools CPUCount))))
                          (nix_version (tool-text (.get Ops tools NixVersion)))
                          (nixpkgs (tool-text (.get Ops tools PackageSet)))
@@ -148,7 +145,7 @@
                          (process_scope "Nix CLI starts at native process boundary; not daemon worker totals")
                          (rounds '()) (flake_rounds '())))
            (receipt (path-expand "summary.json" output)))
-      (def (current!) (unless (sources-current? initial flake) (error "qualification source changed")))
+      (def (current!) (unless (sources-current? tests build initial) (error "qualification source changed")))
       (def (round! index flake-test?)
         (let* ((prefix (string-append (if flake-test? "flake-round-" "round-") (number->string index)))
                (metrics (path-expand (string-append prefix ".json") output))
@@ -176,7 +173,7 @@
               (hash-put! report 'status "failed")
               (hash-put! report 'error (if (Error? exception) (Error-message exception)
                                          "native qualification exception; see retained log"))
-              (hash-put! report 'source_unchanged (sources-current? initial flake))
+              (hash-put! report 'source_unchanged (sources-current? tests build initial))
               (write-json-file receipt report)
               (raise exception))
             (lambda ()

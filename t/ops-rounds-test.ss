@@ -3,7 +3,10 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test :clan/poo/object "./qualification/opentofu/opentofu-rounds.ss"
         (only-in :std/io/tempfile call-with-temporary-directory)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case))
+        (only-in :std/source this-source-file)
+        (only-in "../init.ss" agentic-ai-lab.init.exports)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :agentic-ai-lab/modules/nix/objects NixSource.))
 (export ops-rounds-test)
 (def ops-rounds-test
   (test-suite "Native operational qualification summaries"
@@ -28,12 +31,41 @@
             (write-log "MODULE-OK fixture.ss\nHARNESS-OK fixture.ss\nERROR CHECK failed\nOK\n")
             (check-exception (assert-control (.o status: 0) log "fixture.ss") error?)
             (check-equal? (file-exists? log) #t)))))
-    (yuanxu-test-case "source digests are deterministic and detect indirect input edits"
-      (call-with-temporary-directory "ops-source-hashes"
+    (yuanxu-test-case "summary inputs come from the native test publication"
+      (def tests
+        (.call (.get agentic-ai-lab.init.exports tests) .for-files
+          (list (this-source-file))))
+      (check-equal? (.ref/cached (.get tests source) 'selected-graph) #f)
+      (def build (.get tests build))
+      ((.get build admit-current))
+      (def observations (publication-observations tests build))
+      (check-equal? (and (assoc (path-normalize (this-source-file)) observations) #t) #t)
+      (check-equal? (length (snapshots observations)) (length observations))
+      ;; Summarizing a test publication must not activate business Modules.
+      (check-equal? (.ref/cached (.get tests source) 'selected-graph) #f))
+
+    (yuanxu-test-case "summaries retain original observations and ignore unobserved files"
+      (call-with-temporary-directory "ops-source-observations"
         (lambda (root)
-          (let (source (path-expand "providers.nix" root))
-            (call-with-output-file source (cut display "{ aws = 1; }" <>))
-            (let (before (snapshots root))
-              (check-equal? (snapshots root) before)
-              (call-with-output-file (list path: source truncate: #t) (cut display "{ aws = 2; }" <>))
-              (check-equal? (equal? before (snapshots root)) #f))))))))
+          (def provider (path-expand "providers.nix" root))
+          (def policy (path-expand "policy.nix" root))
+          (def unrelated (path-expand "unselected.nix" root))
+          (def (write-text path text)
+            (call-with-output-file (list path: path truncate: #t) (cut display text <>)))
+          (write-text provider "{ aws = 1; }")
+          (write-text policy "{ allowed = true; }")
+          ;; Use original native Source observations. This test owns only its
+          ;; explicit Fixture, and does not scan Core or invent import edges.
+          (def observations
+            (append (.get (.cc NixSource. expression: provider) source-inputs)
+                    (.get (.cc NixSource. expression: policy) source-inputs)))
+          (def before (snapshots observations))
+          (check-equal? (map car before) (list policy provider))
+          (check-equal? (snapshots (reverse observations)) before)
+          (write-text unrelated "{ notSelected = true; }")
+          (check-equal? (snapshots observations) before)
+          (dynamic-wind
+            (lambda () (write-text policy "{ allowed = false; }"))
+            (lambda () (check-exception (snapshots observations) error?))
+            (lambda () (write-text policy "{ allowed = true; }")))
+          (check-equal? (snapshots observations) before))))))

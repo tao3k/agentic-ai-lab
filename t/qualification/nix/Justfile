@@ -7,10 +7,11 @@ root := justfile_directory() + "/../../.."
 build:
     cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 240s gxi -:max-heap=2G,debug=q t/qualification/nix/build.ss
 
-# This is ordinary official package preparation in the ACTUAL runtime prefix.
-# Init owns the support graph; TestingScript never compiles or repairs it.
+# Bazel has built the declared adapter libraries. Consume the root package's
+# SAME native build declaration in this command-owned runtime prefix, using
+# the official Gerbil frontend and the unchanged pre-import heap/time fence.
 prepare-qualification:
-    cd "{{ root }}/t/qualification/native-module-support" && GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap=2G,debug=q" timeout --signal=TERM --kill-after=5s 120s gerbil -:max-heap=2G,debug=q build
+    cd "{{ root }}" && GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap=2G,debug=q" timeout --signal=TERM --kill-after=5s 120s gerbil -:max-heap=2G,debug=q interactive qualification-build.ss compile
 
 test path: prepare-qualification
     cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 240s gxi -:max-heap=2G,debug=q t/qualification/nix/run.ss "{{ path }}"

@@ -123,14 +123,25 @@ private Schema IR test still reads its original opaque backend record. Derived
 observation policies preserve the actual inherited parent policy and test both
 explicit child settings; they do not assume that an observing Harness is off.
 
-[[file:../../../../t/qualification/native-module-support/build.ss][The ordinary qualification package]] consumes only the existing
-=init.exports.tests.qualification.std-make-spec=. Official =gerbil build=
-owns compilation and signed publication before TestingScript imports Cases.
-The main Just queue prepares it once. The Nix adapter queue prepares it in its
-own command-owned writable prefix, because a publication in the ordinary root
-prefix cannot admit a consumer in an independent runtime. The existing init
-publication owns source discovery and currentness; there is no second source
-inventory, private compiler runner or new configuration protocol.
+[[file:../../../../build.ss][The existing root build entry]] consumes the production and qualification
+projections from the existing init owner. Official =gerbil build= owns both
+compile phases; product qualification adds no Gerbil package under =t/=. The same
+entry prepares the Nix command-owned prefix before TestingScript imports Cases.
+The root command consumes [[file:../../../../qualification-build.ss][the standard qualification build declaration]] in a
+fresh Gerbil process after library construction. Production source bootstrap
+and the installed-library test view have separate native import epochs; their
+compiler evidence is not interchangeable. The declaration inherits the package
+build's existing 2 GiB runtime envelope and consumes only the init projection.
+It owns no Case inventory, Harness or result verdict. Compiler staging aliases
+must end with the temporary source
+extent on success, failure and nested preparation, so a later projection cannot
+inherit a deleted compiler path.
+
+The OpenTofu round summary consumes =source-inputs= from the native init test
+publication. It no longer scans source directories or enumerates Core files,
+root build files or unrelated tests. Original publication admission and byte
+observations remain authoritative. Actual Nix Cases own their external
+transitive source checks; a summary hash cannot substitute for those guards.
 
 The first isolated-prefix preparation hit its existing 120-second timeout.
 A subsequent fresh-prefix preparation exited naturally within that same fence.
@@ -213,3 +224,18 @@ watchdog kill grace. The gate remains 150 seconds; no batch split or wider
 limit was admitted. The waiting/scheduling cause is not established, and the
 replay/performance issue is explicitly open. These runs do not qualify the
 pending C export or a Rust integration.
+
+* Executed ownership repair
+
+The native Core build-graph Suite executed 22 observed Cases, including exact
+source observation projection, changed-input refusal/restoration, successful
+compiler exit, failed nested/outer exits, transitive importer invalidation and
+unaffected native imports. The product summary Suite executed four Cases over
+actual native test publication inputs. The AWS ordinary/observed Schema
+transition and the actual C Context/Session Suite passed with their original
+refusal controls. Those are repair-cut results, not full-cohort acceptance.
+
+The interrupted =3dafa8c1= product queue completed 47 of 315 files before the
+requested layout/source-ownership correction. Its natural signal exit is 143;
+it is not a completed queue or a passing receipt. A new full queue and the
+Context replay remain required on the final published source cohort.

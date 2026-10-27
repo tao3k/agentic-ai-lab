@@ -1,4 +1,4 @@
-#!/usr/bin/env -S timeout --signal=TERM --kill-after=5s 900s gxi
+#!/usr/bin/env -S timeout --signal=TERM --kill-after=5s 900s gxi -:max-heap=2G,debug=q
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
@@ -16,6 +16,13 @@
         (only-in :yuanxu/module-system/building/script defbuild-script)
         (only-in "./init.ss" agentic-ai-lab.init.exports)
         (only-in "./build-spec.ss" agentic-ai-lab-build-spec agentic-ai-lab-public-build-roots))
+
+;; Keep this official package build and its compiler children inside the
+;; agreed heap envelope; use Gambit's existing runtime option, not a selector.
+(let (options (getenv "GAMBOPT" #f))
+  (setenv "GAMBOPT"
+    (string-append (if options (string-append options ",") "")
+                   "max-heap=2G,debug=q")))
 
 ;; The C caller is an AOT qualification leaf, not a production import root.
 ;; Declare its ordinary Gerbil target here with the other retained Suite
@@ -73,4 +80,21 @@
 
 ;; The selected init owns source lowering; the Gerbil owns Make and dispatch.
 (def modules-spec (.get agentic-ai-lab.init.exports std-make-spec))
-(defbuild-script (modules-spec retained-spec))
+;; Both projections belong to this package's ordinary official build entry.
+;; Qualification is an init-owned build phase, not another package under t/.
+(def (build-libraries args)
+  (defbuild-script (modules-spec retained-spec))
+  (apply main args))
+(def (main . args)
+  (build-libraries args)
+  ;; The existing qualification owner signs only real compiler output. The
+  ;; official package command supplies compile; no new mode or environment flag.
+  (when (or (null? args) (equal? (car args) "compile"))
+    ;; Source bootstrap and the installed-library test view have different
+    ;; native import epochs. Gerbil's standard build declaration runs in a
+    ;; fresh compiler process, inheriting this build's resource environment.
+    (run-process
+      (append (list "gerbil" "interactive"
+                (path-expand "qualification-build.ss" (path-directory (this-source-file))))
+        args)
+      stdin-redirection: #f stdout-redirection: #f)))
