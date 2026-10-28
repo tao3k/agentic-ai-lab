@@ -188,7 +188,11 @@ gerbil_project_compile(
     srcs = [":gerbil_package_sources"],
     args = ["compile"],
     build_script = ":build.ss",
-    env = {"GERBIL_BUILD_VERBOSE": "1"},
+    # Fence compiler VMs before imports; native tools preserve this budget.
+    env = {
+        "GERBIL_BUILD_VERBOSE": "1",
+        "GAMBOPT": "max-heap=2G,debug=q",
+    },
     deps = [":gerbil_parser_package", ":orgize_package", ":gerbil_ascent_package"],
 )
 

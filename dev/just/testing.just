@@ -94,12 +94,12 @@ test-profile:
 # Keep Core qualification under its own Justfile.
 [group('test')]
 test-core:
-    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" just test
+    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} just test
 
 # Preserve the root workspace's exported compiler/runtime settings for Core too.
 [group('test')]
 test-core-file path:
-    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" just test-file "{{ path }}"
+    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} just test-file "{{ path }}"
 
 # Run one root-owned Scheme test with the same pre-import heap fence.
 [group('test')]

@@ -11,13 +11,13 @@ build:
 # The default build above still requires Core to build successfully first.
 [group('build')]
 build-library:
-    GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
+    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
 
 # Compile the pinned local Core using the Gerbil's incremental outputs.
 # Explicit cleanup remains available when replacing a bootstrap artifact cohort.
 [group('build')]
 build-core:
-    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
+    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
 
 # Clean only Core outputs; dependency source checkouts stay intact.
 [group('build')]
