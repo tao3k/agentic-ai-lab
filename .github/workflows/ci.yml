@@ -66,15 +66,6 @@ jobs:
       - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - name: Upload focused native unit-test output
-        if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: native-unit-output-${{ runner.os }}
-          path: ${{ runner.temp }}/agentic-ai-lab-unit-tests.log
-          if-no-files-found: ignore
-          retention-days: 7
-
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
         run: |
@@ -151,22 +142,13 @@ jobs:
         run: |
           mkdir -p "$HOME/.gerbil/pkg"
           gerbil pkg dir --add git.cons.io/mighty-gerbils/gerbil-directory
-          python3 packages/automation/gerbil_dependency_pin.py prepare-native --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
           gerbil env just bootstrap-native-poo
-          if [ "${{ steps.native-gerbil-pkg-cache.outputs.cache-hit }}" = "true" ]; then
-            if ! gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "native-dependency-cache-ready"))' >/tmp/native-gerbil-dependency-cache-check.log 2>&1; then
-              echo "::notice::Exact native dependency cache is incomplete; refreshing declared revisions"
-              gerbil env gerbil interactive packages/automation/native-dependencies.ss
-            fi
-          else
-            gerbil env gerbil interactive packages/automation/native-dependencies.ss
-          fi
-          gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "native-dependencies-ready"))'
+          gerbil env just deps
           # The Core submodule owns this checkout's shared POO modules.
-          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil clean)
-          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil build)
+          gerbil env just clean-core
+          gerbil env just build-core
           # Clean only Agentic AI Lab outputs; its build spec excludes Core.
-          gerbil clean
+          gerbil env just clean
 
       - name: Save native Gerbil package cache
         if: steps.native-gerbil-pkg-cache.outputs.cache-hit != 'true'
@@ -186,11 +168,9 @@ jobs:
         run: |
           # The dev manifest owns ASP's pin; the native package prefix stays
           # shared so its POO macros and runtime use the same installed ABI.
-          python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
-          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/native-dependencies.ss)
+          gerbil env just deps-dev
           export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib"
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
-          gerbil env gerbil interactive -e '(begin (import :asp-gerbil-scheme/benchmark-api :asp-gerbil-scheme/testing-api) (displayln "development-dependencies-ready"))'
 
       # Ordinary regressions are discovered once by the native package entry
       # below. Keep this independent process-boundary qualification explicit.
@@ -262,7 +242,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           gerbil env gxc -O modules/workflow/qualification/ascent-table-expression.ss t/scenarios/performance/ascent-table-expression/baseline.ss
-          gerbil env ./dev/performance-tests.ss
+          gerbil env just test-performance
           gerbil env gxi t/scenarios/performance/ascent-table-expression/scenario.ss
           gerbil env gxi t/scenarios/performance/ascent-table-expression-membership/scenario.ss
           gerbil env gxi t/scenarios/performance/ascent-reachability-closure/scenario.ss
@@ -274,6 +254,15 @@ jobs:
           name: native-test-stall-macOS
           path: ${{ runner.temp }}/agentic-ai-lab-test-stalls
           if-no-files-found: warn
+          retention-days: 7
+
+      - name: Upload focused native unit-test output
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: native-unit-output-${{ runner.os }}
+          path: ${{ runner.temp }}/agentic-ai-lab-unit-tests.log
+          if-no-files-found: ignore
           retention-days: 7
 
   quint-proof:
@@ -458,15 +447,19 @@ jobs:
           submodules: recursive
 
       - name: Restore Lean Runtime Host cache
+        id: lean-runtime-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             ~/.elan
             packages/proofs/lean/.lake
             core/dev/proofs/lean/.lake
-          key: lean-proof-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
+          key: lean-proof-cedarRuntimeHost-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
+          # Reuse the same Lake package and pinned native compiler.
           restore-keys: |
-            lean-proof-${{ runner.os }}-${{ runner.arch }}-
+            lean-proof-AgenticAILabModuleGovernanceProof-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
+            lean-proof-cedarRuntimeHost-${{ runner.os }}-${{ runner.arch }}-
+            lean-proof-AgenticAILabModuleGovernanceProof-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Install Cedar Runtime Host toolchains
         shell: bash
@@ -511,6 +504,16 @@ jobs:
             bindings/cedar-gerbil/fixtures/atomic-case/manifest.json \
             "$AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST" \
             bindings/cedar-gerbil/fixtures/atomic-case/policies.cedar
+
+      - name: Save Lean Runtime Host cache
+        if: steps.lean-runtime-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.elan
+            packages/proofs/lean/.lake
+            core/dev/proofs/lean/.lake
+          key: lean-proof-cedarRuntimeHost-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
 
   external-module-linux-full:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}

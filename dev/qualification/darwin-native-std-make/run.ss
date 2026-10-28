@@ -14,7 +14,7 @@
           (path-expand "darwin-native-std-make-one-target-receipt.ss"
                        (getenv "RUNNER_TEMP" run-root))))
     (create-directory* image)
-    (let* ((command [(benchmark-gerbil) "interactive" "./build.ss"])
+    (let* ((command [(benchmark-gerbil) "build"])
            (cold
             (benchmark-measure 'cold image scenario-root command
                                timeout: "60s"))

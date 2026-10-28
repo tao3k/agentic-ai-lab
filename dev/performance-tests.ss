@@ -13,7 +13,8 @@
                  testing-interface-map-profile
                  testing-interface-run-test-files!)
         (only-in :std/list/list filter foldl)
-        (only-in :agentic-ai-lab/dev/testing-api
+        ;; Development policy is source-owned; it is not a published package library.
+        (only-in "./testing-api.ss"
                  +agentic-ai-lab-testing-interface+))
 
 ;;; Scenario end-to-end benchmarks admit on wall-clock p95, so every file in

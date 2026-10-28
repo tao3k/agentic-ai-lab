@@ -2,4 +2,4 @@
 ;;
 ;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(package: agentic-ai-lab/t/qualification/darwin-native-std-make)
+(package: agentic-ai-lab/dev/qualification/darwin-native-std-make)

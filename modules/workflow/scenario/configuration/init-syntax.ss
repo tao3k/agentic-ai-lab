@@ -14,7 +14,8 @@
                  yuanxu-user-module-selection-flag-entry
                  yuanxu-user-module-selection->alist)
         :yuanxu/module-system/observability/presentation
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/interface
+        ;; Configuration imports Memory's inert authoring values and receipts.
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
         :agentic-ai-lab/modules/cubeSandbox/config
         :agentic-ai-lab/modules/cubeSandbox/profile-interface
         :agentic-ai-lab/modules/docker-sandbox/config
@@ -78,7 +79,7 @@
         (import: :agentic-ai-lab/modules/docker-sandbox/profile-interface)
         (import: :yuanxu/modules/funflow/graph-projection)
         (import: :agentic-ai-lab/modules/workflow/funflow-config)
-        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/interface)
+        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
         (import: :agentic-ai-lab/modules/session/config)
         (import: :agentic-ai-lab/modules/session/syntax)
         (import: :agentic-ai-lab/modules/tool-core/config)

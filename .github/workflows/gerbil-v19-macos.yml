@@ -19,7 +19,7 @@ on:
       - modules/**
       - core
       - t/qualification/darwin-gerbil-build-scenario.ss
-      - t/qualification/darwin-native-std-make/**
+      - dev/qualification/darwin-native-std-make/**
       - t/funflow-github-ci-json-schema-contract-test.ss
   pull_request:
     paths:
@@ -32,7 +32,7 @@ on:
       - modules/**
       - core
       - t/qualification/darwin-gerbil-build-scenario.ss
-      - t/qualification/darwin-native-std-make/**
+      - dev/qualification/darwin-native-std-make/**
       - t/funflow-github-ci-json-schema-contract-test.ss
 
 permissions:
@@ -96,17 +96,14 @@ jobs:
           set -euo pipefail
           gerbil --version
           gxi -v
-          gxi -e '(begin (import :std/make) (displayln "darwin-std-make-ready"))'
-          gxi -e '(begin (import :std/encoding/json) (displayln (json->string (string->json "{\"generation\":19}"))))'
 
       - name: Measure native std make
-        working-directory: t/qualification/darwin-native-std-make
         env:
           GERBIL_BUILD_VERBOSE: "1"
           GERBIL_SOURCE_REF: ${{ matrix.toolchain }}
           UPSTREAM_SHA: 1cfb032c7a1612637da6205f5f8a15683eba3ba0
           WARM_BUDGET_SECONDS: "30"
-        run: gxi ./run.ss
+        run: gerbil env just measure-darwin-native-std-make
 
       - name: Restore exact Gerbil dependency cache
         id: dependency-cache
@@ -116,7 +113,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: darwin-gerbil-build-v1-${{ runner.os }}-${{ runner.arch }}-${{ matrix.toolchain }}-${{ hashFiles('gerbil.pkg') }}
+          key: darwin-gerbil-build-v1-${{ runner.os }}-${{ runner.arch }}-${{ matrix.toolchain }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Install declared Gerbil dependencies
         shell: bash
@@ -124,22 +121,13 @@ jobs:
           set -euo pipefail
           mkdir -p "$HOME/.gerbil/pkg"
           gerbil pkg dir --add git.cons.io/mighty-gerbils/gerbil-directory
-          python3 packages/automation/gerbil_dependency_pin.py prepare-native --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
           gerbil env just bootstrap-native-poo
-          if [[ "${{ steps.dependency-cache.outputs.cache-hit }}" == "true" ]]; then
-            gerbil env gerbil interactive -e \
-              '(begin (import :clan/poo/object) (displayln "library-cache-ready"))'
-          else
-            gerbil env gerbil interactive packages/automation/native-dependencies.ss
-          fi
+          gerbil env just deps
           # The measurement harness is development tooling, not a library input.
           # Keep optional tooling in the same native POO ABI as the library.
-          python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
-          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/native-dependencies.ss)
+          gerbil env just deps-dev
           export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib"
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
-          gerbil env gerbil interactive -e \
-            '(begin (import :asp-gerbil-scheme/benchmark-api) (displayln "asp-benchmark-ready"))'
 
       - name: Save exact Gerbil dependency cache
         if: steps.dependency-cache.outputs.cache-hit != 'true'
@@ -149,7 +137,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: darwin-gerbil-build-v1-${{ runner.os }}-${{ runner.arch }}-${{ matrix.toolchain }}-${{ hashFiles('gerbil.pkg') }}
+          key: darwin-gerbil-build-v1-${{ runner.os }}-${{ runner.arch }}-${{ matrix.toolchain }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Measure cold Agentic AI Lab build
         env:
@@ -160,11 +148,10 @@ jobs:
           # Dependency packages may have compiled an older :core namespace into
           # this shared GERBIL_PATH. Replace those artifacts before the measured
           # product build; mtimes cannot qualify this checkout's export identity.
-          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" gerbil clean)
-          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" gerbil build)
-          gerbil clean
-          gerbil env gxi t/qualification/darwin-gerbil-build-scenario.ss \
-            cold "$TOOLCHAIN" "$RUNNER_TEMP/cold-build.ss"
+          gerbil env just clean-core
+          gerbil env just build-core
+          gerbil env just clean
+          gerbil env just measure-darwin-gerbil-build cold "$TOOLCHAIN" "$RUNNER_TEMP/cold-build.ss"
 
       - name: Measure warm Agentic AI Lab build
         env:
@@ -172,13 +159,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gerbil env gxi t/qualification/darwin-gerbil-build-scenario.ss \
-            warm "$TOOLCHAIN" "$RUNNER_TEMP/warm-build.ss"
+          gerbil env just measure-darwin-gerbil-build warm "$TOOLCHAIN" "$RUNNER_TEMP/warm-build.ss"
 
-      - name: Validate v0.19 JSON capability
-        run: |
-          gxi -e \
-            '(begin (import :std/encoding/json) (unless (hash-table? (string->json "{\"native\":true}" (JSONReadOptions object-as-hash: #t))) (error "v19 JSON object-as-hash must decode to a native HashTable")))'
+      - name: Validate v0.19 JSON capability through the native Suite
+        run: gerbil env just test-file t/json-schema-native-contract-test.ss
 
       - name: Publish build comparison summary
         if: always()

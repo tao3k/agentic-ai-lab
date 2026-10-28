@@ -10,9 +10,24 @@
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/module-authoring/module-config-syntax
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects
+        ;; These owners build inert policies, contracts, and handoff receipts.
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation-bridge
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-scenario
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy)
 
 (export (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects)
+        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy)
+        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store)
+        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend)
+        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation)
+        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-operation-bridge)
+        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-scenario)
+        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy)
         memory-store-spec
         memory-catalog
         memory-catalog-validation

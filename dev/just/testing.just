@@ -137,7 +137,7 @@ test-nix-file path: build-test-workers prepare-test-inputs
 [group('test')]
 test-performance:
     @echo "[agentic-ai-lab-test-runtime] maxHeap={{ gerbil_test_max_heap }} debug={{ gerbil_test_debug }} scope=worker-process"
-    GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" gerbil {{ gerbil_test_runtime_options }} env ./dev/performance-tests.ss
+    GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} gerbil {{ gerbil_test_runtime_options }} interactive ./dev/performance-tests.ss
 
 # Run only hermetic Bazel qualifications; `just test` owns Scheme unit tests.
 [group('test')]
@@ -188,3 +188,15 @@ test-query-orgize-source:
 # Source-level ownership controls; heap fence applies before any imports.
 test-module-ownership:
     timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss module-ownership "{{ gerbil_test_runtime_options }}"
+
+# Existing compiler measurements retain their native cold/warm guards. These
+# public launchers apply the shared heap cap before importing measurement code.
+[group('test')]
+measure-darwin-native-std-make:
+    cd "{{ justfile_directory() }}/dev/qualification/darwin-native-std-make" && GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 300s gerbil {{ gerbil_test_runtime_options }} interactive ./run.ss
+
+# Keep the original 60-minute CI job envelope; this measures compiler work.
+# Product Case workers still own their separate 120/150-second deadlines.
+[group('test')]
+measure-darwin-gerbil-build phase toolchain receipt:
+    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 3600s gerbil {{ gerbil_test_runtime_options }} interactive t/qualification/darwin-gerbil-build-scenario.ss "{{ phase }}" "{{ toolchain }}" "{{ receipt }}"

@@ -6,7 +6,8 @@
 ;;; Contract: JSON Schema emits and validates native POO Contracts directly.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-         :std/test)
+        (only-in :std/encoding/json JSONReadOptions string->json)
+        :std/test)
 
 (def (json-schema-native-eval expr)
   (eval expr))
@@ -15,6 +16,12 @@
 
 (def json-schema-native-contract-test
   (test-suite "json-schema-native-contract-test"
+    ;; Preserve the former native compiler JSON probe as an executed Case.
+    (yuanxu-test-case "native JSON object-as-hash retains typed reader behavior"
+      (def value (string->json "{\"native\":true}"
+                   (JSONReadOptions object-as-hash: #t)))
+      (check-equal? (hash-table? value) #t)
+      (check-equal? (hash-get value "native") #t))
     (yuanxu-test-case "validates the native contract"
       (eval '(import "./core/modules/json-schema/json-schema-receipt.ss"))
       (eval '(import "./core/modules/json-schema/json-schema-validate.ss"))
