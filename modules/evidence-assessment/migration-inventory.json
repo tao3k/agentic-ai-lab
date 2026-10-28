@@ -22,7 +22,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/candidate/evidence-store.ss": "daf2981a1a5132a31d87eefa19b153a8ff54671142917a5731d7f3bdd8706634"
+        "modules/evidence-assessment/candidate/evidence-store.ss": "ea48b054b53216bf5cd5adc2998c60d57704a8ec204a64c187de63c2f6694e18"
       }
     },
     {
@@ -139,11 +139,11 @@
       "source": "docs/llm-reasoning-library-plan.org",
       "sourceSha256": "0818ff9149737b8a7ff5e434f8c2b54a84b6ef80d0665bef38cbbbc505222e6e",
       "targets": [
-        "docs/research/agent-inference/legacy-library-plan.org"
+        "modules/evidence-assessment/research/legacy/original-source/docs/llm-reasoning-library-plan.org"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "docs/research/agent-inference/legacy-library-plan.org": "0818ff9149737b8a7ff5e434f8c2b54a84b6ef80d0665bef38cbbbc505222e6e"
+        "modules/evidence-assessment/research/legacy/original-source/docs/llm-reasoning-library-plan.org": "0818ff9149737b8a7ff5e434f8c2b54a84b6ef80d0665bef38cbbbc505222e6e"
       }
     },
     {
@@ -326,44 +326,44 @@
       "source": "docs/research/agent-inference/evidence-interaction-results/interpretation.md",
       "sourceSha256": "ba65a02314dfdeae67dc0ed1aac2ebc9af49d601326a0af03587c73ca0d01685",
       "targets": [
-        "docs/research/agent-inference/evidence-interaction-results/interpretation.md"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction-results/interpretation.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "docs/research/agent-inference/evidence-interaction-results/interpretation.md": "ba65a02314dfdeae67dc0ed1aac2ebc9af49d601326a0af03587c73ca0d01685"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction-results/interpretation.md": "ba65a02314dfdeae67dc0ed1aac2ebc9af49d601326a0af03587c73ca0d01685"
       }
     },
     {
       "source": "docs/research/agent-inference/evidence-interaction-results/report.md",
       "sourceSha256": "d7b79d13dfbe116cc50a6bc26078688d64f2e5e4c1814131e074eb973bec6f8e",
       "targets": [
-        "docs/research/agent-inference/evidence-interaction-results/report.md"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction-results/report.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "docs/research/agent-inference/evidence-interaction-results/report.md": "d7b79d13dfbe116cc50a6bc26078688d64f2e5e4c1814131e074eb973bec6f8e"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction-results/report.md": "d7b79d13dfbe116cc50a6bc26078688d64f2e5e4c1814131e074eb973bec6f8e"
       }
     },
     {
       "source": "docs/research/agent-inference/evidence-interaction.org",
       "sourceSha256": "690f1d21c07177961059f8ea6f0b7eb89b82c87a8fa295b215a87b50c1db2551",
       "targets": [
-        "docs/research/agent-inference/evidence-interaction.org"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction.org"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "docs/research/agent-inference/evidence-interaction.org": "690f1d21c07177961059f8ea6f0b7eb89b82c87a8fa295b215a87b50c1db2551"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction.org": "690f1d21c07177961059f8ea6f0b7eb89b82c87a8fa295b215a87b50c1db2551"
       }
     },
     {
       "source": "docs/research/agent-inference/fact-reuse-protocol.md",
       "sourceSha256": "cc90ca0a68f8e867dae1a279ae82890be66f9f5c60eef4951a740d99d30382b5",
       "targets": [
-        "docs/research/agent-inference/fact-reuse-protocol.md"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-protocol.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "docs/research/agent-inference/fact-reuse-protocol.md": "cc90ca0a68f8e867dae1a279ae82890be66f9f5c60eef4951a740d99d30382b5"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-protocol.md": "cc90ca0a68f8e867dae1a279ae82890be66f9f5c60eef4951a740d99d30382b5"
       }
     },
     {
@@ -447,11 +447,11 @@
       "source": "docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md",
       "sourceSha256": "c44561e5cfeb1b932619f57b5aa617c483076231cd07fe9a2e48d7b4b67cbda0",
       "targets": [
-        "docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md": "c44561e5cfeb1b932619f57b5aa617c483076231cd07fe9a2e48d7b4b67cbda0"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md": "c44561e5cfeb1b932619f57b5aa617c483076231cd07fe9a2e48d7b4b67cbda0"
       }
     },
     {
@@ -557,11 +557,11 @@
       "source": "docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md",
       "sourceSha256": "b5efab56257474e6e96d161c57f8482957c4e02010de78c17a2ee744b7482055",
       "targets": [
-        "docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md": "b5efab56257474e6e96d161c57f8482957c4e02010de78c17a2ee744b7482055"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md": "b5efab56257474e6e96d161c57f8482957c4e02010de78c17a2ee744b7482055"
       }
     },
     {
@@ -590,11 +590,11 @@
       "source": "docs/research/agent-inference/factor-reuse-2026-study.org",
       "sourceSha256": "b10a33b9d23b76b3c3e0ee9b8d07f028521d9e3570647211e9a05a714d5a34dc",
       "targets": [
-        "docs/research/agent-inference/factor-reuse-2026-study.org"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/factor-reuse-2026-study.org"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "docs/research/agent-inference/factor-reuse-2026-study.org": "b10a33b9d23b76b3c3e0ee9b8d07f028521d9e3570647211e9a05a714d5a34dc"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/factor-reuse-2026-study.org": "b10a33b9d23b76b3c3e0ee9b8d07f028521d9e3570647211e9a05a714d5a34dc"
       }
     },
     {
@@ -634,22 +634,22 @@
       "source": "docs/research/agent-inference/history/candidate-model-rules-rejected/report.md",
       "sourceSha256": "68ea0e43cbd091d6297df76bc4e500f5396a4e2e67a59d4ed01eb103c4af0263",
       "targets": [
-        "docs/research/agent-inference/history/candidate-model-rules-rejected/report.md"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/history/candidate-model-rules-rejected/report.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "docs/research/agent-inference/history/candidate-model-rules-rejected/report.md": "68ea0e43cbd091d6297df76bc4e500f5396a4e2e67a59d4ed01eb103c4af0263"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/history/candidate-model-rules-rejected/report.md": "68ea0e43cbd091d6297df76bc4e500f5396a4e2e67a59d4ed01eb103c4af0263"
       }
     },
     {
       "source": "docs/research/agent-inference/index.org",
       "sourceSha256": "4b553d31e663cf629e46b4df34ff20b985a38fb72bf0fb3fd90a8fbe2610fe2e",
       "targets": [
-        "docs/research/agent-inference/index.org"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/index.org"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "docs/research/agent-inference/index.org": "4b553d31e663cf629e46b4df34ff20b985a38fb72bf0fb3fd90a8fbe2610fe2e"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/index.org": "4b553d31e663cf629e46b4df34ff20b985a38fb72bf0fb3fd90a8fbe2610fe2e"
       }
     },
     {
@@ -733,11 +733,11 @@
       "source": "docs/research/agent-inference/serving-sglang-vllm.org",
       "sourceSha256": "7352198f770d6e8d2b221df87dd7d2df8597df83b9ecc94af85a178bd6351a36",
       "targets": [
-        "docs/research/agent-inference/serving-sglang-vllm.org"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/serving-sglang-vllm.org"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "docs/research/agent-inference/serving-sglang-vllm.org": "7352198f770d6e8d2b221df87dd7d2df8597df83b9ecc94af85a178bd6351a36"
+        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/serving-sglang-vllm.org": "7352198f770d6e8d2b221df87dd7d2df8597df83b9ecc94af85a178bd6351a36"
       }
     },
     {
@@ -880,7 +880,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/temporal-causality/trajectory/ascent-checkpoint.ss": "70625eefe7387a1a893deb3494c0df753bc13cd1f986210c92a33d4f21780e5f"
+        "modules/temporal-causality/trajectory/ascent-checkpoint.ss": "56cfa5d7992303dd8fac26c18e75ed3ef767ab03ea52a8e4735ecf3cc8202092"
       }
     },
     {
@@ -891,7 +891,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clue-query.ss": "4800537190107cbd4f431b6dd6fbbc44684febdab0cf02d8dc6fdc3101052ef4"
+        "modules/ai-agentic-context/clue-query.ss": "767da61f31209646a22e92b13eea002bd83e54f85f5d9fcbf03580a1d6cdf891"
       }
     },
     {
@@ -902,7 +902,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/AccountingAbstraction.lean": "925438f525674a994646bd5fd441676919b67c3af2cb7065b8aed7e99932f71a"
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/AccountingAbstraction.lean": "195fbd90d7bfe225ecc403ec5b902683b4c01b58a011817a9bd40708dccddc45"
       }
     },
     {
@@ -913,7 +913,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/AnchoredEvidenceSlice.lean": "43b80a91f9ef8a26502d84e3a0465a4ddd40798c83e90662d0596b83c3f56c81"
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/AnchoredEvidenceSlice.lean": "94ff371923504a20fe1d761bd0ab0958e6d634f92af31e0959910efbb41d338d"
       }
     },
     {
@@ -935,7 +935,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/DomainEvidence.lean": "bf9a5ae6d66b32fa4b8835a518a2d932e42b33bd84b3bfeb96c73ed3eb51782a"
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/DomainEvidence.lean": "24240f73799192fc93dd594b2a36fc3d6094e9e0009103cac2629c5e92515bc8"
       }
     },
     {
@@ -946,7 +946,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/EvidenceCheckpoint.lean": "54262eab1beea340f5e554cea255d240661280f59520c3cc7ce82f2020b4bb5c"
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/EvidenceCheckpoint.lean": "e829431be0228d7c1206856a09dec07a3974e9e3e6944dddb7cfa1f6bb65f8e7"
       }
     },
     {
@@ -957,7 +957,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/EvidenceInteraction.lean": "a39b1e50783e14a6cd03a4781104886c2adfffd6d624cc20b910ff8ab0844ed4"
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/EvidenceInteraction.lean": "1844c327b76abff7975d273fc315a44d314fbb096bdfc93a4dc43759064a6f19"
       }
     },
     {
@@ -968,7 +968,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/Trajectory.lean": "6aab91ec3bdd9d3631da0e55da0257438558f9c04f038404ff9b8ff1e82bb9f0"
+        "packages/proofs/lean/AgenticAILabProof/EvidenceAssessment/Trajectory.lean": "06b6adcc21f73d8bbac7e4e0fcbe22674be903c290a0ef45714eecaea105fcc5"
       }
     },
     {
@@ -1199,7 +1199,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clue-exchange.ss": "aea9b96b2d99726b041cc3a318d0fde854cbb491417e201b0eb14c46403b9d01"
+        "modules/ai-agentic-context/clue-exchange.ss": "2c94b8d32ccf7be63391a0150988ad6747b0d8be1710b67f4482dff08c36052f"
       }
     },
     {
@@ -1272,44 +1272,44 @@
       "source": "python/tests/test_checkpoint_contract.py",
       "sourceSha256": "7e8d68b5e1b53370657f112da12ed66269e6ea2a6c5b548e8addec33fed26725",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_checkpoint_contract.py"
+        "packages/python-runtime/tests/scenarios/test_checkpoint_contract.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_checkpoint_contract.py": "7034dc95e88286949ff5dd015ce8919abd0cf4be30040e5e7af2a7c06351b970"
+        "packages/python-runtime/tests/scenarios/test_checkpoint_contract.py": "7a18181ab6176155d200e25f7a7cbb91623083ace8d040b5bab8300514bc2d3d"
       }
     },
     {
       "source": "python/tests/test_conversation.py",
       "sourceSha256": "ed8f0f34401fecbe1b3529143e4ab6ca773a3c543210e615cff8aeefd179f3f3",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_native_conversation.py"
+        "packages/python-runtime/tests/scenarios/test_native_conversation.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_native_conversation.py": "feeb59170a99cff0f99938c97fd5bc5e1e35442c889b2dc5d3725f758714f26a"
+        "packages/python-runtime/tests/scenarios/test_native_conversation.py": "fe0bccfe638e4184681e787c94d0aadd3e9e4bf4c3076216b46494e68c21c6e3"
       }
     },
     {
       "source": "python/tests/test_derivations.py",
       "sourceSha256": "7949a944e4224baf92658dbb8dcba34681617ea5fbb855cfcb8bdcf5fd242c3e",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_derivations.py"
+        "packages/python-runtime/tests/scenarios/test_derivations.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_derivations.py": "b502068811c16b5355b61216ceb1b66a11669ca3b0a3f8682434057b19ad2ab2"
+        "packages/python-runtime/tests/scenarios/test_derivations.py": "de311131d61ea0ab37514e6d915145c3022c24bd80ed3f25ddae9e9fff023699"
       }
     },
     {
       "source": "python/tests/test_interaction_feedback.py",
       "sourceSha256": "1a2963a5d4fe40b09168429adfa20006f3ee579d53169b537f61d27c0a0905a1",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_native_interaction_feedback.py"
+        "packages/python-runtime/tests/scenarios/test_native_interaction_feedback.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_native_interaction_feedback.py": "cc94e6758bcb90df6ecb8735e947dd7e543e2ec74b187944aa68a197caf17dbe"
+        "packages/python-runtime/tests/scenarios/test_native_interaction_feedback.py": "6178faea89ba93ef43af21ef9a9d8d3ee45c221f2b587eade2a5df2209b74cd5"
       }
     },
     {
@@ -1421,22 +1421,22 @@
       "source": "rust/ascent-python/tests/test_core_c_abi.py",
       "sourceSha256": "bbf8cfc013aca84a621c15e0adc7ea03b1770a57ee81f597d08c45ef080d6caf",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_core_c_abi.py"
+        "packages/python-runtime/tests/scenarios/test_core_c_abi.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_core_c_abi.py": "b01bd2b330509021748eea910a23e8d07b4e269ccdf331f07477762917e85223"
+        "packages/python-runtime/tests/scenarios/test_core_c_abi.py": "b01bd2b330509021748eea910a23e8d07b4e269ccdf331f07477762917e85223"
       }
     },
     {
       "source": "rust/ascent-python/tests/test_rust_evidence.py",
       "sourceSha256": "cdd9d6c5edda2dd48e7d1d5661951058d917db0d93dfba4b73099ffc213c8a68",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_rule_scenarios.py"
+        "packages/python-runtime/tests/scenarios/test_rule_scenarios.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_rule_scenarios.py": "1b347856e7a81b8dca7152d2ff94fcf76bbe5cbd619c722ea11e82b2db67840d"
+        "packages/python-runtime/tests/scenarios/test_rule_scenarios.py": "1b347856e7a81b8dca7152d2ff94fcf76bbe5cbd619c722ea11e82b2db67840d"
       }
     },
     {
@@ -1469,7 +1469,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/exchange.rs": "034722ec51b72c307e43f3b5390eff07d44899eaa1c796449a1b3e62711ccc49"
+        "modules/ai-agentic-context/clues/native/exchange.rs": "dd318a486d3557d66144c8f1fe3ff5af6ac7d5927307d41ec59f8f856b9db179"
       }
     },
     {
@@ -2063,7 +2063,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/clues/exchange/mod.rs": "b3cd9c768ae27a7e92b5062f7d6ccb44141a906de06102cfa6be03ed41400a38"
+        "modules/evidence-assessment/native/tests/clues/exchange/mod.rs": "b48a59ee82d0e6a92d1dec203a6193fcce52d524ea48a54b90b2f4c56ebd8571"
       }
     },
     {
@@ -2107,7 +2107,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/clues/requests.rs": "61cba68e30252a15e796d84f08ec61a0111e282e79ac15417e6e265802094123"
+        "modules/evidence-assessment/native/tests/clues/requests.rs": "e852f8d37fdacb9fd5f4664ecaf1aa370bfa1c7097ee1991b99a3ddda4dfe703"
       }
     },
     {
@@ -2118,7 +2118,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/evidence_checkpoint.rs": "00f2dd01b77f37a609f9b23a2a072a4607ead035778d783a21858b3767c6391b"
+        "modules/evidence-assessment/native/tests/evidence_checkpoint.rs": "37ae32c144db3dd6d6fe4f46a897acebcba1f0d2a37c480d9ac10d1da1e051fd"
       }
     },
     {
@@ -2129,7 +2129,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/interaction.rs": "01bb2efb920f47b724f0d348a4be10dbb9b53047d723266b2cd0d1cb7293f7a4"
+        "modules/evidence-assessment/native/tests/interaction.rs": "ad9503253aca516167842066346bdd0604eb6735712e328e0f1463c088486618"
       }
     },
     {
@@ -2140,7 +2140,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/workflows.rs": "2f4390f177b4d7eccb5f253bb8165f86619277c5d1a21941bf8e9ef92b11ef90"
+        "modules/evidence-assessment/native/tests/workflows.rs": "cf54ac9851cf6b22420db933f1652725beb97d0e43085abb1870e21faf810435"
       }
     },
     {
@@ -2173,7 +2173,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "t/ascent-domain-evidence-test.ss": "b88f08ea0c1152231b9f3d01801fdb0e9fcd6013a4480fe687c3fc9ff145ae33"
+        "t/ascent-domain-evidence-test.ss": "edafd93b0fd5ed8d0dbe3d5891535d6ebd4d6ca87af6eefebbd19611cc6ffaea"
       }
     },
     {
@@ -2184,7 +2184,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "t/ascent-evidence-store-test.ss": "289f6e7897a44fe5cd47be5a77eb2b18df1298b8885212371be6e1baa8254f99"
+        "t/ascent-evidence-store-test.ss": "a95f5e23800da154351cc4e123dfbb3e5c1af45e8f9ec5221595ffaf078c4d7c"
       }
     },
     {
@@ -2195,7 +2195,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "t/clue-exchange-test.ss": "609c3a40736d2cddb7e262132609aea719f4a27e450e8e8e47fbc10355f0a0cd"
+        "t/clue-exchange-test.ss": "d8ee0bbf0ba77745d2159627dbb6377f59fb1598ac84d212904a9fff849fe1db"
       }
     },
     {
@@ -2206,7 +2206,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "t/clue-query-test.ss": "60a62322684ba1d6636d9f27d906c923c601fbae8e8d0bc9ee5866643812cf50"
+        "t/clue-query-test.ss": "e7d7abaa08a5bc498bf30de4f60a5dd4183b3232de33666d672a562590ef3ab1"
       }
     },
     {
@@ -2217,7 +2217,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "t/evidence-dag-test.ss": "77141fcc8214ca3c401ad59fe7a8a0a65cd1d0dc5988cd70aa7bbcca82447676"
+        "t/evidence-dag-test.ss": "05aacbf905ada96d15de50466e4d1462875e3324a832042734cfe06be10a4df3"
       }
     },
     {
@@ -2228,7 +2228,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "t/trajectory-test.ss": "1e08cc8d9ea3adf94aebbc466fc40587d96319a27cb83dc41d7e3d8760279ecd"
+        "t/trajectory-test.ss": "a818dde073718de04976e7a3ef8e3ff41d1a94883c8eb69e408bbcd0e26b87d4"
       }
     },
     {
@@ -2239,7 +2239,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "t/research/candidate-interaction.ss": "5f170b7e9c9c382a469a4cfc49f4dcd6d64d3fd8e7e5ff590ae379a84b5e692f"
+        "t/research/candidate-interaction.ss": "8b49d50928e17659b21d11ef0b42811702dff90872c06714a00f8381e05a18f3"
       }
     },
     {
@@ -2250,7 +2250,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "t/research/evidence-search.ss": "426bb7aa8612f357e3345a53a3281a79eaa186a923e3c64a7eceaef10157e724"
+        "t/research/evidence-search.ss": "a96644342aae932abade462dde76abc1eeeb15ec36699ab359315010a1e4b28d"
       }
     },
     {
@@ -2334,154 +2334,180 @@
       "source": "workbench/engine_tests/test_clue_exchange.py",
       "sourceSha256": "238d45cfb29ffa09041a2d64bd2e6280e672b4ac11dc5f85406150a86dfa5e27",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_clue_exchange.py"
+        "packages/python-runtime/tests/scenarios/test_clue_exchange.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_clue_exchange.py": "9ec4efd81888f783124aa7870aa057dce651302b5dd3285be01b80a2967095de"
+        "packages/python-runtime/tests/scenarios/test_clue_exchange.py": "0aa80d2b7fb2d57ed6c49150725935b1353d8dd9a634fd04626a5af853fa7a72"
       }
     },
     {
       "source": "workbench/engine_tests/test_complex_inference.py",
       "sourceSha256": "1b7b69473cee4add5c92c6633ed56f6560682f498c0d6c394e5d2344df503259",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_complex_inference.py"
+        "packages/python-runtime/tests/scenarios/test_complex_inference.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_complex_inference.py": "60c145c7a0af1e3c6519c193ff873e1321ef5522cd04fe71cda9dd1d92187fee"
+        "packages/python-runtime/tests/scenarios/test_complex_inference.py": "deaa054ea57fe661c47245e00dbf81a8e1565191104fffdc3630d36b55a57bd0"
       }
     },
     {
       "source": "workbench/engine_tests/test_complex_movie.py",
       "sourceSha256": "0f43c8898bf616381db322a5ec82f5761d44e2d2d54cb67783fffd927b6c0c28",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_complex_movie.py"
+        "packages/python-runtime/tests/scenarios/test_complex_movie.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_complex_movie.py": "2c40aae5ab69e16d894bf71a7c1baacac344581e31eae9fe6f033147f8924022"
+        "packages/python-runtime/tests/scenarios/test_complex_movie.py": "09447a26d5bcf88c3f3d28d89de3df112caf9e560a2533eb5a7cb94769d5962f"
       }
     },
     {
       "source": "workbench/engine_tests/test_computational_evidence.py",
       "sourceSha256": "cf0ab0c40e954f33a9da02686a82ce01b9755bb1a649de43e00a2038e8938ef0",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_computational_evidence.py"
+        "packages/python-runtime/tests/scenarios/test_computational_evidence.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_computational_evidence.py": "8abfab0ad37f4d617e83c74b31f5a483c8104b0feabea0eb281db95493bd87d7"
+        "packages/python-runtime/tests/scenarios/test_computational_evidence.py": "ceacd7366a83a5210585e2c8277d1000d5edd05b87cc3315ad1962d2cba1d9df"
       }
     },
     {
       "source": "workbench/engine_tests/test_derivations.py",
       "sourceSha256": "eaaba01c3dc570438475cd17509a358e3cbd203acdc14f7701afa6b5093776ae",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_derivations.py"
+        "packages/python-runtime/tests/scenarios/test_derivations.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_derivations.py": "b502068811c16b5355b61216ceb1b66a11669ca3b0a3f8682434057b19ad2ab2"
+        "packages/python-runtime/tests/scenarios/test_derivations.py": "de311131d61ea0ab37514e6d915145c3022c24bd80ed3f25ddae9e9fff023699"
       }
     },
     {
       "source": "workbench/engine_tests/test_domain_evidence.py",
       "sourceSha256": "f7774f609e8a5c7a0a2cd2a36354e04da72c7a2b80a6bd39436a19ad5119d493",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_domain_evidence.py"
+        "packages/python-runtime/tests/scenarios/test_domain_evidence.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_domain_evidence.py": "0fdd830a83d7cccbc852a310991ca599f031e9648a11e2299112713ab64bb6f4"
+        "packages/python-runtime/tests/scenarios/test_domain_evidence.py": "381642db9e274911c4bf63c9bde48e8a942d0b687f760632adb6d797d0babbcc"
       }
     },
     {
       "source": "workbench/engine_tests/test_evidence.py",
       "sourceSha256": "2fcf27f696f2c755c17258f0c0a28ff777f039c92c1e58a6b14161349611726d",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_evidence.py"
+        "packages/python-runtime/tests/scenarios/test_evidence.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_evidence.py": "e7cd01ffae3f0de5ba7ba2dd0b1e55c92f6d74a674af5143074261dfacb01f9f"
+        "packages/python-runtime/tests/scenarios/test_evidence.py": "3dcfb40bee53d38c72c7b3c5465e276331eed0203a0a10f432f023c1577b9430"
       }
     },
     {
       "source": "workbench/engine_tests/test_evidence_dag.py",
       "sourceSha256": "8af768721ac43a50e413253579c22abfee66c0e8d463cbe0c40daddaa1331820",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_evidence_dag.py"
+        "packages/python-runtime/tests/scenarios/test_evidence_dag.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_evidence_dag.py": "e2f98c51bbef03d63fb0921c6ce991baeaea65e78e7946a1c4cfcabed8b03b60"
+        "packages/python-runtime/tests/scenarios/test_evidence_dag.py": "1e046f30998c31d9fa7cea76750062a26e95e3b5bd87bb2bc07fdb1a277c4328"
       }
     },
     {
       "source": "workbench/engine_tests/test_inference_reuse.py",
       "sourceSha256": "749eda046ea1919582499424a910aaab6e3522f6eb8700a30935ba1a08b61660",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_inference_reuse.py"
+        "packages/python-runtime/tests/scenarios/test_inference_reuse.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_inference_reuse.py": "506a4a1a103427cfc8ae5c8134325c6602ff33f9302665833b8a4a3a9c774d77"
+        "packages/python-runtime/tests/scenarios/test_inference_reuse.py": "c6c821786584e6cd2c8b28ecd67ddb243a570eae7d5b82d93abafdf7bca11b01"
       }
     },
     {
       "source": "workbench/engine_tests/test_interaction.py",
       "sourceSha256": "95128d8ed7049842254d27a60076d2e25571be061bfe2fa05c25a4c01df790e3",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_interaction.py"
+        "packages/python-runtime/tests/scenarios/test_interaction.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_interaction.py": "bb66a07d111ed075fa84875d0156c4f691919a6e072d64c7d4d428ca663cc941"
+        "packages/python-runtime/tests/scenarios/test_interaction.py": "7ebc87b2151040c65e9bda43bc7b1b0a2e81c26bf9d708c081fa5c787a266e00"
       }
     },
     {
       "source": "workbench/engine_tests/test_process_status.py",
       "sourceSha256": "9d9cbac1eb8534ee158f10a9a33f25b1209565b907d72c551f63244c0ab666d9",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_process_status.py"
+        "packages/python-runtime/tests/scenarios/test_process_status.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_process_status.py": "53c67ef7b4ace94f59a6147f4137d04d0332aaa33a539185ea72a7bf5064eb20"
+        "packages/python-runtime/tests/scenarios/test_process_status.py": "9f54beb245ef8e9a0b14b6490ca6aab9a7d2eb106987797e76b1043bc836d7b2"
       }
     },
     {
       "source": "workbench/engine_tests/test_review.py",
       "sourceSha256": "3d25540558a73915e025b64eeaaa8f629e35475e06a6f1096bd603f172a8ffb8",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_review.py"
+        "packages/python-runtime/tests/scenarios/test_review.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_review.py": "24633d4b78a76472ac32e57d75de5da0b2891ba3f3cfdcf1a1c0a4f268043366"
+        "packages/python-runtime/tests/scenarios/test_review.py": "c6dd81bf796108306219afa23cfeec18887874f35d610c7aa2016e88da582031"
       }
     },
     {
       "source": "workbench/engine_tests/test_trajectory.py",
       "sourceSha256": "682d6d674931eab21ac5163ece5a1d8e150dcaabee70fa0dcdf3f2982a9d2659",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_trajectory.py"
+        "packages/python-runtime/tests/scenarios/test_trajectory.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_trajectory.py": "da36ef5dcb08cb835d62bdc3afb3d35b1d1c5797ab677a06fd12f8e2b8403211"
+        "packages/python-runtime/tests/scenarios/test_trajectory.py": "525ba825f2f456f87e274b939db3164a49927ee91f5ea284d359e807d9855228"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/candidate_model.py",
       "sourceSha256": "141c202e4210803f488f28b3089363ba7923f3e5efaf0c2335fb95583f301db4",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_annotations.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_artifacts.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_config.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_judge.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_reporting.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_reuse_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_reuse_response.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_reuse_snapshot.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_snapshot.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_tasks.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_transport.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model.py": "60711c0a52634048f8967cdffbd3bd37e8a62172bdec3fbe0775f0fc87716551"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/__init__.py": "e93bde58ff202b2523aeb6ef8b40f0555e13245c3f2565a16e27a872953ee3e4",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/__main__.py": "0dfa2931f1b677123d025fa7d80a74e35ab001f017b2132e0122c3a29c040b16",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_annotations.py": "d2683578f44456828459d13845e9e413776675bf502f4db7fd1c88b5dcb16fd2",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_artifacts.py": "e6e3c9420460dda6295ffa0e1681b2ba1aaf011cabeeee4de3814b6e18df36de",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_config.py": "ba80bc1196b2f2e284ff33b972eb006c3b7a060c4bc35ce8f4d467b94dd2fe8c",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_execution.py": "63ee03de219da54cecc98cd955ad1e5571bca2f7948b9056249bcffbbbb4b0c6",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_judge.py": "92a7dc575c7cdf9bf4629db6aa946f6613716de765ffe90d5630822ee250a761",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_reporting.py": "3043f136720934d5e3e94779d3072867056c42a8395aaf09cf628efdfb0efc5a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_reuse_execution.py": "dbeb9e84ae07f571712e047bd96f25d45a76e8e8896acf1d0ad29316c2e7e904",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_reuse_response.py": "bd64fa976712dada3689cced7afab301a41aa82999d6af5f02a122fbee1f76db",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_reuse_snapshot.py": "32f5a39b7f612d7dbd8eb5e746fca2ab6d186b0f408f86b1ac61d3d2284ba4f4",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_snapshot.py": "1372f8efd86e6df3c1b0c2143c648a7296b8a609a2e3bf17cabf88287566d9aa",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_tasks.py": "850033cdb8d6f6938aacb30b0ad73bf6066f09e928480966e3bcd9f81a6d6b03",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model/_transport.py": "d97046b8e70ce5022ddfa6b676c60e441f8728abfa68ebac0f68a7795e6e63de"
       }
     },
     {
@@ -2499,66 +2525,136 @@
       "source": "workbench/src/ascent_workbench/complex_movie_study.py",
       "sourceSha256": "d0e8dfd1f2fbc43dc8a3a31538c1e23e8c7d4a3c654870931c3403afd7d35f66",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_config.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_contracts.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_qualification.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_request.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_snapshot.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_workload.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study.py": "0db84ffe5371bde2e707eec794f5b4b77be3ed878c820525e01c75769032e36c"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/__init__.py": "7d396141397b16d389b193cc82c80f65b7c8b8a54507b8ea638063b6ed1b9cda",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/__main__.py": "25c5a20f1dbf14bad64f2d11694bb8e7651c1db8089f317c6d3a2a9e6d3a6dce",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_command.py": "e779beba0a48deeef4806c57ce7a57de68ea3db10d5b2c7c52d1b455ba2d521b",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_config.py": "f5f27f7ca5b68d9acdecc33551bb1ab0eb4ded918e519d4893ee82da986aafdf",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_contracts.py": "49ff88d593be26e8487ae7bb643a3e900dc742a39a514b8c1130bb7f9c9eb5c7",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_execution.py": "de965e35542d9f4702c077cd9c0fc5608296aab3711db69915365e06353e0898",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_qualification.py": "79358f2ea9cdaa9c7989e95971f9518c55826e0760596dd1d04ea796e7862cfd",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_request.py": "e0131e210a20cceaa368d2f101421c333b9a177ce140463321dcb8b09c797540",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_snapshot.py": "5b907aa6e821dbfe564bd04c30a4c7168e4e53ebba364b52041ec5b373295753",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_study/_workload.py": "e9892d95ab5e466a0fdc02225840edf3ee2219cb2c0719d72d06e8fa05b8672a"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/complex_movie_validation.py",
       "sourceSha256": "11e051ef3b8cdb69afeac22f8958317446015a12866d976e1b987bafeff05608",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/_recovery.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/_repair.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/_review.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/_validation.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation.py": "45214cbf4732d7856d18e866146da1d6442649b241d682f88b66e6999ed11a92"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/__init__.py": "1fa584c02e2cd63c9466bf35495481f2d21950561656d349f40ef8173b9d8d04",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/__main__.py": "a754f99a1dde5648c99e0094b679ee264ee6bedbb3b6cd5a2a1532772e7210ad",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/_command.py": "147732ef0cdab6ffd54c51ec7e68ff0ecfa91722e954a5af8649ab41a9a09b45",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/_recovery.py": "f5fe0bda2c264521efa653829f199a734793691d961daccab94460f5027f5ae7",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/_repair.py": "b4db58bb9f4c3713abf917ab9bba52ab00359e2f4419ff5e4709a6509bb50d9b",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/_review.py": "850804359f10393ef3e199e89465842c7feb0e75fac67b52ca1cb9126e7aa5b7",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/complex_movie_validation/_validation.py": "b50c17def162dd79346a30e0a7b382edc78c74da05bb0fb3373d99a71a1971a0"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/compound_inference_recovery.py",
       "sourceSha256": "c1ad1f9b1f502f4d71fc5c3da4fe14b6227d4d6fe84696ae0615f96d344fe30a",
       "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_compound_recovery_plan.py",
         "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/compound_inference_recovery.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/compound_inference_recovery.py": "6e7a5cee24b732d017cd0a279c4885bdec9da1fecab10771fd2c2f58ec7eedbd"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_compound_recovery_plan.py": "7c434113765b69c301ff40b93d88e3266533062a77e9db9b6d8f0da3d4ea4329",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/compound_inference_recovery.py": "a221dc82ec1bfa96d71a29014f10548e681942f0a5fdca6dad612623bcc49d02"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/compound_inference_report.py",
       "sourceSha256": "087da32c6b71912a2c6cfff4b21ea5ce3eaf8b6283cb6776a3044a547d75bb63",
       "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_compound_report_rendering.py",
         "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/compound_inference_report.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/compound_inference_report.py": "087da32c6b71912a2c6cfff4b21ea5ce3eaf8b6283cb6776a3044a547d75bb63"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_compound_report_rendering.py": "2985bde44f97060ae941f296022eaf9011e989dba7afb01f9ccf598af55e2747",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/compound_inference_report.py": "b842a44de1882930388cd8fe8380ab3e66f275ef5b26da575ba63058cb8004fb"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/consumption_study.py",
       "sourceSha256": "ad93f7bb5caf4b770dcf75b7b165d74bad631f08a2584cf86ad3ca88c88f9651",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_admission.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_plan.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_projection.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_recovery.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_request.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_workload.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study.py": "f208882c619b37946a97182975ef0c18cc0147eaa425558504dd1b18624ff70b"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/__init__.py": "d81967b4e4aff73faaddb77fb1eb4c407e38de27a7db0d5d5387de79f472ac0b",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/__main__.py": "84544dd6d35b0fbff08c87c426da341dc9db87d94cd2bd549cde09cf63309e73",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_admission.py": "32cee2084356f40006f2babd797ba7bae195c06cfcab0f5660f11295cfc58cb9",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_command.py": "18a54a5b5b0357c4ecdec0a51a5b2f57e923ae53be3001b1bbc790b404fdf316",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_execution.py": "1a00af035df687ad61e3aca3a6fec160dedc2b24957ffd21f8ef926277a4464a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_plan.py": "dfd9a0ba7485b295940750f8c6c10f8c4ed05e44d0f02bd21fb325f1c60b0def",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_projection.py": "911481301168aa628c48288cda89c8f7c8f18d247527079667c49df1b55fab30",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_recovery.py": "d4d018ba7e2ab34f823b20569d714fbeb5081922a3a9ce5e6ae49a2c18b0ca30",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_request.py": "319eab8e37699ad28ae6a07ec0f213bb7cf7e0757d139bddb48cbefe4904362b",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/consumption_study/_workload.py": "b0d3e7c89502ffb848fb82cf1fff060d829ddba23ccb63ae22222465373e47b7"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/correction_study.py",
       "sourceSha256": "51e8d295483b270a19b66eb212cbe081380afb0fd57190a1eced850f53c1d4c5",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_balanced.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_case_record.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_cases.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_plan.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_request.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_tagged.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study.py": "ce5a16eec8f606570b4bba10d148aa316b015d90364ca55e50bda7224eb64891"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/__init__.py": "b74fd012d93f39339e11d6cb16f18481856355f62ad9a9e15a308d9e9e0b37cf",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/__main__.py": "8011df1a3108053c0371ce45408aaa2c46a79473558cd83cff48865da2a5cc1a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_balanced.py": "293fe18d3bb07564b607cd02e307ff2dc3c62eb6230ed9932a4caed68da7c551",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_case_record.py": "e37d4ec99aab3fe527de234490f5c875b62ec744f5f2a8857f9a8d61fbe8c867",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_cases.py": "50f16fb367c2557342ce837887ebbdbe4796d4fdb5875f615d6fb935c32d4136",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_command.py": "16073e97b04463bf37173cf8ef6bf8b9bdee885ed23b52e3af06f503e990359e",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_execution.py": "41cfed5c6cd12e82e11022c403d09b3aebcbed8e84d69684a685d90db2499bcb",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_plan.py": "6e4e99d07add7de237ee90aaffaafa880a7d207ec793f8d21934dd2d03d83690",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_request.py": "bada25dc17f9f7e608741dc103c2b1d5f5c96607a966087b75f6eff46b9325b8",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/correction_study/_tagged.py": "30518c7b746d8e63888e89cc49502c4373cd4910e54e370215f010c62a96126c"
       }
     },
     {
@@ -2569,7 +2665,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_conformance.py": "38ea91e59890f09ac37989e0a44d8f2f70f5a2bd3cc67c9e6cf48702d0b0be55"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_conformance.py": "21590c9a58e4825ed28faf71e94439e384bbefb6c441ce7301772b98c3661253"
       }
     },
     {
@@ -2587,11 +2683,13 @@
       "source": "workbench/src/ascent_workbench/domain_repository_report.py",
       "sourceSha256": "f6a2c86f6ba43d1797cd0260ada60841522561c0ea7597e9afe29c29321ace3d",
       "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_domain_report_rendering.py",
         "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_repository_report.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_repository_report.py": "f6a2c86f6ba43d1797cd0260ada60841522561c0ea7597e9afe29c29321ace3d"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_domain_report_rendering.py": "0a7b75436703c4e0d0d8c73eb64af9f507f9b5db7689e9118d6ce192a8d69f1c",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_repository_report.py": "806e3f5ab57392aa6da4488084f049edede1daa6bef9eb493e49f0840b64ed3c"
       }
     },
     {
@@ -2602,18 +2700,80 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_repository_study.py": "995bca26da460128eb70c14873f50e5d6abdfe084616de7742f49c9ba04d4e27"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/domain_repository_study.py": "bad3fef0310ea34494c1b97589d449c1e3cffd03cb898e1d63e303bd38f98b98"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/evidence_chain_study.py",
       "sourceSha256": "41f74a1f86f15454a4767e3c4106509fe96ab62efa18130b9e31318857426619",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_actions.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_cases.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_contracts.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_entry.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_labels.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_qualification.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_receipt.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_report.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_request.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_response.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_semantic_labels.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_semantics.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_snapshot.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_task.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_config.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_episode.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_episode_prompt.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_protocol.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_action.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_cases.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_check.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_context.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_labels.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_qualification.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_report.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_snapshot.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_validation.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_study.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study.py": "651944aff136f8955778b0a67304cc55a9d22bffaff6ff762707ecb5e015b8d9"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/__init__.py": "0be518e2856cb195f82448f2bec6f730b5fe303d983eca929bc76472b3d3e023",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/__main__.py": "c899149e600c916f4068387f3fd1bdb41c0c79d4edf906f1a588273878378f82",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_actions.py": "b7831c4e959b4e36b967322dbfa2b38ff9da603a8cdb834f4cf9840f5dab25cb",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_cases.py": "5e6e40419bfa37bd67487de5ca1e33b65c4d16f58aec17ea4ded854b06669028",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_contracts.py": "eb3882fd770c0969c926a97cd7cc18c33fedd2c8eb53eb28e96eefb68619372d",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_entry.py": "7b5f8ce7b91aad979a68ae2224bd0fa412f42fd2572a6f5536e96c8feeb279d6",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_execution.py": "d25fe2055716daa5d4f16429614f50163e7e12e70d019702b570e329b9a59957",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_labels.py": "784228b4d356d58f658346fed9a3ab4ccaca17a4455c1eec1b55ca3d23347770",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_qualification.py": "8630f9714904e8a80aa3d4ef95e0c3fe6535be550fc415f0824f7a2a38c687e5",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_receipt.py": "4b0643e23738c5a319eec69fda832cfb1b0c5e628f655810c7d7bd619898861f",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_report.py": "573163c6fd50a4e718bb4a6c5b139a749d9cc1924cecd97c27de52767f564881",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_request.py": "ed8057abd92015e2462908d275018249e638ca810f27dad1fe568c278c2964fc",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_response.py": "d276c5088a89af8ae97addac82067364df2ac99a18586a72866a69869b6a99a1",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_semantic_labels.py": "2ea374351742db8429d416244824d312a97b4ba6dd8cd0b547dae9f7b4eaf71d",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_semantics.py": "60d9322cf505283ce9cb35ac785cca6421743f66a787c173c24f723f5b571ce5",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_snapshot.py": "0502727ffa45f9cd1ca46625ba0b1c7aca81bb6c9078d4d8cdd8c21c8ba3ede1",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_branch_task.py": "6c7b20efc88b84ab6ebbddc55af68055203aa23133a65dd3f005a46c5360adce",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_config.py": "d311bd5f9c9251071363ecb97cd195188bb01bfcf5ffb4904cf4894ba62a71c5",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_episode.py": "de702bae3fe9cedbe5b8c22f18fad6146c3e77923d270e0ad87b0ae3efd8f987",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_episode_prompt.py": "ec609c7a718ac9ba4d4435f86ba412364046adaf1a157b8a703115395b786ed5",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_protocol.py": "ff78faaca4c9771857a493f41e499143cfd44b0d25f4b17daa1c3ff575aff7c5",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_action.py": "ee5bea1828173e5da31e41dd94240a40c56c694392ce7b484437dbdd39e83f9f",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_cases.py": "39b069cf194ddc92c6b07ef82e4e0d52d9a2689858b1c5003ee2304fdc5f09e6",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_check.py": "9e79d88b7fbed5ca44cc42a6fcd9493a239cb5c9d17587677214d60d4cf1ef00",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_context.py": "19bd7b8e1bb452b18f3a682544fe1ac9346a57e205bb7abf2f82faa98e31b69a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_execution.py": "452f8d73a45a913181632e6a732ef4769e0e8eb2af1f8ebce37d73b37c5363ab",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_labels.py": "961ddb5275085baed660fccd5a3a678a3543b1570ccedad212aeef2df20fa9f6",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_qualification.py": "3392251b71ad008cdef1c16098a7d66ed95893ca367bfd4ad08eabc200c9639d",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_report.py": "ff33103920b17b732cb79368d6984238b7d01bc36ab09f87601a81fde48d494e",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_snapshot.py": "19ad08a571b325cde011da9d160f363dc79f076a52388894db754d100b1ec332",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_shared_validation.py": "1f6b1af7e770b7c47502c209c80b7d00cd9faba9833b712c9c5759be3c67217a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_chain_study/_study.py": "f630603b6d6a8d828141022f5e40ff59028d94ed8b00947f0549f0f4b6dd29dd"
       }
     },
     {
@@ -2631,44 +2791,114 @@
       "source": "workbench/src/ascent_workbench/evidence_interaction.py",
       "sourceSha256": "7000bc32052f0a74ae2d2709c4c4267a5da8ce7a39afd21e1916b29fef72d6ae",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_annotation_validation.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_annotations.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_artifacts.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_config.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_phase.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_qualification.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_report.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_report_bundle.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_snapshot.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_sources.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_transport.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_workload.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction.py": "7a4a8838c99d6cb3315816ce8d4aa41d00e8c1d6a972ce250899ab719aa22f5b"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/__init__.py": "7403c8515bd89a6544b81ab8de13a69eb0612e84462dd07409e9c5f235edfd2e",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/__main__.py": "03e52b60acf22041f3628d7e81a376a240030a3e202c0d11b985f506e22675d8",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_annotation_validation.py": "968db9484e2e94b3b7d313cf7f7b834942fa698e2a44207dcc6f1d9e8ab18310",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_annotations.py": "9aebf2ce15a9247d10ccd8c0de7ef9903927aa2f60ac8566aac23dfdc046d764",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_artifacts.py": "502d2f7c2ab6220fa54be47ec1ae09e91a8def6eac3db0110e6c523a5af64c8b",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_command.py": "af4beaf9eec7bcd5099d167d66c69d2086aa2c89913a1282628f9f5b642f3521",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_config.py": "dfbea261f87f723223562a11b9443d6f1ca82840ce4da17d94ce9189f09cfb0e",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_execution.py": "96f6c9afaada70013eca9c06d4385dc9c8c7d1893b76c6e8af2198c66c156aee",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_phase.py": "af5622cc8aaf7ecd31b741449fb82ba3cc806467aad8c3dcbe94729b5584f336",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_qualification.py": "6ce29c27e0463b46a677368df19ea398453d8218b290432a16b69ecda5850732",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_report.py": "b68e5eba2af95ca1b56aac188e9925e5d9a387805bd746050bf9e1f74a02845b",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_report_bundle.py": "b52da4fff77b63ea42698adc7b7f60e50b941248445189886873d1fba1912577",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_snapshot.py": "8558d41c832f02fd6754d05bcb45dfd4208190e635288b2e9086717186f7b4fa",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_sources.py": "b80c44a1e94251d1a92fb89e0233d881cf586d8a880e3b16079627379efa2162",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_transport.py": "c2e46529e21919f44cf9f4ad736bb203098581b985c927494f50921fd34f5998",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction/_workload.py": "c16ccdd88e0f62bbc9cd29b49cb007c2a12a0341ec62e03cf7ebb0183e9c38bf"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/factor_budget.py",
       "sourceSha256": "5f2b1ffd5bd2b8d78d8c6b38161f3f9ddd3abd67a0121b5bd9bae43eaf7481c8",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_artifacts.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_config.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_phase.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_snapshot.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_tasks.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_transport.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget.py": "674ef76e5abf2d3e184225eab8d85e86f14eb0515f5b0f056a768c50363df553"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/__init__.py": "8f580becee0405a8c7709fc2dd402c41372487e4bf5a11574a96c48f9533fd3c",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/__main__.py": "f03d1d2290b636559e645c778c7762a05f1baf238285f25d4199f17724f2a188",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_artifacts.py": "629719f573ebd6bcbda4118ea670bb7969ebb1ac28d53f0068d2312850875d57",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_config.py": "ca43eb61d6a2f576806728c9abb52fdb34bc0ac1c85b0ce3a2f4958f9fd43b1d",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_execution.py": "262a66a5d16fc86df8dc552488eedf40e8210506ff36d0e6814f4bff12d90136",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_phase.py": "b4bb082a98e90a960dd24f845039e2453a7a0a579929c0c2ca0ae7912372eb0c",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_snapshot.py": "d29ba36a5e74bb6155307213d3388f1e364d037956b662f11ae70d0bb41e1af5",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_tasks.py": "d936fdcff39477f657abf309d9feca7e115a07e7166e74b116046256acadc9e1",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget/_transport.py": "f1286ef9cda477f16fbe26917c581a58db8d5a9803ec2585263b1a1ec96d0d37"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/factor_budget_report.py",
       "sourceSha256": "4521ddfc318e879e0c634722a3e5a107d2d41086d058c915e6356480f2ebd3ba",
       "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_factor_budget_metrics.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_factor_budget_pairing.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_factor_budget_records.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_factor_budget_rendering.py",
         "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget_report.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget_report.py": "d99448571d8924eb3da5b92b929246a27ad9ca5000c41f410709a4bed6924923"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_factor_budget_metrics.py": "95804012d1c684568ab96467f45a3f029224a013e04f00293dbf31d4100aaef3",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_factor_budget_pairing.py": "8d2d3631f745deca00edf0b304733e6fa3dc0811213f35d27fdffc108a4d5cf1",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_factor_budget_records.py": "9b2d535abcfb90c9b67950b438c9cc6c7f224f74386e88db6ef13bc4ce155858",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_factor_budget_rendering.py": "b23b768aa10ad3dcd7b9b6210ee727a174791306f037a2530885b1f1bb8a0973",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_budget_report.py": "20c6fd15253fae657a2f6b06c4f52dd156a88c13762c4c64b7d7aacf0828562b"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/factor_pilot.py",
       "sourceSha256": "20ce93182c667a9928b3270869ba448fa5761c6d8322f2527c9d5f031efbf558",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_artifacts.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_config.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_prompt.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_qualification.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_snapshot.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_transport.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot.py": "67ef5cf76844b5906c85855f621d7033a46305b01e33982d6571d03e03104457"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/__init__.py": "f9085a47a2ffd350e4e5448a59f5aca46339b1c293c3c8f970c72237f0d7e51d",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/__main__.py": "ab5990330d9021371b867a291918584a82937c5209faf5f6a6bec2b1ce0a2544",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_artifacts.py": "d4d813337f99b6da4b1decf42ca267d1de148f901ca3621e1e20e18d05236683",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_config.py": "6306399910a9eb6e8b3767cb0141122e6cf52d72ac34219c51e78765e0560219",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_execution.py": "11110ff49a35a7c5b592eb02548ef24c0c07e2e654e29a17081c8a855d2b5a0a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_prompt.py": "d4b37eb1e6f962c7b4f07c8a8b7def9f074d7938274cf2492c2f0102242413f3",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_qualification.py": "532770c8ee4a8001527c18488ee83088cd136550efc0719f8372c64ba53749cd",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_snapshot.py": "fb8204c17cfcb5f83cf0bf591fe8b83be78edb40e9bcff30d75fc73171cdd8c2",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot/_transport.py": "19ea92e11a98d68b551d1fb5bd734aa6ea82bc061ead4f9faa9ffb4ecea2628b"
       }
     },
     {
@@ -2679,7 +2909,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot_report.py": "a2826759fdbebcf6d514558b2f1a64eca5790d5917ef1eabfd8ff42080be6f8d"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot_report.py": "83db09de24c1ef8ae4f7579b52cbe755b5e1db5347966093d62b44829eb7932b"
       }
     },
     {
@@ -2690,7 +2920,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot_snapshot.py": "507a43642c12c57b71140264c4055636873795adc488392508b70f284e268919"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot_snapshot.py": "70334fc7d30f2a30afd3b66ba6f73fc465bc17799d308def491b8a56e3f8939e"
       }
     },
     {
@@ -2712,7 +2942,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_recovery.py": "183c32d9ff619074abd85fd25bc98fd2ac4225954496f6d9863d2e00f25f1f32"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_recovery.py": "3e1ea1a137778953df1f1a9a289063d9523d37d2174f606fc6a8a73cecec0751"
       }
     },
     {
@@ -2723,40 +2953,84 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reflection.py": "ffceb546f8315eef3e305d1acc5ae7c2b8ec892364544ea989705c693aa5b946"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reflection.py": "5fe983997841aae950c473cb94b5b4a133ac35b81f4339ec6b104ba43929a6a4"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/inference_reuse_study.py",
       "sourceSha256": "8fd9aa2099702f800b4059e1766fb8f02cb59460ce845ea54978dd08d2232dbb",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_config.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_request.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_snapshot.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_workload.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study.py": "8fd9aa2099702f800b4059e1766fb8f02cb59460ce845ea54978dd08d2232dbb"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/__init__.py": "91240eebc17d2d2f4d5d729c2f83beedf5317ad43f830f1458396ce857db38d8",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/__main__.py": "3c439925554574beef60eb69d6d8bc94d3b13d7767d0fc97b6c65e6bd6f3fbb6",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_command.py": "c4785772780561f2b798d2408fcc53707d32b5aae2f0d3bb87457e00f58edda1",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_config.py": "df83c6cdc9e934a2fb8b85858a8a8d0e62ff3ec2209fb1e36052b63aa0ad5978",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_execution.py": "1927fa11113a44c1740bc5b52d3322ae6d7bd204431ed0260b66b6c5744da8db",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_request.py": "1e10153c5108a00e61296f7094c8d3169c2ec03c9175b0b1f1115cc28b6c1122",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_snapshot.py": "14c9a5366c8e43698991b3134f42ed3d5b50ff41c922b16d6b3d41961bd2aaa2",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/inference_reuse_study/_workload.py": "78ca230e62cb3c5abc03383e0499027668d1e65be11c9d652c51022c30b435b6"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/interactive_report.py",
       "sourceSha256": "6e13b12a952c6917d74aada1fb8dbf98eaaa53c719bca7cb37d43ae356da4d96",
       "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_interactive_report_audit.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_interactive_report_rendering.py",
         "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_report.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_report.py": "074777f1a607f9755028b4806c8ee5b1698d6f7781fab0e677b4c032156863c4"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_interactive_report_audit.py": "9ddce9db1de39808ae82f6d42dc3c6d20b0f6b7106401a915bd2b35aa8d690a5",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_interactive_report_rendering.py": "27444c6ff8bdff20808dd56544881b1095415becd43e25f05454367847cbbf33",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_report.py": "3ab27b9dae93c34fe7d0ad7eb5b484bc14cc77437563eba3fdf2575bc009c036"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/interactive_study.py",
       "sourceSha256": "a1981a7da8528e520907cc743b06d938f8a0e5df9da62c968cc9a0f4811acb3a",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_attempt_observation.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_cases.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_ledger.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_operations.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_plan.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_preflight.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_recovery.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_request.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_results.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_verification.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study.py": "9bfb2388edecb6186997472433f460da05c069a0e4ae29645ee0e21a1f4d5db8"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/__init__.py": "d4cc49b396a17610ea24d1ba874548131efa7f710fe24a922f2b40cd6971727b",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/__main__.py": "d6d5859cbdd694b7552bdebcb29cb5902bd21f5a05cdf2e5923587871e789935",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_attempt_observation.py": "984b8cccaf6c3e57d37367c7905e1d284a85da362ff20bd85c4674a74ac16837",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_cases.py": "460dd6151be9345e6b0b5d993d05e721554ee76fec72b9f80d9824787421e7f2",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_command.py": "d5b6e531cf5960080d70c22fec6ef4c3c90ac753dc39edc32bba8092de0fd97a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_execution.py": "7935604de79d0620c80d47bcb6d9ecf6f0b43c15f4cf89b756142c30aae78f53",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_ledger.py": "7da4eb5f9313821eb24a1e825d16f029987f872cfb92e54ee5101f239217d118",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_operations.py": "72fef8cebe5a88d74976c9bc74ad10e74349bdd066d7915d284016e9ec49a771",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_plan.py": "e8921e39fc775b7242576952df51d59209ec56dab6c2c3bd514b0bb2110d001b",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_preflight.py": "d4faf31376739851375d82fbcbcb6256c2637950f8c3f0d6985094bd994a703a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_recovery.py": "b232e01ea3fc2e7cc8678fc23ba2691f5614497b9bb722473a7ccc4b9945f511",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_request.py": "8ccc20c60f595dead0c0010bdf75bbe2b391407ae08e97e939146ae818a7e16e",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_results.py": "d5424d27f598b275b3c7aa390cc57225600cbec1a1e6cf7a81be07387b8db69a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interactive_study/_verification.py": "e171f892472dfbecb424d53d3ca52a35bfe4eeb8728b1cb8d78f5640022dccf7"
       }
     },
     {
@@ -2767,62 +3041,142 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_evidence_recovery.py": "fbca860812224360a97e1cd572f3c7d8235ba0abc3dd95adf50fc937da481ddb"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_evidence_recovery.py": "5f55395fca0b0ce9d750f6c21a223f5ee48f2e5c607f3482226e72cb9e0ec333"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/iterative_inference_study.py",
       "sourceSha256": "2c435dac84011985e5d52351e1686c7a35623876715f8428b71499549fd94b8c",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/_contracts.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/_pairs.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/_plan.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study.py": "c43f2d55600fb9032a29d2ebada2017c9ea0f43fac94020557eefe0ecb60cc64"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/__init__.py": "cbab75e2435c863481435f5637c0335024bb971af1b9f59eb3f551ca8ea9675a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/__main__.py": "7de8bb60d6f11457dc656ed2a5a0a0b263f833772b79524a0a97ab6608f81cce",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/_command.py": "6de0ca5429929ca0ea24b718cf9d4108e3d90b50670ccc9f1dd7a7c063e7aac6",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/_contracts.py": "92ee07871c56e508c3c671a09d10e0d2e29767cd826662ec535d91552473864d",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/_execution.py": "108a671ecd285694eba0aed4bf992bc8111623c4dc5e133ae5f3d2d2d4b5f4ad",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/_pairs.py": "4eb957c3dcc3f278ddfa6ba9e21138599fee0bc9886116dc24364869d4a467fb",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_inference_study/_plan.py": "2fe7e48550f16f67729af17eb9015fc3e50d4bdaffb0e4b42108a2bd5665d298"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/iterative_tool_inference_study.py",
       "sourceSha256": "7e2f037e0eb6b5e58a8ed376967a2cfd43f48b489ade93f75a202efcd4d65421",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_config.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_episode.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_instruction.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_plan.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_request.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_tools.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study.py": "0fffaf9c7d3b529f16c91b50cba6708626c1fe932ee8551930840549bbf39974"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/__init__.py": "628f81f34d07c5f80464af43d2afdf28542b9f5f378b501117c9042b216e5c96",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/__main__.py": "3b000fb796112841ec5b9758f42ddd731e84e879d668580c0a98adb3281c791a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_command.py": "fa96f67fe6aabe86033b0fb648a43c6ba523d1f7e3b72a9f8802e2b36d5738c6",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_config.py": "728a159d977a7d6f08e235509e2c751cbf01439131d8af90cff47922b93a7460",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_episode.py": "0434a65acbef5016be21bb7f245ee5a78c1d16513c0b816130911b6eee0cb680",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_execution.py": "7ab653de59ad1692adf0d24c836a0b208d23febba14ab3ac75a94dadfc576aa9",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_instruction.py": "e3b7953e29f46681f0d4a0fa4978bde3861ec7fdb17ea9bbfd8b4f24314ad59e",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_plan.py": "7fd8f7c99bf91cc5e6b09fdcdc06c410170a3c46f7b2b2c527629289f46c88d7",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_request.py": "02cf0a852b1dfafe6cfdca1aafe28dab8d18b5ab2948610c56e71a7c2ef370f8",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/iterative_tool_inference_study/_tools.py": "2ce7328ae4fbc9efa12c98938d01dd00068ee6fce7c961102a17ca1a2ea81bde"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/model_study.py",
       "sourceSha256": "5a0381db6791bcd5c01e83e7fc7d5374c071f158d35f594e6e48547343583247",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_config.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_native.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_provider.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_report.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_snapshot.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_sources.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_validation.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study.py": "4bc7dd181125cdcd9632fd0b34da411bdbde45cbcdbe56c9457923d6266e5ee6"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/__init__.py": "a43f7ce41f8353e7123158f53a17dc3603860861bbe88f163836ba6dcef562ff",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/__main__.py": "1aae33e2a451e0084561262427bbbd9de5f98726a52d19ae55c2809bcf8508d8",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_command.py": "0d87eaecf2ac356df5a56e3f2d35c108948c5d0374e37719fa15ca2236c9b042",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_config.py": "3ecb01dbc482abd30ddbd3c145173e9a3411c5d34d23f0574f3693c2540b83a2",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_execution.py": "8385d7a102a47a594bd4916cf51fd7a5f9b80001906ef80643ab5c790a89d354",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_native.py": "b04d21af7298f81fd964d5d64e4de65786742432a60338f8ace7b16e97ef9410",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_provider.py": "e9af2f3e4735952c4ff3a26f227db94491c6de2a103648c5e3342dc90e9facee",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_report.py": "9101a3ec4cda1ae101880c44f14c3b225f7b80b533ef980fc1ab487b1cdc514f",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_snapshot.py": "63e03aa82d62712bdb4285718a41e1d01df0d48ff628535db8ca0d600f5f0097",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_sources.py": "8bb7cf73d48fb5f4d00481ae2f668a59e1dc535e7ee36b19b862d7209812d125",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study/_validation.py": "a9cf85db9b6497eef96e1389e9a7e069a9e3257c3d56337d859522d40f1cb5a3"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/movie_study.py",
       "sourceSha256": "8bdacd8ebd7f5d6762898de12f804253da9c2b99b62d0567a936c56978a0833d",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_budget.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_config.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_continuation.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_native.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_provider.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_reflection.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_request.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_snapshot.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_sources.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study.py": "870ad577cb7db38c38ad64ec42b569fc8c7e4872ec3576c64e9ccb4c8cf279c5"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/__init__.py": "0aa9ef769505b4b7866f0fd717028ab4642425ed97e99783c20124817f70883c",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/__main__.py": "d177f415e035cf14f994923727e6a4cdd38460deb2860ce7e4b7db0723b026a3",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_budget.py": "f124fb1c201bb98f566a89230cd7ed6c7e0ec211f35841f7eb4faa90980a2594",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_command.py": "31a34f93bb9468140b094224c68a523c7481cdb3825e9c653317266e58fb6d20",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_config.py": "4a7784760bdd413f4868c64df59bed2762263622c01fb051dfe0367c8854f419",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_continuation.py": "b093d8acaf6f88b2b1a6aff25e0a029ae459556933b31782bfe81489b304ab4a",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_execution.py": "ed24557517c3a7af74289835ec2e3590952614e008d8683fba8fafad38c4ec9c",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_native.py": "dffae900316ae9678cd52f6bfb87c0de54b9d665f8de59070d00ac9758bab327",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_provider.py": "5dee1e2d34994b731aa240d7ab6bd5b1e7adc38606420e021307299195d03b31",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_reflection.py": "c62b07447654f4ca4478aa3c0b0ad776add2c15bed412a88591915ed03173abb",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_request.py": "dab7468e2133914a8eb5f99edd630620034d56c0c248bd7e461cc5768862b94d",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_snapshot.py": "7bf5087d8e6f8b1de40b57812abb83f1f1d319f0b24e894f4b0ba08b0f811ee3",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study/_sources.py": "189cda376f6613db1be46ea06a35a7172a768e9a1807396150d96b5f28c431f8"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/path_consumption_report.py",
       "sourceSha256": "44833d4e0d59321ae2075966cd7d8ee60ad44e96079355471a007ae4e3bb7aca",
       "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_path_consumption_audit.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_path_consumption_projection.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_path_consumption_rendering.py",
         "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/path_consumption_report.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/path_consumption_report.py": "f7f99f5f2a185273636b0cf97dec5587a9e8c9c972471928cd30d5ec46cfa8ed"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_path_consumption_audit.py": "3ee2380caafced8c0611bce42dab03b4de392213e4a7042e988821db1c704502",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_path_consumption_projection.py": "5c7ed3b0979ba47518b1dc755f910cc59c5ff89cced13fb79904d1695680688e",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_path_consumption_rendering.py": "ff75eb3523f256b6d413935d8ab231a8d9d2b9110291cd92e50233e7267595a8",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/path_consumption_report.py": "786e59e7722f1b933623704add2247a0d37c2eb39003e9fb87a39ee198bdce20"
       }
     },
     {
@@ -2844,7 +3198,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repair_study.py": "4da6320549d5c50397986f87732ade65a4cfec60235180ab2214de02e86b9993"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repair_study.py": "4f696a85cc13bed6b559211671668e8472d5c596012346fa0fb088d364ace73e"
       }
     },
     {
@@ -2855,18 +3209,22 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_candidate_audit.py": "b406e06e9d1acb88b8c0b9508f491038e25c16f5b835ec34857efa330409fa1d"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_candidate_audit.py": "a8b2da958e7f6fae79a63982e715dfa78792246d1fcb10960b36d058af94d60e"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/repository_continuation.py",
       "sourceSha256": "852fabcb71c3a21d98f12bf5bab00197698f021b936a6e82b700e1715d8c36d2",
       "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_repository_continuation_actions.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_repository_continuation_restore.py",
         "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_continuation.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_continuation.py": "1ee3cdb678808ec5cb587f09caa5a330d6207c033fde02aa76f9d1aace8635b6"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_repository_continuation_actions.py": "71ef375c2ef9b2f5bee74e956e27b2a6bf4070f9a9fd01f9065d66e85028cf5b",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_repository_continuation_restore.py": "ab75cf67e8d6ae351abc2ba1cd5e03837dd1e1bf3eb4ddaeda08085bcad35291",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_continuation.py": "5e8b77bdf78b44ff4d22e4fd3d28ea0d6472a0936daefdba724cf15055a20513"
       }
     },
     {
@@ -2895,11 +3253,27 @@
       "source": "workbench/src/ascent_workbench/repository_model_study.py",
       "sourceSha256": "0d5b55433967d36252c32475cf1c58ee90362a9de564de5a7cc0d26c30deea77",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_config.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_corpus.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_episode.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_runner.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_tools.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_workspace.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study.py": "1e2b32086cec44d6b4c2e89b52d3e2dcc019baa1f65c164fe45740508cd23e87"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/__init__.py": "8b47427cb6e8763808dc1fd60bf82179e03e7836bd9bf12e7256efef57166557",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/__main__.py": "6d7ba436cf19bd5bbbfced5b0b887a2fe7b306e79dffb11faacbb4a54d21e79f",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_config.py": "1abcaac4f34018556e919ad48f5487d3999e217447cfc3e35578f93588242234",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_corpus.py": "bce2ed76baa433adfe509d644b15ec10c16450c9b00dbaab2dde9131d85d5ee5",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_episode.py": "b17fc66afba25966281783fa1e7180a0bae2994388e05642997286aacc0b0917",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_execution.py": "dccfb92843ccccacbe7c0572d9f48a85f628cbd01ef71b1eb9e8386ffaf9337c",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_runner.py": "3118cc204d72687d93603dcaecfd3b62e99b0860e8111a2f41d34da1c2716056",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_tools.py": "b3d45cc7d3374c398810a6e2716311ebb874c98a21d776a80438a85b6d1d478c",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_model_study/_workspace.py": "3d86e6efe6ea58a2eb29db9c770ff72441a54d9ed163a4f61d361669d4d4bce2"
       }
     },
     {
@@ -2910,18 +3284,20 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_recovery.py": "d642347174d02db4ed7b494cb7b1b6b69b3846c664d9de550817173549273a31"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_recovery.py": "320f3a3a25c34fbee82f440d4dad8b9e57e3093ef3006c5d75caa49d11b0d439"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/repository_statistics.py",
       "sourceSha256": "72b1801c191bcfc4b83eeb9df7facceb3f1c08822f3f2ee84386ee5b81a6e4bf",
       "targets": [
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_repository_report_rendering.py",
         "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_statistics.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_statistics.py": "72b1801c191bcfc4b83eeb9df7facceb3f1c08822f3f2ee84386ee5b81a6e4bf"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/_repository_report_rendering.py": "7eda6d84c2dee538802c8c3969a99b8ce65ca6c0080aa61367959598e9b8b19d",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/repository_statistics.py": "43deebc9d3f97f770516061ec2aacc2f68dc9fd694a7d8d2df5cd11d9459ad6a"
       }
     },
     {
@@ -2932,7 +3308,7 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/retained_inference.py": "f3a74e8c727978f9c3b12bdfc801b04d1f7488760110b18bf9d222fb11bfa987"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/retained_inference.py": "41a2a045a8ae15a340c98c9ee389677ccb1160a4368eb23e2abea885a1991397"
       }
     },
     {
@@ -2943,293 +3319,317 @@
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/tool_inference_recovery.py": "e096c32927420c7c47688ef32f1942f11d3f149e434687fc44115f4dbcb70b96"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/tool_inference_recovery.py": "98f04f8f0b11b07d166657858aba3803df54c5012bbad7cfe0d77bd4b1c50465"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/trajectory_study.py",
       "sourceSha256": "d7f1b2f0a76265f4f1fa4c5ebea426c74abf0bcbfbf02265fc98feb597a6e8a3",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_plan.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_projection.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_repeat_qualification.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_workload.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study.py": "7dab9a638a36034fc49dd5806d0f5736470473146c7379c7592a8be2fb330519"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/__init__.py": "853d67367be68e38a3e5c09f303d3e79584a5636898f4c0397d0482e7a91af82",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/__main__.py": "d87f76218d8c0c39e8b23f68d470f9af1ec3e38b65ed75e82d6a41183abf0762",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_command.py": "236d369d835c29d80d4de99341ae839b176bb67c0adf1e0fad3284a5e5219be4",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_execution.py": "6c4cbab8a793213835bd7c90f769fcfedc4effab46e47f086d616846f7abae89",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_plan.py": "cee01a3e7bf5d8f4e7c4f100612775cdcb62de386d6a23b0b1404b6f989a2503",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_projection.py": "5ed9f3c9d5704125052cf89fb1b028048cbae29ac52e1d53098dbd803cd1ada4",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_repeat_qualification.py": "dd0c077d4782c5c5c98bb867d8f764f0fd4048d0754917abf044cc4685de0661",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_study/_workload.py": "267a03aa61d95b11e2e775d7b3db0f1256eeb663d38ec97158246b421a5e214a"
       }
     },
     {
       "source": "workbench/src/ascent_workbench/trajectory_transfer_study.py",
       "sourceSha256": "3196fecece7efe8f0b7ddf56388114cba5f4d18d490e2c91195652622a0f0f38",
       "targets": [
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study.py"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/__init__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/__main__.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/_command.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/_execution.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/_plan.py",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/_workload.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study.py": "a305f982e1d835759b7cfbbbe19efff0c2612d0fd892a22e96ea92936c3d1374"
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/__init__.py": "cac5a6c9ab18f02998118efad3978aa8dfde9e233f4c090d0b0d26228f343364",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/__main__.py": "42fa7759eebdb6cbeef6258c1884c55ad9330da36ce9d501284be342edf51d82",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/_command.py": "19fab384c543dde055733794486e6ffdbeb2b473ea1365b57c5c5aa26e6777b8",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/_execution.py": "51779d9ac50bb4b71b2d7058c18193df1b77ee71def08fb8deb571f2613aba15",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/_plan.py": "91b2b6cb3990d2872631844d5b3783f786f03c96ce0a3187540333283a774225",
+        "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/trajectory_transfer_study/_workload.py": "e8b33c6c31408ea67d3864cf97ebe92df7642d2c681e334c7ac1010098724eba"
       }
     },
     {
       "source": "workbench/tests/test_candidate_transport.py",
       "sourceSha256": "496ec2d262ffa8dd8edf80660252355fca923926c2eec06abbb12bc9d28be336",
       "targets": [
-        "packages/python-testing/tests/assessment/test_candidate_transport.py"
+        "packages/python-testing/tests/integration/assessment/test_candidate_transport.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_candidate_transport.py": "8d0e1ffc5d2f77c2698fb724f971ed78c7e84ddae5f0fd4b5bd7332aab042419"
+        "packages/python-testing/tests/integration/assessment/test_candidate_transport.py": "cd979428d61cea6ab84cccb4c744a5433794d072b01ba2aebec95d7a949054d2"
       }
     },
     {
       "source": "workbench/tests/test_compound_inference_recovery.py",
       "sourceSha256": "364dc6c60698fdf274b77af93d45bfd493aaf348ed7b013610f79bd5347682f7",
       "targets": [
-        "packages/python-testing/tests/assessment/test_compound_inference_recovery.py"
+        "packages/python-testing/tests/integration/assessment/test_compound_inference_recovery.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_compound_inference_recovery.py": "2b4791c757a2502a1fe525c33f3455c94112586041f6781c133fed2236d4a19e"
+        "packages/python-testing/tests/integration/assessment/test_compound_inference_recovery.py": "3d64181c667090b546442514d628f5d4876b0f82e596d29419e0d2590b8d2659"
       }
     },
     {
       "source": "workbench/tests/test_compound_inference_report.py",
       "sourceSha256": "85c98ee79e2ed2771e67377340e4494c21d5e2d4d86f9b6cf04dc3538a786d6b",
       "targets": [
-        "packages/python-testing/tests/assessment/test_compound_inference_report.py"
+        "packages/python-testing/tests/integration/assessment/test_compound_inference_report.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_compound_inference_report.py": "f69b6b558e11d6472c88e3f6cf063c940bb6ba905f2991c53283928863d10651"
+        "packages/python-testing/tests/integration/assessment/test_compound_inference_report.py": "bd106270f7d647c40517acb5f83094d97658a59d2fcfa06bd43b093d9865148b"
       }
     },
     {
       "source": "workbench/tests/test_correction_study.py",
       "sourceSha256": "9ae7759124d7f66bd23f3965ab3a4b1e4210f53d9e7dd61ba2cf5215f3d75c5c",
       "targets": [
-        "packages/python-testing/tests/assessment/test_correction_study.py"
+        "packages/python-testing/tests/integration/assessment/test_correction_study.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_correction_study.py": "64e06d8b49b839c45e01b4ab09dd9a1744c8df1335da466ecd95369e5e757230"
+        "packages/python-testing/tests/integration/assessment/test_correction_study.py": "9288657eb75f4b3d14ddbd4912e14f2767573477ebd5fe0be37515d76185159c"
       }
     },
     {
       "source": "workbench/tests/test_domain_observations.py",
       "sourceSha256": "87bb3b7852758e122a8ecf9100cb93b1bc0d2d08068c1852a6f20968500c79c6",
       "targets": [
-        "packages/python-testing/tests/assessment/test_domain_observations.py"
+        "packages/python-testing/tests/integration/assessment/test_domain_observations.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_domain_observations.py": "09909e0ac01b51b6704f63fe3bc34d43395455659a1ce698beb6f01ca0b5fcb8"
+        "packages/python-testing/tests/integration/assessment/test_domain_observations.py": "1326cd839d2c6375bc4335b1723385db6eab22146592fe7f0cc989bdb85d98b6"
       }
     },
     {
       "source": "workbench/tests/test_domain_repository_report.py",
       "sourceSha256": "dc32ebcc3096a077ee1bb714b1a7ca0018d547aeeeaf0cbab42cb10a20a86217",
       "targets": [
-        "packages/python-testing/tests/assessment/test_domain_repository_report.py"
+        "packages/python-testing/tests/integration/assessment/test_domain_repository_report.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_domain_repository_report.py": "95ff150943583f61f309265e0a1e0a8470ae435a02a4d5ab192f4d532802b6f8"
+        "packages/python-testing/tests/integration/assessment/test_domain_repository_report.py": "252ee3590bdb6fcb43bbb395d10abdb0acab6887c888ba4896fc75f1f07593bb"
       }
     },
     {
       "source": "workbench/tests/test_evidence_chain_study.py",
       "sourceSha256": "9b95bf99ac99069e313e68c9f3aabe3b3d1324c89317d845a70ca9818fc4781a",
       "targets": [
-        "packages/python-testing/tests/assessment/test_evidence_chain_study.py"
+        "packages/python-testing/tests/integration/assessment/test_evidence_chain_study.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_evidence_chain_study.py": "05958b34e7887179f237f1717db730e0e951a627443627017a0da2aad78c0ac7"
+        "packages/python-testing/tests/integration/assessment/test_evidence_chain_study.py": "49975cbac1218f935c9dec1fbe9d551db0ba63be133204b57ceb5741d782b4e9"
       }
     },
     {
       "source": "workbench/tests/test_factor_budget.py",
       "sourceSha256": "4c9ce69eef759213e47e0ef8ebfb44f733b5a16b56605aa8f8578c570fd7e7da",
       "targets": [
-        "packages/python-testing/tests/assessment/test_factor_budget.py"
+        "packages/python-testing/tests/integration/assessment/test_factor_budget.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_factor_budget.py": "70b69b91f9fb5b5c70a4353a1b21fd44bb261f04837f04b63b073a7b275b973a"
+        "packages/python-testing/tests/integration/assessment/test_factor_budget.py": "42b6e83fcb4d14a077bec0b4d0c4a7a709fbeda3e5086acbd4a3c695d58d044e"
       }
     },
     {
       "source": "workbench/tests/test_inference_effort.py",
       "sourceSha256": "aa431424dbcc69a42e8c03cc69f952c303d49bb6db18ff87d6708e54cc95ec23",
       "targets": [
-        "packages/python-testing/tests/assessment/test_inference_effort.py"
+        "packages/python-testing/tests/integration/assessment/test_inference_effort.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_inference_effort.py": "772437a0389cfa4f1e594e4e2b89ea936c61db6a864408dd7dcc90b6dc6f76cb"
+        "packages/python-testing/tests/integration/assessment/test_inference_effort.py": "26e9e20f54169fab8c343dfbc66e82e30fc8b6ab425b22bfb44f7faf9ac15df1"
       }
     },
     {
       "source": "workbench/tests/test_interactive_study.py",
       "sourceSha256": "bad86c88123a237f01458fbbc1cf520f046e8f7d80a09d12875ed18f3d8621f0",
       "targets": [
-        "packages/python-testing/tests/assessment/test_interactive_study.py"
+        "packages/python-testing/tests/integration/assessment/test_interactive_study.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_interactive_study.py": "7eb8f92a3ff20c3981aca0c5924f1eedb84fdebd85be2104e69c8ddbf5d8f5fc"
+        "packages/python-testing/tests/integration/assessment/test_interactive_study.py": "53bc454cce5efe1da4da99799b3797d76e4dc30737992a8164b553972cfcc3d6"
       }
     },
     {
       "source": "workbench/tests/test_iterative_inference.py",
       "sourceSha256": "700d5fb0ff9169e030cfd90bb25a138da0089c5471d5e53a3c99309e65325197",
       "targets": [
-        "packages/python-testing/tests/assessment/test_iterative_inference.py"
+        "packages/python-testing/tests/integration/assessment/test_iterative_inference.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_iterative_inference.py": "87a02239b90c83e01be62802b3345bd5964079be948fa89099844c60b63e136d"
+        "packages/python-testing/tests/integration/assessment/test_iterative_inference.py": "7a3a4b37c08590af678bd48f0c6b9937ebffbb2f5f7d36305b88dfd97141785a"
       }
     },
     {
       "source": "workbench/tests/test_iterative_tool_inference.py",
       "sourceSha256": "0400763f61b649b182bba689faef67ab4a04773654ecef0e3f49b5ac5d4c933c",
       "targets": [
-        "packages/python-testing/tests/assessment/test_iterative_tool_inference.py"
+        "packages/python-testing/tests/integration/assessment/test_iterative_tool_inference.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_iterative_tool_inference.py": "ca637f565b12b7d4620e71a002e142bde4c2e46c6fd6090f42fa038cf8fa796d"
+        "packages/python-testing/tests/integration/assessment/test_iterative_tool_inference.py": "55d81ca9822c751cf4e61901399626112cd17d51d9b74f8c6ef8af54db5975c6"
       }
     },
     {
       "source": "workbench/tests/test_model_context.py",
       "sourceSha256": "e31ba8c399ac6d09f26dc7f24afcca7830c6a32e37799b0a630e1a47bbe2c054",
       "targets": [
-        "packages/python-testing/tests/assessment/test_model_context.py"
+        "packages/python-testing/tests/integration/assessment/test_model_context.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_model_context.py": "9fc69d23e04e4059bd9611e4441174d6c005c5a888edd8d2e4323922b1550a26"
+        "packages/python-testing/tests/integration/assessment/test_model_context.py": "44ce99d53a4ef7121b6348f4c8c56d1f95c5fbaa08bf5fb5ced1c6e159579eaf"
       }
     },
     {
       "source": "workbench/tests/test_movie_study.py",
       "sourceSha256": "5a7f551db3a315974ee1a0c8333f954f75e0ce5379155681e387c7c669f9f57d",
       "targets": [
-        "packages/python-testing/tests/assessment/test_movie_study.py"
+        "packages/python-testing/tests/integration/assessment/test_movie_study.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_movie_study.py": "147af8e8a97b3f0857358ca0d132511a53e6036cc77b511989c5cd7128de2133"
+        "packages/python-testing/tests/integration/assessment/test_movie_study.py": "42bd04b807d407e5bb27f81d1e7fd21796aa751cda53ba49e019d83c5f1f44f2"
       }
     },
     {
       "source": "workbench/tests/test_provider_progress.py",
       "sourceSha256": "6285f309ea6452bfafb8fd05c34aa2ede45befd8bb70d39d2fabfe8788be489d",
       "targets": [
-        "packages/python-testing/tests/assessment/test_provider_progress.py"
+        "packages/python-testing/tests/integration/assessment/test_provider_progress.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_provider_progress.py": "d29b7aacfabbf1d38c2811f28b2b39a7c2446dae68a4064f25aba84b4e6595c5"
+        "packages/python-testing/tests/integration/assessment/test_provider_progress.py": "5cfd2b736e82469197a385ed1be673b0681fac9f857026a31d694cc874979647"
       }
     },
     {
       "source": "workbench/tests/test_repository_candidate_audit.py",
       "sourceSha256": "96b58321e4623cef94c2c3cf790c19086591304dc23bfa8ec7389bc519ba3948",
       "targets": [
-        "packages/python-testing/tests/assessment/test_repository_candidate_audit.py"
+        "packages/python-testing/tests/integration/assessment/test_repository_candidate_audit.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_repository_candidate_audit.py": "8c995c6511b799c8edc5a5dbb8256c2b24c55971d0071aea3f777d9a8f2da17b"
+        "packages/python-testing/tests/integration/assessment/test_repository_candidate_audit.py": "3fcde0c65c18c7b97cce717b8e77a61a20dd560e99d2249258c4759bd0614555"
       }
     },
     {
       "source": "workbench/tests/test_repository_continuation.py",
       "sourceSha256": "a80da55dd19db5f7e181eb3b6b64d6a303a253cac029268d21563be41216376c",
       "targets": [
-        "packages/python-testing/tests/assessment/test_repository_continuation.py"
+        "packages/python-testing/tests/integration/assessment/test_repository_continuation.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_repository_continuation.py": "f39eca4d92dea10990ba9b16bbdda2b45d0015412d3f0db6dbe0182723bcf422"
+        "packages/python-testing/tests/integration/assessment/test_repository_continuation.py": "ff2242c694ecc7136d8b5587bbf48d9e389c5ee45de98749ab691bbe62e5af0d"
       }
     },
     {
       "source": "workbench/tests/test_repository_corpus.py",
       "sourceSha256": "5d3ac82c7d3ca0c878c5f286f183b97159e9b0f105e3efb9d0baef9187d2c9af",
       "targets": [
-        "packages/python-testing/tests/assessment/test_repository_corpus.py"
+        "packages/python-testing/tests/integration/assessment/test_repository_corpus.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_repository_corpus.py": "be83c1346b715e8a1f613b2948ccabb8b625a391f5591ee9e8ef2e752935c0e2"
+        "packages/python-testing/tests/integration/assessment/test_repository_corpus.py": "fc573bd284eb888b376bf5ed621a0128b37dd1df668b835b83288675715b1112"
       }
     },
     {
       "source": "workbench/tests/test_repository_model_study.py",
       "sourceSha256": "aad552ff02d023faff57987e4284003e502d6599b4bbbe1a0cb234af74be134a",
       "targets": [
-        "packages/python-testing/tests/assessment/test_repository_model_study.py"
+        "packages/python-testing/tests/integration/assessment/test_repository_model_study.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_repository_model_study.py": "b927827d0dd23e5ddc789f8e7b8397ae15ed69edac824b8954610101c4df15a1"
+        "packages/python-testing/tests/integration/assessment/test_repository_model_study.py": "2ed097ccd7e5f4dd88c07d67cc4672aca961f023553f8761d4b4a4c260910b10"
       }
     },
     {
       "source": "workbench/tests/test_repository_recovery.py",
       "sourceSha256": "b6c740bdb6d99c10b9118380a3f29172482e8f901ad9874f3b83e979d9d0e08c",
       "targets": [
-        "packages/python-testing/tests/assessment/test_repository_recovery.py"
+        "packages/python-testing/tests/integration/assessment/test_repository_recovery.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_repository_recovery.py": "e037c8f9f29b79c4aaa17615c6eb09214d92d4ee83afd48164a9f859cfcec132"
+        "packages/python-testing/tests/integration/assessment/test_repository_recovery.py": "a2553d180d32aed623d1c6ef1a641183c08e2f782b4fcec704a40833f5b765a7"
       }
     },
     {
       "source": "workbench/tests/test_repository_statistics.py",
       "sourceSha256": "528e697c734bd2bb6ab7e71b752d6a70873b395fb919373e57720522f7d9606e",
       "targets": [
-        "packages/python-testing/tests/assessment/test_repository_statistics.py"
+        "packages/python-testing/tests/integration/assessment/test_repository_statistics.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_repository_statistics.py": "cd4da963efff4a4fe747593090a0f3610b0b965a66bda7f0ce9afe2eb8a1247a"
+        "packages/python-testing/tests/integration/assessment/test_repository_statistics.py": "3fa346de3da9aa162d1e00de274c7f53c96b9695d2fea3f6d45be0cedf344205"
       }
     },
     {
       "source": "workbench/tests/test_shared_premise.py",
       "sourceSha256": "632b8d9a57bda499e818673875002c47ed9409031fe1c385383bdb0bc46cfb13",
       "targets": [
-        "packages/python-testing/tests/assessment/test_shared_premise.py"
+        "packages/python-testing/tests/integration/assessment/test_shared_premise.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_shared_premise.py": "f7e68a0cbc3c324069e23a29badf70a1f4300e8928057394de23a09ad921f14c"
+        "packages/python-testing/tests/integration/assessment/test_shared_premise.py": "39d0fb73a17a5dd2b380ba2187d5c92cb615a64634e670fe465abfa8121a39cb"
       }
     },
     {
       "source": "workbench/tests/test_tool_inference_recovery.py",
       "sourceSha256": "fcbc49158961332a42539223d0303f4dc7bc70ecd85e871a23c49222a3fb296e",
       "targets": [
-        "packages/python-testing/tests/assessment/test_tool_inference_recovery.py"
+        "packages/python-testing/tests/integration/assessment/test_tool_inference_recovery.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_tool_inference_recovery.py": "61ae0b3c852d5f0a124daa24d58148e692eb02229d03a3e68b07631f0d59d2c9"
+        "packages/python-testing/tests/integration/assessment/test_tool_inference_recovery.py": "c0c8dadfdb666420a5a7770e319658c842a5024eb7eef791a34547bef72d1f22"
       }
     },
     {
       "source": "workbench/tests/test_trajectory_study.py",
       "sourceSha256": "a5a790f57e3f7fed95ac89960b9b45a5636a66ddb8479d9c1e8b97921d0905b0",
       "targets": [
-        "packages/python-testing/tests/assessment/test_trajectory_study.py"
+        "packages/python-testing/tests/integration/assessment/test_trajectory_study.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-testing/tests/assessment/test_trajectory_study.py": "d57b5e825941657e9fcd3c62c4db03b2f3f5fbb247cf74af8dbb005a892ef48f"
+        "packages/python-testing/tests/integration/assessment/test_trajectory_study.py": "aec521361c26a5177d1f145d4f4e769a7b2e3324a1404c898344410006402515"
       }
     }
   ],

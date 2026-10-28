@@ -216,7 +216,7 @@ jobs:
           )"
           "$py" -m pip install dist/python-runtime-wheel/*.whl "$producer"
           PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" "$py" -m unittest discover -s packages/python-runtime/tests/scenarios -v
-          PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" "$py" -m unittest discover -s packages/python-testing/tests/assessment -v
+          PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" "$py" -m unittest discover -s packages/python-testing/tests/integration/assessment -v
 
       - name: Install wheel in clean environment
         run: |

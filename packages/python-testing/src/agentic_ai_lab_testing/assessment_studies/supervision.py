@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Fail a qualification command that stops producing real output."""
 
+from agentic_ai_lab_testing.model_study.reporting import report_text
+
 import argparse
 import ctypes
 from functools import cache
@@ -41,8 +43,8 @@ def forward_output(destination, chunk: bytes, timeout: float) -> None:
 
 def group_cpu(group: int) -> dict[int, float]:
     """Count live and reaped compiler CPU, with native Linux tick precision."""
-    if Path('/proc/self/stat').exists():
-        return proc_group_cpu(Path('/proc'), group, os.sysconf('SC_CLK_TCK'))
+    if Path("/proc/self/stat").exists():
+        return proc_group_cpu(Path("/proc"), group, os.sysconf("SC_CLK_TCK"))
     listing = subprocess.check_output(
         ["ps", "-axo", "pid=,pgid=,time="], text=True, timeout=5
     )
@@ -51,7 +53,7 @@ def group_cpu(group: int) -> dict[int, float]:
         pid, pgid, elapsed = line.split()
         if int(pgid) != group:
             continue
-        if sys.platform == 'darwin':
+        if sys.platform == "darwin":
             try:
                 result[int(pid)] = darwin_process_cpu(int(pid))
             except ProcessLookupError:
@@ -68,16 +70,21 @@ def group_cpu(group: int) -> dict[int, float]:
 
 class RusageInfoV1(ctypes.Structure):
     """Public Darwin sys/resource.h ABI; CPU counters are Mach absolute ticks."""
-    _fields_ = [('uuid', ctypes.c_uint8 * 16),
-                ('user', ctypes.c_uint64), ('system', ctypes.c_uint64),
-                ('resources', ctypes.c_uint64 * 8),
-                ('child_user', ctypes.c_uint64), ('child_system', ctypes.c_uint64),
-                ('child_resources', ctypes.c_uint64 * 4)]
+
+    _fields_ = [
+        ("uuid", ctypes.c_uint8 * 16),
+        ("user", ctypes.c_uint64),
+        ("system", ctypes.c_uint64),
+        ("resources", ctypes.c_uint64 * 8),
+        ("child_user", ctypes.c_uint64),
+        ("child_system", ctypes.c_uint64),
+        ("child_resources", ctypes.c_uint64 * 4),
+    ]
 
 
 @cache
 def darwin_rusage():
-    library = ctypes.CDLL('/usr/lib/libproc.dylib', use_errno=True)
+    library = ctypes.CDLL("/usr/lib/libproc.dylib", use_errno=True)
     read = library.proc_pid_rusage
     read.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.POINTER(RusageInfoV1)]
     read.restype = ctypes.c_int
@@ -85,17 +92,17 @@ def darwin_rusage():
 
 
 class MachTimebaseInfo(ctypes.Structure):
-    _fields_ = [('numer', ctypes.c_uint32), ('denom', ctypes.c_uint32)]
+    _fields_ = [("numer", ctypes.c_uint32), ("denom", ctypes.c_uint32)]
 
 
 @cache
 def darwin_cpu_seconds_per_tick() -> float:
     info = MachTimebaseInfo()
-    read = ctypes.CDLL('/usr/lib/libSystem.B.dylib').mach_timebase_info
+    read = ctypes.CDLL("/usr/lib/libSystem.B.dylib").mach_timebase_info
     read.argtypes = [ctypes.POINTER(MachTimebaseInfo)]
     read.restype = ctypes.c_int
     if read(ctypes.byref(info)) != 0 or not info.numer or not info.denom:
-        raise OSError('cannot read Darwin CPU timebase')
+        raise OSError("cannot read Darwin CPU timebase")
     return info.numer / info.denom / 1e9
 
 
@@ -104,8 +111,9 @@ def darwin_process_cpu(pid: int) -> float:
     if darwin_rusage()(pid, 1, ctypes.byref(usage)) != 0:  # RUSAGE_INFO_V1
         code = ctypes.get_errno()
         raise OSError(code, os.strerror(code), str(pid))
-    return ((usage.user + usage.system + usage.child_user + usage.child_system)
-            * darwin_cpu_seconds_per_tick())
+    return (
+        usage.user + usage.system + usage.child_user + usage.child_system
+    ) * darwin_cpu_seconds_per_tick()
 
 
 def proc_group_cpu(root: Path, group: int, ticks: int) -> dict[int, float]:
@@ -116,7 +124,7 @@ def proc_group_cpu(root: Path, group: int, ticks: int) -> dict[int, float]:
         try:
             # comm can contain spaces or parentheses. Fields after its final
             # ')' start at state (3); pgrp is 5 and CPU fields are 14..17.
-            fields = (entry / 'stat').read_text().rsplit(')', 1)[1].split()
+            fields = (entry / "stat").read_text().rsplit(")", 1)[1].split()
             if int(fields[2]) == group:
                 result[int(entry.name)] = sum(map(int, fields[11:15])) / ticks
         except (FileNotFoundError, ProcessLookupError):
@@ -146,10 +154,16 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--idle-seconds", type=float, default=5)
     parser.add_argument("--startup-seconds", type=float, default=5)
-    parser.add_argument("--separate-stderr", action="store_true",
-                        help="preserve stdout row protocols while supervising both streams")
-    parser.add_argument("--cpu-progress", action="store_true",
-                        help="build only: count measured process-group CPU advances as activity")
+    parser.add_argument(
+        "--separate-stderr",
+        action="store_true",
+        help="preserve stdout row protocols while supervising both streams",
+    )
+    parser.add_argument(
+        "--cpu-progress",
+        action="store_true",
+        help="build only: count measured process-group CPU advances as activity",
+    )
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     command = args.command[1:] if args.command[:1] == ["--"] else args.command
@@ -191,13 +205,19 @@ def main() -> int:
                 if advance > 0:
                     last_output = last_cpu_sample
                     saw_output = True
-                    print(f"[build-activity] cpu-advance={advance:.3f}s "
-                          f"processes={len(current_cpu)}", file=sys.stderr, flush=True)
+                    report_text(
+                        f"[build-activity] cpu-advance={advance:.3f}s "
+                        f"processes={len(current_cpu)}",
+                        file=sys.stderr,
+                        flush=True,
+                    )
             if ready:
                 for key, _events in ready:
                     chunk = os.read(key.fd, 65536)
                     if chunk:
-                        limit = args.idle_seconds if saw_output else args.startup_seconds
+                        limit = (
+                            args.idle_seconds if saw_output else args.startup_seconds
+                        )
                         remaining = limit - (time.monotonic() - last_output)
                         forward_output(key.data, chunk, remaining)
                         last_output = time.monotonic()
@@ -208,7 +228,7 @@ def main() -> int:
                 args.idle_seconds if saw_output else args.startup_seconds
             ):
                 limit = args.idle_seconds if saw_output else args.startup_seconds
-                print(
+                report_text(
                     f"[progress-watchdog] FAIL: no command "
                     f"{'output or CPU advance' if args.cpu_progress else 'output'} for "
                     f"{limit:g}s",

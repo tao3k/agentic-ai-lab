@@ -1,25 +1,143 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Descriptive accounting only. Read grades emitted by the Scheme oracle."""
-import json,hashlib,statistics
+
+from agentic_ai_lab_testing.model_study.reporting import report_text
+import json, hashlib, statistics
 from pathlib import Path
-ROOT=Path.cwd();BASE=ROOT/'.cache/ascent/factor-pilot';DOC=ROOT/'.cache/ascent/research-reports/agent-inference'
+
+ROOT = Path.cwd()
+BASE = ROOT / ".cache/ascent/factor-pilot"
+DOC = ROOT / ".cache/ascent/research-reports/agent-inference"
 DOC.mkdir(parents=True, exist_ok=True)
 
-def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def digest(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+
 def aggregate(rows):
- calls=[x for r in rows for x in r['calls']];tools=[x for r in rows for x in r['tools']];factors=[t for t in tools if t['name']=='factor' and 'factorReceipt' in t];usage=[c['usage'] for c in calls if isinstance(c.get('usage'),dict)]
- valid=[r['grade'] for r in rows if r['grade']['valid']]
- return {'phases':len(rows),'submitted':sum(r['submitted'] for r in rows),'valid':len(valid),'optimal':sum(r['grade']['optimal'] for r in rows),'failures':[r['failure'] for r in rows if r['failure']], 'meanAbsoluteGapValidOnly':statistics.mean(g['gap'] for g in valid) if valid else None,
- 'cachedInputTokensObserved':sum((u.get('input_tokens_details') or {}).get('cached_tokens',0) for u in usage),'inputTokensObserved':sum(u.get('input_tokens',0) for u in usage),'outputTokensObserved':sum(u.get('output_tokens',0) for u in usage),'reasoningTokensObserved':sum((u.get('output_tokens_details') or {}).get('reasoning_tokens',0) for u in usage),'usageMissingCalls':len(calls)-len(usage),'providerSeconds':sum(c['seconds'] for c in calls),'toolSeconds':sum(t['totalToolSeconds'] for t in tools),'nativeStartupAndInitSeconds':sum(r['nativeStartupAndInitSeconds'] for r in rows),'cardsReadSeconds':sum(r['cardsReadSeconds'] for r in rows),'factorRequests':len(factors),'repeatFactorRequests':sum(t['repeatRequest'] for t in factors),'freshNativeSolves':sum(t['factorReceipt']['freshNativeSolve'] for t in factors),'reusedFactorReplies':sum(t['factorReceipt']['reused'] for t in factors),'proofStoreBytesWritten':sum(t.get('proofStoreBytes',0) for t in factors),
- 'uniqueFeasibleCandidatesByPhase':[len({tuple(t['arguments']['order']) for t in r['tools'] if t['name'] in ('evaluate','submit') and t['result'].get('valid')}) for r in rows],
- 'uniqueValidPrefixesByPhase':[len({tuple(t['arguments']['prefix']) for t in r['tools'] if t['name']=='explore' and t['result'].get('validPrefix')}) for r in rows],
- 'maximumVerifiedPrefixDepthByPhase':[max((t['result']['depth'] for t in r['tools'] if t['name']=='explore' and t['result'].get('validPrefix')),default=0) for r in rows]}
-rows=json.loads((BASE/'paid/records.json').read_text());plan=json.loads((BASE/'frozen-plan.json').read_text())
-result={'schema':'ascent.factor-reuse-real-pilot-results.v1','planSha256':digest(BASE/'frozen-plan.json'),'recordsSha256':digest(BASE/'paid/records.json'),'sourceManifestSha256':digest(BASE/'source-manifest.json'),'model':plan['model'],'scheduledPhases':16,'completedGradingPhases':len(rows),'arms':{a:aggregate([r for r in rows if r['arm']==a]) for a in 'ABCD'},'byCase':{c:{a:aggregate([r for r in rows if r['arm']==a and r['case']==c]) for a in 'ABCD'} for c in ('fork','diamond')},'transferOnly':{a:aggregate([r for r in rows if r['arm']==a and r['phase']==1]) for a in 'ABCD'},'phaseGrades':[{k:r[k] for k in ('case','arm','phase','submitted','grade','failure')} for r in rows],'priorCensoredPilot':{'path':'censored-2048','phases':16,'tools':0,'outputTokens':32768,'outcome':'Every phase exhausted its 2048 output allowance entirely in reasoning before tool use. Not interpretable as cache efficacy.'},'verdict':{'nativeReuse':'demonstrated for this finite scope','repeatedModelThinking':'not identified; task effects reverse and D changes supplied information','deeperExploration':'not established; more feasible schedules but fewer checked prefixes and lower maximum depth','qualityImprovement':'not identifiable; all revised phases optimal','totalCostReduction':'not established; input offsets output and invoice unknown'},'actualInvoiceUsd':None,'totalTokenBudgetMatched':False,'outputBudgetMatched':True,'inferenceLimitation':'Tiny exploratory sample, one replicate, alias not immutable model; ordered arm rotation cannot eliminate time drift. Hidden reasoning repetition unobserved. Enumerated synthetic scheduling tasks expose source edges to all arms. Output budget includes reasoning; total input cost is measured, not matched. Certificate files are audit exports, not a disk replay cache.'}
-result['ledgerSha256']=digest(DOC/'factor-reuse-real-pilot-ledger.json')
-result['postRunBindingSha256']=digest(BASE/'post-run-binding-receipt.json')
-(DOC/'factor-reuse-real-pilot-report.json').write_text(json.dumps(result,indent=2)+'\n')
-text='''# ASCENT checked factor/fragment reuse: real-model pilot
+    calls = [x for r in rows for x in r["calls"]]
+    tools = [x for r in rows for x in r["tools"]]
+    factors = [t for t in tools if t["name"] == "factor" and "factorReceipt" in t]
+    usage = [c["usage"] for c in calls if isinstance(c.get("usage"), dict)]
+    valid = [r["grade"] for r in rows if r["grade"]["valid"]]
+    return {
+        "phases": len(rows),
+        "submitted": sum(r["submitted"] for r in rows),
+        "valid": len(valid),
+        "optimal": sum(r["grade"]["optimal"] for r in rows),
+        "failures": [r["failure"] for r in rows if r["failure"]],
+        "meanAbsoluteGapValidOnly": statistics.mean(g["gap"] for g in valid)
+        if valid
+        else None,
+        "cachedInputTokensObserved": sum(
+            (u.get("input_tokens_details") or {}).get("cached_tokens", 0) for u in usage
+        ),
+        "inputTokensObserved": sum(u.get("input_tokens", 0) for u in usage),
+        "outputTokensObserved": sum(u.get("output_tokens", 0) for u in usage),
+        "reasoningTokensObserved": sum(
+            (u.get("output_tokens_details") or {}).get("reasoning_tokens", 0)
+            for u in usage
+        ),
+        "usageMissingCalls": len(calls) - len(usage),
+        "providerSeconds": sum(c["seconds"] for c in calls),
+        "toolSeconds": sum(t["totalToolSeconds"] for t in tools),
+        "nativeStartupAndInitSeconds": sum(
+            r["nativeStartupAndInitSeconds"] for r in rows
+        ),
+        "cardsReadSeconds": sum(r["cardsReadSeconds"] for r in rows),
+        "factorRequests": len(factors),
+        "repeatFactorRequests": sum(t["repeatRequest"] for t in factors),
+        "freshNativeSolves": sum(
+            t["factorReceipt"]["freshNativeSolve"] for t in factors
+        ),
+        "reusedFactorReplies": sum(t["factorReceipt"]["reused"] for t in factors),
+        "proofStoreBytesWritten": sum(t.get("proofStoreBytes", 0) for t in factors),
+        "uniqueFeasibleCandidatesByPhase": [
+            len(
+                {
+                    tuple(t["arguments"]["order"])
+                    for t in r["tools"]
+                    if t["name"] in ("evaluate", "submit") and t["result"].get("valid")
+                }
+            )
+            for r in rows
+        ],
+        "uniqueValidPrefixesByPhase": [
+            len(
+                {
+                    tuple(t["arguments"]["prefix"])
+                    for t in r["tools"]
+                    if t["name"] == "explore" and t["result"].get("validPrefix")
+                }
+            )
+            for r in rows
+        ],
+        "maximumVerifiedPrefixDepthByPhase": [
+            max(
+                (
+                    t["result"]["depth"]
+                    for t in r["tools"]
+                    if t["name"] == "explore" and t["result"].get("validPrefix")
+                ),
+                default=0,
+            )
+            for r in rows
+        ],
+    }
+
+
+rows = json.loads((BASE / "paid/records.json").read_text())
+plan = json.loads((BASE / "frozen-plan.json").read_text())
+result = {
+    "schema": "ascent.factor-reuse-real-pilot-results.v1",
+    "planSha256": digest(BASE / "frozen-plan.json"),
+    "recordsSha256": digest(BASE / "paid/records.json"),
+    "sourceManifestSha256": digest(BASE / "source-manifest.json"),
+    "model": plan["model"],
+    "scheduledPhases": 16,
+    "completedGradingPhases": len(rows),
+    "arms": {a: aggregate([r for r in rows if r["arm"] == a]) for a in "ABCD"},
+    "byCase": {
+        c: {
+            a: aggregate([r for r in rows if r["arm"] == a and r["case"] == c])
+            for a in "ABCD"
+        }
+        for c in ("fork", "diamond")
+    },
+    "transferOnly": {
+        a: aggregate([r for r in rows if r["arm"] == a and r["phase"] == 1])
+        for a in "ABCD"
+    },
+    "phaseGrades": [
+        {k: r[k] for k in ("case", "arm", "phase", "submitted", "grade", "failure")}
+        for r in rows
+    ],
+    "priorCensoredPilot": {
+        "path": "censored-2048",
+        "phases": 16,
+        "tools": 0,
+        "outputTokens": 32768,
+        "outcome": "Every phase exhausted its 2048 output allowance entirely in reasoning before tool use. Not interpretable as cache efficacy.",
+    },
+    "verdict": {
+        "nativeReuse": "demonstrated for this finite scope",
+        "repeatedModelThinking": "not identified; task effects reverse and D changes supplied information",
+        "deeperExploration": "not established; more feasible schedules but fewer checked prefixes and lower maximum depth",
+        "qualityImprovement": "not identifiable; all revised phases optimal",
+        "totalCostReduction": "not established; input offsets output and invoice unknown",
+    },
+    "actualInvoiceUsd": None,
+    "totalTokenBudgetMatched": False,
+    "outputBudgetMatched": True,
+    "inferenceLimitation": "Tiny exploratory sample, one replicate, alias not immutable model; ordered arm rotation cannot eliminate time drift. Hidden reasoning repetition unobserved. Enumerated synthetic scheduling tasks expose source edges to all arms. Output budget includes reasoning; total input cost is measured, not matched. Certificate files are audit exports, not a disk replay cache.",
+}
+result["ledgerSha256"] = digest(DOC / "factor-reuse-real-pilot-ledger.json")
+result["postRunBindingSha256"] = digest(BASE / "post-run-binding-receipt.json")
+(DOC / "factor-reuse-real-pilot-report.json").write_text(
+    json.dumps(result, indent=2) + "\n"
+)
+text = """# ASCENT checked factor/fragment reuse: real-model pilot
 
 Checked fragment reuse avoided native recomputation, but this pilot did not establish a consistent reduction in model thinking, greater exploration depth or improved quality. All 16 revised phases reached the exact optimum. D used 2 fresh native solves versus A's 26, with 19 retained replies. Its output-token change reversed between the two task instances. These are descriptive observations from one replicate, not a benchmark or causal performance claim.
 
@@ -41,9 +159,10 @@ Two frozen DAGs each have a six-job cold phase followed by a seven-job phase wit
 
 | Arm | Graded | Submitted | Valid | Optimal | Mean gap (valid only) | Input tokens | Output tokens | Fresh solves | Factor reuse |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-'''
-for a,x in result['arms'].items():text+=f"| {a} | {x['phases']} | {x['submitted']} | {x['valid']} | {x['optimal']} | {x['meanAbsoluteGapValidOnly']} | {x['inputTokensObserved']} | {x['outputTokensObserved']} | {x['freshNativeSolves']} | {x['reusedFactorReplies']} |\n"
-text+='''
+"""
+for a, x in result["arms"].items():
+    text += f"| {a} | {x['phases']} | {x['submitted']} | {x['valid']} | {x['optimal']} | {x['meanAbsoluteGapValidOnly']} | {x['inputTokensObserved']} | {x['outputTokensObserved']} | {x['freshNativeSolves']} | {x['reusedFactorReplies']} |\n"
+text += """
 ### Task-instance differences and evidence boundary
 
 | Task instance (both phases) | A output tokens | B output tokens | C output tokens | D output tokens | D vs A |
@@ -78,6 +197,6 @@ QQN is not resolved to a concrete file in this checkout; no correspondence claim
 ## Research context
 
 [ENGRAM-R](https://arxiv.org/html/2511.12987v3) motivates anchored atomic Fact cards; [AtomMem](https://arxiv.org/html/2606.19847v1) motivates factor-level memory checks; [CounterMem](https://arxiv.org/html/2609.31874v1) motivates retaining failed local alternatives with applicability boundaries. These papers are conceptual inputs, not reproduced baselines. The accompanying `factor-reuse-2026-study.org` documents version dates and the distinctions between model verification and finite native proof replay.
-'''
-(DOC/'factor-reuse-real-pilot-report.md').write_text(text)
-print(json.dumps(result['arms'],indent=2))
+"""
+(DOC / "factor-reuse-real-pilot-report.md").write_text(text)
+report_text(json.dumps(result["arms"], indent=2))

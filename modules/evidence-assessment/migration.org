@@ -69,6 +69,31 @@ explicitly retired. Generic in-repository renames are not application transfers.
 Historical research reports retain their original bytes. The inventory check
 verifies target existence and content; it is not a semantic equivalence proof.
 
+* Current Python owner refactor
+
+The study packages publish their original APIs through explicit =__init__.py=
+exports. Workload construction, frozen source capture, native execution, provider
+response admission, recovery, accounting and report rendering have separate
+ordinary Python owners. Their original command identities remain available via
+=python -m=. Shared output uses the existing reporting module.
+
+Frozen producer hashes include the statically reachable implementation files,
+not just the package entrypoint. Native Fixture mocks target the implementation
+owner that performs the call. All 152 assessment tests remain in the integration
+suite; no provider request is sent by this qualification.
+
+The strict project scan admits all 355 Python files with no blocking finding
+and no disabled rule or baseline waiver. The complete unit queue passes 73 tests.
+The original 152-test assessment queue passes with the project-declared native
+extension and ASCENT producer =0f99da9e3a3baf1a272ba58fe0769ed8278ae746=.
+These results do not certify the complete wheel, C ABI or remote CI jobs.
+
+The 294 original source identities and hashes remain unchanged. Current target
+paths and hashes follow the owner moves. Evolved working research documents are
+kept intact; their byte-identical historical witnesses are restored from the
+recorded upstream revision under =research/legacy/original-source/=. The original
+source-inventory assertions continue to check every target and historical hash.
+
 * Reproduction and current validation
 Cargo and =gerbil.pkg= both consume ASCENT
 =0f99da9e3a3baf1a272ba58fe0769ed8278ae746=. No local path dependency or old
