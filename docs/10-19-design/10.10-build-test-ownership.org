@@ -395,3 +395,52 @@ A repository-qualified external patch label is refused by Bazel and is not a
 valid replacement. Real external analysis retains the missing-root-override
 counterexample. The Lean YuanxuProof declaration and Lake-generated lock must
 also match the exact Core gitlink; the namespace gate checks that relationship.
+
+* Complete queue and exact failure boundaries, 2026-10-28
+
+The frozen b49c4d8f Root queue completed all 317 original files with natural
+exit zero, all required native markers, 1,234 measured Cases, and an exact
+inventory match. All 3,462 Root and 2,358 Core tracked source hashes remained
+unchanged during the queue. The independent Linux CI queue also admitted all
+317 files and measured 1,234 Cases; its later integration failure does not
+invalidate or replace that separate queue receipt. The AWS Context publication
+Case took 68.162 seconds, with 2.650 seconds before the Harness and 78 seconds
+for the complete file. Original observation-off/on and refusal controls remain.
+
+Exact-head CI identified three additional ownership mismatches. The native
+Context demand observes the existing watchdog and native observer sources, so
+Bazel must project those actual inputs through the Root file and existing
+=//dev:sources= owner. Linux and WASM previously refused the missing watchdog
+before compilation. The native Darwin executable link also needs the maintained
+OpenSSL library environment: CI now uses the existing =just build-library=,
+which still invokes official =gerbil build=, rather than a direct invocation
+that omits the stable library path. The failed link's stale Cellar path is not
+a reason to hard-code another Cellar revision.
+
+The Python evidence consumer still calls the same heap-fenced =just test-file=
+with its original 150-second outer limit. Its completion check now compares
+canonical complete source paths, accepting the same relative or absolute file
+while rejecting another directory or a suffixed filename. Nonzero exits, missing
+Harness/final markers, and Case, Check, Module, Harness, heap and stack errors
+remain refusals. Fifteen executable receipt controls pass. The full Python
+project Harness remains a separate failed gate: an immutable b49c4d8f snapshot
+and the modified project have exactly the same 154 blocking findings (141
+output findings, twelve oversized modules, and one test-root entry). No rule or
+test inventory has been disabled to hide that existing baseline.
+
+A fresh standard POO cold build used three actual workers, the remote guard's
+4,982,162,063-byte tree limit and the unchanged 180-second deadline. Its existing
+=library= entry compiles the same owner declaration as the default entry and
+reports make work before VM shutdown. Make took 72.435 seconds; the guard took
+73.272 seconds and observed natural exit zero, with a 4,207,165,440-byte peak.
+Read-only process observations attributed about 7.2 CPU seconds to the table
+GSC process and 26.3 CPU seconds to its C compiler. The table source was emitted
+about 25 seconds before its GSC process started. These sampled lifetimes include
+queueing and cannot certify remote performance. Existing C host splitting was
+already active; blindly lowering its threshold is not a demonstrated fix.
+
+Failed Bazel dependency sandboxes and their native logs are retained as CI
+artifacts. The original remote POO 180-second failure, Darwin unload failure,
+new link failure, and all negative-control receipts remain failures. Full
+Bazel compilation, native integration, complete replay and exact-head CI must
+finish independently before the macOS lifecycle or complete CI can be closed.

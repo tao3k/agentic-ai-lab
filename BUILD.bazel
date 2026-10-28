@@ -34,6 +34,9 @@ filegroup(
     srcs = [
         "gerbil.pkg",
         ":core_module_sources",
+        # Context program admission observes both execution-boundary sources.
+        "packages/python-runtime/tools/watch.py",
+        "//dev:sources",
         # Cross the existing Bazel package boundary through exported sources.
         "//bindings/runtime-c:include/agentic_ai_lab/semantic.h",
         "//bindings/runtime-c:src/semantic_host.c",
@@ -86,6 +89,9 @@ gerbil_project_compile(
     name = "gerbil_poo_package",
     srcs = ["@gerbil_poo_sources//:sources"],
     build_script = "@gerbil_poo_sources//:build_script",
+    # The owner's library mode keeps the same graph and reports make work
+    # separately from compiler VM shutdown.
+    args = ["library"],
     # Upstream removed its embedded 180-second shell cutoff. Preserve that
     # acceptance budget in the existing project guard, independently of pins.
     execution_policy = gerbil_project_execution_policy(timeout_seconds = 180),

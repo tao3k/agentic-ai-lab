@@ -179,7 +179,8 @@ jobs:
           key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Build native Gerbil package
-        run: GERBIL_BUILD_VERBOSE=1 gerbil build
+        # Reuse the maintained Darwin compiler/header/library environment.
+        run: gerbil env just build-library
 
       - name: Install optional development policy dependencies
         run: |
@@ -713,9 +714,12 @@ jobs:
         run: bazel test --test_output=errors //packages/bazel:parser_dependency_entry_test //packages/bazel:ascent_dependency_entry_test
 
       - name: Build declared Gerbil dependency projects
+        id: dependency-compile
         timeout-minutes: ${{ matrix.dependency-timeout-minutes }}
         run: |
-          arguments=()
+          # Keep failed action logs in the original sandbox for CI artifacts.
+          echo "output-base=$(bazel info output_base)" >> "$GITHUB_OUTPUT"
+          arguments=(--sandbox_debug)
           if [[ "$RUNNER_OS" == macOS ]]; then
             # Each Scheme action uses the full native compiler allocation.
             # Serialize actions on this runner to avoid overlapping CPU/RSS
@@ -781,6 +785,10 @@ jobs:
             ${{ steps.scheme-compile.outputs.profile }}
             bazel-bin/compile.receipt.json
             bazel-bin/compile.log
+            bazel-bin/gerbil_poo_package.receipt.json
+            bazel-bin/gerbil_poo_package.log
+            ${{ steps.dependency-compile.outputs.output-base }}/sandbox/**/gerbil_poo_package.log
+            ${{ steps.dependency-compile.outputs.output-base }}/sandbox/**/gerbil_poo_package.project/.gerbil-bazel-resource-guard.json
           if-no-files-found: warn
           retention-days: 7
 
