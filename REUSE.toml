@@ -68,6 +68,12 @@ SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
 
 # Keep immutable acceptance receipts and historical records byte-for-byte intact.
 [[annotations]]
+path = ["modules/evidence-assessment/research/legacy/original-source/docs/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
+SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
+
+[[annotations]]
 path = [
   "bindings/runtime-c/semantic-wire.org",
   "t/qualification/temporal-library-basic/rust-model-family/historical.org",
@@ -269,10 +275,10 @@ path = [
   "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/interface_tests.py",
   "packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/supervision.py",
   "packages/python-testing/src/agentic_ai_lab_testing/checks/assessment_models.py",
-  "packages/python-testing/tests/assessment/test_factor_budget.py",
-  "packages/python-testing/tests/assessment/test_formal.py",
-  "packages/python-testing/tests/assessment/test_formal_inventory.py",
-  "packages/python-testing/tests/assessment/test_migration_inventory.py",
+  "packages/python-testing/tests/integration/assessment/test_factor_budget.py",
+  "packages/python-testing/tests/integration/assessment/test_formal.py",
+  "packages/python-testing/tests/integration/assessment/test_formal_inventory.py",
+  "packages/python-testing/tests/integration/assessment/test_migration_inventory.py",
   "t/research/factor-budget-build.ss",
   "t/research/factor-budget-oracle.ss",
   "t/research/factor-budget.ss",
