@@ -68,7 +68,7 @@ SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"
 
 # Keep immutable acceptance receipts and historical records byte-for-byte intact.
 [[annotations]]
-path = ["modules/evidence-assessment/research/legacy/original-source/docs/**"]
+path = ["modules/evidence-assessment/research/legacy/original-source/evidence/docs/**"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 tao3k team and Contributors"
 SPDX-License-Identifier = "Apache-2.0 AND LGPL-2.1-or-later"

@@ -139,11 +139,11 @@
       "source": "docs/llm-reasoning-library-plan.org",
       "sourceSha256": "0818ff9149737b8a7ff5e434f8c2b54a84b6ef80d0665bef38cbbbc505222e6e",
       "targets": [
-        "modules/evidence-assessment/research/legacy/original-source/docs/llm-reasoning-library-plan.org"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/llm-reasoning-library-plan.org"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/research/legacy/original-source/docs/llm-reasoning-library-plan.org": "0818ff9149737b8a7ff5e434f8c2b54a84b6ef80d0665bef38cbbbc505222e6e"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/llm-reasoning-library-plan.org": "0818ff9149737b8a7ff5e434f8c2b54a84b6ef80d0665bef38cbbbc505222e6e"
       }
     },
     {
@@ -326,44 +326,44 @@
       "source": "docs/research/agent-inference/evidence-interaction-results/interpretation.md",
       "sourceSha256": "ba65a02314dfdeae67dc0ed1aac2ebc9af49d601326a0af03587c73ca0d01685",
       "targets": [
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction-results/interpretation.md"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/evidence-interaction-results/interpretation.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction-results/interpretation.md": "ba65a02314dfdeae67dc0ed1aac2ebc9af49d601326a0af03587c73ca0d01685"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/evidence-interaction-results/interpretation.md": "ba65a02314dfdeae67dc0ed1aac2ebc9af49d601326a0af03587c73ca0d01685"
       }
     },
     {
       "source": "docs/research/agent-inference/evidence-interaction-results/report.md",
       "sourceSha256": "d7b79d13dfbe116cc50a6bc26078688d64f2e5e4c1814131e074eb973bec6f8e",
       "targets": [
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction-results/report.md"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/evidence-interaction-results/report.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction-results/report.md": "d7b79d13dfbe116cc50a6bc26078688d64f2e5e4c1814131e074eb973bec6f8e"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/evidence-interaction-results/report.md": "d7b79d13dfbe116cc50a6bc26078688d64f2e5e4c1814131e074eb973bec6f8e"
       }
     },
     {
       "source": "docs/research/agent-inference/evidence-interaction.org",
       "sourceSha256": "690f1d21c07177961059f8ea6f0b7eb89b82c87a8fa295b215a87b50c1db2551",
       "targets": [
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction.org"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/evidence-interaction.org"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/evidence-interaction.org": "690f1d21c07177961059f8ea6f0b7eb89b82c87a8fa295b215a87b50c1db2551"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/evidence-interaction.org": "690f1d21c07177961059f8ea6f0b7eb89b82c87a8fa295b215a87b50c1db2551"
       }
     },
     {
       "source": "docs/research/agent-inference/fact-reuse-protocol.md",
       "sourceSha256": "cc90ca0a68f8e867dae1a279ae82890be66f9f5c60eef4951a740d99d30382b5",
       "targets": [
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-protocol.md"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/fact-reuse-protocol.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-protocol.md": "cc90ca0a68f8e867dae1a279ae82890be66f9f5c60eef4951a740d99d30382b5"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/fact-reuse-protocol.md": "cc90ca0a68f8e867dae1a279ae82890be66f9f5c60eef4951a740d99d30382b5"
       }
     },
     {
@@ -447,11 +447,11 @@
       "source": "docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md",
       "sourceSha256": "c44561e5cfeb1b932619f57b5aa617c483076231cd07fe9a2e48d7b4b67cbda0",
       "targets": [
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md": "c44561e5cfeb1b932619f57b5aa617c483076231cd07fe9a2e48d7b4b67cbda0"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/fact-reuse-results/branch-entry/findings.md": "c44561e5cfeb1b932619f57b5aa617c483076231cd07fe9a2e48d7b4b67cbda0"
       }
     },
     {
@@ -557,11 +557,11 @@
       "source": "docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md",
       "sourceSha256": "b5efab56257474e6e96d161c57f8482957c4e02010de78c17a2ee744b7482055",
       "targets": [
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md": "b5efab56257474e6e96d161c57f8482957c4e02010de78c17a2ee744b7482055"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/fact-reuse-results/sibling-search/findings.md": "b5efab56257474e6e96d161c57f8482957c4e02010de78c17a2ee744b7482055"
       }
     },
     {
@@ -590,11 +590,11 @@
       "source": "docs/research/agent-inference/factor-reuse-2026-study.org",
       "sourceSha256": "b10a33b9d23b76b3c3e0ee9b8d07f028521d9e3570647211e9a05a714d5a34dc",
       "targets": [
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/factor-reuse-2026-study.org"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/factor-reuse-2026-study.org"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/factor-reuse-2026-study.org": "b10a33b9d23b76b3c3e0ee9b8d07f028521d9e3570647211e9a05a714d5a34dc"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/factor-reuse-2026-study.org": "b10a33b9d23b76b3c3e0ee9b8d07f028521d9e3570647211e9a05a714d5a34dc"
       }
     },
     {
@@ -634,22 +634,22 @@
       "source": "docs/research/agent-inference/history/candidate-model-rules-rejected/report.md",
       "sourceSha256": "68ea0e43cbd091d6297df76bc4e500f5396a4e2e67a59d4ed01eb103c4af0263",
       "targets": [
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/history/candidate-model-rules-rejected/report.md"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/history/candidate-model-rules-rejected/report.md"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/history/candidate-model-rules-rejected/report.md": "68ea0e43cbd091d6297df76bc4e500f5396a4e2e67a59d4ed01eb103c4af0263"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/history/candidate-model-rules-rejected/report.md": "68ea0e43cbd091d6297df76bc4e500f5396a4e2e67a59d4ed01eb103c4af0263"
       }
     },
     {
       "source": "docs/research/agent-inference/index.org",
       "sourceSha256": "4b553d31e663cf629e46b4df34ff20b985a38fb72bf0fb3fd90a8fbe2610fe2e",
       "targets": [
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/index.org"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/index.org"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/index.org": "4b553d31e663cf629e46b4df34ff20b985a38fb72bf0fb3fd90a8fbe2610fe2e"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/index.org": "4b553d31e663cf629e46b4df34ff20b985a38fb72bf0fb3fd90a8fbe2610fe2e"
       }
     },
     {
@@ -733,11 +733,11 @@
       "source": "docs/research/agent-inference/serving-sglang-vllm.org",
       "sourceSha256": "7352198f770d6e8d2b221df87dd7d2df8597df83b9ecc94af85a178bd6351a36",
       "targets": [
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/serving-sglang-vllm.org"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/serving-sglang-vllm.org"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/research/legacy/original-source/docs/research/agent-inference/serving-sglang-vllm.org": "7352198f770d6e8d2b221df87dd7d2df8597df83b9ecc94af85a178bd6351a36"
+        "modules/evidence-assessment/research/legacy/original-source/evidence/docs/research/agent-inference/serving-sglang-vllm.org": "7352198f770d6e8d2b221df87dd7d2df8597df83b9ecc94af85a178bd6351a36"
       }
     },
     {

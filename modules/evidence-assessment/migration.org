@@ -91,8 +91,10 @@ These results do not certify the complete wheel, C ABI or remote CI jobs.
 The 294 original source identities and hashes remain unchanged. Current target
 paths and hashes follow the owner moves. Evolved working research documents are
 kept intact; their byte-identical historical witnesses are restored from the
-recorded upstream revision under =research/legacy/original-source/=. The original
-source-inventory assertions continue to check every target and historical hash.
+recorded upstream revision under =research/legacy/original-source/evidence/docs/=.
+This is historical evidence, separate from maintained research documents; the
+existing namespace gate still scans maintained sources without a new exclusion.
+The original source-inventory assertions check every target and historical hash.
 
 * Reproduction and current validation
 Cargo and =gerbil.pkg= both consume ASCENT
