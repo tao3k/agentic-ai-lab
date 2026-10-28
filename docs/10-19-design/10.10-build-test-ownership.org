@@ -385,3 +385,13 @@ unchanged smaller Fixture policy, and observed one inside the actual VM. Its
 unpatched replay was refused with twelve actual VM cores; the corrected run
 completed in 2.235 seconds. These receipts do not replace the final frozen Root
 queue or exact-head remote checks.
+
+The root Gerbil Bazel override and its companion =packages/bazel/overrides/=
+package are one public source distribution. Bazel requires =git_override=
+patches to be in the main repository; an external consumer copies that standard
+package alongside the override fragment. The existing external-module Fixture
+performs the same preparation and checks actual copied bytes and BUILD exports.
+A repository-qualified external patch label is refused by Bazel and is not a
+valid replacement. Real external analysis retains the missing-root-override
+counterexample. The Lean YuanxuProof declaration and Lake-generated lock must
+also match the exact Core gitlink; the namespace gate checks that relationship.

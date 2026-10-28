@@ -8,7 +8,6 @@ load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load(":gerbil_dependency_entry.bzl", "gerbil_dependency_entry")
 
 exports_files([
-    "gerbil-native-budget-handoff.patch",
     "bundle_v1.bzl",
     "gerbil_project_environment.bzl",
     "gerbil_projection.bzl",
