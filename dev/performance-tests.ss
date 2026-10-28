@@ -24,7 +24,7 @@
 ;;; lane.
 (def +agentic-ai-lab-performance-serial-test-fragments+
   '("./t/performance/"
-    "module-system-poo-performance-test-support/objects-test.ss"))
+    "module-system-poo-performance-test-support/"))
 
 (def +agentic-ai-lab-performance-testing-interface+
   (foldl
