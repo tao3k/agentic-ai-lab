@@ -90,11 +90,13 @@
   ;; The existing qualification owner signs only real compiler output. The
   ;; official package command supplies compile; no new mode or environment flag.
   (when (or (null? args) (equal? (car args) "compile"))
-    ;; Source bootstrap and the installed-library test view have different
-    ;; native import epochs. Gerbil's standard build declaration runs in a
-    ;; fresh compiler process, inheriting this build's resource environment.
-    (run-process
-      (append (list "gerbil" "interactive"
-                (path-expand "qualification-build.ss" (path-directory (this-source-file))))
-        args)
-      stdin-redirection: #f stdout-redirection: #f)))
+    ;; Each standard declaration gets a fresh native expander epoch. A support
+    ;; build can retain source contexts after publishing installed interfaces;
+    ;; the program must observe the same interfaces as an independent consumer.
+    (for-each
+      (lambda (declaration)
+        (run-process
+          (append (list "gerbil" "interactive"
+                    (path-expand declaration (path-directory (this-source-file)))) args)
+          stdin-redirection: #f stdout-redirection: #f))
+      '("qualification-build.ss" "context-build.ss"))))

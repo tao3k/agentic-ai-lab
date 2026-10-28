@@ -1,0 +1,99 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+diff --git a/gerbil/native_environment.bzl b/gerbil/native_environment.bzl
+new file mode 100644
+index 0000000..60b1c28
+--- /dev/null
++++ b/gerbil/native_environment.bzl
+@@ -0,0 +1,40 @@
++"""Export pinned native identities while preserving invocation-owned budgets."""
++
++def _shell_quote(value):
++    return "'{}'".format(value.replace("'", "'\"'\"'"))
++
++def native_environment_exports(environment):
++    """Keep runtime leases across nested tools; pin compiler relocation last."""
++    lines = []
++    for key in sorted(environment.keys()):
++        value = _shell_quote(environment[key])
++        if key == "GERBIL_BUILD_CORES":
++            # A resource guard has already admitted its child concurrency.
++            # The repository snapshot supplies only the unset default.
++            lines.extend([
++                "if [[ ${GERBIL_BUILD_CORES+x} != x ]]; then",
++                "  export GERBIL_BUILD_CORES={}".format(value),
++                "fi",
++            ])
++        elif key == "GAMBOPT" and environment.get("GERBIL_HOME", ""):
++            home = environment["GERBIL_HOME"]
++            mappings = "~~={},~~bin={}/bin,~~lib={}/lib".format(home, home, home)
++            # Heap/debug options belong to this invocation. Native paths still
++            # win over foreign ambient mappings; repeated tools do not grow
++            # an already canonical trailing mapping group.
++            lines.extend([
++                "if [[ ${GAMBOPT+x} == x ]]; then",
++                "  gerbil_native_mappings={}".format(_shell_quote(mappings)),
++                '  case "$GAMBOPT" in',
++                '    "$gerbil_native_mappings"|*",$gerbil_native_mappings") ;;',
++                '    *) GAMBOPT="${GAMBOPT:+${GAMBOPT},}${gerbil_native_mappings}" ;;',
++                "  esac",
++                "  export GAMBOPT",
++                "  unset gerbil_native_mappings",
++                "else",
++                "  export GAMBOPT={}".format(value),
++                "fi",
++            ])
++        else:
++            lines.append("export {}={}".format(key, value))
++    return "\n".join(lines)
+diff --git a/gerbil/prebuilt_repository.bzl b/gerbil/prebuilt_repository.bzl
+index e0b45f7..0633f52 100644
+--- a/gerbil/prebuilt_repository.bzl
++++ b/gerbil/prebuilt_repository.bzl
+@@ -1,5 +1,7 @@
+ """Repository rule for importing an immutable Gerbil toolchain capability."""
+ 
++load(":native_environment.bzl", _environment_exports = "native_environment_exports")
++
+ load(":gambit_runtime.bzl", "normalized_gambit_runtime")
+ load(
+     ":host_system.bzl",
+@@ -32,12 +34,6 @@ _RELEASE_SCHEMA = "gerbil-bazel.toolchain-release.v1"
+ def _shell_quote(value):
+     return "'{}'".format(value.replace("'", "'\"'\"'"))
+ 
+-def _environment_exports(environment):
+-    return "\n".join([
+-        "export {}={}".format(key, _shell_quote(environment[key]))
+-        for key in sorted(environment.keys())
+-    ])
+-
+ def _environment_args(environment):
+     return " ".join([
+         _shell_quote("{}={}".format(key, environment[key]))
+diff --git a/gerbil/repository.bzl b/gerbil/repository.bzl
+index c908bda..adca933 100644
+--- a/gerbil/repository.bzl
++++ b/gerbil/repository.bzl
+@@ -1,5 +1,7 @@
+ """Repository rule for discovering a native Gerbil installation."""
+ 
++load(":native_environment.bzl", _environment_exports = "native_environment_exports")
++
+ load(
+     ":gambit_runtime.bzl",
+     "discover_gambit_compiler_command",
+@@ -61,12 +63,6 @@ def _gerbil_version(repository_ctx, tools):
+             ))
+     return version
+ 
+-def _environment_exports(environment):
+-    lines = []
+-    for key in sorted(environment.keys()):
+-        lines.append("export {}={}".format(key, _shell_quote(environment[key])))
+-    return "\n".join(lines)
+-
+ def _environment_args(environment):
+     return " ".join([
+         _shell_quote("{}={}".format(key, environment[key]))

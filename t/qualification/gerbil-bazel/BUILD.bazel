@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 load("@rules_python//python:py_test.bzl", "py_test")
+load("@gerbil_bazel//gerbil:defs.bzl", "gerbil_project_compile", "gerbil_project_execution_policy")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -41,5 +42,69 @@ test_suite(
     tests = [
         ":shared_gerbil_capability_test",
         ":shared_gerbil_capability_unit_test",
+        ":native_budget_handoff_test",
+        ":native_budget_compiler_test",
     ],
+)
+
+# Verify the generated native launcher's budget handoff, not a duplicate builder.
+py_test(
+    name = "native_budget_handoff_test",
+    srcs = ["native_budget_handoff_test.py", "shared_gerbil_capability_test.py"],
+    args = [
+        "$(rlocationpath @local_gerbil//:gxi.sh)",
+        "$(rlocationpath @local_gerbil//:gxc.sh)",
+        "$(rlocationpath @local_gerbil//:gxtest.sh)",
+        "$(rlocationpath @local_gerbil//:native_scheme_env.sh)",
+    ],
+    data = [
+        "@local_gerbil//:gxi.sh",
+        "@local_gerbil//:gxc.sh",
+        "@local_gerbil//:gxtest.sh",
+        "@local_gerbil//:native_scheme_env.sh",
+    ],
+    imports = ["."],
+    main = "native_budget_handoff_test.py",
+    python_version = "3.12",
+)
+
+# The normal compiler entry observes its actual initialized capacity, then
+# builds a real library under a smaller fixture budget. No test runner is added.
+gerbil_project_compile(
+    name = "native_budget_compiler_probe",
+    srcs = ["native-budget/probe.ss"],
+    build_script = "native-budget/build.ss",
+    # The existing memory policy must reduce this request before the VM starts.
+    env = {"GERBIL_BUILD_CORES": "12", "GAMBOPT": "max-heap=256M,debug=q"},
+    execution_policy = gerbil_project_execution_policy(
+        timeout_seconds = 20,
+        max_rss_bytes = 1024 * 1024 * 1024,
+        memory_per_core_bytes = 1024 * 1024 * 1024,
+    ),
+    require_library_output = True,
+)
+
+filegroup(
+    name = "native_budget_compiler_receipt",
+    srcs = [":native_budget_compiler_probe"],
+    output_group = "receipt",
+)
+
+filegroup(
+    name = "native_budget_compiler_log",
+    srcs = [":native_budget_compiler_probe"],
+    output_group = "log",
+)
+
+py_test(
+    name = "native_budget_compiler_test",
+    imports = ["."],
+    srcs = ["native_budget_compiler_test.py", "shared_gerbil_capability_test.py"],
+    args = [
+        "$(rlocationpath :native_budget_compiler_receipt)",
+        "$(rlocationpath :native_budget_compiler_log)",
+    ],
+    data = [":native_budget_compiler_receipt", ":native_budget_compiler_log"],
+    main = "native_budget_compiler_test.py",
+    python_version = "3.12",
 )

@@ -310,3 +310,78 @@ required. Complete final-cohort file-queue and exact-head CI evidence must be
 reported separately; the previously published ecf15ec7 queue admitted 314/315
 files and its macOS Context worker failed during native unload after final OK.
 Raw logs, native journals and failure samples remain local or CI artifacts.
+
+* Native program publication and compiler budget handoff
+
+The Context qualification's existing interface remains the sole Suite roster.
+An explicit init-owned test demand projects its standard =exe:= declaration
+through =std-make-spec=. The ordinary =gerbil build= command compiles and signs
+that program; TestingScript only admits the existing publication and executes
+it. Production Module Build roots retain their library-only contract.
+
+The package build invokes =qualification-build.ss= and =context-build.ss= in
+separate official compiler processes. Each is an ordinary =defbuild-script=
+declaration over init's existing specification. The support compiler can retain
+source expander contexts after publishing installed interfaces; sharing that
+process with program projection produced 75 targets while an independent test
+consumer projected one. All 543 observed producer inputs still matched disk,
+so weakening source guards or retrying compilation inside TestingScript would
+hide the actual phase mismatch. The preserved failure refused execution before
+any Case. A fresh program declaration projects one target after a clean build,
+matching the independent consumer's installed-interface view.
+
+Program bytes, executable eligibility, compiler inputs and source observations
+share the existing signed artifact publication and replay path. The admitted
+POO build exposes =.program= for its declared compiler identity; an unknown
+identity, altered executable or stale source must be refused. The real compiler
+Fixture in =core/t/module-native-program-test.ss= checks those boundaries using
+an ordinary temporary Gerbil package and the official build command.
+
+The native program preserves separate linking and builtin module registration
+for the original Suites. Its entry only initializes the official expander and
+resolves the installed =gxtest= main. Gerbil still discovers Suites, runs Cases,
+invokes cleanup and reports results. There is no second Harness or Case loop.
+Whole-program optimization was rejected because the compiler initializes an
+empty builtin-module list in that mode; dynamic discovery can reload modules
+instead of retaining the intended native registration. The stopped experiment
+is not an accepted run. Missing installed tool object files are not repaired by
+copying or rewriting the official Harness.
+
+The pinned Bazel integration has a standard =git_override= patch for generated
+native environments. Invocation-owned =GERBIL_BUILD_CORES= and =GAMBOPT= survive
+nested official tool calls; configured compiler identities and native runtime
+relocation remain pinned. No new environment variable or configuration protocol
+is introduced. The real compiler Fixture observes available cores inside the
+VM, rather than relying only on the resource guard's receipt. The unpatched
+launcher failed with twelve actual cores despite a one-core guard; the patched
+launcher passed the same real compilation with one core. A fresh three-core POO
+build completed locally in 69.625 seconds under its original 180-second cap;
+this does not certify remote cold-build latency.
+
+The published 1cca43d4 local full queue completed all 317 files, admitted 316,
+and measured 1,233 Cases. Its flake process counter was stale after native output
+lookup was added. Linux CI additionally exposed a Fixture builder whose plain
+store-path string omitted the shell dependency from the sandbox closure. The
+counter now distinguishes lookup, validity and construction, and the Fixture
+retains the shell's native Nix string context. Both focused native Nix checks
+passed without removing source invalidation or output-tamper controls.
+
+Candidate Context program runs completed all 99 original Cases and naturally
+exited twice: preparation approximately 2.98 / 3.00 seconds, Harness import
+2.632 / 1.793 seconds, Cases 54.658 / 54.389 seconds. The 2 GiB heap fence,
+150-second worker cap and five-second progress watchdog remain unchanged.
+The old macOS CI result completed all 99 Cases and then failed during dynamic
+unload; it remains a failure. Final published-source queue replay and exact-head
+CI, including natural macOS exit, are separate acceptance requirements. Raw
+logs, failed experiments, samples and structured receipts remain artifacts.
+
+After the clean build with independent compiler declarations, the final installed
+cohort completed 99 Cases and the complete 99-Case replay with natural exit.
+Preparation was 3.007 / 3.111 seconds, Harness import 2.682 / 1.847 seconds,
+and Cases 55.347 / 56.234 seconds. Both consumers projected one program target.
+The native ASCENT gate also passed both original Cases. The stronger real
+compiler qualification requested twelve cores, was admitted for one by the
+unchanged smaller Fixture policy, and observed one inside the actual VM. Its
+unpatched replay was refused with twelve actual VM cores; the corrected run
+completed in 2.235 seconds. These receipts do not replace the final frozen Root
+queue or exact-head remote checks.

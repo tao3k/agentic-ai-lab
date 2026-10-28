@@ -16,13 +16,15 @@
 ;; Only the Context demand needs the product init. Other qualifications consume
 ;; published libraries and must not eagerly lower the complete module selection.
 ;; Resolve the same init-owned tests value through the native expander once.
-(def context-exports
+(def context-demand
   (delay
     (parameterize ((current-expander-context (make-top-context)))
       (eval-syntax '(import :gerbil/core))
       (eval-syntax
         `(import (only-in ,(absolute "init.ss") agentic-ai-lab.init.exports)))
-      (eval-syntax 'agentic-ai-lab.init.exports))))
+      (eval-syntax
+        `(import (only-in ,(absolute "build-spec.ss") agentic-ai-lab-context-test-demand)))
+      (eval-syntax '(agentic-ai-lab-context-test-demand agentic-ai-lab.init.exports)))))
 
 (def (selected-script name vm arguments)
   (def (interpreted file) (list "gxi" vm file))
@@ -81,24 +83,21 @@
          '("CASE-OK POO values keep native evidence separate from cut authority"
            "CASE-OK explicit cut bridge preserves uncertainty and original identity binding"))))
     ((context-temporal)
-     (let* ((demand
-              (.call (.get (force context-exports) tests) .for-files
-                (list (absolute "t/qualification/context-temporal/interface.ss"))
-                (list (this-source-file) (absolute watch)
-                      (absolute "dev/modules/testing/native-test-observation.ss"))))
+     (let* ((demand (force context-demand))
             (files (.get demand spec)))
-       (.cc (module-test-execution (.get demand source))
-         ;; Emit actual preparation timing so a compiler refusal remains
-         ;; distinguishable from the independently bounded runtime worker.
-         'profile (.cc (.get (module-test-execution (.get demand source)) profile) 'emit? #t)
-         'runtime-options (list vm)
-         'progress make-native-test-progress-reader
-         'command
+       (.o (:: script [(module-test-execution (.get demand source)
+                         (lambda () (.get demand build)))])
+         ;; Preparation remains separate from the bounded native worker.
+         profile: (.cc (.get (module-test-execution (.get demand source)) profile) 'emit? #t)
+         runtime-options: (list vm)
+         progress: make-native-test-progress-reader
+         command:
          (watched (append
-           (list "gerbil" vm "test" "-v" "5" "-D" "yuanxu-module-test-observation") files))
-         ;; Includes every real timer interleaving. Use the agreed complete
-         ;; Context runtime envelope; the five-second output gate stays active.
-         'timeout 150 'idle-timeout #f 'case-count 99)))
+           (list (.call (.get demand build) .program
+                   'agentic-ai-lab/t/qualification/context-temporal/interface)
+                 vm "-v" "5" "-D" "yuanxu-module-test-observation") files))
+         ;; Keep every real timer interleaving and the existing byte watchdog.
+         timeout: 150 idle-timeout: #f case-count: 99)))
     (else (error "unknown specialized qualification" name))))
 
 (def (main name vm . arguments)

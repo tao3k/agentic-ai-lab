@@ -3,11 +3,13 @@
 ;;; Public library roots projected through Core's installed native import graph.
 ;;; init.ss owns the selected Module spec through init.exports; it is not a
 ;;; library target or an import-graph root here.
-(import (only-in :gerbil/expander expander-context-id)
+(import (only-in :clan/poo/object .get .call)
+        (only-in :gerbil/expander expander-context-id)
         (only-in :std/source this-source-file)
         (only-in :yuanxu/module-system/building/source-closure package-library-spec))
 (export agentic-ai-lab-public-build-roots agentic-ai-lab-build-spec
-        agentic-ai-lab-native-build-spec agentic-ai-lab-test-exclusions)
+        agentic-ai-lab-native-build-spec agentic-ai-lab-test-exclusions
+        agentic-ai-lab-context-test-demand)
 (def agentic-ai-lab-test-exclusions
   ;; One ordinary-suite inventory serves Gerbil build declarations and execution.
   '("qualification/ascent-integration" "qualification/temporal-mrr-native"
@@ -141,3 +143,16 @@
     (package-library-spec (current-directory) 'agentic-ai-lab roots
       admit-context: admit-production-build-context exclude: special-targets)
     (cdr native)))
+
+;; Build and execution demand the same init-owned native program. The program
+;; publishes the original Suites and the official Gerbil Harness entrypoint.
+(def (agentic-ai-lab-context-test-demand exports)
+  (def root (path-directory (this-source-file)))
+  (.call (.get exports tests) .for-files
+    (list (path-expand "t/qualification/context-temporal/interface.ss" root))
+    (map (cut path-expand <> root)
+      '("build-spec.ss" "qualification-build.ss" "context-build.ss"
+        "t/qualification/testing/specialized.ss"
+        "packages/python-runtime/tools/watch.py"
+        "dev/modules/testing/native-test-observation.ss"))
+    '((exe: "t/qualification/context-temporal/interface" bin: "context-temporal-test"))))

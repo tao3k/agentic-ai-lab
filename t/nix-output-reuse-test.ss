@@ -23,7 +23,10 @@
         (string-append
           "builtins.derivation { name = \"native-output-reuse\"; "
           "system = builtins.currentSystem; salt = builtins.toString ./.; "
-          "builder = \"" (hash-ref tools "shell") "/bin/bash\"; "
+          ;; Retain Nix string context so sandboxed builds include the shell
+          ;; closure. A bare store-path string can pass on unsandboxed macOS
+          ;; while its undeclared builder is absent in a Linux sandbox.
+          "builder = (builtins.storePath \"" (hash-ref tools "shell") "\") + \"/bin/bash\"; "
           (if multiple? "outputs = [ \"out\" \"dev\" ]; " "")
           "args = [ \"-euc\" ''printf native-output > \"$out\""
           (if multiple? "; printf native-dev > \"$dev\"" "")
