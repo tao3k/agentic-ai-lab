@@ -97,3 +97,99 @@ index c908bda..adca933 100644
  def _environment_args(environment):
      return " ".join([
          _shell_quote("{}={}".format(key, environment[key]))
+diff --git a/gerbil/resource_guard.ss b/gerbil/resource_guard.ss
+--- a/gerbil/resource_guard.ss
++++ b/gerbil/resource_guard.ss
+@@ -620,6 +620,30 @@
+         tree-pids
+         (loop tree-pids)))))
+-
++
++(def (report-failed-process-tree! pid)
++  ;; Failure-only source-level attribution: no argv, environment, or unrelated
++  ;; host processes are published. Diagnostic failure cannot replace refusal.
++  (with-catch
++    (lambda (_unavailable) (void))
++    (lambda ()
++      (let* ((owned (process-tree-pids pid (live-process-table)))
++             (snapshot (run-captured
++                        (list "ps" "-axo" "pid=,ppid=,state=,time=,rss=,comm=")))
++             (remaining 32)
++             (port (current-error-port)))
++        (when (zero? (car snapshot))
++          (for-each
++            (lambda (line)
++              (let* ((fields (string-tokenize line))
++                     (observed (and (pair? fields) (string->number (car fields)))))
++                (when (and (> remaining 0) observed (member observed owned))
++                  (display "RESOURCE-GUARD-PROCESS pid,ppid,state,cpu-time,rss-kib,executable: " port)
++                  (display (substring line 0 (min (string-length line) 512)) port)
++                  (newline port)
++                  (set! remaining (- remaining 1)))))
++            (string-split (cdr snapshot) #\newline))
++          (force-output port))))))
++
+ (def (terminate-process-tree! pid)
+   (let (tree-pids (freeze-process-tree-pids! pid))
+     ;; process-tree-pids conses newly discovered descendants ahead of their
+@@ -764,10 +788,12 @@
+            ((> peak-rss max-memory)
+             (set! outcome 'rss-limit-exceeded)
+             (set! guard-exit 70)
++            (report-failed-process-tree! pid)
+             (terminate-process-tree! pid))
+            ((and timeout-seconds (> elapsed timeout-seconds))
+             (set! outcome 'timeout)
+             (set! guard-exit 71)
++            (report-failed-process-tree! pid)
+             (terminate-process-tree! pid))
+            (else
+             (thread-sleep! sample-seconds)
+diff --git a/gerbil/resource_guard_v19.ss b/gerbil/resource_guard_v19.ss
+--- a/gerbil/resource_guard_v19.ss
++++ b/gerbil/resource_guard_v19.ss
+@@ -618,6 +618,30 @@
+         tree-pids
+         (loop tree-pids)))))
+-
++
++(def (report-failed-process-tree! pid)
++  ;; Failure-only source-level attribution: no argv, environment, or unrelated
++  ;; host processes are published. Diagnostic failure cannot replace refusal.
++  (with-catch
++    (lambda (_unavailable) (void))
++    (lambda ()
++      (let* ((owned (process-tree-pids pid (live-process-table)))
++             (snapshot (run-captured
++                        (list "ps" "-axo" "pid=,ppid=,state=,time=,rss=,comm=")))
++             (remaining 32)
++             (port (current-error-port)))
++        (when (zero? (car snapshot))
++          (for-each
++            (lambda (line)
++              (let* ((fields (string-tokenize line))
++                     (observed (and (pair? fields) (string->number (car fields)))))
++                (when (and (> remaining 0) observed (member observed owned))
++                  (display "RESOURCE-GUARD-PROCESS pid,ppid,state,cpu-time,rss-kib,executable: " port)
++                  (display (substring line 0 (min (string-length line) 512)) port)
++                  (newline port)
++                  (set! remaining (- remaining 1)))))
++            (string-split (cdr snapshot) #\newline))
++          (force-output port))))))
++
+ (def (terminate-process-tree! pid)
+   (let (tree-pids (freeze-process-tree-pids! pid))
+     ;; process-tree-pids conses newly discovered descendants ahead of their
+@@ -761,10 +785,12 @@
+            ((> peak-rss max-memory)
+             (set! outcome 'rss-limit-exceeded)
+             (set! guard-exit 70)
++            (report-failed-process-tree! pid)
+             (terminate-process-tree! pid))
+            ((and timeout-seconds (> elapsed timeout-seconds))
+             (set! outcome 'timeout)
+             (set! guard-exit 71)
++            (report-failed-process-tree! pid)
+             (terminate-process-tree! pid))
+            (else
+             (thread-sleep! sample-seconds)

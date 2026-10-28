@@ -97,9 +97,10 @@ test-core:
     cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} just test
 
 # Preserve the root workspace's exported compiler/runtime settings for Core too.
+# Core's discovered entry supplies the same native Fixture as its complete queue.
 [group('test')]
 test-core-file path:
-    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} just test-file "{{ path }}"
+    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} just test-discovered-file "{{ path }}"
 
 # Run one root-owned Scheme test with the same pre-import heap fence.
 [group('test')]
