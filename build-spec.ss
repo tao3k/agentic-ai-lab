@@ -183,7 +183,10 @@
     (map (cut path-expand <> root)
       '("build-spec.ss" "nix-worker-build.ss" "t/qualification/nix/build.ss"
         "t/qualification/nix/programs.ss"))
-    (list (list exe: "t/qualification/build-publication/worker"
+    ;; This file is also a demand root; declare its compiler role explicitly
+    ;; instead of treating it as an interpreted Harness-only Suite.
+    (list '(gxc: "t/qualification/build-publication/store-producer")
+          (list exe: "t/qualification/build-publication/worker"
                 bin: "nix-publication-worker"
                 "-ld-options" (pkg-config-libs "libcrypto" "libssl")))))
 

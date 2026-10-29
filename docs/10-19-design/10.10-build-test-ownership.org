@@ -664,3 +664,31 @@ retargeting, source-role symlink refusal, original/staged byte tampering,
 projection/method tampering, executable corruption and successful restoration.
 Root's gitlink and official Lake resolution now reference that published Core.
 This receipt still does not imply acceptance of the full Root queue or CI.
+
+The =bfedb7d7= CI cohort retains failures: Linux and macOS Nix preparation and
+macOS source-build exceed the unchanged 180-second POO cold-build gate.
+This precedes Core/Context execution. The package API coverage gate separately
+refuses further public Parser APIs consumed by the exact pinned Orgize source.
+The full source archive matches its declared SHA-256; coverage now declares
+those actual public roots, preserving missing-entry and phase controls.
+
+The local read-only adapter build completes POO and Core but then refuses the
+Root producer's missing static =store-producer=. The worker demand had listed
+that source as a Harness file without an explicit library compiler role. The
+standard =gxc:= declaration must be retained for such a demand root; undeclared
+Harness roots remain interpreted. This failure and its compiler transcript stay
+in local artifacts. No complete adapter/full-queue acceptance is inferred from
+the earlier focused native resource Cases.
+
+The explicit-library regression and the existing cached-package and real native
+program Cases pass together through the unchanged heap-fenced Core gate.
+Parser and ASCENT public-entry coverage both pass through their existing Bazel
+targets, including their original negative controls. Core =d0bee3d9= retains
+the explicit library role after integrating the concurrently published native
+metadata/proof update. The complete adapter cold-link replay remains required.
+
+The =d0bee3d9= read-only adapter replay now completes naturally with both worker
+and producer native consumer receipts. Core and adapter actions execute again;
+POO reuses the prior exact-revision Bazel result. Adapter execution takes
+281.400 seconds inside its existing build policy. This is compilation, not Case
+runtime, and does not qualify the separate 180-second POO cold-build gate.

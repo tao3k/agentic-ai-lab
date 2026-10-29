@@ -60,12 +60,17 @@ gerbil_dependency_entry(
     entry_modules = [
         # Orgize's public event-tape binding consumes Parser artifact values.
         "artifact-support.ss",
+        "compiler-build-support.ss",
+        "event-fold-build-support.ss",
+        "event-fold-program-support.ss",
         "graph-projection-support.ss",
         "graph-query-support.ss",
         "language-support.ss",
         "language-support/grammar.ss",
         "rust-runtime-event-support.ss",
         "rust-runtime-support.ss",
+        "rust-syntax-support.ss",
+        "text-support.ss",
         "src/build-support/compiler-profile.ss",
         "src/compiler/event-fold-runtime.ss",
         "src/compiler/event-fold-scheme-build.ss",
