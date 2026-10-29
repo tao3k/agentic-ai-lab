@@ -21,7 +21,7 @@
                  +fhirpath-antlr4-digest+
                  +fhirpath-standard-version+
                  parse-fhirpath-v2)
-        (only-in :gerbil-parser/src/runtime/artifact
+        (only-in :gerbil-parser/artifact-support
                  parse-artifact-ref parse-artifact-roundtrip
                  parse-artifact-success? parse-artifact-valid?))
 

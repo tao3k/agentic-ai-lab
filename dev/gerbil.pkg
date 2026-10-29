@@ -1,4 +1,4 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (package: agentic-ai-lab/dev
- depend: ("github.com/tao3k/asp-gerbil-scheme@f8f1f2e8859a718e3a8bb165146e339da1a872ce"))
+ depend: ("github.com/tao3k/asp-gerbil-scheme@9ae9bc377cbab4b84de52b512a2c03375a36d6c9"))

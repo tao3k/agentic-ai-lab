@@ -201,6 +201,29 @@ class GerbilDependencyPinTest(unittest.TestCase):
             self.assertEqual((source / "source.ss").read_text(), "user edit")
             self.assertTrue(all(path.read_text() == "SDK-owned metadata" for path in metadata))
 
+    def test_new_source_prefetch_does_not_register_sdk_metadata(self) -> None:
+        module = pin_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            upstream = root / "upstream"
+            upstream.mkdir()
+            subprocess.run(["git", "init", "--quiet", str(upstream)], check=True)
+            (upstream / "gerbil.pkg").write_text("(package: native-prefetch-probe)")
+            subprocess.run(["git", "-C", str(upstream), "add", "gerbil.pkg"], check=True)
+            subprocess.run(["git", "-C", str(upstream), "-c", "user.name=Native pin test",
+                            "-c", "user.email=native-pin@example.invalid", "commit", "--quiet",
+                            "-m", "source"], check=True)
+            revision = subprocess.check_output(
+                ["git", "-C", str(upstream), "rev-parse", "HEAD"], text=True).strip()
+            target = root / "store" / "probe"
+            module.ensure_native_commit(str(upstream), revision, target)
+            self.assertEqual(subprocess.check_output(
+                ["git", "-C", str(target), "rev-parse", "HEAD"], text=True).strip(), revision)
+            self.assertEqual((target / "gerbil.pkg").read_text(), "(package: native-prefetch-probe)")
+            for suffix in (".tag", ".manifest"):
+                self.assertFalse(target.with_name(target.name + suffix).exists())
+            self.assertFalse((root / "store" / "lib").exists())
+
     def test_development_preparation_uses_its_own_declaration(self) -> None:
         from unittest.mock import patch
         module = pin_module()

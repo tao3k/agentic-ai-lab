@@ -385,9 +385,8 @@ def ensure_native_commit(url: str, revision: str, target: Path) -> None:
     ).returncode != 0
     if created or unborn:
         subprocess.run(["git", "-C", str(target), "checkout", "--quiet", "--detach", revision], check=True)
-        # gxpkg reads this adjacent Scheme datum to distinguish an installed
-        # immutable pin from an untagged detached branch (whose name is empty).
-        target.with_name(target.name + ".tag").write_text(json.dumps(revision) + "\n")
+        # Source prefetch does not register installation or tag metadata.
+        # The subsequent native SDK fetch owns that transition.
     print(f"gerbil-native-pin: ready {revision}", flush=True)
 
 
