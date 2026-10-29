@@ -19,9 +19,13 @@ from gerbil_dependency_pin import declared_toolchain
 
 ROOT = Path(__file__).resolve().parents[2]
 DARWIN_REVISION = "1cfb032c7a1612637da6205f5f8a15683eba3ba0"
+DARWIN_TAG = (
+    f"gerbil-v0.19-{DARWIN_REVISION}-darwin-aarch64-gcc16-arm64"
+    "-aot-tools-single-host-unlimited-multiple-vms-patch618d76f9eb72"
+)
 DARWIN_RELEASE = (
     "darwin", "aarch64", DARWIN_REVISION,
-    f"https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-{DARWIN_REVISION}-darwin-aarch64-gcc16-arm64-aot-tools-single-host-unlimited-multiple-vms-patch618d76f9eb72/gerbil-v0.19-{DARWIN_REVISION}-darwin-aarch64-gcc16-arm64-aot-tools-single-host-unlimited-multiple-vms-patch618d76f9eb72.tar.gz",
+    f"https://github.com/tao3k/gerbil-bazel/releases/download/{DARWIN_TAG}/{DARWIN_TAG}.tar.gz",
     "0e18d063f888a73d9f9692d441fb3776898114e8440eada6876937d289578183",
 )
 
@@ -65,7 +69,10 @@ def main() -> int:
     parser.add_argument("release_root", type=Path)
     args = parser.parse_args()
     host = (platform.system(), platform.machine())
-    release_os, release_arch, revision, url, expected_digest = release_configuration(host)
+    try:
+        release_os, release_arch, revision, url, expected_digest = release_configuration(host)
+    except ValueError as error:
+        parser.error(str(error))
     runner_temp = os.environ.get("RUNNER_TEMP")
     if not runner_temp:
         parser.error("RUNNER_TEMP is required")
