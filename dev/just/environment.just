@@ -4,8 +4,9 @@
 
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
-# Keep the default cold build within a bounded compiler memory budget.
-export GERBIL_BUILD_CORES := env_var_or_default("GERBIL_BUILD_CORES", "2")
+# The SDK derives host capacity; preserve an explicit caller limit.
+# Heap limits are per process and do not imply a fixed two-worker scheduler.
+export GERBIL_BUILD_CORES := env_var_or_default("GERBIL_BUILD_CORES", `gxi -:max-heap=2G -e '(display (##core-count))'`)
 
 # Test processes are bounded before any Scheme profile module can load. The
 # ASP POO Testing profile remains the policy and receipt owner inside the

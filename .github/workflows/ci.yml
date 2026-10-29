@@ -58,10 +58,8 @@ jobs:
           - os: macos-26
             gerbil-label: release-v0.19-1cfb032
     env:
-      # Reserve memory for the parent VM and two compiler VMs on shared runners.
-      # Test heap capacity is independent of the compiler worker count.
-      GERBIL_BUILD_CORES: '2'
-      GERBIL_TEST_MAX_HEAP: 3G
+      # Heap capacity is per test process; compiler capacity follows the runner.
+      GERBIL_TEST_MAX_HEAP: 2G
       GERBIL_RELEASE_ROOT: ${{ github.workspace }}/.ci/gerbil-release/${{ matrix.gerbil-label }}
     steps:
       - name: Checkout agentic-ai-lab
@@ -82,9 +80,10 @@ jobs:
             pkg-config \
             sqlite3 \
             zlib1g-dev
-          # Leave memory for the parent and two compiler VMs with the larger
-          # CI heap. Native package builds and test files remain serialized.
-          workers=2
+          # Preserve caller limits; package/test serialization does not cap
+          # the native compiler's own runner-derived backend capacity.
+          workers="${GERBIL_BUILD_CORES:-$(getconf _NPROCESSORS_ONLN)}"
+          [[ "$workers" =~ ^[1-9][0-9]*$ ]]
           echo "GERBIL_BUILD_CORES=$workers" >> "$GITHUB_ENV"
           echo "Native compiler workers: $workers"
 
@@ -96,7 +95,9 @@ jobs:
         run: |
           brew list --formula ghostscript >/dev/null 2>&1 && brew unlink ghostscript || true
           brew install coreutils gcc jq openssl pkg-config sqlite zlib
-          echo "GERBIL_BUILD_CORES=2" >> "$GITHUB_ENV"
+          workers="${GERBIL_BUILD_CORES:-$(sysctl -n hw.physicalcpu)}"
+          [[ "$workers" =~ ^[1-9][0-9]*$ ]]
+          echo "GERBIL_BUILD_CORES=$workers" >> "$GITHUB_ENV"
           echo "$(brew --prefix coreutils)/libexec/gnubin" >> "$GITHUB_PATH"
           "$(brew --prefix coreutils)/libexec/gnubin/timeout" --version
 
