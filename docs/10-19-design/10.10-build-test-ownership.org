@@ -692,3 +692,13 @@ and producer native consumer receipts. Core and adapter actions execute again;
 POO reuses the prior exact-revision Bazel result. Adapter execution takes
 281.400 seconds inside its existing build policy. This is compilation, not Case
 runtime, and does not qualify the separate 180-second POO cold-build gate.
+
+The =67dba40e= cohort confirms both platform Parser/ASCENT API coverage gates
+pass. Five build consumers still refuse POO at the unchanged cold gate. The
+external Linux consumer reaches Orgize instead, then refuses the generated
+native Fold tape's import of =:gerbil-parser/src/runtime/fold-tape=. Parser's
+actual emitter supplies that runtime ABI conditionally in generated source;
+it is not a direct import of the generator and must not be inferred by treating
+all quoted examples as dependencies. The Parser build projection now declares
+that exact emitted runtime root. The real external consumer failure remains
+the negative evidence; rebuilding Orgize is the required positive consumer.

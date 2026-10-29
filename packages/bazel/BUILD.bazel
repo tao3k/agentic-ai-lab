@@ -76,6 +76,9 @@ gerbil_dependency_entry(
         "src/compiler/event-fold-scheme-build.ss",
         "src/compiler/event-fold-scheme-modules.ss",
         "src/runtime/machine.ss",
+        # EventFold's emitted tape modules import this runtime ABI directly.
+        # That generated import is deliberately absent from static API scans.
+        "src/runtime/fold-tape.ss",
         "src/compiler/rust-pure-aot.ss",
         "src/compiler/rust-syntax.ss",
         "src/language/descriptor.ss",
