@@ -86,7 +86,9 @@ class NativePinPrefetchTest(unittest.TestCase):
             fresh = root / "fresh"
             module().ensure_native_commit(source.as_uri(), old, fresh)
             self.assertEqual(git(fresh, "rev-parse", "HEAD"), old)
-            self.assertEqual(fresh.with_name(fresh.name + ".tag").read_text(), f'"{old}"\n')
+            # Prefetch supplies immutable Git objects. Only the official
+            # package manager may create its own checkout/tag metadata.
+            self.assertFalse(fresh.with_name(fresh.name + ".tag").exists())
             self.assertEqual((fresh / "gerbil.pkg").read_text(), "old pinned package")
 
     def test_non_git_directory_and_non_full_revision_are_rejected(self):

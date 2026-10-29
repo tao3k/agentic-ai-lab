@@ -570,3 +570,97 @@ was restored to bypass the package language. Core =7c38aaa5= is published on
 the existing PR branch. The Root proof dependency is updated by official
 =lake update YuanxuProof= to the same immutable revision. These focused
 results do not certify the whole Core queue, revised Root queue, or remote CI.
+
+* Frozen Root queue and cold dependency handoff
+
+The complete Root queue at =5c536e35= / Core =7c38aaa5= ran all 317 original
+files in one serial invocation and exited naturally with status 1. Exactly
+314 files passed their original MODULE/HARNESS/final receipts. Source hashes
+for all 3,687 Root and 2,362 Core files remained unchanged throughout the run.
+The three refusals are preserved rather than converted into baseline waivers:
+
+| File | Refusal |
+|------+---------|
+| =t/approved-build-recovery-test.ss= | The original 120-second worker fence stopped the nine-step recovery sequence during the joint control |
+| =t/aws-context-publication-test.ss= | The same fence stopped the combined ordinary/observed qualification |
+| =t/scenarios/aws/context-publication-test.ss= | The direct real Schema transition also reached that fence |
+
+The direct AWS Case recorded 107.173 seconds elapsed and 15.726 seconds of
+Scheme process CPU before refusal. Its 26 external package calls recorded
+70.287 seconds elapsed; parent CPU around those calls was 1.297 seconds and
+does not measure child Nix CPU. These intervals can overlap other diagnostics.
+The result does not establish that Scheme computation, external evaluation,
+or host contention alone explains the deadline. All source, clone, Schema,
+Contract, identity-replay and contextual-denial controls remain required.
+
+Two otherwise passing files exposed a separate diagnostic error: a nested
+Harness's first =OK= prematurely ended the outer Case timing summary. The
+observer now waits for the original Harness's own =HARNESS-OK= and an empty
+Case stack before reporting elapsed spans. It still grants no test verdict
+or watchdog progress. The historical Case-span total is consequently partial;
+the 314 file receipts do not depend on that total.
+
+At that same Root revision, external Linux Bzlmod consumption, both package
+builds, both ABI checks, Lean and Quint passed remotely. Native preparation
+failed on both platforms when Root's executable linker could not find Core's
+already compiled =build-publication/store= static module. Independent adapter
+preparation also failed to resolve Root's =opentofu-contracts= source.
+
+The existing Core Test declaration owns those helper libraries. Root consumes
+its admitted =build.output-directory= through the standard Gerbil load path,
+checks its original source/products around successful work, and restores the
+prior load path on every exit. Root's standard Make declaration remains the
+only producer compiler. The independent adapter declarations register their
+actual source package through Core's existing verified source gateway before
+import discovery. No copied library prefix, unsigned binary alias, additional
+configuration selector or private test dispatcher supplies the dependency.
+
+Core's existing branch subsequently advanced to =0f19da53=, including native
+contract ownership, persistent declaration catalogs and config compiler-phase
+preservation. Root follows that branch without rewriting its history. The
+authoritative Core dependency is published POO =dbbc4365=; the existing pin
+tool derives the Bazel archive/lock projection and official Lake updates the
+matching proof revision. This does not adopt the isolated Trie experiment.
+The earlier =3b08d2e= Core CI cohort had 22 successes but refused both scale
+groups and macOS bootstrap. Those unresolved limits remain separate from
+Root's focused checks and from qualification of the newly integrated source.
+
+The next independent cold adapter build exposed a later compiler boundary:
+Gambit's executable linker writes C beside borrowed static Scheme, while Bazel
+dependencies are read-only. Core now selects exact static inputs through the
+existing native import graph, observes their original bytes/origin and gives
+the official compiler a temporary writable extent. Source guards keep private
+expected evidence; projected text and guard replacement cannot authorize it.
+The original load path is restored and compiler jobs drain before retiring a
+failed extent. No interface, installed dynamic library or approval is copied.
+The resource Cases and real executable Scenario retain source/product tampering
+refusals; independent read-only compilation is a separate acceptance boundary.
+
+Root subsequently fast-forwarded to =ba6d5e15= and Core's published =1934955d=,
+preserving the current dependency cohort and POO =56b474bb=. Root's Bazel
+consumer uses that owner's standard =compile= command instead of the removed
+=library= command. Orgize's event-tape binding also requires Parser's public
+=artifact-support.ss= entry; the native dependency coverage gate still checks
+every actual import and its missing-entry and phase controls.
+
+On that integrated Root source, all 42 automation unit tests pass. The complete
+Python testing package passes its strict Harness with 225 passing items and
+368 passing subtests. Six native catalog Cases require external checkout
+bindings and retain their existing skip conditions; they are not counted as
+accepted native consumers. The initial restricted-sandbox run refused six
+process-supervision Cases because process census/group operations were denied;
+the unchanged complete queue passes with normal host process permissions.
+The earlier immutable failed reports remain local artifacts. No baseline waiver,
+disabled rule or timeout/resource increase supplies these results.
+
+Core =01532e34= publishes the native static-input lifecycle fix. Its helper is
+an ordinary =core-spec= library root, loaded lazily by executable Test demands
+so source bootstrap does not evaluate C declarations. The internal POSIX path
+resolver uses standard Gerbil FFI allocation/finalization and explicit release;
+no external hashing or path subprocess is introduced. Five native resource
+Cases and the real executable positive/negative Scenario exit naturally with
+=MODULE-OK=, =HARNESS-OK= and final =OK=. They preserve same-byte alias
+retargeting, source-role symlink refusal, original/staged byte tampering,
+projection/method tampering, executable corruption and successful restoration.
+Root's gitlink and official Lake resolution now reference that published Core.
+This receipt still does not imply acceptance of the full Root queue or CI.

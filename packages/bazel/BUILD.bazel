@@ -58,6 +58,8 @@ gerbil_dependency_entry(
     name = "parser_dependency_build",
     source_build = "@gerbil_parser_sources//:build_script",
     entry_modules = [
+        # Orgize's public event-tape binding consumes Parser artifact values.
+        "artifact-support.ss",
         "graph-projection-support.ss",
         "graph-query-support.ss",
         "language-support.ss",

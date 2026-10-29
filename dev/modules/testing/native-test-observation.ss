@@ -20,6 +20,8 @@
 (def (make-native-phase-reader)
   (def started (real-time))
   (def prepared #f)
+  (def harness #f)
+  (def harness-complete? #f)
   (def active '())
   (def cases 0)
   (def case-seconds 0)
@@ -34,10 +36,16 @@
     (def now (real-time))
     (cond
       ((and (not prepared) (string-prefix? "HARNESS " line))
+       (set! harness (substring line 8 (string-length line)))
        (set! prepared (- now started))
        (parameterize ((current-output-port (current-error-port)))
          (displayln "test-native-phases before-harness-seconds=" prepared)
          (force-output)))
+      ;; Nested Gerbil Harnesses can finish while an outer Case is active.
+      ;; Only the original Harness's own receipt identifies this diagnostic
+      ;; span; a nested OK must not truncate its Case count or elapsed time.
+      ((and harness (equal? line (string-append "HARNESS-OK " harness)))
+       (set! harness-complete? #t))
       ((string-prefix? "CASE " line)
        (if (< (length active) 4096)
          (set! active (cons (cons (substring line 5 (string-length line)) now) active))
@@ -58,7 +66,8 @@
                    (displayln "test-native-case seconds=" (- now begin) " name=" name)
                    (force-output)))))
            (set! consistent? #f))))
-      ((and (not emitted?) (equal? line "OK"))
+      ((and (not emitted?) harness-complete? (null? active)
+            (equal? line "OK"))
        (set! emitted? #t)
        ;; This is diagnostic data, never a progress event or pass receipt.
        ;; The parent still admits the original Gerbil output and natural exit.

@@ -89,9 +89,9 @@ gerbil_project_compile(
     name = "gerbil_poo_package",
     srcs = ["@gerbil_poo_sources//:sources"],
     build_script = "@gerbil_poo_sources//:build_script",
-    # The owner's library mode keeps the same graph and reports make work
-    # separately from compiler VM shutdown.
-    args = ["library"],
+    # Consume the owner's current standard build entry and complete declaration.
+    # POO no longer publishes the former library command mode.
+    args = ["compile"],
     # Upstream removed its embedded 180-second shell cutoff. Preserve that
     # acceptance budget in the existing project guard, independently of pins.
     execution_policy = gerbil_project_execution_policy(timeout_seconds = 180),
