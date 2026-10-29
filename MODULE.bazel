@@ -23,12 +23,12 @@ single_version_override(
 
 include("//:gerbil-bazel.MODULE.bazel")
 
-GERBIL_LINUX_REVISION = "1cfb032c7a1612637da6205f5f8a15683eba3ba0"
+GERBIL_LINUX_REVISION = "2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb"
 
-GERBIL_LINUX_SHA256 = "143c691fee5af4f9f631fd339f69a66f562e42e0bfc1d4ee2cda5fa8d35c35ee"
+GERBIL_LINUX_SHA256 = "ec3c5f865f58bf529de34b6c0114fdb4d71328f9dacfe053f4cc5f2604233128"
 
 GERBIL_LINUX_URLS = [
-    "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-1cfb032c7a1612637da6205f5f8a15683eba3ba0-linux-x86_64-portable-full-single-host-unlimited-multiple-vms-patch9599b09b82f8/gerbil-v0.19-1cfb032c7a1612637da6205f5f8a15683eba3ba0-linux-x86_64-portable-full-single-host-unlimited-multiple-vms-patch9599b09b82f8.tar.gz",
+    "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patch2ab86460b480/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patch2ab86460b480.tar.gz",
 ]
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
@@ -42,6 +42,7 @@ gerbil.auto(
     # every cold dependency executor at two workers regardless of capacity.
     expected_version_prefixes = [
         "Gerbil 1cfb032",
+        "Gerbil 2591dcd",
     ],
     linux_prebuilt_arch = "x86_64",
     linux_prebuilt_manifest_path = "gerbil-toolchain-release.json",
