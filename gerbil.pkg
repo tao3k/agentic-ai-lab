@@ -6,4 +6,4 @@
  prelude: :tao3k/yuanxu/prelude
  depend: ("github.com/tao3k/gerbil-parser@203d136dd4272db082458abb0e3ca4f8fe77fb20"
           "github.com/tao3k/orgize@aee83c7c2f5b086e788b2d1b0b5777aa14f4a772"
-          "github.com/tao3k/gerbil-ascent@d1d8a52fbecf81e59f977bce4ee1e2caa33bb038"))
+          "github.com/tao3k/gerbil-ascent@910a15bba105ded05125148e2f66dc2e1964195a"))
