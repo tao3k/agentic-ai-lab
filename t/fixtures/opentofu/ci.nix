@@ -13,6 +13,14 @@ let
     inherit pkgs; selection.providers = [ "aws" "null" ];
   };
   inherit (versions) parent child;
+  # The publication cost Case selects the parent AWS schema through the real
+  # provider collection. Prepare that exact immutable collection here instead
+  # of depending on an earlier Context Case to have realized it successfully.
+  parentArtifacts = pkgs.callPackage
+    ../../../modules/services/opentofu/nix/provider-artifacts.nix {
+      schemas.aws = versions.parent;
+      selection.providers = [ "aws" ];
+    };
   # Byte-authentication control for the recorded historical Darwin binary.
   # It is streamed for hashing, never executed on Linux.
   binary = pkgs.runCommand "aws-5.100.0-historical-binary" {

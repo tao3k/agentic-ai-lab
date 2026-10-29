@@ -9,7 +9,16 @@
           (only-in :std/source this-source-file)
           (only-in :yuanxu/module-system/building/source-package register-module-build-source!)))
 (begin-syntax
-  (register-module-build-source! (path-directory (this-source-file)) 'agentic-ai-lab))
+  (let ((root (path-normalize (path-directory (this-source-file))))
+        (paths (load-path)))
+    (register-module-build-source! root 'agentic-ai-lab)
+    ;; Source registration authenticates the fallback package. Preparation
+    ;; must retain the consumer's installed-library priority, rather than
+    ;; accidentally recompiling native dependencies as private test support.
+    (set-load-path!
+      (if (member root (map path-normalize paths))
+        paths
+        (append paths (list root))))))
 
 (import (only-in :clan/poo/object .get)
         (only-in :yuanxu/module-system/building/script defbuild-script)

@@ -712,10 +712,6 @@ jobs:
           echo "fingerprint=$native_abi" >> "$GITHUB_OUTPUT"
           echo "Gerbil native ABI: $native_abi"
 
-      - name: Validate consumed dependency API roots
-        timeout-minutes: 2
-        run: bazel test --test_output=errors //packages/bazel:parser_dependency_entry_test //packages/bazel:ascent_dependency_entry_test
-
       - name: Build declared Gerbil dependency projects
         id: dependency-compile
         timeout-minutes: ${{ matrix.dependency-timeout-minutes }}

@@ -4,10 +4,21 @@
 (import :std/test
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/module-system/source/admission current-module-source-observer)
-        (only-in :yuanxu/t/qualification/build-publication/store store-verify)
+        (only-in :std/source this-source-file)
+        (only-in :clan/poo/object .call)
+        (only-in :clan/poo/io module-action)
+        (only-in "./qualification/nix/programs.ss" nix-publication-programs)
         (only-in :agentic-ai-lab/modules/nix/func
                  agentic-ai-lab-nix-verify-store current-nix-process-observer))
 (export nix-store-verification-test)
+
+;; Core qualification helpers live in their issued support publication, not the
+;; production library. Resolve the native action only inside that admitted scope.
+(def programs
+  (nix-publication-programs (path-expand ".." (path-directory (this-source-file)))))
+(def verify-store
+  (module-action "yuanxu/t/qualification/build-publication/store"
+                 'yuanxu/t/qualification/build-publication/store#store-verify))
 
 (def nix-store-verification-test
   (test-suite "Each approval boundary verifies native registered contents"
@@ -18,8 +29,10 @@
                       (lambda (event _amount)
                         (when (and (pair? event) (eq? (car event) 'native-store-process))
                           (set! calls (cons (cadr event) calls))))))
-        (store-verify root)
-        (store-verify root))
+        (.call programs .with-imports
+          (lambda ()
+            (verify-store (list root))
+            (verify-store (list root)))))
       (check-equal? (reverse calls)
         (list (list "nix-store" "--store" "daemon" "--verify-path" root)
               (list "nix-store" "--store" "daemon" "--verify-path" root))))

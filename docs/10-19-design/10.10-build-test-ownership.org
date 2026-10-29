@@ -728,3 +728,66 @@ package declarations into Bazel source/archive/lock metadata, with its existing
 cross-platform lock and stale-projection controls. Native dependency entries
 call Gerbil directly; no replacement package manager or new package-test lane
 is introduced. The existing real rebuild and consumer queue qualify use.
+
+* Complete native replay and remaining entry ownership
+
+After rebuilding the operator-cleaned prefix, Root =6a307e8e= with Core
+=d0bee3d= completed the entire 317-file serial queue: 315 files passed and
+two failed. The parent exited naturally with status 1. The failures were the
+AWS nested qualification's missing support publication and an ordinary test
+importing a Core qualification helper from the production library. This is
+failure evidence, not admission of the modified source or remote CI.
+
+The preparation entry authenticated Root's source package, but registration
+also prepended that directory ahead of installed libraries. Its support
+closure therefore differed from the independently launched consumer. Retain
+the original installed-library priority and register authenticated source as
+fallback. The formerly absent AWS publication is now produced by native Make;
+the original ordinary/observed integration Cases passed in the complete replay.
+
+The Nix verifier consumes Core's helper through the existing admitted support
+scope and native =module-action=. Its two real verifier calls and refusal
+controls remain. No private helper is promoted into the production library.
+
+An executable host-split experiment was rejected and removed. Native object
+comparison found identical worker/producer host sets (321/335), and neither
+program links POO's table host. The local preparation pass cannot establish
+that the option repairs Linux's 240-second refusal. The separate two-core POO
+cold-build experiment still refused at 180 seconds; its global compiler flag
+did not change the inspected object's single-host layout and was reverted.
+
+The frozen candidate's complete native replay finished naturally: 317 files,
+zero failures, and every file had MODULE-OK, HARNESS-OK and final OK. The two
+nested AWS runs account for 319 sets of markers. This replay included the
+subsequently removed executable option; final declarations still require
+affected runtime checks and exact-head remote CI. Raw logs and hashed receipts
+remain local under =.data/context-ci-20261029/=.
+
+The existing locked Nix fixture also prepares the selected parent AWS
+collection. Its derivation is identical to the collection that old macOS CI
+unexpectedly realized inside the cost Case. This removes dependence on a
+successful earlier Context Case while preserving the zero-realization check.
+Old macOS Context logs printed all success markers before the process timeout;
+natural exit remains required and that remote failure is not a passing Case.
+
+After removal of the ineffective option, final preparation, AWS cost (run
+before Context), the four verifier Cases, AWS ordinary/observed integration
+and all 99 Context Cases/replays exited naturally with their original fences.
+The separate approved-recovery follow-up reproduced the unchanged 120-second
+refusal at =cold-source=. It remains a failure despite the earlier complete
+queue pass. No control, deadline or expected result was relaxed.
+
+A three-second sample of that follow-up's long =gerbil build= preparation
+found all 2619 samples in =___cleanup_dyn_module= / =dlclose=, predominantly
+Darwin =notifyDebuggerUnload=. That sampled interval is shutdown work, not
+manifest or Case computation. Keep it separate from native preparation CPU.
+The worker also constructs a probe compiler projection before branches that
+do not consume it; that dependency-owned optimization is under coordination,
+not an implemented Root repair. Core upgrades wait for their own CI admission.
+
+Bazel now consumes the Parser and ASCENT owners' build entries directly.
+The generated dependency entry, repeated API-root inventories and checks of
+that obsolete adapter are removed. The packages' =yuanxu!= declarations and
+native Make own their complete closure. Original source/product invalidation,
+tampering controls and resource limits are unchanged. POO's separate remote
+180-second cold-build refusal remains open pending a measured fix.
