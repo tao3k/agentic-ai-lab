@@ -4,8 +4,8 @@
 
 (package: agentic-ai-lab
  prelude: :tao3k/yuanxu/prelude
- depend: ("github.com/tao3k/gerbil-parser@3fa3511ca9bbf7ced71378598325a048010aec91"
-          "github.com/tao3k/orgize@2461e44d39dcbca73140cdb80e924f3003c0c87a"
+ depend: ("github.com/tao3k/gerbil-parser@2f2256d44485d61ebfbdf44511043442d480e690"
+          "github.com/tao3k/orgize@4d10994f9144e696d3734b53c4c19a839a55d600"
           ;; Orgize's native C producer consumes this existing Scheme runtime.
           "github.com/tao3k/gerbil-scheme-rust@cfbc10c47ddc41f6670bd78e46e1e9d856cbb870"
-          "github.com/tao3k/gerbil-ascent@657699af18005310c9ffce94c6898ffa4310cbbb"))
+          "github.com/tao3k/gerbil-ascent@41340e32e1596f501fcb2e9fa621f3874e5c6efb"))
