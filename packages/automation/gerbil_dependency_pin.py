@@ -8,6 +8,7 @@ The product, optional development and checked-in Core ``gerbil.pkg`` files
 own their respective dependency pins. This tool does not resolve dependencies;
 gxpkg and Bazel retain that responsibility.  It only updates and checks the equivalent Bazel source
 projection required by isolated builds.
+It never fetches, installs, or changes package checkouts or tag metadata.
 """
 
 from __future__ import annotations
@@ -18,7 +19,6 @@ import hashlib
 import json
 import platform
 import re
-import subprocess
 import sys
 import urllib.request
 from pathlib import Path
@@ -356,71 +356,20 @@ def refresh_native_lock(root: Path = ROOT) -> None:
     print("gerbil-dependency-pin: removed native cached evaluation; Bazel must regenerate it")
 
 
-def ensure_native_commit(url: str, revision: str, target: Path) -> None:
-    """Fetch an exact commit without resetting an existing package checkout."""
-    if not re.fullmatch(r"[0-9a-f]{40}", revision):
-        raise ValueError("native prefetch requires a full commit SHA")
-    created = not target.exists()
-    if created:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        subprocess.run(["git", "init", "--quiet", str(target)], check=True)
-        subprocess.run(["git", "-C", str(target), "remote", "add", "origin", url], check=True)
-    elif not (target / ".git").exists():
-        raise ValueError(f"native package path is not a Git checkout: {target}")
-    present = subprocess.run(
-        ["git", "-C", str(target), "cat-file", "-e", f"{revision}^{{commit}}"],
-        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-    ).returncode == 0
-    if not present:
-        print(f"gerbil-native-pin: fetching {revision} into {target}", flush=True)
-        subprocess.run(
-            ["git", "-C", str(target), "fetch", "--no-tags", "--depth=1", url, revision],
-            check=True,
-        )
-    # A failed first fetch leaves an initialized but unborn checkout. Complete
-    # only that new checkout; existing branches and local edits remain intact.
-    unborn = subprocess.run(
-        ["git", "-C", str(target), "rev-parse", "--verify", "HEAD"],
-        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-    ).returncode != 0
-    if created or unborn:
-        subprocess.run(["git", "-C", str(target), "checkout", "--quiet", "--detach", revision], check=True)
-        # Source prefetch does not register installation or tag metadata.
-        # The subsequent native SDK fetch owns that transition.
-    print(f"gerbil-native-pin: ready {revision}", flush=True)
-
-
-def prepare_native_pins(package_root: Path, root: Path = ROOT, manifest: Path | None = None) -> None:
-    """Materialize declared SHA objects; gxpkg still owns tag resolution/builds."""
-    package_manifest = manifest if manifest is not None else root / "gerbil.pkg"
-    for repository, revision in parse_package_pins(package_manifest.read_text()).values():
-        if not re.fullmatch(r"[0-9a-f]{40}", revision):
-            continue
-        target = (package_root / repository).resolve()
-        if not target.is_relative_to(package_root.resolve()):
-            raise ValueError("native package pin escapes package root")
-        ensure_native_commit(f"https://{repository}.git", revision, target)
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    check_parser = subparsers.add_parser("check", help="validate native and Bazel pins")
+    check_parser = subparsers.add_parser("check", help="check Bazel projections against package declarations")
     check_parser.set_defaults(command="check")
     pin_parser = subparsers.add_parser("pin", help="project one direct dependency revision")
     pin_parser.add_argument("package")
     pin_parser.add_argument("revision")
     subparsers.add_parser("sync-lock", help="copy the native lock projection across platforms")
     subparsers.add_parser("refresh-native-lock", help="invalidate the native cached extension result")
-    prepare_parser = subparsers.add_parser("prepare-native", help="fetch immutable commit objects for gxpkg")
-    prepare_parser.add_argument("--package-root", type=Path, required=True)
-    prepare_parser.add_argument("--manifest", type=Path, help="authoritative package manifest (defaults to root gerbil.pkg)")
     args = parser.parse_args()
 
     try:
-        if args.command == "prepare-native":
-            prepare_native_pins(args.package_root, manifest=args.manifest)
-        elif args.command == "pin":
+        if args.command == "pin":
             project_pin(args.package, args.revision)
         elif args.command == "refresh-native-lock":
             refresh_native_lock()
@@ -433,7 +382,7 @@ def main() -> int:
                     print(f"gerbil-dependency-contract: {error}", file=sys.stderr)
                 return 1
             print("gerbil-dependency-contract: ok")
-    except (KeyError, OSError, ValueError, json.JSONDecodeError, subprocess.CalledProcessError) as error:
+    except (KeyError, OSError, ValueError, json.JSONDecodeError) as error:
         print(f"gerbil-dependency-pin: {error}", file=sys.stderr)
         return 1
     return 0

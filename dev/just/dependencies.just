@@ -6,7 +6,6 @@
 deps:
     # Reuse the existing v0.19 package API adapter for exact checkout/tag admission.
     # Product cleanup belongs to clean, after its owning Core bootstrap exists.
-    python3 packages/automation/gerbil_dependency_pin.py prepare-native --package-root "{{ agentic_ai_lab_gerbil_path }}/pkg"
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" {{ gerbil_darwin_env }} gerbil interactive packages/automation/native-dependencies.ss
 
 # Rebuild one installed source without fetching or changing its dependencies.
@@ -38,18 +37,14 @@ pin-gerbil-dependency package revision:
 mod-tidy:
     {{ bazel }} mod tidy --lockfile_mode=update
 
-# Let Gerbil update and build the dependencies declared by Core. Prefetch only
-# supplies immutable objects; it deliberately never moves an existing checkout.
-# The official update owns both checkout/tag coherence and incremental builds.
+# Gerbil owns fetching, checkout/tag state and the declared Core dependency build.
 [group('dependency')]
 bootstrap-native-poo:
-    python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest core/gerbil.pkg --package-root "{{ agentic_ai_lab_gerbil_path }}/pkg"
     cd "{{ justfile_directory() }}/core" && GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" /usr/bin/time -p {{ gerbil_darwin_env }} timeout --verbose --signal=TERM --kill-after=5s 600s gerbil interactive ../packages/automation/native-dependencies.ss
 
 # Optional ASP policy probes belong to the development package, not the library.
 [group('dependency')]
 deps-dev:
-    python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "{{ agentic_ai_lab_gerbil_path }}/pkg"
     cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" {{ gerbil_darwin_env }} gerbil interactive ../packages/automation/native-dependencies.ss
 
 # Compile installed test dependencies against the Gerbil-selected shared library.

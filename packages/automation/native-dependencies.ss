@@ -16,8 +16,8 @@
     (for-each
       (lambda (dependency)
         (let (package (car (string-split dependency #\@)))
-          ;; Prefetch does not move an existing checkout. Gerbil's update API
-          ;; owns its exact revision/tag transition before installation checks.
+          ;; Gerbil owns fetching and the exact checkout/tag transition before
+          ;; installation checks. No Python prefetch manages package state.
           ;; Call the native APIs directly: v0.19's deps --update forwards the
           ;; tagged spelling to a directory lookup after updating it.
           (when (file-exists? (path-expand package (pkg-root-dir)))

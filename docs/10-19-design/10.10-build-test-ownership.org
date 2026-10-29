@@ -719,3 +719,12 @@ the operator removes its shared =.gerbil= prefix during execution. That run is
 retained as interference evidence and cannot qualify subsequent semantic Cases.
 The original prefix is being rebuilt through the existing dependency/Core
 entries. Evidence lives outside that prefix in ignored local artifacts.
+
+Package acquisition remains owned by Gerbil's existing package API. Python's
+native prefetch command, checkout/tag handling and seven duplicate package
+assertions are removed. The direct dependency-name list is declaration data,
+not another test oracle. The remaining Python utility only projects owning
+package declarations into Bazel source/archive/lock metadata, with its existing
+cross-platform lock and stale-projection controls. Native dependency entries
+call Gerbil directly; no replacement package manager or new package-test lane
+is introduced. The existing real rebuild and consumer queue qualify use.
