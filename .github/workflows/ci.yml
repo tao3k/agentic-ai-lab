@@ -785,10 +785,10 @@ jobs:
             ${{ steps.scheme-compile.outputs.profile }}
             bazel-bin/compile.receipt.json
             bazel-bin/compile.log
-            bazel-bin/gerbil_poo_package.receipt.json
-            bazel-bin/gerbil_poo_package.log
-            ${{ steps.dependency-compile.outputs.output-base }}/sandbox/**/gerbil_poo_package.log
-            ${{ steps.dependency-compile.outputs.output-base }}/sandbox/**/gerbil_poo_package.project/.gerbil-bazel-resource-guard.json
+            bazel-bin/*_package.receipt.json
+            bazel-bin/*_package.log
+            ${{ steps.dependency-compile.outputs.output-base }}/sandbox/**/*_package.log
+            ${{ steps.dependency-compile.outputs.output-base }}/sandbox/**/*_package.project/.gerbil-bazel-resource-guard.json
           if-no-files-found: warn
           retention-days: 7
 
