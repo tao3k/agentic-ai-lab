@@ -12,7 +12,7 @@ package «agentic-ai-lab-proof» where
 -- This revision is identical to the root repository's Core gitlink.
 require YuanxuProof from git
   "https://github.com/tao3k/gebril-yuanxu.git"
-  @ "6f9587f44e1def7c4a902a120f2fc2dd50eb5efd"
+  @ "7b798b477ca97f429bc607fbd82d8cee75676677"
   / "dev/proofs/lean"
 
 require Cedar from git
