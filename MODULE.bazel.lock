@@ -140,7 +140,7 @@
     "@@gerbil_bazel+//gerbil:extensions.bzl%gerbil": {
       "os:linux,arch:amd64": {
         "bzlTransitiveDigest": "Px2WFSnYVQZkUqPn3M4MR9O68hILy3SGKU9s1+kFDYo=",
-        "usagesDigest": "m1N62N41FeZWl1rsuANaOosJZ4A6WCg47vzgEJcWxMk=",
+        "usagesDigest": "N16KVhato5Inc8XrNdJE6i+rAt+XYQba0QgWLBNWszo=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -153,17 +153,18 @@
               ],
               "environment": {},
               "expected_version_prefixes": [
-                "Gerbil 1cfb032"
+                "Gerbil 1cfb032",
+                "Gerbil 2591dcd"
               ],
               "install_digest": "",
               "manifest_path": "gerbil-toolchain-release.json",
-              "release_revision": "1cfb032c7a1612637da6205f5f8a15683eba3ba0",
+              "release_revision": "2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb",
               "project_library_relative_path": ".gerbil/lib",
               "project_root_marker": "@@//:gerbil.pkg",
-              "sha256": "143c691fee5af4f9f631fd339f69a66f562e42e0bfc1d4ee2cda5fa8d35c35ee",
+              "sha256": "ec3c5f865f58bf529de34b6c0114fdb4d71328f9dacfe053f4cc5f2604233128",
               "strip_prefix": "gerbil-v0.19-linux-x86_64",
               "urls": [
-                "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-1cfb032c7a1612637da6205f5f8a15683eba3ba0-linux-x86_64-portable-full-single-host-unlimited-multiple-vms-patch9599b09b82f8/gerbil-v0.19-1cfb032c7a1612637da6205f5f8a15683eba3ba0-linux-x86_64-portable-full-single-host-unlimited-multiple-vms-patch9599b09b82f8.tar.gz"
+                "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patch2ab86460b480/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patch2ab86460b480.tar.gz"
               ]
             }
           },
@@ -223,20 +224,6 @@
               ]
             }
           },
-          "orgize_sources": {
-            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
-            "attributes": {
-              "build_script": "build.ss",
-              "canonical_uri": "https://github.com/tao3k/orgize",
-              "package": "orgize",
-              "revision": "4d10994f9144e696d3734b53c4c19a839a55d600",
-              "sha256": "7aef06bca1c74f1671d24d269c75a56e35de2de1ca9bd64150bd677f402e8c30",
-              "strip_prefix": "orgize-4d10994f9144e696d3734b53c4c19a839a55d600",
-              "urls": [
-                "https://github.com/tao3k/orgize/archive/4d10994f9144e696d3734b53c4c19a839a55d600.tar.gz"
-              ]
-            }
-          },
           "gerbil_scheme_rust_sources": {
             "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
             "attributes": {
@@ -250,12 +237,26 @@
                 "https://github.com/tao3k/gerbil-scheme-rust/archive/cfbc10c47ddc41f6670bd78e46e1e9d856cbb870.tar.gz"
               ]
             }
+          },
+          "orgize_sources": {
+            "repoRuleId": "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository",
+            "attributes": {
+              "build_script": "build.ss",
+              "canonical_uri": "https://github.com/tao3k/orgize",
+              "package": "orgize",
+              "revision": "4d10994f9144e696d3734b53c4c19a839a55d600",
+              "sha256": "7aef06bca1c74f1671d24d269c75a56e35de2de1ca9bd64150bd677f402e8c30",
+              "strip_prefix": "orgize-4d10994f9144e696d3734b53c4c19a839a55d600",
+              "urls": [
+                "https://github.com/tao3k/orgize/archive/4d10994f9144e696d3734b53c4c19a839a55d600.tar.gz"
+              ]
+            }
           }
         }
       },
       "os:osx,arch:aarch64": {
         "bzlTransitiveDigest": "Px2WFSnYVQZkUqPn3M4MR9O68hILy3SGKU9s1+kFDYo=",
-        "usagesDigest": "m1N62N41FeZWl1rsuANaOosJZ4A6WCg47vzgEJcWxMk=",
+        "usagesDigest": "N16KVhato5Inc8XrNdJE6i+rAt+XYQba0QgWLBNWszo=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -269,7 +270,8 @@
               "dependency_roots": [],
               "environment": {},
               "expected_version_prefixes": [
-                "Gerbil 1cfb032"
+                "Gerbil 1cfb032",
+                "Gerbil 2591dcd"
               ],
               "project_library_relative_path": ".gerbil/lib",
               "project_root_marker": "@@//:gerbil.pkg",
