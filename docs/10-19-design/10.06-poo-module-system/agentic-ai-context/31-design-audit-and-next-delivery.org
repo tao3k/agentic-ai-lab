@@ -182,3 +182,43 @@ evidence before asserting an advantage.
 The first implementation unit after review is G1's smallest real import boundary
 and a failing independent consumer, while G0's existing owner repair continues.
 Then deliver G2 over the already implemented native Scheme service.
+
+* G0 native adapter repair checkpoint (2026-10-30)
+
+The isolated Nix adapter exposed two preparation defects before Case execution:
+ordinary library files had been listed as Test demand roots, and an executable
+consumer subset discarded the original producer's library publication. The
+producer now declares only its actual program root; native imports own its
+library closure. The generated service's Nix Source dependency is a real native
+import. Invocation consumes the same original demand as preparation and passes
+its admitted library directories through standard =GERBIL_LOADPATH=.
+
+The existing Nix Just entry preserves installed-library priority and appends the
+registered product source as fallback for official Harness children, matching
+the Root entry. AWS atomic support is prepared through
+=init.exports.scenarios.aws.tests.std-make-spec=, separately from qualification;
+there is no second file inventory or compiler launched by a test Case.
+
+The isolated queue then completed approval/recovery (including source changes,
+joint tampering and missing observations), AWS Context ordinary/observed
+publication and the real atomic endpoint. It later refused store verification
+at the unchanged 60-second Case silence boundary, with a stack in Core artifact
+digest admission. That failed queue is not full adapter admission. The
+store-process observer must compose with the existing source/progress observer;
+forwarding real observations does not create synthetic progress.
+
+Cold-import probes check their issuer's declared Case heap limit in the actual
+child; the expected value comes from the existing profile, not from the observed
+heap. Root recipe evaluation obtains host capacity through the same OS queries
+as CI, retaining explicit =GERBIL_BUILD_CORES= and avoiding a preparation-time
+=gxi -e= process. No test deadline or heap allowance is increased by this repair.
+
+The selected Root cohort at =a71c1369= contains Core =6f9587f= and ASCENT
+=41340e32=. These are candidates, not a qualified dependency receipt: Core's
+Linux scale gate failed, and the ASCENT production program declaration/static
+input boundary remains open. Keep the complete failed queues and local replay
+artifacts outside source control. After dependency admission, rerun the existing
+=just test=, complete =just test-root= replay, =just test-context-temporal=
+execution/replay and =just test-performance=, plus the existing isolated Nix
+=test-all= entry. Focused markers, package preparation or finite-model success
+cannot replace those complete native queues and natural process exits.

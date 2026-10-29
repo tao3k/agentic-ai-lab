@@ -193,9 +193,9 @@
 (def (agentic-ai-lab-nix-producer-demand exports root)
   (.call (.get exports tests) .for-files
     (map (cut path-expand <> root)
-      '("scenarios/aws/types.ss" "scenarios/aws/objects.ss"
-        "modules/nix/objects.ss" "modules/services/opentofu/objects.ss"
-        "t/qualification/nix/tools.ss"))
+      ;; Only the actual program is a demand root. Ordinary libraries belong
+      ;; to its native import closure, not the Harness-owned test-file roster.
+      '("t/qualification/nix/tools.ss"))
     (map (cut path-expand <> root)
       '("build-spec.ss" "nix-worker-build.ss" "t/qualification/nix/build.ss"
         "t/qualification/nix/programs.ss"))

@@ -27,10 +27,10 @@
       (let (exports
             (module-test-source-binding (path-expand "init.ss" root-value)
                                         'agentic-ai-lab.init.exports))
-        (agentic-ai-lab-nix-program-consumer
-          exports
-          (agentic-ai-lab-nix-producer-demand exports root-value)
-          (path-expand "t/qualification/nix/tools.ss" root-value)))
+        ;; Invocation consumes the same declaration as preparation, including
+        ;; the Source interfaces used by generated service modules. Do not
+        ;; narrow its issued publication to just the executable's path.
+        (agentic-ai-lab-nix-producer-demand exports root-value))
       ;; The dependency is an issued build, not an ambient library directory.
       ;; Its source/products are checked before use and after successful work;
       ;; the ordinary Gerbil load path is restored on every exit.
@@ -58,10 +58,24 @@
       (lambda (role . arguments)
         (.call self .with-imports
           (lambda ()
+            (def build (.get self producer-demand build))
+            ((.get build admit-artifacts))
+            ;; The child expander needs the admitted interfaces as well as the
+            ;; linked program. Carry their existing capability-owned directories
+            ;; through Gerbil's standard environment; never depend on a warm
+            ;; product installation or a vanished compiler sandbox.
+            (def libraries
+              (string-append (.get build output-directory) ":"
+                (.get self support-demand build output-directory)))
+            (def inherited (getenv "GERBIL_LOADPATH" ""))
             (.cc Config
               directory: (if (string=? role "store") (path-expand "core" root-value) root-value)
               timeout: 300
+              environment:
+              (.o GERBIL_LOADPATH:
+                (if (equal? inherited "") libraries
+                  (string-append libraries ":" inherited)))
               command: (append
-                (list (.call (.get self producer-demand build) .program
+                (list (.call build .program
                         'agentic-ai-lab/t/qualification/nix/tools)
                       vm-options role) arguments)))))))

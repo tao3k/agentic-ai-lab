@@ -25,8 +25,12 @@
     (yuanxu-test-case "Core recovery repeats fresh native verification without duplicate processes"
       (def root (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_INPUTS"))
       (def calls '())
+      (def previous (current-module-source-observer))
       (parameterize ((current-module-source-observer
-                      (lambda (event _amount)
+                      (lambda (event amount)
+                        ;; Observe this boundary without swallowing the native
+                        ;; Case observer's real source/admission progress.
+                        (when previous (previous event amount))
                         (when (and (pair? event) (eq? (car event) 'native-store-process))
                           (set! calls (cons (cadr event) calls))))))
         (.call programs .with-imports

@@ -16,11 +16,13 @@ prepare-qualification:
     cd "{{ root }}" && GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ env_var_or_default("GERBIL_TEST_MAX_HEAP", "2G") }},debug=q" timeout --signal=TERM --kill-after=5s 600s gerbil {{ vm }} interactive qualification-build.ss compile
 
 test path: build prepare-qualification
-    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 1800s gxi {{ vm }} t/qualification/nix/run.ss "{{ path }}"
+    cd "{{ root }}" && GERBIL_LOADPATH="${GERBIL_LOADPATH:+$GERBIL_LOADPATH:}{{ root }}" timeout --signal=TERM --kill-after=5s 1800s gxi {{ vm }} t/qualification/nix/run.ss "{{ path }}"
 
 # Core TestingScript owns the per-file configured VM / 600-second gate, serially.
+# As in the Root test entry, preserve installed-library priority and pass the
+# registered source fallback through the official Harness child environment.
 test-all: build prepare-qualification
-    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 7200s gxi {{ vm }} t/qualification/nix/run.ss
+    cd "{{ root }}" && GERBIL_LOADPATH="${GERBIL_LOADPATH:+$GERBIL_LOADPATH:}{{ root }}" timeout --signal=TERM --kill-after=5s 7200s gxi {{ vm }} t/qualification/nix/run.ss
 
 # Read the actual Nix-selected head in an independent bounded process.
 head-reader profile:

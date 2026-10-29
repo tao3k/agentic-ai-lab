@@ -4,6 +4,7 @@
 (import :std/test :clan/poo/object
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/source this-source-file)
+        (only-in :yuanxu/observability/testing-case yuanxu-selected-testing-case-profile)
         (only-in :yuanxu/observability/testing-script testing-script-for-source)
         (only-in :yuanxu/module-system/building/test-projection module-test-file-source))
 (export aws-startup-cost-test)
@@ -14,6 +15,11 @@
         (lambda (root)
           (def (probe name guarded? (direct? #f) (changed-path? #f))
             (def path (path-expand (string-append name "-test.ss") root))
+            ;; Check the issuer's declared budget in the actual child, including
+            ;; both direct and environment-restoration paths. Never infer the
+            ;; expected value from that child's observed heap limit.
+            (def expected-heap
+              (.get (yuanxu-selected-testing-case-profile) heap-limit-bytes))
             (call-with-output-file (list path: path truncate: #t)
               (lambda (port)
                 (display "(import :std/test" port)
@@ -21,7 +27,9 @@
                   (display " (only-in :yuanxu/observability/testing-case yuanxu-test-case)" port))
                 (display ")\n(export probe)\n(def probe (test-suite \"startup\" (" port)
                 (display (if guarded? "yuanxu-test-case" "test-case") port)
-                (display " \"check\" (check-equal? 1 1) (check-equal? (##get-max-heap) 1073741824) (check-equal? (car (string-split (getenv \"PATH\") #\\:)) (string-append (getenv \"GERBIL_PATH\") \"/bin\")))))\n" port)))
+                (display " \"check\" (check-equal? 1 1) (check-equal? (##get-max-heap) " port)
+                (write expected-heap port)
+                (display ") (check-equal? (car (string-split (getenv \"PATH\") #\\:)) (string-append (getenv \"GERBIL_PATH\") \"/bin\")))))\n" port)))
             (def script (testing-script-for-source (module-test-file-source (list path))))
             (def actual
               (if direct?

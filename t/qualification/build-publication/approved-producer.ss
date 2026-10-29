@@ -2,6 +2,10 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Qualification driver: production selection/publishing, temporary sources.
 (import :clan/poo/object
+        ;; Generated service code below imports this same public POO Source.
+        ;; Keep that dependency visible to the ordinary native compiler rather
+        ;; than relying on a warm library or scanning strings as an import DSL.
+        (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in "../nix/programs.ss" nix-publication-programs)
         (only-in "../../../core/t/qualification/service-publication/fixtures.ss" ServicesFixture)
         ;; File mutation belongs to the existing directory Fixture owner.

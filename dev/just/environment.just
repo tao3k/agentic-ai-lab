@@ -4,9 +4,9 @@
 
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
-# The SDK derives host capacity; preserve an explicit caller limit.
-# Heap limits are per process and do not imply a fixed two-worker scheduler.
-export GERBIL_BUILD_CORES := env_var_or_default("GERBIL_BUILD_CORES", `gxi -:max-heap=2G -e '(display (##core-count))'`)
+# Match CI's host-derived compiler capacity without starting a Scheme process
+# while resolving recipes. Preserve an explicit caller limit.
+export GERBIL_BUILD_CORES := env_var_or_default("GERBIL_BUILD_CORES", if os() == "macos" { `sysctl -n hw.physicalcpu` } else { `getconf _NPROCESSORS_ONLN` })
 
 # Test processes are bounded before any Scheme profile module can load. The
 # ASP POO Testing profile remains the policy and receipt owner inside the
