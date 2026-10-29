@@ -8,11 +8,13 @@ from __future__ import annotations
 
 import importlib.util
 import tempfile
+import sys
 import unittest
 from pathlib import Path
 
 
 SCRIPT = Path(__file__).resolve().parents[1] / "install_gerbil_release.py"
+sys.path.insert(0, str(SCRIPT.parent))
 SPEC = importlib.util.spec_from_file_location("install_gerbil_release", SCRIPT)
 assert SPEC and SPEC.loader
 installer = importlib.util.module_from_spec(SPEC)
@@ -28,6 +30,14 @@ class InstallGerbilReleaseTest(unittest.TestCase):
         self.assertNotIn("revision=", action)
         self.assertNotIn("sha256=", action)
         self.assertNotIn("2591dcd", action)
+
+    def test_linux_installer_consumes_the_canonical_native_sdk_declaration(self) -> None:
+        sdk = installer.declared_toolchain(installer.ROOT)
+        os_name, architecture, revision, url, digest = installer.release_configuration(("Linux", "x86_64"))
+        self.assertEqual((os_name, architecture), ("linux", "x86_64"))
+        self.assertEqual(revision, sdk["linux_prebuilt_release_revision"])
+        self.assertEqual(digest, sdk["linux_prebuilt_sha256"])
+        self.assertEqual(sdk["linux_prebuilt_urls"], [url])
 
     def test_activation_reads_nonexported_upstream_values(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

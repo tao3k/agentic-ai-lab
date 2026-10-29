@@ -54,7 +54,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            gerbil-label: release-v0.19-1cfb032
+            gerbil-label: release-v0.19-2591dcd
           - os: macos-26
             gerbil-label: release-v0.19-1cfb032
     env:
@@ -138,7 +138,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
+          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Install native Gerbil package dependencies
         run: |
@@ -160,7 +160,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
+          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Build native Gerbil package
         # Reuse the maintained Darwin compiler/header/library environment.
@@ -587,7 +587,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            gerbil-label: release-v0.19-1cfb032
+            gerbil-label: release-v0.19-2591dcd
             gerbil-install: release
             dependency-timeout-minutes: 30
             compile-timeout-minutes: 25

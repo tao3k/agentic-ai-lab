@@ -136,8 +136,8 @@ def declared_projection(text: str, repository_name: str) -> dict[str, object]:
     }
 
 
-def toolchain_lock_errors(extension: dict, root: Path) -> list[str]:
-    """Compare SDK declarations without evaluating or manufacturing Bazel specs."""
+def declared_toolchain(root: Path) -> dict[str, object]:
+    """Read the one native SDK declaration; do not evaluate or synthesize Bazel specs."""
     tree = ast.parse((root / "MODULE.bazel").read_text(encoding="utf-8"))
     constants = {}
     for node in tree.body:
@@ -154,6 +154,12 @@ def toolchain_lock_errors(extension: dict, root: Path) -> list[str]:
                       else ast.literal_eval(keyword.value))
         for keyword in calls[0].keywords
     }
+    return values
+
+
+def toolchain_lock_errors(extension: dict, root: Path) -> list[str]:
+    """Compare SDK declarations without evaluating or manufacturing Bazel specs."""
+    values = declared_toolchain(root)
     common = {name: values[name] for name in ("expected_version_prefixes", "environment")
               if name in values}
     linux = {name.removeprefix("linux_prebuilt_"): value
