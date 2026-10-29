@@ -54,7 +54,7 @@ deps-dev:
 build-testing: build-library
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" {{ gerbil_darwin_env }} gxpkg build github.com/tao3k/asp-gerbil-scheme
     # The existing dev package declares optional init-owned native test support.
-    cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}" GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 900s gerbil {{ gerbil_test_runtime_options }} build
+    cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}" GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1800s gerbil {{ gerbil_test_runtime_options }} build
 
 # Reuse the maintained, hash-locked qualification inputs; retain a GC root.
 [group('dependency')]

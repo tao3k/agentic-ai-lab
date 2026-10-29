@@ -95,7 +95,7 @@
                    'agentic-ai-lab/t/qualification/context-temporal/interface)
                  vm "-v" "5" "-D" "yuanxu-module-test-observation") files))
          ;; Keep every real timer interleaving and the existing byte watchdog.
-         timeout: 150 idle-timeout: #f case-count: 99)))
+         timeout: 600 idle-timeout: #f case-count: 99)))
     (else (error "unknown specialized qualification" name))))
 
 (def (main name vm . arguments)

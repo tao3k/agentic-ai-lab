@@ -3,23 +3,25 @@
 # Product adapter roots; dependency traversal belongs to Core, not shell lists.
 set shell := ["bash", "-euo", "pipefail", "-c"]
 root := justfile_directory() + "/../../.."
+# Reuse the existing test VM setting in standalone Nix qualification.
+vm := "-:max-heap=" + env_var_or_default("GERBIL_TEST_MAX_HEAP", "2G") + ",debug=q"
 
 build:
-    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 240s gerbil -:max-heap=2G,debug=q interactive t/qualification/nix/build.ss compile
+    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 1200s gerbil {{ vm }} interactive t/qualification/nix/build.ss compile
 
 # Bazel has built the declared adapter libraries. Consume the root package's
 # SAME native build declaration in this command-owned runtime prefix, using
-# the official Gerbil frontend and the unchanged pre-import heap/time fence.
+# the official Gerbil frontend and the configured pre-import heap/time fence.
 prepare-qualification:
-    cd "{{ root }}" && GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap=2G,debug=q" timeout --signal=TERM --kill-after=5s 120s gerbil -:max-heap=2G,debug=q interactive qualification-build.ss compile
+    cd "{{ root }}" && GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ env_var_or_default("GERBIL_TEST_MAX_HEAP", "2G") }},debug=q" timeout --signal=TERM --kill-after=5s 600s gerbil {{ vm }} interactive qualification-build.ss compile
 
 test path: build prepare-qualification
-    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 240s gxi -:max-heap=2G,debug=q t/qualification/nix/run.ss "{{ path }}"
+    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 1800s gxi {{ vm }} t/qualification/nix/run.ss "{{ path }}"
 
-# Core TestingScript owns the per-file 2 GiB / 120-second gate, serially.
+# Core TestingScript owns the per-file configured VM / 600-second gate, serially.
 test-all: build prepare-qualification
-    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 3600s gxi -:max-heap=2G,debug=q t/qualification/nix/run.ss
+    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 7200s gxi {{ vm }} t/qualification/nix/run.ss
 
 # Read the actual Nix-selected head in an independent bounded process.
 head-reader profile:
-    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 30s gxi -:max-heap=2G,debug=q t/qualification/build-publication/nix-head-reader.ss "{{ profile }}"
+    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s gxi {{ vm }} t/qualification/build-publication/nix-head-reader.ss "{{ profile }}"

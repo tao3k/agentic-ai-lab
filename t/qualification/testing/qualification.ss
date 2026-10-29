@@ -24,7 +24,7 @@
     'source (qualification-source files inputs)
     'command command 'case-count count 'harness harness 'required-lines required
     ;; These gates had total caps; watched commands retain their original
-    ;; five-second byte-progress watchdog. Do not add a new idle cutoff.
+    ;; 30-second byte-progress watchdog. Do not add a new idle cutoff.
     'idle-timeout #f
     'profile (.cc (.get TestingScript. profile)
                  'max-duration-milliseconds (* 1000 seconds))))

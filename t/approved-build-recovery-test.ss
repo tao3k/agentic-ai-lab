@@ -44,7 +44,7 @@
           ;; These measurements never emit synthetic watchdog progress.
           (def started (real-time))
           (displayln "PHASE approved-start mode=" label) (force-output)
-          (def output (.get (run-script (.cc script timeout: 120
+          (def output (.get (run-script (.cc script timeout: 300
                                             progress: make-test-progress-reader)
                             output-port: (current-error-port)) output))
           (displayln "PHASE approved-end mode=" label " elapsed-s=" (- (real-time) started))

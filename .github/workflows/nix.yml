@@ -44,7 +44,7 @@ jobs:
     env:
       GERBIL_PATH: ${{ github.workspace }}/.gerbil
       GERBIL_BUILD_CORES: '2'
-      GERBIL_TEST_MAX_HEAP: 2G
+      GERBIL_TEST_MAX_HEAP: 3G
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:

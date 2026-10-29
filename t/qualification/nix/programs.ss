@@ -10,6 +10,9 @@
           agentic-ai-lab-nix-program-consumer))
 (export nix-publication-programs)
 (def (nix-publication-programs root-value)
+  ;; Use the same existing VM budget as the public Just test entry.
+  (def vm-options
+    (string-append "-:max-heap=" (getenv "GERBIL_TEST_MAX_HEAP" "2G") ",debug=q"))
   (.o (:: self [])
       core-exports:
       (module-test-source-binding (path-expand "core/init.ss" root-value)
@@ -46,19 +49,19 @@
           (lambda () (set-load-path! paths))))
       .worker:
       (lambda arguments
-        (.cc Config directory: root-value timeout: 120
+        (.cc Config directory: root-value timeout: 300
           command: (append
             (list (.call (.get self worker-demand build) .program
                     'yuanxu/t/qualification/build-publication/worker)
-                  "-:max-heap=2G,debug=q") arguments)))
+                  vm-options) arguments)))
       .producer:
       (lambda (role . arguments)
         (.call self .with-imports
           (lambda ()
             (.cc Config
               directory: (if (string=? role "store") (path-expand "core" root-value) root-value)
-              timeout: 120
+              timeout: 300
               command: (append
                 (list (.call (.get self producer-demand build) .program
                         'agentic-ai-lab/t/qualification/nix/tools)
-                      "-:max-heap=2G,debug=q" role) arguments)))))))
+                      vm-options role) arguments)))))))

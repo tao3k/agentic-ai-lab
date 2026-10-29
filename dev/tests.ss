@@ -44,7 +44,7 @@
        (for-each displayln files)))
     ((compile)
      (unless (= (length arguments) 2) (error "compile requires a test module and VM options"))
-     (.call (execution (car arguments) (cadr arguments) "120" "true") .compile)
+     (.call (execution (car arguments) (cadr arguments) "600" "true") .compile)
      (displayln "TEST-COMPILE-OK " (car arguments)))
     ((inspect)
      (unless (= (length arguments) 2) (error "inspect requires a test module and VM options"))

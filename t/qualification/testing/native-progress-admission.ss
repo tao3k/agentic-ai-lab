@@ -2,7 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Exercise the real Core idle gate, not just the subprocess output watcher.
 (import :clan/poo/object
-        (only-in :std/error Error? Error-message)
+        (only-in :std/error Error? Error-message Error-irritants)
         (only-in :std/source this-source-file)
         (only-in "../../../init.ss" agentic-ai-lab.init.exports)
         (only-in "../../../dev/modules/testing/native-test-observation.ss"
@@ -20,7 +20,7 @@
     command: => (cut native-test-command <> vm)
     progress: make-native-test-progress-reader
     profile: =>.+
-    (.o emit?: #t max-idle-milliseconds: 5000 max-duration-milliseconds: 20000))
+    (.o emit?: #t max-idle-milliseconds: 30000 max-duration-milliseconds: 120000))
   Script)
 
 (def (main vm)
@@ -46,14 +46,15 @@
                  '("native test harness reported failure" "Ops script failed")))
     (error "native failed Case must not become a passing receipt" failed))
   (displayln "NATIVE-HARNESS-FAILURE-OK failed-case=refused")
-  ;; The fixture runs for ten seconds while demanding the SAME cached import.
-  ;; Only the five-second idle gate can reject before its 20-second total gate.
+  ;; The fixture demands the SAME cached import for 90 seconds. Its silence
+  ;; must trip the 30-second idle gate before the 120-second total allowance.
   (def refused
     (with-catch values
       (lambda ()
         (.call (execution "t/qualification/testing/native-progress-idle.ss" vm) .run)
         #f)))
   (unless (and (Error? refused)
-               (equal? (Error-message refused) "Ops execution budget exceeded"))
+               (equal? (Error-message refused) "Ops execution budget exceeded")
+               (equal? (Error-irritants refused) '(idle)))
     (error "cached imports must not renew Core liveness" refused))
   (displayln "NATIVE-HARNESS-ADMISSION-OK positive=passed cached-import-idle=refused"))

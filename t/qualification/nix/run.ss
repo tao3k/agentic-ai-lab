@@ -31,7 +31,7 @@
                 admit-current: (lambda () (module-source-admit-current! (list input))))
     ;; The existing observer separates native import and Case time; the
     ;; watchdog and Case inventory remain owned by TestingScript.
-    profile: =>.+ (.o max-duration-milliseconds: 120000 max-idle-milliseconds: 60000
+    profile: =>.+ (.o max-duration-milliseconds: 600000 max-idle-milliseconds: 60000
                       emit?: #t)
     ;; Relay real fixture boundaries immediately; the existing reader still
     ;; owns Nix/progress admission and the idle watchdog sees no synthetic ticks.

@@ -58,9 +58,10 @@ jobs:
           - os: macos-26
             gerbil-label: release-v0.19-1cfb032
     env:
-      # A fallback until the setup steps select actual native CPU capacity.
-      # Compiler allocation is separate from each runtime Case budget.
+      # Reserve memory for the parent VM and two compiler VMs on shared runners.
+      # Test heap capacity is independent of the compiler worker count.
       GERBIL_BUILD_CORES: '2'
+      GERBIL_TEST_MAX_HEAP: 3G
       GERBIL_RELEASE_ROOT: ${{ github.workspace }}/.ci/gerbil-release/${{ matrix.gerbil-label }}
     steps:
       - name: Checkout agentic-ai-lab
@@ -81,9 +82,9 @@ jobs:
             pkg-config \
             sqlite3 \
             zlib1g-dev
-          # One native package build runs at a time. Use the runner's actual
-          # compiler capacity; test processes retain their separate heap gates.
-          workers=$(getconf _NPROCESSORS_ONLN)
+          # Leave memory for the parent and two compiler VMs with the larger
+          # CI heap. Native package builds and test files remain serialized.
+          workers=2
           echo "GERBIL_BUILD_CORES=$workers" >> "$GITHUB_ENV"
           echo "Native compiler workers: $workers"
 
@@ -95,7 +96,7 @@ jobs:
         run: |
           brew list --formula ghostscript >/dev/null 2>&1 && brew unlink ghostscript || true
           brew install coreutils gcc jq openssl pkg-config sqlite zlib
-          echo "GERBIL_BUILD_CORES=$(sysctl -n hw.logicalcpu)" >> "$GITHUB_ENV"
+          echo "GERBIL_BUILD_CORES=2" >> "$GITHUB_ENV"
           echo "$(brew --prefix coreutils)/libexec/gnubin" >> "$GITHUB_PATH"
           "$(brew --prefix coreutils)/libexec/gnubin/timeout" --version
 
@@ -587,13 +588,13 @@ jobs:
           - os: ubuntu-latest
             gerbil-label: release-v0.19-1cfb032
             gerbil-install: release
-            dependency-timeout-minutes: 12
-            compile-timeout-minutes: 12
-            compile-runaway-timeout-seconds: 660
+            dependency-timeout-minutes: 30
+            compile-timeout-minutes: 25
+            compile-runaway-timeout-seconds: 1440
             acceptance-timeout-minutes: 10
             acceptance-runaway-timeout-seconds: 540
             external-module-mode: analysis
-            job-timeout-minutes: 30
+            job-timeout-minutes: 90
     steps: &native-steps
       - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -1051,13 +1052,13 @@ jobs:
           - os: macos-26
             gerbil-label: release-v0.19-1cfb032
             gerbil-install: release
-            dependency-timeout-minutes: 20
+            dependency-timeout-minutes: 40
             external-module-mode: analysis
             compile-timeout-minutes: 25
             compile-runaway-timeout-seconds: 1440
             acceptance-timeout-minutes: 15
             acceptance-runaway-timeout-seconds: 840
-            job-timeout-minutes: 60
+            job-timeout-minutes: 120
     steps: *native-steps
 
   python-runtime-wheel:

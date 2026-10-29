@@ -791,3 +791,32 @@ that obsolete adapter are removed. The packages' =yuanxu!= declarations and
 native Make own their complete closure. Original source/product invalidation,
 tampering controls and resource limits are unchanged. POO's separate remote
 180-second cold-build refusal remains open pending a measured fix.
+
+* CI allowance revision after native failure diagnosis
+
+The user explicitly authorized larger CI allowances on 2026-10-29. Earlier
+2 GiB / 120-150-second runs remain historical measurements, not the current
+CI admission policy. Performance assertions and source/product refusal
+controls retain their existing expected results.
+
+POO uses the standard host-adaptive Bazel guard without a package-specific
+180-second cutoff. CI's dependency step and job deadlines bound the aggregate
+build. Nix worker/producer preparation has 1200 seconds inside the existing
+1800-second development preparation; complete test files and Context have
+600 seconds. The existing test heap setting is 3 GiB on CI, with two compiler
+workers to leave room for the parent VM and native compiler processes.
+
+The byte watchdog and Core progress admission use 30 seconds of silence. The
+cached-import negative fixture runs for 90 seconds within a 120-second total
+allowance, and must fail specifically for idle exhaustion. Failed assertions,
+invalid sources, tampered artifacts and missing natural exit remain failures.
+Larger allowances do not establish that the dynamic-unload hotspot is fixed;
+preparation, Case work and process shutdown measurements remain separate.
+
+With that policy, a fresh independent Bazel output root built the unchanged
+complete POO declaration successfully: two compiler workers, 374.502 seconds
+inside the resource guard, 404.231 seconds for the Bazel command, and about
+5.72 GB aggregate peak RSS. The owner's Scheme heap remains its declared
+2 GiB. No source override, partial package, target reduction or C optimization
+experiment was used. The native progress positive, failed-assertion refusal
+and cached-import idle refusal also completed under the revised policy.

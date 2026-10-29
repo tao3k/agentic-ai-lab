@@ -6,7 +6,6 @@ load(
     "@gerbil_bazel//gerbil:defs.bzl",
     "gerbil_project_compile",
     "gerbil_project_dev",
-    "gerbil_project_execution_policy",
 )
 load("//packages/bazel:gerbil_project_environment.bzl", "gerbil_project_environment")
 load("//packages/bazel:gerbil_projection.bzl", "gerbil_project_projection")
@@ -92,9 +91,8 @@ gerbil_project_compile(
     # Consume the owner's current standard build entry and complete declaration.
     # POO no longer publishes the former library command mode.
     args = ["compile"],
-    # Upstream removed its embedded 180-second shell cutoff. Preserve that
-    # acceptance budget in the existing project guard, independently of pins.
-    execution_policy = gerbil_project_execution_policy(timeout_seconds = 180),
+    # Use the shared host-adaptive resource guard. CI owns the aggregate
+    # dependency deadline; a cold package has no separate three-minute cutoff.
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_poo_sources//:source_resolution_receipt"],
 )

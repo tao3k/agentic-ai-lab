@@ -8,8 +8,8 @@
   (test-suite "Cached module demands cannot renew liveness"
     (test-case "repeated import is still an idle Case"
       ;; All demands resolve to the same Gerbil instance. No completed new work
-      ;; can hide this intentional delay from the five-second watchdog.
-      (let loop ((remaining 200))
+      ;; can hide this intentional delay from the 30-second watchdog.
+      (let loop ((remaining 1800))
         (unless (zero? remaining)
           (import-module ':std/list/list)
           (thread-sleep! 0.05)

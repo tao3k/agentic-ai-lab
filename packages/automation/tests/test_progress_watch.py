@@ -20,7 +20,7 @@ SPEC.loader.exec_module(watch)
 
 
 class WatchTest(unittest.TestCase):
-    def test_late_success_cannot_override_the_five_second_failure(self):
+    def test_late_success_cannot_override_the_idle_failure(self):
         child = MagicMock(pid=42)
         child.poll.return_value = 0
         child.wait.return_value = 0
@@ -30,7 +30,7 @@ class WatchTest(unittest.TestCase):
 
         def diagnostic(pid):
             self.assertEqual(pid, 42)
-            self.assertIn('FAIL: five seconds', output.getvalue())
+            self.assertIn(f'FAIL: {watch.IDLE_SECONDS} seconds', output.getvalue())
 
         with patch.object(watch.subprocess, 'Popen', return_value=child), \
              patch.object(watch.selectors, 'DefaultSelector') as selector, \
@@ -38,9 +38,9 @@ class WatchTest(unittest.TestCase):
              patch.object(watch, 'capture_failed_process', side_effect=diagnostic), \
              contextlib.redirect_stderr(output):
             selector.return_value.__enter__.return_value = ready
-            clock.monotonic.side_effect = [100., 100., 105.]
+            clock.monotonic.side_effect = [100., 100., 100. + watch.IDLE_SECONDS]
             self.assertEqual(watch.main(['child']), 124)
-        ready.select.assert_called_once_with(timeout=5)
+        ready.select.assert_called_once_with(timeout=watch.IDLE_SECONDS)
 
     def test_failed_process_group_is_still_terminated(self):
         child = MagicMock(pid=42)
@@ -54,7 +54,7 @@ class WatchTest(unittest.TestCase):
              patch.object(watch.os, 'killpg') as kill, \
              contextlib.redirect_stderr(io.StringIO()):
             selector.return_value.__enter__.return_value = ready
-            clock.monotonic.side_effect = [100., 100., 105.]
+            clock.monotonic.side_effect = [100., 100., 100. + watch.IDLE_SECONDS]
             self.assertEqual(watch.main(['child']), 124)
         kill.assert_called_once_with(42, signal.SIGKILL)
 
@@ -64,7 +64,7 @@ class WatchTest(unittest.TestCase):
         child.wait.return_value = 0
         ready = MagicMock()
         # KqueueSelector may return [] immediately after InterruptedError.
-        # EOF on the next wakeup is still inside the original five seconds.
+        # EOF on the next wakeup is still inside the original idle allowance.
         ready.select.side_effect = [[], [(None, watch.selectors.EVENT_READ)]]
         with patch.object(watch.subprocess, 'Popen', return_value=child), \
              patch.object(watch.selectors, 'DefaultSelector') as selector, \
@@ -76,8 +76,8 @@ class WatchTest(unittest.TestCase):
             clock.monotonic.side_effect = [100., 100., 100.1, 100.1]
             self.assertEqual(watch.main(['child']), 0)
         self.assertEqual(ready.select.call_count, 2)
-        self.assertAlmostEqual(ready.select.call_args_list[0].kwargs['timeout'], 5.)
-        self.assertAlmostEqual(ready.select.call_args_list[1].kwargs['timeout'], 4.9)
+        self.assertAlmostEqual(ready.select.call_args_list[0].kwargs['timeout'], watch.IDLE_SECONDS)
+        self.assertAlmostEqual(ready.select.call_args_list[1].kwargs['timeout'], watch.IDLE_SECONDS - .1)
         sample.assert_not_called()
 
     def test_sample_failure_is_bounded_and_retained(self):
