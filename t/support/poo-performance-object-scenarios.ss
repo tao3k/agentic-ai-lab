@@ -5,8 +5,7 @@
 
 ;;; Boundary: reusable native POO object scenarios for performance gates.
 
-(import (only-in :clan/poo/object .ref)
-        :yuanxu/module-system/schema/interface
+(import :yuanxu/module-system/schema/interface
         :yuanxu/graph/interface
         :yuanxu/module-system/schema/validation)
 
@@ -184,6 +183,7 @@
 ;;       ;; => 3
 ;;       ```
 ;;     %
+;; Core owns the native graph index; do not guess legacy object slot layouts.
 (def (poo-performance-object-node-lookup-count objects-node identities rounds)
   (let (objects-index (yuanxu-module-objects-index objects-node))
     (* rounds
@@ -248,45 +248,6 @@
    (lambda (index)
      (yuanxu-graph-node-extend
       (poo-performance-cross-contribution-child index)))))
-
-;; : (-> PooObject Symbol Value Value)
-(def (agentic-ai-lab-performance-ref object key default)
-  (try
-    (.ref object key)
-    (catch (e) default)))
-
-;; : (-> PooObject Value)
-(def (poo-performance-object-index-identity object)
-  (or (agentic-ai-lab-performance-ref object 'identity #f)
-      (agentic-ai-lab-performance-ref object 'name #f)))
-
-;; : (-> [PooObject] HashTable)
-(def (poo-performance-object-list-index objects)
-  (let (index (make-hash-table))
-    (for-each
-     (lambda (object)
-       (let (identity (poo-performance-object-index-identity object))
-         (if identity
-           (hash-put! index identity object)
-           #f)))
-     objects)
-    index))
-
-;; : (-> PooModuleObjectsNode HashTable)
-(def (yuanxu-module-objects-index objects)
-  (if (list? objects)
-    (poo-performance-object-list-index objects)
-    (let ((objects-index (agentic-ai-lab-performance-ref objects 'objects-index #f)))
-      (if objects-index
-        objects-index
-        (let ((index (agentic-ai-lab-performance-ref objects 'index #f)))
-          (if index
-            index
-            (let ((children (agentic-ai-lab-performance-ref objects 'children #f)))
-              (if children
-                (poo-performance-object-list-index children)
-                (poo-performance-object-list-index
-                 (agentic-ai-lab-performance-ref objects 'modules []))))))))))
 
 ;; : (-> Integer Symbol [PooGraphContribution])
 (def (poo-performance-cross-contribution-targeting-contributions child-count target)

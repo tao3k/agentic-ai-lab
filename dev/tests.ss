@@ -2,8 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; CLI policy only; init.exports owns discovery, preparation and execution.
 (import :clan/poo/object
-        (only-in "../build-spec.ss" agentic-ai-lab-native-build-spec agentic-ai-lab-test-exclusions)
-        (only-in :std/source this-source-file)
+        (only-in "../build-spec.ss" agentic-ai-lab-test-demand agentic-ai-lab-test-exclusions)
         (only-in :yuanxu/module-system/building/test-projection module-test-execution)
         (only-in "./modules/testing/build-inspection.ss" write-native-test-build-inspection)
         (only-in "./modules/testing/native-test-observation.ss"
@@ -14,14 +13,7 @@
 ;; qualifications own provider, parser, native-artifact and performance inputs.
 (def excluded agentic-ai-lab-test-exclusions)
 (def (test-demand file)
-  (def root (path-expand ".." (path-directory (this-source-file))))
-  ;; Selection owns the same input snapshot for execution and explicit build
-  ;; inspection. Only the inspection operation asks for its compiler projection.
-  (.call tests .for-files (list file)
-    (map (cut path-expand <> root)
-      '("build-spec.ss" "bindings/nono-c/nono.h"
-        "dev/modules/testing/native-test-observation.ss"))
-    (agentic-ai-lab-native-build-spec)))
+  (agentic-ai-lab-test-demand agentic-ai-lab.init.exports (list file)))
 (def (execution file vm-options seconds observation)
   (unless (member observation '("false" "true" "trace"))
     (error "observe must be false, true, or trace" observation))

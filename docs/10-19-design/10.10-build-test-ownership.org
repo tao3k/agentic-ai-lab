@@ -444,3 +444,129 @@ artifacts. The original remote POO 180-second failure, Darwin unload failure,
 new link failure, and all negative-control receipts remain failures. Full
 Bazel compilation, native integration, complete replay and exact-head CI must
 finish independently before the macOS lifecycle or complete CI can be closed.
+
+* Strict refactoring and cached native package authority, 2026-10-28
+
+The earlier 154-finding Python failure is historical. The complete refactoring
+retains the strict warning/error gate, with no baseline waiver or disabled
+rules. The published Python owner scans and parses all 355 selected files,
+reports zero blocking findings, and retains 781 informational findings.
+Its 73 unit tests and 152 native integration tests pass. These results do not
+certify the separate Scheme, performance or remote-CI gates.
+
+Production =gerbil build= now prepares library roots only. The existing
+=dev/gerbil.pkg= owns =dev/build.ss=, which projects performance support through
+=init.exports.tests= and its =std-make-spec=. The existing qualification and
+Context declarations run in independent official Gerbil compiler processes.
+The Nix declaration keeps its original aggregate 240-second preparation fence;
+the development build keeps its existing 900-second fence. Ordinary workers
+retain 2 GiB / 120 seconds; Context retains 2 GiB / 150 seconds.
+
+The preserved frozen Root attempt completed all 317 files but admitted 316.
+Its sole refusal was the full approved-recovery Case exceeding 120 seconds;
+that queue is not accepted. Recovery readers now consume a separately declared
+Core native program, while the producer retains its original Root/Services
+closure. Both programs come from the admitted build object's =.program= method,
+not a fixed bin path, guessed lease directory or executable copied into place.
+The runtime and preparation share the same declared consumer projection and
+Core's existing subset issuance. They do not compile inside TestingScript.
+
+A concrete source-authority defect remained after splitting the native roles.
+The independent consumer observed one more input than the cached preparation:
+=core/gerbil.pkg=. The other 349 observations, native specification and compiler
+identities matched. Cached native =.ss= contexts had retained source bytes but
+omitted the package lookup observations. Core now reuses its existing retained
+source preparer for those contexts, preserving positive package observations
+and negative observations for nearer package files. This is not a handwritten
+manifest addition. The new native regression checks package replacement,
+nearer-package insertion, refusal, and restoration; the original real compiler,
+executable-tamper and stale-source Case remains intact. Both Cases pass.
+
+After this repair, the complete approved-recovery Case passes twice with all
+nine subprocess steps. The replay after removing temporary fingerprint output
+measures 90.984 seconds of Case execution. The related store-recovery Case
+measures 58.351 seconds. Both have natural exit zero, =MODULE-OK=, =HARNESS-OK=
+and final =OK=, without Case/Check/Harness or heap/stack failures. The existing
+observer reports Case time separately from package preparation. Failed attempts,
+full logs and source fingerprints remain local/CI artifacts, not committed logs.
+
+These are focused working-tree results. The revised whole Root queue, Context
+99-Case replay, all 54 performance files, external compilation and exact-head
+remote CI remain independent acceptance obligations. The earlier performance
+queue attempted all 54 files and refused five; its 49 passes do not waive the
+remaining thresholds. The published macOS native job at =7363abb1= passes,
+but that does not certify these later working-tree changes or make PR 34 green.
+
+* Native replay and current performance boundary, 2026-10-29
+
+The revised source passes all 99 Context/Temporal Cases and then replays the
+entire same queue in a second fresh native process. Both retain 99 Case timing
+records, natural exit zero, MODULE/HARNESS/final acceptance, and no error or
+heap/stack markers. Preparation before the Harness is 3.608 / 2.056 seconds;
+the 99 reported Case spans total 57.706 / 56.445 seconds. These are separate
+preparation and execution measurements, within the original 2 GiB / 150-second
+worker fence. They do not substitute for a cold compiler qualification.
+
+Contract projection had rebuilt every unchanged schema fact with =.cc=.
+It now reads and validates the effective native fields on every call, retaining
+the existing schema object only when its Type identity and required flag match.
+Child refinements still allocate their actual projection; incomplete native
+metadata still fails. The native contract Cases assert this identity and retain
+refinement and missing-metadata controls. In the complete 54-file cohort after
+this change, the Type slot scenario measured 31.440 ms against its 250 ms gate,
+and the JSON receipt measured 61.139 us against its 90 us gate. The earlier
+cohort measured 300.186 ms and 174.544 us respectively. These are separate
+whole-queue cohorts, not a controlled same-process speedup experiment.
+
+The graph walker shares its existing indexed BFS, retaining original fact order,
+duplicate IDs, cycles, shared descendants and metadata. Slot merge uses two
+invocation-local indexes while preserving false values and first-duplicate
+replacement. Native graph controls also require rebasing noncanonical paths
+when the requested root ID is equal: equality alone grants no normalization
+shortcut. The attempted same-root shortcut was removed. Ordinary =.cc= clones
+are eager; lazy construction was not a valid explanation of that attempt.
+
+Performance remains an independent failed gate. Successive complete 54-file
+attempts admitted 48, 51 and 45 files; every refusal is retained locally.
+The latest of those includes a real profile-composition operation-budget
+failure, not just elapsed-time variability. A new complete run checks the
+current native Node/Edge declarations and duplicate-policy-admission removal.
+Focused selection, when requested, is restricted to the same ASP inventory;
+it never changes the default complete queue or its preparation inventory.
+
+An isolated copy of the pinned POO source was used to investigate traversal.
+It is not installed, published, or a dependency update. A native counterexample
+shows its original source family omits Wrapper/Height metadata: editing those
+sources during a fold is accepted. The isolated candidate refuses that edit,
+releases protection after failure, and preserves custom child validators and
+repeated authenticated read delivery. Its three focused native Cases pass,
+but neither that result nor its traversal timings qualify a Root performance
+gate. Full upstream regression and actual consumer qualification would be
+required before adopting such a library change.
+
+The current-facts queue completed all 54 files with natural exit 70: 49 passed,
+five were refused. Extension merge/targeting/coalescing measured
+151.367 / 174.743 / 148.652 ms against 100 ms; the relation expression measured
+15.605 ms against 2 ms; observability measured 63.206 ms against 50 ms;
+Session registry measured 152.346 ms against 100 ms; Sources Lock measured
+51.509 ms against 50 ms. These failures remain failures. Source patches,
+new declarations and decoded per-file transcripts are retained for replay.
+
+During publication, Core's existing PR branch had advanced by four commits.
+The ordinary push refused the divergence without modifying the remote. The
+local repair was rebased onto =3527b55= as =7c38aaa5=, preserving the owned-prelude
+and macOS installed-library changes. The preceding 99+99 and 54-file results
+refer to the source before that integration. Revised preparation and native
+consumer verification are required before attributing them to the rebased head.
+
+The rebased Core passes its ordinary official build and five focused native
+qualifications: package-owned prelude, downstream prelude consumers, native
+program publication, contract-function composition, and graph operations.
+Each has natural exit zero, MODULE/HARNESS/final acceptance and no error or
+heap/stack markers. The first downstream preparation correctly refused the
+old installed prelude, whose interface did not yet export =yuanxu!=; rebuilding
+Core through =just build-core= updated that native interface. No legacy import
+was restored to bypass the package language. Core =7c38aaa5= is published on
+the existing PR branch. The Root proof dependency is updated by official
+=lake update YuanxuProof= to the same immutable revision. These focused
+results do not certify the whole Core queue, revised Root queue, or remote CI.

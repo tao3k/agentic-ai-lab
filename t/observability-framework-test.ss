@@ -448,6 +448,19 @@
         (check-equal? (element? YuanxuDebugSlotReceiptContract admitted) #t)
         (check-equal? (.ref cycle 'accepted?) #f)
         (check-equal? (.ref cycle 'reason) 'recursive-slot-resolution)
+        ;; Receipt construction itself must admit the nested policy, including
+        ;; a non-object and an object whose native policy obligation fails.
+        (check-exception
+         (yuanxu-debug-slot-receipt #f 'configuration 'project-id 0 '() 'admitted)
+         TypeError?)
+        (check-exception
+         (yuanxu-debug-slot-receipt
+          (.cc policy 'maximum-depth 0) 'configuration 'project-id 0 '() 'admitted)
+         TypeError?)
+        (check-exception
+         (yuanxu-debug-slot-receipt
+          (.cc policy 'label 42) 'configuration 'project-id 0 '() 'admitted)
+         TypeError?)
         (check-exception
          (validate YuanxuDebugSlotPolicyContract
                    (.cc policy 'maximum-depth 0))

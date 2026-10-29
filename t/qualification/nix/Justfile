@@ -5,7 +5,7 @@ set shell := ["bash", "-euo", "pipefail", "-c"]
 root := justfile_directory() + "/../../.."
 
 build:
-    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 240s gxi -:max-heap=2G,debug=q t/qualification/nix/build.ss
+    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 240s gerbil -:max-heap=2G,debug=q interactive t/qualification/nix/build.ss compile
 
 # Bazel has built the declared adapter libraries. Consume the root package's
 # SAME native build declaration in this command-owned runtime prefix, using
@@ -13,29 +13,12 @@ build:
 prepare-qualification:
     cd "{{ root }}" && GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap=2G,debug=q" timeout --signal=TERM --kill-after=5s 120s gerbil -:max-heap=2G,debug=q interactive qualification-build.ss compile
 
-test path: prepare-qualification
+test path: build prepare-qualification
     cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 240s gxi -:max-heap=2G,debug=q t/qualification/nix/run.ss "{{ path }}"
 
 # Core TestingScript owns the per-file 2 GiB / 120-second gate, serially.
-test-all: prepare-qualification
+test-all: build prepare-qualification
     cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 3600s gxi -:max-heap=2G,debug=q t/qualification/nix/run.ss
-
-# Nix-specific approval preparation; Core owns the restarted publication worker.
-approved-producer workspace:
-    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s "$GERBIL_PATH/bin/build-publication-tools" -:max-heap=2G,debug=q approved "{{ workspace }}"
-
-# Compiled drivers retain independent processes and the same protocol arguments.
-publication-worker workspace library identity mode record:
-    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s "$GERBIL_PATH/bin/build-publication-tools" -:max-heap=2G,debug=q worker "{{ workspace }}" "{{ library }}" "{{ identity }}" "{{ mode }}" "{{ record }}"
-
-approved-worker workspace mode:
-    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s "$GERBIL_PATH/bin/build-publication-tools" -:max-heap=2G,debug=q worker "{{ workspace }}" "approved-{{ mode }}"
-
-store-producer workspace:
-    cd "{{ root }}/core" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s "$GERBIL_PATH/bin/build-publication-tools" -:max-heap=2G,debug=q store "{{ workspace }}"
-
-store-worker workspace library identity mode record selected candidate:
-    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s "$GERBIL_PATH/bin/build-publication-tools" -:max-heap=2G,debug=q worker "{{ workspace }}" "{{ library }}" "{{ identity }}" "{{ mode }}" "{{ record }}" "{{ selected }}" "{{ candidate }}"
 
 # Read the actual Nix-selected head in an independent bounded process.
 head-reader profile:

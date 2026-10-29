@@ -1,9 +1,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; One native link of the shared closure; every invocation is a fresh process.
+;;; Producer roles retain their caller-owned source capability.
+;;; Recovery readers use the separate, existing Core worker main.
 (import (only-in "../../../core/t/qualification/service-publication/fixtures.ss" current-service-source-root)
-        (rename-in (only-in "../../../core/t/qualification/build-publication/worker.ss" main)
-                   (main publication-worker))
         (rename-in (only-in "../../../core/t/qualification/build-publication/store-producer.ss" main)
                    (main store-producer))
         (rename-in (only-in "../build-publication/approved-producer.ss" main)
@@ -18,7 +17,6 @@
                      (if (string=? role "store") "scenarios/gitea-postgresql"
                          "core/scenarios/gitea-postgresql"))))
     (apply (case (string->symbol role)
-             ((worker) publication-worker)
              ((store) store-producer)
              ((approved) approved-producer)
              (else (error "unknown publication qualification role" role)))

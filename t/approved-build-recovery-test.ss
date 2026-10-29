@@ -1,6 +1,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test :clan/poo/object
+        (only-in "./qualification/nix/programs.ss" nix-publication-programs)
         (only-in "../core/t/qualification/build-publication/projection.ss" write-artifact-bytes)
         (only-in :yuanxu/ops/func run-script)
         (only-in :yuanxu/ops/config Config)
@@ -12,6 +13,7 @@
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/misc/ports read-all-as-u8vector))
 (export approved-build-recovery-test test-cleanup!)
+(def programs (nix-publication-programs (current-directory)))
 (def observations '())
 (def completed 0)
 (def (bytes path) (call-with-input-file path read-all-as-u8vector))
@@ -37,12 +39,12 @@
       (fixture DirectoryFixture)
       (with-slots (root) fixture
         (def processes 0)
-        (def (run label arguments)
+        (def (run label script)
           ;; Real subprocess boundaries, including the native cold workers.
           ;; These measurements never emit synthetic watchdog progress.
           (def started (real-time))
           (displayln "PHASE approved-start mode=" label) (force-output)
-          (def output (.get (run-script (.cc Config command: arguments timeout: 120
+          (def output (.get (run-script (.cc script timeout: 120
                                             progress: make-test-progress-reader)
                             output-port: (current-error-port)) output))
           (displayln "PHASE approved-end mode=" label " elapsed-s=" (- (real-time) started))
@@ -51,7 +53,7 @@
           (execution-progress! 'approved-processes processes)
           output)
         (check-equal? (not (not (string-contains
-          (run "producer" (list "just" "-f" "t/qualification/nix/Justfile" "approved-producer" root)) "APPROVED-SOURCE-PUBLISHED"))) #t)
+          (run "producer" (.call programs .producer "approved" root)) "APPROVED-SOURCE-PUBLISHED"))) #t)
         ;; Capture the sole original record BEFORE warm workers create their
         ;; own records. This path is fault injection input, never approval.
         (def record (path-expand
@@ -75,7 +77,7 @@
                     (call-with-output-file (list path: source truncate: #t)
                       (cut display "(export answer) (def answer 99)\n" <>))))
                 (lambda ()
-                  (def action (cut run label (list "just" "-f" "t/qualification/nix/Justfile" "approved-worker" root label)))
+                  (def action (cut run label (.call programs .worker root (string-append "approved-" label))))
                   (if (equal? label "cold-joint") (with-replaced-products root record action) (action)))
                 (lambda ()
                   (when original-policy (write-artifact-bytes policy original-policy))

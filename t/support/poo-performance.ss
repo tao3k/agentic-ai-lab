@@ -169,7 +169,12 @@
 ;;     %
 (def (poo-performance-run-gate fixture thunk)
   (if (poo-performance-fixture-policy-contract-pass? fixture)
-    (benchmark-run fixture thunk)
+    (let (receipt (benchmark-run fixture thunk))
+      ;; Emit the original receipt on refusal before the Case assertion raises.
+      ;; Measurement and admission remain owned by the unchanged ASP gate.
+      (unless (benchmark-receipt-pass? receipt)
+        (poo-performance-display-receipt receipt))
+      receipt)
     (error "poo performance fixture policy contract failed" fixture)))
 
 ;; : [Symbol]

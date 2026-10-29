@@ -3,13 +3,16 @@
 ;;; Public library roots projected through Core's installed native import graph.
 ;;; init.ss owns the selected Module spec through init.exports; it is not a
 ;;; library target or an import-graph root here.
-(import (only-in :clan/poo/object .get .call)
+(import (only-in :std/make pkg-config-libs)
+        (only-in :clan/poo/object .get .call)
         (only-in :gerbil/expander expander-context-id)
         (only-in :std/source this-source-file)
         (only-in :yuanxu/module-system/building/source-closure package-library-spec))
 (export agentic-ai-lab-public-build-roots agentic-ai-lab-build-spec
         agentic-ai-lab-native-build-spec agentic-ai-lab-test-exclusions
-        agentic-ai-lab-context-test-demand)
+        agentic-ai-lab-context-test-demand agentic-ai-lab-test-demand
+        agentic-ai-lab-nix-worker-demand agentic-ai-lab-nix-producer-demand
+        agentic-ai-lab-nix-program-consumer)
 (def agentic-ai-lab-test-exclusions
   ;; One ordinary-suite inventory serves Gerbil build declarations and execution.
   '("qualification/ascent-integration" "qualification/temporal-mrr-native"
@@ -144,6 +147,17 @@
       admit-context: admit-production-build-context exclude: special-targets)
     (cdr native)))
 
+(def (agentic-ai-lab-test-demand exports files (inputs '()))
+  (def root (path-directory (this-source-file)))
+  ;; One native declaration binds file execution and official support builds.
+  ;; Inputs are source authority, not a second compiler configuration protocol.
+  (.call (.get exports tests) .for-files
+    (map (cut path-expand <> root) files)
+    (map (cut path-expand <> root)
+      (append '("build-spec.ss" "bindings/nono-c/nono.h"
+                "dev/modules/testing/native-test-observation.ss") inputs))
+    (agentic-ai-lab-native-build-spec)))
+
 ;; Build and execution demand the same init-owned native program. The program
 ;; publishes the original Suites and the official Gerbil Harness entrypoint.
 (def (agentic-ai-lab-context-test-demand exports)
@@ -156,3 +170,37 @@
         "packages/python-runtime/tools/watch.py"
         "dev/modules/testing/native-test-observation.ss"))
     '((exe: "t/qualification/context-temporal/interface" bin: "context-temporal-test"))))
+
+;; Build declarations and runtime Fixtures share the same native program demand.
+;; The source root comes from the caller, so compiled Fixtures retain no vanished
+;; compiler-sandbox path and consumers always use the issuer's .program result.
+(def (agentic-ai-lab-nix-worker-demand exports root)
+  (def core-root (path-expand "core" root))
+  (.call (.get exports tests) .for-files
+    (map (cut path-expand <> core-root)
+      '("t/qualification/build-publication/worker.ss"
+        "t/qualification/build-publication/store-producer.ss"))
+    (map (cut path-expand <> root)
+      '("build-spec.ss" "nix-worker-build.ss" "t/qualification/nix/build.ss"
+        "t/qualification/nix/programs.ss"))
+    (list (list exe: "t/qualification/build-publication/worker"
+                bin: "nix-publication-worker"
+                "-ld-options" (pkg-config-libs "libcrypto" "libssl")))))
+
+(def (agentic-ai-lab-nix-producer-demand exports root)
+  (.call (.get exports tests) .for-files
+    (map (cut path-expand <> root)
+      '("scenarios/aws/types.ss" "scenarios/aws/objects.ss"
+        "modules/nix/objects.ss" "modules/services/opentofu/objects.ss"
+        "t/qualification/nix/tools.ss"))
+    (map (cut path-expand <> root)
+      '("build-spec.ss" "nix-worker-build.ss" "t/qualification/nix/build.ss"
+        "t/qualification/nix/programs.ss"))
+    (list (list exe: "t/qualification/nix/tools" bin: "build-publication-tools"
+                "-ld-options" (pkg-config-libs "libcrypto" "libssl")))))
+
+;; One exact consumer projection is shared by preparation and invocation.
+;; The native issuer proves this selection is a subset before retaining it.
+(def (agentic-ai-lab-nix-program-consumer exports declared file)
+  (.call (.get exports tests) .for-files
+    (list file) '() (.get declared source std-make-spec)))

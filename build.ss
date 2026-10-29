@@ -80,23 +80,7 @@
 
 ;; The selected init owns source lowering; the Gerbil owns Make and dispatch.
 (def modules-spec (.get agentic-ai-lab.init.exports std-make-spec))
-;; Both projections belong to this package's ordinary official build entry.
-;; Qualification is an init-owned build phase, not another package under t/.
-(def (build-libraries args)
-  (defbuild-script (modules-spec retained-spec))
-  (apply main args))
-(def (main . args)
-  (build-libraries args)
-  ;; The existing qualification owner signs only real compiler output. The
-  ;; official package command supplies compile; no new mode or environment flag.
-  (when (or (null? args) (equal? (car args) "compile"))
-    ;; Each standard declaration gets a fresh native expander epoch. A support
-    ;; build can retain source contexts after publishing installed interfaces;
-    ;; the program must observe the same interfaces as an independent consumer.
-    (for-each
-      (lambda (declaration)
-        (run-process
-          (append (list "gerbil" "interactive"
-                    (path-expand declaration (path-directory (this-source-file)))) args)
-          stdin-redirection: #f stdout-redirection: #f))
-      '("qualification-build.ss" "context-build.ss"))))
+
+;; Production package builds publish libraries only. Native qualification and
+;; executable preparation belong to the existing development package build.
+(defbuild-script (modules-spec retained-spec))

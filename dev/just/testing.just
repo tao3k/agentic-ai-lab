@@ -51,7 +51,7 @@ test-native-harness-progress:
 
 # Keep the root package's native entry independently callable during repairs.
 [group('test')]
-test-root: build-testing build-test-workers prepare-test-inputs build-library
+test-root: build-testing prepare-test-inputs build-library
     #!/usr/bin/env bash
     set -euo pipefail
     manifest=$(mktemp)
@@ -82,7 +82,7 @@ test-files:
 
 # Diagnose a long native file with the full package's unchanged process budget.
 [group('test')]
-test-package-file path: build-test-workers prepare-test-inputs
+test-package-file path: build-testing prepare-test-inputs
     mkdir -p "{{ justfile_directory() }}/.gerbil/test-results"
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} dev/tests.ss run "{{ path }}" "{{ gerbil_test_runtime_options }}" 1200 false
 
@@ -129,15 +129,16 @@ _test-file path observe="false":
 
 # Use the maintained Nix integration gate and its existing pre-import fences.
 [group('test')]
-test-nix-file path: build-test-workers prepare-test-inputs
+test-nix-file path: build-library prepare-test-inputs
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} just --justfile t/qualification/nix/Justfile test "{{ path }}"
 
-# Run wall-clock performance scenarios through the native ASP scheduler,
-# outside the ordinary unit-test batches.
+# ASP owns performance discovery; init Test publications own native execution.
+# These wall-clock scenarios stay outside the ordinary unit-test batches.
 [group('test')]
-test-performance:
+test-performance path="": build-testing
     @echo "[agentic-ai-lab-test-runtime] maxHeap={{ gerbil_test_max_heap }} debug={{ gerbil_test_debug }} scope=worker-process"
-    GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} gerbil {{ gerbil_test_runtime_options }} interactive ./dev/performance-tests.ss
+    # Match test-file's admitted parent source lookup; issued support remains first in each child.
+    GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} gerbil {{ gerbil_test_runtime_options }} interactive ./dev/performance-tests.ss "{{ path }}"
 
 # Run only hermetic Bazel qualifications; `just test` owns Scheme unit tests.
 [group('test')]

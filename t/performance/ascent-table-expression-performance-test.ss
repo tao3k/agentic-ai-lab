@@ -8,10 +8,11 @@
 (import (only-in :std/test check-equal? test-case test-suite)
         (only-in :clan/poo/object .o .mix .ref .call)
         (only-in :clan/poo/trie UIntTrieSet)
+        (only-in :clan/poo/mop element?)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
-                 benchmark-run)
+                 benchmark-run benchmark-elapsed-us)
         (only-in :agentic-ai-lab/modules/workflow/qualification/ascent-table-expression
                  agentic-ai-lab-ascent-table-expression-prototype))
 
@@ -38,6 +39,23 @@
               (.o (source-pairs pairs) (radix pair-radix)))
         'at-most-two-hop-pairs))
 
+;; Failure-only diagnosis leaves the original timed workload and gate intact.
+;; The raw backing fold isolates traversal cost; it grants no Set admission and
+;; is never used by the candidate algorithm or by an acceptance decision.
+(def (relation-failure-costs pairs)
+  (def table (.ref UIntTrieSet 'Table))
+  (list
+   (cons 'set-recognition-us
+     (benchmark-elapsed-us (lambda () (element? UIntTrieSet pairs))))
+   (cons 'native-shape-us
+     (benchmark-elapsed-us (lambda () (.call table .validate-shape pairs))))
+   (cons 'public-set-fold-us
+     (benchmark-elapsed-us
+       (lambda () (.call UIntTrieSet .foldl (lambda (_ count) (+ count 1)) 0 pairs))))
+   (cons 'backing-fold-without-set-admission-us
+     (benchmark-elapsed-us
+       (lambda () (.call table .foldl (lambda (_key _value count) (+ count 1)) 0 pairs))))))
+
 (def ascent-table-expression-performance-test
   (test-suite "ASCENT table expression performance"
     (test-case "indexes and composes 512 source pairs through standard benchmark gate"
@@ -61,4 +79,13 @@
         (write receipt)
         (newline)
         (force-output)
+        ;; Preserve the rejected native receipt before the strict assertion raises.
+        (unless (benchmark-receipt-pass? receipt)
+          (display "[agentic-ai-lab-benchmark-refused] ")
+          (write receipt)
+          (newline)
+          (display "[agentic-ai-lab-benchmark-costs] ")
+          (write (relation-failure-costs pairs))
+          (newline)
+          (force-output))
         (check-equal? (benchmark-receipt-pass? receipt) #t)))))

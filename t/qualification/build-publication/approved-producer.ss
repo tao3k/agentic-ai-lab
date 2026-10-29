@@ -2,6 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Qualification driver: production selection/publishing, temporary sources.
 (import :clan/poo/object
+        (only-in "../nix/programs.ss" nix-publication-programs)
         (only-in "../../../core/t/qualification/service-publication/fixtures.ss" ServicesFixture)
         ;; File mutation belongs to the existing directory Fixture owner.
         (only-in "../../../core/t/qualification/testing/directory.ss" write-source)
@@ -57,7 +58,8 @@
         (find (cut string-prefix? ".yuanxu-build-issuance-" <>)
           (directory-files (list path: libdir ignore-hidden: #f))) libdir))
       (def transcript (run-build-artifact-process projection libdir
-        (list "just" "-f" "t/qualification/nix/Justfile" "publication-worker" workspace libdir (symbol->string probe-name) "persist" record-path)))
+        (.get (.call (nix-publication-programs (current-directory)) .worker
+                workspace libdir (symbol->string probe-name) "persist" record-path) command)))
       (execution-progress! 'publication-stages 4)
       (def prefix "CORE-STORE-ROOT ")
       (def root-line (find (cut string-prefix? prefix <>) (string-split transcript #\newline)))

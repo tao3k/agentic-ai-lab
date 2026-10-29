@@ -1,7 +1,7 @@
 #!/usr/bin/env -S gerbil interactive
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Standard executable declaration consumed by the official package build.
+;;; Standard executable declaration consumed by the official development package build.
 (import (only-in :clan/poo/object .get)
         (only-in :yuanxu/module-system/building/script defbuild-script)
         (only-in "./init.ss" agentic-ai-lab.init.exports)

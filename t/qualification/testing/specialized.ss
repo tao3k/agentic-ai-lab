@@ -3,10 +3,10 @@
 ;;; Entry projection only: installed native harnesses still own the suites.
 (import :clan/poo/object
         (only-in "./qualification.ss" qualification-script)
-        (only-in :yuanxu/module-system/building/test-projection module-test-execution)
+        (only-in :yuanxu/module-system/building/test-projection
+                 module-test-execution module-test-source-binding)
         (only-in "../../../dev/modules/testing/native-test-observation.ss"
                  make-native-test-progress-reader)
-        (only-in :gerbil/expander current-expander-context make-top-context eval-syntax)
         (only-in :std/source this-source-file))
 (def root (path-expand "../../.." (path-directory (this-source-file))))
 (def watch "packages/python-runtime/tools/watch.py")
@@ -18,13 +18,11 @@
 ;; Resolve the same init-owned tests value through the native expander once.
 (def context-demand
   (delay
-    (parameterize ((current-expander-context (make-top-context)))
-      (eval-syntax '(import :gerbil/core))
-      (eval-syntax
-        `(import (only-in ,(absolute "init.ss") agentic-ai-lab.init.exports)))
-      (eval-syntax
-        `(import (only-in ,(absolute "build-spec.ss") agentic-ai-lab-context-test-demand)))
-      (eval-syntax '(agentic-ai-lab-context-test-demand agentic-ai-lab.init.exports)))))
+    (let ((exports (module-test-source-binding (absolute "init.ss")
+                                             'agentic-ai-lab.init.exports))
+          (project (module-test-source-binding (absolute "build-spec.ss")
+                                              'agentic-ai-lab-context-test-demand)))
+      (project exports))))
 
 (def (selected-script name vm arguments)
   (def (interpreted file) (list "gxi" vm file))
