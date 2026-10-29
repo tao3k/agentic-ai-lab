@@ -702,3 +702,20 @@ it is not a direct import of the generator and must not be inferred by treating
 all quoted examples as dependencies. The Parser build projection now declares
 that exact emitted runtime root. The real external consumer failure remains
 the negative evidence; rebuilding Orgize is the required positive consumer.
+
+The generated Fold runtime root is consumed successfully in the next external
+Linux cohort, which reaches Orgize's C program staging instead. That stage
+imports =:gerbil-scheme-rust/scheme/runtime=. Orgize's exact native manifest
+already declares =gerbil-scheme-rust@cfbc10c4=, but the isolated Bazel graph
+omitted that dependency. Root now declares the same exact Scheme runtime in
+its native cohort and projects its source/lock through the existing pin tool.
+Its owner's ordinary =build.ss= builds six Scheme libraries and their explicit
+includes; the Bazel dependency runs that unchanged native declaration. No Rust
+source or downstream bindings are changed. Actual Orgize program staging is
+still the required positive consumer, independently of lock/API checks.
+
+A complete 317-file local queue finishes with 15 passes and 302 refusals after
+the operator removes its shared =.gerbil= prefix during execution. That run is
+retained as interference evidence and cannot qualify subsequent semantic Cases.
+The original prefix is being rebuilt through the existing dependency/Core
+entries. Evidence lives outside that prefix in ignored local artifacts.

@@ -55,6 +55,17 @@ gerbil_dependency_sources.source_package(
     ],
 )
 gerbil_dependency_sources.source_package(
+    name = "gerbil_scheme_rust_sources",
+    canonical_uri = "https://github.com/tao3k/gerbil-scheme-rust",
+    package = "gerbil-scheme-rust",
+    revision = "cfbc10c47ddc41f6670bd78e46e1e9d856cbb870",
+    sha256 = "c60d5d74efb62268237c1661ab2bf28ddc64b5780515637412d6a0ffd14472e3",
+    strip_prefix = "gerbil-scheme-rust-cfbc10c47ddc41f6670bd78e46e1e9d856cbb870",
+    urls = [
+        "https://github.com/tao3k/gerbil-scheme-rust/archive/cfbc10c47ddc41f6670bd78e46e1e9d856cbb870.tar.gz",
+    ],
+)
+gerbil_dependency_sources.source_package(
     name = "orgize_sources",
     canonical_uri = "https://github.com/tao3k/orgize",
     package = "orgize",
@@ -71,5 +82,6 @@ use_repo(
     "gerbil_parser_sources",
     "gerbil_ascent_sources",
     "gerbil_poo_sources",
+    "gerbil_scheme_rust_sources",
     "orgize_sources",
 )

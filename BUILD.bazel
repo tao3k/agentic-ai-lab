@@ -101,6 +101,16 @@ gerbil_project_compile(
 
 
 gerbil_project_compile(
+    name = "gerbil_scheme_rust_package",
+    srcs = ["@gerbil_scheme_rust_sources//:sources"],
+    # The owner's standard build declares Scheme libraries and their includes.
+    # Orgize's native C producer imports its existing public Scheme runtime.
+    build_script = "@gerbil_scheme_rust_sources//:build_script",
+    require_library_output = True,
+    source_resolution_receipts = ["@gerbil_scheme_rust_sources//:source_resolution_receipt"],
+)
+
+gerbil_project_compile(
     name = "orgize_package",
     srcs = ["@orgize_sources//:sources"],
     build_script = "@orgize_sources//:build_script",
@@ -109,6 +119,7 @@ gerbil_project_compile(
     deps = [
         ":gerbil_poo_package",
         ":gerbil_parser_package",
+        ":gerbil_scheme_rust_package",
     ],
 )
 
@@ -159,6 +170,7 @@ filegroup(
         ":gerbil_parser_package",
         ":gerbil_ascent_package",
         ":gerbil_poo_package",
+        ":gerbil_scheme_rust_package",
         ":orgize_package",
         ":yuanxu_package",
     ],
@@ -168,6 +180,7 @@ filegroup(
     filegroup(name = name, srcs = [project], output_group = "receipt")
     for name, project in [
         ("gerbil_poo_package_receipt", ":gerbil_poo_package"),
+        ("gerbil_scheme_rust_package_receipt", ":gerbil_scheme_rust_package"),
         ("orgize_package_receipt", ":orgize_package"),
         ("yuanxu_package_receipt", ":yuanxu_package"),
         ("gerbil_parser_package_receipt", ":gerbil_parser_package"),

@@ -6,4 +6,6 @@
  prelude: :tao3k/yuanxu/prelude
  depend: ("github.com/tao3k/gerbil-parser@831ded4d0cfe8d39fae9a022ef4307bafe0950a2"
           "github.com/tao3k/orgize@829982f58eb09d7e5281b86461832d1a978d2430"
+          ;; Orgize's native C producer consumes this existing Scheme runtime.
+          "github.com/tao3k/gerbil-scheme-rust@cfbc10c47ddc41f6670bd78e46e1e9d856cbb870"
           "github.com/tao3k/gerbil-ascent@4715fa0aae6a06fa7cc78627b4befcf61b7b9645"))
