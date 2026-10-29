@@ -7,7 +7,7 @@
 ;;; Invariant: this module must describe durable policy surfaces without
 ;;; depending on provider-specific recovery execution.
 (import :gerbil/core
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy)
+        :agentic-ai-lab/modules/session/durable-policy)
 
 (export +agentic-ai-lab-durable-runtime-policy-manifest-schema+
         agentic-ai-lab-durable-policy-runtime-manifest-alist

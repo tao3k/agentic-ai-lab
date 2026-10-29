@@ -4,7 +4,9 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: shared durable policy POO capability objects.
+;;; Boundary: Session-owned durable policy POO capability objects.
+;;; Memory and Sandbox consume this inert resume/identity contract downstream;
+;;; importing Session never acquires a Context, Memory store, or journal.
 ;;; Invariant: this layer validates and projects durable intent only; Rust or
 ;;; Marlin owns fact logs, checkpoints, indexes, leases, replay, and repair.
 

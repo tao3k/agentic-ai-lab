@@ -7,7 +7,7 @@
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
         :yuanxu/utilities/final-projection-syntax
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/session/durable-policy
         :agentic-ai-lab/modules/session/objects
         :agentic-ai-lab/modules/session/transform
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core

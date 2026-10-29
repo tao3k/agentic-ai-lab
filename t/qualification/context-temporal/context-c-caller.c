@@ -15,10 +15,15 @@ ___mod_or_lnk context_test_linker(___global_state_struct *state) {
   return 0;
 }
 static ___SCMOBJ context_test_setup(___setup_params_struct *params) {
-  /* Read the real host limit through Gambit's dynamic-extension linkage. */
+  /* The production facade still requests exactly 2 GiB and one worker.
+   * This embedded Fixture does not initialize another VM: the existing
+   * heap-fenced host owns its local 2 GiB or CI 3 GiB budget. Read that real
+   * limit through Gambit's dynamic-extension linkage and reject other hosts. */
+  const ___SIZE_T gib = (___SIZE_T)1024 * 1024 * 1024;
+  const ___SIZE_T host_heap = ___EXT(___get_max_heap)();
   if (params->max_heap != (___SIZE_T)2 * 1024 * 1024 * 1024 ||
       params->parallelism_level != 1 ||
-      ___EXT(___get_max_heap)() != (___SIZE_T)2 * 1024 * 1024 * 1024)
+      (host_heap != 2 * gib && host_heap != 3 * gib))
     return ___FIX(___UNKNOWN_ERR);
   ++context_test_setups;
   return ___FIX(___NO_ERR);

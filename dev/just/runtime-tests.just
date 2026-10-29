@@ -233,7 +233,7 @@ test-context-temporal:
     # Source/compiled-artifact admission precedes the native worker. Its own
     # TestingScript owns the 600-second runtime and 30-second silence
     # gates. The outer envelope also covers its separate native preparation.
-    GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 900s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}"
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 900s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss context-temporal "{{ gerbil_test_runtime_options }}"
 
 # Qualify the default interpreter dispatcher independently of the AOT tool.
 [group('test')]

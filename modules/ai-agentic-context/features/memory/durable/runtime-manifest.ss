@@ -7,7 +7,7 @@
 ;;; Invariant: manifest serialization must remain bounded and deterministic for
 ;;; policy reports, Marlin handoff, and checkpoint replay.
 (import :gerbil/core
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy-manifest
+        :agentic-ai-lab/modules/session/durable-policy-manifest
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend)
 

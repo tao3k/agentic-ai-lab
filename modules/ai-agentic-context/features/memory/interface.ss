@@ -10,8 +10,10 @@
 (import "types.ss"
         "funs.ss"
         "config.ss"
-        "org-selection.ss")
+        "org-selection.ss"
+        "session-selection.ss")
 (export (import: "types.ss")
         (import: "funs.ss")
         (import: "config.ss")
-        (import: "org-selection.ss"))
+        (import: "org-selection.ss")
+        (import: "session-selection.ss"))

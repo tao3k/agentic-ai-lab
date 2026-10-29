@@ -49,7 +49,9 @@ def _runtime_prefix(args: argparse.Namespace):
     with tempfile.TemporaryDirectory(prefix="run-", dir=parent) as directory:
         runtime = Path(directory)
         (runtime / "lib").mkdir()
-        (runtime / "bin").symlink_to(project_prefix / "bin", target_is_directory=True)
+        # Standard Make publishes executables here. A library-only producer may
+        # have no bin at all, and an existing Bazel bin is immutable input.
+        (runtime / "bin").mkdir()
         yield runtime
 
 

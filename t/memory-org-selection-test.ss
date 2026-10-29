@@ -10,9 +10,7 @@
                  make-org-element-graph-view org-element-query
                  org-elements property descendant-of)
         :agentic-ai-lab/modules/session/config
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/org-selection
-        :agentic-ai-lab/modules/session/org-memory-selection)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/interface)
 
 (export memory-org-selection-test)
 

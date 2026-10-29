@@ -11,7 +11,7 @@
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
                  agentic-ai-lab-product-use-module)
         "funs.ss"
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/session/durable-policy
         :agentic-ai-lab/modules/session/agent
         :agentic-ai-lab/modules/session/agent-param
         :agentic-ai-lab/modules/session/communication
@@ -26,7 +26,7 @@
         :agentic-ai-lab/modules/session/config-policy-syntax)
 
 (export (import: "funs.ss")
-        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy)
+        (import: :agentic-ai-lab/modules/session/durable-policy)
         (import: :agentic-ai-lab/modules/session/agent)
         (import: :agentic-ai-lab/modules/session/agent-param)
         (import: :agentic-ai-lab/modules/session/communication)

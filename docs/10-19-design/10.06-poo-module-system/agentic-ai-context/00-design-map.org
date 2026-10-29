@@ -237,21 +237,36 @@ are separate evidence dimensions; none substitutes for another.
 [[file:27-bounded-scheduling.org][27]] refines 26 with a pure native POO scheduling contract, executable
 SysML handoffs, finite QNT interleavings and actual ITF-to-Scheme replay.
 The reference Actor adapter verifies reserved admission credits before mailbox
-entry. Production Context owner integration and distributed scheduling remain
-separate from this qualified contract.
+entry. 28 subsequently integrates local owner ingress; distributed scheduling
+and end-to-end byte/control admission remain separate obligations.
 
 * Scheme authority and Rust runtime ecosystem
 
 [[file:28-hybrid-runtime.org][28]] integrates bounded ingress into the existing local Context owner and
 composes authority, scheduling and foreign-call lifetime in QNT/SysML. The
-Rust consumer reuses gerbil-scheme-rust fixed VM owners and Tokio, preserving
-Scheme semantics and the C/AOT boundary. Native Context qualification and the
-upstream-image transport fixture are separate; the production Context AOT
-service export and multi-node runtime remain explicit integration work.
+historical Rust transport fixture used gerbil-scheme-rust fixed VM owners and
+Tokio. 29 withdraws that premature integration from current product delivery.
+Native Context qualification, standalone active-service installation and a
+later downstream Rust consumer remain separate evidence boundaries.
 
 * Native Context service and the C ABI boundary
 
 [[file:29-production-service.org][29]] implements the native POO service, durable original decisions and
 close-before-work behavior. Scheme retains all lifecycle semantics; Bindings
 retain the existing C ABI responsibilities. Premature Rust integration was
-withdrawn. The new lifecycle service's C export remains explicitly open.
+withdrawn. The existing C export now reaches an application-installed native
+service; standalone packaged installation with an active Context remains open.
+
+* Current source audit and delivery order
+
+[[file:31-design-audit-and-next-delivery.org][31: design audit and next delivery]] records the current evidence boundary,
+reverse Session-to-Memory implementation imports, active-service packaging,
+byte/work admission, knowledge integration and distributed gaps. It separates
+revised CI allowances from earlier measurements and keeps Rust downstream of
+the existing C ABI.
+
+* Independent Session implementation
+
+[[file:32-independent-session.org][32 Independent Session]] records the direct durable-policy and Org selection
+adapter migration, public interface consumers, native refusal controls and the
+separate package/CI dependency admission boundary.

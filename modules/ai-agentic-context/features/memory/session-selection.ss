@@ -3,7 +3,9 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Session-owned pure policy gate for an Orgize Scheme selection.
+;;; Context Memory-owned pure adapter for Session and Orgize selection.
+;;; Session owns only the inert intent; this composition layer owns the
+;;; dependency on Memory store specs and Org query result validation.
 ;;; Neither a query result nor this intent admits MRR semantics or publishes
 ;;; a Memory head. Current source and grant facts come from the host. The
 ;;; supplied graph is not yet bound to parser-owned source bytes, so policy

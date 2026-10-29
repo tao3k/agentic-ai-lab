@@ -7,7 +7,7 @@
 ;;; Invariant: communication receipts describe routing intent only; Scheme does
 ;;; not deliver messages or mutate source/target sessions.
 
-(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+(import :agentic-ai-lab/modules/session/durable-policy
         :agentic-ai-lab/modules/session/objects
         :agentic-ai-lab/modules/session/receipt-syntax
         :agentic-ai-lab/modules/session/receipt-projection)

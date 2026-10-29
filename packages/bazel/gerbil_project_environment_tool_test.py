@@ -22,7 +22,8 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
             workspace = root / "workspace"
             library = producer / ".gerbil" / "lib"
             library.mkdir(parents=True)
-            (producer / ".gerbil" / "bin").mkdir()
+            # A library-only producer has no bin directory. Qualification must
+            # still be able to publish executables in its own writable prefix.
             marker = library / "source.marker"
             marker.write_text("compiled-source")
             workspace.mkdir()
@@ -38,7 +39,8 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
                 '(runtime / "lib" / "scratch").write_text("mutable")\n'
                 'libraries = os.environ["GERBIL_LOADPATH"].split(os.pathsep)\n'
                 'assert (Path(libraries[1]) / "source.marker").read_text() == "compiled-source"\n'
-                'assert (runtime / "bin").is_dir()\n'
+                '(runtime / "bin").mkdir(exist_ok=True)\n'
+                '(runtime / "bin" / "qualification-tool").write_text("owned")\n'
                 'Path(os.environ["CAPTURE"]).write_text(json.dumps(str(runtime)))\n'
                 'raise SystemExit(int(os.environ["COMMAND_STATUS"]))\n'
             )
@@ -58,6 +60,7 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
                     self.assertFalse(Path(json.loads(capture.read_text())).exists())
                     self.assertEqual(marker.read_text(), "compiled-source")
                     self.assertFalse((library / "scratch").exists())
+                    self.assertFalse((producer / ".gerbil" / "bin").exists())
 
     def test_main_launches_command_with_declared_project_environment(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
