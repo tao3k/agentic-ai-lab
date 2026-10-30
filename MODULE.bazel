@@ -25,10 +25,10 @@ include("//:gerbil-bazel.MODULE.bazel")
 
 GERBIL_LINUX_REVISION = "2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb"
 
-GERBIL_LINUX_SHA256 = "ad747af88350c743375855a84a95308be264d8e5e10d1cc0fd8e742db4542637"
+GERBIL_LINUX_SHA256 = "d2eab03ed402aa5f04e25abf690725b1953af7ffb10daa3a9c5652ce5b4edb16"
 
 GERBIL_LINUX_URLS = [
-    "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patchb37b43e7ba53/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patchb37b43e7ba53.tar.gz",
+    "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patch93b271b637bc/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patch93b271b637bc.tar.gz",
 ]
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
