@@ -140,7 +140,7 @@
     "@@gerbil_bazel+//gerbil:extensions.bzl%gerbil": {
       "os:linux,arch:amd64": {
         "bzlTransitiveDigest": "Px2WFSnYVQZkUqPn3M4MR9O68hILy3SGKU9s1+kFDYo=",
-        "usagesDigest": "4gysE3WMKex0IDfoOod3/14u7Z01pbQzuOiyOVKSRJw=",
+        "usagesDigest": "hZymP1b26knTIoM/CRLoOf7OafDGzujxdsrbsx3eTrc=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -161,10 +161,10 @@
               "release_revision": "2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb",
               "project_library_relative_path": ".gerbil/lib",
               "project_root_marker": "@@//:gerbil.pkg",
-              "sha256": "d2eab03ed402aa5f04e25abf690725b1953af7ffb10daa3a9c5652ce5b4edb16",
+              "sha256": "3b345b1af68dfbbc0e73bae64941e4c8910d0ca192d81432ce699c5af385b565",
               "strip_prefix": "gerbil-v0.19-linux-x86_64",
               "urls": [
-                "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patch93b271b637bc/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patch93b271b637bc.tar.gz"
+                "https://github.com/tao3k/gerbil-bazel/releases/download/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patcha379bb244bfa/gerbil-v0.19-2591dcd9b7c6d2c4e9dd8611a17c5b1a5d82bbdb-linux-x86_64-portable-full-single-host-unlimited-patcha379bb244bfa.tar.gz"
               ]
             }
           },
@@ -256,7 +256,7 @@
       },
       "os:osx,arch:aarch64": {
         "bzlTransitiveDigest": "Px2WFSnYVQZkUqPn3M4MR9O68hILy3SGKU9s1+kFDYo=",
-        "usagesDigest": "4gysE3WMKex0IDfoOod3/14u7Z01pbQzuOiyOVKSRJw=",
+        "usagesDigest": "hZymP1b26knTIoM/CRLoOf7OafDGzujxdsrbsx3eTrc=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
