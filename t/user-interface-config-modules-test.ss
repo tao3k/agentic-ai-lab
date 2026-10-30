@@ -6,7 +6,7 @@
 ;;; Boundary: tests custom user config profile modules.
 ;;; Invariant: user fragments remain declarative module selections.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,27 +17,27 @@
                  check-true
         test-error
         test-suite)
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/modules/agent-sandbox/config
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/agent-sandbox/config
         (only-in "../user-interface/custom/my-module/profiles/session"
-                 poo-flow-custom-my-module-session-module)
+                 agentic-ai-lab-custom-my-module-session-module)
         (only-in "../user-interface/custom/my-module/profiles/task"
-                 poo-flow-custom-my-module-task-module)
+                 agentic-ai-lab-custom-my-module-task-module)
         (only-in "../user-interface/custom/my-module/profiles/cicd"
-                 poo-flow-custom-my-module-cicd-module)
+                 agentic-ai-lab-custom-my-module-cicd-module)
         (only-in "../user-interface/custom/my-module/profiles/object-extension"
-                 poo-flow-custom-my-module-object-extension-module))
+                 agentic-ai-lab-custom-my-module-object-extension-module))
 
 (export user-interface-config-modules-test)
 
 ;; : (-> PooUserModuleSelection [PooSandboxProfile])
 (def (config-module-profiles module-selection)
-  (cdr (poo-flow-user-module-selection-flag-entry module-selection ':config)))
+  (cdr (yuanxu-user-module-selection-flag-entry module-selection ':config)))
 
 ;; : (-> [PooSandboxProfile] Symbol PooSandboxProfile)
 (def (config-profile profiles name)
-  (poo-flow-sandbox-profile-by-name profiles name))
+  (agentic-ai-lab-sandbox-profile-by-name profiles name))
 
 ;; : (-> Alist Symbol Value)
 (def (test-ref alist key)
@@ -47,20 +47,20 @@
 ;;; This suite keeps module declarations in user config small while validation
 ;;; remains owned by upstream modules.
 (def user-interface-config-modules-test
-  (test-suite "poo-flow user interface config modules"
-    (poo-flow-test-case "imports custom profile modules through their owner"
+  (test-suite "agentic-ai-lab user interface config modules"
+    (yuanxu-test-case "imports custom profile modules through their owner"
       (let* ((session-profiles
               (config-module-profiles
-               (car poo-flow-custom-my-module-session-module)))
+               (car agentic-ai-lab-custom-my-module-session-module)))
              (task-profiles
               (config-module-profiles
-               (car poo-flow-custom-my-module-task-module)))
+               (car agentic-ai-lab-custom-my-module-task-module)))
              (cicd-profiles
               (config-module-profiles
-               (car poo-flow-custom-my-module-cicd-module)))
+               (car agentic-ai-lab-custom-my-module-cicd-module)))
              (object-extension-profiles
               (config-module-profiles
-               (car poo-flow-custom-my-module-object-extension-module)))
+               (car agentic-ai-lab-custom-my-module-object-extension-module)))
              (session-profile
               (config-profile session-profiles 'agent/session))
              (task-cache-profile
@@ -71,17 +71,17 @@
               (config-profile object-extension-profiles
                               'agent/poo-object-extension))
              (poo-object-resources
-              (poo-flow-sandbox-profile-resource-policy poo-object-profile))
+              (agentic-ai-lab-sandbox-profile-resource-policy poo-object-profile))
              (poo-object-mounts
               (test-ref poo-object-resources 'mounts)))
         (check-equal? (length session-profiles) 1)
         (check-equal? (length task-profiles) 2)
         (check-equal? (length cicd-profiles) 4)
         (check-equal? (length object-extension-profiles) 1)
-        (check-equal? (poo-flow-sandbox-profile-capabilities
+        (check-equal? (agentic-ai-lab-sandbox-profile-capabilities
                        session-profile)
                       '(process-run filesystem-read tmpdir cache-mount))
-        (check-equal? (poo-flow-sandbox-profile-resource-policy
+        (check-equal? (agentic-ai-lab-sandbox-profile-resource-policy
                        task-cache-profile)
                       '((filesystem
                          (scope . project-workspace)
@@ -94,17 +94,17 @@
                         (cpu . 2)
                         (memory . "2Gi")
                         (timeout-ms . 180000)))
-        (check-equal? (poo-flow-sandbox-profile-network-policy
+        (check-equal? (agentic-ai-lab-sandbox-profile-network-policy
                        build-profile)
                       '(allowlisted "github.com" "crates.io"))
-        (check-equal? (poo-flow-sandbox-profile-network-policy
+        (check-equal? (agentic-ai-lab-sandbox-profile-network-policy
                        poo-object-profile)
                       '(allowlisted "github.com" "crates.io"))
-        (check-equal? (poo-flow-sandbox-profile-capabilities
+        (check-equal? (agentic-ai-lab-sandbox-profile-capabilities
                        poo-object-profile)
                       '(process-run filesystem-read tmpdir cache-mount
                         artifact-cache))
-        (check-equal? (poo-flow-sandbox-profile-resource-policy
+        (check-equal? (agentic-ai-lab-sandbox-profile-resource-policy
                        poo-object-profile)
                       '((filesystem
                          (scope . project-workspace)
@@ -140,7 +140,7 @@
                           (purpose . user-config))
                          ((path . "/run/secrets")
                           (source-kind . env)
-                          (source . "$POO_FLOW_AGENT_SECRETS")
+                          (source . "$AGENTIC_AI_LAB_AGENT_SECRETS")
                           (target . "/run/secrets")
                           (mode . read)
                           (purpose . credentials)))
@@ -160,8 +160,8 @@
                         semantic-cache
                         user-config
                         credentials))
-        (check-equal? (poo-flow-sandbox-profile-metadata poo-object-profile)
-                      '((declared-by . poo-flow-poo-prototype)
+        (check-equal? (agentic-ai-lab-sandbox-profile-metadata poo-object-profile)
+                      '((declared-by . agentic-ai-lab-poo-prototype)
                         (runtime-executed . #f)
                         (backend . nono-sandbox)
                         (intent . poo-object-extension)

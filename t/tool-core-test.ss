@@ -6,16 +6,16 @@
 ;;; Boundary: POO-native tool specs and policy-catalog validation.
 ;;; Invariant: Scheme builds tool handoff receipts only; no tool runtime starts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/modules/tool-core/objects-policy-refs
-                 poo-flow-tool-merge-policy-tool-refs
-                 poo-flow-tool-unique-symbols)
-        :poo-flow/modules/session/config
-        :poo-flow/modules/tool-core/config)
+        (only-in :agentic-ai-lab/modules/tool-core/objects-policy-refs
+                 agentic-ai-lab-tool-merge-policy-tool-refs
+                 agentic-ai-lab-tool-unique-symbols)
+        :agentic-ai-lab/modules/session/config
+        :agentic-ai-lab/modules/tool-core/config)
 
 (export tool-core-test)
 
@@ -30,21 +30,21 @@
 
 ;; : TestSuite
 (def tool-core-test
-  (test-suite "poo-flow tool-core"
-    (poo-flow-test-case "deduplicates policy refs while preserving wildcard and seed semantics"
+  (test-suite "agentic-ai-lab tool-core"
+    (yuanxu-test-case "deduplicates policy refs while preserving wildcard and seed semantics"
       (check-equal?
-       (poo-flow-tool-unique-symbols
+       (agentic-ai-lab-tool-unique-symbols
         '(calculator * shell calculator audit shell)
         '(audit))
        '(calculator shell))
       (check-equal?
-       (poo-flow-tool-merge-policy-tool-refs
+       (agentic-ai-lab-tool-merge-policy-tool-refs
         '(calculator shell calculator)
         '(* shell audit calculator))
        '(calculator shell audit)))
-    (poo-flow-test-case "authors custom tool specs and projects handoff manifests"
+    (yuanxu-test-case "authors custom tool specs and projects handoff manifests"
       (let* ((calculator
-              (poo-flow-tool-spec
+              (agentic-ai-lab-tool-spec
                'calculator
                'custom
                '(calculate)
@@ -57,46 +57,46 @@
                'marlin-tool-adapter
                '((source . unit-test))))
              (catalog
-              (poo-flow-tool-catalog
+              (agentic-ai-lab-tool-catalog
                'tool-core/custom
                (list calculator)
                '((scope . unit-test))))
              (manifest
-              (poo-flow-tool-handoff-manifest->alist
-               (poo-flow-tool-handoff-manifest
+              (agentic-ai-lab-tool-handoff-manifest->alist
+               (agentic-ai-lab-tool-handoff-manifest
                 'request/calculator
                 calculator))))
-        (check-equal? (poo-flow-tool-catalog? catalog) #t)
-        (check-equal? (poo-flow-tool-catalog-ref catalog)
+        (check-equal? (agentic-ai-lab-tool-catalog? catalog) #t)
+        (check-equal? (agentic-ai-lab-tool-catalog-ref catalog)
                       'tool-core/custom)
-        (check-equal? (poo-flow-tool-catalog-tool-refs catalog)
+        (check-equal? (agentic-ai-lab-tool-catalog-tool-refs catalog)
                       '(calculator))
         (check-equal? (test-ref manifest 'tool-ref) 'calculator)
         (check-equal? (test-ref manifest 'handoff-ready?) #t)
         (check-equal? (test-ref manifest 'runtime-executed) #f)))
-    (poo-flow-test-case "projects built-in shell and filesystem tools as sandboxed handoff specs"
-      (let* ((catalog poo-flow-tool-core-default-catalog)
+    (yuanxu-test-case "projects built-in shell and filesystem tools as sandboxed handoff specs"
+      (let* ((catalog agentic-ai-lab-tool-core-default-catalog)
              (shell
-              (poo-flow-tool-catalog-find catalog 'run-shell-command))
+              (agentic-ai-lab-tool-catalog-find catalog 'run-shell-command))
              (read-file
-              (poo-flow-tool-catalog-find catalog 'read-workspace-file))
+              (agentic-ai-lab-tool-catalog-find catalog 'read-workspace-file))
              (manifest
-              (poo-flow-tool-handoff-manifest
+              (agentic-ai-lab-tool-handoff-manifest
                'request/run-shell
                shell))
-             (row (poo-flow-tool-handoff-manifest->alist manifest)))
-        (check-equal? (poo-flow-tool-spec? shell) #t)
-        (check-equal? (poo-flow-tool-spec? read-file) #t)
-        (check-equal? (poo-flow-tool-spec-sandbox-required? shell) #t)
-        (check-equal? (poo-flow-tool-spec-sandbox-profile-ref shell)
+             (row (agentic-ai-lab-tool-handoff-manifest->alist manifest)))
+        (check-equal? (agentic-ai-lab-tool-spec? shell) #t)
+        (check-equal? (agentic-ai-lab-tool-spec? read-file) #t)
+        (check-equal? (agentic-ai-lab-tool-spec-sandbox-required? shell) #t)
+        (check-equal? (agentic-ai-lab-tool-spec-sandbox-profile-ref shell)
                       'agent/nono)
         (check-equal? (test-ref row 'handoff-ready?) #t)
         (check-equal? (test-ref row 'runtime-owner)
                       "marlin-agent-core")
         (check-equal? (test-ref row 'runtime-executed) #f)))
-    (poo-flow-test-case "represents MCP tools without starting an MCP server"
+    (yuanxu-test-case "represents MCP tools without starting an MCP server"
       (let* ((mcp-tool
-              (poo-flow-tool-core-mcp-tool
+              (agentic-ai-lab-tool-core-mcp-tool
                'github/search-issues
                'mcp/github
                '(query)
@@ -104,18 +104,18 @@
                '((issues . list))
                '((transport . external-mcp))))
              (manifest
-              (poo-flow-tool-handoff-manifest
+              (agentic-ai-lab-tool-handoff-manifest
                'request/mcp-search
                mcp-tool))
-             (row (poo-flow-tool-handoff-manifest->alist manifest)))
-        (check-equal? (poo-flow-tool-spec-tool-kind mcp-tool) 'mcp)
-        (check-equal? (poo-flow-tool-spec-sandbox-required? mcp-tool) #f)
+             (row (agentic-ai-lab-tool-handoff-manifest->alist manifest)))
+        (check-equal? (agentic-ai-lab-tool-spec-tool-kind mcp-tool) 'mcp)
+        (check-equal? (agentic-ai-lab-tool-spec-sandbox-required? mcp-tool) #f)
         (check-equal? (test-ref row 'runtime-backend) 'mcp/github)
         (check-equal? (test-ref row 'handoff-ready?) #t)
         (check-equal? (test-ref row 'runtime-executed) #f)))
-    (poo-flow-test-case "validates session tool policies against concrete catalog specs"
+    (yuanxu-test-case "validates session tool policies against concrete catalog specs"
       (let* ((calc
-              (poo-flow-tool-spec
+              (agentic-ai-lab-tool-spec
                'calculator
                'custom
                '(calculate)
@@ -127,7 +127,7 @@
                #f
                'marlin-tool-adapter))
              (unsafe-shell
-              (poo-flow-tool-spec
+              (agentic-ai-lab-tool-spec
                'unsafe-shell
                'builtin-command
                '(run)
@@ -139,48 +139,48 @@
                #f
                'marlin-tool-adapter))
              (catalog
-              (poo-flow-tool-catalog
+              (agentic-ai-lab-tool-catalog
                'tool-core/test
                (list calc
-                     poo-flow-tool-core-builtin-run-shell-command
+                     agentic-ai-lab-tool-core-builtin-run-shell-command
                      unsafe-shell)))
              (calc-grant
-              (poo-flow-session-tool-grant
+              (agentic-ai-lab-session-tool-grant
                'grant/calc
                'calculator
                '(calculate)
                '(session/input)
                '(agent-turn)))
              (shell-grant
-              (poo-flow-session-tool-grant
+              (agentic-ai-lab-session-tool-grant
                'grant/shell
                'run-shell-command
                '(run)
                '(project-workspace)
                '(agent-turn)))
              (unsafe-grant
-              (poo-flow-session-tool-grant
+              (agentic-ai-lab-session-tool-grant
                'grant/unsafe
                'unsafe-shell
                '(run)
                '(project-workspace)
                '(agent-turn)))
              (missing-grant
-              (poo-flow-session-tool-grant
+              (agentic-ai-lab-session-tool-grant
                'grant/missing
                'delete-world
                '(run)
                '(project-workspace)
                '(agent-turn)))
              (bad-action-grant
-              (poo-flow-session-tool-grant
+              (agentic-ai-lab-session-tool-grant
                'grant/calc-delete
                'calculator
                '(delete)
                '(session/input)
                '(agent-turn)))
              (agent-policy
-              (poo-flow-session-tool-permission-policy
+              (agentic-ai-lab-session-tool-permission-policy
                'policy/tool-core-agent
                'session/tool-core
                (list calc-grant
@@ -191,7 +191,7 @@
                '()
                'deny))
              (hook-policy
-              (poo-flow-session-hook-tool-permission-policy
+              (agentic-ai-lab-session-hook-tool-permission-policy
                'policy/tool-core-hook
                'session/tool-core
                '(hook/pre-check)
@@ -199,19 +199,19 @@
                'deny-escalation
                'deny))
              (receipt
-              (poo-flow-tool-policy-catalog-validation-receipt
+              (agentic-ai-lab-tool-policy-catalog-validation-receipt
                'validation/tool-core
                catalog
                agent-policy
                hook-policy))
              (row
-              (poo-flow-tool-policy-catalog-validation-receipt->alist
+              (agentic-ai-lab-tool-policy-catalog-validation-receipt->alist
                receipt)))
         (check-equal?
-         (poo-flow-tool-policy-catalog-validation-receipt? receipt)
+         (agentic-ai-lab-tool-policy-catalog-validation-receipt? receipt)
          #t)
         (check-equal?
-         (poo-flow-tool-policy-catalog-validation-receipt-valid? receipt)
+         (agentic-ai-lab-tool-policy-catalog-validation-receipt-valid? receipt)
          #f)
         (check-equal? (test-ref row 'resolved-tool-refs)
                       '(calculator run-shell-command unsafe-shell))

@@ -6,91 +6,91 @@
 ;;; Invariant: transformation preserves explicit store and handoff references.
 (import :gerbil/core
         (only-in :clan/poo/object .ref object?)
-        :poo-flow/modules/session/objects)
+        :agentic-ai-lab/modules/session/objects)
 
-(export poo-flow-session-memory-intent-ref
-        poo-flow-session-memory-intent?
-        poo-flow-session-memory-intent-name
-        poo-flow-session-memory-intent-store-ref
-        poo-flow-session-memory-intent-scope
-        poo-flow-session-memory-intent-recall
-        poo-flow-session-memory-intent-commit-policy
-        poo-flow-session-memory-intent-runtime-owner
-        poo-flow-session-memory-intent-metadata
-        poo-flow-session-memory-intent-handoff
-        poo-flow-session-memory-intent-handoff-bundle/rev
-        poo-flow-session-memory-intent-handoff-bundle
-        poo-flow-session-memory-intent-count)
+(export agentic-ai-lab-session-memory-intent-ref
+        agentic-ai-lab-session-memory-intent?
+        agentic-ai-lab-session-memory-intent-name
+        agentic-ai-lab-session-memory-intent-store-ref
+        agentic-ai-lab-session-memory-intent-scope
+        agentic-ai-lab-session-memory-intent-recall
+        agentic-ai-lab-session-memory-intent-commit-policy
+        agentic-ai-lab-session-memory-intent-runtime-owner
+        agentic-ai-lab-session-memory-intent-metadata
+        agentic-ai-lab-session-memory-intent-handoff
+        agentic-ai-lab-session-memory-intent-handoff-bundle/rev
+        agentic-ai-lab-session-memory-intent-handoff-bundle
+        agentic-ai-lab-session-memory-intent-count)
 
 ;; Boundary: memory-intent accessors and handoff rows are pure projections.
 ;; The declaration constructor stays in transform.ss where metadata validation lives.
-(def (poo-flow-session-memory-intent-ref intent key default)
+(def (agentic-ai-lab-session-memory-intent-ref intent key default)
   (if (object? intent)
     (.ref intent key)
-    (poo-flow-session-alist-ref intent key default)))
+    (agentic-ai-lab-session-alist-ref intent key default)))
 
-(def (poo-flow-session-memory-intent? value)
+(def (agentic-ai-lab-session-memory-intent? value)
   (or (and (object? value)
-           (eq? (.ref value 'kind) 'poo-flow.session.memory-intent))
+           (eq? (.ref value 'kind) 'agentic-ai-lab.session.memory-intent))
       (and (list? value)
-           (eq? (poo-flow-session-alist-ref value 'kind #f)
-                'poo-flow.session.memory-intent))))
+           (eq? (agentic-ai-lab-session-alist-ref value 'kind #f)
+                'agentic-ai-lab.session.memory-intent))))
 
-(def (poo-flow-session-memory-intent-name intent)
-  (poo-flow-session-memory-intent-ref intent 'intent-name #f))
+(def (agentic-ai-lab-session-memory-intent-name intent)
+  (agentic-ai-lab-session-memory-intent-ref intent 'intent-name #f))
 
-(def (poo-flow-session-memory-intent-store-ref intent)
-  (poo-flow-session-memory-intent-ref intent 'store-ref #f))
+(def (agentic-ai-lab-session-memory-intent-store-ref intent)
+  (agentic-ai-lab-session-memory-intent-ref intent 'store-ref #f))
 
-(def (poo-flow-session-memory-intent-scope intent)
-  (poo-flow-session-memory-intent-ref intent 'scope #f))
+(def (agentic-ai-lab-session-memory-intent-scope intent)
+  (agentic-ai-lab-session-memory-intent-ref intent 'scope #f))
 
-(def (poo-flow-session-memory-intent-recall intent)
-  (poo-flow-session-memory-intent-ref intent 'recall '()))
+(def (agentic-ai-lab-session-memory-intent-recall intent)
+  (agentic-ai-lab-session-memory-intent-ref intent 'recall '()))
 
-(def (poo-flow-session-memory-intent-commit-policy intent)
-  (poo-flow-session-memory-intent-ref intent 'commit-policy #f))
+(def (agentic-ai-lab-session-memory-intent-commit-policy intent)
+  (agentic-ai-lab-session-memory-intent-ref intent 'commit-policy #f))
 
-(def (poo-flow-session-memory-intent-runtime-owner intent)
-  (poo-flow-session-memory-intent-ref intent 'runtime-owner "marlin-agent-core"))
+(def (agentic-ai-lab-session-memory-intent-runtime-owner intent)
+  (agentic-ai-lab-session-memory-intent-ref intent 'runtime-owner "marlin-agent-core"))
 
-(def (poo-flow-session-memory-intent-metadata intent)
-  (poo-flow-session-memory-intent-ref intent 'metadata '()))
+(def (agentic-ai-lab-session-memory-intent-metadata intent)
+  (agentic-ai-lab-session-memory-intent-ref intent 'metadata '()))
 
-(def (poo-flow-session-memory-intent-handoff intent)
+(def (agentic-ai-lab-session-memory-intent-handoff intent)
   (list
-   (cons 'kind 'poo-flow.session.memory-intent.handoff)
-   (cons 'schema 'poo-flow.modules.session.memory-intent.handoff.v1)
-   (cons 'intent-name (poo-flow-session-memory-intent-name intent))
-   (cons 'store-ref (poo-flow-session-memory-intent-store-ref intent))
-   (cons 'scope (poo-flow-session-memory-intent-scope intent))
-   (cons 'recall (poo-flow-session-memory-intent-recall intent))
+   (cons 'kind 'agentic-ai-lab.session.memory-intent.handoff)
+   (cons 'schema 'agentic-ai-lab.modules.session.memory-intent.handoff.v1)
+   (cons 'intent-name (agentic-ai-lab-session-memory-intent-name intent))
+   (cons 'store-ref (agentic-ai-lab-session-memory-intent-store-ref intent))
+   (cons 'scope (agentic-ai-lab-session-memory-intent-scope intent))
+   (cons 'recall (agentic-ai-lab-session-memory-intent-recall intent))
    (cons 'commit-policy
-         (poo-flow-session-memory-intent-commit-policy intent))
+         (agentic-ai-lab-session-memory-intent-commit-policy intent))
    (cons 'runtime-owner
-         (poo-flow-session-memory-intent-runtime-owner intent))
+         (agentic-ai-lab-session-memory-intent-runtime-owner intent))
    (cons 'handoff-required #t)
    (cons 'descriptor-realized? #f)
    (cons 'runtime-executed #f)))
 
-(def (poo-flow-session-memory-intent-handoff-bundle/rev memory-intents
+(def (agentic-ai-lab-session-memory-intent-handoff-bundle/rev memory-intents
                                                         rows-rev
                                                         count)
   (if (null? memory-intents)
     (cons rows-rev count)
-    (poo-flow-session-memory-intent-handoff-bundle/rev
+    (agentic-ai-lab-session-memory-intent-handoff-bundle/rev
      (cdr memory-intents)
-     (cons (poo-flow-session-memory-intent-handoff (car memory-intents))
+     (cons (agentic-ai-lab-session-memory-intent-handoff (car memory-intents))
            rows-rev)
      (fx+ count 1))))
 
-(def (poo-flow-session-memory-intent-handoff-bundle memory-intents)
+(def (agentic-ai-lab-session-memory-intent-handoff-bundle memory-intents)
   (let (bundle
-        (poo-flow-session-memory-intent-handoff-bundle/rev
+        (agentic-ai-lab-session-memory-intent-handoff-bundle/rev
          memory-intents
          '()
          0))
     (cons (reverse (car bundle)) (cdr bundle))))
 
-(def (poo-flow-session-memory-intent-count memory-intents)
+(def (agentic-ai-lab-session-memory-intent-count memory-intents)
   (length memory-intents))

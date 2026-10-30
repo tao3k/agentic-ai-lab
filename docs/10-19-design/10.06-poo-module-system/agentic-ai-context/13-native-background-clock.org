@@ -1,0 +1,183 @@
+#+title: Context lifecycle algorithm: autonomous deadline delivery
+#+language: en
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* The Context algorithm and inherited Org responsibilities
+
+This extends [[file:12-native-authority-propagation.org][the authority-event protocol]], not an inheritance or external
+context-compression algorithm. The owning design is
+=core/module-system/design/context-temporal-lifecycle-policy-system-design.org=:
+original evidence, dependency-directed validity, independent lifecycle axes,
+current-clock result admission, actual reconciliation and conditional publication.
+Session still owns pure Attempt/schedule/obligation reducers. Context coordinates
+information and exact version dependencies; Runtime owns clock/thread capabilities.
+
+The lifecycle state consists of retained original evidence, immutable Context
+versions and their support/authority edges, current authority registrations,
+registered deadline tickets, pending obligations and immutable terminal history.
+A single owner folds admitted events into proposals and publishes guarded state.
+A chronological journal makes an execution replayable; it does not turn the
+dependency graph into a flat transcript or replace the semantic owners.
+
+| Event | Lifecycle decision |
+|-------+--------------------|
+| Policy registration/replacement | Prepare exact version frontier and a new fenced deadline ticket before authority publication |
+| Native deadline wakeup | Retain original ticket/clock observation; enqueue to the owner without touching Context from the timer thread |
+| Owner delivery | Match clock epoch, policy identity, generation, digest and end; reject stale or duplicate tickets |
+| Matching due ticket | Publish canonical expiry and proactively traverse the captured dependency graph; materialize cached invalidation |
+| Result return | Retain exact worker observation; actual current-clock and owner fences decide final result publication |
+| Cancel/recover | Retain obligations; never clear validity loss or replace an existing terminal |
+| Delayed old wakeup after replacement | Retain the wakeup as stale; leave the replacement policy and newly admitted Context unchanged |
+
+C3/C4 belongs to Gerbil POO composition. The inspected native
+=gerbil/runtime/c3.ss= describes C4 as an extension of C3 for ancestor precedence,
+and the existing =t/scenarios/performance/poo-clos-native-c4/scenario.ss= checks
+that the CLOS bridge reuses that order. C4 is not this lifecycle reducer,
+ASCENT entailment or the reverse-dependency algorithm. This implementation adds
+no second inheritance engine and derives no whole-system linear-complexity or
+KV-cache speedup claim from object linearization. Provider token/KV measurements
+and a stable rendering/token-prefix contract remain separate unqualified work.
+
+* Real native clock and owner reactor
+
+=runtime/monotonic-clock.ss= contains the small POSIX =CLOCK_MONOTONIC= primitive;
+all ticket scheduling, event folding, fences and propagation remain Scheme.
+=runtime/policy-clock.ss= starts a real owner thread and a distinct timer thread.
+Bootstrap constructs Context, Session and proof/policy/use Hosts ON that owner;
+existing owner capabilities are not transferred across threads or weakened.
+
+The native POO =policy-clock-owner= capability marshals trusted functional owner
+operations. It is an embedding/runtime boundary, not a wire callback evaluator,
+strategy DSL or permission grant. Native Context APIs remain the ordinary POO
+contract; a =policy-clock-call!= callback only arranges their correct owner thread.
+
+Clock enrollment explicitly binds a named domain, origin coordinate and tick
+period to a native monotonic epoch. The qualification profile accelerates a
+coordinate to 2 milliseconds and extends ORIGINAL fact validity and independent
+policy windows, so policy expiry is not confused with unrelated fact expiry.
+This is a registered local elapsed-time domain, not an inferred conversion to
+UTC, arbitrary logical transactions or authenticated external event time.
+
+The timer has its own deadline queue and mailbox timeout. It wakes without any
+Context/proof/use query, samples the real OS clock and posts an opaque private
+delivery record. It cannot mutate Context or authority state. The owner validates
+and publishes expiry through the existing prepare/publish/pending/drain barrier.
+A policy observer enrolls subsequent replacement deadlines automatically; expired
+windows are not rearmed. Original tickets include epoch, identity, generation,
+policy digest and end. Stale delivery does not install an old policy snapshot.
+The seen set makes duplicate deliveries idempotent, including duplicate stale
+ones. Audit snapshots copy strings/instants and preserve raw monotonic deadline
+and sample coordinates, original ticket commitments and observed provenance.
+
+A paused inbox delays HANDLING, not clock passage or event production. This
+models owner backlog for reproducible races; normal startup is unpaused.
+Even while handling is delayed, =policy-host-current= samples its enrolled native
+clock for support/use admission. If a registered window has actually ended,
+that supplementary fence publishes expiry before admitting a result. Inside an
+unchanged window it supplies a fresh clock VIEW without inventing a new policy
+generation on every tick. The raw registered policy snapshot remains immutable;
+=policy-host-registered= is an owner/scheduler diagnostic, not a use guard.
+A current snapshot returned with an enrolled clock is a live clock view, not a
+claim that its clock coordinate equals the stored registration coordinate.
+
+Timer preflight/delivery faults are retained and quarantine ordinary owner calls.
+The explicit retry drains the policy barrier and rebases pending deliveries;
+shutdown joins both timer and owner threads. Request timeout is not cancellation
+or evidence of resource release. Runtime stop does not certify Session close or
+resolve external worker/provider obligations. The implementation is local and
+in memory; durable delivery/crash recovery and external scheduler supervision
+are not claimed. There is no hard real-time latency or nanosecond-atomic physical
+clock/provider publication guarantee.
+
+* Executable native scenarios
+
+The ordinary autonomous case waits for timer-delivery notification, then reads
+cached A/B/C views. After clock activation, no consumer query occurs before the push. A and its captured
+cross-Session descendant B are invalidated; independent C completes its original
+Attempt. Two actual timer messages produce one expiry and one duplicate no-op.
+A distinct delayed-inbox case attempts an actual native final result publication
+after the real deadline: the current-clock guard refuses it, and later delivery
+of the old ticket is stale rather than reactivating that input.
+
+The retained negative control disables the timer while leaving the native clock
+guard enrolled. After real elapsed time, cached A/B remain admitted/active until
+use; actual final publication still fails. This demonstrates why current-use
+checks alone do not implement autonomous Context lifecycle management. It does
+not claim successful stale publication.
+
+The race corpus starts the real timer, waits for BOTH duplicate messages to be
+produced and received, then executes all 60 legal owner orders of:
+
+| Move | Native operation |
+|------+------------------|
+| 1 | Resume queued timer handling |
+| 2 | Replace policy, admit fresh grant/proof-bound Context D and its real worker |
+| 3 | Actual old A result publication through native current-clock/owner fences |
+| 4 | Cancel A |
+| 5 | Recover A, after 4 |
+
+Every step checks terminal uniqueness and old-result ineligibility. D must keep
+its original revision and successfully publish under the replacement policy;
+C must also complete. Old A/B cleanup requires real thread joins. This enumerates
+all owner orders for the deliberately queued-delivery profile, not every OS
+thread schedule or every joint provider/worker interleaving. The separate idle
+autonomous case proves that the default runtime does not need resume, polling or
+queries. =13-background-clock.sysml= executes the corresponding bounded contract
+and named omission/stale-generation/recovery/duplicate-terminal counterexamples;
+it is not a simulation of the OS clock or a substitute for the native timer.
+
+* Reproduction and evidence
+
+#+begin_src sh
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-clock-scenarios.py --artifacts /private/tmp/context-clock/sysml
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-clock.py --artifacts /private/tmp/context-clock/native
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-clock.py --check-receipt /private/tmp/context-clock/native/clock-receipt.json
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-clock.py --order 2,1,3,4,5 --reuse-build /private/tmp/context-clock/native/clock-receipt.json --artifacts /private/tmp/context-clock/replay
+#+end_src
+
+The real OS clock adapter must be imported from the COMPILED library before the
+source root; otherwise the interpreter attempts to evaluate a C declaration.
+Maintained heap-fenced native Just entrypoints select that order explicitly.
+The module is included in the normal public build-root closure. The gate checks
+actual Case/module/harness/final markers, original proof/journal/propagation
+commitments, exact clock corpus and timer evidence, source and dependency pins,
+and before/after binary commitments including the native clock adapter. Exact
+replay reuses a verified build to keep both full and replay receipts on the same
+binary cut. Raw logs and per-run evidence remain local artifacts, not Git files.
+
+* Qualified local result: 2026-10-25
+
+The current =/private/tmp/context-clock-20261025/qualified/clock-receipt.json=
+passed all 58 native Cases, including 60 queued real-timer race paths. All
+MODULE-OK / HARNESS-OK / final OK markers were present without failure markers.
+ASCENT was =1855e89d998930e67705c5a83141142723196242= and Orgize was
+=c8a092899c6eb4cf164d5007e6da48d647fb4031=. The receipt binds source inputs
+and 1,269 installed dependency/clock compiler/runtime artifacts, unchanged across
+execution. The normal public build-root closure includes the new runtime, but
+whole-project Gerbil qualification and remote CI were not run.
+
+| Evidence | Actual result |
+|----------+---------------|
+| Idle autonomous expiry | A/B cache invalidated before any post-activation consumer query; C completes |
+| Completion before real expiry | Actual A result commits; later autonomous expiry preserves that completed terminal and removes current-use eligibility |
+| Queued delayed expiry | Actual current-clock guard refuses late A result; queued old delivery becomes stale |
+| Native race paths | 60 legal owner orders; 20 matching expiry applications, 40 stale-ticket no-ops |
+| Replacement policy | Fresh grant/proof-bound D remains current and completes in every path |
+| Duplicate deliveries | 63 duplicate no-ops across the three positive profiles and 60 race paths |
+| Raw timer audit | 126 received, 22 applied, 41 stale, 63 duplicate records; deadline/sample evidence retained |
+| Missing timer | Real native cached-admitted/active counterexample, despite the final clock guard denying the result |
+| Legacy regression in same process | 24 sampled authority paths, 8 source paths, 6 cross-Session source/commit orders, 8 owner-CAS paths |
+| Exact native replay | =2,1,3,4,5=; 58 Cases and one clock race; reused the verified binary cut |
+| Receipt controls | 7 altered source/binary/exit/path/ticket/counterexample/proof receipts rejected |
+| SysML run engine | 20 executed; 12 expected unsafe verdicts; no unexpected failures |
+| Exact SysML unsafe/safe pair | 2 executed; 1 expected unsafe verdict |
+
+Both native receipts passed the current-cut verifier after exact replay. The
+=evidence-index.json= beside those directories binds receipts, replay paths,
+validation controls and SysML summaries. Initial FFI loading/audit-accessor
+diagnostics were failures and were never promoted into qualified receipts.
+The 12-series authority receipts remain historical source cuts; their earlier
+840-path qualification is not relabeled as a new background-clock result.

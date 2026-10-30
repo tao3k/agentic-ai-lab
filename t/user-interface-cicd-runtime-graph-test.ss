@@ -6,17 +6,17 @@
 ;;; Boundary: tests inspect the user-facing Funflow CI/CD dependency graph.
 ;;; Invariant: graph projection stays declarative and runtime-free.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        (only-in :poo-flow/modules/workflow/cicd-runtime-command-config
-                 poo-flow-user-config-workflow-cicd-runtime-readiness
-                 poo-flow-user-config-workflow-cicd-runtime-command-manifests
-                 poo-flow-user-workflow-cicd-runtime-command-manifest-summaries
-                 poo-flow-user-workflow-cicd-runtime-command-manifest-agreement)
-        (only-in :poo-flow/modules/workflow/funs
-                 poo-flow-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi)
+        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime-command-config
+                 agentic-ai-lab-user-config-workflow-cicd-runtime-readiness
+                 agentic-ai-lab-user-config-workflow-cicd-runtime-command-manifests
+                 agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-summaries
+                 agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-agreement)
+        (only-in :agentic-ai-lab/modules/workflow/funs
+                 agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi)
         (only-in "./support/user-interface-cicd-runtime-fixture"
                  user-interface-cicd-runtime-fixture-config))
 
@@ -35,13 +35,13 @@
 (def (user-interface-cicd-runtime-graph-context)
   (let* ((config (user-interface-cicd-runtime-fixture-config))
          (readiness-rows
-          (poo-flow-user-config-workflow-cicd-runtime-readiness config))
+          (agentic-ai-lab-user-config-workflow-cicd-runtime-readiness config))
          (readiness
           (car readiness-rows))
          (checks
           (user-interface-cicd-runtime-graph-alist-ref readiness 'checks))
          (manifest-maps
-          (poo-flow-user-config-workflow-cicd-runtime-command-manifests
+          (agentic-ai-lab-user-config-workflow-cicd-runtime-command-manifests
            config))
          (manifest-map
           (car manifest-maps))
@@ -59,16 +59,16 @@
            'manifests))
          (build-manifest (car manifests))
          (manifest-summaries
-          (poo-flow-user-workflow-cicd-runtime-command-manifest-summaries
+          (agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-summaries
            manifest-maps))
          (agreement
-          (poo-flow-user-workflow-cicd-runtime-command-manifest-agreement
+          (agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-agreement
            manifest-maps
            manifest-summaries))
          (agreement-rows
           (user-interface-cicd-runtime-graph-alist-ref agreement 'rows))
          (handoff-abi
-          (poo-flow-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi
+          (agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi
            manifest-map))
          (handoff-entries
           (user-interface-cicd-runtime-graph-alist-ref
@@ -225,7 +225,7 @@
                                                          'package-edge)))
     (check-equal?
      (user-interface-cicd-runtime-graph-alist-ref manifest-map 'kind)
-     'poo-flow.workflow.cicd.runtime-command-manifest-map)
+     'agentic-ai-lab.workflow.cicd.runtime-command-manifest-map)
     (check-equal?
      (user-interface-cicd-runtime-graph-alist-ref dependency-graph 'nodes)
      '(build test package))
@@ -420,8 +420,8 @@
 ;;; rows used for runtime manifest handoff, without executing the adapter.
 ;; : TestSuite
 (def user-interface-cicd-runtime-graph-test
-  (test-suite "poo-flow user interface cicd runtime graph"
-    (poo-flow-test-case "keeps workflow CI/CD graph projection inspectable"
+  (test-suite "agentic-ai-lab user interface cicd runtime graph"
+    (yuanxu-test-case "keeps workflow CI/CD graph projection inspectable"
       (let (context (user-interface-cicd-runtime-graph-context))
         (check-cicd-runtime-readiness! context)
         (check-cicd-dependency-graph! context)

@@ -5,57 +5,57 @@
 
 ;;; Boundary: CubeSandbox module objects.
 
-(import :core/module-system/schema/interface
-        :poo-flow/modules/sandbox-core/shared-object
-        :poo-flow/modules/sandbox-core/backend-object-syntax
-        :poo-flow/modules/sandbox-core/objects
-        :poo-flow/modules/sandbox-core/resource-contract)
+(import :yuanxu/module-system/schema/interface
+        :agentic-ai-lab/modules/sandbox-core/shared-object
+        :agentic-ai-lab/modules/sandbox-core/backend-object-syntax
+        :agentic-ai-lab/modules/sandbox-core/objects
+        :agentic-ai-lab/modules/sandbox-core/resource-contract)
 
-(export poo-flow-cubeSandbox-object
-        poo-flow-cubeSandbox-backend-capability
-        poo-flow-cubeSandbox-backend-capability-registry
-        poo-flow-cubeSandbox-profile-object
-        poo-flow-cubeSandbox-module-objects)
+(export agentic-ai-lab-cubeSandbox-object
+        agentic-ai-lab-cubeSandbox-backend-capability
+        agentic-ai-lab-cubeSandbox-backend-capability-registry
+        agentic-ai-lab-cubeSandbox-profile-object
+        agentic-ai-lab-cubeSandbox-module-objects)
 
 ;;; CubeSandbox object data names backend defaults only; adapter execution and
 ;;; snapshot materialization stay outside this module.
 (defpoo-sandbox-backend-object-family
-  poo-flow-cubeSandbox-object
-  poo-flow-cubeSandbox-backend-capability
-  poo-flow-cubeSandbox-backend-capability-registry
-  poo-flow-cubeSandbox-profile-object
-  poo-flow-cubeSandbox-module-objects
+  agentic-ai-lab-cubeSandbox-object
+  agentic-ai-lab-cubeSandbox-backend-capability
+  agentic-ai-lab-cubeSandbox-backend-capability-registry
+  agentic-ai-lab-cubeSandbox-profile-object
+  agentic-ai-lab-cubeSandbox-module-objects
   (sandbox objects.cubeSandbox.sandbox
            objects.cubeSandbox
            objects.shared.sandbox
-           ((backend PooFlowModuleSymbolType override 'cube '((scope . cubeSandbox)))
-            (profile PooFlowModuleSymbolType override 'default '((scope . cubeSandbox)))))
+           ((backend YuanxuModuleSymbolType override 'cube '((scope . cubeSandbox)))
+            (profile YuanxuModuleSymbolType override 'default '((scope . cubeSandbox)))))
   (backend cube
-           poo-flow-sandbox-backend-capability/cube
+           agentic-ai-lab-sandbox-backend-capability/cube
            '((aliases . ((cubeSandbox . cube)))
              (metadata . ((scope . cubeSandbox)
                           (runtime-executed . #f)))))
   (profile objects.cubeSandbox.profile
            cubeSandbox
            objects.sandbox-core.profile
-           (poo-flow-sandbox-core-profile-object
-            poo-flow-cubeSandbox-object)
-           ((backend-kind PooFlowModuleSymbolType override 'cube
+           (agentic-ai-lab-sandbox-core-profile-object
+            agentic-ai-lab-cubeSandbox-object)
+           ((backend-kind YuanxuModuleSymbolType override 'cube
                           '((scope . cubeSandbox)
                             (owned-by . module-config)))
-            (backend-ref PooFlowModuleSymbolType override 'cubeSandbox
+            (backend-ref YuanxuModuleSymbolType override 'cubeSandbox
                          '((scope . cubeSandbox)
                            (owned-by . module-config)))
-            (capabilities PooFlowModuleListType override
+            (capabilities YuanxuModuleListType override
                           '(process-run filesystem-read cache-mount)
                           '((scope . cubeSandbox)
                             (dsl-row . capabilities)))
-            (backend-capability PooFlowModuleObjectType override
-                                poo-flow-cubeSandbox-backend-capability
+            (backend-capability YuanxuModuleObjectType override
+                                agentic-ai-lab-cubeSandbox-backend-capability
                                 '((scope . cubeSandbox)
                                   (owned-by . module-config)))
-            (resource-policy PooFlowModuleListType override
-                             (poo-flow-sandbox-filesystem-prototype->resource-policy
-                              poo-flow-snapshot-filesystem-prototype)
+            (resource-policy YuanxuModuleListType override
+                             (agentic-ai-lab-sandbox-filesystem-prototype->resource-policy
+                              agentic-ai-lab-snapshot-filesystem-prototype)
                              '((scope . cubeSandbox)
                                (dsl-row . resources))))))

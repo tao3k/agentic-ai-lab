@@ -25,7 +25,7 @@
 (def +poo-performance-benchmark-receipt-family+
   (.o (kind 'poo-performance-family)
       (name 'poo-performance-benchmark-receipt-family)
-      (source 'poo-flow.performance.benchmark)))
+      (source 'agentic-ai-lab.performance.benchmark)))
 
 ;; : (-> String Alist)
 (def (poo-performance-load-fixture path)

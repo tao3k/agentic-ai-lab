@@ -56,10 +56,10 @@ def collect_errors(root: Path = ROOT) -> list[str]:
     try:
         module_version = regex_value(
             root / "MODULE.bazel",
-            r'module\(\s*name\s*=\s*"poo_flow"\s*,\s*version\s*=\s*"([^"]+)"',
+            r'module\(\s*name\s*=\s*"agentic_ai_lab"\s*,\s*version\s*=\s*"([^"]+)"',
             "MODULE.bazel",
         )
-        expect(errors, "MODULE.bazel poo_flow version", module_version, version)
+        expect(errors, "MODULE.bazel agentic_ai_lab version", module_version, version)
 
         toml_versions = (
             ("bindings/cedar-gerbil/Cargo.toml", ("workspace", "package", "version")),
@@ -89,27 +89,27 @@ def collect_errors(root: Path = ROOT) -> list[str]:
         )
 
         pkgconfig_version = regex_value(
-            root / "bindings/runtime-c/pkgconfig/poo-flow-runtime-v0.pc",
+            root / "bindings/runtime-c/pkgconfig/agentic-ai-lab-runtime-v0.pc",
             r"^Version:\s*(\S+)$",
             "runtime-v0 pkg-config",
         )
         expect(errors, "runtime-v0 pkg-config", pkgconfig_version, version)
 
-        scheme_path = root / "src/contract/runtime-v0-abi-schema.ss"
+        scheme_path = root / "modules/workflow/contracts/runtime-v0-abi-schema.ss"
         scheme_major = int(regex_value(scheme_path, r"\(abi-major\s+([0-9]+)\)", "Scheme ABI major"))
         scheme_minor = int(regex_value(scheme_path, r"\(abi-minor\s+([0-9]+)\)", "Scheme ABI minor"))
         expect(errors, "Scheme ABI major", scheme_major, major)
         expect(errors, "Scheme ABI minor", scheme_minor, minor)
 
-        python_path = root / "packages/python-runtime/src/poo_flow_runtime/_protocol_person_abi_schema.py"
+        python_path = root / "packages/python-runtime/src/agentic_ai_lab_runtime/_protocol_person_abi_schema.py"
         python_major = int(regex_value(python_path, r"^ABI_MAJOR\s*=\s*([0-9]+)$", "Python ABI major"))
         python_minor = int(regex_value(python_path, r"^ABI_MINOR\s*=\s*([0-9]+)$", "Python ABI minor"))
         expect(errors, "Python ABI major", python_major, major)
         expect(errors, "Python ABI minor", python_minor, minor)
 
-        header_path = root / "bindings/runtime-c/include/poo_flow/runtime_v0_contract.h"
-        header_major = int(regex_value(header_path, r"^#define POO_FLOW_RUNTIME_V0_ABI_MAJOR ([0-9]+)u$", "C ABI major"))
-        header_minor = int(regex_value(header_path, r"^#define POO_FLOW_RUNTIME_V0_ABI_MINOR ([0-9]+)u$", "C ABI minor"))
+        header_path = root / "bindings/runtime-c/include/agentic_ai_lab/runtime_v0_contract.h"
+        header_major = int(regex_value(header_path, r"^#define AGENTIC_AI_LAB_RUNTIME_V0_ABI_MAJOR ([0-9]+)u$", "C ABI major"))
+        header_minor = int(regex_value(header_path, r"^#define AGENTIC_AI_LAB_RUNTIME_V0_ABI_MINOR ([0-9]+)u$", "C ABI minor"))
         expect(errors, "C ABI major", header_major, major)
         expect(errors, "C ABI minor", header_minor, minor)
 

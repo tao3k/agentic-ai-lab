@@ -3,11 +3,11 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 #+title: Org Zhixing LaTeX and Typst Rendering
-#+author: POO Flow
+#+author: Agentic AI Lab
 
 * Purpose
 
-This document is a rendering smoke test for viewing the POO Flow documentation
+This document is a rendering smoke test for viewing the Agentic AI Lab documentation
 corpus with the Org Zhixing =documents= theme.
 
 * LaTeX mathematics
@@ -31,7 +31,7 @@ $
 #set page(width: 12cm, height: auto, margin: 1cm)
 #set text(size: 13pt)
 
-= POO Flow
+= Agentic AI Lab
 
 Composable control planes should remain readable as technical documents.
 
@@ -43,5 +43,5 @@ $ integral_0^1 x^2 dif x = 1/3 $
 Run this from the Org Zhixing workspace:
 
 #+begin_src sh
-direnv exec . just documents-poo-flow 5198
+direnv exec . just documents-agentic-ai-lab 5198
 #+end_src

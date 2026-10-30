@@ -1,0 +1,168 @@
+#+title: Provider schema conversion fixtures
+
+* Final-configuration build selection
+
+=family-schemas.nix= is a lazy catalog, not a mandatory build list.
+=provider-artifacts.nix= requires =selection.providers= and selects catalog
+values before passing them to =linkFarm=. The control below gets that selection
+from the final native configuration; users do not repeat SelectedTypes.
+
+#+begin_src sh
+just test-opentofu-build-demand /private/tmp/opentofu-selected-request.json
+nix-build --no-out-link -E 'let pkgs = import <nixpkgs> {}; in import ./t/fixtures/opentofu/selected-artifacts.nix { inherit pkgs; selectionFile = /private/tmp/opentofu-selected-request.json; }'
+just test-opentofu-selected-artifact COLLECTION_OUTPUT
+nix-instantiate --eval --strict --json -E 'import ./t/fixtures/opentofu/build-selection-checks.nix { pkgs = import <nixpkgs> {}; }'
+#+end_src
+
+=check-build-selection.py= compares the actual selected and all-family derivation
+closures, including unique excluded Provider dependencies. Already-present store
+outputs are not exclusion evidence. =selected-build-control.json= records the
+actual local qualification and limitations. Loader/Module-graph attachment is
+not implemented. The package pins remain the existing fixture pins; this local
+<nixpkgs> control is not a new production lockfile.
+
+* One collection input
+
+Current multi-Provider recipes accept one =COLLECTION_OUTPUT= from
+=family-artifacts.nix=. =AGENTIC_AI_LAB_OPENTOFU_ARTIFACT= denotes this Nix link-farm
+directory, not a single Provider output. The default OpenTofu object projects
+its immediate names into lazy native =modules= slots. No per-Provider environment
+variables or manual Scheme declarations are required. The older per-family
+test transport described below is historical; current commands are:
+
+#+begin_src sh
+just test-opentofu-artifact-collection COLLECTION_OUTPUT
+just test-opentofu-indexed-inputs COLLECTION_OUTPUT
+just test-opentofu-configuration-discovery COLLECTION_OUTPUT
+#+end_src
+
+* Current indexed artifact format
+
+The current module reader accepts only =yuanxu/provider-schema-v2= artifacts.
+The Nix producer generates hashed kind indexes and per-type inputs; runtime
+never reads the retained audit =schema.json=. Rebuild old Nix outputs rather
+than using a legacy reader fallback. =aws-5.100.0/= now includes v2 indexes and
+two real selected input entries; its historical audit Schema stays unchanged.
+It is still a selected-subtree fixture, not a complete new Provider export.
+
+Development injection is the single collection =AGENTIC_AI_LAB_OPENTOFU_ARTIFACT=.
+Per-family environment variables have been removed. The
+=test-opentofu-indexed-inputs= gate tests actual Nix outputs, selected IO,
+tamper/missing-input rejection and matched whole-export Contract semantics.
+Historical receipts below keep their original artifact paths and hashes.
+
+These are selected *block* subtrees, not complete provider schemas and not a
+fresh OpenTofu export. Extraction retains every field in the selected subtree.
+
+* AWS Security Group
+
+Source: https://github.com/hashicorp/terraform-json/blob/176c29554e7823cce59f3b8151348e8088fbdc01/testdata/basic/schemas.json
+Original SHA-256: adda4401ec56476512c482f8116f8aeafad25c10f7a99a87f1d0cf5a92df36ec
+Path: provider_schemas.aws.resource_schemas.aws_security_group.block
+Format version: 0.1. The fixture does not identify the provider plugin version.
+=ingress= is a cty set-of-object attribute, not a nested block.
+
+The separately inspected AWS provider v5.100.0
+=internal/service/ec2/vpc_security_group.go= uses =securityGroupRuleHash=.
+That source is evidence that JSON Schema uniqueness is insufficient, not a
+claim that the historical JSON export has that provider version. The converter
+therefore refuses to establish object-set identity without additional evidence.
+
+* AWS CloudControl (awscc)
+
+Source: https://github.com/hashicorp/terraform-json/blob/d1018bf93fd9c097133b0159ab8b3c0517a846c9/testdata/nested_attributes/schemas.json
+Original SHA-256: a49236279f96c6d2bffaa6960b75a08567471857d28463038b080b7c8c19a0e4
+Path: provider_schemas[registry.terraform.io/hashicorp/awscc].provider.block
+Format version: 0.2. =assume_role.nested_type= has nesting_mode =single=.
+This is a distinct provider from hashicorp/aws.
+
+* Synthetic controls
+
+Tuple, collection bounds and computed-only fixtures in the test are explicitly
+synthetic. The downloaded AWS example has no tuple or nested_type occurrences.
+No test invokes a provider, downloads a schema, or deploys resources.
+
+* AWS 5.100.0: actual source-qualified control
+
+=aws-5.100.0/= is separate from the older unversioned fixture above. It contains
+the complete selected IAM Group Membership and Security Group schemas exported
+from the acquired darwin_arm64 plugin, the reviewed provider/SDK source files,
+official release metadata/signature/key, provider lock, and structured hash
+controls. Core's =modules/services/opentofu/config.ss= pins the source byte identities.
+
+The real plugin was acquired by OpenTofu 1.12.6; signature key ID
+=34365D9472D7468F=. Its key is currently expired: this is an explicitly pinned
+historical-signature control, not a claim of current signer validity.
+The immutable AWS source commit is =f7a3b98da589ab1d52756b0dcee0dbf2de83d635=,
+with plugin SDK 2.36.1 at =7b9b1111b68d597dccb33fdc8ac4904d8a122f44=.
+
+=hash-control.tf= and =provider-control.tf= are acquisition/control fixtures,
+not a new Scheme user interface. A local no-refresh plan used placeholder
+credentials and disabled credential/account/metadata/region checks. No apply
+or resource deployment was performed. Only selected structured values from its
+result appear in =hash-controls.json=; raw logs/plans/binaries are not committed.
+The rule CRC value in that JSON is an independent checksum of the source-defined
+preimage, not a hash explicitly returned by the provider RPC.
+
+The native binary gate requires the actual acquired executable. Offline source
+and Schema tests never claim to repeat that binary/signature acquisition.
+See Core Config Languages chapter 44 for exact digests and trust boundaries.
+
+* Configuration admission versus actual Provider validation
+
+=aws-5.100.0/admission/= contains complete pinned Terraform configurations and
+selected structured offline =tofu validate -json= results. The actual 5.100.0
+plugin accepts the valid rule and rejects wrong port types, missing rule ports
+and CIDR host bits. Native tests intentionally retain the latter two exported
+Schema gaps. Collection identity is checked separately from ordinary =.admit=;
+an unresolved custom hash is not a malformed configuration. No apply was run.
+
+* Package boundary
+
+The fixed AWS release pin moved from Core runtime config.ss to =release.ss=.
+=qualification.ss= and =request-types.ss= are test-only owners of the historical
+source/binary controls; the Core interface no longer exports that facade.
+=package.nix= packages the official archive with a fixed checksum for the matched
+aarch64-darwin control. The generic Core Nix producer exports Schema plus a
+small manifest; =manifest.json= beside the checked-in selected Schema is a
+regression input for the same public artifact consumer. Its digest is byte
+consistency, not a signature or an independent Provider trust root.
+
+* Three real Provider family outputs
+
+=family-schemas.nix= selects the actual AWS 5.100.0, awscc 1.77.0 and Null 3.2.4
+package derivations. The latter two official archives are pinned in this test
+graph and packaged by =hashicorp-package.nix=. All three reuse the Core schema
+producer. Neither the unversioned historical awscc sample nor a renamed resource
+serves as a substitute. The control is currently aarch64-darwin-only; raw plugin
+binaries, generated full schemas and test logs stay outside source control.
+
+The =test-opentofu-configuration-families= Just recipe consumes the same three
+outputs. It admits one full provider/resource/data configuration, checks real
+equal-name isolation and complete error paths, and confirms unselected AWS and
+awscc Contracts remain uncompiled. It does not execute an OpenTofu plan.
+
+The =test-opentofu-configuration-discovery= recipe uses those same actual
+artifacts with the object-layer =OpenTofuConfiguration.= entrypoint. It removes
+manual SelectedTypes, resolves only final candidate names, calls the original
+native child Contracts and preserves full diagnostic paths and package sources.
+It also checks an unforced throwing module binding, the real Contract cache,
+new type discovery after parent caching and a child's replacement registry.
+
+* Core graph and Nix Source handoff
+
+=just test-opentofu-selected-graph= uses the existing heap-fenced harness and a
+real Nix daemon. It exercises the selected consumer Module's external package
+contribution directly from config.ss: AWS-only -> add Null -> regenerate the
+Graph -> materialize/build/admit, with no manual JSON/Nix/injection phases.
+It retains exact source observations, Nix-owned source checks and derivation
+currentness guards. =selected-graph-control.json= records focused qualification;
+AWS design-source files are not claimed as executed deployment modules.
+
+* Ownership after relocation
+
+This fixture directory is owned by the Core submodule. Commands above run from
+the Core root. Nix imports resolve to modules/services/opentofu inside Core, not the POO
+Flow product. Historical JSON receipts retain original source paths and outcomes;
+their relocation is not a new validation. Current controls run through Core's
+Justfile and t/qualification/opentofu.

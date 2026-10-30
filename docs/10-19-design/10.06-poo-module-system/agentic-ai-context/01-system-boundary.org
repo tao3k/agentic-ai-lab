@@ -1,0 +1,160 @@
+#+title: Agentic AI Context: Overall System Responsibilities and Lifecycles
+#+date: [2026-10-25]
+#+language: en
+#+property: STATUS org-derived-architecture-review
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Direction and existing design
+
+=ai-agentic-context= manages the Agent's overall information context: content,
+interaction history, situated working Context and retained short-/long-term
+knowledge. A model input/prompt is one bounded projection of this system.
+Session remains an independent Module. Context composes its descriptor and
+owns integration adapters; Session independently owns interaction protocols,
+identity, scheduling and event/turn/Attempt lineage.
+
+This follows the user's clarified direction and the existing Org design,
+including the generic Graph Context lifecycle. See the
+[[file:00-design-map.org][inspected-source and SysML allocation map]] for inherited decisions, historical
+ownership corrections, source roles and remaining scope. This review does not
+replace those semantic owners or claim implementation of proposed protocols.
+
+* Evidence-chain semantic foundation
+
+The existing ASCENT-backed temporal-causality Module is the primary inference
+and current-applicability foundation. Context retains original proof,
+Derivation/premise, rule-program/journal and current registered support/policy
+bindings, then coordinates dependency-driven invalidation and Impact refresh.
+Time/leases are inputs to that evidence-bearing model, not its definition.
+Possible hypotheses, retained proof history and current effect permission have
+different meanings. See [[file:05-concurrent-evidence-lifecycle.org][evidence-driven concurrency and native owner mapping]].
+
+* Responsibilities and dependencies
+
+The [[file:01-system-boundary.sysml][boundary model]] distinguishes the following responsibilities:
+
+| Responsibility | Context system coordination | Independent semantic boundary |
+|----------------+-----------------------------+-------------------------------|
+| Content | Source-qualified information and external-artifact references | Orgize owns Org Elements/Contract; unified POO Query/GQL selects through the ORG content window |
+| Graph Context | Compose Project roots and Worktree/domain/task increments, preserve exact cuts and alternatives | Native POO/LeanPOO C3/C4 governs declared inheritance; Git, evidence, revision and consumer edges remain distinct |
+| Working projection | Select a bounded task/turn input with evidence, restrictions and completeness | Prompt order is not composition precedence, chronology or authorization |
+| Interaction history | Bind, select, index and reproject canonical Session events | Session owns original events, branch/turn/Attempt revisions and outcomes |
+| Knowledge/Memory | Capture, reassess, retain, retrieve, consolidate and revise short-/long-term knowledge | Memory is the Context-owned retention Feature; long-term interpretation requires lineage, assumptions, outcomes and defeat conditions |
+| Evidence-driven current use | Bind original proof/premises and current source/journal/program/support/policy/consumer checks | Existing ASCENT-backed temporal-causality, proof Host and support/Impact owners retain inference/applicability; Authority owns grants |
+| Execution/durability | Produce explicit handoff intents and coordinate results/recovery | Host/runtime/provider execute; MRR Data owns conditional durable transactions and resources |
+
+The source dependency is Context -> independent Session descriptor. Session
+preserves its own generic =SessionInputRef= bindings without importing Context's
+implementation. Data flowing from a Context-produced input into a Session does
+not create a reverse source dependency. The SysML input-ref definition is an
+architectural subset, not a replacement ABI.
+
+A selected Session descriptor does not mean an active Session instance. Source
+projection and ordinary recall need no active Session history. Memory activation
+does not start a scheduler or durable store. Without retained Memory, Context
+still handles transient observations and working projections. All information
+categories are within its coordination scope; each operation selects only the
+permitted relevant closure, not the entire repository or transcript.
+
+* Lifecycle as independent activities and state axes
+
+The [[file:02-lifecycle.sysml][lifecycle model]] allocates the activities already described in Org 43.01:
+
+| Activity | Product/binding | Preserved distinction |
+|----------+-----------------+-----------------------|
+| Form | Situated Context revision from demand-led Query and graph composition | Captured is not accepted |
+| Use | Exact input, actual attempt/environment and observed outcome | Retrieved/displayed/applied/successful differ |
+| Reassess | Current relevance, credibility, applicability, retention value, uncertainty and authority observations | Age or one confidence score cannot replace these dimensions |
+| Consolidate | New reusable interpretation with origin/use/contrary-evidence/assumption links | Short-to-long is not text aging, read count or an irreversible truth bit |
+| Retrieve | Candidate for a new question/scope, requiring current assessment | Retained is not currently applicable or authorized |
+| Revise/withdraw | Successor assessment/interpretation with historical lineage | Retirement, correction and authorized deletion differ |
+
+These activities can recur and branch. Working Context can be retained without
+consolidation. A long-term interpretation can seed a new working slice or be
+challenged. Failed or uncertain consolidation leaves original observations
+attributable. Writing an interpretation into Org is a separately authorized
+expected-revision mutation followed by a new parse/Query cycle.
+
+Selected explicit state axes are:
+
+- Projection: proposed -> admitted -> prepared, with invalidated, superseded
+  and terminal retired branches. New cuts create successor immutable revisions.
+- Session: open -> closing -> closed, abstracting its finer protocol phases;
+  closure requires qualified terminal/isolation and resource evidence.
+- Attempt: claimed -> disclosed -> result-received -> admitted, with independent
+  invalidation and recovery/reconciliation branches. Retry uses a fresh Attempt.
+- Revisit: scheduled -> due -> claimed -> completed/deferred -> rescheduled;
+  publication requires the current claim generation and fresh assessment.
+
+Evidence verdict, retention assessment and short-/long-term horizon are separate
+coordinates. Revisit completion changes none automatically. Source lineage,
+proof applicability, strategy, effect ambiguity and durable-head/CAS state also
+remain distinct axes with their existing owners. This subset expands selected
+axes; it does not encode the complete joint protocol in one enum.
+
+* Concrete lifecycle crossings
+
+1. A task selects ORG-bound source/Contract cuts and declared graph inputs.
+   Context constructs/admit a bounded projection, then prepares its joint use
+   envelope. Preparation is not future permission to dispatch.
+2. Context coordinates the independent Session Attempt; Host rechecks the exact
+   current envelope at dispatch admission. Source/grant changes invalidate use.
+3. A matching response is retained as an observation even if result admission
+   fails. Invalidation requests cancellation/isolation and preserves outstanding
+   obligations; a late response cannot revive current acceptance.
+4. Recovery reconciles the exact old Attempt with actual terminal/isolation and
+   resource evidence. It does not restore an old allow flag or reopen a closed
+   Session. Any retry gets fresh identity and current inputs.
+5. Observed use/failure/counterevidence may support reassessment or a new scoped
+   abstraction. Later recall rechecks the new question, current sources and
+   applicability; shared Project content transfers neither grants nor another
+   Session's review or success observations.
+
+Two local checks around provider I/O are not a distributed transaction. Full
+support/retraction, publication fences, physical-resource and provider-idempotency
+qualification remain the obligations named in the existing Org contracts.
+
+* Connected information-to-recall process
+
+[[file:03-information-to-recall.org][Information to recall]] connects source entry, working Context formation,
+Session-bound use, capture, reassessment, optional consolidation and new-demand
+recall with explicit owner crossings. Its [[file:03-information-to-recall.sysml][activity model]] supplies control
+successions, typed item flows and accepted/historical and consolidation/episode
+branches, complementing the separate state axes in 02.
+
+* Executable scenario refinement
+
+[[file:04-executable-scenarios.org][Executed admission/handoff scenarios]] use concrete state transitions and
+explicit verification verdicts, supplementing structural validation with
+positive, refused and deliberately unsafe controls. See that receipt for
+execution results and its finite modeling boundary.
+
+* Native replay and related research
+
+[[file:06-native-proof-support-replay.org][Native proof/support/Session replay]] records executed original ASCENT and
+Scheme observations, a bypass counterexample and explicit remaining publication
+obligations. [[file:07-context-literature-comparison.org][The CLM / memory research comparison]] separates architectural
+differentiation from task-quality, cost and novelty claims requiring evaluation.
+
+* Local CLI validation
+
+Checked using =sysml v0.10.1=, commit
+=1c45b6e1749fc8adc9b82d4af22fbe180b56a0e2=:
+
+#+begin_src sh
+sysml -strict -validate -self-check -no-record-cache \
+  docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+#+end_src
+
+Before adding 04: exit 0; no model errors. Self-model check reported 683 elements,
+5,956 checks, 0 violations and 0 unevaluated checks. All files are loaded together
+so cross-package references are resolved in the same model.
+
+This is the installed CLI's strict validation and reflective self-model result,
+not requirement satisfaction, state-trace exploration, universal proof or native
+implementation qualification. Accepted-event names abbreviate qualified owner
+observations; the model does not authenticate receipts or execute atomic fences.
+No Scheme implementation changed or Scheme/Quint/Lean tests ran in this review.

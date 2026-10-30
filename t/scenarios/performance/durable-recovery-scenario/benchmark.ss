@@ -17,7 +17,7 @@
  (sourcePath . "t/scenarios/performance/durable-recovery-scenario/benchmark.ss")
  (purpose . "observe crash/replay/repair scenario projection into bounded handoff rows")
  (feature . durable-recovery-scenario)
- (rule . POO-FLOW-DURABLE-RECOVERY-SCENARIO-PERFORMANCE-001)
+ (rule . AGENTIC-AI-LAB-DURABLE-RECOVERY-SCENARIO-PERFORMANCE-001)
  (optimizationFocus . "defstruct receipt projection with one bounded alist handoff")
  (inputShape . "ninety-six durable recovery scenario receipts projected from shared runtime-store and memory durable job rows")
  (expectedOutcome . "the durable-recovery-scenario scenario preserves its declared semantic result under the ASP P95 gate")

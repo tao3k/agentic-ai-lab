@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: why/why-not explanation: Why and why-not are provenance queries
+#+STATUS: paper reading; recursive and Agent semantics remain open
+#+DATE: 2026-09-30
+#+FILETAGS: :research:agent:provenance:
+
+* Source
+:PROPERTIES:
+:CUSTOM_ID: agent-why-why-not-explanation
+:SOURCE_PDF: https://arxiv.org/pdf/1808.05752
+:DOI: 10.1007/s00778-018-0518-5
+:END:
+
+Seokki Lee, Bertram Ludäscher, Boris Glavic, /PUG: A Framework and
+Practical Implementation for Why & Why-Not Provenance/ (extended
+version, 2018).  PDF page numbers below use the 32-page extended PDF.
+
+* Evidence ledger
+
+#+NAME: why-why-not-explanation-evidence
+| PDF locator | Author result | Transfer hypothesis | Boundary |
+|-------------+---------------+---------------------+----------|
+| Abstract; §1, PDF pp. 2–3 | Why and why-not questions ask for relevant provenance, not just result rows | Make =explain= a separate bounded query | Paper treats nonrecursive first-order Datalog with negation |
+| §3, PDF pp. 6–8 | Provenance question specifies a tuple pattern and why/why-not | Make goal, polarity, bindings, snapshot and limits explicit | Infinite or open domains need an explicit grounding bound |
+| §§4–5 | Rewrite into a query computing only the relevant explanation subgraph | Avoid dumping entire derivation state into Agent context | Scheme evaluator has no equivalent general rewrite today |
+
+* Assessment for gerbil-ascent
+
+Returning a row is not an explanation.  A why answer needs a valid rule
+instance and supporting source rows.  A why-not answer must declare
+its domain, which missing premise or failed rule is being discussed,
+and whether the search was complete.  For recursive rules, a single
+finite witness can be useful but does not claim all provenance; the
+PUG theorem is not a recursive provenance theorem for this Library.
+Canonical semantic lineage and fact admission remain with MRR.
+
+* Experiment
+
+On a finite diamond graph with two paths to one goal, demand one
+witness and then all bounded alternatives; remove one edge and retain
+the surviving path.  For an absent goal, require a domain-bounded gap
+and distinguish =no derivation under complete snapshot= from
+=not evaluated/partial=.  Compare every explanation with the actual
+rule/source graph before sending it to an Agent.
+
+[[file:index.org][Research index]].

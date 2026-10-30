@@ -9,9 +9,9 @@
 (import (only-in :clan/poo/object .o .ref object<-alist)
         (only-in :std/list/list delete-duplicates/hash)
         (only-in :std/list/list append-map)
-        :poo-flow/modules/workflow/flows-alignment-specs)
+        :agentic-ai-lab/modules/workflow/flows-alignment-specs)
 
-(export poo-flow-funflow-tutorial-alignment-report)
+(export agentic-ai-lab-funflow-tutorial-alignment-report)
 
 ;;; Boundary: alignment status count increment is the policy-visible edge for
 ;;; workflow behavior, keeping validation, lookup, or projection
@@ -35,7 +35,7 @@
     (alignment-status-counts/loop
      (cdr specs)
      (alignment-status-count-increment
-      (poo-flow-funflow-tutorial-alignment-spec-status (car specs))
+      (agentic-ai-lab-funflow-tutorial-alignment-spec-status (car specs))
       counts))))
 
 ;; : (-> [PooObject] Alist)
@@ -57,7 +57,7 @@
     ids-rev
     (alignment-spec-ids/rev
      (cdr specs)
-     (cons (poo-flow-funflow-tutorial-alignment-spec-id (car specs))
+     (cons (agentic-ai-lab-funflow-tutorial-alignment-spec-id (car specs))
            ids-rev))))
 
 ;; : (-> [PooObject] [Symbol])
@@ -75,7 +75,7 @@
    (else
     (alignment-deferred-ids/rev
      (cdr specs)
-     (cons (poo-flow-funflow-tutorial-alignment-spec-id (car specs))
+     (cons (agentic-ai-lab-funflow-tutorial-alignment-spec-id (car specs))
            ids-rev)))))
 
 ;; : (-> [PooObject] [Symbol])
@@ -98,7 +98,7 @@
 
 ;;; Boundary: gate proof count summarizes local verification coverage only.
 ;;; It does not replace executing the tests listed in the proof catalog.
-;; : (-> [PooFlowAlignmentGateProof] Integer Integer)
+;; : (-> [AgenticAILabAlignmentGateProof] Integer Integer)
 (def (alignment-gate-proof-count/loop gate-proofs count)
   (if (null? gate-proofs)
     count
@@ -107,7 +107,7 @@
      (+ count
         (length (alignment-gate-proof-commands (car gate-proofs)))))))
 
-;; : (-> [PooFlowAlignmentGateProof] Integer)
+;; : (-> [AgenticAILabAlignmentGateProof] Integer)
 (def (alignment-gate-proof-count gate-proofs)
   (alignment-gate-proof-count/loop gate-proofs 0))
 
@@ -198,7 +198,7 @@
   (cond
    ((null? specs) specs-rev)
    ((eq? status
-         (poo-flow-funflow-tutorial-alignment-spec-status (car specs)))
+         (agentic-ai-lab-funflow-tutorial-alignment-spec-status (car specs)))
     (alignment-specs-with-status/rev
      status
      (cdr specs)
@@ -216,7 +216,7 @@
     statuses-rev
     (alignment-spec-statuses/rev
      (cdr specs)
-     (cons (poo-flow-funflow-tutorial-alignment-spec-status (car specs))
+     (cons (agentic-ai-lab-funflow-tutorial-alignment-spec-status (car specs))
            statuses-rev))))
 
 ;; : (-> [PooObject] [Symbol])
@@ -349,7 +349,7 @@
 ;; : (-> Alist Alist)
 (def (alignment-ci-receipt-manifest handoff-readiness-summary)
   (list (cons 'schema
-              'poo-flow.modules.funflow.tutorial-alignment.ci-receipts.v1)
+              'agentic-ai-lab.modules.funflow.tutorial-alignment.ci-receipts.v1)
         (cons 'expected-status 'pass)
         (cons 'runtime-executed #f)
         (cons 'handoff-readiness-summary handoff-readiness-summary)
@@ -379,13 +379,13 @@
 (def (alignment-user-interface-handoff-result-gate)
   (list
    (cons 'schema
-         'poo-flow.modules.funflow.tutorial-alignment.user-interface-handoff-gate.v1)
+         'agentic-ai-lab.modules.funflow.tutorial-alignment.user-interface-handoff-gate.v1)
    (cons 'gate-id 'stage-23-user-interface-marlin-handoff-projection)
    (cons 'presentation-field 'workflow-cicd-marlin-runtime-handoff-abis)
    (cons 'summary-field 'workflow-cicd-marlin-runtime-handoff-summaries)
    (cons 'bundle-field 'workflow-cicd-marlin-handoff-receipt-bundle)
    (cons 'expected-abi-kind
-         'poo-flow.workflow.cicd.marlin-runtime-handoff-abi)
+         'agentic-ai-lab.workflow.cicd.marlin-runtime-handoff-abi)
    (cons 'expected-bundle-kind
          'workflow-cicd-marlin-handoff-receipt-bundle)
    (cons 'runtime-owner "marlin-agent-core")
@@ -430,7 +430,7 @@
 (def (alignment-runtime-gap-index specs)
   (reverse (alignment-runtime-gap-index/rev specs '())))
 
-;; : (-> [PooFlowAlignmentGateProof] [Symbol] [Symbol])
+;; : (-> [AgenticAILabAlignmentGateProof] [Symbol] [Symbol])
 (def (alignment-gate-proof-ids/rev gate-proofs ids-rev)
   (if (null? gate-proofs)
     ids-rev
@@ -438,7 +438,7 @@
      (cdr gate-proofs)
      (cons (alignment-gate-proof-id (car gate-proofs)) ids-rev))))
 
-;; : (-> [PooFlowAlignmentGateProof] [Symbol])
+;; : (-> [AgenticAILabAlignmentGateProof] [Symbol])
 (def (alignment-gate-proof-ids gate-proofs)
   (reverse (alignment-gate-proof-ids/rev gate-proofs '())))
 
@@ -457,9 +457,9 @@
 ;;; Boundary: aggregate observability is derived only from normalized spec rows.
 ;;; The map keeps row snapshots separate from report-level summary metadata.
 ;; : (-> [PooObject] PooObject)
-(def (poo-flow-funflow-tutorial-alignment-report . maybe-specs)
+(def (agentic-ai-lab-funflow-tutorial-alignment-report . maybe-specs)
   (let* ((specs (if (null? maybe-specs)
-                  (poo-flow-funflow-tutorial-alignment-specs)
+                  (agentic-ai-lab-funflow-tutorial-alignment-specs)
                   (car maybe-specs)))
          (ids-value (alignment-spec-ids specs))
          (source-count-value (length specs))
@@ -467,7 +467,7 @@
          (deferred-ids-value (alignment-deferred-ids specs))
          (proof-count-value (alignment-proof-count specs))
          (gate-proofs-value
-          (poo-flow-funflow-tutorial-alignment-gate-proofs))
+          (agentic-ai-lab-funflow-tutorial-alignment-gate-proofs))
          (gate-ids-value (alignment-gate-proof-ids gate-proofs-value))
          (gate-proof-count-value
           (alignment-gate-proof-count gate-proofs-value))
@@ -491,8 +491,8 @@
           (alignment-user-interface-handoff-result-gate)))
    (object<-alist
     (list
-     (cons 'kind (poo-flow-funflow-tutorial-alignment-report-kind))
-     (cons 'schema (poo-flow-funflow-tutorial-alignment-schema))
+     (cons 'kind (agentic-ai-lab-funflow-tutorial-alignment-report-kind))
+     (cons 'schema (agentic-ai-lab-funflow-tutorial-alignment-schema))
      (cons 'upstream "tweag/funflow")
      (cons 'upstream-revision "356bc675")
      (cons 'audited-surface

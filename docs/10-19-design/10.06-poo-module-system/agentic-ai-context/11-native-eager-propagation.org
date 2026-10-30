@@ -1,0 +1,322 @@
+#+title: Source Withdrawal to Materialized Cross-Session Context Invalidation
+#+date: [2026-10-25 Sun]
+
+* Existing authority and delivered boundary
+
+This implements the source-driven seam left open in [[file:10-scroll-carryon-clm-contract-comparison.org][10]], under the existing
+[[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][joint Context / Temporal lifecycle design: Primary ASCENT architecture; withdrawal; joint envelope]]:
+source corrections retain journal history, reverse planners identify candidate
+affected consumers, and actual owner publication fences their Attempts. The
+[[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][Context / independent Session contracts]] continue to allocate content,
+knowledge and consumer dependencies to Context, while Session owns Attempt
+identity, revision, completed identities and unresolved worker obligations.
+
+The delivered profile is synchronous in-process source-owner propagation for
+registered source-only positive proofs and explicitly enrolled Context dependency
+edges. It does not infer dependencies from arbitrary prose or implement the
+complete Org/Query negative-inventory, temporal-family or distributed lifecycle.
+
+* Native source-to-consumer path
+
+#+begin_example
+proof-host-refresh! admits a complete append-only source journal/catalog
+  -> verified retained ASCENT / Rule / Derivation selected support premises
+  -> native dependency-index / reverse-dependency-plan: source subjects -> proof registrations
+  -> native dependency-index / reverse-dependency-plan: proof registrations -> Contexts -> dependent Contexts
+  -> prepared native Context batches
+  -> source publication + pending-delivery barrier
+  -> materialized Context invalidation and Session recovery obligations
+  -> source refresh returns only after successful synchronous delivery
+#+end_example
+
+There is no caller-supplied affected-Session list at withdrawal. Consumers enroll
+their original proof binding and declared Context dependencies once; the source
+Host computes the affected proof registrations and the Context Host computes the
+consumer closure from its owned graph. Both planners are the existing native
+Temporal functions, not a Python policy reducer.
+
+The normal Context Host constructor enables propagation. Binding a proof installs
+one POO observer per Context Host / proof Host pair. A named enable operation can
+also attach an existing owner, recursively scanning frozen ancestry rather
+than only current heads. A native migration case moves all live heads to another
+proof Host and verifies that a historical-only source still invalidates its
+remaining dependent. The fourth constructor argument explicitly false
+is retained for historical query-only controls and the missing-subscription
+counterexample. Source-only observers are trusted native POO runtime capabilities,
+not wire callbacks or model-authored permission flags.
+
+The source layer derives changed subjects from new immutable journal revisions.
+The selected support inventory comes from replayed original proof admission.
+Catalog changes conservatively affect every registered proof for that source.
+The consumer graph includes exact Context VERSION dependencies, so a consumer
+can be invalidated even though its own direct proof remains supported. A parent
+reference freezes its proof owner, registration, semantic binding digest and
+ancestry; it never follows the parent's latest head. Version and consumer nodes
+are distinct in the native dependency index. Source-generation cursors can
+advance operationally for proven-unchanged bindings without changing those
+frozen semantic references.
+
+* Materialized state and selective continuation
+
+The Context publication pointer now contains Session schedule, immutable terminal
+history and the propagation record. For an affected active Attempt, propagation
+publishes a recovering schedule with the old exact Attempt in its pending
+obligation. An already completed terminal is preserved; invalidation never
+creates a replacement terminal. Cancel/recover/cleanup preserve the sticky
+Context invalidation latch. A cached current snapshot exposes the invalidated
+state without invoking observe, outcomes, revalidate or a proof query.
+
+For an unaffected registered consumer, the unchanged catalog, complete selected
+premise inventory and empty reverse intersection justify advancing its native
+proof-state generation while preserving the captured input / proof-binding
+digest and Session revision. Final use still performs the full current native
+proof/support/grant check. The original worker can therefore submit under the
+advanced source generation if its actual selected support remains applicable.
+The fixture checks that result against the full native current-proof verdict.
+
+Propagation records retain source-event identity, source generation, old/new
+journal and catalog digests, proof-index and Context-index digests, affected
+Context identities and actual old/new Session revisions. Original bytes, retained
+proof replay inputs, append-only evidence history and terminal history survive.
+The two index layers have different node vocabularies: the first maps source
+subjects to registrations; the second maps registration roots to declared
+consumer dependencies. Their digests are planning provenance, not replacement
+inference proofs.
+
+* Failure, cancellation and recovery
+
+Every observer prepares and validates before source mutation. A malformed batch
+or failed preparation leaves the source journal unpublished. Registry/source
+reentry is blocked during preparation. If publication/delivery fails after the
+source is admitted, the pending batch remains; current proof use and fresh result
+submission are blocked until drain succeeds. The API reports the failure rather
+than pretending the source rolled back.
+
+Retries recompute Context updates against actual current schedules, preserving
+cancellation, recovery, cleanup and any already published terminal. They do not
+reinstall a captured pre-withdrawal schedule. Delivery is idempotent for the
+source-event identity, and source-generation rollback is refused. During failed
+partial delivery even an unaffected consumer can be temporarily blocked by the
+source barrier; after drain it resumes. Successful selective propagation does
+not cancel or advance that consumer's Session schedule.
+
+Context dependency declarations capture admitted parent versions. On an idle
+consumer the owner may stage replacement parent references, but this does not
+change its current binding or clear invalidation. Fresh proof/Context admission
+creates the new input; an old worker observation still cannot commit it. The
+same independent Session can then create a fresh Attempt. Recovery alone never
+reactivates the old input. Source records, original
+proofs and dependency references remain distinct from grants and worker seals.
+
+* Native fixtures and retained counterexample
+
+The fixture uses actual original ASCENT execution and replay, exact native MRR
+Rule / Fact / Derivation correspondence, native support and journal owners, native
+reverse plans, real Scheme worker messages/joins, and final Context owner APIs.
+
+| Consumer | Actual selected proof | Declared Context edge | Required result after retracting edge(2,3) |
+|----------+-----------------------+-----------------------+-------------------------------------------|
+| A / session | path(1,3), requires edge(1,2) and edge(2,3) | None | Cached invalidated; active removed; original obligation or terminal retained |
+| B / session-b | path(1,2), requires only edge(1,2) | B depends on A | Cached invalidated despite its own native proof still being current |
+| C / session-c | path(1,2), requires only edge(1,2) | None | Same input and Attempt remain usable; actual result commits |
+
+Cached state is checked immediately after source refresh and before querying any
+current-use API. The two raw current-proof verdicts separately show unsupported
+for A and current for C's selected proof. A real disabled-subscription native
+profile retains cached admitted/active state after withdrawal: this is saved as
+a counterexample to eager invalidation, even though the independent final result
+guard still refuses stale publication. It is not mislabeled as a successful
+stale-result commit.
+
+Fault injection separately checks malformed preparation, a source already admitted
+with delivery pending, cancellation/recovery and actual cleanup while pending,
+retry preservation of that cancelled terminal, duplicate drain, unaffected
+continuation and rollback refusal. Failed exploratory fixtures are retained:
+one included unused proof leaves and was rejected by exact source correspondence;
+one exposed a POO slot/local-name capture in a propagation record. The checks
+were preserved; selected reachable proof nodes and distinct local names fixed the
+fixtures/record construction.
+
+* Frozen versions and every required source owner
+
+An additional native case completes old A, replaces A's live Context head with
+C's unaffected proof and starts a new A Attempt. B still requires old A's exact
+version. Withdrawing the old premise invalidates only B; A's replacement and C
+continue. B cannot re-admit using that unsupported old parent. Explicitly staging
+A's new version and admitting a new B input permits a fresh B Attempt without
+reviving the old result or creating a new Session. A live-head-only graph would
+miss B; the frozen-parent SysML omission preserves that counterexample.
+
+Another native case binds B's own proof to an independent proof/policy Host while
+retaining its original A dependency. During failed A-source delivery B's own
+proof remains current and B's cached state has not yet received the push. Actual
+result admission must nevertheless refuse the pending required parent, and
+historical current-use must be false. After drain the cached invalidation is
+materialized; the independent proof Host remains at its own generation. This
+checks the joint dependency barrier, not just the consumer's direct proof.
+
+Current-use, worker enrollment and final commit therefore check every frozen
+required parent in addition to the consumer's own proof. These are secondary
+fences for partial delivery. Successful source refresh still performs proactive
+cache/Attempt mutation before returning. The native fixture distinguishes the
+Context's Org-source generation from the proof owner's journal generation;
+withdrawing proof evidence does not overwrite the original Org bytes.
+
+* Native schedule coverage and event granularity
+
+The final seven-event native corpus competes ONE Attempt A, at individual owner
+API boundaries: R1 receives/joins its actual worker; Q2 captures its current
+revision; P3 attempts result commit; S4 registers source withdrawal and performs
+synchronous graph fanout; C5 requests cancellation; T6 joins/reconciles using C5's
+captured revision; H7 publishes recovery. Constraints are R1<Q2<P3, C5<T6 and
+C5<H7. All 280 legal linear extensions run. No Python reducer decides admission.
+
+B remains active until S4 and demonstrates automatic transitive invalidation;
+its late result is refused and its actual joined worker is reconciled after the
+seven-event order. C submits the original unaffected Attempt after withdrawal.
+Every prefix checks cached state and stored terminal identities. These are not
+all joint interleavings of two independently cancelling/recovering Attempts.
+
+A separate native scenario independently enumerates all six orders of A result
+commit, B result commit and source withdrawal. It includes the two asymmetric
+histories where one result committed before withdrawal and the other did not.
+These events are distinct native API calls, not one grouped multi-Session commit.
+Each refused result can still be cleaned up; C still completes.
+
+An earlier 45-Case run passed a 280-order corpus with grouped A/B operations.
+It is retained as exploratory macro-event evidence, not used to claim complete
+independent cross-Session concurrency. The final corpus separates the competing
+Attempt operations and adds the six independent result-publication orders.
+
+Successful terminal records also retain the exact propagation-event identity
+at commit, linking an unaffected continuation to the recorded source/index
+advancement rather than borrowing a later query's source cut.
+
+* Executed SysML contract scenarios
+
+[[file:11-eager-propagation.sysml][The SysML model]] executes prepare, source delivery, real-terminal abstraction,
+retry, recovery and conditional result stages. [[file:run-push-scenarios.py][Its CLI runner]] requires explicit
+run-engine verification verdicts and all six processed stages. Twenty base combinations
+cover complete/incomplete inventory and successful/failed delivery under a safe
+contract and four omissions: missing subscription, invalidating every consumer,
+clearing invalidation on recovery, and reinstalling a stale prepared head.
+Two additional executions compare frozen-parent routing with an unsafe live-head
+substitution. All five saved unsafe witnesses can each be replayed against their
+safe counterpart.
+This is an executable contract fixture, not a claim that SysML implements the
+original proof evaluator or proves all arbitrary graph interleavings.
+
+* Reproduction
+
+#+begin_src sh
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-push-scenarios.py
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-push-scenarios.py --replay /absolute/path/counterexample-1.json
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-push.py --exhaustive
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-push.py --order 4,1,2,3,5,6,7
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-push.py --check-receipt /absolute/path/push-receipt.json
+#+end_src
+
+The native runner builds both modified owners through Just and runs the maintained
+pre-import heap-fenced harness. The exhaustive lane has a 900-second process
+budget / 840-second aggregate Case budget, retains the real 60-second idle guard,
+and reports cumulative completed work. Saved receipts bind runtime sources,
+actual ASCENT / Orgize heads, raw log, exact path corpus and original proof /
+journal / dependency-index commitments. Raw logs stay in local artifacts.
+
+* Qualification limits
+
+Completeness is scoped to registered positive-proof source premises and declared
+Context edges. Inferred prose dependencies, nonmatching Query units, negative /
+complete-inventory obligations, arbitrary temporal families and all implicit
+Memory/consolidation dependencies are not silently covered by this profile.
+Unsupported selected conclusion-premise profiles are refused before publication.
+Policy/grant expiry still has its independent use guards; source propagation here
+does not claim automatic fanout for every policy event.
+
+All participating owners share one serialized Scheme owner thread. Separate
+processes, durable delivery, crash-safe replay, external providers, physical
+source authentication and atomic distributed transactions remain unqualified.
+The MRR correspondence fixture is declared source-relative evidence; no live MRR
+producer or arbitrary natural-language-to-Fact authority was established.
+The finite executable fixtures and native regression paths do not constitute a
+complete unbounded refinement proof.
+
+* Additional standard-entrypoint result
+
+The separate root =just test-file t/ai-agentic-context-session-host-test.ss=
+attempt stopped in =prepare-test-inputs=: Nix could not open
+=/Users/guangtao/.cache/nix/fetcher-cache-v4.sqlite=. Its target tests did not run,
+and no standard-entrypoint pass is claimed. The dedicated native qualification
+uses the maintained heap-fenced Just harness and is recorded separately below.
+
+The native comparison additionally builds a fresh ASCENT source snapshot from the
+new journal's active typed source facts. Full native queries then return no A
+result and the same C result as before withdrawal. This independent query oracle
+uses neither the reverse plan nor cached Context flags. It qualifies the
+selected ground positive-query fixture, not arbitrary Query completeness or
+physical-world source authentication.
+
+Mandatory observer enrollment is validated before publishing a new proof binding,
+task or Session head. A native capacity-failure case fills the source observer
+registry, then verifies failed admission leaves the original input/revision
+unchanged and cannot claim an unobserved proof-bound Attempt. This closes the
+source-feed enrollment boundary rather than relying on a later query to catch it.
+
+* Completed qualification cut
+
+The final source cut passed 50 native Cases, all required Case/Module/Harness/
+final OK markers, zero failure markers, 280 granular seven-event orders, six
+independent cross-Session result/source orders and eight legacy regression orders.
+Installed/declaration heads matched and remained unchanged across execution:
+ASCENT =a1feea38b6106c0910b79d42a48ce62115ee43b5= and Orgize
+=bffe77af99f1263c97475b2a859ea2ee8c43fa07=. The saved receipt check passed.
+
+| Measured property / outcome | Result |
+|----------------------------+--------|
+| Cached invalidation and active-to-obligation transition before queries | Passed for direct and dependent consumers |
+| Full native ASCENT rerun on journal-selected current facts | A result absent; C equals its original result |
+| Original C input / Attempt still commits after withdrawal | 280 / 280 |
+| A outcomes within the seven-event bound | 8 historical completed; 136 cancelled; 136 pending obligations |
+| B deferred cleanup in that corpus | 280 reconciled after actual joins |
+| Duplicate terminal / stale reactivation / unrelated-consumer failure | 0 / 0 / 0 |
+| Independent A/B result/source orders | All 6 passed; 2 asymmetric histories |
+| Frozen-parent head replacement and explicit rebase | Passed; original result stays unusable, fresh input/Attempt succeeds |
+| Required-source pending barrier when own proof Host remains current | Passed |
+| Enabling observers for historical-only dependency sources | Passed |
+| Source-feed enrollment failure leaves input/head unpublished | Passed |
+| SysML executable cases | 22; safe cases passed, 9 expected unsafe verdicts |
+| Saved SysML unsafe/safe replay pairs | All 5 reproduced |
+| Native evidence validator controls | All 7 refused malformed/insufficient evidence |
+
+Pending obligations are not completion or liveness passes. A recovering Attempt
+whose captured cleanup revision becomes stale remains pending until a later
+valid owner retry. Automatic invalidation does not pretend to terminate a worker;
+only an actual issued join observation can reconcile it.
+
+The native disabled-subscription counterexample remains in the raw log and
+receipt: after a real withdrawal its cached Context stays admitted and active.
+That run demonstrates the missing eager behavior; the separate final admission
+guard still refuses stale results. It is not included among production-profile
+successes or mislabeled as an accepted stale result.
+
+Current native artifacts:
+=/private/tmp/context-push-20261025/qualified-final/push-receipt.json=,
+=push-paths.json=, raw =native.log=, and =validator-controls.json=.
+Executed SysML / counterexample artifacts:
+=/private/tmp/context-push-20261025/final-sysml/= and
+=final-sysml-replay-{1,2,3,4,frozen-parent}/=.
+Earlier 45/46/47/48/49-Case runs remain historical or exploratory source cuts;
+their receipts are not substituted for this final implementation cut. One added
+test initially imported an unavailable SRFI module; the final test uses a native
+Scheme loop and all final markers were rechecked.
+
+Implementation owners: [[file:../../../../modules/temporal-causality/evaluator/proof-host.ss][native proof/source Host]],
+[[file:../../../../modules/ai-agentic-context/session-host.ss][Context / Session publication coordinator]], and
+[[file:../../../../t/temporal-evaluator-test.ss][native executable cases]]. Independent Session pure reducers remain in
+[[file:../../../../modules/session/funs-attempt.ss][their existing module]].
+
+The final Source-first order S R Q P C T H was actually replayed in a fresh
+process with the same final runtime cut: 50 Cases, one eager order, all six
+cross-Session commit orders and eight legacy regression orders passed. Its
+saved-receipt check also succeeded. The coupled artifact index is
+=/private/tmp/context-push-20261025/evidence-index.json=.

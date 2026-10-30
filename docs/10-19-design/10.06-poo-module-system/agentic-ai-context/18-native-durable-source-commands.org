@@ -1,0 +1,179 @@
+#+title: Durable Source Commands and Context Recovery
+#+language: en
+:PROPERTIES:
+:ID: context-native-durable-source-commands
+:STATUS: selected-native-crash-paths-qualified
+:END:
+
+* Decision and inherited responsibilities
+
+This implements the next integration boundary from
+[[file:16-query-durable-owner-handoff.org][16: durable source handoff]] and [[file:17-native-catalog-root-recovery.org][17: catalog roots]]. Context owns the
+evidence-bound working view, its source history and captured dependency versions.
+Independent Session reducers own interaction/Attempt transitions and unresolved
+worker obligations. The existing SQLite journal owns the local durable writer
+fence, immutable inbox, state versions, decisions and terminal ledger.
+
+The public functional constructor =context-durable-source-command= produces an
+inert native POO command for the existing owner protocol. It carries the existing
+input identity, expected previous source digest and canonical new source cut.
+Withdrawal and replacement use this same operation; there is no second source
+language, identity allocator, Session registry or event-processing framework.
+
+* Current cut and conditional source publication
+
+The source command must equal the exact received input of the active fenced
+transaction. The adapter refuses an operation closure that substitutes another
+source command. It resolves only the requested source head through the existing
+Provider lookup; it does not copy/scan every retained Query and proof to find it.
+
+An absent previous cut permits first admission of an active source. A known
+source requires exact expected-cut equality and a strictly newer generation.
+Stale commands persist an explicit refused decision; they are not rebased onto
+the latest source. An applied input retry returns a historical ACK. Its bytes
+are checked before that fast path, so the same ID cannot carry a changed body.
+Historical ACKs never grant action authority or make an old source current.
+
+The native Provider still owns source preparation, ASCENT evidence revisions,
+support and dependency propagation. The adapter does not duplicate that logic.
+It saves the resulting Provider root, Context checkpoint, obligations and
+terminals in the existing transaction. The inbox status and decision commit
+with them before an ACK is returned. An aborted owner remains quarantined.
+
+* Recovery order and shared ownership
+
+1. Acquire the existing durable owner epoch and verify retained journal data.
+2. Reconstruct the committed Provider root, including unqueried sources.
+3. Restore consumer observation refs and captured parents against that exact
+   Provider; reconnect existing source subscriptions before pending replay.
+4. Re-evaluate pending source commands using their original inputs under a
+   writer transaction. Commit source state, pushed invalidation and Context
+   obligations together, or persist a stale-command refusal.
+5. Return the ready adapter/Provider capability to the owner reactor. Only then
+   process new results or return historical command ACKs.
+
+=context-durable-adapter= accepts an explicit initial Provider for catalogs
+without consumers and otherwise discovers the coordinator's existing Provider.
+On recovery it exposes the reconstructed Provider through its native capability;
+the bootstrap seed is not the current catalog. Context restoration rejects
+source-history mismatches instead of silently creating a second owner.
+
+The physical checkpoints still contain portable consumer capsules. This is not
+an additional mutable catalog, but compacting repeated checkpoint bytes into
+root-plus-ref storage is a separate physical normalization task. No original
+source/proof history is discarded to obtain that optimization.
+
+* Result, knowledge and evidence after withdrawal
+
+A native result committed before withdrawal remains historical. Its current
+applicability is fenced when the captured source retires. A/B may therefore
+retain terminal records while both Contexts become invalidated; independent C
+keeps its original applicability and actual completion.
+
+Owner death cannot authenticate a portable observation as a native worker
+capability. Unknown effects and unresolved worker obligations survive recovery.
+A pending result envelope is data; it is not automatically rerun as a fresh
+completion or a new Attempt. Fresh admission needs its own currently supported
+view and independent Session admission.
+
+The same rule applies to long-term interpretations: retained history and a
+currently usable conclusion differ. A different possible derivation cannot
+silently repair the captured original proof. Any newly supported interpretation
+requires explicit derivation/admission with its own dependencies. Session
+closure and source withdrawal do not delete original evidence.
+
+* Native gate and limits
+
+[[file:run-native-query-durable.py][The executable gate]] uses real Org/GQL/ASCENT producers, Context/Session
+owners, the actual SQLite journal and process-group SIGKILL. It records source
+and control producer notifications separately from real worker return
+notifications and selected owner orders. Timer delivery is explicitly disabled
+in this source-command slice; existing clock gates own expiry qualification.
+
+Selected crash paths exercise after-inbox, before-decision-commit and
+after-commit/before-ACK cuts, with source-first, result-first,
+cancel/recover-first and observed-arrival prefixes. Separate zero-consumer
+paths exercise all three cuts. The gate checks writer epoch advance, immutable
+evidence and terminal digests, exactly one durable source application, cached
+cross-Session invalidation before support queries, old result rejection and
+unaffected C completion. It also checks duplicate IDs, substituted command
+bodies, first admission and delayed older source commands after re-admission.
+
+Original crash images are retained. A positive replay and a deliberately unsafe
+native control restore the same original pending-source image. Omitting source
+replay leaves a stale cached A Context admitted; corrected recovery must push
+invalidation before returning the owner. Raw logs and databases stay outside Git.
+
+#+begin_src sh
+just build-test t/context-query-durable-test.ss
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-native-query-durable.py" --artifacts /private/tmp/context-query-source-owner-run
+#+end_src
+
+These selected native executions do not prove all OS schedules, external source
+authenticity, distributed exactly-once effects or complete remote storage
+qualification. Native result/cancel/recover pending inputs retain their existing
+reconciliation boundary. Fresh same-Session worker admission after process
+death still requires actual termination/isolation evidence; recovery does not
+fabricate it. The section-16 model is a separate bounded contract, not a proof
+of native source refinement.
+
+* Qualified local results: 2026-10-25
+
+| Native process-death case | Boundary / order prefix |
+|---------------------------+-------------------------|
+| Withdrawal | After inbox receipt, source first |
+| Withdrawal | Before decision commit, A completion first |
+| Withdrawal | After commit, cancellation/recovery before A/B results |
+| Withdrawal | Before commit, actual observed producer arrival order |
+| Replacement | After commit, actual observed producer arrival order |
+| Zero consumers / no Query observations | All three durable crash boundaries |
+
+All eight cases used actual SIGKILL and independent owner restart. A ninth
+positive recovery replayed the original saved case-00 crash image; the unsafe
+control restored that same image while deliberately omitting pending source
+replay. Its cached A remained admitted. Corrected recovery fenced A/B before
+returning the owner, retained C's actual completion/applicability and kept every
+pre-crash terminal digest unchanged. Duplicate commands returned historical
+ACKs; changed bodies and delayed old commands were refused. First admission of
+another unqueried source also used the same conditional command path.
+
+[[file:audit-query-source-crashes.py][The independent prefix audit]] checks actual owner and arrival traces and
+compares SQLite terminal counts with a positional oracle: C completes before
+the prefix, A completes only before source change and cancellation, and B
+completes only before source change. Events planned after the killed source
+command are explicitly recorded as unexecuted suffixes. This is eight selected
+crash prefixes, not eight complete five-event executions or exhaustive native
+concurrency. The audit uses the complete terminal ledger for hashed Session
+identities, not the legacy helper's literal-"session" counter.
+
+The final source/object receipt is
+=/private/tmp/context-query-source-owner-final-20261025/query-durable-receipt.json=;
+the directory retains every original database image, input copy and process log.
+The earlier assertion-successful run under =qualified-20261025/= is superseded
+because the final inventory additionally binds the imported monotonic/boot
+primitive, legacy driver and Python helper sources. Its receipt was not
+relabeled as the final cut. Initial sandbox boot-identity and unenrolled-domain
+diagnostics remain separate from qualification. Tests use the producer's actual
+=txn= domain and the real host boot identity, not a substituted test clock.
+
+The same expanded native cut passed one original live-clock policy/ticket
+crash-recovery case, including a new actual worker completion. Its receipt is
+=/private/tmp/context-query-source-owner-final-legacy-20261025/legacy-receipt.json=.
+This is a focused compatibility case, not a rerun of every previous clock case.
+
+The unchanged section-16 SysML CLI contract was executed again: 2,700 scenarios,
+1,500 expected unsafe failures, zero unexpected verdicts. Four saved unsafe
+witnesses and their corrected paths added eight replay executions with four
+expected failures. Model and native evidence retain separate claims.
+
+The combined artifact index is
+=/private/tmp/context-query-source-owner-evidence-20261025.json=.
+Exact durable-owner replay requires the original boot/clock enrollment; a host
+reboot requires explicit clock re-admission. Foreign-boot historical evidence
+does not automatically authorize current effects.
+
+Still open: exhaustive OS scheduling, crashes during recovery itself, the full
+source/policy/grant/expiry product, remote endpoint reconciliation, physical
+checkpoint normalization and nonlocal storage acceptance. The existing native
+gate does not fabricate those outcomes from the bounded model.

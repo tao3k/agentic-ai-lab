@@ -6,23 +6,24 @@
 ;;; Boundary: Funflow functional DAG objects are POO-native reports.
 ;;; Invariant: DAG construction is pure and never schedules or runs checks.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-module-selection-flags)
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax
-        (only-in :poo-flow/modules/funflow/config
-                 poo-flow-funflow-check-map->functional-dag
-                 poo-flow-funflow-composition-step?
-                 poo-flow-funflow-composition-step->alist
-                 poo-flow-funflow-dag-edge?
-                 poo-flow-funflow-dag-edge->alist
-                 poo-flow-funflow-functional-dag?
-                 poo-flow-funflow-functional-dag->alist))
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flags)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        (only-in :yuanxu/modules/funflow/graph-projection
+                 yuanxu-funflow-check-map->functional-dag
+                 yuanxu-funflow-composition-step?
+                 yuanxu-funflow-composition-step->alist
+                 yuanxu-funflow-dag-edge?
+                 yuanxu-funflow-dag-edge->alist
+                 yuanxu-funflow-functional-dag?
+                 yuanxu-funflow-functional-dag->alist))
 
 (export funflow-functional-dag-test)
 
@@ -87,26 +88,26 @@
 ;; : TestSuite
 (def funflow-functional-dag-test
   (test-suite "funflow functional DAG object"
-    (poo-flow-test-case "projects a POO pipeline into a POO functional DAG"
+    (yuanxu-test-case "projects a POO pipeline into a POO functional DAG"
       (let* ((selection (car (funflow-functional-dag-selection)))
              (pipeline
               (funflow-functional-dag-alist-ref
-               (poo-flow-user-module-selection-flags selection)
+               (yuanxu-user-module-selection-flags selection)
                ':workflow-pipeline))
-             (dag (poo-flow-funflow-check-map->functional-dag pipeline))
+             (dag (yuanxu-funflow-check-map->functional-dag pipeline))
              (composition-steps (.ref dag 'composition-steps))
              (first-composition-step (car composition-steps))
              (first-bind-step (car (cdddr composition-steps)))
              (edges (.ref dag 'edges))
              (first-edge (car edges))
-             (row (poo-flow-funflow-functional-dag->alist dag))
+             (row (yuanxu-funflow-functional-dag->alist dag))
              (row-composition-steps
               (funflow-functional-dag-alist-ref row 'composition-steps))
              (row-first-composition-step (car row-composition-steps))
              (row-first-bind-step (car (cdddr row-composition-steps)))
              (row-edges (funflow-functional-dag-alist-ref row 'edges))
              (row-first-edge (car row-edges)))
-        (check-equal? (poo-flow-funflow-functional-dag? dag) #t)
+        (check-equal? (yuanxu-funflow-functional-dag? dag) #t)
         (check-equal? (.ref dag 'composition-style) 'arrow-kleisli)
         (check-equal? (.ref dag 'composition-step-count) 5)
         (check-equal? (.ref dag 'nodes) '(build test package))
@@ -116,7 +117,7 @@
         (check-equal? (.ref dag 'ready-order) '(build test package))
         (check-equal? (.ref dag 'valid?) #t)
         (check-equal? (.ref dag 'runtime-executed) #f)
-        (check-equal? (poo-flow-funflow-composition-step?
+        (check-equal? (yuanxu-funflow-composition-step?
                        first-composition-step)
                       #t)
         (check-equal? (.ref first-composition-step 'step-kind)
@@ -132,19 +133,19 @@
         (check-equal? (.ref first-bind-step 'composition-style)
                       'kleisli)
         (check-equal? (funflow-functional-dag-alist-ref
-                       (poo-flow-funflow-composition-step->alist
+                       (yuanxu-funflow-composition-step->alist
                         first-composition-step)
                        'kind)
-                      'poo-flow.funflow.composition-step.prototype)
-        (check-equal? (poo-flow-funflow-dag-edge? first-edge) #t)
+                      'yuanxu.funflow.composition-step.prototype)
+        (check-equal? (yuanxu-funflow-dag-edge? first-edge) #t)
         (check-equal? (.ref first-edge 'from) 'build)
         (check-equal? (.ref first-edge 'to) 'test)
         (check-equal? (funflow-functional-dag-alist-ref
-                       (poo-flow-funflow-dag-edge->alist first-edge)
+                       (yuanxu-funflow-dag-edge->alist first-edge)
                        'composition-style)
                       'kleisli)
         (check-equal? (funflow-functional-dag-alist-ref row 'kind)
-                      'poo-flow.funflow.functional-dag.prototype)
+                      'yuanxu.funflow.functional-dag.prototype)
         (check-equal? (funflow-functional-dag-alist-ref
                        row
                        'composition-step-count)

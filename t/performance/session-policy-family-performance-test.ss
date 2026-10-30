@@ -7,7 +7,7 @@
 ;;; Invariant: POO-native policy constructors project to bounded rows before
 ;;; effective validation, without runtime, tool, hook, provider, or sandbox work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -16,7 +16,7 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-policy-family-performance-test)
 
@@ -41,7 +41,7 @@
 
 ;; : (-> Alist Void)
 (def (session-policy-family-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] session-policy-family ")
+  (display "[agentic-ai-lab-benchmark] session-policy-family ")
   (write receipt)
   (newline)
   (force-output))
@@ -61,13 +61,13 @@
 ;; : (-> Integer [PooSessionToolGrant])
 (def (session-policy-family-performance-tool-grants index)
   (list
-   (poo-flow-session-tool-grant
+   (agentic-ai-lab-session-tool-grant
     (session-policy-family-performance-id "grant/read" index)
     'read-workspace-file
     '(read)
     '(project-workspace)
     '(agent-turn hook/pre-check))
-   (poo-flow-session-tool-grant
+   (agentic-ai-lab-session-tool-grant
     (session-policy-family-performance-id "grant/build" index)
     'run-build-command
     '(run)
@@ -99,74 +99,74 @@
          (hook-ref
           (session-policy-family-performance-id "policy/hooks" index)))
     (list
-     (poo-flow-session-isolation-policy
+     (agentic-ai-lab-session-isolation-policy
       isolation-ref
       scope-ref
       'strict
       'deny
       'append-summary
       'via-supervisor)
-     (poo-flow-session-sandbox-policy
+     (agentic-ai-lab-session-sandbox-policy
       sandbox-ref
       scope-ref
       'sandbox/nono-build
       'parent-profile
       'isolated-filesystem)
-     (poo-flow-session-context-policy
+     (agentic-ai-lab-session-context-policy
       context-ref
       scope-ref
       'parent-summary-only
       '(session/root session/audit))
-     (poo-flow-session-history-policy
+     (agentic-ai-lab-session-history-policy
       (session-policy-family-performance-id "policy/history" index)
       scope-ref
       'bounded
       '(record/last-failure record/build-log))
-     (poo-flow-session-communication-policy
+     (agentic-ai-lab-session-communication-policy
       (session-policy-family-performance-id "policy/communication" index)
       scope-ref
       '(channel/build-root channel/build-audit)
       '(session/root session/audit))
-     (poo-flow-session-sharing-policy
+     (agentic-ai-lab-session-sharing-policy
       (session-policy-family-performance-id "policy/sharing" index)
       scope-ref
       '(memory/project)
       '(artifact/build-log)
       '(tool-result/test-summary)
       '("build/" "reports/"))
-     (poo-flow-session-resource-policy
+     (agentic-ai-lab-session-resource-policy
       resource-ref
       scope-ref
       '(budget/build-agent)
       '(capability/cache-read capability/cache-write)
       scope-ref)
-     (poo-flow-session-model-policy
+     (agentic-ai-lab-session-model-policy
       model-ref
       scope-ref
       'marlin/provider
       'marlin/model/build-review
       '(tool-calling structured-output)
       'budget/build-agent)
-     (poo-flow-session-prompt-policy
+     (agentic-ai-lab-session-prompt-policy
       prompt-ref
       scope-ref
       'session/system
       '(system-instruction build-contract)
       'parent-summary-only)
-     (poo-flow-session-tool-permission-policy
+     (agentic-ai-lab-session-tool-permission-policy
       tool-ref
       scope-ref
       tool-grants
       '(write-workspace-file)
       'deny)
-     (poo-flow-session-hook-tool-permission-policy
+     (agentic-ai-lab-session-hook-tool-permission-policy
       hook-ref
       scope-ref
       '(hook/pre-check)
       (list (car tool-grants))
       'human-approval-on-escalation
       'deny)
-     (poo-flow-session-resource-sharing-policy
+     (agentic-ai-lab-session-resource-sharing-policy
       (session-policy-family-performance-id "policy/resource-sharing" index)
       scope-ref
       '((project-workspace
@@ -176,7 +176,7 @@
          (access . read-write)
          (accounting . session/perf)))
       'deny)
-     (poo-flow-session-agent-execution-policy
+     (agentic-ai-lab-session-agent-execution-policy
       (session-policy-family-performance-id "policy/execution" index)
       agent-ref
       scope-ref
@@ -193,7 +193,7 @@
     rows
     (session-policy-family-performance-project/rev
      (cdr policies)
-     (cons (poo-flow-session-policy->alist (car policies)) rows))))
+     (cons (agentic-ai-lab-session-policy->alist (car policies)) rows))))
 
 ;; : (-> [[PooSessionPolicy]] [Alist] [Alist])
 (def (session-policy-family-performance-rows/rev families rows)
@@ -209,7 +209,7 @@
 ;; module profile. Repeated benchmark samples measure the bounded projection
 ;; boundary instead of rebuilding immutable configuration objects.
 (def session-policy-family-performance-families
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    96
    session-policy-family-performance-policies))
 
@@ -278,7 +278,7 @@
 ;; : TestSuite
 (def session-policy-family-performance-test
   (test-suite "session policy family performance"
-    (poo-flow-test-case "keeps foundational policy projection inside benchmark contract"
+    (yuanxu-test-case "keeps foundational policy projection inside benchmark contract"
       (let* ((families session-policy-family-performance-families)
              (family-count (length families))
              (summary

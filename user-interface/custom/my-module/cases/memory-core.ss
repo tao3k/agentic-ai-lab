@@ -7,18 +7,18 @@
 ;;; Invariant: this declares memory store specs and validation receipts only;
 ;;; no memory backend recall or commit is executed.
 
-(import :poo-flow/modules/session/syntax
-        :poo-flow/modules/memory-core/config
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-module-selection-flag-entry
-                 poo-flow-user-module-selection->alist))
+(import :agentic-ai-lab/modules/session/syntax
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flag-entry
+                 yuanxu-user-module-selection->alist))
 
-(export poo-flow-custom-my-module-memory-core-case)
+(export agentic-ai-lab-custom-my-module-memory-core-case)
 
-(def poo-flow-custom-my-module-memory-core-case
+(def agentic-ai-lab-custom-my-module-memory-core-case
   (let* ((selection
         (car
-         (poo-flow-memory-configs
+         (agentic-ai-lab-memory-configs
            (.def (project-memory-store @ memory-store-spec
                                        store-ref store-kind namespace
                                        scopes recall-policies commit-policies
@@ -42,7 +42,7 @@
                          (case . memory-core))))))
        (catalog
         (cdr
-         (poo-flow-user-module-selection-flag-entry
+         (yuanxu-user-module-selection-flag-entry
           selection
           ':memory-catalog)))
        (memory-intent
@@ -60,6 +60,6 @@
           (metadata (source . user-interface)
                     (case . memory-core)))))
   (list
-   (poo-flow-user-module-selection->alist selection)
-   (poo-flow-memory-catalog->alist catalog)
+   (yuanxu-user-module-selection->alist selection)
+   (agentic-ai-lab-memory-catalog->alist catalog)
    (memory-catalog-validation-row validation))))

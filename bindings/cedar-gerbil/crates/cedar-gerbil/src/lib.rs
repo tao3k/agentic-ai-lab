@@ -7,13 +7,16 @@
 //! Application callers construct Gerbil POO objects. Only their explicit
 //! runtime projection is encoded; there is no JSON RPC server or gxi fallback.
 
+mod artifact;
+
+use cedar_poo_bridge::ValidatedManifest;
 use gerbil_scheme::{GerbilRuntime, LinkedStringExport};
-use poo_flow_cedar_authority::authority::{
+use agentic_ai_lab_cedar_authority::authority::{
     Authority, AuthorityInfo, AuthorizationResult, ConsumedHandoff, Grant, Signed,
 };
-use poo_flow_cedar_authority::projection::{Bootstrap, Proposal};
-use poo_flow_cedar_authority::runtime::Deployment;
-use poo_flow_cedar_authority::{Error, Result, canonical};
+use agentic_ai_lab_cedar_authority::projection::{Bootstrap, Proposal};
+use agentic_ai_lab_cedar_authority::runtime::Deployment;
+use agentic_ai_lab_cedar_authority::{Error, Result, canonical};
 use serde::de::DeserializeOwned;
 
 /// Runtime-bound authorization owner. Native projections remain borrowed from
@@ -32,6 +35,25 @@ impl<'runtime> NativeAuthority<'runtime> {
         signer_seed: [u8; 32],
     ) -> Result<Self> {
         let bootstrap: Bootstrap = read_projection(snapshot)?;
+        Ok(Self {
+            authority: Authority::new(bootstrap, deployment, signer_seed)?,
+            _runtime: runtime,
+        })
+    }
+
+    /// Admit a Lean/Cedar candidate only when the Gerbil POO authority
+    /// snapshot projects the same identified policies, schema, and entities.
+    /// The artifact cannot supply provenance or replace the POO snapshot.
+    pub fn new_with_validated_case(
+        runtime: &'runtime GerbilRuntime,
+        snapshot: &LinkedStringExport<'runtime>,
+        manifest: &ValidatedManifest,
+        case_name: &str,
+        deployment: Deployment,
+        signer_seed: [u8; 32],
+    ) -> Result<Self> {
+        let bootstrap: Bootstrap = read_projection(snapshot)?;
+        artifact::ensure_matches_poo_snapshot(&bootstrap, manifest, case_name)?;
         Ok(Self {
             authority: Authority::new(bootstrap, deployment, signer_seed)?,
             _runtime: runtime,

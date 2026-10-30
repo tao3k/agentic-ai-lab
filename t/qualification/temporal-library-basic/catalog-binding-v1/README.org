@@ -1,0 +1,54 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: Original MRR Catalog-bound Temporal projections, fixed ABI v1
+
+* Owner boundary
+
+Both Rust projections now require original admitted MRR RelationCatalog values.
+Fact projection resolves the exact RelationId and derives the evaluator name
+from its predicate. The original relation schema validates field arity/types
+and context; support projection validates each Derivation output too. Calls
+recheck the exact owner catalog digest before native execution. The old
+unchecked evaluator-name constructor is removed. Callers still own obtaining
+an authoritative current catalog; this adapter does not authenticate providers.
+
+The bounded profile allows at most 32 relations with distinct ASCII alphanumeric
+or underscore predicates, and 1--32 nonnullable integer/boolean columns. It
+rejects cross-row Key/Unique/FD constraints and unsupported field schemas rather
+than treating their shape as a semantic proof. Support FactIds are identities;
+this path does not validate source fact content or execute the original Rule.
+
+* Executed evidence
+
+=qualification.ss= records exact source, pinned MRR/ASCENT, artifact and raw logs.
+The existing fact-binding-v1 native artifact is reused without an ABI change.
+No fresh AOT or native proof suite was run. Three new original-catalog typed Fact
+receipts preserve the previously native-qualified request, result and Derivation
+fields exactly and also record the original catalog digest.
+
+The locked offline Rust test build and test binary used =mrr-transport= with
+=CARGO_TARGET_DIR=/private/tmp/poo-fixed-v1-target=. The test binary ran through
+the project =watch.py= under a five-second idle and 45-second total deadline.
+Its three tests passed (3.13 seconds wall), including actual native content
+parity, two/one/zero Temporal support cuts and historical replay. Controls
+reject changed catalog, arity/type mismatch, absent relations, predicate
+collisions, nullable/unsupported/constrained schemas and oversized catalogs.
+Canonical reordered catalogs retain the same owner digest; mixed bool/int
+positions retain their original values. An original catalog remains usable
+after a rejected substitution.
+
+Python ran =test_mrr_fact_content.py= and =test_temporal_support.py= against that
+same native artifact and new Rust Scheme oracles, with the same watchdog.
+All 19 passed without skips (1.30 seconds wall). The first Rust build failed
+on a heterogeneous test datum array; its exit 101 and raw log are retained.
+No real model or benchmark was executed, and remote CI is a separate gate.
+
+* Remaining architecture gates
+
+- Project original mrr_logic::Rule head/body/terms and relation columns into
+  the original Scheme evaluator, then verify proof DAG rule applications.
+- Expose proof producer and Host policy state through separate trusted control
+  entries in ABI v1; ordinary model calls cannot supply an admission flag.
+- Refresh authoritative source/catalog/policy/clock before effects and hand
+  conditional expected-head publication to Data. Authentication, effect
+  authorization and durable IFC publication remain unqualified here.

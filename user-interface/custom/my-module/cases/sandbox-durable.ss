@@ -6,12 +6,12 @@
 ;;; Boundary: downstream sandbox durable placement case.
 ;;; Invariant: pure profile declaration; sandbox execution stays in runtime.
 
-(import :poo-flow/src/user-interface/init-syntax
+(import :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
         "../profiles/all")
 
-(export poo-flow-custom-my-module-sandbox-durable-case)
+(export agentic-ai-lab-custom-my-module-sandbox-durable-case)
 
-(def poo-flow-custom-my-module-sandbox-durable-case
+(def agentic-ai-lab-custom-my-module-sandbox-durable-case
   (let ((durable-build-metadata
        '((intent . durable-sandbox-build)
          (scope . custom-module)

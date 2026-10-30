@@ -7,19 +7,22 @@
 ;;; Invariant: Loader, resolver, diagnostics, and projection APIs expose
 ;;; prototype-composable objects rather than parallel Scheme records.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
-         (only-in :clan/poo/object .ref object?)
+(import (only-in :clan/poo/mop make-instance element?)
+        (only-in :clan/poo/type Record)
+        (only-in :clan/poo/mop Bool)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :clan/poo/object .ref .get .o object?)
         (only-in :std/test check-equal? test-suite)
-        (only-in :poo-flow/src/user-interface/module-diagnostics
-                 make-poo-flow-module-diagnostic)
-        :poo-flow/src/authoring/module-imports
-        :core/module-system/source/objects
-        :poo-flow/src/authoring/module-descriptor
-        :poo-flow/src/user-interface/module-activation
-        :poo-flow/src/user-interface/module-runtime-presentation
-        :core/module-system/loader/objects
-        :core/module-system/catalog/objects
-        :core/module-system/projection/option-objects)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
+                 make-agentic-ai-lab-module-diagnostic)
+        :yuanxu/module-system/source/imports
+        :yuanxu/module-system/source/objects
+        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
+        :yuanxu/module-system/loader/objects
+        :yuanxu/module-system/catalog/objects
+        :yuanxu/module-system/projection/option-objects)
 
 (export module-system-native-value-test)
 
@@ -30,64 +33,73 @@
 ;; : TestSuite
 (def module-system-native-value-test
   (test-suite "native POO module-system value families"
-    (poo-flow-test-case "source loader resolver diagnostics and projections compose as POO"
-      (let* ((source (poo-flow-local-source "modules/example/config.ss"))
+    (yuanxu-test-case "source loader resolver diagnostics and projections compose as POO"
+      (let* ((source (yuanxu-local-source "modules/example/config.ss"))
              (module
-              (make-empty-poo-flow-module-descriptor
+              (make-empty-agentic-ai-lab-module-descriptor
                'example '() '((owner . native-value-test))))
              (loader-entry
-              (make-poo-flow-module-loader-entry source module))
+              (make-instance ModuleSourceBinding source: source module: module))
              (backend
-              (poo-flow-module-static-loader
+              (yuanxu-module-static-loader
                'native-value-test 'local (list loader-entry)))
              (load-receipt
-              (poo-flow-module-load-source-receipt
+              (yuanxu-module-load-source-receipt
                (list backend) source))
              (catalog-entry
-              (make-poo-flow-module-catalog-entry source module))
+              (make-instance ModuleSourceBinding source: source module: module))
              (catalog
-              (make-poo-flow-module-catalog
-               'native-value-test (list catalog-entry)))
-             (activation (activate-poo-flow-modules (list module)))
+              (make-instance ModuleCatalog
+               name: 'native-value-test entries: (list catalog-entry)))
+             (activation (activate-agentic-ai-lab-modules (list module)))
              (diagnostic
-              (make-poo-flow-module-diagnostic
+              (make-agentic-ai-lab-module-diagnostic
                'warning 'native-value-test 'module '()))
              (option-config
-              (make-poo-flow-module-option-config
-               "enabled" #t 'example '()))
+              (.o
+               id: "enabled" value: #t source-module: 'example metadata: '()))
              (option-schema
-              (make-poo-flow-module-option-schema
-               "enabled" 'example 'Boolean 'default #t '()))
+              (make-instance ModuleOptionSchema
+               id: "enabled"
+               source-module: 'example
+               field: (.ref (.ref (Record enabled: [Bool default: #t])
+                                 'effective-slots)
+                            'enabled)))
              (option-receipt
-              (make-poo-flow-module-option-validation-receipt
-               "enabled" 'example #t 'valid '() '()))
-             (runtime-module (poo-flow-module-apply module)))
+              (.o
+               id: "enabled" source-module: 'example
+               valid?: #t code: 'valid
+               messages: '() metadata: '()))
+             (runtime-module (agentic-ai-lab-module-apply module)))
         (check-equal?
          (native-family-marker? source 'module-source-ref?) #t)
         (check-equal?
-         (native-family-marker? loader-entry 'loader-entry?) #t)
+         (element? ModuleSourceBinding loader-entry) #t)
         (check-equal?
-         (native-family-marker? backend 'loader-backend?) #t)
+         (element? ModuleLoaderBackend backend) #t)
         (check-equal?
-         (native-family-marker? load-receipt 'load-receipt?) #t)
+         (element? ModuleLoadReceipt load-receipt) #t)
         (check-equal?
-         (native-family-marker? catalog-entry 'catalog-entry?) #t)
+         (element? ModuleSourceBinding catalog-entry) #t)
         (check-equal?
-         (native-family-marker? catalog 'catalog?) #t)
+         (element? ModuleCatalog catalog) #t)
         (check-equal?
          (native-family-marker? activation 'activation?) #t)
         (check-equal?
          (native-family-marker? diagnostic 'module-diagnostic?) #t)
         (check-equal?
-         (native-family-marker? option-config 'option-config?) #t)
+         (object? option-config) #t)
         (check-equal?
-         (native-family-marker? option-schema 'option-schema?) #t)
+         (element? ModuleOptionSchema option-schema) #t)
         (check-equal?
-         (native-family-marker?
-          option-receipt 'option-validation-receipt?)
+         (object? option-receipt)
          #t)
+        ;; Reporting projections retain explicit attribution and verdict fields.
+        (check-equal? (.get option-config source-module) 'example)
+        (check-equal? (.get option-config value) #t)
+        (check-equal? (.get option-receipt valid?) #t)
         (check-equal? (object? runtime-module) #t)
         (check-equal? (.ref runtime-module 'id) 'example)
         (check-equal?
-         (resolve-poo-flow-module-source catalog source)
+         (resolve-agentic-ai-lab-module-source catalog source)
          module)))))

@@ -7,14 +7,14 @@
 ;;; Invariant: admitted entries are fixture data; the measurement owns
 ;;; canonical lock construction, digest construction, indexing and lookup.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .o .ref)
         (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :poo-flow/src/feature-system/source-lock-feature)
+        :yuanxu/feature-system/source-lock-feature)
 
 (export sources-lock-performance-test)
 
@@ -80,10 +80,10 @@
 (def sources-lock-performance-test
   (test-suite
    "Sources Lock canonical freeze and lookup performance"
-   (poo-flow-test-case
+   (yuanxu-test-case
     "constructs and indexes 10,000 admitted source lock entries"
     (displayln
-     "[poo-flow-benchmark] sources-lock phase=fixture-ready count="
+     "[agentic-ai-lab-benchmark] sources-lock phase=fixture-ready count="
      +sources-lock-performance-count+
      " constructorOwnedIndex="
      (eq? (.ref SourcesLock. 'index) #f))
@@ -100,7 +100,7 @@
            (_construction-receipt
             (begin
               (displayln
-               "[poo-flow-benchmark] sources-lock phase=construction-complete elapsedMs="
+               "[agentic-ai-lab-benchmark] sources-lock phase=construction-complete elapsedMs="
                construction-elapsed-ms
                " targetMs=" +sources-lock-performance-construction-target-ms+
                " maxMs=" +sources-lock-performance-construction-maximum-ms+)
@@ -110,7 +110,7 @@
             (benchmark-run
              sources-lock-performance-benchmark
              (lambda () (sources-lock-performance-summary lock)))))
-      (display "[poo-flow-benchmark] sources-lock ")
+      (display "[agentic-ai-lab-benchmark] sources-lock ")
       (write receipt)
       (newline)
       (force-output)

@@ -6,9 +6,9 @@ from __future__ import annotations
 
 import pytest
 
-from poo_flow_runtime.benchmarks import anyio_runtime as benchmark
-from poo_flow_runtime.benchmarks import __main__ as benchmark_cli
-from poo_flow_runtime.benchmarks import _anyio_runtime_runner as benchmark_runner
+from agentic_ai_lab_runtime.benchmarks import anyio_runtime as benchmark
+from agentic_ai_lab_runtime.benchmarks import __main__ as benchmark_cli
+from agentic_ai_lab_runtime.benchmarks import _anyio_runtime_runner as benchmark_runner
 
 
 def _phase(
@@ -75,7 +75,7 @@ def test_anyio_runtime_receipts_separate_cold_warm_and_reused_input() -> None:
     receipts = tuple(result.receipt() for result in phases)
 
     assert all(
-        'schema: "poo-flow.anyio-runtime-benchmark.v1"' in receipt
+        'schema: "agentic-ai-lab.anyio-runtime-benchmark.v1"' in receipt
         for receipt in receipts
     )
     assert tuple(result.phase for result in phases) == (

@@ -1,0 +1,100 @@
+{
+  "schema": "context.owner-lifecycle.results.v1",
+  "status": "capacity-open",
+  "heap": "1G",
+  "native_watchdog_seconds": 150,
+  "supervisor_seconds": 155,
+  "no_chunking": true,
+  "no_forced_gc": true,
+  "source_object_custody": "/private/tmp/context-owner-custody-20261026/manifest.json",
+  "native_functional": {
+    "unit": {
+      "path": "/private/tmp/context-owner-final-controls-20261026/unit/native.log",
+      "sha256": "40f9c4e7704cf4a62cae3822488ce31216fbdac316476cd5f1c7156e2bd9e946"
+    },
+    "exit": 0,
+    "checks": [
+      "original-v1-wire-byte-oracle",
+      "exact-subscriptions",
+      "foreign-subscriber-retained",
+      "timer-owner-join",
+      "retired-clock-denied",
+      "journal-rollback-and-close",
+      "pending-input-rearmed",
+      "independent-session-endpoints",
+      "no-fabricated-terminals"
+    ]
+  },
+  "capacity": [
+    {
+      "artifact": {
+        "path": "/private/tmp/context-owner-capacity-single-port-20261026/legacy-cut/process.json",
+        "sha256": "7d1961b88c507d2ca11b55ad9613c61913039413dee8ca01345b01a2d73147c3"
+      },
+      "source_object_cut": {
+        "path": "/private/tmp/context-owner-capacity-single-port-20261026/start-cut.json",
+        "sha256": "e5d21d0529e01a5f27c7e78cd2cd3058066154b5d95da301f41ac3d904f957d1"
+      },
+      "paths": 37,
+      "actual_closes": 36,
+      "elapsed_seconds": 155.02281333398423,
+      "exit": -9,
+      "qualified": false,
+      "mode": "all",
+      "requested_paths": 60,
+      "native_gxi_pids": [
+        "52286"
+      ]
+    },
+    {
+      "artifact": {
+        "path": "/private/tmp/context-owner-single-port-replay-20261026/legacy-cut/process.json",
+        "sha256": "5fa6caf7ea1af75af331302ff9a32a667c80716d805602c5963aeb9b4774d6eb"
+      },
+      "source_object_cut": {
+        "path": "/private/tmp/context-owner-single-port-replay-20261026/start-cut.json",
+        "sha256": "e5d21d0529e01a5f27c7e78cd2cd3058066154b5d95da301f41ac3d904f957d1"
+      },
+      "paths": 35,
+      "actual_closes": 35,
+      "elapsed_seconds": 155.01829145799275,
+      "exit": -9,
+      "qualified": false,
+      "mode": "all",
+      "requested_paths": 60,
+      "native_gxi_pids": [
+        "61467"
+      ]
+    }
+  ],
+  "controls": {
+    "receipt": {
+      "path": "/private/tmp/context-owner-final-controls-20261026/partial-receipt.json",
+      "sha256": "760ec4d2d15e47cdfe6f5f10218a86cf2018d7bb2b7bd987a7146142418bd662"
+    },
+    "counter": {
+      "path": "/private/tmp/context-owner-final-controls-20261026/counter-omitted-close/native.log",
+      "sha256": "856f186f24eea490271602b7061c76030c3a07841e86c6c1243ba9568474b07b"
+    },
+    "query_sigkill": -9,
+    "query_stage": "before-commit",
+    "query_originals_retained": true,
+    "query_terminals_retained": true,
+    "policy_writes_after_replay": 1,
+    "decision_writes_after_replay": 1
+  },
+  "sysml": {
+    "executed": 1920,
+    "expected_unsafe": 251,
+    "unexpected": 0,
+    "model_sha256": "a3d3ebba312d1f7fbf789e6d0955099ffb3703671feba72651dca486d65711db",
+    "runner_sha256": "2d42240148d19eb3476329a8e977edd50c28ecf2c21104d703ef0736f741783a",
+    "native_refinement_proved": false,
+    "summary": {
+      "path": "/private/tmp/context-owner-model-20261026/summary.json",
+      "sha256": "ebc16c2a2b7fa850921699886e03ee5066e10642aa63528a4f591e84e21e75d5"
+    },
+    "replay_executed": 14
+  },
+  "remaining": "Whole 60-path processes do not meet the unchanged wall-clock fence. Lifecycle correctness and codec byte equivalence do not establish a throughput fix."
+}

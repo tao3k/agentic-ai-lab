@@ -1,0 +1,30 @@
+{
+  "schema": "ascent.rule-components.v1",
+  "components": [
+    {
+      "id": "dependency",
+      "source": "dependency.ss",
+      "exports": [
+        "make-dependency-relations",
+        "native-copy-rule"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "investigation",
+      "source": "investigation.ss",
+      "exports": [
+        "make-investigation"
+      ],
+      "dependencies": [
+        {
+          "component": "dependency",
+          "bindings": [
+            "make-dependency-relations",
+            "native-copy-rule"
+          ]
+        }
+      ]
+    }
+  ]
+}

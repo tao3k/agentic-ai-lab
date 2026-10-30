@@ -5,7 +5,7 @@
 
 ;;; Boundary: Funflow user-interface pipeline benchmark gate.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -14,9 +14,9 @@
                  benchmark-receipt-pass?
                  benchmark-run/result)
         (only-in "../../user-interface/custom/my-module/profiles/cicd"
-                 poo-flow-custom-my-module-cicd-module)
+                 agentic-ai-lab-custom-my-module-cicd-module)
         (only-in "../../user-interface/custom/my-module/cases/funflow-cicd"
-                 poo-flow-custom-my-module-funflow-cicd-case)
+                 agentic-ai-lab-custom-my-module-funflow-cicd-case)
         "../support/funflow-config-pipeline-performance")
 
 (export funflow-config-pipeline-performance-test)
@@ -31,20 +31,20 @@
 
 ;; : (-> Alist Void)
 (def (funflow-config-pipeline-display-receipt receipt)
-  (display "[poo-flow-benchmark] funflow-config-pipeline ")
+  (display "[agentic-ai-lab-benchmark] funflow-config-pipeline ")
   (write receipt)
   (newline)
   (force-output))
 
 ;; : (-> [[PooUserModuleSelection]])
 (def (funflow-config-pipeline-module-bundles)
-  (append poo-flow-custom-my-module-cicd-module
-          poo-flow-custom-my-module-funflow-cicd-case))
+  (append agentic-ai-lab-custom-my-module-cicd-module
+          agentic-ai-lab-custom-my-module-funflow-cicd-case))
 
 ;; : TestSuite
 (def funflow-config-pipeline-performance-test
   (test-suite "funflow config pipeline performance"
-    (poo-flow-test-case "keeps user-interface Funflow pipeline projection inside benchmark contract"
+    (yuanxu-test-case "keeps user-interface Funflow pipeline projection inside benchmark contract"
       (let-values (((receipt summary)
                     (benchmark-run/result
                      funflow-config-pipeline-fixture

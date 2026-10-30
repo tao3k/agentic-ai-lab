@@ -5,15 +5,15 @@
 
 ;;; Boundary: exclusive end-to-end complexity gate for graph control receipts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :clan/poo/object .ref)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :poo-flow/src/graph/types-core
-        :poo-flow/src/graph/control-analysis)
+        :yuanxu/graph/types-core
+        :yuanxu/graph/control-analysis)
 
 (export graph-control-performance-test)
 
@@ -24,15 +24,15 @@
   (call-with-input-file +graph-control-performance-fixture-path+ read))
 
 (def (graph-control-performance-linear-dag node-count)
-  (poo-flow-graph
+  (yuanxu-graph
    'graph-control/performance
-   (map poo-flow-graph-node (iota node-count))
+   (map yuanxu-graph-node (iota node-count))
    (map (lambda (index)
-          (poo-flow-graph-edge index (+ index 1)))
+          (yuanxu-graph-edge index (+ index 1)))
         (iota (- node-count 1)))))
 
 (def (graph-control-performance-summary graph-value)
-  (let (receipt (poo-flow-graph-control-analysis-receipt graph-value))
+  (let (receipt (yuanxu-graph-control-analysis-receipt graph-value))
     (list (cons 'node-count (.ref receipt 'node-count))
           (cons 'edge-count (.ref receipt 'edge-count))
           (cons 'reachable-count (length (.ref receipt 'reachable-ids)))
@@ -44,14 +44,14 @@
   (cdr (assoc key row)))
 
 (def (graph-control-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] graph-control-linear-dag ")
+  (display "[agentic-ai-lab-benchmark] graph-control-linear-dag ")
   (write receipt)
   (newline)
   (force-output))
 
 (def graph-control-performance-test
   (test-suite "graph control performance"
-    (poo-flow-test-case "projects a 1000-node linear DAG control receipt"
+    (yuanxu-test-case "projects a 1000-node linear DAG control receipt"
       (let* ((node-count 1000)
              (graph-value
               (graph-control-performance-linear-dag node-count))

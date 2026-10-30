@@ -6,11 +6,11 @@
 ;;; Boundary: audit-friendly downstream agent sandbox profile declarations.
 ;;; Invariant: imported by tests as an independent module; it does not execute.
 
-(import :poo-flow/src/user-interface/init-syntax)
+(import :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
-(export poo-flow-custom-module-agent-sandbox-audit-module)
+(export agentic-ai-lab-custom-module-agent-sandbox-audit-module)
 
-(def poo-flow-custom-module-agent-sandbox-audit-module
+(def agentic-ai-lab-custom-module-agent-sandbox-audit-module
   (let ((audit-base-capabilities
        '(process-run filesystem-read filesystem-write tmpdir))
       (audit-branch-capabilities

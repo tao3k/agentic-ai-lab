@@ -39,7 +39,7 @@ It is a test-only program, not a production policy bundle. A production
 consumer must supply its own compiler-owned AOT graph and link descriptor.
 The fixture reads the two-policy =.cedar= file into a Scheme POO policy before
 the native binding creates an Authority. The public application helper for
-this operation is =poo-flow-cedar-policy-file=. =POO_FLOW_CEDAR_POLICY_FILE=
+this operation is =agentic-ai-lab-cedar-policy-file=. =AGENTIC_AI_LAB_CEDAR_POLICY_FILE=
 can select another compatible artifact.
 
 Supply the single AOT Runtime Host artifact, then run the conformance target.
@@ -50,7 +50,7 @@ just test-cedar-native "$out/bin/cedarRuntimeHost"
 #+end_src
 
 The selected environment must provide =GERBIL_GXI=, =GERBIL_GSC=, the project's
-=GERBIL_PATH=, and =POO_FLOW_CEDAR_RUNTIME_HOST=. Missing native toolchains,
+=GERBIL_PATH=, and =AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST=. Missing native toolchains,
 the Host artifact, or Scheme dependencies fail the gate; a zero-test default
 invocation is not acceptance.
 

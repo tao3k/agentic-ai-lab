@@ -6,7 +6,7 @@
 ;;; Boundary: shared sandbox resources are backend-neutral POO data objects.
 ;;; Invariant: tests assert composition and projection only, never runtime setup.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/modules/agent-sandbox/resource)
+        :agentic-ai-lab/modules/agent-sandbox/resource)
 
 (export sandbox-resource-test)
 
@@ -26,7 +26,7 @@
 ;; : TestSuite
 (def sandbox-resource-test
   (test-suite "shared sandbox resources"
-    (poo-flow-test-case "projects volume, port, and env bindings as runtime request data"
+    (yuanxu-test-case "projects volume, port, and env bindings as runtime request data"
       (let* ((volume (make-sandbox-volume-binding 'source-item "/work" 'read))
              (port (make-sandbox-port-binding 'http 8080 18080 'tcp))
              (env (make-sandbox-env-binding 'TOKEN "secret-key" 'secret))
@@ -49,7 +49,7 @@
                       '(((name . TOKEN)
                          (value . "secret-key")
                          (source . secret))))))
-    (poo-flow-test-case "merges resource sets with left-biased sandbox keys"
+    (yuanxu-test-case "merges resource sets with left-biased sandbox keys"
       (let* ((left (make-sandbox-resource-set
                     (list (make-sandbox-volume-binding 'source-item "/work" 'read)
                           (make-sandbox-volume-binding 'config-item "/config" 'read))

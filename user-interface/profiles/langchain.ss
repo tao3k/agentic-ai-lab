@@ -6,12 +6,12 @@
 ;;; User Interface reusable Profile library: LangChain-style linear chain.
 
 (import (only-in :clan/poo/object .def .o .ref)
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        (only-in :poo-flow/src/authoring/semantic-module
-                 poo-flow-semantic-module)
-        (only-in :core/profile-composition/profile-bundle
-                 poo-flow-profile-export
-                 poo-flow-module-profiles))
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :yuanxu/module-system/authoring/roles
+                 yuanxu-semantic-module)
+        (only-in :yuanxu/profile-composition/profile-bundle
+                 yuanxu-profile-export
+                 yuanxu-module-profiles))
 (export langchain LangChainModule)
 
 (.def langchain
@@ -37,12 +37,12 @@
                  (policy 'no-tool-call-branch))))
 
 (def LangChainModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'user-interface 'langchain)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'user-interface 'langchain)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'memory (.ref langchain 'memory))
-    (poo-flow-profile-export 'prompt (.ref langchain 'prompt))
-    (poo-flow-profile-export 'model (.ref langchain 'model))
-    (poo-flow-profile-export 'parser (.ref langchain 'parser))
-    (poo-flow-profile-export 'no-tool (.ref langchain 'no-tool)))))
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'memory (.ref langchain 'memory))
+    (yuanxu-profile-export 'prompt (.ref langchain 'prompt))
+    (yuanxu-profile-export 'model (.ref langchain 'model))
+    (yuanxu-profile-export 'parser (.ref langchain 'parser))
+    (yuanxu-profile-export 'no-tool (.ref langchain 'no-tool)))))

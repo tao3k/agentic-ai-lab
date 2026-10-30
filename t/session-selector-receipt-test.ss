@@ -7,12 +7,12 @@
 ;;; Invariant: Scheme never scores candidates, calls a model, dispatches a
 ;;; workflow, or returns an EmptyWorkflow; it emits pending routing receipts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object object?)
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-selector-receipt-test)
 
@@ -23,31 +23,31 @@
 
 ;; : TestSuite
 (def session-selector-receipt-test
-  (test-suite "poo-flow session selector receipts"
-    (poo-flow-test-case "declares pending selector routing without runtime dispatch"
+  (test-suite "agentic-ai-lab session selector receipts"
+    (yuanxu-test-case "declares pending selector routing without runtime dispatch"
       (let* ((build-candidate
-              (poo-flow-session-selector-candidate
+              (agentic-ai-lab-session-selector-candidate
                'candidate/build
                'transform
                'transform/build
                "Run build verification."
                '(derived-session handoff-intent)))
              (audit-candidate
-              (poo-flow-session-selector-candidate
+              (agentic-ai-lab-session-selector-candidate
                'candidate/audit
                'workflow
                'workflow/audit
                "Audit the build result."
                '(runtime-handoff diagnostics)))
              (governor-candidate
-              (poo-flow-session-selector-candidate
+              (agentic-ai-lab-session-selector-candidate
                'candidate/governor
                'agent-param
                'agent-param/governor
                "Route to a policy governor agent."
                '(validation-valid? runtime-owner)))
              (receipt
-              (poo-flow-session-selector-receipt
+              (agentic-ai-lab-session-selector-receipt
                'selector/build-router
                'project/selector
                'session/root
@@ -58,25 +58,25 @@
                  (result-contract . workflow-ref))
                'empty-workflow
                '((case . unit))))
-             (row (poo-flow-session-selector-receipt->alist receipt)))
-        (check-equal? (poo-flow-session-selector-candidate?
+             (row (agentic-ai-lab-session-selector-receipt->alist receipt)))
+        (check-equal? (agentic-ai-lab-session-selector-candidate?
                        build-candidate)
                       #t)
         (check-equal? (object? build-candidate) #t)
-        (check-equal? (poo-flow-session-selector-candidate-id
+        (check-equal? (agentic-ai-lab-session-selector-candidate-id
                        build-candidate)
                       'candidate/build)
-        (check-equal? (poo-flow-session-selector-candidate-kind
+        (check-equal? (agentic-ai-lab-session-selector-candidate-kind
                        audit-candidate)
                       'workflow)
-        (check-equal? (poo-flow-session-selector-candidate-target-ref
+        (check-equal? (agentic-ai-lab-session-selector-candidate-target-ref
                        governor-candidate)
                       'agent-param/governor)
-        (check-equal? (poo-flow-session-selector-receipt? receipt) #t)
-        (check-equal? (poo-flow-session-selector-receipt-selector-id
+        (check-equal? (agentic-ai-lab-session-selector-receipt? receipt) #t)
+        (check-equal? (agentic-ai-lab-session-selector-receipt-selector-id
                        receipt)
                       'selector/build-router)
-        (check-equal? (poo-flow-session-selector-receipt-candidate-ids
+        (check-equal? (agentic-ai-lab-session-selector-receipt-candidate-ids
                        receipt)
                       '(candidate/build candidate/audit candidate/governor))
         (check-equal? (test-ref row 'transform-candidate-ids)
@@ -86,10 +86,10 @@
         (check-equal? (test-ref row 'agent-param-candidate-ids)
                       '(candidate/governor))
         (check-equal?
-         (poo-flow-session-selector-receipt-selection-state receipt)
+         (agentic-ai-lab-session-selector-receipt-selection-state receipt)
          'pending)
         (check-equal?
-         (poo-flow-session-selector-receipt-selected-candidate-ref receipt)
+         (agentic-ai-lab-session-selector-receipt-selected-candidate-ref receipt)
          #f)
         (check-equal? (test-ref row 'fallback-ref) 'empty-workflow)
         (check-equal?
@@ -103,9 +103,9 @@
                                 'state)
                       'pending)
         (check-equal? (test-ref row 'runtime-executed) #f)))
-    (poo-flow-test-case "allows no-candidate selectors only through explicit fallback"
+    (yuanxu-test-case "allows no-candidate selectors only through explicit fallback"
       (let* ((receipt
-              (poo-flow-session-selector-receipt
+              (agentic-ai-lab-session-selector-receipt
                'selector/no-candidate
                'project/selector
                'session/root
@@ -113,7 +113,7 @@
                '()
                '((strategy . no-candidate))
                'empty-workflow))
-             (row (poo-flow-session-selector-receipt->alist receipt)))
+             (row (agentic-ai-lab-session-selector-receipt->alist receipt)))
         (check-equal? (test-ref row 'candidate-count) 0)
         (check-equal? (test-ref row 'candidate-ids) '())
         (check-equal? (test-ref row 'fallback-ref) 'empty-workflow)

@@ -5,18 +5,18 @@
 
 ;;; Boundary: builtin tool specs and default tool catalog.
 
-(import :poo-flow/modules/tool-core/objects-spec
-        :poo-flow/modules/tool-core/objects-catalog)
+(import :agentic-ai-lab/modules/tool-core/objects-spec
+        :agentic-ai-lab/modules/tool-core/objects-catalog)
 
-(export poo-flow-tool-core-builtin-read-workspace-file
-        poo-flow-tool-core-builtin-write-workspace-file
-        poo-flow-tool-core-builtin-run-shell-command
-        poo-flow-tool-core-mcp-tool
-        poo-flow-tool-core-default-catalog)
+(export agentic-ai-lab-tool-core-builtin-read-workspace-file
+        agentic-ai-lab-tool-core-builtin-write-workspace-file
+        agentic-ai-lab-tool-core-builtin-run-shell-command
+        agentic-ai-lab-tool-core-mcp-tool
+        agentic-ai-lab-tool-core-default-catalog)
 
 ;; : PooToolSpec
-(def poo-flow-tool-core-builtin-read-workspace-file
-  (poo-flow-tool-spec
+(def agentic-ai-lab-tool-core-builtin-read-workspace-file
+  (agentic-ai-lab-tool-spec
    'read-workspace-file
    'builtin-filesystem
    '(read)
@@ -30,8 +30,8 @@
    '((builtin . #t))))
 
 ;; : PooToolSpec
-(def poo-flow-tool-core-builtin-write-workspace-file
-  (poo-flow-tool-spec
+(def agentic-ai-lab-tool-core-builtin-write-workspace-file
+  (agentic-ai-lab-tool-spec
    'write-workspace-file
    'builtin-filesystem
    '(write)
@@ -45,8 +45,8 @@
    '((builtin . #t))))
 
 ;; : PooToolSpec
-(def poo-flow-tool-core-builtin-run-shell-command
-  (poo-flow-tool-spec
+(def agentic-ai-lab-tool-core-builtin-run-shell-command
+  (agentic-ai-lab-tool-spec
    'run-shell-command
    'builtin-command
    '(run)
@@ -60,13 +60,13 @@
    '((builtin . #t))))
 
 ;; : (-> Symbol Symbol [Symbol] Alist Alist [Alist] PooToolSpec)
-(def (poo-flow-tool-core-mcp-tool tool-ref
+(def (agentic-ai-lab-tool-core-mcp-tool tool-ref
                                   server-ref
                                   actions
                                   input-schema
                                   output-schema
                                   . maybe-metadata)
-  (poo-flow-tool-spec
+  (agentic-ai-lab-tool-spec
    tool-ref
    'mcp
    actions
@@ -80,11 +80,11 @@
    (if (null? maybe-metadata) '() (car maybe-metadata))))
 
 ;; : PooToolCatalog
-(def poo-flow-tool-core-default-catalog
-  (poo-flow-tool-catalog
+(def agentic-ai-lab-tool-core-default-catalog
+  (agentic-ai-lab-tool-catalog
    'tool-core/default
-   (list poo-flow-tool-core-builtin-read-workspace-file
-         poo-flow-tool-core-builtin-write-workspace-file
-         poo-flow-tool-core-builtin-run-shell-command)
-   '((source . poo-flow-tool-core)
+   (list agentic-ai-lab-tool-core-builtin-read-workspace-file
+         agentic-ai-lab-tool-core-builtin-write-workspace-file
+         agentic-ai-lab-tool-core-builtin-run-shell-command)
+   '((source . agentic-ai-lab-tool-core)
      (runtime-executed . #f))))

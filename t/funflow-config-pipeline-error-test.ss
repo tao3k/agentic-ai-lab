@@ -5,15 +5,16 @@
 
 ;;; Boundary: invalid Funflow POO configs fail at the declarative contract.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
 (export funflow-config-pipeline-error-test)
 
 ;; : Boolean
-(def poo-flow-import-side-effect-test-suite? #t)
+(def agentic-ai-lab-import-side-effect-test-suite? #t)
 
 ;; : (-> (-> Unit Object) Boolean)
 (def (funflow-config-error? thunk)
@@ -59,6 +60,6 @@
   'ok)
 
 (def funflow-config-pipeline-error-test
-  (test-suite "poo-flow Funflow config contract errors"
-    (poo-flow-test-case "rejects invalid Funflow POO declarations"
+  (test-suite "agentic-ai-lab Funflow config contract errors"
+    (yuanxu-test-case "rejects invalid Funflow POO declarations"
       (check-equal? (run-funflow-config-pipeline-error-checks) 'ok))))

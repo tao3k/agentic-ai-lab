@@ -6,73 +6,73 @@
 ;;; Boundary: POO-native causal-trajectory and structural-analysis values.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :clan/poo/mop validate)
-        (only-in :poo-flow/modules/temporal-causality/types
-                 poo-flow-relation-trajectory-witness-kind
-                 poo-flow-structural-impact-receipt-kind
-                 poo-flow-temporal-observation-kind
-                 poo-flow-causal-event-kind
-                 poo-flow-causal-event-graph-kind
-                 poo-flow-causal-trajectory-contract-kind
-                 poo-flow-causal-trajectory-assessment-kind
-                 poo-flow-causal-cut-kind
-                 poo-flow-temporal-classification-receipt-kind
-                 poo-flow-temporal-clock-domain-kind
-                 poo-flow-temporal-model-observation-kind
-                 poo-flow-temporal-constraint-kind
-                 poo-flow-temporal-hypothesis-kind
-                 poo-flow-temporal-model-kind
-                 poo-flow-temporal-query-kind
-                 poo-flow-temporal-model-receipt-kind
-                 PooFlowRelationTrajectoryWitness
-                 PooFlowStructuralImpactReceipt
-                 PooFlowTemporalObservation
-                 PooFlowCausalEvent
-                 PooFlowCausalEventGraph
-                 PooFlowCausalTrajectoryContract
-                 PooFlowCausalTrajectoryAssessment
-                 PooFlowCausalCut
-                 PooFlowTemporalClassificationReceipt
-                 PooFlowTemporalClockDomain
-                 PooFlowTemporalModelObservation
-                 PooFlowTemporalConstraint
-                 PooFlowTemporalHypothesis
-                 PooFlowTemporalModel
-                 PooFlowTemporalQuery
-                 PooFlowTemporalModelReceipt))
+        (only-in :agentic-ai-lab/modules/temporal-causality/types
+                 agentic-ai-lab-relation-trajectory-witness-kind
+                 agentic-ai-lab-structural-impact-receipt-kind
+                 agentic-ai-lab-temporal-observation-kind
+                 agentic-ai-lab-causal-event-kind
+                 agentic-ai-lab-causal-event-graph-kind
+                 agentic-ai-lab-causal-trajectory-contract-kind
+                 agentic-ai-lab-causal-trajectory-assessment-kind
+                 agentic-ai-lab-causal-cut-kind
+                 agentic-ai-lab-temporal-classification-receipt-kind
+                 agentic-ai-lab-temporal-clock-domain-kind
+                 agentic-ai-lab-temporal-model-observation-kind
+                 agentic-ai-lab-temporal-constraint-kind
+                 agentic-ai-lab-temporal-hypothesis-kind
+                 agentic-ai-lab-temporal-model-kind
+                 agentic-ai-lab-temporal-query-kind
+                 agentic-ai-lab-temporal-model-receipt-kind
+                 AgenticAILabRelationTrajectoryWitness
+                 AgenticAILabStructuralImpactReceipt
+                 AgenticAILabTemporalObservation
+                 AgenticAILabCausalEvent
+                 AgenticAILabCausalEventGraph
+                 AgenticAILabCausalTrajectoryContract
+                 AgenticAILabCausalTrajectoryAssessment
+                 AgenticAILabCausalCut
+                 AgenticAILabTemporalClassificationReceipt
+                 AgenticAILabTemporalClockDomain
+                 AgenticAILabTemporalModelObservation
+                 AgenticAILabTemporalConstraint
+                 AgenticAILabTemporalHypothesis
+                 AgenticAILabTemporalModel
+                 AgenticAILabTemporalQuery
+                 AgenticAILabTemporalModelReceipt))
 
-(export poo-flow-relation-trajectory-witness
-        poo-flow-structural-impact-receipt
-        poo-flow-temporal-observation
-        poo-flow-causal-event
-        poo-flow-causal-event-graph-value
-        poo-flow-causal-trajectory-contract
-        poo-flow-causal-trajectory-assessment
-        poo-flow-causal-cut-value
-        poo-flow-temporal-classification-receipt
-        poo-flow-temporal-clock-domain
-        poo-flow-temporal-model-observation
-        poo-flow-temporal-constraint
-        poo-flow-temporal-hypothesis
-        poo-flow-temporal-model-value
-        poo-flow-temporal-query
-        poo-flow-temporal-model-receipt)
+(export agentic-ai-lab-relation-trajectory-witness
+        agentic-ai-lab-structural-impact-receipt
+        agentic-ai-lab-temporal-observation
+        agentic-ai-lab-causal-event
+        agentic-ai-lab-causal-event-graph-value
+        agentic-ai-lab-causal-trajectory-contract
+        agentic-ai-lab-causal-trajectory-assessment
+        agentic-ai-lab-causal-cut-value
+        agentic-ai-lab-temporal-classification-receipt
+        agentic-ai-lab-temporal-clock-domain
+        agentic-ai-lab-temporal-model-observation
+        agentic-ai-lab-temporal-constraint
+        agentic-ai-lab-temporal-hypothesis
+        agentic-ai-lab-temporal-model-value
+        agentic-ai-lab-temporal-query
+        agentic-ai-lab-temporal-model-receipt)
 
-(def (poo-flow-relation-trajectory-witness
+(def (agentic-ai-lab-relation-trajectory-witness
       target-node-id-value node-path-value relation-path-value)
   (validate
-   PooFlowRelationTrajectoryWitness
-   (.o kind: poo-flow-relation-trajectory-witness-kind
+   AgenticAILabRelationTrajectoryWitness
+   (.o kind: agentic-ai-lab-relation-trajectory-witness-kind
        target-node-id: target-node-id-value
        node-path: node-path-value
        relation-path: relation-path-value)))
 
-(def (poo-flow-structural-impact-receipt
+(def (agentic-ai-lab-structural-impact-receipt
       status-value graph-id-value changed-node-ids-value direction-value
       selected-relations-value affected-node-ids-value trajectories-value
       unresolved-edges-value)
   (validate
-   PooFlowStructuralImpactReceipt
-   (.o kind: poo-flow-structural-impact-receipt-kind
+   AgenticAILabStructuralImpactReceipt
+   (.o kind: agentic-ai-lab-structural-impact-receipt-kind
        status: status-value
        scope: 'structural-snapshot
        graph-id: graph-id-value
@@ -86,12 +86,12 @@
        release-authorized?: #f
        runtime-executed?: #f)))
 
-(def (poo-flow-temporal-observation
+(def (agentic-ai-lab-temporal-observation
       identity-value clock-role-value logical-position-value
       provenance-identity-value)
   (validate
-   PooFlowTemporalObservation
-   (.o kind: poo-flow-temporal-observation-kind
+   AgenticAILabTemporalObservation
+   (.o kind: agentic-ai-lab-temporal-observation-kind
        identity: identity-value
        clock-role: clock-role-value
        logical-position: logical-position-value
@@ -99,13 +99,13 @@
        immutable?: #t
        runtime-executed?: #f)))
 
-(def (poo-flow-causal-event
+(def (agentic-ai-lab-causal-event
       identity-value subject-value event-kind-value observation-value
       payload-identity-value causal-parent-identities-value modality-value
       committed-value)
   (validate
-   PooFlowCausalEvent
-   (.o kind: poo-flow-causal-event-kind
+   AgenticAILabCausalEvent
+   (.o kind: agentic-ai-lab-causal-event-kind
        identity: identity-value
        subject: subject-value
        event-kind: event-kind-value
@@ -116,12 +116,12 @@
        committed?: committed-value
        runtime-executed?: #f)))
 
-(def (poo-flow-causal-event-graph-value
+(def (agentic-ai-lab-causal-event-graph-value
       identity-value subject-value events-value event-index-value
       missing-parent-identities-value temporal-order-violations-value)
   (validate
-   PooFlowCausalEventGraph
-   (.o kind: poo-flow-causal-event-graph-kind
+   AgenticAILabCausalEventGraph
+   (.o kind: agentic-ai-lab-causal-event-graph-kind
        identity: identity-value
        subject: subject-value
        events: events-value
@@ -132,13 +132,13 @@
                        (null? temporal-order-violations-value))
        runtime-executed?: #f)))
 
-(def (poo-flow-causal-trajectory-contract
+(def (agentic-ai-lab-causal-trajectory-contract
       identity-value trigger-event-id-value intended-event-ids-value
       error-event-paths-value intended-impact-event-ids-value
       error-impact-event-ids-value)
   (validate
-   PooFlowCausalTrajectoryContract
-   (.o kind: poo-flow-causal-trajectory-contract-kind
+   AgenticAILabCausalTrajectoryContract
+   (.o kind: agentic-ai-lab-causal-trajectory-contract-kind
        identity: identity-value
        trigger-event-id: trigger-event-id-value
        intended-event-ids: intended-event-ids-value
@@ -146,11 +146,11 @@
        intended-impact-event-ids: intended-impact-event-ids-value
        error-impact-event-ids: error-impact-event-ids-value)))
 
-(def (poo-flow-causal-trajectory-assessment
+(def (agentic-ai-lab-causal-trajectory-assessment
       status-value contract-value event-graph-value diagnostics-value)
   (validate
-   PooFlowCausalTrajectoryAssessment
-   (.o kind: poo-flow-causal-trajectory-assessment-kind
+   AgenticAILabCausalTrajectoryAssessment
+   (.o kind: agentic-ai-lab-causal-trajectory-assessment-kind
        status: status-value
        accepted?: (eq? status-value 'causal-trajectory-admitted)
        contract-identity: (.ref contract-value 'identity)
@@ -165,14 +165,14 @@
        release-authorized?: #f
        runtime-executed?: #f)))
 
-(def (poo-flow-causal-cut-value
+(def (agentic-ai-lab-causal-cut-value
       identity-value event-graph-identity-value subject-value
       events-value event-index-value
       missing-parent-identities-value temporal-order-violations-value
       as-of-position-value)
   (validate
-   PooFlowCausalCut
-   (.o kind: poo-flow-causal-cut-kind
+   AgenticAILabCausalCut
+   (.o kind: agentic-ai-lab-causal-cut-kind
        identity: identity-value
        event-graph-identity: event-graph-identity-value
        subject: subject-value
@@ -185,7 +185,7 @@
        as-of-position: as-of-position-value
        runtime-executed?: #f)))
 
-(def (poo-flow-temporal-classification-receipt
+(def (agentic-ai-lab-temporal-classification-receipt
       status-value event-graph-identity-value cut-identity-value
       trigger-event-id-value
       as-of-position-value horizon-value past-event-ids-value
@@ -194,8 +194,8 @@
       counterfactual-event-ids-value outside-horizon-event-ids-value
       unknown-frontier-value trajectories-value structural-impact-value)
   (validate
-   PooFlowTemporalClassificationReceipt
-   (.o kind: poo-flow-temporal-classification-receipt-kind
+   AgenticAILabTemporalClassificationReceipt
+   (.o kind: agentic-ai-lab-temporal-classification-receipt-kind
        status: status-value
        event-graph-identity: event-graph-identity-value
        cut-identity: cut-identity-value
@@ -215,59 +215,60 @@
        release-authorized?: #f
        runtime-executed?: #f)))
 
-(def (poo-flow-temporal-clock-domain identity-value role-value)
-  (validate PooFlowTemporalClockDomain
-    (.o kind: poo-flow-temporal-clock-domain-kind
+(def (agentic-ai-lab-temporal-clock-domain identity-value role-value)
+  (validate AgenticAILabTemporalClockDomain
+    (.o kind: agentic-ai-lab-temporal-clock-domain-kind
         identity: identity-value clock-role: role-value)))
 
-(def (poo-flow-temporal-model-observation
+(def (agentic-ai-lab-temporal-model-observation
       identity-value domain-id-value position-value provenance-value modality-value)
-  (validate PooFlowTemporalModelObservation
-    (.o kind: poo-flow-temporal-model-observation-kind
+  (validate AgenticAILabTemporalModelObservation
+    (.o kind: agentic-ai-lab-temporal-model-observation-kind
         identity: identity-value domain-identity: domain-id-value
         logical-position: position-value provenance-identity: provenance-value
         modality: modality-value)))
 
-(def (poo-flow-temporal-constraint
+(def (agentic-ai-lab-temporal-constraint
       identity-value relation-value left-id-value right-id-value)
-  (validate PooFlowTemporalConstraint
-    (.o kind: poo-flow-temporal-constraint-kind
+  (validate AgenticAILabTemporalConstraint
+    (.o kind: agentic-ai-lab-temporal-constraint-kind
         identity: identity-value relation: relation-value
         left-observation-id: left-id-value
         right-observation-id: right-id-value)))
 
-(def (poo-flow-temporal-hypothesis
+(def (agentic-ai-lab-temporal-hypothesis
       identity-value cause-id-value effect-id-value constraints-value)
-  (validate PooFlowTemporalHypothesis
-    (.o kind: poo-flow-temporal-hypothesis-kind
+  (validate AgenticAILabTemporalHypothesis
+    (.o kind: agentic-ai-lab-temporal-hypothesis-kind
         identity: identity-value
         cause-observation-id: cause-id-value
         effect-observation-id: effect-id-value
         constraints: constraints-value)))
 
-(def (poo-flow-temporal-model-value
+(def (agentic-ai-lab-temporal-model-value
       identity-value digest-value domains-value observations-value
-      hypotheses-value family-complete-value)
-  (validate PooFlowTemporalModel
-    (.o kind: poo-flow-temporal-model-kind
+      hypotheses-value family-complete-value semantics-value)
+  (validate AgenticAILabTemporalModel
+    (.o kind: agentic-ai-lab-temporal-model-kind
         identity: identity-value semantic-digest: digest-value
         domains: domains-value observations: observations-value
         hypotheses: hypotheses-value
-        family-complete?: family-complete-value)))
+        family-complete?: family-complete-value
+        family-semantics: semantics-value)))
 
-(def (poo-flow-temporal-query
+(def (agentic-ai-lab-temporal-query
       identity-value hypothesis-id-value exploration-limit-value)
-  (validate PooFlowTemporalQuery
-    (.o kind: poo-flow-temporal-query-kind
+  (validate AgenticAILabTemporalQuery
+    (.o kind: agentic-ai-lab-temporal-query-kind
         identity: identity-value
         hypothesis-identity: hypothesis-id-value
         exploration-limit: exploration-limit-value)))
 
-(def (poo-flow-temporal-model-receipt
+(def (agentic-ai-lab-temporal-model-receipt
       model-value query-value classification-value admitted-value refuted-value
       unknown-value unexplored-value exhausted-value)
-  (validate PooFlowTemporalModelReceipt
-    (.o kind: poo-flow-temporal-model-receipt-kind
+  (validate AgenticAILabTemporalModelReceipt
+    (.o kind: agentic-ai-lab-temporal-model-receipt-kind
         model-digest: (.ref model-value 'semantic-digest)
         query-identity: (.ref query-value 'identity)
         classification: classification-value
@@ -277,5 +278,5 @@
         unexplored-hypothesis-ids: unexplored-value
         exhausted?: exhausted-value
         family-complete?: (.ref model-value 'family-complete?)
-        assumption: 'exclusive-explanations
+        assumption: (.ref model-value 'family-semantics)
         runtime-executed?: #f)))

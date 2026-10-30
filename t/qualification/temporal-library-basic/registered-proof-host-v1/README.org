@@ -1,0 +1,27 @@
+#+title: Registered native proof current applicability v1
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+This increment qualifies the native Scheme Library proof registry and Host
+current-state checks. The original native proof, exact retained catalog/journal,
+current append-only journal, current catalog, registered policy, observed clock
+and expected generations are checked independently of effect authority.
+
+Native: 23 Cases, final MODULE/HARNESS/OK and exit 0. Existing C/Python ABI v1:
+118 Python tests, no skips. Original Rust Derivation bridge: 3 tests. These two
+cross-language regressions use the newly linked artifact; they do not expose
+the new proof registry through a wire control. All tests retain the five-second
+idle and 45-second total watchdog. Native heap remains 1G.
+
+The explicit normal-return rejection sentinel replaces check-exception true in
+the evaluator gate. Pre-assertion smoke and failed validity fixtures remain unqualified. Raw
+execution logs are local or CI artifacts and are not stored in Git. The incorrectly named oracle configuration caused three
+Python skips; the corrected full run is the qualified receipt.
+
+qualification.ss records source hashes and bounded claims. native-artifact.ss
+records the actual compiler-owned closure and linked artifact identity. Generated
+SCM is compiler evidence, not manually maintained Scheme source. No source
+provider authentication, final publication fence, MRR Data CAS, real-model call,
+new formal proof, benchmark win or remote exact-head CI closure is claimed.

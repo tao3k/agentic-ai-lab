@@ -1,0 +1,248 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Agentic AI Lab Composition Mathematics (Version 1)
+#+language: en
+
+* Ownership
+
+=AgenticAILabComposition.lean= consumes actual LeanPoo C3/C4 certificates and proves
+role-source agreement, mapped identity/precedence properties and typed sequential
+associativity. Stage and parallel composition have no MRR binding or ASP scenario
+dependency. =CompositionChecks.lean= exercises actual certificate algorithms,
+contradictory-order rejection and typed sequential/parallel operations.
+=CompositionAxioms.lean= permits only standard Lean axioms.
+
+Run =just check-composition-proof= with Lean 4.34.0 available. LeanPoo is pinned
+to the full immutable revision in =lakefile.toml=. The package has no dependency
+on MRR. MRR consumes this package for received-order checks and retains its own
+source/generation, FFI/result admission and publication proofs.
+
+This gate qualifies mathematical composition and certificates. It does not
+prove Scheme implementation refinement or qualify the outstanding standalone
+Scheme DAG corruption controls. No consumer Quint model was moved here: the existing
+Search Quint model is an MRR consumer publication protocol. The new per-stage Search attempt producer model qualifies the implemented
+attempt transition kernel; physical dispatch and source/graph correspondence
+remain separate consumer and producer gates.
+
+Consumers declare this repository, a full immutable commit SHA and the
+=proofs/Composition= subdirectory in their Lake dependency. The standalone
+=pin_dependency.py= bootstraps the exact LeanPoo revision, even after its topic
+branch is deleted. CI executes the same mathematical controls and axiom audit.
+
+MRR has qualified immutable-source materialization and its consumer proofs from
+an empty dependency cache. Its retained publication Quint model remains MRR-owned.
+Producer mathematics and consumer admission are separate gates; this package's
+CI cannot establish downstream consumer CI, Scheme source refinement or release
+integration. The producer review is [[https://github.com/tao3k/agentic-ai-lab/pull/34][PR 34]].
+
+
+* Search Engine and Temporal assurance contract
+
+The canonical producer module is =modules/search-engine/interface.ss=.
+=modules/temporal-causality/interface.ss= supplies Temporal observations and
+causal validity. Search Engine owns strategy lowering, stage readiness, scoped
+attempts and continuation. A structural prerequisite edge permits a dependency;
+an observed Temporal event records actual causal use. C4 precedence alone must
+never be treated as observed causality or authenticated source evidence.
+
+Scheme, Lean and Quint advance together over the same named transitions:
+
+| Producer contract | Scheme implementation | Lean model and LeanPoo reuse | Quint model |
+|-------------------+-----------------------+------------------------------+-------------|
+| Typed composition and stage prerequisites | search-engine/funs.ss, engine.ss | AgenticAILabComposition; LeanPoo C3/C4 certificates | SearchDag DependencyOrder |
+| Exact request identity and cancellation | search-engine/attempt.ss, engine.ss | SearchAttempt admission, cancellation and revision laws | SearchAttempt safety and cancelAny control |
+| Predecessor completion admission | search-engine/attempt.ss, engine.ss | SearchReadiness, SearchDag frontier_exact | SearchReadiness presence, freshness and scope controls |
+| Selective descendant invalidation | search-engine/engine.ss | SearchTemporal; LeanPoo CertifiedInvalidation; SearchDag descendant settlement rejection | SearchDag FreshResults and BranchRetention |
+| Temporal event admission | temporal-causality event graph and search-engine/engine-observe | SearchEvidence scope, order, parent and invalidation laws | SearchEvidence positive model and four guard mutants |
+
+LeanPoo remains the immutable dependency declared in =lakefile.toml= and
+=lake-manifest.json=. Search models reuse its graph and invalidation certificate
+algorithms rather than recreate C3/C4 mathematics. Lean quantifies over arbitrary
+certified finite graphs; Quint explores the declared bounded transitions and
+requires mutant counterexamples; Scheme controls exercise actual POO objects.
+The source-binding gate links model digests and invariant names, while the
+executable controls compare named outcomes. None of these checks alone proves
+Scheme source refinement.
+
+A transition change must update its Scheme controls, Lean laws or executable
+witnesses, and Quint projection or explicitly document why that projection is
+unchanged. Run =just check-search-engine-proof= for the joined producer gate.
+Physical dispatch, backend capability admission and result authenticity remain
+consumer obligations. Evidence-level Temporal composition requires additional
+models and controls before being described as formally closed.
+
+* Search engine proof increment
+
+=SearchAttempt.lean= proves exact scope admission, once-only settlement,
+revision fencing, monotonic request identifiers within one retained state
+lineage, and retirement rejection. =modules/search-engine/attempt.ss= implements the
+matching pure per-stage POO kernel; =t/search-attempt-test.ss= runs actual
+current/foreign/duplicate/revised/retired request controls.
+
+| Scheme operation | Lean definition | Quint action |
+|------------------+-----------------+--------------|
+| attempt-state | State / Scope | init |
+| attempt-issue | issue | issue |
+| attempt-settle | settle | settle |
+| attempt-revise | revise | revise |
+| attempt-retire | retire | retire |
+| engine-cancel | cancel / revise | cancel |
+
+The bounded Quint projection fixes stage/generation/configuration/source identities
+and varies revision, attempt and retirement. It checks five safety predicates
+and requires counterexamples for omitted revision, attempt, retirement and exact
+cancellation guards. Run =just check-search-attempt-quint= using the existing pinned runner.
+The source-binding gate checks Quint source freshness and invariant inventory;
+it is not a semantic refinement proof.
+
+=SearchTemporal.lean= reuses LeanPoo's =CertifiedInvalidation= and
+=certifyInvalidation=. Its certificate characterizes exactly the changed nodes
+and structural descendants; unaffected nodes are excluded. The executable
+A/B/C/D/E and cycle controls run inside =just check-composition-proof=.
+
+The stage dependency graph must be projected with actual prerequisites as
+edges before this structural certificate can govern Search invalidation.
+The C4 graph representation here does not make role precedence equivalent to
+observed causal evidence. Scheme source/graph correspondence, selective observation reuse, negative-evidence dependency tracking,
+physical execution and full engine refinement remain open.
+
+A kernel scope denotes one retained per-stage state lineage. Reconstructing an
+initial state with the same external generation is not a permitted recovery
+operation. State authority and authenticated source cuts belong to its owner.
+Scheme snapshots text bindings, while Lean abstracts identity equality; an
+injective identity projection is required for cross-language correspondence.
+These controls qualify identity admission only, not truth completeness or
+backend cancellation. Arbitrary extended POO objects are not authentication
+certificates.
+
+Run =just check-search-engine-proof= to combine the Lean certificate/axiom gate,
+Quint positive and negative cases, and thirty actual Scheme control cases.
+The Scheme gate bootstraps Gxi and invokes the upstream GxTest entry point.
+The standalone GxTest executable's local =__eval-import= failure also occurs
+in the unchanged Search framework suite; that failure is retained separately
+from successful Gxi-hosted Case/Module/Harness receipts.
+
+* Predecessor readiness admission
+
+=SearchReadiness.lean= and =attempt-issue-ready= require every exact current
+predecessor request to have an owner-admitted completion receipt. Generation
+and configuration must match the downstream execution scope; predecessor
+source cuts and revisions can differ between stages. Duplicate receipts cannot
+replace a missing predecessor. Root stages have an empty prerequisite set.
+The guarded issue delegates to the original attempt gate, preserving retirement,
+active-attempt exclusion and request identity. =attempt-complete= creates the
+receipt only after successful settlement admission and snapshots text identities.
+
+The Lean proofs quantify over arbitrary finite prerequisite lists. The bounded
+Quint projection uses two predecessor slots and one revision per slot, retaining
+old completions across revision changes so that stale evidence is exercised.
+Its exact-request abstraction fixes attempt/source identity per revision and
+varies generation. Positive exhaustion and three single-guard mutants qualify
+presence, revision freshness and scope isolation. Full request fields are tested
+in Scheme and modeled in =SearchAttempt.lean=.
+
+The trusted DAG owner must derive the complete prerequisite set and replace
+expected request identities after invalidation. A caller-provided empty set does
+not certify that an arbitrary stage is a root. These functions are pure admission
+combinators, not an automatic DAG scheduler; they do not authenticate arbitrary
+POO extensions, establish parent result truth, or prove Scheme/Lean refinement.
+
+* Pure DAG controller
+
+=modules/search-engine/engine.ss= lowers the existing Search strategy root directly:
+sequential and merge children consume the previous terminal stages; parallel
+children share incoming dependencies and contribute their own terminal stages.
+Stage names must be unique, and every prerequisite must precede its dependent.
+No second caller-supplied edge list is accepted. Duplicate identities are rejected.
+Nested branch controls qualify terminal-stage fan-in instead of branch names.
+
+The public engine, node and issue values are POO objects. =engine-frontier=
+selects only incomplete, inactive stages with all exact predecessor completions.
+=engine-issue= returns the next retained engine and a request; =engine-complete=
+settles that request through the existing attempt admission kernel.
+=engine-revise= computes changed stages and all structural descendants, increments
+their revisions, clears current requests/completions and preserves next-attempt
+counters. Unaffected nodes retain their original identity and completion. Empty
+changes are a no-op. Old physical work remains execution-owned and its results
+cannot be admitted after invalidation. The caller retains one authoritative state
+lineage; branching historical states is not an exactly-once execution protocol.
+
+=SearchDag.lean= proves frontier characterization, missing-parent rejection,
+affected revision/active/request reset and unaffected state/receipt preservation.
+The reachability theorem directly consumes LeanPoo =CertifiedInvalidation=.
+=SearchDagChecks.lean= exercises the same A/B/C/D control graph. The bounded
+Quint model explores scheduling/completion around one A/C/D revision and checks
+three omission controls: dependency admission, revision fencing, and independent
+branch retention. The revision-fencing mutant retains old active work as well as
+omitting its version check; it is not a claim that those two guards are redundant.
+The separate attempt/readiness models retain their narrower identity controls.
+
+Run =just check-search-engine-proof=. It now includes eight actual DAG Scheme
+cases alongside eight per-stage cases and six framework cases. This qualifies the pure control API;
+active MRR runtime pins, backend dispatch/cancellation, candidate payload truth,
+negative-evidence dependencies, observation policy and source-level refinement
+remain separate gates. The Lean graph projection and Scheme composition lowering
+have matched executable controls, not a mechanically proved parser/refinement link.
+
+* Temporal evidence admission increment
+
+=engine-require-evidence= selects the Temporal evidence contract before the first
+attempt is issued. It refines the existing POO engine, retaining the same DAG
+lowering, request lineage and selective invalidation. =engine-observe= requires
+an exact active request and a committed observed or derived Temporal event.
+The event binds its stage, generation and source cut; its logical-version
+position is a nonnegative integer. Its causal parent identities must match
+current predecessor observations exactly. The existing Temporal event-graph
+analyzer checks unique event identities, missing parents and strict temporal
+order. Arrival order does not define causality.
+
+Evidence is copied on admission, including nested observation identities and
+parent strings. Revision/cancellation clears evidence on the affected stage and
+its structural descendants, preserving independent branches. Identity-only
+=engine-complete= cannot satisfy the evidence-required contract. The original
+identity-only contract remains a boundary check and does not certify evidence.
+
+=SearchEvidence.lean= imports the LeanPoo-backed =SearchDag= model. It proves
+scope binding, missing-parent rejection, uncommitted rejection, temporal-order
+rejection and invalidated-descendant rejection. Its observation inventory is
+assumed to contain current owner-admitted predecessors; authenticating that
+inventory is outside the mathematical abstraction. =SearchEvidence.qnt=
+fixes a three-stage graph and abstracts each returned event's parent, scope,
+order and commitment checks as Boolean projections. It declares an explicit
+completed terminal transition and requires four omitted-guard mutants to fail.
+This abstraction does not establish correctness of the Temporal parser/analyzer.
+
+=just check-search-engine-proof= joins four Scheme suites (30 cases), all five
+Quint groups, the maintained LeanPoo dependency and axiom/source-binding gates.
+The eight evidence Scheme cases exercise actual Temporal event construction, fan-in,
+bad parents, source/stage/modality rejection, time ordering, revision and
+immutable snapshots. Full payload truth, coverage/absence dependencies, retained
+inventory authentication and Scheme source refinement remain open. MRR's wire
+controller must separately qualify transport of this evidence contract before
+downstream execution can claim it.
+
+* Event identity history across revision
+
+The engine retains =event-identities= independently of current node evidence.
+Every successfully admitted observation adds its copied identity to this
+generation's history. Revision and exact cancellation clear invalidated node
+evidence but retain the history, so a previously admitted event identity cannot
+be assigned to a later attempt even when its old observation is no longer in the
+current causal graph. Failed admission leaves both the active attempt and the
+identity history unchanged. This rule applies to one authoritative retained
+state lineage; replaying an older engine snapshot remains outside exactly-once
+execution guarantees.
+
+=SearchEvidenceHistory.lean= reuses the =SearchEvidence= admission contract and
+the LeanPoo-backed graph model. It proves monotonic history retention and
+rejection of a historical identity, including after revision.
+=SearchEvidenceHistory.qnt= explores one stage, two revisions and two event
+identities. Its positive model and two mutants qualify unique admission and
+history retention; they do not model arbitrary graph or source authentication.
+The source digest and invariant inventory are checked by the joined gate.
+
+History grows by one identity per admitted observation within an engine
+generation. It is not discarded when current evidence is invalidated. Engine
+retirement and consumer resource bounds must manage generation lifetime; no
+implicit history reset or guessed retention window is used to admit old IDs.

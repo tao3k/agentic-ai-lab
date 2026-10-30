@@ -1,0 +1,802 @@
+{
+  "schema": "poo-flow.semantic-abi-live-plan",
+  "version": 1,
+  "head": "c8b491bfb91001183e78df4930d0bc38f3a5e17b",
+  "artifactSha256": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",
+  "model": "deepseek-v4-flash",
+  "reasoningEffort": "none",
+  "inputRepresentation": "explicit output contract, public Scheme source and literal semantic-call result projection",
+  "contentIdleSeconds": 5,
+  "totalCallSeconds": 90,
+  "maximumCalls": 24,
+  "retries": 0,
+  "cases": [
+    {
+      "id": "chain",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 27,
+          "asOf": 27,
+          "cut": "contract-cut-chain",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "contract-source-chain",
+          "generation": 41,
+          "clock": "clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              19,
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": [
+            [
+              "r7",
+              "s4"
+            ],
+            [
+              "s4",
+              "t9"
+            ]
+          ]
+        },
+        "root": "r7"
+      }
+    },
+    {
+      "id": "branch",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 27,
+          "asOf": 27,
+          "cut": "contract-cut-branch",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "contract-source-branch",
+          "generation": 41,
+          "clock": "clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              19,
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": [
+            [
+              "r7",
+              "s4"
+            ],
+            [
+              "r7",
+              "t9"
+            ]
+          ]
+        },
+        "root": "r7"
+      }
+    },
+    {
+      "id": "withdrawal",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 27,
+          "asOf": 27,
+          "cut": "contract-cut-withdrawal",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "contract-source-withdrawal",
+          "generation": 41,
+          "clock": "clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              19,
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": []
+        },
+        "root": "r7"
+      }
+    },
+    {
+      "id": "open-cut",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 27,
+          "asOf": 27,
+          "cut": "contract-cut-open-cut",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 8,
+          "closed": false
+        },
+        "source": {
+          "identity": "contract-source-open-cut",
+          "generation": 41,
+          "clock": "clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              19,
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": [
+            [
+              "r7",
+              "s4"
+            ],
+            [
+              "s4",
+              "t9"
+            ]
+          ]
+        },
+        "root": "r7"
+      }
+    },
+    {
+      "id": "late-ingestion",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 27,
+          "asOf": 18,
+          "cut": "contract-cut-late-ingestion",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "contract-source-late-ingestion",
+          "generation": 41,
+          "clock": "clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              19,
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": [
+            [
+              "r7",
+              "s4"
+            ],
+            [
+              "s4",
+              "t9"
+            ]
+          ]
+        },
+        "root": "r7"
+      }
+    },
+    {
+      "id": "interval",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 27,
+          "asOf": 27,
+          "cut": "contract-cut-interval",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "contract-source-interval",
+          "generation": 41,
+          "clock": "clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              [
+                "between",
+                17,
+                37
+              ],
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": [
+            [
+              "r7",
+              "s4"
+            ],
+            [
+              "s4",
+              "t9"
+            ]
+          ]
+        },
+        "root": "r7"
+      }
+    },
+    {
+      "id": "zero-horizon",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 27,
+          "asOf": 27,
+          "cut": "contract-cut-zero-horizon",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 0,
+          "closed": true
+        },
+        "source": {
+          "identity": "contract-source-zero-horizon",
+          "generation": 41,
+          "clock": "clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              19,
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": [
+            [
+              "r7",
+              "s4"
+            ],
+            [
+              "s4",
+              "t9"
+            ]
+          ]
+        },
+        "root": "r7"
+      }
+    },
+    {
+      "id": "one-horizon",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 27,
+          "asOf": 27,
+          "cut": "contract-cut-one-horizon",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 1,
+          "closed": true
+        },
+        "source": {
+          "identity": "contract-source-one-horizon",
+          "generation": 41,
+          "clock": "clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              19,
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": [
+            [
+              "r7",
+              "s4"
+            ],
+            [
+              "s4",
+              "t9"
+            ]
+          ]
+        },
+        "root": "r7"
+      }
+    },
+    {
+      "id": "clock-mismatch",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 27,
+          "asOf": 27,
+          "cut": "contract-cut-clock-mismatch",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "contract-source-clock-mismatch",
+          "generation": 41,
+          "clock": "other-clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              19,
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": [
+            [
+              "r7",
+              "s4"
+            ],
+            [
+              "s4",
+              "t9"
+            ]
+          ]
+        },
+        "root": "r7"
+      }
+    },
+    {
+      "id": "generation-mismatch",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 27,
+          "asOf": 27,
+          "cut": "contract-cut-generation-mismatch",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "contract-source-generation-mismatch",
+          "generation": 42,
+          "clock": "clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              19,
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": [
+            [
+              "r7",
+              "s4"
+            ],
+            [
+              "s4",
+              "t9"
+            ]
+          ]
+        },
+        "root": "r7"
+      }
+    },
+    {
+      "id": "window-end",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 20,
+          "asOf": 27,
+          "cut": "contract-cut-window-end",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "contract-source-window-end",
+          "generation": 41,
+          "clock": "clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              19,
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": [
+            [
+              "r7",
+              "s4"
+            ],
+            [
+              "s4",
+              "t9"
+            ]
+          ]
+        },
+        "root": "r7"
+      }
+    },
+    {
+      "id": "unknown-time",
+      "request": {
+        "lens": {
+          "generation": 41,
+          "clock": "clock",
+          "start": 17,
+          "end": 27,
+          "asOf": 27,
+          "cut": "contract-cut-unknown-time",
+          "members": [
+            "r7",
+            "s4",
+            "t9"
+          ],
+          "horizon": 8,
+          "closed": true
+        },
+        "source": {
+          "identity": "contract-source-unknown-time",
+          "generation": 41,
+          "clock": "clock",
+          "events": [
+            [
+              "r7",
+              18,
+              18
+            ],
+            [
+              "s4",
+              "unknown",
+              19
+            ],
+            [
+              "t9",
+              20,
+              20
+            ]
+          ],
+          "parents": [
+            [
+              "r7",
+              "s4"
+            ],
+            [
+              "s4",
+              "t9"
+            ]
+          ]
+        },
+        "root": "r7"
+      }
+    }
+  ],
+  "order": [
+    {
+      "case": "chain",
+      "api": "sync"
+    },
+    {
+      "case": "chain",
+      "api": "async"
+    },
+    {
+      "case": "branch",
+      "api": "sync"
+    },
+    {
+      "case": "branch",
+      "api": "async"
+    },
+    {
+      "case": "withdrawal",
+      "api": "sync"
+    },
+    {
+      "case": "withdrawal",
+      "api": "async"
+    },
+    {
+      "case": "open-cut",
+      "api": "sync"
+    },
+    {
+      "case": "open-cut",
+      "api": "async"
+    },
+    {
+      "case": "late-ingestion",
+      "api": "sync"
+    },
+    {
+      "case": "late-ingestion",
+      "api": "async"
+    },
+    {
+      "case": "interval",
+      "api": "sync"
+    },
+    {
+      "case": "interval",
+      "api": "async"
+    },
+    {
+      "case": "zero-horizon",
+      "api": "sync"
+    },
+    {
+      "case": "zero-horizon",
+      "api": "async"
+    },
+    {
+      "case": "one-horizon",
+      "api": "sync"
+    },
+    {
+      "case": "one-horizon",
+      "api": "async"
+    },
+    {
+      "case": "clock-mismatch",
+      "api": "sync"
+    },
+    {
+      "case": "clock-mismatch",
+      "api": "async"
+    },
+    {
+      "case": "generation-mismatch",
+      "api": "sync"
+    },
+    {
+      "case": "generation-mismatch",
+      "api": "async"
+    },
+    {
+      "case": "window-end",
+      "api": "sync"
+    },
+    {
+      "case": "window-end",
+      "api": "async"
+    },
+    {
+      "case": "unknown-time",
+      "api": "sync"
+    },
+    {
+      "case": "unknown-time",
+      "api": "async"
+    }
+  ],
+  "sources": {
+    "/private/tmp/poo-pr34-failure-fix/packages/python-testing/src/poo_flow_testing/model_study/semantic_plan.py": "823cdfebcf1a3b961f56d337315322e67770a376df7f5defd2ea855609595e15",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-testing/src/poo_flow_testing/model_study/semantic_abi.py": "8336d34e92d3a00f340ac14426148314e27676d13caab72860b85cbcd13741ee",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-testing/src/poo_flow_testing/model_study/semantic_execution.py": "8698bcce0162da41815a26dc5c39ce81147b141ced74026846e33f940854f187",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-testing/src/poo_flow_testing/model_study/semantic_cases.py": "bde3d304eb6121822f6e6ca0f561c361cb74d197c9817f7281cc424111e7b7bd",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-testing/src/poo_flow_testing/model_study/semantic_provider.py": "25cc5f92825c931dce88fad825e818e61a5a3b6fb21b9deca62d9250312018f1",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-testing/src/poo_flow_testing/model_study/semantic_reporting.py": "5d251a3099d71ed68b67b3e14f3207ccbad88b56322ea9fdea3a1dde9fd22468",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-runtime/src/poo_flow_runtime/semantic_runtime.py": "288997572632cba6ac2cb555f62712e6877ff51c70a3182072c65a950e4ef48a",
+    "/private/tmp/poo-pr34-failure-fix/packages/python-runtime/src/poo_flow_runtime/_native/_semantic_build.py": "d51d2b6452cc93d815775cd1a88c72dbe0eb792d610541063bd2635737cf7075",
+    "/private/tmp/poo-pr34-failure-fix/src/ffi/semantic.ss": "7166c015985948748065bbdb3d236f375bb1a5b316a8cb612f4f25e827267c0e",
+    "/private/tmp/poo-pr34-failure-fix/bindings/runtime-c/src/semantic_host.c": "7a3ff623a32e06371e82ac3a1fd71bafb7d273149f6c3737e91b889947fb0cf4",
+    "/private/tmp/poo-pr34-failure-fix/bindings/runtime-c/include/poo_flow/semantic.h": "0d9808197be95de1a9e9903b1841e78cfae299da82a383e055a8c9614abe961b",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/temporal/lens.ss": "0230ac68b8010344d5f14d1e97f9da5a88da78987bfc89c842c0da80b0344d59",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/table/trrel.ss": "a1217d489e3c6725596471596918e3f73944b0302a6c59cb826c55b3735a47b6",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/table/eqrel.ss": "8b34af47ee851dd88f513d8531b6337e32d5db3556996b5c4d2b70d74fdc0f9e",
+    "/private/tmp/poo-pr34-failure-fix/core/types.ss": "cff7774aa8e6a6daaeae866984fb8a5ec291fe2045a326f846b6e1f4f22a325f",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/table/storage.ss": "e695f3df8c5229aec2d5814eb505220d63288a895a638f9c9974a0b491c0e9ef",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/table/funs.ss": "5a7bc246087de98fcb5fe6df5252ea4e9905687df0e0098f9683d7f4983f2ff4",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/table/provider.ss": "f4447ac97f7b2d07070c2342c459c0980db366c2ec04a41b326b59eee1dd8b06",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/program/funs.ss": "1f266e56a7eb39aba22936ce97ba09060b34a320f85e00c23143cfd3d2a6abbc",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/program/analysis.ss": "1a5c0216db986c29f260a118ac895ebfd9de49a2276864bc26860152f5e15e99",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/program/types.ss": "5c4d00038c5b4c58c0f10aaa25999ebf05e67e138ee25b5f53fb84657855b523",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/program/objects.ss": "03dec21cdf29629b5c12495ff2d399152c79e0c726b2be06e4af20a584e998d6",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/program/planning.ss": "a1bf619c6f4937cf98de11c2f87084780d2ec8fc42c87a6e677bd3b90bd8d6b8",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/program/evaluate.ss": "9994bf826d8d73c708a3ea03890ec06da69fe71b19cbeba354f9fa4fa794d24c",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/program/session.ss": "f6ddeb6f2a0337ff60760ee18dd1f97033a38024e47e8881234c4b59c8a17e3c",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/program/aggregators.ss": "397717ef7aa985dbabfba3c39058209ecb19c6c915b29ca67d9a438d1f936e3d",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/program/scheme-checked.ss": "d3bf04aa3ca37eb00fcf907fd40de7d05bdab92290d9d0b4fbfef4dde4d30923",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/program/scheme-admission.ss": "16b6ccc074dc9d472d885679e8a863483aa21f7cb436590d1fd6b83acc6f1302",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/candidate/types.ss": "2262a14cbd17ed9130485e172df8e56d9b97662dde5db364b4a8c194e9078867",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/candidate/program.ss": "c02e857409b54f5a872b0147f1c423fc1df49f7bfcbf857a410e470cf22ca274",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/candidate/funs.ss": "7d18c1c8641e17b1138ba05f92476bf80241f588cbf4a102c7c7f2a61147efd5",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/candidate/finite-evidence.ss": "0c39b89f3df3cbf88e42fce75f826408083e241372dc027d614bba15f0984094",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/candidate/stratified-proof.ss": "ec23c7966869acb2c5bc8f36bf97080aa5c9388cb86ade2e2328f5d1d51a6436",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/candidate/stratified-producer.ss": "773a69d24400fed07a18af1c12d86cb36ff56d091f8eb97ae7667acf4835023e",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/candidate/provenance.ss": "a4a310dde63545bf271356924923cbea3c724cad62153cb3f28bc60b069ab7e6",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/candidate/nonmembership.ss": "87d559d0c1c09df6cb6c4b85d4df55a9da33d187cf7426b9ff171cf70215f229",
+    "/private/tmp/poo-pr34-current-native/sources/gerbil-ascent/candidate/reasoning.ss": "8b715288b10fefaaf8f58c7676217b9b87e69571c9677d6cad2c85183deb4a6d",
+    "/private/tmp/poo-pr34-failure-fix/src/utilities/product-syntax.ss": "16b487cb7cafa439b94500b8130f08230b37ceac8c5bae1e26aaeaff3d56188b",
+    "/private/tmp/poo-pr34-failure-fix/src/graph/types-core.ss": "316e922bcb1cdd1ffcb30b2fb20f168938b65c0574c9ec6d27950d0eaff15a00",
+    "/private/tmp/poo-pr34-failure-fix/src/graph/algorithms-list-support.ss": "c549a62b7d5d164ffea0a97bae9d4824e9197c29ce7a4d545f6d08b3ae7a0b9b",
+    "/private/tmp/poo-pr34-failure-fix/src/graph/algorithms.ss": "7dbcabe5d125ff292ae3cf709e3b5519c06ee35e0f5082b2533bac8d4df75f6a"
+  },
+  "requestSha256": {
+    "chain": "6b22f665ca74cc2eea81238339bd896b3354a830d1abd2eabf80b093ac9977b5",
+    "branch": "10b3eb684e6eba0a25d5862ff774254a41421b3c1858c4d4b15ef009d1a6584a",
+    "withdrawal": "490e6fd9119834d1a9e757c72fa7c739212e618b654f3e89c7aa6210652a701a",
+    "open-cut": "df7d2a8d7f5faf0bdfc58fbb9460fbdf043b554812dc586e82e8171e570b5481",
+    "late-ingestion": "f254114051dcf16cc82538f3c3222996f2a2428a53b71b32a63740757cec050c",
+    "interval": "d3ba7a51f9297bb7a8f871e87aa1ad500587eb71694f2853506fd9ebe9e84107",
+    "zero-horizon": "191ece0b5e0ca74ce6e22465753f88333766602f5d27cb6a8855c4d547a656f6",
+    "one-horizon": "c571c54416d2b2e18723a24cd8fe9c57852c570fba36ea192458fb7ed6e1e811",
+    "clock-mismatch": "12355a92de52f6fd61bddb6806355f9527b3569225e55c816230f9014317d4be",
+    "generation-mismatch": "43c136f34aaf3c9ab03b67b66c7f9b7ef9eb68ecbb7f73017d585d0dd79dcdd6",
+    "window-end": "e8dd53b9095625d1336ac83f4439e13a346e477168970edf5b7625b4b49ee7ea",
+    "unknown-time": "54fbbd00754ee4274ae4d21e4fb674eae86d1e660b7ae10638f2b750333d090d"
+  },
+  "scope": "finite Temporal prediction through current Python/CFFI/Scheme ABI; not full Scheme understanding, real-time teaching, effect authorization or a control ABI freeze"
+}

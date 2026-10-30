@@ -6,7 +6,7 @@
 ;;; Boundary: nono-sandbox C binding tests cover ABI contracts and manifest projection.
 ;;; Invariant: tests do not load or execute the C library.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,11 +17,11 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/modules/agent-sandbox/api
-        :poo-flow/modules/agent-sandbox/nono
-        :poo-flow/modules/agent-sandbox/cube
-        :poo-flow/modules/nono-sandbox/c-binding)
+        :yuanxu/modules/funflow/control-plane/api
+        :agentic-ai-lab/modules/agent-sandbox/api
+        :agentic-ai-lab/modules/agent-sandbox/nono
+        :agentic-ai-lab/modules/agent-sandbox/cube
+        :agentic-ai-lab/modules/nono-sandbox/c-binding)
 
 (export nono-sandbox-c-binding-test)
 
@@ -34,7 +34,7 @@
 ;; : TestSuite
 (def nono-sandbox-c-binding-test
   (test-suite "nono-sandbox C binding contract"
-    (poo-flow-test-case "declares POO descriptor for the generated nono C ABI"
+    (yuanxu-test-case "declares POO descriptor for the generated nono C ABI"
       (let* ((descriptor (make-nono-c-binding-descriptor))
              (contract (nono-c-binding-descriptor->contract descriptor))
              (override (make-nono-c-binding-descriptor
@@ -45,14 +45,14 @@
         (check-equal? (test-ref contract 'package) "nono-ffi")
         (check-equal? (test-ref contract 'library) "nono_ffi")
         (check-equal? (test-ref contract 'adapter-header)
-                      "poo_flow_nono_binding.h")
+                      "agentic_ai_lab_nono_binding.h")
         (check-equal? (test-ref contract 'adapter-include-ref)
-                      "bindings/nono-c/poo_flow_nono_binding.h")
+                      "bindings/nono-c/agentic_ai_lab_nono_binding.h")
         (check-equal? (test-ref contract 'header) "nono.h")
         (check-equal? (test-ref contract 'include-ref)
                       "bindings/nono-c/nono.h")
         (check-equal? (test-ref contract 'probe-ref)
-                      "bindings/nono-c/poo_flow_nono_binding_probe.c")
+                      "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c")
         (check-equal? (and (memq 'NonoDiagnosticCode
                                  (test-ref contract 'types))
                            #t)
@@ -75,7 +75,7 @@
                       #t)
         (check-equal? (nono-c-binding-descriptor-library override)
                       "nono_ffi_test")))
-    (poo-flow-test-case "declares POO build descriptor for the C compile probe"
+    (yuanxu-test-case "declares POO build descriptor for the C compile probe"
       (let* ((build (make-nono-c-binding-build))
              (contract (nono-c-binding-build->contract build))
              (binding (test-ref contract 'binding))
@@ -111,7 +111,7 @@
         (check-equal? (test-ref contract 'include-dirs)
                       '("bindings/nono-c"))
         (check-equal? (test-ref contract 'probe-ref)
-                      "bindings/nono-c/poo_flow_nono_binding_probe.c")
+                      "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c")
         (check-equal? (map (lambda (input)
                              (test-ref input 'kind))
                            required-inputs)
@@ -126,13 +126,13 @@
                         "-Werror"
                         "-fsyntax-only"
                         "-Ibindings/nono-c"
-                        "bindings/nono-c/poo_flow_nono_binding_probe.c"))
+                        "bindings/nono-c/agentic_ai_lab_nono_binding_probe.c"))
         (check-equal? (nono-c-binding-build-compiler override) "cc")
         (check-equal? (nono-c-binding-build-upstream-include-dirs override)
                       '("/opt/nono/include"))
         (check-equal? (test-ref (car missing-errors) 'code)
                       'path-not-found)))
-    (poo-flow-test-case "projects nono runtime manifests into C capability plans"
+    (yuanxu-test-case "projects nono runtime manifests into C capability plans"
       (let* ((profile (make-nono-agent-sandbox-profile
                        'always-further/opencode))
              (request (agent-sandbox-request
@@ -196,7 +196,7 @@
         (check-equal? (test-ref (test-ref manifest 'apply-plan)
                                 'apply)
                       'nono_sandbox_apply)))
-    (poo-flow-test-case "dry-runs and native-tests nono C binding manifests without applying sandbox"
+    (yuanxu-test-case "dry-runs and native-tests nono C binding manifests without applying sandbox"
       (let* ((request (agent-sandbox-request
                        (make-nono-agent-sandbox-profile
                         'always-further/opencode)
@@ -259,7 +259,7 @@
         (check-equal? (test-ref live-default 'runtime-executed) #f)
         (check-equal? (test-ref live-default 'would-apply?)
                       #f)))
-    (poo-flow-test-case "rejects non-nono, unsupported, and legacy mount policy"
+    (yuanxu-test-case "rejects non-nono, unsupported, and legacy mount policy"
       (let* ((cube-request
               (agent-sandbox-request
                (make-cube-agent-sandbox-profile 'python-template)

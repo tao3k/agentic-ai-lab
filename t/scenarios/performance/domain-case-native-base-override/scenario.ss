@@ -6,9 +6,10 @@
 ;;; A/B witness for native Gerbil POO three-parent mix versus the direct
 ;;; single-allocation base/override window.
 
-(import (only-in :clan/poo/object .all-slots .ref .slot?)
+(import :yuanxu/composition/roles
+        (only-in :clan/poo/object .all-slots .ref .slot?)
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-p95-elapsed-us)
-        (only-in :poo-flow/src/core/roles
+        (only-in :yuanxu/composition/roles
                  role-compose
                  role-constant-slots
                  role-instance-overlay-defaults
@@ -97,7 +98,7 @@
   (error "native base/override did not improve the composition scenario"
          baseline-p95-us candidate-p95-us))
 
-(displayln "schema=poo-flow.domain-case-native-base-override.v1")
+(displayln "schema=agentic-ai-lab.domain-case-native-base-override.v1")
 (displayln "sample-count=" +sample-count+)
 (displayln "agent-count=" +agent-count+)
 (displayln "shared-slot-count=" +shared-slot-count+)

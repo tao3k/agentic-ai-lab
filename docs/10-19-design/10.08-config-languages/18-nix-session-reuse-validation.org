@@ -1,0 +1,148 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: 10.08.18 Stable-Host Nix Session Reuse Validation
+#+language: en
+
+* Evidence and scope
+
+This closes the final-runtime rerun gate recorded in
+[[file:17-nix-c-api-wait-attribution.org][the preceding wait-attribution report]]. On 2026-10-23, the unchanged binding
+runtime from =24517f5254e40184da9e82aab31cd519de1e9232= passed the ordinary
+four-Case regression, the three-round profile Case and the three-Case worker
+control using the installed Gerbil and the existing Just entrypoints. Each
+run exited zero and contained its exact Case count, =MODULE-OK=, =HARNESS-OK=
+and final =OK=, without failure/overflow markers.
+
+Host load initially remained around 3.6--4.3 on 12 logical CPUs, instead of
+the preceding episode above 100. Later host activity rose again; those later
+sampled attempts are separated below. This is not an exclusive-host or
+filesystem-cache-purged benchmark. The pinned libraries, real AWS / Null
+artifacts, original 2 GiB heap and 120/60/240-second execution limits remain
+unchanged. No compiler sources, runtime caching protocol or admission result
+cache were added.
+
+* Three-round cost control
+
+The existing profile Case now includes one additional control per round:
+query the final AWS+Null candidate in a fresh native session and require its
+receipt to equal the result from the session that already evaluated AWS.
+There is no new suite, Builder or user-facing entrypoint. Native phase output
+also exposes the already recorded metric deltas.
+
+The unsampled extended Case passed all three rounds. Query times below are
+milliseconds; both native query columns exclude opening/closing the session
+and include the existing before/after source checks. The fresh-state column
+is deliberately a negative cost control, not the recommended runtime path.
+
+| Round | API AWS first / hot | Add Null in existing state | AWS+Null in fresh state | Fresh-state Nix allocation bytes | CLI AWS first / repeat | CLI AWS+Null first / repeat |
+|-------+---------------------+----------------------------+-------------------------+----------------------------------+------------------------+----------------------------|
+| 1 | 613.019 / 0.778 | 1.927 | 598.945 | 103265536 | 668.130 / 642.884 | 677.997 / 699.814 |
+| 2 | 594.054 / 0.679 | 1.776 | 600.241 | 103264656 | 751.942 / 684.061 | 694.911 / 653.905 |
+| 3 | 608.709 / 0.729 | 2.147 | 675.631 | 103280992 | 700.512 / 740.717 | 655.518 / 691.326 |
+
+The measured avoidable work is approximately 0.60--0.67 seconds and 103 MB of
+Nix allocation when a caller unnecessarily rebuilds its state solely because
+Null was added to the candidate. Constructing the state object itself takes
+only about 0.48--0.53 ms: the expensive part is refilling its lazy imports and
+derivation graph. There is no claim of a new runtime speedup: the existing
+explicit session API already supports the efficient path, now compared against
+an actual fresh-state control rather than inferred from CLI process times.
+
+* What the wall/CPU measurements establish
+
+The initial final-source profile recorded first imports at 460.464 ms wall /
+320.344 ms process CPU, and derivation/residual work at 274.105 / 157.039 ms.
+The unsampled extended Case recorded 602.817 / 319.050 ms for imports and
+240.496 / 143.892 ms for derivation/residual work. Both first native probes
+reported zero completed collections/full-GC milliseconds and incremental mode
+zero. The previous 9.26/6.39-second wall outliers did not recur in these passes.
+
+There remains a real, variable wall/CPU difference. CPU is not elapsed time;
+full-GC time overlaps the wall interval and parallel marker CPU can exceed the
+main-thread CPU. Context switches establish scheduling activity, not its exact
+contribution to delay. A lower-load rerun does not prove that every previous
+outlier was exclusively host scheduling.
+
+* File access, daemon waits and rejected attribution
+
+A separate temporary Scheme probe started the stock macOS sampler at the
+actual first native force point. It used =run-process='s existing coprocess
+callback, sampling the actual =(getpid)= rather than guessing from command
+lines. The sampler-enabled run passed the full Case, but its times are excluded
+from the table. The temporary sampling helper was removed afterward; it is not
+a new maintained runtime hook or module API. The retained test is the unsampled
+fresh-state cost control.
+
+#+begin_src scheme
+;; Diagnostic fixture only, around the existing cold-force thunk.
+(run-process
+  (list "/usr/bin/sample" (number->string (getpid)) "2" "1"
+        "-mayDie" "-file" sample-path)
+  stdin-redirection: #f stdout-redirection: #f stderr-redirection: #f
+  coprocess: (lambda (_) (cold-force)) check-status: #t)
+#+end_src
+
+The trace contains distinct real call paths:
+
+- File access / parsing: =UnionSourceAccessor::readFile=,
+  =PosixSourceAccessor::readFile=, =EvalState::parseExprFromFile=,
+  parser frames, =open= and =lstat=.
+- Store communication: =WorkerProto::BasicClientConnection::processStderrReturn=
+  through =BufferedSource=/=FdSource= to =read=. These waits must not be
+  classified as file reads or duplicated source parsing.
+- Eleven background GC marker threads mostly wait on condition variables.
+  Their combined blocked samples are not main-thread elapsed time or GC CPU.
+
+Two earlier external sampling attempts are retained as failures: one selected
+the timeout wrapper instead of gxtest; the other sampled gxtest while it was
+waiting in the Scheme process I/O loop, rather than during the native force.
+Both full sampled attempts hit the unchanged idle limit. No causal claim that
+sampling caused those timeouts is made. Those traces do not support native
+import-time attribution and are excluded from the successful comparison.
+
+Targeted =fs_usage= was unavailable without root. No credentials, tool
+installation or global tracing were introduced. Therefore exact physical-file
+I/O bytes/latency, Store-server processing time and run-queue delay remain
+unpartitioned. Client stack sampling establishes the different call paths,
+not exclusive percentages or daemon-side root cause.
+
+* Reuse boundary and preserved protections
+
+| Change | Current boundary |
+|--------+------------------|
+| Repeat a query, same validated source / strict lock / output function | Reuse the existing explicit native session and Nix thunks. |
+| Add Null through the final candidate JSON, same context | Reuse that session; calculate the child plan and admit its own final configuration. |
+| Cached parent plan, derived child candidate | Keep receiver-local plans; assertions require the child result and unchanged parent result. |
+| Source bytes or locked context change | Existing source checks reject the old observations before native query or before return. Reuse does not authorize a stale context. |
+| New process or intentionally independent context | Create an independent session; this work adds no cross-process evaluator restoration. |
+| Deliberately fresh-state benchmark control | Keep the reconstruction to measure cost; do not count it as accidental production work. |
+
+The profile requires one Store, one EvalState and one strict lock for the
+baseline session across both candidate values. The final source-mutation
+control must reject before its native call counter increments. Ordinary
+regression additionally checks implicit-lock-update rejection, matching
+receipts and independent generated-Contract admission. Impure CLI calls still
+create no persistent evaluation-cache database; the pure scalar positive
+control creates one. No source currentness check is skipped to obtain reuse.
+
+Fixed-version source explains the measured boundary: Nix 2.34.4
+[[https://github.com/NixOS/nix/blob/2.34.4/src/libexpr/eval.cc#L1118-L1154][EvalState::evalFile]] first checks =importResolutionCache= and =fileEvalCache=;
+only a missing file value installs/forces a parse thunk. The C API
+[[https://github.com/NixOS/nix/blob/2.34.4/src/libexpr-c/nix_api_expr.cc][nix_state_create]] constructs an independent state. This supports retaining
+one state inside its explicit validated lifetime, not globally sharing a state
+across changed sources or caching a Contract admission conclusion.
+
+Local receipts: =/private/tmp/agentic-ai-lab-nix-stable-20261023/{default,profile,
+worker,rebuild,cold-sample}.log=. Raw output and the 6 MB sample remain local.
+Later host saturation and the two failed sampling attempts remain recorded;
+they do not erase the earlier passing final-runtime receipts.
+
+These are local binding qualifications, not a claim that PR #34's complete
+CI matrix is green. The inspected preceding head still had other matrix
+failures whose causes were not investigated in this performance task. The numbers also exclude Provider acquisition, realization,
+cloud execution and arbitrary larger Provider sets.
+
+[[file:19-nix-callchain-and-reuse-boundary.org][The actual-call-chain audit]] distinguishes this binding qualification from
+the product's current CLI route and adds an executable stale-import control.
+The same lock/header snapshot alone does not authorize native state reuse.

@@ -10,7 +10,7 @@
 (def durable-receipt-family
   (.o (kind 'durable-receipt-family)
       (name 'durable-receipt-family)
-      (source 'poo-flow.performance.durable-receipt)))
+      (source 'agentic-ai-lab.performance.durable-receipt)))
 
 (def (durable-receipt job-id-value
                       operation-value

@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Seven-case Gerbil Scheme comprehension result
+#+DATE: 2026-10-02
+#+STATUS: completed bounded run
+
+* Provenance
+
+The seven-case [[file:model-study-module-capabilities.org][protocol]] and source were committed at Agentic AI Lab
+=21d11b91564186e033bac9bd82de75d4eb35d07f= with pinned ASCENT
+=f80c9dc7cf5e4ed42a806b0d78c847e52be09de6=. The exact preview is
+=/private/tmp/poo-scheme-module-preview-head-21d11b9/manifest.tsv=,
+SHA256 =2c1d191dba885570ad3ef23282dcd0602ddf02159a7b0dd5f880efee8c48636c=.
+All seven native expected answers were generated before model calls. The
+user authorized one paid call per case, seven maximum. All seven were
+sent to =deepseek-flash= with no retries. Expected answers were not sent.
+
+The raw response files and run manifest are in
+=/private/tmp/poo-scheme-module-live-head-21d11b9=. Manifest SHA256 is
+=97b4c53930d72041ad0c365b28e51342d8cdb003950d867b4c904e9dd6d56772=.
+
+* Native scores
+
+| Case | API status | Readable datum | Exact answer | Raw response SHA256 |
+|------+------------+----------------+--------------+---------------------|
+| =control_pure= | completed | yes | no | =3ca53fba50838c3c57199ac9b1c2bfd50c51474a2d2fb312c1d166ee61564175= |
+| =control_contract= | completed | yes | yes | =8e29289108a5f0d83ba9d21a88ad6b1c716facc86b6cdda0e414d4c965f81c22= |
+| =withdrawal= | completed | yes | no | =ea89b3c5414da2a2bf7e7d7d652edc41c908ed3917630d1f6f9d854711629a0b= |
+| =negation_count= | completed | yes | no | =66df187f46dcac227fecd93aff75c3d90e28e74786351ff33bd08dd34de014cf= |
+| =module_fragment= | completed | no | no | =76046840868f0ebcda1c5dcc62037c5e7b8e579710f08aa3f7f6db1cc1d7e0c6= |
+| =module_diagnostic= | incomplete | no | no | =c28469b80b0f180b0d0a6a38313acbfafaedc06119b4638a6d3c369a297f788e= |
+| =receipt_boundary= | incomplete | no | no | =592ebd16fd96b258a4325d006e6dbbc5069edab85ac8f03999f261abf0d73e0b= |
+
+Four responses were readable =answer= data, and one was exact. The other
+three were explanatory prose, despite the request in the source comments
+to return one datum. The two incomplete module-source responses reached
+the 512-token output cap before an answer. The completed fragment response
+also included prose and a wrong =(answer ())= in a code fence. The native
+scorer correctly rejected all three as non-datum output. This is an
+observed prompt/format failure as well as an answer failure; it does not
+show whether a short answer-only prompt would yield a correct module result.
+
+* Bounded interpretation
+
+The explicit API-contract case produced the exact three-row answer. The
+pure Scheme case omitted =(1 8)=; withdrawal and negation/count also
+returned wrong rows. One call per case cannot estimate reliability. The
+result does not establish general Scheme competence, general incapacity,
+or an internal reasoning mechanism. A targeted follow-up may put the
+answer-only instruction after the module source and calling program,
+keeping source and answer checking otherwise fixed. It needs a new exact
+preview and separate call authorization.

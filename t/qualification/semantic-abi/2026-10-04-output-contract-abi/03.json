@@ -1,0 +1,239 @@
+{
+  "case": "branch",
+  "api": "async",
+  "index": 3,
+  "planSha256": "77419c82cce1e2bcb07a92d0abe174bab31983131d1f9c54641fc7ec688919e7",
+  "artifactSha256": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",
+  "passed": true,
+  "raw": "{\"status\":\"complete\",\"rows\":[[\"r7\",\"s4\"],[\"r7\",\"t9\"]]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.25377345799961404
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.2538181249997251
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.7198185409997677
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.7198483329998453
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7198712909998903
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8076037910000196
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8194797080000171
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8195587079999314
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.834443249999822
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8344647499998246
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8344734160000371
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8511232910000217
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8511425409997173
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8511511659999087
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8511587909997615
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8511660409999422
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8511730410000382
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8852157080000325
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8852369159999398
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8852459159998034
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8852539999998044
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8852632909997737
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8852715829998488
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8853373329998249
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8853507499998159
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8853587499997957
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.885366332999638
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.8854182499999297
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.8854274159998567
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.8854379999997946
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.8855080829998769
+    }
+  ],
+  "contentGapsSeconds": [
+    0.7198712909998903,
+    0.08773250000012922,
+    0.011875916999997571,
+    7.899999991423101e-05,
+    0.014884541999890644,
+    2.1500000002561137e-05,
+    8.666000212542713e-06,
+    0.016649874999984604,
+    1.9249999695603037e-05,
+    8.625000191386789e-06,
+    7.624999852851033e-06,
+    7.250000180647476e-06,
+    7.000000096013537e-06,
+    0.03404266699999425,
+    2.1207999907346675e-05,
+    8.999999863590347e-06,
+    8.084000000962988e-06,
+    9.29099996938021e-06,
+    8.292000075016404e-06,
+    6.574999997610576e-05,
+    1.3416999991022749e-05,
+    7.999999979801942e-06,
+    7.58299984227051e-06
+  ],
+  "responseId": "88005658-d72e-4462-940b-e26513c72fe2",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9685,
+    "input_tokens_details": {
+      "cached_tokens": 9472
+    },
+    "output_tokens": 23,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9708
+  },
+  "seconds": 0.8855118749997928,
+  "deliveredObservation": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "r7",
+          "s4"
+        ],
+        [
+          "r7",
+          "t9"
+        ]
+      ]
+    },
+    "receipt": {
+      "candidateValid": true,
+      "requestDigest": "29c2fb89b2e0b3be3aa6c185092496c8cd4b3343bc641828222858c9c920eb8b",
+      "difference": false,
+      "operation": "temporal.observe",
+      "verification": "valid",
+      "bindingDigest": "f079d9ff40240f6a7864bb79ae649fbaeafc2ce65cd764073fe319021d63dda9",
+      "verdict": "consistent",
+      "schema": "poo-flow.semantic-observation"
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "nativeObservationSeconds": 0.041867082999942795,
+  "result": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "r7",
+          "s4"
+        ],
+        [
+          "r7",
+          "t9"
+        ]
+      ]
+    },
+    "receipt": {
+      "candidateValid": true,
+      "requestDigest": "29c2fb89b2e0b3be3aa6c185092496c8cd4b3343bc641828222858c9c920eb8b",
+      "difference": false,
+      "operation": "temporal.observe",
+      "verification": "valid",
+      "bindingDigest": "f079d9ff40240f6a7864bb79ae649fbaeafc2ce65cd764073fe319021d63dda9",
+      "verdict": "consistent",
+      "schema": "poo-flow.semantic-observation"
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "sourceRebinding": {
+    "candidateValid": true,
+    "operation": "temporal.observe",
+    "requestDigest": "4f385962eebf2b68f4e3ddd3210dff54d5894d011abf86d4aee864b89615ea23",
+    "difference": false,
+    "verification": "valid",
+    "verdict": "consistent",
+    "schema": "poo-flow.semantic-observation",
+    "bindingDigest": "f161b8d8bba8b4ef4752afb4b32ba54e944582c79675fa5bc534dd9bead34cdf"
+  },
+  "callSeconds": 0.9696095000003879
+}

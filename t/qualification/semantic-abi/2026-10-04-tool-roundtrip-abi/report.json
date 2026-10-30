@@ -1,0 +1,12 @@
+{
+  "schema": "poo-flow.semantic-tool-live-receipt",
+  "planSha256": "8b4c2227da64395f030323737e330891d81133eedcf02e9cbdb8fbe4bfe33c61",
+  "roundtrips": 24,
+  "passed": 24,
+  "failed": 0,
+  "retries": 0,
+  "scope": "forced read-only tool argument fidelity, current-task binding, sync/async native execution and model consumption of actual tool output; not unaided source comprehension, autonomous tool choice or business IO",
+  "nativeCalls": 24,
+  "providerResponses": 48,
+  "sourceFreezeIntact": true
+}

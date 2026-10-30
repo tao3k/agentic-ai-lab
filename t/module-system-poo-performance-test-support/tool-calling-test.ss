@@ -5,7 +5,7 @@
 
 ;;; Boundary: POO performance cases for tool-calling control-plane objects.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,13 +15,13 @@
         "../support/poo-performance-fixtures"
         "../support/poo-performance-object-scenarios"
         "../support/poo-performance"
-        :poo-flow/modules/tool-core/calling-control)
+        :agentic-ai-lab/modules/tool-core/calling-control)
 
 (export tool-calling-test)
 
 ;; : (-> Alist Unit)
 (def (module-system-poo-performance-tool-calling-display-receipt receipt)
-  (display "[poo-flow-benchmark] ")
+  (display "[agentic-ai-lab-benchmark] ")
   (write (benchmark-fixture-ref receipt 'feature))
   (display " ")
   (write receipt)
@@ -49,7 +49,7 @@
                   runtime-call
                   tool-result))
          (plan
-          (poo-flow-tool-call-plan
+          (agentic-ai-lab-tool-call-plan
            'tool-calling-agent-loop
            session
            tool
@@ -62,7 +62,7 @@
            runtime
            trace))
          (runtime-receipt
-          (poo-flow-tool-call-runtime-receipt
+          (agentic-ai-lab-tool-call-runtime-receipt
            'tool-calling-agent-loop
            session
            tool
@@ -89,23 +89,23 @@
   (let* ((plan (car pair))
          (runtime-receipt (cdr pair))
          (facts
-          (poo-flow-tool-call-runtime-validation-proof-facts
+          (agentic-ai-lab-tool-call-runtime-validation-proof-facts
            plan
            runtime-receipt))
          (fact-family
-          (poo-flow-tool-call-fact-family
-           'poo-flow-tool-call-runtime-validation-proof-facts
-           'poo-flow.tool-calling.control.runtime)))
+          (agentic-ai-lab-tool-call-fact-family
+           'agentic-ai-lab-tool-call-runtime-validation-proof-facts
+           'agentic-ai-lab.tool-calling.control.runtime)))
     (and
-     (poo-flow-tool-call-fact-family-ref
+     (agentic-ai-lab-tool-call-fact-family-ref
       fact-family
       facts
       'plan-valid)
-     (poo-flow-tool-call-fact-family-ref
+     (agentic-ai-lab-tool-call-fact-family-ref
       fact-family
       facts
       'runtime-receipt-matches-tool-plan)
-     (poo-flow-tool-call-fact-family-ref
+     (agentic-ai-lab-tool-call-fact-family-ref
       fact-family
       facts
       'tool-output-cannot-authorize-policy))))
@@ -132,7 +132,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-tool-calling-object-list-control-case)
-  (poo-flow-test-case "validates tool-call proof objects through stable POO lists"
+  (yuanxu-test-case "validates tool-call proof objects through stable POO lists"
     (let* ((pair-count 96)
            (rounds 4)
            (pairs
@@ -142,7 +142,7 @@
            (first-plan (car first-pair))
            (first-runtime-receipt (cdr first-pair))
            (first-facts
-            (poo-flow-tool-call-runtime-validation-proof-facts
+            (agentic-ai-lab-tool-call-runtime-validation-proof-facts
              first-plan
              first-runtime-receipt))
            (receipt
@@ -152,13 +152,13 @@
                (module-system-poo-performance-tool-calling-valid-proof-count
                 pairs
                 rounds)))))
-      (check-equal? (poo-flow-tool-call-fact-ref first-facts 'plan-valid)
+      (check-equal? (agentic-ai-lab-tool-call-fact-ref first-facts 'plan-valid)
                     #t)
       (check-equal?
-       (poo-flow-tool-call-fact-ref first-facts 'fact-family)
-       'poo-flow-tool-call-runtime-validation-proof-facts)
+       (agentic-ai-lab-tool-call-fact-ref first-facts 'fact-family)
+       'agentic-ai-lab-tool-call-runtime-validation-proof-facts)
       (check-equal?
-       (poo-flow-tool-call-fact-ref first-facts
+       (agentic-ai-lab-tool-call-fact-ref first-facts
                                     'runtime-receipt-matches-tool-plan)
        #t)
       (check-equal?
@@ -171,5 +171,5 @@
 
 ;; : TestSuite
 (def tool-calling-test
-  (test-suite "poo-flow module system POO tool-calling performance"
+  (test-suite "agentic-ai-lab module system POO tool-calling performance"
     (module-system-poo-performance-tool-calling-object-list-control-case)))

@@ -138,14 +138,14 @@
 (def poo-clos-evidence-suites
   (list
    (evidence-suite 'dispatch "core/t/poo-clos-dispatch-test.ss"
-                   'poo-clos-dispatch-test 12)
+                   'poo-clos-dispatch-test 19)
    (evidence-suite 'lifecycle "core/t/poo-clos-lifecycle-test.ss"
                    'poo-clos-lifecycle-test 15)
    (evidence-suite 'syntax "core/t/poo-clos-syntax-test.ss"
-                   'poo-clos-syntax-test 10)
+                   'poo-clos-syntax-test 18)
    (evidence-suite 'method-combination
                    "core/t/poo-clos-method-combination-test.ss"
-                   'poo-clos-method-combination-test 13)
+                   'poo-clos-method-combination-test 14)
    (evidence-suite 'evolution "core/t/poo-clos-evolution-test.ss"
                    'poo-clos-evolution-test 8)
    (evidence-suite 'generic-evolution

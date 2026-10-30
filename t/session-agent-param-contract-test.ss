@@ -7,12 +7,12 @@
 ;;; Invariant: AgentParam contracts are report-only policy/topology bindings;
 ;;; Scheme never opens providers, tools, memory stores, streams, or sandboxes.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/modules/session/config)
+        :agentic-ai-lab/modules/session/config)
 
 (export session-agent-param-contract-test)
 
@@ -23,7 +23,7 @@
 
 ;; : (-> PooSessionAgentNode)
 (def (make-agent-param-test-node)
-  (poo-flow-session-agent-node
+  (agentic-ai-lab-session-agent-node
    'agent/build
    'project/agent-param
    'session/root
@@ -43,26 +43,26 @@
    '(memory/build)
    'agent/nono
    'builder
-   'poo-flow.session.agent.build-result.v1))
+   'agentic-ai-lab.session.agent.build-result.v1))
 
 ;; : (-> PooSessionPolicyValidationReceipt)
 (def (make-agent-param-test-validation)
   (let* ((read-grant
-          (poo-flow-session-tool-grant
+          (agentic-ai-lab-session-tool-grant
            'grant/read
            'read-workspace-file
            '(read)
            '(project-workspace)
            '(agent-turn hook/pre-check)))
          (build-grant
-          (poo-flow-session-tool-grant
+          (agentic-ai-lab-session-tool-grant
            'grant/build
            'run-build-command
            '(run)
            '(project-workspace build-cache)
            '(agent-turn)))
          (model-policy
-          (poo-flow-session-model-policy
+          (agentic-ai-lab-session-model-policy
            'policy/build-model
            'session/build
            'marlin/provider
@@ -70,14 +70,14 @@
            '(tool-calling structured-output)
            'budget/build))
          (prompt-policy
-          (poo-flow-session-prompt-policy
+          (agentic-ai-lab-session-prompt-policy
            'policy/build-prompt
            'session/build
            'session/build-system
            '(system build-contract)
            'parent-summary-only))
          (isolation-policy
-          (poo-flow-session-isolation-policy
+          (agentic-ai-lab-session-isolation-policy
            'policy/build-isolation
            'session/build
            'child-isolated
@@ -85,32 +85,32 @@
            'denied
            'declared-channel-only))
          (sandbox-policy
-          (poo-flow-session-sandbox-policy
+          (agentic-ai-lab-session-sandbox-policy
            'policy/build-sandbox
            'session/build
            'agent/nono
            'parent-profile
            'isolated-filesystem))
          (context-policy
-          (poo-flow-session-context-policy
+          (agentic-ai-lab-session-context-policy
            'policy/build-context
            'session/build
            'parent-summary
            '(session/root)))
          (history-policy
-          (poo-flow-session-history-policy
+          (agentic-ai-lab-session-history-policy
            'policy/build-history
            'session/build
            'bounded
            '(record/last-failure)))
          (communication-policy
-          (poo-flow-session-communication-policy
+          (agentic-ai-lab-session-communication-policy
            'policy/build-communication
            'session/build
            '(channel/build-root)
            '(session/root)))
          (build-root-communication
-          (poo-flow-session-communication-receipt
+          (agentic-ai-lab-session-communication-receipt
            'project/agent-param
            'child-parent
            'session/root
@@ -124,7 +124,7 @@
            '((summary . "build result ready"))
            'receipt-only))
          (sharing-policy
-          (poo-flow-session-resource-sharing-policy
+          (agentic-ai-lab-session-resource-sharing-policy
            'policy/build-sharing
            'session/build
            '((project-workspace
@@ -135,28 +135,28 @@
               (accounting . session/build)))
            'deny))
          (resource-policy
-          (poo-flow-session-resource-policy
+          (agentic-ai-lab-session-resource-policy
            'policy/build-resource
            'session/build
            '(budget/build)
            '(project-workspace build-cache)
            'session/build))
          (agent-tool-policy
-          (poo-flow-session-tool-permission-policy
+          (agentic-ai-lab-session-tool-permission-policy
            'policy/build-tools
            'session/build
            (list read-grant build-grant)
            '(write-workspace-file)
            'deny))
          (hook-tool-policy
-          (poo-flow-session-hook-tool-permission-policy
+          (agentic-ai-lab-session-hook-tool-permission-policy
            'policy/build-hook-tools
            'session/build
            '(hook/pre-check)
            (list read-grant)
            'human-approval-on-escalation
            'deny)))
-    (poo-flow-session-policy-validation-receipt
+    (agentic-ai-lab-session-policy-validation-receipt
      'validation/build-agent-param
      'session/build
      model-policy
@@ -175,7 +175,7 @@
      '(channel/build-root)
      '(project-workspace build-cache)
      (list
-      (poo-flow-session-policy-tool-attempt
+      (agentic-ai-lab-session-policy-tool-attempt
        'attempt/build
        'agent-turn
        'run-build-command
@@ -183,7 +183,7 @@
        'build-cache
        'agent/build))
      (list
-      (poo-flow-session-policy-tool-attempt
+      (agentic-ai-lab-session-policy-tool-attempt
        'attempt/hook-read
        'hook/pre-check
        'read-workspace-file
@@ -196,12 +196,12 @@
 
 ;; : TestSuite
 (def session-agent-param-contract-test
-  (test-suite "poo-flow session AgentParam contract"
-    (poo-flow-test-case "derives AgentParam contract from topology and policy validation"
+  (test-suite "agentic-ai-lab session AgentParam contract"
+    (yuanxu-test-case "derives AgentParam contract from topology and policy validation"
       (let* ((node (make-agent-param-test-node))
              (validation (make-agent-param-test-validation))
              (contract
-              (poo-flow-session-agent-param-contract
+              (agentic-ai-lab-session-agent-param-contract
                'agent-param/build
                node
                validation
@@ -209,26 +209,26 @@
                'streaming-disabled
                'events-receipt-only
                '((case . unit))))
-             (row (poo-flow-session-agent-param-contract->alist contract))
+             (row (agentic-ai-lab-session-agent-param-contract->alist contract))
              (rows
-              (poo-flow-session-agent-param-contracts->alists
+              (agentic-ai-lab-session-agent-param-contracts->alists
                (list contract))))
-        (check-equal? (poo-flow-session-agent-param-contract? contract)
+        (check-equal? (agentic-ai-lab-session-agent-param-contract? contract)
                       #t)
-        (check-equal? (poo-flow-session-agent-param-contract-id contract)
+        (check-equal? (agentic-ai-lab-session-agent-param-contract-id contract)
                       'agent-param/build)
-        (check-equal? (poo-flow-session-agent-param-contract-agent-id
+        (check-equal? (agentic-ai-lab-session-agent-param-contract-agent-id
                        contract)
                       'agent/build)
-        (check-equal? (poo-flow-session-agent-param-contract-provider-ref
+        (check-equal? (agentic-ai-lab-session-agent-param-contract-provider-ref
                        contract)
                       'marlin/provider)
         (check-equal?
-         (poo-flow-session-agent-param-contract-effective-model-ref
+         (agentic-ai-lab-session-agent-param-contract-effective-model-ref
           contract)
          'marlin/model/build-review)
         (check-equal?
-         (poo-flow-session-agent-param-contract-validation-valid? contract)
+         (agentic-ai-lab-session-agent-param-contract-validation-valid? contract)
          #t)
         (check-equal? (.ref contract 'agent-system-session-ref)
                       'session/build-system)

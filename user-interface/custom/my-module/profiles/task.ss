@@ -6,11 +6,11 @@
 ;;; Boundary: downstream task sandbox profile declarations.
 ;;; Invariant: standalone module; it declares data only.
 
-(import :poo-flow/src/user-interface/init-syntax)
+(import :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
-(export poo-flow-custom-my-module-task-module)
+(export agentic-ai-lab-custom-my-module-task-module)
 
-(def poo-flow-custom-my-module-task-module
+(def agentic-ai-lab-custom-my-module-task-module
   (let ((task-capabilities
        '(process-run filesystem-read tmpdir))
       (cache-capabilities

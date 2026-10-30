@@ -1,0 +1,184 @@
+#+title: Query Source Changes at the Durable Context Owner
+#+language: en
+:PROPERTIES:
+:ID: context-query-durable-owner-handoff
+:STATUS: executed-model-native-integration-open
+:END:
+
+* Baseline and qualification boundary
+
+Core was rebased on 2026-10-25 to PR 19 head
+=bf88264cf0f5c1bf2b5c0a6484ca5f2e1f08c2d5=, retaining local edits.
+The incoming commit changes the process-output pump, its documentation and test.
+This revision update is not a new runtime qualification. The receipts in
+[[file:15-unified-query-provider.org][15: Query Provider]] and [[file:14-native-durable-recovery.org][14: durable recovery]] retain their original cuts.
+
+The inspected Provider prepares subscribers, updates its native source history
+and drains invalidation synchronously. Context checkpoints retain its portable
+source and Query journals. However, the durable adapter's pending named-command
+recovery handles policy replacement, result, cancel and recover; it does not
+yet implement a named Query source replacement/withdrawal recovery branch.
+Checkpoint replay alone therefore does not qualify a crash between receipt of
+a source change and durable publication of its affected Contexts.
+
+* Context state is not Session state
+
+The system retains evidence and derives purpose-bound working views. Short-term
+and long-term knowledge are lifecycle assessments of that evidence and its
+interpretations; they are not two competing stores or replacements for source
+history. Context formation, use, reassessment, consolidation and recall retain
+the ownership established in [[file:03-information-to-recall.org][the information-to-recall design]].
+
+| Transition | Context responsibility | Independent Session responsibility |
+|------------+------------------------+------------------------------------|
+| Admit source | Keep exact bytes, qualified Org IDs and source/Contract cut | No interaction or Attempt created implicitly |
+| Form working view | Select via unified Query; bind original proof, support and captured parents | Supply existing scope/identity and consume opaque admitted input |
+| Use and complete | Recheck current support and owner publication fence | Route actual worker observations and publish one native terminal |
+| Reassess or withdraw | Push dependency-directed invalidation; retain old proof and result | Preserve pending obligations until actual reconciliation |
+| Consolidate | Create a separately admitted interpretation with its own dependencies | Completion alone cannot endorse a generalization |
+| Recall | Re-form a current purpose-bound view from retained evidence | Receiving Session supplies its own scope and authority |
+
+A source withdrawal affects applicability. It neither deletes the original
+evidence nor changes a Session's identity. Historical completion, currently
+usable knowledge and authority to perform an effect are separate facts.
+
+* One identity and owner per responsibility
+
+Org ID remains a source-qualified content anchor. SESSION_ID refers to the
+existing independent Session identity. A source version changes neither.
+The existing receipt digest identifies the selected Query observation. The
+existing inbox input identity deduplicates delivery, and the existing durable
+owner epoch fences writers. None becomes another Session or Context identity.
+
+Extend the existing named-command protocol and journal, rather than adding a
+Provider database, recovery reducer or terminal ledger. Context owns source
+admission, captured-version dependencies and the invalidation decision. Session
+owns Attempt transitions and worker reconciliation. ASCENT supplies derivation;
+support and the temporal journal determine current applicability.
+
+* Durable catalog root, including sources without consumers
+
+The current =context-query-export= requires an observation present in the Query
+journal. =context-durable-adapter= saves Context entries, whose Query bindings
+carry these recovery capsules. Consequently a source admitted before any Query,
+or a catalog without an enrolled consumer, needs an explicit persistence path.
+Do not create a dummy Session, Query or observation just to keep that source.
+
+The proposed extension persists the existing Provider catalog root in the same
+durable journal transaction: ordered original source versions, canonical Query
+records (possibly empty), and their existing digests. Restore that root without
+requiring an observation; consumer bindings resolve their existing receipt refs
+against it. The Provider remains the sole semantic owner. This is storage of
+its existing state, not another catalog identity or registry.
+
+After restoring the committed root, reconstruct Context entries, captured parent
+edges and subscriptions, then replay pending source commands, and only then
+open result processing. Every subscription receives the replayed changes. A
+retired consumer or empty Session set cannot erase the retained catalog history.
+
+| Current implementation seam | Required refinement |
+|-----------------------------+---------------------|
+| =context-query-source!= / =context-query-withdraw!= | Run under a named source command with expected cut and original inbox input |
+| =context-query-export= / =context-query-restore= | Separate whole-catalog snapshot/replay from resolving an observation reference |
+| =context-durable-adapter= save and pending-command recovery | Persist the Provider root and recover source operations in the existing transaction |
+| =policy-clock-command!= / =cycle-call= | Keep existing inbox deduplication, owner epoch, quarantine and commit-before-ACK |
+| =context-host-restore!= | Reconnect consumers to that single restored catalog before replay/open |
+
+* Proposed source-change transaction
+
+1. Durably receive inert source identity, expected previous cut, new generation,
+   operation and exact admitted bytes/digest through the existing inbox. Reusing
+   an input identity with different bytes is refused. Retries of the same input
+   reuse its historical decision.
+2. Acquire the existing writer transaction and validate its owner epoch and
+   expected source cut. Distinguish an already applied retry from a different
+   command proposing the same generation. Refuse generation reuse or rollback.
+3. Prepare the native source change and dependency batches. Bind affected
+   Contexts and Attempts to their captured versions; an unaffected consumer
+   remains admitted. Private in-memory changes are provisional until commit.
+4. Persist the source/Query histories, support retraction, affected Context
+   checkpoint, pending cancellation/reconciliation obligations and any native
+   terminal in the same existing journal transaction. Retain original bytes,
+   proofs and observations. Withdrawal changes applicability, not history.
+5. Commit the decision before ACK or externally visible result publication.
+   Rollback requires quarantining and reconstructing the owner; continuing with
+   mutated Provider pointers after an aborted transaction is forbidden.
+6. On restart, rebuild producers and subscriptions before accepting results.
+   Recover a pending source command under the new owner epoch using its retained
+   original input. A late old worker, ticket or source event cannot select an
+   older head. Re-admission requires a fresh version and proof; it cannot revive
+   an old receipt or a dependent consumer's captured parent.
+
+A result committed before withdrawal may remain a historical completed Attempt;
+its output loses current applicability when withdrawal commits. If withdrawal
+commits first, the old result cannot publish. Cancellation and recovery use the
+existing single-terminal gate. Recovery of delivery does not itself authorize a
+fresh Attempt or fabricate worker termination.
+
+* Required executable gate before claiming implementation
+
+Reuse the native Query corpus and durable crash harness with source change,
+actual A/B worker result, cancel and recover as independent producers. Exercise
+both source replacement and withdrawal at after-inbox, before-decision-commit
+and after-commit/before-ACK crash boundaries. Record generated legal owner
+orders separately from observed mailbox arrivals; neither establishes all OS
+schedules.
+
+Require durable cached invalidation before a use query, unaffected C's real
+completion, at most one terminal per Attempt, fresh same-Session re-admission,
+and the captured old-parent fence after restart. Replay duplicate and delayed
+inputs against original saved database images in another process. Preserve
+the raw source/Query/proof journals and exact code/object/dependency cuts.
+
+Retain unsafe controls: ACK before durable source invalidation; restoring only
+the catalog without consumer fences; replaying an older source command after
+replacement; and continuing from provisional memory after rollback. Each must
+exhibit the corresponding stale-admission/publication or recovery failure;
+the corrected path must reject it using the actual owner, not a model-only
+oracle. These are required future gates, not results of the revision rebase.
+
+Also crash/restart with an empty Query journal and zero Context consumers.
+The source must still be present at its committed generation. Replaying an old
+source command after a later committed replacement must record a refusal or
+historical ACK as appropriate, without restoring the old head. These additional
+native cases are not covered by the bounded model below.
+
+* Executed durable-handoff model
+
+[[file:16-query-durable-owner.sysml][The SysML v2 contract]] executes all 180 linear extensions of six events:
+source withdrawal with process death, A result, B result, cancellation request,
+matching worker reconciliation and owner restart. Source precedes restart;
+cancellation precedes reconciliation. Inputs received during downtime are held
+until restart. This models durable input retention, not a running mailbox in a
+dead process. A/B capture the withdrawn source; C does not depend on it.
+
+Each order runs at three crash stages and five algorithm modes. The first two
+stages differ in whether provisional memory existed; both restart from the
+pre-decision durable cut. Stage three restores the committed decision and must
+not apply it twice. A positional oracle independently checks safe historical
+completion boundaries and concrete output states, in addition to the verdict.
+
+On 2026-10-25 the actual CLI executed 2,700 cases: 540 safe cases and 2,160
+unsafe-mode probes. Exactly 1,500 probes exposed violations; the other 660
+unsafe-mode probes lacked the triggering condition. There were zero unexpected
+verdicts. Every safe case retained affected A/B fences, unaffected C admission,
+exactly one source application, one A terminal, and at most one B terminal.
+Four saved witnesses, one per unsafe mode, were executed again with their
+corrected mode-zero paths: eight additional executions, four expected failures.
+
+The model intentionally abstracts native proof reconstruction, journal I/O,
+matching worker evidence, callback delivery and immutable-byte retention. It
+does not establish the empty-catalog, newer-generation, old-owner or native
+process-death obligations above. It does not claim arbitrary OS scheduling.
+The previous native receipts have not been rerun or promoted by this model.
+
+#+begin_src sh
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-query-durable-scenarios.py" --artifacts /private/tmp/context-query-durable-model-20261025
+python3 "$slice/run-query-durable-scenarios.py" --replay /private/tmp/context-query-durable-model-20261025/counterexample-000-001.json --artifacts /private/tmp/context-query-durable-replay
+#+end_src
+
+Original CLI outputs, witnesses and summaries are retained outside Git under
+=/private/tmp/context-query-durable-model-20261025/= and
+=/private/tmp/context-query-durable-replay-20261025/=. The combined artifact
+index is =/private/tmp/context-query-durable-evidence-20261025.json=.

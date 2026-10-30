@@ -1,0 +1,224 @@
+#+title: Evidence-driven Context: Bounded Concurrent Attempt Lifecycle
+#+date: [2026-10-25]
+#+language: en
+#+property: STATUS exhaustive-declared-linearizations-locally-executed
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Semantic center and source owners
+
+Context is an evidence-chain-driven system with ASCENT-backed temporal-causality
+as its primary inference/applicability foundation. This is the decision in
+[[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][Context/Temporal lifecycle: Primary ASCENT-backed semantic architecture]], not a
+new timestamp-order design. [[file:01-system-boundary.sysml][The responsibility model]] now explicitly represents
+original ASCENT proof/Derivation/premise/program/journal ownership, support and
+Impact dependencies, together with current owner applicability.
+
+The semantic route is:
+
+#+begin_src text
+ORG source / Element / Query cut
+ -> admitted source/event/Fact/rule correspondence
+ -> original ASCENT derivation and proof DAG with exact premise bindings
+ -> registered proof + current native source/journal/program/support/policy witness
+ -> dependency-directed Context invalidation / Impact refresh
+ -> exact Session Attempt and current owner publication fence
+#+end_src
+
+Relevant existing code owners are
+[[file:../../../../modules/temporal-causality/ascent-exchange.ss][ascent-exchange]],
+[[file:../../../../modules/temporal-causality/evaluator/positive-proof.ss][original positive-proof admission]],
+[[file:../../../../modules/temporal-causality/evaluator/derivation.ss][Derivation]],
+[[file:../../../../modules/temporal-causality/evaluator/proof-host.ss][registered proof Host/current applicability]],
+[[file:../../../../modules/temporal-causality/truth-maintenance/support/funs.ss][support evaluation]],
+[[file:../../../../modules/temporal-causality/truth-maintenance/funs.ss][dependency reverse planning]] and
+[[file:../../../../modules/temporal-causality/impact/refresh-funs.ss][Impact refresh]]. The inspected proof Host preserves original proof registration
+and checks current program/journal/support-policy state separately; it grants no
+effect authority. This model does not replace those owners or run their solver.
+
+The [[file:05-concurrent-evidence-lifecycle.sysml][executable SysML model]] projects one original positive proof root with two
+required direct premises. A source withdrawal invalidates a required premise
+and advances the exact source/journal cut; the original proof stays historical.
+Another possible root remains available, but cannot authenticate the original
+selected root or repair its consumption binding. A source change unrelated to
+a proof's premises is not modeled as a general rule that all journal changes
+invalidate every proof. Broader support/retraction coverage remains native work.
+
+* Concurrency scope and atomicity
+
+The earlier 04 fixtures execute fixed scenarios. This model instead enumerates
+all legal interleavings within the following declared bound:
+
+- One already disclosed Attempt, one immutable original proof/input cut.
+- One event of each of the eight kinds below.
+- Response qualification and result publication are separate events.
+- Each event is an atomic reducer/publication linearization point. There is no
+  assumed atomicity between qualification and publication.
+- Source-premise withdrawal, grant revocation and owner recovery can occur
+  between those events. Worker terminal evidence can precede or follow recovery.
+
+| Event | Owner and transition |
+|-------+----------------------|
+| R: receive | Host/Session retain a matching response observation |
+| Q: qualify | Context snapshots original proof/support/grant applicability and Session owner revision |
+| P: publish-result | Context rechecks current proof/source/journal/grant; Session atomically publishes only against expected owner revision and absent terminal outcome |
+| S: withdraw-source-premise | Source/journal and support owners withdraw a required original premise; invalidate current use while retaining original proof |
+| G: revoke-grant | Authority advances the grant generation; historical evidence remains retained, current use is withdrawn |
+| C: request-cancel | Session prepares cancellation against its observed owner revision; a request does not prove worker termination or publish a terminal outcome |
+| T: terminal-receipt/cancel-CAS | Host supplies actual matching terminal evidence; Session conditionally publishes cancellation if the expected revision and absent-outcome condition still match |
+| H: recover | Preserve original proof/history and worker obligations; advance owner revision; recheck current proof/grant before retaining any current-use observation |
+
+The partial order is =R < Q < P=, =C < T= and =C < H=. All other pairs are
+unordered. Thus there are =8! / (3! * 3) = 2,240= legal linearizations.
+Cancellation request and completion publication may overlap; their terminal
+publications compete at the same declared owner CAS. A losing proposal needs
+reevaluation, not permission to overwrite the winner.
+
+[[file:run-concurrency.py][The runner]] enumerates all permutations, filters exactly this partial order,
+checks the count and uniqueness, and supplies each complete order as inputs to
+=ContextConcurrentEvidence::Interleaving=. SysML executes the reducer and
+verification predicate for every order. Python implements no domain reducer,
+proof policy, cancellation decision or acceptance predicate.
+
+This is explicit bounded trace enumeration through the CLI's run engine, not
+its native fork/check search. It covers every linearization of this finite
+atomic-event model; it is not complete verification of arbitrary concurrency,
+retries, crash points inside a reducer, multiple Attempts or distributed CAS.
+
+* Per-prefix invariants
+
+Each event updates sticky violation monitors. A bad intermediate state cannot
+be hidden by later withdrawal or cleanup. The explicit verification verdict
+requires all prefix monitors to remain clear:
+
+1. One Attempt has at most one terminal publication; its first published
+   terminal kind is immutable. Result and cancellation cannot both win.
+2. Current result use requires the exact original registered proof root,
+   Derivation, rule program, source/journal cut, both required premises and grant
+   generation. Once this immutable input is invalidated, neither a delayed
+   publication nor recovery of its historical acceptance can reactivate it.
+3. A pending worker obligation cannot disappear without actual matching terminal
+   evidence. Recovery and a cancellation request alone supply no such evidence.
+4. Original proof and result observations remain historical and attributable
+   while current applicability changes; historical acceptance is not rewritten.
+
+The source/registered-proof identities and authenticated owner observations are
+finite premises, not cryptographic or native source authentication. Retraction
+of the one affected premise and its direct consumer is represented at S's
+linearization point. Asynchronous reverse-index propagation, negative inventory
+coverage and actual ASCENT derivation replay are outside this bound. These
+premises map to the existing
+[[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][joint envelope / lifecycle / formal-obligation sections]] and
+[[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][Session/Memory result, cancellation and recovery contracts]].
+
+* Executed results and negative controls
+
+All 2,240 legal orders were executed for each of five reducer modes:
+
+| Mode | Executions | Violating paths | Result |
+|------+------------+-----------------+--------|
+| Safe | 2,240 | 0 | All prefix invariants held within the declared bound |
+| Remove terminal owner CAS | 2,240 | 224 | Result and cancellation can both publish; first terminal can be overwritten |
+| Substitute alternate proof / skip original current-evidence fence | 2,240 | 152 | A qualified result becomes stale before publication, but is accepted anyway |
+| Restore historical allow during recovery | 2,240 | 80 | Withdrawn/revoked historical result becomes current again |
+| Drop worker obligation during recovery | 2,240 | 1,120 | Recovery clears pending work without terminal evidence |
+
+Total: 11,200 trace executions, followed by four exact counterexample replays
+and four safe counterparts on those same paths. The verification oracle is
+unchanged across modes; each unsafe mode changes only one reducer boundary.
+Some paths do not expose a given mutation; the table counts actual violations,
+not every execution of an unsafe reducer.
+
+The safe model is not vacuously rejecting everything: 144 paths publish a
+result, while 1,064 publish cancellation. Another 1,032 finish the bounded trace
+without a terminal publication because a candidate's owner revision became
+stale. Their CAS proposals require reevaluation or later reconciliation. This
+is a safety result, not proof that every Attempt eventually reaches a terminal
+outcome. The model has no unbounded retry/fairness/liveness argument.
+
+Representative observed violating prefixes, chosen from the first failing
+lexicographic path for each mode, are:
+
+- Missing owner CAS: R Q P S G C T -> two terminal publications.
+- Missing original-proof fence: R Q S P -> publication after required premise withdrawal.
+- Historical resurrection: R Q P S G C T H -> old accepted result restored after invalidation.
+- Dropped obligation: R Q P S G C H -> pending work cleared before T.
+
+These are actual recorded first-bad prefixes for those executions, not claims
+of globally shortest counterexamples. A prefix can be completed to the full
+recorded path for exact replay.
+
+* Execute and replay
+
+From repository root:
+
+#+begin_src sh
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-concurrency.py
+#+end_src
+
+The 2026-10-25 run used =sysml v0.10.1=, commit
+=1c45b6e1749fc8adc9b82d4af22fbe180b56a0e2=, and completed successfully.
+Local artifacts are in =/private/tmp/context-interleavings-5cbnzwgw/=:
+
+- =orders.json=: every legal event order, with no duplicates.
+- =summary.json=: model/runner SHA-256, tool version, explicit partial order,
+  per-mode coverage, counts and replay commands.
+- =mode-*-batch-*.json=: actual CLI outputs and verification witnesses for all traces.
+- =counterexample-mode-1.json= through =counterexample-mode-4.json=: full path,
+  mode, first violating prefix, exact outputs, model hash and CLI witness.
+- =reproduced-*.json= and =safe-counterpart-*.json=: paired executions.
+
+For example:
+
+#+begin_src sh
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-concurrency.py \
+  --replay /private/tmp/context-interleavings-5cbnzwgw/counterexample-mode-2.json
+
+sysml -strict -no-record-cache \
+  docs/10-19-design/10.06-poo-module-system/agentic-ai-context/05-concurrent-evidence-lifecycle.sysml \
+  -engine run -analysis 'ContextConcurrentEvidence::Interleaving(1,2,4,3,5,6,7,8,2)' -json
+#+end_src
+
+The first command checks the model hash and requires exact reproduction,
+returning exit 0 only for a matching failed verdict/output. The direct CLI
+command returns exit 1 for the violated invariant. The replay entrypoint itself
+was additionally executed successfully for mode 2.
+
+These are event-input replays. The CLI's own witness names its deterministic
+run schedule and can have no internal choice points because the event order is
+explicit input. We do not present an empty native choice list as a discovered
+fork schedule. The saved input order is the concurrent linearization witness.
+Raw logs and witnesses remain local artifacts, not committed source logs.
+
+* Tool capability evidence and remaining qualification
+
+A retained tool probe has two concurrent increments with the named property
+=counter <= 1=. The installed =-engine check -action ... -check-property safety=
+reported no violation with final =counter=2=. Its source and raw JSON are saved
+as =tool-capability-probe.sysml= and =tool-capability-probe.json= alongside the
+run artifacts. That invocation is not accepted as this suite's oracle. Instead,
+every prefix is monitored in the executable reducer and =verification def=
+returns an explicit =PassIf= verdict, with the unsafe controls proving that the
+chosen execution path detects violations.
+
+The joint model set also passed strict validation and reflective self-check:
+1,238 elements, 11,618 checks, zero violations and zero unevaluated. That is
+separate evidence from the 11,200 executed interleavings.
+
+The existing [[file:../../../../packages/proofs/quint/SessionAttempt.qnt][SessionAttempt]] and
+[[file:../../../../packages/proofs/quint/ContextTemporalLifecycle.qnt][ContextTemporalLifecycle]] remain their primary finite protocol owners.
+This SysML experiment binds their related questions into an executable
+cross-owner scenario; it neither replaces those models nor claims they were
+rerun. Actual ASCENT solver/original-proof/current-support replay, native Scheme
+reducer correspondence and provider/Data publication remain unqualified by this
+run. No runtime implementation or effect authority was changed.
+
+* Subsequent native correspondence
+
+[[file:06-native-proof-support-replay.org][Native ASCENT/Scheme replay]] subsequently executed three selected native
+paths within a 31-Case suite. It refines the original-proof/current-support,
+withdrawal and recovery-intent observations while retaining the missing final
+provider publication/CAS boundary. This does not retroactively turn the 2,240
+model paths into native executions or prove full cross-language refinement.

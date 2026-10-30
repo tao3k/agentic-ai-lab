@@ -5,12 +5,12 @@
 ;;; -*- Gerbil -*-
 
 (import (only-in :clan/poo/object .def .o .ref)
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        (only-in :poo-flow/src/authoring/semantic-module
-                 poo-flow-semantic-module)
-        (only-in :core/profile-composition/profile-bundle
-                 poo-flow-profile-export
-                 poo-flow-module-profiles))
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :yuanxu/module-system/authoring/roles
+                 yuanxu-semantic-module)
+        (only-in :yuanxu/profile-composition/profile-bundle
+                 yuanxu-profile-export
+                 yuanxu-module-profiles))
 (export tool-calling ToolCallingModule)
 
 (.def tool-calling
@@ -71,18 +71,18 @@
          (policy 'trace-covers-tool-request-call-result))))
 
 (def ToolCallingModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'user-interface 'tool-calling)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'user-interface 'tool-calling)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'tool-request (.ref tool-calling 'tool-request))
-    (poo-flow-profile-export 'tool-schema (.ref tool-calling 'tool-schema))
-    (poo-flow-profile-export 'tool-permission (.ref tool-calling 'tool-permission))
-    (poo-flow-profile-export 'sandbox-scope (.ref tool-calling 'sandbox-scope))
-    (poo-flow-profile-export 'argument-validation (.ref tool-calling 'argument-validation))
-    (poo-flow-profile-export 'untrusted-observation (.ref tool-calling 'untrusted-observation))
-    (poo-flow-profile-export 'tool-cooldown (.ref tool-calling 'tool-cooldown))
-    (poo-flow-profile-export 'result-contract (.ref tool-calling 'result-contract))
-    (poo-flow-profile-export 'runtime-binding (.ref tool-calling 'runtime-binding))
-    (poo-flow-profile-export 'receipt-gate (.ref tool-calling 'receipt-gate))
-    (poo-flow-profile-export 'observability (.ref tool-calling 'observability)))))
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'tool-request (.ref tool-calling 'tool-request))
+    (yuanxu-profile-export 'tool-schema (.ref tool-calling 'tool-schema))
+    (yuanxu-profile-export 'tool-permission (.ref tool-calling 'tool-permission))
+    (yuanxu-profile-export 'sandbox-scope (.ref tool-calling 'sandbox-scope))
+    (yuanxu-profile-export 'argument-validation (.ref tool-calling 'argument-validation))
+    (yuanxu-profile-export 'untrusted-observation (.ref tool-calling 'untrusted-observation))
+    (yuanxu-profile-export 'tool-cooldown (.ref tool-calling 'tool-cooldown))
+    (yuanxu-profile-export 'result-contract (.ref tool-calling 'result-contract))
+    (yuanxu-profile-export 'runtime-binding (.ref tool-calling 'runtime-binding))
+    (yuanxu-profile-export 'receipt-gate (.ref tool-calling 'receipt-gate))
+    (yuanxu-profile-export 'observability (.ref tool-calling 'observability)))))

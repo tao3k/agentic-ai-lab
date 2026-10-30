@@ -8,24 +8,24 @@
 ;;; validation; they never run providers, tools, memory stores, or streams.
 
 (import (only-in :clan/poo/object .ref object? object<-alist)
-        :poo-flow/modules/session/agent
-        :poo-flow/modules/session/objects
-        :poo-flow/modules/session/policy-validation
-        :poo-flow/modules/session/receipt-syntax
-        :poo-flow/modules/session/receipt-projection)
+        :agentic-ai-lab/modules/session/agent
+        :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/policy-validation
+        :agentic-ai-lab/modules/session/receipt-syntax
+        :agentic-ai-lab/modules/session/receipt-projection)
 
-(export poo-flow-session-agent-param-contract
-        poo-flow-session-agent-param-contract?
-        poo-flow-session-agent-param-contract-id
-        poo-flow-session-agent-param-contract-agent-id
-        poo-flow-session-agent-param-contract-provider-ref
-        poo-flow-session-agent-param-contract-effective-model-ref
-        poo-flow-session-agent-param-contract-validation-valid?
-        poo-flow-session-agent-param-contract->alist
-        poo-flow-session-agent-param-contracts->alists)
+(export agentic-ai-lab-session-agent-param-contract
+        agentic-ai-lab-session-agent-param-contract?
+        agentic-ai-lab-session-agent-param-contract-id
+        agentic-ai-lab-session-agent-param-contract-agent-id
+        agentic-ai-lab-session-agent-param-contract-provider-ref
+        agentic-ai-lab-session-agent-param-contract-effective-model-ref
+        agentic-ai-lab-session-agent-param-contract-validation-valid?
+        agentic-ai-lab-session-agent-param-contract->alist
+        agentic-ai-lab-session-agent-param-contracts->alists)
 
 ;; : (-> POOObject Symbol Value Value)
-(def (poo-flow-session-agent-param-slot object key default)
+(def (agentic-ai-lab-session-agent-param-slot object key default)
   (with-catch
    (lambda (_failure) default)
    (lambda ()
@@ -33,79 +33,79 @@
 
 ;;; Boundary: agent-param field rows preserve the session parameter projection
 ;;; shape used by agent graph and policy receipts.
-;; poo-flow-session-agent-param-field-rows
+;; agentic-ai-lab-session-agent-param-field-rows
 ;; : (-> SessionAgentParamFieldRowsClauseSyntax SessionAgentParamFieldRowsExpansionSyntax)
 ;; | doc m%
 ;;   Expands agent parameter field clauses into stable session param rows.
 ;;   # Examples
 ;;   ```scheme
-;;   (poo-flow-session-agent-param-field-rows (agent-id 'worker))
+;;   (agentic-ai-lab-session-agent-param-field-rows (agent-id 'worker))
 ;;   ;; => ((agent-id . worker))
 ;;   ```
-(defrules poo-flow-session-agent-param-field-rows ()
+(defrules agentic-ai-lab-session-agent-param-field-rows ()
   ((_ (field value) ...)
    (list (cons 'field value) ...)))
 
 ;;; Boundary: agent parameter contracts bind session agent nodes to validated
 ;;; policy receipts before child-session runtime launch.
 ;; : (-> Symbol PooSessionAgentNode PooSessionPolicyValidationReceipt Symbol Symbol Symbol [Alist] PooSessionAgentParamContract)
-(def (poo-flow-session-agent-param-contract contract-id
+(def (agentic-ai-lab-session-agent-param-contract contract-id
                                             agent-node
                                             validation-receipt
                                             provider-ref
                                             streaming-policy
                                             event-policy
                                             . maybe-metadata)
-  (poo-flow-session-require "session AgentParam contract id must be a symbol"
+  (agentic-ai-lab-session-require "session AgentParam contract id must be a symbol"
                             (symbol? contract-id)
                             contract-id)
-  (poo-flow-session-require "session AgentParam requires an agent node"
-                            (poo-flow-session-agent-node? agent-node)
+  (agentic-ai-lab-session-require "session AgentParam requires an agent node"
+                            (agentic-ai-lab-session-agent-node? agent-node)
                             agent-node)
-  (poo-flow-session-require
+  (agentic-ai-lab-session-require
    "session AgentParam requires a policy validation receipt"
-   (poo-flow-session-policy-validation-receipt? validation-receipt)
+   (agentic-ai-lab-session-policy-validation-receipt? validation-receipt)
    validation-receipt)
-  (poo-flow-session-require "session AgentParam provider ref must be a symbol"
+  (agentic-ai-lab-session-require "session AgentParam provider ref must be a symbol"
                             (symbol? provider-ref)
                             provider-ref)
-  (poo-flow-session-require "session AgentParam streaming policy must be a symbol"
+  (agentic-ai-lab-session-require "session AgentParam streaming policy must be a symbol"
                             (symbol? streaming-policy)
                             streaming-policy)
-  (poo-flow-session-require "session AgentParam event policy must be a symbol"
+  (agentic-ai-lab-session-require "session AgentParam event policy must be a symbol"
                             (symbol? event-policy)
                             event-policy)
   (object<-alist
-   (poo-flow-session-agent-param-field-rows
-    (kind 'poo-flow.session.agent-param-contract)
-    (schema 'poo-flow.modules.session.agent-param-contract.v1)
+   (agentic-ai-lab-session-agent-param-field-rows
+    (kind 'agentic-ai-lab.session.agent-param-contract)
+    (schema 'agentic-ai-lab.modules.session.agent-param-contract.v1)
     (contract-id contract-id)
     (project-ref (.ref agent-node 'project-ref))
     (agent-id
-     (poo-flow-session-agent-node-agent-id agent-node))
+     (agentic-ai-lab-session-agent-node-agent-id agent-node))
     (root-session-ref (.ref agent-node 'root-session-ref))
     (parent-session-ref
-     (poo-flow-session-agent-node-parent-session-ref agent-node))
+     (agentic-ai-lab-session-agent-node-parent-session-ref agent-node))
     (agent-system-session-ref
      (.ref agent-node 'agent-system-session-ref))
     (input-session-ref (.ref agent-node 'input-session-ref))
     (output-session-ref
-     (poo-flow-session-agent-node-output-session-ref agent-node))
+     (agentic-ai-lab-session-agent-node-output-session-ref agent-node))
     (provider-ref provider-ref)
     (effective-model-ref
-     (poo-flow-session-policy-validation-receipt-effective-model-ref
+     (agentic-ai-lab-session-policy-validation-receipt-effective-model-ref
       validation-receipt))
     (effective-prompt-session-ref
-     (poo-flow-session-policy-validation-receipt-effective-prompt-session-ref
+     (agentic-ai-lab-session-policy-validation-receipt-effective-prompt-session-ref
       validation-receipt))
     (effective-prompt-chunk-refs
-     (poo-flow-session-policy-validation-receipt-effective-prompt-chunk-refs
+     (agentic-ai-lab-session-policy-validation-receipt-effective-prompt-chunk-refs
       validation-receipt))
     (effective-isolation-mode
-     (poo-flow-session-policy-validation-receipt-effective-isolation-mode
+     (agentic-ai-lab-session-policy-validation-receipt-effective-isolation-mode
       validation-receipt))
     (effective-sandbox-profile-ref
-     (poo-flow-session-policy-validation-receipt-effective-sandbox-profile-ref
+     (agentic-ai-lab-session-policy-validation-receipt-effective-sandbox-profile-ref
       validation-receipt))
     (model-policy-ref (.ref agent-node 'model-policy-ref))
     (prompt-policy-ref (.ref agent-node 'prompt-policy-ref))
@@ -116,59 +116,59 @@
     (resource-sharing-policy-ref
      (.ref agent-node 'resource-sharing-policy-ref))
     (durable-policy-ref
-     (poo-flow-session-agent-node-durable-policy-ref agent-node))
+     (agentic-ai-lab-session-agent-node-durable-policy-ref agent-node))
     (tool-refs (.ref agent-node 'tool-refs))
     (memory-refs (.ref agent-node 'memory-refs))
     (sandbox-profile-ref (.ref agent-node 'sandbox-profile-ref))
     (streaming-policy streaming-policy)
     (event-policy event-policy)
     (validation-id
-     (poo-flow-session-policy-validation-receipt-validation-id
+     (agentic-ai-lab-session-policy-validation-receipt-validation-id
       validation-receipt))
     (validation-valid?
-     (poo-flow-session-policy-validation-receipt-valid?
+     (agentic-ai-lab-session-policy-validation-receipt-valid?
       validation-receipt))
     (validation-diagnostic-count
-     (poo-flow-session-policy-validation-receipt-diagnostic-count
+     (agentic-ai-lab-session-policy-validation-receipt-diagnostic-count
       validation-receipt))
     (tool-catalog-ref
-     (poo-flow-session-policy-validation-receipt-tool-catalog-ref
+     (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-ref
       validation-receipt))
     (tool-catalog-valid?
-     (poo-flow-session-policy-validation-receipt-tool-catalog-valid?
+     (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-valid?
       validation-receipt))
     (tool-catalog-policy-tool-refs
-     (poo-flow-session-policy-validation-receipt-tool-catalog-policy-tool-refs
+     (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-policy-tool-refs
       validation-receipt))
     (tool-catalog-resolved-tool-refs
-     (poo-flow-session-policy-validation-receipt-tool-catalog-resolved-tool-refs
+     (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-resolved-tool-refs
       validation-receipt))
     (tool-catalog-unresolved-tool-refs
-     (poo-flow-session-policy-validation-receipt-tool-catalog-unresolved-tool-refs
+     (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-unresolved-tool-refs
       validation-receipt))
     (tool-catalog-allowed-attempt-tool-refs
-     (poo-flow-session-policy-validation-receipt-tool-catalog-allowed-attempt-tool-refs
+     (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-allowed-attempt-tool-refs
       validation-receipt))
     (tool-catalog-unresolved-attempt-tool-refs
-     (poo-flow-session-policy-validation-receipt-tool-catalog-unresolved-attempt-tool-refs
+     (agentic-ai-lab-session-policy-validation-receipt-tool-catalog-unresolved-attempt-tool-refs
       validation-receipt))
     (memory-catalog-ref
-     (poo-flow-session-policy-validation-receipt-memory-catalog-ref
+     (agentic-ai-lab-session-policy-validation-receipt-memory-catalog-ref
       validation-receipt))
     (memory-catalog-valid?
-     (poo-flow-session-policy-validation-receipt-memory-catalog-valid?
+     (agentic-ai-lab-session-policy-validation-receipt-memory-catalog-valid?
       validation-receipt))
     (memory-catalog-resolved-store-refs
-     (poo-flow-session-policy-validation-receipt-memory-catalog-resolved-store-refs
+     (agentic-ai-lab-session-policy-validation-receipt-memory-catalog-resolved-store-refs
       validation-receipt))
     (memory-catalog-unresolved-store-refs
-     (poo-flow-session-policy-validation-receipt-memory-catalog-unresolved-store-refs
+     (agentic-ai-lab-session-policy-validation-receipt-memory-catalog-unresolved-store-refs
       validation-receipt))
     (allowed-communication-receipts
-     (poo-flow-session-policy-validation-receipt-allowed-communication-receipts
+     (agentic-ai-lab-session-policy-validation-receipt-allowed-communication-receipts
       validation-receipt))
     (denied-communication-receipts
-     (poo-flow-session-policy-validation-receipt-denied-communication-receipts
+     (agentic-ai-lab-session-policy-validation-receipt-denied-communication-receipts
       validation-receipt))
     (runtime-owner "marlin-agent-core")
     (runtime-executed #f)
@@ -177,38 +177,38 @@
                 (car maybe-metadata))))))
 
 ;; : (-> POOObject Boolean)
-(def (poo-flow-session-agent-param-contract? value)
+(def (agentic-ai-lab-session-agent-param-contract? value)
   (and (object? value)
-       (eq? (poo-flow-session-agent-param-slot value 'kind #f)
-            'poo-flow.session.agent-param-contract)))
+       (eq? (agentic-ai-lab-session-agent-param-slot value 'kind #f)
+            'agentic-ai-lab.session.agent-param-contract)))
 
 ;; : (-> PooSessionAgentParamContract Symbol)
-(def (poo-flow-session-agent-param-contract-id contract)
+(def (agentic-ai-lab-session-agent-param-contract-id contract)
   (.ref contract 'contract-id))
 
 ;; : (-> PooSessionAgentParamContract Symbol)
-(def (poo-flow-session-agent-param-contract-agent-id contract)
+(def (agentic-ai-lab-session-agent-param-contract-agent-id contract)
   (.ref contract 'agent-id))
 
 ;; : (-> PooSessionAgentParamContract Symbol)
-(def (poo-flow-session-agent-param-contract-provider-ref contract)
+(def (agentic-ai-lab-session-agent-param-contract-provider-ref contract)
   (.ref contract 'provider-ref))
 
 ;; : (-> PooSessionAgentParamContract Symbol)
-(def (poo-flow-session-agent-param-contract-effective-model-ref contract)
+(def (agentic-ai-lab-session-agent-param-contract-effective-model-ref contract)
   (.ref contract 'effective-model-ref))
 
 ;; : (-> PooSessionAgentParamContract Boolean)
-(def (poo-flow-session-agent-param-contract-validation-valid? contract)
+(def (agentic-ai-lab-session-agent-param-contract-validation-valid? contract)
   (.ref contract 'validation-valid?))
 
 ;; : (-> PooSessionAgentParamContract Alist)
 (defpoo-session-receipt-projection
-  poo-flow-session-agent-param-contract->alist
+  agentic-ai-lab-session-agent-param-contract->alist
   (contract)
-  (require poo-flow-session-require
+  (require agentic-ai-lab-session-require
            "session AgentParam projection requires an AgentParam contract"
-           (poo-flow-session-agent-param-contract? contract)
+           (agentic-ai-lab-session-agent-param-contract? contract)
            contract)
   (bindings ())
   (fields
@@ -276,8 +276,8 @@
     ('metadata (.ref contract 'metadata)))))
 
 ;; : (-> [PooSessionAgentParamContract] [Alist])
-(def (poo-flow-session-agent-param-contracts->alists contracts)
-  (poo-flow-session-receipt-projection-batch
+(def (agentic-ai-lab-session-agent-param-contracts->alists contracts)
+  (agentic-ai-lab-session-receipt-projection-batch
    contracts
-   poo-flow-session-agent-param-contract->alist
+   agentic-ai-lab-session-agent-param-contract->alist
    "session AgentParam contract serialization requires a list"))

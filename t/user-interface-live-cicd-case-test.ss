@@ -6,26 +6,26 @@
 ;;; Boundary: test entrypoint for root user-interface CI/CD live cases.
 ;;; Invariant: live execution cases are test fixtures, not user module syntax.
 
-(import (only-in :poo-flow/src/testing/module-system-live-case
-                 poo-flow-module-system-live-case-test-suite
-                 pooFlowModuleSystemLiveCaseFromModuleSelection)
+(import (only-in :agentic-ai-lab/dev/modules/testing/module-system-live-case
+                 agentic-ai-lab-module-system-live-case-test-suite
+                 agenticAiLabModuleSystemLiveCaseFromModuleSelection)
         (only-in "../user-interface/custom/my-module/profiles/cicd"
-                 poo-flow-custom-my-module-cicd-module)
+                 agentic-ai-lab-custom-my-module-cicd-module)
         (only-in "../user-interface/custom/my-module/cases/cicd"
-                 poo-flow-custom-my-module-cicd-case))
+                 agentic-ai-lab-custom-my-module-cicd-case))
 
 (export user-interface-live-cicd-case-test)
 
 ;;; The live CI/CD case is inert fixture data: it wires module selection,
 ;;; profile inheritance, and sandbox config without running gxpkg here.
-;; : PooFlowModuleSystemLiveCase
-(def poo-flow-user-interface-live-cicd-case
-  (pooFlowModuleSystemLiveCaseFromModuleSelection
+;; : AgenticAILabModuleSystemLiveCase
+(def agentic-ai-lab-user-interface-live-cicd-case
+  (agenticAiLabModuleSystemLiveCaseFromModuleSelection
    'current-system-build
-   poo-flow-custom-my-module-cicd-module
-   poo-flow-custom-my-module-cicd-case))
+   agentic-ai-lab-custom-my-module-cicd-module
+   agentic-ai-lab-custom-my-module-cicd-case))
 
 ;; : TestSuite
 (def user-interface-live-cicd-case-test
-  (poo-flow-module-system-live-case-test-suite
-   poo-flow-user-interface-live-cicd-case))
+  (agentic-ai-lab-module-system-live-case-test-suite
+   agentic-ai-lab-user-interface-live-cicd-case))

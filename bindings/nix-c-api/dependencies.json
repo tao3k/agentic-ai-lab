@@ -1,0 +1,15 @@
+{
+  "system": "aarch64-darwin",
+  "minimum-version": "2.34",
+  "resolved-version": "2.34.4+1",
+  "cli": "/nix/store/jvakd1iaz015s3n52jmss3nxpywarhjg-nix-2.34.4+1/bin/nix",
+  "expr": "/nix/store/d5zf6zrvr4ccmxzxm2d3ldamg0zwd0bc-nix-expr-c-2.34.4+1.drv",
+  "store": "/nix/store/qay5azamn9m1mxl2h2w192yzr57yin79-nix-store-c-2.34.4+1.drv",
+  "util": "/nix/store/2i87m5bw0wbm2x8hwdfr4xkb31m1vjws-nix-util-c-2.34.4+1.drv",
+  "expr-dev": "/nix/store/21f61znk92qb2yqz66k63yp9q3vnq9g5-nix-expr-c-2.34.4+1-dev",
+  "store-dev": "/nix/store/nk6y4px8jjp5ii2c3g2g399d852p5zpp-nix-store-c-2.34.4+1-dev",
+  "util-dev": "/nix/store/0r4sj42ch853jqxlz939204bxb5h1bjc-nix-util-c-2.34.4+1-dev",
+  "flake": "/nix/store/bvhy1zi5m32vzajx98viwvd3hsm7bfly-nix-flake-c-2.34.4+1.drv",
+  "flake-dev": "/nix/store/ixvgigw58id0flpi58ci25rsp6mxn3zq-nix-flake-c-2.34.4+1-dev",
+  "fetchers-dev": "/nix/store/5qyi219yvmzk5gzr55qqwhjz1qjcnf1l-nix-fetchers-c-2.34.4+1-dev"
+}

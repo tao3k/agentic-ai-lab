@@ -6,12 +6,14 @@
 ;;; Boundary: downstream Funflow CI/CD POO authoring gate configuration.
 ;;; Invariant: formal POO-native use-module config only; no runtime work.
 
-(import :poo-flow/modules/funflow/config)
+(import (only-in :clan/poo/object .def)
+        (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
+        (only-in :agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-configs))
 
-(export poo-flow-custom-my-module-poo-introspection-case)
+(export agentic-ai-lab-custom-my-module-poo-introspection-case)
 
-(def poo-flow-custom-my-module-poo-introspection-case
-  (poo-flow-funflow-configs
+(def agentic-ai-lab-custom-my-module-poo-introspection-case
+  (agentic-ai-lab-funflow-configs
   (.def (funflow/profile-authoring @ funflow-check
                                    check-name profile-ref command-vector
                                    artifact-outputs cache-intents

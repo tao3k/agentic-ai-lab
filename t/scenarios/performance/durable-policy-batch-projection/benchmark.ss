@@ -17,7 +17,7 @@
  (sourcePath . "t/scenarios/performance/durable-policy-batch-projection/benchmark.ss")
  (purpose . "observe POO durable policy batch projection into struct receipts and bounded alist ABI rows")
  (feature . durable-policy-batch-projection)
- (rule . POO-FLOW-DURABLE-POLICY-PERFORMANCE-001)
+ (rule . AGENTIC-AI-LAB-DURABLE-POLICY-PERFORMANCE-001)
  (optimizationFocus . "POO durable authoring with defstruct runtime receipts and one bounded serialization pass")
  (inputShape . "sixty-four POO durable policy objects projected to struct receipts and bounded alists")
  (expectedOutcome . "the durable-policy-batch-projection scenario preserves its declared semantic result under the ASP P95 gate")

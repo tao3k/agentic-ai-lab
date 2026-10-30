@@ -8,30 +8,30 @@
 
 (import (only-in :clan/poo/object .o .ref object?))
 
-(export poo-flow-agent-lifecycle-gate-kind
-        poo-flow-agent-lifecycle-receipt-kind
-        poo-flow-agent-lifecycle-gate-fact-keys
-        poo-flow-agent-lifecycle-receipt
-        pooFlowAgentLifecycleReceipt
-        poo-flow-agent-lifecycle-gate
-        pooFlowAgentLifecycleGate
-        poo-flow-agent-lifecycle-receipt?
-        poo-flow-agent-lifecycle-gate?
-        poo-flow-agent-lifecycle-gate-name
-        poo-flow-agent-lifecycle-gate-accepted?
-        poo-flow-agent-lifecycle-gate->lean-facts
-        poo-flow-agent-lifecycle-lean-fact-contract-complete?)
+(export agentic-ai-lab-agent-lifecycle-gate-kind
+        agentic-ai-lab-agent-lifecycle-receipt-kind
+        agentic-ai-lab-agent-lifecycle-gate-fact-keys
+        agentic-ai-lab-agent-lifecycle-receipt
+        agenticAiLabAgentLifecycleReceipt
+        agentic-ai-lab-agent-lifecycle-gate
+        agenticAiLabAgentLifecycleGate
+        agentic-ai-lab-agent-lifecycle-receipt?
+        agentic-ai-lab-agent-lifecycle-gate?
+        agentic-ai-lab-agent-lifecycle-gate-name
+        agentic-ai-lab-agent-lifecycle-gate-accepted?
+        agentic-ai-lab-agent-lifecycle-gate->lean-facts
+        agentic-ai-lab-agent-lifecycle-lean-fact-contract-complete?)
 
-;; : (-> Unit PooFlowAgentLifecycleGateKind)
-(def poo-flow-agent-lifecycle-gate-kind
-  "poo-flow.modules.agent-lifecycle.gate.v1")
+;; : (-> Unit AgenticAILabAgentLifecycleGateKind)
+(def agentic-ai-lab-agent-lifecycle-gate-kind
+  "agentic-ai-lab.modules.agent-lifecycle.gate.v1")
 
-;; : (-> Unit PooFlowAgentLifecycleReceiptKind)
-(def poo-flow-agent-lifecycle-receipt-kind
-  "poo-flow.modules.agent-lifecycle.receipt.v1")
+;; : (-> Unit AgenticAILabAgentLifecycleReceiptKind)
+(def agentic-ai-lab-agent-lifecycle-receipt-kind
+  "agentic-ai-lab.modules.agent-lifecycle.receipt.v1")
 
-;; : (-> Unit PooFlowAgentLifecycleLeanFactKeySet)
-(def poo-flow-agent-lifecycle-gate-fact-keys
+;; : (-> Unit AgenticAILabAgentLifecycleLeanFactKeySet)
+(def agentic-ai-lab-agent-lifecycle-gate-fact-keys
   '(ai.lifecycle/public-policy
     ai.session/created
     ai.session/parent-bound
@@ -54,7 +54,7 @@
     ai.lifecycle/reusable-policy-surface
     ai.lifecycle/experimental))
 
-(defstruct poo-flow-agent-lifecycle-receipt-record
+(defstruct agentic-ai-lab-agent-lifecycle-receipt-record
   (kind
    lifecycle-receipt-session-id
    lifecycle-receipt-sandbox-profile-ref
@@ -79,77 +79,77 @@
 
 ;;; Receipt predicates stay local to this owner so lifecycle gate validation can
 ;;; distinguish a missing receipt from a receipt that explicitly rejects safety.
-;; : (-> PooFlowAgentLifecycleReceiptCandidate Boolean)
-(def (poo-flow-agent-lifecycle-receipt? value)
-  (or (poo-flow-agent-lifecycle-receipt-record? value)
+;; : (-> AgenticAILabAgentLifecycleReceiptCandidate Boolean)
+(def (agentic-ai-lab-agent-lifecycle-receipt? value)
+  (or (agentic-ai-lab-agent-lifecycle-receipt-record? value)
       (and (object? value)
            (equal? (.ref value 'kind)
-                   poo-flow-agent-lifecycle-receipt-kind))))
+                   agentic-ai-lab-agent-lifecycle-receipt-kind))))
 
-;; : (-> PooFlowAgentLifecycleReceipt Symbol PooFlowAgentLifecycleReceiptSlotValue)
-(def (poo-flow-agent-lifecycle-receipt-slot receipt key)
-  (if (poo-flow-agent-lifecycle-receipt-record? receipt)
+;; : (-> AgenticAILabAgentLifecycleReceipt Symbol AgenticAILabAgentLifecycleReceiptSlotValue)
+(def (agentic-ai-lab-agent-lifecycle-receipt-slot receipt key)
+  (if (agentic-ai-lab-agent-lifecycle-receipt-record? receipt)
     (case key
       ((kind)
-       (poo-flow-agent-lifecycle-receipt-record-kind receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-kind receipt))
       ((lifecycle-receipt-session-id)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-session-id receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-session-id receipt))
       ((lifecycle-receipt-sandbox-profile-ref)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-sandbox-profile-ref receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-sandbox-profile-ref receipt))
       ((lifecycle-receipt-loop-policy-ref)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-loop-policy-ref receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-loop-policy-ref receipt))
       ((lifecycle-receipt-subagent-refs)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-subagent-refs receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-subagent-refs receipt))
       ((lifecycle-receipt-tool-capability-refs)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-tool-capability-refs receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-tool-capability-refs receipt))
       ((lifecycle-receipt-test-receipts)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-test-receipts receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-test-receipts receipt))
       ((lifecycle-receipt-proof-receipts)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-proof-receipts receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-proof-receipts receipt))
       ((lifecycle-receipt-session-created)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-session-created receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-session-created receipt))
       ((lifecycle-receipt-parent-session-bound)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-parent-session-bound receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-parent-session-bound receipt))
       ((lifecycle-receipt-sandbox-attached)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-sandbox-attached receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-sandbox-attached receipt))
       ((lifecycle-receipt-sandbox-scope-contained)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-sandbox-scope-contained receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-sandbox-scope-contained receipt))
       ((lifecycle-receipt-tool-permissions-contained)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-tool-permissions-contained receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-tool-permissions-contained receipt))
       ((lifecycle-receipt-loop-start-guarded)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-loop-start-guarded receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-loop-start-guarded receipt))
       ((lifecycle-receipt-loop-exit-defined)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-loop-exit-defined receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-loop-exit-defined receipt))
       ((lifecycle-receipt-loop-handoff-guarded)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-loop-handoff-guarded receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-loop-handoff-guarded receipt))
       ((lifecycle-receipt-subagents-parented)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-subagents-parented receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-subagents-parented receipt))
       ((lifecycle-receipt-dependency-closed)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-dependency-closed receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-dependency-closed receipt))
       ((lifecycle-receipt-observability-clean)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-observability-clean receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-observability-clean receipt))
       ((lifecycle-receipt-counterexample-rejected)
-       (poo-flow-agent-lifecycle-receipt-record-lifecycle-receipt-counterexample-rejected receipt))
+       (agentic-ai-lab-agent-lifecycle-receipt-record-lifecycle-receipt-counterexample-rejected receipt))
       (else #f))
     (.ref receipt key)))
 
 ;;; Optional receipt access is intentionally private. Missing receipt facts
 ;;; project to false values instead of becoming partial public accessors.
-;; : (-> PooFlowAgentLifecycleReceiptCandidate Symbol PooFlowAgentLifecycleReceiptSlotValue PooFlowAgentLifecycleReceiptSlotValue)
-(def (poo-flow-agent-lifecycle-receipt-slot/default receipt key default-value)
-  (if (poo-flow-agent-lifecycle-receipt? receipt)
-    (poo-flow-agent-lifecycle-receipt-slot receipt key)
+;; : (-> AgenticAILabAgentLifecycleReceiptCandidate Symbol AgenticAILabAgentLifecycleReceiptSlotValue AgenticAILabAgentLifecycleReceiptSlotValue)
+(def (agentic-ai-lab-agent-lifecycle-receipt-slot/default receipt key default-value)
+  (if (agentic-ai-lab-agent-lifecycle-receipt? receipt)
+    (agentic-ai-lab-agent-lifecycle-receipt-slot receipt key)
     default-value))
 
-;; : (-> PooFlowAgentLifecycleReceiptSlotValue Boolean)
-(def (poo-flow-agent-lifecycle-non-empty-list? value)
+;; : (-> AgenticAILabAgentLifecycleReceiptSlotValue Boolean)
+(def (agentic-ai-lab-agent-lifecycle-non-empty-list? value)
   (and (list? value) (not (null? value))))
 
-;; poo-flow-agent-lifecycle-receipt
+;; agentic-ai-lab-agent-lifecycle-receipt
 ;;   : (-> Symbol Symbol Symbol [Symbol] [Symbol] [Symbol] [Symbol] Boolean Boolean Boolean Boolean Boolean Boolean Boolean Boolean Boolean Boolean POOObject)
 ;;   | contract: POO receipt for session/sandbox/loop/subagent policy gates
 ;; : (-> Symbol Symbol Symbol [Symbol] [Symbol] [Symbol] [Symbol] Boolean Boolean Boolean Boolean Boolean Boolean Boolean Boolean Boolean Boolean POOObject)
-(def (poo-flow-agent-lifecycle-receipt session-id
+(def (agentic-ai-lab-agent-lifecycle-receipt session-id
                                        sandbox-profile-ref
                                        loop-policy-ref
                                        subagent-refs
@@ -168,8 +168,8 @@
                                        dependency-closed?
                                        observability-clean?
                                        counterexample-rejected?)
-  (make-poo-flow-agent-lifecycle-receipt-record
-   poo-flow-agent-lifecycle-receipt-kind
+  (make-agentic-ai-lab-agent-lifecycle-receipt-record
+   agentic-ai-lab-agent-lifecycle-receipt-kind
    session-id
    sandbox-profile-ref
    loop-policy-ref
@@ -191,7 +191,7 @@
    counterexample-rejected?))
 
 ;; : (-> Symbol Symbol Symbol [Symbol] [Symbol] [Symbol] [Symbol] Boolean Boolean Boolean Boolean Boolean Boolean Boolean Boolean Boolean Boolean POOObject)
-(def (pooFlowAgentLifecycleReceipt session-id
+(def (agenticAiLabAgentLifecycleReceipt session-id
                                    sandbox-profile-ref
                                    loop-policy-ref
                                    subagent-refs
@@ -210,7 +210,7 @@
                                    dependency-closed?
                                    observability-clean?
                                    counterexample-rejected?)
-  (poo-flow-agent-lifecycle-receipt
+  (agentic-ai-lab-agent-lifecycle-receipt
    session-id
    sandbox-profile-ref
    loop-policy-ref
@@ -231,178 +231,178 @@
    observability-clean?
    counterexample-rejected?))
 
-;; poo-flow-agent-lifecycle-gate
+;; agentic-ai-lab-agent-lifecycle-gate
 ;;   : (-> Symbol Symbol POOObject Alist POOObject)
 ;;   | contract: constructs a POO-native lifecycle proof gate
 ;; : (-> Symbol Symbol POOObject Alist POOObject)
-(def (poo-flow-agent-lifecycle-gate name status receipt metadata)
-  (.o kind: poo-flow-agent-lifecycle-gate-kind
+(def (agentic-ai-lab-agent-lifecycle-gate name status receipt metadata)
+  (.o kind: agentic-ai-lab-agent-lifecycle-gate-kind
       lifecycle-gate-name: name
       lifecycle-gate-status: status
       lifecycle-gate-receipt: receipt
       lifecycle-gate-metadata: metadata))
 
 ;; : (-> Symbol Symbol POOObject Alist POOObject)
-(def (pooFlowAgentLifecycleGate name status receipt metadata)
-  (poo-flow-agent-lifecycle-gate name status receipt metadata))
+(def (agenticAiLabAgentLifecycleGate name status receipt metadata)
+  (agentic-ai-lab-agent-lifecycle-gate name status receipt metadata))
 
-;; : (-> PooFlowAgentLifecycleGateCandidate Boolean)
-(def (poo-flow-agent-lifecycle-gate? value)
+;; : (-> AgenticAILabAgentLifecycleGateCandidate Boolean)
+(def (agentic-ai-lab-agent-lifecycle-gate? value)
   (and (object? value)
        (equal? (.ref value 'kind)
-               poo-flow-agent-lifecycle-gate-kind)))
+               agentic-ai-lab-agent-lifecycle-gate-kind)))
 
-;; : (-> PooFlowAgentLifecycleGate Symbol PooFlowAgentLifecycleGateSlotValue)
-(def (poo-flow-agent-lifecycle-gate-slot gate key)
+;; : (-> AgenticAILabAgentLifecycleGate Symbol AgenticAILabAgentLifecycleGateSlotValue)
+(def (agentic-ai-lab-agent-lifecycle-gate-slot gate key)
   (.ref gate key))
 
-;; : (-> PooFlowAgentLifecycleGate Symbol)
-(def (poo-flow-agent-lifecycle-gate-name gate)
-  (poo-flow-agent-lifecycle-gate-slot gate 'lifecycle-gate-name))
+;; : (-> AgenticAILabAgentLifecycleGate Symbol)
+(def (agentic-ai-lab-agent-lifecycle-gate-name gate)
+  (agentic-ai-lab-agent-lifecycle-gate-slot gate 'lifecycle-gate-name))
 
-;; : (-> PooFlowAgentLifecycleGate PooFlowAgentLifecycleReceiptCandidate)
-(def (poo-flow-agent-lifecycle-gate-receipt gate)
-  (poo-flow-agent-lifecycle-gate-slot gate 'lifecycle-gate-receipt))
+;; : (-> AgenticAILabAgentLifecycleGate AgenticAILabAgentLifecycleReceiptCandidate)
+(def (agentic-ai-lab-agent-lifecycle-gate-receipt gate)
+  (agentic-ai-lab-agent-lifecycle-gate-slot gate 'lifecycle-gate-receipt))
 
 ;;; Acceptance is the prevention boundary for agent-authored lifecycle policy.
 ;;; A proof receipt alone is insufficient: the public surface also requires
 ;;; session lineage, sandbox scope, tool permissions, loop guards, subagent
 ;;; parentage, dependency closure, observability, and rejected bad cases.
-;; : (-> PooFlowAgentLifecycleGate Boolean)
-(def (poo-flow-agent-lifecycle-gate-accepted? gate)
+;; : (-> AgenticAILabAgentLifecycleGate Boolean)
+(def (agentic-ai-lab-agent-lifecycle-gate-accepted? gate)
   (let* ((status
-          (poo-flow-agent-lifecycle-gate-slot gate 'lifecycle-gate-status))
-         (receipt (poo-flow-agent-lifecycle-gate-receipt gate))
+          (agentic-ai-lab-agent-lifecycle-gate-slot gate 'lifecycle-gate-status))
+         (receipt (agentic-ai-lab-agent-lifecycle-gate-receipt gate))
          (test-receipts
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-test-receipts
            '()))
          (proof-receipts
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-proof-receipts
            '())))
     (and (eq? status 'public)
-         (poo-flow-agent-lifecycle-receipt? receipt)
-         (poo-flow-agent-lifecycle-non-empty-list? test-receipts)
-         (poo-flow-agent-lifecycle-non-empty-list? proof-receipts)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt? receipt)
+         (agentic-ai-lab-agent-lifecycle-non-empty-list? test-receipts)
+         (agentic-ai-lab-agent-lifecycle-non-empty-list? proof-receipts)
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
           receipt
           'lifecycle-receipt-session-created)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
           receipt
           'lifecycle-receipt-parent-session-bound)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
           receipt
           'lifecycle-receipt-sandbox-attached)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
           receipt
           'lifecycle-receipt-sandbox-scope-contained)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
           receipt
           'lifecycle-receipt-tool-permissions-contained)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
           receipt
           'lifecycle-receipt-loop-start-guarded)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
           receipt
           'lifecycle-receipt-loop-exit-defined)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
           receipt
           'lifecycle-receipt-loop-handoff-guarded)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
           receipt
           'lifecycle-receipt-subagents-parented)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
           receipt
           'lifecycle-receipt-dependency-closed)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
           receipt
           'lifecycle-receipt-observability-clean)
-         (poo-flow-agent-lifecycle-receipt-slot
+         (agentic-ai-lab-agent-lifecycle-receipt-slot
          receipt
          'lifecycle-receipt-counterexample-rejected))))
 
 ;;; Lean fact projection is the only alist boundary. Callers author and extend
 ;;; POO gates; the proof layer receives stable fact rows that mirror the gate.
-;; : (-> PooFlowAgentLifecycleGate Alist)
-(def (poo-flow-agent-lifecycle-gate->lean-facts gate)
+;; : (-> AgenticAILabAgentLifecycleGate Alist)
+(def (agentic-ai-lab-agent-lifecycle-gate->lean-facts gate)
   (let* ((status
-          (poo-flow-agent-lifecycle-gate-slot gate 'lifecycle-gate-status))
-         (receipt (poo-flow-agent-lifecycle-gate-receipt gate))
+          (agentic-ai-lab-agent-lifecycle-gate-slot gate 'lifecycle-gate-status))
+         (receipt (agentic-ai-lab-agent-lifecycle-gate-receipt gate))
          (test-receipts
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-test-receipts
            '()))
          (proof-receipts
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-proof-receipts
            '()))
          (public? (eq? status 'public))
          (tested?
-          (poo-flow-agent-lifecycle-non-empty-list? test-receipts))
+          (agentic-ai-lab-agent-lifecycle-non-empty-list? test-receipts))
          (proof-backed?
-          (poo-flow-agent-lifecycle-non-empty-list? proof-receipts))
+          (agentic-ai-lab-agent-lifecycle-non-empty-list? proof-receipts))
          (session-created?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-session-created
            #f))
          (parent-session-bound?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-parent-session-bound
            #f))
          (sandbox-attached?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-sandbox-attached
            #f))
          (sandbox-scope-contained?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-sandbox-scope-contained
            #f))
          (tool-permissions-contained?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-tool-permissions-contained
            #f))
          (loop-start-guarded?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-loop-start-guarded
            #f))
          (loop-exit-defined?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-loop-exit-defined
            #f))
          (loop-handoff-guarded?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-loop-handoff-guarded
            #f))
          (subagents-parented?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-subagents-parented
            #f))
          (dependency-closed?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-dependency-closed
            #f))
          (observability-clean?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-observability-clean
            #f))
          (counterexample-rejected?
-          (poo-flow-agent-lifecycle-receipt-slot/default
+          (agentic-ai-lab-agent-lifecycle-receipt-slot/default
            receipt
            'lifecycle-receipt-counterexample-rejected
            #f)))
@@ -454,13 +454,13 @@
 
 ;; : (forall (k v) (-> [(Pair k v)] Boolean))
 ;; : (-> Alist Boolean)
-(def (poo-flow-agent-lifecycle-lean-fact-contract-complete? facts)
+(def (agentic-ai-lab-agent-lifecycle-lean-fact-contract-complete? facts)
   (and (andmap (lambda (key)
                  (and (assq key facts) #t))
-               poo-flow-agent-lifecycle-gate-fact-keys)
+               agentic-ai-lab-agent-lifecycle-gate-fact-keys)
        (andmap (lambda (fact)
                  (and (pair? fact)
                       (memq (car fact)
-                            poo-flow-agent-lifecycle-gate-fact-keys)
+                            agentic-ai-lab-agent-lifecycle-gate-fact-keys)
                       #t))
                facts)))

@@ -1,0 +1,96 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: Trusted native original Derivation admission through fixed ABI v1
+
+* Actual native owner path
+
+Rust retains and re-admits original MRR Rules, Catalog, Facts and Derivations.
+=typed-native-proof.ss= contains the exact inert original Rust request and the
+actual native joint result. Python replays the same request/result without
+creating owner records. The selected root path(1,3) uses intermediate path(1,2)
+and edge(2,3) as direct MRR inputs. Temporal support binds the two transitive
+source leaves to separately named Host subjects and revision IDs.
+
+The dedicated C control =agentic_ai_lab_semantic_v1_derivation_admit= invokes the
+original Scheme producer and positive-proof replay, Rule node correspondence,
+selected original direct Derivation inputs and exact journal bindings. The
+response projects proof/Rule/Derivation flags from those native admission
+objects. No serialized proof, completion flag or node assignment is accepted.
+Ordinary C calls to the control reject with status 3; Python/Rust reject the
+ordinary operation before enqueueing. The descriptor does not list the control.
+
+Source content, RuleId/direct support substitution, missing/duplicate/unused
+facts, absent Derivation authority, source marker, schema, column type,
+generation and work/node bound controls reject. Repeated valid admission remains
+deterministic after rejection. Late correction invalidates current support;
+the historical cut remains supported. The ordinary support evaluator retains
+its conservative flags even when given a previously admitted support label.
+
+* Source identity and executed gates
+
+=qualification.ss= binds 24 POO source hashes, 4 Orgize owner hashes, the fresh
+library, three compiler-generated SCM hashes and all gate counts/durations.
+=native-artifact.ss= is the full closure manifest. Its module hashes refer to
+compiler-generated SCM, not .ss source. Retained SCM bytes match that manifest.
+ABI, all transport schemas and semantic record versions remain v1; Gerbil is
+v0.19. The private SDK package sources were not patched.
+
+All test gates retained five seconds without actual output and 45 seconds total.
+Scheme tests use heap-fenced Just entrypoints with a 1G heap. Import completion
+markers report real module dependency work; no timer produces progress output.
+Both gxtest gates require exact CASE counts, MODULE-OK, HARNESS-OK, final OK and
+zero propagated exit. Compiler builds are separate from these test deadlines.
+
+- Final native library SHA256:
+  =5a432ad8e8120b0e20af67ecf6d86ceaef43936271fa18ffc565dd0cc4a756ce=.
+- Python: 118 passed, no skipped, 4.75 seconds wall, using this final library.
+- Rust Derivation: 3 passed, 2.57 seconds. One actual native joint proof gate and
+  two original typed graph/control tests.
+- Rust support: 3 passed, 2.07 seconds, using the final native library.
+- Rust registered policy: 1 passed, 2.59 seconds, using the final native library.
+- Native evaluator: 17 CASE-OK, final OK, 17.72 seconds via
+  =just test-temporal-evaluator= against the compiled current Scheme sources.
+- Native POO Org Query: 4 CASE-OK, final OK, 19.19 seconds via
+  =just test-query-orgize-source= and the fresh Orgize owner SDK.
+- Orgize source producer: 4 actual Cases and SOURCE-HEADLINE-OK, 7.35 seconds
+  through its heap-fenced =just qualify-source-headlines=.
+- Dependency projection tests: 4 passed. License, version and native/Bazel pin
+  contracts passed locally with the final fixed pin.
+
+Rust builds used --locked --offline --features mrr-transport. Python used the
+seven semantic/temporal/fact/policy/proof suites with explicit native, control
+and original Rust oracle paths. The native AOT builder and CFFI shim were rebuilt
+from current sources. The cached setuptools build input was reused.
+
+* Repair of the prior head's CI roots
+
+The prior exact head 47d05a3d passed C ABI and Lean gates, but its dependency
+contract found mismatched Orgize native/Bazel pins. Native/Bazel Gerbil builds
+then failed because Orgize did not compile the parser's source closure.
+The raw CI/Darwin failure logs are retained.
+
+Orgize PR #21 now has commit
+=0b1b2b1c6b30177cc098f89f42d62d618b87f6aa=. Its owner build declares all 50
+source modules, including the 26 previously missing transitive imports.
+Actual execution exposed =title: title= recursive POO slot capture; the owner
+fix uses =title-value=. POO's corresponding =query= and =admission= captures
+were renamed, then checked through the canonical Query and source replay gates.
+POO's immutable archive pin, URL, SHA and native-generated cross-platform Bazel
+lock projection now agree on that exact owner commit. No source shim or SDK
+package-source modification substitutes for the owner fix.
+
+Failed attempts remain: test-only Rust mutable array indexing, omitted journal
+validity interval, an unsupported harness import, two Orgize idle failures and
+its POO title stack overflow. No deadline was widened. Older receipts are
+unchanged. The successful gates qualify their recorded sources/artifacts; they
+do not qualify a whole remote CI run.
+
+* Remaining boundaries
+
+This is bounded, positive, source-relative admission with one selected original
+Derivation per derived fact. The control does not retain a current proof
+registry, authenticate a provider, obtain authoritative current source/catalog/
+clock state, combine proof and policy into a final effect fence, or publish Data
+with CAS. Source authentication, selection, action and durability remain false.
+No real model or benchmark ran. Production current-state/refinement and remote
+CI qualification remain distinct outstanding gates.

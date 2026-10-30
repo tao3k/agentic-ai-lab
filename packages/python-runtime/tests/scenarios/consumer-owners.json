@@ -1,0 +1,364 @@
+{
+  "application": {
+    "test_checkpoint_contract.py": [
+      "test_cache_loss_is_not_loss_of_evidence_or_reuse_permission",
+      "test_component_support_does_not_complete_a_declared_native_goal",
+      "test_failed_receipt_is_visible_without_becoming_completion",
+      "test_fresh_process_rederives_snapshot_without_replaying_unrelated_updates",
+      "test_missing_bound_input_is_not_an_empty_success",
+      "test_missing_exit_witness_cannot_promote_declared_pass",
+      "test_missing_or_conflicting_cursor_and_active_epoch_remain_explicit_gaps",
+      "test_missing_receipt_provenance_is_visible_without_erasing_history",
+      "test_missing_receipt_source_association_is_not_a_silent_empty_slice",
+      "test_new_counterevidence_is_displayed_then_acknowledged_across_processes",
+      "test_omission_is_not_a_legitimate_empty_declaration",
+      "test_progress_counter_uses_existing_integer_admission_not_bool_truthiness",
+      "test_progress_cursor_survives_new_owner_without_replaying_old_samples",
+      "test_progress_frontier_rejects_replay_regression_and_conflicting_event",
+      "test_progress_requires_exact_active_identity_and_completed_attestation",
+      "test_progress_restore_does_not_invent_new_work_or_receipt_completion",
+      "test_projection_keeps_history_when_a_binding_changes",
+      "test_provenance_gap_reaches_installed_clue_and_new_process",
+      "test_python_boolean_transport_is_not_integer_truthiness",
+      "test_unselected_source_is_not_required_but_selected_source_remains_mandatory"
+    ],
+    "test_clue_exchange.py": [
+      "test_caller_selector_and_new_hypothesis_remain_open",
+      "test_exact_read_and_scheme_data_have_no_row_json_wrapper",
+      "test_forged_authority_and_closed_owner_are_rejected"
+    ],
+    "test_complex_inference.py": [
+      "test_compound_oracles_withdrawal_and_scope_mutations"
+    ],
+    "test_complex_movie.py": [
+      "test_all_arms_share_question_and_raw_evidence_without_private_gold",
+      "test_compact_intent_keeps_bindings_without_enumerating_source_or_answers",
+      "test_finite_views_and_withdrawals_through_real_scheme",
+      "test_model_cannot_replace_trusted_source_declarations",
+      "test_model_cannot_write_source_or_materialized_heads",
+      "test_source_withdrawal_changes_identity_without_mutating_frozen_facts"
+    ],
+    "test_computational_evidence.py": [
+      "test_caller_owned_counts_preserve_complete_source_and_finite_rejection",
+      "test_native_store_through_selected_public_binding"
+    ],
+    "test_datalog_reuse.py": [
+      "test_aggregate_dependency_and_operator_change_do_not_reuse_wrong_claim",
+      "test_exact_repeat_keeps_native_session_without_reimporting_outputs",
+      "test_replacement_invalidates_negative_results",
+      "test_total_input_fact_limit_is_not_relaxed_by_repeat_fix"
+    ],
+    "test_derivations.py": [
+      "test_scheme_closure_is_reused_across_rounds_but_not_after_source_change"
+    ],
+    "test_domain_evidence.py": [
+      "test_exact_domain_constraints_retention_and_invalidation"
+    ],
+    "test_evidence.py": [
+      "test_real_scheme_evidence_survives_repeat_and_rebuilds_after_withdrawal"
+    ],
+    "test_evidence_dag.py": [
+      "test_alpha_renaming_is_native_and_does_not_mutate_input",
+      "test_capability_is_public_and_request_unknown_fields_are_rejected",
+      "test_explicit_dag_preserves_recursive_component_and_topological_edges",
+      "test_query_dag_rejects_changed_source_before_reuse",
+      "test_query_dag_reuses_exact_completed_alias_and_retains_all_sources",
+      "test_recursive_and_multihead_dependencies_stay_atomic",
+      "test_slice_keeps_negative_and_reducer_dependencies",
+      "test_slice_rejects_extra_rule_fields_and_bool_integer",
+      "test_slice_rejects_missing_sources_and_undefined_or_source_heads"
+    ],
+    "test_inference_reuse.py": [
+      "test_actual_scheme_repeat_and_source_update_match_fresh_evaluation",
+      "test_finite_recursive_source_correspondence_and_stale_answer_control",
+      "test_holdout_intent_has_no_source_rows_or_oracle_answers",
+      "test_incomplete_provider_contract_cannot_enter_scheme_admission",
+      "test_source_heads_and_derived_declaration_collisions_are_rejected",
+      "test_withdrawals_change_answers_without_mutating_source"
+    ],
+    "test_interaction.py": [
+      "test_checkpoint_rejects_unknown_negation_and_unobserved_calls_atomically",
+      "test_conversation_pairs_first_round_tools_and_preserves_reasoning",
+      "test_fresh_control_does_not_admit_retained_components",
+      "test_full_candidate_batch_does_not_open_one_session_per_branch",
+      "test_local_checks_preserve_unknown_and_source_bound_reuse",
+      "test_model_declared_path_requires_every_condition_and_current_support",
+      "test_reuse_and_extension_recheck_the_same_path_without_retyping",
+      "test_unknown_and_mismatched_requests_do_not_become_proofs"
+    ],
+    "test_library_boundary.py": [
+      "test_native_producer_content_matches_installed_core",
+      "test_no_application_facade_in_rule_library"
+    ],
+    "test_movie_contract.py": [
+      "test_movie_contract_shape_repair_and_current_source_witnesses"
+    ],
+    "test_native_conversation.py": [
+      "test_duplicate_tool_identity_cannot_trigger_repeated_execution",
+      "test_reasoning_and_tool_receipt_survive_the_next_stateless_request"
+    ],
+    "test_native_derivations.py": [
+      "test_dag_helpers_use_the_same_native_operation",
+      "test_relaxed_head_surface_preserves_meaning_and_caller_input"
+    ],
+    "test_native_interaction_feedback.py": [
+      "test_lossless_factoring_preserves_scope_order_and_missing_fields",
+      "test_tool_errors_remain_unknown_without_invented_branch_proofs"
+    ],
+    "test_process_status.py": [
+      "test_each_scheme_worker_finishes_without_reusing_a_host_queue",
+      "test_failed_child_status_survives_embedded_runtime_initialization",
+      "test_host_descriptor_flags_survive_initialization_and_evaluation"
+    ],
+    "test_review.py": [
+      "test_context_update_withdraws_transitive_evidence_and_cached_answers",
+      "test_engine_failure_propagates_without_a_review_receipt",
+      "test_input_validation_rejects_conflicting_identity",
+      "test_missing_transitive_premise_and_empty_requirements",
+      "test_new_binary_and_unbacked_cause_do_not_pass",
+      "test_reuse_explains_all_four_views_and_never_authorizes",
+      "test_unbound_missing_and_cyclic_dependencies_cannot_justify_claim",
+      "test_unchanged_failure_is_denied_even_with_cause"
+    ],
+    "test_trajectory.py": [
+      "test_bad_event_cannot_partially_charge_or_overwrite_first_success",
+      "test_consumption_accepts_alpha_and_conjunct_order_and_rejects_weakened_intent",
+      "test_consumption_rejects_accidentally_equal_answers_with_wrong_variable_join",
+      "test_cost_freeze_repair_unknown_usage_and_close",
+      "test_exploration_packet_preserves_open_choice_and_source_history",
+      "test_exploration_result_is_withheld_until_bound_review_and_revoked_on_failure",
+      "test_exploration_uses_real_evidence_chain_and_revokes_on_replace",
+      "test_intermediate_projection_rejects_final_answers_and_source_changes",
+      "test_progressive_brief_does_not_replay_attempts",
+      "test_progressive_focus_and_exact_prefix",
+      "test_real_dag_reuse_direct_answer_and_replacement_share_one_trajectory",
+      "test_subgoal_success_does_not_end_whole_task_cost_prefix"
+    ]
+  },
+  "core": {
+    "test_binding_modes.py": [
+      "test_backend_switch_rejects_before_loading_another_runtime",
+      "test_fork_child_cannot_enter_or_clean_up_inherited_runtime",
+      "test_host_observes_child_failure",
+      "test_result_memory_is_released_on_c_errors",
+      "test_session_exception_releases_handle",
+      "test_typed_error_does_not_poison_next_request",
+      "test_wrong_os_thread_is_rejected"
+    ],
+    "test_build_driver.py": [
+      "test_real_sdk_expands_build_flags_and_preserves_prefix_and_cores",
+      "test_sdk_entrypoint_receives_package_prefix_cores_and_build_environment"
+    ],
+    "test_build_packaging.py": [
+      "test_compiled_generation_drift_is_rejected",
+      "test_compiled_generations_preserve_names_bytes_and_origin",
+      "test_cross_volume_generation_copy_remains_independent",
+      "test_failed_repackaging_preserves_previous_resources_and_library",
+      "test_generation_cannot_be_renamed_even_with_identical_bytes",
+      "test_in_place_generation_change_before_publication_is_rejected",
+      "test_link_io_failure_does_not_turn_into_a_copy_success",
+      "test_missing_receipt_does_not_attempt_native_build",
+      "test_only_packages_exact_native_outputs_without_a_compiler",
+      "test_published_generation_survives_native_unlink_and_replacement",
+      "test_repackaging_removes_unrecorded_contiguous_generations",
+      "test_resource_drift_is_rejected",
+      "test_source_and_resource_paths_cannot_escape_package_roots",
+      "test_stale_source_is_rejected_without_timestamp_inference"
+    ],
+    "test_datalog.py": [
+      "test_all_checked_reducers_grouped_and_empty",
+      "test_checked_arithmetic_filters_and_identity",
+      "test_dependency_slice_includes_every_alternative_and_negative_premise",
+      "test_empty_numeric_relations_get_types_from_operator_constraints",
+      "test_inferred_integer_order_is_native_numeric_not_symbol_order",
+      "test_inferred_operator_chain_and_aggregate",
+      "test_inferred_types_reject_mixed_and_join_conflicts",
+      "test_loaded_engine_advertises_checked_operator_surface",
+      "test_long_symbols_and_literals_preserve_complete_values",
+      "test_mixed_scalar_identity_survives_native_roundtrip",
+      "test_native_admission_rejects_negative_cycle",
+      "test_native_rejects_aggregate_recursion",
+      "test_operator_errors_remain_native_rejections",
+      "test_recursive_closure_and_component_reuse",
+      "test_scalar_types_remain_distinct",
+      "test_source_authority_and_query_projection_cannot_change",
+      "test_unsupported_or_unsafe_rules_fail_closed"
+    ],
+    "test_development_shell.py": [
+      "test_import_definitions_and_engine_call",
+      "test_invalid_expression_returns_nonzero_status",
+      "test_source_reload_updates_exported_binding"
+    ],
+    "test_dsl_collection.py": [
+      "test_declarative_evidence_binding_errors_do_not_infer_sources",
+      "test_declarative_evidence_rules_sources_aliases_and_owned_explanation",
+      "test_empty_program_and_explicit_bounds",
+      "test_hygienic_relation_and_rule_identifiers",
+      "test_include_effects_and_declaration_order",
+      "test_macro_scope_default_storage_and_rule_order",
+      "test_malformed_declarations_still_rejected",
+      "test_public_typed_higher_order_dsl_without_downstream_import",
+      "test_retained_callable_reads_mutable_export_and_keeps_scope_isolation"
+    ],
+    "test_dsl_lifecycle.py": [
+      "test_complete_runtime_scope_limit_is_not_reset_by_close"
+    ],
+    "test_engine.py": [
+      "test_admission_unknown_fields_stale_handles_and_budget",
+      "test_all_1536_quint_lean_observations_through_rust",
+      "test_c_bytes_and_thread_errors_do_not_enter_scheme",
+      "test_general_recursive_graph_negation_and_literal_updates"
+    ],
+    "test_evidence_conformance.py": [
+      "test_all_quint_trajectories",
+      "test_definition_reuse_keeps_sessions_and_limits_independent",
+      "test_scope_isolation_foreign_reference_and_failed_load"
+    ],
+    "test_execution_authority.py": [
+      "test_cancel_during_replacement_preserves_result_and_generation",
+      "test_canceled_queued_replace_never_commits_after_the_vm_becomes_free",
+      "test_deadline_during_replacement_preserves_result_and_generation",
+      "test_fresh_replace_is_transactional_without_an_initial_solve",
+      "test_limits_apply_to_existing_modules_and_source_admission",
+      "test_open_does_not_run_user_rule_callbacks",
+      "test_proof_revoked_by_native_session_close",
+      "test_proof_survives_result_release_and_is_revoked_on_replace",
+      "test_zero_deadline_and_precancellation_reject_cached_native_results"
+    ],
+    "test_fact_limits.py": [
+      "test_default_has_no_fact_ceiling_and_withdraws_large_source",
+      "test_explicit_output_and_derived_ceilings_are_native_failures",
+      "test_finite_limits_count_duplicates_and_leave_rejected_update_atomic",
+      "test_invalid_finite_policy_is_rejected_natively",
+      "test_large_request_default_and_explicit_caller_byte_policy",
+      "test_native_reference_and_positive_change_have_no_default_count_ceiling",
+      "test_operator_default_and_native_program_constructor_are_unlimited",
+      "test_policy_cannot_loosen_explicit_dsl_bounds",
+      "test_pure_dsl_text_uses_unlimited_counts_but_respects_explicit_bounds"
+    ],
+    "test_file_identities.py": [
+      "test_changes_and_aliases_never_reuse_an_old_verdict",
+      "test_complete_installed_source_inventory_matches_actual_bytes",
+      "test_matched_source_bytes_three_alternating_pairs"
+    ],
+    "test_module_calls.py": [
+      "test_cross_module_lattice_program_without_wire_projection",
+      "test_independent_explanation_lifetime_and_repeated_cleanup",
+      "test_multiple_native_return_values_and_prepared_query",
+      "test_native_prepared_change_and_retained_operator_updates",
+      "test_owner_capacity_releases_and_does_not_select_python_fallback",
+      "test_unknown_export_failed_call_released_and_foreign_references",
+      "test_upstream_operator_composition_retained_session_and_withdrawal"
+    ],
+    "test_module_loading.py": [
+      "test_repeated_engine_reuses_runtime_but_preserves_caller_limits",
+      "test_reused_syntax_parent_keeps_program_state_and_failed_expansion_isolated"
+    ],
+    "test_module_source.py": [
+      "test_authorization_required_by_python_and_native",
+      "test_closures_cycles_foreign_and_released_values",
+      "test_consumer_definitions_have_no_scheme_import_module_or_build",
+      "test_invalid_source_and_failed_load_do_not_create_usable_owner",
+      "test_isolated_module_names_and_export_boundaries",
+      "test_macro_import_constructor_update_withdrawal_and_explanation"
+    ],
+    "test_modules.py": [
+      "test_closed_session_and_wrong_owner",
+      "test_execution_program_declares_observation_sources",
+      "test_hygienic_constructor_native_values_and_explanation",
+      "test_rejected_update_and_failed_constructor_preserve_runtime",
+      "test_shared_cyclic_and_opaque_native_values",
+      "test_upstream_lattice_aggregate_and_operator"
+    ],
+    "test_rule_source.py": [
+      "test_checked_comparison_and_literal",
+      "test_fragment_merge_has_one_relation_contract",
+      "test_native_semantic_admission_rejects_bad_arity_binding_and_strata",
+      "test_reader_evaluation_sharing_and_host_code_are_rejected",
+      "test_recursion_negation_and_python_only_consumer",
+      "test_source_text_budgets_and_unsupported_terms_fail_closed"
+    ],
+    "test_rule_sources.py": [
+      "test_authority_type_and_budget_rejections_preserve_generation",
+      "test_executable_and_malformed_sources_have_no_fallback",
+      "test_full_projection_execution_and_withdrawal",
+      "test_general_dsl_guards_keep_projection_gap_and_native_answers",
+      "test_general_dsl_multisource_composition_retains_recursive_closure",
+      "test_general_dsl_short_circuit_preserves_scheme_truth_and_boolean_admission",
+      "test_general_dsl_wide_guard_retains_upstream_macro_language",
+      "test_recursive_multisource_matches_existing_native_catalog_execution"
+    ],
+    "test_supervision.py": [
+      "test_backpressure_preserves_all_bytes_and_descriptor_mode",
+      "test_stalled_sink_rejects_without_resetting_its_deadline",
+      "test_supervisor_retains_nonzero_exit_with_nonblocking_stdout"
+    ],
+    "test_uf_boundary.py": [
+      "test_complete_scc_releases_root_arcs",
+      "test_existing_endpoint_bridge",
+      "test_partial_scc_and_surviving_boundary",
+      "test_scalar_weighted_frontier_and_retained_publication"
+    ],
+    "test_uf_lookup.py": [
+      "test_explicit_empty_query_keeps_visitor_order",
+      "test_grouped_selectors_follow_independent_closure_and_held_order",
+      "test_union_and_explicit_fallback_preserve_complete_order",
+      "test_weighted_products_keep_checked_selectors_after_component_retirement"
+    ],
+    "test_uf_materialization.py": [
+      "test_compact_singletons_with_weighted_target_and_retained_export",
+      "test_compacted_indexed_right_axis_and_repeated_query_constraints",
+      "test_dense_complete_rows",
+      "test_grouped_complete_rows",
+      "test_sparse_cut_survives_full_scc_retirement"
+    ],
+    "test_uf_weighted.py": [
+      "test_bound_axes_match_full_closure_order",
+      "test_complete_points_keep_grouped_owners_and_repeated_tiny_reads",
+      "test_grouped_composite_queries_keep_owner_and_repeat_constraints",
+      "test_grouped_weighted_cut_keeps_both_scopes",
+      "test_indexed_membership_and_complete_delta_keep_frozen_owner_truth",
+      "test_repeated_queries_keep_partial_owner_intersections_and_tiny_cuts",
+      "test_weighted_cut_survives_extension_and_retirement"
+    ]
+  },
+  "originalFiles": [
+    "test_binding_modes.py",
+    "test_build_driver.py",
+    "test_build_packaging.py",
+    "test_clue_exchange.py",
+    "test_complex_inference.py",
+    "test_complex_movie.py",
+    "test_computational_evidence.py",
+    "test_datalog.py",
+    "test_derivations.py",
+    "test_development_shell.py",
+    "test_domain_evidence.py",
+    "test_dsl_collection.py",
+    "test_dsl_lifecycle.py",
+    "test_engine.py",
+    "test_evidence.py",
+    "test_evidence_conformance.py",
+    "test_evidence_dag.py",
+    "test_execution_authority.py",
+    "test_fact_limits.py",
+    "test_file_identities.py",
+    "test_inference_reuse.py",
+    "test_interaction.py",
+    "test_module_calls.py",
+    "test_module_loading.py",
+    "test_module_source.py",
+    "test_modules.py",
+    "test_process_status.py",
+    "test_review.py",
+    "test_rule_source.py",
+    "test_rule_sources.py",
+    "test_supervision.py",
+    "test_trajectory.py",
+    "test_uf_boundary.py",
+    "test_uf_lookup.py",
+    "test_uf_materialization.py",
+    "test_uf_weighted.py"
+  ],
+  "sourceBase": "4764af99c97f48ae07790c088b1edc82072e4edc"
+}

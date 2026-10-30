@@ -6,15 +6,15 @@
 ;;; Boundary: tests verify profile-style loop-engine user declarations.
 ;;; Invariant: profile projection is report-only and never executes loops.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
         (only-in "../user-interface/custom/my-module/profiles/loops"
-                 poo-flow-custom-my-module-loops-module))
+                 agentic-ai-lab-custom-my-module-loops-module))
 
 (export user-interface-custom-loop-engine-profile-test)
 
@@ -44,7 +44,7 @@
 ;;; shape that downstream agents see before runtime manifest expansion.
 ;; : Symbol
 (def expected-loop-engine-profile-human-audit-result-contract
-  'poo-flow.loop-governor.profile-human-audit-decision.v1)
+  'agentic-ai-lab.loop-governor.profile-human-audit-decision.v1)
 
 ;; : [Symbol]
 (def expected-loop-engine-profile-required-result-fields
@@ -54,19 +54,19 @@
 ;;; the same module-selection path a downstream user configuration would use.
 ;; : (-> PooUserModuleSelection POOObject)
 (def (custom-loop-presentation module-bundle)
-  (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules (list module-bundle))
-    (poo-flow-settings))))
+  (agenticAiLabUserConfigPresentation
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules (list module-bundle))
+    (yuanxu-settings))))
 
 ;;; Profile modules should still read like user declarations: one loop-engine
 ;;; row, ordered use-cases, sandbox refs, and no runtime execution.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-profile-case)
-  (poo-flow-test-case "projects custom loop-engine profile use cases"
+  (yuanxu-test-case "projects custom loop-engine profile use cases"
     (let* ((presentation
             (custom-loop-presentation
-             poo-flow-custom-my-module-loops-module))
+             agentic-ai-lab-custom-my-module-loops-module))
            (intent
             (car (.ref presentation 'loop-engine-intents)))
            (result-contract
@@ -147,15 +147,15 @@
                     'before-release-approval)
       (check-equal? (test-ref intent 'result)
                     '((default
-                       . poo-flow.loop-governor.profile-node-result.v1)
+                       . agentic-ai-lab.loop-governor.profile-node-result.v1)
                       (auditor
-                       . poo-flow.loop-governor.profile-audit-result.v1)
+                       . agentic-ai-lab.loop-governor.profile-audit-result.v1)
                       (verifier
-                       . poo-flow.loop-governor.profile-review-result.v1)
+                       . agentic-ai-lab.loop-governor.profile-review-result.v1)
                       (governor
-                       . poo-flow.loop-governor.profile-governor-result.v1)
+                       . agentic-ai-lab.loop-governor.profile-governor-result.v1)
                       (human-audit
-                       . poo-flow.loop-governor.profile-human-audit-decision.v1)
+                       . agentic-ai-lab.loop-governor.profile-human-audit-decision.v1)
                       (format . structured-alist)
                       (required-fields
                        decision
@@ -185,5 +185,5 @@
 ;;; into ABI descriptor assembly.
 ;; : TestSuite
 (def user-interface-custom-loop-engine-profile-test
-  (test-suite "poo-flow custom loop-engine profile declarations"
+  (test-suite "agentic-ai-lab custom loop-engine profile declarations"
     (user-interface-custom-loop-engine-profile-case)))

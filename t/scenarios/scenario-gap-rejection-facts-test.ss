@@ -2,13 +2,15 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test test-suite)
-        :poo-flow/src/graph/scenario-gap-rejection-facts)
+        :agentic-ai-lab/modules/workflow/graph/scenario-gap-rejection-facts)
+
+(export scenario-gap-rejection-facts-test)
 
 (def scenario-gap-rejection-facts-test
   (test-suite "scenario gap rejection facts"
-    (poo-flow-test-case "projects each rejection class"
+    (yuanxu-test-case "projects each rejection class"
 
 (def (alist-ref key alist)
   (let ((entry (assq key alist)))
@@ -21,7 +23,7 @@
     (error "scenario gap proof fact mismatch" label actual expected)))
 
 (def missing-kind-facts
-  (poo-flow-scenario-gap-runtime-contract->proof-facts
+  (agentic-ai-lab-scenario-gap-runtime-contract->proof-facts
    'generated-scenario-gap-missing-kind-runtime-row
    #t
    #t
@@ -30,7 +32,7 @@
 
 (assert-equal 'schema
               (alist-ref 'schema missing-kind-facts)
-              'poo-flow.proof.scenario-gap.runtime-row)
+              'agentic-ai-lab.proof.scenario-gap.runtime-row)
 (assert-equal 'fact-id
               (alist-ref 'fact-id missing-kind-facts)
               'generated-scenario-gap-missing-kind-runtime-row)
@@ -45,7 +47,7 @@
 (assert-equal 'ffi-ready? (alist-ref 'ffi-ready? missing-kind-facts) #t)
 
 (def wrong-plan-facts
-  (poo-flow-scenario-gap-runtime-contract->proof-facts
+  (agentic-ai-lab-scenario-gap-runtime-contract->proof-facts
    'generated-scenario-gap-wrong-plan-runtime-row
    #f
    #t
@@ -57,7 +59,7 @@
               'runtime-row-rejected-by-plan)
 
 (def rejected-kind-facts
-  (poo-flow-scenario-gap-runtime-contract->proof-facts
+  (agentic-ai-lab-scenario-gap-runtime-contract->proof-facts
    'generated-scenario-gap-rejected-kind-runtime-row
    #t
    #f

@@ -6,11 +6,11 @@
 ;;; One semantic sample for ASP's native P95 benchmark runner.
 
 (import (only-in :clan/poo/object .o .ref)
-        (only-in :core/observability/debug
-                 PooFlowDebugSlotPolicyContract
-                 poo-flow-debug-poo
-                 poo-flow-debug-poos
-                 poo-flow-debug-slot-policy))
+        (only-in :yuanxu/observability/debug
+                 YuanxuDebugSlotPolicyContract
+                 yuanxu-debug-poo
+                 yuanxu-debug-poos
+                 yuanxu-debug-slot-policy))
 
 (export observability-slot-performance-scenario
         observability-slot-performance-receipt-sexp)
@@ -20,13 +20,13 @@
 (def +prototype-iterations+ 20)
 (def +warm-iterations+ 1000)
 (def ObservabilitySlotPerformanceReceipt.
-  (.o kind: 'poo-flow.observability-slot-performance.v1
+  (.o kind: 'agentic-ai-lab.observability-slot-performance.v1
       runtime-executed?: #t))
 
 (def (source index) (.o payload: (+ index 1)))
 (def (sources count) (map source (iota count)))
 (def (guards policy inputs port emit?)
-  (poo-flow-debug-poos
+  (yuanxu-debug-poos
    policy 'performance-receiver inputs port: port emit?: emit?))
 (def (sum-payload objects)
   (let loop ((rest objects) (sum 0))
@@ -42,7 +42,7 @@
     (if (zero? remaining)
       count
       (begin
-        (.o (:: @ (.ref PooFlowDebugSlotPolicyContract 'proto)))
+        (.o (:: @ (.ref YuanxuDebugSlotPolicyContract 'proto)))
         (loop (- remaining 1) (+ count 1))))))
 (def (construct-with-hoisted-prototype prototype)
   (let loop ((remaining +prototype-iterations+) (count 0))
@@ -61,8 +61,8 @@
          semantic-valid?)))
 
 (def (observability-slot-performance-scenario)
-  (let* ((policy (poo-flow-debug-slot-policy 'performance-slot 8))
-         (prototype (.ref PooFlowDebugSlotPolicyContract 'proto))
+  (let* ((policy (yuanxu-debug-slot-policy 'performance-slot 8))
+         (prototype (.ref YuanxuDebugSlotPolicyContract 'proto))
          (inputs (sources +cold-count+))
          (cold-guards (guards policy inputs (current-error-port) #f))
          (cold-checksum-value (sum-payload cold-guards))
@@ -74,7 +74,7 @@
          (warm-source
           (.o payload: (begin (set! evaluations (+ evaluations 1)) 17)))
          (warm-guard
-          (poo-flow-debug-poo policy 'warm-receiver warm-source emit?: #f))
+          (yuanxu-debug-poo policy 'warm-receiver warm-source emit?: #f))
          (_warm-first (.ref warm-guard 'payload))
          (direct-source (source 16))
          (_direct-first (.ref direct-source 'payload))

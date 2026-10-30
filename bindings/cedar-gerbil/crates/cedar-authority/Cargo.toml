@@ -3,13 +3,13 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 [package]
-name = "poo-flow-cedar-authority"
+name = "agentic-ai-lab-cedar-authority"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 publish.workspace = true
 license.workspace = true
-description = "POO Flow strict Cedar authorization and single-use runtime admission boundary"
+description = "Agentic AI Lab strict Cedar authorization and single-use runtime admission boundary"
 
 [lib]
 crate-type = ["rlib", "staticlib"]

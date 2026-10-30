@@ -12,12 +12,12 @@
                  benchmark-fixture-ref
                  benchmark-receipt-pass?
                  benchmark-run/result)
-        (only-in :poo-flow/src/authoring/module-descriptor
-                 make-empty-poo-flow-module-descriptor
-                 poo-flow-module-name
-                 poo-flow-module-imports
-                 poo-flow-module-import-profile
-                 poo-flow-module-missing-imports))
+        (only-in :agentic-ai-lab/modules/module-authoring/module-descriptor
+                 make-empty-agentic-ai-lab-module-descriptor
+                 agentic-ai-lab-module-name
+                 yuanxu-module-imports
+                 agentic-ai-lab-module-import-profile
+                 agentic-ai-lab-module-missing-imports))
 
 (def +module-count+ 1000)
 (def +shared-import+ 'module-999)
@@ -32,7 +32,7 @@
       (reverse values-rev)
       (loop (+ index 1)
             (cons
-             (make-empty-poo-flow-module-descriptor
+             (make-empty-agentic-ai-lab-module-descriptor
               (string->symbol (string-append "module-" (number->string index)))
               (if (= index (- +module-count+ 1))
                 '()
@@ -40,7 +40,7 @@
               '())
              values-rev)))))
 
-(def available-names (map poo-flow-module-name modules))
+(def available-names (map agentic-ai-lab-module-name modules))
 
 (def (baseline-member-name? value names)
   (cond
@@ -49,7 +49,7 @@
    (else (baseline-member-name? value (cdr names)))))
 
 (def (baseline-named-import? import-value)
-  (let (profile (poo-flow-module-import-profile import-value))
+  (let (profile (agentic-ai-lab-module-import-profile import-value))
     (or (symbol? profile) (string? profile))))
 
 (def (baseline-missing-for module-name imports)
@@ -58,13 +58,13 @@
    ((not (baseline-named-import? (car imports)))
     (baseline-missing-for module-name (cdr imports)))
    ((baseline-member-name?
-     (poo-flow-module-import-profile (car imports))
+     (agentic-ai-lab-module-import-profile (car imports))
      available-names)
     (baseline-missing-for module-name (cdr imports)))
    (else
     (cons (list (cons 'module module-name)
                 (cons 'import
-                      (poo-flow-module-import-profile (car imports))))
+                      (agentic-ai-lab-module-import-profile (car imports))))
           (baseline-missing-for module-name (cdr imports))))))
 
 (def (baseline-missing modules)
@@ -72,8 +72,8 @@
          '()
          (map (lambda (module)
                 (baseline-missing-for
-                 (poo-flow-module-name module)
-                 (poo-flow-module-imports module)))
+                 (agentic-ai-lab-module-name module)
+                 (yuanxu-module-imports module)))
               modules)))
 
 (unless (benchmark-fixture-contract-pass? fixture)
@@ -86,7 +86,7 @@
   (let-values (((candidate-receipt candidate-value)
                 (benchmark-run/result
                  fixture
-                 (lambda () (poo-flow-module-missing-imports modules)))))
+                 (lambda () (agentic-ai-lab-module-missing-imports modules)))))
     (unless (equal? baseline-value candidate-value)
       (error "indexed import validation changed diagnostic semantics"))
     (unless (benchmark-receipt-pass? candidate-receipt)
@@ -96,7 +96,7 @@
                (benchmark-fixture-ref baseline-receipt 'elapsedNs))
       (error "shared import name index did not improve dense validation"
              baseline-receipt candidate-receipt))
-    (display "[poo-flow-benchmark] module-import-validation-indexed baseline=")
+    (display "[agentic-ai-lab-benchmark] module-import-validation-indexed baseline=")
     (write baseline-receipt)
     (display " candidate=")
     (write candidate-receipt)

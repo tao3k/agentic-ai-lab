@@ -1,0 +1,1053 @@
+[
+  {
+    "case": "chain",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "partial",
+      "rows": [
+        [
+          "a",
+          "b"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": "partial",
+      "expected": "complete",
+      "kind": "status-mismatch"
+    }
+  },
+  {
+    "case": "chain",
+    "api": "async",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "b",
+          "2"
+        ],
+        [
+          "c",
+          "3"
+        ]
+      ]
+    },
+    "difference": {
+      "index": 0,
+      "expected": [
+        "a",
+        "b"
+      ],
+      "kind": "row-mismatch",
+      "observed": [
+        "b",
+        "2"
+      ]
+    }
+  },
+  {
+    "case": "branch",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ],
+        [
+          "b",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": [
+        "b",
+        "c"
+      ],
+      "index": 2,
+      "kind": "extra-row"
+    }
+  },
+  {
+    "case": "withdrawal",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "index": 0,
+      "kind": "extra-row",
+      "observed": [
+        "a",
+        "a"
+      ]
+    }
+  },
+  {
+    "case": "withdrawal",
+    "api": "async",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "partial",
+      "rows": [
+        [
+          "b",
+          "2"
+        ],
+        [
+          "c",
+          "3"
+        ]
+      ]
+    },
+    "difference": {
+      "expected": "complete",
+      "kind": "status-mismatch",
+      "observed": "partial"
+    }
+  },
+  {
+    "case": "open-cut",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "partial"
+    }
+  },
+  {
+    "case": "late-ingestion",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ],
+        [
+          "b",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "expected": "partial",
+      "kind": "status-mismatch",
+      "observed": "complete"
+    }
+  },
+  {
+    "case": "late-ingestion",
+    "api": "async",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": "complete",
+      "expected": "partial",
+      "kind": "status-mismatch"
+    }
+  },
+  {
+    "case": "interval",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "rejected",
+      "rows": []
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "rejected",
+      "expected": "partial"
+    }
+  },
+  {
+    "case": "zero-horizon",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": []
+    },
+    "difference": {
+      "observed": "complete",
+      "expected": "partial",
+      "kind": "status-mismatch"
+    }
+  },
+  {
+    "case": "zero-horizon",
+    "api": "async",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "partial"
+    }
+  },
+  {
+    "case": "one-horizon",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "partial"
+    }
+  },
+  {
+    "case": "one-horizon",
+    "api": "async",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "partial"
+    }
+  },
+  {
+    "case": "clock-mismatch",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "partial",
+      "rows": []
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "partial",
+      "expected": "rejected"
+    }
+  },
+  {
+    "case": "clock-mismatch",
+    "api": "async",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "expected": "rejected",
+      "kind": "status-mismatch",
+      "observed": "complete"
+    }
+  },
+  {
+    "case": "generation-mismatch",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "partial",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": "partial",
+      "expected": "rejected",
+      "kind": "status-mismatch"
+    }
+  },
+  {
+    "case": "generation-mismatch",
+    "api": "async",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "partial",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": "partial",
+      "expected": "rejected",
+      "kind": "status-mismatch"
+    }
+  },
+  {
+    "case": "window-end",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "extra-row",
+      "observed": [
+        "b",
+        "c"
+      ],
+      "index": 1
+    }
+  },
+  {
+    "case": "window-end",
+    "api": "async",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "extra-row",
+      "observed": [
+        "a",
+        "c"
+      ],
+      "index": 1
+    }
+  },
+  {
+    "case": "unknown-time",
+    "api": "sync",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "partial",
+      "rows": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": [
+        "a",
+        "a"
+      ],
+      "index": 0,
+      "kind": "extra-row"
+    }
+  },
+  {
+    "case": "unknown-time",
+    "api": "async",
+    "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "partial",
+      "rows": [
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": [
+        "a",
+        "c"
+      ],
+      "index": 0,
+      "kind": "extra-row"
+    }
+  },
+  {
+    "case": "chain",
+    "api": "sync",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "complete"
+        ],
+        [
+          "rows",
+          "[['k','m'],['k','q'],['m','q']]"
+        ]
+      ]
+    },
+    "difference": {
+      "expected": [
+        "k",
+        "m"
+      ],
+      "index": 0,
+      "observed": [
+        "status",
+        "complete"
+      ],
+      "kind": "row-mismatch"
+    }
+  },
+  {
+    "case": "chain",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "complete"
+        ],
+        [
+          "rows",
+          "[[\"k\",\"m\"],[\"k\",\"q\"]]"
+        ]
+      ]
+    },
+    "difference": {
+      "index": 0,
+      "expected": [
+        "k",
+        "m"
+      ],
+      "kind": "row-mismatch",
+      "observed": [
+        "status",
+        "complete"
+      ]
+    }
+  },
+  {
+    "case": "branch",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "complete"
+        ],
+        [
+          "rows",
+          "[['k', 'm'], ['k', 'q'], ['k', 'k']]"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": [
+        "status",
+        "complete"
+      ],
+      "kind": "row-mismatch",
+      "expected": [
+        "k",
+        "m"
+      ],
+      "index": 0
+    }
+  },
+  {
+    "case": "withdrawal",
+    "api": "sync",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "complete"
+        ],
+        [
+          "rows",
+          "[['k', 'm'], ['k', 'q']]"
+        ]
+      ]
+    },
+    "difference": {
+      "index": 0,
+      "kind": "extra-row",
+      "observed": [
+        "status",
+        "complete"
+      ]
+    }
+  },
+  {
+    "case": "withdrawal",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "k",
+          "partial"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": [
+        "k",
+        "partial"
+      ],
+      "index": 0,
+      "kind": "extra-row"
+    }
+  },
+  {
+    "case": "open-cut",
+    "api": "sync",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "partial"
+        ],
+        [
+          "rows",
+          "[]"
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "partial"
+    }
+  },
+  {
+    "case": "open-cut",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "partial"
+        ],
+        [
+          "rows",
+          ""
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "partial"
+    }
+  },
+  {
+    "case": "late-ingestion",
+    "api": "sync",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "complete"
+        ],
+        [
+          "rows",
+          "[[\"k\",\"m\"],[\"k\",\"q\"],[\"k\",\"k\"]]"
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "partial"
+    }
+  },
+  {
+    "case": "late-ingestion",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "complete"
+        ],
+        [
+          "rows",
+          "[[\"k\",\"m\"],[\"k\",\"q\"],[\"m\",\"q\"]]"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": "complete",
+      "expected": "partial",
+      "kind": "status-mismatch"
+    }
+  },
+  {
+    "case": "interval",
+    "api": "sync",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "partial"
+        ],
+        [
+          "rows",
+          "[]"
+        ]
+      ]
+    },
+    "difference": {
+      "expected": "partial",
+      "kind": "status-mismatch",
+      "observed": "complete"
+    }
+  },
+  {
+    "case": "interval",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": []
+    },
+    "difference": {
+      "expected": "partial",
+      "kind": "status-mismatch",
+      "observed": "complete"
+    }
+  },
+  {
+    "case": "zero-horizon",
+    "api": "sync",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "complete"
+        ],
+        [
+          "rows",
+          "[[\"k\",\"m\"],[\"k\",\"q\"],[\"k\",\"k\"],[\"m\",\"q\"],[\"m\",\"m\"],[\"q\",\"q\"]]"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": "complete",
+      "expected": "partial",
+      "kind": "status-mismatch"
+    }
+  },
+  {
+    "case": "zero-horizon",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "SemanticRuntimeError: model output is not inert JSON",
+    "candidate": null,
+    "difference": null
+  },
+  {
+    "case": "one-horizon",
+    "api": "sync",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "complete"
+        ],
+        [
+          "rows",
+          "[]"
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "partial"
+    }
+  },
+  {
+    "case": "one-horizon",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "partial"
+        ],
+        [
+          "rows",
+          [
+            [
+              "k",
+              "m"
+            ]
+          ]
+        ]
+      ]
+    },
+    "difference": {
+      "observed": "complete",
+      "expected": "partial",
+      "kind": "status-mismatch"
+    }
+  },
+  {
+    "case": "clock-mismatch",
+    "api": "sync",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": []
+    },
+    "difference": {
+      "observed": "complete",
+      "expected": "rejected",
+      "kind": "status-mismatch"
+    }
+  },
+  {
+    "case": "clock-mismatch",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": []
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "rejected"
+    }
+  },
+  {
+    "case": "generation-mismatch",
+    "api": "sync",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "rejected"
+        ],
+        [
+          "rows",
+          "[]"
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "rejected"
+    }
+  },
+  {
+    "case": "generation-mismatch",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": []
+    },
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "rejected"
+    }
+  },
+  {
+    "case": "window-end",
+    "api": "sync",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": []
+    },
+    "difference": {
+      "index": 0,
+      "kind": "missing-row",
+      "expected": [
+        "k",
+        "m"
+      ]
+    }
+  },
+  {
+    "case": "window-end",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "partial"
+        ],
+        [
+          "rows",
+          "[]"
+        ]
+      ]
+    },
+    "difference": {
+      "kind": "row-mismatch",
+      "observed": [
+        "status",
+        "partial"
+      ],
+      "index": 0,
+      "expected": [
+        "k",
+        "m"
+      ]
+    }
+  },
+  {
+    "case": "unknown-time",
+    "api": "sync",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "partial"
+        ],
+        [
+          "rows",
+          "[]"
+        ],
+        [
+          "frontier",
+          "[[\"unknown-parent-order\", [\"k\", \"m\"]]]"
+        ],
+        [
+          "verification",
+          "valid"
+        ]
+      ]
+    },
+    "difference": {
+      "expected": "partial",
+      "kind": "status-mismatch",
+      "observed": "complete"
+    }
+  },
+  {
+    "case": "unknown-time",
+    "api": "async",
+    "planSha256": "e07dbfeed377a10d445b086cb107f28a88232d963b85a6487e3b45690dd4727a",
+    "failure": "native semantic contradiction",
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "status",
+          "unknown"
+        ],
+        [
+          "rows",
+          "[]"
+        ]
+      ]
+    },
+    "difference": {
+      "observed": "complete",
+      "expected": "partial",
+      "kind": "status-mismatch"
+    }
+  }
+]

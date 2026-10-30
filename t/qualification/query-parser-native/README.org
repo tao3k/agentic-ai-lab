@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Native Query parser API qualification
+
+This entry statically links the original Query, Orgize source and Evidence
+assessment suites. Upstream gxtest owns discovery, assertions, reporting and
+exit status. It uses the maintained parser-owned GraphSyntax POO objects;
+there are no legacy GqlQuery aliases or alternative syntax evaluator.
+
+Build against the package revisions declared in =gerbil.pkg= with the selected
+Gerbil 0.19 compiler and its static tools (=env= and =gxtest=) available, then run:
+
+#+begin_src sh
+gxc -d "$GERBIL_PATH/lib" t/query-core-test.ss t/query-orgize-source-test.ss t/evidence-assessment-core-test.ss
+gxc -exe -o /tmp/poo-query-parser-native t/qualification/query-parser-native/native-test.ss
+just test-query-parser-native /tmp/poo-query-parser-native
+#+end_src
+
+The maintained recipe fences the Scheme heap before module initialization,
+requires 24 CASE receipts, all three MODULE receipts, HARNESS-OK, final OK and
+a successful process exit. It retains five seconds without real progress as
+failure and a 45-second total deadline. Build output and runtime logs belong
+outside Git. This local gate does not establish external provider authority
+or protected Data publication.

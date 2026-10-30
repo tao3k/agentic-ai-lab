@@ -6,31 +6,31 @@
 ;;; Invariant: construction and projection perform no authorization or runtime IO.
 (import (only-in :clan/poo/object .o .ref .alist object?)
         (only-in :std/encoding/hex hex-encode)
-        :core/object-family/syntax)
+        :yuanxu/object-family/syntax)
 
-(export poo-flow-cedar-policy poo-flow-cedar-policy?
-        poo-flow-cedar-schema poo-flow-cedar-entities
-        poo-flow-cedar-proof-binding poo-flow-cedar-proof-binding?
-        poo-flow-cedar-authority-context poo-flow-cedar-authority-context?
-        poo-flow-cedar-runtime-capability poo-flow-cedar-runtime-capability?
-        poo-flow-cedar-authority-snapshot poo-flow-cedar-authority-snapshot?
-        poo-flow-cedar-runtime-handoff poo-flow-cedar-runtime-handoff?
-        poo-flow-cedar-authorization-request poo-flow-cedar-authorization-request?
-        poo-flow-cedar-authority-snapshot->runtime
-        poo-flow-cedar-authorization-request->runtime)
+(export agentic-ai-lab-cedar-policy agentic-ai-lab-cedar-policy?
+        agentic-ai-lab-cedar-schema agentic-ai-lab-cedar-entities
+        agentic-ai-lab-cedar-proof-binding agentic-ai-lab-cedar-proof-binding?
+        agentic-ai-lab-cedar-authority-context agentic-ai-lab-cedar-authority-context?
+        agentic-ai-lab-cedar-runtime-capability agentic-ai-lab-cedar-runtime-capability?
+        agentic-ai-lab-cedar-authority-snapshot agentic-ai-lab-cedar-authority-snapshot?
+        agentic-ai-lab-cedar-runtime-handoff agentic-ai-lab-cedar-runtime-handoff?
+        agentic-ai-lab-cedar-authorization-request agentic-ai-lab-cedar-authorization-request?
+        agentic-ai-lab-cedar-authority-snapshot->runtime
+        agentic-ai-lab-cedar-authorization-request->runtime)
 
 ;;; Boundary: this constructor centralizes immutable family metadata without
 ;;; introducing a Cedar-specific public macro or runtime registry.
 ;; : (-> Symbol POOObject)
 (def (cedar-family-prototype kind-value)
   (.o (kind kind-value)
-      (schema 'poo-flow.cedar-values.v1)
+      (schema 'agentic-ai-lab.cedar-values.v1)
       (runtime-owner 'native.cedar-authority)
       (runtime-executed? #f)))
 
 (def policy-kind 'cedar-policy)
 (def Policy. (cedar-family-prototype policy-kind))
-(defpoo-object-family policy-kind poo-flow-cedar-policy? (accessors) (projections))
+(defpoo-object-family policy-kind agentic-ai-lab-cedar-policy? (accessors) (projections))
 (def schema-kind 'cedar-schema)
 (def Schema. (cedar-family-prototype schema-kind))
 (defpoo-object-family schema-kind cedar-schema? (accessors) (projections))
@@ -39,22 +39,22 @@
 (defpoo-object-family entities-kind cedar-entities? (accessors) (projections))
 (def proof-kind 'cedar-proof-binding)
 (def ProofBinding. (cedar-family-prototype proof-kind))
-(defpoo-object-family proof-kind poo-flow-cedar-proof-binding? (accessors) (projections))
+(defpoo-object-family proof-kind agentic-ai-lab-cedar-proof-binding? (accessors) (projections))
 (def context-kind 'cedar-authority-context)
 (def AuthorityContext. (cedar-family-prototype context-kind))
-(defpoo-object-family context-kind poo-flow-cedar-authority-context? (accessors) (projections))
+(defpoo-object-family context-kind agentic-ai-lab-cedar-authority-context? (accessors) (projections))
 (def capability-kind 'cedar-runtime-capability)
 (def Capability. (cedar-family-prototype capability-kind))
-(defpoo-object-family capability-kind poo-flow-cedar-runtime-capability? (accessors) (projections))
+(defpoo-object-family capability-kind agentic-ai-lab-cedar-runtime-capability? (accessors) (projections))
 (def snapshot-kind 'cedar-authority-snapshot)
 (def Snapshot. (cedar-family-prototype snapshot-kind))
-(defpoo-object-family snapshot-kind poo-flow-cedar-authority-snapshot? (accessors) (projections))
+(defpoo-object-family snapshot-kind agentic-ai-lab-cedar-authority-snapshot? (accessors) (projections))
 (def handoff-kind 'cedar-runtime-handoff)
 (def Handoff. (cedar-family-prototype handoff-kind))
-(defpoo-object-family handoff-kind poo-flow-cedar-runtime-handoff? (accessors) (projections))
+(defpoo-object-family handoff-kind agentic-ai-lab-cedar-runtime-handoff? (accessors) (projections))
 (def request-kind 'cedar-authorization-request)
 (def Request. (cedar-family-prototype request-kind))
-(defpoo-object-family request-kind poo-flow-cedar-authorization-request? (accessors) (projections))
+(defpoo-object-family request-kind agentic-ai-lab-cedar-authorization-request? (accessors) (projections))
 
 ;; : (-> String Boolean Object Unit)
 (def (require-value message accepted? value)
@@ -84,7 +84,7 @@
                     (loop (+ index 1))))))))
 
 ;; : (-> String String CedarPolicy)
-(def (poo-flow-cedar-policy identity-value source-value)
+(def (agentic-ai-lab-cedar-policy identity-value source-value)
   (require-value "Cedar policy identity/source must be nonempty text"
                  (and (text? identity-value) (text? source-value)) identity-value)
   (.o (:: @ Policy.) identity: identity-value source: source-value))
@@ -92,17 +92,17 @@
 ;; These are official Cedar JSON documents, not a POO alist/schema DSL. The
 ;; native boundary parses them once with duplicate-key and schema validation.
 ;; : (-> String CedarSchema)
-(def (poo-flow-cedar-schema document-value)
+(def (agentic-ai-lab-cedar-schema document-value)
   (require-value "Cedar schema must be a JSON document" (text? document-value) document-value)
   (.o (:: @ Schema.) document: document-value))
 
 ;; : (-> String CedarEntities)
-(def (poo-flow-cedar-entities document-value)
+(def (agentic-ai-lab-cedar-entities document-value)
   (require-value "Cedar entities must be a JSON document" (text? document-value) document-value)
   (.o (:: @ Entities.) document: document-value))
 
 ;; : (-> String Digest Digest Digest Digest (List String) CedarProofBinding)
-(def (poo-flow-cedar-proof-binding composition-value profile-identities-value
+(def (agentic-ai-lab-cedar-proof-binding composition-value profile-identities-value
                                     origin-value profile-value independent-value
                                     capability-value governance-value
                                     subject-value names-value)
@@ -128,7 +128,7 @@
       certification-names: names-value))
 
 ;; : (-> String String Natural Digest Natural Natural Natural CedarAuthorityContext)
-(def (poo-flow-cedar-authority-context authority-value context-value generation-value
+(def (agentic-ai-lab-cedar-authority-context authority-value context-value generation-value
                                        bundle-value epoch-value policy-value revocation-value)
   (require-value "authority and runtime context must be text"
                  (and (text? authority-value) (text? context-value)) authority-value)
@@ -142,7 +142,7 @@
       policy-revision: policy-value revocation-epoch: revocation-value))
 
 ;; : (-> String PositiveInteger [Boolean] CedarRuntimeCapability)
-(def (poo-flow-cedar-runtime-capability action-value event-value
+(def (agentic-ai-lab-cedar-runtime-capability action-value event-value
                                         source-admission-required?:
                                         (required-value #f))
   (require-value "Cedar action must be text" (text? action-value) action-value)
@@ -154,23 +154,23 @@
       source-admission-required?: required-value))
 
 ;; : (-> CedarAuthorityContext CedarProofBinding (List CedarPolicy) CedarSchema CedarEntities (List CedarRuntimeCapability) CedarAuthoritySnapshot)
-(def (poo-flow-cedar-authority-snapshot context-value proof-value policy-values
+(def (agentic-ai-lab-cedar-authority-snapshot context-value proof-value policy-values
                                         schema-value entities-value capability-values)
   (require-value "authority snapshot requires AuthorityContext"
-                 (poo-flow-cedar-authority-context? context-value) context-value)
+                 (agentic-ai-lab-cedar-authority-context? context-value) context-value)
   (require-value "authority snapshot requires ProofBinding"
-                 (poo-flow-cedar-proof-binding? proof-value) proof-value)
+                 (agentic-ai-lab-cedar-proof-binding? proof-value) proof-value)
   (require-value "authority snapshot requires POO Cedar policies"
-                 (every? poo-flow-cedar-policy? policy-values) policy-values)
+                 (every? agentic-ai-lab-cedar-policy? policy-values) policy-values)
   (require-value "authority snapshot requires Cedar schema/entities documents"
                  (and (cedar-schema? schema-value) (cedar-entities? entities-value)) schema-value)
   (require-value "authority snapshot requires POO runtime capabilities"
-                 (and (pair? capability-values) (every? poo-flow-cedar-runtime-capability? capability-values)) capability-values)
+                 (and (pair? capability-values) (every? agentic-ai-lab-cedar-runtime-capability? capability-values)) capability-values)
   (.o (:: @ Snapshot.) context: context-value proof-binding: proof-value policies: policy-values
       cedar-schema: schema-value entities: entities-value capabilities: capability-values))
 
 ;; : (-> PositiveInteger U8Vector Digest Digest Digest Digest CedarRuntimeHandoff)
-(def (poo-flow-cedar-runtime-handoff sequence-value payload-value semantic-value
+(def (agentic-ai-lab-cedar-runtime-handoff sequence-value payload-value semantic-value
                                      before-value after-value observation-value)
   (require-value "handoff sequence must be positive" (positive? sequence-value) sequence-value)
   (require-value "handoff payload must be at most 64 KiB of bytes"
@@ -183,14 +183,14 @@
       after-execution-root: after-value observation-digest: observation-value))
 
 ;; : (-> String String String POOObject Digest CedarRuntimeHandoff CedarAuthorizationRequest)
-(def (poo-flow-cedar-authorization-request principal-value action-value resource-value
+(def (agentic-ai-lab-cedar-authorization-request principal-value action-value resource-value
                                            context-value intent-value handoff-value)
   (require-value "Cedar subject identifiers must be text"
                  (every? text? (list principal-value action-value resource-value)) principal-value)
   (require-value "Cedar context must be a POO object" (object? context-value) context-value)
   (require-value "intent must be a canonical content identity" (digest? intent-value) intent-value)
   (require-value "authorization requires a runtime handoff value"
-                 (poo-flow-cedar-runtime-handoff? handoff-value) handoff-value)
+                 (agentic-ai-lab-cedar-runtime-handoff? handoff-value) handoff-value)
   (.o (:: @ Request.) principal: principal-value action: action-value resource: resource-value
       context: context-value intent: intent-value handoff: handoff-value))
 
@@ -228,12 +228,12 @@
    (cons "observation_digest" (.ref value 'observation-digest))))
 
 ;; : (-> CedarAuthoritySnapshot HashTable)
-(def (poo-flow-cedar-authority-snapshot->runtime value)
-  (require-value "runtime projection requires an authority snapshot" (poo-flow-cedar-authority-snapshot? value) value)
+(def (agentic-ai-lab-cedar-authority-snapshot->runtime value)
+  (require-value "runtime projection requires an authority snapshot" (agentic-ai-lab-cedar-authority-snapshot? value) value)
   (let ((context (.ref value 'context)) (proof (.ref value 'proof-binding)))
     (runtime-record
-     (cons "schema_id" "poo-flow.cedar-authority-snapshot.v1")
-     (cons "producer" "poo-flow.scheme-control")
+     (cons "schema_id" "agentic-ai-lab.cedar-authority-snapshot.v1")
+     (cons "producer" "agentic-ai-lab.scheme-control")
      (cons "source" "modules/authorization/providers/cedar/objects.ss")
      (cons "object_kind" "cedar-authority-snapshot")
      (cons "provenance" (runtime-record
@@ -269,13 +269,13 @@
                                 (.ref value 'capabilities)))))))
 
 ;; : (-> CedarAuthorizationRequest HashTable)
-(def (poo-flow-cedar-authorization-request->runtime value)
-  (require-value "runtime projection requires a Cedar request" (poo-flow-cedar-authorization-request? value) value)
+(def (agentic-ai-lab-cedar-authorization-request->runtime value)
+  (require-value "runtime projection requires a Cedar request" (agentic-ai-lab-cedar-authorization-request? value) value)
   (let (context (.ref value 'context))
-    (require-value "context.poo_flow is reserved to the authority"
-                   (not (assq 'poo_flow (.alist context))) context)
+    (require-value "context.agentic_ai_lab is reserved to the authority"
+                   (not (assq 'agentic_ai_lab (.alist context))) context)
     (runtime-record
-     (cons "schema_id" "poo-flow.cedar-authorization-request.v1")
+     (cons "schema_id" "agentic-ai-lab.cedar-authorization-request.v1")
      (cons "principal" (.ref value 'principal)) (cons "action" (.ref value 'action))
      (cons "resource" (.ref value 'resource)) (cons "context" (context->runtime context))
      (cons "intent_digest" (.ref value 'intent)) (cons "handoff" (handoff->runtime (.ref value 'handoff))))))

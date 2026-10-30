@@ -1,0 +1,59 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Proof-bound Family lifecycle ABI qualification
+
+This gate extends the original MRR owner-value admission test in
+=.ci/mrr-runtime/runtime/tests/mrr.rs=. The test reconstructs native MRR query,
+candidate and receipt values, projects verified observations through the Rust
+Library, and calls the original Scheme owners through the C ABI. No model or
+external business fixture supplies a substitute proof.
+
+The new profile retains the original necessary admission, registers/re-admits
+the corrected refuted result for the same logical claim, then creates a native
+root, correction branch, proof-bound tombstone and replayed journal. It checks
+original proof/predecessor/classification preservation, independent historical
+Source staleness, no current winner, and false durability/authority/effect flags.
+Incomplete frontier, nonadvancing admission, missing predecessor, duplicate
+revision, unknown handle, extra proof field, foreign cut, overlong index and
+empty journal must reject. Admission/revision capacity is bounded to 128; new
+entries refuse at capacity and retained handles remain idempotent.
+
+Compile the Rust test separately, then run its exact executable through
+=packages/python-runtime/tools/watch.py= with five seconds without genuine output
+as failure and an outer 45-second deadline. Enable =MRR_NATIVE_PROGRESS= for
+native MRR initialization diagnostics and =AGENTIC_AI_LAB_RUNTIME_TRACE= for completed
+artifact hashing and native-call boundaries. Test-stage output follows real
+completed admission/verification work. No synthetic heartbeat or deadline
+widening qualifies a result. A successful build is not a passing runtime gate.
+
+The compiler-owned semantic library manifest and source/executable hashes
+freeze this exact bounded gate's historical receipt. The previous public
+Scheme 11-case receipt remains historical Library evidence; it does not replace
+this ABI execution.
+
+Raw execution logs are local or CI artifacts and are not stored in Git.
+Historical run names below describe earlier outcomes; structured hashes alone
+do not qualify a newer source cut.
+
+=runtime-progress-disabled-failed.log= recorded the initial exit-124 failure:
+the command omitted the existing Rust loader trace and stopped during artifact
+opening before lifecycle calls. =debug-runtime-passed.log= recorded the same
+native library/executable with the existing genuine-progress trace enabled:
+one complete integration test passed, exit 0, under the unchanged five-second
+idle / 45-second wall gates. It is functional debug evidence, not a deployment
+timing receipt. =rust-build-clippy-passed.log= retains successful final compile
+and lint output. =release-build-passed.log= and =release-runtime-passed.log=
+recorded the separately compiled optimized executable: one complete integration
+test passed, exit 0, under the same gates. =build-freeze.ss= freezes both
+executables, exact native artifact, sources, locks, watchdog and original log
+hashes.
+=native-artifact.ss= is the compiler-owned Scheme artifact manifest. This is
+one bounded local qualification, not a workload benchmark or a CI pass.
+
+The frontier's index and completeness are host declarations. Native handles
+are process local and the projected journal is not a restartable proof archive.
+This gate does not qualify MRR Context projection, MRR Data physical execution,
+provider authentication, multi-support stabilization, durable append/recovery,
+current-pointer CAS or authorized effects. Full proof premises and their replay
+must cross the durable boundary before those gates can close. No new paid model
+calls are part of this deterministic native gate.

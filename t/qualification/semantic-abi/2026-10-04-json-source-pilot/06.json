@@ -1,0 +1,232 @@
+{
+  "case": "open-cut",
+  "api": "sync",
+  "index": 6,
+  "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+  "artifactSha256": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c",
+  "passed": false,
+  "raw": "{\"status\":\"complete\",\"rows\":[[\"a\",\"b\"],[\"b\",\"c\"]]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.24246212499565445
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.24267470798804425
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.8154772919951938
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.8155063750018599
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8155298749916255
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9410976669896627
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9485131669935072
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9486089580022963
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9486590419983258
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9487021669920068
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9487415829935344
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.981292416996439
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9813401669962332
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.981419374991674
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9814405829965835
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9814572920004139
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.0039191249961732
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.0039628749946132
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.0040345419984078
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.0040531249978812
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.0040687500004424
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.0132492919947254
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.0132812499941792
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 1.013358333002543
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 1.0133678330021212
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 1.013377124996623
+    },
+    {
+      "type": "response.completed",
+      "seconds": 1.0134404169948539
+    }
+  ],
+  "contentGapsSeconds": [
+    0.8155298749916255,
+    0.12556779199803714,
+    0.0074155000038445,
+    9.57910087890923e-05,
+    5.00839960295707e-05,
+    4.312499368097633e-05,
+    3.941600152757019e-05,
+    0.032550834002904594,
+    4.774999979417771e-05,
+    7.920799544081092e-05,
+    2.1208004909567535e-05,
+    1.6709003830328584e-05,
+    0.022461832995759323,
+    4.374999844003469e-05,
+    7.166700379457325e-05,
+    1.8582999473437667e-05,
+    1.562500256113708e-05,
+    0.009180541994282976,
+    3.195799945387989e-05
+  ],
+  "responseId": "8b9ce501-5622-4860-b247-1aef757525c9",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 10367,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 19,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 10386
+  },
+  "seconds": 1.0134422499977518,
+  "deliveredObservation": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "c"
+        ]
+      ]
+    },
+    "receipt": {
+      "bindingDigest": "acc50c6e3aa1bd1016163bb3df9c2c86960f4ad829eda4660acc6701faa1b154",
+      "verdict": "contradicted",
+      "schema": "poo-flow.semantic-observation",
+      "verification": "invalid",
+      "requestDigest": "c5651742ec2eee13540a0ae609ebbf193addf52c548d97e183fb3e02bf53f846",
+      "difference": {
+        "kind": "status-mismatch",
+        "observed": "complete",
+        "expected": "partial"
+      },
+      "operation": "temporal.observe",
+      "candidateValid": true
+    },
+    "artifactDigest": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c"
+  },
+  "nativeObservationSeconds": 0.0020155000092927366,
+  "result": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "b",
+          "c"
+        ]
+      ]
+    },
+    "receipt": {
+      "bindingDigest": "acc50c6e3aa1bd1016163bb3df9c2c86960f4ad829eda4660acc6701faa1b154",
+      "verdict": "contradicted",
+      "schema": "poo-flow.semantic-observation",
+      "verification": "invalid",
+      "requestDigest": "c5651742ec2eee13540a0ae609ebbf193addf52c548d97e183fb3e02bf53f846",
+      "difference": {
+        "kind": "status-mismatch",
+        "observed": "complete",
+        "expected": "partial"
+      },
+      "operation": "temporal.observe",
+      "candidateValid": true
+    },
+    "artifactDigest": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c"
+  },
+  "sourceRebinding": {
+    "candidateValid": true,
+    "operation": "temporal.observe",
+    "requestDigest": "a5ddd847ca1cd6da8c3e9e8c02d087f71bc10363afcef929912a3bcc7fed4a04",
+    "difference": {
+      "observed": "complete",
+      "expected": "partial",
+      "kind": "status-mismatch"
+    },
+    "verification": "invalid",
+    "verdict": "contradicted",
+    "schema": "poo-flow.semantic-observation",
+    "bindingDigest": "1b93c79b2e671b55e156c65ceba2ee14f3c823384e712a3c476c002006e91afc"
+  },
+  "failure": "native semantic contradiction",
+  "callSeconds": 1.016847124992637
+}

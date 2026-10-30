@@ -5,17 +5,17 @@
 
 ;;; This object is a valid load! fragment used to prove included object parts
 ;;; preserve field contracts and metadata.
-;; : [PooFlowModuleObject]
+;; : [AgenticAILabModuleObject]
 (list
- (poo-flow-module-object
+ (yuanxu-module-object
   'objects.fixture.loaded
   '()
   (list
-   (poo-flow-module-field-contract
-    'title PooFlowModuleStringType 'override "loaded" '((scope . fixture)))
-   (poo-flow-module-field-contract
+   (yuanxu-module-field-contract
+    'title YuanxuModuleStringType 'override "loaded" '((scope . fixture)))
+   (yuanxu-module-field-contract
     'tags
-    (poo-flow-module-list-type PooFlowModuleSymbolType)
+    (yuanxu-module-list-type YuanxuModuleSymbolType)
     'append
     '()
     '((scope . fixture))))

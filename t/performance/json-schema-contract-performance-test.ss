@@ -7,7 +7,7 @@
 ;;; Invariant: benchmark thunks exclude gxi startup, package install, schema
 ;;; download, Python execution, GitHub Actions execution, and external IO.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -21,7 +21,7 @@
 
 ;; : (-> Alist Void)
 (def (json-schema-contract-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] json-schema-contract-performance ")
+  (display "[agentic-ai-lab-benchmark] json-schema-contract-performance ")
   (write receipt)
   (newline)
   (force-output))
@@ -218,7 +218,7 @@
 ;; : TestSuite
 (def json-schema-contract-performance-test
   (test-suite "json schema contract performance"
-    (poo-flow-test-case "keeps recursive map-value validation inside regression budgets"
+    (yuanxu-test-case "keeps recursive map-value validation inside regression budgets"
       (let (receipt (json-schema-contract-performance-receipt))
         (json-schema-contract-performance-display-receipt receipt)
         (check-equal?

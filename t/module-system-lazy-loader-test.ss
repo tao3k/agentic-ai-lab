@@ -6,7 +6,9 @@
 ;;; Boundary: lazy loader tests cover deferred source loading only.
 ;;; Invariant: lazy plans never call loader handlers until explicitly forced.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :clan/poo/mop make-instance)
+        :yuanxu/module-system/source/projection
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -20,19 +22,20 @@
                  test-suite)
         "./support/performance"
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-p95-elapsed-ms)
-        (only-in :poo-flow/src/core/failure
+        (only-in :yuanxu/modules/funflow/control-plane/failure
                  execution-failure?
                  execution-failure-code)
-        (only-in :poo-flow/src/user-interface/module-selection-syntax poo-flow-modules!)
-        :poo-flow/src/authoring/module-imports
-        :core/module-system/source/objects
-        :poo-flow/src/authoring/module-descriptor
-        :core/extension-graph/interface
-        :core/module-system/loader/objects
-        :poo-flow/src/authoring/module-source-collection
-        :poo-flow/src/building/official-contributions
-        :poo-flow/src/user-interface/module-source-selection
-        :poo-flow/src/user-interface/module-source-tree)
+        (only-in :yuanxu/module-system/selection/syntax yuanxu-modules!)
+        :yuanxu/module-system/source/imports
+        :yuanxu/module-system/source/objects
+        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :yuanxu/graph/interface
+        :yuanxu/module-system/loader/objects
+        :yuanxu/module-system/source/collection
+        (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source agentic-ai-lab-maintained-service-source agentic-ai-lab-maintained-integration-directories)
+        :agentic-ai-lab/modules/building/official-contributions
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-source-selection
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-source-tree)
 
 (export module-system-lazy-loader-test)
 
@@ -40,7 +43,7 @@
 ;;; filesystem-backed module loading.
 ;; : (-> Unit PooModuleSourceRef)
 (def loader-standard-library-source
-  (poo-flow-standard-library-source 'standard/kernel))
+  (yuanxu-standard-library-source 'standard/kernel))
 
 ;;; Mutable call count is scoped to this owner to prove deferred loading without
 ;;; reaching into loader internals.
@@ -58,7 +61,7 @@
 ;;; Module fixture is inert descriptor data used by the test loader backend.
 ;; : (-> Unit PooModuleDescriptor)
 (def loader-standard-library-module
-  (make-empty-poo-flow-module-descriptor
+  (make-empty-agentic-ai-lab-module-descriptor
    'standard-kernel
    '()
    '((standard-library . #t))))
@@ -67,25 +70,25 @@
 ;;; library module source.
 ;; : (-> Unit PooModuleLoaderBackend)
 (def user-standard-library-loader
-  (make-poo-flow-module-loader-backend
-   'user-standard-library-loader
-   'standard-library
-   (lambda (source-ref)
+  (make-instance ModuleLoaderBackend
+   name: 'user-standard-library-loader
+   source-kind: 'standard-library
+   load: (lambda (source-ref)
      (set! lazy-loader-call-count (+ lazy-loader-call-count 1))
-     (if (poo-flow-module-source-ref=? source-ref loader-standard-library-source)
+     (if (yuanxu-module-source-ref=? source-ref loader-standard-library-source)
        loader-standard-library-module
        #f))
-   '((library . standard))))
+   metadata: '((library . standard))))
 
 ;;; Plan predicate keeps assertions about deferred receipts compact and local to
 ;;; the lazy-loader policy owner.
-;; : (-> [PooFlowLazyLoadPlan] Boolean)
+;; : (-> [YuanxuLazyLoadPlan] Boolean)
 (def (lazy-loader-plans-deferred? plans)
   (cond
    ((null? plans) #t)
-   ((and (not (poo-flow-lazy-load-plan-forced? (car plans)))
-         (eq? (poo-flow-module-load-receipt-code
-               (poo-flow-lazy-load-plan-receipt (car plans)))
+   ((and (not (.get (car plans) forced?))
+         (eq? (.get
+               (.get (car plans) receipt) code)
               'deferred))
     (lazy-loader-plans-deferred? (cdr plans)))
    (else #f)))
@@ -107,7 +110,7 @@
       (reverse refs-rev)
       (loop (cdr remaining-roots)
             (lazy-loader-values/rev-onto
-             (poo-flow-module-tree-source-refs (car remaining-roots))
+             (agentic-ai-lab-module-tree-source-refs (car remaining-roots))
              refs-rev)))))
 
 ;;; This suite keeps lazy-loader planning observable without forcing modules to
@@ -115,11 +118,11 @@
 ;; : TestSuite
 ;; : TestCase
 (def (module-system-lazy-loader-large-registry-case)
-  (poo-flow-test-case "expands large module registry manifests without loading modules"
+  (yuanxu-test-case "expands large module registry manifests without loading modules"
         (for-each
          (lambda (module-count)
            (let* ((module-roots
-                   (poo-flow-performance-build-list
+                   (agentic-ai-lab-performance-build-list
                     module-count
                     (lambda (index)
                       (string-append "modules/generated-"
@@ -132,12 +135,12 @@
                     (lambda ()
                       (lazy-loader-module-tree-source-refs module-roots)))))
              (check-equal? (length source-refs) module-count)
-             (check-equal? (poo-flow-module-source-ref-value (car source-refs))
+             (check-equal? (yuanxu-module-source-ref-value (car source-refs))
                            "modules/generated-0/interface.ss")
              ;; Emit the scale receipt without embedding a machine-specific
              ;; timing threshold in this semantic unit test. Performance
              ;; admission belongs to a selected Observability profile.
-             (displayln "[poo-flow-module-catalog] phase=projection-complete module-count="
+             (displayln "[yuanxu-module-catalog] phase=projection-complete module-count="
                         module-count " p95-ms=" p95-ms
                         " selected-build-target-count=0")
              (check-equal? (and (real? p95-ms) (>= p95-ms 0)) #t)))
@@ -145,129 +148,149 @@
 
 ;; : TestCase
 (def (module-system-lazy-loader-deferred-standard-library-case)
-  (poo-flow-test-case "defers standard-library module loading until forced"
+  (yuanxu-test-case "defers standard-library module loading until forced"
         (set! lazy-loader-call-count 0)
         (let* ((backends (list user-standard-library-loader))
                (deferred
-                (poo-flow-lazy-load-source-receipt
+                (yuanxu-lazy-load-source-receipt
                  backends
                  loader-standard-library-source))
                (plan
-                (poo-flow-make-lazy-load-plan
+                (yuanxu-make-lazy-load-plan
                  backends
                  loader-standard-library-source
                  '((owner . standard-library))))
                (deferred-metadata
-                (poo-flow-module-load-receipt-metadata deferred)))
-          (check-equal? (poo-flow-module-source-ref-kind loader-standard-library-source)
+                (.get deferred metadata)))
+          (check-equal? (yuanxu-module-source-ref-kind loader-standard-library-source)
                         'standard-library)
-          (check-equal? (poo-flow-module-load-receipt-code deferred)
+          (check-equal? (.get deferred code)
                         'deferred)
-          (check-equal? (poo-flow-module-load-receipt-loaded? deferred)
+          (check-equal? (.get deferred loaded?)
                         #f)
           (check-equal? (cdr (assoc 'mode deferred-metadata))
                         'lazy)
           (check-equal? (cdr (assoc 'enabled? deferred-metadata))
                         #f)
           (check-equal? lazy-loader-call-count 0)
-          (check-equal? (poo-flow-lazy-load-plan-forced? plan)
+          (check-equal? (.get plan forced?)
                         #f)
           (let* ((forced-plan
-                  (poo-flow-force-lazy-load-plan plan))
+                  (yuanxu-force-lazy-load-plan plan))
                  (forced-receipt
-                  (poo-flow-lazy-load-plan-receipt forced-plan)))
-            (check-equal? (poo-flow-lazy-load-plan-forced? forced-plan)
+                  (.get forced-plan receipt)))
+            (check-equal? (.get forced-plan forced?)
                           #t)
             (check-equal? lazy-loader-call-count 1)
-            (check-equal? (poo-flow-module-load-receipt-code forced-receipt)
+            (check-equal? (.get forced-receipt code)
                           'loaded)
-            (check-equal? (poo-flow-module-name
-                           (poo-flow-module-load-receipt-module forced-receipt))
+            (check-equal? (agentic-ai-lab-module-name
+                           (.get forced-receipt module))
                           'standard-kernel)))))
 
 ;; : TestCase
 (def (module-system-lazy-loader-module-tree-case)
-  (poo-flow-test-case "projects the public interface entrypoint from a module tree"
+  (yuanxu-test-case "projects the public interface entrypoint from a module tree"
         (set! lazy-loader-call-count 0)
         (let* ((module-root "modules/nono-sandbox")
                (source-refs
-                (poo-flow-module-tree-source-refs module-root))
+                (agentic-ai-lab-module-tree-source-refs module-root))
                (interface-source (car source-refs))
                (interface-metadata
-                (poo-flow-module-source-ref-metadata interface-source))
+                (yuanxu-module-source-ref-metadata interface-source))
                (plans
-                (poo-flow-module-tree-lazy-load-plans
+                (agentic-ai-lab-module-tree-lazy-load-plans
                  (list user-standard-library-loader)
                  module-root
                  '((owner . module-tree)))))
           (check-equal? (length source-refs) 1)
-          (check-equal? (poo-flow-module-source-ref-kind interface-source) 'local)
-          (check-equal? (poo-flow-module-source-ref-value interface-source)
+          (check-equal? (yuanxu-module-source-ref-kind interface-source) 'local)
+          (check-equal? (yuanxu-module-source-ref-value interface-source)
                         "modules/nono-sandbox/interface.ss")
           (check-equal? (cdr (assoc 'entrypoint-role interface-metadata))
                         'interface)
           (check-equal? (length plans) 1)
-          (check-equal? (poo-flow-lazy-load-plan-forced? (car plans)) #f)
-          (check-equal? (poo-flow-module-load-receipt-code
-                         (poo-flow-lazy-load-plan-receipt (car plans)))
+          (check-equal? (.get (car plans) forced?) #f)
+          (check-equal? (.get
+                         (.get (car plans) receipt) code)
                         'deferred)
           (check-equal? lazy-loader-call-count 0))))
 
 ;; : TestCase
 (def (module-system-lazy-loader-src-modules-case)
-  (poo-flow-test-case "projects canonical modules interfaces as lazy load plans"
+  (yuanxu-test-case "projects canonical modules interfaces as lazy load plans"
         (set! lazy-loader-call-count 0)
         (let* ((plans
-                (poo-flow-src-modules-lazy-load-plans
+                (agentic-ai-lab-src-modules-lazy-load-plans
                  (list user-standard-library-loader)
                  '((owner . src-modules))))
                (source-values
                 (map (lambda (plan)
-                       (poo-flow-module-source-ref-value
-                        (poo-flow-lazy-load-plan-source plan)))
+                       (yuanxu-module-source-ref-value
+                        (.get plan source)))
                      plans))
                (first-receipt
-                (poo-flow-lazy-load-plan-receipt (car plans)))
+                (.get (car plans) receipt))
                (first-metadata
-                (poo-flow-module-load-receipt-metadata first-receipt)))
+                (.get first-receipt metadata)))
           (check-equal?
            (length plans)
            (+ (length
-               (poo-flow-load-modules poo-flow-maintained-module-source))
-              (length (poo-flow-module-system-source-refs))))
+               (yuanxu-module-source-collection-interfaces agentic-ai-lab-maintained-module-source))
+              (length
+               (yuanxu-module-source-collection-interfaces agentic-ai-lab-maintained-service-source))
+              (length (agentic-ai-lab-module-system-source-refs))))
+          (check-equal? (and (member (path-expand "modules/services/opentofu/interface.ss") source-values) #t) #t)
           (check-equal? (car source-values)
-                        "modules/agent-sandbox/interface.ss")
-          (check-equal? (if (member "modules/sandbox-core/interface.ss"
+                        (path-expand "modules/agent-sandbox/interface.ss"))
+          ;; Integration facades remain present, but cannot advertise the
+          ;; four-role Module receipt that belongs to validated Modules.
+          (for-each
+           (lambda (name)
+             (def path (string-append "modules/" name "/interface.ss"))
+             (check-equal? (and (member path source-values) #t) #t)
+             (check-equal?
+              (yuanxu-module-source-collection-locate agentic-ai-lab-maintained-module-source
+                (cons 'custom (string->symbol name))) '())
+             (for-each
+              (lambda (plan)
+                (def source (.get plan source))
+                (when (equal? (yuanxu-module-source-ref-value source) path)
+                  (let (metadata (yuanxu-module-source-ref-metadata source))
+                    (check-equal? (cdr (assoc 'kind metadata)) 'framework-entrypoint)
+                    (check-equal? (assoc 'required-roles metadata) #f)))) plans))
+           agentic-ai-lab-maintained-integration-directories)
+          (check-equal? (if (member (path-expand "modules/sandbox-core/interface.ss")
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "modules/nono-sandbox/interface.ss"
+          (check-equal? (if (member (path-expand "modules/nono-sandbox/interface.ss")
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "modules/standards/interface.ss"
+          (check-equal? (if (member (path-expand "modules/standards/interface.ss")
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "src/user-interface/profile-config.ss"
+          (check-equal? (if (member "modules/workflow/scenario/configuration/profile-config.ss"
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "src/user-interface/init-syntax.ss"
+          (check-equal? (if (member "modules/workflow/scenario/configuration/init-syntax.ss"
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "src/user-interface/root-profile.ss"
+          (check-equal? (if (member "modules/workflow/scenario/configuration/root-profile.ss"
                                     source-values)
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "src/user-interface/declaration-case.ss"
+          (check-equal? (if (member "modules/workflow/scenario/configuration/declaration-case.ss"
                                     source-values)
                           #t
                           #f)
@@ -291,153 +314,159 @@
 
 ;; : TestCase
 (def (module-system-lazy-loader-user-root-case)
-  (poo-flow-test-case "projects only the Doom-style init and config roots"
+  (yuanxu-test-case "projects only the Doom-style init and config roots"
         (set! lazy-loader-call-count 0)
         (let* ((user-root "user-interface")
                (source-refs
-                (poo-flow-user-tree-source-refs user-root))
+                (agentic-ai-lab-user-tree-source-refs user-root))
                (init-source (car source-refs))
                (config-source (cadr source-refs))
                (init-metadata
-                (poo-flow-module-source-ref-metadata init-source))
+                (yuanxu-module-source-ref-metadata init-source))
                (config-metadata
-                (poo-flow-module-source-ref-metadata config-source))
+                (yuanxu-module-source-ref-metadata config-source))
                (plans
-                (poo-flow-user-tree-lazy-load-plans
+                (agentic-ai-lab-user-tree-lazy-load-plans
                  (list user-standard-library-loader)
                  user-root
                  '((owner . user-root-tree)))))
           (check-equal? (length source-refs) 2)
-          (check-equal? (poo-flow-module-source-ref-value init-source)
+          (check-equal? (yuanxu-module-source-ref-value init-source)
                         "user-interface/init.ss")
-          (check-equal? (poo-flow-module-source-ref-value config-source)
+          (check-equal? (yuanxu-module-source-ref-value config-source)
                         "user-interface/config.ss")
           (check-equal? (cdr (assoc 'kind config-metadata)) 'user-tree)
           (check-equal? (cdr (assoc 'policy init-metadata))
                         'init-switches-only)
-          (check-equal? (poo-flow-user-tree-source-allows?
+          (check-equal? (agentic-ai-lab-user-tree-source-allows?
                          init-source
                          'module-switch)
                         #t)
-          (check-equal? (poo-flow-user-tree-source-allows?
+          (check-equal? (agentic-ai-lab-user-tree-source-allows?
                          init-source
                          'feature-switch)
                         #t)
-          (check-equal? (poo-flow-user-tree-source-allows?
+          (check-equal? (agentic-ai-lab-user-tree-source-allows?
                          init-source
                          'sandbox-profile-recipe)
                         #f)
-          (check-equal? (poo-flow-user-tree-source-valid?
+          (check-equal? (agentic-ai-lab-user-tree-source-valid?
                          init-source
                          '(module-switch feature-switch custom-module-switch))
                         #t)
-          (check-equal? (poo-flow-user-tree-source-allows?
+          (check-equal? (agentic-ai-lab-user-tree-source-allows?
                          init-source
                          'profile-selection)
                         #f)
-          (check-equal? (poo-flow-user-tree-source-policy-violations
+          (check-equal? (agentic-ai-lab-user-tree-source-policy-violations
                          init-source
                          '(module-switch object-contract runtime-execution))
                         '(object-contract runtime-execution))
           (check-equal? (cdr (assoc 'policy config-metadata))
                         'composition-declarations-only)
-          (check-equal? (poo-flow-user-tree-source-allows?
+          (check-equal? (agentic-ai-lab-user-tree-source-allows?
                          config-source
                          'composition-declaration)
                         #t)
-          (check-equal? (poo-flow-user-tree-source-valid?
+          (check-equal? (agentic-ai-lab-user-tree-source-valid?
                          config-source
                          '(composition-declaration profile-use scenario-use))
                         #t)
-          (check-equal? (poo-flow-user-tree-source-allows?
+          (check-equal? (agentic-ai-lab-user-tree-source-allows?
                          config-source
                          'runtime-execution)
                         #f)
-          (check-equal? (poo-flow-user-tree-source-allows?
+          (check-equal? (agentic-ai-lab-user-tree-source-allows?
                          config-source
                          'module-switch)
                         #f)
           (check-equal? (length plans) 2)
-          (check-equal? (poo-flow-module-load-receipt-code
-                         (poo-flow-lazy-load-plan-receipt (car plans)))
+          (check-equal? (.get
+                         (.get (car plans) receipt) code)
                         'deferred)
           (check-equal? lazy-loader-call-count 0))))
 
 ;; : TestCase
 (def (module-system-user-root-authoring-contract-case)
-  (poo-flow-test-case "admits value composition and rejects advanced root mechanisms"
+  (yuanxu-test-case "admits value composition and rejects advanced root mechanisms"
     (check-equal?
      (begin
-       (poo-flow-user-tree-config-authoring-validate! "user-interface")
-       (poo-flow-user-tree-config-authoring-validate!
+       (agentic-ai-lab-user-tree-config-authoring-validate! "user-interface")
+       (agentic-ai-lab-user-tree-config-authoring-validate!
         "t/fixtures/user-surface-positive")
        #t)
      #t)
     (check-exception
-     (poo-flow-user-tree-config-authoring-validate!
+     (agentic-ai-lab-user-tree-config-authoring-validate!
       "t/fixtures/user-root-authoring-invalid")
      true)
     (check-exception
-     (poo-flow-user-tree-config-authoring-validate!
+     (agentic-ai-lab-user-tree-config-authoring-validate!
       "t/fixtures/user-surface-raw-mop")
      true)
     (check-exception
-     (poo-flow-user-tree-config-authoring-validate!
+     (agentic-ai-lab-user-tree-config-authoring-validate!
       "t/fixtures/user-surface-direct-clos")
      true)
     (check-exception
-     (poo-flow-user-tree-config-authoring-validate!
+     (agentic-ai-lab-user-tree-config-authoring-validate!
       "t/fixtures/user-surface-raw-hook")
      true)))
 
 ;; : TestCase
 (def (module-system-lazy-loader-aitia-submodule-source-case)
-  (poo-flow-test-case "official contribution sources are optional and resolve by checkout identity"
+  (yuanxu-test-case "official contribution sources are optional and resolve by checkout identity"
     (check-equal?
-     (map poo-flow-module-source-collection-identity
-          poo-flow-official-contribution-sources)
-     '(poo-flow-official-contributions))
-    (let (selection (caar (poo-flow-modules! :custom (lambda-aitia))))
+     (map yuanxu-module-source-collection-identity
+          (yuanxu-module-load-path-collections
+           (make-agentic-ai-lab-contribution-module-load-path
+            'example-contribution ".")))
+     '(example-contribution agentic-ai-lab-maintained agentic-ai-lab-services))
+    (check-equal?
+     (map yuanxu-module-source-collection-identity
+          agentic-ai-lab-official-contribution-sources)
+     '(agentic-ai-lab-official-contributions))
+    (let (selection (caar (yuanxu-modules! :custom (lambda-aitia))))
       (if (file-exists? "packages/lambda-aitia/modules")
         (let (source-refs
-              (poo-flow-module-selection-source-refs
-               poo-flow-official-contribution-load-path selection))
+              (agentic-ai-lab-module-selection-source-refs
+               agentic-ai-lab-official-contribution-load-path selection))
           (check-equal?
-           (map poo-flow-module-source-ref-value source-refs)
-           '("packages/lambda-aitia/modules/ADR/interface.ss"
+           (map yuanxu-module-source-ref-value source-refs)
+           (map path-expand '("packages/lambda-aitia/modules/ADR/interface.ss"
              "packages/lambda-aitia/modules/assurance/interface.ss"
              "packages/lambda-aitia/modules/formal-methods/interface.ss"
              "packages/lambda-aitia/modules/gitops/interface.ss"
-             "packages/lambda-aitia/modules/sdlc/interface.ss")))
+             "packages/lambda-aitia/modules/sdlc/interface.ss"))))
         (let (failure
               (capture-lazy-loader-failure
                (lambda ()
-                 (poo-flow-module-selection-source-refs
-                  poo-flow-official-contribution-load-path selection))))
+                 (agentic-ai-lab-module-selection-source-refs
+                  agentic-ai-lab-official-contribution-load-path selection))))
           (check-equal? (execution-failure? failure) #t)
           (check-equal? (execution-failure-code failure)
                         'missing-module-source))))))
 
 ;; : TestCase
 (def (module-system-lazy-loader-auto-import-removal-case)
-  (poo-flow-test-case "removes auto-imported entrypoints through POO extension"
+  (yuanxu-test-case "removes auto-imported entrypoints through POO extension"
         (set! lazy-loader-call-count 0)
         (let* ((source-refs
-                (poo-flow-user-tree-source-refs "user-interface"))
+                (agentic-ai-lab-user-tree-source-refs "user-interface"))
                (disable-config
-                (poo-flow-module-extension-contribution
-                 poo-flow-module-auto-import-root-identity
+                (yuanxu-graph-contribution
+                 yuanxu-module-auto-import-root-identity
                  (list
-                  (poo-flow-module-extension-node-remove
+                  (yuanxu-graph-node-remove
                    "user-interface/config.ss"))))
                (result
-                (poo-flow-module-auto-imports-resolve
+                (yuanxu-module-auto-imports-resolve
                  source-refs
                  (list disable-config)))
                (resolved-source-values
-                (map poo-flow-module-source-ref-value
-                     (poo-flow-module-auto-imports-result-source-refs result))))
-          (check-equal? (poo-flow-module-extension-result-stable? result) #t)
+                (map yuanxu-module-source-ref-value
+                     (yuanxu-module-auto-imports-result-source-refs result))))
+          (check-equal? (yuanxu-graph-result-applied? result) #t)
           (check-equal? (length resolved-source-values) 1)
           (check-equal? (member "user-interface/config.ss"
                                 resolved-source-values)
@@ -448,7 +477,7 @@
 
 ;; : TestSuite
 (def module-system-lazy-loader-test
-  (test-suite "poo-flow module system lazy loader"
+  (test-suite "agentic-ai-lab module system lazy loader"
     (module-system-lazy-loader-large-registry-case)
     (module-system-lazy-loader-deferred-standard-library-case)
     (module-system-lazy-loader-module-tree-case)

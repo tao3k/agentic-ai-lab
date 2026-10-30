@@ -10,13 +10,15 @@ import argparse
 import json
 import os
 import subprocess
+import tempfile
+from contextlib import contextmanager
 from collections.abc import Sequence
 from pathlib import Path
 
 from packages.bazel.gerbil_environment import build_gerbil_environment
 
 
-RUNTIME_SCHEMA = "poo-flow.gerbil-project-environment-runtime.v1"
+RUNTIME_SCHEMA = "agentic-ai-lab.gerbil-project-environment-runtime.v1"
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -27,12 +29,41 @@ def main(argv: Sequence[str] | None = None) -> int:
     if not command:
         raise SystemExit("a command is required after --")
 
+    with _runtime_prefix(args) as gerbil_path:
+        return _run(args, command, gerbil_path)
+
+
+@contextmanager
+def _runtime_prefix(args: argparse.Namespace):
+    project_prefix = Path(args.project_root).resolve() / ".gerbil"
+    if not args.runtime_directory:
+        yield project_prefix
+        return
+    workspace = Path(args.workspace).resolve()
+    parent = (workspace / args.runtime_directory).resolve()
+    if not parent.is_relative_to(workspace):
+        raise ValueError("runtime directory must remain in the workspace")
+    parent.mkdir(parents=True, exist_ok=True)
+    # One launcher owns this prefix for the complete command and its workers.
+    # Cleanup follows natural command exit; no Bazel output becomes writable.
+    with tempfile.TemporaryDirectory(prefix="run-", dir=parent) as directory:
+        runtime = Path(directory)
+        (runtime / "lib").mkdir()
+        # Standard Make publishes executables here. A library-only producer may
+        # have no bin at all, and an existing Bazel bin is immutable input.
+        (runtime / "bin").mkdir()
+        yield runtime
+
+
+def _run(args: argparse.Namespace, command: tuple[str, ...], gerbil_path: Path) -> int:
+
     project_root = Path(args.project_root).resolve()
-    gerbil_path = project_root / ".gerbil"
     dependency_root = Path(args.dependency_root_marker).resolve().parent
     project_dependency_roots = tuple(
         Path(root).resolve() for root in args.project_dependency_root
     )
+    if args.runtime_directory:
+        project_dependency_roots = (project_root, *project_dependency_roots)
     gxi = Path(args.gxi).resolve()
     native_scheme_env = Path(args.native_scheme_env).resolve()
     workspace = Path(args.workspace).resolve()
@@ -57,13 +88,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     }
     environment.update(
         {
-            "POO_FLOW_GERBIL_ENV_RECEIPT": str(declaration_receipt),
-            "POO_FLOW_GERBIL_ENV_RECEIPT_JSON": json.dumps(
+            "AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT": str(declaration_receipt),
+            "AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT_JSON": json.dumps(
                 runtime_receipt,
                 separators=(",", ":"),
                 sort_keys=True,
             ),
-            "POO_FLOW_GERBIL_PROJECT_RECEIPT": str(project_receipt),
+            "AGENTIC_AI_LAB_GERBIL_PROJECT_RECEIPT": str(project_receipt),
         }
     )
     native_command = (
@@ -86,9 +117,9 @@ def _forwarded_environment_names() -> tuple[str, ...]:
         "GERBIL_PATH",
         "GERBIL_LOADPATH",
         "PATH",
-        "POO_FLOW_GERBIL_ENV_RECEIPT",
-        "POO_FLOW_GERBIL_ENV_RECEIPT_JSON",
-        "POO_FLOW_GERBIL_PROJECT_RECEIPT",
+        "AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT",
+        "AGENTIC_AI_LAB_GERBIL_ENV_RECEIPT_JSON",
+        "AGENTIC_AI_LAB_GERBIL_PROJECT_RECEIPT",
     )
 
 
@@ -102,6 +133,7 @@ def _argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--project-dependency-root", action="append", default=[])
     parser.add_argument("--workspace", required=True)
     parser.add_argument("--working-directory", default="")
+    parser.add_argument("--runtime-directory", default="")
     parser.add_argument("--declaration-receipt", required=True)
     parser.add_argument("command", nargs=argparse.REMAINDER)
     return parser

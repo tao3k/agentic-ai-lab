@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Python Library loader qualification
+
+The active Library uses SemanticRuntime semantic ABI version 1.
+The historical Temporal adapters, prompted producer, replay utilities and copied
+old qualification source archive have been removed. Git history retains past
+versions; they are not current acceptance gates.
+
+The integration/ receipt records 21 focused loader tests from commit 5105dbde.
+Current ABI native and real-provider acceptance belongs to
+../semantic-abi/ and the python-testing model_study.semantic_abi entrypoint.

@@ -89,6 +89,35 @@ assert.equal(
 );
 assert.deepEqual(fallbackCalls, ["bazelisk", "bazel"]);
 
+// Nested npm scripts must not invalidate the already-built Gerbil toolchain.
+for (const configured of [false, true]) {
+  const npmEnv = {
+    PATH: "/package/node_modules/.bin:/sdk/bin:/usr/bin",
+    AGENTIC_AI_LAB_BAZEL_PATH: "/sdk/bin:/usr/bin",
+    GERBIL_NATIVE_ABI: "source-bound-abi",
+    ...(configured ? { BAZEL: "configured-bazel" } : {}),
+  };
+  runBazel(["build", "//selection:test"], {
+    cwd,
+    env: npmEnv,
+    executor: (_executable, _args, _cwd, childEnv) => {
+      assert.equal(childEnv.PATH, "/sdk/bin:/usr/bin");
+      assert.equal(childEnv.GERBIL_NATIVE_ABI, "source-bound-abi");
+      return "ok";
+    },
+  });
+  assert.equal(npmEnv.PATH, "/package/node_modules/.bin:/sdk/bin:/usr/bin");
+}
+
+runBazel(["info", "bazel-bin"], {
+  cwd,
+  env: { PATH: "/user/tools:/usr/bin" },
+  executor: (_executable, _args, _cwd, childEnv) => {
+    assert.equal(childEnv.PATH, "/user/tools:/usr/bin");
+    return "ok";
+  },
+});
+
 assert.throws(
   () =>
     runBazel(["build", "//selection:test"], {

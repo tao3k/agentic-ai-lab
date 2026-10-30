@@ -6,7 +6,7 @@
 ;;; Boundary: native nono FFI tests call the C ABI through Gambit, not the CLI.
 ;;; Invariant: irreversible sandbox apply is never performed by this test.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,10 +17,10 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/modules/agent-sandbox/api
-        :poo-flow/modules/agent-sandbox/nono
-        :poo-flow/modules/nono-sandbox/c-binding)
+        :yuanxu/modules/funflow/control-plane/api
+        :agentic-ai-lab/modules/agent-sandbox/api
+        :agentic-ai-lab/modules/agent-sandbox/nono
+        :agentic-ai-lab/modules/nono-sandbox/c-binding)
 
 (export nono-sandbox-native-ffi-test)
 
@@ -51,7 +51,7 @@
 ;; : TestSuite
 (def nono-sandbox-native-ffi-test
   (test-suite "nono-sandbox native FFI"
-    (poo-flow-test-case "skips cleanly when an explicit native library path is absent"
+    (yuanxu-test-case "skips cleanly when an explicit native library path is absent"
       (let* ((runtime-manifest (make-native-ffi-test-runtime-manifest))
              (receipt
               (nono-c-binding-native-live-test
@@ -67,7 +67,7 @@
         (check-equal? (test-ref receipt 'native-executed) #f)
         (check-equal? (test-ref receipt 'cli-executed) #f)
         (check-equal? (test-maybe-ref receipt 'command) #f)))
-    (poo-flow-test-case "calls native nono C ABI when libnono_ffi is available"
+    (yuanxu-test-case "calls native nono C ABI when libnono_ffi is available"
       (let* ((runtime-manifest (make-native-ffi-test-runtime-manifest))
              (receipt
               (nono-c-binding-native-live-test runtime-manifest)))

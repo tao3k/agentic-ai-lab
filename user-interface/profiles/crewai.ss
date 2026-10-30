@@ -5,12 +5,12 @@
 ;;; -*- Gerbil -*-
 
 (import (only-in :clan/poo/object .def .o .ref)
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        (only-in :poo-flow/src/authoring/semantic-module
-                 poo-flow-semantic-module)
-        (only-in :core/profile-composition/profile-bundle
-                 poo-flow-profile-export
-                 poo-flow-module-profiles))
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :yuanxu/module-system/authoring/roles
+                 yuanxu-semantic-module)
+        (only-in :yuanxu/profile-composition/profile-bundle
+                 yuanxu-profile-export
+                 yuanxu-module-profiles))
 (export crewai CrewAIModule)
 
 (.def crewai
@@ -91,22 +91,22 @@
          (policy 'handoff-after-proof-gate))))
 
 (def CrewAIModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'user-interface 'crewai)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'user-interface 'crewai)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'agent (.ref crewai 'agent))
-    (poo-flow-profile-export 'task (.ref crewai 'task))
-    (poo-flow-profile-export 'crew (.ref crewai 'crew))
-    (poo-flow-profile-export 'planning (.ref crewai 'planning))
-    (poo-flow-profile-export 'memory (.ref crewai 'memory))
-    (poo-flow-profile-export 'knowledge (.ref crewai 'knowledge))
-    (poo-flow-profile-export 'sequential-process (.ref crewai 'sequential-process))
-    (poo-flow-profile-export 'hierarchical-process (.ref crewai 'hierarchical-process))
-    (poo-flow-profile-export 'flow-state (.ref crewai 'flow-state))
-    (poo-flow-profile-export 'flow-router (.ref crewai 'flow-router))
-    (poo-flow-profile-export 'flow-persist (.ref crewai 'flow-persist))
-    (poo-flow-profile-export 'guardrail (.ref crewai 'guardrail))
-    (poo-flow-profile-export 'human-input (.ref crewai 'human-input))
-    (poo-flow-profile-export 'observability (.ref crewai 'observability))
-    (poo-flow-profile-export 'runtime-handoff (.ref crewai 'runtime-handoff)))))
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'agent (.ref crewai 'agent))
+    (yuanxu-profile-export 'task (.ref crewai 'task))
+    (yuanxu-profile-export 'crew (.ref crewai 'crew))
+    (yuanxu-profile-export 'planning (.ref crewai 'planning))
+    (yuanxu-profile-export 'memory (.ref crewai 'memory))
+    (yuanxu-profile-export 'knowledge (.ref crewai 'knowledge))
+    (yuanxu-profile-export 'sequential-process (.ref crewai 'sequential-process))
+    (yuanxu-profile-export 'hierarchical-process (.ref crewai 'hierarchical-process))
+    (yuanxu-profile-export 'flow-state (.ref crewai 'flow-state))
+    (yuanxu-profile-export 'flow-router (.ref crewai 'flow-router))
+    (yuanxu-profile-export 'flow-persist (.ref crewai 'flow-persist))
+    (yuanxu-profile-export 'guardrail (.ref crewai 'guardrail))
+    (yuanxu-profile-export 'human-input (.ref crewai 'human-input))
+    (yuanxu-profile-export 'observability (.ref crewai 'observability))
+    (yuanxu-profile-export 'runtime-handoff (.ref crewai 'runtime-handoff)))))

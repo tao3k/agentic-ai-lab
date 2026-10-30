@@ -1,0 +1,28 @@
+{
+  "format": "historical-evidence-recovery-v1",
+  "method": "Exact Scheme blocks from immutable result document, retaining only bytes matching its recorded SHA256. No response JSON, requests, timings or native TSV were reconstructed.",
+  "recovered_original_bytes": {
+    "native.1.txt": "e710253a174f364ee6d57aed9c04aaacf5abfdee545eee497373b6029bfac4c3",
+    "native.2.txt": "aafe17a5b2ae19f0b9ce2d5bffb5bcde40f4022acbd61139a3b1a52348664c24",
+    "self.1.txt": "acd3180b4774fc8b786221b9511e2e47e640a6e74d2655c7d3233fe364d6e856",
+    "self.2.txt": "acd3180b4774fc8b786221b9511e2e47e640a6e74d2655c7d3233fe364d6e856"
+  },
+  "source_commit": "6d27a0893fe1a404c069b2455feddefb2850b691",
+  "source_document": "packages/python-testing/docs/model-study-support-candidates.org",
+  "status": "partial-original-text-recovery",
+  "unavailable_original_records": {
+    "analysis-score-applicability.json": "963e9c876d99e50ccef93fe63aa128e56f15f64fec393abe3cf4552c4e56e6d8",
+    "native.1.json": "5d96978c2d853aab33ac62e24311931faf2bb1fc20ac96f56fb039a7f6d941ed",
+    "native.2.json": "7227b967bc9bda5042b1a0e0dc3e61842d07c78842390144949af4b18ff7d71d",
+    "native.final.tsv": "07c106e56250f7480d7c03b45199c5157a43c0eb66e5fd3b32c2f3a60caa48cf",
+    "native.initial.tsv": "e5175a15320d9d4200ef9b621fbb46ab1718d88115304eb409fba0e36b89e631",
+    "scores.json": "4d6c5e75b2be0fe3e81a463c1886e9868bba952b4a380ed5ce9fafaa7f3fa902",
+    "self.1.json": "a90ed2d192a3105a8375bb6d1dd53dcc38df7818909db511a696105aa8356517",
+    "self.2.json": "2c5958623268a2fe0526420191aee7fd202c33942e34101a8b39d8cf54c41e29",
+    "self.final.tsv": "20ec4aac2b29795407f8f484b3beffd05d3c912dfd096a104b8196ad09c99040"
+  },
+  "unavailable_unhashed_records": [
+    "complete outgoing request JSON",
+    "approved preview files and manifest bytes"
+  ]
+}

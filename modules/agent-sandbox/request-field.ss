@@ -8,8 +8,8 @@
 ;;; Runtime contract: accepted field names are inert data until request assembly.
 ;;; Policy evidence: request facade re-exports these constants for stable callers.
 
-(import (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        :poo-flow/modules/agent-sandbox/alist)
+(import (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        :agentic-ai-lab/modules/agent-sandbox/alist)
 
 (export +agent-sandbox-request-schema+
         +agent-sandbox-request-field-names+
@@ -18,7 +18,7 @@
         agent-sandbox-validate-request-fields)
 
 ;; : (-> Unit Symbol)
-(def +agent-sandbox-request-schema+ 'poo-flow.agent-sandbox-request.v1)
+(def +agent-sandbox-request-schema+ 'agentic-ai-lab.agent-sandbox-request.v1)
 
 ;;; Named request fields are the typed public surface for macro builders. They
 ;;; deliberately exclude profile-derived backend fields, which stay descriptor-owned.

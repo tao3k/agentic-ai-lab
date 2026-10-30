@@ -1,0 +1,139 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: 10.08.19 Actual Nix Call Chain and the Reuse Boundary
+#+language: en
+
+* Historical observation before product integration
+
+The following records the pre-integration call chain. The subsequent opt-in
+product adapter and its independent-query boundary are documented in
+[[file:20-nix-flake-source-c-api.org][20 Product Flake Source C API]]. The earlier stale-import control remains valid.
+
+[[file:18-nix-session-reuse-validation.org][The preceding session comparison]] established the cost of an unnecessary
+fresh state in the binding qualification. It did not establish that the product
+Source already uses that binding. An inspection of the current working tree
+finds no product import/caller of =bindings/nix-c-api/binding.ss=. Its callers
+are the embedding/profile tests. The product Nix Source still starts the CLI.
+Therefore this investigation does not claim a production C API speedup or
+silently replace an independent currentness query with a warm native value.
+
+* Actual ownership and calls
+
+| Entry | Current behavior | Rebuild classification |
+|-------+------------------+------------------------|
+| =OpenTofu Build.prepare= | Copies the configured Source for one request, projects final Provider demand and currentness observations. | Scheme object construction, not itself an EvalState allocation. |
+| Its =.realize= | Refines arguments or the =selection= data input and calls Source =.prepare=. | A changed data-input snapshot is a changed Nix context even if its directory spelling is unchanged. |
+| =NixSource. .prepare= | Derivation/artifact are lazy receiver-local slots. | Repeated warm slot reads already avoid repeating construction/realization. |
+| Publication =admit-current= | Calls =admit-derivation!= through the derivation-query mode. | Independent query must not be replaced by a cached admission or old output. |
+| =NixFlakeSource. .instantiate= | Contract check, source check, CLI query, source check. | Each CLI process has its own evaluator; no native session is held here. |
+| Serialized =.guard-form= | Reconstructs a Source in the generated guard's process. | Independent process/context; no native state-restoration protocol exists. |
+| Binding =call-with-flake-session= | Creates one state, locks/selects once, runs the callback and closes it. | Already one state across AWS and Null inside that callback. |
+| Qualification fresh-state rounds | Explicit independent sessions for cold controls. | Intentional measurement, not an accidental product reconstruction to remove. |
+
+The only =nix_state_create= in the binding is inside =pf_nix_create=. Its
+functional session brackets call it once per independent callback lifetime;
+there is no additional creation inside =session-query=. Baseline assertions
+continue to require one Store, one state and one strict lock across both final
+candidate values. No safe redundant native construction was found there.
+
+The product CLI's package route uses =path-info --derivation= with its existing
+exact-attribute handling; its applied-function route uses =eval --raw --apply=.
+The latter passes an ordinary Nix attrset to the function and reads =drvPath=.
+The qualification instead passes a JSON string to a function returning a
+receipt string. It explicitly uses =--impure= for matched CLI controls; the
+product command does not. Argument/result projection and evaluation-mode
+parity remain integration work, not interchangeable transport details.
+
+* Executable stale-import counterexample
+
+The existing three-round Case now models exactly the default local header
+observation subset: =flake.nix= and =flake.lock=. This subset is intentionally
+insufficient and never grants acceptance. It is an analysis control derived
+from the inspected product collector, not a claim that the full product
+Scenario was executed or that its richer custom observations were discarded.
+
+After the parent/child computations and their real generated-Contract admits,
+the final round modifies the imported =stamp.nix= from =1= to =2=:
+
+#+begin_src scheme
+;; Existing full observations still reject BEFORE entering the cached state.
+(write-input stamp "2")
+(let (count (session-calls session))
+  (assert 'staged-source-change-refused
+    (rejected? (cut staged both "stale")))
+  (assert 'stale-before-native-call (= count (session-calls session))))
+
+;; Negative control only: header checks pass, but reuse can return stale imports.
+(let* ((cached
+        (checked-query headers
+          (lambda ()
+            (session-apply! session both)
+            (session-result session "receipt"))))
+       (fresh (cli-query both "true" "lib.providerArtifacts" headers)))
+  (assert 'headers-only-reuse-retains-stale-import (= (field cached 'stamp) 1))
+  (assert 'fresh-evaluation-observes-import-change (= (field fresh 'stamp) 2))
+  (assert 'same-lock-does-not-prove-current-imports (not (equal? cached fresh))))
+#+end_src
+
+All three negative-control assertions passed. A lock file fixes inputs; it is
+not a complete identity for a mutable local Flake tree or arbitrary impure
+imports. Comparing only reference/attribute/lock bytes and retaining a state
+would weaken the existing full-source rejection. This control retains all
+original two-candidate admission, parent-cache and unused-awscc laziness checks.
+
+* Repeated comparison
+
+The extended existing Case passed all three rounds, with one =CASE-OK=,
+=MODULE-OK=, =HARNESS-OK= and final =OK= and no error/overflow markers. Times in
+milliseconds, same real AWS 5.100.0 / Null 3.2.4 demand and strict locks:
+
+| Round | Add Null in retained session | Same candidate in a fresh state |
+|-------+------------------------------+----------------------------------|
+| 1 | 3.449 | 700.189 |
+| 2 | 2.306 | 661.175 |
+| 3 | 2.761 | 675.350 |
+
+These are binding costs, not product CLI timings or a new production speedup.
+The initial edit had one extra closing parenthesis; its reader failure is
+retained and was fixed before this passing run. No deadline was changed.
+
+* Product test and repository boundary
+
+The default command =just test-file t/nix-flake-source-test.ss= was attempted.
+It failed before entering the Case because the current root environment cannot
+resolve =:yuanxu/module-system/selection/init-syntax= from =agentic-ai-lab/init=.
+This is not a passing product integration receipt or an observed Nix failure.
+The current =modules/nix= / =modules/services/opentofu= migration is staged or
+untracked concurrent work and is absent from the inspected PR head
+=280e18da1e50eceab6e842f623d02226c638ccab=. It was not rewritten, published or
+absorbed to make this performance task appear integrated.
+
+The inspected worktree source identities (SHA-256) are:
+
+- =modules/nix/objects.ss=: =27159f920f919ccfb360c1ab96bdc6bf8b60e422a13275f88147d674293f232a=.
+- =modules/nix/func.ss=: =61c369c20772141e5ac21706ca99baaaa060ba22b87bda85951a0d20a9c7a128=.
+- =modules/services/opentofu/build.ss=: =eefb057d7953bf99b63a80b3d24984a6a1b8acd555b8aaee45a124f78951a77a=.
+
+The ordinary binding regression also passed all four Cases, required module/
+Harness/final markers and zero process exit. This does not turn the separate
+product test import failure into a pass.
+
+Local logs: =/private/tmp/agentic-ai-lab-nix-callchain-20261023=. No raw logs enter Git.
+
+* Decision and remaining integration work
+
+Keep the existing efficient binding lifetime and the product's independent
+currentness checks. Do not add a global pool, identity table, cached admission
+or Source pointer slot that can hide changed imported values. The evidence
+does not justify removing those queries under a "same lock" shortcut.
+
+Product convergence is still incomplete. It requires the current module
+migration/build dependencies to become executable, then a real Source-to-C-API
+connection preserving argument/result semantics, native evaluation mode,
+locked data-input identity and transitive source currentness. That connection
+must prove that warm reads cannot hide an imported-file change before it
+replaces the existing CLI checks. Reuse belongs inside an explicit validated
+operation lifetime; the already demonstrated cost reduction alone does not
+supply those conditions. No Gerbil/compiler sources or production runtime
+were changed by this audit.

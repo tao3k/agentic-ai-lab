@@ -5,13 +5,13 @@
 
 ;;; Boundary: exclusive complexity gate for DomainCase structural catalogs.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :poo-flow/src/feature-system/domain-case/interface)
+        :yuanxu/feature-system/domain-case/interface)
 
 (export domain-case-structural-performance-test)
 
@@ -46,13 +46,13 @@
              (domain-case-structural-performance-id
               "type/" (- index 1)))))
          (type-contract
-          (poo-flow-case-type-contract type-id parent-type-ids
+          (yuanxu-case-type-contract type-id parent-type-ids
                                        (lambda (_value) #t)))
          (projection
-          (poo-flow-case-projection projection-id component-id
+          (yuanxu-case-projection projection-id component-id
                                     'domain-case.performance.v1
                                     (lambda (value) value))))
-    (poo-flow-case-component
+    (yuanxu-case-component
      component-id 1 #t type-contract '() '() (list projection)
      parent-component-ids #f #f)))
 
@@ -77,14 +77,14 @@
   (cdr (assoc key row)))
 
 (def (domain-case-structural-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] domain-case-structural-catalog ")
+  (display "[agentic-ai-lab-benchmark] domain-case-structural-catalog ")
   (write receipt)
   (newline)
   (force-output))
 
 (def domain-case-structural-performance-test
   (test-suite "DomainCase structural catalog performance"
-    (poo-flow-test-case "indexes 2000 ordered components and projections"
+    (yuanxu-test-case "indexes 2000 ordered components and projections"
       (let* ((count 2000)
              (components
               (map domain-case-structural-performance-component

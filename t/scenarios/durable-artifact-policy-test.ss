@@ -2,17 +2,18 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/modules/memory-core/durable/artifact-policy
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        :poo-flow/src/authoring/semantic-module
-        :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
-        :core/profile-composition/profile-bundle
-        :poo-flow/src/scenario/accessors
-        (only-in :poo-flow/src/scenario/case poo-flow-scenario-case?))
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        :yuanxu/module-system/authoring/roles
+        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
+        :yuanxu/profile-composition/selection-syntax
+        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
+        :yuanxu/profile-composition/profile-bundle
+        :agentic-ai-lab/modules/workflow/scenario/accessors
+        (only-in :agentic-ai-lab/modules/workflow/scenario/case agentic-ai-lab-scenario-case?))
 
 
 (def (profile-id profile)
@@ -46,7 +47,7 @@
     :retention (project-retained audit-log)))
 
 (def (with-audit-retention profile)
-  (poo-flow-artifact-profile-extend
+  (agentic-ai-lab-artifact-profile-extend
    (.ref profile 'name)
    profile
    (.o (analysis (append (.ref profile 'analysis) '(citation-trace)))
@@ -88,15 +89,15 @@
                      vector-top-k))))
 
 (def ArtifactTestModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'test 'artifact)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'test 'artifact)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'research-report
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'research-report
                              (.ref agent-artifacts 'research-report))
-    (poo-flow-profile-export 'tool-output
+    (yuanxu-profile-export 'tool-output
                              (.ref agent-artifacts 'tool-output))
-    (poo-flow-profile-export 'turso (.ref artifact-databases 'turso)))))
+    (yuanxu-profile-export 'turso (.ref artifact-databases 'turso)))))
 
 (.def ArtifactScenarioProfile
   (identity 'artifact-production)
@@ -123,13 +124,13 @@
   (retention '(project-retained audit-log)))
 
 (def InlineArtifactTestModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'test 'inline-artifact)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'test 'inline-artifact)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'research-report
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'research-report
                              (.ref agent-artifacts 'research-report))
-    (poo-flow-profile-export 'internal-report InternalReportProfile))))
+    (yuanxu-profile-export 'internal-report InternalReportProfile))))
 
 (.def InlineArtifactScenarioProfile
   (identity 'inline-artifact-production)
@@ -180,13 +181,13 @@
     :grants ()))
 
 (def artifact-policy-receipt
-  (poo-flow-durable-artifact-validate
+  (agentic-ai-lab-durable-artifact-validate
    report-artifact
    research-report
    (.ref artifact-databases 'turso)))
 
 (def artifact-manifest-receipt
-  (poo-flow-durable-artifact-manifest
+  (agentic-ai-lab-durable-artifact-manifest
    report-artifact
    research-report
    (.ref artifact-databases 'turso)
@@ -195,11 +196,11 @@
                   (case . durable-artifact-policy))))))
 
 (def artifact-manifest-handoff
-  (poo-flow-durable-artifact-manifest->marlin-handoff
+  (agentic-ai-lab-durable-artifact-manifest->marlin-handoff
    artifact-manifest-receipt))
 
 (def invalid-artifact-policy-receipt
-  (poo-flow-durable-artifact-validate
+  (agentic-ai-lab-durable-artifact-validate
    invalid-artifact
    research-report
    (.ref artifact-databases 'turso)))
@@ -224,10 +225,12 @@
       (scope '(external workspace))
       (artifact-grants '(report/artifact-1))))
 
+(export durable-artifact-policy-test)
+
 (def durable-artifact-policy-test
   (test-suite "durable artifact policy"
-    (poo-flow-test-case "artifact profile macro creates reusable POO objects"
-      (check-equal? (poo-flow-artifact-profile? research-report) #t)
+    (yuanxu-test-case "artifact profile macro creates reusable POO objects"
+      (check-equal? (agentic-ai-lab-artifact-profile? research-report) #t)
       (check-equal? (.ref research-report 'name) 'research-report)
       (check-equal? (.ref research-report 'kind) 'research-report)
       (check-equal? (.ref research-report 'extends) 'report/base)
@@ -235,14 +238,14 @@
                     '(tenant project workflow session human-handoff publish-channel))
       (check-equal? (.ref research-report 'storage)
                     '(file-system object-store vector-index checkpoint-store))
-      (check-equal? (poo-flow-artifact-scope-contained?
+      (check-equal? (agentic-ai-lab-artifact-scope-contained?
                      research-report
                      '(session publish-channel))
                     #t)
-      (check-equal? (poo-flow-artifact-publish-gated? research-report) #t))
+      (check-equal? (agentic-ai-lab-artifact-publish-gated? research-report) #t))
 
-    (poo-flow-test-case "profile hook composes native POO object extension"
-      (check-equal? (poo-flow-artifact-profile? audited-report) #t)
+    (yuanxu-test-case "profile hook composes native POO object extension"
+      (check-equal? (agentic-ai-lab-artifact-profile? audited-report) #t)
       (check-equal? (.ref audited-report 'name) 'audited-report)
       (check-equal? (.ref audited-report 'storage)
                     '(file-system object-store vector-index checkpoint-store))
@@ -251,74 +254,74 @@
       (check-equal? (.ref audited-report 'retention)
                     '(project-retained audit-log)))
 
-    (poo-flow-test-case "durable artifact object implements policy scope"
-      (check-equal? (poo-flow-durable-artifact? report-artifact) #t)
+    (yuanxu-test-case "durable artifact object implements policy scope"
+      (check-equal? (agentic-ai-lab-durable-artifact? report-artifact) #t)
       (check-equal? (.ref report-artifact 'artifact-id) 'report/artifact-1)
       (check-equal? (.ref report-artifact 'artifact-kind) 'report)
       (check-equal? (.ref report-artifact 'storage-class) 'file-system)
       (check-equal? (.ref report-artifact 'lifecycle-state) 'created)
-      (check-equal? (poo-flow-durable-artifact-visible?
+      (check-equal? (agentic-ai-lab-durable-artifact-visible?
                      report-artifact
                      session-actor)
                     #t)
-      (check-equal? (poo-flow-durable-artifact-visible?
+      (check-equal? (agentic-ai-lab-durable-artifact-visible?
                      report-artifact
                      outside-actor)
                     #f)
-      (check-equal? (poo-flow-durable-artifact-visible?
+      (check-equal? (agentic-ai-lab-durable-artifact-visible?
                      report-artifact
                      reviewer-actor)
                     #t)
-      (check-equal? (poo-flow-durable-artifact-visible?
+      (check-equal? (agentic-ai-lab-durable-artifact-visible?
                      report-artifact
                      granted-tool-actor)
                     #t))
 
-    (poo-flow-test-case "durable artifact validation emits policy receipts"
-      (check-equal? (poo-flow-durable-artifact-policy-receipt?
+    (yuanxu-test-case "durable artifact validation emits policy receipts"
+      (check-equal? (agentic-ai-lab-durable-artifact-policy-receipt?
                      artifact-policy-receipt)
                     #t)
-      (check-equal? (poo-flow-durable-artifact-policy-receipt-valid?
+      (check-equal? (agentic-ai-lab-durable-artifact-policy-receipt-valid?
                      artifact-policy-receipt)
                     #t)
       (check-equal? (test-ref
-                     (poo-flow-durable-artifact-policy-receipt->alist
+                     (agentic-ai-lab-durable-artifact-policy-receipt->alist
                       artifact-policy-receipt)
                      'artifact-id)
                     'report/artifact-1)
       (check-equal? (test-ref
-                     (poo-flow-durable-artifact-policy-receipt->alist
+                     (agentic-ai-lab-durable-artifact-policy-receipt->alist
                       artifact-policy-receipt)
                      'profile-name)
                     'research-report)
       (check-equal? (test-ref
-                     (poo-flow-durable-artifact-policy-receipt->alist
+                     (agentic-ai-lab-durable-artifact-policy-receipt->alist
                       artifact-policy-receipt)
                      'database-name)
                     'turso)
       (check-equal? (test-ref
-                     (poo-flow-durable-artifact-policy-receipt->alist
+                     (agentic-ai-lab-durable-artifact-policy-receipt->alist
                       artifact-policy-receipt)
                      'valid?) #t)
       (check-equal? (test-ref
-                     (poo-flow-durable-artifact-policy-receipt->alist
+                     (agentic-ai-lab-durable-artifact-policy-receipt->alist
                       artifact-policy-receipt)
                      'runtime-executed) #f)
       (check-equal? (test-ref
-                     (poo-flow-durable-artifact-policy-receipt->alist
+                     (agentic-ai-lab-durable-artifact-policy-receipt->alist
                       artifact-policy-receipt)
                      'source)
-                    'poo-flow.durable.artifact.policy)
+                    'agentic-ai-lab.durable.artifact.policy)
       (check-equal? (test-ref
-                     (poo-flow-durable-artifact-policy-receipt->alist
+                     (agentic-ai-lab-durable-artifact-policy-receipt->alist
                       artifact-policy-receipt)
                      'diagnostics)
                     '())
-      (check-equal? (poo-flow-durable-artifact-policy-receipt-valid?
+      (check-equal? (agentic-ai-lab-durable-artifact-policy-receipt-valid?
                      invalid-artifact-policy-receipt)
                     #f)
       (check-equal? (test-ref
-                     (poo-flow-durable-artifact-policy-receipt->alist
+                     (agentic-ai-lab-durable-artifact-policy-receipt->alist
                       invalid-artifact-policy-receipt)
                      'diagnostics)
                     '(artifact-scope-not-contained-by-profile
@@ -330,14 +333,14 @@
                       artifact-storage-not-supported-by-database
                       artifact-database-capability-not-satisfied)))
 
-    (poo-flow-test-case "durable artifact manifest projects Marlin handoff"
+    (yuanxu-test-case "durable artifact manifest projects Marlin handoff"
       (let ((manifest-row
-             (poo-flow-durable-artifact-manifest-receipt->alist
+             (agentic-ai-lab-durable-artifact-manifest-receipt->alist
               artifact-manifest-receipt)))
-        (check-equal? (poo-flow-durable-artifact-manifest-receipt?
+        (check-equal? (agentic-ai-lab-durable-artifact-manifest-receipt?
                        artifact-manifest-receipt)
                       #t)
-        (check-equal? (poo-flow-durable-artifact-manifest-receipt-valid?
+        (check-equal? (agentic-ai-lab-durable-artifact-manifest-receipt-valid?
                        artifact-manifest-receipt)
                       #t)
         (check-equal? (test-ref manifest-row 'manifest-id)
@@ -348,7 +351,7 @@
         (check-equal? (test-ref manifest-row 'handoff-required) #t)
         (check-equal? (test-ref manifest-row 'runtime-executed) #f)
         (check-equal? (test-ref artifact-manifest-handoff 'kind)
-                      'poo-flow.durable.artifact.marlin-handoff)
+                      'agentic-ai-lab.durable.artifact.marlin-handoff)
         (check-equal? (test-ref artifact-manifest-handoff 'handoff-ready?) #t)
         (check-equal? (test-ref artifact-manifest-handoff
                                 'runtime-executed)
@@ -360,31 +363,31 @@
                                 'scheme-manufactures-runtime-handlers)
                       #f)))
 
-    (poo-flow-test-case "durable artifact lifecycle follows document edges"
-      (let (stored (poo-flow-durable-artifact-transition
+    (yuanxu-test-case "durable artifact lifecycle follows document edges"
+      (let (stored (agentic-ai-lab-durable-artifact-transition
                     report-artifact
                     'stored))
         (check-equal? (.ref stored 'lifecycle-state) 'stored)
         (check-equal? (.ref stored 'artifact-id) 'report/artifact-1)
-        (check-equal? (poo-flow-durable-artifact-lifecycle-transition-allowed?
+        (check-equal? (agentic-ai-lab-durable-artifact-lifecycle-transition-allowed?
                        'stored
                        'indexed)
                       #t)
-        (check-equal? (poo-flow-durable-artifact-lifecycle-transition-allowed?
+        (check-equal? (agentic-ai-lab-durable-artifact-lifecycle-transition-allowed?
                        'created
                        'published)
                       #f)))
 
-    (poo-flow-test-case "artifact and database profiles feed inline composition syntax"
-      (let* ((stages (poo-flow-scenario-case-stages artifact-composition))
+    (yuanxu-test-case "artifact and database profiles feed inline composition syntax"
+      (let* ((stages (agentic-ai-lab-scenario-case-stages artifact-composition))
              (stage (.ref stages 'production))
-             (compose-payload (poo-flow-scenario-case-profiles
+             (compose-payload (agentic-ai-lab-scenario-case-profiles
                                artifact-composition))
              (loop-value (.ref stage 'loop)))
-        (check-equal? (poo-flow-scenario-case? artifact-composition) #t)
-        (check-equal? (poo-flow-scenario-case-name artifact-composition)
-                      'agent-artifacts)
-        (check-equal? (length (poo-flow-scenario-case-modules
+        (check-equal? (agentic-ai-lab-scenario-case? artifact-composition) #t)
+        (check-equal? (agentic-ai-lab-scenario-case-name artifact-composition)
+                      'artifact-composition)
+        (check-equal? (length (agentic-ai-lab-scenario-case-modules
                                artifact-composition))
                       1)
         (check-equal? (map profile-id compose-payload)
@@ -397,13 +400,13 @@
                         artifact-publish-gated
                         database-capability-satisfied))))
 
-    (poo-flow-test-case "inline use-module profiles expand to POO module objects"
-      (let* ((modules (poo-flow-scenario-case-modules inline-artifact-composition))
+    (yuanxu-test-case "inline use-module profiles expand to POO module objects"
+      (let* ((modules (agentic-ai-lab-scenario-case-modules inline-artifact-composition))
              (module-binding (car modules))
              (module-object (.ref module-binding 'module))
-             (compose-payload (poo-flow-scenario-case-profiles
+             (compose-payload (agentic-ai-lab-scenario-case-profiles
                                inline-artifact-composition)))
-        (check-equal? (poo-flow-scenario-case? inline-artifact-composition) #t)
+        (check-equal? (agentic-ai-lab-scenario-case? inline-artifact-composition) #t)
         (check-equal? (.ref (.ref module-object 'identity) 'name)
                       'inline-artifact)
         (check-equal? (.ref (.ref InternalReportProfile 'extends) 'name)

@@ -13,9 +13,9 @@
 
 extern void lean_initialize(void);
 extern void lean_set_exit_on_panic(bool);
-extern lean_object *initialize_poo_x2dflow_x2dproof_PooFlowProof_Runtime_CedarRuntimeHost(uint8_t);
-extern lean_object *poo_flow_cedar_authorize_native(lean_object *);
-extern int poo_flow_cedar_runtime_host_main(int argc, const char *const *argv);
+extern lean_object *initialize_agentic_x2dai_x2dlab_x2dproof_AgenticAILabProof_Runtime_CedarRuntimeHost(uint8_t);
+extern lean_object *agentic_ai_lab_cedar_authorize_native(lean_object *);
+extern int agentic_ai_lab_cedar_runtime_host_main(int argc, const char *const *argv);
 
 static bool lean_ready = false;
 
@@ -24,7 +24,7 @@ static int initialize_lean(void) {
   lean_initialize();
   lean_set_exit_on_panic(true);
   lean_object *initialized =
-      initialize_poo_x2dflow_x2dproof_PooFlowProof_Runtime_CedarRuntimeHost(1);
+      initialize_agentic_x2dai_x2dlab_x2dproof_AgenticAILabProof_Runtime_CedarRuntimeHost(1);
   if (lean_io_result_is_error(initialized)) {
     lean_io_result_show_error(initialized);
     lean_dec(initialized);
@@ -36,7 +36,7 @@ static int initialize_lean(void) {
   return 0;
 }
 
-int poo_flow_cedar_lean_authorize(const uint8_t *input, size_t length,
+int agentic_ai_lab_cedar_lean_authorize(const uint8_t *input, size_t length,
                                   char **output, char **error) {
   *output = NULL;
   *error = NULL;
@@ -45,7 +45,7 @@ int poo_flow_cedar_lean_authorize(const uint8_t *input, size_t length,
   lean_object *bytes = lean_alloc_sarray(1, length, length);
   memcpy(lean_sarray_cptr(bytes), input, length);
   /* The exported Lean function consumes bytes. Except owns the String. */
-  lean_object *result = poo_flow_cedar_authorize_native(bytes);
+  lean_object *result = agentic_ai_lab_cedar_authorize_native(bytes);
   const char *value = lean_string_cstr(lean_ctor_get(result, 0));
   char *copy = strdup(value);
   bool failed = lean_obj_tag(result) == 0;
@@ -59,8 +59,8 @@ int poo_flow_cedar_lean_authorize(const uint8_t *input, size_t length,
   return 0;
 }
 
-void poo_flow_cedar_lean_string_free(char *value) { free(value); }
+void agentic_ai_lab_cedar_lean_string_free(char *value) { free(value); }
 
 int main(int argc, char **argv) {
-  return poo_flow_cedar_runtime_host_main(argc, (const char *const *)argv);
+  return agentic_ai_lab_cedar_runtime_host_main(argc, (const char *const *)argv);
 }

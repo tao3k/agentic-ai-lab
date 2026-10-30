@@ -8,7 +8,7 @@
  (regression_budget . 75ms)
  (expected_over_input_budget . 5ms)
  (sampleCount . 20)
- (targetRationale . "Pinned to the current poo-flow gxtest receipt with a sub-second regression gate.")
+ (targetRationale . "Pinned to the current agentic-ai-lab gxtest receipt with a sub-second regression gate.")
  (maxRssMb . 128)
  (memoryMetric . resident-set-size)
  (memoryUnit . "MB")

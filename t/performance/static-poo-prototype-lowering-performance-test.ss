@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         "../scenarios/performance/static-poo-prototype-lowering/benchmark.ss")
 
@@ -15,9 +15,9 @@
 
 (def static-poo-prototype-lowering-performance-test
   (test-suite "static POO prototype lowering performance"
-    (poo-flow-test-case "avoids full .o normalization for bounded constant rows"
+    (yuanxu-test-case "avoids full .o normalization for bounded constant rows"
       (let (receipt (static-poo-prototype-lowering-benchmark))
-        (display "[poo-flow-benchmark] static-poo-prototype-lowering ")
+        (display "[agentic-ai-lab-benchmark] static-poo-prototype-lowering ")
         (write receipt)
         (newline)
         (force-output)

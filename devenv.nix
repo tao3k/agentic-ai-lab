@@ -4,12 +4,30 @@
 
 { pkgs, lib, config, inputs, ... }:
 
+let
+  # Development-only matched control; production selects its own provider package.
+  awsProvider =
+    if pkgs.stdenv.hostPlatform.system == "aarch64-darwin" then
+      import ./t/fixtures/opentofu/aws-5.100.0/package.nix { inherit pkgs; }
+    else
+      pkgs.terraform-providers.hashicorp_aws;
+  awsSchema = pkgs.callPackage ./modules/services/opentofu/nix/provider-schema.nix {
+    provider = awsProvider;
+  };
+  opentofuArtifact = pkgs.callPackage ./modules/services/opentofu/nix/provider-artifacts.nix {
+    selection.providers = [ "aws" ];
+    schemas.aws = awsSchema;
+  };
+in
 {
   # https://devenv.sh/basics/
   env.GREET = "devenv";
+  env.AGENTIC_AI_LAB_OPENTOFU_ARTIFACT = "${opentofuArtifact}";
 
   # https://devenv.sh/packages/
   packages = [
+    opentofuArtifact
+    awsSchema.engine
     pkgs.typst
     pkgs.git
     pkgs.actionlint
@@ -19,9 +37,8 @@
     pkgs.binaryen
     pkgs.bazel-buildtools
     pkgs.nodejs_24
-    # Official TLA+ Tools distribution.  gerbil-parser remains the syntax
-    # authority; TLC independently owns state-space model checking.
-    pkgs.tlaplus
+    # Quint pins its checker distribution in packages/proofs/quint.
+    pkgs.jdk21
     # The lockfile and lean-toolchain remain the source pins. These tools make
     # `just build-cedar-runtime-host OUT` available through the generated
     # devenv profile entrypoint.

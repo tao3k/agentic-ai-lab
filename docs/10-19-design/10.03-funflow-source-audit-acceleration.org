@@ -53,7 +53,7 @@ Source facts:
   =putDirFlow=, =getDirFlow=, =throwStringFlow=, and =returnFlow= in
   =Funflow/Flow.hs:99= through =Funflow/Flow.hs:130=.
 
-Poo-flow interpretation:
+Agentic AI Lab interpretation:
 - Scheme should not copy the type-level rope encoding.
 - Scheme should keep POO descriptors and registries as the extension mechanism.
 - The immediate missing behavior is not another flow record. It is making
@@ -77,7 +77,7 @@ Source facts:
 - It executes with =performP= in =Funflow/Run.hs:190= through
   =Funflow/Run.hs:192=.
 
-Poo-flow interpretation:
+Agentic AI Lab interpretation:
 - Scheme's runner must remain the policy interpreter, not the heavy runtime.
 - A run config should snapshot strategy, adapter, task descriptor registry,
   flow descriptor registry, external config policy, and runtime options.
@@ -98,7 +98,7 @@ Source facts:
   =Funflow/Config.hs:100=.
 - =missing= reports absent config keys in =Funflow/Config.hs:151=.
 
-Poo-flow interpretation:
+Agentic AI Lab interpretation:
 - Scheme should model config requirements and missing keys as inspectable
   policy data.
 - Loading and secret-handling should be owned by the runtime adapter when it is
@@ -123,7 +123,7 @@ Source facts:
 - =VolumeBinding= maps a store item to a mount path in
   =Funflow/Tasks/Docker.hs:88=.
 
-Poo-flow interpretation:
+Agentic AI Lab interpretation:
 - Scheme should keep pure and Scheme tasks runnable locally.
 - Store and Docker tasks should become descriptor-owned adapter request shapes.
 - Docker should not remain a generic external task forever. It needs a
@@ -151,7 +151,7 @@ Source facts:
 - =DirectoryContent= hashing ignores the absolute directory path and hashes
   relative contents in =Data/CAS/ContentHashable.hs:512=.
 
-Poo-flow interpretation:
+Agentic AI Lab interpretation:
 - Rust should own durable store state, file locks, pending/complete lifecycle,
   hash materialization, archive movement, and remote cache.
 - Scheme should own store task declarations, cache policy decisions, request
@@ -175,13 +175,13 @@ Source facts:
   bindings, runs the container, archives output, and writes the result into CAS
   in =Funflow/Run.hs:237= through =Funflow/Run.hs:317=.
 
-Poo-flow interpretation:
+Agentic AI Lab interpretation:
 - Docker descriptor and request schema belong in Scheme.
 - Docker manager, image pulling, container lifecycle, archive extraction,
   UID/GID handling, and Docker error conversion belong in Rust or a host
   runtime.
 
-** 10.03.30 Current Poo-Flow Parity Matrix
+** 10.03.30 Current Agentic AI Lab Parity Matrix
 | Area | Current state | Target from source audit | Owner |
 | Flow declarations | Task, sequential, branch, empty descriptors are POO prototypes with config-bound registries | Descriptor policy participates in planning and receipts | Scheme |
 | Task families | Pure, Scheme, store, external descriptors are POO prototypes with config-bound registries | Docker becomes a first-class external family | Scheme |
@@ -285,7 +285,7 @@ Implement:
 
 Implementation receipt:
 - Landed the first Scheme-side bridge schema in =src/core/runtime-adapter.ss=
-  with =poo-flow.runtime-request.v1= and =poo-flow.runtime-response.v1=
+  with =yuanxu.runtime-request.v1= and =yuanxu.runtime-response.v1=
   constants.
 - Rust submit and store-put now emit alist-shaped envelopes with schema,
   runtime, operation, request id, artifact handle, policy, plan id, node id,

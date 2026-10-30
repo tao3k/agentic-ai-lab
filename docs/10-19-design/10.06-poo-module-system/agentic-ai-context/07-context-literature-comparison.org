@@ -1,0 +1,118 @@
+#+title: Evidence-driven Context Compared with CLM and Agent Memory Research
+#+date: [2026-10-25]
+#+language: en
+#+property: STATUS primary-source-design-comparison-no-head-to-head-benchmark
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Research question and source versions
+
+The user confirmed that "CLX" refers to Context Language Models (CLM).
+The comparison asks which problem each mechanism addresses, what this
+repository actually implements, and which comparative claim remains untested.
+It does not infer superiority from a larger architecture or a model-check count.
+
+Primary sources inspected on 2026-10-25:
+
+- [[https://arxiv.org/html/2609.37725v1][Shao et al., Context Language Models, v1]]: Sections 4.1, 4.2, 5.1 and 6;
+  [[https://github.com/facebookresearch/context-language-models][authors' repository]].
+- [[https://arxiv.org/html/2310.08560v2][Packer et al., MemGPT, v2]]: Section 2 and experiments.
+- [[https://arxiv.org/html/2502.12110v11][Xu et al., A-MEM, v11]]: Sections 3.1-3.4.
+- [[https://arxiv.org/html/2510.04618v2][Zhang et al., Agentic Context Engineering (ACE), v2]]: Sections 2.2 and 3.
+
+* Mechanisms and fair comparison
+
+| Work | Mechanism and evaluated objective | Relationship to our design |
+|------+-----------------------------------+----------------------------|
+| CLM | Model-controlled editing of a live context file, multiple context files for agents, learned context strategies; task quality and inference cost | Editable working Context is compatible. Our target adds source-bound revisions, original inference/support applicability and independent Session/authority boundaries around accepted use |
+| MemGPT | Model-directed movement between main context and external memory tiers, with function/interrupt control flow; long-document and multi-session recall | Retention/retrieval is an input capability. We additionally distinguish retained content, currently applicable evidence and an admitted consumer operation |
+| A-MEM | LLM-created structured notes, semantic links, embedding retrieval and evolution of related memories | Similarity and evolving notes can nominate candidates. Required support/provenance/current-use admission remains a separate semantic question |
+| ACE | Generator/Reflector/Curator roles, incremental updates and grow/refine playbooks to mitigate destructive rewriting | Fits proposal, reassessment and consolidation roles. Our declared source/Contract revisions, counterevidence preservation and use gates qualify proposed updates independently |
+
+These are mechanism comparisons, not assertions that the papers' implementations
+contain no security controls. Their cited methods/results do not establish our
+specific registered-proof/current-owner/cancellation protocol. That observation
+does not prove that the protocol is novel or that those systems cannot adopt it.
+
+CLM's Section 6 explicitly discusses persistence of injected or self-generated
+instructions through editable context and calls for integrity defenses. The
+present design targets a concrete boundary: edits may propose working content,
+but cannot edit historical receipt issuance, grant generations or worker
+termination evidence. We have not measured whether those boundaries preserve
+CLM's task-quality/compute benefits on its benchmarks.
+
+* Intended architectural contribution and actual evidence
+
+The fundamental target is a machine-checkable distinction between an item being
+retained/retrievable and its being admissible support for this consumer now.
+The system can retain uncertain observations, competing hypotheses and failures;
+not every item is forced into a verified Claim. A Demand declares the evidence
+profile and obligations required for its particular use.
+
+| Design axis | Intended advantage | Owning source / current qualification boundary |
+|-------------+--------------------+------------------------------------------------|
+| Evidence identity | Original source, rule, proof root, Derivation and direct-premise lineage survive rendering/consolidation | [[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][ASCENT-centered lifecycle contract]]; original evaluator/native proof Host seam |
+| Retraction/currentness | Withdraw a required premise without erasing historical proof; recheck current support before accepting dependent use | Native journal/support/proof-current and Context revalidation; full provider result publication is not thereby qualified |
+| Temporal interpretation | Valid time, knowledge cut, applicability and authority are distinct; old does not imply false, retained does not imply currently allowed | [[file:../../../../core/module-system/design/167-temporal-revisit-evidence-design.org][167]] and joint lifecycle contract; bounded native profiles, not arbitrary causal truth |
+| Independent Session | Exact Task/Attempt/Turn/input and pending obligations; a late response cannot replace current acceptance merely by arriving | Session pure reducers and serialized Context Host; actual terminal/isolation evidence and publication require their own runtime boundary |
+| Knowledge consolidation | New scoped reusable interpretation preserves origins, failures, alternatives and defeaters | [[file:../../../../core/module-system/design/43-session-memory-recovery/01-agent-context-lifecycle.org][43.01]]; consolidation quality, fidelity and generalization remain empirical obligations |
+| POO composition | Native graph composition separates inheritance, Query, revision provenance and prompt serialization | Existing Org/POO design; no inference that a C3/C4 result authenticates content or a grant |
+
+These combine established reasoning, truth-maintenance, provenance and lifecycle
+ideas; the comparison does not claim to have invented dependency retraction or
+proof-carrying data. A research novelty claim requires a broader systematic
+review and an evaluated end-to-end refinement, beyond these four agent papers.
+
+* Concrete differentiating experiment
+
+Use one workload with a traceable source premise, an initially supported answer,
+a late source withdrawal/correction and an in-flight response. Compare:
+
+1. CLM-style editable context alone, with the same model/tools and content budget.
+2. The same edit proposals coupled to source-qualified Context and current
+   evidence/admission gates.
+3. Ablations that bypass original-proof currentness, owner CAS, or pending-worker
+   preservation. Do not change the task or oracle when removing a gate.
+
+Measure stale-current-use rate, retained contrary evidence, correct refusal vs
+unnecessary refusal, final task success, recovery completion, actual external
+effect count, tokens, end-to-end latency and provider cost. Repeat across source
+correction, grant withdrawal, foreign Session recall and worker cancellation.
+Also include an unchanged-source task to quantify gate overhead and lost utility.
+
+Model/provider/version, task instances, initial source cuts, context budget,
+parallelism and outcome oracle must match. Report cold/hot conditions and both
+semantic gate cost and complete request cost. Paper-reported FLOPs are not this
+repository's measured latency or a demonstrated speedup. No such head-to-head
+benchmark was run in this work; no paid model/provider calls were made.
+
+* Native evidence available for this comparison
+
+[[file:06-native-proof-support-replay.org][Native proof/support replay]] now records 31 passing Scheme Cases, including
+three new executed paths using actual ASCENT derivation, journal withdrawal,
+current support and a real Scheme-thread join. The old-snapshot completion
+bypass is retained as a counterexample to unguarded publication. These qualify
+specific preservation/refusal seams; provider result CAS, durable recovery and
+authenticated Org-to-Fact correspondence remain open. They are not comparative
+CLM/LLM task results.
+
+* What we can responsibly say
+
+The intended design contribution is evidence-governed Context evolution:
+model-proposed content and learned context-management strategies can coexist
+with explicit provenance, retraction, current-use and independent interaction
+contracts. Local model traces and native tests can establish particular refusal
+and preservation behaviors. They do not yet establish better reasoning,
+broader causal correctness, lower cost, production safety or overall superiority
+to CLM, MemGPT, A-MEM or ACE.
+
+* Later research and native refinement
+
+[[file:09-context-research-2026-july-october.org][July–October 2026 research]] compares 15 primary-source papers, including
+Scroll and CarryOn as close prior art. Original source/evidence is retained;
+working views select information without replacing canonical evidence by summaries.
+[[file:08-native-owner-cas-publication.org][Native owner CAS]] extends the historical intent-only evidence above to
+actual in-process result/terminal publication. Neither extension establishes
+comparative LLM quality, external provider admission or distributed durability.

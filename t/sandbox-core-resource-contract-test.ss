@@ -5,18 +5,18 @@
 
 ;;; Boundary: sandbox resource POO prototypes use native typed contracts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .def .o .ref object?)
         (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/modules/sandbox-core/resource-contract)
+        :agentic-ai-lab/modules/sandbox-core/resource-contract)
 
 (export sandbox-core-resource-contract-test)
 
 ;; : PooSandboxResourcesPrototype
 (.def invalid-cpu-resources-prototype
-  filesystem: poo-flow-runtime-volume-filesystem-prototype
+  filesystem: agentic-ai-lab-runtime-volume-filesystem-prototype
   cpu: "two"
   memory: "4Gi")
 
@@ -27,13 +27,13 @@
 
 ;; : PooSandboxResourcesPrototype
 (.def unreadable-root-mixin-resources-prototype
-  filesystem: =>.+ poo-flow-runtime-volume-filesystem-prototype
+  filesystem: =>.+ agentic-ai-lab-runtime-volume-filesystem-prototype
   cpu: 2
   memory: "4Gi")
 
 ;; : PooSandboxResourcesPrototype
 (.def unreadable-optional-resources-prototype
-  filesystem: poo-flow-runtime-volume-filesystem-prototype
+  filesystem: agentic-ai-lab-runtime-volume-filesystem-prototype
   ports: =>.+ '((scope . runtime))
   cpu: 2
   memory: "4Gi"
@@ -51,7 +51,7 @@
 
 ;; : PooSandboxResourcesPrototype
 (.def runtime-volume-ports-resources-prototype
-  filesystem: poo-flow-runtime-volume-filesystem-prototype
+  filesystem: agentic-ai-lab-runtime-volume-filesystem-prototype
   ports: '((scope . runtime)
            (published-by . runtime))
   cpu: 2
@@ -98,37 +98,37 @@
 ;; : TestSuite
 (def sandbox-core-resource-contract-test
   (test-suite "sandbox-core resource prototype typed contracts"
-    (poo-flow-test-case "projects shared filesystem fragments to resource policies"
+    (yuanxu-test-case "projects shared filesystem fragments to resource policies"
       (check-equal?
-       (poo-flow-sandbox-filesystem-prototype->resource-entry
-        poo-flow-runtime-filesystem-prototype)
+       (agentic-ai-lab-sandbox-filesystem-prototype->resource-entry
+        agentic-ai-lab-runtime-filesystem-prototype)
        '(filesystem
          (scope . runtime)
          (materialized-by . runtime)
          (mounts . runtime)))
       (check-equal?
-       (poo-flow-sandbox-filesystem-prototype->resource-entry
-        poo-flow-runtime-volume-filesystem-prototype)
+       (agentic-ai-lab-sandbox-filesystem-prototype->resource-entry
+        agentic-ai-lab-runtime-volume-filesystem-prototype)
        '(filesystem
          (scope . volume)
          (materialized-by . runtime)
          (mounts . runtime)))
       (check-equal?
-       (poo-flow-sandbox-filesystem-prototype->resource-entry
-        poo-flow-snapshot-filesystem-prototype)
+       (agentic-ai-lab-sandbox-filesystem-prototype->resource-entry
+        agentic-ai-lab-snapshot-filesystem-prototype)
        '(filesystem
          (scope . snapshot)
          (snapshot . clone))))
-    (poo-flow-test-case "projects shared resources with ports, cpu, and memory"
+    (yuanxu-test-case "projects shared resources with ports, cpu, and memory"
       (let ((validation
-             (poo-flow-sandbox-resources-prototype-contract-validation
+             (agentic-ai-lab-sandbox-resources-prototype-contract-validation
               runtime-volume-ports-resources-prototype)))
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation-valid?
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation-valid?
           validation)
          #t)
         (check-equal?
-         (poo-flow-sandbox-resources-prototype->resource-policy
+         (agentic-ai-lab-sandbox-resources-prototype->resource-policy
           runtime-volume-ports-resources-prototype)
          '((filesystem
             (scope . volume)
@@ -139,46 +139,46 @@
             (published-by . runtime))
            (cpu . 2)
            (memory . "4Gi")))))
-    (poo-flow-test-case "validates runtime volume resources with native POO contracts"
+    (yuanxu-test-case "validates runtime volume resources with native POO contracts"
       (let* ((validation
-              (poo-flow-sandbox-resources-prototype-contract-validation
-               poo-flow-runtime-volume-resources-prototype))
+              (agentic-ai-lab-sandbox-resources-prototype-contract-validation
+               agentic-ai-lab-runtime-volume-resources-prototype))
              (summary
-              (poo-flow-sandbox-resources-prototype-contract-validation->alist
+              (agentic-ai-lab-sandbox-resources-prototype-contract-validation->alist
                validation)))
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation-valid?
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation-valid?
           validation)
          #t)
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation-diagnostics
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation-diagnostics
           validation)
          '())
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation?
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation?
           validation)
          #t)
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation?
-          poo-flow-runtime-volume-resources-prototype)
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation?
+          agentic-ai-lab-runtime-volume-resources-prototype)
          #f)
         (check-equal? (not (not (member 'native-poo-slot-types
                                         (alist-ref/default summary
                                                            'checked-signals '()))))
                       #t)
         (check-equal? (alist-ref/default summary 'diagnostic-count #f) 0)))
-    (poo-flow-test-case "reports typed cpu contract failures natively"
+    (yuanxu-test-case "reports typed cpu contract failures natively"
       (let* ((validation
-              (poo-flow-sandbox-resources-prototype-contract-validation
+              (agentic-ai-lab-sandbox-resources-prototype-contract-validation
                invalid-cpu-resources-prototype))
              (diagnostics
-              (poo-flow-sandbox-resources-prototype-contract-validation-diagnostics
+              (agentic-ai-lab-sandbox-resources-prototype-contract-validation-diagnostics
                validation))
              (summary
-              (poo-flow-sandbox-resources-prototype-contract-validation->alist
+              (agentic-ai-lab-sandbox-resources-prototype-contract-validation->alist
                validation)))
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation-valid?
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation-valid?
           validation)
          #f)
         (check-equal?
@@ -193,73 +193,73 @@
         (check-equal?
          (contract-error?
           (lambda ()
-            (poo-flow-require-sandbox-resources-prototype-contract!
+            (agentic-ai-lab-require-sandbox-resources-prototype-contract!
              invalid-cpu-resources-prototype)))
          #t)))
-    (poo-flow-test-case "reports missing filesystem as sandbox-core structure failure"
+    (yuanxu-test-case "reports missing filesystem as sandbox-core structure failure"
       (let ((validation
-             (poo-flow-sandbox-resources-prototype-contract-validation
+             (agentic-ai-lab-sandbox-resources-prototype-contract-validation
               missing-filesystem-resources-prototype)))
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation-valid?
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation-valid?
           validation)
          #f)
         (check-equal?
          (diagnostic-codes
-          (poo-flow-sandbox-resources-prototype-contract-validation-diagnostics
+          (agentic-ai-lab-sandbox-resources-prototype-contract-validation-diagnostics
            validation))
          '(missing-filesystem-slot))))
-    (poo-flow-test-case "reports root resource mixins without parent slot"
+    (yuanxu-test-case "reports root resource mixins without parent slot"
       (let ((validation
-             (poo-flow-sandbox-resources-prototype-contract-validation
+             (agentic-ai-lab-sandbox-resources-prototype-contract-validation
               unreadable-root-mixin-resources-prototype)))
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation-valid?
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation-valid?
           validation)
          #f)
         (check-equal?
          (diagnostic-codes
-          (poo-flow-sandbox-resources-prototype-contract-validation-diagnostics
+          (agentic-ai-lab-sandbox-resources-prototype-contract-validation-diagnostics
            validation))
          '(unreadable-filesystem-slot))))
-    (poo-flow-test-case "reports present but unreadable optional slots"
+    (yuanxu-test-case "reports present but unreadable optional slots"
       (let ((validation
-             (poo-flow-sandbox-resources-prototype-contract-validation
+             (agentic-ai-lab-sandbox-resources-prototype-contract-validation
               unreadable-optional-resources-prototype)))
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation-valid?
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation-valid?
           validation)
          #f)
         (check-equal?
          (diagnostic-codes
-          (poo-flow-sandbox-resources-prototype-contract-validation-diagnostics
+          (agentic-ai-lab-sandbox-resources-prototype-contract-validation-diagnostics
            validation))
          '(unreadable-ports-slot unreadable-timeout-slot))))
-    (poo-flow-test-case "rejects incomplete validation receipts safely"
+    (yuanxu-test-case "rejects incomplete validation receipts safely"
       (let* ((complete
-              (poo-flow-sandbox-resources-prototype-contract-validation
-               poo-flow-runtime-volume-resources-prototype))
+              (agentic-ai-lab-sandbox-resources-prototype-contract-validation
+               agentic-ai-lab-runtime-volume-resources-prototype))
              (incomplete
               (.o kind: (.ref complete 'kind)
                   schema: (.ref complete 'schema))))
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation?
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation?
           incomplete)
          #f)
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation-valid?
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation-valid?
           incomplete)
          #f)))
-    (poo-flow-test-case "reports unstructured filesystem projection"
+    (yuanxu-test-case "reports unstructured filesystem projection"
       (let ((validation
-             (poo-flow-sandbox-resources-prototype-contract-validation
+             (agentic-ai-lab-sandbox-resources-prototype-contract-validation
               unstructured-filesystem-resources-prototype)))
         (check-equal?
-         (poo-flow-sandbox-resources-prototype-contract-validation-valid?
+         (agentic-ai-lab-sandbox-resources-prototype-contract-validation-valid?
           validation)
          #f)
         (check-equal?
          (diagnostic-codes
-          (poo-flow-sandbox-resources-prototype-contract-validation-diagnostics
+          (agentic-ai-lab-sandbox-resources-prototype-contract-validation-diagnostics
            validation))
          '(filesystem-not-structured))))))

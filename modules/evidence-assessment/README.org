@@ -1,0 +1,64 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+#
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Evidence Assessment
+
+* Boundary
+
+Evidence assessment compares competing hypotheses against source-labelled POO
+claims and caller-declared support paths. A caller provides claims, steps,
+hypotheses, and one immutable Scheme GQL Query. The module selects claim nodes
+through the supported single-node GQL slice and uses Ascent to derive
+source-linked steps, reachability, missing claims, and equality conflicts.
+An optional POO evidence reference carries a source URI, an independence
+group, and an optional content digest. Missing digests remain explicit. A
+URI, source label, or digest string does not authenticate an artifact.
+
+No domain incident, intrusion route, or policy decision is built into this
+module. A result states that supplied claims support a candidate under the
+declared steps. It does not authenticate a source, infer a historical
+attribution, authorize an action, or assign a calibrated probability.
+
+* Public values
+
+[[file:objects.ss][objects.ss]] exports =AgenticAILabEvidenceAssessmentCase.= and the
+=agentic-ai-lab-evidence-reference=, =agentic-ai-lab-evidence-claim=,
+=agentic-ai-lab-evidence-step=, =agentic-ai-lab-evidence-hypothesis=, and
+=agentic-ai-lab-evidence-branch= constructors. A branch proposes claims, withholds
+contested claims, or does both. An inference step has either =presence= or
+=equal-value= join semantics. A hypothesis names its outcome, candidate
+origin, and required claims. The first value is an observed outcome; the
+second is an explanatory candidate.
+
+[[file:funs.ss][funs.ss]] exports =agentic-ai-lab-evidence-assessment-evaluate=,
+=agentic-ai-lab-evidence-hypothesis-result=, and
+=agentic-ai-lab-evidence-assessment-explore=. Each hypothesis result is one of
+=supported=, =needs-evidence=, or =conflicted=. Missing claims preserve open
+questions for every hypothesis. Equality mismatches and conflicting values
+are attached to the affected hypotheses; an unrelated hypothesis retains
+its own status. Each reachable hypothesis carries one bounded path of
+supported step rows. =agentic-ai-lab-evidence-assessment-explore= evaluates up to
+eight caller-authored branches against every hypothesis, preserving the
+baseline, changed statuses, witness paths, and remaining gaps for each
+branch. It emits no preferred branch, probability, or next action.
+
+The Case is declarative. The private GQL and Ascent tuples are projections
+of its POO values. The consumer must keep a source-authenticity and Host
+admission boundary outside this engine. Branches grant no tool execution.
+Downstream investigators must not count claims in one independence group as
+independent corroboration.
+
+* Qualification
+
+Run =just test-file t/evidence-assessment-core-test.ss=. The focused test checks
+GQL selection, two competing hypotheses, a matching pair, a conflicting
+source that cannot be hidden by a matching pair, and rejection of a negative
+claim posed as positive evidence. A cyclic candidate graph reaches a finite
+fixed point under Ascent's explicit input, derivation, and output bounds. The
+test also checks a concrete witness path, three opposing hypothetical
+branches, unbound content digests, and rejection of a source-impersonating
+reference.
+
+* Library application ownership
+See [[file:migration.org][the ASCENT application migration boundary]] for native, Python, Scheme and formal ownership.

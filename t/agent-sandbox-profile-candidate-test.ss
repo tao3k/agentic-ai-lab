@@ -6,7 +6,7 @@
 ;;; Boundary: profile candidate tests cover Scheme-side dynamic profile data.
 ;;; Invariant: tests do not execute nono promote/apply or native sandbox code.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,14 +17,14 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/modules/agent-sandbox/api
-        :poo-flow/modules/agent-sandbox/profile-candidate)
+        :agentic-ai-lab/modules/agent-sandbox/api
+        :agentic-ai-lab/modules/agent-sandbox/profile-candidate)
 
 (export agent-sandbox-profile-candidate-test)
 
 (def agent-sandbox-profile-candidate-test
  (test-suite "agent sandbox profile candidates"
-   (poo-flow-test-case "builds nono candidates through POO descriptors and macros"
+   (yuanxu-test-case "builds nono candidates through POO descriptors and macros"
      (let* ((choice
              (agent-sandbox-profile-candidate-choice
               grant
@@ -65,7 +65,7 @@
                      'profile-candidate)
        (check-equal? (length (agent-sandbox-profile-candidate-choices candidate))
                      1)))
-   (poo-flow-test-case "projects candidate choices into patch sections"
+   (yuanxu-test-case "projects candidate choices into patch sections"
      (let* ((grant-choice
              (agent-sandbox-profile-candidate-choice
               grant
@@ -99,7 +99,7 @@
                      1)
        (check-equal? (agent-sandbox-alist-ref patch 'validation-errors #f)
                      '())))
-   (poo-flow-test-case "creates inert nono promotion requests and receipts"
+   (yuanxu-test-case "creates inert nono promotion requests and receipts"
      (let* ((choice
              (agent-sandbox-profile-candidate-choice
               grant
@@ -137,7 +137,7 @@
                      #f)
        (check-equal? (agent-sandbox-alist-ref receipt 'applied? #t)
                      #f)))
-   (poo-flow-test-case "reports structured contract validation errors"
+   (yuanxu-test-case "reports structured contract validation errors"
      (let* ((errors
              (agent-sandbox-profile-candidate-validation-errors
               (list (cons 'schema 'wrong-schema)

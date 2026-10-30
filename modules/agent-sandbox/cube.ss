@@ -5,19 +5,19 @@
 
 ;;; Owner: CubeSandbox profile alignment lives in this backend module.
 ;;; Boundary: core provides schema, task, envelope, and adapter protocols.
-;;; Import contract: users opt in through =:poo-flow/modules/agent-sandbox/cube=.
+;;; Import contract: users opt in through =:agentic-ai-lab/modules/agent-sandbox/cube=.
 ;;; Runtime contract: this module emits profile data only.
 ;;; Runtime contract: Cube API calls stay behind Marlin runtime commands.
 ;;; Runtime contract: remote snapshot lifecycle stays out of Scheme.
 ;;; Policy evidence: tests should import this module when they assert Cube defaults.
 
-(import :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/agent-sandbox/projection-syntax
-        :poo-flow/modules/agent-sandbox/cube-interface)
+(import :agentic-ai-lab/modules/agent-sandbox/profile
+        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :agentic-ai-lab/modules/agent-sandbox/cube-interface)
 
 (export make-cube-agent-sandbox-profile-descriptor
         make-cube-agent-sandbox-profile
-        (import: :poo-flow/modules/agent-sandbox/cube-interface))
+        (import: :agentic-ai-lab/modules/agent-sandbox/cube-interface))
 
 ;;; Cube profiles model remote or clustered KVM-backed sandboxes. The ordinary
 ;;; helper form keeps backend defaults explicit and avoids macro-only evidence.

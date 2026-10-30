@@ -1,0 +1,232 @@
+{
+  "case": "chain",
+  "api": "sync",
+  "index": 0,
+  "planSha256": "d9410d6712adb4ca82a650b8777002065be7546fd05b340b80bddfe3e75adde5",
+  "artifactSha256": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",
+  "passed": false,
+  "raw": "{\"status\":\"partial\",\"rows\":[[\"u\",\"v\"],[\"u\",\"w\"]]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.6157348339997952
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.6158213339999747
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 1.627458791999743
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 1.6274709589997656
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.627489666999736
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7143493339999623
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7143784589998177
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.714391833999798
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7242121249996671
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7242395839998608
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7242506249999678
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7301195000000007
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.730134542000087
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7301433339998766
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7301510419997612
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7301586250000582
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.730166041999837
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7418927919998168
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7419125839996923
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7419221669997569
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7419302089997473
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7419377920000443
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 1.7419452499998442
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 1.758414208999966
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 1.758425250000073
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 1.7584345420000318
+    },
+    {
+      "type": "response.completed",
+      "seconds": 1.758455333999791
+    }
+  ],
+  "contentGapsSeconds": [
+    1.627489666999736,
+    0.08685966700022618,
+    2.912499985541217e-05,
+    1.3374999980442226e-05,
+    0.00982029099986903,
+    2.7459000193630345e-05,
+    1.1041000107070431e-05,
+    0.005868875000032858,
+    1.5042000086396001e-05,
+    8.79199978953693e-06,
+    7.70799988458748e-06,
+    7.583000297017861e-06,
+    7.416999778797617e-06,
+    0.011726749999979802,
+    1.9791999875451438e-05,
+    9.583000064594671e-06,
+    8.041999990382465e-06,
+    7.583000297017861e-06,
+    7.457999799953541e-06
+  ],
+  "responseId": "84a5e46e-f222-465d-93c6-14f4d2d377ba",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 92556,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 19,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 92575
+  },
+  "seconds": 1.7584579589997702,
+  "deliveredObservation": {
+    "candidate": {
+      "status": "partial",
+      "rows": [
+        [
+          "u",
+          "v"
+        ],
+        [
+          "u",
+          "w"
+        ]
+      ]
+    },
+    "receipt": {
+      "verification": "valid",
+      "bindingDigest": "30b28c648251ed41e1b92cb691077b82d40f25dd556aaeb433fb0261d607c4de",
+      "verdict": "contradicted",
+      "schema": "poo-flow.semantic-observation",
+      "candidateValid": true,
+      "requestDigest": "02241ee3b272852569c782da236c623f8e0c90ac5f6ba6a6a92b84e6677c0313",
+      "difference": {
+        "observed": "partial",
+        "expected": "complete",
+        "kind": "status-mismatch"
+      },
+      "operation": "temporal.observe"
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "nativeObservationSeconds": 0.045255791999807116,
+  "result": {
+    "candidate": {
+      "status": "partial",
+      "rows": [
+        [
+          "u",
+          "v"
+        ],
+        [
+          "u",
+          "w"
+        ]
+      ]
+    },
+    "receipt": {
+      "verification": "valid",
+      "bindingDigest": "30b28c648251ed41e1b92cb691077b82d40f25dd556aaeb433fb0261d607c4de",
+      "verdict": "contradicted",
+      "schema": "poo-flow.semantic-observation",
+      "candidateValid": true,
+      "requestDigest": "02241ee3b272852569c782da236c623f8e0c90ac5f6ba6a6a92b84e6677c0313",
+      "difference": {
+        "observed": "partial",
+        "expected": "complete",
+        "kind": "status-mismatch"
+      },
+      "operation": "temporal.observe"
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "sourceRebinding": {
+    "verification": "valid",
+    "bindingDigest": "eae18995fd914e4dab03a3d9062ecd4f322cbfdb3893adbf331cdb0a90855f97",
+    "verdict": "contradicted",
+    "schema": "poo-flow.semantic-observation",
+    "candidateValid": true,
+    "requestDigest": "dd87d554a02920db30465f4ff0cb00317b23f7951c3528c53c332847d86bb7fd",
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "partial",
+      "expected": "complete"
+    },
+    "operation": "temporal.observe"
+  },
+  "failure": "native semantic contradiction",
+  "callSeconds": 1.8754735829998026
+}

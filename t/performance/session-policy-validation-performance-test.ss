@@ -7,7 +7,7 @@
 ;;; Invariant: POO policy authoring projects to bounded validation receipts
 ;;; without executing tools, hooks, providers, sandboxes, or communication.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -16,9 +16,9 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        :poo-flow/modules/session/config
-        :poo-flow/modules/tool-core/config
-        :poo-flow/modules/memory-core/config)
+        :agentic-ai-lab/modules/session/config
+        :agentic-ai-lab/modules/tool-core/config
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
 
 (export session-policy-validation-performance-test)
 
@@ -37,7 +37,7 @@
 
 ;; : (-> Alist Void)
 (def (session-policy-validation-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] session-policy-validation ")
+  (display "[agentic-ai-lab-benchmark] session-policy-validation ")
   (write receipt)
   (newline)
   (force-output))
@@ -52,7 +52,7 @@
   (let (tool-ref (if (= (modulo index 3) 0)
                    'write-workspace-file
                    'run-build-command))
-    (poo-flow-session-policy-tool-attempt
+    (agentic-ai-lab-session-policy-tool-attempt
      (session-policy-validation-performance-id "attempt/agent" index)
      'agent-turn
      tool-ref
@@ -65,7 +65,7 @@
   (let (tool-ref (if (= (modulo index 2) 0)
                    'read-workspace-file
                    'run-build-command))
-    (poo-flow-session-policy-tool-attempt
+    (agentic-ai-lab-session-policy-tool-attempt
      (session-policy-validation-performance-id "attempt/hook" index)
      'hook/pre-check
      tool-ref
@@ -76,21 +76,21 @@
 ;; : (-> Alist)
 (def (session-policy-validation-performance-context)
   (let* ((read-grant
-          (poo-flow-session-tool-grant
+          (agentic-ai-lab-session-tool-grant
            'grant/read
            'read-workspace-file
            '(read)
            '(project-workspace)
            '(agent-turn hook/pre-check)))
          (build-grant
-          (poo-flow-session-tool-grant
+          (agentic-ai-lab-session-tool-grant
            'grant/build
            'run-build-command
            '(run)
            '(project-workspace build-cache)
            '(agent-turn)))
          (model-policy
-          (poo-flow-session-model-policy
+          (agentic-ai-lab-session-model-policy
            'policy/perf-model
            'session/perf-build
            'marlin/provider
@@ -98,14 +98,14 @@
            '(tool-calling structured-output)
            'budget/build))
          (prompt-policy
-          (poo-flow-session-prompt-policy
+          (agentic-ai-lab-session-prompt-policy
            'policy/perf-prompt
            'session/perf-build
            'session/perf-system
            '(system build-contract)
            'parent-summary-only))
          (isolation-policy
-          (poo-flow-session-isolation-policy
+          (agentic-ai-lab-session-isolation-policy
            'policy/perf-isolation
            'session/perf-build
            'child-isolated
@@ -113,32 +113,32 @@
            'denied
            'declared-channel-only))
          (sandbox-policy
-          (poo-flow-session-sandbox-policy
+          (agentic-ai-lab-session-sandbox-policy
            'policy/perf-sandbox
            'session/perf-build
            'agent/nono
            'parent-profile
            'isolated-filesystem))
          (context-policy
-          (poo-flow-session-context-policy
+          (agentic-ai-lab-session-context-policy
            'policy/perf-context
            'session/perf-build
            'parent-summary
            '(session/root)))
          (history-policy
-          (poo-flow-session-history-policy
+          (agentic-ai-lab-session-history-policy
            'policy/perf-history
            'session/perf-build
            'bounded
            '(record/last-failure)))
          (communication-policy
-          (poo-flow-session-communication-policy
+          (agentic-ai-lab-session-communication-policy
            'policy/perf-communication
            'session/perf-build
            '(channel/build-root)
            '(session/root)))
          (root-communication
-          (poo-flow-session-communication-receipt
+          (agentic-ai-lab-session-communication-receipt
            'project/perf
            'child-parent
            'session/root
@@ -152,7 +152,7 @@
            '((summary . "perf build completed"))
            'receipt-only))
          (audit-communication
-          (poo-flow-session-communication-receipt
+          (agentic-ai-lab-session-communication-receipt
            'project/perf
            'sibling
            'session/root
@@ -166,7 +166,7 @@
            '((artifact . perf-build-report))
            'declared-channel-only))
          (sharing-policy
-          (poo-flow-session-resource-sharing-policy
+          (agentic-ai-lab-session-resource-sharing-policy
            'policy/perf-sharing
            'session/perf-build
            '((project-workspace
@@ -177,21 +177,21 @@
               (accounting . session/perf-build)))
            'deny))
          (resource-policy
-          (poo-flow-session-resource-policy
+          (agentic-ai-lab-session-resource-policy
            'policy/perf-resource
            'session/perf-build
            '(budget/build)
            '(project-workspace build-cache)
            'session/perf-build))
          (agent-tool-policy
-          (poo-flow-session-tool-permission-policy
+          (agentic-ai-lab-session-tool-permission-policy
            'policy/perf-agent-tools
            'session/perf-build
            (list read-grant build-grant)
            '(write-workspace-file)
            'deny))
          (hook-tool-policy
-          (poo-flow-session-hook-tool-permission-policy
+          (agentic-ai-lab-session-hook-tool-permission-policy
            'policy/perf-hook-tools
            'session/perf-build
            '(hook/pre-check)
@@ -199,7 +199,7 @@
            'human-approval-on-escalation
            'deny))
          (build-tool
-          (poo-flow-tool-spec
+          (agentic-ai-lab-tool-spec
            'run-build-command
            'builtin-command
            '(run)
@@ -213,19 +213,19 @@
            'agent/nono
            'marlin-tool-adapter))
          (tool-catalog
-          (poo-flow-tool-catalog
+          (agentic-ai-lab-tool-catalog
            'tool-core/perf-session-policy
-           (list poo-flow-tool-core-builtin-read-workspace-file
+           (list agentic-ai-lab-tool-core-builtin-read-workspace-file
                  build-tool)))
          (tool-catalog-validation-row
-          (poo-flow-tool-policy-catalog-validation-receipt->alist
-           (poo-flow-tool-policy-catalog-validation-receipt
+          (agentic-ai-lab-tool-policy-catalog-validation-receipt->alist
+           (agentic-ai-lab-tool-policy-catalog-validation-receipt
             'validation/perf-tool-catalog
             tool-catalog
             agent-tool-policy
             hook-tool-policy)))
          (memory-store
-          (poo-flow-memory-store-spec
+          (agentic-ai-lab-memory-store-spec
            'memory/perf
            'durable-project
            'project
@@ -237,19 +237,19 @@
            #t
            'marlin-memory-adapter))
          (memory-catalog
-          (poo-flow-memory-catalog
+          (agentic-ai-lab-memory-catalog
            'memory-core/perf
            (list memory-store)))
          (memory-intent
-          (poo-flow-session-memory-intent
+          (agentic-ai-lab-session-memory-intent
            'intent/perf-memory
            'memory/perf
            'project
            '(current-ticket)
            'append))
          (memory-catalog-validation-row
-          (poo-flow-memory-policy-catalog-validation-receipt->alist
-           (poo-flow-memory-policy-catalog-validation-receipt
+          (agentic-ai-lab-memory-policy-catalog-validation-receipt->alist
+           (agentic-ai-lab-memory-policy-catalog-validation-receipt
             'validation/perf-memory-catalog
             memory-catalog
             (list memory-intent)))))
@@ -274,15 +274,15 @@
 ;; : (-> Alist Integer Alist)
 (def (session-policy-validation-performance-summary context attempt-count)
   (let* ((agent-attempts
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            attempt-count
            session-policy-validation-performance-agent-attempt))
          (hook-attempts
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            attempt-count
            session-policy-validation-performance-hook-attempt))
          (receipt
-          (poo-flow-session-policy-validation-receipt
+          (agentic-ai-lab-session-policy-validation-receipt
            'validation/perf-build
            'session/perf-build
            (session-policy-validation-performance-ref context 'model)
@@ -317,7 +317,7 @@
                    'communication-receipts))
             (cons 'sibling-session-refs '(session/audit)))))
          (receipt-row
-          (poo-flow-session-policy-validation-receipt->alist receipt)))
+          (agentic-ai-lab-session-policy-validation-receipt->alist receipt)))
     (list (cons 'valid?
                 (session-policy-validation-performance-ref receipt-row
                                                            'valid?))
@@ -396,7 +396,7 @@
 ;; : TestSuite
 (def session-policy-validation-performance-test
   (test-suite "session policy validation performance"
-    (poo-flow-test-case "keeps multi-agent policy validation inside benchmark contract"
+    (yuanxu-test-case "keeps multi-agent policy validation inside benchmark contract"
       (let* ((attempt-count 240)
              (context (session-policy-validation-performance-context))
              (summary

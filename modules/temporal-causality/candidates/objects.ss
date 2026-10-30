@@ -5,51 +5,51 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :poo-flow/modules/temporal-causality/candidates/types
-                 PooFlowCandidateScope PooFlowCandidateReceipt
-                 PooFlowCandidateCheck PooFlowCandidateExchange))
-(export poo-flow-candidate-scope-value poo-flow-candidate-receipt-value
-        poo-flow-candidate-check-value poo-flow-candidate-exchange-value)
+        (only-in :agentic-ai-lab/modules/temporal-causality/candidates/types
+                 AgenticAILabCandidateScope AgenticAILabCandidateReceipt
+                 AgenticAILabCandidateCheck AgenticAILabCandidateExchange))
+(export agentic-ai-lab-candidate-scope-value agentic-ai-lab-candidate-receipt-value
+        agentic-ai-lab-candidate-check-value agentic-ai-lab-candidate-exchange-value)
 
-(def (poo-flow-candidate-scope-value id-value digest-value cut-value
+(def (agentic-ai-lab-candidate-scope-value id-value digest-value cut-value
                                      generation-value coverage-value
                                      providers-value)
-  (validate PooFlowCandidateScope
-    (.o kind: 'poo-flow.temporal-causality.candidate-scope
+  (validate AgenticAILabCandidateScope
+    (.o kind: 'agentic-ai-lab.temporal-causality.candidate-scope
         identity: id-value semantic-digest: digest-value
         evidence-cut-digest: cut-value generation: generation-value
         source-coverage-digest: coverage-value
         required-providers: providers-value)))
 
-(def (poo-flow-candidate-receipt-value id-value digest-value candidate-value
+(def (agentic-ai-lab-candidate-receipt-value id-value digest-value candidate-value
                                         scope-value provider-value request-value
                                         source-value result-value count-value
                                         complete-value)
-  (validate PooFlowCandidateReceipt
-    (.o kind: 'poo-flow.temporal-causality.candidate-receipt
+  (validate AgenticAILabCandidateReceipt
+    (.o kind: 'agentic-ai-lab.temporal-causality.candidate-receipt
         identity: id-value semantic-digest: digest-value
         candidate-identity: candidate-value scope-digest: scope-value
         provider-identity: provider-value request-digest: request-value
         source-receipt-digest: source-value result-digest: result-value
         result-count: count-value complete?: complete-value)))
 
-(def (poo-flow-candidate-check-value id-value digest-value receipt-value
+(def (agentic-ai-lab-candidate-check-value id-value digest-value receipt-value
                                       receipt-digest-value verifier-value
                                       verdict-value basis-value)
-  (validate PooFlowCandidateCheck
-    (.o kind: 'poo-flow.temporal-causality.candidate-check
+  (validate AgenticAILabCandidateCheck
+    (.o kind: 'agentic-ai-lab.temporal-causality.candidate-check
         identity: id-value semantic-digest: digest-value
         receipt-identity: receipt-value receipt-digest: receipt-digest-value
         verifier-identity: verifier-value verdict: verdict-value
         basis-digest: basis-value)))
 
-(def (poo-flow-candidate-exchange-value id-value digest-value candidate-value
+(def (agentic-ai-lab-candidate-exchange-value id-value digest-value candidate-value
                                          scope-value receipts-value checks-value
                                          missing-value stale-value
                                          incomplete-value unchecked-value
                                          invalid-value contested-value status-value)
-  (validate PooFlowCandidateExchange
-    (.o kind: 'poo-flow.temporal-causality.candidate-exchange
+  (validate AgenticAILabCandidateExchange
+    (.o kind: 'agentic-ai-lab.temporal-causality.candidate-exchange
         identity: id-value semantic-digest: digest-value
         candidate-identity: candidate-value
         scope: scope-value receipts: receipts-value checks: checks-value

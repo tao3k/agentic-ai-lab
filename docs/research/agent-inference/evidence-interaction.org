@@ -1,0 +1,204 @@
+#+title: Relational reasoning and temporal validity at the model boundary
+
+* Active research priority (2026-10-11)
+
+The [[file:index.org::Active repository scope (2026-10-11)][active scope]] is paper-grounded Library verification. Start with a small
+Datalog rule/query fixture that exercises shared consequences, checked model
+proposals or BYODS delta visibility. Reuse the existing Library feature owner
+and consumer IO; do not expand the synthetic search controller.
+
+The [[file:candidate-model-results/report.md][small candidate-feedback gate]] implements this first step with existing
+=candidate/reasoning.ss= and =candidate/feedback.ss=. Scheme supplies the
+independent finite-walk oracle; the consumer supplies ordinary rule syntax and
+records input plus all output. Preserving parent prototype identity in private
+contract refinements resolves the correct-rule rejection: native and dynamic
+execution each pass 448 checks. The unchanged frozen model tasks yield two
+correct proposals and one invalid submission, all retained. No paired revision
+was triggered; this establishes the interaction gate, without evidence of
+reduced repeated thinking or deeper exploration. The previous denied gate is
+preserved under =history/candidate-model-rules-rejected/=.
+
+The Agentic AI Lab temporal consumer and search experiment described below are
+completed prior evidence, not prerequisites for every Library experiment.
+Source replacement and generation-bound proof tests can exercise this
+Library's own Session contract directly. Workflow, authority and temporal
+policy remain consumer responsibilities. Retain the prior failures; their
+absence of demonstrated benefit does not justify adding a larger framework.
+
+* Library and consumer boundaries (2026-10-11)
+
+ASCENT Scheme is a Library. It owns admitted Datalog/relational programs,
+fixed-point evaluation, retained Session updates, and bounded computational
+proofs. Agentic AI Lab owns temporal evidence/revisions, dependency reevaluation
+plans and conclusion selection. MRR owns its semantic/Rust integration.
+This repository must not acquire their end-to-end Search or Fact lifecycle.
+
+=candidate/evidence-store.ss= is a bounded computational receipt owner,
+not a generic Fact framework. A graph path is a logical relation; it does
+not establish a causal mechanism or authenticate an external source.
+
+=t/research/evidence-search.ss= is a synthetic consumer test fixture,
+outside the Library build. It imports Agentic AI Lab's existing revision journal,
+as-of projection and reverse-dependency planner. It passes selected rows
+to the existing ASCENT retained Session, then compares published relations
+with independently verified finite evidence. Historical proof handles remain
+usable only for their original scope. A correction requires a current proof;
+an unchanged result tuple alone cannot authorize an old handle.
+
+The fixture's branch controller and scoring belong solely to the model test.
+They are not Library API, production orchestration, a Agentic AI Lab replacement,
+or MRR integration. =t/research/evidence-interaction.py= is the single
+byte-IO/budget/measurement entry point. No round-version module is added.
+
+The test history has an initial bridge edge, a late correction to that edge,
+and its withdrawal. Distinct derivations share bridge premises; another
+path is unaffected. Agentic AI Lab supplies the affected frontier. The retained
+Session computes each committed snapshot; finite evidence is independently
+replayed. This proof replay is additional work, not claimed to be a retained
+proof algorithm. Models are tested at fixed cuts after history replay;
+live correction during a model dialogue remains a separate, unqualified
+consumer scenario.
+
+The inspected Agentic AI Lab source checkout is main at
+=7ab549d060c98b9a0997f6f1879da3d0eec4b07d=. Only the consumed modules are
+compiled and byte-bound for this test. Its observed-precedence ASCENT provider
+profile is not generalized or repinned by this work. Source authentication,
+production conclusion publication and current-head MRR/Rust qualification
+remain outside the result.
+
+* Qualification and model controls
+
+Before any model run, independently check complete ready/path relations at
+all fixture cuts, the changed and unaffected derivation frontiers, stale
+handle rejection and historical evidence retention. Validate literal support
+chains and reject wrong chains/assertions without support. Existing Library
+qualification separately covers bounded/unknown evidence and mutation
+isolation. An invalidation plan schedules reevaluation; it is not a proof
+or an executed conclusion selection.
+
+Use the same consumer fixture and Library implementation for baseline,
+Fact-only and native pruning. All receive the same task/action contract and
+nonoptimal feasible seed; baseline omits model-visible proof results and
+Fact prepruning. Fact-only and pruning receive the same branch-relevant
+packet; only pruning removes alternatives with proved-absent obligations.
+Freeze source/artifact binding, tasks, independent judge and quote rules
+before calls. Charge all provider input plus all output including thinking,
+cached input and failed calls. Unused budget is not savings. Retain failed
+builds, provider responses, rejected labels and negative outcomes.
+No solver instruction asks the model to avoid repeated thinking.
+
+The consumer executable is a qualification artifact, not a registered Library
+entry. Its current generated native module closure contains 216 C objects;
+the build receipt records the exact compiler commands and object closure.
+Some local objects use =-O0= to obtain a bounded functional build. These
+artifacts cannot support performance comparisons. Failed compiler selection,
+runtime-prefix, linking, startup and provider-protocol attempts are preserved
+separately from model effectiveness measurements. Native readiness and each
+RPC retain separate 20-second deadlines.
+
+* Formal-model correspondence
+
+| Existing source | Obligation | Evidence boundary |
+|-----------------+------------+-------------------|
+| =packages/proofs/lean/ComponentClosure.lean= | Abstract dependency/derivation closure laws | Does not prove the native evaluator or Agentic AI Lab admission |
+| =packages/proofs/lean/StableSourceSupport.lean= | Stable occurrence identity and founded support under decreasing sources | Does not cover arbitrary correction/addition, source authority or model cognition |
+| =packages/proofs/quint/SessionTransaction.qnt= | Atomic commit, abort and stale generation guards | Finite protocol abstraction; separate native correspondence required |
+| =packages/proofs/quint/NativeSessionPublication.qnt= | No premature publication; dirty/partial/committed boundaries | Not a universal implementation refinement theorem |
+| =packages/proofs/quint/WithdrawalSession.qnt= | Stable-token withdrawal, bounded failure and retained history | Does not establish general deletion-delta evaluation |
+
+This test introduces no new mathematical framework. The existing
+[[file:../../features/qualification/quint.org][Quint/Lean qualification contract]] distinguishes semantic proofs,
+finite transition checks, native receipts and empirical model outcomes.
+Previously obtained formal results are not rerun or extended merely by
+citing them; their source mapping is explicit, not a new proof claim.
+
+* Engineering correction
+
+The former cross-path studies copied the controller, annotation and report
+modules for each experimental round into =python/src/ascent_test_support=.
+Those round numbers described successive frozen protocols; they did not name
+different ASCENT capabilities or graph revisions. This was the wrong boundary.
+
+The exact historical sources, helper dependencies, tests and frozen plans are
+now in [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/history/crosspath-sources.tar.gz][the historical source archive]].
+[[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/history/crosspath-source-manifest.json][The manifest]] records the original path and byte hash of each file.
+Existing reports and raw response archives retain all failures and their
+original names. They are historical evidence, not a supported Python API.
+The two abandoned interaction prototype files and their failed build log are
+also retained in the archive. No model call was made by that prototype.
+
+* One native capability
+
+[[file:../../../candidate/evidence-store.ss][candidate/evidence-store.ss]] adds a bounded Scheme owner over existing
+candidate admission and proof verification. It has no graph fixture, model
+provider, prompt, search objective or experimental round number.
+
+The public owner is a validated POO object with a private receipt store. Its
+operations serialize under a native dynamic mutex, including a whole branch
+partition. Concurrent callers share one admitted build. Named Scheme
+functions expose its operations:
+
+| Operation | Responsibility |
+|-----------+----------------|
+| =reasoning-resolve-evidence= | Execute and admit a query once, or reuse its bound receipt |
+| =reasoning-evidence-claim= | Resolve one full query row as verified, finite-absent or unknown |
+| =reasoning-evidence-fact= | Resolve an individual source/intermediate ground atom and reference existing support nodes |
+| =reasoning-evidence-partition= | Partition caller-supplied alternatives by their deterministic obligations |
+| =reasoning-evidence-certificate= | Retrieve detached evidence through a current proof handle |
+| =reasoning-evidence-store-stats= | Report native attempts, admitted builds, hits and evictions |
+| =reasoning-evidence-store-clear!= | Invalidate stored handles |
+
+Keys cover source identity, generation, source digest and complete candidate
+content. Candidate content includes rules, hypothetical facts, query and limits.
+Every handle use checks the current snapshot/candidate binding. Published
+descriptions, rows and certificates detach their pairs and strings from the
+private receipt. Capacity is bounded; eviction and clearing invalidate handles.
+
+Native execution completion alone is insufficient. Admission requires positive
+proof verification for a nonempty answer and finite-closure verification.
+Bounded, unsupported and failed evidence stays unknown and is not cached as
+false. An absence is relative to the exact query; constants and repeated query
+variables must match the requested row. Conditional candidate facts remain
+bound to the candidate and are not promoted into source authority.
+
+The Fact operation separately reads an admitted full finite closure. It can
+reuse an intermediate path atom across different branch obligations without
+requiring the whole branch problem to repeat. It returns existing positive-DAG
+node IDs when that atom occurs in the queried proof. A closure-verified atom
+without a DAG witness has an empty node list; no witness is invented. The
+partition consumes ground atoms, not model prose or inferred Fact-ID aliases.
+
+* Interaction contract
+
+Before presenting a branch decision to a model, the host supplies its
+deterministic obligations to Scheme. A branch with a verified absent required
+row can be pruned. A branch with an unknown obligation remains available.
+The partition contains supporting claims and proof handles; it does not rank
+branches or reveal an optimum. There is no instruction asking a model to avoid
+thinking or to narrate reuse for an audit.
+
+Task definitions, source data and action schemas remain ordinary problem input.
+The implementation must change the work offered to the model, rather than add
+behavioral instructions. A later matched study should use one task contract and
+one controller implementation with explicit treatment configuration. Task and
+run identity belong in frozen manifests and artifact directories.
+
+* Validation boundary
+
+The native qualification covers cross-branch proof reuse, scope changes, unknown
+evidence, query-row restrictions, detached publication, eviction and clearing.
+See [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/evidence-store-local-receipt.json][the local receipt]] for source/artifact hashes, exact commands and results.
+The historical Python tests are replayed from a temporary extraction of the
+source archive, rather than left in the current package.
+
+This is a native computational-evidence feature. A synthetic consumer study
+now exercises its model boundary; it is not a production model-session or
+MRR/Rust qualification. See [[file:evidence-interaction-results/report.md][the frozen three-treatment results]] and
+[[file:evidence-interaction-results/interpretation.md][their diagnostic interpretation]]. Native cache hits do not establish
+reduced model thinking, deeper exploration, end-to-end speed or result-quality
+improvement. The failed model outcome is retained rather than converted into
+a Library capability claim.
+
+[[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/history/consumer-build-failures.tar.gz][Development failures and the executable]] are retained with
+[[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/history/consumer-build-failures.json][a digest receipt]], separately from the earlier
+[[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/history/consumer-calibration-failure.tar.gz][provider-protocol failure archive]].

@@ -7,7 +7,7 @@
 ;;; Invariant: validation resolves POO tool specs and policy refs without
 ;;; runtime execution or backend startup.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -17,8 +17,8 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        :poo-flow/modules/session/config
-        :poo-flow/modules/tool-core/config)
+        :agentic-ai-lab/modules/session/config
+        :agentic-ai-lab/modules/tool-core/config)
 
 (export tool-core-performance-test)
 
@@ -40,7 +40,7 @@
 
 ;; : (-> Alist Void)
 (def (tool-core-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] tool-core-catalog-policy-validation ")
+  (display "[agentic-ai-lab-benchmark] tool-core-catalog-policy-validation ")
   (write receipt)
   (newline)
   (force-output))
@@ -52,7 +52,7 @@
 
 ;; : (-> Integer PooToolSpec)
 (def (tool-core-performance-spec index)
-  (poo-flow-tool-spec
+  (agentic-ai-lab-tool-spec
    (tool-core-performance-symbol "tool" index)
    'custom
    '(run)
@@ -66,7 +66,7 @@
 
 ;; : (-> Integer PooSessionToolGrant)
 (def (tool-core-performance-grant index)
-  (poo-flow-session-tool-grant
+  (agentic-ai-lab-session-tool-grant
    (tool-core-performance-symbol "grant" index)
    (tool-core-performance-symbol "tool" index)
    '(run)
@@ -76,23 +76,23 @@
 ;; : (-> Integer Alist)
 (def (tool-core-performance-summary count)
   (let* ((specs
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            count
            tool-core-performance-spec))
          (grants
-          (poo-flow-performance-build-list
+          (agentic-ai-lab-performance-build-list
            count
            tool-core-performance-grant))
-         (catalog (poo-flow-tool-catalog 'tool-core/performance specs))
+         (catalog (agentic-ai-lab-tool-catalog 'tool-core/performance specs))
          (agent-policy
-          (poo-flow-session-tool-permission-policy
+          (agentic-ai-lab-session-tool-permission-policy
            'policy/tool-core-performance-agent
            'session/tool-core-performance
            grants
            '()
            'deny))
          (hook-policy
-          (poo-flow-session-hook-tool-permission-policy
+          (agentic-ai-lab-session-hook-tool-permission-policy
            'policy/tool-core-performance-hook
            'session/tool-core-performance
            '(hook/pre-check)
@@ -100,23 +100,23 @@
            'deny-escalation
            'deny))
          (receipt
-          (poo-flow-tool-policy-catalog-validation-receipt
+          (agentic-ai-lab-tool-policy-catalog-validation-receipt
            'validation/tool-core-performance
            catalog
            agent-policy
            hook-policy)))
     (let* ((valid?
-            (poo-flow-tool-policy-catalog-validation-receipt-valid?
+            (agentic-ai-lab-tool-policy-catalog-validation-receipt-valid?
              receipt))
            (diagnostic-count
             (length
-             (poo-flow-tool-policy-catalog-validation-receipt-diagnostics
+             (agentic-ai-lab-tool-policy-catalog-validation-receipt-diagnostics
               receipt))))
       (list
-       (cons 'tool-count (poo-flow-tool-catalog-tool-count catalog))
+       (cons 'tool-count (agentic-ai-lab-tool-catalog-tool-count catalog))
        (cons 'policy-tool-count (length grants))
        (cons 'resolved-tool-count
-             (if valid? (poo-flow-tool-catalog-tool-count catalog) 0))
+             (if valid? (agentic-ai-lab-tool-catalog-tool-count catalog) 0))
        (cons 'unresolved-tool-count diagnostic-count)
        (cons 'action-mismatch-count diagnostic-count)
        (cons 'valid? valid?)
@@ -125,7 +125,7 @@
 ;; : TestSuite
 (def tool-core-performance-test
   (test-suite "tool-core performance"
-    (poo-flow-test-case "keeps catalog policy validation inside benchmark contract"
+    (yuanxu-test-case "keeps catalog policy validation inside benchmark contract"
       (let* ((summary
               (tool-core-performance-summary tool-core-performance-count))
              (receipt

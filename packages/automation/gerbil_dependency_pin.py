@@ -4,15 +4,17 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Project native Gerbil dependency pins into Bazel declarations and locks.
 
-``gerbil.pkg`` remains the sole human-maintained authority for direct Gerbil
-dependencies.  This tool does not resolve dependencies; gxpkg and Bazel retain
-that responsibility.  It only updates and checks the equivalent Bazel source
+The product, optional development and checked-in Core ``gerbil.pkg`` files
+own their respective dependency pins. This tool does not resolve dependencies;
+gxpkg and Bazel retain that responsibility.  It only updates and checks the equivalent Bazel source
 projection required by isolated builds.
+It never fetches, installs, or changes package checkouts or tag metadata.
 """
 
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import platform
@@ -23,10 +25,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-GERBIL_PACKAGE = ROOT / "gerbil.pkg"
 BAZEL_SOURCES = ROOT / "gerbil-dependencies.MODULE.bazel"
 BAZEL_LOCK = ROOT / "MODULE.bazel.lock"
-REVISION = re.compile(r"[0-9a-f]{40}")
+REVISION = re.compile(r"(?:[0-9a-f]{40}|v\d+(?:\.\d+)+)")
 EXTENSION_ID = "@@gerbil_bazel+//gerbil:extensions.bzl%gerbil"
 SOURCE_PACKAGE_RULE = (
     "@@gerbil_bazel+//gerbil:source_package_repository.bzl%source_package_repository"
@@ -45,7 +46,7 @@ def parse_package_pins(text: str) -> dict[str, tuple[str, str]]:
     pins: dict[str, tuple[str, str]] = {}
     pattern = re.compile(
         r'"(?P<repository>github\.com/[^/@\s]+/(?P<package>[^/@\s]+))'
-        r'@(?P<revision>[0-9a-f]{40})"'
+        r'@(?P<revision>[0-9a-f]{40}|v\d+(?:\.\d+)+)"'
     )
     for match in pattern.finditer(text):
         package = match.group("package")
@@ -53,6 +54,22 @@ def parse_package_pins(text: str) -> dict[str, tuple[str, str]]:
             raise ValueError(f"gerbil.pkg repeats direct dependency {package!r}")
         pins[package] = (match.group("repository"), match.group("revision"))
     return pins
+
+
+def package_pin_owners(root: Path) -> dict[str, tuple[Path, tuple[str, str]]]:
+    owners: dict[str, tuple[Path, tuple[str, str]]] = {}
+    # Core is a tracked first-party subtree, not an external Bazel package.
+    # Its POO dependency still has one native authority and must match the
+    # Bazel source projection; checking only product-direct pins misses drift.
+    for relative in ("gerbil.pkg", "dev/gerbil.pkg", "core/gerbil.pkg"):
+        path = root / relative
+        if not path.exists():
+            continue
+        for package, pin in parse_package_pins(path.read_text(encoding="utf-8")).items():
+            if package in owners:
+                raise ValueError(f"duplicate dependency authority for {package!r}")
+            owners[package] = (path, pin)
+    return owners
 
 
 def source_block(text: str, repository_name: str) -> tuple[re.Match[str], str]:
@@ -94,11 +111,12 @@ def field(body: str, name: str) -> str:
 
 def expected_projection(repository: str, package: str, revision: str) -> dict[str, object]:
     canonical_uri = f"https://{repository}"
+    archive_revision = revision[1:] if revision.startswith("v") else revision
     return {
         "canonical_uri": canonical_uri,
         "package": package,
         "revision": revision,
-        "strip_prefix": f"{package}-{revision}",
+        "strip_prefix": f"{package}-{archive_revision}",
         "urls": [f"{canonical_uri}/archive/{revision}.tar.gz"],
     }
 
@@ -118,15 +136,55 @@ def declared_projection(text: str, repository_name: str) -> dict[str, object]:
     }
 
 
+def declared_toolchain(root: Path) -> dict[str, object]:
+    """Read the one native SDK declaration; do not evaluate or synthesize Bazel specs."""
+    tree = ast.parse((root / "MODULE.bazel").read_text(encoding="utf-8"))
+    constants = {}
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
+            if node.targets[0].id.startswith("GERBIL_LINUX_"):
+                constants[node.targets[0].id] = ast.literal_eval(node.value)
+    calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)
+             and isinstance(node.func, ast.Attribute) and node.func.attr == "auto"
+             and isinstance(node.func.value, ast.Name) and node.func.value.id == "gerbil"]
+    if len(calls) != 1:
+        raise ValueError("expected one authoritative gerbil.auto declaration")
+    values = {
+        keyword.arg: (constants[keyword.value.id] if isinstance(keyword.value, ast.Name)
+                      else ast.literal_eval(keyword.value))
+        for keyword in calls[0].keywords
+    }
+    return values
+
+
+def toolchain_lock_errors(extension: dict, root: Path) -> list[str]:
+    """Compare SDK declarations without evaluating or manufacturing Bazel specs."""
+    values = declared_toolchain(root)
+    common = {name: values[name] for name in ("expected_version_prefixes", "environment")
+              if name in values}
+    linux = {name.removeprefix("linux_prebuilt_"): value
+             for name, value in values.items()
+             if name.startswith("linux_prebuilt_") and name != "linux_prebuilt_arch"}
+    errors = []
+    for platform_key, entry in extension.items():
+        specification = entry.get("generatedRepoSpecs", {}).get("local_gerbil", {})
+        attributes = specification.get("attributes", {})
+        expected = common | (linux if "os:linux," in platform_key else {})
+        for name, value in expected.items():
+            if attributes.get(name) != value:
+                errors.append(f"{platform_key}: SDK local_gerbil.{name} is stale")
+    return errors
+
+
 def collect_errors(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
-    package_text = (root / "gerbil.pkg").read_text(encoding="utf-8")
     sources_text = (root / "gerbil-dependencies.MODULE.bazel").read_text(encoding="utf-8")
     lock = json.loads((root / "MODULE.bazel.lock").read_text(encoding="utf-8"))
-    pins = parse_package_pins(package_text)
+    pins = {package: pin for package, (_path, pin) in package_pin_owners(root).items()}
     repositories = direct_source_repositories(sources_text)
     declared_repository_names = set(repositories.values())
     extension = lock.get("moduleExtensions", {}).get(EXTENSION_ID, {})
+    errors.extend(toolchain_lock_errors(extension, root))
 
     for platform_key, platform_lock in extension.items():
         generated = platform_lock.get("generatedRepoSpecs", {})
@@ -167,12 +225,17 @@ def collect_errors(root: Path = ROOT) -> list[str]:
     }
     if len(usage_digests) > 1:
         errors.append("Bazel extension usagesDigest differs across platform lock entries")
+    implementation_digests = {
+        entry.get("bzlTransitiveDigest") for entry in extension.values()
+    }
+    if len(implementation_digests) > 1:
+        errors.append("Bazel extension implementation differs across platform lock entries")
     return errors
 
 
 def archive_digest(url: str) -> str:
     digest = hashlib.sha256()
-    request = urllib.request.Request(url, headers={"User-Agent": "poo-flow-pin/1"})
+    request = urllib.request.Request(url, headers={"User-Agent": "agentic-ai-lab-pin/1"})
     with urllib.request.urlopen(request) as response:
         while chunk := response.read(1024 * 1024):
             digest.update(chunk)
@@ -193,14 +256,17 @@ def replace_field(body: str, name: str, value: str) -> str:
 
 def project_pin(package: str, revision: str, root: Path = ROOT) -> None:
     if REVISION.fullmatch(revision) is None:
-        raise ValueError("revision must be a full lowercase 40-character Git object ID")
+        raise ValueError("revision must be a full Git object ID or v-prefixed version tag")
 
-    package_path = root / "gerbil.pkg"
+    owners = package_pin_owners(root)
+    if package not in owners:
+        raise ValueError(f"declared direct dependency {package!r} is absent")
+    package_path, _pin = owners[package]
     sources_path = root / "gerbil-dependencies.MODULE.bazel"
     package_text = package_path.read_text(encoding="utf-8")
     pins = parse_package_pins(package_text)
     if package not in pins:
-        raise ValueError(f"gerbil.pkg direct dependency {package!r} is absent")
+        raise ValueError(f"root/development package dependency {package!r} is absent")
     repository, old_revision = pins[package]
     projection = expected_projection(repository, package, revision)
     url = projection["urls"][0]
@@ -261,6 +327,11 @@ def sync_lock(root: Path = ROOT) -> None:
     extension = lock.get("moduleExtensions", {}).get(EXTENSION_ID)
     if not isinstance(extension, dict) or not extension:
         raise ValueError("Gerbil Bazel extension lock is absent")
+    # A new digest cannot bless old platform-specific SDK repository specs.
+    # Native Bazel evaluation owns those specs; refuse before changing the lock.
+    sdk_errors = toolchain_lock_errors(extension, root)
+    if sdk_errors:
+        raise ValueError("; ".join(sdk_errors) + "; run the native lock refresh workflow")
     native = extension[host_lock_key(extension)]
     native_repositories = native["generatedRepoSpecs"]
     repositories_by_package = direct_source_repositories(
@@ -268,6 +339,9 @@ def sync_lock(root: Path = ROOT) -> None:
     )
     repository_names = set(repositories_by_package.values())
     for platform_lock in extension.values():
+        # Extension code and declarations are platform independent. Keep each
+        # platform's toolchain repositories, but update both shared identities.
+        platform_lock["bzlTransitiveDigest"] = native["bzlTransitiveDigest"]
         platform_lock["usagesDigest"] = native["usagesDigest"]
         repositories = platform_lock["generatedRepoSpecs"]
         for repository_name in locked_source_package_names(repositories) - repository_names:
@@ -278,20 +352,33 @@ def sync_lock(root: Path = ROOT) -> None:
     print("gerbil-dependency-pin: synchronized cross-platform Bazel lock projections")
 
 
+def refresh_native_lock(root: Path = ROOT) -> None:
+    """Invalidate only this host's cached extension result before native evaluation."""
+    lock_path = root / "MODULE.bazel.lock"
+    lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    extension = lock["moduleExtensions"][EXTENSION_ID]
+    del extension[host_lock_key(extension)]
+    lock_path.write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")
+    print("gerbil-dependency-pin: removed native cached evaluation; Bazel must regenerate it")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    check_parser = subparsers.add_parser("check", help="validate native and Bazel pins")
+    check_parser = subparsers.add_parser("check", help="check Bazel projections against package declarations")
     check_parser.set_defaults(command="check")
     pin_parser = subparsers.add_parser("pin", help="project one direct dependency revision")
     pin_parser.add_argument("package")
     pin_parser.add_argument("revision")
     subparsers.add_parser("sync-lock", help="copy the native lock projection across platforms")
+    subparsers.add_parser("refresh-native-lock", help="invalidate the native cached extension result")
     args = parser.parse_args()
 
     try:
         if args.command == "pin":
             project_pin(args.package, args.revision)
+        elif args.command == "refresh-native-lock":
+            refresh_native_lock()
         elif args.command == "sync-lock":
             sync_lock()
         else:

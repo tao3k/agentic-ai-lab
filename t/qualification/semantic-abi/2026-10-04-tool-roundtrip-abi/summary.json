@@ -1,0 +1,33 @@
+{
+  "schema": "poo-flow.semantic-tool-qualification-summary",
+  "toolGate": "PASSED",
+  "report": {
+    "schema": "poo-flow.semantic-tool-live-receipt",
+    "planSha256": "8b4c2227da64395f030323737e330891d81133eedcf02e9cbdb8fbe4bfe33c61",
+    "roundtrips": 24,
+    "passed": 24,
+    "failed": 0,
+    "retries": 0,
+    "scope": "forced read-only tool argument fidelity, current-task binding, sync/async native execution and model consumption of actual tool output; not unaided source comprehension, autonomous tool choice or business IO",
+    "nativeCalls": 24,
+    "providerResponses": 48,
+    "sourceFreezeIntact": true
+  },
+  "sourcePredictionGate": "FAILED",
+  "sourceClosurePilot": {
+    "correct": 11,
+    "calls": 24
+  },
+  "zeroTemperaturePilot": {
+    "correct": 12,
+    "calls": 24
+  },
+  "firstContentMaxSeconds": 1.2939960839994455,
+  "contentGapMaxSeconds": 0.22480424999957904,
+  "nativeMaxSeconds": 0.09392704199945001,
+  "installedTests": 49,
+  "testingTestsAndHarness": 48,
+  "wheelSha256": "4f9e1cfaefe19c465a03f2497e9b0584e7d8826b1b3bc63880dc2400cfc4ac59",
+  "artifactSha256": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",
+  "evidenceBoundary": "Native operation computed all Temporal results. Model argument fidelity and consumption of actual tool output passed; unaided source prediction and autonomous tool choice remain unqualified."
+}

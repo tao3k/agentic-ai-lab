@@ -1,0 +1,118 @@
+#+title: Local Trajectory and Evidence DAG Experiment Report
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+
+* Objective and protocol
+
+Validate native trajectory accounting and current-source Evidence DAG reuse, then measure actual provider thinking until the first independently verified complete answer. Test exact-repeat retrieval and changed-query intermediate reuse separately. No output-byte proxy, reconstructed hidden reasoning, remote CI or estimated dollar saving is used.
+
+12 independent task instances were frozen before calls: 8 single-query tasks and 4 two-query bundles. This is 16 distinct query obligations and 24 condition task trajectories. Each bundle succeeds only when both query obligations pass. Both conditions preserve actual model history. Conditions alternate order. Maximum three attempts per query, deepseek-flash high reasoning, 131072 output-token cap. Actual request/response usage and visible answers are retained. Provider output has no server-side JSON schema constraint; explanatory prose and Markdown surrounding a final answer object are accepted.
+
+All 16 distinct query obligations were checked by a separately implemented Python closure/join oracle and actual Scheme before paid calls. Complete answer relations are graded as sets, rather than selected examples. A scalar failure triggers repair; applicable Scheme evidence is exposed only in the evidence condition. Failure and repair calls belong to the first-success prefix. Unknown usage makes that prefix incomplete. Later repeats are post-success work, and source replacement creates a new generation. Provider output_tokens already includes reasoning_tokens.
+
+* Task provenance and complexity
+
+The design is informed by [[https://arxiv.org/abs/2609.37233][DatalogBench]] execution and oracle-mutation methodology, [[https://arxiv.org/abs/2303.11366][Reflexion]] feedback across trials, and [[https://arxiv.org/abs/2506.14852][test-time plan caching]] reuse. These are generated experiments, not official benchmark scores or reproductions. Fresh entities and seeded graph structures prevent exact answer lookup for these instances; training exclusion is not established, and the underlying algorithms may be familiar to the model.
+
+Tasks contain 36–48 nodes, 109–145 edges, recursive fixed points, cycles, multi-relation joins and scoped exclusions. Taint tasks test sanitizer boundaries; conjunctive tasks require both prerequisites rather than either; bidirectional tasks require forward and reverse closures. Second queries add new compositions over unchanged sources. Their retained reach/back packet never includes the second answer. One transfer first query has an empty answer and is explicitly retained; zero output cardinality does not establish equal difficulty to nonempty queries.
+
+| Task | Nodes | Edges | Rules | First answer rows | Second answer rows |
+|------+-------+-------+-------+-------------------+--------------------|
+| recursive-scoped-reachability-2026101300 | 36 | 109 | 3 | 11 | n/a |
+| taint-propagation-with-sanitizers-2026101317 | 40 | 121 | 3 | 4 | n/a |
+| conjunctive-prerequisite-closure-2026101334 | 44 | 133 | 3 | 8 | n/a |
+| bidirectional-recursive-impact-2026101351 | 48 | 145 | 5 | 7 | n/a |
+| recursive-scoped-reachability-2026101301 | 36 | 109 | 3 | 9 | n/a |
+| taint-propagation-with-sanitizers-2026101318 | 40 | 121 | 3 | 1 | n/a |
+| conjunctive-prerequisite-closure-2026101335 | 44 | 133 | 3 | 1 | n/a |
+| bidirectional-recursive-impact-2026101352 | 48 | 145 | 5 | 7 | n/a |
+| recursive-scoped-reachability-2026102300 | 36 | 109 | 3 | 13 | 7 |
+| taint-propagation-with-sanitizers-2026102319 | 40 | 121 | 3 | 6 | 2 |
+| conjunctive-prerequisite-closure-2026102338 | 44 | 133 | 3 | 0 | 2 |
+| bidirectional-recursive-impact-2026102357 | 48 | 145 | 5 | 4 | 1 |
+
+The [[file:../../../.cache/ascent/archived-runs/docs/research/trajectory-study/questions.org][complete questions and input programs]] are printed in a readable appendix. Frozen plans include seeds, input programs, independent gold sets, source hashes and artifact identities. The [[file:../../../.cache/ascent/archived-runs/docs/research/trajectory-study/visible-answers.org][actual visible answers]] print every model attempt and repeat. [[file:../../../.cache/ascent/archived-runs/docs/research/trajectory-study/provider-audit.json][Provider audit]] binds raw responses, requests and answers by SHA256 and retains reported usage.
+
+* Experiment A: first answer, exact repeat and invalidation
+
+| Condition | Correct / tasks | First-correct calls | First-correct thinking | Failed checks | Repair thinking | Repeat correct | Repeat calls | Repeat thinking |
+|-----------+-----------------+---------------------+------------------------+---------------+-----------------+----------------+--------------+-----------------|
+| reflection-only | 8/8 | 8 | 67596 | 0 | 0 | 8/8 | 8 | 63824 |
+| native-evidence | 8/8 | 8 | 72015 | 0 | 0 | 8/8 | 0 | 0 |
+
+| Question | Reflection first thinking | Native first thinking | Reflection repeat thinking | Native repeat calls |
+|----------+---------------------------+-----------------------+----------------------------+---------------------|
+| recursive-scoped-reachability-2026101300 | 5451 | 8280 | 8340 | 0 |
+| taint-propagation-with-sanitizers-2026101317 | 7283 | 5565 | 5255 | 0 |
+| conjunctive-prerequisite-closure-2026101334 | 8117 | 6359 | 8207 | 0 |
+| bidirectional-recursive-impact-2026101351 | 16520 | 15411 | 12921 | 0 |
+| recursive-scoped-reachability-2026101301 | 5394 | 10136 | 6585 | 0 |
+| taint-propagation-with-sanitizers-2026101318 | 3563 | 2983 | 2697 | 0 |
+| conjunctive-prerequisite-closure-2026101335 | 4923 | 5830 | 7062 | 0 |
+| bidirectional-recursive-impact-2026101352 | 16345 | 17451 | 12757 | 0 |
+
+All initial prompts were identical across conditions, and all first answers passed. No native evidence was exposed before these first answers. Their thinking differences therefore cannot be attributed to Scheme enhancement. No actual model correction occurred in this group; observed repair cost is zero, not evidence that repair is cheap.
+
+For the specified one-original-plus-one-exact-repeat workload, observed thinking reduction is 45.2%. This includes stochastic first-call differences. The concrete mechanism result is eight correct native repeat answers with zero model calls, versus eight fresh correct model repeat calls. This workload-specific result does not establish a general 40–50% first-answer saving. The baseline has no application answer memoizer; exact-repeat avoidance alone does not establish superiority over a correctly invalidated answer cache. Different-query component reuse is evaluated separately.
+
+All eight native source-withdrawal controls rejected the old result reference and returned the independently expected empty new answer. No old component was reused after source replacement. The new epoch used no model calls. Historical first-success totals remain available in completedEpochs; they are not overwritten.
+
+* Experiment B: next-query reuse of verified intermediates
+
+Each independent bundle first solves one query and then a different query. Both conditions retain their full actual model history. The treatment additionally receives native source/path identity, component fingerprints and completed reach/back rows after stage one. It receives no final second answer. Native execution after the model verdict independently checks the second answer and reports actual component reuse.
+
+| Condition | Both queries correct / bundles | Actual calls | Complete-bundle first thinking | Stage 1 thinking | Stage 2 thinking | Failed checks | Repair thinking |
+|-----------+-------------------------------+--------------+--------------------------------+------------------+------------------+---------------+-----------------|
+| reflection-history | 4/4 | 8 | 60449 | 32015 | 28434 | 0 | 0 |
+| verified-intermediates | 4/4 | 8 | 48836 | 32558 | 16278 | 0 | 0 |
+
+| Bundle | Baseline stages / thinking | Evidence stages / thinking | Stage 2 reduction | Reused native components |
+|--------+----------------------------+----------------------------+-------------------+--------------------------|
+| recursive-scoped-reachability-2026102300 | 8075 + 12567 = 20642 | 7183 + 7439 = 14622 | 40.81% | 1 |
+| taint-propagation-with-sanitizers-2026102319 | 4783 + 2842 = 7625 | 5821 + 2550 = 8371 | 10.27% | 1 |
+| conjunctive-prerequisite-closure-2026102338 | 6385 + 5179 = 11564 | 8120 + 2458 = 10578 | 52.54% | 1 |
+| bidirectional-recursive-impact-2026102357 | 12772 + 7846 = 20618 | 11434 + 3831 = 15265 | 51.17% | 2 |
+
+Aggregate complete-bundle thinking reduction: 19.21%. Aggregate second-query thinking reduction: 42.75%. The taint bundle consumes 8,371 versus 7,625 thinking tokens overall (9.78% more), despite a lower stage-two count; this negative result is retained. Stage-one costs are included in the primary complete-task measure, even though its prompts contain no intervention. Second-stage results have actual intermediate exposure, but only four pairs and different sampled first histories: this is a local observation, not a stable causal estimate or population guarantee.
+
+* Request, failure and accounting audit
+
+Across all 12 task instances, cumulative thinking to first complete correct answer is 128045 baseline versus 120851 native, an observed 5.62% reduction. Including the eight specified exact repeats makes the mixed workload 191869 versus 120851, an observed 37.01% reduction. These aggregates mix distinct task and reuse opportunities and are not a universal saving estimate.
+
+Actual provider requests: 40; provider errors: 0; non-completed responses: 0; complete reported thinking usage: True. Total actual thinking across both conditions and repeats: 312720; input: 169602; output including thinking: 317330. These are experiment expenditure totals, not the matched reduction denominator. The two conditions are experimental alternatives; their costs are not both needed to run the deployed reuse policy.
+
+Censored/failed trajectories remain in record files and overall denominators. No unknown usage is imputed as zero. Accuracy is independently checked full-set equality. Repair thinking counts actual calls linked to an earlier failed verdict. No simulated token value is mixed with provider usage. There is no dollar estimate because this study qualifies thinking consumption, not provider invoice pricing.
+
+* Native and formal qualification
+
+Five direct Scheme ledger cases pass. Actual ABI and compiled API each pass three Trajectory and nine Evidence DAG cases (24 binding integration cases). Four experiment-intent tests pass. Lean compiles the temporal prefix, preceding failure/repair cost, invalidation and unknown-usage statements. The healthy Quint model passes 10,000 sampled traces of at most 30 steps at seed 13; four intentionally weakened variants each produce counterexamples. This is bounded simulation, not exhaustive model checking or universal source refinement.
+
+The controlled correction regression charges 80 failure + 30 repair = 110 before first success, and leaves a later 50 outside that prefix. Invalid event observations are atomic; stale source/reference observations and invalid repair links are rejected. These are executable mechanism controls, not real model failures. Natural correction effectiveness remains unmeasured when the real model succeeds without repair.
+
+ABI, packaged native and API producer inputs share canonical source/build identity. The API bundled library has a distinct hash after its required Darwin install-name/ad-hoc signing transformation; that output and the CFFI extension are separately bound in the qualification receipt. Local qualification does not assert portable wheel or remote CI success.
+
+* ASCENT design conclusion
+
+Evidence DAG owns prerequisite/component structure and applicability. Trajectory owns ordered observations, first-success cost and source-generation history. EvidenceChain connects them: actual native query results append evidence observations; a retained answer follows a checked path; replacement revokes references and opens a new cost epoch. Lean specifies why a final DAG cannot represent temporal cost, and Quint explores the lifecycle transitions. The model receives current applicable evidence through the host; it does not author trusted cost or correctness events.
+
+The implementation now supports both exact-repeat call avoidance and independently observed next-query intermediate reuse. The data distinguish source validity, response quality, failure-repair accounting and thinking consumption. Remaining efficacy claims must be tested with larger, harder held-out instances, repeated paired samples and actual failures; the current small local study must not be generalized.
+
+* Reproduction and artifacts
+
+Use the normal native build and existing package/API builders, then run ascent_test_support.trajectory_study and ascent_test_support.trajectory_transfer_study with --live and separate fresh output directories. Credentials are read internally from the environment/local .env and are never written to these reports. Raw provider responses remain in .cache/ascent/trajectory/{live,transfer-live}; durable plans, native trajectory records, usage audit, questions and visible answers are linked here.
+
+[[file:../../../.cache/ascent/archived-runs/docs/research/trajectory-study/results.json][Aggregate measured results]]; [[file:../../../.cache/ascent/archived-runs/docs/research/trajectory-study/single-records.json][single-query native trajectories]]; [[file:../../../.cache/ascent/archived-runs/docs/research/trajectory-study/transfer-records.json][two-query native trajectories]]; [[file:../../../.cache/ascent/archived-runs/docs/research/trajectory-study/single-plan.json][single-query frozen plan]]; [[file:../../../.cache/ascent/archived-runs/docs/research/trajectory-study/transfer-plan.json][two-query frozen plan]]; [[file:../../../.cache/ascent/archived-runs/docs/features/trajectory-qualification.json][artifact and qualification receipt]]; [[file:../../features/trajectory.org][architecture, formal design and paper use cases]].
+
+* Token coverage and observed provider time
+
+Provider time below is the sum of actual call durations, not a native execution benchmark or end-to-end latency estimate. Cached prompt tokens are provider prefix-cache observations and are kept distinct from native derivation reuse. No discount is inferred without invoice pricing.
+
+| Group | Calls | Input | Cached input | Output including thinking | Thinking | Provider seconds |
+|-------+-------+-------+--------------+---------------------------+----------+------------------|
+| single/reflection primary | 8 | 26982 | 13056 | 68958 | 67596 | 313.64 |
+| single/native primary | 8 | 26982 | 12544 | 73158 | 72015 | 337.66 |
+| transfer/reflection primary | 8 | 43493 | 20608 | 60959 | 60449 | 273.40 |
+| transfer/native primary | 8 | 45163 | 24448 | 49282 | 48836 | 230.70 |
+| single/reflection repeat | 8 | 26982 | 25600 | 64973 | 63824 | 296.41 |
+| single/native repeat | 0 | 0 | 0 | 0 | 0 | no provider call |

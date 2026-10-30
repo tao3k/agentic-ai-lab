@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#include "poo_flow/workflow_cursor.h"
+#include "agentic_ai_lab/workflow_cursor.h"
 
 #include <stddef.h>
 
-#include "poo_flow/runtime_wasm.h"
+#include "agentic_ai_lab/runtime_wasm.h"
 
 #define PFW_WORKFLOW_CURSOR_SLOT_COUNT 1024u
 

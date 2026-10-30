@@ -1,0 +1,165 @@
+#+title: Executable Context Admission and Handoff Scenarios
+#+date: [2026-10-25]
+#+language: en
+#+property: STATUS locally-executed-finite-scenarios
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* What executes
+
+[[file:04-executable-scenarios.sysml][The SysML model]] refines the owner crossings in
+[[file:03-information-to-recall.sysml][the architectural activity model]] into four executable verification families.
+Each family performs explicit ordered assignments over concrete source/owner
+coordinates and protocol observations, then evaluates =PassIf= over the resulting
+state. These are not the abstract uncomputed leaf outputs in 03.
+
+[[file:run-scenarios.py][The runner]] invokes =sysml -engine run -analysis <case> -json= for every
+named fixture under both =declared= and =reverse= schedules. The
+[[file:04-scenario-expectations.json][literal expectations]] independently specify the expected verdict, CLI exit code
+and every reported output. A broken implementation that rejects every input
+fails the accepted positive fixtures. A bypass that admits unsafe input fails
+the unchanged SysML safety verdict and must produce a witnessed counterexample.
+Python orchestrates and compares results; it does not implement domain gates.
+
+The runner rejects unresolved/error results, missing verdicts, unexpected
+outputs, execution bounds reached and unsafe controls without witnesses.
+It also checks that every named SysML fixture appears in the expectation list.
+Raw JSON, tool version, validation output and structured summary are retained
+outside the repository in a fresh =/private/tmp/context-sysml-*= directory.
+No raw execution logs are committed.
+
+* Org-derived gate and responsibility mapping
+
+| Family | Context decision | Session/Host handoff | Existing Org contract |
+|--------+------------------+----------------------+-----------------------|
+| ResultAdmission | Compare exact response/request, consumed source and grant generations against current owners after response observation | Session retains historical response; current content acceptance does not follow from provider completion | [[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][Session/Memory: input boundary, transitions, invalidation]]; [[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][Joint lifecycle: receive, accept-result and invalidate]] |
+| CancellationRecovery | Require matching terminal evidence plus fresh current recovery admission; do not restore an old allow handle | Session preserves pending worker state through checkpoint/restart, records only qualified terminal outcomes, advances owner/Attempt generations on admitted recovery; closed Session never resumes | [[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][Session/Memory: cancellation, recovery and closed Session]] |
+| KnowledgeConsolidation | Require exact episode assessment, lineage, preserved contrary evidence, scoped assumptions and met domain obligations | Memory creates a distinct interpretation revision; original Session episode remains attributable; no grant generation change | [[file:../../../../core/module-system/design/43-session-memory-recovery/01-agent-context-lifecycle.org][43.01: consolidation conditions]]; [[file:../../../../core/module-system/design/167-temporal-revisit-evidence-design.org][167: short observation to durable insight]] |
+| CrossSessionRecall | Bind B's new projection and B's own review at current source/policy cuts, plus current destination permission | Session A remains origin only; no A review/allow inheritance; admission alone performs no provider dispatch | [[file:../../../../core/module-system/design/43-session-memory-recovery/01-agent-context-lifecycle.org][43.01: cross-Session evidence admission]]; [[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][Session/Memory: recall/current provenance]] |
+
+The verification subjects are explicit finite protocol fixtures. Generations
+stand for exact qualified owner coordinates; source/permission/review evidence
+is supplied as a declared fixture premise. The fixtures do not authenticate a
+seal, source, actor, worker or grant, nor implement an actual transaction.
+A real adapter must establish those premises at the owning boundary.
+
+* Positive, refusal and unsafe-control fixtures
+
+| Fixture | Expected observation | Verification verdict |
+|---------+----------------------+----------------------|
+| freshResult | Matching current result accepted; history preserved | pass |
+| staleSourceResult | Source correction after disclosure; result refused, history retained | pass |
+| revokedGrantResult | Grant generation changes after disclosure; result refused | pass |
+| wrongRequestResult | Foreign response request ID refused | pass |
+| unsafeStaleResult | Mutant skips current source/grant fence and accepts stale result | fail |
+| cancelStillPending | Cancellation requested, worker state unresolved; no terminal outcome or resume | pass |
+| recoveredWithTerminalEvidence | Matching terminal evidence and current recovery fence; revision 7 -> 8, claim generation 3 -> 4, no old allow restored | pass |
+| foreignWorkerReceipt | Foreign worker receipt cannot discharge pending obligation | pass |
+| closedSessionRecovery | Matching terminal evidence may reconcile obligations; closed Session cannot resume | pass |
+| deniedRecoveryFence | Worker reconciled, current recovery admission denied; no resume or re-enrollment | pass |
+| unsafeCancelAcknowledgement | Mutant treats cancel request as terminal evidence and resumes | fail |
+| unsafeClosedResume | Mutant resumes a closed Session | fail |
+| qualifiedConsolidation | New interpretation 102 admitted from original episode 101; source retained | pass |
+| missingLineage | No abstraction admitted; original episode retained | pass |
+| erasedCounterevidence | No abstraction admitted when contrary evidence is discarded | pass |
+| unmetConsolidationObligations | Domain obligations incomplete; retain original without promotion | pass |
+| unsafeSummaryPromotion | Mutant promotes despite missing contrary evidence | fail |
+| freshReviewForB | B-specific review and projection, current policy/source/permission; B admission succeeds without dispatch | pass |
+| copiedReviewFromA | A review cannot admit B consumption | pass |
+| deniedPermissionForB | B review does not substitute for current permission | pass |
+| changedSourceOnRecall | Historical source cut cannot serve as current support | pass |
+| changedPolicyOnRecall | Review under old policy requires renewed review | pass |
+| unsafeCopiedAdmission | Mutant inherits old admission despite A review and denied B permission | fail |
+
+All unsafe controls reuse the safe family's verification predicate; only the
+implementation bypass input changes. The fail verdict and CLI exit 1 are the
+expected evidence of an unsafe execution, not a broken suite. Exit 2/unresolved
+is never counted as a counterexample. Normal refusal cases must return pass
+while exposing literal refused/pending outputs.
+
+Cancellation request and acknowledgement remain distinct. Pending state is
+captured/restored through checkpoint before real matching evidence is applied.
+A late completion is retained historically without adding/replacing a published
+terminal outcome. Recovery of a closed Session may account for old obligations;
+it does not reopen that interaction. Unknown external effects beyond these
+worker/claim fixtures remain separate protocol obligations.
+
+* Execute and inspect
+
+From the repository root:
+
+#+begin_src sh
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-scenarios.py
+#+end_src
+
+To inspect a safe refusal or an unsafe counterpart directly:
+
+#+begin_src sh
+sysml -strict -no-record-cache \
+  docs/10-19-design/10.06-poo-module-system/agentic-ai-context \
+  -engine run -analysis ContextExecutableScenarios::staleSourceResult -json
+
+# Expected exit 1 and explicit VerdictKind::fail, with an execution witness.
+sysml -strict -no-record-cache \
+  docs/10-19-design/10.06-poo-module-system/agentic-ai-context \
+  -engine run -analysis ContextExecutableScenarios::unsafeStaleResult -json
+#+end_src
+
+The runner accepts =--sysml <binary>= and =--artifacts <local-directory>=.
+Inspect =summary.json= and each named fixture/schedule JSON in the printed
+artifact directory for concrete outputs and failed-control witnesses.
+
+* Tool capability observation retained
+
+Before selecting the execution gate, a local probe assigned =accepted=true=
+after source generation advanced from 1 to 2, with an inner action assertion
+=not accepted=. On the installed CLI, ordinary =-action= completed with exit 0
+and =accepted=true=. An explicit =-engine check -check-property= probe also
+reported no violation for that bad final state. These observed invocation paths
+are not used as the safety oracle here; their output is insufficient evidence
+that the intended predicate was enforced.
+
+Changing the probe to =verification def= with
+=return verdict : VerdictKind = PassIf(not accepted)= produced explicit fail,
+exit 1 and a witnessed execution. All five domain unsafe controls additionally
+exercise this verdict path; the runner validates it on every execution.
+This is a scoped tool-mode observation, not a claim that all SysML assertions
+or all checking engines are defective. The probes remain local artifacts;
+no assertion-only or generic "completed" result establishes suite success.
+
+* Local execution receipt
+
+On 2026-10-25 with =sysml v0.10.1= (commit
+=1c45b6e1749fc8adc9b82d4af22fbe180b56a0e2=), the complete runner returned
+exit 0: 46 executions, 0 expectation mismatches. All five unsafe controls
+returned the expected fail verdict/exit 1 under both schedule policies.
+The final local artifact directory is
+=/private/tmp/context-sysml-0wuis263/=; =summary.json= retains exact per-run
+outputs, and the individual JSON files retain unsafe execution witnesses.
+The earlier 44-run receipt preceded the added recovery-fence case and the
+refined cancellation/outcome handling; it is not the final qualification cut.
+
+* Concurrent successor experiment
+
+[[file:05-concurrent-evidence-lifecycle.org][Evidence-driven concurrent lifecycle]] adds all linearizations of an explicit
+bounded partial order, per-prefix invariant monitors and saved counterexample
+replay. The fixed-order cases here remain regression fixtures and are not
+retroactively counted as concurrency exploration.
+
+* Qualification boundary
+
+These are 23 deterministic finite fixtures, each executed under two schedule
+policies: 46 actual executions, comprising 36 expected pass verdicts and 10
+expected fail verdicts from five unsafe controls. Because their event order is
+explicit, the two schedule policies are execution checks, not exploration of
+all concurrency interleavings or independent coverage of a race. The source
+change is deliberately ordered after disclosure and before result admission;
+the late response is deliberately ordered after cancellation/recovery handling.
+
+This suite does not execute the Scheme semantic runtime, real provider effects,
+physical cancellation, durable CAS, private seal issuance, or distributed fences.
+It is neither a Quint replacement nor an unbounded Lean proof. Original Org
+formal/native qualification owners remain in force. The earlier structural
+validation and 03 architecture remain separate from these executed scenarios.

@@ -3,43 +3,47 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Owner: Agent sandbox facade and task/flow opt-in live here.
 ;;; Boundary: profile, request, and bridge contracts live in leaf modules.
-;;; Import contract: users opt in through =:poo-flow/modules/agent-sandbox= exports.
+;;; Import contract: users opt in through =:agentic-ai-lab/modules/agent-sandbox= exports.
 ;;; Runtime contract: Marlin or another runtime owns real sandbox execution.
 ;;; Runtime contract: LLM calls, API/R surfaces, and C bindings stay out of Scheme.
 ;;; Policy evidence: tests should validate this facade plus leaf contracts.
 
-(import (only-in :poo-flow/src/core/task
+(import (only-in :yuanxu/modules/funflow/control-plane/task
                  make-task-family-descriptor task-family-registry-extend
                  default-task-family-registry make-task)
-        (only-in :poo-flow/src/core/strategy
+        (only-in :yuanxu/modules/funflow/control-plane/strategy
                  make-strategy strategy-name strategy-capabilities
                  strategy-cache-policy strategy-failure-policy strategy-planner
                  make-local-eager-strategy)
-        (only-in :poo-flow/src/core/runtime-adapter
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-adapter
                  make-runtime-adapter runtime-adapter-name
                  runtime-adapter-capabilities runtime-adapter-submitter
                  runtime-adapter-fetcher runtime-adapter-store-putter
                  runtime-adapter-store-getter make-rust-adapter adapter-submit)
-        (only-in :poo-flow/src/core/config make-run-config)
-        (only-in :poo-flow/src/core/flow
+        (only-in :yuanxu/modules/funflow/control-plane/config make-run-config)
+        (only-in :yuanxu/modules/funflow/control-plane/flow
                  default-flow-declaration-registry task-flow)
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/agent-sandbox/profile-candidate
-        :poo-flow/modules/agent-sandbox/request
-        :poo-flow/modules/agent-sandbox/request-macro
-        :poo-flow/modules/agent-sandbox/bridge
-        :poo-flow/modules/agent-sandbox/marlin-interface)
+        :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/agent-sandbox/profile
+        :agentic-ai-lab/modules/agent-sandbox/profile-candidate
+        :agentic-ai-lab/modules/agent-sandbox/request
+        :agentic-ai-lab/modules/agent-sandbox/request-macro
+        :agentic-ai-lab/modules/agent-sandbox/bridge
+        :agentic-ai-lab/modules/agent-sandbox/marlin-interface)
 
-(export (import: :poo-flow/modules/agent-sandbox/alist)
-        (import: :poo-flow/modules/agent-sandbox/profile)
-        (import: :poo-flow/modules/agent-sandbox/profile-candidate)
-        (import: :poo-flow/modules/agent-sandbox/request)
-        (import: :poo-flow/modules/agent-sandbox/request-macro)
-        (import: :poo-flow/modules/agent-sandbox/bridge)
-        (import: :poo-flow/modules/agent-sandbox/marlin-interface)
+(export (import: :agentic-ai-lab/modules/agent-sandbox/alist)
+        (import: :agentic-ai-lab/modules/agent-sandbox/profile)
+        (import: :agentic-ai-lab/modules/agent-sandbox/profile-candidate)
+        (import: :agentic-ai-lab/modules/agent-sandbox/request)
+        (import: :agentic-ai-lab/modules/agent-sandbox/request-macro)
+        (import: :agentic-ai-lab/modules/agent-sandbox/bridge)
+        (import: :agentic-ai-lab/modules/agent-sandbox/marlin-interface)
         agent-sandbox-task-family-descriptor
         make-agent-sandbox-task-family-registry
         agent-sandbox-enable-strategy
@@ -148,26 +152,25 @@
      (make-agent-sandbox-task-family-registry)
      default-flow-declaration-registry)))
 
-;;; Compatibility constructor keeps the original flat sandbox API stable for
-;;; callers while routing all backend default logic through the profiled path.
+;;; Explicit task fields lower through the same native profiled constructor.
 ;;; Boundary: future backend policy belongs in profiles/options, not by growing
 ;;; this long signature with runtime-owned concerns.
-;; : (-> Symbol Symbol BackendRef Command [Arg] Env Workdir Mounts NetworkPolicy Capabilities ResourcePolicy OutputPolicy Metadata Contract Contract Task)
-(def (make-agent-sandbox-task name
-                              backend-kind
-                              backend-ref
-                              command
-                              args
-                              env
-                              workdir
-                              mounts
-                              network-policy
-                              capabilities
-                              resource-policy
-                              output-policy
-                              metadata
-                              input-contract
-                              output-contract)
+;; : (-> Symbol Symbol BackendRef Command [Arg] Env Workdir Mounts NetworkPolicy Capabilities ResourcePolicy OutputPolicy Metadata Function Task)
+(def (make-agent-sandbox-task
+      name
+      backend-kind
+      backend-ref
+      command
+      args
+      env
+      workdir
+      mounts
+      network-policy
+      capabilities
+      resource-policy
+      output-policy
+      metadata
+      signature)
   (make-profiled-agent-sandbox-task
    name
    (make-agent-sandbox-backend-profile backend-kind backend-ref '() '() '() '())
@@ -177,8 +180,7 @@
    workdir
    mounts
    output-policy
-   input-contract
-   output-contract
+   signature
    (list (cons 'network-policy network-policy)
          (cons 'capabilities capabilities)
          (cons 'resource-policy resource-policy)
@@ -186,18 +188,19 @@
 
 ;;; Profiled tasks are the preferred bridge-facing constructor. The profile
 ;;; supplies backend defaults and options supply per-task overrides.
-;; : (-> Symbol AgentSandboxProfile Command [Arg] Env Workdir Mounts OutputPolicy Contract Contract [Alist] Task)
-(def (make-profiled-agent-sandbox-task name
-                                       profile
-                                       command
-                                       args
-                                       env
-                                       workdir
-                                       mounts
-                                       output-policy
-                                       input-contract
-                                       output-contract
-                                       . maybe-options)
+;; : (-> Symbol AgentSandboxProfile Command [Arg] Env Workdir Mounts OutputPolicy Function [Alist] Task)
+(def (make-profiled-agent-sandbox-task
+      name
+      profile
+      command
+      args
+      env
+      workdir
+      mounts
+      output-policy
+      signature
+      .
+      maybe-options)
   (let* ((options (if (null? maybe-options) '() (car maybe-options)))
          (request (make-agent-sandbox-request-from-fields
                    profile
@@ -215,62 +218,63 @@
                          (cons 'output-policy output-policy)
                          (cons 'metadata
                                (agent-sandbox-option options 'metadata '()))))))
-    (make-task name
-               'agent-sandbox
-               (list 'agent-sandbox request)
-               input-contract
-               output-contract
-               #f)))
+    (make-task
+     name
+     'agent-sandbox
+     (list 'agent-sandbox request)
+     signature
+     #f)))
 
 ;;; The flow helper keeps user code declaration-shaped: every backend detail is
 ;;; still inert request data until a runtime adapter interprets it.
-;; : (-> Symbol Symbol BackendRef Command [Arg] Env Workdir Mounts NetworkPolicy Capabilities ResourcePolicy OutputPolicy Metadata Contract Contract Flow)
-(def (agent-sandbox-flow name
-                         backend-kind
-                         backend-ref
-                         command
-                         args
-                         env
-                         workdir
-                         mounts
-                         network-policy
-                         capabilities
-                         resource-policy
-                         output-policy
-                         metadata
-                         input-contract
-                         output-contract)
+;; : (-> Symbol Symbol BackendRef Command [Arg] Env Workdir Mounts NetworkPolicy Capabilities ResourcePolicy OutputPolicy Metadata Function Flow)
+(def (agent-sandbox-flow
+      name
+      backend-kind
+      backend-ref
+      command
+      args
+      env
+      workdir
+      mounts
+      network-policy
+      capabilities
+      resource-policy
+      output-policy
+      metadata
+      signature)
   (task-flow name
-             (make-agent-sandbox-task name
-                                      backend-kind
-                                      backend-ref
-                                      command
-                                      args
-                                      env
-                                      workdir
-                                      mounts
-                                      network-policy
-                                      capabilities
-                                      resource-policy
-                                      output-policy
-                                      metadata
-                                      input-contract
-                                      output-contract)))
+             (make-agent-sandbox-task
+	      name
+	      backend-kind
+	      backend-ref
+	      command
+	      args
+	      env
+	      workdir
+	      mounts
+	      network-policy
+	      capabilities
+	      resource-policy
+	      output-policy
+	      metadata
+	      signature)))
 
 ;;; Profiled flows keep reusable backend policy out of call sites while still
 ;;; producing the same normalized task request as direct constructors.
-;; : (-> Symbol AgentSandboxProfile Command [Arg] Env Workdir Mounts OutputPolicy Contract Contract [Alist] Flow)
-(def (profiled-agent-sandbox-flow name
-                                  profile
-                                  command
-                                  args
-                                  env
-                                  workdir
-                                  mounts
-                                  output-policy
-                                  input-contract
-                                  output-contract
-                                  . maybe-options)
+;; : (-> Symbol AgentSandboxProfile Command [Arg] Env Workdir Mounts OutputPolicy Function [Alist] Flow)
+(def (profiled-agent-sandbox-flow
+      name
+      profile
+      command
+      args
+      env
+      workdir
+      mounts
+      output-policy
+      signature
+      .
+      maybe-options)
   (task-flow
    name
    (make-profiled-agent-sandbox-task
@@ -282,6 +286,5 @@
     workdir
     mounts
     output-policy
-    input-contract
-    output-contract
+    signature
     (if (null? maybe-options) '() (car maybe-options)))))

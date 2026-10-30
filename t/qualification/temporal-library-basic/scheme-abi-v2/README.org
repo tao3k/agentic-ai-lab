@@ -1,0 +1,93 @@
+#+title: Scheme ABI v2 and ASP-native qualification
+#+date: [2026-10-04]
+#+property: STATUS functional-and-model-pass-cold-performance-failed
+
+* Producer and boundaries
+
+Native artifact SHA-256:
+=cd05897a66cf2b60d9e2bbb66ae1b463cbe800a516ddb282eb3d93583402e939=.
+macOS ARM64, CPython 3.13.11, Rust 1.95.0 release. Qualification ran on the
+working tree descended from =9ad77d307dfcd83cf6e503aa57c29cce6c0f1ce5=;
+exact binary/native/source bindings are in the Scheme receipts, not an assertion
+that the parent commit implemented ABI v2. ASP owns benchmark and model-batch
+measurement. Whole transitive tool closure/refinement remains unqualified.
+
+* Observed gates
+
+| Gate | Result | Supported claim |
+|------+--------+-----------------|
+| Scheme reader and model entry load tests | MODULE-OK, HARNESS-OK, final OK | Inert reader checks and executable ASP entry; load test makes no paid calls |
+| Installed Python wheel | 101 passed, 4.76s | Native lens/family, source admission, publication and graph execution; old JSON/entry symbol rejected |
+| Rust native integration | Both integration tests passed; 21 exact differential results; 8127 queue rejections | Current installed Python/C/Rust correspondence, bounded queue/lifetime, original typed MRR receipt |
+| Rust wire unit + clippy | Pass; warnings denied for all targets/features used | Inert codec counterexamples and compilation/lint scope |
+| [[file:mrr-cold-benchmark.ss][ASP cold-process MRR benchmark]] | 20/20 semantic samples; p95 1.171178s; 900ms gate FAILED | Fresh process, artifact hashing, native startup and MRR assertions included; no admitted performance claim |
+| [[file:model/receipt.ss][ASP real DeepSeek batch]] | 4/4 cases, 8 completed responses, no retries, freeze intact | Forced Scheme-datum tool task fidelity, Rust/C/POO execution and consumption of actual output |
+
+Provider maximum first-content wait: 1.0257268749992363s. Maximum subsequent
+content gap: 0.1890292079988285s. Maximum native subprocess: 2.7465040839997528s.
+The five-second genuine-content deadline was unchanged. Paid samples run once;
+ASP reports exact elapsed durations, not a p95 derived from repeated paid calls.
+Only the DeepSeek HTTP adapter uses the service-mandated outer JSON envelope.
+Tool payload strings, model answers, internal native transport, oracle and saved
+records use Scheme data. Original provider text is retained in each case datum.
+
+The final wheel also migrates the lens tool envelope to a Scheme =datum= string
+and rejects the old nested task envelope. Its sync/async binding is covered by
+deterministic native tests; the paid batch covers the separate family profile,
+not a new real-model lens qualification.
+
+These model cases do not execute a physical MRR Data source query or authorize
+an effect. MRR bridge tests use authentic owner types over a fixture. The read-only
+model qualification and native MRR mapping qualification are separate evidence.
+
+* Failed attempts and repairs
+
+The first installed v2 run had 91 passes and 9 failures. Two failures lacked the
+control-lane artifact environment; seven exposed a remaining JSON encoder in
+TemporalPublicationStore's trusted host callback. The callback now uses Scheme
+wire, and the final installed-wheel run supplied both real native artifacts.
+The first v2 native artifact was
+=cce7304b55a29dd7a6232c1cfac5981951bdf53fbee813fbb6db9da5c842a59e=.
+The numeric grammar now compiles its regexp once. The final artifact rebuilt
+that module and the semantic root against the isolated prefix from the complete
+build, then re-linked the compiler-resolved closure. This is a local incremental
+build receipt, not a reproducible-build or universal speedup claim.
+
+After measurement, the external benchmark test moved into its own opt-in
+directory so ordinary unit discovery cannot run it without installed artifacts.
+Its measured source is retained in [[file:cold-benchmark-source.ss][the source snapshot]]; the receipt keeps its
+original path/hash. No timing result is changed by that relocation.
+
+The cold benchmark failed its original 900ms p95 gate. It was not retried or
+relabelled as a pass. A subsequent host observation reported load averages
+181.16 / 156.58 / 124.16; this is context, not proof of a sole cause. A qualified
+uncontended run or a separately justified production-residency benchmark remains
+necessary for a performance claim. ASP memory statistics here describe the Scheme
+harness, not child Rust/native peak memory.
+
+Installed wheel tests use an external pytest configuration so repository
+pythonpath settings cannot substitute source files for the installed consumer.
+Rust tests and wheel tests ran with a five-second genuine-output watchdog.
+Scheme harness bootstrap uses the heap-fenced Justfile entrypoints; no claim is
+made that harness compilation/initialization completed within five seconds.
+
+* Reproduction
+
+- =just test-file t/scheme-wire-test.ss=
+- =just test-file t/qualification/temporal-model-native/load-test.ss=
+- Generate =oracle.ss= with the installed wheel and =.ci/mrr-runtime/runtime/tools/differential.py=.
+- Release =cargo test --locked --features mrr-transport -- --nocapture= with the artifact/hash/oracle environment.
+- =just benchmark-temporal-mrr= with the release MRR integration test executable and receipt path.
+- =just qualify-temporal-model PYTHON BINARY LIBRARY ORACLE ENV_FILE NEW_OUTPUT_DIRECTORY=.
+
+The model plan freezes binary/library/oracle/provider adapter inputs and refuses
+an existing output directory. Each adapter case claims its file before HTTP;
+there are at most two requests per case. Credentials and ENV contents are absent
+from these records. Follow the existing payload authorization for real calls.
+
+* Remaining integration
+
+[[file:../../../../modules/temporal-causality/mrr-integration-architecture.org][The bidirectional MRR design]] specifies physical source exchange, reverse
+conclusion projection, revision/absence/SCC maintenance, current applicability and
+authorized publication gates. These are not implied by ABI or model acceptance.
+Remote CI must be checked against the submitted commit separately.

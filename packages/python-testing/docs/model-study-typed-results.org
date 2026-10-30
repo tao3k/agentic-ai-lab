@@ -1,0 +1,62 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Typed observation repair pilot results
+#+STATUS: completed bounded pilot; temporal authority gap remains
+#+DATE: 2026-10-01
+#+FILETAGS: :testing:ascent:temporal:llm:results:
+
+* Receipt
+
+[[file:model-study-typed.org][The typed protocol]] was committed before the
+first typed request. The frozen case corpus SHA256 remained
+=7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
+ASCENT head was =00930e20f382516d78d2d2f2df084b89322162ae=;
+Agentic AI Lab checkout head was
+=d3efbe7ec22c5ab6e59d0eb140dcb1fa38ae74a5=. All 30 requests
+completed with no API error or incomplete response. Raw records stay
+outside the repository at
+=/private/tmp/poo-model-study-typed-2026-10-01.jsonl=, SHA256
+=d23789c5c5db9bf79380b5c5c5f199e5f0270cbabbefb7314fa688bc16b4731d=.
+
+* Scores
+
+#+NAME: model-study-typed-scores
+| Task | Old choice / 3 | Typed choice / 3 | Old claim / 3 | Typed claim / 3 |
+|------+----------------+------------------+---------------+-----------------|
+| ASCENT withdrawal | 3 | 3 | 3 | 3 |
+| ASCENT wrong join | 3 | 3 | 0 | 3 |
+| ASCENT negation and count | 3 | 3 | 3 | 3 |
+| Temporal closed cut | 3 | 3 | 0 | 0 |
+| Temporal open parent | 3 | 3 | 3 | 3 |
+| Total | 15 / 15 | 15 / 15 | 9 / 15 | 12 / 15 |
+
+The typed candidate boundary fixed the wrong-join label in these three
+paired samples. It did not fix the temporal authorization label: all
+six closed-cut responses selected =release_authorized=, including all
+three that received JSON ="release_authorized":false= and
+="causation_proven":false=. The native receipt continued to say
+=release-authorized? #f=. This is a model-output boundary failure,
+not an authorization result. Do not accept the model's field as a
+release decision.
+
+Median model call time was 0.551 s old and 0.409 s typed, excluding
+native tool setup; these tiny timings do not establish a speed gain.
+Input tokens totalled 2,862 old and 3,228 typed; output tokens totalled
+189 and 195. The extra typed fields cost input tokens.
+
+* Required repair
+
+At the Runtime output boundary, deterministically withhold any model
+answer that asserts release authority when the native temporal receipt
+denies it. Keep the original model answer for diagnosis and expose a
+typed =native-denies-release= status. This guard prevents one unsafe
+promotion; it does not make the model's reasoning correct. Test it on
+all six closed-cut outputs and on a harmless classification answer.
+
+The subsequent Testing Runtime guard returns =withheld / native-denies-release=
+for all six typed closed-cut model outputs and =observation-only= for the
+safe classification fixture. It also withholds an open-frontier
+=negative_claim=. This is a downstream containment check; no result
+here shows that the model learned the correct boundary or that a
+production release flow is connected to this experimental guard.

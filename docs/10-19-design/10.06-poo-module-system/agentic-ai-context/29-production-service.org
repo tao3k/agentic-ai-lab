@@ -1,0 +1,319 @@
+:PROPERTIES:
+:ID: context-production-service
+:END:
+#+TITLE: Native Context service and the C ABI boundary
+#+LANGUAGE: en
+
+* Scope correction
+
+Scheme owns Context/Session lifecycle semantics, ASCENT proof/support and the
+persistent journal. Bindings expose C ABI declarations, copied byte ownership,
+status and release rules. Rust is a later downstream consumer. No Rust runtime,
+Tokio scheduler, Rust build script, fixed executable path or Rust-specific VM
+setup adapter belongs in this integration step.
+
+The premature Rust consumer and its binding wrappers were removed from the
+working tree. Diagnostic artifacts remain under
+=/private/tmp/context-service-20261026=; they are not current product delivery.
+Earlier 28 evidence retains its original scope and is not silently promoted.
+
+* Existing C boundary
+
+[[file:../../../../bindings/runtime-c/include/agentic_ai_lab/semantic.h][semantic.h]] already defines the versioned inert-byte call, trusted Host lanes,
+thread-affine open/close and owner-side result release. The optional
+[[file:../../../../bindings/runtime-c/include/agentic_ai_lab/scheme_native_v1.h][Scheme-native header]] defines copied result ownership for AOT-linked consumers.
+[[file:../../../../bindings/runtime-c/README.org][The existing C ABI contract]] is authoritative. This change adds no binding file
+and does not introduce another JSON wire protocol or VM bootstrap framework.
+
+The Context lifecycle declaration and Scheme dispatch now use that existing
+C ABI: =agentic_ai_lab_semantic_v1_context_command= is the trusted mutation
+lane and =context.lifecycle.inspect= is the ordinary read-only operation.
+[[file:../../../../modules/workflow/runtime/context-lifecycle.ss][The native adapter]] accepts an application-installed service capability; inert
+request bytes cannot install a service or reconstruct an observation.
+
+Qualification has two distinct boundaries. [[file:../../../../t/context-c-abi-test.ss][The in-process C caller]] exercises
+active Context/Session decisions inside a heap-fenced Gerbil host, whose setup
+and teardown are supplied by that host. The standalone packaged-artifact probe
+exercises actual Gambit setup/cleanup but installs no live Context. Neither
+alone qualifies a standalone artifact with active Context service installation,
+Rust integration or distributed execution. Current-source complete-queue and
+remote CI admission remain required.
+
+* Integration closure order, 2026-10-27
+
+The next delivery boundary is the existing product PR, with one coherent Core,
+Parser, Orgize and ASCENT source cohort. Parser owns its declaration and graph
+facades. Product GQL and Orgize consume those owners directly; deleted
+=src/modules/parser= paths must not be recreated as compatibility aliases.
+Recovery workers acquire the actual caller-owned service source root through
+the existing Scheme parameter. A compiler sandbox path is not that capability.
+
+| Gate | Required evidence |
+|------+-------------------|
+| Preparation | Official Gerbil builds from init-owned declarations; separate preparation and Case timing |
+| Admission | Original source-change, approval-change and artifact-tamper refusals; restored sources work again |
+| Native integration | GQL/Org Elements and independent-process Nix recovery execute actual Cases |
+| Complete queues | All discovered Core and product files execute; retain every failure and natural-exit result |
+| Context | The complete 99-Case queue and whole-queue replay meet the existing 2 GiB / 150-second gate |
+| Remote delivery | CI passes for the published PR head; local or model results cannot substitute |
+
+Core =66f945d697329d955538e12b57689cd96a543125= passed the native
+preparation regression, including the semantically inert approval-edit refusal.
+Its separate 10,000-declaration gate still failed with heap overflow: the last
+completed 100-entry checkpoint was 2,000 declarations, with 1,837,118,560 bytes
+live at the last GC. The approval-retention fix does not close that gate.
+The raw failure and 20 scalar measurements remain local execution artifacts.
+This declaration-capacity failure is independent of steady Context event
+throughput; neither metric substitutes for the other.
+
+After these gates, qualify the existing C ABI with an installed active Context
+service in a standalone native artifact. Then combine saturation, revocation,
+result publication and owner restart in the same native scenario, preserving
+unaffected consumers and original proof/support/journal evidence. Reuse the
+bounded Actor owner from 28. Cross-node authority and liveness require their
+own executable QNT/SysML correspondence and native qualification. Rust remains
+a downstream C ABI consumer after this boundary.
+
+* Executed queue baseline and repair boundary
+
+The complete product queue on =5ef56938= / Core =d27b63d= completed all
+315 discovered files naturally: 292 passed and 23 failed in 3594.62 seconds.
+No file was removed to obtain that baseline. Raw output and the SHA-bound
+per-file failure receipt are local execution artifacts, not repository logs.
+
+The failures exposed distinct engineering boundaries:
+
+- Schema value admission must run before contextual classification/discovery.
+  Calling =.classify= alone cannot establish native value validity.
+- Native refusal evidence retains its original TypeError and POO diagnostic
+  objects. OpenTofu extends their original paths and SourceRefs; it must not
+  cast them back into private Schema records or accept malformed envelopes.
+- POO map projections have no ordering contract. Exact keys, counts and values
+  remain required; arbitrary iteration order is not a semantic assertion.
+- The official Harness imports an AOT C qualification leaf and executes an
+  exported TestSuite. The C probe must not fabricate Harness success markers.
+  Its original C/header sources are native =std/make extra-inputs= and remain
+  in retained compilation, test publication and byte-currentness guards.
+  A Scheme wrapper cache cannot authenticate a changed C implementation.
+- Every declared retained library and its source-relative imports must exist
+  in the Bazel sandbox. Projecting files does not create another build graph.
+- Core owns its POO pin in =core/gerbil.pkg=. The same existing dependency
+  checker must compare that pin with Bazel, alongside product/development pins.
+  The baseline checker missed a real =e281ad2= versus =29c58aa= divergence.
+
+The earlier 99-Case Context run and whole-queue replay both passed at the
+existing 2 GiB / 150-second envelope. The first native run separated 47.387
+seconds of loading from 57.024 seconds of Cases; replay separated 5.577 from
+57.489 seconds. These results do not qualify a repaired cohort, complete
+product CI, standalone active-service installation or cross-node execution.
+The repaired full queue and exact published-head CI remain separate gates.
+
+The parallel POO package update removes its embedded 180-second cutoff.
+The product retains that same deadline on the existing Bazel project process
+guard. Consuming the official native build entry cannot silently relax the
+cold-build acceptance budget or substitute for a measured improvement.
+
+* Qualification preparation ownership
+
+The 23 failures from the complete 315-file baseline now have passing focused
+native receipts, including the actual C caller Suite. This is per-file repair
+evidence; it does not replace another complete-queue run on the repaired cohort.
+The public Schema admission boundary retains POO diagnostics, while an explicit
+private Schema IR test still reads its original opaque backend record. Derived
+observation policies preserve the actual inherited parent policy and test both
+explicit child settings; they do not assume that an observing Harness is off.
+
+[[file:../../../../build.ss][The existing root build entry]] consumes the production and qualification
+projections from the existing init owner. Official =gerbil build= owns both
+compile phases; product qualification adds no Gerbil package under =t/=. The same
+entry prepares the Nix command-owned prefix before TestingScript imports Cases.
+The root command consumes [[file:../../../../qualification-build.ss][the standard qualification build declaration]] in a
+fresh Gerbil process after library construction. Production source bootstrap
+and the installed-library test view have separate native import epochs; their
+compiler evidence is not interchangeable. The declaration inherits the package
+build's existing 2 GiB runtime envelope and consumes only the init projection.
+It owns no Case inventory, Harness or result verdict. Compiler staging aliases
+must end with the temporary source
+extent on success, failure and nested preparation, so a later projection cannot
+inherit a deleted compiler path.
+
+The OpenTofu round summary consumes =source-inputs= from the native init test
+publication. It no longer scans source directories or enumerates Core files,
+root build files or unrelated tests. Original publication admission and byte
+observations remain authoritative. Actual Nix Cases own their external
+transitive source checks; a summary hash cannot substitute for those guards.
+
+The first isolated-prefix preparation hit its existing 120-second timeout.
+A subsequent fresh-prefix preparation exited naturally within that same fence.
+A native process sample confirmed Fixture compilation and GC; buffered CLI
+output did not establish a CLI startup deadlock. This failure remains evidence:
+a subsequent focused pass alone cannot establish cold-preparation reliability.
+The full queue, current Context replay and exact-head remote CI remain open.
+
+* Cross-platform native controls
+
+Ubuntu CI exposed an actual missing =NIX_PATH= cleanup case: Gambit rejects
+=(setenv name #f)=, so cleanup must use its one-argument removal form when the
+original variable was absent. The forged NAR receipt is restored afterwards;
+the metadata-mismatch refusal remains mandatory. The existing fixture transport
+now binds the standard =NIX_PATH= to the same realized locked package set, so
+legacy expression Fixtures do not depend on an installed user channel. The
+profile recovery Fixture explicitly imports that realized source too.
+
+The C qualification leaf keeps its callback in its own shared object. Linux
+must resolve that symbol while loading the macro-phase object, before another
+module's runtime C export is available. The callback delegates to the original
+production =native-evaluate= Scheme procedure; dispatch, error conversion,
+result allocation and Context/Session decisions are not duplicated. Production
+C ABI declarations and ownership rules remain unchanged. Actual Linux CI must
+confirm this linkage; a Darwin pass cannot establish ELF loader behavior.
+
+Operational source snapshots use the tracked lowercase =justfile=, preserving
+the same byte-change controls on case-sensitive filesystems.
+
+* Native implementation
+
+[[file:../../../../modules/ai-agentic-context/runtime-service.ss][The POO-native service]] reuses the existing Context owner and independent
+Session terminal CAS. The trusted native caller binds original observation
+capabilities; request identities are inert durable inbox keys, not Session
+identities or proof capabilities. The document ID above is only an Org anchor.
+
+Mutating requests check the owner epoch before inbox admission and again
+before the effect. [[file:../../../../modules/ai-agentic-context/durable-owner.ss][The existing durable adapter]] stores the exact original
+request and original decision in the same transaction as the effect. A retry
+returns historical data without another terminal CAS. Same ID with changed
+input is refused. Grant revocation uses the existing version CAS and support
+graph, invalidating affected A/B consumers while independent C remains valid.
+Cancellation/recovery cannot reactivate an old result.
+
+Shutdown drains and joins the existing owner and closes its journal. It also
+works before the first business command: original evidence remains checked,
+but no propagation event or Attempt terminal is fabricated for cleanup.
+
+* Tests and evidence
+
+[[file:../../../../t/context-service-test.ss][Native scenarios]] exercise actual Session publication, historical retry,
+input substitution refusal, proactive cross-Session revocation, cancellation,
+recovery, unknown Session refusal, same-journal restart and close-before-work.
+The original evidence/test module and its native namespace are retained. An
+unnecessary shared-fixture/alias extraction was withdrawn after a native
+compatibility failure; its failure log is preserved separately.
+
+#+begin_src sh
+just build-library
+GERBIL_TEST_MAX_HEAP=2G just build-test t/context-service-test.ss
+GERBIL_TEST_MAX_HEAP=2G just test-context-service /private/tmp/NEW-context.sqlite
+#+end_src
+
+Use a fresh journal path. The native gate keeps the pre-import 2 GiB heap
+fence and 150-second watchdog and requires MODULE-OK, HARNESS-OK, final OK,
+and no harness/heap/stack error marker. [[file:29-service-results.json][The structured receipt]] separates
+this evidence from withdrawn Rust/resource experiments. Raw logs remain local.
+
+The existing [[file:28-hybrid-runtime.org][28 concurrency work]] and inherited Org owners remain references;
+no new finite-resource model is claimed as implementation refinement or as
+proof that the pending C lifecycle export is complete.
+
+* Historical qualification boundary
+
+The earlier restored-module service run passed in 52.3 seconds. One unsplit canonical
+60-order run passed in 96.3 seconds with 60 actual owner/timer/journal closes.
+Whole-queue replay did not pass the fixed watchdog: the two retained attempts
+closed 48 and 34 owners before exit 137, each around 155 seconds including the
+watchdog kill grace. The gate remains 150 seconds; no batch split or wider
+limit was admitted. The waiting/scheduling cause is not established, and the
+replay/performance issue is explicitly open. These runs do not qualify the
+pending C export or a Rust integration.
+
+* Executed ownership repair
+
+The native Core build-graph Suite executed 22 observed Cases, including exact
+source observation projection, changed-input refusal/restoration, successful
+compiler exit, failed nested/outer exits, transitive importer invalidation and
+unaffected native imports. The product summary Suite executed four Cases over
+actual native test publication inputs. The AWS ordinary/observed Schema
+transition and the actual C Context/Session Suite passed with their original
+refusal controls. Those are repair-cut results, not full-cohort acceptance.
+
+The interrupted =3dafa8c1= product queue completed 47 of 315 files before the
+requested layout/source-ownership correction. Its natural signal exit is 143;
+it is not a completed queue or a passing receipt. A new full queue and the
+Context replay remain required on the final published source cohort.
+
+* Complete native queue after source-ownership repair
+
+The frozen product =177ac1c448aa846345cde7a1538ab6f788548692= / Core
+=e77698c35bc0e9a0a01458447fa61c720ee59290= queue naturally completed
+315/315 files in 4232.49 seconds under the existing resource envelopes. Every
+file had MODULE-OK, HARNESS-OK and final OK, with no native error or heap/stack
+overflow marker. The Harness measured 1230 actual Cases; 20 helper files had
+zero Cases and qualify import only. The 3454 tracked source fingerprints were
+unchanged throughout this run. Local raw-log SHA-256:
+=c7f611b0192c154617505255480b12663cfb1d182a4eba73e6a9f83b9c9483fb=.
+
+This is the completed baseline before the following sandbox-interface repair,
+not a complete queue receipt for a later dependency cohort, current Context
+99-Case replay, standalone VM installation or exact-head remote CI.
+
+Bazel sandboxes expose native dependency =.ssi= files as symlinks. Their reader
+must preserve the original interface path and bytes while the live projection
+guards the followed target identity. Ordinary source roles remain regular-file
+only. Core's 23-Case native build-graph Suite passes the added same-byte target
+replacement, tamper, disappearance, directory-target and restoration controls.
+
+The C caller's in-process Fixture supplies setup-parameter initialization for
+its already-running host and reads the real heap limit through Gambit's native
+=___EXT= dynamic-extension linkage. Its actual Case still crosses the unchanged
+production C facade and Scheme Context/Session admission. This Fixture does not
+qualify standalone VM bootstrap; Linux eager symbol resolution remains an
+independent remote gate.
+
+The existing complete Bazel Nix queue on Core =9cfcbc4= and its coherent
+POO/Parser/Orgize/ASCENT cohort naturally passed all 38 selected files and 718
+explicit assertions. All selected files retained their exact MODULE-OK,
+HARNESS-OK and final OK markers, with no native error/overflow markers. Raw-log
+SHA-256: =066918b4c72f7c3bc1f73c51ff69169ddf799614575c3a0f709d4fe6d8ce6636=.
+This is not the full Root queue or the separate =//:compile= consumer gate.
+
+The preceding cold command-owned preparation timed out at the unchanged
+120-second fence before any Case. Another fresh command-owned prefix completed
+in 37.27 seconds, compiling only the AWS Fixture support target, with
+1,709,359,104 peak RSS bytes. A three-second native sample observed file reads,
+GC and dynamic-module cleanup/dlclose. This locates real preparation costs but
+does not establish the first timeout's cause. Fresh writable prefixes do not
+reset the OS file cache. The failed run remains evidence; neither a later pass
+nor host-load speculation closes cold-preparation variability.
+
+* Executable operational summary and final native replay
+
+The operational round declarations referenced three removed Just recipes.
+They now invoke the existing Nix Justfile's =test <file>= entry directly.
+Selected Graph and selected-flake data use the same Script prototype; the
+existing native Case input binds the optional flake. No test package, new
+selector, environment protocol or compiler/worker runner is added.
+
+Core =admit-testing-result= now owns operational receipt admission instead of
+another copy of marker parsing. The four native summary Cases preserve a valid
+receipt, nonzero exit, native check/module failures, exact Harness ownership,
+original source observations, unobserved-file independence and restoration.
+The Nix runner derives one canonical product root for those native paths.
+
+Actual execution in the existing Bazel environment completed three Selected
+Graph rounds with 90 assertions each and three Flake Source rounds with 33
+each. The original source observation set remained current. These are actual
+Case executions through the existing Just/Harness boundary, not command-shape
+assertions. Final installed-cohort Core build-graph (23 Cases), C caller (one)
+and operational summary (four) all retained strict native completion markers.
+
+The final installed cohort's complete 99-Case Context run and unsplit whole
+queue replay both exited naturally within 2 GiB, 150 seconds and the existing
+five-second progress watchdog. First run: loading 10.1016 seconds, Cases
+57.2234, native total 67.3263. Replay: loading 5.5449, Cases 57.4928, total
+63.0632. They do not qualify cold package compilation or distributed throughput.
+
+The current C caller source is also bound to executed QNT and SysML receipts.
+Normal QNT explored 46,945 generated / 4,312 distinct states; all three intended
+broken models retained counterexamples. SysML CLI executed 42 replay paths,
+with three expected unsafe results and no unexpected result. These bounded
+models do not prove native refinement or an unbounded distributed runtime.
+The final published-head full product CI remains its own acceptance gate.

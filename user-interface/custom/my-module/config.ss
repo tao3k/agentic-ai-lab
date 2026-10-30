@@ -8,10 +8,10 @@
 
 (import (only-in :clan/poo/object .o)
         "types.ss")
-(export poo-flow-custom-my-module-config)
+(export agentic-ai-lab-custom-my-module-config)
 
-(def poo-flow-custom-my-module-config
-  (.o identity: +poo-flow-custom-my-module-identity+
+(def agentic-ai-lab-custom-my-module-config
+  (.o identity: +agentic-ai-lab-custom-my-module-identity+
       profile-source: 'profiles
       scenario-source: 'cases
       runtime-executed?: #f))

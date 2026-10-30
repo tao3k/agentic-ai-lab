@@ -10,7 +10,7 @@
 (def runtime-request-family
   (.o (kind 'runtime-request-family)
       (name 'runtime-request-family)
-      (source 'poo-flow.performance.runtime-request)))
+      (source 'agentic-ai-lab.performance.runtime-request)))
 
 (def (runtime-request-family-object request-id-value
                                     runtime-value

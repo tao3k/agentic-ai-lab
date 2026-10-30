@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: proof height minimal-height proof fragments and current evidence owners
+#+DATE: 2026-10-09
+#+STATUS: dedicated method reading; bounded maintained-support height queries implemented
+
+* Primary method
+
+[[https://arxiv.org/pdf/1907.05045][Provenance for Large-scale Datalog]], sections 2--3, PDF pages 7--14:
+proof height annotations participate in evaluation, can improve after a tuple
+first appears, and constrain a later proof-fragment search. Theorem 1 connects
+the annotations to minimum-height trees. A depth-limited fragment and the
+complete derivation collection have different meanings.
+
+* Repository design decision
+
+=candidate/provenance.ss= owns a replayable witness;
+=candidate/provenance-graph.ss= owns complete bounded grounded alternatives;
+=candidate/annotations.ss= owns all-tree unit natural counts. The separate maintained-support layer now computes bounded minimum proof
+heights; natural counts do not certify minimum proof height. The first witness is not necessarily minimal;
+productive recursion can bound natural counts while a finite-height witness
+still exists.
+
+The height read returns only complete annotations or an exception; future
+fragment navigation must distinguish truncated fragments from complete proofs. Its discriminator must discover
+a long witness first, then a shorter alternative without adding a new output
+tuple, and require the annotation to improve. Withdrawal must invalidate an
+annotation whose chosen support disappears, retaining another founded support
+when present. Lean owns minimum-height correctness; the existing snapshot and
+publication models plus height-specific faults own protocol admission.
+
+* Implementation transfer, 2026-10-10
+
+Rechecked §3.2, Figure 10 and Theorem 1 against the authoritative HTML. The
+critical discriminator is annotation improvement after tuple discovery, rather
+than another ordinary tuple insertion. The local [[file:../../features/provenance-heights/acceptance.org][height API]] relaxes all retained
+positive alternatives with source/fact zero and rule one-plus-maximum. It binds
+detached query annotations to the current source cut. Deleting a shortest support
+forces a fresh table, so heights can increase; support compaction preserves them.
+
+This implements the finite min/max height seam identified above. It does not
+integrate annotations into native seminaive evaluation or reproduce Souffle's
+parallel synthesis and DOOP/DaCapo experiments. Fragment search remains open.
+Theorem 1 motivates the Lean closure-plus-attainment characterization; native
+loop refinement is an independent remaining obligation.

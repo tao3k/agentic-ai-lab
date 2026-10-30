@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 [project]
-name = "poo-flow-runtime"
+name = "agentic-ai-lab-runtime"
 version = "0.1.0"
-description = "Python runtime consumer for the POO Flow C ABI."
+description = "Python runtime consumer for the Agentic AI Lab C ABI."
 license = "Apache-2.0 AND LGPL-2.1-or-later"
 license-files = ["LICENSE"]
 readme = { file = "README.org", content-type = "text/plain" }
@@ -17,8 +17,8 @@ dependencies = [
 ]
 
 [project.scripts]
-poo-flow-build-profile = "poo_flow_runtime.build_profile:main"
-poo-flow-jsonschema-contract = "poo_flow_runtime.json_schema_contract:main"
+agentic-ai-lab-build-profile = "agentic_ai_lab_runtime.build_profile:main"
+agentic-ai-lab-jsonschema-contract = "agentic_ai_lab_runtime.json_schema_contract:main"
 
 [dependency-groups]
 dev = [
@@ -27,7 +27,7 @@ dev = [
 ]
 
 [build-system]
-requires = ["setuptools>=75", "wheel", "cffi>=2.0.0"]
+requires = ["setuptools>=75", "wheel", "cffi>=2.0.0", "setuptools-rust>=1.12,<2"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
@@ -38,10 +38,12 @@ include-package-data = true
 where = ["src"]
 
 [tool.setuptools.package-data]
-poo_flow_runtime = [
+agentic_ai_lab_runtime = [
   "_native/lib/*",
+  "reasoning_rules/*.ss",
   "projections/*.ss",
   "projections/*.sexp",
+  "projections/runtime_load_imports.json",
 ]
 
 [tool.pytest.ini_options]
@@ -51,3 +53,9 @@ pythonpath = ["src"]
 
 [tool.uv.sources]
 python-lang-project-harness = { git = "https://github.com/tao3k/python-lang-project-harness" }
+
+[tool.maturin]
+manifest-path = "../../modules/evidence-assessment/native/Cargo.toml"
+module-name = "agentic_ai_lab_runtime._reasoning"
+python-source = "src"
+features = ["python", "extension-module"]

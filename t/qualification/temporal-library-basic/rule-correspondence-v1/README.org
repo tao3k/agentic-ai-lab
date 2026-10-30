@@ -1,0 +1,58 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+TITLE: Original MRR Rule content to native proof-node correspondence
+
+* Executed owner mapping
+
+=typed-rules.ss= contains exact inert Scheme v1 bytes from the Rust producer.
+The original MRR RelationCatalog declares edge/path integer pairs. Two original
+MRR Rules retain their RuleIds, complete positional head/body/variable content,
+catalog digest and declared original generation. The host explicitly maps that
+generation to ASCENT numeric snapshot generation 1; no ID is synthesized from it.
+
+The native test loads those bytes into normal POO relation/term/atom/rule/program
+constructors, then consumes an actual original Scheme evaluator receipt for
+base and recursive path rules. It replays that native query/proof and checks
+exact source/derived schema inventory, source scalar types, complete rule
+content and original clause positions. Three verified DAG rule applications
+map to the two original RuleIds in =correspondence.ss=. Both RuleIds are asserted
+present. This is source-relative positive evidence, not exhaustive provenance.
+
+The program and correspondence receipts bind content digests. Replaying a held
+receipt recomputes original native evidence and checks every field. Tests reject
+changed applications, forged authorization, stale generation, reordered held
+rules, fresh mismatched rule content, unsafe variables, literal type mismatch,
+missing relations and repeated rules. Rust also rejects wrong arity, unsupported
+literal types, cross-column variable type mismatch and oversized programs.
+
+* Qualification
+
+=qualification.ss= records exact source inputs, original MRR/ASCENT revisions,
+compiled native rule artifact, gates and raw logs. The native build ran through
+=just build-temporal-evaluator=. The source runner imported the compiled private
+SDK modules and =just test-temporal-evaluator= required all 15 Case markers,
+MODULE-OK, HARNESS-OK, final OK and actual exit zero. Its 1G heap, five-second
+idle and 45-second total gates were unchanged; wall time was 9.74 seconds.
+
+Rust used locked/offline =mrr-transport= builds. The original rule projection
+binary passed two tests (0.74 seconds wall). The original support/content binary
+passed three tests against the unchanged native semantic ABI v1 artifact
+(1.83 seconds wall), preserving Catalog checks and Temporal withdrawal/replay.
+Both used the same five-second idle and 45-second total watchdog.
+
+Three initial native failures (exit 70) remain in raw compressed logs: identity
+slot capture, test syntax, and applications slot capture. The latter triggered
+the existing debug memory rejection; names were corrected without weakening
+its policy. No Python suite, real model, benchmark or fresh semantic AOT build
+was executed. Current commit CI is independent of these local receipts.
+
+* Remaining combined admission
+
+The correspondence flag verifies exact projected Rule content and node mapping
+relative to supplied source/proposal. It does not authenticate catalog/Rule
+issuers or link a selected proof root to an original MRR Derivation's Rule
+context. Existing source fact/support binding retains its conservative MRR rule
+equivalence flag. That combined authority admission, separate trusted proof and
+Host policy ABI v1 controls, authoritative provider refresh, and conditional
+expected-head Data publication remain open. Selection, action authorization and
+durability are false in this receipt.

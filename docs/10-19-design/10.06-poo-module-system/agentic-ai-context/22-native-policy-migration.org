@@ -1,0 +1,217 @@
+#+title: Policy Replacement Migration and Native Interleavings
+#+language: en
+:PROPERTIES:
+:ID: context-native-policy-migration
+:STATUS: production-scheme-bounded-native-corpus-qualified
+:END:
+
+* Authority carried forward from existing Org
+
+This implements the remaining legacy seam in [[file:21-native-policy-transition.org][21: native policy transition]],
+using the ownership and source allocation in [[file:00-design-map.org][the existing design map]]. The
+Context lifecycle preserves original evidence and captured applicability;
+Session independently owns Attempt scheduling and endpoint reconciliation.
+The independent Module boundary is specified in
+[[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][the Session/Memory contract]]. Publication-time competition follows the
+same final-cut discipline described by
+[[file:../../../../core/module-system/design/43-session-memory-recovery/37-session-rebinding-concurrency.org][the existing concurrent binding contract]]; that document is a design precedent,
+not a claim that a Session-binding permit authorizes a policy effect.
+Changing a policy can invalidate a Context and its consumers; it cannot invent
+an endpoint observation or a second Attempt terminal.
+
+The original source, ASCENT proof DAG, temporal evidence journal, policy history,
+grant and current-use decision remain distinct. Long-term retention does not
+turn an old policy/Attempt receipt into current authority. This slice changes
+neither the C3/C4 composition contract nor the Org content-ID/Session-ID split.
+
+* Production migration
+
+| Input | Owner decision | Durable recovery |
+|-------+----------------+------------------|
+| Canonical =policy-transition= with original generation/digest | Compare both against registered head; advance exactly once on acceptance | Same handler, original inbox identity |
+| Legacy =policy-replacement= name with the canonical CAS body | Same handler; normalize only the operation name for proposal comparison | Same transaction and original identity, no alternate recovery event |
+| Historical =policy-replacement= without an expected cut | Refuse with =missing-expected-cut= | Persist refusal and mark original input applied; preserve original bytes |
+| Same ID with substituted bytes | Refuse before historical ACK | Never rewrite original inbox bytes |
+| Already applied original input | Historical processing ACK | No new policy effect or invented acceptance |
+
+A target generation such as =generation: 3= is not an expected previous version.
+Recovery must not infer the missing expectation from whichever policy happens
+to be registered on restart. The previous branch that created a new
+=authority-recovery:= event and conditionally refreshed a higher generation is
+removed. Historical applied effects are not retroactively changed.
+
+The production adapter keeps one =apply-policy!= implementation and records an
+accepted/refused =context.policy-transition-decision.v1= under the original
+=policy-transition-decision:<input-id>= key. The decision records the actual
+previous generation/digest and the refusal reason. Policy state/history,
+Context fences, unresolved obligations and existing terminals commit together.
+There is no new policy registry, Session store or query-time invalidation loop.
+
+The clock owner now dispatches policy operations to that handler itself.
+=policy-clock-command!= does not execute a supplied policy callback, including
+for the legacy name. A clock without a durable adapter refuses both policy
+operation names; it cannot fall back to executing an unfenced callback. This closes the old live-callback bypass as well as the
+old recovery branch. Normal callers use the named runtime handoff:
+
+#+begin_src scheme
+(def intent
+  (context-durable-policy-command input-id registered-snapshot proposed-policy))
+(policy-clock-replace-policy! clock intent)
+#+end_src
+
+=registered-snapshot= is captured before handoff. A deadline or another
+replacement that wins first can make that intent stale; the owner records
+refusal rather than silently rebasing it. The native Policy Host chooses the
+actual effective time. No caller-supplied timestamp becomes publication time.
+
+The former live callers in =t/context-durable-owner.ss= now construct canonical
+CAS commands. Fresh Session enrollment is a separate Session operation after
+the replacement commits. Its required generation comes from the registered
+policy, not a hard-coded generation 3. The intentionally unsafe stale-handler
+control is explicitly a raw test effect and no longer masquerades as a normal
+policy command.
+
+* Native schedule exploration
+
+[[file:run-native-policy-migration.py][The native gate]] and =t/context-policy-migration-test.ss= independently
+enumerate every permutation of five owner events with cancel before recovery:
+
+1. Publish actual queued background deadline deliveries.
+2. Submit the policy command captured at the original cut.
+3. Commit an actual native worker observation for A.
+4. Cancel A.
+5. Recover A.
+
+There are 60 legal permutations per input profile, not two selected orders.
+The three profiles are canonical, legacy with CAS and legacy missing its cut.
+A real monotonic timer produces delayed duplicate copies; the paused cohort
+delays handling, not clock passage. A result guard may therefore observe actual
+expiry before the queued deadline is handled. The actual previous generation
+in the policy decision must still satisfy the original CAS.
+
+Separate live runs release independent policy, result and cancel/recover
+producers with the timer unpaused. Their actual owner publication order is
+recorded at journal commit boundaries. Those observed OS schedules complement
+the bounded complete owner-order corpus; they do not establish all possible
+OS interleavings. Duplicate receipt is distinguished from publication. The
+first processed original ticket, including a stale disposition, is event 1.
+
+Native assertions inspect cached A/B invalidation before current-use queries;
+C stays admitted and retains an actual completed result. The callback-bypass
+probe supplies a deliberately incorrect refresh-to-generation-99 closure;
+production must not execute it. The native ledger independently forbids two
+terminals for one Session/Attempt across generations. Original Org, rules,
+facts, ASCENT proof and temporal journal remain retained with their digests.
+
+Each fixed 20-order chunk and live cohort runs serially through a Just entrypoint with the
+existing 1 GiB pre-import heap fence and 150-second process timeout. Raw logs,
+committed SQLite images, timer observations and immutable evidence copies stay
+in local artifacts. Missing markers, nonzero exit, error markers, source/object
+drift, incomplete permutations or missing real duplicate delivery fail the gate.
+
+* Crash migration and original-image controls
+
+The crash cohort exercises legacy-with-CAS and missing-cut legacy inputs at
+after-receive, before-commit and after-commit/before-ACK. The actual process is
+killed; another native process either applies the versioned proposal or records
+the missing-cut refusal. Both decisions commit once under the original input
+identity. No permanent pending legacy authority input remains after recovery.
+
+The saved original legacy-with-CAS receipt-cut image is replayed separately.
+An unsafe native restoration that omits pending replay must expose A still
+admitted; production recovery must reconstruct subscriptions and replay before
+opening. The unversioned legacy image is preserved too: its correct outcome is
+a durable refusal, not an inferred replacement.
+
+#+begin_src sh
+just build-test t/context-policy-migration-test.ss
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-native-policy-migration.py" --artifacts /private/tmp/context-policy-migration-run
+python3 "$slice/run-native-policy-migration.py" --replay /private/tmp/context-policy-migration-run/witness-0-0.json --artifacts /private/tmp/context-policy-migration-replay
+python3 "$slice/run-policy-migration-model.py" --artifacts /private/tmp/context-policy-migration-model
+#+end_src
+
+* Executable SysML correspondence
+
+[[file:22-policy-migration.sysml][The SysML scenario]] executes all five events, rather than checking only an
+admission Boolean. Its corpus crosses 60 orders, three input profiles, queued
+versus live-clock abstract cuts and seven algorithms. Unsafe algorithms omit
+generation CAS, guess a historical cut, fire an old ticket on a replacement,
+duplicate a terminal, revive an old result or execute a legacy callback.
+
+[[file:run-policy-migration-model.py][The model gate]] uses an independent positional oracle for safe replacement
+acceptance and worker completion, checks the actual CLI execution/verdict and
+retains every unsafe witness. Saved witnesses run again with the unsafe mode
+and corrected mode 0. Native storage/proof/clock evidence is a separate
+obligation; the bounded SysML scenarios are not a Scheme refinement proof.
+
+* Qualification scope
+
+Power loss, host reboot with new clock identity, remote endpoint reconciliation
+and all possible thread preemptions remain outside this local gate. Historical
+21 receipts remain bound to their earlier production cut. Diagnostic compile
+and native failures are retained separately and are not relabeled as passes.
+
+* Preserved resource failure and cohort boundary
+
+The attempted 60-owner-per-process run under the final policy production code
+hit the unchanged 150-second process watchdog / 155-second supervisor wait in
+legacy-cut. Its log contained 44 complete path lines; 46 databases had been
+created, and the last =case-45.sqlite= had no committed inbox input. The cause
+is unresolved. Evidence remains under
+=/private/tmp/context-policy-migration-sealed-20261026/legacy-cut-controlled/=.
+It is not a qualified monolithic-process run.
+
+The executable corpus now partitions each profile into three disjoint chunks
+of 20 orders, launched serially with the same 1 GiB / 150-second limits. The
+independent audit requires all 60 distinct legal orders per profile and all
+three chunk identities. This qualifies per-order semantics only; capacity for
+60 successive owners in one process remains unqualified. Heap, timeout and
+negative controls have not been relaxed.
+
+* Qualified local results: 2026-10-26
+
+The final chunked production cut passed 180 controlled native paths (all 60
+legal orders for each of three input profiles) and 12 actual independent
+producer runs. Each serial process retained the 1 GiB / 150-second fence.
+Canonical and versioned legacy commands each accepted 20 controlled paths and
+refused 40; all missing-cut historical inputs were refused. Every process also
+passed the non-durable-owner callback-bypass probe.
+
+Six actual SIGKILL/restart paths passed: both legacy input profiles at receipt,
+before commit with A's actual result first, and after commit with cancellation/
+recovery first. Original terminal hashes and evidence stayed unchanged. The
+original legacy-with-CAS receipt-cut image passed separate positive replay; a
+native omitted-replay control exposed A still admitted. A saved complete owner
+order was replayed again on the same source/object cut.
+
+The independent read-only audit verified all chunk identities and 60-order
+sets, current source/native artifacts, actual journal CAS decisions, the queued
+clock's positional acceptance oracle, one terminal per Attempt, settled original
+input IDs and unchanged crash artifacts. Its receipt is
+=/private/tmp/context-policy-migration-chunked-20261026/migration-audit.json=;
+the native receipt is in the same directory as =migration-receipt.json=.
+
+Two additional migrated-caller crash regressions passed on that identical cut.
+The missed-send case rearmed a real background timer after restart and inspected
+A/B cached invalidation before current-use queries. The completed-terminal case
+retained A's actual original completed terminal through expiry and owner recovery.
+Both used the migrated policy handoff and completed a fresh Session under the
+new registered policy. Their receipt is
+=/private/tmp/context-policy-migrated-callers-20261026/caller-receipt.json=.
+
+The actual SysML CLI executed 2,520 scenarios: 60 orders, three profiles, two
+abstract time cuts and seven algorithms. All 360 safe-mode scenarios held;
+818 unsafe probes exposed expected violations, with zero unexpected verdicts.
+Six saved unsafe witnesses and their corrected paths added 12 actual replay
+executions and six expected failures. Their artifacts are under
+=/private/tmp/context-policy-migration-model-20261026/= and
+=/private/tmp/context-policy-migration-model-replay-20261026/=.
+
+The combined source/object/model/evidence index is
+=/private/tmp/context-policy-migration-evidence-20261026.json=.
+The controlled-path replay is under
+=/private/tmp/context-policy-migration-path-replay-20261026/=.
+The monolithic-process watchdog failure remains a separate unresolved capacity
+boundary, as recorded above. These results do not assert unbounded OS-schedule,
+power-loss, host-reboot or remote-endpoint correctness.

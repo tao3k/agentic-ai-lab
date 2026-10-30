@@ -8,7 +8,7 @@
 
 * Objective
 
-POO Flow Scheme owns policy semantics, durable policy families, and functional
+Agentic AI Lab Scheme owns policy semantics, durable policy families, and functional
 strategy composition. Runtime languages own scheduling, native concurrency,
 database drivers, FFI, and process-level performance.
 
@@ -33,8 +33,8 @@ Canonical gates:
 
 Diagnostic gates:
 
-- =uv run --project packages/python-runtime poo-flow-build-profile --cwd .=
-- =uv run --project packages/python-runtime poo-flow-build-profile --cwd . --max-package-seconds 2=
+- =uv run --project packages/python-runtime agentic-ai-lab-build-profile --cwd .=
+- =uv run --project packages/python-runtime agentic-ai-lab-build-profile --cwd . --max-package-seconds 2=
 
 Do not replace =gxpkg build -g= with =gxpkg env gxi build.ss compile=. Current
 evidence shows the direct package CLI path can bypass the same stamp-cache
@@ -62,18 +62,18 @@ Execution gate:
 - =packages/python-runtime/tests/unit/test_runtime_abi_surface.py=
 
 This test is a runtime ABI contract gate. It must fail when adapter-level
-runtime entrypoints disappear from =poo_flow_runtime.__all__= or when the
+runtime entrypoints disappear from =agentic_ai_lab_runtime.__all__= or when the
 durable adapter stops exposing the thread/time-travel facade expected by
 runtime language bindings.
 
-The Python package also exposes =poo-flow.python-runtime.abi-surface.v1= through
+The Python package also exposes =agentic-ai-lab.python-runtime.abi-surface.v1= through
 =runtime_abi_surface_manifest_bytes=. Runtime language bindings should consume
 this machine-readable line manifest to confirm entrypoints, durable adapter
 facade methods, supported Scheme manifest schemas, receipt schemas, and default
 developer gates before binding concrete backend details.
 
 Non-Python bindings can read the same carrier through the console script
-=poo-flow-runtime-abi-surface=.
+=agentic-ai-lab-runtime-abi-surface=.
 
 Python validates this carrier with =coerce_runtime_abi_surface_manifest=. Other
 runtime bindings should implement the same checks natively: schema identity,
@@ -81,7 +81,7 @@ owner identity, runtime role, required entrypoints, durable facade methods,
 Scheme manifest schemas, receipt schemas, and developer gates.
 
 The console script also supports =--validate <path|->= and emits
-=poo-flow.python-runtime.abi-surface.validation.v1=, making the same contract
+=agentic-ai-lab.python-runtime.abi-surface.validation.v1=, making the same contract
 available to shell-based runtime bootstrap scripts.
 
 ** Phase 3: Durable adapter closure
@@ -114,8 +114,8 @@ system.
 
 Receipt surfaces:
 
-- =poo-flow.build-profile.v1=
-- =poo-flow.build-profile-gate.v1=
+- =agentic-ai-lab.build-profile.v1=
+- =agentic-ai-lab.build-profile-gate.v1=
 
 Budget dimensions:
 

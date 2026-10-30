@@ -1,0 +1,103 @@
+#+title: Evidence DAG and Trajectory
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+* Two complementary concepts
+
+| Concept | Meaning | Primary responsibility |
+|---------+---------+------------------------|
+| Evidence | A fact, checked condition or completed derivation with its source/support identity and applicable validation boundary | Supply reusable support |
+| Evidence DAG | Dependencies between source relations and atomic derivation components | Locate support, preserve dependency order and admit applicable reuse |
+| Trajectory | An ordered record of requests, observations, evidence use, verification, failures and repairs across rounds | Explain the process and account for its cost |
+
+A later trajectory can use applicable evidence from an earlier trajectory.
+The reused object is the supported fact or derivation component. The entire
+past trajectory is not automatically admitted as evidence. Evidence reuse must
+remain bound to current sources, support and the relevant checker contract.
+
+* Implemented DAG representation
+
+=program/evidence-dag.ss= replaces =program/evidence-plan.ss=. The exported
+Scheme entry is =ascent-evidence-dag= and the public engine operation is
+=evidence-dag=. The build specification, dispatcher, Python transport and
+qualification tests use the new name directly. Historical build receipts keep
+their original source names and hashes.
+
+Relations can contain recursive dependencies. Tarjan SCC condensation groups
+recursive relations and coupled multihead relations into atomic components.
+The component graph is acyclic; recursive work remains inside a component.
+The =graph= action exposes:
+
+- =nodes=: source nodes followed by dependency-first component nodes. Component
+  nodes carry their relation names and whether they are recursive.
+- =edges=: unique directed =from= / =to= dependencies. An edge points from
+  prerequisite support to its dependent component.
+- =schema=: =ascent.evidence-dag-structure.v1=.
+
+Node IDs identify graph structure. They are not authority or completion tokens.
+The structural graph does not certify source facts or prove a component's
+result. Query admission retains its source identity, canonical-rule dependency
+fingerprints and completed-component alias checks. Native evaluation and the
+existing evidence/provenance mechanisms establish their respective result and
+support boundaries. This component view does not replace fact-level provenance.
+
+The =components=, =canonical-rule=, =query= and =slice= actions retain their
+existing responsibilities under the new operation. Python's =evidence_dag=
+helper transports the structural =graph= response; SCC discovery and graph
+construction remain in Scheme.
+
+* Trajectory design contract
+
+[[file:interactive-evidence-reasoning.org][Interactive Evidence Reasoning]] specifies the intended model integration:
+the model calls Scheme during candidate-path exploration and continues with
+checked local support. Closed-query execution is a separate capability; it
+does not qualify this interaction or prove reduced model reasoning cost.
+
+Trajectory is the temporal view of the same work. Its event references should
+connect the existing study call records to evidence feedback, using:
+
+- Task identity, round/call identity and source identity/generation.
+- The native path/result reference and applicable component fingerprints.
+- Observed fresh/reused components and verifier results.
+- A failed attempt, repair or invalidation event, with its reason.
+- Provider-reported usage and elapsed time for each actual call.
+- The first independently verified correct answer and stopping/censoring state.
+
+Cumulative thinking before the first correct answer includes unsuccessful
+attempts and repairs. Post-success work is reported separately. A lower number
+of output bytes is not itself a reduction in repeated reasoning. An experiment
+must distinguish a first-run derivation from a later verified reuse and from
+an actual model call avoided by following an admitted result path.
+
+A trajectory records exposed observations. It cannot reconstruct or certify
+unexposed model reasoning. Failed attempts may motivate a later repair but do
+not supply positive proof. Source replacement invalidates applicable result
+references and reuse certificates; historical events remain historical records.
+
+The [[file:trajectory.org][native Trajectory implementation]] now connects this contract to EvidenceChain
+feedback and actual provider/grader observations. Scheme owns state transitions,
+reference invalidation and prefix accounting; existing study machinery retains
+raw provider request/response records. The combined qualification reports its
+ABI/API, formal and experimental evidence separately.
+
+* Local qualification
+
+[[file:../../.cache/ascent/archived-runs/docs/features/evidence-dag-qualification.json][The qualification receipt]] records exact source hashes and local test results.
+Eight direct Scheme cases check explicit SCC condensation, topological edge
+ordering, deterministic graph content under declaration/rule permutation,
+edge deduplication, undeclared dependencies, source-bound query reuse and source identity checks before retained-path selection,
+dependency slicing, undefined derivations and atomic multihead components.
+Two Python unit cases check direct operation routing and surface normalization.
+
+The compiled engine integration test has been renamed and extended for graph
+output. Its compiled ABI and API execution passed nine cases in each mode against the
+new production artifact, recorded by [[file:../../.cache/ascent/archived-runs/docs/features/trajectory-qualification.json][the combined qualification receipt]].
+No model efficacy, Lean refinement or Quint correspondence result is claimed
+by this naming and structural-graph change.
+
+The subsequent [[file:../research/correction-holdout/report.org][whole-task correction study]] separately qualifies source-bound
+intermediate projections, task/subgoal verification scope and real failed-prefix
+continuations. Its first-correct endpoint includes every preceding model call,
+including the initial response and failed repairs. It reports successful and
+censored trajectories together; available DAG evidence does not by itself
+establish model correctness or a general reduction in thinking cost.

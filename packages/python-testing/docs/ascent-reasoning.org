@@ -1,0 +1,107 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Interactive model experiment for the Scheme reasoning Library
+
+This is an optional case study in =packages/python-testing=. The OpenAI Python SDK calls the
+DeepSeek Responses endpoint. Agentic AI Lab's =agentic_ai_lab_runtime.RuntimeGraphExecutor=
+executes the two nodes =model= and =candidate=. The second node passes a
+bounded, inert candidate datum to =candidate/reasoning.ss=. No model prompt,
+task, answer or revision policy is stored in the adapter. The caller enters
+each message at the terminal and decides what feedback to send next.
+
+The sample verifier uses immutable =live-graph= snapshots: generation 1 has
+=edge/2= rows =(0 1)= and =(1 2)=; generation 2 withdraws =(1 2)=. The
+checker returns both receipts and their local binding digests. This verifies
+one candidate against those finite sources. It does not test Agentic AI Lab's
+authorization, ASCENT source admission, or a retained incremental deletion
+algorithm. Exact model text enclosed by a single Markdown code fence is
+accepted; arbitrary Scheme expressions and reader extensions are rejected
+before entering the Gerbil worker.
+
+Install Python Testing with its =live= extra. Agentic AI Lab's
+=gerbil.pkg= pins the Scheme =gerbil-ascent= package. The =--ascent-root=
+argument permits testing a local ASCENT checkout before its pinned package
+is installed. Build that checkout with =just build= first. From the Agentic AI Lab
+root, run:
+
+#+begin_src sh
+DEEPSEEK_API_KEY=... PYTHONPATH=packages/python-runtime/src \
+  uv run --project packages/python-testing --extra live \
+  python -m agentic_ai_lab_testing.ascent.live
+#+end_src
+
+The adapter can read a local =--env-file= containing =DEEPSEEK_API_KEY=, but
+does not print the value. =--model= defaults to =deepseek-flash=, currently
+DeepSeek-V4.1-Flash. =--transcript= is opt-in; it writes user and model text,
+usage, graph trace, timing and any Scheme receipt. Keep such a file local.
+The built-in experiment fixture and separate Scheme worker are not a
+published ABI. The worker remains open for the interactive session; it is
+started only once. In the [[file:pilot-2026-10-01.org][live pilot]], its first
+candidate took 6.231 s and later checks took 0.060 and 0.158 s.
+
+For offline registered checks, with a local ASCENT checkout available:
+
+#+begin_src sh
+ASCENT_TEST_ROOT=/path/to/gerbil-ascent \
+  uv run --project packages/python-testing --group dev pytest -q packages/python-testing/tests
+#+end_src
+
+The official SDK call pattern is documented at
+[[https://developers.openai.com/api/docs/quickstart][OpenAI developer quickstart]].
+DeepSeek documents the compatible Responses endpoint and the current Flash
+alias at [[https://api-docs.deepseek.com/guides/responses_api/][Responses API]]
+and [[https://api-docs.deepseek.com/quick_start/pricing/][Models & Pricing]].
+
+* ABI ownership
+
+Agentic AI Lab owns the shared versioned C ABI, module selection and downstream
+distribution. ASCENT remains a Scheme-native Library consumed through its
+Gerbil package pin. Python and Rust bind to Agentic AI Lab's selected native
+features; they do not independently reimplement ASCENT semantics. The
+existing =scheme_native_v1.h= has global symbols and a centralized
+Agentic AI Lab contract dispatch. A module-selective reasoning call contract and
+its AOT packaging need to be designed and qualified in Agentic AI Lab before
+this experiment can use that ABI. The process worker here is a temporary
+experiment boundary and is not a published ABI.
+The current header exposes descriptor and contract-validation calls; it
+does not expose ASCENT snapshots, candidate evaluation or proof receipts.
+The Scheme source pilot therefore executes the pinned native Gerbil
+program and uses a persistent native Scheme scorer. The process boundary
+adds startup and transport cost but does not replace Scheme evaluation.
+
+* ABI decision gate
+
+The model-study fixture's current local dry run spent about 18–21 seconds
+per fresh Gerbil script on this macOS host. A persistent two-snapshot
+candidate worker took 12.001 seconds for its first request and 0.266
+seconds for its next request in one focused run. The separate ASCENT
+three-node ASP benchmark measures roughly 20 ms median for public
+admit-and-solve and about 0.3 ms for the reused native core. These
+different workloads do not identify how much of the worker's warm cost
+is Python transport, parsing, candidate admission, or inference.
+
+ASCENT therefore does not publish a separate C ABI. Agentic AI Lab owns the
+existing native ABI and any module-selective reasoning call added to it.
+Before changing that surface, compare the same candidate through a
+persistent worker and an in-process Scheme call on the same source,
+including cold startup, warm call p50/p95, payload bytes, allocations,
+status preservation, and source/receipt binding. Add a Agentic AI Lab ABI
+entrypoint only if its measured benefit exceeds its packaging and
+ownership cost, while retaining the same Scheme receipt verifier.
+
+* 2026-10-03 implemented POO semantic ABI and matched measurement
+
+POO now owns =temporal.solve= and =temporal.verify= in its semantic AOT byte ABI,
+reusing ASCENT's finite temporal owner. See the
+[[file:../../../docs/10-19-design/10.06-poo-module-system/python-scheme-runtime-foundation.org][Python/Scheme qualification receipt]] for the 60 matched receipts and 48-call
+historical prompted study. That study supplied solved native answers and is
+withdrawn as acceptance evidence for the no-Prompt / real-time teaching design.
+=runtime_transport= compares the same source/lens/answers and
+bindings over both transports. It establishes equality, not a warm speed gain.
+The retired prompted producer and response replay utilities have been removed.
+The obsolete JSON =model_study.semantic_abi= producer has been removed.
+Current frozen physical model cases use the ASP Scheme benchmark owner and
+Scheme transport. Historical prediction scores do not qualify this producer.
+The five-second genuine content watchdog and no-retry rule remain in force.
+The worker remains an experiment transport; ASCENT publishes no separate ABI.

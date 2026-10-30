@@ -1,0 +1,117 @@
+{
+  "schema": "context.scheduling.validation.v1",
+  "contract_identity": "context-bounded-scheduling",
+  "semantic_revision": 1,
+  "status": "finite-model-and-native-reference-correspondence-passed",
+  "source_sha256": {
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/27-scheduling-burst.qnt": "2bfdebd6fc630e55c2b6cdd7b38decc95f73662ad036045f4a0772da16ad6ad3",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/27-scheduling-capacity.qnt": "608d7a67a1c6479e12394400dd3e4c95f30f272cd8d2ea94addbdebc9c719e9a",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/27-scheduling-priority.qnt": "f3f46e9447dc83457dc565a9046e9540293b49412b92e8761a1f60d693f940c1",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/27-scheduling-none.qnt": "c2ffe5950306c462142efa0ca213366f6701b806f64b3ab27aa33e5ccbfd7a0d",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/27-scheduling-close.qnt": "69c59c84aab9faecd360bb48fe4021efab95ff92072b24c27bf408ce99a430d3",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/27-bounded-scheduling.qnt": "8c0063c620c1f200fed3c242747bf28b40c43c0583210f619913c292e8ecf67c",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-scheduling-quint.py": "e6360438ba68a8e0242da2676c1c5e807feaee8100b89715ba71b3837bb2e5db",
+    "core/dev/proofs/quint/backend.py": "8751028709e7b6ee44e592b3feb125235bc7d0465d556a0272cf12931c4d142b",
+    "core/dev/proofs/quint/native.py": "add09bd810ea579091f172f51225cbcfe7308a9f1a857cebdb2962f18334fe02",
+    "core/dev/proofs/quint/native-cli.cjs": "0babb2ca658486ff4dfcb41c9f5e046179329c7ec984e6be0bfae44855c912f2",
+    "modules/temporal-causality/runtime/scheduling.ss": "d3ebd0a0c61ed157ebe8eefd0b22dd3f52d567fa4e647d44647c326d9c155dc7",
+    "t/context-scheduling-test.ss": "b60620e6bb90690046fa880e52836953e1f30f05fabbf89f7ec84da482a7ccce",
+    "t/harness/context-scheduling-driver.ss": "f9d79f936849867d608688c67e56482d7d7bd0a276c55ff0bb417b384ebaa30c",
+    "dev/just/build.just": "98d9e79db5cb8ccf16e184bc3b1ce39e1f7a6081583937c9f7d1da9bfeceef2d",
+    "dev/just/runtime-tests.just": "f66f15975116155bab9f75b30bb32a77b014fb6aae8c91d0b7a692d4a69ec65c",
+    "packages/automation/context-native-artifacts.py": "57dc67d2b046e5552d89fae7a391580784445fda739d79e6fb71f3060de6ce72",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/27-bounded-scheduling.sysml": "14a3a20e517ce51d47508514bb15ae42d474be9c896952b87f9b852785e7833f",
+    "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-scheduling-sysml.py": "53c3fd55ce2a5430cf989a4bfaf2c177f4bd0c1ece23a337a036e085a9b2c22d"
+  },
+  "custody": {
+    "path": "/private/tmp/context-scheduling-final-20261026/custody/manifest.json",
+    "sha256": "493d5c1f67878be0524373fc35fbfd0fd026d198a811246dd1f01c546d0aa17b"
+  },
+  "scope": {
+    "production_owner_integrated": false,
+    "cluster_implemented": false,
+    "liveness_proved": false,
+    "unbounded_native_refinement_proved": false,
+    "throughput_benchmark": false,
+    "original_evidence_and_session_semantics_changed": false
+  },
+  "quint": {
+    "summary": {
+      "path": "/private/tmp/context-scheduling-final-20261026/quint-qualified/summary.json",
+      "sha256": "6beae94fbeda1b57bd33d9fa9733db68bde5b2ea31761ccca586befac28409a5"
+    },
+    "generated_states": 2185,
+    "reachable_states": 312,
+    "broken_families": 4,
+    "replay_traces": 25,
+    "cases": {
+      "path": "/private/tmp/context-scheduling-final-20261026/quint-qualified/native-cases.json",
+      "sha256": "d7b41c57a5de08f4d031b6ebfb43d7ecf3fa8a2f0ae46190c6975dcdf342afa0"
+    },
+    "native_inputs": {
+      "path": "/private/tmp/context-scheduling-final-20261026/quint-qualified/native-cases.scm",
+      "sha256": "ca67f830d36237f093a8aa7fe0bf3c751a0894a969d92b5427c64bfe616fcd17"
+    }
+  },
+  "sysml": {
+    "summary": {
+      "path": "/private/tmp/context-scheduling-final-20261026/sysml-qualified/summary.json",
+      "sha256": "9d669fe37a5cb4367a32e4e8290cd8b6034bc74227baad34092758e99137c439"
+    },
+    "replay": {
+      "path": "/private/tmp/context-scheduling-final-20261026/sysml-replay/summary.json",
+      "sha256": "9d669fe37a5cb4367a32e4e8290cd8b6034bc74227baad34092758e99137c439"
+    },
+    "paths_per_run": 45,
+    "expected_unsafe_per_run": 5,
+    "unexpected": 0
+  },
+  "native": {
+    "receipt": {
+      "path": "/private/tmp/context-scheduling-final-20261026/native-receipt.json",
+      "sha256": "3c229977ec6a5871d6321f8d7ee09bfacf305a51dc5f80375c85168988e50eb9"
+    },
+    "heap": "2G",
+    "watchdog_seconds": 150,
+    "reachable_states": 59,
+    "transitions": 413,
+    "paths_per_run": 25,
+    "prefix_steps_per_run": 130,
+    "corrected_negative_paths_per_run": 5,
+    "complete_runs": 2,
+    "actor": {
+      "producers": 8,
+      "offers": 800,
+      "accepted": 40,
+      "refused": 760,
+      "completed": 40,
+      "joined_owners": 1
+    }
+  },
+  "preserved_failures": [
+    {
+      "path": "/private/tmp/context-scheduling-20261026/build.log",
+      "sha256": "9cbb97df651e83b73ee5db7a47328efd18cd24e8081093001e6e83b15daa5e2d"
+    },
+    {
+      "path": "/private/tmp/context-scheduling-20261026/build-native.log",
+      "sha256": "e6ee62f6ae633f42e6b9f99bff7c94d00cd26f88c84cefb851afe21a1d3c4b2c"
+    },
+    {
+      "path": "/private/tmp/context-scheduling-20261026/build-native2.log",
+      "sha256": "0027016363e289fc7029681dcab36c19553529f00b4d93db7cba91fe0e48ec6e"
+    },
+    {
+      "path": "/private/tmp/context-scheduling-20261026/native-final.log",
+      "sha256": "9330b6d4df487905bb1651b40ccf6649be0feab2c6360b9e5eedc5d08d444efd"
+    },
+    {
+      "path": "/private/tmp/context-scheduling-20261026/quint.log",
+      "sha256": "9ee406d68a54e274057de51c43a67531f32a1362ac7464d934857405a969dadc"
+    },
+    {
+      "path": "/private/tmp/context-scheduling-sysml-validate-20261026.json",
+      "sha256": "06ff4307c34aa0220821c7e8db14c58c626644c873c5e5652dd808ad7c8a18c5"
+    }
+  ]
+}

@@ -1,0 +1,273 @@
+#+title: Deterministic Owner Resource Teardown and Whole-Process Capacity
+#+language: en
+:PROPERTIES:
+:ID: context-native-owner-resource-lifecycle
+:STATUS: scheme-lifecycle-verified-whole-process-capacity-open
+:END:
+
+* Existing boundary and preserved failure
+
+This addresses the unresolved single-process limit in
+[[file:22-native-policy-migration.org][22: policy replacement migration]]. It retains the independent Session
+boundary in [[file:00-design-map.org][the design map]]. Releasing an in-process Context controller is not
+evidence that an independent Session endpoint terminated. Original knowledge,
+proof/support history, immutable terminals and pending reconciliation duties
+remain durable data after a runtime scope is disposed.
+
+The original monolithic failure remains under
+=/private/tmp/context-policy-migration-sealed-20261026/legacy-cut-controlled/=.
+The 150-second native watchdog / 155-second supervisor wait stopped that run
+with 44 complete path lines. The last created database had no admitted input.
+It is not relabeled as a pass. Section 22's successful chunks remain a different
+qualification shape and do not satisfy this whole-process obligation.
+
+* Diagnosis before production changes
+
+A fresh unchanged legacy-cut baseline completed all 60 orders. The diagnostic
+supervisor reported approximately 111 seconds, including up to one sampling
+interval of process-exit observation lag. Samples showed RSS approximately
+674--710 MiB and usually one current database's SQLite mappings/handles; they
+did not show sustained linear FD growth. Garbage collection eventually released
+old connections. Therefore the earlier timeout is not attributed uniquely to
+an FD leak. Host scheduling/throughput variability remains a possible contributor.
+
+The baseline, complete native transcript, ps/lsof samples and source/object cut
+are retained under =/private/tmp/context-owner-baseline-20261026/=.
+
+The source inspection identified deterministic lifecycle gaps: stop joined the
+timer but retained its policy observer and clock capability; no adapter shutdown
+closed its journal or detached Context subscriptions. Closed client handles
+retained their owner thread. Cleanup depended on eventual GC. A separate
+single-path phase diagnostic measured Context construction and persistence as
+major work, while the former stop took about 0.00034 seconds because it did not
+perform that resource teardown. That diagnostic is not a capacity qualification;
+its transcript/cut are under =/private/tmp/context-owner-phase-20261026/=.
+
+The command hot path also decoded the entire inbox for identity verification
+and historical-ACK selection, repeatedly constructing inert POO values for
+unrelated historical inputs. This unnecessary work grew with inbox history.
+
+* Intermediate failures and allocation diagnosis
+
+The first lifecycle implementation passed all 60 legacy-cut paths in 105.8216
+seconds but the canonical process still exceeded the supervisor at 52 completed
+and actually closed owners. Evidence remains under
+=/private/tmp/context-owner-capacity-20261026/=. Explicit teardown alone was
+insufficient to close the whole-process obligation.
+
+A subsequent per-pack projection-memo implementation also timed out, completing
+42 actual owner closes. Its original transcript, ps/lsof observations and exact
+failed build cut remain under
+=/private/tmp/context-owner-capacity-memo-20261026/=. Host load was high, but this
+is still a failed capacity run; no successful receipt was produced.
+
+An isolated instrumented canonical diagnostic completed 60 paths in 102.0777
+seconds. Phase totals were approximately 23.1 seconds for Context construction,
+28.3 for durable bootstrap/independent C completion, 27.5 for five operations,
+6.3 for final checks and 0.25 for all stops. Native sampling found substantial
+POO slot/table and GC work. Its transcript, phase intervals, macOS stack sample
+and source/object cut remain under =/private/tmp/context-owner-hot-20261026/=.
+This diagnostic success does not replace the controlled capacity cohort.
+
+The current journal writer emits the existing v1 bytes directly, avoiding an
+intermediate encoded tree and a second full traversal. Every occurrence is written through
+one output port. An intermediate fragment-cache variant was rejected after a
+54-path/53-close timeout; it added fragment ports and copies through ancestor
+strings. Its exact cut and observations are retained under
+=/private/tmp/context-owner-capacity-stream-20261026/=. Nothing persists across
+versions or calls, and every occurrence checks the original depth bound. The independent old
+projection writer is retained in the test as a byte-for-byte oracle for every
+supported datum kind, shared objects and an actual Context checkpoint. Cyclic
+data, native procedures and a shallow/deep shared-alias depth bypass remain
+negative controls. The decoder, original evidence digests, journal schema and
+wire format are unchanged.
+
+* Production responsibilities
+
+| Owner | Change | Boundary retained |
+|-------+--------+-------------------|
+| Native change feed | Exact-identity unwatch; refuse detachment during pending/busy propagation | Do not discard prepared authority work or another consumer's subscription |
+| Proof, grant, policy and Query publishers | Named unwatch wrappers through their existing serialized owner | No second observer registry or graph algorithm |
+| Context runtime | Dispose its registered subscriptions, clear runtime references, reject subsequent use | Do not cancel Sessions, kill endpoints or create terminals; publishers retain original proof/history |
+| Durable journal | Idempotent explicit close, rollback unfinished transaction, clear DB/owner/cut references, reject closed-handle reuse | Original inbox/evidence and last committed state remain; pending input is replayable |
+| Durability adapter | Dispose its owned Context, close its journal, release captured resolver/authority/catalog references | Do not save an empty disposed Context over the committed checkpoint |
+| Clock reactor | Quiesce client admission, join timer, detach exact observer/clock lease, close adapter, reject waiters/queued RPCs, clear runtime references | Late unreceived deadlines remain recoverable from durable tickets |
+| Clock client | Serialize phase-check plus mailbox admission; join owner before retaining closed receipt; release thread reference | A closed receipt is diagnostic data, not effect authority |
+
+The policy clock's released enrollment becomes a retired marker. It does not
+reset to the never-enrolled state: current-use guards must refuse instead of
+falling back to a frozen registered-time snapshot. A foreign clock capability
+cannot release the live enrollment.
+
+Context disposal is a distinct runtime operation from the existing Session
+close/cancel protocol. It is owner-local and idempotent. It removes only the
+observer values recorded by that Context. Normal subscription release requires
+a quiescent feed; pending propagation is not silently drained or erased to make
+a shutdown receipt look successful. A failed shutdown does not acknowledge
+that all resources joined/closed.
+
+=journal-input= performs indexed identity lookup and validates the selected
+original payload digest. Normal retry verification and ACK selection use this
+path. Full journal verification and recovery enumeration remain intact; the
+optimization does not skip the final native integrity checks or original-input
+substitution controls.
+
+* Native positive and negative controls
+
+=policy-clock-stop-receipt= is produced after the actual timer join and owner
+join. Every scenario additionally checks the actual journal closed predicate,
+disposed Context and zero Context subscriptions, while retaining references to
+those handles. Repeated stop/close is idempotent; further Context/journal/RPC
+use is refused. Neither GC nor process exit is used as the positive oracle.
+
+An isolated negative adapter intentionally omits its teardown and misreports a
+closed receipt. The native probe checks actual handles and detects an open
+journal with three retained Context subscriptions. This is a deliberately
+nonconforming adapter, not an alternative production shutdown path. It shows
+why a declared receipt alone cannot qualify actual resource release.
+
+The native unit probe checks pending-feed detachment refusal, exactly one
+subscription, retention of another consumer's observer, retained original proof,
+foreign-clock refusal, denial of frozen-time fallback, active-transaction
+rollback and preservation of its pending input. An awaiting RPC is actually
+registered with the owner before shutdown; it must receive explicit rejection
+and join rather than time out.
+
+A second native probe closes a paused durable owner with actual pending expiry
+copies and active Attempts. Two duplicate transport copies share one immutable
+inbox identity. The test retains that original ID and payload digest. The
+independent Session endpoints remain running after controller shutdown, then
+actually finish; their result strings alone do not create authenticated terminal
+records. Another owner replays the preserved receipt and receives two real
+rearmed timer copies. Cached A/B invalidation is inspected before use queries,
+C remains admitted, each Attempt retains exactly one reconciliation obligation,
+and no terminal is fabricated. The original bytes remain unchanged.
+
+* Whole-process native gate
+
+[[file:run-native-owner-lifecycle.py][The gate]] invokes the unchanged Just recipe once per profile with =all=.
+Each invocation runs all 60 legal policy/expiry/result/cancel/recovery orders in
+ONE gxi process, sequentially, with the existing pre-import 1 GiB heap fence and
+150-second timeout. There is no chunking, forced GC, larger heap, changed source
+window, removed negative control or shortened case set. Native diagnostic phase
+tracing and ASCENT process tracing are disabled for capacity qualification.
+External ps/lsof samples are retained without altering native resource limits.
+
+The three profiles are canonical CAS, legacy name with CAS and historical
+missing-cut input. The Python and Scheme order generators remain independent.
+The runner requires all actual owner traces, original evidence/terminal checks,
+60 actual close observations, zero exit and MODULE-OK/HARNESS-OK/final OK without
+error markers. It captures exact source/object hashes before and after the run.
+A saved replay token repeats the ENTIRE 60-order process on the identical cut.
+
+The native unit/negative controls and a real Query-provider crash/recovery path
+run serially after the capacity processes. Query subscriptions add the fourth
+publisher kind beyond proof/grant/policy in the raw authority fixture.
+
+#+begin_src sh
+just build-test t/context-owner-lifecycle-test.ss
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-native-owner-lifecycle.py" --artifacts /private/tmp/context-owner-capacity-run
+python3 "$slice/run-native-owner-lifecycle.py" --replay /private/tmp/context-owner-capacity-run/replay-legacy-cut.json --artifacts /private/tmp/context-owner-capacity-replay
+python3 "$slice/run-owner-lifecycle-model.py" --artifacts /private/tmp/context-owner-model
+#+end_src
+
+* Executable SysML correspondence
+
+[[file:23-owner-lifecycle.sysml][The model]] executes five teardown phases: admission quiescence, timer join,
+subscription/clock retirement, journal close and owner join/acknowledgment. It
+explores every phase permutation, no/one pending obligation and eight algorithms.
+Incorrect phase orders are refused without a closed acknowledgment. Unsafe
+algorithms omit journal/subscriber/clock cleanup, acknowledge before owner join,
+lose a pending input, invent an endpoint terminal or leave admission open.
+
+[[file:run-owner-lifecycle-model.py][The actual CLI runner]] checks the executed phase and outputs against an
+independent prefix-order oracle, retains unsafe witnesses and reruns corrected
+mode 0. It does not establish native timing, storage correctness or an unbounded
+refinement theorem. Those remain distinct from the native whole-process gate.
+
+* Historical 1 GiB capacity result: open
+
+The current one-port implementation passed the native lifecycle/codec probe:
+=/private/tmp/context-owner-single-port-unit-20261026/native.log= contains
+MODULE-OK, HARNESS-OK and final OK, and the process returned zero. The byte
+oracle includes an actual Context checkpoint. This is functional/lifecycle
+validation, not a 60-path capacity pass.
+
+The complete legacy-cut process still failed the unchanged resource fence.
+=/private/tmp/context-owner-capacity-single-port-20261026/= retains the exact
+start cut, all original databases/WALs, native transcript, resource observations
+and =legacy-cut/process.json=. The supervisor stopped it at 155.02 seconds
+(native watchdog 150 seconds, with its existing five-second termination grace).
+It emitted 37 path traces and 36 actual close observations. Sampled RSS was
+414064--702800 KiB and numeric FD counts were 5--8; the last sample had about
+72 CPU seconds. No successful whole-process receipt was produced. Neither the
+canonical nor missing-cut profiles can be claimed qualified on this build.
+
+A failed run is replayable with the same whole-process command and exact
+source/object cut. The original token and separate replay artifacts are under
+=/private/tmp/context-owner-capacity-single-port-20261026/replay-legacy-cut.json=
+and =/private/tmp/context-owner-single-port-replay-20261026/= respectively.
+The replay never selects a chunk or shortens the 60-order case list.
+
+Host load observations exceeded 40, and one native probe had received only
+about 10 CPU seconds after 53 wall seconds. This demonstrates a substantial
+scheduling component, but does not establish that host load is the sole cause.
+The current allocation changes have byte-equivalence evidence; their capacity
+benefit is not established. The 60-path/150-second obligation remains OPEN.
+A model pass, a previous build's full pass, fewer retained handles, or successful
+short probes must not be substituted for that missing result.
+
+* Sealed functional, negative and replay evidence
+
+[[file:23-owner-lifecycle-results.json][The structured result index]] separates passing lifecycle evidence from failed
+capacity. The same-cut whole-process replay also timed out: 35 path traces and
+35 actual closes, approximately 155.02 seconds at the supervisor, exit -9. No
+successful capacity receipt was produced for either run. Failed process records
+include original command, unique native gxi PID, resource samples and timeout.
+
+The final native controls passed on the current source/object cut:
+
+- Omitted teardown exposes the actual open journal and three retained Context
+  subscriptions despite a declared closed receipt.
+- Actual SIGKILL before commit preserves the pending policy input. Restart
+  changes its status from pending to applied and writes exactly one policy and
+  one CAS decision. Original Query facts/rules and both prior terminal digests
+  remain identical. Cached A/B are invalidated; independent C remains current.
+  The omitted-replay counterexample, duplicate/substitution and old-ticket
+  refusals remain part of this real recovery execution.
+- Their strict transcripts and sealed partial receipt remain under
+  =/private/tmp/context-owner-final-controls-20261026/=. The receipt explicitly
+  states =capacity_qualified=false=; it cannot be admitted as a full capacity pass.
+
+The actual SysML CLI executed 1920 cases with 251 expected unsafe outcomes and
+zero unexpected outcomes. Seven retained witnesses were replayed against their
+unsafe and corrected algorithms (14 additional executions). Current model and
+runner hashes match those receipts. All native controls are separate from this
+finite model evidence.
+
+The exact source and compiled object bytes for the current failed/replayed cut
+are additionally retained under =/private/tmp/context-owner-custody-20261026/=.
+Its manifest binds every copied file. This is local artifact custody, requiring
+the original OS and Gerbil toolchain; it is not a claim of a hermetic runtime.
+Restoration belongs in a separate checkout after reviewing the cut, never over
+unrelated working changes. The replay command rejects a changed source/object
+cut before running the complete process.
+
+* Limits of the claim
+
+Explicit release and indexed inbox lookup remove confirmed lifecycle and hot-path
+defects. A fresh old-code baseline passing shows why timing improvement alone
+cannot prove that one defect uniquely caused the historical timeout. The final
+claim is the measured complete cohort on its exact build and resource limits,
+plus deterministic native release assertions. It is not a universal scheduling,
+host-reboot, power-loss or remote-endpoint reconciliation guarantee. Resources
+allocated by a bootstrap that throws before returning ownership remain the
+bootstrap caller's responsibility; the reactor cannot infer undisclosed caps.
+
+* Later user-authorized runtime profile
+
+[[file:24-native-runtime-cost.org][Section 24]] records the subsequent Scheme proof-owner repair and 2 GiB
+maximum/1 GiB working-heap runtime profile, all three complete 60-path processes
+and their exact replay. This does not relabel the 1 GiB failures above. The user
+then requested a deeper Actor throughput design beyond merely passing 150 seconds.

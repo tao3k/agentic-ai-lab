@@ -13,5 +13,5 @@
 
 ;; : TestSuite
 (def user-interface-custom-loop-engine-test
-  (test-suite "poo-flow custom user-interface loop-engine cases"
+  (test-suite "agentic-ai-lab custom user-interface loop-engine cases"
     (user-interface-custom-loop-engine-concrete-case)))

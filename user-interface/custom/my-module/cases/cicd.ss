@@ -10,26 +10,26 @@
 ;;; interface selects sandbox profile supers, then declares isolation
 ;;; policy, command fields, and runner-local options.
 ;; : POOObject
-(import (only-in :poo-flow/src/authoring/module-config-syntax
-                 poo-flow-module-inherited-config))
+(import (only-in :agentic-ai-lab/modules/module-authoring/module-config-syntax
+                 agentic-ai-lab-module-inherited-config))
 
-(export poo-flow-custom-my-module-cicd-case)
+(export agentic-ai-lab-custom-my-module-cicd-case)
 
-(def poo-flow-custom-my-module-cicd-case
-  (poo-flow-module-inherited-config
+(def agentic-ai-lab-custom-my-module-cicd-case
+  (agentic-ai-lab-module-inherited-config
    'nono-sandbox
    'ci/build
    '((mode . project-copy)
      (project-mount . isolated-copy)
      (source . ".")
      (root-env . "TMPDIR")
-     (root . "poo-flow-live-case/current-system-build")
+     (root . "agentic-ai-lab-live-case/current-system-build")
      (workspace . "workspace")
      (home . ".home")
      (exclude . (".git" ".tmp" ".cache" "run")))
    '((policy . whitelist)
-     (enabled-env . "POO_FLOW_LIVE_CICD_BUILD")
-     (clear-env . ("POO_FLOW_LIVE_CICD_BUILD")))
+     (enabled-env . "AGENTIC_AI_LAB_LIVE_CICD_BUILD")
+     (clear-env . ("AGENTIC_AI_LAB_LIVE_CICD_BUILD")))
    '((program . "gxpkg")
      (args . ("build")))
    '((network . blocked)

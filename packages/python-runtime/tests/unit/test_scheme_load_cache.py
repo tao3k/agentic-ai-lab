@@ -9,14 +9,14 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from poo_flow_runtime import _scheme_load as scheme_load
-from poo_flow_runtime import _scheme_load_aot as scheme_aot
-from poo_flow_runtime import _scheme_load_cache as scheme_cache
-from poo_flow_runtime import _scheme_load_runner as scheme_runner
+from agentic_ai_lab_runtime import _scheme_load as scheme_load
+from agentic_ai_lab_runtime import _scheme_load_aot as scheme_aot
+from agentic_ai_lab_runtime import _scheme_load_cache as scheme_cache
+from agentic_ai_lab_runtime import _scheme_load_runner as scheme_runner
 
 
 def _runtime_projection_fixture(root: Path) -> None:
-    projection = root / "modules" / "funflow" / "runtime-load-projection.ss"
+    projection = root / "modules" / "workflow" / "scenario" / "runtime-funflow.ss"
     projection.parent.mkdir(parents=True)
     projection.write_text(";; projection fixture\n", encoding="utf-8")
 
@@ -33,7 +33,7 @@ def _fake_scheme_run(calls: list[tuple[str, ...]]):
         return subprocess.CompletedProcess(
             args,
             0,
-            stdout='((schema "poo-flow.funflow-plan-projection.v1"))\n',
+            stdout='((schema "yuanxu.funflow-plan-projection.v1"))\n',
             stderr="",
         )
 
@@ -41,7 +41,7 @@ def _fake_scheme_run(calls: list[tuple[str, ...]]):
 
 
 def _cache_key(root: Path, source: Path) -> tuple[object, ...]:
-    projection = root / "modules" / "funflow" / "runtime-load-projection.ss"
+    projection = root / "modules" / "workflow" / "scenario" / "runtime-funflow.ss"
     return scheme_cache.scheme_load_cache_key(
         source.resolve(),
         root.resolve(),
@@ -54,7 +54,8 @@ def test_scheme_projection_rows_reuse_warm_cache(tmp_path, monkeypatch) -> None:
     _runtime_projection_fixture(tmp_path)
     source = _source_fixture(tmp_path)
     calls: list[tuple[str, ...]] = []
-    monkeypatch.setattr(scheme_runner.subprocess, "run", _fake_scheme_run(calls))
+    monkeypatch.setattr(scheme_runner, "_run_with_native_progress",
+                        lambda command, workdir: _fake_scheme_run(calls)(command.argv))
 
     first = scheme_load.load_projection_rows(source, cwd=tmp_path)
     second = scheme_load.load_projection_rows(source, cwd=tmp_path)
@@ -70,7 +71,8 @@ def test_scheme_projection_cache_invalidates_when_source_changes(
     _runtime_projection_fixture(tmp_path)
     source = _source_fixture(tmp_path)
     calls: list[tuple[str, ...]] = []
-    monkeypatch.setattr(scheme_runner.subprocess, "run", _fake_scheme_run(calls))
+    monkeypatch.setattr(scheme_runner, "_run_with_native_progress",
+                        lambda command, workdir: _fake_scheme_run(calls)(command.argv))
 
     scheme_load.load_projection_rows(source, cwd=tmp_path)
     source.write_text(
@@ -83,7 +85,7 @@ def test_scheme_projection_cache_invalidates_when_source_changes(
 
 
 def test_scheme_projection_cache_tracks_direct_profile_owner(tmp_path) -> None:
-    projection = tmp_path / "modules" / "funflow" / "runtime-load-projection.ss"
+    projection = tmp_path / "modules" / "workflow" / "scenario" / "runtime-funflow.ss"
     _runtime_projection_fixture(tmp_path)
     source = _source_fixture(tmp_path)
     owner = tmp_path / "core" / "profile-composition" / "profile-bundle.ss"
@@ -102,8 +104,9 @@ def test_scheme_projection_cache_can_be_disabled(tmp_path, monkeypatch) -> None:
     _runtime_projection_fixture(tmp_path)
     source = _source_fixture(tmp_path)
     calls: list[tuple[str, ...]] = []
-    monkeypatch.setattr(scheme_runner.subprocess, "run", _fake_scheme_run(calls))
-    monkeypatch.setenv("POO_FLOW_SCHEME_LOAD_CACHE", "0")
+    monkeypatch.setattr(scheme_runner, "_run_with_native_progress",
+                        lambda command, workdir: _fake_scheme_run(calls)(command.argv))
+    monkeypatch.setenv("AGENTIC_AI_LAB_SCHEME_LOAD_CACHE", "0")
 
     scheme_load.load_projection_rows(source, cwd=tmp_path)
     scheme_load.load_projection_rows(source, cwd=tmp_path)
@@ -114,10 +117,11 @@ def test_scheme_projection_cache_can_be_disabled(tmp_path, monkeypatch) -> None:
 def test_scheme_projection_prefers_direct_gerbil_runner(tmp_path, monkeypatch) -> None:
     scheme_load.clear_load_cache()
     _runtime_projection_fixture(tmp_path)
-    (tmp_path / ".gerbil" / "lib" / "poo-flow").mkdir(parents=True)
+    (tmp_path / ".gerbil" / "lib" / "agentic-ai-lab").mkdir(parents=True)
     source = _source_fixture(tmp_path)
     calls: list[tuple[str, ...]] = []
-    monkeypatch.setattr(scheme_runner.subprocess, "run", _fake_scheme_run(calls))
+    monkeypatch.setattr(scheme_runner, "_run_with_native_progress",
+                        lambda command, workdir: _fake_scheme_run(calls)(command.argv))
 
     scheme_load.load_projection_rows(source, cwd=tmp_path, cache=False)
 
@@ -141,7 +145,7 @@ def test_scheme_projection_uses_existing_aot_runner(tmp_path, monkeypatch) -> No
         return subprocess.CompletedProcess(
             args,
             0,
-            stdout='((schema "poo-flow.funflow-plan-projection.v1"))\n',
+            stdout='((schema "yuanxu.funflow-plan-projection.v1"))\n',
             stderr="",
         )
 
@@ -149,7 +153,7 @@ def test_scheme_projection_uses_existing_aot_runner(tmp_path, monkeypatch) -> No
 
     rows = scheme_load.load_projection_rows(source, cwd=tmp_path)
 
-    assert rows == (("schema", "poo-flow.funflow-plan-projection.v1"),)
+    assert rows == (("schema", "yuanxu.funflow-plan-projection.v1"),)
     assert aot_calls == [(str(artifact.binary),)]
 
 

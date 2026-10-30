@@ -1,0 +1,156 @@
+{
+  "date": "2026-10-17",
+  "platform": "aarch64-darwin",
+  "artifact_format": "yuanxu/provider-schema-v2",
+  "default_injection": "YUANXU_OPENTOFU_ARTIFACT",
+  "test_injection": [
+    "AGENTIC_AI_LAB_OPENTOFU_AWS_ARTIFACT",
+    "AGENTIC_AI_LAB_OPENTOFU_AWSCC_ARTIFACT",
+    "AGENTIC_AI_LAB_OPENTOFU_NULL_ARTIFACT"
+  ],
+  "runtime": "default Gerbil, heap-fenced Justfile gates",
+  "gates": {
+    "indexed-inputs": {
+      "test": "t/opentofu-indexed-inputs-test.ss",
+      "assertions": 93,
+      "passed": true
+    },
+    "configuration-discovery": {
+      "test": "t/opentofu-configuration-discovery-test.ss",
+      "assertions": 49,
+      "passed": true
+    },
+    "provider-families": {
+      "test": "t/opentofu-provider-families-test.ss",
+      "assertions": 64,
+      "passed": true
+    },
+    "configuration-families": {
+      "test": "t/opentofu-configuration-families-test.ss",
+      "assertions": 36,
+      "passed": true
+    },
+    "artifact-fixture": {
+      "test": "t/opentofu-provider-artifact-test.ss",
+      "assertions": 17,
+      "passed": true
+    },
+    "artifact-real": {
+      "test": "t/opentofu-provider-artifact-test.ss",
+      "assertions": 17,
+      "passed": true
+    },
+    "module-scope": {
+      "test": "t/opentofu-module-scope-test.ss",
+      "assertions": 20,
+      "passed": true
+    },
+    "provider-versions": {
+      "test": "t/opentofu-provider-versions-test.ss",
+      "assertions": 84,
+      "passed": true
+    },
+    "schema": {
+      "test": "t/opentofu-schema-test.ss",
+      "assertions": 57,
+      "passed": true
+    }
+  },
+  "assertions": 437,
+  "packages": {
+    "aws": {
+      "artifact": "/nix/store/g79zf5kxy8778bsiq3iagvhl4qww7pbc-terraform-provider-aws-5.100.0-schema",
+      "manifest": {
+        "format": "yuanxu/provider-schema-v2",
+        "provider": "registry.opentofu.org/hashicorp/aws",
+        "version": "5.100.0",
+        "schema-sha256": "7e4fc064120609e23bc317629f1308d72891b7241993fbf68be523f03b6c633c",
+        "indexes": {
+          "data": "6111efe35eedfcf75e7baa012e61d7cdedf8ffcc98b846a5dd0af464bcc499a3",
+          "provider": "517d5f3f1e83fbbcf1a8f4a0c33ea31284df6190138fb3e8442ebe9f1be29f41",
+          "resource": "35a034014d56aacf5a9498b09887f45b630cd86d33874482e5957c45df4b07a9"
+        }
+      },
+      "export_bytes": 13591718,
+      "index_bytes": {
+        "data": 61871,
+        "provider": 292,
+        "resource": 159999,
+        "manifest": 477
+      },
+      "selected_input_bytes": {
+        "provider/provider": 53926,
+        "resource/aws_security_group": 1795,
+        "data/aws_region": 395
+      },
+      "selected_read_set_bytes": 278755,
+      "all_entries_equal_to_original_export": true,
+      "entries_verified": 2135
+    },
+    "awscc": {
+      "artifact": "/nix/store/5yag978db1m9w853817z8z10d43gz4mm-terraform-provider-awscc-1.77.0-schema",
+      "manifest": {
+        "format": "yuanxu/provider-schema-v2",
+        "provider": "registry.opentofu.org/hashicorp/awscc",
+        "version": "1.77.0",
+        "schema-sha256": "da2d45cbf066407681bc9b3ead3196277f966fd562bd004411a460ae83cfe7f0",
+        "indexes": {
+          "data": "2daa275fb7bcf4f952805cb7f479b80668c592e3a0602767927c04facc0c91c5",
+          "provider": "af717ad85e79da607c6d9e56cc158b1dde6fd89542b8e9ddfb093d578d6f2436",
+          "resource": "ac16bdfc7bf55b0c3f6dbbd786f867d07f7d02825956005034f98713b386d371"
+        }
+      },
+      "export_bytes": 12570947,
+      "index_bytes": {
+        "data": 250594,
+        "provider": 293,
+        "resource": 141967,
+        "manifest": 478
+      },
+      "selected_input_bytes": {
+        "provider/provider": 9211,
+        "resource/awscc_ec2_security_group": 3643,
+        "data/awscc_ec2_security_group": 3237
+      },
+      "selected_read_set_bytes": 409423,
+      "all_entries_equal_to_original_export": true,
+      "entries_verified": 3664
+    },
+    "null": {
+      "artifact": "/nix/store/pn9vvfwwajj67n54p1d9vi92jgxl1dga-terraform-provider-null-3.2.4-schema",
+      "manifest": {
+        "format": "yuanxu/provider-schema-v2",
+        "provider": "registry.opentofu.org/hashicorp/null",
+        "version": "3.2.4",
+        "schema-sha256": "da768a39ea9a9c3464288786667f8cd2f6838c7d4a258e3a563bd49eb2466448",
+        "indexes": {
+          "data": "a5c7c6c69312461b4b77f015b7f110cc0ff29bde8868def5f3f9066c68a24f4f",
+          "provider": "ed92d87525b624740fa7519eab2ba20dd25681cb0424859cf7cd24492aef0638",
+          "resource": "0e9f9ff3659671b82407ecde6966dabd37e9c65b1d5000474eff765b3127f0c4"
+        }
+      },
+      "export_bytes": 2964,
+      "index_bytes": {
+        "data": 295,
+        "provider": 291,
+        "resource": 296,
+        "manifest": 476
+      },
+      "selected_input_bytes": {
+        "provider/provider": 51,
+        "resource/null_resource": 932,
+        "data/null_data_source": 1803
+      },
+      "selected_read_set_bytes": 4144,
+      "all_entries_equal_to_original_export": true,
+      "entries_verified": 3
+    }
+  },
+  "aws_parent_artifact": "/nix/store/ksilrwxv6pm86c0g4pcc6w9vig33hplw-terraform-provider-aws-5.99.0-schema",
+  "all_split_entries_verified": 5802,
+  "runtime_schema_json_required": false,
+  "legacy_format_fallback": false,
+  "provider_rpc_at_admission": false,
+  "loader_connected": false,
+  "performance_claim": "matched schema/admission/error paths and logical selected-file read sets only; no wall-time speedup claim"
+}

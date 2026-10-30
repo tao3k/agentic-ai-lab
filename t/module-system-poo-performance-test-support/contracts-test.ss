@@ -5,7 +5,7 @@
 
 ;;; Boundary: POO performance contract and API-evidence test cases.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,17 +15,17 @@
                  benchmark-receipt-pass?)
         "../support/poo-performance-fixtures"
         "../support/poo-performance"
-        :core/object-family/indexed
-        :poo-flow/src/core/runtime-protocol
-        :core/module-system/schema/interface
-        :core/extension-graph/interface
-        :core/module-system/schema/validation)
+        :yuanxu/object-family/indexed
+        :yuanxu/modules/funflow/control-plane/runtime-protocol
+        :yuanxu/module-system/schema/interface
+        :yuanxu/graph/interface
+        :yuanxu/module-system/schema/validation)
 
 (export contracts-test)
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-fixture-contract-case)
-  (poo-flow-test-case "keeps every POO performance fixture inside upstream benchmark contract"
+  (yuanxu-test-case "keeps every POO performance fixture inside upstream benchmark contract"
         (let (fixtures (poo-performance-fixtures))
         (check-equal? (length fixtures) 31)
         (check-equal?
@@ -47,7 +47,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-fixture-policy-reject-case)
-  (poo-flow-test-case "rejects fixtures that miss POO performance policy evidence"
+  (yuanxu-test-case "rejects fixtures that miss POO performance policy evidence"
         (let (fixture
               '((feature . missing-poo-policy)
                 (iterations . 1000)
@@ -58,7 +58,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-api-evidence-case)
-  (poo-flow-test-case "keeps POO benchmark evidence anchored to gerbil-poo APIs"
+  (yuanxu-test-case "keeps POO benchmark evidence anchored to gerbil-poo APIs"
         (let (receipt (poo-performance-api-usage-call-receipt))
           (check-equal? (cdr (assoc 'name receipt)) 'poo-api-evidence)
           (check-equal? (cdr (assoc 'color receipt)) 'blue)
@@ -72,7 +72,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-large-profile-projection-case)
-  (poo-flow-test-case "projects large POO profiles through stable descriptor vectors"
+  (yuanxu-test-case "projects large POO profiles through stable descriptor vectors"
         (let (descriptors
               (poo-performance-large-profile-projection-descriptors))
           (check-equal? (vector-length descriptors) 10)
@@ -99,7 +99,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-indexed-family-layout-case)
-  (poo-flow-test-case "reuses indexed POO family layout for large profile projection"
+  (yuanxu-test-case "reuses indexed POO family layout for large profile projection"
         (let* ((object (poo-performance-large-profile-indexed-object))
                (descriptors
                 (poo-performance-large-profile-indexed-descriptors)))
@@ -134,11 +134,11 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-indexed-family-core-case)
-  (poo-flow-test-case "projects stable POO family slots through indexed module API"
+  (yuanxu-test-case "projects stable POO family slots through indexed module API"
         (let* ((family
                 (poo-indexed-family
                  'module-indexed-family
-                 'poo-flow.module-system.indexed-family
+                 'agentic-ai-lab.module-system.indexed-family
                  '(profile-id limit)))
                (object
                 (poo-indexed-family-object family '(large-profile 128)))
@@ -173,7 +173,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-generated-receipt-boundary-case)
-  (poo-flow-test-case "projects generated receipt accessors only at runtime boundary"
+  (yuanxu-test-case "projects generated receipt accessors only at runtime boundary"
         (let (receipt-alist
               (poo-performance-generated-receipt-boundary-alist))
           (check-equal?
@@ -198,7 +198,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-runtime-response-family-case)
-  (poo-flow-test-case "reuses runtime response family descriptors at adapter boundary"
+  (yuanxu-test-case "reuses runtime response family descriptors at adapter boundary"
         (let* ((adapter-response
                 (make-adapter-result
                  'request-1
@@ -220,7 +220,7 @@
             (runtime-response-metadata runtime-family-response)
             'response-family
             #f)
-           'poo-flow-runtime-response-family)
+           'yuanxu-runtime-response-family)
           (check-equal?
            (runtime-response-family-ref
             +runtime-response-family+
@@ -243,7 +243,7 @@
 
 ;; : TestSuite
 (def contracts-test
-  (test-suite "poo-flow module system POO performance contracts"
+  (test-suite "agentic-ai-lab module system POO performance contracts"
     (module-system-poo-performance-fixture-contract-case)
     (module-system-poo-performance-fixture-policy-reject-case)
     (module-system-poo-performance-api-evidence-case)

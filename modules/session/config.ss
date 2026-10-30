@@ -6,5 +6,12 @@
 ;;; Boundary: session configuration facade.
 ;;; Invariant: configuration composes the module-owned syntax surface only.
 
-(import "syntax.ss")
-(export (import: "syntax.ss"))
+(import "syntax.ss" "descriptor.ss"
+        :yuanxu/module-system/selection/objects)
+(export (import: "syntax.ss") (import: "descriptor.ss")
+        agentic-ai-lab-session-module-bundles)
+
+;;; Independent Session selection uses its own module identity.
+(def agentic-ai-lab-session-module-bundles
+  (list (yuanxu-user-module-bundle
+          (session session +lineage +placement +handoff +graph +transform +doctor))))

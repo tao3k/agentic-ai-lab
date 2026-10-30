@@ -5,37 +5,37 @@
 
 ;;; Native POO prototype admission for backend-owned Sandbox Profiles.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test check-equal? test-suite)
-        :poo-flow/modules/nono-sandbox/objects
-        :poo-flow/modules/agent-sandbox/config
-        :poo-flow/modules/sandbox-core/profile-support/resolve)
+        :agentic-ai-lab/modules/nono-sandbox/objects
+        :agentic-ai-lab/modules/agent-sandbox/config
+        :agentic-ai-lab/modules/sandbox-core/profile-support/resolve)
 
 (export sandbox-core-profile-native-composition-test)
 
 (def sandbox-core-profile-native-composition-test
   (test-suite "native Sandbox Profile composition"
-    (poo-flow-test-case "backend defaults are direct POO prototype slots"
+    (yuanxu-test-case "backend defaults are direct POO prototype slots"
       (let (base
-            (poo-flow-sandbox-profile-object-base-prototype
-             poo-flow-nono-sandbox-profile-object 'nono 'native/base))
+            (agentic-ai-lab-sandbox-profile-object-base-prototype
+             agentic-ai-lab-nono-sandbox-profile-object 'nono 'native/base))
         (check-equal?
-         (poo-flow-sandbox-profile-object-slot base 'profile-name)
+         (agentic-ai-lab-sandbox-profile-object-slot base 'profile-name)
          'native/base)
         (check-equal?
-         (poo-flow-sandbox-profile-object-slot base 'backend-kind)
+         (agentic-ai-lab-sandbox-profile-object-slot base 'backend-kind)
          'nono)))
-    (poo-flow-test-case "an empty row set projects the backend prototype"
+    (yuanxu-test-case "an empty row set projects the backend prototype"
       (let (profile
-            (poo-flow-sandbox-profile-object-config
-             poo-flow-nono-sandbox-profile-object 'nono 'native/empty '()))
+            (agentic-ai-lab-sandbox-profile-object-config
+             agentic-ai-lab-nono-sandbox-profile-object 'nono 'native/empty '()))
         (check-equal?
-         (poo-flow-sandbox-profile-object-profile? profile)
+         (agentic-ai-lab-sandbox-profile-object-profile? profile)
          #t)))
-    (poo-flow-test-case "explicit list policy composes on a POO prototype"
+    (yuanxu-test-case "explicit list policy composes on a POO prototype"
       (let (profile
-            (poo-flow-sandbox-profile-object-config
-             poo-flow-nono-sandbox-profile-object
+            (agentic-ai-lab-sandbox-profile-object-config
+             agentic-ai-lab-nono-sandbox-profile-object
              'nono
              'native/composed
              '((capabilities :prepend filesystem-read)
@@ -44,11 +44,11 @@
                (network :override deny-by-default)
                (metadata (stage . native)))))
         (check-equal?
-         (poo-flow-sandbox-profile-capabilities profile)
+         (agentic-ai-lab-sandbox-profile-capabilities profile)
          '(process filesystem tmpdir filesystem-write))
         (check-equal?
-         (poo-flow-sandbox-profile-network-policy profile)
+         (agentic-ai-lab-sandbox-profile-network-policy profile)
          '(deny-by-default))
         (check-equal?
-         (cdr (assoc 'stage (poo-flow-sandbox-profile-metadata profile)))
+         (cdr (assoc 'stage (agentic-ai-lab-sandbox-profile-metadata profile)))
          'native)))))

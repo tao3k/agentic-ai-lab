@@ -6,12 +6,12 @@
 ;;; Boundary: custom user-interface tool-core scenario.
 ;;; Invariant: user config declares tool specs and validation receipts only.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in "../user-interface/custom/my-module/cases/tool-core"
-                 poo-flow-custom-my-module-tool-core-case))
+                 agentic-ai-lab-custom-my-module-tool-core-case))
 
 (export user-interface-custom-tool-core-test)
 
@@ -22,14 +22,14 @@
 
 ;; : TestSuite
 (def user-interface-custom-tool-core-test
-  (test-suite "poo-flow custom user-interface tool-core case"
-    (poo-flow-test-case "projects custom tool-core case without runtime execution"
+  (test-suite "agentic-ai-lab custom user-interface tool-core case"
+    (yuanxu-test-case "projects custom tool-core case without runtime execution"
       (let* ((selection-row
-              (car poo-flow-custom-my-module-tool-core-case))
+              (car agentic-ai-lab-custom-my-module-tool-core-case))
              (catalog-row
-              (cadr poo-flow-custom-my-module-tool-core-case))
+              (cadr agentic-ai-lab-custom-my-module-tool-core-case))
              (validation-row
-              (caddr poo-flow-custom-my-module-tool-core-case)))
+              (caddr agentic-ai-lab-custom-my-module-tool-core-case)))
         (check-equal? (test-ref selection-row 'key)
                       '(session . tool-core))
         (check-equal? (test-ref catalog-row 'catalog-ref)

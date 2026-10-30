@@ -5,11 +5,11 @@
 //! Explicit qualification: a C-owned thread calls Lean's compiled library.
 //! This does not claim authorization-grant, timeout, or crash isolation closure.
 use cedar_policy::{Context, Entities, Policy, PolicyId, PolicySet, Request};
-use poo_flow_cedar_authority::{canonical, wire};
+use agentic_ai_lab_cedar_authority::{canonical, wire};
 use std::{io::Write, process::Command};
 
 fn probe(bytes: &[u8]) -> std::process::Output {
-    let executable = std::env::var_os("POO_FLOW_CEDAR_NATIVE_PROBE")
+    let executable = std::env::var_os("AGENTIC_AI_LAB_CEDAR_NATIVE_PROBE")
         .expect("qualification requires the compiled C native probe; no skipped checks");
     let mut input = tempfile::NamedTempFile::new().unwrap();
     input.write_all(bytes).unwrap();

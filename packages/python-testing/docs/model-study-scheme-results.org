@@ -1,0 +1,64 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Scheme source comprehension pilot results
+#+STATUS: completed bounded pilot; no exact row-set success
+#+DATE: 2026-10-02
+
+* Receipt and scope
+
+The model received only the three Gerbil Scheme source files in
+[[file:model-study-scheme.org][the frozen protocol]], as one user message per call. Each file was sent
+three times to DeepSeek =deepseek-flash=, for nine authorized paid calls.
+The native answers were generated separately and were never sent.
+ASCENT head was =80fee6f0860ff71aaea27ebd08c36b195d4a225f=; POO
+Flow head was =23b0ea400acabac5d4bf7de34040fe8ea929efc5=.
+The exact source files and their SHA256 digests are in the external
+=/private/tmp/poo-scheme-source-preview-head-23b0ea40= manifest.
+
+All nine API responses completed. Raw model text is in separate
+=.sexp= files under =/private/tmp/poo-scheme-source-live-2026-10-02=.
+The original =manifest.tsv= has SHA256
+=bcef8f4062ecb129b07430def8dd6ac9aefe1b16f363bb9023c84506ca2f0fb6=.
+The per-response hashes and native regrade are in =regraded.tsv=,
+SHA256
+=bcd2e7641cab3359233ce41d20a1161e3c720607bf68a73b0c37ad4f12ed0407=.
+
+* Scores and failure shape
+
+| Source | Parseable answer shape / 3 | Exact row sets / 3 |
+|--------+----------------------------+--------------------|
+| Withdrawal | 3 | 0 |
+| Wrong join | 3 | 0 |
+| Negation and count | 2 | 0 |
+| Total | 8 / 9 | 0 / 9 |
+
+The withdrawal answers all wrote =()= for the first snapshot and a
+relation-named row for the second. The wrong-join answers all wrote
+=()= for the proposed program and relation-named rows for the repair.
+The first two negation/count answers wrote a relation-named row with
+count 2; the native result is the bare row =((1 1))=. The third answer
+added an extra outer list. These are raw model errors. There is no
+evidence of exact row-set prediction on this fixed input.
+
+The initial live manifest marked all nine answers invalid because the
+pre-call character filter permitted only letters from =answer=, while
+the model also wrote =path= or =summary=. That filter was overly narrow:
+those names are valid Scheme symbols even though the rows are wrong.
+After the calls, we broadened the safe reader alphabet to ASCII letters
+and reran all saved outputs through the same native Scheme datum and
+row-set scorer. The original manifest remains unchanged. This
+post-hoc syntax correction changed validity to 8/9 and left exact
+correctness at 0/9. The ninth output failed the =answer= shape check.
+
+* Interpretation and boundary
+
+The model read actual Scheme source rather than JSON observations, and
+the native Gerbil program supplied the expected outputs. The model did
+not receive the implementation of the imported ASCENT library; this
+pilot tests its reading of the calling program and candidate forms,
+not comprehension of the whole library implementation. The result is
+limited to three small programs and three calls each. It does not prove
+general inability to read Scheme, or isolate which missing API detail
+caused the errors. The process boundary added cold-start cost but did
+not change Scheme evaluation. No C ABI reasoning entrypoint was added.

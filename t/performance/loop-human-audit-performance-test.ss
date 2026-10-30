@@ -6,7 +6,7 @@
 ;;; Boundary: loop human-audit performance gates cover reused governor facts.
 ;;; Invariant: audit projection is review data and never mutates runtime state.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -15,15 +15,15 @@
                  benchmark-receipt-pass?
                  benchmark-run)
         "../support/performance"
-        (only-in :poo-flow/src/loops/descriptor
+        (only-in :agentic-ai-lab/modules/loop-engine/control/descriptor
                  make-loop-pattern-descriptor)
-        (only-in :poo-flow/src/loops/strategy
+        (only-in :agentic-ai-lab/modules/loop-engine/control/strategy
                  make-loop-strategy-plan)
-        (only-in :poo-flow/src/loops/governor-core
+        (only-in :agentic-ai-lab/modules/loop-engine/control/governor-core
                  make-loop-governor)
-        (only-in :poo-flow/src/loops/governor
+        (only-in :agentic-ai-lab/modules/loop-engine/control/governor
                  loop-governor->contract)
-        :poo-flow/src/loops/human-audit)
+        :agentic-ai-lab/modules/loop-engine/control/human-audit)
 
 (export loop-human-audit-performance-test)
 
@@ -41,7 +41,7 @@
 
 ;; : (-> Alist Void)
 (def (loop-human-audit-performance-display-receipt receipt)
-  (display "[poo-flow-benchmark] loop-human-audit-contract-projection ")
+  (display "[agentic-ai-lab-benchmark] loop-human-audit-contract-projection ")
   (write receipt)
   (newline)
   (force-output))
@@ -64,20 +64,20 @@
 
 ;; : (-> Integer [LoopPatternDescriptor])
 (def (loop-human-audit-performance-patterns count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    loop-human-audit-performance-pattern))
 
 ;; : (-> Integer Integer [String])
 (def (loop-human-audit-performance-action-keys start count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    (lambda (offset)
      (loop-human-audit-performance-action-key (+ start offset)))))
 
 ;; : (-> Integer Integer [Alist])
 (def (loop-human-audit-performance-states start count)
-  (poo-flow-performance-build-list
+  (agentic-ai-lab-performance-build-list
    count
    (lambda (offset)
      (list (cons 'acting_on
@@ -123,7 +123,7 @@
 ;; : TestSuite
 (def loop-human-audit-performance-test
   (test-suite "loop human-audit performance"
-    (poo-flow-test-case "keeps human audit projection inside benchmark contract"
+    (yuanxu-test-case "keeps human audit projection inside benchmark contract"
       (let* ((pattern-count 600)
              (governor
               (loop-human-audit-performance-governor pattern-count))

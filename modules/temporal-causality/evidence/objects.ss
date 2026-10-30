@@ -5,18 +5,18 @@
 
 (import (only-in :clan/poo/object .o)
         (only-in :clan/poo/mop validate)
-        (only-in :poo-flow/modules/temporal-causality/evidence/types
+        (only-in :agentic-ai-lab/modules/temporal-causality/evidence/types
                  PooFlowEvidenceRetrieval PooFlowEvidenceUse
                  PooFlowEvidenceAssessment
                  PooFlowEvidenceDependency PooFlowEvidenceLineage
                  PooFlowEvidenceUseAudit PooFlowEvidenceImpactFrontier))
-(export poo-flow-evidence-retrieval-value poo-flow-evidence-use-value
-        poo-flow-evidence-assessment-value
-        poo-flow-evidence-dependency-value poo-flow-evidence-lineage-value
-        poo-flow-evidence-use-audit-value
-        poo-flow-evidence-impact-frontier-value)
+(export agentic-ai-lab-evidence-retrieval-value agentic-ai-lab-evidence-use-value
+        agentic-ai-lab-evidence-assessment-value
+        agentic-ai-lab-evidence-dependency-value agentic-ai-lab-evidence-lineage-value
+        agentic-ai-lab-evidence-use-audit-value
+        agentic-ai-lab-evidence-impact-frontier-value)
 
-(def (poo-flow-evidence-retrieval-value id-value digest-value query-value
+(def (agentic-ai-lab-evidence-retrieval-value id-value digest-value query-value
                                          evidence-value source-value)
   (validate PooFlowEvidenceRetrieval
     (.o kind: 'poo-flow.temporal-causality.evidence-retrieval
@@ -24,7 +24,7 @@
         query-identity: query-value evidence-identity: evidence-value
         source-digest: source-value)))
 
-(def (poo-flow-evidence-use-value id-value digest-value evidence-value
+(def (agentic-ai-lab-evidence-use-value id-value digest-value evidence-value
                                    claim-value source-value claim-digest-value)
   (validate PooFlowEvidenceUse
     (.o kind: 'poo-flow.temporal-causality.evidence-use
@@ -32,7 +32,7 @@
         evidence-identity: evidence-value claim-identity: claim-value
         source-digest: source-value claim-digest: claim-digest-value)))
 
-(def (poo-flow-evidence-assessment-value id-value digest-value use-value
+(def (agentic-ai-lab-evidence-assessment-value id-value digest-value use-value
                                           use-digest-value assessor-value
                                           method-value verdict-value basis-value)
   (validate PooFlowEvidenceAssessment
@@ -42,7 +42,7 @@
         assessor-identity: assessor-value method-identity: method-value
         verdict: verdict-value basis-digest: basis-value)))
 
-(def (poo-flow-evidence-dependency-value id-value digest-value source-value
+(def (agentic-ai-lab-evidence-dependency-value id-value digest-value source-value
                                           dependent-value)
   (validate PooFlowEvidenceDependency
     (.o kind: 'poo-flow.temporal-causality.evidence-dependency
@@ -50,7 +50,7 @@
         source-claim-identity: source-value
         dependent-claim-identity: dependent-value)))
 
-(def (poo-flow-evidence-lineage-value id-value digest-value retrievals-value
+(def (agentic-ai-lab-evidence-lineage-value id-value digest-value retrievals-value
                                       uses-value assessments-value
                                       dependencies-value)
   (validate PooFlowEvidenceLineage
@@ -60,7 +60,7 @@
         assessments: assessments-value
         dependencies: dependencies-value)))
 
-(def (poo-flow-evidence-use-audit-value id-value digest-value lineage-value
+(def (agentic-ai-lab-evidence-use-audit-value id-value digest-value lineage-value
                                         unused-value unretrieved-value
                                         unreviewed-value supported-value
                                         refuted-value uncertain-value
@@ -78,7 +78,7 @@
         contested-use-identities: contested-value
         status: status-value)))
 
-(def (poo-flow-evidence-impact-frontier-value id-value digest-value
+(def (agentic-ai-lab-evidence-impact-frontier-value id-value digest-value
                                                lineage-value seeds-value
                                                claims-value)
   (validate PooFlowEvidenceImpactFrontier

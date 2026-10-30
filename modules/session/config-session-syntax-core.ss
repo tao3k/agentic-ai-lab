@@ -6,7 +6,7 @@
 ;;; session module category and its feature-level expansions.
 ;;; Invariant: core expansions must stay deterministic for loader and policy
 ;;; diagnostics.
-(import :poo-flow/modules/session/config-session-runtime)
+(import :agentic-ai-lab/modules/session/config-session-runtime)
 
 (export session
         session-graph
@@ -37,14 +37,14 @@
       (lineage branch-kind parent-id ...)
       (placement profile-ref)
       (metadata metadata-entry ...))
-   (poo-flow-session-syntax-value
+   (agentic-ai-lab-session-syntax-value
     'session-id
-    (list (poo-flow-session-syntax-chunk 'chunk-id 'role content) ...)
-    (poo-flow-session-syntax-lineage
+    (list (agentic-ai-lab-session-syntax-chunk 'chunk-id 'role content) ...)
+    (agentic-ai-lab-session-syntax-lineage
      'session-id
      '(parent-id ...)
      'branch-kind)
-    (poo-flow-session-syntax-default-placement
+    (agentic-ai-lab-session-syntax-default-placement
      'profile-ref
      '(metadata-entry ...))
     '(metadata-entry ...)))
@@ -53,14 +53,14 @@
       ...
       (lineage branch-kind parent-id ...)
       (placement profile-ref))
-   (poo-flow-session-syntax-value
+   (agentic-ai-lab-session-syntax-value
     'session-id
-    (list (poo-flow-session-syntax-chunk 'chunk-id 'role content) ...)
-    (poo-flow-session-syntax-lineage
+    (list (agentic-ai-lab-session-syntax-chunk 'chunk-id 'role content) ...)
+    (agentic-ai-lab-session-syntax-lineage
      'session-id
      '(parent-id ...)
      'branch-kind)
-    (poo-flow-session-syntax-default-placement 'profile-ref))))
+    (agentic-ai-lab-session-syntax-default-placement 'profile-ref))))
 
 ;; session-graph
 ;;   : (-> PooSessionValue ... PooSessionGraphPresentation)
@@ -71,11 +71,11 @@
 ;;       # Examples
 ;;       ```scheme
 ;;       (session-graph root-session branch-session)
-;;       ;; => pooFlowSessionGraphPresentation receipt
+;;       ;; => agenticAiLabSessionGraphPresentation receipt
 ;;       ```
 ;;     %
 (def (session-graph . session-values)
-  (poo-flow-session-syntax-graph-presentation session-values))
+  (agentic-ai-lab-session-syntax-graph-presentation session-values))
 
 ;; session-registry-entry
 ;;   : (-> Syntax PooSessionRegistryEntry)
@@ -99,7 +99,7 @@
       (channels channel-id ...)
       (policies (policy-kind policy-summary) ...)
       (metadata metadata-entry ...))
-   (poo-flow-session-syntax-registry-entry
+   (agentic-ai-lab-session-syntax-registry-entry
     session-value
     'agent-id
     '(channel-id ...)
@@ -109,7 +109,7 @@
       (agent agent-id)
       (channels channel-id ...)
       (policies (policy-kind policy-summary) ...))
-   (poo-flow-session-syntax-registry-entry
+   (agentic-ai-lab-session-syntax-registry-entry
     session-value
     'agent-id
     '(channel-id ...)
@@ -138,7 +138,7 @@
       (active active-session-ref)
       (entries entry ...)
       (metadata metadata-entry ...))
-   (poo-flow-session-syntax-registry
+   (agentic-ai-lab-session-syntax-registry
     'project-id
     '(root-session-id ...)
     '(child-session-id ...)
@@ -150,7 +150,7 @@
       (children child-session-id ...)
       (active active-session-ref)
       (entries entry ...))
-   (poo-flow-session-syntax-registry
+   (agentic-ai-lab-session-syntax-registry
     'project-id
     '(root-session-id ...)
     '(child-session-id ...)

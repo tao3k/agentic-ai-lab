@@ -6,11 +6,11 @@
 ;;; Boundary: downstream POO object slot-operator example.
 ;;; Invariant: standalone module; it declares extension data only.
 
-(import :poo-flow/src/user-interface/init-syntax)
+(import :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
-(export poo-flow-custom-my-module-object-extension-module)
+(export agentic-ai-lab-custom-my-module-object-extension-module)
 
-(def poo-flow-custom-my-module-object-extension-module
+(def agentic-ai-lab-custom-my-module-object-extension-module
   (let ((object-extension-capabilities
        '(process-run filesystem-read tmpdir cache-mount artifact-cache))
       (object-extension-mounts
@@ -38,7 +38,7 @@
           (purpose . user-config))
          ((path . "/run/secrets")
           (source-kind . env)
-          (source . "$POO_FLOW_AGENT_SECRETS")
+          (source . "$AGENTIC_AI_LAB_AGENT_SECRETS")
           (target . "/run/secrets")
           (mode . read)
           (purpose . credentials))))

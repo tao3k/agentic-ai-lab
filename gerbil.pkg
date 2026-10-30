@@ -2,11 +2,10 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(package:
- poo-flow
-depend:
- ("github.com/tao3k/poo-flow-core@e85fd45303b208b23e5957fd316e7004994109a4"
-  "github.com/tao3k/gerbil-poo@099b381588360a8a49fd772f666a1a00351366f5"
-  "github.com/tao3k/asp-gerbil-scheme@19bf659450f619a410cef46b093ccaa6bb203c03"
-  "github.com/tao3k/gerbil-parser@0e6d0d6c325145e7af576e6f1af0e136f22487c4"
-  "github.com/tao3k/orgize@f80ee4de8c39ac4d8f3fbbed0c88d4072300c9b9"))
+(package: agentic-ai-lab
+ prelude: :tao3k/yuanxu/prelude
+ depend: ("github.com/tao3k/gerbil-parser@e2ef6a33730b177589567e38517e42e4789474f3"
+          "github.com/tao3k/orgize@772a4f50fd74a70d5701f1179ca33286d90cdeaf"
+          ;; Orgize's native C producer consumes this existing Scheme runtime.
+          "github.com/tao3k/gerbil-scheme-rust@cfbc10c47ddc41f6670bd78e46e1e9d856cbb870"
+          "github.com/tao3k/gerbil-ascent@32af80e960b5191bc9cdefa60e0a599ff8bb5189"))

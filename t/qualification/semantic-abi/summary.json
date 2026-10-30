@@ -1,0 +1,45 @@
+{
+  "schema": "agentic-ai-lab.semantic-abi-qualification",
+  "version": 1,
+  "artifactSha256": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c",
+  "wheel": "agentic_ai_lab_runtime-0.1.0-cp313-cp313-macosx_26_0_arm64.whl",
+  "wheelSha256": "8fad45953de43fdff9553f296e29ca8322a3c1faa70aeb1131cbbafce3ccdfa0",
+  "installedRuntimeNativeTests": 34,
+  "installedTestFailures": 0,
+  "installedTestSkips": 0,
+  "attempts": 48,
+  "completedProviderResponses": 48,
+  "modelCorrect": 4,
+  "modelFailures": 44,
+  "nativeObservations": 47,
+  "inertOutputRejections": [
+    "SemanticRuntimeError: model output is not inert JSON"
+  ],
+  "sourceReboundCases": 47,
+  "negativeControls": 26,
+  "apiRetries": 0,
+  "thinkingEffort": "none",
+  "firstContentMaxSeconds": 1.278647582992562,
+  "contentGapMaxSeconds": 0.31053345900727436,
+  "scope": "current semantic ABI installed Darwin arm64 Library engineering qualified; real-model correctness gate FAILED; no max-effort reasoning, full Scheme capability, real-time teaching, external business or control ABI freeze claim",
+  "modelGate": "failed",
+  "latestFailureFix": {
+    "producerHead": "c8b491bfb91001183e78df4930d0bc38f3a5e17b",
+    "summary": "2026-10-04-output-contract-build/summary.json",
+    "passed": 14,
+    "calls": 24,
+    "modelGate": "FAILED"
+  },
+  "currentLibraryToolRoundtrip": {
+    "summary": "2026-10-04-tool-roundtrip-abi/summary.json",
+    "gate": "PASSED",
+    "roundtrips": 24,
+    "responses": 48
+  },
+  "currentSourcePrediction": {
+    "gate": "FAILED",
+    "correct": 12,
+    "calls": 24,
+    "report": "2026-10-04-temperature-zero-abi/report.json"
+  }
+}

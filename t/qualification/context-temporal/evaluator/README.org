@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Context Temporal Native Test Ownership
+
+* Compilation and execution
+:PROPERTIES:
+:ID: context-temporal-native-test-ownership
+:END:
+
+=t/temporal-evaluator-test.ss= publishes one native TestSuite with the original
+58 Cases in their original order. The eight registration files bound compiler
+unit size. They do not create runtime batches or additional Harness processes.
+The combined Context/Temporal qualification still requires all 99 Case receipts.
+
+The original monolithic evaluator generated approximately 2.73 MB of dynamic
+Scheme intermediate code. The largest registration unit generates approximately
+457 KB. Native Make remains responsible for compilation and scheduling.
+
+=fixtures.ss= owns shared proof, source, clock and Context fixtures. Consumers
+that need those fixtures import that owner directly. They do not import the
+evaluator TestSuite merely to obtain a fixture constructor.
+
+* Replay and refusal controls
+
+Use the existing heap-fenced entries from the repository root:
+
+#+begin_src sh
+just compile-context-temporal-tests
+just test-context-temporal
+just test-native-harness-progress
+just test-root
+#+end_src
+
+Preparation retains its 120-second internal budget. The combined native
+Context qualification retains 2 GiB, 150 seconds and the five-second output
+gate. Case assertions, original evidence, permutations and replay paths are
+unchanged. A final Gerbil =OK= without successful process termination is a failure.
+
+Core's =init-test-input-test.ss= and =module-test-preparation-test.ss= retain
+independent verdict execution, changed-source refusal, compiler-option binding,
+native product tampering and persistent approval replay controls.
+
+Observations distinguish support projection and preparation, time before the
+Gerbil Harness begins, Case spans and time through final Gerbil =OK=. These diagnostics
+do not grant progress or execution authority. Raw logs remain local or in CI
+artifacts.

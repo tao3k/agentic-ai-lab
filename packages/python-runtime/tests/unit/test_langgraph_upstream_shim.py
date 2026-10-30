@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Upstream-shaped LangGraph imports routed into POO Flow compat."""
+"""Upstream-shaped LangGraph imports routed into Agentic AI Lab compat."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from types import ModuleType
 from typing import Any
 
 
-def test_upstream_langgraph_import_shape_runs_on_poo_flow(monkeypatch) -> None:
+def test_upstream_langgraph_import_shape_runs_on_agentic_ai_lab(monkeypatch) -> None:
     _remove_langgraph_modules()
     monkeypatch.syspath_prepend(str(_shim_root()))
 

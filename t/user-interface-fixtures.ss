@@ -7,43 +7,43 @@
 ;;; Invariant: fixtures are declarative data and never realize descriptors.
 
 (import (only-in :clan/poo/object .o .ref)
-        :poo-flow/src/user-interface/module-selection
-        (only-in :poo-flow/src/user-interface/module-selection-syntax
-                 poo-flow-modules!)
-        :poo-flow/modules/loop-engine/config
-        :poo-flow/src/user-interface/profile-core
-        :poo-flow/src/profiles/kernel/interface)
+        :yuanxu/module-system/selection/objects
+        (only-in :yuanxu/module-system/selection/syntax
+                 yuanxu-modules!)
+        :agentic-ai-lab/modules/loop-engine/config
+        :yuanxu/profile-composition/user-profile
+        :agentic-ai-lab/modules/workflow/profiles/kernel/interface)
 
-(defrules poo-flow-profile-set (default profiles)
+(defrules agentic-ai-lab-profile-set (default profiles)
   ((_ name (default default-name) (profiles profile ...))
-   (.o kind: "poo-flow.modules.user-profile-set.v1"
+   (.o kind: "yuanxu.modules.user-profile-set.v1"
        profile-set-name: 'name
        default-profile-name: 'default-name
        user-profiles: (list profile ...))))
 
-(defrules poo-flow-profile (modules settings setting-keys)
+(defrules agentic-ai-lab-profile (modules settings setting-keys)
   ((_ name (modules module ...)
       (settings setting ...)
       (setting-keys key ...))
-   (.o kind: "poo-flow.modules.user-profile.v1"
+   (.o kind: "yuanxu.modules.user-profile.v1"
        profile-name: 'name
        profile-selection-bundles: (list module ...)
        user-settings: (.o setting ...)
        public-setting-keys: '(key ...))))
 
-(defrules poo-flow-user-module-bundle ()
+(defrules yuanxu-user-module-bundle ()
   ((_ (category module feature ...) ...)
    (list
-    (poo-flow-user-module-selection 'category
+    (yuanxu-user-module-selection 'category
                                     'module
                                     '(feature ...))
     ...)))
 
-(defrules poo-flow-user-module-when ()
+(defrules yuanxu-user-module-when ()
   ((_ condition (category module feature ...))
    (if condition
      (list
-      (.o kind: "poo-flow.modules.user-module.v1"
+      (.o kind: "agentic-ai-lab.modules.user-module.v1"
           category: 'category
           module: 'module
           features: '(feature ...)
@@ -52,17 +52,17 @@
           module-features: '(feature ...)))
      [])))
 
-(def (poo-flow-user-module-bundles-extend base-bundles extra-bundles)
+(def (yuanxu-user-module-bundles-extend base-bundles extra-bundles)
   (append base-bundles extra-bundles))
 
-(def (poo-flow-user-module-bundles->modules bundles)
+(def (yuanxu-user-module-bundles->modules bundles)
   (apply append bundles))
 
-(def poo-flow-default-user-setting-keys
+(def yuanxu-default-user-setting-keys
   '(surface profile flow-mode loop-strategy sandbox-policy sandbox-backends mode-lock))
 
-(def (pooFlowDefaultUserSettings profile-name)
-  (.o surface: "poo-flow"
+(def (yuanxuDefaultUserSettings profile-name)
+  (.o surface: "agentic-ai-lab"
       profile: (symbol->string profile-name)
       flow-mode: 'funflow
       loop-strategy: 'governed
@@ -70,39 +70,39 @@
       sandbox-backends: '(nono cube docker)
       mode-lock: "stable"))
 
-(def (pooFlowUserProfile name module-bundles settings setting-keys)
-  (.o kind: "poo-flow.modules.user-profile.v1"
+(def (yuanxuUserProfile name module-bundles settings setting-keys)
+  (.o kind: "yuanxu.modules.user-profile.v1"
       profile-name: name
       profile-selection-bundles: module-bundles
       user-settings: settings
       public-setting-keys: setting-keys))
 
-(def (pooFlowUserProfileExtend name base-profile module-bundles)
-  (pooFlowUserProfile
+(def (yuanxuUserProfileExtend name base-profile module-bundles)
+  (yuanxuUserProfile
    name
    (append (.ref base-profile 'profile-selection-bundles) module-bundles)
    (.ref base-profile 'user-settings)
    (.ref base-profile 'public-setting-keys)))
 
-(export test-poo-flow-user-module-bundles
-        test-poo-flow-user-modules
-        test-poo-flow-user-custom-module-bundles
-        test-poo-flow-user-custom-profile
-        test-poo-flow-user-profile
-        test-poo-flow-user-broken-profile
-        test-poo-flow-user-profile-set
-        test-poo-flow-user-broken-profile-set
-        test-poo-flow-user-settings
-        test-poo-flow-user-config
+(export test-yuanxu-user-module-bundles
+        test-agentic-ai-lab-user-modules
+        test-agentic-ai-lab-user-custom-module-bundles
+        test-agentic-ai-lab-user-custom-profile
+        test-agentic-ai-lab-user-profile
+        test-agentic-ai-lab-user-broken-profile
+        test-agentic-ai-lab-user-profile-set
+        test-agentic-ai-lab-user-broken-profile-set
+        test-agentic-ai-lab-user-settings
+        test-agentic-ai-lab-user-config
         alist-value
         diagnostic-code-member?)
 
 ;; : (-> Unit [[PooUserModuleSelection]])
-(def test-poo-flow-user-module-bundles
-  (poo-flow-user-module-bundles-extend
-   poo-flow-kernel-profile-module-bundles
+(def test-yuanxu-user-module-bundles
+  (yuanxu-user-module-bundles-extend
+   agentic-ai-lab-kernel-profile-module-bundles
    (list
-    (poo-flow-loop-engine-configs
+    (agentic-ai-lab-loop-engine-configs
      (.def (test-loop @ loop-engine-use-case name)
        name: 'test-loop)
 
@@ -131,68 +131,68 @@
        runtime: test-loop-runtime)))))
 
 ;; : (-> Unit [PooUserModuleSelection])
-(def test-poo-flow-user-modules
-  (poo-flow-user-module-bundles->modules test-poo-flow-user-module-bundles))
+(def test-agentic-ai-lab-user-modules
+  (yuanxu-user-module-bundles->modules test-yuanxu-user-module-bundles))
 
 ;; : (-> Unit [[PooUserModuleSelection]])
-(def test-poo-flow-user-custom-module-bundles
-  (poo-flow-modules!
+(def test-agentic-ai-lab-user-custom-module-bundles
+  (yuanxu-modules!
    :custom
    (my-module @ "./custom/my-module" +private +doctor)))
 
 ;; : (-> Unit PooUserProfile)
-(def test-poo-flow-user-custom-profile
-  (pooFlowUserProfileExtend
+(def test-agentic-ai-lab-user-custom-profile
+  (yuanxuUserProfileExtend
    'custom-developer
-   poo-flow-kernel-profile
-   test-poo-flow-user-custom-module-bundles))
+   agentic-ai-lab-kernel-profile
+   test-agentic-ai-lab-user-custom-module-bundles))
 
 ;; : (-> Unit PooUserProfile)
-(def test-poo-flow-user-profile
-  (pooFlowUserProfile
+(def test-agentic-ai-lab-user-profile
+  (yuanxuUserProfile
    'developer
-   test-poo-flow-user-module-bundles
-   (pooFlowDefaultUserSettings 'developer)
-   poo-flow-default-user-setting-keys))
+   test-yuanxu-user-module-bundles
+   (yuanxuDefaultUserSettings 'developer)
+   yuanxu-default-user-setting-keys))
 
 ;; : (-> Unit PooUserProfile)
-(def test-poo-flow-user-broken-profile
-  (poo-flow-profile broken
+(def test-agentic-ai-lab-user-broken-profile
+  (agentic-ai-lab-profile broken
    (modules
-    (poo-flow-user-module-bundle
+    (yuanxu-user-module-bundle
      (flow workflow +typed-receipts)
      (flow workflow +duplicate))
-    (poo-flow-user-module-when #f
+    (yuanxu-user-module-when #f
      (sandbox cubeSandbox +doctor)))
    (settings
-    surface: "poo-flow")
+    surface: "agentic-ai-lab")
    (setting-keys
     surface
     missing-key)))
 
 ;; : (-> Unit PooUserProfileSet)
-(def test-poo-flow-user-profile-set
-  (poo-flow-profile-set workspace
+(def test-agentic-ai-lab-user-profile-set
+  (agentic-ai-lab-profile-set workspace
    (default developer)
    (profiles
-    test-poo-flow-user-profile
-    test-poo-flow-user-custom-profile)))
+    test-agentic-ai-lab-user-profile
+    test-agentic-ai-lab-user-custom-profile)))
 
 ;; : (-> Unit PooUserProfileSet)
-(def test-poo-flow-user-broken-profile-set
-  (poo-flow-profile-set broken-workspace
+(def test-agentic-ai-lab-user-broken-profile-set
+  (agentic-ai-lab-profile-set broken-workspace
    (default missing)
    (profiles
-    test-poo-flow-user-profile
-    test-poo-flow-user-profile)))
+    test-agentic-ai-lab-user-profile
+    test-agentic-ai-lab-user-profile)))
 
 ;; : (-> Unit POOObject)
-(def test-poo-flow-user-settings
-  (.ref test-poo-flow-user-profile 'user-settings))
+(def test-agentic-ai-lab-user-settings
+  (.ref test-agentic-ai-lab-user-profile 'user-settings))
 
 ;; : (-> Unit PooUserConfig)
-(def test-poo-flow-user-config
-  (pooFlowUserConfigFromProfile test-poo-flow-user-profile))
+(def test-agentic-ai-lab-user-config
+  (yuanxuUserConfigFromProfile test-agentic-ai-lab-user-profile))
 
 ;; : (-> UserInterfaceEntry Alist MaybeValue)
 (def (alist-value key entries)

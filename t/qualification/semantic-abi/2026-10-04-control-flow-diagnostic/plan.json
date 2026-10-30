@@ -1,0 +1,7 @@
+{
+  "scope": "output-contract diagnostic only; no new native ABI acceptance",
+  "maxCalls": 12,
+  "retries": 0,
+  "contentIdleSeconds": 5,
+  "requestSha256": "148a71e14ad12a2f1dfb594f24381fc6c23e61c847ad44adfd749fcdf4ba6e42"
+}

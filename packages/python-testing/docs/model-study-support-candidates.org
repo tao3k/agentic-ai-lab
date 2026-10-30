@@ -1,0 +1,248 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Candidate self-review versus ASCENT execution feedback
+#+DATE: 2026-10-02
+#+STATUS: approved four-call run complete; both final candidates rejected
+
+* Task and ownership
+
+The model reads the exact ASCENT =candidate/program.ss= and
+=program/scheme-checked.ss= modules and writes one inert candidate for
+recursive path, pair negation, checked even-weight doubling and grouped
+sum. ASCENT owns the source states, canonical candidate, native execution
+and evidence verification. Python Testing owns preview, transport,
+response records and comparison with ASCENT's reference output. It adds
+no Scheme program or evaluator.
+
+The native adapter imports the existing =scheme-library-contract-test.ss=
+corpus. It uses the public =reasoning-attempt= API with solve budget
+=100000= and evidence budget =20000=. The four source states yield
+=20,20,8,12= with weights =2,4,6= and root =0=. The first receipt must
+fail finite and founded verification against the second source, despite
+an equal answer. Rust 0.8.0 checks the same source states and directly
+compares this adapter's reference output. A hypothetical fact can have
+valid native evidence but fail this task's shape rule: no candidate facts,
+query =summary= with two variables, and limits =16 64 128=.
+
+* Fixed comparison
+
+| Arm | Call 1 | Call 2 | Final evaluation |
+|-----+--------+--------+------------------|
+| self | Common source/task prompt | Self-review with own candidate, no native observation | Native execution over all four source states |
+| native | Identical common source/task prompt | Own candidate plus initial-source native observation | Same four source states |
+
+Each arm is a fresh conversation. The second message contains its own
+first response. Only the native arm receives execution feedback, and
+only for generation 0. Hidden update-state outputs, reference totals,
+correctness scores and the other arm's responses are never sent. The
+self arm is evaluated only after its second call. Arm order is fixed:
+=self=, then =native=. One pair cannot separate order effects or estimate
+reliability; the equal two-call budget supports a bounded task comparison,
+not a general claim that native feedback improves a model.
+
+With explicit approval, maximum four calls to =deepseek-flash=, one per
+stage, non-thinking, temperature 0, maximum 1024 output tokens per call,
+45-second timeout, zero retries. API failures stop the run. The model
+emits bounded candidate data; it cannot supply an executable Scheme
+closure. A non-completed or malformed response is not executed.
+
+* Frozen preview and scores
+
+A new external preview directory contains =initial.txt=,
+=self_review.txt=, =native_review.txt=, =reference.tsv= and
+=manifest.json=. The manifest records both Git heads, settings, four-call
+cap and SHA256 for each file. The reference is checked before preview
+publication. Follow-up templates are frozen; their inserted first
+response and native observation necessarily depend on the approved run.
+
+Live execution requires clean checkouts, the exact Agentic AI Lab ASCENT pin,
+unchanged preview and the approved manifest SHA256. Preview reads no API
+key. Each call records the complete outgoing messages, request hash,
+response JSON, raw text, usage and elapsed time outside the repository.
+Final native observations and state-by-state scores are also preserved.
+
+Report API completion, candidate readability, native completion, finite
+and founded validity, task shape and output correctness independently.
+A final candidate passes only when all four query outputs match the
+reference, each current receipt verifies, the task shape passes and the
+old receipt fails both current-source verifiers. Generation-binding scoring
+is applicable only when the initial receipt completed and passed both
+verifiers against its original source; an already rejected receipt does
+not test a generation change. This certifies the
+supplied finite cases, not general intent, source completeness,
+exhaustive provenance, external authorization or effects.
+
+* Entrypoint
+
+#+begin_src sh
+python -m agentic_ai_lab_testing.model_study.support \
+  --ascent-root ASCENT --poo-root POO --gerbil-path GERBIL_PATH \
+  --preview-dir NEW_EXTERNAL_PREVIEW
+#+end_src
+
+For an approved live run, additionally supply =--output-dir=,
+=--approved-manifest-sha256= and =--env-file= (or an existing API-key
+variable). The frozen raw key is never included in preview or results.
+
+* Approved run and bounded result
+
+The approved preview is
+=/private/tmp/poo-support-candidate-preview-head-f2f2315a/=;
+its =manifest.json= SHA256 is
+=780f9e96cd466c1f6e07c4d55ecf2d0abc668cb6b45384470165358461ec6283=.
+It binds ASCENT =d2b2eb501fdb1c3b9ab6a1edc8141ef1d77ba0ad= and
+Agentic AI Lab =f2f2315aaf4cb4fc592018c3d7bbc5bc81ed0575=. Both exact
+heads passed CI before calls: ASCENT 4 successes; Agentic AI Lab 25 successes
+and 5 conditional skips. Both checkouts remained at these heads through
+the completed run. Raw files are in
+=/private/tmp/poo-support-candidate-live-head-f2f2315a/=.
+
+Exactly four requests completed, with no retry. All four outputs were
+readable inert candidate data. Neither final candidate passed native
+admission on any of the four source states; no model-derived query
+answer or valid finite/founded evidence was produced.
+
+| Arm/stage | Response ID | API seconds | Input tokens | Output tokens | Native outcome |
+|-----------+-------------+-------------+--------------+---------------+----------------|
+| =self.1= | =1ebe90aa-5a6c-4663-ab4c-fdeecebfafaa= | 6.757 | 7115 | 181 | not executed before self-review |
+| =self.2= | =641aa657-dfa1-4790-8ba4-d2de34375f9e= | 1.225 | 7317 | 181 | rejected: invalid-computation |
+| =native.1= | =899118e0-3105-46a5-88c6-db2c8a7dc5da= | 1.505 | 7115 | 192 | rejected: unsupported-operator |
+| =native.2= | =057a3cc1-5559-4b0e-b2f7-873918e9dd24= | 1.401 | 7370 | 192 | rejected: invalid-filter |
+
+Total reported usage is 28917 input and 746 output tokens;
+reported reasoning tokens are zero. API timing excludes native process
+startup and evaluation, so it is not an end-to-end latency comparison.
+The two first requests have the same message hash, but their responses
+differ. One fixed-order pair with different first candidates does not
+isolate a causal feedback effect.
+
+| Final arm | Current source results | Finite/founded verdicts | Task shape | Output score | Generation-binding test |
+|-----------+------------------------+-------------------------+------------+--------------+-------------------------|
+| self | rejected at all four states | invalid / invalid | passes no-facts/query/limits shape | 0/4 | not applicable: original receipt rejected |
+| native | rejected at all four states | invalid / invalid | passes no-facts/query/limits shape | 0/4 | not applicable: original receipt rejected |
+
+The self-review response is byte-identical to its first candidate.
+Its flat =(compute ?w + ?v ?v)= has five list elements; the inert grammar
+requires =(compute OUTPUT (OP INPUT ...))=. Native rejection is
+=invalid-computation= at =(clause 8 body 3)=.
+
+The native arm initially proposed multiplication, which the closed
+compute operator set does not support: =unsupported-operator= at
+=(clause 8 body 3)=. After this feedback it changed multiplication to
+addition, but preserved =(where even? ?w)=. This has three elements;
+the inert grammar requires =(where (OP INPUT ...))=. Its final receipt
+is =invalid-filter= at =(clause 8 body 4)=. Candidate clause/body
+positions here are one-based, unlike the trusted Scheme admission
+question's separate zero-based rule/body coordinates.
+
+Both raw candidates apply =even?= to the doubled weight. No candidate
+was admitted, and the four supplied weight sets are all even, so this
+run does not independently measure the original-weight guard or blocked
+pair semantics. Empty receipt rows here mean rejected execution, not a
+completed proof of an empty answer. After native feedback the response changed its operator, but did not
+yield an admitted final candidate.
+This is a failed bounded execution pair, not evidence of general model
+benefit, exhaustive Scheme understanding or a faulty native solver.
+
+The original =scores.json= mechanically records =stale_invalid=true=,
+because rejected receipts also fail both verifiers. This does not test
+source-generation binding. A subsequent reporting check adds
+=stale_applicable=, requiring an originally completed receipt with both
+original-source verdicts valid. The supplemental
+=analysis-score-applicability.json= marks this axis inapplicable for both
+arms. It reclassifies the existing observations without rerunning native
+programs or models, and does not change either final failure score. The
+qualified reference candidate separately passes the meaningful stale
+receipt test.
+
+* Exact raw candidates
+
+The self arm's two texts are identical:
+
+#+begin_src scheme
+(candidate
+ (relation path 2)
+ (relation allowed 2)
+ (relation weighted 2)
+ (relation summary 2)
+ (rule (path ?x ?y) (edge ?x ?y))
+ (rule (path ?x ?y) (edge ?x ?z) (path ?z ?y))
+ (rule (allowed ?x ?y) (path ?x ?y) (not (blocked ?x ?y)))
+ (rule (weighted ?x ?w) (allowed ?x ?y) (weight ?y ?v) (compute ?w + ?v ?v) (where even? ?w))
+ (rule (summary ?x ?s) (root ?x) (reduce ?s (sum ?w) (weighted ?x ?w)))
+ (query summary ?x ?s)
+ (limits 16 64 128))
+#+end_src
+
+The native arm first returned:
+
+#+begin_src scheme
+(candidate
+  (relation path 2)
+  (relation allowed 2)
+  (relation weighted 2)
+  (relation summary 2)
+  (rule (path ?x ?y) (edge ?x ?y))
+  (rule (path ?x ?y) (edge ?x ?z) (path ?z ?y))
+  (rule (allowed ?x ?y) (path ?x ?y) (not (blocked ?x ?y)))
+  (rule (weighted ?x ?w) (allowed ?x ?y) (weight ?y ?v) (compute ?w (* ?v 2)) (where even? ?w))
+  (rule (summary ?x ?s) (root ?x) (reduce ?s (sum ?w) (weighted ?x ?w)))
+  (query summary ?x ?s)
+  (limits 16 64 128))
+#+end_src
+
+Its final response was:
+
+#+begin_src scheme
+(candidate
+  (relation path 2)
+  (relation allowed 2)
+  (relation weighted 2)
+  (relation summary 2)
+  (rule (path ?x ?y) (edge ?x ?y))
+  (rule (path ?x ?y) (edge ?x ?z) (path ?z ?y))
+  (rule (allowed ?x ?y) (path ?x ?y) (not (blocked ?x ?y)))
+  (rule (weighted ?x ?w) (allowed ?x ?y) (weight ?y ?v) (compute ?w (+ ?v ?v)) (where even? ?w))
+  (rule (summary ?x ?s) (root ?x) (reduce ?s (sum ?w) (weighted ?x ?w)))
+  (query summary ?x ?s)
+  (limits 16 64 128))
+#+end_src
+
+* Raw record hashes
+
+| Record | SHA256 |
+|--------+--------|
+| =self.1.json= | =a90ed2d192a3105a8375bb6d1dd53dcc38df7818909db511a696105aa8356517= |
+| =self.2.json= | =2c5958623268a2fe0526420191aee7fd202c33942e34101a8b39d8cf54c41e29= |
+| =native.1.json= | =5d96978c2d853aab33ac62e24311931faf2bb1fc20ac96f56fb039a7f6d941ed= |
+| =native.2.json= | =7227b967bc9bda5042b1a0e0dc3e61842d07c78842390144949af4b18ff7d71d= |
+| =self.1.txt= | =acd3180b4774fc8b786221b9511e2e47e640a6e74d2655c7d3233fe364d6e856= |
+| =self.2.txt= | =acd3180b4774fc8b786221b9511e2e47e640a6e74d2655c7d3233fe364d6e856= |
+| =native.1.txt= | =e710253a174f364ee6d57aed9c04aaacf5abfdee545eee497373b6029bfac4c3= |
+| =native.2.txt= | =aafe17a5b2ae19f0b9ce2d5bffb5bcde40f4022acbd61139a3b1a52348664c24= |
+| =native.initial.tsv= | =e5175a15320d9d4200ef9b621fbb46ab1718d88115304eb409fba0e36b89e631= |
+| =self.final.tsv= | =20ec4aac2b29795407f8f484b3beffd05d3c912dfd096a104b8196ad09c99040= |
+| =native.final.tsv= | =07c106e56250f7480d7c03b45199c5157a43c0eb66e5fd3b32c2f3a60caa48cf= |
+| =scores.json= | =4d6c5e75b2be0fe3e81a463c1886e9868bba952b4a380ed5ce9fafaa7f3fa902= |
+| =analysis-score-applicability.json= | =963e9c876d99e50ccef93fe63aa128e56f15f64fec393abe3cf4552c4e56e6d8= |
+
+The request JSON records preserve complete outgoing messages, settings,
+canonical message hashes, response JSON and usage. The approved preview
+manifest is copied unchanged into the result directory. No additional
+calls were made after these four responses.
+
+* Evidence retention correction
+
+The temporary preview/result paths above are no longer present. The four
+original response texts were recovered from this immutable result document
+at =6d27a089= only where their bytes matched the recorded SHA256. They are
+retained in [[file:evidence/support-candidates-f2f2315a/recovery.json][the partial recovery inventory]] with explicit unavailable JSON,
+request, preview and native-record entries. No missing original record was
+reconstructed; the historical run cannot currently be fully re-audited.
+
+New live entrypoints require a new durable =--archive-dir= outside temporary
+directories. Preview, results (including failure records) and an inventory
+of SHA256 values are copied and verified before a successful return. Hashes
+check consistency and do not authenticate a source. Model calls remain
+separately budgeted and approved.

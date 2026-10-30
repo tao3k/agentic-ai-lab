@@ -7,65 +7,65 @@
 
 (import :gerbil/core
         (only-in :clan/poo/object .def .o .ref .slot? object?)
-        :core/extension-graph/interface
-        :core/module-system/schema/interface
-        :poo-flow/modules/sandbox-core/shared-object
-        :poo-flow/modules/agent-sandbox/config
-        (only-in :poo-flow/modules/agent-sandbox/profile-validation
+        :yuanxu/graph/interface
+        :yuanxu/module-system/schema/interface
+        :agentic-ai-lab/modules/sandbox-core/shared-object
+        :agentic-ai-lab/modules/agent-sandbox/config
+        (only-in :agentic-ai-lab/modules/agent-sandbox/profile-validation
                  agent-sandbox-profile-resource-policy-filesystem-entry?
                  agent-sandbox-profile-resource-policy-filesystem-diagnostics)
-        :poo-flow/modules/sandbox-core/resource-contract
-        :poo-flow/modules/sandbox-core/profile-support/policy)
+        :agentic-ai-lab/modules/sandbox-core/resource-contract
+        :agentic-ai-lab/modules/sandbox-core/profile-support/policy)
 
-(export poo-flow-sandbox-core-profile-object
-        poo-flow-sandbox-profile-prototype
-        poo-flow-sandbox-profile-prototype-slot/default
-        poo-flow-sandbox-profile-prototype-slot/either
-        poo-flow-sandbox-profile-prototype->profile
-        poo-flow-sandbox-profile-prototypes)
+(export agentic-ai-lab-sandbox-core-profile-object
+        agentic-ai-lab-sandbox-profile-prototype
+        agentic-ai-lab-sandbox-profile-prototype-slot/default
+        agentic-ai-lab-sandbox-profile-prototype-slot/either
+        agentic-ai-lab-sandbox-profile-prototype->profile
+        agentic-ai-lab-sandbox-profile-prototypes)
 
 
 ;;; The core profile object supplies the shared prototype for sandbox backends.
 ;;; Backend modules extend it; users only see the resulting profile rows.
 ;; : PooModuleObject
 ;; | PooSandboxCoreProfileObject = PooModuleObject
-(def poo-flow-sandbox-core-profile-object
-  (poo-flow-module-object
+(def agentic-ai-lab-sandbox-core-profile-object
+  (yuanxu-module-object
    'objects.sandbox-core.profile
-   (list poo-flow-shared-sandbox-object)
+   (list agentic-ai-lab-shared-sandbox-object)
    (list
-    (poo-flow-module-field-contract
-     'profile-name PooFlowModuleSymbolType 'override 'default
+    (yuanxu-module-field-contract
+     'profile-name YuanxuModuleSymbolType 'override 'default
      '((scope . sandbox-core) (dsl-row . profile-name)))
-    (poo-flow-module-field-contract
-     'backend-kind PooFlowModuleSymbolType 'override 'sandbox
+    (yuanxu-module-field-contract
+     'backend-kind YuanxuModuleSymbolType 'override 'sandbox
      '((scope . sandbox-core) (owned-by . module-config)))
-    (poo-flow-module-field-contract
-     'backend-ref PooFlowModuleSymbolType 'override 'sandbox-profile
+    (yuanxu-module-field-contract
+     'backend-ref YuanxuModuleSymbolType 'override 'sandbox-profile
      '((scope . sandbox-core) (owned-by . module-config)))
-    (poo-flow-module-field-contract
-     'network-policy PooFlowModuleListType 'override '(deny-by-default)
+    (yuanxu-module-field-contract
+     'network-policy YuanxuModuleListType 'override '(deny-by-default)
      '((scope . sandbox-core) (dsl-row . network)))
-    (poo-flow-module-field-contract
-     'capabilities PooFlowModuleListType 'override '(process-run filesystem-read tmpdir)
+    (yuanxu-module-field-contract
+     'capabilities YuanxuModuleListType 'override '(process-run filesystem-read tmpdir)
      '((scope . sandbox-core) (dsl-row . capabilities)))
-    (poo-flow-module-field-contract
-     'backend-capability PooFlowModuleObjectType 'override
-     poo-flow-sandbox-backend-capability/sandbox
+    (yuanxu-module-field-contract
+     'backend-capability YuanxuModuleObjectType 'override
+     agentic-ai-lab-sandbox-backend-capability/sandbox
      '((scope . sandbox-core) (owned-by . module-config)))
-    (poo-flow-module-field-contract
-     'profile-policy PooFlowModuleObjectType 'override
-     poo-flow-sandbox-profile-policy/default
+    (yuanxu-module-field-contract
+     'profile-policy YuanxuModuleObjectType 'override
+     agentic-ai-lab-sandbox-profile-policy/default
      '((scope . sandbox-core) (owned-by . policy-object)))
-    (poo-flow-module-field-contract
-     'resource-policy PooFlowModuleListType 'override
+    (yuanxu-module-field-contract
+     'resource-policy YuanxuModuleListType 'override
      '((filesystem
         (scope . runtime)
         (materialized-by . runtime)
         (mounts . runtime)))
      '((scope . sandbox-core) (dsl-row . resources)))
-    (poo-flow-module-field-contract
-     'metadata PooFlowModuleListType 'append '()
+    (yuanxu-module-field-contract
+     'metadata YuanxuModuleListType 'append '()
      '((scope . sandbox-core) (dsl-row . metadata))))
    '((namespace . objects.sandbox-core)
      (domain . profile)
@@ -76,20 +76,20 @@
 ;;; The neutral sandbox profile prototype is backend-agnostic. Backend modules
 ;;; extend it rather than rewriting a resource-policy alist from scratch.
 ;; : PooSandboxProfilePrototype
-(.def poo-flow-sandbox-profile-prototype
+(.def agentic-ai-lab-sandbox-profile-prototype
   backend-kind: 'sandbox
   backend-ref: 'sandbox-profile
   network-policy: '(deny-by-default)
   capabilities: '(process-run filesystem-read tmpdir)
-  resources: poo-flow-runtime-volume-resources-prototype
-  metadata: '((declared-by . poo-flow-poo-prototype)
+  resources: agentic-ai-lab-runtime-volume-resources-prototype
+  metadata: '((declared-by . agentic-ai-lab-poo-prototype)
               (runtime-executed . #f)))
 
 ;;; Profile projection is report-only control-plane data. It materializes the
 ;;; POO profile prototype as the existing public sandbox profile object without
 ;;; executing Docker, nono, Cube, or Marlin runtime work.
 ;; : (-> PooSandboxProfilePrototype Symbol Value)
-(def (poo-flow-sandbox-profile-prototype-slot/default prototype slot default)
+(def (agentic-ai-lab-sandbox-profile-prototype-slot/default prototype slot default)
   (if (.slot? prototype slot)
     (.ref prototype slot)
     default))
@@ -97,7 +97,7 @@
 ;;; Public user profiles use `network` and `resources`; older internal
 ;;; projections may still carry `network-policy` and `resource-policy`.
 ;; : (-> PooSandboxProfilePrototype Symbol Symbol Value)
-(def (poo-flow-sandbox-profile-prototype-slot/either prototype
+(def (agentic-ai-lab-sandbox-profile-prototype-slot/either prototype
                                                      public-slot
                                                      internal-slot
                                                      default)
@@ -110,59 +110,59 @@
 ;;; for sandbox, core behavior, keeping validation, lookup, or projection
 ;;; responsibilities centralized for callers.
 ;; : (-> Symbol PooSandboxProfilePrototype PooSandboxProfile)
-(def (poo-flow-sandbox-profile-prototype->profile name-value prototype)
+(def (agentic-ai-lab-sandbox-profile-prototype->profile name-value prototype)
   (let* ((backend-ref-value
-          (poo-flow-sandbox-profile-prototype-slot/default
+          (agentic-ai-lab-sandbox-profile-prototype-slot/default
            prototype
            'backend-ref
            #f))
          (resources
-          (poo-flow-sandbox-profile-prototype-slot/either
+          (agentic-ai-lab-sandbox-profile-prototype-slot/either
            prototype
            'resources
            'resource-policy
            '())))
-    (.o kind: poo-flow-sandbox-profile-kind
+    (.o kind: agentic-ai-lab-sandbox-profile-kind
         name: name-value
-        backend-kind: (poo-flow-sandbox-profile-prototype-slot/default
+        backend-kind: (agentic-ai-lab-sandbox-profile-prototype-slot/default
                        prototype
                        'backend-kind
                        'sandbox)
         backend-ref: (if backend-ref-value backend-ref-value name-value)
-        network-policy: (poo-flow-sandbox-profile-prototype-slot/either
+        network-policy: (agentic-ai-lab-sandbox-profile-prototype-slot/either
                          prototype
                          'network
                          'network-policy
                          '(deny-by-default))
-        capabilities: (poo-flow-sandbox-profile-prototype-slot/default
+        capabilities: (agentic-ai-lab-sandbox-profile-prototype-slot/default
                        prototype
                        'capabilities
                        '(process-run filesystem-read tmpdir))
-        resource-policy: (poo-flow-sandbox-resources-value->resource-policy
+        resource-policy: (agentic-ai-lab-sandbox-resources-value->resource-policy
                           resources)
-        metadata: (poo-flow-sandbox-profile-prototype-slot/default
+        metadata: (agentic-ai-lab-sandbox-profile-prototype-slot/default
                    prototype
                    'metadata
                    '()))))
 
-;; poo-flow-sandbox-profile-prototypes
+;; agentic-ai-lab-sandbox-profile-prototypes
 ;;   : (-> (ProfileName PooSandboxProfilePrototype)... [PooSandboxProfile])
 ;;   | doc m%
-;;       `poo-flow-sandbox-profile-prototypes` keeps native POO profile names
+;;       `agentic-ai-lab-sandbox-profile-prototypes` keeps native POO profile names
 ;;       visible in user files while returning sandbox profile objects consumed
 ;;       by runtime manifests and presentation projections.
 ;;
 ;;       # Examples
 ;;       ```scheme
-;;       (poo-flow-sandbox-profile-prototypes (agent/nono nono-prototype))
+;;       (agentic-ai-lab-sandbox-profile-prototypes (agent/nono nono-prototype))
 ;;       ;; => (nono-profile)
 ;;       ```
 ;;     %
-(defrules poo-flow-sandbox-profile-prototypes ()
+(defrules agentic-ai-lab-sandbox-profile-prototypes ()
   ((_)
    '())
   ((_ (name prototype) ...)
-   (list (poo-flow-sandbox-profile-prototype->profile 'name prototype) ...)))
+   (list (agentic-ai-lab-sandbox-profile-prototype->profile 'name prototype) ...)))
 
 ;;; Row keys are the user syntax vocabulary; slots are the POO object contract
 ;;; vocabulary. Keeping this table here prevents backend wrappers from drifting.

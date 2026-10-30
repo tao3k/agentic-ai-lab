@@ -67,12 +67,12 @@ cannot change the receipt identity.  This is integrity within the supplied
 POO values; it is not a signature or a proof that an external provider
 produced the stated bytes.
 
-* TLA+ lifecycle model
+* Quint lifecycle model
 :PROPERTIES:
-:CUSTOM_ID: temporal-candidate-exchange-tla
+:CUSTOM_ID: temporal-candidate-exchange-quint
 :END:
 
-[[file:../../../packages/proofs/tla/temporal-causality/evidence/CandidateExchangeExplorer.tla][CandidateExchangeExplorer]]
+[[file:../../../packages/proofs/quint/CandidateExchange.qnt][CandidateExchangeExplorer]]
 lets GQL and ASCENT choose complete/incomplete outcomes and independent
 valid/invalid checks in either order.  The finite case uses one candidate,
 two cuts and generations 0–1; absence of a check represents an unknown
@@ -83,20 +83,20 @@ retains historical receipts, and atomically retires coverage and reviewability.
 | Invariant | Model obligation | Executable counterpart |
 |-----------+------------------+------------------------|
 | Type | Every state value stays in its finite domain | POO type predicates and constructor validation |
-| Reviewability | Current cut, coverage, complete required receipts and valid checks | =poo-flow-candidate-exchange= status calculation |
+| Reviewability | Current cut, coverage, complete required receipts and valid checks | =agentic-ai-lab-candidate-exchange= status calculation |
 | Coverage | No coverage declaration implies no reviewable candidate | =source-coverage-digest= =#f= gives =pending= |
 | Uniqueness | First receipt/check is unique at its key; a later conflict revokes reviewability | Multiple POO receipts or conflicting checks are =contested= |
 | Dispute | =contested= and =reviewable= stay disjoint | Exchange recomputation gives =contested= priority |
 
-The TLA+ conflict actions abstract a second receipt or contradictory check
+The Quint conflict actions abstract a second receipt or contradictory check
 to one contested bit and atomically withdraw reviewability.  Scheme retains
 both concrete assertions.  A future conformance test must define that
-abstraction map; TLC does not establish it.  The model has no fairness
+abstraction map; Quint does not establish it.  The model has no fairness
 claim, no proof of provider semantics, and no runtime CAS.
 
 =just check-temporal-candidate-exchange= passed with =MODULE-OK=,
-=HARNESS-OK= and =OK=.  =CandidateExchangeCase.cfg= explored 19,305 distinct
-TLC states with no invariant violation (one candidate, two cuts,
+=HARNESS-OK= and =OK=.  =CandidateExchangeCase.qnt= explored 19,305 distinct
+Quint states with no invariant violation (one candidate, two cuts,
 generation 0–1).  These are bounded local checks, not a general refinement
 theorem.
 
@@ -105,7 +105,7 @@ theorem.
 :CUSTOM_ID: temporal-candidate-exchange-adapters
 :END:
 
-The =poo-flow-gql-candidate-receipt= bridge now accepts a canonical Query,
+The =agentic-ai-lab-gql-candidate-receipt= bridge now accepts a canonical Query,
 ElementSpace, GQL Provider and =SourceQueryReceipt=.  It requires the
 ElementSpace semantic revision to equal the Temporal cut digest, recomputes
 Query admission, rebinds the Provider candidate through the Query method,
@@ -117,14 +117,13 @@ identifier, not authenticated source bytes.
 
 The Query owner now has a finite [[file:../../query/results/model.org][scalar result-row profile]]: POO cells,
 rows and a set with a versioned canonical digest.  The separate
-=poo-flow-gql-candidate-row-check= replays that set and compares its digest,
+=agentic-ai-lab-gql-candidate-row-check= replays that set and compares its digest,
 count and completion bit with the =CandidateReceipt=.  A mismatch is
 =invalid=; a matching incomplete set is =unknown=; a matching complete set
 is =valid= *for this local row-consistency claim*.  The bridge itself does
 not issue this check.  The MRR-owned Provider has no live row transport.
 The MRR repository already owns a typed =QueryResultAdmissionReceipt= with a
-different MRR-owned CBOR digest.  The new
-The MRR-owned result projection retains its binding, generation, catalog,
+different MRR-owned CBOR digest.  Its result projection retains binding, generation, catalog,
 snapshot, digest and count fields.  The Temporal MRR bridge checks cut and
 generation, then emits an *incomplete* candidate receipt; it does not treat
 the native digest as a scalar row digest.  A future native exporter must
@@ -138,3 +137,6 @@ and pass the verifier basis into =CandidateCheck=.  A bounded or unsupported
 proof cannot be recorded as a valid proof check.  Temporal then separately
 checks source coverage, current revision and premise admission.  No such
 live provider adapter exists in this slice.
+
+The current Quint checking authority and version-scoped receipt requirements
+are documented in [[file:../../../packages/proofs/quint/README.org][the proof inventory]]. Current state counts are admitted only by the version-bound Quint gate.

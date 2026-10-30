@@ -5,17 +5,18 @@
 (export feature-system-bundle-v1-composition-writer-test-suite
         feature-system-bundle-v1-composition-writer-test)
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
-        :poo-flow/src/core/plan
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        :poo-flow/src/authoring/semantic-module
-        :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
-        :core/profile-composition/profile-bundle
-        :poo-flow/src/feature-system/bundle-v1-composition-writer
-        :poo-flow/src/feature-system/bundle-v1-lowering)
+        :yuanxu/modules/funflow/control-plane/graph
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        :yuanxu/module-system/authoring/roles
+        (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
+        :yuanxu/profile-composition/selection-syntax
+        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
+        :yuanxu/profile-composition/profile-bundle
+        :agentic-ai-lab/modules/workflow/scenario/bundle-v1-projection
+        :yuanxu/feature-system/bundle-v1-lowering)
 
 (.def WriterSourceProfile
   (identity 'source)
@@ -30,12 +31,12 @@
   (guard '(all verified authority)))
 
 (def WriterTestModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'test 'writer)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'test 'writer)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'source WriterSourceProfile)
-    (poo-flow-profile-export 'target WriterTargetProfile))))
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'source WriterSourceProfile)
+    (yuanxu-profile-export 'target WriterTargetProfile))))
 
 (.def WriterTestScenarioProfile
   (identity 'writer-test-flow)
@@ -54,10 +55,10 @@
   (test-suite
    "Bundle v1 composition writer"
 
-   (poo-flow-test-case
+   (yuanxu-test-case
     "arbitrary POO composition lowers with symbols and dependency edges"
     (let-values (((plan image)
-                  (poo-flow-scenario-case->bundle-v1-image
+                  (agentic-ai-lab-scenario-case->bundle-v1-image
                    writer-test-composition 'writer-test-bundle 3)))
       (let* ((descriptor (.ref image 'descriptor))
              (no-adapter (feature-bundle-v1-lower-compact-id
@@ -65,7 +66,7 @@
              (no-projection (feature-bundle-v1-lower-compact-id
                              'projection +feature-bundle-v1-no-projection-id+))
              (no-policy (feature-bundle-v1-lower-compact-id
-                         'policy 'poo-flow.policy.none)))
+                         'policy 'agentic-ai-lab.policy.none)))
         (check (.ref image 'accepted?) => #t)
         (check (length (execution-plan-nodes plan)) => 4)
         (check (length (.ref descriptor 'symbol-rows)) => 7)

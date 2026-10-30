@@ -8,25 +8,25 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/list/list delete-duplicates/hash every find)
         (only-in :std/encoding/hex hex-encode)
-        :core/poo-clos/interface
-        (only-in :poo-flow/modules/authorization/objects
+        :yuanxu/poo-clos/interface
+        (only-in :agentic-ai-lab/modules/authorization/objects
                  AuthorizationCapabilityContractExecutor)
-        (only-in :poo-flow/modules/authorization/types
-                 poo-flow-authorization-provider?
-                 poo-flow-authorization-capability?))
+        (only-in :agentic-ai-lab/modules/authorization/types
+                 agentic-ai-lab-authorization-provider?
+                 agentic-ai-lab-authorization-capability?))
 
-(export poo-flow-authorization-capabilities-digest
+(export agentic-ai-lab-authorization-capabilities-digest
         AuthorizationCapabilityContractProtocol
         AuthorizationCapabilityContractGeneric
         AuthorizationCapabilityContractCoreMethods
-        poo-flow-authorization-capability-contract/default
-        poo-flow-authorization-capability-contract)
+        agentic-ai-lab-authorization-capability-contract/default
+        agentic-ai-lab-authorization-capability-contract)
 
 (def (require-authorization-values provider capabilities)
-  (unless (poo-flow-authorization-provider? provider)
+  (unless (agentic-ai-lab-authorization-provider? provider)
     (error "authorization contract requires a Provider" provider))
   (unless (and (pair? capabilities)
-               (every poo-flow-authorization-capability? capabilities))
+               (every agentic-ai-lab-authorization-capability? capabilities))
     (error "authorization contract requires typed capabilities" capabilities)))
 
 (def (authorization-capabilities-digest provider capabilities)
@@ -38,7 +38,7 @@
       (call-with-output-string
        (lambda (port)
          (write
-          (list 'poo-flow.authorization-capability-contract.v1
+          (list 'agentic-ai-lab.authorization-capability-contract.v1
                 (.ref provider 'identity)
                 (.ref provider 'engines)
                 (.ref provider 'arbitration)
@@ -51,11 +51,11 @@
                      capabilities))
           port))))))))
 
-(def (poo-flow-authorization-capabilities-digest provider capabilities)
+(def (agentic-ai-lab-authorization-capabilities-digest provider capabilities)
   (require-authorization-values provider capabilities)
   (authorization-capabilities-digest provider capabilities))
 
-(def (poo-flow-authorization-capability-contract/default
+(def (agentic-ai-lab-authorization-capability-contract/default
       provider-value capability-values)
   (require-authorization-values provider-value capability-values)
   (unless (= (length (.ref provider-value 'engines))
@@ -67,7 +67,7 @@
                          capability-values))
               (eq? (.ref provider-value 'arbitration) 'strict-lockstep))
     (error "elevated authority requires strict lockstep" capability-values))
-  (.o kind: 'poo-flow.authorization-capability-contract
+  (.o kind: 'agentic-ai-lab.authorization-capability-contract
       provider: (.ref provider-value 'identity)
       capability-identities:
       (map (lambda (capability) (.ref capability 'identity)) capability-values)
@@ -105,7 +105,7 @@
  AuthorizationCapabilityContractGeneric
  AuthorizationCapabilityContractCoreMethods)
 
-(def (poo-flow-authorization-capability-contract provider capabilities)
+(def (agentic-ai-lab-authorization-capability-contract provider capabilities)
   (require-authorization-values provider capabilities)
   (poo-clos-call
    AuthorizationCapabilityContractGeneric

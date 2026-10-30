@@ -6,7 +6,7 @@
 ;;; Boundary: loop-governor tests cover multi-loop policy projection only.
 ;;; Invariant: runtime state is passed as inert facts and is never mutated.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,8 +17,8 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/src/loops/agent)
+        :yuanxu/modules/funflow/control-plane/api
+        :agentic-ai-lab/modules/loop-engine/control/agent)
 
 (export loop-governor-test)
 
@@ -111,7 +111,7 @@
 ;; : TestSuite
 (def loop-governor-test
   (test-suite "loop governor policy descriptors"
-    (poo-flow-test-case "projects open, conflicting, and denied loop patterns"
+    (yuanxu-test-case "projects open, conflicting, and denied loop patterns"
       (let* ((governor (make-governor-fixture))
              (states (governor-test-states))
              (contract (loop-governor->contract governor states)))
@@ -165,7 +165,7 @@
         (check-equal? (test-ref (test-ref contract 'runtime-boundary)
                                 'local-execution)
                       'validation-only)))
-    (poo-flow-test-case "uses descriptor metadata as the acting_on action key"
+    (yuanxu-test-case "uses descriptor metadata as the acting_on action key"
       (let* ((descriptor
               (governor-test-pattern 'repair-a 'l2 10 "src/a"))
              (governor (make-governor-fixture)))
@@ -176,7 +176,7 @@
                        (governor-test-states)
                        descriptor)
                       #t)))
-    (poo-flow-test-case "publishes Marlin ABI manifest for governor requests"
+    (yuanxu-test-case "publishes Marlin ABI manifest for governor requests"
       (let (manifest (loop-governor-marlin-abi-manifest))
         (check-equal? (test-ref manifest 'schema)
                       +loop-governor-marlin-abi-schema+)
@@ -184,7 +184,7 @@
                       +loop-governor-marlin-request-schema+)
         (check-equal? (test-ref manifest 'governor-schema)
                       +loop-governor-schema+)
-        (check-equal? (test-ref manifest 'producer) 'poo-flow)
+        (check-equal? (test-ref manifest 'producer) 'agentic-ai-lab)
         (check-equal? (test-ref manifest 'consumer) 'marlin-agent-core)
         (check-equal? (test-ref manifest 'operation) 'govern-loop)
         (check-equal? (test-ref manifest 'required-fields)
@@ -193,7 +193,7 @@
         (check-equal? (test-ref (test-ref manifest 'runtime-boundary)
                                 'production-execution)
                       'marlin-agent-core)))
-    (poo-flow-test-case "projects Marlin request envelopes without execution"
+    (yuanxu-test-case "projects Marlin request envelopes without execution"
       (let* ((governor (make-governor-fixture))
              (states (governor-test-states))
              (envelope
@@ -216,7 +216,7 @@
                                   (test-ref manifest 'loop-engine-discovery)
                                   'receipt-contracts)
                                 'memory-receipt)
-                      'poo-flow.loop-engine.memory-receipt.v1)
+                      'agentic-ai-lab.loop-engine.memory-receipt.v1)
         (check-equal? (test-ref manifest 'required-fields)
                       '(schema governor-schema operation target transport
                         governor))
@@ -241,7 +241,7 @@
         (check-equal? (test-ref (test-ref envelope 'runtime-boundary)
                                 'production-execution)
                       'marlin-agent-core)))
-    (poo-flow-test-case "projects L1 report-only handoff receipts without writes"
+    (yuanxu-test-case "projects L1 report-only handoff receipts without writes"
       (let* ((governor (make-governor-fixture))
              (states (governor-test-states))
              (receipt
@@ -268,7 +268,7 @@
                        'name)
                       '(repo-audit-agent repo-verifier-agent repo-governor))
         (check-equal? (test-ref envelope 'operation) 'govern-loop)))
-    (poo-flow-test-case "publishes runtime manifest discovery for Marlin governor requests"
+    (yuanxu-test-case "publishes runtime manifest discovery for Marlin governor requests"
       (let* ((governor (make-governor-fixture))
              (states (governor-test-states))
              (manifest
@@ -288,12 +288,12 @@
         (check-equal? (test-ref manifest 'receipt-schema)
                       +loop-governor-l1-run-receipt-schema+)
         (check-equal? (test-ref manifest 'runtime-command-contract)
-                      'poo-flow.loop-governor.runtime-command-manifest.v1)
+                      'agentic-ai-lab.loop-governor.runtime-command-manifest.v1)
         (check-equal? (test-ref manifest 'receipt-contracts)
                       (test-ref discovery 'receipt-contracts))
         (check-equal? (test-ref (test-ref manifest 'receipt-contracts)
                                 'memory-receipt)
-                      'poo-flow.loop-engine.memory-receipt.v1)
+                      'agentic-ai-lab.loop-engine.memory-receipt.v1)
         (check-equal?
          (test-symbol-member? 'memory-receipt
                               (test-ref manifest 'object-families))
@@ -307,7 +307,7 @@
                       +loop-governor-marlin-abi-schema+)
         (check-equal? (test-ref abi 'loop-engine-discovery)
                       discovery)))
-    (poo-flow-test-case "rejects invalid Marlin request envelopes"
+    (yuanxu-test-case "rejects invalid Marlin request envelopes"
       (let (failure
             (capture-control-plane-failure
              (lambda ()
@@ -317,7 +317,7 @@
         (check-equal? (execution-failure-owner failure) 'loop-governor)
         (check-equal? (execution-failure-code failure)
                       'invalid-loop-governor-marlin-request-envelope)))
-    (poo-flow-test-case "rejects invalid governor state-key fields"
+    (yuanxu-test-case "rejects invalid governor state-key fields"
       (let* ((strategy
               (make-loop-strategy-plan
                'maintenance

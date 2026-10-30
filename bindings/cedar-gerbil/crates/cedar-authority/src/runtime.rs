@@ -14,9 +14,9 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::time::Duration;
 
-pub const HOST_SCHEMA: &str = "poo-flow.cedar-runtime-host.v1";
-pub const HOST_READY_SCHEMA: &str = "poo-flow.cedar-runtime-ready.v1";
-pub const REPLY_SCHEMA: &str = "poo-flow.cedar-runtime-reply.v1";
+pub const HOST_SCHEMA: &str = "agentic-ai-lab.cedar-runtime-host.v1";
+pub const HOST_READY_SCHEMA: &str = "agentic-ai-lab.cedar-runtime-ready.v1";
+pub const REPLY_SCHEMA: &str = "agentic-ai-lab.cedar-runtime-reply.v1";
 pub const MAX_FRAME_BYTES: usize = canonical::MAX_PROJECTION_BYTES;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

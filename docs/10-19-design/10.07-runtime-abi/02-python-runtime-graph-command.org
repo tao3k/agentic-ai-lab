@@ -197,7 +197,7 @@ runtime from resuming an old interrupt into a different graph topology by
 accident.
 
 This moves us closer to LangGraph's thread-id/checkpointer model without
-binding the POO Flow runtime ABI to a storage implementation.  Durable backends
+binding the Agentic AI Lab runtime ABI to a storage implementation.  Durable backends
 can implement the same snapshot contract later, while the C ABI remains focused
 on graph-plan validation, opaque handles, and receipts.
 
@@ -207,7 +207,7 @@ atomic replace writes.  This backend is intentionally Python-local; it is not a
 cross-language checkpoint protocol and does not introduce JSON into the ABI.
 
 #+begin_src python
-checkpointer = FileRuntimeGraphCheckpointer("/var/lib/poo-flow-runtime")
+checkpointer = FileRuntimeGraphCheckpointer("/var/lib/agentic-ai-lab-runtime")
 
 try:
     program.invoke_thread("thread-1", {}, checkpointer, trace_key="trace")
@@ -358,14 +358,14 @@ every invocation.
 The default cache root is:
 
 #+begin_example
-$XDG_CACHE_HOME/poo-flow-runtime/<workspace-key>/runtime-c-abi
+$XDG_CACHE_HOME/agentic-ai-lab-runtime/<workspace-key>/runtime-c-abi
 #+end_example
 
 When ~$XDG_CACHE_HOME~ is unset, the runtime uses ~~/.cache~.  A caller can
 override the location with:
 
 #+begin_example
-POO_FLOW_RUNTIME_C_ABI_BUILD_DIR=/path/to/cache
+AGENTIC_AI_LAB_RUNTIME_C_ABI_BUILD_DIR=/path/to/cache
 #+end_example
 
 The Python test suite includes performance gates for:

@@ -6,17 +6,17 @@
 ;;; Boundary: use-module config must be inspectable before runtime.
 ;;; Invariant: presentation is inert; no module descriptors or runtimes execute.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/presentation
-        :poo-flow/src/user-interface/init-syntax
-        :poo-flow/modules/agent-sandbox/config
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/agent-sandbox/config
         (only-in "../user-interface/custom/my-module/profiles/agent-sandbox-audit"
-                 poo-flow-custom-module-agent-sandbox-audit-module))
+                 agentic-ai-lab-custom-module-agent-sandbox-audit-module))
 
 ;; : (-> Symbol PresentationAlist MaybePresentationValue)
 (def (alist-value key entries)
@@ -43,11 +43,11 @@
 
 (def user-interface-config-presentation-test
  (test-suite "user-interface config presentation"
-   (poo-flow-test-case "shows an independent custom-module profile fragment as user config"
-     (let* ((config (pooFlowUserConfig
-                     poo-flow-custom-module-agent-sandbox-audit-module
-                     (poo-flow-settings)))
-            (presentation (pooFlowUserConfigPresentation config))
+   (yuanxu-test-case "shows an independent custom-module profile fragment as user config"
+     (let* ((config (yuanxuUserConfig
+                     agentic-ai-lab-custom-module-agent-sandbox-audit-module
+                     (yuanxu-settings)))
+            (presentation (agenticAiLabUserConfigPresentation config))
             (module-row (car (.ref presentation 'modules)))
             (feature-row (car (.ref presentation 'feature-facts)))
             (sandbox-profile-derivations
@@ -57,16 +57,16 @@
             (visible-flags (alist-value 'flags module-row))
             (feature-flags (alist-value 'flags feature-row))
             (selection
-             (car poo-flow-custom-module-agent-sandbox-audit-module))
+             (car agentic-ai-lab-custom-module-agent-sandbox-audit-module))
             (internal-flags
-             (poo-flow-user-module-selection-flags selection))
+             (yuanxu-user-module-selection-flags selection))
             (internal-config-entry
              (alist-value ':config internal-flags))
             (base-profile (car internal-config-entry))
             (session-profile (cadr internal-config-entry))
             (branch-profile (caddr internal-config-entry))
             (branch-metadata
-             (poo-flow-sandbox-profile-metadata branch-profile))
+             (agentic-ai-lab-sandbox-profile-metadata branch-profile))
             (branch-lineage
              (alist-value 'derivation-path branch-metadata))
             (last-lineage-step (last-value branch-lineage)))
@@ -162,16 +162,16 @@
                      #f)
        (check-equal? (alist-value 'runtime-executed branch-derivation)
                      #f)
-       (check-equal? (poo-flow-sandbox-profile? base-profile) #t)
-       (check-equal? (poo-flow-sandbox-profile-backend-kind session-profile)
+       (check-equal? (agentic-ai-lab-sandbox-profile? base-profile) #t)
+       (check-equal? (agentic-ai-lab-sandbox-profile-backend-kind session-profile)
                      'nono)
-       (check-equal? (poo-flow-sandbox-profile-name base-profile)
+       (check-equal? (agentic-ai-lab-sandbox-profile-name base-profile)
                      'agent/audit-base)
-       (check-equal? (poo-flow-sandbox-profile-name session-profile)
+       (check-equal? (agentic-ai-lab-sandbox-profile-name session-profile)
                      'agent/audit-session)
-       (check-equal? (poo-flow-sandbox-profile-name branch-profile)
+       (check-equal? (agentic-ai-lab-sandbox-profile-name branch-profile)
                      'agent/audit-branch)
-       (check-equal? (poo-flow-sandbox-profile-capabilities branch-profile)
+       (check-equal? (agentic-ai-lab-sandbox-profile-capabilities branch-profile)
                      '(process-run filesystem-read tmpdir cache-mount))
        (check-equal? (length branch-lineage) 2)
        (check-equal? (alist-value 'parent-profile last-lineage-step)
@@ -180,7 +180,7 @@
        (check-equal? (alist-value 'scope-ref last-lineage-step)
                      "feature/agent-sandbox-audit")
        (check-equal? (alist-value ':binding internal-flags) 'native-ffi)))
-   (poo-flow-test-case "rejects user-layer derive parents that are not POO profiles"
+   (yuanxu-test-case "rejects user-layer derive parents that are not POO profiles"
      (let (not-profile 'not-a-poo-profile)
        (check-equal?
         (presentation-test-error?

@@ -1,0 +1,55 @@
+#+title: Evidence and Reasoning Interaction Responsibilities
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+* Terms and responsibilities
+
+| Concept | Responsibility | Outside its authority |
+|---------+----------------+-----------------------|
+| Evidence Chain | Track the sources, premises, and derivations supporting a local conclusion; determine current reuse and invalidation | Establish that the model understood the evidence or solved the original problem |
+| Evidence DAG | Represent dependencies, sharing, and composition among premises and derivation fragments | Represent exploration order or all hidden reasoning |
+| Trajectory | Record candidate branches, tool interactions, additional evidence, corrections, and costs at each round | Treat the appearance of a conclusion as proof that it holds |
+
+An Evidence Chain need not be linear. A conclusion can have multiple premises
+and support paths, represented by a DAG. Recursive structural dependencies are
+first condensed into components; the structural graph is not a fact-level proof.
+The current EvidenceChain interface manages sources, completed-component
+credentials, and result references. Its name does not imply proof of arbitrary
+natural-language derivations.
+
+* Interaction responsibilities
+
+The model proposes candidate branches. Scheme performs the local checks
+configured by the application. Evidence checks return supported, contradicted,
+or unknown under the current sources and checking conditions. The trajectory
+records requests and feedback and links to evidence by reference, without
+implementing another truth evaluator.
+
+The model can declare several local premises for a candidate path; Scheme checks
+their conjunction. The model remains responsible for choosing the premises.
+Checking every declared premise does not repair an omitted necessary premise.
+Satisfaction of the model's declared conditions is separate from completeness
+and correctness of the original problem interpretation.
+
+Supported means only that the local check succeeded; it does not certify the
+whole answer. Contradicted requires explicit conflict evidence or a completed
+negative check over a finite, complete domain. No match, unfinished search,
+timeout, or a previous model failure must not be promoted to contradiction.
+
+A model's claim that it used evidence can be recorded as observable behavior.
+Returning evidence does not establish that its use was observed. An independent
+scorer determines whole-task correctness. Actual provider usage determines
+thinking cost; final-output length and trajectory text length are not substitutes.
+
+* Model and implementation boundaries
+
+- Scheme executes local predicates, checks source applicability, reuse, and invalidation, and maintains trajectory events and billing prefixes.
+- Lean models evidence and observations as distinct types; it proves that unknown does not prune, stale evidence cannot support current judgments, and observations cannot manufacture evidence.
+- Quint tracks current support, completeness, source generations, trajectory events, and costs separately; it checks false negation, stale reuse, and observations masquerading as evidence.
+- Python pairs tools, transports arguments, and manages provider sessions; it neither computes relational closure nor registers model output as verified facts.
+
+Source changes revoke affected evidence. Historical trajectories still describe
+what happened at the time; they cannot be reused as current evidence.
+Understanding paraphrases remains a model capability. Local predicates and entity
+bindings can still misinterpret intent and require independent intent and outcome
+evaluation.

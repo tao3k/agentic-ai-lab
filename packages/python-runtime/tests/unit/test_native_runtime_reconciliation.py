@@ -8,14 +8,14 @@ from pathlib import Path
 
 import pytest
 
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime import (
     AuthorizedEffectEvidenceReservation,
     TursoAuthorizedEffectEvidenceStore,
 )
-from poo_flow_runtime._native.arena import NativeEvent, NativeMediation
-from poo_flow_runtime._native.errors import NativeRuntimeError
-from poo_flow_runtime._native.loader import native_library_path
-from poo_flow_runtime._native.session import NativeBundleDescriptor, NativeRuntimeSession
+from agentic_ai_lab_runtime._native.arena import NativeEvent, NativeMediation
+from agentic_ai_lab_runtime._native.errors import NativeRuntimeError
+from agentic_ai_lab_runtime._native.loader import native_library_path
+from agentic_ai_lab_runtime._native.session import NativeBundleDescriptor, NativeRuntimeSession
 
 
 def _repo_library() -> Path:
@@ -34,7 +34,7 @@ def _sink(store, root: bytes, row: str):
 def test_native_session_reconciles_durable_root_and_nonce_after_reopen(
     tmp_path: Path,
 ) -> None:
-    pytest.importorskip("poo_flow_runtime._native._runtime_v0_cffi")
+    pytest.importorskip("agentic_ai_lab_runtime._native._runtime_v0_cffi")
     library = _repo_library()
     if not library.is_file():
         pytest.skip("focused runtime-C build has not run")
@@ -70,7 +70,7 @@ def test_native_session_reconciles_durable_root_and_nonce_after_reopen(
 def test_native_batched_leaf_reopens_and_flushes_without_adapter_replay(
     tmp_path: Path,
 ) -> None:
-    pytest.importorskip("poo_flow_runtime._native._runtime_v0_cffi")
+    pytest.importorskip("agentic_ai_lab_runtime._native._runtime_v0_cffi")
     library = _repo_library()
     if not library.is_file():
         pytest.skip("focused runtime-C build has not run")

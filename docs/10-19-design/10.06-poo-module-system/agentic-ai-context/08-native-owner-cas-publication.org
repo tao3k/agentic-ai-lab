@@ -1,0 +1,224 @@
+#+title: Native Context / Session Owner CAS and Evidence-Bound Terminal Publication
+#+date: [2026-10-25 Sun]
+
+* Authority and scope
+
+This extends [[file:06-native-proof-support-replay.org][06's historical intent-only boundary]] under the existing
+[[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][ASCENT-centered joint lifecycle contract]] and
+[[file:../../../../core/module-system/design/ai-agentic-context-session-memory-contracts.org][independent Context / Session contract]]. The implementation is in
+[[file:../../../../modules/ai-agentic-context/session-host.ss][Context's native Session Host]]; [[file:../../../../modules/session/funs-attempt.ss][Session's pure transitions]] retain ownership
+of Attempt identity, revision, pending obligations and completed identities.
+Context owns source / projection / proof / use admission and the explicit Host
+publication boundary. Session does not acquire ownership of content or memory.
+
+This qualification uses the mandatory enrolled-proof profile of an in-process
+serialized Scheme owner and its real worker threads. The generic Host constructor
+still has an explicit proof-required policy; this run does not qualify optional-
+proof profiles as proof-bound publication. It does not establish external provider admission, persistence,
+process-crash recovery, distributed transactions, or arbitrary causal truth.
+
+* Admission and responsibility handoffs
+
+| Boundary | Required evidence / condition | Published effect and refusal |
+|----------+-------------------------------+------------------------------|
+| attach-worker! | Current owner thread; expected Session revision and source generation; active exact Attempt; native current proof / grant; distinct real worker endpoint | Issue a Host-local POO capability bound to immutable Attempt/input and original proof registration. A caller string or Boolean is not terminal evidence |
+| observe-worker! | Issued capability, same Host and Session; actual nonblocking thread-join! | Pending worker yields false. Completed worker yields a private identity-bound observation with copied bounded result text |
+| commit-result! | Issued observation; expected current revision and source generation; current original proof/support/policy/grant; matching worker mode and frozen input; accepted Session complete proposal | Publish successor schedule plus immutable terminal/result through one owner-publication pointer. Stale owner/proof/input refuses; failed applicability moves active work to a pending obligation |
+| cancel! | Expected current owner/source; active Attempt or matching pending obligation | First publish recovery/pending obligation and fence old revision, then send cooperative cancel. Delivery failure leaves the obligation visible |
+| recover! | Expected current owner/source; Session permits recovery | Publish recovery schedule; retain pending worker obligation and cancelled mode. Recovery never reopens a completed Attempt |
+| reconcile! | Expected owner/source; same Host-issued actual join observation; matching pending Attempt | Publish exactly one cancelled or reconciled terminal. Revoked inputs can be cleaned up without admitting their result |
+| outcomes | Current owner; current source/proof/grant/use checks | Return copied historical records with computed current-use?. History survives withdrawal; a historical completion is not permission for current reuse |
+| close! | Session close preconditions, including resolved obligations | Publish closed schedule; later recovery cannot reopen it |
+
+Workers and observations are private runtime records behind POO capability
+objects. Their maps use object identity. Reconstructing the public kind slot,
+borrowing a capability from another Host/Session, or calling from another owner
+thread does not confer authority. Public interfaces remain POO-native. Private
+worker endpoints are explicit runtime effects, not part of the pure Session API.
+
+The bounded result profile is exact text up to 65,536 characters. Oversized or
+non-text results are refused, not summarized, truncated or silently substituted.
+The current grant profile is purpose =display= with a bound destination. A local
+worker result is not a tool-effect grant or authenticated provider response.
+
+* Final publication record and linearization point
+
+A completed terminal records:
+
+- Session / Attempt / request / generation and exact input/source binding;
+- original proof registration and proof digest, Context proof-binding digest;
+- current proof-state generation/digest and applicability digest;
+- actual support guard, evaluation and program digests;
+- actual journal cut/projection, policy digest and grant identity/generation;
+- purpose, destination, successor owner revision, outcome and copied result.
+
+Cleanup terminals retain original proof identity, but their current support
+fields are false: cleanup is not renewed evidence admission. Result snapshots
+are fully evaluated/copied before replacing the publication pointer. The pointer
+holds both the successor Session schedule and immutable terminal history, so
+there is no intermediate visible schedule-without-terminal publication.
+Expected revision/source checks and native proof/grant rechecks precede that
+replacement in the same owner thread. There is no caller callback or foreign
+I/O between the final check and pointer replacement.
+
+This is a serialized-owner compare-and-publish boundary, not a hardware CAS or
+a claim that two independent owners form a distributed transaction. Proof and
+policy Hosts also require their creating owner thread. Separate remote owners
+would need a new transaction/lease protocol and separate qualification.
+
+The stored terminal describes admission at its commit cut. Later current-use
+queries recheck current proof/support/grant and never turn an old terminal into
+a new Attempt. A returned snapshot is historical evidence, not a reusable grant.
+
+* Executable scenarios and negative evidence
+
+[[file:../../../../t/temporal-evaluator-test.ss][The native suite]] keeps the earlier 31 cases and adds six cases covering actual
+result publication, withdrawal before and after publication, cancellation /
+recovery, forged and foreign evidence, permission withdrawal, and bounded
+interleavings. These call the original installed ASCENT reasoning/proof replay,
+registered native proof Host, support/journal owners, actual Scheme worker
+message/join operations, and the final Context owner APIs.
+
+Positive checks compare each recorded proof/support/journal field to its
+original-owner observation. Mutation of a returned result string cannot alter
+the stored payload. Negative controls exercise stale and fresh-revision
+repeated commits, source withdrawal, revoked grants, pending workers, forged /
+foreign observations, foreign owner threads, cancelled late results and closed
+recovery. They inspect actual stored outcomes, not only completion intents.
+
+The older =bypass-current-owner= counterexample deliberately still demonstrates
+that a pure old Session snapshot can yield an unsafe completion intent. It is
+not mislabeled as a physically published result. The production owner rejects
+corresponding stale publication calls. [[file:05-concurrent-evidence-lifecycle.org][05]] separately preserves four unsafe
+model variants and exact counterexample orders; those remain finite-model
+evidence, not native mutants.
+
+* Complete bounded schedule corpus and replay
+
+The native runner independently enumerates the same 2,240 legal orders as 05:
+R1 < Q2 < P3, C6 < T7 and C6 < H8; S4 and G5 are independent. Each order starts
+fresh native Hosts and a real worker. The immutable original ASCENT context can
+be shared, but every proof registration still performs original proof replay.
+
+| Event | Real native operation |
+|-------+-----------------------|
+| R1 | Worker result becomes available; actual join issues an observation |
+| Q2 | Capture owner revision and run current Context observation |
+| P3 | Attempt final native commit with the captured revision and observation |
+| S4 | Append native required-premise withdrawal; refresh proof source and policy |
+| G5 | Publish disabled grant generation |
+| C6 | Publish native cancellation/recovery obligation, then send cancel |
+| T7 | Actually join worker and attempt reconciliation at C6's captured revision |
+| H8 | Publish native recovery at the current revision |
+
+Every prefix checks at most one stored terminal / completed identity, and no
+current use after S4 or G5. Every path emits its exact event order, terminal
+outcome, owner revision, pending obligation count and current-use verdict. Some
+orders legitimately retain an unresolved obligation because H8 makes T7's
+captured revision stale. This is safety evidence, not a liveness guarantee.
+
+Native C6 immediately publishes a revision fence, whereas the finite model
+separates request and receipt. The two are correspondence scenarios, not a
+proved step-for-step bisimulation. All legal orders are covered for these eight
+operations; arbitrary event counts, scheduling fairness and process failures
+remain outside the bound.
+
+#+begin_src sh
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-replay.py --exhaustive
+# Exact replay of one observed path:
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-replay.py --order 1,2,4,3,5,6,7,8
+# Verify source/pin/log/path commitments of a saved receipt:
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-replay.py --check-receipt /absolute/path/native-receipt.json
+#+end_src
+
+The executable driver builds the changed Host via Just, then uses the dedicated
+heap-fenced 900-second exhaustive recipe (840-second aggregate Case). The ordinary 120-second native recipe
+runs eight regression orders; it is never described as exhaustive. The driver
+requires exit zero, all expected Case/Module/Harness/final markers, no failure
+markers, exact requested path coverage, and unchanged source/ASCENT pin cuts.
+Raw logs and path receipts are local artifacts, not committed source files.
+
+* Qualification history
+
+The initial owner run exposed a POO slot/local name self-reference and failed.
+The implementation now uses distinct local names and forces the complete
+terminal snapshot before publication. One earlier all-path attempt hit the ordinary 120-second budget; another
+ended with an original-proof replay refusal whose immediate cause was not
+established in that log. Neither counts as an exhaustive pass.
+
+A later attempt stopped at path index 233 with an explicit Case idle-exceeded
+verdict. A repeated named checkpoint was initially added, but Ops progress
+requires a strictly increasing cumulative count for a key. Repeating count 1
+advances only once. The next run stopped at index 179 inside original proof
+replay; that exact order passed in a fresh single-path process. The latter
+failure's immediate exception was a replay refusal, not a terminal invariant
+violation; the failed log is retained without reclassifying it as a passing
+proof run.
+
+The final driver reports the actual cumulative number of verified paths through
+execution-progress!. There is no timer keepalive. The aggregate Case has a
+separate 840-second total budget under a 900-second recipe; its 60-second idle
+guard, managed heap fence and every semantic assertion remain enabled. Ordinary
+focused tests retain their existing budgets.
+
+One exploratory run was intentionally interrupted before completion; no pass
+was claimed. History queries now evaluate current proof/grant only when a
+completed result exists; empty or cleanup-only histories have no admissible
+result. Submission guards and every-prefix assertions remain unchanged.
+
+The following measurements come from the inspected completed native receipt;
+no pending or failed run is included.
+
+* Measured native result
+
+The completed exhaustive native run passed 37 Cases, Module/Harness/final OK
+markers and all 2,240 ordered paths with zero terminal-count violations and zero
+stale reactivations. Installed ASCENT HEAD matched the declared package pin
+=9573529ad043a7a23983c65f94df3334f8ed8df8=; its checkout was also inspected clean.
+
+| Final stored state within the eight-event bound | Path count |
+|------------------------------------------------+------------|
+| One completed historical result, current-use=false after withdrawal/revocation | 40 |
+| One cancelled terminal, current-use=false | 1,100 |
+| No terminal; one pending cleanup obligation retained | 1,100 |
+| Total | 2,240 |
+
+Pending is not completion, successful cleanup or a liveness pass. The selected
+separate native cases do exercise successful matching reconciliation, including
+cleanup after proof/grant withdrawal.
+
+| Saved unsafe model order | Safe native stored outcome |
+|--------------------------+----------------------------|
+| R Q P S G C T H | One completed history record, no current use |
+| R Q S P G C T H | Old result refused; one cancelled terminal |
+| R Q P S G C H T | One completed history record, no current use |
+
+All four saved unsafe SysML variants were executed again with the actual CLI;
+their expected counterexamples reproduced. Those are retained model mutants,
+while the table above comes from actual native owner calls under the same event
+orders. There is no claim of native mutation testing or full refinement proof.
+
+The first receipt parse refused a path line split by structured Ops stderr
+progress in the merged log. The executed driver had already passed its
+unchanged-source/pin and native exit/marker gates. The original raw log was then
+revalidated by removing only exact framed =@yuanxu-progress= records, preserving
+all native path characters and requiring the complete ordered corpus. The
+executed driver snapshot/digest and the revised validator digest are recorded
+separately. No Scheme/ASCENT semantic runtime source changed during this repair.
+Three additional validator controls (missing path, current-use=true, explicit
+Harness error) were all refused. An older source-cut receipt was also refused.
+
+Local evidence directory:
+=/private/tmp/context-owner-cas-20261025/qualified-exhaustive-04/=
+contains =native-receipt.json=, raw =native.log=, =native-paths.json=, the executed
+driver snapshot, build output and validator negative controls. Re-running the
+maintained driver's =--check-receipt= succeeded for this completed run. Failed
+and interrupted attempts remain in sibling artifact directories, excluded from
+all pass counts. These are local reproducibility artifacts, not committed logs.
+
+* Later qualification cut
+
+The 37-case measurements above belong to their explicitly recorded historical
+dependency cut. [[file:10-scroll-carryon-clm-contract-comparison.org][10]] extends the suite to 41 Cases and records the later
+ASCENT / Orgize dependency combination separately; old receipt hashes must not
+be relabeled as current-cut execution.

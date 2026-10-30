@@ -4,13 +4,13 @@
 
 * 10.05 Agent Sandbox Extension Design
 ** 10.05.00 Document Status
-This design defines the Scheme-side =agent-sandbox= extension for POO Flow.
+This design defines the Scheme-side =agent-sandbox= extension for Agentic AI Lab.
 It does not implement the real agent runtime, LLM integration, API/R support,
 or C bindings. Those are planned integration surfaces for
 =marlin-agent-core=.
 
 ** 10.05.10 Context
-POO Flow currently has a Docker extension that models Docker as a task family
+Agentic AI Lab currently has a Docker extension that models Docker as a task family
 and an adapter capability. The Scheme side declares task request data,
 strategy capabilities, and run configuration. It does not directly own image
 pulls, mounts, process control, CAS, or runtime execution.
@@ -18,7 +18,7 @@ pulls, mounts, process control, CAS, or runtime execution.
 That split is the right pattern for agent sandbox support. Modern agent
 sandbox backends such as =nono= and =CubeSandbox= are useful reference systems,
 but their real execution authority should stay outside this Scheme control
-plane. POO Flow should express a stable, backend-neutral request contract that
+plane. Agentic AI Lab should express a stable, backend-neutral request contract that
 Marlin can later interpret through its runtime, API/R surfaces, and C binding
 support.
 
@@ -30,7 +30,7 @@ support.
 - Make the request shape rich enough for future =nono=-style local sandboxing
   and =CubeSandbox=-style remote or clustered sandboxing.
 - Avoid making Docker, nono, CubeSandbox, LLM calls, or Marlin runtime code
-  direct dependencies of POO Flow.
+  direct dependencies of Agentic AI Lab.
 
 ** 10.05.30 Non-Goals
 - Do not call a real sandbox backend from Scheme.
@@ -155,7 +155,7 @@ requests and backend-specific adapters. That work belongs in
 - Capability validation can distinguish =agent-sandbox= from generic
   =external= execution.
 - No live backend, LLM, API/R, or C binding dependency is required to run the
-  POO Flow tests for this slice.
+  Agentic AI Lab tests for this slice.
 - The request contract is explicit enough for Marlin to implement backend
   selection later without changing the Scheme task API.
 ** 10.05.90 Native Binding Build Audit
@@ -168,7 +168,7 @@ upstream =:std/foreign= path:
 - Gerbil owns generation of the module interface, Gambit source, and native
   object outputs.
 
-POO Flow must not maintain a parallel raw =.scm= plus =.ssi= target pair for
+Agentic AI Lab must not maintain a parallel raw =.scm= plus =.ssi= target pair for
 this module.  Besides duplicating Gerbil's normal module lifecycle, a raw
 =gsc:= target has no deterministic output before its first compilation and
 therefore cannot satisfy the native =gerbil clean= contract on a fresh package.
@@ -177,7 +177,7 @@ FFI.  The native build scenarios remain distinct:
 
 | Scenario | Source owner and shape | Native =std/make= declaration | Qualification boundary |
 |----------+------------------------+--------------------------------+------------------------|
-| Gerbil-managed FFI | Gerbil =.ss= module using =:std/foreign= and =begin-ffi=, as in POO Flow =_nono= | one =gxc:= target with host flags | =gxc= owns generated =.scm=, =.ssi=, and object outputs; fresh =gerbil clean= must succeed |
+| Gerbil-managed FFI | Gerbil =.ss= module using =:std/foreign= and =begin-ffi=, as in Agentic AI Lab =_nono= | one =gxc:= target with host flags | =gxc= owns generated =.scm=, =.ssi=, and object outputs; fresh =gerbil clean= must succeed |
 | Raw Gambit FFI | checked-in =.scm= plus =.ssi=, as in =gerbil-mysql/db/_mysql= | paired =gsc:= and =ssi:= targets followed by the Gerbil facade module | valid when the package intentionally owns Gambit source and interface; its current fresh-clean limitation belongs to upstream =std/make= output discovery |
 | Gerbil standard-library raw FFI | platform-specialized raw sources such as =std/os/_socket= or optional =std/db/_sqlite= | =cond-expand= or configure-selected =gsc:/ssi:= forms | platform and external-library selection remain with the package's native build spec |
 | Runtime-loaded ABI | a compiled Gerbil FFI shim using =dlopen=/=dlsym=, as in =_nono= | the same =gxc:= module target; runtime library path is not a build target | build qualification proves compilation; live-library availability and ABI probes remain runtime receipts |
@@ -219,12 +219,12 @@ from =bindings/c/src/diagnostic.rs=:
 - =nono_session_diagnostic_report_to_json=
 - =nono_merge_diagnostic_report_json=
 
-POO Flow now includes these symbols in the nono C ABI descriptor, adapter
+Agentic AI Lab now includes these symbols in the nono C ABI descriptor, adapter
 header, compile probe, and runtime =diagnostic-plan=. This lets Marlin consume
 denial diagnostics and remediation JSON through the same handoff manifest as
 capability, query, apply, and state functions.
 
-The POO Flow-owned =bindings/nono-c/nono.h= may need refresh when the Rust
+The Agentic AI Lab-owned =bindings/nono-c/nono.h= may need refresh when the Rust
 source ABI changes. The adapter header keeps diagnostic prototypes visible so
 the syntax-only probe stays tied to the source ABI while still including
 =nono.h= for shared types and constants.

@@ -16,7 +16,7 @@ This record was checked on 2026-10-01.  It covers research available through
 that date; papers published after 2026 are future work.  Conference pages
 establish publication and author claims, not independent replication.  The
 2026-09 treatment-persistence item is an arXiv preprint.  None of the
-external model-training results below has been reproduced in POO Flow.[fn:cutoff]
+external model-training results below has been reproduced in Agentic AI Lab.[fn:cutoff]
 
 * Research map
 :PROPERTIES:
@@ -25,7 +25,7 @@ external model-training results below has been reproduced in POO Flow.[fn:cutoff
 
 #+name: dynamic-impact-source-map
 #+caption: 2026 primary sources, checked scope, semantic owner and claim boundary.
-| Primary source | Verified contribution | POO Flow use | Claim boundary |
+| Primary source | Verified contribution | Agentic AI Lab use | Claim boundary |
 |----------------+-----------------------+--------------+----------------|
 | Wu, Qiu and Xie, [[https://proceedings.iclr.cc/paper_files/paper/2026/hash/f2affea1fddbdf2e7b5542dac3614640-Abstract-Conference.html][DoFlow]], ICLR 2026 | A causal-DAG generative model answers observational, interventional and counterfactual time-series queries; its recovery result has assumptions. | A future model Provider may propose distributions of candidate trajectories with model, graph and intervention identities. | A generated path is not an observed causal edge or an identified effect in this core.  Known or justified DAG assumptions must be explicit. |
 | Li et al., [[https://proceedings.iclr.cc/paper_files/paper/2026/hash/17af43527227c5c96db0f8d4c6aadc4e-Abstract-Conference.html][CLEF]], ICLR 2026 | Conditional sequence editing targets when an intervention begins and which variables it affects; paper evaluates immediate and delayed edits. | Carry intervention onset, affected-variable scope and untouched-variable checks in later candidate-trajectory receipts. | Editing accuracy and plausible counterfactual sequences do not by themselves identify causal impact. |
@@ -43,7 +43,7 @@ checked result.  =Text checked= means that the cited paper section was read;
 it does not mean that its experiments or theorem proofs were reproduced.
 
 #+name: dynamic-impact-assumption-audit-table
-#+caption: Source-local assumptions and falsifiable POO Flow gates (reviewed 2026-10-01).
+#+caption: Source-local assumptions and falsifiable Agentic AI Lab gates (reviewed 2026-10-01).
 | Source passage | Assumption or observation in the paper | Consequence for this module | Verification status |
 |----------------+----------------------------------------+-----------------------------+---------------------|
 | [[https://proceedings.iclr.cc/paper_files/paper/2026/file/f2affea1fddbdf2e7b5542dac3614640-Paper-Conference.pdf][DoFlow PDF]], §§2.1, 4 and App. B.1 | A fixed, correctly specified DAG; at least one-step causal lag; independent exogenous noise.  Counterfactual recovery further uses Assumption 4.1, including noise independence, monotone continuous SCM in noise, and an independent encoded latent; App. B.1 excludes latent common causes. | A proposed model-backed =Impact= receipt must record graph version, lag, noise/confounding assumptions and factual-abduction evidence.  An unknown or revised DAG keeps the result a candidate. | Text checked; no model or recovery theorem reproduced. |
@@ -86,7 +86,7 @@ that the present arithmetic validates either model.
 | Level | Required receipt | Current status |
 |-------+------------------+----------------|
 | Structural path | Bound graph, relation inventory and witness | Executable structural Impact only |
-| Temporal possibility | Clock assumptions, family bound and explored frontier | Executable finite classifier and TLC fixtures |
+| Temporal possibility | Clock assumptions, family bound and explored frontier | Executable finite classifier and Quint fixtures |
 | Trajectory contrast | Aligned clock grid, subject/outcome/unit and evidence scope | Executable exact arithmetic in =impact/= |
 | Candidate intervention window | Onset and end on the supplied grid, observed baseline, pre-onset agreement status | Executable exact trapezoidal score and time mean; no causal admission |
 | Interventional effect | Intervention model, estimand, support and uncertainty | Open |
@@ -204,7 +204,7 @@ The executable suite should include:
   cases, including incomplete inventory and unobserved counterfactuals.
 
 Current local receipts are the exact-arithmetic tests in
-=t/temporal-impact-test.ss= and the existing Temporal model/TLC/Lean
+=t/temporal-impact-test.ss= and the existing Temporal model/Quint/Lean
 gates.  They establish only their stated local invariants.  Reproduction of
 DoFlow, CLEF, HEDRA, LMTP or the treatment-persistence simulation is open.
 

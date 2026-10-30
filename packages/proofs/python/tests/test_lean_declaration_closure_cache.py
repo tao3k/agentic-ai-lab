@@ -13,7 +13,7 @@ import subprocess
 
 import pytest
 
-from poo_flow_proof.lean_declaration_closure import (
+from agentic_ai_lab_proof.lean_declaration_closure import (
     LeanClosureError,
     export_declaration_closure,
 )
@@ -22,12 +22,12 @@ from poo_flow_proof.lean_declaration_closure import (
 @pytest.fixture
 def cache_harness(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     root = tmp_path / ".lake/build/lib/lean/Root.olean"
-    exporter = tmp_path / ".lake/build/bin/pooFlowDeclarationClosure"
+    exporter = tmp_path / ".lake/build/bin/agenticAiLabDeclarationClosure"
     for artifact in (root, exporter):
         artifact.parent.mkdir(parents=True, exist_ok=True)
         artifact.write_bytes(b"generation-one")
     payload = {
-        "schema_id": "poo-flow.lean-declaration-closure.v1",
+        "schema_id": "agentic-ai-lab.lean-declaration-closure.v1",
         "lean_version": "4.31.0",
         "root_module": "Root",
         "root_declarations": ["Root.x"],

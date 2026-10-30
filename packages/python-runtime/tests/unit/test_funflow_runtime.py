@@ -10,8 +10,8 @@ from pathlib import Path
 import anyio
 import pytest
 
-from poo_flow_runtime import load as load_poo_flow
-from poo_flow_runtime.funflow import (
+from agentic_ai_lab_runtime import load as load_agentic_ai_lab
+from agentic_ai_lab_runtime.funflow import (
     AnyioFunFlowRuntime,
     FunFlowDag,
     FunFlowPlanProjection,
@@ -50,7 +50,7 @@ def test_funflow_cicd_sandbox_dag_runs_with_parallel_wave() -> None:
             "sandbox-policy",
             "package",
         )
-        assert receipt.line_receipt().startswith("|poo-flow-funflow-runtime ")
+        assert receipt.line_receipt().startswith("|agentic-ai-lab-funflow-runtime ")
 
     anyio.run(scenario)
 
@@ -71,7 +71,7 @@ def test_funflow_runtime_rejects_missing_dependency() -> None:
 def test_funflow_runtime_rejects_wrong_projection_contract() -> None:
     projection = FunFlowPlanProjection(
         dag=FunFlowDag(name="invalid", steps=(FunFlowStep("noop", lambda state: {}),)),
-        runtime_contract="poo-flow.other-runtime.v1",
+        runtime_contract="agentic-ai-lab.other-runtime.v1",
     )
 
     async def scenario() -> None:
@@ -93,21 +93,21 @@ def test_funflow_cicd_sandbox_dag_shape_is_funflow_native() -> None:
         "sandbox-policy",
         "package",
     )
-    assert dag.steps[-2].sandbox.allowed_env == ("CI", "POO_FLOW_POLICY")
+    assert dag.steps[-2].sandbox.allowed_env == ("CI", "AGENTIC_AI_LAB_POLICY")
 
 
 def test_funflow_cicd_projection_marks_scheme_facade_origin() -> None:
     projection = build_funflow_cicd_sandbox_projection(fanout=2)
 
-    assert projection.schema == "poo-flow.funflow-plan-projection.v1"
+    assert projection.schema == "yuanxu.funflow-plan-projection.v1"
     assert projection.origin == "use-module funflow"
-    assert projection.runtime_contract == "poo-flow.anyio.v1"
+    assert projection.runtime_contract == "yuanxu.anyio.v1"
     assert projection.dag.name == "funflow-cicd-sandbox-dag"
     assert projection.source_map["checkout"].startswith("use-module funflow:")
 
 
 def test_funflow_scheme_plan_projection_runs_in_python_runtime() -> None:
-    projection = load_poo_flow(
+    projection = load_agentic_ai_lab(
         SCHEME_FIXTURE,
         actions={
             "build": lambda state: {"build": "passed"},
@@ -134,7 +134,7 @@ def test_funflow_scheme_plan_projection_runs_in_python_runtime() -> None:
 
 def test_funflow_scheme_plan_projection_requires_action_bindings() -> None:
     with pytest.raises(FunFlowRuntimeError, match="missing Python action binding"):
-        load_poo_flow(SCHEME_FIXTURE, actions={}, cwd=REPO_ROOT)
+        load_agentic_ai_lab(SCHEME_FIXTURE, actions={}, cwd=REPO_ROOT)
 
 
 def test_funflow_scheme_load_reuses_projection_cache() -> None:
@@ -143,11 +143,11 @@ def test_funflow_scheme_load_reuses_projection_cache() -> None:
         "test": lambda state: {"test": state["build"]},
         "package": lambda state: {"artifact": f"{state['test']}:artifact"},
     }
-    load_poo_flow(SCHEME_FIXTURE, actions=actions, cwd=REPO_ROOT)
+    load_agentic_ai_lab(SCHEME_FIXTURE, actions=actions, cwd=REPO_ROOT)
 
     started = time.perf_counter()
     for _ in range(20):
-        projection = load_poo_flow(SCHEME_FIXTURE, actions=actions, cwd=REPO_ROOT)
+        projection = load_agentic_ai_lab(SCHEME_FIXTURE, actions=actions, cwd=REPO_ROOT)
     elapsed = time.perf_counter() - started
 
     assert projection.origin == "user-composition funflow"

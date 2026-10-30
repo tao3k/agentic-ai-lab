@@ -9,13 +9,13 @@ SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 * Abstract
 
-Temporal Causality is a domain-neutral POO Flow Module for asking what is
+Temporal Causality is a domain-neutral Agentic AI Lab Module for asking what is
 known, possible, necessary *relative to declared assumptions*, refuted, or
 still unknown about events and their causal explanations over time.  The
 framework must support partial order, multiple clock roles, intervals,
 late/corrected evidence, open candidate hypotheses, bounded exploration and
 formal assurance without turning time order into actual causation.  Scheme
-owns the POO semantic model and pure queries; TLA+ checks finite behaviors;
+owns the POO semantic model and pure queries; Quint checks finite behaviors;
 Lean can prove reusable semantic and projection laws; GQL and ASCENT can
 propose structural candidates.  A vertical Lambda supplies its own vocabulary
 and authority rules.
@@ -55,18 +55,21 @@ an identity suitable for immutable evidence and replay.
 | Clock domain | Coordinate space with role and provenance | Roles are open symbols; compare inside a domain, while cross-domain conversion requires explicit evidence | =types.ss= has clock-domain POO value; conversion evidence open |
 | Instant | Clock-indexed coordinate with observation modality | Modalities are open symbols; only =observed= is currently admissible as known, with no ambient clock reads | =time/{types,objects,funs}.ss= executable |
 | Interval | Ordered endpoints with explicit closure | Same-domain endpoints; empty interval is representable | =time/{types,objects,funs}.ss= executable |
-| Temporal relation | Partial comparison, not a Boolean total order | =before/equal/after/unknown/incomparable= for instants | =time/funs.ss= executable, Allen interval relations open |
-| Multi-time observation | Event, ingress and processing times plus provenance | Never silently coerce one role to another | =time/{types,objects}.ss= has optional distinct axes; watermark semantics remain open |
+| Temporal relation | Partial comparison, not a Boolean total order | Instants use five-valued comparison; proper observed interval extents use the thirteen Allen endpoint relations | =time/funs.ss= executable; interval closure and uncertainty remain separate |
+| Multi-time observation | Event, ingress and processing times plus provenance | Never silently coerce one role to another | =time/{types,objects}.ss= has optional distinct axes |
+| Uncertain time observation | One observed coordinate enclosed by a finite interval, with source, acquisition, precision and receipt identities | Bounds are observed, same-domain and ordered; crossing a decision boundary is unknown | =time/uncertainty-{types,objects,funs}.ss= and =t/temporal-time-test.ss= executable; external receipt authenticity remains open |
+| Monotonic duration | Conservative elapsed-time bounds between two clock observations | Only same-domain ordered monotonic observations yield a numeric range | =time/uncertainty-{types,objects,funs}.ss= executable; distributed budget delegation remains open |
+| Source watermark | Scoped assertion over source, partition, sequence range and uncertain event-time bound | Structural coverage cannot close a cut without source-owner receipt verification | =time/watermark-{types,objects,funs}.ss= executable; late-event reconciliation and authentic coverage remain open |
 | Evidence revision | Immutable assertion, correction or retraction with valid interval and admission instant | Predecessors must be same-subject, earlier on one declared admission domain; branches remain visible | =revisions/{types,objects,funs}.ss= executable |
 | As-of evidence cut | Beliefs admitted by one explicit transaction-time cut, optionally filtered at a valid-time instant | Conflicting heads, unknown validity and incomparable clocks are distinct outcomes | =revisions/funs.ss= executable |
 | Reverse dependency plan | Cut-bound derivations with subject and conclusion premises | Complete inventory is an explicit scoped assertion; a partial index cannot certify unaffected conclusions | =truth-maintenance/{types,objects,funs}.ss= executable scheduler |
 | Conclusion revision | Immutable assertion, correction or retraction with proof identity, cut and supersession | A change requires a scoped-complete affected frontier and a distinct revised cut; proof semantics remain evaluator-owned | =conclusions/{types,objects,funs}.ss= executable provenance envelope |
-| Active selection | Versioned observation and pure CAS preparation | Observed version and selected predecessor must match; a ready plan still requires atomic runtime commit and capability | =conclusions/funs.ss= executable planner; runtime handoff open |
+| Active selection | Versioned observation and pure CAS preparation | Journal graph/digest and plan inputs replay; observed version and selected predecessor must match; a ready plan still requires atomic runtime commit and capability | =conclusions/funs.ss= executable planner; runtime handoff open |
 | Causal event and cut | Committed event graph and as-of projection | Future/counterfactual elements cannot enter the committed cut | =types/objects/funs.ss= executable first slice |
-| Candidate hypothesis | Proposed cause, effect and constraints | Temporal consistency does not imply actual causation | =types/objects/funs.ss= executable finite family |
+| Candidate hypothesis | Proposed cause, effect and constraints | Explicit exclusive or overlapping family semantics; temporal consistency does not imply actual causation | =types/objects/funs.ss= executable finite family |
 | Candidate exchange | Exact cut/provider receipt and separate checker assertion | Reviewable requires current, complete, checked required providers; it never grants admission | =candidates/{types,objects,funs}.ss= executable; [[file:candidates/model.org][module-local model]] |
 | Temporal query | Target, assumptions, evidence snapshot and optional operational scope | Resource limits belong to query execution, not model truth | current query supports candidate limit or =#f= for full finite family |
-| Assurance receipt | Classification, frontiers, model/source identity and method | Say what was explored, what remains, and what was assumed | native receipt first slice; TLC correspondence open |
+| Assurance receipt | Classification, frontiers, model/source identity and method | Say what was explored, what remains, and what was assumed | native receipt first slice; Quint correspondence open |
 
 The type relations are intentionally partial.  For instants =a= and =b=,
 =compare(a,b)= is =incomparable= if their domains differ without conversion
@@ -77,28 +80,87 @@ returns the same uncertainty states and respects open or closed endpoints.
 An elapsed duration requires monotonic clocks and cannot be inferred from a
 wall-clock or logical-version coordinate alone.
 
+For two proper observed intervals on the same domain,
+=agentic-ai-lab-temporal-interval-extent-relation= classifies their ordered endpoints
+into [[https://cse.unl.edu/~choueiry/Documents/Allen-CACM1983.pdf][Allen's thirteen basic relations]].
+The relation concerns interval *extents*: endpoint openness still governs
+membership, and no relation is inferred for a point or empty extent.  Those
+return =degenerate=; unobserved endpoints return =unknown= and distinct clock
+domains return =incomparable=.  The focused test enumerates all thirteen
+relations and these three fail-closed states.  Constraint propagation over
+networks of interval relations remains unimplemented.
+
+** Bounded time observation
+
+An immutable =AgenticAILabTemporalBoundedObservation= records a source, clock role,
+observed lower and upper instants, precision, acquisition instant, receipt,
+optional attestation identity, attempt and schema.  Its semantic digest covers
+the complete field tuple, including each instant's domain, coordinate,
+provenance and modality.  Replay recomputes that digest before a comparison.
+The constructor validates structure but cannot authenticate a clock source,
+receipt or attestation; those remain source-owner obligations.
+
+For an observation interval =[l,u]= and observed boundary =b= on the same
+domain, the pure comparison is =before= iff =u < b=, =after= iff =l > b=,
+=equal= iff =l = u = b=, and =unknown= otherwise.  A different domain is
+=incomparable=.  For two observations, =before= requires =u_1 < l_2= and
+=after= requires =l_1 > u_2=; overlapping intervals remain =unknown= unless
+both are the same point.  This rule never selects a favorable endpoint to
+assert a policy decision.  The focused =check-temporal-time= gate covers
+crossing, disjoint, invalid bounds and distinct domains.  The layer does not
+yet turn this structural judgment into a policy proof, watermark closure or
+duration budget.
+
+For two bounded observations on the same monotonic clock, a numeric duration
+is emitted only when the earliest possible end is at or after the latest
+possible start.  Its lower bound is =end.lower - start.upper= and upper bound
+is =end.upper - start.lower=.  Overlapping ranges return =unknown=, a fully
+earlier end returns =reversed=, and distinct domains or unsupported clock
+roles are explicit.  The POO duration assessment retains both observation
+digests; replay recomputes its status and bounds.  This is elapsed coordinate
+arithmetic, not a policy deadline, clock attestation or runtime budget spend.
+
+** Source watermark claim
+
+A =AgenticAILabTemporalWatermark= binds source, partition, inclusive sequence range,
+bounded event-time observation, issuer, coverage receipt identity, late-event
+policy identity and receipt identity.  Its digest covers every field and the
+observation digest.  For a cut boundary =b= in the watermark domain, an
+in-scope query yields =coverage-claimed= only if the watermark's *lower*
+possible coordinate is at least =b=.  If its upper coordinate is below =b=,
+the result is =not-covered=; a crossing interval is =unknown=.  Out-of-scope
+sequences and partitions remain =outside-scope=, and clock-domain mismatch is
+=incomparable=.  This is a pure structural assertion.  The source owner must
+authenticate the named coverage receipt and enforce the late-event policy
+before a runtime closes or revises an immutable causal cut.
+
 * Model and query separation
 
 A =TemporalModel= denotes an immutable evidence snapshot, candidate universe,
-constraints and assumptions.  It does not contain a TLC work budget.  A query
+constraints and assumptions.  It does not contain a Quint work budget.  A query
 selects a target and may request an operational exploration limit.  =#f=
 means exhaust the *finite declared family*.  A positive limit permits an
 unexplored frontier; it must not silently upgrade a result to =necessary=.
 The old =MaxWorlds= name was misleading: the finite example selects candidate
 identities, not complete possible worlds or counterfactual histories.  The
-TLA+ configuration now calls this =ExplorationLimit= and treats it as a
+Quint configuration now calls this =ExplorationLimit= and treats it as a
 checking scope: =0= derives the effective bound from the candidate set,
 while a positive number requests an early stop.  Full possible-world semantics requires a separate behavior
 model with explicit interventions, environment actions and observation map.
 
-Classification is relative to the declared hypothesis family.  For target
+Classification is relative to the declared hypothesis family.  The
+=agentic-ai-lab-temporal-model= constructor declares exclusive explanations;
+=agentic-ai-lab-temporal-overlapping-model= declares potentially coexisting
+mechanisms.  Both use the same finite constraint checker, and the family mode
+enters the model digest and classification receipt.  For target
 =h=, =refuted= means a known constraint fails; =possible= means the candidate
 passes known constraints; =unknown= means it has not been explored or its
 evidence is insufficient.  =Necessary= is available only after exhaustive
 inspection of a caller-declared complete exclusive family, with one admitted
 candidate and no unknowns.  This is a restricted uniqueness judgment, not an
 actual-cause theorem.  The model does not invent mechanisms without a
-hypothesis vocabulary.
+hypothesis vocabulary.  The Quint hypothesis exploration currently checks the
+exclusive mode; an overlapping behavior-space projection remains open.
 
 * Composition and ownership
 
@@ -109,19 +171,18 @@ Domain Lambda ──> POO observations / hypotheses / obligations
    time/  ──> temporal-causality model / event graph / query
                        │                    │
                        v                    v
-               TLA+ source projection    GQL / ASCENT candidate inputs
+               Quint source projection    GQL / ASCENT candidate inputs
                        │
                        v
-               TLC finite behavioral receipt
+               Quint finite behavioral receipt
                        │
                        v
                optional Lean correspondence
 #+end_src
 
 =time/= owns clock-indexed primitives.  The Temporal Module owns model
-admission, event/cut semantics, uncertainty and receipts.  =packages/proofs/tla/temporal-causality/= owns the
-finite formal projection and checks; =modules/tla-plus/= owns the parser CST
-boundary and supported source-to-POO mapping.  GQL/ASCENT results may supply
+admission, event/cut semantics, uncertainty and receipts.  =packages/proofs/quint/= owns the
+finite formal projection, source typing and verification.  GQL/ASCENT results may supply
 candidate edges or proofs of structural reachability; they do not admit a
 causal conclusion by themselves.  Runtime or Marlin handoff owns effects and
 authority.  Healthcare, software release and other vocabularies belong in
@@ -240,11 +301,11 @@ Jensen and Snodgrass's bitemporal distinction
 admission and valid-time axes separate.  Full-inventory invalidation is this
 project's conservative proof-scope rule, not a claim made by that source.
 
-The TLA+ submodel in =packages/proofs/tla/temporal-causality/TemporalInvalidationExplorer.tla= checks a finite
+The Quint submodel in =packages/proofs/quint/TemporalInvalidation.qnt= checks a finite
 subject/conclusion graph.  =Direct= is the changed-subject frontier, =Step=
 adds one-hop conclusion dependents, and =Closure= applies =Step= at most
 =|Conclusions|= times.  The explorer schedules any enabled dependent, so
-its action relation admits multiple traversal orders.  TLC checks that every
+its action relation admits multiple traversal orders.  Quint checks that every
 scheduled conclusion belongs to =Closure= and that terminal states equal
 =Closure=.  Under weak fairness of =Advance=, it checks eventual completion
 for the finite fixture with a branch, a cycle and one unaffected conclusion.
@@ -260,7 +321,7 @@ the selected frontier yields a revised certificate while LeanPoo reuses
 unaffected obligations.  This proof is about a typed POO proof object; a
 future projection theorem must connect concrete Scheme index rows and patch
 footprints to those Lean obligations.  The target uses a separate Lean
-toolchain because the existing Cedar-bound POO Flow proof package uses Lean
+toolchain because the existing Cedar-bound Agentic AI Lab proof package uses Lean
 4.31 and LeanPoo currently uses Lean 4.34.
 
 This design follows the explicit justification dependency idea of
@@ -306,16 +367,16 @@ an observation can lose a race before commit.  After retraction, the pointer
 may select the tombstone revision; current applicability must interpret its
 =retract= operation as no active result.
 
-The finite TLA+ model in =packages/proofs/tla/temporal-causality/TemporalConclusionSelection.tla= represents
+The finite Quint model in =packages/proofs/quint/TemporalConclusionSelection.qnt= represents
 two proposals against the same predecessor and expected version.  Its
 abstract atomic =Commit= increments the version; the other proposal then
-enters =Conflict=.  TLC checks at-most-one commit, version accounting,
+enters =Conflict=.  Quint checks at-most-one commit, version accounting,
 selection membership and completed conflict classification across both
 proposal orders.  Weak fairness of =ResolveAny= is an explicit model
 assumption.  This does not prove a concrete runtime CAS implementation,
 authorization check or effect compensation.  The Scheme test covers the
 same bounded branch and stale-observation cases without claiming a general
-Scheme/TLA refinement.  The separate LeanPoo 4.34 target proves for all
+Scheme/Quint refinement.  The separate LeanPoo 4.34 target proves for all
 natural versions that, after one abstract version increment, a second
 proposal against the old expected version is stale.  It does not prove that
 the runtime's durable store implements that abstract atomic step.
@@ -327,14 +388,42 @@ Kleer's assumption-based TMS]] shows why alternative assumption contexts
 need distinct identities.  This slice retains correction branches but does
 not implement full assumption-set labeling or belief revision.
 
+** Host-pinned finite-family conclusion admission
+
+=admission/interface.ss= supplies POO source-snapshot and family-admission
+values. It replays the registered domain/observation inventory, runs the
+finite-family classifier and generates a proof digest and immutable root
+conclusion bound to source cut, valid-time projection, policy and generation.
+Unknown classifications cannot produce a conclusion. This is a proof of the
+supported family-relative classification under declared hypotheses; it does
+not establish an intervention-qualified causal fact or closed source absence.
+
+The Runtime C source-registration control entrypoint maintains a bounded,
+process-local registry. Ordinary semantic calls cannot register sources.
+A higher host generation retires old snapshot applicability; a conflicting
+registration at the same generation or a rollback is rejected. Python uses
+the same control entrypoint on the owner thread. The trust premise is explicit
+host registration, not externally authenticated signatures. External issuer
+verification, complete partition/sequence coverage, correction/retraction
+admission and authorized durable pointer commit remain open.
+
 * Formal programme
 
-The current =packages/proofs/tla/temporal-causality/model.org= gives one finite instance, state machine,
-invariants, liveness assumption and TLC commands.  The general obligations
+The current =packages/proofs/quint/model.org= gives one finite instance, state machine,
+invariants, liveness assumption and Quint commands.  The general obligations
 are broader:
 
 - *Temporal soundness*: every admitted native comparison follows from
   observed coordinates in one domain or validated conversion evidence.
+- *Bounded-time arithmetic*: =AgenticAILabProof.PooC4.TemporalBoundedTime= proves
+  that a definite-before or definite-after judgment holds for every coordinate
+  inside the stated interval, a crossing boundary permits neither definite
+  judgment, and two overlapping bounded observations cannot have a definite
+  before/after order.  It also proves that pairwise definite order holds for
+  every coordinate selected from each interval, and that a watermark lower
+  bound at or beyond a cut bounds every possible watermark coordinate.
+  This is an abstract numeric proof, not
+  Scheme refinement or source receipt authentication.
 - *Uncertainty preservation*: absent, declared, retracted or incomparable
   evidence cannot become a positive causal or authority claim.
 - *Cut monotonicity under append-only evidence*: an unchanged evidence prefix
@@ -342,50 +431,66 @@ are broader:
   so this law does not apply without an unchanged prefix assumption.
 - *Future-append replay*: for an admission cut =c=, appending only revisions
   with admission position greater than =c= preserves the visible list at =c=.
-  =PooFlowProof.PooC4.TemporalEvidenceRevision= proves this abstract list law
+  =AgenticAILabProof.PooC4.TemporalEvidenceRevision= proves this abstract list law
   and preservation of a fixed valid-time projection key; it also proves that
   distinct valid-time parameters give distinct structural projection keys.
   The Scheme test checks digest behavior for concrete instances.  Neither is a general
   implementation refinement proof.
 - *Model/query separation*: changing a checking budget changes only the
   explored frontier and perhaps the answer's certainty, not the model digest.
-- *Source projection*: accepted TLA+ literal values and native POO values
-  have the same admitted interpretation; unsupported syntax fails closed.
+- *Source correspondence*: formal instances and native POO values need a
+  named interpretation; a general translation theorem remains open.
 - *Behavior refinement*: a future observable map relates native state changes
-  to TLA+ traces, including stutter steps and environment assumptions.
-- *Proof/receipt binding*: Lean theorems, TLC executions and native runtime
+  to Quint traces, including stutter steps and environment assumptions.
+- *Proof/receipt binding*: Lean theorems, Quint executions and native runtime
   receipts retain their own identities and scopes.  One is not substituted
   for another.
 
-Finite TLC state exploration is an executable counterexample search.  It
-supports a claim only for an exact source, configuration and finite scope.
-Progress needs explicit fairness and environmental assumptions.  Lean can
-eventually establish generic laws across admitted models; current Lean
-temporal theorems concern a narrower event/cut model and do not discharge
-the new projection/refinement obligations.
+Finite Quint state exploration checks an exact source inventory and finite
+scope. The shared gate snapshots all local =.qnt= modules, checks that their
+identities remain unchanged and binds the selected predicates, fairness
+obligations, tool versions, exit, counts and output digest in a Scheme v1
+receipt. A zero status without explicit completion and an empty queue fails
+admission. Counterexample cases select a named predicate and must fail by
+violating it; parser errors, process crashes and timeouts do not qualify.
+
+=just check-temporal-family-quint= covers the full family, a one-step bound,
+discriminating evidence and the incorrect-necessity mutation. These checks
+are independent of the native POO classifier and its direct Scheme tests.
+No general source-to-POO translation or implementation refinement theorem is
+claimed. Such correspondence needs an explicit interpretation over observable
+states, stutter, input assumptions and terminal outcomes.
 
 * Work remaining for a complete framework
 
-1. Extend the temporal type layer with verified clock conversions,
-   watermark and completeness semantics over the existing
-   event/ingress/processing axes, durations, interval relations, and
-   partial-order constraints.  Align it with RFC 45-70 and 45-72.
+The [[file:design-audit.org][2026-10-04 design decisions and acceptance ledger]] settles the
+extension rules for these gaps, including scoped evidence admission, frozen
+Quint dependencies and authorized runtime publication. The ledger distinguishes
+accepted design from executable closure and is the delivery-order reference.
+
+1. Extend the bounded observation layer with source-verified clock
+   conversions and authenticated watermark/completeness semantics over the
+   existing event/ingress/processing axes, distributed duration budgets,
+   interval constraint propagation, and partial-order constraints.  Align it
+   with RFC 45-70 and 45-72.
 2. Bind reevaluation proof admission to immutable conclusion revisions and
    an authorized runtime active-pointer transition under RFC 45-73.  The
    evidence journal, as-of cuts, reverse index, conclusion journal and pure
    CAS plan are executable; proof admission, signed observations, atomic
    publication and effect receipts remain open.
-3. Generalize hypothesis families to overlapping mechanisms, interventions
-   and behavior spaces.  Keep candidate generation, assumption admission and
-   causal attribution distinct.
+3. Extend the now-explicit overlapping hypothesis-family mode with actual
+   interventions and behavior spaces.  Keep candidate generation, assumption
+   admission and causal attribution distinct.
 4. Define property and query objects for safety, reachability and progress;
-   generate or interpret TLA+ transitions from the semantic model rather than
+   generate or interpret Quint transitions from the semantic model rather than
    exposing a caller-authored =Next= API.
-5. Bind checked TLA+ source/configuration and TLC outputs to typed POO
-   receipts; prove or differentially check the native/TLA+ projection.
+5. Extend the Quint verification receipt from its staged source-inventory binding
+   to a proved or differentially checked native/Quint projection.  The receipt
+   currently binds Quint's own finite run, not the POO state-transition
+   interpretation.
 6. Extend Lean proofs from event/cut facts to generic temporal relations,
    source projection and trace refinement.  The abstract future-append cut
-   lemma is now in the Temporal proof target; retain bounded TLC as separate
+   lemma is now in the Temporal proof target; retain bounded Quint as separate
    executable evidence.
 
 * Trajectory, Impact and 2026 research
@@ -427,17 +532,17 @@ The engine also asks a distinct AI-facing question: which evidence was
 found, which was used for each claim, which use has a separate assessment,
 and which downstream artifacts may depend on a changed premise?  The
 [[file:evidence/model.org][Evidence relation model]] owns this POO-native relation layer and
-its finite TLA+ exploration.  It is shared by short answers, extended
+its finite Quint exploration.  It is shared by short answers, extended
 search, long-running work and autonomous research.  None of those scenario
 names is a public engine type.  Relation reachability gives a potential
 invalidation frontier, not actual influence or claim truth.
 
 * Research and project references
 
-- Lamport, [[https://lamport.azurewebsites.net/pubs/time-clocks.pdf][Time, Clocks, and the Ordering of Events in a Distributed System]]:
+- Lamport, [[https://github.com/informalsystems/quint][Quint specification and verification]]:
   event order is partial and a clock representation needs stated assumptions.
-- Lamport, [[https://lamport.azurewebsites.net/tla/high-level-view.html][A High-Level View of TLA+]] and
-  [[https://lamport.azurewebsites.net/tla/hiding-and-refinement.pdf][Hiding, Refinement, and Auxiliary Variables]]:
+- Lamport, [[https://github.com/informalsystems/quint][Quint specification and verification]] and
+  [[https://github.com/informalsystems/quint][Quint specification and verification]]:
   possible behaviors, internal state and observable refinement.
 - Halpern and Pearl, [[https://www.cs.cornell.edu/home/halpern/papers/actcaus.pdf][Causes and Explanations: A Structural-Model Approach]]:
   actual-cause claims require more than temporal precedence.
@@ -449,3 +554,11 @@ invalidation frontier, not actual influence or claim truth.
 - Repository architecture: =docs/10-19-design/10.06-poo-module-system/161-temporal-causality-and-causal-trajectory-architecture.org=.
 - Temporal observation and revision contracts: RFC 45-70, 45-72 and 45-73
   in the same design directory.
+
+* Quint proof authority (2026-10-08)
+
+Run =just prepare-quint=, =just check-quint-types= and =just check-quint=.
+The maintained case catalog is =packages/python-testing/src/agentic_ai_lab_testing/checks/quint.py=.
+Quint 0.33.0, backend distribution 0.62.1 and Java 21 match MRR.
+Proof receipts use inert Scheme v1 and remain local or CI artifacts.
+The finite model checks do not establish a general Scheme/Rust refinement.

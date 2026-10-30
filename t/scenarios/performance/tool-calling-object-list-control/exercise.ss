@@ -5,7 +5,7 @@
 
 ;;; Boundary: executable exercise for tool-calling object-list performance.
 
-(import :poo-flow/modules/tool-core/calling-control)
+(import :agentic-ai-lab/modules/tool-core/calling-control)
 
 (def (tool-calling-performance-symbol prefix index)
   (string->symbol (string-append prefix "-" (number->string index))))
@@ -21,7 +21,7 @@
                   runtime-call
                   tool-result))
          (plan
-          (poo-flow-tool-call-plan
+          (agentic-ai-lab-tool-call-plan
            'tool-calling-agent-loop
            session
            tool
@@ -34,7 +34,7 @@
            runtime
            trace))
          (runtime-receipt
-          (poo-flow-tool-call-runtime-receipt
+          (agentic-ai-lab-tool-call-runtime-receipt
            'tool-calling-agent-loop
            session
            tool
@@ -68,15 +68,15 @@
                  (plan (car pair))
                  (runtime-receipt (cdr pair))
                  (facts
-                  (poo-flow-tool-call-runtime-validation-proof-facts
+                  (agentic-ai-lab-tool-call-runtime-validation-proof-facts
                    plan
                    runtime-receipt))
                  (valid?
-                  (and (poo-flow-tool-call-fact-ref facts 'plan-valid)
-                       (poo-flow-tool-call-fact-ref
+                  (and (agentic-ai-lab-tool-call-fact-ref facts 'plan-valid)
+                       (agentic-ai-lab-tool-call-fact-ref
                         facts
                         'runtime-receipt-matches-tool-plan)
-                       (poo-flow-tool-call-fact-ref
+                       (agentic-ai-lab-tool-call-fact-ref
                         facts
                         'tool-output-cannot-authorize-policy))))
             (pair-loop (cdr rest)
@@ -91,14 +91,14 @@
   (car pairs))
 
 (def first-facts
-  (poo-flow-tool-call-runtime-validation-proof-facts
+  (agentic-ai-lab-tool-call-runtime-validation-proof-facts
    (car first-pair)
    (cdr first-pair)))
 
-(unless (poo-flow-tool-call-fact-ref first-facts 'plan-valid)
+(unless (agentic-ai-lab-tool-call-fact-ref first-facts 'plan-valid)
   (error "tool-calling performance plan should be valid"))
 
-(unless (poo-flow-tool-call-fact-ref first-facts
+(unless (agentic-ai-lab-tool-call-fact-ref first-facts
                                      'runtime-receipt-matches-tool-plan)
   (error "tool-calling performance receipt should match the plan"))
 

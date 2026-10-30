@@ -7,7 +7,7 @@
 ;;; Invariant: container execution remains a runtime handoff concern.
 
 (import (only-in :clan/poo/object .o)
-        :poo-flow/modules/sandbox-core/profile-interface)
+        :agentic-ai-lab/modules/sandbox-core/profile-interface)
 
 (export docker-sandbox-profile)
 

@@ -1,0 +1,266 @@
+#+title: Unified GQL Provider for Evidence-bound Context
+:PROPERTIES:
+:ID: context-unified-query-provider-20261025
+:STATUS: bounded-native-provider-qualified
+:END:
+#+language: en
+
+* Owning designs and distinct identities
+:PROPERTIES:
+:ID: context-query-provider-owning-contracts
+:END:
+
+This implements a bounded Provider slice of
+[[file:../../../../core/module-system/design/43-session-memory-recovery/11-context-query-boundary.org][Graph Context Query Boundary]],
+[[file:../../../../core/module-system/design/165-native-semantic-element-relation-query-model.org][RFC 165]], and
+[[file:../../../../core/module-system/design/44-current-project-programming-style/04-semantic-query-and-relation.org][Style 04]].
+It extends [[file:14-native-durable-recovery.org][native Context recovery]] without moving content selection or proof
+interpretation into Session. Earlier receipts qualify their recorded cuts; they
+are not current qualification for this implementation.
+
+| Field | Owner and responsibility | Does not mean |
+|-------+--------------------------+---------------|
+| Org ID | Content anchor within its registered source; equal local IDs in different documents have different qualified Element identities | Session identity or source authentication |
+| SESSION_ID | Reference to the independent Session owner's existing identity | Another document/content ID |
+| Session identity hash | Session creates it from a persisted namespace/creation key using =agentic-ai-lab-session-identity= | Hash of current Context content |
+| receipt-ref / digest | Existing producer evidence reference binding Session scope, Query, result and source/Contract cuts | A second Session identity or Session-binding registry |
+
+The consumer template keeps its document ID and SESSION_ID separate. Changing
+source bytes or re-querying cannot create a different Session implicitly. The
+Session hash is an address, not an access token. The owner must allocate distinct
+creation keys for distinct Sessions. There is no new Session identity store.
+
+* Maintained Org Contract templates
+:PROPERTIES:
+:ID: context-query-provider-template-catalog
+:END:
+
+The canonical directory is
+=modules/ai-agentic-context/org-contract/templates/=, under the existing Context
+module rather than a parallel =ai-context= module. It contains a catalog,
+=evidence-source.org= and =consumer-context.org=. The native tests read these
+files directly. Templates are source contracts, not screenshots or prose-only
+examples.
+
+The initial native profile requires one complete OrgFile, a root Property ID,
+nonempty CONTRACT_ID / CONTRACT_REVISION, unique local IDs, and bounded source
+bytes and property-bearing containers. A consumer Contract additionally requires
+a well-formed Session-owner hash in SESSION_ID. Both initial admission and
+re-admission compare that reference with the actual consumer Scope. Literal
+placeholders cannot pass runtime admission.
+
+Native Orgize events own drawer/container structure and byte offsets. Property-
+looking text inside source blocks does not become an ID. Blocks remain inert;
+no Scheme or GQL text inside an Org document is evaluated as code. The profile
+checks declared structural metadata; it does not compile arbitrary Org prose or
+every advanced Org construct into an executable Contract.
+
+* One Query and Provider path
+:PROPERTIES:
+:ID: context-query-provider-execution-boundary
+:END:
+
+=modules/ai-agentic-context/query-provider.ss= is the explicit native runtime
+boundary. Ordinary authors use existing =AgenticAILabQuery.= and parser-owned
+GQL POO ASTs. =context-org-query= is a value constructor for that same language.
+The Provider specializes the existing Query receipt binding protocol through
+its owned POO/CLOS executor bundle. There is no second Query registry, parser,
+raw-string query interface, anonymous resolver language or public alist DSL.
+
+The supported slice is the existing single-node Scheme GQL executor: MATCH an
+OrgElement, one scalar property equality, and a declared canonical projection.
+A Query selects an explicit bounded window in one source's ElementSpace. Result
+rows retain qualified identity, local Property ID, source identity/version/hash,
+Contract identity/revision, element kind, byte start and parser identity. Result
+bounds fail closed; they do not silently truncate a complete result. Empty
+selections may be valid Query results but cannot create a Session Task.
+
+=source-content-identity= in Query core hashes rendered GQL source. It is not the
+Org content hash. The Context lineage explicitly binds BOTH the Query identity /
+version/program digest and the original Org/source/Contract cut and result.
+Unsupported joins, altered projections, foreign source cuts and unsupported
+language overrides are refused. Full graph paths, arbitrary Org properties,
+external artifacts and universal Context-space GQL execution remain outside this
+first Provider profile.
+
+Source catalogs contain already admitted in-memory bytes. The Provider does not
+open arbitrary paths or URLs and cannot grant protected source I/O. Consumer
+scope/grant checks precede Query execution in Context enrollment. Current flow,
+proof, parent and authority gates remain required for publication.
+
+* Actual Org-to-ASCENT refinement and current support
+:PROPERTIES:
+:ID: context-query-provider-native-proof-refinement
+:END:
+
+Each canonical source-derived row becomes the following typed native fact:
+
+#+begin_example
+orgRow(Symbol(sourceDigest), sourceVersion,
+       Symbol(qualifiedElementIdentity), Symbol(canonicalRowDigest))
+#+end_example
+
+The source snapshot contains rows rebuilt from actual native Org Elements. For
+each GQL-selected row, ASCENT actually runs the bounded source-only membership
+rule and concrete query. The existing positive-proof adapter replays and admits
+its native receipt. The original candidate, native proof DAG/roots, admitted
+proof and source bytes are retained. A selected forged row cannot acquire the
+matching native source membership proof merely by supplying a valid-looking
+hash or a completion flag.
+
+This proves membership of that typed row at that source cut. It does not prove
+the historical truth of arbitrary prose, authenticate an external source or
+authorize an effect. The existing temporal/MRR domain proof remains a separate
+conjunct. Context publication binds the Query lineage into the actual Session
+input digest and native worker/terminal evidence alongside that domain proof,
+its support guard, source journal, policy and grant evidence.
+
+Each immutable source version has its own temporal evidence subject. Replacement
+appends retirement of the old subject and admission of a new one; withdrawal
+appends a retraction. Re-admission after withdrawal cannot rewrite a tombstone
+or support the old version again. Native support evaluation uses the latest
+journal; original ASCENT proof admission remains historical evidence even when
+its current support is withdrawn.
+
+* Proactive cross-Session invalidation and publication
+:PROPERTIES:
+:ID: context-query-provider-invalidation-and-cas
+:END:
+
+A serialized Provider owner prepares subscribed native batches before changing
+its source head, then drains delivery. Context builds the existing native
+reverse-dependency index over captured Context versions and consumers. A Source A
+change invalidates direct consumer A and consumer B which captured A's old
+version, even when B's own Query reads Source C. C's independent Context remains
+admitted although its local ID is also =work=.
+
+The cached invalidation and active Attempt recovery are pushed before any
+consumer proof/use query. Native worker observations, cancellation, recovery and
+final result publication still pass the actual Context/Session owner gates.
+A query-time current-support check is an independent defense, not the delivery
+mechanism. Subscriber preparation and Task/anchor admission precede Context row
+publication; subscription failure cannot leave a usable unbound input behind.
+
+=context-host-refresh-query!= requires the same current Session, a new source
+version, no pending old worker obligations, a valid current grant, and a fresh
+Query/proof binding. The worker must actually terminate/reconcile first. A fresh
+Attempt can publish under the new Context, while B's captured old parent remains
+invalid. The independent Session identity does not change with source content.
+
+This initial profile admits one catalog owner per Context coordinator. Source
+identities must be qualified by the source-admission owner; labels are not
+external authentication. Invalidation is conservative at whole-source-version
+scope, not a claim of minimal element-delta invalidation or linear performance.
+
+* Original journal and native recovery
+:PROPERTIES:
+:ID: context-query-provider-original-journal-recovery
+:END:
+
+There is one canonical Query journal. It keeps every original Query observation,
+including results no longer current after re-admission. Context bindings refer
+to an existing receipt digest instead of creating another observation identity.
+The portable recovery capsule contains original source-version history, that
+Query journal, and the selected observation reference. It contains no owner
+pointers, closures, worker endpoints or observation capabilities.
+
+Recovery reparses original Org, reconstructs the canonical GQL program, reruns
+selection and ASCENT, and checks the complete original record at its retained
+journal cut. It restores the latest catalog separately. Replaying an admitted
+historical proof cannot make a withdrawn version current. Shared catalog
+reconstruction preserves cross-Session captured parent versions. Context
+checkpoints pass through the actual persistent journal codec; the independent
+process replay uses a saved checkpoint as input rather than only rerunning a
+fresh fixture order.
+
+* Executable qualification and limits
+:PROPERTIES:
+:ID: context-query-provider-executable-gates
+:END:
+
+#+begin_src sh
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-native-query.py" --artifacts /private/tmp/context-query-run
+python3 "$slice/run-native-query.py" --check-receipt /private/tmp/context-query-run/query-receipt.json
+python3 "$slice/run-native-query.py" --reuse-build /private/tmp/context-query-run/query-receipt.json --order 2,3,1,4,5 --artifacts /private/tmp/context-query-replay
+python3 "$slice/run-query-scenarios.py" --artifacts /private/tmp/context-query-model
+python3 "$slice/run-query-scenarios.py" --replay /private/tmp/context-query-model/counterexample-0001.json --artifacts /private/tmp/context-query-model-replay
+#+end_src
+
+Native tests are serial, each through the Just pre-import 1 GiB heap fence. The
+corpus executes all 60 legal owner orders of source change, real A/B result
+commit, cancellation and recovery (cancel before recover), for both replacement
+and withdrawal, plus one actual mailbox-arrival order per kind. Actual result
+workers and source/control producers deliver concurrently. Enumerated owner
+linearizations and observed arrivals are recorded separately. They are bounded
+native coverage, not an exhaustive proof of OS scheduling.
+
+Retained native counterexamples expose a missing subscription (cache remains
+admitted although final use is denied) and the legacy unbound-source path (an
+actual stale worker result publishes because its owner was never linked to that
+catalog). Additional negatives cover namespace substitution, repeated version,
+duplicate ID, Query forgery, bounds, source-block fake IDs, Session placeholders
+and foreign Session admission/re-admission. The legacy raw-source Host entry is
+an explicit integration boundary, not a substitute for the new Provider route.
+
+SysML execution independently runs admission and lifecycle contracts and retains
+unsafe algorithm witnesses with corrected replay. It is not native source
+refinement proof. Native receipts bind code, templates, original fixture bytes,
+installed dependency pins, native object variants and actual logs/checkpoints.
+Raw logs stay outside Git. Arbitrary GQL/Org Contract completeness, external
+source authenticity, remote provider exactly-once effects, production storage
+qualification and exhaustive concurrent correctness remain outside these gates.
+
+* Qualified native and model results
+:PROPERTIES:
+:ID: context-query-provider-results-20261025
+:END:
+
+On 2026-10-25 the current native Provider cut completed all 122 paths: 60 legal
+owner linearizations for replacement, 60 for withdrawal, and one actual mailbox
+arrival execution per kind. All paths checked cached A/B invalidation before
+consumer use, unaffected C completing on a real worker, exact permitted A/B
+publication boundaries, one terminal per Attempt, fresh native completion in the
+same Session, and preservation of the captured old parent fence. All paths also
+round-tripped actual Context checkpoints through the persistent journal codec.
+
+The two native counterexamples were retained: absent subscription leaves a
+cached Context admitted, and a legacy unbound-source owner actually publishes
+a stale result. A separate new Scheme process recovered the original saved
+withdrawal checkpoint, replayed native Query/source/proof records, retained the
+old result and parent fences and kept fresh A / unaffected C current.
+
+The current receipt is
+=/private/tmp/context-query-20261025/qualified-v3/query-receipt.json=.
+Its checkpoint and Query/source-journal artifacts are separately hashed. The
+installed and declared ASCENT pin is
+=6b1ec87d6d8639c348ba79c5400ee08bc2223526=, Orgize is
+=734b338fdf77c4fab00739f2accd34c6a48d091a=, and Orgize's declared/installed parser
+pin is =2afad27d8feda65739e7f8ceea56ed15dc3b1304=. These are current task pins,
+not the older pins recorded in the preceding research slice.
+
+The executed SysML CLI run contains 1,152 cases: 192 admission scenarios and
+960 lifecycle/unsafe-mode scenarios. Its independent expected-verdict oracle
+matched 756 unsafe failures and reported zero unexpected verdicts. A saved
+ID-only admission witness and its corrected safe replay were both executed.
+The local artifacts are
+=/private/tmp/context-query-20261025/sysml-v2/summary.json= and
+=/private/tmp/context-query-20261025/sysml-replay/summary.json=.
+
+An earlier native run passed its assertions but was rejected when another task
+modified the actual Scheme selector during execution. Its artifacts remain
+unqualified in =qualified-v2/=. The selector was explicitly rebuilt with the
+current standard functional combinators before the successful =qualified-v3/=
+run. No source-drift failure was retrospectively relabeled as passing.
+
+The same-build compatibility gate also passed 58 original native Cases and all
+60 live-owner clock orders, with final MODULE-OK / HARNESS-OK / OK and no failure
+markers. Its receipt is
+=/private/tmp/context-query-20261025/regression/regression-receipt.json=.
+It rechecks the Provider receipt and native object cut after running, rather
+than rebuilding and accidentally qualifying a different set of objects.
+
+#+begin_src sh
+python3 "$slice/run-query-regression.py" --query-receipt /private/tmp/context-query-run/query-receipt.json --artifacts /private/tmp/context-query-regression
+python3 "$slice/run-query-regression.py" --check-receipt /private/tmp/context-query-regression/regression-receipt.json
+#+end_src

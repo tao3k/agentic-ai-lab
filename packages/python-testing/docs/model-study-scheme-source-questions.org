@@ -1,0 +1,87 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Model questions over existing ASCENT Scheme source
+#+DATE: 2026-10-02
+#+STATUS: five-call run complete; exact scores and raw responses recorded
+
+* Ownership
+
+ASCENT owns the Scheme implementation and its qualification tests.
+Python Testing reads the pinned ASCENT modules, presents them to a real
+model, records responses, and compares short answer data. This protocol
+adds no Scheme program or native test fixture to Python Testing. The
+earlier Scheme execution pilots remain in Git history with their raw
+result receipts; they do not define this current model input.
+
+* Questions and answer evidence
+
+The five entries in =model_study/scheme_questions.json= name existing
+ASCENT module paths and short questions. Each prompt contains the module
+source at the pinned Git head, followed by the question and an instruction
+to return one =(answer ...)= S-expression. The answer key is saved
+separately in the external preview and is never sent to the model.
+
+| Question | ASCENT source | Existing qualification evidence |
+|----------+---------------+---------------------------------|
+| Fragment names are fresh across builder calls | =program/scheme-language.ss= | =t/qualification/scheme-operator-test.ss=, fresh fragment case |
+| Diagnostic code/path for a body failure | =program/scheme-admission.ss= | =t/qualification/scheme-native-language-test.ss=, failing body case |
+| Diagnostic code/path for a head failure | =program/scheme-admission.ss= | =t/qualification/scheme-native-language-test.ss=, failing head case |
+| Finite verification returns =valid= after success | =candidate/reasoning.ss= | =t/qualification/ascent-reasoning-library-test.ss=, finite verifier case |
+| A different source generation invalidates an old receipt | =candidate/reasoning.ss= | =reasoning-receipt-bound?= generation check and stale-source qualification case |
+
+The diagnostic questions use the zero-based locations already checked in
+ASCENT. The generation question holds source rows and candidate fixed so
+the generation binding is the only changed fact. These are questions
+about the documented native contract, not a new Python-owned semantics.
+
+* Fixed call and scoring rule
+
+Preview generation copies the outgoing prompt bytes, expected answer,
+SHA256 hashes, and both Git heads to a new external directory. The live
+runner requires clean checkouts, the exact Agentic AI Lab ASCENT dependency pin,
+and unchanged preview bytes. It reads no API key during preview.
+
+With separate approval, each prompt was sent once to =deepseek-flash= via
+the Responses API in non-thinking mode with =temperature=0=,
+=max_output_tokens=512=, 45-second timeout, and no retry: five calls
+total. Raw response text and response IDs are preserved outside the
+repository. A response is exact only when it is a completed, readable
+S-expression equal to its fixed short answer. Report completion,
+readability, and exactness separately.
+
+This small set can identify specific source misunderstandings. One call
+per question does not measure population accuracy or reveal internal
+model reasoning. No new ASCENT implementation claim follows from it.
+
+* Run at the approved preview
+
+The immutable preview is
+=/private/tmp/poo-ascent-source-questions-preview-head-c3abe53/=;
+its =manifest.tsv= SHA256 is
+=b1b8a53e90a0b17552074ed2357ca87c823195a1153fe651238a1917fb39def3=.
+It binds ASCENT =f80c9dc7cf5e4ed42a806b0d78c847e52be09de6= and
+Agentic AI Lab =c3abe535addc78363b1c0d10005e497638d53e8d=. The five-call
+run used a clean detached checkout at that Agentic AI Lab commit. Its raw
+responses and response IDs are in
+=/private/tmp/poo-ascent-source-questions-live-head-c3abe53/=;
+the output =manifest.tsv= SHA256 is
+=9c98054a1343072988cddab551b0374723ded7373c4b5a9a1eed94d8fd045e7c=.
+All five API responses completed and passed the response alphabet and
+balanced-parenthesis check. Three exactly match their answer keys.
+
+| Question | Raw response | Exact | Interpretation |
+|----------+--------------+-------+----------------|
+| =fragment_fresh= | =(answer fresh)= | yes | Correct fresh builder names. |
+| =diagnostic_body= | =(answer (invalid-body (rule 0 body 1)))= | no | Correct code and path, but nested the pair instead of the requested two answer fields. |
+| =diagnostic_head= | =(answer invalid-head (rule 0 head 0))= | yes | Correct code and path. |
+| =receipt_verdict= | =(answer complete)= | no | Confused successful verification's =valid= verdict with a receipt or evidence =complete= status. |
+| =receipt_generation= | =(answer invalid)= | yes | Correct stale-generation verdict. |
+
+The diagnostic-body mismatch is a serialization error under the fixed
+scoring rule; its code and zero-based path agree with the native
+=relational-admit/report= contract. The finite-receipt mismatch is a
+semantic error: =reasoning-verify-finite-receipt= delegates to the finite
+evidence verifier, whose successful verdict is =valid=. The raw result
+is kept unchanged; no call was repeated or repaired. These observations
+describe one model response per question, not a measured reliability rate.

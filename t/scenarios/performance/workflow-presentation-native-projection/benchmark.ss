@@ -15,7 +15,7 @@
  (iterations . 3)
  (unit . "ms")
  (sourcePath . "t/scenarios/performance/workflow-presentation-native-projection/benchmark.ss")
- (rule . POO-FLOW-USER-INTERFACE-PERFORMANCE-004)
+ (rule . AGENTIC-AI-LAB-USER-INTERFACE-PERFORMANCE-004)
  (feature . workflow-presentation-native-projection)
  (optimizationFocus . "Gerbil :clan/poo object<-fun slot cache plus Gerbil promises for shared workflow projections")
  (inputShape . "one real Funflow CI/CD user config with three runtime command manifests and one Marlin handoff ABI")

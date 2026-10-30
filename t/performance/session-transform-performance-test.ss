@@ -5,7 +5,7 @@
 
 ;;; Boundary: performance gates for session transform POO row boundaries.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -14,8 +14,8 @@
                  benchmark-fixture-contract-pass?
                  benchmark-receipt-pass?
                  benchmark-run)
-        :poo-flow/modules/session/objects
-        :poo-flow/modules/session/transform)
+        :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/transform)
 
 (export session-transform-performance-test)
 
@@ -41,17 +41,17 @@
 
 ;; : (-> PooSession)
 (def (make-session-transform-performance-root)
-  (poo-flow-session-value
+  (agentic-ai-lab-session-value
    'session-transform-performance/root
-   (list (poo-flow-session-chunk
+   (list (agentic-ai-lab-session-chunk
           'request
           'user
           "Summarize the current repository state."))
-   (poo-flow-session-lineage
+   (agentic-ai-lab-session-lineage
     'session-transform-performance/root
     '()
     'root)
-   (poo-flow-session-placement-resolve
+   (agentic-ai-lab-session-placement-resolve
     'agent/nono
     (list (make-session-transform-performance-profile))
     '((case . session-transform-performance)))
@@ -60,7 +60,7 @@
 
 ;; : (-> PooSessionMemoryIntent)
 (def (make-session-transform-performance-memory-intent)
-  (poo-flow-session-memory-intent
+  (agentic-ai-lab-session-memory-intent
    'review-memory
    'session/memory
    'project-workspace
@@ -70,7 +70,7 @@
 
 ;; : (-> PooSessionTransform)
 (def (make-session-transform-performance-transform)
-  (poo-flow-session-transform
+  (agentic-ai-lab-session-transform
    'review-agent
    'review
    "Review a session receipt and derive a follow-up session."
@@ -81,11 +81,11 @@
 ;; : (-> Integer)
 (def (session-transform-performance-memory-receipt-count)
   (let (receipt
-        (poo-flow-session-transform-apply
+        (agentic-ai-lab-session-transform-apply
          (make-session-transform-performance-transform)
          (make-session-transform-performance-root)
          'session-transform-performance/review
-         (list (poo-flow-session-chunk
+         (list (agentic-ai-lab-session-chunk
                 'review
                 'assistant
                 "Review the summarized repository state."))
@@ -95,8 +95,8 @@
 
 ;; : TestSuite
 (def session-transform-performance-test
-  (test-suite "poo-flow session transform POO performance"
-    (poo-flow-test-case "keeps memory-intent transform receipts inside row boundary"
+  (test-suite "agentic-ai-lab session transform POO performance"
+    (yuanxu-test-case "keeps memory-intent transform receipts inside row boundary"
       (let (receipt
             (benchmark-run
              session-transform-memory-intent-fixture

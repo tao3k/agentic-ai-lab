@@ -1,0 +1,441 @@
+{
+  "schema": "context.runtime.framework-results.v1",
+  "status": "native-qualified-exact-replay-performance-open",
+  "optimized_throughput_claim": false,
+  "distributed_runtime_implemented": false,
+  "limits": {
+    "heap": "2G",
+    "minimum_heap": "1G",
+    "native_watchdog_seconds": 150,
+    "no_chunking": true,
+    "no_forced_gc": true
+  },
+  "native_paths": 360,
+  "cold_runs": [
+    {
+      "label": "qualification",
+      "receipt": {
+        "path": "/private/tmp/context-runtime-framework-qualified-20261026/owner-receipt.json",
+        "sha256": "a159fbfeb7626d4c6cdfecd7acd8326c9d1855f40557e878e061fb8034717c84"
+      },
+      "audit": {
+        "path": "/private/tmp/context-runtime-framework-qualified-audit-20261026.json",
+        "sha256": "a8821b70472d539ab634f86efbb4d5dbafc910cd9a4fed414e97a32908333780"
+      },
+      "processes": [
+        {
+          "profile": "legacy-cut",
+          "paths": 60,
+          "exit": 0,
+          "elapsed_seconds": 75.28409687499516,
+          "closed_owners": 60
+        },
+        {
+          "profile": "canonical",
+          "paths": 60,
+          "exit": 0,
+          "elapsed_seconds": 45.91062691700063,
+          "closed_owners": 60
+        },
+        {
+          "profile": "legacy-missing",
+          "paths": 60,
+          "exit": 0,
+          "elapsed_seconds": 64.82313020902802,
+          "closed_owners": 60
+        }
+      ]
+    },
+    {
+      "label": "whole-replay",
+      "receipt": {
+        "path": "/private/tmp/context-runtime-framework-replay-20261026/owner-receipt.json",
+        "sha256": "2ad0676d92c041e61cf5fb0a3b7479bef389d4a5e689e4cb7cc93fc5edb4027f"
+      },
+      "audit": {
+        "path": "/private/tmp/context-runtime-framework-replay-audit-20261026.json",
+        "sha256": "1d838f8b1485e7628d2e440f62672dfb3881a1cdd2723c5f21ef0e1fbc7e5754"
+      },
+      "processes": [
+        {
+          "profile": "legacy-cut",
+          "paths": 60,
+          "exit": 0,
+          "elapsed_seconds": 47.150428124994505,
+          "closed_owners": 60
+        },
+        {
+          "profile": "canonical",
+          "paths": 60,
+          "exit": 0,
+          "elapsed_seconds": 65.42910854198271,
+          "closed_owners": 60
+        },
+        {
+          "profile": "legacy-missing",
+          "paths": 60,
+          "exit": 0,
+          "elapsed_seconds": 61.8557925420173,
+          "closed_owners": 60
+        }
+      ]
+    }
+  ],
+  "steady": {
+    "receipt": {
+      "path": "/private/tmp/context-runtime-framework-steady-20261026/cost-receipt.json",
+      "sha256": "54f69b424fcc0729bd90f04769f70f944c3e3aa661a5a22e53596aa03a5acb1a"
+    },
+    "workload": "60 current-proof uses per single owner; eight isolated local fixture owners with eight concurrent producers, 480 actual uses; no cluster claim",
+    "phases": {
+      "context-current-memory": {
+        "count": 60.0,
+        "wall": 0.5275230407714844,
+        "cpu": 0.3855570000000008,
+        "gc-cpu": 0.0,
+        "gcs": 0.0,
+        "allocated": 1807109360.0
+      },
+      "context-current-durable": {
+        "count": 60.0,
+        "wall": 1.3765370845794678,
+        "cpu": 0.9216289999999998,
+        "gc-cpu": 0.049444000000000266,
+        "gcs": 1.0,
+        "allocated": 4276207536.0
+      },
+      "parallel-context-construction": {
+        "count": 8.0,
+        "wall": 2.238574981689453,
+        "cpu": 1.5385140000000006,
+        "gc-cpu": 0.16886399999999901,
+        "gcs": 3.0,
+        "allocated": 5574647912.0
+      },
+      "parallel-current-batch": {
+        "count": 1.0,
+        "wall": 4.666543006896973,
+        "cpu": 3.856261000000001,
+        "gc-cpu": 0.34115700000000126,
+        "gcs": 6.0,
+        "allocated": 15695238760.0
+      },
+      "owner-rpc-roundtrip": {
+        "count": 20000.0,
+        "wall": 0.01834392547607422,
+        "cpu": 0.018264999999999976,
+        "gc-cpu": 0.0,
+        "gcs": 0.0,
+        "allocated": 355299424.0
+      }
+    }
+  },
+  "core": {
+    "status": "passed",
+    "complete_suite": true,
+    "quiet": true,
+    "process": {
+      "path": "/private/tmp/context-cold-diagnosis-20261026/core-issuer-final/process.json",
+      "sha256": "88a9db9e15a33d728e9092771fe2e7ad03debd787018fc0fddc04072eb6f7ee9"
+    },
+    "native_log": {
+      "path": "/private/tmp/context-cold-diagnosis-20261026/core-issuer-final/native.log",
+      "sha256": "ff4a880bf4d0c69d3372ad5280c372806a13408719501236b95eadbf719137ab"
+    },
+    "elapsed_seconds": 50.65013583298423,
+    "historical_137": {
+      "path": "/private/tmp/context-projection-core-test-20261026.log",
+      "sha256": "c4f739d3a910552a181a363f5e46dae5b2fbdb858c73171a308ff6490fe744c3"
+    },
+    "additional_failed_run": {
+      "path": "/private/tmp/context-cold-diagnosis-20261026/core-composition/process.json",
+      "sha256": "505d20fd2112011640895bd0920ee2b0a17b5f01975693d993e76fb455dc81b5"
+    },
+    "earlier_polled_timing_not_admitted": {
+      "path": "/private/tmp/context-cold-diagnosis-20261026/core-fixed/process.json",
+      "sha256": "93ed15121044486e66be616e8e162c95c208a55626ecc8cf17875d28783752ce"
+    },
+    "in_process_make_experiment_selected": false
+  },
+  "native_regressions": {
+    "bootstrap_before": {
+      "path": "/private/tmp/context-cold-diagnosis-20261026/bootstrap-before-v2/native.log",
+      "sha256": "092f55a71e1be1e99c07408f3bc350d372bf600fb98589bf92d451b079f33624"
+    },
+    "bootstrap_before_sources": {
+      "path": "/private/tmp/context-cold-diagnosis-20261026/bootstrap-before-v2/counter-source.json",
+      "sha256": "2da5a904e194935a0eac6e068afaa83413de181605ada59de97682bde9108689"
+    },
+    "bootstrap_after": {
+      "path": "/private/tmp/context-runtime-framework-qualified-20261026/unit/native.log",
+      "sha256": "078d580a09217c1fd5f9642736145c343fb18bc3765af332e3a4d3fdbf6f10d0"
+    },
+    "fencing_before": {
+      "path": "/private/tmp/context-cold-diagnosis-20261026/fence-before/native.log",
+      "sha256": "27d4a7d4f0031d1022e2efac410d29d91c4f6b0b8d4295d3afaeea238e3d764f"
+    },
+    "fencing_before_source": {
+      "path": "/private/tmp/context-cold-diagnosis-20261026/pre-fix/durable-journal.ss",
+      "sha256": "10f1ec35f0959c984ffa1b8b612bf1710e274b51d7b8831ff49ed98ac22446ad"
+    },
+    "fencing_after": {
+      "path": "/private/tmp/context-runtime-framework-qualified-20261026/runtime-fencing/native.log",
+      "sha256": "b770cde35456afe85c9010b61976faf56aa9c0e4740a43e85970f82bc23d79f1"
+    },
+    "matched_crash": {
+      "path": "/private/tmp/context-runtime-framework-crash-20261026/crash-receipt.json",
+      "sha256": "13cd8c488e4ae2754f40258fc189dabd7c99ba922030207682bd4d157b8bccb4"
+    }
+  },
+  "sysml": {
+    "models": [
+      {
+        "name": "migration",
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-migration/summary.json",
+          "sha256": "afaab89564a3ca46d259283abdcbb67d22804bd846400323b8751d40de48f11e"
+        },
+        "executed": 2520,
+        "expected_unsafe": 818,
+        "unexpected": 0
+      },
+      {
+        "name": "owner",
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-owner/summary.json",
+          "sha256": "ebc16c2a2b7fa850921699886e03ee5066e10642aa63528a4f591e84e21e75d5"
+        },
+        "executed": 1920,
+        "expected_unsafe": 251,
+        "unexpected": 0
+      },
+      {
+        "name": "credential",
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-credential/summary.json",
+          "sha256": "338927eec90dba5c2b5dfe5bb2af7620e6952d29fd8245ce41c398621cd0a314"
+        },
+        "executed": 960,
+        "expected_unsafe": 520,
+        "unexpected": 0
+      },
+      {
+        "name": "bootstrap",
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-bootstrap-final/summary.json",
+          "sha256": "c21de87f74d014465c848529629bed5625d58c366ccc1fdfca68bf5d98a08fb3"
+        },
+        "executed": 1680,
+        "expected_unsafe": 22,
+        "unexpected": 0
+      }
+    ],
+    "executed": 7080,
+    "expected_unsafe": 1611,
+    "unexpected": 0,
+    "replay_executions": 44,
+    "replays": [
+      {
+        "model": "migration",
+        "mode": 1,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-migration-1/summary.json",
+          "sha256": "abd428248dbfebcfc125f596b5351154695e07628d024f310c34ad3c469f6a8c"
+        }
+      },
+      {
+        "model": "migration",
+        "mode": 2,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-migration-2/summary.json",
+          "sha256": "abd428248dbfebcfc125f596b5351154695e07628d024f310c34ad3c469f6a8c"
+        }
+      },
+      {
+        "model": "migration",
+        "mode": 6,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-migration-6/summary.json",
+          "sha256": "abd428248dbfebcfc125f596b5351154695e07628d024f310c34ad3c469f6a8c"
+        }
+      },
+      {
+        "model": "migration",
+        "mode": 4,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-migration-4/summary.json",
+          "sha256": "abd428248dbfebcfc125f596b5351154695e07628d024f310c34ad3c469f6a8c"
+        }
+      },
+      {
+        "model": "migration",
+        "mode": 5,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-migration-5/summary.json",
+          "sha256": "abd428248dbfebcfc125f596b5351154695e07628d024f310c34ad3c469f6a8c"
+        }
+      },
+      {
+        "model": "migration",
+        "mode": 3,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-migration-3/summary.json",
+          "sha256": "abd428248dbfebcfc125f596b5351154695e07628d024f310c34ad3c469f6a8c"
+        }
+      },
+      {
+        "model": "owner",
+        "mode": 1,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-owner-1/summary.json",
+          "sha256": "566730bfddfabc9f559f286e118b3467cfa4f0ed9ed7985bf2480b2c2c4c34e3"
+        }
+      },
+      {
+        "model": "owner",
+        "mode": 2,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-owner-2/summary.json",
+          "sha256": "566730bfddfabc9f559f286e118b3467cfa4f0ed9ed7985bf2480b2c2c4c34e3"
+        }
+      },
+      {
+        "model": "owner",
+        "mode": 3,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-owner-3/summary.json",
+          "sha256": "566730bfddfabc9f559f286e118b3467cfa4f0ed9ed7985bf2480b2c2c4c34e3"
+        }
+      },
+      {
+        "model": "owner",
+        "mode": 4,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-owner-4/summary.json",
+          "sha256": "566730bfddfabc9f559f286e118b3467cfa4f0ed9ed7985bf2480b2c2c4c34e3"
+        }
+      },
+      {
+        "model": "owner",
+        "mode": 7,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-owner-7/summary.json",
+          "sha256": "566730bfddfabc9f559f286e118b3467cfa4f0ed9ed7985bf2480b2c2c4c34e3"
+        }
+      },
+      {
+        "model": "owner",
+        "mode": 5,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-owner-5/summary.json",
+          "sha256": "566730bfddfabc9f559f286e118b3467cfa4f0ed9ed7985bf2480b2c2c4c34e3"
+        }
+      },
+      {
+        "model": "owner",
+        "mode": 6,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-owner-6/summary.json",
+          "sha256": "566730bfddfabc9f559f286e118b3467cfa4f0ed9ed7985bf2480b2c2c4c34e3"
+        }
+      },
+      {
+        "model": "credential",
+        "mode": 1,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-credential-1/summary.json",
+          "sha256": "5b49c2c4022224a8376ff81c22cfec8bfc57544a415eddd901a3e9f754e55a39"
+        }
+      },
+      {
+        "model": "credential",
+        "mode": 3,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-credential-3/summary.json",
+          "sha256": "5b49c2c4022224a8376ff81c22cfec8bfc57544a415eddd901a3e9f754e55a39"
+        }
+      },
+      {
+        "model": "credential",
+        "mode": 2,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-replay-credential-2/summary.json",
+          "sha256": "5b49c2c4022224a8376ff81c22cfec8bfc57544a415eddd901a3e9f754e55a39"
+        }
+      },
+      {
+        "model": "bootstrap",
+        "mode": 1,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-bootstrap-final-replay-1/summary.json",
+          "sha256": "9957f0b960cf8cda7d14e95163d5df1485c0ec85f644f8e891163d764fd737f0"
+        }
+      },
+      {
+        "model": "bootstrap",
+        "mode": 2,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-bootstrap-final-replay-2/summary.json",
+          "sha256": "9957f0b960cf8cda7d14e95163d5df1485c0ec85f644f8e891163d764fd737f0"
+        }
+      },
+      {
+        "model": "bootstrap",
+        "mode": 3,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-bootstrap-final-replay-3/summary.json",
+          "sha256": "9957f0b960cf8cda7d14e95163d5df1485c0ec85f644f8e891163d764fd737f0"
+        }
+      },
+      {
+        "model": "bootstrap",
+        "mode": 5,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-bootstrap-final-replay-5/summary.json",
+          "sha256": "9957f0b960cf8cda7d14e95163d5df1485c0ec85f644f8e891163d764fd737f0"
+        }
+      },
+      {
+        "model": "bootstrap",
+        "mode": 6,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-bootstrap-final-replay-6/summary.json",
+          "sha256": "9957f0b960cf8cda7d14e95163d5df1485c0ec85f644f8e891163d764fd737f0"
+        }
+      },
+      {
+        "model": "bootstrap",
+        "mode": 4,
+        "summary": {
+          "path": "/private/tmp/context-cold-diagnosis-20261026/model-bootstrap-final-replay-4/summary.json",
+          "sha256": "9957f0b960cf8cda7d14e95163d5df1485c0ec85f644f8e891163d764fd737f0"
+        }
+      }
+    ],
+    "topology": {
+      "path": "/private/tmp/context-cold-diagnosis-20261026/sysml-runtime-topology-validated.json",
+      "sha256": "95ff8193b19a161d48f22e3eff0e693b41b1120f81ebcc04d679eae6f5f85c2c"
+    },
+    "topology_scope": "structural proposal; behavioral execution belongs to the other models"
+  },
+  "quint": {
+    "summary": {
+      "path": "/private/tmp/context-cold-diagnosis-20261026/quint-runtime-final/summary.json",
+      "sha256": "8d3eab9a70e5efd378d9cb99e6f38ae8dfc33dd26839e656dfece2558877644f"
+    },
+    "safe_generated_states": 64593,
+    "safe_distinct_states": 6864,
+    "broken_contract_families": 6,
+    "itf_replay_traces": 56,
+    "finite_scope": "one affected authority domain, two owner epochs, two Attempts, two policy revisions, one withdrawal, two affected consumers and an independent consumer",
+    "liveness_proved": false,
+    "native_refinement_proved": false
+  },
+  "custody": {
+    "path": "/private/tmp/context-runtime-framework-custody-20261026/manifest.json",
+    "sha256": "f639f08ca2d215ddd964ca17a7e80b59c3d4f14f8d826f5e3409bbec2247e253",
+    "files": 16447,
+    "bytes": 794482118,
+    "current_source_and_objects_verified": true
+  }
+}

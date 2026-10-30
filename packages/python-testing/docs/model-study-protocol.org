@@ -1,0 +1,80 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Pre-registered cross-layer ASCENT receipt model pilot
+#+STATUS: frozen protocol; bounded live pilot completed
+#+DATE: 2026-10-02
+
+* Question and source identity
+
+Does showing a verified finite, founded ASCENT receipt improve model use of
+the checked candidate without promoting it to verified intent? This is one
+interface intervention, not a test of model training or general reasoning.
+The stable code namespace is =agentic_ai_lab_testing.model_study=; protocol
+identity and revision are fixed only in =model_study/schema.py=. This
+experiment selects its =founded= protocol. Future studies must register
+their protocol there and keep filenames and the command entry point stable.
+The ASCENT dependency is pinned to
+=f80c9dc7cf5e4ed42a806b0d78c847e52be09de6= in =gerbil.pkg=.
+The frozen five-task corpus and answer key remain byte-identical to the
+baseline and typed studies,
+SHA256
+=7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
+The exact Rust Ascent 0.8.0, Scheme candidate, and Python native fixture
+for =ascent.negation-count= use the same edge, blocked, weight, and root
+rows. They expect =summary(1,1)=; removing the block gives
+=summary(1,2)=, and repeating an edge leaves it at 2. The first state is
+the model observation. The latter states test source and set semantics
+without adding model requests.
+
+* Frozen arms and scoring
+
+Both arms receive the same prompt and native rows. =typed= is exactly
+the earlier typed observation. =proof= adds to that observation only the
+public receipt's independently checked finite and founded proof verdicts
+for =ascent.negation-count=, plus the narrow proof scope. The other four
+tasks are unchanged controls. Both arms retain
+=intent_verified=false=; a valid finite proof establishes the declared
+candidate's rows on a named snapshot, not the user's intended rules.
+
+Use DeepSeek =deepseek-flash= via the Responses API, non-thinking,
+=temperature=0=, =max_output_tokens=512=, timeout 45 seconds, no retries.
+Three fresh calls per arm per task give 30 requests maximum. Per-task arm
+order is typed/proof, proof/typed, typed/proof. Responses must be exact
+JSON with string =choice= and =claim= fields. Score those two fields
+separately against the unchanged key. Record per-case scores, errors,
+token usage, model latency, native fixture time, and the exact two Git
+heads. Raw responses remain outside the repository.
+
+The primary outcome is the =ascent.negation-count= choice and bounded
+claim. The wrong-join claim and two temporal tasks are boundary controls.
+The Runtime guard records whether an output may be shown as a bounded
+observation. It withholds ASCENT claims of general truth or verified
+intent and temporal claims denied by the native receipt. Report raw model
+scores and guarded results separately; the guard cannot make a wrong
+model answer correct. Do not call this a general model benefit from a
+three-repeat pilot.
+
+* Execution and admission
+
+Before any paid call, build and test both committed heads, run the frozen
+native fixture and the stable model-study entry point with =--dry-run=,
+and require the pinned Agentic AI Lab Linux
+consumer gate. The live runner rejects dirty checkouts and an existing
+output path. Use an absolute external =--output= path and supply an existing
+local =--env-file= only to the process; never store its value in a receipt.
+The experiment's cold and warm tool times are separate from model latency.
+
+#+begin_src sh
+uv run --project packages/python-testing --extra live --extra runtime \
+  python -m agentic_ai_lab_testing.model_study \
+  --ascent-root /path/to/gerbil-ascent \
+  --poo-root /path/to/agentic-ai-lab \
+  --dry-run
+#+end_src
+
+The live invocation uses the same arguments plus =--env-file= and
+=--output=. Review its JSONL receipt before writing a result summary.
+
+The completed bounded result, including unchanged scores and the
+closed-cut guard outcomes, is in [[file:model-study-results.org][the result receipt]].

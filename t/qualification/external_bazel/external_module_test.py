@@ -18,6 +18,7 @@ from external_module import (
     ExternalModuleConfig,
     ExternalModuleError,
     _export_tracked_tree,
+    _write_consumer_module,
     run_external_module,
 )
 
@@ -33,7 +34,7 @@ class ExternalModuleTest(unittest.TestCase):
         self.fake_bazel = root / "fake_bazel.py"
         self.fake_bazel.write_text(
             """import json, os, sys
-with open(os.environ['POO_FLOW_EXTERNAL_BAZEL_ARGS_LOG'], 'a', encoding='utf-8') as stream:
+with open(os.environ['AGENTIC_AI_LAB_EXTERNAL_BAZEL_ARGS_LOG'], 'a', encoding='utf-8') as stream:
     stream.write(json.dumps(sys.argv[1:]) + '\\n')
 raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:]) else 0)
 """,
@@ -41,7 +42,7 @@ raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:
         )
         self.environment = patch.dict(
             os.environ,
-            {"POO_FLOW_EXTERNAL_BAZEL_ARGS_LOG": str(self.log)},
+            {"AGENTIC_AI_LAB_EXTERNAL_BAZEL_ARGS_LOG": str(self.log)},
         )
         self.environment.start()
 
@@ -69,7 +70,7 @@ raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:
             )
         self.assertFalse(self.log.exists())
 
-    def test_export_contains_pinned_core_submodule_sources(self) -> None:
+    def test_export_contains_pinned_core_subtree_sources(self) -> None:
         exported = Path(self.temporary.name) / "exported"
         exported.mkdir()
         _export_tracked_tree(REPO_ROOT, exported)
@@ -79,6 +80,21 @@ raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:
         )
         self.assertTrue((exported / "core" / "build.ss").is_file())
 
+    def test_root_override_carries_its_actual_patch_package(self) -> None:
+        consumer = Path(self.temporary.name) / "consumer"
+        consumer.mkdir()
+        _write_consumer_module(consumer, REPO_ROOT, include_override=True)
+        package = Path("packages/bazel/overrides")
+        for source in (REPO_ROOT / package).iterdir():
+            self.assertEqual(
+                (consumer / package / source.name).read_bytes(), source.read_bytes()
+            )
+        declaration = (consumer / "MODULE.bazel").read_text()
+        self.assertIn(
+            '"//packages/bazel/overrides:gerbil-native-budget-handoff.patch"',
+            declaration,
+        )
+
     def test_default_output_root_and_analysis_build(self) -> None:
         receipt = run_external_module(REPO_ROOT, self.config("analysis"))
         invocations = self.invocations()
@@ -86,7 +102,7 @@ raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:
         self.assertTrue(invocations[0][0].startswith("--output_user_root="))
         self.assertIn("bazel-no-root-override", invocations[0][0])
         self.assertEqual(invocations[1][1], "query")
-        self.assertEqual(invocations[2][1:3], ["build", "--nobuild"])
+        self.assertEqual(invocations[2][1:4], ["build", "--jobs=2", "--nobuild"])
         self.assertFalse(receipt["compiled"])
 
     def test_stable_output_base_and_full_build(self) -> None:
@@ -95,7 +111,7 @@ raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:
         invocations = self.invocations()
         self.assertEqual(len(invocations), 3)
         self.assertTrue(invocations[1][0].startswith("--output_base="))
-        self.assertEqual(invocations[2][1], "build")
+        self.assertEqual(invocations[2][1:3], ["build", "--jobs=2"])
         self.assertNotIn("--nobuild", invocations[2])
         self.assertTrue(output_base.is_dir())
         self.assertTrue(receipt["compiled"])

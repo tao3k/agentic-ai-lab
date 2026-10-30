@@ -1,0 +1,287 @@
+#+title: Evidence-driven Context lifecycle: durable owner recovery
+:PROPERTIES:
+:ID: agentic-ai-context-durable-owner-recovery-20261025
+:STATUS: bounded-native-recovery-qualified
+:END:
+#+language: en
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Owning contracts
+:PROPERTIES:
+:ID: context-durable-recovery-owning-contracts
+:END:
+
+This extends [[file:13-native-background-clock.org][13's real native timer]] using our Context lifecycle algorithm.
+The governing source is
+=core/module-system/design/context-temporal-lifecycle-policy-system-design.org=,
+particularly its joint publication fence, independent clock/source/authority /
+Session/Attempt/effect axes and actual reconciliation obligations.
+
+=core/module-system/design/43-session-memory-recovery/11-context-query-boundary.org=
+has Property ID =agentic-ai-lab-graph-context-query-boundary=. It makes ORG
+Elements the sole Context content window and keeps ORG Contract applicability,
+Query, Context interpretation, ASCENT and C3/C4 composition distinct. RFC 165
+retains one native POO Query model. These documents are current design evidence;
+their original qualification limits are not silently upgraded by this slice.
+
+Property IDs are addressable semantic identities, not a substitute for source
+currency. Persist the original ORG bytes, selected IDs, Scope, parser/source /
+projection digests, exact anchor element kind and ranges, Task input Contract,
+original proofs and current applicability separately. The native Context
+recovery path rebuilds the existing Orgize projection/query and Task, then
+requires the original input digest. The native negative control retains ID
+=work= but changes its source with an Org source block; restoration must refuse
+the changed source. It is not an ID-only text lookup. The inspected local
+=dev/just/README.org= does not itself carry an ID drawer; concrete ID-bearing
+contracts were found in Core's =43-session-memory-recovery/= designs.
+
+** Org Contract as a lifecycle dependency
+:PROPERTIES:
+:ID: context-durable-recovery-org-contract-dependency
+:END:
+
+The useful unit is an addressable, source-bound contract element. Org headings,
+property drawers, typed blocks and explicit relations provide parser-visible
+structure; element Query can select the declared kind, properties and relations
+instead of depending on a prose substring. Property ID provides a stable logical
+address across revisions. The revision, source/parser/projection digest and
+element boundaries identify the actual admitted content at that address.
+
+| Boundary | Retained/reconstructed fact | Current executable scope |
+|----------+-----------------------------+--------------------------|
+| Source to element | Original bytes, ID, element kind/range, parser and projection identity | Existing native Orgize Context projection |
+| Element to working Context | Scope/restriction, selected IDs, Task input digest and anchor bindings | Existing native Context Task construction and recovery equality gate |
+| Context to evidence | Original ASCENT derivation, support and source journal; authority/policy version | Native proof restoration and subscribed invalidation |
+| Context to Session | Versioned admitted input and independent Attempt obligations | Native Session reducer; fresh endpoint capabilities required after restart |
+| Change to consumers | Declared reverse dependencies and immutable source/revision references | A/B invalidated, C unaffected in this fixture |
+
+An ID-preserving source mutation must create a new admitted input version; it
+cannot silently retarget the old contract. A relation/index projection is a
+rebuildable view of its Org source cut. It does not acquire independent authority
+when serialized. A changed contract's affected consumers can be found through
+declared element/support dependencies while retaining the old source for audit.
+The existing source/support propagation supplies this lifecycle mechanism; this
+slice does not claim automatic translation of every advanced Org construct into
+an executable contract or a newly qualified universal element Query engine.
+In particular, the owning Query-boundary design labels the existing
+=org-contract-select= route as internal source selection. A finished unified
+Query/GQL-to-Context Provider adapter remains an open obligation. The recovery
+gate here replays that existing native Contract/Element selector; it does not
+close CQ01--CQ08 merely by retaining an ID and reproducing a Task digest.
+
+* Durable publication protocol
+:PROPERTIES:
+:ID: context-durable-recovery-publication-protocol
+:END:
+
+The SQLite backend uses WAL and synchronous FULL. This is a local storage
+adapter behind native POO capabilities, not a second Context language or a
+replacement MRR/Data backend qualification. It retains immutable evidence,
+received input envelopes, versioned state snapshots, an append-only hash-linked
+decision journal, and a terminal ledger with a unique Session/Attempt/generation
+key. SHA digests bind bytes for replay/integrity; they do not authenticate an
+external source or defend against a malicious privileged database writer.
+
+1. Receive the original inert input into a separately committed inbox before
+   decision handling. An identity cannot be rebound to different bytes.
+2. Begin an IMMEDIATE transaction and validate the current durable owner epoch.
+3. Run the actual native Scheme Context/Session/proof/policy operation in the
+   serialized owner. Native in-memory changes are provisional until commit.
+4. Atomically persist the Context checkpoint (including invalidation and pending
+   obligations), raw policy/grant state and immutable policy revision history,
+   ticket/seen progress, and any original native terminal. A conflicting second
+   terminal is refused by the durable ledger as well as native reducers.
+5. Append a decision bound to the input, predecessor and current materialized
+   state digest; commit before replying. A lost ACK cannot turn an uncommitted
+   private pointer into a durable success. Named command retries return a
+   historical ACK without rerunning the effect.
+6. After an aborted transaction, quarantine the owner and require restart from
+   the committed checkpoint. A plain retry of changed in-memory state is unsafe.
+
+The SQLite writer transaction holds the owner fence through durable publication.
+A replacement owner increments its epoch under the same lock. A prior owner
+which resumes afterwards must fail before its next native decision. This is a
+local durable serialization point, not hardware CAS or a distributed provider
+transaction. External disclosure/exactly-once effects remain out of scope.
+
+* Native restoration and late events
+:PROPERTIES:
+:ID: context-durable-recovery-native-restoration
+:END:
+
+A producer-specific trusted recovery factory reconstructs original native ASCENT
+receipts from preserved typed rule/fact input bytes and the original candidate
+profile. The retained native proof DAG projection (node IDs, relations, rows,
+inputs, roots, status), canonical program and source journal are stored as
+original evidence. The factory is re-run and must match that evidence. Context
+binding restoration additionally replays the retained native derivation and
+checks its original proof digest. Current source program/journal snapshots are
+restored through the native source Host, including its append-only checks.
+A missing producer registration or unsupported input is refused, not guessed.
+This is not a generic serializer of VM pointers or arbitrary Scheme closures.
+
+Context checkpoints preserve immutable parent versions, authority references,
+original admission/guard evidence, source content, source/program/journal state,
+Task/schedule, propagation receipts and terminal history. Projection/Task values
+are reconstructed through native Orgize and Session adapters. Session stays an
+independent pure reducer. No worker or opaque observation capability is decoded
+from storage. Every previously active Attempt becomes a pending obligation;
+owner death is neither a fabricated terminal nor proof of external isolation.
+Original late result envelopes remain data and cannot mint a current endpoint
+capability. A fresh Attempt requires fresh native enrollment.
+An unaffected C Context remains admitted in the crash fixture. Its old worker
+does not thereby survive owner death: any lost endpoint still has a recovery
+obligation. Source/policy validity and runtime recovery are separate axes. The
+live-owner clock corpus separately exercises C completing on a real worker.
+
+Clock origin, domain, scale and OS boot identity are durable. Process restart
+reuses the SAME monotonic epoch rather than resetting the deadline. A changed
+boot/profile or missing boot evidence fails closed and needs explicit clock
+re-admission. The native OS boot read can be denied in the desktop sandbox;
+that denial is a retained negative diagnostic. The qualified native process
+runs require the real host boot read, not a caller-supplied substitute.
+
+Tickets are durably registered before enqueue to the real timer. Recovery reads
+the complete retained calendar and pending delivery inbox, re-arms missed sends,
+and tolerates replay after a committed delivery lost its ACK. The existing
+native identity/generation/digest/end/epoch fences reject stale tickets before
+they can restore an old policy. Seen state and Context invalidation commit in
+the SAME transaction. A new policy's own deadline is enrolled separately.
+
+Known pending policy-replacement inputs are re-admitted before new effects.
+Their safe authority substep has a new recovery decision; the original compound
+request remains unacknowledged/pending until its remaining work is resolved.
+Pending results, cancellation and recovery preserve original obligations instead
+of replaying lost worker capabilities. An unresolved opaque owner callback or
+unknown mutation requires explicit recovery; it cannot be replayed as code.
+Use named native POO command intents for durable mutations. The callback seam is
+trusted runtime embedding, never a public wire/strategy evaluator.
+
+* Qualification profile and boundaries
+:PROPERTIES:
+:ID: context-durable-recovery-qualified-profile
+:END:
+
+The native process harness uses real SIGKILL and a separate new Gerbil process.
+For each selected owner order, it kills at after-inbox-commit, before-decision-commit
+and after-decision-commit/before-ACK. It reads SQLite recovery integrity and raw
+payload digests independently, then requires native proof/Org query restoration,
+autonomous backlog processing, old-result refusal, pending retention, and actual
+fresh-policy worker result publication. Three positive terminal cases distinguish
+uncommitted memory from a durably completed historical Attempt. A missed-send
+case kills after durable scheduling while transport is disabled, then enables the
+real timer in the new owner. No Context query drives that catch-up.
+
+The operation alphabet is the 13-series queued real deadline profile: resume,
+policy replacement plus fresh Context, actual old result commit, cancel, recover
+(with cancel before recover). This is bounded native operation coverage, not
+all OS schedules. Process-death qualification is not hardware power-loss,
+filesystem anti-rollback, malicious writer resistance, cross-host replication,
+external-provider effect recovery or a full product acceptance through the standard Gerbil tools.
+The native resolver profile is explicit; arbitrary additional producer families
+need their own preserved input/replay adapter. No raw build/test logs are Git
+content; executable gates and this scoped summary are maintained here.
+
+The present adapter writes full bounded checkpoints and revalidates native proof
+bindings. It establishes the durable publication/recovery behavior in this
+profile; it is not a linear-time performance result. Reverse dependency
+propagation, Org element indexing and a future delta/checkpoint storage policy
+have separate cost obligations. C3/C4 composition, temporal event ordering and
+model KV-cache reuse are distinct mechanisms; no KV-cache speedup follows from
+these recovery results.
+
+* Reproduction
+:PROPERTIES:
+:ID: context-durable-recovery-reproduction
+:END:
+
+Run from the repository with the native pinned dependencies installed. The
+desktop host must permit its real monotonic/OS-boot reads. Each Gerbil process
+enters through the heap-fenced Just recipe. Case scheduling is serial by default.
+Optional =--jobs 2= uses an explicit two-worker scheduler, with one native
+process per case and a 1 GiB fence per process (aggregate 2 GiB). All cases join
+before controls begin. The old-live-owner fence control separately allows two
+processes under that same aggregate allowance; no other native suite overlaps it.
+
+#+begin_src sh
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-native-durable.py" --corpus critical --jobs 2 --artifacts /private/tmp/context-durable-run
+python3 "$slice/run-native-durable.py" --check-receipt /private/tmp/context-durable-run/durable-receipt.json
+python3 "$slice/run-native-durable.py" --reuse-build /private/tmp/context-durable-run/durable-receipt.json --order 4,5,2,1,3 --stage after-commit --artifacts /private/tmp/context-durable-replay
+python3 "$slice/run-native-durable.py" --replay-crash /private/tmp/context-durable-run/durable-receipt.json --case-index 29 --artifacts /private/tmp/context-crash-image-replay
+python3 "$slice/run-clock-from-durable.py" --durable-receipt /private/tmp/context-durable-run/durable-receipt.json --artifacts /private/tmp/context-live-clock
+python3 "$slice/run-clock-from-durable.py" --check-receipt /private/tmp/context-live-clock/clock-receipt.json
+python3 "$slice/run-durable-scenarios.py" --artifacts /private/tmp/context-durable-model
+python3 "$slice/run-durable-scenarios.py" --replay /private/tmp/context-durable-model/counterexample-1-True-4.json --artifacts /private/tmp/context-durable-model-replay
+#+end_src
+
+=critical= is an explicit sample of ten legal orders at all three crash cuts,
+plus three actual completion-boundary cases and one missed-send case (34 real
+SIGKILL/restarts). The optional default =all= mode schedules 184 crash cases;
+running the critical corpus does not qualify that larger corpus. Because a
+crash cuts execution at the first selected delivery, its unexecuted suffix is
+not counted as having run. The separate live-owner clock gate executes all 60
+legal five-operation orders to completion. Neither gate exhausts OS schedules.
+
+Native controls retain the missing-rearm and wrong-stale-handler counterexamples,
+an old owner resumed after replacement epoch claim, and same-ID/different-Org
+source refusal. Each case retains its database, original input/decision records,
+raw pre/post log and structured digests outside Git. Receipt checking binds the
+runtime source, installed ASCENT/Orgize revisions and compiled objects, verifies
+database integrity/payload hashes, and refuses a stale cut. Debug/partial logs
+remain diagnostics and are not upgraded into qualified receipts.
+The durable driver directly imports native fixture factories and does not load
+the standalone =t/qualification/testing/specialized.ss= selection registry; that
+registry belongs to the separate live-suite receipt. An earlier 34-case run
+passed its native assertions but was rejected when this unrelated registry
+changed during execution. Those logs remain unqualified. The refined durable
+gate retains an initial source/object commitment and reruns its actual path;
+it does not retrospectively stamp the earlier logs with a new source cut.
+
+Every case also retains =crash.sqlite=, an independent SQLite backup made after
+SIGKILL and before the replacement owner starts. The receipt binds its exact
+file hash and database summary. =--replay-crash= first verifies the originating
+receipt, copies that committed image to a fresh destination and runs the actual
+native recovery again. The original proof/source-journal digests and historical
+terminal count must match. Clock observations and subsequent decision hashes
+are new observations, not asserted to be byte-identical. Replay requires the
+same admitted OS boot/profile and valid fixture time horizon; it fails closed
+when those assumptions no longer hold. =--order= separately reproduces an
+operation path on a newly constructed database.
+
+* Qualified local results: 2026-10-25
+:PROPERTIES:
+:ID: context-durable-recovery-results-20261025
+:END:
+
+The current source/object cut passed the following gates. These are separate
+forms of evidence, not interchangeable proofs of general production behavior.
+
+| Gate | Actual result | Local receipt/artifact |
+|------+---------------+------------------------|
+| Native durable critical corpus | 34 real SIGKILL/restarts: ten legal orders x three ticket cuts, three actual native terminal cuts, one missed-send case; two-worker aggregate heap scheduler | =/private/tmp/context-durable-20261025/qualified-v3/durable-receipt.json= |
+| Original crash image replay | Case index 29 (order 4,3,5,2,1; after commit) restored again from the identical committed database image; original proof/source journal and historical terminal invariant matched | =/private/tmp/context-durable-20261025/crash-image-replay/crash-replay.json= |
+| Same-build native regression | 58 native Cases and all 60 legal live-owner five-operation paths; final MODULE-OK, HARNESS-OK and OK, with strict failure-marker inspection | =/private/tmp/context-durable-20261025/current-clock/clock-receipt.json= |
+| Executed SysML contract | 48 executed run-engine cases, 35 expected unsafe failures, zero unexpected safe failures | =/private/tmp/context-durable-20261025/sysml-current/summary.json= |
+| SysML unsafe/safe replay | Two executed cases: duplicate-terminal witness fails, corrected mode holds | =/private/tmp/context-durable-20261025/sysml-current-replay/summary.json= |
+
+Durable native controls retained the actual no-rearm and wrong-stale-handler
+counterexamples and rejected a live superseded owner. Each ordinary recovery
+also rejected ID-preserving Org source retargeting and retained the replacement
+policy's transaction-enrolled calendar ticket. The native terminal crash cases
+preserved counts 0 -> 0 after receipt, 0 -> 0 before commit, and 1 -> 1 after
+commit. Old results remained non-current; fresh-policy native workers actually
+completed. A/B Contexts were invalidated and C's Context remained admitted.
+Original typed rule (1,945 bytes) and fact (5,313 bytes) replay copies were also
+independently byte-compared with their original fixture files.
+
+Installed/declared ASCENT =1855e89d998930e67705c5a83141142723196242= and Orgize
+=c8a092899c6eb4cf164d5007e6da48d647fb4031= matched. Both native receipts passed
+current source/object and stored-evidence verification after the live regression.
+The complete optional 184-crash corpus was not run. Unified Query/GQL Provider
+closure, arbitrary producer recovery, power loss, cross-boot re-admission and
+external-provider effects remain outside this qualification. The earlier drift
+failure remains visible alongside the current successful receipts.

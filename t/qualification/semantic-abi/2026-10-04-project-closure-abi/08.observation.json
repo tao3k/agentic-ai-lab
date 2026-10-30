@@ -1,0 +1,30 @@
+{
+  "candidate": {
+    "status": "complete",
+    "rows": [
+      [
+        "u",
+        "v"
+      ],
+      [
+        "u",
+        "w"
+      ]
+    ]
+  },
+  "receipt": {
+    "bindingDigest": "c35643d93c542101202823b17c084e2343a97a4291a5262ce662a33d57669c90",
+    "verdict": "contradicted",
+    "schema": "poo-flow.semantic-observation",
+    "verification": "invalid",
+    "requestDigest": "25e9bd536fd715583ef96e44626daab0bd9027188e853557551600846b754b10",
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "partial"
+    },
+    "operation": "temporal.observe",
+    "candidateValid": true
+  },
+  "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+}

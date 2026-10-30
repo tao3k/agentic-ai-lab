@@ -1,0 +1,240 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: 10.08.16 Nix C API First-Demand Attribution
+#+language: en
+
+* Question and scope
+
+Why can the first API query take longer than a CLI query, and which repeated
+work can be removed without weakening lock/currentness/receiver admission?
+This follows [[file:15-nix-c-api-qualification.org][the direct-embedding qualification]]. The implementation stays in
+Agentic AI Lab's =bindings/nix-c-api=; Gerbil/Gambit sources and Yuanxu are unchanged.
+
+The qualified platform is aarch64-darwin, with the installed Gerbil 1cfb032 /
+Gambit ea114fc, compiled gerbil-poo 80b590b, current Core 013b89f consumers,
+and the existing pinned Nix CLI/C libraries 2.34.4+1. Real AWS 5.100.0 and Null
+3.2.4 schema artifacts remain the Contract consumers. No cloud deployment,
+provider acquisition or schema replacement is hidden inside query timing.
+
+* What the CLI source actually establishes
+
+The earlier suggestion that this impure CLI might benefit from a persistent
+Flake evaluation cache was unproven and is incorrect for the measured route.
+The fixed Nix source enables a persistent cache fingerprint only when both
+=state.settings.useEvalCache= and =state.settings.pureEval= are true:
+
+#+begin_src c++
+auto fingerprint = state.settings.useEvalCache && state.settings.pureEval
+    ? lockedFlake->getFingerprint(*state.store, state.fetchSettings)
+    : std::nullopt;
+#+end_src
+
+The benchmark explicitly passes =--impure=. Toggling =eval-cache= therefore
+does not turn on that persistent evaluation cache. In addition, =nix eval
+--apply= applies the function after obtaining the installable value; a cached
+output-function path is not a persistent cache of arbitrary function results.
+The C API selects native output values directly, without calling the CLI's
+=openEvalCache= adapter.
+
+The dynamic control uses one fresh =XDG_CACHE_HOME= supplied before either
+native library initialization or CLI startup. Both routes inherit it. All
+impure measured calls, including =--option eval-cache true/false= controls,
+leave zero evaluation-cache database files. A separate pure scalar Flake
+creates one database in that same directory, so the directory detector has a
+positive control. That positive control demonstrates activation, not a claim
+that arbitrary =--apply= results become persistent.
+
+References (Nix 2.34.4):
+
+- [[https://github.com/NixOS/nix/blob/2.34.4/src/libflake/flake.cc#L1006-L1029][openEvalCache fingerprint predicate]].
+- [[https://github.com/NixOS/nix/blob/2.34.4/src/nix/eval.cc#L67-L75][CmdEval applies its function after toValue]].
+- [[https://github.com/NixOS/nix/blob/2.34.4/src/libexpr/eval-cache.cc#L394-L409][AttrCursor::forceValue and cached values]].
+
+* Native instrumentation and lazy boundaries
+
+=session.h= records monotonic wall and process CPU deltas around eight native
+boundaries: libexpr initialization, Store opening, EvalState construction,
+Flake settings/reference preparation, strict locking, output selection,
+function application and result extraction. It also counts calls. CPU is
+process-wide, including native helper threads; it is not per-thread CPU.
+
+The ordinary query interface is unchanged. Diagnostic application retains
+one native result until the next explicit application or session close;
+attribute reads force its ordinary Nix thunks. No admission verdict, source
+certification or cross-session result is cached.
+
+#+begin_src scheme
+(session-apply! session aws-demand)
+(session-result session "source")
+(session-result session "imports")
+(session-result session "package")
+(session-result session "receipt")
+#+end_src
+
+The diagnostic and ordinary functions use one shared environment, package
+constructor and receipt projection. The force points are:
+
+#+begin_src nix
+source = builtins.toString source.outPath;
+imports = builtins.seq pkgs.callPackage (builtins.seq schemas "ready");
+package = builtins.seq package "ready";
+receipt = receipt selection package;
+#+end_src
+
+These are fields of a non-recursive diagnostic result, with =source= and
+=package= bound in its lexical environment. WHNF means weak head normal form:
+forcing the package attrset is not the same as forcing its drvPath. The last
+field forces drvPath/outPath, JSON and any remaining import dependencies.
+Consequently it is named =derive-and-residual=, not "pure derivation time".
+The diagnostic force points are internal probes, not a new configuration DSL.
+
+=session-timing= returns eager scalar observations inside a POO object.
+Reading its slots later cannot silently move the observation time or access a
+closed C session. Each stage subtracts those frozen observations.
+
+* First native session result
+
+The first native session is probed before the matched rounds, separating
+process-first native work from subsequent fresh-EvalState demands. Times in
+milliseconds from the final passing qualification:
+
+| Native boundary | Wall ms | CPU ms |
+|-----------------+---------+--------|
+| libexpr / native GC initialization | 17.909 | 16.324 |
+| Store open | 0.102 | 0.102 |
+| EvalState construction | 0.645 | 0.645 |
+| Flake settings/reference | 0.082 | 0.083 |
+| Strict Flake lock | 11.694 | 1.413 |
+| Output selection | 0.554 | 0.380 |
+| Source/package-set resolution | 0.151 | 0.088 |
+| Import WHNF force | 712.614 | 302.192 |
+| Package WHNF force | 0.189 | 0.189 |
+| Derivation plus residual import / serialization | 220.143 | 156.475 |
+
+This rules out Store/EvalState construction and source-reference resolution
+as the dominant cause in this run. Import forcing and the final projection
+are the substantial measured boundaries. Wall time is appreciably above CPU;
+the evidence does not identify all of that difference as GC, filesystem I/O
+or scheduler delay. Earlier 1.9--2.9 second outliers remain recorded; those
+cannot be explained by pretending a millisecond initialization phase is slow.
+No general cold-start speedup is inferred from one host or these small samples.
+Native shared-library preloading and Gerbil/Harness startup occur before this
+C instrumentation and are not included in the native initialization row.
+
+* Same-workload cold/hot controls
+
+A cold probe first partitions native demand. Then three matched rounds use
+fresh EvalStates. API versus CLI order alternates; the prepared-reference
+variant runs before the original in round 2 and after it in rounds 1 and 3.
+The diagnostic variant is separate, so extra force probes are not charged
+only to the baseline. All variants share the same constructors, immutable
+package set, source stamp, provider selections and generated Contracts.
+
+"Cold" in this table means first demand in a fresh EvalState/process. OS,
+Store and parser caches are not flushed. API request measurements start in
+an already-running Gerbil; CLI measurements include launching the CLI from
+that same host. These are per-request/lifetime costs, not total cold machine
+or whole application startup costs. Source-currentness guards surround both
+routes and all values/derivation outputs are compared, not just times.
+
+| Round | Original API AWS first/hot ms | Prepared API AWS first/hot ms | CLI AWS first/hot ms | CLI eval-cache=false ms |
+|-------+------------------------------+------------------------------+---------------------+-------------------------|
+| 1 | 585.933 / 0.859 | 591.202 / 0.732 | 689.254 / 697.887 | 693.644 |
+| 2 | 590.886 / 0.758 | 624.159 / 0.882 | 653.629 / 667.786 | 715.438 |
+| 3 | 929.815 / 0.835 | 637.660 / 0.740 | 755.481 / 709.359 | 739.051 |
+
+| Round | Original API Null first/hot ms | Prepared API Null first/hot ms | CLI Null first/hot ms |
+|-------+-------------------------------+-------------------------------+----------------------|
+| 1 | 132.460 / 1.179 | 1.797 / 0.732 | 722.823 / 698.973 |
+| 2 | 1.854 / 0.975 | 1.967 / 0.706 | 667.137 / 691.418 |
+| 3 | 2.163 / 0.875 | 1.792 / 0.665 | 764.507 / 762.763 |
+
+The 132 ms Null outlier is retained. The prepared variant is slightly slower
+on AWS first demand in rounds 1 and 2; it is not evidence of a reliable cold
+speedup. Hot-query reuse remains clear in this bounded workload. Additional
+prepared-reference CLI controls return exactly the same AWS/Null outputs.
+
+* Concrete reduction of repeated work
+
+One existing preparation owner resolves the pinned package-set reference
+once (202.577 ms in this run), with source checks before/after the command.
+Both routes receive the same immutable Store reference. The runtime variant
+imports that reference instead of calling the source's fetchTarball resolver
+inside every new EvalState. Preparation time is reported separately, not
+relabeled as free or excluded from an end-to-end cost claim.
+
+#+begin_src nix
+# Original per-EvalState environment
+let source = import pinnedPackageSetMetadata;
+    pkgs = import source.outPath {};
+in ...
+
+# Package-prepared environment
+let pkgs = import "/nix/store/<resolved-package-set>-source" {};
+in ...
+#+end_src
+
+The literal above is generated from the actual preparation result, never a
+hard-coded temporary path. This is an immutable package reference, NOT a new
+Flake =path:= input or a claim that it appears as such in flake.lock. The
+reference is included in observed flake.nix, and its source metadata remains
+in the fixture's observed closure. Lock policy for actual Flake inputs stays
+native and strict. Production injection through the selected build graph is
+outside this binding qualification.
+
+A trial that instead added the whole package-set directory as a =path:= input
+hit the unchanged 60-second idle gate. It is a retained failed experiment;
+its exact slow sub-operation was not established. It cannot justify adding
+large tree-copy/fingerprint work to the hot route or increasing a timeout.
+
+The dominant safe reuse is already the native session: one Store, one
+EvalState, one strict lock per session, and shared Nix import thunks when Null
+is added. Call counters assert those boundaries. There is no global session
+pool, mutable argument-cell reuse, Core cache protocol or cached admission
+verdict. Reusing an argument cell could corrupt thunks retaining an earlier
+candidate; it is not justified by low allocation counts.
+
+* Protection and executable receipts
+
+The profile keeps before/after source guards, real AWS/Null Contract admission,
+throwing unselected awscc branches, a cached AWS parent and an AWS+Null child.
+The child and parent receipts remain independent. Changing an observed source
+rejects the staged query before its native application count changes. The
+unchanged default four-Case qualification retains strict lock-update/override
+rejection, lock bytes, fragment handling and cached-parent source refusal.
+
+#+begin_src sh
+just --justfile bindings/nix-c-api/Justfile test profile
+just --justfile bindings/nix-c-api/Justfile test
+#+end_src
+
+These are serial runs through the existing Core Ops/TestingScript ownership,
+not a new Builder or runner. The 2 GiB pre-import heap fence, separate 120 s
+preparation/Harness limits and 60 s Harness idle limit remain unchanged.
+Structured summaries live here; raw success/failure logs remain local.
+The final serial runs passed 1 profiling Case, 4 default embedding Cases and
+3 worker regression Cases, each with MODULE-OK, HARNESS-OK and final OK, and
+no ERROR CASE/CHECK/HARNESS/MODULE or heap/stack overflow markers.
+Failed fixture attempts (missing std import, illegal conditional definition,
+empty-input lock-file assumption and forward function initialization) remain
+failed receipts, not passing evidence. No library/compiler source is patched.
+
+* Reflection
+
+- Keep: strict native locks and per-owner session reuse; exact final Config
+  demand; existing source checks and receiver-local POO plan caches.
+- Improve: make preparation-produced immutable inputs explicit at the module
+  boundary and keep diagnostic observations eager. Do not rebuild source
+  resolution policies inside every new evaluation context.
+- Do not claim: persistent CLI evaluation-cache hits for the impure workload,
+  a reliable cold speedup, purely separated imports/derivations, or a complete
+  attribution of wall/CPU gaps to GC/I/O/scheduling.
+- Next evidence question: which import subtrees and external waits dominate
+  real application startup after the process-first force point is isolated?
+  Such attribution must precede a global cache or new lifetime policy.
+
+The follow-up [[file:17-nix-c-api-wait-attribution.org][import/derivation wait attribution]] adds GC, thread CPU,
+rusage and targeted stack observations without changing the workload or
+relaxing deadlines. It distinguishes a measured host-contention episode from
+an intrinsic API cost and retains the failed runs.

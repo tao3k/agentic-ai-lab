@@ -19,8 +19,8 @@
 extern void lean_initialize(void);
 extern void lean_finalize_thread(void);
 extern void lean_set_exit_on_panic(bool);
-extern lean_object *initialize_poo_x2dflow_x2dproof_PooFlowProof_Runtime_CedarNative(uint8_t);
-extern lean_object *poo_flow_cedar_authorize_native(lean_object *);
+extern lean_object *initialize_agentic_x2dai_x2dlab_x2dproof_AgenticAILabProof_Runtime_CedarNative(uint8_t);
+extern lean_object *agentic_ai_lab_cedar_authorize_native(lean_object *);
 
 enum { INPUT_LIMIT = 1024 * 1024, REPETITIONS = 128 };
 struct probe_input {
@@ -49,7 +49,7 @@ static void *evaluate_owned(void *argument) {
   /* Never continue with Lean's default value after a panic. */
   lean_set_exit_on_panic(true);
   lean_object *initialized =
-      initialize_poo_x2dflow_x2dproof_PooFlowProof_Runtime_CedarNative(1);
+      initialize_agentic_x2dai_x2dlab_x2dproof_AgenticAILabProof_Runtime_CedarNative(1);
   if (lean_io_result_is_error(initialized)) {
     lean_io_result_show_error(initialized);
     lean_dec(initialized);
@@ -85,7 +85,7 @@ static void *evaluate_owned(void *argument) {
     lean_object *bytes = lean_alloc_sarray(1, input->size, input->size);
     memcpy(lean_sarray_cptr(bytes), input->bytes, input->size);
     /* authorize_native consumes bytes. The Except owns its String field. */
-    lean_object *result = poo_flow_cedar_authorize_native(bytes);
+    lean_object *result = agentic_ai_lab_cedar_authorize_native(bytes);
     const char *json = lean_string_cstr(lean_ctor_get(result, 0));
     if (lean_obj_tag(result) == 0) {
       fprintf(stderr, "cedar-input-invalid: %s\n", json);

@@ -7,12 +7,12 @@
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
-        :poo-flow/src/policy/authorized-effect-token)
+        :agentic-ai-lab/modules/governance/policy/authorized-effect-token)
 
-(export poo-flow-cedar-decision
-        poo-flow-cedar-decision-permit?
-        poo-flow-cedar-decision->semantic-root
-        poo-flow-cedar-decision->authorized-effect-token)
+(export agentic-ai-lab-cedar-decision
+        agentic-ai-lab-cedar-decision-permit?
+        agentic-ai-lab-cedar-decision->semantic-root
+        agentic-ai-lab-cedar-decision->authorized-effect-token)
 
 (def (decision-digest value)
   (hex-encode
@@ -20,16 +20,16 @@
     (string->utf8
      (call-with-output-string (lambda (port) (write value port)))))))
 
-(def (poo-flow-cedar-decision identity decision-outcome policy-identity
+(def (agentic-ai-lab-cedar-decision identity decision-outcome policy-identity
                               policy-hash entity-hash reason-list)
   (unless (memq decision-outcome '(permit forbid indeterminate))
     (error "unknown Cedar decision outcome" decision-outcome))
   (let* ((canonical
-          (list 'poo-flow.cedar-decision.draft.1 identity decision-outcome
+          (list 'agentic-ai-lab.cedar-decision.draft.1 identity decision-outcome
                 policy-identity policy-hash entity-hash reason-list))
          (decision-hash (decision-digest canonical)))
-    (.o (kind 'poo-flow-cedar-decision)
-        (schema 'poo-flow.cedar-decision.draft.1)
+    (.o (kind 'agentic-ai-lab-cedar-decision)
+        (schema 'agentic-ai-lab.cedar-decision.draft.1)
         (decision-id identity)
         (outcome decision-outcome)
         (policy-id policy-identity)
@@ -38,22 +38,22 @@
         (reasons reason-list)
         (decision-digest decision-hash))))
 
-(def (poo-flow-cedar-decision-permit? decision)
+(def (agentic-ai-lab-cedar-decision-permit? decision)
   (eq? (.ref decision 'outcome) 'permit))
 
-(def (poo-flow-cedar-decision->semantic-root decision bundle-digest
+(def (agentic-ai-lab-cedar-decision->semantic-root decision bundle-digest
                                               intent-digest)
-  (poo-flow-semantic-root
+  (agentic-ai-lab-semantic-root
    bundle-digest
    (.ref decision 'policy-digest)
    (.ref decision 'entity-digest)
    (.ref decision 'decision-digest)
    intent-digest))
 
-(def (poo-flow-cedar-decision->authorized-effect-token
+(def (agentic-ai-lab-cedar-decision->authorized-effect-token
       decision token-id nonce semantic-root binding validity durability
       evidence-bits issuer signature)
-  (unless (poo-flow-cedar-decision-permit? decision)
+  (unless (agentic-ai-lab-cedar-decision-permit? decision)
     (error "Cedar forbid/indeterminate cannot issue AuthorizedEffectToken"))
   (unless (and (equal? (.ref decision 'policy-digest)
                        (.ref binding 'policy-digest))
@@ -62,12 +62,12 @@
                (equal? (.ref decision 'decision-digest)
                        (.ref binding 'decision-digest))
                (equal? (.ref semantic-root 'digest)
-                       (.ref (poo-flow-cedar-decision->semantic-root
+                       (.ref (agentic-ai-lab-cedar-decision->semantic-root
                               decision
                               (.ref binding 'bundle-digest)
                               (.ref binding 'intent-digest))
                              'digest)))
     (error "Cedar decision/binding/semantic-root mismatch"))
-  (poo-flow-authorized-effect-token
+  (agentic-ai-lab-authorized-effect-token
    token-id nonce semantic-root binding validity durability evidence-bits
    issuer signature))

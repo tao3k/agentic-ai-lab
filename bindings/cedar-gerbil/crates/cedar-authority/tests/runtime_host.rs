@@ -7,8 +7,8 @@
 mod support;
 
 use cedar_policy::{Context, Entities, Policy, PolicyId, PolicySet, Request};
-use poo_flow_cedar_authority::runtime::{HOST_SCHEMA, RuntimeClient};
-use poo_flow_cedar_authority::{canonical, wire};
+use agentic_ai_lab_cedar_authority::runtime::{HOST_SCHEMA, RuntimeClient};
+use agentic_ai_lab_cedar_authority::{canonical, wire};
 use std::process::{Command, Stdio};
 
 fn artifact(path: &std::path::Path) -> String {
@@ -40,7 +40,7 @@ fn valid_input() -> Vec<u8> {
 #[test]
 fn host_rejects_component_identity_not_bound_to_linked_revisions() {
     let host = std::path::PathBuf::from(
-        std::env::var_os("POO_FLOW_CEDAR_RUNTIME_HOST")
+        std::env::var_os("AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST")
             .expect("qualification requires the AOT Runtime Host artifact"),
     );
     let deployment = tempfile::tempdir().unwrap();
@@ -71,7 +71,7 @@ fn host_rejects_component_identity_not_bound_to_linked_revisions() {
 #[test]
 fn long_lived_host_rejects_bad_input_then_authorizes_with_pinned_witnesses() {
     let source = std::path::PathBuf::from(
-        std::env::var_os("POO_FLOW_CEDAR_RUNTIME_HOST")
+        std::env::var_os("AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST")
             .expect("qualification requires the AOT Runtime Host artifact"),
     );
     let deployment = tempfile::tempdir().unwrap();

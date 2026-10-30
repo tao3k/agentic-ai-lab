@@ -5,10 +5,10 @@
 
 ;;; Contract: executable admission evidence for the pinned gerbil-poo surface.
 ;;; This test exercises upstream mechanics directly; its Scenario and Session
-;;; examples remain native objects and introduce no alternate POO Flow object,
+;;; examples remain native objects and introduce no alternate Agentic AI Lab object,
 ;;; dispatch, precedence, or inherited-computation adapter.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  check-exception
@@ -59,7 +59,7 @@
   (test-suite
    "pinned gerbil-poo operation admission"
 
-   (poo-flow-test-case "constructs, projects, calls, and clones native objects"
+   (yuanxu-test-case "constructs, projects, calls, and clones native objects"
      (.def base-value
        (identity 'base)
        (render (lambda (suffix) (cons identity suffix))))
@@ -71,10 +71,10 @@
        (check-equal? (.slot? clone 'render) #t)
        (check-equal? (length (.all-slots clone)) 2)))
 
-   (poo-flow-test-case "expresses a Scenario as defaults, inherited refinement, nested composition, and behavior"
+   (yuanxu-test-case "expresses a Scenario as defaults, inherited refinement, nested composition, and behavior"
      (.def scenario-base
        (profiles ? '())
-       (metadata (.o (owner 'poo-flow)
+       (metadata (.o (owner 'agentic-ai-lab)
                      (runtime-owner 'marlin)))
        (prepare (lambda (facts)
                   (list 'prepared facts profiles))))
@@ -85,7 +85,7 @@
                   (list 'github-release facts profiles))))
      (check-equal? (.get github-release profiles)
                    '(developer staging production))
-     (check-equal? (.get github-release metadata owner) 'poo-flow)
+     (check-equal? (.get github-release metadata owner) 'agentic-ai-lab)
      (check-equal? (.get github-release metadata provider) 'github-actions)
      ;; In the pinned provider `.has?` checks several slots on one receiver;
      ;; explicitly select a child object before reflecting over its slots.
@@ -96,7 +96,7 @@
                    '(github-release repository-ready
                      (developer staging production))))
 
-   (poo-flow-test-case "keeps run-local Session mutation outside the shared prototype"
+   (yuanxu-test-case "keeps run-local Session mutation outside the shared prototype"
      (.def (session-prototype @)
        (state 'created)
        (history '())
@@ -117,14 +117,17 @@
        ;; A further mix uses the prototype, never the mutated instance cache.
        (check-equal? (.get (.mix first-session) state) 'created)))
 
-   (poo-flow-test-case "makes prototype surgery and instance invalidation explicit"
+   (yuanxu-test-case "invalidates derived caches after prototype surgery"
      (.def evolving-scenario
        (status ? 'draft)
        (version 1))
      (check-equal? (.get evolving-scenario version) 1)
-     (.putslot! evolving-scenario 'version ($constant-slot-spec 2))
-     ;; The already-instantiated value stays cached until deliberately reset.
-     (check-equal? (.get evolving-scenario version) 1)
+     (let ((derived (.mix evolving-scenario)))
+       (check-equal? (.get derived version) 1)
+       (.putslot! evolving-scenario 'version ($constant-slot-spec 2))
+       ;; Supported specification writes invalidate the source and descendants.
+       (check-equal? (.get evolving-scenario version) 2)
+       (check-equal? (.get derived version) 2))
      (uninstantiate-object! evolving-scenario)
      (check-equal? (.get evolving-scenario version) 2)
      (uninstantiate-object! evolving-scenario)
@@ -134,7 +137,7 @@
      (check-equal? (.get evolving-scenario projection-kind)
                    'github-workflow))
 
-   (poo-flow-test-case "preserves C4 super order and lazy slot caching"
+   (yuanxu-test-case "preserves C4 super order and lazy slot caching"
      (let ((b-evaluations 0)
            (c-evaluations 0))
        (let* ((a (.o (responsibility '(a))))
@@ -162,18 +165,18 @@
          (check-equal? b-evaluations 1)
          (check-equal? c-evaluations 1))))
 
-   (poo-flow-test-case "dispatches validation and projection through a Type descriptor"
+   (yuanxu-test-case "dispatches validation and projection through a Type descriptor"
      (check-equal? (element? Type AdmissionSymbol) #t)
      (check-equal? (validate AdmissionSymbol 'flow) 'flow)
      (check-equal? (admission-project AdmissionSymbol 'flow) "flow")
      (check-exception (validate AdmissionSymbol 42) TypeError?))
 
-   (poo-flow-test-case "preserves native missing-method failure"
+   (yuanxu-test-case "preserves native missing-method failure"
      (check-exception
       (admission-project (.o) 'flow)
       NoApplicableMethod?))
 
-   (poo-flow-test-case "preserves native invalid-precedence failure"
+   (yuanxu-test-case "preserves native invalid-precedence failure"
      (let* ((x (.o))
             (y (.o))
             (xy (.mix x y))

@@ -1,0 +1,312 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Verified reasoning caching across search, optimization and context boundaries
+#+DATE: 2026-10-10
+#+STATUS: literature screen and proposed experiment; no new efficacy result
+#+FILETAGS: :research:llm:reasoning:cache:provenance:
+
+The follow-up [[file:factor-reuse-2026-study.org][2026 fact and derivation reuse study]]
+inspects full-text methods for Fact Cards, atomic memory, local evidence,
+verified corrections and stale constraints, with a concrete four-arm pilot.
+
+* Research question and model boundary
+
+Can an external relational checker and persistent evidence graph help a frozen
+model avoid repeated exploration during search and optimization, reuse valid
+intermediate conclusions across branches and context boundaries, and preserve
+task success when source facts change? Context compression is one stressor;
+redundant exploration can occur even with complete conversation history.
+
+Four hypotheses must be tested separately:
+
+- H1, external assistance: checked relational consequences improve task success
+  or the quality/cost frontier relative to ordinary tools with the same evidence.
+- H2, temporal reuse: retained, checked subresults reduce cumulative reasoning
+  work relative to fresh checking, including after compaction or a new session.
+- H3, search reuse: otherwise different questions and branches can share facts,
+  determined conditions, checked derivation segments and scoped failures,
+  reducing repeated confirmation without pruning productive alternatives.
+- H4, budget reallocation: at the same total resource budget, supplying determined
+  components permits more useful exploration or deeper reasoning and improves
+  independently graded solution quality. This differs from cost reduction at
+  comparable quality; both outcomes require separate matched comparisons.
+
+The reusable unit need not be an entire subproblem. It can be one admitted
+fact, a determined factor/condition, a constraint consequence, or a checked
+derivation segment used by otherwise different questions and search branches.
+Equivalent-subproblem reuse is one special case. Record the factor's typed
+meaning and applicability instead of requiring the surrounding tasks to match.
+Deterministic evaluation under fixed premises is distinct from authenticating
+those premises or establishing a real-world fact. External facts do not force
+a model to stop reconsidering them; that behavioral effect must be measured.
+
+The first does not establish the second. A faster relational query also does
+not establish reduced model reasoning. Model weights remain frozen in the
+primary experiment. Pretraining usually optimizes predictive objectives;
+post-training can include SFT and reward-based RL. These stages should not all
+be described as one reward mechanism. External checking changes the inference
+workflow and accessible evidence; it does not directly modify learned weights
+or expose the model's internal reasoning state.
+
+Inspected checkout: =feature/ascent-scheme-syntax= at
+=797d6f4f489e03e4b5f4843f230eb2214df5174f=. Existing uncommitted repository
+pilot/report work was read as a local snapshot and left unchanged. No model
+calls, runtime changes, new tests, or new formal proof are reported here.
+
+* What is cached, and how KV caching relates
+
+| Layer | Reused object | Main avoided work | Validity boundary |
+|-------+---------------+-------------------+-------------------|
+| Prefix/KV cache | Model-specific attention key/value states for token context | Repeated prefill/state calculation | Compatible model and preceding context; non-prefix reuse needs repair/evaluation |
+| Answer cache | A previous final response | An entire repeated request | Exact task, source, policy and intended answer equivalence |
+| Procedural memory | A retrieved method or behavior | Rediscovering a method | Applicability must still be assessed; a hint is not a checked conclusion |
+| Proposed reasoning cache | A checked conclusion/subgraph with dependencies and scope | Re-deriving or rechecking an applicable subproblem | Current premises, rule semantics, query binding and independently checked evidence |
+
+These layers can coexist. A persistent proof graph is not a KV tensor and does
+not preserve the hidden state of a model. A changed token prefix can invalidate
+exact KV reuse while the logical conclusion remains valid. Conversely, an
+identical cached prefix may contain obsolete evidence: a physical cache hit
+does not establish current semantic validity.
+
+If "linear cache" means cache attached to the linear token history, the above
+comparison applies. Linear attention and recurrent state caches are different
+architectural objects; no claim about those architectures follows here.
+
+Proposed composition: retrieve candidate subgraphs; check applicability and
+current support; emit a compact evidence packet; optionally render stable
+packets into a deterministic prefix for a serving runtime's KV cache. New
+questions and changing evidence should not destabilize unrelated static prefix
+content. Reordering retrieved chunks is not automatically safe for KV reuse.
+Do not implement a second serving cache inside ASCENT.
+
+* Primary literature screen through October 10, 2026
+
+Dates below are first arXiv submission dates when shown, rather than search
+engine crawl dates. This is a targeted screen, not an exhaustive systematic
+review. Findings are author-reported and have not been reproduced here.
+Read-depth labels distinguish abstract/metadata screening from inspected text.
+No absence of a feature in an abstract is treated as proof of a research gap.
+
+** Closest reasoning-reuse work
+
+| Work / source | Date and depth | Relevant finding | Consequence for our study |
+|---------------+----------------+------------------+---------------------------|
+| [[https://arxiv.org/abs/2509.13237][Metacognitive Reuse: Turning Recurring LLM Reasoning Into Concise Behaviors]] | 2025-09-16; HTML method and limitations | Extracts reusable named behaviors; reports up to 46% fewer reasoning tokens under its evaluated conditions | Strong procedural-memory baseline; those maxima are not expected ASCENT savings |
+| [[https://arxiv.org/abs/2511.15715][Graph-Memoized Reasoning]] | 2025-11-11; HTML formal model and conceptual evaluation | Stores/retrieves reasoning workflow subgraphs; quantitative evaluation is proposed | Graph-shaped reasoning reuse itself is prior art; conceptual evaluation is not an empirical speedup |
+| [[https://arxiv.org/abs/2602.03773v2][Reasoning Cache: Continual Improvement Over Long Horizons via Short-Horizon RL]] | 2026-02-03; v2 2026-03-22; HTML introduction/related work | Iterative summary-conditioned generation, trained to extrapolate to longer reasoning horizons | Same term, different objective: scaling useful thinking; do not characterize it as proven cross-task verified memoization |
+| [[https://arxiv.org/abs/2602.06319][Exposing Weaknesses of Large Reasoning Models through Graph Algorithm Problems]] | 2026-02-06; abstract | GrAlgoBench probes memory, graph execution errors and ineffective repeated verification | Candidate diagnostic tasks; graph algorithms alone are insufficient for a general agent claim |
+| [[https://arxiv.org/abs/2602.13530][REMem: Reasoning with Episodic Memory in Language Agent]] | 2026-02-13; latest inspected v3 2026-02-28; abstract | Time-aware hybrid memory graph plus iterative retrieval | Compare recovery of event dependencies after compaction, separately from proof validity |
+| [[https://arxiv.org/abs/2605.17721][EXG: Self-Evolving Agents with Experience Graphs]] | 2026-05-18; abstract | Organizes successes/failures for online and offline experience reuse | Recent graph-memory comparator; obtain full method and runnable artifact before selecting reproduction |
+| [[https://arxiv.org/abs/2608.26983][GraphMemix: Query-Aware Evidence Forests for Long-Term Multimodal Agent Memory]] | 2026-08-27; abstract and HTML screen | Query-dependent evidence forest under budget, with relation verification | Evidence selection and lifecycle-cost comparator; "relation verification" deserves full audit before asserting novelty |
+| [[https://arxiv.org/abs/2609.00237v2][Learning What to Retain: Gated-Memory Routing for Efficient Collaboration in Multi-Agent LLM Systems]] | 2026-08-31; v2 2026-09-09; abstract and HTML screen | Learned write/retrieval gates and adaptive stopping | Compare selective memory and stopping; training-dependent routing differs from our frozen-model primary condition |
+
+** KV and prefix reuse: necessary systems comparators
+
+| Work / source | Screen depth | Relevance and limit |
+|---------------+--------------+---------------------|
+| [[https://arxiv.org/abs/2312.07104][SGLang: Efficient Execution of Structured Language Model Programs]] | Abstract/metadata | RadixAttention supplies KV reuse for structured calls; use an actual serving-runtime baseline |
+| [[https://arxiv.org/abs/2502.15734][Cache-Craft: Managing Chunk-Caches for Efficient Retrieval-Augmented Generation]] | Abstract/primary search excerpt | Chunk cache reuse faces preceding-context dependence and selective recomputation; an evidence chunk is not a context-independent KV block |
+| [[https://arxiv.org/abs/2606.09937][RKSC: Reasoning-Aware KV Cache Sharing and Confident Early Exit for Multi-Step LLM Inference]] | Abstract; submitted 2026-06-07 | Similarity-based branch KV sharing plus verification early exit; author-reported workshop acceptance, not a main-conference designation; similarity/confidence does not certify a logical derivation |
+| [[https://arxiv.org/abs/2608.19662][ReCache: Efficient KV Cache Reuse and Compression for Tool-Augmented LLM Agents]] | Abstract/metadata | Direct agent-serving comparator for recurring schema content outside identical prefixes; full implementation audit pending |
+| [[https://arxiv.org/abs/2609.10266v2][KVShareArena: KV-Cache Reuse Across Contexts and Model Checkpoints]] | Abstract; first 2026-09-09, v2 2026-09-27 | Evaluates changed preceding context/model checkpoint across quality, prefill, memory and latency; direct KV reuse can lose quality |
+
+Adjacent long-context sources identified for follow-up are
+[[https://arxiv.org/abs/2510.24699][AgentFold]] and
+[[https://arxiv.org/abs/2512.24601][Recursive Language Models]]. Their role is
+context management, not evidence that our proposed cache already works.
+
+* Proposed contribution and current code boundary
+
+Working paper title: /Verified Reasoning Caching for Language-Agent Search
+and Optimization across Context and Source Changes/.
+
+Candidate contribution: a source-bound reuse contract, explicit invalidation,
+and a quality-controlled evaluation of temporal reuse. Novelty remains a
+hypothesis pending full-text and artifact comparison with the closest sources.
+Neither graph storage, procedural retrieval nor reduced thinking alone is new.
+
+| Existing owner | Inspected capability | Boundary still requiring work |
+|----------------+----------------------+-------------------------------|
+| [[file:../../../candidate/reasoning.ss][candidate/reasoning.ss]] | Snapshot/generation/content and candidate digest binding; optional finite/stratified checking | =reasoning-receipt-bound?= does not check intended meaning, source authority, completion or proof validity |
+| [[file:../../../candidate/provenance-graph.ss][candidate/provenance-graph.ss]] | Positive graph verification before opening retained maintenance | Scoped admitted fragment; not arbitrary natural-language chain-of-thought verification |
+| [[file:../../../candidate/provenance-maintenance.ss][candidate/provenance-maintenance.ss]] | Bounded grounded-support withdrawal, preview and compaction | Positive support mechanism; negation/aggregate changes require their own dependencies/replay |
+| [[file:../../../program/session.ss][program/session.ss]] | Retained native session/update machinery | Not yet evidence of model-side reuse across compaction or durable process restart |
+| [[file:reasoning-language-formal-agenda.org][Formal agenda]] | Existing abstract proof obligations and representation gaps | No theorem that native arbitrary agent reasoning is sound |
+
+ASCENT checks consequences of admitted finite programs. The caller/MRR/POO
+workflow owns source admission, authority, policy and real-world interpretation.
+Record tool observations, assertions, checker results, supports, failed attempts
+and scope. Do not promise access to or faithful storage of hidden model thinking.
+Natural-language assertions without sufficient verification remain proposals.
+
+Proposed reusable record fields: source identity/generation/content digest;
+rule/candidate identity and checker version; normalized typed query/binding;
+premises and support alternatives; checked conclusion and certificate; scope
+and authority decision; completion/proof statuses and budgets; diagnostic
+outcome; retrieval and cost metadata. Model/prompt version belongs to procedural
+retrieval metadata; it need not invalidate an independently rechecked theorem.
+KV artifacts additionally need serving model/tokenizer/context identities.
+
+Retrieval similarity proposes a candidate. Reuse requires applicability checks.
+Exact receipt reuse is limited to its bound snapshot/program. Cross-generation
+reuse needs explicit support-preservation/transport and revalidation; the
+existing binding function does not establish that contract. If one witness is
+removed, a surviving alternative can still support the conclusion. Cyclic
+self-support without a grounded premise must not survive withdrawal.
+
+For negation, source additions can invalidate an old absence conclusion. For
+aggregates, any relevant group member change can alter the result. Incomplete
+or =bounded/unsupported= evidence must retain that status and trigger supported
+fallback rather than publication as a completed proof.
+
+* Matched experiment proposal
+
+** Search and optimization are primary workloads
+
+Different plans, searches or candidate optimizations can share just one fact,
+factor or derivation segment; the full subproblem need not repeat. They can
+also converge on an equivalent subproblem. Record a typed state, goal, applicable constraints,
+action and checked outcome, rather than marking an entire textual path as
+"already thought about". Different prefixes may converge on one equivalent
+subproblem; identical action names may refer to different states. State
+equivalence must include all relevant observations, objective and constraints.
+Hidden or unmodeled state requires conservative fallback.
+
+For example, two optimization candidates may both need the same source-bound
+dependency result. Compute/check that shared result once, then explore each
+candidate's distinct performance effects. A failed candidate can also supply
+a checked constraint violation that avoids another equivalent invalid attempt.
+An unchanged search request can reuse a recorded observation only within its
+source/freshness/access scope; a recorded tool response is not a completeness
+certificate for the whole search space.
+
+Distinguish these exploration records:
+
+| Record | Permitted reuse | Incorrect inference to avoid |
+|--------+-----------------+------------------------------|
+| Verified intermediate fact | Supply it to an applicable downstream subgoal | Assume a similar-looking new state has identical premises |
+| Checked constraint violation / counterexample | Reject an equivalent candidate under unchanged constraints | Treat every nearby candidate as impossible |
+| Completed finite search / nonmembership certificate | Prune its exact certified scope | Generalize bounded exploration to global impossibility |
+| Measured optimization result | Reuse an observation with its environment and measurement conditions | Claim universal superiority or prune without a valid bound |
+| Timeout / exhausted budget / partial exploration | Resume or change strategy with the earlier progress visible | Record the branch as proved unsatisfiable |
+
+Logical pruning and heuristic deprioritization must be separate operations.
+Safe pruning requires a checked infeasibility condition or an applicable bound;
+similarity, prior failure and poor measured performance alone do not supply it.
+Storing failed attempts can guide exploration without making them proofs.
+
+The agent must consult the graph before repeating a subgoal, and consume its
+returned facts/frontier in the next decision. A stored graph alone cannot
+prevent the model from regenerating redundant reasoning. Compare cache-enabled
+and bypassed routing using the same model and evidence. Instrument repeated
+subgoal expansions, equivalent candidate retries, repeated searches/checks,
+incorrect pruning and solved yield. Keep constructive first-solution tasks and
+optimization tasks separate; the latter need solution quality versus total
+budget, not just tokens until the first feasible candidate.
+
+Add converging-branch tasks with unchanged context before introducing compaction.
+Also add distinct-goal tasks sharing only selected determined factors. Compare
+factor-level reuse with whole-subproblem reuse, and test both quality at equal
+total budget and total cost at comparable quality. Measure productive new
+exploration and independently accepted deeper conclusions, not increased trace
+length alone.
+Include genuinely different alternatives with superficially similar actions,
+changed objectives, changed source state and previously timed-out branches.
+Measure cold-cache construction and warm-cache reuse separately, and together
+over the complete workload. Search-state extraction and safe equivalence are
+proposed adapter obligations, not existing general ASCENT capabilities.
+
+** Core conditions
+
+Use identical base model, source access, tools, grader and resource budgets.
+Freeze questions, source revisions, extraction rules and grading before runs.
+
+| Condition | Purpose |
+|-----------+---------|
+| Ordinary tools with standard context management | Measures the full practical baseline |
+| Fresh ASCENT checks | Separates external reasoning assistance from retained reuse |
+| Text/summary memory with comparable evidence budget | Tests whether ordinary persistent memory explains the benefit |
+| Procedural behavior retrieval | Tests method reuse against the closest empirical reasoning-reuse idea |
+| Retained graph retrieval without validity gate | Diagnostic ablation for the cost and benefit of validation |
+| Retained source-bound checked graph with invalidation | Proposed method |
+
+Where serving control is available, cross ordinary versus checked-graph workflows
+with KV/prefix caching off versus on. This 2x2 identifies semantic reuse benefit,
+physical serving benefit and their interaction. Hold graph packets fixed across
+KV toggles. Record runtime configuration and actual cache telemetry; hosted
+cached-token billing does not by itself expose physical KV reuse.
+
+** Task sequences and interventions
+
+1. Solve an initial question and charge construction/verification to its arm.
+2. Ask an exact repeat; report response caching separately.
+3. Ask a paraphrase with the same formal query and unchanged source.
+4. Ask a new question sharing only some checked intermediate facts.
+5. Introduce an unrelated source edit, then a relevant support withdrawal,
+   an added negative blocker, and an aggregate group change.
+6. Insert controlled history growth and deterministic compaction; ask questions
+   that need previous dependencies. Also test a new process/session if durable
+   graph reload is implemented and independently checked.
+
+Run unchanged-source and changed-source sequences separately. Include low/no
+reuse workloads to reveal overhead. Use dependency-rich real tasks and finite
+oracle diagnostics; explicit graphs test the mechanism, not general reasoning.
+Distinguish within-task retention from cross-task transfer. Avoid oracle task
+matching: charge extraction, retrieval and applicability checks in every arm.
+
+Start with shorter controlled histories. A one-million-token cumulative history
+is different from a simultaneous one-million-token active context. Report both
+and only claim the latter on models actually accepting it. Scale history length
+and compaction frequency only after the smaller intervention is interpretable.
+
+** Outcomes, cost and stopping
+
+Primary outcomes are independent acceptance at matched budgets and cumulative
+cost to acceptance. Report all failed/censored trajectories and all memory
+construction costs. A lower token count caused by earlier failure is not a win.
+
+Measure provider-reported reasoning tokens when available; otherwise label the
+observable output-token proxy. Also report input/output/cached-input tokens,
+checker/retrieval/extraction work, memory bytes, latency and actual or separately
+estimated charges. Do not infer internal thinking time from request duration.
+
+Mechanism outcomes: accepted reusable subresults, independently audited repeated
+derivations, stale-reuse rate, invalidation recall, false rejection, grounded
+support survival, and correctness after compaction. Define repeated derivation
+over formal subgoals/actions where observable; repeated prose is not sufficient.
+
+Total lifecycle cost is initial construction plus all retrieval, verification,
+updates and generation. Break-even occurs only when avoided work exceeds that
+total overhead. Display the quality/cost frontier and results by reuse rate and
+source-change rate. Predeclare a practically justified success noninferiority
+margin, statistical analysis and sample size after variance estimation; do not
+choose them retrospectively. Cluster tasks by repository/root cause and keep
+clusters out of both memory-building and held-out evaluation simultaneously.
+
+* Existing pilot is a warning, not validation of this hypothesis
+
+The local [[file:real-repository-experiment-report.md][repository pilot report]]
+contains two tasks and twelve trajectories, not twelve independent tasks.
+Its adaptive 40-turn results record ordinary tools accepted 3/4 with 223,767
+thinking tokens, fresh Scheme accepted 4/4 with 204,684, and retained Scheme
+accepted 2/4 with 190,017. The retained arm's lower total consumption does not
+establish a better quality/cost frontier. It does not test the above controlled
+compaction, million-token setting, KV factorial or source-revision protocol.
+
+Keep existing failures/censoring and the [[file:repository-task-quality.md][task
+quality audit]] intact. Expand mechanism coverage and independent tasks before
+paper-scale claims. No new paid experiment is authorized or run by this note.
+
+* Next gates
+
+- Audit full methods/artifacts of EXG, GraphMemix, REMem, RKSC and KVShareArena;
+  freeze exact versions before choosing baselines or claiming a novelty gap.
+- Specify the cache record and cross-generation transport contract; qualify
+  unchanged support, alternative support and stale-result rejection locally.
+- Build a bounded compaction/revision pilot with fresh-check and summary controls;
+  freeze graders and complete cost instrumentation before model execution.
+- Establish quality-controlled benefit before escalating to long histories and
+  an actual serving-runtime KV comparison.
+
+[[file:index.org][Research index]].

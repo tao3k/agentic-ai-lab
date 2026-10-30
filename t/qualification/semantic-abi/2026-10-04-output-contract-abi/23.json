@@ -1,0 +1,151 @@
+{
+  "case": "unknown-time",
+  "api": "async",
+  "index": 23,
+  "planSha256": "77419c82cce1e2bcb07a92d0abe174bab31983131d1f9c54641fc7ec688919e7",
+  "artifactSha256": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",
+  "passed": true,
+  "raw": "{\"status\":\"partial\",\"rows\":[]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.23241475000031642
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.23248316700028226
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.5598908330002814
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.5599186250001367
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.5599407920003614
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6143623750003826
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6295217080000839
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6295690420001847
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6397019580003871
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6397234170003685
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6397335420001582
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6569617500003915
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6570131670000592
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.6571846250003546
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.6572091250000085
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.6572342080003182
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.6575727080003162
+    }
+  ],
+  "contentGapsSeconds": [
+    0.5599407920003614,
+    0.0544215830000212,
+    0.015159332999701292,
+    4.733400010081823e-05,
+    0.010132916000202385,
+    2.1458999981405213e-05,
+    1.0124999789695721e-05,
+    0.01722820800023328,
+    5.1416999667708296e-05
+  ],
+  "responseId": "a4832d11-9051-4e2f-aa33-31e1145d40d2",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 9688,
+    "input_tokens_details": {
+      "cached_tokens": 9472
+    },
+    "output_tokens": 9,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 9697
+  },
+  "seconds": 0.6575780000002851,
+  "deliveredObservation": {
+    "candidate": {
+      "status": "partial",
+      "rows": []
+    },
+    "receipt": {
+      "requestDigest": "616485d6dd0e78ba9a097f67f742f24b182a9c2c40d01dea98e422162100bf60",
+      "difference": false,
+      "operation": "temporal.observe",
+      "candidateValid": true,
+      "bindingDigest": "04e0892a10f23deecbb55adf72560e7eca015c7d6c00466859f7901a1276fad1",
+      "verdict": "consistent",
+      "schema": "poo-flow.semantic-observation",
+      "verification": "invalid"
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "nativeObservationSeconds": 0.0031864170000517333,
+  "result": {
+    "candidate": {
+      "status": "partial",
+      "rows": []
+    },
+    "receipt": {
+      "requestDigest": "616485d6dd0e78ba9a097f67f742f24b182a9c2c40d01dea98e422162100bf60",
+      "difference": false,
+      "operation": "temporal.observe",
+      "candidateValid": true,
+      "bindingDigest": "04e0892a10f23deecbb55adf72560e7eca015c7d6c00466859f7901a1276fad1",
+      "verdict": "consistent",
+      "schema": "poo-flow.semantic-observation",
+      "verification": "invalid"
+    },
+    "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+  },
+  "sourceRebinding": {
+    "schema": "poo-flow.semantic-observation",
+    "bindingDigest": "5b08b1248aed7124cd0e9ca03492d5f5adebd6c812099589db0b41ec9a2ad864",
+    "verification": "invalid",
+    "operation": "temporal.observe",
+    "requestDigest": "10af9e8cab37bb6ff735bf5854595bcb4d8e6eb8ab833e1fc0fd52485f74de56",
+    "difference": false,
+    "candidateValid": true,
+    "verdict": "consistent"
+  },
+  "callSeconds": 0.6626267080000616
+}

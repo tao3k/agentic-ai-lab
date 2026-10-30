@@ -1,0 +1,379 @@
+#+title: Temporal Engine Design Audit and Closure Decisions
+#+date: [2026-10-04]
+#+property: SDD_KIND architecture-decision
+#+property: STATUS design-decisions-accepted-implementation-partial
+
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Scope and evidence boundary
+
+This record resolves the engine design choices left open across
+[[file:framework.org][the semantic framework]], RFC 161 and RFC 45-70/45-72/45-73.
+It audits source at Agentic AI Lab =3101deb8b0ac2b99d01840ac9b04e075aff442e4=.
+The decisions below are normative for subsequent implementation. A decision
+being accepted does not mean its executable gate has passed.
+
+The current reusable Scheme engine has finite hypothesis classification,
+explicit time, immutable revisions, reverse dependency planning and inert
+conclusion selection. At the audited base head, the C/Python ABI =temporal.solve= instead
+invokes =gerbil-ascent/temporal/lens= through =src/ffi/semantic.ss=.
+Those are distinct supported profiles with distinct inputs and receipts.
+The ABI tool roundtrip receipt tests that lens, its binding and model result
+consumption. It does not qualify hypothesis-family execution, Quint behavior
+refinement, clock authenticity or active conclusion publication.
+
+No external research results are requalified by this source audit. The paper
+map in RFC 161 remains research context. No new test pass is claimed here.
+
+* D1: Select an explicit semantic profile before classifying
+
+The basic engine profile is =finite-hypothesis-family=: a nonempty declared
+candidate set, immutable observations, explicit constraints and exclusive or
+overlapping family mode. =Possible= means the target passes the supported
+known constraints. =Refuted= means a known constraint on that target fails;
+this local refutation does not require exploring every other candidate.
+=Necessary= means the target is the sole admissible candidate in an exhausted,
+caller-declared complete exclusive family with no unknown candidates.
+It is a family-relative uniqueness judgment. Overlapping families never
+obtain necessity from uniqueness under this checker.
+
+A future =finite-behavior-space= profile must supply an interpretation of
+worlds/traces, interventions and observations. In that profile, possible
+requires a satisfying witness; necessary requires nonempty admissible worlds,
+exhaustion and universal satisfaction; refuted requires exhaustive absence
+of a satisfying world. An inconsistent or empty admissible behavior space
+must have an explicit diagnostic and cannot yield vacuous necessity.
+
+The profile and family mode belong in semantic identity. Candidate receipts
+cannot be relabeled as world/trace receipts. The existing Schema remains the
+public finite-family contract; an explicit profile discriminator is required
+before introducing a second interpretation on the same dispatch surface.
+
+* D2: Keep truth scope, evidence coverage and execution budget separate
+
+Completeness has three different subjects: the hypothesis vocabulary, the
+source observation inventory, and the explored search frontier. Exhausting
+one does not close the others. A current =family-complete?= value is a caller
+assumption about alternatives. A watermark or coverage digest is a declared
+reference until its source owner verifies it. Neither establishes empirical
+causation or source completeness merely by appearing in a POO object.
+
+An admitted closed-absence or finality claim must bind source set, partition,
+sequence range/gaps, cut, generation, valid-time projection, policy revision,
+late-event policy, issuer and the verifier's exact receipt. Verification must
+replay the claim and confirm issuer authority for that scope. Changing scope,
+generation, policy or receipt invalidates reuse. Basic pure family queries
+remain available with explicit assumptions and open coverage.
+
+Execution limits live in the query and execution receipt, outside model
+identity. Cancellation, deadline, memory cap or solver interruption produces
+an incomplete execution with its frontier. Such interruption cannot supply
+exhaustion. A previously verified positive witness may still support possible;
+a negative result needs its profile's required closure. Five seconds without
+genuine provider content remains a failed real-model acceptance attempt;
+heartbeat logs and private reasoning do not satisfy that progress condition.
+
+* D3: Admit clock conversion through an explicit verified relation
+
+The initial profile compares coordinates only inside one declared clock
+domain. Distinct domains remain incomparable; absent or declared coordinates
+remain unknown. Event time, ingress time, admission time, processing time,
+logical generation and monotonic duration must remain separate axes.
+
+The extension boundary is a POO conversion relation binding source and target
+domains, issuer/verifier evidence, validity range, uncertainty enclosure and
+revision. It maps an input interval to an output enclosure rather than silently
+choosing a point. A definite ordering is permitted only when every coordinate
+in the admitted enclosure satisfies it. No mapping is inferred from equal
+numbers, similar clock names or a shared clock role. Cyclic or competing
+conversions cannot choose a favorable path: inconsistent enclosures block
+admission, and insufficient evidence preserves unknown/incomparable status.
+Clock-source authenticity belongs to the source owner; Temporal replays the
+verified relation. The current engine has no such conversion adapter.
+
+* D4: Keep provider assertions inert until independently admitted
+
+GQL, ASCENT and model Providers return candidate material for the same exact
+cut and generation. Candidate exchange reviewability is a readiness state.
+A local row check establishes row/count/digest consistency, while derivation
+correctness, source coverage and verifier authority are separate obligations.
+An opaque proof ID, valid check symbol or model confidence cannot fulfill them.
+
+Before conclusion admission, the semantic owner must verify materialized
+result bytes, supported proof method, exact query/policy/source binding and
+checker authority. The verification result has its own immutable identity
+and declared claim class: structural dependency, temporal consistency,
+family-relative classification, or intervention-qualified causal claim.
+Unsupported claim classes remain candidates. MRR owns live result transport;
+Temporal must consume its original result admission receipt without inventing
+query, parser or source identities. Raw model output cannot define a new
+hypothesis mechanism or grant effect authority.
+
+* D5: Bind Quint to a staged source closure and named interpretation
+
+The maintained source inventory is =packages/proofs/quint/*.qnt=. The shared
+checker snapshots the local modules before verification, selects named safety
+and temporal properties and binds all source hashes and exact tool versions.
+Changing an import changes that inventory identity. Missing imports, wrong
+version, unexpected counterexample, interruption or a nonempty final frontier
+fails admission. The five-second no-output and 45-second case limits apply
+independently of dependency preparation.
+
+The inert Scheme v1 receipt establishes finite behavioral evidence. The native
+POO semantic model remains the owner of source/cut/authority identity. A general
+projection correspondence needs a separate interpretation and theorem. Formal
+checks are explicit assurance gates and do not execute during pure query use.
+
+* D6: Reconcile late evidence through immutable revisions
+
+Keep the canonical evidence journal as replay authority. A late assertion,
+correction or retraction creates a new admission-time revision and projection;
+it never rewrites the historical cut. A change in valid-time query is a
+separate reprojection trigger even when the admission cut is unchanged.
+Without an admitted parameter-independence proof, reevaluate the entire
+indexed scope. A partial reverse index cannot certify an unaffected result.
+
+Jointly reevaluate affected nonmonotone SCCs. Stabilization must retain its
+premises, rule/policy revision, scope and proof receipt. Oscillation or resource
+exhaustion yields suspension; no transient candidate becomes active. Competing
+correction branches remain conflicted until an explicit authority-backed
+resolution. A source watermark violation preserves the old scoped receipt,
+withdraws its current applicability and triggers the late-event policy on a
+new revision; it cannot retroactively turn an open claim into closed absence.
+This decision specifies reconciliation; current revision/index helpers do not
+implement source authentication or general SCC evaluation.
+
+* D7: Publish through one runtime transaction and replayable recovery
+
+Scheme owns immutable conclusions and CAS preparation. Runtime owns the
+external pointer and authorized transaction. The library exposes a POO-native
+commit request projection; C/Python consume that projection without creating
+a second semantic contract. Read-only =temporal.solve= is not a commit API.
+
+A future commit must bind subject/scope, admitted conclusion/proof, canonical
+journal, cut/projection, policy/generation, expected pointer version and
+predecessor, current authorization evidence and idempotency identity. Its
+linearization point must atomically validate those preconditions, select the
+revision/tombstone, increment the version and retain a recoverable transition
+receipt. If authorization is issued outside the store, its revision/fence must
+be validated at this point; a preflight permit alone does not close the race.
+An adapter unable to enforce this contract must reject publication.
+
+A stale pointer or authorization fence yields conflict and requires fresh
+observation and reevaluation. No automatic last-write-wins or blind retry.
+Retrying the same idempotency identity must return the original committed
+receipt or recover its outcome, never perform a second selection. A crash
+between selection and client response must be recoverable by that identity.
+External business effects and compensation are separate authorized operations
+with their own receipts; pointer selection cannot claim to undo past effects.
+Runtime C and Python must demonstrate the same transaction contract before
+this engine is advertised as supporting authorized publication.
+
+* D8: Add behavior and intervention support behind a separate admission gate
+
+The reusable basic profile does not infer mechanisms. A behavior model must
+compose POO-native variables/domains, supported mechanism families,
+environment constraints, observation map, intervention and query obligations.
+An intervention binds model revision, onset, target variables, replacement
+mechanism/policy, horizon and assumptions. Unsupported mechanism semantics
+fail admission; stochastic Providers additionally bind estimand, support,
+uncertainty and method evidence. A source fork or numerical trajectory contrast
+alone cannot establish an actual cause or an individual counterfactual.
+
+Safety, reachability and progress are distinct property values. Progress must
+state fairness and environment assumptions; a safety pass does not imply
+progress. The first behavior slice must reuse one core API for two independent
+vertical vocabularies with no edits to core for the second. Public raw =Next=
+lambdas, record/alist DSLs and hard-coded Healthcare actions are rejected.
+
+* Implementation and acceptance ledger
+
+All decisions D1--D8 are accepted design rules. This table records executable
+closure separately. Existing commands name maintained gates, not reruns in
+this audit. New gates below are obligations, not available commands.
+
+| Decision | Implementation owner / current boundary | Required acceptance before stronger claim |
+|----------+-----------------------------------------+-------------------------------------------|
+| D1 | =funs.ss= finite family and =t/temporal-model-test.ss=; no behavior-space interpreter | Existing =just check-temporal-model= covers exclusive/overlap, incomplete evidence and budgets; second profile must reject empty/inconsistent worlds and never reuse candidate semantics as universal trace truth |
+| D2 | =time/watermark-funs.ss=, =candidates/= and =truth-maintenance/= record scoped declarations | New gate: reject forged/foreign coverage, sequence gaps and stale generations; cancellation at each frontier cannot produce closed absence or exhaustion |
+| D3 | =time/funs.ss= and =time/uncertainty-funs.ss= same-domain arithmetic | Existing =just check-temporal-time=; new conversion gate: missing authority, expired validity, crossing enclosures and competing conversion paths preserve uncertainty or block |
+| D4 | =candidates/model.org= row consistency; MRR live adapter outstanding | Existing =just check-temporal-candidate-exchange=; new integrated gate: changed row, false derivation, stale cut and unauthorized checker all block admission independently |
+| D5 | =packages/proofs/quint/= and shared verifier | Bind staged model identities, declared predicates, completion and counterexample controls |
+| D6 | =revisions/=, =truth-maintenance/= and =conclusions/= pure plans | Existing revision/invalidation Quint and conclusion Scheme gates; new authenticated late-event/SCC gate: dual supports, retraction, branching, reprojection and oscillation cannot publish stale/transient results |
+| D7 | =conclusions/funs.ss= inert =cas-ready=; abstract Quint/Lean race models | New Runtime C/Python gate: two competing writers, authorization revocation before commit, duplicate request and crash after linearization; at most one transition, recoverable receipt and no effect permit inferred |
+| D8 | =types.ss= finite hypotheses, =trajectory/= and =impact/= exact contrasts | New two-vertical behavior gate: intervention changes model identity, protected variables, safety/reachability/progress and open horizons; witness replay and assumption-qualified claims |
+
+* Delivery order and exit criteria
+
+1. Preserve the existing pure finite-family and lens profiles. Link every
+   public entrypoint to its exact profile, supported claims and receipt.
+2. Close D2/D4 evidence admission and D6 revision applicability before using
+   derived conclusions for external selection. A verifier must expose which
+   obligation it discharged; a digest-only attestation is insufficient.
+3. Implement D7 on Runtime C/Python with race and crash recovery evidence.
+   This is the next publication slice; no vertical business adapter is needed
+   to test it. Existing generic effect machinery may be reused only after its
+   projection is shown to satisfy this Temporal transaction contract.
+4. Extend D5 frozen qualification and D3 verified conversions as separate
+   slices. Neither is a prerequisite for a same-domain pure basic query.
+5. Add D8 behavior semantics and then the corresponding refinement theorem
+   or explicitly bounded differential evidence. Each new mechanism profile
+   requires its own admission and reproducibility gate.
+
+The design audit is closed when its decisions, owners and failure gates are
+explicit and related RFCs agree. Full engine implementation closure additionally
+requires the applicable new gates above and exact-head receipts. The present
+source audit closes the design choices only; publication, authenticated
+coverage/conversion and general behavior refinement remain implementation work.
+
+* Delivered: finite-family Runtime C/Python bridge (2026-10-04)
+
+=src/ffi/temporal-family.ss= projects bounded JSON onto the existing POO
+constructors and =agentic-ai-lab-temporal-model-classify=. The generic C ABI now
+exposes =temporal.family.classify= and =temporal.family.observe=. Python adds
+sync/async helpers without implementing classification. Model identity binds
+canonical observations, provenance, family mode and completeness; execution
+binding additionally binds query identity, target and budget. Observation
+replays the current native model and checks every result field, including both
+identities and the false authenticity/authorization fields.
+
+The wire profile admits at most 32 domains, 128 observations, 128 hypotheses
+and 256 constraints in total. It supports observed/declared/missing observations
+and before/not-after constraints, with exact field sets. Unsupported syntax,
+empty families, duplicate identities and zero exploration limits are rejected.
+Missing cause/effect evidence remains unknown under the existing core contract.
+No behavior-space interpretation is admitted by this entrypoint.
+
+The installed macOS ARM64 CPython 3.13 wheel passed 60 tests, including 27 new
+finite-family cases and the maintained lens/graph/model-tool tests. It reuses
+two independent vocabularies through the same native API; tests include bounded
+local refutation, overlapping families, uncertainty, permutation, query budget,
+stale results and forged authority. The CI wheel gate includes the new tests.
+The source/artifact qualification receipt (qualification output is an external artifact) records its exact scope.
+This closes the D1 runtime connection for the finite profile and adds D4 result
+fidelity evidence. It does not close source verification, derived-conclusion
+admission, D7 publication or D8 behavior refinement. No real-model calls were
+made in this slice; earlier lens model receipts cannot qualify this new profile.
+
+* Delivered: host-pinned finite-family admission (2026-10-04)
+
+=admission/interface.ss= adds native POO source-snapshot and family-admission
+contracts, exported by the Temporal core interface. The admission function
+replays source/model evidence, classifies the query and generates an immutable
+root conclusion. Its proof identity binds source scope, evidence, assumptions,
+query and explored frontier. Revision identity binds request identity and proof;
+the same request under changed proof cannot reuse the earlier revision identity.
+
+=agentic_ai_lab_semantic_source_register= is a distinct C host control entrypoint.
+The generic semantic operation router rejects the reserved host prefix before
+Scheme dispatch, and Python registration uses the dedicated C function on the
+existing owner thread. Registration canonicalizes the domain/observation
+inventory and binds source/authority/subject/scope/cut/projection/policy/generation.
+The registry holds at most 128 source identities; generation rollback and
+same-generation conflicting bytes are rejected. A higher generation retires
+old snapshot applicability without mutating historical result values.
+
+=temporal.family.admit= selects the current registered source by identity and
+digest, replays the requested model and emits a native conclusion only for a
+resolved finite-family classification. No external opaque proof ID is accepted.
+Unknown classification, changed observations/provenance/clock role, missing
+source or stale digest fail admission. Changing hypotheses or query budget
+changes the generated proof; completeness remains a declared family assumption.
+
+This slice establishes result/proof fidelity relative to a host-pinned source.
+It does not authenticate an external issuer or prove partition/sequence
+coverage. Source trust is =host-registered-snapshot=, the registry is volatile,
+and receipts keep =sourceAuthenticated= and =actionAuthorized= false. No active
+pointer, correction/retraction admission, authorized commit, crash recovery or
+external effect is implemented by these entrypoints. The D2/D4/D6 obligations
+outside this local trust premise and the D7 transaction gate remain open.
+
+The initial ABI test exposed slot self-reference from constructor variables
+named like their POO slots; renaming the value variables removed that recursion.
+The regression gate covers registration, native result generation and proof
+identity changes. The final installed wheel passed 78 tests, including 18 new admission cases,
+and the CI wheel gate now includes that file. See the source/artifact acceptance receipt (qualification output is an external artifact) for final qualification
+and the recorded initial failure. No real-model evaluation is claimed here.
+
+* Delivered: durable authorized first-root selection (2026-10-04)
+
+Runtime C =temporal_store= implements a local SQLite WAL/FULL transaction port;
+Python =TemporalPublicationStore= uses its typed CFFI ABI. Native POO admission
+and C submission share the semantic owner queue; Python performs no classification.
+The durable source generation/digest and scoped host authorization policy/fence
+are rechecked at the same transaction point as empty-pointer CAS, version increment
+and immutable receipt insertion. Failed receipt writes roll back the pointer.
+Competing connections admit at most one initial root. Identical committed retries
+recover the original receipt; later source/grant retirement cannot erase it.
+
+This closes a concrete D7 first-root local selection slice. The host explicitly
+authorizes local selection; this is not Cedar or signed external permit verification.
+It does not extend the existing correction/retraction POO prepare protocol or claim
+its generic refinement. Initial =assert= selection requires version zero and an
+empty predecessor. Business effects, correction/retraction, externally authenticated
+source/coverage, general lifecycle refinement and D8 remain open. The crash gate
+sends SIGKILL after commit and opens a new store to recover pointer and receipt;
+it does not qualify power loss or storage hardware. See
+the exact installed-wheel receipt (qualification output is an external artifact). No real-model calls were made in this slice.
+
+* Current integration readiness audit
+
+[[file:integration-readiness-audit.org][The cross-layer closure audit]] records the current RFC/IFC gaps,
+profile-specific Python/DeepSeek evidence, exact Rust MRR/MRR Data source heads,
+and the R1--R4 integration gates. Read-only Rust transport may proceed against
+the qualified basic profile; historical receipt recovery is not a current
+applicability or information-flow authorization receipt.
+
+* Delivered: bounded Rust read-only Runtime consumer
+
+=runtime/= in the MRR repository consumes the original semantic C ABI on a dedicated
+owner thread. The qualified release build matches 21 current installed-Python
+native results across finite-family/lens profiles. It checks queue saturation,
+concurrent callers, allocator release, wrong-thread rejection and terminal close.
+This result predates the runtime transfer to MRR; current acceptance is recorded
+in [[file:next-delivery-plan-v1.org][the delivery ledger]]. Two debug-startup silent watchdog failures
+remain recorded; the release gate passed at 1.24s with five-second silence limit.
+The crate makes no independent causal decisions or model effect grants.
+
+The Rust model-family study was rejected before execution by automatic approval
+review and awaits explicit payload authorization. It has zero model calls and
+no claimed pass. Live MRR PR inspection found an existing original-row transport
+and receiver-side re-admission; remaining query/source/cut/generation mapping
+must use that original owner interface. Neither full MRR integration nor Rust
+publication/IFC/current-applicability gates are closed by this delivery.
+
+* Delivered: authorized Rust real-model acceptance and native MRR observation seam
+
+The user explicitly authorized the frozen synthetic task/native-result payload.
+The Rust finite-family tool study then passed 4/4 roundtrips and 8 completed real
+DeepSeek responses with no retries, no failure and a preserved source freeze.
+Each provider phase retained the five-second genuine-content watchdog. See
+[[file:../../t/qualification/temporal-library-basic/rust-model-family/historical.org][the frozen model receipt]]. This qualifies read-only forced-tool task fidelity and
+result consumption for the new family/Rust path, not unaided prediction,
+MRR physical execution, source authenticity, root admission or publication.
+
+Feature =mrr-transport= fixes the original MRR facade at
+=3ce31dac2dc58ab780ed06fa88103de501355692=. Original transport is re-admitted
+by MRR against the host's CatalogBoundQuery and its original receipt is retained.
+The narrow event:String/position:Integer projection binds an explicit host
+source/cut/projection/policy/clock and separate Temporal generation to all MRR
+receipt identities. Its correspondence digest becomes POO observation provenance;
+changed mapping cannot silently reuse the model digest. Caller-supplied
+observations and unsupported shapes are rejected. MRR content generation is
+never converted into a Temporal time or integer generation.
+
+The typed observation seam calls the existing native POO classifier. It does
+not implement a Rust classifier, claim verified source coverage, or fabricate
+MRR parser/proof receipts. Physical source execution, GQL parser-source receipt
+transport, source authentication, generic projection profiles and the D6/D7/IFC
+stronger gates remain separately open.
+
+The exact linked MRR/POO operational gate passed two integration tests: original
+MRR transport projection at 0.24s and 21-result native Rust regression at 0.90s.
+The five-second output watchdog did not trigger. See
+[[file:../../t/qualification/temporal-library-basic/rust-mrr-runtime/historical.org][the exact MRR dependency/source/native-artifact receipt]]. CI now builds and runs
+the =mrr-transport= feature against the same native producer artifact. The initial
+macOS system-linker failure is retained separately from test execution.

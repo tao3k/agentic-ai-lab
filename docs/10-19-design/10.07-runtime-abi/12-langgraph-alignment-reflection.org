@@ -7,7 +7,7 @@
 * Alignment Snapshot
 
 The Python runtime is now functionally aligned with the LangGraph runtime
-surface that matters for POO Flow downstream adapters:
+surface that matters for Agentic AI Lab downstream adapters:
 
 - Graph construction: nodes, edges, entry points, finish points, sequences, and
   conditional routing.
@@ -23,7 +23,7 @@ surface that matters for POO Flow downstream adapters:
 - Runtime packaging: ABI surface manifest, validation receipts, and executable
   self-test gates.
 
-Within the intended POO Flow scope, this is roughly 90-95% aligned with
+Within the intended Agentic AI Lab scope, this is roughly 90-95% aligned with
 LangGraph's local runtime semantics. The remaining 5-10% is intentionally
 outside this layer: LangGraph Cloud, hosted SDK semantics, visualization,
 LangChain model integrations, and Python-specific schema ecosystems. Those do
@@ -31,7 +31,7 @@ not belong in the Scheme-owned policy/runtime boundary.
 
 * Boundary Difference
 
-LangGraph owns a Python-first application framework. POO Flow owns a
+LangGraph owns a Python-first application framework. Agentic AI Lab owns a
 Scheme-first policy and strategy layer with runtime adapters. Therefore the
 alignment target is not API mimicry for its own sake. The target is that a
 runtime-language adapter can express the same execution patterns without
@@ -70,5 +70,5 @@ more LangGraph surface area, first classify it:
   adapter.
 - Policy or durable strategy semantics: implement in Scheme POO-native policy
   families and functional combinators.
-- Hosted ecosystem feature: document as out of scope for POO Flow runtime
+- Hosted ecosystem feature: document as out of scope for Agentic AI Lab runtime
   alignment unless it exposes a portable ABI/receipt requirement.

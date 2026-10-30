@@ -1,0 +1,95 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Scheme candidate and native receipt repair pilot results
+#+STATUS: two bounded pilots completed; candidate contract corrected afterward
+#+DATE: 2026-10-02
+
+* Exact run receipt
+
+Four user-authorized DeepSeek =deepseek-flash= Responses calls used the
+reviewed preview in
+=/private/tmp/poo-scheme-repair-preview-head-e738a431=.
+ASCENT head was =f80c9dc7cf5e4ed42a806b0d78c847e52be09de6= and
+Agentic AI Lab head was =e738a431b15d06ac2118b9d67ea59237cb0076b4=.
+The task source SHA256 was
+=c14feca1c4fd066e783677a4852ea78ef3b17cb00a8f449b21ba1dd991de6466=.
+The exact two control source digests and dynamic feedback templates
+are in that external preview. Native control answers were held back.
+
+Raw response text, native receipts and response IDs are under
+=/private/tmp/poo-scheme-repair-live-head-e738a431=. The manifest
+SHA256 is
+=7f85107246849022a2580c98fa7fac2f4cd4ce58118be3c1e8b75f9ed4f33dee=.
+All four API responses completed. The first and second candidate files
+have the same SHA256,
+=bc77845cfaeafbb35c633c40e4dbdf76352bff50a9e68af80fafb4e56241dd22=.
+
+* Native scores
+
+| Case | Readable form | Exact row sets / receipt |
+|------+---------------+--------------------------|
+| Self-contained Scheme | yes | no |
+| Public API contract | yes | no |
+| Initial candidate | yes | no |
+| Repair candidate | yes | no |
+
+The self-contained answer omitted the =(1 8)= row and returned only
+=(1 12)=. The API-contract answer added an extra list level around
+the otherwise expected three rows. The candidate declared =edge=,
+=blocked=, =weight=, and =root= as if they were derived relations.
+The native API rejected all three source states with
+=duplicate-relation=. Neither candidate obtained a finite or founded
+proof. The model repeated the same candidate after receiving the
+first receipt; the native scorer rejected it again. No release or
+effect authority was offered by this tool.
+
+* Protocol limitation and correction
+
+The outgoing task listed the form =(relation NAME ARITY)= but did not
+say that source relations were already supplied by each snapshot and
+must not be redeclared. The first receipt sent back to the model only
+contained =rejected= and =invalid= statuses, not the located
+=duplicate-relation= diagnostic. Therefore this run does not isolate
+the model's ability to repair a diagnosed error. After preserving the
+raw run, the task contract was made explicit and the native tool was
+changed to include diagnostic code/path pairs in its Scheme receipt.
+The earlier four-call authorization was exhausted before the revised run.
+
+* Diagnostic feedback run
+
+The user separately authorized the immutable repair-only preview at
+=/private/tmp/poo-scheme-repair-diagnostic-preview-head-5939b39f=,
+bound to Agentic AI Lab =5939b39f= and the same ASCENT =f80c9dc=. The preview
+contained only the revised Scheme task and a bounded repair template;
+it did not resend the two unchanged controls. Two DeepSeek calls were
+made, with no retries. Raw candidates, native receipts, response IDs,
+and the manifest are in
+=/private/tmp/poo-scheme-repair-diagnostic-live-head-5939b39f=.
+The manifest SHA256 is
+=cf84e6af18c517aad7dc4e10117cecebdcc34da9c06e60a3f769de8ecd47ef7b=.
+
+Both returned candidates were readable and byte-identical (SHA256
+=f0628b625b221bc1648aa25265c0527d3a2a548567d5bcfda3f397219bcb4b85=).
+They declared only derived relations, correcting the first pilot's
+source-redeclaration error. Native admission rejected each candidate
+on all three source states with
+=((invalid-limits (clause 11)))=. The candidate supplied
+=(limits 100 1000 10000)=; the third value exceeds ASCENT's maximum
+output-fact limit of 4096. The second turn repeated the candidate
+despite receiving the located diagnostic. Both independent scores were
+=(score (exact #f))=, and neither candidate obtained a finite or founded
+receipt. The two-call authorization is exhausted.
+
+The outgoing task incorrectly labeled the three limits as iterations,
+rows and steps, and omitted their upper bounds. This makes the run a
+test of an incomplete public contract as well as model repair. After
+preserving the exact preview and output, the checked-in task now names
+the input, derived and output fact limits, gives their caps, and shows
+a valid example. Any further paid call requires a fresh preview and
+authorization. Together, the six calls do not establish general Scheme
+literacy or ASCENT tool usefulness.
+
+This fixed, tiny sample does not establish general Scheme literacy,
+ASCENT tool usefulness, or deployed behavior. It does show that a
+status-only native receipt is too weak for a meaningful repair test.

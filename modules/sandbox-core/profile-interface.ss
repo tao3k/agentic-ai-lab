@@ -8,7 +8,7 @@
 
 (import
         :clan/poo/object
-        :poo-flow/modules/sandbox-core/profile-support/projection-syntax)
+        :agentic-ai-lab/modules/sandbox-core/profile-support/projection-syntax)
 
 (export #t
         (import: :clan/poo/object))
@@ -79,7 +79,7 @@
   network: (deny-network)
   capabilities: '(process-run filesystem-read tmpdir)
   resources: runtime-volume-resources
-  metadata: '((declared-by . poo-flow-poo-prototype)
+  metadata: '((declared-by . agentic-ai-lab-poo-prototype)
               (runtime-executed . #f))))
 
 ;; : (-> Symbol [Symbol] Boolean)
@@ -118,9 +118,9 @@
 ;;; centralized for callers.
 ;; : (-> Symbol Symbol Symbol Value Alist)
 (def (profile-derivation-step profile-name parent-profile scope scope-ref)
-  (poo-flow-sandbox-profile-field-rows/tail
+  (agentic-ai-lab-sandbox-profile-field-rows/tail
    (if scope-ref
-     (poo-flow-sandbox-profile-field-rows (scope-ref scope-ref))
+     (agentic-ai-lab-sandbox-profile-field-rows (scope-ref scope-ref))
      '())
    (profile profile-name)
    (parent-profile parent-profile)
@@ -138,13 +138,13 @@
                                   scope-ref
                                   . maybe-extra)
   (let (extra (if (null? maybe-extra) '() (car maybe-extra)))
-    (poo-flow-sandbox-profile-rows/tail
+    (agentic-ai-lab-sandbox-profile-rows/tail
      (profile-metadata-without parent-metadata
                                '(derivation-path runtime-executed))
-     (poo-flow-sandbox-profile-field-rows/tail
+     (agentic-ai-lab-sandbox-profile-field-rows/tail
       extra
       (derivation-path
-       (poo-flow-sandbox-profile-rows/tail
+       (agentic-ai-lab-sandbox-profile-rows/tail
         (profile-derivation-path parent-metadata)
         (list
          (profile-derivation-step profile-name

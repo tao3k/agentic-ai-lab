@@ -11,10 +11,11 @@ from pathlib import Path
 import platform
 import shutil
 
+from setuptools_rust import Binding, RustExtension
 from setuptools import setup
 from setuptools.command.build_py import build_py
 
-RUNTIME_LIBRARY_ENV = "POO_FLOW_RUNTIME_V0_LIBRARY"
+RUNTIME_LIBRARY_ENV = "AGENTIC_AI_LAB_RUNTIME_V0_LIBRARY"
 
 
 def _runtime_library() -> Path:
@@ -35,16 +36,27 @@ class BuildPyWithRuntime(build_py):
         super().run()
         system = platform.system()
         library_name = {
-            "Darwin": "libpoo_flow_runtime_v0.dylib",
-            "Windows": "poo_flow_runtime_v0.dll",
-        }.get(system, "libpoo_flow_runtime_v0.so")
+            "Darwin": "libagentic_ai_lab_runtime_v0.dylib",
+            "Windows": "agentic_ai_lab_runtime_v0.dll",
+        }.get(system, "libagentic_ai_lab_runtime_v0.so")
         source = _runtime_library()
-        target = Path(self.build_lib) / "poo_flow_runtime" / "_native" / "lib"
+        target = Path(self.build_lib) / "agentic_ai_lab_runtime" / "_native" / "lib"
         target.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, target / library_name)
+        semantic = os.environ.get("AGENTIC_AI_LAB_SEMANTIC_LIBRARY")
+        if semantic:
+            semantic_source = Path(semantic).resolve()
+            semantic_name = "libagentic_ai_lab_semantic.dylib" if system == "Darwin" else "libagentic_ai_lab_semantic.so"
+            shutil.copy2(semantic_source, target / semantic_name)
+            shutil.copy2(Path(str(semantic_source) + ".ss"), target / (semantic_name + ".ss"))
 
 
 setup(
-    cffi_modules=["src/poo_flow_runtime/_native/_build.py:ffibuilder"],
+    rust_extensions=[RustExtension("agentic_ai_lab_runtime._reasoning",
+        path="../../modules/evidence-assessment/native/Cargo.toml",
+        binding=Binding.PyO3, features=["python", "extension-module"])],
+    cffi_modules=["src/agentic_ai_lab_runtime/_native/_build.py:ffibuilder",
+                  "src/agentic_ai_lab_runtime/_native/_semantic_build.py:ffibuilder",
+                  "src/agentic_ai_lab_runtime/_native/_temporal_store_build.py:ffibuilder"],
     cmdclass={"build_py": BuildPyWithRuntime},
 )

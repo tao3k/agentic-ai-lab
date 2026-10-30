@@ -264,7 +264,7 @@ mod tests {
     #[test]
     fn a_denied_case_cannot_hide_a_matching_engine_error() {
         let mut outcome = Outcome {
-            schema_id: "poo-flow.cedar-engine-outcome.v1".into(),
+            schema_id: "agentic-ai-lab.cedar-engine-outcome.v1".into(),
             engine_id: "cedar-rust".into(),
             semantic_revision: "test".into(),
             decision: "deny".into(),

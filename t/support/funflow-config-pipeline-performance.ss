@@ -7,11 +7,11 @@
 
 (import (only-in :clan/poo/object .ref)
         "./performance"
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-settings
-                 pooFlowUserConfig)
-        (only-in :poo-flow/src/user-interface/presentation-config
-                 pooFlowUserConfigPresentation))
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-settings
+                 yuanxuUserConfig)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation))
 
 (export funflow-config-pipeline-scenario-count
         funflow-performance-ref
@@ -29,13 +29,13 @@
 
 ;; : (-> [[PooUserModuleSelection]] PooUserConfig)
 (def (funflow-performance-user-config module-bundles)
-  (pooFlowUserConfig
+  (yuanxuUserConfig
    module-bundles
-   (poo-flow-settings)))
+   (yuanxu-settings)))
 
 ;; : (-> PooUserConfig Integer POOObject)
 (def (funflow-performance-presentation config _index)
-  (pooFlowUserConfigPresentation config))
+  (agenticAiLabUserConfigPresentation config))
 
 ;; : (-> POOObject Alist)
 (def (funflow-performance-presentation-summary presentation)
@@ -61,7 +61,7 @@
 
 ;; : (-> Integer [Boolean])
 (def (funflow-performance-expected-runtime-values count)
-  (poo-flow-performance-build-list count (lambda (_index) #f)))
+  (agentic-ai-lab-performance-build-list count (lambda (_index) #f)))
 
 ;; : (-> PooUserConfig Integer Alist)
 (def (funflow-performance-scaled-presentation-summary config count)

@@ -22,7 +22,7 @@ gerbil-scheme-native-build = { git = "https://github.com/tao3k/gerbil-scheme-rus
 gerbil-scheme-sys = { git = "https://github.com/tao3k/gerbil-scheme-rust.git", rev = "b3eb5dce9bfb1e57c3ce618de46798e360213f6a", features = ["external-program"] }
 getrandom = "0.3"
 hex = "=0.4.3"
-poo-flow-cedar-authority = { path = "crates/cedar-authority" }
+agentic-ai-lab-cedar-authority = { path = "crates/cedar-authority" }
 prost = "=0.14.4"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -30,11 +30,11 @@ sha2 = "=0.11.0"
 tempfile = "3.23"
 thiserror = "2.0"
 
-[workspace.metadata.poo-flow.cedar-runtime]
-runtime-host-input = "POO_FLOW_CEDAR_RUNTIME_HOST"
-runtime-core-archive-input = "POO_FLOW_CEDAR_RUNTIME_CORE_ARCHIVE"
-runtime-endpoint-input = "POO_FLOW_CEDAR_RUNTIME_SOCKET"
-native-probe-input = "POO_FLOW_CEDAR_NATIVE_PROBE"
+[workspace.metadata.agentic-ai-lab.cedar-runtime]
+runtime-host-input = "AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST"
+runtime-core-archive-input = "AGENTIC_AI_LAB_CEDAR_RUNTIME_CORE_ARCHIVE"
+runtime-endpoint-input = "AGENTIC_AI_LAB_CEDAR_RUNTIME_SOCKET"
+native-probe-input = "AGENTIC_AI_LAB_CEDAR_NATIVE_PROBE"
 
 [profile.dev]
 opt-level = 2

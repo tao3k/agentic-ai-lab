@@ -1,0 +1,123 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Scheme candidate and native receipt repair protocol
+#+STATUS: four-call and two-call pilots complete; limit contract corrected afterward
+#+DATE: 2026-10-02
+
+* Question and controls
+
+The earlier [[file:model-study-scheme-results.org][source prediction pilot]] got zero exact row sets in nine calls.
+It did not show the imported ASCENT implementation and did not call the
+Library as a tool. This protocol separates three narrower questions:
+
+1. =control_pure.ss= is executable, self-contained Scheme. The model
+   predicts its single =answer= datum.
+2. =control_contract.ss= calls the public ASCENT API and includes the
+   relevant join, fixed-point and row-output contract. The model again
+   predicts its single =answer= datum.
+3. =repair_task.ss= provides the public candidate contract and three
+   source snapshots. The model returns one inert =(candidate ...)= datum.
+   The native Scheme tool evaluates that candidate through
+   =reasoning-attempt=, requests finite and founded evidence, and returns
+   a Scheme =receipt= datum. If the independent score is not exact, the
+   model receives its first candidate and native receipt as quoted
+   Scheme data and has one repair turn. Correct first turns stop early.
+
+Only Scheme source and S-expressions appear in model messages. Python
+owns HTTP transport, byte limits and process lifetime. It does not
+calculate expected rows or accept the model's claims of authority.
+
+* Frozen scoring and budget
+
+The two controls require one readable =(answer ...)= datum and exact
+native row sets. The repair task accepts only a bounded, ASCII
+=(candidate ...)= datum. Native scoring requires all three receipts to
+be =complete=, bound to the current source/candidate, and independently
+verified as =valid= by both finite and stratified verifiers. It also
+requires a first-generation receipt to verify =invalid= against the
+changed source. The independent expected query rows are =((1 1))= for
+blocked, =((1 2))= for unblocked, and =((1 2))= for duplicate edge.
+Syntax, native completion, proof, source binding, and exact rows are
+reported separately; a plausible row without a valid receipt fails.
+The one repair turn is scored separately from the first proposal.
+
+Use DeepSeek =deepseek-flash= through Responses, non-thinking,
+=temperature=0=, =max_output_tokens=512= for controls and 1024 for
+candidate turns, timeout 45 seconds, no retries. There is one call per
+control and at most two calls for the repair task: four paid calls
+maximum. No repeat calls or extra cases may be inferred from this
+protocol. Model answers, native receipts and request IDs stay outside
+the repository. No model call may precede review and approval of the
+exact preview, including the bounded dynamic repair template.
+
+* Reproducibility and admission
+
+The preview copies outgoing source files, computes native control
+answers into a separate directory, and records payload hashes and
+both Git heads. The live command requires clean committed checkouts,
+the exact pinned ASCENT head, and unchanged preview contents. A
+changed source or dependency requires a new preview and approval.
+
+#+begin_src sh
+python -m agentic_ai_lab_testing.model_study.repair \
+  --ascent-root /private/tmp/gerbil-ascent \
+  --poo-root /private/tmp/poo-ascent-pr34-20261001 \
+  --gerbil-path /Users/guangtao/ghq/github.com/tao3k/agentic-ai-lab/.gerbil \
+  --preview-dir /private/tmp/poo-scheme-repair-preview
+#+end_src
+
+After payload approval, add =--env-file= and a fresh =--output-dir=.
+The result is a bounded tool-use observation; it cannot establish
+general model usefulness or deployed authorization behavior.
+The [[file:model-study-repair-results.org][initial result]] preserves the original payload and failure. Its
+status-only receipt omitted a =duplicate-relation= diagnostic; the
+revised task and tool now return located diagnostic code/path pairs.
+Any second run needs a new exact-head preview and authorization.
+The revised run used =--repair-only=. It reused the completed control
+scores because their source bytes and model settings were unchanged;
+it sent only the revised candidate task and one feedback turn.
+Its preview declared a two-call maximum and contained no
+control payloads. The first run's raw control answers and hashes stay
+available in [[file:model-study-repair-results.org][the result receipt]].
+Both new candidates failed the native limit check and were identical.
+The reviewed task had incorrectly named the three =limits= fields as
+iterations, rows and steps, and had omitted their caps. The corrected
+task names input, derived and output fact caps of 1024, 4096 and 4096.
+The exact original payloads and scores remain in the result receipt;
+this post-run correction is not evidence of model performance.
+
+* Matched native boundary timing
+
+The checked-in =bench_repair.py= sends the same 476-byte reference
+candidate to one persistent Scheme worker. The worker measures its
+own snapshot construction, three native attempts, finite/founded
+verification and receipt serialization; Python measures the enclosing
+request. The 188-byte receipt is byte-identical across samples and a
+native independent scorer accepts the first receipt. On the local
+macOS toolchain, one cold call took 35.761 s, of which Scheme measured
+2.053 s. Across ten warm calls, worker median/p95 were 2.917/3.344 s;
+Scheme median/p95 were 2.915/3.342 s; the enclosing-boundary delta
+median/p95 was 2.03/5.81 ms. The raw, unrounded local samples are in
+=/private/tmp/poo-repair-matched-benchmark.json=.
+Its SHA256 is
+=76219b170aa93ae94329e93d7535e117a61e508de6ea3ee1a3159a5a0e150492=.
+
+The warm process boundary is below 0.2% of the native call's median.
+This does not justify adding a separate ASCENT C ABI to Agentic AI Lab's
+shared runtime. Cold startup is material and is a separate target:
+check compiled worker startup and retained process reuse before
+changing the ABI. This timing does not measure allocator totals,
+Python application integration, or a production deployment.
+
+After adding diagnostic code/path pairs, the same candidate yielded a
+197-byte receipt. A second ten-warm-sample local run recorded worker
+median/p95 6.006/6.727 s, Scheme median/p95 6.004/6.706 s, and
+boundary delta median/p95 1.20/31.62 ms. Its cold worker/Scheme times
+were 70.899/5.390 s. Raw SHA256 for
+=/private/tmp/poo-repair-diagnostic-benchmark.json= is
+=2b717aa5df711684b4d020f7bbe0ec180b39aa764d657f0976cf8b7ff21da66a=.
+The large native-time change between runs is not attributed to the
+nine added receipt bytes; background load and runtime state were not
+controlled. Both runs show warm boundary cost far below native work,
+while cold startup remains substantial.

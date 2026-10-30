@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-17",
+  "core_head": "7595bedcc5347c7add6b9d3b7b2713d6ddc8a42e",
+  "worktree": "shared dirty worktree; source hashes bind the qualified files",
+  "runtime": "default Gerbil; heap-fenced Justfile gates; serial final run",
+  "build": "native std/make focused owner closure rebuilt after ABI transition; no compatibility runtime",
+  "source_sha256": {
+    "core/module-system/source/preparation.ss": "f501e1c754971931a32696b4b2a41e04dae90fd754bdfd6c9119440e4e20809e",
+    "core/module-system/source/reader.ss": "2b1362d8c50fad9e07830e9990bbf628e3f2dc8766d1114fd58b040dcdef2fa5",
+    "core/module-system/source/build.ss": "fe70bbe0967108270a5327c08206a28f7748ac20384ae78abf394bfd1bf95f3d",
+    "core/module-system/source/link.ss": "f4f1cfe0ed8ad2a060511a333fcb2e68fba8341473c3d3c52181064b22b49f9c",
+    "core/modules/building/build-projection.ss": "f560379d01c45aa187def8c06ef2606b7e2f8a08c010a6606408ce1884538420",
+    "core/modules/building/configuration-source.ss": "5a1c8d71d011bd099d53c2740a0ea7b132987c92b59ded779574fe55924a0347",
+    "core/modules/nix/config.ss": "e461aa656c69cfe357e374eba2c32f971229ed06b427e6ee68c6121a2645bfa9",
+    "core/modules/nix/types.ss": "ee82d70beadf6e2ead5c630de74ae9df7609beb3ed3801a772933e465ccb3ade",
+    "core/modules/nix/objects.ss": "206deefecf9f916b74d2660dbf6ebf6fca56f459be2551104b5b22b9f3a9c496",
+    "core/modules/nix/interface.ss": "1d0730998d819f17587d16004efb3dd7b8c4dee55054e97ada91dcd8e61da1a8",
+    "core/modules/nix/func.ss": "efcbfaabaa9ed9c58b13353aefe0a38e8f1998ff96bbf251535fd505b0ebe8ed",
+    "core/modules/nix/source-inputs.nix": "67dbb2fe38c5fc9304248ba50a02780839f3b1bf6332d289d05a0235f3189f75",
+    "core/modules/services/opentofu/build.ss": "a34f1fd69d1e8165eae5663848dd6ca05093da1f89eb0ecf8bad106f0b352c6c",
+    "core/modules/services/opentofu/nix/selected-provider-artifacts.nix": "585e569a08e04e0b07fb133b3e0fa532ace6b3c7d88f6373836229348bdce398",
+    "core/modules/building/bootstrap.ss": "7407be41c2643ec062b9ba2174b8fe568e663f9520547dbda416487bbb7861f9"
+  },
+  "source_unchanged_during_final_gates": true,
+  "gates": {
+    "selected-graph": {
+      "passed": true,
+      "explicit_assert_ok": 27,
+      "native_harness_markers_verified": true
+    },
+    "module-publication": {
+      "passed": true,
+      "explicit_assert_ok": 0,
+      "native_harness_markers_verified": true
+    },
+    "module-build-graph": {
+      "passed": true,
+      "explicit_assert_ok": 0,
+      "native_harness_markers_verified": true
+    },
+    "module-selected-graph": {
+      "passed": true,
+      "explicit_assert_ok": 0,
+      "native_harness_markers_verified": true
+    },
+    "configuration-source": {
+      "passed": true,
+      "explicit_assert_ok": 0,
+      "native_harness_markers_verified": true
+    },
+    "nix-publication": {
+      "passed": true,
+      "explicit_assert_ok": 0,
+      "native_harness_markers_verified": true
+    },
+    "provider-versions": {
+      "passed": true,
+      "explicit_assert_ok": 84,
+      "native_harness_markers_verified": true
+    }
+  },
+  "provider_locks": {
+    "aws": "5.100.0",
+    "null": "3.2.4",
+    "awscc": "not selected"
+  },
+  "qualified_behaviors": [
+    "ordinary final config source creates external package demand in the selected Core graph",
+    "Core build entry materializes demand and invokes Nix Source.build without manual phase handoff",
+    "AWS-only to AWS+Null rebuild and generated native Contract admission",
+    "Core source/negative observations and exact demand bytes checked on reuse",
+    "Nix directly rejects stale serialized source input",
+    "Nix derivation guard rejects a changed selected transitive catalog dependency",
+    "generated script rejects stale config, changed demand, changed derivation",
+    "native Source Scope publication and fresh configuration role imports",
+    "source/version, final-field error path and cached parent isolation",
+    "real two-version upgrade and rollback controls remain valid"
+  ],
+  "retained_failures": [
+    {
+      "kind": "shared Core ABI transition",
+      "record": "local /private/tmp/opentofu-graph-module-publication-stale-abi.log",
+      "resolution": "force native owner/dependency rebuild; final publication gate passed"
+    },
+    {
+      "kind": "declarative JsonSchema versus legacy static build",
+      "record": "local /private/tmp/opentofu-graph-jsonschema-migration-build-failure.log",
+      "resolution": "not presented as full Core qualification; default native focused owners built"
+    },
+    {
+      "kind": "shared reader edit syntax",
+      "resolution": "removed one excess closing parenthesis in kernel-depth dynamic-wind; current source rebuilt"
+    }
+  ],
+  "not_claimed": [
+    "product Loader integration",
+    "full Core build or remote CI qualification",
+    "arbitrary include/macro/dynamic IO dependency capture",
+    "cold performance or 100/1000 real Provider scale",
+    "Provider RPC, plan/apply, deployment authorization",
+    "executability of the AWS documentation-only modules/scenarios"
+  ]
+}

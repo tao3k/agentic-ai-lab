@@ -5,11 +5,11 @@
 
 ;;; Boundary: pure workflow algorithms, constructors, and projection helpers.
 
-(import "cicd-funs.ss"
+(import :yuanxu/modules/funflow/check-funs
         "cicd-sandbox.ss"
         "cicd-runtime.ss"
         "flows.ss")
-(export (import: "cicd-funs.ss")
+(export (import: :yuanxu/modules/funflow/check-funs)
         (import: "cicd-sandbox.ss")
         (import: "cicd-runtime.ss")
         (import: "flows.ss"))

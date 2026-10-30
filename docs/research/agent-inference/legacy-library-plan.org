@@ -1,0 +1,520 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: From Scheme Datalog to an LLM reasoning Library
+#+STATUS: bounded evidence and paired model pilots completed; general proof open
+#+DATE: 2026-10-02
+#+FILETAGS: :design:scheme-dsl:llm:research:
+
+* Aim and terminology
+:PROPERTIES:
+:CUSTOM_ID: llm-library-aim
+:END:
+
+Build two related capabilities: a Scheme-native Datalog Library for
+trusted application code, and an LLM reasoning Library that accepts
+bounded candidate programs and returns checkable observations.  An LLM
+is a caller, not a rule engine.  Use /Agent/ only for a separately
+defined multi-step controller or when discussing a paper's own term.
+Serving products such as SGLang/vLLM are later adapters, not the Library
+semantics.  See the [[file:scheme-relational-dsl-design.org][language overview]]
+and [[file:research/agent-inference/index.org][research ledger]].
+The [[file:scheme-relational-language-design.org][first Scheme language
+design gate]] precedes this LLM interface work: it must decide the
+program IR, higher-order composition and rule-time operator semantics.
+
+The first operational case is finite graph reachability with two named
+source snapshots.  It tests recursion, source withdrawal, mistaken rule
+proposals, positive support and a complete negative answer.  It does
+not stand for all model reasoning.  The implemented boundary is
+=candidate/reasoning.ss=; its focused acceptance corpus is
+=t/qualification/ascent-reasoning-library-test.ss=.
+
+* Implemented first transcript
+:PROPERTIES:
+:CUSTOM_ID: llm-library-first-transcript
+:END:
+
+The caller creates =reasoning-source-snapshot= from a source identity,
+nonnegative generation, and declarations shaped like
+=(edge 2 ((1 2) (2 3)))=.  The constructor copies scalar rows and binds
+them to a local SHA256 digest.  The identity and generation come from
+the caller; this digest is a consistency marker, not authentication.
+Each =reasoning-attempt= evaluates one inert candidate against that
+snapshot.  Candidate facts are hypothetical overlays and never change
+the stored snapshot.
+
+#+begin_src scheme
+(def source
+  (reasoning-source-snapshot 'graph 1 '((edge 2 ((1 2) (2 3)))))
+(reasoning-attempt
+ source
+ '(candidate
+    (relation path 2)
+    (rule (path ?x ?y) (edge ?x ?y))
+    (rule (path ?x ?z) (path ?x ?y) (edge ?y ?z))
+    (query path 1 3)
+    (limits 16 32 64)))
+;; => complete, ((1 3)), one source-row path witness
+#+end_src
+
+The candidate grammar accepts derived =relation= declarations,
+hypothetical =fact= rows only for source relations, =rule= heads with
+ordered positive atoms, checked negation, fixed =where= and =compute=
+operators, and checked count/sum/min/max =reduce= clauses. It accepts
+one =query= and explicit input/derived/output =limits=.
+Terms are exact integers, booleans, symbols or characters; =?name=
+symbols bind variables and =?_= is a wildcard.  It admits no callable
+Scheme values; hypothetical facts must be ground. The fixed operator
+vocabulary is =even?= and =<= for =where=, =identity= and =+= for
+=compute=. Negated atoms read already bound variables; reduction
+reads an admitted relation. The planner checks strata and cycles after
+inspection. This surface admits no model control loop. The implementation uses the Scheme relational admission and
+one-shot solve/query path.  Inspect errors contain clause/body/term
+paths, including mapped planner rule locations. Planner rejection is
+distinguished from solve/query failure.
+
+The receipt status is =rejected= for structural or planner rejection,
+=unknown= for resource exhaustion or an internal failure, and
+=complete= only after the fixed point and query finish.  Graph evidence
+is emitted only for the exact two-rule =edge/path= closure program with
+a ground integer query: one shortest labelled witness for a present
+pair or the reachable cut for an absent pair.  Other programs receive
+=unsupported= evidence alongside a complete answer.  This is not
+general provenance or general Why-Not.  The test corpus checks a wrong
+recursive join as a complete but semantically wrong candidate, and
+checks all 64 directed three-node graphs against an independent
+Floyd-Warshall-style finite reference.
+
+Separately, =reasoning-receipt-proof= can hold a replayable positive
+derivation DAG when every rule body uses relation atoms and fixed
+=where=/=compute= clauses. The verifier replays scalar operations from
+earlier bindings and accepts no input node for them. The receipt keeps
+complete native rows when this proof is =bounded= or =unsupported=.
+The default ordinary receipt does not run finite stratified proof generation;
+the optional fourth budget requests it. The ground nonmembership certificate
+supports the same fixed clauses when their finite closure fits its bounds.
+
+A separate [[file:finite-stratified-evidence.org][finite stratified replay]]
+now checks exact relation sets for inspected candidates containing checked
+negation and count/sum/min/max reduction. It independently recomputes the
+finite model and binds a supplied closure to the snapshot, program and
+native answer. This is a full bounded replay, not a general derivation DAG
+or an explanation of why a real-world fact is absent.
+
+A separate [[file:finite-stratified-evidence.org][stratified derivation certificate]] checks founded
+positive witnesses, lower-stratum negative absence, exact reduction groups
+and final query roots against that replay. A bounded producer emits one
+checked proof for nonempty candidate answers. Supplying a fourth positive
+work budget to =reasoning-attempt= attaches this finite certificate and proof
+status to the ordinary receipt. The verifier rebinds the receipt to the
+current source and inert proposal, reinspects the candidate and checks the
+proof against a freshly replayed closure. An empty query keeps a verifiable
+finite certificate and an =unsupported= proof status. Budget exhaustion
+leaves native completion intact. General Why-Not semantics remain open.
+
+#+NAME: llm-library-evidence-status
+| Claim | Executable evidence | Remaining boundary |
+|-------+---------------------+--------------------|
+| Positive derivation | Replayable proof DAG for the checked positive clauses | No complete provenance for all derivations |
+| Ground positive nonmembership | Finite closed-relation certificate and independent rule-closure checker | No open-world absence or general Why-Not cause |
+| Negation and reduction | Opt-in receipt certificate, bounded producer and independent checker for founded nodes and exact groups | No complete lineage or general Why-Not |
+| Model usefulness | Two five-task paired pilots, one typed/founded observation study, and a three-source Scheme pilot in Agentic AI Lab Python Testing | No general benefit, deployed result or causal explanation |
+
+The finite verifier is independent of the native planner and solver, but its
+certificate generator and verifier share the separate replay semantics. The
+new proof checker uses the freshly replayed closure for lower-stratum
+completeness and exact reduction groups. The producer runs this checker
+before reporting completion. Both apply to inspected candidates and copied
+finite snapshots, not arbitrary programs or real-world absence. Broader
+semantics remain unimplemented.
+
+Candidate and source inputs now pass an iterative scalar/pair-tree
+preflight before list traversal or digest. It rejects cycles,
+executable leaves, excessive nesting and node-budget exhaustion while
+allowing a finite shared row. An inert but structurally rejected
+proposal keeps its content digest, so its diagnostic can be tied to
+the exact submitted proposal; a cyclic or executable proposal has no
+safe candidate digest. =reasoning-receipt-bound?= checks the current
+local snapshot identity, generation and digest together with candidate
+content. It does not authenticate the source, replay a proof or establish
+that the candidate means what the caller intended.
+
+The scripted transcript in
+=t/qualification/ascent-reasoning-library-test.ss= exercises this
+boundary end to end. A missing predicate is rejected with feedback; a
+valid but wrong recursive join completes with an incorrect total; the
+corrected join yields the independent finite-model total. A later
+source withdrawal changes that total, while a hypothetical candidate
+edge changes only its own attempt. An old receipt does not bind to the
+new generation, and a mutated proposal does not bind to its receipt.
+This is a fixed scripted caller, not evidence that an LLM can discover
+or repair a rule. The [[file:research/agent-inference/2026-logic-ai-screen.org][code-anchored research screen]] separates raw model
+proposals, accepted program meaning and independently checked results;
+the scripted transcript establishes only the native boundary.
+
+* Code map and intended seam
+:PROPERTIES:
+:CUSTOM_ID: llm-library-code-map
+:END:
+
+#+NAME: llm-library-code-map
+| Current module | Existing behavior | Next responsibility |
+|----------------+-------------------+---------------------|
+| =program/objects.ss=, =program/syntax.ss= | POO declarations and Scheme =ascent= lowering | Preserve the trusted Scheme authoring path; make its admitted program shape inspectable |
+| =program/analysis.ss=, =program/summary.ss= | Cached schema/plan metadata and dependency SCCs | Return stable admission diagnostics with relation/rule/clause location |
+| =program/evaluate.ss=, =program/session.ss= | Fixed-point results, immutable result snapshots and retained source replacement | The first candidate boundary uses one-shot admission/solve against a copied source snapshot |
+| =candidate/closure.ss= | Bounded binary-closure candidates and one shortest source support | The first candidate boundary implements its own row-labelled graph witness/cut; these remain distinct APIs |
+| =candidate/types.ss=, =candidate/program.ss=, =candidate/reasoning.ss= | Shared bounded data, inert inspection/lowering, snapshot execution and receipts | Keep source authority and general provenance outside the attempt boundary |
+| =candidate/finite-evidence.ss= | Separate exact finite replay and verifier for checked strata | Keep this optional bounded evidence distinct from native completion and general provenance |
+| =interface/request.ss= | Inert identity/bound projection for MRR handoff | Keep MRR identity authority separate from the LLM candidate contract |
+
+The public Library boundary should wrap these modules, not replicate
+their relation store or evaluator.  Its first candidate format is inert
+data: declared relation names and arities, finite source rows, checked
+rule bodies, a query, and budget values. It must not deserialize
+an arbitrary Scheme closure from LLM output. The trusted Scheme API can
+construct richer fragments with explicitly declared operators; the
+untrusted LLM surface admits only a fixed, inspectable subset.
+
+* Proposed flow and statuses
+:PROPERTIES:
+:CUSTOM_ID: llm-library-flow
+:END:
+
+#+begin_example
+source snapshot + candidate data
+    -> parse -> inspect -> admit -> solve -> query -> explain
+          rejected       |       complete / partial / unknown
+                         +-> detached attempt receipt
+#+end_example
+
+#+NAME: llm-library-contract
+| Operation | Required input | Required output | Claim boundary |
+|-----------+----------------+-----------------+----------------|
+| =inspect= | Inert candidate, schema and finite domain declaration | Located syntax/schema/binding/dependency diagnostics | Acceptance is not semantic correctness |
+| =solve= | Accepted program, exact source snapshot and budget | Immutable result or explicit partial/failure status | Budget exhaustion cannot be reported as a complete fixed point |
+| =query= | Completed result identity and relation/tuple pattern | Rows plus completion and snapshot identity | No hidden rerun or source mutation |
+| =explain-present= | Completed result and derived tuple | Bounded source/rule witness where supported | One witness is not exhaustive provenance |
+| =explain-absent= | Completed result, finite declared domain and target tuple | Verified absence plus reachable-set/cut evidence for the graph case | General recursive Why-Not remains a separate research problem |
+
+The current code uses =rejected=, =complete= and =unknown= statuses;
+=unsupported= is an evidence kind for a completed query.  =partial=
+is a future contract question, not an implemented success state.
+A result carries source generation, program identity,
+query, limits and whether the answer is complete.  An absent pair can
+only be called absent after the finite fixed point completes.  A graph
+cut can show that no edge crosses the reachable/unreachable partition
+in the named snapshot; it does not identify which hypothetical missing
+edge a user intended.
+
+* Research-to-implementation decisions
+:PROPERTIES:
+:CUSTOM_ID: llm-library-evidence-map
+:END:
+
+#+NAME: llm-library-paper-decisions
+| Research | Useful result | Implementation decision | Falsifier |
+|----------+---------------+-------------------------+-----------|
+| [[file:research/scheme-dsl/rule-planning.org][Ascent rule planning]] | Declarative rules with indexed, semi-naive fixed-point evaluation | Keep the relational rule graph and visible dependencies | A composed rule cannot be inspected or matches the finite model incorrectly |
+| [[file:research/scheme-dsl/functional-fixed-points.org][Datafun functional fixed points]] and [[file:research/scheme-dsl/higher-order-change.org][higher-order change]] | Monotonicity and higher-order delta need a typed semantic account | Treat pointwise Scheme functions as declared adapters; defer verified higher-order change semantics | A hidden mutable read changes closure under the same admitted program |
+| [[file:research/scheme-dsl/fragment-composition.org][Flix fragment composition]] and [[file:research/scheme-dsl/program-lifecycle.org][program lifecycle]] | First-class constraints and composition make library reuse plausible | Try Scheme-built fragment values with fresh private relation handles | Two fragment instances capture each other's private relations |
+| [[file:research/agent-inference/candidate-feedback.org][DatalogBench candidate execution feedback]] | Recursive programs can compile yet be semantically wrong | Test complete outputs and near-miss joins, not compile rate alone | Wrong recursive join passes the independent model corpus |
+| [[file:research/agent-inference/scoped-witness.org][LLM-MatLogic scoped witness execution]] | A valid executable graph constraint can still carry the wrong scope | Keep source snapshot, branch scope and witness visible before final-answer projection | A scoped exclusion is treated as a global absence claim |
+| [[file:research/agent-inference/why-not-explanations.org][PUG why/why-not explanation]] | Why/Why-Not needs explicit provenance semantics | Start with positive path witness and finite graph absence; defer general provenance | One support is presented as a complete explanation |
+
+The table maps papers to hypotheses; it does not transfer their proofs
+or benchmark scores to this implementation.
+
+* Executed baseline and remaining scientific gate
+:PROPERTIES:
+:CUSTOM_ID: llm-library-gates
+:END:
+
+The following order records the bounded first implementation. Steps 1–5
+have executable evidence for their stated subsets, not for the full
+language inventory. The current public contract and the shared
+native/candidate finite-model gate are in
+[[file:library-acceptance.org][the native Library admission note]].
+
+1. Settle the first Scheme language design gate and its lowering IR.
+   Write the new grammar, binding/mode rules, operator tiers and native
+   finite-model corpus before rewriting the current syntax module.
+2. Freeze a finite graph corpus and an independent reference closure.
+   Include duplicate edges, cycles, a source withdrawal, an undeclared
+   relation, an unsafe binding, and a compiling wrong recursive join.
+3. Make internal program construction/admission/solve/query return
+   complete facts and located failures for that corpus.  Compare fresh
+   and retained sessions; preserve older immutable result snapshots.
+4. Add the inert candidate adapter and typed attempt receipt.  Feed the
+   *same* corpus as data through this boundary.  Reject executable Scheme
+   procedures and out-of-domain terms before evaluation.
+5. Add bounded positive witness and finite graph absence evidence.  Test
+   witness soundness by replaying its source labels, and test absence
+   only when closure is complete.  Negative cases must return =unknown=
+   on budget exhaustion.
+6. The first deterministic transcript covers located rejection, valid
+   wrong formalization, corrected finite-model result, generation change
+   and hypothetical source overlay. A separate Agentic AI Lab Python Testing
+   caller then pre-registered five finite tasks, source fixtures, two arms,
+   three paired repeats per arm, fixed model settings, a 30-request cap
+   per pilot and separate choice/boundary scores before each run. The v1
+   model-only/tool choice scores were 12/15 and 15/15, while boundary
+   scores were 11/15 and 9/15. The v2 old/typed observation choice scores
+   were 15/15 in both arms; boundary scores were 9/15 and 12/15. All six
+   v2 closed-cut responses still claimed release authority despite the
+   native denial. Agentic AI Lab's Testing Runtime guard withholds that claim;
+   it does not repair the model. Protocols, individual failures and
+   receipts are in the Agentic AI Lab Python Testing documents
+   =model-study-baseline-results.org= and =model-study-typed-results.org=
+   on [[https://github.com/tao3k/agentic-ai-lab/pull/34][Agentic AI Lab PR #34]]. These pilots did not include a separate search arm,
+   repair-turn score or a deployment test. They do not establish a general
+   model advantage.
+   A later typed/founded JSON observation study scored choice 15/15 and
+   boundary 12/15 in both arms; its six closed-cut outputs still claimed
+   release authority. A separate nine-call study sent actual Gerbil
+   calling-program source and obtained 8/9 valid answer shapes after a
+   documented post-hoc syntax correction, but 0/9 exact row sets. It did
+   not send the imported Library implementation or use a native receipt
+   as feedback. Later Scheme-source studies are recorded separately in
+   Agentic AI Lab Python Testing. The latest five-call run sent existing pinned
+   ASCENT module source, one question per contract, and no answer key.
+   All five responses were readable; three matched the fixed answer
+   exactly. One body-diagnostic answer had the right code and zero-based
+   path but nested them incorrectly. One finite-receipt answer returned
+   =complete=, the receipt/evidence status, instead of the verifier's
+   =valid= verdict. Exact prompts, raw responses and scores are in
+   =model-study-scheme-source-questions.org= on
+   [[https://github.com/tao3k/agentic-ai-lab/pull/34][Agentic AI Lab PR #34]]. One answer per question cannot establish general
+   Scheme comprehension, and source questions do not test actual
+   model-to-Library tool use.
+
+Keep semantic conformance, Library protocol conformance and model
+helpfulness as three different claims.  The first gate needs no model;
+the final gate cannot be inferred from a green unit test.
+
+* Decisions for discussion
+:PROPERTIES:
+:CUSTOM_ID: llm-library-open-decisions
+:END:
+
+#+NAME: llm-library-decisions
+| Decision | Recommended first choice | Evidence that could change it |
+|----------+--------------------------+-------------------------------|
+| LLM candidate syntax | Inert rule data with a fixed checked operator subset | A task requires another operator that can be safely inspected and bounded |
+| Program identity | Content-derived identity plus named source generation in each attempt | Collision/canonicalization or source-revision test fails |
+| Explanation | One replayable positive witness; finite graph absence/cut | A use case demands complete provenance or a general Why-Not meaning |
+| Feedback size | Typed error code, precise location and bounded supporting rows | Model study shows needed detail without increased unsupported claims |
+| Adapter location | Scheme Library first; external serving adapter later | Measured protocol or latency bottleneck at the plain boundary |
+
+The candidate API and bounded pilots are implemented within these bounds.
+General derivation provenance, broad model usefulness and general reasoning
+verification remain unproved. The bounded stratified producer handles one
+checked support per nonempty answer, not every derivation or Why-Not cause.
+
+* Integrated ASCENT, Rust and model gate
+:PROPERTIES:
+:CUSTOM_ID: llm-library-integrated-gate
+:END:
+
+The next vertical case must bind one frozen source corpus, rule program
+and generation sequence across three separate checks. Agreement in one
+does not substitute for the others.
+
+| Check | Owner and input | Passing receipt | Open boundary |
+|-------+-----------------+-----------------+---------------|
+| Relational semantics | ASCENT Scheme direct/fragment/candidate paths; pinned Rust 0.8.0 where the behavior is defined; independent finite model | Complete row sets match after initial solve, alternate-support withdrawal, last-support withdrawal and source replacement; old snapshots stay immutable | The known =eqrel= split-producer Rust 0.8.0 divergence is a discriminator, not behavior to copy into Scheme |
+| Evidence semantics | ASCENT receipt bound to the same snapshot, candidate and budget | =complete= answer, =valid= finite verifier verdict and founded proof verdict are asserted independently; stale generation and changed candidate fail | One support is not all derivations; a complete finite closure does not certify source completeness or intent |
+| Model behavior | Agentic AI Lab Python Testing reads existing ASCENT source and invokes its public boundary; prompts, held-out source cases and expected native results are frozen before calls | Report execution correctness, diagnostic use, receipt-verdict interpretation and unsupported claims per task, with raw responses, budget and hashes | No conclusion about internal cognition, general model benefit or permission to act follows from a small sample |
+
+The [[file:research/scheme-dsl/rule-planning.org][Ascent paper]] and
+[[file:related-work-matrix.org][BYODS comparison]] motivate the Rust oracle
+and representation discriminator. [[file:research/scheme-dsl/deletion-rederivation.org][Deletion maintenance]]
+and [[file:research/scheme-dsl/incremental-view-maintenance.org][DBSP]] make alternate support
+and recomputation the first update comparison; no retained deletion
+algorithm is admitted without matched output and cost receipts.
+[[file:research/agent-inference/why-not-explanations.org][PUG]] motivates explicit
+Why/Why-Not scope, while the finite closure above justifies absence only
+inside its supplied closed snapshot.
+[[file:research/agent-inference/candidate-feedback.org][DatalogBench]] motivates
+execution scoring and separate diagnostic feedback; its published
+model scores do not transfer to this Library.
+
+The public contract now fixes four source states over nodes =0,1,2=,
+weights =2,4,6= and root =0=. The first graph contains edges =0->1=,
+=1->2= and =0->2=; removing =0->2= preserves the alternate chain;
+removing =1->2= removes the last support for =0->2=; replacing the
+source with only =0->2= produces a fresh result. Even weights are
+doubled before summation, so the expected totals are =20,20,8,12=.
+
+=scheme-library-contract-test.ss= compares direct, fragment and inert
+candidate results against an independent matrix model at each state,
+and checks the retained session and immutable first result. Each fresh
+candidate receipt separately passes finite and founded verification.
+The first receipt fails both verifiers against generation 1 even
+though its answer equals that generation's answer. The Rust test
+=support_withdrawal_matches_public_library_contract= checks full path,
+allowed and weighted sets plus the totals for the same four inputs,
+using a fresh Rust 0.8.0 program each time. The Rust gate also directly
+compares the reference output of
+=ascent-support-study-output.ss=, which imports this qualification
+corpus. This is a finite differential gate, not a retained Rust
+deletion algorithm.
+
+The approved Agentic AI Lab pair ran four =deepseek-flash= calls at Agentic AI Lab
+=f2f2315a= and ASCENT =d2b2eb5=, after both exact heads passed CI.
+The immutable preview manifest SHA256 is
+=780f9e96cd466c1f6e07c4d55ecf2d0abc668cb6b45384470165358461ec6283=.
+Candidate self-review and initial-source native feedback each used two
+calls with identical first prompts, non-thinking mode, temperature 0,
+maximum 1024 output tokens and zero retries. The two first responses
+were different despite identical requests. Four responses completed and
+were readable; both final candidates were rejected at all four states.
+
+The self arm preserved a flat compute clause, rejected as
+=invalid-computation= at =(clause 8 body 3)=. The native arm initially
+used unsupported multiplication; after =unsupported-operator= feedback
+it changed the operator to addition, but its flat where clause still
+failed as =invalid-filter= at =(clause 8 body 4)=. This is an observed
+local change without an admitted final program. It does not establish
+feedback benefit or failure of the qualified evaluator. The raw request,
+response, usage and native receipts are recorded by Agentic AI Lab in
+=model-study-support-candidates.org= and the external result directory
+=/private/tmp/poo-support-candidate-live-head-f2f2315a/=.
+
+No model-derived receipt completed or verified. Rejected receipts fail
+stale verification too, so the model pair does not test generation
+binding; that axis is inapplicable until the original-source receipt
+completes and verifies. The independent reference candidate still passes
+that gate. Blocked sets are empty and all source weights even in these
+four update states, so this model corpus does not independently detect
+missing negation or original-weight guards. Python Testing supplies no
+new Scheme program, and the feedback omits held-out source outputs.
+
+The next interface gate should expose accepted inert clause shapes,
+closed operator names/arities and located diagnostics as canonical data
+owned by the native parser, then check that description against actual
+admission. Reading implementation source alone did not produce admitted
+proposals in this pair. The next finite discriminator should include
+blocked pairs and odd source weights, and require a valid original
+receipt before evaluating stale generation. These remain new design and
+qualification tasks; no additional model calls were authorized or made.
+
+Run native and Rust checks first, then freeze the Agentic AI Lab protocol
+against the exact qualified ASCENT head. Python Testing should
+orchestrate real model calls and preserve their results; ASCENT owns
+Scheme programs, reference outputs and qualification. A new paid run
+needs an immutable prompt preview and explicit call budget. The first
+model comparison should distinguish source-only answers from actual
+candidate execution and bounded native feedback on the same task. A
+correct-format S-expression alone is not evidence of correct reasoning.
+
+The [[file:temporal-causality-module-design.org][temporal and causal lens]] is
+a subsequent, separate semantic gate. [[https://www2.eecs.berkeley.edu/Pubs/TechRpts/2009/EECS-2009-173.html][Dedalus]] motivates explicit logical
+time, but Rust Ascent 0.8.0 has no oracle for this proposed lens. Its
+finite reference must test valid time, knowledge generation, closed cuts,
+late events and two independent supports before a model sees a temporal
+receipt. The source owner supplies clock conversion and cut identity;
+ASCENT cannot infer them from arrival order. Agentic AI Lab's observed
+closed-cut release-claim failures remain a model boundary result, not
+evidence for the separate finite point-time lens implemented below.
+
+* Parser contract and discriminator qualification
+
+The next implementation slice exposes =candidate-language-description= from
+=candidate/program.ss=. Operator and reducer names/arities share the same
+registry with admission. Its fresh inert projection documents nested forms,
+prior-bound operator inputs and one-based candidate diagnostic paths. It is
+not a replacement for source schema, bindings, planner or bounded admission.
+=ascent-candidate-description-test.ss= sends advertised positive forms and
+malformed shapes/arities through real attempts, checks located failures and
+ensures mutating the description cannot change subsequent inspection.
+
+The shared =study-cases= extends the qualified support sequence with blocked,
+odd-weight and equal-weight cases, totals =20,20,8,12,8,12,8=. The independent
+matrix reference now sums distinct weighted values, matching relation set
+semantics even when two destinations share a weight. The direct, fragment and
+candidate paths check that model. Three admitted mutants (missing negation,
+missing guard, guard after doubling) must complete, verify finite/founded
+evidence and still disagree with intended output. Rust checks full path,
+allowed, weighted and summary sets and the exact native adapter projection.
+The retained support-withdrawal and valid-old-receipt generation tests remain.
+
+ASCENT also owns two erroneous syntax seeds, projected as inert data through
+=candidate-repair-seed=. Agentic AI Lab's new shared-seed repair protocol gives each
+arm the same contract, task and seed; only one receives initial-source native
+feedback. Two tasks alternate arm order at one call per arm/task (four calls).
+This measures bounded syntax repair conditional on seeds, not end-to-end
+program generation, verifier interpretation or general feedback benefit.
+The generation and evidence gates run before any paid call. A new immutable
+preview, exact-head CI and explicit budget approval were satisfied for the
+completed four-call run recorded below.
+
+The earlier model study's temporary evidence paths are gone. Agentic AI Lab retains
+four original response texts recovered only where bytes match their recorded
+hashes; original JSON, requests, preview and native records remain unavailable.
+No missing original records are reconstructed. New live runs require durable,
+verified archives for completed and failed runs. This retention correction does
+not change the historical rejected outcomes. Temporal lens work stays separate.
+
+Local receipts for this slice: parser-description 4 cases and public contract
+5 cases passed with =MODULE-OK=, =HARNESS-OK= and final =OK= under the five-second
+output watchdog. The Rust discriminator test passed (1 test, 74 filtered;
+2.80 seconds) against all seven adapter rows and meaningful stale rejection.
+Policy inspection selected 36 modules with zero findings/errors; the package
+build passed after selecting the system SDK rather than inherited Nix headers.
+These are local receipts; current-head remote CI is a separate required gate.
+
+* Completed shared-seed repair gate (2026-10-03)
+
+At qualified ASCENT =cd6f60f= and Agentic AI Lab =0b7a6c52=, the approved final
+manifest =8974b1c55a150a8595f56a2c70f977116db7c428ab09997e098265890b6cb781=
+produced exactly four completed requests, with zero retries. Both self and
+native repaired both supplied syntax-error seeds into the same candidate.
+All four candidates matched all seven independent outputs and verified
+current finite/founded receipts; each valid first receipt was rejected at
+the equal-answer next generation. The durable archive contains 23 verified
+original files (manifest SHA256
+=8843adf26bc2873635ab9910ea37fa44b095f2ed1aba9520ad95bec328278550=).
+
+Agentic AI Lab's =model-study-shared-seed-repair.org= and committed result inventory
+record request/response IDs, usage, timings, hashes and per-state scores.
+This closes this bounded repair protocol. Native feedback showed no observed
+correctness advantage in these two selected task pairs. General model benefit,
+verdict interpretation, temporal lens qualification, other replication
+families and release/deployment authority remain separate. No calls remain
+in the approved budget; the existing PRs remain open and unmerged.
+
+* Mainline temporal lens gate (2026-10-03)
+
+The next independent semantic slice is now implemented in =temporal/lens.ss=:
+POO values bind explicit source generation, clock, half-open valid window,
+knowledge-as-of and a caller-named parent-closed cut. The existing positive
+candidate evaluator produces finite/founded evidence. Nine integrated cases
+cover late events, dual/last-support withdrawal, immutable snapshots, open
+coverage, invalid cuts, horizon exhaustion, hypothetical isolation and receipt
+tampering. Two independent finite models cover 128 graph-order solves and
+128 cut/knowledge/window combinations. A matched 8/32/128-event scale recipe
+records metadata costs without a speedup claim.
+
+Empty complete queries retain valid finite closure and explicitly unsupported
+founded Why-Not evidence. No general temporal rule language, interval algebra,
+POO/MRR source authority bridge or real-world causal semantics is admitted.
+The [[file:temporal-causality-module-design.org][temporal design ledger]] distinguishes this implemented gate from its open
+extensions. Model calls remain separately budgeted; none were made here.
+
+Native temporal receipts now bind all canonical lens/source/root/scope
+coordinates through their snapshot identity, including equal-output cut or
+window changes. A POO extension cannot relabel an old receipt; solve/verify,
+fork and compare all retain actual native evidence checks. The ninth
+qualification case tests that binding explicitly. This is content integrity,
+not source-owner authority.
+
+* Next executed gate: bounded point uncertainty
+
+The native temporal lens now accepts closed uncertainty bounds and exposes a
+three-valued window judgment. The same integrated qualification keeps the
+existing graph/cut/knowledge/withdrawal/fork receipt gates and adds independent
+point enumeration plus uncertain parent-order and metadata-binding checks.
+POO owns the explicit identity/dual-axis exchange. MRR temporal source admission
+and source authentication remain open; no paid model call is added.

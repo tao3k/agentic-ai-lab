@@ -8,14 +8,15 @@
 ;;; Runtime contract: Marlin owns all native/Cube API execution after handoff.
 ;;; Policy evidence: dispatcher tests assert nono/Cube routing and failure gates.
 
-(import (only-in :poo-flow/src/core/failure raise-control-plane-failure)
-        (only-in :poo-flow/src/core/runtime-protocol +runtime-request-schema+)
-        :poo-flow/modules/agent-sandbox/alist
-        :poo-flow/modules/agent-sandbox/projection-syntax
-        :poo-flow/modules/agent-sandbox/profile
-        :poo-flow/modules/agent-sandbox/bridge
-        :poo-flow/modules/nono-sandbox/c-binding
-        :poo-flow/modules/agent-sandbox/cube-interface)
+(import (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol +runtime-request-schema+)
+        :agentic-ai-lab/modules/agent-sandbox/alist
+        :agentic-ai-lab/modules/agent-sandbox/projection-syntax
+        :agentic-ai-lab/modules/agent-sandbox/profile
+        :agentic-ai-lab/modules/agent-sandbox/bridge
+        (only-in :agentic-ai-lab/modules/nono-sandbox/c-binding-runtime
+                 nono-c-binding-runtime-manifest->manifest)
+        :agentic-ai-lab/modules/agent-sandbox/cube-interface)
 
 (export +agent-sandbox-marlin-interface-schema+
         +agent-sandbox-marlin-admission-schema+
@@ -47,13 +48,13 @@
 ;;; delegates to backend-specific nono or Cube runners.
 ;; : (-> Unit MarlinInterfaceSchema)
 (def +agent-sandbox-marlin-interface-schema+
-  'poo-flow.agent-sandbox-marlin-interface.v1)
+  'agentic-ai-lab.agent-sandbox-marlin-interface.v1)
 
 ;;; Admission envelopes are the Marlin runtime entry contract. They keep the
 ;;; core runtime request identity beside the selected backend handoff manifest.
 ;; : (-> Unit MarlinAdmissionSchema)
 (def +agent-sandbox-marlin-admission-schema+
-  'poo-flow.agent-sandbox-marlin-admission.v1)
+  'agentic-ai-lab.agent-sandbox-marlin-admission.v1)
 
 ;;; Supported backends are explicit so adding a new backend requires a dispatch
 ;;; branch and tests instead of silently passing through unknown manifests.

@@ -5,10 +5,10 @@
 
 ;;; Contract: session policy and tool grants expose native POO Contracts.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
-;; : (-> PooFlowSessionPolicyExpr PooFlowSessionPolicyValue)
+;; : (-> AgenticAILabSessionPolicyExpr AgenticAILabSessionPolicyValue)
 (def (session-policy-eval expr)
   (eval expr))
 
@@ -27,7 +27,7 @@
 
 (def session-policy-native-type-contract-test
   (test-suite "session-policy-native-type-contract-test"
-    (poo-flow-test-case "validates the native contract"
+    (yuanxu-test-case "validates the native contract"
       (eval '(import "./modules/session/policy.ss"))
       (eval '(import :clan/poo/mop :clan/poo/object))
       (eval
@@ -36,7 +36,7 @@
             (if entry (cdr entry) default-value))))
       (let (policy-row
       (session-policy-eval
-       '(poo-flow-session-policy-type-contract->alist)))
+       '(agentic-ai-lab-session-policy-type-contract->alist)))
   (unless (and (eq? (alist-ref/default policy-row 'object-kind #f)
                     'PooSessionPolicy)
                (equal? (contract-slot-names policy-row)
@@ -47,7 +47,7 @@
 
 (let (grant-row
       (session-policy-eval
-       '(poo-flow-session-tool-grant-type-contract->alist)))
+       '(agentic-ai-lab-session-tool-grant-type-contract->alist)))
   (unless (and (eq? (alist-ref/default grant-row 'object-kind #f)
                     'PooSessionToolGrant)
                (equal? (contract-slot-names grant-row)
@@ -58,19 +58,19 @@
 (unless
  (session-policy-eval
   '(and
-    (element? Type PooFlowSessionPolicyContract)
-    (element? Type PooFlowSessionToolGrantContract)
+    (element? Type AgenticAILabSessionPolicyContract)
+    (element? Type AgenticAILabSessionToolGrantContract)
     (element?
-     PooFlowSessionPolicyContract
-     (poo-flow-session-tool-permission-policy
+     AgenticAILabSessionPolicyContract
+     (agentic-ai-lab-session-tool-permission-policy
       'policy/native-contract
       'session/native-contract
       '()
       '()
       'deny))
     (element?
-     PooFlowSessionToolGrantContract
-     (poo-flow-session-tool-grant
+     AgenticAILabSessionToolGrantContract
+     (agentic-ai-lab-session-tool-grant
       'grant/read
       'read-workspace-file
       '(read)
@@ -78,12 +78,27 @@
       '(agent-turn)))))
  (error "session policy contracts should be native Types and admit valid grants"))
 
+;; Wire rows are a projection, never a substitute for the native grant value.
+(unless
+ (session-policy-eval
+  '(let (grant (agentic-ai-lab-session-tool-grant
+                'grant/read 'read-workspace-file '(read) '(project-workspace) '(agent-turn)))
+     (and (equal? (map car (agentic-ai-lab-session-tool-grant->alist grant))
+                  '(kind schema grant-id tool-ref actions resource-refs trigger-refs metadata runtime-executed))
+          (not (element? AgenticAILabSessionToolGrantContract
+                         (agentic-ai-lab-session-tool-grant->alist grant)))
+          (not (element? AgenticAILabSessionToolGrantContract
+                         (.cc grant 'actions '(read 42))))
+          (not (element? AgenticAILabSessionToolGrantContract
+                         (.o kind: 'agentic-ai-lab.session.tool-grant))))))
+ (error "native grant admission and canonical wire projection must retain their boundaries"))
+
 (when
  (session-policy-eval
   '(element?
-    PooFlowSessionToolGrantContract
-    '((kind . poo-flow.session.tool-grant)
-      (schema . poo-flow.modules.session.tool-grant.v1)
+    AgenticAILabSessionToolGrantContract
+    '((kind . agentic-ai-lab.session.tool-grant)
+      (schema . agentic-ai-lab.modules.session.tool-grant.v1)
       (grant-id . grant/read)
       (tool-ref . read-workspace-file)
       (actions . (read))
@@ -91,14 +106,44 @@
       (trigger-refs . (agent-turn))
       (metadata)
       (runtime-executed . not-a-boolean))))
- (error "native session tool grant contract should reject invalid slots"))
+ (error "native session tool grant contract should reject wire rows"))
+
+(when
+ (session-policy-eval
+  '(element? AgenticAILabSessionToolGrantContract
+     (.o kind: 'agentic-ai-lab.session.tool-grant
+         schema: 'agentic-ai-lab.modules.session.tool-grant.v1
+         grant-id: 'grant/read tool-ref: 'read-workspace-file
+         actions: '(read) resource-refs: '(project-workspace)
+         trigger-refs: '(agent-turn) metadata: '()
+         runtime-executed: 'not-a-boolean)))
+ (error "native session tool grant contract should reject invalid typed fields"))
+
+(unless
+ (session-policy-eval
+  '(let* ((grant (agentic-ai-lab-session-tool-grant 'grant/read 'read-workspace-file
+                   '(read) '(project-workspace) '(agent-turn)))
+          (wire (agentic-ai-lab-session-tool-grant->alist grant))
+          (policy (agentic-ai-lab-session-tool-permission-policy
+                    'policy/native-contract 'session/native-contract (list grant) '() 'deny))
+          (policy-wire (agentic-ai-lab-session-policy->alist policy)))
+     (and (object? grant) (list? wire)
+          (equal? (cdr (assq 'tool-grants policy-wire)) (list wire))
+          (equal? (cdr (assq 'tool-grants (cdr (assq 'policy-slots policy-wire)))) (list wire))
+          (equal? wire
+            '((kind . agentic-ai-lab.session.tool-grant)
+              (schema . agentic-ai-lab.modules.session.tool-grant.v1)
+              (grant-id . grant/read) (tool-ref . read-workspace-file)
+              (actions . (read)) (resource-refs . (project-workspace))
+              (trigger-refs . (agent-turn)) (metadata) (runtime-executed . #f))))))
+ (error "semantic grants should be native and wire projections retain their fields"))
 
 (when
  (session-policy-eval
   '(element?
-    PooFlowSessionPolicyContract
-    (.o kind: 'poo-flow.session.policy
-        schema: 'poo-flow.modules.session.policy.tool-permission.v1
+    AgenticAILabSessionPolicyContract
+    (.o kind: 'agentic-ai-lab.session.policy
+        schema: 'agentic-ai-lab.modules.session.policy.tool-permission.v1
         policy-kind: 'agent-tool-permission
         policy-name: 'policy/native-contract
         scope-ref: 'session/native-contract
@@ -111,9 +156,9 @@
 
 (unless
  (session-policy-eval
-  '(poo-flow-session-policy-require-slots!
-    'poo-flow.session.policy
-    'poo-flow.modules.session.policy.tool-permission.v1
+  '(agentic-ai-lab-session-policy-require-slots!
+    'agentic-ai-lab.session.policy
+    'agentic-ai-lab.modules.session.policy.tool-permission.v1
     'agent-tool-permission
     'policy/test-tools
     'session/test
@@ -127,9 +172,9 @@
 
 (unless
  (session-policy-eval
-  '(poo-flow-session-tool-grant-require-slots!
-    'poo-flow.session.tool-grant
-    'poo-flow.modules.session.tool-grant.v1
+  '(agentic-ai-lab-session-tool-grant-require-slots!
+    'agentic-ai-lab.session.tool-grant
+    'agentic-ai-lab.modules.session.tool-grant.v1
     'grant/read
     'read-workspace-file
     '(read)
@@ -142,21 +187,21 @@
 (unless
  (session-policy-eval
   '(let* ((grant
-           (poo-flow-session-tool-grant
+           (agentic-ai-lab-session-tool-grant
             'grant/read
             'read-workspace-file
             '(read)
             '(project-workspace)
             '(agent-turn)))
           (policy
-           (poo-flow-session-tool-permission-policy
+           (agentic-ai-lab-session-tool-permission-policy
             'policy/test-tools
             'session/test
             (list grant)
             '(write-workspace-file)
             'deny))
-          (row (poo-flow-session-policy->alist policy)))
-     (and (poo-flow-session-policy? policy)
+          (row (agentic-ai-lab-session-policy->alist policy)))
+     (and (agentic-ai-lab-session-policy? policy)
           (= (alist-ref/default row 'tool-grant-count 0) 1)
           (not (alist-ref/default row 'runtime-executed #t)))))
  (error "session policy constructor should use valid contract-gated values"))
@@ -166,9 +211,9 @@
   '(with-catch
     (lambda (_failure) #f)
     (lambda ()
-      (poo-flow-session-tool-grant-require-slots!
-       'poo-flow.session.tool-grant
-       'poo-flow.modules.session.tool-grant.v1
+      (agentic-ai-lab-session-tool-grant-require-slots!
+       'agentic-ai-lab.session.tool-grant
+       'agentic-ai-lab.modules.session.tool-grant.v1
        'grant/read
        'read-workspace-file
        '(read)

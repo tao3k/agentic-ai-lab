@@ -18,7 +18,7 @@
 
 * Decision
 
-POO Flow SHALL consume one provider-neutral =AgentActionEvidenceEnvelope=.  A
+Agentic AI Lab SHALL consume one provider-neutral =AgentActionEvidenceEnvelope=.  A
 Cursor, Claude, Codex, or future adapter may normalize its own log format, but
 neither Scheme nor Lean SHALL parse those provider-native logs as an assurance
 interface.
@@ -31,7 +31,7 @@ The envelope preserves the existing separation:
 4. =traceParentRoot= binds causal ancestry across action boundaries.
 
 This RFC does not prescribe a fixed three-layer, ten-layer, or vendor-specific
-security architecture.  POO Flow is a composition engine: organizations may
+security architecture.  Agentic AI Lab is a composition engine: organizations may
 compose control, data, identity, model, workload, supply-chain, runtime,
 governance, or other guarantee coordinates.  The executable transition below
 defines the minimum cross-coordinate invariants required before an action can
@@ -56,9 +56,9 @@ classifier is an assurance substitute.
 
 The public Scheme surface is POO-native:
 
-- =poo-flow-agent-action-evidence-envelope= constructs the typed POO object;
-- =poo-flow-ai-security-transition-policy= constructs policy authority;
-- =poo-flow-ai-security-transition-prototype= is the ordinary =.mix= extension
+- =agentic-ai-lab-agent-action-evidence-envelope= constructs the typed POO object;
+- =agentic-ai-lab-ai-security-transition-policy= constructs policy authority;
+- =agentic-ai-lab-ai-security-transition-prototype= is the ordinary =.mix= extension
   point;
 - the =execute= and =replay-valid?= slots are pure functions;
 - the transition emits a versioned POO receipt with envelope digest, output
@@ -151,6 +151,6 @@ correctness chain.
 
 - =src/policy/ai-security-executable-refinement.ss=
 - =t/ai-security-executable-refinement-test.ss=
-- =packages/proofs/python/src/poo_flow_proof/ai_security_executable_refinement.py=
+- =packages/proofs/python/src/agentic_ai_lab_proof/ai_security_executable_refinement.py=
 - =packages/proofs/python/tests/test_ai_security_executable_refinement.py=
-- =packages/proofs/lean/PooFlowProof/Enterprise/AISecurityExecutableRefinementImplementationClosure.lean=
+- =packages/proofs/lean/AgenticAILabProof/Enterprise/AISecurityExecutableRefinementImplementationClosure.lean=

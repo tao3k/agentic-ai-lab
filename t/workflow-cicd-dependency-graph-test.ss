@@ -6,12 +6,12 @@
 ;;; Boundary: workflow CI/CD dependency graphs report topology only.
 ;;; Invariant: tests inspect graph diagnostics without scheduling work.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  test-suite
                  check-equal?
                  )
-        :poo-flow/modules/workflow/interface)
+        :agentic-ai-lab/modules/workflow/interface)
 
 (export workflow-cicd-dependency-graph-test)
 
@@ -24,9 +24,9 @@
 
 ;;; Minimal checks isolate graph topology from sandbox profile resolution; the
 ;;; command is inert intent data and is never executed by these tests.
-;; : (-> Symbol [Symbol] PooFlowCicdCheck)
+;; : (-> Symbol [Symbol] YuanxuCicdCheck)
 (def (cicd-graph-test-check name dependency-refs)
-  (poo-flow-cicd-check
+  (yuanxu-cicd-check
    name
    'ci/check
    '("true")
@@ -44,27 +44,27 @@
 ;; : TestSuite
 (def workflow-cicd-dependency-graph-test
   (test-suite "workflow cicd dependency graph"
-    (poo-flow-test-case "reports topology diagnostics without scheduling"
+    (yuanxu-test-case "reports topology diagnostics without scheduling"
       (let* ((valid-graph
-              (poo-flow-cicd-check-map->dependency-graph
-               (poo-flow-cicd-check-map
+              (yuanxu-cicd-check-map->dependency-graph
+               (yuanxu-cicd-check-map
                 'valid
                 (list (cicd-graph-test-check 'build '())
                       (cicd-graph-test-check 'test '(build))))))
              (duplicate-graph
-              (poo-flow-cicd-check-map->dependency-graph
-               (poo-flow-cicd-check-map
+              (yuanxu-cicd-check-map->dependency-graph
+               (yuanxu-cicd-check-map
                 'duplicate
                 (list (cicd-graph-test-check 'build '())
                       (cicd-graph-test-check 'build '())))))
              (unresolved-graph
-              (poo-flow-cicd-check-map->dependency-graph
-               (poo-flow-cicd-check-map
+              (yuanxu-cicd-check-map->dependency-graph
+               (yuanxu-cicd-check-map
                 'unresolved
                 (list (cicd-graph-test-check 'test '(missing))))))
              (cycle-graph
-              (poo-flow-cicd-check-map->dependency-graph
-               (poo-flow-cicd-check-map
+              (yuanxu-cicd-check-map->dependency-graph
+               (yuanxu-cicd-check-map
                 'cycle
                 (list (cicd-graph-test-check 'build '(test))
                       (cicd-graph-test-check 'test '(build)))))))

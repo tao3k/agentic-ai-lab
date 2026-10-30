@@ -9,17 +9,17 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :std/list/list every)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/delta-types
-                 poo-flow-temporal-trajectory-delta?)
-        (only-in :poo-flow/modules/temporal-causality/trajectory/delta-funs
-                 poo-flow-temporal-trajectory-delta)
-        (only-in :poo-flow/modules/temporal-causality/impact/types
-                 poo-flow-temporal-impact-contrast?)
-        (only-in :poo-flow/modules/temporal-causality/impact/funs
-                 poo-flow-temporal-impact-contrast)
-        (only-in :poo-flow/modules/temporal-causality/impact/refresh-objects
-                 poo-flow-temporal-impact-refresh-value))
-(export poo-flow-temporal-impact-refresh)
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/delta-types
+                 agentic-ai-lab-temporal-trajectory-delta?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/trajectory/delta-funs
+                 agentic-ai-lab-temporal-trajectory-delta)
+        (only-in :agentic-ai-lab/modules/temporal-causality/impact/types
+                 agentic-ai-lab-temporal-impact-contrast?)
+        (only-in :agentic-ai-lab/modules/temporal-causality/impact/funs
+                 agentic-ai-lab-temporal-impact-contrast)
+        (only-in :agentic-ai-lab/modules/temporal-causality/impact/refresh-objects
+                 agentic-ai-lab-temporal-impact-refresh-value))
+(export agentic-ai-lab-temporal-impact-refresh)
 
 (def (text? value) (and (string? value) (> (string-length value) 0)))
 (def (digest datum)
@@ -30,20 +30,20 @@
   (map (lambda (sample) (.ref (.ref sample 'instant) 'coordinate))
        (.ref series 'samples)))
 
-(def (poo-flow-temporal-impact-refresh
+(def (agentic-ai-lab-temporal-impact-refresh
       identity previous left-delta right-delta)
   (unless (and (text? identity)
-               (poo-flow-temporal-impact-contrast? previous)
-               (poo-flow-temporal-trajectory-delta? left-delta)
-               (poo-flow-temporal-trajectory-delta? right-delta))
+               (agentic-ai-lab-temporal-impact-contrast? previous)
+               (agentic-ai-lab-temporal-trajectory-delta? left-delta)
+               (agentic-ai-lab-temporal-trajectory-delta? right-delta))
     (error "invalid impact refresh input"))
   (let* ((left
-          (poo-flow-temporal-trajectory-delta
+          (agentic-ai-lab-temporal-trajectory-delta
            (.ref left-delta 'identity)
            (.ref left-delta 'previous-series)
            (.ref left-delta 'revised-series)))
          (right
-          (poo-flow-temporal-trajectory-delta
+          (agentic-ai-lab-temporal-trajectory-delta
            (.ref right-delta 'identity)
            (.ref right-delta 'previous-series)
            (.ref right-delta 'revised-series)))
@@ -52,7 +52,7 @@
          (new-left (.ref left 'revised-series))
          (new-right (.ref right 'revised-series))
          (canonical-previous
-          (poo-flow-temporal-impact-contrast
+          (agentic-ai-lab-temporal-impact-contrast
            (.ref previous 'identity) old-left old-right)))
     (unless (and (equal? (.ref left-delta 'semantic-digest)
                          (.ref left 'semantic-digest))
@@ -90,19 +90,19 @@
             (case action
               ((reused) canonical-previous)
               ((recomputed)
-               (poo-flow-temporal-impact-contrast
+               (agentic-ai-lab-temporal-impact-contrast
                 (string-append identity "/contrast") new-left new-right))
               (else #f)))
            (semantic-digest
             (digest
-             (list 'poo-flow.temporal-causality.impact-refresh.v1
+             (list 'agentic-ai-lab.temporal-causality.impact-refresh.v1
                    identity (.ref canonical-previous 'semantic-digest)
                    (.ref left 'semantic-digest)
                    (.ref right 'semantic-digest)
                    (.ref new-left 'semantic-digest)
                    (.ref new-right 'semantic-digest)
                    action reason (and revised (.ref revised 'semantic-digest))))))
-      (poo-flow-temporal-impact-refresh-value
+      (agentic-ai-lab-temporal-impact-refresh-value
        identity semantic-digest canonical-previous revised
        (.ref left 'semantic-digest) (.ref right 'semantic-digest)
        (.ref new-left 'semantic-digest) (.ref new-right 'semantic-digest)

@@ -1,0 +1,599 @@
+#+title: Trajectory Evidence for Open Exploration
+
+* Scope
+
+This is an evolving ASCENT Trajectory protocol. The implemented slice is
+domain-independent: Gambit SMP, package builds, and other agent
+workloads may supply evidence, but the upstream protocol knows none of their
+specialized terms. Its output is an advisory observation packet, not an action
+selection, authorization, or proof-admission decision.
+
+The [[file:../scheme-design-framework.org::*Evidence-driven progressive discovery][design framework]] makes evidence-before-action and evidence-driven
+registration core architectural obligations. A registered association removes
+adapter wiring from ordinary queries, not caller ownership of the query.
+
+=ClueExchange.parse_request= decodes inert Scheme association-list data using
+the existing bounded Library reader. It transports the same =bindings=,
+=questions=, =expand=, =checkpoint= and =displayBytes= request fields; optional
+=selector= and =constructor= carry caller-written DSL. It does not evaluate
+request forms or infer relevance. Unknown/duplicate fields and executable forms
+reject. This allows adapters to remove query flags instead of maintaining two
+public request protocols. A checkpoint is still an explicit read hint, not
+execution permission or a mandatory research direction.
+
+For conjunctive association, downstream rules must match every supplied binding
+on one observation ID/digest, not combine different witnesses of a claim. Empty
+anchors need not select everything. Distinguish individually unknown factors
+from available factors with no common witness. Neither gap is evidence of
+absence or a ban on exploration. Selected claim families retain both polarities
+and boundary references. This policy remains downstream DSL; no mandatory
+Library association or natural-language matching engine is introduced.
+
+The [[file:../trajectory-supervision-feedback.md][supervision feedback review]] records the DSL-first extension boundary and
+how observed Agent failures should be assigned to the owning layer.
+
+The purpose is to make retained work available before another expensive
+attempt, leaving more time and context for new hypotheses. An agent may still
+repeat an action intentionally. The protocol must never infer hidden reasoning
+steps, treat missing usage as zero, or equate low immediate evidence gain with
+an unworthy exploratory idea.
+
+* Position in the Existing Architecture
+
+Trajectory already owns ordered calls, failures, repairs, verification,
+reported cost, and source-generation invalidation. Evidence DAG and
+EvidenceChain own applicability and current result paths. The extension joins
+these by stable references; it must not clone transcript storage or make model
+prose an independent verifier. A previous source generation remains visible
+as history but cannot supply a current result without revalidation.
+
+* Generic Attempt and Comparison
+
+The host may attach opaque =questionIdentity=, =scopeIdentity=,
+=operationIdentity=, =inputIdentity=, =toolIdentity=, optional proposal and
+purpose, and existing evidence/verdict references to an ordered attempt.
+Unknown fields remain unknown. Speculative ideas need not declare a falsifier
+until an actual experiment is proposed. A host-supplied purpose for a repeat
+records intent, not permission to bypass an external execution check.
+
+An incremental Scheme projection should derive:
+
+| Relation | Meaning |
+|----------+---------|
+| =ComparableEarlier= | Bound question, operation and relevant premise identities agree |
+| =ChangedPremise= | A source, scope, model, tool, input or proposal differs |
+| =ComparisonUnknown= | Required identities are absent; no equality conclusion |
+| =RetainedResult= | Earlier checked path still answers the current question |
+| =InformationDelta= | A host-bound new observation, result or verdict exists |
+| =OpenAlternative= | Optional host-supplied competing proposal or discriminator |
+| =RepeatNotice= | An exact current path already answers this question |
+
+These are independent descriptions, not a scalar novelty score. Textual
+similarity alone cannot establish =ComparableEarlier=. A failed experiment can
+be valuable when it contributes a new counterexample. An =OpenAlternative=
+set is always open-world; no finite list certifies that exploration is complete.
+No relation is a deny rule or a mandatory next-step schedule.
+
+The packet schema is deliberately closed: a new =next=, =recommendedAction=,
+rank, prescribed choice, or finite menu requires an explicit contract revision.
+The runtime test asserts the complete packet and comparison key sets. That
+test guards the current implementation; it cannot judge arbitrary prose or
+prove that an agent will explore well.
+
+* Reasoning Context
+
+The candidate-free =context= projection exposes only retained attempt IDs,
+generations, supplied identity premises and their historical status. It does
+not expose result references, rank attempts, or require an action or hypothesis
+to have been selected first. Its immutable packet has the same owner, source,
+generation, event-count and full-prefix content-identity freshness check as
+=explore=. The V1 packet's =prefixIdentity= is an opaque identity for the
+complete ordered observed event prefix, including non-attempt events. It is
+computed by the producing implementation; Rust and Scheme digest encodings
+are not asserted to be interchangeable. This identity is not a packet
+signature or a verdict: an independent rule reviewer must replay the bound
+prefix and recompute the claimed relations rather than trust a supplied
+comparison row. An agent may inspect this context before it formulates a
+candidate. The candidate-specific =explore=
+projection then exposes current checked references, similar historical attempts,
+changed premises and missing bindings.
+Every relation points back to its observed event; none is a command, a ranked
+option list, or an assertion that the remaining hypothesis space is closed.
+The model can reuse a result, replicate intentionally, question the comparison,
+or invent a direction absent from the packet. Trajectory records the eventual
+choice only after it is observed, without granting that choice authority.
+
+* Progressive Evidence Access (Design Contract)
+
+The =context= and =explore= packets above are available on demand. They must
+not be copied into every Agent handoff. A persistent full attempt list would
+repeat information the Agent already read, obscure new evidence, and make
+Trajectory itself an expensive default context source. ASCENT instead exposes
+a small, source-bound *evidence index* in the ordinary reasoning view. The
+index describes what can be queried and what has changed; it is not a digest
+of every retained attempt or a prescribed research plan.
+
+| Read surface | Supplied information | When it is useful |
+|--------------+----------------------+-------------------|
+| Brief index | Current evidence/view identity, changed or stale relation references, open questions, and opaque handles for deeper reads; no attempt list or result payload | Ordinary Agent handoff and resumption |
+| Focused delta | Relations and evidence references for a caller-chosen question, hypothesis, obligation, or candidate, relative to a previously observed view | A comparison, contradiction, changed premise, repeated observation, or deliberate investigation |
+| Exact prefix | Source-bound ordered events and original receipt references for a named prefix | Auditing a particular comparison, causal claim, or historical continuation |
+
+The Agent may request any deeper surface at any time, including for a novel
+hypothesis not named by the brief index. A cue that a focused read could be
+useful is not a mandatory trigger, an action recommendation, a closed menu, or
+an execution authorization. Absence of a cue cannot establish absence of
+relevant evidence. The brief index must make the read capabilities discoverable
+without enumerating all hypotheses or all history.
+
+A caller-owned observed-view identity lets ASCENT answer a repeated read with
+"no relevant change" plus the prior view reference, rather than replaying the
+same payload. A changed view returns the relation-level delta and references
+needed to inspect it. This is a relevance and identity contract, not a fixed
+history cap, arbitrary token limit, or guarantee that the Agent remembers the
+previous payload. Unknown comparison, changed premises, source replacement,
+interruption, and unavailable receipts remain explicit; they must not be
+silently collapsed into "no change". The view identity binds its rule source,
+owner, source generation, complete relevant input identities, and observed
+prefix. Reuse requires an independent currentness check of those bindings.
+
+Trajectory remains the single ordered attempt history. Evidence DAG and
+EvidenceChain remain the authority for current support. Incremental ASCENT
+relations derive the index and focused delta from bound facts; the host only
+transports requests, identities, references, and receipts. A materialized
+read may be reused only while its dependencies are current. Expanding the
+exact prefix must not be part of the ordinary handoff path. A result reference
+from an exact read still requires its independent evidence review before it
+can answer a current question.
+
+This section specifies a proposed read contract, not an implemented three-tier
+API or measured Agent improvement. Implementation must connect the brief index
+to a real Agent handoff, offer caller-selected focused reads, and retain exact
+prefix inspection. Qualification must replay historical prefixes using only
+then-available evidence, verify stale and same-count/different-content
+invalidations, and compare matched continuations for repeated work, new
+observations, hypothesis diversity, task completion, and actual cost. Neither
+fewer reads nor fewer repeat notices alone establishes a better Agent.
+
+The current =brief= implementation is a thin owner/source/prefix-bound event
+index. It advertises =context=, =explore=, =focus=, =exact-prefix= and
+=snapshot= without carrying attempts, results or an action choice. =focus=
+returns comparisons for a caller-chosen candidate relative to an observed
+prefix; =exact-prefix= requires the caller's retained-prefix digest. These
+are available reads, not yet the arbitrary Evidence-DAG relation-level delta
+in the table. A host must still expose the brief in its ordinary handoff; a
+repository document alone does not make an Agent discover the interface.
+
+An unsteered low-cost Agent probe of the downstream SMP repository found the
+relevant native receipts and gave a bounded 5/12 assessment, but never invoked
+Trajectory. A later public-action black-box probe initially conflated duplicate
+event IDs with duplicate research attempts, and a foreign observed owner with
+an unavailable receipt. On validity review it corrected both claims: the
+public action API can reject an ID collision and stale packet identity, but
+cannot observe whether a persisted native receipt file survived interruption.
+This is an interface/host-evidence gap, not evidence that SMP has passed or that
+Agent reasoning has become cheaper. Do not score those substitute probes as
+successful tests of the intended three cases.
+
+After =focus= and =exact-prefix= became public, a second black-box continuation
+distinguished an unrelated attempt (unchanged, no comparisons) from a matching
+attempt (changed, one comparison, no action selected). It also kept a retained
+prefix readable after append while refusing to treat the old packet as current.
+The Agent explicitly reported that missing native receipt files remain outside
+Trajectory's public action inputs; this was a qualified partial result, not a
+three-breakpoint pass or a measured Agent-efficiency improvement.
+
+=packages/proofs/quint/TrajectoryProgressiveAccess.qnt= models the thin read,
+caller-available deeper reads, source/content replacement, receipt loss and
+interruption. Its healthy finite state graph satisfies =Safety= under TLC;
+stale-acceptance, missing-receipt, dropped-history, full-handoff and hidden-focus
+mutations violate it. =packages/proofs/lean/Trajectory.lean= states the typed
+view/receipt/review admission laws. Neither artifact proves the implementation
+refines the model, host discoverability, Agent reasoning quality or native SMP
+correctness. Those require an actual current-producer handoff and matched
+black-box continuations after the missing read surfaces are implemented.
+
+From the repository root, the finite protocol and typed laws can be checked
+without a downstream SMP fixture:
+
+#+begin_src sh
+quint verify packages/proofs/quint/TrajectoryProgressiveAccess.qnt --main TrajectoryProgressiveAccessHealthy --backend tlc --invariant Safety --max-steps 8
+just check-lean-file Trajectory.lean
+#+end_src
+
+** Query-Driven Clue Exchange (Design Contract)
+
+*** Caller-owned navigation and durable host submissions
+
+Navigation semantics belong to the caller's Scheme DSL. The application can
+declare factor matching, recursive domain relations or another projection over
+its Facts. ASCENT supplies the Evidence execution and source/receipt protocol;
+it does not impose one factor intersection or preferred path. A consumer maps
+the caller's resulting claims into scoped Clue reads. Query help and source
+handles are on-demand reads, not an investigation sequence.
+
+Protocol models and proofs remain Library-owned. Their assumptions must be
+stated independently of the caller's chosen matching rules. An arbitrary DSL
+does not inherit a proof of its own relevance, completeness or algorithm from
+a proof of receipt identity and journal retention.
+
+=packages/proofs/quint/ClueSubmission.qnt= models concurrent captured prefixes,
+immutable submissions, source replacement, read views and restart. Its finite
+instance has two clue IDs and two sources. Three fault controls cover accepting
+a stale prefix, dropping persisted history and promoting a hypothesis into
+support. =packages/proofs/lean/ClueSubmission.lean= proves stale submission
+atomicity, retention of the accepted prefix, required current prefix and count
+preservation. These are abstract host/refinement laws; the application must
+still bind actual SQLite transactions and native receipts to them. The model
+and proofs are part of ASCENT's existing formal/LeanPoo Guard entries.
+
+#+begin_src sh
+PYTHONPATH=workbench/src python3 -m ascent_workbench.formal quint ClueSubmission
+just check-lean-file ClueSubmission.lean
+#+end_src
+
+*** Runtime-triggered evidence delivery
+
+The intended Agent path starts with the task and ordinary tool declarations.
+The host receives a structured clue request, tool arguments/results or another
+declared observable event, binds its source and epistemic role, and queries the
+caller-owned Evidence rules. It returns a scoped tool result with provenance,
+unknown items and expansion handles. Repeated unchanged reads can return a
+checked identity/delta rather than replaying the full history.
+
+=EvidenceConversation.accept= already dispatches provider tool calls through
+=EvidenceInteraction= and appends compact feedback as tool results. The Clue
+bridge should compose with that mechanism. Hidden model reasoning is opaque to
+the host; an optional public hypothesis remains a hypothesis. Supervisor file
+events alone do not implement a synchronous tool-result bridge.
+
+Guided prompts that name a query sequence qualify integration only. Natural
+discovery and useful progression need a separate trial with the same task and
+normal tool surface, without procedure hints or the expected diagnosis.
+
+The thin Trajectory reads above are a discovery and history surface, not the
+reasoning substrate. At each investigation step the Agent may submit a
+question, relation bindings, and new clues to a retained Evidence session.
+The Agent chooses the question and may introduce a hypothesis outside every
+previous scope. ASCENT returns a local, expandable evidence view; it never
+returns a mandatory =Next=, a preferred action, or an execution grant.
+
+A clue has a stable occurrence identity, content identity, source reference,
+epistemic role (=observation= or =hypothesis=), and currentness status. A
+factor is a typed relation or dimension that the Agent proposes for examining
+a claim, not an opaque score or a priority assigned by ASCENT. Novel factor
+names may enter an open, typed source relation as data without a DSL revision;
+new inference semantics require a reviewed rule revision. Ordinary clues
+cannot inject executable rules. A report is not automatically a verified fact.
+Trusted, versioned Scheme DSL
+defines the relations and rules; Agent input supplies typed source rows, not
+Scheme code. Hypotheses run in an isolated branch. Only independently admitted
+observations may support a current claim, and their native receipt still needs
+its own currentness and availability check.
+
+The proposed public exchange has two operations:
+
+#+begin_src text
+submit(clues, baseGeneration, branch?) -> accepted/rejected, generation, identities
+query(question, bindings, scope?, observedView?, branch?) ->
+  viewIdentity, status, answers, supportReferences, counterevidence,
+  unmetPremises, unknown, coverage, expansionHandles, relationDelta
+#+end_src
+
+=scope= is a caller-selected query projection and execution hint, never a
+closed set of permissible hypotheses. It projects a query over the retained
+source generation; it does not discard out-of-scope source rows. Within one
+source/rule generation, expanding the scope must not remove the support of the
+same positively witnessed ground answer. This monotonicity claim does not
+extend to negation, aggregates, completeness claims, or a changed rule/source
+version. An empty answer is =unknown= unless an independently declared complete domain makes
+negation-as-failure valid for that relation and binding. =unmetPremises= means
+"no derivation in this reviewed finite view", not "false in the world".
+Explicit contradictory evidence is represented separately from absence.
+Positive and contrary admitted observations may both be present. Their
+references must both survive a scoped read, yielding an explicit conflict,
+not a forced winner or an =unknown= that hides either side.
+
+The response binds rule-source identity, Evidence source generation and
+digest, branch identity, query/bindings, scope, Trajectory prefix, and
+independently checked receipt identities. =unchanged= is legal only when the
+relevant dependencies and their availability are unchanged; =changed=,
+=stale=, =unavailable= and =partial= are distinct. An interrupted session
+rechecks these bindings before resuming. Historical views remain inspectable
+but cannot silently become current. A partial recursive evaluation or a
+truncated explanation must expose a continuation handle, not a complete
+answer claim.
+
+The existing =define-evidence= session already supplies trusted relational
+rules and replaceable source rows. =program/evidence-dag.ss= can slice a
+program by relation dependencies, but that structural graph is not row-level
+provenance. EvidenceInteraction already distinguishes supported,
+contradicted and unknown for declared local conditions. The missing bridge is
+typed clue admission, row-level query/explanation with an expandable view,
+and one currentness binding across rules, facts, history and native receipts.
+This contract is not yet an implemented Agent-facing API.
+
+The first internal slice is =evidence/clue-query.ss=, which includes the sole
+rule declaration =python/src/ascent/clue_query_rules.ss=. The same declaration
+is packaged as a Python wheel resource for downstream Rust Evidence clients;
+there is no second Python implementation of its rules. Its fixed trusted DSL
+accepts typed =clue=, =factor=, =link= and caller-selected =question= rows;
+it joins independently supplied =attested= rows only on both clue ID and
+content digest. It emits support, contrary evidence, conditional hypotheses,
+factors, one-hop neighbors, conflict and unknown as distinct relations.
+=t/qualification/clue-query-test.ss= exercises hypothesis separation,
+two-sided conflict, receipt withdrawal, a new question beyond the first
+scope, one-hop-at-a-time graph expansion, and old-digest rejection. These are
+native Scheme execution tests,
+not proof that an arbitrary Agent may safely call raw =EvidenceSession.replace=.
+The raw session can replace =attested= too. The new
+=program/clue-exchange.ss= wraps that session: =submit= accepts clue records
+and a generation precondition, computes their content digests, rejects
+duplicate IDs, binds each digest to the then-current source identity, and
+cannot accept =attested= rows from Agent input. =query=
+calls a trusted host receipt verifier again before each read and derives the
+scoped relations from the Scheme DSL. A trusted context provider supplies
+owner, source, Trajectory-prefix and rule-source identities. The wrapper
+rechecks that context after evaluation; a mid-query change rejects the view.
+Its view identity includes those identities, the local generation, question,
+clue rows, factors, links, and currently admitted receipt rows. =snapshot=
+is a copy of source clues, not a copy of admitted receipts; restoring it
+checks owner and every content digest, then revalidates receipts. The five
+native cases in =t/qualification/clue-exchange-test.ss= cover
+forged/stale submission, conflicting admitted observations, withdrawal,
+progressive questions, snapshot tampering, recovery after receipt loss,
+prefix invalidation, source replacement, foreign-owner rejection and a
+mid-query context change.
+
+From an uninstalled checkout, the native import needs the repository's build
+path explicitly; =direnv exec .= alone does not set it here:
+
+#+begin_src sh
+GERBIL_PATH="$PWD/.gerbil" GERBIL_LOADPATH="$PWD/.gerbil/lib:$PWD" \
+  gxi :gerbil/tools/gxtest -v 5 t/qualification/clue-query-test.ss \
+    t/qualification/clue-exchange-test.ss t/qualification/trajectory-test.ss
+#+end_src
+
+The clue exchange does not replace Trajectory =focus=: its =submit= generation
+check prevents stale writes, while =focus= compares repeat attempts on bound
+premises. A caller that needs both views must request both. A missing receipt
+appears as =unavailable= with the affected clue IDs, not as =unchanged=;
+the trusted verifier owns the detailed native failure reason. A changed
+prefix or rule identity produces =stale= when the caller supplies its previous
+view; same context with changed rows is =changed=, while no previous view is
+=unread=. None of these labels selects an action or authorizes execution.
+
+This closes the library's clue/receipt separation, not the application's
+entire trust boundary. The host must keep the raw Evidence session, verifier
+and context provider inaccessible to Agent-authored code, bind its verifier
+to the current producer and expose only the intended read/submit actions.
+=snapshot= carries untrusted source clues, not admitted receipts; any returned
+copy may be edited, but restore checks its owner and content digests and the
+next query independently rechecks receipt currentness. No
+downstream SMP handoff has exercised this entry, and no executable
+source-refinement check yet proves that a supplied rule identity matches the
+installed DSL bytes. A view is therefore a local evidence view, not an admitted
+native SMP result or a claim of measured Agent acceleration.
+
+For a retained Trajectory owner, =open-trajectory-clue-exchange= is the
+combined library entrance. Its =brief= and caller-chosen =focus= delegate to
+Trajectory; =submit= and =query= delegate to the clue Evidence session. The
+wrapper derives owner, source and prefix identities from the same current
+Trajectory brief, while the trusted host supplies the reviewed rule identity
+and native verifier. It does not expose Trajectory =append= or an action
+choice. The host records attempts separately; =focus= compares their bound
+premises, so a new clue ID does not masquerade as a repeat detector. The
+combined native test checks one focused repeat comparison alongside an
+open-scope clue query. A consumer still needs a host handoff that exposes
+this closure without exposing the trusted verifier or raw session.
+
+A low-cost black-box consumer first failed to import the uninstalled module
+because =direnv exec .= does not set =GERBIL_PATH= in this checkout. After
+compiling into the existing =.gerbil= cache and using the explicit environment
+above, its combined-entry probe observed =focus= relation =exact-current=
+for a host-recorded same-premise attempt, then asked an unrelated clue
+question and received =unread=. No action was selected. A separate native
+combined-entry test withdrew a receipt and observed =unavailable= with no
+current support. The black-box probe did not independently read a real native
+receipt file, so these results establish the library protocol, not a measured
+downstream Agent or SMP improvement.
+
+For example, an SMP Agent might submit a hypothesized relation between a
+frame-header write and a publication-order bug, plus a source-bound trace of
+the first observed write. A scoped query for that header returns its observed
+write, the rule dependencies and still-missing ownership/happens-before
+premises. The hypothesis remains conditional. The Agent can next ask about a
+different GC path absent from the original query; neither the original scope
+nor the returned graph forbids that question. If the trace receipt disappears
+after a restart, the old graph remains historical but cannot answer the
+current question until its producer is revalidated.
+
+Query-driven evaluation can use the idea of [[https://souffle-lang.github.io/magicset][Magic Sets]] to avoid unrelated
+tuples, but that is an optimizer with an equivalence obligation, not an Agent
+scope restriction; it may be slower for some queries. [[https://www.cidrdb.org/cidr2013/Papers/CIDR13_Paper111.pdf][Differential Dataflow]]
+motivates retaining versioned deltas for iterative queries, not claiming the
+current engine implements its algorithm. [[https://www.cs.ucdavis.edu/~green/papers/pods07.pdf][Provenance Semirings]] and
+[[https://arxiv.org/abs/1701.05699][query-local why/why-not provenance]] motivate source-bound support fragments
+instead of eagerly expanding every recursive proof. Deletions must retract
+invalidated conclusions; [[https://ojs.aaai.org/index.php/AAAI/article/view/9409][backward/forward maintenance]] is one design reference.
+
+Qualification compares this exchange with a static handoff on the same
+historical prefix and task: valid new hypotheses, repeated reads, source
+inspection, independently checked progress, tokens, elapsed time and censored
+runs. It also checks scope expansion, fact withdrawal, missing receipts,
+interruption/replay, and a new question absent from every prior cue. Fewer
+tokens or narrower graphs alone do not prove better reasoning. Repetition
+means the same operation on the same bound premises and source generation
+without a new observation; revisiting an operation after a premise changes is
+not counted as redundant. Measure total Agent plus query-engine cost, not
+just the size of a returned packet. The first executable slice should use a
+fixed trusted Scheme declaration with open typed clue/factor sources, the
+existing replace/run session and local-condition checker. Query-plan
+specialisation and a new incremental algorithm are separate optimisations,
+admitted only after equivalence and matched-cost tests.
+
+=packages/proofs/quint/TrajectoryClueScope.qnt= is a finite abstraction of
+these admission and read laws. TLC found no safety violation in the healthy
+graph; all eleven deliberate mutations produce counterexamples in the final
+content-bound model. An independent low-cost Agent
+review found that the first model hid the case of two conflicting admitted
+observations. The revised model retains separate positive and contrary
+references; hiding or misattributing the contrary observation violates its
+invariant. It still has only two abstract clues and a finite scope domain,
+so it does not prove multi-relation Datalog semantics, query-plan equivalence, row-level
+provenance, native receipt I/O, or actual Agent efficiency. The corresponding
+typed observation/receipt/content, positive-scope and two-sided conflict laws are in
+=packages/proofs/lean/Trajectory.lean=, together with source-replacement
+non-inheritance and combined focus/query non-selection laws; they are
+contract laws, not a source
+refinement proof.
+
+* Measurement and Rule Evolution
+
+Measure exact-current repeated work separately from similar attempts with
+changed premises. Actual tokens, wall time, first independently checked
+success, censored runs, new observations and new proposals remain distinct.
+Unobserved internal reasoning is outside the denominator. A reduced repeat
+rate with fewer valid hypotheses or lower task completion is a regression.
+
+Evaluate a versioned rule set on held-out trajectory prefixes without future
+events leaking into the packet. Compare matched continuations with and without
+the packet; preserve failures, unknown usage and source replacements. A missed
+repeat or false similarity notice becomes a retained counterexample to a rule
+revision. New rules first run in shadow mode, then undergo source-invalidation,
+non-interference and continuation checks. They never edit historical events or
+relax existing authority boundaries.
+
+** Rule Revision Contract
+
+A comparison rule is an interpretation of retained facts, not an instruction
+to the agent. A revision must carry its rule-source identity, the trajectory
+source identity, the observed prefix used to produce its packet, and the exact
+counterexamples it claims to address. It does not acquire a preferred action,
+rank, stopping rule, or finite hypothesis menu.
+
+The lifecycle is =CapturePrefix -> ObserveCounterexample -> Draft ->
+ShadowCheck -> Publish=. Capturing a prefix freezes what an earlier agent could
+see; later events may review a draft but cannot appear retroactively in that
+packet. A contradiction is appended to durable history, never edited out to
+make a rule pass. A draft remains shadow-only until an independent checker
+reviews the current source and all retained counterexamples. A failed new
+review, a new counterexample, source invalidation, or a change to the rule
+code after review revokes publication.
+Review binds the identity and content of each counterexample, not merely the
+number of records: replacing a record at the same count requires a new review.
+Publishing permits the rule to produce evidence relations; it does not select
+or authorize an action. A novel hypothesis absent from all retained attempts
+remains expressible.
+
+=packages/proofs/quint/TrajectoryEvidenceChain.qnt= now also checks that a
+packet bound to one full-prefix identity is not current when the same number
+of events has different content. Its bounded content revisions are solely a
+finite model-checking domain, not an Agent limit or a runtime history cap.
+=packages/proofs/lean/Trajectory.lean= states the matching typed condition:
+currentness entails equality of the content identity, not just event count.
+For retrospective review, the consumer must also bind the exact snapshot
+identity captured at the prefix. A later snapshot with the same source identity
+is not interchangeable with that earlier snapshot.
+
+=packages/proofs/quint/TrajectoryRuleEvolution.qnt= checks this protocol under
+a finite abstraction. Its healthy case and nine mutations are registered in
+the formal runner: future-event leakage, deleted counterexamples, publication
+without review, stale-source publication, ignoring a newer counterexample,
+using review for an older rule revision, replacing a reviewed counterexample
+without changing its count, using a later snapshot for a captured prefix, and
+selecting an agent action. The model's
+=historyIdentity= is a symbolic full-content identity, not a runtime digest
+algorithm or a guarantee of hash collision resistance.
+=packages/proofs/lean/Trajectory.lean= proves
+that a current prefix requires both content and snapshot identities, that
+counterexamples and invalidation revoke publication, and that publication
+requires the bound review in the typed abstraction. Neither proof establishes
+the honesty of the independent reviewer or unrestricted natural-language
+reasoning. The finite state domain belongs to the checker, not to the Agent.
+
+#+begin_src sh
+PYTHONPATH=workbench/src python3 -m ascent_workbench.formal quint TrajectoryRuleEvolution
+cd packages/proofs/lean && lake build Trajectory
+#+end_src
+
+The rule-revision protocol is design and formal qualification at present. A
+runtime rule registry, durable review receipts, and prefix-only shadow
+evaluation still need an implementation and source-bound integration tests
+before ASCENT can publish revised rules automatically. A model pass or fewer
+repeat notices is not an agent-efficiency result; matched continuations with
+independent task outcomes are still required.
+
+* Implemented Protocol Slice
+
+Trajectory exposes comparable, changed-premise, unknown and historical
+attempts. An attempt's =resultReference= is exposed as
+=currentEvidenceReference= only when it names current evidence, its admitted
+consumption has a successful bound verification, and the attempt, candidate
+and consumption agree on =contractIdentity=. A failed re-verification or source
+replacement revokes that reference. Ordinary attempts need no contract and
+remain explorable. The packet includes =eventCount=; callers can ask
+=exploration_current= whether the immutable packet still names the same
+Trajectory revision. This is not an independent recheck of EvidenceChain
+support and confers no execution permission.
+
+The generic runtime has a non-SMP =EvidenceChain= query/consume/verify/replace
+integration test; the SMP adapter has separate focused tests. Evaluation of
+agent efficiency still needs held-out prefixes and matched continuations;
+no seven-in-ten reduction or whole-task speedup is claimed.
+
+* Finite Protocol Model
+
+=packages/proofs/quint/TrajectoryEvidenceChain.qnt= is a small composition of
+the ordered attempt, ASCENT consumption admission, bound independent verification, read-only exploration,
+source invalidation and history replay protocols. A generation stands for an
+exact source identity; =checked= stands for a successful independent check,
+not a model-authored assertion. The model deliberately keeps one comparison
+target, two attempts and one source replacement. It does not model hidden
+reasoning, arbitrary evidence DAGs, concurrent writers, or native GC.
+
+| Model transition | Implementation boundary |
+|------------------+-------------------------|
+| =AppendAttempt= | =trajectory/events.rs= admits an ordered =attempt= |
+| =Admit= then =Check= | EvidenceChain consumption, then bound independent verification |
+| =ObserveContext= | Candidate-free attempt premises, never a result reference |
+| =Explore= | =trajectory/exploration.rs= produces a read-only comparison |
+| =Invalidate= | Trajectory source-generation invalidation |
+| =Resume= | Persisted host history replay; old attempts remain historical |
+| =Propose= | The agent may choose a new idea, including after an exact repeat notice |
+
+The invariants separate current packet binding, bound comparison, independently
+checked result, durable history, read-only evidence and open exploration. A
+=force-next= mutation prescribes one of three finite choices, including a novel
+direction absent from the packet, and violates =OpenChoice=. Lean's
+=ReasoningState= separates observations from =AgentChoice=: adding an
+observation cannot choose or override a choice, and any agent choice remains
+expressible after observation. These are interface and finite-model guards,
+not a proof of unconstrained natural-language reasoning. Eleven mutations
+exercise missing bindings, skipped review, history loss, stale packet
+or result, wrong contract, exploratory writes, closed options, unauthorized
+execution and a result leak from candidate-free context. A
+healthy bounded run and mutation counterexamples establish only these finite
+protocol properties. They do not certify that a real evidence reference has
+current support, or that an agent saves tokens or reaches a correct answer.
+The revised healthy model passed TLC's complete reachable-state search in its
+finite abstraction. The =force-next=
+mutation produced an =OpenChoice= counterexample; the context leak mutation
+produced a =ContextNoResult= counterexample. The Lean target and exact
+runtime packet-shape tests also pass. These checks guard the specified API
+boundary, not arbitrary agent-generated prose or downstream UI wording.
+
+#+begin_src sh
+PYTHONPATH=workbench/src python3 -m ascent_workbench.formal quint TrajectoryEvidenceChain
+PYTHONPATH=workbench/src python3 -m unittest workbench.tests.test_formal -q
+#+end_src
+
+The formal runner owns its finite exploration settings. Those settings are
+model-checker mechanics, not limits, recommendations or stopping rules for an
+agent. A receipt may record the actual explored states, but this design does
+not promote a past run's numeric settings into the reasoning interface.
+
+In particular, a review change after packet creation requires the host to
+discard the old packet. =exploration_current= detects this Trajectory revision
+change; an API consumer must not treat an immutable old response as a live
+EvidenceChain review view.

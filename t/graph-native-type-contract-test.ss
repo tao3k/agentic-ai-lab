@@ -5,10 +5,10 @@
 
 ;;; Contract: graph objects expose native POO Type/Contract descriptors.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
 
-;; : (-> PooFlowGraphExpr PooFlowGraphValue)
+;; : (-> AgenticAILabGraphExpr AgenticAILabGraphValue)
 (def (graph-eval expr)
   (eval expr))
 
@@ -27,39 +27,39 @@
 
 (def graph-native-type-contract-test
   (test-suite "graph-native-type-contract-test"
-    (poo-flow-test-case "validates the native contract"
-      (eval '(import "./src/graph/types.ss"))
-      (eval '(import "./src/graph/algorithms.ss"))
+    (yuanxu-test-case "validates the native contract"
+      (eval '(import "./core/graph/types.ss"))
+      (eval '(import "./core/graph/algorithms.ss"))
       (eval '(import :clan/poo/mop :clan/poo/object))
       (let (node-row
-      (graph-eval '(poo-flow-graph-node-type-contract->alist)))
+      (graph-eval '(yuanxu-graph-node-type-contract->alist)))
   (unless (and (eq? (alist-ref/default node-row 'object-kind #f)
-                    'PooFlowGraphNode)
+                    'YuanxuGraphNode)
                (equal? (contract-slot-names node-row)
                        '(id payload metadata)))
     (error "graph node contract should expose node slots")))
 
 (let (edge-row
-      (graph-eval '(poo-flow-graph-edge-type-contract->alist)))
+      (graph-eval '(yuanxu-graph-edge-type-contract->alist)))
   (unless (and (eq? (alist-ref/default edge-row 'object-kind #f)
-                    'PooFlowGraphEdge)
+                    'YuanxuGraphEdge)
                (equal? (contract-slot-names edge-row)
                        '(from to edge-kind metadata)))
     (error "graph edge contract should expose edge slots")))
 
 (unless (graph-eval
-         '(and (element? Type PooFlowGraphEdgeContract)
-               (element? PooFlowGraphEdgeContract
-                         (poo-flow-graph-edge 'start 'finish))))
+         '(and (element? Type YuanxuGraphEdgeContract)
+               (element? YuanxuGraphEdgeContract
+                         (yuanxu-graph-edge 'start 'finish))))
   (error "graph edge contract should be a native Type and admit valid edges"))
 
 (when (graph-eval
        '(element?
-         PooFlowGraphEdgeContract
+         YuanxuGraphEdgeContract
          (object<-alist
           (list
-           (cons 'kind +poo-flow-graph-edge-prototype-kind+)
-           (cons 'schema 'poo-flow.graph.edge.v1)
+           (cons 'kind +yuanxu-graph-edge-prototype-kind+)
+           (cons 'schema 'yuanxu.graph.edge.v1)
            (cons 'from 'start)
            (cons 'to 'finish)
            (cons 'edge-kind "not-a-symbol")
@@ -68,9 +68,9 @@
   (error "native graph edge contract should reject an invalid slot type"))
 
 (let (graph-row
-      (graph-eval '(poo-flow-graph-type-contract->alist)))
+      (graph-eval '(yuanxu-graph-type-contract->alist)))
   (unless (and (eq? (alist-ref/default graph-row 'object-kind #f)
-                    'PooFlowGraph)
+                    'YuanxuGraph)
                (equal? (contract-slot-names graph-row)
                        '(graph-id nodes edges metadata)))
     (error "graph contract should expose aggregate slots")))
@@ -79,25 +79,25 @@
        '(with-catch
          (lambda (_failure) #f)
          (lambda ()
-           (poo-flow-graph-edge 'a 'b "not-a-symbol")
+           (yuanxu-graph-edge 'a 'b "not-a-symbol")
            #t)))
   (error "graph edge constructor should reject non-symbol edge kinds"))
 
 (def analysis
   (graph-eval
-   '(poo-flow-graph-analysis-receipt
-     (poo-flow-graph
+   '(yuanxu-graph-analysis-receipt
+     (yuanxu-graph
       'graph-contract-test
-      (list (poo-flow-graph-node 'start)
-            (poo-flow-graph-node 'finish))
-      (list (poo-flow-graph-edge 'start 'finish))))))
+      (list (yuanxu-graph-node 'start)
+            (yuanxu-graph-node 'finish))
+      (list (yuanxu-graph-edge 'start 'finish))))))
 
-(unless (graph-eval `(poo-flow-graph-analysis? ',analysis))
+(unless (graph-eval `(yuanxu-graph-analysis? ',analysis))
   (error "graph analysis receipt should be a graph analysis object"))
 
 (let (analysis-row
-      (graph-eval '(poo-flow-graph-analysis-type-contract->alist)))
+      (graph-eval '(yuanxu-graph-analysis-type-contract->alist)))
   (unless (and (eq? (alist-ref/default analysis-row 'object-kind #f)
-                    'PooFlowGraphAnalysis)
+                    'YuanxuGraphAnalysis)
                (member 'diagnostics (contract-slot-names analysis-row)))
     (error "graph analysis contract should expose analysis slots"))))))

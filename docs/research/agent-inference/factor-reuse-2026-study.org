@@ -1,0 +1,451 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Fact and derivation reuse: 2026 method reading and ASCENT experiment design
+#+DATE: 2026-10-11
+#+STATUS: paper-to-Library synthesis; exploratory model pilot inconclusive
+#+FILETAGS: :research:llm:fact:reasoning:reuse:
+
+* Decision
+
+The research unit is an admitted fact, determined condition, or checked
+derivation fragment. Different questions can reuse the same unit without
+having the same subproblem or final answer. Search, optimization and divergent
+exploration are primary workloads; context compression is an additional stressor.
+
+Test two outcomes independently: lower cumulative effort at comparable success,
+and better solution quality at the same total resource budget. A cache may
+achieve one without the other. The proposed distinction is compositional,
+source-bound logical reuse with explicit withdrawal, not simply persistent
+memory or executable checking, which have direct prior art.
+
+This note extends [[file:verified-reasoning-cache.org][the initial study]]. The
+machine-readable [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/factor-reuse-pilot-plan.json][pilot plan]] is a design
+artifact, not an executed or preregistered experiment. Exact model, task
+manifests, budgets and grader versions must be frozen before execution.
+
+* Current research decision: return to Library contracts (2026-10-11)
+
+The sections below this update preserve the October 10 reading and historical
+four-arm proposal. The active comparison is baseline / Fact evidence / Scheme
+fragment reuse. No additional model experiment was executed for this update;
+the proposed diagnostic below is not frozen or an efficacy result. Historical
+tasks, judges, annotations and failed receipts remain unchanged.
+
+The subject is external assistance to a frozen model's trained reasoning:
+ASCENT evaluates admitted relations and supplies checked computational
+consequences. It does not own the complete search, model training, a serving
+cache or Agentic AI Lab's authority and Temporal Causality. Lean specifications and
+Quint protocol models constrain particular Library behaviors; they do not
+prove that an LLM will use a supplied premise or stop deriving it again.
+
+** Foundational papers and current primary readings
+
+Sources were inspected on October 11, 2026. Method sections were read where
+specified; no external artifact was executed and no paper speedup is imported.
+
+| Primary source / reading depth | Lesson for this Library | Separate empirical question |
+|--------------------------------+-------------------------+-----------------------------|
+| [[https://s-arash.github.io/ascent/cc22main-p95-seamless-deductive-inference-via-macros.pdf][Ascent, CC 2022]], abstract and introduction | Embedded bottom-up logic must interoperate with host components. Keep =program/= execution and caller responsibilities distinct. | Does native evaluation help a frozen model solve a stated relational obligation correctly? |
+| [[https://kmicinski.com/assets/byods.pdf][BYODS, OOPSLA2 2023]], sections 3.3 and 4 | Concrete relation, total/delta observations and logical indexes must agree. Newly implied facts cannot skip delta and disappear from downstream joins. | With identical concrete consequences, does a representation change affect model behavior at all, beyond native cost? |
+| [[https://www.vldb.org/pvldb/vol19/p361-zhao.pdf][FlowLog]], PVLDB 19(3), 2025 / VLDB 2026, abstract and section 7 | Canonical subplans can share outputs across rules; recursive control and logical plans have separate owners. | A shared engine subplan is not evidence that the model reused a shared premise. Measure both independently. |
+| [[https://arxiv.org/html/2609.37233v1][DatalogBench]], September 29, 2026 preprint, sections 4.3, 6 and Appendix G | Held-out execution and mutation tests distinguish compiling wrong joins from correct rules. Its results concern Souffle, and the oracle is finite. | Independently check intermediate relations and downstream answers, not merely parsing or a final Boolean. |
+| [[https://arxiv.org/html/2607.20507v1][MiniCache]], v1 (HTML header: July 3, 2026), section 3 and Appendix A.1--A.2 | Parameterized programs separate shared computation from extracted variables. Acceptance uses validation examples; malformed bindings fall back. | Different residual questions may share computation, but type/format validation does not establish correct semantic binding. Charge extraction and cache construction. |
+| [[https://arxiv.org/html/2602.13165v1][Krites: Asynchronous Verified Semantic Caching]], February 2026, sections 3.2 and 4 | Promotes reusable answers after an equivalence decision. Evaluation simulates judging with ground-truth equivalence classes, rather than running an LLM judge. | Oracle promotion results cannot qualify our real evidence admission or repetition annotator. Answer equivalence is a different reuse unit. |
+| [[https://proceedings.mlr.press/v306/geng26a.html][RelayCaching]], ICML 2026, proceedings abstract only | Reuses decoding KV states for subsequent prefill with selective recomputation. | Serving compute, generated reasoning and checked relational dependencies are different measurements. No KV implementation or equivalence claim follows here. |
+
+The research hypothesis suggested by these readings is narrower than general
+memory: checked, source-bound premises may let a model spend less effort on
+already settled components while still reasoning about new combinations.
+Composition and source withdrawal are candidate distinctions, not established
+novelty. The older fact/memory papers below remain relevant prior art.
+
+** What the latest experiment actually established
+
+The [[file:fact-reuse-results/complete-branch-reuse/report.md][complete-branch pilot]] and [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/fact-reuse-results/complete-branch-reuse/audit.json][audit]] bind Library source captured at
+=7bb4ba0= plus then-uncommitted changes. The historical audit recorded matching
+Library hashes at =97e41652d7787ee8063a2388e593e893be8d2449=.
+An October 11 recheck of all 65 captured source files finds two subsequent
+working-tree differences: =candidate/stratified-producer.ss= and
+=candidate/stratified-proof.ss=. The other 63 captured files match. Current
+HEAD is still that commit, but the checkout is dirty. Preserve those edits;
+the prior qualification applies to captured source, not these new changes.
+No rebuild or exact-head remote CI qualification was performed in this update.
+
+- Native/full-Gxi qualification and bounded proof-store reuse passed. The
+  model's use of evidence is a separate gate.
+- Fourteen responses completed without truncation; thirteen actions were
+  admitted. One baseline format failure remains a failure.
+- Every successful external expansion followed one prefix chain. No alternative
+  branch reuse was exercised, and no new complete solution was submitted.
+- Task 0 depths at the joint 32,768-token checkpoint were 0 / 1 / 2, while
+  all complete incumbents retained value 79. This is not a quality improvement.
+- The annotator accepted 24 positive derivations and rejected 130 labels.
+  Zero observed repeats cannot establish zero real repeats. Repeated absence
+  checks and resource/value calculations were outside the frozen metric.
+
+The design diagnosis is an inference from these receipts: the optimization
+workload can consume thinking on global combinations before it revisits a
+checked relational premise. A Library cache hit therefore need not shorten
+that thinking. Replayed history and evidence rendering also consume input.
+The Scheme arm additionally prunes finite-absent options, so any depth effect
+cannot be attributed to proof fragments alone. We have not demonstrated a
+baseline repetition signal that the proposed mechanism can reduce.
+
+** Existing implementation owners and hypothesis gates
+
+| Gate | Existing owner / current observation | Evidence still required |
+|------+--------------------------------------+-------------------------|
+| Logical meaning | =program/evaluate.ss=; =table/storage.ss= and =table/provider.ss= | Independent concrete relation and emitted frontier, including split producers and wrong-join mutants |
+| Retained execution | =program/session.ss= retains accepted source snapshots and exposes update/run operations | Fresh/retained answer parity after successful updates and failure recovery; engine work separately from model cost |
+| Evidence binding | =candidate/evidence-store.ss= scopes entries by source identity, generation, digest and candidate digest | Source, rule and query changes refuse an old handle; bounded/unknown is never false |
+| Fragment composition | =reasoning-evidence-fragment= returns ancestor-closed support for an admitted ground atom | Two distinct downstream obligations consume the same supported atom under the admitted candidate's proof scope |
+| Model reuse | Existing =t/research/candidate-interaction.ss= and =candidate-model.py= are consumers | Independently valid answers plus literal evidence of reuse/rederivation in visible thinking; no assumed hidden reasoning |
+| Formal correspondence | Existing Lean Provider models and Quint =VerifiedCandidate.qnt= | State exact modeled assumptions and native correspondence; independent-grader validity is assumed in that Quint model |
+
+An identical atom spelling is insufficient: source and candidate scope must
+also match. The current store does not transport arbitrary proofs across
+different candidate/query scopes or source generations. A changed source
+requires renewed resolution; an old handle becomes unknown. Finer dependency
+withdrawal belongs to the existing bounded provenance-maintenance contract,
+not an invented global Fact lifecycle or an automatic temporal-trust rule.
+
+** Small mechanism diagnostic before another optimization claim
+
+Use a finite admitted program with one shared positive premise P and different
+residual premises L and R. For example, P is =path(0,2)=; a left obligation
+needs P and =path(3,4)=, while a right obligation needs P and =path(5,6)=.
+The downstream obligations differ even though their ground premise is shared.
+Keep both obligations within one admitted program/evidence scope; do not
+pretend a certificate for a restricted query covers another program.
+
+The consumer presents a fixed pair of sibling obligations in the same order
+to all three arms, then a novel residual obligation. This schedule ensures
+an opportunity for cross-path reuse without an instruction to avoid thinking.
+It is a proposed Library diagnostic, not a replacement that makes the failed
+optimization task pass. Publish its exact data, ordinary questions, schedule,
+judge and annotation rules before any model call. The prior tasks stay frozen.
+
+| Arm | Evidence access | Common controls |
+|-----+-----------------+-----------------|
+| baseline | Raw source and existing native query interface | Same obligations, action schema, context policy and total budget |
+| Fact | Same access plus source-bound outcomes for the relevant atoms | Outcomes selected by obligation syntax, not by a hidden optimal answer |
+| Scheme | The same Fact outcomes plus admitted ancestor-closed fragments | Same available siblings; disable pruning in this fragment diagnostic so pruning is not a second intervention |
+
+Construction, lookup, validation and rendering costs remain recorded. Facts
+and fragments are explicit inputs, never free model knowledge. Build them
+from the supplied source with the Library; the independent judge remains a
+separate finite graph/rule oracle. Validate it against missing-rule and
+wrong-join mutations and compare intermediate atoms as well as final answers.
+Retain schema violations, unknown evidence, stale handles and failed calls.
+
+Freeze repetition categories before running: (1) supplied premise consumed,
+(2) positive premise independently rederived, (3) completed-scope absence
+rechecked, (4) new residual inference, (5) resource/objective arithmetic and
+(6) ambiguous or unsupported span. A reference to P alone is not rederivation;
+require a literal span containing an actual supporting argument. Repeated
+arithmetic is reported separately, not relabeled as a cached Datalog proof.
+Blindly adjudicate sampled baseline/treatment spans with a second annotator
+and publish disagreements and rejected labels. An unvalidated zero is unknown.
+
+Test source change separately: remove a support for P, try the old handle,
+resolve against the new source, and independently grade the changed answers.
+Also retain an unchanged-source control and a change with alternative positive
+support. Do not convert failure to find a bounded witness into finite absence.
+
+Three claims have separate admission conditions:
+
+1. *Correct reuse*: shared support is reused and all relevant answers agree
+   with the independent oracle, including stale-source controls.
+2. *Reduced repetition*: baseline visibly rederives the shared premise and
+   the evidence arms reduce that signal with comparable correctness and
+   validated annotation coverage. Native hits alone do not satisfy this gate.
+3. *Productive reallocation*: only after the mechanism gate, an independently
+   frozen harder fixture permits new valid consequences or complete solutions
+   within the same input-plus-all-output budget. Prefix length alone does not
+   establish deeper reasoning or higher quality.
+
+Charge cached/replayed input and all output including thinking and failures.
+Report proof construction and native work separately, along with annotation
+cost. Reservation stops censor outcomes; unused budget is not savings. Model
+aliases, repeated trials and context policies must be disclosed before causal
+claims. This update changes research interpretation and the proposed gate;
+it adds no Library framework, prompt intervention or model-results claim.
+
+* Six primary method readings (historical 2026-10-10)
+
+Full-text HTML methods, evaluation and limitations were inspected on October
+10, 2026. Source versions are explicit. Percentages are author-reported; no
+paper reproduction or artifact execution is claimed. The word "verified"
+has different operational meanings across these papers.
+
+** ENGRAM-R: direct fact reuse and a critical matched ablation
+
+[[https://arxiv.org/html/2511.12987v3][Reuse, Don't Recompute]], v3 March 2, 2026
+(first submitted November 17, 2025): sections 3--4, 6 and Appendix B.
+Typed retrieval produces cards containing an identifier, claim and anchor;
+the model cites identifiers. The answering model is frozen; a separate model
+maintains memory. Appendix B compares cards plus citation control against the
+same retrieval/store/backbone and record budget. Its overall reasoning-token
+reduction is 47.8%, distinct from the abstract's 75% against full context.
+Open-domain judge accuracy falls from 71.5 to 54.2 despite shorter reasoning.
+This supports a matched card-rendering baseline and forbids treating brevity
+as improvement. Anchors and citations provide traceability, not an ASCENT
+derivation certificate. The limitations explicitly identify stale cards.
+The reported artifact locator is an anonymous repository; availability and
+reproduction have not been audited here.
+
+** AtomMem: atomic storage is relevant, but extraction remains a model task
+
+[[https://arxiv.org/html/2606.19847v1][AtomMem]], v1 June 18, 2026:
+sections 3.1--3.5 and limitations. An SFT-trained extractor produces standalone
+facts with participant, keyword, time and event metadata. Section 3.1.3
+retrieves potentially related facts and uses an LLM to generate nonredundant
+content and updates for duplicates/conflicts. Its associative graph organizes
+recall. This is a natural fact-granularity comparator. That verification is
+not independent finite rule replay: extractors and update decisions can err.
+Our primary study freezes the answering model and reports any extractor
+training/build costs separately. Use reviewed extraction only in a diagnostic
+condition, then test actual extraction separately; do not silently supply an
+oracle fact bank to the proposed method alone.
+
+** ReFact: supporting evidence can be local to one inference step
+
+[[https://arxiv.org/html/2607.20833v1][ReFact]], v1 July 23, 2026;
+the metadata lists v2 July 29, but this method reading pins v1:
+sections 3 and 4 plus evaluation tables. A teacher constructs citation-grounded
+traces; SFT followed by RL teaches when to restate source evidence and at what
+granularity. Restatements can be smaller than sentences. This motivates a
+packet that exposes only the factor needed for a local inference. The approach
+changes model parameters and does not by itself establish persistent,
+dependency-valid cross-task reuse. It belongs in the training-assisted secondary
+comparison, not as a supposedly identical frozen-backbone control. Source
+attribution, answer sufficiency and derivation correctness are separate checks.
+
+** CounterMem: checked local alternatives are already direct prior art
+
+[[https://arxiv.org/html/2609.31874v1][CounterMem]], v1 September 25, 2026:
+sections 3--4, Appendix A and metric conventions. A failed action is followed by
+local alternatives evaluated from reset/copied state with tests, proof checkers
+or solvers. Improved outcomes, including partial improvements, can become
+records with original/corrected actions, evidence and applicability conditions.
+A trained selector chooses one record or skips; memory and policy freeze for
+held-out tasks. Appendix A says the selector cannot directly compose multiple
+records and records can become stale. Reported task-run token savings exclude
+offline selector training. This motivates checked correction reuse as a
+comparator and requires lifecycle accounting. Checked local improvement is
+not universal correctness. Code is promised upon acceptance; the metadata's
+"ICLR 2027" comment is not evidence of acceptance or a reproducible release.
+
+** SEMV: scoped revision and memory transfer need separate measurements
+
+[[https://arxiv.org/html/2609.27175v1][Self-Evolving Multimedia Verification]],
+v1 September 23, 2026: sections 4.5--4.6. It retains provenance-bearing
+observations, failure lessons and semantic rules. Memory has scope, supporting
+cases/source fingerprints, conflict and lifecycle information. Its verification
+gate combines grounding identifiers, confidence and a safety check; test cases
+cannot seed activated memory. Scoped revision uses dependency-aware recomputation.
+These are close lifecycle ideas, but argument confidence is not the same object
+as a replayable finite relational proof. Adopt source-fingerprint deduplication,
+negative-transfer measurement and evaluation isolation; investigate the actual
+checker and native representation before claiming equivalence or superiority.
+
+** Stale constraints: confirmed-looking factors can misdirect exploration
+
+[[https://arxiv.org/html/2608.25553v3][When Stale Constraints Go Unchecked]],
+v3 August 28, 2026: methods, sections 4 and 6. A scripted six-memory scenario
+limits source inspection to two records. A superseded constraint is often
+followed unless the relevant source path is inspected. The forced-critical
+intervention uses experimenter knowledge and is an oracle positive control,
+not a general routing algorithm. The target-blind constraint-priority control
+is separately evaluated. Its scripted store does not estimate deployment
+staleness prevalence. Use unchanged-source and stale-source controls, hide
+the critical path from routing, and measure false reuse as well as missed reuse.
+A provenance link alone does not ensure that an agent validates it.
+
+* ASCENT capability map (historical 2026-10-10 checkout)
+
+Checkout HEAD inspected: =797d6f4f489e03e4b5f4843f230eb2214df5174f=.
+There are concurrent uncommitted runtime/report edits. They were preserved;
+these observations are local code/environment evidence, not remote CI closure.
+
+| Reuse unit | Existing owner and capability | Experiment boundary |
+|-----------+-------------------------------+---------------------|
+| Admitted finite source Fact | [[file:../../../candidate/reasoning.ss][reasoning.ss]] snapshots bind local identity, generation and content | Caller owns authenticity and intended meaning |
+| Determined relational consequence | Native admitted rule execution and complete result | Completion does not certify natural-language-to-rule translation |
+| Positive derivation fragment | [[file:../../../candidate/provenance.ss][provenance.ss]] witnesses; [[file:../../../candidate/provenance-graph.ss][provenance-graph.ss]] complete grounded alternatives and verifier | Supported clauses and explicit work/edge caps only |
+| Alternative supports / removed source | [[file:../../../candidate/provenance-maintenance.ss][provenance-maintenance.ss]] bounded withdrawal, private preview, compaction | Positive fragment; absence/aggregate dependencies need finite replay |
+| Derived relation reused downstream | [[file:../../../python/src/ascent_engine/evidence.py][EvidenceStore]] publishes aliases; another program can consume their rows | A materialized row is not itself a stored proof certificate |
+| Subsequent completed query | EvidenceStore path identity and =retainedCompleted=; =Session.run(0)= | Zero engine work is not zero model thinking |
+| Changed source | EvidenceStore.replace clears materialized evidence and closes its consumer sessions | Coarse source invalidation today; no general fact-selective cross-generation transport |
+
+Do not conflate the certificate/support-graph path with the Python materialized
+relation path. The latter does not automatically invoke all proof verifiers.
+The proposed experiment needs an adapter binding a packet to the current
+source, admitted rule, checked proof status and dependencies before claiming
+verified fragment reuse. Arithmetic/code/optimization observations need their
+domain checker. A deterministic relational engine alone cannot establish a
+global optimum or guarantee that all relevant factors were extracted.
+
+* Historical pilot proposal: four arms and two comparisons
+
+| Arm | Memory / checking behavior | What it isolates |
+|-----+----------------------------+------------------|
+| A: fresh | Raw source tools and fresh ASCENT checks | Existing external assistance without retention |
+| B: cards | Persistent fact cards with stable IDs/anchors, same evidence access | Representation and ordinary fact memory |
+| C: checked factors | Current-source checked atomic consequences, with attached scope | Fact validation/retention without supplied derivation fragments |
+| D: checked fragments | C plus composable checked derivation segments and support dependencies | Incremental value of derivation reuse |
+
+All arms can access the same source and checker. A can derive any provided
+consequence, but spends its own matched budget doing so. C/D obtain records
+through measured construction, not hidden answers. B gets the same extracted
+candidate claims and comparable retrieval/rendering budgets, but does not gain
+an independent validity gate for free. Static-source mechanism diagnostics can
+share a reviewed extraction manifest across all arms; results from this oracle
+diagnostic must be reported separately from end-to-end extraction/retrieval.
+
+Use the same concise-answer and record-citation instruction where applicable.
+Do not tell only D to avoid repeated thinking. Compare identical packets with
+different gates in a separate validity ablation; counterbalance record order
+and neutral labels to control authority-language and verbosity effects.
+
+First comparison: fixed resource caps, acceptance and solution quality; then
+cost to independently accepted result. Second: exactly matched resource caps
+with progressively harder residual tasks; test if C/D achieve higher quality
+or more independently accepted new consequences. Do not turn token savings
+into fictitious extra budget. The model must actually perform productive new
+work within the shared cap. Early completion remains an outcome, not a reason
+to force unnecessary reasoning.
+
+** Workload families and factor examples
+
+| Family | Shared determined component | Different residual questions | Independent outcome |
+|--------+-----------------------------+------------------------------+---------------------|
+| Dependency/search planning | Source-bound reachability, permitted transition, affected-set membership | Candidate ordering, admissible plan, minimum cost among valid plans | Finite enumerator / exhaustive small-instance optimum |
+| Constraint composition | Checked membership, local feasibility, scoped blocker | Different combinations/branches with shared and novel constraints | Finite solver with withheld counterexamples |
+| Optimization exploration | Verified invariance/compatibility facts plus separately measured local performance | Different plans, new bottlenecks, multi-constraint tradeoffs | Correctness oracle plus actual matched performance measurements |
+| Repository repair | Checked dependency or domain-condition factor from live source | Distinct edits requiring additional reasoning | Hidden regression tests and passing controls |
+
+Optimization measurements are environment-bound observations; they cannot be
+used as sound pruning rules without an applicable bound. For a small finite
+plan corpus, graph dependencies may be evaluated by ASCENT while an independent
+enumerator grades global quality. Real repository tasks require a broader
+grader; the existing two-task pilot remains a pipeline diagnostic.
+
+Each sequence begins with charged construction and asks distinct residual
+questions sharing selected factors. Include zero reuse, partial reuse and high
+reuse. Vary the unresolved tail difficulty while keeping the shared factors
+fixed. Include alternatives that look alike but have different typed meanings.
+Then introduce irrelevant edits, one lost support with an alternative surviving,
+loss of the last support, a new negative blocker and changed aggregate inputs.
+Finally add controlled compaction. Primary tests do not require compaction.
+
+** Budget, metrics and causal limits
+
+The design pilot uses 4 families x 2 independent instances x 4 arms x 2 total
+generated-token budgets x 2 repetitions = 128 sequence trajectories, before
+secondary ablations. This estimates variance and pipeline feasibility; eight
+instances are not a paper-scale population. Candidate caps are 8,192 and 16,384
+generated tokens including reported reasoning, 8 turns and 65,536 cumulative
+input tokens per trajectory. Resolve provider support before freezing them.
+All extractor/controller model calls count against the arm's total cap.
+Checker work, retrieval and memory construction are separately capped and
+charged; an equal-dollar lifecycle comparison is required as a robustness test.
+
+Provider-reported reasoning-token totals measure aggregate effort. A structured
+external action journal records source generation, factor ID, prior validity,
+check request, cache decision, visible supporting IDs and accepted consequence.
+Repeated eligible check requests are an observable mechanism proxy. They do
+not locate repetitions inside opaque thinking or attribute tokens to a Fact.
+Do not require access to private reasoning text or treat citations as faithful
+internal process measurements.
+
+Report acceptance at both budget levels, objective gap for optimization,
+independently checked new consequences/feasible alternatives, repeated eligible
+checks, stale-use rate, false rejection and lifecycle cost. Reasoning depth is
+the independently verified dependency depth of newly solved obligations, with
+diagnostic shortest proof depth available; neither trace length nor cycles
+count as deeper thought. More branches are useful only if they contribute
+correct new solutions or improved final quality.
+
+Compare paired differences by instance and seed; retain timeouts and censored
+work. Estimate uncertainty by task clusters, not turns. The small pilot reports
+descriptive intervals only and cannot prove noninferiority. Predeclare a
+justified success margin and power analysis for the later confirmatory study.
+Acceptance, repair and source-selection oracles remain hidden; no evaluation
+answer or test trace enters persistent training memory. Within-sequence memory
+is allowed and labeled separately from frozen cross-task transfer.
+
+* Falsification and required ablations
+
+- If B matches C/D, compact fact presentation may explain the benefit; no
+  evidence for an additional verification/derivation contribution follows.
+- If reasoning tokens fall but success or optimization quality falls, the
+  intervention has not shown quality-controlled savings.
+- If cost falls but equal-budget quality/depth does not improve, support the
+  efficiency hypothesis only, not budget reallocation.
+- If D matches C, proof-fragment composition adds no established benefit on
+  this corpus. Charge its maintenance overhead nonetheless.
+- If gains exist only with reviewed/oracle extraction or routing, do not claim
+  an end-to-end agent mechanism. Run noisy extraction and non-oracle retrieval.
+- If stale factors mislead the model, evaluate current-source replay, coarse
+  invalidation and future selective support withdrawal independently.
+
+After the primary pilot, use a cards/citation factorial, checked-correction
+memory baseline modeled on CounterMem, a fixed selector versus learned selector
+comparison, and a separate KV-on/off factorial. Keep exact-answer caching out
+of the distinct-question main comparison. Paper-scale novelty and efficacy
+remain conditional on these outcomes.
+
+* Local mechanism receipts and next execution gate
+
+On October 10, 2026 the existing =scheme-provenance-graph-test.ss= and
+=ascent-reasoning-library-test.ss= were run via =just test-file=, each under the
+existing 120-second watchdog, with exit code 0. The driver requires checked
+Case verdicts, =MODULE-OK=, =HARNESS-OK= and final =OK=. These are local
+environment receipts; imported compiled-module provenance was not rebuilt or
+certified against the dirty checkout, so exact-source/native-head closure is
+not claimed. No new semantic test or formal proof was introduced.
+
+The existing retained CFFI conformance run also passed under a 45-second watchdog:
+32 finite observations, 32 published-subgoal downstream extensions, and 8
+changed-source stale-answer fault controls detected. The
+[[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/factor-reuse-local-receipt.json][local receipt]] records commands, exits,
+source hashes and the actual loaded library digest. The raw native receipt is
+in =.cache/ascent/factor-reuse-research-20261010/=. These finite fixtures qualify
+actual retained execution in that library, not current-source rebuild closure
+or LLM behavior. They are not new independent task instances or model trials.
+Before model execution: bind current native artifacts, implement packet proof
+admission and action-level accounting, freeze manifests/graders/provider identity,
+resolve supported budget counters, and audit extractor/retrieval costs. No new
+paid model calls or model improvement measurements were made in this study.
+
+[[file:index.org][Research index]].
+
+* Captured minimal diagnostic (2026-10-11)
+
+The [[file:fact-reuse-results/shared-premise-diagnostic/findings.md][published evidence chain]] binds the Library's Scheme source, existing
+Python Project consumer, finite Quint protocol, Lean proof premises, native
+qualification and 18 real model responses. Its archive replays locally from a
+fresh directory without provider calls. The source remains a dirty captured
+snapshot; clean committed reproduction is not qualified.
+
+All answers pass the frozen finite oracle, but Fact and Scheme cost more total
+tokens than baseline. The observed thinking does not establish a baseline
+cross-question repetition signal, and Scheme rederives supplied premises.
+This is a retained negative/inconclusive result. It supports the native reuse
+mechanism only; it does not establish deeper exploration or model efficiency.
+
+* Clean committed consumer diagnostic (2026-10-11)
+
+[[file:fact-reuse-results/sibling-search/findings.md][The sibling-search evidence chain]] now qualifies a clean committed source
+bundle, 99 source inputs, normal native build, API/ABI, eight consumer checks,
+Scheme/Quint correspondence and Lean ProofDag. Source identity, native proof
+reuse and LLM behavior remain separate gates. Tool delivery and conservative
+continuation accounting were repaired without an anti-repetition prompt.
+Frozen three-arm real-model results remain censored/failed: neither lower
+repetition nor deeper exploration nor higher quality is established. Offline
+replay matches the report and protocol audit.
+
+* Complete thinking and lossless evidence projection
+[[file:fact-reuse-results/branch-complete/findings.md][Frozen three-arm results, semantic coverage failures and reproducible evidence]] bind the experiment to f6c36359. Thinking is no longer forced into a 2048-token checkpoint. Native columns preserve full statuses and proof ancestors. All remaining budget truncations, infeasible outputs, semantic annotation failures and research costs are retained. General depth/semantic-repetition gains remain unestablished.

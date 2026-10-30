@@ -9,39 +9,39 @@
 
 (import (only-in :gerbil/core fx+)
         (only-in :clan/poo/object .o .ref object? object<-alist)
-        :poo-flow/modules/session/objects)
+        :agentic-ai-lab/modules/session/objects)
 
 
-(export poo-flow-session-transform
-        poo-flow-session-transform?
-        poo-flow-session-transform-name
-        poo-flow-session-transform-intent
-        poo-flow-session-transform-description
-        poo-flow-session-transform-capabilities
-        poo-flow-session-transform-runtime-owner
-        poo-flow-session-transform-metadata
-        poo-flow-session-transform-memory-intents
-        poo-flow-session-memory-intent
-        poo-flow-session-memory-intent?
-        poo-flow-session-memory-intent-name
-        poo-flow-session-memory-intent-store-ref
-        poo-flow-session-memory-intent-scope
-        poo-flow-session-memory-intent-recall
-        poo-flow-session-memory-intent-commit-policy
-        poo-flow-session-memory-intent-runtime-owner
-        poo-flow-session-memory-intent-metadata
-        poo-flow-session-transform-apply
-        poo-flow-session-transform-receipt?
-        poo-flow-session-transform-receipt-derived-session
-        poo-flow-session-transform-receipt-handoff-intent
-        poo-flow-session-transform-receipt-memory-receipts
-        poo-flow-session-memory-receipt-ref
-        poo-flow-session-memory-receipt?
-        poo-flow-session-memory-receipt-name)
+(export agentic-ai-lab-session-transform
+        agentic-ai-lab-session-transform?
+        agentic-ai-lab-session-transform-name
+        agentic-ai-lab-session-transform-intent
+        agentic-ai-lab-session-transform-description
+        agentic-ai-lab-session-transform-capabilities
+        agentic-ai-lab-session-transform-runtime-owner
+        agentic-ai-lab-session-transform-metadata
+        agentic-ai-lab-session-transform-memory-intents
+        agentic-ai-lab-session-memory-intent
+        agentic-ai-lab-session-memory-intent?
+        agentic-ai-lab-session-memory-intent-name
+        agentic-ai-lab-session-memory-intent-store-ref
+        agentic-ai-lab-session-memory-intent-scope
+        agentic-ai-lab-session-memory-intent-recall
+        agentic-ai-lab-session-memory-intent-commit-policy
+        agentic-ai-lab-session-memory-intent-runtime-owner
+        agentic-ai-lab-session-memory-intent-metadata
+        agentic-ai-lab-session-transform-apply
+        agentic-ai-lab-session-transform-receipt?
+        agentic-ai-lab-session-transform-receipt-derived-session
+        agentic-ai-lab-session-transform-receipt-handoff-intent
+        agentic-ai-lab-session-transform-receipt-memory-receipts
+        agentic-ai-lab-session-memory-receipt-ref
+        agentic-ai-lab-session-memory-receipt?
+        agentic-ai-lab-session-memory-receipt-name)
 
-(import :poo-flow/modules/session/transform-support/memory-intent)
+(import :agentic-ai-lab/modules/session/transform-support/memory-intent)
 
-(defstruct poo-flow-session-memory-receipt-record
+(defstruct agentic-ai-lab-session-memory-receipt-record
   (kind
    schema
    intent-name
@@ -60,72 +60,72 @@
   transparent: #t)
 
 ;; : (-> PooSessionMemoryReceipt Symbol Datum)
-(def (poo-flow-session-memory-receipt-ref receipt key)
-  (if (poo-flow-session-memory-receipt-record? receipt)
+(def (agentic-ai-lab-session-memory-receipt-ref receipt key)
+  (if (agentic-ai-lab-session-memory-receipt-record? receipt)
     (case key
-      ((kind) (poo-flow-session-memory-receipt-record-kind receipt))
-      ((schema) (poo-flow-session-memory-receipt-record-schema receipt))
+      ((kind) (agentic-ai-lab-session-memory-receipt-record-kind receipt))
+      ((schema) (agentic-ai-lab-session-memory-receipt-record-schema receipt))
       ((intent-name)
-       (poo-flow-session-memory-receipt-record-intent-name receipt))
-      ((store-ref) (poo-flow-session-memory-receipt-record-store-ref receipt))
-      ((scope) (poo-flow-session-memory-receipt-record-scope receipt))
-      ((recall) (poo-flow-session-memory-receipt-record-recall receipt))
+       (agentic-ai-lab-session-memory-receipt-record-intent-name receipt))
+      ((store-ref) (agentic-ai-lab-session-memory-receipt-record-store-ref receipt))
+      ((scope) (agentic-ai-lab-session-memory-receipt-record-scope receipt))
+      ((recall) (agentic-ai-lab-session-memory-receipt-record-recall receipt))
       ((commit-policy)
-       (poo-flow-session-memory-receipt-record-commit-policy receipt))
+       (agentic-ai-lab-session-memory-receipt-record-commit-policy receipt))
       ((transform-name)
-       (poo-flow-session-memory-receipt-record-transform-name receipt))
+       (agentic-ai-lab-session-memory-receipt-record-transform-name receipt))
       ((source-session-id)
-       (poo-flow-session-memory-receipt-record-source-session-id receipt))
+       (agentic-ai-lab-session-memory-receipt-record-source-session-id receipt))
       ((derived-session-id)
-       (poo-flow-session-memory-receipt-record-derived-session-id receipt))
+       (agentic-ai-lab-session-memory-receipt-record-derived-session-id receipt))
       ((runtime-owner)
-       (poo-flow-session-memory-receipt-record-runtime-owner receipt))
+       (agentic-ai-lab-session-memory-receipt-record-runtime-owner receipt))
       ((handoff-required)
-       (poo-flow-session-memory-receipt-record-handoff-required receipt))
+       (agentic-ai-lab-session-memory-receipt-record-handoff-required receipt))
       ((descriptor-realized?)
-       (poo-flow-session-memory-receipt-record-descriptor-realized? receipt))
+       (agentic-ai-lab-session-memory-receipt-record-descriptor-realized? receipt))
       ((runtime-executed)
-       (poo-flow-session-memory-receipt-record-runtime-executed receipt))
-      ((metadata) (poo-flow-session-memory-receipt-record-metadata receipt))
+       (agentic-ai-lab-session-memory-receipt-record-runtime-executed receipt))
+      ((metadata) (agentic-ai-lab-session-memory-receipt-record-metadata receipt))
       (else #f))
     (.ref receipt key)))
 
 ;; : (-> SessionMemoryKeyCandidate Boolean)
 ;; | type SessionMemoryKeyCandidate = (U Symbol String)
-(def (poo-flow-session-memory-key? value)
+(def (agentic-ai-lab-session-memory-key? value)
   (or (symbol? value) (string? value)))
 
 ;; : (-> Alist Alist Alist)
-(def (poo-flow-session-transform-rows/tail rows tail)
+(def (agentic-ai-lab-session-transform-rows/tail rows tail)
   (foldr cons tail rows))
 
 ;;; Boundary: callers provide explicit field pairs and the runtime function
 ;;; prepends them to the existing transform tail in deterministic order.
 ;; : (-> Alist (List (Pair Symbol Object)) Alist)
-(def (poo-flow-session-transform-field-rows/tail tail . rows)
-  (poo-flow-session-transform-rows/tail rows tail))
+(def (agentic-ai-lab-session-transform-field-rows/tail tail . rows)
+  (agentic-ai-lab-session-transform-rows/tail rows tail))
 
 ;; : (-> Symbol Alist Alist)
-(def (poo-flow-session-transform-declaration-metadata/tail declared-by tail)
-  (poo-flow-session-transform-field-rows/tail
+(def (agentic-ai-lab-session-transform-declaration-metadata/tail declared-by tail)
+  (agentic-ai-lab-session-transform-field-rows/tail
    tail
    (cons 'declared-by declared-by)
    (cons 'runtime-executed #f)))
 
 ;; : (-> Symbol Alist Alist)
-(def (poo-flow-session-transform-lineage-metadata/tail transform-name tail)
-  (poo-flow-session-transform-field-rows/tail
+(def (agentic-ai-lab-session-transform-lineage-metadata/tail transform-name tail)
+  (agentic-ai-lab-session-transform-field-rows/tail
    tail
    (cons 'transform-name transform-name)))
 
 ;; : (-> Symbol Symbol Fixnum Alist Alist)
-(def (poo-flow-session-transform-derived-metadata/tail transform-name
+(def (agentic-ai-lab-session-transform-derived-metadata/tail transform-name
                                                         source-session-id
                                                         memory-intent-count
                                                         tail)
-  (poo-flow-session-transform-field-rows/tail
+  (agentic-ai-lab-session-transform-field-rows/tail
    tail
-   (cons 'derived-by 'poo-flow-session-transform)
+   (cons 'derived-by 'agentic-ai-lab-session-transform)
    (cons 'transform-name transform-name)
    (cons 'source-session-id source-session-id)
    (cons 'memory-intent-count memory-intent-count)))
@@ -133,40 +133,40 @@
 ;;; A memory intent is a report-only request for a runtime memory backend. It is
 ;;; attached to session transforms but never recalls or commits data in Scheme.
 ;; : (-> Symbol Symbol Symbol [Symbol/String] Symbol [Alist] PooSessionMemoryIntent)
-(def (poo-flow-session-memory-intent intent-name
+(def (agentic-ai-lab-session-memory-intent intent-name
                                      store-ref
                                      scope
                                      recall
                                      commit-policy
                                      . maybe-metadata)
-  (poo-flow-session-require "session memory intent name must be a symbol"
+  (agentic-ai-lab-session-require "session memory intent name must be a symbol"
                             (symbol? intent-name)
                             intent-name)
-  (poo-flow-session-require "session memory store ref must be a symbol"
+  (agentic-ai-lab-session-require "session memory store ref must be a symbol"
                             (symbol? store-ref)
                             store-ref)
-  (poo-flow-session-require "session memory scope must be a symbol"
+  (agentic-ai-lab-session-require "session memory scope must be a symbol"
                             (symbol? scope)
                             scope)
-  (poo-flow-session-require "session memory recall keys must be a list"
+  (agentic-ai-lab-session-require "session memory recall keys must be a list"
                             (list? recall)
                             recall)
-  (poo-flow-session-require
+  (agentic-ai-lab-session-require
    "session memory recall keys must be symbols or strings"
-   (poo-flow-session-every? poo-flow-session-memory-key? recall)
+   (agentic-ai-lab-session-every? agentic-ai-lab-session-memory-key? recall)
    recall)
-  (poo-flow-session-require "session memory commit policy must be a symbol"
+  (agentic-ai-lab-session-require "session memory commit policy must be a symbol"
                             (symbol? commit-policy)
                             commit-policy)
   (let ((metadata-value
-         (poo-flow-session-transform-declaration-metadata/tail
-          'poo-flow-session-memory-intent
+         (agentic-ai-lab-session-transform-declaration-metadata/tail
+          'agentic-ai-lab-session-memory-intent
           (if (null? maybe-metadata) '() (car maybe-metadata)))))
-    (poo-flow-session-require "session memory metadata must be a list"
+    (agentic-ai-lab-session-require "session memory metadata must be a list"
                               (list? metadata-value)
                               metadata-value)
-    (list (cons 'kind 'poo-flow.session.memory-intent)
-          (cons 'schema 'poo-flow.modules.session.memory-intent.v1)
+    (list (cons 'kind 'agentic-ai-lab.session.memory-intent)
+          (cons 'schema 'agentic-ai-lab.modules.session.memory-intent.v1)
           (cons 'intent-name intent-name)
           (cons 'store-ref store-ref)
           (cons 'scope scope)
@@ -192,7 +192,7 @@
 ;; : (-> PooSessionMemoryIntent String)
 ;; : (-> PooSessionMemoryIntent Alist)
 ;; : (-> PooSessionMemoryIntent Alist)
-;; poo-flow-session-memory-intent-handoff-bundle
+;; agentic-ai-lab-session-memory-intent-handoff-bundle
 ;;   : (-> [PooSessionMemoryIntent] (Cons [Alist] Fixnum))
 ;;   | doc m%
 ;;       Project memory intents into report-only handoff rows while returning
@@ -200,13 +200,13 @@
 ;;
 ;;       # Examples
 ;;       ```scheme
-;;       (poo-flow-session-memory-intent-handoff-bundle intents)
+;;       (agentic-ai-lab-session-memory-intent-handoff-bundle intents)
 ;;       ;; => (handoff-rows . count)
 ;;       ```
 ;;     %
 ;; : (-> [PooSessionMemoryIntent] [Alist] Fixnum (Cons [Alist] Fixnum))
 ;; : (-> [PooSessionMemoryIntent] (Cons [Alist] Fixnum))
-;; poo-flow-session-memory-intent-count
+;; agentic-ai-lab-session-memory-intent-count
 ;;   : (-> [PooSessionMemoryIntent] Fixnum)
 ;;   | doc m%
 ;;       Return the cardinality of memory intents when callers do not need to
@@ -214,28 +214,28 @@
 ;;
 ;;       # Examples
 ;;       ```scheme
-;;       (poo-flow-session-memory-intent-count intents)
+;;       (agentic-ai-lab-session-memory-intent-count intents)
 ;;       ;; => count
 ;;       ```
 ;;     %
 ;; : (-> [PooSessionMemoryIntent] Fixnum)
 ;; : (-> [PooSessionTransformOption] (Cons Alist [PooSessionMemoryIntent]))
 ;; | type PooSessionTransformOption = (U Alist PooSessionMemoryIntent)
-(def (poo-flow-session-transform-options options)
+(def (agentic-ai-lab-session-transform-options options)
   (cond
    ((null? options)
     (cons '() '()))
    ((null? (cdr options))
     (let ((option (car options)))
       (if (and (list? option)
-               (poo-flow-session-every? poo-flow-session-memory-intent?
+               (agentic-ai-lab-session-every? agentic-ai-lab-session-memory-intent?
                                          option))
           (cons '() option)
           (cons option '()))))
    ((null? (cddr options))
     (cons (car options) (cadr options)))
    (else
-    (poo-flow-session-require
+    (agentic-ai-lab-session-require
      "session transform accepts at most metadata and memory intents"
      #f
      options))))
@@ -243,52 +243,52 @@
 ;;; A transform is an agent-flow layer spec. It is intentionally inert: provider
 ;;; prompts and runtime calls become handoff intent, not Scheme execution.
 ;; : (-> Symbol Symbol String [Symbol] [Alist] PooSessionTransform)
-(def (poo-flow-session-transform transform-name
+(def (agentic-ai-lab-session-transform transform-name
                                  intent
                                  description
                                  capabilities
                                  . options)
-  (poo-flow-session-require "session transform name must be a symbol"
+  (agentic-ai-lab-session-require "session transform name must be a symbol"
                             (symbol? transform-name)
                             transform-name)
-  (poo-flow-session-require "session transform intent must be a symbol"
+  (agentic-ai-lab-session-require "session transform intent must be a symbol"
                             (symbol? intent)
                             intent)
-  (poo-flow-session-require "session transform description must be a string"
+  (agentic-ai-lab-session-require "session transform description must be a string"
                             (string? description)
                             description)
-  (poo-flow-session-require "session transform capabilities must be a list"
+  (agentic-ai-lab-session-require "session transform capabilities must be a list"
                             (list? capabilities)
                             capabilities)
-  (poo-flow-session-require
+  (agentic-ai-lab-session-require
    "session transform capabilities must contain only symbols"
-   (poo-flow-session-every? symbol? capabilities)
+   (agentic-ai-lab-session-every? symbol? capabilities)
    capabilities)
-  (let* ((split-options (poo-flow-session-transform-options options))
+  (let* ((split-options (agentic-ai-lab-session-transform-options options))
          (transform-name-value transform-name)
          (intent-value intent)
          (description-value description)
          (capability-values capabilities)
          (metadata-value
-          (poo-flow-session-transform-declaration-metadata/tail
-           'poo-flow-session-transform
+          (agentic-ai-lab-session-transform-declaration-metadata/tail
+           'agentic-ai-lab-session-transform
            (car split-options)))
          (memory-intents-value (cdr split-options)))
-    (poo-flow-session-require "session transform metadata must be a list"
+    (agentic-ai-lab-session-require "session transform metadata must be a list"
                               (list? metadata-value)
                               metadata-value)
-    (poo-flow-session-require "session transform memory intents must be a list"
+    (agentic-ai-lab-session-require "session transform memory intents must be a list"
                               (list? memory-intents-value)
                               memory-intents-value)
-    (poo-flow-session-require
+    (agentic-ai-lab-session-require
      "session transform memory intents must contain only memory intents"
-     (poo-flow-session-every? poo-flow-session-memory-intent?
+     (agentic-ai-lab-session-every? agentic-ai-lab-session-memory-intent?
                               memory-intents-value)
      memory-intents-value)
     (object<-alist
      (list
-      (cons 'kind 'poo-flow.session.transform)
-      (cons 'schema 'poo-flow.modules.session.transform.v1)
+      (cons 'kind 'agentic-ai-lab.session.transform)
+      (cons 'schema 'agentic-ai-lab.modules.session.transform.v1)
       (cons 'transform-name transform-name-value)
       (cons 'intent intent-value)
       (cons 'description description-value)
@@ -301,68 +301,68 @@
       (cons 'metadata metadata-value)))))
 
 ;; : (-> POOObject Boolean)
-(def (poo-flow-session-transform? value)
+(def (agentic-ai-lab-session-transform? value)
   (and (object? value)
-       (eq? (.ref value 'kind) 'poo-flow.session.transform)))
+       (eq? (.ref value 'kind) 'agentic-ai-lab.session.transform)))
 
 ;; : (-> PooSessionTransform Symbol)
-(def (poo-flow-session-transform-name transform)
+(def (agentic-ai-lab-session-transform-name transform)
   (.ref transform 'transform-name))
 
 ;; : (-> PooSessionTransform Symbol)
-(def (poo-flow-session-transform-intent transform)
+(def (agentic-ai-lab-session-transform-intent transform)
   (.ref transform 'intent))
 
 ;; : (-> PooSessionTransform String)
-(def (poo-flow-session-transform-description transform)
+(def (agentic-ai-lab-session-transform-description transform)
   (.ref transform 'description))
 
 ;; : (-> PooSessionTransform [Symbol])
-(def (poo-flow-session-transform-capabilities transform)
+(def (agentic-ai-lab-session-transform-capabilities transform)
   (.ref transform 'capabilities))
 
 ;; : (-> PooSessionTransform String)
-(def (poo-flow-session-transform-runtime-owner transform)
+(def (agentic-ai-lab-session-transform-runtime-owner transform)
   (.ref transform 'runtime-owner))
 
 ;; : (-> PooSessionTransform Alist)
-(def (poo-flow-session-transform-metadata transform)
+(def (agentic-ai-lab-session-transform-metadata transform)
   (.ref transform 'metadata))
 
 ;; : (-> PooSessionTransform [PooSessionMemoryIntent])
-(def (poo-flow-session-transform-memory-intents transform)
+(def (agentic-ai-lab-session-transform-memory-intents transform)
   (.ref transform 'memory-intents))
 
 ;;; Handoff intent is the runtime-facing summary. It is plain data so Marlin can
 ;;; consume it without traversing nested POO objects.
 ;; : (-> PooSessionTransform PooSession PooSession Alist)
-(def (poo-flow-session-transform-handoff-intent transform
+(def (agentic-ai-lab-session-transform-handoff-intent transform
                                                 source-session
                                                 derived-session)
   (let* ((memory-intents-value
-          (poo-flow-session-transform-memory-intents transform))
+          (agentic-ai-lab-session-transform-memory-intents transform))
          (memory-handoff-bundle
-          (poo-flow-session-memory-intent-handoff-bundle
+          (agentic-ai-lab-session-memory-intent-handoff-bundle
            memory-intents-value))
          (derived-placement-value
-          (poo-flow-session-value-placement derived-session)))
+          (agentic-ai-lab-session-value-placement derived-session)))
     (list
-     (cons 'kind 'poo-flow.session.transform.handoff-intent)
-     (cons 'schema 'poo-flow.modules.session.transform.handoff-intent.v1)
-     (cons 'transform-name (poo-flow-session-transform-name transform))
-     (cons 'intent (poo-flow-session-transform-intent transform))
-     (cons 'source-session-id (poo-flow-session-id source-session))
-     (cons 'derived-session-id (poo-flow-session-id derived-session))
-     (cons 'capabilities (poo-flow-session-transform-capabilities transform))
+     (cons 'kind 'agentic-ai-lab.session.transform.handoff-intent)
+     (cons 'schema 'agentic-ai-lab.modules.session.transform.handoff-intent.v1)
+     (cons 'transform-name (agentic-ai-lab-session-transform-name transform))
+     (cons 'intent (agentic-ai-lab-session-transform-intent transform))
+     (cons 'source-session-id (agentic-ai-lab-session-id source-session))
+     (cons 'derived-session-id (agentic-ai-lab-session-id derived-session))
+     (cons 'capabilities (agentic-ai-lab-session-transform-capabilities transform))
      (cons 'memory-intents (car memory-handoff-bundle))
      (cons 'memory-intent-count (cdr memory-handoff-bundle))
      (cons 'placement-profile-ref
-           (poo-flow-session-placement-profile-ref
+           (agentic-ai-lab-session-placement-profile-ref
             derived-placement-value))
      (cons 'placement-resolved?
-           (poo-flow-session-placement-resolved?
+           (agentic-ai-lab-session-placement-resolved?
             derived-placement-value))
-     (cons 'runtime-owner (poo-flow-session-transform-runtime-owner transform))
+     (cons 'runtime-owner (agentic-ai-lab-session-transform-runtime-owner transform))
      (cons 'handoff-required #t)
      (cons 'descriptor-realized? #f)
      (cons 'runtime-executed #f))))
@@ -370,30 +370,30 @@
 ;;; Runtime memory effects stay behind the handoff. The receipt records what
 ;;; would be recalled or committed by the runtime owner.
 ;; : (-> PooSessionMemoryIntent PooSessionTransform PooSession PooSession PooSessionMemoryReceipt)
-(def (poo-flow-session-memory-receipt-row memory-intent
+(def (agentic-ai-lab-session-memory-receipt-row memory-intent
                                           transform
                                           source-session
                                           derived-session)
   (list
-   (cons 'kind 'poo-flow.session.memory.receipt)
-   (cons 'schema 'poo-flow.modules.session.memory.receipt.v1)
-   (cons 'intent-name (poo-flow-session-memory-intent-name memory-intent))
-   (cons 'store-ref (poo-flow-session-memory-intent-store-ref memory-intent))
-   (cons 'scope (poo-flow-session-memory-intent-scope memory-intent))
-   (cons 'recall (poo-flow-session-memory-intent-recall memory-intent))
-   (cons 'commit-policy (poo-flow-session-memory-intent-commit-policy
+   (cons 'kind 'agentic-ai-lab.session.memory.receipt)
+   (cons 'schema 'agentic-ai-lab.modules.session.memory.receipt.v1)
+   (cons 'intent-name (agentic-ai-lab-session-memory-intent-name memory-intent))
+   (cons 'store-ref (agentic-ai-lab-session-memory-intent-store-ref memory-intent))
+   (cons 'scope (agentic-ai-lab-session-memory-intent-scope memory-intent))
+   (cons 'recall (agentic-ai-lab-session-memory-intent-recall memory-intent))
+   (cons 'commit-policy (agentic-ai-lab-session-memory-intent-commit-policy
                          memory-intent))
-   (cons 'transform-name (poo-flow-session-transform-name transform))
-   (cons 'source-session-id (poo-flow-session-id source-session))
-   (cons 'derived-session-id (poo-flow-session-id derived-session))
-   (cons 'runtime-owner (poo-flow-session-memory-intent-runtime-owner
+   (cons 'transform-name (agentic-ai-lab-session-transform-name transform))
+   (cons 'source-session-id (agentic-ai-lab-session-id source-session))
+   (cons 'derived-session-id (agentic-ai-lab-session-id derived-session))
+   (cons 'runtime-owner (agentic-ai-lab-session-memory-intent-runtime-owner
                          memory-intent))
    (cons 'handoff-required #t)
    (cons 'descriptor-realized? #f)
    (cons 'runtime-executed #f)
-   (cons 'metadata (poo-flow-session-memory-intent-metadata memory-intent))))
+   (cons 'metadata (agentic-ai-lab-session-memory-intent-metadata memory-intent))))
 
-;; poo-flow-session-memory-receipt-row-bundle
+;; agentic-ai-lab-session-memory-receipt-row-bundle
 ;;   : (-> [PooSessionMemoryIntent] PooSessionTransform PooSession PooSession (Cons [Alist] Fixnum))
 ;;   | doc m%
 ;;       Project memory intents into receipt rows for a derived session and
@@ -401,12 +401,12 @@
 ;;
 ;;       # Examples
 ;;       ```scheme
-;;       (poo-flow-session-memory-receipt-row-bundle intents transform source derived)
+;;       (agentic-ai-lab-session-memory-receipt-row-bundle intents transform source derived)
 ;;       ;; => (receipt-rows . count)
 ;;       ```
 ;;     %
 ;; : (-> [PooSessionMemoryIntent] PooSessionTransform PooSession PooSession [Alist] Fixnum (Cons [Alist] Fixnum))
-(def (poo-flow-session-memory-receipt-row-bundle/rev memory-intents
+(def (agentic-ai-lab-session-memory-receipt-row-bundle/rev memory-intents
                                                         transform
                                                         source-session
                                                         derived-session
@@ -414,12 +414,12 @@
                                                         count)
   (if (null? memory-intents)
     (cons rows-rev count)
-    (poo-flow-session-memory-receipt-row-bundle/rev
+    (agentic-ai-lab-session-memory-receipt-row-bundle/rev
      (cdr memory-intents)
      transform
      source-session
      derived-session
-     (cons (poo-flow-session-memory-receipt-row
+     (cons (agentic-ai-lab-session-memory-receipt-row
             (car memory-intents)
             transform
             source-session
@@ -428,12 +428,12 @@
      (fx+ count 1))))
 
 ;; : (-> [PooSessionMemoryIntent] PooSessionTransform PooSession PooSession (Cons [Alist] Fixnum))
-(def (poo-flow-session-memory-receipt-row-bundle memory-intents
+(def (agentic-ai-lab-session-memory-receipt-row-bundle memory-intents
                                                  transform
                                                  source-session
                                                  derived-session)
   (let (bundle
-        (poo-flow-session-memory-receipt-row-bundle/rev
+        (agentic-ai-lab-session-memory-receipt-row-bundle/rev
          memory-intents
          transform
          source-session
@@ -443,115 +443,115 @@
     (cons (reverse (car bundle)) (cdr bundle))))
 
 ;; : (-> Alist PooSessionMemoryReceipt)
-(def (poo-flow-session-memory-receipt-row->object row)
-  (make-poo-flow-session-memory-receipt-record
-   (poo-flow-session-alist-ref row 'kind #f)
-   (poo-flow-session-alist-ref row 'schema #f)
-   (poo-flow-session-alist-ref row 'intent-name #f)
-   (poo-flow-session-alist-ref row 'store-ref #f)
-   (poo-flow-session-alist-ref row 'scope #f)
-   (poo-flow-session-alist-ref row 'recall '())
-   (poo-flow-session-alist-ref row 'commit-policy #f)
-   (poo-flow-session-alist-ref row 'transform-name #f)
-   (poo-flow-session-alist-ref row 'source-session-id #f)
-   (poo-flow-session-alist-ref row 'derived-session-id #f)
-   (poo-flow-session-alist-ref row 'runtime-owner "marlin-agent-core")
-   (poo-flow-session-alist-ref row 'handoff-required #t)
-   (poo-flow-session-alist-ref row 'descriptor-realized? #f)
-   (poo-flow-session-alist-ref row 'runtime-executed #f)
-   (poo-flow-session-alist-ref row 'metadata '())))
+(def (agentic-ai-lab-session-memory-receipt-row->object row)
+  (make-agentic-ai-lab-session-memory-receipt-record
+   (agentic-ai-lab-session-alist-ref row 'kind #f)
+   (agentic-ai-lab-session-alist-ref row 'schema #f)
+   (agentic-ai-lab-session-alist-ref row 'intent-name #f)
+   (agentic-ai-lab-session-alist-ref row 'store-ref #f)
+   (agentic-ai-lab-session-alist-ref row 'scope #f)
+   (agentic-ai-lab-session-alist-ref row 'recall '())
+   (agentic-ai-lab-session-alist-ref row 'commit-policy #f)
+   (agentic-ai-lab-session-alist-ref row 'transform-name #f)
+   (agentic-ai-lab-session-alist-ref row 'source-session-id #f)
+   (agentic-ai-lab-session-alist-ref row 'derived-session-id #f)
+   (agentic-ai-lab-session-alist-ref row 'runtime-owner "marlin-agent-core")
+   (agentic-ai-lab-session-alist-ref row 'handoff-required #t)
+   (agentic-ai-lab-session-alist-ref row 'descriptor-realized? #f)
+   (agentic-ai-lab-session-alist-ref row 'runtime-executed #f)
+   (agentic-ai-lab-session-alist-ref row 'metadata '())))
 
 ;; : (-> PooSessionMemoryIntent PooSessionTransform PooSession PooSession PooSessionMemoryReceipt)
-(def (poo-flow-session-memory-receipt memory-intent
+(def (agentic-ai-lab-session-memory-receipt memory-intent
                                       transform
                                       source-session
                                       derived-session)
-  (poo-flow-session-memory-receipt-row->object
-   (poo-flow-session-memory-receipt-row
+  (agentic-ai-lab-session-memory-receipt-row->object
+   (agentic-ai-lab-session-memory-receipt-row
     memory-intent
     transform
     source-session
     derived-session)))
 
 ;; : (-> [Alist] [PooSessionMemoryReceipt])
-(def (poo-flow-session-memory-receipt-rows->objects rows)
+(def (agentic-ai-lab-session-memory-receipt-rows->objects rows)
   (cond
    ((null? rows) '())
    (else
-    (cons (poo-flow-session-memory-receipt-row->object (car rows))
-          (poo-flow-session-memory-receipt-rows->objects (cdr rows))))))
+    (cons (agentic-ai-lab-session-memory-receipt-row->object (car rows))
+          (agentic-ai-lab-session-memory-receipt-rows->objects (cdr rows))))))
 
 ;;; Apply a transform in the control plane. The output is a receipt object with
 ;;; an inspectable derived session; runtime providers still receive only the
 ;;; handoff intent.
 ;; : (-> PooSessionTransform PooSession Symbol [PooSessionChunk] [Alist] PooSessionTransformReceipt)
-(def (poo-flow-session-transform-apply transform
+(def (agentic-ai-lab-session-transform-apply transform
                                        source-session
                                        derived-session-id
                                        chunks
                                        . maybe-metadata)
-  (poo-flow-session-require "session transform apply requires a transform"
-                            (poo-flow-session-transform? transform)
+  (agentic-ai-lab-session-require "session transform apply requires a transform"
+                            (agentic-ai-lab-session-transform? transform)
                             transform)
-  (poo-flow-session-require "session transform apply requires a session"
-                            (poo-flow-session? source-session)
+  (agentic-ai-lab-session-require "session transform apply requires a session"
+                            (agentic-ai-lab-session? source-session)
                             source-session)
-  (poo-flow-session-require "derived session id must be a symbol"
+  (agentic-ai-lab-session-require "derived session id must be a symbol"
                             (symbol? derived-session-id)
                             derived-session-id)
-  (poo-flow-session-require "derived session chunks must be a list"
+  (agentic-ai-lab-session-require "derived session chunks must be a list"
                             (list? chunks)
                             chunks)
-  (poo-flow-session-require
+  (agentic-ai-lab-session-require
    "derived session chunks must contain only session chunks"
-   (poo-flow-session-every? poo-flow-session-chunk? chunks)
+   (agentic-ai-lab-session-every? agentic-ai-lab-session-chunk? chunks)
    chunks)
   (let* ((metadata-value
           (if (null? maybe-metadata) '() (car maybe-metadata)))
-         (source-session-id-value (poo-flow-session-id source-session))
+         (source-session-id-value (agentic-ai-lab-session-id source-session))
          (derived-session-id-value derived-session-id)
          (memory-intents-value
-          (poo-flow-session-transform-memory-intents transform))
+          (agentic-ai-lab-session-transform-memory-intents transform))
          (memory-intent-count-value
-          (poo-flow-session-memory-intent-count memory-intents-value))
+          (agentic-ai-lab-session-memory-intent-count memory-intents-value))
          (transform-name-value
-          (poo-flow-session-transform-name transform))
+          (agentic-ai-lab-session-transform-name transform))
          (transform-intent-value
-          (poo-flow-session-transform-intent transform))
+          (agentic-ai-lab-session-transform-intent transform))
          (transform-runtime-owner-value
-          (poo-flow-session-transform-runtime-owner transform))
+          (agentic-ai-lab-session-transform-runtime-owner transform))
          (source-placement-value
-          (poo-flow-session-value-placement source-session))
+          (agentic-ai-lab-session-value-placement source-session))
          (source-chunk-count-value
-          (length (poo-flow-session-chunks source-session)))
+          (length (agentic-ai-lab-session-chunks source-session)))
          (derived-chunk-count-value
           (length chunks))
          (derived-session-value
-          (poo-flow-session-value
+          (agentic-ai-lab-session-value
            derived-session-id-value
            chunks
-           (poo-flow-session-lineage
+           (agentic-ai-lab-session-lineage
             derived-session-id-value
             (list source-session-id-value)
             'transform
-            (poo-flow-session-transform-lineage-metadata/tail
+            (agentic-ai-lab-session-transform-lineage-metadata/tail
              transform-name-value
              metadata-value))
            source-placement-value
-           (poo-flow-session-transform-derived-metadata/tail
+           (agentic-ai-lab-session-transform-derived-metadata/tail
             transform-name-value
             source-session-id-value
             memory-intent-count-value
             metadata-value)))
          (handoff-intent-value
-          (poo-flow-session-transform-handoff-intent
+          (agentic-ai-lab-session-transform-handoff-intent
            transform
            source-session
            derived-session-value))
          (derived-placement-value
-          (poo-flow-session-value-placement derived-session-value))
+          (agentic-ai-lab-session-value-placement derived-session-value))
          (memory-receipt-bundle
-          (poo-flow-session-memory-receipt-row-bundle
+          (agentic-ai-lab-session-memory-receipt-row-bundle
            memory-intents-value
            transform
            source-session
@@ -560,8 +560,8 @@
          (memory-receipt-count-value (cdr memory-receipt-bundle)))
     (object<-alist
      (list
-      (cons 'kind 'poo-flow.session.transform.receipt)
-      (cons 'schema 'poo-flow.modules.session.transform.receipt.v1)
+      (cons 'kind 'agentic-ai-lab.session.transform.receipt)
+      (cons 'schema 'agentic-ai-lab.modules.session.transform.receipt.v1)
       (cons 'transform-name transform-name-value)
       (cons 'transform-intent transform-intent-value)
       (cons 'source-session-id source-session-id-value)
@@ -569,22 +569,22 @@
       (cons 'parent-session-ids (list source-session-id-value))
       (cons 'derived-session-chunks chunks)
       (cons 'derived-session-metadata
-            (poo-flow-session-metadata derived-session-value))
+            (agentic-ai-lab-session-metadata derived-session-value))
       (cons 'derived-session-branch-kind 'transform)
       (cons 'placement-profile-ref
-            (poo-flow-session-placement-profile-ref
+            (agentic-ai-lab-session-placement-profile-ref
              derived-placement-value))
       (cons 'placement-resolved?
-            (poo-flow-session-placement-resolved?
+            (agentic-ai-lab-session-placement-resolved?
              derived-placement-value))
       (cons 'placement-diagnostics
-            (poo-flow-session-placement-diagnostics
+            (agentic-ai-lab-session-placement-diagnostics
              derived-placement-value))
       (cons 'placement-runtime-summary
-            (poo-flow-session-placement-runtime-summary
+            (agentic-ai-lab-session-placement-runtime-summary
              derived-placement-value))
       (cons 'placement-handoff-summary
-            (poo-flow-session-placement-handoff-summary
+            (agentic-ai-lab-session-placement-handoff-summary
              derived-placement-value))
       (cons 'placement-metadata
             (.ref derived-placement-value 'placement-metadata))
@@ -600,23 +600,23 @@
       (cons 'metadata metadata-value)))))
 
 ;; : (-> POOObject Boolean)
-(def (poo-flow-session-transform-receipt? value)
+(def (agentic-ai-lab-session-transform-receipt? value)
   (and (object? value)
-       (eq? (.ref value 'kind) 'poo-flow.session.transform.receipt)))
+       (eq? (.ref value 'kind) 'agentic-ai-lab.session.transform.receipt)))
 
 ;; : (-> PooSessionTransformReceipt PooSession)
-(def (poo-flow-session-transform-receipt-derived-session receipt)
+(def (agentic-ai-lab-session-transform-receipt-derived-session receipt)
   (let ((derived-session-id (.ref receipt 'derived-session-id))
         (parent-session-ids (.ref receipt 'parent-session-ids)))
-    (poo-flow-session-value
+    (agentic-ai-lab-session-value
      derived-session-id
      (.ref receipt 'derived-session-chunks)
-     (poo-flow-session-lineage
+     (agentic-ai-lab-session-lineage
       derived-session-id
       parent-session-ids
       (.ref receipt 'derived-session-branch-kind))
-     (.o placement-kind: 'poo-flow.session.placement
-         placement-schema: 'poo-flow.modules.session.placement.v1
+     (.o placement-kind: 'agentic-ai-lab.session.placement
+         placement-schema: 'agentic-ai-lab.modules.session.placement.v1
          placement-profile-ref: (.ref receipt 'placement-profile-ref)
          placement-resolved?: (.ref receipt 'placement-resolved?)
          placement-diagnostics: (.ref receipt 'placement-diagnostics)
@@ -627,10 +627,10 @@
      (.ref receipt 'derived-session-metadata))))
 
 ;; : (-> PooSessionTransformReceipt Alist)
-(def (poo-flow-session-transform-receipt-handoff-intent receipt)
+(def (agentic-ai-lab-session-transform-receipt-handoff-intent receipt)
   (.ref receipt 'handoff-intent))
 
-;; poo-flow-session-transform-receipt-memory-receipts
+;; agentic-ai-lab-session-transform-receipt-memory-receipts
 ;;   : (-> PooSessionTransformReceipt [PooSessionMemoryReceipt])
 ;;   | doc m%
 ;;       Materialize receipt rows from an inert transform receipt as POO memory
@@ -638,21 +638,21 @@
 ;;
 ;;       # Examples
 ;;       ```scheme
-;;       (poo-flow-session-transform-receipt-memory-receipts receipt)
+;;       (agentic-ai-lab-session-transform-receipt-memory-receipts receipt)
 ;;       ;; => memory-receipt-objects
 ;;       ```
 ;;     %
 ;; : (-> PooSessionTransformReceipt [PooSessionMemoryReceipt])
-(def (poo-flow-session-transform-receipt-memory-receipts receipt)
-  (poo-flow-session-memory-receipt-rows->objects
+(def (agentic-ai-lab-session-transform-receipt-memory-receipts receipt)
+  (agentic-ai-lab-session-memory-receipt-rows->objects
    (.ref receipt 'memory-receipts)))
 
 ;; : (-> POOObject Boolean)
-(def (poo-flow-session-memory-receipt? value)
-  (or (poo-flow-session-memory-receipt-record? value)
+(def (agentic-ai-lab-session-memory-receipt? value)
+  (or (agentic-ai-lab-session-memory-receipt-record? value)
       (and (object? value)
-           (eq? (.ref value 'kind) 'poo-flow.session.memory.receipt))))
+           (eq? (.ref value 'kind) 'agentic-ai-lab.session.memory.receipt))))
 
 ;; : (-> PooSessionMemoryReceipt Symbol)
-(def (poo-flow-session-memory-receipt-name receipt)
-  (poo-flow-session-memory-receipt-ref receipt 'intent-name))
+(def (agentic-ai-lab-session-memory-receipt-name receipt)
+  (agentic-ai-lab-session-memory-receipt-ref receipt 'intent-name))

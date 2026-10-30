@@ -5,38 +5,41 @@
 
 ;;; Scenario: user-interface CrewAI-style composition instance.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .all-slots .o .ref .slot?)
         (only-in :std/test check-equal? test-suite)
-        (only-in :poo-flow/src/authoring/fragment-syntax load!)
-        (only-in :poo-flow/src/scenario/case
-                 poo-flow-scenario-case?)
-        :poo-flow/src/scenario/accessors
-        :poo-flow/user-interface/scenarios/crewai/scenario)
+        (only-in :agentic-ai-lab/modules/module-authoring/fragment-syntax load!)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/case
+                 agentic-ai-lab-scenario-case?)
+        :agentic-ai-lab/modules/workflow/scenario/accessors
+        :agentic-ai-lab/user-interface/scenarios/crewai/scenario)
 
 
 (def crewai-composition
   crewai-scenario)
 
-(def (profile-name profile)
-  (.ref profile (if (.slot? profile 'name) 'name 'identity)))
+(def (profile-identity profile)
+  (.ref profile 'identity))
+
+(export crewai-user-composition-test)
 
 (def crewai-user-composition-test
  (test-suite "crewai user composition"
-  (poo-flow-test-case "crewai declares one reusable production composition"
-    (let* ((stage-space (poo-flow-scenario-case-stages crewai-composition))
+  (yuanxu-test-case "crewai declares one reusable production composition"
+    (let* ((stage-space (agentic-ai-lab-scenario-case-stages crewai-composition))
            (stage (.ref stage-space 'production))
            (compose-payload
-            (poo-flow-scenario-case-profiles crewai-composition))
+            (agentic-ai-lab-scenario-case-profiles crewai-composition))
            (loop-value (.ref stage 'loop)))
-      (check-equal? (poo-flow-scenario-case? crewai-composition) #t)
-      (check-equal? (poo-flow-scenario-case-name crewai-composition) 'crewai)
-      (check-equal? (length (poo-flow-scenario-case-modules
+      (check-equal? (agentic-ai-lab-scenario-case? crewai-composition) #t)
+      ;; user-composition uses its declaration identifier as the Case identity.
+      (check-equal? (agentic-ai-lab-scenario-case-name crewai-composition) 'crewai-scenario)
+      (check-equal? (length (agentic-ai-lab-scenario-case-modules
                              crewai-composition))
                     1)
       (check-equal? (.all-slots stage-space) '(production))
       (check-equal? (length compose-payload) 15)
-      (check-equal? (map profile-name compose-payload)
+      (check-equal? (map profile-identity compose-payload)
                     '(agent
                       task
                       crew

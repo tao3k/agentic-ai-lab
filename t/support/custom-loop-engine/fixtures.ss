@@ -6,17 +6,17 @@
 ;;; Shared fixtures for custom loop-engine user-interface tests.
 
 (import (only-in :clan/poo/object .ref .slot? object?)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
-        (only-in :poo-flow/modules/loop-engine/runtime
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        (only-in :agentic-ai-lab/modules/loop-engine/runtime
                  loop-engine-capability-receipt?
-                 poo-flow-user-loop-engine-capability-receipt-ref)
-        (only-in :poo-flow/modules/cubeSandbox/config
-                 poo-flow-cubeSandbox-module-bundles)
-        (only-in :poo-flow/modules/nono-sandbox/config
-                 poo-flow-nono-sandbox-module-bundles)
+                 agentic-ai-lab-user-loop-engine-capability-receipt-ref)
+        (only-in :agentic-ai-lab/modules/cubeSandbox/config
+                 agentic-ai-lab-cubeSandbox-module-bundles)
+        (only-in :agentic-ai-lab/modules/nono-sandbox/config
+                 agentic-ai-lab-nono-sandbox-module-bundles)
         (only-in "../../../user-interface/custom/my-module/cases/loop-engine-owner"
-                 poo-flow-custom-my-module-loop-engine-case))
+                 agentic-ai-lab-custom-my-module-loop-engine-case))
 
 (export test-ref
         test-field-values
@@ -42,7 +42,7 @@
 (def (test-ref value key)
   (cond
    ((loop-engine-capability-receipt? value)
-    (poo-flow-user-loop-engine-capability-receipt-ref value key #f))
+    (agentic-ai-lab-user-loop-engine-capability-receipt-ref value key #f))
    ((and (object? value) (.slot? value key)) (.ref value key))
    ((pair? value)
     (let (entry (assoc key value))
@@ -99,39 +99,39 @@
 ;; : Alist
 (def expected-loop-engine-receipt-contracts
   '((lineage-receipt
-     . poo-flow.loop-engine.lineage-receipt.v1)
+     . agentic-ai-lab.loop-engine.lineage-receipt.v1)
     (selector-receipt
-     . poo-flow.loop-engine.selector-receipt.v1)
+     . agentic-ai-lab.loop-engine.selector-receipt.v1)
     (session-agent-graph
-     . poo-flow.modules.session.agent-graph.v1)
+     . agentic-ai-lab.modules.session.agent-graph.v1)
     (resource-dispatch-receipt
-     . poo-flow.loop-engine.resource-dispatch-receipt.v1)
+     . agentic-ai-lab.loop-engine.resource-dispatch-receipt.v1)
     (capability-receipt
-     . poo-flow.loop-engine.capability-receipt.v1)
+     . agentic-ai-lab.loop-engine.capability-receipt.v1)
     (memory-receipt
-     . poo-flow.loop-engine.memory-receipt.v1)
+     . agentic-ai-lab.loop-engine.memory-receipt.v1)
     (compression-receipt
-     . poo-flow.loop-engine.compression-receipt.v1)
+     . agentic-ai-lab.loop-engine.compression-receipt.v1)
     (policy-extension-receipt
-     . poo-flow.loop-engine.policy-extension-receipt.v1)
+     . agentic-ai-lab.loop-engine.policy-extension-receipt.v1)
     (spec-evolution-review
-     . poo-flow.spec-evolution.review-item.v1)
+     . agentic-ai-lab.spec-evolution.review-item.v1)
     (spec-evolution-runtime-manifest-row
-     . poo-flow.spec-evolution.runtime-manifest-row.v1)
+     . agentic-ai-lab.spec-evolution.runtime-manifest-row.v1)
     (runtime-capability-descriptor
-     . poo-flow.runtime.capability-descriptor.v1)
+     . agentic-ai-lab.runtime.capability-descriptor.v1)
     (policy-profile-packet
-     . poo-flow.runtime.policy-profile-packet.v1)
+     . agentic-ai-lab.runtime.policy-profile-packet.v1)
     (runtime-action-packet
-     . poo-flow.runtime.action-packet.v1)
+     . agentic-ai-lab.runtime.action-packet.v1)
     (runtime-receipt-batch
-     . poo-flow.runtime.receipt-batch.v1)
+     . agentic-ai-lab.runtime.receipt-batch.v1)
     (sandbox-handoff-agreement
-     . poo-flow.loop-engine.sandbox-handoff-agreement.v1)))
+     . agentic-ai-lab.loop-engine.sandbox-handoff-agreement.v1)))
 
 ;; : Symbol
 (def expected-loop-engine-human-audit-result-contract
-  'poo-flow.loop-governor.human-audit-decision.v1)
+  'agentic-ai-lab.loop-governor.human-audit-decision.v1)
 
 ;; : [Symbol]
 (def expected-loop-engine-required-result-fields
@@ -150,16 +150,16 @@
 ;;; descriptor or executing loop runtime code in the test.
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation/bundles module-bundles)
-  (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules module-bundles)
-    (poo-flow-settings))))
+  (agenticAiLabUserConfigPresentation
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules module-bundles)
+    (yuanxu-settings))))
 
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation module-bundle)
   (custom-loop-presentation/bundles
-   (append poo-flow-nono-sandbox-module-bundles
-           poo-flow-cubeSandbox-module-bundles
+   (append agentic-ai-lab-nono-sandbox-module-bundles
+           agentic-ai-lab-cubeSandbox-module-bundles
            (list module-bundle))))
 
 ;;; The concrete context centralizes projection setup so each assertion helper
@@ -169,7 +169,7 @@
 (def (custom-loop-concrete-context)
   (let* ((presentation
           (custom-loop-presentation
-           poo-flow-custom-my-module-loop-engine-case))
+           agentic-ai-lab-custom-my-module-loop-engine-case))
          (intent
           (car (.ref presentation 'loop-engine-intents))))
     (list (cons 'presentation presentation)

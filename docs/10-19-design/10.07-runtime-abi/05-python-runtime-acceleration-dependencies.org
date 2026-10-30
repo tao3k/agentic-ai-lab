@@ -32,7 +32,7 @@ results.
 
 Async graph entry points await async node actions and async conditional routers.
 This lets Python agent runtimes attach native async tools or model calls without
-changing POO Flow graph semantics.
+changing Agentic AI Lab graph semantics.
 
 Threaded runtime execution is also async-aware.  =ainvoke_thread= stores
 interrupt checkpoints through an async checkpointer when one is available, and
@@ -46,8 +46,8 @@ The C header under =bindings/runtime-c/include= remains the ABI source of truth.
 The Python CFFI loader reads that header and does not duplicate the ABI as an
 inline Python string.
 
-The public CFFI entry point is =PooFlowRuntimeCffiBinding=.  It exposes the same
-context and graph-plan shape as =PooFlowRuntimeBinding= so runtime authors can
+The public CFFI entry point is =AgenticAILabRuntimeCffiBinding=.  It exposes the same
+context and graph-plan shape as =AgenticAILabRuntimeBinding= so runtime authors can
 choose the backend that best fits their integration constraints.
 
 * Turso
@@ -58,7 +58,7 @@ Turso is used as the durable runtime substrate.  The Python package exposes:
 - =TursoRuntimeGraphCheckpointer=
 
 The store and checkpointer mirror the existing memory/file contracts.  Runtime
-state and checkpoints remain POO Flow objects; Turso only provides durable
+state and checkpoints remain Agentic AI Lab objects; Turso only provides durable
 storage and high-concurrency database behavior.
 
 The Turso store and checkpointer also expose async facades such as =aput=,
@@ -74,4 +74,4 @@ retention.  Python must not become the durable policy engine.
 
 The Python runtime package does not introduce LangGraph or Pydantic as strategy
 or validation dependencies.  Graph semantics, validation policy, and durable
-policy stay in the POO Flow layer.
+policy stay in the Agentic AI Lab layer.

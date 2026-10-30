@@ -1,0 +1,292 @@
+#+title: Temporal Closure and Rust MRR Integration Readiness Audit
+#+date: [2026-10-04]
+#+property: STATUS basic-read-only-integration-ready-full-engine-partial
+
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Current delivery plan
+
+The [[file:next-delivery-plan-v1.org][2026-10-05 delivery audit]] records the updated ASCENT revision,
+current owner pins and ordered acceptance gates. Earlier implementation and
+qualification sections below retain their historical source/artifact scope.
+
+* Fixed Scheme v1 protocol constraint
+
+The current implementation keeps Scheme transport and semantic ABI versions at
+v1. JSON removal changes the representation, not the protocol version. C
+exports, Scheme descriptors, Python/Rust consumers, MRR transport and Backend
+records must agree on v1. Earlier v2 qualification sections below are historical
+evidence and do not qualify the fixed-v1 artifacts. No v2 or JSON fallback is
+part of the current consumer path. Source currentness through the Data commit
+remains a separate atomicity gate.
+
+* Audited identities and method
+
+Source audit at Agentic AI Lab =a7566036315304b9439b7fd3beb21715fd2c0a95=,
+MRR =faedb3e49d63b0ba32e74a037a1bd0859a18b9c6= and
+MRR Data =55285d510bd655fd546d73e07400c642bdf534e4=.
+Both Rust checkouts were clean and inspected read-only. This audit did not run
+Rust tests or new real-model calls. Test counts below are inspected committed
+receipts, not fresh runs. The POO PR #34 remote head matched this source head;
+all reported checks were complete, with 24 SUCCESS and 6 SKIPPED, including
+Python runtime wheel, Linux/macOS C ABI and Temporal Lean SUCCESS.
+
+The earlier [[file:design-audit.org][D1--D8 audit]] accepts design decisions but does not certify their
+implementation. This report covers those RFC obligations and, separately,
+RFC 91's Context information-flow requirements. It does not give a percentage:
+the advanced profiles and assurance obligations have different acceptance gates.
+
+* Closure matrix
+
+| Concern | Design / executable boundary | Closure judgment / next gate |
+|---------+------------------------------+------------------------------|
+| D1 finite hypothesis family | Native POO classify; bounded C/Python classify/observe; exclusive/overlap, unknown, budget and identity tests | Basic profile implemented and locally qualified; necessity is relative to a declared complete exclusive family |
+| D1/D8 behavior and interventions | Separate behavior interpretation specified; trajectory contrasts exist | No general behavior-space interpreter or intervention-qualified causal admission; cannot infer actual causation from precedence or uniqueness |
+| D2 source binding | Host registration binds inventory, metadata and generation; current native replay rejects changed/stale evidence | Local trust premise implemented; issuer signatures, partition/sequence coverage, late-event completeness and closed absence remain open |
+| D3 time | Explicit domains and same-domain uncertainty; no implicit conversion | Same-domain basic queries supported; verified conversion relations and clock authenticity unimplemented |
+| D4 proof/result admission | Native finite-family replay generates proof/root identities | Root family-relative admission implemented; live MRR/ASCENT derivation and coverage admission remain open |
+| D5 | =packages/proofs/quint/= and shared verifier | Bind staged model identities, declared predicates, completion and counterexample controls |
+| D6 revisions | Immutable revision/projection helpers, reverse dependency and invalidation plans | General authenticated correction/retraction, dual-support SCC stabilization and runtime revision publication remain open |
+| D7 publication | Runtime C SQLite first-root CAS; source/grant/pointer checks, version and receipt in one transaction; Python owner queue | Concrete local first-root slice qualified; replacement/tombstone, signed/Cedar permits, canonical journal replay and external effects remain open |
+| D7 applicability after commit | Historical receipt survives source/grant retirement; pointer() returns stored version/revision | This is outcome recovery, not current validity verification. No automatic durable selection invalidation or current-applicability read receipt |
+| IFC Context facet | Draft.3 bundles canonicalize constraints and check delegated child visibility is a subset of parent visibility | Partial visibility checker; label lattice/intersection composition, provenance/lease validation and authorized declassification are not established |
+
+The D7 database persists conclusion/proof/source references, not the full POO
+evidence journal and replay material. Crash recovery proves which selection
+committed; it does not independently replay the causal proof after restart.
+A source registry must be re-registered in the new Scheme process. Returning
+an old committed receipt is correct idempotent recovery, but it must not become
+a fresh applicability or effect authorization claim after a source/grant change.
+
+* Python and real-model evidence, by profile
+
+| Evidence | Result | Exact supported claim |
+|----------+--------+-----------------------|
+| Final installed wheel (qualification output is an external artifact) | 95 tests passed; 2.90s reported; five-second output watchdog not triggered | Local macOS ARM64 CPython 3.13 native lens/family/admission/publication and related regression scope; 10 new publication cases |
+| [[file:../../t/qualification/semantic-abi/2026-10-04-tool-roundtrip-abi/summary.json][DeepSeek forced read-only tool roundtrip]] | 24/24 roundtrips; 48 provider responses; no retries | temporal.solve lens task fidelity, actual Library execution, sync/async and consumption of actual tool output |
+| Same summary, source prediction pilots | 11/24 source-closure; 12/24 temperature-zero; gate FAILED | Unaided source prediction remains unqualified; successful tool use does not remove these failures |
+| New family/admission/publication receipts | realModelCalls = 0 | No real-provider acceptance for these new interfaces; historical lens scores cannot transfer to them |
+
+Provider watchdog unit tests are transport-policy tests, not real-provider runs.
+The successful tool batch used artifact =248f3f59...=; new family/admission use
+=9025b685...=. The new C publication store is compiled into the wheel's CFFI
+extension separately. Artifact/profile boundaries must remain explicit.
+
+* IFC findings against RFC 91
+
+RFC 91 requires restrictive Context composition, preserved provenance, typed
+labels/flows, leases, redaction conflict handling and declassification linked to
+Authority and Evidence. =src/semantic/organization-bundle.ss= currently models
+context projections as agent ID plus visible symbols. =facet->canonical=
+includes constraint symbols in identity; =bundle-validate/unsafe= checks child
+visibility against parent visibility. These operations do not interpret general
+constraint symbols as a label algebra or a declassification policy.
+
+No full IFC gate follows from that subset check. The Temporal family wire,
+source snapshot and selection receipt do not carry an admitted information-label
+or declassification receipt. A local selection grant is not an information-flow
+permit. Before exporting restricted source or model output to another principal,
+the integration needs an explicit POO-owned flow decision bound to content,
+source revision, principal, destination, policy and expiry. Negative gates must
+cover incomparable labels, constraint widening, lost provenance, expired leases,
+unauthorized downgrade and source changes between flow check and use.
+
+* Rust MRR seams found in current source
+
+MRR's =crates/mrr-property-source/src/source_query.rs= already owns:
+
+1. Exact original GQL source compilation and expected-digest checking.
+2. Binding to admitted catalogs and SemanticSnapshot.
+3. Candidate admission through =admit_query_result_candidate=.
+
+=QueryResultAdmissionReceipt= retains query binding, semantic generation,
+relation/entity catalogs, snapshot digest, result digest and row count.
+Its current admission routine validates identity and result shape/type/resources,
+then hashes the candidate. It does not independently re-execute the backend or
+validate a causal derivation. The receipt must retain that claim scope.
+
+The earlier property-source worker has been removed. Current MRR Data uses
+=execute_restored_property_query_handoff= with the immutable MRR Scheme v2
+pin and original compilation/admission values. POO's native Rust runtime
+consumes the bounded typed handoff; its joined original-GQL physical fixture
+has a separate local acceptance receipt. This audit's older pin and worker
+findings are superseded by =mrr-integration-architecture.org=.
+
+Existing Temporal candidate documentation intentionally leaves the MRR bridge's
+receipt incomplete until original result bytes and an explicit query/snapshot
+mapping are supplied. MRR's CBOR result digest is not the local POO scalar-row
+digest. Reconstructing a new query or relabeling one digest would violate owner
+identity and cannot close this bridge.
+
+* Rust integration decision and acceptance order
+
+The basic library is ready for a bounded Rust read-only integration. Full engine
+closure and model acceptance are not prerequisites for testing that transport,
+but the consumer must preserve the profile's limits. General causal conclusions,
+current authorized selection, IFC-controlled export and business effects are not
+yet qualified for this integration.
+
+** R1: Consume the owner seam and original receipts
+
+Migrate MRR Data's immutable MRR pin to a reviewed revision containing
+=mrr-property-source=, regenerate the lockfile and replace duplicate compilation,
+binding and candidate admission orchestration. Preserve original compilation,
+query, catalogs, snapshot, root and result receipt; physical execution stays in
+MRR Data. Existing source-drift, wrong catalog/generation, transfer and row-limit
+negative cases must continue to pass under that exact dependency head.
+
+** R2: Implement one POO-owned Rust runtime consumer
+
+Use =bindings/runtime-c/include/agentic_ai_lab/semantic.h= rather than a Python bridge
+or a new Rust classifier. The native lifetime is process-global, thread-affine
+and terminal on close. Open/call/release/close on one dedicated OS owner thread
+with a bounded queue. Do not dispatch native calls on arbitrary Tokio workers,
+close after each request, send native pointers across threads or reopen after
+terminal close. Verify artifact digest and operation/profile before calls.
+
+Initial scope: lens solve/observe and finite-family classify/observe. Expose
+source registration as a separate trusted host capability, never a model tool.
+A Rust publication binding is a later gate over the same typed C store contract;
+it cannot replace POO admission with caller-provided basis JSON.
+
+Acceptance: installed Rust consumer/native artifact; differential C/Python/Rust
+results for two vocabularies; unknown/partial/budget/stale binding; queue bounds,
+wrong-thread and lifetime guards; no bare model output admitted; genuine progress
+watchdog. Add a separate real DeepSeek read-only family tool batch against the
+new artifact, preserving historical failed predictions and exact profile scope.
+
+** R3: Connect MRR output to Temporal candidate exchange
+
+Export original typed rows and original MRR receipt together. Retain parser
+source/grammar, query binding, catalog/snapshot/result digests and completeness
+claim; admit an explicit mapping to Temporal source/cut/projection/policy.
+MRR generation is a content-addressed semantic identity, whereas Temporal's
+current host generation is a bounded monotonic integer. Preserve both and bind
+the correspondence to the source owner; do not parse/hash/cast one into the other
+or equate generation with event time. Unsupported Node/Relation/List values need
+an explicit projection or rejection, not silent scalar coercion.
+
+Negative gates: changed row under same receipt; reused result under different
+query/root/catalog/generation; incomplete source inventory; foreign checker;
+missing original parser receipt; ambiguous generation/cut mapping. Result shape
+admission must not imply proof completeness, issuer authenticity or flow permits.
+
+** R4: Close lifecycle and IFC gates before stronger publication claims
+
+Add current-applicability verification after source/grant changes; durable proof
+journal references that can be resolved and replayed; correction/retraction and
+SCC stabilization; atomic verified permit fences; IFC flow/declassification
+receipts bound to the same transfer/commit. Require general publication races
+and recovery tests at their actual operational boundary. Do not infer these from
+first-root CAS, abstract Quint, or a successful read-only model tool batch.
+
+* Rust MRR optimization candidates and measurable limits
+
+| Candidate | Concrete source seam / benefit hypothesis | Acceptance before optimization claim |
+|-----------+-------------------------------------------+--------------------------------------|
+| Remove duplicated owner logic | MRR Data property_source -> MRR property-source compile/bind/admit | Identical original receipts and negative controls; reduced duplicated code, no invented query identity |
+| Cache compiled/bound queries separately | Immutable original source/compiler identity; query/catalog/semantic snapshot bindings | Every source/compiler/catalog/generation change misses; budget/policy/IFC scope cannot reuse a more permissive entry; bound cache bytes |
+| Reuse immutable physical blocks | MRR Data CID restore and transfer caches | Byte/closure validation remains intact; generation and coverage remain bound; measure cold/warm bytes, latency and peak memory |
+| Batch typed exchange, bound copying | MRR candidate rows -> POO supported wire projection | Enforce total bytes/rows/cells/depth before allocation; preserve canonical native digest separately; no partial result called complete |
+| Incremental invalidation | MRR lineage impact + Temporal reverse-support plans | Complete support inventory and SCC gates first; then measure impacted work without skipping retractions or dual supports |
+| Queue and cancellation control | Dedicated Rust native owner + MRR physical worker | Bound queue/memory/deadline, stop cancelled read-only work without unsafe native interruption; measure p50/p95 and contention |
+
+These are proposed optimization experiments, not demonstrated performance gains.
+Do not add another Temporal solver or causal authority inside MRR. The next
+concrete integration slice is R1/R2 followed by R3; R4 gates stronger claims.
+
+* Live PR reconciliation during Rust implementation
+
+The original audit above intentionally records the local Rust checkout heads.
+Subsequent live inspection found MRR Data PR #12 at
+=d36337b703c0a1f5bd0fa1eaaa62d11178e6507f= with MRR pin
+=e9f87c3744b0d38709c479edc1b2143ef5ec9bbd=, and MRR PR #9 at
+=3ce31dac2dc58ab780ed06fa88103de501355692=. These PR trees differ from
+the local main trees; the local pin/duplication observations cannot be applied
+as if they describe the active PR. Preserve both identities rather than
+resetting main or copying a different branch's consumer over the PR.
+
+The latest MRR PR already exports =export_query_result_transport= and
+=verify_query_result_transport=. Transport includes original ordered typed rows,
+query/catalog/snapshot/generation bindings, count and result digest. Receiving
+MRR re-admits against its authentic bound query. Reuse these functions, not a
+new JSON validator that fabricates a MRR receipt. Their row/type/identity claim
+still does not authenticate physical execution or causal derivation. The latest
+MRR Context crate consumes temporal fact references without defining a clock
+or causal solver; its extracted evidence proof does not close POO's IFC label,
+declassification or Temporal applicability gates.
+
+MRR =runtime/= owns the read-only native consumer. MRR CI uses its declared
+POO dependency to test the POO-produced Library.
+Dedicated owner thread, bounded queue, exact artifact digest, allocator-matched
+release and terminal native close are checked against a real native artifact.
+It consumes finite lens/family operations and no trusted registration/publication
+operations. MRR original-result mapping, cross-generation correspondence and
+Rust durable publication are still subsequent gates. The new model study is
+separately permission-gated by automatic approval review; a rejected invocation
+is zero real-model calls, never a successful acceptance receipt.
+
+* Current delivered native MRR slice
+
+The authorized Rust family real-provider gate subsequently passed 4/4 frozen
+roundtrips, 8 completed responses and no retries. This supersedes the earlier
+blocked execution state for that exact payload; its producer head and claim
+scope remain in [[file:../../t/qualification/temporal-library-basic/rust-model-family/historical.org][the model receipt]].
+
+R3 now has an executable original MRR -> explicit host observation correspondence
+-> native POO finite-family seam in =runtime/src/mrr.rs= in MRR.
+The upstream facade is pinned at PR #9 head =3ce31dac...=; no MRR implementation
+or MRR Data PR was overwritten. The receiving side uses native MRR transport
+verification and retains the original candidate/receipt. The narrowly supported
+event/position profile binds all original identities to source/cut/projection/
+policy/clock and a separate integer Temporal generation. Changed scope invalidates
+POO model identity through observation provenance. No generation coercion or
+digest substitution occurs. Exact native/negative-gate results are in
+[[file:../../t/qualification/temporal-library-basic/rust-mrr-runtime/historical.org][the integration receipt]].
+
+Physical MRR Data execution, original GQL parser-source receipts, authenticated
+coverage, generic typed row mapping and R4 lifecycle/IFC gates remain open.
+The frozen real-provider batch exercises Rust native family calls; it does not
+claim a provider -> MRR physical-source -> Temporal publication roundtrip.
+
+* Full integration design follow-up
+
+[[file:mrr-integration-architecture.org][The bidirectional Temporal--MRR architecture]] specifies the next G0--G5
+delivery gates against the active PR trees: physical original-result exchange,
+reverse conclusion projection, acyclic revision/current-applicability lifecycle,
+recursive and absence profiles, authorized publication and real-model lifecycle
+acceptance. It records the old MRR projection document's incompatible identity
+equalities and limits lineage impact to a reevaluation frontier. These contracts
+are proposed; the delivered native event/position slice remains the executable
+boundary until each gate has its own receipt.
+
+* Current fixed-v1 consumer closure
+
+[[file:next-delivery-plan-v1.org][The current delivery ledger]] supersedes the earlier implementation status
+above. Scheme ABI and transport remain v1. The native proof Host controls and
+original MRR rule/Derivation/source-leaf correspondence are implemented and have
+bounded historical qualification. The new exact-run consumer gate requalifies
+Rust and installed Python using one fresh native artifact and the current
+immutable dependency graph. Historical producer receipts are not transferable.
+
+Source issuer authentication, complete coverage, authoritative Data publication,
+replacement/withdrawal recovery, IFC transfer fencing and the real-model physical
+revision lifecycle remain separately gated. The first-root local store is not
+an implementation of the general publication protocol.
+
+* Bounded Context restriction implementation
+
+The native [[file:../../src/semantic/context-restriction.ss][Context restriction profile]] now implements a finite equivalent
+restriction model: reader/destination intersection, preserved provenance and
+half-open lease narrowing. Widening and forged label digests reject. Its flow
+decision is bound to declared source/content, principal, destination and time;
+all source/flow/effect/durable admission flags remain false. This does not
+upgrade the Bundle's visible-symbol projections into admitted IFC labels.
+
+[[file:context-publication-contract-v1.org][The Data publication contract]] records the missing owner registry, admitted
+Authority/Evidence/declassification and protected conditional-commit obligations.
+The full IFC and G4 gates remain open; the profile's native control tests alone
+do not establish either.

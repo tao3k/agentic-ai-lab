@@ -1,9 +1,69 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
-;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-
-;;; Boundary: session currently publishes no standalone types bindings.
-;;; Invariant: the explicit role keeps module composition and discovery uniform.
-
-(export)
+;;; Bounded native proposal shapes; these predicates confer no runtime authority.
+(import (only-in :clan/poo/object .ref .slot? object?)
+        (only-in :clan/poo/mop Type. define-type)
+        (only-in :std/list/list every delete-duplicates/hash))
+(export SessionInputRefType SessionTaskType SessionScheduleType
+        agentic-ai-lab-session-input-ref-shape? agentic-ai-lab-session-task-shape?
+        agentic-ai-lab-session-schedule-shape?)
+(def (name? value) (and (string? value) (< 0 (string-length value) 257)))
+(def (coordinate? value) (and (exact-integer? value) (<= 0 value 65535)))
+(def (has? value kind keys)
+  (and (object? value) (.slot? value 'kind) (eq? (.ref value 'kind) kind)
+       (every (lambda (key) (.slot? value key)) keys)))
+(def (agentic-ai-lab-session-input-ref-shape? value)
+  (and (has? value 'agentic-ai-lab.session.input-ref.v1
+          '(producer contract identity digest scope-digest source-vector-digest query-digest
+            restriction-digest profile-digest receipt-ref complete? consumer-session consumer-turn))
+       (every (lambda (key) (name? (.ref value key)))
+          '(producer contract identity digest scope-digest source-vector-digest query-digest
+            restriction-digest profile-digest receipt-ref))
+       (eq? (.ref value 'complete?) #t)
+       (name? (.ref value 'consumer-session)) (coordinate? (.ref value 'consumer-turn))))
+(def (agentic-ai-lab-session-task-shape? value)
+  (and (has? value 'agentic-ai-lab.session.task.v1 '(identity revision input anchor-refs))
+       (name? (.ref value 'identity)) (coordinate? (.ref value 'revision))
+       (agentic-ai-lab-session-input-ref-shape? (.ref value 'input))
+       (list? (.ref value 'anchor-refs)) (<= (length (.ref value 'anchor-refs)) 32)
+       (every name? (.ref value 'anchor-refs))))
+(def (attempt? value)
+  (and (has? value 'agentic-ai-lab.session.attempt.v1
+          '(session task task-revision identity generation turn request input anchor-refs))
+       (every (lambda (key) (name? (.ref value key))) '(session task identity request))
+       (every (lambda (key) (coordinate? (.ref value key))) '(task-revision generation turn))
+       (agentic-ai-lab-session-input-ref-shape? (.ref value 'input))
+       (list? (.ref value 'anchor-refs)) (<= (length (.ref value 'anchor-refs)) 32)
+       (every name? (.ref value 'anchor-refs))
+       (equal? (.ref value 'session) (.ref (.ref value 'input) 'consumer-session))
+       (= (.ref value 'turn) (.ref (.ref value 'input) 'consumer-turn))))
+(def (agentic-ai-lab-session-schedule-shape? value)
+  (and (has? value 'agentic-ai-lab.session.schedule.v1
+          '(identity revision generation status active obligations completed))
+       (name? (.ref value 'identity))
+       (coordinate? (.ref value 'revision)) (coordinate? (.ref value 'generation))
+       (memq (.ref value 'status) '(idle running recovering closed))
+       (list? (.ref value 'obligations)) (<= (length (.ref value 'obligations)) 1)
+       (every attempt? (.ref value 'obligations))
+       (list? (.ref value 'completed)) (<= (length (.ref value 'completed)) 128)
+       (every name? (.ref value 'completed))
+       (= (length (.ref value 'completed)) (length (delete-duplicates/hash (.ref value 'completed))))
+       (or (and (eq? (.ref value 'status) 'recovering) (= (length (.ref value 'obligations)) 1))
+           (and (not (eq? (.ref value 'status) 'recovering)) (null? (.ref value 'obligations))))
+       (or (and (not (.ref value 'active)) (null? (.ref value 'obligations)))
+           (< (length (.ref value 'completed)) 128))
+       (every (lambda (a) (and (attempt? a) (equal? (.ref a 'session) (.ref value 'identity))
+                              (not (member (.ref a 'identity) (.ref value 'completed)))))
+          (if (.ref value 'active) (cons (.ref value 'active) (.ref value 'obligations))
+              (.ref value 'obligations)))
+       (if (eq? (.ref value 'status) 'running)
+           (and (attempt? (.ref value 'active))
+                (equal? (.ref (.ref value 'active) 'session) (.ref value 'identity))
+                (= (.ref (.ref value 'active) 'generation) (.ref value 'generation))
+                (null? (.ref value 'obligations)))
+           (eq? (.ref value 'active) #f))
+       (or (eq? (.ref value 'status) 'recovering) (null? (.ref value 'obligations)))))
+(define-type (SessionInputRefType @ Type.) .element?: agentic-ai-lab-session-input-ref-shape?)
+(define-type (SessionTaskType @ Type.) .element?: agentic-ai-lab-session-task-shape?)
+(define-type (SessionScheduleType @ Type.) .element?: agentic-ai-lab-session-schedule-shape?)

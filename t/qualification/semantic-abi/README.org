@@ -1,0 +1,140 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Current semantic ABI Library qualification
+#+date: 2026-10-04
+
+* Engineering evidence
+The current SemanticRuntime interface uses semantic ABI Version 1. Retired
+Temporal adapters, prompted producer, replay utilities and copied old source
+archive have been removed from the active tree. Historical versions remain
+in Git history and are not current qualification evidence.
+
+The final AOT artifact is rebuilt against ASCENT pin 0176c061. Its digest is
+a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c.
+A newly built CPython 3.13 Darwin arm64 wheel is installed in an isolated
+environment. With Gerbil absent from PATH, 34 focused Runtime and producer
+checks pass with no skips. Current native source checks additionally pass
+28 cases, including the project harness. Build logs, producer manifest,
+dependency hashes, tests and wheel digest are retained here.
+
+* Real provider evidence and failed model gate
+Both frozen pilots use the configured deepseek-v4-flash via DeepSeek Responses,
+with reasoning effort none, a five-second non-whitespace content watchdog,
+a 90-second total ceiling, no retries, no semantic tutorial and no solved answer.
+The first pilot embeds public Scheme source in JSON. The second uses actual
+Scheme source and a literal semantic-call result projection, with new node
+identities, times, generations and source/cut identities. Each pilot freezes
+24 calls across synchronous and asynchronous prediction. The second pilot is
+a representation experiment on new tasks; it does not repair the first answers.
+
+48 provider responses complete. The first pilot has 3/24 correct predictions;
+the second has 1/24. The native layer produces 47 fresh observations and rejects
+one output as non-inert JSON. All 47 observed candidates are also checked against
+a changed current source generation; two batches of 13 negative controls pass.
+The failed model gate remains FAILED. Passing transport or rejecting bad answers
+does not turn the 4/48 prediction accuracy into model acceptance. No accuracy
+improvement from direct source rendering was observed in this bounded pilot.
+
+The longest first content latency is 1.279 seconds and inter-content gap 0.311
+seconds. There are no timeouts or API retries. This is not a max-effort reasoning
+qualification or a demonstration of feedback transfer/real-time teaching.
+No business IO or effect authorization is granted by candidate consistency.
+
+* Privacy and reproducibility
+Only two byte-identical publicly hosted source files, synthetic graph data and
+mechanical output contracts are supplied to the provider. Public repository
+visibility and exact file hashes are checked in public-input-evidence.json.
+The .env file, API key and private reasoning content are never archived. Plans,
+requests, final candidates, event type/timing receipts, native observations,
+private native evaluation keys and failures are retained with their source heads.
+Each folder preserves its original frozen producer hashes; use its recorded Git
+head to reproduce that producer. The archive index hashes every retained file.
+
+Responses parameters and stream kinds follow the
+[[https://api-docs.deepseek.com/guides/responses_api/][DeepSeek Responses contract]] and
+[[https://api-docs.deepseek.com/api/create-response/][reasoning effort definitions]].
+
+* 2026-10-04 failure repair and fresh installed ABI acceptance
+The Python Testing project harness failed on bare print calls and, after their
+removal, on the mixed ownership/size of the producer module. Planning, execution
+and CLI reporting now have separate owners. All 46 Testing unit/harness checks
+pass. The compiler build runner also preserves captured failure diagnostics.
+
+The request now explicitly asks for the value of the final expression, preserving
+Temporal status, row arrays, comparisons and control flow. These are generic
+execution/output instructions, not supplied answers or a Temporal semantic guide.
+The output schema includes the actual ABI's unknown status. Two output-contract
+diagnostics on previous frozen tasks score 8/12 and 10/12. They are diagnostics
+scored against retained native keys, not new native ABI acceptance.
+
+A fresh native library (248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06)
+and CPython wheel are built and installed independently. Core types and all 26
+ASCENT modules/facades are compiled from the pinned sources. Runtime v0 is built
+locally with Clang from the checked contract header; this is not a new Bazel
+producer qualification. All 41 installed Runtime/producer checks pass, with no
+skips and Gerbil absent from PATH.
+
+The final frozen batch uses new event identities, time positions, generations
+and source/cut identities, through both sync and async current Runtime APIs.
+It completes 24/24 provider calls, native observations, observation deliveries
+and generation rebindings. Thirteen negative controls pass. Exactly 14/24 model
+answers are consistent; ten semantic contradictions remain and are rejected.
+First content takes at most 0.876 seconds; inter-content gaps at most 0.272 seconds.
+There are no retries or timeouts in this batch. The model gate remains FAILED.
+The producer head, plan, requests, raw answers, native keys and ten failures are
+retained in 2026-10-04-output-contract-abi; build/test receipts are in
+2026-10-04-output-contract-build. This does not claim independent semantic proof
+or successful generalization from the diagnostic tasks.
+
+A separately frozen four-case diagnostic with reasoning effort low fails every
+case at the five-second first-content deadline. Reasoning event types/timings
+are recorded, while their private content is discarded. The deadline is kept
+unchanged; none of these timeouts is counted as correct or retried. This result
+bounds this configuration and does not prove that every thinking model is slow.
+Previous failures remain immutable evidence, including the original 4/48 pilots.
+
+* Project source closure and zero-temperature prediction studies
+The compiler-enumerated project runtime sources and imported empty facade are
+now supplied: 32 files, 406322 bytes. Each file is byte-matched to a Git blob in
+public pinned repositories. Gerbil, stdlib and clan/poo remain platform imports;
+the manifest retains these native platform dependencies. This fixes omitted
+project implementation inputs, not a general interpreter for all Scheme code.
+TASK JSON is supplied plainly with the current semantic-call operation, avoiding
+the earlier doubly encoded operand. Missing project source files fail preparation.
+The fresh source-closure batch scores 11/24; a separately frozen temperature-zero
+batch with new identities/times/generations scores 12/24. Both retain all errors,
+24 native observations/rebindings and 13 negative controls. The source-prediction
+gate remains FAILED. Low temperature does not guarantee deterministic outputs.
+Large request JSON files are archived losslessly as requests.json.gz; decompress
+before checking their original request hashes against the frozen plan.
+
+* Real model to Library to model read-only roundtrip
+The new semantic_tools Library surface binds one function call to the caller's
+current task before invoking temporal.solve through the current native ABI.
+Operation identity, exactly one task argument, duplicate fields, source changes,
+source generation changes, numeric-type changes and extra fields are guarded.
+Caller-declared source identities still confer no admission or effect authority.
+Sync and async helpers use the native Scheme owner thread. The native tests
+include stale-task rejection and async parity, and CI explicitly runs them.
+
+The frozen forced-tool batch passes 24/24 roundtrips and 48/48 real DeepSeek
+responses, with no retries, timeouts or skipped cases. Every task is checked
+against caller data, every native result is returned through a paired actual
+function_call_output, and the model's final JSON must preserve status, rows and
+bindingDigest exactly. All 49 installed Runtime/producer checks and 48 Testing
+unit/harness checks pass. These scores measure read-only tool argument fidelity,
+actual Library execution and faithful consumption of the tool output. They do
+not measure unaided source understanding or autonomous selection of a tool.
+The source-prediction failures remain separate, unchanged evidence.
+
+Each model phase retains the five-second genuine-content deadline. The tool
+phase measures non-whitespace function_call_arguments deltas; the final phase
+measures output_text deltas. Metadata and reasoning events cannot reset either
+deadline. First content takes at most 1.294 seconds; subsequent gaps at most
+0.225 seconds; native execution at most 0.094 seconds. The installed wheel SHA256
+is 4f9e1cfaefe19c465a03f2497e9b0584e7d8826b1b3bc63880dc2400cfc4ac59.
+The native artifact remains 248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06.
+Original frozen producer head 128ead00 and scope are recorded in the plan.
+Function-call item pairing and stream events follow the
+[[https://api-docs.deepseek.com/guides/responses_api/][official DeepSeek Responses contract]].

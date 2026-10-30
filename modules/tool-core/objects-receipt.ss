@@ -6,72 +6,72 @@
 ;;; Boundary: POO-native policy-catalog validation receipts.
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :poo-flow/src/utilities/final-projection-syntax
-        :poo-flow/modules/session/objects
-        :poo-flow/modules/session/policy
-        :poo-flow/modules/tool-core/objects-catalog
-        :poo-flow/modules/tool-core/objects-policy-refs
-        :poo-flow/modules/tool-core/objects-support
-        :poo-flow/modules/tool-core/objects-validation)
+        :yuanxu/utilities/final-projection-syntax
+        :agentic-ai-lab/modules/session/objects
+        :agentic-ai-lab/modules/session/policy
+        :agentic-ai-lab/modules/tool-core/objects-catalog
+        :agentic-ai-lab/modules/tool-core/objects-policy-refs
+        :agentic-ai-lab/modules/tool-core/objects-support
+        :agentic-ai-lab/modules/tool-core/objects-validation)
 
-(export +poo-flow-tool-core-policy-validation-receipt-kind+
-        poo-flow-tool-policy-catalog-validation-receipt
-        poo-flow-tool-policy-catalog-validation-receipt?
-        poo-flow-tool-policy-catalog-validation-receipt-valid?
-        poo-flow-tool-policy-catalog-validation-receipt-diagnostics
-        poo-flow-tool-policy-catalog-validation-receipt->alist)
+(export +agentic-ai-lab-tool-core-policy-validation-receipt-kind+
+        agentic-ai-lab-tool-policy-catalog-validation-receipt
+        agentic-ai-lab-tool-policy-catalog-validation-receipt?
+        agentic-ai-lab-tool-policy-catalog-validation-receipt-valid?
+        agentic-ai-lab-tool-policy-catalog-validation-receipt-diagnostics
+        agentic-ai-lab-tool-policy-catalog-validation-receipt->alist)
 
-(def +poo-flow-tool-core-policy-validation-receipt-kind+
-  'poo-flow.tool-core.policy-catalog-validation-receipt)
+(def +agentic-ai-lab-tool-core-policy-validation-receipt-kind+
+  'agentic-ai-lab.tool-core.policy-catalog-validation-receipt)
 
 ;; : (-> Symbol PooToolCatalog PooSessionPolicy PooSessionPolicy [Alist] PooToolPolicyCatalogValidationReceipt)
-(def (poo-flow-tool-policy-catalog-validation-receipt validation-id catalog
+(def (agentic-ai-lab-tool-policy-catalog-validation-receipt validation-id catalog
                                                       agent-policy hook-policy
                                                       . maybe-metadata)
-  (poo-flow-session-require "tool validation id must be a symbol"
+  (agentic-ai-lab-session-require "tool validation id must be a symbol"
                             (symbol? validation-id) validation-id)
-  (poo-flow-session-require "tool validation requires a catalog"
-                            (poo-flow-tool-catalog? catalog) catalog)
-  (poo-flow-session-require "tool validation requires agent tool policy"
-                            (poo-flow-session-policy? agent-policy) agent-policy)
-  (poo-flow-session-require "tool validation requires hook tool policy"
-                            (poo-flow-session-policy? hook-policy) hook-policy)
+  (agentic-ai-lab-session-require "tool validation requires a catalog"
+                            (agentic-ai-lab-tool-catalog? catalog) catalog)
+  (agentic-ai-lab-session-require "tool validation requires agent tool policy"
+                            (agentic-ai-lab-session-policy? agent-policy) agent-policy)
+  (agentic-ai-lab-session-require "tool validation requires hook tool policy"
+                            (agentic-ai-lab-session-policy? hook-policy) hook-policy)
   (let* ((policy-refs
-          (poo-flow-tool-merge-policy-tool-refs
-           (poo-flow-tool-policy-tool-refs agent-policy)
-           (poo-flow-tool-policy-tool-refs hook-policy)))
-         (summary (poo-flow-tool-policy-catalog-validation-summary catalog policy-refs))
+          (agentic-ai-lab-tool-merge-policy-tool-refs
+           (agentic-ai-lab-tool-policy-tool-refs agent-policy)
+           (agentic-ai-lab-tool-policy-tool-refs hook-policy)))
+         (summary (agentic-ai-lab-tool-policy-catalog-validation-summary catalog policy-refs))
          (action-bundle
-          (poo-flow-tool-action-mismatch-bundle
-           catalog (poo-flow-tool-policy-grants agent-policy)
-           (poo-flow-tool-policy-grants hook-policy)))
+          (agentic-ai-lab-tool-action-mismatch-bundle
+           catalog (agentic-ai-lab-tool-policy-grants agent-policy)
+           (agentic-ai-lab-tool-policy-grants hook-policy)))
          (action-diagnostics
-          (poo-flow-session-alist-ref action-bundle 'diagnostics '()))
+          (agentic-ai-lab-session-alist-ref action-bundle 'diagnostics '()))
          (diagnostics
-          (append (poo-flow-session-alist-ref summary 'diagnostics '())
+          (append (agentic-ai-lab-session-alist-ref summary 'diagnostics '())
                   action-diagnostics))
          ;; Keep lexical inputs distinct from `.o` fixed-point slot bindings.
          (validation-id-value validation-id)
          (diagnostic-values diagnostics)
          (metadata-value
           (if (null? maybe-metadata) '() (car maybe-metadata))))
-    (.o (kind +poo-flow-tool-core-policy-validation-receipt-kind+)
-        (schema 'poo-flow.modules.tool-core.policy-catalog-validation.v1)
+    (.o (kind +agentic-ai-lab-tool-core-policy-validation-receipt-kind+)
+        (schema 'agentic-ai-lab.modules.tool-core.policy-catalog-validation.v1)
         (validation-id validation-id-value)
-        (catalog-ref (poo-flow-tool-catalog-ref catalog))
-        (catalog-tool-count (poo-flow-tool-catalog-tool-count catalog))
-        (catalog-tool-refs (poo-flow-tool-catalog-tool-refs catalog))
-        (agent-tool-policy-ref (poo-flow-session-policy-name agent-policy))
-        (hook-tool-policy-ref (poo-flow-session-policy-name hook-policy))
+        (catalog-ref (agentic-ai-lab-tool-catalog-ref catalog))
+        (catalog-tool-count (agentic-ai-lab-tool-catalog-tool-count catalog))
+        (catalog-tool-refs (agentic-ai-lab-tool-catalog-tool-refs catalog))
+        (agent-tool-policy-ref (agentic-ai-lab-session-policy-name agent-policy))
+        (hook-tool-policy-ref (agentic-ai-lab-session-policy-name hook-policy))
         (policy-tool-refs policy-refs)
         (resolved-tool-refs
-         (poo-flow-session-alist-ref summary 'resolved-tool-refs '()))
+         (agentic-ai-lab-session-alist-ref summary 'resolved-tool-refs '()))
         (unresolved-tool-refs
-         (poo-flow-session-alist-ref summary 'unresolved-tool-refs '()))
+         (agentic-ai-lab-session-alist-ref summary 'unresolved-tool-refs '()))
         (sandbox-required-tool-refs
-         (poo-flow-session-alist-ref summary 'sandbox-required-tool-refs '()))
+         (agentic-ai-lab-session-alist-ref summary 'sandbox-required-tool-refs '()))
         (action-mismatch-grants
-         (poo-flow-session-alist-ref action-bundle 'rows '()))
+         (agentic-ai-lab-session-alist-ref action-bundle 'rows '()))
         (valid? (null? diagnostic-values))
         (diagnostic-count (length diagnostic-values))
         (diagnostics diagnostic-values)
@@ -80,25 +80,25 @@
         (metadata metadata-value))))
 
 ;; : (-> Object Boolean)
-(def (poo-flow-tool-policy-catalog-validation-receipt? value)
+(def (agentic-ai-lab-tool-policy-catalog-validation-receipt? value)
   (and (object? value)
-       (eq? (poo-flow-tool-slot value 'kind #f)
-            +poo-flow-tool-core-policy-validation-receipt-kind+)))
+       (eq? (agentic-ai-lab-tool-slot value 'kind #f)
+            +agentic-ai-lab-tool-core-policy-validation-receipt-kind+)))
 
 ;; : (-> PooToolPolicyCatalogValidationReceipt Boolean)
-(def (poo-flow-tool-policy-catalog-validation-receipt-valid? receipt)
+(def (agentic-ai-lab-tool-policy-catalog-validation-receipt-valid? receipt)
   (.ref receipt 'valid?))
 
 ;; : (-> PooToolPolicyCatalogValidationReceipt [Alist])
-(def (poo-flow-tool-policy-catalog-validation-receipt-diagnostics receipt)
+(def (agentic-ai-lab-tool-policy-catalog-validation-receipt-diagnostics receipt)
   (.ref receipt 'diagnostics))
 
 (defpoo-final-projection
-  poo-flow-tool-policy-catalog-validation-receipt->alist (receipt)
+  agentic-ai-lab-tool-policy-catalog-validation-receipt->alist (receipt)
   (bindings ((checked-receipt
-              (poo-flow-session-require
+              (agentic-ai-lab-session-require
                "tool validation projection requires a receipt"
-               (poo-flow-tool-policy-catalog-validation-receipt? receipt)
+               (agentic-ai-lab-tool-policy-catalog-validation-receipt? receipt)
                receipt))))
   (fields ((kind (.ref checked-receipt 'kind))
            (schema (.ref checked-receipt 'schema))

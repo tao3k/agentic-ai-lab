@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-17",
+  "platform": "aarch64-darwin",
+  "provider_family": "hashicorp/aws",
+  "package_outputs": {
+    "5.100.0": {
+      "package": {
+        "artifact": "/nix/store/2rlwphdsarjzllarlr64vw25y05fl3pv-terraform-provider-aws-5.100.0-schema",
+        "engine": "/nix/store/1n0dnxjs2w93vpi3r41agqw5djrbgbd5-opentofu-1.11.5",
+        "engineVersion": "1.11.5",
+        "provider": "/nix/store/871mwwjz43k6q8mjkdd90mlq4fysql0l-terraform-provider-aws-5.100.0",
+        "version": "5.100.0"
+      },
+      "manifest": {
+        "format": "agentic-ai-lab/provider-schema-v1",
+        "provider": "registry.opentofu.org/hashicorp/aws",
+        "version": "5.100.0",
+        "schema-sha256": "7e4fc064120609e23bc317629f1308d72891b7241993fbf68be523f03b6c633c"
+      },
+      "schema_bytes": 13591718,
+      "resource_count": 1526,
+      "has_aws_dsql_cluster": true
+    },
+    "5.99.0": {
+      "package": {
+        "artifact": "/nix/store/2xp0mjg0spwff7zxfcn4xbinccydxryl-terraform-provider-aws-5.99.0-schema",
+        "engine": "/nix/store/c9giwg28vbw3r8h037gndf56dj7b4mdp-opentofu-1.11.5",
+        "engineVersion": "1.11.5",
+        "provider": "/nix/store/h250ksp2dn3n306fq5dalk03i2wnxk7f-terraform-provider-aws-5.99.0",
+        "version": "5.99.0"
+      },
+      "manifest": {
+        "format": "agentic-ai-lab/provider-schema-v1",
+        "provider": "registry.opentofu.org/hashicorp/aws",
+        "version": "5.99.0",
+        "schema-sha256": "4be90d628d38051610695d62058f6699c6e4e39322b591494a73f1e5f6b93d9b"
+      },
+      "schema_bytes": 13510191,
+      "resource_count": 1514,
+      "has_aws_dsql_cluster": false
+    }
+  },
+  "security_group_blocks_equal": true,
+  "assertions": {
+    "version_isolation": 84,
+    "default_module_599": 20
+  },
+  "directions": [
+    "5.99.0 -> 5.100.0",
+    "5.100.0 -> 5.99.0"
+  ],
+  "native_runtime": "default Justfile heap-fenced entrypoints",
+  "provider_family_count": 1,
+  "provider_version_count": 2,
+  "loader_connected": false,
+  "provider_plan_executed": false
+}

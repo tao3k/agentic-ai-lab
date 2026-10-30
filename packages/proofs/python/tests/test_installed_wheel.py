@@ -30,7 +30,7 @@ def test_installed_wheel_consumes_public_c_abi(tmp_path: Path) -> None:
         capture_output=True,
         text=True,
     )
-    wheel = next(dist.glob("poo_flow_proof-*.whl"))
+    wheel = next(dist.glob("agentic_ai_lab_proof-*.whl"))
 
     environment = tmp_path / "venv"
     subprocess.run(
@@ -48,11 +48,11 @@ def test_installed_wheel_consumes_public_c_abi(tmp_path: Path) -> None:
     )
 
     library = tmp_path / (
-        "poo_flow_proof.dll"
+        "agentic_ai_lab_proof.dll"
         if sys.platform == "win32"
-        else "libpoo_flow_proof.dylib"
+        else "libagentic_ai_lab_proof.dylib"
         if sys.platform == "darwin"
-        else "libpoo_flow_proof.so"
+        else "libagentic_ai_lab_proof.so"
     )
     link_mode = "-dynamiclib" if sys.platform == "darwin" else "-shared"
     subprocess.run(
@@ -92,7 +92,7 @@ def test_installed_wheel_consumes_public_c_abi(tmp_path: Path) -> None:
     )
 
     assert "installed-wheel-consumer: version=0.1.0 size=424" in completed.stdout
-    assert "digest=970eaffbfaae38970e2107b89fa11258c6211a5c293a1e400a464527b7a0e44a" in (
+    assert "digest=41c5ef60ac9296a28e045f7e26d975cf46a34cab69f56dc7ab4d7091fe1ff557" in (
         completed.stdout
     )
     assert "site-packages" in completed.stdout

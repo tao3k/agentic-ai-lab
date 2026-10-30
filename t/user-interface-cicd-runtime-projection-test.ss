@@ -6,15 +6,15 @@
 ;;; Boundary: tests inspect Funflow CI/CD runtime projection from user config.
 ;;; Invariant: projection remains declarative; no runtime adapter is executed.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/user-interface/presentation-config
-                 pooFlowUserConfigPresentation)
-        (only-in :poo-flow/modules/workflow/cicd-runtime-command-config
-                 poo-flow-user-workflow-cicd-runtime-command-manifest-agreement)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+                 agenticAiLabUserConfigPresentation)
+        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime-command-config
+                 agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-agreement)
         (only-in "./support/user-interface-cicd-runtime-fixture"
                  user-interface-cicd-runtime-fixture-config))
 
@@ -38,10 +38,10 @@
 ;;; dependency graph row fidelity lives in the separate runtime graph owner.
 ;; : TestSuite
 (def user-interface-cicd-runtime-projection-test
-  (test-suite "poo-flow user interface cicd runtime projection"
-    (poo-flow-test-case "traces workflow CI/CD projection stages"
+  (test-suite "agentic-ai-lab user interface cicd runtime projection"
+    (yuanxu-test-case "traces workflow CI/CD projection stages"
       (let* ((presentation
-              (pooFlowUserConfigPresentation
+              (agenticAiLabUserConfigPresentation
                (user-interface-cicd-runtime-fixture-config)))
              (trace (.ref presentation 'presentation-trace))
              (pipeline-step
@@ -89,9 +89,9 @@
         (check-equal?
          (user-interface-cicd-runtime-alist-ref summary-step 'runtime-executed)
          #f)))
-    (poo-flow-test-case "flags manifest summary mismatch before handoff"
+    (yuanxu-test-case "flags manifest summary mismatch before handoff"
       (let* ((presentation
-              (pooFlowUserConfigPresentation
+              (agenticAiLabUserConfigPresentation
                (user-interface-cicd-runtime-fixture-config)))
              (manifest-maps
               (.ref presentation 'workflow-cicd-runtime-command-manifests))
@@ -102,7 +102,7 @@
               (cons (cons 'argv '("wrong-gxpkg" "build"))
                     (car manifest-summaries)))
              (bad-agreement
-              (poo-flow-user-workflow-cicd-runtime-command-manifest-agreement
+              (agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-agreement
                manifest-maps
                (cons bad-summary (cdr manifest-summaries))))
              (bad-row
@@ -121,9 +121,9 @@
         (check-equal?
          (not (not (member 'argv-mismatch row-diagnostics)))
          #t)))
-    (poo-flow-test-case "flags durable manifest summary mismatch before handoff"
+    (yuanxu-test-case "flags durable manifest summary mismatch before handoff"
       (let* ((presentation
-              (pooFlowUserConfigPresentation
+              (agenticAiLabUserConfigPresentation
                (user-interface-cicd-runtime-fixture-config)))
              (manifest-maps
               (.ref presentation 'workflow-cicd-runtime-command-manifests))
@@ -134,7 +134,7 @@
               (cons (cons 'durable-task-id 'task/wrong)
                     (car manifest-summaries)))
              (bad-agreement
-              (poo-flow-user-workflow-cicd-runtime-command-manifest-agreement
+              (agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-agreement
                manifest-maps
                (cons bad-summary (cdr manifest-summaries))))
              (bad-row

@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+title: LangChain/LangGraph vs POO Flow Runtime Benchmark
+#+title: LangChain/LangGraph vs Agentic AI Lab Runtime Benchmark
 #+startup: overview
 
 * Status
@@ -20,7 +20,7 @@ This document records the design intent. The benchmark README is the canonical r
 * Scope
 
 The benchmark compares native LangChain/LangGraph/CrewAI orchestration with
-semantically aligned POO Flow Python executor surfaces. It does not benchmark
+semantically aligned Agentic AI Lab Python executor surfaces. It does not benchmark
 real LLM latency, network tools, database IO, or another language's production
 runtime. The deterministic actions model control-plane costs for realistic AI
 Agent Flow shapes.
@@ -34,14 +34,14 @@ The suite covers:
 - LangGraph interrupt/resume through an in-memory checkpointer.
 - LangGraph 32-node long graph scale cost.
 - LangGraph stream update consumption.
-- POO Flow executor-only graph routing, handoff/reducer, and interrupt/resume.
-- POO Flow executor-only 32-node long graph and event stream consumption.
-- POO Flow executor-only CrewAI-style sequential composition.
+- Agentic AI Lab executor-only graph routing, handoff/reducer, and interrupt/resume.
+- Agentic AI Lab executor-only 32-node long graph and event stream consumption.
+- Agentic AI Lab executor-only CrewAI-style sequential composition.
 
 #+begin_src mermaid
 flowchart LR
     F["LangChain / LangGraph / CrewAI native orchestration"]
-    P["POO Flow Python executor semantics"]
+    P["Agentic AI Lab Python executor semantics"]
     A["runtime-v0 C ABI benchmark"]
     R["This semantic comparison record"]
     F --> R
@@ -59,7 +59,7 @@ uv run \
   --with-editable ../../.data/langgraph/libs/langgraph \
   --with-editable ../../.data/langchain/libs/core \
   --with-editable ../../.data/crewai/lib/crewai \
-  python -m poo_flow_benchmarks \
+  python -m agentic_ai_lab_benchmarks \
   --iterations 2000 \
   --warmup 200 \
   --progress \
@@ -72,11 +72,11 @@ Key result from the current run:
 
 - Generated at =2026-07-12T17:19:56.967131+00:00= on macOS arm64 with
   Python 3.13.11.
-- POO Flow is =20.64x= faster for the semantically paired LangChain branch
+- Agentic AI Lab is =20.64x= faster for the semantically paired LangChain branch
   route case.
-- POO Flow is =34.72x= to =99.49x= faster across paired LangGraph router,
+- Agentic AI Lab is =34.72x= to =99.49x= faster across paired LangGraph router,
   handoff/reducer, interrupt/resume, long-graph, and stream/event cases.
-- POO Flow is =691.65x= faster for the deterministic CrewAI sequential case.
+- Agentic AI Lab is =691.65x= faster for the deterministic CrewAI sequential case.
 - All current cases completed; the failure table is empty.
 - The benchmark now includes long graph and stream/event consumption, so the honest comparison point is no longer a toy lambda or string append.
 - The honest comparison point for handoff/checkpoint production semantics remains LangGraph native vs the corresponding POO executor shapes; real runtime IO is intentionally outside this project.
@@ -95,7 +95,7 @@ flowchart LR
     LC["langchain.py"] --> REG
     LG["langgraph.py"] --> REG
     CR["crewai.py"] --> REG
-    PF["poo_flow.py"] --> REG
+    PF["agentic_ai_lab.py"] --> REG
     NX["Future framework module"] --> REG
     REG --> RUN["Framework-neutral runner"]
     RUN --> CMP["Explicit semantic comparison pairs"]
@@ -103,7 +103,7 @@ flowchart LR
 #+end_src
 * Runtime Language Implication
 
-The Python runtime is the concrete runtime-language target for the current control-plane work. The benchmark is not only a LangGraph comparison; it validates that POO Flow plans can be lowered into Python runtime graph execution at low cost.
+The Python runtime is the concrete runtime-language target for the current control-plane work. The benchmark is not only a LangGraph comparison; it validates that Agentic AI Lab plans can be lowered into Python runtime graph execution at low cost.
 
 This matters for more than LangGraph:
 

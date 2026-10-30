@@ -11,13 +11,13 @@
         (only-in :std/encoding/hex hex-encode)
         "types.ss")
 
-(export poo-flow-proof-digest
-        poo-flow-proof-artifact-index
-        poo-flow-proof-receipt-index
-        poo-flow-proof-refinement-current?
-        poo-flow-proof-assurance)
+(export agentic-ai-lab-proof-digest
+        agentic-ai-lab-proof-artifact-index
+        agentic-ai-lab-proof-receipt-index
+        agentic-ai-lab-proof-refinement-current?
+        agentic-ai-lab-proof-assurance)
 
-(def (poo-flow-proof-digest value)
+(def (agentic-ai-lab-proof-digest value)
   (string-append
    "sha256:"
    (hex-encode
@@ -36,18 +36,18 @@
      values)
     index))
 
-(def (poo-flow-proof-artifact-index artifacts)
-  (unless (every poo-flow-proof-artifact? artifacts)
+(def (agentic-ai-lab-proof-artifact-index artifacts)
+  (unless (every agentic-ai-lab-proof-artifact? artifacts)
     (error "invalid Proof artifact collection"))
   (proof-index artifacts 'identity 'artifact))
 
-(def (poo-flow-proof-receipt-index receipts)
-  (unless (every poo-flow-proof-receipt? receipts)
+(def (agentic-ai-lab-proof-receipt-index receipts)
+  (unless (every agentic-ai-lab-proof-receipt? receipts)
     (error "invalid Proof receipt collection"))
   (proof-index receipts 'identity 'receipt))
 
-(def (poo-flow-proof-refinement-current? binding artifact-index receipt-index)
-  (and (poo-flow-proof-refinement-binding? binding)
+(def (agentic-ai-lab-proof-refinement-current? binding artifact-index receipt-index)
+  (and (agentic-ai-lab-proof-refinement-binding? binding)
        (let* ((upstream
                (hash-get artifact-index
                          (.ref binding 'upstream-artifact-identity)))
@@ -74,30 +74,30 @@
                       (.ref downstream 'content-digest))
               (eq? (.ref impact 'stale-downstream-policy) 'reject)))))
 
-(def (poo-flow-proof-assurance identity-value artifact-values receipt-values
+(def (agentic-ai-lab-proof-assurance identity-value artifact-values receipt-values
                                refinement-values)
-  (unless (and (poo-flow-proof-text? identity-value)
+  (unless (and (agentic-ai-lab-proof-text? identity-value)
                (pair? artifact-values) (pair? receipt-values)
                (pair? refinement-values)
-               (every poo-flow-proof-artifact? artifact-values)
-               (every poo-flow-proof-receipt? receipt-values)
-               (every poo-flow-proof-refinement-binding? refinement-values))
+               (every agentic-ai-lab-proof-artifact? artifact-values)
+               (every agentic-ai-lab-proof-receipt? receipt-values)
+               (every agentic-ai-lab-proof-refinement-binding? refinement-values))
     (error "Proof assurance requires artifacts, receipts and refinements"
            identity-value))
   (let* ((artifact-index-value
-          (poo-flow-proof-artifact-index artifact-values))
+          (agentic-ai-lab-proof-artifact-index artifact-values))
          (receipt-index-value
-          (poo-flow-proof-receipt-index receipt-values))
+          (agentic-ai-lab-proof-receipt-index receipt-values))
          (current-value
           (every
            (lambda (binding)
-             (poo-flow-proof-refinement-current?
+             (agentic-ai-lab-proof-refinement-current?
               binding artifact-index-value receipt-index-value))
            refinement-values))
          (digest-value
-          (poo-flow-proof-digest
+          (agentic-ai-lab-proof-digest
            (list
-            'poo-flow.proof-assurance.v1 identity-value
+            'agentic-ai-lab.proof-assurance.v1 identity-value
             (map (lambda (artifact)
                    (list (.ref artifact 'identity)
                          (.ref artifact 'content-digest)))
@@ -115,8 +115,8 @@
                          (.ref binding 'receipt-identity)))
                  refinement-values)))))
     (validate
-     PooFlowProofAssurance
-     (.o kind: +poo-flow-proof-assurance-kind+
+     AgenticAILabProofAssurance
+     (.o kind: +agentic-ai-lab-proof-assurance-kind+
          identity: identity-value
          artifacts: artifact-values
          receipts: receipt-values

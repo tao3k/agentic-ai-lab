@@ -11,7 +11,7 @@ surface from the installed runtime v0 header rather than this manifest.
 
 * Purpose
 
-=poo-flow.python-runtime.abi-surface.v1= is a machine-readable line manifest for
+=agentic-ai-lab.python-runtime.abi-surface.v1= is a machine-readable line manifest for
 runtime-language bindings.
 
 It does not replace Scheme-owned policy manifests. Scheme remains the owner of
@@ -28,7 +28,7 @@ The manifest is exported from the Python package:
 - =runtime_abi_surface_manifest_string=
 - =runtime_abi_surface_manifest_bytes=
 - =coerce_runtime_abi_surface_manifest=
-- =poo-flow-runtime-abi-surface=
+- =agentic-ai-lab-runtime-abi-surface=
 
 The byte carrier follows the same line-oriented style as other runtime
 receipts. It deliberately avoids JSON because this surface is a small runtime
@@ -41,11 +41,11 @@ glue.
 It can also validate a captured manifest:
 
 #+begin_src sh
-poo-flow-runtime-abi-surface --validate abi-surface.manifest
-poo-flow-runtime-abi-surface --validate -
+agentic-ai-lab-runtime-abi-surface --validate abi-surface.manifest
+agentic-ai-lab-runtime-abi-surface --validate -
 #+end_src
 
-Validation emits =poo-flow.python-runtime.abi-surface.validation.v1=. A valid
+Validation emits =agentic-ai-lab.python-runtime.abi-surface.validation.v1=. A valid
 payload returns status =ok= and exit code 0. An invalid payload returns status
 =fail= and exit code 1.
 

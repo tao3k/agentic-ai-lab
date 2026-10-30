@@ -1,0 +1,346 @@
+#+title: Native Actor Runtime Costs and Sealed Historical Proof Credentials
+#+language: en
+:PROPERTIES:
+:ID: context-native-actor-runtime-cost
+:STATUS: native-capacity-qualified-actor-throughput-investigation-open
+:END:
+
+* Accepted runtime budget and existing evidence
+
+This continues [[file:23-native-owner-lifecycle.org][23: owner lifecycle]] and the evidence-driven Context/independent
+Session contract in [[file:00-design-map.org][the design map]]. The user explicitly revised the runtime
+budget from 1 GiB to 2 or 3 GiB. The selected acceptance profile is now 2 GiB,
+still with the original 150-second native watchdog and five-second termination
+grace. No 3 GiB result is needed or claimed. Previous 1 GiB failures remain
+historical controls; a 2 GiB pass does not relabel them or prove a 1 GiB pass.
+
+The unchanged-production 2 GiB baseline under
+=/private/tmp/context-2g-baseline-20261026/= printed all 60 paths and actual
+close observations, but exited 124 at approximately 150.56 seconds. It is still
+a failure despite its final OK line. Increasing the budget alone did not meet
+the complete process-exit obligation. Host load is not the explanation offered
+for the production fix below.
+
+* Measured costs inside the actual owner Actor
+
+[[file:../../../../t/context-runtime-cost-test.ss][The native cost probe]] uses the same =policy-clock-owner= and message/RPC
+boundary as production. Construction and all Host reads run inside that owner.
+The timer Actor exists but is disabled for deadline delivery in this isolated
+cost measurement. Counters come from Gambit's process-wide =process-statistics=:
+CPU fields 0+1, wall 2, GC CPU 3+4, GC count 6 and allocated bytes 7. They do not
+force collections. Cumulative allocation is not resident/live heap size.
+
+The paired before/after transcripts remain under
+=/private/tmp/context-runtime-cost-before-20261026/=
+and =/private/tmp/context-runtime-cost-after-20261026/=.
+
+| Phase | Repetitions | Before CPU seconds | After CPU seconds | Before allocated bytes | After allocated bytes |
+|-------+-------------+--------------------+-------------------+------------------------+-----------------------|
+| Historical retained proof digest | 10 | 0.125595 | 0.000018 | 786277792 | 18928 |
+| Context checkpoint | 10 | 0.598191 | 0.001355 | 2244465424 | 4259728 |
+| Encode checkpoint | 10 | 0.071671 | 0.025211 | 105088576 | 107282352 |
+| Current proof replay | 10 | 0.140451 | 0.157676 | 542569120 | 931341288 |
+
+The constructor is still measured independently (about 0.33/0.32 CPU seconds
+in these samples). Current-proof replay remains real work; the after run does
+not warm it through ten historical replays first. These short, process-wide
+samples locate the redundant path; they are not a stable throughput benchmark
+or an attribution of every allocation to an individual source expression.
+Whole-queue qualification, with all diagnostic tracing off, owns capacity.
+
+* GC working heap is distinct from its maximum
+
+The first post-fix adaptive-minimum 2G attempt passed legacy-cut in 69.77 seconds,
+but canonical timed out at 48 path traces/47 closes. The failure and original
+process samples remain under =/private/tmp/context-runtime-2g-qualified-20261026/=.
+This partial result did not receive a successful full-cohort receipt.
+
+Native counters showed the reason a larger maximum alone did not select a
+larger working heap: the adaptive profile collected at about 418 MB with about
+182 MB live. Gambit's default live ratio is 50 percent and its minimum heap is
+zero. Within the same 2 GiB maximum, the selected Actor runtime now has an
+explicit 1 GiB minimum working heap. This is allocator configuration, not forced
+GC, changed scenario semantics, a higher maximum or a longer watchdog.
+
+The steady comparison constructs and disposes ten complete Context fixtures
+inside one actual owner Actor. The default 2G-maximum profile performed 18 GC
+cycles with 0.767372 GC CPU seconds; the 1G-minimum/2G-maximum profile performed
+4 with 0.228723 GC CPU seconds. Total construction CPU was 2.881360 versus
+2.612317 seconds. The larger initial collection has its own cost; this is why
+the repeated construction probe is recorded separately from the first one.
+Original transcripts remain under
+=/private/tmp/context-runtime-gc-steady-default-20261026/=
+and =/private/tmp/context-runtime-gc-steady-reserved-20261026/=.
+
+The runtime flag is =-:min-heap=1G,max-heap=2G,debug=q= before imports. Both
+minimum and maximum are saved in replay tokens and process receipts. An exact
+replay cannot silently substitute another working-heap floor. The global
+project testing default remains separate; this Context gate selects the explicit
+Actor runtime profile and does not rewrite earlier 1G evidence.
+
+* Scheme fix: historical evidence is not present applicability
+
+The expensive call chain was:
+
+#+begin_example
+context-host-checkpoint
+  -> binding and captured parent binding
+    -> temporal-proof-host-retained-digest
+      -> context
+        -> full temporal-mrr-derivation-admission-replay
+#+end_example
+
+Every checkpoint repeatedly reallocated an ASCENT derivation graph to read an
+already registered original digest. Captured parent bindings repeated this
+work within the same checkpoint. A larger heap does not remove that algorithmic
+work.
+
+The existing proof owner now retains one private, copied proof digest after
+registration's full native validation. =retained-digest= returns a detached copy
+of that historical credential. Public registration strings are detached too.
+The public API remains POO-native; the extra field is private owner state, not
+a wire format, new ID, Session identifier, proof cache or new authority channel.
+
+=current= and =source-change= still run the original native replay and current
+support/policy checks. Result publication still uses the existing owner CAS and
+journal commit. A historical credential grants no current-use or effect
+permission. Mutating actual replay inputs still fails current validation.
+Reading the original identity does not rewrite or recompress the evidence.
+Journal bytes/schema, original evidence and persisted proof lineage retain
+their previous format.
+
+* Concrete native Actor ownership
+
+| Actor / endpoint | Runtime ownership and messages | Release boundary |
+|------------------+--------------------------------+------------------|
+| Context/durable owner | Existing Gambit thread/mailbox in =policy-clock-owner=; bootstrap constructs Context, proof/support Hosts and journal on that same owner; serialized command dispatch runs version CAS, propagation and transaction commit | Quiesce admission, close owned resources, acknowledge only after actual owner join |
+| Timer | Separate native thread receives scheduling tickets and sends deadline deliveries to the owner; it never commits a Context or Attempt directly | Join timer before retiring observer and clock enrollment |
+| Session endpoint | Independent executing thread; native observation capability ties its actual completion to the Attempt | Owner disposal cannot kill it or invent a terminal; Session owns its reconciliation duty |
+| Native client | POO capability; phase check and mailbox admission share the existing short lock; replies use channels | Pending waiters receive explicit failure; closed client drops owner reference |
+
+No second Actor framework or parallel lifecycle owner was added. The unit
+probe possesses a real proof Host outside the owner and verifies direct foreign
+thread reads are refused. The same read succeeds as an owner message. It mutates
+returned historical/registration strings and proves the sealed credential and
+current admission are unaffected; it then mutates an actual replay input and
+proves current admission is refused. All involved owner/timer Actors are joined.
+
+The migration and lifecycle harnesses now use =gxi='s ordinary =main= entrypoint
+rather than executing at load time. This lets the interpreter consume artifact
+arguments as function arguments rather than subsequent load targets. There is
+no forced =exit= shortcut and no removal of shutdown checks. This entrypoint
+repair and the production proof-owner change are both part of the measured
+whole-process build; their end-to-end contributions are not separately claimed.
+
+* Executable model and native correspondence
+
+[[file:24-runtime-credential.sysml][The credential model]] executes all 120 orderings of historical read,
+source withdrawal, native input mutation, result submission and returned-alias
+mutation, both owner/foreign access and four algorithms: 960 cases. An independent
+Python oracle checks every output and executed verification result. Counter
+algorithms substitute historical metadata for current proof, bypass Actor owner
+checks, or expose private mutable credentials. Their witnesses are replayed
+against both unsafe and corrected algorithms.
+
+The existing policy migration model still supplies all 60 legal expiry,
+replacement, completion, cancellation and recovery orderings, three profiles,
+two expiry cuts and seven algorithms. The owner release model supplies all
+teardown phase permutations and pending-work controls. These finite models do
+not prove native allocation, timing or storage durability. Native positive and
+negative controls remain required.
+
+* Whole-queue acceptance and replay
+
+[[file:run-native-owner-lifecycle.py][The native gate]] accepts an explicit =--heap= profile and defaults to the
+user-authorized 2G. It supplies the runtime option through Just before module
+imports. The global project default and old 1G controls are not weakened. Each
+of the canonical, legacy-with-cut and missing-cut profiles runs all 60 orders in
+one gxi process. Both independent order generators and every assertion remain.
+
+The saved =whole-replay.json= token binds all profiles, the selected heap and
+exact source/compiled-object hashes. It is written before execution, including
+failed runs. Replaying that token repeats all three whole processes; it cannot
+change heap or select chunks. The auditor verifies the observed native process
+flag, the actual Just watchdog command, one PID per complete queue, strict
+markers and zero process exit, all 60 close observations and stored terminal,
+CAS and original evidence checks. Wall time is recorded at process exit,
+separately from external resource-observer joining.
+
+#+begin_src sh
+just build-test t/context-owner-lifecycle-test.ss
+just build-test t/context-runtime-cost-test.ss
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-native-owner-lifecycle.py" --heap 2G --min-heap 1G --artifacts /private/tmp/context-runtime-qualified
+python3 "$slice/audit-owner-lifecycle.py" --receipt /private/tmp/context-runtime-qualified/owner-receipt.json --output /private/tmp/context-runtime-qualified-audit.json
+python3 "$slice/run-native-owner-lifecycle.py" --replay /private/tmp/context-runtime-qualified/whole-replay.json --artifacts /private/tmp/context-runtime-replay
+python3 "$slice/audit-owner-lifecycle.py" --receipt /private/tmp/context-runtime-replay/owner-receipt.json --output /private/tmp/context-runtime-replay-audit.json
+#+end_src
+
+* Qualified capacity, separate from the next performance objective
+
+[[file:24-runtime-cost-results.json][The structured evidence index]] records three complete primary queues and their
+exact three-queue replay. Each row is one gxi process, all 60 legal schedules,
+2 GiB maximum/1 GiB minimum working heap and the unchanged 150-second watchdog.
+
+| Input profile | Primary seconds | Exact whole-queue replay seconds |
+|---------------+-----------------+---------------------------------|
+| Legacy CAS | 52.26 | 74.63 |
+| Canonical CAS | 50.56 | 116.56 |
+| Legacy missing cut | 52.58 | 87.22 |
+
+All six processes returned zero with strict markers and 60 actual close
+observations each. Separate read-only audits verified current source/object
+cuts, all 360 schedules, original evidence and immutable terminal/CAS records.
+Two falsified budget receipts (wrong maximum and wrong working-heap floor) were
+actually rejected against the observed native commands.
+
+The inherited crash producer used its archived 1G pre-crash recipe, then the
+selected 2G recovery profile. This cross-profile control is not capacity evidence.
+[[file:run-native-runtime-crash.py][The additional matched-profile runner]] explicitly binds the selected runtime
+to pre-crash, post-crash and a separately executed omitted-replay counter. It
+passed with actual SIGKILL, retained original data and terminal digests, and one
+policy/CAS decision. Its earlier summary-only failure (assuming a counter log
+existed when the inherited helper had only run pre/post) remains preserved;
+the corrected runner explicitly executes that negative case.
+
+SysML CLI executed 5400 cases across the policy migration, owner release and
+historical credential models: 1589 expected unsafe outcomes, zero unexpected.
+All unsafe algorithm families were replayed against corrected implementations
+(32 additional executions). Native source/object bytes for the qualified cut
+are sealed under =/private/tmp/context-runtime-reserved-custody-20261026/=.
+
+The user explicitly rejected 52 seconds as an acceptable Actor throughput
+objective after this capacity gate passed. Passing this gate is therefore not
+a claim that the runtime is optimized. The next investigation must separate
+bare Gambit scheduling, current RPC wrapping, repeated world construction,
+proof verification and actual journal work. Cold startup and all original
+qualification work stay visible; a warm message probe cannot replace these
+full-process receipts.
+
+* Two acceptance dimensions, with no substitution
+
+The user selected cold reconstruction and steady events as equal acceptance
+dimensions. The cold dimension retains all three unpartitioned 60-path process
+queues, their complete exits, real timer/journal ownership, negative controls
+and exact whole-queue replay. The steady dimension measures 60 current-proof
+uses inside one long-lived owner, separately with and without the real durable
+adapter. The durable phase includes automatic Context checkpoints and journal
+work. Neither a bare mailbox roundtrip nor a warm proof use replaces the cold
+queue, and these current-proof reads do not claim to measure every mutation.
+
+[[file:run-native-context-cost.py][The dual cost runner]] binds steady measurements to a cold receipt with the
+same source and native object hashes, selected minimum/maximum heap and native
+watchdog. It rejects missing 60-event phases, non-finite or negative native
+counters, and source/object drift. It publishes both dimensions independently;
+it does not declare an optimized throughput target merely from passing 150s.
+
+** Remove duplicated current-source work
+
+Native =open-headlines-replay= reparses the supplied source bytes, executes the
+canonical Query, checks the embedded observation, and returns fresh canonical
+output. Context =org-replay= previously discarded this result and called the
+parser again while assembling the same projection. The private assembly now
+consumes that returned result inside the same invocation. Public constructors,
+scope, feature, restriction, completeness, content and budget checks remain.
+No observation supplied by a public caller enters this private path without
+native replay. No admission verdict is cached across source versions or calls.
+
+Same-source parser/source/Query substitutions have explicit negative tests in
+=t/ai-agentic-context-core-test.ss=. The original changed-source, scope,
+restriction, content and claimed-authority counterexamples remain.
+The corresponding native cost probe executes source/parser/Query, edited-source
+and authority negatives after its timed replay phase, against the production
+boundary. Its strict controls marker is required by the dual cost runner.
+
+The general TestingScript invocation for the complete Context core test file
+did not finish within the selected 150s process fence (exit 137). Its original
+transcript is =/private/tmp/context-projection-core-test-20261026.log=; this is
+not a passing general-suite result. The temporary extra launcher was removed.
+Focused native controls and complete lifecycle queues have independent receipts
+and do not relabel that failure.
+
+The reproducible sequence, after the focused builds, is:
+
+#+begin_src sh
+python3 run-native-owner-lifecycle.py --heap 2G --min-heap 1G --artifacts /private/tmp/context-cold
+python3 audit-owner-lifecycle.py --receipt /private/tmp/context-cold/owner-receipt.json --output /private/tmp/context-cold-audit.json
+python3 run-native-context-cost.py --cold-receipt /private/tmp/context-cold/owner-receipt.json --artifacts /private/tmp/context-steady
+python3 run-native-owner-lifecycle.py --replay /private/tmp/context-cold/whole-replay.json --artifacts /private/tmp/context-replay
+#+end_src
+
+The commands above run from this design directory; artifacts directories must
+not already exist. All native processes retain the Just heap/watchdog fence.
+
+** Current dual measurement and complete replay
+
+[[file:24-dual-runtime-results.json][The structured dual results]] preserve source/receipt hashes and the failed
+general core-suite invocation separately. Current qualification and exact replay
+both passed their native artifact/database audits. Each cell below is a complete
+process including startup, 60 freshly constructed worlds, teardown and exit:
+
+| Profile | Qualification seconds | Exact whole-queue replay seconds |
+|---------+-----------------------+---------------------------------|
+| Legacy CAS | 88.85 | 53.09 |
+| Canonical command | 53.33 | 48.90 |
+| Legacy missing cut | 50.83 | 49.80 |
+
+All six processes observed 60 actual owner/timer/clock/journal closes and zero
+retained subscriptions. The native omitted-close counter, historical credential
+and malformed lineage controls, and real crash/recovery ran independently of
+these 360 paths. The current primary and replay roots are
+=/private/tmp/context-projection-qualified-20261026/=
+and =/private/tmp/context-projection-replay-20261026/=.
+
+| Steady operation | Count | Wall seconds | CPU seconds |
+|------------------+-------+--------------+-------------|
+| Current proof, memory Context | 60 | 0.614190 | 0.613583 |
+| Current proof, durable Context | 60 | 1.371318 | 1.164519 |
+| Current Org replay | 60 | 0.116836 | 0.116433 |
+| Production owner RPC | 20000 | 0.019832 | 0.018956 |
+
+The same-cut steady receipt is
+=/private/tmp/context-projection-steady-20261026/cost-receipt.json=.
+Its five provenance/authority negatives all refused. The A/B timed Org replay
+operation used the same source and produced the same projection digest. CPU
+decreased from 0.221337s to 0.116433s (47.4% in this sample); cumulative allocated
+bytes decreased from 731660968 to 450301056 (38.5%). Both timed phases observed
+zero collections. The sole production source change between these samples is
+=funs-projection.ss=. Candidate negative controls execute after this timed phase;
+other phase comparisons are not used to claim causal improvement.
+
+These data establish a focused reduction in repeated native parsing. They do
+not establish a stable full-process speedup or optimized cold reconstruction.
+Current-proof replay, large temporary allocation, cold imports and process
+teardown remain separate performance obligations. The private-row experiment
+and a warm timing do not close those obligations.
+
+The current-cut matched-profile SIGKILL/recovery and omitted-replay control also
+passed with =min-heap=1G,max-heap=2G=: original Query facts/rules and terminal
+digests survived; pending input applied once, with one policy/decision write
+and no old terminal revival. Its receipt is under
+=/private/tmp/context-projection-matched-crash-20261026/=.
+Verified custody of 16353 source/native object files (793695534 bytes) is under
+=/private/tmp/context-projection-custody-20261026/manifest.json=. Restoration
+requires the original operating system and Gerbil/Gambit runtime libraries; this is not a
+hermetic runtime image.
+
+** Experiments that were not selected
+
+A private native-row proof representation preserved the original digest and
+rejected malformed support and next-call mutation, but did not demonstrate a
+CPU improvement in actual steady Context uses. It has been removed from the
+production implementation. Its source and negative evidence remain locally in
+=/private/tmp/context-native-row-experiment-preserved-20261026/=.
+
+An explicitly compiled executable reduced the sampled startup CPU from roughly
+6.9s to 0.074s, but did not improve the measured steady phase and produced
+negative allocation counters. That diagnostic executable is not the selected
+production launcher, and its allocation figures are not accepted measurements.
+The failed first link and corrected native execution are retained separately.
+
+A native stack sample of the unchanged-launcher baseline captured
+=___cleanup_dyn_module= / =dyld4::APIs::dlclose= during process teardown, after
+the phase operations and journal closures. This is concrete runtime diagnosis,
+not a reason to omit cleanup from the process acceptance budget. The original
+transcript and sample remain under
+=/private/tmp/context-projection-ab-20261026/baseline/=.

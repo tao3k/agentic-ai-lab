@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api
                  benchmark-fixture-ref
@@ -14,8 +14,8 @@
                  micro-kernel-receipt-pass?
                  micro-kernel-run/result)
         (only-in :clan/poo/object .o .ref)
-        (only-in :core/observability/debug
-                 PooFlowDebugSlotPolicyContract)
+        (only-in :yuanxu/observability/debug
+                 YuanxuDebugSlotPolicyContract)
         (only-in "../support/poo-performance"
                  poo-performance-fixture-policy-contract-pass?
                  poo-performance-display-receipt)
@@ -46,7 +46,7 @@
                         fixture)))))
 
 (def (display-micro-kernel-receipt receipt)
-  (display "[poo-flow-micro-kernel] ")
+  (display "[agentic-ai-lab-micro-kernel] ")
   (write
    (map (lambda (key)
           (cons key (benchmark-fixture-ref receipt key)))
@@ -58,12 +58,12 @@
 
 (def observability-slot-performance-test
   (test-suite "observability slot phase performance"
-    (poo-flow-test-case "keeps prototype lookup in a native nanosecond envelope"
+    (yuanxu-test-case "keeps prototype lookup in a native nanosecond envelope"
       (let-values (((receipt result)
                     (micro-kernel-run/result
                      prototype-lookup-fixture
                      (lambda ()
-                       (.ref PooFlowDebugSlotPolicyContract 'proto)))))
+                       (.ref YuanxuDebugSlotPolicyContract 'proto)))))
         (display-micro-kernel-receipt receipt)
         (check-equal?
          (micro-kernel-fixture-contract-pass? prototype-lookup-fixture)
@@ -72,8 +72,8 @@
         (check-equal? (micro-kernel-receipt-pass? receipt) #t)
         (check-equal? (not (not result)) #t)))
 
-    (poo-flow-test-case "keeps one prototype composition below two microseconds"
-      (let (prototype (.ref PooFlowDebugSlotPolicyContract 'proto))
+    (yuanxu-test-case "keeps one prototype composition below two microseconds"
+      (let (prototype (.ref YuanxuDebugSlotPolicyContract 'proto))
         (let-values (((receipt result)
                       (micro-kernel-run/result
                        prototype-compose-fixture
@@ -86,14 +86,14 @@
           (check-equal? (micro-kernel-receipt-pass? receipt) #t)
           (check-equal? (not (not result)) #t))))
 
-    (poo-flow-test-case "keeps authoring, cold demand, warm cache, and trace distinct"
+    (yuanxu-test-case "keeps authoring, cold demand, warm cache, and trace distinct"
       (let (fixture (poo-performance-observability-slot-guard-fixture))
         (let-values (((gate receipt)
                       (benchmark-run/result
                        fixture
                        observability-slot-performance-scenario)))
           (poo-performance-display-receipt gate)
-          (display "[poo-flow-benchmark] observability-slot ")
+          (display "[agentic-ai-lab-benchmark] observability-slot ")
           (write (observability-slot-performance-receipt-sexp receipt))
           (newline)
           (force-output)

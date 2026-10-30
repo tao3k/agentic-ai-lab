@@ -1,0 +1,138 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Native Temporal current-source evidence
+
+Raw execution logs are local or CI artifacts and are not retained in the
+source checkout. Historical structured summaries do not qualify a newer source
+cut; run the executable gate again for current evidence.
+
+This slice retains the original native family admission, replays its premises,
+and compares it with a host-selected current source. The Scheme owner decides
+current/stale; the Rust library controls the native owner queue and forwards
+verified original MRR observations. Every authority/effect flag remains false.
+
+=native-test.ss= delegates to upstream gxtest's =main=. Its four applicability
+cases and seven =t/temporal-lifecycle-test.ss= cases use the public
+=yuanxu-test-case= helper.
+Compile through the official Gerbil compiler, with native dependency inputs
+selected explicitly. Run the executable through a five-second genuine-output
+watchdog and a 45-second total deadline, passing =-v 5= and the original test
+files. Discovery, assertions, Case profiles, reporting and status remain gxtest
+owned. A compiled binary alone is not a passing test result.
+
+Always compile the entry module before linking its executable:
+#+begin_src sh
+gxc -O -static t/qualification/temporal-current-source/native-test.ss
+#+end_src
+Then use official =compile-exe= and =execute-pending-compile-jobs!=. Linking
+alone can reuse installed static code that predates a source edit. The entry's
+static compiler output must contain the current completion diagnostics, and
+the run must enable =AGENTIC_AI_LAB_TEST_PROGRESS= to expose those real boundaries.
+The entry also imports named dependency contexts through the official expander
+before gxtest discovery, reporting only completed imports. A single stalled
+import still fails the five-second gate. Compile changed dependency and test
+modules before compiling the entry; never reuse stale installed static code.
+
+* Family lifecycle discovery diagnostics
+
+=lifecycle-discovery-failed.log= records the first two-file run: static module
+and official expander initialization completed, then the five-second watchdog
+failed before any Case output (exit 124). The single-file diagnostic in
+=lifecycle-isolated-discovery-failed.log= and compiled-input search-order
+diagnostic in =lifecycle-compiled-import-discovery-failed.log= failed at the
+same boundary. They are not test passes and do not establish a semantic failure.
+No timeout was widened. The subsequent entry exposes completed official
+dependency imports before delegating the original files to upstream gxtest.
+
+=lifecycle-mop-import-failed.log= then located the silent stage in the official
+=:clan/poo/mop= context import. Splitting its declared dependencies into
+completed import stages fixed the observed silence without changing upstream
+discovery, the test cases or either deadline. =lifecycle-native-passed.log=
+records all 11 Case passes, both Module/Suite passes, final =OK= and exit 0
+under the original five-second idle / 45-second wall gates.
+=lifecycle-build-freeze.ss= records the exact source, static entry, executable,
+watchdog and log hashes. It preserves the four prior exit-124 discovery failures
+as failures. This receipt qualifies pure Library replay/correction/retraction
+and journal graph admission only; it does not qualify ABI journal transport,
+authenticated Source/current cut, support stabilization, durability or CAS.
+
+* Earlier current-source and physical qualification
+
+=rust-native.log= records the passing real ABI regression. It includes original
+necessary/current, correction making historical evidence stale, refuted/current
+readmission, anti-rollback, forged-request rejection and bounded history. Its
+native library freeze is =native-build-freeze.ss=. Admission failures before
+the distinct lexical POO slot bindings were fixed remain archived.
+
+The interpreted Scheme startup failures and physical MRR initialization
+failures are separate failed gates. They are not replaced by the passing ABI
+regression. In particular, the new physical Arrow correction/re-query scenario
+cannot be claimed accepted until its entire original GQL/MRR/Data/Temporal
+path passes the same limits. No paid model call or performance benchmark was
+made for this slice. ASP Scheme owns any future benchmark measurement.
+
+The final public =gerbil test= attempt also fails the five-second startup gate;
+=public-gxtest-failed.log= records it. Static gxtest qualification is not a pass:
+the installed SDK lacks tools/env and tools/gxtest static objects; a temporary
+SDK compiled their unchanged upstream Scheme compiler outputs, but the host
+again refused to fork during final compilation. =gxtest-static-build-failed.log=
+retains that failure. No installed SDK file was changed. A stale core/types
+object lock from an earlier interrupted attempt had no active holder and was
+removed from the temporary package SDK; that only unblocked compilation.
+
+The subsequent official static build completed after generating both missing
+upstream C/object pairs in the temporary SDK and explicitly selecting that
+SDK with =GERBIL_BUILD_PREFIX=. No installed SDK file or compiler intermediate
+was edited. The first executable reached gxtest source discovery but rejected
+the public helper's import syntax; =gxtest-expander-missing.log= preserves that
+failure. The entry now calls the official =gerbil-load-expander!= hook before
+the same upstream runner, matching Gerbil's interpreter initialization.
+
+The rebuilt entry also exposes optional =AGENTIC_AI_LAB_TEST_PROGRESS= completion
+events after static initialization and after expander initialization. These
+are completed stages, not timer output. The first diagnostic run timed out
+without an entry event: =gxtest-before-entry-failed.log=. Inspection subsequently
+found that its static entry was cached from before the diagnostics were added.
+That log remains a failed run but does not establish a pre-entry blocking
+location. Native process sampling observed expander dynamic module loading.
+
+Recompiling the entry with official =gxc -O -static= before =compile-exe=
+produced the current diagnostics. The strict run then passed all four public
+cases with =CASE-OK=, final upstream =OK= and exit status zero.
+=gxtest-native-passed.log= retains the output, and =gxtest-build-freeze.ss=
+records current entry/source/compiler-output and executable digests. The
+five-second genuine-progress and 45-second total limits were unchanged.
+This closes local native public-case qualification, not interpreted cold
+startup, the physical MRR/Data roundtrip or a latency benchmark.
+
+* Coherent pinned physical correction
+
+The Rust Library and physical qualification now resolve one MRR source at
+=d5beb4030bf875fa851cddc27789030c551154c3=. The latter resolves one Data source
+at =707f435320008df6799be8e8be1cfede5aad71cb=, whose facade selects that same
+MRR commit. Cargo generated both lockfiles; no path patch substitutes a pin.
+
+The new immutable binary passes the physical correction/re-query and native
+Temporal re-admission under the unchanged five-second real-progress and
+45-second total deadlines. Original GQL reaches actual Arrow/DataFusion
+execution and original MRR Scheme V2 transport. A corrected physical root
+produces a new MRR generation; retained historical proof is necessary/stale
+and revised proof is refuted/current. Cross-root handoff substitution, stale
+re-admission and rollback remain refused. Physical roots and host-selected
+Temporal cuts retain distinct identities.
+
+=physical-pinned-passed.log=, =physical-pinned-receipt.ss= and
+=physical-pinned-oracle.ss= retain original output/data. The oracle is the
+emitted replay pair and is not an independent proof of physical execution.
+=physical-pinned-build-freeze.ss= freezes pins, current executable/library,
+four compiler-owned MRR modules, source/lock/build inputs and evidence hashes.
+The old initialization failures remain failed historical invocations.
+
+This closes the local read-only correction/re-query path for this exact graph.
+It is not a new model result, benchmark, authenticated production current cut,
+effect authorization, withdrawal journal, durable CAS/IFC publication or
+recovery qualification. All three receipt authority/coverage flags are false.
+
+These host-declared read-only checks do not authenticate the source, fence a
+subsequent effect, prove physical evaluation or implement withdrawal journals,
+authoritative multi-source cuts, durable CAS/IFC publication and recovery.

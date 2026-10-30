@@ -6,12 +6,12 @@
 ;;; User Interface reusable Profile library: LangGraph-style state graph.
 
 (import (only-in :clan/poo/object .def .o .ref)
-        (only-in :core/module-system/schema/relations poo-flow-semantic-identity)
-        (only-in :poo-flow/src/authoring/semantic-module
-                 poo-flow-semantic-module)
-        (only-in :core/profile-composition/profile-bundle
-                 poo-flow-profile-export
-                 poo-flow-module-profiles))
+        (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
+        (only-in :yuanxu/module-system/authoring/roles
+                 yuanxu-semantic-module)
+        (only-in :yuanxu/profile-composition/profile-bundle
+                 yuanxu-profile-export
+                 yuanxu-module-profiles))
 (export langgraph LangGraphModule)
 
 (.def langgraph
@@ -45,14 +45,14 @@
                          (policy 'handoff-after-proof-gate))))
 
 (def LangGraphModule
-  (poo-flow-semantic-module
-   (poo-flow-semantic-identity 'user-interface 'langgraph)
+  (yuanxu-semantic-module
+   (yuanxu-semantic-identity 'user-interface 'langgraph)
    profiles:
-   (poo-flow-module-profiles
-    (poo-flow-profile-export 'session (.ref langgraph 'session))
-    (poo-flow-profile-export 'state (.ref langgraph 'state))
-    (poo-flow-profile-export 'router (.ref langgraph 'router))
-    (poo-flow-profile-export 'agent-node (.ref langgraph 'agent-node))
-    (poo-flow-profile-export 'tool-node (.ref langgraph 'tool-node))
-    (poo-flow-profile-export 'bounded-loop (.ref langgraph 'bounded-loop))
-    (poo-flow-profile-export 'runtime-handoff (.ref langgraph 'runtime-handoff)))))
+   (yuanxu-module-profiles
+    (yuanxu-profile-export 'session (.ref langgraph 'session))
+    (yuanxu-profile-export 'state (.ref langgraph 'state))
+    (yuanxu-profile-export 'router (.ref langgraph 'router))
+    (yuanxu-profile-export 'agent-node (.ref langgraph 'agent-node))
+    (yuanxu-profile-export 'tool-node (.ref langgraph 'tool-node))
+    (yuanxu-profile-export 'bounded-loop (.ref langgraph 'bounded-loop))
+    (yuanxu-profile-export 'runtime-handoff (.ref langgraph 'runtime-handoff)))))

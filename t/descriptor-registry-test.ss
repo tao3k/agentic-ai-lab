@@ -3,9 +3,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures
+                 Fun Any Number Integer String Symbol List Pair Null Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/flow flow-output-contract)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: descriptor registries are policy extension surfaces.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,14 +21,16 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .@ .slot? .all-slots)
-        :poo-flow/src/core/api)
+        :yuanxu/modules/funflow/control-plane/api)
 
 ;;; This suite keeps descriptor registry lookup behavior separate from concrete
 ;;; workflow execution.
 ;; : TestSuite
+(export descriptor-registry-test)
+
 (def descriptor-registry-test
   (test-suite "descriptor registries"
-    (poo-flow-test-case "extends task family descriptors without editing defaults"
+    (yuanxu-test-case "extends task family descriptors without editing defaults"
       (let* ((custom (make-task-family-descriptor 'custom-runtime
                                                   'external
                                                   'adapter
@@ -33,12 +39,12 @@
              (registry (task-family-registry-extend
                         default-task-family-registry
                         custom))
-             (task (make-task 'build
-                              'custom-runtime
-                              '(custom build)
-                              'artifact
-                              'artifact
-                              #f)))
+             (task (make-task
+		    'build
+		    'custom-runtime
+		    '(custom build)
+		    (Fun Any <- Any)
+		    #f)))
         (check-equal? (task-family-registry? registry) #t)
         (check-equal? (task-family-name
                        (task-family-for-kind-in registry 'custom-runtime))
@@ -54,7 +60,7 @@
         (check-equal? (and (memq 'extension-policy (.all-slots custom)) #t)
                       #t)
         (check-equal? (length task-family-descriptors) 3)))
-    (poo-flow-test-case "extends flow declarations without editing defaults"
+    (yuanxu-test-case "extends flow declarations without editing defaults"
       (let* ((remote (make-flow-declaration-descriptor 'remote-flow
                                                        'remote
                                                        'linear-dag
@@ -62,7 +68,10 @@
              (registry (flow-declaration-registry-extend
                         default-flow-declaration-registry
                         remote))
-             (inc (pure-flow 'inc (lambda (x) (+ x 1)) 'number 'number))
+             (inc (pure-flow
+		   'inc
+		   (Fun Number <- Number)
+		   (lambda (x) (+ x 1))))
              (planner (strategy-planner-for-flow-in
                        (make-local-eager-strategy)
                        registry

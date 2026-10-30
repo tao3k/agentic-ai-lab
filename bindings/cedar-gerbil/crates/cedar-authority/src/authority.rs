@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
-const SIGNING_DOMAIN: &str = "poo-flow/cedar/authority-signature";
+const SIGNING_DOMAIN: &str = "agentic-ai-lab/cedar/authority-signature";
 const MAX_PENDING: usize = 4096;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -253,7 +253,7 @@ impl Authority {
     pub fn info(&self) -> AuthorityInfo {
         let snapshot = &self.snapshot.bootstrap;
         AuthorityInfo {
-            schema_id: "poo-flow.cedar-authority-state.v1",
+            schema_id: "agentic-ai-lab.cedar-authority-state.v1",
             authority_id: snapshot.authority_id.clone(),
             authority_instance: self.instance.clone(),
             issuer_public_key: self.public_key(),
@@ -300,7 +300,7 @@ impl Authority {
         let input_digest = canonical::raw_digest(&prepared.protobuf);
         let engine_receipt = |result: RuntimeWitness| {
             self.sign(EngineReceipt {
-                schema_id: "poo-flow.cedar-engine-receipt.v1".into(),
+                schema_id: "agentic-ai-lab.cedar-engine-receipt.v1".into(),
                 engine_id: result.engine_id.clone(),
                 runtime_artifact_digest: self.deployment.runtime_artifact_digest.clone(),
                 engine_component_digest: result.component_digest,
@@ -315,7 +315,7 @@ impl Authority {
         let decision = rust.outcome.decision.clone();
         let snapshot = &self.snapshot.bootstrap;
         let receipt = self.sign(DecisionReceipt {
-            schema_id: "poo-flow.cedar-decision-receipt.v1".into(),
+            schema_id: "agentic-ai-lab.cedar-decision-receipt.v1".into(),
             authority_id: snapshot.authority_id.clone(),
             authority_instance: self.instance.clone(),
             runtime_context_id: snapshot.runtime_context_id.clone(),
@@ -349,13 +349,13 @@ impl Authority {
             .checked_add(self.deployment.grant_lifetime_ms)
             .ok_or_else(|| Error::new("authority-clock-invalid", "timestamp overflow"))?;
         let grant = self.sign(Grant {
-            schema_id: "poo-flow.cedar-runtime-grant.v1".into(),
+            schema_id: "agentic-ai-lab.cedar-runtime-grant.v1".into(),
             grant_id: grant_id.clone(),
             authority_id: snapshot.authority_id.clone(),
             authority_instance: self.instance.clone(),
             issuer_public_key: self.public_key(),
             decision_receipt_digest: canonical::digest(
-                "poo-flow/cedar/decision-receipt",
+                "agentic-ai-lab/cedar/decision-receipt",
                 &receipt,
             )?,
             subject: prepared.subject,
@@ -368,7 +368,7 @@ impl Authority {
             policy_revision: snapshot.policy_revision,
             revocation_epoch: snapshot.revocation_epoch,
             intent_digest: proposal.intent_digest,
-            handoff_digest: canonical::digest("poo-flow/cedar/runtime-handoff", &proposal.handoff)?,
+            handoff_digest: canonical::digest("agentic-ai-lab/cedar/runtime-handoff", &proposal.handoff)?,
             action: prepared.action,
             event_kind: prepared.event_kind,
             nonce: [
@@ -381,7 +381,7 @@ impl Authority {
         self.pending.insert(
             grant_id,
             Pending {
-                digest: canonical::digest("poo-flow/cedar/grant", &grant)?,
+                digest: canonical::digest("agentic-ai-lab/cedar/grant", &grant)?,
                 deadline: Instant::now() + Duration::from_millis(self.deployment.grant_lifetime_ms),
             },
         );
@@ -429,7 +429,7 @@ impl Authority {
         verify_signature(&self.public_key(), &request.grant)?;
         let grant = &request.grant.payload;
         let current = &self.snapshot.bootstrap;
-        if grant.schema_id != "poo-flow.cedar-runtime-grant.v1"
+        if grant.schema_id != "agentic-ai-lab.cedar-runtime-grant.v1"
             || grant.authority_instance != self.instance
             || grant.authority_id != current.authority_id
             || grant.issuer_public_key != self.public_key()
@@ -464,7 +464,7 @@ impl Authority {
         if grant.action != request.action
             || grant.intent_digest != request.intent_digest
             || grant.handoff_digest
-                != canonical::digest("poo-flow/cedar/runtime-handoff", &request.handoff)?
+                != canonical::digest("agentic-ai-lab/cedar/runtime-handoff", &request.handoff)?
         {
             return Err(Error::new(
                 "grant-effect-binding-mismatch",
@@ -484,7 +484,7 @@ impl Authority {
                 "monotonic validity window expired",
             ));
         }
-        if pending.digest != canonical::digest("poo-flow/cedar/grant", &request.grant)? {
+        if pending.digest != canonical::digest("agentic-ai-lab/cedar/grant", &request.grant)? {
             return Err(Error::new(
                 "grant-issuance-mismatch",
                 "receipt differs from the actual issuance",
@@ -494,7 +494,7 @@ impl Authority {
         // nonce; recovery must obtain a fresh, newly evaluated authorization.
         self.pending.remove(&grant.grant_id);
         Ok(ConsumedHandoff {
-            schema_id: "poo-flow.cedar-consumed-handoff.v1",
+            schema_id: "agentic-ai-lab.cedar-consumed-handoff.v1",
             grant_id: grant.grant_id.clone(),
             nonce: grant.nonce,
             event_kind: grant.event_kind,

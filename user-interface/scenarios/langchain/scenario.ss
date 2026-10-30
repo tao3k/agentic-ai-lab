@@ -4,11 +4,11 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 (import (only-in :clan/poo/object .def .o)
-        (only-in :core/profile-composition/profile-bundle
+        (only-in :yuanxu/profile-composition/profile-bundle
                  profiles compose)
-        :core/profile-composition/selection-syntax
-        :poo-flow/src/scenario/composition-syntax
-        :poo-flow/user-interface/profiles/langchain)
+        :yuanxu/profile-composition/selection-syntax
+        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
+        :agentic-ai-lab/user-interface/profiles/langchain)
 (export LangChainProductionProfile langchain-scenario)
 
 (.def LangChainProductionProfile

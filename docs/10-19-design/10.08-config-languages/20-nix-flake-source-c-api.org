@@ -1,0 +1,193 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: 10.08.20 Product Flake Source: Scoped C API Evaluation
+#+language: en
+
+* Integration boundary
+
+The product =NixFlakeSource. .instantiate= now accepts an optional POO
+=evaluator= object. Its method receives the reference, exact attribute,
+ordinary argument/input objects and the configured CLI executable. Contract
+admission and source checks still bracket that method. With no evaluator the
+existing CLI path is unchanged. This is an opt-in product call chain, not a
+claim that every product process already bootstraps libflake-c.
+
+The adapter belongs to Agentic AI Lab's =bindings/nix-c-api=, never Yuanxu. It uses
+the installed Gerbil and the pinned Nix 2.34.4+1 C libraries. No compiler or
+Gerbil source is patched. Minimum supported Nix remains major/minor >= 2.34.
+
+#+begin_src scheme
+(call-with-flake-evaluator
+  (lambda (engine)
+    (.def (Source @ NixFlakeSource.)
+      reference: "path:/absolute/project"
+      attribute: "packages.aarch64-darwin.default"
+      evaluator: engine)
+    (.call Source .build check-current!)))
+#+end_src
+
+* Lifecycle and independent authentication
+
+The engine is an ordinary native POO object. Its =handle= slot lazily acquires
+one Store/EvalState. =dynamic-wind= releases an acquired handle on scope exit;
+an unused scope allocates no native evaluator, and an escaped method refuses
+use after close. Source/publication copies retain the existing receiver-local
+POO derivation, artifact and Contract slots. There is no admission-result
+cache, global session registry, restoration protocol or Core cache layer.
+
+Each independent query resets references and lock flags, strictly locks again,
+and selects outputs again in that state. It must not reuse an earlier selected
+output thunk as proof of filesystem currentness. The selected value is adapted
+to =value: input: value.drvPath= or, for nonempty ordinary arguments,
+=value: input: (value (builtins.fromJSON input)).drvPath=.
+
+The startup configuration requests pure evaluation. The product adapter checks
+the effective EvalState's absence of impure currentSystem/currentTime builtins;
+it does not infer this from a hand-written purity label or from the global
+settings registry (pure-eval belongs to EvalSettings). No query changes the
+process environment or enables impure evaluation.
+
+* Path override boundary
+
+A raw local path override accepted by the CLI is not automatically a locked
+input reference in the pure C API. For direct immutable Store inputs only,
+the adapter projects the matching path/narHash/lastModified from the current
+lock row. The path must equal the requested input. This is argument projection,
+not a second lock resolver: libflake-c mode_check still decides validity.
+No lock is created, modified, or updated by that projection.
+
+The matched CLI control exposed an existing strictness bug: --override-input
+implicitly enables virtual/no-write locking, so adding --no-update-lock-file
+did not reject an unrelated newly declared input. The original negative control
+failed. The CLI implementation now checks root metadata without overrides
+first, then performs the explicit override query. This additional CLI process
+is counted, not hidden as native evaluation or omitted from timings. Without
+overrides the original strict single-query route remains unchanged.
+
+Unmatched paths, remote overrides and follows mappings retain the configured
+strict CLI implementation. These fallbacks are counted separately. They are
+not counted as native zero-process queries. A matching immutable input still
+undergoes Nix's own lock/hash checks and the Source's before/after byte checks.
+
+* Process and test ownership
+
+Importing the binding does not start an evaluator. Process startup preload is
+an explicit effect: on this macOS host, the installed Homebrew gxi shell wrapper
+can discard DYLD_INSERT_LIBRARIES. The existing binding Just qualification uses
+the resolved native Gerbil binary so preload precedes Gambit initialization.
+Core TestingScript, Ops and the original std/test Harness retain execution,
+source-currentness, failure admission, logs and watchdog ownership.
+
+The test preparation compiles the FFI with the pinned headers/libraries, then
+imports its actual compiled .ssi by native path. It does not ask ordinary local
+Scheme support discovery to recompile a foreign binding without its flags.
+The same =t/nix-flake-source-test.ss= suite supplies both CLI and C API controls;
+only the evaluator resource owner differs. Limits remain 120 seconds per
+preparation/test phase, 60 seconds idle and 240 seconds for the enclosing Just
+qualification. No Builder or replacement Harness is introduced.
+
+#+begin_src sh
+just -f bindings/nix-c-api/Justfile test product-native
+just -f bindings/nix-c-api/Justfile test product-cli
+#+end_src
+
+The existing real Nix fixture supplies AGENTIC_AI_LAB_OPENTOFU_FLAKE_ARTIFACT and
+AGENTIC_AI_LAB_NIX_TEST_TOOLS. Real AWS 5.100.0 and Null 3.2.4 schema artifacts are
+already populated in the Store. Measurements therefore are not download-cold.
+Fixture lock creation, FFI compilation and native process startup are outside
+the reported product phase times; both controls use the same startup libraries.
+
+* Required controls and interpretation
+
+The suite retains AWS-only -> AWS+Null admission, independent derivation
+comparison, selected type reads/compiles, parent Contract identity, parent
+absence of Null, unselected awscc, imported providers.nix mutation refusal,
+serialized independent guard refusal and unchanged lock bytes after failed
+implicit updates. Native controls additionally require one Store/EvalState,
+zero CLI query processes and zero fallback for the locked Store input.
+The instantiate field counts actual Source evaluation requests; cli-processes
+counts all Nix CLI starts in the measured phase, including strict metadata.
+Realization and selected type reads/compiles have separate counters.
+
+A warm slot read may do zero evaluation. Explicit currentness may not reuse an
+admission verdict: it still evaluates and compares the derivation. Generated
+cross-process guards deliberately use the existing CLI path rather than
+serialize a C pointer. Realization remains the existing nix-store/Ops boundary.
+Thus zero CLI query processes does not mean the complete test launches no CLI
+or builder process.
+
+* Qualification record
+
+The first complete native product run passed MODULE-OK, HARNESS-OK and final
+OK, with all negative controls retained. Earlier failures were retained locally:
+foreign-binding recompile without headers, preload lost through shell startup,
+sandbox denial of the daemon socket, a test counter name shadowing a function,
+incorrect use of the global pure-eval settings registry, pure unpinned input
+refusal, and the corresponding import/syntax repairs. None was made passing by
+increasing a timeout or removing a negative control.
+
+Three alternating CLI/native rounds and their untrimmed phase distributions
+are required before a performance claim. Process/query and type counts are
+reported separately. A warm Store and host/daemon scheduling can dominate a
+cold sample; no outlier is dropped and wall-time differences alone do not
+identify filesystem, GC or daemon wait as the cause.
+
+** Final source: three serial matched rounds
+
+All six final-source product runs passed MODULE-OK, HARNESS-OK and final OK,
+without ERROR MODULE/CASE/CHECK/HARNESS or overflow markers. Round 2 reversed
+backend order. The ordinary root =just test-file t/nix-flake-source-test.ss=
+also passed through the current Core init/test preparation and Harness chain,
+with its unchanged 1 GiB/120-second entry limits. The existing four binding
+Cases subsequently passed through the original binding Just entrypoint.
+
+| Product phase | C API seconds min / median / max | CLI seconds min / median / max |
+|---------------+---------------------------------+-------------------------------|
+| AWS-only build | 1.085 / 1.151 / 1.360 | 1.729 / 1.760 / 1.890 |
+| AWS+Null build | 1.121 / 1.141 / 1.255 | 1.689 / 1.736 / 1.743 |
+| AWS independent currentness | 0.371 / 0.382 / 0.391 | 0.495 / 0.496 / 0.528 |
+| AWS+Null independent currentness | 0.370 / 0.394 / 0.413 | 0.497 / 0.508 / 0.530 |
+
+Every build phase performs two evaluation requests and one realization
+process. Those requests use zero Nix CLI processes in the native control and
+four in the strict CLI control. Independent currentness performs one request:
+zero native-side CLI starts versus two strict CLI starts. Each owned native
+scope creates exactly one Store/EvalState across the AWS and Null generations.
+Five hot slot reads perform zero evaluation, realization, type reads or type
+compiles in both controls. First admission reads/compiles one selected type
+for AWS and two for AWS+Null; awscc remains unselected. The same real fixture
+also verifies ordinary argument-object application to a Flake function.
+Unused scopes remain cold, and use after the functional scope closes is refused.
+
+These are product-phase timings on a populated Store, not startup-inclusive
+latency or download/build-cold performance. Earlier cohorts and failed runs
+remain local artifacts; one earlier native cold sample was approximately 21.7
+seconds. It is not relabeled as a pass in the final matched cohort or silently
+used to claim a general speedup. Host/daemon wait attribution remains open.
+
+The runtime was built from the current Core working tree with declared
+=gerbil-poo@80b590b15c6d4bde7717f5fd85d5b98dbf230bd8=. This is local consumer
+qualification, not a complete CI claim. The underlying Core init/tests and
+product-ownership migration was subsequently published as =59cc155= on the
+existing Core PR branch, and the product snapshot carries that dependency
+pointer. Scheme sources used by the qualified runtime are unchanged by that
+commit; one new QNT file's redundant trailing blank line was removed during
+the commit check. Other workspace changes included in the coordinated snapshot
+have not all been requalified by this Nix suite. No Gerbil source was modified.
+
+* CI source closure
+
+The pinned Nix package-set expression has an =outPath= attribute. Select that
+attribute before JSON serialization: Nix may coerce the whole attribute set to
+a string when serializing it. The setup action uses =--attr outPath= and checks
+that the decoded result is a directory; it does not change the source lock.
+
+Source-only Bazel inputs include nested =gerbil.pkg= files as well as Scheme
+sources. These headers select each role's native prelude and package identity.
+The ABI source consumer registers the single Yuanxu prelude through the existing
+source-package bootstrap helper before importing the fixture; it does not
+publish a second prelude or depend on an incidental installed Core copy.
+
+The root =gerbil.pkg= and Bazel source/lock projections must name the same
+qualified =gerbil-poo= revision. Dependency-contract checks remain mandatory;
+matching one installed runtime does not excuse a different CI dependency graph.

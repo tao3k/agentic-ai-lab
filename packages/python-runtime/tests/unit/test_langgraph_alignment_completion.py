@@ -6,8 +6,8 @@ import asyncio
 
 import pytest
 
-from poo_flow_runtime._runtime_graph_context import GraphRunContext
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime._runtime_graph_context import GraphRunContext
+from agentic_ai_lab_runtime import (
     MemoryRuntimeGraphCheckpointer,
     MemoryRuntimeGraphStore,
     RuntimeGraphBuilder,

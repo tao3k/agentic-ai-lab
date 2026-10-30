@@ -7,7 +7,7 @@
 ;;; Invariant: benchmark payloads live under t/; user-interface declarations
 ;;; stay POO-native and never realize sandbox descriptors.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
@@ -17,9 +17,9 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .ref)
         "../user-interface-fixtures.ss"
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/profile-config
-        :poo-flow/modules/agent-sandbox/config)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/profile-config
+        :agentic-ai-lab/modules/agent-sandbox/config)
 
 (export user-interface-sandbox-config-performance-test)
 
@@ -38,7 +38,7 @@
 
 ;; : (-> Alist Void)
 (def (user-interface-sandbox-config-display-receipt receipt)
-  (display "[poo-flow-benchmark] user-interface-sandbox-config ")
+  (display "[agentic-ai-lab-benchmark] user-interface-sandbox-config ")
   (write receipt)
   (newline)
   (force-output))
@@ -46,50 +46,50 @@
 ;; : (-> Alist)
 (def (user-interface-sandbox-config-summary)
   (let* ((presentation
-          (poo-flow-default-sandbox-profile-presentation))
+          (agentic-ai-lab-default-sandbox-profile-presentation))
          (nono-profile
-          (poo-flow-sandbox-profile-by-name
-           poo-flow-default-sandbox-profiles
+          (agentic-ai-lab-sandbox-profile-by-name
+           agentic-ai-lab-default-sandbox-profiles
            'agent/nono))
          (cube-profile
-          (poo-flow-sandbox-profile-by-name
-           poo-flow-default-sandbox-profiles
+          (agentic-ai-lab-sandbox-profile-by-name
+           agentic-ai-lab-default-sandbox-profiles
            'agent/cube))
          (docker-profile
-          (poo-flow-sandbox-profile-by-name
-           poo-flow-default-sandbox-profiles
+          (agentic-ai-lab-sandbox-profile-by-name
+           agentic-ai-lab-default-sandbox-profiles
            'agent/docker)))
     (list
      (cons 'profile-count (.ref presentation 'profile-count))
-     (cons 'profile-names poo-flow-default-sandbox-profile-names)
+     (cons 'profile-names agentic-ai-lab-default-sandbox-profile-names)
      (cons 'nono-feature?
-           (poo-flow-user-config-feature?
-            test-poo-flow-user-config
+           (yuanxu-user-config-feature?
+            test-agentic-ai-lab-user-config
             'sandbox
             'nono-sandbox
             '+nono
             '+doctor))
      (cons 'cube-feature?
-           (poo-flow-user-config-feature?
-            test-poo-flow-user-config
+           (yuanxu-user-config-feature?
+            test-agentic-ai-lab-user-config
             'sandbox
             'cubeSandbox
             '+cube
             '+doctor))
      (cons 'docker-feature?
-           (poo-flow-user-config-feature?
-            test-poo-flow-user-config
+           (yuanxu-user-config-feature?
+            test-agentic-ai-lab-user-config
             'sandbox
             'docker-sandbox
             '+docker
             '+doctor))
      (cons 'backend-kinds
            (list
-            (poo-flow-sandbox-profile-backend-kind nono-profile)
-            (poo-flow-sandbox-profile-backend-kind cube-profile)
-            (poo-flow-sandbox-profile-backend-kind docker-profile)))
+            (agentic-ai-lab-sandbox-profile-backend-kind nono-profile)
+            (agentic-ai-lab-sandbox-profile-backend-kind cube-profile)
+            (agentic-ai-lab-sandbox-profile-backend-kind docker-profile)))
      (cons 'nono-resource-policy-count
-           (length (poo-flow-sandbox-profile-resource-policy nono-profile)))
+           (length (agentic-ai-lab-sandbox-profile-resource-policy nono-profile)))
      (cons 'descriptor-realized? (.ref presentation 'descriptor-realized?))
      (cons 'runtime-executed (.ref presentation 'runtime-executed))
      (cons 'benchmark-surface 't/scenarios/performance)
@@ -98,7 +98,7 @@
 ;; : TestSuite
 (def user-interface-sandbox-config-performance-test
   (test-suite "user-interface sandbox config performance"
-    (poo-flow-test-case "keeps sandbox config projection inside benchmark contract"
+    (yuanxu-test-case "keeps sandbox config projection inside benchmark contract"
       (let-values (((receipt summary)
                     (benchmark-run/result
                      user-interface-sandbox-config-fixture

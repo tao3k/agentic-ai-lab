@@ -1,0 +1,29 @@
+{
+  "candidate": {
+    "status": "partial",
+    "rows": [
+      [
+        "u",
+        "v"
+      ]
+    ]
+  },
+  "receipt": {
+    "verification": "invalid",
+    "verdict": "contradicted",
+    "schema": "poo-flow.semantic-observation",
+    "bindingDigest": "30b7dd22ee42ed45ca3eb5be399d2e80e86367e5169c939cd15ee27a9a162051",
+    "candidateValid": true,
+    "operation": "temporal.observe",
+    "requestDigest": "1af4d68ad5416bafa9a6298ef3eaf7f8eefa9075d0a05ff0b9df487d58bfbdd5",
+    "difference": {
+      "index": 0,
+      "kind": "extra-row",
+      "observed": [
+        "u",
+        "v"
+      ]
+    }
+  },
+  "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
+}

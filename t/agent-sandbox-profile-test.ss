@@ -3,10 +3,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
+(import (only-in :yuanxu/modules/funflow/control-plane/runtime-command-invocation make-procedure-runtime-command))
+(import (only-in :yuanxu/modules/funflow/control-plane/signatures Fun Integer Unit)
+        (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 ;;; Boundary: agent-sandbox profile tests cover profile descriptors and defaults.
 ;;; Invariant: backend execution stays outside Scheme tests.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -17,10 +20,10 @@
                  check-true
                  test-error
                  test-suite)
-        :poo-flow/src/core/api
-        :poo-flow/modules/agent-sandbox/api
-        :poo-flow/modules/agent-sandbox/nono
-        :poo-flow/modules/agent-sandbox/cube)
+        :yuanxu/modules/funflow/control-plane/api
+        :agentic-ai-lab/modules/agent-sandbox/api
+        :agentic-ai-lab/modules/agent-sandbox/nono
+        :agentic-ai-lab/modules/agent-sandbox/cube)
 
 ;;; Fixture result mirrors runtime bridge receipts while keeping the profile
 ;;; tests independent of an actual sandbox backend.
@@ -61,7 +64,7 @@
 
 (def agent-sandbox-profile-test
  (test-suite "agent sandbox profile descriptors"
-   (poo-flow-test-case "builds backend profiles for nono and CubeSandbox"
+   (yuanxu-test-case "builds backend profiles for nono and CubeSandbox"
      (let ((nono (make-nono-agent-sandbox-profile 'always-further/opencode))
            (cube (make-cube-agent-sandbox-profile 'python-template)))
        (check-equal? (agent-sandbox-profile-ref nono 'schema #f)
@@ -93,7 +96,7 @@
                         (snapshot . clone))
                        (snapshot . clone)
                        (resume . supported)))))
-   (poo-flow-test-case "summarizes structured profiles for runtime handoff"
+   (yuanxu-test-case "summarizes structured profiles for runtime handoff"
      (let* ((profile
              (make-agent-sandbox-backend-profile
               'nono
@@ -139,12 +142,12 @@
        (check-equal? (alist-value 'handoff-target handoff)
                      "marlin-agent-core")
        (check-equal? (alist-value 'handoff-contract handoff)
-                     'poo-flow.agent-sandbox-profile.runtime-handoff.v1)
+                     'agentic-ai-lab.agent-sandbox-profile.runtime-handoff.v1)
        (check-equal? (alist-value 'profile handoff) profile)
        (check-equal? (alist-value 'schema handoff-summary)
                      +agent-sandbox-profile-runtime-summary-schema+)
        (check-equal? (alist-value 'runtime-executed handoff) #f)))
-   (poo-flow-test-case "uses POO profile descriptors for backend overrides"
+   (yuanxu-test-case "uses POO profile descriptors for backend overrides"
      (let* ((cube-descriptor
              (make-cube-agent-sandbox-profile-descriptor 'python-template))
             (override-descriptor
@@ -180,7 +183,7 @@
        (check-equal? (agent-sandbox-profile-metadata override-profile)
                      '((backend . override)
                        (reason . test)))))
-   (poo-flow-test-case "validates profile and request contracts before runtime"
+   (yuanxu-test-case "validates profile and request contracts before runtime"
      (let* ((invalid-profile
              (make-agent-sandbox-backend-profile 'nono #f '() '() '() '()))
             (profile-failure
@@ -261,7 +264,7 @@
                  (scope . project-workspace)
                  (paths
                   ((role . project-workspace)
-                   (source . ".data/poo-flow-missing-source")
+                   (source . ".data/agentic-ai-lab-missing-source")
                    (project-marker . "gerbil.pkg")
                    (target . "/workspace/project")
                    (mode . read-only))))
@@ -306,7 +309,7 @@
        (check-equal? (execution-failure? request-failure) #t)
        (check-equal? (execution-failure-code request-failure)
                      'invalid-agent-sandbox-request)))
-   (poo-flow-test-case "builds requests with named-field macro contracts"
+   (yuanxu-test-case "builds requests with named-field macro contracts"
      (let* ((profile (make-nono-agent-sandbox-profile
                       'always-further/opencode))
             (request (agent-sandbox-request
@@ -333,13 +336,16 @@
                      '("--print" "typed"))
        (check-equal? (agent-sandbox-request-ref request 'network-policy '())
                      '((mode . blocked)))
-       (check-equal? (agent-sandbox-request-ref request 'capabilities '())
-                     '((filesystem . scoped)
-                       (credentials . injected)))
+       ;; Compare the complete map; distinct POO keys have no wire-order
+       ;; guarantee. Length plus both keys also rejects missing/extra rows.
+       (let ((capabilities (agent-sandbox-request-ref request 'capabilities '())))
+         (check-equal? (length capabilities) 2)
+         (check-equal? (cdr (assq 'filesystem capabilities)) 'scoped)
+         (check-equal? (cdr (assq 'credentials capabilities)) 'injected))
        (check-equal? (execution-failure? field-failure) #t)
        (check-equal? (execution-failure-code field-failure)
                      'invalid-agent-sandbox-request-fields)))
-   (poo-flow-test-case "profiled flow normalizes defaults and task overrides"
+   (yuanxu-test-case "profiled flow normalizes defaults and task overrides"
      (let (seen-request #f)
        (let* ((profile (make-nono-agent-sandbox-profile
                         'always-further/opencode
@@ -358,19 +364,18 @@
                          (set! seen-request (cdr (assoc 'request envelope)))
                          (runtime-result 'profiled '(artifact profiled-output))))
               (config (make-agent-sandbox-run-config
-                       (list (cons 'runtime-command command))))
+                       (list (cons 'runtime-command (make-procedure-runtime-command 'test-command command)))))
               (flow (profiled-agent-sandbox-flow
-                     'profiled-agent
-                     profile
-                     "opencode"
-                     '("--print" "hello")
-                     '()
-                     "/workspace"
-                     '(((path . ".") (mode . read-write)))
-                     'artifact
-                     'unit
-                     'artifact
-                     (list (cons 'network-policy '((mode . blocked)))
+		     'profiled-agent
+		     profile
+		     "opencode"
+		     '("--print" "hello")
+		     '()
+		     "/workspace"
+		     '(((path . ".") (mode . read-write)))
+		     'artifact
+		     (Fun AdapterResult <- Unit)
+		     (list (cons 'network-policy '((mode . blocked)))
                            (cons 'resource-policy '((task-timeout-ms . 30000)))
                            (cons 'metadata '((task . profiled-agent))))))
               (result (run-result-value
@@ -384,22 +389,27 @@
                        'always-further/opencode)
          (check-equal? (cdr (assoc 'network-policy sandbox))
                        '((mode . blocked)))
-         (check-equal? (cdr (assoc 'capabilities sandbox))
-                       '((filesystem . scoped)
-                         (credentials . injected)))
-         (check-equal? (cdr (assoc 'resource-policy sandbox))
-                       '((task-timeout-ms . 30000)
-                         (filesystem
-                          (scope . project-workspace)
-                          (paths
-                           ((role . project-workspace)
-                            (source . ".")
-                            (project-marker . "gerbil.pkg")
-                            (target . "/workspace/project")
-                            (mode . read-write))))
-                         (startup . zero-latency)
-                         (profile-timeout-ms . 120000)))
-         (check-equal? (cdr (assoc 'metadata sandbox))
-                       '((task . profiled-agent)
-                         (backend . nono)
-                         (profile . always-further/opencode))))))))
+         (let ((capabilities (cdr (assoc 'capabilities sandbox))))
+           (check-equal? (length capabilities) 2)
+           (check-equal? (cdr (assq 'filesystem capabilities)) 'scoped)
+           (check-equal? (cdr (assq 'credentials capabilities)) 'injected))
+         ;; This policy is a map. Preserve every configured value and reject
+         ;; missing/extra rows without treating POO key order as semantics.
+         (let (policy (cdr (assoc 'resource-policy sandbox)))
+           (check-equal? (length policy) 4)
+           (check-equal? (cdr (assq 'task-timeout-ms policy)) 30000)
+           (check-equal? (cdr (assq 'profile-timeout-ms policy)) 120000)
+           (check-equal? (cdr (assq 'startup policy)) 'zero-latency)
+           (check-equal? (cdr (assq 'filesystem policy))
+                         '((scope . project-workspace)
+                           (paths
+                            ((role . project-workspace)
+                             (source . ".")
+                             (project-marker . "gerbil.pkg")
+                             (target . "/workspace/project")
+                             (mode . read-write))))))
+         (let (metadata (cdr (assoc 'metadata sandbox)))
+           (check-equal? (length metadata) 3)
+           (check-equal? (cdr (assq 'task metadata)) 'profiled-agent)
+           (check-equal? (cdr (assq 'backend metadata)) 'nono)
+           (check-equal? (cdr (assq 'profile metadata)) 'always-further/opencode)))))))

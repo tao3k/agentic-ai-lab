@@ -14,7 +14,7 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files([
     "gerbil-dependencies.MODULE.bazel",
-    "t/feature-system-bundle-v1-foreign-arena-fixture.ss",
+    "core/t/feature-system-bundle-v1-foreign-arena-fixture.ss",
     "t/module-system-observability-test.ss",
     "t/profile-binding-syntax-test.ss",
     "t/profile-bundle-test.ss",
@@ -23,20 +23,36 @@ exports_files([
 
 filegroup(
     name = "runtime_v0_schema",
-    srcs = ["src/contract/runtime-v0-abi-schema.ss"],
+    srcs = ["modules/workflow/contracts/runtime-v0-abi-schema.ss"],
 )
 
 filegroup(
     name = "gerbil_package_sources",
     # This is only the Bazel sandbox projection. gerbil.pkg owns dependency
     # identity and build.ss owns the module graph compiled from these files.
-    srcs = ["gerbil.pkg"] + glob([
+    srcs = [
+        "gerbil.pkg",
+        ":core_module_sources",
+        # Context program admission observes both execution-boundary sources.
+        "packages/python-runtime/tools/watch.py",
+        "//dev:sources",
+        # Cross the existing Bazel package boundary through exported sources.
+        "//bindings/runtime-c:include/agentic_ai_lab/semantic.h",
+        "//bindings/runtime-c:src/semantic_host.c",
+        "//packages/python-runtime/src/agentic_ai_lab_runtime:reasoning_rule_sources",
+    ] + glob([
         "*.ss",
         "bindings/nono-c/**/*.h",
+        # Retained native Suite libraries and their source-relative imports
+        # must exist inside the sandbox just as they do in a checkout. This
+        # projects inputs only; build.ss still owns which targets compile.
+        "t/**/*.ss",
+        "t/qualification/context-temporal/*.c",
         "modules/**/*.ss",
-        "src/**/*.inc",
-        "src/**/*.ss",
+        "modules/**/*.inc",
         "user-interface/**/*.ss",
+        "scenarios/**/*.ss",
+        "schemas/**/*.json",
     ]),
 )
 
@@ -47,7 +63,7 @@ filegroup(
 
 filegroup(
     name = "runtime_load_projection_source",
-    srcs = ["modules/funflow/runtime-load-projection.ss"],
+    srcs = ["modules/workflow/scenario/runtime-funflow.ss"],
 )
 
 filegroup(
@@ -72,17 +88,24 @@ gerbil_project_compile(
     name = "gerbil_poo_package",
     srcs = ["@gerbil_poo_sources//:sources"],
     build_script = "@gerbil_poo_sources//:build_script",
+    # Consume the owner's current standard build entry and complete declaration.
+    # POO no longer publishes the former library command mode.
+    args = ["compile"],
+    # Use the shared host-adaptive resource guard. CI owns the aggregate
+    # dependency deadline; a cold package has no separate three-minute cutoff.
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_poo_sources//:source_resolution_receipt"],
 )
 
+
 gerbil_project_compile(
-    name = "asp_gerbil_scheme_package",
-    srcs = ["@asp_gerbil_scheme_sources//:sources"],
-    build_script = "@asp_gerbil_scheme_sources//:build_script",
+    name = "gerbil_scheme_rust_package",
+    srcs = ["@gerbil_scheme_rust_sources//:sources"],
+    # The owner's standard build declares Scheme libraries and their includes.
+    # Orgize's native C producer imports its existing public Scheme runtime.
+    build_script = "@gerbil_scheme_rust_sources//:build_script",
     require_library_output = True,
-    source_resolution_receipts = ["@asp_gerbil_scheme_sources//:source_resolution_receipt"],
-    deps = [":gerbil_poo_package"],
+    source_resolution_receipts = ["@gerbil_scheme_rust_sources//:source_resolution_receipt"],
 )
 
 gerbil_project_compile(
@@ -94,15 +117,22 @@ gerbil_project_compile(
     deps = [
         ":gerbil_poo_package",
         ":gerbil_parser_package",
+        ":gerbil_scheme_rust_package",
     ],
 )
 
-gerbil_project_compile(
-    name = "poo_flow_core_package",
-    srcs = ["core/gerbil.pkg"] + glob(
-        ["core/*.ss", "core/**/*.ss"],
-        exclude = ["core/t/**"],
+# Core is versioned as a submodule and consumed as ordinary checkout files.
+filegroup(
+    name = "core_module_sources",
+    srcs = glob(
+        ["core/*.ss", "core/**/*.ss", "core/**/*.json", "core/**/gerbil.pkg"],
+        exclude = ["core/t/**", "core/design/**", "core/module-system/design/**", "core/dev/proofs/**"],
     ),
+)
+
+gerbil_project_compile(
+    name = "yuanxu_package",
+    srcs = [":core_module_sources"],
     build_script = "core/build.ss",
     require_library_output = True,
     deps = [":gerbil_poo_package"],
@@ -111,23 +141,35 @@ gerbil_project_compile(
 gerbil_project_compile(
     name = "gerbil_parser_package",
     srcs = ["@gerbil_parser_sources//:sources"],
+    # The package owns its yuanxu! declaration and complete native closure.
     build_script = "@gerbil_parser_sources//:build_script",
     require_library_output = True,
     source_resolution_receipts = ["@gerbil_parser_sources//:source_resolution_receipt"],
     deps = [
-        ":asp_gerbil_scheme_package",
-        ":poo_flow_core_package",
+        ":yuanxu_package",
+    ],
+)
+
+gerbil_project_compile(
+    name = "gerbil_ascent_package",
+    srcs = ["@gerbil_ascent_sources//:sources"],
+    build_script = "@gerbil_ascent_sources//:build_script",
+    require_library_output = True,
+    source_resolution_receipts = ["@gerbil_ascent_sources//:source_resolution_receipt"],
+    deps = [
+        ":yuanxu_package",
     ],
 )
 
 filegroup(
     name = "dependency_packages",
     srcs = [
-        ":asp_gerbil_scheme_package",
         ":gerbil_parser_package",
+        ":gerbil_ascent_package",
         ":gerbil_poo_package",
+        ":gerbil_scheme_rust_package",
         ":orgize_package",
-        ":poo_flow_core_package",
+        ":yuanxu_package",
     ],
 )
 
@@ -135,10 +177,11 @@ filegroup(
     filegroup(name = name, srcs = [project], output_group = "receipt")
     for name, project in [
         ("gerbil_poo_package_receipt", ":gerbil_poo_package"),
-        ("asp_gerbil_scheme_package_receipt", ":asp_gerbil_scheme_package"),
+        ("gerbil_scheme_rust_package_receipt", ":gerbil_scheme_rust_package"),
         ("orgize_package_receipt", ":orgize_package"),
-        ("poo_flow_core_package_receipt", ":poo_flow_core_package"),
+        ("yuanxu_package_receipt", ":yuanxu_package"),
         ("gerbil_parser_package_receipt", ":gerbil_parser_package"),
+        ("gerbil_ascent_package_receipt", ":gerbil_ascent_package"),
     ]
 ]
 
@@ -146,7 +189,6 @@ filegroup(
     filegroup(name = name, srcs = [project], output_group = "project_root")
     for name, project in [
         ("gerbil_poo_package_project_root", ":gerbil_poo_package"),
-        ("asp_gerbil_scheme_package_project_root", ":asp_gerbil_scheme_package"),
         ("orgize_package_project_root", ":orgize_package"),
     ]
 ]
@@ -156,8 +198,12 @@ gerbil_project_compile(
     srcs = [":gerbil_package_sources"],
     args = ["compile"],
     build_script = ":build.ss",
-    env = {"GERBIL_BUILD_VERBOSE": "1"},
-    deps = [":gerbil_parser_package", ":orgize_package"],
+    # Fence compiler VMs before imports; native tools preserve this budget.
+    env = {
+        "GERBIL_BUILD_VERBOSE": "1",
+        "GAMBOPT": "max-heap=2G,debug=q",
+    },
+    deps = [":gerbil_parser_package", ":orgize_package", ":gerbil_ascent_package"],
 )
 
 gerbil_project_environment(
@@ -166,12 +212,33 @@ gerbil_project_environment(
     working_directory = "packages/python-runtime",
 )
 
+# Adapter qualification consumes the same pinned, receipt-bound POO/Core
+# projects as the product. Its build script selects the native adapter/helper
+# closure; tests still run separately through the heap-fenced Just entrypoint.
+gerbil_project_compile(
+    name = "nix_adapters",
+    srcs = [":gerbil_package_sources"] + glob([
+        "core/t/**/*.ss",
+        "t/qualification/build-publication/**/*.ss",
+        "t/qualification/nix/**/*.ss",
+    ]),
+    build_script = "t/qualification/nix/build.ss",
+    require_library_output = True,
+    deps = [":yuanxu_package"],
+)
+
+gerbil_project_environment(
+    name = "nix_adapter_test_environment",
+    project = ":nix_adapters",
+    runtime_directory = ".gerbil/nix-adapter-runtimes",
+)
+
 gerbil_project_dev(
     name = "dev_compile",
     args = ["compile"],
     build_script = ":build.ss",
     tags = ["local", "manual"],
-    deps = [":gerbil_parser_package", ":orgize_package"],
+    deps = [":gerbil_parser_package", ":orgize_package", ":gerbil_ascent_package"],
 )
 
 filegroup(name = "project_root", srcs = [":compile"], output_group = "project_root")
@@ -179,8 +246,8 @@ filegroup(name = "compile_log", srcs = [":compile"], output_group = "log")
 
 gerbil_project_projection(
     name = "wheel_smoke_projection_artifact",
-    output_name = "wheel_smoke.ss.poo-flow-projection.sexp",
+    output_name = "wheel_smoke.ss.agentic-ai-lab-projection.sexp",
     project = ":compile",
     projection_source = ":runtime_load_projection_source",
-    source = "//packages/python-runtime/src/poo_flow_runtime:wheel_smoke_projection_source",
+    source = "//packages/python-runtime/src/agentic_ai_lab_runtime:wheel_smoke_projection_source",
 )

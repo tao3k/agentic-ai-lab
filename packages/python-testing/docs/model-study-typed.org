@@ -1,0 +1,58 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Pre-registered typed observation repair pilot
+#+STATUS: frozen before typed live requests; results collected
+#+DATE: 2026-10-01
+#+FILETAGS: :testing:ascent:temporal:llm:
+
+* Repair being tested
+
+The [[file:model-study-baseline-results.org][baseline pilot]] found boundary mistakes:
+the model called completed candidate results =verified_intent= and, in
+the temporal tool arm, selected =release_authorized= despite the native
+boolean =#f=. The typed protocol hypothesizes that the Testing adapter should
+preserve booleans and state the module's claim scope in typed fields.
+This changes the observation given to the model, not ASCENT or
+temporal-causality semantics.
+
+* Frozen observation transformation
+
+Use the same five prompts, answer keys and task order from the baseline corpus
+SHA256
+=7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
+Both arms generate observations from the same live native fixtures.
+
+- =old=: exactly the baseline observation dictionary for that task.
+- =typed= for the three ASCENT tasks: copy the old dictionary and add
+  =evidence_scope="candidate_on_named_finite_snapshot"= and
+  =intent_verified=false=. For =ascent.negation-count=, keep the
+  =finite-status= and =verdict= fields.
+- =typed= for the two temporal tasks: copy the old dictionary, replace
+  string field ="release-authorized?":"#f"= with JSON boolean
+  ="release_authorized":false=, add ="causation_proven":false= and
+  ="evidence_scope":"temporal_classification_only"=. For
+  =temporal.open-parent= also add ="absence_proven":false=.
+
+No other task text, observation rows, status, answer key or prompt
+format changes. The typed fields are factual module boundaries. They
+are part of the tool intervention and may make the answer easier; that
+is the specific interface effect being measured.
+
+* Budget, order and scores
+
+DeepSeek =deepseek-flash=, Responses API through official OpenAI Python
+SDK, =reasoning.effort=none=, =temperature=0=,
+=max_output_tokens=512=, timeout 45 seconds, no retries. Three fresh
+conversations per arm and task, 30 requests maximum. Arm order per task:
+old/typed, typed/old, old/typed. The first user message is the unchanged
+case prompt; the second user message is the old or typed JSON
+observation. The existing Runtime graph transports both arms.
+
+Use the baseline strict parser and separate =choice= and =claim= exact-match
+scores. Report each case, errors, token usage and latency. The primary
+question is whether boundary scores change on the two failing tasks;
+also check that choice accuracy and the other three task boundaries do
+not regress. A three-repeat pilot cannot establish general model
+benefit. Keep raw JSONL outside the repository and freeze tool hashes
+and repository heads in the result.

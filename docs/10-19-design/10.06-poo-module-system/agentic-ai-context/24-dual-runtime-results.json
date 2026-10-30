@@ -1,0 +1,234 @@
+{
+  "schema": "context.runtime.dual-results.v1",
+  "status": "native-dual-measured-with-exact-whole-queue-replay-and-custody",
+  "optimized_throughput_claim": false,
+  "runtime": {
+    "heap": "2G",
+    "minimum_heap": "1G",
+    "watchdog_seconds": 150,
+    "no_chunking": true,
+    "no_forced_gc": true
+  },
+  "native_path_count": 360,
+  "cold_runs": [
+    {
+      "label": "qualification",
+      "receipt": {
+        "path": "/private/tmp/context-projection-qualified-20261026/owner-receipt.json",
+        "sha256": "8bae28ed103f2d3a0d24bdfd8f5d4aed9d714090c84c0959950a2a79536adb20"
+      },
+      "audit": {
+        "path": "/private/tmp/context-projection-qualified-audit-20261026.json",
+        "sha256": "01c7ed26ba005c8c08d8db3e94dadd19c4896bc5cb6e9bebc4456ddbe41a01aa"
+      },
+      "processes": [
+        {
+          "profile": "legacy-cut",
+          "paths": 60,
+          "elapsed_seconds": 88.8463609169994,
+          "closed_owners": 60
+        },
+        {
+          "profile": "canonical",
+          "paths": 60,
+          "elapsed_seconds": 53.325171290984144,
+          "closed_owners": 60
+        },
+        {
+          "profile": "legacy-missing",
+          "paths": 60,
+          "elapsed_seconds": 50.833438500005286,
+          "closed_owners": 60
+        }
+      ]
+    },
+    {
+      "label": "whole-replay",
+      "receipt": {
+        "path": "/private/tmp/context-projection-replay-20261026/owner-receipt.json",
+        "sha256": "0d312d873f6fbe01aa112d303fb0b51a5c473157b113bcb60a33d74a4c0ec0f7"
+      },
+      "audit": {
+        "path": "/private/tmp/context-projection-replay-audit-20261026.json",
+        "sha256": "7eff1ade81126b281c5397aba5ec84d3fe1ac8e4b7da14f14016802d7d55b61a"
+      },
+      "processes": [
+        {
+          "profile": "legacy-cut",
+          "paths": 60,
+          "elapsed_seconds": 53.0863524999877,
+          "closed_owners": 60
+        },
+        {
+          "profile": "canonical",
+          "paths": 60,
+          "elapsed_seconds": 48.89780829200754,
+          "closed_owners": 60
+        },
+        {
+          "profile": "legacy-missing",
+          "paths": 60,
+          "elapsed_seconds": 49.79704862498329,
+          "closed_owners": 60
+        }
+      ]
+    }
+  ],
+  "steady": {
+    "receipt": {
+      "path": "/private/tmp/context-projection-steady-20261026/cost-receipt.json",
+      "sha256": "c3c3397b575d37f8d5562ed5dc6ac48dcf749b17f45d91a9ad7675ef4220b09b"
+    },
+    "workload": "60 current-proof uses in one long-lived Context; memory and real durable adapter measured separately",
+    "phases": {
+      "context-current-memory": {
+        "count": 60.0,
+        "wall": 0.614189863204956,
+        "cpu": 0.613583,
+        "gc-cpu": 0.04521499999999978,
+        "gcs": 1.0,
+        "allocated": 3231788200.0
+      },
+      "context-current-durable": {
+        "count": 60.0,
+        "wall": 1.3713178634643555,
+        "cpu": 1.1645189999999999,
+        "gc-cpu": 0.0905089999999995,
+        "gcs": 2.0,
+        "allocated": 5763902392.0
+      },
+      "org-current-replay": {
+        "count": 60.0,
+        "wall": 0.1168360710144043,
+        "cpu": 0.11643299999999934,
+        "gc-cpu": 0.0,
+        "gcs": 0.0,
+        "allocated": 450301056.0
+      },
+      "owner-rpc-roundtrip": {
+        "count": 20000.0,
+        "wall": 0.01983189582824707,
+        "cpu": 0.01895599999999975,
+        "gc-cpu": 0.0,
+        "gcs": 0.0,
+        "allocated": 357429472.0
+      }
+    }
+  },
+  "org_replay_ab": {
+    "baseline": {
+      "count": 60.0,
+      "wall": 1.2610549926757812,
+      "cpu": 0.22133700000000012,
+      "gc-cpu": 0.0,
+      "gcs": 0.0,
+      "allocated": 731660968.0
+    },
+    "candidate": {
+      "count": 60.0,
+      "wall": 0.1168360710144043,
+      "cpu": 0.11643299999999934,
+      "gc-cpu": 0.0,
+      "gcs": 0.0,
+      "allocated": 450301056.0
+    },
+    "cpu_reduction_percent": 47.39560037409052,
+    "allocation_reduction_percent": 38.454957187220074,
+    "same_projection_digest": "sha256:c7b15940aad769e048c47289fa1f97e9a63a677eae06bdb38f5a5821b1877bcb",
+    "production_source_difference": [
+      "modules/ai-agentic-context/funs-projection.ss"
+    ],
+    "scope": "Only the timed Org replay operation is compared; candidate adds native negative controls after that phase. Other timings do not establish causal speedup.",
+    "baseline_cut": {
+      "path": "/private/tmp/context-projection-ab-20261026/baseline/cut.json",
+      "sha256": "ae95040d69f98265b4a80870ac8551de9212966fc3ba70f423ec26fd2e2431b4"
+    },
+    "baseline_source": {
+      "path": "/private/tmp/context-projection-ab-20261026/baseline.ss",
+      "sha256": "62aefdbb9ff9a4d5baa177db3c72a1489386d7d455137394674461e01e41c418"
+    },
+    "baseline_probe_source": {
+      "path": "/private/tmp/context-projection-ab-20261026/baseline-actor-cost-test.ss",
+      "sha256": "8e38afe15fc67aa5f37d276d39b1140b0a48c5b46a286e0ba24645a1458c0ce1"
+    },
+    "candidate_source": {
+      "path": "/private/tmp/context-projection-ab-20261026/candidate.ss",
+      "sha256": "c1050844b0f40b8c79c381020727759cfd2d728c859a62b591695cefdeaec9c0"
+    },
+    "baseline_process": {
+      "path": "/private/tmp/context-projection-ab-20261026/baseline/process.json",
+      "sha256": "b0d1494e199a248c0ef5d289add738602ca1488e38292abde8d45f089b6bbe47"
+    },
+    "baseline_log": {
+      "path": "/private/tmp/context-projection-ab-20261026/baseline/native.log",
+      "sha256": "7b77fff2eeea6056a7b21db83f2967a9ba0cee556050bfa95b1d7d30ae56fc81"
+    }
+  },
+  "general_core_test": {
+    "status": "failed-not-admitted",
+    "exit": 137,
+    "watchdog_seconds": 150,
+    "log": {
+      "path": "/private/tmp/context-projection-core-test-20261026.log",
+      "sha256": "c4f739d3a910552a181a363f5e46dae5b2fbdb858c73171a308ff6490fe744c3"
+    }
+  },
+  "proof_kernel_experiment": {
+    "selected": false,
+    "reason": "No demonstrated CPU gain; implementation removed, experiment preserved.",
+    "decision": {
+      "path": "/private/tmp/context-native-row-experiment-preserved-20261026/decision.json",
+      "sha256": "95af9fc480375939a16d2603909ea8c0aec30d43d1eacb89c9b661b55f86fceb"
+    }
+  },
+  "models": [
+    {
+      "name": "credential",
+      "summary": {
+        "path": "/private/tmp/context-runtime-credential-model-20261026/summary.json",
+        "sha256": "338927eec90dba5c2b5dfe5bb2af7620e6952d29fd8245ce41c398621cd0a314"
+      },
+      "executed": 960,
+      "expected_unsafe": 520,
+      "unexpected": 0,
+      "model_sha256": "ce497d2666e215201160902d1c6ee2776ea6667b201fe1a38b4237212bbf06a7",
+      "runner_sha256": "a8f0d73b14eed8e7d257f8b04c28f8fe334481cc92fdf9e9d1d45eea52080c3e",
+      "native_refinement_proved": false
+    },
+    {
+      "name": "migration",
+      "summary": {
+        "path": "/private/tmp/context-runtime-migration-model-20261026/summary.json",
+        "sha256": "afaab89564a3ca46d259283abdcbb67d22804bd846400323b8751d40de48f11e"
+      },
+      "executed": 2520,
+      "expected_unsafe": 818,
+      "unexpected": 0,
+      "model_sha256": "202e40d0d87d3387986223c8167c500df7a8a04ba5eccd2f0470c0cf08ee8c04",
+      "runner_sha256": "cb82cf5083c8b80201a1e212c9981dc2ad6972bb226363a2a7d1669af7cdbeca",
+      "native_refinement_proved": false
+    },
+    {
+      "name": "owner",
+      "summary": {
+        "path": "/private/tmp/context-runtime-owner-model-20261026/summary.json",
+        "sha256": "ebc16c2a2b7fa850921699886e03ee5066e10642aa63528a4f591e84e21e75d5"
+      },
+      "executed": 1920,
+      "expected_unsafe": 251,
+      "unexpected": 0,
+      "model_sha256": "a3d3ebba312d1f7fbf789e6d0955099ffb3703671feba72651dca486d65711db",
+      "runner_sha256": "2d42240148d19eb3476329a8e977edd50c28ecf2c21104d703ef0736f741783a",
+      "native_refinement_proved": false
+    }
+  ],
+  "matched_profile_crash": {
+    "path": "/private/tmp/context-projection-matched-crash-20261026/crash-receipt.json",
+    "sha256": "f2c03a70f2bf1aabd418cb1ee3c449421810f21253e1bf5bc8f50c527ec57c9d"
+  },
+  "custody": {
+    "path": "/private/tmp/context-projection-custody-20261026/manifest.json",
+    "sha256": "8a864a35b624b19adad2fe8624fb0ed346e1d744f058030ef4be73a150cb2bef"
+  },
+  "custody_scope": "Verified source/native object bytes; requires the original SDK and operating system; not hermetic."
+}

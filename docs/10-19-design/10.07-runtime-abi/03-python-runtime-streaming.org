@@ -7,7 +7,7 @@
 * Boundary
 
 The Python runtime graph now exposes a LangGraph-style =stream= surface without
-adding LangGraph or LangChain as dependencies. This stays inside the POO Flow
+adding LangGraph or LangChain as dependencies. This stays inside the Agentic AI Lab
 runtime package and keeps the stable upstream boundary as C ABI validation plus
 Python-native runtime execution.
 

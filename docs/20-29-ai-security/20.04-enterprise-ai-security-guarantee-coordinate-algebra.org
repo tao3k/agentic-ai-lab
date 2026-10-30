@@ -13,13 +13,13 @@ Research snapshot: 2026-07-30.
 
 * Engine boundary
 
-POO Flow is the general POO-native architecture-semantics composition engine.
+Agentic AI Lab is the general POO-native architecture-semantics composition engine.
 It is not a three-layer, seven-layer, nine-pillar, ten-layer, control-plane,
 data-plane, or enterprise-security architecture.
 
 This document models how independently owned security architectures can be
 represented, related, composed, admitted, projected, and replayed by the
-engine. It does not add a public POO Flow DSL or declare a universal industry
+engine. It does not add a public Agentic AI Lab DSL or declare a universal industry
 standard.
 
 * Research finding
@@ -144,7 +144,7 @@ source. The initial open set is:
 
 This is an extensible semantic set, not an ordered stack. A package may import
 some coordinate kinds and omit others. New frameworks may add kinds without
-changing the POO Flow engine ontology.
+changing the Agentic AI Lab engine ontology.
 
 * Enterprise guarantee claim
 
@@ -263,7 +263,7 @@ Response must also reason about:
 - whether recovery restores the violated invariant;
 - whether an independent party can replay the decision from evidence.
 
-POO Flow composes these =ObservationEvent=, =RecoveryDecision=, continuation,
+Agentic AI Lab composes these =ObservationEvent=, =RecoveryDecision=, continuation,
 effect, and evidence-root semantics. It does not become a traditional ADR
 product or own a vendor's telemetry system.
 
@@ -360,7 +360,7 @@ contained, observed, recovered, or replayable.
 
 The first coordinate-algebra proof unit is implemented at:
 
-- =packages/proofs/lean/PooFlowProof/Enterprise/AISecurityGuaranteeCoordinateAlgebraClosure.lean=
+- =packages/proofs/lean/AgenticAILabProof/Enterprise/AISecurityGuaranteeCoordinateAlgebraClosure.lean=
 
 It closes the eight obligations named above:
 
@@ -381,13 +381,13 @@ continuity, and bundle-only replay.
 Validation receipts:
 
 - focused source check:
-  =lake env lean PooFlowProof/Enterprise/AISecurityGuaranteeCoordinateAlgebraClosure.lean=
+  =lake env lean AgenticAILabProof/Enterprise/AISecurityGuaranteeCoordinateAlgebraClosure.lean=
   completed successfully;
 - focused module build:
-  =lake build PooFlowProof.Enterprise.AISecurityGuaranteeCoordinateAlgebraClosure=
+  =lake build AgenticAILabProof.Enterprise.AISecurityGuaranteeCoordinateAlgebraClosure=
   completed successfully with =2/2= jobs;
 - enterprise aggregate:
-  =lake env lean PooFlowProof/Enterprise.lean=
+  =lake env lean AgenticAILabProof/Enterprise.lean=
   completed successfully;
 - full Lean build:
   =lake build=
@@ -406,13 +406,13 @@ engine ontology:
 
 - Snowflake Data, Model, and Agent are protection-object coordinates;
 - CSA's three operational domains are reference-architecture coordinates;
-- POO Flow guarantee families are target semantics;
+- Agentic AI Lab guarantee families are target semantics;
 - =partial= and =unknown= mappings remain outside the proven region.
 
 The versioned bundle contains eight claims.  Six enter proof coverage and two
 require escalation.  The corresponding Lean module is:
 
-- =PooFlowProof/Enterprise/AISecurityExternalFrameworkMappingBundleClosure.lean=
+- =AgenticAILabProof/Enterprise/AISecurityExternalFrameworkMappingBundleClosure.lean=
 
 The bundle and independent receipt are maintained under:
 
@@ -439,12 +439,12 @@ four separate stages:
 This follows the useful separation in the in-toto Attestation Framework
 between subject, predicate, statement, envelope, and bundle, while SCITT adds
 registration policy, transparency receipts, and log replay.  These frameworks
-are external evidence coordinates; they do not become the POO Flow engine
+are external evidence coordinates; they do not become the Agentic AI Lab engine
 ontology.
 
 The corresponding Lean proof unit is:
 
-- =PooFlowProof/Enterprise/AISecurityEvidenceAttestationAssuranceClosure.lean=
+- =AgenticAILabProof/Enterprise/AISecurityEvidenceAttestationAssuranceClosure.lean=
 
 It proves:
 
@@ -487,7 +487,7 @@ These are different assurance coordinates.  Static declaration and runtime
 resolution prove availability metadata, not executable semantic conformance.
 The corresponding profile is implemented in:
 
-- =PooFlowProof/Enterprise/AISecurityCapabilityConformanceAttestationClosure.lean=
+- =AgenticAILabProof/Enterprise/AISecurityCapabilityConformanceAttestationClosure.lean=
 
 =ASR-EXACT-PROJECTION-006= demonstrates the distinction.  ASP healthcheck is
 green, the Rust manifest is contract-valid, and the runtime provider resolves.

@@ -6,7 +6,9 @@
 ;;; Boundary: this integration test imports precise Module System and User
 ;;; Interface owners without a module-system aggregate.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :clan/poo/mop make-instance)
+        (only-in :clan/poo/type Record String List)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
                  check-eq?
@@ -18,44 +20,44 @@
                  test-error
                  test-suite)
         (only-in :clan/poo/object .o .ref .slot?)
-        :poo-flow/src/authoring/module-interface
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/authoring/module-descriptor
-        :poo-flow/src/authoring/module-source-collection
-        :poo-flow/src/user-interface/module-source-tree
-        :poo-flow/src/authoring/module-option-projection
-        :poo-flow/src/user-interface/module-runtime-presentation
-        :poo-flow/src/user-interface/module-value-catalog
-        :core/module-system/loader/objects
-        :core/module-system/projection/option-objects
-        :core/module-system/projection/option-validation
-        :poo-flow/src/user-interface/module-diagnostics
-        :poo-flow/src/user-interface/doctor-presentation
-        :poo-flow/src/authoring/module-imports
-        :core/module-system/source/objects
-        :core/module-system/funs
-        :poo-flow/src/user-interface/module-activation
-        :core/module-system/catalog/objects
-        :poo-flow/src/user-interface/module-authoring-syntax
-        :poo-flow/src/user-interface/facade)
+        :agentic-ai-lab/modules/module-authoring/module-interface
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/module-authoring/module-descriptor
+        :yuanxu/module-system/source/collection
+        (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-source-tree
+        :agentic-ai-lab/modules/module-authoring/module-option-projection
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
+        :yuanxu/module-system/catalog/values
+        :yuanxu/module-system/loader/objects
+        :yuanxu/module-system/projection/option-objects
+        :yuanxu/module-system/projection/option-validation
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-diagnostics
+        :agentic-ai-lab/modules/workflow/scenario/configuration/doctor-presentation
+        :yuanxu/module-system/source/imports
+        :yuanxu/module-system/source/objects
+        :yuanxu/module-system/funs
+        :agentic-ai-lab/modules/workflow/scenario/configuration/module-activation
+        :yuanxu/module-system/catalog/objects
+        :yuanxu/module-system/authoring/syntax)
 
 (export module-system-user-interface-test)
 
 ;; : (-> Unit PooModuleInterface)
 (def user-child-interface
-  (poo-flow-module-interface
+  (yuanxu-module-interface
    "UserChildProfile"
-   (poo-flow-module-option-block
-    surface: (poo-flow-string-constant "poo-flow")
-    child-mode: (poo-flow-string-default "helper")
-    layers: (poo-flow-option-append 'List '("base"))
-    priority: (poo-flow-option-override 'String "base")
-    mode-lock: (poo-flow-option-conflict 'String))
+   (Record
+    surface: [String constant: "agentic-ai-lab"]
+    child-mode: [String default: "helper"]
+    layers: [(List String) policy: 'append default: '("base")]
+    priority: [String policy: 'override default: "base"]
+    mode-lock: [String policy: 'conflict])
    '((audience . user))))
 
 ;; : (-> Unit PooModuleDescriptor)
 (def user-child-module
-  (pooFlowModules
+  (agenticAiLabModules
    user-child-interface
    (.o id: 'user-child
        group: 'tools
@@ -64,35 +66,35 @@
        depth: (cons -20 20)
        phase-files: '((init . "child/init.ss")
                       (config . "child/config.ss"))
-       config: (poo-flow-module-option-block
-                surface: "poo-flow"
+       config: (yuanxu-module-option-block
+                surface: "agentic-ai-lab"
                 child-mode: "helper"
                 layers: '("child")
                 priority: "child"
                 mode-lock: "stable")
-       hooks: (poo-flow-module-hook-block
+       hooks: (yuanxu-module-hook-block
                (after-config child-ready)))))
 
 ;; : (-> Unit PooModuleInterface)
 (def user-root-interface
-  (poo-flow-module-interface
+  (yuanxu-module-interface
    "UserRootProfile"
-   (poo-flow-module-option-block
-    surface: (poo-flow-string-constant "poo-flow")
-    mode: (poo-flow-string-default "interactive")
-    layers: (poo-flow-option-append 'List '("base"))
-    priority: (poo-flow-option-override 'String "base")
-    mode-lock: (poo-flow-option-conflict 'String))
+   (Record
+    surface: [String constant: "agentic-ai-lab"]
+    mode: [String default: "interactive"]
+    layers: [(List String) policy: 'append default: '("base")]
+    priority: [String policy: 'override default: "base"]
+    mode-lock: [String policy: 'conflict])
    '((audience . user)
      (surface . module-system))))
 
 ;; : (-> Unit PooModuleDescriptor)
-(defpoo-flow-module user-root-module
+(defagentic-ai-lab-module user-root-module
   user-root-interface
   (id 'user-root)
-  (imports (poo-flow-import ":user/root#child" user-child-module))
-  (config (poo-flow-module-option-block
-           surface: "poo-flow"
+  (imports (yuanxu-import ":user/root#child" user-child-module))
+  (config (yuanxu-module-option-block
+           surface: "agentic-ai-lab"
            mode: "interactive"
            layers: '("root")
            priority: "root"
@@ -104,71 +106,71 @@
 
 ;; : (-> Unit PooModuleDescriptor)
 (def invalid-user-module
-  (pooFlowModules
+  (agenticAiLabModules
    user-root-interface
    (.o id: 'invalid-user
-       config: (poo-flow-module-option-block
+       config: (yuanxu-module-option-block
                 surface: "wrong-surface"
                 unknown-option: "left-unclaimed"))))
 
 ;; : (-> Unit PooModuleSourceRef)
 (def loader-child-source
-  (poo-flow-local-source "loaded/child.ss"))
+  (yuanxu-local-source "loaded/child.ss"))
 
 ;; : (-> Unit PooModuleSourceRef)
 (def loader-root-source
-  (poo-flow-local-source "loaded/root.ss"))
+  (yuanxu-local-source "loaded/root.ss"))
 
 ;; : (-> Unit PooModuleSourceRef)
 (def loader-missing-source
-  (poo-flow-local-source "loaded/missing.ss"))
+  (yuanxu-local-source "loaded/missing.ss"))
 
 ;; : (-> Unit PooModuleDescriptor)
 (def loader-child-module
-  (make-empty-poo-flow-module-descriptor
+  (make-empty-agentic-ai-lab-module-descriptor
    'loaded-child
    '()
    '((loaded-child . #t))))
 
 ;; : (-> Unit PooModuleDescriptor)
 (def loader-root-module
-  (make-empty-poo-flow-module-descriptor
+  (make-empty-agentic-ai-lab-module-descriptor
    'loaded-root
    '(loaded-child)
    '((loaded-root . #t))))
 
 ;; : (-> Unit PooModuleLoaderBackend)
 (def user-static-loader
-  (poo-flow-module-static-loader
+  (yuanxu-module-static-loader
    'user-static-loader
    'local
-   (list (make-poo-flow-module-loader-entry loader-root-source
-                                            loader-root-module)
-         (make-poo-flow-module-loader-entry loader-child-source
-                                            loader-child-module))))
+   (list (make-instance ModuleSourceBinding source: loader-root-source
+                                            module: loader-root-module)
+         (make-instance ModuleSourceBinding source: loader-child-source
+                                            module: loader-child-module))))
 
 ;; : (-> Unit PooModuleValueCatalog)
 (def user-catalog
-  (pooFlowModuleCatalog user-root-module invalid-user-module))
+  (yuanxuModuleCatalog user-root-module invalid-user-module))
 
 ;; : (-> Unit PooModuleValueCatalog)
-(defpoo-flow-module-set user-macro-catalog
+(defyuanxu-module-set user-macro-catalog
   (modules user-root-module)
-  (poo-flow-module-when #t user-child-module)
-  (poo-flow-module-when #f invalid-user-module))
+  (yuanxu-module-when #t user-child-module)
+  (yuanxu-module-when #f invalid-user-module))
 
 ;; : (-> Identifier Syntax)
-(defpoo-flow-module-object-block poo-flow-module-user-block)
+(defyuanxu-module-object-block agentic-ai-lab-module-user-block)
 
 ;; : (-> Unit POOObject)
 (def user-generated-poo-block
-  (poo-flow-module-user-block
-   generated: "poo-flow"
+  (agentic-ai-lab-module-user-block
+   generated: "agentic-ai-lab"
    policy: 'slot-based))
 
 ;; : (-> Unit POOObject)
 (def user-generated-hook-block
-  (poo-flow-module-hook-block
+  (yuanxu-module-hook-block
    (before-init prepare-state)
    (after-config child-ready)))
 
@@ -180,62 +182,62 @@
 ;;; This suite guards the compact user-facing module syntax from depending on
 ;;; internal loader or registry owners.
 (def module-system-user-interface-test
-  (test-suite "poo-flow module system user interface"
-    (poo-flow-test-case "declares modules through explicit public owners"
-      (check-equal? (poo-flow-module-descriptor? user-root-module) #t)
-      (check-equal? (poo-flow-module-name user-root-module) 'user-root)
-      (check-equal? (poo-flow-module-interface-id
-                     (poo-flow-module-interface-object user-root-module))
+  (test-suite "agentic-ai-lab module system user interface"
+    (yuanxu-test-case "declares modules through explicit public owners"
+      (check-equal? (agentic-ai-lab-module-descriptor? user-root-module) #t)
+      (check-equal? (agentic-ai-lab-module-name user-root-module) 'user-root)
+      (check-equal? (yuanxu-module-interface-id
+                     (agentic-ai-lab-module-interface-object user-root-module))
                     "UserRootProfile")
-      (check-equal? (poo-flow-module-group user-root-module)
-                    poo-flow-brand-group)
-      (let* ((imports (poo-flow-module-imports user-root-module))
+      (check-equal? (agentic-ai-lab-module-group user-root-module)
+                    agentic-ai-lab-brand-group)
+      (let* ((imports (yuanxu-module-imports user-root-module))
              (first-import (car imports))
              (source-ref (.ref first-import 'source-ref)))
         (check-equal? (length imports) 1)
-        (check-equal? (poo-flow-import? first-import) #t)
-        (check-equal? (poo-flow-module-source-ref-kind source-ref) 'local)
-        (check-equal? (poo-flow-module-source-ref-value source-ref)
+        (check-equal? (yuanxu-import? first-import) #t)
+        (check-equal? (yuanxu-module-source-ref-kind source-ref) 'local)
+        (check-equal? (yuanxu-module-source-ref-value source-ref)
                       ":user/root#child")
         (check-equal? (.ref first-import 'profile) user-child-module))
-      (check-equal? (poo-flow-module-extensions user-root-module)
+      (check-equal? (agentic-ai-lab-module-extensions user-root-module)
                     '(root-extension))
-      (check-equal? (poo-flow-module-scripts user-root-module)
+      (check-equal? (agentic-ai-lab-module-scripts user-root-module)
                     '(root-script))
-      (check-equal? (poo-flow-module-metadata user-root-module)
+      (check-equal? (agentic-ai-lab-module-metadata user-root-module)
                     '((audience . user)
                       (owner . public-interface))))
-    (poo-flow-test-case "exposes Doom-style user predicates as explicit data checks"
-      (check-equal? (poo-flow-module-group user-child-module) 'tools)
-      (check-equal? (poo-flow-module-flags user-child-module) '(+helper))
-      (check-equal? (poo-flow-module-features user-child-module)
+    (yuanxu-test-case "exposes Doom-style user predicates as explicit data checks"
+      (check-equal? (agentic-ai-lab-module-group user-child-module) 'tools)
+      (check-equal? (agentic-ai-lab-module-flags user-child-module) '(+helper))
+      (check-equal? (agentic-ai-lab-module-features user-child-module)
                     '(child-profile))
-      (check-equal? (poo-flow-module-depth-value user-child-module 'init) -20)
-      (check-equal? (poo-flow-module-depth-value user-child-module 'config) 20)
-      (check-equal? (poo-flow-module-phase-file user-child-module 'config)
+      (check-equal? (yuanxu-module-depth-value user-child-module 'init) -20)
+      (check-equal? (yuanxu-module-depth-value user-child-module 'config) 20)
+      (check-equal? (yuanxu-module-phase-file user-child-module 'config)
                     "child/config.ss")
-      (check-equal? (poo-flow-module-hook-values user-child-module 'after-config)
+      (check-equal? (yuanxu-module-hook-values user-child-module 'after-config)
                     '(child-ready))
-      (check-equal? (poo-flow-module-active? user-child-module '+helper '-missing)
+      (check-equal? (agentic-ai-lab-module-active? user-child-module '+helper '-missing)
                     #t)
-      (check-equal? (poo-flow-module-active? user-child-module '+missing)
+      (check-equal? (agentic-ai-lab-module-active? user-child-module '+missing)
                     #f)
-      (check-equal? (poo-flow-module-value-catalog-active? user-catalog 'user-root)
+      (check-equal? (agentic-ai-lab-module-value-catalog-active? user-catalog 'user-root)
                     #t)
-      (check-equal? (poo-flow-module-value-catalog-active? user-catalog 'user-child)
+      (check-equal? (agentic-ai-lab-module-value-catalog-active? user-catalog 'user-child)
                     #f)
-      (check-equal? (poo-flow-module-value-catalog-active? user-catalog 'invalid-user '+helper)
+      (check-equal? (agentic-ai-lab-module-value-catalog-active? user-catalog 'invalid-user '+helper)
                     #f))
-    (poo-flow-test-case "projects catalog eval and presentation for users"
-      (let* ((workflow (poo-flow-module-workflow user-root-module '("after-config")))
-             (evaluation (poo-flow-module-evaluate user-root-module))
-             (eval-result (pooFlowEvalModules user-catalog 'user-root '("after-config")))
+    (yuanxu-test-case "projects catalog eval and presentation for users"
+      (let* ((workflow (agentic-ai-lab-module-workflow user-root-module '("after-config")))
+             (evaluation (agentic-ai-lab-module-evaluate user-root-module))
+             (eval-result (agenticAiLabEvalModules user-catalog 'user-root '("after-config")))
              (presentation
-              (pooFlowModuleSystemPresentation
+              (agenticAiLabModuleSystemPresentation
                user-catalog
                'user-root
                '("after-config"))))
-        (check-equal? (.ref workflow 'kind) poo-flow-module-workflow-kind)
+        (check-equal? (.ref workflow 'kind) agentic-ai-lab-module-workflow-kind)
         (check-equal? (.ref evaluation 'module-ids) '(user-root user-child))
         (check-equal? (.ref evaluation 'init-module-ids)
                       '(user-child user-root))
@@ -244,74 +246,77 @@
         (check-equal? (.ref eval-result 'hook-count) 1)
         (check-equal? (.ref presentation 'catalog-module-count) 2)
         (check-equal? (.ref presentation 'root-module-id) 'user-root)
-        (check-equal? (.ref presentation 'brand-name) poo-flow-brand-name)
-        (check-equal? (has-member? "poo-flow-module-value-catalog-active?"
+        (check-equal? (.ref presentation 'brand-name) agentic-ai-lab-brand-name)
+        (check-equal? (has-member? "agentic-ai-lab-module-value-catalog-active?"
                                    (.ref presentation 'user-entrypoints))
       #t)))
-    (poo-flow-test-case "returns validation receipts for user config mistakes"
+    (yuanxu-test-case "returns validation receipts for user config mistakes"
       (let* ((receipts
-              (poo-flow-module-option-validation-receipts invalid-user-module))
+              (agentic-ai-lab-module-option-validation-receipts invalid-user-module))
              (codes
-              (map poo-flow-module-option-validation-receipt-code receipts)))
-        (check-equal? (length receipts) 2)
+              (map (cut .get <> code) receipts)))
+        (check-equal? (length receipts) 5)
+        (check-equal? (length (filter (lambda (receipt)
+                                      (not (.get receipt valid?)))
+                                    receipts)) 2)
         (check-equal? (has-member? 'constant-mismatch codes) #t)
         (check-equal? (has-member? 'missing-schema codes) #t)))
-    (poo-flow-test-case "loads source refs into catalogs before resolver activation"
+    (yuanxu-test-case "loads source refs into catalogs before resolver activation"
       (let* ((sources (list loader-root-source loader-child-source))
              (backends (list user-static-loader))
              (receipts
-              (poo-flow-module-load-source-receipts backends sources))
+              (yuanxu-module-load-source-receipts backends sources))
              (catalog
-              (poo-flow-module-load-catalog 'loaded-user-catalog
+              (agentic-ai-lab-module-load-catalog 'loaded-user-catalog
                                             backends
                                             sources))
             (doctor
-              (poo-flow-module-resolve-doctor catalog sources))
+              (agentic-ai-lab-module-resolve-doctor catalog sources))
              (activation
-              (poo-flow-module-resolve-and-activate catalog sources)))
-        (check-equal? (map poo-flow-module-load-receipt-code receipts)
+              (agentic-ai-lab-module-resolve-and-activate catalog sources)))
+        (check-equal? (map (cut .get <> code) receipts)
                       '(loaded loaded))
-        (check-equal? (map poo-flow-module-load-receipt-backend-name receipts)
+        (check-equal? (map (cut .get <> backend-name) receipts)
                       '(user-static-loader user-static-loader))
-        (check-equal? (poo-flow-module-catalog-name catalog)
+        (check-equal? (.get catalog name)
                       'loaded-user-catalog)
-        (check-equal? (map poo-flow-module-name
-                           (poo-flow-module-catalog-modules catalog))
+        (check-equal? (map agentic-ai-lab-module-name
+                           (yuanxu-module-catalog-modules catalog))
                       '(loaded-root loaded-child))
-        (check-equal? (poo-flow-module-doctor-report-status doctor)
+        (check-equal? (yuanxu-module-doctor-report-status doctor)
                       'warning)
-        (check-equal? (poo-flow-module-names
-                       (poo-flow-module-activation-modules activation))
+        (check-equal? (agentic-ai-lab-module-names
+                       (agentic-ai-lab-module-activation-modules activation))
                       '(loaded-root loaded-child))))
-    (poo-flow-test-case "presents doctor evidence without runtime execution"
+    (yuanxu-test-case "presents doctor evidence without runtime execution"
       (let* ((doctor-presentation
-              (pooFlowModuleDoctorPresentation user-catalog 'user-root))
+              (agenticAiLabModuleDoctorPresentation user-catalog 'user-root))
              (source-presentation
-              (pooFlowModuleSourceDoctorPresentation
+              (agenticAiLabModuleSourceDoctorPresentation
                (list user-static-loader)
                (list loader-root-source loader-child-source)))
              (missing-source-presentation
-              (pooFlowModuleSourceDoctorPresentation
+              (agenticAiLabModuleSourceDoctorPresentation
                (list user-static-loader)
                (list loader-missing-source)))
              (source-doctor
               (.ref source-presentation 'module-doctor)))
         (check-equal? (.ref doctor-presentation 'kind)
-                      poo-flow-module-doctor-presentation-kind)
+                      agentic-ai-lab-module-doctor-presentation-kind)
         (check-equal? (.ref doctor-presentation 'root-module-id)
                       'user-root)
         (check-equal? (.ref doctor-presentation 'runtime-executed)
                       #f)
         (check-equal? (.ref doctor-presentation 'brand-name)
-                      poo-flow-brand-name)
+                      agentic-ai-lab-brand-name)
         (check-equal? (.ref doctor-presentation 'runtime-owner)
                       "marlin-agent-core")
         (check-equal? (.ref source-presentation 'kind)
-                      poo-flow-module-source-doctor-presentation-kind)
+                      agentic-ai-lab-module-source-doctor-presentation-kind)
         (check-equal? (.ref source-presentation 'loaded-count) 2)
         (check-equal? (.ref source-presentation 'load-status) 'ok)
         (check-equal? (.ref source-presentation 'brand-name)
-                      poo-flow-brand-name)
+                      agentic-ai-lab-brand-name)
         (check-equal? (.ref missing-source-presentation 'loaded-count) 0)
         (check-equal? (.ref missing-source-presentation 'missing-count) 1)
         (check-equal? (.ref missing-source-presentation 'load-status) 'error)
@@ -320,13 +325,13 @@
                       "marlin-agent-core")
         (check-equal? (.ref source-doctor 'root-module-id)
                       'loaded-root)))
-    (poo-flow-test-case "uses Gerbil-hosted higher-order macros for POO blocks"
+    (yuanxu-test-case "uses Gerbil-hosted higher-order macros for POO blocks"
       (check-equal? (not
                      (not
                       (.slot? user-generated-poo-block 'generated)))
                     #t)
       (check-equal? (.ref user-generated-poo-block 'generated)
-                    "poo-flow")
+                    "agentic-ai-lab")
       (check-equal? (.ref user-generated-poo-block 'policy)
                     'slot-based)
       (check-equal? (not
@@ -337,17 +342,17 @@
                     '(prepare-state))
       (check-equal? (.ref user-generated-hook-block 'after-config)
                     '(child-ready)))
-    (poo-flow-test-case "builds module sets with Gerbil macro authoring"
+    (yuanxu-test-case "builds module sets with Gerbil macro authoring"
       (let* ((modules (.ref user-macro-catalog 'modules))
-             (eval-result (pooFlowEvalModules user-macro-catalog 'user-root)))
+             (eval-result (agenticAiLabEvalModules user-macro-catalog 'user-root)))
         (check-equal? (length modules) 2)
-        (check-equal? (map poo-flow-module-name modules)
+        (check-equal? (map agentic-ai-lab-module-name modules)
                       '(user-root user-child))
-        (check-equal? (poo-flow-module-value-catalog-active? user-macro-catalog
+        (check-equal? (agentic-ai-lab-module-value-catalog-active? user-macro-catalog
                                                              'user-child
                                                              '+helper)
                       #t)
-        (check-equal? (poo-flow-module-value-catalog-active? user-macro-catalog 'invalid-user)
+        (check-equal? (agentic-ai-lab-module-value-catalog-active? user-macro-catalog 'invalid-user)
                       #f)
         (check-equal? (.ref eval-result 'module-count) 2))))
   )

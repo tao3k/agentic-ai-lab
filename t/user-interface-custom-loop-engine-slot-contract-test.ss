@@ -6,13 +6,13 @@
 ;;; Boundary: focused user-interface loop-engine POO slot contract failures.
 ;;; Invariant: malformed slots fail before presentation emits intent rows.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
-        :poo-flow/src/user-interface/module-selection
-        :poo-flow/src/user-interface/facade
-        :poo-flow/src/user-interface/init-syntax)
+        :yuanxu/module-system/selection/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
 
 (export user-interface-custom-loop-engine-slot-contract-test)
 
@@ -78,15 +78,15 @@
 ;;; are only reachable through downstream-style `use-module` declarations.
 ;; : (-> [PooUserModuleSelection] POOObject)
 (def (custom-loop-presentation module-bundle)
-  (pooFlowUserConfigPresentation
-   (pooFlowUserConfig
-    (poo-flow-user-module-bundles->modules (list module-bundle))
-    (poo-flow-settings))))
+  (agenticAiLabUserConfigPresentation
+   (yuanxuUserConfig
+    (yuanxu-user-module-bundles->modules (list module-bundle))
+    (yuanxu-settings))))
 
 ;;; POO object slot contracts fail before presentation can emit bad intent rows.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-invalid-poo-slot-case)
-  (poo-flow-test-case "rejects invalid loop-engine POO object slot types"
+  (yuanxu-test-case "rejects invalid loop-engine POO object slot types"
     (check-equal?
      (with-catch
       (lambda (_) #t)
@@ -99,7 +99,7 @@
 ;;; objects: malformed recall/commit declarations never become receipts.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-invalid-memory-slot-case)
-  (poo-flow-test-case "rejects invalid loop-engine memory-policy slot types"
+  (yuanxu-test-case "rejects invalid loop-engine memory-policy slot types"
     (check-equal?
      (with-catch
       (lambda (_) #t)
@@ -112,7 +112,7 @@
 ;;; Compression policy has the same fail-fast POO slot boundary as memory.
 ;; : TestCase
 (def (user-interface-custom-loop-engine-invalid-compression-slot-case)
-  (poo-flow-test-case "rejects invalid loop-engine compression-policy slot types"
+  (yuanxu-test-case "rejects invalid loop-engine compression-policy slot types"
     (check-equal?
      (with-catch
       (lambda (_) #t)
@@ -124,7 +124,7 @@
 
 ;; : TestSuite
 (def user-interface-custom-loop-engine-slot-contract-test
-  (test-suite "poo-flow custom loop-engine slot contracts"
+  (test-suite "agentic-ai-lab custom loop-engine slot contracts"
     (user-interface-custom-loop-engine-invalid-poo-slot-case)
     (user-interface-custom-loop-engine-invalid-memory-slot-case)
     (user-interface-custom-loop-engine-invalid-compression-slot-case)))

@@ -6,8 +6,8 @@ from dataclasses import replace
 
 import pytest
 
-from poo_flow_proof.embodied_ai_security_change_impact_replay import canonical_graph
-from poo_flow_proof.embodied_ai_security_relation_graph import (
+from agentic_ai_lab_proof.embodied_ai_security_change_impact_replay import canonical_graph
+from agentic_ai_lab_proof.embodied_ai_security_relation_graph import (
     ArchitectureNode,
     NodeKind,
     project_change_impact,

@@ -1,0 +1,12 @@
+(candidate
+  (relation path 2)
+  (relation allowed 2)
+  (relation weighted 2)
+  (relation summary 2)
+  (rule (path ?x ?y) (edge ?x ?y))
+  (rule (path ?x ?y) (edge ?x ?z) (path ?z ?y))
+  (rule (allowed ?x ?y) (path ?x ?y) (not (blocked ?x ?y)))
+  (rule (weighted ?x ?w) (allowed ?x ?y) (weight ?y ?v) (compute ?w (* ?v 2)) (where even? ?w))
+  (rule (summary ?x ?s) (root ?x) (reduce ?s (sum ?w) (weighted ?x ?w)))
+  (query summary ?x ?s)
+  (limits 16 64 128))

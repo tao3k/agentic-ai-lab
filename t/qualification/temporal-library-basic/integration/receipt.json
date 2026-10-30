@@ -1,0 +1,22 @@
+{
+  "schema": "agentic-ai-lab.pr34-library-integration.v1",
+  "pr_url": "https://github.com/tao3k/agentic-ai-lab/pull/34",
+  "base_head": "273e637d2e6055ef072816f5567705afd17c78b7",
+  "historical_qualification_commit": "7ab549d060c98b9a0997f6f1879da3d0eec4b07d",
+  "test_scope": "focused loader, durable fixture environment, cache, artifact, AOT command unit tests; no current SemanticRuntime native or real-model qualification",
+  "test_command": "PYTHONPATH=packages/python-runtime/src <existing-python-venv>/bin/python -m pytest -q packages/python-runtime/tests/unit/test_scheme_load_runner.py packages/python-runtime/tests/unit/test_scheme_durable_fixture_environment.py packages/python-runtime/tests/unit/test_scheme_load_cache.py packages/python-runtime/tests/unit/test_scheme_load_artifact.py packages/python-runtime/tests/unit/test_scheme_load_aot_command.py --junitxml=t/qualification/temporal-library-basic/integration/tests.xml",
+  "results": {
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "source_sha256": {
+    "packages/python-runtime/src/agentic_ai_lab_runtime/_scheme_load_runner.py": "b40d553b84b6f9a2ad551dc04e3697abacc22e7a9f59b76f66dd5e5f34e83275",
+    "packages/python-runtime/tests/unit/scheme_durable_fixtures.py": "96d21ab2fb10fae626b22003f97acb0e7fb8f9896cd553f82c73e26049f1f503",
+    "packages/python-runtime/tests/unit/test_scheme_load_runner.py": "ee969959d835a62082e4bcd3a86455dd0d9809ad2c82fbe1e668590a9d85c4bb",
+    "packages/python-runtime/tests/unit/test_scheme_durable_fixture_environment.py": "0aca7ef5b0966bbd0a68f91813e8b69c4895d9564ee1002bf43b49a22ca85e4e"
+  },
+  "junit_sha256": "e9b85283a02180d581ceb98bb8fe40c9bce2c12738a0cdf4f2f59d441dc841e6",
+  "historical_archive_verified_files": 226
+}

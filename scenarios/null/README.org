@@ -1,0 +1,77 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+title: Null Local Funflow Job
+#+language: en
+
+* User configuration
+
+The platform supplies the bound Null Job. Users replace ordinary values and
+invoke the same Job entry used by every maintained Scenario:
+
+#+begin_src scheme
+(.def (Hello @ Null)
+  message: "hello from the user")
+(.call Hello .run "./work/null")
+#+end_src
+
+The workspace must already exist and be empty. It is passed only at execution.
+No separate Check object, validation callback or user-written process sequence is
+required. The message is literal data, including ${...} and %{...}; the local
+provisioner invokes printf directly, without a shell program.
+
+* Init and platform binding
+
+The real [[file:../init.ss][init.ss]] selects the maintained examples:
+
+#+begin_src scheme
+(yuanxu! mode: explicit source: "." (null) (aws-validation))
+#+end_src
+
+The existing platform binding, exercised by the integration test, is:
+
+#+begin_src scheme
+(def Null
+  (opentofu-execution selection 'null 'Scenario selected-tofu-command))
+#+end_src
+
+=selection= and =selected-tofu-command= are platform inputs. Provider package
+configuration is still supplied by the test's pinned Nix package realization;
+automatic realized-package rebinding remains a separate integration gap. This is
+not a claim that init alone downloads or binds an executable. No runtime Loader
+was connected and field access does not run Nix or a deployment.
+
+* Maintained declaration and execution
+
+[[file:objects.ss][The Scenario]] inherits the Core OpenTofu Job and defines message/resource defaults.
+[[file:types.ss][The projection contract]] uses the actual selected null_resource Schema Type.
+[[file:interface.ss][The publication]] associates that export and contract once. Existing Core admission
+retains the final checked object, actual contract and source/Schema Context.
+
+The shared [[file:../../modules/services/opentofu/execution.ss][OpenTofu Job]] declares:
+
+#+begin_src text
+init -> validate -> plan -> apply -> output
+                           |
+                           +-- after-start finalizer: destroy
+#+end_src
+
+Funflow projects the selected dependency closure into its existing functional
+Flow runner. Its Ops interpreter executes argv declarations and retains the Flow
+receipt plus per-task process receipts. Every forward task checks the admitted
+Context before and after Ops. Destroy uses the previously admitted command even
+if source/Schema freshness is lost after apply starts. It runs after success,
+failed apply or failed output; it does not run when validation blocks apply.
+Cleanup failure is reported with the primary failure instead of being hidden.
+Process-kill/power-loss cleanup is not guaranteed by dynamic-wind.
+
+* Actual qualification
+
+=just test-opentofu-admission-execution= uses the pinned Null 3.2.4 package and
+provider-mirror engine. It verifies actual apply/output/destroy, a parent-cached
+Graph with a child's final message, literal template markers, nonempty workspace
+refusal, output-command failure cleanup and source-change cleanup. The source
+change is deliberately injected by a test-only POO task override; the execution,
+Context guard and destroy are real framework mechanisms.
+
+No state, generated resource JSON or raw logs are committed. The test does not
+qualify distributed scheduling, durable recovery, CAS or a production deployment.

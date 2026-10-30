@@ -6,19 +6,19 @@
 ;;; Boundary: real module object catalog validation stays out of the unit root.
 ;;; Invariant: catalog checks load backend object sets but never realize runtime.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .ref object?)
         (only-in :std/test
                  test-suite
                  check-equal?)
-        :core/module-system/schema/interface
-        :core/module-system/schema/validation
-        :poo-flow/modules/sandbox-core/shared-object
-        :poo-flow/modules/sandbox-core/objects
-        :poo-flow/src/user-interface/root-objects
-        :poo-flow/modules/nono-sandbox/objects
-        :poo-flow/modules/cubeSandbox/objects
-        :poo-flow/modules/docker-sandbox/objects)
+        :yuanxu/module-system/schema/interface
+        :yuanxu/module-system/schema/validation
+        :agentic-ai-lab/modules/sandbox-core/shared-object
+        :agentic-ai-lab/modules/sandbox-core/objects
+        :agentic-ai-lab/modules/workflow/scenario/configuration/root-objects
+        :agentic-ai-lab/modules/nono-sandbox/objects
+        :agentic-ai-lab/modules/cubeSandbox/objects
+        :agentic-ai-lab/modules/docker-sandbox/objects)
 
 (export module-object-catalog-validation-test)
 
@@ -28,28 +28,28 @@
 
 ;; : TestSuite
 (def module-object-catalog-validation-test
-  (test-suite "poo-flow module object catalog validation"
-    (poo-flow-test-case "validates real module object sets"
+  (test-suite "agentic-ai-lab module object catalog validation"
+    (yuanxu-test-case "validates real module object sets"
       (let* ((objects
-              (append poo-flow-shared-module-objects
-                      poo-flow-sandbox-core-module-objects
-                      poo-flow-user-interface-root-module-objects
-                      poo-flow-nono-sandbox-module-objects
-                      poo-flow-cubeSandbox-module-objects
-                      poo-flow-docker-sandbox-module-objects))
+              (append agentic-ai-lab-shared-module-objects
+                      agentic-ai-lab-sandbox-core-module-objects
+                      agentic-ai-lab-user-interface-root-module-objects
+                      agentic-ai-lab-nono-sandbox-module-objects
+                      agentic-ai-lab-cubeSandbox-module-objects
+                      agentic-ai-lab-docker-sandbox-module-objects))
              (validations
-              (poo-flow-module-objects-validation objects)))
+              (yuanxu-module-objects-validation objects)))
         (check-equal? (length validations) 9)
         (check-equal?
          (eq? (car validations)
-              (car (poo-flow-module-objects-validation objects)))
+              (car (yuanxu-module-objects-validation objects)))
          #t)
         (check-equal? (andmap object? validations) #t)
-        (check-equal? (map poo-flow-module-object-validation-valid?
+        (check-equal? (map yuanxu-module-object-validation-valid?
                            validations)
                       '(#t #t #t #t #t #t #t #t #t))
         (let (summary
-              (poo-flow-module-objects-validation-summary validations))
+              (yuanxu-module-objects-validation-summary validations))
           (check-equal? (object? summary) #t)
           (check-equal? (receipt-ref summary 'valid) #t)
           (check-equal? (receipt-ref summary 'invalid-count) 0)
@@ -75,10 +75,10 @@
           (check-equal? (receipt-ref summary 'descriptor-realized?) #f)
           (check-equal? (receipt-ref summary 'runtime-executed) #f))))
 
-    (poo-flow-test-case "pins nono sandbox object binding to native FFI"
+    (yuanxu-test-case "pins nono sandbox object binding to native FFI"
       (let ((binding-field
-             (poo-flow-module-object-field poo-flow-nono-sandbox-object
+             (yuanxu-module-object-field agentic-ai-lab-nono-sandbox-object
                                            'binding)))
         (check-equal? (not (not binding-field)) #t)
-        (check-equal? (poo-flow-module-field-contract-default binding-field)
+        (check-equal? (yuanxu-module-field-contract-default binding-field)
                       'native-ffi)))))

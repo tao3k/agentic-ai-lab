@@ -1,0 +1,168 @@
+#+title: Native Durable Policy Transition
+#+language: en
+:PROPERTIES:
+:ID: context-native-durable-policy-transition
+:STATUS: production-scheme-selected-native-prefixes-qualified
+:END:
+
+* Existing design and the production gap
+
+The ownership boundary remains [[file:00-design-map.org][the existing Org allocation]]: Context owns
+versioned information and evidence applicability; Session owns its independent
+interaction and Attempt lifecycle. Source support, authority applicability and
+worker termination are different facts. Policy replacement must retire uses
+of an old captured policy without deleting original evidence or fabricating a
+terminal result.
+
+[[file:20-native-grant-revocation.org][20: grant revocation]] established durable expected-cut admission for grant
+retirement. The older =policy-replacement= recovery branch still accepts a
+trusted legacy payload with an explicit generation. This slice adds a named,
+version-fenced =policy-transition= route for new callers. It does not silently
+reinterpret or migrate historical inbox rows; the legacy route remains a
+separate trusted path and is not qualified by the new contract.
+
+* Production Scheme: values and owner effects
+
+=context-durable-policy-command= in =modules/ai-agentic-context/durable-owner.ss=
+is a pure POO constructor. It requires a canonical new revision of the same
+policy identity and freezes the expected registered generation, expected
+policy digest and proposed policy into the existing journal wire format.
+No Session, authority registry or propagation engine is allocated.
+
+#+begin_src scheme
+(def intent
+  (context-durable-policy-command input-id registered-snapshot proposed-policy))
+
+(policy-clock-command!
+ clock intent
+ (lambda (resource)
+   (.call adapter .replace-policy! adapter intent)))
+#+end_src
+
+The caller chooses a proposal, not its publication time. The adapter consumes
+only its private detached active input under the existing writer transaction.
+Both expected generation and digest must equal the registered policy head.
+Generation matters even if policy bytes are unchanged: a deadline can advance
+that generation. The accepted transition advances it by exactly one.
+
+The existing native Policy Host validates immutable revision history, replaces
+deadline registration and publishes its authority change through existing
+observers. The Context dependency graph invalidates direct consumer A and B,
+which captured A, before use queries. C's independent policy remains usable.
+The adapter saves policy snapshots/history, Context fences, reconciliation
+obligations, original terminal ledger and accepted/refused decision in the same
+journal transaction. A stale expected cut receives a durable refusal rather
+than an automatic rebase onto the new policy.
+
+At recovery, pending =policy-transition= inputs use the same handler and original
+inbox identity before owner readiness. The effective time comes from the
+persisted native clock anchor and the real monotonic sample on the same boot.
+After reactor enrollment the Policy Host's own clock supplies publication time.
+A command never transports an effective instant. Host reboot with a different
+boot identity remains a refusal requiring explicit clock re-admission.
+
+Same-ID changed bytes are refused before historical ACK. An unchanged retry
+reports processing history, not current authority or proposal acceptance. The
+existing journal stores =policy-transition-decision:<input-id>=, including the
+actual previous generation/digest and proposed digest. A decision is not a
+proof that a caller is authorized to administer policy: this remains an
+explicit trusted runtime capability.
+
+* Native scenarios and evidence custody
+
+[[file:run-native-policy-transition.py][The native gate]] runs the real Orgize/GQL/ASCENT fixture, native worker
+observations, Session reducer, Policy Host, monotonic clock and SQLite journal.
+It kills the process at receipt, before commit and after commit/before ACK;
+another native owner must replay or retain the original decision correctly.
+
+The five selected prefixes cover replacement first, A's actual completion
+first, cancellation/recovery first and two observed producer-arrival orders.
+The trace records actual arrival, selected owner order, executed prefix and
+unexecuted suffix. This is not all interleavings of the five events. The runner
+independently checks terminal count against the event order and retains exact
+terminal payload hashes across restart.
+
+Before any independent support query, cached A/B must already be invalidated;
+C retains its actual completed result. Every original Query observation remains
+source-supported and all original evidence files retain their hashes. Native
+checks also exercise detached caller strings, generation-only and digest-only
+CAS refusals, duplicate delivery, changed-body refusal, delayed replacement,
+out-of-transaction refusal and a stale generation-1 deadline against the new
+generation-2 policy. That last probe invokes the actual deadline handler; this
+fixture disables background timer dispatch and does not claim joint expiry
+scheduler qualification.
+
+The original saved receipt-cut image is separately replayed through the
+production adapter. An intentionally unsafe native restoration omits pending
+policy replay and observes A still admitted. Both paths retain the original
+image as evidence. The correct adapter must restore subscriptions and replay
+pending authority changes before reopening the owner.
+
+#+begin_src sh
+just build-test t/context-policy-durable-test.ss
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-native-policy-transition.py" --artifacts /private/tmp/context-policy-run
+python3 "$slice/run-policy-scenarios.py" --artifacts /private/tmp/context-policy-model
+python3 "$slice/audit-policy-transition.py" --receipt /private/tmp/context-policy-run/policy-receipt.json --output /private/tmp/context-policy-audit.json
+python3 "$slice/run-policy-regressions.py" --policy-receipt /private/tmp/context-policy-run/policy-receipt.json --artifacts /private/tmp/context-policy-regressions
+#+end_src
+
+Use the repository's Just heap fence and actual boot identity. Logs, SQLite
+images and native artifacts belong in local/CI artifacts, not source control.
+A run is qualified only when source/object cuts are unchanged, the child exits
+successfully and all MODULE-OK, HARNESS-OK and final OK markers pass without
+error markers. An earlier smoke run that changed its runner during execution
+is retained as diagnostic evidence only, despite its native assertions passing.
+
+* SysML correspondence and remaining obligations
+
+[[file:21-policy-transition.sysml][The executable SysML contract]] separates generation CAS, digest CAS, original
+input identity, source support, cached consumer invalidation and stale deadline
+rejection. [[file:run-policy-scenarios.py][The CLI gate]] retains unsafe witnesses and reruns each with mode 0.
+These are bounded admission contracts, not mechanical refinement proofs of
+Scheme, complete scheduling verification or endpoint reconciliation.
+
+The full combined source/grant/policy/expiry product, repeated process death
+during policy replay, remote endpoint reconciliation and migration of trusted
+legacy =policy-replacement= callers remain open. The new route does not make
+old Query/Attempt receipts current by reusing policy content at a later generation.
+
+* Qualified local results: 2026-10-26
+
+The production Scheme build passed all five declared crash prefixes with real
+SIGKILL and a new owner process. The original saved receipt-cut image passed
+positive production replay; the unsafe omitted-replay path exposed cached A
+still admitted. All corrected paths passed MODULE-OK, HARNESS-OK, final OK and
+zero exit, with no native error markers. The native receipt is
+=/private/tmp/context-policy-final-20261026/policy-receipt.json=.
+
+The independent read-only audit verified the current source/object cut,
+original inbox bytes, actual arrival/owner traces, positional terminal counts,
+original terminal digests and exactly one atomic policy/Context decision. Its
+receipt is =/private/tmp/context-policy-final-20261026/policy-audit.json=.
+
+The actual SysML CLI executed 224 contract cases with 19 expected unsafe
+violations and zero unexpected verdicts. Six retained witnesses, one for each
+unsafe mode, and their corrected paths added 12 replay executions with six
+expected failures. Model receipts are under
+=/private/tmp/context-policy-model-20261026/= and
+=/private/tmp/context-policy-model-replay-20261026/=.
+
+These results qualify the declared selected prefixes and bounded admission
+contracts. They do not qualify all native concurrent interleavings or the
+legacy policy-replacement protocol.
+
+The same final source/object cut also passed one grant-revocation and one
+source-withdrawal before-commit crash/recovery path, each with A's actual result
+committed first. The serial compatibility gate checked the final policy cut
+before and after both executions. Its receipt is
+=/private/tmp/context-policy-regressions-20261026/regression-receipt.json=.
+
+The combined immutable artifact index is
+=/private/tmp/context-policy-evidence-20261026.json=.
+
+* Subsequent legacy migration
+
+[[file:22-native-policy-migration.org][22: Policy replacement migration]] supersedes this slice's open legacy
+entrypoint obligation. The results above retain their historical source/object
+cut; the migrated production path has its own native and SysML evidence.

@@ -1,0 +1,87 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+title: Agentic AI Lab Product Module Owners
+
+Shared mechanisms are implemented in the independent Core submodule. This product
+repository contains maintained modules, Profiles, Scenarios, adapters and cases;
+it no longer has a parallel src/core or src/feature-system hierarchy.
+
+| Owner | Product responsibility |
+|-------+------------------------|
+| workflow/control-plane | flow/task/runtime roles, policy, Plan and runner semantics |
+| workflow/scenario | Scenario composition and Plan/Bundle projection |
+| module-authoring | product source conventions, brand/default authoring policy and module declarations |
+| user-interface | product selection, configuration and presentation policy |
+| loop-engine/control | product loop/human audit coordination |
+| proof/projections | product proof receipts and integration facts |
+| query/semantic | product semantic/ORG and organization Bundle adapters |
+| governance/policy and governance/evidence | product authority policy and evidence projections |
+| testing and building | product admission/build/test profiles |
+
+Generic Graph values/algorithms, JSON Schema Contract generation/validation,
+type-fact projection and pure helpers have moved to Core. Native import paths
+point to their precise Core or product owner; deleted paths have no forwarding
+modules. Module, Profile and Scenario remain distinct abstractions.
+
+The root [[file:../init.ss][init.ss]] declares the maintained module source object. It does not scan
+or load modules. Packages may place their single init inside modules instead;
+future init-source resolution must use an explicit source declaration. The
+Loader adapter and selected build projection design are not implemented here.
+
+* Migration verification (2026-10-16)
+
+Core is an independent Git submodule; the product does not compile its source
+as a local subtree. The former product =src/= tree is removed. Shared Feature,
+Graph, JSON Schema, object syntax and proof mechanisms have one Core owner;
+Scenario/Plan conversion remains a product module. Old-path compatibility
+modules are not provided. The directory Loader adapter remains unimplemented.
+Each repository continues to own its module collection and init declaration;
+the shared collection/publication contract is defined by Core.
+
+The heap-fenced =just test-module-ownership= entry runs seven existing native
+suites: product roles, Scenario-to-Bundle projection, Funflow public/native
+publication and three JSON Schema contract bridges. All seven pass using the
+installed native Gerbil interpreter and isolated dependency prefix. Core's
+corresponding entry passes 21 existing suites. Its native AOT build also passes.
+These focused controls do not substitute for the complete product package build
+or the full cross-platform suite. The installed gxtest source-import route
+failed with an illegal-import diagnostic; that failure is retained in local
+artifacts and is not counted as a pass. The explicit source runner uses the
+real =std/test/base= harness with every TestResult checked and a heap/timeout
+fence before imports.
+
+Bazel regenerates its native dependency lock from =gerbil.pkg=; the existing
+cross-platform projection helper synchronizes the source-package attributes.
+Dependency/version/license checks and twelve automation tests pass. Raw logs
+are local/CI artifacts; historical receipts relocated from design directories
+remain under the corresponding test evidence owner.
+
+The complete local =just build= attempt did not finish: the isolated prefix
+lacks the pinned gerbil-poo package manifest required by =gerbil build= in
+=build-core=. This is a package-environment precondition, not a successful
+product build. Core's direct native build and the focused source suites above
+are separate evidence. The product PR's exact-head CI installs pinned package
+dependencies and remains the full-package/cross-platform acceptance gate.
+
+* Core source version authority
+
+The product's Core source version is the Git submodule gitlink. Product builds
+compile that ordinary =core/= directory before compiling product modules, via
+=just build-core= or the equivalent native CI step. Core is not a second direct
+package-install dependency with another root revision. Earlier direct Core
+installation conflicted with the existing dependency packages' bootstrap Core
+pin (=e85fd453= versus =06fe336b=); removing the duplicate declaration restores
+the existing package manager's coherent bootstrap graph without rewriting its
+transitive constraints. The local Core build then supplies this product's Core
+artifacts. Dependency installation alone is not a complete product build.
+Bazel also compiles the initialized local Core directory; external consumer
+qualification exports its tracked files without its Git metadata. No loader or
+old-namespace forwarding layer is introduced.
+
+The local Core build first cleans only Core-owned compiled outputs. A newly
+installed bootstrap dependency can have newer mtimes than the checked-out Core
+sources, so timestamps alone do not qualify reuse across the source-owner
+cutover. Dependency source checkouts and their declared revisions are retained;
+no uninstall or manifest rewriting is used. The subsequent local build and
+product tests qualify the pinned Core implementation rather than stale output.

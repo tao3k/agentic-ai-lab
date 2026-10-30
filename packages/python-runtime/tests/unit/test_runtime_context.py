@@ -3,18 +3,22 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 import pytest
+import anyio
+from types import SimpleNamespace
 
-from poo_flow_runtime import (
+from agentic_ai_lab_runtime import (
     END,
     START,
     MemoryRuntimeGraphStore,
     RuntimeGraphEdge,
+    RuntimeGraphError,
     RuntimeGraphExecutor,
     RuntimeGraphPlan,
     RuntimeGraphProgram,
     RuntimeGraphRegistries,
     RuntimeGraphRuntime,
     RuntimeGraphRuntimeError,
+    linear_plan,
 )
 
 
@@ -117,3 +121,50 @@ def test_runtime_graph_runtime_reference_backend_is_explicit() -> None:
     assert runtime.backend == "reference"
     with pytest.raises(RuntimeGraphRuntimeError, match="negotiated native context"):
         runtime.require_native_context()
+
+
+@pytest.mark.parametrize("entrypoint", ["invoke", "stream", "resume"])
+def test_native_graph_rejects_before_reference_action(entrypoint: str) -> None:
+    calls = []
+    program = RuntimeGraphProgram(
+        plan=linear_plan("model"),
+        runtime=RuntimeGraphRuntime.native(SimpleNamespace(closed=False)),
+        registries=RuntimeGraphRegistries(
+            actions={"model": lambda state: calls.append(state) or {"answer": 42}}
+        ),
+    )
+    with pytest.raises(RuntimeGraphError, match="native graph execution is unavailable"):
+        if entrypoint == "invoke":
+            program.invoke({})
+        elif entrypoint == "stream":
+            list(program.stream({}))
+        else:
+            program.resume_interrupted(None)
+    assert calls == []
+
+
+@pytest.mark.parametrize("entrypoint", ["invoke", "stream", "batch", "resume"])
+def test_async_native_graph_rejects_before_reference_action(entrypoint: str) -> None:
+    calls = []
+    program = RuntimeGraphProgram(
+        plan=linear_plan("model"),
+        runtime=RuntimeGraphRuntime.native(SimpleNamespace(closed=False)),
+        registries=RuntimeGraphRegistries(
+            actions={"model": lambda state: calls.append(state) or {"answer": 42}}
+        ),
+    )
+
+    async def run() -> None:
+        with pytest.raises(RuntimeGraphError, match="native graph execution is unavailable"):
+            if entrypoint == "invoke":
+                await program.ainvoke({})
+            elif entrypoint == "stream":
+                async for _ in program.astream({}):
+                    pass
+            elif entrypoint == "batch":
+                await program.abatch([{}])
+            else:
+                await program.aresume_interrupted(None)
+
+    anyio.run(run)
+    assert calls == []

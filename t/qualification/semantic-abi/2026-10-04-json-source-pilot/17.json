@@ -1,0 +1,232 @@
+{
+  "case": "clock-mismatch",
+  "api": "async",
+  "index": 17,
+  "planSha256": "ebd90dea35a01b7224aa711c247e6680e0b98c3087fde2b699645fe492f75633",
+  "artifactSha256": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c",
+  "passed": false,
+  "raw": "{\"status\":\"complete\",\"rows\":[[\"a\",\"b\"],[\"a\",\"c\"]]}",
+  "events": [
+    {
+      "type": "response.created",
+      "seconds": 0.22904933299287222
+    },
+    {
+      "type": "response.in_progress",
+      "seconds": 0.22912445799738634
+    },
+    {
+      "type": "response.output_item.added",
+      "seconds": 0.6372969579970231
+    },
+    {
+      "type": "response.content_part.added",
+      "seconds": 0.6373092079884373
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.6373179999936838
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.7963782079896191
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8100329579901882
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.810125916992547
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.810172582991072
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8102126250014408
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8102513749909122
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.830436207994353
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8304829169937875
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8304999169922667
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8305128749925643
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8305249999975786
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.8305364580010064
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.902478791991598
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9026080829935381
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9026371669897344
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9026529169932473
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9026704169955337
+    },
+    {
+      "type": "response.output_text.delta",
+      "seconds": 0.9026872499962337
+    },
+    {
+      "type": "response.output_text.done",
+      "seconds": 0.9028181249886984
+    },
+    {
+      "type": "response.content_part.done",
+      "seconds": 0.9028276249882765
+    },
+    {
+      "type": "response.output_item.done",
+      "seconds": 0.902836416993523
+    },
+    {
+      "type": "response.completed",
+      "seconds": 0.9028584170009708
+    }
+  ],
+  "contentGapsSeconds": [
+    0.6373179999936838,
+    0.15906020799593534,
+    0.013654750000569038,
+    9.295900235883892e-05,
+    4.666599852498621e-05,
+    4.00420103687793e-05,
+    3.8749989471398294e-05,
+    0.020184833003440872,
+    4.670899943448603e-05,
+    1.6999998479150236e-05,
+    1.2958000297658145e-05,
+    1.2125005014240742e-05,
+    1.1458003427833319e-05,
+    0.07194233399059158,
+    0.0001292910019401461,
+    2.908399619627744e-05,
+    1.575000351294875e-05,
+    1.750000228639692e-05,
+    1.6833000699989498e-05
+  ],
+  "responseId": "3db0a36e-8141-4933-a49e-d085ab9ad82c",
+  "responseModel": "deepseek-flash",
+  "responseStatus": "completed",
+  "usage": {
+    "input_tokens": 10368,
+    "input_tokens_details": {
+      "cached_tokens": 10112
+    },
+    "output_tokens": 19,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 10387
+  },
+  "seconds": 0.9028602920006961,
+  "deliveredObservation": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "receipt": {
+      "verification": "invalid",
+      "verdict": "contradicted",
+      "schema": "poo-flow.semantic-observation",
+      "bindingDigest": "98db39ef4762ff79231210f44b5b56b87eb73762cf7111a859d147f3d664f349",
+      "candidateValid": true,
+      "operation": "temporal.observe",
+      "requestDigest": "15d699dabb7a5fc1cf36a191672546108216c9b4fbc94e224b6810780f1f8950",
+      "difference": {
+        "expected": "rejected",
+        "kind": "status-mismatch",
+        "observed": "complete"
+      }
+    },
+    "artifactDigest": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c"
+  },
+  "nativeObservationSeconds": 0.002095417003147304,
+  "result": {
+    "candidate": {
+      "status": "complete",
+      "rows": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "c"
+        ]
+      ]
+    },
+    "receipt": {
+      "verification": "invalid",
+      "verdict": "contradicted",
+      "schema": "poo-flow.semantic-observation",
+      "bindingDigest": "98db39ef4762ff79231210f44b5b56b87eb73762cf7111a859d147f3d664f349",
+      "candidateValid": true,
+      "operation": "temporal.observe",
+      "requestDigest": "15d699dabb7a5fc1cf36a191672546108216c9b4fbc94e224b6810780f1f8950",
+      "difference": {
+        "expected": "rejected",
+        "kind": "status-mismatch",
+        "observed": "complete"
+      }
+    },
+    "artifactDigest": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c"
+  },
+  "sourceRebinding": {
+    "candidateValid": true,
+    "requestDigest": "b236ba6f43202f42a02f703ba740d6f6056cd783b8bbd9f9eb7535b36f98530c",
+    "difference": {
+      "kind": "status-mismatch",
+      "observed": "complete",
+      "expected": "rejected"
+    },
+    "operation": "temporal.observe",
+    "verification": "invalid",
+    "bindingDigest": "712f28d56e10e3f0b692a182e5f934dbc00905faa01040efcdc076a27cd3d6ad",
+    "verdict": "contradicted",
+    "schema": "poo-flow.semantic-observation"
+  },
+  "failure": "native semantic contradiction",
+  "callSeconds": 0.9062177500018151
+}

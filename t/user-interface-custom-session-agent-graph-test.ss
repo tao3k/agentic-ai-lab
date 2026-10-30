@@ -7,17 +7,17 @@
 ;;; Invariant: graph, registry, and communication receipts are declarative;
 ;;; Scheme never delivers messages or starts agents.
 
-(import (only-in :core/observability/testing-case poo-flow-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :poo-flow/src/user-interface/module-selection
-                 poo-flow-user-module-selection-flag-entry
-                 poo-flow-user-module-selection-key)
-        :poo-flow/modules/session/config
+        (only-in :yuanxu/module-system/selection/objects
+                 yuanxu-user-module-selection-flag-entry
+                 yuanxu-user-module-selection-key)
+        :agentic-ai-lab/modules/session/config
         (only-in "../user-interface/custom/my-module/cases/session-agent-graph"
-                 poo-flow-custom-my-module-session-agent-graph-case))
+                 agentic-ai-lab-custom-my-module-session-agent-graph-case))
 
 (export user-interface-custom-session-agent-graph-test)
 
@@ -43,36 +43,36 @@
 (def (module-config-rows module-selection-bundle)
   (let* ((selection (car module-selection-bundle))
          (entry
-          (poo-flow-user-module-selection-flag-entry selection ':session-rows)))
+          (yuanxu-user-module-selection-flag-entry selection ':session-rows)))
     (if entry (cdr entry) '())))
 
 ;; : TestSuite
 (def user-interface-custom-session-agent-graph-test
-  (test-suite "poo-flow custom user-interface session-agent-graph case"
-    (poo-flow-test-case "projects custom session graph and communication receipts"
+  (test-suite "agentic-ai-lab custom user-interface session-agent-graph case"
+    (yuanxu-test-case "projects custom session graph and communication receipts"
       (let* ((selection
-              (car poo-flow-custom-my-module-session-agent-graph-case))
+              (car agentic-ai-lab-custom-my-module-session-agent-graph-case))
              (rows
               (module-config-rows
-               poo-flow-custom-my-module-session-agent-graph-case))
+               agentic-ai-lab-custom-my-module-session-agent-graph-case))
              (registry-entry-count (.ref (car rows) 'entry-count))
-             (graph (poo-flow-session-agent-graph->alist (cadr rows)))
+             (graph (agentic-ai-lab-session-agent-graph->alist (cadr rows)))
              (build-audit-channel
-              (poo-flow-session-communication-channel-receipt->alist
+              (agentic-ai-lab-session-communication-channel-receipt->alist
                (list-ref rows 2)))
-             (build-audit (poo-flow-session-communication-receipt->alist
+             (build-audit (agentic-ai-lab-session-communication-receipt->alist
                            (list-ref rows 4)))
              (communication-channel-rows
               (rows-with-kind
                rows
-               'poo-flow.session.communication-channel-receipt))
+               'agentic-ai-lab.session.communication-channel-receipt))
              (communication-rows
-              (rows-with-kind rows 'poo-flow.session.communication-receipt)))
-        (check-equal? (poo-flow-user-module-selection-key selection)
-                      '(session . session-core))
+              (rows-with-kind rows 'agentic-ai-lab.session.communication-receipt)))
+        (check-equal? (yuanxu-user-module-selection-key selection)
+                      '(session . session))
         (check-equal? registry-entry-count 3)
         (check-equal? (test-ref graph 'kind)
-                      'poo-flow.session.agent-graph)
+                      'agentic-ai-lab.session.agent-graph)
         (check-equal? (test-ref graph 'agent-count) 2)
         (check-equal? (test-ref graph 'session-count) 3)
         (check-equal? (test-ref graph 'agent-ids)

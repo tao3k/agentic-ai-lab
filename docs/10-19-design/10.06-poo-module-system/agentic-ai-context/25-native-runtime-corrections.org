@@ -1,0 +1,187 @@
+#+title: Native Runtime Corrections: Cold Cost, Failed Acquisition and Fenced Writers
+#+language: en
+:PROPERTIES:
+:ID: context-native-runtime-corrections
+:STATUS: native-qualified-finite-contracts-separate-from-distributed-deployment
+:END:
+
+* Reading boundary
+
+This continues [[file:24-native-runtime-cost.org][the existing cold/steady investigation]].
+[[file:26-distributed-runtime.org][The runtime framework]] supplies the proposed partition/provider allocation;
+it does not turn local Actor tests into distributed qualification. Original
+failures, experimental sources and corrected receipts remain local artifacts.
+Source control contains executable gates, models and structured summaries.
+
+All selected native processes retain =min-heap=1G,max-heap=2G,debug=q= and the
+150-second Just watchdog. No forced successful exit, workload partitioning or
+forced GC is used. The native process must finish teardown and exit normally.
+
+* Locate costs before changing the workload
+
+The six previous cold receipts have approximately 36--65 seconds between their
+first and last real timer samples, within 49--89-second process totals. That
+span is not a precise decomposition: it excludes the first construction and
+last teardown work. It does show that dynamic unloading cannot explain the
+whole 50-second workload.
+
+A complete 60-case diagnostic run, with the same native fence, separately
+reported 26.547 seconds of Context fixture construction, 6.653 seconds of
+bootstrap/C completion, 3.565 seconds of original source/proof construction,
+3.471 seconds of final checks and 0.777 seconds of stop work. Process exit was
+68.666 seconds. This tracing run diagnoses costs; the untraced qualification
+receipts own capacity. Its root is
+=/private/tmp/context-cold-diagnosis-20261026/cold-baseline/=.
+
+The workload reconstructs 60 independent worlds with proofs, three Sessions,
+real journal transactions, expiry receipt, replacement/result/cancel/recover
+interleavings and actual endpoint completion. It is not 60 bare Actor messages.
+The workload remains unchanged in the qualification gate.
+
+* Native Scheme changes
+
+** Share one native replay within one derivation invocation
+
+Rule correspondence and support correspondence previously each executed the
+same native positive-proof replay, including the original ASCENT query. The
+derivation boundary now performs that replay once and passes its canonical
+result to private functional rule/support kernels in the same invocation.
+Nothing is cached across calls, source changes, events or owner epochs.
+Public rule/support entrypoints still execute native replay themselves. Public
+runtime bindings and ordinary POO results remain available through their
+existing facades; the unchecked intermediate helpers are not exported there.
+
+The original derivation digest, missing/duplicate premise controls, forged
+support controls and next-call mutation refusal passed natively. Current proof
+validation and current source/policy/support checks remain active. This is a
+reduction in duplicated computation, not reuse of a cached authority flag.
+
+** Failed anchor acquisition releases the actual resource
+
+After bootstrap returns its resource, an anchor failure occurs before timer or
+clock-lease enrollment. The old path returned the error while retaining an open
+journal and Context subscriptions. The pre-fix native regression reported
+=journal-closed=#f context-disposed=#f= and failed its real handle check.
+
+The owner now aborts the partial decision, closes the durable adapter, releases
+subscriptions and joins the failed Actor before returning the original error.
+The initializer is also consumed once rather than retained by a long-lived
+owner closure. The positive regression reopens the journal and checks that the
+uncommitted write disappeared, original evidence remained and the received
+input is still pending. Independent Session endpoints receive no fabricated
+terminal. This control covers anchor failure after resource handover; it does
+not claim all possible startup/runtime exception paths are verified.
+
+** Refused evidence writes release the successor's lock
+
+The old immutable-evidence writer began a short transaction and then checked
+its durable owner epoch. An epoch refusal left that transaction open. Two real
+Actors with independent connections reproduced =stale-refused=#t= together with
+=successor-progress=#f=. Both Actors were closed/joined before the counterexample
+was reported, so this detects the write lock rather than an omitted test close.
+
+The writer now rolls back on fencing/insert/commit failure. The corrected native
+path advances the actual epoch from 1 to 2, refuses the old writer, permits the
+successor's write, preserves original bytes and confirms obsolete evidence was
+never stored. The full receipt audit checks the independent database afterward.
+This local takeover regression is one concrete path; the QNT model separately
+checks arbitrary transitions within its finite ownership/authority instance.
+
+** Core preparation uses an existing issuer rather than a no-op compiler VM
+
+The preserved 137 transcript contains =Ops execution terminated= with signal
+15 after a =TERM / kill-after=5s= process watchdog. It is consistent with timeout
+escalation; exit 137 alone is not evidence of heap exhaustion. The old transcript
+has no phase sample proving where its whole time was spent. Another diagnostic
+sampler itself timed out after 35 seconds; later time must not be attributed to
+its last observed compiler process.
+
+Measured Core preparation launched std/make even when it compiled zero files.
+The selected correction first calls the original native artifact issuer, which
+rechecks current source, package approval, exact output bytes and publication.
+Only successfully admitted existing products skip the no-op compiler process.
+Missing or stale products retain the original isolated std/make path. Pre/post
+source and artifact checks, actual gxtest execution and normal exit remain.
+
+An in-process compiler experiment was retained but not selected: compiling
+another Core epoch can invalidate the host reader's captured tool context.
+Pure module composition was also separated from source resolution/diagnostics;
+the Core suite still executes the real activation logic through that pure owner.
+Existing activation runtime bindings delegate without changing the API.
+
+Fifteen refusal assertions were strengthened to catch only the tested operation,
+with the assertion outside the catch. A no-exception control must return false.
+The full Core quiet suite now exits normally in 50.650 seconds with all strict
+markers, under the same native limit. The result is a fresh process measurement,
+not a warm iteration inside a previously imported VM.
+
+* Evidence and model separation
+
+[[file:25-bootstrap-lifecycle.sysml][The executable bootstrap model]] checks rollback/close/join, pending input,
+original evidence and independent terminals. The existing SysML policy/owner/
+credential models retain their positive and negative traces. The topology in
+[[file:26-distributed-runtime.sysml][26]] is structural; QNT owns the proposed finite distributed transition
+contract, with native local correspondences reported separately.
+
+[[file:run-context-runtime-quint.py][The QNT runner]] uses the existing pinned Core backend. Real progress from
+the owned backend's compilation stream can now contribute to its existing
+five-second real-output deadline while the CLI waits on gRPC; the 45-second
+case limit stays unchanged. No heartbeat substitutes for real work. Original
+backend/typecheck failures remain preserved and were not admitted as proofs.
+
+Final cold, steady, Core, model and replay references belong in
+[[file:25-runtime-results.json][the structured results]]. A local eight-owner fixture workload supplements
+the single-owner steady phases: it preserves all 480 completed current-proof
+calls and all eight closes. It does not measure remote transport, consensus,
+mixed-event saturation or production mailbox bounds.
+
+* Remaining performance/engineering obligations
+
+Cold reconstruction still costs tens of seconds. These changes do not qualify
+an optimized throughput target. Full proof verification, POO construction and
+temporary allocation, durable checkpointing, source admission and dynamic
+unloading remain separate costs. The production bounded scheduler policy and
+distributed provider/terminal protocol remain explicit work in [[file:26-distributed-runtime.org][26]].
+
+* Final qualification and replay receipt
+
+All native runs below retain the selected 2 GiB heap and 150-second watchdog.
+Each cold row is one process with all 60 worlds and 60 actual owner closes;
+the replay repeats the entire queue rather than splitting it into batches.
+
+| Cold profile | Qualification seconds | Whole-queue replay seconds |
+|--------------+-----------------------+----------------------------|
+| legacy-cut | 75.284 | 47.150 |
+| canonical | 45.911 | 65.429 |
+| legacy-missing | 64.823 | 61.856 |
+
+The exact values and source/object bindings are in
+[[file:25-runtime-results.json][25-runtime-results.json]]. Across both gates this is 360 native paths.
+The complete quiet Core suite exits normally in 50.650 seconds. A separate
+matched-budget real SIGKILL recovery gate retains pending input, replays once,
+and refuses obsolete terminal publication.
+
+At the same native source/object cut, 60 uses of one long-lived Context take
+0.528 seconds in memory and 1.377 seconds with the journal. Eight independent
+local owner Actors and eight producer threads complete 480 current-proof uses
+in 4.667 seconds, followed by all eight owner closes. Eight-owner construction
+is measured separately at 2.239 seconds. These are local fixture measurements,
+not mixed-event saturation, cluster throughput or a substitute for cold cost.
+
+The four executable SysML models execute 7,080 paths, including 1,611 expected
+unsafe paths and zero unexpected outcomes. Twenty-two positive/negative trace
+families are each replayed twice, for 44 actual replay executions. The separate
+distributed topology validation is structural only.
+
+The finite QNT/TLC instance explores 64,593 generated states and 6,864 distinct
+reachable states with an empty remaining queue. All six intentionally broken
+contracts produce counterexamples. Fifty-six deterministic Quint run traces
+preserve corrected and broken replay paths. This establishes safety only for
+the declared finite instance, under its Authority Provider assumption; neither
+temporal liveness nor native/distributed refinement is proved.
+
+Original failed runs, raw logs, native objects and original proof inputs remain
+local artifacts. The structured results link their receipts and a SHA-256
+custody manifest under
+=/private/tmp/context-runtime-framework-custody-20261026/=. The snapshot requires
+the original Gerbil/Gambit runtime libraries and OS; it is not a hermetic executable image.

@@ -1,0 +1,72 @@
+#+TITLE: Agentic AI Lab Quint proofs
+
+#+begin_comment
+SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+#+end_comment
+
+* Source and checking authority
+
+All maintained finite formal models are Quint. Quint =0.33.0= and the
+=0.62.1= Apalache distribution match MRR. Verification uses Quint's =tlc=
+backend, with Java 21 or newer (the backend class version is 65). Generated TLA+ is transient compiler output. Lean retains its
+independent algebraic scope; it is not automatically a refinement proof.
+
+#+begin_src sh
+just prepare-quint
+just check-quint-types
+just check-quint
+PYTHONPATH=packages/python-testing/src python3 -m agentic_ai_lab_testing.checks.quint \
+  --group all --receipt /tmp/poo-quint-proof.ss
+#+end_src
+
+The default runner uses [[file:../../../core/dev/proofs/quint/backend.py][Core's backend session helper]] to own one
+version-checked Apalache process per invocation, with a 1 GiB heap and an
+ephemeral loopback endpoint. Each model gets a fresh compilation and TLC run.
+The session is cleaned up on completion, failure and TERM; proof admission
+also rejects changes to the model or checker source cut during the invocation.
+
+The runner requires real output within five seconds and finishes each check
+within 45 seconds. Missing counts, a nonempty final queue, wrong exit status,
+missing temporal completion or an unexpected counterexample fails admission.
+Negative cases select a named predicate and require an invariant violation;
+syntax errors, crashes and timeouts are not successful negative controls.
+Receipts use inert Scheme =agentic-ai-lab.quint-proof.v1= and bind every local Quint
+source hash, versions, selected properties, exit, counts and output hash.
+Do not commit logs, generated traces, backend output or acceptance receipts.
+Install dependencies before checking; package manifests only pin build tools.
+
+* Finite model inventory
+
+| Group | Scope |
+|-------+-------|
+| governance | Work/blocker/authority handoff |
+| query | Native semantic query revision and provider receipts |
+| healthcare, healthcare-ai, healthcare-migration | Original bounded evidence/human/Cedar authority cases |
+| family | Exclusive two-cause family, one-step bound and discriminating evidence |
+| revision | Four append-only revisions, historical cut and concurrent heads |
+| invalidation | Four conclusions, reverse dependency cycle and scope reprojection |
+| selection | Two competing proposals, revision CAS and conflict |
+| evidence | Two claim use lineage, reviewer disagreement and two-provider candidate exchange |
+| session | Two sessions/workers and two worktrees, authorization/cut/scope/CAS guard mutants |
+
+The complete executable catalog is =checks/quint.py= in the Python testing
+package. A passing finite case covers that instance's reachable states, not
+arbitrary family cardinality, production concurrency or deployed behavior.
+The public POO model and proof artifacts use their own current names and
+source identities. Build and test discovery contain only maintained entries.
+
+* Context Delta reference cases
+
+=just check-context-delta-proof= compiles the separate Lean reference laws and
+checks the pinned =context-delta= and =context-coverage= groups: one full-reconstruction/publication/use
+safety case plus five matched CAS/cut/deletion/grant controls, and complete-domain
+local selection with insertion/removal/nonmatching mutation controls. The fixtures model
+abstract publication/use snapshots and do not qualify native Host or Data fences.
+See [[file:../../../docs/10-19-design/10.06-poo-module-system/context-delta-lean-quint-model-design.org][the Context Delta model design]] for the exact evidence and remaining gates.
+
+
+=just check-session-attempt-proof= compiles the standalone pure Session laws and
+checks =session-attempt=: exact completion, preserved recovery obligations and
+closed-state terminal behavior with three matched mutants. These instances are
+separate from the combined production coordination/refinement gate.
