@@ -22,7 +22,6 @@ on:
       - 'gerbil.pkg'
       - 'build.ss'
       - 'build-spec.ss'
-      - 'nix-worker-build.ss'
       - 'init.ss'
       - 'services.ss'
       - 'nix-contracts.ss'

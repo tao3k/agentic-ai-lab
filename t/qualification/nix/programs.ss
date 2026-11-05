@@ -4,10 +4,9 @@
 ;;; Admission belongs to each build demand; this owner launches no process.
 (import (only-in :clan/poo/object .o .cc .get .call)
         (only-in :yuanxu/ops/config Config)
-        (only-in :yuanxu/module-system/building/test-projection module-test-source-binding)
-        (only-in "../../../build-spec.ss"
-          agentic-ai-lab-nix-worker-demand agentic-ai-lab-nix-producer-demand
-          agentic-ai-lab-nix-program-consumer))
+        (only-in :gerbil/expander import-module current-expander-context)
+        (only-in :yuanxu/module-system/source/deferred-declaration module-role-values)
+        (only-in :std/make pkg-config-libs))
 (export nix-publication-programs)
 (def (nix-publication-programs root-value)
   ;; Use the same existing VM budget as the public Just test entry.
@@ -15,22 +14,42 @@
     (string-append "-:max-heap=" (getenv "GERBIL_TEST_MAX_HEAP" "2G") ",debug=q"))
   (.o (:: self [])
       core-exports:
-      (module-test-source-binding (path-expand "core/init.ss" root-value)
-                                  'yuanxu.init.exports)
+      (.get (parameterize ((current-expander-context
+                            (import-module (path-expand "core/init.ss" root-value) #f #t)))
+              (module-role-values '(yuanxu.init.exports)))
+            yuanxu.init.exports)
       support-demand:
-      (agentic-ai-lab-nix-worker-demand (.get self core-exports) root-value)
+      (.call (.get self core-exports tests) .for-files
+        (map (cut path-expand <> root-value)
+          '("core/t/qualification/build-publication/worker.ss"
+            "core/t/qualification/build-publication/store-producer.ss"))
+        (map (cut path-expand <> root-value)
+          '("t/qualification/nix/build.ss" "t/qualification/nix/programs.ss"))
+        (list (list exe: "t/qualification/build-publication/worker"
+                    bin: "nix-publication-worker"
+                    "-ld-options" (pkg-config-libs "libcrypto" "libssl"))))
       worker-demand:
-      (agentic-ai-lab-nix-program-consumer (.get self core-exports)
-        (.get self support-demand)
-        (path-expand "core/t/qualification/build-publication/worker.ss" root-value))
+      (.call (.get self core-exports tests) .for-files
+        (list (path-expand "core/t/qualification/build-publication/worker.ss" root-value))
+        '() (.get self support-demand source std-make-spec))
       producer-demand:
       (let (exports
-            (module-test-source-binding (path-expand "init.ss" root-value)
-                                        'agentic-ai-lab.init.exports))
+            (.get (parameterize ((current-expander-context
+                                  (import-module (path-expand "init.ss" root-value) #f #t)))
+                    (module-role-values '(agentic-ai-lab.init.exports)))
+                  agentic-ai-lab.init.exports))
         ;; Invocation consumes the same declaration as preparation, including
         ;; the Source interfaces used by generated service modules. Do not
         ;; narrow its issued publication to just the executable's path.
-        (agentic-ai-lab-nix-producer-demand exports root-value))
+        (.call (.get exports tests) .for-files
+          (map (cut path-expand <> root-value)
+            '("scenarios/aws/types.ss" "scenarios/aws/objects.ss"
+              "modules/nix/objects.ss" "modules/services/opentofu/objects.ss"
+              "t/qualification/nix/tools.ss"))
+          (map (cut path-expand <> root-value)
+            '("t/qualification/nix/build.ss" "t/qualification/nix/programs.ss"))
+          (list (list exe: "t/qualification/nix/tools" bin: "build-publication-tools"
+                      "-ld-options" (pkg-config-libs "libcrypto" "libssl")))))
       ;; The dependency is an issued build, not an ambient library directory.
       ;; Its source/products are checked before use and after successful work;
       ;; the ordinary Gerbil load path is restored on every exit.

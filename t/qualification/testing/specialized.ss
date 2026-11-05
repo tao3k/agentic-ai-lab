@@ -9,17 +9,6 @@
 (def (watched command) (append (list "python3" watch) command))
 (def (absolute file) (path-expand file root))
 
-;; Only the Context demand needs the product init. Other qualifications consume
-;; published libraries and must not eagerly lower the complete module selection.
-;; Resolve the same init-owned tests value through the native expander once.
-(def context-demand
-  (delay
-    (let ((exports (module-test-source-binding (absolute "init.ss")
-                                             'agentic-ai-lab.init.exports))
-          (project (module-test-source-binding (absolute "build-spec.ss")
-                                              'agentic-ai-lab-context-test-demand)))
-      (project exports))))
-
 (def (selected-script name vm arguments)
   (def (interpreted file) (list "gxi" vm file))
   (def (runtime files command seconds count (inputs '()) (lines '()))

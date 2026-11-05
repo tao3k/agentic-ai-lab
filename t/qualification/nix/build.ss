@@ -38,6 +38,7 @@
          ((string=? "agentic-ai-lab/opentofu-contracts" name) "opentofu-contracts.ss")
          ((or (string-prefix? "agentic-ai-lab/modules/nix/" name)
               (string-prefix? "agentic-ai-lab/modules/services/" name)
+              (string-prefix? "agentic-ai-lab/t/qualification/nix/" name)
               (string-prefix? "agentic-ai-lab/t/qualification/build-publication/" name))
           (string-append
             (substring name (string-length "agentic-ai-lab/") (string-length name)) ".ss"))

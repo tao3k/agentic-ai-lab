@@ -465,27 +465,31 @@ Raw logs, native journals and failure samples remain local or CI artifacts.
 * Native program publication and compiler budget handoff
 
 The Context qualification's existing interface remains the sole Suite roster.
-An explicit init-owned test demand projects its standard =exe:= declaration
-through =std-make-spec=. The ordinary =gerbil build= command compiles and signs
-that program; TestingScript only admits the existing publication and executes
-it. Production Module Build roots retain their library-only contract.
+Its specialized declaration invokes the official =gerbil test= command through
+the existing TestingScript, retaining the original Case count and deadline.
+There is no separate Context executable build entry or unused deferred demand.
 
-The package build invokes =qualification-build.ss= and =context-build.ss= in
-separate official compiler processes. Each is an ordinary =defbuild-script=
-declaration over init's existing specification. The support compiler can retain
-source expander contexts after publishing installed interfaces; sharing that
-process with program projection produced 75 targets while an independent test
-consumer projected one. All 543 observed producer inputs still matched disk,
-so weakening source guards or retrying compilation inside TestingScript would
-hide the actual phase mismatch. The preserved failure refused execution before
-any Case. A fresh program declaration projects one target after a clean build,
-matching the independent consumer's installed-interface view.
+Nix recovery has an actual cross-process requirement. Its program capability
+declares files, observed preparation inputs and native =exe:= rows directly
+through =init.exports.tests .for-files=. Source-only init exports are obtained
+using Gerbil's =import-module= evaluation argument and the existing role-value
+projection. Repeated imports reuse the native Context. Producer discovery and
+compilation remain lazy slots; importing the capability starts no process.
+Removed helper functions in the ordinary package library spec are not restored.
+
+The current Core integration still has a program-publication gap: its retained
+target admission rejects =exe:= rows, although the pure =program-products=
+projection and program rejection tests remain. Until that path is connected
+to the existing artifact issuer, successful adapter linking is not successful
+recovery qualification. Keep the refusal; do not execute an ambient binary as
+a substitute for an issued program. Reproduce through =just test-file
+t/approved-build-recovery-test.ss= after the standard Nix adapter preparation.
 
 Program bytes, executable eligibility, compiler inputs and source observations
 share the existing signed artifact publication and replay path. The admitted
 POO build exposes =.program= for its declared compiler identity; an unknown
 identity, altered executable or stale source must be refused. The real compiler
-Fixture in =core/t/module-native-program-test.ss= checks those boundaries using
+Fixture in =core/t/module-program-test.ss= checks those boundaries using
 an ordinary temporary Gerbil package and the official build command.
 
 The native program preserves separate linking and builtin module registration
