@@ -2,6 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Qualification driver: production selection/publishing, temporary sources.
 (import :clan/poo/object
+        (only-in "../nix/programs.ss" nix-publication-programs)
         (only-in "../../../core/t/qualification/testing/directory.ss" write-source)
         (only-in "../../../core/t/qualification/service-publication/fixtures.ss" ServicesFixture)
         (only-in :yuanxu/module-system/source/link yuanxu-load-modules)
