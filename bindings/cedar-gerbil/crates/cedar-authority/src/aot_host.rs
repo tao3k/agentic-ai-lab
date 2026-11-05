@@ -8,7 +8,7 @@ use crate::runtime::{
     HOST_READY_SCHEMA, HOST_SCHEMA, REPLY_SCHEMA, RuntimeHello, RuntimeReady, RuntimeReply,
     RuntimeWitness, read_frame, write_frame,
 };
-use crate::wire::{CEDAR_VERSION, LEAN_REVISION, Outcome, evaluate_rust, validate_native_input};
+use crate::wire::{CEDAR_VERSION, LEAN_REVISION, Outcome, evaluate_rust, validate_runtime_input};
 use crate::{Error, Result, canonical};
 use serde::{Deserialize, Serialize};
 use std::ffi::{CStr, c_char, c_int};
@@ -257,7 +257,7 @@ fn evaluate(
     executable: &Path,
 ) -> RuntimeReply {
     let result = (|| {
-        validate_native_input(bytes)?;
+        validate_runtime_input(bytes)?;
         let mut input = tempfile::NamedTempFile::new()
             .map_err(|e| Error::new("cedar-input-io-failed", e.to_string()))?;
         input

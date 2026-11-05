@@ -1,0 +1,56 @@
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+classes: {
+  title: {shape: text; style: {font-size: 34; bold: true; font-color: "#14273A"}}
+  subtitle: {shape: text; style: {font-size: 17; font-color: "#415668"}}
+  row: {width: 165; style: {fill: "#EAF0F6"; stroke-width: 0; bold: true; font-size: 17; font-color: "#263A4D"; border-radius: 8}}
+  cell: {width: 365; style: {fill: "#F2F5F8"; stroke-width: 0; font-size: 17; font-color: "#263A4D"; border-radius: 8}}
+  head: {style: {bold: true; font-size: 19}}
+}
+
+comparison: {
+  label: ""
+  grid-rows: 5
+  vertical-gap: 18
+  style: {fill: transparent; stroke-width: 0}
+
+  title: "One write. Three views of what happened." {class: title}
+  premise: "After a crash, the expected line is present. The file observation and original Attempt stay the same." {class: subtitle}
+  cuts: {
+    label: ""
+    grid-rows: 5
+    horizontal-gap: 10
+    vertical-gap: 9
+    style: {fill: transparent; stroke-width: 0}
+
+    perspective: "View" {class: [row; head]}
+    a: "A   File observed" {class: [cell; head]; style.fill: "#E5EBF2"}
+    b: "B   Receipt admitted" {class: [cell; head]; style.fill: "#D8EFE3"}
+    c: "C   Attribution corrected" {class: [cell; head]; style.fill: "#FBE8CD"}
+
+    evidence: "Temporal\nevidence" {class: row}
+    e_a: "Expected line is present.\nNo admitted result for this Attempt." {class: cell}
+    e_b: "Receipt R1 is admitted as evidence\nfor this Attempt's write." {class: cell}
+    e_c: "Source correction R2 reassigns R1\nto a different Attempt.\nR1 was the only success support." {class: cell}
+
+    context: "Context\njudgment" {class: row}
+    c_a: "UNKNOWN\nThe line alone cannot identify its writer." {class: cell; style.fill: "#E5EBF2"}
+    c_b: "SUCCEEDED AT B\nR1 supports the original effect." {class: cell; style.fill: "#D8EFE3"}
+    c_c: "UNKNOWN AT C\nThe sole success support was withdrawn." {class: cell; style.fill: "#FBE8CD"}
+
+    ascent: "ASCENT\noutcome duty" {class: row}
+    a_a: "OPEN\nTask owner must establish the outcome." {class: cell}
+    a_b: "RESOLVED AT B\nThe admitted result settles this duty." {class: cell}
+    a_c: "REOPENED AT C\nSame Task owner and outcome question." {class: cell}
+
+    model: "Model\nexample inquiries" {class: row}
+    m_a: "Find a receipt source, or ask\nwho else could have written the line." {class: cell}
+    m_b: "The outcome question is settled at B.\nCheck claims that depend on it, if useful." {class: cell}
+    m_c: "Compare Attempt IDs, or seek\nan independent record of this write." {class: cell}
+  }
+  reading: "Each column is a snapshot. The inquiry options can be combined or deferred." {class: subtitle}
+  history: "History kept at C   •   File observation   •   Cut B's success judgment and receipt R1   •   Source correction R2" {
+    class: subtitle
+    style: {bold: true; font-color: "#27465C"}
+  }
+}

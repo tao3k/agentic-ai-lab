@@ -17,7 +17,7 @@ before any request. The corpus SHA256 was
 =7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
 ASCENT head was =80fee6f0860ff71aaea27ebd08c36b195d4a225f= and POO
 Flow head was =518b2973a725ade0dce04576dd5275d5e69e4641=. Both
-checkouts were clean; their exact-head CI had passed. The native
+checkouts were clean; their exact-head CI had passed. The runtime
 fixture returned =summary(1,1)= with valid finite and founded receipt
 verdicts. An external request preview listed the ten case/arm payloads
 and the thirty-call order before the user approved their disclosure to
@@ -53,8 +53,8 @@ founded receipt on this fixed corpus; it cannot rule out a benefit on a
 different task or prompt.
 
 All six closed-cut answers still said =release_authorized= even though
-the native temporal receipt denied release. The guard recorded
-=withheld / native-denies-release= for those six outputs, three in each
+the runtime temporal receipt denied release. The guard recorded
+=withheld / runtime-denies-release= for those six outputs, three in each
 arm. It recorded =observation-only= for the other 24. Guard containment
 does not make the six model claims correct and is not effect authority.
 
@@ -64,7 +64,7 @@ The typed arm used 3,228 input and 195 output tokens; the proof arm
 used 3,396 input and 195 output tokens. Total reported use was 7,014
 tokens. Median model-call times were 0.575 s typed and 0.505 s proof;
 one typed call took 5.458 s. These small, sequential samples do not
-establish a latency advantage. Native preparation was shared across
+establish a latency advantage. Runtime preparation was shared across
 requests and excluded from those model times. The live JSONL recorded
 the earlier source-fixture times, but not the separate founded-receipt
 construction time, so it cannot support a complete end-to-end timing

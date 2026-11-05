@@ -4,10 +4,10 @@ Application Evidence, Clue, Trajectory and model interaction are exposed through
 `agentic_ai_lab_runtime.reasoning`. ASCENT supplies the generic rule evaluator and
 provenance. See [ownership and validation](../../modules/evidence-assessment/migration.org).
 
-Build the native extension from this Python project with the existing maturin
+Build the runtime extension from this Python project with the existing maturin
 configuration, or through its setuptools Rust extension registration. Install the
-ASCENT producer from the exact revision pinned in the native Cargo manifest.
-The native receipt exposes `runtime_identity()`; study admission compares every
+ASCENT producer from the exact revision pinned in the runtime Cargo manifest.
+The runtime receipt exposes `runtime_identity()`; study admission compares every
 producer source hash with the independently installed ASCENT wheel and binds both
 extension files. Mismatches fail admission.
 

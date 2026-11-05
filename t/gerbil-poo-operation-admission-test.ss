@@ -5,7 +5,7 @@
 
 ;;; Contract: executable admission evidence for the pinned gerbil-poo surface.
 ;;; This test exercises upstream mechanics directly; its Scenario and Session
-;;; examples remain native objects and introduce no alternate Agentic AI Lab object,
+;;; examples remain runtime objects and introduce no alternate Agentic AI Lab object,
 ;;; dispatch, precedence, or inherited-computation adapter.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
@@ -46,7 +46,7 @@
 
 (export gerbil-poo-operation-admission-test)
 
-;;; The generic selects behavior from a native Type descriptor.  The project
+;;; The generic selects behavior from a Type descriptor.  The project
 ;;; does not copy method lookup or add a registry around the descriptor.
 (.defgeneric (admission-project descriptor value)
   slot: .admission-project)
@@ -59,7 +59,7 @@
   (test-suite
    "pinned gerbil-poo operation admission"
 
-   (yuanxu-test-case "constructs, projects, calls, and clones native objects"
+   (yuanxu-test-case "constructs, projects, calls, and clones runtime objects"
      (.def base-value
        (identity 'base)
        (render (lambda (suffix) (cons identity suffix))))
@@ -171,12 +171,12 @@
      (check-equal? (admission-project AdmissionSymbol 'flow) "flow")
      (check-exception (validate AdmissionSymbol 42) TypeError?))
 
-   (yuanxu-test-case "preserves native missing-method failure"
+   (yuanxu-test-case "preserves runtime missing-method failure"
      (check-exception
       (admission-project (.o) 'flow)
       NoApplicableMethod?))
 
-   (yuanxu-test-case "preserves native invalid-precedence failure"
+   (yuanxu-test-case "preserves runtime invalid-precedence failure"
      (let* ((x (.o))
             (y (.o))
             (xy (.mix x y))

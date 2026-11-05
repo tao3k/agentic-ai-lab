@@ -31,7 +31,7 @@
         (def selection
           (realize-aws-selection fixture (path-expand "packages-old" root) phase))
         (phase 'parent-selected)
-        ;; Native imports keep their owners in this explicit source policy.
+        ;; Runtime imports keep their owners in this explicit source policy.
         (check-equal?
           (and (find (lambda (input)
                        (string-suffix? "/modules/funflow/func.ss" (car input)))
@@ -65,7 +65,7 @@
         (check-equal? (eq? (.get child admission-contract) child-contract) #t)
         (check-equal? (eq? (.get child context) (.get publication context)) #t)
         ;; This newly present transitive Nix file is intentionally absent from
-        ;; Scheme's observation list. Native flake input hashing must refuse the
+        ;; Scheme's observation list. Runtime flake input hashing must refuse the
         ;; old package identity; restoring it may reuse only Nix's own cache.
         (def transitive (path-expand "profile-options.nix" project))
         (dynamic-wind

@@ -131,8 +131,8 @@ Neither graph storage, procedural retrieval nor reduced thinking alone is new.
 | [[file:../../../candidate/reasoning.ss][candidate/reasoning.ss]] | Snapshot/generation/content and candidate digest binding; optional finite/stratified checking | =reasoning-receipt-bound?= does not check intended meaning, source authority, completion or proof validity |
 | [[file:../../../candidate/provenance-graph.ss][candidate/provenance-graph.ss]] | Positive graph verification before opening retained maintenance | Scoped admitted fragment; not arbitrary natural-language chain-of-thought verification |
 | [[file:../../../candidate/provenance-maintenance.ss][candidate/provenance-maintenance.ss]] | Bounded grounded-support withdrawal, preview and compaction | Positive support mechanism; negation/aggregate changes require their own dependencies/replay |
-| [[file:../../../program/session.ss][program/session.ss]] | Retained native session/update machinery | Not yet evidence of model-side reuse across compaction or durable process restart |
-| [[file:reasoning-language-formal-agenda.org][Formal agenda]] | Existing abstract proof obligations and representation gaps | No theorem that native arbitrary agent reasoning is sound |
+| [[file:../../../program/session.ss][program/session.ss]] | Retained runtime session/update machinery | Not yet evidence of model-side reuse across compaction or durable process restart |
+| [[file:reasoning-language-formal-agenda.org][Formal agenda]] | Existing abstract proof obligations and representation gaps | No theorem that runtime arbitrary agent reasoning is sound |
 
 ASCENT checks consequences of admitted finite programs. The caller/MRR/POO
 workflow owns source admission, authority, policy and real-world interpretation.

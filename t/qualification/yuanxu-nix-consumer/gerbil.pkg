@@ -1,0 +1,4 @@
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+;; This package is an in-tree integration consumer of the declared Lab source.
+;; Yuanxu and gerbil-poo are preinstalled test-environment prerequisites.
+(package: yuanxu-nix-consumer prelude: :tao3k/yuanxu/prelude)

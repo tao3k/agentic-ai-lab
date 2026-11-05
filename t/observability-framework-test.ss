@@ -9,7 +9,7 @@
         (only-in :clan/poo/object .o .cc .ref .slot? .call CyclicSlot? CyclicSlot-path)
         (only-in :clan/poo/mop element? validate TypeError?)
         :yuanxu/observability/debug
-        (only-in :agentic-ai-lab/testing-api
+        (only-in :yuanxu/observability/testing-case
                  yuanxu-test-case
                  yuanxu-test-case/with
                  yuanxu-testing-case-profile-prototype
@@ -79,7 +79,7 @@
 (def observability-framework-test
   (test-suite "Agentic AI Lab observability over gerbil-poo"
     (let (harness-thread (current-thread))
-      (yuanxu-test-case "default POO Case preserves native assertions"
+      (yuanxu-test-case "default POO Case preserves runtime assertions"
         (check-equal? (eq? (current-thread) harness-thread) #t)
         (check-equal? (not (current-test-case)) #f)
         (check-equal? (yuanxu-testing-case-profile?
@@ -99,7 +99,7 @@
              heap-limit-bytes: -1))
        #f))
 
-    (yuanxu-test-case "duration receipt has a native POO contract"
+    (yuanxu-test-case "duration receipt has a POO contract"
       (let (proto (.ref YuanxuDebugDurationReceiptContract 'proto))
         (check-equal?
          (element? YuanxuDebugDurationReceiptContract
@@ -195,7 +195,7 @@
         (check-equal? (.slot? facts 'context) #f)
         (check-equal? (.ref summary 'failure-count) 0)))
 
-    (yuanxu-test-case "missing and invalid responsibilities have native explanation paths"
+    (yuanxu-test-case "missing and invalid responsibilities have runtime explanation paths"
       (let* ((context (framework-context))
              (missing (.o (:: @ SemanticModule.)
                           imports: (yuanxu-empty-imports)
@@ -214,7 +214,7 @@
         (check-equal? (.ref failure 'path) '(imports))
         (check-equal? (.ref failure 'code) 'prototype-mismatch)))
 
-    (yuanxu-test-case "native ancestry rejection is not disguised as a field failure"
+    (yuanxu-test-case "runtime ancestry rejection is not disguised as a field failure"
       (let* ((event (yuanxu-observe-contract-admission
                      (framework-context) SemanticModuleContract (.o identity: 'lookalike)))
              (failure (car (.ref (yuanxu-observation-explain event) 'failures))))
@@ -278,7 +278,7 @@
         (check-equal? (.ref (yuanxu-observation-explain event) 'accepted?) #t)
         (check-equal? (.ref (yuanxu-observation-debug event port trace?: #t) 'accepted?) #t)))
 
-    (yuanxu-test-case "producer is evaluated once and native explanation can be refined"
+    (yuanxu-test-case "producer is evaluated once and runtime explanation can be refined"
       (let* ((count 0)
              (contract (yuanxu-predicate-contract
                         'counted symbol? (lambda (_candidate _context) (set! count (1+ count)) '())))
@@ -506,7 +506,7 @@
         (check-equal? (framework-contains? output "slot-resolution-raised") #t)
         (check-equal? (framework-contains? output canary) #f)))
 
-    (yuanxu-test-case "slot guard preserves the native finite lazy-cycle failure"
+    (yuanxu-test-case "slot guard preserves the runtime finite lazy-cycle failure"
       (let* ((policy (yuanxu-debug-slot-policy 'slot-cycle 4))
              (port (open-output-string))
              (source (.o project-id: project-id))
@@ -561,7 +561,7 @@
         (check-equal? (.ref receipt 'reason)
                       'maximum-slot-depth-exceeded)))
 
-    (yuanxu-test-case "memory policy comparison is a pure native POO receipt"
+    (yuanxu-test-case "memory policy comparison is a pure POO receipt"
       (let* ((policy
               (yuanxu-debug-memory-policy
                'unit heap-limit-bytes: 1000 live-growth-limit-bytes: 50))
@@ -581,13 +581,13 @@
       (let* ((limit 1152921504606846976)
              (policy
               (yuanxu-debug-memory-policy
-               'native-span heap-limit-bytes: limit
+               'runtime-span heap-limit-bytes: limit
                live-growth-limit-bytes: limit))
              (port (open-output-string)))
         (call-with-values
           (lambda ()
             (call-with-yuanxu-debug-memory-span
-             policy 'native-span (lambda () 'completed) port: port emit?: #t))
+             policy 'runtime-span (lambda () 'completed) port: port emit?: #t))
           (lambda (value receipt)
             (check-equal? value 'completed)
             (check-equal? (.ref receipt 'accepted?) #t)
@@ -595,11 +595,11 @@
                            (get-output-string port) "debug-memory-observation")
                           #t)))))
 
-    (yuanxu-test-case "native memory monitor samples a running Scheme operation"
+    (yuanxu-test-case "runtime memory monitor samples a running Scheme operation"
       (let* ((limit 1152921504606846976)
              (policy
               (yuanxu-debug-memory-policy
-               'native-monitor heap-limit-bytes: limit
+               'runtime-monitor heap-limit-bytes: limit
                live-growth-limit-bytes: limit
                sample-interval-milliseconds: 1))
              (port (open-output-string)))
@@ -607,22 +607,22 @@
           (lambda ()
             (call-with-yuanxu-debug-memory-monitor
              policy
-             'native-monitor
+             'runtime-monitor
              (lambda () (thread-sleep! 0.01) 'completed)
              port: port
              emit?: #t))
           (lambda (value receipt)
             (check-equal? value 'completed)
             (check-equal? (.ref receipt 'accepted?) #t)
-            (check-equal? (.ref receipt 'phase) 'native-monitor)
+            (check-equal? (.ref receipt 'phase) 'runtime-monitor)
             (check-equal? (framework-contains?
                            (get-output-string port) "debug-memory-observation")
                           #t)))))
 
-    (yuanxu-test-case "native memory monitor stops a non-returning debug worker"
+    (yuanxu-test-case "runtime memory monitor stops a non-returning debug worker"
       (let* ((policy
               (yuanxu-debug-memory-policy
-               'native-monitor-rejected
+               'runtime-monitor-rejected
                heap-limit-bytes: 0
                live-growth-limit-bytes: 0
                sample-interval-milliseconds: 1))
@@ -632,7 +632,7 @@
          (lambda ()
            (call-with-yuanxu-debug-memory-monitor
             policy
-            'native-monitor-rejected
+            'runtime-monitor-rejected
             (lambda ()
               (let loop ()
                 (thread-sleep! 0.01)
@@ -640,12 +640,12 @@
         (check-equal? (YuanxuDebugMemoryAnomaly? captured) #t)
         (check-equal?
          (.ref (YuanxuDebugMemoryAnomaly-receipt captured) 'phase)
-         'native-monitor-rejected)
+         'runtime-monitor-rejected)
         (check-equal?
          (.ref (YuanxuDebugMemoryAnomaly-receipt captured) 'reason)
          'heap-limit-exceeded)))
 
-    (yuanxu-test-case "native memory monitor propagates finite POO cycle detection"
+    (yuanxu-test-case "runtime memory monitor propagates finite POO cycle detection"
       (let* ((initial (yuanxu-debug-memory-snapshot 'poo-self-slot-cycle))
              (policy
               (yuanxu-debug-memory-policy

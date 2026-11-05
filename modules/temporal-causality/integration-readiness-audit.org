@@ -43,11 +43,11 @@ the advanced profiles and assurance obligations have different acceptance gates.
 
 | Concern | Design / executable boundary | Closure judgment / next gate |
 |---------+------------------------------+------------------------------|
-| D1 finite hypothesis family | Native POO classify; bounded C/Python classify/observe; exclusive/overlap, unknown, budget and identity tests | Basic profile implemented and locally qualified; necessity is relative to a declared complete exclusive family |
+| D1 finite hypothesis family | POO classify; bounded C/Python classify/observe; exclusive/overlap, unknown, budget and identity tests | Basic profile implemented and locally qualified; necessity is relative to a declared complete exclusive family |
 | D1/D8 behavior and interventions | Separate behavior interpretation specified; trajectory contrasts exist | No general behavior-space interpreter or intervention-qualified causal admission; cannot infer actual causation from precedence or uniqueness |
-| D2 source binding | Host registration binds inventory, metadata and generation; current native replay rejects changed/stale evidence | Local trust premise implemented; issuer signatures, partition/sequence coverage, late-event completeness and closed absence remain open |
+| D2 source binding | Host registration binds inventory, metadata and generation; current runtime replay rejects changed/stale evidence | Local trust premise implemented; issuer signatures, partition/sequence coverage, late-event completeness and closed absence remain open |
 | D3 time | Explicit domains and same-domain uncertainty; no implicit conversion | Same-domain basic queries supported; verified conversion relations and clock authenticity unimplemented |
-| D4 proof/result admission | Native finite-family replay generates proof/root identities | Root family-relative admission implemented; live MRR/ASCENT derivation and coverage admission remain open |
+| D4 proof/result admission | Runtime finite-family replay generates proof/root identities | Root family-relative admission implemented; live MRR/ASCENT derivation and coverage admission remain open |
 | D5 | =packages/proofs/quint/= and shared verifier | Bind staged model identities, declared predicates, completion and counterexample controls |
 | D6 revisions | Immutable revision/projection helpers, reverse dependency and invalidation plans | General authenticated correction/retraction, dual-support SCC stabilization and runtime revision publication remain open |
 | D7 publication | Runtime C SQLite first-root CAS; source/grant/pointer checks, version and receipt in one transaction; Python owner queue | Concrete local first-root slice qualified; replacement/tombstone, signed/Cedar permits, canonical journal replay and external effects remain open |
@@ -65,7 +65,7 @@ a fresh applicability or effect authorization claim after a source/grant change.
 
 | Evidence | Result | Exact supported claim |
 |----------+--------+-----------------------|
-| Final installed wheel (qualification output is an external artifact) | 95 tests passed; 2.90s reported; five-second output watchdog not triggered | Local macOS ARM64 CPython 3.13 native lens/family/admission/publication and related regression scope; 10 new publication cases |
+| Final installed wheel (qualification output is an external artifact) | 95 tests passed; 2.90s reported; five-second output watchdog not triggered | Local macOS ARM64 CPython 3.13 runtime lens/family/admission/publication and related regression scope; 10 new publication cases |
 | [[file:../../t/qualification/semantic-abi/2026-10-04-tool-roundtrip-abi/summary.json][DeepSeek forced read-only tool roundtrip]] | 24/24 roundtrips; 48 provider responses; no retries | temporal.solve lens task fidelity, actual Library execution, sync/async and consumption of actual tool output |
 | Same summary, source prediction pilots | 11/24 source-closure; 12/24 temperature-zero; gate FAILED | Unaided source prediction remains unqualified; successful tool use does not remove these failures |
 | New family/admission/publication receipts | realModelCalls = 0 | No real-provider acceptance for these new interfaces; historical lens scores cannot transfer to them |
@@ -110,7 +110,7 @@ validate a causal derivation. The receipt must retain that claim scope.
 
 The earlier property-source worker has been removed. Current MRR Data uses
 =execute_restored_property_query_handoff= with the immutable MRR Scheme v2
-pin and original compilation/admission values. POO's native Rust runtime
+pin and original compilation/admission values. POO's Rust runtime
 consumes the bounded typed handoff; its joined original-GQL physical fixture
 has a separate local acceptance receipt. This audit's older pin and worker
 findings are superseded by =mrr-integration-architecture.org=.
@@ -141,10 +141,10 @@ negative cases must continue to pass under that exact dependency head.
 ** R2: Implement one POO-owned Rust runtime consumer
 
 Use =bindings/runtime-c/include/agentic_ai_lab/semantic.h= rather than a Python bridge
-or a new Rust classifier. The native lifetime is process-global, thread-affine
+or a new Rust classifier. The runtime lifetime is process-global, thread-affine
 and terminal on close. Open/call/release/close on one dedicated OS owner thread
-with a bounded queue. Do not dispatch native calls on arbitrary Tokio workers,
-close after each request, send native pointers across threads or reopen after
+with a bounded queue. Do not dispatch runtime calls on arbitrary Tokio workers,
+close after each request, send runtime pointers across threads or reopen after
 terminal close. Verify artifact digest and operation/profile before calls.
 
 Initial scope: lens solve/observe and finite-family classify/observe. Expose
@@ -152,7 +152,7 @@ source registration as a separate trusted host capability, never a model tool.
 A Rust publication binding is a later gate over the same typed C store contract;
 it cannot replace POO admission with caller-provided basis JSON.
 
-Acceptance: installed Rust consumer/native artifact; differential C/Python/Rust
+Acceptance: installed Rust consumer/runtime artifact; differential C/Python/Rust
 results for two vocabularies; unknown/partial/budget/stale binding; queue bounds,
 wrong-thread and lifetime guards; no bare model output admitted; genuine progress
 watchdog. Add a separate real DeepSeek read-only family tool batch against the
@@ -190,9 +190,9 @@ first-root CAS, abstract Quint, or a successful read-only model tool batch.
 | Remove duplicated owner logic | MRR Data property_source -> MRR property-source compile/bind/admit | Identical original receipts and negative controls; reduced duplicated code, no invented query identity |
 | Cache compiled/bound queries separately | Immutable original source/compiler identity; query/catalog/semantic snapshot bindings | Every source/compiler/catalog/generation change misses; budget/policy/IFC scope cannot reuse a more permissive entry; bound cache bytes |
 | Reuse immutable physical blocks | MRR Data CID restore and transfer caches | Byte/closure validation remains intact; generation and coverage remain bound; measure cold/warm bytes, latency and peak memory |
-| Batch typed exchange, bound copying | MRR candidate rows -> POO supported wire projection | Enforce total bytes/rows/cells/depth before allocation; preserve canonical native digest separately; no partial result called complete |
+| Batch typed exchange, bound copying | MRR candidate rows -> POO supported wire projection | Enforce total bytes/rows/cells/depth before allocation; preserve canonical runtime digest separately; no partial result called complete |
 | Incremental invalidation | MRR lineage impact + Temporal reverse-support plans | Complete support inventory and SCC gates first; then measure impacted work without skipping retractions or dual supports |
-| Queue and cancellation control | Dedicated Rust native owner + MRR physical worker | Bound queue/memory/deadline, stop cancelled read-only work without unsafe native interruption; measure p50/p95 and contention |
+| Queue and cancellation control | Dedicated Rust runtime owner + MRR physical worker | Bound queue/memory/deadline, stop cancelled read-only work without unsafe runtime interruption; measure p50/p95 and contention |
 
 These are proposed optimization experiments, not demonstrated performance gains.
 Do not add another Temporal solver or causal authority inside MRR. The next
@@ -219,17 +219,17 @@ MRR Context crate consumes temporal fact references without defining a clock
 or causal solver; its extracted evidence proof does not close POO's IFC label,
 declassification or Temporal applicability gates.
 
-MRR =runtime/= owns the read-only native consumer. MRR CI uses its declared
+MRR =runtime/= owns the read-only runtime consumer. MRR CI uses its declared
 POO dependency to test the POO-produced Library.
 Dedicated owner thread, bounded queue, exact artifact digest, allocator-matched
-release and terminal native close are checked against a real native artifact.
+release and terminal runtime close are checked against a real runtime artifact.
 It consumes finite lens/family operations and no trusted registration/publication
 operations. MRR original-result mapping, cross-generation correspondence and
 Rust durable publication are still subsequent gates. The new model study is
 separately permission-gated by automatic approval review; a rejected invocation
 is zero real-model calls, never a successful acceptance receipt.
 
-* Current delivered native MRR slice
+* Current delivered runtime MRR slice
 
 The authorized Rust family real-provider gate subsequently passed 4/4 frozen
 roundtrips, 8 completed responses and no retries. This supersedes the earlier
@@ -237,19 +237,19 @@ blocked execution state for that exact payload; its producer head and claim
 scope remain in [[file:../../t/qualification/temporal-library-basic/rust-model-family/historical.org][the model receipt]].
 
 R3 now has an executable original MRR -> explicit host observation correspondence
--> native POO finite-family seam in =runtime/src/mrr.rs= in MRR.
+-> POO finite-family seam in =runtime/src/mrr.rs= in MRR.
 The upstream facade is pinned at PR #9 head =3ce31dac...=; no MRR implementation
-or MRR Data PR was overwritten. The receiving side uses native MRR transport
+or MRR Data PR was overwritten. The receiving side uses runtime MRR transport
 verification and retains the original candidate/receipt. The narrowly supported
 event/position profile binds all original identities to source/cut/projection/
 policy/clock and a separate integer Temporal generation. Changed scope invalidates
 POO model identity through observation provenance. No generation coercion or
-digest substitution occurs. Exact native/negative-gate results are in
+digest substitution occurs. Exact runtime/negative-gate results are in
 [[file:../../t/qualification/temporal-library-basic/rust-mrr-runtime/historical.org][the integration receipt]].
 
 Physical MRR Data execution, original GQL parser-source receipts, authenticated
 coverage, generic typed row mapping and R4 lifecycle/IFC gates remain open.
-The frozen real-provider batch exercises Rust native family calls; it does not
+The frozen real-provider batch exercises Rust runtime family calls; it does not
 claim a provider -> MRR physical-source -> Temporal publication roundtrip.
 
 * Full integration design follow-up
@@ -260,16 +260,16 @@ reverse conclusion projection, acyclic revision/current-applicability lifecycle,
 recursive and absence profiles, authorized publication and real-model lifecycle
 acceptance. It records the old MRR projection document's incompatible identity
 equalities and limits lineage impact to a reevaluation frontier. These contracts
-are proposed; the delivered native event/position slice remains the executable
+are proposed; the delivered runtime event/position slice remains the executable
 boundary until each gate has its own receipt.
 
 * Current fixed-v1 consumer closure
 
 [[file:next-delivery-plan-v1.org][The current delivery ledger]] supersedes the earlier implementation status
-above. Scheme ABI and transport remain v1. The native proof Host controls and
+above. Scheme ABI and transport remain v1. The runtime proof Host controls and
 original MRR rule/Derivation/source-leaf correspondence are implemented and have
 bounded historical qualification. The new exact-run consumer gate requalifies
-Rust and installed Python using one fresh native artifact and the current
+Rust and installed Python using one fresh runtime artifact and the current
 immutable dependency graph. Historical producer receipts are not transferable.
 
 Source issuer authentication, complete coverage, authoritative Data publication,
@@ -279,7 +279,7 @@ an implementation of the general publication protocol.
 
 * Bounded Context restriction implementation
 
-The native [[file:../../src/semantic/context-restriction.ss][Context restriction profile]] now implements a finite equivalent
+The runtime [[file:../../src/semantic/context-restriction.ss][Context restriction profile]] now implements a finite equivalent
 restriction model: reader/destination intersection, preserved provenance and
 half-open lease narrowing. Widening and forged label digests reject. Its flow
 decision is bound to declared source/content, principal, destination and time;
@@ -288,5 +288,5 @@ upgrade the Bundle's visible-symbol projections into admitted IFC labels.
 
 [[file:context-publication-contract-v1.org][The Data publication contract]] records the missing owner registry, admitted
 Authority/Evidence/declassification and protected conditional-commit obligations.
-The full IFC and G4 gates remain open; the profile's native control tests alone
+The full IFC and G4 gates remain open; the profile's runtime control tests alone
 do not establish either.

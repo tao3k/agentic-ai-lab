@@ -40,7 +40,7 @@ def forward_output(destination, chunk: bytes, timeout: float) -> None:
 
 
 def group_cpu(group: int) -> dict[int, float]:
-    """Count live and reaped compiler CPU, with native Linux tick precision."""
+    """Count live and reaped compiler CPU, with runtime Linux tick precision."""
     if Path('/proc/self/stat').exists():
         return proc_group_cpu(Path('/proc'), group, os.sysconf('SC_CLK_TCK'))
     listing = subprocess.check_output(

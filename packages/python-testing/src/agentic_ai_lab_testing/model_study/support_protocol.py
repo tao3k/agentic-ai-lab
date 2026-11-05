@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Freeze prompts, native reference and call budget before model execution."""
+"""Freeze prompts, runtime reference and call budget before model execution."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from pathlib import Path
 
 from .protocol import require_clean, require_pinned_ascent
 from .runner import source_head
-from .support_native import observe, parse_observation
+from .support_runtime import observe, parse_observation
 
 SETTINGS = {"model": "deepseek-flash", "temperature": 0,
             "reasoning": {"effort": "none"}, "max_output_tokens": 1024}
@@ -29,7 +29,7 @@ source withdrawal and replacement; those source states are held out.
 Return exactly one candidate datum, with no Markdown or explanation.
 """
 SELF_REVIEW = "Review your candidate against the task and supplied implementation. Return the final candidate datum only."
-NATIVE_REVIEW = "Review your candidate using this initial-source native observation. It checks execution and bounded evidence, not task intent. Return the final candidate datum only.\n{observation}"
+RUNTIME_REVIEW = "Review your candidate using this initial-source runtime observation. It checks execution and bounded evidence, not task intent. Return the final candidate datum only.\n{observation}"
 
 
 def initial_prompt(root: Path) -> str:
@@ -44,7 +44,7 @@ def digest(raw: bytes) -> str:
 def metadata(ascent: Path, poo: Path, files: dict[str, bytes]) -> dict:
     return {"protocol": "support-candidate-paired-v1", "ascent_head": source_head(ascent),
             "poo_head": source_head(poo), "settings": SETTINGS, "transport": TRANSPORT, "max_calls": 4,
-            "arms": ["self", "native"], "calls_per_arm": 2,
+            "arms": ["self", "runtime"], "calls_per_arm": 2,
             "files": {name: digest(raw) for name, raw in files.items()}}
 
 
@@ -64,7 +64,7 @@ def preview(directory: Path, ascent: Path, poo: Path, gerbil_path: Path) -> dict
             or records[-1]["finite"] != "invalid" or records[-1]["founded"] != "invalid"):
         raise RuntimeError("qualified support reference changed")
     files = {"initial.txt": initial_prompt(ascent).encode(),
-             "self_review.txt": SELF_REVIEW.encode(), "native_review.txt": NATIVE_REVIEW.encode(),
+             "self_review.txt": SELF_REVIEW.encode(), "runtime_review.txt": RUNTIME_REVIEW.encode(),
              "reference.tsv": reference.encode()}
     manifest = metadata(ascent, poo, files)
     directory.mkdir(parents=True)
@@ -78,14 +78,14 @@ def validate(directory: Path, ascent: Path, poo: Path) -> dict[str, str]:
     require_clean(ascent)
     require_clean(poo)
     require_pinned_ascent(ascent, poo)
-    names = ("initial.txt", "self_review.txt", "native_review.txt", "reference.tsv")
+    names = ("initial.txt", "self_review.txt", "runtime_review.txt", "reference.tsv")
     files = {name: (directory / name).read_bytes() for name in names}
     manifest = json.loads((directory / "manifest.json").read_text())
     if manifest != metadata(ascent, poo, files):
         raise RuntimeError("preview bytes, heads or protocol settings changed")
     if (files["initial.txt"] != initial_prompt(ascent).encode()
             or files["self_review.txt"] != SELF_REVIEW.encode()
-            or files["native_review.txt"] != NATIVE_REVIEW.encode()):
+            or files["runtime_review.txt"] != RUNTIME_REVIEW.encode()):
         raise RuntimeError("preview prompt differs from committed protocol")
     parse_observation(files["reference.tsv"].decode())
     return {name: raw.decode() for name, raw in files.items()}

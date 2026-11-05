@@ -38,7 +38,7 @@ uses existing stratified Session recomputation. Existing SessionTransaction
 Quint owns candidate source admission, refusal and publication; it is checked
 alongside this application without a second Session state-machine replica.
 
-[[file:../../../t/qualification/ascent-taint-paths-test.ss][Native qualification]] checks all 64 non-self-edge three-node graphs and all
+[[file:../../../t/qualification/ascent-taint-paths-test.ss][Runtime qualification]] checks all 64 non-self-edge three-node graphs and all
 eight sanitizer sets against independent graph search. Interior blocking,
 bypass paths, zero-edge witnesses, source replacement, zero-budget refusal and
 held results are separate controls. These are 512 finite semantic comparisons,

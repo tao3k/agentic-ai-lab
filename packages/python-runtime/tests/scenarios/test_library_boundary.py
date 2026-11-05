@@ -17,5 +17,5 @@ class LibraryBoundary(unittest.TestCase):
         with ReasoningRuntime() as runtime:
             self.assertFalse(runtime.closed)
 
-    def test_native_producer_content_matches_installed_core(self):
+    def test_runtime_producer_content_matches_installed_core(self):
         self.assertEqual(len(qualification_inputs([])),2)

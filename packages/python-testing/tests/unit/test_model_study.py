@@ -77,7 +77,7 @@ def test_typed_observation_preserves_boolean_and_scope() -> None:
     }
 
 
-def test_runtime_guard_withholds_native_denied_model_claims() -> None:
+def test_runtime_guard_withholds_runtime_denied_model_claims() -> None:
     closed = typed_observation("temporal.closed-cut", {
         "source": "agentic-ai-lab.temporal-causality",
         "status": "bounded-temporal-classification",
@@ -90,7 +90,7 @@ def test_runtime_guard_withholds_native_denied_model_claims() -> None:
     })
     assert trace == ["authority"]
     assert state["guard"] == {
-        "status": "withheld", "reason": "native-denies-release",
+        "status": "withheld", "reason": "runtime-denies-release",
     }
     safe = '{"choice":"A","claim":"classification_no_authority"}'
     assert gate_model_answer(safe, closed) == {

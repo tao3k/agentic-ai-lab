@@ -64,7 +64,7 @@ def main():
         raise RuntimeError('CLI exit disagrees with executed verdicts')
     summary = {'executed': len(jobs), 'expected_unsafe_failures': failures, 'safe_failures': 0,
                'model_sha256': sha(model), 'tool': version, 'bounded_contract_fixture': True,
-               'native_concurrency_proof': False}
+               'runtime_concurrency_proof': False}
     (artifacts / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
     print(f'PASS: {len(jobs)} executed, {failures} expected unsafe; {artifacts}')
 

@@ -69,7 +69,7 @@ package AgenticAIContextRoundTrip {
         in item source : SourcePacket;
         in item recalled : ContextRevisionRef [0..1];
         out item working : ContextRevisionRef;
-        doc /* Unified Query/GQL selects ORG-bound closure; Context composes native
+        doc /* Unified Query/GQL selects ORG-bound closure; Context composes runtime
                POO graph inputs under declared parent/source/Contract cuts, then
                admits the scoped working projection. Preserve hypotheses,
                contradictions, unknown coverage, mandatory inputs and budgets.

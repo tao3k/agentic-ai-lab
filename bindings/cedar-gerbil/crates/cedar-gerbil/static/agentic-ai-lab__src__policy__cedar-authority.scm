@@ -45,7 +45,7 @@
                                     (let* ((_%object28298%_ _%self28230%_)
                                            (_%object28369%_ _%object28298%_)
                                            (_%object28440%_ _%object28369%_))
-                                      'native.cedar-authority))))
+                                      'runtime.cedar-authority))))
                              (declare (not safe))
                              (##structure
                               clan/poo/object#$self-slot-spec::t
@@ -130,7 +130,7 @@
                                     (let* ((_%object27162%_ _%self27094%_)
                                            (_%object27233%_ _%object27162%_)
                                            (_%object27304%_ _%object27233%_))
-                                      'native.cedar-authority))))
+                                      'runtime.cedar-authority))))
                              (declare (not safe))
                              (##structure
                               clan/poo/object#$self-slot-spec::t
@@ -215,7 +215,7 @@
                                     (let* ((_%object26026%_ _%self25958%_)
                                            (_%object26097%_ _%object26026%_)
                                            (_%object26168%_ _%object26097%_))
-                                      'native.cedar-authority))))
+                                      'runtime.cedar-authority))))
                              (declare (not safe))
                              (##structure
                               clan/poo/object#$self-slot-spec::t
@@ -301,7 +301,7 @@
                                     (let* ((_%object24890%_ _%self24822%_)
                                            (_%object24961%_ _%object24890%_)
                                            (_%object25032%_ _%object24961%_))
-                                      'native.cedar-authority))))
+                                      'runtime.cedar-authority))))
                              (declare (not safe))
                              (##structure
                               clan/poo/object#$self-slot-spec::t
@@ -387,7 +387,7 @@
                                     (let* ((_%object23754%_ _%self23686%_)
                                            (_%object23825%_ _%object23754%_)
                                            (_%object23896%_ _%object23825%_))
-                                      'native.cedar-authority))))
+                                      'runtime.cedar-authority))))
                              (declare (not safe))
                              (##structure
                               clan/poo/object#$self-slot-spec::t
@@ -473,7 +473,7 @@
                                     (let* ((_%object22618%_ _%self22550%_)
                                            (_%object22689%_ _%object22618%_)
                                            (_%object22760%_ _%object22689%_))
-                                      'native.cedar-authority))))
+                                      'runtime.cedar-authority))))
                              (declare (not safe))
                              (##structure
                               clan/poo/object#$self-slot-spec::t
@@ -559,7 +559,7 @@
                                     (let* ((_%object21482%_ _%self21414%_)
                                            (_%object21553%_ _%object21482%_)
                                            (_%object21624%_ _%object21553%_))
-                                      'native.cedar-authority))))
+                                      'runtime.cedar-authority))))
                              (declare (not safe))
                              (##structure
                               clan/poo/object#$self-slot-spec::t
@@ -645,7 +645,7 @@
                                     (let* ((_%object20346%_ _%self20278%_)
                                            (_%object20417%_ _%object20346%_)
                                            (_%object20488%_ _%object20417%_))
-                                      'native.cedar-authority))))
+                                      'runtime.cedar-authority))))
                              (declare (not safe))
                              (##structure
                               clan/poo/object#$self-slot-spec::t
@@ -731,7 +731,7 @@
                                     (let* ((_%object19210%_ _%self19142%_)
                                            (_%object19281%_ _%object19210%_)
                                            (_%object19352%_ _%object19281%_))
-                                      'native.cedar-authority))))
+                                      'runtime.cedar-authority))))
                              (declare (not safe))
                              (##structure
                               clan/poo/object#$self-slot-spec::t

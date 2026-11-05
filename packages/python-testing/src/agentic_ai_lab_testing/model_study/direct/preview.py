@@ -1,14 +1,14 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Freeze input bytes and independently preflight native computation."""
+"""Freeze input bytes and independently preflight runtime computation."""
 import json
 import os
 from pathlib import Path
 import subprocess
 import sys
 from .tasks import DIRECT_FAMILIES, DIRECT_MODULES, digest, task_program, expected_value, sexp
-from .native import native_run
-from .worker import NativeStudyWorker, worker_source
+from .runtime import runtime_run
+from .worker import RuntimeStudyWorker, worker_source
 
 def producer_hashes():
     files = [*Path(__file__).parent.glob('*.py'), Path(__file__).parent.parent/'direct_understanding.py',
@@ -17,9 +17,9 @@ def producer_hashes():
             for path in sorted(files)}
 
 def dependency_modules(root, output):
-    text = native_run(root, ['just', 'model-understanding-compute',
+    text = runtime_run(root, ['just', 'model-understanding-compute',
         str(root/'t/model-study/direct-understanding/source-closure.ss')],
-        output/'source-closure.native.log')
+        output/'source-closure.runtime.log')
     modules = json.loads(next(line for line in text.splitlines() if line.startswith('[')))
     project = [name for name in modules if name.startswith('gerbil-ascent/') or name == 'yuanxu/types']
     if not all('gerbil-ascent/'+name.removesuffix('.ss') in project for name in DIRECT_MODULES):
@@ -33,7 +33,7 @@ def source_paths(root, ascent, modules):
             for name in modules}
 
 
-def native_bindings(modules):
+def runtime_bindings(modules):
     prefix = Path(os.environ['GERBIL_PATH'])/'lib'
     files = []
     for module in modules:
@@ -62,7 +62,7 @@ def prepare(root, ascent, output):
         'templates': {name: digest((root/'t/model-study/direct-understanding'/f'{name}.ss').read_bytes())
                       for name in DIRECT_FAMILIES},
         'producerHashes': producer_hashes(),
-        'nativeBindings': native_bindings(modules),
+        'runtimeBindings': runtime_bindings(modules),
         'scorerSha256': digest((root/'t/model-study/direct-understanding/prediction-score.ss').read_bytes()),
         'predictionCoreSha256': digest((root/'t/model-study/direct-understanding/prediction-core.ss').read_bytes()),
         'workerLoopSha256': digest((root/'t/model-study/direct-understanding/worker-loop.ss').read_bytes()),
@@ -77,9 +77,9 @@ def prepare(root, ascent, output):
     imports = ''
     for module in (':gerbil-ascent/program/scheme-language',):
         imports += f'(displayln "IMPORT {module}") (force-output)\n(import {module})\n(displayln "MODULE-OK {module}") (force-output)\n'
-    worker_script = output/'native-worker.ss'
+    worker_script = output/'host-worker.ss'
     worker_script.write_text(worker_source(root))
-    worker = NativeStudyWorker(root, worker_script, output/'native-worker.log')
+    worker = RuntimeStudyWorker(root, worker_script, output/'native-worker.log')
     try:
         for family in DIRECT_FAMILIES:
             for variant in ('initial', 'transfer'):
@@ -87,10 +87,10 @@ def prepare(root, ascent, output):
                 program = task_program(root, family, variant)
                 task = output / f'{case}.ss'
                 task.write_text(imports + program + '\n(write result) (newline)\n(displayln "HARNESS-OK direct-compute")\n(displayln "OK") (force-output)\n')
-                log = output / f'{case}.native.log'
+                log = output / f'{case}.runtime.log'
                 result = worker.compute(case)
                 log.write_text(json.dumps(result, sort_keys=True)+'\n')
-                actual = result['nativeDatum'].rstrip('\n')
+                actual = result['runtimeDatum'].rstrip('\n')
                 expected = sexp(expected_value(family, variant))
                 if actual != expected:
                     raise AssertionError(f'independent oracle mismatch {case}: {actual} != {expected}')
@@ -102,7 +102,7 @@ def prepare(root, ascent, output):
                 (output / f'{case}.input.ss').write_text(payload)
                 manifest['cases'].append({'id': case, 'family': family, 'variant': variant,
                     'inputSha256': digest(payload.encode()), 'inputBytes': len(payload.encode()),
-                    'nativeProgramSha256': digest(task.read_bytes()), 'expectedSha256': digest((actual+'\n').encode())})
+                    'runtimeProgramSha256': digest(task.read_bytes()), 'expectedSha256': digest((actual+'\n').encode())})
                 sys.stdout.write(f'COMPUTE-OK {case}\n'); sys.stdout.flush()
     finally:
         worker.close()
@@ -120,5 +120,5 @@ def prepare(root, ascent, output):
                                       'case': f'{family}-{variant}'})
     encoded = json.dumps(manifest, sort_keys=True, separators=(',', ':')).encode()
     (output/'plan.json').write_bytes(encoded)
-    sys.stdout.write(f'PREPARED {digest(encoded)} native=12 modelCalls=0\n'); sys.stdout.flush()
+    sys.stdout.write(f'PREPARED {digest(encoded)} runtime=12 modelCalls=0\n'); sys.stdout.flush()
     return manifest

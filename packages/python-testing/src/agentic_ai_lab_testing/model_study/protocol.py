@@ -98,7 +98,7 @@ def main() -> int:
                      "protocol": CURRENT_PROTOCOL,
                      "cases": {case["id"]: variants(case["id"], old[case["id"]])
                                for case in cases}, "receipt": receipt,
-                     "native_fixture_seconds": tool_seconds,
+                     "runtime_fixture_seconds": tool_seconds,
                      "stratified_receipt_seconds": receipt_seconds})
         return 0
     if args.output is None:

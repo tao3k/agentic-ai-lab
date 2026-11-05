@@ -17,7 +17,7 @@ PROOF_ROOT = Path(__file__).parents[2]
 MANIFEST = PROOF_ROOT / "proof-case-vector-v1.toml"
 
 
-def test_manifest_has_stable_native_layout() -> None:
+def test_manifest_has_stable_runtime_layout() -> None:
     schema = load_proof_case_schema(MANIFEST)
 
     assert schema.version == 1

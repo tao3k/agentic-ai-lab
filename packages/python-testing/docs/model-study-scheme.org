@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 #+TITLE: Scheme source comprehension pilot
-#+STATUS: completed bounded pilot; native regrade documented
+#+STATUS: completed bounded pilot; runtime regrade documented
 #+DATE: 2026-10-02
 
 This page records the completed historical pilot. The current =scheme.py=
@@ -30,7 +30,7 @@ Before model calls, execute the same three files with Gerbil on the
 committed checkouts to obtain expected S-expressions. The expected files
 stay outside the repository and are never sent to the model. Save raw
 model text as separate =.sexp= files. Reject text outside the restricted
-answer alphabet or above 2048 bytes. The native Scheme scorer only reads
+answer alphabet or above 2048 bytes. The Scheme scorer only reads
 the returned datum; it never evaluates it. It checks =answer= shape and
 compares each row set independent of row order. Report valid syntax and
 correct rows separately.
@@ -40,14 +40,14 @@ Use DeepSeek =deepseek-flash= through the Responses API, non-thinking,
 Run three fresh calls per case, nine calls maximum. Each call sends one
 source file as a single user message. This pilot has no paired receipt arm;
 the outcome is exact row-set prediction on each of the three programs.
-Record both Git heads, source SHA256, response status and ID, native score,
+Record both Git heads, source SHA256, response status and ID, runtime score,
 and model wall time. Keep raw output outside the repository. Do not infer
 general Scheme comprehension from nine calls.
 
 * Execution gate
 
 The preview command writes the exact outgoing source files, expected
-native answers in a separate subdirectory, and a manifest to an external
+runtime answers in a separate subdirectory, and a manifest to an external
 directory. Review the three outgoing files before authorizing any paid
 call. The live runner requires clean committed checkouts, the exact POO
 Flow dependency pin, and unchanged preview hashes and Git heads.

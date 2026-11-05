@@ -17,8 +17,8 @@
         agentic-ai-lab-nono-sandbox-profile-object
         agentic-ai-lab-nono-sandbox-module-objects)
 
-;;; Nono sandbox object data names the backend family and native binding
-;;; default; native calls remain in their dedicated owner.
+;;; Nono sandbox object data names the backend family and runtime binding
+;;; default; runtime calls remain in their dedicated owner.
 (defpoo-sandbox-backend-object-family
   agentic-ai-lab-nono-sandbox-object
   agentic-ai-lab-nono-sandbox-backend-capability
@@ -29,7 +29,7 @@
            objects.nono-sandbox
            objects.shared.sandbox
            ((backend YuanxuModuleSymbolType override 'nono '((scope . nono-sandbox)))
-            (binding YuanxuModuleSymbolType override 'native-ffi '((scope . nono-sandbox)))))
+            (binding YuanxuModuleSymbolType override 'ffi '((scope . nono-sandbox)))))
   (backend nono
            agentic-ai-lab-sandbox-backend-capability/nono
            '((metadata . ((scope . nono-sandbox)

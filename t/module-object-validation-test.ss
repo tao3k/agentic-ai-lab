@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: Agentic AI Lab integration with Core's native module-schema admission.
+;;; Boundary: Agentic AI Lab integration with Core's runtime module-schema admission.
 
 (import :gerbil/core
         (only-in :clan/poo/object .ref object?)
@@ -34,13 +34,13 @@
     (yuanxu-module-field-contract
      'backend YuanxuModuleSymbolType 'override 'nono '((scope . validation)))
     (yuanxu-module-field-contract
-     'binding YuanxuModuleSymbolType 'override 'native-ffi
+     'binding YuanxuModuleSymbolType 'override 'ffi
      '((scope . validation))))
    '((domain . validation))))
 
 (def module-object-validation-test
-  (test-suite "agentic-ai-lab native module object validation"
-    (yuanxu-test-case "admits inherited module objects through native Type and C4"
+  (test-suite "agentic-ai-lab runtime module object validation"
+    (yuanxu-test-case "admits inherited module objects through Type and C4"
       (let* ((validation
               (yuanxu-module-object-validation validation-nono-sandbox-object))
              (field-validations (.ref validation 'fieldContractValidations))
@@ -77,13 +77,13 @@
         (check-equal? (yuanxu-module-object-validation-diagnostics validation)
                       '())))
 
-    (yuanxu-test-case "rejects symbolic field kinds at the native Type boundary"
+    (yuanxu-test-case "rejects symbolic field kinds at the Type boundary"
       (check-exception
        (yuanxu-module-field-contract
         'broken 'Unknown 'override #f '((scope . validation)))
        true))
 
-    (yuanxu-test-case "reports native field contract diagnostics"
+    (yuanxu-test-case "reports runtime field contract diagnostics"
       (let* ((broken-object
               (yuanxu-module-object
                'objects.validation.broken
@@ -100,7 +100,7 @@
                            (yuanxu-module-object-validation-diagnostics
                             validation))
                       '(unsupported-merge metadata-not-association-list
-                        default-not-in-native-type))
+                        default-not-in-poo-type))
         (check-equal? (yuanxu-module-field-contract-validation-valid?
                        field-validation)
                       #f)
@@ -112,7 +112,7 @@
             #f))
          #t)))
 
-    (yuanxu-test-case "requires every catalog object to pass native admission"
+    (yuanxu-test-case "requires every catalog object to pass runtime admission"
       (check-equal?
        (yuanxu-require-module-objects-validation!
         (list validation-shared-sandbox-object

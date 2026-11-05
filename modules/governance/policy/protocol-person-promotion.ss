@@ -126,7 +126,7 @@
       (materialization-count materialization-count-value)
       (injection-receipted? injection-receipted-value)))
 
-;; The public inputs stay POO-native.  The receipt is deliberately closed so
+;; The public inputs stay POO.  The receipt is deliberately closed so
 ;; callers cannot extend an approval result with unchecked fields.
 (defstruct agentic-ai-lab-promotion-validation-receipt
   (kind

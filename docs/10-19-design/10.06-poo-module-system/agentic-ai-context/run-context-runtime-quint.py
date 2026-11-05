@@ -16,7 +16,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[3]
 sys.path.insert(0, str(ROOT / "core/dev/proofs/quint"))
 from backend import backend_session
-from native import QuintCLI
+from cli import QuintCLI
 
 COUNTS = re.compile(rb"([\d,]+) states generated, ([\d,]+) distinct states.*?([\d,]+) states left on queue")
 
@@ -36,7 +36,7 @@ def main():
         raise RuntimeError("Expected pinned Quint 0.33.0")
     sources = {str(p.relative_to(ROOT)): sha(p) for p in HERE.glob("26-*.qnt")}
     sources[str(Path(__file__).relative_to(ROOT))] = sha(Path(__file__))
-    for name in ("backend.py", "native.py", "native-cli.cjs"):
+    for name in ("backend.py", "runtime.py", "quint-cli.cjs"):
         p = ROOT / "core/dev/proofs/quint" / name
         sources[str(p.relative_to(ROOT))] = sha(p)
     (out / "source-cut.json").write_text(json.dumps(sources, indent=2) + "\n")
@@ -91,7 +91,7 @@ def main():
                    "--main", f"ContextRuntime_{bug}", "--seed", "20261026",
                    "--max-samples", "1", "--out-itf", str(replay / "trace_{test}_{seq}.itf.json")]
         result = subprocess.run(command, capture_output=True, timeout=30)
-        (replay / "native.log").write_bytes(result.stdout + result.stderr)
+        (replay / "runtime.log").write_bytes(result.stdout + result.stderr)
         traces = sorted(replay.glob("*.itf.json"))
         if result.returncode or len(traces) != 8:
             raise RuntimeError("Missing deterministic QNT replay: " + bug)
@@ -102,7 +102,7 @@ def main():
     (out / "summary.json").write_text(json.dumps(dict(
         schema="context.runtime.quint.v1", source_sha256=sources, results=results, replays=replays,
         bounded_finite_model=True, distributed_runtime_implemented=False,
-        native_refinement_proved=False), indent=2) + "\n")
+        runtime_refinement_proved=False), indent=2) + "\n")
     print("PASS: finite runtime safety plus six deliberate broken-contract counterexamples")
 
 

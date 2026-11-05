@@ -90,9 +90,9 @@ class ReviewIntegration(unittest.TestCase):
 
     def test_missing_transitive_premise_and_empty_requirements(self):
         value = facts()
-        value["ClaimDepends"].append(["bounded-model", "native-origin"])
+        value["ClaimDepends"].append(["bounded-model", "runtime-origin"])
         result = self.result(value)
-        self.assertIn(["candidate", "native-origin"], result["result"]["relations"]["Missing"])
+        self.assertIn(["candidate", "runtime-origin"], result["result"]["relations"]["Missing"])
         value["Requires"] = []
         self.assertIn("missing-requirement-set", self.reasons(self.result(value)))
 

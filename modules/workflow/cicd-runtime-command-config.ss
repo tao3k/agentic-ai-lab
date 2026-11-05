@@ -12,7 +12,9 @@
         :yuanxu/modules/funflow/graph-projection
         :yuanxu/modules/funflow/check-types
         :yuanxu/modules/funflow/check-objects
-        :agentic-ai-lab/modules/workflow/funs)
+        (only-in :yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map?)
+        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->runtime-manifest-readiness agentic-ai-lab-cicd-check-map->runtime-command-manifests)
+        )
 
 (export agentic-ai-lab-user-cicd-payload?
         agentic-ai-lab-user-cicd-payload-section

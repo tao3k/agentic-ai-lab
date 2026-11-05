@@ -20,7 +20,7 @@
     "abiVersion": 1,
     "maximumInputBytes": 1048576
   },
-  "nativeColdSeconds": 0.17103654200036544,
+  "runtimeColdSeconds": 0.17103654200036544,
   "runtimeModule": "/private/tmp/poo-pr34-semantic-live-env-20261003/lib/python3.13/site-packages/poo_flow_runtime/semantic_runtime.py",
   "attempts": 24,
   "plannedCalls": 24,

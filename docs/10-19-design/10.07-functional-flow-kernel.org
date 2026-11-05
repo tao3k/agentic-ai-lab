@@ -26,10 +26,10 @@ the semantic object system.
 
 Functional programming is the preferred implementation style for the Scheme kernel. Funflow was introduced to keep the kernel centered on Category/Arrow-style composition, pure flow values, hygienic Gerbil authoring macros, and POO metadata for strategy selection. POO + functional programming is the non-negotiable core of this project; imperative schedulers, mutable runtime state, and backend-specific execution logic stay outside this Scheme layer.
 
-** Current native Function boundary
+** Current runtime Function boundary
 
 The implementation lives in =core/modules/funflow/control-plane/=. Task and Flow
-are extensible POO values. An operation owns one native Function Type; its input
+are extensible POO values. An operation owns one runtime Function Type; its input
 and output views are derived from that descriptor. The former symbolic
 =name proc input-contract output-contract= API is removed.
 
@@ -43,16 +43,16 @@ and output views are derived from that descriptor. The former symbolic
 (def pipeline (flow-then 'pipeline increment double))
 #+end_src
 
-Native =ObjectContract.= and =refine= validate Flow routes. Category operation
+Runtime =ObjectContract.= and =refine= validate Flow routes. Category operation
 slots, submitted functions, dynamic binders, recovery handlers and runtime
-callbacks retain native Function boundaries. Conditional selection uses native
-=Observation. .bind=; Try uses native =Sum=. Type descriptions in DAG and Store
+callbacks retain runtime Function boundaries. Conditional selection uses runtime
+=Observation. .bind=; Try uses runtime =Sum=. Type descriptions in DAG and Store
 reports are data projections, while runtime execution keeps actual Types.
 
 Fixed-domain module constructors state their signatures in their own definitions:
 =(custom-repeat-flow name text count)= and =(word-count-flow name)= need no
 caller-supplied contract labels. Docker and Sandbox constructors accept one
-native operation signature and return the actual adapter result envelope.
+runtime operation signature and return the actual adapter result envelope.
 
 Current verification uses the heap-fenced workspace entrypoints:
 
@@ -113,7 +113,7 @@ Implemented functional kernel surface:
   =defyuanxu-map=, =defyuanxu-fanout=, =defyuanxu-first=, and
   =defyuanxu-second=.
 
-Flow declarations and Category operations are native POO values. The Category
+Flow declarations and Category operations are POO values. The Category
 selects typed functional operations; the runner owns execution and receipts.
 
 ** 10.07.30 Boundary Rules

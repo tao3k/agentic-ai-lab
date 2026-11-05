@@ -65,7 +65,7 @@
    (agentic-ai-lab-qualification-gate
     'lean-build 'lean #f "lean-checked-artifact" '(release))
    (agentic-ai-lab-qualification-gate
-    'lean-ffi-smoke 'lean #t "lean-native-ffi-smoke" '(release))
+    'lean-ffi-smoke 'lean #t "lean-ffi-smoke" '(release))
    (agentic-ai-lab-qualification-gate
     'runtime-c-functional 'runtime-c #f "runtime-c-functional" '(release))
    (agentic-ai-lab-qualification-gate

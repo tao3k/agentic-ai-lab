@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; One semantic sample for ASP's native P95 benchmark runner.
+;;; One semantic sample for ASP's runtime P95 benchmark runner.
 
 (import (only-in :clan/poo/object .o .ref)
         (only-in :yuanxu/observability/debug

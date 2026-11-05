@@ -1,3 +1,5 @@
+(import (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -6,18 +8,21 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .all-slots .ref)
         (only-in :std/test check-equal? test-suite)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/case agentic-ai-lab-scenario-case?)
-        :agentic-ai-lab/modules/workflow/scenario/accessors
+        (only-in :clan/poo/mop element?)
+        (only-in :yuanxu/modules/funflow/scenario Scenario)
+
         :yuanxu/module-system/source/collection
         (only-in :agentic-ai-lab/modules/module-authoring/module-source-collection make-agentic-ai-lab-contribution-module-load-path agentic-ai-lab-default-module-load-path agentic-ai-lab-maintained-module-source)
         (only-in :yuanxu/module-system/source/objects
                  yuanxu-module-source-ref-value)
-        (only-in :agentic-ai-lab/user-interface/profiles/langchain langchain)
+
         (only-in :agentic-ai-lab/user-interface/scenarios/langchain/scenario
                  langchain-scenario)
         (only-in :agentic-ai-lab/user-interface/scenarios/tool-calling-agent-loop/scenario
                  tool-calling-agent-loop-scenario)
         :agentic-ai-lab/user-interface/config)
+
+(def (langchain-defaults) (.get agentic-ai-lab.init.exports Profiles langchain defaults))
 
 (export user-interface-doom-config-test)
 
@@ -27,24 +32,24 @@
    (yuanxu-test-case
     "config directly composes reusable Profiles across three stages"
     (check-equal?
-     (agentic-ai-lab-scenario-case? default-agent-control-plane) #t)
+     (element? Scenario default-agent-control-plane) #t)
     (check-equal?
-     (agentic-ai-lab-scenario-case-name default-agent-control-plane)
+     (.ref default-agent-control-plane 'name)
      'default-agent-control-plane)
     (check-equal?
-     (length (agentic-ai-lab-scenario-case-modules default-agent-control-plane)) 2)
+     (length (.ref default-agent-control-plane 'modules)) 2)
     (check-equal?
-     (length (agentic-ai-lab-scenario-case-profiles default-agent-control-plane)) 19)
+     (length (.ref default-agent-control-plane 'profiles)) 19)
     (check-equal?
      (.all-slots
-      (agentic-ai-lab-scenario-case-stages default-agent-control-plane))
+      (.ref default-agent-control-plane 'stages))
      '(development staging production)))
    (yuanxu-test-case
     "Profile and Scenario libraries retain explicit import paths"
-    (check-equal? (.ref (.ref langchain 'memory) 'name)
+    (check-equal? (.ref (.ref (langchain-defaults) 'memory) 'name)
                   'langchain-stateless-memory)
-    (check-equal? (agentic-ai-lab-scenario-case? langchain-scenario) #t)
-    (check-equal? (agentic-ai-lab-scenario-case? tool-calling-agent-loop-scenario)
+    (check-equal? (element? Scenario langchain-scenario) #t)
+    (check-equal? (element? Scenario tool-calling-agent-loop-scenario)
                   #t))
    (yuanxu-test-case
     "custom modules expose one admitted interface entry"

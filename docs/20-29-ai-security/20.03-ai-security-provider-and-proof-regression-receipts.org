@@ -134,7 +134,7 @@ Synthetic transport labels MUST NOT be admitted as filesystem project roots.
 ** Project-root implementation receipt
 
 Parser-owned projection establishes that =project-resolution-stdin= is the
-provider ABI method token emitted by =LocalNativeCliBackend::push_method=; it
+provider ABI method token emitted by =LocalRuntimeCliBackend::push_method=; it
 is not a filesystem project root. The Python provider child implements
 =try_run_project_resolution= for exactly that method token. A direct capability
 probe against the activated =py-harness= returns the versioned
@@ -767,10 +767,10 @@ invocations emit byte-identical canonical JSON.
   =src/agentic_ai_lab_proof/embodied_ai_constrained_effect.py= and
   =src/agentic_ai_lab_proof/embodied_ai_authority_declaration.py=;
 - requested projection: exact owner search followed by callable skeleton;
-- returned schema: =agent.semantic-protocols.host-native-execution-required=;
+- returned schema: =agent.semantic-protocols.host-runtime-execution-required=;
 - reason kind: =host-local-ipc-permission-denied=;
 - error kind: =permission-denied=;
-- required execution authority: =host-native=;
+- required execution authority: =host-runtime=;
 - retry policy: =do-not-retry-in-current-sandbox=;
 - selector/callable result: =not-emitted=.
 
@@ -794,8 +794,8 @@ contract.
 - =asp --version=: =asp 0.1.0=
 - =asp healthcheck .=: =status=ok=
 - Rust provider manifest: =contractStatus=valid=
-- declared native route:
-  =exactSelectorNative=query/exact-selector-native-v1=
+- declared runtime route:
+  =exactSelectorRuntime=query/exact-selector-runtime-v1=
 - activated Rust provider SHA-256:
   =28c293ec23b0dd7073ac93e63a979b704bfbdee3a9f56e860d41e7ce39c2e72d=
 - =~/.local/bin/rs-harness= SHA-256:
@@ -826,7 +826,7 @@ The Python exact route separately reaches provider output but fails to decode:
 
 #+begin_example
 failed to decode direct exact-selector provider output:
-data did not match any variant of untagged enum ProviderNativeExactResponse
+data did not match any variant of untagged enum ProviderRuntimeExactResponse
 #+end_example
 
 ** Capability conformance profile

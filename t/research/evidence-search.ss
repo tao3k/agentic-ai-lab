@@ -296,7 +296,7 @@
             (set! incumbent (hash ("selection" selection) ("evaluation" evaluation))))
           (set! expansions (cons event expansions)) (set! pending #f) event)))
     ((summary) (hash ("incumbent" incumbent) ("expansions" (reverse expansions))
-                    ("prunings" (reverse prunings)) ("nativeStats" (wire (reasoning-evidence-store-stats store)))))
+                    ("prunings" (reverse prunings)) ("runtimeStats" (wire (reasoning-evidence-store-stats store)))))
     (else (error "unsupported scenario operation"))))
 (def (main . args)
   (displayln "{\"ready\":true}") (force-output)

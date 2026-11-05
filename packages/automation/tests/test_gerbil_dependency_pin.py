@@ -73,7 +73,7 @@ class GerbilDependencyPinTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "duplicate dependency authority"):
                 module.package_pin_owners(root)
 
-    def test_native_prefetch_preserves_sdk_checkout_and_metadata(self) -> None:
+    def test_runtime_prefetch_preserves_sdk_checkout_and_metadata(self) -> None:
         module = pin_module()
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -84,8 +84,8 @@ class GerbilDependencyPinTest(unittest.TestCase):
             def commit(text: str) -> str:
                 (source / "source.ss").write_text(text)
                 subprocess.run(["git", "-C", str(source), "add", "source.ss"], check=True)
-                subprocess.run(["git", "-C", str(source), "-c", "user.name=Native pin test",
-                                "-c", "user.email=native-pin@example.invalid", "commit", "--quiet",
+                subprocess.run(["git", "-C", str(source), "-c", "user.name=Runtime pin test",
+                                "-c", "user.email=runtime-pin@example.invalid", "commit", "--quiet",
                                 "-m", text], check=True)
                 return subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip()
             previous = commit("installed")
@@ -98,7 +98,7 @@ class GerbilDependencyPinTest(unittest.TestCase):
             (root / "dev").mkdir()
             manifest = root / "dev/gerbil.pkg"
             manifest.write_text(f'(depend: ("github.com/tao3k/asp-gerbil-scheme@{requested}"))')
-            module.prepare_native_pins(package_root, root, manifest=manifest)
+            module.prepare_runtime_pins(package_root, root, manifest=manifest)
             self.assertEqual(subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip(), previous)
             self.assertEqual((source / "source.ss").read_text(), "user edit")
             self.assertTrue(all(path.read_text() == "SDK-owned metadata" for path in metadata))
@@ -110,8 +110,8 @@ class GerbilDependencyPinTest(unittest.TestCase):
             root = Path(directory)
             (root / "dev").mkdir()
             (root / "dev/gerbil.pkg").write_text('(depend: ("github.com/tao3k/asp-gerbil-scheme@' + "1" * 40 + '"))')
-            with patch.object(module, "ensure_native_commit") as prepare:
-                module.prepare_native_pins(root / "store", root, manifest=root / "dev/gerbil.pkg")
+            with patch.object(module, "ensure_runtime_commit") as prepare:
+                module.prepare_runtime_pins(root / "store", root, manifest=root / "dev/gerbil.pkg")
             self.assertEqual(prepare.call_args.args[0], "https://github.com/tao3k/asp-gerbil-scheme.git")
             self.assertEqual(prepare.call_args.args[1], "1" * 40)
             prepare.assert_called_once()

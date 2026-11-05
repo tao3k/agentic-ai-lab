@@ -28,9 +28,9 @@ Gerbil source is patched. Minimum supported Nix remains major/minor >= 2.34.
 
 * Lifecycle and independent authentication
 
-The engine is an ordinary native POO object. Its =handle= slot lazily acquires
+The engine is an ordinary POO object. Its =handle= slot lazily acquires
 one Store/EvalState. =dynamic-wind= releases an acquired handle on scope exit;
-an unused scope allocates no native evaluator, and an escaped method refuses
+an unused scope allocates no runtime evaluator, and an escaped method refuses
 use after close. Source/publication copies retain the existing receiver-local
 POO derivation, artifact and Contract slots. There is no admission-result
 cache, global session registry, restoration protocol or Core cache layer.
@@ -61,12 +61,12 @@ implicitly enables virtual/no-write locking, so adding --no-update-lock-file
 did not reject an unrelated newly declared input. The original negative control
 failed. The CLI implementation now checks root metadata without overrides
 first, then performs the explicit override query. This additional CLI process
-is counted, not hidden as native evaluation or omitted from timings. Without
+is counted, not hidden as runtime evaluation or omitted from timings. Without
 overrides the original strict single-query route remains unchanged.
 
 Unmatched paths, remote overrides and follows mappings retain the configured
 strict CLI implementation. These fallbacks are counted separately. They are
-not counted as native zero-process queries. A matching immutable input still
+not counted as runtime zero-process queries. A matching immutable input still
 undergoes Nix's own lock/hash checks and the Source's before/after byte checks.
 
 * Process and test ownership
@@ -74,12 +74,12 @@ undergoes Nix's own lock/hash checks and the Source's before/after byte checks.
 Importing the binding does not start an evaluator. Process startup preload is
 an explicit effect: on this macOS host, the installed Homebrew gxi shell wrapper
 can discard DYLD_INSERT_LIBRARIES. The existing binding Just qualification uses
-the resolved native Gerbil binary so preload precedes Gambit initialization.
+the resolved Gerbil binary so preload precedes Gambit initialization.
 Core TestingScript, Ops and the original std/test Harness retain execution,
 source-currentness, failure admission, logs and watchdog ownership.
 
 The test preparation compiles the FFI with the pinned headers/libraries, then
-imports its actual compiled .ssi by native path. It does not ask ordinary local
+imports its actual compiled .ssi by runtime path. It does not ask ordinary local
 Scheme support discovery to recompile a foreign binding without its flags.
 The same =t/nix-flake-source-test.ss= suite supplies both CLI and C API controls;
 only the evaluator resource owner differs. Limits remain 120 seconds per
@@ -87,14 +87,14 @@ preparation/test phase, 60 seconds idle and 240 seconds for the enclosing Just
 qualification. No Builder or replacement Harness is introduced.
 
 #+begin_src sh
-just -f bindings/nix-c-api/Justfile test product-native
+just -f bindings/nix-c-api/Justfile test product-runtime
 just -f bindings/nix-c-api/Justfile test product-cli
 #+end_src
 
 The existing real Nix fixture supplies AGENTIC_AI_LAB_OPENTOFU_FLAKE_ARTIFACT and
 AGENTIC_AI_LAB_NIX_TEST_TOOLS. Real AWS 5.100.0 and Null 3.2.4 schema artifacts are
 already populated in the Store. Measurements therefore are not download-cold.
-Fixture lock creation, FFI compilation and native process startup are outside
+Fixture lock creation, FFI compilation and runtime process startup are outside
 the reported product phase times; both controls use the same startup libraries.
 
 * Required controls and interpretation
@@ -103,7 +103,7 @@ The suite retains AWS-only -> AWS+Null admission, independent derivation
 comparison, selected type reads/compiles, parent Contract identity, parent
 absence of Null, unselected awscc, imported providers.nix mutation refusal,
 serialized independent guard refusal and unchanged lock bytes after failed
-implicit updates. Native controls additionally require one Store/EvalState,
+implicit updates. Runtime controls additionally require one Store/EvalState,
 zero CLI query processes and zero fallback for the locked Store input.
 The instantiate field counts actual Source evaluation requests; cli-processes
 counts all Nix CLI starts in the measured phase, including strict metadata.
@@ -118,7 +118,7 @@ or builder process.
 
 * Qualification record
 
-The first complete native product run passed MODULE-OK, HARNESS-OK and final
+The first complete runtime product run passed MODULE-OK, HARNESS-OK and final
 OK, with all negative controls retained. Earlier failures were retained locally:
 foreign-binding recompile without headers, preload lost through shell startup,
 sandbox denial of the daemon socket, a test counter name shadowing a function,
@@ -126,7 +126,7 @@ incorrect use of the global pure-eval settings registry, pure unpinned input
 refusal, and the corresponding import/syntax repairs. None was made passing by
 increasing a timeout or removing a negative control.
 
-Three alternating CLI/native rounds and their untrimmed phase distributions
+Three alternating CLI/runtime rounds and their untrimmed phase distributions
 are required before a performance claim. Process/query and type counts are
 reported separately. A warm Store and host/daemon scheduling can dominate a
 cold sample; no outlier is dropped and wall-time differences alone do not
@@ -149,9 +149,9 @@ Cases subsequently passed through the original binding Just entrypoint.
 | AWS+Null independent currentness | 0.370 / 0.394 / 0.413 | 0.497 / 0.508 / 0.530 |
 
 Every build phase performs two evaluation requests and one realization
-process. Those requests use zero Nix CLI processes in the native control and
+process. Those requests use zero Nix CLI processes in the runtime control and
 four in the strict CLI control. Independent currentness performs one request:
-zero native-side CLI starts versus two strict CLI starts. Each owned native
+zero runtime-side CLI starts versus two strict CLI starts. Each owned runtime
 scope creates exactly one Store/EvalState across the AWS and Null generations.
 Five hot slot reads perform zero evaluation, realization, type reads or type
 compiles in both controls. First admission reads/compiles one selected type
@@ -161,7 +161,7 @@ Unused scopes remain cold, and use after the functional scope closes is refused.
 
 These are product-phase timings on a populated Store, not startup-inclusive
 latency or download/build-cold performance. Earlier cohorts and failed runs
-remain local artifacts; one earlier native cold sample was approximately 21.7
+remain local artifacts; one earlier runtime cold sample was approximately 21.7
 seconds. It is not relabeled as a pass in the final matched cohort or silently
 used to claim a general speedup. Host/daemon wait attribution remains open.
 
@@ -183,7 +183,7 @@ a string when serializing it. The setup action uses =--attr outPath= and checks
 that the decoded result is a directory; it does not change the source lock.
 
 Source-only Bazel inputs include nested =gerbil.pkg= files as well as Scheme
-sources. These headers select each role's native prelude and package identity.
+sources. These headers select each role's runtime prelude and package identity.
 The ABI source consumer registers the single Yuanxu prelude through the existing
 source-package bootstrap helper before importing the fixture; it does not
 publish a second prelude or depend on an incidental installed Core copy.

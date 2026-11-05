@@ -6,9 +6,9 @@
   (feature mrr-context) (recipe test-temporal-mrr-context)
   (idle-seconds 5) (wall-seconds 45) (runtime-wall-seconds 6.81)
   (parent-tests 1) (fresh-child-tests 1) (exit-status 0)
-  (checks original-receipt current-context-source query-binding exact-receipt-fact policy-map native-current-source)
+  (checks original-receipt current-context-source query-binding exact-receipt-fact policy-map runtime-current-source)
   (rejects changed-payload missing-reference wrong-policy foreign-generation foreign-bundle stale-source-after-correction)
-  (native-library reused-immutable-archive-qualified-artifact)
+  (runtime-library reused-immutable-archive-qualified-artifact)
   (source-authenticated? #f) (action-authorized? #f) (runtime-executed? #f) (durable? #f)
   (atomic-disclosure? #f) (data-current-cas? #f) (benchmark-claim? #f)
   (inputs

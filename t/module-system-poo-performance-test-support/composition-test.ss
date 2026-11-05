@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO composition macro and native extension performance gates.
+;;; Boundary: POO composition macro and runtime extension performance gates.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
@@ -24,7 +24,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-profile-declaration-case)
-  (yuanxu-test-case "gates inline profile declarations as native POO objects"
+  (yuanxu-test-case "gates inline profile declarations as POO objects"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
              poo-performance-composition-profile-declaration-gate-receipt))
@@ -51,7 +51,7 @@
 
 ;; Registers one case in the enclosing TestSuite.
 (def (module-system-poo-performance-local-override-case)
-  (yuanxu-test-case "gates local native POO override profiles"
+  (yuanxu-test-case "gates local POO override profiles"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
              poo-performance-composition-local-override-gate-receipt))
@@ -76,29 +76,29 @@
       (check-equal? (benchmark-receipt-pass? receipt) #t))))
 
 ;; Registers one case in the enclosing TestSuite.
-(def (module-system-poo-performance-native-object-reuse-case)
-  (yuanxu-test-case "gates direct native POO object reuse"
+(def (module-system-poo-performance-poo-object-reuse-case)
+  (yuanxu-test-case "gates direct POO object reuse"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
-             poo-performance-composition-native-object-reuse-gate-receipt))
+             poo-performance-composition-poo-object-reuse-gate-receipt))
            (receipt (car observed))
            (construction-count (cadr observed)))
       (check-equal?
-       (poo-performance-composition-native-object-reuse-valid-count 1)
+       (poo-performance-composition-poo-object-reuse-valid-count 1)
        1)
       (check-equal? construction-count 1)
       (check-equal? (benchmark-receipt-pass? receipt) #t))))
 
 ;; Registers one case in the enclosing TestSuite.
-(def (module-system-poo-performance-native-object-reuse-large-library-case)
-  (yuanxu-test-case "gates 2048 native POO profiles plus hook variants"
+(def (module-system-poo-performance-poo-object-reuse-large-library-case)
+  (yuanxu-test-case "gates 2048 POO profiles plus hook variants"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
-             poo-performance-composition-native-object-reuse-large-library-gate-receipt))
+             poo-performance-composition-poo-object-reuse-large-library-gate-receipt))
            (receipt (car observed))
            (construction-count (cadr observed)))
       (check-equal?
-       (poo-performance-composition-native-object-reuse-large-library-valid-count
+       (poo-performance-composition-poo-object-reuse-large-library-valid-count
         1)
        1)
       (check-equal? construction-count 1)
@@ -118,15 +118,15 @@
       (check-equal? (benchmark-receipt-pass? receipt) #t))))
 
 ;; Registers one case in the enclosing TestSuite.
-(def (module-system-poo-performance-native-object-list-indexed-family-case)
+(def (module-system-poo-performance-poo-object-list-indexed-family-case)
   (yuanxu-test-case "gates Project Harness-style POO object-list indexed family"
     (let* ((observed
             (poo-performance-composition-run-observed-gate
-             poo-performance-native-object-list-indexed-family-gate-receipt))
+             poo-performance-poo-object-list-indexed-family-gate-receipt))
            (receipt (car observed))
            (construction-count (cadr observed)))
       (check-equal?
-       (poo-performance-native-object-list-indexed-family-valid-count 1)
+       (poo-performance-poo-object-list-indexed-family-valid-count 1)
        1)
       (check-equal? construction-count 1)
       (check-equal? (benchmark-receipt-pass? receipt) #t))))
@@ -152,8 +152,8 @@
     (module-system-poo-performance-profiles-bulk-case)
     (module-system-poo-performance-local-override-case)
     (module-system-poo-performance-hook-override-case)
-    (module-system-poo-performance-native-object-reuse-case)
-    (module-system-poo-performance-native-object-reuse-large-library-case)
+    (module-system-poo-performance-poo-object-reuse-case)
+    (module-system-poo-performance-poo-object-reuse-large-library-case)
     (module-system-poo-performance-composition-lazy-demand-case)
-    (module-system-poo-performance-native-object-list-indexed-family-case)
+    (module-system-poo-performance-poo-object-list-indexed-family-case)
     (module-system-poo-performance-macro-style-matrix-case)))

@@ -34,11 +34,11 @@ def _comparison_rows(
     results = {result.name: result for result in report.results}
     rows = []
     for comparison in COMPARISONS:
-        native = results.get(comparison.native_case)
+        runtime = results.get(comparison.runtime_case)
         poo = results.get(comparison.agentic_ai_lab_case)
-        if native is None or poo is None or poo.mean_us <= 0:
+        if runtime is None or poo is None or poo.mean_us <= 0:
             continue
-        rows.append((comparison.label, native, poo, native.mean_us / poo.mean_us))
+        rows.append((comparison.label, runtime, poo, runtime.mean_us / poo.mean_us))
     return rows
 
 def render_org(report: Report) -> str:
@@ -47,7 +47,7 @@ def render_org(report: Report) -> str:
     lines.append('#+startup: overview')
     lines.append('')
     lines.append('* Scope')
-    lines.append('This benchmark compares native LangChain/LangGraph/CrewAI orchestration with semantically aligned Agentic AI Lab executor surfaces.')
+    lines.append('This benchmark compares runtime LangChain/LangGraph/CrewAI orchestration with semantically aligned Agentic AI Lab executor surfaces.')
     lines.append('')
     lines.append('It does not measure real LLM latency, network tools, or durable storage IO. The deterministic actions model control-plane costs for policy routing, graph edges, dynamic handoff, reducers, checkpoint interrupt/resume, long graph scale, and stream/event consumption.')
     lines.append('')
@@ -84,23 +84,23 @@ def render_org(report: Report) -> str:
     comparison_rows = _comparison_rows(report)
     lines.append('* Summary')
     if comparison_rows:
-        langchain_speedups = [speedup for _, native, _, speedup in comparison_rows if native.family == 'langchain-native']
-        langgraph_speedups = [speedup for _, native, _, speedup in comparison_rows if native.family == 'langgraph-native']
-        crewai_speedups = [speedup for _, native, _, speedup in comparison_rows if native.family == 'crewai-native']
+        langchain_speedups = [speedup for _, runtime, _, speedup in comparison_rows if runtime.family == 'langchain-runtime']
+        langgraph_speedups = [speedup for _, runtime, _, speedup in comparison_rows if runtime.family == 'langgraph-runtime']
+        crewai_speedups = [speedup for _, runtime, _, speedup in comparison_rows if runtime.family == 'crewai-runtime']
         if langchain_speedups:
-            lines.append('- Agentic AI Lab runtime surfaces are {min_speedup:.2f}x to {max_speedup:.2f}x faster than the measured LangChain native orchestration cases in this run.'.format(min_speedup=min(langchain_speedups), max_speedup=max(langchain_speedups)))
+            lines.append('- Agentic AI Lab runtime surfaces are {min_speedup:.2f}x to {max_speedup:.2f}x faster than the measured LangChain runtime orchestration cases in this run.'.format(min_speedup=min(langchain_speedups), max_speedup=max(langchain_speedups)))
         if langgraph_speedups:
-            lines.append('- Agentic AI Lab runtime surfaces are {min_speedup:.2f}x to {max_speedup:.2f}x faster than the measured LangGraph native orchestration cases in this run.'.format(min_speedup=min(langgraph_speedups), max_speedup=max(langgraph_speedups)))
+            lines.append('- Agentic AI Lab runtime surfaces are {min_speedup:.2f}x to {max_speedup:.2f}x faster than the measured LangGraph runtime orchestration cases in this run.'.format(min_speedup=min(langgraph_speedups), max_speedup=max(langgraph_speedups)))
         if crewai_speedups:
-            lines.append('- Agentic AI Lab runtime surfaces are {min_speedup:.2f}x to {max_speedup:.2f}x faster than the measured CrewAI native orchestration cases in this run.'.format(min_speedup=min(crewai_speedups), max_speedup=max(crewai_speedups)))
+            lines.append('- Agentic AI Lab runtime surfaces are {min_speedup:.2f}x to {max_speedup:.2f}x faster than the measured CrewAI runtime orchestration cases in this run.'.format(min_speedup=min(crewai_speedups), max_speedup=max(crewai_speedups)))
         lines.append('- All comparison rows report deterministic control-plane latency only; they do not include LLM, network, or durable storage IO.')
         lines.append('')
-        lines.append('| comparison | native mean ms | agentic-ai-lab mean ms | speedup |')
+        lines.append('| comparison | runtime mean ms | agentic-ai-lab mean ms | speedup |')
         lines.append('|-')
-        for label, native, poo, speedup in comparison_rows:
-            lines.append('| {label} | {native_ms:.4f} | {poo_ms:.4f} | {speedup:.2f}x |'.format(label=_org_escape(label), native_ms=_mean_ms(native), poo_ms=_mean_ms(poo), speedup=speedup))
+        for label, runtime, poo, speedup in comparison_rows:
+            lines.append('| {label} | {runtime_ms:.4f} | {poo_ms:.4f} | {speedup:.2f}x |'.format(label=_org_escape(label), runtime_ms=_mean_ms(runtime), poo_ms=_mean_ms(poo), speedup=speedup))
     else:
-        lines.append('- Native LangChain/LangGraph/CrewAI comparison rows were not available in this run. Check the Failures section before reading the Agentic AI Lab numbers as a framework comparison.')
+        lines.append('- Runtime LangChain/LangGraph/CrewAI comparison rows were not available in this run. Check the Failures section before reading the Agentic AI Lab numbers as a framework comparison.')
     lines.append('')
     lines.append('* Benchmark Results')
     lines.append('| name | family | features | mean ms | p50 ms | p95 ms | min ms | max ms | checksum |')

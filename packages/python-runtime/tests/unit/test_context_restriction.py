@@ -24,7 +24,7 @@ def query(runtime):
                 contentDigest='sha256:'+'b'*64, principal='bob', destination='store', declaredAt=2)
 
 
-def test_native_context_composition_preserves_provenance_and_order(runtime):
+def test_runtime_context_composition_preserves_provenance_and_order(runtime):
     request = dict(schema='agentic-ai-lab.context-restriction-compose-request.v1', restrictions=declarations())
     original = deepcopy(request)
     first = runtime.compose_context_restrictions(request)

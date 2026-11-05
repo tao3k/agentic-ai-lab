@@ -14,22 +14,22 @@ check-aitia-integration:
     just test-contribute lambda-aitia bindings
     just test-contribute lambda-aitia integration
 
-# Build the self-contained Aitia Scheme-native library and its Aitia-owned consumers.
+# Build the self-contained Aitia Scheme-runtime library and its Aitia-owned consumers.
 [group('check')]
-check-aitia-native:
+check-aitia-runtime:
     just build-contribute lambda-aitia
     cd "{{ contribution_source_root }}/lambda-aitia" && GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} ./integration-build.ss compile
-    mkdir -p "{{ justfile_directory() }}/.gerbil/native"
-    cd "{{ contribution_source_root }}/lambda-aitia" && GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} python3 tools/build-native-library.py --output "{{ aitia_native_library }}"
-    cc -std=c11 -Wall -Wextra -Werror -pedantic -I"{{ contribution_source_root }}/lambda-aitia/bindings/c/include" "{{ contribution_source_root }}/lambda-aitia/bindings/c/tests/aitia-header-harness.c" -o "{{ justfile_directory() }}/.gerbil/native/aitia_header_harness"
-    "{{ justfile_directory() }}/.gerbil/native/aitia_header_harness"
-    cc -std=c11 -Wall -Wextra -Werror -pedantic -I"{{ contribution_source_root }}/lambda-aitia/bindings/c/include" "{{ contribution_source_root }}/lambda-aitia/bindings/c/tests/aitia-dynamic-harness.c" -o "{{ justfile_directory() }}/.gerbil/native/aitia_dynamic_harness"
-    "{{ justfile_directory() }}/.gerbil/native/aitia_dynamic_harness" "{{ aitia_native_library }}"
+    mkdir -p "{{ justfile_directory() }}/.gerbil/runtime"
+    cd "{{ contribution_source_root }}/lambda-aitia" && GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} python3 tools/build-runtime-library.py --output "{{ aitia_ffi_library }}"
+    cc -std=c11 -Wall -Wextra -Werror -pedantic -I"{{ contribution_source_root }}/lambda-aitia/bindings/c/include" "{{ contribution_source_root }}/lambda-aitia/bindings/c/tests/aitia-header-harness.c" -o "{{ justfile_directory() }}/.gerbil/runtime/aitia_header_harness"
+    "{{ justfile_directory() }}/.gerbil/runtime/aitia_header_harness"
+    cc -std=c11 -Wall -Wextra -Werror -pedantic -I"{{ contribution_source_root }}/lambda-aitia/bindings/c/include" "{{ contribution_source_root }}/lambda-aitia/bindings/c/tests/aitia-dynamic-harness.c" -o "{{ justfile_directory() }}/.gerbil/runtime/aitia_dynamic_harness"
+    "{{ justfile_directory() }}/.gerbil/runtime/aitia_dynamic_harness" "{{ aitia_ffi_library }}"
     just test-contribute lambda-aitia bindings
     cd "{{ aitia_python_dir }}" && {{ gerbil_darwin_env }} uv lock --check
-    cd "{{ aitia_python_dir }}" && {{ gerbil_darwin_env }} uv run --locked --extra test python src/lambda_aitia/_native/_build.py
-    cd "{{ aitia_python_dir }}" && LAMBDA_AITIA_NATIVE_LIBRARY="{{ aitia_native_library }}" {{ gerbil_darwin_env }} uv run --locked --extra test pytest
-    cd "{{ contribution_source_root }}/lambda-aitia" && just build-python-wheel "{{ aitia_native_library }}"
+    cd "{{ aitia_python_dir }}" && {{ gerbil_darwin_env }} uv run --locked --extra test python src/lambda_aitia/_runtime/_build.py
+    cd "{{ aitia_python_dir }}" && LAMBDA_AITIA_FFI_LIBRARY="{{ aitia_ffi_library }}" {{ gerbil_darwin_env }} uv run --locked --extra test pytest
+    cd "{{ contribution_source_root }}/lambda-aitia" && just build-python-wheel "{{ aitia_ffi_library }}"
 
 # separate semantic gate; no source acceptance is presented as model checking.
 
@@ -103,7 +103,7 @@ build-contribute contribution="lambda-episteme":
     case "{{ contribution }}" in lambda-episteme|lambda-aitia) ;; *) echo "unsupported contribution: {{ contribution }}" >&2; exit 64 ;; esac
     cd "{{ contribution_source_root }}/{{ contribution }}" && GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_library_path }}" exec {{ gerbil_darwin_env }} gerbil build </dev/null
 
-# Clean one contribution through its native gxpkg package entry.
+# Clean one contribution through its runtime gxpkg package entry.
 [group('build')]
 clean-contribute contribution="lambda-episteme":
     case "{{ contribution }}" in lambda-episteme|lambda-aitia) ;; *) echo "unsupported contribution: {{ contribution }}" >&2; exit 64 ;; esac
@@ -128,7 +128,7 @@ test-contribute contribution="lambda-aitia" module="sdlc":
     test -d "$test_directory"
     GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="$test_root" GERBIL_LOADPATH="{{ contribution_source_root }}/{{ contribution }}:{{ justfile_directory() }}:$test_root/lib:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} "$runner" "$test_directory"
 
-# Replay a previously compiled exact test under the opt-in native heap monitor.
+# Replay a previously compiled exact test under the opt-in runtime heap monitor.
 [group('test')]
 observe-contribute-import-memory contribution="lambda-aitia" module="sdlc" test_file="unit/nasa-certification-test.ss":
     case "{{ contribution }}" in lambda-episteme|lambda-aitia) ;; *) echo "unsupported contribution: {{ contribution }}" >&2; exit 64 ;; esac
@@ -136,7 +136,7 @@ observe-contribute-import-memory contribution="lambda-aitia" module="sdlc" test_
     echo "[agentic-ai-lab-observability] phase=import-observer-start owner={{ contribution }} module={{ module }} test={{ test_file }} budget=15s"
     GERBIL_PATH="{{ justfile_directory() }}/.gerbil/contributions/{{ contribution }}/atomic-test" GERBIL_LOADPATH="{{ justfile_directory() }}/.gerbil/contributions/{{ contribution }}/atomic-test/lib:{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=2s 15s gxi {{ gerbil_test_runtime_options }} ./observe-contribute-import.ss "{{ contribution }}" "{{ module }}" "{{ test_file }}"
 
-# Execute one exact test file. Source admission belongs to the native gxtest
+# Execute one exact test file. Source admission belongs to the runtime gxtest
 # lifecycle and is enabled declaratively by its POO Testing Profile.
 [group('test')]
 test-contribute-atomic contribution="lambda-aitia" module="sdlc" test_file="unit/nasa-certification-test.ss":

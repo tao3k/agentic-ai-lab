@@ -17,7 +17,8 @@
                  check-true
                  test-error
                  test-suite)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         :yuanxu/graph/interface
         :yuanxu/module-system/schema/interface
         :agentic-ai-lab/modules/sandbox-core/shared-object

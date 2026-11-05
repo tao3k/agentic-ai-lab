@@ -156,7 +156,7 @@
     },
     "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
   },
-  "nativeObservationSeconds": 0.001163165999969351,
+  "runtimeObservationSeconds": 0.001163165999969351,
   "result": {
     "candidate": {
       "status": "partial",
@@ -203,6 +203,6 @@
     "operation": "temporal.observe",
     "candidateValid": true
   },
-  "failure": "native semantic contradiction",
+  "failure": "runtime semantic contradiction",
   "callSeconds": 1.0281474170001275
 }

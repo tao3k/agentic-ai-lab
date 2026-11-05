@@ -56,18 +56,18 @@ and [[https://api-docs.deepseek.com/quick_start/pricing/][Models & Pricing]].
 * ABI ownership
 
 Agentic AI Lab owns the shared versioned C ABI, module selection and downstream
-distribution. ASCENT remains a Scheme-native Library consumed through its
-Gerbil package pin. Python and Rust bind to Agentic AI Lab's selected native
+distribution. ASCENT remains a Scheme-runtime Library consumed through its
+Gerbil package pin. Python and Rust bind to Agentic AI Lab's selected runtime
 features; they do not independently reimplement ASCENT semantics. The
-existing =scheme_native_v1.h= has global symbols and a centralized
+existing =scheme_contract_v1.h= has global symbols and a centralized
 Agentic AI Lab contract dispatch. A module-selective reasoning call contract and
 its AOT packaging need to be designed and qualified in Agentic AI Lab before
 this experiment can use that ABI. The process worker here is a temporary
 experiment boundary and is not a published ABI.
 The current header exposes descriptor and contract-validation calls; it
 does not expose ASCENT snapshots, candidate evaluation or proof receipts.
-The Scheme source pilot therefore executes the pinned native Gerbil
-program and uses a persistent native Scheme scorer. The process boundary
+The Scheme source pilot therefore executes the pinned Gerbil
+program and uses a persistent Scheme scorer. The process boundary
 adds startup and transport cost but does not replace Scheme evaluation.
 
 * ABI decision gate
@@ -77,12 +77,12 @@ per fresh Gerbil script on this macOS host. A persistent two-snapshot
 candidate worker took 12.001 seconds for its first request and 0.266
 seconds for its next request in one focused run. The separate ASCENT
 three-node ASP benchmark measures roughly 20 ms median for public
-admit-and-solve and about 0.3 ms for the reused native core. These
+admit-and-solve and about 0.3 ms for the reused runtime core. These
 different workloads do not identify how much of the worker's warm cost
 is Python transport, parsing, candidate admission, or inference.
 
 ASCENT therefore does not publish a separate C ABI. Agentic AI Lab owns the
-existing native ABI and any module-selective reasoning call added to it.
+existing runtime ABI and any module-selective reasoning call added to it.
 Before changing that surface, compare the same candidate through a
 persistent worker and an in-process Scheme call on the same source,
 including cold startup, warm call p50/p95, payload bytes, allocations,
@@ -95,7 +95,7 @@ ownership cost, while retaining the same Scheme receipt verifier.
 POO now owns =temporal.solve= and =temporal.verify= in its semantic AOT byte ABI,
 reusing ASCENT's finite temporal owner. See the
 [[file:../../../docs/10-19-design/10.06-poo-module-system/python-scheme-runtime-foundation.org][Python/Scheme qualification receipt]] for the 60 matched receipts and 48-call
-historical prompted study. That study supplied solved native answers and is
+historical prompted study. That study supplied solved runtime answers and is
 withdrawn as acceptance evidence for the no-Prompt / real-time teaching design.
 =runtime_transport= compares the same source/lens/answers and
 bindings over both transports. It establishes equality, not a warm speed gain.

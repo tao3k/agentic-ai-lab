@@ -5,14 +5,18 @@
 
 ;;; Boundary: downstream-shaped Funflow POO config lowers to readiness facts.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
+        (only-in :yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
         :yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/workflow/funflow-config
         :agentic-ai-lab/modules/agent-sandbox/config
-        :agentic-ai-lab/modules/workflow/interface)
+        (only-in :yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map-name)
+        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->runtime-manifest-readiness))
 
 (export funflow-config-pipeline-downstream-test)
 
@@ -31,12 +35,8 @@
 
 ;; : (-> Unit [PooUserModuleSelection])
 (def (funflow-config-downstream-selection)
-  (use-module funflow
-    :config
-    (.def (funflow-downstream/build @ funflow-check
-                                    check-name profile-ref command-vector
-                                    artifact-outputs cache-intents
-                                    result-protocol runtime-mode)
+  (let ()
+    (.def (funflow-downstream/build @ funflow-check)
       check-name: 'build
       profile-ref: 'ci/build
       command-vector: '("gerbil" "build")
@@ -44,11 +44,7 @@
       cache-intents: '(gerbil-build-cache)
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff)
-
-    (.def (funflow-downstream/test @ funflow-check
-                                   check-name profile-ref command-vector
-                                   artifact-outputs result-protocol
-                                   runtime-mode dependency-refs)
+    (.def (funflow-downstream/test @ funflow-check)
       check-name: 'test
       profile-ref: 'ci/check
       command-vector: '("gerbil" "env" "./unit-tests.ss")
@@ -56,11 +52,7 @@
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
       dependency-refs: '(build))
-
-    (.def (funflow-downstream/package @ funflow-check
-                                      check-name profile-ref command-vector
-                                      artifact-outputs result-protocol
-                                      runtime-mode dependency-refs)
+    (.def (funflow-downstream/package @ funflow-check)
       check-name: 'package
       profile-ref: 'ci/check
       command-vector: '("gerbil" "env" "./unit-tests.ss")
@@ -68,15 +60,17 @@
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
       dependency-refs: '(test))
-
-    (.def (funflow-downstream/default @ funflow-pipeline
-                                      pipeline-name checks metadata)
+    (.def (funflow-downstream/default @ funflow-pipeline)
       pipeline-name: 'default
       checks: (list funflow-downstream/build
                     funflow-downstream/test
                     funflow-downstream/package)
       metadata: '((scenario . funflow-cicd)
-                  (authoring-style . gerbil-poo-native)))))
+                  (authoring-style . gerbil-poo)))
+    (agentic-ai-lab-product-use-module 'funflow
+      (agentic-ai-lab-funflow-config-flags
+        (yuanxu-funflow-poo-pipeline->check-map funflow-downstream/default)
+        (list ':config funflow-downstream/default)))))
 
 ;; : (-> Unit [PooSandboxProfile])
 (def (funflow-config-downstream-sandbox-profiles)

@@ -19,7 +19,7 @@ def _runtime_projection_fixture(root: Path) -> None:
 
 def _source_fixture(root: Path) -> Path:
     source = root / "flow.ss"
-    source.write_text("(user-composition command-flow CommandProfile)\n", encoding="utf-8")
+    source.write_text("(def command-flow (.new Scenario name: 'command-flow config: CommandProfile))\n", encoding="utf-8")
     return source
 
 

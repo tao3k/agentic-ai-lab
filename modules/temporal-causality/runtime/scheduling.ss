@@ -38,7 +38,7 @@
 (def (context-scheduling-step current event)
   (unless (and (eq? (.ref current 'kind) 'context.scheduling-state.v1)
                (eq? (.ref event 'kind) 'context.scheduling-event.v1))
-    (error "Expected native scheduling state and event"))
+    (error "Expected runtime scheduling state and event"))
   (let* ((contract (.ref current 'contract))
          (frame (make-scheduling-frame
                   (.ref contract 'data-capacity) (.ref contract 'control-capacity)

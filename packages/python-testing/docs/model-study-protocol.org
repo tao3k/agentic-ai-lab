@@ -20,7 +20,7 @@ The frozen five-task corpus and answer key remain byte-identical to the
 baseline and typed studies,
 SHA256
 =7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
-The exact Rust Ascent 0.8.0, Scheme candidate, and Python native fixture
+The exact Rust Ascent 0.8.0, Scheme candidate, and Python runtime fixture
 for =ascent.negation-count= use the same edge, blocked, weight, and root
 rows. They expect =summary(1,1)=; removing the block gives
 =summary(1,2)=, and repeating an edge leaves it at 2. The first state is
@@ -29,7 +29,7 @@ without adding model requests.
 
 * Frozen arms and scoring
 
-Both arms receive the same prompt and native rows. =typed= is exactly
+Both arms receive the same prompt and runtime rows. =typed= is exactly
 the earlier typed observation. =proof= adds to that observation only the
 public receipt's independently checked finite and founded proof verdicts
 for =ascent.negation-count=, plus the narrow proof scope. The other four
@@ -43,14 +43,14 @@ Three fresh calls per arm per task give 30 requests maximum. Per-task arm
 order is typed/proof, proof/typed, typed/proof. Responses must be exact
 JSON with string =choice= and =claim= fields. Score those two fields
 separately against the unchanged key. Record per-case scores, errors,
-token usage, model latency, native fixture time, and the exact two Git
+token usage, model latency, runtime fixture time, and the exact two Git
 heads. Raw responses remain outside the repository.
 
 The primary outcome is the =ascent.negation-count= choice and bounded
 claim. The wrong-join claim and two temporal tasks are boundary controls.
 The Runtime guard records whether an output may be shown as a bounded
 observation. It withholds ASCENT claims of general truth or verified
-intent and temporal claims denied by the native receipt. Report raw model
+intent and temporal claims denied by the runtime receipt. Report raw model
 scores and guarded results separately; the guard cannot make a wrong
 model answer correct. Do not call this a general model benefit from a
 three-repeat pilot.
@@ -58,7 +58,7 @@ three-repeat pilot.
 * Execution and admission
 
 Before any paid call, build and test both committed heads, run the frozen
-native fixture and the stable model-study entry point with =--dry-run=,
+runtime fixture and the stable model-study entry point with =--dry-run=,
 and require the pinned Agentic AI Lab Linux
 consumer gate. The live runner rejects dirty checkouts and an existing
 output path. Use an absolute external =--output= path and supply an existing

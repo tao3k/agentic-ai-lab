@@ -8,7 +8,7 @@
  * This header mirrors the subset of always-further/nono's C ABI that the
  * Scheme control plane describes and the adapter probe compiles against. It is
  * intentionally declarations-only: the real implementation remains in the
- * native nono_ffi library loaded by an external runtime or explicit live test.
+ * runtime nono_ffi library loaded by an external runtime or explicit live test.
  */
 
 #ifndef AGENTIC_AI_LAB_NONO_ABI_H

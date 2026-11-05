@@ -54,4 +54,4 @@ def make_langchain_branch_agent() -> Subject:
     return subject
 
 def cases() -> tuple[BenchmarkCase, ...]:
-    return (BenchmarkCase('langchain-linear-agent-native', 'langchain-native', 'LangChain prompt/parser/runnable sequence.', ('prompt-template', 'output-parser', 'runnable-sequence', 'agent-policy'), make_langchain_linear_agent, 1000), BenchmarkCase('langchain-branch-tool-native', 'langchain-native', 'LangChain branch routing for RAG, tool, and handoff selection.', ('runnable-branch', 'policy-router', 'tool-selection', 'handoff-route'), make_langchain_branch_agent, 1000))
+    return (BenchmarkCase('langchain-linear-agent-runtime', 'langchain-runtime', 'LangChain prompt/parser/runnable sequence.', ('prompt-template', 'output-parser', 'runnable-sequence', 'agent-policy'), make_langchain_linear_agent, 1000), BenchmarkCase('langchain-branch-tool-runtime', 'langchain-runtime', 'LangChain branch routing for RAG, tool, and handoff selection.', ('runnable-branch', 'policy-router', 'tool-selection', 'handoff-route'), make_langchain_branch_agent, 1000))

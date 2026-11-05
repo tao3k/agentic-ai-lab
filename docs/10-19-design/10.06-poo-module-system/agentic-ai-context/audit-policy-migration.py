@@ -38,8 +38,8 @@ def main():
     args = parser.parse_args()
     data = json.loads(args.receipt.read_text())
     root = args.receipt.parent
-    require(data["schema"] == "context.policy-migration.native.v1" and data["exhaustive_declared_controlled_orders"],
-            "Missing complete declared native corpus")
+    require(data["schema"] == "context.policy-migration.runtime.v1" and data["exhaustive_declared_controlled_orders"],
+            "Missing complete declared runtime corpus")
     for name, digest in {**data["source_sha256"], **data["binaries"]}.items():
         require(sha(ROOT / name) == digest, "Current source/object drift: " + name)
     for name, digest in data["artifacts"].items():
@@ -50,7 +50,7 @@ def main():
         controlled = [b for b in data["batches"] if b["profile"] == profile and b["mode"].startswith("chunk:")]
         live = next(b for b in data["batches"] if b["profile"] == profile and b["mode"] == "live")
         require(len(controlled) == 3 and {b["mode"] for b in controlled} == {"chunk:0", "chunk:1", "chunk:2"},
-                "Missing fixed-size native chunk")
+                "Missing fixed-size runtime chunk")
         paths = [p for b in controlled for p in b["paths"]]
         require(len(paths) == 60 and {tuple(p["actual"]) for p in paths} == legal,
                 "Missing or duplicate controlled schedules: " + profile)
@@ -70,9 +70,9 @@ def main():
                     if cohort["mode"].startswith("chunk:"):
                         pos = {event: path["actual"].index(event) for event in range(1, 6)}
                         positional = profile != "legacy-missing" and pos[2] < min(pos[1], pos[3])
-                        require(expected == positional, "Native CAS disagrees with queued-clock positional oracle")
+                        require(expected == positional, "Runtime CAS disagrees with queued-clock positional oracle")
                         require(db.execute("SELECT count(*) FROM terminals WHERE session='session'").fetchone() == (0,),
-                                "An expired native result acquired a terminal")
+                                "An expired runtime result acquired a terminal")
                     if profile == "legacy-missing":
                         require(decision["reason"] == "missing-expected-cut" and decision["expected-generation"] is False,
                                 "A missing historical expectation was inferred")
@@ -87,7 +87,7 @@ def main():
                     accepted += int(expected)
         require((accepted == 0) if profile == "legacy-missing" else (0 < accepted < 64), "Vacuous CAS cohort")
         counts[profile] = dict(controlled=60, live=4, accepted=accepted, refused=64-accepted)
-    require(len(data["crash_prefixes"]) == 6 and data["native_counterexamples"] == 1 and data["original_image_positive"],
+    require(len(data["crash_prefixes"]) == 6 and data["runtime_counterexamples"] == 1 and data["original_image_positive"],
             "Missing crash/replay controls")
     require({(c["profile"], c["stage"]) for c in data["crash_prefixes"]} ==
             {(p, s) for p in ("legacy-cut", "legacy-missing") for s in ("after-receive", "before-commit", "after-commit")},
@@ -114,7 +114,7 @@ def main():
         receipt_sha256=sha(args.receipt), auditor_sha256=sha(Path(__file__)), cohorts=counts,
         current_cut_verified=True, artifact_hashes_verified=len(data["artifacts"]),
         all_os_interleavings_proved=False), indent=2) + "\n")
-    print("PASS: 180 controlled + 12 live paths, native CAS decisions, immutable crash evidence")
+    print("PASS: 180 controlled + 12 live paths, runtime CAS decisions, immutable crash evidence")
 
 
 if __name__ == "__main__":

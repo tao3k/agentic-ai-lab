@@ -217,7 +217,7 @@ async def _steady_state_receipts(
             candidate_samples=warm_samples[0],
             reference_samples=warm_samples[1],
             detail=(
-                "paired-native-bounded-fresh-inputs"
+                "paired-runtime-bounded-fresh-inputs"
                 if gated
                 else "single-capacity-report-only"
             ),
@@ -228,7 +228,7 @@ async def _steady_state_receipts(
             candidate_samples=reused_samples[0],
             reference_samples=reused_samples[1],
             detail=(
-                "paired-native-bounded-reused-inputs"
+                "paired-runtime-bounded-reused-inputs"
                 if gated
                 else "single-capacity-report-only"
             ),

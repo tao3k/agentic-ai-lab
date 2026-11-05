@@ -8,7 +8,7 @@
 
 (import :yuanxu/composition/roles
         (only-in :clan/poo/type Record)
-        (only-in :clan/poo/object .o .@ .ref .mix object? object<-alist)
+        (only-in :clan/poo/object .o .@ .ref .mix .slot? .all-slots object? object<-alist)
         :yuanxu/modules/funflow/control-plane/roles
         :yuanxu/modules/funflow/control-plane/failure
         :yuanxu/object-family/role-syntax
@@ -41,6 +41,7 @@
         agentic-ai-lab-module-task-registry
         agentic-ai-lab-module-flow-registry
         agentic-ai-lab-module-options
+        agentic-ai-lab-module-option-names
         agentic-ai-lab-module-interface-object
         agentic-ai-lab-module-schemas
         agentic-ai-lab-module-config
@@ -66,6 +67,7 @@
         agentic-ai-lab-module-all-flow-descriptors
         agentic-ai-lab-module-all-options
         agentic-ai-lab-module-missing-imports
+        agentic-ai-lab-module-missing-imports/closed
         validate-yuanxu-module-imports)
 
 ;;; Boundary: role data anchors module descriptors in the control-plane C4 set.
@@ -138,29 +140,21 @@
       depth
       phase-files
       hooks)
-  (poo-core-role-object
-   (slots ((name module-name)
-           (module-kind agentic-ai-lab-modules-kind)
-           (group group)
-           (interface interface)
-           (imports module-imports)
-           (extensions extensions)
-           (scripts scripts)
-           (flags flags)
-           (features features)
-           (depth depth)
-           (phase-files phase-files)
-           (hooks hooks)
-           (task-registry task-registry)
-           (flow-registry flow-registry)
-           (options options)
-           (config config)
-           (schemas schemas)
-           (metadata metadata)
-           (source-ref source-ref)
-           (responsibility
-            (list 'agentic-ai-lab-module module-name))))
-   (supers agentic-ai-lab-module-descriptor-prototype)))
+  ;; Shorthand captures constructor values before lexical slot bindings. Only
+  ;; options is computed: Interface-backed descriptors have one config authority.
+  (let ((name module-name)
+        (module-kind agentic-ai-lab-modules-kind)
+        (imports module-imports)
+        (responsibility (list 'agentic-ai-lab-module module-name)))
+    (.o inherit: (list agentic-ai-lab-module-descriptor-prototype)
+        bind: (config interface) bind-these: #f
+        (name) (module-kind) (group) (interface) (imports)
+        (extensions) (scripts) (flags) (features) (depth)
+        (phase-files) (hooks) (task-registry) (flow-registry)
+        (options (if (object? interface)
+                   (yuanxu-module-object->alist config)
+                   options))
+        (config) (schemas) (metadata) (source-ref) (responsibility))))
 
 ;;; Boundary: extended constructor keeps Marlin migration call sites stable.
 ;; : (-> ModuleName ModuleImportList TaskFamilyRegistry FlowDeclarationRegistry ModuleOptionAlist MaybeInterface ModuleSchemas ModuleConfig [ModuleExtension] [ModuleScript] ModuleMetadata MaybeSourceRef PooModuleDescriptor)
@@ -230,10 +224,9 @@
 (def (agentic-ai-lab-modules interface module-config)
   (let* ((supplied-config
           ;; Config may be supplied under Marlin's `config` slot or as option data.
-          (yuanxu-module-object-ref/default
-           module-config
-           'config
-           (yuanxu-module-object-ref/default module-config 'options (.o))))
+          (if (and (object? module-config) (.slot? module-config 'config))
+            (.ref module-config 'config)
+            (yuanxu-module-object-ref/default module-config 'options (.o))))
          (config-values
           (.mix (if (object? supplied-config) supplied-config
                     (object<-alist supplied-config))
@@ -279,7 +272,7 @@
      module-imports
      (make-task-family-registry module-id-value '())
      (make-flow-declaration-registry module-id-value '())
-     (yuanxu-module-object->alist config-values)
+     '() ;; options is a demand-driven projection of the final config
      interface
      (yuanxu-module-interface-schemas interface)
      config-values
@@ -301,6 +294,14 @@
 ;; : (-> ModuleDescriptorCandidate Boolean)
 (def (agentic-ai-lab-module-config? value)
   (agentic-ai-lab-module-descriptor? value))
+
+;; Interface-backed config is authoritative. Inventory never materializes its
+;; values; malformed config is diagnosed separately. Legacy rows keep duplicates.
+(def (agentic-ai-lab-module-option-names module)
+  (if (object? (agentic-ai-lab-module-interface-object module))
+    (let (config (agentic-ai-lab-module-config module))
+      (if (object? config) (.all-slots config) '()))
+    (map car (agentic-ai-lab-module-options module))))
 
 ;;; Boundary:
 ;;; - defagentic-ai-lab-module is constructor sugar around POO descriptor values.
@@ -497,8 +498,12 @@
      (agentic-ai-lab-module-import-configs (yuanxu-module-imports module)))))
 
 (def (agentic-ai-lab-module-missing-imports modules)
+  (agentic-ai-lab-module-missing-imports/closed (agentic-ai-lab-module-closure modules)))
+
+;; A caller with a preview-owned closure must not expand it a second time.
+(def (agentic-ai-lab-module-missing-imports/closed modules)
   (module-missing-imports
-   (agentic-ai-lab-module-closure modules)
+   modules
    agentic-ai-lab-module-name
    yuanxu-module-imports
    agentic-ai-lab-module-named-import?

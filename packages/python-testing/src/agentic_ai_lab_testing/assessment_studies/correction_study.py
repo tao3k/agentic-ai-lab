@@ -197,7 +197,7 @@ def run(library,output,live,cases=None):
                             history.append_feedback(correction)
                         if not passed:complete=False;break
                     snapshot=trajectory.close('both-correct' if complete else 'provider-error' if fatal else 'attempt-budget')
-                    record={'case':case['case'],'arm':arm,'verifiedBoth':complete,'calls':calls,'packets':packets,'nativeReusedComponents':reused,'trajectory':snapshot}
+                    record={'case':case['case'],'arm':arm,'verifiedBoth':complete,'calls':calls,'packets':packets,'runtimeReusedComponents':reused,'trajectory':snapshot}
                     records.append(record);(output/'records.json').write_text(json.dumps(records,indent=2))
                 finally:
                     trajectory.close('exception')

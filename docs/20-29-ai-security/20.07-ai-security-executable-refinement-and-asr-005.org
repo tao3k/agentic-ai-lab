@@ -11,7 +11,7 @@
 - Normative authority: this Org RFC and the adjacent AI-security RFC family.
 - Formal authority: =AISecurityExecutableRefinementContractClosure= and
   =AISecurityExecutableRefinementImplementationClosure=.
-- Executable authorities: the POO-native Scheme transition and the independent
+- Executable authorities: the POO Scheme transition and the independent
   Python refinement/replay.
 - Empirical authority: versioned run receipts only.  Diagrams and rendered
   documents are presentation views and never correctness authorities.
@@ -20,7 +20,7 @@
 
 Agentic AI Lab SHALL consume one provider-neutral =AgentActionEvidenceEnvelope=.  A
 Cursor, Claude, Codex, or future adapter may normalize its own log format, but
-neither Scheme nor Lean SHALL parse those provider-native logs as an assurance
+neither Scheme nor Lean SHALL parse those provider-runtime logs as an assurance
 interface.
 
 The envelope preserves the existing separation:
@@ -54,7 +54,7 @@ classifier is an assurance substitute.
 
 * Scheme reference transition
 
-The public Scheme surface is POO-native:
+The public Scheme surface is POO:
 
 - =agentic-ai-lab-agent-action-evidence-envelope= constructs the typed POO object;
 - =agentic-ai-lab-ai-security-transition-policy= constructs policy authority;

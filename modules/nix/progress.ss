@@ -8,7 +8,7 @@
     (error "Nix observation must be a procedure or false"))
   (def activities (make-hash-table))
   (lambda (line)
-    (let* (;; Native diagnostic messages cannot advance liveness. A parent
+    (let* (;; Runtime diagnostic messages cannot advance liveness. A parent
            ;; test already receives the child's progress relay; do not decode
            ;; thousands of diagnostic JSON records there a second time. Keep
            ;; the general decoder for other serializations and activity events.

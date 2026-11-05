@@ -19,9 +19,9 @@ class SchemeEngine:
  def call(self,**kw):
   began=time.monotonic();self.p.stdin.write(json.dumps(kw)+'\n');self.p.stdin.flush()
   s=selectors.DefaultSelector();s.register(self.p.stdout,selectors.EVENT_READ)
-  if not s.select(20):self.close();raise TimeoutError('native reply deadline')
+  if not s.select(20):self.close();raise TimeoutError('runtime reply deadline')
   s.close();line=self.p.stdout.readline()
-  if not line:raise RuntimeError('native exited; see native-stderr.log')
+  if not line:raise RuntimeError('runtime exited; see native-stderr.log')
   r=json.loads(line)
   if 'error' in r:raise RuntimeError(r['error'])
   return r,time.monotonic()-began
@@ -40,11 +40,11 @@ TOOLS=[{'type':'function','name':name,'description':desc,'parameters':{'type':'o
  ('submit','Submit your best full schedule and finish the phase.',{'order':{'type':'array','items':{'type':'integer'}}})]]
 INSTRUCTIONS='You solve finite scheduling optimization. Minimize sum(weight[j]*completion_time[j]) on a single machine without idle time. All jobs appear once and every implied precedence must hold. Use factor to resolve shared deterministic factors, explore to investigate branches, and evaluate to compare candidate schedules. Finish with submit. You have at most 6 response calls, 24 tool actions and 24576 total output tokens including reasoning per phase. Do not access hidden grading. Some tool replies include retained facts or checked fragments; use them if useful. Cached evidence is confined to the same source digest. Optimize deeply within the budget.'
 def freeze():
- plan={'frozenAtUtc':datetime.now(timezone.utc).isoformat(),'schema':'ascent.factor-reuse-real-pilot.v2','supersedesCensoredPilot':'censored-2048/frozen-plan.json','revisionReason':'All 16 v1 phases exhausted the 2048 per-call output cap entirely in reasoning before any tool action. Preserve v1 separately; raise equal phase allowance to 24576 and per-call cap to 16384 for all arms; same tasks/grader.','model':'deepseek-flash','reasoningEffort':'high','arms':{'A':'fresh checked atomic factors','B':'retained cards without independent proof gate','C':'checked retained atomic factors','D':'checked shared closure and derivation DAG'},'cases':CASES,'phaseOutputBudget':24576,'perCallOutputCap':16384,'phaseCallLimit':6,'phaseToolLimit':24,'replicates':1,'order':[{'case':c['id'],'arm':a} for ci,c in enumerate(CASES) for a in (list('ABCD') if ci==0 else list('DCBA'))],'instructions':INSTRUCTIONS,'tools':TOOLS,'grader':'t/research/factor-pilot.ss direct-edge permutation enumeration; no model grader','hiddenThinkingMeasurement':False,'taskScope':'Controlled transfer after history reset, 6 jobs then 7 jobs; precedence sources unchanged; weights/goals change. No full-answer cache.','failurePolicy':'No retries. Retain failed/incomplete calls, invalid schedules, missing usage and censored phases.','buildScope':'Frozen current Scheme production modules excluding applications/domain-evidence, interface/engine-api and interface/c-api after full-build syntax failure. This is not full build qualification.','costPolicy':'All input/output including reasoning charged. Native admission+proof storage+IO recorded. Native cache resets per trajectory. Cold phase included. USD invoice unavailable.'}
+ plan={'frozenAtUtc':datetime.now(timezone.utc).isoformat(),'schema':'ascent.factor-reuse-real-pilot.v2','supersedesCensoredPilot':'censored-2048/frozen-plan.json','revisionReason':'All 16 v1 phases exhausted the 2048 per-call output cap entirely in reasoning before any tool action. Preserve v1 separately; raise equal phase allowance to 24576 and per-call cap to 16384 for all arms; same tasks/grader.','model':'deepseek-flash','reasoningEffort':'high','arms':{'A':'fresh checked atomic factors','B':'retained cards without independent proof gate','C':'checked retained atomic factors','D':'checked shared closure and derivation DAG'},'cases':CASES,'phaseOutputBudget':24576,'perCallOutputCap':16384,'phaseCallLimit':6,'phaseToolLimit':24,'replicates':1,'order':[{'case':c['id'],'arm':a} for ci,c in enumerate(CASES) for a in (list('ABCD') if ci==0 else list('DCBA'))],'instructions':INSTRUCTIONS,'tools':TOOLS,'grader':'t/research/factor-pilot.ss direct-edge permutation enumeration; no model grader','hiddenThinkingMeasurement':False,'taskScope':'Controlled transfer after history reset, 6 jobs then 7 jobs; precedence sources unchanged; weights/goals change. No full-answer cache.','failurePolicy':'No retries. Retain failed/incomplete calls, invalid schedules, missing usage and censored phases.','buildScope':'Frozen current Scheme production modules excluding applications/domain-evidence, interface/engine-api and interface/c-api after full-build syntax failure. This is not full build qualification.','costPolicy':'All input/output including reasoning charged. Runtime admission+proof storage+IO recorded. Runtime cache resets per trajectory. Cold phase included. USD invoice unavailable.'}
  paths=['t/research/factor-pilot.ss','t/research/factor-pilot-build.ss','packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/factor_pilot.py','packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study.py','packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study.py','rust/ascent/src/conversation.rs']
  runtime=Path(shutil.which('gxi')).resolve();plan['runtime']={'path':str(runtime),'sha256':sha(runtime.read_bytes())}
  plan['qualificationSha256']=sha((BASE/'qualification.json').read_bytes())
- plan['formalReceipts']={p:sha((BASE/p).read_bytes()) for p in ('native-retained-correspondence.json','quint-retained-correspondence.json','lean-native-quint-correspondence.log','lean-retained.log','quint-retained.log')}
+ plan['formalReceipts']={p:sha((BASE/p).read_bytes()) for p in ('runtime-retained-correspondence.json','quint-retained-correspondence.json','lean-native-quint-correspondence.log','lean-retained.log','quint-retained.log')}
  plan['producerHashes']={p:sha((ROOT/p).read_bytes()) for p in paths}
  # Bind every fresh compiler output and retained dependency byte, not pre-existing ASCENT objects.
  plan['artifactHashes']={str(p.relative_to(SNAP)):sha(p.read_bytes()) for p in (SNAP/'.gerbil/lib').rglob('*') if p.is_file() and not p.name.endswith('.lock')}
@@ -53,26 +53,26 @@ def freeze():
  save(BASE/'frozen-plan.json',plan);(BASE/'frozen-plan.sha256').write_text(sha((BASE/'frozen-plan.json').read_bytes())+'\n')
  return plan
 def qualification():
- native=SchemeEngine();obs=[]
+ runtime=SchemeEngine();obs=[]
  try:
-  native.call(op='init',arm='A',edges=[],identity='oracle-control')
-  control,_=native.call(op='grade',durations=[1,2,3],weights=[3,2,1],order=[0,1,2])
+  runtime.call(op='init',arm='A',edges=[],identity='oracle-control')
+  control,_=runtime.call(op='grade',durations=[1,2,3],weights=[3,2,1],order=[0,1,2])
   assert control['oracle']=={'optimum':15,'feasibleOrders':6,'enumeratedOrders':6} and control['optimal']
-  native.call(op='init',arm='A',edges=[[0,1],[1,2]],identity='chain-control')
-  chain,_=native.call(op='grade',durations=[1,2,3],weights=[3,2,1],order=[0,1,2])
-  prefix,_=native.call(op='explore',prefix=[1],n=3)
+  runtime.call(op='init',arm='A',edges=[[0,1],[1,2]],identity='chain-control')
+  chain,_=runtime.call(op='grade',durations=[1,2,3],weights=[3,2,1],order=[0,1,2])
+  prefix,_=runtime.call(op='explore',prefix=[1],n=3)
   assert chain['oracle']['feasibleOrders']==1 and not prefix['validPrefix']
   for c in CASES:
    for a in 'ABCD':
-    native.call(op='init',arm=a,edges=c['edges'],identity=c['id'])
-    x,_=native.call(op='factor',u=0,v=4);y,_=native.call(op='factor',u=0,v=4);z,_=native.call(op='factor',u=1,v=5)
-    assert x['precedes'] and x['freshNativeSolve'] and y['reused']==(a!='A')
+    runtime.call(op='init',arm=a,edges=c['edges'],identity=c['id'])
+    x,_=runtime.call(op='factor',u=0,v=4);y,_=runtime.call(op='factor',u=0,v=4);z,_=runtime.call(op='factor',u=1,v=5)
+    assert x['precedes'] and x['freshRuntimeSolve'] and y['reused']==(a!='A')
     assert z['precedes'] and z['reused']==(a=='D')
-    f,_=native.call(op='fault');assert all(f.values())
+    f,_=runtime.call(op='fault');assert all(f.values())
     for phase in range(2):
      n=6+phase;ds=c['durations'][:n];ws=c['weights'][phase]
-     gold,_=native.call(op='grade',durations=ds,weights=ws,order=list(range(n)))
-     bad,_=native.call(op='grade',durations=ds,weights=ws,order=list(reversed(range(n))))
+     gold,_=runtime.call(op='grade',durations=ds,weights=ws,order=list(range(n)))
+     bad,_=runtime.call(op='grade',durations=ds,weights=ws,order=list(reversed(range(n))))
      assert gold['valid'] and not bad['valid'] and gold['oracle']['enumeratedOrders'] in (720,5040)
      obs.append({'case':c['id'],'arm':a,'phase':phase,'grade':gold,'faults':f})
   correspondence=[]
@@ -80,13 +80,13 @@ def qualification():
    for phase in range(2):
     current=ident-4 if phase==1 and ident&4 else ident
     graph=[e for i,e in enumerate([[0,0],[0,1],[1,0],[1,1]]) if current&(1<<i)]
-    native.call(op='init',arm='C',edges=graph,identity=f'finite-{current}')
-    x,_=native.call(op='factor',u=0,v=0);y,_=native.call(op='factor',u=1,v=0)
-    # Python only projects native boolean observations into the model wire mask.
+    runtime.call(op='init',arm='C',edges=graph,identity=f'finite-{current}')
+    x,_=runtime.call(op='factor',u=0,v=0);y,_=runtime.call(op='factor',u=1,v=0)
+    # Python only projects runtime boolean observations into the model wire mask.
     correspondence.append([ident,phase,current,int(x['precedes'])+2*int(y['precedes']),int(ident==current)])
-  save(BASE/'native-retained-correspondence.json',correspondence)
+  save(BASE/'runtime-retained-correspondence.json',correspondence)
   save(BASE/'qualification.json',{'passed':True,'observations':obs});print('QUALIFICATION-OK',len(obs),flush=True)
- finally:native.close()
+ finally:runtime.close()
 def question(c,phase,cards):
  n=6+phase
  return json.dumps({'task':c['id'],'phase':phase,'jobs':list(range(n)),'durations':c['durations'][:n],'weights':c['weights'][phase],'sourceEdges':c['edges'],'sourceIdentity':c['id'],'retained':cards,'guidance':'This objective differs from prior phases. Check useful implied precedence factors (especially nonadjacent jobs) once and reuse supported evidence. Compare several feasible schedules. Submit best found.'},sort_keys=True)
@@ -102,13 +102,13 @@ def run(plan):
  assert json.loads((BASE/'qualification.json').read_text())['passed']
  key=provider_key();paid=BASE/'paid';paid.mkdir(exist_ok=False);records=[]
  for item in plan['order']:
-  c=next(c for c in plan['cases'] if c['id']==item['case']);arm=item['arm'];began=time.monotonic();native=SchemeEngine();init,_=native.call(op='init',arm=arm,edges=c['edges'],identity=c['id']);startup=time.monotonic()-began
+  c=next(c for c in plan['cases'] if c['id']==item['case']);arm=item['arm'];began=time.monotonic();runtime=SchemeEngine();init,_=runtime.call(op='init',arm=arm,edges=c['edges'],identity=c['id']);startup=time.monotonic()-began
   seen=set()
   try:
    for phase in range(2):
     folder=paid/f'{c["id"]}-{arm}-{phase}';folder.mkdir();store=folder/'proof-store';store.mkdir()
-    cards,card_seconds=native.call(op='cards') if arm!='A' else ({},0)
-    history=ResponseHistory(question(c,phase,cards));n=6+phase;ds=c['durations'][:n];ws=c['weights'][phase];row={**item,'phase':phase,'calls':[],'tools':[],'grade':None,'failure':None,'budget':24576,'nativeStartupAndInitSeconds':startup if phase==0 else 0,'cardsReadSeconds':card_seconds};used=0;tool_count=0;best=None;submitted=None
+    cards,card_seconds=runtime.call(op='cards') if arm!='A' else ({},0)
+    history=ResponseHistory(question(c,phase,cards));n=6+phase;ds=c['durations'][:n];ws=c['weights'][phase];row={**item,'phase':phase,'calls':[],'tools':[],'grade':None,'failure':None,'budget':24576,'runtimeStartupAndInitSeconds':startup if phase==0 else 0,'cardsReadSeconds':card_seconds};used=0;tool_count=0;best=None;submitted=None
     for turn in range(6):
      if used>=24576 or tool_count>=24:row['failure']='phase_budget_exhausted';break
      request={'model':plan['model'],'input':history.input(),'instructions':plan['instructions'],'tools':TOOLS,'tool_choice':'auto','reasoning':{'effort':'high'},'max_output_tokens':min(plan['perCallOutputCap'],24576-used),'stream':True,'store':False}
@@ -128,7 +128,7 @@ def run(plan):
        args=json.loads(fc['arguments']);log['arguments']=args
        if tool_count>24:result={'error':'tool budget exhausted'}
        elif name=='factor':
-        result,ipc=native.call(op='factor',**args);k=(args['u'],args['v']);log['repeatRequest']=k in seen;seen.add(k);log['nativeRoundtripSeconds']=ipc
+        result,ipc=runtime.call(op='factor',**args);k=(args['u'],args['v']);log['repeatRequest']=k in seen;seen.add(k);log['runtimeRoundtripSeconds']=ipc
         certificate=result.pop('admittedCertificate',None)
         if certificate:
          payload=json.dumps(certificate,sort_keys=True).encode();h=sha(payload);(store/f'{h}.json').write_bytes(payload);log['proofStoreSha256']=h;log['proofStoreBytes']=len(payload)
@@ -136,10 +136,10 @@ def run(plan):
          if arm=='D':result['derivationDAG']=certificate
         log['factorReceipt']=result
        elif name in ('evaluate','submit'):
-        result,_=native.call(op='evaluate',durations=ds,weights=ws,**args)
+        result,_=runtime.call(op='evaluate',durations=ds,weights=ws,**args)
         if result['valid'] and (best is None or result['objective']<best[0]):best=(result['objective'],args['order'])
         if name=='submit':submitted=args['order']
-       elif name=='explore':result,_=native.call(op='explore',n=n,**args)
+       elif name=='explore':result,_=runtime.call(op='explore',n=n,**args)
        else:raise ValueError('unknown tool')
       except Exception as e:result={'error':str(e)[:2000]};log['failure']=str(e)[:2000]
       log['result']=result;log['totalToolSeconds']=time.monotonic()-started;row['tools'].append(log);history.append_result(fc['call_id'],result)
@@ -147,11 +147,11 @@ def run(plan):
      if submitted is not None:break
     candidate=submitted if submitted is not None else (best[1] if best else [])
     row['submitted']=submitted is not None;row['candidate']=candidate;row['observedOutputTokens']=used
-    row['grade'],seconds=native.call(op='grade',durations=ds,weights=ws,order=candidate);row['graderSeconds']=seconds
+    row['grade'],seconds=runtime.call(op='grade',durations=ds,weights=ws,order=candidate);row['graderSeconds']=seconds
     if not row['submitted'] and not row['failure']:row['failure']='call_budget_exhausted'
     save(folder/'receipt.json',row);records.append(row);save(paid/'records.json',records)
     print('\nPHASE',c['id'],arm,phase,'calls',len(row['calls']),'output',used,'grade',row['grade'],'failure',row['failure'],flush=True)
-  finally:native.close()
+  finally:runtime.close()
  return records
 if __name__=='__main__':
  parser=argparse.ArgumentParser();parser.add_argument('command',choices=['qualify','freeze','run']);args=parser.parse_args()

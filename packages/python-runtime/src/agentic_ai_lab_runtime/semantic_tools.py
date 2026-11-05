@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Provider JSON adapter only; native runtime transport is Scheme datum ABI v1."""
+"""Provider JSON adapter only; runtime transport is Scheme datum ABI v1."""
 from __future__ import annotations
 import json
 from typing import Any, Mapping

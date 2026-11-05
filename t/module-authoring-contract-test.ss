@@ -3,22 +3,20 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :clan/poo/type Record)
+(import (only-in :yuanxu/modules/funflow/scenario Scenario)
+        (only-in :clan/poo/mop .new)
+        (only-in :clan/poo/type Record)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .cc .o .ref)
-        (only-in :clan/poo/mop TypeError?)
+        (only-in :clan/poo/mop TypeError? validate)
         (only-in :std/test check-equal? check-exception test-suite)
         :yuanxu/module-system/authoring/admission
         (only-in :yuanxu/poo-clos/interface
                  poo-clos-call
-                 poo-clos-call-next-method
                  poo-clos-compose-method-bundle
                  poo-clos-compute-applicable-methods
                  poo-clos-generic-function
-                 poo-clos-method
-                 poo-clos-method-bundle
-                 poo-clos-prototype-specializer
-                 poo-clos-any-specializer)
+                 .defgeneric .defmethod .defmethod-bundle)
         (only-in :yuanxu/module-system/observability/presentation
                  yuanxu-poo-slot-authoring-file-observations
                  yuanxu-poo-slot-authoring-diagnostics)
@@ -72,7 +70,7 @@
          (user-interface-source-role path))
        port))))
 
-;;; A vertical package refines native prototypes and contributes one CLOS
+;;; A vertical package refines runtime prototypes and contributes one CLOS
 ;;; method bundle.  It does not register a parallel role table or evaluator.
 (def ClinicalAuthoringExecutor.
   (.o (:: @ ModuleAuthoringExecutor.)
@@ -85,49 +83,34 @@
 (def ClinicalModuleInterface.
   (.o (:: @ yuanxu-module-interface-prototype)))
 
-(def ClinicalAuthoringMethod
-  (poo-clos-method
-   'module-authoring/clinical
-   (list (poo-clos-prototype-specializer ClinicalAuthoringExecutor.)
-         (poo-clos-prototype-specializer ClinicalObjectsSourceRole.)
-         (poo-clos-prototype-specializer ClinicalModuleInterface.)
-         (poo-clos-any-specializer))
-   (lambda (frame _executor _role _interface _datum)
-     (.cc (poo-clos-call-next-method frame)
-          'vertical-owner 'clinical))))
+(.defgeneric clinical-authoring-analyze (executor role interface datum)
+  (protocol ModuleAuthoringAnalysisProtocol))
 
-(def TestAuthoringCommonMethod
-  (poo-clos-method
-   'module-authoring/test-common
-   (list (poo-clos-prototype-specializer ModuleAuthoringExecutor.)
-         (poo-clos-prototype-specializer ModuleSourceRole.)
-         (poo-clos-prototype-specializer yuanxu-module-interface-prototype)
-         (poo-clos-any-specializer))
-   (lambda (_frame _executor role interface _datum)
-     (.o kind: 'agentic-ai-lab.module-authoring.admission.v1
-         module: (.ref interface 'id)
-         role: (.ref role 'identity)
-         accepted?: #t
-         diagnostics: '()
-         runtime-executed?: #f))))
+(.defmethod-bundle TestAuthoringCoreMethods ModuleAuthoringAnalysisProtocol
+  (.defmethod (clinical-authoring-analyze
+                (executor (prototype ModuleAuthoringExecutor.))
+                (role (prototype ModuleSourceRole.))
+                (interface (prototype yuanxu-module-interface-prototype)) datum)
+    '()))
 
-(def TestAuthoringCoreMethods
-  (poo-clos-method-bundle
-   'module-authoring/test-core
-   ModuleAuthoringAdmissionProtocol
-   (list TestAuthoringCommonMethod)))
-
-(def ClinicalAuthoringMethods
-  (poo-clos-method-bundle
-   'module-authoring/clinical
-   ModuleAuthoringAdmissionProtocol
-   (list ClinicalAuthoringMethod)))
+(.defmethod-bundle ClinicalAuthoringMethods ModuleAuthoringAnalysisProtocol
+  (.defmethod (clinical-authoring-analyze
+                (executor (prototype ClinicalAuthoringExecutor.))
+                (role (prototype ClinicalObjectsSourceRole.))
+                (interface (prototype ClinicalModuleInterface.)) datum)
+    (let ((module (.ref interface 'id)) (role-name (.ref role 'identity)))
+      (append (call-next-method)
+        (list (.o (:: @ ModuleAuthoringDiagnostic)
+                module role: role-name
+                code: 'clinical-review-required subject: 'events
+                rule: 'clinical-policy recommendation: 'add-review
+                freedom: 'domain-extension vertical-owner: 'clinical))))))
 
 (def module-authoring-contract-test
   (test-suite
    "POO Module Interface role authoring Contract"
 
-   (yuanxu-test-case "native Interface, executor, and role axes are CLOS-applicable"
+   (yuanxu-test-case "runtime Interface, executor, and role axes are CLOS-applicable"
      (let* ((authoring (yuanxu-module-interface-authoring
                         test-module-interface))
             (arguments
@@ -139,10 +122,10 @@
        (check-equal?
         (length
          (apply poo-clos-compute-applicable-methods
-                ModuleAuthoringAdmissionGeneric arguments))
+                ModuleAuthoringAnalysisGeneric arguments))
         1)))
 
-   (yuanxu-test-case "a vertical method bundle refines all three native POO axes"
+   (yuanxu-test-case "a vertical method bundle refines all three POO axes"
      (let* ((authoring
              (.cc (yuanxu-default-module-authoring-profile)
                   'executor (.o (:: @ ClinicalAuthoringExecutor.))
@@ -155,20 +138,20 @@
                  metadata: '()))
             (generic
              (poo-clos-generic-function
-              'module-authoring-admit/clinical 4
-              protocol: ModuleAuthoringAdmissionProtocol)))
+              'module-authoring-analyze/clinical 4
+              protocol: ModuleAuthoringAnalysisProtocol)))
        (poo-clos-compose-method-bundle generic TestAuthoringCoreMethods)
        (poo-clos-compose-method-bundle generic ClinicalAuthoringMethods)
-       (let (admission
-             (poo-clos-call
+       (let (diagnostics
+             (validate YuanxuModuleAuthoringDiagnostics (poo-clos-call
               generic
               (.ref authoring 'executor)
               (.ref authoring 'objects)
               interface
-              '(.def ClinicalCase (events =>.+ (.o review: required)))))
-         (check-equal?
-          (yuanxu-module-authoring-admission-accepted? admission) #t)
-         (check-equal? (.ref admission 'vertical-owner) 'clinical))))
+              '(.def ClinicalCase (events =>.+ (.o review: required))))))
+         (check-equal? (length diagnostics) 1)
+         (check-equal? (.ref (car diagnostics) 'code) 'clinical-review-required)
+         (check-equal? (.ref (car diagnostics) 'vertical-owner) 'clinical))))
 
    (yuanxu-test-case "Interface rejects an invalid authoring Profile immediately"
      (check-exception
@@ -176,7 +159,7 @@
        "invalid-authoring" (Record) '() authoring: (.o))
       TypeError?))
 
-   (yuanxu-test-case "admits native noun slots and leaves algorithms open"
+   (yuanxu-test-case "admits runtime noun slots and leaves algorithms open"
      (let (admission
            (yuanxu-module-authoring-admit-datum
             test-module-interface
@@ -213,7 +196,7 @@
        (check-equal?
         (yuanxu-module-authoring-admission-accepted? admission) #f)
        (check-equal? (.ref diagnostic 'code)
-                     'poo-query-must-be-native-object)
+                     'poo-query-must-be-poo-object)
        (check-equal? (.ref diagnostic 'subject) 'impact-query)
        (check-equal? (.ref diagnostic 'rule) 'single-poo-semantic-model)
        (check-equal? (.ref diagnostic 'recommendation)
@@ -230,7 +213,7 @@
        (check-equal?
         (yuanxu-module-authoring-admission-accepted? admission) #f)
        (check-equal? (.ref diagnostic 'code)
-                     'poo-query-must-be-native-object)
+                     'poo-query-must-be-poo-object)
        (check-equal? (.ref diagnostic 'subject) 'query))
      (check-equal?
       (yuanxu-module-authoring-admission-accepted?
@@ -257,7 +240,7 @@
        (check-equal? (.ref diagnostic 'subject) '.add-event)
        (check-equal? (.ref diagnostic 'repair-operators)
                      '(? => =>.+ override))
-       (check-equal? (.ref diagnostic 'freedom) 'open-native-poo)))
+       (check-equal? (.ref diagnostic 'freedom) 'open-runtime-poo)))
 
    (yuanxu-test-case "config role adds its own composition-only method"
      (let* ((admission
@@ -278,9 +261,10 @@
              (yuanxu-module-authoring-admit-datum
               user-root-module-interface
               'config
-              '(user-composition broken
-                 (compose profiles
-                   (.o production: maintained-profile)))))
+              '(def broken
+  (.new Scenario name: 'broken
+        config: (compose profiles
+                   (.o production: maintained-profile))))))
             (diagnostic (first-diagnostic admission)))
        (check-equal?
         (yuanxu-module-authoring-admission-accepted? admission) #f)
@@ -330,9 +314,10 @@
              (yuanxu-module-authoring-admit-datum
               user-root-module-interface
               'config
-              '(user-composition broken
-                 (compose profiles
-                   (lambda (self super) (super self))))))
+              '(def broken
+  (.new Scenario name: 'broken
+        config: (compose profiles
+                   (lambda (self super) (super self)))))))
             (diagnostic (first-diagnostic admission)))
        (check-equal?
         (yuanxu-module-authoring-admission-accepted? admission) #f)
@@ -356,10 +341,7 @@
      (let (failures '())
        (for-each
         (lambda (path)
-          ;; init.ss is a distinct yuanxu! declaration surface qualified by
-          ;; user-interface-root-config-test; Module config roles do not own it.
-          (when (and (string-suffix? ".ss" path)
-                     (not (equal? path "user-interface/init.ss")))
+          (when (string-suffix? ".ss" path)
             (let (admission (user-interface-source-admission path))
               (unless (yuanxu-module-authoring-admission-accepted? admission)
                 (set! failures

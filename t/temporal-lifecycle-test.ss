@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :agentic-ai-lab/testing-api yuanxu-test-case)
+(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
         :std/test
         :agentic-ai-lab/modules/temporal-causality/objects
@@ -36,7 +36,7 @@
     (agentic-ai-lab-temporal-reverse-dependency-plan
      index (.ref source 'cut-digest) (.ref source 'projection-digest) '("build"))))
 (def temporal-lifecycle-test
-  (test-suite "native family proof bound conclusion lifecycle"
+  (test-suite "runtime family proof bound conclusion lifecycle"
     (yuanxu-test-case "same classification still gets new proof and predecessor"
       (let* ((root (agentic-ai-lab-temporal-family-revision-root (admit 7 1)))
              (next (admit 8 1))
@@ -99,7 +99,7 @@
       (let* ((root (agentic-ai-lab-temporal-family-revision-root (admit 7 1))) (next (admit 8 3))
              (changed (agentic-ai-lab-temporal-family-revision-change root next (frontier root next #t) 'retract)))
         (check-exception (agentic-ai-lab-temporal-family-revision-journal "history" (list changed)) true)))
-    (yuanxu-test-case "native archive replays a canonical full premise graph"
+    (yuanxu-test-case "runtime archive replays a canonical full premise graph"
       (let* ((root (agentic-ai-lab-temporal-family-revision-root (admit 7 1)))
              (next (admit 8 3))
              (changed (agentic-ai-lab-temporal-family-revision-change root next (frontier root next #t) 'retract))

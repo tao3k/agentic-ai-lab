@@ -20,12 +20,9 @@ _SCHEME_LOAD_DEPENDENCIES = (
     Path("modules/workflow/scenario/configuration/init-syntax.ss"),
     Path("modules/workflow/scenario/runtime-funflow.ss"),
     Path("core/profile-composition/selection-syntax.ss"),
-    Path("modules/workflow/scenario/composition-syntax.ss"),
     Path("core/profile-composition/profile-bundle.ss"),
     Path("core/profile-composition/bindings.ss"),
-    Path("modules/workflow/scenario/profile-root.ss"),
-    Path("modules/workflow/scenario/case.ss"),
-    Path("modules/workflow/scenario/accessors.ss"),
+    Path("core/modules/funflow/scenario.ss"),
     Path("core/modules/funflow/config.ss"),
     Path("core/modules/funflow/config-prototypes.ss"),
 )

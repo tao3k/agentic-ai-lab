@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Native completed-import boundaries; no timer output or semantic shortcuts.
+;;; Runtime completed-import boundaries; no timer output or semantic shortcuts.
 (for-each (lambda (module)
   (displayln "IMPORT " module) (force-output)
   (eval `(import ,module))
@@ -38,7 +38,7 @@
     :yuanxu/profile-composition/user-profile
     :yuanxu/utilities/functional
     :yuanxu/profile-composition/policy
-    :agentic-ai-lab/testing-api
+    :yuanxu/observability/testing-case
     :agentic-ai-lab/modules/temporal-causality/time/types
     :agentic-ai-lab/modules/temporal-causality/time/objects
     :agentic-ai-lab/modules/temporal-causality/revisions/types

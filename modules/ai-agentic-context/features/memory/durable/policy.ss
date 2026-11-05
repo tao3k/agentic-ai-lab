@@ -186,7 +186,7 @@
 ;;   | doc m%
 ;;       Durable policy construction is the single normalization point for
 ;;       policy identity, handoff refs, repair defaults, and runtime ownership.
-;;       The returned value remains a native POO object until the explicit
+;;       The returned value remains a POO object until the explicit
 ;;       receipt projection boundary.
 ;;
 ;;       # Examples

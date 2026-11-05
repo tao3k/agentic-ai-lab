@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Generate a native PackageSpec bootstrap for a dependency's demanded APIs.
+"""Generate a runtime PackageSpec bootstrap for a dependency's demanded APIs.
 
 Source ownership still comes from the upstream build-script label. The shared
 Gerbil project provider stages external inputs in .gerbil-bazel/external/; this

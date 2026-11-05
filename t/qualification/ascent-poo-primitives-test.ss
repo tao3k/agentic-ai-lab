@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; The native dependency boundary for ASCENT; relation closure stays in MRR.
+;;; The runtime dependency boundary for ASCENT; relation closure stays in MRR.
 
 (import (only-in :std/test check-equal? test-case test-suite)
         (only-in :clan/poo/object .o .mix .ref .call)
@@ -12,7 +12,7 @@
 (export ascent-poo-primitives-test)
 
 (def ascent-poo-primitives-test
-  (test-suite "ASCENT native POO primitives"
+  (test-suite "ASCENT POO primitives"
     (test-case "late refinement supplies a demanded relation slot"
       (let* ((rule-prototype
               (.o (:: self [] edges)

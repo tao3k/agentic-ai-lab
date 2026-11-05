@@ -1,3 +1,5 @@
+(import (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :clan/poo/object .get))
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
@@ -6,8 +8,11 @@
          (only-in :std/test test-suite)
         (only-in :clan/poo/object .o)
         :agentic-ai-lab/modules/tool-core/calling-control
-        :agentic-ai-lab/user-interface/profiles/tool-calling
+        
         :agentic-ai-lab/user-interface/scenarios/tool-calling-agent-loop/scenario)
+
+(def tool-calling (.get agentic-ai-lab.init.exports Profiles tool-calling defaults))
+(def ToolCallingModule (.get agentic-ai-lab.init.exports Profiles tool-calling profile))
 
 (export tool-calling-control-plane-test)
 

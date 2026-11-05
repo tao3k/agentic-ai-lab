@@ -1,3 +1,4 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile? agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-resource-policy))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -40,7 +41,7 @@
     (error "sandbox profile prototype lost required slot" key)))
 
 ;;; Backend field contracts own inherited defaults. The resolved profile is a
-;;; native POO prototype, not an extension-graph node.
+;;; POO prototype, not an extension-graph node.
 ;; : (-> PooModuleObject Symbol Value)
 (def (agentic-ai-lab-sandbox-profile-object-field-default profile-object slot)
   (let (field (yuanxu-module-object-field profile-object slot))
@@ -94,7 +95,7 @@
 
 ;;; Shared resolver keeps validation and filesystem safety common to fresh and
 ;;; derived profiles. Explicit list operators reuse Core's pure value policy;
-;;; the resulting field is an ordinary native POO prototype extension.
+;;; the resulting field is an ordinary POO prototype extension.
 ;; : (-> PooModuleObject PooSandboxProfilePrototype SandboxProfileForm PooSandboxProfilePrototype)
 (def (agentic-ai-lab-sandbox-profile-object-extend-row profile-object prototype row)
   (let* ((field (agentic-ai-lab-sandbox-profile-object-row-field profile-object row))
@@ -184,7 +185,7 @@
 
 ;;; Project/session/task/branch profiles should split by deriving from a parent
 ;;; profile, not by re-parsing backend rows. This keeps profile extension and
-;;; override behavior on the native POO extension path.
+;;; override behavior on the POO extension path.
 ;; : (-> PooModuleObject PooSandboxProfile Symbol [SandboxProfileForm] [Alist] PooSandboxProfile)
 (def (agentic-ai-lab-sandbox-profile-object-derive profile-object
                                              parent-profile

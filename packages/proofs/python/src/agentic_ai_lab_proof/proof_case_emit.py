@@ -254,7 +254,7 @@ def emit_vectors(schema: ProofCaseSchema) -> tuple[str, str]:
 def generated_artifacts(schema: ProofCaseSchema) -> dict[Path, str]:
     positive, malformed = emit_vectors(schema)
     return {
-        Path("lean/native/agentic_ai_lab_proof_case_vector_v1.h"): emit_c(schema),
+        Path("lean/runtime/agentic_ai_lab_proof_case_vector_v1.h"): emit_c(schema),
         Path("../../bindings/runtime-c/include/agentic_ai_lab/proof_case_vector_v1.h"): emit_c(
             schema
         ),

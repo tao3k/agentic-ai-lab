@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; A graph-free Scheme experiment: native Ascent candidate closure can revise
+;;; A graph-free Scheme experiment: runtime Ascent candidate closure can revise
 ;;; a POO Agent society. Neither closure nor successor has MRR or Host authority.
 
 (import (only-in :clan/poo/object .o .ref .call object?)

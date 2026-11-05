@@ -17,7 +17,7 @@ package ContextHybridAllocation {
         attribute controlCredits : Integer;
         attribute controlBurst : Integer;
     }
-    part def NativeContextOwner {
+    part def RuntimeContextOwner {
         part scheduling : SchedulingContract;
         part reverseSupport : ReverseSupportIndex;
         part journal : DurableJournal;
@@ -28,19 +28,19 @@ package ContextHybridAllocation {
     }
     part def SchemeVm {
         // Heap, continuations, roots and Actor scheduling stay in this VM.
-        part contexts : NativeContextOwner[1..*];
+        part contexts : RuntimeContextOwner[1..*];
         part proof : AscentProofOwner;
         attribute maximumHeapBytes : Integer := 2147483648;
     }
-    part def NativeServiceBoundary {
+    part def RuntimeServiceBoundary {
         // Compiler-produced C ABI; transfer copied bytes, never borrowed roots.
         attribute productionContextExportImplemented : Boolean := false;
         attribute preSetupHeapPolicyImplemented : Boolean := false;
     }
-    part def FixedNativeOwner {
+    part def FixedRuntimeOwner {
         part vm : SchemeVm;
-        part service : NativeServiceBoundary;
-        // A route identifies a pinned native owner, not a Session or grant.
+        part service : RuntimeServiceBoundary;
+        // A route identifies a pinned runtime owner, not a Session or grant.
         attribute route : Integer;
     }
     part def TokioExecutor;
@@ -52,7 +52,7 @@ package ContextHybridAllocation {
     part def RustAdapter {
         part asyncIo : TokioExecutor;
         part input : BoundedIoFeed;
-        part nativeOwners : FixedNativeOwner[2..*];
+        part runtimeOwners : FixedRuntimeOwner[2..*];
         part compute : OptionalCpuPool[0..1];
     }
     part def HybridNode {

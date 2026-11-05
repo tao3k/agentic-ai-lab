@@ -11,7 +11,8 @@
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
         (only-in :yuanxu/module-system/source/admission module-source-admit-current! module-source-read)
         (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
-        (only-in "../core/t/qualification/service-publication/fixtures.ss" ServicesFixture write-source))
+        (only-in "../core/t/qualification/testing/directory.ss" write-source)
+        (only-in "../core/t/qualification/service-publication/fixtures.ss" ServicesFixture))
 (export nix-profile-effect-boundary-test)
 
 ;; Only the admitted, selected domain plan is packaged. Not all module fields.
@@ -73,7 +74,7 @@
         ;; Retained actual effect has no expected-revision/fence operand.
         (check-equal? (.get (.call saved .run) status) 0)
         (check-equal? (waref (profile-plan profile) "postgresql" #f) 5432)
-        ;; Source guard refuses changed source; an already saved native effect
+        ;; Source guard refuses changed source; an already saved runtime effect
         ;; can nevertheless switch to the captured immutable snapshot.
         (write-source new-expression (string-append (module-source-read new-expression) "\n# changed\n"))
         (check-exception ((.get new-publication admit-current)) Error?)

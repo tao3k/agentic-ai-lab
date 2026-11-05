@@ -20,6 +20,6 @@
  (optimizationFocus . "module-owned POO session policy families with repeatable bounded projection")
  (inputShape . "96 stable policy families covering isolation, sandbox, context, history, communication, session-sharing, resource, model, prompt, tool, hook, resource-sharing, and agent-execution policies")
  (expectedRepair . "construct immutable POO policy declarations once, project bounded rows repeatedly, and leave effective safety decisions to policy-validation receipts")
- (expectedOutcome . "96 declarative POO policy families retain their native constructors while repeated projections reuse the stable module-owned objects")
+ (expectedOutcome . "96 declarative POO policy families retain their runtime constructors while repeated projections reuse the stable module-owned objects")
  (measurementPhases policy-family-before projection-before policy-family-after projection-after assert-time-gate observe-runtime-memory)
  (tags poo session policy family projection performance openrath))

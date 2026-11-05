@@ -17,8 +17,7 @@
             provider: (.slot? scope 'provider)
             types: (.slot? scope 'types))))))
 (def ScopeContract
-  (.cc (yuanxu-predicate-contract 'null/scope object? (lambda (_v _c) '()))
-    'value-contract ScopeShape))
+  (.cc ScopeShape identity: 'null/scope))
 (def (null-admission input-type)
   (.cc (yuanxu-predicate-contract 'null/input object? (lambda (_v _c) '()))
     'value-contract

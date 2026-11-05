@@ -15,7 +15,7 @@
     (relation compiled_workspace ((build string?) (binding string?)))
     (relation tested_executable ((test string?) (build string?)))
     (relation control_case ((test string?) (case string?) (negative boolean?)))
-    (relation native_process ((step string?) (stage string?) (exit exact-integer?) (timeout boolean?)))
+    (relation runtime_process ((step string?) (stage string?) (exit exact-integer?) (timeout boolean?)))
     (relation checked_step ((step string?)))
     (relation missing_step ((step string?)))
     (relation bound_source ((binding string?) (source string?)))
@@ -29,7 +29,7 @@
     (gerbil-ascent-program (.ref program 'relations) (.ref program 'rules)
       4096 4096 4096
       '(observed_step required_step step_dependency source_binding workspace_projection
-        compiled_workspace tested_executable control_case native_process)))
+        compiled_workspace tested_executable control_case runtime_process)))
   (lambda (program result query scope)
     (hash ("status" "recorded-only") ("query" query) ("scope" scope)
           ("dependencies" (.ref program 'rules))

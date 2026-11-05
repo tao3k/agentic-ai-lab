@@ -33,7 +33,7 @@ fn bootstrap() -> Bootstrap {
             "profile_identities": ["example.profile"], "profile_origin_digest": digest(1),
             "governance_assessment_digest": digest(10), "subject_snapshot_digest": digest(11),
             "governance_admitted": true,
-            "certification_names": ["AgenticAILabProof.Runtime.CedarNative", "AgenticAILabProof.Runtime.CedarRuntimeHost"]},
+            "certification_names": ["AgenticAILabProof.Runtime.CedarRuntime", "AgenticAILabProof.Runtime.CedarRuntimeHost"]},
         "authority_id": "example.authority", "runtime_context_id": "context-1", "runtime_generation": 1, "bundle_epoch": 7,
         "runtime_bundle_digest": digest(2), "profile_bundle_digest": digest(3), "independent_bundle_digest": digest(4),
         "capability_contract_digest": digest(5), "policy_revision": 1, "revocation_epoch": 0,

@@ -37,7 +37,7 @@ class CaseRegistry:
                ) -> tuple[RegisteredCase, ...]:
         if composition not in (None, "single", "cross"):
             raise ValueError("composition must be single or cross")
-        if mode not in (None, "unit", "native", "live"):
+        if mode not in (None, "unit", "runtime", "live"):
             raise ValueError("unknown case mode")
 
         def matches(case: RegisteredCase) -> bool:

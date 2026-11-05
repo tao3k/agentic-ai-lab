@@ -16,7 +16,7 @@ Source already uses that binding. An inspection of the current working tree
 finds no product import/caller of =bindings/nix-c-api/binding.ss=. Its callers
 are the embedding/profile tests. The product Nix Source still starts the CLI.
 Therefore this investigation does not claim a production C API speedup or
-silently replace an independent currentness query with a warm native value.
+silently replace an independent currentness query with a warm runtime value.
 
 * Actual ownership and calls
 
@@ -26,8 +26,8 @@ silently replace an independent currentness query with a warm native value.
 | Its =.realize= | Refines arguments or the =selection= data input and calls Source =.prepare=. | A changed data-input snapshot is a changed Nix context even if its directory spelling is unchanged. |
 | =NixSource. .prepare= | Derivation/artifact are lazy receiver-local slots. | Repeated warm slot reads already avoid repeating construction/realization. |
 | Publication =admit-current= | Calls =admit-derivation!= through the derivation-query mode. | Independent query must not be replaced by a cached admission or old output. |
-| =NixFlakeSource. .instantiate= | Contract check, source check, CLI query, source check. | Each CLI process has its own evaluator; no native session is held here. |
-| Serialized =.guard-form= | Reconstructs a Source in the generated guard's process. | Independent process/context; no native state-restoration protocol exists. |
+| =NixFlakeSource. .instantiate= | Contract check, source check, CLI query, source check. | Each CLI process has its own evaluator; no runtime session is held here. |
+| Serialized =.guard-form= | Reconstructs a Source in the generated guard's process. | Independent process/context; no runtime state-restoration protocol exists. |
 | Binding =call-with-flake-session= | Creates one state, locks/selects once, runs the callback and closes it. | Already one state across AWS and Null inside that callback. |
 | Qualification fresh-state rounds | Explicit independent sessions for cold controls. | Intentional measurement, not an accidental product reconstruction to remove. |
 
@@ -35,7 +35,7 @@ The only =nix_state_create= in the binding is inside =pf_nix_create=. Its
 functional session brackets call it once per independent callback lifetime;
 there is no additional creation inside =session-query=. Baseline assertions
 continue to require one Store, one state and one strict lock across both final
-candidate values. No safe redundant native construction was found there.
+candidate values. No safe redundant runtime construction was found there.
 
 The product CLI's package route uses =path-info --derivation= with its existing
 exact-attribute handling; its applied-function route uses =eval --raw --apply=.
@@ -62,7 +62,7 @@ the final round modifies the imported =stamp.nix= from =1= to =2=:
 (let (count (session-calls session))
   (assert 'staged-source-change-refused
     (rejected? (cut staged both "stale")))
-  (assert 'stale-before-native-call (= count (session-calls session))))
+  (assert 'stale-before-runtime-call (= count (session-calls session))))
 
 ;; Negative control only: header checks pass, but reuse can return stale imports.
 (let* ((cached
@@ -130,7 +130,7 @@ does not justify removing those queries under a "same lock" shortcut.
 
 Product convergence is still incomplete. It requires the current module
 migration/build dependencies to become executable, then a real Source-to-C-API
-connection preserving argument/result semantics, native evaluation mode,
+connection preserving argument/result semantics, runtime evaluation mode,
 locked data-input identity and transitive source currentness. That connection
 must prove that warm reads cannot hide an imported-file change before it
 replaces the existing CLI checks. Reuse belongs inside an explicit validated

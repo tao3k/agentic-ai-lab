@@ -42,7 +42,7 @@
   ;; Bounded counters, not a path registry or an evaluation/result cache. The
   ;; protocol logs requests, not RPC completion: do not invent service timings.
   (def counts (and observer (make-hash-table-eq)))
-  (def (record-native record)
+  (def (record-runtime record)
     (when (equal? (hash-get record 'action) "msg")
       (let* ((text (hash-get record 'msg))
              (category
@@ -62,7 +62,7 @@
       (run-script
         (.o command: argv directory: #f environment: (.o)
             timeout: execution-total-seconds idle-timeout: execution-idle-seconds
-            progress: (lambda () (make-nix-progress-reader observe: (and observer record-native)))
+            progress: (lambda () (make-nix-progress-reader observe: (and observer record-runtime)))
             log: #f check-status: check?)
         output-port: (current-error-port)))
     (lambda ()
@@ -71,7 +71,7 @@
 (def (call-with-package-process-observation argv thunk)
   (let ((observer (current-nix-process-completion-observer))
         (source-observer (current-module-source-observer))
-        ;; Liveness decoding must not depend on observation emission. Native
+        ;; Liveness decoding must not depend on observation emission. Runtime
         ;; activity records are required even when no Case observer is active.
         (command (observed-nix-command argv)))
     (if (not (or observer source-observer)) (thunk command)
@@ -182,7 +182,7 @@
       (call-with-package-process-observation command (cut run-nix-process <> #t))))
   (let* ((applied? (pair? (.all-slots arguments)))
          ;; A fully qualified output is an exact path, not a package shorthand.
-         ;; Native prefix probing can seal/replace ancestor cache rows on Nix
+         ;; Runtime prefix probing can seal/replace ancestor cache rows on Nix
          ;; 2.34 and cause a second full evaluation for identical inputs. The
          ;; leading dot selects Nix's existing exact-attribute route. Keep short
          ;; names and applied-function evaluation unchanged.
@@ -217,7 +217,7 @@
                                          (nix-string json) ")).drvPath"))
           '())))))
 (def (agentic-ai-lab-nix-flake-source-inputs reference)
-  ;; No tree scan. Native Nix checks transitive derivation dependencies. Remote
+  ;; No tree scan. Runtime Nix checks transitive derivation dependencies. Remote
   ;; roots have no local byte observations; transport/pinning remains upstream.
   (let (root (cond ((string-prefix? "path:/" reference) (substring reference 5 (string-length reference)))
                   ((string-prefix? "/" reference) reference) (else #f)))

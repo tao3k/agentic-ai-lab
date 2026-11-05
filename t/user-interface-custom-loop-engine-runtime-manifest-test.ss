@@ -12,8 +12,9 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+
         (only-in :agentic-ai-lab/modules/loop-engine/control/governor-marlin
                  +loop-governor-marlin-loop-engine-discovery-schema+
                  loop-governor-marlin-loop-engine-discovery)

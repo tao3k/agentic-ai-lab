@@ -83,7 +83,7 @@ embedding result. No signal handler was rebound to hide the failure.
 Gambit's upstream =sigchld_signal_handler= reaps children with
 =waitpid(-1, ..., WNOHANG)=; Nix's =Pid::wait= expects to reap its own child.
 These source mechanisms explain a possible ownership conflict, but the
-experiment does not establish a full native backtrace of the loader failure.
+experiment does not establish a full runtime backtrace of the loader failure.
 
 ** A product-owned reusable worker
 
@@ -92,7 +92,7 @@ one EvalState and one parsed function per session. Gerbil starts it explicitly
 through the installed =std/misc/process= API and sends bounded private JSON
 requests. Four measured queries reuse that evaluator; they do not spawn four
 Nix CLIs. Two additional queries verify the separate POO plan projections.
-Importing =session.ss= starts no worker. The native reference-counted
+Importing =session.ss= starts no worker. The runtime reference-counted
 values and state are released on exit; the process lifecycle checks exit
 status on success and closes its ports on failure.
 
@@ -155,7 +155,7 @@ calls versus four CLI evaluations, not all internal Nix helper or daemon
 processes. Each measured C worker also serves two unmeasured POO plan checks.
 The initialization probe and post-source-change fresh session are separate.
 
-OS page caches, store contents and native cache databases are not cleared.
+OS page caches, store contents and runtime cache databases are not cleared.
 "Cold" means a new evaluator or first selection in that session, not a clean
 machine. Runtime import, C compilation, downloads, actual provider planning
 and cloud deployment are outside the reported query timings. These results
@@ -237,7 +237,7 @@ Flow must own that runtime boundary while Yuanxu remains a reusable library.
 
 * 2026-10-22: direct Gerbil embedding with libflake-c
 
-** Ownership and native interface
+** Ownership and runtime interface
 
 This implementation lives entirely in =agentic-ai-lab/bindings/nix-c-api=. Yuanxu
 neither links Nix nor gains a Nix dependency. The installed Gerbil and Gambit
@@ -246,7 +246,7 @@ branch or PR is introduced.
 
 =dependencies.json= retains the numeric floor =2.34= and pins CLI, expr,
 store, util, fetchers and Flake C development outputs to =2.34.4+1= on
-=aarch64-darwin=. The native compiler/linker probes the actual interfaces;
+=aarch64-darwin=. The runtime compiler/linker probes the actual interfaces;
 the version floor alone is not a capability claim.
 
 The new bridge follows the public C API, with reference-counted Nix values
@@ -263,7 +263,7 @@ value = nix_locked_flake_get_output_attrs(s->ctx, s->flakes, s->state, locked);
 #+end_src
 
 Every operation checks the C context before using its result. Attribute
-selection uses native =nix_get_attr_byname=, and query calls reuse the same
+selection uses runtime =nix_get_attr_byname=, and query calls reuse the same
 EvalState/function. No Scheme implementation of lock parsing, lock merging,
 =--override-input= semantics or =builtins.getFlake= is substituted.
 The separate attribute argument rejects fragments in the reference instead
@@ -302,7 +302,7 @@ Gambit ___dynamic_load / dyld dlopen
 
 The corresponding Nix source probes Rosetta with
 =arch -arch x86_64 /usr/bin/true=. Gambit's SIGCHLD handler reaps children;
-late Nix initialization can then fail to reap its own probe. This is native
+late Nix initialization can then fail to reap its own probe. This is runtime
 library initialization before =nix_libexpr_init=, not slow Flake evaluation.
 
 The existing product launcher now preloads =libnixflakec.dylib= before
@@ -317,12 +317,12 @@ DYLD environment.
 This repair establishes the startup order on this host. It does not prove
 safe ownership of arbitrary later Nix-spawned subprocesses, remote builders,
 realization, all signals, cancellation, concurrency or other operating systems.
-Preloading itself executes Nix initializers and the native platform probe;
+Preloading itself executes Nix initializers and the runtime platform probe;
 ordinary declarations do not create an EvalState or execute a provider query.
 
 ** Matched cold/hot results and safety controls
 
-The successful native Harness used the installed Gerbil =1cfb032= / Gambit
+The successful runtime Harness used the installed Gerbil =1cfb032= / Gambit
 =ea114fc=, compiled gerbil-poo =80b590b15c6d4bde7717f5fd85d5b98dbf230bd8=
 and the current Core 013b89f consumer prefix. Earlier trials using the older
 f956f4c prefix are not the qualification result. Product source imports and
@@ -357,9 +357,9 @@ The passing controls are:
   are refused before the API call count changes. A new session with fresh
   observations reads the new source. No admission verdict is cached.
 - Permit an override constructed from the actual Nix lock's immutable input
-  reference. An unlocked input is refused by the native API; do not relax its
+  reference. An unlocked input is refused by the runtime API; do not relax its
   default restriction just to make an override positive pass.
-- Add an input without updating the lock: native check mode rejects it both
+- Add an input without updating the lock: runtime check mode rejects it both
   with and without a locked override; CLI check-only mode also rejects it.
   The lock bytes remain unchanged after all failures.
 - Reuse the expression comparison and its separate registration-mode control;
@@ -368,7 +368,7 @@ The passing controls are:
 Four real CASE-OK lines, MODULE-OK, HARNESS-OK and final OK were verified, with
 no ERROR CASE/CHECK/HARNESS/MODULE, undefined-binding, heap or stack overflow
 markers. The separate three-Case worker regression also passed. The final late-load
-control still exits with native SIGABRT 134 (Ops/Just reports failure), confirming
+control still exits with runtime SIGABRT 134 (Ops/Just reports failure), confirming
 that errors are not suppressed. The initial accidental empty nested suite was rejected as evidence;
 the final TestingScript requires an exact Case count and the final lock
 negative's assertion. The existing 2 GiB heap fence, 120-second preparation
@@ -381,7 +381,7 @@ passing controls, and raw logs/crash reports are not committed.
 
 ** Reflection and remaining boundary
 
-Native Flake locking eliminates a second lock implementation and the CLI
+Runtime Flake locking eliminates a second lock implementation and the CLI
 flag interaction where =--override-input= can suppress refusal of an in-memory
 lock update. It does not authenticate our deployment configuration, discover
 all mutable source inputs or authorize execution. The bounded test explicitly
@@ -391,12 +391,12 @@ work. This change qualifies the product binding, not replacement of every
 published Source or deployment/execution path.
 
 - [[https://github.com/NixOS/nix/blob/2.34.4/src/libflake-c/nix_api_flake.h][Nix 2.34.4 public Flake C API]]: strict mode, overrides, parsing and output lifetime.
-- [[https://github.com/NixOS/nix/blob/2.34.4/src/libstore/globals.cc][Nix 2.34.4 library settings]]: native platform-probe initialization.
+- [[https://github.com/NixOS/nix/blob/2.34.4/src/libstore/globals.cc][Nix 2.34.4 library settings]]: runtime platform-probe initialization.
 - [[https://github.com/NixOS/nix/blob/2.34.4/src/libcmd/installables.cc][Nix 2.34.4 CLI installable arguments]]: override/write-lock interaction.
 
 * First-demand attribution follow-up
 
-See [[file:16-nix-c-api-first-demand.org][10.08.16 First-Demand Attribution]] for native wall/CPU phase measurements,
+See [[file:16-nix-c-api-first-demand.org][10.08.16 First-Demand Attribution]] for runtime wall/CPU phase measurements,
 the corrected CLI persistent-cache conclusion, shared-cache controls and the
 prepared immutable-reference experiment. The cold-start cache explanation
 must follow that source/experimental result rather than speculation.

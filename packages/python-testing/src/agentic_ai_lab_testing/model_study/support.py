@@ -15,7 +15,7 @@ from ..ascent.candidate import candidate_text
 from ..ascent.live import key_from_file
 from .reporting import report_json
 from .archive import require_archive, seal
-from .support_native import observe, score
+from .support_runtime import observe, score
 from .support_protocol import SETTINGS, TRANSPORT, digest, preview, validate
 
 
@@ -45,16 +45,16 @@ def inert_output(response) -> str | None:
 
 def run(client, files: dict[str, str], ascent: Path, gerbil_path: Path, output: Path) -> dict:
     results = {}
-    for arm in ("self", "native"):
+    for arm in ("self", "runtime"):
         messages = [{"role": "user", "content": files["initial.txt"]}]
         first = call(client, messages, output, f"{arm}.1")
         review = files["self_review.txt"]
-        if arm == "native":
+        if arm == "runtime":
             proposal = inert_output(first)
             observation = (observe(ascent, gerbil_path, proposal, initial=True)
                            if proposal is not None else "invalid-model-output")
-            (output / "native.initial.tsv").write_text(observation)
-            review = files["native_review.txt"].format(observation=observation)
+            (output / "runtime.initial.tsv").write_text(observation)
+            review = files["runtime_review.txt"].format(observation=observation)
         messages = [*messages, {"role": "assistant", "content": first.output_text},
                     {"role": "user", "content": review}]
         final = call(client, messages, output, f"{arm}.2")

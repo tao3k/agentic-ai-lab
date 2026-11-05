@@ -11,7 +11,8 @@
                  test-suite
                  check-equal?
                  )
-        :agentic-ai-lab/modules/workflow/interface)
+        (only-in :yuanxu/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
+        (only-in :yuanxu/modules/funflow/dependency-graph yuanxu-cicd-check-map->dependency-graph))
 
 (export workflow-cicd-dependency-graph-test)
 

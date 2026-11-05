@@ -16,11 +16,11 @@ from agentic_ai_lab_proof.generated.proof_case_vector import FIELD_OFFSETS, VECT
 from agentic_ai_lab_proof.proof_case_emit import generated_artifacts
 from agentic_ai_lab_proof.proof_case_manifest import load_proof_case_schema
 from agentic_ai_lab_proof.proof_case_runtime import (
-    NativeProofCaseRuntime,
+    RuntimeProofCaseRuntime,
     ProofCaseError,
     ProofStatus,
     VectorDivergence,
-    assert_native_differential,
+    assert_runtime_differential,
     first_vector_divergence,
     proof_case_vector_digest,
     validate_proof_case_vector,
@@ -32,7 +32,7 @@ PROOF_ROOT = Path(__file__).parents[2]
 
 
 @pytest.fixture(scope="session")
-def native_runtime(tmp_path_factory: pytest.TempPathFactory) -> NativeProofCaseRuntime:
+def runtime(tmp_path_factory: pytest.TempPathFactory) -> RuntimeProofCaseRuntime:
     output = tmp_path_factory.mktemp("runtime-c") / (
         "libagentic_ai_lab_proof.dylib" if sys.platform == "darwin" else "libagentic_ai_lab_proof.so"
     )
@@ -52,7 +52,7 @@ def native_runtime(tmp_path_factory: pytest.TempPathFactory) -> NativeProofCaseR
         ],
         check=True,
     )
-    return NativeProofCaseRuntime(output)
+    return RuntimeProofCaseRuntime(output)
 
 
 def positive_vector() -> bytes:
@@ -82,45 +82,45 @@ def scheme_vector() -> tuple[bytes, bytes]:
     return bytes.fromhex(receipt["vector"]), bytes.fromhex(receipt["digest"])
 
 
-def test_native_cffi_round_trip_matches_python_contract(
-    native_runtime: NativeProofCaseRuntime,
+def test_runtime_cffi_round_trip_matches_python_contract(
+    runtime: RuntimeProofCaseRuntime,
 ) -> None:
     vector = positive_vector()
-    layout = assert_native_differential(native_runtime, vector)
+    layout = assert_runtime_differential(runtime, vector)
 
     assert layout.required_size == VECTOR_SIZE
     assert validate_proof_case_vector(vector) is ProofStatus.OK
 
 
 def test_layout_negotiates_once_and_hot_path_reuses_caller_buffer(
-    native_runtime: NativeProofCaseRuntime,
+    runtime: RuntimeProofCaseRuntime,
 ) -> None:
     vector = positive_vector()
     first = bytearray(VECTOR_SIZE)
     second = bytearray([0xA5]) * VECTOR_SIZE
 
-    first_layout = native_runtime.validate_and_write(vector, first)
-    second_layout = native_runtime.validate_and_write(vector, second)
+    first_layout = runtime.validate_and_write(vector, first)
+    second_layout = runtime.validate_and_write(vector, second)
 
     assert first_layout == second_layout
-    assert native_runtime.layout_measurements == 1
+    assert runtime.layout_measurements == 1
     assert first == vector
     assert second == vector
 
 
 def test_caller_buffer_capacity_failure_is_atomic(
-    native_runtime: NativeProofCaseRuntime,
+    runtime: RuntimeProofCaseRuntime,
 ) -> None:
     output = bytearray([0xA5]) * (VECTOR_SIZE - 1)
 
     with pytest.raises(ProofCaseError) as caught:
-        native_runtime.validate_and_write(positive_vector(), output)
+        runtime.validate_and_write(positive_vector(), output)
     assert caught.value.status is ProofStatus.BUFFER_TOO_SMALL
     assert output == bytearray([0xA5]) * (VECTOR_SIZE - 1)
 
 
 def test_scheme_c_python_and_lean_fixture_share_one_vector(
-    native_runtime: NativeProofCaseRuntime,
+    runtime: RuntimeProofCaseRuntime,
 ) -> None:
     generated = positive_vector()
     scheme, scheme_digest = scheme_vector()
@@ -132,7 +132,7 @@ def test_scheme_c_python_and_lean_fixture_share_one_vector(
         actual_owner="scheme",
     ) is None
     assert proof_case_vector_digest(scheme) == scheme_digest
-    assert_native_differential(native_runtime, scheme)
+    assert_runtime_differential(runtime, scheme)
 
 
 def test_scheme_process_reproduces_vector_and_digest() -> None:
@@ -167,7 +167,7 @@ def test_differential_reports_first_owner_and_field() -> None:
     ],
 )
 def test_python_and_c_reject_mutations_with_same_status(
-    native_runtime: NativeProofCaseRuntime,
+    runtime: RuntimeProofCaseRuntime,
     field: str,
     value: int,
     expected: ProofStatus,
@@ -178,18 +178,18 @@ def test_python_and_c_reject_mutations_with_same_status(
 
     assert validate_proof_case_vector(bytes(vector)) is expected
     with pytest.raises(ProofCaseError) as caught:
-        assert_native_differential(native_runtime, bytes(vector))
+        assert_runtime_differential(runtime, bytes(vector))
     assert caught.value.status is expected
 
 
 def test_python_and_c_reject_truncated_vector(
-    native_runtime: NativeProofCaseRuntime,
+    runtime: RuntimeProofCaseRuntime,
 ) -> None:
     vector = positive_vector()[:-1]
 
     assert validate_proof_case_vector(vector) is ProofStatus.MALFORMED_EVIDENCE
     with pytest.raises(ProofCaseError) as caught:
-        assert_native_differential(native_runtime, vector)
+        assert_runtime_differential(runtime, vector)
     assert caught.value.status is ProofStatus.MALFORMED_EVIDENCE
 
 
@@ -208,7 +208,7 @@ def test_python_and_c_reject_truncated_vector(
     ],
 )
 def test_table_driven_structural_mutations_fail_closed(
-    native_runtime: NativeProofCaseRuntime,
+    runtime: RuntimeProofCaseRuntime,
     field: str,
     value: int,
     format_: str,
@@ -219,7 +219,7 @@ def test_table_driven_structural_mutations_fail_closed(
 
     assert validate_proof_case_vector(bytes(vector)) is expected
     with pytest.raises(ProofCaseError) as caught:
-        assert_native_differential(native_runtime, bytes(vector))
+        assert_runtime_differential(runtime, bytes(vector))
     assert caught.value.status is expected
 
 
@@ -258,12 +258,12 @@ def test_digest_and_root_substitution_changes_receipt_identity(field: str) -> No
 
 @pytest.mark.parametrize("reserved_index", [0, 11])
 def test_reserved_boundary_bytes_fail_closed(
-    native_runtime: NativeProofCaseRuntime, reserved_index: int
+    runtime: RuntimeProofCaseRuntime, reserved_index: int
 ) -> None:
     vector = bytearray(positive_vector())
     vector[FIELD_OFFSETS["reserved"] + reserved_index] = 1
 
     assert validate_proof_case_vector(bytes(vector)) is ProofStatus.MALFORMED_EVIDENCE
     with pytest.raises(ProofCaseError) as caught:
-        assert_native_differential(native_runtime, bytes(vector))
+        assert_runtime_differential(runtime, bytes(vector))
     assert caught.value.status is ProofStatus.MALFORMED_EVIDENCE

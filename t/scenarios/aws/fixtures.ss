@@ -76,7 +76,7 @@
   (phase 'package-set-resolved)
   ;; Pin the existing immutable store input with Nix's own NAR metadata. A bare
   ;; path input makes flake lock rescan/copy the entire package set each time.
-  ;; This is a native store query, not a maintained hash or a Scheme cache.
+  ;; This is a runtime store query, not a maintained hash or a Scheme cache.
   (def metadata
     (call-with-input-string
       (.get (run-script (.cc NixSetup 'command
@@ -91,7 +91,7 @@
   (unless (and (string? nar-hash) (string-prefix? "sha256-" nar-hash))
     (error "Nix store metadata lacks the immutable NAR identity"))
   (phase 'package-set-identified)
-  ;; Resolve Nix's content-addressed source name from its native NAR identity.
+  ;; Resolve Nix's content-addressed source name from its runtime NAR identity.
   ;; Reuse an existing immutable object only after querying its recorded hash;
   ;; fetchTree otherwise rescans a large path even when that object exists.
   (def canonical-package-set
@@ -178,7 +178,7 @@
     ;; Resolve the SAME immutable input through Nix's path fetcher. On 2.34,
     ;; the final/narHash shortcut loses this path accessor's fingerprint;
     ;; explicit resolution retains Nix's own source-to-hash cache. The locked
-    ;; declaration above and all native GC/source guards remain in place.
+    ;; declaration above and all runtime GC/source guards remain in place.
     inputs: (.o nixpkgs: (.get fixture package-set))
     source-inputs: (append (.get fixture closure-inputs)
                     (map (lambda (path) (cons path (module-source-read path)))
@@ -212,7 +212,7 @@
                     (.call context current? generation)))))
   ;; Demand the same Graph that SelectedPackages consumes. This separates pure
   ;; source preparation from Nix effects without constructing another Graph.
-  ;; Native Funflow/Ops imports currently require eligible Module owners in
+  ;; Runtime Funflow/Ops imports currently require eligible Module owners in
   ;; this explicit source policy; keep them until that distinction is modeled.
   (.get selection build-graph)
   (phase 'build-graph)

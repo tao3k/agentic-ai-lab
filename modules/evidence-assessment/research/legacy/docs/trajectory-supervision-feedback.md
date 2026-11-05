@@ -20,7 +20,7 @@ Python should remain a reusable search service host, not a research script.
 | Owner | Responsibility | Must not absorb |
 |-------|----------------|-----------------|
 | Agent | Form hypotheses, translate a question into logical factors, choose scope and expansion, interpret counterevidence | Treat a returned slice as an exhaustive menu or an execution instruction |
-| Downstream Scheme DSL | Declare facts, provenance, applicability, domain associations, and caller-owned query rules | Implement Library internals or require downstream native compilation for a new evidence case |
+| Downstream Scheme DSL | Declare facts, provenance, applicability, domain associations, and caller-owned query rules | Implement Library internals or require downstream runtime compilation for a new evidence case |
 | ASCENT Library | Evaluate relations, preserve witnesses and polarity, produce source-bound incremental slices and expansion references | Know SMP labels, source filenames, milestone numbers, or prescribe the Agent's next action |
 | Python host | Discover registered declarations, load and bind sources, invoke the Library, persist opaque checkpoints, transport results and execution receipts | Reimplement logical matching, causal inference, topic routing, or domain-specific failure classification |
 
@@ -64,7 +64,7 @@ Investigate an apparent lack of progress by locating the broken contract:
 | Query rejected before Library execution | Tool or host execution | Exact tool result and execution boundary, separate from a query verdict |
 | Query executes but misses applicable retained evidence | Projection, association, or scope | Bound query, source/rule identities and missing witness |
 | Continuation repeats entire payload | Checkpoint transport, scope changes, or deliberate replay | Passed checkpoint and displayed-unit identities; intent may be unknown |
-| Accurate slice but no source repair | Unresolved domain reasoning | Proposed mechanism, discriminator and source/native evidence; not just call counts |
+| Accurate slice but no source repair | Unresolved domain reasoning | Proposed mechanism, discriminator and source/runtime evidence; not just call counts |
 
 The supervisor's proposed explanation is itself a hypothesis. Preserve contrary
 traces. Failure records are reusable evidence under stated conditions, not
@@ -75,7 +75,7 @@ global bans on a hypothesis whose premises later change.
 Before editing, record the observed defect, whether it is already explored,
 the missing contract, expected benefit and a falsifying acceptance case.
 If the benefit is not measured, describe the expected work removed rather than
-inventing a percentage or a native speedup.
+inventing a percentage or a runtime speedup.
 
 Prefer an existing declarative extension when a new case needs only facts,
 associations, applicability rules or query scope. A Python change needs a
@@ -89,7 +89,7 @@ premises, then run a real Agent continuation. Existing QNT and Lean laws own
 protocol correctness: first-hit guarantees are conditional on registered,
 associated, applicable evidence and sufficient capacity for honest references.
 They cannot prove that a probabilistic Agent chooses the interface or repairs
-native code. Those require observed integration and task outcomes separately.
+runtime code. Those require observed integration and task outcomes separately.
 
 Success is more useful evidence and better-supported source decisions with
 fewer unnecessary host edits. Fewer calls alone, more DSL files, or a green

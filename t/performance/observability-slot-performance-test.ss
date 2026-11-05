@@ -29,7 +29,7 @@
    'poo-debug-policy-prototype-lookup
    100
    100
-   "Live calibration measured 67 ns/op; 100 ns/op is the target and 200 ns/op is the hard ceiling for native prototype slot lookup."))
+   "Live calibration measured 67 ns/op; 100 ns/op is the target and 200 ns/op is the hard ceiling for runtime prototype slot lookup."))
 
 (def prototype-compose-fixture
   (let (fixture
@@ -37,7 +37,7 @@
          'poo-debug-policy-prototype-compose
          1500
          500
-         "Live calibration measured 1438 ns/op; 1500 ns/op is the target and 2000 ns/op is the hard ceiling for one native prototype composition."))
+         "Live calibration measured 1438 ns/op; 1500 ns/op is the target and 2000 ns/op is the hard ceiling for one runtime prototype composition."))
     (cons '(warmupOperations . 2000)
           (cons '(batchOperations . 10000)
                 (filter (lambda (entry)
@@ -58,7 +58,7 @@
 
 (def observability-slot-performance-test
   (test-suite "observability slot phase performance"
-    (yuanxu-test-case "keeps prototype lookup in a native nanosecond envelope"
+    (yuanxu-test-case "keeps prototype lookup in a runtime nanosecond envelope"
       (let-values (((receipt result)
                     (micro-kernel-run/result
                      prototype-lookup-fixture

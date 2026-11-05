@@ -4,7 +4,7 @@
 
 (import (only-in :clan/poo/object .o .ref))
 
-;;; Scenario expected: native POO remains the control-plane surface.
+;;; Scenario expected: POO remains the control-plane surface.
 ;;; The repair is object-list/index discipline, not replacing POO with vectors
 ;;; or raw records.
 

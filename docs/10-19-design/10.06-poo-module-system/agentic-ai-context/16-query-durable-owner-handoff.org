@@ -2,7 +2,7 @@
 #+language: en
 :PROPERTIES:
 :ID: context-query-durable-owner-handoff
-:STATUS: executed-model-native-integration-open
+:STATUS: executed-model-runtime-integration-open
 :END:
 
 * Baseline and qualification boundary
@@ -11,9 +11,9 @@ Core was rebased on 2026-10-25 to PR 19 head
 =bf88264cf0f5c1bf2b5c0a6484ca5f2e1f08c2d5=, retaining local edits.
 The incoming commit changes the process-output pump, its documentation and test.
 This revision update is not a new runtime qualification. The receipts in
-[[file:15-unified-query-provider.org][15: Query Provider]] and [[file:14-native-durable-recovery.org][14: durable recovery]] retain their original cuts.
+[[file:15-unified-query-provider.org][15: Query Provider]] and [[file:14-runtime-durable-recovery.org][14: durable recovery]] retain their original cuts.
 
-The inspected Provider prepares subscribers, updates its native source history
+The inspected Provider prepares subscribers, updates its runtime source history
 and drains invalidation synchronously. Context checkpoints retain its portable
 source and Query journals. However, the durable adapter's pending named-command
 recovery handles policy replacement, result, cancel and recover; it does not
@@ -33,7 +33,7 @@ the ownership established in [[file:03-information-to-recall.org][the informatio
 |------------+------------------------+------------------------------------|
 | Admit source | Keep exact bytes, qualified Org IDs and source/Contract cut | No interaction or Attempt created implicitly |
 | Form working view | Select via unified Query; bind original proof, support and captured parents | Supply existing scope/identity and consume opaque admitted input |
-| Use and complete | Recheck current support and owner publication fence | Route actual worker observations and publish one native terminal |
+| Use and complete | Recheck current support and owner publication fence | Route actual worker observations and publish one runtime terminal |
 | Reassess or withdraw | Push dependency-directed invalidation; retain old proof and result | Preserve pending obligations until actual reconciliation |
 | Consolidate | Create a separately admitted interpretation with its own dependencies | Completion alone cannot endorse a generalization |
 | Recall | Re-form a current purpose-bound view from retained evidence | Receiving Session supplies its own scope and authority |
@@ -93,11 +93,11 @@ retired consumer or empty Session set cannot erase the retained catalog history.
 2. Acquire the existing writer transaction and validate its owner epoch and
    expected source cut. Distinguish an already applied retry from a different
    command proposing the same generation. Refuse generation reuse or rollback.
-3. Prepare the native source change and dependency batches. Bind affected
+3. Prepare the runtime source change and dependency batches. Bind affected
    Contexts and Attempts to their captured versions; an unaffected consumer
    remains admitted. Private in-memory changes are provisional until commit.
 4. Persist the source/Query histories, support retraction, affected Context
-   checkpoint, pending cancellation/reconciliation obligations and any native
+   checkpoint, pending cancellation/reconciliation obligations and any runtime
    terminal in the same existing journal transaction. Retain original bytes,
    proofs and observations. Withdrawal changes applicability, not history.
 5. Commit the decision before ACK or externally visible result publication.
@@ -117,7 +117,7 @@ fresh Attempt or fabricate worker termination.
 
 * Required executable gate before claiming implementation
 
-Reuse the native Query corpus and durable crash harness with source change,
+Reuse the runtime Query corpus and durable crash harness with source change,
 actual A/B worker result, cancel and recover as independent producers. Exercise
 both source replacement and withdrawal at after-inbox, before-decision-commit
 and after-commit/before-ACK crash boundaries. Record generated legal owner
@@ -141,7 +141,7 @@ Also crash/restart with an empty Query journal and zero Context consumers.
 The source must still be present at its committed generation. Replaying an old
 source command after a later committed replacement must record a refusal or
 historical ACK as appropriate, without restoring the old head. These additional
-native cases are not covered by the bounded model below.
+runtime cases are not covered by the bounded model below.
 
 * Executed durable-handoff model
 
@@ -166,11 +166,11 @@ exactly one source application, one A terminal, and at most one B terminal.
 Four saved witnesses, one per unsafe mode, were executed again with their
 corrected mode-zero paths: eight additional executions, four expected failures.
 
-The model intentionally abstracts native proof reconstruction, journal I/O,
+The model intentionally abstracts runtime proof reconstruction, journal I/O,
 matching worker evidence, callback delivery and immutable-byte retention. It
-does not establish the empty-catalog, newer-generation, old-owner or native
+does not establish the empty-catalog, newer-generation, old-owner or runtime
 process-death obligations above. It does not claim arbitrary OS scheduling.
-The previous native receipts have not been rerun or promoted by this model.
+The previous runtime receipts have not been rerun or promoted by this model.
 
 #+begin_src sh
 slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context

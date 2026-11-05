@@ -1,6 +1,6 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Native source commands, actual workers and process-death recovery. Timer
+;;; Runtime source commands, actual workers and process-death recovery. Timer
 ;;; delivery is disabled here; the existing clock qualification owns expiry.
 (import
  (only-in :clan/poo/object .o .ref .call)
@@ -65,7 +65,7 @@
                " provisional-generation=2 obligations-exact=#t terminals-unique=#t zero=" zero?)
     (force-output)))
 
-;;; Preserve the actual native domain fixture inputs used by both processes.
+;;; Preserve the actual runtime domain fixture inputs used by both processes.
 (def (retain-originals! journal db)
   (for-each
    (lambda (row)
@@ -122,7 +122,7 @@
              provider: (.call adapter .query-provider adapter))
          (.ref authority-value 'policies) adapter)))
 
-    ;; Deliberately unsafe native control: restore the committed catalog and
+    ;; Deliberately unsafe runtime control: restore the committed catalog and
     ;; consumers but omit replay of the actually persisted pending source input.
     (if (equal? mode "counter")
         (begin
@@ -158,7 +158,7 @@
               (command! "unaffected-c" 'result "c"
                 (lambda (r)
                   (ensure (.ref (query.commit (.ref r 'host) (.ref r 'workers) "c")
-                                'native-result-published?) "C actual completion failed"))))
+                                'runtime-result-published?) "C actual completion failed"))))
             (let* ((intent
                     (read! (lambda (r)
                       (let* ((old (context-query-current-source (.ref r 'provider) "source-a"))
@@ -253,7 +253,7 @@
                   (for-each (lambda (observation)
                     (when (equal? (.ref (.ref observation 'source-cut) 'identity) "source-a")
                       (ensure (not (context-query-current? provider observation))
-                              "Original native Query support revived")))
+                              "Original runtime Query support revived")))
                     (.ref root 'queries)))
                 (displayln "QUERY-DURABLE-RECOVER generation=2 affected-fenced=#t unaffected-preserved=#t zero=" zero?))))
 

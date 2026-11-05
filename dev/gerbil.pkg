@@ -1,4 +1,5 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+;; Dependency-only development environment; init.exports.tests owns testing.
 (package: agentic-ai-lab/dev
  depend: ("github.com/tao3k/asp-gerbil-scheme@f8f1f2e8859a718e3a8bb165146e339da1a872ce"))

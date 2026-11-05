@@ -1,6 +1,6 @@
 -- SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-/-! Generic dependency closure. Host attestations and native refinement are premises. -/
+/-! Generic dependency closure. Host attestations and runtime refinement are premises. -/
 namespace AgenticAILabProof.EvidenceCheckpoint
 
 def observeCompletion {Unit : Type} [DecidableEq Unit] (seen : List Unit)

@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; A/B witness for the retired per-import name-list scan versus the production
-;;; shared native hash index. The baseline is evidence only; it is not an
+;;; shared runtime hash index. The baseline is evidence only; it is not an
 ;;; alternate runtime or public compatibility path.
 
 (import (only-in :asp-gerbil-scheme/benchmark-api

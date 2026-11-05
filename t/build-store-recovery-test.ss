@@ -13,7 +13,7 @@
         (only-in :yuanxu/ops/config Config)
         (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in :yuanxu/ops/progress execution-progress!)
-        (only-in "../core/t/qualification/service-publication/fixtures.ss" DirectoryFixture write-source)
+        (only-in "../core/t/qualification/testing/directory.ss" DirectoryFixture write-source)
         "../core/t/qualification/build-publication/store.ss")
 (export build-store-recovery-test test-cleanup!)
 (def observations '())
@@ -34,7 +34,7 @@
     (def completed-processes 0)
     (def (run argv)
       (begin0 (execute argv)
-        ;; Native progress uses monotone totals. Repeating phase=1 is correctly
+        ;; Runtime progress uses monotone totals. Repeating phase=1 is correctly
         ;; deduplicated; only a genuinely completed checked process advances.
         (set! completed-processes (+ completed-processes 1))
         (execution-progress! 'completed-recovery-processes completed-processes)))
@@ -120,7 +120,7 @@
             (set! observations (cons (vector "unanchored" decision) observations)))))
       (lambda () (write-artifact-bytes binary original) (write-artifact-bytes record old-record)))
     ;; Last destructive source control: no timestamp reset and no later warm
-    ;; compilation that could produce an additional native object generation.
+    ;; compilation that could produce an additional runtime object generation.
     (def source (path-expand "probe.ss" root))
     (def source-bytes (bytes source))
     (dynamic-wind

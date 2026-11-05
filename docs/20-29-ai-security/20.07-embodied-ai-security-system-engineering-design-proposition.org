@@ -53,7 +53,7 @@ Every security-relevant effect SHOULD declare at least:
 - fencing or replay protection where authority can change;
 - the evidence required to establish completion or safe non-completion.
 
-The ordinary public API MUST expose these concepts through POO-native objects,
+The ordinary public API MUST expose these concepts through POO objects,
 prototypes, slots, extension helpers, and functional combinators.  Raw alist
 DSLs, ad hoc patch languages, and unbounded =(lambda (self super) ...)= hooks
 MUST NOT become the normal security-engineering surface.
@@ -150,7 +150,7 @@ and its explicitly assigned authorities.
 
 agentic-ai-lab is the compositional assurance control plane.  It SHOULD provide:
 
-- POO-native declarations for systems, scenarios, assets, boundaries, effects,
+- POO declarations for systems, scenarios, assets, boundaries, effects,
   risks, controls, obligations, evidence, receipts, and authorities;
 - functional composition and projection of local declarations into system views;
 - conflict, withdrawal, dependency, and assume--guarantee analysis;

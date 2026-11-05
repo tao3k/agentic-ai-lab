@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""POO-owned execution policy; the original native source/authority assertions."""
+"""POO-owned execution policy; the original runtime source/authority assertions."""
 from importlib.resources import files
 import unittest
 import ascent
@@ -16,7 +16,7 @@ class ExecutionPolicy(unittest.TestCase):
         with self.engine.open_module(module,'make-execution-evidence') as session:
             sources={r['name'] for r in session.descriptors if r['source']}
             self.assertIn('required_step',sources);self.assertIn('observed_step',sources);self.assertNotIn('checked_step',sources)
-            session.run();session.replace({'required_step':[['finished'],['missing']], 'observed_step':[['finished','PASS','native.test']]})
+            session.run();session.replace({'required_step':[['finished'],['missing']], 'observed_step':[['finished','PASS','runtime.test']]})
             receipt=session.run(queries=['checked_step','missing_step'])
             self.assertEqual(receipt['relations']['checked_step'],[['finished']]);self.assertEqual(receipt['relations']['missing_step'],[['missing']])
             with session.result(receipt) as result:

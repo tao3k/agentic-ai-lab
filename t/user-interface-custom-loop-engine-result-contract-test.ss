@@ -12,8 +12,10 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/loop-engine/config
+        :agentic-ai-lab/modules/loop-engine/prototypes)
 
 (export user-interface-custom-loop-engine-result-contract-test)
 
@@ -34,8 +36,7 @@
 ;;; result-contract validator without introducing unrelated sandbox resolution.
 ;; : [PooUserModuleSelection]
 (def custom-loop-invalid-result-module
-  (use-module loop-engine
-    :config
+  (agentic-ai-lab-loop-engine-configs
     (.def (invalid-result-loop @ loop-engine-use-case name workflow)
       name: 'invalid-result-loop
       workflow: 'funflow-cicd)

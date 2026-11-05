@@ -58,9 +58,8 @@
             Scenario: (.slot? scope 'Scenario)
             types: (.slot? scope 'types)
             provider: (.slot? scope 'provider))))))
-(define-type (AWSInterfaceContract @ AWSAdmissionContract.)
-  identity: 'aws/interface
-  value-contract: AWSInterfaceShape)
+(def AWSInterfaceContract
+  (.cc AWSInterfaceShape identity: 'aws/interface))
 
 (def (aws-scenario-contract input-type)
   (.cc AWSAdmissionContract.

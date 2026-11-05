@@ -1,0 +1,121 @@
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+(import (only-in :clan/poo/object .o .ref)
+        (only-in :std/misc/ports read-all-as-string)
+        (only-in :agentic-ai-lab/modules/temporal-causality/runtime/durable-journal
+                 journal-unpack journal-hash)
+        "../../modules/durable/recovery-decision.ss")
+(export main)
+
+;; Closed Lean literals only. Naturals and UTF-8 identifiers occupy disjoint
+;; ranges. The leading digit preserves length and leading zero bytes.
+(def (nat value)
+  (cond
+    ((and (exact-integer? value) (>= value 0)) (* 3 value))
+    ((or (string? value) (symbol? value))
+     (let* ((text (if (symbol? value) (symbol->string value) value))
+            (bytes (string->utf8 text)))
+       (let loop ((index 0) (number 1))
+         (if (= index (u8vector-length bytes))
+           (+ (* 3 number) (if (symbol? value) 2 1))
+           (loop (+ index 1) (+ (* 257 number) (+ 1 (u8vector-ref bytes index))))))))
+    (else (error "Expected a portable scope identity" value))))
+
+(def (flag value)
+  (if (eq? value #t) "true" "false"))
+
+(def (outcome value)
+  (case value
+    ((succeeded) "DurableEffectOutcome.succeeded")
+    ((failed) "DurableEffectOutcome.failed")
+    ((unknown) "DurableEffectOutcome.unknown")
+    (else (error "Invalid normalized outcome" value))))
+
+(def (scope value revision cut-slot)
+  (display "⟨")
+  (display (nat (.ref value 'attempt)))
+  (display ", ")
+  (display (nat (.ref value 'effect)))
+  (display ", ")
+  (display (nat revision))
+  (display ", ")
+  (display (nat (.ref value cut-slot)))
+  (display "⟩"))
+
+(def (evidence-fields binding permission safe observations recorded)
+  (for-each (lambda (value) (display ", ") (display (flag value)))
+            (list binding permission safe observations))
+  (display ", ")
+  (display (outcome recorded))
+  (display "⟩"))
+
+(def (emit-projection snapshot revision result interpreted allows-retry)
+  (let (basis (.ref result 'basis))
+    (displayln "import AgenticAILabProof.PooC4.RecoveryPolicyAuthorization")
+    (displayln "open AgenticAILabProof.PooC4.RecoveryPolicyAuthorization")
+    (display "def doc19Input : DurableEvidence := ⟨")
+    (scope snapshot revision 'cut)
+    (evidence-fields (.ref snapshot 'binding-matches?) (.ref snapshot 'current-permission?)
+                     (.ref snapshot 'repeat-safe?) (pair? (.ref snapshot 'outcome-observations))
+                     (.ref snapshot 'recorded-outcome))
+    (newline)
+    (display "def doc19Returns : DurablePolicyReturns := ⟨")
+    (display (outcome interpreted))
+    (display ", ")
+    (display (flag allows-retry))
+    (displayln "⟩")
+    (display "def doc19Output : DurableDecision := ⟨⟨")
+    (scope result (.ref result 'policy-revision) 'evidence-cut)
+    (evidence-fields (.ref basis 'binding-matches?) (.ref basis 'current-permission?)
+                     (.ref basis 'repeat-safe?) (.ref basis 'has-observations?)
+                     (.ref result 'recorded-outcome))
+    (for-each (lambda (value) (display ", ") (display value))
+              (list (outcome (.ref basis 'interpretation))
+                    (outcome (.ref result 'outcome))
+                    (flag (.ref result 'retry-proposed?))
+                    (flag (.ref result 'retry-eligible?))))
+    (displayln "⟩")
+    (displayln "theorem doc19Projection : SchemeDurableDecisionRefines doc19Input doc19Returns doc19Output := by")
+    (displayln "  apply checkSchemeDurableProjectionSound")
+    (displayln "  decide")
+    (unless (eq? #t (.ref result 'retry-eligible?))
+      (displayln "theorem doc19NoRedispatch (cut : DurableHostCut) (cap : RetryCapability) :")
+      (displayln "    ¬ DurableRedispatch cut doc19Output cap :=")
+      (displayln "  durableCannotRedispatchIneligible (by decide)"))))
+
+(def (emit-case)
+  (let* ((snapshot
+           (.o attempt: 1 effect: 1 cut: 2 binding-matches?: #t
+               current-permission?: #f repeat-safe?: #f
+               recorded-outcome: 'unknown outcome-observations: '()))
+         (interpretation 'unknown)
+         (allows-retry #f)
+         (config
+           (.o revision: 1
+               outcome-interpreter: (lambda (input) (set! interpretation 'unknown) interpretation)
+               retry-policy: (lambda (input result) (set! allows-retry #t) allows-retry)))
+         (result (durable-recovery-decision config snapshot)))
+    (emit-projection snapshot (.ref config 'revision) result interpretation allows-retry)
+    (displayln "theorem doc19RemainsOpen : doc19Output.proposed = true ∧ doc19Output.eligible = false := by decide")))
+
+(def (emit-receipt path)
+  (let* ((bytes (call-with-input-file path read-all-as-string))
+         (receipt (journal-unpack bytes)))
+    (unless (eq? (.ref receipt 'kind) 'context.workspace-recovery-decision.v1)
+      (error "Expected a workspace recovery decision receipt"))
+    (let* ((snapshot (.ref receipt 'evidence))
+           (result (.ref receipt 'decision))
+           (binding (.ref receipt 'binding))
+           (basis (.ref result 'basis)))
+      ;; The kernel records a proposal only when it actually calls the retry
+      ;; policy and gets true. A skipped callback projects to false.
+      (emit-projection snapshot (cadr binding) result
+                       (.ref basis 'interpretation) (.ref result 'retry-proposed?))
+      (display "def doc19ReceiptDigest : String := ")
+      (write (journal-hash bytes))
+      (newline))))
+
+(def (main . args)
+  (case (length args)
+    ((0) (emit-case))
+    ((1) (if (equal? (car args) "") (emit-case) (emit-receipt (car args))))
+    (else (error "Expected zero arguments or a packed recovery decision path"))))

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Run existing Context/temporal regressions on the qualified Provider build.
 
-No rebuild occurs between the two gates. Both the Query receipt and the native
+No rebuild occurs between the two gates. Both the Query receipt and the runtime
 object commitment are rechecked after the original suite has actually run.
 """
 import argparse
@@ -13,7 +13,7 @@ from pathlib import Path
 import subprocess
 
 HERE = Path(__file__).resolve().parent
-spec = importlib.util.spec_from_file_location('query_gate', HERE / 'run-native-query.py')
+spec = importlib.util.spec_from_file_location('query_gate', HERE / 'run-runtime-query.py')
 query = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(query)
 
@@ -26,11 +26,11 @@ def verify(path):
             or query.sha(Path(__file__)) != receipt['runner_sha256']
             or query.binaries() != receipt['binaries']
             or any(query.sha(query.ROOT / p) != h for p, h in receipt['source_sha256'].items())
-            or query.sha(path.parent / 'native.log') != receipt['log_sha256']):
+            or query.sha(path.parent / 'runtime.log') != receipt['log_sha256']):
         raise RuntimeError('Regression source/object/evidence cut changed')
-    actual = query.clock.inspect(path.parent / 'native.log', receipt['exit_code'], query.clock.ALL)
+    actual = query.clock.inspect(path.parent / 'runtime.log', receipt['exit_code'], query.clock.ALL)
     if actual != receipt['execution']:
-        raise RuntimeError('Saved regression verdict differs from native execution')
+        raise RuntimeError('Saved regression verdict differs from runtime execution')
     return receipt
 
 
@@ -56,7 +56,7 @@ def main():
             env.pop(name)
     env.update(GERBIL_PATH=str(query.ROOT / '.gerbil'),
                GERBIL_LOADPATH=f'{query.ROOT}/.gerbil/lib:{query.ROOT}:{query.ROOT}/dev/.gerbil/lib')
-    log = args.artifacts / 'native.log'
+    log = args.artifacts / 'runtime.log'
     with log.open('w') as stream:
         result = subprocess.run(['just', 'test-context-clock'], cwd=query.ROOT, env=env,
                                 stdout=stream, stderr=subprocess.STDOUT, timeout=915)
@@ -71,7 +71,7 @@ def main():
     path = args.artifacts / 'regression-receipt.json'
     path.write_text(json.dumps(receipt, indent=2) + '\n')
     verify(path)
-    print('PASS: same-build original native regression and 60 live clock paths;', path)
+    print('PASS: same-build original runtime regression and 60 live clock paths;', path)
 
 
 if __name__ == '__main__':

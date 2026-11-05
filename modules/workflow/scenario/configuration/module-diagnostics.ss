@@ -6,7 +6,8 @@
 ;;; Boundary: non-mutating module diagnostics within Observability.
 ;;; Invariant: diagnostics never change activation behavior.
 
-(import :yuanxu/modules/funflow/control-plane/task
+(import (only-in :std/list/list append-map)
+        :yuanxu/modules/funflow/control-plane/task
         :yuanxu/modules/funflow/control-plane/flow
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         (only-in :yuanxu/utilities/functional
@@ -33,6 +34,7 @@
         yuanxu-module-doctor-report-status
         yuanxu-module-doctor-report-diagnostics
         agentic-ai-lab-module-doctor
+        agentic-ai-lab-module-doctor/closed
         yuanxu-module-doctor-ok?
         agentic-ai-lab-module-doctor-report->alist)
 
@@ -54,14 +56,6 @@
 ;; : (-> [DiagnosticKey] [DiagnosticKey])
 (def (agentic-ai-lab-module-duplicate-symbols values)
   (yuanxu-stable-duplicates values))
-
-;;; Boundary: option diagnostics look only at keys, not option payloads.
-;; : (-> ModuleOptionAlist [Symbol])
-(def (agentic-ai-lab-module-option-keys options)
-  (if (null? options)
-    '()
-    (cons (caar options)
-          (agentic-ai-lab-module-option-keys (cdr options)))))
 
 ;;; Boundary: task diagnostic projection ignores task payloads.
 ;; : (-> [PooModuleTaskDescriptor] [Symbol] [Symbol])
@@ -98,7 +92,7 @@
 ;;; Boundary: option diagnostic projection ignores option values.
 ;; : (-> [PooModuleDescriptor] [Symbol])
 (def (agentic-ai-lab-module-all-option-keys modules)
-  (agentic-ai-lab-module-option-keys (agentic-ai-lab-module-all-options modules)))
+  (append-map agentic-ai-lab-module-option-names modules))
 
 ;;; Boundary: duplicate detail shape is shared across task/flow/option diagnostics.
 ;; : (-> Symbol [Symbol] DiagnosticDetail DiagnosticDetail)
@@ -128,7 +122,7 @@
    'error
    'missing-module-imports
    'imports
-   (agentic-ai-lab-module-missing-imports modules)))
+   (agentic-ai-lab-module-missing-imports/closed modules)))
 
 ;;; Boundary: duplicate task names remain warnings in this slice.
 ;; : (-> [PooModuleDescriptor] [PooModuleDiagnostic])
@@ -195,18 +189,22 @@
 ;;; Boundary: doctor runs over closure so inline imports are visible.
 ;; : (-> [PooModuleDescriptor] [PooModuleDiagnostic])
 (def (agentic-ai-lab-module-diagnostics modules)
-  (let (closed-modules (agentic-ai-lab-module-closure modules))
-    (append (agentic-ai-lab-module-missing-import-diagnostics closed-modules)
-            (agentic-ai-lab-module-duplicate-task-diagnostics closed-modules)
-            (agentic-ai-lab-module-duplicate-flow-diagnostics closed-modules)
-            (agentic-ai-lab-module-duplicate-option-diagnostics closed-modules)
-            (agentic-ai-lab-module-empty-contribution-diagnostics closed-modules))))
+  (agentic-ai-lab-module-diagnostics/closed (agentic-ai-lab-module-closure modules)))
+
+(def (agentic-ai-lab-module-diagnostics/closed closed-modules)
+  (append (agentic-ai-lab-module-missing-import-diagnostics closed-modules)
+          (agentic-ai-lab-module-duplicate-task-diagnostics closed-modules)
+          (agentic-ai-lab-module-duplicate-flow-diagnostics closed-modules)
+          (agentic-ai-lab-module-duplicate-option-diagnostics closed-modules)
+          (agentic-ai-lab-module-empty-contribution-diagnostics closed-modules)))
 
 ;;; Boundary: doctor reports summarize closure health without activation.
 ;; : (-> [PooModuleDescriptor] PooModuleDoctorReport)
 (def (agentic-ai-lab-module-doctor modules)
-  (let ((closed-modules (agentic-ai-lab-module-closure modules))
-        (diagnostics (agentic-ai-lab-module-diagnostics modules)))
+  (agentic-ai-lab-module-doctor/closed (agentic-ai-lab-module-closure modules)))
+
+(def (agentic-ai-lab-module-doctor/closed closed-modules)
+  (let (diagnostics (agentic-ai-lab-module-diagnostics/closed closed-modules))
     (make-agentic-ai-lab-module-doctor-report
      (agentic-ai-lab-module-names closed-modules)
      (yuanxu-module-diagnostics-status diagnostics)

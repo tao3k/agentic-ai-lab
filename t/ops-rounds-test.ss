@@ -6,7 +6,7 @@
         (only-in :yuanxu/observability/testing-case yuanxu-test-case))
 (export ops-rounds-test)
 (def ops-rounds-test
-  (test-suite "Native operational qualification summaries"
+  (test-suite "Runtime operational qualification summaries"
     (yuanxu-test-case "statistics retain every round and refuse different phase sets"
       (let* ((rounds (map (lambda (seconds)
                            (hash (phases (list (hash (phase "currentness") (seconds seconds)
@@ -17,7 +17,7 @@
         (check-equal? (hash-ref (hash-ref result 'seconds) 'median) 2.)
         (check-equal? (hash-ref result 'instantiate) '(1 1 1))
         (check-exception (aggregate (cons (hash (phases '())) rounds)) error?)))
-    (yuanxu-test-case "a nonzero exit or native error marker cannot become a passing receipt"
+    (yuanxu-test-case "a nonzero exit or runtime error marker cannot become a passing receipt"
       (call-with-temporary-directory "ops-failed-control"
         (lambda (root)
           (let (log (path-expand "round.log" root))

@@ -13,7 +13,7 @@
 
 (def opentofu-set-evidence-test
   (test-suite "opentofu-set-evidence-test"
-    (yuanxu-test-case "bound collection evidence and native admission"
+    (yuanxu-test-case "bound collection evidence and runtime admission"
       (def (assert label value)
         (unless value (error "assertion failed" label))
         (displayln "ASSERT-OK " label) (force-output))

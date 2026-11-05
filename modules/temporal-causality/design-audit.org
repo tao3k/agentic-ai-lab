@@ -122,7 +122,7 @@ version, unexpected counterexample, interruption or a nonempty final frontier
 fails admission. The five-second no-output and 45-second case limits apply
 independently of dependency preparation.
 
-The inert Scheme v1 receipt establishes finite behavioral evidence. The native
+The inert Scheme v1 receipt establishes finite behavioral evidence. The runtime
 POO semantic model remains the owner of source/cut/authority identity. A general
 projection correspondence needs a separate interpretation and theorem. Formal
 checks are explicit assurance gates and do not execute during pure query use.
@@ -149,7 +149,7 @@ implement source authentication or general SCC evaluation.
 * D7: Publish through one runtime transaction and replayable recovery
 
 Scheme owns immutable conclusions and CAS preparation. Runtime owns the
-external pointer and authorized transaction. The library exposes a POO-native
+external pointer and authorized transaction. The library exposes a POO
 commit request projection; C/Python consume that projection without creating
 a second semantic contract. Read-only =temporal.solve= is not a commit API.
 
@@ -175,7 +175,7 @@ this engine is advertised as supporting authorized publication.
 * D8: Add behavior and intervention support behind a separate admission gate
 
 The reusable basic profile does not infer mechanisms. A behavior model must
-compose POO-native variables/domains, supported mechanism families,
+compose POO variables/domains, supported mechanism families,
 environment constraints, observation map, intervention and query obligations.
 An intervention binds model revision, onset, target variables, replacement
 mechanism/policy, horizon and assumptions. Unsupported mechanism semantics
@@ -237,7 +237,7 @@ exposes =temporal.family.classify= and =temporal.family.observe=. Python adds
 sync/async helpers without implementing classification. Model identity binds
 canonical observations, provenance, family mode and completeness; execution
 binding additionally binds query identity, target and budget. Observation
-replays the current native model and checks every result field, including both
+replays the current runtime model and checks every result field, including both
 identities and the false authenticity/authorization fields.
 
 The wire profile admits at most 32 domains, 128 observations, 128 hypotheses
@@ -249,7 +249,7 @@ No behavior-space interpretation is admitted by this entrypoint.
 
 The installed macOS ARM64 CPython 3.13 wheel passed 60 tests, including 27 new
 finite-family cases and the maintained lens/graph/model-tool tests. It reuses
-two independent vocabularies through the same native API; tests include bounded
+two independent vocabularies through the same runtime API; tests include bounded
 local refutation, overlapping families, uncertainty, permutation, query budget,
 stale results and forged authority. The CI wheel gate includes the new tests.
 The source/artifact qualification receipt (qualification output is an external artifact) records its exact scope.
@@ -260,7 +260,7 @@ made in this slice; earlier lens model receipts cannot qualify this new profile.
 
 * Delivered: host-pinned finite-family admission (2026-10-04)
 
-=admission/interface.ss= adds native POO source-snapshot and family-admission
+=admission/interface.ss= adds POO source-snapshot and family-admission
 contracts, exported by the Temporal core interface. The admission function
 replays source/model evidence, classifies the query and generates an immutable
 root conclusion. Its proof identity binds source scope, evidence, assumptions,
@@ -277,7 +277,7 @@ same-generation conflicting bytes are rejected. A higher generation retires
 old snapshot applicability without mutating historical result values.
 
 =temporal.family.admit= selects the current registered source by identity and
-digest, replays the requested model and emits a native conclusion only for a
+digest, replays the requested model and emits a runtime conclusion only for a
 resolved finite-family classification. No external opaque proof ID is accepted.
 Unknown classification, changed observations/provenance/clock role, missing
 source or stale digest fail admission. Changing hypotheses or query budget
@@ -293,7 +293,7 @@ outside this local trust premise and the D7 transaction gate remain open.
 
 The initial ABI test exposed slot self-reference from constructor variables
 named like their POO slots; renaming the value variables removed that recursion.
-The regression gate covers registration, native result generation and proof
+The regression gate covers registration, runtime result generation and proof
 identity changes. The final installed wheel passed 78 tests, including 18 new admission cases,
 and the CI wheel gate now includes that file. See the source/artifact acceptance receipt (qualification output is an external artifact) for final qualification
 and the recorded initial failure. No real-model evaluation is claimed here.
@@ -301,7 +301,7 @@ and the recorded initial failure. No real-model evaluation is claimed here.
 * Delivered: durable authorized first-root selection (2026-10-04)
 
 Runtime C =temporal_store= implements a local SQLite WAL/FULL transaction port;
-Python =TemporalPublicationStore= uses its typed CFFI ABI. Native POO admission
+Python =TemporalPublicationStore= uses its typed CFFI ABI. POO admission
 and C submission share the semantic owner queue; Python performs no classification.
 The durable source generation/digest and scoped host authorization policy/fence
 are rechecked at the same transaction point as empty-pointer CAS, version increment
@@ -331,7 +331,7 @@ applicability or information-flow authorization receipt.
 
 =runtime/= in the MRR repository consumes the original semantic C ABI on a dedicated
 owner thread. The qualified release build matches 21 current installed-Python
-native results across finite-family/lens profiles. It checks queue saturation,
+runtime results across finite-family/lens profiles. It checks queue saturation,
 concurrent callers, allocator release, wrong-thread rejection and terminal close.
 This result predates the runtime transfer to MRR; current acceptance is recorded
 in [[file:next-delivery-plan-v1.org][the delivery ledger]]. Two debug-startup silent watchdog failures
@@ -345,9 +345,9 @@ and receiver-side re-admission; remaining query/source/cut/generation mapping
 must use that original owner interface. Neither full MRR integration nor Rust
 publication/IFC/current-applicability gates are closed by this delivery.
 
-* Delivered: authorized Rust real-model acceptance and native MRR observation seam
+* Delivered: authorized Rust real-model acceptance and runtime MRR observation seam
 
-The user explicitly authorized the frozen synthetic task/native-result payload.
+The user explicitly authorized the frozen synthetic task/runtime-result payload.
 The Rust finite-family tool study then passed 4/4 roundtrips and 8 completed real
 DeepSeek responses with no retries, no failure and a preserved source freeze.
 Each provider phase retained the five-second genuine-content watchdog. See
@@ -365,15 +365,15 @@ changed mapping cannot silently reuse the model digest. Caller-supplied
 observations and unsupported shapes are rejected. MRR content generation is
 never converted into a Temporal time or integer generation.
 
-The typed observation seam calls the existing native POO classifier. It does
+The typed observation seam calls the existing POO classifier. It does
 not implement a Rust classifier, claim verified source coverage, or fabricate
 MRR parser/proof receipts. Physical source execution, GQL parser-source receipt
 transport, source authentication, generic projection profiles and the D6/D7/IFC
 stronger gates remain separately open.
 
 The exact linked MRR/POO operational gate passed two integration tests: original
-MRR transport projection at 0.24s and 21-result native Rust regression at 0.90s.
+MRR transport projection at 0.24s and 21-result Rust regression at 0.90s.
 The five-second output watchdog did not trigger. See
-[[file:../../t/qualification/temporal-library-basic/rust-mrr-runtime/historical.org][the exact MRR dependency/source/native-artifact receipt]]. CI now builds and runs
-the =mrr-transport= feature against the same native producer artifact. The initial
+[[file:../../t/qualification/temporal-library-basic/rust-mrr-runtime/historical.org][the exact MRR dependency/source/host-artifact receipt]]. CI now builds and runs
+the =mrr-transport= feature against the same runtime producer artifact. The initial
 macOS system-linker failure is retained separately from test execution.

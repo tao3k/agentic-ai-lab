@@ -358,4 +358,205 @@ theorem retryCapabilityStepSatisfiesConsumptionContract
       rfl,
       capability.evidence.refines.freshAttempt⟩
 
+/-- Portable identifiers projected from the admitted POO snapshot. -/
+structure DurableDecisionScope where
+  attempt : AttemptId
+  effect : OperationId
+  policyRevision : Nat
+  evidenceCut : Nat
+deriving DecidableEq
+
+inductive DurableEffectOutcome where
+  | unknown
+  | succeeded
+  | failed
+deriving DecidableEq
+
+structure DurableEvidence where
+  scope : DurableDecisionScope
+  bindingMatches : Bool
+  currentPermission : Bool
+  repeatSafe : Bool
+  hasObservations : Bool
+  recordedOutcome : DurableEffectOutcome
+deriving DecidableEq
+
+/-- Callback returns are parameters, including a policy that always proposes retry. -/
+structure DurablePolicyReturns where
+  interpretation : DurableEffectOutcome
+  allowsRetry : Bool
+
+structure DurableDecision where
+  evidence : DurableEvidence
+  interpretation : DurableEffectOutcome
+  outcome : DurableEffectOutcome
+  proposed : Bool
+  eligible : Bool
+deriving DecidableEq
+
+def durableInterpretation (e : DurableEvidence) (p : DurablePolicyReturns) :
+    DurableEffectOutcome :=
+  match e.recordedOutcome with
+  | .unknown => if e.bindingMatches && e.hasObservations then p.interpretation else .unknown
+  | _ => .unknown
+
+def durableOutcome (recorded interpretation : DurableEffectOutcome) :
+    DurableEffectOutcome :=
+  match recorded with
+  | .unknown => interpretation
+  | .succeeded => .succeeded
+  | .failed => .failed
+
+/-- Mirrors recovery-decision.ss after Scheme truth values and symbols are normalized. -/
+def durableDecision (e : DurableEvidence) (p : DurablePolicyReturns) : DurableDecision :=
+  let interpretation := durableInterpretation e p
+  let outcome := durableOutcome e.recordedOutcome interpretation
+  let proposed := e.bindingMatches && decide (outcome ≠ .succeeded) && p.allowsRetry
+  { evidence := e, interpretation, outcome, proposed,
+    eligible := proposed && e.currentPermission && e.repeatSafe }
+
+/-- Equality covers the entire projected result, including the original scope and guards. -/
+def SchemeDurableDecisionRefines (e : DurableEvidence) (p : DurablePolicyReturns)
+    (projected : DurableDecision) : Prop :=
+  projected = durableDecision e p
+
+def checkSchemeDurableProjection (e : DurableEvidence) (p : DurablePolicyReturns)
+    (projected : DurableDecision) : Bool :=
+  decide (projected = durableDecision e p)
+
+theorem checkSchemeDurableProjectionSound
+    {e : DurableEvidence} {p : DurablePolicyReturns} {projected : DurableDecision}
+    (accepted : checkSchemeDurableProjection e p projected = true) :
+    SchemeDurableDecisionRefines e p projected := by
+  change projected = durableDecision e p
+  exact of_decide_eq_true accepted
+
+theorem durableRetryRequiresIndependentGuards
+    {e : DurableEvidence} {p : DurablePolicyReturns} {d : DurableDecision}
+    (refines : SchemeDurableDecisionRefines e p d) (eligible : d.eligible = true) :
+    d.evidence.scope = e.scope ∧ e.currentPermission = true ∧ e.repeatSafe = true := by
+  change d = durableDecision e p at refines
+  subst d
+  have h := (Bool.and_eq_true_iff.mp eligible)
+  exact ⟨rfl, (Bool.and_eq_true_iff.mp h.1).2, h.2⟩
+
+theorem durableRetryIneligibleAfterSuccess
+    {e : DurableEvidence} {p : DurablePolicyReturns} {d : DurableDecision}
+    (refines : SchemeDurableDecisionRefines e p d)
+    (succeeded : e.recordedOutcome = .succeeded ∨ d.outcome = .succeeded) :
+    d.eligible = false := by
+  change d = durableDecision e p at refines
+  subst d
+  rcases succeeded with recorded | effective
+  · simp [durableDecision, durableOutcome, recorded]
+  · change durableOutcome e.recordedOutcome (durableInterpretation e p) = .succeeded at effective
+    simp [durableDecision, effective]
+
+/-- This witness is process-local. Journal restoration only restores the spend. -/
+structure DurableLiveSpend where
+  scope : DurableDecisionScope
+  tokenIdentity : Nat
+  spendDigest : Nat
+  predecessor : Option Nat
+
+/-- Host admission binds the current decision cut to an exact committed receipt
+and its current authority. It is independent of the Scheme result. -/
+structure DurableHostCut where
+  scope : DurableDecisionScope
+  authority : RecoveryPolicyAuthority
+  decisionDigest : Nat
+  contextCurrent : Bool
+  endpointMatches : Bool
+  observationCurrent : Bool
+  originalOutstanding : Bool
+  issuerConsumedToken : Option Nat
+  latestSpend : Option Nat
+  reconciledPredecessor : Option Nat
+  liveSpend : Option DurableLiveSpend
+
+def DurableHandoffCurrent (current : DurableHostCut) (capability : RetryCapability) : Prop :=
+  current.contextCurrent = true ∧ current.endpointMatches = true ∧
+  current.observationCurrent = true ∧ current.originalOutstanding = true ∧
+  current.issuerConsumedToken = some capability.token.tokenIdentity ∧
+  ∃ live, current.liveSpend = some live ∧ live.scope = current.scope ∧
+    live.tokenIdentity = capability.token.tokenIdentity ∧
+    current.latestSpend = some live.spendDigest ∧
+    current.reconciledPredecessor = live.predecessor
+
+def DurableRedispatch (current : DurableHostCut) (d : DurableDecision)
+    (capability : RetryCapability) : Prop :=
+  let receipt := capability.evidence.receipt
+  d.eligible = true ∧ d.evidence.scope = current.scope ∧
+  receipt.operation = current.scope.effect ∧
+  receipt.priorAttempt = current.scope.attempt ∧
+  receipt.authority = current.authority ∧
+  receipt.decisionDigest = current.decisionDigest ∧
+  RetryCapabilityStep capability .available .consumed ∧
+  DurableHandoffCurrent current capability
+
+theorem durableRedispatchRequiresIndependentGuards
+    {e : DurableEvidence} {p : DurablePolicyReturns} {d : DurableDecision}
+    {current : DurableHostCut} {capability : RetryCapability}
+    (refines : SchemeDurableDecisionRefines e p d)
+    (dispatch : DurableRedispatch current d capability) :
+    e.currentPermission = true ∧ e.repeatSafe = true :=
+  (durableRetryRequiresIndependentGuards refines dispatch.1).2
+
+theorem durableRedispatchRejectsStaleScope
+    {d : DurableDecision} {current : DurableHostCut} {capability : RetryCapability}
+    (stale : d.evidence.scope ≠ current.scope) :
+    ¬ DurableRedispatch current d capability :=
+  fun dispatch => stale dispatch.2.1
+
+theorem durableRedispatchRequiresCurrentReceipt
+    {d : DurableDecision} {current : DurableHostCut} {capability : RetryCapability}
+    (dispatch : DurableRedispatch current d capability) :
+    capability.evidence.receipt.authority = current.authority ∧
+    capability.evidence.receipt.decisionDigest = current.decisionDigest :=
+  ⟨dispatch.2.2.2.2.1, dispatch.2.2.2.2.2.1⟩
+
+theorem durableRedispatchRequiresLiveSpend
+    {d : DurableDecision} {current : DurableHostCut} {capability : RetryCapability}
+    (dispatch : DurableRedispatch current d capability) :
+    DurableHandoffCurrent current capability :=
+  dispatch.2.2.2.2.2.2.2
+
+theorem durableCannotReanimateCommittedSpend
+    {d : DurableDecision} {current : DurableHostCut} {capability : RetryCapability}
+    (noLiveSpend : current.liveSpend = none) :
+    ¬ DurableRedispatch current d capability := by
+  intro dispatch
+  obtain ⟨live, liveWitness, _⟩ := (durableRedispatchRequiresLiveSpend dispatch).2.2.2.2.2
+  rw [noLiveSpend] at liveWitness
+  contradiction
+
+theorem durableCannotRedispatchWithoutIssuerSpend
+    {d : DurableDecision} {current : DurableHostCut} {capability : RetryCapability}
+    (unspent : current.issuerConsumedToken ≠ some capability.token.tokenIdentity) :
+    ¬ DurableRedispatch current d capability :=
+  fun dispatch => unspent (durableRedispatchRequiresLiveSpend dispatch).2.2.2.2.1
+
+theorem durableCannotRedispatchChangedObservation
+    {d : DurableDecision} {current : DurableHostCut} {capability : RetryCapability}
+    (changed : current.observationCurrent = false) :
+    ¬ DurableRedispatch current d capability :=
+  fun dispatch =>
+    Bool.noConfusion (changed.symm.trans (durableRedispatchRequiresLiveSpend dispatch).2.2.1)
+
+theorem durableCannotRedispatchIneligible
+    {d : DurableDecision} {current : DurableHostCut} {capability : RetryCapability}
+    (ineligible : d.eligible = false) :
+    ¬ DurableRedispatch current d capability :=
+  fun dispatch => Bool.noConfusion (ineligible.symm.trans dispatch.1)
+
+theorem durableCannotRedispatchSuccess
+    {e : DurableEvidence} {p : DurablePolicyReturns} {d : DurableDecision}
+    {current : DurableHostCut} {capability : RetryCapability}
+    (refines : SchemeDurableDecisionRefines e p d)
+    (succeeded : e.recordedOutcome = .succeeded ∨ d.outcome = .succeeded) :
+    ¬ DurableRedispatch current d capability := by
+  intro dispatch
+  have ineligible := durableRetryIneligibleAfterSuccess refines succeeded
+  exact Bool.noConfusion (ineligible.symm.trans dispatch.1)
+
 end AgenticAILabProof.PooC4.RecoveryPolicyAuthorization

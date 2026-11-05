@@ -13,24 +13,24 @@ package ContextQueryProvider {
         in contractSame : Boolean;
         in querySame : Boolean;
         in sessionSame : Boolean;
-        in nativeProof : Boolean;
-        in mode : Integer; // 0 safe; 1 ID-only; 2 trust a claimed native proof
+        in runtimeProof : Boolean;
+        in mode : Integer; // 0 safe; 1 ID-only; 2 trust a claimed runtime proof
         attribute admitted : Boolean := false;
         attribute processed : Integer := 0;
         first start then admitCandidate;
         action admitCandidate {
             assign admitted := if mode == 1 ? true else
                 sourceSame and versionSame and contractSame and querySame and sessionSame
-                and (nativeProof or mode == 2);
+                and (runtimeProof or mode == 2);
             assign processed := 1;
         }
         then done;
         out steps : Integer = processed;
         return verdict : VerdictKind = PassIf(processed == 1 and admitted ==
-            (sourceSame and versionSame and contractSame and querySame and sessionSame and nativeProof));
+            (sourceSame and versionSame and contractSame and querySame and sessionSame and runtimeProof));
     }
 
-    // Owner linearizations of real native source/result/control producer inputs.
+    // Owner linearizations of real runtime source/result/control producer inputs.
     // This is a bounded contract, not a proof of all OS schedules or source truth.
     verification def Race {
         subject target : Fixture default = fixture;

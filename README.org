@@ -35,7 +35,7 @@ The current design is centered on three ideas.
 2. Gerbil POO prototype objects should describe extensible policy objects, module objects, profile objects, and descriptor inheritance.
 3. Lean proofs should make policy, strategy, session, sandbox, and runtime-handoff claims explicit instead of relying on informal configuration shape.
 
-Public extension APIs should stay POO-native. Raw alist DSLs, ad hoc patch languages, and untyped mutation hooks are not the normal user interface. They can exist only as internal or advanced escape hatches behind named POO-native or functional helpers.
+Public extension APIs should stay POO. Raw alist DSLs, ad hoc patch languages, and untyped mutation hooks are not the normal user interface. They can exist only as internal or advanced escape hatches behind named POO or functional helpers.
 
 * Enterprise Security Governance
 
@@ -130,7 +130,7 @@ POO prototype objects
 #+end_src
 
 Gerbil v0.19 is the project baseline. =gerbil-poo= delegates prototype
-precedence to the native =c4-linearize= implementation; Agentic AI Lab projects
+precedence to the runtime =c4-linearize= implementation; Agentic AI Lab projects
 that order and does not implement another linearizer.
 
 * Proof Direction
@@ -153,7 +153,7 @@ The current Lean proof package lives under =packages/proofs/lean=. The active Po
 
 | Area | Purpose |
 | =Semantics= | Core flow specification, scope, dependency, and =CanStart=. |
-| =PolicyComposition= and =PolicyBundle= | POO-native policy objects, facets, and reusable policy projections. |
+| =PolicyComposition= and =PolicyBundle= | POO policy objects, facets, and reusable policy projections. |
 | =PolicyRefinement= | Subset/refinement proofs so overrides cannot silently broaden parent policy. |
 | =PolicyTrace= | Completion traces and runtime unlock conditions. |
 | =ControlPlane= | Session sandbox, tool, file, and subagent trace invariants. |
@@ -258,12 +258,12 @@ just check-healthcare-lean
 #+end_src
 
 Lean validation is module-atomic by default: each command builds only the named
-module or Lake-declared module bundle and its native import closure.  The full
+module or Lake-declared module bundle and its runtime import closure.  The full
 =AgenticAILabProof.lean= aggregate is an explicit integration qualification,
 available as =just check-lean-all=; ordinary pull requests do not compile all
 proof families merely because one Case-owned theorem changed.
 
-Proof-bearing POO owners map directly to native Lake libraries:
+Proof-bearing POO owners map directly to runtime Lake libraries:
 
 | POO owner | Lake library target |
 |-----------+---------------------|
@@ -292,21 +292,21 @@ just deps
 just build
 #+end_src
 
-The package =build.ss= declares native targets through the =exclude-modules=
+The package =build.ss= declares runtime targets through the =exclude-modules=
 and =extra-spec= POO slots of =:asp-gerbil-scheme/building-api=. The upstream
-catalog owns discovery; there is no downstream =native-spec-projector= or
+catalog owns discovery; there is no downstream =std-make-spec-projector= or
 second source scan. ASP Scheme owns shared build and testing
 machinery; Agentic AI Lab retains its domain modules, test cases, and performance
 contracts. There is no package-local CLI support or testing framework wrapper.
 
-The default =just clean/deps/build/test= recipes call Gerbil's native package
+The default =just clean/deps/build/test= recipes call Gerbil's runtime package
 commands. =just build= incrementally compiles Core and the product library.
 =just clean-core= explicitly removes Core outputs. =just rebuild= cleans both
 packages, installs dependencies, builds, and runs the unit suite sequentially,
 stopping at the first failure. =just check= runs the
-native build and unit suite; neither command invokes Bazel.
+runtime build and unit suite; neither command invokes Bazel.
 
-Run the single native test entrypoint and Scheme scripts through the package
+Run the single runtime test entrypoint and Scheme scripts through the package
 environment:
 
 #+begin_src shell
@@ -315,13 +315,16 @@ just test
 gerbil env gerbil interactive t/fixtures/cli-run-smoke.ss 3
 #+end_src
 
-=dev/unit-tests.ss= is the optional package test interface. Its ASP dependency
-is owned by =dev/gerbil.pkg=; the library build uses Core's source closure and
-native build interface without importing ASP. =just deps-dev= installs the
-development dependencies separately. It applies ASP Scheme's
-default POO Testing profile to the current Gambit runtime, initializes
-=clan/testing=, and leaves recursive =*-test.ss= discovery to that upstream
-framework. =just test= and =just test-performance= fail closed before Scheme
+Ordinary =t/= discovery belongs to Gerbil's test tool. =just test-root= passes
+that directory directly; explicit directories and files are native arguments.
+Selected module tests remain published through =init.exports.tests=, without a
+second product test runner or test-time compilation.
+=dev/gerbil.pkg= owns optional ASP dependencies; it has no product build
+forwarder. =just deps-dev= installs those dependencies separately. The product
+library builds once in its production prefix without importing ASP; development
+preparation compiles only its dependencies. Core projects the selected test
+files and the installed =gerbil test= owns suite execution and Harness results.
+=just test= and =just test-performance= fail closed before Scheme
 imports with a 1 GiB launch heap and non-interactive =debug=q=.  The maintained
 debug controls remain declarative Just inputs, for example
 =GERBIL_TEST_MAX_HEAP=1536M GERBIL_TEST_DEBUG=aq9b9h2 just test=.  A larger

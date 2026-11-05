@@ -26,7 +26,7 @@
         :agentic-ai-lab/modules/custom-task/interface
         :agentic-ai-lab/modules/docker/interface
         :agentic-ai-lab/modules/text/interface
-        :agentic-ai-lab/modules/workflow/flows
+        (only-in :agentic-ai-lab/modules/workflow/flows-builders make-docker-store-run-config make-ccompilation-flow make-ccompilation-store-workflow make-tensorflow-workflow make-makefile-tool-workflow)
         :yuanxu/modules/funflow/store)
 
 ;; : (-> RunConfig Flow Input Value)

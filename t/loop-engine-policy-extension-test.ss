@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: focused tests for loop-engine POO-native policy extensions.
+;;; Boundary: focused tests for loop-engine POO policy extensions.
 ;;; Invariant: extension receipts are report-only and runtime-owned by Marlin.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
@@ -223,10 +223,10 @@
      #t)))
 
 ;;; The suite covers both the positive receipt propagation path and the contract
-;;; rejection path for POO-native loop-engine policy extensions.
+;;; rejection path for POO loop-engine policy extensions.
 ;; : TestSuite
 (def loop-engine-policy-extension-test
-  (test-suite "loop-engine POO-native policy extension"
+  (test-suite "loop-engine POO policy extension"
     (loop-engine-policy-extension-coordination-case)
     (loop-engine-policy-extension-observability-case)
     (loop-engine-policy-extension-safety-case)

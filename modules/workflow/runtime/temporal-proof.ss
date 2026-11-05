@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Trusted owner projection; recompute original native proof, never read proof flags.
+;;; Trusted owner projection; recompute original runtime proof, never read proof flags.
 (import (only-in :clan/poo/object .ref)
         (only-in :gerbil-ascent/candidate/checked-program reasoning-source-snapshot reasoning-attempt reasoning-receipt-proof)
         (only-in :gerbil-ascent/candidate/provenance positive-proof-nodes positive-proof-roots
@@ -126,7 +126,7 @@
                 (proofAdmitted (.ref admission 'proof-admitted?))
                 (derivationCorrespondenceVerified (.ref joint 'derivation-correspondence-verified?))
                 (mrrRuleEquivalenceVerified (.ref joint 'mrr-rule-equivalence-verified?))
-                (trustBasis "host-declared-source-relative-native-proof")
+                (trustBasis "host-declared-source-relative-runtime-proof")
                 (sourceAuthenticated #f) (selectionAdmitted #f) (actionAuthorized #f) (durable #f))))))))
 
 (def (temporal-derivation-admit request) (list-ref (derivation-input request #f) 3))

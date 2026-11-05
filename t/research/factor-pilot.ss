@@ -1,5 +1,5 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Finite pilot only. Native proof admission and an independent scheduling oracle.
+;;; Finite pilot only. Runtime proof admission and an independent scheduling oracle.
 (import :std/encoding/json :std/error
         :gerbil-ascent/candidate/checked-program
         :gerbil-ascent/candidate/program
@@ -60,13 +60,13 @@
             (let* ((p (if (string=? arm "D") (proposal '?x '?y) (proposal u v)))
                    (r (if (string=? arm "B") (reasoning-attempt snapshot p #f) (admit p)))
                    (answer (and (member key (reasoning-receipt-rows r)) #t)))
-              (unless (eq? (reasoning-receipt-status r) 'complete) (error "incomplete native answer"))
+              (unless (eq? (reasoning-receipt-status r) 'complete) (error "incomplete runtime answer"))
               (unless (string=? arm "B") (set! cert (certificate r)))
               (when (string=? arm "D") (set! packet r) (set! all (reasoning-receipt-rows r)))
               (unless (string=? arm "A") (hash-put! atomic key (list answer r p)))
               answer)))))
     (hash ("claim" (list u v)) ("precedes" value) ("reused" hit)
-          ("freshNativeSolve" fresh) ("checked" (not (string=? arm "B")))
+          ("freshRuntimeSolve" fresh) ("checked" (not (string=? arm "B")))
           ("seconds" (exact->inexact (/ (- (current-jiffy) began) (jiffies-per-second))))
           ("sourceDigest" (reasoning-snapshot-digest snapshot))
           ("admittedCertificate" cert) ("derivedFactors" all))))

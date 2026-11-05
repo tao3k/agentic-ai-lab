@@ -4,7 +4,7 @@
 
 Events after the killed source command are planned suffixes, not executions.
 The positional oracle below checks committed worker results without replaying
-the native reducer or trusting a generic success marker alone.
+the runtime reducer or trusting a generic success marker alone.
 """
 
 import argparse
@@ -15,7 +15,7 @@ import re
 
 
 HERE = Path(__file__).resolve().parent
-spec = importlib.util.spec_from_file_location("source_gate", HERE / "run-native-query-durable.py")
+spec = importlib.util.spec_from_file_location("source_gate", HERE / "run-runtime-query-durable.py")
 gate = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(gate)
 ORDER = re.compile(r"QUERY-DURABLE-ORDER owner=\(([1-5 ]+)\) arrival=\(([1-5 ]*)\)")
@@ -33,10 +33,10 @@ def main():
     receipt = json.loads(args.receipt.read_text())
     out = args.receipt.parent
     if receipt["source_sha256"] != gate.sources() or receipt["binaries"] != gate.binaries():
-        raise RuntimeError("Native source/object receipt is stale")
+        raise RuntimeError("Runtime source/object receipt is stale")
     for name, digest in receipt["artifacts"].items():
         if gate.catalog.sha(out / name) != digest:
-            raise RuntimeError("Changed native evidence: " + name)
+            raise RuntimeError("Changed runtime evidence: " + name)
 
     results = []
     for case in receipt["cases"]:
@@ -72,7 +72,7 @@ def main():
         # only if their events precede withdrawal (and cancellation for A).
         if (case["before"]["terminals"] != expected_terminals
                 or case["after"]["terminals"] != expected_terminals):
-            raise RuntimeError("Native terminal ledger violates the independent prefix oracle")
+            raise RuntimeError("Runtime terminal ledger violates the independent prefix oracle")
         split = order.index(1) + 1
         results.append(dict(profile=case["profile"], stage=case["stage"],
                             owner_order=order, actual_arrival=arrival,

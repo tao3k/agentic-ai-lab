@@ -9,7 +9,7 @@ from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
 
 @pytest.fixture
 def registered(runtime, request):
-    task = deepcopy(loads(Path(os.environ['AGENTIC_AI_LAB_NATIVE_DERIVATION_ORACLE']).read_text())['request'])
+    task = deepcopy(loads(Path(os.environ['AGENTIC_AI_LAB_RUNTIME_DERIVATION_ORACLE']).read_text())['request'])
     task['journal']['validDomain'] = task['journal']['admissionDomain']
     identity = 'wire-' + request.node.name
     def instant(n):
@@ -33,7 +33,7 @@ def no_effects(value):
     assert not any(value[k] for k in ['sourceAuthenticated', 'selectionAdmitted', 'actionAuthorized', 'durable'])
 
 
-def test_native_registration_current_parity_and_clock_expiry(runtime, registered):
+def test_runtime_registration_current_parity_and_clock_expiry(runtime, registered):
     state, policy, registration, current, proof = registered
     before = deepcopy(registration)
     admitted = runtime.admit_temporal_derivation(registration['task'])

@@ -11,8 +11,8 @@
         (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
         (only-in :yuanxu/module-system/authoring/roles yuanxu-semantic-module)
         :yuanxu/profile-composition/profile-bundle
-        (only-in :agentic-ai-lab/modules/workflow/scenario/profile-root
-                 agentic-ai-lab-profile-bundle-root))
+        (only-in :clan/poo/mop make-instance)
+        (only-in :yuanxu/modules/funflow/scenario Scenario))
 
 (export profile-bundle-test)
 
@@ -58,7 +58,7 @@
 
 (def profile-bundle-test
   (test-suite
-   "POO-native ProfileBundle algebra"
+   "POO ProfileBundle algebra"
    (yuanxu-test-case "Module selection uses an indexed export surface"
      (let (bundle
            (yuanxu-select-module-profiles
@@ -180,11 +180,11 @@
         '(primary secondary))))
    (yuanxu-test-case "root projection happens exactly after value composition"
      (let* ((bundle (compose profiles audit-profile governed-profile))
-            (root (agentic-ai-lab-profile-bundle-root 'assurance-root bundle)))
+            (root (make-instance Scenario name: 'assurance-root config: bundle)))
        (check-equal? (.ref root 'name) 'assurance-root)
        (check-equal? (.ref root 'profiles)
                      (list audit-profile governed-profile))
-       (check-equal? (eq? (.ref root 'profile-bundle) bundle) #t)
+       (check-equal? (eq? (.ref root 'config) bundle) #t)
        (check-equal? (.ref root 'runtime-executed?) #f)))
    (yuanxu-test-case "domain string identities remain valid direct Profile keys"
      (let (bundle (compose profiles string-identity-profile))
@@ -199,7 +199,7 @@
             (refined-profile
              (.o identity: 'refined-stage-profile stages: refined-stages))
             (bundle (compose profiles base-profile refined-profile))
-            (case-value (agentic-ai-lab-profile-bundle-root 'clinical-case bundle))
+            (case-value (make-instance Scenario name: 'clinical-case config: bundle))
             (effective-stages (.ref case-value 'stages))
             (sources
              (.o effective: (.o prototype: effective-stages

@@ -31,7 +31,7 @@ def run(argv: list[str], *, capture: bool = False) -> str:
     return result.stdout or ""
 
 
-def native_link_flags(home: Path, system: str) -> list[str]:
+def runtime_link_flags(home: Path, system: str) -> list[str]:
     flags = shlex.split((home / "lib/libgerbil.ldd").read_text().strip().strip("()"))
     if system == "Darwin":
         # A portable SDK can retain its producer's versioned Homebrew paths.
@@ -49,7 +49,7 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     # Preserve the selected package frontend before changing C-tool PATH.
-    # Its build command supplies the native package environment to build.ss.
+    # Its build command supplies the runtime package environment to build.ss.
     frontend = shutil.which("gerbil")
     if frontend is None:
         raise RuntimeError("selected Gerbil package frontend is unavailable")
@@ -80,7 +80,7 @@ def main() -> None:
                         (displayln (expander-context-id dep) "\\t"
                                    (gxc#find-static-module-file dep))) deps)
                       (displayln "ROOT\\t" (gxc#find-static-module-file ctx)))'''
-    # Resolve the compiler's static closure in that same native package
+    # Resolve the compiler's static closure in that same runtime package
     # environment, rather than guessing GERBIL_PATH/LOADPATH in Python.
     closure = run([frontend, "env", str(home / "bin/gxi"), "-:max-heap=1G,debug=q", "-e", "(import :gerbil/compiler/driver :gerbil/expander)",
                    "-e", expression], capture=True)
@@ -135,7 +135,7 @@ def main() -> None:
                f"-I{ROOT / 'bindings/runtime-c/include'}")
     run([gsc, "-cc-options", options, "-obj", "-o", str(host_object),
          str(ROOT / 'bindings/runtime-c/src/semantic_host.c')])
-    flags = native_link_flags(home, platform.system())
+    flags = runtime_link_flags(home, platform.system())
     shared = ["-shared"]
     if platform.system() == "Darwin":
         shared = ["-dynamiclib", "-Wl,-no_compact_unwind"]

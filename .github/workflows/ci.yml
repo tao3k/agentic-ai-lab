@@ -44,9 +44,9 @@ jobs:
           python3 packages/automation/gerbil_dependency_pin.py check
           python3 -m unittest discover -s packages/automation/tests -p 'test_*.py'
 
-  native-gerbil-tests:
+  runtime-gerbil-tests:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
-    name: Native Gerbil unit tests (${{ matrix.os }})
+    name: Runtime Gerbil unit tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 240
     strategy:
@@ -63,11 +63,11 @@ jobs:
       - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - name: Upload focused native unit-test output
+      - name: Upload focused runtime unit-test output
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: native-unit-output-${{ runner.os }}
+          name: runtime-unit-output-${{ runner.os }}
           path: ${{ runner.temp }}/agentic-ai-lab-unit-tests.log
           if-no-files-found: ignore
           retention-days: 7
@@ -124,8 +124,8 @@ jobs:
         shell: bash
         run: python3 packages/automation/install_gerbil_release.py "$GERBIL_RELEASE_ROOT"
 
-      - name: Restore native Gerbil package cache
-        id: native-gerbil-pkg-cache
+      - name: Restore Gerbil package cache
+        id: runtime-gerbil-pkg-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
@@ -137,28 +137,28 @@ jobs:
       - name: Initialize Core submodule
         run: git submodule update --init core
 
-      - name: Install native Gerbil package dependencies
+      - name: Install Gerbil package dependencies
         run: |
           mkdir -p "$HOME/.gerbil/pkg"
           gerbil pkg dir --add git.cons.io/mighty-gerbils/gerbil-directory
-          python3 packages/automation/gerbil_dependency_pin.py prepare-native --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
-          if [ "${{ steps.native-gerbil-pkg-cache.outputs.cache-hit }}" = "true" ]; then
-            if ! gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "native-dependency-cache-ready"))' >/tmp/native-gerbil-dependency-cache-check.log 2>&1; then
-              echo "::notice::Exact native dependency cache is incomplete; refreshing declared revisions"
-              gerbil env gerbil interactive packages/automation/native-dependencies.ss
+          python3 packages/automation/gerbil_dependency_pin.py prepare-runtime --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
+          if [ "${{ steps.runtime-gerbil-pkg-cache.outputs.cache-hit }}" = "true" ]; then
+            if ! gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "runtime-dependency-cache-ready"))' >/tmp/gerbil-dependency-cache-check.log 2>&1; then
+              echo "::notice::Exact runtime dependency cache is incomplete; refreshing declared revisions"
+              gerbil env gerbil interactive packages/automation/runtime-dependencies.ss
             fi
           else
-            gerbil env gerbil interactive packages/automation/native-dependencies.ss
+            gerbil env gerbil interactive packages/automation/runtime-dependencies.ss
           fi
-          gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "native-dependencies-ready"))'
+          gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "runtime-dependencies-ready"))'
           # The Core submodule owns this checkout's shared POO modules.
           (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil clean)
           (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil build)
           # Clean only Agentic AI Lab outputs; its build spec excludes Core.
           gerbil clean
 
-      - name: Save native Gerbil package cache
-        if: steps.native-gerbil-pkg-cache.outputs.cache-hit != 'true'
+      - name: Save Gerbil package cache
+        if: steps.runtime-gerbil-pkg-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
@@ -167,21 +167,16 @@ jobs:
             .gerbil/bin
           key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
 
-      - name: Build native Gerbil package
+      - name: Build Gerbil package
         run: GERBIL_BUILD_VERBOSE=1 gerbil build
 
       - name: Install optional development policy dependencies
         run: |
-          python3 packages/automation/gerbil_dependency_pin.py prepare-native --manifest dev/gerbil.pkg --package-root "$GITHUB_WORKSPACE/dev/.gerbil/pkg"
-          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/native-dependencies.ss)
+          python3 packages/automation/gerbil_dependency_pin.py prepare-runtime --manifest dev/gerbil.pkg --package-root "$GITHUB_WORKSPACE/dev/.gerbil/pkg"
+          (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
           export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
           gerbil env gerbil interactive -e '(begin (import :asp-gerbil-scheme/benchmark-api :asp-gerbil-scheme/testing-api) (displayln "development-dependencies-ready"))'
-
-      # Ordinary regressions are discovered once by the native package entry
-      # below. Keep this independent process-boundary qualification explicit.
-      - name: Prepare published Context and Temporal TestSuites
-        run: gerbil env just compile-context-temporal-tests
 
       - name: Check original Temporal proof binding and Session invalidation
         env:
@@ -189,7 +184,10 @@ jobs:
           AGENTIC_AI_LAB_TEST_STALL_DIAGNOSTICS: ${{ runner.temp }}/agentic-ai-lab-test-stalls
         run: gerbil env just test-context-temporal
 
-      - name: Run the single native unit-test entrypoint
+      - name: Prepare explicit qualification inputs
+        run: gerbil env just build-testing build-test-workers prepare-test-inputs
+
+      - name: Run the single runtime unit-test entrypoint
         env:
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
         run: |
@@ -211,7 +209,7 @@ jobs:
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: agentic-ai-lab-semantic-native-linux
+          name: agentic-ai-lab-semantic-runtime-linux
           path: |
             .ci/semantic/libagentic_ai_lab_semantic.so
             .ci/semantic/libagentic_ai_lab_semantic.so.ss
@@ -229,13 +227,13 @@ jobs:
               --case evidence-ascent.hypothesis-status
           PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" \
             gerbil env python3 -m agentic_ai_lab_testing run \
-              --case model-study.native-fixtures
+              --case model-study.runtime-fixtures
 
-      - name: Run native performance scenarios without unit-batch contention
+      - name: Run runtime performance scenarios without unit-batch contention
         if: runner.os == 'Linux'
         run: |
           gerbil env gxc -O modules/workflow/qualification/ascent-table-expression.ss t/scenarios/performance/ascent-table-expression/baseline.ss
-          gerbil env ./dev/performance-tests.ss
+          gerbil env just test-performance
           gerbil env gxi t/scenarios/performance/ascent-table-expression/scenario.ss
           gerbil env gxi t/scenarios/performance/ascent-table-expression-membership/scenario.ss
           gerbil env gxi t/scenarios/performance/ascent-reachability-closure/scenario.ss
@@ -244,7 +242,7 @@ jobs:
         if: failure() && runner.os == 'macOS'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: native-test-stall-macOS
+          name: runtime-test-stall-macOS
           path: ${{ runner.temp }}/agentic-ai-lab-test-stalls
           if-no-files-found: warn
           retention-days: 7
@@ -391,7 +389,7 @@ jobs:
           cd packages/proofs/lean
           "$HOME/.elan/bin/lake" --version
 
-      - name: Build native Lean module library
+      - name: Build runtime Lean module library
         working-directory: packages/proofs/lean
         shell: bash
         run: |
@@ -467,7 +465,7 @@ jobs:
           cargo test --locked \
             --manifest-path bindings/cedar-gerbil/Cargo.toml \
             -p agentic-ai-lab-cedar-authority \
-            --features native-runtime-host-qualification \
+            --features runtime-host-qualification \
             --test runtime_host \
             --test authorization \
             --test case_check
@@ -541,7 +539,7 @@ jobs:
           AGENTIC_AI_LAB_EXTERNAL_TEST_MODE: full
         run: python3 t/qualification/external_bazel/external_module.py
 
-  native-linux:
+  runtime-linux:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: Agentic AI Lab Gerbil package (${{ matrix.os }}, ${{ matrix.gerbil-label }})
     runs-on: ${{ matrix.os }}
@@ -560,7 +558,7 @@ jobs:
             acceptance-runaway-timeout-seconds: 540
             external-module-mode: analysis
             job-timeout-minutes: 30
-    steps: &native-steps
+    steps: &runtime-steps
       - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
@@ -649,32 +647,32 @@ jobs:
         run: python3 t/qualification/external_bazel/external_module.py
 
       - name: Resolve shared Gerbil capability
-        id: gerbil-native-abi
+        id: gerbil-runtime-abi
         shell: bash
         run: |
           set -euo pipefail
           set +e
-          native_abi_output="$(
+          runtime_abi_output="$(
             bazel run --ui_event_filters=-info --noshow_progress \
-              @gerbil_bazel//gerbil:native_abi_fingerprint 2>&1
+              @gerbil_bazel//gerbil:runtime_abi_fingerprint 2>&1
           )"
-          native_abi_status=$?
+          runtime_abi_status=$?
           set -e
-          if (( native_abi_status != 0 )); then
-            printf '%s\n' "$native_abi_output" >&2
-            exit "$native_abi_status"
+          if (( runtime_abi_status != 0 )); then
+            printf '%s\n' "$runtime_abi_output" >&2
+            exit "$runtime_abi_status"
           fi
-          native_abi="$(
-            printf '%s\n' "$native_abi_output" \
+          runtime_abi="$(
+            printf '%s\n' "$runtime_abi_output" \
               | awk '/^[0-9a-f]{40}$/ { value = $0 } END { if (value != "") print value }'
           )"
-          if [[ "${#native_abi}" -ne 40 ]]; then
-            printf '%s\n' "$native_abi_output" >&2
+          if [[ "${#runtime_abi}" -ne 40 ]]; then
+            printf '%s\n' "$runtime_abi_output" >&2
             exit 1
           fi
-          echo "GERBIL_NATIVE_ABI=$native_abi" >> "$GITHUB_ENV"
-          echo "fingerprint=$native_abi" >> "$GITHUB_OUTPUT"
-          echo "Gerbil native ABI: $native_abi"
+          echo "GERBIL_RUNTIME_ABI=$runtime_abi" >> "$GITHUB_ENV"
+          echo "fingerprint=$runtime_abi" >> "$GITHUB_OUTPUT"
+          echo "Gerbil runtime ABI: $runtime_abi"
 
       - name: Validate consumed Parser API roots
         timeout-minutes: 2
@@ -777,7 +775,7 @@ jobs:
           fi
           jq -n \
             --arg schema "agentic-ai-lab.ci.scheme-projection-handoff.v1" \
-          --arg producerJob "native-linux" \
+          --arg producerJob "runtime-linux" \
           --arg action "//:wheel_smoke_projection_artifact" \
           --arg compileOwner "//:compile" \
           --arg currentHeadSha "$GITHUB_SHA" \
@@ -943,11 +941,11 @@ jobs:
 
           jq -n \
             --arg schema "agentic-ai-lab.ci.runtime-c-handoff.v1" \
-            --arg producerJob "native-linux" \
+            --arg producerJob "runtime-linux" \
             --arg producerTarget "//bindings/runtime-c:runtime_c_shared" \
             --arg platform "${RUNNER_OS}-${RUNNER_ARCH}" \
             --arg currentHeadSha "$GITHUB_SHA" \
-            --arg gerbilNativeAbi "$GERBIL_NATIVE_ABI" \
+            --arg gerbilRuntimeAbi "$GERBIL_RUNTIME_ABI" \
             --arg artifactPath "libagentic_ai_lab_runtime_v0.so" \
             --arg artifactDigest "$artifact_digest" \
             --arg exportedSymbolsDigest "$symbols_digest" \
@@ -959,7 +957,7 @@ jobs:
             '{schema: $schema, producerJob: $producerJob,
               producerTarget: $producerTarget,
               platform: $platform, currentHeadSha: $currentHeadSha,
-              gerbilNativeAbi: $gerbilNativeAbi, artifactPath: $artifactPath,
+              gerbilRuntimeAbi: $gerbilRuntimeAbi, artifactPath: $artifactPath,
               artifactDigest: $artifactDigest,
               exportedSymbolsDigest: $exportedSymbolsDigest,
               exportedSymbolCount: $exportedSymbolCount,
@@ -987,12 +985,12 @@ jobs:
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: agentic-ai-lab-runtime-native-library
+          name: agentic-ai-lab-runtime-library
           path: .ci/runtime-c
           if-no-files-found: error
           retention-days: 7
 
-  native-macos:
+  runtime-macos:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: Agentic AI Lab Gerbil package (${{ matrix.os }}, ${{ matrix.gerbil-label }})
     runs-on: ${{ matrix.os }}
@@ -1011,12 +1009,12 @@ jobs:
             acceptance-timeout-minutes: 15
             acceptance-runaway-timeout-seconds: 840
             job-timeout-minutes: 45
-    steps: *native-steps
+    steps: *runtime-steps
 
   python-runtime-wheel:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: Python runtime wheel
-    needs: [native-linux, native-gerbil-tests]
+    needs: [runtime-linux, runtime-gerbil-tests]
     uses: ./.github/workflows/python-runtime-wheel.yml
 
   lock-linux-seed:

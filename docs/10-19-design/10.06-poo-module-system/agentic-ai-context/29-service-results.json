@@ -5,7 +5,7 @@
   "rust_delivery_withdrawn": true,
   "duplicate_json_protocol_removed": true,
   "context_lifecycle_c_export_implemented": false,
-  "native_source_sha256": {
+  "runtime_source_sha256": {
     "modules/ai-agentic-context/runtime-service.ss": "4f368d1abc017af50ae802e260fc16961b248f7bb2bc5b9ebd17d45a76e0046d",
     "modules/ai-agentic-context/durable-owner.ss": "9a9a04fd233060fe594848ab0398d1167380ac63162b13c2346f5562df506561",
     "modules/ai-agentic-context/session-host.ss": "d3721af659c9c65b73e0031fac2ee3227a541a69472008e3d30afda848895832",
@@ -29,7 +29,7 @@
     "log": "/private/tmp/context-service-20261026/final-scheme/service.log",
     "log_sha256": "53ff8de70111dc8a874f346e51940395e3fb0466c9fe8a57d15b0db9e732b46e",
     "heap": "2G",
-    "native_watchdog_seconds": 150,
+    "runtime_watchdog_seconds": 150,
     "unsplit_single_process": true
   },
   "canonical_sixty": {
@@ -48,7 +48,7 @@
     "log": "/private/tmp/context-service-20261026/final-scheme/canonical.log",
     "log_sha256": "62135d0d6f84f2a2e3aac75160d10a0e451678bd2c638e73b620ca9263e19ee5",
     "heap": "2G",
-    "native_watchdog_seconds": 150,
+    "runtime_watchdog_seconds": 150,
     "unsplit_single_process": true
   },
   "failed_whole_replay": {
@@ -67,12 +67,12 @@
     "log": "/private/tmp/context-service-20261026/final-scheme/whole-replay.log",
     "log_sha256": "20d58a78c946416556bdc8ab7b1c1c4c7ad7699182d3352fc8c505d285d81446",
     "heap": "2G",
-    "native_watchdog_seconds": 150,
+    "runtime_watchdog_seconds": 150,
     "unsplit_single_process": true
   },
   "resource_limits": {
     "maximum_heap": "2G",
-    "native_watchdog_seconds": 150,
+    "runtime_watchdog_seconds": 150,
     "cohort_split": false
   },
   "fixture_extraction": {
@@ -94,7 +94,7 @@
       "actual_owner_closes": 0,
       "log": "/private/tmp/context-service-20261026/scheme-regression/canonical.log",
       "log_sha256": "1a2bf5978bde58e24764102e511abdfb50183a2fa390aabc0ac83e1b0a83cc0f",
-      "native_watchdog_seconds": 150,
+      "runtime_watchdog_seconds": 150,
       "heap": "2G",
       "unsplit_single_process": true
     }
@@ -113,7 +113,7 @@
     "peak_child_rss_bytes": 741834752,
     "actual_owner_closes": 34,
     "heap": "2G",
-    "native_watchdog_seconds": 150,
+    "runtime_watchdog_seconds": 150,
     "unsplit_single_process": true,
     "command": [
       "just",
@@ -128,7 +128,7 @@
     "timing_variability_resolved": false
   },
   "complete_whole_queue_replay_admitted": false,
-  "native_replay_issue_closed": false,
+  "runtime_replay_issue_closed": false,
   "unresolved": [
     "New Context lifecycle service has not been connected to the existing C ABI.",
     "Whole-queue replay exceeded the fixed watchdog twice; cause not established."

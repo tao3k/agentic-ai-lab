@@ -35,7 +35,7 @@
            (eq? (cadr datum) 'public-entry-modules))
       (match datum
         (['def 'public-entry-modules ['quote entries]] entries)
-        (else (error "expected literal native PackageSpec entries" datum))))
+        (else (error "expected literal runtime PackageSpec entries" datum))))
      (else (or (walk (car datum)) (walk (cdr datum)))))))
 (def (require-coverage entries required owner)
   (for-each (lambda (entry)
@@ -49,7 +49,7 @@
                           (source-files (path-expand "modules" product-root))
                           (source-files (path-expand "user-interface" product-root))))
          (required-count 0))
-    (unless (and (pair? entries) (andmap string? entries)) (error "missing native API roots" entries))
+    (unless (and (pair? entries) (andmap string? entries)) (error "missing runtime API roots" entries))
     (for-each (lambda (entry)
                 (unless (file-exists? (path-expand entry parser-root))
                   (error "Parser API root does not exist in the pinned source" entry))) entries)

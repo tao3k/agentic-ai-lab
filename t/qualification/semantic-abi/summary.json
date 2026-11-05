@@ -4,14 +4,14 @@
   "artifactSha256": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c",
   "wheel": "agentic_ai_lab_runtime-0.1.0-cp313-cp313-macosx_26_0_arm64.whl",
   "wheelSha256": "8fad45953de43fdff9553f296e29ca8322a3c1faa70aeb1131cbbafce3ccdfa0",
-  "installedRuntimeNativeTests": 34,
+  "installedRuntimeRuntimeTests": 34,
   "installedTestFailures": 0,
   "installedTestSkips": 0,
   "attempts": 48,
   "completedProviderResponses": 48,
   "modelCorrect": 4,
   "modelFailures": 44,
-  "nativeObservations": 47,
+  "runtimeObservations": 47,
   "inertOutputRejections": [
     "SemanticRuntimeError: model output is not inert JSON"
   ],

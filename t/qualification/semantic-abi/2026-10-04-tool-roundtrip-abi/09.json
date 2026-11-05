@@ -1233,8 +1233,8 @@
     "call_id": "call_00_XaKnd57NylzBTMpk4hi95794",
     "name": "poo_flow_temporal_solve"
   },
-  "nativeSeconds": 0.0010027090002040495,
-  "nativeResult": {
+  "runtimeSeconds": 0.0010027090002040495,
+  "runtimeResult": {
     "schema": "poo-flow.semantic-tool-result",
     "callId": "call_00_XaKnd57NylzBTMpk4hi95794",
     "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",

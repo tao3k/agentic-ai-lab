@@ -8,7 +8,8 @@
 ;;; Runtime contract: this module performs no backend selection or execution.
 ;;; Policy evidence: larger extension owners should import these helpers.
 
-(import :yuanxu/utilities/functional)
+(import (only-in :std/list/list filter-map append-map)
+        :yuanxu/utilities/functional)
 
 (export agent-sandbox-option
         agent-sandbox-alist-ref
@@ -47,7 +48,7 @@
 ;; : (-> MaybeAgentSandboxOptionRows AgentSandboxOptionRows)
 (def (agent-sandbox-normalize-alist alist)
   (if (list? alist)
-    (yuanxu-filter-map
+    (filter-map
      (lambda (entry)
        (and (pair? entry) entry))
      alist)
@@ -57,7 +58,7 @@
 ;;; assoc get task overrides before profile defaults.
 ;; : (-> MaybeAgentSandboxOptionRows MaybeAgentSandboxOptionRows AgentSandboxOptionRows)
 (def (agent-sandbox-merge-alists primary secondary)
-  (yuanxu-append-map
+  (append-map
    agent-sandbox-normalize-alist
    (list primary secondary)))
 

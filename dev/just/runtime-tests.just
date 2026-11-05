@@ -47,13 +47,13 @@ check-temporal-candidate-exchange:
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}/..:{{ justfile_directory() }}/core:{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}" just test-file t/temporal-candidate-exchange-test.ss
 
 [group('check')]
-check-native-semantic-query-model: check-native-semantic-query-lean
+check-runtime-semantic-query-model: check-runtime-semantic-query-lean
     PYTHONPATH="{{ justfile_directory() }}/packages/python-testing/src" python3 -m agentic_ai_lab_testing.checks.quint --group query
 
-# Rebuild the pinned POO dependency after a native compiler/runtime repair.
+# Rebuild the pinned POO dependency after a runtime compiler/runtime repair.
 # Preserve source and old AOT artifacts; never uninstall the package checkout.
 [group('build')]
-rebuild-poo-native backup:
+rebuild-poo backup:
     #!/usr/bin/env bash
     set -euo pipefail
     package_root="{{ agentic_ai_lab_gerbil_path }}/pkg/github.com/tao3k/gerbil-poo"
@@ -68,14 +68,14 @@ rebuild-poo-native backup:
 
 # Run the existing C4 identity/performance witness under the test heap fence.
 [group('test')]
-benchmark-poo-clos-native-c4:
-    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} env gxi t/scenarios/performance/poo-clos-native-c4/scenario.ss
+benchmark-poo-clos-runtime-c4:
+    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} env gxi t/scenarios/performance/poo-clos-runtime-c4/scenario.ss
 
 # Production FFI owners use the init-owned library projection. The existing
-# focused test entry owns support compilation, heap fencing and native Harness.
+# focused test entry owns support compilation, heap fencing and runtime Harness.
 [group('test')]
-test-runtime-v0-native-ffi: build-library
-    just test-file t/runtime-v0-native-ffi-test.ss
+test-runtime-v0-ffi: build-library
+    just test-file t/runtime-v0-ffi-test.ss
 
 # A plain C consumer loads the packaged artifact with its actual SDK VM.
 # The facade fences the heap at 2 GiB before setup; the watchdog covers dlopen,
@@ -93,13 +93,13 @@ test-semantic-c library:
 
 # Run statically linked Query/Orgize/Evidence cases through upstream gxtest.
 [group('test')]
-test-query-parser-native executable:
-    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 45s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss query-native "{{ gerbil_test_runtime_options }}" "{{ executable }}"
+test-query-parser-runtime executable:
+    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 45s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss query-runtime "{{ gerbil_test_runtime_options }}" "{{ executable }}"
 
-# Run the compiler-owned native Temporal suite with heap fencing and Case receipts.
+# Run the compiler-owned runtime Temporal suite with heap fencing and Case receipts.
 [group('test')]
-test-temporal-family-native executable:
-    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 45s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss temporal-native "{{ gerbil_test_runtime_options }}" "{{ executable }}"
+test-temporal-family-host executable:
+    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 45s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss temporal-runtime "{{ gerbil_test_runtime_options }}" "{{ executable }}"
 
 # Verify original MRR owner values and fresh-process archive replay through the ABI.
 [group('test')]
@@ -110,13 +110,13 @@ test-temporal-family-archive executable library sha256 directory:
     test -f "{{ library }}"
     log="$(mktemp)"
     trap 'rm -f "$log"' EXIT
-    MRR_NATIVE_PROGRESS=1 AGENTIC_AI_LAB_RUNTIME_TRACE=1 AGENTIC_AI_LAB_ARCHIVE_DIRECTORY="{{ directory }}" AGENTIC_AI_LAB_SEMANTIC_LIBRARY="{{ library }}" AGENTIC_AI_LAB_SEMANTIC_SHA256="{{ sha256 }}" timeout --foreground --signal=TERM --kill-after=1s 45s python3 "{{ justfile_directory() }}/packages/python-runtime/tools/watch.py" "{{ executable }}" --exact original_mrr_values_project_to_real_native_poo --nocapture --test-threads=1 2>&1 | tee "$log"
+    MRR_RUNTIME_PROGRESS=1 AGENTIC_AI_LAB_RUNTIME_TRACE=1 AGENTIC_AI_LAB_ARCHIVE_DIRECTORY="{{ directory }}" AGENTIC_AI_LAB_SEMANTIC_LIBRARY="{{ library }}" AGENTIC_AI_LAB_SEMANTIC_SHA256="{{ sha256 }}" timeout --foreground --signal=TERM --kill-after=1s 45s python3 "{{ justfile_directory() }}/packages/python-runtime/tools/watch.py" "{{ executable }}" --exact original_mrr_values_project_to_real_runtime_poo --nocapture --test-threads=1 2>&1 | tee "$log"
     test "$(grep -Ec '^test result: ok\. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;' "$log" || true)" = 2
     grep -Eq '^Fresh-process full Family proof archive replay verified$' "$log"
     test -s "{{ directory }}/archive.ss"
     test -s "{{ directory }}/replayed.ss"
 
-# Require real Context binding and stale-Source checks in the native MRR ABI run.
+# Require real Context binding and stale-Source checks in the runtime MRR ABI run.
 [group('test')]
 test-temporal-mrr-context executable library sha256 directory:
     #!/usr/bin/env bash
@@ -125,7 +125,7 @@ test-temporal-mrr-context executable library sha256 directory:
     trap 'rm -f "$log"' EXIT
     just --justfile "{{ justfile_directory() }}/justfile" test-temporal-family-archive "{{ executable }}" "{{ library }}" "{{ sha256 }}" "{{ directory }}" 2>&1 | tee "$log"
     grep -F 'MRR Context checked original receipt, policy, temporal fact and current Source; forged/missing/foreign bindings rejected' "$log" >/dev/null
-    grep -Fx 'MRR Context rejected stale native Source after correction' "$log" >/dev/null
+    grep -Fx 'MRR Context rejected stale runtime Source after correction' "$log" >/dev/null
 
 # Check the declared ASCENT package through Agentic AI Lab's Observability Case.
 [group('test')]
@@ -154,12 +154,12 @@ test-bundle-v1:
 # Qualify an explicitly supplied Cedar Runtime Host artifact.
 [group('test')]
 test-cedar-runtime-host host:
-    AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST="{{ host }}" cargo test --locked --manifest-path {{ cedar_workspace }} -p agentic-ai-lab-cedar-authority --features native-runtime-host-qualification --test runtime_host --test authorization --test case_check
+    AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST="{{ host }}" cargo test --locked --manifest-path {{ cedar_workspace }} -p agentic-ai-lab-cedar-authority --features runtime-host-qualification --test runtime_host --test authorization --test case_check
 
-# Qualify the Scheme POO -> native authority -> AOT Host path with one Cedar artifact.
+# Qualify the Scheme POO -> runtime authority -> AOT Host path with one Cedar artifact.
 [group('test')]
-test-cedar-native host:
-    AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST="{{ host }}" cargo test --locked --manifest-path {{ cedar_workspace }} -p agentic-ai-lab-cedar-gerbil --features conformance --test native_authorization
+test-cedar-runtime host:
+    AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST="{{ host }}" cargo test --locked --manifest-path {{ cedar_workspace }} -p agentic-ai-lab-cedar-gerbil --features conformance --test runtime_authorization
 
 # Replay one data-only case manifest against exported Cedar files and both Host engines.
 [group('test')]
@@ -189,16 +189,16 @@ semantic-worker:
 # Explicit installed-artifact acceptance; ASP Scheme owns measurement and receipts.
 [group('test')]
 benchmark-temporal-mrr:
-    just test-file t/qualification/temporal-mrr-native/native-test.ss
+    just test-file t/qualification/temporal-mrr-host/runtime-test.ss
 
 # Paid model samples run once; ASP measures each, without repeated p95 sampling.
 [group('test')]
 qualify-temporal-model python binary library oracle env_file output:
-    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 180s gerbil {{ gerbil_test_runtime_options }} env gxi t/qualification/temporal-model-native/scenario.ss "{{ python }}" "{{ binary }}" "{{ library }}" "{{ oracle }}" "{{ env_file }}" "{{ output }}"
+    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 180s gerbil {{ gerbil_test_runtime_options }} env gxi t/qualification/temporal-model-host/scenario.ss "{{ python }}" "{{ binary }}" "{{ library }}" "{{ oracle }}" "{{ env_file }}" "{{ output }}"
 
 [group('test')]
 qualify-temporal-physical-model python binary library oracle env_file output:
-    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 60s gerbil {{ gerbil_test_runtime_options }} env gxi t/qualification/temporal-physical-native/model-scenario.ss "{{ python }}" "{{ binary }}" "{{ library }}" "{{ oracle }}" "{{ env_file }}" "{{ output }}"
+    GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 60s gerbil {{ gerbil_test_runtime_options }} env gxi t/qualification/temporal-physical-host/model-scenario.ss "{{ python }}" "{{ binary }}" "{{ library }}" "{{ oracle }}" "{{ env_file }}" "{{ output }}"
 
 [group('test')]
 test-temporal-support:
@@ -208,23 +208,18 @@ test-temporal-support:
 test-temporal-evaluator:
     GERBIL_LOADPATH="{{ justfile_directory() }}${GERBIL_LOADPATH:+:$GERBIL_LOADPATH}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=1s 45s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss temporal-evaluator "{{ gerbil_test_runtime_options }}"
 
-# Native proof/support/Context replay uses the maintained import-progress harness.
+# Runtime proof/support/Context replay uses the maintained import-progress harness.
 # Cold dependency imports can exceed the specialized five-second idle watchdog;
 # preserve the normal focused-file total budget and pre-import heap fence.
 [group('test')]
-test-context-evidence-native:
+test-context-evidence-runtime:
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
 
-# Opt-in exhaustive native replay; ordinary focused runs keep eight matched paths.
+# Opt-in exhaustive runtime replay; ordinary focused runs keep eight matched paths.
 # This is an aggregate qualification budget, not a relaxed semantic assertion.
 [group('test')]
 test-context-owner-cas:
-    AGENTIC_CONTEXT_NATIVE_CAS_EXHAUSTIVE=1 GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
-
-# Original Context/Temporal suites through installed Scheme and upstream gxtest.
-[group('build')]
-compile-context-temporal-tests:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/tests.ss compile t/qualification/context-temporal/interface.ss "{{ gerbil_test_runtime_options }}"
+    AGENTIC_CONTEXT_RUNTIME_CAS_EXHAUSTIVE=1 GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
 
 [group('test')]
 test-context-temporal:
@@ -245,26 +240,26 @@ test-context-push:
 test-context-authority:
     AGENTIC_CONTEXT_AUTHORITY_EXHAUSTIVE=1 GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 2700s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
 
-# Same current native gate with a focused/replay corpus and cold import budget.
+# Same current runtime gate with a focused/replay corpus and cold import budget.
 [group('test')]
 test-context-authority-focused:
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
 
-# Real monotonic timer/owner reactor, native proof/current-use and replay corpus.
+# Real monotonic timer/owner reactor, runtime proof/current-use and replay corpus.
 [group('test')]
 test-context-clock:
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/temporal-evaluator-runner.ss
 
 [group('test')]
 test-context-clock-primitive:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 30s gxi {{ gerbil_test_runtime_options }} -e '(import :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock)' -e '(displayln (native-monotonic-seconds))'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 30s gxi {{ gerbil_test_runtime_options }} -e '(import :agentic-ai-lab/modules/temporal-causality/runtime/monotonic-clock)' -e '(displayln (monotonic-seconds))'
 
-# Each process is heap fenced before importing the persistent native owner.
+# Each process is heap fenced before importing the persistent runtime owner.
 [group('test')]
 test-context-durable-worker db mode order stage profile:
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 90s gxi {{ gerbil_test_runtime_options }} t/harness/context-durable-driver.ss '{{db}}' '{{mode}}' '{{order}}' '{{stage}}' '{{profile}}'
 
-# Native Query/Context scenarios use the same pre-import heap fence.
+# Runtime Query/Context scenarios use the same pre-import heap fence.
 [group('test')]
 test-context-query mode="all" order="all":
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 900s gxi {{ gerbil_test_runtime_options }} t/harness/context-query-driver.ss '{{mode}}' '{{order}}'
@@ -308,14 +303,14 @@ test-context-actor-cost directory:
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-actor-cost-driver.ss '{{directory}}'
 
 [group('test')]
-test-context-actor-native executable directory:
+test-context-actor-runtime executable directory:
     {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s '{{executable}}' {{ gerbil_test_runtime_options }} '{{directory}}'
 
-# Observe the ordinary Core-selected suite, including its own native worker.
+# Observe the ordinary Core-selected suite, including its own runtime worker.
 # The enclosing fence includes init, selection, child execution and teardown.
 [group('test')]
 test-context-core observe="false":
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_gerbil_path }}/lib:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} core/t/qualification/testing/run.ss t/ai-agentic-context-core-test.ss '{{ gerbil_test_runtime_options }}' 150 '{{observe}}'
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_gerbil_path }}/lib:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} core/dev/test-file.ss {{ if observe == "false" { "" } else if observe == "trace" { "-D yuanxu-module-test-observation,yuanxu-module-test-trace" } else { "-D yuanxu-module-test-observation" } }} t/ai-agentic-context-core-test.ss
 
 [group('test')]
 test-context-runtime-fencing path:
@@ -337,3 +332,8 @@ test-context-service path:
 [group('test')]
 test-context-c-abi path mode="run":
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{justfile_directory()}}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-c-abi-driver.ss '{{path}}' '{{mode}}'
+
+# Existing Durable/Session owner with a scoped real workspace worker.
+[group('test')]
+test-context-workspace db workspace mode phase="before-commit":
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_gerbil_path }}/lib:{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 150s gxi {{ gerbil_test_runtime_options }} t/harness/context-workspace-driver.ss '{{db}}' '{{workspace}}' '{{mode}}' '{{phase}}'

@@ -24,7 +24,7 @@
 
 ;;; The compile probe is deliberately syntax-only: success means C can consume
 ;;; our adapter header, nono's generated header, constants, structs, and
-;;; function declarations without needing a platform sandbox or native link step.
+;;; function declarations without needing a platform sandbox or runtime link step.
 ;; : (-> Unit String)
 (def (run-nono-c-binding-compile-probe)
   (run-process (nono-c-binding-compile-probe-command)

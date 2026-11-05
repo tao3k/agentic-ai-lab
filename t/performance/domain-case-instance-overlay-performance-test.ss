@@ -27,7 +27,7 @@
            (check (.ref receipt 'overlay-mix-count) => 0)
            (check (.ref receipt 'resolver-depth) => 1)
            (check (.ref receipt 'construction-complexity)
-                  => 'native-base-override)
+                  => 'runtime-base-override)
            (check (.ref receipt 'lookup-source-depth)
                   => 'constant-source-depth)
            (check (.ref receipt 'correct?) => #t)

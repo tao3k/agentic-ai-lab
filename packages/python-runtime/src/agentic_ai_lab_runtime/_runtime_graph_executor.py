@@ -53,13 +53,13 @@ class RuntimeGraphExecutor:
         self.plan = plan
         self.runtime = runtime or RuntimeGraphRuntime.reference()
         self._semantic_graph = semantic_graph
-        if self.runtime.backend == 'native':
+        if self.runtime.backend == 'runtime':
             from .semantic_runtime import _SemanticGraphBinding
-            from ._native.session import NativeRuntimeSession
-            if not isinstance(self.runtime.require_native_context(), NativeRuntimeSession):
-                raise RuntimeGraphError('native scheduler requires an actual control session')
+            from ._runtime.session import RuntimeSession
+            if not isinstance(self.runtime.require_runtime_context(), RuntimeSession):
+                raise RuntimeGraphError('runtime scheduler requires an actual control session')
             if not isinstance(semantic_graph, _SemanticGraphBinding):
-                raise RuntimeGraphError('native scheduler requires a Scheme graph binding')
+                raise RuntimeGraphError('runtime scheduler requires a Scheme graph binding')
         self.actions = {
             node: bind_runtime_action(action, self.runtime)
             for node, action in actions.items()

@@ -1,0 +1,4 @@
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+(import "objects.ss")
+(export DurableConfig)
+(def DurableConfig DurableRecoveryPolicy.)

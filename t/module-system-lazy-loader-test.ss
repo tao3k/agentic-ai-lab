@@ -6,7 +6,9 @@
 ;;; Boundary: lazy loader tests cover deferred source loading only.
 ;;; Invariant: lazy plans never call loader handlers until explicitly forced.
 
-(import :yuanxu/module-system/source/projection
+(import (only-in :yuanxu/module-system/interface yuanxu-load-modules) (only-in :clan/poo/object .get .call)
+        (only-in :clan/poo/mop make-instance)
+        :yuanxu/module-system/source/projection
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
@@ -67,27 +69,25 @@
 
 ;;; Loader backend fixture records calls and returns only the known standard
 ;;; library module source.
-;; : (-> Unit PooModuleLoaderBackend)
+;; : (-> Unit ModuleLoaderBackend)
 (def user-standard-library-loader
-  (make-yuanxu-module-loader-backend
-   'user-standard-library-loader
-   'standard-library
-   (lambda (source-ref)
+  (make-instance ModuleLoaderBackend
+   name: 'user-standard-library-loader source-kind: 'standard-library
+   load: (lambda (source-ref)
      (set! lazy-loader-call-count (+ lazy-loader-call-count 1))
      (if (yuanxu-module-source-ref=? source-ref loader-standard-library-source)
        loader-standard-library-module
        #f))
-   '((library . standard))))
+   metadata: '((library . standard))))
 
 ;;; Plan predicate keeps assertions about deferred receipts compact and local to
 ;;; the lazy-loader policy owner.
-;; : (-> [YuanxuLazyLoadPlan] Boolean)
+;; : (-> [LazyLoadPlan] Boolean)
 (def (lazy-loader-plans-deferred? plans)
   (cond
    ((null? plans) #t)
-   ((and (not (yuanxu-lazy-load-plan-forced? (car plans)))
-         (eq? (yuanxu-module-load-receipt-code
-               (yuanxu-lazy-load-plan-receipt (car plans)))
+   ((and (not (.get (car plans) forced?))
+         (eq? (.get (car plans) receipt code)
               'deferred))
     (lazy-loader-plans-deferred? (cdr plans)))
    (else #f)))
@@ -160,31 +160,31 @@
                  loader-standard-library-source
                  '((owner . standard-library))))
                (deferred-metadata
-                (yuanxu-module-load-receipt-metadata deferred)))
+                (.get deferred metadata)))
           (check-equal? (yuanxu-module-source-ref-kind loader-standard-library-source)
                         'standard-library)
-          (check-equal? (yuanxu-module-load-receipt-code deferred)
+          (check-equal? (.get deferred code)
                         'deferred)
-          (check-equal? (yuanxu-module-load-receipt-loaded? deferred)
+          (check-equal? (.get deferred loaded?)
                         #f)
           (check-equal? (cdr (assoc 'mode deferred-metadata))
                         'lazy)
           (check-equal? (cdr (assoc 'enabled? deferred-metadata))
                         #f)
           (check-equal? lazy-loader-call-count 0)
-          (check-equal? (yuanxu-lazy-load-plan-forced? plan)
+          (check-equal? (.get plan forced?)
                         #f)
           (let* ((forced-plan
                   (yuanxu-force-lazy-load-plan plan))
                  (forced-receipt
-                  (yuanxu-lazy-load-plan-receipt forced-plan)))
-            (check-equal? (yuanxu-lazy-load-plan-forced? forced-plan)
+                  (.get forced-plan receipt)))
+            (check-equal? (.get forced-plan forced?)
                           #t)
             (check-equal? lazy-loader-call-count 1)
-            (check-equal? (yuanxu-module-load-receipt-code forced-receipt)
+            (check-equal? (.get forced-receipt code)
                           'loaded)
             (check-equal? (agentic-ai-lab-module-name
-                           (yuanxu-module-load-receipt-module forced-receipt))
+                           (.get forced-receipt module))
                           'standard-kernel)))))
 
 ;; : TestCase
@@ -209,9 +209,8 @@
           (check-equal? (cdr (assoc 'entrypoint-role interface-metadata))
                         'interface)
           (check-equal? (length plans) 1)
-          (check-equal? (yuanxu-lazy-load-plan-forced? (car plans)) #f)
-          (check-equal? (yuanxu-module-load-receipt-code
-                         (yuanxu-lazy-load-plan-receipt (car plans)))
+          (check-equal? (.get (car plans) forced?) #f)
+          (check-equal? (.get (car plans) receipt code)
                         'deferred)
           (check-equal? lazy-loader-call-count 0))))
 
@@ -226,12 +225,12 @@
                (source-values
                 (map (lambda (plan)
                        (yuanxu-module-source-ref-value
-                        (yuanxu-lazy-load-plan-source plan)))
+                        (.get plan source)))
                      plans))
                (first-receipt
-                (yuanxu-lazy-load-plan-receipt (car plans)))
+                (.get (car plans) receipt))
                (first-metadata
-                (yuanxu-module-load-receipt-metadata first-receipt)))
+                (.get first-receipt metadata)))
           (check-equal?
            (length plans)
            (+ (length
@@ -253,7 +252,7 @@
                 (cons 'custom (string->symbol name))) '())
              (for-each
               (lambda (plan)
-                (def source (yuanxu-lazy-load-plan-source plan))
+                (def source (.get plan source))
                 (when (equal? (yuanxu-module-source-ref-value source) path)
                   (let (metadata (yuanxu-module-source-ref-metadata source))
                     (check-equal? (cdr (assoc 'kind metadata)) 'framework-entrypoint)
@@ -274,21 +273,9 @@
                           #t
                           #f)
                         #t)
-          (check-equal? (if (member "modules/workflow/scenario/configuration/profile-config.ss"
-                                    source-values)
-                          #t
-                          #f)
-                        #t)
-          (check-equal? (if (member "modules/workflow/scenario/configuration/init-syntax.ss"
-                                    source-values)
-                          #t
-                          #f)
-                        #t)
-          (check-equal? (if (member "modules/workflow/scenario/configuration/root-profile.ss"
-                                    source-values)
-                          #t
-                          #f)
-                        #t)
+          (check-equal? (member "modules/workflow/scenario/configuration/profile-config.ss" source-values) #f)
+          (check-equal? (member "modules/workflow/scenario/configuration/init-syntax.ss" source-values) #f)
+          (check-equal? (member "modules/workflow/scenario/configuration/root-profile.ss" source-values) #f)
           (check-equal? (if (member "modules/workflow/scenario/configuration/declaration-case.ss"
                                     source-values)
                           #t
@@ -313,77 +300,16 @@
 
 ;; : TestCase
 (def (module-system-lazy-loader-user-root-case)
-  (yuanxu-test-case "projects only the Doom-style init and config roots"
-        (set! lazy-loader-call-count 0)
-        (let* ((user-root "user-interface")
-               (source-refs
-                (agentic-ai-lab-user-tree-source-refs user-root))
-               (init-source (car source-refs))
-               (config-source (cadr source-refs))
-               (init-metadata
-                (yuanxu-module-source-ref-metadata init-source))
-               (config-metadata
-                (yuanxu-module-source-ref-metadata config-source))
-               (plans
-                (agentic-ai-lab-user-tree-lazy-load-plans
-                 (list user-standard-library-loader)
-                 user-root
-                 '((owner . user-root-tree)))))
-          (check-equal? (length source-refs) 2)
-          (check-equal? (yuanxu-module-source-ref-value init-source)
-                        "user-interface/init.ss")
-          (check-equal? (yuanxu-module-source-ref-value config-source)
-                        "user-interface/config.ss")
-          (check-equal? (cdr (assoc 'kind config-metadata)) 'user-tree)
-          (check-equal? (cdr (assoc 'policy init-metadata))
-                        'init-switches-only)
-          (check-equal? (agentic-ai-lab-user-tree-source-allows?
-                         init-source
-                         'module-switch)
-                        #t)
-          (check-equal? (agentic-ai-lab-user-tree-source-allows?
-                         init-source
-                         'feature-switch)
-                        #t)
-          (check-equal? (agentic-ai-lab-user-tree-source-allows?
-                         init-source
-                         'sandbox-profile-recipe)
-                        #f)
-          (check-equal? (agentic-ai-lab-user-tree-source-valid?
-                         init-source
-                         '(module-switch feature-switch custom-module-switch))
-                        #t)
-          (check-equal? (agentic-ai-lab-user-tree-source-allows?
-                         init-source
-                         'profile-selection)
-                        #f)
-          (check-equal? (agentic-ai-lab-user-tree-source-policy-violations
-                         init-source
-                         '(module-switch object-contract runtime-execution))
-                        '(object-contract runtime-execution))
-          (check-equal? (cdr (assoc 'policy config-metadata))
-                        'composition-declarations-only)
-          (check-equal? (agentic-ai-lab-user-tree-source-allows?
-                         config-source
-                         'composition-declaration)
-                        #t)
-          (check-equal? (agentic-ai-lab-user-tree-source-valid?
-                         config-source
-                         '(composition-declaration profile-use scenario-use))
-                        #t)
-          (check-equal? (agentic-ai-lab-user-tree-source-allows?
-                         config-source
-                         'runtime-execution)
-                        #f)
-          (check-equal? (agentic-ai-lab-user-tree-source-allows?
-                         config-source
-                         'module-switch)
-                        #f)
-          (check-equal? (length plans) 2)
-          (check-equal? (yuanxu-module-load-receipt-code
-                         (yuanxu-lazy-load-plan-receipt (car plans)))
-                        'deferred)
-          (check-equal? lazy-loader-call-count 0))))
+  (yuanxu-test-case "one native root owns Profile and Scenario source selection"
+    (def view (yuanxu-load-modules (path-expand "init.ss")))
+    (def graph (.get view selected-graph))
+    (check-equal? (and (memq 'langchain (.get graph module-order)) #t) #t)
+    (check-equal? (and (memq 'developer (.get graph module-order)) #t) #t)
+    (def record (.call view .selected-record 'langchain))
+    (check-equal? (yuanxu-module-source-ref-value (.get record source))
+                  (path-expand "user-interface/profiles/langchain/interface.ss"))
+    (.call view admit-current)))
+
 
 ;; : TestCase
 (def (module-system-user-root-authoring-contract-case)
@@ -451,7 +377,8 @@
   (yuanxu-test-case "removes auto-imported entrypoints through POO extension"
         (set! lazy-loader-call-count 0)
         (let* ((source-refs
-                (agentic-ai-lab-user-tree-source-refs "user-interface"))
+                (list (make-yuanxu-module-source-ref 'local "init.ss" '())
+                      (make-yuanxu-module-source-ref 'local "user-interface/config.ss" '())))
                (disable-config
                 (yuanxu-graph-contribution
                  yuanxu-module-auto-import-root-identity
@@ -471,7 +398,7 @@
                                 resolved-source-values)
                         #f)
           (check-equal? resolved-source-values
-                        '("user-interface/init.ss"))
+                        '("init.ss"))
           (check-equal? lazy-loader-call-count 0))))
 
 ;; : TestSuite

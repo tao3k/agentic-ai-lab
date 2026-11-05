@@ -32,7 +32,7 @@
       (check-exception (call-with-execution-progress 1000 +inf.0 void) error?)
       (.def (Invalid @ ProcessScript.) command: '("true") timeout: +inf.0)
       (check-exception (.call Invalid .run) error?))
-    (yuanxu-test-case "native counters advance; duplicate logs, expectations and replays do not"
+    (yuanxu-test-case "runtime counters advance; duplicate logs, expectations and replays do not"
       (def now 0)
       (call-with-execution-progress 100 1000
         (lambda (state)
@@ -63,7 +63,7 @@
           (set! now 111)
           (check-equal? (execution-progress-status state) 'idle))
         clock: (lambda () now)))
-    (yuanxu-test-case "native observations share decoding but never renew liveness"
+    (yuanxu-test-case "runtime observations share decoding but never renew liveness"
       (def now 0)
       (def observations 0)
       (call-with-execution-progress 100 1000

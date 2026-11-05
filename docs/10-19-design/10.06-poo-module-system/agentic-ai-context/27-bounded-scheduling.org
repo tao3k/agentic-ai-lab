@@ -1,8 +1,8 @@
-#+title: Bounded Context Scheduling: Native Contract and Executable Correspondence
+#+title: Bounded Context Scheduling: Runtime Contract and Executable Correspondence
 #+language: en
 :PROPERTIES:
 :ID: context-bounded-scheduling
-:STATUS: pure-native-kernel-and-reference-adapter-qualified-production-integration-open
+:STATUS: pure-runtime-kernel-and-reference-adapter-qualified-production-integration-open
 :END:
 
 * Ownership and contract
@@ -13,10 +13,10 @@ scaling across cores/nodes. Cold import/reconstruction remains a separate
 measurement. The present saturation fixture is a correctness test, not a
 throughput benchmark.
 
-The semantic owner is the native POO =context.scheduling-contract.v1= value,
+The semantic owner is the POO =context.scheduling-contract.v1= value,
 identity =context-bounded-scheduling=, semantic revision 1, constructed in
 =modules/temporal-causality/runtime/scheduling.ss=. The pure step consumes a
-native event and returns a POO decision containing next state, admission result
+runtime event and returns a POO decision containing next state, admission result
 and selection. It acquires no Actor, timer, connection or subscription. Scalars
 in formal models and replay files are named diagnostic projections, not a
 second public DSL or another authority registry.
@@ -68,11 +68,11 @@ distributed transport or refinement of the production Context owner. Coupling
 these scheduling transitions with 26's authority/terminal transitions remains
 an explicit composition obligation.
 
-* Native verification
+* Runtime verification
 
-=t/context-scheduling-test.ss= traverses the reachable native scalar states and
+=t/context-scheduling-test.ss= traverses the reachable runtime scalar states and
 checks every outgoing operation. It also replays actual Quint paths, compares
-every prefix on safe paths and confirms that the corrected native kernel
+every prefix on safe paths and confirms that the corrected runtime kernel
 blocks each broken path. This is executable correspondence, not an unbounded
 refinement theorem.
 
@@ -85,9 +85,9 @@ accepted payload once, closes and joins. This validates pre-mailbox bounds;
 it is not an integration of the existing policy-clock owner and does not
 replace Gerbil's ActorHost transport.
 
-The native regression caught a POO lexical-slot self-reference in the first
+The runtime regression caught a POO lexical-slot self-reference in the first
 candidate. Parameters now have distinct value names. Failed build, sandbox and
-native logs are retained beside the qualified artifacts; successful model
+runtime logs are retained beside the qualified artifacts; successful model
 checks from before that correction are not admitted as the final source cut.
 
 * Commands and evidence
@@ -97,11 +97,11 @@ Run from the repository root, with the configured Gerbil package environment:
 #+begin_src sh
 GERBIL_PATH="$PWD/.gerbil" GERBIL_LOADPATH="$PWD/.gerbil/lib:$PWD:$PWD/dev/.gerbil/lib" just build-test t/context-scheduling-test.ss
 python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-scheduling-quint.py --artifacts /private/tmp/context-scheduling-quint-REPLAY
-python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-scheduling-sysml.py --cases /private/tmp/context-scheduling-quint-REPLAY/native-cases.json --artifacts /private/tmp/context-scheduling-sysml-REPLAY
-GERBIL_TEST_MAX_HEAP=2G just test-context-scheduling /private/tmp/context-scheduling-quint-REPLAY/native-cases.scm
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-scheduling-sysml.py --cases /private/tmp/context-scheduling-quint-REPLAY/runtime-cases.json --artifacts /private/tmp/context-scheduling-sysml-REPLAY
+GERBIL_TEST_MAX_HEAP=2G just test-context-scheduling /private/tmp/context-scheduling-quint-REPLAY/runtime-cases.scm
 #+end_src
 
-Native imports are heap-fenced at 2 GiB, with a 150-second watchdog and normal
+Runtime imports are heap-fenced at 2 GiB, with a 150-second watchdog and normal
 process exit. The QNT backend retains its pinned versions and existing real
 output/watchdog limits. No benchmark improvement is inferred from these passes.
 Structured evidence belongs in [[file:27-scheduling-results.json][27-scheduling-results.json]]; raw traces,
@@ -116,13 +116,13 @@ The final source cut is retained under
 | Deliberately broken QNT contracts | All four produce actual counterexamples |
 | Quint deterministic replay | 25 ITF paths, including five unsafe paths across four fault families |
 | SysML actual execution | 45 paths, five expected failures, zero unexpected outcomes; complete replay also passes |
-| Native finite traversal | 59 scalar states and 413 outgoing transitions |
-| Native ITF correspondence | 25 paths / 130 prefix steps; all safe prefixes agree, five unsafe paths are blocked |
+| Runtime finite traversal | 59 scalar states and 413 outgoing transitions |
+| Runtime ITF correspondence | 25 paths / 130 prefix steps; all safe prefixes agree, five unsafe paths are blocked |
 | Reference Actor saturation | Eight producers, 800 offers, 40 accepted, 760 refused, 40 completed; owner closed/joined |
-| Source/object-bound native rerun | Entire traversal, ITF corpus and Actor probe repeated; both processes exit normally |
+| Source/object-bound runtime rerun | Entire traversal, ITF corpus and Actor probe repeated; both processes exit normally |
 
 QNT includes operation/proof bookkeeping in its state, so its state count is
-not the native scalar-state count. Native replay is executed correspondence,
+not the runtime scalar-state count. Runtime replay is executed correspondence,
 not a claimed mathematical refinement proof. The selected-source/object
 custody manifest and failed-candidate references are linked from the structured
 results. No raw logs or ITF traces are committed to the repository.

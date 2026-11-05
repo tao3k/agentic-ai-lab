@@ -12,27 +12,27 @@ Scheme test workers, or case registrations.
 
 * Case contract
 
-Each =CaseSpec= has a stable identity, a mode (=unit=, =native= or =live=), and one or
+Each =CaseSpec= has a stable identity, a mode (=unit=, =runtime= or =live=), and one or
 more =(module, part)= targets. One module is a module case; two or more
 distinct modules are a cross-module case. The check receives a =CaseContext=
 with the repository root and optional source roots for externally pinned
 modules. Registration rejects duplicate case identities and target pairs.
 
 The [[file:src/agentic_ai_lab_testing/catalog.py][catalog]] currently registers an
-inert Ascent candidate boundary, a native source-withdrawal check, a Python
+inert Ascent candidate boundary, a runtime source-withdrawal check, a Python
 Runtime graph check, a Runtime + Ascent candidate graph, and the Agentic AI Lab
-evidence-assessment + Ascent qualification, and a native ASCENT plus
+evidence-assessment + Ascent qualification, and a runtime ASCENT plus
 temporal-causality fixture check. These are actual checks, not
 coverage placeholders. New module owners add a check near their domain and
 register its target parts in the catalog.
 
-Two =session= native cases invoke the Agentic AI Lab Session and WorkTree Quint models,
+Two =session= runtime cases invoke the Agentic AI Lab Session and WorkTree Quint models,
 including their ten declared guard mutations. The invariants live in Quint;
 Python only supervises Quint, checks its exit and expected mutant failure, and
 records compact observations. =run --receipt PATH= writes a JSON result for
 each selected model, including failures, source revision, worktree dirty flag,
 and any returned evidence. Real Quint progress appears on stdout; the cases do
-not create raw log files. The Lean Session axiom audit runs through its native
+not create raw log files. The Lean Session axiom audit runs through its runtime
 =lake build AgenticAILabSessionProof= target.
 
 From the repository root:
@@ -50,12 +50,12 @@ not a claim that all 25 public Agentic AI Lab modules are covered. External
 =gerbil-ascent= and =python-runtime= targets appear in =list=; their case
 records are not counted as local =modules/*= files.
 
-Native checks need a built or installed Gerbil package graph. For an isolated
+Runtime checks need a built or installed Gerbil package graph. For an isolated
 checkout, pass exact source roots rather than relying on a sibling branch:
 
 #+begin_src sh
 uv run --project packages/python-testing agentic-ai-lab-test-cases run \
-  --mode native --module gerbil-ascent \
+  --mode runtime --module gerbil-ascent \
   --module-root gerbil-ascent=/path/to/gerbil-ascent \
   --module-root gerbil-parser=/path/to/pinned-gerbil-parser
 #+end_src
@@ -67,7 +67,7 @@ Scheme worker for the two-source snapshot fixture. Other modules can
 register checks that use their own semantic test owners; this framework
 does not reimplement their logic in Python.
 
-The =model-study.native-fixtures= case executes both Scheme owners, including
+The =model-study.runtime-fixtures= case executes both Scheme owners, including
 ASCENT's requested finite and founded receipt, and checks their outputs
 against the pre-registered answer keys. It runs in
 Ubuntu CI with the declared ASCENT pin and makes no model API request.
@@ -88,7 +88,7 @@ model. Their [[file:docs/model-study-baseline-results.org][baseline]] and
 [[file:docs/model-study-typed-results.org][typed]] results retain wrong
 answers and boundary failures. The experimental Runtime output guard
 in =temporal/authority.py= withholds model claims of release authority
-when the native receipt denies it; it does not authorize any effect.
+when the runtime receipt denies it; it does not authorize any effect.
 The [[file:docs/model-study-protocol.org][founded receipt protocol]] pairs the typed
 observation with the newly verified ASCENT receipt on the same frozen
 task and records the Runtime's guarded output separately from model
@@ -99,16 +99,16 @@ corpus: both arms scored 15/15 on choice and 12/15 on boundary claim.
 The guard withheld all six closed-cut release-authority claims.
 That pilot sent JSON observations. The separate
 [[file:docs/model-study-scheme.org][Scheme source pilot]] sends actual Gerbil Scheme
-programs and scores returned S-expressions with a native Scheme reader;
+programs and scores returned S-expressions with a Scheme reader;
 its [[file:docs/model-study-scheme-results.org][nine-call result]] found no exact row-set answer on the fixed programs.
 The [[file:docs/model-study-repair.org][repair protocol]] separates self-contained Scheme,
 an explicit ASCENT API contract, and a model candidate evaluated by a
-native finite/founded receipt with at most one repair turn.
+runtime finite/founded receipt with at most one repair turn.
 Its [[file:docs/model-study-repair-results.org][first four-call result]] exposed an underspecified source-relation
 contract and a status-only receipt; revised diagnostic feedback is
 pending a separate live qualification.
 The [[file:docs/model-study-module-capabilities.org][module comprehension study]] fixes seven distinct Gerbil
-Scheme programs and their native answers, with one model call per case.
+Scheme programs and their runtime answers, with one model call per case.
 Its [[file:docs/model-study-module-capabilities-results.org][bounded result]] records one exact answer; the three module-source
 responses were prose, motivating a separately gated
 [[file:docs/model-study-module-answer-followup.org][answer-format follow-up]].
@@ -120,7 +120,7 @@ model prompts, records calls, and scores short answers.
 
 See [[file:docs/model-study-support-candidates.org][the support candidate comparison]] for the frozen four-call protocol.
 
-The [[file:docs/model-study-shared-seed-repair.org][shared-seed repair protocol]] reads the native parser description,
+The [[file:docs/model-study-shared-seed-repair.org][shared-seed repair protocol]] reads the runtime parser description,
 compares two frozen erroneous candidates at a four-call cap and requires
 durable verified evidence archives for any approved live run.
 
@@ -131,10 +131,10 @@ Historical evidence under =t/qualification/semantic-abi= retains its original
 failure boundary and is not current ABI qualification.
 
 Current frozen physical model cases are owned by the ASP Scheme benchmark
-scenario in =t/qualification/temporal-physical-native/= in Agentic AI Lab. The HTTP adapter reads literal provider
+scenario in =t/qualification/temporal-physical-host/= in Agentic AI Lab. The HTTP adapter reads literal provider
 configuration, preserves raw responses, makes at most two calls for one case,
 and performs no retry or repair. Five seconds without real content remains a
-failure. Native observations do not grant effect authority.
+failure. Runtime observations do not grant effect authority.
 
 * Real Library tool roundtrip evidence
 

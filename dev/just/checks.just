@@ -6,7 +6,7 @@
 query:
     {{ bazel }} query //...
 
-# Run the cold native lifecycle in order; stop on the first failure.
+# Run the cold runtime lifecycle in order; stop on the first failure.
 [group('check')]
 rebuild:
     just clean-core
@@ -15,7 +15,7 @@ rebuild:
     just build
     just test
 
-# Run the native Scheme build and ordinary-test convergence gate.
+# Run the Scheme build and ordinary-test convergence gate.
 [group('check')]
 check: build test
 
@@ -100,7 +100,7 @@ check-search-evidence-scheme:
     grep -F 'HARNESS-OK' "$log"
     grep -x 'OK' "$log"
 
-# Native Core build projection must load without an ASP build facade.
+# Runtime Core build projection must load without an ASP build facade.
 [group('check')]
 check-production-build:
     {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gerbil {{ gerbil_test_runtime_options }} env gxi {{ gerbil_test_runtime_options }} build.ss spec

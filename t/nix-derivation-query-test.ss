@@ -10,7 +10,7 @@
                  current-module-process-trace-budget)
         (only-in :agentic-ai-lab/modules/nix/func current-nix-process-observer call-with-nix-derivation-query))
 (export nix-derivation-query-test test-cleanup!)
-;; Store registration can stream a final path without a newline. Keep native
+;; Store registration can stream a final path without a newline. Keep runtime
 ;; harness markers on their own line without changing the captured process data.
 (def (test-cleanup!) (newline))
 (def (write-input path value)
@@ -55,7 +55,7 @@
             (check-equal?
               (take store-decisions (- (length store-decisions) decisions-before-warm))
               '(hit))
-            ;; The native Case adapter supplies this optional allowance. Warm
+            ;; The runtime Case adapter supplies this optional allowance. Warm
             ;; construction must exhaust it without adding probe processes.
             (when (current-module-process-trace-budget)
               (check-equal? (unbox (current-module-process-trace-budget)) 0))

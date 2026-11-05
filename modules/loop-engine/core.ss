@@ -310,7 +310,7 @@
    (else
     (error "loop-engine POO config prototypes must be a list" prototypes))))
 
-;;; The flag packet is the compatibility bridge from POO-native user config to
+;;; The flag packet is the compatibility bridge from POO user config to
 ;;; the older module-selection surface. It preserves the authored profile for
 ;;; diagnostics and stores normalized intent rows for projection.
 ;; : (-> [AgenticAILabLoopEngineConfigPrototype] Alist [UserModuleFlagEntry])

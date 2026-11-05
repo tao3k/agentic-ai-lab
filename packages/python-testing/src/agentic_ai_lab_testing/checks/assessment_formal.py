@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Downstream formal qualification: original obligations, native capacity, exact exits."""
+"""Downstream formal qualification: original obligations, runtime capacity, exact exits."""
 
 from __future__ import annotations
 
@@ -161,7 +161,7 @@ def capacity(heap_mib: int = 1024) -> int:
     path = Path("/sys/fs/cgroup/memory.max")
     if path.exists() and path.read_text().strip().isdecimal():
         memory = min(memory, int(path.read_text()))
-    # A 1 GiB TLC heap plus native overhead; leave room for Lean and the OS.
+    # A 1 GiB TLC heap plus runtime overhead; leave room for Lean and the OS.
     detected = max(1, min(cpu, max(1, (memory - 2 * 1024**3) // ((heap_mib + 256) * 1024**2))))
     # A caller may reduce concurrency without changing any model or obligation.
     return detected if ceiling is None else min(detected, int(ceiling))

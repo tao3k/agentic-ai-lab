@@ -165,12 +165,12 @@ in the table. A host must still expose the brief in its ordinary handoff; a
 repository document alone does not make an Agent discover the interface.
 
 An unsteered low-cost Agent probe of the downstream SMP repository found the
-relevant native receipts and gave a bounded 5/12 assessment, but never invoked
+relevant runtime receipts and gave a bounded 5/12 assessment, but never invoked
 Trajectory. A later public-action black-box probe initially conflated duplicate
 event IDs with duplicate research attempts, and a foreign observed owner with
 an unavailable receipt. On validity review it corrected both claims: the
 public action API can reject an ID collision and stale packet identity, but
-cannot observe whether a persisted native receipt file survived interruption.
+cannot observe whether a persisted runtime receipt file survived interruption.
 This is an interface/host-evidence gap, not evidence that SMP has passed or that
 Agent reasoning has become cheaper. Do not score those substitute probes as
 successful tests of the intended three cases.
@@ -179,7 +179,7 @@ After =focus= and =exact-prefix= became public, a second black-box continuation
 distinguished an unrelated attempt (unchanged, no comparisons) from a matching
 attempt (changed, one comparison, no action selected). It also kept a retained
 prefix readable after append while refusing to treat the old packet as current.
-The Agent explicitly reported that missing native receipt files remain outside
+The Agent explicitly reported that missing runtime receipt files remain outside
 Trajectory's public action inputs; this was a qualified partial result, not a
 three-breakpoint pass or a measured Agent-efficiency improvement.
 
@@ -189,7 +189,7 @@ interruption. Its healthy finite state graph satisfies =Safety= under TLC;
 stale-acceptance, missing-receipt, dropped-history, full-handoff and hidden-focus
 mutations violate it. =packages/proofs/lean/Trajectory.lean= states the typed
 view/receipt/review admission laws. Neither artifact proves the implementation
-refines the model, host discoverability, Agent reasoning quality or native SMP
+refines the model, host discoverability, Agent reasoning quality or runtime SMP
 correctness. Those require an actual current-producer handoff and matched
 black-box continuations after the missing read surfaces are implemented.
 
@@ -224,7 +224,7 @@ a stale prefix, dropping persisted history and promoting a hypothesis into
 support. =packages/proofs/lean/ClueSubmission.lean= proves stale submission
 atomicity, retention of the accepted prefix, required current prefix and count
 preservation. These are abstract host/refinement laws; the application must
-still bind actual SQLite transactions and native receipts to them. The model
+still bind actual SQLite transactions and runtime receipts to them. The model
 and proofs are part of ASCENT's existing formal/LeanPoo Guard entries.
 
 #+begin_src sh
@@ -268,7 +268,7 @@ cannot inject executable rules. A report is not automatically a verified fact.
 Trusted, versioned Scheme DSL
 defines the relations and rules; Agent input supplies typed source rows, not
 Scheme code. Hypotheses run in an isolated branch. Only independently admitted
-observations may support a current claim, and their native receipt still needs
+observations may support a current claim, and their runtime receipt still needs
 its own currentness and availability check.
 
 The proposed public exchange has two operations:
@@ -310,7 +310,7 @@ program by relation dependencies, but that structural graph is not row-level
 provenance. EvidenceInteraction already distinguishes supported,
 contradicted and unknown for declared local conditions. The missing bridge is
 typed clue admission, row-level query/explanation with an expandable view,
-and one currentness binding across rules, facts, history and native receipts.
+and one currentness binding across rules, facts, history and runtime receipts.
 This contract is not yet an implemented Agent-facing API.
 
 The first internal slice is =evidence/clue-query.ss=, which includes the sole
@@ -324,7 +324,7 @@ factors, one-hop neighbors, conflict and unknown as distinct relations.
 =t/qualification/clue-query-test.ss= exercises hypothesis separation,
 two-sided conflict, receipt withdrawal, a new question beyond the first
 scope, one-hop-at-a-time graph expansion, and old-digest rejection. These are
-native Scheme execution tests,
+Scheme execution tests,
 not proof that an arbitrary Agent may safely call raw =EvidenceSession.replace=.
 The raw session can replace =attested= too. The new
 =program/clue-exchange.ss= wraps that session: =submit= accepts clue records
@@ -339,13 +339,13 @@ Its view identity includes those identities, the local generation, question,
 clue rows, factors, links, and currently admitted receipt rows. =snapshot=
 is a copy of source clues, not a copy of admitted receipts; restoring it
 checks owner and every content digest, then revalidates receipts. The five
-native cases in =t/qualification/clue-exchange-test.ss= cover
+runtime cases in =t/qualification/clue-exchange-test.ss= cover
 forged/stale submission, conflicting admitted observations, withdrawal,
 progressive questions, snapshot tampering, recovery after receipt loss,
 prefix invalidation, source replacement, foreign-owner rejection and a
 mid-query context change.
 
-From an uninstalled checkout, the native import needs the repository's build
+From an uninstalled checkout, the runtime import needs the repository's build
 path explicitly; =direnv exec .= alone does not set it here:
 
 #+begin_src sh
@@ -358,7 +358,7 @@ The clue exchange does not replace Trajectory =focus=: its =submit= generation
 check prevents stale writes, while =focus= compares repeat attempts on bound
 premises. A caller that needs both views must request both. A missing receipt
 appears as =unavailable= with the affected clue IDs, not as =unchanged=;
-the trusted verifier owns the detailed native failure reason. A changed
+the trusted verifier owns the detailed runtime failure reason. A changed
 prefix or rule identity produces =stale= when the caller supplies its previous
 view; same context with changed rows is =changed=, while no previous view is
 =unread=. None of these labels selects an action or authorizes execution.
@@ -373,17 +373,17 @@ next query independently rechecks receipt currentness. No
 downstream SMP handoff has exercised this entry, and no executable
 source-refinement check yet proves that a supplied rule identity matches the
 installed DSL bytes. A view is therefore a local evidence view, not an admitted
-native SMP result or a claim of measured Agent acceleration.
+runtime SMP result or a claim of measured Agent acceleration.
 
 For a retained Trajectory owner, =open-trajectory-clue-exchange= is the
 combined library entrance. Its =brief= and caller-chosen =focus= delegate to
 Trajectory; =submit= and =query= delegate to the clue Evidence session. The
 wrapper derives owner, source and prefix identities from the same current
 Trajectory brief, while the trusted host supplies the reviewed rule identity
-and native verifier. It does not expose Trajectory =append= or an action
+and runtime verifier. It does not expose Trajectory =append= or an action
 choice. The host records attempts separately; =focus= compares their bound
 premises, so a new clue ID does not masquerade as a repeat detector. The
-combined native test checks one focused repeat comparison alongside an
+combined runtime test checks one focused repeat comparison alongside an
 open-scope clue query. A consumer still needs a host handoff that exposes
 this closure without exposing the trusted verifier or raw session.
 
@@ -392,9 +392,9 @@ because =direnv exec .= does not set =GERBIL_PATH= in this checkout. After
 compiling into the existing =.gerbil= cache and using the explicit environment
 above, its combined-entry probe observed =focus= relation =exact-current=
 for a host-recorded same-premise attempt, then asked an unrelated clue
-question and received =unread=. No action was selected. A separate native
+question and received =unread=. No action was selected. A separate runtime
 combined-entry test withdrew a receipt and observed =unavailable= with no
-current support. The black-box probe did not independently read a real native
+current support. The black-box probe did not independently read a real runtime
 receipt file, so these results establish the library protocol, not a measured
 downstream Agent or SMP improvement.
 
@@ -441,7 +441,7 @@ observations. The revised model retains separate positive and contrary
 references; hiding or misattributing the contrary observation violates its
 invariant. It still has only two abstract clues and a finite scope domain,
 so it does not prove multi-relation Datalog semantics, query-plan equivalence, row-level
-provenance, native receipt I/O, or actual Agent efficiency. The corresponding
+provenance, runtime receipt I/O, or actual Agent efficiency. The corresponding
 typed observation/receipt/content, positive-scope and two-sided conflict laws are in
 =packages/proofs/lean/Trajectory.lean=, together with source-replacement
 non-inheritance and combined focus/query non-selection laws; they are
@@ -550,7 +550,7 @@ source invalidation and history replay protocols. A generation stands for an
 exact source identity; =checked= stands for a successful independent check,
 not a model-authored assertion. The model deliberately keeps one comparison
 target, two attempts and one source replacement. It does not model hidden
-reasoning, arbitrary evidence DAGs, concurrent writers, or native GC.
+reasoning, arbitrary evidence DAGs, concurrent writers, or runtime GC.
 
 | Model transition | Implementation boundary |
 |------------------+-------------------------|

@@ -69,7 +69,7 @@ redisFollower: frontend.Server {
 }
 #+end_src
 
-First-time contribution declarations using current native parent syntax follow.
+First-time contribution declarations using current runtime parent syntax follow.
 Each .def derives a named Profile from the indicated Contract proto. Every .o
 inside these declarations constructs a fresh nested data object; none refines an
 inherited container, env record, resource wrapper, Service or port. Each ordinary
@@ -105,7 +105,7 @@ already maintained Profile.
 
 The proposed direct Contract parent, e.g. (GuestbookFrontend @
 GuestbookFrontendContract), would hide proto lookup but requires the declaration
-adapter described in [[file:../../../core/docs/10-19-design/11-configuration-languages/11.09-contract-directed-service-scenarios.org][module 08]]. The native forms above do not themselves preserve a
+adapter described in [[file:../../../core/docs/10-19-design/11-configuration-languages/11.09-contract-directed-service-scenarios.org][module 08]]. The runtime forms above do not themselves preserve a
 published Contract association or perform admission. Publication association,
 recursive domain admission and a Kubernetes consumer remain additional work.
 No user should hand-maintain per-derivative association records.
@@ -300,7 +300,7 @@ independently typed Server and not an inherited image object. Later upstream
 container/resource/Service changes remain inherited; the selected image remains
 replaced. Production has the same intended lowering with the v3 string.
 
-The native rule in [[file:../../../.data/gerbil-poo/object.ss][gerbil-poo object.ss]] translates =>.+ to => .+;
+The runtime rule in [[file:../../../.data/gerbil-poo/object.ss][gerbil-poo object.ss]] translates =>.+ to => .+;
 => passes the same slot's inherited value as the first argument. Thus the
 frontend refinement conceptually computes .+ of its inherited frontend and the
 fresh image payload. It does not use the whole Guestbook as that slot's super.
@@ -309,7 +309,7 @@ manufacture a missing intermediate slot.
 
 Current [[file:../../../core/object-syntax/path-slots.ss][path-slots.ss]] accepts dotted paths only with =>.+ and one object
 expression, and rejects a dotted direct assignment with "path slots require one
-=>.+ object expression". Consequently the native nested form above is the
+=>.+ object expression". Consequently the runtime nested form above is the
 currently available equivalent, while the concise user form is a design target.
 Supporting direct leaf assignments and merging their common prefixes remains
 pending; no syntax implementation is changed in this documentation work.
@@ -342,7 +342,7 @@ operator. The user knows the complete desired value of team:
   frontend.labels.team: "checkout")
 #+end_src
 
-Its desired lowering uses existing native operations:
+Its desired lowering uses existing runtime operations:
 
 #+begin_src scheme
 (.def (TeamDevelopment @ Development)
@@ -365,7 +365,7 @@ If the intention is to replace the entire label map, the target is instead:
   frontend.labels: (.o team: "checkout"))
 #+end_src
 
-The native counterpart has only the outer refinement:
+The runtime counterpart has only the outer refinement:
 
 #+begin_src scheme
 (.def (TeamOnlyDevelopment @ Development)
@@ -376,13 +376,13 @@ Here the inner .o constructs the complete replacement map; there is no labels
 super operation. Other user-configured labels are intentionally replaced. Platform
 reserved selector labels still require their separate final consistency policy.
 
-If users genuinely transform an existing collection, use native => with a named
+If users genuinely transform an existing collection, use runtime => with a named
 function over its inherited value. No such transformation is needed for the actual
 Guestbook image override or the known team value, so this case does not add an
 artificial append/filter example merely to expose an extension operator.
 
 Conclusion: setting one label and replacing the label map are different user
-intentions. Both should be plain assignments at the relevant depth. Native
+intentions. Both should be plain assignments at the relevant depth. Runtime
 refinement belongs in the lowering that preserves intermediate objects; users
 need an extension operator only when the requested operation depends on old values.
 
@@ -471,7 +471,7 @@ Target path-assignment surface (pending direct-path support):
   frontend.labels.costCenter: "infra")
 #+end_src
 
-Current native counterpart, including common-prefix grouping:
+Current runtime counterpart, including common-prefix grouping:
 
 #+begin_src scheme
 (.def (MaintainedV1 @ Guestbook)
@@ -506,7 +506,7 @@ costCenter. All .o forms are new payload/maps; no port or Service is reconstruct
   frontend.labels: (.o team: "checkout"))
 #+end_src
 
-Current native counterparts:
+Current runtime counterparts:
 
 #+begin_src scheme
 (.def (ImagePinnedV2 @ MaintainedV2)
@@ -580,7 +580,7 @@ all resources would be a separate documented policy change, not a free improveme
 A warmed V1 resource plan must not serve as V2's plan. Each derived configuration
 needs receiver-sensitive computation and evidence for its effective objects;
 projection must additionally track relevant environment/schema/consumer dependencies.
-Existing native receiver/cache controls motivate the design, but do not constitute
+Existing runtime receiver/cache controls motivate the design, but do not constitute
 an executed proof of this new Guestbook resource chain.
 
 ** What the comparison changes in our design
@@ -598,7 +598,7 @@ from whole-object replacement; previews should show retained/replaced/defaulted
 fields and their sources; release selection must remain explicit; schema-generated
 validation must be reused; required organizational policy cannot be confused with
 optional defaults. MOP and macro work is justified only if it enforces these rules
-without per-user bookkeeping. Native functions/dispatch earn their place when a
+without per-user bookkeeping. Runtime functions/dispatch earn their place when a
 real transformation or open protocol is needed, not for a known image string.
 
 Conclusion: the intended benefit is less duplicated maintenance with explainable
@@ -616,13 +616,13 @@ Profiles above. Scheme's list/object delimiters are not inherently less verbose;
 we should not manufacture savings by hiding more defaults than the KCL library.
 Task-specific defaults and role Contracts could also be maintained in KCL.
 
-The useful POO opportunity is sparse independent Profile reuse, native assignment
+The useful POO opportunity is sparse independent Profile reuse, runtime assignment
 and inherited transformations, with receiver-aware derived plans. The unfinished
 Guestbook integration includes field discovery, recursive default views,
 derivation-aware Contract association, supported image capabilities, final resource
 consistency and source-qualified previews. Schema-to-Contract generation and
 candidate-validation diagnostics already exist and should be reused, not listed
-as missing platform mechanisms. Native
+as missing platform mechanisms. Runtime
 multiple inheritance alone supplies none of those Kubernetes guarantees.
 
 For thousands of Profiles, catalog metadata should identify exports/Contracts
@@ -633,12 +633,12 @@ runtime execution stay outside it. Unselected Scenarios must remain cold.
 No performance improvement is measured here. Cache qualification must account for
 receiver identity, selected Profile generation, environment parameters, Contract
 and projector versions, and referenced dependencies. A warmed parent and a child
-are different effective configurations. Existing native receiver/cache controls
+are different effective configurations. Existing runtime receiver/cache controls
 support that core distinction, not this unexecuted domain adapter.
 
 * Evidence and next acceptance
 
-Existing: native .def, .o, =>.+, lexical receiver semantics and dotted
+Existing: .def, .o, =>.+, lexical receiver semantics and dotted
 =>.+ path-slot lowering. Dotted direct assignment is not supported by the inspected
 lowerer; its examples above are proposed user syntax. Inspected external implementation: pinned KCL inputs, schemas, backend,
 Service mixin, converter and renderer. Pending for Guestbook: selected-schema integration and default adapters,
@@ -660,10 +660,10 @@ The intended gain is maintaining evolving configuration libraries across many
 owners, not saving a pair of braces in Guestbook. Independent Profiles can carry
 reusable behavior as well as values. A derived Scenario can retain upstream
 behavior while replacing a leaf, transforming a collection, or extending a
-well-defined protocol. Receiver-aware derived values give a native foundation
+well-defined protocol. Receiver-aware derived values give a runtime foundation
 for projecting the effective child rather than a warmed parent's configuration.
 
-Native functions and higher-order composition can share domain transformations
+Runtime functions and higher-order composition can share domain transformations
 without inventing an overlay language for each data type. Generic multiple
 dispatch can support independently growing Contract/consumer families where the
 crossing is genuinely open. MOP can provide a common construction/provenance
@@ -672,7 +672,7 @@ macros can remove repeated internal declarations while expanding to inspectable
 POO/functional code. None of these tools is a reason to expose their machinery
 in an ordinary image assignment or to use multiple dispatch for a simple function.
 
-These are opportunities supported by native mechanisms, not a demonstrated
+These are opportunities supported by runtime mechanisms, not a demonstrated
 end-to-end advantage over KCL. KCL also supports reusable schemas and abstractions.
 To establish an advantage, the same Guestbook change must require fewer repeated
 policy declarations while retaining final-object evidence, useful diagnostics,
@@ -687,14 +687,14 @@ Guestbook still needs direct path assignment, qualified schema/default views,
 association through contribution/derivation, field discovery, relationship-specific
 diagnostics and a qualified resource consumer. The existing JSON Schema bridge
 already provides Contract generation and candidate validation, with a GitHub CI
-consumer; those are implementation assets, not missing capabilities. Native lists/objects can also be more verbose
+consumer; those are implementation assets, not missing capabilities. Runtime lists/objects can also be more verbose
 than KCL records. Scheme's general execution power makes effect discipline,
 reproducibility and safe contribution boundaries additional obligations.
 
 Automatic provenance and admissible nested-object discovery are not established
 just by naming a MOP hook. A scalable implementation also needs selected demand,
 conflict policy, dependency-sensitive invalidation and understandable cost.
-Existing small native cache controls do not prove these ecosystem properties.
+Existing small runtime cache controls do not prove these ecosystem properties.
 
 ** Why another configuration system rather than another Kubernetes wrapper?
 

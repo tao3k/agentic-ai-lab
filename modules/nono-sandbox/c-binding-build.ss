@@ -5,9 +5,9 @@
 
 ;;; Owner: nono-sandbox C binding build/probe metadata lives here.
 ;;; Boundary: this module describes host-side compile probes and include policy.
-;;; Runtime contract: native loading lives in native.ss; irreversible apply is gated.
+;;; Runtime contract: runtime loading lives in ffi.ss; irreversible apply is gated.
 
-;;; Native nono C binding build manifest and validation.
+;;; Runtime nono C binding build manifest and validation.
 ;;; - Keep compiler/include policy explicit before any probe command is materialized.
 (import :gerbil/core
         (only-in :clan/poo/object .ref object?)
@@ -68,7 +68,7 @@
   (foldr cons tail values))
 
 ;;; Build schema is separate from the ABI descriptor. The descriptor names the
-;;; native surface; this object names the package-managed host probe policy.
+;;; runtime surface; this object names the package-managed host probe policy.
 ;; : Symbol
 (def +nono-c-binding-build-schema+
   'agentic-ai-lab.sandbox.nono-sandbox.c-binding.build.v1)

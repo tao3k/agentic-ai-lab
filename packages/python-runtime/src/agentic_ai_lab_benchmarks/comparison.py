@@ -10,16 +10,16 @@ from dataclasses import dataclass
 @dataclass(frozen=True, slots=True)
 class ComparisonSpec:
     label: str
-    native_case: str
+    runtime_case: str
     agentic_ai_lab_case: str
 
 
 COMPARISONS = (
-    ComparisonSpec("LangChain branch/tool route", "langchain-branch-tool-native", "agentic-ai-lab-executor-router-agent"),
-    ComparisonSpec("LangGraph router", "langgraph-router-agent-native", "agentic-ai-lab-executor-router-agent"),
-    ComparisonSpec("LangGraph handoff/reducer", "langgraph-handoff-reducer-native", "agentic-ai-lab-executor-handoff-reducer"),
-    ComparisonSpec("LangGraph interrupt/resume", "langgraph-interrupt-resume-native", "agentic-ai-lab-executor-interrupt-resume"),
-    ComparisonSpec("LangGraph long graph", "langgraph-long-graph-native", "agentic-ai-lab-executor-long-graph"),
-    ComparisonSpec("LangGraph stream/events", "langgraph-router-stream-native", "agentic-ai-lab-executor-router-stream-events"),
-    ComparisonSpec("CrewAI sequential crew", "crewai-sequential-crew-native", "agentic-ai-lab-executor-crewai-sequential"),
+    ComparisonSpec("LangChain branch/tool route", "langchain-branch-tool-runtime", "agentic-ai-lab-executor-router-agent"),
+    ComparisonSpec("LangGraph router", "langgraph-router-agent-runtime", "agentic-ai-lab-executor-router-agent"),
+    ComparisonSpec("LangGraph handoff/reducer", "langgraph-handoff-reducer-runtime", "agentic-ai-lab-executor-handoff-reducer"),
+    ComparisonSpec("LangGraph interrupt/resume", "langgraph-interrupt-resume-runtime", "agentic-ai-lab-executor-interrupt-resume"),
+    ComparisonSpec("LangGraph long graph", "langgraph-long-graph-runtime", "agentic-ai-lab-executor-long-graph"),
+    ComparisonSpec("LangGraph stream/events", "langgraph-router-stream-runtime", "agentic-ai-lab-executor-router-stream-events"),
+    ComparisonSpec("CrewAI sequential crew", "crewai-sequential-crew-runtime", "agentic-ai-lab-executor-crewai-sequential"),
 )

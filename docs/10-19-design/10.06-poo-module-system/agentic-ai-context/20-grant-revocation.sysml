@@ -6,7 +6,7 @@ package ContextGrantRevocation {
     part fixture : Fixture;
 
     // Authority is separate from original source/proof support. B captures A's
-    // old authority; C is independent. Native gates exercise actual worker races.
+    // old authority; C is independent. Runtime gates exercise actual worker races.
     verification def Control {
         subject target : Fixture default = fixture;
         in expectedSame : Boolean;

@@ -7,8 +7,8 @@
         (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy agentic-ai-lab-temporal-support-policy agentic-ai-lab-temporal-support-claim)
         :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
         (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-support temporal-support-input temporal-support-result))
-(export temporal-policy-refresh temporal-policy-guard-call temporal-policy-native-host temporal-policy-claim-call)
-(def (temporal-policy-native-host) host)
+(export temporal-policy-refresh temporal-policy-guard-call temporal-policy-host-host temporal-policy-claim-call)
+(def (temporal-policy-host-host) host)
 (def host (agentic-ai-lab-temporal-support-policy-host))
 (def (field x key)
   (unless (and (hash-table? x) (hash-key? x key)) (error "missing policy field" key)) (hash-ref x key))

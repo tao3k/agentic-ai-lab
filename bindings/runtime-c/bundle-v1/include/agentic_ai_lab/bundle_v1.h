@@ -69,7 +69,7 @@ typedef struct agentic_ai_lab_bundle_v1_symbol_entry {
 } agentic_ai_lab_bundle_v1_symbol_entry;
 
 /*
- * This row is the native projection of one composed Domain Case component.
+ * This row is the runtime projection of one composed Domain Case component.
  * Keeping the identity columns fixed makes multi-agent lookup independent of
  * any downstream language object model.
  */
@@ -198,7 +198,7 @@ agentic_ai_lab_bundle_v1_status agentic_ai_lab_bundle_v1_find_component(
 
 /*
  * Create one C-owned immutable arena. The descriptor and payload are copied
- * once at the ABI boundary, validated, and retained in 64-byte-aligned native
+ * once at the ABI boundary, validated, and retained in 64-byte-aligned runtime
  * storage. Runtime slice and lookup operations are zero-copy thereafter.
  */
 agentic_ai_lab_bundle_v1_status agentic_ai_lab_bundle_v1_arena_create(
@@ -211,7 +211,7 @@ agentic_ai_lab_bundle_v1_status agentic_ai_lab_bundle_v1_arena_create(
  * Safe entry point for Scheme/Python CFFI buffers whose descriptor alignment
  * is not guaranteed. Packed descriptors use the canonical little-endian byte
  * order. descriptor_bytes must equal the Bundle v1 descriptor size; the
- * implementation copies through an aligned native descriptor.
+ * implementation copies through an aligned runtime descriptor.
  */
 agentic_ai_lab_bundle_v1_status agentic_ai_lab_bundle_v1_arena_create_packed(
     const void *descriptor_bytes,

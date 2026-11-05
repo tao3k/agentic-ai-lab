@@ -1,9 +1,10 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-backend-ref agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-metadata))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: sandbox-core profile derivation follows native POO extension.
+;;; Boundary: sandbox-core profile derivation follows POO extension.
 ;;; Invariant: derived profiles are inert recipes; no backend runtime executes.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)

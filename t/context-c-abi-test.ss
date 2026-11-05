@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Real C facade -> exported Scheme entry -> native owner -> Session CAS.
+;;; Real C facade -> exported Scheme entry -> runtime owner -> Session CAS.
 (import :std/ffi
         (only-in :clan/poo/object .ref)
         :agentic-ai-lab/modules/workflow/runtime/semantic

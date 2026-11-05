@@ -58,10 +58,10 @@
   (let ((journal #f) (adapter #f) (intent #f) (trace '()) (expiry-seen? #f)
         (callback-ran? #f) (caller (current-thread)) (held-context #f) (leaked-subscriptions #f))
     (def profile? (getenv "CONTEXT_RESOURCE_PROFILE" #f))
-    (def profile-time (if profile? (native-monotonic-seconds) 0.))
+    (def profile-time (if profile? (monotonic-seconds) 0.))
     (def (phase! label)
       (when profile?
-        (let (now (native-monotonic-seconds))
+        (let (now (monotonic-seconds))
           (displayln "RESOURCE-PHASE phase=" label " seconds=" (- now profile-time))
           (force-output) (set! profile-time now))))
     (def (mark! move)
@@ -80,7 +80,7 @@
                            (.ref f 'policies) (lambda (registration) (.ref f 'proof))))
           (when leaky-close?
             ;; Isolated negative control: model the former omitted adapter
-            ;; teardown. Its declared receipt lies; actual native handles below
+            ;; teardown. Its declared receipt lies; actual runtime handles below
             ;; expose the leak even if a caller retains all retired objects.
             (let (original-adapter adapter)
              (set! adapter (.o (:: @ original-adapter)
@@ -133,7 +133,7 @@
         (lambda (f)
           (ensure (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result!
                           (.ref f 'host) "session-c" 2 0 (push-join! f "session-c"))
-                        'native-result-published?) "C actual completion failed")))
+                        'runtime-result-published?) "C actual completion failed")))
       (phase! 'bootstrap-and-c-completion)
       (if live?
         (let* ((spawn (lambda (moves delay)
@@ -155,7 +155,7 @@
           ;; The model explores publication ordering, never a synthetic expiry.
           (policy-clock-await-events! clock 2)
           (for-each (lambda (move) (step! move) (phase! move)) requested)))
-      (ensure (not callback-ran?) "Legacy callback bypassed native CAS dispatch")
+      (ensure (not callback-ran?) "Legacy callback bypassed runtime CAS dispatch")
       (read! (lambda (f)
         (cached-check! f)
         (ensure (journal-verify! journal) "Journal chain verification failed")
@@ -194,7 +194,7 @@
                        (.ref receipt 'clock-released?) (.ref receipt 'journal-closed?)
                        (journal-closed? journal) (context-host-disposed? held-context)
                        (= (context-host-subscription-count held-context) 0))
-                  "Owner left native runtime resources open")
+                  "Owner left runtime resources open")
           (ensure (policy-clock-stop! clock) "Owner stop was not idempotent")
           (ensure (rejected? (lambda () (journal-input journal "replace"))) "Closed journal accepted a read")
           (ensure (rejected? (lambda () (context-host-checkpoint held-context))) "Disposed Context accepted reuse")
@@ -223,7 +223,7 @@
 (def (controlled-chunk text)
   (let* ((index (string->number (substring text 6 (string-length text))))
          (all (orders '() '(1 2 3 4 5))))
-    (unless (and (exact-integer? index) (<= 0 index 2)) (error "Invalid native chunk" text))
+    (unless (and (exact-integer? index) (<= 0 index 2)) (error "Invalid runtime chunk" text))
     (let loop ((rest (list-tail all (* index 20))) (left 20) (selected '()))
       (if (= left 0) (reverse selected)
           (loop (cdr rest) (- left 1) (cons (car rest) selected))))))

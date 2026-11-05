@@ -1,45 +1,45 @@
-#+TITLE: Native Evidence DSL Protocol Qualification
+#+TITLE: Runtime Evidence DSL Protocol Qualification
 
 * Ownership
 
 ASCENT is a Library for Agentic AI. These specifications and verification tools
 belong to Library maintenance. Consumers import Python and supply trusted,
 import-free Scheme definitions. They do not install Quint or invoke a Scheme
-compiler. Native imports, hygiene, macros, relation operators, aggregation,
+compiler. Runtime imports, hygiene, macros, relation operators, aggregation,
 lattice evaluation and inference remain owned by the Library.
 
 * New Protocols
 
 | Model | State and transitions | Checked properties | Deliberate faults |
 |-------+-----------------------+--------------------+-------------------|
-| DslOwnership | Reader rejection, admitted expansion failure, fresh scope, native value retain/release, close, foreign reference | Expansion accounting, isolated definitions, owner-bound references, live values | scope alias, uncharged failed expansion, close resets count, foreign reference |
+| DslOwnership | Reader rejection, admitted expansion failure, fresh scope, runtime value retain/release, close, foreign reference | Expansion accounting, isolated definitions, owner-bound references, live values | scope alias, uncharged failed expansion, close resets count, foreign reference |
 | EvidenceLifecycle | Source replacement/rejection, run/repeat, result/explanation ownership, close | Current results, independent explanation ownership, frozen historical observations, atomic rejection, closed owners | stale result, coupled release, historical rewrite, partial rejection, live result after close |
 | EvidenceCacheAdmission | Retained owner and exact DSL/backend/caller-policy key, host change, reuse, exception/release | Exact source/backend/policy admission, failed-owner revocation | ignore DSL identity, ignore backend, ignore policy, retain failed owner |
 
 EvidenceLifecycle checks the unlimited policy and an explicit caller
 input ceiling independently. InputLimit=0 denotes absence of a count ceiling;
 it is not a substitute finite runtime bound. The two-value data domain and
-GenerationCutoff are finite exploration parameters only. Native counts default
+GenerationCutoff are finite exploration parameters only. Runtime counts default
 to +inf.0 and explicit Python FactLimits remain caller-controlled. Runtime scope,
 live-owner, value-graph, structural and execution-time protections are separate.
 
 * Source Correspondence
 
-| Contract | Actual source | Native control |
+| Contract | Actual source | Runtime control |
 |----------+---------------+----------------|
-| Scope admission and failure accounting | interface/evidence-module.ss: ascent-load-evidence-source | test_native_dsl_lifecycle.py; test_native_evidence_conformance.py scope control |
-| Hygiene and export ownership | interface/evidence-module.ss: fresh top context and gensym namespace; interface/engine-api.ss: module-owner lookup | Distinct same-name closures, foreign/released native reference rejection |
+| Scope admission and failure accounting | interface/evidence-module.ss: ascent-load-evidence-source | test_runtime_dsl_lifecycle.py; test_runtime_evidence_conformance.py scope control |
+| Hygiene and export ownership | interface/evidence-module.ss: fresh top context and gensym namespace; interface/engine-api.ss: module-owner lookup | Distinct same-name closures, foreign/released runtime reference rejection |
 | Event/source generation and replacement | interface/engine-api.ss: source-replace, source-state-generation, cleared results; program/view-state.ss owns the deeper journal | All finite-domain replacement pairs through real source-replace/source-run |
-| Result and explanation lifetime | interface/engine-api.ss: native-result-lookup, retain-native-result, result-dispatch; python/src/ascent_engine/__init__.py: NativeResult/NativeExplanation | Release result while retaining explanation; reject native handles after source change; preserve copied historical observation |
-| Complete publication, bounded/failing work | Existing SessionPublication and SessionTransaction models | Existing timeout/publication native regressions; not re-proved by the new copy-rule replay |
-| Retained consumer admission | Consumer src/gambit_smp/ascent_program.py: native_api, evaluate, close_retained_queries | Consumer test_retained_native_api.py: content tamper with restored mtime, policy change, exception, release, LRU and withdrawal |
+| Result and explanation lifetime | interface/engine-api.ss: runtime-result-lookup, retain-runtime-result, result-dispatch; python/src/ascent_engine/__init__.py: RuntimeResult/RuntimeExplanation | Release result while retaining explanation; reject runtime handles after source change; preserve copied historical observation |
+| Complete publication, bounded/failing work | Existing SessionPublication and SessionTransaction models | Existing timeout/publication runtime regressions; not re-proved by the new copy-rule replay |
+| Retained consumer admission | Consumer src/gambit_smp/ascent_program.py: runtime_api, evaluate, close_retained_queries | Consumer test_retained_runtime_api.py: content tamper with restored mtime, policy change, exception, release, LRU and withdrawal |
 
 The new model's generation is the public source-state generation, not a claim
 to model every internal journal Event or scheduler interleaving. One source
-replacement invalidates current native result and explanation references even
+replacement invalidates current runtime result and explanation references even
 when extensional source rows happen to be equal. A copied explanation can still
 be inspected as a historical observation until its Python owner/session closes.
-Its recorded sourceGeneration does not become CURRENT, and its native reference
+Its recorded sourceGeneration does not become CURRENT, and its runtime reference
 must fail after a source generation change. Releasing a result alone must not
 release an independently owned explanation in the same generation.
 
@@ -60,7 +60,7 @@ refused. A cached compiled TLA is not a reused checker PASS: TLC always runs.
 
 The repository conformance.json fixture is emitted by the model's pure transition
 relation, not generated by a Python reference interpreter. The conformance
-target regenerates and compares exact bytes. Native API tests decode graph
+target regenerates and compares exact bytes. Runtime API tests decode graph
 observations and call actual Engine.evidence/SourceSession/NativeResult APIs.
 They do not interpret or infer Scheme semantics in Python.
 
@@ -72,12 +72,12 @@ Both compiled API and ABI binding modes are checked in fresh processes.
 
 * Evidence Boundaries And Remaining Obligations
 
-- Finite exploration and native trajectory correspondence are separate evidence.
+- Finite exploration and runtime trajectory correspondence are separate evidence.
   Neither establishes a universal source-refinement proof, host source authority,
   causal review, retry admission or authorization.
 - Equality tokens abstract exact content identity; hash collisions, mutable
   nested values and arbitrary trusted host effects remain explicit premises.
-- The scope model uses a finite configured capacity. Native controls separately
+- The scope model uses a finite configured capacity. Runtime controls separately
   exercise the actual 64-load boundary, including failed expansion and close.
 - The data-mask fixture has distinct rows. Duplicate occurrence charging, large
   unlimited inputs, derived/output ceilings and request-byte policy are covered
@@ -86,14 +86,14 @@ Both compiled API and ABI binding modes are checked in fresh processes.
   concurrent host mutation and teardown of user-owned external resources are not
   made safe by this state model. This is not a sandbox.
 - Non-scalar/cyclic/opaque graph execution and missing proof projection retain
-  their independent native interface regressions. The copy-rule fixture is not
+  their independent runtime interface regressions. The copy-rule fixture is not
   a replacement for aggregate/lattice/operator qualification.
 - The cache model specifies admission, not LRU ordering or an algorithm for
-  source inference. The retained-cache native controls cover bounded eviction.
+  source inference. The retained-cache runtime controls cover bounded eviction.
 - Full consumer current-graph qualification, the prior sealed-review timeout,
   matched optimization measurements and transaction separation in persistent
   history remain independent open gates. A new model PASS closes none of these.
 
 For existing evaluation, publication, withdrawal, relation/lattice and reader
 models, see quint.org. Do not count source files as qualified models: bind the
-exact source, checker configuration, raw run, native artifact and actual exit.
+exact source, checker configuration, raw run, runtime artifact and actual exit.

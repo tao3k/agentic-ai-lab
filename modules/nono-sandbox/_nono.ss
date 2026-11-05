@@ -3,21 +3,21 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Owner: native Gerbil FFI shim for nono's C ABI.
+;;; Owner: Gerbil FFI shim for nono's C ABI.
 ;;; Boundary: this file owns dlopen/dlsym and safe symbol probes only.
 
 (import (only-in :std/ffi C-declare def-C-lambda))
 
-(export nono_native_open
-        nono_native_close
-        nono_native_is_loaded
-        nono_native_last_error
-        nono_native_sandbox_is_supported
-        nono_native_support_is_supported
-        nono_native_support_platform
-        nono_native_support_details
-        nono_native_capability_roundtrip
-        nono_native_apply_null)
+(export nono_ffi_open
+        nono_ffi_close
+        nono_ffi_is_loaded
+        nono_ffi_last_error
+        nono_ffi_sandbox_is_supported
+        nono_ffi_support_is_supported
+        nono_ffi_support_platform
+        nono_ffi_support_details
+        nono_ffi_capability_roundtrip
+        nono_ffi_apply_null)
 
 (C-declare #<<END-C
 #include <stdbool.h>
@@ -47,7 +47,7 @@ static ffi_nono_capability_set_free_fn ffi_nono_capability_set_free = NULL;
 static ffi_nono_capability_set_set_network_mode_fn
     ffi_nono_capability_set_set_network_mode = NULL;
 static ffi_nono_sandbox_apply_fn ffi_nono_sandbox_apply = NULL;
-static ffi_nono_sandbox_is_supported_fn ffi_nono_sandbox_is_supported = NULL;
+static ffi_nono_sandbox_is_supported_fn ffi_nono_sandbox_is_supported_symbol = NULL;
 static ffi_nono_sandbox_support_info_fn ffi_nono_sandbox_support_info = NULL;
 static ffi_nono_string_free_fn ffi_nono_string_free = NULL;
 
@@ -64,7 +64,7 @@ static void ffi_nono_clear_symbols(void) {
   ffi_nono_capability_set_free = NULL;
   ffi_nono_capability_set_set_network_mode = NULL;
   ffi_nono_sandbox_apply = NULL;
-  ffi_nono_sandbox_is_supported = NULL;
+  ffi_nono_sandbox_is_supported_symbol = NULL;
   ffi_nono_sandbox_support_info = NULL;
   ffi_nono_string_free = NULL;
 }
@@ -79,7 +79,7 @@ static void *ffi_nono_resolve_symbol(const char *name) {
   }
   if (symbol == NULL) {
     snprintf(ffi_nono_error, sizeof(ffi_nono_error),
-             "missing native nono symbol: %s", name);
+             "missing runtime nono symbol: %s", name);
   }
   return symbol;
 }
@@ -105,10 +105,10 @@ static int ffi_nono_resolve_symbols(void) {
       ffi_nono_resolve_symbol("nono_sandbox_apply");
   if (ffi_nono_sandbox_apply == NULL) return -1;
 
-  ffi_nono_sandbox_is_supported =
+  ffi_nono_sandbox_is_supported_symbol =
       (ffi_nono_sandbox_is_supported_fn)
       ffi_nono_resolve_symbol("nono_sandbox_is_supported");
-  if (ffi_nono_sandbox_is_supported == NULL) return -1;
+  if (ffi_nono_sandbox_is_supported_symbol == NULL) return -1;
 
   ffi_nono_sandbox_support_info =
       (ffi_nono_sandbox_support_info_fn)
@@ -124,9 +124,9 @@ static int ffi_nono_resolve_symbols(void) {
   return 0;
 }
 
-static int ffi_nono_native_open(char *library_path) {
+static int ffi_nono_open(char *library_path) {
   if (library_path == NULL || library_path[0] == '\0') {
-    ffi_nono_set_error("native nono library path is empty");
+    ffi_nono_set_error("runtime nono library path is empty");
     return -1;
   }
   if (ffi_nono_handle != NULL) {
@@ -150,7 +150,7 @@ static int ffi_nono_native_open(char *library_path) {
   return 0;
 }
 
-static int ffi_nono_native_close(void) {
+static int ffi_nono_close(void) {
   int rc = 0;
   if (ffi_nono_handle != NULL) {
     rc = dlclose(ffi_nono_handle);
@@ -160,23 +160,23 @@ static int ffi_nono_native_close(void) {
   return rc;
 }
 
-static int ffi_nono_native_is_loaded(void) {
+static int ffi_nono_is_loaded(void) {
   return ffi_nono_handle != NULL ? 1 : 0;
 }
 
-static char *ffi_nono_native_last_error(void) {
+static char *ffi_nono_last_error(void) {
   return ffi_nono_error;
 }
 
-static int ffi_nono_native_sandbox_is_supported(void) {
-  if (ffi_nono_sandbox_is_supported == NULL) {
+static int ffi_nono_sandbox_is_supported(void) {
+  if (ffi_nono_sandbox_is_supported_symbol == NULL) {
     ffi_nono_set_error("nono_sandbox_is_supported is not loaded");
     return -1;
   }
-  return ffi_nono_sandbox_is_supported() ? 1 : 0;
+  return ffi_nono_sandbox_is_supported_symbol() ? 1 : 0;
 }
 
-static struct NonoSupportInfo ffi_nono_native_support_info(void) {
+static struct NonoSupportInfo ffi_nono_support_info(void) {
   struct NonoSupportInfo empty;
   empty.is_supported = false;
   empty.platform = NULL;
@@ -188,8 +188,8 @@ static struct NonoSupportInfo ffi_nono_native_support_info(void) {
   return ffi_nono_sandbox_support_info();
 }
 
-static void ffi_nono_native_copy_support_info(void) {
-  struct NonoSupportInfo info = ffi_nono_native_support_info();
+static void ffi_nono_copy_support_info(void) {
+  struct NonoSupportInfo info = ffi_nono_support_info();
   snprintf(ffi_nono_platform, sizeof(ffi_nono_platform), "%s",
            info.platform == NULL ? "" : info.platform);
   snprintf(ffi_nono_details, sizeof(ffi_nono_details), "%s",
@@ -200,18 +200,18 @@ static void ffi_nono_native_copy_support_info(void) {
   }
 }
 
-static char *ffi_nono_native_support_platform(void) {
-  ffi_nono_native_copy_support_info();
+static char *ffi_nono_support_platform(void) {
+  ffi_nono_copy_support_info();
   return ffi_nono_platform;
 }
 
-static char *ffi_nono_native_support_details(void) {
-  ffi_nono_native_copy_support_info();
+static char *ffi_nono_support_details(void) {
+  ffi_nono_copy_support_info();
   return ffi_nono_details;
 }
 
-static int ffi_nono_native_support_is_supported(void) {
-  struct NonoSupportInfo info = ffi_nono_native_support_info();
+static int ffi_nono_support_is_supported(void) {
+  struct NonoSupportInfo info = ffi_nono_support_info();
   int result = info.is_supported ? 1 : 0;
   if (ffi_nono_string_free != NULL) {
     if (info.platform != NULL) ffi_nono_string_free(info.platform);
@@ -220,11 +220,11 @@ static int ffi_nono_native_support_is_supported(void) {
   return result;
 }
 
-static int ffi_nono_native_capability_roundtrip(void) {
+static int ffi_nono_capability_roundtrip(void) {
   if (ffi_nono_capability_set_new == NULL ||
       ffi_nono_capability_set_free == NULL ||
       ffi_nono_capability_set_set_network_mode == NULL) {
-    ffi_nono_set_error("capability-set native symbols are not loaded");
+    ffi_nono_set_error("capability-set runtime symbols are not loaded");
     return -1000;
   }
 
@@ -240,7 +240,7 @@ static int ffi_nono_native_capability_roundtrip(void) {
   return (int)rc;
 }
 
-static int ffi_nono_native_apply_null(void) {
+static int ffi_nono_apply_null(void) {
   if (ffi_nono_sandbox_apply == NULL) {
     ffi_nono_set_error("nono_sandbox_apply is not loaded");
     return -1000;
@@ -250,23 +250,23 @@ static int ffi_nono_native_apply_null(void) {
 END-C
 )
 
-(def-C-lambda nono_native_open (char-string) int
-  "ffi_nono_native_open")
-(def-C-lambda nono_native_close () int
-  "ffi_nono_native_close")
-(def-C-lambda nono_native_is_loaded () int
-  "ffi_nono_native_is_loaded")
-(def-C-lambda nono_native_last_error () char-string
-  "ffi_nono_native_last_error")
-(def-C-lambda nono_native_sandbox_is_supported () int
-  "ffi_nono_native_sandbox_is_supported")
-(def-C-lambda nono_native_support_is_supported () int
-  "ffi_nono_native_support_is_supported")
-(def-C-lambda nono_native_support_platform () char-string
-  "ffi_nono_native_support_platform")
-(def-C-lambda nono_native_support_details () char-string
-  "ffi_nono_native_support_details")
-(def-C-lambda nono_native_capability_roundtrip () int
-  "ffi_nono_native_capability_roundtrip")
-(def-C-lambda nono_native_apply_null () int
-  "ffi_nono_native_apply_null")
+(def-C-lambda nono_ffi_open (char-string) int
+  "ffi_nono_open")
+(def-C-lambda nono_ffi_close () int
+  "ffi_nono_close")
+(def-C-lambda nono_ffi_is_loaded () int
+  "ffi_nono_is_loaded")
+(def-C-lambda nono_ffi_last_error () char-string
+  "ffi_nono_last_error")
+(def-C-lambda nono_ffi_sandbox_is_supported () int
+  "ffi_nono_sandbox_is_supported")
+(def-C-lambda nono_ffi_support_is_supported () int
+  "ffi_nono_support_is_supported")
+(def-C-lambda nono_ffi_support_platform () char-string
+  "ffi_nono_support_platform")
+(def-C-lambda nono_ffi_support_details () char-string
+  "ffi_nono_support_details")
+(def-C-lambda nono_ffi_capability_roundtrip () int
+  "ffi_nono_capability_roundtrip")
+(def-C-lambda nono_ffi_apply_null () int
+  "ffi_nono_apply_null")

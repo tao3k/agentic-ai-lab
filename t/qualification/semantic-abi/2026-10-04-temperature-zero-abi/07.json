@@ -185,7 +185,7 @@
     },
     "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
   },
-  "nativeObservationSeconds": 0.0012759169999299047,
+  "runtimeObservationSeconds": 0.0012759169999299047,
   "result": {
     "candidate": {
       "status": "partial",
@@ -236,6 +236,6 @@
     "verdict": "contradicted",
     "schema": "poo-flow.semantic-observation"
   },
-  "failure": "native semantic contradiction",
+  "failure": "runtime semantic contradiction",
   "callSeconds": 0.8849164170001131
 }

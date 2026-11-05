@@ -25,7 +25,7 @@ def main():
     out.mkdir(parents=True, exist_ok=False)
     cases = json.loads(args.cases.read_text())
     projections = []
-    # QNT negative paths are also executed with the correct contract. Native
+    # QNT negative paths are also executed with the correct contract. Runtime
     # Scheme separately compares every prefix to the actual QNT scalar state.
     for case in cases:
         trace = json.loads(Path(case['trace']).read_text())

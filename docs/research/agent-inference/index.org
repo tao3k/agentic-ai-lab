@@ -27,28 +27,28 @@ and data schemas. No instruction asks the solver to avoid repeated thinking.
 | Datalog consequences and scoped computational proof reuse; [[file:proof-height.org][provenance reading]] | =candidate/provenance.ss=; =candidate/evidence-store.ss=; =program/session.ss= | Across a few queries sharing a derived premise, does Library assistance preserve answers and reduce directly observed rederivation? Do source replacement and stale handles remain correct? |
 | [[https://kmicinski.com/assets/byods.pdf][BYODS]] concretization, delta visibility and index agreement | =table/storage.ss=; =table/eqrel.ss=; =table/trrel.ss=; =table/provider.ss= | Does a frozen proposal consume every newly implied fact? Compare the declared concrete relation and downstream results with an independent finite model. |
 
-BYODS storage/iteration checks qualify the native backend first. Representation
+BYODS storage/iteration checks qualify the runtime backend first. Representation
 cost and model thinking are separate measurements. A Set-backed comparison
 must represent the same declared concrete relation; raw input tuples are not
 an equivalence closure. Do not transfer paper speedups or infer model savings
-from native cache hits. [[https://www.vldb.org/pvldb/vol19/p361-zhao.pdf][FlowLog]] is relevant engine/plan reading, not an instruction
+from runtime cache hits. [[https://www.vldb.org/pvldb/vol19/p361-zhao.pdf][FlowLog]] is relevant engine/plan reading, not an instruction
 to add Differential Dataflow or reproduce a whole engine in a model fixture.
 
 Freeze tasks, independent grading, source/build identity and annotation rules.
 Charge input plus all output, including thinking and failed calls; unused
 budget is not savings. A repetition claim needs a validated baseline signal
 and literal supported spans. A missing or unvalidated measurement is not zero.
-Lean expresses specified semantic laws; Quint checks bounded protocols; native
+Lean expresses specified semantic laws; Quint checks bounded protocols; runtime
 receipts establish tested correspondence; model outcomes remain empirical.
 Changes belong to the existing feature owner, with no copied round modules.
 
 The [[file:factor-reuse-2026-study.org][October 11 paper-to-Library synthesis]] returns to Ascent/BYODS semantics,
 FlowLog subplan reuse and DatalogBench's independent execution checks, with
 2026 program-cache, semantic-answer-cache and KV-cache comparators. It separates
-native reuse from model reuse and proposes a small shared-premise diagnostic
+runtime reuse from model reuse and proposes a small shared-premise diagnostic
 before another optimization claim. The [[file:fact-reuse-results/shared-premise-diagnostic/findings.md][shared-premise diagnostic]] now has frozen source/build identities,
 Quint correspondence, public Python API/ABI receipts, real model calls and a
-published archive that replays in a fresh directory. Native reuse passes, but
+published archive that replays in a fresh directory. Runtime reuse passes, but
 model cost grows and the baseline repetition signal is missing; thinking and
 quality benefits remain unestablished. Existing failed tasks remain unchanged.
 
@@ -61,7 +61,7 @@ dynamically reloaded exits cleanly; full Gxi dyld cleanup remains a recorded
 external-runtime failure, not a repaired global runtime claim.
 
 The [[file:fact-reuse-results/complete-branch-reuse/report.md][latest proof-frame and model-interaction results]] bind the current captured
-Library source, pass native/full-Gxi qualification, and retain both earlier
+Library source, pass runtime/full-Gxi qualification, and retain both earlier
 interaction failures. All 14 final responses complete without truncation;
 one prose response still fails the action contract. At task 0's matched 32,768
 input-plus-all-output checkpoint, baseline / Fact / Scheme depths are 0 / 1 / 2.
@@ -73,7 +73,7 @@ dyld fix or general model benefit is claimed.
 
 The [[file:candidate-model-results/report.md][finite candidate-feedback gate]] now binds a consistently captured Library source
 closure, a successful =std/make= build and independent full-row grading.
-Private contract refinements now retain the parent prototype. Native and dynamic
+Private contract refinements now retain the parent prototype. Runtime and dynamic
 execution each pass 448 checks without weakening admission. The same frozen
 tasks, judge and input-plus-all-output budget produced three real model calls:
 two proposals match all 60 held-out graphs each; one malformed submission is
@@ -83,7 +83,7 @@ thinking, reuse and exploration benefits remain unmeasured. The
 
 Primary Ascent, BYODS, FlowLog and DatalogBench sources were checked on
 2026-10-11. The [[file:../paper-coverage.org][coverage audit]] still separates reading, implementation,
-native qualification and full paper replication. The finite model gate does
+runtime qualification and full paper replication. The finite model gate does
 not establish paper replication or an extended formal proof.
 
 The [[file:factor-reuse-2026-study.org][2026 fact and derivation reuse method study]]
@@ -98,7 +98,7 @@ compaction and source-revision tests.
 It records a research hypothesis rather than an established token-saving result.
 
 Dedicated [[file:withholding.org][BRINK method reading]] connects whole-batch evidence protection to
-[[file:../../features/withholding/acceptance.org][native snapshot withholding and finite qualification]].
+[[file:../../features/withholding/acceptance.org][runtime snapshot withholding and finite qualification]].
 
 The [[file:repository-evidence-study.md][Fresh Repository Evidence Study]] applies
 SWE-rebench and LiveCodeBench collection methods to recent public changes,
@@ -114,7 +114,7 @@ and Quint invalidation. Its [[file:domain-repository-experiment-report.md][indep
 records uniform-budget trajectories, cumulative thinking and candidate repair cost.
 
 The [[file:factor-reuse-real-pilot-report.md][frozen factor and derivation reuse real-model pilot]] records
-current-build scope, native/Quint/Lean correspondence, independent grading,
+current-build scope, runtime/Quint/Lean correspondence, independent grading,
 charged costs and preserved censored outcomes.
 
 * Question and scope
@@ -287,20 +287,20 @@ fragments from current witnesses, complete ground graphs and natural counts.
 
 * Matched Fact packets under a gross inference budget
 
-The [[file:factor-total-budget-report.md][matched-evidence native-cache pilot]] freezes identical Fact/derivation
+The [[file:factor-total-budget-report.md][matched-evidence runtime-cache pilot]] freezes identical Fact/derivation
 packets, 14/16-job tasks with fixed adjacent transition penalties, an
 independent Scheme subset-plus-last grader, and a common input-plus-thinking
-budget. It retains all calibration/censoring outcomes and separates native
+budget. It retains all calibration/censoring outcomes and separates runtime
 proof reuse, any-time candidate quality, model submission and exploration
 proxies. The [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/factor-total-budget-ledger.json][complete ledger]] includes every paid response, usage and raw-file hash.
 The sample does not establish reduced model thinking or improved quality.
 
-* Native evidence interaction
+* Runtime evidence interaction
 
-The current [[file:evidence-interaction.org][native evidence interaction contract]] keeps ASCENT Scheme a
+The current [[file:evidence-interaction.org][runtime evidence interaction contract]] keeps ASCENT Scheme a
 Library. Computational relation/proof APIs are separate from Agentic AI Lab temporal
 ownership, MRR/Rust integration and the research consumer's branch controller.
-Its [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/evidence-store-local-receipt.json][local qualification receipt]] covers the native feature. The new
+Its [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/evidence-store-local-receipt.json][local qualification receipt]] covers the runtime feature. The new
 [[file:evidence-interaction-results/report.md][frozen three-treatment model study]] and [[file:evidence-interaction-results/interpretation.md][diagnostic interpretation]] retain
 failures and do not establish thinking savings, greater depth or better quality.
 
@@ -310,7 +310,7 @@ are preserved in [[file:history/README.md][the source archive]]; they are no lon
 
 * Historical cross-path Fact reuse with an evidence-free baseline
 
-Completed 18 real-model phases with frozen native grading and direct thinking spans.
+Completed 18 real-model phases with frozen runtime grading and direct thinking spans.
 See [[file:crosspath-next-round.md][completed experiment and negative results]],
 [[file:crosspath-search-v2-report.md][eligibility-oracle-free replay]], and
 [[file:crosspath-thinking-span-review.md][paired source-anchored derivation audit]].
@@ -338,14 +338,14 @@ All failures and raw streams are retained; no quality/depth improvement establis
 * Clean Library consumer and sibling-search diagnostic (2026-10-11)
 
 [[file:fact-reuse-results/sibling-search/findings.md][Mechanism diagnosis, clean source reproduction and retained negative results]]
-aligns the existing Python Project, native computational evidence store,
+aligns the existing Python Project, runtime computational evidence store,
 finite Quint/Lean scope, frozen independent grader and actual model tool IO.
 The clean bundle rebuild and offline receipt replay pass. Evidence consumption
 works after transport repair; cognitive benefit remains unproved. All solver,
 annotation and engineering failures are retained.
 
 * Source-qualified branch-entry diagnostic
-[[file:fact-reuse-results/branch-entry/findings.md][Current Library result and reproducible evidence chain]] records native pre-thinking evidence, the frozen three-arm comparison, literal annotation coverage, costs and retained failures. Explicit reconstruction decreased; deeper exploration and general quality improvements remain open.
+[[file:fact-reuse-results/branch-entry/findings.md][Current Library result and reproducible evidence chain]] records runtime pre-thinking evidence, the frozen three-arm comparison, literal annotation coverage, costs and retained failures. Explicit reconstruction decreased; deeper exploration and general quality improvements remain open.
 
 * Complete thinking and lossless evidence projection
-[[file:fact-reuse-results/branch-complete/findings.md][Frozen three-arm results, semantic coverage failures and reproducible evidence]] bind the experiment to f6c36359. Thinking is no longer forced into a 2048-token checkpoint. Native columns preserve full statuses and proof ancestors. All remaining budget truncations, infeasible outputs, semantic annotation failures and research costs are retained. General depth/semantic-repetition gains remain unestablished.
+[[file:fact-reuse-results/branch-complete/findings.md][Frozen three-arm results, semantic coverage failures and reproducible evidence]] bind the experiment to f6c36359. Thinking is no longer forced into a 2048-token checkpoint. Runtime columns preserve full statuses and proof ancestors. All remaining budget truncations, infeasible outputs, semantic annotation failures and research costs are retained. General depth/semantic-repetition gains remain unestablished.

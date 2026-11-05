@@ -77,7 +77,7 @@
      (constant . NONO_NETWORK_MODE_PROXY_ONLY)
      (value . 2))))
 
-;;; Type names are contract data for a Rust/C bridge; Scheme records the native
+;;; Type names are contract data for a Rust/C bridge; Scheme records the runtime
 ;;; ABI inventory but never allocates or owns those C objects.
 ;; : [Symbol]
 (def +nono-c-binding-types+
@@ -93,7 +93,7 @@
     NonoSandboxState))
 
 ;;; Function inventory ownership:
-;;; - This list is the allowlist of native entry points a backend may bind.
+;;; - This list is the allowlist of runtime entry points a backend may bind.
 ;;; - Descriptor validation depends on lifecycle and apply symbols being present.
 ;;; - Runtime bridges can compare this list to `nono.h` during ABI refresh work.
 ;; : [Symbol]
@@ -200,7 +200,7 @@
    (supers execution-policy-role)))
 
 ;;; Descriptor construction is the POO override point for local builds that
-;;; rename the native library while keeping the same nono ABI contract.
+;;; rename the runtime library while keeping the same nono ABI contract.
 ;; : (-> [Alist] NonoCBindingDescriptor)
 (def (make-nono-c-binding-descriptor . maybe-overrides)
   (poo-core-role-object
@@ -258,7 +258,7 @@
   (nono-c-binding-descriptor-slot descriptor 'crate-ref #f))
 
 ;;; Probe references make compile success auditable from the Scheme contract
-;;; without forcing Scheme to execute or link the native nono library.
+;;; without forcing Scheme to execute or link the runtime nono library.
 ;; : (-> NonoCBindingDescriptor String)
 (def (nono-c-binding-descriptor-probe-ref descriptor)
   (nono-c-binding-descriptor-slot descriptor 'probe-ref #f))
@@ -345,7 +345,7 @@
     (list '((field . descriptor) (code . not-poo-object)))))
 
 ;;; Validation raises the same typed failure shape as other extension gates so
-;;; callers can recover by code without parsing native binding error strings.
+;;; callers can recover by code without parsing runtime binding error strings.
 ;; : (-> NonoCBindingDescriptor NonoCBindingDescriptor)
 (def (nono-c-binding-validate-descriptor descriptor)
   (let (errors (nono-c-binding-descriptor-validation-errors descriptor))

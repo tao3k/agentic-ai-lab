@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: Agentic AI Lab owns test-operation observation while ASP retains the
-;;; native Gerbil test runner.  Enablement and cadence are POO profile slots;
+;;; Gerbil test runner.  Enablement and cadence are POO profile slots;
 ;;; process environment is transport, not policy.
 
 (import (only-in :clan/poo/object .cc .o .ref .slot? object?)
@@ -19,7 +19,7 @@
                  yuanxu-debug-call-policy
                  call-with-yuanxu-debug-trace))
 
-(export agentic-ai-lab-native-observability-enabled?
+(export agentic-ai-lab-runtime-observability-enabled?
         agentic-ai-lab-testing-observability-profile-prototype
         make-agentic-ai-lab-testing-observability-profile
         agentic-ai-lab-testing-observability-profile?
@@ -33,7 +33,7 @@
         agentic-ai-lab-testing-observability-extension)
 
 (def +agentic-ai-lab-testing-observation-policy+
-  (yuanxu-debug-call-policy 'native-gerbil-testing 8))
+  (yuanxu-debug-call-policy 'runtime-gerbil-testing 8))
 
 ;;; ASP derives closure ownership from Gerbil's resident module registry.  POO
 ;;; Flow declares only the policy slots: what counts as a large closure, how
@@ -107,7 +107,7 @@
 (def agentic-ai-lab-current-testing-observability-profile
   (make-parameter agentic-ai-lab-default-testing-observability-profile))
 
-;;; ASP 3f5fb71c59d5ebb3232d9c0cca1f463ccae72062 starts one native
+;;; ASP 3f5fb71c59d5ebb3232d9c0cca1f463ccae72062 starts one runtime
 ;;; `gerbil test` process per selected batch.
 ;;; Keep the source-root decision in the POO profile and project it once into
 ;;; Gerbil's documented child-process load-path transport before workers start.
@@ -134,7 +134,7 @@
 
 ;; : (forall (a) (-> Symbol (-> a) a))
 (def (agentic-ai-lab-call-with-testing-heartbeat operation thunk)
-  (if (not (and (agentic-ai-lab-native-observability-enabled?)
+  (if (not (and (agentic-ai-lab-runtime-observability-enabled?)
                 (.ref (agentic-ai-lab-current-testing-observability-profile)
                       'heartbeat-enabled?)))
     (thunk)
@@ -162,7 +162,7 @@
         (lambda () (thread-terminate! heartbeat))))))
 
 ;; : (-> Boolean)
-(def (agentic-ai-lab-native-observability-enabled?)
+(def (agentic-ai-lab-runtime-observability-enabled?)
   (.ref (agentic-ai-lab-current-testing-observability-profile) 'enabled?))
 
 ;; : (forall (a) (-> Symbol (-> a) a))
@@ -173,7 +173,7 @@
    (lambda ()
      (agentic-ai-lab-call-with-testing-heartbeat operation thunk))
    '()
-   emit?: (and (agentic-ai-lab-native-observability-enabled?)
+   emit?: (and (agentic-ai-lab-runtime-observability-enabled?)
                (.ref (agentic-ai-lab-current-testing-observability-profile)
                      'trace-enabled?))))
 

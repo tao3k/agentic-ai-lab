@@ -18,4 +18,4 @@ The shared Module System proof sources moved to `../../../core/dev/proofs/lean`.
 `YuanxuProof` is an explicit local Lake dependency, so product imports use
 Core module paths while theorem names and proof statements retain their identities. Build the
 Module System target in Core; product module and Scenario targets stay here.
-Cedar and its native FFI still belong to this product package, not Core.
+Cedar and its runtime FFI still belong to this product package, not Core.

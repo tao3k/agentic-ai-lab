@@ -1,4 +1,4 @@
-;;; Historical deltas are native inference, not proof or execution authority.
+;;; Historical deltas are runtime inference, not proof or execution authority.
 (ascent-fragment
   (relation current_row ((query symbol?) (row symbol?)))
   (relation previous_row ((query symbol?) (row symbol?)))

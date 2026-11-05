@@ -30,8 +30,8 @@ def main():
     args = parser.parse_args()
     data = json.loads(args.receipt.read_text())
     root = args.receipt.parent
-    require(data["schema"] in ("context.owner-lifecycle.native.v1", "context.owner-lifecycle.native.v2") and data["no_chunking"], "Not a whole-process receipt")
-    require(data["heap"] in ("1G", "2G", "3G") and data["native_watchdog_seconds"] == 150, "Resource limits changed")
+    require(data["schema"] in ("context.owner-lifecycle.runtime.v1", "context.owner-lifecycle.runtime.v2") and data["no_chunking"], "Not a whole-process receipt")
+    require(data["heap"] in ("1G", "2G", "3G") and data["runtime_watchdog_seconds"] == 150, "Resource limits changed")
     for name, digest in {**data["source_sha256"], **data["binaries"]}.items():
         require(sha(ROOT / name) == digest, "Current build drift: " + name)
     for name, digest in data["artifacts"].items():
@@ -56,16 +56,16 @@ def main():
         require(process["exit"] == 0 and process["elapsed_seconds"] < 150 and not process["trace_enabled"],
                 "Whole-process budget was not met")
         pids = {row["process"].split()[0] for row in process["resources"]}
-        require(len(pids) == 1, "Observed multiple native gxi processes for one 60-path invocation")
-        lines = (folder / "native.log").read_text().splitlines()
+        require(len(pids) == 1, "Observed multiple runtime gxi processes for one 60-path invocation")
+        lines = (folder / "runtime.log").read_text().splitlines()
         require(process['heap'] == data['heap'] and process.get("minimum_heap", "0") == minimum and all(
             options in row['process'] for row in process['resources']),
-                "Observed native process heap differs from the receipt")
+                "Observed runtime process heap differs from the receipt")
         require(any('150s gxi' in line and options in line for line in lines),
-                "Missing actual pre-import native heap/watchdog command")
+                "Missing actual pre-import runtime heap/watchdog command")
         require(lines.count(CLOSE) == 60, "Missing actual closed-handle assertions")
         require(lines[-1] == "OK" and all(m in lines for m in (
-            "MODULE-OK t/context-policy-migration-test.ss", "HARNESS-OK context-policy-migration")), "Missing strict native markers")
+            "MODULE-OK t/context-policy-migration-test.ss", "HARNESS-OK context-policy-migration")), "Missing strict runtime markers")
         for index in range(60):
             image = folder / f"case-{index}.sqlite"
             with closing(sqlite3.connect(image.resolve().as_uri() + "?mode=ro", uri=True)) as db:
@@ -77,16 +77,16 @@ def main():
                         "Lost or duplicated CAS decision")
                 for payload, digest in db.execute("SELECT payload,digest FROM evidence"):
                     require(digest == "sha256:" + hashlib.sha256(payload.encode()).hexdigest(), "Original evidence changed")
-        processes.append(dict(profile=profile, native_pid=next(iter(pids)), paths=60,
+        processes.append(dict(profile=profile, runtime_pid=next(iter(pids)), paths=60,
                               elapsed_seconds=process["elapsed_seconds"], closed_owners=60))
-    if data["native_counterexamples"]:
+    if data["runtime_counterexamples"]:
         require({p["profile"] for p in processes} == {"canonical", "legacy-cut", "legacy-missing"}, "Missing input profile")
-        text = (root / "counter-omitted-close/native.log").read_text()
+        text = (root / "counter-omitted-close/runtime.log").read_text()
         require("OWNER-COUNTER journal-open=#t retained-subscriptions=3" in text and CLOSE not in text,
-                "Omitted-cleanup native counterexample was not exposed")
-        text = (root / "unit/native.log").read_text()
-        if data["schema"] == "context.owner-lifecycle.native.v2":
-            fencing = (root / "runtime-fencing/native.log").read_text()
+                "Omitted-cleanup runtime counterexample was not exposed")
+        text = (root / "unit/runtime.log").read_text()
+        if data["schema"] == "context.owner-lifecycle.runtime.v2":
+            fencing = (root / "runtime-fencing/runtime.log").read_text()
             require("OWNER-FENCE old-epoch=1 new-epoch=2 stale-refused=#t successor-progress=#t" in fencing,
                     "Missing actual old-owner refusal and successor progress")
             with closing(sqlite3.connect(root / "runtime-fencing/journal.sqlite")) as db:
@@ -113,7 +113,7 @@ def main():
     args.output.write_text(json.dumps(dict(schema="context.owner-lifecycle.audit.v1", receipt_sha256=sha(args.receipt),
         auditor_sha256=sha(Path(__file__)), current_cut_verified=True, processes=processes,
         artifact_hashes_verified=len(data["artifacts"]), unbounded_capacity_proved=False), indent=2) + "\n")
-    print("PASS: complete single-process cohorts, unchanged limits, native release and retained journal evidence")
+    print("PASS: complete single-process cohorts, unchanged limits, runtime release and retained journal evidence")
 
 
 if __name__ == "__main__":

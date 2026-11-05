@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: scenario test for native POO resource validation receipts.
+;;; Boundary: scenario test for POO resource validation receipts.
 
 (import (only-in :clan/poo/object .o))
 
@@ -20,7 +20,7 @@
           agentic-ai-lab-runtime-volume-resources-prototype))
      (agentic-ai-lab-sandbox-resources-prototype-contract-validation?
       valid-validation)))
-  (error "sandbox resource validation should return a native POO receipt"))
+  (error "sandbox resource validation should return a POO receipt"))
 
 (unless
  (type-facts-sandbox-scenario-eval

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-//! Downstream transport qualification. The echo image validates the native
+//! Downstream transport qualification. The echo image validates the runtime
 //! boundary, not ASCENT admission or the production Context service export.
 use gerbil_scheme::instances::{InstanceConfig, InstanceError, InstancePool, IsolatedProgram};
 use std::{error::Error, path::PathBuf, sync::mpsc, time::Duration};
@@ -11,9 +11,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             .ok_or("missing qualified image")?,
     );
     // SAFETY: the runner admits an explicit upstream qualification image with
-    // its strong-root native export (string input is echoed after GC). No caller-controlled symbol is resolved.
+    // its strong-root runtime export (string input is echoed after GC). No caller-controlled symbol is resolved.
     // Image unload is not opted in: callback quiescence is a separate contract.
-    let program = unsafe { IsolatedProgram::from_image(image, c"gerbil_owner_native_call")? };
+    let program = unsafe { IsolatedProgram::from_image(image, c"gerbil_owner_runtime_call")? };
     let mut pool = InstancePool::start(
         &program,
         InstanceConfig {
@@ -73,7 +73,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         );
         Ok::<(), InstanceError>(())
     });
-    // Always observe native shutdown before propagating the directed outcome.
+    // Always observe runtime shutdown before propagating the directed outcome.
     let shutdown = pool.shutdown(Duration::from_secs(10));
     result?;
     assert_eq!(shutdown.joined, 2);

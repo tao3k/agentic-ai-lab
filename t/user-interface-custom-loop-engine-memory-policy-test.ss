@@ -11,8 +11,10 @@
                  check-equal?
                  test-suite)
         :yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/loop-engine/config
+        :agentic-ai-lab/modules/loop-engine/prototypes)
 
 (export user-interface-custom-loop-engine-memory-policy-test)
 
@@ -30,8 +32,7 @@
 ;;; projection.
 ;; : (-> [PooUserModuleSelection])
 (def (custom-loop-duplicate-memory-policy-module)
-  (use-module loop-engine
-    :config
+  (agentic-ai-lab-loop-engine-configs
     (.def (duplicate-memory-loop @ loop-engine-use-case name workflow)
       name: 'duplicate-memory-loop
       workflow: 'funflow-cicd)
@@ -52,8 +53,7 @@
 ;;; structurally invalid because no selected branch can bind it deterministically.
 ;; : (-> [PooUserModuleSelection])
 (def (custom-loop-unmatched-memory-policy-module)
-  (use-module loop-engine
-    :config
+  (agentic-ai-lab-loop-engine-configs
     (.def (unmatched-memory-loop @ loop-engine-use-case name workflow)
       name: 'unmatched-memory-loop
       workflow: 'funflow-cicd)
@@ -95,7 +95,7 @@
      #t)))
 
 ;;; The suite isolates memory-policy contract failures from the larger custom
-;;; loop-engine presentation test, keeping negative POO-native cases explicit.
+;;; loop-engine presentation test, keeping negative POO cases explicit.
 ;; : TestSuite
 (def user-interface-custom-loop-engine-memory-policy-test
   (test-suite "agentic-ai-lab custom loop-engine memory-policy contracts"

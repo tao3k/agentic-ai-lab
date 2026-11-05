@@ -61,7 +61,7 @@ from .evidence_model import (
     AuthorizedEffectEvidenceReservation,
     AuthorizedEffectEvidenceReceipt,
     BatchedEvidenceCommitReceipt,
-    authorized_effect_evidence_from_native,
+    authorized_effect_evidence_from_runtime,
     authorized_effect_evidence_receipt,
 )
 from ._scheme_load import clear_load_cache, load, precompile_load, preproject_load
@@ -202,7 +202,7 @@ __all__ = (
     "AuthorizedEffectEvidenceReceipt",
     "BatchedEvidenceCommitReceipt",
     "TursoAuthorizedEffectEvidenceStore",
-    "authorized_effect_evidence_from_native",
+    "authorized_effect_evidence_from_runtime",
     "authorized_effect_evidence_receipt",
     "load",
     "precompile_load",

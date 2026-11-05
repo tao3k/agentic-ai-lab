@@ -69,14 +69,14 @@ declared completeness scope before being reported as a contradiction. Missing
 or mixed-domain conditions remain unknown.
 
 Candidate checks sharing a domain program are grouped and split according to
-the native rule capacity, including space for materialized-alias rules. This
-avoids opening a retained Session for every branch. Native output rows identify supported branches; Python only
+the runtime rule capacity, including space for materialized-alias rules. This
+avoids opening a retained Session for every branch. Runtime output rows identify supported branches; Python only
 projects those returned identifiers into feedback. It does not compute a
 relational closure. The branch =reference= binds operation, arguments, trusted
-program and source; =resultReference= identifies the native batch result.
-Requesting reuse rechecks current applicability through the native query path.
+program and source; =resultReference= identifies the runtime batch result.
+Requesting reuse rechecks current applicability through the runtime query path.
 
-Source replacement invalidates evidence references and native certificates.
+Source replacement invalidates evidence references and runtime certificates.
 The application then exposes the updated sources to the model conversation.
 Historical events remain observations of their original source generation.
 Provider-call totals across source generations must be summed for a whole-task
@@ -176,7 +176,7 @@ tests, Lean compilation and bounded Quint simulations. [[file:../research/intera
 includes independent inputs, every policy trajectory, failed-answer repairs,
 interrupted requests, local feedback audits and physical provider usage.
 
-The native multi-premise capability is implemented, but no model in the new
+The runtime multi-premise capability is implemented, but no model in the new
 cohort selected a multi-condition branch. Retained evidence did not consistently
 reduce whole-task thinking. Correct local support was sometimes omitted when
 the model composed the final result. These limitations are experimental findings,
@@ -198,7 +198,7 @@ model effect must be evaluated independently:
 - =extend_paths= combines the current referenced path's original prerequisites
   with model-selected additional conditions. It cannot discard the original
   prerequisites; old-generation references remain unknown after replacement.
-- Feedback uses lossless =ascent.path-feedback.v1= grouping with shared native
+- Feedback uses lossless =ascent.path-feedback.v1= grouping with shared runtime
   provenance and explicit path =id= / =status= / =reference= / =conditions=
   objects. A column-format pilot used a Boolean presence mask that the model
   misread as condition truth; that pilot is retained and the mask is removed.

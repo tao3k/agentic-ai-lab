@@ -21,7 +21,7 @@ stack samples remain local artifacts, not committed source.
 * Measurement boundary
 
 Only the explicit profile backend enables additional counters. Ordinary
-qualification does not call the additional GC or rusage counters. Every native
+qualification does not call the additional GC or rusage counters. Every runtime
 force point records:
 
 - monotonic wall, process CPU and current-thread CPU seconds;
@@ -36,8 +36,8 @@ than becoming apparent zeros. The fixed Nix executable links Boehm 8.2.12.
 The installed =gc/gc.h= documents full-GC timing in milliseconds and states
 that it excludes incremental collection work. Incremental mode must therefore
 be reported alongside timing. Gambit's collector is separate: these counters
-measure Nix allocations during native calls, not Scheme allocation outside
-them. Native wall/CPU brackets likewise exclude Scheme result processing.
+measure Nix allocations during runtime calls, not Scheme allocation outside
+them. Runtime wall/CPU brackets likewise exclude Scheme result processing.
 
 Darwin's SDK marks =ru_minflt= and =ru_majflt= with =(NU)=; retain them as raw
 observations, not portable page-I/O evidence. Block counters are not read(2)
@@ -92,14 +92,14 @@ The passing run's three ordinary query comparisons are in milliseconds:
 | 3 | 632.696 / 0.950 | 3.687 / 0.966 | 807.061 / 714.993 | 698.344 / 677.775 |
 
 CLI repeats launch new evaluators; API repeats reuse their session. Round 1's
-large native cold outlier remains in the table. No outlier is dropped or
+large runtime cold outlier remains in the table. No outlier is dropped or
 relabelled as an equivalent clean-host comparison. Profiling overhead is not
 subtracted from timings.
 
 Round 1 derivation recorded one collection / 36 ms full-GC time; thus the GC
 probe has an observed nonzero case. The later mode-enabled probes report incremental GC disabled (=0=).
 The measured first-import delay has no
-corresponding completed collection or full-GC time. Host contention and native
+corresponding completed collection or full-GC time. Host contention and runtime
 waits are demonstrated, but their exact shares remain unmeasured. These data
 must not be presented as an intrinsic API regression versus CLI.
 
@@ -112,7 +112,7 @@ EvalStates repeat approximately 66 MB of import allocation plus approximately
 37 MB of derivation/residual allocation. That is a session-boundary cost, not
 proof that the hot path repeatedly parses the same files.
 
-Therefore keep the current explicit session lifetime and shared native thunks;
+Therefore keep the current explicit session lifetime and shared runtime thunks;
 do not create an EvalState per query. Do not add a global result cache, cache
 Contract admission, omit source checks or share mutable receiver plans to
 hide this cost. Small remaining hot package/receipt allocations do not justify
@@ -151,14 +151,14 @@ Local artifacts are under =/private/tmp/agentic-ai-lab-nix-wait-20261023=:
 | profile-2 + targeted sample | idle timeout | Stack evidence only; no passing timing qualification. |
 | profile-3 | one CASE-OK, MODULE-OK, HARNESS-OK, final OK | Complete three-round comparison and original admission/currentness/parent controls. |
 | profile-4 / profile-5 | idle timeout | Retained incomplete attempts under rising host load; not performance passes. |
-| profile-6, final instrumentation | idle timeout | Compiled and emitted native mode/counter observations; complete regression gate remains open. |
+| profile-6, final instrumentation | idle timeout | Compiled and emitted runtime mode/counter observations; complete regression gate remains open. |
 | ordinary regression, final instrumentation | idle timeout | Profiling disabled; not a passing four-case regression receipt. |
 
 The final probes additionally handle missing counter symbols through the
 existing initialization error path, read the actual incremental mode, and
 flush completed query timings. The complete passing run predates these small
 diagnostic refinements. Do not present that run as a full pass of the final
-source. Subsequent native observations report incremental mode zero, but do
+source. Subsequent runtime observations report incremental mode zero, but do
 not close the final-source regression gate. The ordinary four-case and worker
 three-case passes in the preceding report belong to the preceding revision.
 

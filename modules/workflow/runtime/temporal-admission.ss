@@ -110,7 +110,7 @@
 
 ;;; In-process immutable handles only. No journal persistence/current-pointer CAS.
 (def (known table id)
-  (or (hash-get table id) (error "unknown native history handle")))
+  (or (hash-get table id) (error "unknown runtime history handle")))
 (def (bounded-text? value)
   (and (string? value) (< 0 (string-length value) 129)))
 (def (bounded-identities? values)

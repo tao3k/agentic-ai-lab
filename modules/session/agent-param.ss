@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO-native AgentParam contract objects.
+;;; Boundary: POO AgentParam contract objects.
 ;;; Invariant: AgentParam contracts bind agent topology to effective policy
 ;;; validation; they never run providers, tools, memory stores, or streams.
 

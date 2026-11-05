@@ -5,7 +5,7 @@ class ApplicationDatalogReuse(unittest.TestCase):
     def setUp(self):
         self.engine=ReasoningRuntime()
         self.addCleanup(self.engine.close)
-    def test_exact_repeat_keeps_native_session_without_reimporting_outputs(self):
+    def test_exact_repeat_keeps_runtime_session_without_reimporting_outputs(self):
             facts = {"input": [[str(n)] for n in range(2100)]}
             program, _ = read_datalog(facts, "out(X) <= input(X)", {"answer": "out(X)"})
             with EvidenceChain(self.engine, [r for r in program["relations"] if r["source"]]) as chain:

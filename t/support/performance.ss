@@ -147,7 +147,7 @@
       (cons 'legacy-reference-count 1)
       (cons 'overlay-mix-count 0)
       (cons 'resolver-depth 1)
-      (cons 'construction-complexity 'native-base-override)
+      (cons 'construction-complexity 'runtime-base-override)
       (cons 'lookup-source-depth 'constant-source-depth)
       (cons 'overlay-us overlay-us)
       (cons 'correct? correct?)

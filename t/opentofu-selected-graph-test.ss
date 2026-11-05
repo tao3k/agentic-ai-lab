@@ -40,7 +40,7 @@
 (def (write-source path text)
   (create-directory* (path-directory path))
   (call-with-output-file (list path: path truncate: #t) (cut display text <>)))
-;; Upstream package configuration is a native derivation of the one real
+;; Upstream package configuration is a runtime derivation of the one real
 ;; publication. The existing source-context hook retains its reader observations.
 ;; No alternative declaration, copied module implementation or runtime Loader.
 (def (configured-modules init upstream-source)
@@ -123,7 +123,7 @@
                     (cons 'register (- (process-count 'register) before-register))
                     (cons 'store-validity (- (process-count 'store-validity) before-validity))
                     (cons 'nix-seconds (- nix-seconds before-nix))
-                    (cons 'native-seconds (- elapsed (- nix-seconds before-nix)))))
+                    (cons 'runtime-seconds (- elapsed (- nix-seconds before-nix)))))
          (row (append row
                 (map (lambda (key)
                        (cons (string->symbol (string-append "source-" (symbol->string key)))
@@ -207,7 +207,7 @@
                           :services (opentofu @ ,upstream)
                           :app (infrastructure) :unused (bomb disable: #t)) port))))
           (write-source (path-expand "types.ss" owner)
-                        "(import :clan/poo/object (only-in :yuanxu/object-types/contracts yuanxu-predicate-contract)) (def Scope (yuanxu-predicate-contract 'scope object? (lambda (_v _c) '()))) (export Scope)")
+                        "(import :clan/poo/object (only-in :clan/poo/mop Type.)) (def Scope (.cc Type. identity: 'scope .element?: object?)) (export Scope)")
           (write-source (path-expand "objects.ss" owner)
                         "(import :clan/poo/object) (def Defaults (.o)) (export Defaults)")
           (write-source config (if invalid-only?
@@ -269,9 +269,9 @@
             (assert 'json-schema-producer-contract-retained
               (eq? (.get json-schema scope-evidence admission-contract)
                    (.get json-schema publication core scope-contract)))
-            (assert 'json-schema-requirement-contract-retained
-              (eq? (.get json-schema-requirement requirement-evidence admission-contract)
-                   (.get tofu publication core requires JsonSchema contract)))
+            (assert 'json-schema-edge-uses-producer-admission
+              (eq? (.get json-schema-requirement provider-evidence)
+                   (.get json-schema scope-evidence)))
             (assert 'json-schema-requirement-admitted
               (yuanxu-validation-evidence-accepted?
                 (.get json-schema-requirement requirement-evidence)))

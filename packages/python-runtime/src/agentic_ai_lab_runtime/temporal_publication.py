@@ -9,7 +9,7 @@ from pathlib import Path
 import threading
 from types import MappingProxyType
 
-from ._native._temporal_store import ffi, lib
+from ._runtime._temporal_store import ffi, lib
 
 
 class TemporalPublicationError(RuntimeError):
@@ -106,7 +106,7 @@ class TemporalPublicationStore:
             return _receipt(out[0])
 
     def register_source(self, runtime, scope, task):
-        # Freeze caller input before queueing; native source update and durable
+        # Freeze caller input before queueing; runtime source update and durable
         # fence update cannot be separated by another local semantic operation.
         data = _datum({'scope': scope, 'task': task})
         def register():
@@ -145,7 +145,7 @@ class TemporalPublicationStore:
                         or admitted.get('sourceVerified') is not True
                         or admitted.get('trustBasis') != 'host-registered-snapshot'
                         or admitted['conclusion']['operation'] != 'assert'):
-                    raise ValueError('native result is not a root admission')
+                    raise ValueError('runtime result is not a root admission')
                 root = admitted['conclusion']
                 basis = ffi.new('agentic_ai_lab_temporal_basis *')
                 values = dict(admission=admitted['admissionDigest'], source=source_identity,

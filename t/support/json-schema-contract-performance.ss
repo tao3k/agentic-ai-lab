@@ -26,9 +26,9 @@
         json-schema-contract-performance-step
         json-schema-contract-performance-job
         json-schema-contract-performance-workflow
-        json-schema-contract-performance-native-step
-        json-schema-contract-performance-native-job
-        json-schema-contract-performance-native-workflow
+        json-schema-contract-performance-runtime-step
+        json-schema-contract-performance-runtime-job
+        json-schema-contract-performance-runtime-workflow
         json-schema-contract-performance-poo-workflow
         json-schema-contract-performance-valid-receipt?
         json-schema-contract-performance-repeat
@@ -71,7 +71,7 @@
             (json-schema-contract-performance-job index step-count))))))
 
 ;; : (-> Integer HashTable)
-(def (json-schema-contract-performance-native-step index)
+(def (json-schema-contract-performance-runtime-step index)
   (list->hash-table
    (list
     (cons "id"
@@ -79,7 +79,7 @@
     (cons "run" "echo agentic-ai-lab-json-schema-contract"))))
 
 ;; : (-> Integer Integer Pair)
-(def (json-schema-contract-performance-native-job index step-count)
+(def (json-schema-contract-performance-runtime-job index step-count)
   (cons
    (string-append "job_" (number->string index))
    (list->hash-table
@@ -88,12 +88,12 @@
      (cons "steps"
            (agentic-ai-lab-performance-build-list
             step-count
-            json-schema-contract-performance-native-step))))))
+            json-schema-contract-performance-runtime-step))))))
 
-;; This is Gerbil's default :std/text/json native representation: string-keyed
+;; This is Gerbil's default :std/text/json runtime representation: string-keyed
 ;; hash tables for objects and lists for arrays.
 ;; : (-> Integer Integer HashTable)
-(def (json-schema-contract-performance-native-workflow job-count step-count)
+(def (json-schema-contract-performance-runtime-workflow job-count step-count)
   (list->hash-table
    (list
     (cons "name" "Agentic AI Lab recursive contract benchmark")
@@ -103,7 +103,7 @@
            (agentic-ai-lab-performance-build-list
             job-count
             (lambda (index)
-              (json-schema-contract-performance-native-job
+              (json-schema-contract-performance-runtime-job
                index
                step-count))))))))
 

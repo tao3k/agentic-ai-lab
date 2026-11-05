@@ -46,8 +46,8 @@ specified; no external artifact was executed and no paper speedup is imported.
 
 | Primary source / reading depth | Lesson for this Library | Separate empirical question |
 |--------------------------------+-------------------------+-----------------------------|
-| [[https://s-arash.github.io/ascent/cc22main-p95-seamless-deductive-inference-via-macros.pdf][Ascent, CC 2022]], abstract and introduction | Embedded bottom-up logic must interoperate with host components. Keep =program/= execution and caller responsibilities distinct. | Does native evaluation help a frozen model solve a stated relational obligation correctly? |
-| [[https://kmicinski.com/assets/byods.pdf][BYODS, OOPSLA2 2023]], sections 3.3 and 4 | Concrete relation, total/delta observations and logical indexes must agree. Newly implied facts cannot skip delta and disappear from downstream joins. | With identical concrete consequences, does a representation change affect model behavior at all, beyond native cost? |
+| [[https://s-arash.github.io/ascent/cc22main-p95-seamless-deductive-inference-via-macros.pdf][Ascent, CC 2022]], abstract and introduction | Embedded bottom-up logic must interoperate with host components. Keep =program/= execution and caller responsibilities distinct. | Does runtime evaluation help a frozen model solve a stated relational obligation correctly? |
+| [[https://kmicinski.com/assets/byods.pdf][BYODS, OOPSLA2 2023]], sections 3.3 and 4 | Concrete relation, total/delta observations and logical indexes must agree. Newly implied facts cannot skip delta and disappear from downstream joins. | With identical concrete consequences, does a representation change affect model behavior at all, beyond runtime cost? |
 | [[https://www.vldb.org/pvldb/vol19/p361-zhao.pdf][FlowLog]], PVLDB 19(3), 2025 / VLDB 2026, abstract and section 7 | Canonical subplans can share outputs across rules; recursive control and logical plans have separate owners. | A shared engine subplan is not evidence that the model reused a shared premise. Measure both independently. |
 | [[https://arxiv.org/html/2609.37233v1][DatalogBench]], September 29, 2026 preprint, sections 4.3, 6 and Appendix G | Held-out execution and mutation tests distinguish compiling wrong joins from correct rules. Its results concern Souffle, and the oracle is finite. | Independently check intermediate relations and downstream answers, not merely parsing or a final Boolean. |
 | [[https://arxiv.org/html/2607.20507v1][MiniCache]], v1 (HTML header: July 3, 2026), section 3 and Appendix A.1--A.2 | Parameterized programs separate shared computation from extracted variables. Acceptance uses validation examples; malformed bindings fall back. | Different residual questions may share computation, but type/format validation does not establish correct semantic binding. Charge extraction and cache construction. |
@@ -72,7 +72,7 @@ HEAD is still that commit, but the checkout is dirty. Preserve those edits;
 the prior qualification applies to captured source, not these new changes.
 No rebuild or exact-head remote CI qualification was performed in this update.
 
-- Native/full-Gxi qualification and bounded proof-store reuse passed. The
+- Runtime/full-Gxi qualification and bounded proof-store reuse passed. The
   model's use of evidence is a separate gate.
 - Fourteen responses completed without truncation; thirteen actions were
   admitted. One baseline format failure remains a failure.
@@ -101,7 +101,7 @@ baseline repetition signal that the proposed mechanism can reduce.
 | Evidence binding | =candidate/evidence-store.ss= scopes entries by source identity, generation, digest and candidate digest | Source, rule and query changes refuse an old handle; bounded/unknown is never false |
 | Fragment composition | =reasoning-evidence-fragment= returns ancestor-closed support for an admitted ground atom | Two distinct downstream obligations consume the same supported atom under the admitted candidate's proof scope |
 | Model reuse | Existing =t/research/candidate-interaction.ss= and =candidate-model.py= are consumers | Independently valid answers plus literal evidence of reuse/rederivation in visible thinking; no assumed hidden reasoning |
-| Formal correspondence | Existing Lean Provider models and Quint =VerifiedCandidate.qnt= | State exact modeled assumptions and native correspondence; independent-grader validity is assumed in that Quint model |
+| Formal correspondence | Existing Lean Provider models and Quint =VerifiedCandidate.qnt= | State exact modeled assumptions and runtime correspondence; independent-grader validity is assumed in that Quint model |
 
 An identical atom spelling is insufficient: source and candidate scope must
 also match. The current store does not transport arbitrary proofs across
@@ -128,7 +128,7 @@ judge and annotation rules before any model call. The prior tasks stay frozen.
 
 | Arm | Evidence access | Common controls |
 |-----+-----------------+-----------------|
-| baseline | Raw source and existing native query interface | Same obligations, action schema, context policy and total budget |
+| baseline | Raw source and existing runtime query interface | Same obligations, action schema, context policy and total budget |
 | Fact | Same access plus source-bound outcomes for the relevant atoms | Outcomes selected by obligation syntax, not by a hidden optimal answer |
 | Scheme | The same Fact outcomes plus admitted ancestor-closed fragments | Same available siblings; disable pruning in this fragment diagnostic so pruning is not a second intervention |
 
@@ -159,14 +159,14 @@ Three claims have separate admission conditions:
    with the independent oracle, including stale-source controls.
 2. *Reduced repetition*: baseline visibly rederives the shared premise and
    the evidence arms reduce that signal with comparable correctness and
-   validated annotation coverage. Native hits alone do not satisfy this gate.
+   validated annotation coverage. Runtime hits alone do not satisfy this gate.
 3. *Productive reallocation*: only after the mechanism gate, an independently
    frozen harder fixture permits new valid consequences or complete solutions
    within the same input-plus-all-output budget. Prefix length alone does not
    establish deeper reasoning or higher quality.
 
 Charge cached/replayed input and all output including thinking and failures.
-Report proof construction and native work separately, along with annotation
+Report proof construction and runtime work separately, along with annotation
 cost. Reservation stops censor outcomes; unused budget is not savings. Model
 aliases, repeated trials and context policies must be disclosed before causal
 claims. This update changes research interpretation and the proposed gate;
@@ -248,7 +248,7 @@ cannot seed activated memory. Scoped revision uses dependency-aware recomputatio
 These are close lifecycle ideas, but argument confidence is not the same object
 as a replayable finite relational proof. Adopt source-fingerprint deduplication,
 negative-transfer measurement and evaluation isolation; investigate the actual
-checker and native representation before claiming equivalence or superiority.
+checker and runtime representation before claiming equivalence or superiority.
 
 ** Stale constraints: confirmed-looking factors can misdirect exploration
 
@@ -272,7 +272,7 @@ these observations are local code/environment evidence, not remote CI closure.
 | Reuse unit | Existing owner and capability | Experiment boundary |
 |-----------+-------------------------------+---------------------|
 | Admitted finite source Fact | [[file:../../../candidate/reasoning.ss][reasoning.ss]] snapshots bind local identity, generation and content | Caller owns authenticity and intended meaning |
-| Determined relational consequence | Native admitted rule execution and complete result | Completion does not certify natural-language-to-rule translation |
+| Determined relational consequence | Runtime admitted rule execution and complete result | Completion does not certify natural-language-to-rule translation |
 | Positive derivation fragment | [[file:../../../candidate/provenance.ss][provenance.ss]] witnesses; [[file:../../../candidate/provenance-graph.ss][provenance-graph.ss]] complete grounded alternatives and verifier | Supported clauses and explicit work/edge caps only |
 | Alternative supports / removed source | [[file:../../../candidate/provenance-maintenance.ss][provenance-maintenance.ss]] bounded withdrawal, private preview, compaction | Positive fragment; absence/aggregate dependencies need finite replay |
 | Derived relation reused downstream | [[file:../../../python/src/ascent_engine/evidence.py][EvidenceStore]] publishes aliases; another program can consume their rows | A materialized row is not itself a stored proof certificate |
@@ -404,18 +404,18 @@ On October 10, 2026 the existing =scheme-provenance-graph-test.ss= and
 existing 120-second watchdog, with exit code 0. The driver requires checked
 Case verdicts, =MODULE-OK=, =HARNESS-OK= and final =OK=. These are local
 environment receipts; imported compiled-module provenance was not rebuilt or
-certified against the dirty checkout, so exact-source/native-head closure is
+certified against the dirty checkout, so exact-source/runtime-head closure is
 not claimed. No new semantic test or formal proof was introduced.
 
 The existing retained CFFI conformance run also passed under a 45-second watchdog:
 32 finite observations, 32 published-subgoal downstream extensions, and 8
 changed-source stale-answer fault controls detected. The
 [[file:../../../.cache/ascent/archived-runs/docs/research/agent-inference/factor-reuse-local-receipt.json][local receipt]] records commands, exits,
-source hashes and the actual loaded library digest. The raw native receipt is
+source hashes and the actual loaded library digest. The raw runtime receipt is
 in =.cache/ascent/factor-reuse-research-20261010/=. These finite fixtures qualify
 actual retained execution in that library, not current-source rebuild closure
 or LLM behavior. They are not new independent task instances or model trials.
-Before model execution: bind current native artifacts, implement packet proof
+Before model execution: bind current runtime artifacts, implement packet proof
 admission and action-level accounting, freeze manifests/graders/provider identity,
 resolve supported budget counters, and audit extractor/retrieval costs. No new
 paid model calls or model improvement measurements were made in this study.
@@ -425,7 +425,7 @@ paid model calls or model improvement measurements were made in this study.
 * Captured minimal diagnostic (2026-10-11)
 
 The [[file:fact-reuse-results/shared-premise-diagnostic/findings.md][published evidence chain]] binds the Library's Scheme source, existing
-Python Project consumer, finite Quint protocol, Lean proof premises, native
+Python Project consumer, finite Quint protocol, Lean proof premises, runtime
 qualification and 18 real model responses. Its archive replays locally from a
 fresh directory without provider calls. The source remains a dirty captured
 snapshot; clean committed reproduction is not qualified.
@@ -433,14 +433,14 @@ snapshot; clean committed reproduction is not qualified.
 All answers pass the frozen finite oracle, but Fact and Scheme cost more total
 tokens than baseline. The observed thinking does not establish a baseline
 cross-question repetition signal, and Scheme rederives supplied premises.
-This is a retained negative/inconclusive result. It supports the native reuse
+This is a retained negative/inconclusive result. It supports the runtime reuse
 mechanism only; it does not establish deeper exploration or model efficiency.
 
 * Clean committed consumer diagnostic (2026-10-11)
 
 [[file:fact-reuse-results/sibling-search/findings.md][The sibling-search evidence chain]] now qualifies a clean committed source
-bundle, 99 source inputs, normal native build, API/ABI, eight consumer checks,
-Scheme/Quint correspondence and Lean ProofDag. Source identity, native proof
+bundle, 99 source inputs, normal runtime build, API/ABI, eight consumer checks,
+Scheme/Quint correspondence and Lean ProofDag. Source identity, runtime proof
 reuse and LLM behavior remain separate gates. Tool delivery and conservative
 continuation accounting were repaired without an anti-repetition prompt.
 Frozen three-arm real-model results remain censored/failed: neither lower
@@ -448,4 +448,4 @@ repetition nor deeper exploration nor higher quality is established. Offline
 replay matches the report and protocol audit.
 
 * Complete thinking and lossless evidence projection
-[[file:fact-reuse-results/branch-complete/findings.md][Frozen three-arm results, semantic coverage failures and reproducible evidence]] bind the experiment to f6c36359. Thinking is no longer forced into a 2048-token checkpoint. Native columns preserve full statuses and proof ancestors. All remaining budget truncations, infeasible outputs, semantic annotation failures and research costs are retained. General depth/semantic-repetition gains remain unestablished.
+[[file:fact-reuse-results/branch-complete/findings.md][Frozen three-arm results, semantic coverage failures and reproducible evidence]] bind the experiment to f6c36359. Thinking is no longer forced into a 2048-token checkpoint. Runtime columns preserve full statuses and proof ancestors. All remaining budget truncations, infeasible outputs, semantic annotation failures and research costs are retained. General depth/semantic-repetition gains remain unestablished.

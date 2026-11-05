@@ -1,3 +1,4 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile? agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-backend-ref agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-metadata))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -5,23 +6,15 @@
 
 ;;; Boundary: public facade for sandbox-core profile POO projection.
 
-(import :agentic-ai-lab/modules/agent-sandbox/profile-native-contract
+(import :agentic-ai-lab/modules/agent-sandbox/profile-contract
         :agentic-ai-lab/modules/sandbox-core/profile-support/prototype
         :agentic-ai-lab/modules/sandbox-core/profile-support/policy
         :agentic-ai-lab/modules/sandbox-core/profile-support/authoring
         :agentic-ai-lab/modules/sandbox-core/profile-support/derivation
         :agentic-ai-lab/modules/sandbox-core/profile-support/resolve
-        (only-in :agentic-ai-lab/modules/agent-sandbox/config
-                 agentic-ai-lab-sandbox-profile?
-                 agentic-ai-lab-sandbox-profile-name
-                 agentic-ai-lab-sandbox-profile-backend-kind
-                 agentic-ai-lab-sandbox-profile-backend-ref
-                 agentic-ai-lab-sandbox-profile-network-policy
-                 agentic-ai-lab-sandbox-profile-capabilities
-                 agentic-ai-lab-sandbox-profile-resource-policy
-                 agentic-ai-lab-sandbox-profile-metadata))
+        )
 
-(export (import: :agentic-ai-lab/modules/agent-sandbox/profile-native-contract)
+(export (import: :agentic-ai-lab/modules/agent-sandbox/profile-contract)
         (import: :agentic-ai-lab/modules/sandbox-core/resource-contract)
         (import: :agentic-ai-lab/modules/sandbox-core/profile-support/policy)
         agentic-ai-lab-sandbox-profile?

@@ -8,7 +8,7 @@
  (regression_budget . 75ms)
  (expected_over_input_budget . 5ms)
  (sampleCount . 20)
- (targetRationale . "Runtime requests should be projected once into a POO-native family and read through stable scalar slots.")
+ (targetRationale . "Runtime requests should be projected once into a POO family and read through stable scalar slots.")
  (maxRssMb . 512)
  (memoryMetric . resident-set-size)
  (memoryUnit . "MB")

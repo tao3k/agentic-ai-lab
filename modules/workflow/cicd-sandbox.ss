@@ -1,3 +1,4 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile? agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-runtime-summary agentic-ai-lab-sandbox-profile-handoff-summary agentic-ai-lab-sandbox-profile-by-name))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -9,12 +10,7 @@
 (import (only-in :clan/poo/object .ref)
         (only-in :std/list/list delete-duplicates/hash)
         :yuanxu/modules/funflow/control-plane/projection-syntax
-        (only-in :agentic-ai-lab/modules/agent-sandbox/config
-                 agentic-ai-lab-sandbox-profile?
-                 agentic-ai-lab-sandbox-profile-by-name
-                 agentic-ai-lab-sandbox-profile-handoff-summary
-                 agentic-ai-lab-sandbox-profile-name
-                 agentic-ai-lab-sandbox-profile-runtime-summary)
+        
         :yuanxu/modules/funflow/check-types
         :yuanxu/modules/funflow/check-objects)
 

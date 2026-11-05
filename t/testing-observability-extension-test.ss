@@ -19,7 +19,7 @@
         (only-in :agentic-ai-lab/dev/testing-api
                  +agentic-ai-lab-testing-interface+
                  +agentic-ai-lab-testing-import-footprint-profile+
-                 agentic-ai-lab-native-observability-enabled?
+                 agentic-ai-lab-runtime-observability-enabled?
                  agentic-ai-lab-testing-observability-profile-prototype
                  yuanxu-testing-case-profile-prototype
                  make-agentic-ai-lab-testing-observability-profile
@@ -34,7 +34,7 @@
       trace-enabled?: #t))
 
 (def testing-observability-extension-test
-  (test-suite "Agentic AI Lab native testing observability extension"
+  (test-suite "Agentic AI Lab runtime testing observability extension"
     (yuanxu-test-case "the public Agentic AI Lab interface owns the ASP extension once"
       (check (.slot? +agentic-ai-lab-testing-interface+ 'around-operation) => #t)
       (check (testing-interface-profile-enabled?
@@ -56,7 +56,7 @@
           (testing-interface-call-with-operation
            (agentic-ai-lab-testing-observability-extension
             +asp-testing-interface+)
-           'native-test-batch
+           'runtime-test-batch
            (lambda () (thread-sleep! 0.02))))
         (check (and (string-contains
                      (get-output-string port) "operation-heartbeat") #t)
@@ -105,7 +105,7 @@
            (testing-interface-call-with-operation
             (agentic-ai-lab-testing-observability-extension
              +asp-testing-interface+)
-            'native-test-batch
+            'runtime-test-batch
             (lambda ()
               (set! admission-visible-inside?
                     (and (string-contains
@@ -114,7 +114,7 @@
                          #t))
               'completed))
            => 'completed))
-        (check (agentic-ai-lab-native-observability-enabled?) => #t)
+        (check (agentic-ai-lab-runtime-observability-enabled?) => #t)
         (check admission-visible-inside? => #f)
         (check (and (string-contains
                      (get-output-string port)
@@ -130,7 +130,7 @@
             +asp-testing-interface+
             (make-agentic-ai-lab-testing-observability-profile
              'testing/fast-heartbeat 0.01))
-           'native-test-batch
+           'runtime-test-batch
            (lambda () (thread-sleep! 0.03))))
         (let (output (get-output-string port))
           (check (and (string-contains output "operation-heartbeat") #t)
@@ -147,14 +147,14 @@
          (testing-interface-call-with-operation
           (agentic-ai-lab-testing-observability-extension
            +asp-testing-interface+ profile)
-          'native-test-batch
+          'runtime-test-batch
           (lambda ()
             (set! enabled-inside?
-                  (agentic-ai-lab-native-observability-enabled?))
+                  (agentic-ai-lab-runtime-observability-enabled?))
             'completed))
          => 'completed)
         (check enabled-inside? => #f)))
-    (yuanxu-test-case "the native batch emits POO receipts and upstream elapsed timing"
+    (yuanxu-test-case "the runtime batch emits POO receipts and upstream elapsed timing"
       (let (port (open-output-string))
         (parameterize ((current-output-port port)
                        (current-error-port port))
@@ -162,7 +162,7 @@
            (testing-interface-run-test-batch!
             (agentic-ai-lab-testing-observability-extension
              +asp-testing-interface+ +testing-trace-profile+)
-            '("t/scenarios/testing-observability/native-batch-test.ss"))
+            '("t/scenarios/testing-observability/runtime-batch-test.ss"))
            => (void)))
         (let (output (get-output-string port))
           (check (and (string-contains output "call-admitted") #t) => #t)
@@ -172,7 +172,7 @@
                                        "phase=batch-complete elapsedNs=")
                       #t)
                  => #t))))
-    (yuanxu-test-case "failed native batches retain POO and ASP elapsed terminals"
+    (yuanxu-test-case "failed runtime batches retain POO and ASP elapsed terminals"
       (def missing "t/scenarios/testing-observability/missing-test.ss")
       (check-equal? (file-exists? missing) #f)
       (def result

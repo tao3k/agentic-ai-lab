@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO-native causal-trajectory and structural-analysis values.
+;;; Boundary: POO causal-trajectory and structural-analysis values.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :clan/poo/mop validate)
         (only-in :agentic-ai-lab/modules/temporal-causality/types

@@ -17,7 +17,7 @@
                  check-true
                  test-error
                  test-suite)
-        (only-in :clan/poo/object .ref)
+        (only-in :clan/poo/object .get .ref)
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-user-config-presentation-kind
                  yuanxu-user-config?)
@@ -37,18 +37,13 @@
                  agentic-ai-lab-declaration-case-trace-stages
                  agentic-ai-lab-declaration-case-trace-safe?
                  agentic-ai-lab-declaration-case-presentation-matches?)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/root-profile
-                 agenticAiLabRootConfig)
-        (only-in :agentic-ai-lab/user-interface/init
-                 yuanxu-user-module-bundles))
+        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports))
 
 (export declaration-case-test)
 
 ;; : (-> UserInterfaceEntry Alist MaybeValue)
 ;; : (-> Unit POOObject)
-(def (root-developer-case)
-  (agenticAiLabRootDeveloperDeclarationCase
-   (agenticAiLabRootConfig yuanxu-user-module-bundles)))
+(def (root-developer-case) (.get agentic-ai-lab.init.exports scenarios developer declaration))
 
 ;; : (-> [Alist] Pair MaybeAlist)
 (def (agentic-ai-lab-declaration-case-find-entry entries key)
@@ -74,7 +69,7 @@
         (check-equal? (agentic-ai-lab-declaration-case-case-file case-object)
                       "modules/workflow/scenario/configuration/declaration-case.ss")
         (check-equal? (agentic-ai-lab-declaration-case-init-file case-object)
-                      "user-interface/init.ss")
+                      "init.ss")
         (check-equal? (agentic-ai-lab-declaration-case-custom-module-file
                        case-object)
                       "user-interface/custom/my-module/interface.ss")

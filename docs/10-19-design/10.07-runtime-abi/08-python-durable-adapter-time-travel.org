@@ -35,7 +35,7 @@ thread stores a durable checkpoint; the runtime can inspect history, load a
 specific checkpoint id, patch state, and resume through the same adapter that
 was built from the Scheme manifest or runtime envelope.
 
-The policy center remains Scheme/POO-native. Python is the runtime harness and
+The policy center remains Scheme/POO. Python is the runtime harness and
 FFI consumer; it does not re-own durable policy semantics.
 
 * Test performance boundary

@@ -16,7 +16,7 @@
   (reasoning-source-snapshot 'search generation
     (list (list 'edge 2 edges) (list 'need 5 '((0 0 2 3 4) (1 0 2 4 3))))))
 (def ascent-evidence-store-test
-  (test-suite "native evidence store and deterministic obligations"
+  (test-suite "runtime evidence store and deterministic obligations"
     (test-case "Fact fragments close over shared support and reject stale generations"
       (let* ((store (reasoning-open-evidence-store)) (snapshot (source))
              (answer (reasoning-resolve-evidence store snapshot candidate)) (h (field 'handle answer))

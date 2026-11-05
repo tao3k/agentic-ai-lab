@@ -61,4 +61,4 @@ branches, unbound content digests, and rejection of a source-impersonating
 reference.
 
 * Library application ownership
-See [[file:migration.org][the ASCENT application migration boundary]] for native, Python, Scheme and formal ownership.
+See [[file:migration.org][the ASCENT application migration boundary]] for runtime, Python, Scheme and formal ownership.

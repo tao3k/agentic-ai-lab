@@ -15,7 +15,7 @@ open SourceBoundEffectCompletionRecoveryOwnerDeferralAdmissionContractModel
 open SourceBoundRuntimeWatchdogClosure
 
 /-!
-# Owner-native crash-deferral and storage-admission contracts
+# Owner-runtime crash-deferral and storage-admission contracts
 
 The current runtime watchdog and completion commit receipt remain observations
 of already-observed runtime and post-commit facts.  This proof-only model

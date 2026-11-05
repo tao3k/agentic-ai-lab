@@ -1,9 +1,8 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :asp-gerbil-scheme/src/build-api/native-import-closure
-                 asp-gerbil-scheme-native-import-closure)
-        :std/test (only-in :agentic-ai-lab/testing-api yuanxu-test-case)
+(import (only-in :yuanxu/module-system/building/source-closure package-library-spec)
+        :std/test (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
         :agentic-ai-lab/modules/ai-agentic-context/interface
         :agentic-ai-lab/modules/query/semantic/context-restriction
@@ -31,12 +30,10 @@
       (check (rejected? (lambda () #t)) => #f)
       (check (rejected? (lambda () (error "controlled refusal"))) => #t))
     (test-case "public module publication closes the selection adapter build input"
-      (let (sources (asp-gerbil-scheme-native-import-closure
-                     (current-directory)
+      (let (targets (package-library-spec
+                     (current-directory) 'agentic-ai-lab
                      '("modules/ai-agentic-context/interface.ss")))
-        (check (ormap (lambda (path)
-                        (string-suffix? "modules/ai-agentic-context/selection-adapter.ss" path))
-                      sources) => #t)))
+        (check (and (member "modules/ai-agentic-context/selection-adapter" targets) #t) => #t)))
     (yuanxu-test-case "core Org projection requires neither Session nor Memory"
       (let (p (project))
         (check (.ref p 'feature-ids) => '(ai-agentic-context/core))
@@ -60,7 +57,7 @@
                => '(ai-agentic-context/core)))
       (check (.ref ai-agentic-context-memory-feature 'owner-module-id) => 'ai-agentic-context)
       (check (.ref (feature-manifest-bundle 'missing-core (list ai-agentic-context-memory-feature)) 'accepted?) => #f))
-    (yuanxu-test-case "public Context selection preserves native Session dependency"
+    (yuanxu-test-case "public Context selection preserves runtime Session dependency"
       (let* ((selection (car (agentic-ai-lab-modules-system-use-module/ai
                               'ai-agentic-context '(+memory))))
              (descriptor (.ref selection 'module-descriptor)))
@@ -77,8 +74,8 @@
               (project)
               scope)))
         => #t))
-    (yuanxu-test-case "same-source replay refuses substituted native observation provenance"
-      ;; Reusing the native replay result inside one call must not turn the
+    (yuanxu-test-case "same-source replay refuses substituted runtime observation provenance"
+      ;; Reusing the runtime replay result inside one call must not turn the
       ;; caller's embedded observation into an already-admitted artifact.
       (let* ((p (project)) (observation (.ref p 'observation)))
         (check

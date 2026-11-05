@@ -6,7 +6,7 @@ module HybridRuntime {
   import ContextRuntime(BUG = if (BUG == "receipt") "cached" else if (BUG == "terminal") "terminal" else "none") as auth from "./26-context-runtime"
   import BoundedScheduling(BUG = "none", TRACK_OP = false) as queue from "./27-bounded-scheduling"
   // Work 0=not submitted, 1=inside owner-pinned VM, 2=copied reply,
-  // 3=Context result queued. Rust wait timeout does not retire the native call.
+  // 3=Context result queued. Rust wait timeout does not retire the runtime call.
   var event: int
   var work: int
   var credit: int
@@ -55,7 +55,7 @@ module HybridRuntime {
     dispatch, resultComplete, revoke, retryControl, deliverControl, acknowledge,
     cancel, observeCancellation, recover, takeover, replacePolicy, expireOldTicket,
     independent, drain, close, idle}
-  val NativeCredit = work != 1 or credit == 1
+  val RuntimeCredit = work != 1 or credit == 1
   val JoinQuiesces = not(joined) or (work != 1 and queue::s.p == 2)
-  val safety = auth::safety and queue::safety and NativeCredit and JoinQuiesces
+  val safety = auth::safety and queue::safety and RuntimeCredit and JoinQuiesces
 }

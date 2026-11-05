@@ -178,7 +178,7 @@
     },
     "artifactDigest": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c"
   },
-  "nativeObservationSeconds": 0.07640074999653734,
+  "runtimeObservationSeconds": 0.07640074999653734,
   "result": {
     "candidate": {
       "status": "complete",

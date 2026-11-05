@@ -3,7 +3,7 @@ package ContextAuthorityPropagation {
     private import VerificationCases::*;
     part def Fixture;
     part fixture : Fixture;
-    // This is a contract fixture. Actual concurrency is the native owner corpus.
+    // This is a contract fixture. Actual concurrency is the runtime owner corpus.
     verification def Dispatch {
         subject target : Fixture default = fixture;
         in eventKind : Integer; // 0 grant revoke; 1 policy revision; 2 deadline

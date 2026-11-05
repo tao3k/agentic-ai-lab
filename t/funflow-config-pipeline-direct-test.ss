@@ -1,4 +1,6 @@
-(import (only-in :agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-pipeline-runtime-command-manifests))
+(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
+        (only-in :yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
+        (only-in :agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-pipeline-runtime-command-manifests))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -10,11 +12,14 @@
         (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
         :yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/workflow/funflow-config
         :agentic-ai-lab/modules/workflow/cicd-config
         :agentic-ai-lab/modules/agent-sandbox/config
-        :agentic-ai-lab/modules/workflow/interface)
+        (only-in :yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map? yuanxu-cicd-check-name yuanxu-cicd-check-profile yuanxu-cicd-check-dependency-refs yuanxu-cicd-check-map-name yuanxu-cicd-check-map-checks)
+        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->receipts)
+        (only-in :agentic-ai-lab/modules/workflow/cicd-config agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-summaries))
 
 (export funflow-config-pipeline-direct-test)
 
@@ -33,12 +38,8 @@
 
 ;; : (-> Unit [PooUserModuleSelection])
 (def (funflow-config-direct-selection)
-  (use-module funflow
-    :config
-    (.def (funflow-test/build @ funflow-check
-                              check-name profile-ref command-vector
-                              artifact-outputs cache-intents result-protocol
-                              runtime-mode)
+  (let ()
+    (.def (funflow-test/build @ funflow-check)
       check-name: 'build
       profile-ref: 'ci/build
       command-vector: '("gerbil" "build")
@@ -46,11 +47,7 @@
       cache-intents: '(gerbil-build-cache)
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff)
-
-    (.def (funflow-test/integration @ funflow-check
-                                    check-name profile-ref command-vector
-                                    artifact-outputs result-protocol
-                                    runtime-mode dependency-refs)
+    (.def (funflow-test/integration @ funflow-check)
       check-name: 'integration
       profile-ref: '(ci/check agent/poo-object-extension)
       command-vector: '("gerbil" "env" "./unit-tests.ss")
@@ -58,13 +55,15 @@
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
       dependency-refs: '(build))
-
-    (.def (funflow-test/default @ funflow-pipeline
-                                pipeline-name checks metadata)
+    (.def (funflow-test/default @ funflow-pipeline)
       pipeline-name: 'default
       checks: (list funflow-test/build funflow-test/integration)
       metadata: '((scenario . direct-test)
-                  (authoring-style . gerbil-poo-native)))))
+                  (authoring-style . gerbil-poo)))
+    (agentic-ai-lab-product-use-module 'funflow
+      (agentic-ai-lab-funflow-config-flags
+        (yuanxu-funflow-poo-pipeline->check-map funflow-test/default)
+        (list ':config funflow-test/default)))))
 
 ;; : (-> Unit [PooSandboxProfile])
 (def (funflow-config-direct-sandbox-profiles)

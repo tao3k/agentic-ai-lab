@@ -10,8 +10,8 @@ from pathlib import Path
 
 import agentic_ai_lab_proof
 from agentic_ai_lab_proof.proof_case_runtime import (
-    NativeProofCaseRuntime,
-    assert_native_differential,
+    RuntimeProofCaseRuntime,
+    assert_runtime_differential,
     proof_case_vector_digest,
 )
 
@@ -32,8 +32,8 @@ def main() -> None:
         raise RuntimeError(f"consumer imported checkout source: {package_path}")
 
     vector = bytes.fromhex(args.vector.read_text(encoding="ascii"))
-    runtime = NativeProofCaseRuntime(args.library)
-    layout = assert_native_differential(runtime, vector)
+    runtime = RuntimeProofCaseRuntime(args.library)
+    layout = assert_runtime_differential(runtime, vector)
     digest = proof_case_vector_digest(vector).hex()
     print(
         "installed-wheel-consumer: "

@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Project native Gerbil dependency pins into Bazel declarations and locks.
+"""Project Gerbil dependency pins into Bazel declarations and locks.
 
 ``gerbil.pkg`` and ``dev/gerbil.pkg`` own production and optional development
 pins respectively. This tool does not resolve dependencies; gxpkg and Bazel retain
@@ -267,7 +267,7 @@ def host_lock_key(extension: dict[str, object]) -> str:
     arch = {"arm64": "aarch64", "x86_64": "amd64", "amd64": "amd64"}.get(machine, machine)
     key = f"os:{os_name},arch:{arch}"
     if key not in extension:
-        raise ValueError(f"native Bazel lock entry {key!r} is absent")
+        raise ValueError(f"runtime Bazel lock entry {key!r} is absent")
     return key
 
 
@@ -277,40 +277,40 @@ def sync_lock(root: Path = ROOT) -> None:
     extension = lock.get("moduleExtensions", {}).get(EXTENSION_ID)
     if not isinstance(extension, dict) or not extension:
         raise ValueError("Gerbil Bazel extension lock is absent")
-    native = extension[host_lock_key(extension)]
-    native_repositories = native["generatedRepoSpecs"]
+    runtime = extension[host_lock_key(extension)]
+    runtime_repositories = runtime["generatedRepoSpecs"]
     repositories_by_package = direct_source_repositories(
         (root / "gerbil-dependencies.MODULE.bazel").read_text(encoding="utf-8")
     )
     repository_names = set(repositories_by_package.values())
     for platform_lock in extension.values():
-        platform_lock["usagesDigest"] = native["usagesDigest"]
+        platform_lock["usagesDigest"] = runtime["usagesDigest"]
         repositories = platform_lock["generatedRepoSpecs"]
         for repository_name in locked_source_package_names(repositories) - repository_names:
             del repositories[repository_name]
         for repository_name in repository_names:
-            repositories[repository_name] = native_repositories[repository_name]
+            repositories[repository_name] = runtime_repositories[repository_name]
     lock_path.write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")
     print("gerbil-dependency-pin: synchronized cross-platform Bazel lock projections")
 
 
-def ensure_native_commit(url: str, revision: str, target: Path) -> None:
+def ensure_runtime_commit(url: str, revision: str, target: Path) -> None:
     """Fetch an exact commit without resetting an existing package checkout."""
     if not re.fullmatch(r"[0-9a-f]{40}", revision):
-        raise ValueError("native prefetch requires a full commit SHA")
+        raise ValueError("runtime prefetch requires a full commit SHA")
     created = not target.exists()
     if created:
         target.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(["git", "init", "--quiet", str(target)], check=True)
         subprocess.run(["git", "-C", str(target), "remote", "add", "origin", url], check=True)
     elif not (target / ".git").exists():
-        raise ValueError(f"native package path is not a Git checkout: {target}")
+        raise ValueError(f"runtime package path is not a Git checkout: {target}")
     present = subprocess.run(
         ["git", "-C", str(target), "cat-file", "-e", f"{revision}^{{commit}}"],
         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
     ).returncode == 0
     if not present:
-        print(f"gerbil-native-pin: fetching {revision} into {target}", flush=True)
+        print(f"gerbil-runtime-pin: fetching {revision} into {target}", flush=True)
         subprocess.run(
             ["git", "-C", str(target), "fetch", "--no-tags", "--depth=1", url, revision],
             check=True,
@@ -326,10 +326,10 @@ def ensure_native_commit(url: str, revision: str, target: Path) -> None:
         # gxpkg reads this adjacent Scheme datum to distinguish an installed
         # immutable pin from an untagged detached branch (whose name is empty).
         target.with_name(target.name + ".tag").write_text(json.dumps(revision) + "\n")
-    print(f"gerbil-native-pin: ready {revision}", flush=True)
+    print(f"gerbil-runtime-pin: ready {revision}", flush=True)
 
 
-def prepare_native_pins(package_root: Path, root: Path = ROOT, manifest: Path | None = None) -> None:
+def prepare_runtime_pins(package_root: Path, root: Path = ROOT, manifest: Path | None = None) -> None:
     """Materialize declared SHA objects; gxpkg still owns tag resolution/builds."""
     package_manifest = manifest if manifest is not None else root / "gerbil.pkg"
     for repository, revision in parse_package_pins(package_manifest.read_text()).values():
@@ -337,27 +337,27 @@ def prepare_native_pins(package_root: Path, root: Path = ROOT, manifest: Path | 
             continue
         target = (package_root / repository).resolve()
         if not target.is_relative_to(package_root.resolve()):
-            raise ValueError("native package pin escapes package root")
-        ensure_native_commit(f"https://{repository}.git", revision, target)
+            raise ValueError("runtime package pin escapes package root")
+        ensure_runtime_commit(f"https://{repository}.git", revision, target)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    check_parser = subparsers.add_parser("check", help="validate native and Bazel pins")
+    check_parser = subparsers.add_parser("check", help="validate runtime and Bazel pins")
     check_parser.set_defaults(command="check")
     pin_parser = subparsers.add_parser("pin", help="project one direct dependency revision")
     pin_parser.add_argument("package")
     pin_parser.add_argument("revision")
-    subparsers.add_parser("sync-lock", help="copy the native lock projection across platforms")
-    prepare_parser = subparsers.add_parser("prepare-native", help="fetch immutable commit objects for gxpkg")
+    subparsers.add_parser("sync-lock", help="copy the runtime lock projection across platforms")
+    prepare_parser = subparsers.add_parser("prepare-runtime", help="fetch immutable commit objects for gxpkg")
     prepare_parser.add_argument("--package-root", type=Path, required=True)
     prepare_parser.add_argument("--manifest", type=Path, help="authoritative package manifest (defaults to root gerbil.pkg)")
     args = parser.parse_args()
 
     try:
-        if args.command == "prepare-native":
-            prepare_native_pins(args.package_root, manifest=args.manifest)
+        if args.command == "prepare-runtime":
+            prepare_runtime_pins(args.package_root, manifest=args.manifest)
         elif args.command == "pin":
             project_pin(args.package, args.revision)
         elif args.command == "sync-lock":

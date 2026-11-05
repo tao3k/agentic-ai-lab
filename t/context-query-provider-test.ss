@@ -1,6 +1,6 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Native scenarios: real Orgize, GQL execution, ASCENT and worker observations.
+;;; Runtime scenarios: real Orgize, GQL execution, ASCENT and worker observations.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/list/list find every)
         (only-in :std/text/pregexp pregexp-replace*)
@@ -26,7 +26,7 @@
       "modules/ai-agentic-context/org-contract/templates/evidence-source.org"
     (lambda (port) (read-line port #f))))
 
-(def session-namespace (make-parameter "context-query-native"))
+(def session-namespace (make-parameter "context-query-runtime"))
 
 (def (sid role)
   (agentic-ai-lab-session-identity (session-namespace) role))
@@ -128,7 +128,7 @@
          (lineage (context-query-lineage observed))
          (saved (context-query-export provider observed)))
     (ensure (= (length (.ref observed 'proofs)) 1) "Missing actual ASCENT proof")
-    (ensure (pair? (.ref (car (.ref observed 'proofs)) 'dag)) "Missing original native proof DAG")
+    (ensure (pair? (.ref (car (.ref observed 'proofs)) 'dag)) "Missing original runtime proof DAG")
     (ensure (.ref (.ref observed 'query-receipt) 'admitted?) "Provider receipt denied")
     (ensure (context-query-current? provider observed) "Current Query denied")
     (ensure (not (equal? (.ref a 'semantic-digest) (.ref c 'semantic-digest)))
@@ -157,9 +157,9 @@
     (let (portable (journal-unpack (journal-pack saved)))
       (let-values (((restored replayed) (context-query-restore portable)))
         (ensure (equal? (.ref replayed 'semantic-digest) (.ref observed 'semantic-digest))
-                "Native Query proof replay differs")
+                "Runtime Query proof replay differs")
         (ensure (context-query-current? restored replayed) "Replayed current support denied")))
-    (displayln "QUERY-CONTROLS namespace=#t same-id-retarget=rejected duplicate-id=rejected query-forgery=rejected native-proof-replay=#t")
+    (displayln "QUERY-CONTROLS namespace=#t same-id-retarget=rejected duplicate-id=rejected query-forgery=rejected runtime-proof-replay=#t")
     (displayln "QUERY-EVIDENCE original=" (journal-pack saved))
     (ensure
      (rejected? (lambda ()
@@ -194,12 +194,12 @@
 
 ;;; Independent Session scope/grants still gate enrollment. The Context Provider
 ;;; supplies an input reference and the original domain proof remains mandatory.
-(def (fixture eager?)
+(def (fixture eager? (task-source (template)))
   (let* ((f (authority-fixture #t #f 10 #f))
          (host (agentic-ai-lab-ai-agentic-context-session-host
                 (.ref f 'grants) (.ref f 'policies) #t eager?))
          (provider (context-query-host))
-         (a (context-query-source! provider (context-org-source "source-a" 1 (template))))
+         (a (context-query-source! provider (context-org-source "source-a" 1 task-source)))
          (c (context-query-source! provider (context-org-source "source-c" 1 (template))))
          (workers (make-hash-table)))
     (for-each
@@ -233,7 +233,7 @@
             (lambda ()
               (thread-receive)
               (when notify (thread-send owner notify))
-              "native-query-result"))))
+              "runtime-query-result"))))
          (token
           (agentic-ai-lab-ai-agentic-context-session-host-attach-worker!
            host (sid role) (revision host role) 1 worker)))
@@ -333,17 +333,17 @@
             '("a" "b" "c"))
            (for-each
             (lambda (role)
-              (ensure (<= (length (outcomes host role)) 1) "Attempt acquired two native terminals")
+              (ensure (<= (length (outcomes host role)) 1) "Attempt acquired two runtime terminals")
               (when changed?
                 (ensure (every (lambda (t) (not (.ref t 'current-use?))) (outcomes host role))
                         "Old result became current")))
             '("a" "b")))
          order)
-        (ensure (.ref (commit host workers "c") 'native-result-published?) "Unrelated real worker C failed")
+        (ensure (.ref (commit host workers "c") 'runtime-result-published?) "Unrelated real worker C failed")
         (ensure (not (.ref (commit host workers "a") 'accepted?)) "Old result accepted after source event")
         (ensure (not (.ref (commit host workers "b") 'accepted?)) "Old parent result accepted after source event")
         ;; Round-trip the actual Context checkpoint through the persistent codec.
-        ;; Recovery must reconstruct Query catalogs, native proofs and old bindings.
+        ;; Recovery must reconstruct Query catalogs, runtime proofs and old bindings.
         (when eager?
           (let* ((saved (journal-unpack (journal-pack (context-host-checkpoint host))))
                  (restored (agentic-ai-lab-ai-agentic-context-session-host
@@ -355,7 +355,7 @@
           (ensure
            (equal? expected-a
                    (if (find (lambda (t) (eq? (.ref t 'outcome) 'completed)) (outcomes host "a")) #t #f))
-           "A did not publish exactly in the permitted native linearizations")
+           "A did not publish exactly in the permitted runtime linearizations")
           (ensure
            (equal? expected-b
                    (if (find (lambda (t) (eq? (.ref t 'outcome) 'completed)) (outcomes host "b")) #t #f))
@@ -405,7 +405,7 @@
        (.ref (.ref f 'policy) 'semantic-digest) 128)
       (agentic-ai-lab-ai-agentic-context-session-host-claim!
        host (sid "a") (revision host "a") generation "attempt-a-fresh" "request-a-fresh")
-      (let* ((worker (thread-start! (make-thread (lambda () "fresh-native-query-result"))))
+      (let* ((worker (thread-start! (make-thread (lambda () "fresh-runtime-query-result"))))
              (token
               (agentic-ai-lab-ai-agentic-context-session-host-attach-worker!
                host (sid "a") (revision host "a") generation worker)))
@@ -417,7 +417,7 @@
            (.ref
             (agentic-ai-lab-ai-agentic-context-session-host-commit-result!
              host (sid "a") (revision host "a") generation observation)
-            'native-result-published?)
+            'runtime-result-published?)
            "Fresh Query Attempt failed to publish")))
       (ensure (eq? (.ref (row host "b") 'context-state) 'invalidated)
               "Fresh parent reactivated an old captured Context version")
@@ -431,7 +431,7 @@
               (not (.ref t 'current-use?))))
         (outcomes host "a"))
        "Terminal lineage or historical current-use fence failed")
-      (displayln "QUERY-FRESH same-session=#t old-parent-stays-invalid=#t native-result-published=#t"))))
+      (displayln "QUERY-FRESH same-session=#t old-parent-stays-invalid=#t runtime-result-published=#t"))))
 
 (def (run-path kind requested-order eager?)
   (parameterize
@@ -441,7 +441,7 @@
                         (lambda (port) (write (list kind requested-order eager?) port))))))
     (run-path/owner kind requested-order eager?)))
 
-;;; Native counterexample for the missing Provider boundary. Raw source enrollment
+;;; Runtime counterexample for the missing Provider boundary. Raw source enrollment
 ;;; cannot subscribe to an unrelated catalog it was never told about. Its actual
 ;;; worker result remains publishable after that catalog withdraws the source.
 (def (unbound-source-counter)
@@ -463,11 +463,11 @@
        host (sid "a") 1 1 "legacy-attempt" "legacy-request")
       (attach host workers "a")
       (context-query-withdraw! provider "source-a" 2)
-      (ensure (.ref (commit host workers "a") 'native-result-published?)
-              "Unbound-source native counterexample failed to expose missing lineage")
+      (ensure (.ref (commit host workers "a") 'runtime-result-published?)
+              "Unbound-source runtime counterexample failed to expose missing lineage")
       (displayln "QUERY-COUNTEREXAMPLE unbound-source actual-stale-result-published=#t"))))
 
-;;; Replay an actual saved checkpoint in a fresh native process. Native source
+;;; Replay an actual saved checkpoint in a fresh runtime process. Runtime source
 ;;; producers are reconstructed from the pinned original fixture inputs; GQL and
 ;;; Org membership proofs are reconstructed from the retained source history.
 (def (restore-path path)
@@ -499,13 +499,13 @@
                 (.ref terminal 'current-use?)
                 (not (.ref terminal 'current-use?))))
           (outcomes host "a"))
-         "Historical A result revived after native checkpoint replay")
+         "Historical A result revived after runtime checkpoint replay")
         (ensure (every (lambda (t) (not (.ref t 'current-use?))) (outcomes host "b"))
-                "Historical B result revived after native checkpoint replay")
+                "Historical B result revived after runtime checkpoint replay")
         (ensure (every (lambda (t) (.ref t 'current-use?)) (outcomes host "c"))
                 "Unrelated C result lost current support")
         (displayln "QUERY-RESTORE kind=" kind " order=" order
-                   " native-proof-replayed=#t old-current=#f fresh-current=#t parent-fenced=#t")))))
+                   " runtime-proof-replayed=#t old-current=#f fresh-current=#t parent-fenced=#t")))))
 
 (def (context-query-driver mode order-text)
   (if (equal? mode "restore")

@@ -6,7 +6,7 @@
         (only-in :yuanxu/observability/testing-case yuanxu-test-case))
 (export module-nix-phase-test)
 (def module-nix-phase-test
-  (test-suite "Native Nix preparation is candidate-only and receiver-local"
+  (test-suite "Runtime Nix preparation is candidate-only and receiver-local"
     (yuanxu-test-case "preparation caches derivation, not currentness or authority"
       (let ((instantiations 0) (realizations 0) (current? #t))
         (def source

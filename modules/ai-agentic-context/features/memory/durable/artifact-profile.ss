@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: durable artifact profile objects and database profile objects.
-;;; Invariant: this module returns POO-native objects and performs no runtime
+;;; Invariant: this module returns POO objects and performs no runtime
 ;;; storage, database, artifact lifecycle, or Marlin handoff work.
 
 (import (only-in :clan/poo/object .ref .slot? object? object<-alist))
@@ -129,7 +129,7 @@
 ;; agentic-ai-lab-artifact-profile/direct
 ;; : (-> Symbol ArtifactExtends Symbol [Symbol] [Symbol] [Symbol] [Symbol] [Symbol] [Symbol] [Symbol] [(-> PooArtifactProfile PooArtifactProfile)] PooArtifactProfile)
 ;; | doc m%
-;;   Build the POO-native artifact profile object from normalized slots.
+;;   Build the POO artifact profile object from normalized slots.
 ;;   # Examples
 ;;   ```scheme
 ;;   (agentic-ai-lab-artifact-profile/direct 'report #f 'report '() '() '() '() '() '() '() '())
@@ -167,7 +167,7 @@
 ;; agentic-ai-lab-artifact-database-profile/direct
 ;; : (-> Symbol ArtifactExtends [Symbol] [Symbol] [Symbol] PooArtifactDatabaseProfile)
 ;; | doc m%
-;;   Build the POO-native artifact database profile object from normalized slots.
+;;   Build the POO artifact database profile object from normalized slots.
 ;;   # Examples
 ;;   ```scheme
 ;;   (agentic-ai-lab-artifact-database-profile/direct 'turso #f '(sqlite) '(kv) '(file))

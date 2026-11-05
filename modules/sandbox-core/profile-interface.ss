@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: public POO-native sandbox profile authoring interface.
+;;; Boundary: public POO sandbox profile authoring interface.
 ;;; Invariant: users write Gerbil POO objects; projection stays report-only.
 
 (import
@@ -125,7 +125,7 @@
    (profile profile-name)
    (parent-profile parent-profile)
    (scope scope)
-   (derived-by 'poo-native-profile-object)))
+   (derived-by 'poo-profile-object)))
 
 ;;; Boundary: profile derivation metadata is the policy-visible edge for
 ;;; sandbox, core behavior, keeping validation, lookup, or projection

@@ -34,7 +34,7 @@
     (let ((rows (map (lambda (name) (cons name (.ref arguments name))) (.all-slots arguments)))
           (tools (map (lambda (name) (cons name (.ref config name))) '(instantiate realize))))
       `(agentic-ai-lab-nix-admit-generation ,expression ',rows ,expected ',tools)))
-  ;; A native phase object: derivation and realization are receiver-local lazy
+  ;; A runtime phase object: derivation and realization are receiver-local lazy
   ;; slots. Core may write its guarded entry between preparation and validation.
   ;; This is a candidate until admit-current succeeds; .build keeps the eager
   ;; public publication boundary for standalone callers.
@@ -55,7 +55,7 @@
                 artifact
                 (check-current!))
               (admit-derivation! source-value derivation)))
-          ;; The paired native continuation can omit just this operation's
+          ;; The paired runtime continuation can omit just this operation's
           ;; entry guard when its caller has immediately run that exact guard.
           ;; Tail checks and all external effect boundaries remain unchanged.
           admit-current: (module-source-operation-procedure %source-operation)
@@ -73,7 +73,7 @@
   ;; Explicit local data inputs are hashed by Nix on every query. They are not
   ;; Scheme argument/result caches and never permit implicit lock-file updates.
   inputs: (.o)
-  ;; An optional explicitly owned evaluator scope. Native POO receiver copies
+  ;; An optional explicitly owned evaluator scope. POO receiver copies
   ;; retain configuration, not an admission verdict or a selected flake output.
   evaluator: #f
   source-inputs: (agentic-ai-lab-nix-flake-source-inputs reference)

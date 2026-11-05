@@ -99,7 +99,7 @@
 
 (def release-assurance-manifest-test
   (test-suite "AC-10 S1 ReleaseAssuranceManifest v1"
-    (yuanxu-test-case "POO-native object family and complete manifest validate"
+    (yuanxu-test-case "POO object family and complete manifest validate"
       (let (value (manifest (list claim-a claim-b)
                             (list gate-a gate-b) (list tcb)))
         (let (receipt (agentic-ai-lab-release-assurance-manifest-validate value))

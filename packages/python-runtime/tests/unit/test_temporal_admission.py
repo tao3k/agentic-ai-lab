@@ -25,7 +25,7 @@ def admit(runtime, task, scope, registered, conclusion='conclusion-1'):
                                         conclusion_identity=conclusion)
 
 
-def test_host_snapshot_admits_native_recomputed_inert_conclusion(runtime):
+def test_host_snapshot_admits_runtime_recomputed_inert_conclusion(runtime):
     task, scope = family_task(), source_scope('source-success')
     registered = runtime.register_temporal_source(scope, task)
     result = admit(runtime, task, scope, registered)
@@ -160,7 +160,7 @@ def test_registered_source_permutation_and_async_admission(runtime):
     assert result == expected
 
 
-def test_source_control_preserves_native_owner_thread_and_transport_guards(runtime):
+def test_source_control_preserves_runtime_owner_thread_and_transport_guards(runtime):
     data = wire.dumps({'task': family_task(), 'scope': source_scope('source-wrong-thread')}).encode()
     result = runtime._ffi.new('agentic_ai_lab_semantic_result *')
     assert runtime._lib.agentic_ai_lab_python_semantic_source_register(data, len(data), result) == 2

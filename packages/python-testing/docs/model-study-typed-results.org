@@ -35,26 +35,26 @@ The typed candidate boundary fixed the wrong-join label in these three
 paired samples. It did not fix the temporal authorization label: all
 six closed-cut responses selected =release_authorized=, including all
 three that received JSON ="release_authorized":false= and
-="causation_proven":false=. The native receipt continued to say
+="causation_proven":false=. The runtime receipt continued to say
 =release-authorized? #f=. This is a model-output boundary failure,
 not an authorization result. Do not accept the model's field as a
 release decision.
 
 Median model call time was 0.551 s old and 0.409 s typed, excluding
-native tool setup; these tiny timings do not establish a speed gain.
+runtime tool setup; these tiny timings do not establish a speed gain.
 Input tokens totalled 2,862 old and 3,228 typed; output tokens totalled
 189 and 195. The extra typed fields cost input tokens.
 
 * Required repair
 
 At the Runtime output boundary, deterministically withhold any model
-answer that asserts release authority when the native temporal receipt
+answer that asserts release authority when the runtime temporal receipt
 denies it. Keep the original model answer for diagnosis and expose a
-typed =native-denies-release= status. This guard prevents one unsafe
+typed =runtime-denies-release= status. This guard prevents one unsafe
 promotion; it does not make the model's reasoning correct. Test it on
 all six closed-cut outputs and on a harmless classification answer.
 
-The subsequent Testing Runtime guard returns =withheld / native-denies-release=
+The subsequent Testing Runtime guard returns =withheld / runtime-denies-release=
 for all six typed closed-cut model outputs and =observation-only= for the
 safe classification fixture. It also withholds an open-frontier
 =negative_claim=. This is a downstream containment check; no result

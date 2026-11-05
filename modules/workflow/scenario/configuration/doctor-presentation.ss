@@ -8,20 +8,12 @@
 ;;; Intent: borrow Doom's doctor ergonomics while keeping POO values explicit.
 ;;; Parser policy should treat this file as the module-system observation edge.
 
-(import (only-in :clan/poo/object .o .ref)
+(import (only-in :clan/poo/object .o .ref .get)
         :agentic-ai-lab/modules/module-authoring/module-interface
         :yuanxu/module-system/source/imports
         :yuanxu/module-system/source/objects
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         "module-diagnostics.ss"
-        :yuanxu/utilities/final-projection-syntax
-        (only-in :yuanxu/module-system/projection/option-objects
-                 yuanxu-module-option-validation-receipt-id
-                 yuanxu-module-option-validation-receipt-source-module
-                 yuanxu-module-option-validation-receipt-valid?
-                 yuanxu-module-option-validation-receipt-code
-                 yuanxu-module-option-validation-receipt-messages
-                 yuanxu-module-option-validation-receipt-metadata)
         (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/module-runtime-presentation
                  agentic-ai-lab-module-evaluate
                  agentic-ai-lab-module-value-catalog-root)
@@ -43,21 +35,6 @@
 ;; : (-> Unit ModuleKindId)
 (def agentic-ai-lab-module-source-doctor-presentation-kind
   "agentic-ai-lab.modules.source-doctor-presentation.v1")
-
-;;; Boundary: validation receipt projection stays local to the doctor edge.
-;; : (-> PooModuleOptionValidationReceipt Alist)
-(defpoo-final-projection
-  agentic-ai-lab-module-validation-receipt->alist (receipt)
-  (bindings ())
-  (fields ((id (yuanxu-module-option-validation-receipt-id receipt))
-           (source-module
-            (yuanxu-module-option-validation-receipt-source-module receipt))
-           (valid? (yuanxu-module-option-validation-receipt-valid? receipt))
-           (code (yuanxu-module-option-validation-receipt-code receipt))
-           (messages
-            (yuanxu-module-option-validation-receipt-messages receipt))
-           (metadata
-            (yuanxu-module-option-validation-receipt-metadata receipt)))))
 
 ;;; Boundary: import profiles are summarized without resolving source refs.
 ;; : (-> ModuleImportProfile Value)
@@ -101,7 +78,7 @@
         (cons 'import-count (length (yuanxu-module-imports module)))
         (cons 'task-count (length (agentic-ai-lab-module-task-descriptors module)))
         (cons 'flow-count (length (agentic-ai-lab-module-flow-descriptors module)))
-        (cons 'option-count (length (agentic-ai-lab-module-options module)))
+        (cons 'option-count (length (agentic-ai-lab-module-option-names module)))
         (cons 'extension-count (length (agentic-ai-lab-module-extensions module)))
         (cons 'script-count (length (agentic-ai-lab-module-scripts module)))
         (cons 'hook-count (length (agentic-ai-lab-module-hooks module)))))
@@ -112,26 +89,26 @@
   (map agentic-ai-lab-module-contribution-summary modules))
 
 ;;; Boundary: loader status is a presentation signal, not a strict-load action.
-;; : (-> [PooModuleLoadReceipt] Boolean)
+;; : (-> [ModuleLoadReceipt] Boolean)
 (def (agentic-ai-lab-module-load-receipts-all-loaded? receipts)
   (cond
    ((null? receipts) #t)
-   ((yuanxu-module-load-receipt-loaded? (car receipts))
+   ((.get (car receipts) loaded?)
     (agentic-ai-lab-module-load-receipts-all-loaded? (cdr receipts)))
    (else #f)))
 
 ;;; Boundary: missing count is derived from receipts without inspecting sources.
-;; : (-> [PooModuleLoadReceipt] Fixnum)
+;; : (-> [ModuleLoadReceipt] Fixnum)
 (def (agentic-ai-lab-module-load-receipts-missing-count receipts)
   (cond
    ((null? receipts) 0)
-   ((yuanxu-module-load-receipt-loaded? (car receipts))
+   ((.get (car receipts) loaded?)
     (agentic-ai-lab-module-load-receipts-missing-count (cdr receipts)))
    (else
     (+ 1 (agentic-ai-lab-module-load-receipts-missing-count (cdr receipts))))))
 
 ;;; Boundary: empty source lists are distinct from failed source loads.
-;; : (-> [PooModuleSourceRef] [PooModuleLoadReceipt] Symbol)
+;; : (-> [PooModuleSourceRef] [ModuleLoadReceipt] Symbol)
 (def (agentic-ai-lab-module-load-status source-refs receipts)
   (cond
    ((null? source-refs) 'empty)
@@ -141,23 +118,21 @@
 ;;; Boundary: root doctor presentation is the shared data projection for both callers.
 ;; : (-> PooModuleDescriptor POOObject)
 (def (agentic-ai-lab-module-root-doctor-presentation root-module)
-  (let* ((closed-modules (agentic-ai-lab-module-closure (list root-module)))
-         (doctor-report (agentic-ai-lab-module-doctor closed-modules))
-         (evaluation-value (agentic-ai-lab-module-evaluate root-module))
-         (validation-receipts
-         (.ref evaluation-value 'validation-receipts)))
     (.o kind: agentic-ai-lab-module-doctor-presentation-kind
-        root-module-id: (agentic-ai-lab-module-name root-module)
-        module-ids: (agentic-ai-lab-module-names closed-modules)
+        config: root-module
+        evaluation: (agentic-ai-lab-module-evaluate config)
+        doctor-report: (agentic-ai-lab-module-doctor/closed (.get evaluation modules))
+        root-module-id: (agentic-ai-lab-module-name config)
+        module-ids: (.get evaluation module-ids)
         doctor-status: (yuanxu-module-doctor-report-status doctor-report)
         doctor-ok: (yuanxu-module-doctor-ok? doctor-report)
         diagnostics:
         (map agentic-ai-lab-module-diagnostic->alist
              (yuanxu-module-doctor-report-diagnostics doctor-report))
-        import-graph: (agentic-ai-lab-module-import-graph closed-modules)
-        contributions: (agentic-ai-lab-module-contribution-summaries closed-modules)
-        validation-receipt-count: (length validation-receipts)
-        module-evaluation-kind: (.ref evaluation-value 'kind)
+        import-graph: (agentic-ai-lab-module-import-graph (.get evaluation modules))
+        contributions: (agentic-ai-lab-module-contribution-summaries (.get evaluation modules))
+        validation-receipt-count: (length (.get evaluation validation-receipts))
+        module-evaluation-kind: (.get evaluation kind)
         brand-name: agentic-ai-lab-brand-name
         brand-group: agentic-ai-lab-brand-group
         scheme-owner: agentic-ai-lab-scheme-owner
@@ -167,7 +142,7 @@
         runtime-parses-scheme-source: #f
         scheme-manufactures-runtime-handlers: #f
         runtime-executed: #f
-        replayable: #t)))
+        replayable: #t))
 
 ;;; Boundary: value-catalog doctor mirrors system presentation root selection.
 ;;; Intent: callers can inspect already-built module values without invoking source loaders.
@@ -184,18 +159,18 @@
   agenticAiLabModuleDoctorPresentation)
 
 ;;; Boundary: source doctor ignores failed loads here because receipts retain failures.
-;; : (-> [PooModuleLoadReceipt] [PooModuleDescriptor])
+;; : (-> [ModuleLoadReceipt] [PooModuleDescriptor])
 (def (agentic-ai-lab-module-loaded-modules-from-receipts receipts)
   (cond
    ((null? receipts) '())
-   ((yuanxu-module-load-receipt-loaded? (car receipts))
-    (cons (yuanxu-module-load-receipt-module (car receipts))
+   ((.get (car receipts) loaded?)
+    (cons (.get (car receipts) module)
           (agentic-ai-lab-module-loaded-modules-from-receipts (cdr receipts))))
    (else
     (agentic-ai-lab-module-loaded-modules-from-receipts (cdr receipts)))))
 
 ;;; Boundary: source doctor surfaces loader evidence before descriptor diagnostics.
-;; : (-> [PooModuleLoaderBackend] [PooModuleSourceRef] POOObject)
+;; : (-> [ModuleLoaderBackend] [PooModuleSourceRef] POOObject)
 (def (agenticAiLabModuleSourceDoctorPresentation backends source-refs)
   (let* ((load-receipts-value
          (yuanxu-module-load-source-receipts backends source-refs))
@@ -229,6 +204,6 @@
         runtime-executed: #f
         replayable: #t)))
 
-;; : (-> [PooModuleLoaderBackend] [PooModuleSourceRef] POOObject)
+;; : (-> [ModuleLoaderBackend] [PooModuleSourceRef] POOObject)
 (def agentic-ai-lab-module-source-doctor-presentation
   agenticAiLabModuleSourceDoctorPresentation)

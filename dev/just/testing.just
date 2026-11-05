@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 # Keep the 10k scale fixture out of the ordinary unit-test worker. This
-# dedicated gate owns its benchmark budget and emits the full native receipt.
+# dedicated gate owns its benchmark budget and emits the full runtime receipt.
 [group('test')]
 test-standards-resolution-performance:
     GERBIL_BUILD_VERBOSE=1 GERBIL_PATH="{{ justfile_directory() }}/.gerbil" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=3s 90s gerbil {{ gerbil_test_runtime_options }} test -v 3 t/performance/standards-resolution-performance-test.ss
@@ -15,7 +15,7 @@ test-sources-lock-performance:
 
 # Run Core and product tests through their init-owned publications.
 [group('test')]
-test:
+test: build-testing build-test-workers prepare-test-inputs build-library
     #!/usr/bin/env bash
     set -euo pipefail
     # A maintenance sleep consumes every real Case/runner deadline. Keep the
@@ -26,36 +26,17 @@ test:
     just test-core
     just test-root
 
-# Keep the root package's native entry independently callable during repairs.
+# Keep the root package's runtime entry independently callable during repairs.
 [group('test')]
-test-root: build-testing build-test-workers prepare-test-inputs build-library
-    #!/usr/bin/env bash
-    set -euo pipefail
-    manifest=$(mktemp)
-    trap 'rm -f "$manifest"' EXIT
-    just test-files > "$manifest"
-    # Preparation above is shared, not repeated by every file. The external
-    # loop owns isolation; each native Harness retains its own heap and budget.
-    python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- timeout --signal=TERM --kill-after=5s 1200s bash -euo pipefail -c '
-      failed=0
-      while IFS= read -r file; do
-        [[ -n "$file" ]] || continue
-        [[ -f "$file" && "$file" == *-test.ss ]] || { echo "invalid test input: $file" >&2; exit 64; }
-        if ! just _test-file "$file"; then failed=1; fi
-      done < "$1"
-      exit "$failed"
-    ' -- "$manifest"
+[positional-arguments]
+test-root +paths="t":
+    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" python3 packages/automation/gerbil_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} core/dev/test-file.ss "$@"
 
-# Keep the existing declarative inclusion policy, not a second file scanner.
-[private]
-test-files:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 60s gxi {{ gerbil_test_runtime_options }} dev/tests.ss list
-
-# Diagnose a long native file with the full package's unchanged process budget.
+# Diagnose a long runtime file with the full package's unchanged process budget.
 [group('test')]
-test-package-file path: build-test-workers prepare-test-inputs
+test-package-file path:
     mkdir -p "{{ justfile_directory() }}/.gerbil/test-results"
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} dev/tests.ss run "{{ path }}" "{{ gerbil_test_runtime_options }}" 1200 false
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/gerbil_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} core/dev/test-file.ss "{{ path }}"
 
 # Keep ASP's per-phase test receipts and add process wall/user/system timing.
 [group('test')]
@@ -74,23 +55,22 @@ test-core-file path:
 
 # Run one root-owned Scheme test with the same pre-import heap fence.
 [group('test')]
-test-file path observe="false": (_test-file path observe)
+test-file path observe="false":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    options=()
+    case "{{ observe }}" in
+      false) ;;
+      true) options=(-D yuanxu-module-test-observation) ;;
+      trace) options=(-D yuanxu-module-test-observation,yuanxu-module-test-trace) ;;
+      *) echo 'observe must be false, true, or trace' >&2; exit 64 ;;
+    esac
+    GAMBOPT="${GAMBOPT:+$GAMBOPT,}max-heap={{ gerbil_test_max_heap }},debug={{ gerbil_test_debug }}" GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} core/dev/test-file.ss "${options[@]}" "{{ path }}"
 
-[private]
-_test-file path observe="false":
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/tests.ss run "{{ path }}" "{{ gerbil_test_runtime_options }}" 120 "{{ observe }}"
-
-# Use the maintained Nix integration gate and its existing pre-import fences.
-[group('test')]
-test-nix-file path: build-test-workers prepare-test-inputs
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" python3 packages/automation/native_test_inputs.py --inputs "{{ agentic_ai_lab_gerbil_path }}/test-inputs" -- {{ gerbil_darwin_env }} just --justfile t/qualification/nix/Justfile test "{{ path }}"
-
-# Run wall-clock performance scenarios through the native ASP scheduler,
-# outside the ordinary unit-test batches.
+# Run performance Suites serially through the same official test entry.
 [group('test')]
 test-performance:
-    @echo "[agentic-ai-lab-test-runtime] maxHeap={{ gerbil_test_max_heap }} debug={{ gerbil_test_debug }} scope=worker-process"
-    GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" gerbil {{ gerbil_test_runtime_options }} env ./dev/performance-tests.ss
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 1200s gxi {{ gerbil_test_runtime_options }} core/dev/test-file.ss 't/performance/...' t/module-system-poo-performance-test-support
 
 # Run only hermetic Bazel qualifications; `just test` owns Scheme unit tests.
 [group('test')]
@@ -140,4 +120,4 @@ test-query-orgize-source:
 
 # Source-level ownership controls; heap fence applies before any imports.
 test-module-ownership:
-    timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss module-ownership "{{ gerbil_test_runtime_options }}"
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss module-ownership "{{ gerbil_test_runtime_options }}"

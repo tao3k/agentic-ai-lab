@@ -310,7 +310,7 @@ static int agentic_ai_lab_nix_pure(agentic_ai_lab_nix_session *s)
     return ok;
 }
 
-/* One explicit native application; diagnostic attribute reads share its thunks.
+/* One explicit runtime application; diagnostic attribute reads share its thunks.
  * This does not cache an admission verdict or a cross-session result. */
 static int agentic_ai_lab_nix_apply(agentic_ai_lab_nix_session *s, const char *input)
 {

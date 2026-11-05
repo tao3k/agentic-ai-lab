@@ -93,7 +93,7 @@
                                   (run . "gxpkg build -g"))))))))))
 
 ;; : String
-(def funflow-github-ci-native-json
+(def funflow-github-ci-runtime-json
   "{\"name\":\"Agentic AI Lab CI\",\"on\":\"push\",\"jobs\":{\"build\":{\"runs-on\":\"ubuntu-latest\",\"steps\":[{\"run\":\"gxpkg build -g\"}]}}}")
 
 ;; : TestSuite
@@ -145,12 +145,12 @@
         (check-equal? (funflow-github-ci-test-ref alist-receipt 'checked-slots)
                       '(name run-name on env defaults concurrency permissions jobs))
         (check-equal? (funflow-github-ci-test-ref poo-receipt 'valid?) #t)))
-    (yuanxu-test-case "validates native JSON hash objects directly"
+    (yuanxu-test-case "validates runtime JSON hash objects directly"
       (let* ((string-key-workflow
-              (string->json funflow-github-ci-native-json
+              (string->json funflow-github-ci-runtime-json
                             (JSONReadOptions object-as-hash: #t)))
              (symbol-key-workflow
-              (string->json funflow-github-ci-native-json
+              (string->json funflow-github-ci-runtime-json
                             (JSONReadOptions object-as-hash: #t
                                              key-as-symbol: #t)))
              (string-key-receipt

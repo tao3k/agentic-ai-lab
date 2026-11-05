@@ -79,7 +79,7 @@
     (ensure (equal? (.ref original 'semantic-digest)
               (.ref (agentic-ai-lab-ai-agentic-context-org-replay
                       context-source original context-scope) 'semantic-digest))
-            "Catalog projection changed the native replay digest")
+            "Catalog projection changed the runtime replay digest")
     (ensure (rejected? (lambda ()
       (agentic-ai-lab-ai-agentic-context-org-replay
         (string-append context-source "\nchanged bytes\n") original context-scope)))
@@ -91,7 +91,7 @@
             "Caller mutation corrupted the private catalog IDs")
     (ensure (rejected? (lambda ()
       (agentic-ai-lab-ai-agentic-context-org-replay context-source original context-scope)))
-      "Altered Feature IDs survived native replay"))
+      "Altered Feature IDs survived runtime replay"))
   ;; An acquired owner must close even before its first business command.
   ;; Recovery may preserve pending Attempts; it must not invent a terminal.
   (let (empty (service-fixture (string-append path ".empty")))
@@ -105,13 +105,13 @@
     (def (command id operation sid revision observation)
       (context-service-dispatch! service (context-service-command id operation sid revision 0 1 observation)))
     (let (first (command "complete-C" 'result "session-c" 2 "obs-C"))
-      (ensure (.ref first 'native-result-published?) "Service did not publish the actual Session terminal")
+      (ensure (.ref first 'runtime-result-published?) "Service did not publish the actual Session terminal")
       (ensure (.ref (command "complete-C" 'result "session-c" 2 "obs-C") 'historical?) "Duplicate lost original decision")
       (ensure (eq? (.ref (command "complete-C" 'result "session" 2 "obs-A") 'reason) 'identity-conflict)
               "Same retry ID accepted different Session bytes"))
     (let* ((revoke (context-service-grant-command "revoke" "grant" (service-fixture-grant-digest value) 1))
            (answer (context-service-dispatch! service revoke)))
-      (ensure (.ref answer 'accepted?) "Native grant CAS did not apply")
+      (ensure (.ref answer 'accepted?) "Runtime grant CAS did not apply")
       (ensure (.ref (context-service-dispatch! service revoke) 'historical?) "Grant retry reconstructed a new proposal"))
     (ensure (not (.ref (command "old-A" 'result "session" 2 "obs-A") 'accepted?)) "Revoked result revived")
     (let ((a (command "inspect-A" 'inspect "session" 0 #f))

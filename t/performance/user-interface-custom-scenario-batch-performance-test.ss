@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: custom user-interface scenarios keep a real performance fixture.
-;;; Invariant: user modules stay POO-native; benchmark contracts live under t/.
+;;; Invariant: user modules stay POO; benchmark contracts live under t/.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test

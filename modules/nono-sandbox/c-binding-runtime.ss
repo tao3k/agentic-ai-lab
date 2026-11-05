@@ -9,7 +9,7 @@
 ;;; Source contract: symbols mirror the package-owned bindings/nono-c/nono.h.
 ;;; Policy evidence: binding tests assert descriptor override and manifest gates.
 
-;;; Native nono C binding runtime manifest projection.
+;;; Runtime nono C binding runtime manifest projection.
 ;;; - Keep sandbox manifests validated before runtime dry-run, smoke, or live receipts are emitted.
 (import (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
         :agentic-ai-lab/modules/agent-sandbox/alist
@@ -61,7 +61,7 @@
      (cons (car rows) rows-rev))))
 
 ;;; Dry-run receipts are Scheme-side evidence only. They prove the nono C ABI
-;;; manifest can be projected, but they do not load a native library or apply a sandbox.
+;;; manifest can be projected, but they do not load a runtime library or apply a sandbox.
 ;; : (-> Unit Symbol)
 (def +nono-c-binding-dry-run-receipt-schema+
   'agentic-ai-lab.sandbox.nono-sandbox.c-binding.dry-run.v1)
@@ -206,7 +206,7 @@
       (field 'runtime-manifest)
       (code 'not-alist)))))
 
-;;; This validator is the last Scheme-side boundary before a native runtime
+;;; This validator is the last Scheme-side boundary before a runtime
 ;;; receives the manifest, so it preserves the original manifest in failures
 ;;; for bridge diagnostics and policy tests.
 ;; : (-> RuntimeManifest AgentSandboxRuntimeManifest)
@@ -372,10 +372,10 @@
 
 ;;; The dry-run receipt is the nono C binding preflight surface: it validates
 ;;; the neutral runtime manifest, projects the ABI call plan, and reports the
-;;; native apply entrypoint without calling it.
+;;; runtime apply entrypoint without calling it.
 ;; nono-c-binding-dry-run
 ;;   : (-> RuntimeManifest [NonoCBindingDescriptor] Alist)
-;;   | contract: validates and projects only; native sandbox apply is never called
+;;   | contract: validates and projects only; runtime sandbox apply is never called
 ;;   | doc m%
 ;;       # Examples
 ;;
@@ -417,7 +417,7 @@
 ;; nono-c-binding-smoke-test
 ;;   : (forall (c) (-> RuntimeManifest [c] Alist))
 ;;   : (-> RuntimeManifest [Command] Alist)
-;;   | contract: runs a host probe command only; native sandbox apply is never called
+;;   | contract: runs a host probe command only; runtime sandbox apply is never called
 ;;   | doc m%
 ;;       # Examples
 ;;
@@ -453,7 +453,7 @@
 ;; nono-c-binding-live-test
 ;;   : (forall (c) (-> RuntimeManifest [c] Alist))
 ;;   : (-> RuntimeManifest [Command] Alist)
-;;   | contract: runs only an installed nono CLI probe; native sandbox apply is never called
+;;   | contract: runs only an installed nono CLI probe; runtime sandbox apply is never called
 ;;   | doc m%
 ;;       # Examples
 ;;
@@ -503,7 +503,7 @@
 ;;; Final projection packages the verified ABI contract, request policy, and
 ;;; query/apply/state entry points into one backend-owned manifest. Consumers
 ;;; can bind this data to C directly without reading Gerbil request internals
-;;; or invoking native code from the Scheme layer.
+;;; or invoking runtime code from the Scheme layer.
 ;; : (-> AgentSandboxRuntimeManifest [NonoCBindingDescriptor] NonoCBindingManifest)
 (def (nono-c-binding-runtime-manifest->manifest runtime-manifest
                                                 . maybe-descriptor)

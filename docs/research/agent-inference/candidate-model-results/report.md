@@ -2,7 +2,7 @@
 
 Finite three-node synthesis/feedback integration gate, not corpus reproduction or proof of reduced thinking. If every development proposal passes, assistance comparison is unexercised. No new formal proof or current-head remote CI claim.
 
-| Task | Initial held-out matches / evaluated | Complete native attempts | Paired revisions |
+| Task | Initial held-out matches / evaluated | Complete runtime attempts | Paired revisions |
 |---|---:|---:|---:|
 | 0 | 60 / 60 | 60 | 0 |
 | 1 | 60 / 60 | 60 | 0 |

@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test (only-in :agentic-ai-lab/testing-api yuanxu-test-case)
+(import :std/test (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .cc .ref)
         :agentic-ai-lab/modules/ai-agentic-context/use-host
         :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host

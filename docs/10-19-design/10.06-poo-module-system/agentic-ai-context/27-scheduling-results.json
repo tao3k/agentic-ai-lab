@@ -2,7 +2,7 @@
   "schema": "context.scheduling.validation.v1",
   "contract_identity": "context-bounded-scheduling",
   "semantic_revision": 1,
-  "status": "finite-model-and-native-reference-correspondence-passed",
+  "status": "finite-model-and-runtime-reference-correspondence-passed",
   "source_sha256": {
     "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/27-scheduling-burst.qnt": "2bfdebd6fc630e55c2b6cdd7b38decc95f73662ad036045f4a0772da16ad6ad3",
     "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/27-scheduling-capacity.qnt": "608d7a67a1c6479e12394400dd3e4c95f30f272cd8d2ea94addbdebc9c719e9a",
@@ -12,14 +12,14 @@
     "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/27-bounded-scheduling.qnt": "8c0063c620c1f200fed3c242747bf28b40c43c0583210f619913c292e8ecf67c",
     "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-scheduling-quint.py": "e6360438ba68a8e0242da2676c1c5e807feaee8100b89715ba71b3837bb2e5db",
     "core/dev/proofs/quint/backend.py": "8751028709e7b6ee44e592b3feb125235bc7d0465d556a0272cf12931c4d142b",
-    "core/dev/proofs/quint/native.py": "add09bd810ea579091f172f51225cbcfe7308a9f1a857cebdb2962f18334fe02",
-    "core/dev/proofs/quint/native-cli.cjs": "0babb2ca658486ff4dfcb41c9f5e046179329c7ec984e6be0bfae44855c912f2",
+    "core/dev/proofs/quint/cli.py": "add09bd810ea579091f172f51225cbcfe7308a9f1a857cebdb2962f18334fe02",
+    "core/dev/proofs/quint/quint-cli.cjs": "0babb2ca658486ff4dfcb41c9f5e046179329c7ec984e6be0bfae44855c912f2",
     "modules/temporal-causality/runtime/scheduling.ss": "d3ebd0a0c61ed157ebe8eefd0b22dd3f52d567fa4e647d44647c326d9c155dc7",
     "t/context-scheduling-test.ss": "b60620e6bb90690046fa880e52836953e1f30f05fabbf89f7ec84da482a7ccce",
     "t/harness/context-scheduling-driver.ss": "f9d79f936849867d608688c67e56482d7d7bd0a276c55ff0bb417b384ebaa30c",
     "dev/just/build.just": "98d9e79db5cb8ccf16e184bc3b1ce39e1f7a6081583937c9f7d1da9bfeceef2d",
     "dev/just/runtime-tests.just": "f66f15975116155bab9f75b30bb32a77b014fb6aae8c91d0b7a692d4a69ec65c",
-    "packages/automation/context-native-artifacts.py": "57dc67d2b046e5552d89fae7a391580784445fda739d79e6fb71f3060de6ce72",
+    "packages/automation/context-host-artifacts.py": "57dc67d2b046e5552d89fae7a391580784445fda739d79e6fb71f3060de6ce72",
     "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/27-bounded-scheduling.sysml": "14a3a20e517ce51d47508514bb15ae42d474be9c896952b87f9b852785e7833f",
     "docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-scheduling-sysml.py": "53c3fd55ce2a5430cf989a4bfaf2c177f4bd0c1ece23a337a036e085a9b2c22d"
   },
@@ -31,7 +31,7 @@
     "production_owner_integrated": false,
     "cluster_implemented": false,
     "liveness_proved": false,
-    "unbounded_native_refinement_proved": false,
+    "unbounded_runtime_refinement_proved": false,
     "throughput_benchmark": false,
     "original_evidence_and_session_semantics_changed": false
   },
@@ -45,11 +45,11 @@
     "broken_families": 4,
     "replay_traces": 25,
     "cases": {
-      "path": "/private/tmp/context-scheduling-final-20261026/quint-qualified/native-cases.json",
+      "path": "/private/tmp/context-scheduling-final-20261026/quint-qualified/runtime-cases.json",
       "sha256": "d7b41c57a5de08f4d031b6ebfb43d7ecf3fa8a2f0ae46190c6975dcdf342afa0"
     },
-    "native_inputs": {
-      "path": "/private/tmp/context-scheduling-final-20261026/quint-qualified/native-cases.scm",
+    "runtime_inputs": {
+      "path": "/private/tmp/context-scheduling-final-20261026/quint-qualified/runtime-cases.scm",
       "sha256": "ca67f830d36237f093a8aa7fe0bf3c751a0894a969d92b5427c64bfe616fcd17"
     }
   },
@@ -66,9 +66,9 @@
     "expected_unsafe_per_run": 5,
     "unexpected": 0
   },
-  "native": {
+  "runtime": {
     "receipt": {
-      "path": "/private/tmp/context-scheduling-final-20261026/native-receipt.json",
+      "path": "/private/tmp/context-scheduling-final-20261026/runtime-receipt.json",
       "sha256": "3c229977ec6a5871d6321f8d7ee09bfacf305a51dc5f80375c85168988e50eb9"
     },
     "heap": "2G",

@@ -6,7 +6,7 @@
  (only-in :std/list/list find delete-duplicates/hash)
  (only-in
   :agentic-ai-lab/modules/query/semantic/orgize-source-interface
-  parse-org-native-events
+  parse-org-events
   org-source-headline-elements
   org-source-headline-parser-identity)
  (only-in
@@ -21,7 +21,7 @@
 (def (text? v)
   (and (string? v) (< 0 (string-length v) 257)))
 
-;;; Consume native parser events, including structural ownership of drawers.
+;;; Consume runtime parser events, including structural ownership of drawers.
 ;;; ID-looking text inside a source block is not a document/headline property.
 ;;; IDs are local anchors; the registered source identity qualifies them.
 (def (context-org-source identity-value generation-value bytes-value (active-value #t))
@@ -95,7 +95,7 @@
                  (slice (frame-value-start p) (frame-value-end p)))
                 properties)))))
          (else (error "Unknown Org event"))))
-     (parse-org-native-events raw))
+     (parse-org-events raw))
     (unless (and (= roots 1) (null? stack) (= offset size) (.ref projection 'complete?))
       (error "Incomplete Org source"))
     (let* ((props (reverse properties))

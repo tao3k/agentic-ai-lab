@@ -25,7 +25,7 @@ def typed_observation(case_id: str, old: dict[str, Any]) -> dict[str, Any]:
         typed["intent_verified"] = False
     elif case_id.startswith("temporal."):
         if typed.pop("release-authorized?") != "#f":
-            raise RuntimeError("native release field changed from frozen fixture")
+            raise RuntimeError("runtime release field changed from frozen fixture")
         typed["release_authorized"] = False
         typed["causation_proven"] = False
         typed["evidence_scope"] = "temporal_classification_only"

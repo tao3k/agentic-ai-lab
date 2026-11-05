@@ -92,13 +92,13 @@
 (def (line-present? lines expected)
   (member expected lines))
 
-(def (agentic-ai-lab-performance-matrix-verify runtime-path native-proof-path
+(def (agentic-ai-lab-performance-matrix-verify runtime-path runtime-proof-path
                                          python-proof-path)
   (let* ((runtime-lines (receipt-lines runtime-path))
          (runtime-blocks-value (receipt-blocks runtime-lines))
          (observed (map runtime-block-signature runtime-blocks-value))
          (expected (expected-runtime-signatures))
-         (native-lines (receipt-lines native-proof-path))
+         (runtime-lines (receipt-lines runtime-proof-path))
          (python-lines (receipt-lines python-proof-path))
          (diagnostics '()))
     (def (reject! code observed-value)
@@ -113,11 +113,11 @@
                                 "lookup-complexity=O(log-n-plus-k)")
                  (line-present? runtime-lines "abi-v1-frozen=false"))
       (reject! 'invalid-runtime-performance-contract runtime-path))
-    (unless (and (proof-profile-complete? native-lines)
-                 (line-present? native-lines "threshold-status=baseline-only")
-                 (line-present? native-lines "allocations-per-item=0")
-                 (line-present? native-lines "crossings-per-item=3"))
-      (reject! 'invalid-native-proof-baseline native-proof-path))
+    (unless (and (proof-profile-complete? runtime-lines)
+                 (line-present? runtime-lines "threshold-status=baseline-only")
+                 (line-present? runtime-lines "allocations-per-item=0")
+                 (line-present? runtime-lines "crossings-per-item=3"))
+      (reject! 'invalid-runtime-proof-baseline runtime-proof-path))
     (unless (and (proof-profile-complete? python-lines)
                  (line-present? python-lines "threshold-status=baseline-only")
                  (line-present? python-lines

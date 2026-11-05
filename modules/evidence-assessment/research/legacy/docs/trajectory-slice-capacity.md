@@ -46,4 +46,4 @@ cargo clippy --locked --manifest-path rust/Cargo.toml -p gerbil-ascent --lib -- 
 
 Build Python artifacts through the `python/` project entrypoint, not the internal
 Cargo-only project. Model and consumer passes do not establish an SMP runtime
-repair, reduced agent repetition, or a native performance improvement.
+repair, reduced agent repetition, or a runtime performance improvement.

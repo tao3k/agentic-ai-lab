@@ -22,7 +22,7 @@ The semantic route is:
 ORG source / Element / Query cut
  -> admitted source/event/Fact/rule correspondence
  -> original ASCENT derivation and proof DAG with exact premise bindings
- -> registered proof + current native source/journal/program/support/policy witness
+ -> registered proof + current runtime source/journal/program/support/policy witness
  -> dependency-directed Context invalidation / Impact refresh
  -> exact Session Attempt and current owner publication fence
 #+end_src
@@ -44,7 +44,7 @@ and advances the exact source/journal cut; the original proof stays historical.
 Another possible root remains available, but cannot authenticate the original
 selected root or repair its consumption binding. A source change unrelated to
 a proof's premises is not modeled as a general rule that all journal changes
-invalidate every proof. Broader support/retraction coverage remains native work.
+invalidate every proof. Broader support/retraction coverage remains runtime work.
 
 * Concurrency scope and atomicity
 
@@ -83,7 +83,7 @@ verification predicate for every order. Python implements no domain reducer,
 proof policy, cancellation decision or acceptance predicate.
 
 This is explicit bounded trace enumeration through the CLI's run engine, not
-its native fork/check search. It covers every linearization of this finite
+its runtime fork/check search. It covers every linearization of this finite
 atomic-event model; it is not complete verification of arbitrary concurrency,
 retries, crash points inside a reducer, multiple Attempts or distributed CAS.
 
@@ -105,7 +105,7 @@ requires all prefix monitors to remain clear:
    while current applicability changes; historical acceptance is not rewritten.
 
 The source/registered-proof identities and authenticated owner observations are
-finite premises, not cryptographic or native source authentication. Retraction
+finite premises, not cryptographic or runtime source authentication. Retraction
 of the one affected premise and its direct consumer is represented at S's
 linearization point. Asynchronous reverse-index propagation, negative inventory
 coverage and actual ASCENT derivation replay are outside this bound. These
@@ -188,7 +188,7 @@ was additionally executed successfully for mode 2.
 
 These are event-input replays. The CLI's own witness names its deterministic
 run schedule and can have no internal choice points because the event order is
-explicit input. We do not present an empty native choice list as a discovered
+explicit input. We do not present an empty runtime choice list as a discovered
 fork schedule. The saved input order is the concurrent linearization witness.
 Raw logs and witnesses remain local artifacts, not committed source logs.
 
@@ -211,14 +211,14 @@ The existing [[file:../../../../packages/proofs/quint/SessionAttempt.qnt][Sessio
 [[file:../../../../packages/proofs/quint/ContextTemporalLifecycle.qnt][ContextTemporalLifecycle]] remain their primary finite protocol owners.
 This SysML experiment binds their related questions into an executable
 cross-owner scenario; it neither replaces those models nor claims they were
-rerun. Actual ASCENT solver/original-proof/current-support replay, native Scheme
+rerun. Actual ASCENT solver/original-proof/current-support replay, Scheme
 reducer correspondence and provider/Data publication remain unqualified by this
 run. No runtime implementation or effect authority was changed.
 
-* Subsequent native correspondence
+* Subsequent runtime correspondence
 
-[[file:06-native-proof-support-replay.org][Native ASCENT/Scheme replay]] subsequently executed three selected native
+[[file:06-runtime-proof-support-replay.org][Runtime ASCENT/Scheme replay]] subsequently executed three selected runtime
 paths within a 31-Case suite. It refines the original-proof/current-support,
 withdrawal and recovery-intent observations while retaining the missing final
 provider publication/CAS boundary. This does not retroactively turn the 2,240
-model paths into native executions or prove full cross-language refinement.
+model paths into runtime executions or prove full cross-language refinement.

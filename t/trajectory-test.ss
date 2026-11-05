@@ -15,7 +15,7 @@
             (if repair [(cons "repairOf" repair)] []))))
 (def (reject thunk) (with-catch (lambda (_) #t) (lambda () (thunk) #f)))
 (def trajectory-test
-  (test-suite "Native trajectory evidence and first-correct accounting"
+  (test-suite "Runtime trajectory evidence and first-correct accounting"
     (test-case "checkpoint records uncertainty without admitting correctness"
       (let (h (open))
         (check (reject (cut event h "missing" "checkpoint" '("modelCall" . "absent")

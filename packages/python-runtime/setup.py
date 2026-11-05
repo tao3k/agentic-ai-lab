@@ -40,7 +40,7 @@ class BuildPyWithRuntime(build_py):
             "Windows": "agentic_ai_lab_runtime_v0.dll",
         }.get(system, "libagentic_ai_lab_runtime_v0.so")
         source = _runtime_library()
-        target = Path(self.build_lib) / "agentic_ai_lab_runtime" / "_native" / "lib"
+        target = Path(self.build_lib) / "agentic_ai_lab_runtime" / "_runtime" / "lib"
         target.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, target / library_name)
         semantic = os.environ.get("AGENTIC_AI_LAB_SEMANTIC_LIBRARY")
@@ -53,10 +53,10 @@ class BuildPyWithRuntime(build_py):
 
 setup(
     rust_extensions=[RustExtension("agentic_ai_lab_runtime._reasoning",
-        path="../../modules/evidence-assessment/native/Cargo.toml",
+        path="../../modules/evidence-assessment/runtime/Cargo.toml",
         binding=Binding.PyO3, features=["python", "extension-module"])],
-    cffi_modules=["src/agentic_ai_lab_runtime/_native/_build.py:ffibuilder",
-                  "src/agentic_ai_lab_runtime/_native/_semantic_build.py:ffibuilder",
-                  "src/agentic_ai_lab_runtime/_native/_temporal_store_build.py:ffibuilder"],
+    cffi_modules=["src/agentic_ai_lab_runtime/_runtime/_build.py:ffibuilder",
+                  "src/agentic_ai_lab_runtime/_runtime/_semantic_build.py:ffibuilder",
+                  "src/agentic_ai_lab_runtime/_runtime/_temporal_store_build.py:ffibuilder"],
     cmdclass={"build_py": BuildPyWithRuntime},
 )

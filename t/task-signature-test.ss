@@ -1,3 +1,4 @@
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Exercise extension executors and inert external requests through real Types.
 (import :std/test
@@ -5,7 +6,7 @@
         (only-in :clan/poo/type String Unit)
         (only-in :clan/poo/number Integer)
         (only-in :agentic-ai-lab/services Services)
-        (only-in :agentic-ai-lab/modules/workflow/runtime/runtime-v0-native native-abi-version)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/runtime-v0-ffi contract-abi-version)
         (only-in :agentic-ai-lab/modules/workflow/runtime/semantic semantic-call)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/modules/funflow/control-plane/task
@@ -23,11 +24,11 @@
         (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol AdapterResult))
 (export task-signature-test)
 (def task-signature-test
-  (test-suite "Extension native Task boundaries"
-    (yuanxu-test-case "installed FFI facades load through their complete native import closure"
-      (check-equal? (procedure? native-abi-version) #t)
+  (test-suite "Extension runtime Task boundaries"
+    (yuanxu-test-case "installed FFI facades load through their complete runtime import closure"
+      (check-equal? (procedure? contract-abi-version) #t)
       (check-equal? (procedure? semantic-call) #t))
-    (yuanxu-test-case "the installed shared Services boundary is a native Type"
+    (yuanxu-test-case "the installed shared Services boundary is a Type"
       (check-eq? (validate Type Services) Services))
     (yuanxu-test-case "local executors enforce actual input and output Types"
       (def repeat (make-custom-repeat-task 'repeat "." 2))
@@ -51,7 +52,7 @@
           (check-equal? (task-executor task) #f))
         (list docker sandbox)))
     (yuanxu-test-case "workflow composition retains concrete module-owned Function Types"
-      ;; No Docker or makefile effect runs while composing these native values.
+      ;; No Docker or makefile effect runs while composing these runtime values.
       (for-each
         (lambda (build input-type)
           (def flow (build 'typed))

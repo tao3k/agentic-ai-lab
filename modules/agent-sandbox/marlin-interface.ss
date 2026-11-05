@@ -5,7 +5,7 @@
 
 ;;; Owner: Marlin-facing agent sandbox backend dispatch lives here.
 ;;; Boundary: this module selects backend interface manifests, not runtimes.
-;;; Runtime contract: Marlin owns all native/Cube API execution after handoff.
+;;; Runtime contract: Marlin owns all runtime/Cube API execution after handoff.
 ;;; Policy evidence: dispatcher tests assert nono/Cube routing and failure gates.
 
 (import (only-in :yuanxu/modules/funflow/control-plane/failure raise-control-plane-failure)
@@ -174,7 +174,7 @@
   (and (pair? value) (list? value)))
 
 ;;; Final Marlin handoff wraps the backend-owned manifest with uniform routing
-;;; fields. Marlin can inspect `handoff-kind` before delegating to a native or
+;;; fields. Marlin can inspect `handoff-kind` before delegating to a runtime or
 ;;; remote runner, while tests can assert one shape across backends.
 ;; : (-> AgentSandboxRuntimeManifest MarlinInterfaceManifest)
 (def (agent-sandbox-runtime-manifest->marlin-interface-manifest

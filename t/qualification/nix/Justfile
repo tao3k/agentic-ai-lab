@@ -7,13 +7,6 @@ root := justfile_directory() + "/../../.."
 build:
     cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 240s gxi -:max-heap=2G,debug=q t/qualification/nix/build.ss
 
-test path:
-    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 240s gxi -:max-heap=2G,debug=q t/qualification/nix/run.ss "{{ path }}"
-
-# Core TestingScript owns the per-file 2 GiB / 120-second gate, serially.
-test-all:
-    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 3600s gxi -:max-heap=2G,debug=q t/qualification/nix/run.ss
-
 # Nix-specific approval preparation; Core owns the restarted publication worker.
 approved-producer workspace:
     cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s "$GERBIL_PATH/bin/build-publication-tools" -:max-heap=2G,debug=q approved "{{ workspace }}"

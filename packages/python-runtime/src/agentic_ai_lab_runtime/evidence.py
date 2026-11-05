@@ -304,7 +304,7 @@ class TursoAuthorizedEffectEvidenceStore:
     def close(self) -> None:
         self._conn.close()
 
-    def native_sink(
+    def runtime_sink(
         self,
         *,
         session_id: str,
@@ -314,9 +314,9 @@ class TursoAuthorizedEffectEvidenceStore:
         signature_verified: bool = False,
         inclusion_proof_verified: bool = False,
     ):
-        from .native_evidence_sink import build_turso_native_evidence_sink
+        from .runtime_evidence_sink import build_turso_runtime_evidence_sink
 
-        return build_turso_native_evidence_sink(
+        return build_turso_runtime_evidence_sink(
             self,
             session_id=session_id,
             committed_execution_root=committed_execution_root,

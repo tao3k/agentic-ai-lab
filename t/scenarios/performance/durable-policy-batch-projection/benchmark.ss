@@ -22,11 +22,11 @@
  (inputShape . "sixty-four POO durable policy objects projected to struct receipts and bounded alists")
  (expectedOutcome . "the durable-policy-batch-projection scenario preserves its declared semantic result under the ASP P95 gate")
  (expectedRepair . "keep durable policy validation/projection batched; do not make runtime consumers traverse POO object graphs")
- (nativePooAuthoring . #t)
+ (runtimePooAuthoring . #t)
  (receiptRepresentation . defstruct)
  (adapterBoundary . "durable policy receipts are structs until ABI alist projection")
  (hotPathExemption . durable-policy-batch-projection)
- (hotPathEvidence native-poo-authoring
+ (hotPathEvidence poo-authoring
                   defstruct-runtime-receipt
                   durable-policy
                   batch-projection

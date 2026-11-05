@@ -152,7 +152,7 @@
      (make-agent-sandbox-task-family-registry)
      default-flow-declaration-registry)))
 
-;;; Explicit task fields lower through the same native profiled constructor.
+;;; Explicit task fields lower through the same runtime profiled constructor.
 ;;; Boundary: future backend policy belongs in profiles/options, not by growing
 ;;; this long signature with runtime-owned concerns.
 ;; : (-> Symbol Symbol BackendRef Command [Arg] Env Workdir Mounts NetworkPolicy Capabilities ResourcePolicy OutputPolicy Metadata Function Task)

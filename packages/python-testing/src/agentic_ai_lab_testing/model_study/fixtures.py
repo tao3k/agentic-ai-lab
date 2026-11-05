@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Read and validate native observations for the frozen model corpus."""
+"""Read and validate runtime observations for the frozen model corpus."""
 
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ def source_head(root: Path) -> str:
     ).strip()
 
 
-def native_script(script: Path, root: Path, load_roots: list[Path]) -> dict[str, str]:
+def runtime_script(script: Path, root: Path, load_roots: list[Path]) -> dict[str, str]:
     env = os.environ.copy()
     env.pop("DEEPSEEK_API_KEY", None)
     env["GERBIL_LOADPATH"] = ":".join(
@@ -49,7 +49,7 @@ def native_script(script: Path, root: Path, load_roots: list[Path]) -> dict[str,
     lines = [line for line in result.stdout.splitlines() if "\t" in line]
     fields = dict(line.split("\t", 1) for line in lines)
     if len(fields) != len(lines):
-        raise RuntimeError("native fixture emitted duplicate labels")
+        raise RuntimeError("runtime fixture emitted duplicate labels")
     return fields
 
 
@@ -69,7 +69,7 @@ def observations(ascent_root: Path | None, poo_root: Path) -> tuple[dict[str, di
         raise RuntimeError("ASCENT path observations disagree with frozen answer")
 
     started = time.perf_counter()
-    finite = native_script(
+    finite = runtime_script(
         HERE.parent / "ascent" / "finite_attempt.ss",
         ascent_root or poo_root,
         [ascent_root] if ascent_root is not None else [poo_root],
@@ -82,7 +82,7 @@ def observations(ascent_root: Path | None, poo_root: Path) -> tuple[dict[str, di
         raise RuntimeError("ASCENT finite evidence disagrees with frozen answer")
 
     started = time.perf_counter()
-    temporal = native_script(
+    temporal = runtime_script(
         HERE.parent / "temporal" / "attempt.ss", poo_root,
         [poo_root],
     )
@@ -139,7 +139,7 @@ def observations(ascent_root: Path | None, poo_root: Path) -> tuple[dict[str, di
 
 def stratified_observation(ascent_root: Path | None, poo_root: Path) -> dict[str, str]:
     """Check the new receipt on the same frozen negation/count input."""
-    result = native_script(
+    result = runtime_script(
         HERE.parent / "ascent" / "stratified_attempt.ss",
         ascent_root or poo_root,
         [ascent_root] if ascent_root is not None else [poo_root],

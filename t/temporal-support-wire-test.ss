@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :std/test (only-in :agentic-ai-lab/testing-api yuanxu-test-case)
+(import :std/test (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :agentic-ai-lab/modules/workflow/runtime/scheme-wire
         :agentic-ai-lab/modules/workflow/runtime/temporal-support :agentic-ai-lab/modules/workflow/runtime/temporal-policy)
 (export temporal-support-wire-test)
@@ -36,7 +36,7 @@
     (task (task n)) (claim "child") (expectedContextBinding expected))))
 (def temporal-support-wire-test
   (test-suite "named support wire projection"
-    (yuanxu-test-case "reverse projection and Context selection use native owners"
+    (yuanxu-test-case "reverse projection and Context selection use runtime owners"
       (let* ((revision (temporal-support-revise-call
                         (wire (hash (schema "agentic-ai-lab.temporal-support-revision-request.v1") (task (task 2)) (previousAsOf 1)))))
              (registered (refresh 1 1))

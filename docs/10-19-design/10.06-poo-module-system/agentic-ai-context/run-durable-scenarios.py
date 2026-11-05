@@ -30,6 +30,6 @@ def main():
   if bad:
    failed+=1;(out/f'counterexample-{window}-{replaced}-{mode}.json').write_text(json.dumps({'inputs':inputs,'model_sha256':sha(model),'actual':c},indent=2)+'\n')
  if r.returncode!=(1 if failed else 0):raise RuntimeError('Wrong CLI exit')
- (out/'summary.json').write_text(json.dumps({'executed':len(jobs),'expected_unsafe_failures':failed,'safe_failures':0,'model_sha256':sha(model),'native_storage_proof':False},indent=2)+'\n')
+ (out/'summary.json').write_text(json.dumps({'executed':len(jobs),'expected_unsafe_failures':failed,'safe_failures':0,'model_sha256':sha(model),'runtime_storage_proof':False},indent=2)+'\n')
  print(f'PASS: {len(jobs)} executed, {failed} expected unsafe; {out}')
 if __name__=='__main__':main()

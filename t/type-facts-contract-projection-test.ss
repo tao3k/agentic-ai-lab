@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Contract: native POO Contracts project into type-fact proof rows.
+;;; Contract: POO Contracts project into type-fact proof rows.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test)
@@ -21,7 +21,7 @@
 
 (def type-facts-contract-projection-test
   (test-suite "type-facts-contract-projection-test"
-    (yuanxu-test-case "validates the native contract"
+    (yuanxu-test-case "validates the runtime contract"
       (eval '(import :yuanxu/module-system/schema/slot-contracts))
       (eval '(import :yuanxu/object-types/facts))
       (eval '(import :clan/poo/object :clan/poo/mop))

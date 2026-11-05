@@ -1,0 +1,183 @@
+#+title: Interrupted write: evidence, responsibility and exploration
+#+language: en
+
+
+* Evidence cut comparison
+
+The comparison view reads across three admission cuts for one original Attempt.
+The four rows show Temporal evidence, Context judgment, the ASCENT outcome duty
+and example model inquiries. The design correspondence is in the interrupted
+write section of [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org][workspace-recovery.org]].
+
+Render the [[file:evidence-cuts.d2][native D2 source]] from the repository root.
+
+#+begin_src sh
+d2 --pad 18 dev/d2/examples/recovery-evidence/evidence-cuts.d2 dev/d2/output/recovery-evidence/evidence-cuts.svg
+rsvg-convert -b white -o dev/d2/output/recovery-evidence/evidence-cuts.png dev/d2/output/recovery-evidence/evidence-cuts.svg
+#+end_src
+
+** Rendered image reading and feedback
+
+The first PNG interleaved roles and cuts because D2 filled the grid down the
+columns. Switching the grid to five rows restored each role's three aligned
+snapshots. The second PNG made the status changes readable, but the headings
+and history footer needed sharper temporal wording. The revision explicitly
+labels success at B, unknown at C and the retained success judgment in history.
+
+The final PNG reads across Context as Unknown, Succeeded at B, Unknown at C
+and across ASCENT as Open, Resolved at B, Reopened at C. The Temporal row gives
+the causal basis for the judgment change. R2 withdraws the only qualifying
+support by identifying a different Attempt. The unchanged file observation
+and retained B record are visible separately from the current judgment.
+The inquiry row offers alternatives, and its caption explains how to read
+the columns as snapshots. All visible labels were read in the rendered image.
+
+Final PNG SHA-256: =aa9c1eea0b4c9f0b5e88af07e3ad5605876ad5f58a23ba5582be87cdf88a6e33=.
+
+
+* Design owner
+
+The source is [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org][Workspace Recovery]], its existing SysML companion, the
+=RecoveryEvidenceInquiry= module in its Quint companion and the Lean companion.
+Temporal Causality owns evidence versions, uses, assessments and admission.
+Durable supplies effect-specific questions; the model proposes investigations.
+
+The case and teaching files are inert presentation inputs to the existing
+=modules/d2= API. There is no new Scheme implementation, renderer or custom
+scene layout. Each SVG depicts one object or a local before/after distinction.
+The existing ASCENT rules choose constraints and ELK chooses global placement.
+
+* Actual first reading
+
+The first image was inspected, rather than assigned a pass verdict. Its long
+return edge made the relation graph look like an ordered cycle. The internal
+text was too small for the intended novice reader. A mislabeled state-change
+relation also caused ASCENT to request comparable object states even though
+the two endpoints were evidence and a judgment. The exact image-bound critique
+is in =readings.ss=. The repair is semantic: relate the actual premises to the
+judgment, rather than prescribe coordinates or move the layout into an SVG.
+
+* Scope of assurance
+
+Lean checks abstract safety theorems and Quint typechecks the bounded behavior
+model. No state-space search, runtime test or Scheme implementation is included.
+The source-qualified rendering and model reading do not establish that a human
+learner understood the picture. Cross-language refinement, authentic source
+admission and full causal identification remain separate obligations.
+
+* Second reading and semantic consolidation
+
+The second image exposed three converging premises and measured a minimum
+text size above 19 px, but the dense-reason rule selected a tall layout with
+long feedback routes and unused side space. The actual critique was returned
+to ASCENT before revising the presentation. The next candidate consolidates
+views of the same evidence lineage and views of the same original question.
+It retains three interacting objects: Temporal evidence, Context/ASCENT question
+responsibility, and model exploration. This is a choice for this explanation,
+not a three-object template or a fixed sequence for future diagrams.
+
+The narrower presentation inventory still covers observed content, evidence
+admission/correction, unknown outcome, retained responsibility and alternative
+exploration. Request counts across these different inventories are not quality
+scores. Historical PNGs and request snapshots remain local ignored artifacts.
+
+* Third reading
+
+The three-object view fit at 1800 by 628 pixels with a measured minimum of
+18.25 px. Actual reading still found a misleading local arrow between a file
+and a receipt, plus two captions exceeding their local paper bounds. Those
+findings were returned to ASCENT. The local repair removes the invented causal
+arrow and shortens labels; it does not change global positions or routing.
+
+* Design checks
+
+The Lean companion elaborated successfully with the repository's Lean 4.34.0
+toolchain, without sorry or added axioms. The existing Quint file, including
+its new design module, passed typechecking. No tests or state-space searches
+were run. The SysML view was parsed through the existing OpenSysML SDK during
+actual export. This is not an executable refinement proof between the files.
+
+During this session a concurrent Core build left the existing rendering tool's
+role-context dependency unpublished. A temporary copy compiled from that exact
+existing source restored the public driver without editing Core. This is a
+local tool-dependency workaround, not part of the Durable design or a new runtime.
+
+* Final actual reading
+
+The final 1800 by 628 image was viewed again after the local spacing repair.
+The two condition captions have approximately 4.98 px of measured separation;
+the minimum text size remains 18.25 px. The final reading is bound to the new
+PNG digest and exact visible text anchors in =readings.ss=. Prior readings are
+retained. The model can locate observed content, the unknown original outcome,
+the retained owner's question, competing explanations and conditional
+resolve/reopen effects. This is a scoped model reading, not measured interest
+or understanding by a real learner.
+
+* Correction support comparison
+
+The companion [[file:correction-support.d2][D2 source]] uses two alternatives
+at the same cut C. Both withdraw R1 and its dependent copy. Only the right
+alternative retains independently admitted W1. Render it with the same
+native D2 and PNG commands as the three-cut figure, using =correction-support=
+as the basename.
+
+The first PNG made the outcome and review responsibilities readable in both
+columns, but “withdraws” could be read as deletion from history, and the W1
+inquiry could imply that the surviving outcome automatically supports every
+affected claim. The revised PNG labels withdrawal from current support and
+asks the model to check each claim against W1. The footer keeps B's judgment
+and evidence history visible. The final image was read across both columns,
+including the open and resolved outcome questions and the identical review
+scope. Final PNG SHA-256: =7e998f0ef597f266d1fe111bacd848e5c2127c312c74fc0f78bf904d1fdb5fd1=.
+
+* Indirect Attempt attribution
+
+The [[file:indirect-attribution.d2][D2 source]] shows the active indirect
+attribution case. Use the native D2 and PNG commands above with
+=indirect-attribution= as the basename.
+
+On the first PNG, the separate R2 block made the lineage too wide and the two
+inputs to the W1 use were easy to read as alternatives. The final rendering
+places R2 on the premise it corrects and labels the use as requiring both the
+record and its binding. A distinct green edge shows the raw record supplying
+that use without joining the affected lineage. The final PNG was read from
+R1 attribution through the crosswalk and W1 use to both B judgments, then
+across the three separate response roles at C. The shared graph's unused
+R1-copy branch is outside this figure. The labels explain that arrows are
+dependencies and that a missing path in incomplete lineage leaves W1 pending.
+Final PNG SHA-256: =294c150294a833fea4b4de7abbc3e3828cabc79f7f78e71bca2ad38af061b56d=.
+
+* W1 readmission
+
+The [[file:w1-readmission.d2][D2 source]] compares the candidate at C with the
+uncontested readmission at D. Use the native D2 and PNG commands above with
+=w1-readmission= as the basename.
+
+The first PNG's D heading only said that a qualified use was selected. Its
+green success cell could therefore imply that binding admission settled every
+result. The revised heading states the uncontested result assumption and the
+footer shows the separate conflict branch. In the final reading, the top
+row compares D1 against original intent and retained W1 independently.
+The C column keeps the candidate and unknown judgment visible. The D column
+closes the binding and effect questions under their distinct conditions and
+keeps summary review open. The history footer preserves the old use and both
+earlier judgments. The final English labels were read back from the image.
+
+Final PNG SHA-256: =e2c8bde3b95ea7f9c5bf5971312f571758951bb02726bc5631a788237d51d690=.
+
+* Summary B claim review
+
+The [[file:summary-review.d2][D2 source]] compares the three B claims at D and
+the partial and full publication scopes. Use the native D2 and PNG commands
+above with =summary-review= as the basename.
+
+The first PNG's green append cell could look already closed. The revised
+label states that closure depends on the fresh claim assessment. The first
+version also left the publication effect implicit. The final rendering
+explicitly keeps the count and dispatch reviews open in the partial
+example, and reserves aggregate closure for a verified full revision. I read
+the final PNG across all three claim rows and both publication choices. The
+gate and history captions show the current basis check and the retained B
+version. All visible labels are English.
+
+Final PNG SHA-256: =f904ec9a863c601f8e90ab9b565e3436bb135801590f7a88328651012d8e1f7f=.

@@ -10,7 +10,7 @@
 (export main)
 
 (C-include "\"agentic_ai_lab/runtime_v0.h\"")
-(def-C-lambda runtime-v0-status-name/native (unsigned-int) char-string
+(def-C-lambda runtime-v0-status-name/runtime (unsigned-int) char-string
   "agentic_ai_lab_runtime_v0_status_name")
 
 ;;; Measurement boundary:
@@ -34,7 +34,7 @@
     ;; The range iterator expands to the allocation-free specialized loop used
     ;; by this performance boundary; list materialization would pollute timing.
     (for (_ (in-range iterations))
-      (unless (equal? (runtime-v0-status-name/native 0) "ok")
+      (unless (equal? (runtime-v0-status-name/runtime 0) "ok")
         (error "unexpected runtime v0 status name")))
     (let (elapsed (- (real-time) started))
       (display "schema=agentic-ai-lab.runtime-v0.gerbil-ffi-benchmark.1\n")

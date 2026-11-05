@@ -133,8 +133,8 @@
       (cons 'bundle-validation bundle-validation)
       (cons 'bundle-identity bundle-identity)
       (cons 'runtime-event event)
-      (cons 'runtime-native-fields
-            (agentic-ai-lab-runtime-v0-event->native-fields event))
+      (cons 'runtime-fields
+            (agentic-ai-lab-runtime-v0-event->runtime-fields event))
       (cons 'cedar-decision decision)
       (cons 'token token)
       (cons 'mediation-receipt mediation-receipt)

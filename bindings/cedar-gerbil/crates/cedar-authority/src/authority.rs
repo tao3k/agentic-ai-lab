@@ -392,13 +392,29 @@ impl Authority {
         })
     }
 
-    /// Native control-plane consumption also binds the complete re-projected
+    /// Runtime control-plane consumption also binds the complete re-projected
     /// Cedar request, not only the effect fields required by the runtime ABI.
     pub fn consume_proposal(
         &mut self,
         grant: Signed<Grant>,
         proposal: Proposal,
     ) -> Result<ConsumedHandoff> {
+        let request = self.proposal_consume_request(grant, proposal)?;
+        self.consume(request)
+    }
+
+    /// Check whether this exact proposal still has a live signed issuance.
+    /// The caller must consume it separately before handing off the effect.
+    pub fn check_proposal(&self, grant: &Signed<Grant>, proposal: Proposal) -> Result<()> {
+        let request = self.proposal_consume_request(grant.clone(), proposal)?;
+        self.check_consume_request(&request).map(|_| ())
+    }
+
+    fn proposal_consume_request(
+        &self,
+        grant: Signed<Grant>,
+        proposal: Proposal,
+    ) -> Result<ConsumeRequest> {
         self.ensure_live()?;
         verify_signature(&self.public_key(), &grant)?;
         let prepared = self.snapshot.prepare(&proposal)?;
@@ -407,11 +423,11 @@ impl Authority {
         {
             return Err(Error::new(
                 "grant-request-binding-mismatch",
-                "native request differs from the evaluated request",
+                "runtime request differs from the evaluated request",
             ));
         }
         let current = &self.snapshot.bootstrap;
-        self.consume(ConsumeRequest {
+        Ok(ConsumeRequest {
             grant,
             runtime_context_id: current.runtime_context_id.clone(),
             runtime_generation: current.runtime_generation,
@@ -424,6 +440,30 @@ impl Authority {
     }
 
     pub fn consume(&mut self, request: ConsumeRequest) -> Result<ConsumedHandoff> {
+        let payload_digest = match self.check_consume_request(&request) {
+            Ok(digest) => digest,
+            Err(error) => {
+                if error.code == "grant-expired" {
+                    self.pending.remove(&request.grant.payload.grant_id);
+                }
+                return Err(error);
+            }
+        };
+        let grant = &request.grant.payload;
+        // Commit before external execution. Runtime failure never reopens this
+        // nonce; recovery must obtain a fresh, newly evaluated authorization.
+        self.pending.remove(&grant.grant_id);
+        Ok(ConsumedHandoff {
+            schema_id: "agentic-ai-lab.cedar-consumed-handoff.v1",
+            grant_id: grant.grant_id.clone(),
+            nonce: grant.nonce,
+            event_kind: grant.event_kind,
+            payload_digest,
+            handoff: request.handoff,
+        })
+    }
+
+    fn check_consume_request(&self, request: &ConsumeRequest) -> Result<String> {
         self.ensure_live()?;
         let payload = request.handoff.validate()?;
         verify_signature(&self.public_key(), &request.grant)?;
@@ -478,7 +518,6 @@ impl Authority {
             )
         })?;
         if pending.deadline <= Instant::now() {
-            self.pending.remove(&grant.grant_id);
             return Err(Error::new(
                 "grant-expired",
                 "monotonic validity window expired",
@@ -490,17 +529,7 @@ impl Authority {
                 "receipt differs from the actual issuance",
             ));
         }
-        // Commit before external execution. Runtime failure never reopens this
-        // nonce; recovery must obtain a fresh, newly evaluated authorization.
-        self.pending.remove(&grant.grant_id);
-        Ok(ConsumedHandoff {
-            schema_id: "agentic-ai-lab.cedar-consumed-handoff.v1",
-            grant_id: grant.grant_id.clone(),
-            nonce: grant.nonce,
-            event_kind: grant.event_kind,
-            payload_digest: canonical::raw_digest(&payload),
-            handoff: request.handoff,
-        })
+        Ok(canonical::raw_digest(&payload))
     }
 
     pub fn revoke(&mut self, next_epoch: u64) -> Result<()> {

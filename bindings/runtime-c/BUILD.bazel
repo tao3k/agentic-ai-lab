@@ -13,14 +13,14 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files([
     "pkgconfig/agentic-ai-lab-runtime-v0.pc",
-    "include/agentic_ai_lab/scheme_native_v1.h",
+    "include/agentic_ai_lab/scheme_contract_v1.h",
     "include/agentic_ai_lab/semantic.h",
     "t/validate-runtime-v0-symbol-surface.ss",
 ])
 
 cc_library(
-    name = "scheme_native_v1_headers",
-    hdrs = ["include/agentic_ai_lab/scheme_native_v1.h"],
+    name = "scheme_contract_v1_headers",
+    hdrs = ["include/agentic_ai_lab/scheme_contract_v1.h"],
     strip_include_prefix = "include",
 )
 
@@ -122,10 +122,10 @@ cc_test(
 )
 
 cc_test(
-    name = "scheme_native_v1_header_harness",
+    name = "scheme_contract_v1_header_harness",
     size = "small",
-    srcs = ["tests/scheme_native_v1_header_harness.c"],
-    deps = [":scheme_native_v1_headers"],
+    srcs = ["tests/scheme_contract_v1_header_harness.c"],
+    deps = [":scheme_contract_v1_headers"],
 )
 
 runtime_gerbil_benchmark_test(
@@ -345,7 +345,7 @@ test_suite(
         ":runtime_v0_installed_consumer",
         ":runtime_v0_symbol_surface_test",
         ":runtime_v0_vector_harness",
-        ":scheme_native_v1_header_harness",
+        ":scheme_contract_v1_header_harness",
     ],
 )
 

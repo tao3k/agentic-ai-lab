@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""One native lifetime for frozen trusted tasks; model outputs remain data."""
+"""One runtime lifetime for frozen trusted tasks; model outputs remain data."""
 import json
 import subprocess
 import sys
@@ -19,7 +19,7 @@ def worker_source(root):
     return source+(root/'t/model-study/direct-understanding/worker-loop.ss').read_text()
 
 
-class NativeStudyWorker:
+class RuntimeStudyWorker:
     def __init__(self, root, script, log):
         self.log = log.open('w')
         self.process = subprocess.Popen(['just', 'model-understanding-compute', str(script)],
@@ -42,14 +42,14 @@ class NativeStudyWorker:
                 self.process.stdin.close()
             if failure is None and accept(line):
                 return line
-        raise RuntimeError(f'native study worker ended without a receipt: {failure}')
+        raise RuntimeError(f'runtime study worker ended without a receipt: {failure}')
 
     def compute(self, case, candidate=None):
         self.process.stdin.write(json.dumps({'case': case, 'candidate': str(candidate) if candidate else None})+'\n')
         self.process.stdin.flush()
         result = json.loads(self._read(lambda line: line.startswith('{')))
         if result['case'] != case:
-            raise RuntimeError('native task receipt identity mismatch')
+            raise RuntimeError('runtime task receipt identity mismatch')
         return result
 
     def close(self):
@@ -60,8 +60,8 @@ class NativeStudyWorker:
                     self._read(lambda line: line.strip() == 'OK')
                 returncode = self.process.wait(timeout=5)
                 if self.ready and returncode:
-                    raise RuntimeError('native study worker closed unsuccessfully')
+                    raise RuntimeError('runtime study worker closed unsuccessfully')
             except subprocess.TimeoutExpired:
                 self.process.kill(); self.process.wait()
-                raise RuntimeError('native study worker failed to close')
+                raise RuntimeError('runtime study worker failed to close')
         self.process.stdout.close(); self.log.close()

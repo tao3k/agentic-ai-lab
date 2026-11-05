@@ -31,7 +31,7 @@ provided body entails the head. Caller-supplied groundings require separately
 admitted rule semantics before a reasoning claim. The finite family control is
 hand-written, not an AMIE3 output or real-KG extraction. Lean describes exact
 set removal/protection; Quint checks whole-batch publication and rejected faults.
-Native source/schema/hash correspondence remains an executable-test boundary.
+Runtime source/schema/hash correspondence remains an executable-test boundary.
 
 * Remaining experiment
 

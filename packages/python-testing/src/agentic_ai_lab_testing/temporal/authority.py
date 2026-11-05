@@ -24,7 +24,7 @@ def gate_model_answer(output: str, observation: dict[str, Any]) -> dict[str, Any
             and all(isinstance(value, str) for value in answer.values())):
         return {"status": "withheld", "reason": "invalid-model-answer"}
     if answer["claim"] == "release_authorized":
-        return {"status": "withheld", "reason": "native-denies-release"}
+        return {"status": "withheld", "reason": "runtime-denies-release"}
     if answer["claim"] == "negative_claim":
         if (observation.get("status") == "partial-temporal-classification"
                 or observation.get("unknown") not in (None, "()")):
@@ -32,7 +32,7 @@ def gate_model_answer(output: str, observation: dict[str, Any]) -> dict[str, Any
                     "reason": "open-frontier-denies-absence"}
         if observation.get("absence_proven") is not True:
             return {"status": "withheld",
-                    "reason": "no-native-absence-proof"}
+                    "reason": "no-runtime-absence-proof"}
     return {"status": "observation-only", "choice": answer["choice"],
             "claim": answer["claim"]}
 

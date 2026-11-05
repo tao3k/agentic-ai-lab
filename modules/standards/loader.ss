@@ -8,7 +8,7 @@
 ;;; hidden behind an ordinary POO lazy slot reference.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/hash/misc hash-remove!)
-        (only-in :yuanxu/utilities/functional yuanxu-find)
+        (only-in :std/list/list find)
         "types.ss"
         "objects.ss")
 
@@ -47,7 +47,7 @@
        (unless (agentic-ai-lab-standard-artifact-ref? artifact-ref)
          (error "invalid Standard artifact ref" artifact-ref))
        (let (identity (.ref artifact-ref 'identity))
-         ;; Artifact refs are truthy POO objects; one native lookup is enough.
+         ;; Artifact refs are truthy POO objects; one runtime lookup is enough.
          (when (hash-get artifact-index identity)
            (error "duplicate materialization artifact identity" identity))
          (hash-put! artifact-index identity artifact-ref)
@@ -218,7 +218,7 @@
                            (load-one dependency (cons identity path)))
                          (.ref artifact-ref 'dependencies)))
                 (let (dependency-failure
-                      (yuanxu-find
+                      (find
                        (lambda (candidate)
                          (not (.ref candidate 'valid?)))
                        dependency-receipts))

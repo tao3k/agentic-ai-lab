@@ -31,7 +31,7 @@ supporting dependency/rejection relations. They are bounded by the supplied
 snapshot and declared assumptions. The host owns provenance, scope matching,
 requirement completeness and observation authenticity; this API cannot infer
 missing facts about an external system. Claim names should include evidence
-scope so a finite-model result cannot masquerade as native correctness.
+scope so a finite-model result cannot masquerade as runtime correctness.
 
 Only `DENY` and `REVIEW_REQUIRED` are produced. `executionAuthorized` is always
 false. Changed binaries and expected-success prose never confer execution
@@ -40,5 +40,5 @@ successful receipt. Application runners must enforce their own admission.
 
 Run `engine_tests/test_review.py` with `ASCENT_ENGINE_LIBRARY` selecting a real
 built library. Seven tests exercise real Scheme queries/validation; one additional
-fault-injection test checks that engine failure is propagated. No native runtime
+fault-injection test checks that engine failure is propagated. No runtime
 correctness or broad performance conclusion follows from these interface tests.

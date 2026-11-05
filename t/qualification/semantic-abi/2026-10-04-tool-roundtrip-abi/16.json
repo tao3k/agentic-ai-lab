@@ -1213,8 +1213,8 @@
     "call_id": "call_00_q8tQYBTOZIyGRTdbC0CM9272",
     "name": "poo_flow_temporal_solve"
   },
-  "nativeSeconds": 0.0004307080007492914,
-  "nativeResult": {
+  "runtimeSeconds": 0.0004307080007492914,
+  "runtimeResult": {
     "schema": "poo-flow.semantic-tool-result",
     "callId": "call_00_q8tQYBTOZIyGRTdbC0CM9272",
     "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",

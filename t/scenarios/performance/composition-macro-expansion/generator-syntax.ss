@@ -5,9 +5,11 @@
 
 ;;; Boundary: declarative fixture generator for composition expansion gates.
 
-(import (only-in :clan/poo/object .def)
+(import (only-in :yuanxu/modules/funflow/scenario Scenario)
+        (only-in :clan/poo/mop .new)
+        (only-in :clan/poo/object .def)
         :yuanxu/profile-composition/selection-syntax
-        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
+
         (only-in :yuanxu/profile-composition/profile-bundle
                  compose profiles)
         (for-syntax
@@ -25,7 +27,7 @@
          (fx1+ index)
          (cons (stx-identifier template prefix index) out))))))
 
-;;; Emit COUNT real native POO Profile values and one thin user-composition
+;;; Emit COUNT real POO Profile values and one thin user-composition
 ;;; binding.  The benchmark measures the production value-level path, not the
 ;;; removed clause parser.
 (defsyntax (define-composition-expansion-case stx)
@@ -43,5 +45,6 @@
          (with-syntax (((profile-name ...) profile-identifiers))
            #'(begin
                (.def profile-name (identity 'profile-name)) ...
-               (user-composition binding
-                 (compose profiles profile-name ...)))))))))
+               (def binding
+  (.new Scenario name: 'binding
+        config: (compose profiles profile-name ...))))))))))

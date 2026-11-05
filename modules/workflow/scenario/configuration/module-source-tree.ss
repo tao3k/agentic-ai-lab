@@ -7,7 +7,8 @@
 ;;; Invariant: static entrypoint metadata lives in module-registry and stays loader-free.
 
 (import (only-in :clan/poo/type Record)
-        (only-in :clan/poo/object .o)
+        (only-in :clan/poo/mop make-instance)
+        (only-in :clan/poo/object .o .get)
         :yuanxu/modules/funflow/control-plane/failure
         (only-in :agentic-ai-lab/modules/module-authoring/module-interface
                  yuanxu-module-interface)
@@ -31,7 +32,6 @@
         agentic-ai-lab-module-tree-lazy-load-plans
         agentic-ai-lab-src-modules-lazy-load-plans
         agentic-ai-lab-user-tree-config-authoring-validate!
-        agentic-ai-lab-user-tree-lazy-load-plans
         agentic-ai-lab-module-selection-source-refs
         agentic-ai-lab-module-bundles-source-refs
         agentic-ai-lab-module-selection-lazy-load-plans
@@ -40,7 +40,7 @@
         agentic-ai-lab-module-load-sources
         agentic-ai-lab-module-load-catalog)
 
-;; : (-> [PooModuleLoaderBackend] Path [YuanxuLazyLoadPlan])
+;; : (-> [ModuleLoaderBackend] Path [LazyLoadPlan])
 (def (agentic-ai-lab-module-tree-lazy-load-plans backends module-root-path
                                            . maybe-metadata)
   (let (metadata
@@ -51,7 +51,7 @@
      metadata)))
 
 ;;; Boundary: modules lazy plans never call loader handlers.
-;; : (-> [PooModuleLoaderBackend] [YuanxuLazyLoadPlan])
+;; : (-> [ModuleLoaderBackend] [LazyLoadPlan])
 (def (agentic-ai-lab-src-modules-lazy-load-plans backends . maybe-metadata)
   (let (metadata
         (if (null? maybe-metadata) '() (car maybe-metadata)))
@@ -87,18 +87,10 @@
 
 ;;; Boundary: user-root tree loading is lazy and never evaluates init.ss or
 ;;; config.ss.  It does admit config.ss as inert data before publishing plans.
-;; : (-> [PooModuleLoaderBackend] Path [YuanxuLazyLoadPlan])
-(def (agentic-ai-lab-user-tree-lazy-load-plans backends user-root-path
-                                         . maybe-metadata)
-  (agentic-ai-lab-user-tree-config-authoring-validate! user-root-path)
-  (let (metadata
-        (if (null? maybe-metadata) '() (car maybe-metadata)))
-    (yuanxu-module-source-refs->lazy-load-plans
-     backends
-     (agentic-ai-lab-user-tree-source-refs user-root-path)
-     metadata)))
+;; : (-> [ModuleLoaderBackend] Path [LazyLoadPlan])
 
-;; : (-> [PooModuleLoaderBackend] PooModuleLoadPath PooUserModuleSelection [YuanxuLazyLoadPlan])
+
+;; : (-> [ModuleLoaderBackend] PooModuleLoadPath PooUserModuleSelection [LazyLoadPlan])
 (def (agentic-ai-lab-module-selection-lazy-load-plans backends load-path selection
                                                 . maybe-metadata)
   (yuanxu-module-source-refs->lazy-load-plans
@@ -106,7 +98,7 @@
    (agentic-ai-lab-module-selection-source-refs load-path selection)
    (if (null? maybe-metadata) '() (car maybe-metadata))))
 
-;; : (-> [PooModuleLoaderBackend] PooModuleLoadPath [[PooUserModuleSelection]] [YuanxuLazyLoadPlan])
+;; : (-> [ModuleLoaderBackend] PooModuleLoadPath [[PooUserModuleSelection]] [LazyLoadPlan])
 (def (agentic-ai-lab-module-bundles-lazy-load-plans backends load-path module-bundles
                                               . maybe-metadata)
   (yuanxu-module-source-refs->lazy-load-plans
@@ -115,11 +107,11 @@
    (if (null? maybe-metadata) '() (car maybe-metadata))))
 
 ;;; Boundary: strict loading raises typed failures before resolver activation.
-;; : (-> [PooModuleLoaderBackend] PooModuleSourceRef PooModuleDescriptor)
+;; : (-> [ModuleLoaderBackend] PooModuleSourceRef PooModuleDescriptor)
 (def (agentic-ai-lab-module-load-source backends source-ref)
   (let (receipt (yuanxu-module-load-source-receipt backends source-ref))
-    (if (yuanxu-module-load-receipt-loaded? receipt)
-      (yuanxu-module-load-receipt-module receipt)
+    (if (.get receipt loaded?)
+      (.get receipt module)
       (raise-control-plane-failure
        'module-system
        'missing-module-loader
@@ -128,7 +120,7 @@
              (cons 'receipt (yuanxu-module-load-receipt->alist receipt)))))))
 
 ;;; Boundary: multi-source loading preserves requested source order.
-;; : (-> [PooModuleLoaderBackend] [PooModuleSourceRef] [PooModuleDescriptor])
+;; : (-> [ModuleLoaderBackend] [PooModuleSourceRef] [PooModuleDescriptor])
 (def (agentic-ai-lab-module-load-sources backends source-refs)
   (if (null? source-refs)
     '()
@@ -136,10 +128,10 @@
           (agentic-ai-lab-module-load-sources backends (cdr source-refs)))))
 
 ;;; Boundary: loaded catalogs hand descriptor data to the existing resolver owner.
-;; : (-> CatalogName [PooModuleLoaderBackend] [PooModuleSourceRef] PooModuleCatalog)
+;; : (-> CatalogName [ModuleLoaderBackend] [PooModuleSourceRef] PooModuleCatalog)
 (def (agentic-ai-lab-module-load-catalog catalog-name backends source-refs)
-  (make-yuanxu-module-catalog
-   catalog-name
-   (map make-yuanxu-module-catalog-entry
+  (make-instance ModuleCatalog name: catalog-name
+   entries: (map (lambda (source module)
+                   (make-instance ModuleSourceBinding source: source module: module))
         source-refs
         (agentic-ai-lab-module-load-sources backends source-refs))))

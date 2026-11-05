@@ -14,11 +14,11 @@
 (def organization-bundle-runtime-v0-batch-test
   (test-suite
    "runtime v0 hot/bulk typed projection"
-   (yuanxu-test-case "event projects fixed 96-byte native fields"
+   (yuanxu-test-case "event projects fixed 96-byte runtime fields"
      (let* ((event (agentic-ai-lab-runtime-v0-event
                     1 0 7 (id 1 2) (id 3 4) (id 5 6)
                     64 128 9000 3))
-            (fields (agentic-ai-lab-runtime-v0-event->native-fields event)))
+            (fields (agentic-ai-lab-runtime-v0-event->runtime-fields event)))
        (check-equal? (cdr (assq 'layout-version fields)) 1)
        (check-equal? (cdr (assq 'header-bytes fields)) 96)
        (check-equal? (cdr (assq 'sequence fields)) 7)

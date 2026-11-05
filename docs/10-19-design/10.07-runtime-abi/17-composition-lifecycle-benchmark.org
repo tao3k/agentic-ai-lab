@@ -44,7 +44,7 @@ runtime operations.  Composition lifecycle presets, scale profiles, and benchmar
 benchmark-layer values.  They do not become C ABI fields or cross-language
 protocol requirements.
 
-The Scheme control plane SHOULD expose workload construction through POO-native
+The Scheme control plane SHOULD expose workload construction through POO
 objects and functional combinators.  Python is the production-grade validation
 runtime for this benchmark.  Downstream Rust, TypeScript, or other runtimes MAY
 consume the same lowered workload semantics through their own adapters.
@@ -89,7 +89,7 @@ flowchart LR
 ** Generic composition multiplicity and benchmark projection
 
 The core model is not an execution-group object.  A =agentic-ai-lab.composition= already is the
-POO-native combination of profiles, policies, roles, and stages.  Multiplicity
+POO combination of profiles, policies, roles, and stages.  Multiplicity
 associates a positive cardinality with that reusable composition.  A workload
 folds distinct multiplicities into an immutable vector of half-open launch
 ranges; it does not allocate one object per requested instance.

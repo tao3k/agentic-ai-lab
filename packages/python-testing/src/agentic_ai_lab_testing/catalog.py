@@ -5,10 +5,10 @@
 
 from __future__ import annotations
 
-from .checks.ascent import candidate_boundary, native_withdrawal
+from .checks.ascent import candidate_boundary, runtime_withdrawal
 from .checks.cross import runtime_ascent_candidate
 from .checks.evidence import evidence_assessment
-from .checks.model_study import native_fixtures
+from .checks.model_study import runtime_fixtures
 from .checks.runtime import graph_transport
 from .checks.session import check_quint_model
 from .model import CaseSpec, ModulePart
@@ -24,8 +24,8 @@ def build_catalog() -> CaseRegistry:
     )
     catalog.register(
         CaseSpec("ascent.source-withdrawal",
-                 (ModulePart("gerbil-ascent", "candidate/checked-program"),), "native"),
-        native_withdrawal,
+                 (ModulePart("gerbil-ascent", "candidate/checked-program"),), "runtime"),
+        runtime_withdrawal,
     )
     catalog.register(
         CaseSpec("runtime.graph-transport",
@@ -35,26 +35,26 @@ def build_catalog() -> CaseRegistry:
     catalog.register(
         CaseSpec("runtime-ascent.candidate-graph",
                  (ModulePart("python-runtime", "graph/execution"),
-                  ModulePart("gerbil-ascent", "candidate/checked-program")), "native"),
+                  ModulePart("gerbil-ascent", "candidate/checked-program")), "runtime"),
         runtime_ascent_candidate,
     )
     catalog.register(
         CaseSpec("evidence-ascent.hypothesis-status",
                  (ModulePart("evidence-assessment", "hypothesis/status"),
-                  ModulePart("gerbil-ascent", "program/evaluation")), "native"),
+                  ModulePart("gerbil-ascent", "program/evaluation")), "runtime"),
         evidence_assessment,
     )
     catalog.register(
-        CaseSpec("model-study.native-fixtures",
+        CaseSpec("model-study.runtime-fixtures",
                  (ModulePart("gerbil-ascent", "candidate/finite-evidence"),
                   ModulePart("temporal-causality", "classification")),
-                 "native"),
-        native_fixtures,
+                 "runtime"),
+        runtime_fixtures,
     )
     catalog.register(CaseSpec("session.quint-lifecycle",
-                              (ModulePart("session", "proof/quint/lifecycle"),), "native"),
+                              (ModulePart("session", "proof/quint/lifecycle"),), "runtime"),
                      lambda context: check_quint_model(context, "ContextSession"))
     catalog.register(CaseSpec("session.quint-worktree",
-                              (ModulePart("session", "proof/quint/worktree"),), "native"),
+                              (ModulePart("session", "proof/quint/worktree"),), "runtime"),
                      lambda context: check_quint_model(context, "WorktreeContext"))
     return catalog

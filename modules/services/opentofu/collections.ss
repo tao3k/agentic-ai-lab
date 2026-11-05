@@ -126,7 +126,7 @@
          (binding (agentic-ai-lab-opentofu-value-digest
                     (list provider version schema (.get policy identity) paths)))
          ;; Private identity ledger. Copying a prototype or its visible audit
-         ;; fields cannot enroll a receipt here. Weak keys follow Core's native
+         ;; fields cannot enroll a receipt here. Weak keys follow Core's runtime
          ;; verification boundary: discarded plan bindings are not retained by
          ;; a long-lived authority. The authority is a trust root.
          (ledger (make-hash-table-eq weak-keys: #t))

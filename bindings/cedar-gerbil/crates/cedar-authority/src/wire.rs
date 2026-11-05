@@ -112,7 +112,7 @@ fn decode_input(bytes: &[u8]) -> Result<(Request, PolicySet, Entities)> {
 }
 
 /// Admission before an independent Runtime may pass bytes to either engine.
-pub fn validate_native_input(bytes: &[u8]) -> Result<()> {
+pub fn validate_runtime_input(bytes: &[u8]) -> Result<()> {
     decode_input(bytes).map(drop)
 }
 

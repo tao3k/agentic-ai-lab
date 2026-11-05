@@ -1,6 +1,6 @@
 # Shared-premise Library diagnostic
 
-Observed literal derivation counts are lower bounds. Two passes use the same stochastic model, so concordance does not establish independent-rater reliability or completeness. No depth/optimization/causal efficacy claim follows from two small fixtures. Unused budget is not savings. Native cache reuse and model behavior are separate.
+Observed literal derivation counts are lower bounds. Two passes use the same stochastic model, so concordance does not establish independent-rater reliability or completeness. No depth/optimization/causal efficacy claim follows from two small fixtures. Unused budget is not savings. Runtime cache reuse and model behavior are separate.
 
 | Case | Arm | Total input + all output | Correct obligations | Correct new answers after first | Stop |
 |---|---|---:|---:|---:|---|
@@ -28,6 +28,6 @@ Observed literal derivation counts are lower bounds. Two passes use the same sto
 
 Known solver tokens: 36819; unknown-usage calls: 0. Known annotation tokens: 61537; unknown annotation calls: 0.
 
-The source-bound native qualification proves support reuse across three distinct downstream obligations, alternative-support preservation, stale-handle rejection and withdrawal recomputation on this fixture. Quint correspondence and Lean premises are separate gates. The baseline/Fact/Scheme arms share the same questions and full reasoning-history replay, and do not prune alternatives. Failures remain in the ledger. No anti-repetition instruction is supplied.
+The source-bound runtime qualification proves support reuse across three distinct downstream obligations, alternative-support preservation, stale-handle rejection and withdrawal recomputation on this fixture. Quint correspondence and Lean premises are separate gates. The baseline/Fact/Scheme arms share the same questions and full reasoning-history replay, and do not prune alternatives. Failures remain in the ledger. No anti-repetition instruction is supplied.
 
-See plan.json for relative source hashes, paper lessons, formal scope, exact tasks, independent grader and frozen annotation rules; raw.tar.gz retains inputs, native artifacts, requests, SSE events, returned thinking and rejected labels. This is a local Darwin source snapshot, not a portable binary wheel or a verified clean Git checkout reproduction.
+See plan.json for relative source hashes, paper lessons, formal scope, exact tasks, independent grader and frozen annotation rules; raw.tar.gz retains inputs, runtime artifacts, requests, SSE events, returned thinking and rejected labels. This is a local Darwin source snapshot, not a portable binary wheel or a verified clean Git checkout reproduction.

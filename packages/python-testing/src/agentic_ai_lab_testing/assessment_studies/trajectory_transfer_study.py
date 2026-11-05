@@ -122,7 +122,7 @@ def run(library,output,live):
                     final=chain.query(case['secondProgram']);reused=final['reusedComponents']
                     assert sorted(row[0] for row in final['result']['relations']['answer'])==case['secondGold']
                 record={'case':case['case'],'arm':arm,'calls':calls,'verifiedBoth':all_correct,
-                        'intermediatePacket':support,'nativeReusedComponents':reused,
+                        'intermediatePacket':support,'runtimeReusedComponents':reused,
                         'trajectory':trajectory.close('both-correct' if all_correct else 'attempt-budget')}
                 if chain:chain.close()
                 records.append(record);(output/'records.json').write_text(json.dumps(records,indent=2))

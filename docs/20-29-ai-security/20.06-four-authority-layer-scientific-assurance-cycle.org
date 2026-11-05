@@ -20,7 +20,7 @@ Agentic AI Lab assurance uses four correctness-authoritative layers:
    semantics, owner, and observable acceptance criteria.
 2. *Formal layer* -- Lean states whether that claim follows from explicit
    assumptions, preserves counterexamples, and rejects an inconsistent model.
-3. *Executable refinement layer* -- the POO-native Scheme reference transition
+3. *Executable refinement layer* -- the POO Scheme reference transition
    and the Rust/Python SDK or runtime emit traces that refine the formal
    transition relation.
 4. *Empirical qualification layer* -- red-team counterexamples, property and
@@ -63,7 +63,7 @@ Every closure candidate MUST bind these identities in one evidence root:
 
 - =rfcClaimId= and =rfcRevision=;
 - =leanDeclarationSetId= and compiled theorem-set digest;
-- =referenceTransitionId= for the POO-native Scheme semantics;
+- =referenceTransitionId= for the POO Scheme semantics;
 - =implementationArtifactId= for each Rust/Python implementation under test;
 - =traceSchemaId= and =traceRoot=;
 - =empiricalRunId=, environment identity, sample-set identity, and receipt root;
@@ -72,7 +72,7 @@ Every closure candidate MUST bind these identities in one evidence root:
 
 The normalized agent action/evidence envelope remains the observation boundary.
 Provider-specific Cursor, Claude, Codex, or tool logs are adapters into that
-envelope; Lean does not parse their native log formats.
+envelope; Lean does not parse their runtime log formats.
 
 * Closure states
 
@@ -105,7 +105,7 @@ transition, its trace MUST establish at least:
 - deterministic normalization sufficient for independent replay;
 - explicit unknown or fail-closed disposition when a required binding is absent.
 
-The public construction surface remains POO-native and functional. Scheme owns
+The public construction surface remains POO and functional. Scheme owns
 the reference semantic object/combinator surface; Rust and Python may implement
 runtime and SDK refinements. Raw JSON is an evidence encoding, not the ordinary
 module API.

@@ -70,7 +70,7 @@
          (operator (agentic-ai-lab-sandbox-profile-object-row-operator row)))
     (if operator (cdr tail) tail)))
 
-;;; Authoring diagnostics are report-only facts for enforcing the POO-native
+;;; Authoring diagnostics are report-only facts for enforcing the POO
 ;;; programming contract. They do not reject rows; structural validation below
 ;;; remains the hard gate before POO extension.
 ;; : (-> Symbol SandboxProfileForm Alist ValidationError)

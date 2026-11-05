@@ -16,24 +16,24 @@ crate-type = ["rlib", "staticlib"]
 
 [features]
 aot-runtime-host = []
-native-ffi-qualification = []
-native-runtime-host-qualification = []
+ffi-qualification = []
+runtime-host-qualification = []
 
 [[test]]
-name = "native_ffi"
-required-features = ["native-ffi-qualification"]
+name = "runtime_ffi"
+required-features = ["ffi-qualification"]
 
 [[test]]
 name = "runtime_host"
-required-features = ["native-runtime-host-qualification"]
+required-features = ["runtime-host-qualification"]
 
 [[test]]
 name = "authorization"
-required-features = ["native-runtime-host-qualification"]
+required-features = ["runtime-host-qualification"]
 
 [[test]]
 name = "case_check"
-required-features = ["native-runtime-host-qualification"]
+required-features = ["runtime-host-qualification"]
 
 [dependencies]
 cedar-policy.workspace = true

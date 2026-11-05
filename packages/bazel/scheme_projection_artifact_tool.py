@@ -89,10 +89,10 @@ def _load_projection_rows(
 ) -> tuple[object, ...]:
     runner_source = (
         "(import :yuanxu/profile-composition/selection-syntax\n"
-        "        :agentic-ai-lab/modules/workflow/scenario/composition-syntax\n"
         "        :yuanxu/profile-composition/profile-bundle\n"
-        "        :agentic-ai-lab/modules/workflow/scenario/profile-root\n"
-        "        :agentic-ai-lab/modules/funflow/profile-library)\n"
+        "        (only-in :clan/poo/mop .new)\n"
+        "        (only-in :yuanxu/modules/funflow/scenario Scenario)\n"
+        "        :agentic-ai-lab/modules/workflow/profiles/funflow-library)\n"
         f"(include {_scheme_string(str(projection))})\n"
         "(agentic-ai-lab-runtime-load-write!\n"
         f" (begin (include {_scheme_string(str(source))})))\n"
@@ -120,7 +120,7 @@ def _load_projection_rows(
             stderr=subprocess.PIPE,
         )
         if result.returncode:
-            # Preserve the native Gerbil diagnostic at the Bazel action
+            # Preserve the Gerbil diagnostic at the Bazel action
             # boundary; a bare CalledProcessError hides the typed root cause.
             sys.stderr.write(result.stdout)
             sys.stderr.write(result.stderr)

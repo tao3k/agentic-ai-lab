@@ -669,5 +669,5 @@
       }
     }
   },
-  "scope": "forced read-only tool argument fidelity, current-task binding, sync/async native execution and model consumption of actual tool output; not unaided source comprehension, autonomous tool choice or business IO"
+  "scope": "forced read-only tool argument fidelity, current-task binding, sync/async runtime execution and model consumption of actual tool output; not unaided source comprehension, autonomous tool choice or business IO"
 }

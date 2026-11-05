@@ -5,11 +5,14 @@
 
 ;;; Boundary: invalid Funflow POO configs fail at the declarative contract.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test check-equal? test-suite)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
+        :agentic-ai-lab/modules/workflow/funflow-config)
 
 (export funflow-config-pipeline-error-test)
 
@@ -23,25 +26,23 @@
 
 ;; : (-> Unit [PooUserModuleSelection])
 (def (funflow-config-workflow-category-selection)
-  (use-module workflow
-    :config
-    (pipeline default)))
+  (agentic-ai-lab-product-use-module 'workflow '()))
 
 ;; : (-> Unit [PooUserModuleSelection])
 (def (funflow-config-bad-dependency-selection)
-  (use-module funflow
-    :config
-    (.def (funflow-test/bad @ funflow-check
-                            check-name profile-ref command-vector
-                            dependency-refs)
+  (let ()
+    (.def (funflow-test/bad @ funflow-check)
       check-name: 'bad
       profile-ref: 'ci/check
       command-vector: '("gerbil" "build")
       dependency-refs: '("build"))
-    (.def (funflow-test/bad-pipeline @ funflow-pipeline
-                                     pipeline-name checks)
+    (.def (funflow-test/bad-pipeline @ funflow-pipeline)
       pipeline-name: 'bad
-      checks: (list funflow-test/bad))))
+      checks: (list funflow-test/bad))
+    (agentic-ai-lab-product-use-module 'funflow
+      (agentic-ai-lab-funflow-config-flags
+        (yuanxu-funflow-poo-pipeline->check-map funflow-test/bad-pipeline)
+        (list ':config funflow-test/bad-pipeline)))))
 
 ;; : (-> Unit Symbol)
 (def (run-funflow-config-pipeline-error-checks)

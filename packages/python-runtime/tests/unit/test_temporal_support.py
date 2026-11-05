@@ -18,7 +18,7 @@ def request():
             rev('a2','a','retract','a1',2),rev('b2','b','retract','b1',3)]),
         asOf=1, validAt=False, budget=128)
 
-def test_native_support_withdrawal_and_inert_receipt(runtime):
+def test_runtime_support_withdrawal_and_inert_receipt(runtime):
     payload=request(); before=deepcopy(payload)
     first=runtime.evaluate_temporal_support(payload)
     assert payload == before
@@ -32,7 +32,7 @@ def test_native_support_withdrawal_and_inert_receipt(runtime):
     assert runtime.evaluate_temporal_support(before) == first
 
 @pytest.mark.parametrize('mode',['partial','budget','future','outside'])
-def test_native_support_uncertainty(runtime,mode):
+def test_runtime_support_uncertainty(runtime,mode):
     p=request();p['asOf']=3
     if mode=='partial':p['program']['complete']=False
     if mode=='budget':p['budget']=0
@@ -42,7 +42,7 @@ def test_native_support_uncertainty(runtime,mode):
     assert r['conclusions'][0]['status']==('unsupported' if mode=='outside' else 'unknown')
 
 @pytest.mark.parametrize('mode',['schema','extra','cycle','foreign','budget','reorder'])
-def test_native_support_rejects_unqualified_input(runtime,mode):
+def test_runtime_support_rejects_unqualified_input(runtime,mode):
     p=request()
     if mode=='schema':p['schema']='agentic-ai-lab.temporal-support-request.v2'
     if mode=='extra':p['publish']=True

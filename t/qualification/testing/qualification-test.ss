@@ -18,7 +18,7 @@
   case-count: 4)
 (def qualification-test
   (test-suite "Specialized qualification receipts over Core execution"
-    (test-case "case-count protocols retain native module and harness checks"
+    (test-case "case-count protocols retain runtime module and harness checks"
       (for-each
         (lambda (count)
           (def configured (.cc Suite 'case-count count))
@@ -26,7 +26,7 @@
           (check-equal? (eq? (.call configured .admit-result result) result) #t)
           (check-exception (.call configured .admit-result (receipt (output (+ count 1)))) error?))
         '(4 9 13 24 28 69)))
-    (test-case "native completion cannot be replaced by successful-looking text"
+    (test-case "runtime completion cannot be replaced by successful-looking text"
       (for-each
         (lambda (text) (check-exception (.call Suite .admit-result (receipt text)) error?))
         (list "OK\n"
@@ -46,7 +46,7 @@
       (check-exception (.call Child .admit-result (receipt (output 1))) error?)
       (parent-admit (receipt (output 1)))
       (check-exception (parent-admit (receipt (output 2))) error?))
-    (test-case "custom native harnesses require their exact receipt and module identity"
+    (test-case "custom runtime harnesses require their exact receipt and module identity"
       (def configured (.cc Suite 'case-count #f 'harness "HARNESS-OK custom 7 suites"))
       (.call configured .admit-result
         (receipt "MODULE-OK specialized-fixture-test.ss\nHARNESS-OK custom 7 suites\nOK\n"))

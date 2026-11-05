@@ -44,4 +44,9 @@ jobs:
             echo "AGENTIC_AI_LAB_NIX_TEST_TOOLS=$(cat "$inputs/tools")"
           } >> "$GITHUB_ENV"
       - name: Serial product adapter regressions
-        run: just --justfile t/qualification/nix/Justfile test-all
+        run: |
+          just test-root \
+            t/nix-*-test.ss t/opentofu-*-test.ss t/aws-*-test.ss \
+            t/module-nix-*-test.ss t/json-schema-aws-*-test.ss \
+            t/ops-selected-packages-test.ss t/execution-progress-test.ss \
+            t/approved-build-recovery-test.ss t/build-store-recovery-test.ss

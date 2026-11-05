@@ -276,7 +276,7 @@ jobs:
             .gerbil
           key: gerbil-pkg-v3-${{ runner.os }}-${{ runner.arch }}-${{ env.GERBIL_LABEL }}-${{ env.GERBIL_REF }}-${{ hashFiles('gerbil.pkg') }}
 
-      - name: Build native binary
+      - name: Build runtime binary
         shell: bash
         run: |
           set -euo pipefail

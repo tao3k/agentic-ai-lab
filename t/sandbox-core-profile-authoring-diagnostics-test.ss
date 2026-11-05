@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: report-only POO-native authoring diagnostics for sandbox profiles.
+;;; Boundary: report-only POO authoring diagnostics for sandbox profiles.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
@@ -43,13 +43,13 @@
 ;; : TestSuite
 (def sandbox-core-profile-authoring-diagnostics-test
   (test-suite "sandbox-core profile authoring diagnostics"
-    (yuanxu-test-case "keeps POO-native rows diagnostic-free"
+    (yuanxu-test-case "keeps POO rows diagnostic-free"
       (let ((diagnostics
              (agentic-ai-lab-sandbox-profile-object-authoring-diagnostics
               agentic-ai-lab-sandbox-core-profile-object
               clean-profile-authoring-rows)))
         (check-equal? diagnostics '())))
-    (yuanxu-test-case "reports advanced and non-native authoring shapes"
+    (yuanxu-test-case "reports advanced and non-runtime authoring shapes"
       (let ((diagnostics
              (agentic-ai-lab-sandbox-profile-object-authoring-diagnostics
               agentic-ai-lab-sandbox-core-profile-object

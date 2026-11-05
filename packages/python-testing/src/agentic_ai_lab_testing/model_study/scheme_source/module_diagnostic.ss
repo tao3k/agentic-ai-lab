@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;;
-;;; Read two invalid native Scheme programs. Return only the
+;;; Read two invalid Scheme programs. Return only the
 ;;; S-expression written by main, including diagnostic code and path.
 (import (only-in :gerbil-ascent/program/interface
                  relational-program relational-admit/report

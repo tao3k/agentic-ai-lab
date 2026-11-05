@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 #+TITLE: Gerbil Scheme module comprehension study
-#+STATUS: native references and paid-call preview pending
+#+STATUS: runtime references and paid-call preview pending
 #+DATE: 2026-10-02
 
 The completed run is recorded in [[file:model-study-module-capabilities-results.org][the seven-case result]].
@@ -43,10 +43,10 @@ scripts only. The questions cover different capabilities, so their scores
 are reported by case as well as in aggregate. There is no repeated repair
 loop or claim about an unobserved cognitive mechanism.
 
-* Native answer and model rule
+* Runtime answer and model rule
 
 Run each program with the same committed checkouts and a 1 GiB Gerbil
-heap fence. Preview generation uses at most two native processes at once.
+heap fence. Preview generation uses at most two runtime processes at once.
 The source, expected answer, pinned Git heads, and SHA256 hashes are
 recorded in an external preview manifest. Live execution requires clean
 checkouts and an exact match to that manifest and the Agentic AI Lab ASCENT pin.
@@ -55,7 +55,7 @@ Use =deepseek-flash= through the Responses API, non-thinking,
 =temperature=0=, =max_output_tokens=512=, timeout 45 seconds, and no
 retries: at most seven paid calls. Save raw response text and response IDs
 outside the repository. The model must return one =(answer ...)= datum.
-A native Scheme scorer reads the datum without evaluating it, rejects
+A Scheme scorer reads the datum without evaluating it, rejects
 unreadable answers, compares row-set fields independent of row order, and
 compares status and diagnostic fields exactly.
 Syntax validity and exact answer correctness are separate results.

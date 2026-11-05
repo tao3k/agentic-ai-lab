@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Inert wire projection onto the existing POO-native finite family engine.
+;;; Inert wire projection onto the existing POO finite family engine.
 (import (only-in :std/list/list every)
         (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)
@@ -138,7 +138,7 @@
           (modelDigest (hash-get expected 'modelDigest))
           (sourceAuthenticated #f) (actionAuthorized #f))))
 
-;;; Reify the original native premises, never a derived classification DTO.
+;;; Reify the original runtime premises, never a derived classification DTO.
 (def (temporal-family-task model query)
   (hash (profile "finite-hypothesis-family")
         (model (hash (identity (.ref model 'identity))

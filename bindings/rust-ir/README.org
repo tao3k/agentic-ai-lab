@@ -15,7 +15,7 @@ owning Scheme function and determinism test are:
 - =modules/query/rust-ir.ss=
 - =t/query-rust-ir-test.ss=
 
-Native Rust consumers depend on the small =agentic-ai-lab-rust-ir= crate in this
+Runtime Rust consumers depend on the small =agentic-ai-lab-rust-ir= crate in this
 directory.  The crate only embeds the checked-in IR as bytes; it contains no
 contract implementation.  Consumer build scripts lower those bytes through
 =gerbil-scheme-rust-ir=, so no checkout path or runtime Scheme process is

@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Contract: domain noun slots compose through native gerbil-poo algebra.
+;;; Contract: domain noun slots compose through gerbil-poo algebra.
 ;;; Invariant: refinements retain inherited declarations and never mutate their
 ;;; parent objects.
 
@@ -116,7 +116,7 @@
        (check-equal? (.get (.get presented effective-value) prescription)
                      'reviewed-prescription-event)))
 
-   (yuanxu-test-case "progressive views preserve native declaration order"
+   (yuanxu-test-case "progressive views preserve runtime declaration order"
      (let* ((provenance
              (yuanxu-slot-presentation
               ReviewedPrescriptionCase 'events 'provenance
@@ -164,18 +164,18 @@
             (subject (.o measured:
                          (begin
                            (set! evaluation-count (+ evaluation-count 1))
-                           'native-result)))
+                           'runtime-result)))
             (sources
              (.o measured: (fixture-source subject 163))))
        (check-equal?
         (.get (yuanxu-slot-presentation subject 'measured)
               effective-value)
-        'native-result)
+        'runtime-result)
        (check-equal?
         (.get (yuanxu-slot-presentation
                subject 'measured 'source sources)
               effective-value)
-        'native-result)
+        'runtime-result)
        (check-equal? evaluation-count 1)))
 
    (yuanxu-test-case "incomplete provenance labels fail closed"

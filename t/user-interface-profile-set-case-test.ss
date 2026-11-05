@@ -1,3 +1,5 @@
+(import (only-in :yuanxu/profile-composition/user-profile yuanxu-user-profile-set-presentation-kind yuanxu-user-profile-set? yuanxu-user-profile-name yuanxu-user-profile-set-name yuanxu-user-profile-set-default-profile-name yuanxu-user-profile-set-profile-names yuanxu-user-profile-set-default-profile)
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/profile-presentation-config agenticAiLabUserProfileSetPresentation))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -22,8 +24,9 @@
                  +agentic-ai-lab-testing-interface+
                  agentic-ai-lab-testing-admit-user-profile-set!
                  agentic-ai-lab-testing-check-user-profile-set)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/profile-config)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        )
 
 (export user-interface-profile-set-case-test)
 
@@ -60,7 +63,7 @@
         (check-equal? (.ref presentation 'selected-profile?) #t)
         (check-equal? (not
                        (not
-                        (member "agentic-ai-lab-profile-set"
+                        (member "yuanxu!"
                                 (.ref presentation 'user-entrypoints))))
                       #t)
         (check-equal? (not

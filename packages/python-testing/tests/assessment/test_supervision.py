@@ -73,8 +73,8 @@ class BuildActivity(unittest.TestCase):
                  patch('agentic_ai_lab_testing.assessment_studies.supervision.darwin_cpu_seconds_per_tick', return_value=scale):
                 self.assertAlmostEqual(darwin_process_cpu(42), 24000000 * scale)
 
-    @unittest.skipUnless(sys.platform == 'darwin', 'Darwin native CPU clock')
-    def test_darwin_native_cpu_matches_process_clock(self):
+    @unittest.skipUnless(sys.platform == 'darwin', 'Darwin runtime CPU clock')
+    def test_darwin_runtime_cpu_matches_process_clock(self):
         before = darwin_process_cpu(os.getpid())
         started = time.process_time()
         while time.process_time() - started < .2:

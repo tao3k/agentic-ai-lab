@@ -10,7 +10,7 @@
         make-agentic-ai-lab-contribution-module-load-path)
 
 (def agentic-ai-lab-maintained-integration-directories
-  '("building" "evidence-assessment" "module-authoring" "testing" "workflow"))
+  '("building" "evidence-assessment" "module-authoring" "workflow"))
 
 (def agentic-ai-lab-maintained-module-source
   (.o (:: @ (make-yuanxu-module-source-collection

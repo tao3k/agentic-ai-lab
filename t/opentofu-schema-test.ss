@@ -20,7 +20,7 @@
 (export opentofu-schema-test)
 (def opentofu-schema-test
   (test-suite "opentofu-schema-test"
-    (yuanxu-test-case "provider conversion and native admission"
+    (yuanxu-test-case "provider conversion and runtime admission"
         (def (assert label value) (unless value (error "assertion failed" label)) (displayln "ASSERT-OK " label) (force-output))
         (def (accepted? contract candidate)
           (yuanxu-validation-evidence-accepted? (.call contract .admit candidate #f)))
@@ -130,13 +130,13 @@
         (assert 'awscc-null (accepted? AwsccContract '((assume_role . null))))
         (assert 'computed-optional-retained (accepted? AwsContract '((id . "sg-123"))))
         (def wrong (.call AwsccContract .admit '((assume_role . ((duration . 900)))) #f))
-        (assert 'native-error-path
+        (assert 'runtime-error-path
           (equal? (cdr (assoc 'path (yuanxu-json-schema-validation-diagnostic-metadata
                                      (car (.get wrong diagnostics))))) '(assume_role duration)))
         (assert 'normalize-malformed-safe
           (pair? (.get (agentic-ai-lab-opentofu-normalize-block awscc
                           '((assume_role . ((duration . 900))))) diagnostics)))
-        (assert 'native-object-normalization
+        (assert 'poo-object-normalization
           (equal? (.get (agentic-ai-lab-opentofu-normalize-block StringsBlock
                           (.o accounts: '("a" "a"))) value) '((accounts . ("a")))))
         (def nested-tuple-block

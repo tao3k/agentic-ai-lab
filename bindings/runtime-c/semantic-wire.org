@@ -7,7 +7,7 @@ not authorize a version bump.
 
 The public ABI v1 consists of =agentic_ai_lab_semantic_v1_open/call/source_register/close=
 and =agentic_ai_lab_semantic_v1_result_release=. Result layout and owner-thread lifetime
-are unchanged. Native POO objects remain inside Scheme; this encoding is an inert
+are unchanged. POO objects remain inside Scheme; this encoding is an inert
 FFI projection, not a semantic DSL or an evaluator. Legacy symbols and JSON
 payloads are rejected. The descriptor reports version 1 and scheme-datum-v1.
 
@@ -47,9 +47,9 @@ provider adapter and is decoded before crossing project interfaces.
 
 Publication request digests use the domain =agentic-ai-lab.temporal-publication-request.v1=
 and canonical Scheme bytes. Existing historical database receipts retain their
-original identities. Reusing a legacy JSON idempotency key with a native Scheme request fails as
+original identities. Reusing a legacy JSON idempotency key with a Scheme request fails as
 a mismatch; there is no silent rewrite or JSON replay fallback. Historical lookup
-remains distinct from a new commit. This qualification uses fresh native Scheme v1 stores.
+remains distinct from a new commit. This qualification uses fresh Scheme v1 stores.
 
 * Read-only support applicability, v1
 
@@ -61,7 +61,7 @@ Journal fields: identity, admissionDomain, validDomain, revisions. Each revision
 has identity, subject, operation (assert/correct/retract), predecessor (#f or ID),
 admitted (integer), validRange (#f or [start,end)), content (#f or content ID).
 =validAt= is #f or an integer. Inventory bounds are 128; budget is 0--128.
-Native POO constructors and the original temporal journal enforce admission.
+POO constructors and the original temporal journal enforce admission.
 
 The result schema is =agentic-ai-lab.temporal-support-result.v1=, ABI 1, with program,
 binding, cut and projection digests, evaluatedSupports, budgetExhausted and
@@ -94,7 +94,7 @@ manifestDigest, admissionDigest, contract, policyIdentity, policyDigest,
 purposes (display/action) and enabled. The inert contract carries actor, task,
 policyDigest, required, temporalReceipts and requireComplete. MRR owns their
 original identity parsing and equality; POO retains the registered declaration.
-Enabled registration requires a current native family admission and a registered
+Enabled registration requires a current runtime family admission and a registered
 policy. Disabled registration can retire a stale source. Same-generation changes,
 rollback and resurrection of a retired identity reject before mutation; the
 registry retains at most 128 identities.
@@ -102,7 +102,7 @@ registry retains at most 128 identities.
 The public read =context.use.observe= accepts only schema
 =agentic-ai-lab.context-use-observe-request.v1=, identity, expectedGeneration, purpose
 and admissionDigest. It observes the retained contract and the existing policy
-Host clock, then rechecks the actual native family Source in the same native call.
+Host clock, then rechecks the actual runtime family Source in the same runtime call.
 It returns the original registered manifest/contract plus allowed, denied,
 revoked or expired. Extra fields, foreign admissions and unknown identities reject.
 The model call lane cannot refresh grants, replace contracts or supply a clock.

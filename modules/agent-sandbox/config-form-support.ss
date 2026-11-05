@@ -9,7 +9,7 @@
 (import (only-in :clan/poo/object .o .ref object<-alist)
         (only-in :clan/poo/mop element?)
         :agentic-ai-lab/modules/agent-sandbox/profile
-        :agentic-ai-lab/modules/agent-sandbox/profile-native-contract
+        :agentic-ai-lab/modules/agent-sandbox/profile-contract
         :agentic-ai-lab/modules/agent-sandbox/projection-syntax
         :agentic-ai-lab/modules/sandbox-core/profile-support/policy
         :yuanxu/utilities/final-projection-syntax)

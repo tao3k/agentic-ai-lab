@@ -40,7 +40,7 @@
                    '("flake-dev" "fetchers-dev" "expr-dev" "store-dev" "util-dev")) ":"))
 
 (def (qualify backend build)
-  (unless (member backend '("worker" "embedded" "embedded-preload" "profile" "product-native" "product-cli"))
+  (unless (member backend '("worker" "embedded" "embedded-preload" "profile" "product-runtime" "product-cli"))
     (error "unknown C API qualification backend" backend))
   (def packages (.o PKG_CONFIG_PATH: (package-path)))
   (def flags (words (execute '("pkg-config" "--cflags" "nix-flake-c") packages)))
@@ -48,9 +48,9 @@
   (def library-directory (string-trim (execute '("pkg-config" "--variable=libdir" "nix-flake-c") packages)))
   (def worker? (equal? backend "worker"))
   (def profiling? (equal? backend "profile"))
-  (def product? (member backend '("product-native" "product-cli")))
+  (def product? (member backend '("product-runtime" "product-cli")))
   (def test-file (local (cond (worker? "tests/qualification-test.ss")
-                             ((equal? backend "product-native") "tests/product-test.ss")
+                             ((equal? backend "product-runtime") "tests/product-test.ss")
                              ((equal? backend "product-cli") "../../t/nix-flake-source-test.ss")
                              (profiling? "tests/profile-test.ss")
                              (else "tests/embedding-test.ss"))))
@@ -62,8 +62,8 @@
                   "-cc-options" (string-join (append flags (list (string-append "-I" directory))) " ")
                   "-ld-options" (string-join libraries " ") (local "binding.ss"))
       (.o COMPILER_PATH: "/usr/bin" CPATH: "" LIBRARY_PATH: "" SDKROOT: "")))
-  (when (equal? backend "product-native")
-    ;; Native absolute compiled imports keep std/make from treating this
+  (when (equal? backend "product-runtime")
+    ;; Runtime absolute compiled imports keep std/make from treating this
     ;; already-built C binding as an ordinary local Scheme support root.
     (set! test-file (path-expand "product-test.ss" build))
     (call-with-output-file test-file
@@ -116,7 +116,7 @@
             AGENTIC_AI_LAB_NIX_PROFILE_METRICS: "1"
             AGENTIC_AI_LAB_NIX_PROFILE_PACKAGE_SET: profile-package))))
   (def test-command '("gxtest" "-:max-heap=2G,debug=q"))
-  (when (member backend '("embedded-preload" "profile" "product-native" "product-cli"))
+  (when (member backend '("embedded-preload" "profile" "product-runtime" "product-cli"))
     (let* ((installed (string-trim (execute '("which" "gerbil"))))
            (actual (string-trim (execute (list "realpath" installed))))
            (prefix (path-directory (path-strip-trailing-directory-separator (path-directory actual))))
@@ -129,7 +129,7 @@
               DYLD_INSERT_LIBRARIES: (path-expand "libnixflakec.dylib" library-directory))))))
   (when product?
     ;; Both controls use this Just-owned TestingScript/Harness gate and the
-    ;; resolved native binary: Homebrew's shell launcher drops DYLD preload
+    ;; resolved runtime binary: Homebrew's shell launcher drops DYLD preload
     ;; before Nix can initialize. Limits and exact Harness checks are unchanged.
     (set! test-environment (.+ test-environment (.o NIX_CONFIG: "pure-eval = true"))))
   ;; Core owns marker validation, fixture cleanup, return currentness and limits.

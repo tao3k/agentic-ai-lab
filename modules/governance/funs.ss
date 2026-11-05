@@ -23,7 +23,7 @@
         agentic-ai-lab-governance-module-config
         agentic-ai-lab-governance-evaluate)
 
-;;; Derived Profiles replace their native method slot while callers retain one
+;;; Derived Profiles replace their runtime method slot while callers retain one
 ;;; open protocol.  The result remains a semantic assessment, not authority.
 (def (agentic-ai-lab-governance-evaluate profile-value context-value)
   (unless (agentic-ai-lab-governance-profile? profile-value)

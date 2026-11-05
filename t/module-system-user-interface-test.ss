@@ -7,6 +7,7 @@
 ;;; Interface owners without a module-system aggregate.
 
 (import (only-in :clan/poo/type Record String List)
+        (only-in :clan/poo/mop make-instance Function)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
                  check
@@ -18,7 +19,7 @@
                  check-true
                  test-error
                  test-suite)
-        (only-in :clan/poo/object .o .ref .slot?)
+        (only-in :clan/poo/object .o .def .ref .slot? .get)
         :agentic-ai-lab/modules/module-authoring/module-interface
         :yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/module-authoring/module-descriptor
@@ -138,15 +139,15 @@
    '(loaded-child)
    '((loaded-root . #t))))
 
-;; : (-> Unit PooModuleLoaderBackend)
+;; : (-> Unit ModuleLoaderBackend)
 (def user-static-loader
   (yuanxu-module-static-loader
    'user-static-loader
    'local
-   (list (make-yuanxu-module-loader-entry loader-root-source
-                                            loader-root-module)
-         (make-yuanxu-module-loader-entry loader-child-source
-                                            loader-child-module))))
+   (list (make-instance ModuleSourceBinding source: loader-root-source
+                                            module: loader-root-module)
+         (make-instance ModuleSourceBinding source: loader-child-source
+                                            module: loader-child-module))))
 
 ;; : (-> Unit PooModuleValueCatalog)
 (def user-catalog
@@ -249,17 +250,105 @@
         (check-equal? (has-member? "agentic-ai-lab-module-value-catalog-active?"
                                    (.ref presentation 'user-entrypoints))
       #t)))
+    (yuanxu-test-case "workflow root and aggregate share only their own runtime preview"
+      (def trace '())
+      (def (declaration label)
+        (.o (:: @ (Record value: [String]))
+          .element?: (lambda (candidate)
+                       (set! trace (append trace (list (list label (.get candidate value))))) #t)))
+      (def child-module
+        (agentic-ai-lab-modules (yuanxu-module-interface "Child" (declaration 'child) '())
+          (.o id: 'preview-child config: (.o value: "child"))))
+      (def root-module
+        (agentic-ai-lab-modules (yuanxu-module-interface "Root" (declaration 'root) '())
+          (.o id: 'preview-root imports: (list child-module child-module)
+              config: (.o value: "parent"))))
+      (def workflow (agentic-ai-lab-module-workflow root-module))
+      (check-equal? trace '())
+      (def root-receipts (.get workflow root-validation-receipts))
+      (check-equal? trace '((root "parent")))
+      (def combined (.get workflow validation-receipts))
+      (check-equal? trace '((root "parent") (child "child")))
+      (check-equal? (map (cut .get <> source-module) combined) '(preview-root preview-child))
+      (check-equal? (eq? (car combined) (car root-receipts)) #t)
+      (check-equal? (eq? root-receipts (.get workflow evaluation root-validation-receipts)) #t)
+      (set! trace '())
+      (def fresh (agentic-ai-lab-module-workflow root-module))
+      (.get fresh validation-receipts)
+      (.get fresh root-validation-receipts)
+      (check-equal? trace '((root "parent") (child "child")))
+      (set! trace '())
+      (.def (derived @ workflow)
+        config: =>.+ (.o config: =>.+ (.o value: "derived")))
+      (.get derived validation-receipts)
+      (.get derived root-validation-receipts)
+      (check-equal? trace '((root "derived") (child "child")))
+      (check-equal? (.get (car (.get derived root-options)) value) "derived")
+      (check-equal? (eq? root-receipts (.get workflow root-validation-receipts)) #t)
+      (check-equal? (.get (car (.get workflow root-options)) value) "parent")
+      (check-equal? trace '((root "derived") (child "child"))))
+    (yuanxu-test-case "one preview closure serves workflow and all doctor metadata consumers"
+      (def leaf (make-empty-agentic-ai-lab-module-descriptor 'closure-leaf '() '()))
+      (def left (make-empty-agentic-ai-lab-module-descriptor 'closure-left (list leaf) '()))
+      (def right (make-empty-agentic-ai-lab-module-descriptor 'closure-right (list leaf) '()))
+      (def base (make-empty-agentic-ai-lab-module-descriptor 'closure-root '() '()))
+      (.def (root @ base) imports: (list root left right 'missing))
+      (def catalog (yuanxuModuleCatalog root))
+      (def productions 0)
+      (def evaluation (agentic-ai-lab-module-evaluate root))
+      (def (count-production modules) (set! productions (+ productions 1)) modules)
+      (.def (observed @ evaluation) (modules => count-production))
+      (.def (workflow @ (agentic-ai-lab-module-workflow root)) evaluation: observed)
+      (.def (doctor @ (agenticAiLabModuleDoctorPresentation catalog 'closure-root)) evaluation: observed)
+      (check-equal? productions 0)
+      (def cached (.get observed modules))
+      (check-equal? (.get workflow evaluation module-ids)
+                    '(closure-root closure-left closure-leaf closure-right))
+      (.get observed init-module-ids)
+      (.get observed config-module-ids)
+      (.get observed hooks)
+      (.get observed extensions)
+      (.get observed scripts)
+      (.get observed options)
+      (.get workflow validation-receipts)
+      (check-equal? (.get doctor module-ids) (.get observed module-ids))
+      (check-equal? (.get doctor doctor-status) 'error)
+      (.get doctor diagnostics)
+      (.get doctor import-graph)
+      (.get doctor contributions)
+      (.get doctor validation-receipt-count)
+      (check-equal? productions 1)
+      (check-equal? (agentic-ai-lab-module-doctor-report->alist (.get doctor doctor-report))
+                    (agentic-ai-lab-module-doctor-report->alist (agentic-ai-lab-module-doctor (list root))))
+      (def fresh (agentic-ai-lab-module-evaluate root))
+      (.def (observed-fresh @ fresh) (modules => count-production))
+      (.get observed-fresh modules)
+      (check-equal? productions 2)
+      (def added (make-empty-agentic-ai-lab-module-descriptor 'closure-added '() '()))
+      (.def (changed @ root) imports: (list added 'missing))
+      (.def (derived @ observed) config: changed)
+      (check-equal? (.get derived module-ids) '(closure-root closure-added))
+      (check-equal? productions 3)
+      (check-equal? (eq? (.get observed modules) cached) #t)
+      (def original-doctor (agenticAiLabModuleDoctorPresentation catalog 'closure-root))
+      (def doctor-ids (.get original-doctor module-ids))
+      (.def (derived-doctor @ original-doctor) config: changed)
+      (check-equal? (.get derived-doctor module-ids) '(closure-root closure-added))
+      (check-equal? (eq? (.get original-doctor module-ids) doctor-ids) #t))
     (yuanxu-test-case "returns validation receipts for user config mistakes"
       (let* ((receipts
               (agentic-ai-lab-module-option-validation-receipts invalid-user-module))
              (codes
-              (map yuanxu-module-option-validation-receipt-code receipts)))
-        (check-equal? (length receipts) 5)
+              (map (cut .ref <> 'code) receipts)))
+        (check-equal? (length receipts) 6)
         (check-equal? (length (filter (lambda (receipt)
-                                      (not (yuanxu-module-option-validation-receipt-valid? receipt)))
-                                    receipts)) 2)
+                                      (not (.ref receipt 'valid?)))
+                                    receipts)) 3)
         (check-equal? (has-member? 'constant-mismatch codes) #t)
-        (check-equal? (has-member? 'missing-schema codes) #t)))
+        (check-equal? (has-member? 'missing-schema codes) #t)
+        (let (missing (find (lambda (receipt) (eq? (.ref receipt 'code) 'missing-field)) receipts))
+          (check-equal? (.ref missing 'id) "mode-lock")
+          (check-equal? (.ref (car (.ref missing 'messages)) 'path) '(mode-lock)))))
     (yuanxu-test-case "loads source refs into catalogs before resolver activation"
       (let* ((sources (list loader-root-source loader-child-source))
              (backends (list user-static-loader))
@@ -273,11 +362,11 @@
               (agentic-ai-lab-module-resolve-doctor catalog sources))
              (activation
               (agentic-ai-lab-module-resolve-and-activate catalog sources)))
-        (check-equal? (map yuanxu-module-load-receipt-code receipts)
+        (check-equal? (map (cut .get <> code) receipts)
                       '(loaded loaded))
-        (check-equal? (map yuanxu-module-load-receipt-backend-name receipts)
+        (check-equal? (map (cut .get <> backend-name) receipts)
                       '(user-static-loader user-static-loader))
-        (check-equal? (yuanxu-module-catalog-name catalog)
+        (check-equal? (.get catalog name)
                       'loaded-user-catalog)
         (check-equal? (map agentic-ai-lab-module-name
                            (yuanxu-module-catalog-modules catalog))
@@ -287,6 +376,48 @@
         (check-equal? (agentic-ai-lab-module-names
                        (agentic-ai-lab-module-activation-modules activation))
                       '(loaded-root loaded-child))))
+    (yuanxu-test-case "doctor metadata stays cold and each preview owns its diagnostic demand"
+      (def values-read 0)
+      (def checked 0)
+      (def body-calls 0)
+      (def raw-handler (lambda (value) (set! body-calls (+ body-calls 1)) value))
+      (def declaration
+        (.o (:: @ (Record endpoint: [String] handler: [(Function (list String) (list String))]))
+          .element?: (lambda (_) (set! checked (+ checked 1)) #t)))
+      (def interface (yuanxu-module-interface "Doctor" declaration '()))
+      (def module
+        (agentic-ai-lab-modules interface
+          (.o id: 'doctor-cold config:
+              (.o endpoint: (begin (set! values-read (+ values-read 1)) "localhost")
+                  handler: raw-handler
+                  unclaimed: (error "doctor forced an unclaimed value")))))
+      (def catalog (yuanxuModuleCatalog module))
+      (def preview (agenticAiLabModuleDoctorPresentation catalog 'doctor-cold))
+      (check-equal? values-read 0)
+      (check-equal? checked 0)
+      (check-equal? (.ref preview 'kind) agentic-ai-lab-module-doctor-presentation-kind)
+      (check-equal? (cdr (assoc 'option-count (car (.ref preview 'contributions)))) 3)
+      (check-equal? values-read 0)
+      (check-equal? checked 0)
+      (check-equal? (.ref preview 'validation-receipt-count) 3)
+      (check-equal? values-read 1)
+      (check-equal? checked 1)
+      (check-equal? (.ref preview 'validation-receipt-count) 3)
+      (check-equal? checked 1)
+      (def fresh (agenticAiLabModuleDoctorPresentation catalog 'doctor-cold))
+      (check-equal? checked 1)
+      (check-equal? (.ref fresh 'validation-receipt-count) 3)
+      (check-equal? checked 2)
+      (check-equal? values-read 1)
+      (check-equal? body-calls 0)
+      (check-equal? (eq? (.ref (.ref module 'config) 'handler) raw-handler) #t)
+      ;; Inspection follows the constructor's interface/config boundary, not a
+      ;; product brand predicate that would fall back to reading the values.
+      (def shared-interface (.o (:: @ interface) kind: 'shared-interface))
+      (def shared
+        (agentic-ai-lab-modules shared-interface
+          (.o config: (.o endpoint: "shared" unclaimed: (error "shared payload forced")))))
+      (check-equal? (length (agentic-ai-lab-module-option-names shared)) 2))
     (yuanxu-test-case "presents doctor evidence without runtime execution"
       (let* ((doctor-presentation
               (agenticAiLabModuleDoctorPresentation user-catalog 'user-root))

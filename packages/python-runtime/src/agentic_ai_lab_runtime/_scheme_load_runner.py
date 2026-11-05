@@ -63,9 +63,9 @@ def aot_runner_source(module_path: Path, projection_path: Path) -> str:
     projection_source_path = scheme_string(str(projection_path))
     return (
         "(import :yuanxu/profile-composition/selection-syntax\n"
-        "        :agentic-ai-lab/modules/workflow/scenario/composition-syntax\n"
         "        :yuanxu/profile-composition/profile-bundle\n"
-        "        :agentic-ai-lab/modules/workflow/scenario/profile-root\n"
+        "        (only-in :clan/poo/mop .new)\n"
+        "        (only-in :yuanxu/modules/funflow/scenario Scenario)\n"
         "        :agentic-ai-lab/modules/workflow/profiles/funflow-library)\n"
         f"(include {projection_source_path})\n"
         "(export main)\n"
@@ -113,7 +113,7 @@ def _run_scheme_loader(
     failures: list[str] = []
     for command in _scheme_loader_commands(workdir, runner_path):
         try:
-            return _run_with_native_progress(command, workdir)
+            return _run_with_runtime_progress(command, workdir)
         except subprocess.CalledProcessError as exc:
             detail = (exc.stderr or exc.stdout or "").strip()
             failures.append(f"{' '.join(command.argv[:3])}: {detail}")
@@ -125,8 +125,8 @@ def _run_scheme_loader(
 _SCHEME_LOAD_TOTAL_SECONDS = 90.0
 
 
-def _run_with_native_progress(command, workdir):
-    """Preserve the data stdout and forward real native diagnostics immediately."""
+def _run_with_runtime_progress(command, workdir):
+    """Preserve the data stdout and forward real runtime diagnostics immediately."""
     process = subprocess.Popen(command.argv, cwd=workdir, env=command.env,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     deadline = time.monotonic() + _SCHEME_LOAD_TOTAL_SECONDS

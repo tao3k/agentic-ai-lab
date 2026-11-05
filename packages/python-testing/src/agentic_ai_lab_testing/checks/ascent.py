@@ -29,7 +29,7 @@ def candidate_boundary(_context: CaseContext) -> None:
             raise AssertionError("unsafe candidate text was accepted")
 
 
-def native_withdrawal(context: CaseContext) -> None:
+def runtime_withdrawal(context: CaseContext) -> None:
     checker = SchemeChecker(context.module_root("gerbil-ascent"))
     try:
         rejected = checker.attempt(PATH_CANDIDATE.replace(

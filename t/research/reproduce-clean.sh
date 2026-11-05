@@ -17,7 +17,7 @@ printf "%s\n" "$LDFLAGS" > "$work/link-configuration.txt"
 gxi -e '(displayln (gerbil-home))' > "$work/sdk.txt"
 timeout -k 5 240 gxpkg deps --install > "$work/dependencies.log" 2>&1
 timeout -k 5 240 gxi build.ss > "$work/scheme-build.log" 2>&1
-timeout -k 5 60 uv sync --project python --locked --extra native-build --python 3.13 > "$work/python-install.log" 2>&1
+timeout -k 5 60 uv sync --project python --locked --extra runtime-build --python 3.13 > "$work/python-install.log" 2>&1
 timeout -k 5 180 uv run --project python --locked --offline python -m ascent_engine.build --root . --output "$work/libascent.dylib" > "$work/native-build.log" 2>&1
 timeout -k 5 180 uv run --project python --locked --offline python -m ascent_engine.api_build --library "$work/libascent.dylib" --header bindings/c/ascent.h --out "$work/api" --cc "${ASCENT_CC:-/opt/homebrew/bin/gcc-16}" > "$work/api-build.log" 2>&1
 export PYTHONPATH="$work/source/python/src:$work/api"

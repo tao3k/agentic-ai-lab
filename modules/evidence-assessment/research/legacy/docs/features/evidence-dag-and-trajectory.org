@@ -37,7 +37,7 @@ The =graph= action exposes:
 Node IDs identify graph structure. They are not authority or completion tokens.
 The structural graph does not certify source facts or prove a component's
 result. Query admission retains its source identity, canonical-rule dependency
-fingerprints and completed-component alias checks. Native evaluation and the
+fingerprints and completed-component alias checks. Runtime evaluation and the
 existing evidence/provenance mechanisms establish their respective result and
 support boundaries. This component view does not replace fact-level provenance.
 
@@ -57,7 +57,7 @@ Trajectory is the temporal view of the same work. Its event references should
 connect the existing study call records to evidence feedback, using:
 
 - Task identity, round/call identity and source identity/generation.
-- The native path/result reference and applicable component fingerprints.
+- The runtime path/result reference and applicable component fingerprints.
 - Observed fresh/reused components and verifier results.
 - A failed attempt, repair or invalidation event, with its reason.
 - Provider-reported usage and elapsed time for each actual call.
@@ -74,7 +74,7 @@ unexposed model reasoning. Failed attempts may motivate a later repair but do
 not supply positive proof. Source replacement invalidates applicable result
 references and reuse certificates; historical events remain historical records.
 
-The [[file:trajectory.org][native Trajectory implementation]] now connects this contract to EvidenceChain
+The [[file:trajectory.org][runtime Trajectory implementation]] now connects this contract to EvidenceChain
 feedback and actual provider/grader observations. Scheme owns state transitions,
 reference invalidation and prefix accounting; existing study machinery retains
 raw provider request/response records. The combined qualification reports its

@@ -11,7 +11,7 @@
 This Org-first family owns AI-security research, architecture semantics, and
 enterprise security architecture packages built with the Agentic AI Lab engine.
 
-Agentic AI Lab itself remains the general POO-native architecture-semantics
+Agentic AI Lab itself remains the general POO architecture-semantics
 composition engine.  Documents in this family describe security architectures
 that the engine may compose; they do not redefine the engine or widen its
 public API.
@@ -54,7 +54,7 @@ semantic objects and relations, mapping status, and evidence admission.
 File:
 =20.02-composable-ai-security-architecture-package.org=
 
-Normative RFC for representing security architecture semantics as POO-native
+Normative RFC for representing security architecture semantics as POO
 values composed by the existing engine without adding a new public DSL.
 
 ** 20.03 AI Security Provider and Proof Regression Receipts

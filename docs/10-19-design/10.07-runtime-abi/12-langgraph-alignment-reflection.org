@@ -68,7 +68,7 @@ more LangGraph surface area, first classify it:
 
 - Runtime execution shape: implement in Python runtime or another runtime
   adapter.
-- Policy or durable strategy semantics: implement in Scheme POO-native policy
+- Policy or durable strategy semantics: implement in Scheme POO policy
   families and functional combinators.
 - Hosted ecosystem feature: document as out of scope for Agentic AI Lab runtime
   alignment unless it exposes a portable ABI/receipt requirement.

@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: reusable workloads for native Type/Contract performance gates.
+;;; Boundary: reusable workloads for Type/Contract performance gates.
 ;;; Invariant: workloads measure Scheme contract operations, not gxi startup,
 ;;; package loading, Lean execution, or Marlin runtime work.
 

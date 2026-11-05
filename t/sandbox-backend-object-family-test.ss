@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: sandbox backend object-family macro contracts.
-;;; Invariant: generated backend objects stay POO-native and runtime-free.
+;;; Invariant: generated backend objects stay POO and runtime-free.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test

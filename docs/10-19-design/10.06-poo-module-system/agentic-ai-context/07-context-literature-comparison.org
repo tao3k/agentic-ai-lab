@@ -53,12 +53,12 @@ profile and obligations required for its particular use.
 
 | Design axis | Intended advantage | Owning source / current qualification boundary |
 |-------------+--------------------+------------------------------------------------|
-| Evidence identity | Original source, rule, proof root, Derivation and direct-premise lineage survive rendering/consolidation | [[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][ASCENT-centered lifecycle contract]]; original evaluator/native proof Host seam |
-| Retraction/currentness | Withdraw a required premise without erasing historical proof; recheck current support before accepting dependent use | Native journal/support/proof-current and Context revalidation; full provider result publication is not thereby qualified |
-| Temporal interpretation | Valid time, knowledge cut, applicability and authority are distinct; old does not imply false, retained does not imply currently allowed | [[file:../../../../core/module-system/design/167-temporal-revisit-evidence-design.org][167]] and joint lifecycle contract; bounded native profiles, not arbitrary causal truth |
+| Evidence identity | Original source, rule, proof root, Derivation and direct-premise lineage survive rendering/consolidation | [[file:../../../../core/module-system/design/context-temporal-lifecycle-policy-system-design.org][ASCENT-centered lifecycle contract]]; original evaluator/runtime proof Host seam |
+| Retraction/currentness | Withdraw a required premise without erasing historical proof; recheck current support before accepting dependent use | Runtime journal/support/proof-current and Context revalidation; full provider result publication is not thereby qualified |
+| Temporal interpretation | Valid time, knowledge cut, applicability and authority are distinct; old does not imply false, retained does not imply currently allowed | [[file:../../../../core/module-system/design/167-temporal-revisit-evidence-design.org][167]] and joint lifecycle contract; bounded runtime profiles, not arbitrary causal truth |
 | Independent Session | Exact Task/Attempt/Turn/input and pending obligations; a late response cannot replace current acceptance merely by arriving | Session pure reducers and serialized Context Host; actual terminal/isolation evidence and publication require their own runtime boundary |
 | Knowledge consolidation | New scoped reusable interpretation preserves origins, failures, alternatives and defeaters | [[file:../../../../core/module-system/design/43-session-memory-recovery/01-agent-context-lifecycle.org][43.01]]; consolidation quality, fidelity and generalization remain empirical obligations |
-| POO composition | Native graph composition separates inheritance, Query, revision provenance and prompt serialization | Existing Org/POO design; no inference that a C3/C4 result authenticates content or a grant |
+| POO composition | Runtime graph composition separates inheritance, Query, revision provenance and prompt serialization | Existing Org/POO design; no inference that a C3/C4 result authenticates content or a grant |
 
 These combine established reasoning, truth-maintenance, provenance and lifecycle
 ideas; the comparison does not claim to have invented dependency retraction or
@@ -88,9 +88,9 @@ semantic gate cost and complete request cost. Paper-reported FLOPs are not this
 repository's measured latency or a demonstrated speedup. No such head-to-head
 benchmark was run in this work; no paid model/provider calls were made.
 
-* Native evidence available for this comparison
+* Runtime evidence available for this comparison
 
-[[file:06-native-proof-support-replay.org][Native proof/support replay]] now records 31 passing Scheme Cases, including
+[[file:06-runtime-proof-support-replay.org][Runtime proof/support replay]] now records 31 passing Scheme Cases, including
 three new executed paths using actual ASCENT derivation, journal withdrawal,
 current support and a real Scheme-thread join. The old-snapshot completion
 bypass is retained as a counterexample to unguarded publication. These qualify
@@ -103,16 +103,16 @@ CLM/LLM task results.
 The intended design contribution is evidence-governed Context evolution:
 model-proposed content and learned context-management strategies can coexist
 with explicit provenance, retraction, current-use and independent interaction
-contracts. Local model traces and native tests can establish particular refusal
+contracts. Local model traces and runtime tests can establish particular refusal
 and preservation behaviors. They do not yet establish better reasoning,
 broader causal correctness, lower cost, production safety or overall superiority
 to CLM, MemGPT, A-MEM or ACE.
 
-* Later research and native refinement
+* Later research and runtime refinement
 
 [[file:09-context-research-2026-july-october.org][July–October 2026 research]] compares 15 primary-source papers, including
 Scroll and CarryOn as close prior art. Original source/evidence is retained;
 working views select information without replacing canonical evidence by summaries.
-[[file:08-native-owner-cas-publication.org][Native owner CAS]] extends the historical intent-only evidence above to
+[[file:08-runtime-owner-cas-publication.org][Runtime owner CAS]] extends the historical intent-only evidence above to
 actual in-process result/terminal publication. Neither extension establishes
 comparative LLM quality, external provider admission or distributed durability.

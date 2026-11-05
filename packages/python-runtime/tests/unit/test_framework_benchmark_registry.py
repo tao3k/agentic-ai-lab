@@ -19,29 +19,29 @@ def test_registry_exposes_unique_framework_case_ids() -> None:
     assert len(cases) == 14
     assert len({case.name for case in cases}) == len(cases)
     assert {case.family for case in cases} == {
-        "crewai-native",
-        "langchain-native",
-        "langgraph-native",
+        "crewai-runtime",
+        "langchain-runtime",
+        "langgraph-runtime",
         "agentic-ai-lab-executor",
     }
 
 
 def test_registry_selects_by_framework_and_case_id() -> None:
     langchain_cases = select_cases(frameworks={"langchain"})
-    router_case = select_cases(case_ids={"langgraph-router-agent-native"})
+    router_case = select_cases(case_ids={"langgraph-router-agent-runtime"})
 
     assert {case.name for case in langchain_cases} == {
-        "langchain-linear-agent-native",
-        "langchain-branch-tool-native",
+        "langchain-linear-agent-runtime",
+        "langchain-branch-tool-runtime",
     }
-    assert [case.name for case in router_case] == ["langgraph-router-agent-native"]
+    assert [case.name for case in router_case] == ["langgraph-router-agent-runtime"]
 
 
 def test_comparisons_reference_registered_cases() -> None:
     registered = {case.name for case in all_cases()}
 
     assert COMPARISONS
-    assert all(spec.native_case in registered for spec in COMPARISONS)
+    assert all(spec.runtime_case in registered for spec in COMPARISONS)
     assert all(spec.agentic_ai_lab_case in registered for spec in COMPARISONS)
 
 

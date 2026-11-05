@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Freeze and run four controlled repairs from two shared native-owned seeds."""
+"""Freeze and run four controlled repairs from two shared runtime-owned seeds."""
 
 from __future__ import annotations
 
@@ -17,16 +17,16 @@ from .protocol import require_clean, require_pinned_ascent
 from .reporting import report_json
 from .runner import source_head
 from .support import call, inert_output
-from .support_native import observe, parse_observation, score
+from .support_runtime import observe, parse_observation, score
 from .support_protocol import SETTINGS, TRANSPORT, TASK, digest
 
 TASKS = ('compute', 'filter')
-ORDER = (('compute', 'self'), ('compute', 'native'), ('filter', 'native'), ('filter', 'self'))
+ORDER = (('compute', 'self'), ('compute', 'runtime'), ('filter', 'runtime'), ('filter', 'self'))
 SELF = 'Repair the supplied candidate using the task and candidate contract. Return only the final candidate datum.'
-NATIVE = SELF + '\nInitial-source native observation (execution/evidence only, not task intent):\n{observation}'
+RUNTIME = SELF + '\nInitial-source runtime observation (execution/evidence only, not task intent):\n{observation}'
 
 
-def native_data(root: Path, gerbil_path: Path, command: list[str]) -> str:
+def runtime_data(root: Path, gerbil_path: Path, command: list[str]) -> str:
     env = os.environ.copy()
     env.pop('DEEPSEEK_API_KEY', None)
     env.update(GERBIL_PATH=str(gerbil_path), GERBIL_LOADPATH=str(root))
@@ -43,7 +43,7 @@ def metadata(ascent: Path, poo: Path, files: dict[str, bytes]) -> dict:
 
 def names() -> set[str]:
     return {'contract.sexp', 'reference.tsv',
-            *(f'{task}.{kind}.txt' for task in TASKS for kind in ('seed', 'self', 'native'))}
+            *(f'{task}.{kind}.txt' for task in TASKS for kind in ('seed', 'self', 'runtime'))}
 
 
 def preview(directory: Path, ascent: Path, poo: Path, gerbil_path: Path) -> dict:
@@ -53,7 +53,7 @@ def preview(directory: Path, ascent: Path, poo: Path, gerbil_path: Path) -> dict
     if directory.exists() or any(directory.resolve().is_relative_to(root.resolve())
                                  for root in (ascent, poo)):
         raise ValueError('preview requires a new external directory')
-    contract = native_data(ascent, gerbil_path, ['candidate-description'])
+    contract = runtime_data(ascent, gerbil_path, ['candidate-description'])
     reference = observe(ascent, gerbil_path, discriminator=True)
     records = parse_observation(reference, state_count=7)
     if ([r['rows'] for r in records[:-1]] != [f'((0 {n}))' for n in (20, 20, 8, 12, 8, 12, 8)]
@@ -61,16 +61,16 @@ def preview(directory: Path, ascent: Path, poo: Path, gerbil_path: Path) -> dict
         raise RuntimeError('qualified seven-state reference changed')
     files = {'contract.sexp': contract.encode(), 'reference.tsv': reference.encode()}
     for task, mode in (('compute', 'repair-seed'), ('filter', 'filter-seed')):
-        seed = native_data(ascent, gerbil_path, ['candidate-repair-seed', mode])
+        seed = runtime_data(ascent, gerbil_path, ['candidate-repair-seed', mode])
         observation = observe(ascent, gerbil_path, seed, initial=True)
         initial = parse_observation(observation, initial=True)[0]
         expected = 'invalid-computation' if task == 'compute' else 'invalid-filter'
         if initial['status'] != 'rejected' or expected not in initial['diagnostics']:
-            raise RuntimeError('frozen repair seed no longer has its expected native diagnostic')
+            raise RuntimeError('frozen repair seed no longer has its expected runtime diagnostic')
         common = 'Candidate syntax contract:\n' + contract + '\nTask:\n' + TASK + '\nCandidate to repair:\n' + seed
         files[f'{task}.seed.txt'] = seed.encode()
         files[f'{task}.self.txt'] = (common + '\n' + SELF).encode()
-        files[f'{task}.native.txt'] = (common + '\n' + NATIVE.format(observation=observation)).encode()
+        files[f'{task}.runtime.txt'] = (common + '\n' + RUNTIME.format(observation=observation)).encode()
     manifest = metadata(ascent, poo, files)
     directory.mkdir(parents=True)
     for name, raw in files.items():

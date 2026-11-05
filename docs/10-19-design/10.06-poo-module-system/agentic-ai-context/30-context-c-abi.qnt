@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-// C ownership/control handoff composed with the existing native authority model.
+// C ownership/control handoff composed with the existing runtime authority model.
 module ContextCAbi {
   const BUG: str
   const TRACK_OP: bool

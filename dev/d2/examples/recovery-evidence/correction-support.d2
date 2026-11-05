@@ -1,0 +1,52 @@
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+classes: {
+  title: {shape: text; style: {font-size: 34; bold: true; font-color: "#14273A"}}
+  note: {shape: text; style: {font-size: 17; font-color: "#415668"}}
+  row: {width: 185; style: {fill: "#EAF0F6"; stroke-width: 0; bold: true; font-size: 17; border-radius: 8}}
+  cell: {width: 465; style: {fill: "#F2F5F8"; stroke-width: 0; font-size: 17; font-color: "#263A4D"; border-radius: 8}}
+  head: {style: {bold: true; font-size: 19}}
+}
+
+comparison: {
+  label: ""
+  grid-rows: 5
+  vertical-gap: 16
+  style: {fill: transparent; stroke-width: 0}
+
+  title: "After the correction, what still proves the write?" {class: title}
+  premise: "Same original Attempt. Correction R2 says receipt R1 belongs to another Attempt. Both cases were judged successful at B." {class: note}
+  cuts: {
+    label: ""
+    grid-rows: 6
+    horizontal-gap: 10
+    vertical-gap: 8
+    style: {fill: transparent; stroke-width: 0}
+
+    view: "At evidence cut C" {class: [row; head]}
+    copied: "Only R1 and its copy were admitted" {class: [cell; head]; style.fill: "#FBE8CD"}
+    independent: "W1 was also independently admitted" {class: [cell; head]; style.fill: "#D8EFE3"}
+
+    withdrawn: "Withdrawn from\ncurrent support" {class: row}
+    left_removed: "R1 and R1-copy\nThe copy relies on the same attribution." {class: cell}
+    right_removed: "R1 and R1-copy\nThe copy relies on the same attribution." {class: cell}
+
+    survives: "Surviving\nsuccess evidence" {class: row}
+    left_basis: "No active success evidence" {class: cell}
+    right_basis: "W1, an independent workspace write record\nfor this exact Attempt and write" {class: cell}
+
+    context: "Context\njudgment" {class: row}
+    left_outcome: "UNKNOWN AT C" {class: cell; style.fill: "#FBE8CD"}
+    right_outcome: "SUCCEEDED AT C ON W1" {class: cell; style.fill: "#D8EFE3"}
+
+    ascent: "ASCENT\nresponsibility" {class: row}
+    left_duty: "Reopen the original outcome question.\nReview claims that used R1 or R1-copy." {class: cell}
+    right_duty: "Keep the outcome question resolved.\nReview claims that used R1 or R1-copy." {class: cell}
+
+    model: "Model\nexample inquiries" {class: row}
+    left_inquiry: "Compare Attempt IDs, or look for\nan independent record of the write." {class: cell}
+    right_inquiry: "Check whether W1 supports each affected claim.\nSeek other evidence where useful." {class: cell}
+  }
+  scope: "The alternatives assume no unresolved competing evidence. Inquiry choices are examples." {class: note}
+  history: "Both alternatives retain the success judgment at B and its evidence history." {class: note}
+}

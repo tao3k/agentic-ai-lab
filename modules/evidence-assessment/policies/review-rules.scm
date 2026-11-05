@@ -1,4 +1,4 @@
-;; Finite snapshot review, distinct from the sealed native retry safety policy.
+;; Finite snapshot review, distinct from the sealed runtime retry safety policy.
 (ascent-fragment
   (relation Candidate ((candidate symbol?) (scope symbol?) (identity symbol?)))
   (relation Failure ((failure symbol?) (scope symbol?) (identity symbol?) (report symbol?)))

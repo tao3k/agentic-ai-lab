@@ -11,7 +11,7 @@ from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntime, SemanticRun
 from semantic_cases import temporal_request
 
 
-def test_semantic_native_descriptor(runtime):
+def test_semantic_runtime_descriptor(runtime):
     assert runtime.descriptor['operations'] == [
         'context.lifecycle.inspect',
         'context.use.observe',
@@ -34,7 +34,7 @@ def test_semantic_native_descriptor(runtime):
     assert runtime.descriptor['threading'] == 'single-owner-thread'
 
 
-def test_semantic_native_temporal_result_and_generation_binding(runtime):
+def test_semantic_runtime_temporal_result_and_generation_binding(runtime):
     payload = temporal_request()
     original = deepcopy(payload)
     first = runtime.call('temporal.solve', payload)
@@ -50,7 +50,7 @@ def test_semantic_native_temporal_result_and_generation_binding(runtime):
 
 
 @pytest.mark.parametrize('variant', ['open', 'late', 'interval', 'horizon', 'clock'])
-def test_semantic_native_uncertainty_is_preserved(runtime, variant):
+def test_semantic_runtime_uncertainty_is_preserved(runtime, variant):
     payload = temporal_request()
     if variant == 'open':
         payload['lens']['closed'] = False
@@ -68,7 +68,7 @@ def test_semantic_native_uncertainty_is_preserved(runtime, variant):
     assert result['verification'] != 'valid'
 
 
-def test_semantic_native_rejection_does_not_poison_following_calls(runtime):
+def test_semantic_runtime_rejection_does_not_poison_following_calls(runtime):
     for operation, payload in [('missing-operation', {}), ('temporal.solve', {})]:
         with pytest.raises(SemanticRuntimeError) as error:
             runtime.call(operation, payload)
@@ -76,7 +76,7 @@ def test_semantic_native_rejection_does_not_poison_following_calls(runtime):
     assert runtime.call('temporal.solve', temporal_request())['status'] == 'complete'
 
 
-def test_semantic_native_concurrent_async_calls_are_serialized(runtime):
+def test_semantic_runtime_concurrent_async_calls_are_serialized(runtime):
     async def run():
         return await asyncio.gather(*[runtime.acall('temporal.solve', temporal_request())
                                       for _ in range(8)])
@@ -84,14 +84,14 @@ def test_semantic_native_concurrent_async_calls_are_serialized(runtime):
     assert all(answer == answers[0] for answer in answers)
 
 
-def test_semantic_native_transport_rejects_oversize_and_nul(runtime):
+def test_semantic_runtime_transport_rejects_oversize_and_nul(runtime):
     with pytest.raises(ValueError, match='maximum'):
         runtime.call('temporal.solve', {'value': 'x' * 1048576})
     with pytest.raises(ValueError, match='operation'):
         runtime.call('bad\0operation', {})
 
 
-def test_semantic_native_owner_thread_and_raw_input_guards(runtime):
+def test_semantic_runtime_owner_thread_and_raw_input_guards(runtime):
     ffi, lib = runtime._ffi, runtime._lib
     result = ffi.new('agentic_ai_lab_semantic_result *')
     assert lib.agentic_ai_lab_python_semantic_call(b'descriptor', b'{}', 2, result) == 2
@@ -111,10 +111,10 @@ def test_semantic_native_owner_thread_and_raw_input_guards(runtime):
                         expected_digest=runtime.artifact_digest)
 
 
-def test_semantic_native_graph_admission_and_actual_python_io(runtime, tmp_path):
+def test_semantic_runtime_graph_admission_and_actual_python_io(runtime, tmp_path):
     from agentic_ai_lab_runtime import (RuntimeGraphProgram, RuntimeGraphRuntime,
                                  RuntimeGraphRegistries, linear_plan)
-    from agentic_ai_lab_runtime._native.session import NativeRuntimeSession, NativeBundleDescriptor
+    from agentic_ai_lab_runtime._runtime.session import RuntimeSession, RuntimeBundleDescriptor
     path = os.environ.get('AGENTIC_AI_LAB_RUNTIME_V0_LIBRARY')
     if not path:
         pytest.fail('graph execution qualification requires the real control-lane artifact')
@@ -122,10 +122,10 @@ def test_semantic_native_graph_admission_and_actual_python_io(runtime, tmp_path)
     def model(state):
         artifact.write_text(str(state['value'] + 1))
         return {'answer': state['value'] + 1}
-    with NativeRuntimeSession(NativeBundleDescriptor(bytes(32), 1, b'bundle'), library_path=path) as session:
+    with RuntimeSession(RuntimeBundleDescriptor(bytes(32), 1, b'bundle'), library_path=path) as session:
         program = RuntimeGraphProgram(
             plan=linear_plan('model', 'format'),
-            runtime=RuntimeGraphRuntime.native(session, semantic_context=runtime),
+            runtime=RuntimeGraphRuntime.runtime(session, semantic_context=runtime),
             registries=RuntimeGraphRegistries(actions={
                 'model': model,
                 'format': lambda state: {'formatted': artifact.read_text()}}))
@@ -136,7 +136,7 @@ def test_semantic_native_graph_admission_and_actual_python_io(runtime, tmp_path)
     assert execution.trace == ('model', 'format')
 
 
-def test_semantic_native_graph_rejects_invalid_endpoint_before_io(runtime):
+def test_semantic_runtime_graph_rejects_invalid_endpoint_before_io(runtime):
     from agentic_ai_lab_runtime import RuntimeGraphBindings, RuntimeGraphPlan, RuntimeGraphEdge
     plan = RuntimeGraphPlan(nodes=('model',), edges=(RuntimeGraphEdge('__start__', 'missing'),))
     with pytest.raises(SemanticRuntimeError) as error:
@@ -144,7 +144,7 @@ def test_semantic_native_graph_rejects_invalid_endpoint_before_io(runtime):
     assert error.value.status == 4
 
 
-def test_semantic_native_final_model_answer_is_revalidated(runtime):
+def test_semantic_runtime_final_model_answer_is_revalidated(runtime):
     from agentic_ai_lab_runtime import scheme_wire as wire
     task = temporal_request()
     candidate = {'status': 'complete', 'rows': [['a', 'b'], ['a', 'c']]}
@@ -163,7 +163,7 @@ def test_semantic_native_final_model_answer_is_revalidated(runtime):
         '(object ("authorized" #t) ("rows" (list)) ("status" "complete"))')['verdict'] == 'contradicted'
 
 
-def test_semantic_native_async_cancellation_discards_queued_call(runtime):
+def test_semantic_runtime_async_cancellation_discards_queued_call(runtime):
     import threading
     entered = threading.Event()
     release = threading.Event()
@@ -186,7 +186,7 @@ def test_semantic_native_async_cancellation_discards_queued_call(runtime):
     assert runtime.call('temporal.solve', temporal_request())['status'] == 'complete'
 
 
-def test_semantic_native_rejects_duplicate_nodes_and_unknown_action_binding(runtime):
+def test_semantic_runtime_rejects_duplicate_nodes_and_unknown_action_binding(runtime):
     payload = {'nodes': ['model', 'model'], 'edges': [], 'stepLimit': 8,
                'conditionalEdges': [], 'actions': {}, 'reducers': {}}
     with pytest.raises(SemanticRuntimeError):
@@ -202,7 +202,7 @@ def test_semantic_native_rejects_duplicate_nodes_and_unknown_action_binding(runt
         runtime.call('graph.admit', payload)
 
 
-def test_semantic_native_queue_bound_and_digest_rejection(runtime):
+def test_semantic_runtime_queue_bound_and_digest_rejection(runtime):
     import threading
     with pytest.raises(SemanticRuntimeError, match='digest mismatch'):
         SemanticRuntime(os.environ['AGENTIC_AI_LAB_SEMANTIC_LIBRARY'], expected_digest='0'*64)
@@ -234,7 +234,7 @@ def test_semantic_answer_validation_binds_current_source(runtime):
     assert runtime.validate_model_answer(task, output)['verdict'] == 'contradicted'
 
 
-def test_semantic_native_rejects_excess_finite_domain_before_solver(runtime):
+def test_semantic_runtime_rejects_excess_finite_domain_before_solver(runtime):
     task = temporal_request()
     task['source']['events'] *= 50
     with pytest.raises(SemanticRuntimeError) as error:
@@ -242,11 +242,11 @@ def test_semantic_native_rejects_excess_finite_domain_before_solver(runtime):
     assert error.value.status == 4
 
 
-def test_semantic_native_routes_and_dynamic_targets_are_scheme_owned(runtime):
+def test_semantic_runtime_routes_and_dynamic_targets_are_scheme_owned(runtime):
     from agentic_ai_lab_runtime import (START, END, RuntimeGraphPlan, RuntimeGraphEdge,
         RuntimeGraphConditionalEdge, RuntimeGraphProgram, RuntimeGraphRegistries,
         RuntimeGraphRuntime, RuntimeGraphBindings)
-    from agentic_ai_lab_runtime._native.session import NativeRuntimeSession, NativeBundleDescriptor
+    from agentic_ai_lab_runtime._runtime.session import RuntimeSession, RuntimeBundleDescriptor
     plan = RuntimeGraphPlan(nodes=('decide', 'left', 'right'),
         edges=(RuntimeGraphEdge(START, 'decide'), RuntimeGraphEdge('left', END),
                RuntimeGraphEdge('right', END)),
@@ -262,14 +262,14 @@ def test_semantic_native_routes_and_dynamic_targets_are_scheme_owned(runtime):
     with pytest.raises(SemanticRuntimeError):
         runtime.call('graph.targets', dict(plan=binding.payload, expectedDigest='0'*64,
                      source='decide', mode='control', targets=['right']))
-    with NativeRuntimeSession(NativeBundleDescriptor(bytes(32), 1, b'bundle'),
+    with RuntimeSession(RuntimeBundleDescriptor(bytes(32), 1, b'bundle'),
             library_path=os.environ['AGENTIC_AI_LAB_RUNTIME_V0_LIBRARY']) as session:
         registries = RuntimeGraphRegistries(actions={
             'decide': lambda state: {}, 'left': lambda state: {'answer': 'left'},
             'right': lambda state: {'answer': 'right'}},
             routers={'route': lambda state: state['label']})
         program = RuntimeGraphProgram(plan=plan, registries=registries,
-            runtime=RuntimeGraphRuntime.native(session, semantic_context=runtime))
+            runtime=RuntimeGraphRuntime.runtime(session, semantic_context=runtime))
         assert program.invoke({'label': 'yes'})['answer'] == 'right'
         assert asyncio.run(program.ainvoke({'label': 'no'}))['answer'] == 'left'
         with pytest.raises(SemanticRuntimeError):
@@ -278,11 +278,11 @@ def test_semantic_native_routes_and_dynamic_targets_are_scheme_owned(runtime):
 
 def test_semantic_abi_v1_rejects_legacy_json_and_reader_extensions(runtime):
     import ctypes
-    native = ctypes.CDLL(os.environ['AGENTIC_AI_LAB_SEMANTIC_LIBRARY'])
+    runtime = ctypes.CDLL(os.environ['AGENTIC_AI_LAB_SEMANTIC_LIBRARY'])
     with pytest.raises(AttributeError):
-        getattr(native, 'agentic_ai_lab_semantic_open')
+        getattr(runtime, 'agentic_ai_lab_semantic_open')
     with pytest.raises(AttributeError):
-        getattr(native, 'agentic_ai_lab_semantic_v2_open')
+        getattr(runtime, 'agentic_ai_lab_semantic_v2_open')
     assert runtime.descriptor['wireFormat'] == 'scheme-datum-v1'
     for data in [b'{}', b'#.(exit)', b'#0=(list #0#)', b'(object ("a" 1) ("a" 2))']:
         result = runtime._ffi.new('agentic_ai_lab_semantic_result *')

@@ -1,3 +1,5 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-metadata agentic-ai-lab-sandbox-profile-by-name))
+(import (only-in :yuanxu/module-system/selection/objects yuanxu-user-module-selection-flag-entry))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -20,8 +22,14 @@
         :yuanxu/modules/funflow/control-plane/api
         (only-in "../user-interface/custom/my-module/profiles/cicd"
                  agentic-ai-lab-custom-my-module-cicd-module)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :clan/poo/object
+        :agentic-ai-lab/modules/sandbox-core/profile
+        :agentic-ai-lab/modules/sandbox-core/profile-interface
+        :agentic-ai-lab/modules/nono-sandbox/config
+        :agentic-ai-lab/modules/nono-sandbox/profile-interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
         :agentic-ai-lab/modules/agent-sandbox/config)
 
 (export user-interface-cicd-profile-case-test)
@@ -51,7 +59,7 @@
              (promote-profile
               (agentic-ai-lab-sandbox-profile-by-name profiles
                                                 'cicd/artifact-promote)))
-        (check-equal? binding 'native-ffi)
+        (check-equal? binding 'ffi)
         (check-equal? (length profiles) 4)
         (check-equal? (agentic-ai-lab-sandbox-profile-network-policy check-profile)
                       '(deny-by-default))
@@ -87,23 +95,32 @@
                         (scope . cicd)
                         (stage . promote)
                         (artifacts . consume)))))
-    (yuanxu-test-case "defaults nono use-module config to native FFI binding"
+    (yuanxu-test-case "defaults nono use-module config to runtime FFI binding"
       (let* ((check-capabilities '(process-run filesystem-read tmpdir))
              (check-metadata '((intent . ci-check)))
              (nono-config
-              (car (use-module nono-sandbox
-                     (.def (ci/check @ nono-sandbox-profile)
+              (car (let ()
+    (.def (ci/check @ nono-sandbox-profile)
                        network: (deny-network)
                        capabilities: check-capabilities
                        resources: =>.+ readonly-project-workspace-resources
                        metadata: => (lambda (super-metadata)
                                       (append super-metadata
-                                              check-metadata))))))
+                                              check-metadata)))
+    (agentic-ai-lab-product-use-module 'nono-sandbox
+      (agentic-ai-lab-nono-sandbox-config-flags 'ffi (agentic-ai-lab-sandbox-profile-prototypes (ci/check ci/check))
+        '((.def (ci/check @ nono-sandbox-profile)
+                       network: (deny-network)
+                       capabilities: check-capabilities
+                       resources: =>.+ readonly-project-workspace-resources
+                       metadata: => (lambda (super-metadata)
+                                      (append super-metadata
+                                              check-metadata)))))))))
              (binding
               (cdr (yuanxu-user-module-selection-flag-entry
                     nono-config
                     ':binding))))
-        (check-equal? binding 'native-ffi)))
+        (check-equal? binding 'ffi)))
     (yuanxu-test-case "rejects CI/CD resources without filesystem sandbox"
       (let* ((broken-capabilities '(process-run filesystem-read tmpdir))
              (broken-metadata '((intent . ci-check)
@@ -114,8 +131,8 @@
               (with-catch (lambda (failure) failure)
                           (lambda ()
                             (let* ((broken-config
-                                    (car (use-module nono-sandbox
-                                           (.def (ci/broken
+                                    (car (let ()
+    (.def (ci/broken
                                                   @
                                                   nono-sandbox-profile)
                                              network: (deny-network)
@@ -125,7 +142,20 @@
                                                            (super-metadata)
                                                            (append
                                                             super-metadata
-                                                            broken-metadata))))))
+                                                            broken-metadata)))
+    (agentic-ai-lab-product-use-module 'nono-sandbox
+      (agentic-ai-lab-nono-sandbox-config-flags 'ffi (agentic-ai-lab-sandbox-profile-prototypes (ci/broken ci/broken))
+        '((.def (ci/broken
+                                                  @
+                                                  nono-sandbox-profile)
+                                             network: (deny-network)
+                                             capabilities: broken-capabilities
+                                             resources: broken-resources
+                                             metadata: => (lambda
+                                                           (super-metadata)
+                                                           (append
+                                                            super-metadata
+                                                            broken-metadata)))))))))
                                    (profiles
                                     (cdr
                                      (yuanxu-user-module-selection-flag-entry

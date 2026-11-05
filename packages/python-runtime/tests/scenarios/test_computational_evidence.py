@@ -49,7 +49,7 @@ print('CALLER-PROOF-COUNTS-OK',flush=True)
         subprocess.run([sys.executable, '-u', '-'], input=code, text=True,
                        env=os.environ.copy(), check=True, timeout=45)
 
-    def test_native_store_through_selected_public_binding(self):
+    def test_runtime_store_through_selected_public_binding(self):
         code = '''
 import copy, os
 from agentic_ai_lab_runtime.reasoning import ReasoningRuntime, ReasoningError
@@ -58,7 +58,7 @@ from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import share
 library = os.environ.get('ASCENT_ENGINE_LIBRARY') if os.environ.get('ASCENT_ENGINE_BACKEND') == 'abi' else None
 with ReasoningRuntime() as engine:
     checks = shared_qualify(engine)
-    assert len(checks['taskChecks']) == 2 and len(checks['nativeQuintRows']) == 32
+    assert len(checks['taskChecks']) == 2 and len(checks['runtimeQuintRows']) == 32
     with ComputationalEvidence(engine) as a, ComputationalEvidence(engine) as b:
         task = shared_tasks()[0]; source = shared_source(task)
         r = a.resolve(source, SHARED_CANDIDATE)

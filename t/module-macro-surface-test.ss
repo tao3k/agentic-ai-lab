@@ -11,17 +11,6 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
-                 agentic-ai-lab-profile-extend)
-        (only-in :agentic-ai-lab/modules/module-authoring/fragment-syntax
-                 agentic-ai-lab-load-profile-module-binding)
-        (only-in :yuanxu/module-system/selection/objects
-                 yuanxu-user-module-bundle)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/profile-config
-                 yuanxu-user-profile-module-bundles
-                 yuanxu-user-profile-name)
-        (only-in :agentic-ai-lab/modules/workflow/profiles/kernel/interface
-                 agentic-ai-lab-kernel-profile)
         (only-in :yuanxu/utilities/final-projection-syntax
                  yuanxu-product-field-rows/tail)
         (only-in :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy
@@ -37,25 +26,6 @@
                  agentic-ai-lab-sandbox-profile-name))
 
 (export module-macro-surface-test)
-
-;;; The loader identifier macro preserves the call-site binding while using
-;;; the canonical fallback module name outside a custom/<name> source tree.
-(def agentic-ai-lab-custom-module-syntax-probe-module 'syntax-probe-binding)
-
-(def load-profile-binding
-  (agentic-ai-lab-load-profile-module-binding syntax-probe))
-
-;;; Profile extension remains a POO-native declaration and appends complete
-;;; module bundles without flattening individual module selection rows.
-(def macro-extra-module-bundles
-  (list
-   (yuanxu-user-module-bundle
-    (custom macro-surface "/tmp/agentic-ai-lab-macro-surface" +contract))))
-
-(agentic-ai-lab-profile-extend macro-extended-profile
-                         macro-extended
-                         agentic-ai-lab-kernel-profile
-  (bundles macro-extra-module-bundles))
 
 ;;; Each backend macro is called directly so its public shorthand is covered,
 ;;; while the collection forms exercise the shared ordered build recursion.
@@ -129,16 +99,6 @@
 ;; : TestSuite
 (def module-macro-surface-test
   (test-suite "agentic-ai-lab public module macro surface"
-    (yuanxu-test-case "loader identifier macro preserves the generated binding"
-      (check-equal? load-profile-binding 'syntax-probe-binding))
-    (yuanxu-test-case "profile extension appends bundles to a POO profile"
-      (check-equal? (yuanxu-user-profile-name macro-extended-profile)
-                    'macro-extended)
-      (check-equal?
-       (length (yuanxu-user-profile-module-bundles macro-extended-profile))
-       (+ (length (yuanxu-user-profile-module-bundles
-                   agentic-ai-lab-kernel-profile))
-          (length macro-extra-module-bundles))))
     (yuanxu-test-case "field-row tail projection preserves fixed-first ordering"
       (check-equal?
        (yuanxu-product-field-rows/tail
@@ -146,7 +106,7 @@
         (kind 'module)
         (name 'syntax-surface))
        '((kind . module) (name . syntax-surface) (tail . value))))
-    (yuanxu-test-case "durable module macros expose POO-native named profiles"
+    (yuanxu-test-case "durable module macros expose POO named profiles"
       (check-equal?
        (agentic-ai-lab-artifact-profile?
         (.ref durable-artifact-module-witness 'macro-artifact))

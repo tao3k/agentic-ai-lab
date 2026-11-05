@@ -6,7 +6,7 @@ The default Rust runtime exports =ascent.trajectory.ClueExchange=. It loads
 caller-owned =define-evidence= declarations through the existing
 =Engine.open_evidence_sources=/=SourceSession= implementation. No downstream
 Scheme executable, compiler, interpreter subprocess, or Python rule engine is
-required. The Scheme implementation and native owner use the same
+required. The Scheme implementation and runtime owner use the same
 =python/src/ascent/clue_query_rules.ss= declaration.
 
 The application owns its projection and selector DSL. The host binds source
@@ -48,7 +48,7 @@ already-investigated premise does not ban a materially changed premise.
 Conditional hypotheses remain unknown until independently supported or
 countered. A partial vocabulary never closes the set of possible questions.
 The owner never emits a next action, ranks hypotheses, authorizes execution or
-turns a model result into a native runtime pass.
+turns a model result into a runtime pass.
 
 The host must recheck its source binding before publishing a result. An owner
 is an immutable source projection, not a filesystem watcher. Changed source
@@ -73,6 +73,6 @@ View rows are read directly, not serialized into a fake Clue factor named row.
 - =ClueSubmission.qnt= and =ClueSubmission.lean=: durable journal/CAS laws.
   They are not a Rust implementation-equivalence proof.
 
-Native tests, finite model checks and a real Agent investigation are separate
+Runtime tests, finite model checks and a real Agent investigation are separate
 receipts. A passing interface test does not prove that an Agent avoided a
 failed path, found a runtime repair, or advanced SMP acceptance.

@@ -31,7 +31,7 @@
   (unless (<= (length (.ref j 'revisions)) 128) (error "proof host journal capacity exceeded"))
   (let (v (agentic-ai-lab-temporal-evidence-journal (.ref j 'identity) (.ref j 'admission-domain-identity) (.ref j 'revisions)))
     (unless (equal? (.ref v 'semantic-digest) (.ref j 'semantic-digest)) (error "forged proof host journal")) v))
-;;; Pure native owner adapter. The context retains original replay inputs; it is
+;;; Pure runtime owner adapter. The context retains original replay inputs; it is
 ;;; not accepted from a wire and caller flags never become authority.
 (def (agentic-ai-lab-temporal-derivation-context held program correspondence bound admission snapshot candidate receipt
                                          steps max-nodes node-bindings output source-bindings journal)
@@ -92,7 +92,7 @@
                           (lambda () (map (lambda (observer)
                             (let (batch (.call observer .prepare observer event))
                               (unless (and (tag? batch 'temporal.source-propagation-batch.v1) (.slot? batch '.publish!))
-                                (error "Invalid prepared native propagation batch")) batch))
+                                (error "Invalid prepared runtime propagation batch")) batch))
                             (proof-host-state-observers s)))
                           (lambda () (set! (proof-host-state-busy? s) #f))) '())))
         (when event (set! (proof-host-state-pending s) batches))
@@ -158,7 +158,7 @@
             semantic-digest: (digest (list 'temporal.proof-host-applicability.v1 registration-value
               (.ref a 'semantic-digest) (cadddr held) (.ref current 'semantic-digest)
               expected-state-generation expected-policy-generation (.ref guard-value 'semantic-digest) status-value))
-            proof-admitted?: #t trust-basis: 'host-registered-source-relative-native-proof
+            proof-admitted?: #t trust-basis: 'host-registered-source-relative-runtime-proof
             source-authenticated?: #f selection-admitted?: #f action-authorized?: #f durable?: #f)))))
 
 ;;; Trusted synchronous source observers; all use the creating owner thread.
@@ -166,7 +166,7 @@
   (let (s (state host))
     (when (or (proof-host-state-pending s) (proof-host-state-busy? s)) (error "Cannot enroll observer during propagation"))
     (unless (and (tag? observer 'temporal.source-observer.v1) (.slot? observer '.prepare))
-      (error "Expected native POO source observer"))
+      (error "Expected POO source observer"))
     (unless (memq observer (proof-host-state-observers s))
       (when (>= (length (proof-host-state-observers s)) 128) (error "Source observer capacity"))
       (set! (proof-host-state-observers s) (cons observer (proof-host-state-observers s)))) observer))
@@ -233,7 +233,7 @@
     ;; Reading original evidence is not a current-use admission. Replaying the
     ;; whole ASCENT proof here made every parent/checkpoint copy reallocate its
     ;; derivation graph. Return the credential sealed by register!, detached
-    ;; from the caller. current and source-change still perform native replay.
+    ;; from the caller. current and source-change still perform runtime replay.
     (string-copy (list-ref held 4))))
 
 (def (agentic-ai-lab-temporal-proof-host-source-snapshot host registration)

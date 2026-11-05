@@ -14,10 +14,10 @@ by switching thinking off. A completed plain response may use the existing bound
 non-thinking structured transport only if all its replay input plus output fit
 inside the same ceiling. Output limits are budget-derived, not timeout widening.
 
-The existing public Python binding projects the already verified native packet
+The existing public Python binding projects the already verified runtime packet
 into lossless named columns. Common conclusion fields and node field names appear
 once, with all scope digests, statuses, handles, roots, labels and ancestors
-preserved. Expansion must equal the complete native observation. Fact and Scheme
+preserved. Expansion must equal the complete runtime observation. Fact and Scheme
 share exactly the same conclusions; Scheme adds checked named support. Evidence
 arrives before the first model call of every sibling branch. No Python inference,
 search framework, authority admission or new version module is introduced.

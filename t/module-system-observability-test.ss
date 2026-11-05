@@ -33,7 +33,7 @@
 (def (module-observability-test-alist-value key rows)
   (cdr (assoc key rows)))
 
-;; Native Scheme owns the source gate as well as the observations.  Callers
+;; Runtime Scheme owns the source gate as well as the observations.  Callers
 ;; choose bounded roots and read `.ss` files without expanding them.
 (def (module-observability-source-files directory)
   (apply append
@@ -94,13 +94,13 @@
                 (yuanxu-authoring-owner-import-port-observations
                  'modules/example/objects.ss
                  (open-input-string
-                  "(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/interface yuanxu-module-interface))") AgenticAILabSourcePolicy))
+                  "(import (only-in :yuanxu/modules/funflow/control-plane/api make-task))") AgenticAILabSourcePolicy))
                (contribution-observation
                 (car contribution-observations)))
           (check-equal? (length contribution-observations) 1)
           (check-equal?
            (.ref contribution-observation 'owner)
-           ':agentic-ai-lab/modules/workflow/scenario/configuration/interface)
+           ':yuanxu/modules/funflow/control-plane/api)
           (check-equal? (.ref contribution-observation 'accepted?) #f))))
     (yuanxu-test-case "all maintained module sources import precise owners"
       (let* ((paths (module-observability-source-files "modules"))
@@ -150,7 +150,7 @@
          (def roots (all-gerbil-modules))
          (asp-gerbil-scheme-package-spec!
           (package @ prototype)
-          (spec native-spec)
+          (spec std-make-spec)
           (modules roots))))
       ;; A quoted documentation example does not execute a projection.
       (check-equal?
@@ -158,7 +158,7 @@
         'build.ss '(quote (yuanxu-module-source-collection-interfaces maintained-source)) AgenticAILabSourcePolicy)
        '()))
     (yuanxu-test-case "builds strict presentation trace rows"
-      (let* ((native-observation
+      (let* ((runtime-observation
               (yuanxu-module-observation-stage/detail
                'test-presentation 'selected-modules 2 '() '()))
              (trace
@@ -168,8 +168,8 @@
                      (cons 'settings 1))))
              (first-step (car trace))
              (second-step (cadr trace)))
-        (check-equal? (and (object? native-observation)
-                           (yuanxu-module-observation? native-observation))
+        (check-equal? (and (object? runtime-observation)
+                           (yuanxu-module-observation? runtime-observation))
                       #t)
         (check-equal? (module-observability-test-alist-value 'kind first-step)
                       yuanxu-module-observation-kind)
@@ -215,7 +215,7 @@
                        repeat-step)
                       '(selected-modules selected-modules))))
     (yuanxu-test-case "observes POO slot initializer self references"
-      (let* ((native-observation
+      (let* ((runtime-observation
               (make-yuanxu-poo-slot-authoring-observation
                'poo-introspection-slot-receipt
                'safe
@@ -236,8 +236,8 @@
              (good (caddr observations))
              (detail (module-observability-test-alist-value 'detail bad)))
         (check-equal?
-         (and (object? native-observation)
-              (yuanxu-poo-slot-authoring-observation? native-observation))
+         (and (object? runtime-observation)
+              (yuanxu-poo-slot-authoring-observation? runtime-observation))
          #t)
         (check-equal? (module-observability-test-alist-value 'kind bad)
                       yuanxu-poo-slot-authoring-observation-kind)
@@ -291,7 +291,7 @@
         (check-equal? (yuanxu-poo-slot-authoring-diagnostics
                        (list good))
                       '())))
-    (yuanxu-test-case "reader-native source inspection catches both POO slot spellings"
+    (yuanxu-test-case "reader-runtime source inspection catches both POO slot spellings"
       (let* ((source
               "(.o values: values safe: safe-value (before before) (after after-value) diagnostics: (reverse diagnostics))\n(.def Prototype policy: policy (result result-value))")
              (observations
@@ -312,7 +312,7 @@
                 (module-observability-test-alist-value 'slot diagnostic))
               (yuanxu-poo-slot-authoring-diagnostics observations))
          '(values before diagnostics policy))))
-    (yuanxu-test-case "reader-native POO bindings preserve nested source order"
+    (yuanxu-test-case "reader-POO bindings preserve nested source order"
       (check-equal?
        (yuanxu-poo-slot-authoring-datum-bindings
         '(begin
@@ -324,7 +324,7 @@
          (nested . (.o inner: inner-value))
          (inner . inner-value)
          (final . final-value))))
-    (yuanxu-test-case "reader-native source inspection catches lexical values calls"
+    (yuanxu-test-case "reader-runtime source inspection catches lexical values calls"
       (let* ((source
               (string-append
                "(def (agentic-ai-lab-tool-unique-symbols/accumulate remaining seen values)\n"
@@ -360,7 +360,7 @@
         (check-equal?
          (module-observability-test-alist-value 'runtime-executed observation)
          #f)))
-    (yuanxu-test-case "projects one inline prototype lookup as native authoring advice"
+    (yuanxu-test-case "projects one inline prototype lookup as runtime authoring advice"
       (let* ((source
               (string-append
                "(.o (:: @ (.ref Contract 'proto)) value: 1)\n"
@@ -379,21 +379,21 @@
     (yuanxu-test-case "observability owner exposes development quality and performance evidence"
       (let* ((policy
               (yuanxu-debug-memory-policy
-               'native-module-system-test
+               'runtime-module-system-test
                heap-limit-bytes: 4096
                live-growth-limit-bytes: 1024
                fail-closed?: #t))
              (before
               (yuanxu-debug-memory-sample
-               'native-module-system-test 1024 512 256 128 128))
+               'runtime-module-system-test 1024 512 256 128 128))
              (after
               (yuanxu-debug-memory-sample
-               'native-module-system-test 2048 1024 768 384 384))
+               'runtime-module-system-test 2048 1024 768 384 384))
              (receipt
               (yuanxu-debug-memory-receipt policy before after))
              (observations
               (yuanxu-authoring-inline-prototype-datum-observations
-               'native-module-system-test
+               'runtime-module-system-test
                '(.o (:: @ (.ref Contract 'proto)) value: 1))))
         (check-equal? (.ref receipt 'accepted?) #t)
         (check-equal? (.ref receipt 'heap-growth-bytes) 1024)
@@ -401,7 +401,7 @@
         (check-equal? (length observations) 1)
         (check-equal? (.ref (car observations) 'code)
                       'poo-prototype-lookup-inside-composition)))
-    (yuanxu-test-case "native getter paths are literals but receivers remain expressions"
+    (yuanxu-test-case "runtime getter paths are literals but receivers remain expressions"
       (for-each
        (lambda (initializer)
          (check-equal? (yuanxu-poo-slot-authoring-status 'pipeline initializer)

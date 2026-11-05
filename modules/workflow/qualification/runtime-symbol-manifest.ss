@@ -19,7 +19,7 @@
   "agentic-ai-lab.runtime-symbol-manifest.v1")
 (def +agentic-ai-lab-runtime-symbol-manifest-version+ 1)
 
-;;; Optimization boundary: parsed manifests share one fixed native POO shape.
+;;; Optimization boundary: parsed manifests share one fixed POO shape.
 (.def agentic-ai-lab-runtime-symbol-manifest-prototype
   kind: 'agentic-ai-lab.runtime-symbol-manifest.v1
   schema: #f

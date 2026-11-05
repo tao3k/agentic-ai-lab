@@ -11,7 +11,7 @@
 (export runtime-cost-probe)
 
 (def (require value message) (unless value (error message)))
-;;; Gambit's native process-statistics fields: CPU 0+1, wall 2, GC CPU 3+4,
+;;; Gambit's runtime process-statistics fields: CPU 0+1, wall 2, GC CPU 3+4,
 ;;; GC count 6, allocated bytes 7. Sampling does not force a collection.
 (def (measure phase count operation)
   (let* ((before (##process-statistics))

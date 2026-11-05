@@ -244,12 +244,12 @@ def shared_atoms(task, ids):
 
 def shared_packet(store, task, ids):
     src=shared_source(task); begin=time.monotonic(); r=store.resolve(src,SHARED_CANDIDATE)
-    if r['status'] != 'verified': raise ValueError('unverified native evidence')
+    if r['status'] != 'verified': raise ValueError('unverified runtime evidence')
     facts=[]; fragments=[]
     for atom in shared_atoms(task,ids):
         f=store.fact(src,SHARED_CANDIDATE,r['handle'],atom)
-        if f['status'] not in ('verified','finite-absent'): raise ValueError('unknown native fact')
-        if (f['status']=='verified') != shared_truth(task,atom): raise ValueError('native/oracle disagreement')
+        if f['status'] not in ('verified','finite-absent'): raise ValueError('unknown runtime fact')
+        if (f['status']=='verified') != shared_truth(task,atom): raise ValueError('runtime/oracle disagreement')
         facts.append({'atom':atom,'status':f['status']})
         if f['status']=='verified':
             p=store.fragment(src,SHARED_CANDIDATE,r['handle'],atom)
@@ -257,7 +257,7 @@ def shared_packet(store, task, ids):
             fragments.append({'atom':atom,'roots':p['roots'],'nodes':p['nodes']})
     return {'scope':dict(r['scope']),'facts':facts,'fragments':fragments,
             'nodeEncoding':['id','kind','relation','row','ruleLabel','inputs'],
-            'nativeStats':store.stats(),'nativeSeconds':time.monotonic()-begin,'reused':r['reused']}
+            'runtimeStats':store.stats(),'runtimeSeconds':time.monotonic()-begin,'reused':r['reused']}
 
 
 def shared_qualify(engine):
@@ -269,7 +269,7 @@ def shared_qualify(engine):
             assert first['status']=='verified'
             assert sorted(first['rows'])==[[n[0]] for n in task['needs'] if shared_truth(task,['ready',n[0]])]
             packets=[shared_packet(store,task,ids) for ids in task['schedule']]
-            assert all(p['nativeStats']['proof-builds']==1 and p['reused'] for p in packets)
+            assert all(p['runtimeStats']['proof-builds']==1 and p['reused'] for p in packets)
             shared=[next(f for f in p['fragments'] if f['atom']==task['sharedAtom']) for p in packets]
             assert shared[0]==shared[1]==shared[2]
             for p in packets:
@@ -311,7 +311,7 @@ def shared_qualify(engine):
             p=store.fact(src,SHARED_CANDIDATE,r['handle'],['path',0,2])
             observed.append([i,int(p['status']=='verified'),int([0] in r['rows'])])
     assert observed==expected,'Scheme/Quint finite observation mismatch'
-    return {'taskChecks':results,'nativeQuintRows':observed,'quintCommand':['quint','repl','-q','--backend','typescript','-r','packages/proofs/quint/SharedPremiseReuse.qnt::SharedPremiseReuse','conformance']}
+    return {'taskChecks':results,'runtimeQuintRows':observed,'quintCommand':['quint','repl','-q','--backend','typescript','-r','packages/proofs/quint/SharedPremiseReuse.qnt::SharedPremiseReuse','conformance']}
 
 
 def shared_freeze(library, directory, *, search_tasks=None):
@@ -328,8 +328,8 @@ def shared_freeze(library, directory, *, search_tasks=None):
         qualification=shared_qualify(engine)
         if search_tasks is not None:qualification['branchTaskChecks']=branch_qualify(engine,search_tasks)
     (directory/'qualification.json').write_text(json.dumps(qualification,indent=2)+'\n')
-    native_receipt=compiled_inputs()
-    binding=dict(native_receipt['sourceInputs'])
+    runtime_receipt=compiled_inputs()
+    binding=dict(runtime_receipt['sourceInputs'])
     # The installed application artifact carries the resolved producer's source
     # digests; qualification_inputs checks the independently installed core wheel.
     names=['gerbil.pkg','packages/python-runtime/pyproject.toml',
@@ -345,7 +345,7 @@ def shared_freeze(library, directory, *, search_tasks=None):
         target=directory/'inputs'/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(root/name,target)
     runtime_inputs=qualification_inputs([])
     (directory/'pyo3-runtime-receipt.json').write_text(json.dumps(runtime_inputs,indent=2)+'\n')
-    (directory/'native-build-receipt.json').write_text(json.dumps(native_receipt,indent=2)+'\n')
+    (directory/'runtime-build-receipt.json').write_text(json.dumps(runtime_receipt,indent=2)+'\n')
     metadata={'schema':'ascent.shared-premise-diagnostic.v1','tasks':shared_tasks(),'candidate':SHARED_CANDIDATE,
         'question':SHARED_QUESTION,'tool':SHARED_TOOL,'arms':['baseline','facts','scheme'],
         'orders':[['baseline','facts','scheme'],['scheme','facts','baseline']],
@@ -355,8 +355,8 @@ def shared_freeze(library, directory, *, search_tasks=None):
         'inputs':binding,'qualificationSha256':hashlib.sha256((directory/'qualification.json').read_bytes()).hexdigest(),
         'annotationRubric':SHARED_RUBRIC,'annotationTool':SHARED_LABEL_TOOL,'annotationPasses':2,'annotationOutputCap':8192,
         'annotationRules':'Exact nonoverlapping quotes; endpoint literals; independent finite truth; explicit ordered edge/path chain or ready conjunction for positive inference. premise_consumed must refer to an earlier or supplied true atom. new_residual is derived by classification after validation, never trusted from label name. A repeated positive atom is counted across different questions in the same source scope. Exact-premise repeat reported separately. Negative claims require an explicit negative argument and independently absent atom, but completeness of the quoted absence argument is unproven. Arithmetic and ambiguity are reported without assigning cached-atom savings. Rejected/empty/missing labels remain visible. Two blind passes of the SAME model are correlated annotations, not independent-rater validation.',
-        'claims':{'correctReuse':'Equal native support nodes across different obligations; source/handle binding and independent answer agreement.',
-                  'reducedRepetition':'Requires directly supported baseline repetitions plus validated annotation coverage; native hits alone are insufficient.',
+        'claims':{'correctReuse':'Equal runtime support nodes across different obligations; source/handle binding and independent answer agreement.',
+                  'reducedRepetition':'Requires directly supported baseline repetitions plus validated annotation coverage; runtime hits alone are insufficient.',
                   'newInference':'Distinct correct downstream answers and qualified nonsupplied consequences after the first obligation. No optimization or depth claim.'},
         'controls':'Same task, sibling schedule, history policy, answer schema and input-plus-all-output cap. No pruning, ranking, optimal answer or anti-repetition instruction. Fact and Scheme supply identical atomic outcomes; Scheme adds checked ancestor-closed fragments. Unused reservations are censored, not savings. All failed calls and unknown usage retained.',
         'sourceState':(json.loads((root/'.research-source.json').read_text()) if (root/'.research-source.json').exists() else {'head':__import__('subprocess').check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'dirtySourceSnapshot':True,'cleanCheckoutReproductionVerified':False}),
@@ -364,7 +364,7 @@ def shared_freeze(library, directory, *, search_tasks=None):
         'papers':[{'id':'BYODS','url':'https://kmicinski.com/assets/byods.pdf','role':'concretization/delta semantics; separate from model efficacy'},
                   {'id':'DatalogBench-v1','url':'https://arxiv.org/html/2609.37233v1','role':'held-out execution and oracle mutation tests'},
                   {'id':'MiniCache-v1','url':'https://arxiv.org/html/2607.20507v1','role':'shared computation with different request variables'}],
-        'formalBoundary':'SharedPremiseReuse.qnt models finite fixture truth and source-generation admission. ProofDag.lean proves specified ordered positive-DAG soundness under premises, not FFI correctness or model behavior. VerifiedCandidate assumes independent grader validity. Native correspondence receipts are separate.'}
+        'formalBoundary':'SharedPremiseReuse.qnt models finite fixture truth and source-generation admission. ProofDag.lean proves specified ordered positive-DAG soundness under premises, not FFI correctness or model behavior. VerifiedCandidate assumes independent grader validity. Runtime correspondence receipts are separate.'}
     (directory/'plan.json').write_text(json.dumps(metadata,indent=2)+'\n')
     (directory/'plan.sha256').write_text(hashlib.sha256((directory/'plan.json').read_bytes()).hexdigest()+'\n')
     print('SHARED_PREMISE_FROZEN', (directory/'plan.sha256').read_text().strip(),flush=True)
@@ -457,7 +457,7 @@ def shared_live(directory, output):
                             if cap<plan['minimumOutputTokens']:row.update(stop='budget_reservation',nextInputReservation=bound);break
                             req['max_output_tokens']=cap
                             folder=output/'calls'/f'{case}-{arm}'/str(turn);folder.mkdir(parents=True)
-                            record={'turn':turn,'usage':None,'grossTokens':None,'failure':None,'correct':False,'inputReservation':bound,'outputCap':cap,'nativePacket':packet}
+                            record={'turn':turn,'usage':None,'grossTokens':None,'failure':None,'correct':False,'inputReservation':bound,'outputCap':cap,'runtimePacket':packet}
                             row['calls'].append(record);save();(folder/'request.json').write_text(json.dumps(req,indent=2)+'\n')
                             _,meta=provider(req,provider_key(),folder/'response.json');term=meta.get('terminal') or {}
                             text=''.join(p.get('text','') for x in term.get('output',[]) if x.get('type')=='reasoning'
@@ -508,7 +508,7 @@ def shared_validate_label(text,item,task,supplied,prior,*,supplied_absent=()):
     assert all(n in numbers for a in [atom,*premises] for n in a[1:]),'endpoints absent from quote'
     if category=='absent_premise_consumed':
         assert not truth and atom in supplied_absent,'negative premise not previously supplied as finite-absent'
-        assert not premises and re.search(r'\b(native|evidence|given|conclusion)\b',quote,re.I),'negative use must explicitly reference supplied evidence, not invent a proof'
+        assert not premises and re.search(r'\b(runtime|evidence|given|conclusion)\b',quote,re.I),'negative use must explicitly reference supplied evidence, not invent a proof'
         result['negativePremiseConsumed']=True
         return result
     if category=='absence_recheck':
@@ -566,7 +566,7 @@ def shared_label(directory, output):
                     assert not meta.get('error') and term.get('status')=='completed','annotation provider failure'
                     calls=[c for c in term['output'] if c['type']=='function_call'];assert len(calls)==1 and calls[0]['name']=='annotate'
                     raw=json.loads(calls[0]['arguments']);assert set(raw)=={'episodes'} and isinstance(raw['episodes'],list)
-                    record['raw']=raw['episodes'];supplied=call['suppliedAtoms'] if plan.get('experiment')=='sibling-search' else [f['atom'] for f in (call.get('nativePacket') or {}).get('facts',[]) if f['status']=='verified']
+                    record['raw']=raw['episodes'];supplied=call['suppliedAtoms'] if plan.get('experiment')=='sibling-search' else [f['atom'] for f in (call.get('runtimePacket') or {}).get('facts',[]) if f['status']=='verified']
                     for item in raw['episodes']:
                         try:
                             label=shared_validate_label(text,item,task,supplied,prior)
@@ -623,7 +623,7 @@ def shared_report(directory, output):
         'annotationKnownTokens':sum(c['grossTokens'] or 0 for x in labels for c in x['calls']),
         'annotationUnknownUsageCalls':sum(c['modelCalled'] and c['grossTokens'] is None for x in labels for c in x['calls']),
         'trajectories':rows,'annotationSummaries':summaries,'annotationConcordance':concordance,'jointCheckpoints':points,
-        'claims':'Observed literal derivation counts are lower bounds. Two passes use the same stochastic model, so concordance does not establish independent-rater reliability or completeness. No depth/optimization/causal efficacy claim follows from two small fixtures. Unused budget is not savings. Native cache reuse and model behavior are separate.'}
+        'claims':'Observed literal derivation counts are lower bounds. Two passes use the same stochastic model, so concordance does not establish independent-rater reliability or completeness. No depth/optimization/causal efficacy claim follows from two small fixtures. Unused budget is not savings. Runtime cache reuse and model behavior are separate.'}
     (output/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     lines=['# Shared-premise Library diagnostic','',report['claims'],'',
         '| Case | Arm | Total input + all output | Correct obligations | Correct new answers after first | Stop |',
@@ -633,12 +633,12 @@ def shared_report(directory, output):
               '|---|---:|---:|---:|---:|---:|']
     for a in summaries:lines.append(f"| {a['case']} / {a['arm']} / {a['pass']} | {a['sharedPremiseDerivations']} | {a['observedRepeatedFacts']} | {a['newConsequencesAfterFirst']} | {a['consumedPremises']} | {a['rejected']} |")
     lines += ['',f"Known solver tokens: {report['solverKnownTokens']}; unknown-usage calls: {report['solverUnknownUsageCalls']}. Known annotation tokens: {report['annotationKnownTokens']}; unknown annotation calls: {report['annotationUnknownUsageCalls']}.",
-        '', 'The source-bound native qualification proves support reuse across three distinct downstream obligations, alternative-support preservation, stale-handle rejection and withdrawal recomputation on this fixture. Quint correspondence and Lean premises are separate gates. The baseline/Fact/Scheme arms share the same questions and full reasoning-history replay, and do not prune alternatives. Failures remain in the ledger. No anti-repetition instruction is supplied.',
-        '', 'See plan.json for relative source hashes, paper lessons, formal scope, exact tasks, independent grader and frozen annotation rules; raw.tar.gz retains inputs, native artifacts, requests, SSE events, returned thinking and rejected labels. This is a local Darwin source snapshot, not a portable binary wheel or a verified clean Git checkout reproduction.']
+        '', 'The source-bound runtime qualification proves support reuse across three distinct downstream obligations, alternative-support preservation, stale-handle rejection and withdrawal recomputation on this fixture. Quint correspondence and Lean premises are separate gates. The baseline/Fact/Scheme arms share the same questions and full reasoning-history replay, and do not prune alternatives. Failures remain in the ledger. No anti-repetition instruction is supplied.',
+        '', 'See plan.json for relative source hashes, paper lessons, formal scope, exact tasks, independent grader and frozen annotation rules; raw.tar.gz retains inputs, runtime artifacts, requests, SSE events, returned thinking and rejected labels. This is a local Darwin source snapshot, not a portable binary wheel or a verified clean Git checkout reproduction.']
     (output/'report.md').write_text('\n'.join(lines)+'\n')
     doc=s.ROOT/'.cache/ascent/research-reports/agent-inference/fact-reuse-results/shared-premise-diagnostic';doc.mkdir(parents=True,exist_ok=False)
     for name in ['report.json','report.md','ledger.json','annotation-ledger.json']:shutil.copy2(output/name,doc/name)
-    for name in ['plan.json','plan.sha256','qualification.json','pyo3-runtime-receipt.json','native-build-receipt.json']:shutil.copy2(directory/name,doc/name)
+    for name in ['plan.json','plan.sha256','qualification.json','pyo3-runtime-receipt.json','runtime-build-receipt.json']:shutil.copy2(directory/name,doc/name)
     with tarfile.open(doc/'raw.tar.gz','w:gz') as archive:
         archive.add(directory,arcname='frozen');archive.add(output,arcname='run')
     (doc/'integrity.json').write_text(json.dumps({p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in doc.iterdir() if p.is_file()},indent=2)+'\n')
@@ -723,12 +723,12 @@ def branch_qualify(engine,tasks):
                 observation=store.observe(source,SHARED_CANDIDATE,hit['handle'],[task['sharedAtom']],support=True)
                 supports.append(observation)
             assert all(x==supports[0] for x in supports) and store.stats()['proof-builds']==1
-            checks.append({'id':task['id'],'proofBuilds':1,'sharedSupportIdenticalAcrossBranches':True,'nativeStats':store.stats()})
+            checks.append({'id':task['id'],'proofBuilds':1,'sharedSupportIdenticalAcrossBranches':True,'runtimeStats':store.stats()})
     return checks
 
 
 def branch_observe(store, task, source, *, support):
-    """Read all required path atoms through the public native binding before a branch."""
+    """Read all required path atoms through the public runtime binding before a branch."""
     resolved=store.resolve(source,SHARED_CANDIDATE)
     assert resolved['status']=='verified'
     atoms=list(dict.fromkeys(tuple(['path',*pair]) for x in task['items'] for pair in x['paths']))
@@ -1010,7 +1010,7 @@ def branch_semantic_label(directory, output):
     shared_check(directory)
 
 def branch_freeze(library, directory):
-    # Reuse the existing source/binary freezer and its native/formal gates.
+    # Reuse the existing source/binary freezer and its runtime/formal gates.
     tasks=branch_tasks();shared_freeze(library,directory,search_tasks=tasks)
     plan=json.loads((directory/'plan.json').read_text())
     plan.update(question=BRANCH_QUESTION,tasks=tasks,tool=BRANCH_SUBMIT,readTool=BRANCH_READ,
@@ -1021,7 +1021,7 @@ def branch_freeze(library, directory):
                 annotationTool=None,
                 outputProtocol='Automatic tool choice, unchanged low reasoning. Output cap uses all remaining cell budget after conservative input reservation. Never disable thinking to salvage truncation: incomplete first output is a retained censored failure. A completed plain response may use the existing non-thinking structured transport only if its entire replay input and output fit the same total ceiling.',
                 annotationCoverage='Every visible character partitioned; only literal ordered chains counted. Unresolved semantic lines retained; syntactic coverage is not exhaustive semantic certification.',
-                historyPolicy='Each sibling forks the same root task. No sibling reasoning is imported into another sibling; identical policy in all arms. Native store spans siblings.',
+                historyPolicy='Each sibling forks the same root task. No sibling reasoning is imported into another sibling; identical policy in all arms. Runtime store spans siblings.',
                 annotationRules=plan['annotationRules']+' Repetition is split into within-response, same-branch and cross-branch dimensions. Supplied evidence is only evidence returned before the labeled response, never later tool results.')
     plan['independentJudge']={'algorithm':'Enumerate all four-item subsets independently of Scheme; directed BFS, sum resource constraints, group count and exact pair bonus scoring.',
                              'frozenOptima':[[max(branch_candidates(t,b))[0] for b in t['branches']] for t in tasks]}
@@ -1034,7 +1034,7 @@ def branch_freeze(library, directory):
     semantic_tool['parameters']['required']=['episodes','blocks']
     plan.update(semanticTool=semantic_tool,maxSemanticCalls=18,semanticOutputCap=8192,
                 semanticReviewBlockChars=1800,
-                semanticRubric=SHARED_RUBRIC+' absent_premise_consumed is use of an earlier finite-absent conclusion, not a new absence proof: quote must explicitly refer to native/given evidence; unknown is never an absent premise. Read every supplied reasoningBlock; return each block id exactly once with all applicable tags: positive_fact_use, negative_fact_use, positive_derivation, negative_argument, downstream_inference, optimization, task_interpretation, unclear. Reading or listing supplied conclusions is evidence use, not reconstruction. Applying path facts to item feasibility is downstream inference, not proving those paths again. A negative assertion alone is not an absence argument; unclear use-versus-recheck must include unclear. For episodes, concatenate block texts in their given order and use exact contiguous quotes and zero-based occurrence within that full text. Do not enumerate lines or invent offsets. Do not emit arithmetic episodes. Blocks are review proposals, not certified recall; unsupported or ambiguous content remains unknown. No solver receives these annotation instructions.')
+                semanticRubric=SHARED_RUBRIC+' absent_premise_consumed is use of an earlier finite-absent conclusion, not a new absence proof: quote must explicitly refer to runtime/given evidence; unknown is never an absent premise. Read every supplied reasoningBlock; return each block id exactly once with all applicable tags: positive_fact_use, negative_fact_use, positive_derivation, negative_argument, downstream_inference, optimization, task_interpretation, unclear. Reading or listing supplied conclusions is evidence use, not reconstruction. Applying path facts to item feasibility is downstream inference, not proving those paths again. A negative assertion alone is not an absence argument; unclear use-versus-recheck must include unclear. For episodes, concatenate block texts in their given order and use exact contiguous quotes and zero-based occurrence within that full text. Do not enumerate lines or invent offsets. Do not emit arithmetic episodes. Blocks are review proposals, not certified recall; unsupported or ambiguous content remains unknown. No solver receives these annotation instructions.')
     plan['branchQualification']=json.loads((directory/'qualification.json').read_text())['branchTaskChecks']
     # No model trial can begin from a dirty or incomplete producer checkout.
     import subprocess
@@ -1042,7 +1042,7 @@ def branch_freeze(library, directory):
     assert not status,'clean producer required: '+status
     plan['sourceState']={'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=s.ROOT,text=True).strip(),
                          'dirtySourceSnapshot':False,'cleanCheckoutReproductionVerified':True,
-                         'scope':'Local clean checkout rebuild and native qualification; not a cross-machine or remote CI claim.'}
+                         'scope':'Local clean checkout rebuild and runtime qualification; not a cross-machine or remote CI claim.'}
     (directory/'plan.json').write_text(json.dumps(plan,indent=2)+'\n')
     (directory/'plan.sha256').write_text(hashlib.sha256((directory/'plan.json').read_bytes()).hexdigest()+'\n')
     shared_committed_check(directory,directory/'committed-gate')
@@ -1087,7 +1087,7 @@ def branch_import_output_qualification(directory, output):
     assert record['fixtureSha256']==plan['inputs']['t/research/output-check-fixture.json']
     linked={**record,'acceptedForPlanSha256':hashlib.sha256((directory/'plan.json').read_bytes()).hexdigest(),
             'qualificationRequestSha256':hashlib.sha256((output/'request.json').read_bytes()).hexdigest(),
-            'reuseScope':'Byte-identical nonthinking transport request only; does not qualify thinking tool choice or native semantics'}
+            'reuseScope':'Byte-identical nonthinking transport request only; does not qualify thinking tool choice or runtime semantics'}
     (directory/'output-qualification.json').write_text(json.dumps(linked,indent=2)+'\n')
     print('OUTPUT_QUALIFICATION_REQUEST_IDENTITY_OK',flush=True)
 
@@ -1140,11 +1140,11 @@ def branch_live(directory, output):
                         supplied=[];entry_packet=None
                         if plan.get('evidenceAtBranchEntry') and arm!='baseline':
                             entry_packet=branch_observe(store,task,source,support=arm=='scheme')
-                            context['nativeEvidence']=entry_packet
+                            context['runtimeEvidence']=entry_packet
                             if plan.get('compactEvidence'):
                                 from agentic_ai_lab_runtime.reasoning import compact_observation, expand_observation
-                                context['nativeEvidence']=compact_observation(entry_packet)
-                                assert expand_observation(context['nativeEvidence'])==entry_packet
+                                context['runtimeEvidence']=compact_observation(entry_packet)
+                                assert expand_observation(context['runtimeEvidence'])==entry_packet
                             supplied=[o['conclusion']['atom'] for o in entry_packet['observations'] if o['conclusion']['status']=='verified']
                         history=ResponseHistory(json.dumps(context,separators=(',',':')));done=False;prior_usage=None;new_results=[]
                         try:
@@ -1163,7 +1163,7 @@ def branch_live(directory, output):
                                 if cap<(plan['minimumOutputTokens'] if step==0 else plan['finalizationOutputCap']):row['stop']='budget_reservation';break
                                 req['max_output_tokens']=cap
                                 folder=output/'calls'/f'{case}-{arm}'/f"{branch['id']}-{step}";folder.mkdir(parents=True)
-                                rec={'turn':branch['id'],'step':step,'usage':None,'grossTokens':None,'failure':None,'suppliedAtoms':copy.deepcopy(supplied),'inputReservation':bound,'outputCap':cap,'nativePacket':None,'entryEvidence':entry_packet,'suppliedFacts':copy.deepcopy([o['conclusion'] for o in (entry_packet or {}).get('observations',[])]),'outputTruncated':False}
+                                rec={'turn':branch['id'],'step':step,'usage':None,'grossTokens':None,'failure':None,'suppliedAtoms':copy.deepcopy(supplied),'inputReservation':bound,'outputCap':cap,'runtimePacket':None,'entryEvidence':entry_packet,'suppliedFacts':copy.deepcopy([o['conclusion'] for o in (entry_packet or {}).get('observations',[])]),'outputTruncated':False}
                                 row['calls'].append(rec);save();(folder/'request.json').write_text(json.dumps(req,indent=2)+'\n')
                                 _,meta=provider(req,provider_key(),folder/'response.json');terminal=meta.get('terminal') or {};u=terminal.get('usage')
                                 rec.update(status=terminal.get('status'),usage=u,providerError=meta.get('error'),incompleteDetails=terminal.get('incomplete_details'))
@@ -1204,7 +1204,7 @@ def branch_live(directory, output):
                                             assert (f['status']=='verified')==shared_truth(task,f['atom'])
                                             if f['status']=='verified' and f['atom'] not in supplied:supplied.append(f['atom'])
                                         history.append_result(c['call_id'],packet);packets.append(packet)
-                                    rec['nativePacket']={'returnedToolPackets':packets,'nativeStats':store.stats()}
+                                    rec['runtimePacket']={'returnedToolPackets':packets,'runtimeStats':store.stats()}
                                     prior_usage=rec['grossTokens'];new_results=history.snapshot()[-len(calls):]
                                 else:
                                     if calls:
@@ -1230,7 +1230,7 @@ def branch_live(directory, output):
                                 (folder/'receipt.json').write_text(json.dumps(row['calls'][-1],indent=2)+'\n')
                             break
                         finally:save()
-                    row['stop']=row['stop'] or 'schedule_complete';row['unusedBudget']=plan['totalBudget']-row['grossTokens'];row['nativeStats']=store.stats();save()
+                    row['stop']=row['stop'] or 'schedule_complete';row['unusedBudget']=plan['totalBudget']-row['grossTokens'];row['runtimeStats']=store.stats();save()
     shared_check(directory)
     print('BRANCH_LIVE_COMPLETE',flush=True)
 
@@ -1249,7 +1249,7 @@ def branch_report(directory, output):
                  'finalizationCalls':sum(c['step']>0 for c in row['calls']),
                  'startScores':starts,'incumbentScores':achieved,'optimumScores':optima,
                  'meanNormalizedImprovement':sum((a-s)/(o-s) for a,s,o in zip(achieved,starts,optima))/len(starts),
-                 'nativeStats':row['nativeStats'],'unusedBudget':row['unusedBudget'],'annotation':[]}
+                 'runtimeStats':row['runtimeStats'],'unusedBudget':row['unusedBudget'],'annotation':[]}
         for phase in [x for x in labels if (x['case'],x['arm'])==(row['case'],row['arm'])]:
             accepted=[e for c in phase['calls'] for e in c['accepted']]
             summary['annotation'].append({'pass':phase['pass'],'qualifiedDerivations':sum(e['qualifiedPositive'] for e in accepted),
@@ -1278,7 +1278,7 @@ def branch_report(directory, output):
             'solverUnknownUsageCalls':sum(c['grossTokens'] is None for r in rows for c in r['calls']),
             'annotationKnownTokens':sum(c['grossTokens'] or 0 for x in labels for c in x['calls']),
             'annotationUnknownUsageCalls':sum(c['modelCalled'] and c['grossTokens'] is None for x in labels for c in x['calls']),
-            'claims':'Two finite fixtures and one stochastic trajectory per cell. Native reuse, model tool consumption, literal derivation counts and optimization quality are separate. Literal chain counts have limited grammar recall; complete character partition does not certify semantic completeness. Unresolved lines are retained. Thinking truncated at a checkpoint remains censored even if finalization returns an answer. Unused budget is not savings. Budget/call stops are censored and all failures remain.'}
+            'claims':'Two finite fixtures and one stochastic trajectory per cell. Runtime reuse, model tool consumption, literal derivation counts and optimization quality are separate. Literal chain counts have limited grammar recall; complete character partition does not certify semantic completeness. Unresolved lines are retained. Thinking truncated at a checkpoint remains censored even if finalization returns an answer. Unused budget is not savings. Budget/call stops are censored and all failures remain.'}
     (output/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     lines=['# Sibling-search Library diagnostic','',report['claims'],'',
            '| Source | Arm | Input + all output | Submitted / feasible / optimal branches | Mean normalized incumbent improvement | Stop |',
@@ -1288,12 +1288,12 @@ def branch_report(directory, output):
     for r in summaries:
         for a in r['annotation']:lines.append(f"| {r['case']} / {r['arm']} / {a['pass']} | {a['crossBranchRepeats']} | {a['suppliedPremiseRederivations']} | {a['rejectedLabels']} | {a['failedCalls']} |")
     lines+=['',f"Solver known tokens: {report['solverKnownTokens']}; annotation known tokens: {report['annotationKnownTokens']}. Unknown usage solver/annotation calls: {report['solverUnknownUsageCalls']} / {report['annotationUnknownUsageCalls']}.",
-            '', 'All arms fork sibling histories from the same root and receive identical initial feasible incumbents and branch constraints. At each branch entry, Fact receives native conclusions and Scheme receives the same conclusions plus named supports from the same public Python binding. Baseline has neither. Only the common submission tool is exposed; no anti-repetition instruction is supplied. Incomplete thinking is a retained censored failure and is never salvaged by non-thinking finalization. A completed plain response may use structured finalization only within the same total budget. The independent exhaustive grader is never given to the solver. A stale handle never becomes a verified tool conclusion.',
-            '', 'The producer is a locally committed clean checkout. Native build, formal checks and source identities are explicit in plan/receipts; this does not qualify another machine or remote CI. raw.tar.gz retains every request, thinking, response, tool packet, failure and annotation.']
+            '', 'All arms fork sibling histories from the same root and receive identical initial feasible incumbents and branch constraints. At each branch entry, Fact receives runtime conclusions and Scheme receives the same conclusions plus named supports from the same public Python binding. Baseline has neither. Only the common submission tool is exposed; no anti-repetition instruction is supplied. Incomplete thinking is a retained censored failure and is never salvaged by non-thinking finalization. A completed plain response may use structured finalization only within the same total budget. The independent exhaustive grader is never given to the solver. A stale handle never becomes a verified tool conclusion.',
+            '', 'The producer is a locally committed clean checkout. Runtime build, formal checks and source identities are explicit in plan/receipts; this does not qualify another machine or remote CI. raw.tar.gz retains every request, thinking, response, tool packet, failure and annotation.']
     (output/'report.md').write_text('\n'.join(lines)+'\n')
     doc=s.ROOT/'.cache/ascent/research-reports/agent-inference/fact-reuse-results'/plan.get('artifactDirectory','sibling-search');doc.mkdir(parents=True,exist_ok=False)
     for name in ['report.json','report.md','ledger.json','annotation-ledger.json']:shutil.copy2(output/name,doc/name)
-    for name in ['plan.json','plan.sha256','qualification.json','pyo3-runtime-receipt.json','native-build-receipt.json']:shutil.copy2(directory/name,doc/name)
+    for name in ['plan.json','plan.sha256','qualification.json','pyo3-runtime-receipt.json','runtime-build-receipt.json']:shutil.copy2(directory/name,doc/name)
     with tarfile.open(doc/'raw.tar.gz','w:gz') as archive:
         archive.add(directory,arcname='frozen');archive.add(output,arcname='run')
     (doc/'integrity.json').write_text(json.dumps({p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in doc.iterdir() if p.is_file()},indent=2)+'\n')

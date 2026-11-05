@@ -9,7 +9,8 @@
 ;; | PooModuleOptionSchemaCandidate = Value
 ;; | PooModuleOptionValidationReceiptCandidate = Value
 
-(import (only-in :clan/poo/object .all-slots .ref .slot?)
+(import (only-in :clan/poo/mop make-instance)
+        (only-in :clan/poo/object .o .all-slots .ref .slot?)
         :agentic-ai-lab/modules/module-authoring/module-interface
         :agentic-ai-lab/modules/module-authoring/module-descriptor
         :yuanxu/module-system/projection/option-objects
@@ -27,26 +28,35 @@
     (symbol->string slot-name)
     slot-name))
 
-;;; Effective native Slot descriptors own Type, presence, defaults and constants.
-;;; The receipt adds only the contributing module and diagnostic metadata.
+;;; Effective runtime Slot descriptors own Type, presence, defaults and constants.
+;;; The projection adds module identity; diagnostic metadata stays on the Slot.
 (def (agentic-ai-lab-module-schema-from-spec module-id-value option-id-value field)
-  (make-yuanxu-module-option-schema option-id-value module-id-value field
-    (yuanxu-module-object-ref/default field 'metadata '())))
+  (make-instance ModuleOptionSchema
+    id: option-id-value source-module: module-id-value field: field))
 
-;;; Project final POO fields in their native order; receipts add source identity.
+;;; Project final POO fields in their runtime order; receipts add source identity.
 (def (agentic-ai-lab-module-option-configs module)
   (def owner (agentic-ai-lab-module-name module))
   (def config (agentic-ai-lab-module-config module))
-  (map (lambda (entry)
-         (make-yuanxu-module-option-config
-           (agentic-ai-lab-module-option-id (car entry)) (cdr entry) owner '()))
-       (if (object? config) (yuanxu-module-object->alist config)
-           (agentic-ai-lab-module-options module))))
+  (if (object? config)
+    (map (lambda (name)
+           (.o id: (agentic-ai-lab-module-option-id name)
+               value: (.ref config name)
+               source-module: owner
+               metadata: '()))
+         (.all-slots config))
+    ;; Keep legacy row order/duplicates; do not coerce rows through a new object.
+    (map (lambda (entry)
+           (.o id: (agentic-ai-lab-module-option-id (car entry))
+               value: (cdr entry)
+               source-module: owner
+               metadata: '()))
+         (agentic-ai-lab-module-options module))))
 
 (def (agentic-ai-lab-module-option-schemas module)
   (def declaration (agentic-ai-lab-module-schemas module))
   ;; A legacy descriptor without an Interface has no declaration, not an
-  ;; implicit String contract. Actual declarations must be native Records.
+  ;; implicit String contract. Actual declarations must be runtime Records.
   (if (object? declaration)
     (let ((owner (agentic-ai-lab-module-name module))
           (slots (.ref declaration 'effective-slots)))
@@ -58,30 +68,24 @@
 
 ;; : (-> PooModuleDescriptor [PooModuleOptionValidationReceipt])
 (def (agentic-ai-lab-module-option-validation-receipts module)
-  (let* ((interface (agentic-ai-lab-module-interface-object module))
-         (schema-ref
-          (if (yuanxu-module-interface? interface)
-            (lambda (option-id)
-              (alet (schema-spec
-                     (yuanxu-module-interface-schema-spec
-                      interface
-                      option-id))
-                (agentic-ai-lab-module-schema-from-spec
-                 (agentic-ai-lab-module-name module)
-                 option-id
-                 schema-spec)))
-            (let ((schemas (agentic-ai-lab-module-option-schemas module))
-                  (index (make-hash-table)))
-              (for-each
-               (lambda (schema)
-                 (hash-put! index
-                            (yuanxu-module-option-schema-id schema)
-                            schema))
-               schemas)
-              (lambda (option-id) (hash-get index option-id))))))
-    (yuanxu-module-options-validate
-     schema-ref
-     (agentic-ai-lab-module-option-configs module))))
+  (let* ((declaration (agentic-ai-lab-module-schemas module))
+         (config (agentic-ai-lab-module-config module))
+         (owner (agentic-ai-lab-module-name module))
+         (fields (and (object? declaration) (.ref declaration 'effective-slots)))
+         (field-ref
+          (lambda (id)
+            (and fields (string? id)
+              (let (name (string->symbol id))
+                (and (.slot? fields name) (.ref fields name)))))))
+    (if (and (object? declaration)
+             (or (object? config)
+                 (yuanxu-module-interface? (agentic-ai-lab-module-interface-object module))))
+      (yuanxu-module-config-validation-receipts declaration field-ref config owner)
+      (yuanxu-module-options-validate
+        (lambda (id)
+          (alet (field (field-ref id))
+            (agentic-ai-lab-module-schema-from-spec owner id field)))
+        (agentic-ai-lab-module-option-configs module)))))
 
 ;;; Boundary: module validation stays recursive over inline import profiles.
 ;; : (-> PooModuleDescriptor [PooModuleOptionValidationReceipt])

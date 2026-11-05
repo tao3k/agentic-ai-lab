@@ -123,7 +123,7 @@
           (unless (and (eq? (.ref observed 'modality) 'observed)
                        (equal? (.ref observed 'domain-identity) (.ref end-value 'domain-identity))
                        (>= (.ref observed 'coordinate) (.ref (.ref snapshot 'effective-at) 'coordinate)))
-            (error "Native clock rollback/domain mismatch"))
+            (error "Runtime clock rollback/domain mismatch"))
           ;; Supplement the proactive timer: a delayed mailbox cannot let a
           ;; final-use guard use a clock frozen before the actual deadline.
           (if (and (< (.ref (.ref snapshot 'effective-at) 'coordinate) (.ref end-value 'coordinate))
@@ -136,9 +136,9 @@
 (def (agentic-ai-lab-temporal-support-policy-host-enroll-clock! host clock-value)
   (let (s (state host))
     (change-feed-open! (policy-host-state-feed s))
-    (when (policy-host-state-clock s) (error "Native clock is already enrolled"))
-    (unless (and (object? clock-value) (eq? (.ref clock-value 'kind) 'temporal.native-clock.v1)
-                 (.slot? clock-value '.observe)) (error "Expected native clock owner capability"))
+    (when (policy-host-state-clock s) (error "Runtime clock is already enrolled"))
+    (unless (and (object? clock-value) (eq? (.ref clock-value 'kind) 'temporal.monotonic-clock.v1)
+                 (.slot? clock-value '.observe)) (error "Expected runtime clock owner capability"))
     (set! (policy-host-state-clock s) clock-value) #t))
 
 ;;; Releasing a runtime lease does not restore authority to a frozen snapshot.

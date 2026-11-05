@@ -7,7 +7,8 @@
 
 (import (only-in :clan/poo/object .ref .slot? object?)
         :yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         (only-in :agentic-ai-lab/modules/loop-engine/runtime
                  loop-engine-capability-receipt?
                  agentic-ai-lab-user-loop-engine-capability-receipt-ref)

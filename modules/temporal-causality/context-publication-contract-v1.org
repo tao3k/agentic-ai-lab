@@ -8,7 +8,7 @@ SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 * Implemented Library slice
 
-[[file:../../src/semantic/context-restriction.ss][Context restriction]] implements RFC 91's equivalent restriction model as native
+[[file:../../src/semantic/context-restriction.ss][Context restriction]] implements RFC 91's equivalent restriction model as runtime
 POO objects and pure functions. Its finite profile names permitted readers and
 permitted destinations independently; disclosure requires membership in both.
 It does not express arbitrary reader/destination pair correlations. Empty sets
@@ -25,14 +25,14 @@ has no executable operation in this profile; it needs separate Authority and
 Evidence admission before implementation. Redaction and integrity-label semantics
 also remain outside this finite profile.
 
-The native flow decision binds restriction digest, exact source/content digests,
+The runtime flow decision binds restriction digest, exact source/content digests,
 principal, destination and declared evaluation coordinate. Eligible means those
 declared restrictions permit the flow at that coordinate. It does not authorize
 IO: source-authenticated, flow-admitted, action-authorized and durable remain
 false. A changed source/content changes the decision binding, but only a Host or
 Data coordinator can establish which source is current and fence later use.
 
-Six native cases, run from freshly compiled Gerbil package modules through the
+Six runtime cases, run from freshly compiled Gerbil package modules through the
 existing heap-fenced Just entry and unchanged five-second watchdog, cover restrictive composition, canonical ordering and algebra,
 widening/provenance/lease rejection, empty intersections and incomparable domains,
 lease boundaries and destination/principal denial, and material substitution or
@@ -52,17 +52,17 @@ for a fresh declaration evaluation and supplies no inherited authority.
 Extra authority or clock fields reject.
 
 The original MRR consumer composes restrictions carrying original Fact identities
-and binds source/output digests to native canonical original MRR Fact content.
+and binds source/output digests to runtime canonical original MRR Fact content.
 Seven flows cover lease, reader and destination boundaries and changed source
 or output content. Substituted material changes the decision identity; eligibility
 alone does not reject an unauthenticated material declaration. The original Fact
 and derivation remain in the Scheme oracle, which Python replays through the same
-native artifact. These are original Fact content bindings, not an authenticated
+runtime artifact. These are original Fact content bindings, not an authenticated
 Temporal source vector or Data frontier. All admission flags remain false.
 
 The existing consumer CI requires this oracle before Python replay. Fourteen
 Python cases cover composition, denial, exact-field rejection and original oracle
-replay. No new CI job, installer or protocol version is introduced. Native wire
+replay. No new CI job, installer or protocol version is introduced. Runtime wire
 execution passed the existing five-second watchdog with final OK; fresh AOT Rust
 execution and Python oracle replay on the delivered head remain the closure gate.
 
@@ -81,11 +81,11 @@ validation. =SnapshotPublication= separately acknowledges physical closure
 transfer; it does not publish a mutable discovery pointer. The new Data source
 cut =844a1d74= adds atomic publication delivery and exact historical ACKs to that
 same Backend. Neither API grants IFC authority by itself. Host authentication,
-exact grant enrollment and synchronized native/source fences remain required.
+exact grant enrollment and synchronized runtime/source fences remain required.
 The Runtime C first-root store has a local pointer transaction but no unified
 Data protected-material/IFC commit. Neither is sufficient for this boundary.
 Do not introduce a second durable backend in MRR runtime or infer permission from
-B2's declared support inventory or native cut-binding selection.
+B2's declared support inventory or runtime cut-binding selection.
 
 * Proposed typed commit input, still v1
 
@@ -101,7 +101,7 @@ query JSON or a tool-supplied Boolean permit. The protocol carries:
   digest and monotonic owner generation;
 - exact policy/grant generations and revocation fences;
 - restriction and flow-decision identities, actor, destination and lease;
-- the native proof/current-applicability binding and fixed-v1 transport identity.
+- the runtime proof/current-applicability binding and fixed-v1 transport identity.
 
 The source vector, policy/grant generations and effective clock come from trusted
 owner state. An ordinary model/query request cannot supply new registry state,
@@ -137,7 +137,7 @@ source advance/grant revocation against commit, replacement and tombstone CAS,
 material/actor/destination substitution, expiry between check and use, unresolved
 proofs, duplicate/reordered outbox and crash/restart at every durable boundary.
 Rust owns backend semantic assertions; Python remains Library/adapter glue.
-Quint checks the bounded coordinator model and native/Data traces must replay
+Quint checks the bounded coordinator model and runtime/Data traces must replay
 that exact transition relation before a refinement claim. Keep five-second real
 progress, fixed versions and package-managed build/test entries. No logs belong
 in Git. Until these gates pass, B3 remains open.
@@ -146,8 +146,8 @@ Local source and compiled-module startup attempts also failed the unchanged
 five-second gate before HARNESS. The compiled-module run passed once with
 MODULE-OK, HARNESS-OK, final OK and exit zero, but later attempts failed; this is
 not stable local startup qualification. Diagnostics found a concurrently changed
-global Homebrew runtime and active native compilation. No external processes or
-SDK installation were changed and no timeout was widened. Final-source native
+global Homebrew runtime and active runtime compilation. No external processes or
+SDK installation were changed and no timeout was widened. Final-source runtime
 execution must qualify in the fixed SDK CI environment before delivery closes.
 
 * Executable publication stage
@@ -158,10 +158,10 @@ scope, operation, expected head, physical payload root, proof admission and full
 Context restriction/actor/destination declarations. Only necessary admissions
 with the exact source and physical content digest can construct a plan. Current
 proof and fresh Host-clock lease evaluation happen inside Data's held transaction.
-The Host advances Data fences before native source refresh; direct native changes
+The Host advances Data fences before runtime source refresh; direct runtime changes
 that bypass that protocol are outside this synchronization guarantee.
 
-The original physical producer now executes native-to-Turso commit, exact replay
+The original physical producer now executes runtime-to-Turso commit, exact replay
 without another clock read, delivery ACK, expired lease refusal, actual source
 correction, stale and refuted refusal and restart. These are required in the
 existing physical job. Their execution and delivered-head CI remain separate
@@ -171,19 +171,19 @@ separate design/implementation gates.
 
 Publication requires distinct grant and source authority identities. Inside the
 held transaction, the source authority commitment must equal the Raw CID of the
-native current source digest. Missing guards and the interval after Data fence
-advance but before native source refresh refuse without a delivery. The physical
+runtime current source digest. Missing guards and the interval after Data fence
+advance but before runtime source refresh refuse without a delivery. The physical
 producer requires an explicit mixed-source refusal marker. Turso internal
 registry versions match the original Data owner's lock; the resolved graph gate
 rejects provider version drift before execution.
 
 * Durable grant retirement and historical recovery
 
-MRR's native/Data qualification holds source proof and flow eligibility constant
+MRR's runtime/Data qualification holds source proof and flow eligibility constant
 while the durable grant changes. Full authority generation prevents same-byte
 ABA. Retirement is terminal for its stable authority ID and stays mandatory
 for that home; a newly enrolled alias cannot bypass it. Refusal happens before
-fresh native validation, and creates neither replacement nor delivery.
+fresh runtime validation, and creates neither replacement nor delivery.
 
 After restart and source correction, historical operation replay/ACK remains
 recoverable without fresh clock or validation. This recovers the exact original

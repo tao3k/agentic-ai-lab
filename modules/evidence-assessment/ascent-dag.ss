@@ -250,7 +250,7 @@
               (case (string->symbol (hash-ref column "kind"))
                 ((symbol) (string? value)) ((integer) (exact-integer? value))
                 ((boolean) (boolean? value)) (else #f))) row columns))
-            (error "source row violates native relation type" name))) rows)
+            (error "source row violates runtime relation type" name))) rows)
         (hash-put! relation "rows" rows) relation)) (names (hash-keys used))))
       (hash ("relations" relations)
             ("rules" (map (cut list-ref (hash-ref program "rules") <>) (sorted (hash-keys selected) <)))

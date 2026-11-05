@@ -2,11 +2,11 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (family-lifecycle-abi-qualification
   (mrr-pin "d5beb4030bf875fa851cddc27789030c551154c3")
-  (wire scheme-datum-v2) (owner-thread single-native-owner)
+  (wire scheme-datum-v2) (owner-thread single-runtime-owner)
   (integration-tests 1) (idle-seconds 5) (wall-seconds 45)
   (debug-exit-status 0) (release-exit-status 0)
   (initial-progress-disabled-exit-status 124)
-  (progress completed-artifact-hash-and-native-call-events)
+  (progress completed-artifact-hash-and-runtime-call-events)
   (compiler-route original-gxc-closure-and-gsc-objects)
   (source-authenticated? #f) (runtime-executed? #f) (action-authorized? #f) (durable? #f)
   (index-completeness caller-premise) (handles process-local)
@@ -29,7 +29,7 @@
     ("modules/temporal-causality/lifecycle/objects.ss" "1f6806fdb03707e7d26a2e6fc7ff66143ca44814cf65db22e67a2f1096eb6a64")
     ("modules/temporal-causality/lifecycle/funs.ss" "dd68e8bd5e5c05a0adc26f0983c4b9bb8b5c842a4b752e0ef26050577ae33cc3")
     ("modules/temporal-causality/lifecycle/interface.ss" "5b612bd3ab51f19108adfe1afeb9d4a8917067341ba23d04a662126d20098afe")
-    ("t/qualification/temporal-family-lifecycle-abi/native-artifact.ss" "449e5b28c9a0f18f8e4a0e81a221f216d84d3806ce4f7814f906ceb8cefbb8a7")
+    ("t/qualification/temporal-family-lifecycle-abi/host-artifact.ss" "449e5b28c9a0f18f8e4a0e81a221f216d84d3806ce4f7814f906ceb8cefbb8a7")
     ("t/qualification/temporal-family-lifecycle-abi/debug-runtime-passed.log" "2b4e20796dcabf5b0445116ab7e1ea225aa7bbf834b6f0f46253b53591fe7d70")
     ("t/qualification/temporal-family-lifecycle-abi/release-runtime-passed.log" "d840c764fa5f760ea57a41be227bb1eae21e6ba10c96b73dd6969b1352651bb4")
     ("t/qualification/temporal-family-lifecycle-abi/runtime-progress-disabled-failed.log" "1459152a59bff2794817c1dc97eb14b0da868ed83cc190cb1955067b858d9ac4")

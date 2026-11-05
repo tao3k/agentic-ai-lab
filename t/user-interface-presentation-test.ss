@@ -326,7 +326,7 @@
                       '(flow . funflow))
         (check-equal? (not
                        (not
-                        (member "agentic-ai-lab-profile"
+                        (member "yuanxu!"
                                 (.ref presentation 'user-entrypoints))))
                       #t)
         (check-equal? (.ref presentation 'brand-name) agentic-ai-lab-brand-name)

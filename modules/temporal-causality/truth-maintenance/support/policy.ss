@@ -95,11 +95,11 @@
                          (.ref (.ref receipt 'evaluation) 'semantic-digest)))
       (error "support guard replay binding mismatch")) value))
 
-;;; A read-only projection of a native policy guard, never an effect permit.
+;;; A read-only projection of a runtime policy guard, never an effect permit.
 (def (agentic-ai-lab-temporal-support-claim guard-value identity expected-binding)
   (validate AgenticAILabTemporalSupportGuard guard-value)
   (unless (and (text? identity) (or (not expected-binding) (text? expected-binding)))
-    (error "invalid native claim selection"))
+    (error "invalid runtime claim selection"))
   (let* ((matches (filter (lambda (row) (equal? (.ref row 'identity) identity))
                     (.ref (.ref guard-value 'evaluation) 'conclusions)))
          (binding (.ref guard-value 'semantic-digest))

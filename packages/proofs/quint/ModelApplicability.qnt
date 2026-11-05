@@ -1,4 +1,4 @@
-// A finite contract for source-bound scope reviews, not native correctness.
+// A finite contract for source-bound scope reviews, not runtime correctness.
 // Revisions and two values bound checking, never Agent exploration or CPUs.
 module ModelApplicability {
   const Mutation: str

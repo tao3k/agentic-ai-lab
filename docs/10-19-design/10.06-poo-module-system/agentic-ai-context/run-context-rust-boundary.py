@@ -21,7 +21,7 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def native(command, log, env, timeout, expected=0):
+def runtime(command, log, env, timeout, expected=0):
     started = time.monotonic()
     with subprocess.Popen(command, env=env, stdout=subprocess.PIPE,
                           stderr=subprocess.STDOUT, start_new_session=True) as run:
@@ -29,7 +29,7 @@ def native(command, log, env, timeout, expected=0):
             output, _ = run.communicate(timeout=timeout)
         except subprocess.TimeoutExpired:
             # This is failure cleanup of only this owned process group; it is
-            # never admitted as a successful native exit or wider deadline.
+            # never admitted as a successful runtime exit or wider deadline.
             os.killpg(run.pid, signal.SIGTERM)
             try:
                 output, _ = run.communicate(timeout=5)
@@ -76,9 +76,9 @@ def main():
     image = out/'owner-image.dylib'
     shutil.copy2(args.image, image)
     symbols = subprocess.check_output(['/usr/bin/nm', '-gU', str(image)], text=True)
-    for name in ('gerbil_scheme_instance_abi', 'gerbil_owner_native_call'):
+    for name in ('gerbil_scheme_instance_abi', 'gerbil_owner_runtime_call'):
         if '_'+name not in symbols:
-            raise RuntimeError('Missing native fixture export: '+name)
+            raise RuntimeError('Missing runtime fixture export: '+name)
     (out/'symbols.txt').write_text(symbols)
     consumer = out/'consumer'
     shutil.copytree(CONSUMER/'src', consumer/'src')
@@ -94,23 +94,23 @@ def main():
                CARGO_TARGET_AARCH64_APPLE_DARWIN_LINKER='/usr/bin/clang',
                CARGO_TARGET_DIR=str((args.target_dir or out/'target').resolve()))
     cargo = ['cargo', '--offline', '--manifest-path', str(consumer/'Cargo.toml')]
-    build = native(['cargo', 'build', *cargo[1:]], out/'build.log', env, 180)
+    build = runtime(['cargo', 'build', *cargo[1:]], out/'build.log', env, 180)
     binary = Path(env['CARGO_TARGET_DIR'])/'debug/context-hybrid-runtime-probe'
     executable_sha = sha(binary)
     command = ['timeout', '--foreground', '--signal=TERM', '--kill-after=5s', '150s', str(binary), str(image)]
     runs = []
-    for name in ('native', 'replay'):
-        runs.append(native(command, out/(name+'.log'), env, 155))
+    for name in ('runtime', 'replay'):
+        runs.append(runtime(command, out/(name+'.log'), env, 155))
         text = (out/(name+'.log')).read_text()
         if ('RUST-SCHEME owners=2 timeout=observation credit=retained independent=completed roots=0 joined=2\nOK\n' not in text
                 or 'panicked' in text or '*** ERROR' in text):
-            raise RuntimeError('Incomplete Rust/Scheme native boundary')
+            raise RuntimeError('Incomplete Rust/Scheme runtime boundary')
     negative = consumer/'src/bin/root-escape.rs'
     negative.parent.mkdir()
     shutil.copy2(CONSUMER/'root-escape.rs', negative)
-    control = native(['cargo', 'check', *cargo[1:], '--bin', 'root-escape'], out/'root-escape.log', env, 120, 101)
+    control = runtime(['cargo', 'check', *cargo[1:], '--bin', 'root-escape'], out/'root-escape.log', env, 120, 101)
     text = (out/'root-escape.log').read_text()
-    if not all(marker in text for marker in ('E0277', 'NativeRoot', 'Send', 'cannot be sent between threads')):
+    if not all(marker in text for marker in ('E0277', 'RuntimeRoot', 'Send', 'cannot be sent between threads')):
         raise RuntimeError('Compile failure was not the expected owner-local-root refusal')
     if any(sha(ROOT/p) != digest for p, digest in local.items()):
         raise RuntimeError('Consumer source drift')
@@ -122,12 +122,12 @@ def main():
         schema='context.hybrid.rust-boundary.v1', upstream_revision=revision,
         consumer_source_sha256=local, upstream_source_sha256=upstream,
         image_sha256=sha(image), executable_sha256=executable_sha,
-        runner_sha256=sha(Path(__file__)), build=build, native_runs=runs, root_escape_control=control,
+        runner_sha256=sha(Path(__file__)), build=build, runtime_runs=runs, root_escape_control=control,
         scope=dict(transport_boundary_only=True, production_context_export=False,
                    image_current_source_provenance=False, heap_limit_not_exposed_by_upstream_instance_api=True,
-                   scheme_context_heap_fence_verified_separately='2G/150s', native_watchdog_seconds=150,
+                   scheme_context_heap_fence_verified_separately='2G/150s', runtime_watchdog_seconds=150,
                    throughput_claim=False)), indent=2)+'\n')
-    print('PASS: Tokio/fixed-owner native boundary, whole replay and owner-root compile-fail control')
+    print('PASS: Tokio/fixed-owner runtime boundary, whole replay and owner-root compile-fail control')
 
 
 if __name__ == '__main__':

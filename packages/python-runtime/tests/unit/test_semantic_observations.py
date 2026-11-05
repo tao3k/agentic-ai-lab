@@ -7,7 +7,7 @@ import pytest
 from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
 from semantic_cases import temporal_request
 
-def test_direct_prediction_receives_task_and_native_difference(runtime):
+def test_direct_prediction_receives_task_and_runtime_difference(runtime):
     from agentic_ai_lab_runtime import scheme_wire as wire
     task = temporal_request()
     calls = []
@@ -60,11 +60,11 @@ def test_direct_prediction_recomputes_current_source_and_async(runtime):
     ('(object ("rows" "bad") ("status" "complete"))', 'candidate-shape'),
     ('(list)', 'candidate-shape'),
 ])
-def test_native_observation_failure_contract(runtime, output, kind):
+def test_runtime_observation_failure_contract(runtime, output, kind):
     assert runtime.observe_model_answer(temporal_request(), output)['difference']['kind'] == kind
 
 
-def test_native_observation_rejects_duplicate_scheme_fields(runtime):
+def test_runtime_observation_rejects_duplicate_scheme_fields(runtime):
     with pytest.raises(SemanticRuntimeError, match='inert Scheme datum'):
         runtime.observe_model_answer(temporal_request(), '(object ("rows" (list)) ("rows" (list)) ("status" "complete"))')
 

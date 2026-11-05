@@ -8,6 +8,6 @@
     (let (message (call-with-output-string (lambda (p) (display-exception e p))))
       (if (and (getenv "CONTEXT_EXPECT_OWNER_FENCE" #f)
                (pregexp-match "Durable owner epoch superseded" message))
-        (begin (displayln "DURABLE-FENCED stale-owner-native-decision-refused=#t") (exit 0))
+        (begin (displayln "DURABLE-FENCED stale-owner-runtime-decision-refused=#t") (exit 0))
         (raise e))))
   (lambda () (apply durable-driver (cddr (command-line)))))

@@ -52,11 +52,11 @@
     (yuanxu-test-case "rejection assertions fail when the operation returns normally"
       (check (rejected? (lambda () 42)) => #f)
       (check (rejected? (lambda () (error "typed rejection"))) => #t))
-    (yuanxu-test-case "native source withdrawal preserves original ASCENT proof but retracts current support"
+    (yuanxu-test-case "runtime source withdrawal preserves original ASCENT proof but retracts current support"
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
         (let* ((derived (derive-selected ctx (list-ref ctx 6)))
                (support (.ref derived 'support))
-               (support-program (agentic-ai-lab-temporal-support-program "native-replay" "policy" #t (list support)))
+               (support-program (agentic-ai-lab-temporal-support-program "runtime-replay" "policy" #t (list support)))
                (original (list-ref ctx 9)) (withdrawn (withdrawn-journal original))
                (before (proof-current proof-host registration 1 1 p)))
           (check (reasoning-receipt-status (list-ref ctx 5)) => 'complete)
@@ -75,14 +75,14 @@
             (check (.ref after 'proof-admitted?) => #t)
             (check (.ref after 'proof-digest) => (.ref before 'proof-digest))
             (check (.ref after 'action-authorized?) => #f)
-            (displayln "NATIVE-CONTEXT-OBSERVE withdrawal before=" (.ref before 'status)
+            (displayln "RUNTIME-CONTEXT-OBSERVE withdrawal before=" (.ref before 'status)
               " after=" (.ref after 'status) " proof-retained="
               (equal? (.ref after 'proof-digest) (.ref before 'proof-digest))
               " proof=" (.ref after 'proof-digest) " journal=" (.ref withdrawn 'semantic-digest)))
           (check-rejected (agentic-ai-lab-temporal-proof-host-refresh! proof-host "source" 3 (car ctx) original))
           (check (.ref (proof-current proof-host registration 2 2 p) 'status) => 'unsupported)
-          (displayln "NATIVE-CONTEXT-TRACE withdrawal: ascent-complete -> current -> retract-premise -> unsupported; original-proof-retained"))))
-    (yuanxu-test-case "native current input permits one pure completion intent without granting provider effects"
+          (displayln "RUNTIME-CONTEXT-TRACE withdrawal: ascent-complete -> current -> retract-premise -> unsupported; original-proof-retained"))))
+    (yuanxu-test-case "runtime current input permits one pure completion intent without granting provider effects"
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
         (context-bind context-host proof-host registration p 0 0 1 1)
         (let* ((claimed (context-claim context-host 1 0)) (running (.ref claimed 'schedule))
@@ -97,12 +97,12 @@
           (check (.ref (agentic-ai-lab-session-complete next (.ref next 'revision) attempt) 'accepted?) => #f)
           (check (.ref claimed 'provider-disclosed?) => #f)
           (check (.ref claimed 'provider-result-admitted?) => #f)
-          (displayln "NATIVE-CONTEXT-OBSERVE current-result eligible=" (.ref observation 'accepted?)
+          (displayln "RUNTIME-CONTEXT-OBSERVE current-result eligible=" (.ref observation 'accepted?)
             " completion-intent=" (.ref completion 'accepted?)
             " runtime-published=" (.ref completion 'runtime-published?)
             " repeated-completion=" (.ref (agentic-ai-lab-session-complete next (.ref next 'revision) attempt) 'accepted?))
-          (displayln "NATIVE-CONTEXT-TRACE current-result: current-proof -> current-input -> one-completion-intent; no-provider-admission"))))
-    (yuanxu-test-case "native late worker result cannot revive withdrawn Context during cancellation recovery"
+          (displayln "RUNTIME-CONTEXT-TRACE current-result: current-proof -> current-input -> one-completion-intent; no-provider-admission"))))
+    (yuanxu-test-case "runtime late worker result cannot revive withdrawn Context during cancellation recovery"
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
         (context-bind context-host proof-host registration p 0 0 1 1)
         (let* ((claimed (context-claim context-host 1 0)) (old-schedule (.ref claimed 'schedule))
@@ -125,7 +125,7 @@
             (check (.ref (agentic-ai-lab-session-complete old-schedule 2 old-attempt) 'accepted?) => #t)
             (check (.ref (agentic-ai-lab-session-complete pending (.ref pending 'revision) old-attempt) 'accepted?) => #f)
             (thread-send worker 'cancel)
-            ;; Only real join observes this native worker's terminal response.
+            ;; Only real join observes this runtime worker's terminal response.
             (let* ((late-result (thread-join! worker))
                    (again (.ref (agentic-ai-lab-session-recover pending (.ref pending 'revision)) 'schedule)))
               (check (.ref late-result 'identity) => "attempt")
@@ -141,25 +141,25 @@
                 (check (length (.ref ready 'completed)) => 1)
                 (check (.ref (agentic-ai-lab-session-complete ready (.ref ready 'revision) late-result) 'accepted?) => #f)
                 (check (.ref (agentic-ai-lab-session-recover closed (.ref closed 'revision)) 'reason) => 'closed)
-                (displayln "NATIVE-CONTEXT-OBSERVE cancellation pending=" (length (.ref pending 'obligations))
+                (displayln "RUNTIME-CONTEXT-OBSERVE cancellation pending=" (length (.ref pending 'obligations))
                   " late-completion=" (.ref (agentic-ai-lab-session-complete again (.ref again 'revision) late-result) 'accepted?)
                   " completed-identities=" (length (.ref ready 'completed))
                   " reconciliation-published=" (.ref intent 'runtime-published?)
                   " closed-recovery=" (.ref (agentic-ai-lab-session-recover closed (.ref closed 'revision)) 'reason)))
               (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-observe context-host "session" 3 0) 'accepted?) => #f)
-              (displayln "NATIVE-CONTEXT-TRACE cancellation: claim -> retract -> revalidate -> obligation -> cancel-message -> actual-thread-join -> reject-late-result -> reconciliation-intent; no-host-result-CAS")
-              (displayln "NATIVE-CONTEXT-COUNTEREXAMPLE bypass-current-owner: old-session-snapshot yields completion-intent; current-context refuses"))))))
-    (yuanxu-test-case "native owner commits result payload and terminal once with original proof binding"
-      (let-values (((host proof ph registration p ctx worker worker-token grants) (native-cas-setup)))
-        (native-finish-worker worker)
+              (displayln "RUNTIME-CONTEXT-TRACE cancellation: claim -> retract -> revalidate -> obligation -> cancel-message -> actual-thread-join -> reject-late-result -> reconciliation-intent; no-host-result-CAS")
+              (displayln "RUNTIME-CONTEXT-COUNTEREXAMPLE bypass-current-owner: old-session-snapshot yields completion-intent; current-context refuses"))))))
+    (yuanxu-test-case "runtime owner commits result payload and terminal once with original proof binding"
+      (let-values (((host proof ph registration p ctx worker worker-token grants) (runtime-cas-setup)))
+        (runtime-finish-worker worker)
         (let* ((observation (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" worker-token))
                (r (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 observation))
                (terminal (.ref r 'terminal)))
           (check (.ref r 'accepted?) => #t)
           (check (.ref r 'runtime-published?) => #t)
-          (check (.ref r 'native-result-published?) => #t)
+          (check (.ref r 'runtime-result-published?) => #t)
           (check (.ref terminal 'outcome) => 'completed)
-          (check (.ref terminal 'payload) => "native-result-for-request")
+          (check (.ref terminal 'payload) => "runtime-result-for-request")
           (check (.ref terminal 'proof-registration) => (.ref registration 'identity))
           (check (.ref terminal 'proof-digest) => (.ref (proof-current proof registration 1 1 p) 'proof-digest))
           (let* ((current (proof-current proof registration 1 1 p))
@@ -177,11 +177,11 @@
           (check (length (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) => 1)
           (string-set! (.ref terminal 'payload) 0 #\x)
           (check (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) 'payload)
-            => "native-result-for-request")
-          (displayln "NATIVE-CAS-OBSERVE result published=#t terminals=1 duplicate=#f proof-bound=#t"))))
-    (yuanxu-test-case "native commit rechecks withdrawn proof and cannot restore historical accepted result"
-      (let-values (((host proof ph registration p ctx worker worker-token grants) (native-cas-setup)))
-        (native-finish-worker worker)
+            => "runtime-result-for-request")
+          (displayln "RUNTIME-CAS-OBSERVE result published=#t terminals=1 duplicate=#f proof-bound=#t"))))
+    (yuanxu-test-case "runtime commit rechecks withdrawn proof and cannot restore historical accepted result"
+      (let-values (((host proof ph registration p ctx worker worker-token grants) (runtime-cas-setup)))
+        (runtime-finish-worker worker)
         (let (observation (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" worker-token))
           (agentic-ai-lab-temporal-proof-host-refresh! proof "source" 2 (car ctx) (withdrawn-journal (list-ref ctx 9)))
           (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 2 (at 2))
@@ -194,8 +194,8 @@
             (check (.ref r 'runtime-published?) => #t)
             (check (.ref (.ref r 'terminal) 'outcome) => 'reconciled)
             (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 4 0 observation) 'accepted?) => #f))))
-      (let-values (((host proof ph registration p ctx worker worker-token grants) (native-cas-setup)))
-        (native-finish-worker worker)
+      (let-values (((host proof ph registration p ctx worker worker-token grants) (runtime-cas-setup)))
+        (runtime-finish-worker worker)
         (let (observation (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" worker-token))
           (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 observation)
           (agentic-ai-lab-temporal-proof-host-refresh! proof "source" 2 (car ctx) (withdrawn-journal (list-ref ctx 9)))
@@ -205,14 +205,14 @@
             (check (.ref terminal 'current-use?) => #f))
           (agentic-ai-lab-ai-agentic-context-session-host-recover! host "session" 3 0)
           (check (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) 'current-use?) => #f)
-          (displayln "NATIVE-CAS-OBSERVE withdrawal stale-commit=#f historical-retained=#t reactivated=#f"))))
-    (yuanxu-test-case "native cancellation publication beats late completion and recovery cannot replace terminal"
-      (let-values (((host proof ph registration p ctx worker worker-token grants) (native-cas-setup)))
+          (displayln "RUNTIME-CAS-OBSERVE withdrawal stale-commit=#f historical-retained=#t reactivated=#f"))))
+    (yuanxu-test-case "runtime cancellation publication beats late completion and recovery cannot replace terminal"
+      (let-values (((host proof ph registration p ctx worker worker-token grants) (runtime-cas-setup)))
         (let (r (agentic-ai-lab-ai-agentic-context-session-host-cancel! host "session" 2 0))
           (check (.ref r 'runtime-published?) => #t)
           (check (length (.ref (.ref r 'schedule) 'obligations)) => 1)
           (check (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session") => '()))
-        (native-finish-worker worker)
+        (runtime-finish-worker worker)
         (let (observation (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" worker-token))
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 observation) 'accepted?) => #f)
           (agentic-ai-lab-ai-agentic-context-session-host-recover! host "session" 3 0)
@@ -224,26 +224,26 @@
           (check (length (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) => 1)
           (agentic-ai-lab-ai-agentic-context-session-host-close! host "session" 5 0)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-recover! host "session" 6 0) 'reason) => 'closed)
-          (displayln "NATIVE-CAS-OBSERVE cancellation terminal=cancelled late-result=#f duplicate=#f closed-resume=#f"))))
-    (yuanxu-test-case "native terminal evidence cannot be forged or borrowed from another Host"
-      (let-values (((host proof ph registration p ctx worker worker-token grants) (native-cas-setup)))
+          (displayln "RUNTIME-CAS-OBSERVE cancellation terminal=cancelled late-result=#f duplicate=#f closed-resume=#f"))))
+    (yuanxu-test-case "runtime terminal evidence cannot be forged or borrowed from another Host"
+      (let-values (((host proof ph registration p ctx worker worker-token grants) (runtime-cas-setup)))
         (check (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" worker-token) => #f)
         (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session" 2 0
                           (.o kind: 'agentic-ai-lab.ai-agentic-context.observation-capability.v1)))
-        (native-finish-worker worker)
+        (runtime-finish-worker worker)
         (let (observation (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" worker-token))
           (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "foreign" 2 0 observation))
-          (let-values (((other other-proof other-ph other-registration other-p other-ctx other-worker other-token other-grants) (native-cas-setup)))
+          (let-values (((other other-proof other-ph other-registration other-p other-ctx other-worker other-token other-grants) (runtime-cas-setup)))
             (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-commit-result! other "session" 2 0 observation))
-            (native-finish-worker other-worker))
+            (runtime-finish-worker other-worker))
           (check (thread-join! (thread-start! (make-thread (lambda ()
             (rejected? (lambda () (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 observation))))))) => #t)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 observation) 'accepted?) => #t))))
-    (yuanxu-test-case "native revocation prevents result publication but allows matching cleanup"
-      (let-values (((host proof ph registration p ctx worker worker-token grants) (native-cas-setup)))
-        (native-finish-worker worker)
+    (yuanxu-test-case "runtime revocation prevents result publication but allows matching cleanup"
+      (let-values (((host proof ph registration p ctx worker worker-token grants) (runtime-cas-setup)))
+        (runtime-finish-worker worker)
         (let (observation (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" worker-token))
-          (native-revoke-grant! grants p)
+          (runtime-revoke-grant! grants p)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 observation) 'reason)
             => 'current-grant-denied)
           (check (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session") => '())
@@ -251,8 +251,8 @@
             (check (.ref r 'runtime-published?) => #t)
             (check (.ref (.ref r 'terminal) 'outcome) => 'reconciled)))))
     (yuanxu-test-case "comparison recoverable bytes and unchanged revision do not authorize withdrawn evidence"
-      (let-values (((host proof ph registration p ctx worker token grants) (native-cas-setup)))
-        (native-finish-worker worker)
+      (let-values (((host proof ph registration p ctx worker token grants) (runtime-cas-setup)))
+        (runtime-finish-worker worker)
         (let* ((observed (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" token))
                (before (agentic-ai-lab-ai-agentic-context-session-host-current host "session"))
                (input-digest (.ref (.ref (.ref before 'schedule) 'active) 'input))
@@ -269,26 +269,26 @@
             (check (.ref (.ref (.ref (.ref still 'schedule) 'active) 'input) 'digest) => (.ref input-digest 'digest))
             ;; Deliberately unsafe TEST-LOCAL publication, not a paper implementation.
             (when (and (equal? archive context-source) revision-same? (.ref current 'proof-admitted?))
-              (hash-put! weak-head 'terminal (.o kind: 'comparison-ablation payload: "native-result-for-request")))
-            (check (.ref (hash-ref weak-head 'terminal) 'payload) => "native-result-for-request")
+              (hash-put! weak-head 'terminal (.o kind: 'comparison-ablation payload: "runtime-result-for-request")))
+            (check (.ref (hash-ref weak-head 'terminal) 'payload) => "runtime-result-for-request")
             (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 observed) 'accepted?) => #f)
             (check (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session") => '())
             (check (.ref (.ref (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session" 3 0 observed) 'terminal) 'outcome) => 'reconciled)
-            (displayln "NATIVE-COMPARISON archive history=#t revision-same=#t proof-current=#f native-result=#f cleanup=reconciled")
-            (displayln "NATIVE-COMPARISON-COUNTEREXAMPLE archive-revision-ablation test-local-publication=#t native-publication=#f")))))
-    (yuanxu-test-case "comparison model editable claims cannot mint native observation or restore a revoked grant"
-      (let-values (((host proof ph registration p ctx worker token grants) (native-cas-setup)))
-        (native-finish-worker worker)
+            (displayln "RUNTIME-COMPARISON archive history=#t revision-same=#t proof-current=#f runtime-result=#f cleanup=reconciled")
+            (displayln "RUNTIME-COMPARISON-COUNTEREXAMPLE archive-revision-ablation test-local-publication=#t runtime-publication=#f")))))
+    (yuanxu-test-case "comparison model editable claims cannot mint runtime observation or restore a revoked grant"
+      (let-values (((host proof ph registration p ctx worker token grants) (runtime-cas-setup)))
+        (runtime-finish-worker worker)
         (let* ((observed (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" token))
                (edited (.o (:: @ observed) proof-admitted?: #t current?: #t authorized?: #t)))
           (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 edited))
-          (native-revoke-grant! grants p)
+          (runtime-revoke-grant! grants p)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 observed) 'accepted?) => #f)
           (check (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session") => '())
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session" 3 0 observed) 'runtime-published?) => #t)
-          (displayln "NATIVE-COMPARISON editable-view forged-observation=#f revoked-result=#f cleanup=#t"))))
+          (displayln "RUNTIME-COMPARISON editable-view forged-observation=#f revoked-result=#f cleanup=#t"))))
     (yuanxu-test-case "comparison cross Session recall reuses original proof but requires independent consumer admission"
-      (let-values (((host proof ph registration p ctx worker token grants) (native-cas-setup)))
+      (let-values (((host proof ph registration p ctx worker token grants) (runtime-cas-setup)))
         (let* ((scope-b (.o (:: @ context-scope) actor: "actor-b" task: "task-b" session: "session-b" turn: 1))
                (restriction-b (agentic-ai-lab-context-restriction "domain" '("actor-b") '("provider") '("org") 0 8)))
           (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source scope-b
@@ -304,25 +304,25 @@
             (.ref registration 'identity) 1 1 (.ref p 'semantic-digest) 128)
           (let* ((claim-b (agentic-ai-lab-ai-agentic-context-session-host-claim! host "session-b" 1 0 "attempt-b" "request-b"))
                  (attempt-b (.ref (.ref claim-b 'schedule) 'active))
-                 (worker-b (thread-start! (make-thread (lambda () (thread-receive) "native-result-for-request"))))
+                 (worker-b (thread-start! (make-thread (lambda () (thread-receive) "runtime-result-for-request"))))
                  (token-b (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host "session-b" 2 0 worker-b)))
             (check (.ref (.ref attempt-b 'input) 'consumer-session) => "session-b")
             (check (.ref (.ref attempt-b 'input) 'consumer-turn) => 1)
-            (native-finish-worker worker) (native-finish-worker worker-b)
+            (runtime-finish-worker worker) (runtime-finish-worker worker-b)
             (let ((a (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" token))
                   (b (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session-b" token-b)))
               (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 2 0 a))
-              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 2 0 b) 'native-result-published?) => #t)
+              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 2 0 b) 'runtime-result-published?) => #t)
               (check (.ref (.ref (agentic-ai-lab-ai-agentic-context-session-host-current host "session") 'schedule) 'revision) => 2)
-              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 a) 'native-result-published?) => #t))
+              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 a) 'runtime-result-published?) => #t))
             (agentic-ai-lab-temporal-proof-host-refresh! proof "source" 2 (car ctx) (withdrawn-journal (list-ref ctx 9)))
             (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 2 (at 2))
             (check (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) 'current-use?) => #f)
             (check (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session-b")) 'current-use?) => #f)
-            (displayln "NATIVE-COMPARISON recall borrowed-grant=#f foreign-receipt=#f fresh-consumer=#t sessions-independent=#t withdrawn-both=#t")))))
+            (displayln "RUNTIME-COMPARISON recall borrowed-grant=#f foreign-receipt=#f fresh-consumer=#t sessions-independent=#t withdrawn-both=#t")))))
     (yuanxu-test-case "comparison equal proof bytes under a new owner binding cannot reactivate an old Attempt"
-      (let-values (((host proof ph registration p ctx worker token grants) (native-cas-setup)))
-        (native-finish-worker worker)
+      (let-values (((host proof ph registration p ctx worker token grants) (runtime-cas-setup)))
+        (runtime-finish-worker worker)
         (let* ((observation (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" token))
                (first (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 2 0 observation))
                (snapshot (agentic-ai-lab-temporal-proof-host-refresh! proof "source-alt" 1 (car ctx) (list-ref ctx 9)))
@@ -334,18 +334,18 @@
           (check (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) 'current-use?) => #f)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 4 0 observation) 'accepted?) => #f)
           (agentic-ai-lab-ai-agentic-context-session-host-claim! host "session" 4 0 "attempt-new" "request-new")
-          (let* ((next-worker (thread-start! (make-thread (lambda () (thread-receive) "native-result-for-request"))))
+          (let* ((next-worker (thread-start! (make-thread (lambda () (thread-receive) "runtime-result-for-request"))))
                  (next-token (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host "session" 5 0 next-worker)))
-            (native-finish-worker next-worker)
+            (runtime-finish-worker next-worker)
             (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 5 0
-              (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" next-token)) 'native-result-published?) => #t)
+              (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" next-token)) 'runtime-result-published?) => #t)
             (let (outcomes (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session"))
               (check (length outcomes) => 2)
               (check (.ref (car outcomes) 'current-use?) => #f)
               (check (.ref (cadr outcomes) 'current-use?) => #t)
               (check (.ref (car outcomes) 'attempt) => "attempt")
               (check (.ref (cadr outcomes) 'attempt) => "attempt-new")))
-          (displayln "NATIVE-COMPARISON rebind equal-proof=#t changed-owner=#t old-current=#f old-recommit=#f fresh-attempt=#t"))))
+          (displayln "RUNTIME-COMPARISON rebind equal-proof=#t changed-owner=#t old-current=#f old-recommit=#f fresh-attempt=#t"))))
     (yuanxu-test-case "push withdrawal eagerly invalidates direct and dependent Contexts while preserving an unaffected Attempt"
       (let (f (push-fixture))
         (push-withdraw! f)
@@ -369,8 +369,8 @@
         (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-require-proof! (.ref f 'host) "session-b"
           (push-revision f "session-b") 0 (.ref f 'proof) (.ref (.ref f 'registration-c) 'identity) 2 2
           (.ref (.ref f 'policy) 'semantic-digest) 128))
-        (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! (.ref f 'host) "session-c" 2 0 (push-join! f "session-c")) 'native-result-published?) => #t)
-        (displayln "NATIVE-PUSH-OBSERVE selective direct=invalidated dependent=invalidated unaffected=completed cached-before-query=#t history-retained=#t replay-idempotent=#t")))
+        (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! (.ref f 'host) "session-c" 2 0 (push-join! f "session-c")) 'runtime-result-published?) => #t)
+        (displayln "RUNTIME-PUSH-OBSERVE selective direct=invalidated dependent=invalidated unaffected=completed cached-before-query=#t history-retained=#t replay-idempotent=#t")))
     (yuanxu-test-case "push pending delivery fences results and retries merge actual cancellation recovery and terminal state"
       (let* ((f (push-fixture)) (host (.ref f 'host)) (proof (.ref f 'proof)) (fail? #t) (prepare-fail? #t)
              (observer (.o kind: 'temporal.source-observer.v1
@@ -401,15 +401,15 @@
         (agentic-ai-lab-temporal-proof-host-drain! proof)
         (check (length (agentic-ai-lab-ai-agentic-context-session-host-propagations host)) => 3)
         (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session-b" 3 0 (push-join! f "session-b"))
-        (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'native-result-published?) => #t)
-        (displayln "NATIVE-PUSH-OBSERVE retry preflight-atomic=#t pending-blocks-result=#t cancelled-terminal-preserved=#t unaffected=completed duplicate-delivery=#f")))
-    (yuanxu-test-case "push subscription omission retains a real native stale cached Context counterexample"
+        (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'runtime-result-published?) => #t)
+        (displayln "RUNTIME-PUSH-OBSERVE retry preflight-atomic=#t pending-blocks-result=#t cancelled-terminal-preserved=#t unaffected=completed duplicate-delivery=#f")))
+    (yuanxu-test-case "push subscription omission retains a real runtime stale cached Context counterexample"
       (let* ((f (push-fixture #f)) (host (.ref f 'host)))
         (push-withdraw! f)
         (check (.ref (push-row f "session") 'context-state) => 'admitted)
         (check (.ref (.ref (push-row f "session") 'schedule) 'active) ? object?)
         (check (agentic-ai-lab-ai-agentic-context-session-host-propagations host) => '())
-        (displayln "NATIVE-PUSH-COUNTEREXAMPLE no-subscription cached-admitted=#t active-after-withdrawal=#t automatic-invalidation=#f")
+        (displayln "RUNTIME-PUSH-COUNTEREXAMPLE no-subscription cached-admitted=#t active-after-withdrawal=#t automatic-invalidation=#f")
         (for-each (lambda (id)
           (let (observation (push-join! f id))
             (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host id 2 0 observation) 'accepted?) => #f)
@@ -429,7 +429,7 @@
             (check (.ref (.ref after 'schedule) 'revision) => 0)
             (check (.ref (.ref (.ref after 'task) 'input) 'digest) => (.ref (.ref (.ref before 'task) 'input) 'digest)))
           (check (.ref (context-claim host 0 0) 'reason) => 'temporal-proof-denied)
-          (displayln "NATIVE-PUSH-OBSERVE enrollment failure-atomic=#t unobserved-input-published=#f"))))
+          (displayln "RUNTIME-PUSH-OBSERVE enrollment failure-atomic=#t unobserved-input-published=#f"))))
     (yuanxu-test-case "push enabling an existing owner discovers sources retained only by frozen dependencies"
       (let* ((f (push-fixture #f)) (host (.ref f 'host)) (ctx (.ref f 'context)) (p (.ref f 'policy))
              (ph (agentic-ai-lab-temporal-support-policy-host)) (independent (agentic-ai-lab-temporal-proof-host ph)))
@@ -451,12 +451,12 @@
           (for-each (lambda (id)
             (agentic-ai-lab-ai-agentic-context-session-host-claim! host id 4 0
               (string-append "retained-" id) (string-append "retained-request-" id))
-            (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "native-result-for-request"))))
+            (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "runtime-result-for-request"))))
                    (token (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host id 5 0 worker)))
-              (native-finish-worker worker)
+              (runtime-finish-worker worker)
               (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host id 5 0
-                (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host id token)) 'native-result-published?) => #t))) '("session" "session-c"))
-          (displayln "NATIVE-PUSH-OBSERVE enable-retained historical-source-discovered=#t affected-only-dependent=#t unaffected=completed"))))
+                (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host id token)) 'runtime-result-published?) => #t))) '("session" "session-c"))
+          (displayln "RUNTIME-PUSH-OBSERVE enable-retained historical-source-discovered=#t affected-only-dependent=#t unaffected=completed"))))
     (yuanxu-test-case "push pending source dependency blocks a consumer whose own proof Host is still current"
       (let* ((f (push-fixture)) (host (.ref f 'host)) (proof (.ref f 'proof)) (p (.ref f 'policy))
              (ctx (.ref f 'context)) (independent (agentic-ai-lab-temporal-proof-host (agentic-ai-lab-temporal-support-policy-host)))
@@ -473,12 +473,12 @@
             (.ref registration 'identity) 1 2 (.ref p 'semantic-digest) 128)
           (def (worker-at revision attempt request)
             (agentic-ai-lab-ai-agentic-context-session-host-claim! host "session-b" revision 0 attempt request)
-            (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "native-result-for-request"))))
+            (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "runtime-result-for-request"))))
                    (token (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host "session-b" (+ revision 1) 0 worker)))
-              (native-finish-worker worker)
+              (runtime-finish-worker worker)
               (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session-b" token)))
           (let ((completed (worker-at 4 "independent-completed" "independent-result")) (fail? #t))
-            (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 5 0 completed) 'native-result-published?) => #t)
+            (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 5 0 completed) 'runtime-result-published?) => #t)
             (let* ((observation (worker-at 6 "independent-pending" "independent-late"))
                    (observer (.o kind: 'temporal.source-observer.v1 .prepare: (lambda (self event)
                      (.o kind: 'temporal.source-propagation-batch.v1 .publish!: (lambda (batch)
@@ -497,8 +497,8 @@
               (check (.ref (proof-current independent registration 1 2 p) 'current?) => #t)
               (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session-b" 8 0 observation) 'runtime-published?) => #t)
               (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session" 3 0 (push-join! f "session"))
-              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'native-result-published?) => #t)
-              (displayln "NATIVE-PUSH-OBSERVE multi-source pending-dependency-blocks=#t own-proof-stays-current=#t cached-delivered=#t history-unusable=#t"))))))
+              (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'runtime-result-published?) => #t)
+              (displayln "RUNTIME-PUSH-OBSERVE multi-source pending-dependency-blocks=#t own-proof-stays-current=#t cached-delivered=#t history-unusable=#t"))))))
     (yuanxu-test-case "push retains frozen parent versions after the live Context head is replaced"
       (let* ((f (push-fixture)) (host (.ref f 'host)) (proof (.ref f 'proof))
              (old-a (push-join! f "session")) (old-b (push-join! f "session-b")))
@@ -507,7 +507,7 @@
         (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host "session" 3 0 proof
           (.ref (.ref f 'registration-c) 'identity) 1 2 (.ref (.ref f 'policy) 'semantic-digest) 128)
         (agentic-ai-lab-ai-agentic-context-session-host-claim! host "session" 4 0 "attempt-a-replaced" "request-a-replaced")
-        (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "native-result-for-request"))))
+        (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "runtime-result-for-request"))))
                (token (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host "session" 5 0 worker)))
           (push-withdraw! f)
           (check (.ref (push-row f "session") 'context-state) => 'admitted)
@@ -516,9 +516,9 @@
           (check (.ref (.ref (push-row f "session-b") 'schedule) 'active) => #f)
           (check (.ref (.ref (push-row f "session-b") 'propagation) 'affected-contexts) => '("session-b"))
           (check (.ref (push-row f "session-c") 'context-state) => 'admitted)
-          (native-finish-worker worker)
+          (runtime-finish-worker worker)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session" 5 0
-            (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" token)) 'native-result-published?) => #t)
+            (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" token)) 'runtime-result-published?) => #t)
           (check (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) 'current-use?) => #f)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 3 0 old-b) 'accepted?) => #f)
           (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session-b" 3 0 old-b)
@@ -531,14 +531,14 @@
             (.ref (.ref f 'registration-c) 'identity) 2 2 (.ref (.ref f 'policy) 'semantic-digest) 128)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 5 0 old-b) 'accepted?) => #f)
           (agentic-ai-lab-ai-agentic-context-session-host-claim! host "session-b" 5 0 "attempt-b-rebased" "request-b-rebased")
-          (let* ((worker-b (thread-start! (make-thread (lambda () (thread-receive) "native-result-for-request"))))
+          (let* ((worker-b (thread-start! (make-thread (lambda () (thread-receive) "runtime-result-for-request"))))
                  (token-b (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host "session-b" 6 0 worker-b)))
-            (native-finish-worker worker-b)
+            (runtime-finish-worker worker-b)
             (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b" 6 0
-              (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session-b" token-b)) 'native-result-published?) => #t))
+              (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session-b" token-b)) 'runtime-result-published?) => #t))
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0
-            (push-join! f "session-c")) 'native-result-published?) => #t)
-          (displayln "NATIVE-PUSH-OBSERVE frozen-parent old-version-invalidated=#t replacement-unaffected=#t dependent-invalidated=#t rebased-dependent=#t old-result-reactivated=#f"))))
+            (push-join! f "session-c")) 'runtime-result-published?) => #t)
+          (displayln "RUNTIME-PUSH-OBSERVE frozen-parent old-version-invalidated=#t replacement-unaffected=#t dependent-invalidated=#t rebased-dependent=#t old-result-reactivated=#f"))))
     (yuanxu-test-case "push cross Session result commits interleave independently with automatic source withdrawal"
       (let ((orders '((1 2 3) (1 3 2) (2 1 3) (2 3 1) (3 1 2) (3 2 1))) (asymmetric 0))
         (for-each (lambda (order)
@@ -559,7 +559,7 @@
                 (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host id
                   (push-revision f id) 0 observation) 'runtime-published?) => #t))) '("session" "session-b") (list a b))
             (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0
-              (push-join! f "session-c")) 'native-result-published?) => #t)
+              (push-join! f "session-c")) 'runtime-result-published?) => #t)
             (let* ((oa (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) 'outcome))
                    (ob (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session-b")) 'outcome))
                    (a-before? (> (length (member 1 order)) (length (member 3 order))))
@@ -567,14 +567,14 @@
               (check oa => (if a-before? 'completed 'reconciled))
               (check ob => (if b-before? 'completed 'reconciled))
               (when (not (eq? oa ob)) (set! asymmetric (+ asymmetric 1)))
-              (displayln "NATIVE-PUSH-CROSS order=" order " a=" oa " b=" ob " c=completed")))) orders)
+              (displayln "RUNTIME-PUSH-CROSS order=" order " a=" oa " b=" ob " c=completed")))) orders)
         (check asymmetric => 2)
-        (displayln "NATIVE-PUSH-OBSERVE cross-session paths=6 asymmetric=2 all-unaffected=completed")))
+        (displayln "RUNTIME-PUSH-OBSERVE cross-session paths=6 asymmetric=2 all-unaffected=completed")))
     (yuanxu-test-case/with
       (let (base (yuanxu-selected-testing-case-profile))
         (.o (:: @ base) max-duration-milliseconds:
           (if (getenv "AGENTIC_CONTEXT_AUTHORITY_EXHAUSTIVE" #f) 2520000 (.ref base 'max-duration-milliseconds))))
-      "native authority revocation policy and expiry propagate through frozen Context versions"
+      "runtime authority revocation policy and expiry propagate through frozen Context versions"
       (let* ((all (push-orders '() '(1 2 3 4 5 6 7)))
              (replay (getenv "AGENTIC_CONTEXT_AUTHORITY_ORDER" #f))
              (orders (cond (replay (list (call-with-input-string replay read)))
@@ -585,15 +585,15 @@
           (for-each (lambda (order)
             (unless (member order all) (error "Illegal authority replay path"))
             (let (f (authority-fixture))
-              (displayln "NATIVE-AUTHORITY-BEGIN kind=" kind " order=" order) (force-output)
+              (displayln "RUNTIME-AUTHORITY-BEGIN kind=" kind " order=" order) (force-output)
               (push-replay order f (lambda (value) (authority-change! value kind))
-                (string-append "NATIVE-AUTHORITY-PATH kind=" (symbol->string kind)))
+                (string-append "RUNTIME-AUTHORITY-PATH kind=" (symbol->string kind)))
               (authority-evidence! f kind)
-              (set! count (+ count 1)) (execution-progress! '(native-authority-paths-verified) count))) orders))
+              (set! count (+ count 1)) (execution-progress! '(runtime-authority-paths-verified) count))) orders))
           '(grant policy expiry))
         (check count => (* 3 (length orders)))
-        (displayln "NATIVE-AUTHORITY-OBSERVE paths=" count " duplicate-terminals=0 stale-reactivations=0 unaffected-failures=0")))
-    (yuanxu-test-case "authority missing subscriptions retain native counterexamples"
+        (displayln "RUNTIME-AUTHORITY-OBSERVE paths=" count " duplicate-terminals=0 stale-reactivations=0 unaffected-failures=0")))
+    (yuanxu-test-case "authority missing subscriptions retain runtime counterexamples"
       (for-each (lambda (kind)
         (let* ((f (authority-fixture #f)) (host (.ref f 'host)))
           (authority-change! f kind)
@@ -607,8 +607,8 @@
               (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host id (push-revision f id) 0 observation)))
             '("session" "session-b"))
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0
-            (push-join! f "session-c")) 'native-result-published?) => #t)
-          (displayln "NATIVE-AUTHORITY-COUNTEREXAMPLE kind=" kind " cached-admitted=#t active-after-change=#t final-guard-denies=#t")))
+            (push-join! f "session-c")) 'runtime-result-published?) => #t)
+          (displayln "RUNTIME-AUTHORITY-COUNTEREXAMPLE kind=" kind " cached-admitted=#t active-after-change=#t final-guard-denies=#t")))
         '(grant policy expiry)))
     (yuanxu-test-case "authority delivery failure preserves pending barrier and cancellation on retry"
       (for-each (lambda (kind)
@@ -647,10 +647,10 @@
           (let (observation (push-join! f "session-b"))
             (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session-b" (push-revision f "session-b") 0 observation))
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0
-            (push-join! f "session-c")) 'native-result-published?) => #t)
-          (displayln "NATIVE-AUTHORITY-RETRY kind=" kind " preflight-atomic=#t pending-blocks=#t terminal-preserved=#t unaffected=completed")))
+            (push-join! f "session-c")) 'runtime-result-published?) => #t)
+          (displayln "RUNTIME-AUTHORITY-RETRY kind=" kind " preflight-atomic=#t pending-blocks=#t terminal-preserved=#t unaffected=completed")))
         '(grant policy expiry)))
-    (yuanxu-test-case "real background clock invalidates without consumer queries and deduplicates native events"
+    (yuanxu-test-case "real background clock invalidates without consumer queries and deduplicates runtime events"
       (let (clock (clock-fixture #f 0. 2))
         (dynamic-wind void
           (lambda ()
@@ -664,15 +664,15 @@
               (check (clock-phases audit 'duplicate) => 1)
               (check (every (lambda (r) (eq? (.ref r 'cause) 'timer)) audit) => #t)
               (clock-print-audit "autonomous" audit))
-            (displayln "NATIVE-CLOCK-OBSERVE autonomous no-context-query-before-push=#t applied=1 duplicate=1 unaffected=completed originals-retained=#t"))
+            (displayln "RUNTIME-CLOCK-OBSERVE autonomous no-context-query-before-push=#t applied=1 duplicate=1 unaffected=completed originals-retained=#t"))
           (lambda () (policy-clock-stop! clock)))))
-    (yuanxu-test-case "native result before real deadline retains one historical terminal after autonomous expiry"
+    (yuanxu-test-case "runtime result before real deadline retains one historical terminal after autonomous expiry"
       (let (clock (clock-fixture #f 0. 2 #t 1.))
         (dynamic-wind void
           (lambda ()
             (policy-clock-call! clock (lambda (f)
               (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! (.ref f 'host)
-                "session" 2 0 (push-join! f "session")) 'native-result-published?) => #t)
+                "session" 2 0 (push-join! f "session")) 'runtime-result-published?) => #t)
               (check (.ref (car (agentic-ai-lab-ai-agentic-context-session-host-outcomes (.ref f 'host) "session")) 'current-use?) => #t)))
             (policy-clock-await-events! clock 2)
             (policy-clock-call! clock (lambda (f)
@@ -686,9 +686,9 @@
                 (check (length (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session")) => 1))
               (clock-check-originals! f) (clock-cleanup! f)))
             (clock-print-audit "completed-before" (policy-clock-audit clock))
-            (displayln "NATIVE-CLOCK-OBSERVE completion-before-deadline published=#t historical-terminal=completed current-after-expiry=#f duplicate-terminal=#f"))
+            (displayln "RUNTIME-CLOCK-OBSERVE completion-before-deadline published=#t historical-terminal=completed current-after-expiry=#f duplicate-terminal=#f"))
           (lambda () (policy-clock-stop! clock)))))
-    (yuanxu-test-case "delayed native clock delivery cannot beat actual deadline result guard"
+    (yuanxu-test-case "delayed runtime clock delivery cannot beat actual deadline result guard"
       (let (clock (clock-fixture #t 0. 2))
         (dynamic-wind void
           (lambda ()
@@ -705,9 +705,9 @@
               (check (clock-phases audit 'duplicate) => 1)
               (clock-print-audit "delayed-guard" audit))
             (policy-clock-call! clock clock-cleanup!)
-            (displayln "NATIVE-CLOCK-OBSERVE delayed guard-expires-before-result=#t queued-old-stale=#t duplicate-idempotent=#t"))
+            (displayln "RUNTIME-CLOCK-OBSERVE delayed guard-expires-before-result=#t queued-old-stale=#t duplicate-idempotent=#t"))
           (lambda () (policy-clock-stop! clock)))))
-    (yuanxu-test-case "missing background activation preserves native no-query counterexample"
+    (yuanxu-test-case "missing background activation preserves runtime no-query counterexample"
       (let (clock (clock-fixture #f 0. 1 #f))
         (dynamic-wind void
           (lambda ()
@@ -721,28 +721,28 @@
                 (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! (.ref f 'host)
                   "session" 2 0 observation) 'accepted?) => #f))
               (clock-cleanup! f)))
-            (displayln "NATIVE-CLOCK-COUNTEREXAMPLE no-timer cached-admitted=#t active-after-deadline=#t final-clock-guard-denies=#t"))
+            (displayln "RUNTIME-CLOCK-COUNTEREXAMPLE no-timer cached-admitted=#t active-after-deadline=#t final-clock-guard-denies=#t"))
           (lambda () (policy-clock-stop! clock)))))
     (yuanxu-test-case/with
       (let (base (yuanxu-selected-testing-case-profile))
         (.o (:: @ base) max-duration-milliseconds: 840000))
-      "native delayed duplicate tickets policy replacement results cancellation recovery races"
+      "runtime delayed duplicate tickets policy replacement results cancellation recovery races"
       (let* ((all (clock-orders '() '(1 2 3 4 5)))
              (replay (getenv "AGENTIC_CONTEXT_CLOCK_ORDER" #f))
              (orders (if replay (list (call-with-input-string replay read)) all)) (count 0))
         (check (length all) => 60)
         (for-each (lambda (order)
-          (unless (member order all) (error "Illegal native clock order" order))
-          (displayln "NATIVE-CLOCK-BEGIN order=" order) (force-output)
+          (unless (member order all) (error "Illegal runtime clock order" order))
+          (displayln "RUNTIME-CLOCK-BEGIN order=" order) (force-output)
           (clock-replay order)
-          (set! count (+ count 1)) (execution-progress! '(native-clock-paths-verified) count)) orders)
+          (set! count (+ count 1)) (execution-progress! '(runtime-clock-paths-verified) count)) orders)
         (check count => (if replay 1 60))
-        (displayln "NATIVE-CLOCK-OBSERVE races paths=" count " duplicate-terminals=0 old-ticket-new-policy-damage=0 stale-reactivations=0 unaffected-failures=0")))
+        (displayln "RUNTIME-CLOCK-OBSERVE races paths=" count " duplicate-terminals=0 old-ticket-new-policy-damage=0 stale-reactivations=0 unaffected-failures=0")))
     (yuanxu-test-case/with
       (let (base (yuanxu-selected-testing-case-profile))
         (.o (:: @ base) max-duration-milliseconds:
           (if (getenv "AGENTIC_CONTEXT_PUSH_EXHAUSTIVE" #f) 840000 (.ref base 'max-duration-milliseconds))))
-      "push native source propagation result cancellation recovery interleavings"
+      "push runtime source propagation result cancellation recovery interleavings"
       (let* ((all (push-orders '() '(1 2 3 4 5 6 7)))
              (replay (getenv "AGENTIC_CONTEXT_PUSH_ORDER" #f))
              (full? (getenv "AGENTIC_CONTEXT_PUSH_EXHAUSTIVE" #f))
@@ -752,20 +752,20 @@
         (check (length all) => 280)
         (for-each (lambda (order)
           (unless (member order all) (error "illegal push replay path" order))
-          (displayln "NATIVE-PUSH-BEGIN order=" order) (force-output)
+          (displayln "RUNTIME-PUSH-BEGIN order=" order) (force-output)
           (push-replay order)
-          (set! count (+ count 1)) (execution-progress! '(native-push-paths-verified) count)) orders)
+          (set! count (+ count 1)) (execution-progress! '(runtime-push-paths-verified) count)) orders)
         (check count => expected)
-        (displayln "NATIVE-PUSH-OBSERVE interleavings paths=" count " duplicate-terminals=0 stale-reactivations=0 unaffected-failures=0")))
+        (displayln "RUNTIME-PUSH-OBSERVE interleavings paths=" count " duplicate-terminals=0 stale-reactivations=0 unaffected-failures=0")))
     (yuanxu-test-case/with
       (let (base (yuanxu-selected-testing-case-profile))
         (.o (:: @ base) max-duration-milliseconds:
-          (if (getenv "AGENTIC_CONTEXT_NATIVE_CAS_EXHAUSTIVE" #f) 840000 (.ref base 'max-duration-milliseconds))))
-      "all bounded native owner interleavings preserve terminal and evidence fences"
+          (if (getenv "AGENTIC_CONTEXT_RUNTIME_CAS_EXHAUSTIVE" #f) 840000 (.ref base 'max-duration-milliseconds))))
+      "all bounded runtime owner interleavings preserve terminal and evidence fences"
       (let* ((ctx (mrr-derivation-fixture)) (admitted-context (selected-context ctx))
-             (all-orders (native-cas-orders '() '(1 2 3 4 5 6 7 8)))
-             (replay (getenv "AGENTIC_CONTEXT_NATIVE_CAS_ORDER" #f))
-             (exhaustive? (getenv "AGENTIC_CONTEXT_NATIVE_CAS_EXHAUSTIVE" #f))
+             (all-orders (runtime-cas-orders '() '(1 2 3 4 5 6 7 8)))
+             (replay (getenv "AGENTIC_CONTEXT_RUNTIME_CAS_ORDER" #f))
+             (exhaustive? (getenv "AGENTIC_CONTEXT_RUNTIME_CAS_EXHAUSTIVE" #f))
              (orders (cond (replay (list (call-with-input-string replay read)))
                            (exhaustive? all-orders)
                            (else '((1 2 3 4 5 6 7 8) (1 2 4 3 5 6 7 8)
@@ -774,22 +774,22 @@
                                    (1 2 6 3 7 4 5 8) (1 6 8 2 4 3 7 5)))))
              (expected-count (cond (replay 1) (exhaustive? 2240) (else 8))) (count 0))
         (check (length all-orders) => 2240)
-        (for-each (lambda (order) (unless (member order all-orders) (error "illegal native replay order" order))) orders)
+        (for-each (lambda (order) (unless (member order all-orders) (error "illegal runtime replay order" order))) orders)
         (for-each (lambda (order)
           (with-catch (lambda (exception)
             (let* ((fresh (reasoning-attempt (list-ref ctx 4) proposal 512))
                    (fresh-proof (reasoning-receipt-proof fresh)))
-              (displayln "NATIVE-CAS-FAILED index=" count " order=" order
+              (displayln "RUNTIME-CAS-FAILED index=" count " order=" order
                 " receipt=" (reasoning-receipt-status fresh)
                 " proof=" (and fresh-proof (positive-proof-status fresh-proof)))
               (force-output))
             (raise exception))
-            (lambda () (native-cas-replay order ctx admitted-context)))
+            (lambda () (runtime-cas-replay order ctx admitted-context)))
           (set! count (+ count 1))
-          (execution-progress! '(native-owner-paths-verified) count)
+          (execution-progress! '(runtime-owner-paths-verified) count)
           (when (= (modulo count 128) 0)
-            (displayln "NATIVE-CAS-PROGRESS completed=" count) (force-output))) orders)
-        (displayln "NATIVE-CAS-OBSERVE interleavings paths=" count " terminal-violations=0 stale-reactivations=0")
+            (displayln "RUNTIME-CAS-PROGRESS completed=" count) (force-output))) orders)
+        (displayln "RUNTIME-CAS-OBSERVE interleavings paths=" count " terminal-violations=0 stale-reactivations=0")
         (check count => expected-count)))
     (yuanxu-test-case "Context binds original proof into input and fences prepared claims"
       (let-values (((context-host proof-host policy-host registration p ctx) (context-proof-setup)))
@@ -852,7 +852,7 @@
         (check (thread-join! (thread-start! (make-thread (lambda ()
           (rejected? (lambda () (agentic-ai-lab-temporal-proof-host-refresh! proof-host "source" 1 (car ctx) (list-ref ctx 9)))))))) => #t)
         (check (.ref (agentic-ai-lab-temporal-proof-host-refresh! proof-host "source" 1 (car ctx) (list-ref ctx 9)) 'generation) => 1)))
-    (yuanxu-test-case "retained native proof uses registered current source policy and observed clock"
+    (yuanxu-test-case "retained runtime proof uses registered current source policy and observed clock"
       (let* ((ctx (mrr-derivation-fixture)) (ph (agentic-ai-lab-temporal-support-policy-host))
              (host (agentic-ai-lab-temporal-proof-host ph)) (p (policy "v1"))
              (snapshot (agentic-ai-lab-temporal-proof-host-refresh! host "source" 1 (car ctx) (list-ref ctx 9)))
@@ -980,7 +980,7 @@
             (.ref base-rule 'identity) (.ref d 'generation) (.ref d 'output) (.ref d 'supports)))) ))
         (check-rejected (derive-selected ctx (map (lambda (b) (if (= (.ref b 'node) root)
           (agentic-ai-lab-temporal-proof-node-fact root (.ref root-binding 'fact) #f) b)) bindings)) )))
-    (yuanxu-test-case "original MRR recursive rules correspond to verified native proof nodes"
+    (yuanxu-test-case "original MRR recursive rules correspond to verified runtime proof nodes"
       (let* ((p (mrr-rule-program-fixture)) (s (source 1)) (r (reasoning-attempt s proposal 512))
              (a (admit s proposal r))
              (c (agentic-ai-lab-temporal-rule-correspondence-from-ascent p a s proposal r 512 32)))
@@ -1012,7 +1012,7 @@
                (changed (agentic-ai-lab-temporal-rule-program (.ref p 'identity) (.ref p 'catalog-digest)
                  (.ref p 'generation) 1 (.ref p 'relations) (cons wrong (cdr (.ref p 'rules))))))
           (check-rejected (agentic-ai-lab-temporal-rule-correspondence-from-ascent changed a s proposal r 512 32) ))))
-    (yuanxu-test-case "native rule program rejects unsafe variables typed terms and missing relation"
+    (yuanxu-test-case "runtime rule program rejects unsafe variables typed terms and missing relation"
       (let* ((p (mrr-rule-program-fixture)) (rs (.ref p 'relations)) (old (car (.ref p 'rules)))
              (head (.ref old 'head))
              (rebuild (lambda (rules) (agentic-ai-lab-temporal-rule-program "invalid" (.ref p 'catalog-digest)
@@ -1026,7 +1026,7 @@
         (check-rejected (rebuild (list (agentic-ai-lab-temporal-rule "missing" head
           (list (agentic-ai-lab-temporal-rule-atom "missing" (.ref head 'terms)))))) )
         (check-rejected (rebuild (list old old)) )))
-    (yuanxu-test-case "native positive query and original proof replay produce POO admission"
+    (yuanxu-test-case "runtime positive query and original proof replay produce POO admission"
       (let* ((s (source 1)) (receipt (reasoning-attempt s proposal 512)) (a (admit s proposal receipt))
              (replay (agentic-ai-lab-temporal-positive-proof-replay a s proposal receipt 512 32)))
         (check (reasoning-receipt-status receipt) => 'complete)
@@ -1106,7 +1106,7 @@
         (check-rejected (agentic-ai-lab-temporal-support-policy-host-refresh! a p 2
           (agentic-ai-lab-temporal-instant "uncertain" "txn" 2 "host" 'uncertain)) )
         (check (.ref first 'durable?) => #f)))
-    (yuanxu-test-case "original evaluator rule node tamper rejects despite intact native rows and binding"
+    (yuanxu-test-case "original evaluator rule node tamper rejects despite intact runtime rows and binding"
       (let* ((s (source 1)) (receipt (reasoning-attempt s proposal 512))
              (nodes (positive-proof-nodes (reasoning-receipt-proof receipt)))
              (last-node (list-ref nodes (- (length nodes) 1))))
@@ -1188,7 +1188,7 @@
         (check-rejected (agentic-ai-lab-temporal-mrr-fact-content "id" "generation" "relation" "edge" '(1.0)) )
         (check-rejected (agentic-ai-lab-temporal-mrr-fact-content "id" "generation" "relation" "edge" '()) )
         (check-rejected (agentic-ai-lab-temporal-mrr-fact-content-replay (.o (:: @ f) row: '(2 #t))) )))
-    (yuanxu-test-case "original MRR fact and Derivation fixture binds to native proof leaves"
+    (yuanxu-test-case "original MRR fact and Derivation fixture binds to runtime proof leaves"
       (let* ((cases (call-with-input-file "t/qualification/temporal-library-basic/fact-binding-v1/typed-facts.ss"
                       (lambda (p) (read-line p) (read-line p) (scheme-wire-read (read-line p)))))
              (facts (map (lambda (c) (let (r (hash-ref c "request"))
@@ -1218,7 +1218,7 @@
         (check (.ref bound 'mrr-rule-equivalence-verified?) => #f)
         (check (.ref bound 'action-authorized?) => #f)))))
 
-;;; Inert original-owner projection fixture; the normal API is native POO values.
+;;; Inert original-owner projection fixture; the normal API is POO values.
 (def (mrr-rule-program-fixture)
   (let* ((data (call-with-input-file (or (getenv "AGENTIC_AI_LAB_MRR_RULE_ORACLE" #f)
                     "t/qualification/temporal-library-basic/rule-correspondence-v1/typed-rules.ss")
@@ -1234,7 +1234,7 @@
     (agentic-ai-lab-temporal-rule-program (hash-ref data "identity") (hash-ref data "catalogDigest")
       (hash-ref data "generation") (hash-ref data "ascentGeneration") relations rules)))
 
-(def (selected-native-nodes proof)
+(def (selected-runtime-nodes proof)
   (let ((all (positive-proof-nodes proof)) (seen (make-hash-table)))
     (def (visit id)
       (unless (hash-get seen id)
@@ -1254,7 +1254,7 @@
          (ds (map (lambda (d) (agentic-ai-lab-temporal-mrr-derivation (hash-ref d "identity") (hash-ref d "rule")
                (hash-ref d "generation") (get-fact (hash-ref d "output")) (hash-ref d "supports"))) (hash-ref data "derivations")))
          (s (source 1)) (r (reasoning-attempt s candidate 512)) (a (admit s candidate r))
-         (nodes (selected-native-nodes (reasoning-receipt-proof r)))
+         (nodes (selected-runtime-nodes (reasoning-receipt-proof r)))
          (bindings (map (lambda (f)
                      (let* ((node (car (filter (lambda (n) (and (equal? (proof-node-row n) (.ref f 'row))
                                   (equal? (symbol->string (proof-node-relation n)) (.ref f 'evaluator-relation)))) nodes)))
@@ -1304,7 +1304,7 @@
   (let (first (car (.ref j 'revisions)))
     (agentic-ai-lab-temporal-evidence-journal (.ref j 'identity) (.ref j 'admission-domain-identity)
       (append (.ref j 'revisions)
-        (list (agentic-ai-lab-temporal-evidence-revision "native-withdrawal"
+        (list (agentic-ai-lab-temporal-evidence-revision "runtime-withdrawal"
           (.ref first 'subject-identity) 'retract (.ref first 'identity) (at 2) #f #f))))))
 
 ;;; Context owner enrollment associates its source-relative Task with the retained
@@ -1334,40 +1334,40 @@
   (agentic-ai-lab-ai-agentic-context-session-host-claim! host "session" revision source-generation "attempt" "request"))
 
 
-;;; Native reducer replay. Ordering is test data; every state change uses a real
+;;; Runtime reducer replay. Ordering is test data; every state change uses a real
 ;;; Context/Session owner API and actual ASCENT proof/current-support Hosts.
-(def (native-cas-setup (original-context #f) (admitted-context #f))
+(def (runtime-cas-setup (original-context #f) (admitted-context #f))
   (let (grants (agentic-ai-lab-context-use-host))
     (let-values (((host proof ph registration p ctx) (context-proof-setup grants original-context admitted-context)))
       (context-bind host proof registration p 0 0 1 1)
       (context-claim host 1 0)
-      (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "native-result-for-request"))))
+      (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "runtime-result-for-request"))))
              (token (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host "session" 2 0 worker)))
         (values host proof ph registration p ctx worker token grants)))))
-(def (native-finish-worker worker)
+(def (runtime-finish-worker worker)
   (with-catch (lambda (exception) #f) (lambda () (thread-send worker 'result)))
-  (check (thread-join! worker 2 'native-worker-timeout) => "native-result-for-request"))
-(def (native-revoke-grant! grants p)
+  (check (thread-join! worker 2 'host-worker-timeout) => "runtime-result-for-request"))
+(def (runtime-revoke-grant! grants p)
   (agentic-ai-lab-context-use-host-refresh! grants
     (agentic-ai-lab-context-use-grant "grant" 2 "manifest" "admission"
       (agentic-ai-lab-context-use-contract "actor" "task" "context-policy" '() '() #t)
       "policy" (.ref p 'semantic-digest) '(display) #f)))
-(def (native-cas-orders prefix remaining)
+(def (runtime-cas-orders prefix remaining)
   (if (null? remaining) (list (reverse prefix))
     (apply append
       (map (lambda (move)
         (if (and (or (not (= move 2)) (member 1 prefix))
                  (or (not (= move 3)) (member 2 prefix))
                  (or (not (memq move '(7 8))) (member 6 prefix)))
-          (native-cas-orders (cons move prefix) (filter (lambda (x) (not (= x move))) remaining)) '())) remaining))))
-(def (native-cas-replay order ctx (admitted-context #f))
-  (let-values (((host proof ph registration p original worker worker-token grants) (native-cas-setup ctx admitted-context)))
+          (runtime-cas-orders (cons move prefix) (filter (lambda (x) (not (= x move))) remaining)) '())) remaining))))
+(def (runtime-cas-replay order ctx (admitted-context #f))
+  (let-values (((host proof ph registration p original worker worker-token grants) (runtime-cas-setup ctx admitted-context)))
     (let ((result-revision 2) (cancel-revision 2) (observation #f) (invalidated? #f))
       (def (revision)
         (.ref (.ref (agentic-ai-lab-ai-agentic-context-session-host-current host "session") 'schedule) 'revision))
       (for-each (lambda (move)
         (case move
-          ((1) (native-finish-worker worker)
+          ((1) (runtime-finish-worker worker)
                (set! observation (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" worker-token)))
           ((2) (set! result-revision (revision))
                (agentic-ai-lab-ai-agentic-context-session-host-observe host "session" result-revision 0))
@@ -1375,10 +1375,10 @@
           ((4) (agentic-ai-lab-temporal-proof-host-refresh! proof "source" 2 (car ctx) (withdrawn-journal (list-ref ctx 9)))
                (agentic-ai-lab-temporal-support-policy-host-refresh! ph p 2 (at 2))
                (set! invalidated? #t))
-          ((5) (native-revoke-grant! grants p) (set! invalidated? #t))
+          ((5) (runtime-revoke-grant! grants p) (set! invalidated? #t))
           ((6) (let (r (agentic-ai-lab-ai-agentic-context-session-host-cancel! host "session" (revision) 0))
                  (set! cancel-revision (.ref (.ref r 'schedule) 'revision))))
-          ((7) (native-finish-worker worker)
+          ((7) (runtime-finish-worker worker)
                (set! observation (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host "session" worker-token))
                (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host "session" cancel-revision 0 observation))
           ((8) (agentic-ai-lab-ai-agentic-context-session-host-recover! host "session" (revision) 0)))
@@ -1389,13 +1389,13 @@
           (when (and invalidated? (pair? outcomes)) (check (.ref (car outcomes) 'current-use?) => #f)))) order)
       (let* ((outcomes (agentic-ai-lab-ai-agentic-context-session-host-outcomes host "session"))
              (schedule (.ref (agentic-ai-lab-ai-agentic-context-session-host-current host "session") 'schedule)))
-        (displayln "NATIVE-CAS-PATH order=" order
+        (displayln "RUNTIME-CAS-PATH order=" order
           " outcome=" (if (pair? outcomes) (.ref (car outcomes) 'outcome) 'pending)
           " revision=" (.ref schedule 'revision)
           " terminals=" (length outcomes)
           " obligations=" (length (.ref schedule 'obligations))
           " current-use=" (and (pair? outcomes) (.ref (car outcomes) 'current-use?))))
-      (native-finish-worker worker))))
+      (runtime-finish-worker worker))))
 
 ;;; Three real consumers: A uses path(1,3), B uses unaffected path(1,2)
 ;;; but explicitly depends on Context A, C uses only path(1,2).
@@ -1424,7 +1424,7 @@
           (.ref selected 'identity) 1 2 (.ref p 'semantic-digest) 128)
         (agentic-ai-lab-ai-agentic-context-session-host-claim! host id 1 0
           (string-append "attempt-" id) (string-append "request-" id))
-        (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "native-result-for-request"))))
+        (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "runtime-result-for-request"))))
                (token (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host id 2 0 worker)))
           (hash-put! workers id (list worker token))))
       (enroll "session" registration '())
@@ -1437,7 +1437,7 @@
 (def (push-revision f id) (.ref (.ref (push-row f id) 'schedule) 'revision))
 (def (push-join! f id)
   (let (worker (hash-ref (.ref f 'workers) id))
-    (native-finish-worker (car worker))
+    (runtime-finish-worker (car worker))
     (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! (.ref f 'host) id (cadr worker))))
 (def (push-withdraw! f)
   (let* ((ctx (.ref f 'context)) (j (list-ref ctx 9))
@@ -1464,7 +1464,7 @@
                (or (not (= move 3)) (member 2 prefix))
                (or (not (memq move '(6 7))) (member 5 prefix)))
         (push-orders (cons move prefix) (filter (lambda (x) (not (= x move))) remaining)) '())) remaining))))
-(def (push-replay order (fixture #f) (withdraw! push-withdraw!) (label "NATIVE-PUSH-PATH"))
+(def (push-replay order (fixture #f) (withdraw! push-withdraw!) (label "RUNTIME-PUSH-PATH"))
   (let* ((f (or fixture (push-fixture))) (host (.ref f 'host)) (ids '("session" "session-b"))
          (result-revisions (make-hash-table)) (cancel-revisions (make-hash-table))
          (observations (make-hash-table)) (withdrawn? #f))
@@ -1490,7 +1490,7 @@
           (when (and withdrawn? (pair? outcomes)) (check (.ref (car outcomes) 'current-use?) => #f)))) ids)
       (check (.ref (push-row f "session-c") 'context-state) => 'admitted)
       (check (push-revision f "session-c") => 2)) order)
-    (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'native-result-published?) => #t)
+    (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0 (push-join! f "session-c")) 'runtime-result-published?) => #t)
     (push-join! f "session")
     (let (observation (push-join! f "session-b"))
       (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-b"
@@ -1509,14 +1509,14 @@
 (def (push-print-evidence f)
   (let ((receipt (car (agentic-ai-lab-ai-agentic-context-session-host-propagations (.ref f 'host))))
         (ctx (.ref f 'context)))
-    (displayln "NATIVE-PUSH-EVIDENCE event=" (.ref receipt 'event)
+    (displayln "RUNTIME-PUSH-EVIDENCE event=" (.ref receipt 'event)
       " proof-index=" (.ref receipt 'proof-index) " context-index=" (.ref receipt 'context-index)
       " previous-journal=" (.ref receipt 'previous-cut) " revised-journal=" (.ref receipt 'revised-cut)
       " ascent-a=" (.ref (list-ref ctx 3) 'proof-digest)
       " registered-a=" (.ref (.ref f 'registration-a) 'proof-digest)
       " registered-c=" (.ref (.ref f 'registration-c) 'proof-digest))))
 
-;;; Independent full native query oracle over the journal-selected CURRENT facts.
+;;; Independent full runtime query oracle over the journal-selected CURRENT facts.
 ;;; This does not reuse the incremental reverse plan or cached invalidation flags.
 (def (push-current-ascent-oracle f)
   (let* ((ctx (.ref f 'context))
@@ -1534,7 +1534,7 @@
     (check (reasoning-receipt-rows fresh-a) => '())
     (check (reasoning-receipt-rows fresh-c) => (reasoning-receipt-rows original-c))
     (check (length rows) => 1)
-    (displayln "NATIVE-PUSH-ORACLE withdrawn-a-rows=0 unaffected-c-equal=#t active-facts=1 native-status=complete")))
+    (displayln "RUNTIME-PUSH-ORACLE withdrawn-a-rows=0 unaffected-c-equal=#t active-facts=1 runtime-status=complete")))
 
 ;;; A has the changed grant/policy. B has independent authority/proof but captures
 ;;; A's immutable Context version. C shares B's authority without that dependency.
@@ -1564,7 +1564,7 @@
           (when workers?
         (agentic-ai-lab-ai-agentic-context-session-host-claim! host id 1 0
             (string-append "attempt-" id) (string-append "request-" id))
-          (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "native-result-for-request"))))
+          (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "runtime-result-for-request"))))
                  (token (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host id 2 0 worker)))
             (hash-put! workers id (list worker token)))))
         (let (ticket (find (lambda (ticket) (equal? (.ref ticket 'identity) "policy"))
@@ -1580,7 +1580,7 @@
               policy: p context: ctx registration-a: registration registration-c: registered-c))))))
 (def (authority-change! f kind)
   (case kind
-    ((grant) (native-revoke-grant! (.ref f 'grants) (.ref f 'policy)))
+    ((grant) (runtime-revoke-grant! (.ref f 'grants) (.ref f 'policy)))
     ((policy) (agentic-ai-lab-temporal-support-policy-host-refresh! (.ref f 'policies) (policy "v2") 2 (at 1)))
     ((expiry) (agentic-ai-lab-temporal-support-policy-host-fire-deadline! (.ref f 'policies) "policy" 1 (at 4)))
     (else (error "Unknown authority change"))))
@@ -1601,7 +1601,7 @@
                   (check (.ref (.ref old 'policy) 'semantic-digest) => (.ref (.ref new 'policy) 'semantic-digest)))))
     (check (.ref receipt 'affected-contexts) => '("session" "session-b"))
     (check (.ref (.ref f 'registration-a) 'proof-digest) => (.ref (derive-selected ctx (list-ref ctx 6)) 'semantic-digest))
-    (displayln "NATIVE-AUTHORITY-EVIDENCE kind=" kind " event=" (.ref event 'semantic-digest)
+    (displayln "RUNTIME-AUTHORITY-EVIDENCE kind=" kind " event=" (.ref event 'semantic-digest)
       " context-index=" (.ref receipt 'context-index) " original-journal=" (.ref (list-ref ctx 9) 'semantic-digest)
       " original-proof=" (.ref (.ref f 'registration-a) 'proof-digest))))
 
@@ -1621,7 +1621,7 @@
   (length (filter (lambda (row) (eq? (.ref row 'phase) phase)) audit)))
 (def (clock-print-audit label audit)
   (for-each (lambda (row)
-    (displayln "NATIVE-CLOCK-EVENT case=" label " phase=" (.ref row 'phase) " cause=" (.ref row 'cause)
+    (displayln "RUNTIME-CLOCK-EVENT case=" label " phase=" (.ref row 'phase) " cause=" (.ref row 'cause)
       " ticket=" (.ref row 'ticket) " policy=" (.ref row 'policy) " generation=" (.ref row 'generation)
       " policy-digest=" (.ref row 'policy-digest) " end=" (.ref row 'end)
       " observed=" (.ref (.ref row 'observed) 'coordinate)
@@ -1630,7 +1630,7 @@
   (let (ctx (.ref f 'context))
     (check (.ref (derive-selected ctx (list-ref ctx 6)) 'semantic-digest) => (.ref (.ref f 'registration-a) 'proof-digest))
     (let (receipt (car (reverse (agentic-ai-lab-ai-agentic-context-session-host-propagations (.ref f 'host)))))
-      (displayln "NATIVE-CLOCK-EVIDENCE journal=" (.ref (list-ref ctx 9) 'semantic-digest)
+      (displayln "RUNTIME-CLOCK-EVIDENCE journal=" (.ref (list-ref ctx 9) 'semantic-digest)
         " proof=" (.ref (.ref f 'registration-a) 'proof-digest) " event=" (.ref receipt 'event)
         " context-index=" (.ref receipt 'context-index)))))
 (def (clock-cleanup! f)
@@ -1642,7 +1642,7 @@
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host id
             (push-revision f id) 0 observation) 'runtime-published?) => #t)))) '("session" "session-b"))
     (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host "session-c" 2 0
-      (push-join! f "session-c")) 'native-result-published?) => #t)))
+      (push-join! f "session-c")) 'runtime-result-published?) => #t)))
 (def (clock-replace! f observed)
   (let* ((p (agentic-ai-lab-temporal-support-policy "policy" "clock-new" (at 1) (at 1000000)))
          (host (.ref f 'host)) (grants (.ref f 'grants)) (sid "session-new"))
@@ -1658,7 +1658,7 @@
     (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host sid 0 0 (.ref f 'proof)
       (.ref (.ref f 'registration-a) 'identity) 1 3 (.ref p 'semantic-digest) 128)
     (agentic-ai-lab-ai-agentic-context-session-host-claim! host sid 1 0 "attempt-new" "request-new")
-    (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "native-result-for-request"))))
+    (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "runtime-result-for-request"))))
            (token (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host sid 2 0 worker)))
       (hash-put! (.ref f 'workers) sid (list worker token)))))
 (def (clock-orders prefix remaining)
@@ -1696,13 +1696,13 @@
           (check (.ref (push-row f "session-new") 'context-state) => 'admitted)
           (check (push-revision f "session-new") => 2)
           (check (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! (.ref f 'host) "session-new" 2 0
-            (push-join! f "session-new")) 'native-result-published?) => #t)
+            (push-join! f "session-new")) 'runtime-result-published?) => #t)
           (clock-check-originals! f)))
         (let (audit (policy-clock-audit clock))
           (check (clock-phases audit 'received) => 2)
           (check (+ (clock-phases audit 'applied) (clock-phases audit 'stale)) => 1)
           (check (clock-phases audit 'duplicate) => 1)
           (clock-print-audit "race" audit)
-          (displayln "NATIVE-CLOCK-PATH order=" order " received=2 applied=" (clock-phases audit 'applied)
+          (displayln "RUNTIME-CLOCK-PATH order=" order " received=2 applied=" (clock-phases audit 'applied)
             " stale=" (clock-phases audit 'stale) " duplicate=1 old-current=#f new-current=#t unaffected=#t")))
       (lambda () (policy-clock-stop! clock)))))

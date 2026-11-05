@@ -138,7 +138,7 @@ def main():
         unsafe += run_batch(cases[start:start + 150], out, start // 150)
     summary = dict(executed=len(cases), expected_unsafe=unsafe, unexpected=0,
                    model_sha256=sha(MODEL), runner_sha256=sha(Path(__file__)),
-                   native_implementation_qualified=False)
+                   runtime_implementation_qualified=False)
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(f"PASS: {len(cases)} executed, {unsafe} expected unsafe; {out}")
 

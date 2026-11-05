@@ -28,7 +28,7 @@ resources -> [[https://github.com/kcl-lang/konfig/blob/12025e8e250ca409006879126
 not inspected that OCI package's schema-generation pipeline or executed it; do not
 invent an exact JSON-Schema-to-KCL command from the observed consumption chain.
 
-Agentic AI Lab should connect schema artifacts -> native Profile values/defaults ->
+Agentic AI Lab should connect schema artifacts -> runtime Profile values/defaults ->
 selected Scenario admission -> effective resource projection -> resource validation
 and preview -> explicit executor. Schema provenance and final candidate identity
 must survive the connections. That is the design work, not another language DSL.
@@ -52,7 +52,7 @@ are not evidence that a matching frontend JSON Schema is already available here.
 * Existing interfaces that can be reused now
 
 These are internal implementation interfaces. [[file:../../../core/docs/10-19-design/11-configuration-languages/11.14-guestbook-module-contract-admission.org][Module 13]] defines their proposed
-module-scope publication and native responsibilities integration; ordinary users
+module-scope publication and runtime responsibilities integration; ordinary users
 do not read schema paths or import these implementation functions.
 
 | Interface | Executable owner | Role in this design |
@@ -62,12 +62,12 @@ do not read schema paths or import these implementation functions.
 | yuanxu-json-schema-contract-artifact-valid? | same owner | Reject fatal generation diagnostics; not proof that all schema features were implemented |
 | yuanxu-json-schema-contract-artifact-diagnostics | same owner | Review supported/reference/normalization boundaries before publishing |
 | yuanxu-json-schema-contract-artifact-object-contract | same owner | Retrieve the generated object Contract representation |
-| yuanxu-json-schema-contract-artifact-validate | [[file:../../../core/modules/json-schema/json-schema-validate.ss][json-schema-validate.ss]] | Validate final native POO candidate or supported JSON-like value against the artifact |
+| yuanxu-json-schema-contract-artifact-validate | [[file:../../../core/modules/json-schema/json-schema-validate.ss][json-schema-validate.ss]] | Validate final POO candidate or supported JSON-like value against the artifact |
 | yuanxu-json-schema-object-contract-validation-valid? | same owner | Read the resulting validation decision |
 | yuanxu-json-schema-object-contract-validation->alist | same owner | Project diagnostics/results for tools; not an object-provenance or runtime receipt |
 
 The [[file:../../../core/modules/funflow/github-ci-contract.ss][GitHub CI integration]] already uses these entry points.
-[[file:../../../t/json-schema-contract-bridge-test.ss][Bridge tests]] and [[file:../../../t/funflow-github-ci-json-schema-contract-test.ss][GitHub CI tests]] define controls including native POO candidates
+[[file:../../../t/json-schema-contract-bridge-test.ss][Bridge tests]] and [[file:../../../t/funflow-github-ci-json-schema-contract-test.ss][GitHub CI tests]] define controls including POO candidates
 and recursive maps. This study inspected those sources, without rerunning tests.
 Unsupported-reference/normalization warnings require deliberate qualification;
 artifact-valid? alone is not a complete coverage assertion. In particular,
@@ -104,7 +104,7 @@ object retaining the exact candidate alongside the existing validation result.
 This is proposed glue, not a new validation engine or a complete admission API.
 
 Source verification in module 13 confirms that the generated object Contract
-already derives from the native predicate Contract protocol and supports .admit.
+already derives from the runtime predicate Contract protocol and supports .admit.
 It is not itself the artifact, nor a default-bearing prototype descriptor.
 Use the generated Contract in responsibilities, retain full-root validation as an
 obligation, and qualify required-field/default/diagnostic semantics explicitly.
@@ -113,7 +113,7 @@ Conclusion: the reusable implementation already exists. The remaining schema wor
 is choosing/pinning the right sources, checking coverage and wiring the existing
 result into domain admission, not regenerating an independent handwritten model.
 
-* Defaults and maintained Profiles remain native POO values
+* Defaults and maintained Profiles remain POO values
 
 Field Contracts constrain values; maintained prototypes/Profiles provide operational
 defaults. Keep defaults separate from mandatory policy. The following complete
@@ -138,7 +138,7 @@ against that adapter, rather than assuming bridge generation performs objectizat
 The upstream evolution experiment reuses those Profiles:
 
 #+begin_src scheme
-;; Existing native operators; proposed Guestbook library objects.
+;; Existing runtime operators; proposed Guestbook library objects.
 (.def (MaintainedV1 @ Guestbook)
   frontend: =>.+
   (.o image: "gcr.io/google-samples/gb-frontend:v5"
@@ -173,7 +173,7 @@ Target user syntax, pending dotted direct assignment:
   frontend.labels: (.o team: "checkout"))
 #+end_src
 
-Existing native counterparts:
+Existing runtime counterparts:
 
 #+begin_src scheme
 (.def (ImagePinnedV2 @ MaintainedV2)
@@ -272,8 +272,8 @@ metadata. No new Loader or automatic dependency discovery is claimed.
 | Schema acquisition | JSON file reader | Pin input/output schemas; supported reference/dialect closure |
 | Contract generation | Normalization, emission, artifact/diagnostics | Verify actual Guestbook/Kubernetes schema coverage; no second generator |
 | Value validation | Artifact validation, POO candidate handling | Apply to final effective candidates and projected resources |
-| Object semantics | Native .def/.o/=>.+ and inherited receiver behavior | Default-view/Contract association and .admit adapter for these domain objects |
-| Simple surface | Direct native slot assignment; existing refinement paths | Dotted direct assignment and grouped-prefix lowering |
+| Object semantics | Runtime .def/.o/=>.+ and inherited receiver behavior | Default-view/Contract association and .admit adapter for these domain objects |
+| Simple surface | Direct runtime slot assignment; existing refinement paths | Dotted direct assignment and grouped-prefix lowering |
 | Scenario semantics | Core admission entry; design reference in module 09 | Role/image/connection checks with final identities and complete evidence |
 | Resource consumption | KCL external backend as a concrete reference | Scheme Guestbook projector, parity tests and final resource diagnostics |
 | Execution | Explicit boundary retained | No execution adapter added or qualified by this work |

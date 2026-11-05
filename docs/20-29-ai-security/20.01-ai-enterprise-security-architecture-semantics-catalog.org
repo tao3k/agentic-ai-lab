@@ -46,7 +46,7 @@ This catalog MUST NOT:
   authority;
 - treat an LLM-generated mapping as verified architecture evidence.
 
-The existing POO-native and functional engine remains the owner of composition.
+The existing POO and functional engine remains the owner of composition.
 Architecture catalogs and packages are values composed by that engine.
 
 * Discovery method
@@ -66,7 +66,7 @@ A proof is not runtime admission.  Runtime admission is not effect completion.
 
 * Initial external architecture corpus
 
-| Source | Native organization | Primary contribution | Important limitation |
+| Source | Runtime organization | Primary contribution | Important limitation |
 |--------+---------------------+----------------------+----------------------|
 | Snowflake Data–Model–Agent | three layers | governed data, protected model, governed agent/action | product-centered; does not define our composition semantics |
 | CSA AI Agents Architecture | ten layers in three operational domains | infrastructure through governance/accountability coverage | reference taxonomy; layer membership is not executable semantics |
@@ -284,7 +284,7 @@ external observation records.  A record SHOULD retain:
 - review decision and superseding observation.
 
 This is a conceptual contract.  It MUST NOT become a raw public alist/YAML DSL.
-Concrete representation requires a separate POO-native owner.
+Concrete representation requires a separate POO owner.
 
 * Architecture discovery questions
 
@@ -339,8 +339,8 @@ For each new source:
 - [X] Coordinate kinds and mapping statuses are explicit.
 - [X] Policy, proof, runtime admission, and effect completion stay separate.
 - [X] Existing POO/profile boundaries are reused.
-- [ ] Data/knowledge semantics have a POO-native package owner.
-- [ ] Model/intelligence semantics have a POO-native package owner.
+- [ ] Data/knowledge semantics have a POO package owner.
+- [ ] Model/intelligence semantics have a POO package owner.
 - [ ] Catalog observations have a versioned provenance representation.
 - [ ] Cross-architecture mappings have proof/property validation.
 - [ ] A runtime acceptance projection consumes composed architecture semantics.
@@ -348,6 +348,6 @@ For each new source:
 * Open frontier
 
 The next owner is =20.02-composable-ai-security-architecture-package=.
-It defines how catalog semantics become POO-native packages, how multiple
+It defines how catalog semantics become POO packages, how multiple
 architectures compose, and how profiles project obligations without changing
 the Agentic AI Lab public engine surface.

@@ -3,10 +3,12 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: Funflow functional DAG objects are POO-native reports.
+;;; Boundary: Funflow functional DAG objects are POO reports.
 ;;; Invariant: DAG construction is pure and never schedules or runs checks.
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy agentic-ai-lab-product-use-module)
+        (only-in :yuanxu/modules/funflow/config-adapter yuanxu-funflow-poo-pipeline->check-map)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :yuanxu/modules/funflow/config-prototypes funflow-check funflow-pipeline)
          (only-in :std/test
                  check-equal?
@@ -14,8 +16,9 @@
         (only-in :clan/poo/object .ref)
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flags)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/workflow/funflow-config
         (only-in :yuanxu/modules/funflow/graph-projection
                  yuanxu-funflow-check-map->functional-dag
                  yuanxu-funflow-composition-step?
@@ -40,22 +43,15 @@
 
 ;; : (-> Unit [PooUserModuleSelection])
 (def (funflow-functional-dag-selection)
-  (use-module funflow
-    :config
-    (.def (funflow-dag/build @ funflow-check
-                             check-name profile-ref command-vector
-                             artifact-outputs result-protocol runtime-mode)
+  (let ()
+    (.def (funflow-dag/build @ funflow-check)
       check-name: 'build
       profile-ref: 'ci/build
       command-vector: '("gerbil" "build")
       artifact-outputs: '(build-log)
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff)
-
-    (.def (funflow-dag/test @ funflow-check
-                            check-name profile-ref command-vector
-                            artifact-outputs result-protocol runtime-mode
-                            dependency-refs)
+    (.def (funflow-dag/test @ funflow-check)
       check-name: 'test
       profile-ref: 'ci/check
       command-vector: '("gerbil" "env" "./unit-tests.ss")
@@ -63,11 +59,7 @@
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
       dependency-refs: '(build))
-
-    (.def (funflow-dag/package @ funflow-check
-                               check-name profile-ref command-vector
-                               artifact-outputs result-protocol runtime-mode
-                               dependency-refs)
+    (.def (funflow-dag/package @ funflow-check)
       check-name: 'package
       profile-ref: 'ci/check
       command-vector: '("gerbil" "env" "./unit-tests.ss")
@@ -75,15 +67,17 @@
       result-protocol: '(read :lines)
       runtime-mode: 'manifest-handoff
       dependency-refs: '(test))
-
-    (.def (funflow-dag/default @ funflow-pipeline
-                               pipeline-name checks metadata)
+    (.def (funflow-dag/default @ funflow-pipeline)
       pipeline-name: 'default
       checks: (list funflow-dag/build
                     funflow-dag/test
                     funflow-dag/package)
       metadata: '((scenario . funflow-functional-dag)
-                  (authoring-style . gerbil-poo-native)))))
+                  (authoring-style . gerbil-poo)))
+    (agentic-ai-lab-product-use-module 'funflow
+      (agentic-ai-lab-funflow-config-flags
+        (yuanxu-funflow-poo-pipeline->check-map funflow-dag/default)
+        (list ':config funflow-dag/default)))))
 
 ;; : TestSuite
 (def funflow-functional-dag-test

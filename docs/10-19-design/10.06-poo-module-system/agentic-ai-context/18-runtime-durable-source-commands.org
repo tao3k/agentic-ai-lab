@@ -1,0 +1,425 @@
+#+title: Durable Source Commands and Context Recovery
+#+language: en
+:PROPERTIES:
+:ID: context-runtime-durable-source-commands
+:STATUS: selected-runtime-crash-paths-qualified
+:END:
+
+* Decision and inherited responsibilities
+
+This implements the next integration boundary from
+[[file:16-query-durable-owner-handoff.org][16: durable source handoff]] and [[file:17-runtime-catalog-root-recovery.org][17: catalog roots]]. Context owns the
+evidence-bound working view, its source history and captured dependency versions.
+Independent Session reducers own interaction/Attempt transitions and unresolved
+worker obligations. The existing SQLite journal owns the local durable writer
+fence, immutable inbox, state versions, decisions and terminal ledger.
+
+The public functional constructor =context-durable-source-command= produces an
+inert POO command for the existing owner protocol. It carries the existing
+input identity, expected previous source digest and canonical new source cut.
+Withdrawal and replacement use this same operation; there is no second source
+language, identity allocator, Session registry or event-processing framework.
+
+* Current cut and conditional source publication
+
+The source command must equal the exact received input of the active fenced
+transaction. The adapter refuses an operation closure that substitutes another
+source command. It resolves only the requested source head through the existing
+Provider lookup; it does not copy/scan every retained Query and proof to find it.
+
+An absent previous cut permits first admission of an active source. A known
+source requires exact expected-cut equality and a strictly newer generation.
+Stale commands persist an explicit refused decision; they are not rebased onto
+the latest source. An applied input retry returns a historical ACK. Its bytes
+are checked before that fast path, so the same ID cannot carry a changed body.
+Historical ACKs never grant action authority or make an old source current.
+
+The runtime Provider still owns source preparation, ASCENT evidence revisions,
+support and dependency propagation. The adapter does not duplicate that logic.
+It saves the resulting Provider root, Context checkpoint, obligations and
+terminals in the existing transaction. The inbox status and decision commit
+with them before an ACK is returned. An aborted owner remains quarantined.
+
+* Recovery order and shared ownership
+
+1. Acquire the existing durable owner epoch and verify retained journal data.
+2. Reconstruct the committed Provider root, including unqueried sources.
+3. Restore consumer observation refs and captured parents against that exact
+   Provider; reconnect existing source subscriptions before pending replay.
+4. Re-evaluate pending source commands using their original inputs under a
+   writer transaction. Commit source state, pushed invalidation and Context
+   obligations together, or persist a stale-command refusal.
+5. Return the ready adapter/Provider capability to the owner reactor. Only then
+   process new results or return historical command ACKs.
+
+=context-durable-adapter= accepts an explicit initial Provider for catalogs
+without consumers and otherwise discovers the coordinator's existing Provider.
+On recovery it exposes the reconstructed Provider through its runtime capability;
+the bootstrap seed is not the current catalog. Context restoration rejects
+source-history mismatches instead of silently creating a second owner.
+
+The physical checkpoints still contain portable consumer capsules. This is not
+an additional mutable catalog, but compacting repeated checkpoint bytes into
+root-plus-ref storage is a separate physical normalization task. No original
+source/proof history is discarded to obtain that optimization.
+
+* Result, knowledge and evidence after withdrawal
+
+A runtime result committed before withdrawal remains historical. Its current
+applicability is fenced when the captured source retires. A/B may therefore
+retain terminal records while both Contexts become invalidated; independent C
+keeps its original applicability and actual completion.
+
+Owner death cannot authenticate a portable observation as a runtime worker
+capability. Unknown effects and unresolved worker obligations survive recovery.
+A pending result envelope is data; it is not automatically rerun as a fresh
+completion or a new Attempt. Fresh admission needs its own currently supported
+view and independent Session admission.
+
+The same rule applies to long-term interpretations: retained history and a
+currently usable conclusion differ. A different possible derivation cannot
+silently repair the captured original proof. Any newly supported interpretation
+requires explicit derivation/admission with its own dependencies. Session
+closure and source withdrawal do not delete original evidence.
+
+* Runtime gate and limits
+
+[[file:run-runtime-query-durable.py][The executable gate]] uses real Org/GQL/ASCENT producers, Context/Session
+owners, the actual SQLite journal and process-group SIGKILL. It records source
+and control producer notifications separately from real worker return
+notifications and selected owner orders. Timer delivery is explicitly disabled
+in this source-command slice; existing clock gates own expiry qualification.
+
+Selected crash paths exercise after-inbox, before-decision-commit and
+after-commit/before-ACK cuts, with source-first, result-first,
+cancel/recover-first and observed-arrival prefixes. Separate zero-consumer
+paths exercise all three cuts. The gate checks writer epoch advance, immutable
+evidence and terminal digests, exactly one durable source application, cached
+cross-Session invalidation before support queries, old result rejection and
+unaffected C completion. It also checks duplicate IDs, substituted command
+bodies, first admission and delayed older source commands after re-admission.
+
+Original crash images are retained. A positive replay and a deliberately unsafe
+runtime control restore the same original pending-source image. Omitting source
+replay leaves a stale cached A Context admitted; corrected recovery must push
+invalidation before returning the owner. Raw logs and databases stay outside Git.
+
+#+begin_src sh
+just build-test t/context-query-durable-test.ss
+slice=docs/10-19-design/10.06-poo-module-system/agentic-ai-context
+python3 "$slice/run-runtime-query-durable.py" --artifacts /private/tmp/context-query-source-owner-run
+#+end_src
+
+These selected runtime executions do not prove all OS schedules, external source
+authenticity, distributed exactly-once effects or complete remote storage
+qualification. Runtime result/cancel/recover pending inputs retain their existing
+reconciliation boundary. Fresh same-Session worker admission after process
+death still requires actual termination/isolation evidence; recovery does not
+fabricate it. The section-16 model is a separate bounded contract, not a proof
+of runtime source refinement.
+
+* Qualified local results: 2026-10-25
+
+| Runtime process-death case | Boundary / order prefix |
+|---------------------------+-------------------------|
+| Withdrawal | After inbox receipt, source first |
+| Withdrawal | Before decision commit, A completion first |
+| Withdrawal | After commit, cancellation/recovery before A/B results |
+| Withdrawal | Before commit, actual observed producer arrival order |
+| Replacement | After commit, actual observed producer arrival order |
+| Zero consumers / no Query observations | All three durable crash boundaries |
+
+All eight cases used actual SIGKILL and independent owner restart. A ninth
+positive recovery replayed the original saved case-00 crash image; the unsafe
+control restored that same image while deliberately omitting pending source
+replay. Its cached A remained admitted. Corrected recovery fenced A/B before
+returning the owner, retained C's actual completion/applicability and kept every
+pre-crash terminal digest unchanged. Duplicate commands returned historical
+ACKs; changed bodies and delayed old commands were refused. First admission of
+another unqueried source also used the same conditional command path.
+
+[[file:audit-query-source-crashes.py][The independent prefix audit]] checks actual owner and arrival traces and
+compares SQLite terminal counts with a positional oracle: C completes before
+the prefix, A completes only before source change and cancellation, and B
+completes only before source change. Events planned after the killed source
+command are explicitly recorded as unexecuted suffixes. This is eight selected
+crash prefixes, not eight complete five-event executions or exhaustive runtime
+concurrency. The audit uses the complete terminal ledger for hashed Session
+identities, not the legacy helper's literal-"session" counter.
+
+The final source/object receipt is
+=/private/tmp/context-query-source-owner-final-20261025/query-durable-receipt.json=;
+the directory retains every original database image, input copy and process log.
+The earlier assertion-successful run under =qualified-20261025/= is superseded
+because the final inventory additionally binds the imported monotonic/boot
+primitive, legacy driver and Python helper sources. Its receipt was not
+relabeled as the final cut. Initial sandbox boot-identity and unenrolled-domain
+diagnostics remain separate from qualification. Tests use the producer's actual
+=txn= domain and the real host boot identity, not a substituted test clock.
+
+The same expanded runtime cut passed one original live-clock policy/ticket
+crash-recovery case, including a new actual worker completion. Its receipt is
+=/private/tmp/context-query-source-owner-final-legacy-20261025/legacy-receipt.json=.
+This is a focused compatibility case, not a rerun of every previous clock case.
+
+The unchanged section-16 SysML CLI contract was executed again: 2,700 scenarios,
+1,500 expected unsafe failures, zero unexpected verdicts. Four saved unsafe
+witnesses and their corrected paths added eight replay executions with four
+expected failures. Model and runtime evidence retain separate claims.
+
+The combined artifact index is
+=/private/tmp/context-query-source-owner-evidence-20261025.json=.
+Exact durable-owner replay requires the original boot/clock enrollment; a host
+reboot requires explicit clock re-admission. Foreign-boot historical evidence
+does not automatically authorize current effects.
+
+Still open: exhaustive OS scheduling, crashes during recovery itself, the full
+source/policy/grant/expiry product, remote endpoint reconciliation, physical
+checkpoint normalization and nonlocal storage acceptance. The existing runtime
+gate does not fabricate those outcomes from the bounded model.
+
+* Declarative Module extension through Core Features
+:PROPERTIES:
+:STATUS: proposed-composition-boundary-not-runtime-migration
+:END:
+
+This refinement uses the existing Core Feature System to extend a Module.
+It specifies the target ownership; the current journal and Context adapter have
+not been physically migrated by this documentation change. Existing runtime
+qualification above does not qualify this proposed composition.
+
+Durable is an independent Module providing the journal, commit boundary, writer
+fence and retained decision integrity. Context owns evidence relations and
+unknowns; Session owns Task/Attempt transitions and reconciliation responsibility.
+The Context recovery Feature extends Context through its published extension
+surface and requires a Durable provider contract. It does not transfer Context
+or Session semantics into Durable. Memory retention is a separate Feature;
+long-term knowledge is not implied by selecting persistence.
+
+The Context recovery Feature extends Context; Durable supplies its required contract.
+Feature binding is a declaration, not a running owner or permission to replay an effect.
+
+** Existing Core mechanisms and concrete integration gaps
+
+[[file:../../../../core/feature-system/model.ss][Feature descriptors]] already declare components, policy/strategy contributions,
+adapter requirements, projections, options and Feature dependencies.
+[[file:../../../../core/feature-system/composition.ss][Composition]] preserves resolved contribution order.
+[[file:../../../../core/feature-system/adapter-projection-binding.ss][Adapter binding]] matches capability identity and contract identity/version.
+[[file:../../../../core/module-system/design/03-publication-selection.org][Module selection]] owns baseline dependency admission and negative intent.
+These mechanisms remain the single owners. Feature dependency IDs must not be
+used as substitutes for Module dependency declarations.
+
+The product integration must replace the closed =memory?= entry with the
+existing POO Feature selections/options and a qualified profile. Selecting
+recovery contributes a Context extension and a requirement for the Durable
+contract; the selected Module graph must admit that provider through existing
+selection policy. An explicitly disabled provider remains an actionable
+composition failure. A Feature must not silently re-enable a denied Module.
+
+The following obligations refine the existing Core extension design; their
+complete integration is proposed, not inferred from a successful manifest:
+
+- The target Module publishes the supported extension point and contribution
+  contract. A contribution identifies that target and its own source revision.
+- Existing POO composition governs refinement/override. Non-composable owner
+  claims are conflicts; independent contributions retain declared order.
+- Binding retains provider identity/version, selected options and required
+  projections with source lineage. Matching metadata does not prove behavior.
+- Admission produces inert composition values. Explicit runtime handoff creates
+  a live owner/capability; failed handoff does not masquerade as a ready Module.
+- Recovery retains the admitted composition identity alongside its checkpoints.
+  A changed or unavailable required binding remains unresolved. No automatic
+  provider substitution, reconstruction of a live capability from bytes, or
+  implicit migration of old state is permitted.
+- An intentionally changed composition is a new revision with a separately
+  admitted state interpretation/migration, not a mutation of the old receipt.
+
+** Recovery correspondence
+
+The independent Durable provider retains the admitted decisions and original
+pending responsibilities. Context reconstruction restores evidence dependencies;
+Session reconstruction retains the original Attempt responsibility. The new
+owner establishes current readiness after reconstruction. Historical readiness
+never replaces this current evidence. The same journal remains shared; there is
+no second Context database or Session registry introduced by the extension.
+
+See [[file:workspace-recovery.org][Workspace recovery]] for the existing concrete recovery case and its
+[[file:workspace-recovery.sysml][SysML model]], now extended with an explicitly proposed Module/Feature structure.
+The diagram examples =dev/d2/examples/durable-feature-composition/= and
+=dev/d2/examples/durable-owner-recovery/= read these existing designs without
+executing their verification cases. =modules/d2= derives explanatory constraints;
+=dev/d2= only drives native SysML rendering and image-bound feedback.
+
+** Recognizing the original composition
+
+Save the admitted composition with the checkpoint.
+On recovery, match that record before interpreting the checkpoint.
+The record identifies the Context extension and its revision, selected Feature
+options, Durable provider and contract version, and checkpoint schema.
+If the matching binding is unavailable, the Attempt stays unresolved until an
+explicit interpretation or migration is admitted.
+
+** Scheme VM host boundary
+
+Scheme owns the policy rules and decision algorithms, including the distinction
+between retained evidence, unresolved effects and permission to resume work.
+The Scheme VM accepts explicit inputs and returns POO decisions and effect
+intents. Rust or Zig hosts may embed the VM through a versioned boundary that
+defines value encoding, host capabilities, and effect results. The host owns
+physical effects and provides their observed outcomes. Recovery uses the
+checkpoint and committed records, with fresh host capabilities.
+
+Compare checkpoint and transaction boundaries with
+[[https://docs.dbos.dev/architecture][DBOS Architecture]] and
+[[https://www.vldb.org/cidrdb/papers/2026/p9-stonebraker.pdf][Consistency and Correctness in Data-Oriented Workflow Systems]].
+[[https://github.com/temporalio/temporal][Temporal]] is the Workflow reference.
+Its [[https://docs.temporal.io/encyclopedia/event-history][Event History]] records workflow events. During replay, recorded Activity
+results reconstruct workflow decisions without reissuing those Activities.
+For this design, compare the boundary between decision reconstruction and live
+effects. Our retained composition also identifies the policy and provider needed
+to interpret a checkpoint. An unresolved external effect still requires
+reconciliation. Workflow can consume Durable while Context and Session retain
+their own responsibilities.
+
+** Extension admission for the Durable consumer
+
+A selected Feature contributes ordinary POO components to a published Module
+extension point. The Module's baseline stays present. The target contract states
+which component/projection is accepted, how it refines the published POO value,
+and which independent provider capabilities it needs. No per-Feature name switch
+is permitted to choose behavior. Options are typed values carried by existing
+Feature selections; absent, explicitly disabled and configured are distinct.
+
+| Concern | Existing owner | Required consumer correspondence |
+|---------+----------------+----------------------------------|
+| Selection and options | =model.ss=, =resolver.ss= | Preserve selected Feature/options and diagnostics |
+| Contributions and precedence | =composition.ss=, ordinary POO role composition | Bind contribution to the Module's admitted extension contract |
+| Provider contract | =capability-model.ss=, =adapter-projection-binding.ss= | Join the admitted Module identity, capability and contract version |
+| Component/projection realization | =domain-case-assembly.ss= and existing projection binding | Keep domain schemas and operations owned by the target Module |
+| Effects and current liveness | Existing explicit runtime handoff and consumer Host | Do not equate composition-plan acceptance with readiness |
+
+For recovery, preserve a source-bound description of the admitted composition:
+Module/Feature identities and revisions, selected options, provider/contract
+bindings and checkpoint interpretation. This is portable semantic data, not a
+serialized live closure or capability. A fresh runtime handoff must establish
+current liveness. A different binding creates a new candidate interpretation;
+it cannot overwrite the historical composition used by an unresolved Attempt.
+The consumer may retain multiple interpretations/questions while binding is
+unresolved. Selection failure and missing runtime evidence remain distinct.
+
+This specifies the required correspondence without inventing an unimplemented
+public constructor, universal callback protocol, extra dependency resolver or
+new extension evaluator. Implementation can complete the existing owner paths
+when the consuming contracts are admitted; the documentation alone supplies no
+runtime acceptance evidence.
+
+** Durable engine configuration and extension
+
+Core's Feature System is part of the Module System. It governs how a Feature
+extends an admitted Module. The Context recovery Feature described above uses
+that mechanism to contribute Context reconstruction and request a Durable
+provider. It belongs to the module composition boundary.
+
+Agentic AI Lab owns the Durable engine's own configuration and extension
+contracts. Engine configuration selects policy values and providers for an
+engine instance. Engine extension supplies a domain operation, such as an
+interpreter for outcome evidence or a rule for effect-specific retry
+eligibility. A Module Feature can contribute such a value when assembling the
+application. Once assembled, the engine evaluates it through its Durable
+contract. An engine policy does not need its own Module Feature identity.
+
+The higher-order composition here is in the engine's decision functions.
+For example, a configured retry decision can use an injected outcome
+interpreter and a rule for safe repetition. Binding compatibility, effect
+completion and retry eligibility retain separate evidence and provenance.
+The original Attempt stays open when evidence needed for dispatch is missing.
+The host retains authority over live effects.
+
+Retain the policy and provider revisions needed to interpret saved engine
+state. Reconstruct historical decisions under the recorded interpretation.
+A new policy can make a new proposal under current evidence and admission.
+Scheme owns these decision functions. Rust or Zig hosts can embed the Scheme
+VM and supply capabilities through the versioned runtime boundary.
+
+** Modeling and implementation boundaries
+
+The existing [[file:workspace-recovery.sysml][SysML model]] identifies the
+Module assembly, POO engine configuration, original Attempt and policy
+consumers. The accompanying
+[[file:workspace-recovery.qnt][Quint model]] expresses evidence arrival,
+binding mismatch, policy proposals, owner takeover and dispatch as independent
+actions. Its finite abstraction models the dispatch decision, not external
+execution or completion. A fresh dispatch requires admitted current authority
+and repeat safety even when a policy proposes retry. This model is authored
+and awaits tool validation.
+
+Lean owns reusable refinement obligations, beginning with the existing
+[[file:../../../../packages/proofs/lean/AgenticAILabProof/PooC4/RecoveryPolicyAuthorization.lean][recovery policy authorization model]].
+The intended connection is that an admitted retry refines a source-bound
+decision receipt, preserves the original operation and Attempt lineage, and
+requires current host authority. An arbitrary policy contribution cannot
+manufacture these witnesses. The Quint safety predicate is a finite model
+obligation. A Lean theorem would establish the corresponding contract for
+all admitted inputs and needs its own refinement argument.
+
+The first Scheme implementation slice is a pure Durable decision over POO
+configuration, retained Attempt, admitted evidence and current authority.
+Outcome interpretation and retry policy produce proposals with provenance.
+The Durable decision checks the common dispatch guards outside those
+extensions and returns a decision value for the existing host handoff.
+Journal writes, worker dispatch and authority minting remain at their
+existing runtime owners.
+
+[[file:../../../../modules/durable/recovery-decision.ss][The first Scheme kernel]]
+returns a pure eligibility decision tied to an Attempt, effect, policy revision
+and evidence cut. Its callers must supply admitted, current snapshots.
+The kernel is a draft for integration and has no live dispatch entry point.
+
+The kernel projects admitted observations for the outcome interpreter and
+supplies the retry policy with the effective outcome, current permission and
+repeat safety. The result keeps the policy proposal separate from eligibility.
+
+The Lean projection reads the admitted input independently of the output:
+
+| Scheme input or result | Lean representation |
+|------------------------+---------------------|
+| Attempt, effect, configuration revision and evidence cut | DurableDecisionScope, compared at host handoff |
+| Exact true binding, permission and repeat-safety flags | DurableEvidence Boolean fields |
+| A nonempty admitted observation list and normalized recorded outcome | hasObservations and recordedOutcome |
+| Normalized interpreter return and exact true retry callback return | DurablePolicyReturns, arbitrary across all invocations |
+| Output identity, basis, recorded and effective outcomes, proposal and eligibility | DurableDecision, checked by SchemeDurableDecisionRefines |
+
+When a callback is skipped, use unknown for its interpretation and false for
+its retry return. Outcome symbols outside succeeded and failed project to
+unknown. Encode identifiers consistently across input, output and current
+host scope. The proof abstracts from the encoding and the provenance of
+admitted facts. The executable Lean checker =checkSchemeDurableProjection= compares the
+projected result with =durableDecision=. Its soundness theorem yields the
+refinement premise used by the guard and redispatch proofs.
+
+The host redispatch relation additionally requires the current scope,
+a capability for the original Attempt and effect, and a single-use
+capability step. The success veto and the two guard obligations carry
+through that relation. The proof covers the projected kernel and host
+contract. Runtime witness admission and Gerbil evaluation are assumptions
+of the projection, and the Scheme kernel has no live dispatch integration.
+
+Quint separates an eligible decision from capability admission and
+redispatch. Evidence changes invalidate both the prior proposal and the
+current-cut capability in the model. Its host state is an abstraction of
+capability admission and consumption, with no external effect execution.
+
+For the workspace recovery case, =just emit-durable-recovery-projection= emits a Lean
+module from the Scheme execution. Elaborate the emitted module with the
+existing =RecoveryPolicyAuthorization= import available. The declaration
+=doc19Projection= checks the actual output against the independently
+emitted input and observed callback results. =doc19RemainsOpen= records
+the positive proposal and withheld eligibility. This checks one concrete
+execution and instantiates the general proof for that projection. It does
+not authenticate the evidence snapshot or provide a host capability.
+
+The Lean host cut identifies the admitted scope, current authority and
+decision receipt digest. A capability for the same effect and Attempt
+must also match that authority and exact receipt before consumption.
+Constructing the host cut from admitted journal and authority state is
+a runtime obligation.

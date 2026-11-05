@@ -1283,11 +1283,11 @@
       "source": "python/tests/test_conversation.py",
       "sourceSha256": "ed8f0f34401fecbe1b3529143e4ab6ca773a3c543210e615cff8aeefd179f3f3",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_native_conversation.py"
+        "packages/python-runtime/tests/assessment/test_runtime_conversation.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_native_conversation.py": "feeb59170a99cff0f99938c97fd5bc5e1e35442c889b2dc5d3725f758714f26a"
+        "packages/python-runtime/tests/assessment/test_runtime_conversation.py": "feeb59170a99cff0f99938c97fd5bc5e1e35442c889b2dc5d3725f758714f26a"
       }
     },
     {
@@ -1305,110 +1305,110 @@
       "source": "python/tests/test_interaction_feedback.py",
       "sourceSha256": "1a2963a5d4fe40b09168429adfa20006f3ee579d53169b537f61d27c0a0905a1",
       "targets": [
-        "packages/python-runtime/tests/assessment/test_native_interaction_feedback.py"
+        "packages/python-runtime/tests/assessment/test_runtime_interaction_feedback.py"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "packages/python-runtime/tests/assessment/test_native_interaction_feedback.py": "cc94e6758bcb90df6ecb8735e947dd7e543e2ec74b187944aa68a197caf17dbe"
+        "packages/python-runtime/tests/assessment/test_runtime_interaction_feedback.py": "cc94e6758bcb90df6ecb8735e947dd7e543e2ec74b187944aa68a197caf17dbe"
       }
     },
     {
       "source": "rust/ascent-python/src/api/computational.rs",
       "sourceSha256": "16664138cada4c04f11a184e44f9402c4e0f4ec57870e9c8a7b008eae839642b",
       "targets": [
-        "modules/evidence-assessment/native/src/python/computational.rs"
+        "modules/evidence-assessment/runtime/src/python/computational.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/python/computational.rs": "776bdf74970e7cc9fde40ef9eaa6613bd8ab86ec3c890ea40e2cc470f36d1ea9"
+        "modules/evidence-assessment/runtime/src/python/computational.rs": "776bdf74970e7cc9fde40ef9eaa6613bd8ab86ec3c890ea40e2cc470f36d1ea9"
       }
     },
     {
       "source": "rust/ascent-python/src/api/conversation.rs",
       "sourceSha256": "f86de1eb8a404ac1b96122c5fd1a1800acb6fa14981697e307376019c8364cad",
       "targets": [
-        "modules/evidence-assessment/native/src/python/conversation.rs"
+        "modules/evidence-assessment/runtime/src/python/conversation.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/python/conversation.rs": "ec08ef56a34323bd30664149d47b9015adf8e440e5c55f293fe10ddcaa6a329c"
+        "modules/evidence-assessment/runtime/src/python/conversation.rs": "ec08ef56a34323bd30664149d47b9015adf8e440e5c55f293fe10ddcaa6a329c"
       }
     },
     {
       "source": "rust/ascent-python/src/api/derivations.rs",
       "sourceSha256": "355cca2997468f731cbe1e22cfbf478cfebdc7f395402ac9c3eb1711ac17c679",
       "targets": [
-        "modules/evidence-assessment/native/src/python/derivations.rs"
+        "modules/evidence-assessment/runtime/src/python/derivations.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/python/derivations.rs": "242a7c361ffc50376233e55b8e4c730233144267bdb196ba58ddb39941df43f5"
+        "modules/evidence-assessment/runtime/src/python/derivations.rs": "242a7c361ffc50376233e55b8e4c730233144267bdb196ba58ddb39941df43f5"
       }
     },
     {
       "source": "rust/ascent-python/src/api/domain.rs",
       "sourceSha256": "04c17214cbec0646dceff883d998f3c25c8c3c4b261009fef6a077a24d41c1da",
       "targets": [
-        "modules/evidence-assessment/native/src/python/domain.rs"
+        "modules/evidence-assessment/runtime/src/python/domain.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/python/domain.rs": "25a97ffa24bd61d8544e6c2cdde838fecc94d59858d7e713e10de226b8f661e8"
+        "modules/evidence-assessment/runtime/src/python/domain.rs": "25a97ffa24bd61d8544e6c2cdde838fecc94d59858d7e713e10de226b8f661e8"
       }
     },
     {
       "source": "rust/ascent-python/src/api/evidence_conversation.rs",
       "sourceSha256": "1832049578c24319b464519b8362eae7532f3ac2e75753a66f62d06c419d0baf",
       "targets": [
-        "modules/evidence-assessment/native/src/python/evidence_conversation.rs"
+        "modules/evidence-assessment/runtime/src/python/evidence_conversation.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/python/evidence_conversation.rs": "3cacbeb94ee96656a2372cc97fa531e5ed5aec5d4d3dc40b18d2c97a2ebd2539"
+        "modules/evidence-assessment/runtime/src/python/evidence_conversation.rs": "3cacbeb94ee96656a2372cc97fa531e5ed5aec5d4d3dc40b18d2c97a2ebd2539"
       }
     },
     {
       "source": "rust/ascent-python/src/api/interaction.rs",
       "sourceSha256": "781a5ff8a01ea6ecda871a1ea28f47c87822f753d7a1290c525d2512949f5d53",
       "targets": [
-        "modules/evidence-assessment/native/src/python/interaction.rs"
+        "modules/evidence-assessment/runtime/src/python/interaction.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/python/interaction.rs": "c91da69bcacb30113b328492afc435ff49ab8b1662b2e18111793b19a98f62c3"
+        "modules/evidence-assessment/runtime/src/python/interaction.rs": "c91da69bcacb30113b328492afc435ff49ab8b1662b2e18111793b19a98f62c3"
       }
     },
     {
       "source": "rust/ascent-python/src/api/review.rs",
       "sourceSha256": "9812b5195a2392783dca2360a0534b96cad56897ecb2469d637546d04f558b35",
       "targets": [
-        "modules/evidence-assessment/native/src/python/review.rs"
+        "modules/evidence-assessment/runtime/src/python/review.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/python/review.rs": "50c580bda1f5785d8a01dca7fef86fbf0b15af49b122077297e324c4bdecb4c8"
+        "modules/evidence-assessment/runtime/src/python/review.rs": "50c580bda1f5785d8a01dca7fef86fbf0b15af49b122077297e324c4bdecb4c8"
       }
     },
     {
       "source": "rust/ascent-python/src/api/trajectory.rs",
       "sourceSha256": "ed1cc5b06c825907dd12becd8b8bf28654e80c3fafa7e747a54be152d6def413",
       "targets": [
-        "modules/evidence-assessment/native/src/python/trajectory.rs"
+        "modules/evidence-assessment/runtime/src/python/trajectory.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/python/trajectory.rs": "2bc819f910d6ea2c018a1cfa042563e58e41e8fd25b9a390e58f5a7bb4ed8f97"
+        "modules/evidence-assessment/runtime/src/python/trajectory.rs": "2bc819f910d6ea2c018a1cfa042563e58e41e8fd25b9a390e58f5a7bb4ed8f97"
       }
     },
     {
       "source": "rust/ascent-python/src/rust_clues.rs",
       "sourceSha256": "7150ed8615ec3938e5da215749dba461bf6707caf14defbc484a16a97c144310",
       "targets": [
-        "modules/evidence-assessment/native/src/python/clues.rs"
+        "modules/evidence-assessment/runtime/src/python/clues.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/python/clues.rs": "d852502ee4f83bb4566e8e586ccd672462148aa0964827d79510a3c9e6941276"
+        "modules/evidence-assessment/runtime/src/python/clues.rs": "d852502ee4f83bb4566e8e586ccd672462148aa0964827d79510a3c9e6941276"
       }
     },
     {
@@ -1443,726 +1443,726 @@
       "source": "rust/ascent/src/clues/cells.rs",
       "sourceSha256": "fdeb9706514dff2e72c542db57a8700196e22cd0d92ab31d9d8183bc2a2ab001",
       "targets": [
-        "modules/ai-agentic-context/clues/native/cells.rs"
+        "modules/ai-agentic-context/clues/runtime/cells.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/cells.rs": "fdeb9706514dff2e72c542db57a8700196e22cd0d92ab31d9d8183bc2a2ab001"
+        "modules/ai-agentic-context/clues/runtime/cells.rs": "fdeb9706514dff2e72c542db57a8700196e22cd0d92ab31d9d8183bc2a2ab001"
       }
     },
     {
       "source": "rust/ascent/src/clues/deferred.rs",
       "sourceSha256": "725616e9bb1fa5b0dc0b8e11c839bb60b01483576e9e1764e662921c8b2cc30c",
       "targets": [
-        "modules/ai-agentic-context/clues/native/deferred.rs"
+        "modules/ai-agentic-context/clues/runtime/deferred.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/deferred.rs": "5769aac145999f8a037ace976742921f5c32a61d565fc644b7bf2ef849b6f7b1"
+        "modules/ai-agentic-context/clues/runtime/deferred.rs": "5769aac145999f8a037ace976742921f5c32a61d565fc644b7bf2ef849b6f7b1"
       }
     },
     {
       "source": "rust/ascent/src/clues/exchange.rs",
       "sourceSha256": "e1ea8db23cb0487d5105762d78ba59ab9affce5c26acda1da4d9672dbaad12c8",
       "targets": [
-        "modules/ai-agentic-context/clues/native/exchange.rs"
+        "modules/ai-agentic-context/clues/runtime/exchange.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/exchange.rs": "034722ec51b72c307e43f3b5390eff07d44899eaa1c796449a1b3e62711ccc49"
+        "modules/ai-agentic-context/clues/runtime/exchange.rs": "034722ec51b72c307e43f3b5390eff07d44899eaa1c796449a1b3e62711ccc49"
       }
     },
     {
       "source": "rust/ascent/src/clues/family.rs",
       "sourceSha256": "e0a1536e5e1853ad8e4702f382148e1d925504dae1aa816625dec0333b12c26c",
       "targets": [
-        "modules/ai-agentic-context/clues/native/family.rs"
+        "modules/ai-agentic-context/clues/runtime/family.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/family.rs": "e0a1536e5e1853ad8e4702f382148e1d925504dae1aa816625dec0333b12c26c"
+        "modules/ai-agentic-context/clues/runtime/family.rs": "e0a1536e5e1853ad8e4702f382148e1d925504dae1aa816625dec0333b12c26c"
       }
     },
     {
       "source": "rust/ascent/src/clues/hypotheses.rs",
       "sourceSha256": "13e9413b5fee3783af584f9af8fceb56cfb2d8149e348478d429916a4b9ec40e",
       "targets": [
-        "modules/ai-agentic-context/clues/native/hypotheses.rs"
+        "modules/ai-agentic-context/clues/runtime/hypotheses.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/hypotheses.rs": "13e9413b5fee3783af584f9af8fceb56cfb2d8149e348478d429916a4b9ec40e"
+        "modules/ai-agentic-context/clues/runtime/hypotheses.rs": "13e9413b5fee3783af584f9af8fceb56cfb2d8149e348478d429916a4b9ec40e"
       }
     },
     {
       "source": "rust/ascent/src/clues/mod.rs",
       "sourceSha256": "a212de8bf4258dc35741fa81ef517bd9fe95216058d0e26edbb43970737c35fe",
       "targets": [
-        "modules/ai-agentic-context/clues/native/mod.rs"
+        "modules/ai-agentic-context/clues/runtime/mod.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/mod.rs": "a212de8bf4258dc35741fa81ef517bd9fe95216058d0e26edbb43970737c35fe"
+        "modules/ai-agentic-context/clues/runtime/mod.rs": "a212de8bf4258dc35741fa81ef517bd9fe95216058d0e26edbb43970737c35fe"
       }
     },
     {
       "source": "rust/ascent/src/clues/projection.rs",
       "sourceSha256": "00e1895425efc607e5c6520df115a2a88ae7f0d1f84bf62662991100ece76192",
       "targets": [
-        "modules/ai-agentic-context/clues/native/projection.rs"
+        "modules/ai-agentic-context/clues/runtime/projection.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/projection.rs": "00e1895425efc607e5c6520df115a2a88ae7f0d1f84bf62662991100ece76192"
+        "modules/ai-agentic-context/clues/runtime/projection.rs": "00e1895425efc607e5c6520df115a2a88ae7f0d1f84bf62662991100ece76192"
       }
     },
     {
       "source": "rust/ascent/src/clues/request.rs",
       "sourceSha256": "6d0756921c5be246e1b08bdee5ee52ddce659489ce700bff4dd30e33b137ba1f",
       "targets": [
-        "modules/ai-agentic-context/clues/native/request.rs"
+        "modules/ai-agentic-context/clues/runtime/request.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/request.rs": "0f6bc09b76223098a44f7f8d5bfa071ccdd5ac77355bb1c640571d9995df5cb6"
+        "modules/ai-agentic-context/clues/runtime/request.rs": "0f6bc09b76223098a44f7f8d5bfa071ccdd5ac77355bb1c640571d9995df5cb6"
       }
     },
     {
       "source": "rust/ascent/src/clues/slices.rs",
       "sourceSha256": "9c1483f430049b597de9d919b2c11a7879e8a7ae117ce358ab08b63892991d8d",
       "targets": [
-        "modules/ai-agentic-context/clues/native/slices.rs"
+        "modules/ai-agentic-context/clues/runtime/slices.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/slices.rs": "a4f83464d6e81766ee7bc584e6aad970433f19729de7c337ec5b20b7dc76ac98"
+        "modules/ai-agentic-context/clues/runtime/slices.rs": "a4f83464d6e81766ee7bc584e6aad970433f19729de7c337ec5b20b7dc76ac98"
       }
     },
     {
       "source": "rust/ascent/src/computational/lowering.rs",
       "sourceSha256": "8269a5b1a8298f517e1fb59b5c23e9be2f1671ef9ae4867075f47bca6599688a",
       "targets": [
-        "modules/evidence-assessment/native/src/computational/lowering.rs"
+        "modules/evidence-assessment/runtime/src/computational/lowering.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/computational/lowering.rs": "8269a5b1a8298f517e1fb59b5c23e9be2f1671ef9ae4867075f47bca6599688a"
+        "modules/evidence-assessment/runtime/src/computational/lowering.rs": "8269a5b1a8298f517e1fb59b5c23e9be2f1671ef9ae4867075f47bca6599688a"
       }
     },
     {
       "source": "rust/ascent/src/computational/mod.rs",
       "sourceSha256": "c3c6666d876debc1fd982126a55e95644c8b81148c54158ff6890835b75dd835",
       "targets": [
-        "modules/evidence-assessment/native/src/computational/mod.rs"
+        "modules/evidence-assessment/runtime/src/computational/mod.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/computational/mod.rs": "c3c6666d876debc1fd982126a55e95644c8b81148c54158ff6890835b75dd835"
+        "modules/evidence-assessment/runtime/src/computational/mod.rs": "c3c6666d876debc1fd982126a55e95644c8b81148c54158ff6890835b75dd835"
       }
     },
     {
       "source": "rust/ascent/src/computational/observations.rs",
       "sourceSha256": "7289f3b9235ef2a841f3e4f35169ab5926f8015a8c212cc68796e824ea431580",
       "targets": [
-        "modules/evidence-assessment/native/src/computational/observations.rs"
+        "modules/evidence-assessment/runtime/src/computational/observations.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/computational/observations.rs": "7289f3b9235ef2a841f3e4f35169ab5926f8015a8c212cc68796e824ea431580"
+        "modules/evidence-assessment/runtime/src/computational/observations.rs": "7289f3b9235ef2a841f3e4f35169ab5926f8015a8c212cc68796e824ea431580"
       }
     },
     {
       "source": "rust/ascent/src/computational/owner.rs",
       "sourceSha256": "73bf970a772b2a40d162cc02bd94aae2a545f59c315f3f4cae4ca48783b2ead7",
       "targets": [
-        "modules/evidence-assessment/native/src/computational/owner.rs"
+        "modules/evidence-assessment/runtime/src/computational/owner.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/computational/owner.rs": "73bf970a772b2a40d162cc02bd94aae2a545f59c315f3f4cae4ca48783b2ead7"
+        "modules/evidence-assessment/runtime/src/computational/owner.rs": "73bf970a772b2a40d162cc02bd94aae2a545f59c315f3f4cae4ca48783b2ead7"
       }
     },
     {
       "source": "rust/ascent/src/computational/support.rs",
       "sourceSha256": "67310db77ba60631dae7865072bc96645d68fee4177e562d9e996a8a8fa7d35d",
       "targets": [
-        "modules/evidence-assessment/native/src/computational/support.rs"
+        "modules/evidence-assessment/runtime/src/computational/support.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/computational/support.rs": "67310db77ba60631dae7865072bc96645d68fee4177e562d9e996a8a8fa7d35d"
+        "modules/evidence-assessment/runtime/src/computational/support.rs": "67310db77ba60631dae7865072bc96645d68fee4177e562d9e996a8a8fa7d35d"
       }
     },
     {
       "source": "rust/ascent/src/conversation.rs",
       "sourceSha256": "bc93877a143dcb9e6bbced57f1be04edc2f9e3815a3c9c5668b03e2888f892e7",
       "targets": [
-        "modules/evidence-assessment/native/src/conversation.rs"
+        "modules/evidence-assessment/runtime/src/conversation.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/conversation.rs": "bc93877a143dcb9e6bbced57f1be04edc2f9e3815a3c9c5668b03e2888f892e7"
+        "modules/evidence-assessment/runtime/src/conversation.rs": "bc93877a143dcb9e6bbced57f1be04edc2f9e3815a3c9c5668b03e2888f892e7"
       }
     },
     {
       "source": "rust/ascent/src/derivations.rs",
       "sourceSha256": "29b7d9bd73563c93c86350956c7fa3c51ec20cc8dc50e6b15fe69216a3d38797",
       "targets": [
-        "modules/evidence-assessment/native/src/derivations.rs"
+        "modules/evidence-assessment/runtime/src/derivations.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/derivations.rs": "29b7d9bd73563c93c86350956c7fa3c51ec20cc8dc50e6b15fe69216a3d38797"
+        "modules/evidence-assessment/runtime/src/derivations.rs": "29b7d9bd73563c93c86350956c7fa3c51ec20cc8dc50e6b15fe69216a3d38797"
       }
     },
     {
       "source": "rust/ascent/src/domain.rs",
       "sourceSha256": "a107f4ac0b266c95ebeabfaa41197d0ea6978532a6a9a547de6b9aff8acb5292",
       "targets": [
-        "modules/evidence-assessment/native/src/domain.rs"
+        "modules/evidence-assessment/runtime/src/domain.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/domain.rs": "a107f4ac0b266c95ebeabfaa41197d0ea6978532a6a9a547de6b9aff8acb5292"
+        "modules/evidence-assessment/runtime/src/domain.rs": "a107f4ac0b266c95ebeabfaa41197d0ea6978532a6a9a547de6b9aff8acb5292"
       }
     },
     {
       "source": "rust/ascent/src/domain_memory.rs",
       "sourceSha256": "d317198e000fa37259fb0934654b5e46d76a8d0e0bbf84668fd146e676807322",
       "targets": [
-        "modules/evidence-assessment/native/src/domain_memory.rs"
+        "modules/evidence-assessment/runtime/src/domain_memory.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/domain_memory.rs": "7428a6341db7d571c8921577f10d7bad117cdb4f738dcbfd097c5cad22eb596d"
+        "modules/evidence-assessment/runtime/src/domain_memory.rs": "7428a6341db7d571c8921577f10d7bad117cdb4f738dcbfd097c5cad22eb596d"
       }
     },
     {
       "source": "rust/ascent/src/evidence_graph/continuation.rs",
       "sourceSha256": "673fca4597d6b659d51edbab12f006fdac11ac9ec014d2e98aa1ce2904fb0315",
       "targets": [
-        "modules/evidence-assessment/native/src/evidence_graph/continuation.rs"
+        "modules/evidence-assessment/runtime/src/evidence_graph/continuation.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/evidence_graph/continuation.rs": "673fca4597d6b659d51edbab12f006fdac11ac9ec014d2e98aa1ce2904fb0315"
+        "modules/evidence-assessment/runtime/src/evidence_graph/continuation.rs": "673fca4597d6b659d51edbab12f006fdac11ac9ec014d2e98aa1ce2904fb0315"
       }
     },
     {
       "source": "rust/ascent/src/evidence_graph/mod.rs",
       "sourceSha256": "f436262cdd74fc43830772eb4cb3351bccfd6e563e8033872aae6a2bec118833",
       "targets": [
-        "modules/evidence-assessment/native/src/evidence_graph/mod.rs"
+        "modules/evidence-assessment/runtime/src/evidence_graph/mod.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/evidence_graph/mod.rs": "f436262cdd74fc43830772eb4cb3351bccfd6e563e8033872aae6a2bec118833"
+        "modules/evidence-assessment/runtime/src/evidence_graph/mod.rs": "f436262cdd74fc43830772eb4cb3351bccfd6e563e8033872aae6a2bec118833"
       }
     },
     {
       "source": "rust/ascent/src/evidence_graph/reuse.rs",
       "sourceSha256": "170c1b2188dad973e6e668e81c65fc70b04e18b55c68afe1b02c89a0318f20f3",
       "targets": [
-        "modules/evidence-assessment/native/src/evidence_graph/reuse.rs"
+        "modules/evidence-assessment/runtime/src/evidence_graph/reuse.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/evidence_graph/reuse.rs": "170c1b2188dad973e6e668e81c65fc70b04e18b55c68afe1b02c89a0318f20f3"
+        "modules/evidence-assessment/runtime/src/evidence_graph/reuse.rs": "170c1b2188dad973e6e668e81c65fc70b04e18b55c68afe1b02c89a0318f20f3"
       }
     },
     {
       "source": "rust/ascent/src/evidence_graph/slice.rs",
       "sourceSha256": "31a257ca4937a2f504616f4530e86ce447af511b94c5d8ef7fa31e67ba287bfc",
       "targets": [
-        "modules/evidence-assessment/native/src/evidence_graph/slice.rs"
+        "modules/evidence-assessment/runtime/src/evidence_graph/slice.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/evidence_graph/slice.rs": "757d29c589264fe1b93dbcc396536486fee4ea2b72eb824a9264891e6516b8a9"
+        "modules/evidence-assessment/runtime/src/evidence_graph/slice.rs": "757d29c589264fe1b93dbcc396536486fee4ea2b72eb824a9264891e6516b8a9"
       }
     },
     {
       "source": "rust/ascent/src/evidence_graph/structure.rs",
       "sourceSha256": "0316cdcd4bedc7df3c2bc6c94b81d7955eb3809970ee0d3cc5824e7769c5dfe7",
       "targets": [
-        "modules/evidence-assessment/native/src/evidence_graph/structure.rs"
+        "modules/evidence-assessment/runtime/src/evidence_graph/structure.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/evidence_graph/structure.rs": "0316cdcd4bedc7df3c2bc6c94b81d7955eb3809970ee0d3cc5824e7769c5dfe7"
+        "modules/evidence-assessment/runtime/src/evidence_graph/structure.rs": "0316cdcd4bedc7df3c2bc6c94b81d7955eb3809970ee0d3cc5824e7769c5dfe7"
       }
     },
     {
       "source": "rust/ascent/src/evidence_store/admission.rs",
       "sourceSha256": "49ffe664d8f42d2250ae1b3585a53a73a57a31440d5cae678a45b9600e0a3e03",
       "targets": [
-        "modules/evidence-assessment/native/src/evidence_store/admission.rs"
+        "modules/evidence-assessment/runtime/src/evidence_store/admission.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/evidence_store/admission.rs": "49ffe664d8f42d2250ae1b3585a53a73a57a31440d5cae678a45b9600e0a3e03"
+        "modules/evidence-assessment/runtime/src/evidence_store/admission.rs": "49ffe664d8f42d2250ae1b3585a53a73a57a31440d5cae678a45b9600e0a3e03"
       }
     },
     {
       "source": "rust/ascent/src/evidence_store/mod.rs",
       "sourceSha256": "eca666c2e2be38320fdf3a32a905bfef8f277fe6dc6c8dd8cc653605c6f1137a",
       "targets": [
-        "modules/evidence-assessment/native/src/evidence_store/mod.rs"
+        "modules/evidence-assessment/runtime/src/evidence_store/mod.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/evidence_store/mod.rs": "eca666c2e2be38320fdf3a32a905bfef8f277fe6dc6c8dd8cc653605c6f1137a"
+        "modules/evidence-assessment/runtime/src/evidence_store/mod.rs": "eca666c2e2be38320fdf3a32a905bfef8f277fe6dc6c8dd8cc653605c6f1137a"
       }
     },
     {
       "source": "rust/ascent/src/evidence_store/owner.rs",
       "sourceSha256": "1b6b611932d777b3899d3cfa0648903d90f156a5e33d87de4e6d9a0e6a678431",
       "targets": [
-        "modules/evidence-assessment/native/src/evidence_store/owner.rs"
+        "modules/evidence-assessment/runtime/src/evidence_store/owner.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/evidence_store/owner.rs": "1b6b611932d777b3899d3cfa0648903d90f156a5e33d87de4e6d9a0e6a678431"
+        "modules/evidence-assessment/runtime/src/evidence_store/owner.rs": "1b6b611932d777b3899d3cfa0648903d90f156a5e33d87de4e6d9a0e6a678431"
       }
     },
     {
       "source": "rust/ascent/src/interaction/feedback.rs",
       "sourceSha256": "d5905bedd86ab82279db5dd1480f5a71edfa819ad90bdaa64961c6cc6a8dd6da",
       "targets": [
-        "modules/ai-agentic-context/interaction/native/feedback.rs"
+        "modules/ai-agentic-context/interaction/runtime/feedback.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/interaction/native/feedback.rs": "d5905bedd86ab82279db5dd1480f5a71edfa819ad90bdaa64961c6cc6a8dd6da"
+        "modules/ai-agentic-context/interaction/runtime/feedback.rs": "d5905bedd86ab82279db5dd1480f5a71edfa819ad90bdaa64961c6cc6a8dd6da"
       }
     },
     {
       "source": "rust/ascent/src/interaction/mod.rs",
       "sourceSha256": "49dbf41be64ce06b64d1dfb0e6ae1cf07dd7b579b595c70e8724e0717faa90ce",
       "targets": [
-        "modules/ai-agentic-context/interaction/native/mod.rs"
+        "modules/ai-agentic-context/interaction/runtime/mod.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/interaction/native/mod.rs": "49dbf41be64ce06b64d1dfb0e6ae1cf07dd7b579b595c70e8724e0717faa90ce"
+        "modules/ai-agentic-context/interaction/runtime/mod.rs": "49dbf41be64ce06b64d1dfb0e6ae1cf07dd7b579b595c70e8724e0717faa90ce"
       }
     },
     {
       "source": "rust/ascent/src/interaction/owner.rs",
       "sourceSha256": "1cfe3b4dfdf08ca5b03b79aa1589909ed9fb2bc9bafe96a1ad3290296017701b",
       "targets": [
-        "modules/ai-agentic-context/interaction/native/owner.rs"
+        "modules/ai-agentic-context/interaction/runtime/owner.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/interaction/native/owner.rs": "1cfe3b4dfdf08ca5b03b79aa1589909ed9fb2bc9bafe96a1ad3290296017701b"
+        "modules/ai-agentic-context/interaction/runtime/owner.rs": "1cfe3b4dfdf08ca5b03b79aa1589909ed9fb2bc9bafe96a1ad3290296017701b"
       }
     },
     {
       "source": "rust/ascent/src/interaction/paths.rs",
       "sourceSha256": "5435ae89943812455e26f474913a7ea6319c34f13ce91500953fd2b544468bae",
       "targets": [
-        "modules/ai-agentic-context/interaction/native/paths.rs"
+        "modules/ai-agentic-context/interaction/runtime/paths.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/interaction/native/paths.rs": "5435ae89943812455e26f474913a7ea6319c34f13ce91500953fd2b544468bae"
+        "modules/ai-agentic-context/interaction/runtime/paths.rs": "5435ae89943812455e26f474913a7ea6319c34f13ce91500953fd2b544468bae"
       }
     },
     {
       "source": "rust/ascent/src/interaction/registry.rs",
       "sourceSha256": "02ee6f70136efc90744a9db49e2942f1789c7982a8483129d12343b33c6c8d34",
       "targets": [
-        "modules/ai-agentic-context/interaction/native/registry.rs"
+        "modules/ai-agentic-context/interaction/runtime/registry.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/interaction/native/registry.rs": "265f69cdaa89971ff38ab201b7ce40625c51798072ef18db05a694a88b6503fe"
+        "modules/ai-agentic-context/interaction/runtime/registry.rs": "265f69cdaa89971ff38ab201b7ce40625c51798072ef18db05a694a88b6503fe"
       }
     },
     {
       "source": "rust/ascent/src/interaction/tools.rs",
       "sourceSha256": "8c36787647feb0ed95de61597266fabb18b4c637d4d4497d93df5a69578c9126",
       "targets": [
-        "modules/ai-agentic-context/interaction/native/tools.rs"
+        "modules/ai-agentic-context/interaction/runtime/tools.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/interaction/native/tools.rs": "8c36787647feb0ed95de61597266fabb18b4c637d4d4497d93df5a69578c9126"
+        "modules/ai-agentic-context/interaction/runtime/tools.rs": "8c36787647feb0ed95de61597266fabb18b4c637d4d4497d93df5a69578c9126"
       }
     },
     {
       "source": "rust/ascent/src/observations/compact.rs",
       "sourceSha256": "b7e3eb1b4ad7d1d27faccd5030cef0c82e72e65b9e5fe8461c130eb39a84b58f",
       "targets": [
-        "modules/evidence-assessment/native/src/observations/compact.rs"
+        "modules/evidence-assessment/runtime/src/observations/compact.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/observations/compact.rs": "b7e3eb1b4ad7d1d27faccd5030cef0c82e72e65b9e5fe8461c130eb39a84b58f"
+        "modules/evidence-assessment/runtime/src/observations/compact.rs": "b7e3eb1b4ad7d1d27faccd5030cef0c82e72e65b9e5fe8461c130eb39a84b58f"
       }
     },
     {
       "source": "rust/ascent/src/observations/expand.rs",
       "sourceSha256": "079f85e1af267c3d75015e5e7327b72df895e540d2c5cdcac0b094b2d26f5a2c",
       "targets": [
-        "modules/evidence-assessment/native/src/observations/expand.rs"
+        "modules/evidence-assessment/runtime/src/observations/expand.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/observations/expand.rs": "079f85e1af267c3d75015e5e7327b72df895e540d2c5cdcac0b094b2d26f5a2c"
+        "modules/evidence-assessment/runtime/src/observations/expand.rs": "079f85e1af267c3d75015e5e7327b72df895e540d2c5cdcac0b094b2d26f5a2c"
       }
     },
     {
       "source": "rust/ascent/src/observations/mod.rs",
       "sourceSha256": "c26889eda20751019759c290de2480252c63ce35783dbf994ed75f30d999a637",
       "targets": [
-        "modules/evidence-assessment/native/src/observations/mod.rs"
+        "modules/evidence-assessment/runtime/src/observations/mod.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/observations/mod.rs": "c26889eda20751019759c290de2480252c63ce35783dbf994ed75f30d999a637"
+        "modules/evidence-assessment/runtime/src/observations/mod.rs": "c26889eda20751019759c290de2480252c63ce35783dbf994ed75f30d999a637"
       }
     },
     {
       "source": "rust/ascent/src/provider.rs",
       "sourceSha256": "1a373ba95362ceb83b75de7a2d6f8af26b68805206a42d9475fdd2a0cba9aef8",
       "targets": [
-        "modules/evidence-assessment/native/src/provider.rs"
+        "modules/evidence-assessment/runtime/src/provider.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/provider.rs": "1a373ba95362ceb83b75de7a2d6f8af26b68805206a42d9475fdd2a0cba9aef8"
+        "modules/evidence-assessment/runtime/src/provider.rs": "1a373ba95362ceb83b75de7a2d6f8af26b68805206a42d9475fdd2a0cba9aef8"
       }
     },
     {
       "source": "rust/ascent/src/review/mod.rs",
       "sourceSha256": "10a0d083c954206a0a651fb2973911fb69fbbbb5140d8a79bdc72c97a72790ca",
       "targets": [
-        "modules/evidence-assessment/native/src/review/mod.rs"
+        "modules/evidence-assessment/runtime/src/review/mod.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/review/mod.rs": "10a0d083c954206a0a651fb2973911fb69fbbbb5140d8a79bdc72c97a72790ca"
+        "modules/evidence-assessment/runtime/src/review/mod.rs": "10a0d083c954206a0a651fb2973911fb69fbbbb5140d8a79bdc72c97a72790ca"
       }
     },
     {
       "source": "rust/ascent/src/review/owner.rs",
       "sourceSha256": "77ed9c3da069b4423c4c54f8230c9f2f88eb0f180df32b4fe07929cc7a97e098",
       "targets": [
-        "modules/evidence-assessment/native/src/review/owner.rs"
+        "modules/evidence-assessment/runtime/src/review/owner.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/review/owner.rs": "77ed9c3da069b4423c4c54f8230c9f2f88eb0f180df32b4fe07929cc7a97e098"
+        "modules/evidence-assessment/runtime/src/review/owner.rs": "77ed9c3da069b4423c4c54f8230c9f2f88eb0f180df32b4fe07929cc7a97e098"
       }
     },
     {
       "source": "rust/ascent/src/review/policy.rs",
       "sourceSha256": "b53bc1eb7b777ec7eb8e99c8ab3e2619cb0dfbf3ec655a89dacd586196a06a95",
       "targets": [
-        "modules/evidence-assessment/native/src/review/policy.rs"
+        "modules/evidence-assessment/runtime/src/review/policy.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/src/review/policy.rs": "b53bc1eb7b777ec7eb8e99c8ab3e2619cb0dfbf3ec655a89dacd586196a06a95"
+        "modules/evidence-assessment/runtime/src/review/policy.rs": "b53bc1eb7b777ec7eb8e99c8ab3e2619cb0dfbf3ec655a89dacd586196a06a95"
       }
     },
     {
       "source": "rust/ascent/src/trajectory/events.rs",
       "sourceSha256": "3d5c6bddc30b625d86282f00a38468a5f16b7f30d7ebce65796d1ccd8e2c559c",
       "targets": [
-        "modules/temporal-causality/trajectory/native/events.rs"
+        "modules/temporal-causality/trajectory/runtime/events.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/temporal-causality/trajectory/native/events.rs": "4353db601ba8af9e7d3283777a050e8e6030ada92980e33e54a7041427436841"
+        "modules/temporal-causality/trajectory/runtime/events.rs": "4353db601ba8af9e7d3283777a050e8e6030ada92980e33e54a7041427436841"
       }
     },
     {
       "source": "rust/ascent/src/trajectory/exploration.rs",
       "sourceSha256": "181dd90663500e540e5100defa1a2db7410e76aa990586dfd51b321afc479db4",
       "targets": [
-        "modules/temporal-causality/trajectory/native/exploration.rs"
+        "modules/temporal-causality/trajectory/runtime/exploration.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/temporal-causality/trajectory/native/exploration.rs": "9bd18fb8ca25737b7fbceb52c6ad6364ce260d234782e4d1a6a412d13cff1d89"
+        "modules/temporal-causality/trajectory/runtime/exploration.rs": "9bd18fb8ca25737b7fbceb52c6ad6364ce260d234782e4d1a6a412d13cff1d89"
       }
     },
     {
       "source": "rust/ascent/src/trajectory/mod.rs",
       "sourceSha256": "5f96ddcf39af522acea84e2e6db274d8edbe6ebd06b25b0935d50f7cbef93eca",
       "targets": [
-        "modules/temporal-causality/trajectory/native/mod.rs"
+        "modules/temporal-causality/trajectory/runtime/mod.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/temporal-causality/trajectory/native/mod.rs": "5f96ddcf39af522acea84e2e6db274d8edbe6ebd06b25b0935d50f7cbef93eca"
+        "modules/temporal-causality/trajectory/runtime/mod.rs": "5f96ddcf39af522acea84e2e6db274d8edbe6ebd06b25b0935d50f7cbef93eca"
       }
     },
     {
       "source": "rust/ascent/src/trajectory/owner.rs",
       "sourceSha256": "09eef06a17ab8884c09ae011f59c9ece7dab5520e56d9859819323c2dbc61e18",
       "targets": [
-        "modules/temporal-causality/trajectory/native/owner.rs"
+        "modules/temporal-causality/trajectory/runtime/owner.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/temporal-causality/trajectory/native/owner.rs": "1f9a00a1324c75705adad014ee4a537e4ba4db515124b0e3999a8bca2be9812a"
+        "modules/temporal-causality/trajectory/runtime/owner.rs": "1f9a00a1324c75705adad014ee4a537e4ba4db515124b0e3999a8bca2be9812a"
       }
     },
     {
       "source": "rust/ascent/tests/fixtures/evidence/actions.ss",
       "sourceSha256": "cb94f541958ab1fe63cac26753de24d6c6b777f21a920cb55501d8282bd8f276",
       "targets": [
-        "modules/evidence-assessment/native/tests/fixtures/evidence/actions.ss"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/actions.ss"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/fixtures/evidence/actions.ss": "01a1206985da441aafaa674ae9027c8879a40b1ee92290494335d56687ff801c"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/actions.ss": "01a1206985da441aafaa674ae9027c8879a40b1ee92290494335d56687ff801c"
       }
     },
     {
       "source": "rust/ascent/tests/fixtures/evidence/catalog.ss",
       "sourceSha256": "6ff424f6f11e851992388e5af37909313fdd05464ca46c5a55c2932a4201de3a",
       "targets": [
-        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog.ss"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/catalog.ss"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog.ss": "775ca467261de82df5e0a9c87a6570aeb2d88afbb9edb5f66c86a045008d77f2"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/catalog.ss": "775ca467261de82df5e0a9c87a6570aeb2d88afbb9edb5f66c86a045008d77f2"
       }
     },
     {
       "source": "rust/ascent/tests/fixtures/evidence/catalog/observations.ss",
       "sourceSha256": "f3ceabbff8758d09851d3e9589f0ada6b7495e52eecb2f198e6a275c45c2e421",
       "targets": [
-        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/observations.ss"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/catalog/observations.ss"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/observations.ss": "f3ceabbff8758d09851d3e9589f0ada6b7495e52eecb2f198e6a275c45c2e421"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/catalog/observations.ss": "f3ceabbff8758d09851d3e9589f0ada6b7495e52eecb2f198e6a275c45c2e421"
       }
     },
     {
       "source": "rust/ascent/tests/fixtures/evidence/catalog/protocols.ss",
       "sourceSha256": "de79ce09be2c8d2e8ccc74c41eb4128cf55d5f303c3c0c7ca330842ba7731b81",
       "targets": [
-        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/protocols.ss"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/catalog/protocols.ss"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/protocols.ss": "de79ce09be2c8d2e8ccc74c41eb4128cf55d5f303c3c0c7ca330842ba7731b81"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/catalog/protocols.ss": "de79ce09be2c8d2e8ccc74c41eb4128cf55d5f303c3c0c7ca330842ba7731b81"
       }
     },
     {
       "source": "rust/ascent/tests/fixtures/evidence/catalog/reports.ss",
       "sourceSha256": "1e81ecf71e0571ec826445a949e7d3043ee13c29196d773f5b098ce8894cd607",
       "targets": [
-        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/reports.ss"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/catalog/reports.ss"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/fixtures/evidence/catalog/reports.ss": "1e81ecf71e0571ec826445a949e7d3043ee13c29196d773f5b098ce8894cd607"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/catalog/reports.ss": "1e81ecf71e0571ec826445a949e7d3043ee13c29196d773f5b098ce8894cd607"
       }
     },
     {
       "source": "rust/ascent/tests/fixtures/evidence/dependency.ss",
       "sourceSha256": "736e370d86daefaee26176003da13185da55adb518d80be4a5feae324544a0c1",
       "targets": [
-        "modules/evidence-assessment/native/tests/fixtures/evidence/dependency.ss"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/dependency.ss"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/fixtures/evidence/dependency.ss": "736e370d86daefaee26176003da13185da55adb518d80be4a5feae324544a0c1"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/dependency.ss": "736e370d86daefaee26176003da13185da55adb518d80be4a5feae324544a0c1"
       }
     },
     {
       "source": "rust/ascent/tests/fixtures/evidence/history.ss",
       "sourceSha256": "a52b374f567e7d4e2735485fb509931180b52ca88364fac2160be7fda4e7b9e8",
       "targets": [
-        "modules/evidence-assessment/native/tests/fixtures/evidence/history.ss"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/history.ss"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/fixtures/evidence/history.ss": "e188545c5b06ede74f674eb421eb865701d2f9e06cd711c78696f22767e1c0d0"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/history.ss": "e188545c5b06ede74f674eb421eb865701d2f9e06cd711c78696f22767e1c0d0"
       }
     },
     {
       "source": "rust/ascent/tests/fixtures/evidence/investigation.ss",
       "sourceSha256": "948721403430c2f1238d6183a40f04aff3cad3cf8534696ebf469f82a13fee5e",
       "targets": [
-        "modules/evidence-assessment/native/tests/fixtures/evidence/investigation.ss"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/investigation.ss"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/fixtures/evidence/investigation.ss": "d718ca2875b8e2821f2b633c5b01f93d5603420b5e2865d0cbe5a017a97d0a57"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/investigation.ss": "d718ca2875b8e2821f2b633c5b01f93d5603420b5e2865d0cbe5a017a97d0a57"
       }
     },
     {
       "source": "rust/ascent/tests/fixtures/evidence/lifecycle.ss",
       "sourceSha256": "67550c71ffd4162dabf48495d8e8ca3a1c0f033377118cc2bed850d47875c533",
       "targets": [
-        "modules/evidence-assessment/native/tests/fixtures/evidence/lifecycle.ss"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/lifecycle.ss"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/fixtures/evidence/lifecycle.ss": "58105a9bb782f921f2aaea316694fec567414aff8fee757a0389bcba21d45e73"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/lifecycle.ss": "58105a9bb782f921f2aaea316694fec567414aff8fee757a0389bcba21d45e73"
       }
     },
     {
       "source": "rust/ascent/tests/fixtures/evidence/review.ss",
       "sourceSha256": "39720b0719253024809bee0fe3d3b1182a9d35dda39594e265d4f5a6af4587fd",
       "targets": [
-        "modules/evidence-assessment/native/tests/fixtures/evidence/review.ss"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/review.ss"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/fixtures/evidence/review.ss": "e381cb62a0e228d58d43763120b68eb535dcfdf5d2e54b6c47005b8353ce0c1a"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/review.ss": "e381cb62a0e228d58d43763120b68eb535dcfdf5d2e54b6c47005b8353ce0c1a"
       }
     },
     {
       "source": "rust/ascent/tests/fixtures/evidence/review/receipts.ss",
       "sourceSha256": "08c0518f569b9c58296779f7d048bef7ddedf2d913cf7d9360ad36502d280106",
       "targets": [
-        "modules/evidence-assessment/native/tests/fixtures/evidence/review/receipts.ss"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/review/receipts.ss"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/fixtures/evidence/review/receipts.ss": "08c0518f569b9c58296779f7d048bef7ddedf2d913cf7d9360ad36502d280106"
+        "modules/evidence-assessment/runtime/tests/fixtures/evidence/review/receipts.ss": "08c0518f569b9c58296779f7d048bef7ddedf2d913cf7d9360ad36502d280106"
       }
     },
     {
       "source": "rust/ascent/tests/integration/clues/exchange/authority.rs",
       "sourceSha256": "418325c45c9540207c25eb6012577fbf8fbd8b42978ff9dbb7b16267f52ef186",
       "targets": [
-        "modules/evidence-assessment/native/tests/clues/exchange/authority.rs"
+        "modules/evidence-assessment/runtime/tests/clues/exchange/authority.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/clues/exchange/authority.rs": "a930855529b50f6715c04abaf37130b447afbbead8d32cce6ac66907f09974cc"
+        "modules/evidence-assessment/runtime/tests/clues/exchange/authority.rs": "a930855529b50f6715c04abaf37130b447afbbead8d32cce6ac66907f09974cc"
       }
     },
     {
       "source": "rust/ascent/tests/integration/clues/exchange/checkpoint.rs",
       "sourceSha256": "97917825fe716f1cbf328c332170fa342d9cc0a77d49e5c4e46f0e016affc93c",
       "targets": [
-        "modules/evidence-assessment/native/tests/clues/exchange/checkpoint.rs"
+        "modules/evidence-assessment/runtime/tests/clues/exchange/checkpoint.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/clues/exchange/checkpoint.rs": "9ef5be1ac10da4a184e396f8fa8c2d6b2a1272612b76ac05c07c790d8adab5b5"
+        "modules/evidence-assessment/runtime/tests/clues/exchange/checkpoint.rs": "9ef5be1ac10da4a184e396f8fa8c2d6b2a1272612b76ac05c07c790d8adab5b5"
       }
     },
     {
       "source": "rust/ascent/tests/integration/clues/exchange/mod.rs",
       "sourceSha256": "b8d6bda3a9539495e0b6dfd19a5f43ef84d8b2e538eba5a0add822856d3675a1",
       "targets": [
-        "modules/evidence-assessment/native/tests/clues/exchange/mod.rs"
+        "modules/evidence-assessment/runtime/tests/clues/exchange/mod.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/clues/exchange/mod.rs": "b3cd9c768ae27a7e92b5062f7d6ccb44141a906de06102cfa6be03ed41400a38"
+        "modules/evidence-assessment/runtime/tests/clues/exchange/mod.rs": "b3cd9c768ae27a7e92b5062f7d6ccb44141a906de06102cfa6be03ed41400a38"
       }
     },
     {
       "source": "rust/ascent/tests/integration/clues/exchange/slicing.rs",
       "sourceSha256": "c3cdd5a2a416f5e7b4b1c724194d403a7508d993402bb122c47372c0750d683f",
       "targets": [
-        "modules/evidence-assessment/native/tests/clues/exchange/slicing.rs"
+        "modules/evidence-assessment/runtime/tests/clues/exchange/slicing.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/clues/exchange/slicing.rs": "a16822fd9b485d636cdfb370438f38c3e6174cac8e1a3bf171c9f87f619203cb"
+        "modules/evidence-assessment/runtime/tests/clues/exchange/slicing.rs": "a16822fd9b485d636cdfb370438f38c3e6174cac8e1a3bf171c9f87f619203cb"
       }
     },
     {
       "source": "rust/ascent/tests/integration/clues/exchange/support.rs",
       "sourceSha256": "e29ff1af57672949de09db8ef22705bea8ba368b2c583570cfa32826b2fff91f",
       "targets": [
-        "modules/evidence-assessment/native/tests/clues/exchange/support.rs"
+        "modules/evidence-assessment/runtime/tests/clues/exchange/support.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/clues/exchange/support.rs": "219dacacff35ebc4ce19c0e6d19e12d884780c3c5eb457e8bed57446696241ea"
+        "modules/evidence-assessment/runtime/tests/clues/exchange/support.rs": "219dacacff35ebc4ce19c0e6d19e12d884780c3c5eb457e8bed57446696241ea"
       }
     },
     {
       "source": "rust/ascent/tests/integration/clues/mod.rs",
       "sourceSha256": "70753bdaab1a5019b47c76fe606bf88d83e556b5355707f61dee182c481ca302",
       "targets": [
-        "modules/evidence-assessment/native/tests/clues/mod.rs"
+        "modules/evidence-assessment/runtime/tests/clues/mod.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/clues/mod.rs": "70753bdaab1a5019b47c76fe606bf88d83e556b5355707f61dee182c481ca302"
+        "modules/evidence-assessment/runtime/tests/clues/mod.rs": "70753bdaab1a5019b47c76fe606bf88d83e556b5355707f61dee182c481ca302"
       }
     },
     {
       "source": "rust/ascent/tests/integration/clues/requests.rs",
       "sourceSha256": "c0d003ebf6cf79b6769ee88a7165771db07b6633450fdd57690ac15206ecea3d",
       "targets": [
-        "modules/evidence-assessment/native/tests/clues/requests.rs"
+        "modules/evidence-assessment/runtime/tests/clues/requests.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/clues/requests.rs": "61cba68e30252a15e796d84f08ec61a0111e282e79ac15417e6e265802094123"
+        "modules/evidence-assessment/runtime/tests/clues/requests.rs": "61cba68e30252a15e796d84f08ec61a0111e282e79ac15417e6e265802094123"
       }
     },
     {
       "source": "rust/ascent/tests/integration/evidence_checkpoint.rs",
       "sourceSha256": "73c7f609e38eb337592ef0c607bc3ef51d9c6d83ef1d1eaf765b4170b1e1b376",
       "targets": [
-        "modules/evidence-assessment/native/tests/evidence_checkpoint.rs"
+        "modules/evidence-assessment/runtime/tests/evidence_checkpoint.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/evidence_checkpoint.rs": "00f2dd01b77f37a609f9b23a2a072a4607ead035778d783a21858b3767c6391b"
+        "modules/evidence-assessment/runtime/tests/evidence_checkpoint.rs": "00f2dd01b77f37a609f9b23a2a072a4607ead035778d783a21858b3767c6391b"
       }
     },
     {
       "source": "rust/ascent/tests/integration/interaction.rs",
       "sourceSha256": "47f53de00d5f26cf5699d337315e8d935453f34b78aced666ab4e0e63d03652d",
       "targets": [
-        "modules/evidence-assessment/native/tests/interaction.rs"
+        "modules/evidence-assessment/runtime/tests/interaction.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/interaction.rs": "01bb2efb920f47b724f0d348a4be10dbb9b53047d723266b2cd0d1cb7293f7a4"
+        "modules/evidence-assessment/runtime/tests/interaction.rs": "01bb2efb920f47b724f0d348a4be10dbb9b53047d723266b2cd0d1cb7293f7a4"
       }
     },
     {
       "source": "rust/ascent/tests/integration/workflows.rs",
       "sourceSha256": "1bd7f581a5f1cc0ecec29e341669e8d57ed3b62cc6979429629fdd8968298beb",
       "targets": [
-        "modules/evidence-assessment/native/tests/workflows.rs"
+        "modules/evidence-assessment/runtime/tests/workflows.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/evidence-assessment/native/tests/workflows.rs": "2f4390f177b4d7eccb5f253bb8165f86619277c5d1a21941bf8e9ef92b11ef90"
+        "modules/evidence-assessment/runtime/tests/workflows.rs": "2f4390f177b4d7eccb5f253bb8165f86619277c5d1a21941bf8e9ef92b11ef90"
       }
     },
     {
       "source": "rust/ascent/tests/unit/clues/capacity.rs",
       "sourceSha256": "e58020bb60f8d87e6c5db5cad7ad56e0fb4145cc4cf8e9b4b4bb9eb7c081a0ac",
       "targets": [
-        "modules/ai-agentic-context/clues/native/tests/capacity.rs"
+        "modules/ai-agentic-context/clues/runtime/tests/capacity.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/tests/capacity.rs": "e58020bb60f8d87e6c5db5cad7ad56e0fb4145cc4cf8e9b4b4bb9eb7c081a0ac"
+        "modules/ai-agentic-context/clues/runtime/tests/capacity.rs": "e58020bb60f8d87e6c5db5cad7ad56e0fb4145cc4cf8e9b4b4bb9eb7c081a0ac"
       }
     },
     {
       "source": "rust/ascent/tests/unit/clues/deferred.rs",
       "sourceSha256": "7414d8060063e46158d9359fd5da9354a5e018a2266b92fbf414613c4547bfff",
       "targets": [
-        "modules/ai-agentic-context/clues/native/tests/deferred.rs"
+        "modules/ai-agentic-context/clues/runtime/tests/deferred.rs"
       ],
       "disposition": "moved-to-agentic-ai-lab",
       "targetSha256": {
-        "modules/ai-agentic-context/clues/native/tests/deferred.rs": "7414d8060063e46158d9359fd5da9354a5e018a2266b92fbf414613c4547bfff"
+        "modules/ai-agentic-context/clues/runtime/tests/deferred.rs": "7414d8060063e46158d9359fd5da9354a5e018a2266b92fbf414613c4547bfff"
       }
     },
     {
@@ -3238,7 +3238,7 @@
     {
       "source": "rust/ascent/tests/integration/program_definitions.rs",
       "retained": "generic declaration tests",
-      "moved": "modules/evidence-assessment/native/tests/scenarios.rs",
+      "moved": "modules/evidence-assessment/runtime/tests/scenarios.rs",
       "testCount": 5
     },
     {

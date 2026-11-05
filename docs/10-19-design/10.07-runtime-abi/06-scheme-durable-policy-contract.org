@@ -13,6 +13,67 @@ the durable strategy engine.
 This keeps Agentic AI Lab's durable behavior in one semantic owner while allowing each
 runtime to use the best local execution libraries.
 
+* Host an existing Scheme VM
+
+Use one Durable engine under the existing product module selection.
+The engine owns next-occurrence selection, handoff identity, admission,
+replay and recovery. Scheme and POO define the configuration and
+decision semantics. A runtime host supplies time, durable storage,
+provider calls, cancellation and resource management. Host storage
+implements the engine's conditional commit; the host does not infer
+whether a missing external receipt means success or failure.
+
+The native entrypoint is the [[file:../../../bindings/runtime-c/include/agentic_ai_lab/semantic.h][Semantic C ABI]].
+=semantic= names the application operations exposed across this boundary.
+The VM itself is Gambit/Gerbil. The C host owns VM open, foreign entry,
+result ownership and close. The trusted Context command lane already
+routes to an attached Scheme runtime service. Agenda admission is a
+proposed extension of that service. POO objects stay in the VM; the
+host exchanges bounded inert data and releases ABI-owned result buffers.
+
+The native entry thread and the Scheme Actor owner have different jobs:
+
+| Layer | Responsibility |
+|-------+----------------|
+| Rust or Go host | Run OS-facing work, including blocking provider I/O; queue calls to the VM entry thread. |
+| C host / VM entry thread | Keep open, call and close on the same OS thread. The current native profile is process-global and uses parallelism level 1. |
+| Gerbil Actors / Gambit green threads | Run the Context owner, timer and Session endpoints inside the VM. The Context owner serializes its state transitions and journal commit. The timer posts an observation; Session keeps its own Attempt lifecycle. |
+
+The existing [[file:../10.06-poo-module-system/agentic-ai-context/28-hybrid-runtime.org][hybrid runtime design]] describes the bounded owner ingress.
+The foreign entry thread is a boundary for native callers. Scheme green
+threads are scheduled inside the VM and can make progress cooperatively
+under the single-processor profile. Rust can own the entry thread
+directly; Go can pin the goroutine that owns it to one OS thread.
+Host tasks return provider results to the existing owner path. The
+current native host profile establishes local concurrency; independent
+VM instances and parallel Scheme execution require separate qualification.
+
+** First end-to-end slice: Durable Agenda
+
+Use the [[file:../10.06-poo-module-system/agentic-ai-context/org-durable-declarations.org::#durable-agenda][Org Element Query and registered Action]] as the host integration
+case. The existing Query boundary supplies a typed occurrence and its
+source reference. Scheme decides the next wake through the existing
+clock owner. At a wake or restart the Context Actor rechecks the relevant source, authorization and occurrence
+state before admitting a handoff. The substrate persists the admitted
+decision before releasing its effect. It returns provider evidence
+through the trusted host lane, and Scheme interprets it against the
+frozen decision. Unknown outcomes stay in reconciliation.
+
+The native Agenda slice uses the existing trusted Context command
+lane with the =agentic-ai-lab.agenda-request.v1= schema. =open= binds
+an Org source, journal, fixed timezone offset, registered action name
+and the host's current authorized Element IDs. =refresh= replaces the
+permission snapshot and recalculates the next wake. =take= returns a
+handoff only after the owner rechecks the current selection and commits
+its stable key. A subsequent process supplies current permissions again.
+The bounded projection selects single timed =SCHEDULED= occurrences on
+open headings with stable IDs. Each ID is a one-shot notice in its source.
+
+The Rust qualification driver consumes the handoff with a local file
+sink. It exercises revocation before wake and process restart without
+an external receipt. Go can consume the same trusted command schema
+through the existing C ABI.
+
 * Scheme Responsibility
 
 The Scheme layer owns durable policy families and functional strategy

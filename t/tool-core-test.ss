@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO-native tool specs and policy-catalog validation.
+;;; Boundary: POO tool specs and policy-catalog validation.
 ;;; Invariant: Scheme builds tool handoff receipts only; no tool runtime starts.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)

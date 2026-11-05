@@ -24,7 +24,7 @@ def _runtime_projection_fixture(root: Path) -> Path:
 
 def _source_fixture(root: Path) -> Path:
     source = root / "flow.ss"
-    source.write_text("(user-composition artifact-flow ArtifactProfile)\n", encoding="utf-8")
+    source.write_text("(def artifact-flow (.new Scenario name: 'artifact-flow config: ArtifactProfile))\n", encoding="utf-8")
     return source
 
 
@@ -53,7 +53,7 @@ def test_scheme_projection_loads_adjacent_artifact_without_subprocess(
     def fail_subprocess(*_args: object, **_kwargs: object) -> None:
         raise AssertionError("artifact load should not start Gerbil")
 
-    monkeypatch.setattr(scheme_runner, "_run_with_native_progress", fail_subprocess)
+    monkeypatch.setattr(scheme_runner, "_run_with_runtime_progress", fail_subprocess)
 
     loaded = scheme_load.load_projection_rows(source, cwd=tmp_path, cache=False)
 
@@ -80,7 +80,7 @@ def test_scheme_projection_loads_adjacent_artifact_without_projection_source(
         raise AssertionError("standalone artifact load should not start Gerbil")
 
     monkeypatch.setattr(scheme_load, "find_runtime_projection_source", lambda _cwd: None)
-    monkeypatch.setattr(scheme_runner, "_run_with_native_progress", fail_subprocess)
+    monkeypatch.setattr(scheme_runner, "_run_with_runtime_progress", fail_subprocess)
 
     loaded = scheme_load.load_projection_rows(source, cwd=tmp_path, cache=False)
 
@@ -101,7 +101,7 @@ def test_scheme_projection_ignores_stale_artifact_and_falls_back(
         rows=_projection_rows("stale"),
     )
     source.write_text(
-        "(user-composition changed-artifact-flow ChangedArtifactProfile)\n",
+        "(def changed-artifact-flow (.new Scenario name: 'changed-artifact-flow config: ChangedArtifactProfile))\n",
         encoding="utf-8",
     )
     calls: list[tuple[str, ...]] = []
@@ -121,7 +121,7 @@ def test_scheme_projection_ignores_stale_artifact_and_falls_back(
             stderr="",
         )
 
-    monkeypatch.setattr(scheme_runner, "_run_with_native_progress",
+    monkeypatch.setattr(scheme_runner, "_run_with_runtime_progress",
                         lambda command, workdir: fake_run(command.argv))
 
     loaded = scheme_load.load_projection_rows(source, cwd=tmp_path, cache=False)
@@ -149,7 +149,7 @@ def test_preproject_load_writes_projection_artifact(tmp_path, monkeypatch) -> No
             stderr="",
         )
 
-    monkeypatch.setattr(scheme_runner, "_run_with_native_progress",
+    monkeypatch.setattr(scheme_runner, "_run_with_runtime_progress",
                         lambda command, workdir: fake_run(command.argv))
 
     artifact = scheme_load.preproject_load(source, cwd=tmp_path)

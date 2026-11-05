@@ -7,7 +7,7 @@ from ascent import Engine, EngineError, EXECUTION_BACKEND
 
 class EvidenceWheelTests(unittest.TestCase):
     def setUp(self):
-        self.root = Path(__file__).resolve().parents[4] / "modules/evidence-assessment/native/tests/fixtures/evidence"
+        self.root = Path(__file__).resolve().parents[4] / "modules/evidence-assessment/runtime/tests/fixtures/evidence"
         self.engine = Engine(backend="rust", workers=2)
 
     def tearDown(self):
@@ -128,11 +128,11 @@ class EvidenceWheelTests(unittest.TestCase):
             self.assertEqual(len(rows), 4)
             for row in rows:
                 self.assertIsInstance(row[0], ascent.Value)
-                self.assertEqual(row[0].graph['format'], 'native-value-graph.v1')
+                self.assertEqual(row[0].graph['format'], 'runtime-value-graph.v1')
             result = session.result(receipt)
             self.assertIsInstance(result, ascent.Result)
-            self.assertEqual(result.graph('packed')['format'], 'native-value-graph.v1')
-            self.assertEqual(result.rows('packed')['value']['format'], 'native-value-graph.v1')
+            self.assertEqual(result.graph('packed')['format'], 'runtime-value-graph.v1')
+            self.assertEqual(result.rows('packed')['value']['format'], 'runtime-value-graph.v1')
             result.close()
             with self.assertRaises(ValueError):
                 result.graph('packed')

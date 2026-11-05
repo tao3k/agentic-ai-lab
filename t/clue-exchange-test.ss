@@ -51,7 +51,7 @@
     (test-case "content-bound receipt and progressive question"
       (let* ((admitted #f)
              (verify (lambda (_id digest _source _context)
-               (and (equal? digest admitted) "native-receipt")))
+               (and (equal? digest admitted) "runtime-receipt")))
              (exchange (open-clue-exchange verify context))
              (first (clue "a" "header" "support" "observation" "trace-a"
                           [] '(("gc" "depends-on")))))
@@ -114,11 +114,11 @@
              (live #t)
              (exchange (open-trajectory-clue-exchange owner
                (lambda (_id _digest _source _context)
-                 (and live "native-receipt")) "reviewed-rules"))
+                 (and live "runtime-receipt")) "reviewed-rules"))
              (candidate (hash ("questionIdentity" "header")
                ("scopeIdentity" "header-scope")
                ("operationIdentity" "inspect") ("inputIdentity" "source")
-               ("toolIdentity" "native-trace") ("modelIdentity" "agent"))))
+               ("toolIdentity" "runtime-trace") ("modelIdentity" "agent"))))
         (check-equal? (hash-ref (exchange 'brief) "clueReads")
           ["submit" "query"])
         (check-equal? (hash-ref (exchange 'focus candidate) "comparisons") [])
@@ -127,7 +127,7 @@
             ("sourceIdentity" "source") ("questionIdentity" "header")
             ("scopeIdentity" "header-scope")
             ("operationIdentity" "inspect") ("inputIdentity" "source")
-            ("toolIdentity" "native-trace") ("modelIdentity" "agent")))))
+            ("toolIdentity" "runtime-trace") ("modelIdentity" "agent")))))
         (let (focus (exchange 'focus candidate))
           (check-equal? (length (hash-ref focus "comparisons")) 1)
           (check-equal? (hash-ref (car (hash-ref focus "comparisons"))

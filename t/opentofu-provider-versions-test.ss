@@ -66,7 +66,7 @@
   (assert 'catalog-discovery-does-not-compile-new-resource
     (and (not (.ref/cached parent-resources 'aws_dsql_cluster))
          (not (.ref/cached (.get Child types resources) 'aws_dsql_cluster))))
-  (assert 'distinct-native-contracts (not (eq? parent-contract child-contract)))
+  (assert 'distinct-poo-contracts (not (eq? parent-contract child-contract)))
   (assert 'distinct-contract-identities
     (not (eq? (.get parent-contract identity) (.get child-contract identity))))
   (assert 'this-pair-has-equal-security-group-shapes

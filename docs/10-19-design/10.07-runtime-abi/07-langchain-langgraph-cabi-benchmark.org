@@ -19,7 +19,7 @@ This document records the design intent. The benchmark README is the canonical r
 
 * Scope
 
-The benchmark compares native LangChain/LangGraph/CrewAI orchestration with
+The benchmark compares runtime LangChain/LangGraph/CrewAI orchestration with
 semantically aligned Agentic AI Lab Python executor surfaces. It does not benchmark
 real LLM latency, network tools, database IO, or another language's production
 runtime. The deterministic actions model control-plane costs for realistic AI
@@ -40,7 +40,7 @@ The suite covers:
 
 #+begin_src mermaid
 flowchart LR
-    F["LangChain / LangGraph / CrewAI native orchestration"]
+    F["LangChain / LangGraph / CrewAI runtime orchestration"]
     P["Agentic AI Lab Python executor semantics"]
     A["runtime-v0 C ABI benchmark"]
     R["This semantic comparison record"]
@@ -79,7 +79,7 @@ Key result from the current run:
 - Agentic AI Lab is =691.65x= faster for the deterministic CrewAI sequential case.
 - All current cases completed; the failure table is empty.
 - The benchmark now includes long graph and stream/event consumption, so the honest comparison point is no longer a toy lambda or string append.
-- The honest comparison point for handoff/checkpoint production semantics remains LangGraph native vs the corresponding POO executor shapes; real runtime IO is intentionally outside this project.
+- The honest comparison point for handoff/checkpoint production semantics remains LangGraph runtime vs the corresponding POO executor shapes; real runtime IO is intentionally outside this project.
 
 The generated README contains the full table and should be regenerated after benchmark code or ABI changes.
 

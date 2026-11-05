@@ -15,7 +15,7 @@ surface from the installed runtime v0 header rather than this manifest.
 runtime-language bindings.
 
 It does not replace Scheme-owned policy manifests. Scheme remains the owner of
-POO-native durable policy and runtime envelope semantics. The Python runtime
+POO durable policy and runtime envelope semantics. The Python runtime
 package publishes the ABI surface it consumes and exposes so another runtime
 binding can confirm compatibility before binding concrete backend details.
 
@@ -79,7 +79,7 @@ It rejects:
 - missing developer gates
 
 Other runtime languages do not need to call this Python function directly, but
-their native validator should enforce the same checks before generating FFI or
+their runtime validator should enforce the same checks before generating FFI or
 backend glue.
 
 * Contract gate

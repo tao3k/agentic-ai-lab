@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; ABI-only inert datum projection. Public semantic owners remain POO-native.
+;;; ABI-only inert datum projection. Public semantic owners remain POO.
 (import (only-in :gerbil/core call-with-output-string)
         (only-in :std/text/pregexp pregexp pregexp-match))
 (export scheme-wire-read scheme-wire-write)

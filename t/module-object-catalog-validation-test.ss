@@ -71,14 +71,14 @@
           (check-equal? (length (receipt-ref summary 'field-origins)) 9)
           (check-equal? (length (receipt-ref summary 'validation-phases)) 9)
           (check-equal? (receipt-ref summary 'checkedSignals)
-                        '(native-poo-catalog-validation))
+                        '(poo-catalog-validation))
           (check-equal? (receipt-ref summary 'descriptor-realized?) #f)
           (check-equal? (receipt-ref summary 'runtime-executed) #f))))
 
-    (yuanxu-test-case "pins nono sandbox object binding to native FFI"
+    (yuanxu-test-case "pins nono sandbox object binding to runtime FFI"
       (let ((binding-field
              (yuanxu-module-object-field agentic-ai-lab-nono-sandbox-object
                                            'binding)))
         (check-equal? (not (not binding-field)) #t)
         (check-equal? (yuanxu-module-field-contract-default binding-field)
-                      'native-ffi)))))
+                      'ffi)))))

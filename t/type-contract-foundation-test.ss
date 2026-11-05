@@ -19,7 +19,7 @@
 
 (def type-contract-foundation-test
   (test-suite "project Type and Contract foundation"
-    (yuanxu-test-case "native ancestry rejects lookalike objects"
+    (yuanxu-test-case "runtime ancestry rejects lookalike objects"
       (let ((prototype (.ref NamedContract 'proto)) (contract NamedContract))
         (check-equal? (element? contract (.o (:: @ prototype) name: 'flow)) #t)
         (check-equal? (element? contract (.cc (.mix (.o) prototype) 'name 'flow)) #t)
@@ -87,7 +87,7 @@
              '[Symbol] '(read) #t '() 'context))
         (check-equal? (yuanxu-classification-evidence? evidence) #t)
         (check-equal? (yuanxu-classification-evidence-accepted? evidence) #t)))
-    (yuanxu-test-case "native specialization has one classification decision"
+    (yuanxu-test-case "runtime specialization has one classification decision"
       (let* ((base (yuanxu-predicate-type 'symbol symbol?))
              (refined
               (.cc base '.classify

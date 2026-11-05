@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO-native policy-catalog validation receipts.
+;;; Boundary: POO policy-catalog validation receipts.
 
 (import (only-in :clan/poo/object .o .ref object?)
         :yuanxu/utilities/final-projection-syntax

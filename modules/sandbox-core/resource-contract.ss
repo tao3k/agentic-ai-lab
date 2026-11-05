@@ -477,15 +477,15 @@
 (def (agentic-ai-lab-sandbox-resources-prototype-contract-validation resources)
   (let* ((local-diagnostics
           (agentic-ai-lab-sandbox-resources-prototype-local-diagnostics resources))
-         (native-valid? (null? local-diagnostics)))
+         (runtime-valid? (null? local-diagnostics)))
     (.o kind: agentic-ai-lab-sandbox-resources-prototype-contract-validation-kind
         schema: agentic-ai-lab-sandbox-resources-prototype-contract-validation-schema
         object: 'PooSandboxResourcesPrototype
-        valid: native-valid?
+        valid: runtime-valid?
         diagnostics: local-diagnostics
         checked-signals:
-        '(native-poo-object-shape native-poo-required-slots
-          native-poo-slot-types structured-filesystem-projection
+        '(poo-object-shape poo-required-slots
+          poo-slot-types structured-filesystem-projection
           structured-type-facts lean-fact-contracts)
         type-facts: +agentic-ai-lab-sandbox-resources-prototype-type-facts+
         lean-fact-contracts:

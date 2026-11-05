@@ -6,7 +6,7 @@
   identity: 'services/opentofu
   core:
   (.o requires: (.o Nix: (.o module-id: 'nix contract: NixScopeContract)
-                    JsonSchema: (.o module-id: 'json-schema contract: JsonSchemaScopeContract)
+                    JsonSchema: (.o module-id: 'json-schema publish?: #t)
                     Funflow: (.o module-id: 'funflow contract: FunflowScopeContract))
       scope-contract: OpenTofuScopeContract
       ;; Join this publication's role values once. Reusable prototypes can have

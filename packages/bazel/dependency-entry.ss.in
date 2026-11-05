@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Consumer API roots only. Native imports own closure; std/make owns execution.
+;;; Consumer API roots only. Runtime imports own closure; std/make owns execution.
 (import (only-in :std/source this-source-file)
         (only-in :std/make make)
         (only-in :yuanxu/module-system/building/source-package register-module-build-source!)

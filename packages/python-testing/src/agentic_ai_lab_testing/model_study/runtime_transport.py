@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Compare identical Scheme receipts over a worker and the native byte ABI."""
+"""Compare identical Scheme receipts over a worker and the runtime byte ABI."""
 import argparse
 import hashlib
 import json
@@ -42,8 +42,8 @@ def main():
         worker_cold = time.perf_counter() - started
         started = time.perf_counter()
         runtime = SemanticRuntime(args.library, expected_digest=hashlib.sha256(args.library.read_bytes()).hexdigest())
-        native_cold = time.perf_counter() - started
-        timings = {'worker': [], 'native': []}
+        runtime_cold = time.perf_counter() - started
+        timings = {'worker': [], 'runtime': []}
         try:
             for iteration in range(5):
                 for case_index, case in enumerate(corpus()):
@@ -54,14 +54,14 @@ def main():
                         answer = json.loads(read_line(worker))
                         timings['worker'].append(time.perf_counter() - started)
                         return answer
-                    def native_call():
+                    def runtime_call():
                         started = time.perf_counter(); answer = runtime.call('temporal.solve', case['request'])
-                        timings['native'].append(time.perf_counter() - started)
+                        timings['runtime'].append(time.perf_counter() - started)
                         return answer
                     if (iteration + case_index) % 2:
-                        result = native_call(); baseline = worker_call()
+                        result = runtime_call(); baseline = worker_call()
                     else:
-                        baseline = worker_call(); result = native_call()
+                        baseline = worker_call(); result = runtime_call()
                     assert baseline == result, case['id']
                     sys.stdout.write(f'MATCH {iteration} {case["id"]}\n'); sys.stdout.flush()
         finally:
@@ -72,12 +72,12 @@ def main():
         assert worker.wait(timeout=5) == 0
         report = {'schema': 'agentic-ai-lab.semantic-transport-comparison.v1',
                   'matchedReceipts': 60, 'callOrder': 'alternating-paired', 'workerColdSeconds': worker_cold,
-                  'nativeColdSeconds': native_cold,
-                  'nativeArtifactSha256': hashlib.sha256(args.library.read_bytes()).hexdigest()}
+                  'runtimeColdSeconds': runtime_cold,
+                  'runtimeArtifactSha256': hashlib.sha256(args.library.read_bytes()).hexdigest()}
         for arm, values in timings.items():
             report[arm] = {'p50Seconds': statistics.median(values),
                            'p95Seconds': sorted(values)[56], 'samples': len(values)}
-        report['warmSpeedup'] = report['worker']['p50Seconds'] / report['native']['p50Seconds']
+        report['warmSpeedup'] = report['worker']['p50Seconds'] / report['runtime']['p50Seconds']
         args.output.write_text(json.dumps(report, indent=2) + '\n')
         sys.stdout.write(json.dumps(report) + '\n')
     finally:

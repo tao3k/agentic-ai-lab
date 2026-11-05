@@ -45,7 +45,7 @@
     (measure 'gambit-mailbox-roundtrip 20000
       (lambda (index)
         (thread-send echo index)
-        (require (= (thread-receive 5 'echo-timeout) index) "Native mailbox roundtrip mismatch")))
+        (require (= (thread-receive 5 'echo-timeout) index) "Runtime mailbox roundtrip mismatch")))
     ;; A bounded burst measures scheduler throughput separately from synchronous
     ;; caller handoffs; it changes neither the workload nor any authority state.
     (measure 'gambit-mailbox-burst 1
@@ -54,10 +54,10 @@
           (when (< index 20000) (thread-send echo index) (send (+ index 1))))
         (let receive ((index 0))
           (when (< index 20000)
-            (require (= (thread-receive 5 'burst-timeout) index) "Native mailbox burst mismatch")
+            (require (= (thread-receive 5 'burst-timeout) index) "Runtime mailbox burst mismatch")
             (receive (+ index 1))))))
     (thread-send echo 'stop)
-    (require (eq? (thread-join! echo 2 'join-timeout) 'echo-stopped) "Native echo Actor did not join"))
+    (require (eq? (thread-join! echo 2 'join-timeout) 'echo-stopped) "Runtime echo Actor did not join"))
   (measure 'fresh-reply-channel 20000 (lambda (index) (make-channel 1)))
   (let ((clock (policy-clock-owner
                 (lambda () (values #f (agentic-ai-lab-temporal-support-policy-host)))
@@ -148,7 +148,7 @@
         (lambda (forged)
           (require (rejected? (lambda ()
                      (agentic-ai-lab-ai-agentic-context-org-replay source forged scope)))
-                   "Forged native observation passed Context replay"))
+                   "Forged runtime observation passed Context replay"))
         (list
           (.o (:: @ projection) observation:
             (.o (:: @ observation) source-sha256: "forged-source-cut"))

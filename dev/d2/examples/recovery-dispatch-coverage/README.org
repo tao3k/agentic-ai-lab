@@ -1,0 +1,29 @@
+#+TITLE: Dispatch coverage and an exact replay count
+#+LANGUAGE: en
+
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/workspace-recovery.org::#recovery-dispatch-coverage][recovery design]] owns the inventory, range, identity and admission rules.
+This case supplies declarative scene facts and local object art to the existing
+D2 module. Its comparison depicts evidence cuts, with a withdrawal revision
+and a later exact revision in the illustrated history.
+
+#+begin_src sh
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-dispatch-coverage/case.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/recovery-dispatch-coverage/case.ss --evaluate
+#+end_src
+
+The first image made the missing and filled ranges visible. Its unlabeled
+arrows could suggest a required workflow or immediate admission when logs
+arrive. The first bound reading returned both representation gaps to ASCENT.
+The revised labels identify B's seal and the separate count assessment.
+The second reading found that layout scaling reduced the Replay and Missing
+labels below the reader size target. Those local labels were enlarged while
+retaining the same semantic scene and layout driver.
+
+The final image was read from the dashed B ranges to the sealed ranges and
+the assessed count. The A replay marker persists, and B and v2 remain
+visible in the summary stack. It has 49 visible English
+words and a measured minimum text size of 18.30 px.
+The [[file:../../output/recovery-dispatch-coverage/final-reviewed.json][final ASCENT readback]]
+exited successfully and grounds all three facets against this PNG.
+
+Final PNG SHA-256: =a48bb205942f04797dd8cc33b2a15544c985eac40affcbf8f1f601a5af08469e=.

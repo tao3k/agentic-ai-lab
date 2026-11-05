@@ -11,7 +11,7 @@
 :CUSTOM_ID: llm-library-aim
 :END:
 
-Build two related capabilities: a Scheme-native Datalog Library for
+Build two related capabilities: a Scheme-runtime Datalog Library for
 trusted application code, and an LLM reasoning Library that accepts
 bounded candidate programs and returns checkable observations.  An LLM
 is a caller, not a rule engine.  Use /Agent/ only for a separately
@@ -90,7 +90,7 @@ Separately, =reasoning-receipt-proof= can hold a replayable positive
 derivation DAG when every rule body uses relation atoms and fixed
 =where=/=compute= clauses. The verifier replays scalar operations from
 earlier bindings and accepts no input node for them. The receipt keeps
-complete native rows when this proof is =bounded= or =unsupported=.
+complete runtime rows when this proof is =bounded= or =unsupported=.
 The default ordinary receipt does not run finite stratified proof generation;
 the optional fourth budget requests it. The ground nonmembership certificate
 supports the same fixed clauses when their finite closure fits its bounds.
@@ -99,7 +99,7 @@ A separate [[file:finite-stratified-evidence.org][finite stratified replay]]
 now checks exact relation sets for inspected candidates containing checked
 negation and count/sum/min/max reduction. It independently recomputes the
 finite model and binds a supplied closure to the snapshot, program and
-native answer. This is a full bounded replay, not a general derivation DAG
+runtime answer. This is a full bounded replay, not a general derivation DAG
 or an explanation of why a real-world fact is absent.
 
 A separate [[file:finite-stratified-evidence.org][stratified derivation certificate]] checks founded
@@ -111,7 +111,7 @@ status to the ordinary receipt. The verifier rebinds the receipt to the
 current source and inert proposal, reinspects the candidate and checks the
 proof against a freshly replayed closure. An empty query keeps a verifiable
 finite certificate and an =unsupported= proof status. Budget exhaustion
-leaves native completion intact. General Why-Not semantics remain open.
+leaves runtime completion intact. General Why-Not semantics remain open.
 
 #+NAME: llm-library-evidence-status
 | Claim | Executable evidence | Remaining boundary |
@@ -121,7 +121,7 @@ leaves native completion intact. General Why-Not semantics remain open.
 | Negation and reduction | Opt-in receipt certificate, bounded producer and independent checker for founded nodes and exact groups | No complete lineage or general Why-Not |
 | Model usefulness | Two five-task paired pilots, one typed/founded observation study, and a three-source Scheme pilot in Agentic AI Lab Python Testing | No general benefit, deployed result or causal explanation |
 
-The finite verifier is independent of the native planner and solver, but its
+The finite verifier is independent of the runtime planner and solver, but its
 certificate generator and verifier share the separate replay semantics. The
 new proof checker uses the freshly replayed closure for lower-stratum
 completeness and exact reduction groups. The producer runs this checker
@@ -151,7 +151,7 @@ new generation, and a mutated proposal does not bind to its receipt.
 This is a fixed scripted caller, not evidence that an LLM can discover
 or repair a rule. The [[file:research/agent-inference/2026-logic-ai-screen.org][code-anchored research screen]] separates raw model
 proposals, accepted program meaning and independently checked results;
-the scripted transcript establishes only the native boundary.
+the scripted transcript establishes only the runtime boundary.
 
 * Code map and intended seam
 :PROPERTIES:
@@ -166,7 +166,7 @@ the scripted transcript establishes only the native boundary.
 | =program/evaluate.ss=, =program/session.ss= | Fixed-point results, immutable result snapshots and retained source replacement | The first candidate boundary uses one-shot admission/solve against a copied source snapshot |
 | =candidate/closure.ss= | Bounded binary-closure candidates and one shortest source support | The first candidate boundary implements its own row-labelled graph witness/cut; these remain distinct APIs |
 | =candidate/types.ss=, =candidate/program.ss=, =candidate/reasoning.ss= | Shared bounded data, inert inspection/lowering, snapshot execution and receipts | Keep source authority and general provenance outside the attempt boundary |
-| =candidate/finite-evidence.ss= | Separate exact finite replay and verifier for checked strata | Keep this optional bounded evidence distinct from native completion and general provenance |
+| =candidate/finite-evidence.ss= | Separate exact finite replay and verifier for checked strata | Keep this optional bounded evidence distinct from runtime completion and general provenance |
 | =interface/request.ss= | Inert identity/bound projection for MRR handoff | Keep MRR identity authority separate from the LLM candidate contract |
 
 The public Library boundary should wrap these modules, not replicate
@@ -234,11 +234,11 @@ or benchmark scores to this implementation.
 The following order records the bounded first implementation. Steps 1–5
 have executable evidence for their stated subsets, not for the full
 language inventory. The current public contract and the shared
-native/candidate finite-model gate are in
-[[file:library-acceptance.org][the native Library admission note]].
+runtime/candidate finite-model gate are in
+[[file:library-acceptance.org][the runtime Library admission note]].
 
 1. Settle the first Scheme language design gate and its lowering IR.
-   Write the new grammar, binding/mode rules, operator tiers and native
+   Write the new grammar, binding/mode rules, operator tiers and runtime
    finite-model corpus before rewriting the current syntax module.
 2. Freeze a finite graph corpus and an independent reference closure.
    Include duplicate edges, cycles, a source withdrawal, an undeclared
@@ -263,7 +263,7 @@ native/candidate finite-model gate are in
    scores were 11/15 and 9/15. The v2 old/typed observation choice scores
    were 15/15 in both arms; boundary scores were 9/15 and 12/15. All six
    v2 closed-cut responses still claimed release authority despite the
-   native denial. Agentic AI Lab's Testing Runtime guard withholds that claim;
+   runtime denial. Agentic AI Lab's Testing Runtime guard withholds that claim;
    it does not repair the model. Protocols, individual failures and
    receipts are in the Agentic AI Lab Python Testing documents
    =model-study-baseline-results.org= and =model-study-typed-results.org=
@@ -275,7 +275,7 @@ native/candidate finite-model gate are in
    release authority. A separate nine-call study sent actual Gerbil
    calling-program source and obtained 8/9 valid answer shapes after a
    documented post-hoc syntax correction, but 0/9 exact row sets. It did
-   not send the imported Library implementation or use a native receipt
+   not send the imported Library implementation or use a runtime receipt
    as feedback. Later Scheme-source studies are recorded separately in
    Agentic AI Lab Python Testing. The latest five-call run sent existing pinned
    ASCENT module source, one question per contract, and no answer key.
@@ -325,7 +325,7 @@ does not substitute for the others.
 |-------+-----------------+-----------------+---------------|
 | Relational semantics | ASCENT Scheme direct/fragment/candidate paths; pinned Rust 0.8.0 where the behavior is defined; independent finite model | Complete row sets match after initial solve, alternate-support withdrawal, last-support withdrawal and source replacement; old snapshots stay immutable | The known =eqrel= split-producer Rust 0.8.0 divergence is a discriminator, not behavior to copy into Scheme |
 | Evidence semantics | ASCENT receipt bound to the same snapshot, candidate and budget | =complete= answer, =valid= finite verifier verdict and founded proof verdict are asserted independently; stale generation and changed candidate fail | One support is not all derivations; a complete finite closure does not certify source completeness or intent |
-| Model behavior | Agentic AI Lab Python Testing reads existing ASCENT source and invokes its public boundary; prompts, held-out source cases and expected native results are frozen before calls | Report execution correctness, diagnostic use, receipt-verdict interpretation and unsupported claims per task, with raw responses, budget and hashes | No conclusion about internal cognition, general model benefit or permission to act follows from a small sample |
+| Model behavior | Agentic AI Lab Python Testing reads existing ASCENT source and invokes its public boundary; prompts, held-out source cases and expected runtime results are frozen before calls | Report execution correctness, diagnostic use, receipt-verdict interpretation and unsupported claims per task, with raw responses, budget and hashes | No conclusion about internal cognition, general model benefit or permission to act follows from a small sample |
 
 The [[file:research/scheme-dsl/rule-planning.org][Ascent paper]] and
 [[file:related-work-matrix.org][BYODS comparison]] motivate the Rust oracle
@@ -365,20 +365,20 @@ The approved Agentic AI Lab pair ran four =deepseek-flash= calls at Agentic AI L
 =f2f2315a= and ASCENT =d2b2eb5=, after both exact heads passed CI.
 The immutable preview manifest SHA256 is
 =780f9e96cd466c1f6e07c4d55ecf2d0abc668cb6b45384470165358461ec6283=.
-Candidate self-review and initial-source native feedback each used two
+Candidate self-review and initial-source runtime feedback each used two
 calls with identical first prompts, non-thinking mode, temperature 0,
 maximum 1024 output tokens and zero retries. The two first responses
 were different despite identical requests. Four responses completed and
 were readable; both final candidates were rejected at all four states.
 
 The self arm preserved a flat compute clause, rejected as
-=invalid-computation= at =(clause 8 body 3)=. The native arm initially
+=invalid-computation= at =(clause 8 body 3)=. The runtime arm initially
 used unsupported multiplication; after =unsupported-operator= feedback
 it changed the operator to addition, but its flat where clause still
 failed as =invalid-filter= at =(clause 8 body 4)=. This is an observed
 local change without an admitted final program. It does not establish
 feedback benefit or failure of the qualified evaluator. The raw request,
-response, usage and native receipts are recorded by Agentic AI Lab in
+response, usage and runtime receipts are recorded by Agentic AI Lab in
 =model-study-support-candidates.org= and the external result directory
 =/private/tmp/poo-support-candidate-live-head-f2f2315a/=.
 
@@ -393,20 +393,20 @@ new Scheme program, and the feedback omits held-out source outputs.
 
 The next interface gate should expose accepted inert clause shapes,
 closed operator names/arities and located diagnostics as canonical data
-owned by the native parser, then check that description against actual
+owned by the runtime parser, then check that description against actual
 admission. Reading implementation source alone did not produce admitted
 proposals in this pair. The next finite discriminator should include
 blocked pairs and odd source weights, and require a valid original
 receipt before evaluating stale generation. These remain new design and
 qualification tasks; no additional model calls were authorized or made.
 
-Run native and Rust checks first, then freeze the Agentic AI Lab protocol
+Run runtime and Rust checks first, then freeze the Agentic AI Lab protocol
 against the exact qualified ASCENT head. Python Testing should
 orchestrate real model calls and preserve their results; ASCENT owns
 Scheme programs, reference outputs and qualification. A new paid run
 needs an immutable prompt preview and explicit call budget. The first
 model comparison should distinguish source-only answers from actual
-candidate execution and bounded native feedback on the same task. A
+candidate execution and bounded runtime feedback on the same task. A
 correct-format S-expression alone is not evidence of correct reasoning.
 
 The [[file:temporal-causality-module-design.org][temporal and causal lens]] is
@@ -437,12 +437,12 @@ semantics even when two destinations share a weight. The direct, fragment and
 candidate paths check that model. Three admitted mutants (missing negation,
 missing guard, guard after doubling) must complete, verify finite/founded
 evidence and still disagree with intended output. Rust checks full path,
-allowed, weighted and summary sets and the exact native adapter projection.
+allowed, weighted and summary sets and the exact runtime adapter projection.
 The retained support-withdrawal and valid-old-receipt generation tests remain.
 
 ASCENT also owns two erroneous syntax seeds, projected as inert data through
 =candidate-repair-seed=. Agentic AI Lab's new shared-seed repair protocol gives each
-arm the same contract, task and seed; only one receives initial-source native
+arm the same contract, task and seed; only one receives initial-source runtime
 feedback. Two tasks alternate arm order at one call per arm/task (four calls).
 This measures bounded syntax repair conditional on seeds, not end-to-end
 program generation, verifier interpretation or general feedback benefit.
@@ -452,7 +452,7 @@ completed four-call run recorded below.
 
 The earlier model study's temporary evidence paths are gone. Agentic AI Lab retains
 four original response texts recovered only where bytes match their recorded
-hashes; original JSON, requests, preview and native records remain unavailable.
+hashes; original JSON, requests, preview and runtime records remain unavailable.
 No missing original records are reconstructed. New live runs require durable,
 verified archives for completed and failed runs. This retention correction does
 not change the historical rejected outcomes. Temporal lens work stays separate.
@@ -470,7 +470,7 @@ These are local receipts; current-head remote CI is a separate required gate.
 At qualified ASCENT =cd6f60f= and Agentic AI Lab =0b7a6c52=, the approved final
 manifest =8974b1c55a150a8595f56a2c70f977116db7c428ab09997e098265890b6cb781=
 produced exactly four completed requests, with zero retries. Both self and
-native repaired both supplied syntax-error seeds into the same candidate.
+runtime repaired both supplied syntax-error seeds into the same candidate.
 All four candidates matched all seven independent outputs and verified
 current finite/founded receipts; each valid first receipt was rejected at
 the equal-answer next generation. The durable archive contains 23 verified
@@ -479,7 +479,7 @@ original files (manifest SHA256
 
 Agentic AI Lab's =model-study-shared-seed-repair.org= and committed result inventory
 record request/response IDs, usage, timings, hashes and per-state scores.
-This closes this bounded repair protocol. Native feedback showed no observed
+This closes this bounded repair protocol. Runtime feedback showed no observed
 correctness advantage in these two selected task pairs. General model benefit,
 verdict interpretation, temporal lens qualification, other replication
 families and release/deployment authority remain separate. No calls remain
@@ -503,16 +503,16 @@ POO/MRR source authority bridge or real-world causal semantics is admitted.
 The [[file:temporal-causality-module-design.org][temporal design ledger]] distinguishes this implemented gate from its open
 extensions. Model calls remain separately budgeted; none were made here.
 
-Native temporal receipts now bind all canonical lens/source/root/scope
+Runtime temporal receipts now bind all canonical lens/source/root/scope
 coordinates through their snapshot identity, including equal-output cut or
 window changes. A POO extension cannot relabel an old receipt; solve/verify,
-fork and compare all retain actual native evidence checks. The ninth
+fork and compare all retain actual runtime evidence checks. The ninth
 qualification case tests that binding explicitly. This is content integrity,
 not source-owner authority.
 
 * Next executed gate: bounded point uncertainty
 
-The native temporal lens now accepts closed uncertainty bounds and exposes a
+The runtime temporal lens now accepts closed uncertainty bounds and exposes a
 three-valued window judgment. The same integrated qualification keeps the
 existing graph/cut/knowledge/withdrawal/fork receipt gates and adds independent
 point enumeration plus uncertain parent-order and metadata-binding checks.

@@ -10,7 +10,7 @@
 
 (def opentofu-module-scope-test
   (test-suite "opentofu-module-scope-test"
-    (yuanxu-test-case "module-owned package injection and bounded native admission"
+    (yuanxu-test-case "module-owned package injection and bounded runtime admission"
       (def (assert label value)
         (unless value (error "assertion failed" label))
         (displayln "ASSERT-OK " label) (force-output))

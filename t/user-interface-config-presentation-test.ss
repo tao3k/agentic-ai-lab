@@ -1,3 +1,4 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile? agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-metadata))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -13,7 +14,12 @@
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
+        :clan/poo/object
+        :agentic-ai-lab/modules/sandbox-core/profile
+        :agentic-ai-lab/modules/sandbox-core/profile-interface
+        :agentic-ai-lab/modules/nono-sandbox/config
+        :agentic-ai-lab/modules/nono-sandbox/profile-interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
         :agentic-ai-lab/modules/agent-sandbox/config
         (only-in "../user-interface/custom/my-module/profiles/agent-sandbox-audit"
                  agentic-ai-lab-custom-module-agent-sandbox-audit-module))
@@ -72,7 +78,7 @@
             (last-lineage-step (last-value branch-lineage)))
        (check-equal? visible-flags
                      '((:config
-                        (binding native-ffi)
+                        (binding ffi)
                         (.def (agent/audit-base
                                @
                                nono-sandbox-profile
@@ -179,14 +185,19 @@
        (check-equal? (alist-value 'scope last-lineage-step) 'branch)
        (check-equal? (alist-value 'scope-ref last-lineage-step)
                      "feature/agent-sandbox-audit")
-       (check-equal? (alist-value ':binding internal-flags) 'native-ffi)))
+       (check-equal? (alist-value ':binding internal-flags) 'ffi)))
    (yuanxu-test-case "rejects user-layer derive parents that are not POO profiles"
      (let (not-profile 'not-a-poo-profile)
        (check-equal?
         (presentation-test-error?
          (lambda ()
-           (use-module nono-sandbox
-             (.def (agent/bad-parent @ not-profile)
+           (let ()
+    (.def (agent/bad-parent @ not-profile)
                metadata: => (lambda (super-metadata)
-                              super-metadata)))))
+                              super-metadata))
+    (agentic-ai-lab-product-use-module 'nono-sandbox
+      (agentic-ai-lab-nono-sandbox-config-flags 'ffi (agentic-ai-lab-sandbox-profile-prototypes (agent/bad-parent agent/bad-parent))
+        '((.def (agent/bad-parent @ not-profile)
+               metadata: => (lambda (super-metadata)
+                              super-metadata))))))))
         #t)))))

@@ -9,7 +9,7 @@ from collections.abc import Mapping
 from .common import Subject, _agent_input, _checksum, _classify, _linear_node_names
 from .model import BenchmarkCase
 
-def make_crewai_sequential_crew_native() -> Subject:
+def make_crewai_sequential_crew_runtime() -> Subject:
     from crewai import Agent, Crew, Process, Task
     from crewai.llms.base_llm import BaseLLM
 
@@ -35,4 +35,4 @@ def make_crewai_sequential_crew_native() -> Subject:
     return subject
 
 def cases() -> tuple[BenchmarkCase, ...]:
-    return (BenchmarkCase('crewai-sequential-crew-native', 'crewai-native', 'CrewAI deterministic sequential crew.', ('crew', 'sequential-process', 'agent', 'task-context'), make_crewai_sequential_crew_native, 50),)
+    return (BenchmarkCase('crewai-sequential-crew-runtime', 'crewai-runtime', 'CrewAI deterministic sequential crew.', ('crew', 'sequential-process', 'agent', 'task-context'), make_crewai_sequential_crew_runtime, 50),)

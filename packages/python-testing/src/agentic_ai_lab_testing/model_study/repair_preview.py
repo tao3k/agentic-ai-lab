@@ -10,7 +10,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from .repair_native import SCHEME_SOURCE_DIR, scheme_env
+from .repair_runtime import SCHEME_SOURCE_DIR, scheme_env
 from .runner import source_head
 
 MODEL = "deepseek-flash"
@@ -18,7 +18,7 @@ TASK = "repair_task.ss"
 CONTROLS = ("control_pure", "control_contract")
 
 
-def native_control(script: Path, poo_root: Path, ascent_root: Path,
+def runtime_control(script: Path, poo_root: Path, ascent_root: Path,
                    gerbil_path: Path) -> str:
     result = subprocess.run(
         ["gerbil", "-:max-heap=1G,debug=q", "env", "gxi", str(script)],
@@ -27,19 +27,19 @@ def native_control(script: Path, poo_root: Path, ascent_root: Path,
     )
     lines = [line for line in result.stdout.splitlines() if line.startswith("(")]
     if len(lines) != 1:
-        raise RuntimeError(f"native Scheme control emitted {len(lines)} data lines")
+        raise RuntimeError(f"Scheme control emitted {len(lines)} data lines")
     return lines[0] + "\n"
 
 
 def repair_payload(task: str, candidate: str, receipt: str) -> str:
-    return (task + "\n;;; Native tool feedback; one repair turn only.\n"
+    return (task + "\n;;; Runtime tool feedback; one repair turn only.\n"
             + f"(def prior-candidate '{candidate})\n"
-            + f"(def native-receipt '{receipt})\n"
+            + f"(def runtime-receipt '{receipt})\n"
             + ";;; Return one corrected (candidate ...) datum.\n")
 
 
 def syntax_payload(task: str) -> str:
-    return (task + "\n;;; Native reader rejected the first output's"
+    return (task + "\n;;; Runtime reader rejected the first output's"
             " candidate syntax. Return one (candidate ...) datum.\n")
 
 
@@ -60,7 +60,7 @@ def preview(directory: Path, poo_root: Path, ascent_root: Path,
             control = SCHEME_SOURCE_DIR / f"{name}.ss"
             shutil.copyfile(control, directory / control.name)
             (expected_dir / f"{name}.sexp").write_text(
-                native_control(control, poo_root, ascent_root, gerbil_path),
+                runtime_control(control, poo_root, ascent_root, gerbil_path),
                 encoding="utf-8",
             )
             control_digests.append(
@@ -73,7 +73,7 @@ def preview(directory: Path, poo_root: Path, ascent_root: Path,
     task = source.read_text(encoding="utf-8")
     (directory / "repair-template.ss").write_text(
         repair_payload(task, "<candidate-from-first-call>",
-                       "<native-receipt-from-tool>"), encoding="utf-8",
+                       "<runtime-receipt-from-tool>"), encoding="utf-8",
     )
     (directory / "syntax-template.ss").write_text(
         syntax_payload(task), encoding="utf-8",
@@ -104,7 +104,7 @@ def validate_preview(directory: Path, poo_root: Path, ascent_root: Path,
         raise RuntimeError("preview no longer matches committed source and heads")
     if ((directory / "repair-template.ss").read_text(encoding="utf-8")
             != repair_payload(payload, "<candidate-from-first-call>",
-                              "<native-receipt-from-tool>")
+                              "<runtime-receipt-from-tool>")
             or (directory / "syntax-template.ss").read_text(
                 encoding="utf-8") != syntax_payload(payload)):
         raise RuntimeError("repair preview changed")
@@ -124,7 +124,7 @@ def validate_preview(directory: Path, poo_root: Path, ascent_root: Path,
                     or hashlib.sha256(control).hexdigest() != control_digest
                     or control != (SCHEME_SOURCE_DIR / f"{name}.ss").read_bytes()
                     or (directory / "expected" / f"{name}.sexp").read_text(
-                        encoding="utf-8") != native_control(
+                        encoding="utf-8") != runtime_control(
                             SCHEME_SOURCE_DIR / f"{name}.ss", poo_root,
                             ascent_root, gerbil_path)):
                 raise RuntimeError("control preview changed")

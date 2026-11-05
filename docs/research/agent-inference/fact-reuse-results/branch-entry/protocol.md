@@ -1,12 +1,12 @@
 # Branch-entry Library comparison — frozen before model execution
 
-The existing public `ComputationalEvidence.observe` binding reads native path
+The existing public `ComputationalEvidence.observe` binding reads runtime path
 conclusions at every branch entry. Fact receives the conclusions; Scheme receives
 the same conclusions plus named support nodes. Baseline receives neither. The
 complete task graph, common feasible nonoptimal starting selections and six
 branch constraints stay identical across arms. No anti-repetition instruction,
-synthetic tool call, native optimization answer, or oracle feedback is supplied.
-The native evidence store retains one source-bound proof across sibling branches;
+synthetic tool call, runtime optimization answer, or oracle feedback is supplied.
+The runtime evidence store retains one source-bound proof across sibling branches;
 Python projects evidence and performs the existing consumer experiment only.
 This is finite computational provenance, not consumer authority or temporal trust.
 
@@ -26,7 +26,7 @@ Completed submission after a truncated checkpoint does not mean thinking complet
 A separate retained-trace live transport check must pass before the solver runs.
 Its cost is reported separately, never hidden in the experiment's gains.
 
-All native entry-packet and replay input is charged. Later sibling input may be
+All runtime entry-packet and replay input is charged. Later sibling input may be
 bounded from the previous measured first-input count only when every other
 request/context field matches, with conservative old/new branch byte allowances.
 Actual provider usage must be below every reservation and the trajectory ceiling.
@@ -46,7 +46,7 @@ statistical recall estimate. Failure/empty-thinking coverage is not a zero-repea
 observation. No annotation model is called and no labels depend on solver score.
 
 Report branch coverage, objective quality relative to the common start at matched
-spend checkpoints, native builds/hits, thinking truncations, recovered submissions,
+spend checkpoints, runtime builds/hits, thinking truncations, recovered submissions,
 input/thinking/output costs, chain counts and unresolved annotation coverage.
 An incomplete schedule or partial thinking cannot support a deeper-exploration
 claim by itself. Every failure stays in the denominator and raw archive.

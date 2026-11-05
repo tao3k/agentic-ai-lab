@@ -33,12 +33,12 @@ This ordering matters on macOS. Loading libstore with =dlopen= after Gambit
 initialization runs =Settings::getDefaultExtraPlatforms()=, which invokes
 =arch -arch x86_64 /usr/bin/true=. The recorded abort backtrace goes through
 =Pid::wait=, =runProgram= and the library's global initializer. Gambit's
-SIGCHLD reaper can consume that child first. Early native-library loading
+SIGCHLD reaper can consume that child first. Early runtime-library loading
 avoids that particular initialization race without replacing signal handlers.
 The launcher targets the actual installed =current/bin/gxtest=, because a
 system-interpreter wrapper may discard =DYLD_INSERT_LIBRARIES=.
 
-Preloading itself runs Nix's native initializers, including its platform
+Preloading itself runs Nix's runtime initializers, including its platform
 probe; it is an explicit process-startup action, not inert module discovery.
 The successful qualification does not prove that every Nix feature that
 spawns subprocesses can coexist with Gambit's child reaper. Realization,
@@ -50,7 +50,7 @@ remote builders and arbitrary execution remain separate qualifications.
 - =binding.ss=: explicit functional session and query interface.
 - =qualify.ss=: product preparation and installed-binary bootstrap; Core Ops
   and TestingScript retain execution, failure, source and timeout gates.
-- =tests/flake-cases.ss=: native Flake/CLI comparison, real AWS and Null
+- =tests/flake-cases.ss=: runtime Flake/CLI comparison, real AWS and Null
   Contracts, strict lock/override negatives, receiver and source controls.
 - =tests/cases.ss=: shared real-provider fixture and expression controls.
 - =worker.c= and =session.ss=: retained expression-worker comparison, not the
@@ -66,13 +66,13 @@ just --justfile bindings/nix-c-api/Justfile dependencies
 just --justfile bindings/nix-c-api/Justfile test
 #+end_src
 
-The real product suite has matched =product-native= and =product-cli= modes in
+The real product suite has matched =product-runtime= and =product-cli= modes in
 the same Just entrypoint. Supply the existing real Provider fixture's
 =AGENTIC_AI_LAB_OPENTOFU_FLAKE_ARTIFACT= and =AGENTIC_AI_LAB_NIX_TEST_TOOLS=. These modes use
 pure evaluation and the same startup libraries. The CLI control includes the
 strict root-lock preflight required when an override would enable virtual
-locking. Unsupported native override shapes use that same strict CLI path;
-fallbacks cannot be reported as zero-process native queries.
+locking. Unsupported runtime override shapes use that same strict CLI path;
+fallbacks cannot be reported as zero-process runtime queries.
 
 Preparation and Harness execution retain separate 120-second limits, the
 Harness retains its 60-second idle limit, and Scheme processes have a 2 GiB
@@ -108,7 +108,7 @@ just --justfile bindings/nix-c-api/Justfile test profile
 #+end_src
 
 This uses the same bounded Ops/TestingScript entry, with one real Case. It
-reports native wall/CPU/call counts, first-process lazy force points and three
+reports runtime wall/CPU/call counts, first-process lazy force points and three
 matched AWS-to-Null rounds. Both backends receive the same fresh cache root
 before startup. Impure CLI eval-cache on/off controls create no eval database;
 a pure scalar positive control does create one. A preparation-produced Store
@@ -132,5 +132,5 @@ completed runtime regressions and separate sampling limits.
 The profile additionally demonstrates why unchanged Flake headers alone are
 insufficient: an imported file changes, a warm state retains its old value,
 and a fresh evaluation sees the new one. Full observations still reject before
-the native call. See [[file:../../docs/10-19-design/10.08-config-languages/19-nix-callchain-and-reuse-boundary.org][the actual-call-chain audit]]; product Sources currently
+the runtime call. See [[file:../../docs/10-19-design/10.08-config-languages/19-nix-callchain-and-reuse-boundary.org][the actual-call-chain audit]]; product Sources currently
 use the CLI, and this qualification is not a completed product integration.

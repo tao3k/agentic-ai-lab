@@ -16,7 +16,7 @@
 
 (def opentofu-provider-artifact-test
   (test-suite "opentofu-provider-artifact-test"
-    (yuanxu-test-case "package artifact to native Security Group admission"
+    (yuanxu-test-case "package artifact to runtime Security Group admission"
       (def (assert label value)
         (unless value (error "assertion failed" label))
         (displayln "ASSERT-OK " label) (force-output))

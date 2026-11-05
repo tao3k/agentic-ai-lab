@@ -7,7 +7,7 @@
 #include <string.h>
 
 /* This caller loads the packaged artifact and exercises its actual SDK VM.
- * It replaces no setup/cleanup functions and installs no native Context.
+ * It replaces no setup/cleanup functions and installs no runtime Context.
  * Active Context/Session CAS remains covered by context-c-caller.c. */
 typedef struct {
   int32_t (*open)(void);

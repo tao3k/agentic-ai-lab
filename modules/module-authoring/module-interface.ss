@@ -4,14 +4,14 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Agentic AI Lab identity and default authoring policy for the Core Module Interface.
-;;; Schema indexing, option vocabulary, and native construction live in Core.
+;;; Schema indexing, option vocabulary, and runtime construction live in Core.
 (import (rename-in (only-in :yuanxu/module-system/source/interface
                             yuanxu-module-interface-prototype)
                    (yuanxu-module-interface-prototype ModuleInterface.))
         (only-in :clan/poo/object .o .ref .slot? object?)
         :yuanxu/module-system/config
         (only-in :yuanxu/module-system/authoring/roles
-                 yuanxu-default-module-authoring-profile))
+                 make-default-module-authoring-profile))
 
 (export agentic-ai-lab-modules-kind
         agentic-ai-lab-brand-name
@@ -50,7 +50,7 @@
 
 (def (yuanxu-module-interface interface-id-value schema-object metadata-value
                                 authoring: (authoring-value
-                                            (yuanxu-default-module-authoring-profile)))
+                                            (make-default-module-authoring-profile)))
   (make-module-interface yuanxu-module-interface-prototype
                          interface-id-value schema-object metadata-value
                          authoring-value))

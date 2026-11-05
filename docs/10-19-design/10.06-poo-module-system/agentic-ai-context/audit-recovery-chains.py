@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 HERE = Path(__file__).resolve().parent
-spec = importlib.util.spec_from_file_location("recovery_gate", HERE / "run-native-query-recovery.py")
+spec = importlib.util.spec_from_file_location("recovery_gate", HERE / "run-runtime-query-recovery.py")
 recovery = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(recovery)
 gate = recovery.gate
@@ -62,11 +62,11 @@ def main():
     if set(profiles) != {"pending", "completed", "zero"}:
         raise RuntimeError("The declared three-profile recovery corpus is incomplete")
     result = dict(schema="context.query-recovery.corpus-audit.v1", profiles=profiles,
-                  native_kills=15, final_native_recoveries=3,
+                  runtime_kills=15, final_runtime_recoveries=3,
                   seed_receipt_sha256=seed_digest, audit_sha256=gate.catalog.sha(Path(__file__)),
                   runtime_code_changed=False, exhaustive_os_scheduling=False)
     args.output.write_text(json.dumps(result, indent=2) + "\n")
-    print("PASS: three native recovery profiles; 15 SIGKILLs; fresh current-epoch readiness")
+    print("PASS: three runtime recovery profiles; 15 SIGKILLs; fresh current-epoch readiness")
 
 
 if __name__ == "__main__":

@@ -9,9 +9,9 @@ from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
 
 @pytest.fixture
 def original_proof():
-    path = os.environ.get('AGENTIC_AI_LAB_NATIVE_DERIVATION_ORACLE')
+    path = os.environ.get('AGENTIC_AI_LAB_RUNTIME_DERIVATION_ORACLE')
     if not path:
-        pytest.skip('original Rust/native joint admission oracle must be configured')
+        pytest.skip('original Rust/runtime joint admission oracle must be configured')
     return loads(Path(path).read_text())
 
 def test_actual_original_joint_proof_parity_and_late_correction(runtime, original_proof):
@@ -22,7 +22,7 @@ def test_actual_original_joint_proof_parity_and_late_correction(runtime, origina
     assert admitted['proofAdmitted'] and admitted['mrrRuleEquivalenceVerified'] and admitted['derivationCorrespondenceVerified']
     assert not any(admitted[k] for k in ['sourceAuthenticated', 'selectionAdmitted', 'actionAuthorized', 'durable'])
     task = dict(schema='agentic-ai-lab.temporal-support-request.v1',
-        program=dict(identity='native-proof-support', policy='read-only', complete=True, supports=[admitted['support']]),
+        program=dict(identity='runtime-proof-support', policy='read-only', complete=True, supports=[admitted['support']]),
         journal=deepcopy(request['journal']), asOf=1, validAt=False, budget=128)
     assert runtime.evaluate_temporal_support(task)['conclusions'][0]['status'] == 'supported'
     first = task['journal']['revisions'][0]

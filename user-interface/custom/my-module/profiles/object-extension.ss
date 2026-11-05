@@ -6,7 +6,12 @@
 ;;; Boundary: downstream POO object slot-operator example.
 ;;; Invariant: standalone module; it declares extension data only.
 
-(import :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
+(import :clan/poo/object
+        :agentic-ai-lab/modules/sandbox-core/profile
+        :agentic-ai-lab/modules/sandbox-core/profile-interface
+        :agentic-ai-lab/modules/nono-sandbox/config
+        :agentic-ai-lab/modules/nono-sandbox/profile-interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy)
 
 (export agentic-ai-lab-custom-my-module-object-extension-module)
 
@@ -47,7 +52,7 @@
          (scope . demo)
          (poo-object . objects.nono-sandbox.profile)
          (slot-operators . (override append remove))
-         (authoring-style . native-gerbil-poo))))
+         (authoring-style . runtime-gerbil-poo))))
   (let* ((object-extension-filesystem
           (.o (:: @ readwrite-project-workspace-filesystem)
               mounts: 'declared))
@@ -55,10 +60,18 @@
           (.o (:: @ readwrite-project-workspace-resources)
               filesystem: object-extension-filesystem
               mounts: object-extension-mounts)))
-    (use-module nono-sandbox
-      (.def (agent/poo-object-extension @ nono-sandbox-profile)
+    (let ()
+    (.def (agent/poo-object-extension @ nono-sandbox-profile)
         network: (allowlisted-network "github.com" "crates.io")
         capabilities: object-extension-capabilities
         resources: =>.+ object-extension-resources
         metadata: => (lambda (super-metadata)
-                       (append super-metadata object-extension-metadata)))))))
+                       (append super-metadata object-extension-metadata)))
+    (agentic-ai-lab-product-use-module 'nono-sandbox
+      (agentic-ai-lab-nono-sandbox-config-flags 'ffi (agentic-ai-lab-sandbox-profile-prototypes (agent/poo-object-extension agent/poo-object-extension))
+        '((.def (agent/poo-object-extension @ nono-sandbox-profile)
+        network: (allowlisted-network "github.com" "crates.io")
+        capabilities: object-extension-capabilities
+        resources: =>.+ object-extension-resources
+        metadata: => (lambda (super-metadata)
+                       (append super-metadata object-extension-metadata))))))))))

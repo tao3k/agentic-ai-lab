@@ -33,6 +33,6 @@
                          (lambda (port) (write expected port) (newline port))))
                (observation (observe-prediction expected candidate-path)))
           (hash-put! observation 'case case)
-          (hash-put! observation 'nativeDatum actual)
+          (hash-put! observation 'runtimeDatum actual)
           (displayln (json->string observation)) (force-output))
         (loop)))))

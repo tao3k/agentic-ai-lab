@@ -7,7 +7,7 @@ tree by user direction; the original evidence remains in Git commit
 =:asp-gerbil-scheme/benchmark-api= and emits Scheme receipts.
 
 The historical release run passed both integration tests, 21 differential
-results, and clippy with warnings denied. Native MRR scenario: 0.24s; native
+results, and clippy with warnings denied. Runtime MRR scenario: 0.24s; runtime
 regression: 0.90s. The fixture did not execute a physical MRR Data query.
 Original MRR pin: =3ce31dac2dc58ab780ed06fa88103de501355692=.
 

@@ -9,7 +9,8 @@
         (only-in :clan/poo/mop .defgeneric define-type Type. element?)
         (only-in :std/list/list every))
 
-(export agentic-ai-lab-governance-profile-kind
+(export GovernanceScope
+        agentic-ai-lab-governance-profile-kind
         agentic-ai-lab-governance-source-kind
         agentic-ai-lab-governance-precondition-kind
         agentic-ai-lab-governance-threat-kind
@@ -29,6 +30,13 @@
         agentic-ai-lab-governance-threat-model?
         agentic-ai-lab-governance-assessment?
         agentic-ai-lab-governance-profile?)
+
+(define-type (GovernanceScope @ Type.)
+  identity: 'governance/scope
+  .element?: (lambda (value)
+               (and (object? value)
+                    (.slot? value 'Profile) (object? (.ref value 'Profile))
+                    (.slot? value 'evaluate) (procedure? (.ref value 'evaluate)))))
 
 (def agentic-ai-lab-governance-profile-kind 'agentic-ai-lab.governance-profile)
 (def agentic-ai-lab-governance-source-kind 'agentic-ai-lab.governance-source)

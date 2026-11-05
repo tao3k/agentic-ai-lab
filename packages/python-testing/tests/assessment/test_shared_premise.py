@@ -121,12 +121,12 @@ class BranchEntryTest(unittest.TestCase):
     def test_branch_delta_requires_identical_evidence_and_common_context(self):
         import json
         from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_entry_reservation
-        ctx={'task':'x'*20000,'branch':{'id':0},'nativeEvidence':{'scope':1}}
+        ctx={'task':'x'*20000,'branch':{'id':0},'runtimeEvidence':{'scope':1}}
         old={'model':'m','input':[{'role':'user','content':json.dumps(ctx)}]}
         ctx['branch']={'id':1};new={'model':'m','input':[{'role':'user','content':json.dumps(ctx)}]}
         bound=branch_entry_reservation(new,old,5000,256)
         self.assertLess(bound,6000)
-        ctx['nativeEvidence']['scope']=2;new['input'][0]['content']=json.dumps(ctx)
+        ctx['runtimeEvidence']['scope']=2;new['input'][0]['content']=json.dumps(ctx)
         self.assertGreater(branch_entry_reservation(new,old,5000,256),20000)
 
     def test_non_thinking_submission_contains_exact_visible_trace_without_new_prompt(self):
@@ -161,7 +161,7 @@ class EvidenceProjectionTest(unittest.TestCase):
         encoded['supportNodes'][0][-1].clear()
         self.assertEqual(packet,original)
 
-    def test_heterogeneous_native_fields_are_not_erased(self):
+    def test_heterogeneous_runtime_fields_are_not_erased(self):
         from agentic_ai_lab_runtime.reasoning import compact_observation,expand_observation
         packet={'observations':[{'conclusion':{'status':'unknown'}},{'conclusion':{'status':'verified','atom':['path',0,1]}}]}
         self.assertEqual(expand_observation(compact_observation(packet)),packet)
@@ -170,15 +170,15 @@ class EvidenceProjectionTest(unittest.TestCase):
 class SemanticCoverageTest(unittest.TestCase):
     def test_missing_lines_cannot_be_called_complete(self):
         from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_semantic_validate
-        text='Native path exists.\n\nChoose a resource feasible set.\n'
+        text='Runtime path exists.\n\nChoose a resource feasible set.\n'
         with self.assertRaises(AssertionError):branch_semantic_validate(text,{'lineCategories':['premise_use'],'episodes':[]})
         spans=branch_semantic_validate(text,{'lineCategories':['premise_use','other','optimization'],'episodes':[]})
         self.assertEqual(spans[-1]['span'][1],len(text))
 
 
 class NegativeEvidenceAnnotationTest(unittest.TestCase):
-    def test_native_absence_use_is_not_an_absence_rederivation(self):
-        text='Native evidence marks path(2,0) absent; use that constraint.'
+    def test_runtime_absence_use_is_not_an_absence_rederivation(self):
+        text='Runtime evidence marks path(2,0) absent; use that constraint.'
         item={'quote':text,'occurrence':0,'category':'absent_premise_consumed','atom':['path',2,0],'premises':[]}
         label=shared_validate_label(text,item,shared_tasks()[0],[],[],supplied_absent=[['path',2,0]])
         self.assertTrue(label['negativePremiseConsumed'])
@@ -231,8 +231,8 @@ class SemanticQuoteCoverageTest(unittest.TestCase):
 
     def test_unmatched_text_is_explicitly_unreviewed_not_semantically_covered(self):
         from agentic_ai_lab_testing.assessment_studies.evidence_chain_study import branch_semantic_partition
-        text='unknown prefix. native path(0,2). unknown suffix.'
-        quote='native path(0,2)';start=text.index(quote)
+        text='unknown prefix. runtime path(0,2). unknown suffix.'
+        quote='runtime path(0,2)';start=text.index(quote)
         result=branch_semantic_partition(text,[{'quote':quote,'span':[start,start+len(quote)]}])
         self.assertEqual(sum(x['span'][1]-x['span'][0] for x in result),len(text))
         self.assertEqual([x['category'] for x in result],['unreviewed_semantics','admitted_quote_proposal','unreviewed_semantics'])

@@ -53,7 +53,7 @@ module TemporalPublicationDelivery {
       proposals' = proposals, attempted' = attempted, receipts' = receipts, outbox' = outbox }
   }
   // Before COMMIT, death rolls back. After COMMIT, recovery/replay never revalidate
-  // or emit another delivery. Native rollback is qualified independently in Rust.
+  // or emit another delivery. Runtime rollback is qualified independently in Rust.
   action recover = all { headVersion' = headVersion, sourceGeneration' = sourceGeneration,
     grantActive' = grantActive, now' = now, proposals' = proposals,
     attempted' = attempted, receipts' = receipts, outbox' = outbox, acknowledged' = acknowledged }

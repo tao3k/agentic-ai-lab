@@ -39,7 +39,7 @@
         spec))))
 
 ;;; Validate only the declared PackageSpec boundary.  The ordinary Agentic AI Lab
-;;; package declares its stable public roots so ASP can project their native
+;;; package declares its stable public roots so ASP can project their runtime
 ;;; registry closure before handing the resulting targets to std/make.
 ;;; Observation reports that declaration and never replaces its graph.
 (def (agentic-ai-lab-admit-build-package-spec! package-spec policy)
@@ -54,7 +54,7 @@
       (when (and (pair? roots)
                  (agentic-ai-lab-build-policy-ref policy 'enabled?))
         (yuanxu-write-observation-line!
-         "[agentic-ai-lab] phase=spec-input profile=%a mode=public-entry-modules declared-root-count=%a policy=%a owner=asp-build-api/native-import-closure executor=asp-build-api/std-make"
+         "[agentic-ai-lab] phase=spec-input profile=%a mode=public-entry-modules declared-root-count=%a policy=%a owner=asp-build-api/gerbil-import-closure executor=asp-build-api/std-make"
          (agentic-ai-lab-build-policy-ref policy 'profile)
          (length roots)
          (agentic-ai-lab-build-policy-ref policy 'id))))))
@@ -128,7 +128,7 @@
       ;; This observer does not own std/make's lifetime, so it must not spawn
       ;; an unbounded heartbeat thread.  ASP's scoped projection observer owns
       ;; and terminates its heartbeat with dynamic-wind; this edge records the
-      ;; handoff exactly once and then returns control to the native executor.
+      ;; handoff exactly once and then returns control to the runtime executor.
       (yuanxu-write-observation-line!
        "[agentic-ai-lab] phase=executor-handoff profile=%a boundary=std/make/source-import-currentness-or-compile target-count=%a policy=%a owner=observability/build executor=asp-build-api/std-make"
        (agentic-ai-lab-build-policy-ref policy 'profile)

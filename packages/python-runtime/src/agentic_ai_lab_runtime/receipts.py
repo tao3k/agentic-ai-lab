@@ -4,7 +4,7 @@
 
 """Typed helpers for Agentic AI Lab receipts, including local domain descriptions.
 
-Parsing a receipt does not establish its producer or native execution authority.
+Parsing a receipt does not establish its producer or runtime execution authority.
 """
 
 from __future__ import annotations

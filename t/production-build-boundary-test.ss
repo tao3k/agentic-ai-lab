@@ -5,6 +5,10 @@
         (only-in :std/error Error? Error-message)
         (only-in :gerbil/expander core-import-module expander-context-id)
         (only-in :yuanxu/module-system/building/source-closure for-each-build-module)
+        (only-in :yuanxu/module-system/source/objects
+                 yuanxu-module-source-ref-value yuanxu-module-source-ref-metadata)
+        (only-in :agentic-ai-lab/modules/module-authoring/source-registry
+                 agentic-ai-lab-module-system-source-refs)
         (only-in "../build-spec.ss" agentic-ai-lab-build-spec agentic-ai-lab-public-build-roots)
         (only-in :clan/poo/object .get)
         (only-in "../init.ss" agentic-ai-lab.init.exports))
@@ -19,6 +23,24 @@
       ;; Obtaining the compiler projection remains inert; invoking it belongs
       ;; to the build entry, with the original selected-source admission.
       (check-equal? (procedure? (.get agentic-ai-lab.init.exports std-make-spec)) #t))
+    (test-case "library roots preserve the real front end without bootstrapping application selection"
+      ;; Derive the old query from the REAL publisher, not a copied registry.
+      ;; This test imports it; the production build-spec no longer does.
+      (def front-ends
+        (map yuanxu-module-source-ref-value
+          (filter (lambda (source)
+                    (not (eq? (cdr (assq 'entrypoint-role
+                                        (yuanxu-module-source-ref-metadata source)))
+                              'interface)))
+                  (agentic-ai-lab-module-system-source-refs))))
+      (check-equal? (length front-ends) 1)
+      (check-equal? (take agentic-ai-lab-public-build-roots (length front-ends)) front-ends)
+      (for-each-build-module (core-import-module "build-spec.ss")
+        (lambda (context)
+          (check-equal? (and (memq (expander-context-id context)
+                            '(agentic-ai-lab/modules/module-authoring/source-registry
+                              agentic-ai-lab/modules/module-authoring/module-source-collection
+                              agentic-ai-lab/modules/module-authoring/source-policy)) #t) #f))))
     (test-case "ASP is declared only by the development package"
       (check-equal? (any asp? (dependencies "gerbil.pkg")) #f)
       (check-equal? (length (filter asp? (dependencies "dev/gerbil.pkg"))) 1))
@@ -33,9 +55,9 @@
                      (name (and (symbol? id) (symbol->string id))))
                 (when name
                   (check-equal? (string-prefix? "asp-gerbil-scheme/" name) #f))))))
-        '("testing-api.ss" "build-spec.ss"))
+        '(:yuanxu/observability/testing-case "build-spec.ss"))
       (check-equal? (> visited 0) #t))
-    (test-case "native dependency DFS rejects a development namespace before producing targets"
+    (test-case "runtime dependency DFS rejects a development namespace before producing targets"
       (call-with-temporary-directory "build-boundary-"
         (lambda (directory)
           (def source (path-expand "fixture.ss" directory))

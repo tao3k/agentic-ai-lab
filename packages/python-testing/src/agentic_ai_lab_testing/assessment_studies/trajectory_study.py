@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Fresh relational tasks, independent oracle, actual provider call trajectories.
 
-No server-side output schema. Native evidence is supplied only after an actual
+No server-side output schema. Runtime evidence is supplied only after an actual
 failed model attempt; known repeat answers require no additional model call.
 """
 import argparse
@@ -117,7 +117,7 @@ def extract(raw):
 def run(library,output,live):
     output.mkdir(parents=True,exist_ok=False)
     cases=[task(family,2026101300+family*17+repeat) for repeat in range(2) for family in range(4)]
-    plan={'schema':'ascent.trajectory-study.v1','cases':cases,'arms':['reflection-only','native-evidence'],
+    plan={'schema':'ascent.trajectory-study.v1','cases':cases,'arms':['reflection-only','runtime-evidence'],
           'maxAttempts':3,'maxOutputTokens':131072,'model':'deepseek-flash','effort':'high',
           'primary':'Actual cumulative provider thinking through first independently verified correct answer, including failures and repairs.',
           'sampling':'Eight independent generated cases; arm order alternates; evidence appears only after an actual error.',
@@ -131,8 +131,8 @@ def run(library,output,live):
             # Independently derived closure must agree with actual Scheme execution.
             with EvidenceChain(engine,case['sources']) as preflight:
                 feedback=preflight.query(case['program'])
-                native=sorted(x[0] for x in feedback['result']['relations']['answer'])
-                if native!=case['gold']:raise AssertionError(f'oracle mismatch: {case["case"]}')
+                runtime=sorted(x[0] for x in feedback['result']['relations']['answer'])
+                if runtime!=case['gold']:raise AssertionError(f'oracle mismatch: {case["case"]}')
                 dag=evidence_graph(case['program'])
                 positions={n['id']:i for i,n in enumerate(dag['nodes'])}
                 assert all(positions[e['from']]<positions[e['to']] for e in dag['edges'])
@@ -142,7 +142,7 @@ def run(library,output,live):
             for arm in arms:
                 folder=output/f'{case["case"]}-{arm}';folder.mkdir()
                 trajectory=Trajectory(engine,case['case'],identity(case['sources']))
-                chain=EvidenceChain(engine,case['sources'],trajectory=trajectory) if arm=='native-evidence' else None
+                chain=EvidenceChain(engine,case['sources'],trajectory=trajectory) if arm=='runtime-evidence' else None
                 history=ResponseHistory(case['question']);calls=[];reference=None
                 for attempt in range(1,4):
                     request={'model':plan['model'],'input':history.input(),'reasoning':{'effort':plan['effort']},
@@ -165,7 +165,7 @@ def run(library,output,live):
                     history.append_response(terminal)
                     if chain:
                         feedback=chain.query(case['program']);reference=feedback['resultReference']
-                        history.append_feedback({'instruction':'Reflect on the previous error. Continue using these source-bound native facts.',
+                        history.append_feedback({'instruction':'Reflect on the previous error. Continue using these source-bound runtime facts.',
                                                  'evidence':feedback})
                     else:history.append_feedback({'correct':False,'instruction':'Reflect on the previous error and recompute the complete answer relation, including all joins and scoped negative conditions.'})
                 primary=trajectory.snapshot();repeated=None;invalidation=None

@@ -31,7 +31,7 @@ class SemanticRuntime:
         """Open the optional wheel artifact using its producer digest."""
         import sys
         name = 'libagentic_ai_lab_semantic.dylib' if sys.platform == 'darwin' else 'libagentic_ai_lab_semantic.so'
-        path = Path(__file__).parent / '_native' / 'lib' / name
+        path = Path(__file__).parent / '_runtime' / 'lib' / name
         manifest = wire.loads(Path(str(path) + '.ss').read_text())
         if (manifest.get('schema') != 'agentic-ai-lab.semantic-aot-artifact'
                 or manifest.get('version') != 1):
@@ -42,7 +42,7 @@ class SemanticRuntime:
         path = Path(library).resolve()
         if hashlib.sha256(path.read_bytes()).hexdigest() != expected_digest:
             raise SemanticRuntimeError('semantic artifact digest mismatch', status=6)
-        from ._native._semantic_cffi import ffi, lib
+        from ._runtime._semantic_cffi import ffi, lib
         self._ffi, self._lib = ffi, lib
         self.artifact_digest = expected_digest
         self._lock = threading.Lock()
@@ -72,7 +72,7 @@ class SemanticRuntime:
         return self.call('temporal.fact.content', request)
 
     def compose_context_restrictions(self, request: Mapping[str, Any]) -> dict[str, Any]:
-        """Native restrictive composition of declarations; no IFC grant admission."""
+        """Runtime restrictive composition of declarations; no IFC grant admission."""
         return self.call('context.restriction.compose', request)
 
     def evaluate_declared_context_flow(self, request: Mapping[str, Any]) -> dict[str, Any]:
@@ -80,7 +80,7 @@ class SemanticRuntime:
         return self.call('context.flow.evaluate', request)
 
     def revise_temporal_support(self, request: Mapping[str, Any]) -> dict[str, Any]:
-        """Replay native support cuts and project the reverse claim frontier."""
+        """Replay runtime support cuts and project the reverse claim frontier."""
         return self.call('temporal.support.revise', request)
 
     def select_temporal_claim(self, request: Mapping[str, Any]) -> dict[str, Any]:
@@ -88,7 +88,7 @@ class SemanticRuntime:
         return self.call('temporal.support.claim', request)
 
     def evaluate_temporal_support(self, request: Mapping[str, Any]) -> dict[str, Any]:
-        """Read-only native applicability; does not admit proofs or authorize effects."""
+        """Read-only runtime applicability; does not admit proofs or authorize effects."""
         return self.call('temporal.support.evaluate', request)
 
     def refresh_context_use(self, request: Mapping[str, Any]) -> dict[str, Any]:
@@ -96,7 +96,7 @@ class SemanticRuntime:
         return self._submit('$host.context.use.refresh', request, control=True).result()
 
     def observe_context_use(self, request: Mapping[str, Any]) -> dict[str, Any]:
-        """Observe registered Context scope against native current source and clock."""
+        """Observe registered Context scope against runtime current source and clock."""
         return self.call('context.use.observe', request)
 
     def refresh_temporal_policy(self, request: Mapping[str, Any]) -> dict[str, Any]:
@@ -104,15 +104,15 @@ class SemanticRuntime:
         return self._submit('$host.temporal.policy.refresh', request, control=True).result()
 
     def admit_temporal_derivation(self, request: Mapping[str, Any]) -> dict[str, Any]:
-        """Trusted source-relative native proof/lineage admission, without effect grants."""
+        """Trusted source-relative runtime proof/lineage admission, without effect grants."""
         return self._submit('$host.temporal.derivation.admit', request, control=True).result()
 
     def refresh_temporal_proof_state(self, request: Mapping[str, Any]) -> dict[str, Any]:
-        """Dedicated Host control of the native Library proof registry; no effects."""
+        """Dedicated Host control of the runtime Library proof registry; no effects."""
         return self._submit('$host.temporal.proof.state.refresh', request, control=True).result()
 
     def register_temporal_proof(self, request: Mapping[str, Any]) -> dict[str, Any]:
-        """Dedicated Host control of the native Library proof registry; no effects."""
+        """Dedicated Host control of the runtime Library proof registry; no effects."""
         return self._submit('$host.temporal.proof.register', request, control=True).result()
 
     def current_temporal_proof(self, request: Mapping[str, Any]) -> dict[str, Any]:
@@ -124,7 +124,7 @@ class SemanticRuntime:
         return self.call('temporal.support.guard', request)
 
     def classify_temporal_family(self, task: Mapping[str, Any]) -> dict[str, Any]:
-        """Classify the finite POO hypothesis family in the native Scheme engine."""
+        """Classify the finite POO hypothesis family in the Scheme engine."""
         return self.call('temporal.family.classify', task)
 
     async def aclassify_temporal_family(self, task: Mapping[str, Any]) -> dict[str, Any]:
@@ -169,7 +169,7 @@ class SemanticRuntime:
         return self._submit_host(lambda: self._call(operation.encode(), data, control=control))
 
     def _submit_host(self, callback):
-        """Queue one trusted host operation on the native owner thread."""
+        """Queue one trusted host operation on the runtime owner thread."""
         with self._lock:
             if self._closed:
                 raise SemanticRuntimeError('semantic runtime is closed', status=1)
@@ -205,11 +205,11 @@ class SemanticRuntime:
                 status = self._lib.agentic_ai_lab_python_semantic_call(operation, data, len(data), result)
             if os.environ.get('AGENTIC_AI_LAB_RUNTIME_TRACE') == '1':
                 logging.getLogger(__name__).info(
-                    'NATIVE-COMPLETED %s status=%s', operation.decode('utf-8'), status)
+                    'RUNTIME-COMPLETED %s status=%s', operation.decode('utf-8'), status)
             raw = bytes(self._ffi.buffer(result.data, result.length)) if result.data != self._ffi.NULL else b''
             if status:
                 raise SemanticRuntimeError(raw.decode('utf-8', 'replace') or
-                                           'semantic native call failed', status=status)
+                                           'semantic runtime call failed', status=status)
             decoded = wire.loads(raw)
             if not isinstance(decoded, dict):
                 raise SemanticRuntimeError('invalid semantic result shape', status=6)
@@ -320,7 +320,7 @@ class SemanticRuntime:
 
 @dataclass(frozen=True)
 class _SemanticGraphBinding:
-    """Immutable native plan projection used by the Python scheduler."""
+    """Immutable runtime plan projection used by the Python scheduler."""
     runtime: SemanticRuntime
     payload: str
     digest: str

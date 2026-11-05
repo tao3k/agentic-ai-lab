@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Preview and run one Scheme candidate, native receipt, and repair turn."""
+"""Preview and run one Scheme candidate, runtime receipt, and repair turn."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from pathlib import Path
 from ..ascent.candidate import candidate_text
 from ..ascent.live import key_from_file
 from .protocol import require_clean, require_pinned_ascent
-from .repair_native import NativeTool, control_score, score
+from .repair_runtime import RuntimeTool, control_score, score
 from .repair_preview import (
     CONTROLS, MODEL, TASK, preview, repair_payload, syntax_payload,
     validate_preview,
@@ -59,9 +59,9 @@ def live(directory: Path, output: Path, poo_root: Path, ascent_root: Path,
                     poo_root, ascent_root, gerbil_path,
                 )
             records.append({"case": name, "response_id": response.id,
-                            "status": response.status, "native_score": verdict,
+                            "status": response.status, "runtime_score": verdict,
                             "seconds": round(time.perf_counter() - started, 3)})
-        tool = NativeTool(poo_root, ascent_root, gerbil_path)
+        tool = RuntimeTool(poo_root, ascent_root, gerbil_path)
         try:
             run_repair(tool, client, directory, output, poo_root,
                        ascent_root, gerbil_path, records, payload)
@@ -73,7 +73,7 @@ def live(directory: Path, output: Path, poo_root: Path, ascent_root: Path,
         )
 
 
-def run_repair(tool: NativeTool, client: object, directory: Path, output: Path,
+def run_repair(tool: RuntimeTool, client: object, directory: Path, output: Path,
                poo_root: Path, ascent_root: Path, gerbil_path: Path,
                records: list[dict[str, object]], payload: str) -> None:
     for turn in (1, 2):
@@ -96,16 +96,16 @@ def run_repair(tool: NativeTool, client: object, directory: Path, output: Path,
                     (directory / TASK).read_text(encoding="utf-8"))
             continue
         receipt = tool.attempt(candidate)
-        native_ns = tool.last_native_ns
+        runtime_ns = tool.last_runtime_ns
         receipt_path = output / f"receipt-{turn}.sexp"
         receipt_path.write_text(receipt, encoding="utf-8")
         verdict = score(receipt_path, poo_root, ascent_root, gerbil_path)
         records.append({"case": "repair", "turn": turn,
                         "response_id": response.id,
                         "status": response.status, "syntax": True,
-                        "native_score": verdict,
-                        "native_seconds": round(native_ns / 1e9, 3)
-                        if native_ns is not None else None,
+                        "runtime_score": verdict,
+                        "runtime_seconds": round(runtime_ns / 1e9, 3)
+                        if runtime_ns is not None else None,
                         "seconds": round(time.perf_counter() - started, 3)})
         if verdict == "(score (exact #t))":
             break

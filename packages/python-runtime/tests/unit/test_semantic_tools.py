@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Exercise native read-only tool binding, stale source rejection and async parity."""
+"""Exercise runtime read-only tool binding, stale source rejection and async parity."""
 import asyncio
 from copy import deepcopy
 import json
@@ -16,7 +16,7 @@ def _call(task):
             'call_id': 'actual-call', 'arguments': json.dumps({'datum': wire.dumps(task)})}
 
 
-def test_bound_tool_runs_current_native_owner_and_async(runtime):
+def test_bound_tool_runs_current_runtime_owner_and_async(runtime):
     task = temporal_request()
     call = _call(task)
     result = invoke_temporal_tool(runtime, task, call)

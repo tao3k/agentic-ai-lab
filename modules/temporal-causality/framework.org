@@ -69,7 +69,7 @@ an identity suitable for immutable evidence and replay.
 | Candidate hypothesis | Proposed cause, effect and constraints | Explicit exclusive or overlapping family semantics; temporal consistency does not imply actual causation | =types/objects/funs.ss= executable finite family |
 | Candidate exchange | Exact cut/provider receipt and separate checker assertion | Reviewable requires current, complete, checked required providers; it never grants admission | =candidates/{types,objects,funs}.ss= executable; [[file:candidates/model.org][module-local model]] |
 | Temporal query | Target, assumptions, evidence snapshot and optional operational scope | Resource limits belong to query execution, not model truth | current query supports candidate limit or =#f= for full finite family |
-| Assurance receipt | Classification, frontiers, model/source identity and method | Say what was explored, what remains, and what was assumed | native receipt first slice; Quint correspondence open |
+| Assurance receipt | Classification, frontiers, model/source identity and method | Say what was explored, what remains, and what was assumed | runtime receipt first slice; Quint correspondence open |
 
 The type relations are intentionally partial.  For instants =a= and =b=,
 =compare(a,b)= is =incomparable= if their domains differ without conversion
@@ -413,7 +413,7 @@ The current =packages/proofs/quint/model.org= gives one finite instance, state m
 invariants, liveness assumption and Quint commands.  The general obligations
 are broader:
 
-- *Temporal soundness*: every admitted native comparison follows from
+- *Temporal soundness*: every admitted runtime comparison follows from
   observed coordinates in one domain or validated conversion evidence.
 - *Bounded-time arithmetic*: =AgenticAILabProof.PooC4.TemporalBoundedTime= proves
   that a definite-before or definite-after judgment holds for every coordinate
@@ -438,11 +438,11 @@ are broader:
   implementation refinement proof.
 - *Model/query separation*: changing a checking budget changes only the
   explored frontier and perhaps the answer's certainty, not the model digest.
-- *Source correspondence*: formal instances and native POO values need a
+- *Source correspondence*: formal instances and POO values need a
   named interpretation; a general translation theorem remains open.
-- *Behavior refinement*: a future observable map relates native state changes
+- *Behavior refinement*: a future observable map relates runtime state changes
   to Quint traces, including stutter steps and environment assumptions.
-- *Proof/receipt binding*: Lean theorems, Quint executions and native runtime
+- *Proof/receipt binding*: Lean theorems, Quint executions and runtime
   receipts retain their own identities and scopes.  One is not substituted
   for another.
 
@@ -456,7 +456,7 @@ violating it; parser errors, process crashes and timeouts do not qualify.
 
 =just check-temporal-family-quint= covers the full family, a one-step bound,
 discriminating evidence and the incorrect-necessity mutation. These checks
-are independent of the native POO classifier and its direct Scheme tests.
+are independent of the POO classifier and its direct Scheme tests.
 No general source-to-POO translation or implementation refinement theorem is
 claimed. Such correspondence needs an explicit interpretation over observable
 states, stutter, input assumptions and terminal outcomes.
@@ -485,7 +485,7 @@ accepted design from executable closure and is the delivery-order reference.
    generate or interpret Quint transitions from the semantic model rather than
    exposing a caller-authored =Next= API.
 5. Extend the Quint verification receipt from its staged source-inventory binding
-   to a proved or differentially checked native/Quint projection.  The receipt
+   to a proved or differentially checked runtime/Quint projection.  The receipt
    currently binds Quint's own finite run, not the POO state-transition
    interpretation.
 6. Extend Lean proofs from event/cut facts to generic temporal relations,
@@ -531,7 +531,7 @@ causal trajectory claim.
 The engine also asks a distinct AI-facing question: which evidence was
 found, which was used for each claim, which use has a separate assessment,
 and which downstream artifacts may depend on a changed premise?  The
-[[file:evidence/model.org][Evidence relation model]] owns this POO-native relation layer and
+[[file:evidence/model.org][Evidence relation model]] owns this POO relation layer and
 its finite Quint exploration.  It is shared by short answers, extended
 search, long-running work and autonomous research.  None of those scenario
 names is a public engine type.  Relation reachability gives a potential

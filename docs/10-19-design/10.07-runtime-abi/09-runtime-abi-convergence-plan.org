@@ -9,13 +9,13 @@
 * Objective
 
 Agentic AI Lab Scheme owns policy semantics, durable policy families, and functional
-strategy composition. Runtime languages own scheduling, native concurrency,
+strategy composition. Runtime languages own scheduling, runtime concurrency,
 database drivers, FFI, and process-level performance.
 
 The runtime ABI must therefore expose a small, stable, high-performance
 surface:
 
-- Scheme emits POO-native policy/runtime manifests.
+- Scheme emits POO policy/runtime manifests.
 - Runtime packages consume those manifests through typed adapters.
 - Runtime languages bind adapter-level APIs first, not backend internals.
 - Build and test gates report where time is spent before changing policy or
@@ -76,7 +76,7 @@ Non-Python bindings can read the same carrier through the console script
 =agentic-ai-lab-runtime-abi-surface=.
 
 Python validates this carrier with =coerce_runtime_abi_surface_manifest=. Other
-runtime bindings should implement the same checks natively: schema identity,
+runtime bindings should implement the same checks runtimely: schema identity,
 owner identity, runtime role, required entrypoints, durable facade methods,
 Scheme manifest schemas, receipt schemas, and developer gates.
 

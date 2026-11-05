@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Benchmark native LangChain/LangGraph flows against Agentic AI Lab runtime surfaces.
+"""Benchmark runtime LangChain/LangGraph flows against Agentic AI Lab runtime surfaces.
 
 The benchmark intentionally avoids real LLM/network calls. It measures framework
 orchestration, graph execution, runtime handoff, and C ABI materialization costs

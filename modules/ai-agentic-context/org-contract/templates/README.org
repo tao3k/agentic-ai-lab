@@ -32,7 +32,7 @@ Template placeholders do not constitute an admitted runtime binding.
 Author ordinary Query values with AgenticAILabQuery and the existing GQL POO AST.
 The initial Provider supports the existing bounded single-node GQL Scheme
 slice over property-bearing Org Elements. Context Session tasks additionally
-require document roots or open headline anchors accepted by the existing native
+require document roots or open headline anchors accepted by the existing runtime
 Context profile. Unsupported paths, incomplete results and unbound source cuts
 are refused. GQL, Org Contract, ASCENT proof, authority and Session are distinct
 contracts; none is a substitute for the others.

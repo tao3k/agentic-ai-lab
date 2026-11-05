@@ -15,7 +15,7 @@ from agentic_ai_lab_proof.generated.proof_case_vector import (
     FIELD_OFFSETS,
     VECTOR_SIZE,
 )
-from agentic_ai_lab_proof.proof_case_runtime import NativeProofCaseRuntime
+from agentic_ai_lab_proof.proof_case_runtime import RuntimeProofCaseRuntime
 
 
 def percentile(samples: list[int], numerator: int) -> int:
@@ -34,7 +34,7 @@ def main() -> None:
         raise ValueError("iterations and max-batch must be positive")
 
     canonical = bytes.fromhex(args.vector.read_text(encoding="ascii"))
-    runtime = NativeProofCaseRuntime(args.library)
+    runtime = RuntimeProofCaseRuntime(args.library)
     warmup = bytearray(VECTOR_SIZE)
     runtime.validate_and_write(canonical, warmup)
 

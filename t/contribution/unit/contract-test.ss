@@ -29,7 +29,7 @@
                           (list (.o (:: @ sample) core-contract: 'future))
                           '(test-read)) 'reasons)
                     '(incompatible-core-contract)))
-    (yuanxu-test-case "native composition keeps explicit Profile payloads"
+    (yuanxu-test-case "runtime composition keeps explicit Profile payloads"
       (let* ((profile (.o identity: 'sample-contribution payload: sample))
              (selection (compose profiles profile)))
         (check-equal? (eq? (.ref (car (.ref selection 'profiles)) 'payload)

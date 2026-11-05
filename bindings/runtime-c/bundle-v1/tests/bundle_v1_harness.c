@@ -292,7 +292,7 @@ int main(void) {
     return 1;
   }
   printf("schema=agentic-ai-lab.bundle-v1.harness.1\n");
-  printf("layout=typed-native-regions\n");
+  printf("layout=typed-runtime-regions\n");
   printf("lookup=binary-search\n");
   printf("payload-zero-copy=true\n");
   printf("arena-lifetime=reference-counted\n");

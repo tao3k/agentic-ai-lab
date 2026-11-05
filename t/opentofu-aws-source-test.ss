@@ -23,7 +23,7 @@
 
 (def opentofu-aws-source-test
   (test-suite "opentofu-aws-source-test"
-    (yuanxu-test-case "real pinned AWS source, Schema and native collection admission"
+    (yuanxu-test-case "real pinned AWS source, Schema and runtime collection admission"
       (def (assert label value)
         (unless value (error "assertion failed" label))
         (displayln "ASSERT-OK " label) (force-output))
@@ -170,7 +170,7 @@
           (.o resource: (.o aws_iam_group_membership: (.call aws .authority 'aws_iam_group_membership)))))
       (def config `((resource . ((aws_iam_group_membership . ((example . ,value)))))))
       (assert 'final-configuration-admitted (accepted? (.call Config .admit config #f)))
-      ;; Native source checks remain live after an earlier admission.
+      ;; Runtime source checks remain live after an earlier admission.
       (def active-read read-source)
       (def live-aws (agentic-ai-lab-opentofu-aws-provider selection lock (lambda (id) (active-read id))))
       (def Live (.call live-aws .contract 'aws_iam_group_membership))

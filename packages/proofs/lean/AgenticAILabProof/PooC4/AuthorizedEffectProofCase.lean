@@ -338,7 +338,7 @@ def authorizedEffectTheoremSetPayload : List UInt8 :=
 noncomputable section
 
 /-- Trusted SHA-256 primitive. Executable runtimes discharge this boundary
-    through their native digest provider and differential gates. -/
+    through their runtime digest provider and differential gates. -/
 opaque sha256Digest (payload : List UInt8) : Digest32
 
 def proofVectorDigest (vector : ProofCaseVector) : Digest32 :=

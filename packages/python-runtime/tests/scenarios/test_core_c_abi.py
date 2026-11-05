@@ -89,13 +89,13 @@ class CoreCAbiTests(unittest.TestCase):
             result = owner.run()
             answer = result.value()
             self.assertTrue(answer["complete"])
-            native = owner.diagnose().value()
+            runtime = owner.diagnose().value()
             again = owner.diagnose().value()
-            self.assertEqual(native, again)
-            self.assertTrue(native["enabled"])
+            self.assertEqual(runtime, again)
+            self.assertTrue(runtime["enabled"])
             for phase in ("open.rayonPool", "open.dslReadAndLower", "run.coreSnapshot",
                           "run.objectGraphAndPacket", "abi.outputEncode"):
-                self.assertGreaterEqual(native["timingsNanoseconds"][phase], 0)
+                self.assertGreaterEqual(runtime["timingsNanoseconds"][phase], 0)
             host = result.diagnose()["timingsNanoseconds"]
             self.assertIn("host.decodeOwned", host)
             self.assertIn("host.pythonProjection", host)
@@ -108,7 +108,7 @@ class CoreCAbiTests(unittest.TestCase):
             owner.close()
 
     def setUp(self):
-        self.root = Path(__file__).resolve().parents[4] / "modules/evidence-assessment/native/tests/fixtures/evidence"
+        self.root = Path(__file__).resolve().parents[4] / "modules/evidence-assessment/runtime/tests/fixtures/evidence"
         self.engine = Engine(backend="rust", workers=2)
 
     def tearDown(self):

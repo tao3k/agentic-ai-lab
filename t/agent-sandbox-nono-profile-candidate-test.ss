@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: nono profile candidate tests cover backend-specific projection.
-;;; Invariant: tests do not execute nono promote/apply or native sandbox code.
+;;; Invariant: tests do not execute nono promote/apply or runtime sandbox code.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test

@@ -186,7 +186,7 @@ Implementation checklist:
 - [X] Keep =RecoveryDecisionReceipt= observable and non-authoritative.
 - [X] Keep the one-shot token outside serializable POO receipt data.
 - [X] Keep recovery syntax out of =user-composition=.
-- [X] Require POO-native construction through pinned =gerbil-poo= mechanisms.
+- [X] Require POO construction through pinned =gerbil-poo= mechanisms.
 - [ ] Fix exact internal slot names and prototype ownership.
 - [ ] Define receipt accepted/rejected validation predicates.
 - [ ] Implement the Scheme/runtime atomic =RetryCapability= projection
@@ -245,7 +245,7 @@ implementation is absent. Raw source search is not an admissible substitute.
 - [ ] Identify the exact Agentic AI Lab constructor and effect-boundary owners.
 - [ ] Verify that the owner uses the canonical =gerbil-poo= mechanisms rather
   than a duplicate object runtime.
-- [ ] Implement and test POO-native capability projection only after owner
+- [ ] Implement and test POO capability projection only after owner
   identity and the internal slot contract are qualified.
 
 #+begin_src mermaid
@@ -378,7 +378,7 @@ Use source/API evidence plus focused Gerbil witnesses for:
 - exact =gerbil-poo= constructors and operators;
 - runtime root and lineage identity;
 - demand-cell and continuation behavior;
-- POO-native capability and refinement semantics.
+- POO capability and refinement semantics.
 
 A correspondence item is blocked, not guessed, while an exact =gerbil-poo=
 symbol remains =semantic-required= or merely =symbol-located=.
@@ -632,7 +632,7 @@ Required counterexample record:
 | classification | =missing-premise= with approved architecture clarification |
 | invalidated claim | runtime at-most-once commit without a linearization/uniqueness receipt |
 | unaffected theorem | finite traces and explicitly linearizable executions accept at most one commit |
-| approved resolution | provider terminal/idempotency evidence plus Agentic AI Lab atomic arbitration, implemented as POO-native semantics through the sole =gerbil-poo= library |
+| approved resolution | provider terminal/idempotency evidence plus Agentic AI Lab atomic arbitration, implemented as POO semantics through the sole =gerbil-poo= library |
 | remaining gap | concrete runtime linearizability and provider evidence correspondence, tracked as =EFF-005CR= |
 
 * Receipt requirements

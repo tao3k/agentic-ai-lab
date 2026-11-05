@@ -33,7 +33,7 @@ Earlier MemGPT/A-MEM/ACE comparisons remain historical background in
 | Jul 26 | [[https://arxiv.org/abs/2607.23809][ACM: Agentic Context Management for Long Horizon Tasks]] | Agent-directed context editing, externalized history and later retrieval | Distinguish recoverable offload from destructive information loss; do not adopt compression as the core |
 | Aug 21 | [[https://arxiv.org/html/2608.21690v1][Scroll: Context as an Environment]] | Persistent executable session environment, exact event log, deferred programmatic working-view selection | Closely relevant prior art for retaining original history and exposing bounded views |
 | Aug 28 | [[https://arxiv.org/abs/2608.28476][ContextPilot]]; [[https://aclanthology.org/2026.emnlp-main.299/][October EMNLP publication]] | Planning/memory tools and action-level RL credit for context decisions | Study scheduling/proposal policy separately from current-owner admission |
-| Aug 30 | [[https://arxiv.org/abs/2608.29897][When History Is Multimodal / VERA]]; v2 Sep 1 | Retain native visual observations rather than replacing them with textual descriptions | Compare modality/source fidelity; representation change is not proof or effect permission |
+| Aug 30 | [[https://arxiv.org/abs/2608.29897][When History Is Multimodal / VERA]]; v2 Sep 1 | Retain runtime visual observations rather than replacing them with textual descriptions | Compare modality/source fidelity; representation change is not proof or effect permission |
 | Sep 1 | [[https://arxiv.org/html/2609.00749v1][ContextPipe]] | Typed context assembly, catalog, deterministic placement and execution tracing | Compare Query/projection and auditability; reject fail-open substitution when required evidence is unavailable |
 | Sep 28 | [[https://arxiv.org/abs/2609.35540][Continuous Context Management]] | Per-turn compacted memory plus task/new observation | Explicit contrasting route; no automatic adoption of its compaction objective |
 | Sep 29 | [[https://arxiv.org/html/2609.37725v1][Context Language Models]] | Model edits live context files and can learn editing strategies | Keep edit proposals distinct from source/evidence/authority ownership; our constraint rejects lossy replacement of originals |
@@ -64,7 +64,7 @@ comparison, not an assertion that Scroll has no safety controls.
 CarryOn's Method and Appendix A describe reusable object carriers, supporting
 evidence, environment checks, versions and validation before commitment. We
 must not present object-oriented Context, versioned records or evidence-bound
-updates as our exclusive inventions. The specific question for our native work
+updates as our exclusive inventions. The specific question for our runtime work
 is whether original ASCENT proof/support/journal bindings and owner-fenced
 Attempt outcomes reject withdrawn evidence and late results. CarryOn's method
 must be evaluated on its own semantics rather than relabeled as summarization.
@@ -84,7 +84,7 @@ CICM studies selection of outdated values despite current information being
 present. Same Simulation, Different Evidence studies a different failure:
 answers can use substituted evidence even when the simulator computed the right
 value. These motivate distinct tests for retained bytes, selected evidence,
-current applicability, and actual answer grounding. Our native current-owner
+current applicability, and actual answer grounding. Our runtime current-owner
 gate does not itself prove that an LLM used the admitted evidence correctly.
 
 * Advantages that require specific evidence
@@ -93,11 +93,11 @@ The candidate contribution is a composed executable contract: retain originals;
 carry exact original inference and support lineage; change current applicability
 on premise withdrawal without deleting history; admit each consumer under
 current owners; conditionally publish one terminal result per Attempt. POO is
-the native composition mechanism, Org/Query owns addressable content, ASCENT /
+the runtime composition mechanism, Org/Query owns addressable content, ASCENT /
 temporal-causality owns declared derivation/support applicability, and Session
 independently owns interaction identity and lifecycle.
 
-A local owner CAS and proof-relative native tests can support those specific
+A local owner CAS and proof-relative runtime tests can support those specific
 claims. They do not prove factual truth of inputs, correctness of arbitrary
 inference programs, complete causal attribution, better LLM reasoning, cheaper
 serving, durable multi-process recovery or priority over all related work.
@@ -117,7 +117,7 @@ serving, durable multi-process recovery or priority over all related work.
   cannot be inferred from one token/cost example.
 
 No new paid model calls, training run or paper benchmark was executed. The
-current work implements and tests the native owner-publication boundary; the
+current work implements and tests the runtime owner-publication boundary; the
 papers guide explicit comparisons and future matched experiments.
 
 * Connection to the existing Context lifecycle
@@ -126,15 +126,15 @@ papers guide explicit comparisons and future matched experiments.
 |-------------------------+--------------------------+--------------------------------|
 | Information entry | Content / Org source identities and versions; declared evidence admission | Can the exact original artifact be recovered, including multimodal source? |
 | Working Context formation | Query, scoped composition and admitted consumer projection | Does selected evidence retain original bindings and explicit omissions? |
-| Use and result publication | Independent Session Attempt; Context native current-owner guard | Can a stale source/grant or cancelled Attempt still publish a result? |
+| Use and result publication | Independent Session Attempt; Context runtime current-owner guard | Can a stale source/grant or cancelled Attempt still publish a result? |
 | Reassessment | Original ASCENT proof retained; support/journal applicability recomputed | Does required-premise withdrawal remove current eligibility without erasing history? |
 | Long-term knowledge integration | New scoped claim/procedure with origins, alternatives, failures and defeaters | Is generalization justified by actual outcomes rather than a compressed retelling? |
 | Cross-Session recall | A new consumer request, projection, admission and grant | Is recalled knowledge reassessed rather than inheriting the old Session's authority? |
 
-[[file:03-information-to-recall.org][03]] owns the connected lifecycle view. [[file:08-native-owner-cas-publication.org][08]] qualifies a concrete local
+[[file:03-information-to-recall.org][03]] owns the connected lifecycle view. [[file:08-runtime-owner-cas-publication.org][08]] qualifies a concrete local
 publication seam within it. CICM / evidence-substitution failures remain a
 separate end-to-end obligation: a correctly admitted input does not by itself
 establish that an Agent's generated answer used the evidence correctly.
 
 [[file:10-scroll-carryon-clm-contract-comparison.org][10]] develops Scroll, CarryOn and CLM into contract-level comparisons with
-executed scenarios, native publication/refusal checks and retained counterexamples.
+executed scenarios, runtime publication/refusal checks and retained counterexamples.

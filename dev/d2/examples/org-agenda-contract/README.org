@@ -1,0 +1,24 @@
+#+title: A late receipt after an Agenda reschedule
+#+language: en
+
+The [[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/org-durable-declarations.org::#agenda-late-receipt][Agenda case]] owns the matching, recovery and send admission rules.
+The existing D2 ASCENT module derives the composition from source-backed
+teaching relations and local object artwork.
+
+#+begin_src sh
+bun dev/d2/reuse.ts --case dev/d2/examples/org-agenda-contract/case.ss
+bun dev/d2/reuse.ts --case dev/d2/examples/org-agenda-contract/case.ss --evaluate
+#+end_src
+
+The first PNG still used “Starts 18:00” for the old time and showed Bob's
+receipt without its effect on the assessment. The revised figure makes
+the two times explicit, names the old handoff on the receipt relation,
+and shows Bob's assessment changing from unknown to provider acceptance.
+“Correction” and “First notice” name candidates. Durable checks permission
+and consumes a stable handoff key before sending.
+
+The revised PNG was viewed again. The labels are distinct and do not
+overlap. ASCENT grounded 17 visible anchors in the
+[[file:../../output/org-agenda-contract/review.json][image-bound evaluation]].
+
+PNG SHA-256: =d4e72ee04fa441e62609ba96829c8238289f9e991e91049ee60460a4bcb386cf=.

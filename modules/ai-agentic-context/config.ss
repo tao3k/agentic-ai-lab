@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Native Module descriptor carries the qualified Feature manifest, never a registry.
+;;; Runtime Module descriptor carries the qualified Feature manifest, never a registry.
 (import (only-in :clan/poo/type Record)
         (only-in :clan/poo/object .o .ref)
         (only-in :agentic-ai-lab/modules/module-authoring/module-interface yuanxu-module-interface)

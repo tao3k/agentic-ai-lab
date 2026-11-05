@@ -59,5 +59,5 @@
 (newline)
 (display "component-matching=compact-id-sort-merge\n")
 (display "component-matching-complexity=O(n-log-n)\n")
-(display "input-interface=poo-native-runtime-handoff-plan\n")
+(display "input-interface=poo-runtime-handoff-plan\n")
 (display "json-in-hot-path=false\n")

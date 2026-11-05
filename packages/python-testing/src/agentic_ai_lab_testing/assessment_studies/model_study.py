@@ -62,7 +62,7 @@ def module_path(name):
     raise ValueError('unrecognized source binding')
 
 
-def native(command, log):
+def runtime(command, log):
     with log.open('w') as output:
         process = subprocess.Popen(command, cwd=ROOT, stdin=subprocess.DEVNULL,
                                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -75,14 +75,14 @@ def native(command, log):
     markers = ('MODULE-OK', 'HARNESS-OK', '\nOK\n')
     errors = ('ERROR CASE', 'ERROR CHECK', 'ERROR HARNESS', 'ERROR MODULE', 'Heap overflow', 'Stack overflow')
     if status or not all(marker in text for marker in markers) or any(error in text for error in errors):
-        raise RuntimeError(f'native gate failed with status {status}: {log}')
+        raise RuntimeError(f'runtime gate failed with status {status}: {log}')
     return text
 
 
 def source_environment():
     env = os.environ.copy()
     existing = env.get('GERBIL_LOADPATH', '')
-    # Native executables do not inherit gxi's standard-library initialization.
+    # Runtime executables do not inherit gxi's standard-library initialization.
     # Locate the installed SDK through the actual launcher, never a guessed ABI.
     launcher = shutil.which('gxi')
     if launcher is None:
@@ -116,12 +116,12 @@ def source_closure(imports, log):
 def probe(output):
     subprocess.run(['gxi', str(ROOT/'t/harness/artifact-admission.ss'), 'check'], cwd=ROOT, check=True)
     output.mkdir(parents=True, exist_ok=False)
-    text = native(HARNESS + RUNTIME + ['t/qualification/scheme-model-closure-test.ss'], output/'preflight.native.log')
+    text = runtime(HARNESS + RUNTIME + ['t/qualification/scheme-model-closure-test.ss'], output/'preflight.runtime.log')
     cases = [json.loads(line.removeprefix('STUDY-CASE ')) for line in text.splitlines() if line.startswith('STUDY-CASE ')]
     if len(cases) != 24 or len({case['id'] for case in cases}) != 24:
-        raise ValueError('expected 24 unique independent native truths')
+        raise ValueError('expected 24 unique independent runtime truths')
     imports = sorted({name for case in cases for name in case['imports']})
-    closures = source_closure(imports, output/'source-closure.native.log')
+    closures = source_closure(imports, output/'source-closure.runtime.log')
     return cases, closures
 
 
@@ -142,9 +142,9 @@ def prepare(output):
                 'framingTokenPadding': FRAME_TOKEN_PADDING,
                 'conservativeMaximumUsd': MAX_CALLS * ((MAX_INPUT_BYTES+FRAME_TOKEN_PADDING)*.3 + MAX_OUTPUT_TOKENS*1.2)/1_000_000,
                 'inputContract': 'actual compiler-derived module sources and exact compiled Scheme expression with missing expected datum; no system instructions, examples, semantic recipe, answer prefill, tools or repair',
-                'feedbackContract': 'only actual initial output and post-response current native score/truth; no corrective instruction',
+                'feedbackContract': 'only actual initial output and post-response current runtime score/truth; no corrective instruction',
                 'outputContract': 'raw retained; unique inert literal/quoted assertion normalization without oracle; ambiguity, EOF and executable leaves reject',
-                'primaryMetric': 'completed provider response and correct native-scored normalized datum; all scheduled attempts remain in denominator',
+                'primaryMetric': 'completed provider response and correct runtime-scored normalized datum; all scheduled attempts remain in denominator',
                 'sourceBinding': json.loads((ROOT/'.cache/ascent/compiled-library/dsl-closure.json').read_text()),
                 'producerHashes': producer_hashes(), 'modules': modules, 'cases': [], 'order': [], 'families': families}
     private = output/'private'; private.mkdir()
@@ -172,9 +172,9 @@ def prepare(output):
             raise ValueError(f'source/task leaves insufficient bounded history space: {case["id"]}')
         (output/f'{case["id"]}.input.ss').write_bytes(encoded)
         (output/f'{case["id"]}.task.ss').write_text(task)
-        expected = (case['nativeDatum']+'\n').encode()
-        if case['nativeDatum'] != case['independentDatum']:
-            raise ValueError('native truth did not match independent frozen fixture')
+        expected = (case['runtimeDatum']+'\n').encode()
+        if case['runtimeDatum'] != case['independentDatum']:
+            raise ValueError('runtime truth did not match independent frozen fixture')
         (private/f'{case["id"]}.sexp').write_bytes(expected)
         manifest['cases'].append({'id':case['id'], 'family':case['family'], 'variant':case['variant'],
                                  'imports':case['imports'], 'dependencyModules':owned, 'compilerLoweredDependencyFiles':lowered,
@@ -189,12 +189,12 @@ def prepare(output):
               ('deep','('*65+'2'+')'*65,False,False),('oversize','2'*8193,False,False)]
     observations=[]
     for label,datum,readable,correct in controls:
-        observed=native_score('higher-input-initial',datum,output/f'control-{label}')
+        observed=runtime_score('higher-input-initial',datum,output/f'control-{label}')
         if observed['readable']!=readable or observed['correct']!=correct:
-            raise ValueError(f'native transport control failed: {label}')
+            raise ValueError(f'runtime transport control failed: {label}')
         observations.append({'control':label,**observed})
     (output/'transport-controls.json').write_text(json.dumps(observations,indent=2)+'\n')
-    manifest['nativeTransportControls']=len(observations)
+    manifest['runtimeTransportControls']=len(observations)
     for index, family in enumerate(families):
         initial = [('initial-none','none','initial'),('initial-high','high','initial')]
         transfer = [('transfer-fresh','high','transfer'),('transfer-history','high','transfer'),('transfer-feedback','high','transfer')]
@@ -204,7 +204,7 @@ def prepare(output):
             manifest['order'].append({'family':family,'arm':arm,'reasoningEffort':effort,'case':f'{family}-{variant}'})
     encoded=json.dumps(manifest,sort_keys=True,separators=(',',':')).encode()
     (output/'plan.json').write_bytes(encoded)
-    print(f'PREPARED {digest(encoded)} native=24 modelCalls=0 modules={len(modules)}',flush=True)
+    print(f'PREPARED {digest(encoded)} runtime=24 modelCalls=0 modules={len(modules)}',flush=True)
 
 
 def validate(preview, approved):
@@ -220,7 +220,7 @@ def validate(preview, approved):
         raise ValueError('frozen producer/budget contract changed')
     subprocess.run(['gxi',str(ROOT/'t/harness/artifact-admission.ss'),'check'],cwd=ROOT,check=True)
     if plan['sourceBinding']!=json.loads((ROOT/'.cache/ascent/compiled-library/dsl-closure.json').read_text()):
-        raise ValueError('native artifact changed after preparation')
+        raise ValueError('runtime artifact changed after preparation')
     for name, sha in plan['modules'].items():
         if digest(module_path(name).read_bytes())!=sha:
             raise ValueError('module bytes changed after preparation')
@@ -243,7 +243,7 @@ def request_for(plan, preview, item, initial):
         inputs=[{'role':'user','content':(preview/f'{item["family"]}-initial.input.ss').read_text()}]
         if previous['raw']:
             inputs.append({'role':'assistant','content':previous['raw']})
-        feedback=json.dumps(previous['nativeObservation'],sort_keys=True)+'\n' if item['arm']=='transfer-feedback' else ''
+        feedback=json.dumps(previous['runtimeObservation'],sort_keys=True)+'\n' if item['arm']=='transfer-feedback' else ''
         inputs.append({'role':'user','content':feedback+(preview/f'{item["case"]}.task.ss').read_text()})
     if len(json.dumps(inputs,ensure_ascii=False).encode())>plan['maxInputBytes']:
         raise ValueError('serialized input exceeds frozen byte ceiling before call')
@@ -304,18 +304,18 @@ def provider(request, api_key, destination):
     return raw, metadata
 
 
-def native_projection(raw_path, directory):
-    text = native(HARNESS + RUNTIME + ['--study-project', str(raw_path)], directory/'projection.native.log')
-    projected = json.loads(next(line.removeprefix('NATIVE-PROJECTION ') for line in text.splitlines()
-                                if line.startswith('NATIVE-PROJECTION ')))['prediction']
+def runtime_projection(raw_path, directory):
+    text = runtime(HARNESS + RUNTIME + ['--study-project', str(raw_path)], directory/'projection.runtime.log')
+    projected = json.loads(next(line.removeprefix('RUNTIME-PROJECTION ') for line in text.splitlines()
+                                if line.startswith('RUNTIME-PROJECTION ')))['prediction']
     return projected if isinstance(projected, str) else None
 
 
-def native_score(id, candidate, directory):
+def runtime_score(id, candidate, directory):
     directory.mkdir()
     path=directory/'candidate.sexp';path.write_text(candidate if candidate is not None else '')
-    text=native(HARNESS+RUNTIME+['--study-score',id,str(path)],directory/'score.native.log')
-    observation=json.loads(next(line.removeprefix('NATIVE-SCORE ') for line in text.splitlines() if line.startswith('NATIVE-SCORE ')))
+    text=runtime(HARNESS+RUNTIME+['--study-score',id,str(path)],directory/'score.runtime.log')
+    observation=json.loads(next(line.removeprefix('RUNTIME-SCORE ') for line in text.splitlines() if line.startswith('RUNTIME-SCORE ')))
     return observation
 
 
@@ -340,12 +340,12 @@ def summary(records, plan):
         results.append({'arm':arm,'scheduled':12,'attempted':len(group),
                         'completed':sum(row['providerCompleted'] for row in group),
                         'rawReadable':sum(row['rawObservation']['readable'] for row in group),
-                        'normalizedReadable':sum(row['nativeObservation']['readable'] for row in group),
+                        'normalizedReadable':sum(row['runtimeObservation']['readable'] for row in group),
                         'correct':sum(row['endToEndCorrect'] for row in group),
-                        'nativeCorrectObserved':sum(row['nativeObservation']['correct'] for row in group),
+                        'runtimeCorrectObserved':sum(row['runtimeObservation']['correct'] for row in group),
                         'providerFailures':sum(row['providerError'] is not None for row in group),
                         'providerTiming':timing(group,'providerSeconds'),
-                        'nativeScoringTiming':timing(group,'nativeSeconds'),
+                        'runtimeScoringTiming':timing(group,'runtimeSeconds'),
                         'firstVisibleTiming':timing(group,'firstVisibleTextSeconds'),
                         'cost':cost(group)})
     paired=[]
@@ -380,18 +380,18 @@ def live(preview,output,approved):
                 ledger.write(json.dumps(attempt)+'\n');ledger.flush();os.fsync(ledger.fileno())
             print(f'CALL {index+1}/60 {item["family"]} {item["arm"]} ',end='',flush=True)
             raw,response=provider(request,key,destination/'response.json');(destination/'raw-output.txt').write_text(raw)
-            start=time.monotonic();canonical=native_projection(destination/'raw-output.txt',destination)
-            raw_score=native_score(item['case'],raw,destination/'raw')
-            observation=native_score(item['case'],canonical,destination/'normalized')
+            start=time.monotonic();canonical=runtime_projection(destination/'raw-output.txt',destination)
+            raw_score=runtime_score(item['case'],raw,destination/'raw')
+            observation=runtime_score(item['case'],canonical,destination/'normalized')
             truth=(preview/'private'/f'{item["case"]}.sexp').read_text().strip()
-            if observation['nativeDatum']!=truth or raw_score['nativeDatum']!=truth:
-                raise ValueError('current native truth changed; batch stops without retry')
+            if observation['runtimeDatum']!=truth or raw_score['runtimeDatum']!=truth:
+                raise ValueError('current runtime truth changed; batch stops without retry')
             terminal=response['terminal'];completed=bool(terminal and terminal.get('status')=='completed' and response['error'] is None)
             record={**attempt,'raw':raw,'responseId':terminal.get('id') if terminal else None,
                     'resolvedModel':terminal.get('model') if terminal else None,'providerStatus':terminal.get('status') if terminal else None,
                     'providerCompleted':completed,'providerError':response['error'],'usage':terminal.get('usage') if terminal else None,
-                    'rawObservation':raw_score,'nativeObservation':observation,'endToEndCorrect':bool(completed and observation['correct']),
-                    'providerSeconds':response['providerSeconds'],'nativeSeconds':time.monotonic()-start,
+                    'rawObservation':raw_score,'runtimeObservation':observation,'endToEndCorrect':bool(completed and observation['correct']),
+                    'providerSeconds':response['providerSeconds'],'runtimeSeconds':time.monotonic()-start,
                     'firstVisibleTextSeconds':response['firstVisibleTextSeconds'],'reasoningEvents':response['reasoningEvents']}
             with (output/'calls.jsonl').open('a') as ledger:
                 ledger.write(json.dumps(record,ensure_ascii=False)+'\n');ledger.flush();os.fsync(ledger.fileno())
@@ -412,7 +412,7 @@ def main():
     args=parser.parse_args()
     if args.mode=='prepare':prepare(args.output.resolve())
     elif args.mode=='probe':
-        probe(args.output.resolve());print('NATIVE-SOURCE-PROBE-OK modelCalls=0',flush=True)
+        probe(args.output.resolve());print('RUNTIME-SOURCE-PROBE-OK modelCalls=0',flush=True)
     elif args.mode=='validate':
         validate(args.preview.resolve(),args.approved_sha256);print('OFFLINE-VALID modelCalls=0',flush=True)
     else:live(args.preview.resolve(),args.output.resolve(),args.approved_sha256)

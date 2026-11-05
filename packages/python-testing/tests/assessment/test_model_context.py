@@ -20,14 +20,14 @@ class ProviderByteContext(unittest.TestCase):
             (root/'f-initial.input.ss').write_text('ACTUAL-INITIAL-SOURCE')
             (root/'f-transfer.input.ss').write_text('ACTUAL-TRANSFER-SOURCE')
             (root/'f-transfer.task.ss').write_text('ACTUAL-TRANSFER-TASK')
-            initial={'f':{'raw':"'2",'nativeObservation':{'nativeDatum':'2','correct':True}}}
+            initial={'f':{'raw':"'2",'runtimeObservation':{'runtimeDatum':'2','correct':True}}}
             plan={'model':'deepseek-flash','maxInputBytes':655360,'maxOutputTokens':8192}
             item={'family':'f','case':'f-transfer','reasoningEffort':'high'}
             history=study.request_for(plan,root,{**item,'arm':'transfer-history'},initial)
             feedback=study.request_for(plan,root,{**item,'arm':'transfer-feedback'},initial)
             self.assertEqual(history['input'][:2],feedback['input'][:2])
             self.assertEqual(history['input'][2]['content'],'ACTUAL-TRANSFER-TASK')
-            self.assertEqual(feedback['input'][2]['content'],json.dumps(initial['f']['nativeObservation'],sort_keys=True)+'\nACTUAL-TRANSFER-TASK')
+            self.assertEqual(feedback['input'][2]['content'],json.dumps(initial['f']['runtimeObservation'],sort_keys=True)+'\nACTUAL-TRANSFER-TASK')
             self.assertEqual(set(history),{'model','input','reasoning','max_output_tokens','stream','store'})
             self.assertEqual([x['role'] for x in history['input']],['user','assistant','user'])
             fresh=study.request_for(plan,root,{**item,'arm':'transfer-fresh'},initial)

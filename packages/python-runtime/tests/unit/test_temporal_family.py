@@ -33,7 +33,7 @@ def family_task(vocabulary='release'):
 
 
 @pytest.mark.parametrize('vocabulary', ['release', 'medication'])
-def test_family_reuses_native_engine_for_independent_vocabularies(runtime, vocabulary):
+def test_family_reuses_runtime_engine_for_independent_vocabularies(runtime, vocabulary):
     task = family_task(vocabulary)
     before = deepcopy(task)
     result = runtime.classify_temporal_family(task)
@@ -110,7 +110,7 @@ def test_family_stale_result_is_rejected_under_equal_or_changed_classification(r
 
 
 @pytest.mark.parametrize('variant', ['classification', 'binding', 'authority', 'extra', 'missing'])
-def test_family_result_envelope_is_checked_in_native_owner(runtime, variant):
+def test_family_result_envelope_is_checked_in_runtime_owner(runtime, variant):
     task = family_task()
     result = runtime.classify_temporal_family(task)
     if variant == 'classification':

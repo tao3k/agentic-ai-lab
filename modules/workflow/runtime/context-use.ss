@@ -4,7 +4,7 @@
 ;;; Strict inert projection into POO-owned Host values; no query-controlled state.
 (import (only-in :clan/poo/object .ref)
         :agentic-ai-lab/modules/ai-agentic-context/use-host
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-policy temporal-policy-native-host)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-policy temporal-policy-host-host)
         (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
                  agentic-ai-lab-temporal-support-policy-host-current)
         (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-admission temporal-family-current-call))
@@ -37,9 +37,9 @@
                  (field x "policyIdentity") (field x "policyDigest")
                  (map purpose (field x "purposes")) (field x "enabled")))
          (current (temporal-family-current-call (hash ("admissionDigest" (.ref grant 'admission-digest))))))
-    (unless (or (not (.ref grant 'enabled?)) (equal? (hash-ref current 'status) "current")) (error "Context grant requires current native source"))
+    (unless (or (not (.ref grant 'enabled?)) (equal? (hash-ref current 'status) "current")) (error "Context grant requires current runtime source"))
     ;; Validate every registration before mutation, including the policy identity.
-    (agentic-ai-lab-temporal-support-policy-host-current (temporal-policy-native-host) (.ref grant 'policy-identity))
+    (agentic-ai-lab-temporal-support-policy-host-current (temporal-policy-host-host) (.ref grant 'policy-identity))
     (agentic-ai-lab-context-use-host-refresh! host grant)
     (hash (schema "agentic-ai-lab.context-use-refresh-result.v1") (abiVersion 1)
           (identity (.ref grant 'identity)) (generation (.ref grant 'generation))
@@ -49,11 +49,11 @@
   (fields x ["schema" "identity" "expectedGeneration" "purpose" "admissionDigest"])
   (unless (equal? (field x "schema") "agentic-ai-lab.context-use-observe-request.v1")
     (error "unsupported Context use observe schema"))
-  (let* ((observed (agentic-ai-lab-context-use-host-observe host (temporal-policy-native-host)
+  (let* ((observed (agentic-ai-lab-context-use-host-observe host (temporal-policy-host-host)
                     (field x "identity") (field x "expectedGeneration") (purpose (field x "purpose"))))
          (grant (.ref observed 'grant))
          (_ (unless (equal? (field x "admissionDigest") (.ref grant 'admission-digest))
-              (error "foreign Context native admission")))
+              (error "foreign Context runtime admission")))
          (current (temporal-family-current-call (hash ("admissionDigest" (.ref grant 'admission-digest)))))
          (snapshot (.ref observed 'policy-snapshot)))
     (hash (schema "agentic-ai-lab.context-use-observation.v1") (abiVersion 1)

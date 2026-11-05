@@ -17,8 +17,8 @@ tar -xzf .cache/ascent/archived-runs/docs/research/agent-inference/history/cross
 PYTHONPATH="$temporary_directory/python/src:$PWD/python/src" python3 -m pytest -q "$temporary_directory/python/tests"
 ```
 
-Historical paid runners bind original repository paths and native artifacts.
+Historical paid runners bind original repository paths and runtime artifacts.
 Moving their source out of the active package intentionally removes those live
 entry points. To reproduce them, reconstruct a separate original layout from
-the manifest and retained native snapshot; do not install the archived modules
+the manifest and retained runtime snapshot; do not install the archived modules
 into the current package or silently edit their bindings.

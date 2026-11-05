@@ -1,3 +1,6 @@
+(import (only-in :clan/poo/mop .new)
+        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :clan/poo/object .get))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -12,18 +15,16 @@
         :yuanxu/graph/algorithms
         :yuanxu/graph/control-analysis
         :agentic-ai-lab/modules/workflow/graph/runtime-executor
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax
-        (only-in :agentic-ai-lab/modules/workflow/scenario/composition-syntax
-                 user-composition)
         :yuanxu/profile-composition/profile-bundle
         (rename-in
          (only-in :yuanxu/profile-composition/selection-syntax
                   use-module)
          (use-module use-profile-module))
-        :agentic-ai-lab/modules/workflow/scenario/accessors
-        (only-in :agentic-ai-lab/modules/workflow/scenario/case agentic-ai-lab-scenario-case?)
-        :agentic-ai-lab/user-interface/profiles/langchain
-        :agentic-ai-lab/user-interface/profiles/langgraph
+
+        (only-in :clan/poo/mop element?)
+        (only-in :yuanxu/modules/funflow/scenario Scenario)
+
+
         :agentic-ai-lab/user-interface/scenarios/langchain/scenario
         :agentic-ai-lab/user-interface/scenarios/langgraph/scenario)
 
@@ -40,12 +41,13 @@
   (contract 'single-turn-input-output)
   (policy 'audit-model-call-before-terminal))
 
-(user-composition audited-langchain-composition
-  (compose profiles
+(def audited-langchain-composition
+  (.new Scenario name: 'audited-langchain-composition
+        config: (compose profiles
     (use-profile-module LangChainModule as chain memory prompt)
     AuditedLangChainModelProfile
     (use-profile-module LangChainModule as chain parser no-tool)
-    LangChainProductionProfile))
+    LangChainProductionProfile)))
 
 (def langchain-linear-control-graph
   (yuanxu-graph
@@ -178,10 +180,15 @@
    (else #f)))
 
 (def (single-stage composition)
-  (.ref (agentic-ai-lab-scenario-case-stages composition) 'production))
+  (.ref (.ref composition 'stages) 'production))
 
 (def (profile-identity profile)
   (.ref profile (if (.slot? profile 'identity) 'identity 'name)))
+
+(def langchain (.get agentic-ai-lab.init.exports Profiles langchain defaults))
+(def LangChainModule (.get agentic-ai-lab.init.exports Profiles langchain profile))
+(def langgraph (.get agentic-ai-lab.init.exports Profiles langgraph defaults))
+(def LangGraphModule (.get agentic-ai-lab.init.exports Profiles langgraph profile))
 
 (export langchain-langgraph-core-test)
 
@@ -190,13 +197,12 @@
   (yuanxu-test-case "langchain linear chain declares one production stage"
     (let* ((stage (single-stage langchain-composition))
            (compose-payload
-            (agentic-ai-lab-scenario-case-profiles langchain-composition))
+            (.ref langchain-composition 'profiles))
            (loop-value (.ref stage 'loop)))
-      (check-equal? (agentic-ai-lab-scenario-case? langchain-composition) #t)
-      (check-equal? (agentic-ai-lab-scenario-case-name langchain-composition)
+      (check-equal? (element? Scenario langchain-composition) #t)
+      (check-equal? (.ref langchain-composition 'name)
                     'langchain-scenario)
-      (check-equal? (length (agentic-ai-lab-scenario-case-modules
-                             langchain-composition))
+      (check-equal? (length (.ref langchain-composition 'modules))
                     1)
       (check-equal? (length compose-payload) 6)
       (check-equal? (.ref stage 'graph) 'langchain-linear-chain)
@@ -228,11 +234,9 @@
   (yuanxu-test-case "local composition preserves source module and selected profiles"
     (let* ((stage (single-stage audited-langchain-composition))
            (compose-payload
-            (agentic-ai-lab-scenario-case-profiles
-             audited-langchain-composition))
+            (.ref audited-langchain-composition 'profiles))
            (module-binding
-            (car (agentic-ai-lab-scenario-case-modules
-                  audited-langchain-composition)))
+            (car (.ref audited-langchain-composition 'modules)))
            (module (.ref module-binding 'module)))
       (check-equal? (length compose-payload) 6)
       (check-equal? (map profile-identity compose-payload)
@@ -243,13 +247,12 @@
   (yuanxu-test-case "langgraph state graph declares bounded loop and handoff"
     (let* ((stage (single-stage langgraph-composition))
            (compose-payload
-            (agentic-ai-lab-scenario-case-profiles langgraph-composition))
+            (.ref langgraph-composition 'profiles))
            (loop-value (.ref stage 'loop)))
-      (check-equal? (agentic-ai-lab-scenario-case? langgraph-composition) #t)
-      (check-equal? (agentic-ai-lab-scenario-case-name langgraph-composition)
+      (check-equal? (element? Scenario langgraph-composition) #t)
+      (check-equal? (.ref langgraph-composition 'name)
                     'langgraph-scenario)
-      (check-equal? (length (agentic-ai-lab-scenario-case-modules
-                             langgraph-composition))
+      (check-equal? (length (.ref langgraph-composition 'modules))
                     1)
       (check-equal? (length compose-payload) 8)
       (check-equal? (.ref stage 'graph) 'langgraph-state-graph)

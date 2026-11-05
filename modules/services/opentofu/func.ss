@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Pure provider-format conversion. Schemas/candidates are JSON wire values;
-;;; public results and diagnostics are native POO objects. No process or Loader.
+;;; public results and diagnostics are POO objects. No process or Loader.
 (import :clan/poo/object
         (only-in "./types.ss" OpenTofuConfigContract)
         (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)

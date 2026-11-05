@@ -12,7 +12,7 @@ SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 :CUSTOM_ID: temporal-candidate-exchange-owner
 :END:
 
-=candidates/= records a POO-native handoff among an exact Temporal evidence
+=candidates/= records a POO handoff among an exact Temporal evidence
 cut, a provider result receipt, and a separate check of that receipt.  It is
 domain-neutral: candidate identities may denote a graph path, relation row,
 proposed explanation, or artifact dependency.  The contract does not choose
@@ -126,12 +126,12 @@ The MRR repository already owns a typed =QueryResultAdmissionReceipt= with a
 different MRR-owned CBOR digest.  Its result projection retains binding, generation, catalog,
 snapshot, digest and count fields.  The Temporal MRR bridge checks cut and
 generation, then emits an *incomplete* candidate receipt; it does not treat
-the native digest as a scalar row digest.  A future native exporter must
+the runtime digest as a scalar row digest.  A future runtime exporter must
 prove an explicit query/snapshot mapping.  Even a local scalar =valid= check
 does not attest Provider execution or source authenticity.
 
 ASCENT owns positive-rule Why/Why-Not proof generation and replay for a
-finite relation snapshot.  Its adapter must require the native result to
+finite relation snapshot.  Its adapter must require the runtime result to
 complete, run the independent proof checker on the exact snapshot/program,
 and pass the verifier basis into =CandidateCheck=.  A bounded or unsupported
 proof cannot be recorded as a valid proof check.  Temporal then separately

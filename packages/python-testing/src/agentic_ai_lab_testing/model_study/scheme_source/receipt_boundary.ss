@@ -2,7 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;;
-;;; Read this bounded native receipt check. Return only the
+;;; Read this bounded runtime receipt check. Return only the
 ;;; S-expression written by main. A complete receipt concerns one
 ;;; source generation and candidate; it does not prove user intent.
 (import (only-in :gerbil-ascent/candidate/checked-program

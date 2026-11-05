@@ -12,7 +12,7 @@
 (export ascent-table-expression-test)
 
 (def ascent-table-expression-test
-  (test-suite "ASCENT table expression over native persistent tries"
+  (test-suite "ASCENT table expression over runtime persistent tries"
     (test-case "indexed composition deduplicates the diamond's two-hop path"
       ;; Radix 8: 1->2=10, 2->3=19, 1->4=12, 4->3=35.
       (let* ((source

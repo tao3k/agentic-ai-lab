@@ -77,7 +77,7 @@
         metadata: metadata-value
         runtime-executed: #f)))
 
-;; The semantic grant is POO-native; wire rows are produced only by projection.
+;; The semantic grant is POO; wire rows are produced only by projection.
 (def (session-tool-grant-object? value)
   (and (object? value) (.slot? value 'kind)
        (eq? (.ref value 'kind) 'agentic-ai-lab.session.tool-grant)))

@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO-native Cedar Provider policy, authority, and handoff values.
+;;; Boundary: POO Cedar Provider policy, authority, and handoff values.
 ;;; Invariant: construction and projection perform no authorization or runtime IO.
 (import (only-in :clan/poo/object .o .ref .alist object?)
         (only-in :std/encoding/hex hex-encode)
@@ -25,7 +25,7 @@
 (def (cedar-family-prototype kind-value)
   (.o (kind kind-value)
       (schema 'agentic-ai-lab.cedar-values.v1)
-      (runtime-owner 'native.cedar-authority)
+      (runtime-owner 'runtime.cedar-authority)
       (runtime-executed? #f)))
 
 (def policy-kind 'cedar-policy)
@@ -90,7 +90,7 @@
   (.o (:: @ Policy.) identity: identity-value source: source-value))
 
 ;; These are official Cedar JSON documents, not a POO alist/schema DSL. The
-;; native boundary parses them once with duplicate-key and schema validation.
+;; runtime boundary parses them once with duplicate-key and schema validation.
 ;; : (-> String CedarSchema)
 (def (agentic-ai-lab-cedar-schema document-value)
   (require-value "Cedar schema must be a JSON document" (text? document-value) document-value)

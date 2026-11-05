@@ -35,6 +35,12 @@
   (cond
    ((not (equal? expected-root (.ref state 'execution-root)))
     (transition state (negative-receipt 'execution-root-fork state token)))
+   ;; A caller can retain a validation context from before consumption.
+   ;; The authoritative transition state still fences that nonce and epoch.
+   ((member (.ref token 'nonce) (.ref state 'consumed-nonces))
+    (transition state (negative-receipt 'token-reuse state token)))
+   ((not (= (.ref state 'revocation-epoch) (.ref validation-context 'revocation-epoch)))
+    (transition state (negative-receipt 'stale-revocation-epoch state token)))
    (else
     (let (validation
           (agentic-ai-lab-authorized-effect-token-validate token validation-context))

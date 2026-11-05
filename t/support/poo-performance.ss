@@ -294,17 +294,9 @@
    family
    (poo-performance-run-gate fixture thunk)))
 
-;; : (-> (Listof Symbol) Alist)
-(def (poo-performance-index-slots slot-names)
-  (poo-index-slots slot-names))
-
 ;; : (-> Symbol Symbol (Listof Symbol) POOObject)
 (def (poo-performance-indexed-family family-name source-tag slot-names)
   (poo-indexed-family family-name source-tag slot-names))
-
-;; : (-> POOObject Symbol (Maybe Fixnum))
-(def (poo-performance-indexed-family-slot-index family-object slot-name)
-  (poo-indexed-family-slot-index family-object slot-name))
 
 ;; : (-> POOObject [Object] POOObject)
 (def (poo-performance-indexed-family-object family-object values)
@@ -313,12 +305,6 @@
 ;; : (-> POOObject POOObject Symbol Object Object)
 (def (poo-performance-indexed-family-ref family-object object slot-name default-value)
   (poo-indexed-family-ref family-object object slot-name default-value))
-
-;; : (-> POOObject Symbol Symbol POOObject)
-(def (poo-performance-indexed-family-named-slot-lens family-object slot-name descriptor-name)
-  (poo-indexed-family-named-slot-lens family-object
-                                      slot-name
-                                      descriptor-name))
 
 ;; : (-> POOObject Symbol POOObject)
 (def (poo-performance-indexed-family-slot-lens family-object slot-name)

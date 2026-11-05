@@ -3,7 +3,7 @@ package ContextContractComparison {
     private import VerificationCases::*;
     doc /* Contract omission experiments, NOT executable implementations of Scroll,
            CarryOn or CLM. External owner changes leave candidate revision fixed.
-           Native companions exercise real proof/journal/grant/Session Hosts. */
+           Runtime companions exercise real proof/journal/grant/Session Hosts. */
     part def Fixture;
     part fixture : Fixture;
     verification def EvidenceUse {

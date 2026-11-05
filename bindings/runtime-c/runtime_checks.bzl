@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Runtime-C checks that need a small Bazel-native test launcher."""
+"""Runtime-C checks that need a small Bazel-runtime test launcher."""
 
 load(
     "@gerbil_bazel//gerbil:defs.bzl",
@@ -170,13 +170,13 @@ library="$runfiles/%s"
 library_dir="$(dirname "$library")"
 gxc="$runfiles/%s"
 gxi="$runfiles/%s"
-native_env="$runfiles/%s"
+runtime_env="$runfiles/%s"
 gerbil_cc=%s
 gerbil_as=%s
 gerbil_ld=%s
 output_root="$TEST_TMPDIR/gerbil"
 mkdir -p "$output_root/lib"
-"$native_env" env -u CPATH -u C_INCLUDE_PATH -u LIBRARY_PATH \
+"$runtime_env" env -u CPATH -u C_INCLUDE_PATH -u LIBRARY_PATH \
   GERBIL_CC="$gerbil_cc" \
   GERBIL_AS="$gerbil_as" \
   GERBIL_LD="$gerbil_ld" \
@@ -196,7 +196,7 @@ env -u CPATH -u C_INCLUDE_PATH -u LIBRARY_PATH \
             library.short_path,
             toolchain.gxc.executable.short_path,
             toolchain.gxi.executable.short_path,
-            toolchain.native_scheme_env.executable.short_path,
+            toolchain.runtime_scheme_env.executable.short_path,
             _shell_quote(toolchain.gerbil_cc),
             _shell_quote(toolchain.gerbil_as),
             _shell_quote(toolchain.gerbil_ld),

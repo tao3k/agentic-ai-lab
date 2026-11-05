@@ -18,11 +18,7 @@
         (only-in :yuanxu/modules/funflow/check-objects
                  yuanxu-cicd-check-map?
                  yuanxu-cicd-check-map-name)
-        (only-in :agentic-ai-lab/modules/workflow/funs
-                 agentic-ai-lab-cicd-check-map->receipts
-                 agentic-ai-lab-cicd-check-map->runtime-manifest-readiness
-                 agentic-ai-lab-cicd-check-map->runtime-command-manifests
-                 agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi))
+        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-check-map->receipts agentic-ai-lab-cicd-check-map->runtime-manifest-readiness agentic-ai-lab-cicd-check-map->runtime-command-manifests agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi))
 
 (export agentic-ai-lab-user-cicd-payload?
         agentic-ai-lab-user-cicd-payload-section
@@ -399,7 +395,7 @@
           (agentic-ai-lab-user-workflow-cicd-check-map-names
            (cdr check-maps))))))
 
-;;; The runtime projection is POO-native and demand driven. Each field family is
+;;; The runtime projection is POO and demand driven. Each field family is
 ;;; computed at most once, and unrelated readiness/receipt families stay cold.
 (def +agentic-ai-lab-user-workflow-cicd-runtime-projection-keys+
   '(check-maps

@@ -1,6 +1,6 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(family-lifecycle-native-qualification
+(family-lifecycle-runtime-qualification
   (idle-seconds 5) (wall-seconds 45) (cases 11) (exit-status 0)
   (compiler-route official-gxc-then-compile-exe)
   (sdk-overlay temporary-unchanged-upstream-outputs)
@@ -18,7 +18,7 @@
     ("modules/temporal-causality/interface.ss" "6cb578ce032ff5aea452154c8d62bd9922afbbcf7f39c09a694a57217e59e8dd")
     ("t/temporal-lifecycle-test.ss" "6d42294478e9bb521dc29be7da4c3baaab4f620ee1bcba952a80ff2cb111fd91")
     ("t/temporal-applicability-test.ss" "6b0068754bbfaee77fc3100ffbc7b9146813d8b77da4b0a77221eac827572db9")
-    ("t/qualification/temporal-current-source/native-test.ss" "da0704f79f761ea2b1f59150177279dbc3332c27a546b07eef982730820f6b2f")
+    ("t/qualification/temporal-current-source/runtime-test.ss" "da0704f79f761ea2b1f59150177279dbc3332c27a546b07eef982730820f6b2f")
     ("bindings/rust-runtime/tools/watch.py" "bef8e506ed4834d48420e3e908da5f389d3462a50f7f8a4f20aa13360e2e4098")
     ("t/qualification/temporal-current-source/lifecycle-native-passed.log" "ce3001614e15e0ddde4a66ed592c73f54e320c43082a08e84986597bd165d002")
   ))

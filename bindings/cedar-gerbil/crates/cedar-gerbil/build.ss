@@ -3,14 +3,14 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Canonical compiler owner for the downstream native conformance program.
+;;; Canonical compiler owner for the downstream runtime conformance program.
 (import (only-in :asp-gerbil-scheme/building-api
                  asp-gerbil-scheme-package-spec!
                  asp-gerbil-scheme-library-package-prototype)
         (only-in "./scheme/conformance-build-runtime"
                  cedar-conformance-build!))
 
-;; This is a bounded native projection of the parent Agentic AI Lab package, not a
+;; This is a bounded runtime projection of the parent Agentic AI Lab package, not a
 ;; new package or source-catalog authority. Dependencies come from the parent
 ;; gerbil.pkg, including ASP's declarative build API.
 (asp-gerbil-scheme-package-spec!

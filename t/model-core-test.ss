@@ -16,7 +16,7 @@
 
 (def model-core-test
   (test-suite "model core"
-    (yuanxu-test-case "model specs expose POO-native accessors and projections"
+    (yuanxu-test-case "model specs expose POO accessors and projections"
       (check-equal? (element? AgenticAILabModelSpec
                               agentic-ai-lab-model-core-tool-json-model)
                     #t)

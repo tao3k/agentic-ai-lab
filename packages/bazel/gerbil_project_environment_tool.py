@@ -34,7 +34,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         Path(root).resolve() for root in args.project_dependency_root
     )
     gxi = Path(args.gxi).resolve()
-    native_scheme_env = Path(args.native_scheme_env).resolve()
+    runtime_scheme_env = Path(args.runtime_scheme_env).resolve()
     workspace = Path(args.workspace).resolve()
     working_directory = (workspace / args.working_directory).resolve()
     declaration_receipt = Path(args.declaration_receipt).resolve()
@@ -66,14 +66,14 @@ def main(argv: Sequence[str] | None = None) -> int:
             "AGENTIC_AI_LAB_GERBIL_PROJECT_RECEIPT": str(project_receipt),
         }
     )
-    native_command = (
-        str(native_scheme_env),
+    runtime_command = (
+        str(runtime_scheme_env),
         "env",
         *(f"{name}={environment[name]}" for name in _forwarded_environment_names()),
         *command,
     )
     completed = subprocess.run(
-        native_command,
+        runtime_command,
         cwd=working_directory,
         env=dict(os.environ),
         check=False,
@@ -95,7 +95,7 @@ def _forwarded_environment_names() -> tuple[str, ...]:
 def _argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument("--gxi", required=True)
-    parser.add_argument("--native-scheme-env", required=True)
+    parser.add_argument("--runtime-scheme-env", required=True)
     parser.add_argument("--project-root", required=True)
     parser.add_argument("--project-receipt", required=True)
     parser.add_argument("--dependency-root-marker", required=True)

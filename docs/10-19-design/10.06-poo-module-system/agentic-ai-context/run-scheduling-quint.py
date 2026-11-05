@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Check bounded scheduling and project real ITF traces for native replay."""
+"""Check bounded scheduling and project real ITF traces for runtime replay."""
 import argparse
 import hashlib
 import json
@@ -16,7 +16,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[3]
 sys.path.insert(0, str(ROOT / "core/dev/proofs/quint"))
 from backend import backend_session
-from native import QuintCLI
+from cli import QuintCLI
 
 COUNTS = re.compile(rb"([\d,]+) states generated, ([\d,]+) distinct states.*?([\d,]+) states left on queue")
 
@@ -36,7 +36,7 @@ def main():
         raise RuntimeError("Expected pinned Quint 0.33.0")
     sources = {str(p.relative_to(ROOT)): sha(p) for p in HERE.glob("27-*.qnt")}
     sources[str(Path(__file__).relative_to(ROOT))] = sha(Path(__file__))
-    for name in ("backend.py", "native.py", "native-cli.cjs"):
+    for name in ("backend.py", "runtime.py", "quint-cli.cjs"):
         p = ROOT / "core/dev/proofs/quint" / name
         sources[str(p.relative_to(ROOT))] = sha(p)
     for relative in ("modules/temporal-causality/runtime/scheduling.ss",
@@ -92,7 +92,7 @@ def main():
                                     distinct_states=int(counts[2].replace(b",", b"")) if counts else None,
                                     log_sha256=sha(log)))
     replays = []
-    native_cases = []
+    runtime_cases = []
     for bug in ("none", "capacity", "priority", "close", "burst"):
         replay = out / ("replay-" + bug)
         replay.mkdir()
@@ -100,7 +100,7 @@ def main():
                    "--main", f"BoundedScheduling_{bug}", "--seed", "20261026",
                    "--max-samples", "1", "--out-itf", str(replay / "trace_{test}_{seq}.itf.json")]
         result = subprocess.run(command, capture_output=True, timeout=30)
-        (replay / "native.log").write_bytes(result.stdout + result.stderr)
+        (replay / "runtime.log").write_bytes(result.stdout + result.stderr)
         traces = sorted(replay.glob("*.itf.json"))
         if result.returncode or len(traces) != 5:
             raise RuntimeError("Missing deterministic QNT replay: " + bug)
@@ -118,23 +118,23 @@ def main():
                          (int(state[state_key]["p"]["#bigint"]) == 2 and
                           any(int(state[state_key][field]["#bigint"]) != 0 for field in ("d", "c", "b")))
                          for state in itf["states"])
-            native_cases.append(dict(mode=bug, unsafe=unsafe, trace=str(trace), events=rows))
+            runtime_cases.append(dict(mode=bug, unsafe=unsafe, trace=str(trace), events=rows))
         replays.append(dict(mode=bug, command=command,
                             traces={trace.name: sha(trace) for trace in traces}))
-    (out / "native-cases.json").write_text(json.dumps(native_cases, indent=2) + "\n")
+    (out / "runtime-cases.json").write_text(json.dumps(runtime_cases, indent=2) + "\n")
     def sexpr(value):
         if isinstance(value, list):
             return "(" + " ".join(sexpr(item) for item in value) + ")"
         return str(value)
-    (out / "native-cases.scm").write_text(
+    (out / "runtime-cases.scm").write_text(
         "(" + "\n".join("(" + case["mode"] + (" #t " if case["unsafe"] else " #f ") + sexpr(case["events"]) + ")"
-                          for case in native_cases) + ")\n")
+                          for case in runtime_cases) + ")\n")
     if any(sha(ROOT / name) != digest for name, digest in sources.items()):
         raise RuntimeError("QNT source/backend drift")
     (out / "summary.json").write_text(json.dumps(dict(
         schema="context.scheduling.quint.v1", source_sha256=sources, results=results, replays=replays,
         bounded_finite_model=True, distributed_runtime_implemented=False,
-        native_refinement_proved=False), indent=2) + "\n")
+        runtime_refinement_proved=False), indent=2) + "\n")
     print("PASS: finite scheduling safety plus four deliberate broken-contract counterexamples")
 
 

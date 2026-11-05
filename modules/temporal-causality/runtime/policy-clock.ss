@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Native owner reactor and real monotonic deadline thread. No wire evaluator.
+;;; Runtime owner reactor and real monotonic deadline thread. No wire evaluator.
 (import (only-in :clan/poo/object .o .ref .call object<-alist)
         (only-in :std/sync/channel make-channel channel-put channel-get)
         (only-in :std/crypto/digest sha256) (only-in :std/encoding/hex hex-encode)
@@ -105,7 +105,7 @@
   (unless (and (procedure? bootstrap) (string? domain-value) (< 0 (string-length domain-value) 257)
                (exact-integer? origin-value) (real? tick-value) (< 0 tick-value 3601)
                (real? delay-value) (<= 0 delay-value 60) (memv copies-value '(1 2))
-               (boolean? paused-value) (boolean? enabled-value)) (error "Invalid native clock profile"))
+               (boolean? paused-value) (boolean? enabled-value)) (error "Invalid runtime clock profile"))
   (let* ((ready (make-channel 1))
          (ingress (context-owner-ingress scheduling-value))
          (owner-thread (make-thread (lambda ()
@@ -120,7 +120,7 @@
     (let (answer (channel-get ready 10 'clock-start-timeout))
       (when (eq? answer 'clock-start-timeout) (error "Clock owner bootstrap timed out"))
       (unless (car answer)
-        ;; Failure is returned only after the native owner has finished its
+        ;; Failure is returned only after the runtime owner has finished its
         ;; acquisition rollback. Do not leave a failed initializer unjoined.
         (when (eq? (thread-join! owner-thread 2 'bootstrap-join-timeout) 'bootstrap-join-timeout)
           (error "Failed bootstrap owner did not join" (cadr answer)))
@@ -142,9 +142,9 @@
             (.call durability .close! durability))))
       (raise failure))
     (lambda ()
-      (let (now (native-monotonic-seconds))
+      (let (now (monotonic-seconds))
         (if durability
-          (.call durability .anchor! durability domain origin tick now (native-boot-identity))
+          (.call durability .anchor! durability domain origin tick now (runtime-boot-identity))
           now)))))
 
 (def (clock-loop bootstrap domain-value origin-value tick-value delay-value copies-value paused-value enabled-value ready ingress)
@@ -199,11 +199,11 @@
                     (.call durability .finish! durability id #t)
                     (if intent (.o kind: 'context.durable-ack.v1 identity: id historical?: #f action-authorized?: #f) answer))))))))
       (def (observe)
-        (let* ((now (native-monotonic-seconds))
+        (let* ((now (monotonic-seconds))
                (coordinate (+ origin-value (inexact->exact (floor (/ (- now epoch) tick-value))))))
           (agentic-ai-lab-temporal-instant (string-append epoch-id ":" (number->string coordinate))
             domain-value coordinate epoch-id 'observed)))
-      (def (record! phase-value ticket observed-value (sample-value (native-monotonic-seconds)))
+      (def (record! phase-value ticket observed-value (sample-value (monotonic-seconds)))
         (when (>= (length audit) 4096) (error "Clock audit capacity"))
         (let ((ticket-id-value (clock-ticket-identity ticket)) (policy-id-value (clock-ticket-policy ticket))
               (generation-value (clock-ticket-generation ticket)) (digest-value (clock-ticket-digest ticket))
@@ -254,14 +254,14 @@
         (set! waiters (filter (lambda (request-value)
           (if (<= (clock-request-operation request-value) received)
             (begin (channel-put (clock-request-reply request-value) (list #t received)) #f) #t)) waiters)))
-      ;; The native provider is enrolled once. It selects real current time for
+      ;; The runtime provider is enrolled once. It selects real current time for
       ;; support/use guards; generations change on actual lifecycle publication.
-      (set! clock-cap (.o kind: 'temporal.native-clock.v1 .observe: (lambda (self policy-id) (observe))))
+      (set! clock-cap (.o kind: 'temporal.monotonic-clock.v1 .observe: (lambda (self policy-id) (observe))))
       (agentic-ai-lab-temporal-support-policy-host-enroll-clock! policy-host clock-cap)
       (set! clock-observer (.o kind: 'temporal.source-observer.v1
           .prepare: (lambda (self event-value)
             (let ((snapshot (.ref event-value 'revised)))
-              (when (>= (hash-length scheduled) 256) (error "Native timer capacity"))
+              (when (>= (hash-length scheduled) 256) (error "Runtime timer capacity"))
               (ticket-for snapshot)
               (.o kind: 'temporal.source-propagation-batch.v1
                   .publish!: (lambda (self) (enqueue! snapshot) #t))))))
@@ -269,12 +269,12 @@
       (set! timer (thread-start! (make-thread (lambda ()
         (let loop ((tickets '()))
           (let* ((ordered (list-sort (lambda (a b) (< (clock-ticket-due a) (clock-ticket-due b))) tickets))
-                 (wait (if (pair? ordered) (max 0. (- (clock-ticket-due (car ordered)) (native-monotonic-seconds))) #f))
+                 (wait (if (pair? ordered) (max 0. (- (clock-ticket-due (car ordered)) (monotonic-seconds))) #f))
                  (message (if wait (thread-receive wait 'timer-wakeup) (thread-receive))))
             (cond ((eq? message 'stop) 'clock-timer-stopped)
                   ((clock-ticket? message) (loop (cons message ordered)))
                   (else
-                    (let* ((now (native-monotonic-seconds))
+                    (let* ((now (monotonic-seconds))
                            (due (filter (lambda (ticket) (<= (clock-ticket-due ticket) now)) ordered))
                            (future (filter (lambda (ticket) (> (clock-ticket-due ticket) now)) ordered)))
                       (let ((deferred '()) (halted? #f))
@@ -365,7 +365,7 @@
                          ((stop)
                            (thread-send timer 'stop)
                            (unless (eq? (thread-join! timer 2 'timer-stop-timeout) 'clock-timer-stopped)
-                             (error "Native timer did not terminate"))
+                             (error "Runtime timer did not terminate"))
                            (agentic-ai-lab-temporal-support-policy-host-unwatch! policy-host clock-observer)
                            (agentic-ai-lab-temporal-support-policy-host-release-clock! policy-host clock-cap)
                            (let ((closed-value (and durability (.call durability .close! durability)))
@@ -389,7 +389,7 @@
                                  journal-closed?: (if closed-value (.ref closed-value 'journal-closed?) #f)
                                  context-disposed?: (if closed-value (.ref closed-value 'context-disposed?) #f)
                                  subscriptions: 0 waiters-rejected: rejected-count owner-joined?: #f)))
-                         (else (error "Unknown native clock operation"))))
+                         (else (error "Unknown runtime clock operation"))))
                        (channel-put (clock-request-reply message) (list #t answer))))))))
             (else (error "Unknown private owner message"))))
             (lambda () (ingress-complete! ingress)))

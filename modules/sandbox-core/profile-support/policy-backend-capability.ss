@@ -4,8 +4,8 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: backend capability policy describes sandbox provider capabilities
-;;; before nano, docker, cube, or native runtime adapters consume them.
-;;; Invariant: capability objects must stay parser-visible and POO-native for
+;;; before nano, docker, cube, or runtime adapters consume them.
+;;; Invariant: capability objects must stay parser-visible and POO for
 ;;; shared sandbox profile inheritance.
 
 (import :gerbil/core
@@ -435,7 +435,7 @@
 ;; agentic-ai-lab-sandbox-backend-capability/nono
 ;;   : POOObject
 ;;   | doc m%
-;;       Static POO capability object for the native nono sandbox backend.
+;;       Static POO capability object for the runtime nono sandbox backend.
 ;;
 ;;       # Examples
 ;;       ```scheme
@@ -452,7 +452,7 @@
      (supports-command . #t)
      (supports-filesystem . #t)
      (cold-start-ms-p50 . 10)
-     (metadata . ((scope . nono-sandbox) (binding . native-ffi))))))
+     (metadata . ((scope . nono-sandbox) (binding . ffi))))))
 
 ;; agentic-ai-lab-sandbox-backend-capability/cube
 ;;   : POOObject

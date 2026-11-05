@@ -27,7 +27,7 @@ SOLVER_TOOLS = [{'type': 'function', 'name': 'expand',
     'description': 'Select and expand exactly one unvisited child of the supplied parent.',
     'parameters': {'type': 'object', 'properties': {'optionId': {'type': 'integer'}},
                    'required': ['optionId'], 'additionalProperties': False}}]
-RUBRIC = '''Extract atomic reasoning episodes ONLY from the supplied external model reasoning. Return exact contiguous quotes, zero-based occurrence, a single concluded atom [relation, integer arguments], the ordered premises EXPLICITLY stated in that quote as atoms, and kind derive/reuse/mention/conditional_recheck/uncertain. Relations are edge, path, ready. ready f means both paths of needs row f. Option IDs are not fragment IDs. A derive episode must contain an inference and actual support, not just an asserted result or a reference to evidence. A reuse episode cites an established result without deriving it. Empty premises are allowed for references and uncertainty, but do not invent edges or fill support from source. Alternative edge chains stay different. Changed value/resource checks are conditional_recheck, not source-path repetitions. Use uncertain for ambiguity. A quoted literal fragment ID must agree with the atom; never silently repair a model's wrong ID. Path endpoints and premise numbers must occur in the quote. Extract explicit negative claims too, using polarity false; absence of derivation is not evidence of absence of thinking. You are blind to arm, score and cost, although reasoning can reveal supplied evidence. Do not invent an episode to fill a category. Native source truth is checked independently after extraction. Quotes must occur verbatim. Return every explicit relevant episode you identify; completeness and independent-rater agreement are unvalidated.'''
+RUBRIC = '''Extract atomic reasoning episodes ONLY from the supplied external model reasoning. Return exact contiguous quotes, zero-based occurrence, a single concluded atom [relation, integer arguments], the ordered premises EXPLICITLY stated in that quote as atoms, and kind derive/reuse/mention/conditional_recheck/uncertain. Relations are edge, path, ready. ready f means both paths of needs row f. Option IDs are not fragment IDs. A derive episode must contain an inference and actual support, not just an asserted result or a reference to evidence. A reuse episode cites an established result without deriving it. Empty premises are allowed for references and uncertainty, but do not invent edges or fill support from source. Alternative edge chains stay different. Changed value/resource checks are conditional_recheck, not source-path repetitions. Use uncertain for ambiguity. A quoted literal fragment ID must agree with the atom; never silently repair a model's wrong ID. Path endpoints and premise numbers must occur in the quote. Extract explicit negative claims too, using polarity false; absence of derivation is not evidence of absence of thinking. You are blind to arm, score and cost, although reasoning can reveal supplied evidence. Do not invent an episode to fill a category. Runtime source truth is checked independently after extraction. Quotes must occur verbatim. Return every explicit relevant episode you identify; completeness and independent-rater agreement are unvalidated.'''
 LABEL_TOOL = {'type': 'function', 'name': 'annotate', 'description': 'Record exact atomic reasoning episodes.',
  'parameters': {'type': 'object', 'properties': {'episodes': {'type': 'array', 'items': {
  'type': 'object', 'properties': {'quote': {'type': 'string'}, 'occurrence': {'type': 'integer'},
@@ -79,10 +79,10 @@ class EvidenceEngine:
         with selectors.DefaultSelector() as selector:
             selector.register(self.p.stdout, selectors.EVENT_READ)
             if not selector.select(20):
-                raise TimeoutError('native RPC deadline')
+                raise TimeoutError('runtime RPC deadline')
         line = self.p.stdout.readline()
         if not line:
-            raise RuntimeError('native process exited')
+            raise RuntimeError('runtime process exited')
         answer = json.loads(line)
         self.trace.append({'request': request, 'answer': answer, 'seconds': time.monotonic()-began})
         if 'error' in answer:
@@ -99,7 +99,7 @@ class EvidenceEngine:
     def __enter__(self): return self
     def __exit__(self, kind, failure, _):
         if failure is not None:
-            save(self.run/f"native-failure-{'judge' if self.judge else 'consumer'}-{time.time_ns()}.json",
+            save(self.run/f"runtime-failure-{'judge' if self.judge else 'consumer'}-{time.time_ns()}.json",
                  {'failure':str(failure),'trace':self.trace})
         self.close()
 
@@ -130,30 +130,30 @@ def verify(run, plan):
 def qualify(run):
     run.mkdir(parents=True, exist_ok=False)
     records = []
-    with EvidenceEngine(run) as native, EvidenceEngine(run, True) as judge:
+    with EvidenceEngine(run) as runtime, EvidenceEngine(run, True) as judge:
         for case in (0, 1, 2):
             contexts = []; cert_hashes = []
-            task = native.call(op='task', case=case); judge_init(judge, task)
+            task = runtime.call(op='task', case=case); judge_init(judge, task)
             seed = judge.call(op='grade', goal=task['goal'], selection=task['seed'])
             if not seed['valid'] or seed['optimal']: raise ValueError('common seed must be feasible and nonoptimal')
             for arm in ('baseline', 'facts', 'prune'):
-                init = native.call(op='init', case=case, arm=arm)
+                init = runtime.call(op='init', case=case, arm=arm)
                 cert_hashes.append(sha(canonical(init['certificate']).encode()))
-                q = native.call(op='next')['context']; contexts.append(q)
-                # Fixed probes, not outcome-tuned model policies. Native/independent checker parity.
+                q = runtime.call(op='next')['context']; contexts.append(q)
+                # Fixed probes, not outcome-tuned model policies. Runtime/independent checker parity.
                 for _ in range(12):
-                    step = native.call(op='next')
+                    step = runtime.call(op='next')
                     if step['done']: break
                     oid = step['context']['unvisitedChildren'][0]['option']['id']
-                    event = native.call(op='expand', optionId=oid)
+                    event = runtime.call(op='expand', optionId=oid)
                     same_check(event['prefix'], judge.call(op='inspect', goal=task['goal'], selection=event['child']))
                     same_check(event['evaluation'], judge.call(op='evaluate', goal=task['goal'], selection=event['completion']))
-                state = native.call(op='summary')
-                if fields(state['nativeStats'])['proof-builds'] != len(init['libraryLifecycle']['records']): raise ValueError('proof rebuilt across branches')
+                state = runtime.call(op='summary')
+                if fields(state['runtimeStats'])['proof-builds'] != len(init['libraryLifecycle']['records']): raise ValueError('proof rebuilt across branches')
                 if arm != 'prune' and state['prunings']: raise ValueError('control unexpectedly pruned')
-                native.call(op='init', case=case, arm=arm)
-                native.call(op='next')
-                try: native.call(op='expand', optionId=9999)
+                runtime.call(op='init', case=case, arm=arm)
+                runtime.call(op='next')
+                try: runtime.call(op='expand', optionId=9999)
                 except ValueError: pass
                 else: raise ValueError('invalid action admitted')
             if len(set(cert_hashes)) != 1: raise ValueError('treatments use different proof')
@@ -172,18 +172,18 @@ def qualify(run):
                 if {r[0] for r in record['sessionReady']}!=expected:raise ValueError('Session/independent temporal Fact parity failed')
                 expected_paths={(a,b) for a in range(12) for b in range(12) if independent_atom(judge,atom_task,['path',a,b],memo)}
                 if {tuple(p) for p in record['sessionPaths']}!=expected_paths:raise ValueError('Session/independent full path parity failed')
-            native.call(op='init',case=case,arm='baseline')
-            if not native.call(op='episode',atom=['path',0,7],premises=[['edge',0,2],['edge',2,4],['edge',4,7]])['supportQualified']:raise ValueError('true explicit chain rejected')
-            if native.call(op='episode',atom=['path',0,7],premises=[['edge',1,2],['edge',2,4],['edge',4,7]])['supportQualified']:raise ValueError('wrong chain admitted')
-            if native.call(op='episode',atom=['path',0,7],premises=[])['supportQualified']:raise ValueError('assertion counted as derivation')
+            runtime.call(op='init',case=case,arm='baseline')
+            if not runtime.call(op='episode',atom=['path',0,7],premises=[['edge',0,2],['edge',2,4],['edge',4,7]])['supportQualified']:raise ValueError('true explicit chain rejected')
+            if runtime.call(op='episode',atom=['path',0,7],premises=[['edge',1,2],['edge',2,4],['edge',4,7]])['supportQualified']:raise ValueError('wrong chain admitted')
+            if runtime.call(op='episode',atom=['path',0,7],premises=[])['supportQualified']:raise ValueError('assertion counted as derivation')
             records.append({'case':case, 'task':task, 'seedGrade':seed, 'certificateSha256':cert_hashes[0], 'libraryLifecycle':lifecycle,
                 'rootContexts':contexts, 'probeParity':True})
-        save(run/'qualification-native.json', {'scenario':native.trace, 'judge':judge.trace})
+        save(run/'qualification-runtime.json', {'scenario':runtime.trace, 'judge':judge.trace})
     # Both candidate implementation and original checker kernel remain byte bound.
     for dirname in ('candidate','program'):
         for p in (KERNEL/dirname).glob('*.ss'):
             if p.read_bytes() != (ROOT/dirname/p.name).read_bytes(): raise ValueError('kernel source drift: '+dirname+'/'+p.name)
-    save(run/'qualification.json', {'tasks':records, 'rootTaskParity':True, 'nativeProbeJudgeParity':True,
+    save(run/'qualification.json', {'tasks':records, 'rootTaskParity':True, 'runtimeProbeJudgeParity':True,
         'judgeSha256':sha((KERNEL/'.gerbil/bin/crosspath-search').read_bytes())})
     print('QUALIFIED', len(records), flush=True)
 
@@ -195,12 +195,12 @@ def freeze(run):
         'schedule':[(0,'baseline'),(0,'facts'),(0,'prune'),(1,'prune'),(1,'facts'),(1,'baseline')],
         'model':'deepseek-flash','reasoningEffort':'low','budget':65536,'maxOutputTokens':8192,'maxCalls':32,
         'maxConsecutiveFailures':3,'checkpoints':[16384,32768],'tools':SOLVER_TOOLS,
-        'nativeBoundaries':'Explicit module-load readiness and each native RPC have separate 20-second deadlines. One consumer/judge process pair is reused within each calibration/solver batch. Earlier combined-load/RPC failures remain archived; no timeout is widened.',
+        'runtimeBoundaries':'Explicit module-load readiness and each runtime RPC have separate 20-second deadlines. One consumer/judge process pair is reused within each calibration/solver batch. Earlier combined-load/RPC failures remain archived; no timeout is widened.',
         'solverInstructions':None,'annotationRubric':RUBRIC,'annotationTool':LABEL_TOOL,'annotationOutputCap':8192,
         'measurementContract':'Fixed one returned solver call per chunk; exact quotes, explicit grounded atoms/premises, literal-ID agreement, independent source truth, identical-premise prior links. All calls, failures, negatives, uncertain and rejected labels retained; no extraction retry. Same-provider extraction is not validated independent cognitive ground truth.',
         'budgetContract':'All provider input + all output, including thinking, cached input and failures. Reasoning tokens are a subset of output. Per-call reservation is serialized UTF8 bytes + 4096 + 128*inputItems, plus 8192 output. Unused reservation remains unused, never savings. Only completed actions ending before common checkpoints contribute to quality/depth.',
         'failureContract':'Known usage retained/charged; no failed action admitted. New call receives same pending branch, at most three consecutive failed calls. Unknown usage stops that phase. No retries or continuation of truncated reasoning. Common controller incumbent survives all failures.',
-        'boundary':'Consumer fixture only, outside Library build. Agentic AI Lab revision projection and reverse-dependency plan feed ASCENT retained Session; independent finite proof replay compares its published rows. Each case starts after its predetermined temporal history; this study does not yet test live correction mid-model-dialogue. All arms use native post-choice validation. Baseline has no model-visible Facts or Fact prepruning. Fact-only and pruning share evidence. Two fixed task cases, one run per arm; descriptive only. No general source authentication, MRR integration or causal-mechanism claim.',
+        'boundary':'Consumer fixture only, outside Library build. Agentic AI Lab revision projection and reverse-dependency plan feed ASCENT retained Session; independent finite proof replay compares its published rows. Each case starts after its predetermined temporal history; this study does not yet test live correction mid-model-dialogue. All arms use runtime post-choice validation. Baseline has no model-visible Facts or Fact prepruning. Fact-only and pruning share evidence. Two fixed task cases, one run per arm; descriptive only. No general source authentication, MRR integration or causal-mechanism claim.',
         'binding':binding(),'qualificationSha256':sha((run/'qualification.json').read_bytes())}
     save(run/'plan.json',plan); (run/'plan.sha256').write_text(sha((run/'plan.json').read_bytes())+'\n')
     # Exact executable study sources are artifacts, not copied active modules.
@@ -214,7 +214,7 @@ def freeze(run):
     for entry in qualification['tasks']:
         for arm,context in zip(('baseline','facts','prune'),entry['rootContexts']):
             save(preview/f"case-{entry['case']}-{arm}.json",request_for(plan,context))
-    save(preview/'manifest.json',{'destination':'https://api.deepseek.com/responses','data':'Synthetic graph, fixed numerical search task, native Fact/proof nodes. No repository source, user files, business records or credentials in requests.','solverSystemInstructions':False,'solverAntiRepetitionPrompt':False})
+    save(preview/'manifest.json',{'destination':'https://api.deepseek.com/responses','data':'Synthetic graph, fixed numerical search task, runtime Fact/proof nodes. No repository source, user files, business records or credentials in requests.','solverSystemInstructions':False,'solverAntiRepetitionPrompt':False})
     print('FROZEN',sha((run/'plan.json').read_bytes()),flush=True)
 
 def request_for(plan, context):
@@ -239,16 +239,16 @@ def reasoning(meta, path):
         text=''.join(e.get('delta','') for line in path.with_suffix('.events.jsonl').read_text().splitlines() if (e:=json.loads(line)).get('type')=='response.reasoning_text.delta')
     return text
 
-def phase(run, plan, case, arm, calibration=False, native=None, judge=None):
+def phase(run, plan, case, arm, calibration=False, runtime=None, judge=None):
     folder=run/('calibration' if calibration else 'paid')/f'{case}-{arm}';folder.mkdir(parents=True,exist_ok=False)
     row={'case':case,'arm':arm,'calls':[],'expansions':[],'grossTokens':0,'failure':None,'stopReason':None,'budget':plan['budget']}
     with contextlib.ExitStack() as stack:
-        native=native or stack.enter_context(EvidenceEngine(run));judge=judge or stack.enter_context(EvidenceEngine(run,True))
-        init=native.call(op='init',case=case,arm=arm);task=init['task'];judge_init(judge,task)
+        runtime=runtime or stack.enter_context(EvidenceEngine(run));judge=judge or stack.enter_context(EvidenceEngine(run,True))
+        init=runtime.call(op='init',case=case,arm=arm);task=init['task'];judge_init(judge,task)
         save(folder/'certificate.json',init['certificate']);save(folder/'library-lifecycle.json',init['libraryLifecycle']);row['seedGrade']=judge.call(op='grade',goal=task['goal'],selection=task['seed'])
         consecutive=0
         for turn in range(1 if calibration else plan['maxCalls']):
-            step=native.call(op='next')
+            step=runtime.call(op='next')
             if step['done']:row['stopReason']='tree_exhausted';break
             request=request_for(plan,step['context']);reserve=len(canonical(request).encode())+4096+128*len(request['input'])
             if row['grossTokens']+reserve+plan['maxOutputTokens']>plan['budget']:
@@ -271,7 +271,7 @@ def phase(run, plan, case, arm, calibration=False, native=None, judge=None):
                 if len(actions)!=1 or actions[0].get('name')!='expand':raise ValueError('expected_one_expand')
                 args=json.loads(actions[0]['arguments'])
                 if set(args)!={'optionId'} or type(args['optionId']) is not int:raise ValueError('invalid_action_schema')
-                event=native.call(op='expand',**args)
+                event=runtime.call(op='expand',**args)
                 same_check(event['prefix'],judge.call(op='inspect',goal=task['goal'],selection=event['child']))
                 same_check(event['evaluation'],judge.call(op='evaluate',goal=task['goal'],selection=event['completion']))
                 event.update(turn=turn,atGrossTokens=row['grossTokens']);row['expansions'].append(event);consecutive=0
@@ -281,19 +281,19 @@ def phase(run, plan, case, arm, calibration=False, native=None, judge=None):
                 if consecutive>=plan['maxConsecutiveFailures']:row['failure']='consecutive_failed_calls';row['stopReason']='failed_calls';break
             save(folder/'receipt.json',row)
             print('\nSOLVER',case,arm,turn,'gross',row['grossTokens'],'failure',call['failure'],flush=True)
-        state=native.call(op='summary');row['state']=state
+        state=runtime.call(op='summary');row['state']=state
         row['grade']=judge.call(op='grade',goal=task['goal'],selection=state['incumbent']['selection'])
         same_check(state['incumbent']['evaluation'],row['grade'])
         row['unusedBudget']=plan['budget']-row['grossTokens'];row['stopReason']=row['stopReason'] or ('calibration_one_call' if calibration else 'call_limit')
-        save(folder/'native.json',{'scenario':native.trace,'judge':judge.trace});save(folder/'receipt.json',row)
+        save(folder/'runtime.json',{'scenario':runtime.trace,'judge':judge.trace});save(folder/'receipt.json',row)
     print('\nPHASE',case,arm,len(row['calls']),row['grossTokens'],'gap',row['grade']['gap'],flush=True)
     return row
 
 def calibrate(run,plan):
     verify(run,plan);rows=[]
-    with EvidenceEngine(run) as native,EvidenceEngine(run,True) as judge:
+    with EvidenceEngine(run) as runtime,EvidenceEngine(run,True) as judge:
         for arm in ('baseline','facts','prune'):
-            rows.append(phase(run,plan,2,arm,True,native,judge));save(run/'calibration-ledger.json',{'phases':rows,'passed':False})
+            rows.append(phase(run,plan,2,arm,True,runtime,judge));save(run/'calibration-ledger.json',{'phases':rows,'passed':False})
     passed=all(len(r['expansions'])==1 and r['calls'][0]['status']=='completed' and not r['calls'][0]['failure'] for r in rows)
     save(run/'calibration-ledger.json',{'phases':rows,'passed':passed})
     if not passed:raise ValueError('calibration gate failed; no confirmatory study')
@@ -304,9 +304,9 @@ def solve(run,plan):
     if not json.loads((run/'calibration-ledger.json').read_text())['passed']:raise ValueError('calibration failed')
     if (run/'ledger.json').exists():raise ValueError('study already started; do not overwrite failures')
     rows=[]
-    with EvidenceEngine(run) as native,EvidenceEngine(run,True) as judge:
+    with EvidenceEngine(run) as runtime,EvidenceEngine(run,True) as judge:
         for case,arm in plan['schedule']:
-            rows.append(phase(run,plan,case,arm,native=native,judge=judge));save(run/'ledger.json',{'planSha256':sha((run/'plan.json').read_bytes()),'phases':rows})
+            rows.append(phase(run,plan,case,arm,runtime=runtime,judge=judge));save(run/'ledger.json',{'planSha256':sha((run/'plan.json').read_bytes()),'phases':rows})
     verify(run,plan);print('SOLVER_STUDY_COMPLETE',flush=True)
 
 def independent_atom(judge,task,atom,memo):
@@ -336,14 +336,14 @@ def anchor(text,quote,occurrence):
         start=pos+1
     return [pos,pos+len(quote)]
 
-def validate_episode(text,item,task,native,judge,memo):
+def validate_episode(text,item,task,runtime,judge,memo):
     span=anchor(text,item['quote'],item['occurrence'])
     if item['kind'] not in ('derive','reuse','mention','conditional_recheck','uncertain') or type(item['polarity']) is not bool:
         raise ValueError('invalid label category')
     atom=item['atom'];premises=item['premises']
-    native_check=native.call(op='episode',atom=atom,premises=premises)
+    runtime_check=runtime.call(op='episode',atom=atom,premises=premises)
     truth=independent_atom(judge,task,atom,memo)
-    if truth!=native_check['present']:raise ValueError('atomic independent checker disagreement')
+    if truth!=runtime_check['present']:raise ValueError('atomic independent checker disagreement')
     for premise in premises:
         if not independent_atom(judge,task,premise,memo):raise ValueError('false stated premise')
     numbers={int(x) for x in re.findall(r'(?<![\w.])-?\d+(?![\w.])',item['quote'])}
@@ -353,9 +353,9 @@ def validate_episode(text,item,task,native,judge,memo):
     numbers|=literal_ids
     if any(x not in numbers for claim in [atom,*premises] for x in claim[1:]):raise ValueError('claimed endpoints absent from literal quote')
     if atom[0]=='ready' and atom[1] not in literal_ids:raise ValueError('fragment ID absent or mismatched; no silent repair')
-    qualified=bool(item['kind']=='derive' and item['polarity'] is True and truth and native_check['supportQualified'])
-    return {**item,'span':span,'nativeTruth':truth,'truthMatches':truth==item['polarity'],
-        'supportQualified':native_check['supportQualified'],'qualifiedPositiveDerivation':qualified,
+    qualified=bool(item['kind']=='derive' and item['polarity'] is True and truth and runtime_check['supportQualified'])
+    return {**item,'span':span,'runtimeTruth':truth,'truthMatches':truth==item['polarity'],
+        'supportQualified':runtime_check['supportQualified'],'qualifiedPositiveDerivation':qualified,
         'claimKey':[canonical(atom),canonical(premises),item['polarity']], 'prior':None,'definiteRepeat':False}
 
 def annotate(run,plan):
@@ -364,8 +364,8 @@ def annotate(run,plan):
         folder=run/'paid'/f"{row['case']}-{row['arm']}";task=next(t for t in plan['tasks'] if t['id']==f"evidence-search-{row['case']}")
         measurement={'case':row['case'],'arm':row['arm'],'calls':[],'accepted':[],'rejected':[],'grossTokens':0,'failure':None}
         memo={}
-        with EvidenceEngine(run) as native,EvidenceEngine(run,True) as judge:
-            native.call(op='init',case=row['case'],arm='baseline')
+        with EvidenceEngine(run) as runtime,EvidenceEngine(run,True) as judge:
+            runtime.call(op='init',case=row['case'],arm='baseline')
             for call in row['calls']:
                 text=(folder/f"{call['turn']}.thinking.txt").read_text();assert sha(text.encode())==call['thinkingSha256']
                 blind=sha((task['id']+'\n'+text).encode())[:24];out=dest/f"{blind}-{len(phases)}-{call['turn']}";out.mkdir(exist_ok=False)
@@ -386,7 +386,7 @@ def annotate(run,plan):
                         raw=json.loads(actions[0]['arguments'])['episodes'];result['rawEpisodes']=raw
                         for i,item in enumerate(raw):
                             try:
-                                episode=validate_episode(text,item,task,native,judge,memo)
+                                episode=validate_episode(text,item,task,runtime,judge,memo)
                                 episode.update(index=len(measurement['accepted']),turn=call['turn'],textSha256=result['textSha256'],atGrossTokens=call.get('atGrossTokens'))
                                 if result['accepted'] and episode['span'][0]<result['accepted'][-1]['span'][0]:raise ValueError('out_of_order_quote')
                                 previous=next((p for p in measurement['accepted'] if p['qualifiedPositiveDerivation'] and p['claimKey']==episode['claimKey'] and
@@ -402,7 +402,7 @@ def annotate(run,plan):
                 save(out/'receipt.json',result);measurement['calls'].append(result)
                 save(dest/f"phase-{row['case']}-{row['arm']}.json",measurement)
                 print('\nANNOTATION',row['case'],row['arm'],call['turn'],'labels',len(result['accepted']),'rejected',len(result['rejected']),'failure',result['failure'],flush=True)
-            save(dest/f"native-{row['case']}-{row['arm']}.json",{'scenario':native.trace,'independentAtomJudge':judge.trace})
+            save(dest/f"runtime-{row['case']}-{row['arm']}.json",{'scenario':runtime.trace,'independentAtomJudge':judge.trace})
         phases.append(measurement);save(run/'annotation-ledger.json',{'planSha256':sha((run/'plan.json').read_bytes()),'phases':phases})
     verify(run,plan);print('ANNOTATION_COMPLETE',flush=True)
 
@@ -441,7 +441,7 @@ def report(run,plan):
             'truncatedCalls':sum(c['status']=='incomplete' for c in row['calls']),'grossTokens':row['grossTokens'],'unusedBudget':row['unusedBudget'],
             'thinkingTokens':sum((c['usage'].get('output_tokens_details') or {}).get('reasoning_tokens',0) for c in row['calls'] if isinstance(c.get('usage'),dict)),
             'seedValue':row['seedGrade']['value'],'bestValue':row['grade']['value'],'gap':row['grade']['gap'],'valid':row['grade']['valid'],
-            'nativeStats':fields(row['state']['nativeStats']),'automaticPrunedBranches':sum(len(fields(p[1])['pruned']) for p in row['state']['prunings']),
+            'runtimeStats':fields(row['state']['runtimeStats']),'automaticPrunedBranches':sum(len(fields(p[1])['pruned']) for p in row['state']['prunings']),
             'measurementFailure':lab['failure'],'rejectedLabels':len(lab['rejected']),
             'checkpoints':[point(row,lab,cp) for cp in plan['checkpoints']]})
     # Assert the common root task and Fact-only/pruning packet parity on real payloads.
@@ -458,20 +458,20 @@ def report(run,plan):
         'limitations':['Two deterministic tasks, one stochastic run per arm; descriptive study, not a causal/statistical effect estimate.',
             'All arms retain Scheme execution and post-choice checking. Baseline omits model-visible Fact evidence and Fact prepruning.',
             'Task/action contracts are common; there are no solver system instructions, anti-repetition directives or requested audit narration.',
-            'Only actual completed native-admitted prefixes measure depth; full seed-suffix candidates do not establish explored depth.',
+            'Only actual completed runtime-admitted prefixes measure depth; full seed-suffix candidates do not establish explored depth.',
             'Unused ceiling is not savings. Matched checkpoints credit only observed completed calls before the common gross-token boundary.',
-            'Positive repeated labels require exact quotes, literal IDs/endpoints, independently true atoms and native-qualified explicit edge-chain/conjunction support. This narrow metric omits unsupported/negative/ambiguous derivations.',
+            'Positive repeated labels require exact quotes, literal IDs/endpoints, independently true atoms and runtime-qualified explicit edge-chain/conjunction support. This narrow metric omits unsupported/negative/ambiguous derivations.',
             'Same-provider extraction is partially blind but not independently validated for completeness or semantic category accuracy. Counts are qualified labels, not cognitive ground truth.',
             'This is a Library consumer test, not a Library Search/Fact workflow API or MRR integration. Agentic AI Lab revision projection and reevaluation planning are exercised before model calls at fixed cuts; live revision during the model dialogue remains unqualified.',
             'Retained Session publication is checked against independently replayed finite evidence. Proof replay costs are additional; no cross-generation retained-proof algorithm or source authentication is claimed.',
-            'Native proof builds/hits are not end-to-end speed or model-thinking savings. Negative and failed outcomes remain in all records.']}
+            'Runtime proof builds/hits are not end-to-end speed or model-thinking savings. Negative and failed outcomes remain in all records.']}
     prior=ROOT/'.cache/ascent/archived-runs/docs/research/agent-inference/history/consumer-calibration-failure.tar.gz'
     if prior.exists():
         result['priorProtocolFailureArchiveSha256']=sha(prior.read_bytes())
         result['priorProtocolCostBoundary']='Earlier HTTP 400 requests returned no usage. Their cost is unknown, not zero; they are excluded from known-token sums and retained in the failure archive.'
     save(run/'report.json',result);save(run/'thinking-episodes.json',spans)
-    lines=['# Native Fact interaction study','',f"Frozen plan `{result['planSha256']}`. One implementation; three configured treatments. No solver instructions or anti-repetition prompt.",'',
-        '| Task / arm | Gross / unused | Seed → best | Gap | Calls / failures / truncation | Native Fact prunings |',
+    lines=['# Runtime Fact interaction study','',f"Frozen plan `{result['planSha256']}`. One implementation; three configured treatments. No solver instructions or anti-repetition prompt.",'',
+        '| Task / arm | Gross / unused | Seed → best | Gap | Calls / failures / truncation | Runtime Fact prunings |',
         '|---|---:|---:|---:|---:|---:|']
     for r in table:lines.append(f"| {r['case']} / {r['arm']} | {r['grossTokens']} / {r['unusedBudget']} | {r['seedValue']} → {r['bestValue']} | {r['gap']} | {r['calls']} / {r['failedCalls']} / {r['truncatedCalls']} | {r['automaticPrunedBranches']} |")
     lines+=['','## Matched input + all-output checkpoints','','| Task / arm | Gross checkpoint / reached | Value | Expansions / admitted depth | Qualified positive repeats / derives / reuse | Missing measurements |','|---|---:|---:|---:|---:|---:|']
@@ -491,14 +491,14 @@ def report(run,plan):
     with tarfile.open(bundle,'w:gz') as tar:
         if prior.exists():tar.add(prior,arcname='development/consumer-calibration-failure.tar.gz')
         for dirname in ('paid','calibration','annotations','payload-review','producers'):tar.add(run/dirname,arcname=dirname)
-        for name in ('plan.json','plan.sha256','qualification.json','qualification-native.json','ledger.json','annotation-ledger.json','calibration-ledger.json','integrity.json'):tar.add(run/name,arcname=name)
+        for name in ('plan.json','plan.sha256','qualification.json','qualification-runtime.json','ledger.json','annotation-ledger.json','calibration-ledger.json','integrity.json'):tar.add(run/name,arcname=name)
         development=run.parent
         for folder in ('failed-startup-qualification','consumer-startup-probe','consumer-model-check'):
             if (development/folder).exists():tar.add(development/folder,arcname='development/'+folder)
-        for folder in ('failed-object-command-resolution','failed-object-runtime-prefix','native-objects','retired-locks'):
+        for folder in ('failed-object-command-resolution','failed-object-runtime-prefix','poo-objects','retired-locks'):
             if (RUNTIME/folder).exists():tar.add(RUNTIME/folder,arcname='development/runtime/'+folder)
         for log in sorted(RUNTIME.glob('*.log')):tar.add(log,arcname='development/runtime/'+log.name)
-        for name in ('consumer-build.json','poo-source-order.json','native-object-closure.json','native-link-receipt.json','native-link-missing-crypto.json'):
+        for name in ('consumer-build.json','poo-source-order.json','poo-object-closure.json','runtime-link-receipt.json','runtime-link-missing-crypto.json'):
             tar.add(RUNTIME/name,arcname='development/runtime/'+name)
     save(doc/'archive.json',{'sha256':sha(bundle.read_bytes()),'bytes':bundle.stat().st_size})
     print('REPORTED',result['solverGrossTokens'],result['measurementGrossTokens'],flush=True)

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Qualify the live-owner clock corpus using an already verified durable build.
 
-Rebuilding between gates would change the native binary commitment. This entry
+Rebuilding between gates would change the runtime binary commitment. This entry
 point verifies the durable receipt, reuses those exact objects, then invokes the
 ordinary clock evidence parser and receipt checker. It never relabels old logs.
 """
@@ -16,7 +16,7 @@ import shutil
 import subprocess
 
 HERE = Path(__file__).resolve().parent
-spec = importlib.util.spec_from_file_location('durable_gate', HERE / 'run-native-durable.py')
+spec = importlib.util.spec_from_file_location('durable_gate', HERE / 'run-runtime-durable.py')
 durable = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(durable)
 clock = durable.clock
@@ -58,19 +58,19 @@ def main():
     env.update(GERBIL_PATH=str(ROOT / '.gerbil'),
                GERBIL_LOADPATH=f'{ROOT}/.gerbil/lib:{ROOT}:{ROOT}/dev/.gerbil/lib')
     shutil.copyfile(args.durable_receipt.parent / 'build.log', args.artifacts / 'build.log')
-    with (args.artifacts / 'native.log').open('w') as output:
+    with (args.artifacts / 'runtime.log').open('w') as output:
         result = subprocess.run(['just', 'test-context-clock'], cwd=ROOT, env=env,
                                 stdout=output, stderr=subprocess.STDOUT, timeout=915)
     durable.verify_receipt(args.durable_receipt)
     if before != {p: durable.sha(ROOT / p) for p in clock.INPUTS} or binary_cut != clock.binaries():
         raise RuntimeError('Clock source/binary cut changed')
-    actual = clock.inspect(args.artifacts / 'native.log', result.returncode, clock.ALL)
+    actual = clock.inspect(args.artifacts / 'runtime.log', result.returncode, clock.ALL)
     (args.artifacts / 'paths.json').write_text(json.dumps(actual['paths'], indent=2) + '\n')
-    receipt = dict(schema='context.native-background-clock.v1', mode='all', orders=clock.ALL,
-                   native_exit=result.returncode, source_sha256=before, ascent_head=ascent,
+    receipt = dict(schema='context.runtime-background-clock.v1', mode='all', orders=clock.ALL,
+                   runtime_exit=result.returncode, source_sha256=before, ascent_head=ascent,
                    orgize_head=orgize, binaries=binary_cut, execution=actual,
                    artifacts={p: durable.sha(args.artifacts / p)
-                              for p in ('build.log', 'native.log', 'paths.json')},
+                              for p in ('build.log', 'runtime.log', 'paths.json')},
                    scope=dict(os_monotonic_timer=True, owner_reactor=True,
                               no_query_push=True, delayed_duplicate_queue_orders=True,
                               all_machine_interleavings=False,
@@ -82,7 +82,7 @@ def main():
     path = args.artifacts / 'clock-receipt.json'
     path.write_text(json.dumps(receipt, indent=2) + '\n')
     verify(path)
-    print(f'PASS: current native clock regression and {len(clock.ALL)} owner paths; {path}')
+    print(f'PASS: current runtime clock regression and {len(clock.ALL)} owner paths; {path}')
 
 
 if __name__ == '__main__':

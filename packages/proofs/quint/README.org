@@ -41,7 +41,7 @@ Install dependencies before checking; package manifests only pin build tools.
 | Group | Scope |
 |-------+-------|
 | governance | Work/blocker/authority handoff |
-| query | Native semantic query revision and provider receipts |
+| query | Runtime semantic query revision and provider receipts |
 | healthcare, healthcare-ai, healthcare-migration | Original bounded evidence/human/Cedar authority cases |
 | family | Exclusive two-cause family, one-step bound and discriminating evidence |
 | revision | Four append-only revisions, historical cut and concurrent heads |
@@ -62,7 +62,7 @@ source identities. Build and test discovery contain only maintained entries.
 checks the pinned =context-delta= and =context-coverage= groups: one full-reconstruction/publication/use
 safety case plus five matched CAS/cut/deletion/grant controls, and complete-domain
 local selection with insertion/removal/nonmatching mutation controls. The fixtures model
-abstract publication/use snapshots and do not qualify native Host or Data fences.
+abstract publication/use snapshots and do not qualify runtime Host or Data fences.
 See [[file:../../../docs/10-19-design/10.06-poo-module-system/context-delta-lean-quint-model-design.org][the Context Delta model design]] for the exact evidence and remaining gates.
 
 

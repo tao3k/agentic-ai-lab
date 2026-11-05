@@ -19,15 +19,15 @@ def test_catalog_selects_single_part_and_cross_module_cases() -> None:
     cross = catalog.select(composition="cross")
     assert {case.spec.identity for case in cross} == {
         "runtime-ascent.candidate-graph", "evidence-ascent.hypothesis-status",
-        "model-study.native-fixtures",
+        "model-study.runtime-fixtures",
     }
     assert all(len({target.module for target in case.spec.targets}) > 1 for case in cross)
-    assert catalog.select(identity="ascent.source-withdrawal")[0].spec.mode == "native"
+    assert catalog.select(identity="ascent.source-withdrawal")[0].spec.mode == "runtime"
 
 
-def test_session_native_cases_register_the_two_quint_models() -> None:
+def test_session_runtime_cases_register_the_two_quint_models() -> None:
     catalog = build_catalog()
-    assert {case.spec.identity for case in catalog.select(module="session", mode="native")} == {
+    assert {case.spec.identity for case in catalog.select(module="session", mode="runtime")} == {
         "session.quint-lifecycle", "session.quint-worktree"
     }
 

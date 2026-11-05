@@ -73,4 +73,4 @@ adapters:
 Every stable runtime binding should provide an equivalent self-test receipt for
 its own package surface. The receipt should prove parser compatibility and
 interface completeness, not business policy semantics. Policy semantics stay in
-POO-native Scheme manifests and functional strategy combinators.
+POO Scheme manifests and functional strategy combinators.

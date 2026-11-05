@@ -5,7 +5,7 @@
 #include <agentic_ai_lab/semantic.h>
 
 /* This caller runs inside the heap-fenced gxi test host. Only SDK setup and
- * teardown are supplied by that host; the production C facade, native Scheme
+ * teardown are supplied by that host; the production C facade, Scheme
  * entry, Context/Session CAS, journal and result ownership all run unchanged.
  * This does not claim standalone AOT VM/bootstrap qualification. */
 static unsigned context_test_setups;
@@ -103,7 +103,7 @@ int context_c_roundtrip(int restart, const char *digest) {
         "\"obs-A\"", "unknown-observation", 16))) return error;
   } else {
     if ((error = context_session_command("complete-C", "result", "session-c", 2, 1,
-        "\"obs-C\"", "(\"nativeResultPublished\" #t)", 20))) return error;
+        "\"obs-C\"", "(\"runtimeResultPublished\" #t)", 20))) return error;
     if ((error = context_session_command("complete-C", "result", "session-c", 2, 1,
         "\"obs-C\"", "(\"historical\" #t)", 21))) return error;
     if ((error = context_session_command("complete-C", "result", "session", 2, 1,

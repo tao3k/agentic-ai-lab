@@ -6,7 +6,7 @@
 #+startup: overview
 
 * Scope
-This benchmark compares native LangChain/LangGraph/CrewAI orchestration with semantically aligned Agentic AI Lab executor surfaces.
+This benchmark compares runtime LangChain/LangGraph/CrewAI orchestration with semantically aligned Agentic AI Lab executor surfaces.
 
 It does not measure real LLM latency, network tools, or durable storage IO. The deterministic actions model control-plane costs for policy routing, graph edges, dynamic handoff, reducers, checkpoint interrupt/resume, long graph scale, and stream/event consumption.
 
@@ -41,12 +41,12 @@ uv run \
 - GC during measurement: =false=
 
 * Summary
-- Agentic AI Lab runtime surfaces are 20.64x to 20.64x faster than the measured LangChain native orchestration cases in this run.
-- Agentic AI Lab runtime surfaces are 34.72x to 99.49x faster than the measured LangGraph native orchestration cases in this run.
-- Agentic AI Lab runtime surfaces are 691.65x to 691.65x faster than the measured CrewAI native orchestration cases in this run.
+- Agentic AI Lab runtime surfaces are 20.64x to 20.64x faster than the measured LangChain runtime orchestration cases in this run.
+- Agentic AI Lab runtime surfaces are 34.72x to 99.49x faster than the measured LangGraph runtime orchestration cases in this run.
+- Agentic AI Lab runtime surfaces are 691.65x to 691.65x faster than the measured CrewAI runtime orchestration cases in this run.
 - All comparison rows report deterministic control-plane latency only; they do not include LLM, network, or durable storage IO.
 
-| comparison | native mean ms | agentic-ai-lab mean ms | speedup |
+| comparison | runtime mean ms | agentic-ai-lab mean ms | speedup |
 |-
 | LangChain branch/tool route | 0.2386 | 0.0116 | 20.64x |
 | LangGraph router | 0.4535 | 0.0116 | 39.22x |
@@ -59,14 +59,14 @@ uv run \
 * Benchmark Results
 | name | family | features | mean ms | p50 ms | p95 ms | min ms | max ms | checksum |
 |-
-| crewai-sequential-crew-native | crewai-native | crew, sequential-process, agent, task-context | 11.0340 | 10.7730 | 12.9284 | 10.0847 | 16.5610 | 440557 |
-| langchain-branch-tool-native | langchain-native | runnable-branch, policy-router, tool-selection, handoff-route | 0.2386 | 0.2477 | 0.2685 | 0.1880 | 0.7498 | 133065 |
-| langchain-linear-agent-native | langchain-native | prompt-template, output-parser, runnable-sequence, agent-policy | 0.2920 | 0.2400 | 0.6755 | 0.2293 | 1.4421 | 5292 |
-| langgraph-handoff-reducer-native | langgraph-native | state-graph, send, multi-agent-handoff, reducer | 0.7717 | 0.7597 | 0.8988 | 0.6562 | 0.9992 | 139366 |
-| langgraph-interrupt-resume-native | langgraph-native | interrupt, resume, checkpoint, human-in-loop | 1.3768 | 1.3258 | 1.7155 | 1.1371 | 2.3353 | 638974 |
-| langgraph-long-graph-native | langgraph-native | state-graph, long-graph, scale, linear-graph | 3.1973 | 2.8896 | 4.7452 | 2.7896 | 11.6980 | 341567 |
-| langgraph-router-agent-native | langgraph-native | state-graph, conditional-edge, policy-router, agent-state | 0.4535 | 0.4395 | 0.5386 | 0.4189 | 0.6797 | 431648 |
-| langgraph-router-stream-native | langgraph-native | state-graph, stream, events, conditional-edge | 0.4170 | 0.4048 | 0.5061 | 0.3933 | 0.6411 | 372039 |
+| crewai-sequential-crew-runtime | crewai-runtime | crew, sequential-process, agent, task-context | 11.0340 | 10.7730 | 12.9284 | 10.0847 | 16.5610 | 440557 |
+| langchain-branch-tool-runtime | langchain-runtime | runnable-branch, policy-router, tool-selection, handoff-route | 0.2386 | 0.2477 | 0.2685 | 0.1880 | 0.7498 | 133065 |
+| langchain-linear-agent-runtime | langchain-runtime | prompt-template, output-parser, runnable-sequence, agent-policy | 0.2920 | 0.2400 | 0.6755 | 0.2293 | 1.4421 | 5292 |
+| langgraph-handoff-reducer-runtime | langgraph-runtime | state-graph, send, multi-agent-handoff, reducer | 0.7717 | 0.7597 | 0.8988 | 0.6562 | 0.9992 | 139366 |
+| langgraph-interrupt-resume-runtime | langgraph-runtime | interrupt, resume, checkpoint, human-in-loop | 1.3768 | 1.3258 | 1.7155 | 1.1371 | 2.3353 | 638974 |
+| langgraph-long-graph-runtime | langgraph-runtime | state-graph, long-graph, scale, linear-graph | 3.1973 | 2.8896 | 4.7452 | 2.7896 | 11.6980 | 341567 |
+| langgraph-router-agent-runtime | langgraph-runtime | state-graph, conditional-edge, policy-router, agent-state | 0.4535 | 0.4395 | 0.5386 | 0.4189 | 0.6797 | 431648 |
+| langgraph-router-stream-runtime | langgraph-runtime | state-graph, stream, events, conditional-edge | 0.4170 | 0.4048 | 0.5061 | 0.3933 | 0.6411 | 372039 |
 | agentic-ai-lab-executor-crewai-sequential | agentic-ai-lab-executor | runtime-graph, crewai-sequential, executor-only | 0.0160 | 0.0157 | 0.0168 | 0.0147 | 0.0598 | 910496 |
 | agentic-ai-lab-executor-handoff-reducer | agentic-ai-lab-executor | runtime-graph, handoff-reducer, executor-only | 0.0222 | 0.0220 | 0.0225 | 0.0211 | 0.0709 | 110844 |
 | agentic-ai-lab-executor-interrupt-resume | agentic-ai-lab-executor | runtime-graph, interrupt-resume, executor-only | 0.0138 | 0.0137 | 0.0140 | 0.0129 | 0.0470 | 552858 |

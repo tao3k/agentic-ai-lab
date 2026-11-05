@@ -60,7 +60,7 @@
     (error "invalid canonical Query" query))
   (unless (agentic-ai-lab-query-element-space? element-space)
     (error "invalid canonical Query ElementSpace" element-space))
-  ;; Keep the lexical binding distinct from the public slot name.  In native
+  ;; Keep the lexical binding distinct from the public slot name.  In runtime
   ;; POO object syntax an identifier matching a slot is a self reference; using
   ;; `diagnostics` here would therefore define the slot in terms of itself.
   (let (diagnostic-values (query-admission-diagnostics query element-space))

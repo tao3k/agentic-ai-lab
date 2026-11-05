@@ -1,6 +1,6 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Native reference adapter and cross-language path replay, not a cluster gate.
+;;; Runtime reference adapter and cross-language path replay, not a cluster gate.
 (import (only-in :clan/poo/object .ref)
         (only-in :std/list/list delete-duplicates/hash)
         :agentic-ai-lab/modules/temporal-causality/runtime/scheduling)
@@ -36,7 +36,7 @@
     (if (null? pending)
       (begin
         (displayln "SCHEDULING-REACHABLE states=" (length seen) " transitions=" edges)
-        (ensure (> (length seen) 20) "Native finite exploration did not run"))
+        (ensure (> (length seen) 20) "Runtime finite exploration did not run"))
       (let* ((current (car pending)) (key (row current)))
         (if (member key seen)
           (loop (cdr pending) seen edges)
@@ -45,7 +45,7 @@
                         (let* ((decision (apply-event current operation))
                                (next (.ref decision 'state))
                                (selected (.ref decision 'selected)))
-                          (ensure (safe? next) "Native scheduling invariant failed")
+                          (ensure (safe? next) "Runtime scheduling invariant failed")
                           (when (and (eq? operation 'dispatch)
                                      (eq? (.ref current 'active) 'idle)
                                      (> (.ref current 'queued-controls) 0)
@@ -53,7 +53,7 @@
                             (ensure (eq? selected
                                       (if (< (.ref current 'consecutive-controls) 2)
                                         'control 'data))
-                                    "Native control/data selection obligation failed"))
+                                    "Runtime control/data selection obligation failed"))
                           next)) operations))
             (loop (append successors (cdr pending)) (cons key seen) (+ edges 7))))))))
 
@@ -68,13 +68,13 @@
             (set! current (advance current (list-ref operations (- (car event) 1))))
             (set! steps (+ steps 1))
             (unless (equal? (row current) (cadr event)) (set! different #t))
-            (ensure (safe? current) "Native ITF replay became unsafe"))
+            (ensure (safe? current) "Runtime ITF replay became unsafe"))
           (caddr case))
          ;; Every safe prefix agrees; each actual broken projection must
          ;; diverge from the corrected kernel on the same input path.
          (when different (set! negatives (+ negatives 1)))
-         (ensure (eq? different (cadr case)) "Quint/native path mismatch"))) cases)
-    (ensure (= (length cases) 25) "Missing native ITF paths")
+         (ensure (eq? different (cadr case)) "Quint/runtime path mismatch"))) cases)
+    (ensure (= (length cases) 25) "Missing runtime ITF paths")
     (ensure (= negatives 5) "Broken contracts were not rejected independently")
     (displayln "SCHEDULING-REPLAY paths=" (length cases) " steps=" steps
       " corrected-counterexamples=" negatives)))
@@ -150,7 +150,7 @@
     (ensure (eq? (thread-join! actor 10 'join-timeout) 'owner-closed) "Owner did not join")
     (ensure (= accepted 40) "Reserved capacities did not bound admission")
     (ensure (= refused 760) "Overflow did not return explicit refusal")
-    (ensure (safe? current) "Drained native state became unsafe")
+    (ensure (safe? current) "Drained runtime state became unsafe")
     (ensure (= (length processed) accepted) "Admitted payload was lost")
     (ensure (= (length (delete-duplicates/hash processed)) accepted) "Payload ran twice")
     (displayln "SCHEDULING-ACTOR producers=8 offers=800 accepted=40 refused=760 completed=40 joined=1")))

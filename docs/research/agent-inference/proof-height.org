@@ -39,7 +39,7 @@ detached query annotations to the current source cut. Deleting a shortest suppor
 forces a fresh table, so heights can increase; support compaction preserves them.
 
 This implements the finite min/max height seam identified above. It does not
-integrate annotations into native seminaive evaluation or reproduce Souffle's
+integrate annotations into runtime seminaive evaluation or reproduce Souffle's
 parallel synthesis and DOOP/DaCapo experiments. Fragment search remains open.
-Theorem 1 motivates the Lean closure-plus-attainment characterization; native
+Theorem 1 motivates the Lean closure-plus-attainment characterization; runtime
 loop refinement is an independent remaining obligation.

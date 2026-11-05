@@ -14,7 +14,7 @@
     (scheduling-frame-control-capacity previous) (scheduling-frame-burst-limit previous)
     data controls active burst phase))
 
-;; Return the next immutable frame, acceptance, and selected class as native
+;; Return the next immutable frame, acceptance, and selected class as runtime
 ;; multiple values. No POO object, closure, list or event is built on refusal.
 (def (scheduling-transition current operation)
   (let ((data (scheduling-frame-data current))

@@ -1,0 +1,278 @@
+# SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+# SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
+#+TITLE: Reuse the image-reading mechanism: hybrid runtime allocation
+#+LANGUAGE: en
+
+The whole-scene SVG experiment described later in this history is rejected as
+reuse evidence. The current teaching case no longer selects that SVG or declares
+handmade regions, solver options, direction or important routes. It supplies
+source-qualified meanings and local object/state imagery to the Module's
+composition rules. The historical output below is not a qualification of the
+new rule-driven renderer. See =../policy-generation/README.org= for the new
+native-rendering reuse check and actual image feedback.
+
+* Existing design and new reader context
+
+This example uses the existing
+[[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/28-hybrid-runtime.org][28-hybrid-runtime.org]] and
+[[file:../../../../docs/10-19-design/10.06-poo-module-system/agentic-ai-context/28-hybrid-allocation.sysml][28-hybrid-allocation.sysml]]. Neither source is rewritten for rendering. The
+small =view.sysml= selects the native =HybridNode= allocation. The SDK supplies
+30 source occurrences and their ownership. The native provenance selection omits
+unneeded fields and one intermediate VM boundary; its source ancestry remains
+captured, and ASCENT derives the nearest visible owner.
+
+The new reader asks about I/O versus semantic authority, originals versus
+returned results, independent Session completion and the three explicitly false
+deployment flags. All ten original facet requirements are retained. The mechanism revision adds
+visible Context-state and independent terminal-authority requirements.
+The drawing describes the selected design; no new runtime qualification was run.
+
+* What is reusable
+
+The new example owns POO =case.ss/teaching.ss/readings.ss=, a native view and SVG assets.
+It has no TypeScript layout, pixel positions or connection routes. The existing
+SDK =composeDiagram/graphFromModel= and ELK calculate all placement. The generic
+=reuse.ts/reuse.ss= adapter contains no source-specific name, layout or icon
+dispatch branch. Native layout options are POO data and are inherited uniformly
+by visible compound nodes.
+
+=modules/d2/ascent-scene.ss= relates reader needs to source occurrences and
+model choices. It preserves visible ancestry, exposes missing choices and refuses
+unknown references/cyclic ownership. =plan/author/inspection= are the same public
+Module operations used by the time-window example. Their answer coverage now
+joins actual grounded facets individually, rather than requiring a manually
+positive representation-review record.
+
+The initial structural projection used small role glyphs. Those were rejected
+as insufficient teaching images. The current =TeachingItems= instead depict
+object/state contrasts: an arriving envelope, conditional checks, pinned homes,
+proposal output, detached byte copies, retained originals, separate ledger
+states and three visibly different implementation gaps. Each selected depiction
+retains its rationale and located source quotation in the generated report.
+
+* Actual observations and revisions
+
+| Observation | Module consequence | Model response |
+|-------------+--------------------+----------------|
+| Default child layout formed a very wide strip; actual leaf text was about 7px | Original 12px gate rejected export; model readings opened explanation/depiction obligations | Choose native ELK box packing in POO data; apply the declared options at every compound |
+| Packed version rendered at 20px, but a complete control shield implied protection that the source marks unimplemented; nested owner/VM frames repeated locality | Two illustration requests, despite grounded caption text | Replace the shield with a broken amber lane; omit the intermediate VM choice and retain derived ancestry |
+| Simplified view still left "fixed" ambiguous for a beginner | One explanation request for fixed locality | State "Same Context domain, same VM" explicitly |
+
+Actual PNG inspections and located quotations remain in =readings.ss=. Earlier
+negative findings are retained with their original image/source digests. A
+successful export is never turned into a favorable semantic verdict. New image
+bytes need a new current-model reading. These observations establish a bounded
+model answer basis, not measured comprehension by every student.
+
+The rejected export remains a failure. It is retained under the ignored output
+folder for diagnostic inspection; its existence does not bypass the 12px gate.
+The latest export uses the same gate and unchanged requirement inventory.
+It was subsequently rejected by the user for requiring technical prerequisites,
+showing roles without their mechanism, and wasting space in nested enclosures.
+The current model inspected that PNG again and recorded those representation
+gaps against its exact digest. It is not an accepted teaching result. Generating
+child characters was a mistaken interpretation of the audience requirement;
+those generated assets are not adopted into this case.
+
+* Run
+
+#+begin_src sh
+# From the repository root:
+bun dev/d2/reuse.ts --case dev/d2/examples/hybrid-allocation/case.ss
+# Read the actual figure, return image-bound observations, then re-evaluate:
+bun dev/d2/reuse.ts --case dev/d2/examples/hybrid-allocation/case.ss --evaluate
+just test-d2
+#+end_src
+
+Local outputs are =dev/d2/output/hybrid-allocation/figure.{svg,png,html}=,
+source/export receipts, measured anchors and =findings.org=. Rejected, packed
+and simplified snapshots are retained separately under that ignored directory.
+The process JSON is a final POO handoff to the existing native SDK model; there
+is no editable JSON design model and no second SysML parser.
+
+* Replacement driven by the rejected picture
+
+The thirteen outstanding requests were three representation critiques plus ten
+unlocated facets on the latest image. The requirements were retained. The new
+=teaching.ss= supplies question-relative depictions, each with its exact native
+target and a quotation from the unchanged Org/SysML design. The Module derives
+selection and grouping; the browser grid in the generic =teaching-view.ts=
+projects those groups without native enclosure or subject-specific placement.
+No new TypeScript layout exists for this design.
+
+| Facet | Object, visible change or reason |
+|-------+----------------------------------|
+| I/O readiness | The same envelope moves into an arrival tray; content does not acquire authority |
+| Context authority | A candidate meets source/permission/rule checks; admission and no-change branch apart |
+| Fixed locality | Repeated A requests converge on the same VM, while B has a separate home |
+| Compute proposal | Copied input enters a calculator; an amber question-mark proposal comes out |
+| Copied boundary | Detached byte copies cross a boundary; live object roots remain inside the VM |
+| Retained originals | Facts, rules and proof stay on the shelf; a separate result references them |
+| Independent terminal | An arrival marks only one ledger row; the final outcome remains an independent owner decision |
+| Control reserve gap | A broken control lane prevents a complete-path protection claim |
+| Context export gap | A disconnected plug/socket shows the missing service link |
+| Heap policy gap | A missing memory-limit line appears before the start switch |
+
+The three earlier representation critiques now have concrete responses: the
+candidate/check/no-change picture explains the decision mechanism; the ledger
+separates receipt from completion; question-relative automatic packing removes
+the large native ownership enclosures. These proposals were subsequently inspected as described below; they never
+receive an automatically favorable review result. Reusing an envelope or
+page where it is the same semantic object is intentional; no stock icon is
+used as a universal replacement for an explanation. No child characters are used.
+
+* Historical coverage receipt, superseded by reader critique
+
+The user rejected the gallery described below. Its request count reached zero,
+but it remained an arrangement of separate pictures. It did not show an end to
+end mechanism. That result is retained as negative evidence about the review
+inventory, not as a teaching acceptance result. The current model reconsidered
+the same image and returned three contrary observations; none of the earlier
+coverage rows establishes student comprehension.
+
+The current model viewed each actual PNG and returned natural observations,
+located visible text and contrary findings. No =passed=, =understood= or positive
+review flag was supplied.
+
+| Actual observation | ASCENT consequence | Applied change |
+|--------------------+--------------------+----------------|
+| First question-grouped export had 23 measured text intersections | 23 =relayout= requests; no answer bases | Fix the generic nested SVG viewport instead of introducing per-design coordinates |
+| Re-render had no text intersections, but the lens covered part of SOURCE | One =illustrate= request; other two questions retained scoped bases | Move the lens in the depiction, then view the new image |
+| Exported SVG preview lost the HTML-only section colors | Independent export inspection found PNG/SVG divergence | Make question bands actual vector surfaces in the generic compositor |
+| Final PNG and actual SVG preview show the source check, conditional outcomes, retained originals, separate terminal row and three open boundaries | Zero current requests, ten grounded facets and three scoped question answer bases | Retain the readings and all prior negative evidence by exact image digest |
+
+The final image uses English only. Its minimum measured text size is 15 CSS px
+against the unchanged 12 px gate. It contains no bitmap =image= element or
+=foreignObject= wrapper. A browser-wide rectangle check found zero text-text
+intersections after the generic viewport repair. The SVG preview was actually
+viewed, rather than inferred from export success.
+
+=just test-d2= passed all eight managed-entry test modules, with eight
+=MODULE-OK= markers, =HARNESS-OK=, final =OK= and no failure/overflow markers.
+The new cases cover question-relative source selection, missing or invented
+source support, automatically derived scoped collisions and refusal to reuse a
+scoped caption for another native target. =bun run check= passed as well.
+The existing heap/time fences were retained. These are rendering/rule checks;
+no new hybrid production runtime qualification or student comprehension study
+is claimed.
+
+The counts above describe an observed run, not a prescribed sequence. A new
+question, contrary reading or source/image change can reopen obligations and
+select different depictions. Neither the Module nor the driver encodes this
+example's revisions as a fixed workflow.
+
+* Connected mechanism revision
+
+The replacement preserves the original ten facets and adds explicit views of
+Context v0, a possible Context v1 and independent Session terminal authority.
+Candidate R, its copied handoff, original evidence and the current source/policy
+cut now meet at one checker. The admitted branch adds R and its relationships;
+the not-admitted branch leaves the same Context unchanged. Optional computation
+feeds a proposal back to that check. Session arrival observation and Context
+admission are distinguished from the Session owner's independent final decision.
+
+=TeachingMechanism= contains source-qualified links, required relations and
+requested causal traces. Deleting a required link cannot be compensated by a
+caption. Non-propagating constraints cannot be counted as causal paths. This is
+an explanatory read model; its arrows are not an executor's next-step policy.
+=modules/d2= owns that inference. The reusable compositor owns no design names,
+coordinates or routes; it calls the existing SDK and ELK.
+
+The first connected export was rejected by the unchanged font gate: its actual
+horizontal layout shrank text to about 7px. The actual rejected PNG was viewed
+and its failure returned to Context. A diagnostic vertical reflow restored
+legibility but still wasted space because caveats were ranked as stages. The
+model therefore attached each caveat to the affected ingress, foreign boundary
+or fixed-owner check. These observations concern the physical picture, not a
+request-count definition of successful teaching.
+
+The final reading order starts with the same example result R. Explicit links
+carry its separate copy to the check, while original evidence and the current
+Context provide the reasons for that check. Two conditional relations show what
+stays the same and what can change: A/B/C remain in v0, or the new v1 also contains
+R and its relationships. These are illustrative possible states, not a recorded
+production execution or an unconditional state-machine schedule.
+
+The Session has its own branch: R's arrival is only an observation; its owner
+records the final outcome independently. A crossed no-effect statement on the
+changed Context prevents reading admission as task completion. The three
+unimplemented deployment qualifications remain attached to their affected sites.
+Plain-language labels replace specialist terms such as source/policy cut,
+terminal and pre-setup heap; exact Org/SysML quotations remain in the report.
+
+During actual image inspection the model reopened otherwise covered questions
+for an unclear entry point and unexplained vocabulary. Those observations, the
+rejected wide mechanism, and the overly tall reflow remain image-bound in
+=readings.ss=. The engine's inventory coverage is never presented as evidence
+that an elementary-school student understood the picture.
+
+* Earlier perimeter picture verification (rejected)
+
+The current model viewed both the actual PNG and a browser-rendered preview of
+the exported SVG. It followed the same R through the copy/check paths, original
+and current-Context inputs, and conditional keep-v0/add-R outcomes. It separately
+followed arrival observation and owner-recorded Session outcome, and checked the
+explicit no-effect statement on changed Context. The natural responses and
+located node/edge-label quotations remain in =readings.ss=, including contrary
+findings from earlier versions. No favorable comprehension flag was supplied.
+
+The rejected perimeter artifact was 1800 x 1614. Its minimum measured text was approximately
+18 CSS px, with the original 12 px export gate unchanged. All ten routed edges
+have visible paths whose ends meet the declared object bounds (maximum measured
+distance below 0.001 CSS px). The exported SVG retains native vector paths and
+text, without raster-image or foreignObject wrappers. There are no measured
+text-text intersections. These checks establish geometry and correspondence;
+they are not a learner study or a definition of understanding.
+
+All eight focused managed Module test files passed, including regressions for
+complete captions with missing causal links, non-propagating constraints that
+cannot satisfy a state-change trace, and refusal to hide a true effect in a
+note or no-effect marker. TypeScript checking passed. No runtime qualification
+or broader repository acceptance is inferred from these rendering checks.
+
+One rendering replay encountered a module-reader syntax error before producing
+an image. It did not reproduce in a subsequent describe run, the full focused
+Module suite, or the successful rendering replay. No Core reader source was
+changed as part of this work. Earlier rejected images and structured findings
+remain local diagnostic evidence.
+
+* Model-composed explanation and actual spatial feedback
+
+The perimeter paths measured 3.50 and 2.50 times their respective endpoint
+distances. Source-qualified explanatory neighborhoods and current-image route
+measurements were added to the Module. The compound layered replay exposed a
+native ELK model-order error; vertical and horizontal diagnostic reflows were
+also rejected for excessive blank space or reduced legibility. These were not
+accepted as student explanations.
+
+The current model then selected a complete vector illustration in
+=assets/mechanism.svg= through the POO teaching mechanism's =artwork= slot.
+The generic driver contains no coordinates or case-specific routing code.
+The illustration follows the same R across its middle, places original evidence
+above its check, compares existing and changed Context locally on the right,
+and preserves the independent Session branch below the receipt.
+
+Actual exported PNG readings reopened questions for crossed labels, colliding
+qualifications and a clipped owner caption. ASCENT derived illustration requests
+from those image-bound findings before the model revised the SVG. A second
+actual reading found a remaining label/line contact and an observation branch
+crossing the Session heading; those findings were also returned to Context.
+No handwritten pass or student-understood field is used. Historical adverse
+findings remain in =readings.ss= with their original image hashes.
+
+The delivered figure is 1800 x 1235 with a measured minimum text size of
+17.52 CSS px; the export gate remains 12 px. Copy-to-check and copy-to-optional
+paths each measure 1.00 times their endpoint distance. The current model viewed
+both the PNG and an independently browser-displayed standalone SVG. Sampling
+each mechanism route at two SVG-unit intervals found no contacts with the 78
+visible illustration text lines after the final adjustments. This is a finite
+geometry check, not a proof of comprehension. The SVG contains native paths and
+text, with no raster image or foreignObject wrapper.
+
+The final image reading records three natural responses and fourteen located
+quotations covering the current thirteen declared facets. These are bound to
+the actual image digest. They coexist with the earlier contrary observations;
+the Module derives remaining requests from this current evidence rather than
+receiving a favorable verdict field. All eight focused Module suites passed
+with =MODULE-OK=, =HARNESS-OK= and final =OK=; TypeScript checking also passed.

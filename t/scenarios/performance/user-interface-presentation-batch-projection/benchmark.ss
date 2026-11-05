@@ -21,11 +21,11 @@
  (inputShape . "eight real custom loop-engine user-interface module declarations projected through agenticAiLabUserConfigPresentation")
  (expectedOutcome . "the user-interface-presentation-batch-projection scenario preserves its declared semantic result under the ASP P95 gate")
  (expectedRepair . "use focused POO presentation owners so loop-engine-only configs do not force unrelated CI/CD, session, sandbox, or workflow projection families")
- (nativePooAuthoring . #t)
+ (runtimePooAuthoring . #t)
  (receiptRepresentation . defstruct)
  (adapterBoundary . "presentation loop-engine capability receipts are structs; runtime handoff capability receipts are alists")
  (hotPathExemption . user-interface-presentation-batch-projection)
- (hotPathEvidence native-poo-authoring
+ (hotPathEvidence poo-authoring
                   defstruct-runtime-receipt
                   user-interface-presentation
                   clan-poo-object-fun-projection

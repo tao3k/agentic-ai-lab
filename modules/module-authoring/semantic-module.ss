@@ -16,7 +16,7 @@
   (validate ModuleSourceRoleContract
     (.o (:: @ ConfigSourceRole.)
         identity: 'user-config
-        recommended-forms: '(user-composition compose use-module)
+        recommended-forms: '(def .new compose use-module)
         forbidden-root-forms:
         '(.def .o stage graph loop prove handoff provider runtime)
         recursive-root-forms?: #t

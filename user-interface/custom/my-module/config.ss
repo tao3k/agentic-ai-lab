@@ -8,9 +8,9 @@
 
 (import (only-in :clan/poo/object .o)
         "types.ss")
-(export agentic-ai-lab-custom-my-module-config)
+(export Config)
 
-(def agentic-ai-lab-custom-my-module-config
+(def Config
   (.o identity: +agentic-ai-lab-custom-my-module-identity+
       profile-source: 'profiles
       scenario-source: 'cases

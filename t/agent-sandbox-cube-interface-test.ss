@@ -37,7 +37,7 @@
       (let* ((descriptor (make-cube-interface-descriptor))
              (contract (cube-interface-descriptor->contract descriptor))
              (override (make-cube-interface-descriptor
-                        (list (cons 'api-compatibility 'cube-native)))))
+                        (list (cons 'api-compatibility 'cube-runtime)))))
         (check-equal? (cube-interface-descriptor? descriptor) #t)
         (check-equal? (test-ref contract 'schema)
                       +cube-interface-schema+)
@@ -48,7 +48,7 @@
         (check-equal? (test-ref contract 'network-modes)
                       '(egress-filtered blocked allow-all proxy-only))
         (check-equal? (cube-interface-descriptor-api-compatibility override)
-                      'cube-native)
+                      'cube-runtime)
         (check-equal? (test-ref (car (test-ref contract
                                                'lifecycle-operations))
                                 'stage)

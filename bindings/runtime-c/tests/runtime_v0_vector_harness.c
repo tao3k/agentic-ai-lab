@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
   size_t count = fread(text, 1, sizeof(text) - 1, input);
   fclose(input);
   text[count] = '\0';
-  assert(strstr(text, "schema=agentic-ai-lab.runtime-v0.native-event-vector.1\n") != NULL);
+  assert(strstr(text, "schema=agentic-ai-lab.runtime-v0.runtime-event-vector.1\n") != NULL);
   agentic_ai_lab_runtime_v0_event_header header = {0};
   header.layout_version = (uint16_t)field(text, "layout-version");
   header.event_kind = (uint16_t)field(text, "event-kind");

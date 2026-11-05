@@ -8,19 +8,8 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test check-equal? test-suite)
-        (only-in :agentic-ai-lab/user-interface/init
-                 yuanxu-user-module-bundles)
-        (only-in :yuanxu/profile-composition/user-profile
-                 yuanxuUserConfigFromProfile
-                 yuanxu-user-profile?
-                 yuanxu-user-profile-name
-                 yuanxu-user-profile-module-bundles)
-        (only-in :clan/poo/object .ref)
-        (only-in :agentic-ai-lab/dev/testing-api
-                 +agentic-ai-lab-testing-interface+
-                 agentic-ai-lab-testing-admit-user-profile!)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/root-profile
-                 agenticAiLabRootProfile)
+        (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
+        (only-in :clan/poo/object .get .ref)
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-user-config-modules
                  yuanxu-user-config-module-keys
@@ -30,11 +19,6 @@
 
 (export user-interface-root-config-test)
 
-(def root-config-profile
-  (agenticAiLabRootProfile yuanxu-user-module-bundles))
-
-(def root-config
-  (yuanxuUserConfigFromProfile root-config-profile))
 
 (def root-config-expected-module-keys
   '((flow . funflow)
@@ -57,6 +41,8 @@
 (def user-interface-root-config-test
   (test-suite "agentic-ai-lab user interface root config"
     (yuanxu-test-case "loads modules directory facade through top-level config"
+      (def root-scenario (.get agentic-ai-lab.init.exports scenarios developer))
+      (def root-config (.get root-scenario config))
       (let* ((root-modules (yuanxu-user-config-modules root-config))
              (root-flow-module
               (root-config-module-selection-by-key root-modules
@@ -64,18 +50,8 @@
              (root-custom-module
               (root-config-module-selection-by-key root-modules
                                                    '(custom . my-module))))
-        (check-equal? (yuanxu-user-profile? root-config-profile) #t)
-        (check-equal? (yuanxu-user-profile-name root-config-profile) 'users)
-        (check-equal?
-         (.ref (agentic-ai-lab-testing-admit-user-profile!
-                +agentic-ai-lab-testing-interface+
-                root-config-profile)
-               'admitted?)
-         #t)
-        (check-equal? (length (yuanxu-user-profile-module-bundles
-                               root-config-profile))
-                      8)
-        (check-equal? (length yuanxu-user-module-bundles) 5)
+        (check-equal? (.get agentic-ai-lab.init.exports modules my-module config identity) 'my-module)
+        (check-equal? (eq? root-scenario (.get agentic-ai-lab.init.exports scenarios developer)) #t)
         (check-equal? (length root-modules) 8)
         (check-equal? (yuanxu-user-config-module-keys root-config)
                       root-config-expected-module-keys)

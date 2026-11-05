@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Scenario-gap runtime rejection proof facts.
-;;; - Keep runtime-row proof receipts stable while scenario planning remains object/native upstream.
+;;; - Keep runtime-row proof receipts stable while scenario planning remains object/runtime upstream.
 (export agentic-ai-lab-scenario-gap-runtime-contract->proof-facts)
 
 ;;; Static failure mapping keeps runtime-row proof ABI changes data-driven.
@@ -24,7 +24,7 @@
       (cdr (car matches)))))
 
 ;;; Boundary: this bounded alist is the scenario-gap proof ABI for runtime-row checks.
-;;; Optimization: runtime planning remains object/native upstream; proof handoff receives stable fields only.
+;;; Optimization: runtime planning remains object/runtime upstream; proof handoff receives stable fields only.
 ;; : (-> ProofFactId ScenarioGapPlanOk? ScenarioGapRejectionsOk? ScenarioGapAcceptedOk? ScenarioGapRuntimeFailure ScenarioGapRuntimeProofFacts)
 (def (agentic-ai-lab-scenario-gap-runtime-contract->proof-facts
       fact-id

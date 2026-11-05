@@ -49,7 +49,7 @@
         (check (.ref left 'required-consumers)
                => '(runtime-c-installed python-cffi-wheel lean-ffi-smoke))))
     (yuanxu-test-case "runtime event preserves batch authorization identity"
-      (let (fields (.ref canonical-fixture 'runtime-native-fields))
+      (let (fields (.ref canonical-fixture 'runtime-fields))
         (check (cdr (assq 'layout-version fields)) => 1)
         (check (cdr (assq 'header-bytes fields)) => 96)
         (check (cdr (assq 'authorization-identity fields)) => '(3 1))

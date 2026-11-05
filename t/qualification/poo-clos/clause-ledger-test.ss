@@ -105,7 +105,7 @@
                  cases))))
 
 (def clause-ledger-test
-  (test-suite "POO-native CLOS executable clause ledger"
+  (test-suite "POO CLOS executable clause ledger"
     (yuanxu-test-case "semantic clause rows remain explicit and structurally valid"
       (let (required (poo-clos-required-rows))
         (check (> (length required) 30) => #t)

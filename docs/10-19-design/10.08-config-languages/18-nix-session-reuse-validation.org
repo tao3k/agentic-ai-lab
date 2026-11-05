@@ -25,13 +25,13 @@ cache were added.
 * Three-round cost control
 
 The existing profile Case now includes one additional control per round:
-query the final AWS+Null candidate in a fresh native session and require its
+query the final AWS+Null candidate in a fresh runtime session and require its
 receipt to equal the result from the session that already evaluated AWS.
-There is no new suite, Builder or user-facing entrypoint. Native phase output
+There is no new suite, Builder or user-facing entrypoint. Runtime phase output
 also exposes the already recorded metric deltas.
 
 The unsampled extended Case passed all three rounds. Query times below are
-milliseconds; both native query columns exclude opening/closing the session
+milliseconds; both runtime query columns exclude opening/closing the session
 and include the existing before/after source checks. The fresh-state column
 is deliberately a negative cost control, not the recommended runtime path.
 
@@ -54,7 +54,7 @@ an actual fresh-state control rather than inferred from CLI process times.
 The initial final-source profile recorded first imports at 460.464 ms wall /
 320.344 ms process CPU, and derivation/residual work at 274.105 / 157.039 ms.
 The unsampled extended Case recorded 602.817 / 319.050 ms for imports and
-240.496 / 143.892 ms for derivation/residual work. Both first native probes
+240.496 / 143.892 ms for derivation/residual work. Both first runtime probes
 reported zero completed collections/full-GC milliseconds and incremental mode
 zero. The previous 9.26/6.39-second wall outliers did not recur in these passes.
 
@@ -67,7 +67,7 @@ outlier was exclusively host scheduling.
 * File access, daemon waits and rejected attribution
 
 A separate temporary Scheme probe started the stock macOS sampler at the
-actual first native force point. It used =run-process='s existing coprocess
+actual first runtime force point. It used =run-process='s existing coprocess
 callback, sampling the actual =(getpid)= rather than guessing from command
 lines. The sampler-enabled run passed the full Case, but its times are excluded
 from the table. The temporary sampling helper was removed afterward; it is not
@@ -96,9 +96,9 @@ The trace contains distinct real call paths:
 
 Two earlier external sampling attempts are retained as failures: one selected
 the timeout wrapper instead of gxtest; the other sampled gxtest while it was
-waiting in the Scheme process I/O loop, rather than during the native force.
+waiting in the Scheme process I/O loop, rather than during the runtime force.
 Both full sampled attempts hit the unchanged idle limit. No causal claim that
-sampling caused those timeouts is made. Those traces do not support native
+sampling caused those timeouts is made. Those traces do not support runtime
 import-time attribution and are excluded from the successful comparison.
 
 Targeted =fs_usage= was unavailable without root. No credentials, tool
@@ -111,16 +111,16 @@ not exclusive percentages or daemon-side root cause.
 
 | Change | Current boundary |
 |--------+------------------|
-| Repeat a query, same validated source / strict lock / output function | Reuse the existing explicit native session and Nix thunks. |
+| Repeat a query, same validated source / strict lock / output function | Reuse the existing explicit runtime session and Nix thunks. |
 | Add Null through the final candidate JSON, same context | Reuse that session; calculate the child plan and admit its own final configuration. |
 | Cached parent plan, derived child candidate | Keep receiver-local plans; assertions require the child result and unchanged parent result. |
-| Source bytes or locked context change | Existing source checks reject the old observations before native query or before return. Reuse does not authorize a stale context. |
+| Source bytes or locked context change | Existing source checks reject the old observations before runtime query or before return. Reuse does not authorize a stale context. |
 | New process or intentionally independent context | Create an independent session; this work adds no cross-process evaluator restoration. |
 | Deliberately fresh-state benchmark control | Keep the reconstruction to measure cost; do not count it as accidental production work. |
 
 The profile requires one Store, one EvalState and one strict lock for the
 baseline session across both candidate values. The final source-mutation
-control must reject before its native call counter increments. Ordinary
+control must reject before its runtime call counter increments. Ordinary
 regression additionally checks implicit-lock-update rejection, matching
 receipts and independent generated-Contract admission. Impure CLI calls still
 create no persistent evaluation-cache database; the pure scalar positive
@@ -145,4 +145,4 @@ cloud execution and arbitrary larger Provider sets.
 
 [[file:19-nix-callchain-and-reuse-boundary.org][The actual-call-chain audit]] distinguishes this binding qualification from
 the product's current CLI route and adds an executable stale-import control.
-The same lock/header snapshot alone does not authorize native state reuse.
+The same lock/header snapshot alone does not authorize runtime state reuse.

@@ -5,7 +5,7 @@ package ContextPolicyTransition {
     part def Fixture;
     part fixture : Fixture;
 
-    // Admission contract only. Actual owner crashes, workers and native
+    // Admission contract only. Actual owner crashes, workers and runtime
     // support propagation are separate Scheme qualification obligations.
     verification def Control {
         subject target : Fixture default = fixture;

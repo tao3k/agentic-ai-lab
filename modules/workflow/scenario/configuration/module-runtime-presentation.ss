@@ -65,51 +65,55 @@
 ;;; Boundary: evaluation folds the import closure into one receipt object.
 ;; : (-> PooModuleDescriptor POOObject)
 (def (agentic-ai-lab-module-evaluate module)
-  (let (closed-modules (agentic-ai-lab-module-closure (list module)))
     (.o kind: "agentic-ai-lab.modules.runtime-evaluation.v1"
-        module-ids: (agentic-ai-lab-module-names closed-modules)
+        config: module
+        modules: (agentic-ai-lab-module-closure (list config))
+        module-ids: (agentic-ai-lab-module-names modules)
         init-module-ids:
         (agentic-ai-lab-module-names
-         (yuanxu-module-phase-order closed-modules 'init))
+         (yuanxu-module-phase-order modules 'init))
         config-module-ids:
         (agentic-ai-lab-module-names
-         (yuanxu-module-phase-order closed-modules 'config))
+         (yuanxu-module-phase-order modules 'config))
         hooks:
         (agentic-ai-lab-module-append-projection
-         closed-modules agentic-ai-lab-module-hooks)
+         modules agentic-ai-lab-module-hooks)
         extensions:
         (agentic-ai-lab-module-append-projection
-         closed-modules agentic-ai-lab-module-extensions)
+         modules agentic-ai-lab-module-extensions)
         scripts:
         (agentic-ai-lab-module-append-projection
-         closed-modules agentic-ai-lab-module-scripts)
+         modules agentic-ai-lab-module-scripts)
         options:
         (agentic-ai-lab-module-append-projection
-         closed-modules agentic-ai-lab-module-option-configs)
+         modules agentic-ai-lab-module-option-configs)
+        root-validation-receipts:
+        (agentic-ai-lab-module-option-validation-receipts config)
         validation-receipts:
         (agentic-ai-lab-module-append-projection
-         closed-modules agentic-ai-lab-module-option-validation-receipts))))
+         modules
+         (lambda (current)
+           (if (eq? current config) root-validation-receipts
+             (agentic-ai-lab-module-option-validation-receipts current))))))
 
 ;;; Boundary: workflow groups root projections and validation receipts.
 ;; : (-> PooModuleDescriptor [AllowedHookId] POOObject)
 (def (agentic-ai-lab-module-workflow module . maybe-allowed-hook-id-values)
-  (let* ((allowed-hook-id-values
+  (let ((allowed-hook-id-values
           (if (null? maybe-allowed-hook-id-values)
             '()
-            (car maybe-allowed-hook-id-values)))
-         (runtime-module-value (agentic-ai-lab-module-apply module))
-         (evaluation-value (agentic-ai-lab-module-evaluate module)))
+            (car maybe-allowed-hook-id-values))))
     (.o kind: agentic-ai-lab-module-workflow-kind
         config: module
-        runtime-module: runtime-module-value
-        evaluation: evaluation-value
+        runtime-module: (agentic-ai-lab-module-apply config)
+        evaluation: (agentic-ai-lab-module-evaluate config)
         allowed-hook-ids: allowed-hook-id-values
-        root-options: (agentic-ai-lab-module-option-configs module)
-        option-schemas: (agentic-ai-lab-module-option-schemas module)
+        root-options: (agentic-ai-lab-module-option-configs config)
+        option-schemas: (agentic-ai-lab-module-option-schemas config)
         root-validation-receipts:
-        (agentic-ai-lab-module-option-validation-receipts module)
+        (.get evaluation root-validation-receipts)
         validation-receipts:
-        (.ref evaluation-value 'validation-receipts))))
+        (.get evaluation validation-receipts))))
 
 ;;; Boundary: this projection reports runtime-facing object family capability.
 ;;; It does not construct runtime handles, start sessions, or submit dispatches.

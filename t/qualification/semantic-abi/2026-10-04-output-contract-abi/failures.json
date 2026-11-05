@@ -167,7 +167,7 @@
       },
       "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
     },
-    "nativeObservationSeconds": 0.04103883399966435,
+    "runtimeObservationSeconds": 0.04103883399966435,
     "result": {
       "candidate": {
         "status": "complete",
@@ -214,7 +214,7 @@
       },
       "candidateValid": true
     },
-    "failure": "native semantic contradiction",
+    "failure": "runtime semantic contradiction",
     "callSeconds": 0.7065049159996306
   },
   {
@@ -421,7 +421,7 @@
       },
       "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
     },
-    "nativeObservationSeconds": 0.0011169999997946434,
+    "runtimeObservationSeconds": 0.0011169999997946434,
     "result": {
       "candidate": {
         "status": "complete",
@@ -466,7 +466,7 @@
       "verdict": "contradicted",
       "schema": "poo-flow.semantic-observation"
     },
-    "failure": "native semantic contradiction",
+    "failure": "runtime semantic contradiction",
     "callSeconds": 0.6467074580000371
   },
   {
@@ -673,7 +673,7 @@
       },
       "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
     },
-    "nativeObservationSeconds": 0.001046916000177589,
+    "runtimeObservationSeconds": 0.001046916000177589,
     "result": {
       "candidate": {
         "status": "complete",
@@ -718,7 +718,7 @@
       "schema": "poo-flow.semantic-observation",
       "verification": "invalid"
     },
-    "failure": "native semantic contradiction",
+    "failure": "runtime semantic contradiction",
     "callSeconds": 0.489729208999961
   },
   {
@@ -925,7 +925,7 @@
       },
       "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
     },
-    "nativeObservationSeconds": 0.0012027910001961573,
+    "runtimeObservationSeconds": 0.0012027910001961573,
     "result": {
       "candidate": {
         "status": "complete",
@@ -970,7 +970,7 @@
       "schema": "poo-flow.semantic-observation",
       "verification": "invalid"
     },
-    "failure": "native semantic contradiction",
+    "failure": "runtime semantic contradiction",
     "callSeconds": 0.6468237919998501
   },
   {
@@ -1177,7 +1177,7 @@
       },
       "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
     },
-    "nativeObservationSeconds": 0.001100250000035885,
+    "runtimeObservationSeconds": 0.001100250000035885,
     "result": {
       "candidate": {
         "status": "complete",
@@ -1222,7 +1222,7 @@
       "bindingDigest": "85e36933b48d87f0ef8620d6bc947e65be703269f0fe4414d0761e9ba7137302",
       "verification": "invalid"
     },
-    "failure": "native semantic contradiction",
+    "failure": "runtime semantic contradiction",
     "callSeconds": 0.650824165999893
   },
   {
@@ -1429,7 +1429,7 @@
       },
       "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
     },
-    "nativeObservationSeconds": 0.0009137920001194288,
+    "runtimeObservationSeconds": 0.0009137920001194288,
     "result": {
       "candidate": {
         "status": "complete",
@@ -1474,7 +1474,7 @@
       "verdict": "contradicted",
       "schema": "poo-flow.semantic-observation"
     },
-    "failure": "native semantic contradiction",
+    "failure": "runtime semantic contradiction",
     "callSeconds": 0.949359541999911
   },
   {
@@ -1642,7 +1642,7 @@
       },
       "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
     },
-    "nativeObservationSeconds": 0.0009935830003087176,
+    "runtimeObservationSeconds": 0.0009935830003087176,
     "result": {
       "candidate": {
         "status": "complete",
@@ -1683,7 +1683,7 @@
       "verdict": "contradicted",
       "schema": "poo-flow.semantic-observation"
     },
-    "failure": "native semantic contradiction",
+    "failure": "runtime semantic contradiction",
     "callSeconds": 0.707273417000124
   },
   {
@@ -1811,7 +1811,7 @@
       },
       "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
     },
-    "nativeObservationSeconds": 0.04284300000017538,
+    "runtimeObservationSeconds": 0.04284300000017538,
     "result": {
       "candidate": {
         "status": "partial",
@@ -1847,7 +1847,7 @@
       "bindingDigest": "75bf4ea0213a266c94633514773b5e0a0c88849e9f9903f78e9f0271ffa600e8",
       "verification": "valid"
     },
-    "failure": "native semantic contradiction",
+    "failure": "runtime semantic contradiction",
     "callSeconds": 0.58999704200005
   },
   {
@@ -2057,7 +2057,7 @@
       },
       "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
     },
-    "nativeObservationSeconds": 0.04267237499971088,
+    "runtimeObservationSeconds": 0.04267237499971088,
     "result": {
       "candidate": {
         "status": "complete",
@@ -2108,7 +2108,7 @@
       },
       "operation": "temporal.observe"
     },
-    "failure": "native semantic contradiction",
+    "failure": "runtime semantic contradiction",
     "callSeconds": 1.3241978330001984
   },
   {
@@ -2315,7 +2315,7 @@
       },
       "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
     },
-    "nativeObservationSeconds": 0.001081583000086539,
+    "runtimeObservationSeconds": 0.001081583000086539,
     "result": {
       "candidate": {
         "status": "complete",
@@ -2360,7 +2360,7 @@
       "verification": "invalid",
       "requestDigest": "e2c133e66fbc25baf72e4c1bc95f0972c01f66f15f66afdb9123e0e814171e39"
     },
-    "failure": "native semantic contradiction",
+    "failure": "runtime semantic contradiction",
     "callSeconds": 0.954121166999812
   }
 ]

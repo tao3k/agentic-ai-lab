@@ -148,7 +148,7 @@
 ;; agentic-ai-lab-sandbox-profile-prototypes
 ;;   : (-> (ProfileName PooSandboxProfilePrototype)... [PooSandboxProfile])
 ;;   | doc m%
-;;       `agentic-ai-lab-sandbox-profile-prototypes` keeps native POO profile names
+;;       `agentic-ai-lab-sandbox-profile-prototypes` keeps POO profile names
 ;;       visible in user files while returning sandbox profile objects consumed
 ;;       by runtime manifests and presentation projections.
 ;;

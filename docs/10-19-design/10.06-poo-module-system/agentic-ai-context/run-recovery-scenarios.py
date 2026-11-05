@@ -11,7 +11,7 @@ import subprocess
 
 
 HERE = Path(__file__).resolve().parent
-MODEL = HERE / "19-repeated-recovery.sysml"
+MODEL = HERE / "workspace-recovery.sysml"
 
 
 def sha(path):
@@ -101,7 +101,7 @@ def main():
         failures += batch_failures
     summary = dict(executed=len(cases), expected_unsafe=failures, unexpected=0,
                    model_sha256=sha(MODEL), runner_sha256=sha(Path(__file__)),
-                   native_refinement_proved=False)
+                   runtime_refinement_proved=False)
     (args.artifacts / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(f"PASS: {len(cases)} executed; {failures} expected unsafe; {args.artifacts}")
 

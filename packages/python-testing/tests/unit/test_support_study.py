@@ -6,8 +6,8 @@
 from types import SimpleNamespace
 
 from agentic_ai_lab_testing.model_study import support
-from agentic_ai_lab_testing.model_study.support_native import score
-from agentic_ai_lab_testing.model_study.support_protocol import SELF_REVIEW, NATIVE_REVIEW
+from agentic_ai_lab_testing.model_study.support_runtime import score
+from agentic_ai_lab_testing.model_study.support_protocol import SELF_REVIEW, RUNTIME_REVIEW
 
 REFERENCE = "\n".join([
     "0\tcomplete\t((0 20))\tvalid\tvalid\ttask-shape\t()",
@@ -33,7 +33,7 @@ def test_paired_calls_hold_out_update_states_and_preserve_raw_requests(tmp_path,
 
     monkeypatch.setattr(support, "observe", observe)
     files = {"initial.txt": "same source and task", "self_review.txt": SELF_REVIEW,
-             "native_review.txt": NATIVE_REVIEW, "reference.tsv": REFERENCE}
+             "runtime_review.txt": RUNTIME_REVIEW, "reference.tsv": REFERENCE}
     result = support.run(SimpleNamespace(responses=SimpleNamespace(create=create)),
                          files, tmp_path, tmp_path, tmp_path)
     assert len(calls) == 4 and modes == [False, True, False]
@@ -42,10 +42,10 @@ def test_paired_calls_hold_out_update_states_and_preserve_raw_requests(tmp_path,
     feedback = calls[3]["input"][-1]["content"]
     assert "((0 20))" in feedback and "((0 8))" not in feedback
     assert all(value["correct"] for value in result.values())
-    assert (tmp_path / "self.1.json").exists() and (tmp_path / "native.2.txt").read_text() == text
+    assert (tmp_path / "self.1.json").exists() and (tmp_path / "runtime.2.txt").read_text() == text
 
 
-def test_native_validity_does_not_make_wrong_task_results_correct():
+def test_runtime_validity_does_not_make_wrong_task_results_correct():
     wrong = REFERENCE.replace("2\tcomplete\t((0 8))", "2\tcomplete\t((0 20))")
     result = score(wrong, REFERENCE)
     assert result["matched_states"] == [True, True, False, True]

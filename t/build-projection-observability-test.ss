@@ -26,7 +26,7 @@
 
 (def build-projection-observability-test
   (test-suite "POO PackageSpec projection observability"
-    (yuanxu-test-case "native package init entries coexist without forcing either graph"
+    (yuanxu-test-case "runtime package init entries coexist without forcing either graph"
       (yuanxu-write-observation-line! "init-entry source=%s"
         (module-context-path (core-import-module (path-expand "core/init.ss"))))
       (check-equal? (eq? yuanxu.init.exports agentic-ai-lab.init.exports) #f)
@@ -36,7 +36,7 @@
       (check-exception (.get agentic-ai-lab.init.exports std-make-run) NoApplicableMethod?)
       (check-equal? (.ref/cached (.get yuanxu.init.exports tests) 'selected-graph) #f)
       (check-equal? (.ref/cached (.get agentic-ai-lab.init.exports tests) 'selected-graph) #f))
-    (yuanxu-test-case "native package catalog reaches the supplied projector unchanged"
+    (yuanxu-test-case "runtime package catalog reaches the supplied projector unchanged"
       (let ((projected? #f)
             (port (open-output-string))
             (package-spec (.o)))
@@ -81,17 +81,13 @@
                                  "build_script = \":build.ss\"")
                       #t)))
 
-    (yuanxu-test-case "performance suite consumes the public POO testing interface"
-      (let (performance-source
-            (call-with-input-file "dev/performance-tests.ss" read-all-as-string))
-        (check-equal?
-         (contains?
-          performance-source
-          "+agentic-ai-lab-testing-interface+")
-         #t)
-        (check-equal?
-         (contains? performance-source "+asp-testing-interface+")
-         #f)))
+    (yuanxu-test-case "testing uses the official tool without another discovery loop"
+      (def source (call-with-input-file "core/dev/test-file.ss" read-all-as-string))
+      (check-equal? (file-exists? "dev/tests.ss") #f)
+      (check-equal? (file-exists? "dev/performance-tests.ss") #f)
+      (check-equal? (contains? source ":gerbil/tools/gxtest") #t)
+      (check-equal? (contains? source "testing-interface-run-test-files!") #f)
+      (check-equal? (contains? source "compile-testing-script") #f))
 
     (yuanxu-test-case "Just test launch is fail-closed before Profile loading"
       (let ((environment (call-with-input-file "dev/just/environment.just" read-all-as-string))
@@ -99,21 +95,14 @@
             (driver (call-with-input-file "t/qualification/testing/specialized.ss" read-all-as-string)))
         (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_MAX_HEAP\", \"1G\")") #t)
         (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_DEBUG\", \"q\")") #t)
-        (check-equal? (contains? testing "gxi {{ gerbil_test_runtime_options }} t/qualification/testing/specialized.ss package") #t)
-        (check-equal? (contains? driver "(list \"gerbil\" vm \"env\" \"gxi\" vm \"./unit-tests.ss\")") #t)
+        (check-equal? (contains? testing "timeout --signal=TERM --kill-after=5s 1200s") #t)
+        (check-equal? (contains? testing "just _test-file") #f)
+        (check-equal? (contains? driver "\"./unit-tests.ss\"") #f)
         (check-equal? (contains? testing ".devenv/devenv-profile-exec") #f)
         (check-equal? (contains? testing "rm -rf") #f)))
 
-    (yuanxu-test-case "unit tests inherit the Agentic AI Lab default testing policy"
-      (let (source (call-with-input-file "dev/testing-profiles.ss" read-all-as-string))
-        (check-equal?
-         (contains? source ":agentic-ai-lab/dev/testing-api")
-         #t)
-        (check-equal?
-         (contains? source "+agentic-ai-lab-testing-interface+")
-         #t)
-        (check-equal? (contains? source "+asp-testing-interface+") #f)
-        (check-equal? (contains? source "maxHeapMiB: 1024") #f)))
+    (yuanxu-test-case "test execution has one init-owned public entry"
+      (check-equal? (file-exists? "dev/testing-profiles.ss") #f))
 
     (yuanxu-test-case "default policy measures catalog size without an invented limit"
       (let (port (open-output-string))

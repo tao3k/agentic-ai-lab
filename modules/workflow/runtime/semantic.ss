@@ -360,7 +360,7 @@ ___return(___arg2);
 C
 )
 (begin-foreign
-(c-define (native-evaluate operation payload result)
+(c-define (gerbil-evaluate operation payload result)
   (UTF-8-string UTF-8-string result-pointer) int32
   "agentic_ai_lab_semantic_evaluate" "extern"
   (with-exception-catcher

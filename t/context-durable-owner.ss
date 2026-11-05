@@ -54,7 +54,7 @@
     (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host sid 0 0 (.ref f 'proof)
       (.ref (.ref f 'registration-a) 'identity) 1 gen (.ref p 'semantic-digest) 128)
     (agentic-ai-lab-ai-agentic-context-session-host-claim! host sid 1 0 (string-append "attempt-" sid) (string-append "request-" sid))
-    (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "native-result-for-request"))))
+    (let* ((worker (thread-start! (make-thread (lambda () (thread-receive) "runtime-result-for-request"))))
            (token (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host sid 2 0 worker)))
       (hash-put! (.ref f 'workers) sid (list worker token)))))
 (def (durable-driver db mode order-text stage-text profile)
@@ -84,7 +84,7 @@
         (ensure (eq? (.ref (push-row f "session-c") 'context-state) 'admitted) "C Context was overinvalidated")
         (let ((outcomes (agentic-ai-lab-ai-agentic-context-session-host-outcomes (.ref f 'host) "session"))
               (schedule (.ref (push-row f "session") 'schedule)))
-          (ensure (<= (length outcomes) 1) "Duplicate native terminal")
+          (ensure (<= (length outcomes) 1) "Duplicate runtime terminal")
           (for-each (lambda (o) (ensure (not (.ref o 'current-use?)) "Old result resurrected")) outcomes)
           (when (null? outcomes)
             (ensure (pair? (.ref schedule 'obligations)) "Owner crash silently released old Attempt"))))
@@ -108,7 +108,7 @@
                        (context-observation-evidence (.ref f 'host) "session" (push-join! f "session")))))
                   (command! "terminal-original" 'result evidence (lambda (f)
                     (let (r (agentic-ai-lab-ai-agentic-context-session-host-commit-result! (.ref f 'host) "session" 2 0 (push-join! f "session")))
-                      (ensure (.ref r 'native-result-published?) "Positive native completion failed")))))
+                      (ensure (.ref r 'runtime-result-published?) "Positive runtime completion failed")))))
                 (for-each (lambda (move)
                   (case move
                     ((1) (policy-clock-resume! clock))
@@ -181,7 +181,7 @@
                 (displayln "DURABLE-CALENDAR replacement-ticket-retained=#t"))))
             (command! (string-append "complete:" sid) 'result sid (lambda (f)
               (ensure (.ref (agentic-ai-lab-ai-agentic-context-session-host-commit-result! (.ref f 'host) sid 2 0
-                (push-join! f sid)) 'native-result-published?) "New policy Attempt cannot complete")))
+                (push-join! f sid)) 'runtime-result-published?) "New policy Attempt cannot complete")))
             (read! (lambda (f)
               (checkpoint-check! f)
               (ensure (eq? (.ref (push-row f sid) 'context-state) 'admitted) "Old ticket damaged new policy")
@@ -191,7 +191,7 @@
                 " old-current=#f pending-preserved=#t new-completed=#t source-retained=#t chain=" (journal-verify! journal)))))
           (when (equal? mode "counter-stale")
             (let (now (policy-clock-observed clock))
-              ;; Deliberately wrong native handler: rebase an old policy as a
+              ;; Deliberately wrong runtime handler: rebase an old policy as a
               ;; fresh generation instead of checking the original ticket.
               (let (old-policy-value (policy "v1"))
                (command! "unsafe-old-policy" 'result

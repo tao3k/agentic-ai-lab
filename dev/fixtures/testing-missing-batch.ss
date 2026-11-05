@@ -1,5 +1,5 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Negative process fixture: native child diagnostics belong to its Ops receipt.
+;;; Negative process fixture: runtime child diagnostics belong to its Ops receipt.
 (import (only-in :clan/poo/object .cc)
         (only-in :asp-gerbil-scheme/testing-api
                  +asp-testing-interface+ testing-interface-run-test-batch!)

@@ -10,7 +10,7 @@
 
 The [[file:model-study-baseline-results.org][baseline pilot]] found boundary mistakes:
 the model called completed candidate results =verified_intent= and, in
-the temporal tool arm, selected =release_authorized= despite the native
+the temporal tool arm, selected =release_authorized= despite the runtime
 boolean =#f=. The typed protocol hypothesizes that the Testing adapter should
 preserve booleans and state the module's claim scope in typed fields.
 This changes the observation given to the model, not ASCENT or
@@ -21,7 +21,7 @@ temporal-causality semantics.
 Use the same five prompts, answer keys and task order from the baseline corpus
 SHA256
 =7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
-Both arms generate observations from the same live native fixtures.
+Both arms generate observations from the same live runtime fixtures.
 
 - =old=: exactly the baseline observation dictionary for that task.
 - =typed= for the three ASCENT tasks: copy the old dictionary and add

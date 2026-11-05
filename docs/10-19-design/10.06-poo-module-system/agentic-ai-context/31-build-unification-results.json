@@ -79,7 +79,7 @@
       "log": "/private/tmp/context-unified-build-test.log",
       "logSha256": "b8434734cd8ce08d75bcfbb2b076c6be39cb4c9321a85e5da75acf00ff1454c9"
     },
-    "nativeService": {
+    "runtimeService": {
       "status": "pass",
       "log": "/private/tmp/context-unified-service.log",
       "logSha256": "ea348f6163a8ea5cd00757409144a9dbdf826bc93cde9f883e1575fbdfa1ddf2"
@@ -96,7 +96,7 @@
       "scope": "One descriptor regression plus the project harness check; two pytest passes."
     }
   },
-  "nativeService": {
+  "runtimeService": {
     "heap": "2G",
     "watchdogSeconds": 150,
     "terminalCount": 1,

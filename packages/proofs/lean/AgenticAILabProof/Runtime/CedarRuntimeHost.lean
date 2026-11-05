@@ -2,10 +2,10 @@
 --
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-import AgenticAILabProof.Runtime.CedarNative
+import AgenticAILabProof.Runtime.CedarRuntime
 
 /-! Root identity for the AOT Runtime Host link graph. Runtime behavior lives
-in the Rust staticlib and the exported CedarNative function. -/
+in the Rust staticlib and the exported CedarRuntime function. -/
 
 namespace AgenticAILabProof.Runtime.CedarRuntimeHost
 

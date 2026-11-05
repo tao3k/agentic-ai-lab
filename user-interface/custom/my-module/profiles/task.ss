@@ -6,7 +6,12 @@
 ;;; Boundary: downstream task sandbox profile declarations.
 ;;; Invariant: standalone module; it declares data only.
 
-(import :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
+(import :clan/poo/object
+        :agentic-ai-lab/modules/sandbox-core/profile
+        :agentic-ai-lab/modules/sandbox-core/profile-interface
+        :agentic-ai-lab/modules/nono-sandbox/config
+        :agentic-ai-lab/modules/nono-sandbox/profile-interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy)
 
 (export agentic-ai-lab-custom-my-module-task-module)
 
@@ -28,18 +33,32 @@
             cpu: 2
             memory: "2Gi"
             timeout-ms: 180000))
-    (use-module nono-sandbox
-      (.def (agent/task @ nono-sandbox-profile)
+    (let ()
+    (.def (agent/task @ nono-sandbox-profile)
         network: (deny-network)
         capabilities: task-capabilities
         resources: =>.+ readonly-project-workspace-resources
         metadata: => (lambda (super-metadata)
                        (append super-metadata task-metadata)))
-
-      (.def (agent/task-cache @ agent/task)
+    (.def (agent/task-cache @ agent/task)
         network: (allowlisted-network "github.com")
         capabilities: => (lambda (super-capabilities)
                            (append super-capabilities cache-capabilities))
         resources: =>.+ task-cache-resources
         metadata: => (lambda (super-metadata)
-                       (append super-metadata task-cache-metadata)))))))
+                       (append super-metadata task-cache-metadata)))
+    (agentic-ai-lab-product-use-module 'nono-sandbox
+      (agentic-ai-lab-nono-sandbox-config-flags 'ffi (agentic-ai-lab-sandbox-profile-prototypes (agent/task agent/task) (agent/task-cache agent/task-cache))
+        '((.def (agent/task @ nono-sandbox-profile)
+        network: (deny-network)
+        capabilities: task-capabilities
+        resources: =>.+ readonly-project-workspace-resources
+        metadata: => (lambda (super-metadata)
+                       (append super-metadata task-metadata)))
+(.def (agent/task-cache @ agent/task)
+        network: (allowlisted-network "github.com")
+        capabilities: => (lambda (super-capabilities)
+                           (append super-capabilities cache-capabilities))
+        resources: =>.+ task-cache-resources
+        metadata: => (lambda (super-metadata)
+                       (append super-metadata task-cache-metadata))))))))))

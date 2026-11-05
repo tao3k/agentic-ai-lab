@@ -13,7 +13,7 @@ Research snapshot: 2026-07-30.
 
 * Engine boundary
 
-Agentic AI Lab is the general POO-native architecture-semantics composition engine.
+Agentic AI Lab is the general POO architecture-semantics composition engine.
 It is not a three-layer, seven-layer, nine-pillar, ten-layer, control-plane,
 data-plane, or enterprise-security architecture.
 
@@ -502,7 +502,7 @@ connectors, agent runtimes, policy engines, and evidence verifiers.
 
 * Planned implementation frontier
 
-- [ ] Define a POO-native internal guarantee-claim profile without adding a
+- [ ] Define a POO internal guarantee-claim profile without adding a
   public record DSL.
 - [ ] Add one mapping fixture each for Snowflake, MAESTRO, ORCHIDEAS, NIST, and
   OWASP.

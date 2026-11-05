@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Audit saved native policy evidence without launching or mutating an owner."""
+"""Audit saved runtime policy evidence without launching or mutating an owner."""
 
 import argparse
 from contextlib import closing
@@ -40,17 +40,17 @@ def main():
     args = parser.parse_args()
     receipt = json.loads(args.receipt.read_text())
     root = args.receipt.parent
-    require(receipt["schema"] == "context.policy-transition.native.v1", "Wrong native receipt schema")
+    require(receipt["schema"] == "context.policy-transition.runtime.v1", "Wrong runtime receipt schema")
     require(receipt["complete_declared_corpus"] and len(receipt["cases"]) == 5,
             "The declared five-prefix corpus was not executed")
-    require(receipt["original_image_replayed"] and receipt["native_counterexamples"] == 1,
-            "Missing original-image positive or native negative control")
+    require(receipt["original_image_replayed"] and receipt["runtime_counterexamples"] == 1,
+            "Missing original-image positive or runtime negative control")
     for name, digest in {**receipt["source_sha256"], **receipt["binaries"]}.items():
         require(sha(ROOT / name) == digest, "Current source/object drift: " + name)
     for name, digest in receipt["artifacts"].items():
         require(sha(root / name) == digest, "Evidence artifact changed: " + name)
     for log in root.rglob("*.log"):
-        require(not BAD.search(log.read_text()), "Native error marker: " + str(log))
+        require(not BAD.search(log.read_text()), "Runtime error marker: " + str(log))
     require("POLICY-COUNTER pending-replacement=#t cached-a=admitted" in
             (root / "counter-no-replay/counter.log").read_text().splitlines(),
             "Missing actual unsafe restoration observation")
@@ -59,7 +59,7 @@ def main():
         lines = (root / label / (mode + ".log")).read_text().splitlines()
         require(all(marker in lines for marker in (
                     "MODULE-OK t/context-policy-durable-test.ss", "HARNESS-OK context-policy-durable", "OK"))
-                and lines[-1] == "OK", "Missing original-image native harness markers")
+                and lines[-1] == "OK", "Missing original-image runtime harness markers")
     results = []
     for index, case in enumerate(receipt["cases"]):
         folder = root / f"case-{index:02d}"
@@ -94,7 +94,7 @@ def main():
         schema="context.policy-transition.audit.v1", receipt_sha256=sha(args.receipt),
         auditor_sha256=sha(Path(__file__)), current_cut_verified=True, cases=results,
         artifact_hashes_verified=len(receipt["artifacts"]), exhaustive_concurrency=False), indent=2) + "\n")
-    print("PASS: current native cut, immutable evidence, atomic policy decisions and terminal oracle")
+    print("PASS: current runtime cut, immutable evidence, atomic policy decisions and terminal oracle")
 
 
 if __name__ == "__main__":

@@ -22,9 +22,9 @@
         (.o source-inputs: '() other-projections: other external-packages: (list request)
             admit-current: void))))
 (def ops-selected-packages-test
-  (test-suite "Native Ops consumes selected external packages"
-    (yuanxu-test-case "native chains normalize boundaries and opaque callbacks keep fresh guards"
-      (call-with-temporary-directory "ops-native-package-prefix"
+  (test-suite "Runtime Ops consumes selected external packages"
+    (yuanxu-test-case "runtime chains normalize boundaries and opaque callbacks keep fresh guards"
+      (call-with-temporary-directory "ops-runtime-package-prefix"
         (lambda (root)
           ;; Real Nix publication and SelectedPackages composition; only the
           ;; external commands are probes. AWS retains real Nix in init .run.
@@ -36,29 +36,29 @@
           (def checks 0)
           (def instantiations 0)
           (def change? #f)
-          (def native-change? #f)
+          (def runtime-change? #f)
           (def override? #f)
           (def promote? #f)
           (def entry-to-change #f)
           (.def (Source @ NixSource.)
             .instantiate: (lambda ()
                             (set! instantiations (+ instantiations 1))
-                            (when native-change? (write-source! "version-two"))
+                            (when runtime-change? (write-source! "version-two"))
                             (when entry-to-change
                               (call-with-output-file (list path: entry-to-change truncate: #t)
-                                (cut display "changed during native action" <>)))
-                            "/nix/store/native-prefix.drv")
-            .realize: (lambda (_derivation) "/nix/store/native-prefix-artifact")
+                                (cut display "changed during runtime action" <>)))
+                            "/nix/store/package-prefix.drv")
+            .realize: (lambda (_derivation) "/nix/store/package-prefix-artifact")
             .guard-form: (lambda (_derivation) #t))
           (def request
             (.o identity: 'package input-files: '()
               .realize:
               (lambda (_directory check!)
-                (def native (.call Source .prepare check!))
+                (def runtime (.call Source .prepare check!))
                 (if override?
-                  (.cc native 'admit-current
+                  (.cc runtime 'admit-current
                     (lambda () (check!) (when change? (write-source! "version-two"))))
-                  native))))
+                  runtime))))
           (def selected
             (.o build-graph:
               (.o source-inputs: observed other-projections: '()
@@ -76,10 +76,10 @@
             (and (Error? exception)
                  (string=? (Error-message exception)
                    "stale selected build input; regenerate the build entry")))
-          (def result (prepare "native"))
+          (def result (prepare "runtime"))
           (set! checks 0)
           (.call result admit-current)
-          ;; One initial check plus one fresh native post-effect check.
+          ;; One initial check plus one fresh runtime post-effect check.
           (check-equal? checks 2)
           (def multi
             (prepare "multi" (list (.cc request 'identity 'first)
@@ -88,21 +88,21 @@
           (.call multi admit-current)
           ;; Every effect still has a fresh tail: one initial plus two tails.
           (check-equal? checks 3)
-          ;; Check the composition law beyond one adjacent pair. These native
+          ;; Check the composition law beyond one adjacent pair. These runtime
           ;; command probes require no process or second test runner.
           (for-each
             (lambda (names)
               (def batch
-                (prepare (string-append "native-" (number->string (length names)))
+                (prepare (string-append "runtime-" (number->string (length names)))
                   (map (lambda (name) (.cc request 'identity name)) names)))
               (set! checks 0)
               (.call batch admit-current)
               (check-equal? checks (+ 1 (length names))))
             '(() (a b c d) (a b c d e f g h)))
-          (set! native-change? #t)
+          (set! runtime-change? #t)
           (check-exception (.call result admit-current) stale?)
-          (set! native-change? #f)
-          ;; A replaced method must not inherit the native prefix allowance.
+          (set! runtime-change? #f)
+          ;; A replaced method must not inherit the runtime prefix allowance.
           (write-source! "version-one")
           (set! change? #f)
           (set! override? #t)
@@ -115,14 +115,14 @@
           (def opaque
             (.cc request 'identity 'opaque '.realize
               (lambda (_directory check!)
-                (def native (.call Source .prepare check!))
-                (def invoke (.get native admit-current))
-                (def operation (.get native %source-operation))
+                (def runtime (.call Source .prepare check!))
+                (def invoke (.get runtime admit-current))
+                (def operation (.get runtime %source-operation))
                 (def value
-                  (.cc native 'admit-current
+                  (.cc runtime 'admit-current
                     (lambda ()
                       (check!)
-                      ;; Fault injection: installing native-looking metadata
+                      ;; Fault injection: installing runtime-looking metadata
                       ;; AFTER an opaque call must not certify its return.
                       (when promote?
                         (.put! value '%source-operation operation)
@@ -134,7 +134,7 @@
           (set! instantiations 0)
           (set! change? #t)
           (check-exception (.call opaque-first admit-current) stale?)
-          ;; The next native entry must refuse BEFORE its query can execute.
+          ;; The next runtime entry must refuse BEFORE its query can execute.
           (check-equal? instantiations 0)
           (write-source! "version-one")
           (set! change? #f)
@@ -143,7 +143,7 @@
           (set! change? #t)
           (check-exception (.call opaque-last admit-current) stale?)
           ;; Tail reuse covers inputs only. The separately generated entry
-          ;; must still be checked AFTER a native action that modifies it.
+          ;; must still be checked AFTER a runtime action that modifies it.
           (write-source! "version-one")
           (set! change? #f)
           (set! entry-to-change (.get result guard-entry))

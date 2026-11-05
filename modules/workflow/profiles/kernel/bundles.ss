@@ -1,4 +1,4 @@
-(import (only-in :agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-module-bundles poo-upstream-flow-funflow-module-bundles))
+(import (only-in :agentic-ai-lab/modules/workflow/funflow-config agentic-ai-lab-funflow-module-bundles))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -25,7 +25,6 @@
 (export yuanxu-funflow-cicd-default-payload
         agentic-ai-lab-kernel-module-bundles
         agentic-ai-lab-funflow-module-bundles
-        poo-upstream-flow-funflow-module-bundles
         +agentic-ai-lab-session-default-flags+
         agentic-ai-lab-session-module-bundles
         agentic-ai-lab-loop-governor-module-bundles

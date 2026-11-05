@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Execute native-Provider contract scenarios and retain unsafe replay inputs."""
+"""Execute runtime-Provider contract scenarios and retain unsafe replay inputs."""
 import argparse
 import hashlib
 import itertools
@@ -94,7 +94,7 @@ def main():
         raise RuntimeError('Unexpected SysML CLI exit status')
     (out / 'summary.json').write_text(json.dumps(dict(
         executed=len(cases), expected_unsafe=failed, unexpected=0,
-        model_sha256=sha(MODEL), runner_sha256=sha(Path(__file__)), native_proof=False), indent=2) + '\n')
+        model_sha256=sha(MODEL), runner_sha256=sha(Path(__file__)), runtime_proof=False), indent=2) + '\n')
     print(f'PASS: {len(cases)} executed; {failed} expected unsafe; {out}')
 
 

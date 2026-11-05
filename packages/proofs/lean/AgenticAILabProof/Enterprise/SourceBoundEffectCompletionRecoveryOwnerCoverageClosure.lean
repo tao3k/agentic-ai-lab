@@ -24,7 +24,7 @@ open SourceBoundProgressEvidenceClosure
 
 The generic progress receipt proves a rank decrease.  It does not by itself
 prove which external runtime, scheduler, or storage receipt justified that
-decrease.  This closure requires one owner-native transition witness for every
+decrease.  This closure requires one owner-runtime transition witness for every
 non-committed step and projects that witness into the existing convergence
 algebra.
 -/

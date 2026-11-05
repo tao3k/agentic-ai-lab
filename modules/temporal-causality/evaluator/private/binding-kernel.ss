@@ -43,7 +43,7 @@
    identity-value receipt root-value output-value bindings journal))
 
 ;; This helper has no storage or cached admission. The private caller supplies
-;; the canonical result produced by native replay in the same invocation.
+;; the canonical result produced by runtime replay in the same invocation.
 (def (support-from-verified verified identity-value receipt root-value output-value bindings journal)
   (unless (and (text? identity-value) (list? bindings) (<= 1 (length bindings) 128)
                (exact-integer? root-value))

@@ -51,7 +51,7 @@ class EvidenceDagTests(unittest.TestCase):
         self.assertTrue(all(positions[edge['from']] < positions[edge['to']]
                             for edge in dag['edges']))
 
-    def test_alpha_renaming_is_native_and_does_not_mutate_input(self):
+    def test_alpha_renaming_is_runtime_and_does_not_mutate_input(self):
         def rule(a, b):
             return {'head': [{'relation': 'reach', 'terms': [{'var': a}, {'var': b}]}],
                     'body': [{'relation': 'edge', 'terms': [{'var': a}, {'var': b}]}]}
@@ -118,7 +118,7 @@ class EvidenceDagTests(unittest.TestCase):
             self.assertEqual(len(second['reusedComponents']),1)
             self.assertTrue(second['retainedCompleted'])
             self.assertEqual(first['result'],second['result'])
-            # Certificates and aliases are private native owner state, not caller packets.
+            # Certificates and aliases are private runtime owner state, not caller packets.
             with self.assertRaises(TypeError):chain.query(program,certificates={'answer':'input'})
             forged=copy.deepcopy(program);forged['relations'][-1]['source']=True
             forged['relations'][-1]['rows']=[['forged']]

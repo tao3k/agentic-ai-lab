@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: proof-backed AI agent lifecycle gate objects.
-;;; Invariant: gates are POO-native; alists appear only as Lean facts.
+;;; Invariant: gates are POO; alists appear only as Lean facts.
 
 (import (only-in :clan/poo/object .o .ref object?))
 
@@ -233,7 +233,7 @@
 
 ;; agentic-ai-lab-agent-lifecycle-gate
 ;;   : (-> Symbol Symbol POOObject Alist POOObject)
-;;   | contract: constructs a POO-native lifecycle proof gate
+;;   | contract: constructs a POO lifecycle proof gate
 ;; : (-> Symbol Symbol POOObject Alist POOObject)
 (def (agentic-ai-lab-agent-lifecycle-gate name status receipt metadata)
   (.o kind: agentic-ai-lab-agent-lifecycle-gate-kind

@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-// Finite protocol model, not a model of hidden reasoning or native GC.
+// Finite protocol model, not a model of hidden reasoning or runtime GC.
 module TrajectoryEvidenceChain {
   const Mutation: str
   // Four content revisions bound only TLC's finite search, not an agent or runtime.

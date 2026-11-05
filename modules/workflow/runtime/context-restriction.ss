@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Inert declarations project to the native Library; no registry or grant IO.
+;;; Inert declarations project to the runtime Library; no registry or grant IO.
 (import (only-in :std/list/list every)
         (only-in :clan/poo/object .ref)
         :agentic-ai-lab/modules/query/semantic/context-restriction)

@@ -4,7 +4,7 @@
 
 ;;; Provider-neutral AI-security executable refinement.
 ;;;
-;;; Boundary: provider adapters normalize logs into the POO-native envelope.
+;;; Boundary: provider adapters normalize logs into the POO envelope.
 ;;; This module owns only pure policy transition and versioned proof receipts.
 
 (import (only-in :clan/poo/object .def .mix .o .ref)

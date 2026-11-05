@@ -23,7 +23,7 @@
 
 (def opentofu-configuration-discovery-test
   (test-suite "opentofu-configuration-discovery-test"
-    (yuanxu-test-case "final candidate discovers native Contracts without SelectedTypes"
+    (yuanxu-test-case "final candidate discovers Contracts without SelectedTypes"
       (def AWS (.get OpenTofuScope. modules aws))
       (def AWSCC (.get OpenTofuScope. modules awscc))
       (def Null (.get OpenTofuScope. modules null))
@@ -82,7 +82,7 @@
       (assert 'nine-real-child-admissions (= (length children) 9))
       (assert 'children-receive-original-context
         (every (lambda (child) (eq? (.get child admission context) Context)) children))
-      (assert 'native-child-admissions-all-accepted
+      (assert 'runtime-child-admissions-all-accepted
         (every (lambda (child) (accepted? (.get child admission))) children))
       (def (child-at path)
         (find (lambda (child) (equal? (.get child path) path)) children))

@@ -47,10 +47,10 @@
 (defstruct source-entry (generation source scope restriction profile task-revision ids
                         projection task publication grant-id grant-generation authority query))
 (defstruct proof-binding (host registration state-generation policy-generation policy-digest budget source-generation digest parents authority admission query))
-(defstruct native-worker (session attempt source-generation proof-digest registration original-proof thread observation mode query))
-(defstruct native-observation (worker payload))
+(defstruct host-worker (session attempt source-generation proof-digest registration original-proof thread observation mode query))
+(defstruct runtime-observation (worker payload))
 (defstruct context-parent (session binding parents))
-;;; Native Provider ownership is kept outside the portable lineage.
+;;; Runtime Provider ownership is kept outside the portable lineage.
 (defstruct query-binding (owner observation))
 (def (source-entry-schedule row) (owner-publication-schedule (source-entry-publication row)))
 (def (publish-schedule! row schedule)
@@ -113,7 +113,7 @@
 
 (def (entry runtime-value session-id)
   (or (hash-get (session-owner-state-entries runtime-value) session-id) (error "Unknown enrolled Session")))
-;;; Snapshot only closed native schemas. No live object/string aliases escape.
+;;; Snapshot only closed runtime schemas. No live object/string aliases escape.
 (def (copy-value value)
   (cond ((string? value) (string-copy value))
         ((pair? value) (map copy-value value))
@@ -340,7 +340,7 @@
         (view row #f (.ref observed 'reason) #t))
       observed)))
 
-;;; Native endpoint publication. Enrollment is an explicit trusted Host action;
+;;; Runtime endpoint publication. Enrollment is an explicit trusted Host action;
 ;;; a joined endpoint authenticates only that endpoint's bytes, not their truth.
 ;;; All participating proof/grant/source Hosts require this same owner thread.
 (def (binding-digest runtime-value session-id)
@@ -351,12 +351,12 @@
        (equal? generation (source-entry-generation row))))
 (def (worker-for runtime-value token session-id)
   (let (worker (hash-get (session-owner-state-workers runtime-value) token))
-    (unless (and worker (equal? session-id (native-worker-session worker)))
-      (error "Unknown or foreign native worker capability")) worker))
+    (unless (and worker (equal? session-id (host-worker-session worker)))
+      (error "Unknown or foreign runtime worker capability")) worker))
 (def (observation-for runtime-value token session-id)
   (let (observation (hash-get (session-owner-state-observations runtime-value) token))
-    (unless (and observation (equal? session-id (native-worker-session (native-observation-worker observation))))
-      (error "Unknown or foreign native observation capability")) observation))
+    (unless (and observation (equal? session-id (host-worker-session (runtime-observation-worker observation))))
+      (error "Unknown or foreign runtime observation capability")) observation))
 (def (agentic-ai-lab-ai-agentic-context-session-host-attach-worker! host session-id revision generation endpoint)
   (let* ((runtime-value (state host)) (row (entry runtime-value session-id))
          (schedule (source-entry-schedule row)) (attempt (.ref schedule 'active)))
@@ -366,16 +366,16 @@
                  (query-current? (source-entry-query row))
                  (observe-proof runtime-value row session-id) (observe-grant runtime-value row)
                  (< (hash-length (session-owner-state-workers runtime-value)) 128))
-      (error "Native worker enrollment requires exact active current input"))
-    (when (find (lambda (w) (or (eq? endpoint (native-worker-thread w))
-                     (and (equal? session-id (native-worker-session w))
-                          (equal? (.ref attempt 'identity) (.ref (native-worker-attempt w) 'identity)))))
+      (error "Runtime worker enrollment requires exact active current input"))
+    (when (find (lambda (w) (or (eq? endpoint (host-worker-thread w))
+                     (and (equal? session-id (host-worker-session w))
+                          (equal? (.ref attempt 'identity) (.ref (host-worker-attempt w) 'identity)))))
                 (hash-values (session-owner-state-workers runtime-value)))
-      (error "Native endpoint or Attempt already enrolled"))
+      (error "Runtime endpoint or Attempt already enrolled"))
     (let ((token (.o kind: 'agentic-ai-lab.ai-agentic-context.worker-capability.v1))
           (worker (let* ((binding (hash-get (session-owner-state-proofs runtime-value) session-id))
                          (proof (and binding (current-proof binding))))
-                    (make-native-worker (string-copy session-id) (copy-value attempt) generation
+                    (make-host-worker (string-copy session-id) (copy-value attempt) generation
                       (binding-digest runtime-value session-id)
                       (and binding (string-copy (proof-binding-registration binding)))
                       (and proof (string-copy (.ref proof 'proof-digest))) endpoint #f 'running
@@ -384,30 +384,30 @@
       (hash-put! (session-owner-state-workers runtime-value) token worker) token)))
 (def (agentic-ai-lab-ai-agentic-context-session-host-observe-worker! host session-id worker-token)
   (let* ((runtime-value (state host)) (worker (worker-for runtime-value worker-token session-id)))
-    (or (native-worker-observation worker)
-      (let* ((pending (list 'native-worker-pending))
+    (or (host-worker-observation worker)
+      (let* ((pending (list 'host-worker-pending))
              ;; Nonblocking actual join: a timeout never issues a terminal seal.
-             (payload (thread-join! (native-worker-thread worker) 0 pending)))
+             (payload (thread-join! (host-worker-thread worker) 0 pending)))
         (if (eq? pending payload) #f
           (begin
             (unless (and (string? payload) (<= (string-length payload) 65536))
-              (error "Native worker result requires bounded immutable text"))
+              (error "Runtime worker result requires bounded immutable text"))
             (let ((token (.o kind: 'agentic-ai-lab.ai-agentic-context.observation-capability.v1))
-                  (observation (make-native-observation worker (string-copy payload))))
+                  (observation (make-runtime-observation worker (string-copy payload))))
               (hash-put! (session-owner-state-observations runtime-value) token observation)
-              (set! (native-worker-observation worker) token) token)))))))
+              (set! (host-worker-observation worker) token) token)))))))
 (def (terminal-publication! runtime-value row session-id observation proposal outcome-value applicability)
-  (let* ((worker (native-observation-worker observation)) (attempt-value (native-worker-attempt worker))
+  (let* ((worker (runtime-observation-worker observation)) (attempt-value (host-worker-attempt worker))
          (schedule (.ref proposal 'schedule))
          (terminal-value (.o kind: 'agentic-ai-lab.ai-agentic-context.terminal.v1
            session: (string-copy session-id) attempt: (string-copy (.ref attempt-value 'identity))
            generation: (.ref attempt-value 'generation) request: (string-copy (.ref attempt-value 'request))
            input-digest: (string-copy (.ref (.ref attempt-value 'input) 'digest))
-           source-generation: (native-worker-source-generation worker)
-           query-lineage: (native-worker-query worker)
-           proof-binding: (native-worker-proof-digest worker)
-           proof-registration: (native-worker-registration worker)
-           proof-digest: (native-worker-original-proof worker)
+           source-generation: (host-worker-source-generation worker)
+           query-lineage: (host-worker-query worker)
+           proof-binding: (host-worker-proof-digest worker)
+           proof-registration: (host-worker-registration worker)
+           proof-digest: (host-worker-original-proof worker)
            applicability-digest: (and applicability (string-copy (.ref applicability 'semantic-digest)))
            proof-state-generation: (and applicability (.ref applicability 'state-generation))
            proof-state-digest: (and applicability (string-copy (.ref applicability 'current-state-digest)))
@@ -422,7 +422,7 @@
            propagation-event: (let (p (owner-publication-propagation (source-entry-publication row)))
                                 (and p (string-copy (.ref p 'event))))
            revision: (.ref schedule 'revision) outcome: outcome-value
-           payload: (string-copy (native-observation-payload observation))))
+           payload: (string-copy (runtime-observation-payload observation))))
          ;; Force and copy the closed POO schema before the state pointer changes.
          (terminal-snapshot (copy-value terminal-value))
          (publication (make-owner-publication schedule
@@ -432,20 +432,20 @@
     ;; No caller callback, foreign I/O, yield or receipt resolver follows the guard.
     (set! (source-entry-publication row) publication)
     (.o (:: @ (view row #t outcome-value #t)) terminal: terminal-snapshot
-        native-result-published?: (eq? outcome-value 'completed))))
+        runtime-result-published?: (eq? outcome-value 'completed))))
 (def (agentic-ai-lab-ai-agentic-context-session-host-commit-result! host session-id revision generation observation-token)
   (let* ((runtime-value (state host)) (row (entry runtime-value session-id))
          (observation (observation-for runtime-value observation-token session-id))
-         (worker (native-observation-worker observation)))
+         (worker (runtime-observation-worker observation)))
     (if (not (owner-match row revision generation)) (view row #f 'stale-revision #f)
       (let ((observed (agentic-ai-lab-ai-agentic-context-session-host-revalidate! host session-id revision generation)))
         (if (not (.ref observed 'accepted?)) observed
-          (if (not (and (= generation (native-worker-source-generation worker))
-                        (equal? (binding-digest runtime-value session-id) (native-worker-proof-digest worker))
-                        (eq? (native-worker-mode worker) 'running)))
+          (if (not (and (= generation (host-worker-source-generation worker))
+                        (equal? (binding-digest runtime-value session-id) (host-worker-proof-digest worker))
+                        (eq? (host-worker-mode worker) 'running)))
             (view row #f 'stale-worker-input #f)
             (let* ((proposal (agentic-ai-lab-session-complete (source-entry-schedule row) revision
-                                (native-worker-attempt worker)))
+                                (host-worker-attempt worker)))
                    (binding (hash-get (session-owner-state-proofs runtime-value) session-id))
                    (applicability (and binding (current-proof binding))))
               (cond ((not (.ref proposal 'accepted?)) (view row #f (.ref proposal 'reason) #f))
@@ -467,14 +467,14 @@
           (begin
             (publish-schedule! row (.ref proposal 'schedule))
             (for-each (lambda (worker)
-              (when (and active (equal? session-id (native-worker-session worker))
-                         (equal? (.ref active 'identity) (.ref (native-worker-attempt worker) 'identity)))
-                (unless (eq? (native-worker-mode worker) 'cancelled)
-                  (set! (native-worker-mode worker) mode))
+              (when (and active (equal? session-id (host-worker-session worker))
+                         (equal? (.ref active 'identity) (.ref (host-worker-attempt worker) 'identity)))
+                (unless (eq? (host-worker-mode worker) 'cancelled)
+                  (set! (host-worker-mode worker) mode))
                 (when (eq? mode 'cancelled)
                   ;; Failure to deliver leaves the already-published obligation.
                   (with-catch (lambda (exception) #f)
-                    (lambda () (thread-send (native-worker-thread worker) 'cancel))))))
+                    (lambda () (thread-send (host-worker-thread worker) 'cancel))))))
               (hash-values (session-owner-state-workers runtime-value)))
             (view row #t (if (eq? mode 'cancelled) 'cancellation-requested 'recovery-published) #t)))))))
 (def (agentic-ai-lab-ai-agentic-context-session-host-cancel! host session-id revision generation)
@@ -484,13 +484,13 @@
 (def (agentic-ai-lab-ai-agentic-context-session-host-reconcile! host session-id revision generation observation-token)
   (let* ((runtime-value (state host)) (row (entry runtime-value session-id))
          (observation (observation-for runtime-value observation-token session-id))
-         (worker (native-observation-worker observation)))
+         (worker (runtime-observation-worker observation)))
     (if (not (owner-match row revision generation)) (view row #f 'stale-revision #f)
-      (let (proposal (agentic-ai-lab-session-reconcile (source-entry-schedule row) revision (native-worker-attempt worker)))
+      (let (proposal (agentic-ai-lab-session-reconcile (source-entry-schedule row) revision (host-worker-attempt worker)))
         (if (not (.ref proposal 'accepted?)) (view row #f (.ref proposal 'reason) #f)
           ;; Cleanup can resolve revoked inputs, but cannot admit their result.
           (terminal-publication! runtime-value row session-id observation proposal
-            (if (eq? (native-worker-mode worker) 'cancelled) 'cancelled 'reconciled) #f))))))
+            (if (eq? (host-worker-mode worker) 'cancelled) 'cancelled 'reconciled) #f))))))
 (def (agentic-ai-lab-ai-agentic-context-session-host-close! host session-id revision generation)
   (let* ((runtime-value (state host)) (row (entry runtime-value session-id)))
     (if (not (owner-match row revision generation)) (view row #f 'stale-revision #f)
@@ -735,10 +735,10 @@
 
 ;;; Trusted recovery projection. No worker/observation capability is serialized.
 (def (context-observation-evidence host sid token)
-  (let* ((s (state host)) (o (observation-for s token sid)) (w (native-observation-worker o)))
-    (.o kind: 'context.native-observation-evidence.v1 session: (string-copy sid)
-      attempt: (copy-value (native-worker-attempt w)) payload: (string-copy (native-observation-payload o))
-      proof: (native-worker-original-proof w) binding: (native-worker-proof-digest w))))
+  (let* ((s (state host)) (o (observation-for s token sid)) (w (runtime-observation-worker o)))
+    (.o kind: 'context.runtime-observation-evidence.v1 session: (string-copy sid)
+      attempt: (copy-value (host-worker-attempt w)) payload: (string-copy (runtime-observation-payload o))
+      proof: (host-worker-original-proof w) binding: (host-worker-proof-digest w))))
 (def (context-host-checkpoint host)
   (let (s (state host))
     (def (binding b)

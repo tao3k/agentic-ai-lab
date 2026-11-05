@@ -24,7 +24,7 @@
         :yuanxu/modules/funflow/control-plane/api
         :agentic-ai-lab/modules/docker/interface
         :yuanxu/modules/funflow/store
-        :agentic-ai-lab/modules/workflow/flows)
+        (only-in :agentic-ai-lab/modules/workflow/flows-builders make-docker-store-run-config))
 
 (export tutorial-runtime-result-test)
 

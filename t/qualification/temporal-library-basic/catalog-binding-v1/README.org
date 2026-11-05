@@ -8,7 +8,7 @@ Both Rust projections now require original admitted MRR RelationCatalog values.
 Fact projection resolves the exact RelationId and derives the evaluator name
 from its predicate. The original relation schema validates field arity/types
 and context; support projection validates each Derivation output too. Calls
-recheck the exact owner catalog digest before native execution. The old
+recheck the exact owner catalog digest before runtime execution. The old
 unchecked evaluator-name constructor is removed. Callers still own obtaining
 an authoritative current catalog; this adapter does not authenticate providers.
 
@@ -21,15 +21,15 @@ this path does not validate source fact content or execute the original Rule.
 * Executed evidence
 
 =qualification.ss= records exact source, pinned MRR/ASCENT, artifact and raw logs.
-The existing fact-binding-v1 native artifact is reused without an ABI change.
-No fresh AOT or native proof suite was run. Three new original-catalog typed Fact
-receipts preserve the previously native-qualified request, result and Derivation
+The existing fact-binding-v1 runtime artifact is reused without an ABI change.
+No fresh AOT or runtime proof suite was run. Three new original-catalog typed Fact
+receipts preserve the previously runtime-qualified request, result and Derivation
 fields exactly and also record the original catalog digest.
 
 The locked offline Rust test build and test binary used =mrr-transport= with
 =CARGO_TARGET_DIR=/private/tmp/poo-fixed-v1-target=. The test binary ran through
 the project =watch.py= under a five-second idle and 45-second total deadline.
-Its three tests passed (3.13 seconds wall), including actual native content
+Its three tests passed (3.13 seconds wall), including actual runtime content
 parity, two/one/zero Temporal support cuts and historical replay. Controls
 reject changed catalog, arity/type mismatch, absent relations, predicate
 collisions, nullable/unsupported/constrained schemas and oversized catalogs.
@@ -38,7 +38,7 @@ positions retain their original values. An original catalog remains usable
 after a rejected substitution.
 
 Python ran =test_mrr_fact_content.py= and =test_temporal_support.py= against that
-same native artifact and new Rust Scheme oracles, with the same watchdog.
+same runtime artifact and new Rust Scheme oracles, with the same watchdog.
 All 19 passed without skips (1.30 seconds wall). The first Rust build failed
 on a heterogeneous test datum array; its exit 101 and raw log are retained.
 No real model or benchmark was executed, and remote CI is a separate gate.

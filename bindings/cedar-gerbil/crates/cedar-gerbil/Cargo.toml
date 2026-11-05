@@ -23,8 +23,8 @@ serde_json.workspace = true
 tempfile.workspace = true
 
 [build-dependencies]
-gerbil-scheme-native-build.workspace = true
+gerbil-scheme-build.workspace = true
 
 [[test]]
-name = "native_authorization"
+name = "runtime_authorization"
 required-features = ["conformance"]

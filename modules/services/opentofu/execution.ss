@@ -120,7 +120,7 @@
   ;; Linking captures identities only. Resolving publication here would re-enter
   ;; the active scope; its lazy slot is first demanded after linking completes.
   .bind-publication:
-  (lambda (selection owner name current!)
+  (lambda (resolve-publication _owner _name current!)
     ;; Derived executions share this binding's selected export metadata. The
     ;; promise caches construction only: publish and every forward Task still
     ;; run their live source/package guards and validate the current receiver.
@@ -130,7 +130,7 @@
              (begin
                (unless current!
                  (error "build-required: selected OpenTofu packages are not prepared"))
-               (.call AdmissionPublication. .for-export selection owner name))))
+               (resolve-publication))))
       (.o (:: @ execution)
         package-current: current!
         publication: (force selected-publication))))

@@ -4,13 +4,13 @@ The frozen Library build rejects a known-correct positive Datalog proposal befor
 
 The consumer uses the existing `candidate/reasoning.ss` and `candidate/feedback.ss`. Scheme owns the independent finite-walk oracle and full-row comparisons; Python owns provider IO, records and budget admission. There is no search controller or anti-repetition instruction.
 
-The three frozen tasks are positive-length reachability, positive even-length walks, and the conjunction of reachability from two origins. Each has four visible graphs and 60 held-out graphs on three vertices. A trajectory has 32,768 input plus all-output tokens, including thinking, an 8,192 output cap, and no retries. Only a completed, known-cost proposal failing visible examples can receive the planned paired revision with or without native execution feedback. Shared initial cost is charged to both trajectories. **These model comparisons were not run.**
+The three frozen tasks are positive-length reachability, positive even-length walks, and the conjunction of reachability from two origins. Each has four visible graphs and 60 held-out graphs on three vertices. A trajectory has 32,768 input plus all-output tokens, including thinking, an 8,192 output cap, and no retries. Only a completed, known-cost proposal failing visible examples can receive the planned paired revision with or without runtime execution feedback. Shared initial cost is charged to both trajectories. **These model comparisons were not run.**
 
 ## Build and observed failure
 
 The Library source closure was consistently captured from the active dirty checkout at 2026-10-11T02:47:50.301380+00:00 (HEAD `652934cd728d7edee32df020af75e9632dffc755`), then built with `std/make`: 62 modules, exit 0. Subsequent workspace edits are outside this frozen build. Source, compiler products, linked C/object files and the executable are hashed in the plan.
 
-A known-correct two-rule transitive-closure proposal is rejected on all four visible graphs: native status `rejected`, feedback `inconclusive`, diagnostic `planner-rejected`. The diagnostic points to the rules contract at `program/types.ss:238`. Even the empty graph is not admitted: empty returned rows are not a semantic match when execution was rejected.
+A known-correct two-rule transitive-closure proposal is rejected on all four visible graphs: runtime status `rejected`, feedback `inconclusive`, diagnostic `planner-rejected`. The diagnostic points to the rules contract at `program/types.ss:238`. Even the empty graph is not admitted: empty returned rows are not a semantic match when execution was rejected.
 
 The same public `candidate-program` call through the coherently built dynamic Library also raises a TypeError at that rules contract, with `core/types#yuanxu-contract-validate` in its backtrace. This locates the failure in the captured admission/contract path; it does not yet establish a source fix or a benefit from caching. Full diagnostic: [dynamic-diagnosis.txt](../../../../../.cache/ascent/archived-runs/docs/research/agent-inference/history/candidate-model-rules-rejected/dynamic-diagnosis.txt).
 

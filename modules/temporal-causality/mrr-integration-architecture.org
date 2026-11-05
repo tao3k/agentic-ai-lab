@@ -15,8 +15,8 @@ crate or compatibility alias. It supplies Scheme semantic modules, C ABI and
 Python Library. Data supplies Backend/Protocols and durable transactions.
 
 MRR CI consumes the immutable POO dependency declared in its =gerbil.pkg=.
-It builds the native Library from that dependency and owns Rust/Python comparison
-and native-to-Data physical acceptance. POO CI qualifies its Scheme core, C ABI
+It builds the runtime Library from that dependency and owns Rust/Python comparison
+and runtime-to-Data physical acceptance. POO CI qualifies its Scheme core, C ABI
 and Python Library; it neither checks out MRR nor pins the MRR runtime.
 Historical build-freeze receipts retain their original commits and paths.
 
@@ -60,7 +60,7 @@ Dedicated ABI v1 controls retain proof inputs; ordinary read-only queries cannot
 replace current state, policy or the observed clock. Source authentication,
 complete support inventories and effect authorization are not inferred.
 
-MRR's Library qualification uses one native artifact for its original Rust
+MRR's Library qualification uses one runtime artifact for its original Rust
 evidence and installed Python Library replay. Success qualifies the named
 bounded lifecycle only. Physical execution remains a separate executable gate
 in MRR, using the same artifact and Data's authoritative port. Historical
@@ -70,7 +70,7 @@ C SQLite publication currently admits only an initial root. Replacement,
 tombstone, durable current-state fences and crash recovery must compose the
 MRR Data authoritative commit port. Two independently passing stores do not
 establish one atomic publication. Recursive/absence profiles and a general
-native-to-Quint trace correspondence remain separate work.
+runtime-to-Quint trace correspondence remain separate work.
 
 * Audited seams and necessary corrections
 
@@ -82,7 +82,7 @@ native-to-Quint trace correspondence remain separate work.
 | =mrr-lineage/src/api.rs= | Acyclic graph admission and reverse reachability over supplied edges | Impact schedules reevaluation; it cannot decide whether alternative support survives |
 | =mrr-agentic-ai-context/src/state.rs= | Context elements with declared dependencies and temporal FactId references | Export applicability evidence as explicit dependencies and check it at consumption |
 
-The current MRR projection document preserves native GenerationId separately
+The current MRR projection document preserves runtime GenerationId separately
 from Temporal host generation, and records snapshot/cut correspondence as a
 missing verification. Keep those identities distinct. A receipt digest alone
 cannot authenticate source execution or establish a causal cut.
@@ -134,10 +134,10 @@ admitted recursive interpretation. G0--G2 below accept only acyclic proof use.
 
 The user subsequently required removal of project JSON transport and benchmark
 artifacts. The replacement semantic ABI is version 2 with inert Scheme data;
-Rust consumes original native MRR candidate/receipt values and re-admits them
+Rust consumes original runtime MRR candidate/receipt values and re-admits them
 through the MRR owner. The older JSON exporter remains an upstream MRR feature,
 but POO no longer uses it. Physical cross-process exchange must implement a
-versioned native projection at the owning boundary, retaining original identity
+versioned runtime projection at the owning boundary, retaining original identity
 and admission semantics; it must not reintroduce JSON as a compatibility lane.
 ASP Scheme benchmark API owns new measurement and receipts. DeepSeek HTTP
 encoding is confined to the provider adapter. Historical receipts qualify only
@@ -152,7 +152,7 @@ checker binds the following independently named fields:
 - Profile/schema version, producer/checker artifact and canonical encoding.
 - Source owner, source identity, exact revision inventory and root content ID.
 - Journal identity, admission cut, optional valid-time selector and projection.
-- Temporal host generation and native MRR GenerationId, stored separately.
+- Temporal host generation and runtime MRR GenerationId, stored separately.
 - Original parser/compiler/source receipt, query binding, both catalogs,
   SemanticSnapshot, ordered result digest and row count.
 - Clock domain/role and coordinate interpretation; explicit conversion proof
@@ -184,14 +184,14 @@ or turn a truncated enumeration into a complete one.
 These are proposed semantic relation families. Names below are explanatory,
 not new callable APIs. POO defines their meaning; an admitted versioned MRR
 catalog defines field types and authority. Start with the existing scalar ABI
-and add new native profiles only with their own differential acceptance.
+and add new runtime profiles only with their own differential acceptance.
 
 | Family | Essential payload | Admission requirement |
 |--------+-------------------+-----------------------|
 | Observation revision | Source/event/revision, observed/declared/missing kind, predecessor, coordinate or interval, clock | Explicit provenance and distinction between observation and assumption |
 | Evidence cut | Journal, admission selector, valid-time selector, visible revision set, conflict status | Replay from the immutable journal; no caller-authored selected heads |
 | Coverage | Source/partition set, scope, frontier, query/program, completion status | Owner evidence for the exact closed domain; a watermark alone is insufficient |
-| Conclusion revision | Subject, predecessor, profile, model/query, classification, cut/projection, proof | Native owner proof admission; immutable revisions including tombstones |
+| Conclusion revision | Subject, predecessor, profile, model/query, classification, cut/projection, proof | Runtime owner proof admission; immutable revisions including tombstones |
 | Support group | Conclusion, derivation identity, conjunctive premise set, alternative group, polarity | Resolvable premises and independently checked derivation semantics |
 | Applicability | Conclusion, source vector, policy/authority epoch, scope, selection version, status | Checked current-state binding at the intended use boundary |
 
@@ -298,8 +298,8 @@ payload; none can be inferred from a model's agreement with tool output.
 
 * Rust layout and optimization constraints
 
-Keep the native lifetime/queue/transport adapter in MRR =runtime/=. Keep
-query admission in MRR and physical IO in MRR Data. Add POO-native projection,
+Keep the runtime lifetime/queue/transport adapter in MRR =runtime/=. Keep
+query admission in MRR and physical IO in MRR Data. Add POO projection,
 correspondence and applicability objects in the Temporal module; expose only
 bounded ABI operations required by the runtime. Trusted registration/publication
 must remain host capabilities separate from model-callable read-only tools.
@@ -311,17 +311,17 @@ reuses an expired applicability decision. Bound total bytes, rows, cells, depth,
 support edges and queued work before expensive allocation; reject partial
 transfers rather than silently admitting their prefix.
 
-Measure cold/warm physical bytes, native queue delay, proof time, copied bytes
+Measure cold/warm physical bytes, runtime queue delay, proof time, copied bytes
 and peak memory separately. Optimize affected-frontier work only after comparison
-with full recomputation. Current native timeout abandons a response, not the
-owner-thread execution; cancellation must preserve terminal native lifetime and
+with full recomputation. Current runtime timeout abandons a response, not the
+owner-thread execution; cancellation must preserve terminal runtime lifetime and
 bounded admission. Performance claims need measured workloads and exact pins.
 
 * Delivery gates and falsifiable acceptance
 
 | Gate | Owned change | Required evidence |
 |------+--------------+-------------------|
-| G0 physical read-only | MRR Data original typed transport; immutable MRR pin migration; POO correspondence check | Original GQL -> restored physical root -> original MRR receipt -> native Temporal; changed root/source/query/catalog/row and empty answer controls |
+| G0 physical read-only | MRR Data original typed transport; immutable MRR pin migration; POO correspondence check | Original GQL -> restored physical root -> original MRR receipt -> runtime Temporal; changed root/source/query/catalog/row and empty answer controls |
 | G1 reverse projection | POO conclusion/cut/receipt relation profile; MRR typed fact admission | Roundtrip preserves original identities, conflict/tombstone/history and classification scope; forged proof and self-support reject |
 | G2 acyclic revision lifecycle | POO support groups and durable journal; runtime dirty/current fences; MRR Context dependency use | Late correction, dual supports, last-support removal, absence dependency, policy expiry, stale Context and as-of replay |
 | G3 recursive/absence profiles | Named evaluator plus SCC/coverage certificates and POO replay | External-support removal breaks cycles; unsupported negation rejects; incremental results equal full recomputation; budget leaves dirty |
@@ -348,7 +348,7 @@ a current permit merely because its historical commit receipt still exists.
 - [[file:framework.org][Temporal framework and existing revision/projection contracts]]
 - [[file:design-audit.org][D1--D8 design decisions and remaining implementation gates]]
 - [[file:integration-readiness-audit.org][Pinned runtime and real-model qualification boundaries]]
-- [[https://github.com/tao3k/meta-relational-reasoning/tree/feat/property-query-executor/runtime][MRR native Rust adapter]]
+- [[https://github.com/tao3k/meta-relational-reasoning/tree/feat/property-query-executor/runtime][MRR Rust adapter]]
 - [[file:../../bindings/runtime-c/include/agentic_ai_lab/temporal_store.h][Current first-root publication ABI]]
 
 * Direct Legacy removal
@@ -394,7 +394,7 @@ Omitting a predecessor or continuing a withdrawn branch rejects admission.
 
 This is pure Scheme Library behavior. The frontier's completeness and Source
 cut remain caller premises; there is no authenticated index/current-cut
-correspondence, durable append, support stabilization, native ABI journal
+correspondence, durable append, support stabilization, runtime ABI journal
 transport, current-pointer CAS or effect execution. Retraction is query scoped;
 it does not establish that all independent supports for a business claim have
 been removed. Runtime-executed, Source-authenticated and action-authorized
@@ -407,7 +407,7 @@ MRR =d5beb403=. Its successful receipt is in
 slice's ABI transport, durable journal or publication behavior.
 
 The next ownership sequence is:
-1. POO extends the native Scheme ABI with proof-bound revision/journal transport
+1. POO extends the Scheme ABI with proof-bound revision/journal transport
    and replay refusal receipts; Rust forwards the original typed identities.
 2. MRR projects admitted revisions into Context with explicit classification,
    predecessor and Source scope. It must preserve multiple independent support
@@ -419,7 +419,7 @@ The next ownership sequence is:
 Each step requires its own pinned cross-runtime receipt. The Library slice
 does not supply those receipts or choose a business-level current winner.
 
-The native public Library qualification passed 11/11 Cases (seven lifecycle,
+The runtime public Library qualification passed 11/11 Cases (seven lifecycle,
 four current-source regressions), final =OK= and exit 0 under five-second
 genuine-progress and 45-second total gates. The frozen Scheme receipt and
 original output are in the qualification archive linked above. Four earlier
@@ -431,8 +431,8 @@ were used to substitute for these Library checks.
 
 The POO Rust Library now connects original admitted MRR values to the Scheme
 Family lifecycle owner. =MrrFamilyAdmission::revision_root= and
-=MrrFamilyRevision::change/journal= use three native Scheme datum v2 operations.
-The original admission and proof objects stay on the native owner thread;
+=MrrFamilyRevision::change/journal= use three Scheme datum v2 operations.
+The original admission and proof objects stay on the runtime owner thread;
 caller payloads name retained handles and a declared scoped frontier. Scheme
 replays admissions and predecessors, then projects original proof, revision,
 classification and Source scope fields. A supplied proof field cannot override
@@ -446,13 +446,13 @@ response has per-entry admission/revision digests and classification, in
 addition to the original conclusion envelope fields.
 
 The original MRR query/candidate/receipt regression passed through the actual
-native C ABI with both debug and release Rust executables, exit 0, five seconds
+runtime C ABI with both debug and release Rust executables, exit 0, five seconds
 without genuine output as failure and a 45-second total deadline. It covers
 proof-bound correction/tombstone, retained classification/history/branches,
 missing/duplicate/unknown inventory, partial frontier, wrong cut, extra proof
 field, identity bounds and capacity refusal. Exact artifact/source/pin receipts
 are in [[file:../../t/qualification/temporal-family-lifecycle-abi/README.org][the lifecycle ABI qualification archive]]. One initial omitted-trace
-exit-124 failure remains archived; enabling existing completed hash/native-call
+exit-124 failure remains archived; enabling existing completed hash/runtime-call
 events qualified the same debug artifact without widening either deadline.
 
 This slice lives in the POO adapter; MRR Context and MRR Data retain their

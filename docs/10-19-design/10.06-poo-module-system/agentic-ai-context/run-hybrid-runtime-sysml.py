@@ -10,7 +10,7 @@ import subprocess
 HERE = Path(__file__).resolve().parent
 MODEL = HERE/'28-hybrid-runtime.sysml'
 MODES = {'none': 0, 'receipt': 1, 'credit': 2, 'join': 3, 'terminal': 4}
-FIELDS = ('workPhase', 'nativeCredit', 'ownerJoined', 'queuedData', 'queuedControls',
+FIELDS = ('workPhase', 'runtimeCredit', 'ownerJoined', 'queuedData', 'queuedControls',
           'activeHandler', 'queuePhase', 'sourceVersion', 'policyVersion',
           'ownerEpoch', 'activeAttempt', 'terminalCount')
 

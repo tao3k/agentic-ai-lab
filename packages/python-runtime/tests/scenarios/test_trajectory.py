@@ -263,7 +263,7 @@ class TrajectoryIntegration(unittest.TestCase):
             with EvidenceChain(self.engine,sources,trajectory=trajectory) as chain:
                 first=chain.query(program)
                 self.assertEqual(chain.answer(first['resultReference'],'answer'),[['a']])
-                trajectory.verify(True,'native-test-oracle')
+                trajectory.verify(True,'runtime-test-oracle')
                 second=chain.query(program)
                 self.assertTrue(second['retainedCompleted'])
                 self.assertEqual(chain.answer(second['resultReference'],'answer'),[['a']])
@@ -276,7 +276,7 @@ class TrajectoryIntegration(unittest.TestCase):
                 fresh=chain.query(program)
                 self.assertFalse(fresh['reusedComponents'])
                 self.assertEqual(chain.answer(fresh['resultReference'],'answer'),[['b']])
-                trajectory.verify(True,'native-test-oracle')
+                trajectory.verify(True,'runtime-test-oracle')
             result=trajectory.snapshot()
             self.assertEqual(result['generation'],1)
             self.assertEqual(len(result['completedEpochs']),1)

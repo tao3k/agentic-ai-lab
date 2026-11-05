@@ -34,7 +34,7 @@ class TransportTest(unittest.TestCase):
         with self.assertRaises(TimeoutError):
             c.receive(.25)
         self.assertLess(time.monotonic()-began, 1)
-        self.assertEqual((c.run/'native-partial-output.bin').read_bytes(), b'{"ready":')
+        self.assertEqual((c.run/'runtime-partial-output.bin').read_bytes(), b'{"ready":')
         self.assertTrue(c.close()['clean'])
 
     def test_multiple_frames_are_not_lost_in_buffer(self):
@@ -50,7 +50,7 @@ class TransportTest(unittest.TestCase):
         c = self.consumer('print("{",end="",flush=True)')
         with self.assertRaisesRegex(RuntimeError, 'before complete response'):
             c.receive(1)
-        self.assertEqual((c.run/'native-partial-output.bin').read_bytes(), b'{')
+        self.assertEqual((c.run/'runtime-partial-output.bin').read_bytes(), b'{')
 
     def test_invalid_frame_is_preserved(self):
         c = self.consumer('print("not-json",flush=True)')
@@ -68,7 +68,7 @@ class TransportTest(unittest.TestCase):
         c.p.wait(timeout=1)
         with self.assertRaises(BrokenPipeError):
             c.call(op='ignored')
-        self.assertIn('failure', model.json.loads((c.run/'native.json').read_text())[0])
+        self.assertIn('failure', model.json.loads((c.run/'runtime.json').read_text())[0])
 
     def test_readiness_failure_records_actual_deadline_and_cleans(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -81,10 +81,10 @@ class TransportTest(unittest.TestCase):
                 with self.assertRaises(TimeoutError):
                     model.Consumer(run, dynamic=True)
                 receive.assert_called_once_with(60)
-            receipt = model.json.loads((run/'native-readiness-failure.json').read_text())
+            receipt = model.json.loads((run/'runtime-readiness-failure.json').read_text())
             self.assertEqual(receipt['deadline'], 60)
             self.assertEqual(receipt['pendingBytes'], 0)
-            self.assertTrue(model.json.loads((run/'native-shutdown.json').read_text())['clean'])
+            self.assertTrue(model.json.loads((run/'runtime-shutdown.json').read_text())['clean'])
 
     def test_spawn_failure_has_receipt(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -92,7 +92,7 @@ class TransportTest(unittest.TestCase):
             with patch.object(model.subprocess, 'Popen', side_effect=FileNotFoundError('missing executable')):
                 with self.assertRaises(FileNotFoundError):
                     model.Consumer(run)
-            self.assertEqual(model.json.loads((run/'native-readiness-failure.json').read_text())['phase'], 'spawn')
+            self.assertEqual(model.json.loads((run/'runtime-readiness-failure.json').read_text())['phase'], 'spawn')
 
 
 class BranchRequestTest(unittest.TestCase):

@@ -1,6 +1,6 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; One GQL model; bounded native Org refinement, positive proof and source feed.
+;;; One GQL model; bounded runtime Org refinement, positive proof and source feed.
 (import
  (only-in :clan/poo/object .o .ref .slot? .call object? object<-alist .alist/sort)
  (only-in :clan/poo/mop validate)
@@ -151,7 +151,7 @@
      next: (projections (cdr fields)))))
 
 
-;;; Ordinary authors receive a native Query value. The fixed result projection
+;;; Ordinary authors receive a runtime Query value. The fixed result projection
 ;;; carries qualified Element identity, Property ID, source cut and Contract cut.
 ;;; Unsupported joins or projections are refused rather than partially executed.
 (def (context-org-query
@@ -216,7 +216,7 @@
            (eq? (.ref (.ref query 'language) '.program?)
                 (.ref AgenticAILabSchemeGqlQueryLanguage. '.program?))
            (agentic-ai-lab-query? query))
-    (error "Provider requires a native Query"))
+    (error "Provider requires a runtime Query"))
   (let* ((p (.ref (.ref query 'program) 'where))
          (key-value (.ref (.ref p 'left) 'property))
          (literal-value (.ref (.ref p 'right) 'value))
@@ -268,7 +268,7 @@
 
 
 ;;; Runtime effects stay behind this owner capability. Source versions and the
-;;; native evidence journal are append-only; subscribers prepare before mutation.
+;;; runtime evidence journal are append-only; subscribers prepare before mutation.
 (defstruct owner (thread sources versions journal feed queries))
 
 (def (context-query-host)
@@ -384,7 +384,7 @@
   (result-row (map (lambda (k) (.ref n k)) columns)))
 
 
-;;; Named Org-to-Fact refinement: each native fact binds the actual source digest,
+;;; Named Org-to-Fact refinement: each runtime fact binds the actual source digest,
 ;;; version, qualified Element and canonical result-row digest. Strings become
 ;;; symbol atoms because this ASCENT source profile accepts typed scalar atoms.
 (def (fact src row)
@@ -446,7 +446,7 @@
      rows)))
 
 
-;;; GQL selection -> native membership proof -> support -> Provider receipt.
+;;; GQL selection -> runtime membership proof -> support -> Provider receipt.
 ;;; Source-content-identity in Query core hashes GQL text; the separate lineage
 ;;; below binds original Org bytes and its source/Contract revision as well.
 (def (execute src query source-journal seq)
@@ -672,7 +672,7 @@
              (from-descriptor cut (.ref recorded 'query-descriptor))
              (journal prefix) seq)))
     (unless (equal? (data-form fresh) (data-form recorded))
-      (error "Recovered Query record differs from native replay"))
+      (error "Recovered Query record differs from runtime replay"))
     fresh))
 
 ;;; Restore every original Query record, including inputs no longer current.

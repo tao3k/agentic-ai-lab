@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: load! fixture module objects are integration validation cases.
+;;; Boundary: Imported fixture module objects are integration validation cases.
 ;;; Invariant: unit receipt-shape tests do not import fixture packages.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
@@ -24,8 +24,8 @@
 ;; : TestSuite
 (def module-object-load-validation-test
   (test-suite "agentic-ai-lab module object load validation"
-    (yuanxu-test-case "validates loaded objects with native Core contracts"
-      (let* ((objects agentic-ai-lab-custom-module-object1-module)
+    (yuanxu-test-case "validates loaded objects with runtime Core contracts"
+      (let* ((objects ValidatedObjects)
              (validation
               (yuanxu-module-object-validation (car objects)))
              (field-validations

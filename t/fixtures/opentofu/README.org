@@ -5,7 +5,7 @@
 =family-schemas.nix= is a lazy catalog, not a mandatory build list.
 =provider-artifacts.nix= requires =selection.providers= and selects catalog
 values before passing them to =linkFarm=. The control below gets that selection
-from the final native configuration; users do not repeat SelectedTypes.
+from the final runtime configuration; users do not repeat SelectedTypes.
 
 #+begin_src sh
 just test-opentofu-build-demand /private/tmp/opentofu-selected-request.json
@@ -26,7 +26,7 @@ not implemented. The package pins remain the existing fixture pins; this local
 Current multi-Provider recipes accept one =COLLECTION_OUTPUT= from
 =family-artifacts.nix=. =AGENTIC_AI_LAB_OPENTOFU_ARTIFACT= denotes this Nix link-farm
 directory, not a single Provider output. The default OpenTofu object projects
-its immediate names into lazy native =modules= slots. No per-Provider environment
+its immediate names into lazy runtime =modules= slots. No per-Provider environment
 variables or manual Scheme declarations are required. The older per-family
 test transport described below is historical; current commands are:
 
@@ -104,7 +104,7 @@ result appear in =hash-controls.json=; raw logs/plans/binaries are not committed
 The rule CRC value in that JSON is an independent checksum of the source-defined
 preimage, not a hash explicitly returned by the provider RPC.
 
-The native binary gate requires the actual acquired executable. Offline source
+The runtime binary gate requires the actual acquired executable. Offline source
 and Schema tests never claim to repeat that binary/signature acquisition.
 See Core Config Languages chapter 44 for exact digests and trust boundaries.
 
@@ -113,7 +113,7 @@ See Core Config Languages chapter 44 for exact digests and trust boundaries.
 =aws-5.100.0/admission/= contains complete pinned Terraform configurations and
 selected structured offline =tofu validate -json= results. The actual 5.100.0
 plugin accepts the valid rule and rejects wrong port types, missing rule ports
-and CIDR host bits. Native tests intentionally retain the latter two exported
+and CIDR host bits. Runtime tests intentionally retain the latter two exported
 Schema gaps. Collection identity is checked separately from ordinary =.admit=;
 an unresolved custom hash is not a malformed configuration. No apply was run.
 
@@ -145,7 +145,7 @@ awscc Contracts remain uncompiled. It does not execute an OpenTofu plan.
 The =test-opentofu-configuration-discovery= recipe uses those same actual
 artifacts with the object-layer =OpenTofuConfiguration.= entrypoint. It removes
 manual SelectedTypes, resolves only final candidate names, calls the original
-native child Contracts and preserves full diagnostic paths and package sources.
+runtime child Contracts and preserves full diagnostic paths and package sources.
 It also checks an unforced throwing module binding, the real Contract cache,
 new type discovery after parent caching and a child's replacement registry.
 

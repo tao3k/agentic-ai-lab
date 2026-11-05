@@ -2,6 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :clan/poo/object
+        (only-in :clan/poo/mop Type. define-type)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :yuanxu/object-types/contracts yuanxu-predicate-contract))
 (export NixSourceContract NixFlakeSourceContract NixScopeContract)
@@ -32,7 +33,7 @@
            (.slot? value 'attribute) (string? (.get value attribute))
            (pregexp-match "^[A-Za-z_][A-Za-z0-9_-]*(\\.[A-Za-z_][A-Za-z0-9_-]*)*$" (.get value attribute))
            ;; Empty arguments select a package; nonempty string arguments apply
-           ;; an exported native Nix function through --apply, never --argstr.
+           ;; an exported runtime Nix function through --apply, never --argstr.
            (.slot? value 'arguments) (nix-arguments? (.get value arguments))
            (.slot? value 'inputs) (nix-arguments? (.get value inputs))
            (or (not (.slot? value 'evaluator)) (not (.get value evaluator))
@@ -44,14 +45,13 @@
            (.slot? value 'source-inputs) (source-inputs? (.get value source-inputs))))
     (lambda (_v _c) '())))
 
-(def NixScopeContract
-  (yuanxu-predicate-contract 'nix/scope
-    (lambda (scope)
+(define-type (NixScopeContract @ Type.)
+  identity: 'nix/scope
+  .element?: (lambda (scope)
       (and (object? scope) (.slot? scope 'config) (.slot? scope 'types)
            (.slot? (.get scope types) 'Source)
            (.slot? scope 'prototypes) (.slot? (.get scope prototypes) 'Source)
            (.slot? (.get scope types) 'FlakeSource)
            (.slot? (.get scope prototypes) 'FlakeSource)
            (.slot? scope 'admit-generation) (procedure? (.get scope admit-generation))
-           (.slot? scope 'source-inputs) (procedure? (.get scope source-inputs))))
-    (lambda (_v _c) '())))
+           (.slot? scope 'source-inputs) (procedure? (.get scope source-inputs)))))

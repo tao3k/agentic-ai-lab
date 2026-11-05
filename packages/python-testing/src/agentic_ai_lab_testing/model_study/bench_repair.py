@@ -11,7 +11,7 @@ import statistics
 import time
 from pathlib import Path
 
-from .repair_native import SCHEME_SOURCE_DIR, NativeTool, score
+from .repair_runtime import SCHEME_SOURCE_DIR, RuntimeTool, score
 from .reporting import report_json
 
 
@@ -31,7 +31,7 @@ def main() -> int:
         raise ValueError("benchmark receipt must stay outside the repository")
     fixture = (SCHEME_SOURCE_DIR / "repair_reference.sexp").read_text(encoding="utf-8")
     candidate = fixture[fixture.index("(candidate"):]
-    worker = NativeTool(args.poo_root, args.ascent_root, args.gerbil_path)
+    worker = RuntimeTool(args.poo_root, args.ascent_root, args.gerbil_path)
     samples = []
     first_receipt: str | None = None
     try:
@@ -50,11 +50,11 @@ def main() -> int:
                 first_receipt = receipt
             elif receipt != first_receipt:
                 raise RuntimeError("benchmark receipt changed across samples")
-            native_ns = worker.last_native_ns
-            assert native_ns is not None
+            runtime_ns = worker.last_runtime_ns
+            assert runtime_ns is not None
             samples.append({"kind": "cold" if index == 0 else "warm",
-                            "worker_ns": wall_ns, "scheme_ns": native_ns,
-                            "boundary_ns": wall_ns - native_ns,
+                            "worker_ns": wall_ns, "scheme_ns": runtime_ns,
+                            "boundary_ns": wall_ns - runtime_ns,
                             "candidate_bytes": len(candidate.encode()),
                             "receipt_bytes": len(receipt.encode())})
     finally:

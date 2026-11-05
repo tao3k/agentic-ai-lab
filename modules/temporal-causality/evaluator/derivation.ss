@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Pure native lineage correspondence. Original evaluator replay owns truth.
+;;; Pure runtime lineage correspondence. Original evaluator replay owns truth.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :std/crypto/digest sha256) (only-in :std/encoding/hex hex-encode)
         (only-in :gerbil-ascent/candidate/checked-program reasoning-receipt-proof)

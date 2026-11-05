@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; POO-native tool specification owner and runtime-boundary projection.
+;;; POO tool specification owner and runtime-boundary projection.
 
 (import (only-in :clan/poo/object .ref object? object<-alist)
         :yuanxu/utilities/final-projection-syntax

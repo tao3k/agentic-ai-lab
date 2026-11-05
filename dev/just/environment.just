@@ -4,13 +4,13 @@
 
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
-# Keep the default cold build within a bounded compiler memory budget.
-export GERBIL_BUILD_CORES := env_var_or_default("GERBIL_BUILD_CORES", "2")
+# std/make uses this host's CPU count; explicit caller/CI budgets win.
+export GERBIL_BUILD_CORES := env_var_or_default("GERBIL_BUILD_CORES", num_cpus())
 
 # Test processes are bounded before any Scheme profile module can load. The
 # ASP POO Testing profile remains the policy and receipt owner inside the
 # process; this launch option is the fail-closed pre-import boundary.
-gerbil_test_max_heap := env_var_or_default("GERBIL_TEST_MAX_HEAP", "1G")
+gerbil_test_max_heap := env_var_or_default("GERBIL_TEST_MAX_HEAP", "2G")
 
 gerbil_test_debug := env_var_or_default("GERBIL_TEST_DEBUG", "q")
 
@@ -79,7 +79,7 @@ gerbil_parser_path := agentic_ai_lab_gerbil_path
 
 gerbil_parser_library_path := agentic_ai_lab_library_path + ":" + gerbil_parser_dir + ":" + contribution_source_root + "/lambda-episteme:" + justfile_directory()
 
-aitia_native_library := justfile_directory() + "/.gerbil/native/libagentic_ai_lab_aitia.dylib"
+aitia_ffi_library := justfile_directory() + "/.gerbil/runtime/libagentic_ai_lab_aitia.dylib"
 
 aitia_python_dir := contribution_source_root + "/lambda-aitia/bindings/python"
 

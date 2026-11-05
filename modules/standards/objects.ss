@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO-native Standard values and immutable constructors.
+;;; Boundary: POO Standard values and immutable constructors.
 ;;; Invariant: construction performs no source loading or validation execution.
 (import (only-in :clan/poo/object .all-slots .cc .o .ref .slot?)
         (only-in :clan/poo/mop validate)
@@ -320,7 +320,7 @@
      (lambda (edition)
        (let (identity (.ref edition 'identity))
          ;; Edition values are always truthy POO objects, so hash-get gives a
-         ;; single native lookup for duplicate detection on the 10k hot path.
+         ;; single runtime lookup for duplicate detection on the 10k hot path.
          (when (hash-get edition-index-value identity)
            (error "duplicate Standard edition identity" identity))
          (hash-put! edition-index-value identity edition)

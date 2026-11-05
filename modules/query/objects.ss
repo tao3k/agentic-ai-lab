@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: canonical prototypes and validated value constructors.
-;;; Invariant: ordinary authors derive Query values through native slot algebra.
+;;; Invariant: ordinary authors derive Query values through runtime slot algebra.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :clan/poo/mop validate)
         (only-in :std/list/list every)

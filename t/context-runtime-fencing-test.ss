@@ -44,7 +44,7 @@
         (let* ((old-result (ask old-owner 'old-write))
                (new-result (ask new-owner 'new-write))
                (inspection (ask new-owner 'inspect)))
-          ;; Always close/join both native Actors before admitting the outcome.
+          ;; Always close/join both runtime Actors before admitting the outcome.
           ;; The pre-fix control therefore detects the retained lock itself.
           (ensure (car (ask old-owner 'close)) "Old journal did not close")
           (ensure (car (ask new-owner 'close)) "New journal did not close")

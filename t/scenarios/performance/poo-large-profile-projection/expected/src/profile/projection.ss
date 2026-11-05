@@ -9,7 +9,7 @@
                  poo-indexed-family-project-objects))
 
 ;;; Scenario expected: the downstream profile is repaired into a reusable
-;;; indexed POO family.  The public surface is still POO-native, while hot slot
+;;; indexed POO family.  The public surface is still POO, while hot slot
 ;;; reads use a compiled lens and vector index instead of rebuilding objects or
 ;;; repeatedly scanning alists.
 

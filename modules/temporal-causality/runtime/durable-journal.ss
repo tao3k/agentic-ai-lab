@@ -51,7 +51,7 @@
      ((or (boolean? x) (string? x) (exact-integer? x))
       (display "(list \"scalar\" " port)
       (write x port) (display ")" port))
-     (else (error "Nonportable native capability in journal"))))
+     (else (error "Nonportable runtime capability in journal"))))
   (call-with-output-string (lambda (port) (emit value 0 port))))
 (def (decode x)
   (unless (and (list? x) (pair? x)) (error "Invalid journal encoding"))

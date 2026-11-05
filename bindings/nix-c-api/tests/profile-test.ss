@@ -29,7 +29,7 @@
   (for-each
     (lambda (phase)
       (let (row (session-timing session phase))
-        (assert 'nonnegative-native-phase
+        (assert 'nonnegative-runtime-phase
           (and (>= (.get row wall) 0) (>= (.get row cpu) 0)))
         (displayln "NIX-PHASE round=" round " mode=" mode " phase=" phase
                    " wall=" (.get row wall) " cpu=" (.get row cpu) " calls=" (.get row calls)
@@ -97,12 +97,12 @@
                 (checked-query observations
                   (lambda ()
                     (session-apply! session aws)
-                    (assert 'native-cold-source-is-prepared-path
+                    (assert 'runtime-cold-source-is-prepared-path
                       (equal? (force-result session 0 "source" "cold-source-resolution") package-set))
                     (force-result session 0 "imports" "cold-imports-whnf")
                     (force-result session 0 "package" "cold-package-whnf")
                     (let (receipt (force-result session 0 "receipt" "cold-derive-and-residual"))
-                      (phases session 0 'first-native)
+                      (phases session 0 'first-runtime)
                       receipt))))))
           (def (round number)
             (def (cli-round)
@@ -177,7 +177,7 @@
                               (checked-query observations (cut session-query session both))))
                           (cdr baseline)))
                 (phases session number 'fresh-child)))
-            ;; Fresh state; native values from one application share the real
+            ;; Fresh state; runtime values from one application share the real
             ;; Nix import/constructor thunks. Each stage reports wall/CPU.
             (call-with-flake-session reference directory "lib.diagnostic" (.o)
               (lambda (session)
@@ -207,7 +207,7 @@
                     (write-input stamp "2")
                     (let (count (session-calls session))
                       (assert 'staged-source-change-refused (rejected? (cut staged both "stale")))
-                      (assert 'stale-before-native-call (= count (session-calls session))))
+                      (assert 'stale-before-runtime-call (= count (session-calls session))))
                     (let* ((cached
                             (checked-query headers
                               (lambda ()

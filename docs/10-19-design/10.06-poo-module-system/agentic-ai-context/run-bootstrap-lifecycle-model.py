@@ -100,7 +100,7 @@ def main():
         raise RuntimeError("Unexpected policy CLI exit status")
     (args.artifacts / "summary.json").write_text(json.dumps(dict(
         executed=len(cases), expected_unsafe=failures, unexpected=0,
-        model_sha256=sha(MODEL), runner_sha256=sha(Path(__file__)), native_refinement_proved=False), indent=2) + "\n")
+        model_sha256=sha(MODEL), runner_sha256=sha(Path(__file__)), runtime_refinement_proved=False), indent=2) + "\n")
     print(f"PASS: {len(cases)} executed; {failures} expected unsafe")
 
 

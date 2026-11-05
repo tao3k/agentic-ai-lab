@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Native admission integration and independent C storage failure receipts."""
+"""Runtime admission integration and independent C storage failure receipts."""
 import concurrent.futures
 import sqlite3
 import subprocess
@@ -8,7 +8,7 @@ import sys
 
 import pytest
 from agentic_ai_lab_runtime.temporal_publication import TemporalPublicationStore, TemporalPublicationError
-from agentic_ai_lab_runtime._native._temporal_store import ffi, lib
+from agentic_ai_lab_runtime._runtime._temporal_store import ffi, lib
 from test_temporal_admission import source_scope
 from test_temporal_family import family_task
 
@@ -27,7 +27,7 @@ def prepared(runtime, tmp_path, name):
     return store, scope, task, args
 
 
-def test_native_admission_commit_and_recovery(runtime, tmp_path):
+def test_runtime_admission_commit_and_recovery(runtime, tmp_path):
     store, scope, task, args = prepared(runtime, tmp_path, 'publication-success')
     with store:
         with pytest.raises(TemporalPublicationError) as error:
@@ -63,7 +63,7 @@ def test_source_and_authorization_fences(runtime, tmp_path):
         with pytest.raises(TemporalPublicationError):
             grant(store, fence=2, enabled=False)
         # Independent host advances the shared durable source fence; this
-        # process's valid native admission must still fail at transaction time.
+        # process's valid runtime admission must still fail at transaction time.
         assert lib.agentic_ai_lab_temporal_store_source(store._handle[0],
             scope['identity'].encode(), ('sha256:' + 'f'*64).encode(), 2) == 0
         with pytest.raises(TemporalPublicationError) as error:
@@ -116,12 +116,12 @@ def test_two_independent_c_handles_compete_once(tmp_path):
         assert sum(one.recover(k) is not None for k in ['one', 'two']) == 1
 
 
-def test_sigkill_after_commit_recovers_without_native_runtime(tmp_path):
+def test_sigkill_after_commit_recovers_without_runtime(tmp_path):
     # Trusted C fixture isolates process-crash recovery from semantic admission.
     script = '''
 import sys
 from agentic_ai_lab_runtime.temporal_publication import TemporalPublicationStore
-from agentic_ai_lab_runtime._native._temporal_store import ffi, lib
+from agentic_ai_lab_runtime._runtime._temporal_store import ffi, lib
 s=TemporalPublicationStore(sys.argv[1])
 s.authorize_selection(subject='release',scope='release-evidence',policy='policy-1',authority='host-policy',fence=1)
 b=ffi.new('agentic_ai_lab_temporal_basis *')

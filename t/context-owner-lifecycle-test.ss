@@ -1,6 +1,6 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Native teardown boundaries: exact leases, closed handles and durable rollback.
+;;; Runtime teardown boundaries: exact leases, closed handles and durable rollback.
 (import (only-in :clan/poo/object .o .ref .call object? .alist/sort)
         (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-write)
         :agentic-ai-lab/t/temporal-evaluator-test
@@ -62,8 +62,8 @@
 
 (def (clock-probe!)
   (let* ((host (agentic-ai-lab-temporal-support-policy-host))
-         (cap (.o kind: 'temporal.native-clock.v1 .observe: (lambda (self id) (at 1))))
-         (foreign (.o kind: 'temporal.native-clock.v1 .observe: (lambda (self id) (at 1)))))
+         (cap (.o kind: 'temporal.monotonic-clock.v1 .observe: (lambda (self id) (at 1))))
+         (foreign (.o kind: 'temporal.monotonic-clock.v1 .observe: (lambda (self id) (at 1)))))
     (agentic-ai-lab-temporal-support-policy-host-refresh! host (policy "v1") 1 (at 1))
     (agentic-ai-lab-temporal-support-policy-host-enroll-clock! host cap)
     (ensure (rejected? (lambda () (agentic-ai-lab-temporal-support-policy-host-release-clock! host foreign)))
@@ -147,7 +147,7 @@
       (ensure (eq? (thread-join! worker 0 'still-running) 'still-running)
               "Controller shutdown terminated a Session endpoint")
       (thread-send worker 'return)
-      (ensure (equal? (thread-join! worker 2 'endpoint-timeout) "native-result-for-request")
+      (ensure (equal? (thread-join! worker 2 'endpoint-timeout) "runtime-result-for-request")
               "Independent endpoint did not finish")) held-workers)
     (let (second (policy-clock-owner setup "txn" 1 0.002 0. 2 #f #t))
       ;; The duplicate transport copies shared one immutable inbox identity.
@@ -185,7 +185,7 @@
         ((vector? x) (list "vector" (map next (vector->list x))))
         ((and (real? x) (or (inexact? x) (not (integer? x)))) (list "number" (number->string x)))
         ((or (boolean? x) (string? x) (exact-integer? x)) (list "scalar" x))
-        (else (error "Nonportable native capability in journal"))))
+        (else (error "Nonportable runtime capability in journal"))))
 (def (check-wire value)
   (ensure (equal? (journal-pack value) (scheme-wire-write (reference-encode value)))
           "Production codec changed original v1 wire bytes"))
@@ -210,7 +210,7 @@
          (golden "sha256:4e35c0f59fe1973642e4dd2faa0d8a58073886e9fb78a2655e3a6c29a983ab24")
          (support (.ref value 'support)))
     (ensure (equal? (.ref value 'semantic-digest) golden) "Canonical graph changed the original proof digest")
-    (ensure (equal? (.ref (kernel-replay value ctx bindings) 'semantic-digest) golden) "Native proof did not replay")
+    (ensure (equal? (.ref (kernel-replay value ctx bindings) 'semantic-digest) golden) "Runtime proof did not replay")
     (ensure (rejected? (lambda () (kernel-derive ctx (cdr bindings)))) "Missing graph binding was accepted")
     (ensure (rejected? (lambda () (kernel-derive ctx (cons (car bindings) bindings)))) "Duplicate graph binding was accepted")
     (ensure (rejected? (lambda () (kernel-replay (.o (:: @ value) action-authorized?: #t) ctx bindings)))
@@ -255,13 +255,13 @@
                  (catalog-digest (.ref program 'catalog-digest))
                  (first-char (string-ref catalog-digest 0)))
             ;; Neither returned historical strings nor the public registration
-            ;; may mutate the private credential or the admitted native proof.
+            ;; may mutate the private credential or the admitted runtime proof.
             (string-set! read-value 0 #\X)
             (string-set! (.ref registration 'proof-digest) 0 #\X)
             (ensure (equal? original (agentic-ai-lab-temporal-proof-host-retained-digest held-proof registration-id))
                     "Historical proof credential retained a mutable caller alias")
             (ensure (.ref (agentic-ai-lab-temporal-proof-host-current held-proof registration-id 1 1 policy-digest 128) 'current?)
-                    "Public historical string mutation corrupted native proof admission")
+                    "Public historical string mutation corrupted runtime proof admission")
             ;; A historical credential must never substitute for current replay.
             ;; Tamper with an actual replay input, then restore it for cleanup.
             (dynamic-wind
@@ -297,7 +297,7 @@
   (let (cycle (make-vector 1 #f))
     (vector-set! cycle 0 cycle)
     (ensure (rejected? (lambda () (journal-pack cycle))) "Cyclic data escaped the depth bound"))
-  (ensure (rejected? (lambda () (journal-pack (lambda () #t)))) "Codec admitted a native procedure"))
+  (ensure (rejected? (lambda () (journal-pack (lambda () #t)))) "Codec admitted a runtime procedure"))
 
 (def (bootstrap-failure-probe! path)
   (let ((journal #f) (host #f) (owner #f))

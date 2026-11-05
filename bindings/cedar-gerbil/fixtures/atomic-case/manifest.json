@@ -14,7 +14,7 @@
       "subject_snapshot_digest": "sha256:0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b",
       "governance_admitted": true,
       "certification_names": [
-        "AgenticAILabProof.Runtime.CedarNative",
+        "AgenticAILabProof.Runtime.CedarRuntime",
         "AgenticAILabProof.Runtime.CedarRuntimeHost"
       ]
     },

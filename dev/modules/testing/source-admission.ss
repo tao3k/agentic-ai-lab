@@ -3,13 +3,13 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: native gxtest prepares the declared entry files before this POO
+;;; Boundary: runtime gxtest prepares the declared entry files before this POO
 ;;; extension runs. Gerbil's import model then projects those cached contexts;
 ;;; this extension only observes the resulting source set.
 
 (import :gerbil/core
-        (only-in :asp-gerbil-scheme/src/build-api/native-import-closure
-                 asp-gerbil-scheme-prepared-native-import-closure)
+        (only-in :asp-gerbil-scheme/src/build-api/gerbil-import-closure
+                 asp-gerbil-scheme-prepared-gerbil-import-closure)
         (only-in :asp-gerbil-scheme/src/support/time
                  duration-micros monotonic-micros)
         (only-in :clan/poo/object
@@ -94,7 +94,7 @@
     (dynamic-wind
       (lambda () (current-directory root))
       (lambda ()
-        (asp-gerbil-scheme-prepared-native-import-closure root entries))
+        (asp-gerbil-scheme-prepared-gerbil-import-closure root entries))
       (lambda () (current-directory previous-directory)))))
 
 ;;; Fold observations as each file is read.  The admission receipt needs only
@@ -117,7 +117,7 @@
 
 ;; agentic-ai-lab-source-admission
 ;;   : (-> Path [Path] POOObject)
-;;   | contract: observe exactly the Gerbil-native import closure of entries
+;;   | contract: observe exactly the Gerbil-runtime import closure of entries
 ;;   | result: a bounded POO receipt with no retained successful source rows
 (def (agentic-ai-lab-source-admission root entries)
   (let* ((normalized-root (path-normalize (path-expand root)))

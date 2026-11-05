@@ -86,7 +86,7 @@
               (syntax ctx)
               (syntax ((slot-def ...) ...)))))
        (unless definition-heads?
-         (error "agentic-ai-lab module config expects native .def forms"))
+         (error "agentic-ai-lab module config expects .def forms"))
        (if (agentic-ai-lab-config-syntax-all? slot-groups)
          (with-syntax (((((slot-name slot-value) ...) ...) slot-groups))
            (syntax
@@ -117,7 +117,7 @@
 ;; | type ConfigBindingSyntax = Syntax
 ;; | type ConfigSlotRowsSyntax = Syntax
 ;; | type ConfigPrototypeSyntax = Syntax
-;; | contract: expands bounded literal slots through clan/poo's native object constructor
+;; | contract: expands bounded literal slots through clan/poo's runtime object constructor
 ;; | warning: keep object inheritance and merge policy outside this syntax helper
 ;; | doc m%
 ;;   Defines a module config prototype object.

@@ -1,6 +1,6 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Production grant revocation through the real durable owner and native
+;;; Production grant revocation through the real durable owner and runtime
 ;;; ASCENT/Query/Session fixture. Raw source evidence stays valid and retained.
 (import
  (only-in :clan/poo/object .o .ref .call)
@@ -78,7 +78,7 @@
       (force-output)
       order)))
 
-;;; Unsafe native control: original state restored without the pending authority
+;;; Unsafe runtime control: original state restored without the pending authority
 ;;; command. The cached view incorrectly stays admitted despite durable receipt
 ;;; of revocation. The correct adapter must replay before opening the reactor.
 (def (missing-replay-counter! db)
@@ -134,7 +134,7 @@
        ((equal? mode "pre")
         (named! "complete-c" 'result "c"
           (lambda (r)
-            (ensure (.ref (query.commit (.ref r 'host) (.ref r 'workers) "c") 'native-result-published?)
+            (ensure (.ref (query.commit (.ref r 'host) (.ref r 'workers) "c") 'runtime-result-published?)
                     "C actual worker completion failed")))
         (let* ((intent (read! (lambda (r)
                          (context-durable-revoke-command "grant-revoke"

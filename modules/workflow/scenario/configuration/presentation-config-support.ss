@@ -1,3 +1,4 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile? agentic-ai-lab-sandbox-profile-name agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-backend-ref agentic-ai-lab-sandbox-profile-metadata))
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
@@ -26,13 +27,9 @@
         +agentic-ai-lab-user-config-presentation-loop-engine-fields+)
 
 (import :agentic-ai-lab/modules/sandbox-core/profile-support/policy
-        (only-in :agentic-ai-lab/modules/agent-sandbox/config
-                 agentic-ai-lab-sandbox-profile?
-                 agentic-ai-lab-sandbox-profile-name
-                 agentic-ai-lab-sandbox-profile-backend-kind
-                 agentic-ai-lab-sandbox-profile-backend-ref
-                 agentic-ai-lab-sandbox-profile-metadata)
-        :agentic-ai-lab/modules/workflow/interface
+        
+        (only-in :yuanxu/modules/funflow/check-objects yuanxu-cicd-check-map-name)
+        (only-in :agentic-ai-lab/modules/workflow/cicd-config agentic-ai-lab-user-alist-ref)
         :agentic-ai-lab/modules/module-authoring/module-interface
         :yuanxu/module-system/selection/objects
         (only-in :agentic-ai-lab/modules/workflow/cicd-runtime-command-config

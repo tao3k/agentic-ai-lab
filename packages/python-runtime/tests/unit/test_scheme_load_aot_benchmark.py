@@ -24,7 +24,7 @@ def _runtime_projection_fixture(root: Path) -> Path:
 
 def _source_fixture(root: Path) -> Path:
     source = root / "flow.ss"
-    source.write_text("(user-composition benchmark-flow BenchmarkProfile)\n", encoding="utf-8")
+    source.write_text("(def benchmark-flow (.new Scenario name: 'benchmark-flow config: BenchmarkProfile))\n", encoding="utf-8")
     return source
 
 

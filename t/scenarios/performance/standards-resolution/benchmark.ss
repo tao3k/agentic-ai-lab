@@ -20,6 +20,6 @@
  (optimizationFocus . "catalog-identity admission, indexed edition lookup, bounded dependency traversal and one immutable bundle digest")
  (inputShape . "10,000 exact Standard roots with no artifact bodies or runtime Provider execution")
  (expectedOutcome . "10,000 selected editions, 10,000 resolver operations, zero loaded artifacts and one source-bound bundle generation")
- (expectedRepair . "retain native hash indexes and prove selected object identity against the admitted catalog; do not repeat deep member validation in nested receipts, eagerly load artifacts or add a shadow resolver")
+ (expectedRepair . "retain runtime hash indexes and prove selected object identity against the admitted catalog; do not repeat deep member validation in nested receipts, eagerly load artifacts or add a shadow resolver")
  (measurementPhases collect-before resolve-exact-roots construct-receipt collect-after assert-time-gate observe-runtime-memory)
  (tags poo standards resolution receipt performance big-o lazy-loading))

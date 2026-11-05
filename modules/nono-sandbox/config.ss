@@ -28,15 +28,15 @@
    (list
     (yuanxu-user-module-selection
      'sandbox 'nono-sandbox
-     (list '+nono '+native-ffi '+doctor
+     (list '+nono '+ffi '+doctor
            (cons ':backend-capability-registry
                  agentic-ai-lab-nono-sandbox-backend-capability-registry))))))
 
 ;; : Symbol
-(def +agentic-ai-lab-nono-sandbox-default-binding+ 'native-ffi)
+(def +agentic-ai-lab-nono-sandbox-default-binding+ 'ffi)
 
 ;;; Module-level binding flags are user-visible configuration facts. The
-;;; native FFI implementation remains in native.ss; this layer only records the
+;;; runtime FFI implementation remains in ffi.ss; this layer only records the
 ;;; selected binding strategy for use-module/module presentation.
 ;; : (-> Symbol Symbol)
 (def (agentic-ai-lab-nono-sandbox-binding-config binding-value)
@@ -61,7 +61,7 @@
      (:user-config (car maybe-user-config)))))
 
 ;;; Backend wrappers pass their inherited profile object into sandbox-core; nono
-;;; runtime state stays in native.ss while module flags record binding choice.
+;;; runtime state stays in ffi.ss while module flags record binding choice.
 ;; : (-> Symbol [SandboxProfileForm] PooSandboxProfile)
 (def (agentic-ai-lab-nono-sandbox-profile-config name-value forms)
   (agentic-ai-lab-sandbox-profile-object-config

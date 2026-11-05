@@ -64,6 +64,7 @@ gerbil_dependency_entry(
         "language-support/grammar.ss",
         "rust-runtime-event-support.ss",
         "rust-runtime-support.ss",
+        "src/build-support/compiler-profile.ss",
         "src/compiler/event-fold-runtime.ss",
         "src/compiler/event-fold-scheme-build.ss",
         "src/compiler/event-fold-scheme-modules.ss",

@@ -25,7 +25,7 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
             workspace = root / "workspace"
             working_directory = workspace / "packages" / "python-runtime"
             gxi = root / "toolchain" / "bin" / "gxi"
-            native_scheme_env = root / "native-scheme-env"
+            runtime_scheme_env = root / "runtime-scheme-env"
             capture = root / "environment.json"
             capture_command = root / "capture-environment"
             declaration_receipt = root / "environment.receipt.json"
@@ -39,8 +39,8 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
             gxi.parent.mkdir(parents=True)
             gxi.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
             gxi.chmod(0o755)
-            native_scheme_env.write_text("#!/bin/sh\nexec \"$@\"\n", encoding="utf-8")
-            native_scheme_env.chmod(0o755)
+            runtime_scheme_env.write_text("#!/bin/sh\nexec \"$@\"\n", encoding="utf-8")
+            runtime_scheme_env.chmod(0o755)
             declaration_receipt.write_text('{"schema":"declaration.v1"}\n')
             project_receipt.write_text('{"schema":"project.v1"}\n')
             capture_command.write_text(
@@ -65,8 +65,8 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
                     [
                         "--gxi",
                         str(gxi),
-                        "--native-scheme-env",
-                        str(native_scheme_env),
+                        "--runtime-scheme-env",
+                        str(runtime_scheme_env),
                         "--project-root",
                         str(project_root),
                         "--project-receipt",

@@ -9,11 +9,11 @@
 The Python runtime graph now exposes a LangGraph-style =stream= surface without
 adding LangGraph or LangChain as dependencies. This stays inside the Agentic AI Lab
 runtime package and keeps the stable upstream boundary as C ABI validation plus
-Python-native runtime execution.
+Python-runtime execution.
 
 The stream-mode API is deliberately a runtime-language projection. It is not a
 new ABI encoding layer and does not serialize graph state through JSON. Runtime
-languages should keep state in their own native objects while using the C ABI
+languages should keep state in their own runtime objects while using the C ABI
 for graph-plan validation, receipt generation, and stable plan identity.
 
 * Implemented Modes
@@ -40,7 +40,7 @@ for graph-plan validation, receipt generation, and stable plan identity.
 
 When multiple modes are requested, the stream yields =(mode, chunk)= tuples.
 That mirrors the official LangGraph stream-mode contract while preserving our
-own object-native runtime surface.
+own object-runtime surface.
 
 * Typed Projection
 

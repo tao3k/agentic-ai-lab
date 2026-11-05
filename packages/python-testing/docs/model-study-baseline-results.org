@@ -13,7 +13,7 @@ before the first API request. Corpus SHA256:
 =7248c6452afba59a1627f82c9fd5763b1fb4bba71513153a303d8edc4abec628=.
 ASCENT head =00930e20f382516d78d2d2f2df084b89322162ae=, Agentic AI Lab
 checkout head =a3ed9f9c3ebcacdd8d4edea3191cc422b85b2427=. The
-runner and native fixture files were uncommitted during execution, so
+runner and runtime fixture files were uncommitted during execution, so
 the Agentic AI Lab head alone is not a complete source receipt. Their SHA256s
 were recorded immediately after the run: runner
 =cd57a4381595b8801efd328ae93b91f1398ec5fe1c0f065ab16864233dbf416c=,
@@ -62,7 +62,7 @@ The Python Testing adapter transported Scheme =#f= as a JSON string
 and sent complete candidate rows without an explicit intent boundary.
 The next adapter should preserve boolean =false= as a JSON boolean and
 carry typed =intent_verified=false= and =release_authorized=false=
-fields. Keep the native module semantics unchanged. Freeze that new
+fields. Keep the runtime module semantics unchanged. Freeze that new
 observation shape as the typed protocol before another model request, and compare the
 old and new tool observations on the same five tasks with the same
 model and request budget. This is an interface hypothesis; the baseline

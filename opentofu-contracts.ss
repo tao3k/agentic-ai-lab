@@ -141,8 +141,8 @@
   (let ((config-type OpenTofuConfigContract)
         (services-type ServicesContract)
         (opentofu-type OpenTofuContract))
-    (yuanxu-predicate-contract 'opentofu/scope
-      (lambda (value)
+    (.cc Type. identity: 'opentofu/scope
+      .element?: (lambda (value)
         (and (object? value)
              (every (cut .slot? value <>) '(config modules types prototypes schema .build-inputs))
              (object? (.get value config))
@@ -150,8 +150,7 @@
              (every (cut .slot? (.get value types) <>) '(config Services OpenTofu))
              (eq? (.get value types config) config-type)
              (eq? (.get value types Services) services-type)
-             (eq? (.get value types OpenTofu) opentofu-type)))
-      (lambda (_value _context) '()))))
+             (eq? (.get value types OpenTofu) opentofu-type))))))
 
 ;; Reuse the selected resource's projection Type and exact Schema observations.
 ;; The publication checks the final execution receiver, never a parent receipt.

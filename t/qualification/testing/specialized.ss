@@ -1,9 +1,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Entry projection only: installed native harnesses still own the suites.
+;;; Entry projection only: installed runtime harnesses still own the suites.
 (import :clan/poo/object
         (only-in "./qualification.ss" qualification-script)
-        (only-in "../../../init.ss" agentic-ai-lab.init.exports)
         (only-in :std/source this-source-file))
 (def root (path-expand "../../.." (path-directory (this-source-file))))
 (def watch "packages/python-runtime/tools/watch.py")
@@ -12,40 +11,38 @@
 
 (def (selected-script name vm arguments)
   (def (interpreted file) (list "gxi" vm file))
-  (def (native files command seconds count (inputs '()) (lines '()))
+  (def (runtime files command seconds count (inputs '()) (lines '()))
     (qualification-script files command seconds case-count: count
       inputs: (cons (this-source-file) inputs) required-lines: lines))
   (def (runner file test count (lines '()) (command (interpreted file)))
-    (native (list test) (watched command) 45 count (list file watch) lines))
+    (runtime (list test) (watched command) 45 count (list file watch) lines))
   (case (string->symbol name)
     ((gerbil-runtime)
-     (native '("t/gerbil-runtime-import-test.ss")
+     (runtime '("t/gerbil-runtime-import-test.ss")
        (list "gerbil" vm "test" "t/gerbil-runtime-import-test.ss") 90 #f))
     ((gerbil-tool)
      (let* ((executable (car arguments))
             (file (cadr arguments))
             (home (getenv "GERBIL_HOME")))
        (unless (file-exists? executable) (error "test executable is missing" executable))
-       (.cc (native (list file) (list executable vm file) 90 #f)
+       (.cc (runtime (list file) (list executable vm file) 90 #f)
          'environment (.o GERBIL_HOME: home
                           GAMBOPT: (string-append "~~=" home ",~~bin=" home "/bin,~~lib=" home "/lib")))))
     ((runtime-ffi)
      (let (file (car arguments))
-       (native (list file) (list "gerbil" vm "env" "gxtest" file) 120 #f)))
+       (runtime (list file) (list "gerbil" vm "env" "gxtest" file) 120 #f)))
     ((module-ownership)
      (let (file "t/qualification/module-ownership/run.ss")
-       (qualification-script (list file) (interpreted file) 120
-         inputs: (list (this-source-file))
-         harness: "HARNESS-OK module-ownership 7 suites")))
-    ((query-native temporal-native)
-     (let* ((query? (equal? name "query-native"))
+       (runtime (list file) (list "gerbil" vm "test" file) 120 #f)))
+    ((query-runtime temporal-runtime)
+     (let* ((query? (equal? name "query-runtime"))
             (files (map absolute
                      (if query?
                        '("t/query-core-test.ss" "t/query-orgize-source-test.ss" "t/evidence-assessment-core-test.ss")
                        '("t/temporal-applicability-test.ss" "t/temporal-lifecycle-test.ss"))))
             (executable (car arguments)))
        (unless (file-exists? executable) (error "test executable is missing" executable))
-       (.cc (native files
+       (.cc (runtime files
               (watched (append (list executable vm "-v" "5") files))
               45 (if query? 24 13) (list watch))
          'environment (.o AGENTIC_AI_LAB_TEST_PROGRESS: "1"))))
@@ -58,19 +55,14 @@
      (runner "t/harness/temporal-evaluator-runner.ss" "t/temporal-evaluator-test.ss" 58))
     ((ascent-temporal)
      (runner "t/harness/ascent-temporal-runner.ss" "t/ascent-temporal-lens-test.ss" #f
-       '("CASE-OK POO values keep native evidence separate from cut authority"
+       '("CASE-OK POO values keep runtime evidence separate from cut authority"
          "CASE-OK explicit cut bridge preserves uncertainty and original identity binding")
        (list "gerbil" vm "env" "gerbil" vm "t/harness/ascent-temporal-runner.ss")))
     ((context-temporal)
-     (let* ((demand
-              (.call (.get agentic-ai-lab.init.exports tests) .for-files
-                (list (absolute "t/qualification/context-temporal/interface.ss"))
-                (list (this-source-file) (absolute watch))))
-            (files (.get demand spec)))
-       (.cc (.get demand execution)
-         'runtime-options (list vm)
-         'command (watched (append (list "gerbil" vm "test" "-v" "5") files))
-         'timeout 45 'idle-timeout #f 'case-count 99)))
+     (let (files (list (absolute "t/qualification/context-temporal/interface.ss")))
+       (qualification-script files
+         (watched (append (list "gerbil" vm "test" "-v" "5") files)) 45
+         inputs: (list (this-source-file) (absolute watch)) case-count: 99)))
     (else (error "unknown specialized qualification" name))))
 
 (def (main name vm . arguments)

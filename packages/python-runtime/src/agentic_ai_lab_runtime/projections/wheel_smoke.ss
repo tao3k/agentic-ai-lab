@@ -8,8 +8,7 @@
 ;;; adapters.  Root declaration belongs to user configuration; adapters project
 ;;; the same ProfileBundle value without introducing a top-level binding.
 
-(agentic-ai-lab-profile-bundle-root
- 'wheel-smoke
-  (compose profiles
+(.new Scenario name: 'wheel-smoke
+  config: (compose profiles
     (use-module FunflowProfileModule as ff github-ci python-anyio)
     WheelSmokeScenarioProfile))

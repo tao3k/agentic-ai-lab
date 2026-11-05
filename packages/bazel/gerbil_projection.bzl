@@ -45,7 +45,7 @@ def _gerbil_project_projection_impl(ctx):
     environment = dict(toolchain.environment)
     environment.update({
         "GERBIL_BAZEL_NATIVE_ABI": toolchain.native_abi_fingerprint,
-        "AGENTIC_AI_LAB_GERBIL_NATIVE_ABI": toolchain.native_abi_fingerprint,
+        "AGENTIC_AI_LAB_GERBIL_ABI": toolchain.native_abi_fingerprint,
     })
     ctx.actions.run(
         arguments = [arguments],
@@ -121,7 +121,7 @@ def _gerbil_project_contract_projection_impl(ctx):
             ] +
             [toolchain.dependency_library_root.path],
         ),
-        "AGENTIC_AI_LAB_GERBIL_NATIVE_ABI": toolchain.native_abi_fingerprint,
+        "AGENTIC_AI_LAB_GERBIL_ABI": toolchain.native_abi_fingerprint,
     })
     ctx.actions.run(
         arguments = [arguments],

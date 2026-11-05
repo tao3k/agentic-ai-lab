@@ -50,7 +50,7 @@
          (observed (context-query-execute host "catalog-source" (context-org-query src "work"))))
     (ensure (= (.ref src 'generation) 1) "Unqueried source generation was lost")
     (ensure (equal? (.ref src 'source) (original-source)) "Original Org bytes changed")
-    (ensure (context-query-current? host observed) "First real Query lacks native support")
+    (ensure (context-query-current? host observed) "First real Query lacks runtime support")
     (restore-catalog (journal-get journal "empty"))
     (ensure
      (rejected? (lambda ()
@@ -71,13 +71,13 @@
     (let (src3 (context-query-source! host (context-org-source "catalog-source" 3 (original-source))))
       (let (fresh-value (context-query-execute host "catalog-source" (context-org-query src3 "work")))
         (ensure (not (context-query-current? host observed)) "Re-admission revived old proof")
-        (ensure (context-query-current? host fresh-value) "Fresh native proof is not current")
+        (ensure (context-query-current? host fresh-value) "Fresh runtime proof is not current")
         (save-root! journal "withdraw-readmit" "latest" (context-query-export host))
         (journal-receive! journal "retained-observations" (.o old: observed fresh: fresh-value))
         (journal-begin! journal "retained-observations")
         (journal-put! journal "observations" (.o old: observed fresh: fresh-value))
         (journal-commit! journal)))
-    (displayln "CATALOG-REPLAY original-bytes=#t empty-root=#t native-proof=#t"
+    (displayln "CATALOG-REPLAY original-bytes=#t empty-root=#t runtime-proof=#t"
                " same-query-different-head-refused=#t old-current=#f fresh-current=#t")))
 
 (def (verify! journal)

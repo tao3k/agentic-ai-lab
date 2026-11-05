@@ -27,7 +27,7 @@
 ;; : (-> SandboxBackendObjectFamilySyntax SandboxBackendObjectFamilyExpansionSyntax)
 ;; | doc m%
 ;;   Expands sandbox, backend capability, registry, and profile object family
-;;   declarations into POO-native module objects.
+;;   declarations into POO module objects.
 ;;   # Examples
 ;;   ```scheme
 ;;   (defpoo-sandbox-backend-object-family ...)

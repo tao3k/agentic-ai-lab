@@ -4,7 +4,7 @@ package ContextRuntimeTopology {
     // Structural allocation. Behavioral obligations execute in Quint and the
     // existing SysML verification cases; these parts do not instantiate nodes.
     part def ImmutableEvidenceStore;
-    part def NativeAscentVerifier;
+    part def RuntimeAscentVerifier;
     part def ReverseSupportIndex;
     part def DurableOutbox;
     part def Transport;
@@ -25,7 +25,7 @@ package ContextRuntimeTopology {
         attribute bootIdentity : String;
     }
     part def ContextShard {
-        part verifier : NativeAscentVerifier;
+        part verifier : RuntimeAscentVerifier;
         part support : ReverseSupportIndex;
         part journal : JournalProvider;
         part outbox : DurableOutbox;

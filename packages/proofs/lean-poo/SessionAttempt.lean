@@ -4,7 +4,7 @@ import Lean
 namespace AgenticAILabSessionAttemptProof
 def quintSourceDigest : String := "sha256:2857ad1bc556179f034255a93537a136f08dcc21cd46458a6af18fef206f58b4"
 def quintInvariantNames : List String := ["ExactAttempt", "RecoveryPreservesObligation", "ClosedIsTerminal"]
--- Pure owner-coordinate projection. Binding includes every native routing/input field.
+-- Pure owner-coordinate projection. Binding includes every runtime routing/input field.
 -- Producer receipt resolution and runtime publication are outside these laws.
 structure Schedule (α : Type) where
   revision : Nat

@@ -65,9 +65,9 @@ OWNER_MAP_ROWS = [
     {
         "row_id": "rfc45-07-public-composition",
         "rfc": "45-07",
-        "source_path": "modules/workflow/scenario/composition-syntax.ss",
-        "source_symbol": "user-composition",
-        "source_kind": "macro",
+        "source_path": "core/modules/funflow/scenario.ss",
+        "source_symbol": "Scenario",
+        "source_kind": "type",
         "test_path": "t/profile-binding-syntax-test.ss",
         "test_symbol": "profile-binding-syntax-test",
         "target_name": "rfc45_07_composition_sources",

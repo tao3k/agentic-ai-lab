@@ -15,8 +15,7 @@
                  agentic-ai-lab-user-config-workflow-cicd-runtime-command-manifests
                  agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-summaries
                  agentic-ai-lab-user-workflow-cicd-runtime-command-manifest-agreement)
-        (only-in :agentic-ai-lab/modules/workflow/funs
-                 agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi)
+        (only-in :agentic-ai-lab/modules/workflow/cicd-runtime agentic-ai-lab-cicd-runtime-command-manifest-map->marlin-runtime-handoff-abi)
         (only-in "./support/user-interface-cicd-runtime-fixture"
                  user-interface-cicd-runtime-fixture-config))
 

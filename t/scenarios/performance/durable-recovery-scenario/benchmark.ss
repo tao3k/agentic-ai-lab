@@ -22,7 +22,7 @@
  (inputShape . "ninety-six durable recovery scenario receipts projected from shared runtime-store and memory durable job rows")
  (expectedOutcome . "the durable-recovery-scenario scenario preserves its declared semantic result under the ASP P95 gate")
  (expectedRepair . "keep recovery projection batched; do not make runtime consumers traverse POO object graphs")
- (nativePooAuthoring . #t)
+ (runtimePooAuthoring . #t)
  (receiptRepresentation . defstruct)
  (adapterBoundary . "durable recovery scenario rows are report-only ABI alists at Marlin handoff")
  (hotPathExemption . durable-recovery-scenario)

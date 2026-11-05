@@ -6,7 +6,12 @@
 ;;; Boundary: downstream session sandbox profile declarations.
 ;;; Invariant: standalone module; it declares data only.
 
-(import :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
+(import :clan/poo/object
+        :agentic-ai-lab/modules/sandbox-core/profile
+        :agentic-ai-lab/modules/sandbox-core/profile-interface
+        :agentic-ai-lab/modules/nono-sandbox/config
+        :agentic-ai-lab/modules/nono-sandbox/profile-interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy)
 
 (export agentic-ai-lab-custom-my-module-session-module)
 
@@ -17,10 +22,18 @@
        '((intent . coding-agent)
          (scope . session)
          (stage . interactive))))
-  (use-module nono-sandbox
+  (let ()
     (.def (agent/session @ nono-sandbox-profile)
       network: (allowlisted-network "github.com" "crates.io")
       capabilities: session-capabilities
       resources: =>.+ runtime-volume-resources
       metadata: => (lambda (super-metadata)
-                     (append super-metadata session-metadata))))))
+                     (append super-metadata session-metadata)))
+    (agentic-ai-lab-product-use-module 'nono-sandbox
+      (agentic-ai-lab-nono-sandbox-config-flags 'ffi (agentic-ai-lab-sandbox-profile-prototypes (agent/session agent/session))
+        '((.def (agent/session @ nono-sandbox-profile)
+      network: (allowlisted-network "github.com" "crates.io")
+      capabilities: session-capabilities
+      resources: =>.+ runtime-volume-resources
+      metadata: => (lambda (super-metadata)
+                     (append super-metadata session-metadata)))))))))

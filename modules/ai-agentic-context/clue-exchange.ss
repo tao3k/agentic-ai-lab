@@ -187,7 +187,7 @@
         (set! generation (hash-ref retained "generation"))))
     dispatch))
 
-;; A host owns the trajectory handle and native verifier. The Agent-facing
+;; A host owns the trajectory handle and runtime verifier. The Agent-facing
 ;; closure offers read-only history plus clue submission/query, never append.
 (def (open-trajectory-clue-exchange trajectory verify rule-identity (retained #f))
   (unless (and (string? rule-identity) (> (string-length rule-identity) 0))

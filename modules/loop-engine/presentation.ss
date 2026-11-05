@@ -32,7 +32,7 @@
       setting-object
       public-setting-keys)
   ;; Shared projections use Gerbil promises; each public slot is then cached by
-  ;; the native :clan/poo object returned from object<-fun.
+  ;; the runtime :clan/poo object returned from object<-fun.
   (let ()
     ;; : (-> Void FeatureFacts)
     (def feature-fact-rows/promise

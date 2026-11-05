@@ -1,7 +1,7 @@
 :PROPERTIES:
 :ID: context-production-service
 :END:
-#+TITLE: Native Context service and the C ABI boundary
+#+TITLE: Runtime Context service and the C ABI boundary
 #+LANGUAGE: en
 
 * Scope correction
@@ -21,18 +21,18 @@ Earlier 28 evidence retains its original scope and is not silently promoted.
 
 [[file:../../../../bindings/runtime-c/include/agentic_ai_lab/semantic.h][semantic.h]] already defines the versioned inert-byte call, trusted Host lanes,
 thread-affine open/close and owner-side result release. The optional
-[[file:../../../../bindings/runtime-c/include/agentic_ai_lab/scheme_native_v1.h][Scheme-native header]] defines copied result ownership for AOT-linked consumers.
+[[file:../../../../bindings/runtime-c/include/agentic_ai_lab/scheme_contract_v1.h][Scheme-runtime header]] defines copied result ownership for AOT-linked consumers.
 [[file:../../../../bindings/runtime-c/README.org][The existing SDK contract]] is authoritative. This change adds no binding file
 and does not introduce another JSON wire protocol or VM bootstrap framework.
 
 The new Context lifecycle service is not yet exported through that C ABI.
-That integration remains open; native Scheme tests are not evidence of a
+That integration remains open; Scheme tests are not evidence of a
 completed C export, Rust integration or distributed runtime.
 
-* Native implementation
+* Runtime implementation
 
-[[file:../../../../modules/ai-agentic-context/runtime-service.ss][The POO-native service]] reuses the existing Context owner and independent
-Session terminal CAS. The trusted native caller binds original observation
+[[file:../../../../modules/ai-agentic-context/runtime-service.ss][The POO service]] reuses the existing Context owner and independent
+Session terminal CAS. The trusted runtime caller binds original observation
 capabilities; request identities are inert durable inbox keys, not Session
 identities or proof capabilities. The document ID above is only an Org anchor.
 
@@ -50,11 +50,11 @@ but no propagation event or Attempt terminal is fabricated for cleanup.
 
 * Tests and evidence
 
-[[file:../../../../t/context-service-test.ss][Native scenarios]] exercise actual Session publication, historical retry,
+[[file:../../../../t/context-service-test.ss][Runtime scenarios]] exercise actual Session publication, historical retry,
 input substitution refusal, proactive cross-Session revocation, cancellation,
 recovery, unknown Session refusal, same-journal restart and close-before-work.
-The original evidence/test module and its native namespace are retained. An
-unnecessary shared-fixture/alias extraction was withdrawn after a native
+The original evidence/test module and its runtime namespace are retained. An
+unnecessary shared-fixture/alias extraction was withdrawn after a runtime
 compatibility failure; its failure log is preserved separately.
 
 #+begin_src sh
@@ -63,7 +63,7 @@ GERBIL_TEST_MAX_HEAP=2G just build-test t/context-service-test.ss
 GERBIL_TEST_MAX_HEAP=2G just test-context-service /private/tmp/NEW-context.sqlite
 #+end_src
 
-Use a fresh journal path. The native gate keeps the pre-import 2 GiB heap
+Use a fresh journal path. The runtime gate keeps the pre-import 2 GiB heap
 fence and 150-second watchdog and requires MODULE-OK, HARNESS-OK, final OK,
 and no harness/heap/stack error marker. [[file:29-service-results.json][The structured receipt]] separates
 this evidence from withdrawn Rust/resource experiments. Raw logs remain local.

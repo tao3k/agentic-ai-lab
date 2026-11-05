@@ -34,11 +34,11 @@ The benchmark explicitly passes =--impure=. Toggling =eval-cache= therefore
 does not turn on that persistent evaluation cache. In addition, =nix eval
 --apply= applies the function after obtaining the installable value; a cached
 output-function path is not a persistent cache of arbitrary function results.
-The C API selects native output values directly, without calling the CLI's
+The C API selects runtime output values directly, without calling the CLI's
 =openEvalCache= adapter.
 
 The dynamic control uses one fresh =XDG_CACHE_HOME= supplied before either
-native library initialization or CLI startup. Both routes inherit it. All
+runtime library initialization or CLI startup. Both routes inherit it. All
 impure measured calls, including =--option eval-cache true/false= controls,
 leave zero evaluation-cache database files. A separate pure scalar Flake
 creates one database in that same directory, so the directory detector has a
@@ -51,16 +51,16 @@ References (Nix 2.34.4):
 - [[https://github.com/NixOS/nix/blob/2.34.4/src/nix/eval.cc#L67-L75][CmdEval applies its function after toValue]].
 - [[https://github.com/NixOS/nix/blob/2.34.4/src/libexpr/eval-cache.cc#L394-L409][AttrCursor::forceValue and cached values]].
 
-* Native instrumentation and lazy boundaries
+* Runtime instrumentation and lazy boundaries
 
-=session.h= records monotonic wall and process CPU deltas around eight native
+=session.h= records monotonic wall and process CPU deltas around eight runtime
 boundaries: libexpr initialization, Store opening, EvalState construction,
 Flake settings/reference preparation, strict locking, output selection,
 function application and result extraction. It also counts calls. CPU is
-process-wide, including native helper threads; it is not per-thread CPU.
+process-wide, including runtime helper threads; it is not per-thread CPU.
 
 The ordinary query interface is unchanged. Diagnostic application retains
-one native result until the next explicit application or session close;
+one runtime result until the next explicit application or session close;
 attribute reads force its ordinary Nix thunks. No admission verdict, source
 certification or cross-session result is cached.
 
@@ -93,15 +93,15 @@ The diagnostic force points are internal probes, not a new configuration DSL.
 Reading its slots later cannot silently move the observation time or access a
 closed C session. Each stage subtracts those frozen observations.
 
-* First native session result
+* First runtime session result
 
-The first native session is probed before the matched rounds, separating
-process-first native work from subsequent fresh-EvalState demands. Times in
+The first runtime session is probed before the matched rounds, separating
+process-first runtime work from subsequent fresh-EvalState demands. Times in
 milliseconds from the final passing qualification:
 
-| Native boundary | Wall ms | CPU ms |
+| Runtime boundary | Wall ms | CPU ms |
 |-----------------+---------+--------|
-| libexpr / native GC initialization | 17.909 | 16.324 |
+| libexpr / runtime GC initialization | 17.909 | 16.324 |
 | Store open | 0.102 | 0.102 |
 | EvalState construction | 0.645 | 0.645 |
 | Flake settings/reference | 0.082 | 0.083 |
@@ -119,12 +119,12 @@ the evidence does not identify all of that difference as GC, filesystem I/O
 or scheduler delay. Earlier 1.9--2.9 second outliers remain recorded; those
 cannot be explained by pretending a millisecond initialization phase is slow.
 No general cold-start speedup is inferred from one host or these small samples.
-Native shared-library preloading and Gerbil/Harness startup occur before this
-C instrumentation and are not included in the native initialization row.
+Runtime shared-library preloading and Gerbil/Harness startup occur before this
+C instrumentation and are not included in the runtime initialization row.
 
 * Same-workload cold/hot controls
 
-A cold probe first partitions native demand. Then three matched rounds use
+A cold probe first partitions runtime demand. Then three matched rounds use
 fresh EvalStates. API versus CLI order alternates; the prepared-reference
 variant runs before the original in round 2 and after it in rounds 1 and 3.
 The diagnostic variant is separate, so extra force probes are not charged
@@ -180,7 +180,7 @@ hard-coded temporary path. This is an immutable package reference, NOT a new
 Flake =path:= input or a claim that it appears as such in flake.lock. The
 reference is included in observed flake.nix, and its source metadata remains
 in the fixture's observed closure. Lock policy for actual Flake inputs stays
-native and strict. Production injection through the selected build graph is
+runtime and strict. Production injection through the selected build graph is
 outside this binding qualification.
 
 A trial that instead added the whole package-set directory as a =path:= input
@@ -188,7 +188,7 @@ hit the unchanged 60-second idle gate. It is a retained failed experiment;
 its exact slow sub-operation was not established. It cannot justify adding
 large tree-copy/fingerprint work to the hot route or increasing a timeout.
 
-The dominant safe reuse is already the native session: one Store, one
+The dominant safe reuse is already the runtime session: one Store, one
 EvalState, one strict lock per session, and shared Nix import thunks when Null
 is added. Call counters assert those boundaries. There is no global session
 pool, mutable argument-cell reuse, Core cache protocol or cached admission
@@ -200,7 +200,7 @@ candidate; it is not justified by low allocation counts.
 The profile keeps before/after source guards, real AWS/Null Contract admission,
 throwing unselected awscc branches, a cached AWS parent and an AWS+Null child.
 The child and parent receipts remain independent. Changing an observed source
-rejects the staged query before its native application count changes. The
+rejects the staged query before its runtime application count changes. The
 unchanged default four-Case qualification retains strict lock-update/override
 rejection, lock bytes, fragment handling and cached-parent source refusal.
 
@@ -222,7 +222,7 @@ failed receipts, not passing evidence. No library/compiler source is patched.
 
 * Reflection
 
-- Keep: strict native locks and per-owner session reuse; exact final Config
+- Keep: strict runtime locks and per-owner session reuse; exact final Config
   demand; existing source checks and receiver-local POO plan caches.
 - Improve: make preparation-produced immutable inputs explicit at the module
   boundary and keep diagnostic observations eager. Do not rebuild source

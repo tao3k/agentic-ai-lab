@@ -11,7 +11,7 @@
 DRAFT — architecture-semantics package boundary.
 
 This RFC defines how an AI enterprise security architecture is represented as
-POO-native composable semantics.  It does not define a universal AI security
+POO composable semantics.  It does not define a universal AI security
 architecture and does not extend the public Agentic AI Lab engine API.
 
 * Problem
@@ -29,7 +29,7 @@ projection.
 Agentic AI Lab needs a bounded architecture package semantic that:
 
 - preserves each architecture's identity and ownership;
-- reuses POO-native composition and profiles;
+- reuses POO composition and profiles;
 - expresses explicit cross-architecture mappings;
 - detects conflicts and unknown mappings;
 - projects selected semantics to POL, proof, runtime, observation, and receipt
@@ -38,7 +38,7 @@ Agentic AI Lab needs a bounded architecture package semantic that:
 
 * Core decision
 
-An architecture package is a first-class POO-native value assembled through
+An architecture package is a first-class POO value assembled through
 existing functions, objects/prototypes, =compose=, capabilities, and profiles.
 
 It is not:
@@ -57,7 +57,7 @@ how those semantics are proved or enforced.
 
 The package design MUST preserve the current module-system invariants:
 
-1. Functions and native POO objects/prototypes remain the default abstraction.
+1. Functions and POO objects/prototypes remain the default abstraction.
 2. Composition is pure and deterministic for the same identities and profile.
 3. Profiles are first-class values.
 4. Capabilities bind authority; they are not inferred from package names.
@@ -130,7 +130,7 @@ Relates two independently owned architectures:
 - evidence/proof identity;
 - policy revision.
 
-These families expand to ordinary POO-native values.  They are not a public
+These families expand to ordinary POO values.  They are not a public
 record language.
 
 * Package use of existing module slots
@@ -144,7 +144,7 @@ Architecture semantics MUST fit the existing thin module surface.
 | capabilities | authority required by a projection or runtime consumer |
 | profiles | selected enterprise architecture composition and policy view |
 
-Semantic objects, relations, invariants, and mappings are ordinary POO-native
+Semantic objects, relations, invariants, and mappings are ordinary POO
 objects referenced by the package/profile.  They do not become new public
 module slots.
 
@@ -479,7 +479,7 @@ increase, or duplicate local evidence predicate is admitted.
 * Acceptance criteria
 
 - [X] Agentic AI Lab remains the general composition engine.
-- [X] Architecture packages are POO-native values, not a new DSL.
+- [X] Architecture packages are POO values, not a new DSL.
 - [X] Existing =identity/imports/capabilities/profiles= slots are sufficient.
 - [X] Cross-architecture equivalence requires evidence.
 - [X] Unknown and conflict behavior is fail closed where guarantees are needed.

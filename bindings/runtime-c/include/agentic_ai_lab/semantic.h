@@ -23,13 +23,13 @@ int32_t agentic_ai_lab_semantic_v1_call(const char *operation, const uint8_t *in
  * This validates local snapshot fidelity, not external issuer signatures. */
 int32_t agentic_ai_lab_semantic_v1_source_register(const uint8_t *input, size_t length,
                                            agentic_ai_lab_semantic_result *result);
-/* Trusted Context contract/purpose registration. Native current Source and the
+/* Trusted Context contract/purpose registration. Runtime current Source and the
  * existing policy Host clock determine use eligibility; no external effect grant. */
 int32_t agentic_ai_lab_semantic_v1_context_use_refresh(const uint8_t *input, size_t length,
                                                agentic_ai_lab_semantic_result *result);
-/* Trusted lifecycle command lane into an application-attached native Context
+/* Trusted lifecycle command lane into an application-attached runtime Context
  * service. Scheme owns the actual Session CAS, proof/support and journal.
- * Copied observation references cannot manufacture native capabilities.
+ * Copied observation references cannot manufacture runtime capabilities.
  * Ordinary tools may use context.lifecycle.inspect, never this control lane.
  * The application retires its independent Session endpoints before close. */
 int32_t agentic_ai_lab_semantic_v1_context_command(const uint8_t *input, size_t length,

@@ -30,7 +30,7 @@
   (cdr (assoc key alist)))
 
 ;;; This suite keeps C binding descriptor policy executable without compiling
-;;; or loading the native nono library.
+;;; or loading the runtime nono library.
 ;; : TestSuite
 (def nono-sandbox-c-binding-test
   (test-suite "nono-sandbox C binding contract"
@@ -196,7 +196,7 @@
         (check-equal? (test-ref (test-ref manifest 'apply-plan)
                                 'apply)
                       'nono_sandbox_apply)))
-    (yuanxu-test-case "dry-runs and native-tests nono C binding manifests without applying sandbox"
+    (yuanxu-test-case "dry-runs and runtime-tests nono C binding manifests without applying sandbox"
       (let* ((request (agent-sandbox-request
                        (make-nono-agent-sandbox-profile
                         'always-further/opencode)
@@ -216,11 +216,11 @@
                runtime-manifest
                '("sh" "-c" "printf nono-smoke")))
              (live-skip
-              (nono-c-binding-native-live-test
+              (nono-c-binding-ffi-live-test
                runtime-manifest
                '((library-path . "run/no-such-libnono_ffi.dylib"))))
              (live-default
-              (nono-c-binding-native-live-test runtime-manifest)))
+              (nono-c-binding-ffi-live-test runtime-manifest)))
         (check-equal? (test-ref dry-run 'schema)
                       +nono-c-binding-dry-run-receipt-schema+)
         (check-equal? (test-ref dry-run 'ok?) #t)
@@ -239,18 +239,18 @@
         (check-equal? (test-ref (test-ref smoke 'dry-run) 'would-apply?)
                       #f)
         (check-equal? (test-ref live-skip 'schema)
-                      +nono-c-binding-native-live-test-receipt-schema+)
+                      +nono-c-binding-ffi-live-test-receipt-schema+)
         (check-equal? (test-ref live-skip 'ok?) #t)
         (check-equal? (test-ref live-skip 'enabled?) #f)
         (check-equal? (test-ref live-skip 'skipped?) #t)
         (check-equal? (test-ref live-skip 'skip-reason)
-                      'native-library-not-found)
-        (check-equal? (test-ref live-skip 'native-executed) #f)
+                      'runtime-library-not-found)
+        (check-equal? (test-ref live-skip 'runtime-executed) #f)
         (check-equal? (test-ref live-skip 'cli-executed) #f)
         (check-equal? (test-ref live-skip 'runtime-executed) #f)
         (check-equal? (test-ref live-skip 'would-apply?) #f)
         (check-equal? (test-ref live-default 'schema)
-                      +nono-c-binding-native-live-test-receipt-schema+)
+                      +nono-c-binding-ffi-live-test-receipt-schema+)
         (check-equal? (test-ref live-default 'ok?) #t)
         (check-equal? (or (test-ref live-default 'enabled?)
                           (test-ref live-default 'skipped?))

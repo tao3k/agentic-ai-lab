@@ -438,7 +438,7 @@ def _observe_export_phase(
     )
 
 
-def _observe_native_export_phases(
+def _observe_runtime_export_phases(
     observer: PhaseObserver | None,
     stderr: str,
 ) -> None:
@@ -620,7 +620,7 @@ def export_declaration_closure(
                     "lean-export-failed",
                     exported.stderr.strip() or exported.stdout.strip() or root_module,
                 )
-            _observe_native_export_phases(phase_observer, exported.stderr)
+            _observe_runtime_export_phases(phase_observer, exported.stderr)
             exported_json = exported.stdout
         else:
             exported_json = _exported_json_provider()
@@ -759,7 +759,7 @@ def export_declaration_closures(
     )
     batch_payloads: list[str] | None = None
 
-    def native_batch_payloads() -> list[str]:
+    def runtime_batch_payloads() -> list[str]:
         nonlocal batch_payloads
         if batch_payloads is not None:
             return batch_payloads
@@ -809,7 +809,7 @@ def export_declaration_closures(
                 "lean-export-failed",
                 exported.stderr.strip() or exported.stdout.strip() or ",".join(root_modules),
             )
-        _observe_native_export_phases(phase_observer, exported.stderr)
+        _observe_runtime_export_phases(phase_observer, exported.stderr)
         try:
             payload = json.loads(exported.stdout)
         except json.JSONDecodeError as error:
@@ -860,7 +860,7 @@ def export_declaration_closures(
                 _build_prepared=True,
                 _exporter_digest=exporter_digest,
                 _exported_json_provider=(
-                    (lambda index=request_index: native_batch_payloads()[index])
+                    (lambda index=request_index: runtime_batch_payloads()[index])
                     if batch_compatible
                     else None
                 ),

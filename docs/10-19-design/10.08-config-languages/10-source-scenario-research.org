@@ -46,7 +46,7 @@ ordinary authors to write those consumers themselves.
 
 We should match the task-facing interface first: Contract-directed Profile values,
 sparse independent reuse and named relationship references. Then qualify actual
-resource output and typed diagnostics. More general native POO syntax alone does
+resource output and typed diagnostics. More general POO syntax alone does
 not outperform a maintained KCL backend or its field tooling.
 
 * A concrete source-level conflict policy to examine
@@ -71,7 +71,7 @@ The actual [[https://github.com/tao3k/omnibus-ncl/blob/c5d37eb51961fd7bd32f77584
 [[https://github.com/tao3k/omnibus-ncl/blob/c5d37eb51961fd7bd32f775843044ca7f8191715/sandbox/examples/web-scraper.ncl][Sandbox input]] supplies command/policy values to the maintained interface.
 The [[https://github.com/tao3k/hivebus/blob/edc6095bed63a3c14f9f7147c931378d3e9d1609/hosts/host-1/meta.nix][HiveBus host]] sets deployment values, while [[https://github.com/tao3k/hivebus/blob/edc6095bed63a3c14f9f7147c931378d3e9d1609/units/self/flakeOutputs.nix][the export owner]] exposes advanced
 POP extension. Compare these actual operation boundaries with POO configuration
-versus native object/protocol extension; do not flatten them into a list-append demo.
+versus runtime object/protocol extension; do not flatten them into a list-append demo.
 
 * Acceptance agenda, without implementing adapters
 

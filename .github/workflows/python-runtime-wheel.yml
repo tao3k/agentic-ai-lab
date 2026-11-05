@@ -55,13 +55,13 @@ jobs:
       - name: Download runtime-C producer handoff
         uses: actions/download-artifact@v8
         with:
-          name: agentic-ai-lab-runtime-native-library
+          name: agentic-ai-lab-runtime-library
           path: .ci/runtime-c
 
       - name: Download semantic AOT producer handoff
         uses: actions/download-artifact@v8
         with:
-          name: agentic-ai-lab-semantic-native-linux
+          name: agentic-ai-lab-semantic-runtime-linux
           path: .ci/semantic
 
       - name: Verify semantic artifact and source binding
@@ -98,7 +98,7 @@ jobs:
 
           jq -e --arg head "$GITHUB_SHA" '
             .schema == "agentic-ai-lab.ci.scheme-projection-handoff.v1" and
-            .producerJob == "native-linux" and
+            .producerJob == "runtime-linux" and
             .compileOwner == "//:compile" and
             .currentHeadSha == $head and
             .status == 0 and
@@ -110,7 +110,7 @@ jobs:
 
           jq -e --arg head "$GITHUB_SHA" '
             .schema == "agentic-ai-lab.ci.runtime-c-handoff.v1" and
-            .producerJob == "native-linux" and
+            .producerJob == "runtime-linux" and
             .producerTarget == "//bindings/runtime-c:runtime_c_shared" and
             .currentHeadSha == $head and
             .artifactAvailable == true and
@@ -142,7 +142,7 @@ jobs:
           jq -n \
             --arg schema "agentic-ai-lab.ci.python-wheel-handoff-consumer.v1" \
             --arg projectionArtifact "python-wheel-scheme-projection-producer" \
-            --arg runtimeArtifact "agentic-ai-lab-runtime-native-library" \
+            --arg runtimeArtifact "agentic-ai-lab-runtime-library" \
             --arg transport "github-actions-artifact" \
             --arg projectionDigest "$projection_digest" \
             --arg expectedDigest "$expected_runtime_digest" \
@@ -168,11 +168,11 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
-      - name: Test Python native runtime against producer library
+      - name: Test Python runtime against producer library
         run: |
           set -euo pipefail
           uv run --project packages/python-runtime pytest \
-            packages/python-runtime/tests/unit/test_native_runtime_v0.py \
+            packages/python-runtime/tests/unit/test_runtime_v0.py \
             packages/python-runtime/tests/unit/test_semantic_runtime.py \
             packages/python-runtime/tests/unit/test_semantic_observations.py \
             packages/python-runtime/tests/unit/test_semantic_tools.py \
@@ -189,8 +189,8 @@ jobs:
           uv run --locked --project packages/python-testing --extra runtime agentic-ai-lab-test-cases \
             coverage > .ci/python-testing-coverage.tsv
 
-      - name: Qualify migrated assessment and Review native semantics
-        run: cargo test --locked --manifest-path modules/evidence-assessment/native/Cargo.toml --lib --test assessment
+      - name: Qualify migrated assessment and Review runtime semantics
+        run: cargo test --locked --manifest-path modules/evidence-assessment/runtime/Cargo.toml --lib --test assessment
 
       - name: Build wheel
         run: |
@@ -209,7 +209,7 @@ jobs:
           producer="$(python - <<'PYTHON'
           import tomllib
           from pathlib import Path
-          dep = tomllib.loads(Path('modules/evidence-assessment/native/Cargo.toml').read_text())['dependencies']['gerbil-ascent']
+          dep = tomllib.loads(Path('modules/evidence-assessment/runtime/Cargo.toml').read_text())['dependencies']['gerbil-ascent']
           assert set(('git', 'rev')).issubset(dep) and 'path' not in dep
           print('git+' + dep['git'] + '@' + dep['rev'] + '#subdirectory=python')
           PYTHON
@@ -232,9 +232,9 @@ jobs:
           "$RUNNER_TEMP/agentic-ai-lab-runtime-wheel-smoke/bin/python" -m \
             agentic_ai_lab_runtime.benchmarks scheme-load-aot --help
           "$RUNNER_TEMP/agentic-ai-lab-runtime-wheel-smoke/bin/python" - <<'PY'
-          from agentic_ai_lab_runtime._native.loader import probe_native_runtime
+          from agentic_ai_lab_runtime._runtime.loader import probe_runtime
 
-          health = probe_native_runtime()
+          health = probe_runtime()
           assert (health.abi_major, health.abi_minor) == (0, 1)
           print("packaged Bazel runtime-v0 negotiation: ok")
           PY
@@ -243,7 +243,7 @@ jobs:
           from agentic_ai_lab_runtime import scheme_wire as wire
           from agentic_ai_lab_runtime import (SemanticRuntime, RuntimeGraphProgram,
               RuntimeGraphRuntime, RuntimeGraphRegistries, linear_plan)
-          from agentic_ai_lab_runtime._native.session import NativeRuntimeSession, NativeBundleDescriptor
+          from agentic_ai_lab_runtime._runtime.session import RuntimeSession, RuntimeBundleDescriptor
           assert shutil.which('gxi') is None
           task = {'lens': {'generation': 1, 'clock': 'c', 'start': 0, 'end': 5,
                           'asOf': 5, 'cut': 'cut', 'members': ['a', 'b'],
@@ -261,9 +261,9 @@ jobs:
                   {'status': 'complete', 'rows': [['a', 'b']]}))['verdict'] == 'consistent'
               assert runtime.observe_model_answer(task,
                   wire.dumps({'status': 'complete', 'rows': []}))['verdict'] == 'contradicted'
-              with NativeRuntimeSession(NativeBundleDescriptor(bytes(32), 1, b'bundle')) as session:
+              with RuntimeSession(RuntimeBundleDescriptor(bytes(32), 1, b'bundle')) as session:
                   program = RuntimeGraphProgram(plan=linear_plan('act'),
-                      runtime=RuntimeGraphRuntime.native(session, semantic_context=runtime),
+                      runtime=RuntimeGraphRuntime.runtime(session, semantic_context=runtime),
                       registries=RuntimeGraphRegistries(actions={
                           'act': lambda state: {'answer': state['value'] + 1}}))
                   execution = program.invoke_with_trace({'value': 41})

@@ -17,6 +17,7 @@ devenv.local.yaml
 # Gerbil std/make output for the agentic-ai-lab executable.
 .bin
 .gerbil
+/t/qualification/yuanxu-nix-consumer/manifest.ss
 manifest.ss
 version.ss
 
@@ -27,18 +28,18 @@ version.ss
 # Bazel convenience symlinks and output trees.
 /bazel-*
 
-# Shared native binding build cache.
+# Shared runtime binding build cache.
 /target/
 /bindings/rust-ir/Cargo.lock
 /bindings/rust-ir/target/
 
-# Local Python packaging and native-extension build outputs.
+# Local Python packaging and runtime-extension build outputs.
 __pycache__/
 *.py[cod]
 *.egg-info/
 *.so
-/packages/python-runtime/src/agentic_ai_lab_runtime/_native/_semantic_cffi.c
-/packages/python-runtime/src/agentic_ai_lab_runtime/_native/_semantic_cffi.o
+/packages/python-runtime/src/agentic_ai_lab_runtime/_runtime/_semantic_cffi.c
+/packages/python-runtime/src/agentic_ai_lab_runtime/_runtime/_semantic_cffi.o
 
 # Generated runtime-WASM bundle artifacts are build outputs, not sources.
 /bindings/runtime-wasm/workflows/*.bin
@@ -52,5 +53,5 @@ packages/python-runtime/build/
 node_modules/
 _apalache-out/
 
-# Native package publication coordination; no source or receipt authority.
+# Runtime package publication coordination; no source or receipt authority.
 /.gerbil.publication.lock

@@ -50,12 +50,12 @@ filegroup(
 )
 
 filegroup(
-    name = "json_schema_native_contract_test_support",
+    name = "json_schema_runtime_contract_test_support",
     srcs = [
         "schemas/json/github-workflow.json",
         "t/funflow-github-ci-json-schema-contract-test.ss",
         "t/json-schema-contract-bridge-test.ss",
-        "t/json-schema-native-contract-test.ss",
+        "t/json-schema-poo-contract-test.ss",
     ],
 )
 
@@ -108,7 +108,7 @@ gerbil_project_compile(
 gerbil_project_compile(
     name = "gerbil_parser_package",
     srcs = ["@gerbil_parser_sources//:sources"],
-    # Compile the native closure of consumed APIs, not every upstream language
+    # Compile the runtime closure of consumed APIs, not every upstream language
     # and optional FFI product. Source revision/receipt admission is unchanged.
     build_script = "//packages/bazel:parser_dependency_build",
     require_library_output = True,

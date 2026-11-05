@@ -134,7 +134,7 @@
     },
     "artifactDigest": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06"
   },
-  "nativeObservationSeconds": 0.0013415419998636935,
+  "runtimeObservationSeconds": 0.0013415419998636935,
   "result": {
     "candidate": {
       "status": "rejected",

@@ -449,7 +449,7 @@ impl Snapshot {
                 "caller cannot supply context.agentic_ai_lab",
             ));
         }
-        // POO-native preflight projections are caller-editable input. Until a
+        // POO preflight projections are caller-editable input. Until a
         // Runtime-owned source admission exists, even a permissive Cedar
         // policy must not turn one into an effect grant.
         if fields.contains_key("agentic_ai_lab_preflight_only") {

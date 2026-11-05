@@ -2,20 +2,22 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(export feature-system-bundle-v1-composition-writer-test-suite
-        feature-system-bundle-v1-composition-writer-test)
+(export feature-system-bundle-v1-composition-writer-test)
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
+        (only-in :clan/poo/mop .new TypeError?)
+        (only-in :clan/poo/type Record Symbol)
+        (only-in :yuanxu/modules/funflow/scenario Scenario)
         :yuanxu/modules/funflow/control-plane/graph
         (only-in :yuanxu/module-system/schema/relations yuanxu-semantic-identity)
         :yuanxu/module-system/authoring/roles
         (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
         :yuanxu/profile-composition/selection-syntax
-        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
+
         :yuanxu/profile-composition/profile-bundle
-        :agentic-ai-lab/modules/workflow/scenario/bundle-v1-projection
+        :yuanxu/modules/funflow/bundle-v1
         :yuanxu/feature-system/bundle-v1-lowering)
 
 (.def WriterSourceProfile
@@ -46,19 +48,20 @@
            steps: (.o source: #t target: #t)
            edges: (.o source-target: '(source target))))))
 
-(user-composition writer-test-composition
-  (compose profiles
+(def writer-test-composition
+  (.new Scenario name: 'writer-test-composition
+        config: (compose profiles
     (use-module WriterTestModule as writer source target)
-    WriterTestScenarioProfile))
+    WriterTestScenarioProfile)))
 
-(def feature-system-bundle-v1-composition-writer-test-suite
+(def feature-system-bundle-v1-composition-writer-test
   (test-suite
    "Bundle v1 composition writer"
 
    (yuanxu-test-case
     "arbitrary POO composition lowers with symbols and dependency edges"
     (let-values (((plan image)
-                  (agentic-ai-lab-scenario-case->bundle-v1-image
+                  (scenario->bundle-v1-image
                    writer-test-composition 'writer-test-bundle 3)))
       (let* ((descriptor (.ref image 'descriptor))
              (no-adapter (feature-bundle-v1-lower-compact-id
@@ -66,7 +69,7 @@
              (no-projection (feature-bundle-v1-lower-compact-id
                              'projection +feature-bundle-v1-no-projection-id+))
              (no-policy (feature-bundle-v1-lower-compact-id
-                         'policy 'agentic-ai-lab.policy.none)))
+                         'policy 'yuanxu.funflow.policy.none)))
         (check (.ref image 'accepted?) => #t)
         (check (length (execution-plan-nodes plan)) => 4)
         (check (length (.ref descriptor 'symbol-rows)) => 7)
@@ -99,7 +102,27 @@
              no-projection)
             => #t))
          (.ref descriptor 'component-rows))
-        (check (.ref descriptor 'bundle-epoch) => 3))))))
+        (check (.ref descriptor 'bundle-epoch) => 3)
+        (check (eq? plan (.ref writer-test-composition 'execution-plan)) => #t))))
 
-(def feature-system-bundle-v1-composition-writer-test
-  feature-system-bundle-v1-composition-writer-test-suite)
+   (yuanxu-test-case
+    "Bundle projection uses the child's final plan after the parent is cached"
+    (def parent-plan (.ref writer-test-composition 'execution-plan))
+    (def child (.o (:: @ writer-test-composition) name: 'child-writer))
+    (let-values (((plan image)
+                  (scenario->bundle-v1-image
+                   child 'child-bundle 4)))
+      (check (execution-plan-flow-name plan) => 'child-writer)
+      (check (eq? plan (.ref child 'execution-plan)) => #t)
+      (check (eq? parent-plan (.ref writer-test-composition 'execution-plan)) => #t)
+      (check (execution-plan-flow-name parent-plan) => 'writer-test-composition)))
+
+   (yuanxu-test-case
+    "Bundle projection preserves the derived Record's obligations"
+    (def Restricted (Record [Scenario] marker: [Symbol constant: 'allowed]))
+    (def denied (.new Restricted name: 'denied
+                      config: (.ref writer-test-composition 'config)
+                      marker: 'denied))
+    (check-exception
+     (scenario->bundle-v1-image denied 'denied-bundle 1)
+     TypeError?))))

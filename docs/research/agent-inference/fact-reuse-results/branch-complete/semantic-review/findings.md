@@ -1,8 +1,8 @@
-# Contextual semantic review and native packet projection
+# Contextual semantic review and runtime packet projection
 
 This is a post-run, exploratory review of the frozen f6c36359 solver receipts. No task, question, grader, output failure, original annotation verdict or cost is changed. No provider calls were made. Solver quality after the binding change is unmeasured.
 
-The current Library consumer source is `432d2d7fb8073849105de5cb91d649a6a160193f`. Only the existing Python evidence binding, existing research consumer and its regression tests changed relative to 07efe5ae. Native Scheme, candidate rules and scoped Lean/Quint models are unchanged. This is a Python integration qualification against the previously cold-built native library, not a new native cold-build or remote CI claim.
+The current Library consumer source is `432d2d7fb8073849105de5cb91d649a6a160193f`. Only the existing Python evidence binding, existing research consumer and its regression tests changed relative to 07efe5ae. Runtime Scheme, candidate rules and scoped Lean/Quint models are unchanged. This is a Python integration qualification against the previously cold-built runtime library, not a new runtime cold-build or remote CI claim.
 
 ## Semantic distinctions
 
@@ -20,12 +20,12 @@ The larger first-two-output aggregate is not uniform: Scheme's first output is s
 
 ## Existing binding improvement
 
-`compact_observation` now references roots already present in the native conclusion only when they match exactly. It also factors the observed relation name for a node kind when all such native nodes actually agree; mixed relations keep their original encoding. `expand_observation` restores all original observations, optional support presence, node order, atoms, rule labels, parents, handles, scope and status. It infers no Fact and removes no proof ancestor. Native absence never receives an invented empty positive proof.
+`compact_observation` now references roots already present in the runtime conclusion only when they match exactly. It also factors the observed relation name for a node kind when all such runtime nodes actually agree; mixed relations keep their original encoding. `expand_observation` restores all original observations, optional support presence, node order, atoms, rule labels, parents, handles, scope and status. It infers no Fact and removes no proof ancestor. Runtime absence never receives an invented empty positive proof.
 
-All 12 previously delivered Fact/Scheme native packets round-trip identically. Scheme packets shrink from 3,931 to 3,231 serialized UTF-8 bytes (17.8%); Fact stays 1,191 bytes. The existing branch-entry consumer already uses this public binding helper, so the change reaches its model input without another framework or solver instruction. Provider token reduction and quality at the new source are unknown; byte reduction is not a performance claim.
+All 12 previously delivered Fact/Scheme runtime packets round-trip identically. Scheme packets shrink from 3,931 to 3,231 serialized UTF-8 bytes (17.8%); Fact stays 1,191 bytes. The existing branch-entry consumer already uses this public binding helper, so the change reaches its model input without another framework or solver instruction. Provider token reduction and quality at the new source are unknown; byte reduction is not a performance claim.
 
 ## Reproduction and retained failures
 
-Run `bash reproduce.sh` in this directory. It clones the exact local source bundle into a fresh checkout, clears the provider key, checks all thinking hashes, reproduces both native encodings, replays the original atomic proposals, verifies the supplementary receipt byte for byte and runs 22 consumer checks. Only Python and Git are required for this offline scope. API and ABI logs additionally record real native-store checks against the prior qualified 07efe5ae build. No new formal claim is made for natural-language annotation.
+Run `bash reproduce.sh` in this directory. It clones the exact local source bundle into a fresh checkout, clears the provider key, checks all thinking hashes, reproduces both runtime encodings, replays the original atomic proposals, verifies the supplementary receipt byte for byte and runs 22 consumer checks. Only Python and Git are required for this offline scope. API and ABI logs additionally record real runtime-store checks against the prior qualified 07efe5ae build. No new formal claim is made for natural-language annotation.
 
 All 16 original failures/completions remain in the frozen ledger; this directory copies original requests and thinking without repairing truncation. The parent raw archive retains provider responses, independent grades, earlier annotation failures and full costs. New full-trace semantic recall and a real-model quality comparison of this projection remain unqualified.

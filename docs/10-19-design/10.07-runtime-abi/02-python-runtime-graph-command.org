@@ -388,5 +388,5 @@ validated graph plans.  Python proves this path with ctypes today; Rust,
 Marlin, or other runtimes can use the same boundary with their own FFI layer.
 
 There is no JSON handoff protocol here.  JSON-like data can exist inside a
-runtime's own state model, but the cross-language interface remains native C
+runtime's own state model, but the cross-language interface remains runtime C
 ABI values and opaque handles.

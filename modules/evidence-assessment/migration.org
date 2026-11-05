@@ -3,10 +3,10 @@
 * Owners
 ASCENT remains the producer of generic rules, queries, source maintenance and
 provenance. This module owns computational Evidence and application assessment.
-=modules/ai-agentic-context/clues/native= owns Clue submission and selection;
-=modules/ai-agentic-context/interaction/native= owns model/tool interaction;
-=modules/temporal-causality/trajectory/native= owns ordered application history
-and cost accounting. Their native implementation shares a POO runtime owner,
+=modules/ai-agentic-context/clues/runtime= owns Clue submission and selection;
+=modules/ai-agentic-context/interaction/runtime= owns model/tool interaction;
+=modules/temporal-causality/trajectory/runtime= owns ordered application history
+and cost accounting. Their runtime implementation shares a POO runtime owner,
 which delegates execution to the producer Library.
 
 The existing Python runtime package exposes =agentic_ai_lab_runtime.reasoning=.
@@ -14,9 +14,9 @@ The existing Python runtime package exposes =agentic_ai_lab_runtime.reasoning=.
 Trajectory and conversation types require that owner. Generic declarations use
 =Engine.rules= from ASCENT when no application owner is needed.
 
-The Scheme computational store is an internal POO-native owner. The existing
+The Scheme computational store is an internal POO owner. The existing
 Case objects and functional assessment helpers remain the ordinary Scheme API.
-Candidate syntax and packet dispatchers stay behind internal native transport;
+Candidate syntax and packet dispatchers stay behind internal runtime transport;
 they are not added to the module facade. There is no old ASCENT import facade.
 
 * Formal and executable closure
@@ -29,10 +29,10 @@ identity obligations remain with ASCENT.
 Installed Python regression tests live under
 =packages/python-runtime/tests/scenarios=. Offline study tests live under
 =packages/python-testing/tests/assessment=. Neither gate sends provider requests.
-The native assessment gate is:
+The runtime assessment gate is:
 
 #+begin_src sh
-cargo test --locked --manifest-path modules/evidence-assessment/native/Cargo.toml --lib --test assessment
+cargo test --locked --manifest-path modules/evidence-assessment/runtime/Cargo.toml --lib --test assessment
 #+end_src
 
 * Research history and current binding
@@ -41,7 +41,7 @@ Existing reports and failures retain their bytes and old source identities under
 consumer qualification code, not a new search framework. Historical plans do not
 qualify the new module layout.
 
-The native build receipt freezes POO source inputs and the resolved producer's
+The runtime build receipt freezes POO source inputs and the resolved producer's
 source hashes into the extension. Current study admission compares these producer
 hashes with the independently installed ASCENT extension, then binds both actual
 extension files. This is content binding; caller authority and applicability are
@@ -49,16 +49,16 @@ separate application obligations. Old compiled-Scheme study plans require their
 original producer and are not silently admitted against the new package.
 
 * Review and remaining consumer policies
-Review is application policy, not a rule-engine primitive. Its native owner and
-rule source are =native/src/review/{mod,owner,policy}.rs= and
-=policies/review-rules.scm=; its Python binding is =native/src/python/review.rs=.
+Review is application policy, not a rule-engine primitive. Its runtime owner and
+rule source are =runtime/src/review/{mod,owner,policy}.rs= and
+=policies/review-rules.scm=; its Python binding is =runtime/src/python/review.rs=.
 =agentic_ai_lab_runtime.reasoning.EvidenceReview= and =review_sources= are the public
 Python entry. =packages/python-runtime/tests/scenarios/test_review.py= checks
 source identity, withdrawal, failed receipts and engine failure.
 
 Catalog, Review, History, investigation and lifecycle declarations used as real
-consumer scenarios now live under =native/tests/fixtures/evidence=. Five native
-scenario tests are in =native/tests/scenarios.rs=; installed rule/C-ABI consumer
+consumer scenarios now live under =runtime/tests/fixtures/evidence=. Five runtime
+scenario tests are in =runtime/tests/scenarios.rs=; installed rule/C-ABI consumer
 tests are in =packages/python-runtime/tests/scenarios=. Generic declaration,
 query, cancellation, typed value and provenance tests remain in ASCENT.
 
@@ -76,9 +76,9 @@ ASCENT application import facade is provided. The source receipt records the
 resolved Git source and 63 producer inputs; the independent installed ASCENT
 wheel must match every input before study admission.
 
-Fresh source checkouts built both native Python extensions. A fresh virtual
+Fresh source checkouts built both Python extensions. A fresh virtual
 environment installed their wheels and passed 139 ASCENT and 112 POO installed
-consumer tests. POO's standalone native crate passed 3 unit and 54 integration
+consumer tests. POO's standalone runtime crate passed 3 unit and 54 integration
 tests against the Git-pinned producer. The offline application study and
 inventory suite passed 152 tests. No provider request was sent.
 
@@ -92,7 +92,7 @@ completed.
 * Retained failures and corrected assumptions
 - Missing explicit Gerbil HOME caused dynamic expander module lookup failures.
   Binding the installed SDK and using the existing nextest process-isolation
-  entry passed 63 native producer tests, with no skipped tests, forced shutdown,
+  entry passed 63 runtime producer tests, with no skipped tests, forced shutdown,
   leaked process or checkpoint-transport failure markers.
 - A direct serial diagnostic was cut off at 120 seconds. It is incomplete, not
   successful. The final run uses the repository's existing CI nextest route;
@@ -115,8 +115,8 @@ not establish a reduction in model thinking or improved search quality.
 The first migration CI also exposed missing transferred licensing metadata, a
 stale Bazel producer projection, and the real Core/ASP dependency conflict
 (gerbil-poo 099b381 versus fdeadfa). Explicit REUSE annotations preserve original
-source/report bytes. The native workspace declares the existing license.
-ASP PR #12 changes only its dependency pin and passed its original native build
+source/report bytes. The runtime workspace declares the existing license.
+ASP PR #12 changes only its dependency pin and passed its original runtime build
 and 17-module parent test suite; its intentional child failure controls remain
 active. Both consumers use that immutable source. Bazel projections are derived
 with the existing pin/lock tool and its contract; no tag override is introduced.

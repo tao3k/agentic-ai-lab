@@ -36,13 +36,13 @@ Wikidata claims. The [[file:../../features/candidate-feedback/acceptance.org][ca
 =reasoning-compare-attempts=: compare submitted and gold program receipts only
 after independent same-source/content binding, completion and exact full query
 agreement. Frozen scope controls produce exact missing/extra rows under the
-same native executor, with Lean qualification premises and Quint fault controls.
+same runtime executor, with Lean qualification premises and Quint fault controls.
 This makes gold-versus-proposal grading available without rerunning execution.
 The feedback transfer now has a shared 1,024-state finite corpus: Quint's actual
 transition evaluator exports it, Lean checks current/frozen results against a
 kernel-checked executable grader, and Scheme replays public APIs with real
-native receipts while checking the input abstraction premises. CI rejects
-regeneration or native result drift. This strengthens result correspondence;
+runtime receipts while checking the input abstraction premises. CI rejects
+regeneration or runtime result drift. This strengthens result correspondence;
 it does not change the model-experiment or arbitrary-source proof boundary.
 It does not supply a model proposal, certify gold intent, implement MatLogic's
 matrix schedule or reproduce its benchmark. Raw response capture, model/request
@@ -66,7 +66,7 @@ scope in witness and answer rows before a separate union projection. The
 shared 1,024-input BranchScopedWitness corpus tests both independent masks,
 two alternative paths and each branch's direct support through Scheme, Lean
 and Quint. Lean establishes locality over arbitrary scope/vertex types; the
-native tests use caller-supplied symbolic identities and retained source updates.
+runtime tests use caller-supplied symbolic identities and retained source updates.
 This transfer implements two-hop disjunctive composition. The subsequent
 [[file:../../features/scoped-witness/composition.org][scoped composition]] layer implements group-local OR and required-group AND
 over the same endpoint pairs, following Algorithm 1 lines 19–30. Its shared

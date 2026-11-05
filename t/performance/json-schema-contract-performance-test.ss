@@ -60,39 +60,39 @@
   (let (ordered (list-sort < (append values '())))
     (list-ref ordered (quotient (length ordered) 2))))
 
-;;; Measure each native/alist pair in alternating order.  The pair owns the
+;;; Measure each runtime/alist pair in alternating order.  The pair owns the
 ;;; same compiled schema and workload size, so process scheduling and warm-up
 ;;; affect both representations instead of becoming a false speedup.  The ASP
 ;;; benchmark API remains the clock owner.
 ;; : (-> Integer (-> Integer) (-> Integer) Alist)
-(def (json-schema-contract-performance-paired-ab attempts native-workload
+(def (json-schema-contract-performance-paired-ab attempts runtime-workload
                                                     alist-workload)
   (let loop ((remaining attempts)
-             (native-first? #t)
-             (native-samples '())
+             (runtime-first? #t)
+             (runtime-samples '())
              (alist-samples '()))
     (if (<= remaining 0)
-      (let ((native-median
-             (json-schema-contract-performance-median native-samples))
+      (let ((runtime-median
+             (json-schema-contract-performance-median runtime-samples))
             (alist-median
              (json-schema-contract-performance-median alist-samples)))
-        (list (cons 'native-samples-us (reverse native-samples))
+        (list (cons 'runtime-samples-us (reverse runtime-samples))
               (cons 'alist-samples-us (reverse alist-samples))
-              (cons 'native-median-us native-median)
+              (cons 'runtime-median-us runtime-median)
               (cons 'alist-median-us alist-median)
-              (cons 'native-over-alist-speedup
-                    (/ alist-median native-median))))
+              (cons 'runtime-over-alist-speedup
+                    (/ alist-median runtime-median))))
       (let* ((first-workload
-              (if native-first? native-workload alist-workload))
+              (if runtime-first? runtime-workload alist-workload))
              (second-workload
-              (if native-first? alist-workload native-workload))
+              (if runtime-first? alist-workload runtime-workload))
              (first-us (benchmark-elapsed-us first-workload))
              (second-us (benchmark-elapsed-us second-workload))
-             (native-us (if native-first? first-us second-us))
-             (alist-us (if native-first? second-us first-us)))
+             (runtime-us (if runtime-first? first-us second-us))
+             (alist-us (if runtime-first? second-us first-us)))
         (loop (- remaining 1)
-              (not native-first?)
-              (cons native-us native-samples)
+              (not runtime-first?)
+              (cons runtime-us runtime-samples)
               (cons alist-us alist-samples))))))
 
 ;; : (-> Alist)
@@ -109,7 +109,7 @@
          (poo-workflow
           (json-schema-contract-performance-poo-workflow job-count step-count))
          (micro-workflow
-          (json-schema-contract-performance-native-workflow
+          (json-schema-contract-performance-runtime-workflow
            micro-job-count
            micro-step-count))
          (micro-alist-workflow
@@ -202,12 +202,12 @@
            (json-schema-contract-performance-average-us
             micro-alist-fast-us
             micro-rounds))
-     (cons 'native-over-alist-speedup
+     (cons 'runtime-over-alist-speedup
            (json-schema-contract-performance-ref
             micro-ab
-            'native-over-alist-speedup))
-     (cons 'native-over-alist-speedup-min 11/10)
-     (cons 'native-over-alist-ab micro-ab)
+            'runtime-over-alist-speedup))
+     (cons 'runtime-over-alist-speedup-min 11/10)
+     (cons 'runtime-over-alist-ab micro-ab)
      (cons 'micro-receipt-us micro-receipt-us)
      (cons 'micro-receipt-average-us
            (json-schema-contract-performance-average-us
@@ -247,10 +247,10 @@
         (check-equal?
          (>= (json-schema-contract-performance-ref
               receipt
-              'native-over-alist-speedup)
+              'runtime-over-alist-speedup)
              (json-schema-contract-performance-ref
               receipt
-              'native-over-alist-speedup-min))
+              'runtime-over-alist-speedup-min))
          #t)
         (json-schema-contract-performance-check-budget!
          'micro-receipt-average-us

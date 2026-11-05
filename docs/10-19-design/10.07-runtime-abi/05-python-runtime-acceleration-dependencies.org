@@ -7,7 +7,7 @@
 * Boundary
 
 The Python runtime package uses acceleration dependencies only below the POO
-Flow strategy boundary.  POO-native policy families and functional strategy
+Flow strategy boundary.  POO policy families and functional strategy
 combinators remain the source of strategy semantics.
 
 * AnyIO
@@ -31,7 +31,7 @@ entry points through the runtime adapter layer and preserves ordered batch
 results.
 
 Async graph entry points await async node actions and async conditional routers.
-This lets Python agent runtimes attach native async tools or model calls without
+This lets Python agent runtimes attach runtime async tools or model calls without
 changing Agentic AI Lab graph semantics.
 
 Threaded runtime execution is also async-aware.  =ainvoke_thread= stores

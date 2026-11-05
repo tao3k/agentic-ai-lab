@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Native values; original ASCENT replay owns all derivation semantics.
+;;; Runtime values; original ASCENT replay owns all derivation semantics.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :clan/poo/mop define-type Type. validate)
         (only-in :std/crypto/digest sha256) (only-in :std/encoding/hex hex-encode)
@@ -103,7 +103,7 @@
    (agentic-ai-lab-temporal-positive-proof-replay admission snapshot candidate receipt steps nodes)
    program snapshot candidate receipt))
 
-;; Consume a canonical native replay result only within this derivation call.
+;; Consume a canonical runtime replay result only within this derivation call.
 ;; Public entrypoints always run the original ASCENT evaluator first.
 (def (rule-from-verified verified program snapshot candidate receipt)
   (unless (tag? program 'temporal.rule-program.v1) (error "invalid rule program kind"))
@@ -154,7 +154,7 @@
         source-authenticated? selection-admitted? action-authorized? durable?))
       (error "rule correspondence replay mismatch")) canonical))
 
-;;; Named owner handoff: native POO program/output to original ASCENT candidate.
+;;; Named owner handoff: POO program/output to original ASCENT candidate.
 ;;; This bounded projection is for trusted adapters, not a general user DSL.
 (def (agentic-ai-lab-temporal-rule-program-ascent-query program snapshot output)
   (let* ((canonical (agentic-ai-lab-temporal-rule-program (.ref program 'identity) (.ref program 'catalog-digest)

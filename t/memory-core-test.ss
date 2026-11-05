@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO-native memory specs and catalog validation.
+;;; Boundary: POO memory specs and catalog validation.
 ;;; Invariant: Scheme builds memory handoff receipts only; no backend runs.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)

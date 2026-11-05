@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import pytest
 from agentic_ai_lab_testing.model_study import archive
 from agentic_ai_lab_testing.model_study import shared_repair as repair
-from agentic_ai_lab_testing.model_study.support_native import score
+from agentic_ai_lab_testing.model_study.support_runtime import score
 
 REFERENCE = '\n'.join([
     *(f'{g}\tcomplete\t((0 {n}))\tvalid\tvalid\ttask-shape\t()'
@@ -27,7 +27,7 @@ def test_repairs_share_seed_and_hold_out_semantic_discriminators(tmp_path, monke
     for task in repair.TASKS:
         common = f'contract; task; shared {task} seed'
         files[f'{task}.self.txt'] = common + '\n' + repair.SELF
-        files[f'{task}.native.txt'] = common + '\n' + repair.NATIVE.format(observation='invalid-form (clause 8 body 3)')
+        files[f'{task}.runtime.txt'] = common + '\n' + repair.RUNTIME.format(observation='invalid-form (clause 8 body 3)')
     result = repair.run(SimpleNamespace(responses=SimpleNamespace(create=create)),
                         files, tmp_path, tmp_path, tmp_path)
     assert len(calls) == 4 and all(value['correct'] for value in result.values())
@@ -35,7 +35,7 @@ def test_repairs_share_seed_and_hold_out_semantic_discriminators(tmp_path, monke
         'contract; task; shared compute seed', 'contract; task; shared compute seed',
         'contract; task; shared filter seed', 'contract; task; shared filter seed']
     assert all('((0 12))' not in item[0]['content'] for item in calls)
-    assert [name for name in result] == ['compute.self', 'compute.native', 'filter.native', 'filter.self']
+    assert [name for name in result] == ['compute.self', 'compute.runtime', 'filter.runtime', 'filter.self']
 
 
 def test_seven_state_score_detects_guard_and_blocked_failures():
@@ -77,7 +77,7 @@ def test_repair_preview_rejects_modified_prompt_before_any_call(tmp_path, monkey
         (directory / name).write_bytes(raw)
     (directory / 'manifest.json').write_text(json.dumps(repair.metadata(ascent, poo, files)))
     assert repair.validate(directory, ascent, poo)['reference.tsv'] == REFERENCE
-    (directory / 'compute.native.txt').write_text('replacement prompt')
+    (directory / 'compute.runtime.txt').write_text('replacement prompt')
     with pytest.raises(RuntimeError, match='preview bytes'):
         repair.validate(directory, ascent, poo)
 

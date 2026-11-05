@@ -1,3 +1,4 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-capabilities agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-metadata agentic-ai-lab-sandbox-profile-by-name))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -17,7 +18,8 @@
                  check-true
         test-error
         test-suite)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         :yuanxu/module-system/selection/objects
         :agentic-ai-lab/modules/agent-sandbox/config
         (only-in "../user-interface/custom/my-module/profiles/session"
@@ -168,4 +170,4 @@
                         (scope . demo)
                         (poo-object . objects.nono-sandbox.profile)
                         (slot-operators . (override append remove))
-                        (authoring-style . native-gerbil-poo)))))))
+                        (authoring-style . runtime-gerbil-poo)))))))

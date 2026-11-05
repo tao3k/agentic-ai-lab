@@ -65,7 +65,7 @@
                  (<= (length (positive-proof-nodes proof)) max-nodes)
                  (andmap (lambda (n) (not (eq? (proof-node-kind n) 'candidate))) (positive-proof-nodes proof)))
       (error "proof profile requires bounded source-only positive evidence"))
-    ;; Recompute the native query once; never trust caller-supplied completion/rows.
+    ;; Recompute the runtime query once; never trust caller-supplied completion/rows.
     (let* ((fresh (reasoning-attempt source owned-candidate work-steps))
            (rows-value (reasoning-receipt-rows fresh))
            (candidate-digest-value (reasoning-receipt-candidate-digest fresh)))
@@ -75,7 +75,7 @@
                    (candidate-same-row-set? rows-value (reasoning-receipt-rows receipt))
                    (candidate-verify-positive-proof source spec candidate-digest-value
                      (reasoning-receipt-status fresh) rows-value proof max-nodes))
-        (error "native query or original evaluator proof replay rejected"))
+        (error "runtime query or original evaluator proof replay rejected"))
       (let* ((query-value (candidate-copy-pairs (positive-proof-query proof)))
              (proof-data (candidate-copy-pairs
                (list (positive-proof-work-budget proof) (map node-row (positive-proof-nodes proof))

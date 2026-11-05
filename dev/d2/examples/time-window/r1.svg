@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" data-vector-surface width="1600" height="1280" viewBox="0 0 1600 1280" role="img" aria-label="Two time windows over one Context: late evidence changes explanations and keeps knowledge scoped">
+<defs><marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L11 6L1 11Z" fill="context-stroke"/></marker></defs>
+<rect x="0" y="0" width="1600" height="1280" rx="0" fill="#FBFCF8" stroke="none" stroke-width="2"/>
+<text x="60" y="65" font-size="42" fill="#244957" font-weight="700" text-anchor="start">A late result can change an earlier idea.</text>
+<text x="62" y="106" font-size="24" fill="#476873" font-weight="400" text-anchor="start">Time opens a view. Evidence changes the explanation. Knowledge keeps its limits.</text>
+<rect x="120" y="146" width="640" height="60" rx="16" fill="#DEF0E9" stroke="#A5CCC1" stroke-width="2"/>
+<text x="143" y="184" font-size="23" fill="#21867D" font-weight="700" text-anchor="start">Window A / events before 20 / known by 15</text>
+<rect x="120" y="216" width="1280" height="60" rx="16" fill="#EEEBF7" stroke="#BDB3D4" stroke-width="2"/>
+<text x="143" y="254" font-size="23" fill="#796D9E" font-weight="700" text-anchor="start">Window B / events before 40 / known by 40</text>
+<path d="M120 299H1490" fill="none" stroke="#8DA6AD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M120 293V305" fill="none" stroke="#8DA6AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="120" y="329" font-size="20" fill="#476873" font-weight="400" text-anchor="middle">0</text>
+<path d="M440 293V305" fill="none" stroke="#8DA6AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="440" y="329" font-size="20" fill="#476873" font-weight="400" text-anchor="middle">10</text>
+<path d="M504 293V305" fill="none" stroke="#8DA6AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="504" y="329" font-size="20" fill="#476873" font-weight="400" text-anchor="middle">12</text>
+<path d="M600 293V305" fill="none" stroke="#8DA6AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="600" y="329" font-size="20" fill="#476873" font-weight="400" text-anchor="middle">15</text>
+<path d="M760 293V305" fill="none" stroke="#8DA6AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="760" y="329" font-size="20" fill="#476873" font-weight="400" text-anchor="middle">20</text>
+<path d="M1080 293V305" fill="none" stroke="#8DA6AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1080" y="329" font-size="20" fill="#476873" font-weight="400" text-anchor="middle">30</text>
+<path d="M1400 293V305" fill="none" stroke="#8DA6AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1400" y="329" font-size="20" fill="#476873" font-weight="400" text-anchor="middle">40</text>
+<circle cx="504" cy="299" r="7" fill="#C19750" stroke="none" stroke-width="2"/>
+<circle cx="1080" cy="299" r="7" fill="#796D9E" stroke="none" stroke-width="2"/>
+<path d="M508 344C650 372 899 372 1075 344" fill="none" stroke="#C19750" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="390" y="365" font-size="21" fill="#99743B" font-weight="400" text-anchor="start">Failed control happened at 12</text>
+<text x="1080" y="365" font-size="21" fill="#796D9E" font-weight="400" text-anchor="middle">Result received at 30</text>
+<rect x="40" y="397" width="1520" height="603" rx="28" fill="#EEF6F1" stroke="#C6DDD3" stroke-width="2"/>
+<text x="68" y="438" font-size="25" fill="#21867D" font-weight="700" text-anchor="start">ONE CONTEXT / two views of the same history</text>
+<path d="M790 473V900" fill="none" stroke="#D1E2D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="85" y="484" font-size="29" fill="#244957" font-weight="700" text-anchor="start">Known by 15</text>
+<text x="845" y="484" font-size="29" fill="#244957" font-weight="700" text-anchor="start">Known by 40</text>
+<text x="86" y="517" font-size="21" fill="#476873" font-weight="400" text-anchor="start">One observation gives us a lead.</text>
+<text x="846" y="517" font-size="21" fill="#476873" font-weight="400" text-anchor="start">A late counterexample changes the picture.</text>
+<g data-object="clean-run" data-view="early">
+<g transform="translate(106 552) scale(1)">
+<path d="M0 86H198" fill="none" stroke="#345666" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="17" cy="94" r="12" fill="#9CB6BE" stroke="none" stroke-width="2"/>
+<circle cx="177" cy="94" r="12" fill="#9CB6BE" stroke="none" stroke-width="2"/>
+<rect x="18" y="0" width="158" height="88" rx="15" fill="#FFFFFF" stroke="#9CB6BE" stroke-width="2"/>
+<rect x="35" y="16" width="124" height="42" rx="6" fill="#E1EEEB" stroke="none" stroke-width="2"/>
+<rect x="44" y="27" width="24" height="20" rx="4" fill="#7DAFA7" stroke="none" stroke-width="2"/>
+<rect x="79" y="27" width="24" height="20" rx="4" fill="#7DAFA7" stroke="none" stroke-width="2"/>
+<rect x="114" y="27" width="24" height="20" rx="4" fill="#7DAFA7" stroke="none" stroke-width="2"/>
+<path d="M62 68h67" fill="none" stroke="#9CB6BE" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="197" cy="15" r="24" fill="#E4F3EB" stroke="#208B7F" stroke-width="2"/>
+<path d="M186 15l8 9 17-22" fill="none" stroke="#208B7F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="205" y="700" font-size="23" fill="#244957" font-weight="700" text-anchor="middle">Clean rebuild passed</text>
+</g>
+<path d="M357 608H480" fill="none" stroke="#21867D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="419" y="589" font-size="20" fill="#21867D" font-weight="400" text-anchor="middle">supports</text>
+<g data-object="stale-inputs" data-view="early">
+<g transform="translate(502 546) scale(1.2)">
+<path d="M12 80l58-22 54 21-58 23Z" fill="#E1C696" stroke="#C29A5E" stroke-width="2"/>
+<path d="M21 58l58-22 54 21-58 23Z" fill="#EAD6B2" stroke="#C29A5E" stroke-width="2"/>
+<path d="M30 36l58-22 54 21-58 23Z" fill="#F9EBD3" stroke="#C29A5E" stroke-width="2"/>
+<path d="M126 6l8-9m9 28h12m-19 22 8 7" fill="none" stroke="#C29A5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="35" cy="2" r="3" fill="#C29A5E" stroke="none" stroke-width="2"/>
+<circle cx="9" cy="35" r="2" fill="#C29A5E" stroke="none" stroke-width="2"/>
+</g>
+<text x="583" y="701" font-size="23" fill="#9A753F" font-weight="700" text-anchor="middle">Old generated inputs?</text>
+</g>
+<text x="85" y="771" font-size="23" fill="#476873" font-weight="400" text-anchor="start">A useful lead, not a proven cause.</text>
+<text x="85" y="810" font-size="22" fill="#99743B" font-weight="400" text-anchor="start">The failed control is not known yet.</text>
+<text x="85" y="850" font-size="21" fill="#476873" font-weight="400" text-anchor="start">POO preserves objects and earlier versions.</text>
+<g data-object="clean-run" data-view="later">
+<circle cx="880" cy="565" r="24" fill="#E4F3EB" stroke="#208B7F" stroke-width="2"/>
+<path d="M869 565l8 9 17-22" fill="none" stroke="#208B7F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="918" y="572" font-size="20" fill="#21867D" font-weight="400" text-anchor="start">Pass retained</text>
+</g>
+<g data-object="counterexample" data-view="later">
+<g transform="translate(1135 550) scale(0.78)">
+<path d="M0 86H198" fill="none" stroke="#345666" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="17" cy="94" r="12" fill="#9CB6BE" stroke="none" stroke-width="2"/>
+<circle cx="177" cy="94" r="12" fill="#9CB6BE" stroke="none" stroke-width="2"/>
+<rect x="18" y="0" width="158" height="88" rx="15" fill="#FFFFFF" stroke="#9CB6BE" stroke-width="2"/>
+<rect x="35" y="16" width="124" height="42" rx="6" fill="#E1EEEB" stroke="none" stroke-width="2"/>
+<rect x="44" y="27" width="24" height="20" rx="4" fill="#7DAFA7" stroke="none" stroke-width="2"/>
+<rect x="79" y="27" width="24" height="20" rx="4" fill="#7DAFA7" stroke="none" stroke-width="2"/>
+<rect x="114" y="27" width="24" height="20" rx="4" fill="#D6B878" stroke="none" stroke-width="2"/>
+<path d="M62 68h67" fill="none" stroke="#9CB6BE" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="197" cy="15" r="24" fill="#FFF0E4" stroke="#BA7940" stroke-width="2"/>
+<path d="M188 6l18 18m0-18-18 18" fill="none" stroke="#BA7940" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="1220" y="672" font-size="23" fill="#244957" font-weight="700" text-anchor="middle">Control run still failed</text>
+</g>
+<path d="M1182 688C1150 712 1037 716 1018 747" fill="none" stroke="#B98542" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="1082" y="716" font-size="20" fill="#A67535" font-weight="400" text-anchor="middle">conflicts</text>
+<path d="M1268 688C1307 713 1354 716 1371 747" fill="none" stroke="#21867D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="1390" y="718" font-size="20" fill="#21867D" font-weight="400" text-anchor="middle">supports</text>
+<path d="M880 596V744H924" fill="none" stroke="#21867D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="866" y="698" font-size="24" fill="#21867D" font-weight="700" text-anchor="middle">+</text>
+<g data-object="stale-inputs" data-view="later">
+<g transform="translate(929 746) scale(0.8)">
+<path d="M12 80l58-22 54 21-58 23Z" fill="#E1C696" stroke="#C29A5E" stroke-width="2"/>
+<path d="M21 58l58-22 54 21-58 23Z" fill="#EAD6B2" stroke="#C29A5E" stroke-width="2"/>
+<path d="M30 36l58-22 54 21-58 23Z" fill="#F9EBD3" stroke="#C29A5E" stroke-width="2"/>
+<path d="M126 6l8-9m9 28h12m-19 22 8 7" fill="none" stroke="#C29A5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="35" cy="2" r="3" fill="#C29A5E" stroke="none" stroke-width="2"/>
+<circle cx="9" cy="35" r="2" fill="#C29A5E" stroke="none" stroke-width="2"/>
+</g>
+<text x="988" y="885" font-size="23" fill="#9A753F" font-weight="700" text-anchor="middle">Old inputs?</text>
+</g>
+<g data-object="compiler-abi" data-view="later">
+<g transform="translate(1287 753)">
+<path d="M0 54h24m113 0h33" fill="none" stroke="#6C8798" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M23 23h45v63H23q-13-30 0-63Z" fill="#E1EAF4" stroke="#7698B3" stroke-width="3"/>
+<path d="M68 36h18m-18 36h18" fill="none" stroke="#7698B3" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M140 23H98v63h42q12-30 0-63Z" fill="#EBE6F5" stroke="#9A8CB5" stroke-width="3"/>
+<circle cx="108" cy="47" r="5" fill="#9A8CB5" stroke="none" stroke-width="2"/>
+<circle cx="108" cy="62" r="5" fill="#9A8CB5" stroke="none" stroke-width="2"/>
+<path d="M90 8l-5 12m15 81 5 12" fill="none" stroke="#C49D59" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="1372" y="885" font-size="22" fill="#796D9E" font-weight="700" text-anchor="middle">Compiler / ABI mismatch?</text>
+</g>
+<text x="1109" y="925" font-size="23" fill="#244957" font-weight="700" text-anchor="middle">Both explanations remain open.</text>
+<path d="M70 950H1530" fill="none" stroke="#C6DDD3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="85" y="980" font-size="23" fill="#21867D" font-weight="700" text-anchor="start">ASCENT keeps support, conflict and their evidence connected.</text>
+<text x="68" y="1055" font-size="29" fill="#244957" font-weight="700" text-anchor="start">What could become long-term knowledge?</text>
+<text x="70" y="1100" font-size="23" fill="#476873" font-weight="400" text-anchor="start">Keep a method together with its scope</text>
+<text x="70" y="1132" font-size="23" fill="#476873" font-weight="400" text-anchor="start">and the counterexamples that limit it.</text>
+<text x="70" y="1187" font-size="24" fill="#99743B" font-weight="700" text-anchor="start">Time alone cannot promote an idea.</text>
+<path d="M835 1060Q950 1032 1065 1060Q1180 1032 1320 1060V1220Q1190 1190 1065 1220Q950 1190 835 1220Z" fill="#FFFDF4" stroke="#C6AF7D" stroke-width="3"/>
+<path d="M1065 1061V1220" fill="none" stroke="#C6AF7D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="865" y="1100" font-size="24" fill="#9A753F" font-weight="700" text-anchor="start">Method</text>
+<text x="865" y="1137" font-size="21" fill="#476873" font-weight="400" text-anchor="start">Proposed diagnosis</text>
+<text x="865" y="1173" font-size="21" fill="#9A753F" font-weight="400" text-anchor="start">Still under review</text>
+<text x="1090" y="1100" font-size="23" fill="#9A753F" font-weight="700" text-anchor="start">Limits travel with it</text>
+<text x="1090" y="1137" font-size="21" fill="#476873" font-weight="400" text-anchor="start">Scope: source-v1</text>
+<text x="1090" y="1173" font-size="20" fill="#476873" font-weight="400" text-anchor="start">Failed control retained</text>
+<path d="M1430 1190C1514 1180 1530 1069 1460 1043" fill="none" stroke="#796D9E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+<text x="1418" y="1091" font-size="21" fill="#796D9E" font-weight="400" text-anchor="middle">Reuse</text>
+<text x="1418" y="1120" font-size="21" fill="#796D9E" font-weight="400" text-anchor="middle">reopens</text>
+<text x="1418" y="1149" font-size="21" fill="#796D9E" font-weight="400" text-anchor="middle">questions</text>
+<text x="69" y="1253" font-size="23" fill="#796D9E" font-weight="700" text-anchor="start">Model exploration stays open: what else could explain the failed control?</text>
+</svg>

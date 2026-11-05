@@ -12,7 +12,8 @@
                  test-suite)
         (only-in :clan/poo/object .ref)
         :yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
         (only-in "../user-interface/custom/my-module/cases/funflow-cicd"
                  agentic-ai-lab-custom-my-module-funflow-cicd-case)
         (only-in "../user-interface/custom/my-module/cases/loop-engine"

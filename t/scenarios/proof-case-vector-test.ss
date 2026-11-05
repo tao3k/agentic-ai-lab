@@ -47,7 +47,7 @@
   (make-proof-case (digest-byte #x11)))
 
 (def proof-case-vector-test
-  (test-suite "AC-09 Scheme native proof vector"
+  (test-suite "AC-09 Scheme runtime proof vector"
     (yuanxu-test-case "caller-owned write follows the canonical layout"
       (let ((canonical
              (hex-decode

@@ -5,7 +5,7 @@
 ;;; Initial anchors are document IDs and IDs of selected ordinary headlines.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/list/list every delete-duplicates/hash find)
-        (only-in :agentic-ai-lab/modules/query/semantic/orgize-source-interface parse-org-native-events
+        (only-in :agentic-ai-lab/modules/query/semantic/orgize-source-interface parse-org-events
                  org-source-headline-parser-identity)
         "types.ss" "objects.ss" "funs-projection.ss" "funs-scope.ss")
 (export agentic-ai-lab-ai-agentic-context-org-anchors agentic-ai-lab-ai-agentic-context-org-anchors-replay)
@@ -15,7 +15,7 @@
 (def (slice bytes start end) (utf8->string (subu8vector bytes start end)))
 (def (source-properties source)
   (let* ((bytes (string->utf8 source)) (size (u8vector-length bytes))
-         (events (parse-org-native-events source)))
+         (events (parse-org-events source)))
     (let ((stack '()) (offset 0) (roots 0) (properties '()))
       (for-each (lambda (event)
         (unless (pair? event) (error "Invalid Orgize structural event"))

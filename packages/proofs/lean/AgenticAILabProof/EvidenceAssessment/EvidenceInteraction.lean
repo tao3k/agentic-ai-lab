@@ -2,7 +2,7 @@
 -- SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 /-! Local evidence validity and temporal observations have separate owners.
 These laws assume a trusted domain checker; they do not prove model intent,
-the native query kernel, or efficacy of model feedback. -/
+the runtime query kernel, or efficacy of model feedback. -/
 namespace AgenticAILabProof.EvidenceInteraction
 inductive Verdict where
   | supported | contradicted | unknown

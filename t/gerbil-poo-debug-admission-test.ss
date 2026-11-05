@@ -25,8 +25,8 @@
 (def (contains? text fragment) (if (string-contains text fragment) #t #f))
 
 (def gerbil-poo-debug-admission-test
-  (test-suite "native POO debug admission"
-    (yuanxu-test-case "DDT uses the explicit native Type projection and preserves result"
+  (test-suite "POO debug admission"
+    (yuanxu-test-case "DDT uses the explicit Type projection and preserves result"
       (let ((port (open-output-string)) (evaluations 0))
         (parameterize ((current-error-port port))
           (check-equal? (DDT 'typed DebugSymbol

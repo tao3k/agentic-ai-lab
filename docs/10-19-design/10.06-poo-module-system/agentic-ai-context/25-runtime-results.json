@@ -1,16 +1,16 @@
 {
   "schema": "context.runtime.framework-results.v1",
-  "status": "native-qualified-exact-replay-performance-open",
+  "status": "runtime-qualified-exact-replay-performance-open",
   "optimized_throughput_claim": false,
   "distributed_runtime_implemented": false,
   "limits": {
     "heap": "2G",
     "minimum_heap": "1G",
-    "native_watchdog_seconds": 150,
+    "runtime_watchdog_seconds": 150,
     "no_chunking": true,
     "no_forced_gc": true
   },
-  "native_paths": 360,
+  "runtime_paths": 360,
   "cold_runs": [
     {
       "label": "qualification",
@@ -138,7 +138,7 @@
       "path": "/private/tmp/context-cold-diagnosis-20261026/core-issuer-final/process.json",
       "sha256": "88a9db9e15a33d728e9092771fe2e7ad03debd787018fc0fddc04072eb6f7ee9"
     },
-    "native_log": {
+    "runtime_log": {
       "path": "/private/tmp/context-cold-diagnosis-20261026/core-issuer-final/native.log",
       "sha256": "ff4a880bf4d0c69d3372ad5280c372806a13408719501236b95eadbf719137ab"
     },
@@ -157,7 +157,7 @@
     },
     "in_process_make_experiment_selected": false
   },
-  "native_regressions": {
+  "runtime_regressions": {
     "bootstrap_before": {
       "path": "/private/tmp/context-cold-diagnosis-20261026/bootstrap-before-v2/native.log",
       "sha256": "092f55a71e1be1e99c07408f3bc350d372bf600fb98589bf92d451b079f33624"
@@ -429,7 +429,7 @@
     "itf_replay_traces": 56,
     "finite_scope": "one affected authority domain, two owner epochs, two Attempts, two policy revisions, one withdrawal, two affected consumers and an independent consumer",
     "liveness_proved": false,
-    "native_refinement_proved": false
+    "runtime_refinement_proved": false
   },
   "custody": {
     "path": "/private/tmp/context-runtime-framework-custody-20261026/manifest.json",

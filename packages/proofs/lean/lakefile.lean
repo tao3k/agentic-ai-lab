@@ -24,7 +24,7 @@ lean_lib AgenticAILabProof where
   roots := #[`AgenticAILabProof]
 
 /-!
-Native module libraries mirror proof-bearing owners under `modules`.
+Runtime module libraries mirror proof-bearing owners under `modules`.
 Lake derives each complete import closure from these roots; no external scanner
 or changed-file projection owns the proof graph. `AgenticAILabProof` above remains
 the explicit repository-wide integration aggregate.
@@ -87,16 +87,16 @@ lean_lib AgenticAILabModuleMemoryCoreProof where
     `AgenticAILabProof.PooC4.RecoveryPolicyAuthorization
   ]
 
-target proof_native.o (pkg : NPackage __name__) : FilePath := do
-  let src := pkg.dir / "native" / "agentic_ai_lab_proof_ffi.c"
-  let obj := pkg.buildDir / "native" / "agentic_ai_lab_proof_ffi.o"
+target proof_runtime.o (pkg : NPackage __name__) : FilePath := do
+  let src := pkg.dir / "runtime" / "agentic_ai_lab_proof_ffi.c"
+  let obj := pkg.buildDir / "runtime" / "agentic_ai_lab_proof_ffi.o"
   buildFileAfterDep obj (← inputFile src true) fun srcFile => do
     let leanDir := (← getLeanIncludeDir).toString
     compileO obj srcFile #["-I", leanDir, "-fPIC"]
 
-extern_lib proof_native (pkg : NPackage __name__) := do
-  let name := nameToStaticLib "proof_native"
-  let obj ← fetch <| pkg.target ``proof_native.o
+extern_lib proof_runtime (pkg : NPackage __name__) := do
+  let name := nameToStaticLib "proof_runtime"
+  let obj ← fetch <| pkg.target ``proof_runtime.o
   buildStaticLib (pkg.buildDir / "lib" / name) #[obj]
 
 lean_exe ffiSmoke where
@@ -105,23 +105,23 @@ lean_exe ffiSmoke where
 lean_exe agenticAiLabDeclarationClosure where
   root := `AgenticAILabProof.Export.DeclarationClosure
 
-target cedar_native_probe.o (pkg : NPackage __name__) : FilePath := do
-  let src := pkg.dir / "native" / "cedar_native_probe.c"
-  let obj := pkg.buildDir / "native" / "cedar_native_probe.o"
+target cedar_runtime_probe.o (pkg : NPackage __name__) : FilePath := do
+  let src := pkg.dir / "runtime" / "cedar_runtime_probe.c"
+  let obj := pkg.buildDir / "runtime" / "cedar_runtime_probe.o"
   buildFileAfterDep obj (← inputFile src true) fun srcFile => do
     let leanDir := (← getLeanIncludeDir).toString
     compileO obj srcFile #["-I", leanDir, "-O2", "-Wall", "-Wextra", "-Werror", "-pthread"]
 
--- A C-owned main calls Lean's exported function on a dedicated native thread.
+-- A C-owned main calls Lean's exported function on a dedicated runtime thread.
 -- Lake owns the transitive object graph, just as for the diagnostic executable.
-lean_exe cedarNativeProbe where
-  root := `AgenticAILabProof.Runtime.CedarNative
-  moreLinkObjs := #[cedar_native_probe.o]
+lean_exe cedarRuntimeProbe where
+  root := `AgenticAILabProof.Runtime.CedarRuntime
+  moreLinkObjs := #[cedar_runtime_probe.o]
   moreLinkArgs := #["-pthread"]
 
 target cedar_runtime_host.o (pkg : NPackage __name__) : FilePath := do
-  let src := pkg.dir / "native" / "cedar_runtime_host.c"
-  let obj := pkg.buildDir / "native" / "cedar_runtime_host.o"
+  let src := pkg.dir / "runtime" / "cedar_runtime_host.c"
+  let obj := pkg.buildDir / "runtime" / "cedar_runtime_host.o"
   buildFileAfterDep obj (← inputFile src true) fun srcFile => do
     let leanDir := (← getLeanIncludeDir).toString
     compileO obj srcFile #["-I", leanDir, "-O2", "-Wall", "-Wextra", "-Werror", "-pthread"]

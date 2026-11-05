@@ -10,7 +10,7 @@
 ASCENT owns the Scheme implementation and its qualification tests.
 Python Testing reads the pinned ASCENT modules, presents them to a real
 model, records responses, and compares short answer data. This protocol
-adds no Scheme program or native test fixture to Python Testing. The
+adds no Scheme program or runtime test fixture to Python Testing. The
 earlier Scheme execution pilots remain in Git history with their raw
 result receipts; they do not define this current model input.
 
@@ -25,15 +25,15 @@ separately in the external preview and is never sent to the model.
 | Question | ASCENT source | Existing qualification evidence |
 |----------+---------------+---------------------------------|
 | Fragment names are fresh across builder calls | =program/scheme-language.ss= | =t/qualification/scheme-operator-test.ss=, fresh fragment case |
-| Diagnostic code/path for a body failure | =program/scheme-admission.ss= | =t/qualification/scheme-native-language-test.ss=, failing body case |
-| Diagnostic code/path for a head failure | =program/scheme-admission.ss= | =t/qualification/scheme-native-language-test.ss=, failing head case |
+| Diagnostic code/path for a body failure | =program/scheme-admission.ss= | =t/qualification/scheme-contract-language-test.ss=, failing body case |
+| Diagnostic code/path for a head failure | =program/scheme-admission.ss= | =t/qualification/scheme-contract-language-test.ss=, failing head case |
 | Finite verification returns =valid= after success | =candidate/reasoning.ss= | =t/qualification/ascent-reasoning-library-test.ss=, finite verifier case |
 | A different source generation invalidates an old receipt | =candidate/reasoning.ss= | =reasoning-receipt-bound?= generation check and stale-source qualification case |
 
 The diagnostic questions use the zero-based locations already checked in
 ASCENT. The generation question holds source rows and candidate fixed so
 the generation binding is the only changed fact. These are questions
-about the documented native contract, not a new Python-owned semantics.
+about the documented runtime contract, not a new Python-owned semantics.
 
 * Fixed call and scoring rule
 
@@ -79,7 +79,7 @@ balanced-parenthesis check. Three exactly match their answer keys.
 | =receipt_generation= | =(answer invalid)= | yes | Correct stale-generation verdict. |
 
 The diagnostic-body mismatch is a serialization error under the fixed
-scoring rule; its code and zero-based path agree with the native
+scoring rule; its code and zero-based path agree with the runtime
 =relational-admit/report= contract. The finite-receipt mismatch is a
 semantic error: =reasoning-verify-finite-receipt= delegates to the finite
 evidence verifier, whose successful verdict is =valid=. The raw result

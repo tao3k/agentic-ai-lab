@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 210"><g font-family="Inter,Arial,sans-serif" text-anchor="middle" fill="#234358"><rect x="42" y="18" width="266" height="170" rx="24" fill="#FFF1DF" stroke="#A3602F" stroke-width="4"/>
+<path d="M142 61a42 42 0 1 0 6 59m-6-59v25h-25" fill="none" stroke="#A3602F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<text data-visual-expression="replay-witness" x="110" y="112" font-size="41" fill="#753E1D">1</text>
+<text x="232" y="86" font-size="24">No replay</text>
+<path d="M180 79h107" stroke="#AE392F" stroke-width="4"/>
+<path d="m218 116 24 24m0-24-24 24" stroke="#AE392F" stroke-width="5" stroke-linecap="round"/><text x="109" y="167" font-size="24">Replay seen</text></g></svg>

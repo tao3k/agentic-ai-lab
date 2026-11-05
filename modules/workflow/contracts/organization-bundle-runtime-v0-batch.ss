@@ -73,7 +73,7 @@
          (cons 'required-evidence-bits evidence-bits-value)
          (cons 'reserved0 0))))
 
-(def (agentic-ai-lab-runtime-v0-event->native-fields event)
+(def (agentic-ai-lab-runtime-v0-event->runtime-fields event)
   (list (cons 'layout-version (.ref event 'layout-version))
         (cons 'header-bytes (.ref event 'header-bytes))
         (cons 'event-kind (.ref event 'event-kind))

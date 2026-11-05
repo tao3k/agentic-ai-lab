@@ -3,7 +3,7 @@
 import Lean
 namespace AgenticAILabOrgAnchorProof
 -- The parser owns rows; this law projects unique source lookup and selected ownership.
--- Natural-number cuts/scopes abstract exact native binding records, not hash injectivity.
+-- Natural-number cuts/scopes abstract exact runtime binding records, not hash injectivity.
 structure Anchor where
   id : Nat
   owner : Nat

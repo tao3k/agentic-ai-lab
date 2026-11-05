@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 #+TITLE: SGLang and vLLM: serving-time reasoning Library integration
-#+STATUS: deferred serving research; not the native Library architecture
+#+STATUS: deferred serving research; not the runtime Library architecture
 #+DATE: 2026-09-30
 #+FILETAGS: :research:llm:inference:serving:
 
@@ -18,10 +18,10 @@ tools.  It does not require changing model weights or treating either
 server as the owner of our rule semantics.
 
 This is parked interface research, not an implementation plan for the
-current Scheme Datalog Library. The Library uses native checked DSL and
+current Scheme Datalog Library. The Library uses runtime checked DSL and
 program values; no JSON candidate decoder or serving adapter is part of
 its internal architecture. Any future serving experiment needs a separate
-priority decision after the native program and AOT/FFI boundaries are
+priority decision after the runtime program and AOT/FFI boundaries are
 settled.
 
 #+NAME: serving-primary-sources
@@ -71,7 +71,7 @@ attempt ID, snapshot/program identities, typed status, diagnostics,
 rows or bounded witness/gap, and completion/bound flags.  The LLM caller
 receives that result as a =tool= message and may revise its candidate.
 Its name and argument representation are undecided; semantics would come
-from the native checked Library contract and the
+from the runtime checked Library contract and the
 [[file:index.org::#agent-inference-synthesis][LLM reasoning Library contract]], not either serving framework.
 
 #+NAME: serving-owner-boundaries

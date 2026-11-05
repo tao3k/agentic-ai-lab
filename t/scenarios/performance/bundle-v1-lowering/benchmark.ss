@@ -2,14 +2,15 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import :clan/poo/object
+(import (only-in :std/list/list map)
+        :clan/poo/object
         :yuanxu/feature-system/bundle-v1-lowering
         :yuanxu/utilities/functional)
 
 (def +agent-count+ 1000)
 
 (def (make-components count)
-  (yuanxu-map
+  (map
    (lambda (index)
      (feature-bundle-v1-component
       1 index
@@ -26,14 +27,14 @@
    (iota count)))
 
 (def (make-edges count)
-  (yuanxu-map
+  (map
    (lambda (index)
      (feature-bundle-v1-edge
       1 (- index 1) index 'depends-on (- index 1)))
    (iota (max 0 (- count 1)) 1)))
 
 (def (make-evidence count)
-  (yuanxu-map
+  (map
    (lambda (index)
      (feature-bundle-v1-evidence
       1 index
@@ -82,6 +83,6 @@
 (display "elapsed-seconds=")
 (display elapsed-seconds)
 (newline)
-(display "input-interface=poo-native\n")
-(display "layout=typed-native-regions\n")
+(display "input-interface=poo\n")
+(display "layout=typed-runtime-regions\n")
 (display "json-in-hot-path=false\n")

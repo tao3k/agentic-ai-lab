@@ -22,7 +22,7 @@ package AgenticAIContextArchitecture {
            Agent information context: content, interaction history and knowledge.
            Session remains an independent Module. This is an architecture model,
            not runtime classes, a second semantic authority or an API schema.
-           Public implementation remains native POO values and pure functions. */
+           Public implementation remains POO values and pure functions. */
 
     part def Orgize {
         doc /* External owner of Org syntax, Elements and structural selection. */
@@ -58,7 +58,7 @@ package AgenticAIContextArchitecture {
                foundation, not a timestamp helper. Compose causal cuts, declared
                inference profiles, original proofs, current registered owner
                applicability, support/retraction and Impact with time domains,
-               leases and revisit obligations. Reuse native semantic owners. */
+               leases and revisit obligations. Reuse runtime semantic owners. */
     }
     part def Evidence {
         doc /* External owner of assessment. Preserve competing hypotheses,
@@ -78,7 +78,7 @@ package AgenticAIContextArchitecture {
     part def GraphContextComposition {
         doc /* Bounded versioned compositions of ORG-bound facts, hypotheses,
                goals, environments, outcomes and unresolved alternatives.
-               Native POO / LeanPOO C3/C4 owns declared inheritance/override.
+               POO / LeanPOO C3/C4 owns declared inheritance/override.
                Composition precedence, revision provenance and prompt ordering
                are distinct. Source, composition and consumer graphs are distinct.
                Project roots and Worktree/domain/task increments retain exact
@@ -250,7 +250,7 @@ package AgenticAIContextArchitecture {
     dependency promotionObligation from discussionSystem::contextModule::memory to sourcePromotion;
 
     doc /* Requirements allocate obligations, not satisfaction assertions.
-           SysML acceptance is separate from requirement satisfaction and native
+           SysML acceptance is separate from requirement satisfaction and runtime
            correspondence. Existing Quint and Lean owners remain authoritative
            for their selected temporal questions and semantic laws. */
 }

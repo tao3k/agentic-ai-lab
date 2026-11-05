@@ -24,9 +24,9 @@ open SourceBoundProgressEvidenceClosure
 /-!
 # First-class recovery owner audit closure
 
-Owner-native receipts remain the authority for each recovery transition.  This
+Owner-runtime receipts remain the authority for each recovery transition.  This
 closure adds one canonical, cross-owner audit chain that preserves the exact
-native owner and receipt identities.  There is no compatibility, migration,
+runtime owner and receipt identities.  There is no compatibility, migration,
 legacy, or fallback interpretation.
 -/
 

@@ -1,3 +1,4 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile?))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -6,9 +7,7 @@
 ;;; Boundary: sandbox profile catalog extraction for module-system projections.
 ;;; Invariant: catalog helpers read user module selections but never resolve runtimes.
 
-(import (only-in :agentic-ai-lab/modules/agent-sandbox/config
-                 agentic-ai-lab-default-sandbox-profiles
-                 agentic-ai-lab-sandbox-profile?)
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/config agentic-ai-lab-default-sandbox-profiles)
         :yuanxu/module-system/selection/objects)
 
 (export agentic-ai-lab-user-module-selection-sandbox-profiles

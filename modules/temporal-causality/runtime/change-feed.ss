@@ -14,7 +14,7 @@
 (def (change-feed-watch! feed observer)
   (change-feed-open! feed)
   (unless (and (object? observer) (eq? (.ref observer 'kind) 'temporal.source-observer.v1)
-               (.slot? observer '.prepare)) (error "Expected native POO observer"))
+               (.slot? observer '.prepare)) (error "Expected POO observer"))
   (unless (memq observer (feed-state-observers feed))
     (when (>= (length (feed-state-observers feed)) 128) (error "Authority observer capacity"))
     (set! (feed-state-observers feed) (cons observer (feed-state-observers feed)))) observer)

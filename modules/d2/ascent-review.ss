@@ -1,0 +1,66 @@
+;;; -*- Gerbil -*-
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+;;; Open reader questions and source-bound review observations. Models supply
+;;; interpretations/critique; these rules expose gaps and revision obligations.
+(import (only-in :clan/poo/object .ref)
+        (only-in :gerbil-ascent/program/syntax ascent)
+        (only-in :gerbil-ascent/program/interface gerbil-ascent-evaluate-program))
+(export d2-review)
+(def (project-review objects slots)
+  (map (lambda (value) (map (lambda (slot) (.ref value slot)) slots)) objects))
+(def (d2-review input)
+  (gerbil-ascent-evaluate-program
+   (ascent
+    (relation View (view revision audience)
+      (project-review (.ref input 'views) '(identity revision audience)))
+    (relation Question (q audience subject)
+      (project-review (.ref input 'questions) '(identity audience subject)))
+    (relation Needs (q concept)
+      (project-review (.ref input 'needs) '(question concept)))
+    (relation Prerequisite (concept premise)
+      (project-review (.ref input 'prerequisites) '(concept premise)))
+    (relation Explains (view revision concept element)
+      (project-review (.ref input 'explanations) '(view revision concept element)))
+    (relation Feedback (finding view revision question verdict producer)
+      (project-review (.ref input 'feedback) '(identity view revision question verdict producer)))
+    ;; Qualified by the host/review owner, never derived from a model's assertion
+    ;; that it is a human. The example does not authenticate these inputs.
+    (relation LearnerCheck (finding audience)
+      (project-review (.ref input 'learner-checks) '(finding audience)))
+    (relation Needed (q concept))
+    (relation Covered (view revision concept))
+    (relation HasFeedback (view revision q))
+    (relation ExplanationGap (view revision q concept))
+    (relation Critique (view revision q finding))
+    (relation AwaitingReview (view revision q))
+    (relation UnsettledFeedback (view revision q finding))
+    (relation ReviewSupport (view revision q finding))
+    (relation LearnerSupport (view revision q finding))
+    (relation OpenQuestion (view revision q))
+
+    ((Needed Q C) <-- (Needs Q C))
+    ((Needed Q P) <-- (Needed Q C) (Prerequisite C P))
+    ((Covered V R C) <-- (Explains V R C Element))
+    ((ExplanationGap V R Q C) <-- (View V R A) (Question Q A Subject)
+      (Needed Q C) (not (Covered V R C)))
+    ((HasFeedback V R Q) <-- (View V R A) (Question Q A Subject)
+      (Feedback F V R Q Verdict Producer))
+    ((AwaitingReview V R Q) <-- (View V R A) (Question Q A Subject)
+      (not (HasFeedback V R Q)))
+    ((Critique V R Q F) <-- (View V R A) (Question Q A Subject)
+      (Feedback F V R Q (lit 'unclear) Producer))
+    ((ReviewSupport V R Q F) <-- (View V R A) (Question Q A Subject)
+      (Feedback F V R Q (lit 'understood) Producer))
+    ((UnsettledFeedback V R Q F) <-- (View V R A) (Question Q A Subject)
+      (Feedback F V R Q Verdict Producer)
+      (if (Verdict) (not (memq Verdict '(understood unclear)))))
+    ((LearnerSupport V R Q F) <-- (View V R A) (Question Q A Subject)
+      (Feedback F V R Q (lit 'understood) Producer) (LearnerCheck F A))
+    ((OpenQuestion V R Q) <-- (ExplanationGap V R Q C))
+    ((OpenQuestion V R Q) <-- (Critique V R Q F))
+    ((OpenQuestion V R Q) <-- (AwaitingReview V R Q))
+    ((OpenQuestion V R Q) <-- (UnsettledFeedback V R Q F))
+    ;; No rule turns a covered caption or model approval into "all pupils
+    ;; understand", nor forces every question into a prewritten prompt catalog.
+    (bounds 384 2048 4096))))

@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 // SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-// Finite read protocol; Agent reasoning and native evidence are external.
+// Finite read protocol; Agent reasoning and runtime evidence are external.
 module TrajectoryProgressiveAccess {
   const Mutation: str
   type State = {source: int, prefix: int, packetSource: int, packetPrefix: int,

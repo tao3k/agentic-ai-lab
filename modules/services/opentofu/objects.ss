@@ -34,7 +34,7 @@
 ;; Configuration admission is structural. Provider collection identity belongs
 ;; to the explicit collection-contract, never a prerequisite for configuration.
 ;; Only provider semantics live here. Classification and path diagnostics are
-;; supplied by the shared JSON Schema -> native admission adapter.
+;; supplied by the shared JSON Schema -> runtime admission adapter.
 (def (collection-step binding candidate context issue? lifetime emit path values literal?)
   (cond
    ((not binding) 'provider-set-identity-unresolved)
@@ -125,7 +125,7 @@
                     (checked-authority authority (cdr block-row) (cdddr path)))))))))
 
 ;; Compose selected generated input schemas, not raw provider exports. The
-;; selected native Contracts remain attached for provenance/inspection. This
+;; selected Contracts remain attached for provenance/inspection. This
 ;; structural boundary does not discharge collection identity or Provider RPC.
 (def (agentic-ai-lab-opentofu-configuration-from-types selected)
   (def (rows value) (yuanxu-json-schema-candidate-rows value))
@@ -160,7 +160,7 @@
                 '(provider resource data))))
        'selected-types selected))
 
-;; Package parsing is a lower role; native publication belongs to objects.
+;; Package parsing is a lower role; runtime publication belongs to objects.
 (def (required rows key)
   (or (yuanxu-contract-object-ref rows key #f)
       (error "provider-schema-field-missing" key)))
@@ -353,7 +353,7 @@
                (null? failures) (reverse failures) context)
              'children (reverse children))))))
 
-;; A module-level native Contract; each admission discovers only the current
+;; A module-level Contract; each admission discovers only the current
 ;; candidate's names. No SelectedTypes list or whole-catalog compilation.
 (.def OpenTofuConfiguration.
   .build-inputs: configuration-build-inputs

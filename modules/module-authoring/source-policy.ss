@@ -10,7 +10,6 @@
   (.o (:: @ SourceInspectionPolicy.)
       aggregate-imports:
       '(:yuanxu/modules/funflow/control-plane/api
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
         :yuanxu/feature-system/interface)
       package-prefix: ":agentic-ai-lab/"
       source-roots: '("./src/" "src/" "./modules/" "modules/")

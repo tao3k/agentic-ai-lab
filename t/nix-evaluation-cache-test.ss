@@ -55,12 +55,12 @@
           (def cold-summary (cadr summaries))
           (check-equal? (> (cdr (assq 'nix-gc-root-requests cold-summary)) 0) #t)
           (check-equal? (> (cdr (assq 'package-store-validity-requests cold-summary)) 0) #t)
-          ;; Inspect the already captured native records; extra Case counter
+          ;; Inspect the already captured runtime records; extra Case counter
           ;; categories would consume the finite observation budget.
           (check-equal? (and (string-contains first "getting root value") #t) #t)
           (check-equal? (string-contains second "getting root value") #f)
           (check-equal? (and (string-contains second "using cached string attribute") #t) #t)
-          ;; Disabling observation still keeps native progress records, and
+          ;; Disabling observation still keeps runtime progress records, and
           ;; neither a summary nor a currentness approval is retained globally.
           (def silent
             (call-with-output-string
@@ -71,14 +71,14 @@
                   (check-equal? (.call Source .instantiate) expected)))))
           (check-equal? (and (string-contains silent "@nix ") #t) #t)
           (check-equal? (length summaries) 2))))
-    (yuanxu-test-case "native fingerprints do not equate unchanged outputs with unchanged inputs"
+    (yuanxu-test-case "runtime fingerprints do not equate unchanged outputs with unchanged inputs"
       (call-with-temporary-directory "nix-input-identity"
         (lambda (root)
-          ;; Explicit source metadata is a controlled native input here, not a
+          ;; Explicit source metadata is a controlled runtime input here, not a
           ;; production normalization. A consumer can observe lastModified.
           (write-input (path-expand "flake.nix" root)
             (string-append
-              ;; A native content cache may outlive a temporary directory. Give
+              ;; A runtime content cache may outlive a temporary directory. Give
               ;; each fixture distinct input bytes rather than deleting caches
               ;; or assuming that another directory implies a cold fingerprint.
               "{ description = \"" (path-strip-directory root) "\"; "
@@ -105,7 +105,7 @@
           (check-equal? (traced? changed-metadata) #t)
           (check-equal? (derivation changed-metadata) (derivation cold))
           (check-equal? (traced? (query "2" "stable")) #f)
-          ;; The earlier fingerprint's native cache is still reusable. There
+          ;; The earlier fingerprint's runtime cache is still reusable. There
           ;; is no global eviction and no Scheme result/currentness cache.
           (check-equal? (traced? (query "1" "stable")) #f)
           (check-equal?
@@ -118,21 +118,21 @@
           (check-equal? (traced? changed-tree) #t)
           (check-equal? (derivation changed-tree) (derivation cold))
           (check-equal? (traced? (query "2" "stable")) #f))))
-    (yuanxu-test-case "explicit immutable path resolution retains native source hashing cache"
+    (yuanxu-test-case "explicit immutable path resolution retains runtime source hashing cache"
       (call-with-temporary-directory "nix-store-input"
         (lambda (root)
           (def input (path-expand "source" root))
           (create-directory input)
           (write-input (path-expand "value" input) (path-strip-directory root))
-          (def (native arguments)
+          (def (runtime arguments)
             (run-process arguments stdin-redirection: #f stderr-redirection: #f
               coprocess: read-all-as-string check-status: #t))
           (def stored
             (find (cut string-prefix? "/nix/store/" <>)
-              (string-split (native (list "nix-store" "--add" input)) #\newline)))
+              (string-split (runtime (list "nix-store" "--add" input)) #\newline)))
           (def metadata
             (call-with-input-string
-              (native (list "nix" "--extra-experimental-features" "nix-command flakes"
+              (runtime (list "nix" "--extra-experimental-features" "nix-command flakes"
                             "path-info" "--json" stored))
               (lambda (port) (read-json port key-as-symbol: #f object-as-hash: #t))))
           (def hash (hash-ref (hash-ref metadata stored) "narHash"))
@@ -144,7 +144,7 @@
               "name = \"immutable-source-input\"; system = \"aarch64-darwin\"; "
               "builder = \"/bin/sh\"; source = toString catalog; }; "
               "in { packages.aarch64-darwin = { direct = value; resolved = value; }; }; }"))
-          (native (list "nix" "--extra-experimental-features" "nix-command flakes"
+          (runtime (list "nix" "--extra-experimental-features" "nix-command flakes"
                         "flake" "lock" (string-append "path:" (path-normalize root))))
           (def lock (path-expand "flake.lock" root))
           (def lock-before (call-with-input-file lock read-all-as-string))
@@ -190,7 +190,7 @@
               "  };\n"
               "}; }\n"))
           (def (evaluate attribute (options '()))
-            ;; Capture native trace and result together. No new runner, cache,
+            ;; Capture runtime trace and result together. No new runner, cache,
             ;; dependencies, realization or timing-based cache inference.
             (run-process
               (append
@@ -231,7 +231,7 @@
           (check-equal? (and (string-contains changed "after") #t) #t)
           (check-equal? (traced? (derivation)) #t)
           (check-equal? (traced? (derivation)) #f))))
-    (yuanxu-test-case "explicit path input overrides retain native cache and transitive invalidation"
+    (yuanxu-test-case "explicit path input overrides retain runtime cache and transitive invalidation"
       (call-with-temporary-directory "nix-selected-input"
         (lambda (root)
           (def input (path-expand "input" (path-normalize root)))
@@ -286,7 +286,7 @@
           (check-equal? (traced? (query)) #f)
           (check-equal? (call-with-input-file lock read-all-as-string) lock-before)
           ;; An explicitly overridden data input does not authorize unrelated
-          ;; implicit dependency updates. Only native Nix enforces this gate.
+          ;; implicit dependency updates. Only runtime Nix enforces this gate.
           (def flake (path-expand "flake.nix" publication))
           (def text (call-with-input-file flake read-all-as-string))
           (write-input flake

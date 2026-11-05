@@ -4,7 +4,7 @@
 
 ;;; Boundary: durable artifact policy owns the Scheme-side artifact/profile
 ;;; contract before runtime, database, and Marlin handoff layers consume it.
-;;; Invariant: this module must keep profile objects POO-native while emitting
+;;; Invariant: this module must keep profile objects POO while emitting
 ;;; stable bounded receipts for policy and parser-owned validation.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :yuanxu/modules/funflow/control-plane/runtime-protocol
@@ -282,7 +282,7 @@
 ;; artifact-profile
 ;; : (-> Syntax DurableArtifactProfileExpansionSyntax)
 ;; | doc m%
-;;   Expand an artifact profile declaration into a POO-native durable artifact
+;;   Expand an artifact profile declaration into a POO durable artifact
 ;;   profile, optionally applying profile hooks.
 ;;   # Examples
 ;;   ```scheme

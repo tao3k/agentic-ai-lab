@@ -1,14 +1,14 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Strict owner wire projections of the native Library proof Host.
+;;; Strict owner wire projections of the runtime Library proof Host.
 (import (only-in :clan/poo/object .ref)
         :agentic-ai-lab/modules/temporal-causality/evaluator/proof-host
-        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-policy temporal-policy-native-host)
+        (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-policy temporal-policy-host-host)
         (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-proof temporal-derivation-context-input temporal-rule-program-input)
         (only-in :agentic-ai-lab/modules/workflow/runtime/temporal-support temporal-support-journal-input temporal-support-result))
 (export temporal-proof-state-refresh temporal-proof-register temporal-proof-current)
-(def host (agentic-ai-lab-temporal-proof-host (temporal-policy-native-host)))
+(def host (agentic-ai-lab-temporal-proof-host (temporal-policy-host-host)))
 (def (field x k)
   (unless (and (hash-table? x) (hash-key? x k)) (error "missing proof host field" k)) (hash-ref x k))
 (def (request x schema keys)
@@ -32,7 +32,7 @@
     (hash (schema "agentic-ai-lab.temporal-proof-register-result.v1") (abiVersion 1)
           (registration (.ref v 'identity)) (proofDigest (.ref v 'proof-digest))
           (originalStateDigest (.ref v 'original-state-digest)) (proofAdmitted (.ref v 'proof-admitted?))
-          (trustBasis "host-registered-source-relative-native-proof")
+          (trustBasis "host-registered-source-relative-runtime-proof")
           (sourceAuthenticated #f) (selectionAdmitted #f) (actionAuthorized #f) (durable #f))))
 (def (temporal-proof-current x)
   (request x "agentic-ai-lab.temporal-proof-current-request.v1"
@@ -49,5 +49,5 @@
             (coordinate (.ref now 'coordinate)) (provenance (.ref now 'provenance-identity)) (modality "observed")))
           (evaluation (temporal-support-result (.ref g 'evaluation)))
           (status (symbol->string (.ref v 'status))) (current (.ref v 'current?)) (proofAdmitted (.ref v 'proof-admitted?))
-          (trustBasis "host-registered-source-relative-native-proof")
+          (trustBasis "host-registered-source-relative-runtime-proof")
           (sourceAuthenticated #f) (selectionAdmitted #f) (actionAuthorized #f) (durable #f))))

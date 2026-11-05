@@ -35,7 +35,7 @@
 (def (claim host revision cut)
   (agentic-ai-lab-ai-agentic-context-session-host-claim! host "session" revision cut "attempt" "request"))
 (def ai-agentic-context-session-host-test
-  (test-suite "Serialized native Context Session claim owner"
+  (test-suite "Serialized runtime Context Session claim owner"
     (yuanxu-test-case "claim commits once at exact owner and source revisions"
       (let-values (((host grants policies) (setup)))
         (let (r (claim host 0 0))

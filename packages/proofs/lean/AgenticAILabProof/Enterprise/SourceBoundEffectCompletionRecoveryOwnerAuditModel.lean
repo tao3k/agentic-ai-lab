@@ -7,7 +7,7 @@ namespace AgenticAILabProof.Enterprise.SourceBoundEffectCompletionRecoveryOwnerA
 /-!
 # Independent recovery owner audit model
 
-This model separates owner-native receipt identity from the common audit chain.
+This model separates owner-runtime receipt identity from the common audit chain.
 It deliberately contains no compatibility, migration, legacy, or fallback
 semantics: a witness either satisfies the canonical audit contract or it is
 rejected.

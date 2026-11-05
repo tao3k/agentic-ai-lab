@@ -47,7 +47,7 @@ installation failure has a separate recovery path. Original interactions remain
 logged. This is close prior art. Versioned objects, evidence checks, atomic
 updates, unresolved obligations and recovery are not exclusive contributions.
 Its checks are not task-correctness proofs; our additional obligation is exact
-native inference/support applicability plus consumer/Attempt publication.
+runtime inference/support applicability plus consumer/Attempt publication.
 
 ** CLM
 
@@ -56,7 +56,7 @@ context file and lets it define context-management functions. Multiple files
 support multi-agent workflows. The paper also identifies persistent injection
 risks. Its key contribution is flexible learned control of context transitions;
 it should not be reduced to a fixed summarizer. In our design such edits can
-propose a working view, but text cannot mint proof registration, grant or native
+propose a working view, but text cannot mint proof registration, grant or runtime
 worker-observation authority. This boundary does not prove a model will reason
 correctly over the admitted view.
 
@@ -68,8 +68,8 @@ correctly over the admitted view.
 | Does this result follow from the selected original inference? | A source citation or equal output does not specify a proof root and required direct premises | ASCENT original replay and Rule/Derivation/support correspondence; source-relative bounded positive profile |
 | Is the proof applicable now? | A once-successful check or unchanged candidate revision does not resolve changed external support | Registered current program/journal/policy/support at the required cut; historical proof survives withdrawal |
 | May this consumer use it? | Cross-session storage and shared text do not transfer a grant or worker receipt | Scope, actor/task grant, consumer Session/Turn and Host-issued capabilities |
-| May this Attempt publish now? | A finished worker or successful representation installation is not the current Attempt owner | Expected revision/source, exact frozen input and one terminal publication through the native owner |
-| Does the generated answer actually use its admitted evidence? | Even complete retention and correct admission do not guarantee correct model selection/reasoning | Remains a separate end-to-end evaluation; not closed by these native tests |
+| May this Attempt publish now? | A finished worker or successful representation installation is not the current Attempt owner | Expected revision/source, exact frozen input and one terminal publication through the runtime owner |
+| Does the generated answer actually use its admitted evidence? | Even complete retention and correct admission do not guarantee correct model selection/reasoning | Remains a separate end-to-end evaluation; not closed by these runtime tests |
 
 These are contract differences to investigate, not evidence that an untested
 paper implementation lacks every corresponding safeguard. In particular, we do
@@ -94,7 +94,7 @@ relation to the original premise; current support is evaluated under the named
 cut and policy. A proof can remain historically admitted while current use is
 unsupported. A new owner binding can change the input contract even when proof
 bytes and the derived conclusion are equal. This removes reliance on an Agent
-remembering a warning in its prompt: the native publication boundary refuses
+remembering a warning in its prompt: the runtime publication boundary refuses
 an invalid use even when the proposed view says it is allowed.
 
 * Executable contract-omission matrix
@@ -102,8 +102,8 @@ an invalid use even when the proposed view says it is allowed.
 [[file:10-evidence-contract-comparison.sysml][The SysML v2 scenario]] executes four stages: retain originals, capture a
 working context/revision, change independent owners, then attempt publication.
 The model's candidate/view revision remains fixed when external support, grants
-or consumer/Attempt bindings change; it is not the native Session owner revision.
-In the native withdrawal case, the Session revision also happens to remain
+or consumer/Attempt bindings change; it is not the runtime Session owner revision.
+In the runtime withdrawal case, the Session revision also happens to remain
 unchanged until revalidation detects the external change. Four Boolean inputs cover withdrawal, revocation, foreign consumer and
 rebound Attempt. All 16 combinations run under the safe contract and four
 intentionally weakened contracts, for 80 executions.
@@ -126,15 +126,15 @@ The first CLI attempt had an unbound verification subject and was refused by
 the driver. The subject now explicitly defaults to its fixture. Only the bound
 80-case run and its four paired replays count as passes.
 
-* Native scenarios: actual stored outcomes
+* Runtime scenarios: actual stored outcomes
 
-Four new cases in [[file:../../../../t/temporal-evaluator-test.ss][the native suite]] call real original ASCENT proof replay,
+Four new cases in [[file:../../../../t/temporal-evaluator-test.ss][the runtime suite]] call real original ASCENT proof replay,
 proof/support/journal owners, registered grants, independent Session transitions,
-actual worker joins and the final native Context Host publication API.
+actual worker joins and the final runtime Context Host publication API.
 
-| Native scenario | Positive / retained facts | Adversarial operation and actual stored result |
+| Runtime scenario | Positive / retained facts | Adversarial operation and actual stored result |
 |-----------------+---------------------------+-----------------------------------------------|
-| archive | Original Context bytes, exact input digest and Session revision unchanged; original proof still historically admitted | Withdraw a required premise in the native journal. Current proof becomes ineligible; native result commit leaves no terminal result; matching actual cleanup publishes reconciled |
+| archive | Original Context bytes, exact input digest and Session revision unchanged; original proof still historically admitted | Withdraw a required premise in the runtime journal. Current proof becomes ineligible; runtime result commit leaves no terminal result; matching actual cleanup publishes reconciled |
 | editable-view | Genuine worker observation is available | A POO view copied from it with allow/proof flags is not an issued observation. Forgery throws before publication; the genuine observation also cannot bypass a revoked grant. Actual cleanup still publishes |
 | recall | Two Sessions share the same original registered inference | Borrowed actor/task grant is refused without enrollment; issue a fresh consumer grant, input and Attempt. Foreign receipt is refused; each genuine worker can publish independently. Later source withdrawal removes current use in BOTH histories |
 | rebind | Proof digest and result bytes remain equal | Register the same proof under another source owner. Rebind only while idle. Old terminal stays historical/ineligible and old observation cannot commit. A fresh Attempt under the new binding publishes; each Attempt has one terminal |
@@ -142,8 +142,8 @@ actual worker joins and the final native Context Host publication API.
 The archive case also performs a deliberately unsafe TEST-LOCAL publication into
 a separate mutable head using archive presence, historical admission and equal
 revision alone. The weak head contains an actual result payload; the production
-native owner refuses the same result after withdrawal. This is stronger than
-showing a completion intent, but is not a native production-code mutant and not
+runtime owner refuses the same result after withdrawal. This is stronger than
+showing a completion intent, but is not a runtime production-code mutant and not
 a paper runtime. Its printed counterexample is retained separately from the
 older pure old-snapshot completion-intent counterexample.
 
@@ -153,7 +153,7 @@ separately tests exact original premise/Rule/Derivation correspondence.
 
 These fixtures declare Fact/source correspondence; no real MRR producer, model
 provider, physical source authentication or arbitrary language-to-Fact mapping
-was established. The completed native boundary is local and serialized, not a
+was established. The completed runtime boundary is local and serialized, not a
 durable distributed transaction or a proof of source truth.
 
 * Reproduction and evidence
@@ -161,24 +161,24 @@ durable distributed transaction or a proof of source truth.
 #+begin_src sh
 python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-contract-comparison.py
 python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-contract-comparison.py --replay /absolute/path/counterexample-2.json
-python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-replay.py --exhaustive
-python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-native-replay.py --check-receipt /absolute/path/native-receipt.json
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-runtime-replay.py --exhaustive
+python3 docs/10-19-design/10.06-poo-module-system/agentic-ai-context/run-runtime-replay.py --check-receipt /absolute/path/runtime-receipt.json
 #+end_src
 
-The native receipt validator now requires the four NATIVE-COMPARISON observations
+The runtime receipt validator now requires the four RUNTIME-COMPARISON observations
 and the actual test-local publication counterexample, in addition to the prior
 owner-CAS observations, all Case/Module/Harness/final markers, unchanged runtime
 source/pin cuts and exact requested path coverage. The suite contains 41 Cases.
 No paper benchmark, trained model or comparative inference-cost experiment ran.
 
-The focused native run passed 41 Cases and eight regression orders. The extended
+The focused runtime run passed 41 Cases and eight regression orders. The extended
 exhaustive run is reported below only after completion and receipt inspection.
 Raw execution logs remain local; source control holds scenarios, assertions,
 runners and this scoped result summary.
 
 * Delivered boundary and remaining design
 
-The delivered native result is an executable refusal/publication contract for
+The delivered runtime result is an executable refusal/publication contract for
 the selected positive-proof profile. It removes specific substitutions: bytes
 for current support, candidate revision for external applicability, edited text
 for registered authority, and a recalled result for a current Attempt. That is
@@ -198,11 +198,11 @@ The recall fixture changes actor/task, so it requires an independently issued
 matching grant. This does not require every Session to mint a new grant identity:
 a declared policy may legitimately authorize the same actor/task across Sessions.
 What cannot transfer implicitly is an old consumer binding or worker receipt.
-The native owner and opaque capabilities are trusted in-process coordination;
+The runtime owner and opaque capabilities are trusted in-process coordination;
 these tests are not a sandbox for arbitrary reflective Scheme code.
 
 The 80 comparison executions enumerate state combinations, not every concurrent
-schedule. The separate native owner replay retains the eight-event / 2,240-order
+schedule. The separate runtime owner replay retains the eight-event / 2,240-order
 corpus from 08. The new two-Session case is a selected consumer-independence and
 withdrawal scenario, not exhaustive two-Session concurrency verification.
 
@@ -220,13 +220,13 @@ bffe77af99f1263c97475b2a859ea2ee8c43fa07 only after a fresh completed run.
 The fresh run under the ASCENT / Orgize heads above completed with exit zero,
 41 CASE-OK markers, MODULE-OK, HARNESS-OK and final OK, no failure markers, all
 four comparison observations, both counterexample observations and all 2,240
-ordered native paths. Runtime source and both dependency cuts were unchanged
+ordered runtime paths. Runtime source and both dependency cuts were unchanged
 across the run. The saved receipt check passed.
 
 | Current-cut measurement | Result |
 |-------------------------+--------|
-| Native Cases, including the four comparison cases | 41 passed |
-| Eight-event legal native orders | 2,240 passed |
+| Runtime Cases, including the four comparison cases | 41 passed |
+| Eight-event legal runtime orders | 2,240 passed |
 | Duplicate terminal / stale reactivation violations | 0 / 0 |
 | Historical completed outcomes after withdrawal/revocation | 40; current-use=false |
 | Cancelled terminal outcomes | 1,100 |
@@ -237,27 +237,27 @@ across the run. The saved receipt check passed.
 | Receipt controls: missing comparison row, missing actual ablation publication, stale reactivation, old dependency receipt | All four refused |
 
 The original-bound-subject CLI failure and the interrupted changing-dependency
-native attempt are preserved outside these pass counts. The new native cases
+runtime attempt are preserved outside these pass counts. The new runtime cases
 needed no change to the production publication implementation: they exercise its
 existing original-proof, grant, exact consumer and Attempt guards.
 
-Current native receipt:
-=/private/tmp/context-research-comparison-20261025/native-current-dependencies/native-receipt.json=.
+Current runtime receipt:
+=/private/tmp/context-research-comparison-20261025/runtime-current-dependencies/runtime-receipt.json=.
 SysML summary and counterexamples:
 =/private/tmp/context-research-comparison-20261025/sysml-final/=.
 Both directories retain raw results and their source/model commitments. The
-single-order native replay is recorded separately after completion.
+single-order runtime replay is recorded separately after completion.
 
-The current-cut native order R Q S P G C T H was also actually replayed in a
+The current-cut runtime order R Q S P G C T H was also actually replayed in a
 fresh process: 41 Cases, one exact owner order and both counterexample
 observations passed. Its receipt check succeeded. A coupled local artifact index
-with hashes of the native, native-replay, SysML and validator-control receipts is
+with hashes of the runtime, runtime-replay, SysML and validator-control receipts is
 =/private/tmp/context-research-comparison-20261025/comparison-receipt.json=.
 This index explicitly records that paper implementations were not executed and
-that no complete model-to-native refinement proof was established.
+that no complete model-to-runtime refinement proof was established.
 
 * Later source-driven refinement
 
-[[file:11-native-eager-propagation.org][11]] extends the read-time boundary above with materialized native source
+[[file:11-runtime-eager-propagation.org][11]] extends the read-time boundary above with materialized runtime source
 propagation. Its runtime source cut and larger Case count are qualified
 separately; this document retains its 41-case measurements as historical evidence.

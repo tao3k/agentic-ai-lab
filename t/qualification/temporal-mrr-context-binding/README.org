@@ -6,8 +6,8 @@ Compile the Rust =mrr= integration test with =--locked --release --features
 mrr-context --no-run= through the pinned MRR devenv profile. Run the exact
 fresh executable with:
 #+begin_src sh
-just test-temporal-mrr-context "$fresh_executable" "$native_library" \
-  "$verified_native_sha256" "$archive_directory"
+just test-temporal-mrr-context "$fresh_executable" "$runtime_library" \
+  "$verified_runtime_sha256" "$archive_directory"
 #+end_src
 
 The recipe uses the original five-second genuine-progress watchdog and
@@ -18,16 +18,16 @@ cannot qualify this gate. Rust owns all semantic assertions; Python supervises
 the process only. No new paid model call or benchmark is part of this gate.
 
 The parent constructs a real MRR source catalog and Context receipt fact, binds
-the native Context against the source, re-admits original MRR rows/receipt and
+the runtime Context against the source, re-admits original MRR rows/receipt and
 asks Scheme to recheck current Source. It rejects substituted payload, missing
 temporal reference, wrong policy, foreign generation and source bundle. A
-subsequent native Source correction makes the original Context evidence stale.
+subsequent runtime Source correction makes the original Context evidence stale.
 The remaining existing proof-bound correction/retraction/journal and fresh
 process archive checks execute in the same test.
 
 =build-freeze.ss= retains source/binary/log hashes and limits. Generated raw logs
 remain local and do not by themselves qualify another source cut. The immutable
-Scheme native artifact is the archive-qualified library, reused because no
+Scheme runtime artifact is the archive-qualified library, reused because no
 Scheme or C ABI implementation changed in this slice.
 
 This gate closes the Library adapter's structural/current binding checks only.

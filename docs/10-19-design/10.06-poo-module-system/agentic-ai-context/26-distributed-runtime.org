@@ -2,13 +2,13 @@
 #+language: en
 :PROPERTIES:
 :ID: context-distributed-runtime-framework
-:STATUS: proposed-distributed-contract-native-local-refinements
+:STATUS: proposed-distributed-contract-runtime-local-refinements
 :END:
 
 * Scope and implementation boundary
 
 This extends [[file:00-design-map.org][the existing evidence-driven Context design]] and
-[[file:24-native-runtime-cost.org][the separately measured cold and steady runtime]]. Context manages source
+[[file:24-runtime-cost.org][the separately measured cold and steady runtime]]. Context manages source
 admission, working views, proof/support lineage, invalidation and knowledge
 recall. Session remains an independent module with its own endpoint, Attempt
 and terminal lifecycle. Org Property ID identifies an evidence element;
@@ -65,7 +65,7 @@ durable completion intent is insufficient. Session's actual terminal CAS and
 its effect receipt must correspond to that decision; cancellation, recovery,
 duplicate callbacks and owner migration cannot erase or overwrite a terminal.
 
-The local SQLite adapter holds a fenced transaction around its native decision.
+The local SQLite adapter holds a fenced transaction around its runtime decision.
 A cluster provider cannot hold that local assumption across an arbitrary remote
 effect. It must supply an explicit atomic authority/terminal boundary or a
 fenced, idempotent endpoint protocol whose actual acknowledgement is journaled.
@@ -78,17 +78,17 @@ The intended provider responsibilities are:
 
 | Provider/owner | Responsibility | Current implementation |
 |----------------+----------------+------------------------|
-| Evidence Provider | Original bytes, Org ID/version, native parser/Query provenance | Local Org/GQL adapter |
+| Evidence Provider | Original bytes, Org ID/version, runtime parser/Query provenance | Local Org/GQL adapter |
 | Authority Provider | Linearizable epoch/version CAS and effective revocation fence | Local journal/policy owners |
 | Journal Provider | Durable inbox, decisions, terminal evidence and original inputs | SQLite per local domain |
 | Transport Provider | Replayable duplicate/late delivery, acknowledgements, backpressure | Bounded local ingress and coalesced wake in 28; remote transport open |
 | Scheduler Provider | Long-lived owners, bounded admission, fair control delivery | Gambit Actors with local bounded ingress in 28; distributed scheduling open |
-| Clock Provider | Versioned deadlines and failover re-admission | Native host-monotonic clock |
-| Session endpoint | Independent Attempt execution and actual terminal CAS | Native Session module |
+| Clock Provider | Versioned deadlines and failover re-admission | Runtime host-monotonic clock |
+| Session endpoint | Independent Attempt execution and actual terminal CAS | Runtime Session module |
 
-These are responsibilities for POO-native provider composition, not new raw
+These are responsibilities for POO provider composition, not new raw
 alist/record DSLs or a second module registry. Existing entrypoints remain the
-native path. Runtime acquisition must be explicit and lazy; import/selection
+runtime path. Runtime acquisition must be explicit and lazy; import/selection
 does not acquire timers, connections, workers or subscriptions.
 
 The installed Gerbil SDK already exposes =std/actor='s =ActorHost= interface
@@ -98,7 +98,7 @@ use that existing actor/ensemble boundary rather than invent another remote RPC
 runtime. The inspected SDK owners are =src/std/actor/host.ss= and
 =src/std/actor/interaction.ss=. This capability has not yet been connected to
 Context's persistent fencing protocol. An Actor handle is a route, not Context
-identity, Session identity or evidence/authorization authority. The native local
+identity, Session identity or evidence/authorization authority. The runtime local
 path also uses =thread-send= directly; adopting envelopes alone would not add
 bounded admission, consensus, current-proof verification or exactly-once effects.
 
@@ -111,7 +111,7 @@ invented, terminated or given synthetic terminals during controller disposal.
 
 A refused old-owner evidence write must release its short transaction's lock.
 Refusing a stale write while blocking the successor is a real concurrency bug,
-even when no wrong bytes were committed. The native two-Actor regression uses
+even when no wrong bytes were committed. The runtime two-Actor regression uses
 two actual connections to one journal and checks successor progress after the
 refusal. It is a specific local takeover regression, not full cluster coverage.
 
@@ -158,10 +158,10 @@ pending-input and original-evidence obligations with negative replay.
 
 Distributed transport, consensus-backed authority, a bounded production
 scheduler policy, cross-node terminal publication and clock failover are not
-implemented by this design document. Native local corrections and receipts
+implemented by this design document. Runtime local corrections and receipts
 must be reported separately from these proposed responsibilities.
 
-The first bounded-scheduler refinement is [[file:27-bounded-scheduling.org][27]]. It defines native POO admission
+The first bounded-scheduler refinement is [[file:27-bounded-scheduling.org][27]]. It defines POO admission
 and selection values and checks their projected handoffs with SysML, QNT and
 Scheme. Its Actor adapter is a qualification fixture; the production owner
 cutover, durable overflow retry, multi-node transport and coupled authority /

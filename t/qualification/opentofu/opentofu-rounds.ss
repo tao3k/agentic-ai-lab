@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Native operational coordination; std/test remains the assertion authority.
+;;; Runtime operational coordination; std/test remains the assertion authority.
 (import :clan/poo/object "./objects.ss"
         :std/cli/getopt
         (only-in :yuanxu/profile-composition/selection-syntax use-module)
@@ -78,7 +78,7 @@
                  (lambda (field)
                    (when (every (cut hash-key? <> field) rows)
                      (hash-put! value field (stats (map (cut hash-ref <> field) rows)))))
-                 '(nix-seconds native-seconds source-check-seconds))
+                 '(nix-seconds runtime-seconds source-check-seconds))
                (for-each (lambda (field) (when (every (cut hash-key? <> field) rows)
                                           (hash-put! value field (map (cut hash-ref <> field) rows))))
                  '(instantiate realize type-reads type-compiles source-checks source-reads
@@ -138,14 +138,14 @@
     (create-directory* output)
     (let* ((initial (snapshots flake)) (rounds '()) (flake-rounds '())
            (report (hash (status "incomplete") (requested_rounds round-count)
-                         (runtime "default Gerbil; native Ops scripts invoke heap-fenced Just tests")
+                         (runtime "default Gerbil; runtime Ops scripts invoke heap-fenced Just tests")
                          (source_sha256 (list->hash-table initial))
                          (cpu_count (string->number (tool-text (.get Ops tools CPUCount))))
                          (nix_version (tool-text (.get Ops tools NixVersion)))
                          (nixpkgs (tool-text (.get Ops tools PackageSet)))
                          (cold "fresh Scheme process/scope; populated Nix store, not download cold")
                          (hot "five cached receiver accesses; independent currentness is measured separately")
-                         (process_scope "Nix CLI starts at native process boundary; not daemon worker totals")
+                         (process_scope "Nix CLI starts at runtime process boundary; not daemon worker totals")
                          (rounds '()) (flake_rounds '())))
            (receipt (path-expand "summary.json" output)))
       (def (current!) (unless (sources-current? initial flake) (error "qualification source changed")))
@@ -175,7 +175,7 @@
             (lambda (exception)
               (hash-put! report 'status "failed")
               (hash-put! report 'error (if (Error? exception) (Error-message exception)
-                                         "native qualification exception; see retained log"))
+                                         "runtime qualification exception; see retained log"))
               (hash-put! report 'source_unchanged (sources-current? initial flake))
               (write-json-file receipt report)
               (raise exception))
@@ -196,7 +196,7 @@
       (displayln "ROUNDS-OK " receipt))))
 (def (main . arguments)
   (call-with-getopt qualify arguments program: "opentofu-rounds"
-    help: "Run native POO Ops declarations serially; preserve Just watchdogs and all Scheme assertions."
+    help: "Run POO Ops declarations serially; preserve Just watchdogs and all Scheme assertions."
     (option 'output "--output" value: path-expand)
     (option 'rounds "--rounds" value: string->number default: 3)
     (option 'selected-flake "--selected-flake" value: canonical-directory)

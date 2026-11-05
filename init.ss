@@ -9,7 +9,16 @@
   (json-schema)
   (funflow)
   :load-modules "./modules" mode: auto
+  (governance)
+  (my-module @ "./user-interface/custom/my-module")
   :load-modules "./scenarios" mode: explicit rename: scenarios
   (null)
   (aws-validation)
-  (aws))
+  (aws)
+  (developer @ "./user-interface/scenarios/developer")
+  :load-modules "./profiles" mode: explicit rename: Profiles
+  (sandbox)
+  (langchain @ "./user-interface/profiles/langchain")
+  (langgraph @ "./user-interface/profiles/langgraph")
+  (crewai @ "./user-interface/profiles/crewai")
+  (tool-calling @ "./user-interface/profiles/tool-calling"))

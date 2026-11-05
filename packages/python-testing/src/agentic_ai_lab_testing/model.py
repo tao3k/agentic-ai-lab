@@ -37,8 +37,8 @@ class CaseSpec:
             raise ValueError("case identity must be a lower-case name")
         if not self.targets or len(set(self.targets)) != len(self.targets):
             raise ValueError("case needs distinct module parts")
-        if self.mode not in ("unit", "native", "live"):
-            raise ValueError("case mode must be unit, native, or live")
+        if self.mode not in ("unit", "runtime", "live"):
+            raise ValueError("case mode must be unit, runtime, or live")
 
     @property
     def composition(self) -> str:

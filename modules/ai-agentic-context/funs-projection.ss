@@ -23,7 +23,7 @@
     (map values stored)))
 
 (def (selection-profile memory?)
-  ;; Private projection into the existing profile-ids guard. Replaying a native
+  ;; Private projection into the existing profile-ids guard. Replaying a runtime
   ;; Query must not rebuild an entire Feature manifest for these same two IDs.
   (let (ids-value (canonical-feature-ids memory?))
     (.o accepted?: #t feature-ids: ids-value)))
@@ -38,7 +38,7 @@
       (error "foreign or incomplete Context Feature profile"))
     (canonical-feature-ids (if (memq 'ai-agentic-context/memory ids) #t #f))))
 ;; The private replay path may assemble from the canonical observation returned
-;; by native Query replay in this same call. It never accepts a cached verdict
+;; by runtime Query replay in this same call. It never accepts a cached verdict
 ;; or an observation supplied by a public caller without replaying current bytes.
 (def (project scope source restriction profile row-limit byte-limit base-source base-observation
               (replayed-observation #f))
@@ -94,7 +94,7 @@
                          (equal? (.ref scope-value 'semantic-digest) (.ref stored-scope-value 'semantic-digest)))
               (error "Context scope mismatch")))
          (observed (agentic-ai-lab-query-orgize-open-headlines-replay source (.ref projection 'observation)))
-         ;; `observed` is fresh, source-derived native Query output. Re-parsing
+         ;; `observed` is fresh, source-derived runtime Query output. Re-parsing
          ;; the same source again here discarded that verified work previously.
          (current (project scope-value source (.ref projection 'restriction)
                     (selection-profile

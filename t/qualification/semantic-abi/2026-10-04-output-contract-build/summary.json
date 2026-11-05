@@ -2,7 +2,7 @@
   "schema": "poo-flow.semantic-abi-failure-fix-summary",
   "producerHead": "c8b491bfb91001183e78df4930d0bc38f3a5e17b",
   "modelGate": "FAILED",
-  "nativeArtifactSha256": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",
+  "runtimeArtifactSha256": "248f3f5966783f852fc1819d17276d73856aa2fafff481c82d5a841a9943cb06",
   "wheelSha256": "dfcfc8df574d161a6f4d9f4e9dc57896f318929baa45d06a1f170f083c76b8a2",
   "installedTests": {
     "passed": 41,
@@ -35,7 +35,7 @@
       "abiVersion": 1,
       "maximumInputBytes": 1048576
     },
-    "nativeColdSeconds": 0.4489653329997054,
+    "runtimeColdSeconds": 0.4489653329997054,
     "runtimeModule": "/private/tmp/poo-pr34-current-installed/lib/python3.13/site-packages/poo_flow_runtime/semantic_runtime.py",
     "attempts": 24,
     "plannedCalls": 24,
@@ -65,21 +65,21 @@
   "diagnostics": [
     {
       "directory": "2026-10-04-contract-diagnostic",
-      "scope": "output contract diagnostic; scores use prior frozen native keys; no new ABI acceptance",
+      "scope": "output contract diagnostic; scores use prior frozen runtime keys; no new ABI acceptance",
       "calls": 12,
       "correct": 8,
       "timeouts": 0
     },
     {
       "directory": "2026-10-04-control-flow-diagnostic",
-      "scope": "output contract diagnostic; scores use prior frozen native keys; no new ABI acceptance",
+      "scope": "output contract diagnostic; scores use prior frozen runtime keys; no new ABI acceptance",
       "calls": 12,
       "correct": 10,
       "timeouts": 0
     },
     {
       "directory": "2026-10-04-thinking-diagnostic",
-      "scope": "output contract diagnostic; scores use prior frozen native keys; no new ABI acceptance",
+      "scope": "output contract diagnostic; scores use prior frozen runtime keys; no new ABI acceptance",
       "calls": 4,
       "correct": 0,
       "timeouts": 4

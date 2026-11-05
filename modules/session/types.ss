@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Bounded native proposal shapes; these predicates confer no runtime authority.
+;;; Bounded runtime proposal shapes; these predicates confer no runtime authority.
 (import (only-in :clan/poo/object .ref .slot? object?)
         (only-in :clan/poo/mop Type. define-type)
         (only-in :std/list/list every delete-duplicates/hash))

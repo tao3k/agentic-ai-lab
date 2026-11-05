@@ -12,12 +12,8 @@
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flags
                  yuanxu-user-module-selection-key)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/accessors
-                 agentic-ai-lab-scenario-case-name
-                 agentic-ai-lab-scenario-case-profiles
-                 agentic-ai-lab-scenario-case-stages)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/case
-                 agentic-ai-lab-scenario-case?)
+        (only-in :clan/poo/mop element?)
+        (only-in :yuanxu/modules/funflow/scenario Scenario)
         (only-in :yuanxu/modules/funflow/graph-projection
                  funflow-plan
                  yuanxu-funflow-plan->runtime-projection))
@@ -45,7 +41,7 @@
 (def (agentic-ai-lab-runtime-load-composition? value)
   (and (object? value)
        (.slot? value 'kind)
-       (agentic-ai-lab-scenario-case? value)))
+       (element? Scenario value)))
 
 ;; : (-> Object Boolean)
 (def (agentic-ai-lab-runtime-load-funflow-profile? profile)
@@ -150,7 +146,7 @@
 ;; : (-> PooObject Symbol PooObject [Alist])
 (def (agentic-ai-lab-runtime-load-stage-source-map-rows composition stage-name stage)
   (agentic-ai-lab-runtime-load-source-map-stage-rows
-   (agentic-ai-lab-scenario-case-name composition)
+   (.ref composition 'name)
    stage-name
    (agentic-ai-lab-runtime-load-stage-step-names stage)))
 
@@ -164,13 +160,13 @@
 
 ;; : (-> PooObject PooObject)
 (def (agentic-ai-lab-runtime-load-composition->funflow-plan composition)
-  (let* ((profiles (agentic-ai-lab-scenario-case-profiles composition))
+  (let* ((profiles (.ref composition 'profiles))
          (_funflow-profile
           (if (agentic-ai-lab-runtime-load-has-funflow-profile? profiles)
             #t
             (error "runtime load expected a composed funflow profile"
                    profiles)))
-         (stages (agentic-ai-lab-scenario-case-stages composition))
+         (stages (.ref composition 'stages))
          (nodes (agentic-ai-lab-runtime-load-composition-step-names stages))
          (edge-rows (agentic-ai-lab-runtime-load-composition-edge-rows stages))
          (source-map
@@ -180,10 +176,10 @@
      (list
       (cons 'kind (.ref funflow-plan 'kind))
       (cons 'schema 'yuanxu.modules.funflow.plan.v1)
-      (cons 'name (agentic-ai-lab-scenario-case-name composition))
+      (cons 'name (.ref composition 'name))
       (cons 'version 1)
       (cons 'origin 'user-composition-funflow)
-      (cons 'normalized-flow (agentic-ai-lab-scenario-case-name composition))
+      (cons 'normalized-flow (.ref composition 'name))
       (cons 'node-table
             (list->vector (agentic-ai-lab-runtime-load-node-rows nodes)))
       (cons 'edge-table (list->vector edge-rows))

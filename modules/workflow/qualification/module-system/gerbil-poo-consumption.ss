@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: records the concrete gerbil-poo provider surface consumed by Agentic AI Lab.
-;;; Invariant: provider validation uses native POO objects rather than parallel adapters.
+;;; Invariant: provider validation uses POO objects rather than parallel adapters.
 (import (only-in :clan/poo/object
                  .o
                  .@

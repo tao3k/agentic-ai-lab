@@ -7,7 +7,7 @@
 (export Config OpenTofuProviderConfig)
 
 (.def Config
-  ;; Supplied upstream as a native Nix Source, never a per-provider registry.
+  ;; Supplied upstream as a runtime Nix Source, never a per-provider registry.
   source: #f
   ;; A maintained final-package flake names its demand input here. Without one,
   ;; legacy expressions/functions retain their existing argument boundary.

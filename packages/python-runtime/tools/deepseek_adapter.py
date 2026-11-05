@@ -75,8 +75,8 @@ async def run():
             except BaseException:
                 child.kill();await child.wait();raise
             if child.returncode:raise ValueError('Rust consumer failed: '+stderr.decode())
-            result=wire.loads(stdout);r['nativeSeconds']=time.monotonic()-start;r['nativeResult']=result
-            if result!=case['expected']:raise ValueError('Rust native result differs from frozen native oracle')
+            result=wire.loads(stdout);r['runtimeSeconds']=time.monotonic()-start;r['runtimeResult']=result
+            if result!=case['expected']:raise ValueError('Rust runtime result differs from frozen runtime oracle')
             fields=['classification','bindingDigest','modelDigest','exhausted','sourceAuthenticated','actionAuthorized']
             expected={k:result[k] for k in fields}
             final=dict(model=model,reasoning={'effort':'none'},temperature=0.0,max_output_tokens=2048,stream=True,
@@ -84,7 +84,7 @@ async def run():
                                        dict(role='user',content='Return only these fields from the actual Library output as one Scheme datum: classification, bindingDigest, modelDigest, exhausted, sourceAuthenticated, actionAuthorized. Use (object ("field" value) ...), strings in quotes, booleans #t/#f. No markdown.')])
             raw=await predict(final,config['DEEPSEEK_API_KEY'],r['final'],emit=lambda _:report_progress('.',end=''))
             r['modelText']=raw
-            if wire.loads(raw)!=expected:raise ValueError('final differs from actual native result')
+            if wire.loads(raw)!=expected:raise ValueError('final differs from actual runtime result')
             r['modelResult']=wire.loads(raw)
             r['boundTask']=bound_task
             r['passed']=True
@@ -96,7 +96,7 @@ async def run():
             r[phase] = {k:metrics[k] for k in ('responseId','responseStatus','seconds',
                 'firstContentSeconds','contentGapsSeconds','usage','progressKind') if k in metrics}
         r.update(schema='agentic-ai-lab.provider-family-case.v1', model=model,
-                 nativeArtifactSha256=artifact_digest, retries=0)
+                 runtimeArtifactSha256=artifact_digest, retries=0)
         a.output.write_text(wire.dumps(r) + '\n')
         report_progress(' RESULT',r['passed'],r.get('failure',''))
         return 0 if r['passed'] else 1

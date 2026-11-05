@@ -2,7 +2,8 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :clan/poo/mop .new)
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :clan/poo/object
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/artifact-policy
@@ -10,10 +11,11 @@
         :yuanxu/module-system/authoring/roles
         (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile)
         :yuanxu/profile-composition/selection-syntax
-        :agentic-ai-lab/modules/workflow/scenario/composition-syntax
+
         :yuanxu/profile-composition/profile-bundle
-        :agentic-ai-lab/modules/workflow/scenario/accessors
-        (only-in :agentic-ai-lab/modules/workflow/scenario/case agentic-ai-lab-scenario-case?))
+
+        (only-in :clan/poo/mop element?)
+        (only-in :yuanxu/modules/funflow/scenario Scenario))
 
 
 (def (profile-id profile)
@@ -110,11 +112,12 @@
                artifact-publish-gated: #t
                database-capability-satisfied: #t)))))
 
-(user-composition artifact-composition
-  (compose profiles
+(def artifact-composition
+  (.new Scenario name: 'artifact-composition
+        config: (compose profiles
     (use-module ArtifactTestModule as artifact
       research-report tool-output turso)
-    ArtifactScenarioProfile))
+    ArtifactScenarioProfile)))
 
 (.def InternalReportProfile
   (identity 'internal-report)
@@ -140,11 +143,12 @@
            (.o artifact-scope-contained: #t
                artifact-publish-gated: #t)))))
 
-(user-composition inline-artifact-composition
-  (compose profiles
+(def inline-artifact-composition
+  (.new Scenario name: 'inline-artifact-composition
+        config: (compose profiles
     (use-module InlineArtifactTestModule as artifact
       research-report internal-report)
-    InlineArtifactScenarioProfile))
+    InlineArtifactScenarioProfile)))
 
 (def report-artifact
   (durable-artifact report/artifact-1
@@ -244,7 +248,7 @@
                     #t)
       (check-equal? (agentic-ai-lab-artifact-publish-gated? research-report) #t))
 
-    (yuanxu-test-case "profile hook composes native POO object extension"
+    (yuanxu-test-case "profile hook composes POO object extension"
       (check-equal? (agentic-ai-lab-artifact-profile? audited-report) #t)
       (check-equal? (.ref audited-report 'name) 'audited-report)
       (check-equal? (.ref audited-report 'storage)
@@ -379,16 +383,14 @@
                       #f)))
 
     (yuanxu-test-case "artifact and database profiles feed inline composition syntax"
-      (let* ((stages (agentic-ai-lab-scenario-case-stages artifact-composition))
+      (let* ((stages (.ref artifact-composition 'stages))
              (stage (.ref stages 'production))
-             (compose-payload (agentic-ai-lab-scenario-case-profiles
-                               artifact-composition))
+             (compose-payload (.ref artifact-composition 'profiles))
              (loop-value (.ref stage 'loop)))
-        (check-equal? (agentic-ai-lab-scenario-case? artifact-composition) #t)
-        (check-equal? (agentic-ai-lab-scenario-case-name artifact-composition)
+        (check-equal? (element? Scenario artifact-composition) #t)
+        (check-equal? (.ref artifact-composition 'name)
                       'artifact-composition)
-        (check-equal? (length (agentic-ai-lab-scenario-case-modules
-                               artifact-composition))
+        (check-equal? (length (.ref artifact-composition 'modules))
                       1)
         (check-equal? (map profile-id compose-payload)
                       '(research-report tool-output turso artifact-production))
@@ -401,12 +403,11 @@
                         database-capability-satisfied))))
 
     (yuanxu-test-case "inline use-module profiles expand to POO module objects"
-      (let* ((modules (agentic-ai-lab-scenario-case-modules inline-artifact-composition))
+      (let* ((modules (.ref inline-artifact-composition 'modules))
              (module-binding (car modules))
              (module-object (.ref module-binding 'module))
-             (compose-payload (agentic-ai-lab-scenario-case-profiles
-                               inline-artifact-composition)))
-        (check-equal? (agentic-ai-lab-scenario-case? inline-artifact-composition) #t)
+             (compose-payload (.ref inline-artifact-composition 'profiles)))
+        (check-equal? (element? Scenario inline-artifact-composition) #t)
         (check-equal? (.ref (.ref module-object 'identity) 'name)
                       'inline-artifact)
         (check-equal? (.ref (.ref InternalReportProfile 'extends) 'name)

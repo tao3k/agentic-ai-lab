@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO-native session execution, tool, and hook policy contracts.
+;;; Boundary: POO session execution, tool, and hook policy contracts.
 ;;; Invariant: policies are declarative authorization objects; Scheme never
 ;;; runs tools or hooks.
 
@@ -476,11 +476,11 @@
 ;; : TestSuite
 (def session-policy-contract-test
   (test-suite "agentic-ai-lab session policy contracts"
-    (yuanxu-test-case "declares POO-native tool permission policies"
+    (yuanxu-test-case "declares POO tool permission policies"
       (check-session-tool-permission-policy!))
     (yuanxu-test-case "keeps hook-triggered tools separate from agent tools"
       (check-session-hook-tool-separation!))
-    (yuanxu-test-case "uses native POO inheritance for policy refinement"
+    (yuanxu-test-case "uses POO inheritance for policy refinement"
       (check-session-policy-poo-inheritance!))
     (yuanxu-test-case "projects generated foundational policy families"
       (check-generated-session-policy-families!))

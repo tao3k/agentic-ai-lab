@@ -20,11 +20,11 @@ check-governance-lean:
 # Prove the shared Object/Entity/Element/Relation/Query ownership laws without
 # traversing the repository-wide Lean aggregate.
 [group('check')]
-check-native-semantic-query-lean:
+check-runtime-semantic-query-lean:
     cd "{{ lean_proof_dir }}" && lake build YuanxuProof.ModuleSystem.Schema.Query
 
 [group('check')]
-check-native-semantic-query-quint:
+check-runtime-semantic-query-quint:
     PYTHONPATH="{{ justfile_directory() }}/packages/python-testing/src" python3 -m agentic_ai_lab_testing.checks.quint --group query
 
 # Explore the module-owned hypothesis family both to exhaustion and under a
@@ -69,6 +69,15 @@ check-session-poo-lean:
 [group('test')]
 emit-proof-case-vector:
     GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 60s gxi {{ gerbil_test_runtime_options }} packages/proofs/t/fixtures/emit-proof-case-vector.ss
+
+# Emit the workspace recovery recovery projection from the actual Durable decision.
+[group('proof')]
+emit-durable-recovery-projection receipt="":
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/durable/emit-recovery-projection.ss {{ quote(receipt) }}
+
+[group('runtime')]
+workspace-recovery-host journal workspace source operation issuer="" socket="" artifact="" snapshot="":
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}:{{ justfile_directory() }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/durable/workspace-recovery.ss {{ quote(journal) }} {{ quote(workspace) }} {{ quote(source) }} {{ quote(operation) }} {{ if issuer == "" { "" } else { quote(issuer) + " " + quote(socket) + " " + quote(artifact) + " " + quote(snapshot) } }}
 
 [group('check')]
 check-session-context-quint:

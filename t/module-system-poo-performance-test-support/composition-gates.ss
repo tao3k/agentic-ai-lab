@@ -14,9 +14,9 @@
         poo-performance-composition-profiles-bulk-fixture
         poo-performance-composition-local-override-fixture
         poo-performance-composition-hook-override-fixture
-        poo-performance-composition-native-object-reuse-fixture
-        poo-performance-composition-native-object-reuse-large-library-fixture
-        poo-performance-native-object-list-indexed-family-fixture
+        poo-performance-composition-poo-object-reuse-fixture
+        poo-performance-composition-poo-object-reuse-large-library-fixture
+        poo-performance-poo-object-list-indexed-family-fixture
         poo-performance-composition-macro-style-matrix-fixture
         poo-performance-family-run-gate
         +poo-performance-benchmark-receipt-family+)
@@ -52,19 +52,19 @@
    "t/scenarios/performance/poo-composition-hook-override/benchmark.ss"))
 
 ;; : (-> Alist)
-(def (poo-performance-composition-native-object-reuse-fixture)
+(def (poo-performance-composition-poo-object-reuse-fixture)
   (poo-performance-load-fixture
-   "t/scenarios/performance/poo-composition-native-object-reuse/benchmark.ss"))
+   "t/scenarios/performance/poo-composition-poo-object-reuse/benchmark.ss"))
 
 ;; : (-> Alist)
-(def (poo-performance-composition-native-object-reuse-large-library-fixture)
+(def (poo-performance-composition-poo-object-reuse-large-library-fixture)
   (poo-performance-load-fixture
-   "t/scenarios/performance/poo-composition-native-object-reuse-large-library/benchmark.ss"))
+   "t/scenarios/performance/poo-composition-poo-object-reuse-large-library/benchmark.ss"))
 
 ;; : (-> Alist)
-(def (poo-performance-native-object-list-indexed-family-fixture)
+(def (poo-performance-poo-object-list-indexed-family-fixture)
   (poo-performance-load-fixture
-   "t/scenarios/performance/poo-native-object-list-indexed-family/benchmark.ss"))
+   "t/scenarios/performance/poo-object-list-indexed-family/benchmark.ss"))
 
 ;; : (-> Alist)
 (def (poo-performance-composition-macro-style-matrix-fixture)

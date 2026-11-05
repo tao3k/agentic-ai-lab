@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: user-interface presentation hot path stays bounded.
-;;; Invariant: public authoring remains POO-native; generated runtime receipts
+;;; Invariant: public authoring remains POO; generated runtime receipts
 ;;; are fixed structs until Marlin ABI handoff serialization.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)

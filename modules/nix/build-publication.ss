@@ -13,7 +13,7 @@
     (lambda (failure) (invalidate-build-artifacts! graph) (raise failure))
     (lambda ()
       ((.get graph compiler-current))
-      ;; A receiver-local native publication owns the derivation and its source
+      ;; A receiver-local runtime publication owns the derivation and its source
       ;; observations. This guard intentionally does not close over the Graph.
       (def observations (.get source source-inputs))
       (def publication (.call source .prepare (cut module-source-admit-current! observations)))

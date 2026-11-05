@@ -1,15 +1,21 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Public library roots projected through Core's installed native import graph.
+;;; Public library roots projected through Core's installed runtime import graph.
 ;;; init.ss owns the selected Module spec through init.exports; it is not a
 ;;; library target or an import-graph root here.
 (import (only-in :gerbil/expander expander-context-id)
         (only-in :yuanxu/module-system/building/source-closure package-library-spec))
 (export agentic-ai-lab-public-build-roots agentic-ai-lab-build-spec)
 (def agentic-ai-lab-public-build-roots
-  ;; Every maintained Module and Feature interface is a public library root.
-  ;; Core projects their shared native import closure without duplicate targets.
-  '("modules/agent-sandbox/interface.ss"
+  ;; Retained package-library entries migrate only after selected-owner coverage.
+  ;; Nix's Interface/roles/public progress library now come from its selected
+  ;; publication and Build role. Core closes native imports without duplicates.
+  ;; This ordinary public library has a native package root, not a Module
+  ;; selection request. Do not initialize the application source registry and
+  ;; its collection/policy objects to reconstruct this constant entrypoint.
+  ;; Gerbil still discovers every transitive source through the roots below.
+  '("modules/workflow/scenario/configuration/declaration-case.ss"
+    "modules/agent-sandbox/interface.ss"
     "modules/ai-agentic-context/features/memory/interface.ss"
     "modules/ai-agentic-context/interface.ss"
     "modules/authorization/interface.ss"
@@ -20,12 +26,10 @@
     "modules/docker-sandbox/interface.ss"
     "modules/docker/interface.ss"
     "modules/evidence-assessment/interface.ss"
-    "modules/governance/interface.ss"
     "modules/governor/interface.ss"
     "modules/loop-engine/interface.ss"
     "modules/model-core/interface.ss"
     "modules/module-authoring/interface.ss"
-    "modules/nix/interface.ss"
     "modules/nono-sandbox/interface.ss"
     "modules/proof/interface.ss"
     "modules/query/interface.ss"
@@ -51,13 +55,13 @@
     "modules/temporal-causality/truth-maintenance/support/interface.ss"
     "modules/text/interface.ss"
     "modules/tool-core/interface.ss"
-    "modules/workflow/interface.ss"
+    "modules/workflow/cicd-config.ss"
+    "modules/workflow/flows-builders.ss"
+    "modules/workflow/flows-alignment-report.ss"
     "modules/workflow/profiles/kernel/interface.ss"
-    "modules/workflow/scenario/configuration/interface.ss"
+    "modules/workflow/scenario/configuration/presentation-config.ss"
 
     ;; Standalone public/embedded APIs and compiler-option owners.
-    "modules/workflow/scenario/bundle-v1-projection.ss"
-    "testing-api.ss"
     "modules/agent-sandbox/api.ss"
     "modules/ai-agentic-context/clue-exchange.ss"
     "services.ss"
@@ -73,12 +77,6 @@
     "modules/workflow/scenario/configuration/doctor-presentation.ss"
     "modules/building/build-projection.ss"
     "modules/proof/projections/composition-facts.ss"
-    "modules/workflow/scenario/profile-root.ss"
-    "modules/workflow/scenario/composition-syntax.ss"
-    "modules/workflow/scenario/case.ss"
-    "modules/workflow/scenario/accessors.ss"
-    "modules/workflow/scenario/workload.ss"
-    "modules/workflow/scenario/plan-projection.ss"
     "modules/workflow/funflow-config.ss"
     "modules/workflow/profiles/funflow-library.ss"
     "modules/workflow/profiles/github-ci-contract.ss"
@@ -103,11 +101,11 @@
     "modules/workflow/runtime/temporal-proof.ss"
     "modules/workflow/runtime/temporal-proof-host.ss"
     "modules/nono-sandbox/_nono.ss"
-    "modules/workflow/runtime/runtime-v0-native.ss"
+    "modules/workflow/runtime/runtime-v0-ffi.ss"
     "modules/workflow/runtime/semantic.ss"))
 
 (def special-targets '("modules/nono-sandbox/_nono"
-                      "modules/workflow/runtime/runtime-v0-native"
+                      "modules/workflow/runtime/runtime-v0-ffi"
                       "modules/workflow/runtime/semantic"))
 (def (admit-production-build-context context)
   (let* ((identity (expander-context-id context))
@@ -126,5 +124,5 @@
     (package-library-spec (current-directory) 'agentic-ai-lab roots
       admit-context: admit-production-build-context exclude: special-targets)
     ;; The process/AOT consumer supplies runtime symbols at final link time.
-    `((gxc: "modules/workflow/runtime/runtime-v0-native" ,@ffi-options)
+    `((gxc: "modules/workflow/runtime/runtime-v0-ffi" ,@ffi-options)
       (gxc: "modules/workflow/runtime/semantic" ,@ffi-options))))

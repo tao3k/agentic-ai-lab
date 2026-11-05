@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Installed Python transports declarations; native POO owns every decision."""
+"""Installed Python transports declarations; POO owns every decision."""
 from copy import deepcopy
 import pytest
 from agentic_ai_lab_runtime.semantic_runtime import SemanticRuntimeError
@@ -9,7 +9,7 @@ from test_temporal_admission import source_scope, admit
 from test_temporal_policy import refresh
 
 
-def test_context_use_observes_actual_native_host_state(runtime):
+def test_context_use_observes_actual_runtime_host_state(runtime):
     task, scope = family_task(), source_scope('python-context-use')
     registered = runtime.register_temporal_source(scope, task)
     family = admit(runtime, task, scope, registered, 'python-context')

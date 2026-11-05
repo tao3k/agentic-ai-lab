@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 typedef struct agentic_ai_lab_temporal_store agentic_ai_lab_temporal_store;
-/* Borrowed input: a projection of a freshly replayed native POO admission.
+/* Borrowed input: a projection of a freshly replayed POO admission.
  * Host control code supplies this; never expose raw basis/grant APIs as tools.
  * Names are bounded UTF-8 C strings (128 bytes), digests canonical sha256 IDs. */
 typedef struct {

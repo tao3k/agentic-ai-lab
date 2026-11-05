@@ -58,10 +58,10 @@ def test_declared_bazel_environment_selects_direct_gxi_first(
     assert commands[1].env is None
 
 
-def test_native_progress_keeps_datum_and_diagnostics_separate(tmp_path, capsys):
+def test_runtime_progress_keeps_datum_and_diagnostics_separate(tmp_path, capsys):
     import sys
     from agentic_ai_lab_runtime._scheme_load_runner import (
-        _SchemeLoaderCommand, _run_with_native_progress,
+        _SchemeLoaderCommand, _run_with_runtime_progress,
     )
 
     command = _SchemeLoaderCommand(
@@ -69,7 +69,7 @@ def test_native_progress_keeps_datum_and_diagnostics_separate(tmp_path, capsys):
          "import sys; print('MODULE-OK test', file=sys.stderr); print('(datum)')"),
         None,
     )
-    result = _run_with_native_progress(command, tmp_path)
+    result = _run_with_runtime_progress(command, tmp_path)
     assert result.stdout == '(datum)\n'
     assert result.stderr == 'MODULE-OK test\n'
     assert capsys.readouterr().err == result.stderr
@@ -87,4 +87,4 @@ def test_total_deadline_stops_child_even_with_continuous_output(tmp_path, monkey
         None,
     )
     with pytest.raises(RuntimeError, match='total time limit'):
-        runner._run_with_native_progress(command, tmp_path)
+        runner._run_with_runtime_progress(command, tmp_path)

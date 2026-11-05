@@ -1,6 +1,6 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Same real provider function, strict native flake locking and matched CLI.
+;;; Same real provider function, strict runtime flake locking and matched CLI.
 (import :std/test :clan/poo/object "./cases.ss"
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/process run-process)
@@ -146,11 +146,11 @@
               "inputs.new.url = \"path:" policy-directory "\"; "
               "outputs = { self, policy, new }: { lib.providerArtifacts = "
               (provider-expression directory) "; }; }"))
-          (assert 'native-strict-update-refused
+          (assert 'runtime-strict-update-refused
             (lock-rejected?
               (lambda () (call-with-flake-session reference directory "lib.providerArtifacts" (.o)
                            (lambda (s) (session-query s aws))))))
-          (assert 'native-strict-override-still-refuses-update
+          (assert 'runtime-strict-override-still-refuses-update
             (lock-rejected?
               (lambda () (call-with-flake-session reference directory "lib.providerArtifacts"
                            (.o policy: locked-policy)

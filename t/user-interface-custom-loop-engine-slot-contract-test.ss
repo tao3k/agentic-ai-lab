@@ -11,8 +11,10 @@
                  check-equal?
                  test-suite)
         :yuanxu/module-system/selection/objects
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        :agentic-ai-lab/modules/loop-engine/config
+        :agentic-ai-lab/modules/loop-engine/prototypes)
 
 (export user-interface-custom-loop-engine-slot-contract-test)
 
@@ -20,8 +22,7 @@
 ;;; malformed objects can be lowered into intent rows or manifests.
 ;; : (-> [PooUserModuleSelection])
 (def (custom-loop-invalid-poo-slot-module)
-  (use-module loop-engine
-    :config
+  (agentic-ai-lab-loop-engine-configs
     (.def (invalid-poo-slot-loop @ loop-engine-use-case name workflow)
       name: 'invalid-poo-slot-loop
       workflow: 'funflow-cicd)
@@ -38,8 +39,7 @@
 ;;; commit must be symbol lists before the runtime manifest is projected.
 ;; : (-> [PooUserModuleSelection])
 (def (custom-loop-invalid-memory-slot-module)
-  (use-module loop-engine
-    :config
+  (agentic-ai-lab-loop-engine-configs
     (.def (invalid-memory-slot-loop @ loop-engine-use-case name workflow)
       name: 'invalid-memory-slot-loop
       workflow: 'funflow-cicd)
@@ -57,8 +57,7 @@
 ;;; Compression policy is report-only but still structurally typed.
 ;; : (-> [PooUserModuleSelection])
 (def (custom-loop-invalid-compression-slot-module)
-  (use-module loop-engine
-    :config
+  (agentic-ai-lab-loop-engine-configs
     (.def (invalid-compression-slot-loop @ loop-engine-use-case
                                          name workflow)
       name: 'invalid-compression-slot-loop

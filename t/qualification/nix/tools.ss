@@ -1,6 +1,6 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; One native link of the shared closure; every invocation is a fresh process.
+;;; One runtime link of the shared closure; every invocation is a fresh process.
 (import (rename-in (only-in "../../../core/t/qualification/build-publication/worker.ss" main)
                    (main publication-worker))
         (rename-in (only-in "../../../core/t/qualification/build-publication/store-producer.ss" main)

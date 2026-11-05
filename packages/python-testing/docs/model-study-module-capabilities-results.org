@@ -12,7 +12,7 @@ The seven-case [[file:model-study-module-capabilities.org][protocol]] and source
 =f80c9dc7cf5e4ed42a806b0d78c847e52be09de6=. The exact preview is
 =/private/tmp/poo-scheme-module-preview-head-21d11b9/manifest.tsv=,
 SHA256 =2c1d191dba885570ad3ef23282dcd0602ddf02159a7b0dd5f880efee8c48636c=.
-All seven native expected answers were generated before model calls. The
+All seven runtime expected answers were generated before model calls. The
 user authorized one paid call per case, seven maximum. All seven were
 sent to =deepseek-flash= with no retries. Expected answers were not sent.
 
@@ -20,7 +20,7 @@ The raw response files and run manifest are in
 =/private/tmp/poo-scheme-module-live-head-21d11b9=. Manifest SHA256 is
 =97b4c53930d72041ad0c365b28e51342d8cdb003950d867b4c904e9dd6d56772=.
 
-* Native scores
+* Runtime scores
 
 | Case | API status | Readable datum | Exact answer | Raw response SHA256 |
 |------+------------+----------------+--------------+---------------------|
@@ -36,7 +36,7 @@ Four responses were readable =answer= data, and one was exact. The other
 three were explanatory prose, despite the request in the source comments
 to return one datum. The two incomplete module-source responses reached
 the 512-token output cap before an answer. The completed fragment response
-also included prose and a wrong =(answer ())= in a code fence. The native
+also included prose and a wrong =(answer ())= in a code fence. The runtime
 scorer correctly rejected all three as non-datum output. This is an
 observed prompt/format failure as well as an answer failure; it does not
 show whether a short answer-only prompt would yield a correct module result.

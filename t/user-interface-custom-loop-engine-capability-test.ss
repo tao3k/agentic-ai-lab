@@ -21,13 +21,14 @@
         (only-in :agentic-ai-lab/modules/loop-engine/runtime
                  loop-engine-capability-receipt?
                  agentic-ai-lab-user-loop-engine-capability-receipt-ref)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/init-syntax)
+        :agentic-ai-lab/modules/loop-engine/config
+        :agentic-ai-lab/modules/loop-engine/prototypes)
 
 (export user-interface-custom-loop-engine-capability-test)
 
 ;;; Generated runtime receipts are fixed Scheme structs internally and project
 ;;; to bounded alists at presentation and runtime handoff boundaries. User POO
-;;; authoring remains native.
+;;; authoring remains runtime.
 ;; | LoopEngineIntentRow = (Or POOObject LoopEngineCapabilityReceipt Alist)
 ;; | LoopEngineIntentKey = Symbol
 ;; : (-> LoopEngineIntentRow LoopEngineIntentKey MaybeValue)
@@ -60,8 +61,7 @@
 ;;; capability registry, not the Marlin runtime owner.
 ;; : [PooUserModuleSelection]
 (def custom-loop-invalid-capability-module
-  (use-module loop-engine
-    :config
+  (agentic-ai-lab-loop-engine-configs
     (.def (invalid-capability-loop @ loop-engine-use-case name workflow)
       name: 'invalid-capability-loop
       workflow: 'funflow-cicd)

@@ -68,7 +68,7 @@ These are open semantic families, not universal layers.  An enterprise profile
 may compose different policy languages and enforcement systems while retaining
 the same proof obligations.
 
-The implementation must remain POO-native and functional at its public
+The implementation must remain POO and functional at its public
 surface.  Raw JSON or record bundles may be internal evidence artifacts, but
 they are not the ordinary module interface.
 
@@ -217,7 +217,7 @@ The governing lifecycle is [[file:20.06-four-authority-layer-scientific-assuranc
 
 * Planned implementation frontier
 
-- define the thin POO-native data/knowledge semantic package;
+- define the thin POO data/knowledge semantic package;
 - bind a concrete runtime data action bundle to the shared evidence root;
 - add classification, retention, residency, purpose, and erasure property
   tests;

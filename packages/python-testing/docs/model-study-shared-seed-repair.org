@@ -8,32 +8,32 @@
 * Question and ownership
 
 Given one fixed erroneous inert candidate and the same parser-owned syntax
-contract, does initial-source native feedback help repair that candidate?
+contract, does initial-source runtime feedback help repair that candidate?
 This is a syntax-repair comparison conditional on a supplied seed. It does
 not estimate end-to-end program generation, internal reasoning, general
 feedback benefit or model interpretation of verifier verdicts.
 
 ASCENT owns the grammar/operator description, two frozen erroneous seeds,
 seven-state corpus, independent matrix model, Scheme qualification and
-Rust 0.8.0 differential reference. Python Testing reads these native data
+Rust 0.8.0 differential reference. Python Testing reads these runtime data
 projections, freezes prompts, records API results and compares output and
 evidence scores. Python adds no Scheme evaluator or owned Scheme fixture.
 
-* Native qualification before preview
+* Runtime qualification before preview
 
 The parser description advertises nested where/compute/reduce forms,
 closed operator names and arities, prior-bound operator inputs, fresh
 compute/reduction output bindings and one-based candidate diagnostic paths.
 The operator/reducer registry is shared with admission. Public description
 values are detached copies. Positive and negative forms are checked through
-real native attempts; the description does not replace schema, binding,
+real runtime attempts; the description does not replace schema, binding,
 planner, finite-domain or budget admission checks.
 
 The first four states retain support withdrawal/replacement totals
 =20,20,8,12=. Three further states independently discriminate a blocked pair
 (total 8), an odd original weight (12) and equal weighted values under set
 semantics (8). Missing negation, missing original-weight guard and checking
-evenness after doubling must all complete and verify natively, yet disagree
+evenness after doubling must all complete and verify runtimely, yet disagree
 with the independent intended output on at least one state. Scheme direct,
 fragment and candidate results and the Rust full relation sets are qualified.
 The first valid receipt must fail against the equal-answer next generation;
@@ -43,11 +43,11 @@ a rejected original receipt cannot test generation binding.
 
 | Task | Shared erroneous seed | Order | Calls per arm |
 |------+-----------------------+-------+---------------|
-| compute | flat compute arguments; invalid-computation | self then native | 1 |
-| filter | flat where arguments; invalid-filter | native then self | 1 |
+| compute | flat compute arguments; invalid-computation | self then runtime | 1 |
+| filter | flat where arguments; invalid-filter | runtime then self | 1 |
 
 Both arms receive byte-identical task, candidate contract and seed for the
-same task. Neither receives a prior model-generated candidate. Only native
+same task. Neither receives a prior model-generated candidate. Only runtime
 receives the seed's initial-source observation, frozen during preview.
 Each call is a fresh conversation and emits only one candidate datum.
 No update/discriminator source rows, reference outputs or correctness scores
@@ -58,14 +58,14 @@ benefit reliably; report each repair and avoid significance claims.
 Settings: =deepseek-flash=, non-thinking, temperature 0, at most 1024 output
 tokens, 45-second timeout, zero retries. Maximum four paid requests; any API
 failure stops the run and preserves partial records. Temperature 0 is not a
-determinism guarantee. API duration excludes native evaluation and archiving.
+determinism guarantee. API duration excludes runtime evaluation and archiving.
 
 * Scores and evidence retention
 
-Report API completion, inert readability, each state's native completion,
+Report API completion, inert readability, each state's runtime completion,
 finite/founded validity, task shape and exact query-row agreement separately.
 Final success requires all seven outputs, valid current receipts and a
-meaningful stale-generation rejection. Native validity proves the proposed
+meaningful stale-generation rejection. Runtime validity proves the proposed
 program's bounded execution, not its agreement with the task. The wrong-rule
 qualification cases demonstrate this distinction before any paid call.
 
@@ -74,13 +74,13 @@ reference TSV, source heads, package pin, settings, order and SHA256 inventory.
 Live execution requires clean exact-head checkouts, unchanged approved preview
 and manifest digest, a new external output directory and a new durable archive
 directory outside temporary storage. Each request/response, usage, elapsed time,
-raw candidate and native TSV is retained. Both completed and failed runs are
+raw candidate and runtime TSV is retained. Both completed and failed runs are
 sealed with a file inventory and verified hashes before returning. Archive
 integrity is consistency evidence, not source authentication.
 
 The earlier four-call study has a [[file:evidence/support-candidates-f2f2315a/recovery.json][partial original-text recovery]]:
 all four recovered texts match recorded hashes, but full original JSON,
-requests, preview and native records are unavailable. It remains a bounded
+requests, preview and runtime records are unavailable. It remains a bounded
 historical result with incomplete audit retention; missing records are not
 reconstructed or presented as originals.
 
@@ -108,7 +108,7 @@ All 23 Python unit/harness checks passed, including preview-tamper rejection,
 feedback isolation, seven-state evidence/output scoring, archive-tamper
 rejection and archive destination checks. The license contract passed for
 2629 project files; four dependency-projection automation tests and the
-native/Bazel contract and error-mode lock check passed. These were pre-run local checks; exact-head CI and explicit approval were
+runtime/Bazel contract and error-mode lock check passed. These were pre-run local checks; exact-head CI and explicit approval were
 subsequently satisfied before the completed run below.
 
 The earlier implementation head =b3d960c= passed Scheme and byods CI, but
@@ -131,8 +131,8 @@ Exactly four requests completed with zero retries and no remaining call budget.
 | Call order | Task/arm | API seconds | Input tokens | Output tokens | Matched states | Current finite/founded | Stale rejection |
 |------------+----------+-------------+--------------+---------------+----------------+------------------------+-----------------|
 | 1 | compute.self | 2.392 | 597 | 181 | 7/7 | valid/valid on all 7 | applicable; invalid/invalid |
-| 2 | compute.native | 1.263 | 642 | 181 | 7/7 | valid/valid on all 7 | applicable; invalid/invalid |
-| 3 | filter.native | 1.329 | 640 | 181 | 7/7 | valid/valid on all 7 | applicable; invalid/invalid |
+| 2 | compute.runtime | 1.263 | 642 | 181 | 7/7 | valid/valid on all 7 | applicable; invalid/invalid |
+| 3 | filter.runtime | 1.329 | 640 | 181 | 7/7 | valid/valid on all 7 | applicable; invalid/invalid |
 | 4 | filter.self | 1.028 | 596 | 181 | 7/7 | valid/valid on all 7 | applicable; invalid/invalid |
 
 All responses completed and were inert-readable. All 28 current attempts
@@ -142,15 +142,15 @@ negation, the original-weight guard and set aggregation. Total usage was
 2475 input and 724 output tokens, with zero reasoning tokens. Durations are
 API transport times, not full solve latency or a matched performance result.
 
-Both self and native repaired both supplied syntax-error seeds. This run
+Both self and runtime repaired both supplied syntax-error seeds. This run
 shows bounded repair success for these two selected tasks; it provides no
-observed correctness advantage for native feedback. It cannot establish
+observed correctness advantage for runtime feedback. It cannot establish
 causal or general model benefit, generation competence, verifier-interpretation
 competence, temporal lens qualification or release/deployment authority.
 
 [[file:evidence/shared-seed-repair-0b7a6c52/receipt.json][The committed result inventory]] records exact IDs, usage, request/record/candidate
 hashes, per-state scores and all 23 original archive file hashes. Four unchanged
-candidate texts accompany it. Full original requests, response JSON, native
+candidate texts accompany it. Full original requests, response JSON, runtime
 TSV, scores and frozen preview are retained in the durable archive:
 =/Users/guangtao/ghq/github.com/tao3k/meta-relational-reasoning/.data/research-evidence/shared-seed-repair-0b7a6c52/archive=.
 Its manifest SHA256 is

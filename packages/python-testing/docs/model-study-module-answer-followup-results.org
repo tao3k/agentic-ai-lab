@@ -22,7 +22,7 @@ SHA256 is =f611383a1dcceb60cd3e37ba0ed10016f146e8cebf3d7e8eddc00853eacdca4c=.
 
 * Results
 
-| Case | API status | Run filter readable | Native exact | Raw response SHA256 |
+| Case | API status | Run filter readable | Runtime exact | Raw response SHA256 |
 |------+------------+---------------------+--------------+---------------------|
 | =module_fragment= | completed | yes | yes | =7eb3300564bb7d78031f613663e66b7fd2774fbae4e9fa9c359184f6239e7c7b= |
 | =module_diagnostic= | completed | no | no | =86bae8ff55b9c3f49e8f4f3fd9d53792820fb7f89cdd9b73eb639326236fef4e= |
@@ -30,16 +30,16 @@ SHA256 is =f611383a1dcceb60cd3e37ba0ed10016f146e8cebf3d7e8eddc00853eacdca4c=.
 
 The fragment answer was the exact three-row set, in a different row
 order. The diagnostic answer used =missing-relation= and
-=unbound-head-variable= with source expressions as paths; the native
+=unbound-head-variable= with source expressions as paths; the runtime
 answer uses =invalid-body (rule 0 body 1)= and
 =invalid-head (rule 0 head 0)=. The receipt answer returned
-=(complete complete complete)= where the native answer is
+=(complete complete complete)= where the runtime answer is
 =(complete valid valid)=, while its rows and stale-generation outcome
 matched. These are concrete semantic errors in this run.
 
 The diagnostic response was a Scheme datum containing =?y= and =?x=.
 The run's narrow text filter excluded =?=, so its manifest reports
-=valid=false=. An offline call to the same native Scheme scorer accepted
+=valid=false=. An offline call to the same Scheme scorer accepted
 the raw datum as =valid #t= and scored =correct #f=. The filter now admits
 =?= for later offline regrades; the original run manifest is preserved.
 

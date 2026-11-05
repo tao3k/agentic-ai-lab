@@ -4,7 +4,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ;;; Boundary: durable policy projection hot path stays bounded.
-;;; Invariant: authoring stays POO-native; runtime handoff sees struct receipts
+;;; Invariant: authoring stays POO; runtime handoff sees struct receipts
 ;;; and bounded alist serialization.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)

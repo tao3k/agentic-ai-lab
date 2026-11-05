@@ -15,7 +15,7 @@ RuntimeContractInfo = provider(
     fields = {
         "header": "Generated C contract header.",
         "vector": "Generated contract vector.",
-        "event_vector": "Generated native event vector.",
+        "event_vector": "Generated runtime event vector.",
     },
 )
 

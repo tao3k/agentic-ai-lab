@@ -17,7 +17,7 @@
 (export ascent-temporal-lens-test)
 (def ascent-temporal-lens-test
   (test-suite "pinned ASCENT temporal value consumer"
-    (test-case "POO values keep native evidence separate from cut authority"
+    (test-case "POO values keep runtime evidence separate from cut authority"
       (let* ((lens (temporal-lens 0 'owner-clock 0 5 4 'owner-cut '(a b c) 3 #t))
              (source (temporal-source 'owner-source 0 'owner-clock
                        '((a 0 0) (b 1 1) (c 2 4)) '((a b) (b c))))
@@ -64,7 +64,7 @@
           (check-equal? (agentic-ai-lab-ascent-exchange-verify ex "A" answer) 'valid)
           (check-equal? (agentic-ai-lab-ascent-exchange-verify
                          (exchange (reverse (bindings 2))) "A" answer) 'valid)
-          ;; Identical native bounds and rows; changed original instant identity.
+          ;; Identical runtime bounds and rows; changed original instant identity.
           (check-equal? (agentic-ai-lab-ascent-exchange-verify
                          (exchange (bindings 2 "renamed")) "A" answer) 'invalid)
           (for-each

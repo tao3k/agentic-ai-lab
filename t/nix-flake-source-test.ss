@@ -37,7 +37,7 @@
              (list (+ (car total) (.call (.get provider artifact) .entry-read-count name 'resource))
                    (+ (cadr total) (.call provider .contract-compile-count))))) '(0 0) owners))
 (def (nix-flake-source-suite with-evaluator)
-  (test-suite "Locked native flake Source with real Provider schema artifacts"
+  (test-suite "Locked runtime flake Source with real Provider schema artifacts"
     (yuanxu-test-case "AWS-only to Null, fresh guards and receiver-local caches"
       (with-evaluator (lambda (evaluator)
       (call-with-temporary-directory "nix-flake-source"
@@ -130,7 +130,7 @@
               'config (.cc (.get NixFlakeSource. config) 'nix nix)
               'attribute (string-append "packages." system ".default")
               ;; Resolve the same locked immutable path explicitly, retaining
-              ;; Nix's native accessor fingerprint instead of rehashing its tree.
+              ;; Nix's runtime accessor fingerprint instead of rehashing its tree.
               'inputs (.o nixpkgs: package-set)))
           (def (build null?)
             (let* ((observed (map (lambda (path) (cons path (module-source-read path)))
@@ -190,9 +190,9 @@
             (assert 'null-version-locked (equal? (.get child-scope modules null provider version) "3.2.4"))
             (assert 'parent-cache-isolated (eq? parent-contract (.get parent-scope types configuration)))
             (when evaluator
-              (assert 'native-evaluations-start-no-nix-cli (= (processes "nix") 0))
+              (assert 'gerbil-evaluations-start-no-nix-cli (= (processes "nix") 0))
               (assert 'locked-store-input-needs-no-cli-fallback (= (.call evaluator .fallback-calls) 0))
-              (assert 'native-store-and-state-created-once
+              (assert 'runtime-store-and-state-created-once
                 (and (= (.get (.call evaluator .timing 'store) calls) 1)
                      (= (.get (.call evaluator .timing 'state) calls) 1))))
             (assert 'parent-no-null (not (.slot? (.get parent-scope modules) 'null)))
@@ -201,7 +201,7 @@
               (equal? (.call (.cc (source) 'attribute "lib.fromArguments"
                                 'arguments (.o name: "configured")) .instantiate)
                       (.get child derivation)))
-            ;; Indirect Nix dependency changes are checked by native flake eval.
+            ;; Indirect Nix dependency changes are checked by runtime flake eval.
             (write-source providers (string-append "{ artifacts }: let p = " provider-text "; in p // { null = p.aws; }"))
             (assert 'transitive-flake-change-rejected
               (rejects? "stale external package derivation" (lambda () ((.get child admit-current)))))

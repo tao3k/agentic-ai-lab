@@ -53,18 +53,18 @@ class Consumer:
                 stderr=self.err, bufsize=0)
         except OSError as error:
             self.err.close()
-            save(run/'native-readiness-failure.json', {'phase':'spawn',
+            save(run/'runtime-readiness-failure.json', {'phase':'spawn',
                 'command':command, 'dynamic':dynamic, 'error':str(error)})
             raise
         began=time.monotonic()
         load_deadline = 60 if dynamic else 20
         try:
-            if self.receive(load_deadline) != {'ready':True}: raise ValueError('native readiness mismatch')
+            if self.receive(load_deadline) != {'ready':True}: raise ValueError('runtime readiness mismatch')
             self.trace.append({'request':{'op':'module_load'},'answer':{'ready':True},'seconds':time.monotonic()-began})
-            save(run/'native-readiness.json', {'ready':True, 'command':command,
+            save(run/'runtime-readiness.json', {'ready':True, 'command':command,
                 'dynamic':dynamic, 'deadline':load_deadline, 'seconds':time.monotonic()-began})
         except Exception as error:
-            save(run/'native-readiness-failure.json',{'error':str(error),'seconds':time.monotonic()-began,
+            save(run/'runtime-readiness-failure.json',{'error':str(error),'seconds':time.monotonic()-began,
                 'deadline':load_deadline, 'command':command, 'dynamic':dynamic,
                 'exit':self.p.poll(), 'pendingBytes':len(self._stdout_buffer)})
             self.close(); raise
@@ -77,13 +77,13 @@ class Consumer:
                 remaining = expires - time.monotonic()
                 if remaining <= 0 or not selector.select(remaining):
                     if self._stdout_buffer:
-                        (self.run/'native-partial-output.bin').write_bytes(self._stdout_buffer)
-                    raise TimeoutError(f'native {deadline}-second deadline')
+                        (self.run/'runtime-partial-output.bin').write_bytes(self._stdout_buffer)
+                    raise TimeoutError(f'runtime {deadline}-second deadline')
                 chunk = os.read(self.p.stdout.fileno(), 65536)
                 if not chunk:
                     if self._stdout_buffer:
-                        (self.run/'native-partial-output.bin').write_bytes(self._stdout_buffer)
-                    raise RuntimeError(f'native exit before complete response (exit={self.p.poll()})')
+                        (self.run/'runtime-partial-output.bin').write_bytes(self._stdout_buffer)
+                    raise RuntimeError(f'runtime exit before complete response (exit={self.p.poll()})')
                 self._stdout_buffer.extend(chunk)
         line, _, rest = self._stdout_buffer.partition(b'\n')
         self._stdout_buffer = bytearray(rest)
@@ -96,14 +96,14 @@ class Consumer:
     def call(self, **request):
         began = time.monotonic()
         event={'request':request}
-        self.trace.append(event);save(self.run/'native.json',self.trace)
+        self.trace.append(event);save(self.run/'runtime.json',self.trace)
         try:
             self.p.stdin.write((json.dumps(request)+'\n').encode()); self.p.stdin.flush()
             answer = self.receive();event['answer']=answer
         except Exception as error:
             event['failure']=str(error);raise
         finally:
-            event['seconds']=time.monotonic()-began;save(self.run/'native.json', self.trace)
+            event['seconds']=time.monotonic()-began;save(self.run/'runtime.json', self.trace)
         if isinstance(answer, dict) and 'error' in answer: raise ValueError(answer['error'])
         return answer
 
@@ -129,7 +129,7 @@ class Consumer:
             'clean':self.p.returncode==0 and not fallback and error is None,
             'exit':self.p.returncode, 'fallback':fallback, 'error':error,
             'seconds':time.monotonic()-began, 'graceSeconds':5}
-        save(self.run/'native-shutdown.json',self.shutdown)
+        save(self.run/'runtime-shutdown.json',self.shutdown)
         return self.shutdown
 
 TASKS = [
@@ -179,27 +179,27 @@ def call_model(folder, context, previous_cost=0):
 
 def freeze(run):
     run.mkdir(parents=True,exist_ok=False)
-    native=Consumer(run)
+    runtime=Consumer(run)
     try:
         groups=[]
         try:
-            for i in range(8):groups.append(native.call(op='qualify',group=i))
+            for i in range(8):groups.append(runtime.call(op='qualify',group=i))
             if [g.get('checks') for g in groups] != [64]*7+[0]:
-                raise ValueError('native qualification group failed')
+                raise ValueError('runtime qualification group failed')
             qualification={'checks':sum(g['checks'] for g in groups),
                 'staleRejected':groups[7].get('staleRejected'),
                 'boundedNotMatch':groups[7].get('boundedNotMatch')}
             if qualification != {'checks':448,'staleRejected':True,'boundedNotMatch':True}:
-                raise ValueError('native qualification failed: '+json.dumps(qualification))
+                raise ValueError('runtime qualification failed: '+json.dumps(qualification))
             qualified=True
         except ValueError as error:
             qualified=False
             qualification={'admitted':False,'error':str(error),'completedGroups':groups}
-            save(run/'correct-control.json',native.call(op='feedback',case=0,
+            save(run/'correct-control.json',runtime.call(op='feedback',case=0,
                 rules=[[['path','?x','?y'],['edge','?x','?y']],
                        [['path','?x','?z'],['path','?x','?y'],['edge','?y','?z']]]))
-        tasks=[task(i,native.call(op='feedback',case=i,rules=[])) for i in range(3)]
-    finally: native.close()
+        tasks=[task(i,runtime.call(op='feedback',case=i,rules=[])) for i in range(3)]
+    finally: runtime.close()
     save(run/'qualification.json',qualification)
     paths=[ROOT/'packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model.py',ROOT/'t/research/candidate-interaction.ss',
            ROOT/'packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study.py',ROOT/'packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study.py',
@@ -231,18 +231,18 @@ def freeze(run):
                     raise ValueError('prepared source drift '+str(src))
                 if rebuilt.get('compiledCSha256')!=digest(Path(rebuilt['compiledC'])):
                     raise ValueError('rebuilt module artifact drift '+str(src))
-                if rebuilt['compiledC'] not in json.loads((RUNTIME/'native-object-sources.json').read_text()):
-                    raise ValueError('rebuilt source absent from native link '+str(src))
+                if rebuilt['compiledC'] not in json.loads((RUNTIME/'poo-object-sources.json').read_text()):
+                    raise ValueError('rebuilt source absent from runtime link '+str(src))
                 paths.append(receipt_path)
     paths += [RUNTIME/'bin/candidate-interaction',RUNTIME/'closure.json']
-    native_sources=[Path(p) for p in json.loads((RUNTIME/'native-object-sources.json').read_text())]
+    runtime_sources=[Path(p) for p in json.loads((RUNTIME/'poo-object-sources.json').read_text())]
     for module in modules:
         name=module.replace('/','__')+'.c'
         for static in (CANONICAL/'static',RUNTIME/'lib/static',PREPARED/'static',system/'static'):
-            if (static/name).exists() and name not in {p.name for p in native_sources}:
-                raise ValueError('runtime submodule omitted from native link: '+module)
-    paths += native_sources
-    paths += list((RUNTIME/'native-objects').glob('*.o'))
+            if (static/name).exists() and name not in {p.name for p in runtime_sources}:
+                raise ValueError('runtime submodule omitted from runtime link: '+module)
+    paths += runtime_sources
+    paths += list((RUNTIME/'poo-objects').glob('*.o'))
     capture=RUNTIME/'source-capture.json'
     if capture.exists():
         for relative,sha in json.loads(capture.read_text())['sourceSha256'].items():
@@ -252,12 +252,12 @@ def freeze(run):
         paths.append(capture)
     binding={str(p):digest(p) for p in sorted(set(paths))}
     plan={'tasks':tasks,'tool':TOOL,'binding':binding,'model':'deepseek-flash','budgetPerTrajectory':32768,
-        'nativeQualified':qualified,
+        'runtimeQualified':qualified,
         'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         'librarySourceCapture':json.loads(capture.read_text()) if capture.exists() else None,
         'qualificationSha256':digest(run/'qualification.json'),
         'outputCap':8192,'developmentMasks':[0,1,3,9],'heldOutMasks':[i for i in range(64) if i not in (0,1,3,9)],
-        'protocol':'One initial model proposal per task. Only a completed, known-cost proposal failing visible development rows receives one paired revision: same proposal/task, baseline without feedback versus native complete-row feedback. Hidden masks never drive repair. Charge shared initial cost to both trajectories; physical calls count once. No retries, anti-repetition instructions or search controller.',
+        'protocol':'One initial model proposal per task. Only a completed, known-cost proposal failing visible development rows receives one paired revision: same proposal/task, baseline without feedback versus runtime complete-row feedback. Hidden masks never drive repair. Charge shared initial cost to both trajectories; physical calls count once. No retries, anti-repetition instructions or search controller.',
         'limits':'Finite three-node synthesis/feedback integration gate, not corpus reproduction or proof of reduced thinking. If every development proposal passes, assistance comparison is unexercised. No new formal proof or current-head remote CI claim.'}
     save(run/'plan.json',plan);(run/'plan.sha256').write_text(digest(run/'plan.json')+'\n')
     for path in paths:
@@ -274,16 +274,16 @@ def verify(run,plan):
 
 def solve(run):
     plan=json.loads((run/'plan.json').read_text());verify(run,plan)
-    if plan.get('nativeQualified') is not True: raise ValueError('native qualification denied; model calls prohibited')
+    if plan.get('runtimeQualified') is not True: raise ValueError('runtime qualification denied; model calls prohibited')
     if (run/'ledger.json').exists(): raise ValueError('already run; retain results')
-    native=Consumer(run);rows=[]
+    runtime=Consumer(run);rows=[]
     try:
         for t in plan['tasks']:
             i=t['case'];row={'case':i,'initial':{'failure':'not_completed','rules':None,'grossTokens':None},'revisions':[]}
             rows.append(row);save(run/'ledger.json',rows)
             initial=call_model(run/'calls'/f'{i}-initial',t);row['initial']=initial;save(run/'ledger.json',rows)
             if initial['rules'] is not None:
-                dev=native.call(op='feedback',case=i,rules=initial['rules']);row['development']=dev
+                dev=runtime.call(op='feedback',case=i,rules=initial['rules']);row['development']=dev
                 # Repair is decided by visible data, before any hidden assessment.
                 if any(x['status']!='match' for x in dev):
                     for arm in ('baseline','feedback'):
@@ -291,23 +291,23 @@ def solve(run):
                         if arm=='feedback':context['executionFeedback']=dev
                         revision=call_model(run/'calls'/f'{i}-{arm}',context,initial['grossTokens'])
                         revised={'arm':arm,'call':revision};row['revisions'].append(revised);save(run/'ledger.json',rows)
-                        revised['grade']=native.call(op='grade',case=i,rules=revision['rules']) if revision['rules'] is not None else None
-                row['grade']=native.call(op='grade',case=i,rules=initial['rules'])
+                        revised['grade']=runtime.call(op='grade',case=i,rules=revision['rules']) if revision['rules'] is not None else None
+                row['grade']=runtime.call(op='grade',case=i,rules=initial['rules'])
             save(run/'ledger.json',rows);print('TASK_DONE',i,'failure',initial['failure'],'paired',len(row['revisions']),flush=True)
     except Exception as error:
         row['interactionFailure']=str(error);save(run/'ledger.json',rows)
         save(run/'failure.json',{'case':row['case'],'error':str(error),'remainingTasks':'not run','retry':False})
         print('INTERACTION_STOPPED',row['case'],str(error),flush=True)
-    finally: native.close()
+    finally: runtime.close()
     verify(run,plan)
     save(run/'integrity.json',{'bindingVerified':True,'files':{str(p.relative_to(run)):digest(p) for p in sorted(run.rglob('*')) if p.is_file() and p.name!='integrity.json'}})
     doc=ROOT/'.cache/ascent/research-reports/agent-inference/candidate-model-results';doc.mkdir(parents=True,exist_ok=True)
     for name in ['plan.json','qualification.json','ledger.json','integrity.json']:(doc/name).write_bytes((run/name).read_bytes())
     lines=['# Finite Library candidate-feedback model gate','',plan['limits'],'',
-           '| Task | Initial held-out matches / evaluated | Complete native attempts | Paired revisions |','|---|---:|---:|---:|']
+           '| Task | Initial held-out matches / evaluated | Complete runtime attempts | Paired revisions |','|---|---:|---:|---:|']
     for r in rows:
         grade=r.get('grade');matches=f"{sum(x['status']=='match' for x in grade)} / {len(grade)}" if grade is not None else 'not evaluated'
-        complete=sum(x['nativeStatus']=='complete' for x in grade) if grade is not None else 'not evaluated'
+        complete=sum(x['runtimeStatus']=='complete' for x in grade) if grade is not None else 'not evaluated'
         lines.append(f"| {r['case']} | {matches} | {complete} | {len(r['revisions'])} |")
     for r in rows:
         if r['initial']['failure'] or r.get('interactionFailure'):lines.append(f"\nTask {r['case']} failure: {r.get('interactionFailure') or r['initial']['failure']}.\n")
@@ -393,7 +393,7 @@ def reuse_freeze(run):
     assert json.loads(store_test.read_text())['passed']
     modules=json.loads((RUNTIME/'closure.json').read_text())['modules']
     assert not any('agentic-ai-lab/' in m for m in modules), 'workflow dependency in consumer'
-    linked={Path(p).name for p in json.loads((RUNTIME/'native-object-sources.json').read_text())}
+    linked={Path(p).name for p in json.loads((RUNTIME/'poo-object-sources.json').read_text())}
     for module in modules:
         name=module.replace('/','__')+'.c'
         for static in (CANONICAL/'static',PREPARED/'static'):
@@ -403,11 +403,11 @@ def reuse_freeze(run):
         assert digest(ROOT/name)==h==digest(RUNTIME/'current-source'/name), 'source capture drift '+name
     for i,t in enumerate(tasks):
         seed=judge_selection(t,t['seed'],True);best=optimum(t);assert seed['valid'] and seed['value']<best['evaluation']['value']
-        d=run/f'qualify-{i}';d.mkdir();native=Consumer(d)
+        d=run/f'qualify-{i}';d.mkdir();runtime=Consumer(d)
         try:
-            init=native.call(op='reuse-init',identity=t['id'],edges=t['edges'],needs=t['needs'])
+            init=runtime.call(op='reuse-init',identity=t['id'],edges=t['edges'],needs=t['needs'])
             assert {x[0] for x in init['rows']}=={n[0] for n in t['needs'] if ready(t,n[0])}
-            packets=[native.call(op='reuse-packet',fragments=list(range(12))) for _ in range(2)]
+            packets=[runtime.call(op='reuse-packet',fragments=list(range(12))) for _ in range(2)]
             assert packets[0]['facts']==packets[1]['facts'] and packets[0]['nodes']==packets[1]['nodes']
             assert all(p['reused'] for p in packets)
             for p in packets:
@@ -416,15 +416,15 @@ def reuse_freeze(run):
                     a=fact['atom'];truth=ready(t,a[1]) if a[0]=='ready' else reachable(t['edges'],*a[1:]);assert fact['present']==truth
                 assert set(p['allowed'])=={n[0] for n in t['needs'] if ready(t,n[0])}
                 ids={n[0] for n in p['nodes']};assert all(x in ids for n in p['nodes'] for x in n[5])
-            assert native.call(op='reuse-episode',atom=['path',0,7],premises=[['edge',0,2],['edge',2,4],['edge',4,6],['edge',6,7]])['supportQualified']
-            assert not native.call(op='reuse-episode',atom=['path',0,7],premises=[])['supportQualified']
-            assert not native.call(op='reuse-episode',atom=['path',0,7],premises=[['edge',1,3]])['supportQualified']
-        finally:shutdown=native.close()
+            assert runtime.call(op='reuse-episode',atom=['path',0,7],premises=[['edge',0,2],['edge',2,4],['edge',4,6],['edge',6,7]])['supportQualified']
+            assert not runtime.call(op='reuse-episode',atom=['path',0,7],premises=[])['supportQualified']
+            assert not runtime.call(op='reuse-episode',atom=['path',0,7],premises=[['edge',1,3]])['supportQualified']
+        finally:shutdown=runtime.close()
         assert shutdown['clean'];checks.append({'case':i,'seed':seed,'optimum':best,'packet':packets[0],'shutdown':shutdown})
     shutdown_dir=ROOT/'.cache/ascent/candidate-interaction/latest-proof-frame-qualification'
     startup=json.loads((shutdown_dir/'receipt.json').read_text())
     assert len(startup)==9 and all(x['passed'] and x['shutdown']['clean'] for x in startup)
-    clean={'allClean':True,'checks':startup,'scope':'Native, dynamic evidence module and full gxi, three starts each; current captured proof-frame.'}
+    clean={'allClean':True,'checks':startup,'scope':'Runtime, dynamic evidence module and full gxi, three starts each; current captured proof-frame.'}
     sources=[ROOT/'packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/candidate_model.py',ROOT/'t/research/candidate-interaction.ss',ROOT/'packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/evidence_interaction.py',ROOT/'packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/model_study.py',ROOT/'packages/python-testing/src/agentic_ai_lab_testing/assessment_studies/movie_study.py']
     sources += [store_test,ROOT/'candidate/evidence-store.ss',ROOT/'t/qualification/ascent-evidence-store-test.ss',shutdown_dir/'receipt.json']
     sources += [ROOT/'t/research/test_candidate_transport.py',shutdown_dir/'rules/receipt.json',shutdown_dir/'test-receipt.json']
@@ -517,12 +517,12 @@ def reuse_solve(run):
     plan=reuse_verify(run);assert not (run/'reuse-ledger.json').exists();rows=[];save(run/'reuse-ledger.json',rows)
     for case,t in enumerate(plan['tasks']):
         for arm in plan['orders'][case]:
-            folder=run/'calls'/f'{case}-{arm}';folder.mkdir(parents=True);native=Consumer(folder)
+            folder=run/'calls'/f'{case}-{arm}';folder.mkdir(parents=True);runtime=Consumer(folder)
             row={'case':case,'arm':arm,'calls':[],'grossTokens':0,'maxDepth':0,'expandedPrefixes':[],
                 'incumbent':{'selection':t['seed'],'evaluation':judge_selection(t,t['seed'],True)},'stop':None};rows.append(row)
             frontier={0:[]};tried=set();serial=0;history=[];pending_call=None;history_tokens=None
             try:
-                native.call(op='reuse-init',identity=t['id'],edges=t['edges'],needs=t['needs'])
+                runtime.call(op='reuse-init',identity=t['id'],edges=t['edges'],needs=t['needs'])
                 for turn in range(plan['maxCalls']):
                     choices=[]
                     for parent,selection in frontier.items():
@@ -531,7 +531,7 @@ def reuse_solve(run):
                         if children:choices.append({'parentId':parent,'selection':selection,'optionIds':[o['id'] for o in children]})
                     if not choices:row['stop']='frontier_exhausted';break
                     ids=sorted({next(o['fragment'] for o in t['options'] if o['id']==i) for x in choices for i in x['optionIds']})
-                    packet=native.call(op='reuse-packet',fragments=ids) if arm!='baseline' else None
+                    packet=runtime.call(op='reuse-packet',fragments=ids) if arm!='baseline' else None
                     if arm=='scheme':
                         allowed=set(packet['allowed'])
                         for x in choices:x['optionIds']=[i for i in x['optionIds'] if next(o['fragment'] for o in t['options'] if o['id']==i) in allowed]
@@ -569,7 +569,7 @@ def reuse_solve(run):
                     row['calls'][-1]['failure']=str(error)
                     save(folder/str(row['calls'][-1]['turn'])/'receipt.json',row['calls'][-1])
             finally:
-                row['shutdown']=native.close();row['unusedBudget']=(plan['budget']-row['grossTokens'] if all(c['grossTokens'] is not None for c in row['calls']) else None);save(run/'reuse-ledger.json',rows)
+                row['shutdown']=runtime.close();row['unusedBudget']=(plan['budget']-row['grossTokens'] if all(c['grossTokens'] is not None for c in row['calls']) else None);save(run/'reuse-ledger.json',rows)
     reuse_verify(run);print('REUSE_MODEL_COMPLETE',flush=True)
 
 class AtomicJudge:
@@ -581,16 +581,16 @@ class AtomicJudge:
         return {'valid':reachable(self.edges,n[1],n[2]) and reachable(self.edges,n[3],n[4])}
 
 class EpisodeConsumer:
-    def __init__(self,native):self.native=native
-    def call(self,**request):return self.native.call(op='reuse-episode',atom=request['atom'],premises=request['premises'])
+    def __init__(self,runtime):self.runtime=runtime
+    def call(self,**request):return self.runtime.call(op='reuse-episode',atom=request['atom'],premises=request['premises'])
 
 def reuse_annotate(run):
     plan=reuse_verify(run);old=study_annotations();rows=json.loads((run/'reuse-ledger.json').read_text());measurements=[]
     assert not (run/'reuse-annotation-ledger.json').exists()
     for row in rows:
-        t=plan['tasks'][row['case']];folder=run/'annotations'/f"{row['case']}-{row['arm']}";folder.mkdir(parents=True);native=Consumer(folder);accepted=[];results=[]
+        t=plan['tasks'][row['case']];folder=run/'annotations'/f"{row['case']}-{row['arm']}";folder.mkdir(parents=True);runtime=Consumer(folder);accepted=[];results=[]
         try:
-            native.call(op='reuse-init',identity=t['id'],edges=t['edges'],needs=t['needs'])
+            runtime.call(op='reuse-init',identity=t['id'],edges=t['edges'],needs=t['needs'])
             for call in row['calls']:
                 source=run/'calls'/f"{row['case']}-{row['arm']}"/str(call['turn'])/'thinking.txt';out=folder/str(call['turn']);out.mkdir();result={'turn':call['turn'],'failure':None,'accepted':[],'rejected':[],'grossTokens':None};results.append(result)
                 try:
@@ -603,7 +603,7 @@ def reuse_annotate(run):
                     raw=json.loads(actions[0]['arguments'])['episodes'];result['raw']=raw
                     for item in raw:
                         try:
-                            e=old.validate_episode(text,item,t,EpisodeConsumer(native),AtomicJudge(),{})
+                            e=old.validate_episode(text,item,t,EpisodeConsumer(runtime),AtomicJudge(),{})
                             e['turn']=call['turn'];e['atGrossTokens']=call.get('atGrossTokens');e['repeatFact']=False;e['definiteRepeat']=False
                             if result['accepted']:assert e['span'][0]>=result['accepted'][-1]['span'][1],'overlapping_or_unsorted_quotes'
                             if e['qualifiedPositiveDerivation']:
@@ -613,7 +613,7 @@ def reuse_annotate(run):
                         except Exception as error:result['rejected'].append({'item':item,'failure':str(error)})
                 except Exception as error:result['failure']=str(error)
                 save(out/'receipt.json',result);print('REUSE_LABELS',row['case'],row['arm'],call['turn'],len(result['accepted']),result['failure'],flush=True)
-        finally:shutdown=native.close()
+        finally:shutdown=runtime.close()
         measurements.append({'case':row['case'],'arm':row['arm'],'calls':results,'shutdown':shutdown});save(run/'reuse-annotation-ledger.json',measurements)
     reuse_verify(run)
 
@@ -645,7 +645,7 @@ def reuse_report(run):
     measurement_cost=sum(c['grossTokens'] or 0 for r in labels for c in r['calls'])
     report={'planSha256':digest(run/'plan.json'),'solverKnownTokens':known,'solverUnknownCostCalls':unknown,'annotationKnownTokens':measurement_cost,
         'budgetPerTrajectory':plan['budget'],'jointlyReachedCheckpoints':joint,'trajectories':rows,'annotationResults':labels,
-        'limits':'Two unchanged fixed tasks, one stochastic trajectory per arm/task. Scheme combines proof fragments and finite-absence partition; this does not isolate their individual effects. All arms replay their own prior thinking and paired tool outputs, charging all repeated input. Repeat metrics are observed, exact-quote supported lower bounds; extraction completeness and inter-rater agreement are unvalidated. At checkpoints inside a model call, repeat counts are unknown because per-token usage timing is unavailable. Unknown or rejected labels remain explicit. No hidden model reasoning is inferred. Current captured native and full gxi qualification passes; prior dyld cleanup failures remain retained and no global runtime fix is claimed. Unused budget is censored, not savings.'}
+        'limits':'Two unchanged fixed tasks, one stochastic trajectory per arm/task. Scheme combines proof fragments and finite-absence partition; this does not isolate their individual effects. All arms replay their own prior thinking and paired tool outputs, charging all repeated input. Repeat metrics are observed, exact-quote supported lower bounds; extraction completeness and inter-rater agreement are unvalidated. At checkpoints inside a model call, repeat counts are unknown because per-token usage timing is unavailable. Unknown or rejected labels remain explicit. No hidden model reasoning is inferred. Current captured runtime and full gxi qualification passes; prior dyld cleanup failures remain retained and no global runtime fix is claimed. Unused budget is censored, not savings.'}
     save(run/'reuse-report.json',report)
     lines=['# Library Fact and proof-fragment reuse pilot','',report['limits'],'',
         '| Task | Arm | Input + all output | Depth | Best value / optimum | Stop |','|---|---|---:|---:|---:|---|']

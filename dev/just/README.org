@@ -18,17 +18,32 @@ command namespace and root working directory.
 
 * Reuse
 
-=just test-file PATH= calls the Core
-[[file:../../core/t/qualification/testing/run.ss][TestingScript projection]].
-It supplies the product source root, the existing VM options and the existing
-120-second budget.  Core Ops executes the process; Core test admission checks
-status, error markers and exact native harness completion.  The product does
-not maintain another copy of this ordinary per-file log gate.
+=just test-file PATH= calls Core's
+[[file:../../core/dev/test-file.ss][atomic adapter to the installed Gerbil test tool]].
+It retains the product's pre-import heap fence and 120-second budget. The
+same VM executes native =std/test= through the official tool. It does not
+construct a Script/Process, select init, compile support or start a child
+Harness. Independent build commands own compilation and issuance; domain
+Cases exercise actual source-currentness and admission checks.
 
-Nix adapter preparation and qualification remain product-owned under
-[[file:../../t/qualification/nix/Justfile][the Nix qualification entrypoint]] and
-[[file:../../bindings/nix-c-api/Justfile][the C API binding entrypoint]].
-They consume the same maintained Ops and TestingScript objects.
+=test-root= passes the default directory =t= straight to the installed tool.
+Gerbil owns filename filtering, non-recursive directory discovery, import hooks
+and the single Harness. An explicit =t/...= requests Gerbil's recursive mode;
+additional directories/files are native arguments, not another discovery policy.
+There is no =dev/tests.ss=, exclusion table or per-file execution loop.
+
+=test-root= and =test-package-file= do not rebuild the product or prepare Nix
+packages. The complete =just test= aggregate and CI prepare declared inputs once.
+The existing Python fixture transport uses =exec= to replace itself and injects
+only the already-built package inputs. It performs no test discovery or build.
+Focused =test-file= retains its 120-second process fence; whole-suite execution
+retains its aggregate fence and existing Case policies. It no longer claims a
+separate per-file clock implemented by a second batch runner.
+
+Performance directories are explicit native test arguments. Nix qualifications
+use the same entry with explicit files; the Nix Justfile owns only its independent
+build and worker-effect qualifications. Init-selected module test inputs remain
+owned by the module projection, separately from ordinary =t/= discovery.
 
 The initial recipe split preserved the parsed command definitions.  Specialized
 historical gates have been relocated, not silently replaced or declared green.
@@ -48,20 +63,20 @@ The source and compiled-Gerbil qualifications now declare their command and
 receipt requirements through
 [[file:../../t/qualification/testing/specialized.ss][the qualification entry projection]]
 and the existing Core =TestingScript.=.  Core owns process execution, status,
-error markers, source Fixture cleanup and exact native harness completion.
+error markers, source Fixture cleanup and exact runtime harness completion.
 The qualification source includes the selected suite and selected runner inputs;
 unselected suites are not imported or read by the selector.
 
 | Entry | Original total budget | Retained receipt obligation |
 |-------+-----------------------+-----------------------------|
-| Interpreter/tool | 90 seconds | Exact module and native harness |
+| Interpreter/tool | 90 seconds | Exact module and runtime harness |
 | Runtime FFI | 120 seconds per existing phase | Exact compiled module/harness |
-| Query source/native | 45 seconds | 4 / 24 Case receipts |
-| Temporal native/support/evaluator | 45 seconds | 13 / 9 / 28 Case receipts |
+| Query source/runtime | 45 seconds | 4 / 24 Case receipts |
+| Temporal runtime/support/evaluator | 45 seconds | 13 / 9 / 28 Case receipts |
 | Context/Temporal | 45 seconds | 69 Case receipts, all six modules |
 | ASCENT temporal | 45 seconds | Both named semantic controls |
 | Module ownership | 120 seconds | Existing aggregator identity |
-| Whole product | 1200 seconds | ASP discovery/batch completion and observed modules |
+| Whole product | 1200 seconds | Official Harness completion for every explicit file |
 
 Watched commands retain the existing five-second byte-progress watchdog and
 failure-only stack capture.  The Scheme projection does not widen the outer
@@ -80,7 +95,7 @@ require their original producer outputs; absence is a failure, never a skip.
 
 =dev/gerbil.pkg= owns the optional ASP pin. =just deps-dev= installs it;
 =dev/testing-api.ss= composes the policy interface and =dev/unit-tests.ss=
-owns the package test entry. Production =build.ss= uses Core's native import
+owns the package test entry. Production =build.ss= uses Core's runtime import
 closure and build projection. It rejects a dependency on =agentic-ai-lab/dev/= or
 =asp-gerbil-scheme/= rather than silently building development modules.
 CI installs the optional development dependency after the library build.
@@ -96,11 +111,11 @@ digest evaluated by Bazel and synchronized to both platform lock projections.
 Product adapters now call the actual =yuanxu= source/catalog/option constructors.
 The earlier unbound =resolve-agentic-ai-lab-module-source/default= and constructor
 failures are retained as historical local failures, not current interfaces.
-=check-production-build= uses native =build.ss spec=: =--help= is not a supported
+=check-production-build= uses runtime =build.ss spec=: =--help= is not a supported
 =std/build-script= operation on this runtime.
 
 The missing-file negative case runs the real ASP batch in a bounded Ops child.
-It asserts exit 70, the missing path, native =collect-files= diagnosis,
+It asserts exit 70, the missing path, runtime =collect-files= diagnosis,
 =call-raised= and =batch-failed= terminals, and absence of a success terminal.
 Its raw child diagnostics remain in the receipt instead of being written into
 the outer harness's success stream. The strict failure-marker gate is unchanged.
@@ -109,7 +124,7 @@ The repaired policy suite passed with the installed runtime.
 ** Upstream dependency boundary
 
 The production build and Parser's local Bazel entry both use Core's
-=package-library-spec= over the native context graph. ASP owns no library
+=package-library-spec= over the runtime context graph. ASP owns no library
 source collector or build executor. Shared imports are visited once, excluded
 targets are still inspected for dependency admission, and unselected sources
 are not opened. =std/make= still owns compilation and currentness.
@@ -126,7 +141,7 @@ The pinned upstream packages remain separate evidence:
   session's upstream work.
 
 Removing the product import does not remove these upstream package-install
-requirements. Their native executable/artifact build behavior must not be
+requirements. Their runtime executable/artifact build behavior must not be
 silently discarded merely to remove a dependency edge.
 
 Installed Gerbil invokes a script's =main= itself. Qualification entry scripts

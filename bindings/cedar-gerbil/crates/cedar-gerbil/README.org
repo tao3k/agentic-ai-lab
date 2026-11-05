@@ -2,29 +2,29 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+title: POO-native Cedar boundary through gerbil-scheme-rust
+#+title: POO Cedar boundary through gerbil-scheme-rust
 
 * Owners
 
 =modules/authorization/providers/cedar/objects.ss= owns the public POO objects and their explicit
 runtime projections. =gerbil-scheme-rust= owns AOT graph linking, the one-shot
-Gerbil runtime and GC-rooted native calls. =cedar-authority= owns Cedar input
+Gerbil runtime and GC-rooted runtime calls. =cedar-authority= owns Cedar input
 validation, two real engine witnesses, signing, revocation and single-use
 grant consumption. This crate composes those owners; it adds no Scheme/C ABI
 replacement and no process-backed Scheme evaluator.
 
 The workspace root pins the three =gerbil-scheme-rust= crates to one exact Git
-revision. The native build crate exposes its Cargo-resolved source workspace,
+revision. The runtime build crate exposes its Cargo-resolved source workspace,
 so the build never guesses a sibling =.data= checkout or writes into one.
 
 * Default build contract
 
 Cedar inherits the root =gerbil.pkg= dependencies, including
-=asp-gerbil-scheme=. It declares its bounded native module projection through
-the existing ASP POO-native PackageSpec/BuilderProfile API and =std/make=;
+=asp-gerbil-scheme=. It declares its bounded runtime module projection through
+the existing ASP POO PackageSpec/BuilderProfile API and =std/make=;
 there is no nested Cedar =gerbil.pkg= or duplicate ASP dependency. The root
 remains the project source-catalog and quality-admission owner. The upstream
-=gerbil-scheme-rust= adapter owns only the compiler graph/native link boundary.
+=gerbil-scheme-rust= adapter owns only the compiler graph/runtime link boundary.
 
 Dev/test optimization is enabled at level 2 with debug information, assertions
 and overflow checks. Release uses level 3 with thin LTO and overflow checks.
@@ -32,13 +32,13 @@ Build-script dependencies also use level 2 in Dev and level 3 in Release.
 Gerbil optimization and generated C =-O2= are enabled in the canonical build.
 There is no special "fast enough for tests" profile or relaxed engine deadline.
 
-* Native conformance program
+* Runtime conformance program
 
 The =conformance= feature links the real POO fixture graph through =build.ss=.
 It is a test-only program, not a production policy bundle. A production
 consumer must supply its own compiler-owned AOT graph and link descriptor.
 The fixture reads the two-policy =.cedar= file into a Scheme POO policy before
-the native binding creates an Authority. The public application helper for
+the runtime binding creates an Authority. The public application helper for
 this operation is =agentic-ai-lab-cedar-policy-file=. =AGENTIC_AI_LAB_CEDAR_POLICY_FILE=
 can select another compatible artifact.
 
@@ -46,11 +46,11 @@ Supply the single AOT Runtime Host artifact, then run the conformance target.
 The test starts and cleans up its own Host and socket:
 
 #+begin_src sh
-just test-cedar-native "$out/bin/cedarRuntimeHost"
+just test-cedar-runtime "$out/bin/cedarRuntimeHost"
 #+end_src
 
 The selected environment must provide =GERBIL_GXI=, =GERBIL_GSC=, the project's
-=GERBIL_PATH=, and =AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST=. Missing native toolchains,
+=GERBIL_PATH=, and =AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST=. Missing runtime toolchains,
 the Host artifact, or Scheme dependencies fail the gate; a zero-test default
 invocation is not acceptance.
 
@@ -59,15 +59,15 @@ invocation is not acceptance.
 Gerbil and the engine runners no longer share a process: the POO owner connects
 to the independently managed Runtime Host. This removes Gambit's =SIGCHLD=
 handler from the child-process ownership domain while retaining hard engine
-timeouts and crash containment. =CedarNative.lean= exports the same real Cedar
-projection linked into the AOT Host. =cedarNativeProbe= is a C-owned
+timeouts and crash containment. =CedarRuntime.lean= exports the same real Cedar
+projection linked into the AOT Host. =cedarRuntimeProbe= is a C-owned
 qualification host: one thread initializes Lean and owns every argument/result;
-it never launches a child process. Lake owns its transitive native object graph.
+it never launches a child process. Lake owns its transitive runtime object graph.
 It is not an alternate public composition API or the normal authorization
 backend. See the sibling =cedar-authority/README.org= for the explicit
 qualification gate.
 
-The native probe remains diagnostic only; native execution alone does not
+The runtime probe remains diagnostic only; runtime execution alone does not
 retain hard process cancellation, crash containment, or deployment-artifact
 identity. Those properties belong to the single AOT Host and its internal
 private-worker lifecycle. Silently resetting the signal handler, accepting an

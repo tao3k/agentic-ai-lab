@@ -30,7 +30,7 @@
 
 (def opentofu-provider-families-test
   (test-suite "opentofu-provider-families-test"
-    (yuanxu-test-case "three real Provider packages, native publication and admission"
+    (yuanxu-test-case "three real Provider packages, runtime publication and admission"
       ;; One package collection supplies all leaf scopes, without per-provider ENV.
       (def AWS (.get OpenTofuScope. modules aws))
       (def AWSCC (.get OpenTofuScope. modules awscc))

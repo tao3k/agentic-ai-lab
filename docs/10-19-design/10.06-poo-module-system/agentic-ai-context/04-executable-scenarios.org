@@ -161,5 +161,5 @@ the late response is deliberately ordered after cancellation/recovery handling.
 This suite does not execute the Scheme semantic runtime, real provider effects,
 physical cancellation, durable CAS, private seal issuance, or distributed fences.
 It is neither a Quint replacement nor an unbounded Lean proof. Original Org
-formal/native qualification owners remain in force. The earlier structural
+formal/runtime qualification owners remain in force. The earlier structural
 validation and 03 architecture remain separate from these executed scenarios.

@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Generate current installed-Python/native fixtures; run in a separate process."""
+"""Generate current installed-Python/runtime fixtures; run in a separate process."""
 import argparse
 import hashlib
 from agentic_ai_lab_runtime.scheme_wire import dumps
@@ -27,11 +27,11 @@ with SemanticRuntime(args.library, expected_digest=hashlib.sha256(args.library.r
             if mode == 'unknown': task['model']['observations'][0]['modality'] = 'declared'
             result = runtime.classify_temporal_family(task)
             cases.append(dict(name=vocabulary+'-'+mode, operation='temporal.family.classify', payload=task, expected=result))
-            print('PYTHON-NATIVE-COMPLETED', vocabulary, mode, 'classify', flush=True)
+            print('PYTHON-RUNTIME-COMPLETED', vocabulary, mode, 'classify', flush=True)
             payload = {'task': task, 'candidate': result}
             cases.append(dict(name=vocabulary+'-'+mode+'-observe', operation='temporal.family.observe', payload=payload,
                               expected=runtime.call('temporal.family.observe', payload)))
-            print('PYTHON-NATIVE-COMPLETED', vocabulary, mode, 'observe', flush=True)
+            print('PYTHON-RUNTIME-COMPLETED', vocabulary, mode, 'observe', flush=True)
     lens = {'lens': {'generation': 1, 'clock': 'c', 'start': 0, 'end': 5,
                     'asOf': 5, 'cut': 'cut', 'members': ['a', 'b'], 'horizon': 8, 'closed': True},
             'source': {'identity': 'source', 'generation': 1, 'clock': 'c',
@@ -39,4 +39,4 @@ with SemanticRuntime(args.library, expected_digest=hashlib.sha256(args.library.r
     result = runtime.call('temporal.solve', lens)
     cases.append(dict(name='lens-solve', operation='temporal.solve', payload=lens, expected=result))
 args.output.write_text(dumps(cases) + '\n')
-print(f'PYTHON-NATIVE-ORACLE {len(cases)} results', flush=True)
+print(f'PYTHON-RUNTIME-ORACLE {len(cases)} results', flush=True)

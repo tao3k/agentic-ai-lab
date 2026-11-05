@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: sandbox resource POO prototypes use native typed contracts.
+;;; Boundary: sandbox resource POO prototypes use runtime typed contracts.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :clan/poo/object .def .o .ref object?)
@@ -139,7 +139,7 @@
             (published-by . runtime))
            (cpu . 2)
            (memory . "4Gi")))))
-    (yuanxu-test-case "validates runtime volume resources with native POO contracts"
+    (yuanxu-test-case "validates runtime volume resources with POO contracts"
       (let* ((validation
               (agentic-ai-lab-sandbox-resources-prototype-contract-validation
                agentic-ai-lab-runtime-volume-resources-prototype))
@@ -162,12 +162,12 @@
          (agentic-ai-lab-sandbox-resources-prototype-contract-validation?
           agentic-ai-lab-runtime-volume-resources-prototype)
          #f)
-        (check-equal? (not (not (member 'native-poo-slot-types
+        (check-equal? (not (not (member 'poo-slot-types
                                         (alist-ref/default summary
                                                            'checked-signals '()))))
                       #t)
         (check-equal? (alist-ref/default summary 'diagnostic-count #f) 0)))
-    (yuanxu-test-case "reports typed cpu contract failures natively"
+    (yuanxu-test-case "reports typed cpu contract failures runtimely"
       (let* ((validation
               (agentic-ai-lab-sandbox-resources-prototype-contract-validation
                invalid-cpu-resources-prototype))

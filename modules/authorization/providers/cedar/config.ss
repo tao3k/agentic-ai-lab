@@ -26,4 +26,4 @@
    '("cedar-rust" "cedar-lean")
    'strict-lockstep
    CedarCapabilityContractProjector
-   'native.cedar-authority))
+   'runtime.cedar-authority))

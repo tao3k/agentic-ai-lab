@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-#+title: POO-native CLOS qualification ownership
+#+title: POO CLOS qualification ownership
 
 This directory owns CLOS-specific test data and optional observation helpers.
 Build and test execution remain owned by the package's =build.ss= and its
@@ -12,13 +12,13 @@ deliberately outside the POO CLOS core denominator.
 | File | Responsibility |
 |------+----------------|
 | =clause-ledger.ss= | explicit-status semantic clauses plus the exhaustive 41-entry CLHS 7.7 operator manifest |
-| =clause-ledger-test.ss= | closure, uniqueness, profile separation, and native-reader binding to exported suites with nonzero checks |
+| =clause-ledger-test.ss= | closure, uniqueness, profile separation, and runtime-reader binding to exported suites with nonzero checks |
 | =observation.ss= | optional POO memory-observation extension for scenario tests |
 
 Agentic AI Lab does not maintain a qualification-local source catalog, dependency
 order, compiler wrapper, output directory, artifact scanner, or manifest.
 =build.ss= declares the package once through the ASP Gerbil Scheme Build API;
-the inherited native build graph owns those concerns.
+the inherited runtime build graph owns those concerns.
 
 From the project root with its Gerbil environment active:
 

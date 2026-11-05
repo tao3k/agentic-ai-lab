@@ -1,3 +1,4 @@
+(import (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config agenticAiLabUserConfigPresentation))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -7,7 +8,7 @@
 ;;; Invariant: cases consume config declarations; root user-facing files remain declarations only.
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
-        :agentic-ai-lab/modules/workflow/scenario/configuration/profile-config)
+        )
 
 (export agentic-ai-lab-declaration-case-kind
         agentic-ai-lab-declaration-case-default-setting-keys
@@ -95,7 +96,7 @@
 ;;       (agenticAiLabDeclarationCase
 ;;        'developer
 ;;        "modules/workflow/scenario/configuration/declaration-case.ss"
-;;        "user-interface/init.ss"
+;;        "init.ss"
 ;;        "user-interface/custom/my-module/interface.ss"
 ;;        config
 ;;        setting-keys
@@ -135,7 +136,7 @@
       (cons 'runtime-executed #f)))))
 
 ;;; This is a maintained template for the root practice interface. The concrete
-;;; downstream declarations still live in user-interface/init.ss and custom modules.
+;;; downstream declarations still live in init.ss and custom modules.
 ;; agenticAiLabRootDeveloperDeclarationCase
 ;;   : (-> PooUserConfig POOObject)
 ;;   | contract: builds the developer case from the supplied root config facade
@@ -152,7 +153,7 @@
   (agenticAiLabDeclarationCase
    'developer
    "modules/workflow/scenario/configuration/declaration-case.ss"
-   "user-interface/init.ss"
+   "init.ss"
    "user-interface/custom/my-module/interface.ss"
    config
    (agentic-ai-lab-declaration-case-default-setting-keys)

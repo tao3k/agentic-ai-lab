@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO-native Governance values and default method slots.
+;;; Boundary: POO Governance values and default method slots.
 ;;; Invariant: the root Profile is abstract and an assessment is never authority.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :clan/poo/mop validate)

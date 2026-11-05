@@ -133,7 +133,7 @@
     },
     "artifactDigest": "a98f918aac998d09ad6d9cd9fc23d89511996becb70eb87a5c084aff340d079c"
   },
-  "nativeObservationSeconds": 0.009165292009129189,
+  "runtimeObservationSeconds": 0.009165292009129189,
   "result": {
     "candidate": {
       "status": "complete",
@@ -169,6 +169,6 @@
     "bindingDigest": "68ed342059139c1ede54e24372bff71089ab9848d18a5214c5a18983cf47b8c4",
     "verification": "invalid"
   },
-  "failure": "native semantic contradiction",
+  "failure": "runtime semantic contradiction",
   "callSeconds": 0.8120039170025848
 }

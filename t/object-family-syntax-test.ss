@@ -62,7 +62,7 @@
 
 (def object-family-syntax-test
   (test-suite "object family syntax"
-    (yuanxu-test-case "generates POO-native predicates, accessors, and projections"
+    (yuanxu-test-case "generates POO predicates, accessors, and projections"
       (check-equal? (poo-object-family-syntax-test?
                      poo-object-family-syntax-test-object)
                     #t)

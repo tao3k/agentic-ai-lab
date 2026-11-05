@@ -1,5 +1,5 @@
 {
-  "scope": "output-contract diagnostic only; no new native ABI acceptance",
+  "scope": "output-contract diagnostic only; no new runtime ABI acceptance",
   "maxCalls": 12,
   "retries": 0,
   "contentIdleSeconds": 5,

@@ -5,4 +5,4 @@
 * Harness Policy User Interface Composition
 This scenario anchors user-facing composition syntax to the testing policy suite.
 
-The executable gates are the user-interface composition scenarios and native POO profile checks.
+The executable gates are the user-interface composition scenarios and POO profile checks.

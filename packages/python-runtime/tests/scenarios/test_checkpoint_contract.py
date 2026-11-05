@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-"""Native Session contract through Python transport; no Python inference oracle."""
+"""Runtime Session contract through Python transport; no Python inference oracle."""
 from pathlib import Path
 from importlib.resources import files
 import json
@@ -138,23 +138,23 @@ class CheckpointTransport(unittest.TestCase):
                 result = self.evaluate(facts)
                 self.assertEqual(bool(result["historical_complete"]), accepted)
 
-    def test_component_support_does_not_complete_a_declared_native_goal(self):
+    def test_component_support_does_not_complete_a_declared_runtime_goal(self):
         facts = self.facts()
-        facts["requirement"].append(("native",))
-        facts.update(dependency=[("native", "test")],
+        facts["requirement"].append(("runtime",))
+        facts.update(dependency=[("runtime", "test")],
             checkpoint_claim=[("model-claim", "test", "finite-model", "declaration"),
-                              ("native-claim", "native", "original-stress", "declaration")],
+                              ("runtime-claim", "runtime", "original-stress", "declaration")],
             checkpoint_source=[("declaration", "dsl", "declaration-sha"),
                                ("report", "receipt", "report-sha")],
             checkpoint_receipt_source=[("r", "report")])
         result = self.evaluate(facts)
         self.assertIn(["r", "report-sha", "model-claim", "support", "receipt",
                        "test", "finite-model", "applicable", "r"], result["checkpoint_observation"])
-        self.assertIn(["native-claim", "declaration-sha", "native-claim", "counter",
-                       "dsl", "native", "original-stress", "unclosed", ""],
+        self.assertIn(["runtime-claim", "declaration-sha", "runtime-claim", "counter",
+                       "dsl", "runtime", "original-stress", "unclosed", ""],
                       result["checkpoint_observation"])
-        self.assertEqual(result["checkpoint_dependency"], [["native-claim", "model-claim"]])
-        self.assertEqual(result["unclosed"], [["native"]])
+        self.assertEqual(result["checkpoint_dependency"], [["runtime-claim", "model-claim"]])
+        self.assertEqual(result["unclosed"], [["runtime"]])
 
     def test_projection_keeps_history_when_a_binding_changes(self):
         facts = self.facts()

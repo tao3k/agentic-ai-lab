@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Typed AC-08 evidence receipts and native mediation projections."""
+"""Typed AC-08 evidence receipts and runtime mediation projections."""
 
 from __future__ import annotations
 
@@ -118,7 +118,7 @@ def authorized_effect_evidence_receipt(
     return receipt
 
 
-def authorized_effect_evidence_from_native(
+def authorized_effect_evidence_from_runtime(
     *, session_id: str, mediation, result, evidence_reference: str = "",
     kernel_signature: bytes = b"", signature_verified: bool = False,
     inclusion_proof_verified: bool = False, first_sequence: int,
@@ -129,7 +129,7 @@ def authorized_effect_evidence_from_native(
         outcome = outcomes[int(result.mediation_outcome)]
     except (KeyError, TypeError, ValueError) as exc:
         raise AuthorizedEffectEvidenceError(
-            "native mediation returned an unknown outcome"
+            "runtime mediation returned an unknown outcome"
         ) from exc
     return authorized_effect_evidence_receipt(
         session_id=session_id, mediation_sequence=int(result.mediation_sequence),

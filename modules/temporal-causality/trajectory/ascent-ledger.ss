@@ -1,6 +1,6 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Native ordered observations. Provider usage and grader verdicts are trusted
+;;; Runtime ordered observations. Provider usage and grader verdicts are trusted
 ;;; host observations, not model-authored proof or reconstructed hidden thinking.
 (import :std/encoding/json (only-in :std/hash/misc hash-key?)
         (only-in :std/crypto/digest sha256)
@@ -263,7 +263,7 @@
                  (hash-put! stats "repairThinkingComplete" #f))))))
       ((evidence)
        (unless (and (text (hash-ref event "resultReference")) (text (hash-ref event "pathIdentity")))
-         (error "native evidence references required"))
+         (error "runtime evidence references required"))
        (hash-put! refs (hash-ref event "resultReference") (hash-ref next "generation"))
        (add! stats "evidenceEvents" 1))
       ((direct-answer)

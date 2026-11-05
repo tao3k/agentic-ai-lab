@@ -12,7 +12,7 @@ from agentic_ai_lab_runtime import (
     AuthorizedEffectEvidenceError,
     AuthorizedEffectEvidenceReservation,
     TursoAuthorizedEffectEvidenceStore,
-    authorized_effect_evidence_from_native,
+    authorized_effect_evidence_from_runtime,
     authorized_effect_evidence_receipt,
 )
 
@@ -83,7 +83,7 @@ def test_evidence_journal_persists_linear_root_chain(tmp_path) -> None:
     reopened.close()
 
 
-def test_native_result_projects_without_recomputing_runtime_roots() -> None:
+def test_runtime_result_projects_without_recomputing_runtime_roots() -> None:
     semantic_root = bytes.fromhex("55" * 32)
     before_root = bytes(32)
     after_root = bytes.fromhex("aa" * 32)
@@ -99,11 +99,11 @@ def test_native_result_projects_without_recomputing_runtime_roots() -> None:
         execution_root=after_root,
         observation_digest=observation,
     )
-    receipt = authorized_effect_evidence_from_native(
-        session_id="session-native",
+    receipt = authorized_effect_evidence_from_runtime(
+        session_id="session-runtime",
         mediation=mediation,
         result=result,
-        evidence_reference="native-row-1",
+        evidence_reference="runtime-row-1",
         kernel_signature=b"kernel-signature",
         signature_verified=True,
         inclusion_proof_verified=True,

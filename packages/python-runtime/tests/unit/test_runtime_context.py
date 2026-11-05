@@ -108,32 +108,32 @@ def test_runtime_graph_runtime_requires_configured_resources() -> None:
         runtime.require_checkpointer()
 
 
-def test_runtime_graph_runtime_native_backend_fails_closed_without_public_capability() -> None:
+def test_runtime_graph_runtime_backend_fails_closed_without_public_capability() -> None:
     runtime = RuntimeGraphRuntime()
 
-    with pytest.raises(RuntimeGraphRuntimeError, match="negotiated native context"):
-        runtime.require_native_context()
+    with pytest.raises(RuntimeGraphRuntimeError, match="negotiated runtime context"):
+        runtime.require_runtime_context()
 
 
 def test_runtime_graph_runtime_reference_backend_is_explicit() -> None:
     runtime = RuntimeGraphRuntime.reference()
 
     assert runtime.backend == "reference"
-    with pytest.raises(RuntimeGraphRuntimeError, match="negotiated native context"):
-        runtime.require_native_context()
+    with pytest.raises(RuntimeGraphRuntimeError, match="negotiated runtime context"):
+        runtime.require_runtime_context()
 
 
 @pytest.mark.parametrize("entrypoint", ["invoke", "stream", "resume"])
-def test_native_graph_rejects_before_reference_action(entrypoint: str) -> None:
+def test_runtime_graph_rejects_before_reference_action(entrypoint: str) -> None:
     calls = []
     program = RuntimeGraphProgram(
         plan=linear_plan("model"),
-        runtime=RuntimeGraphRuntime.native(SimpleNamespace(closed=False)),
+        runtime=RuntimeGraphRuntime.runtime(SimpleNamespace(closed=False)),
         registries=RuntimeGraphRegistries(
             actions={"model": lambda state: calls.append(state) or {"answer": 42}}
         ),
     )
-    with pytest.raises(RuntimeGraphError, match="native graph execution is unavailable"):
+    with pytest.raises(RuntimeGraphError, match="runtime graph execution is unavailable"):
         if entrypoint == "invoke":
             program.invoke({})
         elif entrypoint == "stream":
@@ -144,18 +144,18 @@ def test_native_graph_rejects_before_reference_action(entrypoint: str) -> None:
 
 
 @pytest.mark.parametrize("entrypoint", ["invoke", "stream", "batch", "resume"])
-def test_async_native_graph_rejects_before_reference_action(entrypoint: str) -> None:
+def test_async_runtime_graph_rejects_before_reference_action(entrypoint: str) -> None:
     calls = []
     program = RuntimeGraphProgram(
         plan=linear_plan("model"),
-        runtime=RuntimeGraphRuntime.native(SimpleNamespace(closed=False)),
+        runtime=RuntimeGraphRuntime.runtime(SimpleNamespace(closed=False)),
         registries=RuntimeGraphRegistries(
             actions={"model": lambda state: calls.append(state) or {"answer": 42}}
         ),
     )
 
     async def run() -> None:
-        with pytest.raises(RuntimeGraphError, match="native graph execution is unavailable"):
+        with pytest.raises(RuntimeGraphError, match="runtime graph execution is unavailable"):
             if entrypoint == "invoke":
                 await program.ainvoke({})
             elif entrypoint == "stream":

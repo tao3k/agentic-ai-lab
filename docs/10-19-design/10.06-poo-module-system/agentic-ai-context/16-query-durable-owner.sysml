@@ -5,7 +5,7 @@ package ContextQueryDurability {
     part def OwnerFixture;
     part fixture : OwnerFixture;
 
-    // Bounded durable-owner contract. No native storage or worker is simulated
+    // Bounded durable-owner contract. No runtime storage or worker is simulated
     // as a proof of implementation: the companion Org lists that open gate.
     verification def Recovery {
         subject target : OwnerFixture default = fixture;
@@ -68,7 +68,7 @@ package ContextQueryDurability {
                 assign running := running or move == 6;
 
                 // These flags are received envelopes while down, not fabricated
-                // worker termination. Event 5 denotes matching native evidence
+                // worker termination. Event 5 denotes matching runtime evidence
                 // in the abstraction, rather than a mere recovery request.
                 assign cancelReceived := cancelReceived or move == 4;
                 assign reconcileReceived := reconcileReceived or move == 5;

@@ -1,3 +1,4 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-runtime-summary agentic-ai-lab-sandbox-profile-handoff-summary agentic-ai-lab-sandbox-profile-by-name))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -7,10 +8,7 @@
 ;;; Invariant: missing or invalid profiles become diagnostics, never runtime IO.
 
 (import
-        (only-in :agentic-ai-lab/modules/agent-sandbox/config
-                 agentic-ai-lab-sandbox-profile-by-name
-                 agentic-ai-lab-sandbox-profile-handoff-summary
-                 agentic-ai-lab-sandbox-profile-runtime-summary)
+        
         "intent-utils.ss")
 
 (export +agentic-ai-lab-user-loop-engine-sandbox-handoff-agreement-contract+

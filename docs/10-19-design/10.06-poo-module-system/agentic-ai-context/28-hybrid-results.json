@@ -4,14 +4,14 @@
   "distributed_runtime_implemented": false,
   "production_context_aot_export": false,
   "throughput_accepted": false,
-  "native_limits": {
+  "runtime_limits": {
     "heap": "2G",
     "minimum_heap": "1G",
     "watchdog_seconds": 150,
     "no_chunking": true,
     "no_forced_success_exit": true
   },
-  "native": {
+  "runtime": {
     "complete_paths": 360,
     "runs": [
       {
@@ -82,7 +82,7 @@
       "sha256": "759dc9ce2a2a8faaefc29139077ffa3f8dcf7999285e95f04e171a481e4b79d0"
     },
     "standalone_scheduler": {
-      "path": "/private/tmp/context-hybrid-optimized-20261026/scheduling-native/process.json",
+      "path": "/private/tmp/context-hybrid-optimized-20261026/scheduling-runtime/process.json",
       "sha256": "313cb8af2965e63efadad79f59969dfbf00cde69572794a4c47b6b3ab8afcd54"
     }
   },
@@ -96,7 +96,7 @@
     "broken_families": 4,
     "itf_paths": 30,
     "real_progress_option": "-Dtlc2.TLC.progressInterval=1",
-    "native_refinement_proved": false,
+    "runtime_refinement_proved": false,
     "liveness_proved": false
   },
   "sysml": {

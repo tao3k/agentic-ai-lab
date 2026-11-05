@@ -101,7 +101,7 @@
         ;; path-info folds registration into its first derivation request.
         (check-equal? selected-queries (+ 1 2))
         (check-equal? bound-queries (+ 1 2))
-        ;; The real fixture is a FlakeSource: path-info owns native drv
+        ;; The real fixture is a FlakeSource: path-info owns runtime drv
         ;; registration, with no separate --read-write-mode process.
         (check-equal? registrations 0)
         (check-equal? realizations 1)

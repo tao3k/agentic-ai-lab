@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;;
 ;;; Return one inert (candidate ...) S-expression, with no prose or fence.
-;;; The native tool will call reasoning-attempt on each source snapshot
+;;; The runtime tool will call reasoning-attempt on each source snapshot
 ;;; below, request finite/founded evidence, and return a receipt. If a
 ;;; receipt is returned, you may submit one corrected candidate.
 ;;;
@@ -23,7 +23,7 @@
 ;;; Source relations edge, blocked, weight, and root are already declared
 ;;; by each snapshot. Declare only the new derived relations in the
 ;;; candidate; redeclaring a source relation is rejected by admission.
-;;; A complete native receipt is bound to its source generation and
+;;; A complete runtime receipt is bound to its source generation and
 ;;; candidate. A prior receipt must fail on a changed source.
 ;;;
 ;;; Define path as transitive closure of edge. Define allowed as path

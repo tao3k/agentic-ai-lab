@@ -11,7 +11,8 @@
          (only-in :std/test check-equal? test-suite)
         (only-in :asp-gerbil-scheme/benchmark-api benchmark-elapsed-us)
         "../support/performance"
-        :agentic-ai-lab/modules/workflow/interface)
+        (only-in :yuanxu/modules/funflow/check-objects yuanxu-cicd-check yuanxu-cicd-check-map)
+        (only-in :yuanxu/modules/funflow/dependency-graph yuanxu-cicd-check-map->dependency-graph))
 
 (export workflow-cicd-graph-performance-test)
 

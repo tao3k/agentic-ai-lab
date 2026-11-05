@@ -18,7 +18,7 @@
 (def root (getenv "AGENTIC_AI_LAB_NIX_C_API_ROOT"))
 (def nix (getenv "AGENTIC_AI_LAB_NIX_C_API_CLI"))
 (def cli-calls 0)
-(def (native-cli expression (registration? #f))
+(def (runtime-cli expression (registration? #f))
   (set! cli-calls (1+ cli-calls))
   ;; Match the existing expression Source's nix-instantiate evaluation mode.
   ;; `nix eval` defaults to pure evaluation and is a different protocol.
@@ -156,7 +156,7 @@
           (def aws-null (demand AwsNull))
           (def (cli input (registration? #f))
             (checked-query observations
-              (lambda () (native-cli (string-append "(" expression ") " (json->string input)) registration?))))
+              (lambda () (runtime-cli (string-append "(" expression ") " (json->string input)) registration?))))
           (def (measure-cli number)
             (let* ((parent (timed 'cli number 'aws-cold (cut cli aws)))
                    (parent-hot (timed 'cli number 'aws-hot (cut cli aws)))
@@ -228,7 +228,7 @@
                   (assert 'child-source-change-refused
                     (rejected? (cut query aws-null)))
                   (assert 'cli-source-change-refused (rejected? (cut cli aws-null)))
-                  (assert 'native-guard-fails-before-api (= (session-calls session) 7))
+                  (assert 'runtime-guard-fails-before-api (= (session-calls session) 7))
                   (call-with-nix-session expression directory
                     (lambda (fresh)
                       (assert 'new-session-reads-new-source

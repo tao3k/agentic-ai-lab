@@ -56,7 +56,7 @@ def _agentic_ai_lab_bundle_v1_impl(ctx):
     environment = dict(toolchain.environment)
     environment.update({
         "GERBIL_BAZEL_NATIVE_ABI": toolchain.native_abi_fingerprint,
-        "AGENTIC_AI_LAB_GERBIL_NATIVE_ABI": toolchain.native_abi_fingerprint,
+        "AGENTIC_AI_LAB_GERBIL_ABI": toolchain.native_abi_fingerprint,
     })
     ctx.actions.run(
         arguments = [arguments],

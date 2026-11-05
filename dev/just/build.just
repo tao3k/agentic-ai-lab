@@ -11,20 +11,20 @@ build:
 # The default build above still requires Core to build successfully first.
 [group('build')]
 build-library:
-    GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
+    GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_darwin_env }} gerbil build
 
 # Compile the pinned local Core using the SDK's incremental outputs.
 # Explicit cleanup remains available when replacing a bootstrap artifact cohort.
 [group('build')]
 build-core:
-    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil build
+    cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_darwin_env }} gerbil build
 
 # Clean only Core outputs; dependency source checkouts stay intact.
 [group('build')]
 clean-core:
     cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil clean
 
-# Clean only native Gerbil package build artifacts.
+# Clean only Gerbil package build artifacts.
 [group('build')]
 clean:
     gerbil clean
@@ -55,17 +55,16 @@ toolchain:
     {{ bazel }} build --toolchain_resolution_debug={{ gerbil_toolchain_type }} {{ gerbil_compile }}
 
 [group('build')]
-build-semantic-native output:
+build-semantic-runtime output:
     python3 bindings/runtime-c/tools/build-semantic.py --output "{{ output }}"
-
-# Compile one explicit test demand through init.exports.tests, as test-file does.
-# Core owns its support closure, native options, source admission and artifacts.
-# This prepares the test without starting its Cases or Harness.
-[group('build')]
-build-test path:
-    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ justfile_directory() }}:{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} timeout --signal=TERM --kill-after=5s 120s gxi {{ gerbil_test_runtime_options }} dev/tests.ss compile "{{ path }}" "{{ gerbil_test_runtime_options }}"
 
 # An explicit AOT caller consumes the published library; it owns no module list.
 [group('build')]
-build-context-actor-native executable:
-    {{ gerbil_darwin_env }} gxc -:max-heap=1G,debug=q -O -exe -o '{{executable}}' t/harness/context-actor-native-driver.ss
+build-context-actor-runtime executable:
+    {{ gerbil_darwin_env }} gxc -:max-heap=1G,debug=q -O -exe -o '{{executable}}' t/harness/context-actor-runtime-driver.ss
+
+# Focused producer compilation for the existing Durable owner. This is not
+# whole-package acceptance; runtime crash receipts bind these exact products.
+[group('build')]
+build-context-workspace-owner:
+    GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" {{ gerbil_darwin_env }} timeout --foreground --signal=TERM --kill-after=5s 120s gxc {{ gerbil_test_runtime_options }} -O -d "{{ agentic_ai_lab_library_path }}" modules/ai-agentic-context/recovery-observation.ss modules/ai-agentic-context/durable-owner.ss

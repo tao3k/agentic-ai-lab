@@ -15,7 +15,7 @@ in
 pkgs.stdenvNoCC.mkDerivation {
   pname = "terraform-provider-aws";
   inherit version;
-  # The native fixed-output fetcher reports transfer counters to Nix's activity
+  # The runtime fixed-output fetcher reports transfer counters to Nix's activity
   # stream. A curl builder's carriage-return display is not liveness evidence.
   # URL, expected content hash and archive name retain the same fixed output.
   # stdenv.fetchurlBoot can itself be replaced by a later curl bootstrap stage.

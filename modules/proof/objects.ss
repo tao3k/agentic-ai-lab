@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO-native Proof artifacts, receipts and exact digest bindings.
+;;; Boundary: POO Proof artifacts, receipts and exact digest bindings.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :clan/poo/mop validate)
         "types.ss")

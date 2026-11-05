@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Real POO object construction used only by native conformance qualification.
+;;; Real POO object construction used only by runtime conformance qualification.
 (import (only-in :std/ffi C-ffi-macrology)
         (only-in :std/encoding/json json->string)
         (only-in :clan/poo/object .o)
@@ -24,13 +24,13 @@
 ;; : (-> Unit CedarAuthoritySnapshot)
 (def (snapshot)
   (agentic-ai-lab-cedar-authority-snapshot
-   (agentic-ai-lab-cedar-authority-context "native.authority" "native.context" 1 (digest #\2) 7 1 0)
-   (agentic-ai-lab-cedar-proof-binding "native.composition" '("native.profile")
+   (agentic-ai-lab-cedar-authority-context "runtime.authority" "runtime.context" 1 (digest #\2) 7 1 0)
+   (agentic-ai-lab-cedar-proof-binding "runtime.composition" '("runtime.profile")
      (digest #\1) (digest #\3) (digest #\4) (digest #\5)
      (digest #\a) (digest #\b)
-     ["AgenticAILabProof.Runtime.CedarNative" "AgenticAILabProof.Runtime.CedarRuntimeHost"])
+     ["AgenticAILabProof.Runtime.CedarRuntime" "AgenticAILabProof.Runtime.CedarRuntimeHost"])
    [(agentic-ai-lab-cedar-policy
-     "native-atomic-bundle"
+     "runtime-atomic-bundle"
      (call-with-input-file
       (getenv "AGENTIC_AI_LAB_CEDAR_POLICY_FILE"
               "../../fixtures/atomic-case/policies.cedar")
@@ -45,13 +45,13 @@
    (.o (approved #t) (blocked blocked?)) (digest #\6)
    (agentic-ai-lab-cedar-runtime-handoff 1 #u8(10 20 30) (digest #\7) (digest #\0) (digest #\8) (digest #\9))))
 
-;; : (-> Unit NativeRoot)
+;; : (-> Unit RuntimeRoot)
 (def (project-snapshot)
   (with-catch (lambda (_) 0)
     (lambda ()
       (gerbil-rs-root-string
        (json->string (agentic-ai-lab-cedar-authority-snapshot->runtime (snapshot)))))))
-;; : (-> CedarPrincipal Boolean NativeRoot)
+;; : (-> CedarPrincipal Boolean RuntimeRoot)
 (def (project-request principal blocked?)
   (with-catch (lambda (_) 0)
     (lambda ()

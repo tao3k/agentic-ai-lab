@@ -24,7 +24,7 @@
 
 (def boundary-namespace-test
   (test-suite "boundary-namespace-test"
-    (yuanxu-test-case "validates the native contract"
+    (yuanxu-test-case "validates the runtime contract"
       (eval '(import "./modules/workflow/contracts/boundary-namespace.ss"))
       (def author-namespace
   (boundary-eval

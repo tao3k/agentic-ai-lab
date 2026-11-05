@@ -18,7 +18,7 @@ policy semantics.
 Agentic AI Lab keeps semantic authority in the upstream control plane:
 
 - Scheme / POO owns policy families, strategy combinators, object extension,
-  and policy-native composition.
+  and policy-runtime composition.
 - Lean and proof surfaces own formal guarantees where a proof layer exists.
 - The stable C ABI owns runtime-facing validation receipts, plan identity, and
   plan digest exchange.
@@ -90,7 +90,7 @@ async-anyio = ["anyio"]
 
 ** Durable Backend
 
-The durable backend should target agent-native database substrates instead of
+The durable backend should target agent-runtime database substrates instead of
 plain SQLite. The current priority is Turso / pyturso style integration:
 
 - many-database architecture for per-agent, per-user, or per-tenant isolation
@@ -162,7 +162,7 @@ When adding a new runtime language, follow this checklist:
    - high-performance FFI runtime
 2. Implement the C ABI backend first.
 3. Prove receipt compatibility with the shared conformance tests.
-4. Implement graph execution using the language runtime's native control
+4. Implement graph execution using the language runtime's runtime control
    primitives.
 5. Implement stream modes:
    - values
@@ -189,7 +189,7 @@ baseline are documented in
 /usr/bin/time -p uv run --project packages/python-runtime python -m agentic_ai_lab_runtime.benchmarks anyio-runtime --observations-per-side 10000
 #+end_src
 
-| Phase | Candidate median (ns/item) | Native reference median (ns/item) | Ratio | Threshold | Result |
+| Phase | Candidate median (ns/item) | Runtime reference median (ns/item) | Ratio | Threshold | Result |
 |-
 | Cold | 754894.083 | 204175.333 | 3.697283 | report-only | report-only |
 | Warm | 230581.604 | 167241.333 | 1.378736 | 1.545946 | pass |

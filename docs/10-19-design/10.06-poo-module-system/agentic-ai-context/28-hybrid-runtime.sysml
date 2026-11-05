@@ -6,7 +6,7 @@ package ContextHybridRuntime {
     part fixture : Fixture;
     // Runtime allocation: Tokio IO/arrival -> fixed Scheme VM owner ->
     // Context authority commit -> independent Session terminal CAS.
-    // Only owned copied bytes cross the foreign boundary; proof remains native.
+    // Only owned copied bytes cross the foreign boundary; proof remains runtime.
     verification def Handoff {
         subject target : Fixture default = fixture;
         in e1 : Integer;
@@ -62,7 +62,7 @@ package ContextHybridRuntime {
                 assign credit := if move == 2 and work == 1 and mode == 2 ? 0 else credit;
                 assign credit := if move == 3 and work == 1 ? 0 else credit;
                 assign work := if move == 3 and work == 1 ? 2 else work;
-                // Candidate bytes can outlive their native execution credit.
+                // Candidate bytes can outlive their runtime execution credit.
                 assign data := if move == 4 and work >= 2 and not joined and phase == 0
                     and data + (if busy == 1 ? 1 else 0) < 2 ? data + 1 else data;
                 assign work := if move == 4 and work >= 2 and not joined ? 3 else work;
@@ -117,7 +117,7 @@ package ContextHybridRuntime {
         }
         then done;
         out workPhase : Integer = work;
-        out nativeCredit : Integer = credit;
+        out runtimeCredit : Integer = credit;
         out ownerJoined : Boolean = joined;
         out queuedData : Integer = data;
         out queuedControls : Integer = controls;

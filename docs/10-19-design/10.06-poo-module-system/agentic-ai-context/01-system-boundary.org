@@ -30,7 +30,7 @@ Derivation/premise, rule-program/journal and current registered support/policy
 bindings, then coordinates dependency-driven invalidation and Impact refresh.
 Time/leases are inputs to that evidence-bearing model, not its definition.
 Possible hypotheses, retained proof history and current effect permission have
-different meanings. See [[file:05-concurrent-evidence-lifecycle.org][evidence-driven concurrency and native owner mapping]].
+different meanings. See [[file:05-concurrent-evidence-lifecycle.org][evidence-driven concurrency and runtime owner mapping]].
 
 * Responsibilities and dependencies
 
@@ -39,7 +39,7 @@ The [[file:01-system-boundary.sysml][boundary model]] distinguishes the followin
 | Responsibility | Context system coordination | Independent semantic boundary |
 |----------------+-----------------------------+-------------------------------|
 | Content | Source-qualified information and external-artifact references | Orgize owns Org Elements/Contract; unified POO Query/GQL selects through the ORG content window |
-| Graph Context | Compose Project roots and Worktree/domain/task increments, preserve exact cuts and alternatives | Native POO/LeanPOO C3/C4 governs declared inheritance; Git, evidence, revision and consumer edges remain distinct |
+| Graph Context | Compose Project roots and Worktree/domain/task increments, preserve exact cuts and alternatives | POO/LeanPOO C3/C4 governs declared inheritance; Git, evidence, revision and consumer edges remain distinct |
 | Working projection | Select a bounded task/turn input with evidence, restrictions and completeness | Prompt order is not composition precedence, chronology or authorization |
 | Interaction history | Bind, select, index and reproject canonical Session events | Session owns original events, branch/turn/Attempt revisions and outcomes |
 | Knowledge/Memory | Capture, reassess, retain, retrieve, consolidate and revise short-/long-term knowledge | Memory is the Context-owned retention Feature; long-term interpretation requires lineage, assumptions, outcomes and defeat conditions |
@@ -132,9 +132,9 @@ explicit verification verdicts, supplementing structural validation with
 positive, refused and deliberately unsafe controls. See that receipt for
 execution results and its finite modeling boundary.
 
-* Native replay and related research
+* Runtime replay and related research
 
-[[file:06-native-proof-support-replay.org][Native proof/support/Session replay]] records executed original ASCENT and
+[[file:06-runtime-proof-support-replay.org][Runtime proof/support/Session replay]] records executed original ASCENT and
 Scheme observations, a bypass counterexample and explicit remaining publication
 obligations. [[file:07-context-literature-comparison.org][The CLM / memory research comparison]] separates architectural
 differentiation from task-quality, cost and novelty claims requiring evaluation.
@@ -154,7 +154,7 @@ Before adding 04: exit 0; no model errors. Self-model check reported 683 element
 so cross-package references are resolved in the same model.
 
 This is the installed CLI's strict validation and reflective self-model result,
-not requirement satisfaction, state-trace exploration, universal proof or native
+not requirement satisfaction, state-trace exploration, universal proof or runtime
 implementation qualification. Accepted-event names abbreviate qualified owner
 observations; the model does not authenticate receipts or execute atomic fences.
 No Scheme implementation changed or Scheme/Quint/Lean tests ran in this review.

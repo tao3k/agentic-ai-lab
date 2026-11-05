@@ -11,7 +11,7 @@ open SourceBoundEffectCompletionRecoveryProgressEvidenceClosure
 /-!
 # Canonical recovery owner audit algebra
 
-This lightweight module owns identity continuity and non-reuse.  Native crash,
+This lightweight module owns identity continuity and non-reuse.  Runtime crash,
 scheduler, and storage bindings depend on it; the audit algebra does not depend
 on those heavy transition families.
 -/

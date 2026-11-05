@@ -14,7 +14,7 @@
         (only-in :agentic-ai-lab/modules/module-authoring/semantic-module UserConfigSourceRole. agentic-ai-lab-user-root-module-authoring-profile))
 (export semantic-module-test)
 (def semantic-module-test
-  (test-suite "role-constrained native Module"
+  (test-suite "role-constrained runtime Module"
     (yuanxu-test-case "construction has five semantic responsibilities and fresh profiles"
       (let* ((identity (yuanxu-semantic-identity 'test 'module))
              (a (yuanxu-semantic-module identity))
@@ -26,7 +26,7 @@
         (check-equal? (eq? (.ref a 'profiles) (.ref b 'profiles)) #f)
         (check-equal? (eq? (.ref a 'authoring) (.ref b 'authoring)) #f)
         (check-equal? (.ref (.ref (.ref a 'authoring) 'objects) 'freedom)
-                      'open-native-poo)
+                      'open-runtime-poo)
         (check-equal? (element? ModuleImportsContract (.ref a 'profiles)) #f)
         (check-equal? (element? SemanticModuleContract
                               (.o identity: identity imports: (.ref a 'imports)

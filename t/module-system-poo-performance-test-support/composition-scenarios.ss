@@ -19,14 +19,14 @@
         poo-performance-composition-local-override-gate-receipt
         poo-performance-composition-hook-override-valid-count
         poo-performance-composition-hook-override-gate-receipt
-        poo-performance-composition-native-object-reuse-valid-count
-        poo-performance-composition-native-object-reuse-gate-receipt
-        poo-performance-composition-native-object-reuse-large-library-valid-count
-        poo-performance-composition-native-object-reuse-large-library-gate-receipt
+        poo-performance-composition-poo-object-reuse-valid-count
+        poo-performance-composition-poo-object-reuse-gate-receipt
+        poo-performance-composition-poo-object-reuse-large-library-valid-count
+        poo-performance-composition-poo-object-reuse-large-library-gate-receipt
         poo-performance-composition-lazy-demand-valid-count
         poo-performance-composition-lazy-demand-gate-receipt
-        poo-performance-native-object-list-indexed-family-valid-count
-        poo-performance-native-object-list-indexed-family-gate-receipt
+        poo-performance-poo-object-list-indexed-family-valid-count
+        poo-performance-poo-object-list-indexed-family-gate-receipt
         poo-performance-composition-macro-style-matrix-valid-count
         poo-performance-composition-macro-style-matrix-gate-receipt
         poo-performance-composition-construction-count
@@ -60,7 +60,7 @@
       (runtime-handoff (.o (name 'runtime-handoff) (scope '(runtime))))))
 
 ;; : PooObject
-(def poo-performance-native-enterprise-profile
+(def poo-performance-runtime-enterprise-profile
   (.o (name 'enterprise-report)
       (scope '(session publish-channel))
       (publish '(human-approved legal-review proof-gated))
@@ -84,7 +84,7 @@
          (hook-audited-memory
           (poo-performance-audit-retention-hook memory-profile))
          (enterprise-report
-          (.o (:extends poo-performance-native-enterprise-profile)
+          (.o (:extends poo-performance-runtime-enterprise-profile)
               (name 'enterprise-report)
               (analysis '(checksum provenance citation-trace)))))
     (.o (name 'macro-style-performance)
@@ -119,9 +119,9 @@
                     (payload
                      '(declared-profile-object
                        grouped-profile-import
-                       local-override-native-poo
-                       hook-override-native-poo
-	                       native-object-reused-directly)))))))))))
+                       local-override-runtime-poo
+                       hook-override-runtime-poo
+	                       poo-object-reused-directly)))))))))))
 
 ;; : (-> PooObject)
 (def (poo-performance-composition-profile-declaration)
@@ -140,18 +140,18 @@
   (poo-performance-composition-macro-style-source))
 
 ;; : (-> PooObject)
-(def (poo-performance-composition-native-object-reuse)
+(def (poo-performance-composition-poo-object-reuse)
   (poo-performance-composition-macro-style-source))
 
 ;; : (-> PooObject)
-(def (poo-performance-composition-native-object-reuse-large-library)
+(def (poo-performance-composition-poo-object-reuse-large-library)
   (poo-performance-composition-note-construction!)
-  (poo-performance-large-native-profile-composition))
+  (poo-performance-large-runtime-profile-composition))
 
 ;; : (-> PooObject)
-(def (poo-performance-native-object-list-indexed-family)
+(def (poo-performance-poo-object-list-indexed-family)
   (poo-performance-composition-note-construction!)
-  (poo-performance-large-native-profile-composition))
+  (poo-performance-large-runtime-profile-composition))
 
 ;; poo-performance-composition-valid-count
 ;;   : (-> PooObject Integer Integer)
@@ -231,17 +231,17 @@
      (lambda () (poo-performance-composition-valid-count composition rounds)))))
 
 ;; : (-> Integer Integer)
-(def (poo-performance-composition-native-object-reuse-valid-count rounds)
+(def (poo-performance-composition-poo-object-reuse-valid-count rounds)
   (poo-performance-composition-valid-count
-   (poo-performance-composition-native-object-reuse)
+   (poo-performance-composition-poo-object-reuse)
    rounds))
 
 ;; : (-> Integer Alist)
-(def (poo-performance-composition-native-object-reuse-gate-receipt rounds)
-  (let (composition (poo-performance-composition-native-object-reuse))
+(def (poo-performance-composition-poo-object-reuse-gate-receipt rounds)
+  (let (composition (poo-performance-composition-poo-object-reuse))
     (poo-performance-family-run-gate
      +poo-performance-benchmark-receipt-family+
-     (poo-performance-composition-native-object-reuse-fixture)
+     (poo-performance-composition-poo-object-reuse-fixture)
      (lambda () (poo-performance-composition-valid-count composition rounds)))))
 
 ;; : (-> PooObject Integer Integer)
@@ -268,28 +268,28 @@
         rounds)))))
 
 ;; : (-> PooObject Integer Integer)
-(def (poo-performance-composition-native-object-reuse-large-library-valid-count*
+(def (poo-performance-composition-poo-object-reuse-large-library-valid-count*
       composition
       rounds)
-  (poo-performance-large-native-profile-valid-count* composition rounds))
+  (poo-performance-large-runtime-profile-valid-count* composition rounds))
 
 ;; : (-> Integer Integer)
-(def (poo-performance-composition-native-object-reuse-large-library-valid-count
+(def (poo-performance-composition-poo-object-reuse-large-library-valid-count
       rounds)
-  (poo-performance-composition-native-object-reuse-large-library-valid-count*
-   (poo-performance-composition-native-object-reuse-large-library)
+  (poo-performance-composition-poo-object-reuse-large-library-valid-count*
+   (poo-performance-composition-poo-object-reuse-large-library)
    rounds))
 
 ;; : (-> Integer Alist)
-(def (poo-performance-composition-native-object-reuse-large-library-gate-receipt
+(def (poo-performance-composition-poo-object-reuse-large-library-gate-receipt
       rounds)
   (let (composition
-        (poo-performance-composition-native-object-reuse-large-library))
+        (poo-performance-composition-poo-object-reuse-large-library))
     (poo-performance-family-run-gate
      +poo-performance-benchmark-receipt-family+
-     (poo-performance-composition-native-object-reuse-large-library-fixture)
+     (poo-performance-composition-poo-object-reuse-large-library-fixture)
      (lambda ()
-       (poo-performance-composition-native-object-reuse-large-library-valid-count*
+       (poo-performance-composition-poo-object-reuse-large-library-valid-count*
         composition
         rounds)))))
 
@@ -320,19 +320,19 @@
      (poo-performance-composition-lazy-demand-valid-count rounds))))
 
 ;; : (-> Integer Integer)
-(def (poo-performance-native-object-list-indexed-family-valid-count rounds)
-  (poo-performance-composition-native-object-reuse-large-library-valid-count*
-   (poo-performance-native-object-list-indexed-family)
+(def (poo-performance-poo-object-list-indexed-family-valid-count rounds)
+  (poo-performance-composition-poo-object-reuse-large-library-valid-count*
+   (poo-performance-poo-object-list-indexed-family)
    rounds))
 
 ;; : (-> Integer Alist)
-(def (poo-performance-native-object-list-indexed-family-gate-receipt rounds)
+(def (poo-performance-poo-object-list-indexed-family-gate-receipt rounds)
   (let (composition
-        (poo-performance-native-object-list-indexed-family))
+        (poo-performance-poo-object-list-indexed-family))
     (poo-performance-family-run-gate
      +poo-performance-benchmark-receipt-family+
-     (poo-performance-native-object-list-indexed-family-fixture)
+     (poo-performance-poo-object-list-indexed-family-fixture)
      (lambda ()
-       (poo-performance-composition-native-object-reuse-large-library-valid-count*
+       (poo-performance-composition-poo-object-reuse-large-library-valid-count*
         composition
         rounds)))))

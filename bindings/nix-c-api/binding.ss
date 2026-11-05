@@ -19,8 +19,8 @@
 (def-C-lambda session-pure? (session-pointer) int "agentic_ai_lab_nix_pure")
 (def-C-lambda session-close (session-pointer) void "agentic_ai_lab_nix_close")
 (def-C-lambda session-call (session-pointer char-string) int "agentic_ai_lab_nix_query")
-(def-C-lambda native-apply (session-pointer char-string) int "agentic_ai_lab_nix_apply")
-(def-C-lambda native-result (session-pointer char-string) int "agentic_ai_lab_nix_result")
+(def-C-lambda runtime-apply (session-pointer char-string) int "agentic_ai_lab_nix_apply")
+(def-C-lambda runtime-result (session-pointer char-string) int "agentic_ai_lab_nix_result")
 (def-C-lambda phase-seconds (session-pointer int int) double "agentic_ai_lab_nix_seconds")
 (def-C-lambda incremental-gc-mode () int "___return(agentic_ai_lab_nix_profile ? agentic_ai_lab_gc_incremental_mode() : -1);")
 (def-C-lambda phase-metric (session-pointer int int) double "agentic_ai_lab_nix_metric")
@@ -143,10 +143,10 @@
 
 ;; Diagnostic projection only; the ordinary query surface is unchanged.
 (def (session-apply! session input)
-  (unless (= (native-apply session input) 1)
+  (unless (= (runtime-apply session input) 1)
     (error "Nix C API application failed" (session-error session))))
 (def (session-result session attribute)
-  (unless (= (native-result session attribute) 1)
+  (unless (= (runtime-result session attribute) 1)
     (error "Nix C API result projection failed" attribute (session-error session)))
   (session-output session))
 (def (session-timing session phase)

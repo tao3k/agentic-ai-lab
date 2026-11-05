@@ -18,7 +18,7 @@
                  test-error
                  test-suite)
         :yuanxu/modules/funflow/control-plane/api
-        :agentic-ai-lab/modules/workflow/flows)
+        (only-in :agentic-ai-lab/modules/workflow/flows-builders make-makefile-tool-workflow make-makefile-tool-runtime-command-descriptor))
 
 (export tutorial-makefile-runtime-test)
 

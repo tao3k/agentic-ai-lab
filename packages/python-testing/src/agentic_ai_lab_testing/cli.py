@@ -37,7 +37,7 @@ def parser() -> argparse.ArgumentParser:
     command.add_argument("--module")
     command.add_argument("--part")
     command.add_argument("--composition", choices=("single", "cross"))
-    command.add_argument("--mode", choices=("unit", "native", "live"))
+    command.add_argument("--mode", choices=("unit", "runtime", "live"))
     command.add_argument("--module-root", action="append", default=[], metavar="NAME=PATH")
     command.add_argument("--receipt", type=Path,
                          help="write a structured result for the selected cases")

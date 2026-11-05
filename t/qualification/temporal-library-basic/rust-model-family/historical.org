@@ -9,7 +9,7 @@ tree by user direction; the original evidence remains in Git commit
 The historical forced read-only family batch passed 4/4 roundtrips with
 8 completed provider responses and no retries. Maximum first content was
 1.5116587499996967s; maximum content gap 0.4755849590001162s; maximum
-native call 0.2776202500008367s. Five-second genuine-content limit.
+runtime call 0.2776202500008367s. Five-second genuine-content limit.
 No MRR physical execution, authorization or IFC claim follows.
 
 | Removed artifact | Historical SHA-256 |

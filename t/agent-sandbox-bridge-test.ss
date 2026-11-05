@@ -97,9 +97,11 @@
           (check-equal? (cdr (assoc 'network-policy sandbox))
                         '((mode . proxy-only)
                           (allow-hosts . ("api.openai.com"))))
-          (check-equal? (cdr (assoc 'resource-policy sandbox))
-                        '((timeout-ms . 30000)
-                          (memory-mb . 512))))))
+          ;; Record normalization preserves policy fields, not alist order.
+          (let (policy (cdr (assoc 'resource-policy sandbox)))
+            (check-equal? (length policy) 2)
+            (check-equal? (cdr (assq 'timeout-ms policy)) 30000)
+            (check-equal? (cdr (assq 'memory-mb policy)) 512)))))
     (yuanxu-test-case "projects execution requests into bridge envelopes"
       (let ((seen-request #f)
             (seen-envelope #f))

@@ -2,7 +2,7 @@
   "application": {
     "test_checkpoint_contract.py": [
       "test_cache_loss_is_not_loss_of_evidence_or_reuse_permission",
-      "test_component_support_does_not_complete_a_declared_native_goal",
+      "test_component_support_does_not_complete_a_declared_runtime_goal",
       "test_failed_receipt_is_visible_without_becoming_completion",
       "test_fresh_process_rederives_snapshot_without_replaying_unrelated_updates",
       "test_missing_bound_input_is_not_an_empty_success",
@@ -40,11 +40,11 @@
     ],
     "test_computational_evidence.py": [
       "test_caller_owned_counts_preserve_complete_source_and_finite_rejection",
-      "test_native_store_through_selected_public_binding"
+      "test_runtime_store_through_selected_public_binding"
     ],
     "test_datalog_reuse.py": [
       "test_aggregate_dependency_and_operator_change_do_not_reuse_wrong_claim",
-      "test_exact_repeat_keeps_native_session_without_reimporting_outputs",
+      "test_exact_repeat_keeps_runtime_session_without_reimporting_outputs",
       "test_replacement_invalidates_negative_results",
       "test_total_input_fact_limit_is_not_relaxed_by_repeat_fix"
     ],
@@ -58,7 +58,7 @@
       "test_real_scheme_evidence_survives_repeat_and_rebuilds_after_withdrawal"
     ],
     "test_evidence_dag.py": [
-      "test_alpha_renaming_is_native_and_does_not_mutate_input",
+      "test_alpha_renaming_is_runtime_and_does_not_mutate_input",
       "test_capability_is_public_and_request_unknown_fields_are_rejected",
       "test_explicit_dag_preserves_recursive_component_and_topological_edges",
       "test_query_dag_rejects_changed_source_before_reuse",
@@ -87,21 +87,21 @@
       "test_unknown_and_mismatched_requests_do_not_become_proofs"
     ],
     "test_library_boundary.py": [
-      "test_native_producer_content_matches_installed_core",
+      "test_runtime_producer_content_matches_installed_core",
       "test_no_application_facade_in_rule_library"
     ],
     "test_movie_contract.py": [
       "test_movie_contract_shape_repair_and_current_source_witnesses"
     ],
-    "test_native_conversation.py": [
+    "test_runtime_conversation.py": [
       "test_duplicate_tool_identity_cannot_trigger_repeated_execution",
       "test_reasoning_and_tool_receipt_survive_the_next_stateless_request"
     ],
-    "test_native_derivations.py": [
-      "test_dag_helpers_use_the_same_native_operation",
+    "test_runtime_derivations.py": [
+      "test_dag_helpers_use_the_same_runtime_operation",
       "test_relaxed_head_surface_preserves_meaning_and_caller_input"
     ],
-    "test_native_interaction_feedback.py": [
+    "test_runtime_interaction_feedback.py": [
       "test_lossless_factoring_preserves_scope_order_and_missing_fields",
       "test_tool_errors_remain_unknown_without_invented_branch_proofs"
     ],
@@ -157,9 +157,9 @@
       "test_generation_cannot_be_renamed_even_with_identical_bytes",
       "test_in_place_generation_change_before_publication_is_rejected",
       "test_link_io_failure_does_not_turn_into_a_copy_success",
-      "test_missing_receipt_does_not_attempt_native_build",
-      "test_only_packages_exact_native_outputs_without_a_compiler",
-      "test_published_generation_survives_native_unlink_and_replacement",
+      "test_missing_receipt_does_not_attempt_runtime_build",
+      "test_only_packages_exact_runtime_outputs_without_a_compiler",
+      "test_published_generation_survives_runtime_unlink_and_replacement",
       "test_repackaging_removes_unrecorded_contiguous_generations",
       "test_resource_drift_is_rejected",
       "test_source_and_resource_paths_cannot_escape_package_roots",
@@ -170,15 +170,15 @@
       "test_checked_arithmetic_filters_and_identity",
       "test_dependency_slice_includes_every_alternative_and_negative_premise",
       "test_empty_numeric_relations_get_types_from_operator_constraints",
-      "test_inferred_integer_order_is_native_numeric_not_symbol_order",
+      "test_inferred_integer_order_is_runtime_numeric_not_symbol_order",
       "test_inferred_operator_chain_and_aggregate",
       "test_inferred_types_reject_mixed_and_join_conflicts",
       "test_loaded_engine_advertises_checked_operator_surface",
       "test_long_symbols_and_literals_preserve_complete_values",
-      "test_mixed_scalar_identity_survives_native_roundtrip",
-      "test_native_admission_rejects_negative_cycle",
-      "test_native_rejects_aggregate_recursion",
-      "test_operator_errors_remain_native_rejections",
+      "test_mixed_scalar_identity_survives_runtime_roundtrip",
+      "test_runtime_admission_rejects_negative_cycle",
+      "test_runtime_rejects_aggregate_recursion",
+      "test_operator_errors_remain_runtime_rejections",
       "test_recursive_closure_and_component_reuse",
       "test_scalar_types_remain_distinct",
       "test_source_authority_and_query_projection_cannot_change",
@@ -221,18 +221,18 @@
       "test_fresh_replace_is_transactional_without_an_initial_solve",
       "test_limits_apply_to_existing_modules_and_source_admission",
       "test_open_does_not_run_user_rule_callbacks",
-      "test_proof_revoked_by_native_session_close",
+      "test_proof_revoked_by_runtime_session_close",
       "test_proof_survives_result_release_and_is_revoked_on_replace",
-      "test_zero_deadline_and_precancellation_reject_cached_native_results"
+      "test_zero_deadline_and_precancellation_reject_cached_runtime_results"
     ],
     "test_fact_limits.py": [
       "test_default_has_no_fact_ceiling_and_withdraws_large_source",
-      "test_explicit_output_and_derived_ceilings_are_native_failures",
+      "test_explicit_output_and_derived_ceilings_are_runtime_failures",
       "test_finite_limits_count_duplicates_and_leave_rejected_update_atomic",
-      "test_invalid_finite_policy_is_rejected_natively",
+      "test_invalid_finite_policy_is_rejected_runtimely",
       "test_large_request_default_and_explicit_caller_byte_policy",
-      "test_native_reference_and_positive_change_have_no_default_count_ceiling",
-      "test_operator_default_and_native_program_constructor_are_unlimited",
+      "test_runtime_reference_and_positive_change_have_no_default_count_ceiling",
+      "test_operator_default_and_runtime_program_constructor_are_unlimited",
       "test_policy_cannot_loosen_explicit_dsl_bounds",
       "test_pure_dsl_text_uses_unlimited_counts_but_respects_explicit_bounds"
     ],
@@ -244,8 +244,8 @@
     "test_module_calls.py": [
       "test_cross_module_lattice_program_without_wire_projection",
       "test_independent_explanation_lifetime_and_repeated_cleanup",
-      "test_multiple_native_return_values_and_prepared_query",
-      "test_native_prepared_change_and_retained_operator_updates",
+      "test_multiple_runtime_return_values_and_prepared_query",
+      "test_runtime_prepared_change_and_retained_operator_updates",
       "test_owner_capacity_releases_and_does_not_select_python_fallback",
       "test_unknown_export_failed_call_released_and_foreign_references",
       "test_upstream_operator_composition_retained_session_and_withdrawal"
@@ -255,7 +255,7 @@
       "test_reused_syntax_parent_keeps_program_state_and_failed_expansion_isolated"
     ],
     "test_module_source.py": [
-      "test_authorization_required_by_python_and_native",
+      "test_authorization_required_by_python_and_runtime",
       "test_closures_cycles_foreign_and_released_values",
       "test_consumer_definitions_have_no_scheme_import_module_or_build",
       "test_invalid_source_and_failed_load_do_not_create_usable_owner",
@@ -265,15 +265,15 @@
     "test_modules.py": [
       "test_closed_session_and_wrong_owner",
       "test_execution_program_declares_observation_sources",
-      "test_hygienic_constructor_native_values_and_explanation",
+      "test_hygienic_constructor_runtime_values_and_explanation",
       "test_rejected_update_and_failed_constructor_preserve_runtime",
-      "test_shared_cyclic_and_opaque_native_values",
+      "test_shared_cyclic_and_opaque_runtime_values",
       "test_upstream_lattice_aggregate_and_operator"
     ],
     "test_rule_source.py": [
       "test_checked_comparison_and_literal",
       "test_fragment_merge_has_one_relation_contract",
-      "test_native_semantic_admission_rejects_bad_arity_binding_and_strata",
+      "test_runtime_semantic_admission_rejects_bad_arity_binding_and_strata",
       "test_reader_evaluation_sharing_and_host_code_are_rejected",
       "test_recursion_negation_and_python_only_consumer",
       "test_source_text_budgets_and_unsupported_terms_fail_closed"
@@ -282,11 +282,11 @@
       "test_authority_type_and_budget_rejections_preserve_generation",
       "test_executable_and_malformed_sources_have_no_fallback",
       "test_full_projection_execution_and_withdrawal",
-      "test_general_dsl_guards_keep_projection_gap_and_native_answers",
+      "test_general_dsl_guards_keep_projection_gap_and_runtime_answers",
       "test_general_dsl_multisource_composition_retains_recursive_closure",
       "test_general_dsl_short_circuit_preserves_scheme_truth_and_boolean_admission",
       "test_general_dsl_wide_guard_retains_upstream_macro_language",
-      "test_recursive_multisource_matches_existing_native_catalog_execution"
+      "test_recursive_multisource_matches_existing_runtime_catalog_execution"
     ],
     "test_supervision.py": [
       "test_backpressure_preserves_all_bytes_and_descriptor_mode",

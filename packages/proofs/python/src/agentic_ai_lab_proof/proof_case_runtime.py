@@ -2,10 +2,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-"""Native proof-case validation through the stable C ABI.
+"""Runtime proof-case validation through the stable C ABI.
 
 The Python validator and CFFI adapter intentionally consume the same generated
-native vector.  This keeps Python useful as a production runtime while making
+runtime vector.  This keeps Python useful as a production runtime while making
 cross-runtime conformance byte-for-byte testable without a JSON boundary.
 """
 
@@ -75,7 +75,7 @@ def _u64(vector: bytes, field: str) -> int:
 
 
 def validate_proof_case_vector(vector: bytes) -> ProofStatus:
-    """Mirror the C boundary checks using generated native-layout constants."""
+    """Mirror the C boundary checks using generated runtime-layout constants."""
     if len(vector) != VECTOR_SIZE:
         return ProofStatus.MALFORMED_EVIDENCE
     if _u32(vector, "abi_version") != ABI_VERSION:
@@ -150,7 +150,7 @@ const char *agentic_ai_lab_proof_status_name(agentic_ai_lab_proof_status);
 """
 
 
-class NativeProofCaseRuntime:
+class RuntimeProofCaseRuntime:
     """Zero-copy input adapter over ``agentic_ai_lab_proof_case_v1``."""
 
     def __init__(self, library: str | PathLike[str]) -> None:
@@ -248,8 +248,8 @@ class NativeProofCaseRuntime:
         return layout, bytes(output)
 
 
-def assert_native_differential(
-    runtime: NativeProofCaseRuntime, vector: bytes
+def assert_runtime_differential(
+    runtime: RuntimeProofCaseRuntime, vector: bytes
 ) -> ProofCaseLayout:
     python_status = validate_proof_case_vector(vector)
     try:
@@ -263,7 +263,7 @@ def assert_native_differential(
     if python_status != ProofStatus.OK:
         raise AssertionError(f"C accepted vector rejected by Python: {python_status.name}")
     if copied != vector:
-        raise AssertionError("C ABI proof-case round trip changed native bytes")
+        raise AssertionError("C ABI proof-case round trip changed runtime bytes")
     if layout != ProofCaseLayout(
         VECTOR_SIZE, VECTOR_ALIGNMENT, ABI_VERSION, bytes.fromhex(SCHEMA_FINGERPRINT_HEX)
     ):

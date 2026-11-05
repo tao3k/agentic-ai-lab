@@ -13,7 +13,7 @@
 (def (accepted? result) (yuanxu-validation-evidence-accepted? result))
 (def opentofu-reselected-artifact-test
   (test-suite "opentofu-reselected-artifact-test"
-    (yuanxu-test-case "cached AWS parent, explicit rebuild, new native child scope"
+    (yuanxu-test-case "cached AWS parent, explicit rebuild, new runtime child scope"
       (.def Configuration
         resource: (.o aws_security_group: (.o web: (.o name: "web"))))
       (.def (ParentScope @ OpenTofuScope.)

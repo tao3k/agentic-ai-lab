@@ -70,7 +70,7 @@
               null_data_source: (.o release: (.o inputs: (.o name: "smoke"))))))
       (def result (.call ConfigurationContract .admit Configuration #f))
       (assert 'whole-configuration-admitted (accepted? result))
-      (assert 'selected-native-types-retained
+      (assert 'selected-poo-types-retained
         (eq? SelectedTypes (.get ConfigurationContract selected-types)))
       (def provider-types (.get SelectedTypes provider))
       (def AwsProvider (.get provider-types aws))
@@ -96,7 +96,7 @@
             (equal? (.get module source metadata provider) (.get provider-contract provider)))
           (assert 'source-digest
             (equal? (.get module source metadata schema-digest) (.get provider-contract schema-digest)))
-          (assert 'contract-retains-native-source
+          (assert 'contract-retains-runtime-source
             (eq? (.get module source) (.get provider-contract source))))
         (list AWS AWSCC Null) (list AwsProvider AwsccProvider NullProvider)
         '("5.100.0" "1.77.0" "3.2.4"))

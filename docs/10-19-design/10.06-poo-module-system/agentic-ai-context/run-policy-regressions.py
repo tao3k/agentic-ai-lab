@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-spec = importlib.util.spec_from_file_location("grant_gate", HERE / "run-native-grant-revocation.py")
+spec = importlib.util.spec_from_file_location("grant_gate", HERE / "run-runtime-grant-revocation.py")
 grant = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(grant)
 source = grant.base

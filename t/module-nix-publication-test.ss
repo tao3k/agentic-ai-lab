@@ -15,12 +15,12 @@
 (export module-nix-publication-test)
 (def module-nix-publication-test
   (test-suite "Nix is a declarative Core Module, not a global facade"
-    (yuanxu-test-case "native prefix inspection never forces metadata or bypasses MOP reads"
+    (yuanxu-test-case "runtime prefix inspection never forces metadata or bypasses MOP reads"
       (def calls 0)
       (def (guard) (set! calls (+ calls 1)))
       (.def (Source @ NixSource.)
-        .instantiate: (lambda () "/nix/store/native-probe.drv")
-        .realize: (lambda (_derivation) "/nix/store/native-probe-artifact"))
+        .instantiate: (lambda () "/nix/store/runtime-probe.drv")
+        .realize: (lambda (_derivation) "/nix/store/runtime-probe-artifact"))
       (def prepared (.call Source .prepare guard))
       (check-equal? (module-source-operation-resume prepared guard) #f)
       (check-equal? calls 0)
@@ -39,7 +39,7 @@
       (object-protocol-set! prepared (.o))
       (.call prepared admit-current)
       (check-equal? (module-source-operation-resume prepared guard) #f))
-    (yuanxu-test-case "selected source publishes native Sources without realizing packages"
+    (yuanxu-test-case "selected source publishes runtime Sources without realizing packages"
       (call-with-temporary-directory "nix-module-publication"
         (lambda (directory)
           (let* ((path (path-expand "init.ss" directory))
@@ -51,7 +51,7 @@
                    (scope (.get view modules nix))
                    (prototype (.get scope prototypes Source)))
               (check-equal? (object? prototype) #t)
-              ;; The selected Module publishes its own native Config Type.
+              ;; The selected Module publishes its own runtime Config Type.
               (check-equal?
                 (.get (validate (.get scope types Config) (.get scope config)) nix)
                 (.get scope config nix))

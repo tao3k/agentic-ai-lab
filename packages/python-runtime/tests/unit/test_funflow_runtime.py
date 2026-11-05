@@ -81,7 +81,7 @@ def test_funflow_runtime_rejects_wrong_projection_contract() -> None:
     anyio.run(scenario)
 
 
-def test_funflow_cicd_sandbox_dag_shape_is_funflow_native() -> None:
+def test_funflow_cicd_sandbox_dag_shape_is_funflow_runtime() -> None:
     dag = build_funflow_cicd_sandbox_dag(fanout=2)
 
     assert dag.name == "funflow-cicd-sandbox-dag"

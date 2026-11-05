@@ -3,7 +3,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: stable facade for POO-native tool specs, catalogs, and receipts.
+;;; Boundary: stable facade for POO tool specs, catalogs, and receipts.
 
 (import :agentic-ai-lab/modules/tool-core/objects-spec
         :agentic-ai-lab/modules/tool-core/objects-catalog

@@ -2,7 +2,7 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Boundary: POO proof values project into the canonical native vector.
+;;; Boundary: POO proof values project into the canonical runtime vector.
 ;;; Invariant: the hot path writes once into caller-owned storage; no JSON.
 (import (only-in :clan/poo/object .ref)
         (only-in :std/crypto/digest sha256)

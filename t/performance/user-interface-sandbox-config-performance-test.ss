@@ -1,3 +1,5 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-by-name))
+(import (only-in :yuanxu/module-system/selection/objects yuanxu-user-config-feature?))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -5,7 +7,7 @@
 
 ;;; Boundary: sandbox user-interface config keeps an owner-local benchmark.
 ;;; Invariant: benchmark payloads live under t/; user-interface declarations
-;;; stay POO-native and never realize sandbox descriptors.
+;;; stay POO and never realize sandbox descriptors.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          (only-in :std/test
@@ -17,8 +19,9 @@
                  benchmark-run/result)
         (only-in :clan/poo/object .ref)
         "../user-interface-fixtures.ss"
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/profile-config
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        
         :agentic-ai-lab/modules/agent-sandbox/config)
 
 (export user-interface-sandbox-config-performance-test)

@@ -19,7 +19,7 @@
  (feature . module-objects-validation-summary)
  (optimizationFocus . "single-pass module object catalog validation summary")
  (inputShape . "5000 precomputed validation receipts aggregated into one catalog summary")
- (expectedOutcome . "one native POO summary preserves all 5000 identities, 500 invalid identities, and the no-runtime-execution signal")
+ (expectedOutcome . "one POO summary preserves all 5000 identities, 500 invalid identities, and the no-runtime-execution signal")
  (expectedRepair . "collect summary columns and invalid object identities in one traversal")
  (measurementPhases collect-before policy-before collect-after policy-after assert-time-gate observe-runtime-memory)
  (tags module-system object-validation catalog-summary performance integration))

@@ -40,16 +40,16 @@
                          '(identity semantic-digest clock-role source-identity precision
                            receipt-identity attestation-identity attempt-identity schema-identity))))))
 (def (binding? x)
-  (and (slots? x '(kind event-identity native-identity valid-time knowledge-time))
+  (and (slots? x '(kind event-identity runtime-identity valid-time knowledge-time))
        (eq? (.ref x 'kind) 'agentic-ai-lab.ascent-event-binding.v1)
-       (text? (.ref x 'event-identity)) (id? (.ref x 'native-identity))
+       (text? (.ref x 'event-identity)) (id? (.ref x 'runtime-identity))
        (let (v (.ref x 'valid-time))
          (or (not v) (observed-instant? v) (agentic-ai-lab-temporal-bounded-observation? v)))
        (observed-instant? (.ref x 'knowledge-time))))
 
-(def (agentic-ai-lab-ascent-event-binding event-id native-id valid-value knowledge-value)
+(def (agentic-ai-lab-ascent-event-binding event-id runtime-id valid-value knowledge-value)
   (let (binding (.o kind: 'agentic-ai-lab.ascent-event-binding.v1
-                   event-identity: event-id native-identity: native-id
+                   event-identity: event-id runtime-identity: runtime-id
                    valid-time: valid-value knowledge-time: knowledge-value))
     (unless (binding? binding) (error "invalid ASCENT event binding"))
     binding))
@@ -68,7 +68,7 @@
   (hex-encode (sha256 (string->utf8
                        (call-with-output-string "" (lambda (port) (write data port)))))))
 
-;;; Both domains are explicit: the common native clock name identifies this
+;;; Both domains are explicit: the common runtime clock name identifies this
 ;;; declared pair of axes. Acquisition time and cut logical time are never used
 ;;; as a replacement for the caller's knowledge coordinate.
 (def (agentic-ai-lab-ascent-exchange graph cut bindings source-name generation clock
@@ -78,7 +78,7 @@
                (id? source-name) (boolean? closed?) (text? valid-domain) (text? knowledge-domain)
                (list? bindings) (<= (length bindings) 256) (andmap binding? bindings)
                (unique? (map (lambda (b) (.ref b 'event-identity)) bindings))
-               (unique? (map (lambda (b) (.ref b 'native-identity)) bindings)))
+               (unique? (map (lambda (b) (.ref b 'runtime-identity)) bindings)))
     (error "invalid ASCENT exchange"))
   ;; Recompute owner cut selection instead of trusting a caller's complete? slot.
   (unless (equal? (cut-data cut)
@@ -96,7 +96,7 @@
     (def (find-binding name)
       (or (find (lambda (b) (equal? name (.ref b 'event-identity))) ordered)
           (error "ASCENT exchange has an unmapped parent" name)))
-    (def (native name) (.ref (find-binding name) 'native-identity))
+    (def (runtime name) (.ref (find-binding name) 'runtime-identity))
     (def (row binding)
       (let ((v (.ref binding 'valid-time)) (k (.ref binding 'knowledge-time)))
         (unless (and (equal? knowledge-domain (.ref k 'domain-identity))
@@ -105,7 +105,7 @@
                            (equal? valid-domain (.ref v 'domain-identity))
                            (equal? valid-domain (.ref (.ref v 'earliest) 'domain-identity)))))
           (error "ASCENT exchange clock domain mismatch"))
-        (list (.ref binding 'native-identity)
+        (list (.ref binding 'runtime-identity)
               (cond ((not v) 'unknown)
                     ((observed-instant? v) (.ref v 'coordinate))
                     (else (temporal-interval (.ref (.ref v 'earliest) 'coordinate)
@@ -114,12 +114,12 @@
     (let* ((rows (map row ordered))
            (parents (apply append
                       (map (lambda (e)
-                             (map (lambda (p) (list (native p) (native (.ref e 'identity))))
+                             (map (lambda (p) (list (runtime p) (runtime (.ref e 'identity))))
                                   (.ref e 'causal-parent-identities))) events)))
-           (members (map (lambda (e) (native (.ref e 'identity))) (.ref cut 'events)))
+           (members (map (lambda (e) (runtime (.ref e 'identity))) (.ref cut 'events)))
            (lens-value (temporal-lens generation clock start end as-of cut-name members horizon
                                  (and closed? (.ref cut 'complete?))))
-           ;; Bind ALL original identities/coordinates, even if native rows match.
+           ;; Bind ALL original identities/coordinates, even if runtime rows match.
            ;; This derived snapshot name is content integrity, not authentication.
            (source-id (string->symbol
                        (string-append "poo-exchange-"
@@ -127,19 +127,19 @@
                                        valid-domain knowledge-domain (cut-data cut)
                                        (.ref graph 'identity) (map event-data events)
                                        (map (lambda (b)
-                                              (list (.ref b 'event-identity) (.ref b 'native-identity)
+                                              (list (.ref b 'event-identity) (.ref b 'runtime-identity)
                                                     (valid-data (.ref b 'valid-time))
                                                     (instant-data (.ref b 'knowledge-time)))) ordered))))))
            (source-value (temporal-source source-id generation clock rows parents))
-           (lookup (map (lambda (b) (cons (string-copy (.ref b 'event-identity)) (.ref b 'native-identity))) ordered)))
+           (lookup (map (lambda (b) (cons (string-copy (.ref b 'event-identity)) (.ref b 'runtime-identity))) ordered)))
       (.o kind: 'agentic-ai-lab.ascent-exchange.v1 lens: lens-value source: source-value
-          native-root: (lambda (name)
+          runtime-root: (lambda (name)
                          (let (entry (assoc name lookup))
                            (if entry (cdr entry) (error "unmapped ASCENT root" name))))))))
 
 (def (agentic-ai-lab-ascent-exchange-solve exchange root)
   (temporal-solve (.ref exchange 'lens) (.ref exchange 'source)
-                  ((.ref exchange 'native-root) root)))
+                  ((.ref exchange 'runtime-root) root)))
 (def (agentic-ai-lab-ascent-exchange-verify exchange root answer)
   (temporal-verify (.ref exchange 'lens) (.ref exchange 'source)
-                   ((.ref exchange 'native-root) root) answer))
+                   ((.ref exchange 'runtime-root) root) answer))

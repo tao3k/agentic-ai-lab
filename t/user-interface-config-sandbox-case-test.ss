@@ -1,3 +1,6 @@
+(import (only-in :agentic-ai-lab/modules/agent-sandbox/func agentic-ai-lab-sandbox-profile-backend-kind agentic-ai-lab-sandbox-profile-backend-ref agentic-ai-lab-sandbox-profile-network-policy agentic-ai-lab-sandbox-profile-resource-policy agentic-ai-lab-sandbox-profile-recipe-portable? agentic-ai-lab-sandbox-profile->descriptor agentic-ai-lab-sandbox-profile-by-name))
+(import (only-in :yuanxu/profile-composition/user-profile yuanxuUserConfigFromProfile))
+(import (only-in :yuanxu/module-system/selection/objects yuanxu-user-config-modules yuanxu-user-config-settings yuanxu-user-module-selection? yuanxu-user-module-selection-key yuanxu-user-module-selection-has-flag? yuanxu-user-module-selection-has-flags? yuanxu-user-module-selection yuanxu-user-config-feature?))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -16,8 +19,9 @@
         test-suite)
         (only-in :clan/poo/object .ref)
         "user-interface-fixtures.ss"
-        :agentic-ai-lab/modules/workflow/scenario/configuration/interface
-        :agentic-ai-lab/modules/workflow/scenario/configuration/profile-config
+        :agentic-ai-lab/modules/workflow/scenario/configuration/entrypoints
+        :agentic-ai-lab/modules/workflow/scenario/configuration/presentation-config
+        
         :agentic-ai-lab/modules/agent-sandbox/config
         :agentic-ai-lab/modules/sandbox-core/backend-capability-catalog
         (only-in :agentic-ai-lab/modules/sandbox-core/profile-support/policy

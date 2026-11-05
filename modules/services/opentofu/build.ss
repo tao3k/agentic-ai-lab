@@ -9,11 +9,11 @@
         (only-in :yuanxu/module-system/building/configuration-source yuanxu-configuration-source)
         (only-in :yuanxu/module-system/source/admission call-with-module-source-read-cache
                  module-source-admit-current!)
-        ;; Build-tool native owners, not a second runtime facade or Loader.
+        ;; Build-tool runtime owners, not a second runtime facade or Loader.
         (only-in :agentic-ai-lab/nix-contracts NixFlakeSourceContract)
         (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :agentic-ai-lab/modules/nix/func agentic-ai-lab-nix-source-inputs))
-;; The native outer module slot keeps source/config refinements receiver-local.
+;; The runtime outer module slot keeps source/config refinements receiver-local.
 (.def Build
   module: OpenTofuScope.
   configuration-projection: (lambda (configuration) configuration)
@@ -22,7 +22,7 @@
   (lambda (root context-current! publication)
     (unless (yuanxu-validation-evidence-accepted?
               (.call OpenTofuConfigContract .admit (.get module config) #f))
-      (error "invalid OpenTofu upstream Config; expected a native Nix Source"))
+      (error "invalid OpenTofu upstream Config; expected a runtime Nix Source"))
     (unless (.get module config source)
       (error "build-required: OpenTofu Config.source must supply a Nix Source"))
     (let* ((source (.cc (.get module config source)))

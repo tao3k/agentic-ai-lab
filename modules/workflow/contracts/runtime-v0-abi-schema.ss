@@ -144,7 +144,7 @@
 
 (def (agentic-ai-lab-runtime-v0-abi-schema->event-vector schema)
   (let (port (open-output-string))
-    (emit-line port "schema=agentic-ai-lab.runtime-v0.native-event-vector.1")
+    (emit-line port "schema=agentic-ai-lab.runtime-v0.runtime-event-vector.1")
     (emit-line port "layout-version=" (.ref schema 'hot-layout-version))
     (emit-line port "header-bytes=" (.ref schema 'event-header-bytes))
     (emit-line port "event-kind=1")
