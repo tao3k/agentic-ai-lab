@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "@poo-flow/context-diagrams",
+      "name": "@agentic-ai-lab/context-diagrams",
       "dependencies": {
         "@deterministic-engineering/render": "git+https://github.com/hardenedlinux/deterministic-engineering.git#1fe20380441a0cd85055695c2adcc55ce699a369",
         "@openmbee/opensysml": "0.11.0",
