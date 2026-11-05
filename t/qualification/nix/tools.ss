@@ -3,6 +3,8 @@
 ;;; Producer roles retain their caller-owned source capability.
 ;;; Recovery readers use the separate, existing Core worker main.
 (import (only-in "../../../core/t/qualification/service-publication/fixtures.ss" current-service-source-root)
+        (rename-in (only-in "../../../core/t/qualification/build-publication/worker.ss" main)
+                   (main publication-worker))
         (rename-in (only-in "../../../core/t/qualification/build-publication/store-producer.ss" main)
                    (main store-producer))
         (rename-in (only-in "../build-publication/approved-producer.ss" main)
@@ -17,7 +19,10 @@
                      (if (string=? role "store") "scenarios/gitea-postgresql"
                          "core/scenarios/gitea-postgresql"))))
     (apply (case (string->symbol role)
-             ((store) store-producer)
+             ((store)
+              (lambda (workspace)
+                (store-producer workspace (list (car (command-line))))))
+             ((worker) publication-worker)
              ((approved) approved-producer)
              (else (error "unknown publication qualification role" role)))
            arguments)))

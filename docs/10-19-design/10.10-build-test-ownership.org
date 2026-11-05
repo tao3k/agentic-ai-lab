@@ -462,20 +462,28 @@ reported separately; the previously published ecf15ec7 queue admitted 314/315
 files and its macOS Context worker failed during native unload after final OK.
 Raw logs, native journals and failure samples remain local or CI artifacts.
 
-* Native program publication and compiler budget handoff
+* Library publication and fresh Gerbil processes
 
 The Context qualification's existing interface remains the sole Suite roster.
 Its specialized declaration invokes the official =gerbil test= command through
 the existing TestingScript, retaining the original Case count and deadline.
 There is no separate Context executable build entry or unused deferred demand.
 
-Nix recovery has an actual cross-process requirement. Its program capability
-declares files, observed preparation inputs and native =exe:= rows directly
-through =init.exports.tests .for-files=. Source-only init exports are obtained
-using Gerbil's =import-module= evaluation argument and the existing role-value
-projection. Repeated imports reuse the native Context. Producer discovery and
-compilation remain lazy slots; importing the capability starts no process.
-Removed helper functions in the ordinary package library spec are not restored.
+Core is a library. Restart qualification requires a fresh process, not a new
+executable target in Core. Lab's existing Ops declarations invoke its own
+standard-Make qualification tool. Construction is inert; only explicit execution
+creates the process. Core continues to issue and admit
+the selected library products, their identities, source inputs and approval
+records. Test drivers and the installed interpreter are trusted qualification
+inputs, distinct from the candidate library products under attack.
+
+The Nix preparation entry uses native Make to compile supporting libraries and
+link Lab's existing qualification tool. It introduces no Core =.program=
+interface or executable issuance requirement. The Core producer accepts the
+test owner's worker command; its standalone fixture still uses installed Gerbil.
+Library publication is checked independently before and after child
+execution through the existing Core artifact handoff. The candidate's writable
+record cannot substitute for the selected publication's approval.
 
 CI keeps Quint typechecking/source binding separate from model verification.
 The two existing complete verification inventories still run together; the
@@ -484,30 +492,21 @@ Both jobs retain the original deadline, and every model retains its original
 execution and idle fences. Parallel scheduling does not remove a model,
 negative control, source check or required receipt.
 
-The current Core integration still has a program-publication gap: its retained
-target admission rejects =exe:= rows, although the pure =program-products=
-projection and program rejection tests remain. Until that path is connected
-to the existing artifact issuer, successful adapter linking is not successful
-recovery qualification. Keep the refusal; do not execute an ambient binary as
-a substitute for an issued program. Reproduce through =just test-file
-t/approved-build-recovery-test.ss= after the standard Nix adapter preparation.
+Reproduce complete restart and joint product/record replacement through
+=just test-file t/approved-build-recovery-test.ss= and
+=just test-file t/build-store-recovery-test.ss= after standard Nix qualification
+preparation. Keep every refusal control and original process/Case budget. A
+successful producer or warm reader alone is not complete qualification.
 
-Program bytes, executable eligibility, compiler inputs and source observations
-share the existing signed artifact publication and replay path. The admitted
-POO build exposes =.program= for its declared compiler identity; an unknown
-identity, altered executable or stale source must be refused. The real compiler
-Fixture in =core/t/module-program-test.ss= checks those boundaries using
-an ordinary temporary Gerbil package and the official build command.
-
-The native program preserves separate linking and builtin module registration
-for the original Suites. Its entry only initializes the official expander and
-resolves the installed =gxtest= main. Gerbil still discovers Suites, runs Cases,
-invokes cleanup and reports results. There is no second Harness or Case loop.
-Whole-program optimization was rejected because the compiler initializes an
-empty builtin-module list in that mode; dynamic discovery can reload modules
-instead of retaining the intended native registration. The stopped experiment
-is not an accepted run. Missing installed tool object files are not repaired by
-copying or rewriting the official Harness.
+The process budget includes interpreter startup, qualification execution and
+normal runtime shutdown. A child printing an accepted result is not sufficient:
+the parent must observe its natural successful exit, and the official Harness
+must complete every control. Native dynamic-module unload can still consume
+time after the last protocol row. Attribute that cost separately from source
+admission; do not suppress cleanup, omit restarted readers or widen the budget
+to make a library-publication result appear complete. Existing Lean
+=CoreBuildPublication= and Quint controls describe issuance authority and final
+checks, not a bound on the operating system's dynamic-loader latency.
 
 The pinned Bazel integration has a standard =git_override= patch for generated
 native environments. Invocation-owned =GERBIL_BUILD_CORES= and =GAMBOPT= survive
@@ -626,12 +625,11 @@ retain 2 GiB / 120 seconds; Context retains 2 GiB / 150 seconds.
 
 The preserved frozen Root attempt completed all 317 files but admitted 316.
 Its sole refusal was the full approved-recovery Case exceeding 120 seconds;
-that queue is not accepted. Recovery readers now consume a separately declared
-Core native program, while the producer retains its original Root/Services
-closure. Both programs come from the admitted build object's =.program= method,
-not a fixed bin path, guessed lease directory or executable copied into place.
-The runtime and preparation share the same declared consumer projection and
-Core's existing subset issuance. They do not compile inside TestingScript.
+that queue is not accepted. Recovery readers now run Lab's existing standard
+Make tool in a fresh process. The producer retains its original Root/Services
+closure. The original Core library publication and approval
+remain the authority for candidate products; a test-driver executable is not
+another publication root. TestingScript does not compile a driver.
 
 A concrete source-authority defect remained after splitting the native roles.
 The independent consumer observed one more input than the cached preparation:

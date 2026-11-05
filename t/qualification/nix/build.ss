@@ -1,8 +1,8 @@
 #!/usr/bin/env -S gerbil interactive
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Native Nix qualification preparation uses the existing init Test demand.
-;;; Standard Make owns closure discovery, source admission and both packages.
+;;; Lab qualification preparation; Core remains an ordinary library dependency.
+;;; Standard Make owns library compilation and the existing Lab test tool.
 (import (for-syntax
           (only-in :std/source this-source-file)
           (only-in :yuanxu/module-system/building/source-package register-module-build-source!)))
@@ -69,13 +69,7 @@
   srcdir: (path-expand "core" root) libdir: output prefix: "yuanxu")
 (make (filter (lambda (source) (not (string-prefix? "core/" source))) ordered-sources)
   srcdir: root libdir: output prefix: "agentic-ai-lab")
-;; std/make owns executable construction, dependency closure and object reuse.
-;; Runtime workers remain independent processes with the existing heap limits.
-;; SDK-standard pkg-config discovery supplies the foreign-library closure;
-;; no Homebrew prefix or SDK build-machine path belongs in a target recipe.
-(def executable-link-options
-  (pkg-config-libs "libcrypto" "libssl"))
 (make (list (list exe: "t/qualification/nix/tools" bin: "build-publication-tools"
-                  "-ld-options" executable-link-options))
+                  "-ld-options" (pkg-config-libs "libcrypto" "libssl")))
   srcdir: root libdir: output prefix: "agentic-ai-lab")
 (displayln "NIX-ADAPTER-BUILD-OK")
