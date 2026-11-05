@@ -104,7 +104,7 @@ jobs:
           GERBIL_SOURCE_REF: ${{ matrix.toolchain }}
           UPSTREAM_SHA: 1cfb032c7a1612637da6205f5f8a15683eba3ba0
           WARM_BUDGET_SECONDS: "30"
-        run: gerbil env just measure-darwin-native-std-make
+        run: gerbil interactive ./run.ss
 
       - name: Restore exact Gerbil dependency cache
         id: dependency-cache
@@ -155,7 +155,7 @@ jobs:
           gerbil env just clean-core
           gerbil env just build-core
           gerbil env just clean
-          gerbil env just measure-darwin-gerbil-build cold "$TOOLCHAIN" "$RUNNER_TEMP/cold-build.ss"
+          gerbil interactive t/qualification/darwin-gerbil-build-scenario.ss cold "$TOOLCHAIN" "$RUNNER_TEMP/cold-build.ss"
 
       - name: Measure warm Agentic AI Lab build
         env:
@@ -163,7 +163,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gerbil env just measure-darwin-gerbil-build warm "$TOOLCHAIN" "$RUNNER_TEMP/warm-build.ss"
+          gerbil interactive t/qualification/darwin-gerbil-build-scenario.ss warm "$TOOLCHAIN" "$RUNNER_TEMP/warm-build.ss"
 
       - name: Validate v0.19 JSON capability
         run: |

@@ -58,3 +58,8 @@ _apalache-out/
 
 # Isolated native CI dependency qualification prefixes.
 .gerbil-ci-*/
+
+# Local finite-model execution inputs are qualification artifacts.
+/runtime-capacity-current-quint.receipt.inputs.json
+/runtime-capacity-final-quint.receipt.inputs.json
+/runtime-native-capture-quint.receipt.inputs.json

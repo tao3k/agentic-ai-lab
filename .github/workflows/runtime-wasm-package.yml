@@ -96,7 +96,7 @@ jobs:
           set +e
           runtime_abi_output="$(
             bazelisk run --ui_event_filters=-info --noshow_progress \
-              @gerbil_bazel//gerbil:runtime_abi_fingerprint 2>&1
+              @gerbil_bazel//gerbil:native_abi_fingerprint 2>&1
           )"
           runtime_abi_status=$?
           set -e

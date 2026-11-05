@@ -21,7 +21,7 @@
   (let* ((elapsed-ms
           (benchmark-elapsed-ms
            (lambda ()
-             (run-process/batch '("gerbil" "build")))))
+             (run-process/batch '("timeout" "--signal=TERM" "--kill-after=5s" "60s" "gerbil" "build")))))
          (receipt
           `((schema . agentic-ai-lab.darwin-gerbil-build-scenario.v1)
             (phase . ,phase)
@@ -29,6 +29,7 @@
             (entrypoint . "build.ss")
             (measurement-owner . asp-gerbil-scheme/benchmark-api)
             (executor . "gerbil build")
+            (timeout-seconds . 60)
             (elapsed-ms . ,(exact->inexact elapsed-ms))
             (status . 0))))
     (call-with-output-file
