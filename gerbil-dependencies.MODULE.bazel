@@ -14,11 +14,11 @@ gerbil_dependency_sources.source_package(
     name = "gerbil_poo_sources",
     canonical_uri = "https://github.com/tao3k/gerbil-poo",
     package = "gerbil-poo",
-    revision = "v0.1.2",
-    sha256 = "4a9d0eeae1858aba23b55d09e20896c77188f4a0fa03b8e0c57f1a7d4b428d99",
-    strip_prefix = "gerbil-poo-0.1.2",
+    revision = "d06ee2f118cdd9eb46597dd2bd4b4c71f6652fca",
+    sha256 = "3cc97b37d37b1e32d739789942c4e33dbe17531bf84925184ced4d7852fafbf2",
+    strip_prefix = "gerbil-poo-d06ee2f118cdd9eb46597dd2bd4b4c71f6652fca",
     urls = [
-        "https://github.com/tao3k/gerbil-poo/archive/v0.1.2.tar.gz",
+        "https://github.com/tao3k/gerbil-poo/archive/d06ee2f118cdd9eb46597dd2bd4b4c71f6652fca.tar.gz",
     ],
 )
 gerbil_dependency_sources.source_package(
