@@ -11,13 +11,14 @@
 (def (assert label value)
   (unless value (error "assertion failed" label))
   (displayln "ASSERT-OK " label) (force-output))
-(def (inputs candidate) (.call OpenTofuScope. .build-inputs candidate))
-(def (providers candidate) (.get (inputs candidate) providers))
 (def (accepted? result) (yuanxu-validation-evidence-accepted? result))
 
 (def opentofu-build-selection-test
   (test-suite "opentofu-build-selection-test"
     (yuanxu-test-case "final keys select package inputs before artifact injection"
+      (def Scope (.cc OpenTofuScope.))
+      (def (inputs candidate) (.call Scope .build-inputs candidate))
+      (def (providers candidate) (.get (inputs candidate) providers))
       (.def Configuration
         resource: (.o aws_security_group: (.o web: (.o name: "web"))))
       (assert 'aws-only-demand (equal? (providers Configuration) '("aws")))
@@ -43,7 +44,7 @@
       (check-exception (inputs (.o resource: 42)) error?)
       (check-exception (inputs (.o resources: (.o))) error?)
       (check-exception (inputs (.o resource: (.o typo: #f))) error?)
-      (assert 'projection-never-demands-artifact (not (.ref/cached OpenTofuScope. 'modules)))
+      (assert 'projection-never-demands-artifact (not (.ref/cached Scope 'modules)))
       ;; Wire projection consumed by Nix; not a second user selection list.
       (let (output (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_SELECTION" #f))
         (when output
@@ -54,7 +55,7 @@
       ;; Second phase runs against the real AWS-only Nix output.
       (when (getenv "AGENTIC_AI_LAB_OPENTOFU_ARTIFACT" #f)
        (let ()
-        (.def (SelectedScope @ OpenTofuScope.)
+        (.def (SelectedScope @ Scope)
           config: =>.+
           (.o artifact: (getenv "AGENTIC_AI_LAB_OPENTOFU_TEST_AWS_ONLY_ARTIFACT")))
         (def Contract (.get SelectedScope types configuration))

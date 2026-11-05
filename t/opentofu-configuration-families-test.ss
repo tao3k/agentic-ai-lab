@@ -22,10 +22,11 @@
 (def opentofu-configuration-families-test
   (test-suite "opentofu-configuration-families-test"
     (yuanxu-test-case "one configuration, three actual Provider packages"
+      (def Scope (.cc OpenTofuScope.))
       ;; Only package/test integration supplies these paths.
-      (def AWS (.get OpenTofuScope. modules aws))
-      (def AWSCC (.get OpenTofuScope. modules awscc))
-      (def Null (.get OpenTofuScope. modules null))
+      (def AWS (.get Scope modules aws))
+      (def AWSCC (.get Scope modules awscc))
+      (def Null (.get Scope modules null))
       (def SelectedTypes
         (use-module AWS as aws-scope
           (use-module AWSCC as awscc-scope

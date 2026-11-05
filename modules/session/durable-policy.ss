@@ -1,4 +1,3 @@
-(import (only-in :yuanxu/modules/funflow/check-types +yuanxu-durable-action-classes+))
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;
@@ -73,7 +72,11 @@
   'agentic-ai-lab.module-system.durable-policy.receipt.v1)
 
 ;; : [PooDurableActionClass]
-
+;; This is Session's accepted policy vocabulary, not a dependency on a selected
+;; Funflow Module's private implementation. Core's installed library need not
+;; publish that Module to construct an inert Session intent.
+(def +yuanxu-durable-action-classes+
+  '(replayable idempotent compensatable terminal manual))
 
 ;; : [PooDurableRepairMode]
 (def +agentic-ai-lab-durable-repair-modes+

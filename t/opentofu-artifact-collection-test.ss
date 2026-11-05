@@ -15,19 +15,20 @@
 (def opentofu-artifact-collection-test
   (test-suite "opentofu-artifact-collection-test"
     (yuanxu-test-case "one actual Nix collection, bounded scope and final candidate"
-      (assert 'default-root-inert (not (.ref/cached OpenTofuScope. 'modules)))
+      (def Scope (.cc OpenTofuScope.))
+      (assert 'default-root-inert (not (.ref/cached Scope 'modules)))
       (let (tf 'outside)
-        (assert 'one-bounded-binding (use-module OpenTofuScope. as tf (eq? tf OpenTofuScope.)))
+        (assert 'one-bounded-binding (use-module Scope as tf (eq? tf Scope)))
         (assert 'alias-does-not-leak (eq? tf 'outside)))
-      (def Contract (.get OpenTofuScope. types configuration))
-      (assert 'contract-does-not-demand-collection (not (.ref/cached OpenTofuScope. 'modules)))
-      (def Modules (.get OpenTofuScope. modules))
+      (def Contract (.get Scope types configuration))
+      (assert 'contract-does-not-demand-collection (not (.ref/cached Scope 'modules)))
+      (def Modules (.get Scope modules))
       (assert 'three-real-package-names (= (length (.all-slots Modules)) 3))
       (assert 'name-discovery-keeps-leaves-unforced
         (every (lambda (name) (not (.ref/cached Modules name))) '(aws awscc null)))
       (def AwsOnly (.o resource: (.o aws_security_group: (.o web: (.o name: "web")))))
       (def first
-        (use-module OpenTofuScope. as tf
+        (use-module Scope as tf
           (.call (.get tf types configuration) .admit AwsOnly #f)))
       (assert 'aws-resource-admitted (accepted? first))
       (assert 'other-package-leaves-unforced
@@ -46,11 +47,11 @@
                 awscc_ec2_security_group: (.o existing: (.o id: "sg-1234"))
                 null_data_source: (.o release: (.o inputs: (.o name: "smoke"))))))
       (def result
-        (use-module OpenTofuScope. as tf
+        (use-module Scope as tf
           (.call (.get tf types configuration) .admit Configuration #f)))
       (assert 'all-three-provider-configuration-admitted (accepted? result))
       (assert 'nine-original-child-admissions (= (length (.get result classification children)) 9))
-      (assert 'same-cached-root-contract (eq? Contract (.get OpenTofuScope. types configuration)))
+      (assert 'same-cached-root-contract (eq? Contract (.get Scope types configuration)))
       (.def (WithGroup @ Configuration)
         resource: =>.+ (.o aws_iam_group: (.o release: (.o name: "release"))))
       (def extended (.call Contract .admit WithGroup #f))
@@ -70,7 +71,7 @@
                 (create-directory directory)
                 (call-with-output-file (string-append directory "/manifest.json") (cut display "{}" <>)))
               (loop (1+ n))))
-          (.def (Probe @ OpenTofuScope.) config: =>.+ (.o artifact: tmp))
+          (.def (Probe @ Scope) config: =>.+ (.o artifact: tmp))
           (def ProbeModules (.get Probe modules))
           (assert 'hundred-directory-keys (= (length (.all-slots ProbeModules)) 100))
           (assert 'new-root-does-not-reuse-parent-registry (not (eq? Modules ProbeModules)))
@@ -82,5 +83,5 @@
             (every (lambda (name) (or (eq? name 'aws) (not (.ref/cached ProbeModules name))))
                    (.all-slots ProbeModules)))
           (assert 'retargeted-parent-contract-unchanged
-            (eq? Contract (.get OpenTofuScope. types configuration)))))
+            (eq? Contract (.get Scope types configuration)))))
       (displayln "OPENTOFU-ARTIFACT-COLLECTION-OK"))))

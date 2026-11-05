@@ -508,6 +508,15 @@ to make a library-publication result appear complete. Existing Lean
 =CoreBuildPublication= and Quint controls describe issuance authority and final
 checks, not a bound on the operating system's dynamic-loader latency.
 
+The POO dependency action uses the pinned upstream
+=gerbil_project_execution_policy= with =memory_per_core_bytes= set to 4 GiB.
+The existing guard still owns the live host-derived RSS ceiling and compiler
+capacity decision. This accounts for the Gerbil frontend and GSC/C compiler
+subtrees without fixing the worker count, changing compiler optimization,
+raising the RSS ceiling or extending a deadline. Runtime Case heap limits are
+independent and unchanged. The estimate is not proof that every compiler input
+will fit: the same guard must still reject an actual over-budget process tree.
+
 The pinned Bazel integration has a standard =git_override= patch for generated
 native environments. Invocation-owned =GERBIL_BUILD_CORES= and =GAMBOPT= survive
 nested official tool calls; configured compiler identities and native runtime

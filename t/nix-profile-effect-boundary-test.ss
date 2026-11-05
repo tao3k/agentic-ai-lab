@@ -13,7 +13,8 @@
         (only-in :yuanxu/module-system/source/admission module-source-admit-current! module-source-read)
         (only-in :yuanxu/observability/testing-fixture yuanxu-test-fixture)
         (only-in "../core/t/qualification/testing/directory.ss" write-source)
-        (only-in "../core/t/qualification/service-publication/fixtures.ss" ServicesFixture))
+        (only-in "../core/t/qualification/service-publication/fixtures.ss"
+                 ServicesFixture current-service-source-root))
 (export nix-profile-effect-boundary-test)
 
 ;; The integration owner binds real domain sources at acquisition. A compiled

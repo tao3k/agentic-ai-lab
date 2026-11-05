@@ -22,9 +22,10 @@
 (def opentofu-configuration-discovery-test
   (test-suite "opentofu-configuration-discovery-test"
     (yuanxu-test-case "final candidate discovers Contracts without SelectedTypes"
-      (def AWS (.get OpenTofuScope. modules aws))
-      (def AWSCC (.get OpenTofuScope. modules awscc))
-      (def Null (.get OpenTofuScope. modules null))
+      (def Scope (.cc OpenTofuScope.))
+      (def AWS (.get Scope modules aws))
+      (def AWSCC (.get Scope modules awscc))
+      (def Null (.get Scope modules null))
       ;; Upstream publishes the binding once. Neither keys nor values of all
       ;; bound modules may be traversed to discover a resource's owner.
       (.def (Infrastructure @ OpenTofuConfiguration.)
