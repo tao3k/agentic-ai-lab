@@ -7,7 +7,7 @@
 ;;; Invariant: this owner normalizes receipt rows only; scenario construction
 ;;; and public projection stay in durable-recovery-scenario.ss.
 
-(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+(import :agentic-ai-lab/modules/session/durable-policy
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store)
 
 (export +agentic-ai-lab-durable-recovery-scenario-diagnostic-schema+

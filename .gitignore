@@ -55,3 +55,6 @@ _apalache-out/
 
 # Runtime package publication coordination; no source or receipt authority.
 /.gerbil.publication.lock
+
+# Isolated native CI dependency qualification prefixes.
+.gerbil-ci-*/

@@ -14,7 +14,7 @@
         (only-in :clan/poo/object .o object?)
         :yuanxu/modules/funflow/control-plane/runtime-protocol
         :yuanxu/modules/funflow/control-plane/runtime-adapter
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/session/durable-policy
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend)
 

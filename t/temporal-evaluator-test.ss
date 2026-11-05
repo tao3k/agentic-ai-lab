@@ -1,52 +1,19 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features agentic-ai-lab-ai-agentic-context-profile)
-        :agentic-ai-lab/modules/ai-agentic-context/session-host
-        :agentic-ai-lab/modules/ai-agentic-context/use-host
-        :agentic-ai-lab/modules/session/funs-attempt
-        :agentic-ai-lab/modules/query/semantic/context-restriction
-        :agentic-ai-lab/modules/temporal-causality/runtime/policy-clock
-        :std/test (only-in :clan/poo/object .o .ref object?)
-        (only-in :yuanxu/observability/testing-case yuanxu-test-case yuanxu-test-case/with yuanxu-selected-testing-case-profile)
-        (only-in :yuanxu/ops/progress execution-progress!)
-        (only-in :gerbil-ascent/candidate/checked-program
-                 reasoning-source-snapshot reasoning-attempt reasoning-receipt-status reasoning-receipt-proof
-                 reasoning-receipt-rows reasoning-receipt-bound?)
-        (only-in :gerbil-ascent/candidate/provenance positive-proof-status positive-proof-nodes positive-proof-roots proof-node-id proof-node-kind proof-node-row proof-node-relation proof-node-inputs)
-        :agentic-ai-lab/modules/temporal-causality/evaluator/interface
-        :agentic-ai-lab/modules/temporal-causality/time/objects
-        :agentic-ai-lab/modules/temporal-causality/revisions/interface
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/interface
-        :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host)
-(export temporal-evaluator-test authority-fixture clock-original-context clock-replace!
-        push-row push-revision push-join! context-source context-scope at policy
-        clock-check-originals! context-proof-setup)
-;;; Keep the assertion outside the catch: std/test check-exception with `true`
-;;; can catch its own missing-exception TestError and silently pass.
-(def (rejected? thunk) (try (begin (thunk) #f) (catch (e) #t)))
-(defrule (check-rejected expr) (check (rejected? (lambda () expr)) => #t))
-;;; Original ASCENT owner data is used only at the explicitly named owner adapter.
-(def (source generation) (reasoning-source-snapshot 'graph generation '((edge 2 ((1 2) (2 3))))))
-(def proposal '(candidate (relation path 2)
-                 (rule (path ?x ?y) (edge ?x ?y))
-                 (rule (path ?x ?z) (path ?x ?y) (edge ?y ?z))
-                 (query path 1 3) (limits 8 16 32)))
-(def (admit snapshot datum receipt (steps 512) (nodes 32))
-  (agentic-ai-lab-temporal-positive-proof-from-ascent "proof" snapshot datum receipt steps nodes))
+;;; Preserve the published Suite; shared fixtures have their own owner.
+;;; Compiler units register every original Case into this native lifecycle.
+(import :std/test
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-1 register-evaluator-cases-1!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-2 register-evaluator-cases-2!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-3 register-evaluator-cases-3!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-4 register-evaluator-cases-4!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-5 register-evaluator-cases-5!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-6 register-evaluator-cases-6!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-7 register-evaluator-cases-7!)
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/cases-8 register-evaluator-cases-8!))
+(export temporal-evaluator-test)
 
-(def (at n) (agentic-ai-lab-temporal-instant (number->string n) "txn" n "host-clock" 'observed))
-(def (policy rev) (agentic-ai-lab-temporal-support-policy "policy" rev (at 1) (at 4)))
-(def program (agentic-ai-lab-temporal-support-program "p" "policy" #t
-  (list (agentic-ai-lab-temporal-support "s" "claim" "unadmitted-label"
-    (list (agentic-ai-lab-temporal-support-premise "source" "r1")) '()))))
-(def journal (agentic-ai-lab-temporal-evidence-journal "j" "txn"
-  (list (agentic-ai-lab-temporal-evidence-revision "r1" "source" 'assert #f (at 1) (agentic-ai-lab-temporal-interval "valid" (at 0) (at 10) #t #f) "content"))))
-(def (guard host gen p)
-  (agentic-ai-lab-temporal-support-policy-host-guard host gen (.ref p 'semantic-digest)
-    program journal (at 1) #f 128))
 (def temporal-evaluator-test
   (test-suite "original evaluator positive proof admission"
     (yuanxu-test-case "rejection assertions fail when the operation returns normally"

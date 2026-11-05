@@ -10,7 +10,6 @@
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. agentic-ai-lab-opentofu-provider-from-directory agentic-ai-lab-opentofu-block-contract) (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
-        (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
         :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-indexed-inputs-test)
 
@@ -33,7 +32,7 @@
 (def (ref rows key) (cdr (assoc key rows)))
 (def (diagnostic-paths result)
   (map (lambda (diagnostic)
-         (ref (yuanxu-json-schema-validation-diagnostic-metadata diagnostic) 'path))
+         (.get diagnostic path))
        (.get result diagnostics)))
 
 (def (verify-input directory name candidate unselected data-name data-candidate version)

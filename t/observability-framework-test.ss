@@ -249,7 +249,7 @@
 
     (yuanxu-test-case "source-owned obligation code survives without a central code registry"
       (let* ((contract (yuanxu-predicate-contract
-                        'domain-specific symbol? (lambda (_c _x) '(domain-policy-denied))))
+                        'domain-specific symbol? (lambda (_c _x) (list (.o code: 'domain-policy-denied)))))
              (event (yuanxu-observe-contract-admission (framework-context) contract 'value))
              (explanation (yuanxu-observation-explain event))
              (failure (car (.ref explanation 'failures))))
@@ -307,7 +307,7 @@
          (yuanxu-observe-contract-admission (.o) SemanticModuleContract (framework-module)) TypeError?)))
 
     (yuanxu-test-case "cyclic supplied evidence is incomplete inspection, not a Module cycle verdict"
-      (let* ((contract (yuanxu-predicate-contract 'denied symbol? (lambda (_c _x) '(denied))))
+      (let* ((contract (yuanxu-predicate-contract 'denied symbol? (lambda (_c _x) (list (.o code: 'denied)))))
              (receipt (yuanxu-contract-admit contract 'value #f))
              (cyclic (.o (:: self receipt) responsibility: 'cycle
                          (responsibility-evidence (list self))))
@@ -448,6 +448,19 @@
         (check-equal? (element? YuanxuDebugSlotReceiptContract admitted) #t)
         (check-equal? (.ref cycle 'accepted?) #f)
         (check-equal? (.ref cycle 'reason) 'recursive-slot-resolution)
+        ;; Receipt construction itself must admit the nested policy, including
+        ;; a non-object and an object whose native policy obligation fails.
+        (check-exception
+         (yuanxu-debug-slot-receipt #f 'configuration 'project-id 0 '() 'admitted)
+         TypeError?)
+        (check-exception
+         (yuanxu-debug-slot-receipt
+          (.cc policy 'maximum-depth 0) 'configuration 'project-id 0 '() 'admitted)
+         TypeError?)
+        (check-exception
+         (yuanxu-debug-slot-receipt
+          (.cc policy 'label 42) 'configuration 'project-id 0 '() 'admitted)
+         TypeError?)
         (check-exception
          (validate YuanxuDebugSlotPolicyContract
                    (.cc policy 'maximum-depth 0))

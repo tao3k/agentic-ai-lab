@@ -6,7 +6,8 @@
 ;;; Contract: JSON Schema emits and validates POO Contracts directly.
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-         :std/test)
+        (only-in :std/encoding/json JSONReadOptions string->json)
+        :std/test)
 
 (def (json-schema-gerbil-eval expr)
   (eval expr))

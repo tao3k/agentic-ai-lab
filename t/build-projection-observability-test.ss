@@ -3,7 +3,11 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-(import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+(import (only-in :yuanxu/observability/testing-case
+                 yuanxu-test-case yuanxu-default-testing-case-profile)
+        (rename-in
+          (only-in :agentic-ai-lab/testing-api yuanxu-default-testing-case-profile)
+          (yuanxu-default-testing-case-profile product-default-testing-profile))
         (only-in :std/test test-suite check-equal? check-exception)
         (only-in :std/misc/ports read-all-as-string)
         (only-in :clan/poo/object .o .get .ref/cached NoApplicableMethod?)
@@ -60,7 +64,7 @@
             (projection (call-with-input-file "build-spec.ss" read-all-as-string)))
         (check-equal? (contains? source ":asp-gerbil-scheme/") #f)
         (check-equal? (contains? source ":yuanxu/module-system/building/script") #t)
-        ;; Core passes its admitted value into the unchanged SDK macro.
+        ;; Core passes its admitted value into the unchanged std/build-script macro.
         (check-equal? (contains? source "(defbuild-script (modules-spec retained-spec))") #t)
         (check-equal? (contains? source "std-make-run") #f)
         (check-equal? (contains? projection "package-library-spec") #t)))
@@ -92,8 +96,10 @@
     (yuanxu-test-case "Just test launch is fail-closed before Profile loading"
       (let ((environment (call-with-input-file "dev/just/environment.just" read-all-as-string))
             (testing (call-with-input-file "dev/just/testing.just" read-all-as-string))
-            (driver (call-with-input-file "t/qualification/testing/specialized.ss" read-all-as-string)))
-        (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_MAX_HEAP\", \"1G\")") #t)
+            (driver (call-with-input-file "dev/tests.ss" read-all-as-string))
+            (adapter (call-with-input-file
+                       "dev/modules/testing/native-test-observation.ss" read-all-as-string)))
+        (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_MAX_HEAP\", \"2G\")") #t)
         (check-equal? (contains? environment "env_var_or_default(\"GERBIL_TEST_DEBUG\", \"q\")") #t)
         (check-equal? (contains? testing "timeout --signal=TERM --kill-after=5s 1200s") #t)
         (check-equal? (contains? testing "just _test-file") #f)

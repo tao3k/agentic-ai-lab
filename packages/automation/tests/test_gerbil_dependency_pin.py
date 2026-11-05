@@ -38,7 +38,7 @@ class GerbilDependencyPinTest(unittest.TestCase):
     def test_gerbil_package_is_the_direct_revision_authority(self) -> None:
         module = pin_module()
         pins = module.parse_package_pins((ROOT / "gerbil.pkg").read_text(encoding="utf-8"))
-        self.assertEqual(set(pins), {"orgize", "gerbil-ascent"})
+        self.assertEqual(set(pins), {"gerbil-parser", "orgize", "gerbil-ascent"})
         self.assertNotIn("gerbil-poo", pins)
         self.assertNotIn("asp-gerbil-scheme", pins)
         owners = module.package_pin_owners(ROOT)
@@ -73,48 +73,7 @@ class GerbilDependencyPinTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "duplicate dependency authority"):
                 module.package_pin_owners(root)
 
-    def test_runtime_prefetch_preserves_sdk_checkout_and_metadata(self) -> None:
-        module = pin_module()
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            package_root = root / "store"
-            source = package_root / "github.com/tao3k/asp-gerbil-scheme"
-            source.mkdir(parents=True)
-            subprocess.run(["git", "init", "--quiet", str(source)], check=True)
-            def commit(text: str) -> str:
-                (source / "source.ss").write_text(text)
-                subprocess.run(["git", "-C", str(source), "add", "source.ss"], check=True)
-                subprocess.run(["git", "-C", str(source), "-c", "user.name=Runtime pin test",
-                                "-c", "user.email=runtime-pin@example.invalid", "commit", "--quiet",
-                                "-m", text], check=True)
-                return subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip()
-            previous = commit("installed")
-            requested = commit("requested")
-            subprocess.run(["git", "-C", str(source), "checkout", "--quiet", previous], check=True)
-            (source / "source.ss").write_text("user edit")
-            metadata = [source.with_name(source.name + suffix) for suffix in (".manifest", ".tag")]
-            for path in metadata:
-                path.write_text("SDK-owned metadata")
-            (root / "dev").mkdir()
-            manifest = root / "dev/gerbil.pkg"
-            manifest.write_text(f'(depend: ("github.com/tao3k/asp-gerbil-scheme@{requested}"))')
-            module.prepare_runtime_pins(package_root, root, manifest=manifest)
-            self.assertEqual(subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip(), previous)
-            self.assertEqual((source / "source.ss").read_text(), "user edit")
-            self.assertTrue(all(path.read_text() == "SDK-owned metadata" for path in metadata))
 
-    def test_development_preparation_uses_its_own_declaration(self) -> None:
-        from unittest.mock import patch
-        module = pin_module()
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            (root / "dev").mkdir()
-            (root / "dev/gerbil.pkg").write_text('(depend: ("github.com/tao3k/asp-gerbil-scheme@' + "1" * 40 + '"))')
-            with patch.object(module, "ensure_runtime_commit") as prepare:
-                module.prepare_runtime_pins(root / "store", root, manifest=root / "dev/gerbil.pkg")
-            self.assertEqual(prepare.call_args.args[0], "https://github.com/tao3k/asp-gerbil-scheme.git")
-            self.assertEqual(prepare.call_args.args[1], "1" * 40)
-            prepare.assert_called_once()
 
     def test_repository_dependency_projection_is_closed(self) -> None:
         completed = subprocess.run(

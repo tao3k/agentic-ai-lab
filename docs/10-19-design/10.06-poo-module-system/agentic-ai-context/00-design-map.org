@@ -241,8 +241,8 @@ are separate evidence dimensions; none substitutes for another.
 [[file:27-bounded-scheduling.org][27]] refines 26 with a pure POO scheduling contract, executable
 SysML handoffs, finite QNT interleavings and actual ITF-to-Scheme replay.
 The reference Actor adapter verifies reserved admission credits before mailbox
-entry. Production Context owner integration and distributed scheduling remain
-separate from this qualified contract.
+entry. 28 subsequently integrates local owner ingress; distributed scheduling
+and end-to-end byte/control admission remain separate obligations.
 
 * Scheme authority and Rust runtime ecosystem
 

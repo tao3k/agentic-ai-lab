@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import os
 import subprocess
+from pathlib import Path
 
 from ..model import CaseContext
 
@@ -25,9 +26,19 @@ def evidence_assessment(context: CaseContext) -> None:
         check=False,
     )
     output = result.stdout
-    required = ("MODULE-OK t/evidence-assessment-core-test.ss", "HARNESS-OK", "\nOK\n")
-    errors = ("ERROR CASE", "ERROR CHECK", "ERROR HARNESS", "Heap overflow", "Stack overflow")
-    if result.returncode or any(token not in output for token in required):
-        raise AssertionError("evidence-assessment Scheme case did not complete")
+    # The official entry may publish a relative or normalized absolute path.
+    # Bind admission to the complete source identity, never just its basename.
+    expected = (context.repository_root / "t/evidence-assessment-core-test.ss").resolve()
+    module_ok = any(
+        (context.repository_root / Path(line.removeprefix("MODULE-OK "))).resolve() == expected
+        for line in output.splitlines() if line.startswith("MODULE-OK ")
+    )
+    required = ("HARNESS-OK", "\nOK\n")
+    errors = ("ERROR CASE", "ERROR CHECK", "ERROR MODULE", "ERROR HARNESS",
+              "Heap overflow", "Stack overflow")
+    if result.returncode or not module_ok or any(token not in output for token in required):
+        raise AssertionError(
+            f"evidence-assessment Scheme case did not complete (exit={result.returncode})\n"
+            + output[-8192:])
     if any(token in output for token in errors):
         raise AssertionError("evidence-assessment Scheme case contains an error marker")

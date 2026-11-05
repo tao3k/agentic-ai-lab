@@ -4,7 +4,7 @@
 
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/session/durable-policy
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store-backend
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/runtime-manifest)

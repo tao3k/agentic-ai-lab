@@ -121,6 +121,8 @@ jobs:
           test -n "$(bazelisk query 'somepath(//:compile, //:gerbil_parser_package)')"
           test -n "$(bazelisk query 'somepath(//:gerbil_parser_package, //:yuanxu_package)')"
 
+      # The source job includes the full cold Scheme dependency graph before
+      # its separately bounded WebAssembly compile/link phase.
       - name: Build declared Gerbil dependency projects
         timeout-minutes: 12
         run: bazelisk build --jobs=2 //:dependency_packages
@@ -140,6 +142,22 @@ jobs:
           mkdir -p "$payload"
           tar -xzf "$RUNNER_TEMP/$archive" -C "$payload" --strip-components=1
           printf '%s\n' "$GITHUB_SHA" > "$payload/.agentic-ai-lab-source-rev"
+
+      # The console tail can contain only a long linker argv and hide the first
+      # compiler error. Retain original native diagnostics on failed builds too;
+      # publishing the verified payload below still requires job success.
+      - name: Upload native source-build evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: runtime-wasm-native-source-evidence-${{ runner.os }}-${{ runner.arch }}
+          path: |
+            bazel-bin/compile.log
+            bazel-bin/compile.receipt.json
+            bazel-bin/*_package.log
+            bazel-bin/*_package.receipt.json
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Upload verified package payload
         uses: actions/upload-artifact@v7

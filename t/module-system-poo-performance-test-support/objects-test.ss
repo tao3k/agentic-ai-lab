@@ -120,9 +120,16 @@
                     identities
                     12)))))
           (check-equal? (length identities) 80)
-          (check-equal?
-           (poo-performance-object-node-lookup-count objects-node identities 1)
-           80)
+          ;; Keep missing identity evidence visible before the original assertion.
+          (let (actual (poo-performance-object-node-lookup-count objects-node identities 1))
+            (unless (= actual 80)
+              (displayln "[object-catalog-lookup] hits=" actual
+                         " child-count=" (length (yuanxu-graph-root-children objects-node))
+                         " expected-first=" (car identities)
+                         " actual-first="
+                         (let (children (yuanxu-graph-root-children objects-node))
+                           (and (pair? children) (yuanxu-graph-root-id (car children))))))
+            (check-equal? actual 80))
           (check-equal? (benchmark-receipt-pass? receipt) #t))))
 
 ;; Registers one case in the enclosing TestSuite.

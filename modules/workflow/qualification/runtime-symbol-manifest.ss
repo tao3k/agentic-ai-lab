@@ -1,3 +1,6 @@
+;;; Symbol verification is a bootstrap ABI check over native POO values.
+;;; It must run before a Core package is available in the sandbox.
+prelude: :gerbil/polydactyl
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;;

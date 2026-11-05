@@ -2,6 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Real local Nix profile effects; no default/user profile is touched.
 (import :std/test :clan/poo/object
+        (only-in :std/source this-source-file)
         (only-in :std/error Error?)
         (only-in :std/encoding/json write-json read-json)
         (only-in :std/list/walist waref)
@@ -15,6 +16,17 @@
         (only-in "../core/t/qualification/service-publication/fixtures.ss" ServicesFixture))
 (export nix-profile-effect-boundary-test)
 
+;; The integration owner binds real domain sources at acquisition. A compiled
+;; Core Fixture cannot use its build sandbox as the product's runtime source.
+(def (bind-product-service-sources prepare)
+  (lambda (workspace)
+    (parameterize ((current-service-source-root
+                     (path-expand "../core/scenarios/gitea-postgresql"
+                       (path-directory (this-source-file)))))
+      (prepare workspace))))
+(.def (ProductServicesFixture @ ServicesFixture)
+  (.prepare => bind-product-service-sources))
+
 ;; Only the admitted, selected domain plan is packaged. Not all module fields.
 (def (plan-release root label plan)
   (def directory (path-expand label root))
@@ -24,9 +36,20 @@
       (write-json port (hash ("postgresql" (.get plan postgresql port))
                             ("gitea" (.get plan gitea database-port))))))
   (def expression (path-expand "release.nix" directory))
+  ;; Use the same locked, realized fixture as the other native Nix Cases.
+  ;; CI need not install a user channel and ambient NIX_PATH is not authority.
+  (def tools
+    (call-with-input-string (getenv "AGENTIC_AI_LAB_NIX_TEST_TOOLS")
+      (lambda (port) (read-json port key-as-symbol: #f object-as-hash: #t))))
+  (def package-set (and (hash-table? tools) (hash-get tools "nixpkgs")))
+  (unless (and (string? package-set) (string-prefix? "/nix/store/" package-set)
+               (file-exists? package-set))
+    (error "Nix profile qualification requires its realized locked package set"))
   (write-source expression
     (string-append
-      "let pkgs = import <nixpkgs> {}; in pkgs.runCommand \"yuanxu-head-" label "\"\n"
+      "let pkgs = import (builtins.storePath "
+      (call-with-output-string (cut write package-set <>))
+      ") {}; in pkgs.runCommand \"yuanxu-head-" label "\"\n"
       "{ src = ./payload; } \"mkdir $out; cp $src/plan.json $out/plan.json\"\n"))
   (def source (.cc NixSource. 'expression expression))
   (def observations (.get source source-inputs))
@@ -40,7 +63,7 @@
 (def nix-profile-effect-boundary-test
   (test-suite "Real Nix profile persistence is not conditional deployment"
     (yuanxu-test-fixture "fresh process recovery and stale saved effects use immutable releases"
-      (fixture ServicesFixture)
+      (fixture ProductServicesFixture)
       (with-slots (root selection publication) fixture
         (def parent (.get publication value))
         (def cached (.get parent plan))
@@ -83,7 +106,7 @@
         (check-equal? (.get cached postgresql port) 5432)
         (check-equal? (.get next plan postgresql port) 5433)))
     (yuanxu-test-fixture "real conflicting domain requirements still prevent admission"
-      (fixture (.cc ServicesFixture postgres-ports: '(5433) gitea-ports: '(5440)))
+      (fixture (.cc ProductServicesFixture postgres-ports: '(5433) gitea-ports: '(5440)))
       (with-slots (publication) fixture
         (def parent (.get publication value))
         (.def (Release @ parent)

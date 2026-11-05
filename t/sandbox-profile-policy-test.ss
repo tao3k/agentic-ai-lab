@@ -11,7 +11,7 @@
                  check-equal?
                  test-suite)
         (only-in :clan/poo/object .ref .slot? object?)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        (only-in :agentic-ai-lab/modules/session/durable-policy
                  agentic-ai-lab-durable-policy)
         :agentic-ai-lab/modules/sandbox-core/profile-support/policy)
 

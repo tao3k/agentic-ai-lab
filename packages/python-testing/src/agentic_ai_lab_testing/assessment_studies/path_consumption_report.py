@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Exact local ledger audit and English report for the path interface study."""
+
+from agentic_ai_lab_testing.assessment_studies._source_files import _study_module_file
+
+from agentic_ai_lab_testing.model_study.reporting import report_text
 import hashlib
 import copy
 import json
@@ -10,17 +14,13 @@ from .interactive_study import balanced_oracle, tagged_oracle, obligation_accept
 from agentic_ai_lab_runtime.reasoning import expand_feedback
 
 
-def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
-def count_thinking(call):return (call.get('usage') or {}).get('output_tokens_details',{}).get('reasoning_tokens')
+from ._path_consumption_projection import sha, count_thinking, decode_historical
 
-def decode_historical(packet):
-    if packet.get('encoding')!='ascent.branch-columns.v1':return expand_feedback(packet)
-    packet=copy.deepcopy(packet);packet.pop('encoding');groups=packet.pop('groups');order=packet.pop('branchOrder');rows=[]
-    for group in groups:
-        for values,present in zip(group['rows'],group['present']):
-            rows.append({**group['common'],**{k:v for k,v,p in zip(group['fields'],values,present) if p}})
-    by_id={b['id']:b for b in rows};packet['branches']=[by_id[i] for i in order]
-    return packet
+
+from ._path_consumption_audit import _audit_path_runs
+
+
+from ._path_consumption_rendering import _render_path_report
 
 
 def main():
@@ -158,4 +158,5 @@ def main():
     print(json.dumps({'runs':len(results),'physicalResponses':len(audit),'physicalThinking':physical_thinking,'partialRequests':len(partial),'localChecks':sum(r['independentLocalChecks'] for r in results),'baselineThinking':baseline_total,'readableFreshThinking':fresh_total,'readableRetainedThinking':retained_total,'reduction':100*(1-retained_total/baseline_total)}))
 
 
-if __name__=='__main__':main()
+if __name__ == "__main__":
+    main()

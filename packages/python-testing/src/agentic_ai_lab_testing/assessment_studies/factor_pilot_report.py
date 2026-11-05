@@ -1,11 +1,20 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Descriptive accounting only. Read grades emitted by the Scheme oracle."""
-import json,hashlib,statistics
+
+from agentic_ai_lab_testing.model_study.reporting import report_text
+import json, hashlib, statistics
 from pathlib import Path
-ROOT=Path.cwd();BASE=ROOT/'.cache/ascent/factor-pilot';DOC=ROOT/'.cache/ascent/research-reports/agent-inference'
+
+ROOT = Path.cwd()
+BASE = ROOT / ".cache/ascent/factor-pilot"
+DOC = ROOT / ".cache/ascent/research-reports/agent-inference"
 DOC.mkdir(parents=True, exist_ok=True)
 
-def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def digest(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+
 def aggregate(rows):
  calls=[x for r in rows for x in r['calls']];tools=[x for r in rows for x in r['tools']];factors=[t for t in tools if t['name']=='factor' and 'factorReceipt' in t];usage=[c['usage'] for c in calls if isinstance(c.get('usage'),dict)]
  valid=[r['grade'] for r in rows if r['grade']['valid']]

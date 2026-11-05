@@ -157,7 +157,7 @@ ASCENT was =1855e89d998930e67705c5a83141142723196242= and Orgize was
 =c8a092899c6eb4cf164d5007e6da48d647fb4031=. The receipt binds source inputs
 and 1,269 installed dependency/clock compiler/runtime artifacts, unchanged across
 execution. The normal public build-root closure includes the new runtime, but
-whole-project/SDK qualification and remote CI were not run.
+whole-project Gerbil qualification and remote CI were not run.
 
 | Evidence | Actual result |
 |----------+---------------|

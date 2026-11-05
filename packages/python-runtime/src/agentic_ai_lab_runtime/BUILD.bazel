@@ -16,3 +16,10 @@ py_library(
     srcs = ["_scheme_datum.py"],
     imports = ["."],
 )
+
+# Scheme consumers include these maintained ASCENT rules in their native graph.
+filegroup(
+    name = "reasoning_rule_sources",
+    srcs = glob(["reasoning_rules/*.ss"]),
+    visibility = ["//visibility:public"],
+)

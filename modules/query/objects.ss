@@ -8,7 +8,7 @@
 (import (only-in :clan/poo/object .o .ref .slot? object?)
         (only-in :clan/poo/mop validate)
         (only-in :std/list/list every)
-        (only-in :gerbil-parser/src/modules/parser/graph-syntax
+        (only-in :gerbil-parser/graph-syntax-support
                  GraphSyntaxNode.
                  GraphSyntaxStep.
                  GraphSyntaxPath.
@@ -33,7 +33,7 @@
                  AgenticAILabQueryProvider
                  AgenticAILabQueryExecutionCandidate
                  AgenticAILabSourceQueryReceipt)
-        :yuanxu/poo-clos/interface)
+        (only-in :yuanxu/poo-clos/classes poo-clos-class))
 
 (export AgenticAILabQuery.
         AgenticAILabQueryLanguage.

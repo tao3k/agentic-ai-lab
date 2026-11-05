@@ -18,6 +18,15 @@
 (def declaration
   (.o admissions: (.o Config: (.o export-path: '(config) contract-path: '(types config)))))
 
+;; Admission is evidence-bearing. Keep each negative candidate and verify
+;; the original native failure, rather than expecting it to escape .admit.
+(def (check-refused contract candidate)
+  (def refused (.call contract .admit candidate #f))
+  (check-equal? (yuanxu-validation-evidence-accepted? refused) #f)
+  (check-equal? (pair? (.get refused diagnostics)) #t)
+  (check-equal? (TypeError? (.get refused cause)) #t)
+  (check-equal? (eq? (.get refused admission-contract) contract) #t))
+
 (def opentofu-service-contract-test
   (test-suite "Services -> OpenTofu -> Null declarations"
     (yuanxu-test-case "enabled service without a Source retains build demand"
@@ -41,18 +50,18 @@
       (def touched? #f)
       (.def (Unknown @ Config)
         services: =>.+ (.o opentofuu: (begin (set! touched? #t) (error "unknown value forced"))))
-      (check-exception (.call OpenTofuConfigContract .admit Unknown #f) TypeError?)
+      (check-refused OpenTofuConfigContract Unknown)
       (check-equal? touched? #f)
       (.def (UnknownRecipe @ Config)
         services: =>.+ (.o opentofu: =>.+ (.o Nul: (.o message: "typo"))))
-      (check-exception (.call OpenTofuConfigContract .admit UnknownRecipe #f) TypeError?)
+      (check-refused OpenTofuConfigContract UnknownRecipe)
       (.def (UnknownField @ Config)
         services: =>.+ (.o opentofu: =>.+ (.o Null: (.o message: "ok" messsage: "typo"))))
-      (check-exception (.call OpenTofuConfigContract .admit UnknownField #f) TypeError?))
+      (check-refused OpenTofuConfigContract UnknownField))
     (yuanxu-test-case "override cannot discard a field Type or missing Contract"
       (.def (Invalid @ Config)
         services: =>.+ (.o opentofu: =>.+ (.o Null: (.o message: 123))))
-      (check-exception (.call OpenTofuConfigContract .admit Invalid #f) TypeError?)
+      (check-refused OpenTofuConfigContract Invalid)
       (check-exception
         (admit-module-configuration!
           (.o config: Config types: (.o)) declaration 'services/opentofu #f) error?)
@@ -69,5 +78,5 @@
         value-contract: =>.+ (.o responsibilities: =>.+ (.o services: Extended)))
       (.def (Values @ Config)
         services: =>.+ (.o additional: (.o label: "declared")))
-      (check-exception (.call OpenTofuConfigContract .admit Values #f) TypeError?)
+      (check-refused OpenTofuConfigContract Values)
       (check-equal? (yuanxu-validation-evidence-accepted? (.call ExtendedConfig .admit Values #f)) #t))))

@@ -1,7 +1,8 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; The orchestrator retains a selected store path, NEVER a Core issuance map.
-(import :std/test :clan/poo/object
+(import (only-in "./qualification/nix/programs.ss" nix-publication-programs)
+        :std/test :clan/poo/object
         (only-in "../core/t/qualification/build-publication/projection.ss" write-artifact-bytes)
         (only-in :std/string/path path-force-extension)
         (only-in :std/io/tempfile call-with-temporary-directory)
@@ -16,14 +17,15 @@
         (only-in "../core/t/qualification/testing/directory.ss" DirectoryFixture write-source)
         "../core/t/qualification/build-publication/store.ss")
 (export build-store-recovery-test test-cleanup!)
+(def programs (nix-publication-programs (current-directory)))
 (def observations '())
 (def completed 0)
 (def (observed-result output (prefix "STORE-RESULT "))
   (def line (find (cut string-prefix? prefix <>) (string-split output #\newline)))
   (unless line (error "worker did not report its actual decision"))
   (call-with-input-string (substring line (string-length prefix) (string-length line)) read))
-(def (execute argv)
-  (.get (run-script (.cc Config command: argv timeout: 120)
+(def (execute script)
+  (.get (run-script (.cc script timeout: 120)
                     output-port: (current-error-port)) output))
 (def (bytes path) (call-with-input-file path read-all-as-u8vector))
 (def build-store-recovery-test
@@ -38,7 +40,7 @@
         ;; deduplicated; only a genuinely completed checked process advances.
         (set! completed-processes (+ completed-processes 1))
         (execution-progress! 'completed-recovery-processes completed-processes)))
-    (def output (run (list "just" "-f" "t/qualification/nix/Justfile" "store-producer" root)))
+    (def output (run (.call programs .producer "store" root)))
     (def prefix "CORE-STORE-ROOT ")
     (def line (find (cut string-prefix? prefix <>) (string-split output #\newline)))
     (unless line (error "producer did not publish a store root"))
@@ -52,7 +54,7 @@
     (def record (list-ref packet 5))
     (def binary (path-expand (string-append identity "~0.o1") lib))
     (def (worker label mode candidate marker accepted?)
-      (def actual (run (list "just" "-f" "t/qualification/nix/Justfile" "store-worker" root lib identity mode record selected candidate)))
+      (def actual (run (.call programs .worker root lib identity mode record selected candidate)))
       (check-equal? (not (not (string-contains actual marker))) #t)
       (def decision (observed-result actual
         (if (equal? mode "joint") "STORE-ATTACK-RESULT " "STORE-RESULT ")))
@@ -76,7 +78,7 @@
         (create-symbolic-link record (path-expand "issuance.ss" directory))
         (def linked (store-add directory))
         (store-verify linked)
-        (def actual (run (list "just" "-f" "t/qualification/nix/Justfile" "store-worker" root lib identity "recover-reject"
+        (def actual (run (.call programs .worker root lib identity "recover-reject"
                               record linked linked)))
         (check-equal? (not (not (string-contains actual
           "STORE-REFUSED stored Core issuance must be a regular file"))) #t)
@@ -112,7 +114,7 @@
                     "STORE-REFUSED Nix release differs from selected publication" #f)
             ;; Deliberately omit trusted release selection, holding everything
             ;; else equal. This negative control MUST accept: integrity != origin.
-            (def actual (run (list "just" "-f" "t/qualification/nix/Justfile" "store-worker" root lib identity "unanchored"
+            (def actual (run (.call programs .worker root lib identity "unanchored"
                                   record substitute substitute)))
             (check-equal? (not (not (string-contains actual "UNANCHORED-ACCEPTED"))) #t)
             (def decision (observed-result actual))

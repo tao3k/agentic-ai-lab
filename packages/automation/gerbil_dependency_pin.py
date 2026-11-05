@@ -4,20 +4,21 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Project Gerbil dependency pins into Bazel declarations and locks.
 
-``gerbil.pkg`` and ``dev/gerbil.pkg`` own production and optional development
-pins respectively. This tool does not resolve dependencies; gxpkg and Bazel retain
-that responsibility.  It only updates and checks the equivalent Bazel source
+The product, optional development and checked-in Core ``gerbil.pkg`` files
+own their respective dependency pins. This tool does not resolve dependencies;
+gxpkg and Bazel retain that responsibility.  It only updates and checks the equivalent Bazel source
 projection required by isolated builds.
+It never fetches, installs, or changes package checkouts or tag metadata.
 """
 
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import platform
 import re
-import subprocess
 import sys
 import urllib.request
 from pathlib import Path
@@ -57,7 +58,10 @@ def parse_package_pins(text: str) -> dict[str, tuple[str, str]]:
 
 def package_pin_owners(root: Path) -> dict[str, tuple[Path, tuple[str, str]]]:
     owners: dict[str, tuple[Path, tuple[str, str]]] = {}
-    for relative in ("gerbil.pkg", "dev/gerbil.pkg"):
+    # Core is a tracked first-party subtree, not an external Bazel package.
+    # Its POO dependency still has one runtime authority and must match the
+    # Bazel source projection; checking only product-direct pins misses drift.
+    for relative in ("gerbil.pkg", "dev/gerbil.pkg", "core/gerbil.pkg"):
         path = root / relative
         if not path.exists():
             continue
@@ -132,6 +136,46 @@ def declared_projection(text: str, repository_name: str) -> dict[str, object]:
     }
 
 
+def declared_toolchain(root: Path) -> dict[str, object]:
+    """Read the one runtime Gerbil declaration; do not evaluate or synthesize Bazel specs."""
+    tree = ast.parse((root / "MODULE.bazel").read_text(encoding="utf-8"))
+    constants = {}
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
+            if node.targets[0].id.startswith("GERBIL_LINUX_"):
+                constants[node.targets[0].id] = ast.literal_eval(node.value)
+    calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)
+             and isinstance(node.func, ast.Attribute) and node.func.attr == "auto"
+             and isinstance(node.func.value, ast.Name) and node.func.value.id == "gerbil"]
+    if len(calls) != 1:
+        raise ValueError("expected one authoritative gerbil.auto declaration")
+    values = {
+        keyword.arg: (constants[keyword.value.id] if isinstance(keyword.value, ast.Name)
+                      else ast.literal_eval(keyword.value))
+        for keyword in calls[0].keywords
+    }
+    return values
+
+
+def toolchain_lock_errors(extension: dict, root: Path) -> list[str]:
+    """Compare Gerbil declarations without evaluating or manufacturing Bazel specs."""
+    values = declared_toolchain(root)
+    common = {name: values[name] for name in ("expected_version_prefixes", "environment")
+              if name in values}
+    linux = {name.removeprefix("linux_prebuilt_"): value
+             for name, value in values.items()
+             if name.startswith("linux_prebuilt_") and name != "linux_prebuilt_arch"}
+    errors = []
+    for platform_key, entry in extension.items():
+        specification = entry.get("generatedRepoSpecs", {}).get("local_gerbil", {})
+        attributes = specification.get("attributes", {})
+        expected = common | (linux if "os:linux," in platform_key else {})
+        for name, value in expected.items():
+            if attributes.get(name) != value:
+                errors.append(f"{platform_key}: Gerbil local_gerbil.{name} is stale")
+    return errors
+
+
 def collect_errors(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
     sources_text = (root / "gerbil-dependencies.MODULE.bazel").read_text(encoding="utf-8")
@@ -140,6 +184,7 @@ def collect_errors(root: Path = ROOT) -> list[str]:
     repositories = direct_source_repositories(sources_text)
     declared_repository_names = set(repositories.values())
     extension = lock.get("moduleExtensions", {}).get(EXTENSION_ID, {})
+    errors.extend(toolchain_lock_errors(extension, root))
 
     for platform_key, platform_lock in extension.items():
         generated = platform_lock.get("generatedRepoSpecs", {})
@@ -180,6 +225,11 @@ def collect_errors(root: Path = ROOT) -> list[str]:
     }
     if len(usage_digests) > 1:
         errors.append("Bazel extension usagesDigest differs across platform lock entries")
+    implementation_digests = {
+        entry.get("bzlTransitiveDigest") for entry in extension.values()
+    }
+    if len(implementation_digests) > 1:
+        errors.append("Bazel extension implementation differs across platform lock entries")
     return errors
 
 
@@ -277,6 +327,11 @@ def sync_lock(root: Path = ROOT) -> None:
     extension = lock.get("moduleExtensions", {}).get(EXTENSION_ID)
     if not isinstance(extension, dict) or not extension:
         raise ValueError("Gerbil Bazel extension lock is absent")
+    # A new digest cannot bless old platform-specific Gerbil repository specs.
+    # Runtime Bazel evaluation owns those specs; refuse before changing the lock.
+    sdk_errors = toolchain_lock_errors(extension, root)
+    if sdk_errors:
+        raise ValueError("; ".join(sdk_errors) + "; run the runtime lock refresh workflow")
     runtime = extension[host_lock_key(extension)]
     runtime_repositories = runtime["generatedRepoSpecs"]
     repositories_by_package = direct_source_repositories(
@@ -284,6 +339,9 @@ def sync_lock(root: Path = ROOT) -> None:
     )
     repository_names = set(repositories_by_package.values())
     for platform_lock in extension.values():
+        # Extension code and declarations are platform independent. Keep each
+        # platform's toolchain repositories, but update both shared identities.
+        platform_lock["bzlTransitiveDigest"] = runtime["bzlTransitiveDigest"]
         platform_lock["usagesDigest"] = runtime["usagesDigest"]
         repositories = platform_lock["generatedRepoSpecs"]
         for repository_name in locked_source_package_names(repositories) - repository_names:
@@ -294,72 +352,33 @@ def sync_lock(root: Path = ROOT) -> None:
     print("gerbil-dependency-pin: synchronized cross-platform Bazel lock projections")
 
 
-def ensure_runtime_commit(url: str, revision: str, target: Path) -> None:
-    """Fetch an exact commit without resetting an existing package checkout."""
-    if not re.fullmatch(r"[0-9a-f]{40}", revision):
-        raise ValueError("runtime prefetch requires a full commit SHA")
-    created = not target.exists()
-    if created:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        subprocess.run(["git", "init", "--quiet", str(target)], check=True)
-        subprocess.run(["git", "-C", str(target), "remote", "add", "origin", url], check=True)
-    elif not (target / ".git").exists():
-        raise ValueError(f"runtime package path is not a Git checkout: {target}")
-    present = subprocess.run(
-        ["git", "-C", str(target), "cat-file", "-e", f"{revision}^{{commit}}"],
-        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-    ).returncode == 0
-    if not present:
-        print(f"gerbil-runtime-pin: fetching {revision} into {target}", flush=True)
-        subprocess.run(
-            ["git", "-C", str(target), "fetch", "--no-tags", "--depth=1", url, revision],
-            check=True,
-        )
-    # A failed first fetch leaves an initialized but unborn checkout. Complete
-    # only that new checkout; existing branches and local edits remain intact.
-    unborn = subprocess.run(
-        ["git", "-C", str(target), "rev-parse", "--verify", "HEAD"],
-        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-    ).returncode != 0
-    if created or unborn:
-        subprocess.run(["git", "-C", str(target), "checkout", "--quiet", "--detach", revision], check=True)
-        # gxpkg reads this adjacent Scheme datum to distinguish an installed
-        # immutable pin from an untagged detached branch (whose name is empty).
-        target.with_name(target.name + ".tag").write_text(json.dumps(revision) + "\n")
-    print(f"gerbil-runtime-pin: ready {revision}", flush=True)
-
-
-def prepare_runtime_pins(package_root: Path, root: Path = ROOT, manifest: Path | None = None) -> None:
-    """Materialize declared SHA objects; gxpkg still owns tag resolution/builds."""
-    package_manifest = manifest if manifest is not None else root / "gerbil.pkg"
-    for repository, revision in parse_package_pins(package_manifest.read_text()).values():
-        if not re.fullmatch(r"[0-9a-f]{40}", revision):
-            continue
-        target = (package_root / repository).resolve()
-        if not target.is_relative_to(package_root.resolve()):
-            raise ValueError("runtime package pin escapes package root")
-        ensure_runtime_commit(f"https://{repository}.git", revision, target)
+def refresh_runtime_lock(root: Path = ROOT) -> None:
+    """Invalidate only this host's cached extension result before runtime evaluation."""
+    lock_path = root / "MODULE.bazel.lock"
+    lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    extension = lock["moduleExtensions"][EXTENSION_ID]
+    del extension[host_lock_key(extension)]
+    lock_path.write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")
+    print("gerbil-dependency-pin: removed runtime cached evaluation; Bazel must regenerate it")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    check_parser = subparsers.add_parser("check", help="validate runtime and Bazel pins")
+    check_parser = subparsers.add_parser("check", help="check Bazel projections against package declarations")
     check_parser.set_defaults(command="check")
     pin_parser = subparsers.add_parser("pin", help="project one direct dependency revision")
     pin_parser.add_argument("package")
     pin_parser.add_argument("revision")
     subparsers.add_parser("sync-lock", help="copy the runtime lock projection across platforms")
-    prepare_parser = subparsers.add_parser("prepare-runtime", help="fetch immutable commit objects for gxpkg")
-    prepare_parser.add_argument("--package-root", type=Path, required=True)
-    prepare_parser.add_argument("--manifest", type=Path, help="authoritative package manifest (defaults to root gerbil.pkg)")
+    subparsers.add_parser("refresh-runtime-lock", help="invalidate the runtime cached extension result")
     args = parser.parse_args()
 
     try:
-        if args.command == "prepare-runtime":
-            prepare_runtime_pins(args.package_root, manifest=args.manifest)
-        elif args.command == "pin":
+        if args.command == "pin":
             project_pin(args.package, args.revision)
+        elif args.command == "refresh-runtime-lock":
+            refresh_runtime_lock()
         elif args.command == "sync-lock":
             sync_lock()
         else:
@@ -369,7 +388,7 @@ def main() -> int:
                     print(f"gerbil-dependency-contract: {error}", file=sys.stderr)
                 return 1
             print("gerbil-dependency-contract: ok")
-    except (KeyError, OSError, ValueError, json.JSONDecodeError, subprocess.CalledProcessError) as error:
+    except (KeyError, OSError, ValueError, json.JSONDecodeError) as error:
         print(f"gerbil-dependency-pin: {error}", file=sys.stderr)
         return 1
     return 0

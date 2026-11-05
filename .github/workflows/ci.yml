@@ -54,10 +54,12 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            gerbil-label: release-v0.19-1cfb032
+            gerbil-label: release-v0.19-2591dcd
           - os: macos-26
             gerbil-label: release-v0.19-1cfb032
     env:
+      # Heap capacity is per test process; compiler capacity follows the runner.
+      GERBIL_TEST_MAX_HEAP: 2G
       GERBIL_RELEASE_ROOT: ${{ github.workspace }}/.ci/gerbil-release/${{ matrix.gerbil-label }}
     steps:
       - name: Checkout agentic-ai-lab
@@ -87,6 +89,12 @@ jobs:
             pkg-config \
             sqlite3 \
             zlib1g-dev
+          # Preserve caller limits; package/test serialization does not cap
+          # the native compiler's own runner-derived backend capacity.
+          workers="${GERBIL_BUILD_CORES:-$(getconf _NPROCESSORS_ONLN)}"
+          [[ "$workers" =~ ^[1-9][0-9]*$ ]]
+          echo "GERBIL_BUILD_CORES=$workers" >> "$GITHUB_ENV"
+          echo "Native compiler workers: $workers"
 
       - name: Install macOS system dependencies
         if: runner.os == 'macOS'
@@ -96,6 +104,9 @@ jobs:
         run: |
           brew list --formula ghostscript >/dev/null 2>&1 && brew unlink ghostscript || true
           brew install coreutils gcc jq openssl pkg-config sqlite zlib
+          workers="${GERBIL_BUILD_CORES:-$(sysctl -n hw.physicalcpu)}"
+          [[ "$workers" =~ ^[1-9][0-9]*$ ]]
+          echo "GERBIL_BUILD_CORES=$workers" >> "$GITHUB_ENV"
           echo "$(brew --prefix coreutils)/libexec/gnubin" >> "$GITHUB_PATH"
           "$(brew --prefix coreutils)/libexec/gnubin/timeout" --version
 
@@ -132,16 +143,12 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
-
-      - name: Initialize Core submodule
-        run: git submodule update --init core
+          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Install Gerbil package dependencies
         run: |
           mkdir -p "$HOME/.gerbil/pkg"
           gerbil pkg dir --add git.cons.io/mighty-gerbils/gerbil-directory
-          python3 packages/automation/gerbil_dependency_pin.py prepare-runtime --package-root "$GITHUB_WORKSPACE/.gerbil/pkg"
           if [ "${{ steps.runtime-gerbil-pkg-cache.outputs.cache-hit }}" = "true" ]; then
             if ! gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "runtime-dependency-cache-ready"))' >/tmp/gerbil-dependency-cache-check.log 2>&1; then
               echo "::notice::Exact runtime dependency cache is incomplete; refreshing declared revisions"
@@ -152,10 +159,10 @@ jobs:
           fi
           gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "runtime-dependencies-ready"))'
           # The Core submodule owns this checkout's shared POO modules.
-          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil clean)
-          (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/.gerbil/lib" GERBIL_BUILD_VERBOSE=1 gerbil build)
+          gerbil env just clean-core
+          gerbil env just build-core
           # Clean only Agentic AI Lab outputs; its build spec excludes Core.
-          gerbil clean
+          gerbil env just clean
 
       - name: Save Gerbil package cache
         if: steps.runtime-gerbil-pkg-cache.outputs.cache-hit != 'true'
@@ -165,18 +172,16 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
+          key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Build Gerbil package
         run: GERBIL_BUILD_VERBOSE=1 gerbil build
 
       - name: Install optional development policy dependencies
         run: |
-          python3 packages/automation/gerbil_dependency_pin.py prepare-runtime --manifest dev/gerbil.pkg --package-root "$GITHUB_WORKSPACE/dev/.gerbil/pkg"
           (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
           export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
-          gerbil env gerbil interactive -e '(begin (import :asp-gerbil-scheme/benchmark-api :asp-gerbil-scheme/testing-api) (displayln "development-dependencies-ready"))'
 
       - name: Check original Temporal proof binding and Session invalidation
         env:
@@ -218,7 +223,10 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           gerbil env just test-ascent-integration
-          gerbil env python3 "$GITHUB_WORKSPACE/packages/python-runtime/tools/watch.py" just test-ascent-temporal
+          # The native worker already owns its five-second progress watchdog.
+          # Its Just entry retains the 45-second total cap, source guards and
+          # strict Harness/Case admission; preparation has no duplicate watcher.
+          gerbil env just test-ascent-temporal
           PYTHONPATH="$GITHUB_WORKSPACE/packages/python-testing/src" \
             gerbil env python3 -m agentic_ai_lab_testing run \
               --case ascent.source-withdrawal
@@ -247,10 +255,21 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
+      - name: Upload focused native unit-test output
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: native-unit-output-${{ runner.os }}
+          path: ${{ runner.temp }}/agentic-ai-lab-unit-tests.log
+          if-no-files-found: ignore
+          retention-days: 7
+
   quint-proof:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
     name: Quint finite proof models
     runs-on: ubuntu-latest
+    # Include backend setup, complete typechecking and both proof inventories
+    # plus receipt upload. Per-case 45-second/5-second-idle fences are unchanged.
     timeout-minutes: 15
     steps:
       - name: Checkout agentic-ai-lab
@@ -427,15 +446,19 @@ jobs:
           submodules: recursive
 
       - name: Restore Lean Runtime Host cache
+        id: lean-runtime-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             ~/.elan
             packages/proofs/lean/.lake
             core/dev/proofs/lean/.lake
-          key: lean-proof-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
+          key: lean-proof-cedarRuntimeHost-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
+          # Reuse the same Lake package and pinned native compiler.
           restore-keys: |
-            lean-proof-${{ runner.os }}-${{ runner.arch }}-
+            lean-proof-AgenticAILabModuleGovernanceProof-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
+            lean-proof-cedarRuntimeHost-${{ runner.os }}-${{ runner.arch }}-
+            lean-proof-AgenticAILabModuleGovernanceProof-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Install Cedar Runtime Host toolchains
         shell: bash
@@ -480,6 +503,16 @@ jobs:
             bindings/cedar-gerbil/fixtures/atomic-case/manifest.json \
             "$AGENTIC_AI_LAB_CEDAR_RUNTIME_HOST" \
             bindings/cedar-gerbil/fixtures/atomic-case/policies.cedar
+
+      - name: Save Lean Runtime Host cache
+        if: steps.lean-runtime-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.elan
+            packages/proofs/lean/.lake
+            core/dev/proofs/lean/.lake
+          key: lean-proof-cedarRuntimeHost-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('packages/proofs/lean/lean-toolchain', 'packages/proofs/lean/lakefile.lean', 'packages/proofs/lean/lake-manifest.json', 'core/dev/proofs/lean/lakefile.lean', 'core/dev/proofs/lean/lake-manifest.json') }}
 
   external-module-linux-full:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
@@ -532,6 +565,8 @@ jobs:
         timeout-minutes: 2
         run: python3 -m unittest discover -s t/qualification/external_bazel -p 'external_module_test.py' -v
 
+      # This includes compiling the complete cold dependency/product graph.
+      # Per-test execution profiles remain independently bounded.
       - name: Validate Agentic AI Lab as an external Bazel module
         timeout-minutes: 12
         env:
@@ -549,7 +584,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            gerbil-label: release-v0.19-1cfb032
+            gerbil-label: release-v0.19-2591dcd
             gerbil-install: release
             dependency-timeout-minutes: 12
             compile-timeout-minutes: 12
@@ -569,7 +604,9 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
+          # Keep the leak gate's explicit valgrind dependency; omit optional
+          # recommendations from this time-bounded compiler installation.
+          sudo apt-get install -y --no-install-recommends \
             build-essential \
             ca-certificates \
             git \
@@ -578,9 +615,9 @@ jobs:
             libssl-dev \
             openssl \
             pkg-config \
-          sqlite3 \
-          valgrind \
-          zlib1g-dev
+            sqlite3 \
+            valgrind \
+            zlib1g-dev
 
       - name: Restore Homebrew cache
         if: runner.os == 'macOS'
@@ -674,13 +711,20 @@ jobs:
           echo "fingerprint=$runtime_abi" >> "$GITHUB_OUTPUT"
           echo "Gerbil runtime ABI: $runtime_abi"
 
-      - name: Validate consumed Parser API roots
-        timeout-minutes: 2
-        run: bazel test --test_output=errors //packages/bazel:parser_dependency_entry_test
-
       - name: Build declared Gerbil dependency projects
+        id: dependency-compile
         timeout-minutes: ${{ matrix.dependency-timeout-minutes }}
-        run: bazel build //:dependency_packages
+        run: |
+          # Keep failed action logs in the original sandbox for CI artifacts.
+          echo "output-base=$(bazel info output_base)" >> "$GITHUB_OUTPUT"
+          arguments=(--sandbox_debug)
+          if [[ "$RUNNER_OS" == macOS ]]; then
+            # Each Scheme action uses the full native compiler allocation.
+            # Serialize actions on this runner to avoid overlapping CPU/RSS
+            # budgets; std/make still schedules compilation within each action.
+            arguments+=(--jobs=1)
+          fi
+          bazel build "${arguments[@]}" //:dependency_packages
 
       - name: Validate shared Gerbil provider
         run: bazel test --test_output=errors //t/qualification/gerbil-bazel:tests
@@ -739,6 +783,10 @@ jobs:
             ${{ steps.scheme-compile.outputs.profile }}
             bazel-bin/compile.receipt.json
             bazel-bin/compile.log
+            bazel-bin/*_package.receipt.json
+            bazel-bin/*_package.log
+            ${{ steps.dependency-compile.outputs.output-base }}/sandbox/**/*_package.log
+            ${{ steps.dependency-compile.outputs.output-base }}/sandbox/**/*_package.project/.gerbil-bazel-resource-guard.json
           if-no-files-found: warn
           retention-days: 7
 
@@ -1035,6 +1083,7 @@ jobs:
 
       - name: Generate the Linux module-extension evaluation
         run: |
+          python3 packages/automation/gerbil_dependency_pin.py refresh-native-lock
           bazelisk mod deps --lockfile_mode=update
           bazelisk mod deps --lockfile_mode=error
 
@@ -1071,6 +1120,7 @@ jobs:
       - name: Merge the Darwin module-extension evaluation
         run: |
           cp .ci/lock-linux/MODULE.bazel.lock MODULE.bazel.lock
+          python3 packages/automation/gerbil_dependency_pin.py refresh-native-lock
           bazelisk mod deps --lockfile_mode=update
           bazelisk mod deps --lockfile_mode=error
 

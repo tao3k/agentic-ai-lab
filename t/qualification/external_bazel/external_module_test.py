@@ -18,6 +18,7 @@ from external_module import (
     ExternalModuleConfig,
     ExternalModuleError,
     _export_tracked_tree,
+    _write_consumer_module,
     run_external_module,
 )
 
@@ -78,6 +79,21 @@ raise SystemExit(1 if any('bazel-no-root-override' in arg for arg in sys.argv[1:
             (REPO_ROOT / "core" / "gerbil.pkg").read_bytes(),
         )
         self.assertTrue((exported / "core" / "build.ss").is_file())
+
+    def test_root_override_carries_its_actual_patch_package(self) -> None:
+        consumer = Path(self.temporary.name) / "consumer"
+        consumer.mkdir()
+        _write_consumer_module(consumer, REPO_ROOT, include_override=True)
+        package = Path("packages/bazel/overrides")
+        for source in (REPO_ROOT / package).iterdir():
+            self.assertEqual(
+                (consumer / package / source.name).read_bytes(), source.read_bytes()
+            )
+        declaration = (consumer / "MODULE.bazel").read_text()
+        self.assertIn(
+            '"//packages/bazel/overrides:gerbil-native-budget-handoff.patch"',
+            declaration,
+        )
 
     def test_default_output_root_and_analysis_build(self) -> None:
         receipt = run_external_module(REPO_ROOT, self.config("analysis"))

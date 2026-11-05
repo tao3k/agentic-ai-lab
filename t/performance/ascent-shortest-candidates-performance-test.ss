@@ -39,6 +39,12 @@
           (check-equal? (.ref (list-ref items 18) 'pair) 19)
           (check-equal? (.ref (list-ref items 18) 'distance) 19)
           (check-equal? (.ref (list-ref items 18) 'support) (iota 19)))
+        ;; Preserve the rejected native receipt before the strict assertion raises.
+        (unless (benchmark-receipt-pass? receipt)
+          (display "[agentic-ai-lab-benchmark-refused] ")
+          (write receipt)
+          (newline)
+          (force-output))
         (check-equal? (benchmark-receipt-pass? receipt) #t)
         (display "[agentic-ai-lab-benchmark] ascent-shortest-candidates p95=")
         (displayln (benchmark-fixture-ref receipt 'elapsed))))))

@@ -81,6 +81,11 @@ def _write_consumer_module(
         f'local_path_override(module_name = "agentic_ai_lab", path = "{exported}")\n'
     )
     if include_override:
+        # Bazel permits git_override patches only in the main repository.
+        # The public companion package is copied with the override declaration;
+        # keep its actual BUILD exports and bytes, rather than inventing labels.
+        override_package = Path("packages/bazel/overrides")
+        shutil.copytree(exported / override_package, consumer / override_package)
         module += (exported / "gerbil-bazel.MODULE.bazel").read_text(encoding="utf-8")
     (consumer / "MODULE.bazel").write_text(module, encoding="utf-8")
 

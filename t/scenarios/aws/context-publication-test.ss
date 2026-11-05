@@ -22,7 +22,13 @@
   (test-suite "AWS public fields, contextual child admission and publication"
     (yuanxu-test-fixture "real Schema upgrade refuses stale evidence and keeps accepted values"
       (root Workspace)
-      (def (phase name) (yuanxu-test-checkpoint name))
+      (def started (real-time))
+      (def (phase name)
+        ;; Real domain boundaries remain visible when an enclosing worker is
+        ;; terminated, including with Case observation disabled.
+        (displayln "PHASE aws-atomic phase=" name " elapsed-s=" (- (real-time) started))
+        (force-output)
+        (yuanxu-test-checkpoint name))
       (let ()
         (phase 'start)
         (def fixture (prepare-aws-selection! root phase))

@@ -6,7 +6,8 @@
         (only-in :std/sync/channel make-channel)
         (only-in :agentic-ai-lab/modules/temporal-causality/truth-maintenance/support/policy-host
                  agentic-ai-lab-temporal-support-policy-host)
-        :agentic-ai-lab/t/temporal-evaluator-test
+        (only-in :agentic-ai-lab/t/qualification/context-temporal/evaluator/fixtures
+                 authority-fixture clock-original-context policy)
         (prefix-in :agentic-ai-lab/t/context-durable-owner originals.)
         :agentic-ai-lab/modules/ai-agentic-context/durable-owner
         :agentic-ai-lab/modules/ai-agentic-context/session-host

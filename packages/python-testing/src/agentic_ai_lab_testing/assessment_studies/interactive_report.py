@@ -1,7 +1,14 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+
 """Reconcile immutable local experimental records into the English report."""
-import json,hashlib,shutil
+
+from agentic_ai_lab_testing.model_study.reporting import report_text
+
+
+import json, hashlib, shutil
+
+
 from pathlib import Path
 from agentic_ai_lab_testing.assessment_studies.interactive_study import obligation_acceptance,balanced_oracle,tagged_oracle
 root=Path.cwd();cache=root/'.cache/ascent/interactive';out=root/'.cache/ascent/research-reports/interactive-evidence-study';out.mkdir(parents=True,exist_ok=True)

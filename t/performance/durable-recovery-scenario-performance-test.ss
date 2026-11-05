@@ -15,7 +15,7 @@
                  benchmark-receipt-pass?
                  benchmark-run/result)
         "../support/performance"
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/session/durable-policy
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-scenario
         :agentic-ai-lab/modules/session/transform

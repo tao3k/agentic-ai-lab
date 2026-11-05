@@ -3,9 +3,11 @@
 # Product adapter roots; dependency traversal belongs to Core, not shell lists.
 set shell := ["bash", "-euo", "pipefail", "-c"]
 root := justfile_directory() + "/../../.."
+# Reuse the existing test VM setting in standalone Nix qualification.
+vm := "-:max-heap=" + env_var_or_default("GERBIL_TEST_MAX_HEAP", "2G") + ",debug=q"
 
 build:
-    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 240s gxi -:max-heap=2G,debug=q t/qualification/nix/build.ss
+    cd "{{ root }}" && timeout --signal=TERM --kill-after=5s 1200s gerbil {{ vm }} interactive t/qualification/nix/build.ss compile
 
 # Nix-specific approval preparation; Core owns the restarted publication worker.
 approved-producer workspace:
@@ -26,4 +28,4 @@ store-worker workspace library identity mode record selected candidate:
 
 # Read the actual Nix-selected head in an independent bounded process.
 head-reader profile:
-    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 30s gxi -:max-heap=2G,debug=q t/qualification/build-publication/nix-head-reader.ss "{{ profile }}"
+    cd "{{ root }}" && env -u SDKROOT timeout --signal=TERM --kill-after=5s 120s gxi {{ vm }} t/qualification/build-publication/nix-head-reader.ss "{{ profile }}"

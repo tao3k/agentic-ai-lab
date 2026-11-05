@@ -5,7 +5,6 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :std/test check check-exception test-suite)
         (only-in :clan/poo/object .o .ref)
-        :yuanxu/poo-clos/interface
         :agentic-ai-lab/modules/query/objects
         :agentic-ai-lab/modules/query/results/funs
         :agentic-ai-lab/modules/query/orgize-source)

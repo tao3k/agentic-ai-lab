@@ -83,6 +83,10 @@
         (check-equal?
          (object? option-receipt)
          #t)
+        ;; Reporting projections retain explicit attribution and verdict fields.
+        (check-equal? (.get option-config source-module) 'example)
+        (check-equal? (.get option-config value) #t)
+        (check-equal? (.get option-receipt valid?) #t)
         (check-equal? (object? runtime-module) #t)
         (check-equal? (.ref runtime-module 'id) 'example)
         (check-equal?

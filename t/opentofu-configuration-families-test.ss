@@ -6,7 +6,6 @@
         (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         :yuanxu/profile-composition/selection-syntax
         (only-in :agentic-ai-lab/modules/services/opentofu/objects OpenTofuScope. agentic-ai-lab-opentofu-configuration-from-types)
-        (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
         :yuanxu/object-types/contracts :clan/poo/object)
 (export opentofu-configuration-families-test)
 
@@ -16,8 +15,7 @@
 (def (accepted? result) (yuanxu-validation-evidence-accepted? result))
 (def (path? result expected)
   (find (lambda (diagnostic)
-          (equal? (cdr (assoc 'path
-                         (yuanxu-json-schema-validation-diagnostic-metadata diagnostic)))
+          (equal? (.get diagnostic path)
                   expected))
         (.get result diagnostics)))
 

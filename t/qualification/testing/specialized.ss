@@ -9,6 +9,17 @@
 (def (watched command) (append (list "python3" watch) command))
 (def (absolute file) (path-expand file root))
 
+;; Only the Context demand needs the product init. Other qualifications consume
+;; published libraries and must not eagerly lower the complete module selection.
+;; Resolve the same init-owned tests value through the native expander once.
+(def context-demand
+  (delay
+    (let ((exports (module-test-source-binding (absolute "init.ss")
+                                             'agentic-ai-lab.init.exports))
+          (project (module-test-source-binding (absolute "build-spec.ss")
+                                              'agentic-ai-lab-context-test-demand)))
+      (project exports))))
+
 (def (selected-script name vm arguments)
   (def (interpreted file) (list "gxi" vm file))
   (def (runtime files command seconds count (inputs '()) (lines '()))
@@ -66,5 +77,12 @@
     (else (error "unknown specialized qualification" name))))
 
 (def (main name vm . arguments)
-  (display (.get (.call (selected-script name vm arguments) .run) output)))
+  (def compile? (and (pair? arguments) (equal? (car arguments) "--compile")))
+  (def script (selected-script name vm (if compile? (cdr arguments) arguments)))
+  (if compile?
+    (begin
+      ;; Preparation and execution consume the same init-owned demand.
+      (.call script .compile)
+      (displayln "TEST-COMPILE-OK " name))
+    (display (.get (.call script .run) output))))
 ;; gxi invokes main after loading the script; never invoke it again here.

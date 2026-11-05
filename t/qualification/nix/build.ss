@@ -1,8 +1,17 @@
+#!/usr/bin/env -S gerbil interactive
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Build only the selected adapter import closure with the installed compiler.
-(import (only-in :std/make make pkg-config-libs)
-        (only-in :gerbil/expander core-import-module expander-context-id)
+;;; Native Nix qualification preparation uses the existing init Test demand.
+;;; Standard Make owns closure discovery, source admission and both packages.
+(import (for-syntax
+          (only-in :std/source this-source-file)
+          (only-in :yuanxu/module-system/building/source-package register-module-build-source!)))
+(begin-syntax
+  ;; Reuse the package source gateway before native import discovery. The
+  ;; adapter package must work before any Root library has been installed.
+  (register-module-build-source!
+    (path-expand "../../.." (path-directory (this-source-file))) 'agentic-ai-lab))
+(import (only-in :clan/poo/object .get .call)
         (only-in :std/source this-source-file)
         (only-in :yuanxu/module-system/building/source-package register-module-build-source! register-yuanxu-build-source!)
         (only-in :yuanxu/module-system/building/source-closure for-each-build-module))

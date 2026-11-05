@@ -11,7 +11,6 @@
         (only-in :agentic-ai-lab/opentofu-contracts ProviderSelectionContract)
         (only-in :agentic-ai-lab/modules/services/opentofu/aws-hash agentic-ai-lab-opentofu-aws-rule-key)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-read-file)
-        (only-in :yuanxu/modules/json-schema/json-schema-diagnostics yuanxu-json-schema-validation-diagnostic-metadata)
         :yuanxu/object-types/contracts
         :clan/poo/object)
 (export opentofu-aws-source-test)
@@ -151,8 +150,7 @@
             (.o example: (.o ingress: (list (.o from_port: "wrong")))))) #f))
       (assert 'configuration-type-path-preserved
         (find (lambda (diagnostic)
-                (equal? (cdr (assoc 'path
-                          (yuanxu-json-schema-validation-diagnostic-metadata diagnostic)))
+                (equal? (.get diagnostic path)
                         '(resource aws_security_group example ingress 0 from_port)))
               (.get wrong-config diagnostics)))
       (assert 'admit-does-not-prove-or-normalize

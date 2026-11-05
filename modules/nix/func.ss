@@ -81,6 +81,7 @@
             (operation
               (cond ((member "--check-validity" argv) 'store-validity)
                     ((member "--realise" argv) 'store-realize)
+                    ((and (member "--query" argv) (member "--outputs" argv)) 'store-output-query)
                     ((member "--read-write-mode" argv) 'derivation-registration)
                     ((or (member "--eval" argv) (member "--derivation" argv)) 'derivation-query)
                     (else 'flake-query))))
@@ -130,12 +131,13 @@
                (not (string-index (substring path 11 (string-length path)) #\/))
                (eq? (module-source-type path) 'directory))
     (error "approved release must be an exact Nix store directory" path))
-  (for-each
-    (lambda (operation)
-      (def argv (list executable operation path))
-      (when (current-nix-process-observer) ((current-nix-process-observer) argv))
-      (call-with-package-process-observation argv (cut run-nix-process <> #t)))
-    '("--check-validity" "--verify-path")))
+  ;; Nix 2.34 --verify-path first queries registered path metadata, then
+  ;; compares the current NAR hash. A separate --check-validity process repeats
+  ;; that database check. Keep one cryptographic check at EVERY call boundary;
+  ;; no successful result or registration claim is cached between callers.
+  (def argv (list executable "--verify-path" path))
+  (when (current-nix-process-observer) ((current-nix-process-observer) argv))
+  (call-with-package-process-observation argv (cut run-nix-process <> #t)))
 
 (def (agentic-ai-lab-nix-instantiate executable expression arguments
                                    (store-command (lambda () "nix-store")))
@@ -227,8 +229,29 @@
                (cons path (and (module-source-type path) (module-source-read path)))))
            '("flake.nix" "flake.lock"))
       '())))
+(def (registered-single-output executable derivation)
+  ;; Ask the store on every invocation. This is not a Scheme result cache:
+  ;; neither an earlier mapping nor an earlier registration grants reuse.
+  (def command (list executable "--query" "--outputs" derivation))
+  (when (current-nix-process-observer) ((current-nix-process-observer) command))
+  (def result
+    (call-with-package-process-observation command (cut run-nix-process <> #f)))
+  (and (zero? (.get result status))
+       (let (outputs
+              (filter (cut string-prefix? "/nix/store/" <>)
+                (string-split (.get result output) #\newline)))
+         ;; Preserve native realization semantics for multiple or unresolved
+         ;; outputs. A single registered output can be returned constructively.
+         (and (= (length outputs) 1)
+              (nix-store-path-valid? executable (car outputs))
+              (car outputs)))))
+
 (def (agentic-ai-lab-nix-realize executable derivation)
-  (store-path-command (list executable "--realise" derivation)))
+  (or (registered-single-output executable derivation)
+      ;; Missing, ambiguous and unregistered outputs retain the original native
+      ;; construction/refusal path. The caller's source and package guards still
+      ;; bracket this operation and every subsequent publication boundary.
+      (store-path-command (list executable "--realise" derivation))))
 
 ;; Project already-observed Core source bytes; no extra filesystem scan.
 (def (agentic-ai-lab-nix-source-inputs observations)

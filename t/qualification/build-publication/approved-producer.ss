@@ -13,7 +13,7 @@
         (only-in "../../../core/t/qualification/build-publication/store.ss" store-add)
         (only-in :yuanxu/ops/progress call-with-execution-progress execution-progress!))
 (export main)
-;; Both the interpreter and the compiled SDK executable pass only user arguments.
+;; Both the interpreter and the compiled Gerbil executable pass only user arguments.
 (def (main workspace)
   (call-with-execution-progress 60000 600000
     (lambda (_frame)
@@ -56,7 +56,8 @@
         (find (cut string-prefix? ".yuanxu-build-issuance-" <>)
           (directory-files (list path: libdir ignore-hidden: #f))) libdir))
       (def transcript (run-build-artifact-process projection libdir
-        (list "just" "-f" "t/qualification/nix/Justfile" "publication-worker" workspace libdir (symbol->string probe-name) "persist" record-path)))
+        (.get (.call (nix-publication-programs (current-directory)) .worker
+                workspace libdir (symbol->string probe-name) "persist" record-path) command)))
       (execution-progress! 'publication-stages 4)
       (def prefix "CORE-STORE-ROOT ")
       (def root-line (find (cut string-prefix? prefix <>) (string-split transcript #\newline)))

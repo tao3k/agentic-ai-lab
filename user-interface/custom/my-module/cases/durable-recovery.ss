@@ -8,7 +8,7 @@
 ;;; replay event logs, claim leases, repair state, or run workflow commands.
 
 (import :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy
+        :agentic-ai-lab/modules/session/durable-policy
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/store
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/recovery-scenario
         :agentic-ai-lab/modules/session/config)

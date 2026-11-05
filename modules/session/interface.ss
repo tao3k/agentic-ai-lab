@@ -10,12 +10,10 @@
         "funs.ss"
         "syntax.ss"
         "config.ss"
-        "lifecycle-gate.ss"
-        "org-memory-selection.ss")
+        "lifecycle-gate.ss")
 (export (import: "types.ss")
         (import: "objects.ss")
         (import: "funs.ss")
         (import: "syntax.ss")
         (import: "config.ss")
-        (import: "lifecycle-gate.ss")
-        (import: "org-memory-selection.ss"))
+        (import: "lifecycle-gate.ss"))

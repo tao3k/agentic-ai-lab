@@ -10,7 +10,7 @@
                  JSONReadOptions json->string string->json)
         (only-in :gerbil-parser/src/compiler/rust-pure-aot
                  define-rust-pure)
-        (only-in :gerbil-parser/src/compiler/rust-syntax
+        (only-in :gerbil-parser/rust-syntax-support
                  rust-function-ir-json))
 
 (export agentic-ai-lab-query-execution-candidate-transport-diagnostic

@@ -1,18 +1,34 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 """Descriptive paired summaries, preserving failed trials and all raw receipts."""
+
+from agentic_ai_lab_testing.model_study.reporting import report_text
 import json, hashlib, statistics
 from pathlib import Path
+
 ROOT = Path.cwd()
-BASE = ROOT / '.cache/ascent/factor-budget'
-DOC = ROOT / '.cache/ascent/research-reports/agent-inference'
+BASE = ROOT / ".cache/ascent/factor-budget"
+DOC = ROOT / ".cache/ascent/research-reports/agent-inference"
 
 DOC.mkdir(parents=True, exist_ok=True)
 
-def sha(b):
-    return hashlib.sha256(b).hexdigest()
+
+from ._factor_budget_rendering import _render_budget_text
+
+from ._factor_budget_metrics import metrics, _build_metrics_result
+
+
+from ._factor_budget_pairing import (
+    _aggregate_budget_arms,
+    _compare_fact_replies,
+    _pair_budget_trials,
+)
+
+
+from ._factor_budget_records import _build_ledger, _build_report, sha
+
 
 def save(p, x):
-    p.write_text(json.dumps(x, ensure_ascii=False, indent=2) + '\n')
+    p.write_text(json.dumps(x, ensure_ascii=False, indent=2) + "\n")
 
 def metrics(r):
     usages = [c['usage'] for c in r['calls'] if isinstance(c.get('usage'), dict)]

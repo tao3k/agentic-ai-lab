@@ -16,7 +16,7 @@
                  parse-hl7v2)
         (only-in :gerbil-parser/languages/hl7/v2-2.5.1/projection
                  hl7v2-adt-a08-patient-projection)
-        (only-in :gerbil-parser/src/runtime/artifact
+        (only-in :gerbil-parser/artifact-support
                  parse-artifact-ref parse-artifact-roundtrip
                  parse-artifact-success? parse-artifact-valid?))
 

@@ -39,7 +39,6 @@ mod-tidy:
 # Optional ASP policy probes belong to the development package, not the library.
 [group('dependency')]
 deps-dev:
-    python3 packages/automation/gerbil_dependency_pin.py prepare-runtime --manifest dev/gerbil.pkg --package-root "{{ agentic_ai_lab_dev_gerbil_path }}/pkg"
     cd "{{ justfile_directory() }}/dev" && GERBIL_PATH="{{ agentic_ai_lab_dev_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_dev_library_path }}" {{ gerbil_darwin_env }} gerbil env gxi ../packages/automation/runtime-dependencies.ss
 
 # Compile installed test dependencies against the product's shared library.
