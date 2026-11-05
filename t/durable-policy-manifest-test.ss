@@ -5,7 +5,7 @@
 (import (only-in :yuanxu/observability/testing-case yuanxu-test-case)
          :std/test
         :agentic-ai-lab/modules/session/durable-policy
-        :agentic-ai-lab/modules/session/durable-policy-manifest)
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/durable/policy-manifest)
 
 (export durable-policy-manifest-test)
 
