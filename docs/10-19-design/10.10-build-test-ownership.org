@@ -477,6 +477,13 @@ projection. Repeated imports reuse the native Context. Producer discovery and
 compilation remain lazy slots; importing the capability starts no process.
 Removed helper functions in the ordinary package library spec are not restored.
 
+CI keeps Quint typechecking/source binding separate from model verification.
+The two existing complete verification inventories still run together; the
+typecheck job retains receipt-admission unit tests and source correspondence.
+Both jobs retain the original deadline, and every model retains its original
+execution and idle fences. Parallel scheduling does not remove a model,
+negative control, source check or required receipt.
+
 The current Core integration still has a program-publication gap: its retained
 target admission rejects =exe:= rows, although the pure =program-products=
 projection and program rejection tests remain. Until that path is connected

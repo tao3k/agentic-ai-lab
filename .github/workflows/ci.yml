@@ -269,11 +269,15 @@ jobs:
 
   quint-proof:
     if: ${{ github.event_name != 'workflow_dispatch' || !inputs.refresh_lock }}
-    name: Quint finite proof models
+    name: ${{ matrix.phase == 'typecheck' && 'Quint types and source binding' || 'Quint finite proof models' }}
     runs-on: ubuntu-latest
-    # Include backend setup, complete typechecking and both proof inventories
-    # plus receipt upload. Per-case 45-second/5-second-idle fences are unchanged.
+    # Typechecking and verification retain their complete inventories but do
+    # not consume the same job deadline. Per-case fences remain unchanged.
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        phase: [typecheck, verification]
     steps:
       - name: Checkout agentic-ai-lab
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -295,6 +299,7 @@ jobs:
           npm ci --prefix packages/proofs/quint --no-audit --no-fund
           python3 packages/proofs/quint/prepare_backend.py
       - name: Check types, receipt admission and source binding
+        if: matrix.phase == 'typecheck'
         env:
           PYTHONPATH: packages/python-testing/src
         run: |
@@ -302,6 +307,7 @@ jobs:
           python3 -m unittest discover -s packages/proofs/quint -p 'test_*.py'
           python3 packages/proofs/quint/source_binding.py
       - name: Verify all finite, temporal and fault cases
+        if: matrix.phase == 'verification'
         env:
           PYTHONPATH: packages/python-testing/src
           QUINT_HOME: ${{ runner.temp }}/agentic-ai-lab-quint-cache
@@ -309,11 +315,13 @@ jobs:
           python3 -m agentic_ai_lab_testing.checks.quint --group all \
             --receipt "$RUNNER_TEMP/poo-quint-proof.ss"
       - name: Verify migrated assessment protocols and negative controls
+        if: matrix.phase == 'verification'
         env:
           PYTHONPATH: packages/python-testing/src
           QUINT_HOME: ${{ runner.temp }}/agentic-ai-lab-quint-cache
         run: python3 -m agentic_ai_lab_testing.checks.assessment_formal quint all
       - name: Upload Quint receipt
+        if: matrix.phase == 'verification'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: quint-proof-receipt
