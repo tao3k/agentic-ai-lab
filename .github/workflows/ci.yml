@@ -74,6 +74,9 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+      - name: Initialize Core source directory
+        run: git submodule update --init core
+
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
         run: |

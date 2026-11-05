@@ -11,7 +11,9 @@
   ;; adapter package must work before any Root library has been installed.
   (register-module-build-source!
     (path-expand "../../.." (path-directory (this-source-file))) 'agentic-ai-lab))
-(import (only-in :clan/poo/object .get .call)
+(import (only-in :gerbil/expander core-import-module expander-context-id)
+        :std/make
+        (only-in :clan/poo/object .get .call)
         (only-in :std/source this-source-file)
         (only-in :yuanxu/module-system/building/source-package register-module-build-source! register-yuanxu-build-source!)
         (only-in :yuanxu/module-system/building/source-closure for-each-build-module))
