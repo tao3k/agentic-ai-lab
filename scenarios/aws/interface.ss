@@ -5,7 +5,7 @@
   identity: 'aws
   config: Config
   core:
-  (.o requires: (.o Tofu: (.o module-id: 'services/opentofu contract: OpenTofuScopeContract))
+  (.o requires: (.o Tofu: (.o module-id: 'agentic-ai-lab/modules/services/opentofu/interface))
       scope-contract: AWSInterfaceContract
       admissions:
       (.o Scenario: (.o export-path: '(Scenario) contract-path: '(types Scenario)))

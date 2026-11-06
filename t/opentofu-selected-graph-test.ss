@@ -16,11 +16,8 @@
         (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
         (only-in :yuanxu/modules/json-schema/json-schema-source yuanxu-json-schema-source->json-like)
         (only-in :yuanxu/modules/json-schema/functional yuanxu-contract-object-ref)
-        (only-in :yuanxu/module-system/interface yuanxu-load-modules)
         (only-in :yuanxu/module-system/source/admission module-source-read current-module-source-observer)
-        (only-in :yuanxu/module-system/source/reader module-publication-reader)
-        (only-in :yuanxu/module-system/source/directory module-directory-context)
-        (only-in "./qualification/opentofu/objects.ss" Ops))
+        (only-in "./qualification/opentofu/objects.ss" Ops configured-opentofu-modules))
 (export opentofu-selected-graph-test)
 (def SelectedPackages. (.get Ops prototypes SelectedPackages))
 (def (assert label value)
@@ -39,31 +36,9 @@
 (def (write-source path text)
   (create-directory* (path-directory path))
   (call-with-output-file (list path: path truncate: #t) (cut display text <>)))
-;; Upstream package configuration is a runtime derivation of the one real
-;; publication. The existing source-context hook retains its reader observations.
-;; No alternative declaration, copied module implementation or runtime Loader.
 (def (configured-modules init upstream-source)
-  (def reader (module-publication-reader))
-  (def (configure scope)
-    (.cc scope 'config (.cc (.get scope config) 'source upstream-source)))
-  (def (read-publication source)
-    (let* ((published (.call reader read source))
-           (baseline (.get published core)))
-      (if (not (eq? (.get published identity) 'services/opentofu)) published
-        (.cc published 'core
-          (.o (:: @ baseline)
-            link: (lambda (dependencies) (configure (.call baseline link dependencies)))
-            configuration-build:
-            (let (build (.get baseline configuration-build))
-              (.cc build 'module (configure (.get build module)))))))))
-  (def context (module-directory-context init read-publication))
-  (yuanxu-load-modules
-    (.cc context
-      'publication-inputs (.get reader inputs)
-      'publication-preparation (.get reader preparation)
-      'current? (lambda (generation)
-                  (.call reader admit-current)
-                  (.call context current? generation)))))
+  (configured-opentofu-modules init
+    (lambda (scope) (.cc scope 'config (.cc (.get scope config) 'source upstream-source)))))
 (def (derivation-inputs value)
   (run-process (list "nix-store" "--query" "--references" (.get value derivation))
                stdin-redirection: #f stderr-redirection: #f
@@ -237,11 +212,8 @@
                   source-inputs:
                   (map (lambda (path) (cons path (module-source-read path)))
                        (list expression-path catalog-path collector-path checker))))))
-          (write-source (path-expand "types.ss" owner)
-            (string-append "(import (only-in :agentic-ai-lab/opentofu-contracts OpenTofuScopeContract)) "
-                           (string-subst (module-source-read (path-expand "types.ss" owner)) "(export Scope)" "(export Scope OpenTofuScopeContract)")))
           (write-source (path-expand "interface.ss" owner)
-            "(.def Infrastructure identity: 'app/infrastructure core: (.o requires: (.o Tofu: (.o module-id: 'agentic-ai-lab/modules/services/opentofu/interface contract: OpenTofuScopeContract)) scope-contract: Scope exports: (.o config: Config)) features: (.o))")
+            "(.def Infrastructure identity: 'app/infrastructure core: (.o requires: (.o Tofu: (.o module-id: 'agentic-ai-lab/modules/services/opentofu/interface)) scope-contract: Scope exports: (.o config: Config)) features: (.o))")
           (write-source (path-expand "modules/unused/bomb/interface.ss" root)
                         "(((disabled module must not parse")
           (write-source (path-expand "modules/unused/bomb/build.ss" root)
@@ -267,10 +239,8 @@
           (assert 'scope-does-not-start-nix (= (process-count evaluator) 0))
           (assert 'core-source-is-not-copied
             (not (file-exists? (path-expand "modules/services/opentofu" root))))
-          (assert 'selected-dependency-order
-            (equal? (.get parent-view dependency-order)
-                    (map owner-id
-                         '(json-schema nix funflow services/opentofu app/infrastructure))))
+          (check-equal? (.get parent-view dependency-order)
+                        (map owner-id '(json-schema funflow nix services/opentofu app/infrastructure)))
           (let* ((records (.get parent-view selected-records))
                  (json-schema (find (lambda (record) (eq? (.get record identity) (owner-id 'json-schema))) records))
                  (nix (find (lambda (record) (eq? (.get record identity) (owner-id 'nix))) records))

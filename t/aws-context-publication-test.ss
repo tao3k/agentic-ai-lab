@@ -7,14 +7,15 @@
 (def aws-context-publication-test
   (test-suite "AWS qualification metadata"
     (test-case "qualification shares source authority without running another Harness"
-      (def module (.get agentic-ai-lab.init.exports scenarios aws))
-      (check-equal? (.ref/cached module 'scope) #f)
-      (def tests (.get module tests qualification))
-      (check-equal? (eq? (.call tests .select '(aws)) tests) #t)
+      (def tests
+        (.call (.get agentic-ai-lab.init.exports tests qualification) .select
+               '(agentic-ai-lab/scenarios/aws/interface)))
+      (check-equal? (.ref/cached tests 'selected-graph) #f)
+      (check-equal? (eq? (.call tests .select '(agentic-ai-lab/scenarios/aws/interface)) tests) #t)
       (check-equal? (map path-strip-directory (.get tests spec))
                     '("context-publication-test.ss"))
       (check-equal? (eq? (.get tests admit-current) (.get tests source admit-current)) #t)
       (for-each (lambda (name) (check-equal? (.slot? tests name) #f))
                 '(.run .compile execution))
       ((.get tests admit-current))
-      (check-equal? (.ref/cached module 'scope) #f))))
+      (check-equal? (.ref/cached tests 'selected-graph) #f))))

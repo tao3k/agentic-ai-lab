@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import tempfile
@@ -46,7 +47,7 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
             )
             command.chmod(0o755)
             arguments = [
-                "--gxi", str(root / "gxi"), "--native-scheme-env", str(wrapper),
+                "--gxi", str(root / "gxi"), "--runtime-scheme-env", str(wrapper),
                 "--project-root", str(producer), "--project-receipt", str(root / "receipt"),
                 "--dependency-root-marker", str(root / "dependency" / ".root"),
                 "--workspace", str(workspace), "--declaration-receipt", str(root / "declaration"),
@@ -61,6 +62,27 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
                     self.assertEqual(marker.read_text(), "compiled-source")
                     self.assertFalse((library / "scratch").exists())
                     self.assertFalse((producer / ".gerbil" / "bin").exists())
+
+    def test_writable_runtime_includes_producer_programs(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            project = workspace / "producer"
+            program = project / ".gerbil" / "bin" / "build-publication-tools"
+            program.parent.mkdir(parents=True)
+            program.write_bytes(b"native program")
+            program.chmod(0o755)
+            args = argparse.Namespace(
+                project_root=str(project),
+                workspace=str(workspace),
+                runtime_directory=".runtimes",
+            )
+            with environment_tool._runtime_prefix(args) as runtime:
+                copied = runtime / "bin" / program.name
+                self.assertEqual(copied.read_bytes(), program.read_bytes())
+                self.assertTrue(os.access(copied, os.X_OK))
+                copied.unlink()
+            self.assertTrue(program.is_file())
+            self.assertFalse(runtime.exists())
 
     def test_main_launches_command_with_declared_project_environment(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:

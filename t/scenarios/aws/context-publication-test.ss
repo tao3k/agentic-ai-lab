@@ -43,7 +43,7 @@
                        (string-suffix? "/modules/funflow/func.ss" (car input)))
                      (.get selection build-graph source-inputs)) #t) #t)
         ;; No Schema list, descriptor reconstruction or handwritten admission paths.
-        (def publication (.call AdmissionPublication. .for-export selection 'aws 'Scenario))
+        (def publication (.call AdmissionPublication. .for-export selection 'agentic-ai-lab/scenarios/aws/interface 'Scenario))
         (phase 'parent-bound)
         (def contract (.get publication contract))
         (def child-contract (.get contract responsibilities profile))
@@ -181,7 +181,7 @@
                 (def fresh-selection
                   (realize-aws-selection fixture (path-expand "packages-new" root) phase))
                 (def fresh-publication
-                  (.call AdmissionPublication. .for-export fresh-selection 'aws 'Scenario))
+                  (.call AdmissionPublication. .for-export fresh-selection 'agentic-ai-lab/scenarios/aws/interface 'Scenario))
                 (phase 'fresh-publication-bound)
                 (check-equal? (.get fresh-selection modules aws provider version) "5.100.0")
                 (check-equal? (eq? (.get fresh-publication contract) contract) #f)

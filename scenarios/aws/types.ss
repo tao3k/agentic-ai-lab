@@ -5,11 +5,9 @@
         (only-in :clan/poo/mop define-type)
         (only-in :clan/poo/type True)
         (only-in :yuanxu/modules/json-schema/contracts ProjectionContract.)
-        (only-in :agentic-ai-lab/opentofu-contracts OpenTofuScopeContract)
         (only-in :yuanxu/object-types/contracts YuanxuContract. yuanxu-classification-evidence))
 (export AWSProfileContract. AWSScenarioContract. AWSAdmissionContract.
-        AWSProfileAdmissionContract. AWSInterfaceContract aws-scenario-contract
-        OpenTofuScopeContract)
+        AWSProfileAdmissionContract. AWSInterfaceContract aws-scenario-contract)
 
 ;; AWS fields, optionality and unknown names belong to the actual Provider
 ;; Schema. Delegate rather than copying its vocabulary into responsibilities.

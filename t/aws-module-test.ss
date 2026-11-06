@@ -7,9 +7,9 @@
 (def aws-module-test
   (test-suite "AWS atomic endpoint"
     (test-case "cold discovery and repeated reads leave integration and scope cold"
-      (def module (.get agentic-ai-lab.init.exports scenarios aws))
-      (def tests (.get module tests))
-      (check-equal? (.ref/cached module 'scope) #f)
+      (def tests (.call (.get agentic-ai-lab.init.exports tests) .select
+                        '(agentic-ai-lab/scenarios/aws/interface)))
+      (check-equal? (.ref/cached tests 'selected-graph) #f)
       (def integration-before (.ref/cached tests 'integration))
       (def qualification-before (.ref/cached tests 'qualification))
       (def files (.get tests spec))
@@ -20,10 +20,10 @@
                 '(.run .compile execution))
       (check-equal? (eq? (.ref/cached tests 'integration) integration-before) #t)
       (check-equal? (eq? (.ref/cached tests 'qualification) qualification-before) #t)
-      (check-equal? (.ref/cached module 'scope) #f))
+      (check-equal? (.ref/cached tests 'selected-graph) #f))
     (test-case "integration is an explicit lazy projection of the same Graph"
-      (def module (.get agentic-ai-lab.init.exports scenarios aws))
-      (def tests (.get module tests))
+      (def tests (.call (.get agentic-ai-lab.init.exports tests) .select
+                        '(agentic-ai-lab/scenarios/aws/interface)))
       (def integration (.get tests integration))
       (check-equal? (eq? (.get tests selected-graph) (.get integration selected-graph)) #t)
       ;; Publication fault injection is Core qualification, not an AWS suite.
@@ -33,4 +33,4 @@
       (check-equal? (eq? (.get tests selected-graph) (.get qualification selected-graph)) #t)
       (check-equal? (map path-strip-directory (.get qualification spec)) '("context-publication-test.ss"))
       (check-equal? (.ref/cached qualification 'execution) #f)
-      (check-equal? (.ref/cached module 'scope) #f))))
+      (check-equal? (.ref/cached (.get tests selected-graph) 'selected-records) #f))))

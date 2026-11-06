@@ -8,7 +8,8 @@
         (only-in :std/encoding/json read-json)
         (only-in :std/list/walist waref)
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
-        (only-in :yuanxu/module-system/source/link yuanxu-load-modules)
+        (only-in :agentic-ai-lab/modules/services/opentofu/func opentofu-service-configuration)
+        (only-in "./objects.ss" configured-opentofu-modules)
         (only-in :yuanxu/observability/testing-fixture call-with-yuanxu-fixture)
         (only-in :yuanxu/observability/testing-case yuanxu-test-checkpoint)
         (only-in :yuanxu/ops/progress execution-progress!)
@@ -62,46 +63,27 @@
   (call-with-yuanxu-fixture Workspace
     (lambda (root-dir)
       (def project (current-directory))
-      (def service-dir (path-expand "modules/services/opentofu" root-dir))
       (displayln "PHASE producer-derivation at=" (real-time)) (force-output)
       (yuanxu-test-checkpoint 'opentofu-producer-derivation)
-      (def derivation
+      (def producer-derivation
         (.call (.o (:: @ NixSource.)
                  expression: (path-expand "t/fixtures/opentofu/null-provider-artifacts.nix" project))
                .instantiate))
-      ;; The relocated roles retain their native package identity. Copy the
-      ;; public roots they declare so the compiler checks their actual owner.
-      (for-each
-        (lambda (relative)
-          (let ((source (path-expand relative project)) (target (path-expand relative root-dir)))
-            (create-directory* target)
-            (for-each
-              (lambda (name)
-                (when (or (string-suffix? ".ss" name) (string-suffix? ".nix" name))
-                  (copy-file (path-expand name source) (path-expand name target))))
-              (directory-files source))))
-        '("modules/nix" "modules/services/opentofu"))
-      (for-each
-        (lambda (name) (copy-file (path-expand name project) (path-expand name root-dir)))
-        '("nix-contracts.ss" "opentofu-contracts.ss" "services.ss"))
-      (write-source (path-expand "gerbil.pkg" root-dir)
-        "(package: agentic-ai-lab prelude: :yuanxu/module-system/source/module-prelude)\n")
-      (def config-path (path-expand "config.ss" service-dir))
-      (copy-file config-path (path-expand "service-defaults.ss" service-dir))
+      (def config-path (path-expand "config.nix" root-dir))
+      (def expression (path-expand "t/fixtures/opentofu/selected-derivation.nix" project))
+      (def checker (path-expand "modules/nix/source-inputs.nix" project))
       (write-source config-path
-        (call-with-output-string
-          (lambda (port)
-            (for-each (lambda (form) (write form port) (newline port))
-              `((import :clan/poo/object
-                   (rename-in (only-in "service-defaults.ss"
-                                Config OpenTofuProviderConfig) (Config Defaults))
-                   (only-in :agentic-ai-lab/modules/nix/objects NixSource.))
-                (export Config OpenTofuProviderConfig)
-                (.def (Config @ Defaults)
-                  source: (.o (:: @ NixSource.)
-                    expression: ,(path-expand "t/fixtures/opentofu/selected-derivation.nix" project)
-                    arguments: (.o derivation: ,derivation))
-                  services: (.o opentofu: (.o Null: (.o message: "configured service")))))))))
+        (call-with-output-string (lambda (port) (display "import " port) (write expression port))))
+      (def original-text (module-source-read config-path))
+      ;; The temporary input is evaluated by Nix and guarded alongside the real
+      ;; declaration and its transitive expression files.
+      (def source
+        (.o (:: @ NixSource.)
+          expression: config-path
+          arguments: (.o derivation: producer-derivation)
+          source-inputs: (list (cons config-path original-text)
+                               (cons expression (module-source-read expression))
+                               (cons checker (module-source-read checker)))))
       (def init-path (path-expand "init.ss" root-dir))
       (write-source init-path
         (call-with-output-string
@@ -109,21 +91,23 @@
             (write `(yuanxu!
                       :load-modules ,(path-expand "core/modules" project)
                       mode: explicit rename: Core (json-schema) (funflow)
-                      :load-modules "./modules" mode: explicit rename: Lab
+                      :load-modules ,(path-expand "modules" project) mode: explicit rename: Lab
                       (nix) :services (opentofu)) port))))
       (displayln "PHASE source-selection at=" (real-time)) (force-output)
       (yuanxu-test-checkpoint 'opentofu-source-selection)
+      (def (configure scope)
+        (.cc scope 'config
+          (.cc (.get scope config) 'source source
+            'services (.o opentofu: (.o Null: (.o message: "configured service"))))))
       (def selected-view
         (parameterize ((current-module-source-observer report-stage))
-          (yuanxu-load-modules init-path
-            module-view: (lambda (owner scope!) (.o identity: owner scope: (scope!))))))
-      (def original-text (module-source-read config-path))
+          (configured-opentofu-modules init-path configure opentofu-service-configuration)))
       (action
         (.o config: config-path original: original-text
           .source-scope:
           (lambda ()
             (parameterize ((current-module-source-observer report-stage))
-              (.get selected-view modules Lab services opentofu scope)))
+              (.get selected-view modules Lab services opentofu)))
           .prepare:
           (lambda ()
             (def packages
@@ -131,7 +115,7 @@
                 (.call (.cc SelectedPackages. 'selection selected-view
                             'directory (path-expand "packages" root-dir)) .run)))
             (def ready-view (.call selected-view .with-packages packages))
-            (def ready-value (.get ready-view modules Lab services opentofu scope))
+            (def ready-value (.get ready-view modules Lab services opentofu))
             (def recipe-value (.get ready-value Null))
             (.o ready-scope: ready-value recipe: recipe-value))
           .workspace:

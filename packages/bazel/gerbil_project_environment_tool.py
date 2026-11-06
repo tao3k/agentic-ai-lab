@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 from contextlib import contextmanager
@@ -49,9 +50,13 @@ def _runtime_prefix(args: argparse.Namespace):
     with tempfile.TemporaryDirectory(prefix="run-", dir=parent) as directory:
         runtime = Path(directory)
         (runtime / "lib").mkdir()
-        # Standard Make publishes executables here. A library-only producer may
-        # have no bin at all, and an existing Bazel bin is immutable input.
-        (runtime / "bin").mkdir()
+        # Publish the producer's native programs in the command's Gerbil
+        # prefix. Writes and cleanup must remain local to this invocation.
+        programs = project_prefix / "bin"
+        if programs.is_dir():
+            shutil.copytree(programs, runtime / "bin")
+        else:
+            (runtime / "bin").mkdir()
         yield runtime
 
 

@@ -119,7 +119,7 @@
         (source-report)
         (phase 'selected)
         (def selected-queries queries)
-        (def publication (.call AdmissionPublication. .for-export selected 'aws 'Scenario))
+        (def publication (.call AdmissionPublication. .for-export selected 'agentic-ai-lab/scenarios/aws/interface 'Scenario))
         (phase 'bound)
         (def bound-queries queries)
         (def Parent (.get publication value))
