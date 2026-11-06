@@ -30,7 +30,7 @@ filegroup(
 filegroup(
     name = "gerbil_package_sources",
     # This is only the Bazel sandbox projection. gerbil.pkg owns dependency
-    # identity and build.ss owns the module graph compiled from these files.
+    # identity and the explicit build entry owns the module graph.
     srcs = [
         "gerbil.pkg",
         ":core_module_sources",
@@ -46,7 +46,7 @@ filegroup(
         "bindings/nono-c/**/*.h",
         # Retained native Suite libraries and their source-relative imports
         # must exist inside the sandbox just as they do in a checkout. This
-        # projects inputs only; build.ss still owns which targets compile.
+        # projects inputs only; the build entry still owns which targets compile.
         "t/**/*.ss",
         "t/qualification/context-temporal/*.c",
         "modules/**/*.ss",
@@ -204,7 +204,7 @@ gerbil_project_compile(
     name = "compile",
     srcs = [":gerbil_package_sources"],
     args = ["compile"],
-    build_script = ":build.ss",
+    build_script = ":build-development.ss",
     # Fence compiler VMs before imports; native tools preserve this budget.
     env = {
         "GERBIL_BUILD_VERBOSE": "1",
@@ -243,7 +243,7 @@ gerbil_project_environment(
 gerbil_project_dev(
     name = "dev_compile",
     args = ["compile"],
-    build_script = ":build.ss",
+    build_script = ":build-development.ss",
     tags = ["local", "manual"],
     deps = [":gerbil_parser_package", ":orgize_package", ":gerbil_ascent_package"],
 )

@@ -49,7 +49,7 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     # Preserve the selected package frontend before changing C-tool PATH.
-    # Its build command supplies the runtime package environment to build.ss.
+    # Its environment command supplies the runtime package environment.
     frontend = shutil.which("gerbil")
     if frontend is None:
         raise RuntimeError("selected Gerbil package frontend is unavailable")
@@ -71,9 +71,9 @@ def main() -> None:
     gsc = str(home / "bin/gsc")
     os.environ["GAMBOPT"] = f"~~={home},~~bin={home / 'bin'},~~lib={home / 'lib'}"
     # Compile Scheme modules through the product's single init-owned Make spec.
-    # This consumer only materializes C objects from the SDK-emitted static
+    # This consumer only materializes C objects from Gerbil's static
     # closure below; it never maintains a module list or compiler-order policy.
-    run([frontend, "build"])
+    run([frontend, "env", "./build-development.ss", "compile"])
     expression = '''(let* ((ctx (import-module "modules/workflow/runtime/semantic.ss"))
                            (deps (gxc#find-runtime-module-deps ctx)))
                       (for-each (lambda (dep)
