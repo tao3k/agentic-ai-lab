@@ -6,7 +6,7 @@
 ;;; reviews and critiques. No object-kind -> box/icon/layout table lives here.
 (import (only-in :clan/poo/object .ref)
         (only-in :gerbil-ascent/program/syntax ascent)
-        (only-in :gerbil-ascent/program/interface gerbil-ascent-evaluate-program))
+        (only-in :gerbil-ascent/program/api gerbil-ascent-evaluate-program))
 (export d2-plan-explanation)
 (def (explanation-rows objects slots)
   (map (lambda (value) (map (lambda (slot) (.ref value slot)) slots)) objects))

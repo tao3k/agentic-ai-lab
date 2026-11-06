@@ -4,7 +4,7 @@
 ;;; Pure bounded recovery assessment. Runtime owners admit the source witnesses.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :gerbil-ascent/program/syntax ascent)
-        (only-in :gerbil-ascent/program/interface gerbil-ascent-evaluate-program))
+        (only-in :gerbil-ascent/program/api gerbil-ascent-evaluate-program))
 (export RecoveryObservation. recovery-observation-evaluate recovery-observation-rows)
 (def RecoveryObservation.
   (.o identity: #f revision: #f intents: '() journal-heads: '() scans: '()

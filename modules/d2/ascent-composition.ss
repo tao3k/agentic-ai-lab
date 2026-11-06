@@ -4,7 +4,7 @@
 ;;; Infer explanatory constraints, never a case-specific canvas or schedule.
 (import (only-in :clan/poo/object .o .ref .slot?)
         (only-in :gerbil-ascent/program/syntax ascent)
-        (only-in :gerbil-ascent/program/interface gerbil-ascent-evaluate-program)
+        (only-in :gerbil-ascent/program/api gerbil-ascent-evaluate-program)
         "config.ss")
 (export d2-compose)
 (def (optional value slot fallback) (if (.slot? value slot) (.ref value slot) fallback))

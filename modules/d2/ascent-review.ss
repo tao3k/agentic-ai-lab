@@ -5,7 +5,7 @@
 ;;; interpretations/critique; these rules expose gaps and revision obligations.
 (import (only-in :clan/poo/object .ref)
         (only-in :gerbil-ascent/program/syntax ascent)
-        (only-in :gerbil-ascent/program/interface gerbil-ascent-evaluate-program))
+        (only-in :gerbil-ascent/program/api gerbil-ascent-evaluate-program))
 (export d2-review)
 (def (project-review objects slots)
   (map (lambda (value) (map (lambda (slot) (.ref value slot)) slots)) objects))

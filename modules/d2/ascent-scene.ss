@@ -6,7 +6,7 @@
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/list/list find delete-duplicates/hash)
         (only-in :gerbil-ascent/program/syntax ascent)
-        (only-in :gerbil-ascent/program/interface gerbil-ascent-evaluate-program))
+        (only-in :gerbil-ascent/program/api gerbil-ascent-evaluate-program))
 (export d2-scene)
 (def (scene-rows values slots)
   (map (lambda (value) (map (lambda (slot) (.ref value slot)) slots)) values))

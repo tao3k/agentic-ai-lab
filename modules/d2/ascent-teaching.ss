@@ -5,7 +5,7 @@
 (import (only-in :clan/poo/object .o .ref .slot?)
         (only-in :std/list/list delete-duplicates/hash filter-map)
         (only-in :gerbil-ascent/program/syntax ascent)
-        (only-in :gerbil-ascent/program/interface gerbil-ascent-evaluate-program)
+        (only-in :gerbil-ascent/program/api gerbil-ascent-evaluate-program)
         "ascent-composition.ss" "config.ss")
 (export d2-teaching)
 (def (teaching-rows values slots)
