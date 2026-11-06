@@ -140,7 +140,7 @@
     "@@gerbil_bazel+//gerbil:extensions.bzl%gerbil": {
       "os:linux,arch:amd64": {
         "bzlTransitiveDigest": "Px2WFSnYVQZkUqPn3M4MR9O68hILy3SGKU9s1+kFDYo=",
-        "usagesDigest": "vtSYa7wcUR1tMF3pUK6Y0ZSVeNt/pY7qPDdCnv2KGd0=",
+        "usagesDigest": "vbt2Kek0nwaLd2UMc7+D5QdHrEr5h4mpWtESufvOtvk=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -230,11 +230,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/gerbil-scheme-rust",
               "package": "gerbil-scheme-rust",
-              "revision": "cfbc10c47ddc41f6670bd78e46e1e9d856cbb870",
-              "sha256": "c60d5d74efb62268237c1661ab2bf28ddc64b5780515637412d6a0ffd14472e3",
-              "strip_prefix": "gerbil-scheme-rust-cfbc10c47ddc41f6670bd78e46e1e9d856cbb870",
+              "revision": "a4af77fc35ed485360d6fc9de49bbe971000ff65",
+              "sha256": "09c3a4b6fc8a54c0e1b6fb3d49de9b119650d87ddf3b0b727ad28ab3c124e72b",
+              "strip_prefix": "gerbil-scheme-rust-a4af77fc35ed485360d6fc9de49bbe971000ff65",
               "urls": [
-                "https://github.com/tao3k/gerbil-scheme-rust/archive/cfbc10c47ddc41f6670bd78e46e1e9d856cbb870.tar.gz"
+                "https://github.com/tao3k/gerbil-scheme-rust/archive/a4af77fc35ed485360d6fc9de49bbe971000ff65.tar.gz"
               ]
             }
           },
@@ -256,7 +256,7 @@
       },
       "os:osx,arch:aarch64": {
         "bzlTransitiveDigest": "Px2WFSnYVQZkUqPn3M4MR9O68hILy3SGKU9s1+kFDYo=",
-        "usagesDigest": "vtSYa7wcUR1tMF3pUK6Y0ZSVeNt/pY7qPDdCnv2KGd0=",
+        "usagesDigest": "vbt2Kek0nwaLd2UMc7+D5QdHrEr5h4mpWtESufvOtvk=",
         "recordedInputs": [],
         "generatedRepoSpecs": {
           "local_gerbil": {
@@ -340,11 +340,11 @@
               "build_script": "build.ss",
               "canonical_uri": "https://github.com/tao3k/gerbil-scheme-rust",
               "package": "gerbil-scheme-rust",
-              "revision": "cfbc10c47ddc41f6670bd78e46e1e9d856cbb870",
-              "sha256": "c60d5d74efb62268237c1661ab2bf28ddc64b5780515637412d6a0ffd14472e3",
-              "strip_prefix": "gerbil-scheme-rust-cfbc10c47ddc41f6670bd78e46e1e9d856cbb870",
+              "revision": "a4af77fc35ed485360d6fc9de49bbe971000ff65",
+              "sha256": "09c3a4b6fc8a54c0e1b6fb3d49de9b119650d87ddf3b0b727ad28ab3c124e72b",
+              "strip_prefix": "gerbil-scheme-rust-a4af77fc35ed485360d6fc9de49bbe971000ff65",
               "urls": [
-                "https://github.com/tao3k/gerbil-scheme-rust/archive/cfbc10c47ddc41f6670bd78e46e1e9d856cbb870.tar.gz"
+                "https://github.com/tao3k/gerbil-scheme-rust/archive/a4af77fc35ed485360d6fc9de49bbe971000ff65.tar.gz"
               ]
             }
           },
