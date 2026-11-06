@@ -161,11 +161,11 @@ jobs:
             gerbil env gerbil interactive packages/automation/runtime-dependencies.ss
           fi
           gerbil env gerbil interactive -e '(begin (import :clan/poo/object) (displayln "runtime-dependencies-ready"))'
-          # The Core submodule owns this checkout's shared POO modules.
+          # Lab clean includes the Core owners selected by its init. Clean
+          # the shared output before rebuilding the Core prerequisites.
+          gerbil env just clean
           gerbil env just clean-core
           gerbil env just build-core
-          # Clean only Agentic AI Lab outputs; its build spec excludes Core.
-          gerbil env just clean
 
       - name: Save Gerbil package cache
         if: steps.runtime-gerbil-pkg-cache.outputs.cache-hit != 'true'
