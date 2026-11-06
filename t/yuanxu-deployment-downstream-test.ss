@@ -8,8 +8,8 @@
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/crypto/digest sha256)
-        (only-in :yuanxu/ops/progress execution-progress! make-test-progress-reader)
-        (only-in :yuanxu/observability/testing-script TestingScript.)
+        (only-in :yuanxu/ops/progress current-execution-progress execution-progress! make-test-progress-reader)
+        (only-in :yuanxu/observability/testing-script TestingScript. make-compiler-progress-reader)
         (only-in :yuanxu/module-system/building/source-closure yuanxu-bootstrap-contexts)
         (only-in :yuanxu/module-system/building/products artifact-files)
         (only-in :yuanxu/module-system/building/products current-build-output-directory)
@@ -38,6 +38,30 @@
                (cons 'failed? failed?)))
   (newline) (force-output)
   (if failed? (raise failure) (apply values (cdr (assq 'result stats)))))
+
+;; Relay completed native compiler work while retaining its exact transcript.
+(def (call-with-compiler-output action)
+  (call-with-output-string
+    (lambda (output)
+      (defvalues (reader writer) (open-string-pipe '(direction: input)))
+      (def progress (current-execution-progress))
+      (def receive (make-compiler-progress-reader))
+      (def drain
+        (make-thread
+          (lambda ()
+            (parameterize ((current-execution-progress progress))
+              (let loop ((line (read-line reader #\newline #t)))
+                (unless (eof-object? line)
+                  (receive line)
+                  (display line output)
+                  (loop (read-line reader #\newline #t))))))))
+      (thread-start! drain)
+      (dynamic-wind void
+        (lambda () (parameterize ((current-output-port writer)) (action)))
+        (lambda ()
+          (close-output-port writer)
+          (dynamic-wind void (lambda () (thread-join! drain))
+            (lambda () (close-input-port reader))))))))
 
 (def (compile-events output)
   (call-with-input-string output
@@ -94,10 +118,10 @@
             (def output
               (measure-phase phase
                 (lambda ()
-                  (call-with-output-string
-                    (lambda (port)
+                  (call-with-compiler-output
+                    (lambda ()
                       (parameterize ((current-build-output-directory libdir)
-                                     (current-output-port port) (current-directory consumer))
+                                     (current-directory consumer))
                         (dynamic-wind
                           (lambda () (set-load-path! (cons libdir prerequisites)))
                           (lambda () (deployment-build-main operation))
