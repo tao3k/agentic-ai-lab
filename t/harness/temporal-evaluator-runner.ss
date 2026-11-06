@@ -36,7 +36,7 @@
    :gerbil-ascent/table/trrel
    :gerbil-ascent/table/provider
    :gerbil-ascent/table/storage
-   :gerbil-ascent/table/interface
+   :gerbil-ascent/table/func
    :gerbil-ascent/program/types
    :gerbil-ascent/program/objects
    :gerbil-ascent/program/aggregators
@@ -65,7 +65,7 @@
    :gerbil-ascent/program/operator-change
    :gerbil-ascent/program/operator-session
    :gerbil-ascent/program/summary
-   :gerbil-ascent/program/interface
+   :gerbil-ascent/program/api
    :gerbil-ascent/core/binary-program
    :gerbil-ascent/candidate/closure
    :gerbil-ascent/candidate/datum

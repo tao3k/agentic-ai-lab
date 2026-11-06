@@ -4,7 +4,7 @@
 ;;; Pure, snapshot-based authoring obligations. No provider or stage counter.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :gerbil-ascent/program/syntax ascent)
-        (only-in :gerbil-ascent/program/interface gerbil-ascent-evaluate-program)
+        (only-in :gerbil-ascent/program/api gerbil-ascent-evaluate-program)
         "ascent-explanation.ss" "ascent-review.ss" "ascent-inspection.ss")
 (export d2-author)
 (def (author-rows values slots)

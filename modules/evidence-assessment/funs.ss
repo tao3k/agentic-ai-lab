@@ -9,7 +9,7 @@
         (only-in :std/list/list every find)
         (only-in :agentic-ai-lab/modules/query/scheme-select
                  agentic-ai-lab-query-select-scheme-nodes)
-        (only-in :gerbil-ascent/program/interface
+        (only-in :gerbil-ascent/program/api
                  relational-program gerbil-ascent-evaluate-program))
 
 (export agentic-ai-lab-evidence-assessment-evaluate

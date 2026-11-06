@@ -8,7 +8,7 @@
 ;;; No generated JSON schema, task selector or knowledge publication authority.
 (import (only-in :clan/poo/object .o .ref)
         (only-in :gerbil-ascent/program/syntax ascent)
-        (only-in :gerbil-ascent/program/interface gerbil-ascent-evaluate-program))
+        (only-in :gerbil-ascent/program/api gerbil-ascent-evaluate-program))
 (export ExperienceWindow. context-evolution-evaluate context-evolution-rows)
 
 (def ExperienceWindow.

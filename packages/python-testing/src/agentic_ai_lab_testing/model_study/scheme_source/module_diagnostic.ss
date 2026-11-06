@@ -4,7 +4,7 @@
 ;;;
 ;;; Read two invalid Scheme programs. Return only the
 ;;; S-expression written by main, including diagnostic code and path.
-(import (only-in :gerbil-ascent/program/interface
+(import (only-in :gerbil-ascent/program/api
                  relational-program relational-admit/report
                  relational-admission-report-diagnostic
                  relational-diagnostic-code relational-diagnostic-path))

@@ -1,7 +1,7 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import :gerbil-ascent/rules/interface (only-in :clan/poo/object .ref))
+(import :gerbil-ascent/rules/func (only-in :clan/poo/object .ref))
 (export make-execution-evidence)
 
 ;; Execution observations are facts, not execution permission or source proofs.

@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in :clan/poo/object .o .ref)
         (only-in :std/list/list delete-duplicates/hash)
-        (only-in :gerbil-ascent/program/interface gerbil-ascent-evaluate-program)
+        (only-in :gerbil-ascent/program/api gerbil-ascent-evaluate-program)
         "types.ss" "ascent.ss" "ascent-review.ss" "ascent-explanation.ss" "ascent-authoring.ss" "ascent-scene.ss" "ascent-teaching.ss" "profiles/context-evolution.ss")
 (export d2-infer d2-review d2-plan-explanation d2-author d2-scene d2-teaching d2-source d2-source-for-config
         ExperienceWindow. context-evolution-evaluate context-evolution-rows)

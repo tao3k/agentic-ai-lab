@@ -4,7 +4,7 @@
 ;;;
 ;;; Read the Gerbil module use below. Return only the S-expression
 ;;; written by main. The export name reach refers to private path.
-(import (only-in :gerbil-ascent/program/interface
+(import (only-in :gerbil-ascent/program/api
                  relational-fragment relational-compose relational-admit
                  relational-solve relational-query))
 (export main)
