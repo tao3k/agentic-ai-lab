@@ -153,12 +153,13 @@
   (write-source init
     (call-with-output-string
       (lambda (port)
-        (write `(yuanxu! mode: explicit source: ,(path-expand "modules" repository)
+        (write `(yuanxu!
+                  :load-modules ,(path-expand "core/modules" repository)
+                  mode: explicit rename: Core (funflow) (json-schema)
+                  :load-modules ,(path-expand "modules" repository)
+                  mode: explicit rename: Lab
                   (aws @ ,(path-expand "scenarios/aws" repository))
-                  (nix @ ,(path-expand "modules/nix" repository))
-                  (funflow @ ,(path-expand "core/modules/funflow" repository))
-                  (json-schema @ ,(path-expand "core/modules/json-schema" repository))
-                  :services (opentofu @ ,(path-expand "modules/services/opentofu" repository))) port))))
+                  (nix) :services (opentofu)) port))))
   (.cc (.o) 'project project 'init init 'reader (module-publication-reader)
     'closure-inputs closure-inputs 'package-set canonical-package-set 'system system))
 (def (realize-aws-selection fixture directory (phase void))

@@ -194,7 +194,6 @@
           (def lock-text (and flake-root (module-source-read (path-expand "flake.lock" flake-root))))
           (def owner (path-expand "modules/app/infrastructure" root))
           (def config (path-expand "config.ss" owner))
-          (def upstream (path-expand "modules/services/opentofu" (current-directory)))
           (def maintained (path-expand "modules/services/opentofu" (current-directory)))
           (def real-catalog (path-expand "t/fixtures/opentofu/family-schemas.nix" (current-directory)))
           (def catalog-path (path-expand "catalog.nix" root))
@@ -210,11 +209,12 @@
           (write-source init
             (call-with-output-string
               (lambda (port)
-                (write `(yuanxu! mode: explicit
-                          (json-schema @ ,(path-expand "core/modules/json-schema" (current-directory)))
-                          (nix @ ,(path-expand "modules/nix" (current-directory)))
-                          (funflow @ ,(path-expand "core/modules/funflow" (current-directory)))
-                          :services (opentofu @ ,upstream)
+                (write `(yuanxu!
+                          :load-modules ,(path-expand "core/modules" (current-directory))
+                          mode: explicit rename: Core (json-schema) (funflow)
+                          :load-modules ,(path-expand "modules" (current-directory))
+                          mode: explicit rename: Lab (nix) :services (opentofu)
+                          :load-modules "./modules" mode: explicit rename: App
                           :app (infrastructure) :unused (bomb disable: #t)) port))))
           (write-source (path-expand "types.ss" owner)
                         "(import :clan/poo/object (only-in :clan/poo/mop Type.)) (def Scope (.cc Type. identity: 'scope .element?: object?)) (export Scope)")
@@ -241,7 +241,7 @@
             (string-append "(import (only-in :agentic-ai-lab/opentofu-contracts OpenTofuScopeContract)) "
                            (string-subst (module-source-read (path-expand "types.ss" owner)) "(export Scope)" "(export Scope OpenTofuScopeContract)")))
           (write-source (path-expand "interface.ss" owner)
-            "(.def Infrastructure identity: 'app/infrastructure core: (.o requires: (.o Tofu: (.o module-id: 'services/opentofu contract: OpenTofuScopeContract)) scope-contract: Scope exports: (.o config: Config)) features: (.o))")
+            "(.def Infrastructure identity: 'app/infrastructure core: (.o requires: (.o Tofu: (.o module-id: 'agentic-ai-lab/modules/services/opentofu/interface contract: OpenTofuScopeContract)) scope-contract: Scope exports: (.o config: Config)) features: (.o))")
           (write-source (path-expand "modules/unused/bomb/interface.ss" root)
                         "(((disabled module must not parse")
           (write-source (path-expand "modules/unused/bomb/build.ss" root)
@@ -254,13 +254,14 @@
                   (path-expand "invalid" root)))))
             (let ()
           (def parent-view (configured-modules init upstream-source))
+          (def owner-id (.get parent-view context resolve-root))
           (assert 'maintained-publisher-source
             (equal? (path-normalize (.get (.call (.get parent-view context) locate 'services/opentofu) value))
                     (path-normalize (path-expand "interface.ss" maintained))))
           (assert 'maintained-build-role-source
-            (equal? (path-normalize (.get (.call parent-view prepare-publication 'services/opentofu) build-source))
+            (equal? (path-normalize (.get (.call parent-view prepare-publication 'agentic-ai-lab/modules/services/opentofu/interface) build-source))
                     (path-normalize (path-expand "build.ss" maintained))))
-          (def public-scope (.get parent-view modules services opentofu))
+          (def public-scope (.get parent-view modules Lab services opentofu))
           (assert 'scope-published-before-build (object? public-scope))
           (assert 'scope-does-not-force-source (not (.ref/cached (.get public-scope config source) 'source-inputs)))
           (assert 'scope-does-not-start-nix (= (process-count evaluator) 0))
@@ -268,11 +269,12 @@
             (not (file-exists? (path-expand "modules/services/opentofu" root))))
           (assert 'selected-dependency-order
             (equal? (.get parent-view dependency-order)
-                    '(json-schema nix funflow services/opentofu app/infrastructure)))
+                    (map owner-id
+                         '(json-schema nix funflow services/opentofu app/infrastructure))))
           (let* ((records (.get parent-view selected-records))
-                 (json-schema (find (lambda (record) (eq? (.get record identity) 'json-schema)) records))
-                 (nix (find (lambda (record) (eq? (.get record identity) 'nix)) records))
-                 (tofu (find (lambda (record) (eq? (.get record identity) 'services/opentofu)) records)))
+                 (json-schema (find (lambda (record) (eq? (.get record identity) (owner-id 'json-schema))) records))
+                 (nix (find (lambda (record) (eq? (.get record identity) (owner-id 'nix))) records))
+                 (tofu (find (lambda (record) (eq? (.get record identity) (owner-id 'services/opentofu))) records)))
             (def json-schema-requirement (.get tofu dependency-records JsonSchema))
             (assert 'json-schema-provider-record-shared
               (eq? (.get json-schema-requirement provider) json-schema))
@@ -292,9 +294,9 @@
           (assert 'external-package-in-selected-graph (= (length (.get parent-graph external-packages)) 1))
           (assert 'consumer-has-no-build-role (not (file-exists? (path-expand "build.ss" owner))))
           (assert 'upstream-build-owner
-            (eq? (.get (car (.get parent-graph external-packages)) build-owner) 'services/opentofu))
+            (eq? (.get (car (.get parent-graph external-packages)) build-owner) (owner-id 'services/opentofu)))
           (assert 'downstream-configuration-owner
-            (eq? (.get (car (.get parent-graph external-packages)) configuration-owner) 'app/infrastructure))
+            (eq? (.get (car (.get parent-graph external-packages)) configuration-owner) (owner-id 'app/infrastructure)))
           (assert 'config-observed (assoc (path-normalize config) (.get parent-graph source-inputs)))
           (def parent (measure "aws-build" (lambda () (run-selected-packages parent-view (path-expand "parent" root))) 2
             types: (lambda (result) (if result (type-counts (.get (package-result result) scope) '(aws)) '()))))

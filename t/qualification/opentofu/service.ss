@@ -62,7 +62,6 @@
   (call-with-yuanxu-fixture Workspace
     (lambda (root-dir)
       (def project (current-directory))
-      (def maintained (path-expand "modules/services/opentofu" project))
       (def service-dir (path-expand "modules/services/opentofu" root-dir))
       (displayln "PHASE producer-derivation at=" (real-time)) (force-output)
       (yuanxu-test-checkpoint 'opentofu-producer-derivation)
@@ -70,21 +69,31 @@
         (.call (.o (:: @ NixSource.)
                  expression: (path-expand "t/fixtures/opentofu/null-provider-artifacts.nix" project))
                .instantiate))
-      (create-directory* service-dir)
+      ;; The relocated roles retain their native package identity. Copy the
+      ;; public roots they declare so the compiler checks their actual owner.
       (for-each
-        (lambda (name)
-          (when (string-suffix? ".ss" name)
-            (copy-file (path-expand name maintained) (path-expand name service-dir))))
-        (directory-files maintained))
+        (lambda (relative)
+          (let ((source (path-expand relative project)) (target (path-expand relative root-dir)))
+            (create-directory* target)
+            (for-each
+              (lambda (name)
+                (when (or (string-suffix? ".ss" name) (string-suffix? ".nix" name))
+                  (copy-file (path-expand name source) (path-expand name target))))
+              (directory-files source))))
+        '("modules/nix" "modules/services/opentofu"))
+      (for-each
+        (lambda (name) (copy-file (path-expand name project) (path-expand name root-dir)))
+        '("nix-contracts.ss" "opentofu-contracts.ss" "services.ss"))
       (write-source (path-expand "gerbil.pkg" root-dir)
-        "(package: opentofu-service-fixture prelude: :yuanxu/module-system/source/module-prelude)\n")
+        "(package: agentic-ai-lab prelude: :yuanxu/module-system/source/module-prelude)\n")
       (def config-path (path-expand "config.ss" service-dir))
+      (copy-file config-path (path-expand "service-defaults.ss" service-dir))
       (write-source config-path
         (call-with-output-string
           (lambda (port)
             (for-each (lambda (form) (write form port) (newline port))
               `((import :clan/poo/object
-                   (rename-in (only-in :agentic-ai-lab/modules/services/opentofu/config
+                   (rename-in (only-in "service-defaults.ss"
                                 Config OpenTofuProviderConfig) (Config Defaults))
                    (only-in :agentic-ai-lab/modules/nix/objects NixSource.))
                 (export Config OpenTofuProviderConfig)
@@ -97,11 +106,11 @@
       (write-source init-path
         (call-with-output-string
           (lambda (port)
-            (write `(yuanxu! :load-modules "./modules" mode: explicit
-                      (json-schema @ ,(path-expand "core/modules/json-schema" project))
-                      (nix @ ,(path-expand "modules/nix" project))
-                      (funflow @ ,(path-expand "core/modules/funflow" project))
-                      :services (opentofu)) port))))
+            (write `(yuanxu!
+                      :load-modules ,(path-expand "core/modules" project)
+                      mode: explicit rename: Core (json-schema) (funflow)
+                      :load-modules "./modules" mode: explicit rename: Lab
+                      (nix) :services (opentofu)) port))))
       (displayln "PHASE source-selection at=" (real-time)) (force-output)
       (yuanxu-test-checkpoint 'opentofu-source-selection)
       (def selected-view
@@ -114,7 +123,7 @@
           .source-scope:
           (lambda ()
             (parameterize ((current-module-source-observer report-stage))
-              (.get selected-view modules modules services opentofu scope)))
+              (.get selected-view modules Lab services opentofu scope)))
           .prepare:
           (lambda ()
             (def packages
@@ -122,7 +131,7 @@
                 (.call (.cc SelectedPackages. 'selection selected-view
                             'directory (path-expand "packages" root-dir)) .run)))
             (def ready-view (.call selected-view .with-packages packages))
-            (def ready-value (.get ready-view modules modules services opentofu scope))
+            (def ready-value (.get ready-view modules Lab services opentofu scope))
             (def recipe-value (.get ready-value Null))
             (.o ready-scope: ready-value recipe: recipe-value))
           .workspace:
