@@ -53,10 +53,12 @@ def _runtime_prefix(args: argparse.Namespace):
         # Publish the producer's native programs in the command's Gerbil
         # prefix. Writes and cleanup must remain local to this invocation.
         programs = project_prefix / "bin"
+        runtime_bin = runtime / "bin"
         if programs.is_dir():
-            shutil.copytree(programs, runtime / "bin")
+            shutil.copytree(programs, runtime_bin)
+            runtime_bin.chmod(0o700)
         else:
-            (runtime / "bin").mkdir()
+            runtime_bin.mkdir()
         yield runtime
 
 

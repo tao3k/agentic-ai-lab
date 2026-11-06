@@ -70,19 +70,23 @@ class GerbilProjectEnvironmentToolTest(unittest.TestCase):
             program = project / ".gerbil" / "bin" / "build-publication-tools"
             program.parent.mkdir(parents=True)
             program.write_bytes(b"native program")
-            program.chmod(0o755)
+            program.chmod(0o555)
+            program.parent.chmod(0o555)
             args = argparse.Namespace(
                 project_root=str(project),
                 workspace=str(workspace),
                 runtime_directory=".runtimes",
             )
-            with environment_tool._runtime_prefix(args) as runtime:
-                copied = runtime / "bin" / program.name
-                self.assertEqual(copied.read_bytes(), program.read_bytes())
-                self.assertTrue(os.access(copied, os.X_OK))
-                copied.unlink()
-            self.assertTrue(program.is_file())
-            self.assertFalse(runtime.exists())
+            try:
+                with environment_tool._runtime_prefix(args) as runtime:
+                    copied = runtime / "bin" / program.name
+                    self.assertEqual(copied.read_bytes(), program.read_bytes())
+                    self.assertTrue(os.access(copied, os.X_OK))
+                    copied.unlink()
+                self.assertTrue(program.is_file())
+                self.assertFalse(runtime.exists())
+            finally:
+                program.parent.chmod(0o755)
 
     def test_main_launches_command_with_declared_project_environment(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
