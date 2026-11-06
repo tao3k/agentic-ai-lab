@@ -177,8 +177,8 @@ jobs:
             .gerbil/bin
           key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
 
-      - name: Build Gerbil package
-        run: GERBIL_BUILD_VERBOSE=1 gerbil build
+      - name: Build the development library
+        run: GERBIL_BUILD_VERBOSE=1 just build-library
 
       - name: Install optional development policy dependencies
         run: |

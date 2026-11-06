@@ -3,13 +3,14 @@
 (import :std/test
         (only-in :clan/poo/object .get .cc .o)
         (only-in :std/source this-source-file)
+        (only-in :gerbil/runtime/loader load-path set-load-path!)
+        (only-in :gerbil/expander __module-registry module-context? module-context-path)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :std/misc/ports read-all-as-u8vector)
         (only-in :std/crypto/digest sha256)
-        (only-in :yuanxu/ops/interface Ops)
-        (only-in :yuanxu/ops/func run-script)
         (only-in :yuanxu/ops/progress execution-progress! make-test-progress-reader)
-        (only-in :yuanxu/observability/testing-script make-compiler-progress-reader TestingScript.)
+        (only-in :yuanxu/observability/testing-script TestingScript.)
+        (only-in :yuanxu/module-system/building/source-closure yuanxu-bootstrap-contexts)
         (only-in :yuanxu/module-system/building/products artifact-files)
         (only-in :yuanxu/module-system/building/products current-build-output-directory)
         (only-in :yuanxu/module-system/source/admission module-source-read
@@ -77,75 +78,34 @@
           (def b-lib (path-expand "lib" b))
           (for-each create-directory* (list a-lib b-lib))
           (def completed 0)
-          (def compiler-context-paths #f)
-          (def (action state operation)
-            (def start (real-time))
-            (def returned-at #f)
-            (displayln "LAB-DEPLOYMENT-ACTION start=" operation " environment=" (path-strip-directory state)
-                       " epoch=" (time->seconds (current-time)))
-            (force-output)
-            (def result
-              (measure-phase (list 'process operation (path-strip-directory state)) (lambda () (run-script
-                (.cc (.get Ops prototypes Script)
-                  command: (if (equal? operation "use") '("gxi" "use.ss") (list "gxi" "build.ss" operation))
-                  directory: consumer timeout: 120 idle-timeout: 60
-                  progress:
-                  (lambda ()
-                    (def read-progress (make-compiler-progress-reader))
-                    (lambda (line)
-                      ;; Observe delivery without granting liveness: only the
-                      ;; original compiler reader advances the watchdog.
-                      (when (string-prefix? "BUILD-STAGE main return at=" line)
-                        (set! returned-at (time->seconds (current-time)))
-                        (displayln "LAB-DEPLOYMENT-RETURN-RECEIVED epoch=" returned-at)
-                        (force-output))
-                      (read-progress line)))
-                  environment: (.o GERBIL_PATH: state GAMBOPT: runtime-options
-                    GERBIL_BUILD_VERBOSE: "2"
-                    ;; Deliberately output-first for EVERY action. The init-owned
-                    ;; projection must establish its input context itself.
-                    GERBIL_LOADPATH: (string-join (cons (path-expand "lib" state) prerequisites) ":")))
-                '() output-port: (current-error-port)))))
-            (def output (.get result output))
-            (when returned-at
-              (displayln "LAB-DEPLOYMENT-RETURN-WAIT seconds="
-                         (- (time->seconds (current-time)) returned-at))
-              (force-output))
-            (unless (equal? operation "use")
-              ;; Products may override domain libraries at runtime. They must
-              ;; never replace the native compiler's prerequisite Contexts.
-              (let (contexts
-                (call-with-input-string output
-                  (lambda (port)
-                    (let loop ((rows '()))
-                      (let (line (read-line port))
-                        (cond ((eof-object? line) (list-sort string<? rows))
-                              ((string-prefix? "(BUILD-BOOTSTRAP-ROOT " line)
-                               (loop (cons (car (reverse (call-with-input-string line read))) rows)))
-                              (else (loop rows))))))))
-              (check-equal? (pair? contexts) #t)
-              (check-equal? (ormap (cut string-prefix? (string-append (path-expand "lib" state) "/") <>) contexts) #f)
-              (if compiler-context-paths (check-equal? contexts compiler-context-paths)
-                  (set! compiler-context-paths contexts))))
-            (when (ormap (lambda (marker) (string-contains output marker))
-                         '("*** ERROR" "ERROR CASE" "ERROR CHECK" "ERROR HARNESS" "Heap overflow" "Stack overflow"))
-              (error "Deployment action reported failure" operation output))
-            (displayln "LAB-DEPLOYMENT-ACTION return=" operation " seconds=" (- (real-time) start)
-                       " epoch=" (time->seconds (current-time)))
-            (force-output)
+          (def compiler-contexts '())
+          (def (check-compiler-contexts!)
+            (for-each
+              (lambda (row)
+                (check-equal? (eq? (cdr row) (hash-get __module-registry (car row))) #t))
+              compiler-contexts))
+          (def (from-source-plan state operation phase)
+            ;; The same init-owned plan can address independent output roots.
+            ;; Start output-first as the subprocess does. The native entry still
+            ;; checks source authority before and after every artifact effect.
+            (check-compiler-contexts!)
+            (def libdir (path-expand "lib" state))
+            (def previous (load-path))
+            (def output
+              (measure-phase phase
+                (lambda ()
+                  (call-with-output-string
+                    (lambda (port)
+                      (parameterize ((current-build-output-directory libdir)
+                                     (current-output-port port) (current-directory consumer))
+                        (dynamic-wind
+                          (lambda () (set-load-path! (cons libdir prerequisites)))
+                          (lambda () (deployment-build-main operation))
+                          (lambda () (set-load-path! previous)))))))))
+            (check-compiler-contexts!)
+            (display output) (force-output)
             (set! completed (1+ completed))
             (execution-progress! 'lab-deployment-actions completed)
-            output)
-          (def (cold-from-source-plan state)
-            ;; Same native build.ss entry, same guarded POO source plan, another
-            ;; native libdir. Artifact-cold does not require reparsing that plan.
-            (def output
-              (measure-phase 'cold-b (lambda () (call-with-output-string
-                (lambda (port)
-                  (parameterize ((current-build-output-directory (path-expand "lib" state))
-                                 (current-output-port port) (current-directory consumer))
-                    (deployment-build-main "compile")))))))
-            (display output) (force-output)
             output)
           ;; Source projection must not first warm business scopes. All first
           ;; .get/lazy/identity assertions execute in the independent B runtime.
@@ -158,6 +118,18 @@
                       (deployment-build-main "spec"))))) accounting?: #f))))
           (check-equal? (hash-ref spec-times '(calls scope-factory) 0) 0)
           (check-equal? (hash-ref spec-times '(calls candidate-read) 0) 4)
+          ;; Capture the exact native prerequisites of the source plan before
+          ;; either output exists. A/B may resolve new products; they may not
+          ;; replace the compiler contexts already bound to this plan.
+          (hash-for-each
+            (lambda (_ context)
+              (when (module-context? context)
+                (let (path (module-context-path context))
+                  (when (and (string? path) (eq? context (hash-get __module-registry path)))
+                    (check-equal? (string-prefix? temporary path) #f)
+                    (set! compiler-contexts (cons (cons path context) compiler-contexts))))))
+            (yuanxu-bootstrap-contexts))
+          (check-equal? (pair? compiler-contexts) #t)
           (execution-progress! 'lab-deployment-spec 1)
           (def targets (list-sort string<? (map cadr (call-with-input-string spec read))))
           (def selected-owners '(agentic-ai-lab/modules/nix/interface
@@ -228,20 +200,19 @@
           (for-each (lambda (state)
                       (def library (path-expand "lib" state))
                       (check-equal? (interface-products library) '())
-                      (check-equal? (compile-events (if (equal? state a) (action state "compile")
-                                                     (cold-from-source-plan state))) targets)
+                      (check-equal? (compile-events (from-source-plan state "compile" (if (equal? state a) 'cold-a 'cold-b))) targets)
                       (check-equal? (interface-products library) targets)
                       (check-equal? (pair? (artifact-files identities library)) #t))
                     (list a b))
           (def b-products (measure-phase 'b-hashes-before (lambda () (product-digests (artifact-files identities b-lib)))))
           (def sentinel (path-expand "unrelated.ssi" a-lib))
           (call-with-output-file sentinel (lambda (port) (display "unrelated product" port)))
-          (action a "clean")
+          (from-source-plan a "clean" 'clean-a)
           (check-equal? (interface-products a-lib) '("unrelated"))
           (check-equal? (artifact-files identities a-lib #f) '())
           (check-equal? (module-source-read sentinel) "unrelated product")
           (check-equal? (measure-phase 'b-hashes-after-clean (lambda () (product-digests (artifact-files identities b-lib)))) b-products)
-          (check-equal? (compile-events (action b "compile")) '())
+          (check-equal? (compile-events (from-source-plan b "compile" 'hot-b)) '())
           (displayln "LAB-DEPLOYMENT-STAGE test-start at=" (real-time)) (force-output)
           (def test-result
             ;; The selected Suite consumes B's production products through the

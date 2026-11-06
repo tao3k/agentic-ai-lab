@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-# Resolve and build the canonical Scheme project through build.ss.
+# Build the full Scheme project through the explicit development entry.
 [group('build')]
 build:
     just build-core
@@ -11,9 +11,9 @@ build:
 # The default build above still requires Core to build successfully first.
 [group('build')]
 build-library:
-    GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_darwin_env }} gerbil build
+    GERBIL_BUILD_VERBOSE="${GERBIL_BUILD_VERBOSE:-1}" {{ gerbil_darwin_env }} ./build-development.ss compile
 
-# Compile the pinned local Core using the SDK's incremental outputs.
+# Compile the pinned local Core using Gerbil's incremental outputs.
 # Explicit cleanup remains available when replacing a bootstrap artifact cohort.
 [group('build')]
 build-core:
@@ -24,10 +24,10 @@ build-core:
 clean-core:
     cd "{{ justfile_directory() }}/core" && GERBIL_PATH="{{ agentic_ai_lab_gerbil_path }}" GERBIL_LOADPATH="{{ agentic_ai_lab_library_path }}" GERBIL_BUILD_VERBOSE=1 {{ gerbil_darwin_env }} gerbil clean
 
-# Clean only Gerbil package build artifacts.
+# Clean the same explicit development build artifacts.
 [group('build')]
 clean:
-    gerbil clean
+    {{ gerbil_darwin_env }} ./build-development.ss clean
 
 # Incrementally build the canonical Scheme project through a persistent Bazel development root.
 [group('build')]

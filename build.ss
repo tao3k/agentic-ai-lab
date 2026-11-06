@@ -13,10 +13,10 @@
         (only-in :std/misc/process run-process)
         (only-in :yuanxu/module-system/building/script defbuild-script)
         (only-in :yuanxu/module-system/building/products current-build-module-roots)
-        (only-in "./init.ss" agentic-ai-lab.init.exports)
-        (only-in "./build-spec.ss" agentic-ai-lab-build-spec))
+        (only-in "./build-modules.ss" agentic-ai-lab.build-modules.exports))
+(export main)
 
-;; Runtime package clones acquire the declared Core gitlink before source lowering.
+;; Explicit source builds can use the declared Core gitlink.
 (def (ensure-core-source!)
   ;; An existing Core may contain local work and must not be reset by a build.
   (unless (file-exists? (path-expand "core/gerbil.pkg" (path-directory (this-source-file))))
@@ -25,13 +25,10 @@
             "submodule" "update" "--init" "--depth" "1" "--" "core")
       stdin-redirection: #f stdout-redirection: #f)))
 
-;; The selected init owns source lowering; Yuanxu owns Make and dispatch.
-(def modules-spec (.get agentic-ai-lab.init.exports std-make-spec))
+;; Installation supplies no Module roots and no package library targets.
+(def modules-spec (.get agentic-ai-lab.build-modules.exports std-make-spec))
 (defbuild-script
-  (begin
-    (ensure-core-source!)
-    (modules-spec
-      (if (current-build-module-roots)
-        '()
-        (parameterize ((current-directory (path-directory (this-source-file))))
-          (agentic-ai-lab-build-spec))))))
+  (let (roots (or (current-build-module-roots) '()))
+    (parameterize ((current-build-module-roots roots))
+      (when (pair? roots) (ensure-core-source!))
+      (modules-spec '()))))
