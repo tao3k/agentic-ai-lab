@@ -2,6 +2,7 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import (only-in "./progress.ss" make-nix-progress-reader) :clan/poo/object
+        (only-in :agentic-ai-lab/bindings/nix-c-api/derivation-session query-derivation-session)
         (only-in :std/misc/process run-process)
         (only-in :yuanxu/ops/func run-script)
         (only-in :yuanxu/ops/progress execution-idle-seconds execution-total-seconds)
@@ -151,7 +152,15 @@
                (list "--argstr" (symbol->string name) (.ref arguments name)))
              (.all-slots arguments)))))
   (if (nix-derivation-query?)
-    (store-path-command command)
+    (let* ((observer (current-nix-process-completion-observer))
+           (started (and observer (real-time)))
+           (result (and (not (or (current-nix-process-observer) (current-module-source-observer)))
+                        (query-derivation-session executable expression arguments))))
+      (if result
+        (begin
+          (when observer (observer '(native-fresh-evalstate) (- (real-time) started) #t))
+          result)
+        (store-path-command command)))
     (let (candidate (store-path-command command lookup?: #t))
       (if (and candidate (nix-store-path-valid? (store-command) candidate))
         candidate

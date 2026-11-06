@@ -4,7 +4,6 @@
 (import :clan/poo/object
         (only-in :std/source this-source-file)
         (only-in :std/string/misc string-trim)
-        (only-in :std/encoding/json read-json JSONReadOptions)
         (only-in :std/io/tempfile call-with-temporary-directory)
         (only-in :yuanxu/ops/func run-script)
         (only-in :yuanxu/ops/process-script ProcessScript.)
@@ -14,35 +13,35 @@
 (def directory (path-directory (this-source-file)))
 (def root (path-expand "../.." directory))
 (def (local path) (path-expand path directory))
-(def lock
-  (call-with-input-file (local "dependencies.json")
-    (lambda (port) (read-json port (JSONReadOptions object-as-hash: #t)))))
-(def (dependency name) (hash-ref lock name))
 (def observations
   (append
   (map (lambda (name) (let (path (local name)) (cons path (module-source-read path))))
-    '("dependencies.json" "session.h" "worker.c" "binding.ss" "session.ss"
+    '("dependencies.nix" "session.h" "worker.c" "binding.ss" "session.ss"
       "compatibility.ss" "tests/cases.ss" "tests/embedding-test.ss" "tests/qualification-test.ss" "tests/flake-cases.ss" "tests/profile-test.ss"))
   (map (lambda (name) (let (path (path-expand name root)) (cons path (module-source-read path))))
     '("modules/nix/objects.ss" "modules/nix/func.ss" "modules/nix/types.ss" "t/nix-flake-source-test.ss"))))
 (def (current!) (module-source-admit-current! observations))
 
-(def (execute command (environment (.o)))
+(def (execute command (environment (.o)) stderr-redirection: (stderr-value #t))
   (current!)
   (let (receipt
          (run-script (.cc ProcessScript. 'command command 'directory root
-                       'timeout 120 'environment environment)))
+                       'timeout 120 'environment environment)
+           stderr-redirection: stderr-value))
     (current!)
     (.get receipt output)))
+(def (resolve-dependencies)
+  (string-trim
+    (execute (list "nix-build" (local "dependencies.nix") "-A" "qualification" "--no-out-link")
+      stderr-redirection: #f)))
 (def (words text) (filter (lambda (word) (not (string-empty? word))) (string-split (string-trim text) #\space)))
-(def (package-path)
-  (string-join (map (lambda (name) (string-append (dependency name) "/lib/pkgconfig"))
-                   '("flake-dev" "fetchers-dev" "expr-dev" "store-dev" "util-dev")) ":"))
 
 (def (qualify backend build)
   (unless (member backend '("worker" "embedded" "embedded-preload" "profile" "product-runtime" "product-cli"))
     (error "unknown C API qualification backend" backend))
-  (def packages (.o PKG_CONFIG_PATH: (package-path)))
+  (def tools (resolve-dependencies))
+  (def cli (path-expand "bin/nix" tools))
+  (def packages (.o PKG_CONFIG_PATH: "" PKG_CONFIG_LIBDIR: (path-expand "lib/pkgconfig" tools)))
   (def flags (words (execute '("pkg-config" "--cflags" "nix-flake-c") packages)))
   (def libraries (words (execute '("pkg-config" "--libs" "nix-flake-c") packages)))
   (def library-directory (string-trim (execute '("pkg-config" "--variable=libdir" "nix-flake-c") packages)))
@@ -93,20 +92,20 @@
   (def profile-package
     (and profiling?
       (string-trim
-        (execute (list (dependency "cli") "--extra-experimental-features" "nix-command flakes" "eval" "--impure" "--raw" "--expr"
+        (execute (list cli "--extra-experimental-features" "nix-command flakes" "eval" "--impure" "--raw" "--expr"
                    (string-append "(import " (path-expand "t/fixtures/nixpkgs.nix" root) ").outPath"))
           (.o XDG_CACHE_HOME: profile-cache)))))
   (when profiling?
     (displayln "NIX-PROFILE-PREPARATION package-set-seconds=" (- (real-time) package-start))
     (force-output))
-  (def cli-output (string-trim (execute (list (dependency "cli") "--version"))))
+  (def cli-output (string-trim (execute (list cli "--version"))))
   (unless (string-prefix? "nix (Nix) " cli-output) (error "unexpected Nix version output" cli-output))
   (def cli-version (substring cli-output 10 (string-length cli-output)))
   (def loadpath (string-append build ":" root ":" (getenv "GERBIL_LOADPATH" "")))
   (def test-environment
     (.o GERBIL_LOADPATH: loadpath
         AGENTIC_AI_LAB_NIX_C_API_ROOT: root
-        AGENTIC_AI_LAB_NIX_C_API_CLI: (dependency "cli")
+        AGENTIC_AI_LAB_NIX_C_API_CLI: cli
         AGENTIC_AI_LAB_NIX_C_API_CLI_VERSION: cli-version
         AGENTIC_AI_LAB_NIX_C_API_WORKER: (path-expand "worker" build)))
   (when profiling?
@@ -147,8 +146,7 @@
 
 (def (main mode)
   (if (equal? mode "dependencies")
-    (display (execute (list "nix-store" "--realise" (dependency "expr")
-                          (dependency "store") (dependency "util") (dependency "flake"))))
+    (displayln (resolve-dependencies))
     (call-with-temporary-directory "agentic-ai-lab-nix-api" (cut qualify mode <>))))
 
 ;; gxi invokes main after loading the script; never invoke it again here.

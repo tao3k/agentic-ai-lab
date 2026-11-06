@@ -14,12 +14,12 @@
         (check-equal? (.get view context intent mode) 'auto)
         (check-equal?
           (map (lambda (window) (.get window mount)) (.get view context intent windows))
-          '(Core modules scenarios))
+          '(Core modules scenarios Profiles))
         (for-each
           (lambda (mount)
             (check-equal? (.all-slots (.ref agentic-ai-lab.init.exports mount))
                           (.all-slots (.ref (.get view modules) mount))))
-          '(Core modules scenarios))
+          '(Core modules scenarios Profiles))
         (check-equal? (.ref/cached view 'selected-graph) #f)
         (check-equal? (.ref/cached view 'build-graph) #f)
         (check-equal? (.ref/cached (.get agentic-ai-lab.init.exports Core funflow) 'scope) #f)

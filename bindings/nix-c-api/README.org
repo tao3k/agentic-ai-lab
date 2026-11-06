@@ -20,8 +20,9 @@ scope boundary and refuses escaped use. Details, fallback limits and actual
 product controls are in [[file:../../docs/10-19-design/10.08-config-languages/20-nix-flake-source-c-api.org][20 Product Flake Source C API]].
 
 Compatibility requires numeric =(major, minor) >= (2, 34)= and actual header,
-linker and runtime probes. =dependencies.json= pins the qualification CLI and
-C libraries to =2.34.4+1= on =aarch64-darwin=. It does not rebuild Gerbil.
+linker and runtime probes. =dependencies.nix= selects the CLI and C libraries
+from the caller's Nix package set. The qualification reads the resulting
+toolchain through its executable and pkg-config paths. Nix owns artifact reuse.
 
 * Direct embedding and startup ownership
 
@@ -44,6 +45,359 @@ The successful qualification does not prove that every Nix feature that
 spawns subprocesses can coexist with Gambit's child reaper. Realization,
 remote builders and arbitrary execution remain separate qualifications.
 
+* Read-only expression currentness
+
+Expression currentness can reuse a Store connection across an execution while
+creating a fresh EvalState for each query. Reusing an EvalState can retain an
+import after its file changes. Each pre-effect and post-effect guard still
+evaluates the expression and compares its derivation with the admitted path.
+
+The pinned Nix version selects the derivation write path using the process-wide
+Store setting. The public EvalState builder alone does not establish CLI
+read-only behavior. Qualify any replacement with a new derivation that remains
+unregistered, an atomically replaced indirect import that is rejected, and an
+unchanged real Provider whose original derivation is returned. A process that
+owns this global setting must also own startup, cancellation and shutdown.
+Include those costs in the execution comparison.
+See [[https://github.com/NixOS/nix/blob/2.34.4/src/libexpr/primops.cc#L1690-L1695][the derivation write boundary in Nix 2.34.4]].
+
+For an in-process expression adapter, pass names and string values directly
+through the C ABI. Qualification must exercise a long-running pure Nix
+expression under a short deadline, require cancellation before it returns a
+value, and verify that a following query still works. Both the Scheme watchdog
+and the Nix thread-local interruption predicate allowed the tight fold probe
+to finish. The subprocess boundary still owns the production timeout and
+cleanup guarantees.
+
+The expression worker package keeps one read-only Nix Store connection and
+creates a fresh EvalState for each query. Its pipe uses Nix's length-prefixed
+serialization for argument names and values. The worker uses Nix's own
+configuration parser before and after evaluation to reject changed settings,
+including Store routing and nested config includes. The package also exposes
+the matching =nix-instantiate= for the ordinary CLI path.
+
+For an OpenTofu expression Source, set the existing Nix Config =instantiate=
+to =bin/nix-instantiate= in this Nix output. The admitted baseline carries
+that selection into OpenTofu's explicit =.run=. Ops supervises one evaluator
+after the execution task graph passes preflight. The existing per-query
+watchdog remains active. The final currentness check runs after the
+evaluator exits. Commands
+without the paired executable and Flake Sources use their existing paths.
+Source observation, environment changes and working-directory changes keep
+individual queries on the configured CLI.
+
+With the Lab package already compiled in =GERBIL_PATH=, run the same
+qualification against the paired tools and the matching standalone CLI.
+
+#+begin_src sh
+tools=$(nix-build bindings/nix-c-api/dependencies.nix -A derivation-worker --no-out-link)
+cli=$(readlink "$tools/bin/nix-instantiate")
+PATH="$tools/bin:$PATH" just test-file t/qualification/opentofu/runtime-qualification.ss
+PATH="$(dirname "$cli"):$PATH" just test-file t/qualification/opentofu/runtime-qualification.ss
+#+end_src
+
+Compare the printed execution digest and admitted Provider path before
+comparing timing rows. The three timed calls start after preparation and
+the first =.get=. Each checks all 14 Nix queries and the six OpenTofu commands.
+The source-accounting round is separate from the timing gate. Qualification
+leaves the open source observer off during selection because the observer
+changes the guards retained by that selection. The ordinary mutation tests
+retain their source observation. Dispatch controls use the same six-step job
+shape with in-process Scheme receipts and then real Ops child processes.
+The source spans are inclusive. A file read inside a link guard contributes
+to both spans, so their times cannot be added.
+
+On the local arm64 macOS qualification with Nix 2.34.7+1 and Null
+Provider 3.2.4, both modes loaded the same compiled execution module and
+selected the same Provider output. The three timed calls measured:
+
+| Mode                 | Complete .run (s)  | Fourteen Nix checks (s) |
+|----------------------+--------------------+--------------------------|
+| Paired evaluator     | 2.866, 2.494, 2.489 | 0.148, 0.135, 0.129     |
+| Matching standalone  | 3.549, 3.836, 3.558 | 1.234, 1.460, 1.255     |
+
+The dispatch-only control measured 122–194 ms over the six-step job. A
+separate first run of the paired fixture exceeded the three-second gate
+at 3.48 s, including 0.57 s in =tofu destroy=. The gate covers every timed
+round and remains sensitive to the external command tail.
+
+An isolated =init= trace used the selected OpenTofu 1.11.5 binary, its
+packaged mirror, and the same 20-second watchdog. All 16 fresh directories
+produced identical lock bytes. The median was 53.7 ms and the slowest
+trial took 257.7 ms, with 243.7 ms before the first OpenTofu trace entry.
+No trial logged registry discovery. This control did not reproduce the
+1.96-second =init= in the full runtime qualification, so it leaves that
+event unattributed.
+
+To inspect this boundary separately, use the Provider directory printed by
+the qualification and run from a fresh directory containing the rendered
+Null configuration:
+
+#+begin_src sh
+TF_LOG=TRACE TF_LOG_PATH="$PWD/init.trace" TF_IN_AUTOMATION=1 CHECKPOINT_DISABLE=1 \
+  "$provider/watchdog/timeout" --verbose --signal=TERM --kill-after=5s 20s \
+  "$provider/engine/bin/tofu" init -backend=false -input=false -no-color
+#+end_src
+
+The independent source-accounting round in both modes made 3,246 reads
+and 5,910 source comparisons across 45 read windows. In a second paired
+run, metadata replay accounted for 147 inclusive calls and 1.47 s. File
+reads accounted for 0.31 s. The evaluator reduces process work while
+leaving this Scheme-side guard workload in place.
+
+** Rebased Core and the directory reader
+
+The run with Yuanxu =3b8e539= and Lab =f863631= plus the runtime candidate
+used the selected Gerbil build for =nix= and =services/opentofu=. Both
+measurements loaded the same compiled =execution~0.o1= (SHA-256
+=d96acdba44fdb7cce5b64d59590f3200d58f49870ea38fc0dd645aca3d064593=)
+and admitted the same Null Provider 3.2.4 from the same nixpkgs input.
+The worker and standalone CLI both came from Nix 2.34.7+1.
+
+Use the standard directory reader in the service fixture. The custom
+publication-reader fixture caused 16,959 physical source reads and 2,782
+full reader checks per timed diagnostic run. The directory reader kept the
+2,782 link checks and reduced the underlying work to 3,291 source reads,
+96 reader checks, and 147 native metadata replays. Each completed timed
+round still issued 14 Nix checks and executed all six OpenTofu commands.
+
+| Directory reader, arm64 macOS | Complete .run (s)  | Fourteen Nix checks (s) |
+|-------------------------------+--------------------+--------------------------|
+| Paired evaluator              | 3.327, 2.750, 2.718 | 0.450, 0.178, 0.138      |
+| Standalone CLI                | 4.620, 3.911, 3.528 | 1.285, 1.168, 1.031      |
+
+The evaluator cohort still failed the three-second gate on its first round.
+The six physical commands took 0.908 s in that round and 0.591–0.629 s in
+the subsequent rounds. The completed CLI cohort came from a separate
+invocation after the earlier CLI invocation refused an incomplete Nix check.
+The paired invocation immediately after that CLI cohort took 7.402, 6.094,
+and 6.326 s. It retained the same 3,291 source reads and 298,343 metadata
+visits, while its diagnostic metadata replay time rose from 1.52 to 4.36 s.
+The timing gate is still open. Keep the failure and invocation order with
+the benchmark evidence.
+
+A later invocation of the same compiled artifact took 3.257, 4.214 and
+3.444 s. Nix checks took 0.158, 0.336 and 0.194 s, and the six
+OpenTofu processes took 0.985, 1.099 and 0.791 s in total. The six-task
+dispatch controls took 146–194 ms without children and 252–342 ms with
+real Ops launches of =true=. These controls measure the scheduler and
+process boundary separately from OpenTofu work.
+
+In the separate accounting round, 79 =graph-current/build-admit-before=
+reader checks accounted for 2,880 of 3,291 physical reads. The 147 native
+replays visited 298,343 records and took 2.675 s inclusive of checkpoints.
+They used 2.033 s of process CPU, with two collections (0.192 s wall),
+244 minor faults and zero major faults. The 0.642 s wall-minus-CPU
+residual is unclassified. The replay and checkpoint times are nested and
+must not be added. Use the callback-free accounting round emitted by
+=just test-file t/qualification/opentofu/runtime-qualification.ss= to
+reproduce this breakdown.
+
+An independent deployment run using the physical Core source tree passed
+the A/B build, zero-compile B reuse, A cleanup isolation and first B
+=.get= checks in 80.54 s. Keep this end-to-end gate separate from =.run=.
+With the same compiled execution artifact, the subsequent runtime rounds
+took 4.030, 2.871 and 2.926 s. Its diagnostic round confirmed 79
+=prepared-batch-closed= calls and 79 =native-configuration-request=
+calls, with no open or observed fallback. The inner 2,765 protected
+checkpoint calls took 0.115 s in total. All 147 metadata replays took
+1.666 s inclusive, including the 79 protected checkpoints. The
+configuration request already takes the closed route; the number of
+inner checkpoints alone does not explain the elapsed replay cost.
+
+The existing [[file:../../core/dev/proofs/lean/YuanxuProof/Admission/ReturnWindows.lean][Lean read-window laws]]
+allow sharing bytes only in one stable world and still compare each
+expectation. In =core/dev/proofs/quint=, the finite pure control passed
+1,000 traces at a 24-step bound. Replaying the open control with seed
+=0x3f8c6ac4db5d9b35= reproduced a false acceptance under =FinalSources=.
+
+#+begin_src sh
+quint run ReturnWindows_pure.qnt --invariant safety --max-steps 24 --max-samples 1000
+quint run ReturnWindows_crossReplay.qnt --invariant FinalSources --max-steps 24 \
+  --seed=0x3f8c6ac4db5d9b35 --backend=rust
+#+end_src
+
+The first boundary-attribution probe rebuilt Core in an isolated prefix,
+then reused the checksum-verified B execution binary with the same
+qualification. Both invocations stopped at the unchanged 60 s idle limit
+during Harness import, before fixture preparation. A three-second sample
+of the second startup recorded 224 of 253 main-thread samples in
+=dyld Loader::mapSegments= through =__fcntl=. These failures belong to
+diagnostic startup and contribute no =.run= samples. The probe did not
+establish which publication phases can share a protected frame.
+
+The follow-up kept both the original Core artifacts and the same B
+binary. Three ordinary runs took 3.402, 2.945 and 2.725 s. Their
+14 Nix checks took 0.504, 0.416 and 0.159 s, and the six OpenTofu
+children took 0.885, 0.596 and 0.649 s in total.
+
+The separate boundary-accounting round wraps existing guards on a
+derived diagnostic receiver. Each wrapper counts the original
+guard's inclusive work without installing a source observer.
+
+| Boundary                       | Calls | Native config checks | Metadata replays | Physical reads | Wall (s) |
+|--------------------------------+-------+----------------------+------------------+----------------+----------|
+| Admission Context              |    16 |                   48 |              112 |          1,184 |    0.960 |
+| Publication package guard      |     2 |                    4 |                4 |            284 |    0.185 |
+| Execution package guard        |    12 |                   24 |               24 |          1,704 |    0.753 |
+
+The unwrapped accounting control recorded 79 configuration checks,
+147 replays and 3,246 physical reads. The wrapper table attributes
+76 checks, 140 replays and 3,172 reads inside the named guards;
+it is not a complete instruction trace. The Context runs the build
+Graph guard before and after its own source and Schema checks, then
+the contribution guard runs the realized selection's source tail.
+The package guard's paired checks span Nix evaluation and must
+remain independent. The next candidate boundary is the Context's
+inner sequence, with a verified callback-free route and a fallback
+for replaced guards, cold getters and observers.
+
+** Context protection-frame candidate
+
+The candidate joins the two build Graph checks around the fixed Context
+source and Schema checks in one issuer-protected frame. Both Graph checks
+still run. The frame is available only for the original Graph and guard,
+with native cached identity fields and no active observer or open route.
+The native issuer authenticates the same read support before and after
+the joined segment. The existing contribution tail and package checks
+on either side of Nix still run in their own boundaries.
+
+An isolated native Core build completed. Its full library prefix hit
+the unchanged idle guard during macOS dynamic loading. A focused
+diagnostic compiled only the two changed Core modules with =gxc= and
+verified that both were loaded over the original Core prerequisites.
+It kept the exact B execution binary, Provider and inputs. This focused
+run does not qualify the full deployment build.
+
+| Fixed B comparison                  | Round 1 | Round 2 | Round 3 |
+|-------------------------------------+---------+---------+---------|
+| Baseline .run (s)                   |   3.402 |   2.945 |   2.725 |
+| Candidate .run (s)                  |   2.856 |   2.572 |   2.494 |
+| Candidate fourteen Nix checks (s)   |   0.118 |   0.123 |   0.110 |
+| Candidate six OpenTofu children (s) |   0.877 |   0.631 |   0.601 |
+
+The diagnostic round retained 79 configuration checks and 3,246 physical
+reads. Reader checks and protected batches fell by 17, and metadata
+replays fell from 147 to 130. Within the 16 Context calls the read count
+stayed at 1,184, while replays fell from 112 to 96. The measured wall
+difference includes variation in Nix and child process costs. The detached
+Task and post-destroy source mutation controls still refused.
+
+A fresh process repeated the same candidate and returned 3.079, 2.719
+and 2.938 s. It reproduced 130 replays, 79 configuration checks and
+3,246 physical reads. Its first round took 0.122 s for Nix and 0.997 s
+for the six children. The first round in the earlier candidate process
+used 0.118 s and 0.877 s respectively. The first-round CPU also rose
+from 1.779 to 1.883 s. These overlapping measurements describe the two
+runs; their totals are not a disjoint wall-clock decomposition. Both
+rejection controls passed in the repeat. The three-second gate failed
+on its first round.
+
+Core's existing =admission-publication-test.ss= and
+=module-configuration-source-test.ss= passed through =just test-file=
+with the focused candidate products. The
+[[file:../../core/dev/proofs/lean/YuanxuProof/ModuleSystem/Graph/SourceClosureWork.lean][frame equivalence law]]
+keeps first failure identical when authentication remains stable through
+the joined sequence.
+
+The complete candidate Core build passed its four build-input mutation
+controls, including the admission and order suites before and after the
+faults. The independent Lab deployment gate passed in 88.20 s with the
+complete Core library and a physical Core source tree. It compiled both
+A and B from source, kept B unchanged while cleaning A, compiled zero
+targets in the B hot round and passed B's first compiled consumer
+=.get=. Source projection built zero business scopes. That gate does
+not measure the fixed-artifact =.run= or the separate Context Memory
+enable/withdrawal scenario. Core's Feature Interface regression also
+passed in 9.61 s, including receiver-local withdrawal, refusal on a
+changed tracked source, and the absence of effects before explicit run.
+The strict Flake test passed in 15.40 s with the same complete Core
+library and the real AWS/Null inputs produced by =t/fixtures/opentofu/ci.nix=.
+An earlier invocation lacked the declared Provider fixture and stopped
+before evaluating any Flake.
+
+The subsequent fixed B benchmark used the complete Core library.
+It verified the same B execution SHA-256 again and measured the
+worker and final CLI separately. Each row contains 13 worker
+queries and one independent CLI query.
+
+| Process / round | Complete .run (s) | Scheme CPU (s) | Worker (ms) | Final CLI (ms) | Six children (s) |
+|-----------------+-------------------+----------------+-------------+----------------+------------------|
+| P1 / 1          |             2.681 |          1.637 |          32 |             79 |            0.872 |
+| P1 / 2          |             2.438 |          1.703 |          35 |             71 |            0.576 |
+| P1 / 3          |             2.463 |          1.670 |          55 |             73 |            0.587 |
+| P2 / 1          |             2.380 |          1.638 |          33 |             72 |            0.584 |
+| P2 / 2          |             2.455 |          1.700 |          35 |             69 |            0.594 |
+| P2 / 3          |             2.398 |          1.643 |          35 |             70 |            0.592 |
+
+Both new processes passed the three-second gate with the complete
+candidate library. The earlier focused-overlay failure and the Actor
+diagnostic still describe separate runs. In the complete candidate's
+separate accounting sample, the 130 inclusive metadata replays took
+1.288 s, including 0.535 s inside 62 checkpoints. The 3,246 physical
+source reads took 0.249 s. These spans overlap.
+
+The immediately following CLI-only process loaded the same B and
+complete Core with the standalone Nix executable from the same
+2.34.7+1 build. It took 3.368, 3.605 and 3.683 s. Its 14 independent
+Nix CLI calls took 1.074, 1.108 and 1.150 s, versus 0.105 s per
+round in P2. No worker query ran in this control. The gap isolates
+most of the observed difference in the Nix call path while leaving
+variation in Scheme CPU and OpenTofu children visible.
+
+** Local Actor control
+
+The same fixed B and focused Core products ran the same Null recipe
+in this order: direct, Actor, Actor, direct, direct, Actor. The actor was
+a Gerbil local mailbox thread. Start it before timing, send the ordinary
+=.run= closure, then wait for its return inside the timed interval. The
+closure installs the original Nix observer in the executing thread.
+Neither route moves individual provider effects out of their order.
+
+| Route and round | Complete .run (s) | Scheme process CPU (s) | Nix (s) | Six OpenTofu children (s) |
+|-----------------+-------------------+------------------------+---------+---------------------------|
+| Direct 1        |             2.755 |                  1.751 |   0.109 |                     0.838 |
+| Actor 1         |             2.504 |                  1.744 |   0.110 |                     0.595 |
+| Actor 2         |             2.607 |                  1.821 |   0.112 |                     0.620 |
+| Direct 2        |             4.685 |                  1.971 |   0.913 |                     0.995 |
+| Direct 3        |             6.881 |                  2.163 |   1.944 |                     1.012 |
+| Actor 3         |             7.551 |                  2.418 |   1.559 |                     1.058 |
+
+All six runs preserved the 14 Nix checks, six process receipts and
+the final cleanup. The diagnostic retains the large wall-time variation
+and does not act as the three-second gate. The first pair differs
+primarily in the child durations. The later pairs include substantially
+different external timings, so their wall times cannot isolate Actor cost.
+
+Repeat the six-task =measure-dispatch= workload with and without the
+mailbox, reversing the order on even samples. The worker is created
+outside each sample, and both routes invoke the same =run-job= and
+check the same six receipts. Six samples per route gave these medians:
+
+| Dispatch control   | Direct wall (ms) | Actor wall (ms) | Direct CPU (ms) | Actor CPU (ms) |
+|--------------------+------------------+-----------------+-----------------+----------------|
+| Scheme receipts    |            173.0 |           176.0 |           172.4 |          173.6 |
+| Six Ops true calls |            221.1 |           226.0 |           177.1 |          180.1 |
+
+The local mailbox comparison uses Gerbil's existing primitives:
+
+#+begin_src scheme
+(def worker (thread-start! (make-thread (lambda () ((thread-receive))))))
+;; Begin timing here, as for a direct (run-job job workspace).
+(thread-send worker (lambda () (run-job job workspace)))
+(def result (thread-join! worker))
+#+end_src
+
+The control provides no dispatch saving to apply to this serial
+workflow. The production route remains direct.
+
+Use Nix's attribute traversal, argument binding and raw coercion for expression
+queries. Directly applying the argument object changes how extra and default
+arguments are handled. The evaluator's private settings must apply the native
+=NIX_PATH= parser and its precedence over configured =nix-path=. A worker
+inherits its environment at spawn. Each use must match that environment and
+working directory or take the existing CLI path with current inputs.
+
 * Files
 
 - =session.h=: private reference-counted expression/Flake bridge.
@@ -63,6 +417,7 @@ Use an installed, compiled Yuanxu/gerbil-poo dependency closure in
 
 #+begin_src sh
 just --justfile bindings/nix-c-api/Justfile dependencies
+nix-build bindings/nix-c-api/dependencies.nix -A derivation-worker --no-out-link
 just --justfile bindings/nix-c-api/Justfile test
 #+end_src
 

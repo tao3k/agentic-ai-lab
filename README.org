@@ -292,15 +292,14 @@ just deps
 just build
 #+end_src
 
-The package =build.ss= declares runtime targets through the =exclude-modules=
-and =extra-spec= POO slots of =:asp-gerbil-scheme/building-api=. The upstream
-catalog owns discovery; there is no downstream =std-make-spec-projector= or
-second source scan. ASP Scheme owns shared build and testing
-machinery; Agentic AI Lab retains its domain modules, test cases, and performance
-contracts. There is no package-local CLI support or testing framework wrapper.
+The default package =build.ss= supplies an empty Gerbil Make specification.
+Dependency installation builds Yuanxu and the other declared dependencies
+through Gerbil. Lab itself installs no compiled Scheme libraries by default.
+An explicit =--modules= request uses the selected Lab compiler closure.
+Downstream packages can select Lab owners in their own =yuanxu!= declaration.
 
-The default =just clean/deps/build/test= recipes call Gerbil's runtime package
-commands. =just build= incrementally compiles Core and the product library.
+The default =just clean/deps/build/test= recipes use Gerbil's build and test
+tools. =just build= incrementally compiles Core and Lab's development library.
 =just clean-core= explicitly removes Core outputs. =just rebuild= cleans both
 packages, installs dependencies, builds, and runs the unit suite sequentially,
 stopping at the first failure. =just check= runs the

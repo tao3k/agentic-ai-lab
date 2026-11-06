@@ -7,8 +7,6 @@
         (only-in :std/crypto/digest sha256)
         (only-in :std/encoding/hex hex-encode)
         (only-in :yuanxu/module-system/building/configuration-source yuanxu-configuration-source)
-        (only-in :yuanxu/module-system/source/admission call-with-module-source-read-cache
-                 module-source-admit-current!)
         ;; Build-tool runtime owners, not a second runtime facade or Loader.
         (only-in :agentic-ai-lab/nix-contracts NixFlakeSourceContract)
         (only-in :yuanxu/object-types/contracts yuanxu-validation-evidence-accepted?)
@@ -32,7 +30,8 @@
                                  (.get module config selection-input)))
            (path (path-expand "config.ss" root))
            (configuration-input (yuanxu-configuration-source path 'Config context-current!
-                                  role-sources: (.get publication role-sources)))
+                                  role-sources: (.get publication role-sources)
+                                  package-request?: #t))
            (observed (append (.get configuration-input source-inputs) (.get source source-inputs)))
            (source-text (cdr (assoc path observed)))
            (source-digest (hex-encode (sha256 (string->utf8 source-text))))
@@ -47,19 +46,13 @@
                              (cons 'configuration-sha256 source-digest)
                              (cons 'binding "Config")
                              (cons 'source-inputs (agentic-ai-lab-nix-source-inputs observed)))))))))
-      (def (current!)
-        ;; Both are source-only observations of this same prepared request.
-        ;; Keep its full requirements while sharing bytes inside this check;
-        ;; Nix realization and validators remain outside the window.
-        (call-with-module-source-read-cache
-          (lambda ()
-            ((.get configuration-input admit-current))
-            (module-source-admit-current! observed))))
+      (defvalues (current! configuration-check)
+        (.call configuration-input .request-check observed))
       (current!)
       (.o identity: 'opentofu source-inputs: observed
           configuration: configuration-value demand: projected-demand
           input-files: (list (cons "selection.json" wire))
-          admit-current: current!
+          admit-current: current! %configuration-check: configuration-check
           .realize:
           (lambda (directory check-current!)
             (let* ((selection (path-expand "selection.json" directory))

@@ -177,7 +177,9 @@ jobs:
           key: gerbil-deps-v3-${{ runner.os }}-${{ runner.arch }}-${{ matrix.gerbil-label }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'MODULE.bazel', 'MODULE.bazel.lock', 'packages/automation/install_gerbil_release.py') }}
 
       - name: Build the development library
-        run: GERBIL_BUILD_VERBOSE=1 just build-library
+        run: |
+          gerbil env gerbil pkg link github.com/tao3k/agentic-ai-lab "$GITHUB_WORKSPACE"
+          GERBIL_BUILD_VERBOSE=1 just build-library
 
       - name: Install optional development policy dependencies
         run: |
@@ -201,7 +203,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for category in governance deployment; do
+          for category in governance deployment context-memory; do
             gerbil env just test-file "t/yuanxu-$category-downstream-test.ss" 2>&1 | tee "$RUNNER_TEMP/lab-$category-downstream.log"
           done
           python3 - <<'PY'
@@ -213,6 +215,12 @@ jobs:
                              "profile=governance roots=1 selected-tests=1 cold=A/B hot=0 clean-isolation=ok"),
               "deployment": ("LAB-DEPLOYMENT-PRODUCT-USE-OK",
                              "LAB-DEPLOYMENT-DOWNSTREAM-OK targets=45 profile=deployment roots=1 owners=4 selected-tests=3 runtime-qualification=1 cold=A/B hot=0 clean-isolation=ok"),
+              "context-memory": ("LAB-CONTEXT-USE-OK mode=base",
+                                 "LAB-CONTEXT-USE-OK mode=enabled",
+                                 "LAB-CONTEXT-USE-OK mode=withdrawn",
+                                 "LAB-CONTEXT-REFUSAL-OK owner=ai-agentic-context feature=memory",
+                                 "LAB-CONTEXT-MEMORY-DOWNSTREAM-OK",
+                                 "hot=0 clean-isolation=ok scopes-during-build=0"),
           }
           forbidden = ("ERROR CASE", "ERROR CHECK", "ERROR HARNESS", "Heap overflow", "Stack overflow")
           for category, markers in selections.items():
@@ -237,6 +245,7 @@ jobs:
             ${{ runner.temp }}/build-input-context/**/*.log
             ${{ runner.temp }}/lab-governance-downstream.log
             ${{ runner.temp }}/lab-deployment-downstream.log
+            ${{ runner.temp }}/lab-context-memory-downstream.log
           if-no-files-found: ignore
           retention-days: 7
 

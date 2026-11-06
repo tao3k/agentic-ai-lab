@@ -1,8 +1,9 @@
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Public library roots projected through Core's installed runtime import graph.
-;;; init.ss owns the selected Module spec through init.exports; it is not a
-;;; library target or an import-graph root here.
+;;; Explicit library requests complement an init-owned Module projection.
+;;; Explicit library callers own their requested roots. Package installation
+;;; supplies an empty library specification.
 (import (only-in :gerbil/expander expander-context-id)
         (only-in :yuanxu/module-system/building/source-closure package-library-spec))
 (export agentic-ai-lab-public-build-roots agentic-ai-lab-build-spec)
@@ -104,9 +105,6 @@
     "modules/workflow/runtime/runtime-v0-ffi.ss"
     "modules/workflow/runtime/semantic.ss"))
 
-(def special-targets '("modules/nono-sandbox/_nono"
-                      "modules/workflow/runtime/runtime-v0-ffi"
-                      "modules/workflow/runtime/semantic"))
 (def (admit-production-build-context context)
   (let* ((identity (expander-context-id context))
          (name (and (symbol? identity) (symbol->string identity))))
@@ -117,12 +115,17 @@
 (def (agentic-ai-lab-build-spec (roots agentic-ai-lab-public-build-roots))
   (def ffi-options
     (cond-expand (darwin '("-ld-options" "-Wl,-undefined,dynamic_lookup")) (else '())))
-  (append
-    `((gxc: "modules/nono-sandbox/_nono"
-            "-cc-options" ,(string-append "-I" (path-expand "bindings/nono-c" (current-directory)))
-            "-ld-options" ,(cond-expand (darwin "-Wl,-undefined,dynamic_lookup") (else "-ldl"))))
+  ;; Preserve compiler options for every demanded special target, including a
+  ;; transitive import. Unselected targets contribute neither files nor options.
+  (map
+    (lambda (target)
+      (cond
+        ((equal? target "modules/nono-sandbox/_nono")
+         `(gxc: ,target
+                "-cc-options" ,(string-append "-I" (path-expand "bindings/nono-c" (current-directory)))
+                "-ld-options" ,(cond-expand (darwin "-Wl,-undefined,dynamic_lookup") (else "-ldl"))))
+        ((member target '("modules/workflow/runtime/runtime-v0-ffi" "modules/workflow/runtime/semantic"))
+         `(gxc: ,target ,@ffi-options))
+        (else target)))
     (package-library-spec (current-directory) 'agentic-ai-lab roots
-      admit-context: admit-production-build-context exclude: special-targets)
-    ;; The process/AOT consumer supplies runtime symbols at final link time.
-    `((gxc: "modules/workflow/runtime/runtime-v0-ffi" ,@ffi-options)
-      (gxc: "modules/workflow/runtime/semantic" ,@ffi-options))))
+      admit-context: admit-production-build-context)))

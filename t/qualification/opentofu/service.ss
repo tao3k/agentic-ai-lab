@@ -59,9 +59,11 @@
 ;; remain real Nix outputs. Effects use explicit methods, so a lazy getter does
 ;; not retain a POO dependency recorder over an entire operational workflow.
 ;; Core's fixture protocol owns cancellation and release of the std/io resource.
-(def (call-with-service action)
+(def (call-with-service action instantiate: (instantiate-command #f)
+                        observe-stages?: (observe-stages? #t))
   (call-with-yuanxu-fixture Workspace
     (lambda (root-dir)
+      (def stage-observer (and observe-stages? report-stage))
       (def project (current-directory))
       (displayln "PHASE producer-derivation at=" (real-time)) (force-output)
       (yuanxu-test-checkpoint 'opentofu-producer-derivation)
@@ -77,13 +79,17 @@
       (def original-text (module-source-read config-path))
       ;; The temporary input is evaluated by Nix and guarded alongside the real
       ;; declaration and its transitive expression files.
-      (def source
+      (def baseline
         (.o (:: @ NixSource.)
           expression: config-path
           arguments: (.o derivation: producer-derivation)
           source-inputs: (list (cons config-path original-text)
                                (cons expression (module-source-read expression))
                                (cons checker (module-source-read checker)))))
+      (def source
+        (if instantiate-command
+          (.cc baseline 'config (.cc (.get baseline config) 'instantiate instantiate-command))
+          baseline))
       (def init-path (path-expand "init.ss" root-dir))
       (write-source init-path
         (call-with-output-string
@@ -100,18 +106,18 @@
           (.cc (.get scope config) 'source source
             'services (.o opentofu: (.o Null: (.o message: "configured service"))))))
       (def selected-view
-        (parameterize ((current-module-source-observer report-stage))
+        (parameterize ((current-module-source-observer stage-observer))
           (configured-opentofu-modules init-path configure opentofu-service-configuration)))
       (action
         (.o config: config-path original: original-text
           .source-scope:
           (lambda ()
-            (parameterize ((current-module-source-observer report-stage))
+            (parameterize ((current-module-source-observer stage-observer))
               (.get selected-view modules Lab services opentofu)))
           .prepare:
           (lambda ()
             (def packages
-              (parameterize ((current-module-source-observer report-stage))
+              (parameterize ((current-module-source-observer stage-observer))
                 (.call (.cc SelectedPackages. 'selection selected-view
                             'directory (path-expand "packages" root-dir)) .run)))
             (def ready-view (.call selected-view .with-packages packages))

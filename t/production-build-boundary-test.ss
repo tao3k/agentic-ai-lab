@@ -11,6 +11,9 @@
                  agentic-ai-lab-module-system-source-refs)
         (only-in "../build-spec.ss" agentic-ai-lab-build-spec agentic-ai-lab-public-build-roots)
         (only-in :clan/poo/object .get)
+        (only-in :yuanxu/module-system/source/admission call-with-module-source-operation-measurement)
+        (rename-in (only-in "../build.ss" main) (main package-build-main))
+        (only-in "../build-modules.ss" agentic-ai-lab.build-modules.exports)
         (only-in "../init.ss" agentic-ai-lab.init.exports))
 (export production-build-boundary-test)
 (def (dependencies path)
@@ -18,6 +21,19 @@
 (def (asp? text) (string-prefix? "github.com/tao3k/asp-gerbil-scheme@" text))
 (def production-build-boundary-test
   (test-suite "Production build and optional development policy boundary"
+    (test-case "default package spec selects no compiler targets or business scopes"
+      (defvalues (output counts)
+        (call-with-module-source-operation-measurement
+          (lambda () (call-with-output-string
+            (lambda (port)
+              (parameterize ((current-output-port port)) (package-build-main "spec")))))
+          accounting?: #f))
+      (def targets (map (lambda (row) (if (pair? row) (cadr row) row))
+                        (call-with-input-string output read)))
+      (check-equal? targets '())
+      (check-equal? (hash-ref counts '(calls candidate-read) 0) 0)
+      (check-equal? (hash-ref counts '(calls scope-factory) 0) 0)
+      (check-equal? (eq? agentic-ai-lab.build-modules.exports agentic-ai-lab.init.exports) #f))
     (test-case "init owns selection and is not a library build root"
       (check-equal? (member "init.ss" agentic-ai-lab-public-build-roots) #f)
       ;; Obtaining the compiler projection remains inert; invoking it belongs

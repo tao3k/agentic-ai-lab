@@ -51,7 +51,7 @@ not capture a parent's already projected profile. The module scope publishes
 (import (only-in :agentic-ai-lab/init agentic-ai-lab.init.exports)
         (only-in :clan/poo/object .get))
 (def graph-profile
-  (.get agentic-ai-lab.init.exports Profiles langgraph profile))
+  (.get agentic-ai-lab.init.exports modules Profiles langgraph profile))
 #+end_src
 
 The executable consumers use this exact path. The Module leaf is the configured,

@@ -50,6 +50,9 @@
           (check-equal? (.all-slots (.get OpenTofu modules)) '(null))
           (check-equal? (.get Null command)
             (list (path-expand "engine/bin/tofu" (.get Null provider source value))))
+          (def watchdog (path-expand "watchdog/timeout" (.get Null provider source value)))
+          (check-equal? (.get Null tasks init timeout-program) watchdog)
+          (check-equal? (.get Null tasks destroy timeout-program) watchdog)
           (check-equal? (.get Null resource triggers message) "configured service")
           (.def (Hello @ Null) message: "selected ${literal} %{literal}")
           (displayln "PHASE apply-output-cleanup") (force-output)
@@ -76,10 +79,12 @@
             tasks: =>.+ (.o output: =>.+ (.o command: '("false"))))
           (.def (WrongCleanup @ Hello)
             tasks: =>.+ (.o destroy: =>.+ (.o command: '("false"))))
+          (.def (WrongWatchdog @ Hello)
+            tasks: =>.+ (.o destroy: =>.+ (.o timeout-program: "/usr/bin/false")))
           (for-each
             (lambda (recipe)
               (check-equal? (rejects? "selected execution and engine"
                               (lambda () (.call recipe .run rejected))) #t)
               (check-equal? (directory-files rejected) '()))
-            (list WrongTask WrongCleanup))
+            (list WrongTask WrongCleanup WrongWatchdog))
           (displayln "OPENTOFU-SERVICE-OK"))))))

@@ -369,7 +369,11 @@
   Null: (.o (:: @ NullExecution.)
           message: (let (settings (.get scope config services opentofu Null))
                      (if settings (.get settings message) (.get NullExecution. message)))
-          provider: (.get scope modules null provider))
+          provider: (.get scope modules null provider)
+          derivation-command:
+          (let (source (.get scope config source))
+            (and source (.slot? source 'expression) (string? (.get source expression))
+                 (.slot? source 'config) (.get source config instantiate))))
   types: =>.+ (.o config: OpenTofuConfigContract
                   Services: ServicesContract OpenTofu: OpenTofuContract
                   Null: (execution-admission (.get scope Null provider types resources null_resource)))

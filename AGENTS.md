@@ -17,6 +17,10 @@ SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
 ## Development Tests
 
+- Build input context is owned by Yuanxu's init/build projection. Do not fix cold/hot regressions by changing downstream `GERBIL_LOADPATH` ordering, warming scopes before projection, bypassing native compiler Context authentication, or increasing timeouts. Use the existing `call-with-build-input-path` boundary; preserve caller order on exit and refuse an epoch after input-context mutation.
+- Normal `.get` acceptance must use the existing callback-free operation counters, including owner-qualified `scope-factory` counts. An open source observer is an adversarial effect boundary and changes replay behavior; keep those controls separate from normal EVAL timing. Do not remove the corresponding mutation/callback tests.
+- Changes to module resolution or projection must pass Core `just test-build-input-context-mutations <artifact-dir>` (including order/admission suites before and after isolated faults), plus Lab `t/yuanxu-deployment-downstream-test.ss`. A timeout or compiler failure does not count as rejecting a mutation. The Lab gate deliberately supplies output-first paths to every action, verifies stable compiler prerequisites, and requires runtime/tests to consume B products. Source projection must construct zero business scopes; the independent B runtime retains all first `.get` assertions. Keep the 120-second aggregate and 120/60-second action/idle budgets.
+
 - Run Gerbil/Scheme tests through the Justfile heap-fenced entrypoints: `just test-file <path>` for one test and `just test` for the full suite. Do not launch raw `gxtest`, `gxi`, or `gerbil test` for project tests; those commands omit this project's pre-import heap limit.
 - Run focused Gerbil tests serially unless the scheduler enforces an aggregate memory budget. Each process can use its own heap allowance.
 - Add a Just recipe with `gerbil_test_runtime_options` and a timeout before importing Scheme modules if a test needs a different launcher.

@@ -2,6 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Explicit Ops handoff over a checked publication; importing this file is inert.
 (import :clan/poo/object
+        (only-in :agentic-ai-lab/bindings/nix-c-api/derivation-session call-with-derivation-session)
         (only-in :std/encoding/json write-json read-json)
         (only-in :std/string/misc string-subst)
         (only-in :yuanxu/ops/func run-script)
@@ -74,6 +75,16 @@
       (error "build-required: selected Provider artifact has no OpenTofu engine" command))
     (list command)))
 
+(def (provider-timeout-program provider)
+  (and provider (.slot? provider 'source)
+    (let (directory (path-expand "watchdog" (.get provider source value)))
+      ;; Older admitted products use the ordinary Ops PATH lookup.
+      (and (file-exists? directory)
+           (let (program (path-expand "timeout" directory))
+             (unless (file-exists? program)
+               (error "build-required: selected Provider artifact has no timeout program" program))
+             program)))))
+
 ;; Recheck package identity and source metadata at every forward-effect boundary.
 ;; Cleanup bypasses this guard and retains this execution's admitted command.
 (def (execution-current! job)
@@ -91,6 +102,7 @@
   owner: #f arguments: '() guard-current?: #t
   command: (append (.get owner command) arguments)
   timeout: (.get owner timeout)
+  timeout-program: (.get owner timeout-program)
   environment: (.+ (.o TF_IN_AUTOMATION: "1" CHECKPOINT_DISABLE: "1") (.get owner environment))
   .run: (lambda () (run-opentofu-task task)))
 ;; Specialize Funflow's Task without introducing another execution protocol.
@@ -101,11 +113,13 @@
 ;; Arguments may be refined, but Task command/owner overrides cannot silently
 ;; detach execution from the Provider artifact admitted for this receiver.
 (def (admit-execution-tasks! job projection)
+  (def program (provider-timeout-program (.get job provider)))
   (for-each
     (lambda (name)
       (let (task (.ref (.get job tasks) name))
         (unless (and (.slot? task 'owner) (eq? (.get task owner) job)
                      (.slot? task 'arguments)
+                     (equal? (and (.slot? task 'timeout-program) (.get task timeout-program)) program)
                      (equal? (.get task command)
                        (append (.get job command) (.get task arguments))))
           (error "OpenTofu Task must use the selected execution and engine" name))))
@@ -116,6 +130,7 @@
   name: 'opentofu
   publication: #f previous: (.o)
   command: (if provider (provider-command provider) '())
+  timeout-program: (provider-timeout-program provider)
   package-current: #f
   ;; Linking captures identities only. Resolving publication here would re-enter
   ;; the active scope; its lazy slot is first demanded after linking completes.
@@ -160,21 +175,27 @@
   resource: (let (text message) (.o triggers: (.o message: text)))
   provider-name: 'null resource-kind: 'null_resource resource-name: "hello")
 
-;; Admit the final derived receiver before rendering or starting any process.
+;; Check the final task graph before starting the evaluator or admitting effects.
 (def (run-execution job work-directory)
   (def publication (.get job publication))
   (unless publication (error "selected publication must be bound before execution"))
-  (let (baseline (.get publication value))
-    (unless (and (eq? (.get job provider) (.get baseline provider))
-                 (eq? (.get job resource-kind) (.get baseline resource-kind))
-                 (eq? (.get job provider-name) (.get baseline provider-name))
-                 (equal? (.get job command) (.get baseline command)))
-      (error "execution provider must match the selected publication")))
-  ;; Reject detached Tasks before expensive live package admission. This is
-  ;; pure preflight, not approval; publication still validates and guards the
-  ;; candidate. If validation returns another receiver, check its closure too.
+  (def baseline (.get publication value))
+  (unless (and (eq? (.get job provider) (.get baseline provider))
+               (eq? (.get job resource-kind) (.get baseline resource-kind))
+               (eq? (.get job provider-name) (.get baseline provider-name))
+               (equal? (.get job command) (.get baseline command)))
+    (error "execution provider must match the selected publication"))
   (def input-projection (job-graph job))
   (admit-execution-tasks! job input-projection)
+  (def finish
+    (call-with-derivation-session
+      (and (.slot? baseline 'derivation-command) (.get baseline derivation-command))
+      (provider-timeout-program (.get baseline provider))
+      (lambda () (run-published-execution publication job input-projection work-directory))))
+  (finish))
+
+(def (run-published-execution publication job input-projection work-directory)
+  ;; Publication validates the candidate and can return a different receiver.
   (defvalues (admission-evidence checked failure)
     (.call publication .publish (.get job previous) job))
   (when failure (error "OpenTofu input admission refused" failure))
@@ -194,14 +215,17 @@
   (call-with-output-file (path-expand "main.tf.json" work-directory)
     (lambda (port) (write-json port document)))
   (def outcome (run-job checked work-directory))
-  (execution-current! checked)
-  (def final-steps (.get outcome steps))
-  (def output-value
-    (and local? (.slot? final-steps 'output)
-      (call-with-input-string (.get final-steps output output) read-json)))
-  (.o kind: (if local? 'local-execution-completed 'configuration-validated)
-      value: checked evidence: admission-evidence steps: final-steps
-      graph: projection flow-receipt: (.get outcome flow-receipt) output: output-value))
+  ;; Reuse the final guard after the evaluator has exited. Shutdown cannot
+  ;; fall between the last currentness check and a successful return.
+  (lambda ()
+    (execution-current! checked)
+    (def final-steps (.get outcome steps))
+    (def output-value
+      (and local? (.slot? final-steps 'output)
+        (call-with-input-string (.get final-steps output output) read-json)))
+    (.o kind: (if local? 'local-execution-completed 'configuration-validated)
+        value: checked evidence: admission-evidence steps: final-steps
+        graph: projection flow-receipt: (.get outcome flow-receipt) output: output-value)))
 
 ;; Existing platform binding: workspaces are supplied only to Job.run.
 (def (opentofu-execution selection owner name)

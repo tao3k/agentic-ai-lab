@@ -34,6 +34,9 @@ runCommand "${provider.pname}-${provider.version}-schema" {
   # Retain the exact engine used to obtain this Schema in the same output.
   # Consumers never reconstruct an executable from PATH or a second selection.
   ln -s ${engine} "$out/engine"
+  # Ship the same GNU timeout semantics with the locked execution toolchain.
+  mkdir "$out/watchdog"
+  ln -s ${coreutils}/bin/timeout "$out/watchdog/timeout"
   mkdir -p "$out/indexes" "$out/inputs/"{provider,resource,data}
   # Validate path components before using exported names as package paths.
   jq -e --arg address ${lib.escapeShellArg address} '
