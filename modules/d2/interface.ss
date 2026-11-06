@@ -4,6 +4,7 @@
 ;;; Declarative managed Module publication; the source wrapper owns role imports.
 (.def D2
   identity: 'd2
+  tags: '(graph diagram)
   core:
   (.o requires: (.o)
       scope-contract: D2ScopeContract

@@ -3,40 +3,12 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 ;;; Orgize and canonical Query own selection. This module binds scope and content.
 (import (only-in :clan/poo/object .o .ref .slot? object?)
-        (only-in :std/list/list every delete-duplicates/hash)
         :agentic-ai-lab/modules/query/orgize-source
         :agentic-ai-lab/modules/query/semantic/context-restriction
         "funs-scope.ss" "funs-features.ss")
 (export agentic-ai-lab-ai-agentic-context-org-project-incremental
         agentic-ai-lab-ai-agentic-context-org-project
         agentic-ai-lab-ai-agentic-context-org-replay)
-;; The two immutable, code-owned Feature selections are catalog metadata.
-;; Resolve their ID ordering lazily once, then return detached lists. No source,
-;; Context, proof verdict, Session, journal or runtime handle is cached here.
-(def canonical-core-ids #f)
-(def canonical-memory-ids #f)
-(def (canonical-feature-ids memory?)
-  (let (stored (if memory? canonical-memory-ids canonical-core-ids))
-    (unless stored
-      (set! stored (map values (.ref (agentic-ai-lab-ai-agentic-context-profile memory?) 'feature-ids)))
-      (if memory? (set! canonical-memory-ids stored) (set! canonical-core-ids stored)))
-    (map values stored)))
-
-(def (selection-profile memory?)
-  ;; Private projection into the existing profile-ids guard. Replaying a runtime
-  ;; Query must not rebuild an entire Feature manifest for these same two IDs.
-  (let (ids-value (canonical-feature-ids memory?))
-    (.o accepted?: #t feature-ids: ids-value)))
-(def (profile-ids profile)
-  (unless (and (object? profile) (.slot? profile 'accepted?) (.ref profile 'accepted?)
-               (.slot? profile 'feature-ids)) (error "unqualified Context Feature profile"))
-  (let (ids (.ref profile 'feature-ids))
-    (unless (and (list? ids) (member 'ai-agentic-context/core ids)
-                 (<= (length ids) 2)
-                 (= (length ids) (length (delete-duplicates/hash ids)))
-                 (every (lambda (id) (memq id '(ai-agentic-context/core ai-agentic-context/memory))) ids))
-      (error "foreign or incomplete Context Feature profile"))
-    (canonical-feature-ids (if (memq 'ai-agentic-context/memory ids) #t #f))))
 ;; The private replay path may assemble from the canonical observation returned
 ;; by runtime Query replay in this same call. It never accepts a cached verdict
 ;; or an observation supplied by a public caller without replaying current bytes.
@@ -48,7 +20,7 @@
   (when (> (u8vector-length (string->utf8 source)) byte-limit)
     (error "Context source byte budget exceeded"))
   (let* ((scope-value (agentic-ai-lab-ai-agentic-context-scope-admit scope))
-         (feature-ids-value (profile-ids profile))
+         (feature-ids-value (context-profile-feature-ids profile))
          (restriction-value (agentic-ai-lab-context-restriction-compose (list restriction)))
          (observation-value
           (or replayed-observation
@@ -97,8 +69,7 @@
          ;; `observed` is fresh, source-derived runtime Query output. Re-parsing
          ;; the same source again here discarded that verified work previously.
          (current (project scope-value source (.ref projection 'restriction)
-                    (selection-profile
-                      (if (memq 'ai-agentic-context/memory ids) #t #f))
+                    (context-profile-from-feature-ids ids)
                     (.ref projection 'row-budget) (.ref projection 'byte-budget)
                     #f #f observed)))
     (unless (and (equal? (.ref current 'semantic-digest) (.ref projection 'semantic-digest))

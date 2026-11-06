@@ -186,6 +186,61 @@ jobs:
           export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
 
+      - name: Reject Core build input context regressions
+        working-directory: core
+        env:
+          GERBIL_PATH: ${{ github.workspace }}/.gerbil
+          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
+        run: |
+          just test-build-input-context-mutations "$RUNNER_TEMP/build-input-context"
+          just test-file t/module-publication-test.ss
+          just test-file t/module-testing-source-admission-test.ss
+
+      - name: Qualify real selected downstreams
+        env:
+          GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib
+        shell: bash
+        run: |
+          set -euo pipefail
+          for category in governance deployment; do
+            gerbil env just test-file "t/yuanxu-$category-downstream-test.ss" 2>&1 | tee "$RUNNER_TEMP/lab-$category-downstream.log"
+          done
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          import re
+          selections = {
+              "governance": ("LAB-GOVERNANCE-PRODUCT-USE-OK",
+                             "profile=governance roots=1 selected-tests=1 cold=A/B hot=0 clean-isolation=ok"),
+              "deployment": ("LAB-DEPLOYMENT-PRODUCT-USE-OK",
+                             "LAB-DEPLOYMENT-DOWNSTREAM-OK targets=45 profile=deployment roots=1 owners=4 selected-tests=3 runtime-qualification=1 cold=A/B hot=0 clean-isolation=ok"),
+          }
+          forbidden = ("ERROR CASE", "ERROR CHECK", "ERROR HARNESS", "Heap overflow", "Stack overflow")
+          for category, markers in selections.items():
+              text = (Path(os.environ["RUNNER_TEMP"]) / f"lab-{category}-downstream.log").read_text()
+              required = ("MODULE-OK", "HARNESS-OK", *markers)
+              if (not all(marker in text for marker in required)
+                      or any(marker in text for marker in forbidden)
+                      or not re.search(r"^OK\s*$", text, re.M)):
+                  raise SystemExit(f"{category} downstream receipt is incomplete or failed")
+          PY
+
+      - name: Qualify selected Agentic Context memory
+        run: gerbil env just test-file t/ai-agentic-context-core-test.ss
+
+      - name: Retain build input context and real downstream evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: build-input-context-${{ runner.os }}
+          path: |
+            ${{ runner.temp }}/build-input-context/**/receipt.json
+            ${{ runner.temp }}/build-input-context/**/*.log
+            ${{ runner.temp }}/lab-governance-downstream.log
+            ${{ runner.temp }}/lab-deployment-downstream.log
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Check original Temporal proof binding and Session invalidation
         env:
           GERBIL_LOADPATH: ${{ github.workspace }}/.gerbil/lib

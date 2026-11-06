@@ -4,7 +4,6 @@
 ;;; Bounded compiler unit; register the unchanged native Cases in order.
 (import (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
         (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features agentic-ai-lab-ai-agentic-context-profile)
         :agentic-ai-lab/modules/ai-agentic-context/session-host
         :agentic-ai-lab/modules/ai-agentic-context/use-host
         :agentic-ai-lab/modules/session/funs-attempt

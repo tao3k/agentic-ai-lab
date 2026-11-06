@@ -16,7 +16,7 @@
   project: "project" worktree: "worktree" source-cut: "cut" actor: "actor" task: "task"
   destination: "provider" session: "session" turn: 0))
 (def restriction (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 10))
-(def profile (agentic-ai-lab-ai-agentic-context-profile #f))
+(def profile ContextCoreProfile)
 (def source "* TODO Parent\n:PROPERTIES:\n:ID: parent\n:END:\n** TODO 子项\n:PROPERTIES:\n:ID: child-α\n:END:\n")
 (def (project text (scope-value scope))
   (agentic-ai-lab-ai-agentic-context-org-project scope-value text restriction profile))

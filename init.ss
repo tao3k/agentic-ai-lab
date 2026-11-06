@@ -10,6 +10,7 @@
   (funflow)
   :load-modules "./modules" mode: auto
   (governance)
+  (ai-agentic-context +memory)
   (my-module @ "./user-interface/custom/my-module")
   :load-modules "./scenarios" mode: explicit rename: scenarios
   (null)

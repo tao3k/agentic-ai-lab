@@ -9,10 +9,11 @@
         (only-in :yuanxu/ops/interface Ops)
         (only-in :yuanxu/ops/func run-script)
         (only-in :yuanxu/ops/progress execution-progress!)
-        (only-in :yuanxu/observability/testing-script make-compiler-progress-reader)
+        (only-in :yuanxu/observability/testing-script make-compiler-progress-reader TestingScript.)
         (only-in :yuanxu/module-system/building/products artifact-files)
-        (only-in :yuanxu/module-system/source/admission module-source-read)
-        (only-in "./qualification/yuanxu-governance-consumer/use.ss" verify-governance-use)
+        (only-in :yuanxu/module-system/source/admission module-source-read
+                 call-with-module-source-operation-measurement)
+        (only-in "./qualification/yuanxu-governance-consumer/init.ss" yuanxu-governance-consumer.init.exports)
         (rename-in (only-in "./qualification/yuanxu-governance-consumer/build.ss" main)
                    (main governance-build-main)))
 (export yuanxu-governance-downstream-test)
@@ -49,19 +50,25 @@
         (lambda (temporary)
           (def a (path-expand "a" temporary))
           (def b (path-expand "b" temporary))
+          (def base (path-expand "base" temporary))
           (def a-lib (path-expand "lib" a))
           (def b-lib (path-expand "lib" b))
-          (for-each create-directory* (list a-lib b-lib))
+          (for-each create-directory* (list a-lib b-lib (path-expand "lib" base)))
           (def completed 0)
-          (def (action state operation)
+          (def (action state operation (package-default? #f))
             (def start (real-time))
             (displayln "LAB-GOVERNANCE-ACTION start=" operation " environment=" (path-strip-directory state))
             (force-output)
             (def result
               (run-script
                 (.cc (.get Ops prototypes Script)
-                  command: (if (equal? operation "use") '("gxi" "use.ss") (list "gxi" "build.ss" operation))
-                  directory: consumer timeout: 120 idle-timeout: 60 progress: make-compiler-progress-reader
+                  command: (cond ((eq? package-default? 'governance)
+                                  (list "gxi" "build.ss" operation "--modules" "governance"))
+                                 (package-default? (list "gxi" "build.ss" operation))
+                                 ((equal? operation "use") '("gxi" "use.ss"))
+                                 (else (list "gxi" "build.ss" operation)))
+                  directory: (if package-default? root consumer)
+                  timeout: 120 idle-timeout: 60 progress: make-compiler-progress-reader
                   environment: (.o GERBIL_PATH: state GAMBOPT: runtime-options
                     GERBIL_BUILD_VERBOSE: "1"
                     GERBIL_LOADPATH: (string-join (cons (path-expand "lib" state) prerequisites) ":")))
@@ -75,18 +82,23 @@
             (set! completed (1+ completed))
             (execution-progress! 'lab-governance-actions completed)
             output)
-          ;; Both are read-only. Use the test VM so the budget covers admission
-          ;; and the real Make specification without two redundant VM startups.
-          (verify-governance-use)
-          (execution-progress! 'lab-governance-source-read 1)
-          (def spec
-            (call-with-output-string
+          ;; Preparation admits declarations, never a business scope. The
+          ;; independent B process below owns the first native .get.
+          (defvalues (spec spec-times)
+            (call-with-module-source-operation-measurement
+              (lambda () (call-with-output-string
               (lambda (out)
                 (parameterize ((current-output-port out) (current-directory consumer))
-                  (governance-build-main "spec")))))
+                  (governance-build-main "spec"))))) accounting?: #f))
+          (check-equal? (hash-ref spec-times '(calls scope-factory) 0) 0)
+          (check-equal? (hash-ref spec-times '(calls candidate-read) 0) 1)
           (execution-progress! 'lab-governance-spec 1)
           (def targets (list-sort string<? (map cadr (call-with-input-string spec read))))
           (def owner "agentic-ai-lab/modules/governance/")
+          (def selected-tests (.get yuanxu-governance-consumer.init.exports tests))
+          (def test-files (.get selected-tests spec))
+          (check-equal? (.get selected-tests selected-graph module-order) '(governance))
+          (check-equal? test-files (list (path-expand "modules/governance/tests/module-test.ss" root)))
           (check-equal? (filter (lambda (target) (not (string-prefix? owner target))) targets)
                         '("yuanxu-governance-consumer/init" "yuanxu-governance-consumer/main"))
           (for-each (lambda (suffix) (check-equal? (and (member (string-append owner suffix) targets) #t) #t))
@@ -103,6 +115,20 @@
                                    (path-expand (string-append (substring target 15 (string-length target)) ".ss") root)))
                             targets))))
           (def source-before (map module-source-read inputs))
+          ;; The default producer has no compiled output. Downstream A/B
+          ;; below selects Governance itself.
+          (check-equal? (compile-events (action base "compile" #t)) '())
+          (check-equal? (interface-products (path-expand "lib" base)) '())
+          (check-equal? (compile-events (action base "compile" #t)) '())
+          (displayln "LAB-PACKAGE-BASE-OK targets=0 modules=0 hot=0")
+          ;; The very same package build entry can explicitly add one owner.
+          (def governance-targets (filter (cut string-prefix? owner <>) targets))
+          (check-equal? (compile-events (action base "compile" 'governance))
+                        (map (lambda (target) (substring target 15 (string-length target))) governance-targets))
+          (check-equal? (interface-products (path-expand "lib" base))
+                        (list-sort string<? governance-targets))
+          (check-equal? (compile-events (action base "compile" 'governance)) '())
+          (displayln "LAB-PACKAGE-SELECTION-OK module=governance targets=" (length governance-targets) " hot=0")
           (check-equal? (interface-products a-lib) '())
           (for-each (lambda (state)
                       (def library (path-expand "lib" state))
@@ -119,8 +145,22 @@
           (check-equal? (module-source-read sentinel) "unrelated product")
           (check-equal? (product-digests (artifact-files identities b-lib)) b-products)
           (check-equal? (compile-events (action b "compile")) '())
-          (check-equal? (and (string-contains (action b "use") "assessment=release-ready") #t) #t)
+          (def test-result
+            ;; The selected Suite consumes B's production products through the
+            ;; existing harness. Test discovery supplies the exact file list.
+            (.call (.cc TestingScript. source: selected-tests timeout: 120 idle-timeout: 60
+                     environment: (.o GERBIL_PATH: b GAMBOPT: runtime-options
+                       GERBIL_LOADPATH: (string-join (cons b-lib prerequisites) ":"))) .run))
+          (check-equal? (.get test-result status) 0)
+          (check-equal? (compile-events (.get test-result output)) '())
+          (check-equal? (and (string-contains (.get test-result output) "LAB-GOVERNANCE-PRODUCT-USE-OK") #t) #t)
+          (display (.get test-result output))
+          (execution-progress! 'lab-governance-selected-tests 1)
+          (def runtime-output (action b "use"))
+          (for-each (lambda (marker)
+                      (check-equal? (and (string-contains runtime-output marker) #t) #t))
+                    '("assessment=release-ready"))
           (check-equal? (product-digests (installed-products)) installed-before)
           (check-equal? (map module-source-read inputs) source-before)
           (displayln "LAB-GOVERNANCE-DOWNSTREAM-OK targets=" (length targets)
-                     " cold=A/B hot=0 clean-isolation=ok"))))))
+                     " profile=governance roots=1 selected-tests=1 cold=A/B hot=0 clean-isolation=ok"))))))

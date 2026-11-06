@@ -4,7 +4,7 @@
 ;;; Shared native fixtures. Test verdicts remain in the original Suite.
 (import (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
         (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features agentic-ai-lab-ai-agentic-context-profile)
+        (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features ContextCoreProfile)
         :agentic-ai-lab/modules/ai-agentic-context/session-host
         :agentic-ai-lab/modules/ai-agentic-context/use-host
         :agentic-ai-lab/modules/session/funs-attempt
@@ -156,7 +156,7 @@
       (agentic-ai-lab-context-use-grant "grant" 1 "manifest" "admission" contract "policy" (.ref p 'semantic-digest) '(display) #t))
     (agentic-ai-lab-ai-agentic-context-session-host-enroll! context-host 0 context-source context-scope
       (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 8)
-      (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant" 1)
+      ContextCoreProfile 0 '("work") "grant" 1)
     (values context-host proof-host ph registration p ctx)))
 (def (context-bind host proof-host registration p revision source-generation state-generation policy-generation)
   (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host "session" revision source-generation
@@ -248,7 +248,7 @@
           (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source
             (.o (:: @ context-scope) session: id)
             (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 8)
-            (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant" 1))
+            ContextCoreProfile 0 '("work") "grant" 1))
         (when (pair? parents)
           (agentic-ai-lab-ai-agentic-context-session-host-depend-on! host id 0 0 parents))
         (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host id 0 0 proof
@@ -388,7 +388,7 @@
             (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source
               (.o (:: @ context-scope) session: id)
               (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 safe-end)
-              (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "safe-grant" 1))
+              ContextCoreProfile 0 '("work") "safe-grant" 1))
           (when (pair? parents) (agentic-ai-lab-ai-agentic-context-session-host-depend-on! host id 0 0 parents))
           (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host id 0 0 proof
             (.ref selected 'identity) 1 1 (.ref policy-value 'semantic-digest) 128)
@@ -485,7 +485,7 @@
     (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source
       (.o (:: @ context-scope) session: sid)
       (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 1000000)
-      (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "clock-new-grant" 1)
+      ContextCoreProfile 0 '("work") "clock-new-grant" 1)
     (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host sid 0 0 (.ref f 'proof)
       (.ref (.ref f 'registration-a) 'identity) 1 3 (.ref p 'semantic-digest) 128)
     (agentic-ai-lab-ai-agentic-context-session-host-claim! host sid 1 0 "attempt-new" "request-new")

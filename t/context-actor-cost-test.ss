@@ -133,7 +133,7 @@
          (restriction (agentic-ai-lab-context-restriction
                        "domain:1" '("actor:1") '("provider:1") '("org:1") 0 10))
          (projection (agentic-ai-lab-ai-agentic-context-org-project
-                      scope source restriction (agentic-ai-lab-ai-agentic-context-profile #f)))
+                      scope source restriction ContextCoreProfile))
          (expected (.ref projection 'semantic-digest)))
     (measure 'org-current-replay 60
       (lambda (index)

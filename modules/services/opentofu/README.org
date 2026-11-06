@@ -2,6 +2,67 @@
 # SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 #+title: Declared OpenTofu service configuration
 
+* Select the deployment category
+
+An independent downstream declares source windows and the category, without
+repeating dependency names. Lab's executable downstream fixture is
+=t/qualification/yuanxu-deployment-consumer/=:
+
+#+begin_src scheme
+(yuanxu!
+  :load-modules "../../../modules" rename: Lab mode: auto profile: deployment
+  :load-modules "../../../core/modules" rename: Core mode: auto profile: deployment)
+(.get yuanxu-deployment-consumer.init.exports Lab services opentofu)
+#+end_src
+
+Paths are relative to that fixture's =init.ss=; a downstream declares its own
+source windows. OpenTofu's =deployment= tag selects one root. Its =requires=
+edges select Nix (=package-management=), JsonSchema (=schema validation=), and
+Funflow (=workflow=), including the Core package owners. These dependencies
+do not become extra visible category roots. Native =.get= admits the reached
+scopes. Production =std-make-spec= and default Profile tests consume that same
+dependency Graph. Selected owner sources retain original compiler identities,
+and the downstream =GERBIL_PATH= owns their products; installed prerequisites
+outside those sources stay under Gerbil's package management.
+
+The owners also declare their ordinary public libraries: Nix contributes
+=agentic-ai-lab/nix-contracts= and OpenTofu contributes
+=agentic-ai-lab/opentofu-contracts= through =library-roots=. The latter's native
+imports bring =services=. These compile contributions remain selected after
+their outputs are installed, so hot builds and clean keep the cold inventory.
+
+Run =just test-file t/yuanxu-deployment-downstream-test.ss= with built Core
+prerequisites. This suite has a 240-second aggregate limit and retains its
+120-second action and 60-second idle limits. The assertions check exact cold A/B compiler events and interfaces,
+zero hot compiler events, selected test execution, and B product hashes after
+cleaning A. It invokes the public schema operation through the downstream
+scope; provider realization and external OpenTofu execution remain explicit
+configuration effects.
+
+A prior complete gate passed with a natural exit in 111.81 seconds under
+the former 120-second aggregate limit and the same action and idle limits.
+The deployment gate with freshly compiled Core prerequisites exited naturally
+in 210.96 seconds. The child reported =OK= 5.05 seconds before the outer
+test received its result. The two source checks took about 0.06 seconds each.
+The preceding timeout remains failed evidence. Coarse CPU/wall and correlated
+process timestamps now distinguish specification preparation, native Make and
+process completion. Suite entry records the completion of native Harness imports
+before source projection starts. The 60-second idle limit still applies to
+each phase without progress. The full history is recorded in Core design 13.35.
+A is a CLI cold build; B is artifact-cold using the same native build entry,
+Gerbil's =libdir= option and the existing guarded POO source plan. Fresh CLI
+processes validate A clean and B hot. With installed Core prerequisites, each
+cold environment compiles 45 targets and hot compiles zero. The earlier
+61-target projection also compiled 16 Funflow and JSON Schema libraries whose
+native compiler contexts were already installed. Those contexts remain guarded
+prerequisites. The independent B qualification harness executes first
+=.get= plus three owner suites and verifies loaded B native product paths.
+
+Compiler input context is established by the init-owned projection. The gate
+supplies output-first paths to all CLI actions as a regression control; users
+do not reorder =GERBIL_LOADPATH=. Ordinary =.get= counts use callback-free
+accounting, while separate Core tests preserve adversarial observer checks.
+
 * Declarations and values
 
 =services.ss= publishes the closed =Services= Type. This module

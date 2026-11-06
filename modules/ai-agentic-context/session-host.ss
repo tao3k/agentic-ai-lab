@@ -199,7 +199,7 @@
                          task-revision ids-value grant-value grant-generation)))
       (let (row (make-source-entry source-generation source-value scope-value
                        (.ref projection-value 'restriction)
-                       (agentic-ai-lab-ai-agentic-context-profile (if (memq 'ai-agentic-context/memory (.ref projection-value 'feature-ids)) #t #f)) task-revision ids-value projection-value task-value
+                       (context-profile-from-feature-ids (.ref projection-value 'feature-ids)) task-revision ids-value projection-value task-value
                        (make-owner-publication (agentic-ai-lab-session-schedule session-value) '() #f) grant-value grant-generation
                        (capture-authority runtime-value grant-value grant-generation) #f))
         (unless (observe-grant runtime-value row) (error "Session enrollment requires current matching registered grant"))
@@ -815,18 +815,24 @@
     (for-each (lambda (value)
       (let* ((b (binding (.ref value 'binding)))
              (qb (restore-query (and (.slot? value 'query) (.ref value 'query))))
+             (memory? (.ref value 'memory?))
+             (profile (begin
+                        (unless (boolean? memory?) (error "invalid Context checkpoint memory flag"))
+                        (context-profile-from-feature-ids
+                          (if memory? '(ai-agentic-context/core ai-agentic-context/memory)
+                            '(ai-agentic-context/core)))))
              (schedule (.ref value 'schedule))
              ;; Owner death alone is no terminal/isolation evidence.
              (recovered (if (.ref schedule 'active)
                (.ref (agentic-ai-lab-session-recover schedule (.ref schedule 'revision)) 'schedule) schedule)))
         (let-values (((projection task) (build-task (.ref value 'source) (.ref value 'scope) (.ref value 'restriction)
-          (agentic-ai-lab-ai-agentic-context-profile (.ref value 'memory?)) (.ref value 'task-revision) (.ref value 'ids)
+          profile (.ref value 'task-revision) (.ref value 'ids)
           (.ref value 'grant) (.ref value 'grant-generation) (and b (proof-binding-digest b)) qb)))
           (unless (equal? (.ref (.ref task 'input) 'digest) (.ref (.ref (.ref value 'task) 'input) 'digest))
             (error "Recovered Context source/input mismatch"))
           (hash-put! rows (.ref value 'identity)
             (make-source-entry (.ref value 'generation) (.ref value 'source) (.ref value 'scope) (.ref value 'restriction)
-              (agentic-ai-lab-ai-agentic-context-profile (.ref value 'memory?)) (.ref value 'task-revision) (.ref value 'ids)
+              profile (.ref value 'task-revision) (.ref value 'ids)
               projection task (make-owner-publication recovered (.ref value 'terminals) (.ref value 'propagation))
               (.ref value 'grant) (.ref value 'grant-generation) (.ref value 'authority) qb))
           (when b (hash-put! (session-owner-state-proofs s) (.ref value 'identity) b))

@@ -259,14 +259,14 @@
         (let* ((scope-b (.o (:: @ context-scope) actor: "actor-b" task: "task-b" session: "session-b" turn: 1))
                (restriction-b (agentic-ai-lab-context-restriction "domain" '("actor-b") '("provider") '("org") 0 8)))
           (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source scope-b
-            restriction-b (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant" 1))
+            restriction-b ContextCoreProfile 0 '("work") "grant" 1))
           (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-current host "session-b"))
           (agentic-ai-lab-context-use-host-refresh! grants
             (agentic-ai-lab-context-use-grant "grant-b" 1 "manifest-b" "admission-b"
               (agentic-ai-lab-context-use-contract "actor-b" "task-b" "context-policy" '() '() #t)
               "policy" (.ref p 'semantic-digest) '(display) #t))
           (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source scope-b restriction-b
-            (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant-b" 1)
+            ContextCoreProfile 0 '("work") "grant-b" 1)
           (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host "session-b" 0 0 proof
             (.ref registration 'identity) 1 1 (.ref p 'semantic-digest) 128)
           (let* ((claim-b (agentic-ai-lab-ai-agentic-context-session-host-claim! host "session-b" 1 0 "attempt-b" "request-b"))
@@ -1292,7 +1292,7 @@
       (agentic-ai-lab-context-use-grant "grant" 1 "manifest" "admission" contract "policy" (.ref p 'semantic-digest) '(display) #t))
     (agentic-ai-lab-ai-agentic-context-session-host-enroll! context-host 0 context-source context-scope
       (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 8)
-      (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant" 1)
+      ContextCoreProfile 0 '("work") "grant" 1)
     (values context-host proof-host ph registration p ctx)))
 (def (context-bind host proof-host registration p revision source-generation state-generation policy-generation)
   (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host "session" revision source-generation
@@ -1384,7 +1384,7 @@
           (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source
             (.o (:: @ context-scope) session: id)
             (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 8)
-            (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant" 1))
+            ContextCoreProfile 0 '("work") "grant" 1))
         (when (pair? parents)
           (agentic-ai-lab-ai-agentic-context-session-host-depend-on! host id 0 0 parents))
         (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host id 0 0 proof
@@ -1524,7 +1524,7 @@
             (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source
               (.o (:: @ context-scope) session: id)
               (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 safe-end)
-              (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "safe-grant" 1))
+              ContextCoreProfile 0 '("work") "safe-grant" 1))
           (when (pair? parents) (agentic-ai-lab-ai-agentic-context-session-host-depend-on! host id 0 0 parents))
           (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host id 0 0 proof
             (.ref selected 'identity) 1 1 (.ref policy-value 'semantic-digest) 128)
@@ -1621,7 +1621,7 @@
     (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source
       (.o (:: @ context-scope) session: sid)
       (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 1000000)
-      (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "clock-new-grant" 1)
+      ContextCoreProfile 0 '("work") "clock-new-grant" 1)
     (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host sid 0 0 (.ref f 'proof)
       (.ref (.ref f 'registration-a) 'identity) 1 3 (.ref p 'semantic-digest) 128)
     (agentic-ai-lab-ai-agentic-context-session-host-claim! host sid 1 0 "attempt-new" "request-new")

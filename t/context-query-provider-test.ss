@@ -69,14 +69,14 @@
         (context-host-enroll-query!
          host provider "consumer-source" (context-org-query source "work")
          (scope "foreign-consumer") (restriction)
-         (agentic-ai-lab-ai-agentic-context-profile #f) 0 "grant" 1)))
+         ContextCoreProfile 0 "grant" 1)))
      "Consumer Contract silently changed Session owner")
     (ensure
      (.ref
       (context-host-enroll-query!
        host provider "consumer-source" (context-org-query source "work")
        (scope "consumer") (restriction)
-       (agentic-ai-lab-ai-agentic-context-profile #f) 0 "grant" 1)
+       ContextCoreProfile 0 "grant" 1)
       'accepted?)
      "Owner Session template rejected")
     ;; A catalog-only root is valid durable data but cannot stand in for the
@@ -212,7 +212,7 @@
                (agentic-ai-lab-temporal-support-policy-host-current (.ref f 'policies) policy-id)))
          (context-host-enroll-query!
           host provider (.ref source 'identity) (context-org-query source "work")
-          (scope role) (restriction) (agentic-ai-lab-ai-agentic-context-profile #f)
+          (scope role) (restriction) ContextCoreProfile
           0 grant 1)
          (when (equal? role "b")
            (agentic-ai-lab-ai-agentic-context-session-host-depend-on!
@@ -454,7 +454,7 @@
            (workers (make-hash-table)))
       (agentic-ai-lab-ai-agentic-context-session-host-enroll!
        host 1 (.ref source 'source) (scope "a") (restriction)
-       (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant" 1)
+       ContextCoreProfile 0 '("work") "grant" 1)
       (agentic-ai-lab-ai-agentic-context-session-host-require-proof!
        host (sid "a") 0 1 (.ref f 'proof)
        (.ref (.ref f 'registration-a) 'identity) 1 1

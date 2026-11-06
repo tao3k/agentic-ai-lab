@@ -2,6 +2,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (.def Durable
   identity: 'durable
+  tags: '(engine policy)
   core:
   (.o requires: (.o)
       scope-contract: DurableScopeContract

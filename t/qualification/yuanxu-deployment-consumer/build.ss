@@ -1,0 +1,14 @@
+#!/usr/bin/env gxi
+;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
+;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
+(import (only-in :clan/poo/object .get)
+        (only-in :std/source this-source-file)
+        (only-in :yuanxu/module-system/building/source-closure package-library-spec)
+        (only-in :yuanxu/module-system/building/script defbuild-script)
+        (only-in :yuanxu/module-system/building/products build-output-directory)
+        (only-in "./init.ss" yuanxu-deployment-consumer.init.exports))
+(export main)
+(def application-spec
+  (package-library-spec (path-directory (this-source-file)) 'yuanxu-deployment-consumer '("main.ss")))
+(defbuild-script ((.get yuanxu-deployment-consumer.init.exports std-make-spec) application-spec)
+  libdir: (build-output-directory) verbose: #t)

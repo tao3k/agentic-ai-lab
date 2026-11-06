@@ -53,7 +53,7 @@
     (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source
       (.o (:: @ context-scope) session: sid)
       (agentic-ai-lab-context-restriction "domain" '("actor") '("provider") '("org") 0 1000000)
-      (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "clock-new-grant" 1)
+      ContextCoreProfile 0 '("work") "clock-new-grant" 1)
     (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host sid 0 0 (.ref f 'proof)
       (.ref (.ref f 'registration-a) 'identity) 1 gen (.ref p 'semantic-digest) 128)
     (agentic-ai-lab-ai-agentic-context-session-host-claim! host sid 1 0 (string-append "attempt-" sid) (string-append "request-" sid))

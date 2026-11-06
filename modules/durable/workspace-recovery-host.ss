@@ -4,7 +4,8 @@
 ;;; workspace recovery deployment and operator commands over the normal host API.
 (import :clan/poo/object
         :std/encoding/json
-        :agentic-ai-lab/modules/ai-agentic-context/interface
+        (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
+        (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features ContextCoreProfile)
         :agentic-ai-lab/modules/ai-agentic-context/session-host
         :agentic-ai-lab/modules/ai-agentic-context/use-host
         :agentic-ai-lab/modules/ai-agentic-context/durable-owner
@@ -71,7 +72,7 @@
         (begin
           (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 1 (text source-path) scope
             (agentic-ai-lab-context-restriction "doc19" '("actor") '("provider") '("org") 0 60)
-            (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "doc19-grant" 1)
+            ContextCoreProfile 0 '("work") "doc19-grant" 1)
           (let (claim (agentic-ai-lab-ai-agentic-context-session-host-claim!
                          host "doc19-session" 0 1 "doc19-attempt" "doc19-request"))
             (unless (.ref claim 'accepted?) (error "workspace recovery original Attempt refused"))

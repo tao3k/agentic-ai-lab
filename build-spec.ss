@@ -17,7 +17,7 @@
   '("modules/workflow/scenario/configuration/declaration-case.ss"
     "modules/agent-sandbox/interface.ss"
     "modules/ai-agentic-context/features/memory/interface.ss"
-    "modules/ai-agentic-context/interface.ss"
+    "modules/ai-agentic-context/funs.ss"
     "modules/authorization/interface.ss"
     "modules/authorization/providers/cedar/interface.ss"
     "modules/building/interface.ss"

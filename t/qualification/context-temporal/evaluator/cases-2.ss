@@ -4,7 +4,7 @@
 ;;; Bounded compiler unit; register the unchanged native Cases in order.
 (import (only-in :agentic-ai-lab/modules/workflow/runtime/scheme-wire scheme-wire-read scheme-wire-write)
         (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
-        (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features agentic-ai-lab-ai-agentic-context-profile)
+        (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features ContextCoreProfile)
         :agentic-ai-lab/modules/ai-agentic-context/session-host
         :agentic-ai-lab/modules/ai-agentic-context/use-host
         :agentic-ai-lab/modules/session/funs-attempt
@@ -80,14 +80,14 @@
         (let* ((scope-b (.o (:: @ context-scope) actor: "actor-b" task: "task-b" session: "session-b" turn: 1))
                (restriction-b (agentic-ai-lab-context-restriction "domain" '("actor-b") '("provider") '("org") 0 8)))
           (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source scope-b
-            restriction-b (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant" 1))
+            restriction-b ContextCoreProfile 0 '("work") "grant" 1))
           (check-rejected (agentic-ai-lab-ai-agentic-context-session-host-current host "session-b"))
           (agentic-ai-lab-context-use-host-refresh! grants
             (agentic-ai-lab-context-use-grant "grant-b" 1 "manifest-b" "admission-b"
               (agentic-ai-lab-context-use-contract "actor-b" "task-b" "context-policy" '() '() #t)
               "policy" (.ref p 'semantic-digest) '(display) #t))
           (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 context-source scope-b restriction-b
-            (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant-b" 1)
+            ContextCoreProfile 0 '("work") "grant-b" 1)
           (agentic-ai-lab-ai-agentic-context-session-host-require-proof! host "session-b" 0 0 proof
             (.ref registration 'identity) 1 1 (.ref p 'semantic-digest) 128)
           (let* ((claim-b (agentic-ai-lab-ai-agentic-context-session-host-claim! host "session-b" 1 0 "attempt-b" "request-b"))

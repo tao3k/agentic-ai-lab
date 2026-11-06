@@ -1,24 +1,23 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-;;; Inert Context prototypes and owned Feature descriptor values.
-(import (only-in :clan/poo/object .def)
-        :yuanxu/feature-system/model
+;;; Inert Context prototypes and the Memory Feature refinement.
+(import (only-in :clan/poo/object .def .o)
+        (only-in "funs-features.ss" ContextCoreProfile context-profile-from-feature-ids)
         "types.ss")
-(export AiAgenticContextTemporalPolicy. AiAgenticContextOrgAnchor. AiAgenticContextDelta. AiAgenticContextEdit. AiAgenticContextScope. ai-agentic-context-core-feature
-        ai-agentic-context-memory-feature)
+(export AiAgenticContextTemporalPolicy. AiAgenticContextOrgAnchor.
+        AiAgenticContextDelta. AiAgenticContextEdit. AiAgenticContextScope.
+        ContextCoreProfile EnableMemory)
+
+(def (EnableMemory scope)
+  (.o (:: self scope)
+    profile: (context-profile-from-feature-ids '(ai-agentic-context/core ai-agentic-context/memory))))
+
 (.def AiAgenticContextScope.
   (kind 'agentic-ai-lab.ai-agentic-context.scope.v1)
   (bundle #f) (organization #f) (epoch #f) (project #f) (worktree #f)
   (source-cut #f) (actor #f) (task #f) (destination #f)
   (session #f) (turn #f))
-(def ai-agentic-context-core-feature
-  (feature-descriptor
-    (feature-descriptor-base 'ai-agentic-context/core 'ai-agentic-context)))
-(def ai-agentic-context-memory-feature
-  (feature-descriptor (feature-spec-compose
-    (feature-descriptor-base 'ai-agentic-context/memory 'ai-agentic-context)
-    (feature-required-features ai-agentic-context-core-feature))))
 
 (.def AiAgenticContextEdit.
   (kind 'agentic-ai-lab.ai-agentic-context.edit.v1)

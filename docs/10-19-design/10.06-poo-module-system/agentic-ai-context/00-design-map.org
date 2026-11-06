@@ -44,11 +44,30 @@ they were not rerun by this documentation change.
 * Corrections to the first discussion draft
 
 The first draft incorrectly presented static dependency direction as an open
-choice for an additional upper manager. The existing contracts and inspected
-=modules/ai-agentic-context/config.ss= already compose the independent Session
-descriptor; =modules/session/descriptor.ss= is independently owned. The updated
-model preserves that direction. Session's consumption of an opaque input ref
-is a data contract, not a reverse import.
+choice for an additional upper manager. Session owns its descriptor and
+scheduling. Context's Session host imports the scheduling operations it uses.
+The Context module can publish its profile independently. Session consumes
+an opaque input reference through its own data contract.
+
+* Context Memory selection
+
+[[file:../../../../modules/ai-agentic-context/interface.ss][The Context Interface]]
+owns the =memory= Feature. A downstream init selects it through the same
+window as the base module.
+
+#+begin_src scheme
+(yuanxu!
+  :load-modules "./modules" mode: explicit
+  (ai-agentic-context +memory))
+#+end_src
+
+The Module System composes and admits the selected scope. Consumers read
+its =profile= slot for Context projections. The base profile contains only
+=ai-agentic-context/core=. The Memory refinement adds
+=ai-agentic-context/memory=, and the Feature contract checks the final profile.
+Both identities remain part of the stored projection format. Checkpoint
+recovery decodes the recorded profile and revalidates the projection against
+its source. Feature selection acquires no Memory store or Session host.
 
 The first draft also underrepresented the already designed Graph Context,
 ORG-only Query window, consumer-local interpretation and short-to-long

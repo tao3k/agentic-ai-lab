@@ -30,7 +30,7 @@
     (agentic-ai-lab-temporal-support-policy-host-refresh! policies policy 0 (at 1))
     (agentic-ai-lab-context-use-host-refresh! grants (grant 1 #t))
     (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 source scope restriction
-      (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant" 1)
+      ContextCoreProfile 0 '("work") "grant" 1)
     (values host grants policies)))
 (def (claim host revision cut)
   (agentic-ai-lab-ai-agentic-context-session-host-claim! host "session" revision cut "attempt" "request"))
@@ -119,7 +119,7 @@
         (agentic-ai-lab-temporal-support-policy-host-refresh! policies policy 0 (at 1))
         (agentic-ai-lab-context-use-host-refresh! grants (grant 1 #t))
         (agentic-ai-lab-ai-agentic-context-session-host-enroll! host 0 source scope short
-          (agentic-ai-lab-ai-agentic-context-profile #f) 0 '("work") "grant" 1)
+          ContextCoreProfile 0 '("work") "grant" 1)
         (agentic-ai-lab-temporal-support-policy-host-refresh! policies policy 1 (at 4))
         (check (.ref (claim host 0 0) 'reason) => 'current-grant-denied)))
     (yuanxu-test-case "returned snapshots cannot mutate internal active input or scheduling state"

@@ -3,7 +3,7 @@
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 (import :std/test (only-in :yuanxu/observability/testing-case yuanxu-test-case)
         (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/ai-agentic-context/interface
+        :agentic-ai-lab/modules/ai-agentic-context/funs-temporal
         :agentic-ai-lab/modules/temporal-causality/time/objects
         :agentic-ai-lab/modules/temporal-causality/time/uncertainty-funs)
 (export ai-agentic-context-temporal-test)

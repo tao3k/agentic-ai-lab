@@ -15,7 +15,7 @@
   project: "p" worktree: "w" source-cut: "cut:0" actor: "a" task: "t" destination: "d"))
 (def target-scope (.o (:: @ scope) source-cut: "cut:1"))
 (def restriction (agentic-ai-lab-context-restriction "domain" '("a") '("d") '("o") 0 10))
-(def profile (agentic-ai-lab-ai-agentic-context-profile #f))
+(def profile ContextCoreProfile)
 (def before "#+SEQ_TODO: TODO | DONE\n* TODO Original\n* TODO Retained\n")
 (def after "#+SEQ_TODO: TODO | DONE\n* DONE Original\n* TODO Retained\n* TODO Added\n")
 (def (base) (agentic-ai-lab-ai-agentic-context-org-project scope before restriction profile))
@@ -69,7 +69,7 @@
         (check (.ref (agentic-ai-lab-ai-agentic-context-delta-admit before b d after
           (.o (:: @ target-scope) destination: "other") restriction profile) 'reason) => 'contract-mismatch)
         (check (.ref (agentic-ai-lab-ai-agentic-context-delta-admit before b d after target-scope
-          restriction (agentic-ai-lab-ai-agentic-context-profile #t)) 'reason) => 'contract-mismatch)))
+          restriction (context-profile-from-feature-ids '(ai-agentic-context/core ai-agentic-context/memory))) 'reason) => 'contract-mismatch)))
     (yuanxu-test-case "incremental source changes equal full projection"
       (for-each (lambda (source)
         (let* ((b (base))

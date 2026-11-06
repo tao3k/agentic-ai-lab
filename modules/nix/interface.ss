@@ -4,8 +4,11 @@
 ;;; Declarative Module publication; the admitted source wrapper owns imports.
 (.def Nix
   identity: 'nix
+  tags: '(package-management)
   core:
   (.o requires: (.o)
+      projections: (list (.o kind: 'module/build roots: '()
+                            library-roots: '(agentic-ai-lab/nix-contracts)))
       scope-contract: NixScopeContract
       admissions: (.o Config: (.o export-path: '(config) contract-path: '(types Config)))
       exports:

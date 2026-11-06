@@ -1,24 +1,22 @@
 ;;; -*- Gerbil -*-
 ;;; SPDX-FileCopyrightText: 2026 tao3k team and Contributors
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
-(import (only-in :yuanxu/module-system/building/source-closure package-library-spec)
-        :std/test (only-in :yuanxu/observability/testing-case yuanxu-test-case)
-        (only-in :clan/poo/object .o .ref)
-        :agentic-ai-lab/modules/ai-agentic-context/interface
-        :agentic-ai-lab/modules/query/semantic/context-restriction
-        :agentic-ai-lab/modules/workflow/scenario/configuration/module-composition
-        :yuanxu/module-system/selection/contract
-        :agentic-ai-lab/modules/module-authoring/module-descriptor
-        :yuanxu/feature-system/model
-        :yuanxu/feature-system/feature-manifest)
+(import :std/test
+        (only-in :yuanxu/observability/testing-case yuanxu-test-case)
+        (only-in "./qualification/context-memory-init.ss" agentic-ai-lab/t/qualification.context-memory-init.exports)
+        (only-in :clan/poo/object .o .get .ref)
+        (only-in :agentic-ai-lab/modules/ai-agentic-context/objects AiAgenticContextScope.)
+        :agentic-ai-lab/modules/ai-agentic-context/funs
+        :agentic-ai-lab/modules/query/semantic/context-restriction)
 (export ai-agentic-context-core-test)
+
 (def source "#+SEQ_TODO: TODO | DONE\n* TODO Review source evidence\n* DONE Historical task\n")
 (def scope (.o (:: @ AiAgenticContextScope.)
   bundle: "bundle:1" organization: "org:1" epoch: 1 project: "project:1"
   worktree: "worktree:1" source-cut: "cut:1" actor: "actor:1" task: "task:1"
   destination: "provider:1"))
 (def restriction (agentic-ai-lab-context-restriction "domain:1" '("actor:1") '("provider:1") '("org:1") 0 10))
-(def (project (profile (agentic-ai-lab-ai-agentic-context-profile #f)))
+(def (project (profile ContextCoreProfile))
   (agentic-ai-lab-ai-agentic-context-org-project scope source restriction profile))
 ;; Catch only the operation. A failed assertion must never be caught as the
 ;; expected exception; otherwise a missing refusal can silently pass the gate.
@@ -29,11 +27,6 @@
     (test-case "refusal control cannot catch its own failed assertion"
       (check (rejected? (lambda () #t)) => #f)
       (check (rejected? (lambda () (error "controlled refusal"))) => #t))
-    (test-case "public module publication closes the selection adapter build input"
-      (let (targets (package-library-spec
-                     (current-directory) 'agentic-ai-lab
-                     '("modules/ai-agentic-context/interface.ss")))
-        (check (and (member "modules/ai-agentic-context/selection-adapter" targets) #t) => #t)))
     (yuanxu-test-case "core Org projection requires neither Session nor Memory"
       (let (p (project))
         (check (.ref p 'feature-ids) => '(ai-agentic-context/core))
@@ -42,29 +35,16 @@
         (check (.ref p 'source-authenticated?) => #f)
         (check (.ref (agentic-ai-lab-ai-agentic-context-org-replay source p scope) 'semantic-digest)
                => (.ref p 'semantic-digest))))
-    (yuanxu-test-case "Context composes independent Session and owns only Memory Feature"
-      (check (.ref (agentic-ai-lab-ai-agentic-context-profile #t) 'feature-ids)
-             => '(ai-agentic-context/core ai-agentic-context/memory))
-      (let* ((context (agentic-ai-lab-ai-agentic-context-module #f))
-             (closure (agentic-ai-lab-module-closure (list context))))
-        (check (agentic-ai-lab-module-name (car (agentic-ai-lab-module-import-configs
-                  (yuanxu-module-imports context)))) => 'session)
-        (check (length closure) => 2)
-        (check (length (agentic-ai-lab-module-activation-modules
-                        (activate-agentic-ai-lab-modules (list context)))) => 2)
-        (check (validate-yuanxu-module-imports (list context)) => #t)
-        (check (.ref (.ref (agentic-ai-lab-module-config context) 'feature-manifest) 'feature-ids)
-               => '(ai-agentic-context/core)))
-      (check (.ref ai-agentic-context-memory-feature 'owner-module-id) => 'ai-agentic-context)
-      (check (.ref (feature-manifest-bundle 'missing-core (list ai-agentic-context-memory-feature)) 'accepted?) => #f))
-    (yuanxu-test-case "public Context selection preserves runtime Session dependency"
-      (let* ((selection (car (agentic-ai-lab-modules-system-use-module/ai
-                              'ai-agentic-context '(+memory))))
-             (descriptor (.ref selection 'module-descriptor)))
-        (check (.ref (.ref selection 'feature-manifest) 'feature-ids)
-               => '(ai-agentic-context/core ai-agentic-context/memory))
-        (check (length (agentic-ai-lab-module-closure (list descriptor))) => 2))
-      (check (length (agentic-ai-lab-modules-system-use-module/ai 'session '(+lineage))) => 1))
+    (yuanxu-test-case "init selects Memory from the real Context Interface"
+      (def selected (.get agentic-ai-lab/t/qualification.context-memory-init.exports
+                          Context ai-agentic-context))
+      (def profile (.get selected profile))
+      (def projection (project profile))
+      (check (.get profile feature-ids) => '(ai-agentic-context/core ai-agentic-context/memory))
+      (check (.get projection feature-ids) => (.get profile feature-ids))
+      (check (.get (agentic-ai-lab-ai-agentic-context-org-replay source projection scope) semantic-digest)
+             => (.get projection semantic-digest))
+      (check (.get ContextCoreProfile feature-ids) => '(ai-agentic-context/core)))
     (yuanxu-test-case "source edit refuses reuse of an admitted projection"
       (check
         (rejected?
@@ -150,7 +130,7 @@
               scope
               source
               restriction
-              (agentic-ai-lab-ai-agentic-context-profile #f)
+              ContextCoreProfile
               0)))
         => #t)
       (check
@@ -160,7 +140,7 @@
               scope
               source
               restriction
-              (agentic-ai-lab-ai-agentic-context-profile #f)
+              ContextCoreProfile
               256
               2)))
         => #t))

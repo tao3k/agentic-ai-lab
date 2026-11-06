@@ -13,7 +13,7 @@
         :agentic-ai-lab/modules/ai-agentic-context/use-host
         :agentic-ai-lab/modules/ai-agentic-context/funs-projection
         (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features
-                 agentic-ai-lab-ai-agentic-context-profile)
+                 ContextCoreProfile)
         (only-in :agentic-ai-lab/modules/query/semantic/context-restriction
                  agentic-ai-lab-context-restriction)
         (only-in :agentic-ai-lab/modules/ai-agentic-context/session-host
@@ -73,7 +73,7 @@
 (def (service-probe path)
   ;; The catalog optimization must neither share caller-mutable ID lists nor
   ;; turn a prior Context projection into authority for changed source bytes.
-  (let* ((profile (agentic-ai-lab-ai-agentic-context-profile #f))
+  (let* ((profile ContextCoreProfile)
          (restriction (agentic-ai-lab-context-restriction
                         "domain" '("actor") '("provider") '("org") 0 8))
          (original (agentic-ai-lab-ai-agentic-context-org-project
