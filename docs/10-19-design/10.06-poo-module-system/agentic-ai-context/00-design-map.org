@@ -191,6 +191,19 @@ wall time for 7.67 seconds of process CPU. The child emitted its final
 marker at 117.39 seconds and the outer gate reached its aggregate deadline
 before the test process returned. This deployment run remains a failure.
 
+With the same Core products and fresh deployment prefixes, the next run
+reached its inner Harness success at 86.99 seconds and returned from the
+child at 94.65 seconds. The outer gate exited successfully after checking
+both output inventories, the independent B read and prerequisite digests.
+
+On fresh CI runners, the Parser commit was absent from the ordinary clone.
+The package installer recovers only from a native checkout failure for a
+full pinned SHA whose tree is absent locally. It fetches that exact object
+and uses Gerbil's update to bind the tag before installing the dependency.
+The detached-object and normal-clone controls checked the installed HEAD
+and recorded tag against the requested SHA. The dependency declarations
+and their Bazel projections remain unchanged.
+
 Package windows read the native Gerbil checkout tree under =gerbil-path=.
 The source reader has no reason to initialize the package manager or to
 create directories. Installation, checkout placement, pinning, and compiled
