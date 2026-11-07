@@ -38,6 +38,8 @@
          ((string=? "agentic-ai-lab/services" name) "services.ss")
          ((string=? "agentic-ai-lab/nix-contracts" name) "nix-contracts.ss")
          ((string=? "agentic-ai-lab/opentofu-contracts" name) "opentofu-contracts.ss")
+         ((string=? "agentic-ai-lab/bindings/nix-c-api/derivation-session" name)
+          "bindings/nix-c-api/derivation-session.ss")
          ((or (string-prefix? "agentic-ai-lab/modules/nix/" name)
               (string-prefix? "agentic-ai-lab/modules/services/" name)
               (string-prefix? "agentic-ai-lab/t/qualification/nix/" name)

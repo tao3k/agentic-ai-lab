@@ -3,13 +3,13 @@
 ;;; Shared real-service fixture; Core and std/io own selection and lifetime.
 (import :clan/poo/object
         (only-in :std/error Error? Error-message)
-        (only-in :std/io/tempfile make-temporary-file-name clear-temporary-file!)
+        (only-in :std/io/tempfile call-with-temporary-file-name
+                 make-temporary-file-name clear-temporary-file!)
         (only-in :std/text/pregexp pregexp-match)
         (only-in :std/encoding/json read-json)
         (only-in :std/list/walist waref)
         (only-in :agentic-ai-lab/modules/nix/objects NixSource.)
-        (only-in :agentic-ai-lab/modules/services/opentofu/func opentofu-service-configuration)
-        (only-in "./objects.ss" configured-opentofu-modules)
+        (only-in :yuanxu/module-system/source/link yuanxu-load-modules)
         (only-in :yuanxu/observability/testing-fixture call-with-yuanxu-fixture)
         (only-in :yuanxu/observability/testing-case yuanxu-test-checkpoint)
         (only-in :yuanxu/ops/progress execution-progress!)
@@ -22,7 +22,9 @@
 (def Workspace
   (.o .acquire:
       (lambda ()
-        (let (directory (make-temporary-file-name "opentofu-service-"))
+        ;; The isolated roles still belong to this real package. Their
+        ;; declared public library roots resolve against its own gerbil.pkg.
+        (let (directory (make-temporary-file-name (path-expand ".opentofu-service-" (current-directory))))
           (create-directory directory) directory))
       .release: clear-temporary-file!))
 
@@ -41,13 +43,18 @@
         (and (pregexp-match pattern text) #t)))
     (lambda () (action) #f)))
 
-;; Report actual Core boundaries, not a timer or synthetic heartbeat.
-(def (report-stage event _amount)
-  (when (and (pair? event)
-             (memq (car event) '(link-stage-start link-stage-end
-                                package-stage-start package-stage-end)))
-    (execution-progress! (cons 'opentofu event) 1)
-    (displayln "PHASE " event " at=" (real-time)) (force-output)))
+;; Each fixture has its own completed work, even in a shared Harness.
+(def (make-stage-observer directory)
+  (def completed 0)
+  (def key (cons 'opentofu directory))
+  (lambda (event _amount)
+    (when (and (pair? event)
+               (memq (car event) '(link-stage-start link-stage-end
+                                  package-stage-start package-stage-end)))
+      (when (memq (car event) '(link-stage-end package-stage-end))
+        (set! completed (1+ completed))
+        (execution-progress! key completed))
+      (displayln "PHASE " event " at=" (real-time)) (force-output))))
 
 ;; Read real state after destroy; command success alone is not cleanup evidence.
 (def (empty-state? directory)
@@ -61,59 +68,70 @@
 ;; Core's fixture protocol owns cancellation and release of the std/io resource.
 (def (call-with-service action instantiate: (instantiate-command #f)
                         observe-stages?: (observe-stages? #t))
+  ;; The init declaration owns the same package kernel as the library targets
+  ;; published by Nix and OpenTofu. The isolated roles have their own window.
+  (call-with-temporary-file-name (path-expand ".opentofu-init-" (current-directory))
+    (cut call-with-service-at action instantiate-command observe-stages? <>)
+    suffix: ".ss"))
+
+(def (call-with-service-at action instantiate-command observe-stages? init-path)
   (call-with-yuanxu-fixture Workspace
     (lambda (root-dir)
-      (def stage-observer (and observe-stages? report-stage))
+      (def stage-observer (and observe-stages? (make-stage-observer root-dir)))
       (def project (current-directory))
+      (def maintained (path-expand "modules/services/opentofu" project))
+      (def service-dir (path-expand "modules/services/opentofu" root-dir))
       (displayln "PHASE producer-derivation at=" (real-time)) (force-output)
       (yuanxu-test-checkpoint 'opentofu-producer-derivation)
-      (def producer-derivation
+      (def derivation
         (.call (.o (:: @ NixSource.)
                  expression: (path-expand "t/fixtures/opentofu/null-provider-artifacts.nix" project))
                .instantiate))
-      (def config-path (path-expand "config.nix" root-dir))
-      (def expression (path-expand "t/fixtures/opentofu/selected-derivation.nix" project))
-      (def checker (path-expand "modules/nix/source-inputs.nix" project))
+      (create-directory* service-dir)
+      (for-each
+        (lambda (name)
+          (when (string-suffix? ".ss" name)
+            (copy-file (path-expand name maintained) (path-expand name service-dir))))
+        (directory-files maintained))
+      (def config-path (path-expand "config.ss" service-dir))
       (write-source config-path
-        (call-with-output-string (lambda (port) (display "import " port) (write expression port))))
-      (def original-text (module-source-read config-path))
-      ;; The temporary input is evaluated by Nix and guarded alongside the real
-      ;; declaration and its transitive expression files.
-      (def baseline
-        (.o (:: @ NixSource.)
-          expression: config-path
-          arguments: (.o derivation: producer-derivation)
-          source-inputs: (list (cons config-path original-text)
-                               (cons expression (module-source-read expression))
-                               (cons checker (module-source-read checker)))))
-      (def source
-        (if instantiate-command
-          (.cc baseline 'config (.cc (.get baseline config) 'instantiate instantiate-command))
-          baseline))
-      (def init-path (path-expand "init.ss" root-dir))
+        (call-with-output-string
+          (lambda (port)
+            (for-each (lambda (form) (write form port) (newline port))
+              `((import :clan/poo/object
+                   (rename-in (only-in :agentic-ai-lab/modules/services/opentofu/config
+                                Config OpenTofuProviderConfig) (Config Defaults))
+                   (only-in :agentic-ai-lab/modules/nix/objects NixSource.))
+                (export Config OpenTofuProviderConfig)
+                (.def (Config @ Defaults)
+                  source: (.o (:: @ NixSource.)
+                    ,@(if instantiate-command
+                        (list 'config: `(.cc (.get NixSource. config)
+                                         'instantiate ,instantiate-command)) '())
+                    expression: ,(path-expand "t/fixtures/opentofu/selected-derivation.nix" project)
+                    arguments: (.o derivation: ,derivation))
+                  services: (.o opentofu: (.o Null: (.o message: "configured service")))))))))
       (write-source init-path
         (call-with-output-string
           (lambda (port)
-            (write `(yuanxu!
-                      :load-modules ,(path-expand "core/modules" project)
-                      mode: explicit rename: Core (json-schema) (funflow)
-                      :load-modules ,(path-expand "modules" project) mode: explicit rename: Lab
-                      (nix) :services (opentofu)) port))))
+            (write `(yuanxu! :load-modules ,(path-expand "modules" root-dir) mode: explicit
+                      (json-schema @ ,(path-expand "core/modules/json-schema" project))
+                      (nix @ ,(path-expand "modules/nix" project))
+                      (funflow @ ,(path-expand "core/modules/funflow" project))
+                      :services (opentofu)) port))))
       (displayln "PHASE source-selection at=" (real-time)) (force-output)
       (yuanxu-test-checkpoint 'opentofu-source-selection)
-      (def (configure scope)
-        (.cc scope 'config
-          (.cc (.get scope config) 'source source
-            'services (.o opentofu: (.o Null: (.o message: "configured service"))))))
       (def selected-view
         (parameterize ((current-module-source-observer stage-observer))
-          (configured-opentofu-modules init-path configure opentofu-service-configuration)))
+          (yuanxu-load-modules init-path
+            module-view: (lambda (owner scope!) (.o identity: owner scope: (scope!))))))
+      (def original-text (module-source-read config-path))
       (action
         (.o config: config-path original: original-text
           .source-scope:
           (lambda ()
             (parameterize ((current-module-source-observer stage-observer))
-              (.get selected-view modules Lab services opentofu)))
+              (.get selected-view modules modules services opentofu scope)))
           .prepare:
           (lambda ()
             (def packages
@@ -121,7 +139,7 @@
                 (.call (.cc SelectedPackages. 'selection selected-view
                             'directory (path-expand "packages" root-dir)) .run)))
             (def ready-view (.call selected-view .with-packages packages))
-            (def ready-value (.get ready-view modules Lab services opentofu))
+            (def ready-value (.get ready-view modules modules services opentofu scope))
             (def recipe-value (.get ready-value Null))
             (.o ready-scope: ready-value recipe: recipe-value))
           .workspace:

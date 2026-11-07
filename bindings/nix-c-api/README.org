@@ -86,19 +86,27 @@ without the paired executable and Flake Sources use their existing paths.
 Source observation, environment changes and working-directory changes keep
 individual queries on the configured CLI.
 
-With the Lab package already compiled in =GERBIL_PATH=, run the same
-qualification against the paired tools and the matching standalone CLI.
+Set =GERBIL_PATH= to the retained B output prefix and keep the same
+compiler prerequisite load path for all three invocations. Prepare the
+locked package set and paired tool before starting the qualification.
 
 #+begin_src sh
+nixpkgs=$(nix eval --impure --raw --expr '(import ./t/fixtures/nixpkgs.nix).outPath')
+export NIX_PATH="nixpkgs=$nixpkgs"
 tools=$(nix-build bindings/nix-c-api/dependencies.nix -A derivation-worker --no-out-link)
 cli=$(readlink "$tools/bin/nix-instantiate")
+b_execution="$GERBIL_PATH/lib/agentic-ai-lab/modules/services/opentofu/execution~0.o1"
+shasum -a 256 "$b_execution"
 PATH="$tools/bin:$PATH" just test-file t/qualification/opentofu/runtime-qualification.ss
 PATH="$(dirname "$cli"):$PATH" just test-file t/qualification/opentofu/runtime-qualification.ss
+PATH="$tools/bin:$PATH" just test-file t/qualification/opentofu/runtime-qualification.ss
+shasum -a 256 "$b_execution"
 #+end_src
 
-Compare the printed execution digest and admitted Provider path before
-comparing timing rows. The three timed calls start after preparation and
-the first =.get=. Each checks all 14 Nix queries and the six OpenTofu commands.
+Compare the loaded execution digest and admitted Provider path in every
+=OPENTOFU-RUNTIME-INPUT= row before comparing timings. The three timed
+calls start after preparation and the first =.get=. Each checks all 14
+Nix queries and the six OpenTofu commands.
 The source-accounting round is separate from the timing gate. Qualification
 leaves the open source observer off during selection because the observer
 changes the guards retained by that selection. The ordinary mutation tests
@@ -344,6 +352,45 @@ Nix CLI calls took 1.074, 1.108 and 1.150 s, versus 0.105 s per
 round in P2. No worker query ran in this control. The gap isolates
 most of the observed difference in the Nix call path while leaving
 variation in Scheme CPU and OpenTofu children visible.
+
+** Rebase follow-up
+
+The =6b9377af= rebase retained the callback-based test reader. With Yuanxu
+=4d6c681=, the same B execution digest and the same Null output, its paired
+invocations took 3.611, 3.310 and 3.236 s, then 3.382, 3.276 and 3.207 s.
+The matching CLI invocation between them took 4.394, 4.105 and 4.159 s.
+All nine runs performed 14 Nix checks and six OpenTofu commands. The
+paired evaluator and final CLI check together took 0.108–0.135 s per
+round. The independent source-accounting rounds each recorded 16,722
+physical reads, 2,782 reader checks and 254 open guard batches. Both
+paired invocations failed the unchanged three-second assertion.
+
+After restoring the standard directory reader, a paired/CLI/paired
+comparison reused that B binary, Null output and Nix build. All three
+processes exited naturally. The timed rounds excluded test startup,
+artifact preparation and the first =.get=.
+
+| Process        | Complete .run (s)  | Nix checks (s)     | Six OpenTofu processes (s) |
+|----------------+--------------------+--------------------+-----------------------------|
+| Paired         | 2.903, 2.370, 2.406 | 0.443, 0.113, 0.153 | 0.579, 0.575, 0.586         |
+| Standalone CLI | 3.504, 3.735, 3.521 | 1.148, 1.339, 1.197 | 0.612, 0.645, 0.645         |
+| Paired repeat  | 2.402, 2.323, 2.342 | 0.107, 0.106, 0.109 | 0.572, 0.565, 0.573         |
+
+Both paired processes passed preflight refusal and return currentness.
+The 13 worker queries took 32–55 ms per ordinary round, with a 371 ms
+first-round exception. The separate final CLI query took 72–98 ms.
+Scheme CPU was 1.601–1.722 s in paired rounds. The six-task Scheme
+dispatch controls took 190–197 ms and real Ops launches took 175–237 ms.
+Each paired accounting round kept all 2,782 link checks while reducing
+reader checks to 79 and physical reads to 3,246. Its 130 native metadata
+replays took 1.340–1.393 s inclusive. The replay and file-read timings
+overlap.
+
+The independent deployment gate also passed with the same Core source.
+Each cold build compiled 46 targets, including the derivation session;
+the hot B build compiled zero. The B test process verified the first
+business read from B's compiled products. Cleaning A preserved B's
+digests. These build and deployment checks are outside the timing rows.
 
 ** Local Actor control
 

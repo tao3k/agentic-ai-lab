@@ -28,7 +28,7 @@ filegroup(
 )
 
 filegroup(
-    name = "gerbil_package_sources",
+    name = "gerbil_library_sources",
     # This is only the Bazel sandbox projection. gerbil.pkg owns dependency
     # identity and the explicit build entry owns the module graph.
     srcs = [
@@ -36,6 +36,7 @@ filegroup(
         "modules/gerbil.pkg",
         "scenarios/gerbil.pkg",
         ":core_module_sources",
+        "bindings/nix-c-api/derivation-session.ss",
         # Context program admission observes both execution-boundary sources.
         "packages/python-runtime/tools/watch.py",
         "//dev:sources",
@@ -46,17 +47,21 @@ filegroup(
     ] + glob([
         "*.ss",
         "bindings/nono-c/**/*.h",
-        # Retained native Suite libraries and their source-relative imports
-        # must exist inside the sandbox just as they do in a checkout. This
-        # projects inputs only; the build entry still owns which targets compile.
-        "t/**/*.ss",
-        "t/qualification/context-temporal/*.c",
         "modules/**/*.ss",
         "modules/**/*.inc",
         "user-interface/**/*.ss",
         "scenarios/**/*.ss",
         "profiles/**/*.ss",
         "schemas/**/*.json",
+    ]),
+)
+
+filegroup(
+    name = "gerbil_package_sources",
+    # Full package build includes the retained native Suite libraries.
+    srcs = [":gerbil_library_sources"] + glob([
+        "t/**/*.ss",
+        "t/qualification/context-temporal/*.c",
     ]),
 )
 
@@ -227,7 +232,7 @@ gerbil_project_environment(
 # closure; tests still run separately through the heap-fenced Just entrypoint.
 gerbil_project_compile(
     name = "nix_adapters",
-    srcs = [":gerbil_package_sources"] + glob([
+    srcs = [":gerbil_library_sources"] + glob([
         "core/t/**/*.ss",
         "t/qualification/build-publication/**/*.ss",
         "t/qualification/nix/**/*.ss",
