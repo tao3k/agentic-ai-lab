@@ -11,12 +11,14 @@
         (only-in :agentic-ai-lab/modules/session/objects-core
                  agentic-ai-lab-session-require
                  agentic-ai-lab-session-every?)
-        (only-in :agentic-ai-lab/modules/query/semantic/orgize-interface
+        (only-in :orgize/languages/org/modules/org-elements/value-types
                  org-element-graph-view?
+                 org-named-element-query?)
+        (only-in :orgize/languages/org/modules/org-elements/values
                  org-element-graph-id-of
-                 org-named-element-query?
                  org-named-element-query-id
-                 org-named-element-query-query
+                 org-named-element-query-query)
+        (only-in :orgize/languages/org/modules/org-elements/query
                  make-org-element-query-context
                  org-element-select))
 

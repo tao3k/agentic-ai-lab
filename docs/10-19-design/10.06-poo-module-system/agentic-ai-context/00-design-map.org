@@ -152,6 +152,32 @@ build with zero compilation. The aggregate watchdog interrupted
 withdrawn clean after its child logged =main return=, before the parent
 reported completion. That run does not qualify as acceptance.
 
+With parent action epochs enabled, the base build took 4.93 seconds to
+enter =main=, 6.72 seconds inside =main=, and 2.80 seconds from its return
+to parent completion. Withdrawn clean spent 6.40 seconds inside =main=
+and another 8.50 seconds before parent completion. The clean output
+removal itself took about 20 milliseconds. This run completed the hot
+build and clean, then exhausted the aggregate budget after launching
+the refusal process. The post-main interval includes both child
+teardown and parent collection. A separate native sample identified
+Gambit's dynamic-module cleanup in the child, without attributing the
+entire interval to that stack.
+
+Memory's Org selection uses seven bindings from Orgize's Element Types,
+values, and query modules. Each binding is the same native procedure as
+the corresponding Lab facade export. Keep the facade for clients that
+use its Org Contract and syntax APIs. The independent import census
+reported 171 newly loaded module IDs for the defining modules and 179
+for the facade. In the complete cold build phase the enabled target set
+lost only =modules/query/semantic/orgize-interface=, leaving 40 targets.
+Projection Contexts moved from 246 to 240, and Make Contexts from 394 to
+389. Base and withdrawn retained their exact target sets. These counts
+establish work reduction; the runs had different host load.
+The Org selection suite passed against products from a separate
+40-target build. The aggregate run under higher host load finished all
+three first reads, started the hot build at 118.99 seconds, and timed
+out without an acceptance receipt.
+
 For withdrawal, compare the entire =gerbil clean= action with its
 =clean-outputs= span and the nested =gerbil-clean= and
 =clean-product-residue= spans. Use a fresh withdrawn build with
