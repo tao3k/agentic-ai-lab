@@ -11,7 +11,8 @@
         (only-in :yuanxu/ops/progress execution-progress!)
         (only-in :yuanxu/observability/testing-script make-compiler-progress-reader)
         (only-in :yuanxu/module-system/source/admission module-source-read)
-        (only-in :yuanxu/module-system/building/products artifact-files))
+        (only-in :yuanxu/module-system/building/products artifact-files)
+        (only-in "./qualification/yuanxu-build-events.ss" compile-events))
 (export yuanxu-context-memory-downstream-test)
 
 (def (copy-source from to)
@@ -31,15 +32,6 @@
       (display (substring text 0 at) out)
       (display new out)
       (display (substring text (+ at (string-length old)) (string-length text)) out))))
-
-(def (compiled output)
-  (call-with-input-string output
-    (lambda (port)
-      (let loop ((line (read-line port)) (targets '()))
-        (cond ((eof-object? line) (list-sort string<? targets))
-              ((string-prefix? "... compile " line)
-               (loop (read-line port) (cons (substring line 12 (string-length line)) targets)))
-              (else (loop (read-line port) targets)))))))
 
 (def (product-digests targets library)
   (map (lambda (path) (cons path (sha256 (call-with-input-file path read-all-as-u8vector))))
@@ -102,7 +94,7 @@
             (def output (action state (list "gerbil" operation)))
             (check-equal? (and (string-contains output "BUILD-STAGE main return") #t) #t)
             (check-equal? (string-contains output "scope-factory") #f)
-            (compiled output))
+            (compile-events output))
           (def (use! state name)
             (check-equal?
               (and (string-contains (action state (list "gxi" "use.ss" name))

@@ -15,6 +15,7 @@
         (only-in :yuanxu/module-system/building/products current-build-output-directory)
         (only-in :yuanxu/module-system/source/admission module-source-read
                  call-with-module-source-operation-measurement call-with-module-source-read-cache)
+        (only-in "./qualification/yuanxu-build-events.ss" compile-events)
         (only-in "./qualification/yuanxu-deployment-consumer/init.ss" yuanxu-deployment-consumer.init.exports)
         (rename-in (only-in "./qualification/yuanxu-deployment-consumer/build.ss" main)
                    (main deployment-build-main)))
@@ -83,26 +84,6 @@
           (dynamic-wind void (lambda () (thread-join! drain))
             (lambda () (close-input-port reader))))))))
 
-(def (compile-events output)
-  (def worker-prefix "... execute compile job ")
-  (call-with-input-string output
-    (lambda (port)
-      (let loop ((events '()) (target-pending? #f))
-        (let (line (read-line port))
-          (cond ((eof-object? line)
-                 (when target-pending? (error "missing target in native Make output"))
-                 (list-sort string<? events))
-                ((string-prefix? worker-prefix line)
-                 (loop events target-pending?))
-                (target-pending? (loop (cons line events) #f))
-                ((string-prefix? "... compile " line)
-                 (let (target (substring line 12 (string-length line)))
-                   ;; The parallel compiler may print a complete job record
-                   ;; between Make's prefix and its target.
-                   (if (string-prefix? worker-prefix target)
-                     (loop events #t)
-                     (loop (cons target events) #f))))
-                (else (loop events #f))))))))
 (def (interface-products directory (prefix ""))
   (list-sort string<?
     (foldl (lambda (name found)
@@ -118,9 +99,12 @@
 (def yuanxu-deployment-downstream-test
   (test-suite "Independent downstream selects OpenTofu by deployment category"
     (test-case "first business read, selected native build and isolated cleanup"
-      (check-equal? (compile-events
-                      "... compile ... execute compile job (compile-file example.scm)\nexample/target\n")
-                    '("example/target"))
+      (check-equal?
+        (compile-events
+          (string-append
+            "... compile ... execute compile job (compile-file example.scm)\nexample/target\n"
+            "... compile example/other... execute compile job (compile-file other.scm)\n"))
+        '("example/other" "example/target"))
       ;; The native harness has finished importing the suite. Report that
       ;; boundary before beginning a separate source projection phase.
       (execution-progress! 'lab-deployment-suite 1)
