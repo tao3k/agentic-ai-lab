@@ -20,6 +20,26 @@
                    (main deployment-build-main)))
 (export yuanxu-deployment-downstream-test)
 
+(def (report-specification-work times)
+  ;; Nested spans are inclusive. Print only fixed stage names, never source
+  ;; paths or the private accounting table.
+  (for-each
+    (lambda (stage)
+      (let (calls (hash-ref times (list 'calls stage) 0))
+        (when (positive? calls)
+          (let (user (hash-get times (list 'cpu-user stage)))
+            (write (append (list 'LAB-DEPLOYMENT-SPEC-WORK stage
+                                 (cons 'calls calls)
+                                 (cons 'wall (hash-ref times stage)))
+                           (if user
+                             (list (cons 'cpu (+ user (hash-ref times (list 'cpu-system stage)))))
+                             '()))))
+          (newline))))
+    '(build-main build-specification build-selected-graph build-projection
+      reader-bootstrap reader-native-import reader-role-import reader-preparation-start
+      reader-interface-start reader-admission-start metadata-replay build-current))
+  (force-output))
+
 (def (measure-phase name action)
   ;; One native sample per coarse phase, with no read observer or scope demand.
   (def failed? #f)
@@ -147,13 +167,16 @@
             output)
           ;; Source projection must not first warm business scopes. All first
           ;; .get/lazy/identity assertions execute in the independent B runtime.
+          (displayln "LAB-DEPLOYMENT-SPEC-START")
+          (force-output)
           (defvalues (spec spec-times)
             (measure-phase 'specification (lambda () (call-with-module-source-operation-measurement
               (lambda ()
                 (call-with-output-string
                   (lambda (out)
                     (parameterize ((current-output-port out) (current-directory consumer))
-                      (deployment-build-main "spec"))))) accounting?: #f))))
+                      (deployment-build-main "spec"))))) accounting?: 'stages))))
+          (report-specification-work spec-times)
           (check-equal? (hash-ref spec-times '(calls scope-factory) 0) 0)
           (check-equal? (hash-ref spec-times '(calls candidate-read) 0) 4)
           ;; Capture the exact native prerequisites of the source plan before
