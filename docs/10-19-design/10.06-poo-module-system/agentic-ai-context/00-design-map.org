@@ -108,11 +108,37 @@ library resolution remain Gerbil's responsibilities. Compare any package
 root experiment outside the Graph and report its loader IDs separately
 from Gerbil Contexts and native Make targets.
 
+The runtime reader uses its own native Context as the root of its
+source-authentication closure. The Core source bootstrap retains its
+build entry roots. Both use Gerbil's import identities and the same
+Context traversal for the shared role languages and value libraries.
+
+An installed Context can remain a Gerbil prerequisite while an explicit
+selected source owner has a separate byte obligation for the same Module
+ID. The reader retains authenticated owner observations in its existing
+currentness guards. The installed Context adds no Make target. Core's
+=t/module-reader-tool-context-test.ss= exercises the distinction using a
+relocated source checkout: an unrelated edit is allowed, an admitted
+owner edit or removal is refused, and the installed prerequisite stays
+out of the compiler inputs.
+To check the boundary, compare the first compiled consumer read and the
+withdrawn build and clean against the original native target set. Run
+the wrong-Context and changed-source controls separately.
+
 The Base control removes the package manager and its network imports
-from the =std-make-spec= inventory while preserving the registered
+from the runtime loader inventory while preserving the registered
 projection Context count and exact compiler target set. Compare wall
 times only with paired host conditions and keep the standalone control
 separate from the full Memory gate.
+
+The owner-currentness control preserved the exact cold target sets in
+all three modes: 12 base, 46 enabled, and 12 withdrawn. Of the 34 enabled
+additions, 23 are in the Memory Feature and 11 are imported Lab libraries.
+All three independent first reads completed. The aggregate watchdog then
+terminated the hot enabled build, which had started at 113.81 seconds
+on the Harness clock. This run establishes cold target and first-read
+coverage only. The hot compilation count, clean, refusal, and three
+complete in-budget runs remain separate acceptance obligations.
 
 For withdrawal, compare the entire =gerbil clean= action with its
 =clean-outputs= span and the nested =gerbil-clean= and
