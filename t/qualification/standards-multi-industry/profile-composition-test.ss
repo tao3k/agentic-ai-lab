@@ -73,7 +73,7 @@
                      "lambda-aitia/nasa-npr-7150.2d/full"))
       (check-equal? (.ref receipt 'base-editions)
                     '("hl7.fhir.au.core@1.0.0"
-                      "nasa/npr-7150.2d/2022-03-08"))
+                      "nasa/sdlc/npr-7150.2/D/2022-03-08"))
       (check-equal? (.ref receipt 'constraint-count) 130)
       (check-equal? (.ref bundle 'edition-count) 4)
       (check-equal? (.ref bundle 'artifact-count) 10)
