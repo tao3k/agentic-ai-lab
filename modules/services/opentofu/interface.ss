@@ -17,7 +17,7 @@
       configuration-build: (.cc Build module: scope)
       projections: (cons (.o kind: 'module/build roots: '()
                             library-roots: '(agentic-ai-lab/opentofu-contracts))
-                    (if (opentofu-service-configuration (.get scope config))
+                    (if (opentofu-service-configuration Config)
                      (list (.cc Build module: scope
                                configuration-projection: opentofu-service-configuration)) '()))
       admissions: (.o Config: (.o export-path: '(config) contract-path: '(types config))

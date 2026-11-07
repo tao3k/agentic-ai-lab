@@ -106,8 +106,14 @@
             (parameterize ((current-nix-process-observer (lambda (_argv) (set! starts (1+ starts)))))
               (def next-view #f)
               (def cross-generation-identities #f)
-              (let* ((view (yuanxu-load-modules init))
-                     (scope (.get (selected-record view 'services/opentofu) scope)))
+              (let (view (yuanxu-load-modules init))
+                (assert 'builder-alone-does-not-prepare (null? (.get view build-graph external-packages)))
+                (let (node (find (lambda (node)
+                                   (eq? (.get node identity) (owner view 'services/opentofu)))
+                                 (.get view selected-graph nodes)))
+                  (assert 'build-projection-keeps-runtime-prototype-cold
+                    (and node (not (.ref/cached (.get node publication core) 'scope)))))
+                (def scope (.get (selected-record view 'services/opentofu) scope))
                 (assert 'scope-without-artifact (not (.ref/cached scope 'modules)))
                 (assert 'default-source-unconfigured (not (.get scope config source)))
                 (assert 'runtime-schema-function
@@ -121,7 +127,6 @@
                 (check-equal?
                   (ormap (lambda (issue) (equal? (.get issue path) '(source)))
                     (.get refused diagnostics)) #t)
-                (assert 'builder-alone-does-not-prepare (null? (.get view build-graph external-packages)))
                 (assert 'scope-and-selection-start-no-nix (zero? starts))
                 (let (prepared (.call view prepare-publication 'agentic-ai-lab/modules/services/opentofu/interface))
                   (assert 'physical-core-interface-source
