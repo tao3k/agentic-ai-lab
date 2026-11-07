@@ -36,17 +36,17 @@ imports bring =services=. These compile contributions remain selected after
 their outputs are installed, so hot builds and clean keep the cold inventory.
 
 Run =just test-file t/yuanxu-deployment-downstream-test.ss= with built Core
-prerequisites. This suite has a 240-second aggregate limit and retains its
-120-second action and 60-second idle limits. The assertions check exact cold A/B compiler events and interfaces,
+prerequisites. The gate uses a 120-second aggregate limit, a 120-second action
+limit and a 60-second idle limit. The assertions check exact cold A/B compiler events and interfaces,
 zero hot compiler events, selected test execution, and B product hashes after
 cleaning A. It invokes the public schema operation through the downstream
 scope; provider realization and external OpenTofu execution remain explicit
 configuration effects.
 
-A prior complete gate passed with a natural exit in 111.81 seconds under
-the former 120-second aggregate limit and the same action and idle limits.
-The deployment gate with freshly compiled Core prerequisites exited naturally
-in 210.96 seconds. The child reported =OK= 5.05 seconds before the outer
+The direct Config projection passed the complete gate with a natural exit
+in 94.11 seconds. An earlier run under the same budget finished in 111.81
+seconds. In a separate diagnostic run with freshly compiled Core prerequisites,
+the process exited naturally in 210.96 seconds. The child reported =OK= 5.05 seconds before the outer
 test received its result. The two source checks took about 0.06 seconds each.
 The preceding timeout remains failed evidence. Coarse CPU/wall and correlated
 process timestamps now distinguish specification preparation, native Make and
