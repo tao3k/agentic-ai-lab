@@ -112,6 +112,10 @@
             (member "agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy"
                     enabled-targets)
             #f)
+          (check-equal?
+            (filter (cut string-prefix? (string-append memory-prefix "durable/") <>)
+                    enabled-targets)
+            '())
           (def withdrawn-targets (build! withdrawn))
           (def memory-entry (string-append memory-prefix "interface"))
           (def added (filter (lambda (target) (not (member target base-targets))) enabled-targets))

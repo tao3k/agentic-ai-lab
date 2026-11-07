@@ -113,6 +113,33 @@ well: the enabled projection goes from 219 to 217 Contexts, and Make
 goes from 389 to 388. These counts establish the eliminated work. Compare
 wall time separately on a stable host before attributing a speedup.
 
+After removing the selection policy, the enabled build had 25 additional
+module identities.
+The generated interfaces separate them into ten durable modules, eleven
+other Memory modules, three Session dependencies and one authoring syntax
+module. The Module System selects =features/memory/interface.ss= as one
+native source root. That Interface imports the configuration and both
+selection adapters. The configuration in turn re-exports the durable
+store, operation, recovery and artifact owners. These are distinct
+compiled modules from the same selected root.
+
+Memory configuration now publishes catalog and job-receipt declarations.
+Durable store, operation, recovery and artifact consumers import the
+corresponding Gerbil modules directly. The selected Memory Interface keeps
+its catalog and Org/Session selection APIs. The empty-prefix build removed
+exactly the ten =memory/durable/= compiler targets. Base and withdrawal
+still produce the same 12 interfaces each, and enabling Memory produces
+27 instead of 37. The enabled projection fell from 217 to 198 native
+Contexts, and Make from 388 to 332. The test checks that the enabled
+target set excludes Durable modules. This comparison uses the existing
+compiled Core qualification cohort. The relocated Feature namespace still
+requires a separate full Core rebuild and downstream acceptance.
+The three independent first reads and the zero-compilation hot build
+passed in the same round. The aggregate deadline expired during withdrawn
+clean, so this round did not qualify as complete acceptance. The existing
+catalog, Org selection, durable receipt, recovery and store handoff suites
+passed separately through =just test-file=.
+
 Package windows read the native Gerbil checkout tree under =gerbil-path=.
 The source reader has no reason to initialize the package manager or to
 create directories. Installation, checkout placement, pinning, and compiled

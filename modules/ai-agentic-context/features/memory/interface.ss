@@ -3,9 +3,8 @@
 ;;;
 ;;; SPDX-License-Identifier: Apache-2.0 AND LGPL-2.1-or-later
 
-;;; Public Memory Feature interface; all internal roles close through this file.
-;;; Config owns inert policy/contract values shared with authoring. Orgize query
-;;; execution remains available from this Feature interface and its own owner.
+;;; Memory publishes catalog and selection operations through this Interface.
+;;; Store execution, artifact policy and recovery consumers import their owners.
 
 (import "config.ss"
         "org-selection.ss"
