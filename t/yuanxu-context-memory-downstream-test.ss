@@ -10,7 +10,7 @@
         (only-in :yuanxu/ops/func run-script)
         (only-in :yuanxu/ops/progress execution-progress!)
         (only-in :yuanxu/observability/testing-script make-compiler-progress-reader)
-        (only-in :yuanxu/module-system/source/admission module-source-read)
+        (only-in :yuanxu/module-system/source/observations module-source-read)
         (only-in :yuanxu/module-system/building/products artifact-files)
         (only-in "./qualification/yuanxu-build-events.ss" compile-events))
 (export yuanxu-context-memory-downstream-test)

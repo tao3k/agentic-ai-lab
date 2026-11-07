@@ -4,7 +4,7 @@
         (only-in :clan/poo/object .get .slot?)
         (only-in :yuanxu-context-consumer/main selected-context)
         (only-in :agentic-ai-lab/modules/ai-agentic-context/funs-features context-profile-feature-ids)
-        (only-in :yuanxu/module-system/source/admission call-with-module-source-operation-measurement)
+        (only-in :yuanxu/module-system/source/observations call-with-module-source-operation-measurement)
         (only-in :gerbil/runtime/loader list-modules))
 (export main)
 

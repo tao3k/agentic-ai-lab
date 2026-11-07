@@ -140,6 +140,57 @@ clean, so this round did not qualify as complete acceptance. The existing
 catalog, Org selection, durable receipt, recovery and store handoff suites
 passed separately through =just test-file=.
 
+A subsequent empty-prefix Core build completed within 120 seconds and
+produced all 20 modules under the relocated Feature namespace. Use that
+Core library as the compiler prerequisite for the downstream gate. In
+the integrated round, all three cold builds, independent reads, the hot
+zero-compilation build, and withdrawn cleanup returned successfully. The
+aggregate deadline interrupted the final refusal process. The hot action
+took 26.97 seconds, of which 1.48 were in native Make. Its 9.73-second
+specification phase and its process boundaries remain distinct costs.
+The two fixture measurements import the same source-observation bindings
+directly from their defining module.
+
+The earlier 10.16-second hot action on the existing qualification cohort
+and the slower relocated build both reported 86 library Contexts, 198
+projection Contexts, ten Make Contexts, and 89,560 metadata visits across
+74 replay calls. The slower invocation spent 3.95 seconds before the
+selected-graph span, 5.68 seconds in that span and 0.10 seconds in the
+remaining specification checks. Its selected-graph span includes 3.03
+seconds in the Feature's native library walk. These counters separate the
+retained replay work from the observed wall-time difference. Keep
+independent source authentication and open-callback checks in place.
+
+Three consecutive invocations of the unchanged-budget downstream gate
+then completed on the same rebuilt Core products. Each invocation
+created fresh, independent output prefixes. The compiler was Gerbil
+=1cfb032= on Gambit =ea114fc=, with gerbil-poo =cd4de644=, 12 build workers,
+and a 2 GiB test heap. All times in the table are seconds. Total is the
+test entry through return from the refusal action. Each process exited
+with the final Harness success markers.
+
+| Round | Total | Base cold | Memory cold | Withdrawn cold | Base after main | Hot build | Withdrawn clean |
+|-------+-------+-----------+-------------+----------------+-----------------+-----------+-----------------|
+|     1 | 103.80 |     12.26 |       15.56 |          11.97 |            2.60 |      9.61 |            7.98 |
+|     2 | 100.52 |     11.57 |       18.64 |          14.74 |            2.62 |      9.56 |            8.18 |
+|     3 | 100.76 |     12.30 |       16.40 |          11.74 |            2.81 |     13.56 |           11.74 |
+
+Each round checked the 12/27/12 cold targets, zero scope construction
+during projection, all three independent first reads, receiver and
+consumer refinement isolation, zero hot compilation, withdrawn output
+cleanup, explicit Feature refusal, and the enabled products' digest.
+The earlier failed rounds remain separate evidence. The 2.60–2.81-second
+base tail is an observation from these runs, with no change to the
+Gerbil process exit path.
+
+The Core input-context mutation gate rejected all four injected faults,
+and the publication, test-source admission and Feature Interface suites
+passed. The separate Lab deployment gate reached the B product's first
+read and inner Harness success. Its specification used 50.14 seconds of
+wall time for 7.67 seconds of process CPU. The child emitted its final
+marker at 117.39 seconds and the outer gate reached its aggregate deadline
+before the test process returned. This deployment run remains a failure.
+
 Package windows read the native Gerbil checkout tree under =gerbil-path=.
 The source reader has no reason to initialize the package manager or to
 create directories. Installation, checkout placement, pinning, and compiled
