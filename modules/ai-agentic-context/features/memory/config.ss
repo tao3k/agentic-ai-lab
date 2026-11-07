@@ -38,18 +38,7 @@
         agentic-ai-lab-ai-agentic-context-memory-poo-catalog->catalog
         agentic-ai-lab-ai-agentic-context-memory-prototype-super
         agentic-ai-lab-ai-agentic-context-memory-poo-config-flags
-        agentic-ai-lab-memory-configs
         agentic-ai-lab-ai-agentic-context-memory-module-bundles)
-
-(defsyntax (agentic-ai-lab-memory-configs stx)
-  (syntax-case stx ()
-    ((_ config-form ...)
-     (syntax
-      (agentic-ai-lab-module-configs
-       ai-agentic-context
-       agentic-ai-lab-ai-agentic-context-memory-poo-config-flags
-       (quoted :config config-form ...)
-       config-form ...)))))
 
 (defpoo-module-config-prototype
   memory-store-spec

@@ -108,6 +108,10 @@
             (filter (lambda (target) (string-prefix? memory-prefix target)) base-targets)
             '())
           (def enabled-targets (build! enabled))
+          (check-equal?
+            (member "agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy"
+                    enabled-targets)
+            #f)
           (def withdrawn-targets (build! withdrawn))
           (def memory-entry (string-append memory-prefix "interface"))
           (def added (filter (lambda (target) (not (member target base-targets))) enabled-targets))

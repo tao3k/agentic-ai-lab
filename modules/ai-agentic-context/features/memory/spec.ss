@@ -5,6 +5,19 @@
 
 ;;; Boundary: stable import surface for memory-core public specs.
 
-(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/config)
+(import :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
+        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
+                 agentic-ai-lab-module-configs))
 
-(export (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/config))
+(export agentic-ai-lab-memory-configs
+        (import: :agentic-ai-lab/modules/ai-agentic-context/features/memory/config))
+
+(defsyntax (agentic-ai-lab-memory-configs stx)
+  (syntax-case stx ()
+    ((_ config-form ...)
+     (syntax
+      (agentic-ai-lab-module-configs
+       ai-agentic-context
+       agentic-ai-lab-ai-agentic-context-memory-poo-config-flags
+       (quoted :config config-form ...)
+       config-form ...)))))

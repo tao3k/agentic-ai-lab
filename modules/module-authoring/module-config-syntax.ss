@@ -7,109 +7,11 @@
 ;;; Invariant: generated forms are ordinary POO objects and predicates; public
 ;;; config authoring remains prototype composition plus named conversion helpers.
 
-(import (only-in :clan/poo/object .o .ref .slot? object? object<-alist)
-        (only-in :agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy
-                 agentic-ai-lab-product-use-module))
+(import (only-in :clan/poo/object .ref .slot? object? object<-alist))
 
 (export defpoo-module-config-prototype
         defpoo-module-config-kind-predicate
-        defpoo-module-config-converter
-        agentic-ai-lab-module-configs
-        agentic-ai-lab-module-inherited-config)
-
-;;; One runtime lowering owns inherited external execution declarations.
-;;; Values remain inert module-selection facts; no sandbox or command runs here.
-(def (agentic-ai-lab-module-inherited-config module-key
-                                       inherited-profile
-                                       isolation
-                                       environment
-                                       command
-                                       backend)
-  (agentic-ai-lab-product-use-module
-   module-key
-   (list (cons ':inherits inherited-profile)
-         (cons ':isolation isolation)
-         (cons ':environment environment)
-         (cons ':command command)
-         (cons ':nono backend))))
-
-(begin-syntax
-  (def (agentic-ai-lab-config-syntax-keyword-slots/elements ctx elements)
-    (match elements
-      ([] '())
-      ([slot-key slot-value . more]
-       (let (key (syntax->datum slot-key))
-         (and (keyword? key)
-              (let (rest
-                    (agentic-ai-lab-config-syntax-keyword-slots/elements ctx more))
-                (and rest
-                     (cons (list (datum->syntax
-                                  ctx
-                                  (string->symbol (keyword->string key)))
-                                 slot-value)
-                           rest))))))
-      (else #f)))
-
-  (def (agentic-ai-lab-config-syntax-keyword-slots ctx slot-specs)
-    (let (elements (syntax->list slot-specs))
-      (and elements
-           (agentic-ai-lab-config-syntax-keyword-slots/elements ctx elements))))
-
-  (def (agentic-ai-lab-config-syntax-keyword-slot-groups ctx slot-def-groups)
-    (map (lambda (slot-specs)
-           (agentic-ai-lab-config-syntax-keyword-slots ctx slot-specs))
-         (syntax->list slot-def-groups)))
-
-  (def (agentic-ai-lab-config-syntax-all? values)
-    (not (member #f values)))
-
-  (def (agentic-ai-lab-config-syntax-definition-heads? heads)
-    (andmap (lambda (head)
-              (eq? (syntax->datum head) '.def))
-            (syntax->list heads))))
-
-;;; One lowering owns POO prototype config declarations for every module.
-;;; Module-specific syntax supplies only its module key and config projector.
-(defsyntax (agentic-ai-lab-module-configs stx)
-  (syntax-case stx (quoted)
-    ((ctx module-key config-flags
-          (quoted quoted-form ...)
-          (definition-head
-           (prototype-name prototype-self prototype-super prototype-slot ...)
-           slot-def ...)
-          ...)
-     (let* ((definition-heads?
-             (agentic-ai-lab-config-syntax-definition-heads?
-              (syntax (definition-head ...))))
-            (slot-groups
-             (agentic-ai-lab-config-syntax-keyword-slot-groups
-              (syntax ctx)
-              (syntax ((slot-def ...) ...)))))
-       (unless definition-heads?
-         (error "agentic-ai-lab module config expects .def forms"))
-       (if (agentic-ai-lab-config-syntax-all? slot-groups)
-         (with-syntax (((((slot-name slot-value) ...) ...) slot-groups))
-           (syntax
-            (let* ((prototype-name
-                    (object<-alist
-                     (list (cons 'slot-name slot-value) ...)
-                     supers: prototype-super))
-                   ...)
-              (agentic-ai-lab-product-use-module
-               'module-key
-               (config-flags
-                (list prototype-name ...)
-                '(quoted-form ...))))))
-         (syntax
-          (let* ((prototype-name
-                  (.o (:: prototype-self prototype-super prototype-slot ...)
-                      slot-def ...))
-                 ...)
-            (agentic-ai-lab-product-use-module
-             'module-key
-             (config-flags
-              (list prototype-name ...)
-              '(quoted-form ...))))))))))
+        defpoo-module-config-converter)
 
 ;;; Prototype macros define named POO config objects from bounded slot rows.
 ;; defpoo-module-config-prototype

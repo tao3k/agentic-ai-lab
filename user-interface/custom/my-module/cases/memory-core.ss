@@ -8,7 +8,7 @@
 ;;; no memory backend recall or commit is executed.
 
 (import :agentic-ai-lab/modules/session/syntax
-        :agentic-ai-lab/modules/ai-agentic-context/features/memory/config
+        :agentic-ai-lab/modules/ai-agentic-context/features/memory/spec
         (only-in :yuanxu/module-system/selection/objects
                  yuanxu-user-module-selection-flag-entry
                  yuanxu-user-module-selection->alist))

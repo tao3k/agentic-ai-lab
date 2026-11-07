@@ -102,6 +102,17 @@ new Gerbil contexts, including those supplied by installed
 dependencies. It does not count compiler invocations or prove that a
 source file was expanded twice.
 
+The Memory Feature imports the prototype and conversion syntax without
+importing the product selection policy. The explicit Memory authoring
+syntax lives in =memory/spec.ss=, and the custom cases that use it import
+that file. On an empty-prefix run this removes only
+=agentic-ai-lab/modules/workflow/scenario/configuration/selection-policy=
+from the enabled compiler target set. The base and withdrawn sets remain
+identical to the reference. Compare the native expansion counters as
+well: the enabled projection goes from 219 to 217 Contexts, and Make
+goes from 389 to 388. These counts establish the eliminated work. Compare
+wall time separately on a stable host before attributing a speedup.
+
 Package windows read the native Gerbil checkout tree under =gerbil-path=.
 The source reader has no reason to initialize the package manager or to
 create directories. Installation, checkout placement, pinning, and compiled
