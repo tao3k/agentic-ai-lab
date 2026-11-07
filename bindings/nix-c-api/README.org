@@ -1112,6 +1112,127 @@ metadata replay CPU. This process failed the three-second assertion
 and exited with status 70. The earlier six sub-three-second candidate
 rounds and this failed process both belong in the qualification record.
 
+*** Fixed-layout birth field control
+
+An isolated =read-route= variant replaced five named field reads in
+the issuer with the generated fixed-layout accessors. It retained the
+same record class, registered birth identity and captured fields. The
+2,048-record microbenchmark fell from 114.3 to 86.2 ms median CPU for
+40 checks. The 29 issued-read cases and warm checkpoint control passed.
+
+The fixed B comparison ran in A/B/B/A order with only =read-route=
+swapped. A used the prior isolated Object sweep and original issuer.
+B used the same sweep and the fixed-layout issuer. All four processes
+kept the same B hash, Provider, 14 queries, six OpenTofu commands and
+refusal controls.
+
+| Process | Complete .run (s) | Replay CPU (s) |
+|---------+-------------------+----------------|
+| A       | 2.377, 2.050, 1.999 |          1.069 |
+| B       | 2.782, 3.605, 2.630 |          1.168 |
+| B       | 3.503, 2.742, 2.541 |          1.210 |
+| A       | 2.335, 2.223, 2.194 |          1.144 |
+
+The B processes both failed the timing assertion. They also spent
+more time in the physical tools, so this comparison cannot assign
+the wall-time difference to issuer changes.
+
+A focused negative control minted a read for a symbol slot, changed
+the record class's reflected =key= offset to its =value= offset, then
+asked =object-read-issued?= before restoring the class mapping. A
+returned false during the mutation and true after restoration. B
+returned true during the mutation. Keep the issuer's current named
+lookup on this evidence. Any future direct-access path must preserve
+the reflection rejection as well as the existing payload and route
+controls.
+
+A second issuer variant retained every named record lookup and removed
+only the =HashTable= wrapper around the private weak identity registry,
+using =table-ref= and =table-set!=. It passed the issued-read suite and
+the reflection negative control. The same four-process microbenchmark
+put both variants at about 100 ms median CPU, so the wrapper change
+was left out.
+
+*** Published artifact follow-up
+
+Two fresh processes used the checkpoint artifact pinned by Yuanxu
+=27a666e=, with neither issuer variant nor the isolated Object sweep.
+The fixed B execution hash matched before and after. Both Harnesses
+returned naturally, with 14 queries, six commands and both refusal
+controls per process.
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+-----------------------|
+|       1 | 2.833, 2.246, 2.264 | 1.476, 1.460, 1.452 | 0.115, 0.116, 0.130 | 1.138, 0.614, 0.620 |
+|       2 | 2.407, 2.447, 2.578 | 1.566, 1.567, 1.681 | 0.119, 0.163, 0.146 | 0.642, 0.636, 0.671 |
+
+Scheme-only dispatch took 124–253 ms, and separate replay accounting
+reported 1.169 and 1.284 s CPU. All six numbered calls passed the
+three-second gate in this cohort. The earlier failed cohorts remain
+part of the stability evidence.
+
+*** Build and selection gate follow-up
+
+On Yuanxu =27a666e=, the observer-free 10,000-owner Linux Case timed
+out in first Graph selection. The interrupted stack was in the
+Gerbil expander. The separate observed declaration Case reached
+1,500 completions and 2.12 GB of heap before the same 180 s limit.
+The bootstrap job hit its existing idle watchdog inside the native
+=gerbil pkg deps --install= action for the thousand-owner fixture.
+
+Use Core's =just test-file t/module-runtime-attribution-1000-test.ss=
+to attribute the same reader path without an open observer. It
+returned normally under the original budget. Declaration admission
+took 103.45 s, with 1,000 Interface imports taking 56.77 s inclusive,
+2,000 compile/evaluation entries, and 1,000 Contract admission spans
+taking 9.85 s. Independent Graph currentness took 0.53 s. The first
+scope after admission took 9.50 s. The spans overlap. Reducing warm
+replay alone cannot close the dense-selection budget.
+
+On Lab =eb613826=, the external Linux Bazel lock and qualification
+logic passed. The full build completed the POO and Yuanxu actions,
+then reached the existing 12-minute step limit while Parser and its
+parallel work were still running. The failed run saved its disk cache
+afterward. That cache is not evidence of a successful cold build.
+
+The root Linux package job also timed out during dependency builds,
+after Ascent completed and while Parser was still running. The
+Darwin source-build job completed POO just before the step budget and
+had only reached Yuanxu preparation. Neither job reached the Lab
+runtime. Separately, the frozen local B passed the existing
+=opentofu-service-cleanup-test.ss= and =opentofu-service-failure-test.ss=
+through =just test-file=, with natural Harness exit and the original
+source-expiry and failed-command cleanup checks.
+
+The external qualification now carries the repository's =.bazelversion=
+into its generated consumer workspace. Bazelisk previously selected
+9.3.2 in the external CI job while the repository pinned 9.2.0.
+The native analysis and missing-override control passed using 9.2.0
+without a version environment override.
+
+To compare dependency identity, run =aquery --output=jsonproto= for
+=mnemonic("GerbilProjectCompile", deps(...))= on the root's
+=//:dependency_packages= and the external consumer's
+=//:agentic_ai_lab_compile=, with the same Bazel version. In the
+Darwin control all six dependency actions had matching native ABI
+fingerprints and distinct action keys. The external repository owner
+changes the output path and the producer label passed to the receipt
+writer. Dependent packages also receive different
+=GERBIL_BAZEL_PROJECT_DEPENDENCY_ROOTS=. Sharing a disk-cache location
+does not make these actions interchangeable. This analysis executed
+zero compile actions.
+
+In the bootstrap failure, the native Gerbil =pkg-retag= path invokes
+=gxtags= through =run-process= with its default stdout capture.
+The tagger's per-file =TAG= lines therefore do not reach the parent
+Ops progress reader during that call. The fixture still requires
+the actual generated TAGS index and natural exit.
+With the same dependency pin, a local run of Core's
+=just test-file t/package-install-test.ss= also hit the existing idle
+watchdog in the thousand-owner checkout. The destination TAGS file
+stayed empty while sampled. This reproduces the timeout without
+establishing that the tagger was making progress.
+
 ** Native Nix configuration replay control
 
 The Nix 2.34.7 C API moves the builder's evaluator and fetch settings into
