@@ -91,8 +91,9 @@ and the first =.get= in each independent runtime. Use the same commands,
 source checks and deadlines on fresh output prefixes.
 
 Compare the full sets of compiler target identities. The base and
-withdrawn sets must match. The enabled delta can include same-package
-imports owned outside the Memory directory. Treat a hot Make result
+withdrawn sets must match, and the base set may not contain any
+target owned by the Memory Feature directory. The enabled delta can
+include same-package imports owned outside the Memory directory. Treat a hot Make result
 with zero compiled targets as a separate observation from how much
 Interface projection and source admission still ran in that process.
 Use =BUILD-EXPANSION= and =BUILD-ACCOUNT= to compare the Interface
@@ -186,6 +187,21 @@ the existing currentness check, and JSON Schema produced a node from a
 different nominal type instance. Deferring these roots requires both
 canonical type identity and the existing source guard at actual use.
 
+A second native control mutated the already loaded Funflow Task
+Context's path after creating the Reader and before reading a source
+whose objects import =TaskContract=. The production Reader refused
+the read. The pruned overlay accepted it. A deferred enrollment must
+retain the original provenance of an already loaded Context; checking
+only the path observed at its first demand can bless the replacement.
+
+Both variants passed the isolated native base first-read control with
+the exact same 12 cold compiler targets. The pruned overlay registered
+92 projection Contexts instead of 131 and loaded 76 new runtime module
+IDs during the first read instead of 90. Make reported 214 Contexts in
+both runs. The host load differed between variants, so this comparison
+establishes a reduction in counted work. The two failed publication
+controls exclude this overlay from acceptance.
+
 Memory's Org selection uses seven bindings from Orgize's Element Types,
 values, and query modules. Each binding is the same native procedure as
 the corresponding Lab facade export. Keep the facade for clients that
@@ -226,6 +242,12 @@ builds, started the withdrawn build, and exceeded the aggregate
 deadline. Base took 12.81 seconds from child =main return= to
 parent action completion. The diagnostic and cold target reduction
 do not establish three in-budget aggregate runs.
+
+A subsequent aggregate run completed all three cold builds and the
+target assertions with 12, 38, and 12 targets respectively. Its base
+and withdrawn target sets were identical and contained no Memory
+Feature target. The enabled set matched the independent 38-target
+build. The aggregate watchdog interrupted the base first-read action.
 
 For withdrawal, compare the entire =gerbil clean= action with its
 =clean-outputs= span and the nested =gerbil-clean= and
