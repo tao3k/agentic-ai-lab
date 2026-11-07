@@ -241,13 +241,17 @@
                        (hex-encode (sha256 (call-with-input-file (cdr loaded) read-all-as-u8vector)))
                        (.get provider source value) (.get provider version) executable))
           (newline)
-          (def observations (assoc "yuanxu/module-system/source/observations~0" loaded-modules))
-          (unless (and observations (string? (cdr observations))
-                       (string-suffix? ".o1" (cdr observations)))
-            (error "runtime qualification requires compiled Yuanxu source observations" observations))
-          (write (list 'OPENTOFU-RUNTIME-OBSERVATIONS (cdr observations)
-                       (hex-encode (sha256 (call-with-input-file (cdr observations) read-all-as-u8vector)))))
-          (newline)
+          (for-each
+            (lambda (entry)
+              (def product (assoc (cdr entry) loaded-modules))
+              (unless (and product (string? (cdr product)) (string-suffix? ".o1" (cdr product)))
+                (error "runtime qualification requires a compiled prerequisite" (cdr entry) product))
+              (write (list (car entry) (cdr product)
+                           (hex-encode (sha256 (call-with-input-file (cdr product) read-all-as-u8vector)))))
+              (newline))
+            '((OPENTOFU-RUNTIME-OBSERVATIONS . "yuanxu/module-system/source/observations~0")
+              (OPENTOFU-RUNTIME-POO . "clan/poo/object~0")
+              (OPENTOFU-RUNTIME-READ-ROUTE . "clan/poo/read-route~0")))
           (def walls
             (map (lambda (round)
                    (measure recipe (.call fixture .workspace (number->string round)) round paired?))
@@ -263,4 +267,6 @@
             (check-current-after-destroy recipe (.call fixture .workspace "return-currentness")
                                          (.get fixture config) (.get fixture original))
             (check-equal? (andmap (cut < <> 3.) walls) #t)))
-        instantiate: executable report-progress?: #f))))
+        ;; Preparation reports real completed work. Each timed run installs
+        ;; its own observer, with the same accounting and timing boundaries.
+        instantiate: executable))))

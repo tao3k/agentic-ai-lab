@@ -203,6 +203,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          gerbil env gerbil pkg build github.com/tao3k/agentic-ai-lab
           for category in governance deployment context-memory; do
             gerbil env just test-file "t/yuanxu-$category-downstream-test.ss" 2>&1 | tee "$RUNNER_TEMP/lab-$category-downstream.log"
           done

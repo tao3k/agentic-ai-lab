@@ -72,15 +72,19 @@
             (create-symbolic-link packages (path-expand "pkg" prefix))
             (copy-source fixture source)
             (rewrite (path-expand "init.ss" source) " +memory" flag)
-            (.o source prefix library: (path-expand "lib" prefix)))
+            (.o name source prefix library: (path-expand "lib" prefix)))
           (def (action state command)
+            (def started (real-time))
+            (displayln "LAB-CONTEXT-ACTION enter state=" (.get state name) " command=" command
+                       " at=" started)
+            (force-output)
             (def result
               (run-script
                 (.cc (.get Ops prototypes Script)
                   command: command directory: (.get state source) timeout: 120 idle-timeout: 60
                   progress: make-compiler-progress-reader
                   environment: (.o GERBIL_PATH: (.get state prefix) GAMBOPT: runtime-options
-                    GERBIL_BUILD_VERBOSE: "2"
+                    GERBIL_BUILD_VERBOSE: (if (equal? (car command) "gerbil") "2" "0")
                     GERBIL_LOADPATH: (string-join (cons (.get state library) prerequisites) ":")))
                 '() output-port: (current-error-port)))
             (def output (.get result output))
@@ -89,6 +93,9 @@
               (error "Context downstream action failed" command output))
             (set! completed (1+ completed))
             (execution-progress! 'lab-context-memory-actions completed)
+            (displayln "LAB-CONTEXT-ACTION return state=" (.get state name) " command=" command
+                       " seconds=" (- (real-time) started) " process=" (.get result seconds))
+            (force-output)
             output)
           (def (build! state (operation "build"))
             (def output (action state (list "gerbil" operation)))

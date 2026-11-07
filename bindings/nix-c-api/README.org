@@ -508,6 +508,192 @@ commands. The extra child time was concentrated in =init= and
 =validate=. These are instrumented timings. The three-second gate
 still uses its separate, uninstrumented rounds.
 
+The isolated public checkpoint was also retested in three new processes
+using the same fixed B and the paired worker. Each process loaded the
+candidate Yuanxu observations digest
+=6cf19311f23217cfc023cd4f6e336d2b38f4ee766c3297dece595c76357c7396=.
+
+| Process | Complete .run (s)  | Scheme CPU (s)     | Nix checks (s)     | Six OpenTofu children (s) |
+|---------+--------------------+--------------------+--------------------+--------------------------|
+|       1 | 3.064, 2.792, 2.740 | 1.571, 1.538, 1.554 | 0.294, 0.276, 0.176 |      1.067, 0.842, 0.752 |
+|       2 | 2.526, 2.365, 2.551 | 1.566, 1.473, 1.509 | 0.274, 0.149, 0.140 |      0.606, 0.637, 0.753 |
+|       3 | 2.574, 2.493, 2.733 | 1.581, 1.592, 1.550 | 0.264, 0.234, 0.197 |      0.597, 0.615, 0.799 |
+
+Every timed round performed 14 Nix checks and ran the same six OpenTofu
+commands. All three processes passed the preflight and return-currentness
+controls. The first process failed the timing assertion. Compared with
+the other two process-first rounds, its Scheme CPU and Nix totals were
+similar, while the OpenTofu child total rose by about 0.46 s. This repeat
+therefore leaves the three-second runtime gate open even for the isolated
+candidate.
+
+** Physical OpenTofu child control
+
+Capture =main.tf.json= from the completed workspace inside the existing
+runtime qualification fixture, after =measure= returns and before the
+fixture removes it. The fixed-B input SHA-256 was
+=ddc752ff8b6e64ee5004be4a39cdaf74f22fc2c1bff8e88e688b35c22f7d61ed=.
+In a fresh workspace per group, run the same six commands and arguments
+from =modules/services/opentofu/execution.ss=. Use the admitted artifact's
+=watchdog/timeout= with =--verbose --signal=TERM --kill-after=5s 20s= and
+the same =TF_IN_AUTOMATION= and =CHECKPOINT_DISABLE= settings. Measure each
+command with macOS =/usr/bin/time -l=. The direct control reads the exact
+binary and =NIX_TERRAFORM_PLUGIN_DIR= from the immutable wrapper and passes
+that same mirror to the binary. Verify the output string, empty state
+after destroy, and unchanged input for every group.
+
+| Order | Entrypoint | Six children wall (s) | User + system CPU (s) |
+|-------+------------+-----------------------+-----------------------|
+|     1 | Wrapper    |                  0.63 |                  0.59 |
+|     2 | Binary     |                  0.75 |                  0.54 |
+|     3 | Binary     |                  0.53 |                  0.51 |
+|     4 | Wrapper    |                  0.64 |                  0.56 |
+|     5 | Wrapper    |                  0.57 |                  0.53 |
+|     6 | Binary     |                  0.53 |                  0.53 |
+
+These are sums of the six printed values, rounded to centiseconds per
+command. The control isolates external work from Scheme admission and Nix
+queries. It produced overlapping wall ranges, so it does not justify
+changing the artifact-owned wrapper.
+
+** Source comparison payload on the released POO runtime
+
+Yuanxu's existing source-read window holds the first successfully
+checked expected-text identity directly. It allocates an identity table
+only when that same path has another successful expected identity.
+Independent checks, collector enrollment, observer order, and callback
+invalidation use the existing source window. Distinct text objects with
+equal bytes are still checked separately. Missing paths retain a valid
+checked absence, and a conflicting expectation keeps its own error.
+
+Compile =core/module-system/source/observations.ss= with =gerbil compile
+-O= against the same released POO library for both revisions. Put only
+that compiled Yuanxu module ahead of the original prerequisite paths
+and run the fixed-B qualification as above. Check the printed
+=OPENTOFU-RUNTIME-OBSERVATIONS= digest in each process. The measured
+order was control, candidate, candidate, control.
+
+| Process | Variant   | Complete .run (s)  | Scheme CPU (s)     |
+|---------+-----------+--------------------+--------------------|
+|       1 | Control   | 8.445, 7.230, 6.523 | 2.196, 2.125, 2.024 |
+|       2 | Candidate | 2.417, 2.326, 2.346 | 1.684, 1.602, 1.593 |
+|       3 | Candidate | 2.574, 2.527, 2.384 | 1.700, 1.725, 1.627 |
+|       4 | Control   | 2.831, 2.738, 2.466 | 1.841, 1.808, 1.681 |
+
+Every process retained 14 Nix checks and six OpenTofu commands per
+round, and passed both refusal controls. The accounting round held
+45 read windows, 3,246 physical reads, 5,910 new comparisons and 2,620
+comparison hits in each process. The first control coincided with
+host contention and is retained as a failed gate. A separate focused
+control repeated the same 64 sources twice per window, for 256 fresh
+windows per sample. Median Scheme CPU across six samples per variant
+fell from 475 to 401 ms. The focused result isolates the payload change;
+the full wall difference also includes process and GC variation.
+
+Recompiling from the tracked Yuanxu source gave 4.186, 5.587 and 5.024 s
+in the first new process and 3.702, 5.447 and 7.736 s in the second.
+Both completed the refusal controls. The third process exhausted the
+60-second idle limit in selection preparation, before producing a timed
+=.run= row. These failures are retained and leave the production gate
+open. The maintained fixture reports completed Nix preparation work
+through its existing progress callback and records the loaded POO Object
+and read-route digests before timing. The timed rounds keep their own
+observer and the existing budgets.
+
+** Fused preflight experiment
+
+The issued projection currently verifies the entire cached traversal's
+births before checking its live routes. A native experiment checks each
+birth and live route together on a cached checkpoint, with the action
+still fenced behind the complete preflight. An earlier live failure
+does not hide a later malformed birth. The cold DFS and post-action
+authentication are unchanged. A Lean probe checked diagnostic priority
+on a fixed sequence. The native probe exercised a later forged record
+and an earlier stale record, plus receiver protection, stale refusal,
+multiple values, and an exception from the action.
+
+| Process         | Complete .run (s)  | Scheme CPU (s)     | Nix checks (s)     | Six OpenTofu children (s) |
+|-----------------+--------------------+--------------------+--------------------+--------------------------|
+| Checkpoint      | 2.608, 2.322, 2.277 | 1.520, 1.504, 1.478 | 0.116, 0.129, 0.126 |      0.816, 0.632, 0.579 |
+| Fused preflight | 2.327, 2.353, 2.231 | 1.422, 1.494, 1.447 | 0.114, 0.114, 0.112 |      0.697, 0.673, 0.610 |
+| Checkpoint      | 2.389, 2.286, 2.137 | 1.487, 1.472, 1.415 | 0.111, 0.138, 0.117 |      0.713, 0.570, 0.551 |
+
+The fixed execution and Yuanxu observations digests stayed identical.
+The compiled POO Object digest changed only in the middle process.
+All nine runs retained 14 Nix checks and six OpenTofu commands, and all
+processes passed both refusal controls. The fused variant's separate
+accounting round had two collections and 0.126 s of replay GC wall time.
+The two controls had no replay collections in that round. The physical
+reads and replay counts were the same. The timing ranges overlap.
+This variant remains isolated. Its diagnostic-priority probe assumes a
+read-only native traversal. The prototype catches a general exception
+while inspecting live routes, so production would also need to keep
+asynchronous cancellation outside the deferred diagnostic path.
+
+The follow-up carries only the first explicit native route or freshness
+refusal as a value. A later failed birth still takes precedence. It does
+not catch an unrelated exception during traversal. The native control
+delivered an asynchronous interrupt during the protected action, observed
+the exact cancellation condition, and then wrote the receiver after the
+frame unwound. The stale/forged order and parent isolation controls also
+passed. A separately instrumented binary paused after the first native
+refusal, before authenticating the remaining records. An asynchronous
+interrupt at that pause kept its exact identity, even with a forged
+record later in the sequence. The timed binary has no such probe hook.
+
+| Process | Variant          | Complete .run (s)  | Scheme CPU (s)     |
+|---------+------------------+--------------------+--------------------|
+|       1 | Released         | 3.448, 2.562, 3.271 | 1.740, 1.713, 1.838 |
+|       2 | Explicit refusal | 2.900, 2.451, 2.325 | 1.527, 1.536, 1.485 |
+|       3 | Explicit refusal | 2.335, 2.146, 2.166 | 1.451, 1.416, 1.418 |
+|       4 | Released         | 2.419, 2.529, 2.437 | 1.594, 1.584, 1.580 |
+|       5 | Explicit refusal | 2.475, 2.260, 2.202 | 1.434, 1.403, 1.397 |
+
+The execution digest, admitted Provider and paired Nix worker stayed fixed.
+Each row retained 14 Nix checks, six real OpenTofu commands, and both
+refusal controls. The released first process exceeded three seconds on
+two calls. All three isolated processes passed. This comparison measures
+the combined checkpoint and fused-preflight changes against the release.
+It does not isolate their individual gains or qualify a published pin.
+
+** Native Nix configuration replay control
+
+The Nix 2.34.7 C API moves the builder's evaluator and fetch settings into
+each new state. Its standard loader parses the configuration independently
+for both settings objects. The isolated worker instead applies the native
+parser's ordered setting updates and override-reset position to each
+fresh builder. It still reads the configuration before and after each
+query, retains one Store connection, and constructs a fresh EvalState.
+See the [[https://github.com/NixOS/nix/blob/2.34.7/src/libexpr-c/nix_api_expr.cc#L139-L176][pinned C API implementation]].
+
+Both workers matched the CLI derivation for an expression with a relative
+import, observed an atomic replacement of that import, and left both
+derivations unregistered. Editing an included Nix configuration file
+caused both workers to refuse the next query. A fresh session with the
+included =restrict-eval= setting then refused the same path, as did the
+matching CLI, confirming the replay reaches the effective evaluator.
+
+| Process | Worker | Complete .run (s)  | All Nix checks (s) |
+|---------+--------+--------------------+--------------------|
+|       1 | Stock  | 5.296, 6.792, 7.747 | 1.783, 1.971, 1.527 |
+|       2 | Replay | 2.388, 2.408, 2.432 | 0.326, 0.315, 0.210 |
+|       3 | Replay | 2.483, 2.389, 2.280 | 0.419, 0.328, 0.204 |
+|       4 | Stock  | 2.869, 2.656, 2.440 | 0.501, 0.534, 0.245 |
+
+All four used fixed B, the same isolated POO binary and the same CLI
+target. Every round retained 14 Nix checks and six OpenTofu commands.
+Both refusal controls passed in each process. In the first process,
+even the independent CLI check and OpenTofu children took longer than
+their later counterparts. The host was running other builds. These
+measurements therefore do not isolate the cost of configuration replay.
+
+In one Gerbil process, alternating the two workers over 128 fresh states
+per sample gave stock groups of 141, 221, 136 and 144 ms and replay groups
+of 107, 70, 159 and 87 ms. The median difference corresponds to roughly
+5 ms across 13 queries on this small expression. This isolates the
+configuration lane enough to rule out attributing the seconds in the
+first stock process to the two additional parses.
+
 ** Local Actor control
 
 The same fixed B and focused Core products ran the same Null recipe
