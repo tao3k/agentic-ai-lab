@@ -114,6 +114,13 @@ projection Context count and exact compiler target set. Compare wall
 times only with paired host conditions and keep the standalone control
 separate from the full Memory gate.
 
+For withdrawal, compare the entire =gerbil clean= action with its
+=clean-outputs= span and the nested =gerbil-clean= and
+=clean-product-residue= spans. Use a fresh withdrawn build with
+products present and confirm that the admitted products disappear.
+Run the existing Feature refusal from its own source prefix so its
+startup and termination can be attributed independently of cleaning.
+
 On macOS, pair an uninstrumented base build with a fresh base build in
 which =sample= attaches to the descendant running =gxi build.ss
 compile= immediately after =BUILD-STAGE main return=. The =main= return
