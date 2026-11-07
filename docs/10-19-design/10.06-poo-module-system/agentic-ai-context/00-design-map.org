@@ -171,12 +171,20 @@ diagnostic locates most of this interval before the build interpreter
 exits and is separate from the aggregate acceptance run.
 
 An independent base first-read diagnostic observed seven native
-compiler demand roots. Traversing their native Contexts reached 295
+compiler demand roots. Traversing their native module Contexts reached 292
 of the 343 Contexts in the reader catalogue. Neither Funflow's Flow
 and Scenario roots nor the JSON Schema receipt and validation roots
 were in that demand closure. This measures one base input. The
 catalogue still authenticates the canonical Context before publication
 callbacks, and other modules can demand these roots.
+
+An isolated native overlay removed all four roots from the reader
+catalogue while preserving the build bootstrap. The baseline passed
+=module-candidate-stage-test= and =module-json-schema-publication-test=.
+The overlay failed both. A replaced Funflow Task Context path escaped
+the existing currentness check, and JSON Schema produced a node from a
+different nominal type instance. Deferring these roots requires both
+canonical type identity and the existing source guard at actual use.
 
 Memory's Org selection uses seven bindings from Orgize's Element Types,
 values, and query modules. Each binding is the same native procedure as
@@ -212,6 +220,12 @@ of exactly those two files. The module projection census dropped from
 Org selection passed using the newly compiled products. The existing Memory configuration,
 Org selection and Session selection exports still determine the
 public dependency closure.
+
+The first 38-target aggregate run finished the two initial cold
+builds, started the withdrawn build, and exceeded the aggregate
+deadline. Base took 12.81 seconds from child =main return= to
+parent action completion. The diagnostic and cold target reduction
+do not establish three in-budget aggregate runs.
 
 For withdrawal, compare the entire =gerbil clean= action with its
 =clean-outputs= span and the nested =gerbil-clean= and
