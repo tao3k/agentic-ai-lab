@@ -22,38 +22,62 @@ namespace {
 constexpr std::size_t max_text = 1 << 20;
 using Arguments = std::vector<std::pair<std::string, std::string>>;
 
-// Observe the exact ordered configuration updates from Nix's own loader,
-// including includes and overrides. Never apply them to the live Store.
+// Capture the ordered updates and override boundary from Nix's own loader.
+// Apply them only to a fresh evaluator, never to the live Store.
 struct ConfigurationCapture : nix::Config {
     Arguments entries;
+    std::size_t reset_at = 0;
+
     bool set(const std::string &name, const std::string &value) override
     {
         entries.emplace_back(name, value);
         return true;
     }
+
+    void resetOverridden() override
+    {
+        reset_at = entries.size();
+    }
+
+    void apply(nix::AbstractConfig &config) const
+    {
+        for (std::size_t i = 0; i < entries.size(); ++i) {
+            if (i == reset_at)
+                config.resetOverridden();
+            const auto &[name, value] = entries[i];
+            config.set(name, value);
+        }
+        if (reset_at == entries.size())
+            config.resetOverridden();
+    }
 };
 
-Arguments configuration()
+ConfigurationCapture configuration()
 {
     ConfigurationCapture capture;
     nix::loadConfFile(capture);
-    return std::move(capture.entries);
+    return capture;
 }
 
-void require_configuration(const Arguments &initial)
+void require_configuration(const ConfigurationCapture &initial)
 {
-    if (configuration() != initial)
+    const auto live = configuration();
+    if (live.reset_at != initial.reset_at || live.entries != initial.entries)
         throw std::runtime_error("Nix configuration changed during read-only evaluation");
 }
 
-std::string evaluate(nix_c_context *context, Store *store, const std::string &path,
-                     const Arguments &arguments)
+std::string evaluate(nix_c_context *context, Store *store, const ConfigurationCapture &configuration,
+                     const std::string &path, const Arguments &arguments)
 {
-    // A fresh state reads current imports. Only the Store connection is shared.
+    // Build from the admitted settings so a transient file change cannot
+    // affect evaluation between the two currentness checks.
     const std::unique_ptr<nix_eval_state_builder, decltype(&nix_eval_state_builder_free)>
         builder(nix_eval_state_builder_new(context, store), nix_eval_state_builder_free);
-    if (!builder || nix_eval_state_builder_load(context, builder.get()) != NIX_OK)
-        throw std::runtime_error("could not load Nix evaluation settings");
+    if (!builder)
+        throw std::runtime_error("could not create Nix evaluation settings");
+    builder->settings.readOnlyMode = nix::settings.readOnlyMode;
+    configuration.apply(builder->settings);
+    configuration.apply(builder->fetchSettings);
     if (const auto nix_path = std::getenv("NIX_PATH"))
         builder->settings.nixPath.override(nix::EvalSettings::parseNixPath(nix_path));
     const std::unique_ptr<EvalState, decltype(&nix_state_free)>
@@ -135,7 +159,7 @@ int main()
             uint64_t status = 0;
             try {
                 require_configuration(initial_configuration);
-                result = evaluate(context.get(), store.get(), path, arguments);
+                result = evaluate(context.get(), store.get(), initial_configuration, path, arguments);
                 require_configuration(initial_configuration);
                 if (result.size() > max_text)
                     throw std::runtime_error("Nix derivation response exceeds wire limit");

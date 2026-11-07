@@ -566,6 +566,131 @@ default and 0.47 s with one processor. The first default group took
 the recipe. The setting controls Go execution parallelism as documented
 in [[https://pkg.go.dev/runtime#hdr-Environment_Variables][the Go runtime reference]].
 
+*** CLI startup and Provider handshake
+
+Repeat the physical control with the artifact-owned wrapper throughout.
+Alternate tracing in the order off, on, on, off, off, on. For the trace
+groups, set =TF_LOG=TRACE= for the diagnostic child only and capture
+stderr separately for each command. Keep the same fresh workspaces,
+watchdog, commands, and output, state, and input checks. At a host load
+of 13.53–17.26, the three untraced groups took 1.11, 0.99 and 1.17 s
+across the six commands. The traced groups took 1.12, 1.09 and 1.13 s.
+Keep traced durations separate from the fixed-B runtime acceptance.
+
+Pair the =starting plugin=, =plugin started= and =plugin address= events
+in each command's trace. The six commands launched the following number
+of Null 3.2.4 plugin processes in every traced group.
+
+| Command  | init | validate | plan | apply | output | destroy |
+|----------+------+----------+------+-------+--------+---------|
+| Children |    0 |        2 |    3 |     2 |      0 |       5 |
+
+To locate work before the first CLI trace record, use
+=zmodload zsh/datetime= and record =$EPOCHREALTIME= immediately before
+and after each existing =/usr/bin/time -l= invocation. Compare those
+two values with the first and last timestamped stderr records. The
+initial interval includes the watchdog, the artifact wrapper, CLI
+startup and any wait before the first record. The final interval
+includes work after the last record and child collection.
+
+A separate run of twelve traced groups at a one-minute host load of
+46.04–47.90 saw 144 plugin starts. The launch request to PID interval
+was 1–39 ms with a median of 3.5 ms. The PID to published RPC address
+interval was 20–180 ms with a median of 30 ms. In the slowest =init=,
+500 of 526 ms elapsed before the first trace record and 20 ms elapsed
+between the first and last records. That command launched no plugin.
+Another =output= call spent 571 of 618 ms before its first record,
+also with no plugin. The slow =init= recorded 3,288 page faults and
+1,950 involuntary context switches, compared with 909–914 faults and
+368–825 switches in the other =init= samples. The resource counts
+cannot distinguish filesystem latency from scheduling. This control
+locates a CLI startup tail as well as separate plugin handshakes.
+
+*** Two independent workspaces
+
+Use the same physical control and create two fresh workspaces per group.
+Each workspace keeps its own Terraform directory, plan and state. Run
+all six commands in their existing order within each workspace. Time
+both complete lanes as one batch, either by waiting for the first lane
+before starting the second, or by starting both and waiting for both
+statuses. Keep the watchdog on each command, verify both outputs, check
+both destroyed states and compare both input files with the original.
+Use the order serial, concurrent, concurrent, serial, serial,
+concurrent, concurrent, serial to limit order bias.
+
+| Mode | Four batch wall times (s) | Median batch wall (s) | Median one-workspace wall (s) |
+|------+---------------------------+-----------------------+-------------------------------|
+| Serial | 3.396, 2.853, 3.450, 2.868 | 3.132 | 1.499 |
+| Concurrent | 1.935, 2.646, 1.333, 1.751 | 1.843 | 1.788 |
+
+All sixteen workspaces passed the output, state and input checks.
+The one-minute host load was 40.44–41.87. The two-lane batch finished
+earlier in this physical control, while median one-workspace latency
+increased. This measures external throughput. The full Scheme
+admission, Nix checks and individual =.run= acceptance are outside
+the control. The six same-workspace commands remain ordered.
+
+The separate Gerbil control declares two =Ops.prototypes.Script=
+objects. Each child writes its own marker and waits for the other's
+marker before it can return. Start the two existing =.run= calls on
+Gerbil threads and join both. Both returned status zero and their
+distinct output under the existing per-Script watchdog. The barrier
+demonstrates overlap in the native child processes, rather than
+inferring overlap from elapsed time. The threads supervise children;
+the commands execute in separate OS processes.
+
+Core's =Ops.prototypes.ScriptBatch= owns the declared concurrency limit,
+joins the existing Script invocations and returns receipts or failures in
+declaration order. It stops queued work and joins the active workers on
+cancellation. A dependency graph determines which nodes may run together.
+The caller still owns workspace and log isolation. The OpenTofu recipe
+continues to execute the six effects in one workspace in dependency order.
+
+With the compiled Ops changes and rebuilt configuration-bound worker,
+the ordinary fixed-B fixture completed these three calls in the order
+shown. Both refusal controls passed and the execution digest remained
+unchanged. The first two samples failed the timing assertion. All
+intervals are in seconds.
+
+| Interval | First | Second | Third |
+|----------+-------+--------+-------|
+| Complete =.run= | 5.599 | 3.927 | 2.678 |
+| Scheme process CPU | 2.238 | 1.980 | 1.607 |
+| Thirteen C evaluator queries | 0.092 | 0.203 | 0.035 |
+| Final Nix CLI query | 0.158 | 0.210 | 0.078 |
+| tofu =init= | 0.488 | 0.097 | 0.034 |
+| tofu =validate= | 0.284 | 0.358 | 0.094 |
+| tofu =plan= | 0.291 | 0.146 | 0.130 |
+| tofu =apply= | 0.333 | 0.150 | 0.200 |
+| tofu =output= | 0.085 | 0.045 | 0.035 |
+| tofu =destroy= | 0.367 | 0.228 | 0.200 |
+| Six tofu commands combined | 1.848 | 1.024 | 0.694 |
+| Wall outside measured Nix and tofu intervals | 3.501 | 2.489 | 1.872 |
+
+The second call took 1.248 s more than the third. Nix accounted for
+0.301 s and the tofu commands for 0.331 s of that wall difference,
+with =validate= contributing 0.264 s. The first call took another
+1.672 s. The tofu commands took 0.824 s longer and Nix took 0.163 s
+less. The largest tofu increases were =init= (0.391 s), =apply=
+(0.183 s), =plan= (0.145 s), and =destroy= (0.139 s). The remaining
+wall intervals include Scheme work, waits and boundaries outside the
+tool timers. Process CPU is a separate measure and overlaps those
+wall intervals. Subtracting it does not identify scheduler wait or
+GC. The separate source-accounting call used 1.147 s of replay CPU
+with zero collections. That diagnostic alone cannot attribute GC in
+the three ordinary calls.
+
+For the per-call VM control, wrap only the existing observed =.run=
+body in Gambit's =##exec-stats=. Keep the fixture, numbered assertions,
+both refusal controls and B digest unchanged. Record =nb-gcs=,
+=gc-real-time= and faults from the returned statistics after the
+timer stops. A separate three-call process measured 3.116, 3.094 and
+2.801 s with two, three and two collections respectively. GC wall was
+0.150, 0.252 and 0.147 s. The first and third calls differed by 0.315 s
+with only 0.003 s difference in GC time. These diagnostic samples
+also failed the wall gate and do not assign GC to the earlier
+uninstrumented calls.
+
 *** Ops preparation before spawn
 
 The fixed-B diagnostic compiled an isolated =yuanxu/ops/func= with wall
@@ -1377,14 +1502,39 @@ Gerbil's load of =module-system/building/products~0= and hit the
 product then rejected a selected-source edit from the replaced package
 callback and passed the Feature receiver test. In the input mutation
 gate, the positive build-role baseline hit its idle deadline before
-the fault cases. Retain that result as an incomplete gate.
+the fault cases on the first attempt. Repeating
+=just test-build-input-context-mutations <artifact-dir>= against the
+same complete Core products passed the order and admission controls
+before and after all four rejected faults. The gate reported unchanged
+checkout sources.
 Lab's complete deployment gate passed with the same product. It
 reported 45 targets, clean isolation, zero-compile B reuse, and the
 independent B runtime checks. The fixed B execution digest remained
 unchanged throughout this sequence.
 
-Three subsequent processes used the same complete Core library
-and the same fixed B execution digest. The observations binary
+Run the separate Feature consumer through
+=just test-file t/yuanxu-context-memory-downstream-test.ss=. With the
+complete Core product it compiled 12 base, 46 enabled, and 12
+withdrawn targets, and all three independent first reads passed. The
+enabled rebuild began at 110.86 s and reached native =std/make=
+6.77 s after its start. The outer 120 s deadline interrupted it before
+it could report a compile count. This run leaves the hot build, clean
+and refusal actions of the complete Memory gate open.
+
+After the Ops batch change, a frozen tracked Core source snapshot
+started with only the previously qualified POO dependency in its
+output prefix. The native =just build= logged 249 target starts before
+the unchanged 120 s deadline, then exited 124. Compiler jobs were
+still running near the deadline. This is a failed empty-output build.
+The separate downstream run used the complete baseline Core library
+and only the newly compiled Ops modules ahead of it. It passed the
+base, enabled and withdrawn independent first-read controls. The hot
+enabled build started at 118.26 s and was interrupted at the 120 s
+deadline. This leaves the full Memory gate open for the new Ops
+revision. The fixed B digest remained unchanged.
+
+In the earlier runtime series, three processes used the complete
+baseline Core library and the same fixed B execution digest. The observations binary
 reported by the fixture came from that complete library in each
 process. The first two passed both refusal controls and exited
 naturally. The third completed all numbered calls and the source
@@ -1404,6 +1554,102 @@ snapshot recorded 41.07 and six concurrent Gambit stress processes.
 This records the concurrent work and timing split. It leaves the
 unattributed wall interval open and the complete-product stability
 gate unclosed.
+
+**** First call versus subsequent calls
+
+Repeat =just test-file t/qualification/opentofu/runtime-qualification.ss=
+in three serial processes with the same complete Core library, B
+execution digest, admitted Null 3.2.4 provider and paired Nix binary.
+The one-minute host load at launch was 12.77–15.98. The timed region
+still excludes fixture preparation, Harness startup and the first =.get=.
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+-----------------------|
+| 1 | 3.163, 2.735, 2.657 | 1.640, 1.645, 1.600 | 0.129, 0.147, 0.157 | 1.229, 0.798, 0.820 |
+| 2 | 3.310, 2.577, 2.626 | 1.678, 1.596, 1.637 | 0.124, 0.152, 0.150 | 1.072, 0.683, 0.692 |
+| 3 | 3.034, 2.302, 2.748 | 1.565, 1.473, 1.583 | 0.205, 0.113, 0.185 | 1.175, 0.628, 0.804 |
+
+All three failed the unchanged three-second assertion on their first
+call and passed the invalid-task and after-destroy source refusal
+controls. Relative to each process's second call, the first call
+spent an additional 0.389–0.547 s in the six tofu commands and
+changed Scheme CPU by -0.005 to +0.092 s. The command-level increase
+varied across processes, including =init=, =validate=, =plan= and
+=destroy=. The summed command intervals explain part of the wall
+difference. They do not attribute the remainder to cache misses,
+filesystem latency or scheduling.
+
+**** Native route candidate with the complete Core product
+
+Keep the complete Core product and B execution digest from the previous
+section. Use the Object-only adjacent-route candidate described above
+against the same pinned ReadRoute binary. Run the standard fixed-B
+qualification in A/B/B/A order, placing only the candidate Object product
+ahead of the complete Core library in B. Confirm the loaded Object and
+ReadRoute digests in the fixture output.
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+-----------------------|
+| A1 | 4.105, 3.205, 3.042 | 1.777, 1.753, 1.725 | 0.201, 0.154, 0.202 | 1.418, 0.938, 0.928 |
+| B1 | 2.342, 2.580, 2.496 | 1.472, 1.415, 1.453 | 0.117, 0.136, 0.137 | 0.653, 0.889, 0.728 |
+| B2 | 3.047, 2.501, 2.402 | 1.458, 1.417, 1.357 | 0.132, 0.221, 0.124 | 1.100, 0.715, 0.811 |
+| A2 | 2.724, 2.249, 2.462 | 1.523, 1.471, 1.531 | 0.107, 0.136, 0.132 | 0.985, 0.572, 0.627 |
+
+The pooled median Scheme CPU was 1.628 s for A and 1.435 s for B.
+The last A process used 1.471–1.531 s per sample, so the pooled change
+includes substantial variation between the two control processes.
+The separate replay-accounting rounds recorded 1.439 and 1.246 s of
+CPU for A and 1.074 and 1.131 s for B. Each process retained 130
+replays, 255,083 issued-read visits and 3,246 source reads. Every
+process passed the pre-evaluator and after-destroy refusal controls.
+A1 and B2 failed the unchanged timing assertion. The candidate remains
+isolated.
+
+With the same candidate loaded, the native route replacement control
+refused before dispatching the substituted table method. The real
+OpenTofu realized-package control invoked the replacement callback once
+and refused its source edit. Both focused Harnesses exited normally.
+
+The Lean adjacent-route law assumes a stable route within the native
+sweep and gives a counterexample across a state change. The existing
+Quint route model keeps that boundary separate from the two requirement
+checks. With seed =0x41= and an eight-step bound,
+=MetadataRoute_acceptance.qnt= passed 1,000 traces for =safety= and
+=MetadataRoute_endpoint.qnt= violated =NoForeignCalls=. This checks the
+effect of opening the modeled interval. Concurrent reflective writes
+remain outside the serial route law.
+
+**** Replay ownership within the selected OpenTofu graph
+
+Read =module-order= and =feature-order= from the admitted recipe's
+=publication.context.selected-graph= after fixture preparation, outside
+the numbered timer. In the fixed B control the graph contained the
+package-qualified JsonSchema, Nix, Funflow and fixture OpenTofu Interface
+identities, in that order. The Feature list was empty and =list-modules=
+had no AI Context images. Ops enters through ordinary Gerbil imports.
+The separate Memory test explicitly selects =ai-agentic-context +memory=
+and exercises its own consumer package.
+
+Keep the fixed B and compile only a diagnostic =source/observations=
+module ahead of the same Core products. In
+=module-source-measure-replay= record the current source phase, replay
+mode, root-list length and native visit count in the existing operation
+table. Emit those counters only from the independent source-accounting
+call. The numbered calls remain ordinary.
+
+| Phase | Mode | Replay calls | Presented roots | Issued-read visits |
+|-------+------+--------------+-----------------+--------------------|
+| source | protected checkpoint | 45 | 91,755 | 115,020 |
+| link-current | protected checkpoint | 17 | 34,663 | 43,452 |
+| link-current | plain replay | 68 | 34,663 | 96,611 |
+
+The 17 linker checkpoint calls and 68 plain linker calls presented
+the same aggregate number of roots, but the plain replay visited
+2.22 times as many signed records. These counters locate work in
+the Module System's linker and reader path. They do not establish
+that differently placed calls may share authentication across a
+callback or that all root spines are identical. The protected and
+plain paths retain their individual refusal and currentness checks.
 
 *** Build and selection gate follow-up
 
@@ -1504,6 +1750,62 @@ of 107, 70, 159 and 87 ms. The median difference corresponds to roughly
 5 ms across 13 queries on this small expression. This isolates the
 configuration lane enough to rule out attributing the seconds in the
 first stock process to the two additional parses.
+
+*** Bind the admitted settings to evaluation
+
+The worker now applies the captured Nix configuration to both settings
+objects of a fresh builder. The same Nix parser reads the live
+configuration before evaluation and again before returning a
+successful derivation path. The evaluator itself consumes the admitted
+updates and their override boundary. It still constructs a fresh
+EvalState and keeps only the existing Store connection.
+
+Build through the ordinary =dependencies.nix= derivation-worker target.
+Compare with the original worker from the same Nix package set. For the
+configuration interleaving control, make a temporary user =nix.conf=
+that includes a FIFO. Start the worker under the admitted watchdog.
+For each of its startup opens, serve =restrict-eval = true=. Wait for the
+native ready word, then send a read-only request for a derivation at an
+absolute temporary path using the existing length-prefixed protocol.
+For the original worker's query opens, serve =true=, =false=, =false=,
+=true= in that order. Close the writer between opens. The two middle
+opens correspond to loading evaluator and fetch settings. In the
+constant control, serve =true= for every open. Stop the worker through
+the normal close request after recording the reply.
+
+| Worker | Constant configuration | Transient configuration at builder load |
+|--------+------------------------+-----------------------------------------|
+| Original | Restricted path refused | Returned a derivation path |
+| Admitted settings | Restricted path refused | Restricted path refused |
+
+The rebuilt worker had no builder-time FIFO opens. This reproduces a
+per-query evaluator settings gap without altering the system
+configuration. The control does not make Store startup or concurrent
+filesystem reads atomic. Configuration changes that survive to an
+observation boundary still refuse the query.
+
+The rebuilt worker also passed the CLI equivalence, relative import
+replacement, unregistered derivation and included-config refusal
+controls. A separate full-Core fixed-B comparison changed only the
+worker prefix in the order original, rebuilt, rebuilt, original. The
+underlying CLI executable was identical. Both binaries retained the
+thirteen C evaluator queries, one CLI query and six tofu commands in
+every sample.
+
+| Process | Complete .run (s) | All Nix checks (s) |
+|---------+-------------------+--------------------|
+| Original 1 | 3.849, 3.739, 3.012 | 0.269, 0.183, 0.210 |
+| Rebuilt 1 | 3.585, 2.675, 3.048 | 0.234, 0.150, 0.205 |
+| Rebuilt 2 | 3.727, 2.713, 2.808 | 0.154, 0.142, 0.157 |
+| Original 2 | 3.404, 3.132, 3.555 | 0.235, 0.290, 0.192 |
+
+All four processes passed the preflight and post-destroy refusal
+controls and failed the three-second wall assertion. Median time
+inside the thirteen evaluator queries was 61 ms for the original
+and 55 ms for the rebuilt worker. The one-minute host load at process
+launch ranged from 15.90 to 50.73. The difference is consistent with
+the focused configuration control, while this comparison does not
+isolate a wall-clock speedup.
 
 ** Local Actor control
 
