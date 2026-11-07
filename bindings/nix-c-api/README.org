@@ -1196,6 +1196,215 @@ The independent accounting round recorded 3,246 and 5,524 file reads
 respectively. This is a currentness correction with an observed cost.
 The three measured calls do not establish a stable three-second bound.
 
+*** Owned source continuation
+
+The package producer constructs its source-only continuation from the
+selected Build Graph and the observed, generated and entry source rows.
+The linker can reuse the current read window only when the warm
+procedure and Graph guard match those original bindings, with ordinary
+read routes and no active source or slot observer. If the Graph falls
+back to an open request, the callback clears the current window and
+the linker rechecks the selected sources before returning. A replaced
+=sources-current= always takes the independent callback path.
+
+The compiled candidate and =6ebf37d= control used the same B execution
+digest and Null provider through
+=just test-file t/qualification/opentofu/runtime-qualification.ss=.
+The table excludes import, first =.get= and producer preparation.
+
+| Linker | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|--------+-------------------+----------------+-------------------+-----------------------|
+| Control, first pair | 2.559, 2.475, 2.444 | 1.754, 1.688, 1.677 | 0.118, 0.119, 0.125 | 0.592, 0.585, 0.554 |
+| Owned continuation, first pair | 2.728, 2.304, 2.287 | 1.652, 1.501, 1.464 | 0.126, 0.116, 0.140 | 0.808, 0.628, 0.615 |
+| Control, reversed order | 2.541, 2.631, 3.296 | 1.665, 1.720, 1.920 | 0.136, 0.170, 0.224 | 0.656, 0.620, 0.836 |
+| Owned continuation, reversed order | 2.786, 2.316, 2.359 | 1.625, 1.471, 1.503 | 0.329, 0.149, 0.161 | 0.651, 0.623, 0.573 |
+| Owned continuation, guarded warmup | 2.616, 2.398, 2.389 | 1.512, 1.557, 1.501 | 0.259, 0.161, 0.177 | 0.740, 0.604, 0.630 |
+
+The separate accounting round reduced physical source reads from 5,524
+to 3,246 and Reader currentness calls from 96 to 79. Both paths still
+performed 2,782 link currentness calls, 130 metadata replays and
+255,083 issued-read visits. The candidate replay pass accounted for
+1.198 s of CPU. The separate Scheme dispatch probe took 124–190 ms.
+The fixed B replacement callback still ran once and the linker refused
+its source edit. The first candidate sample spent 216 ms more in the six
+tofu commands than the first control, despite lower Scheme CPU. In the
+reversed pair, the control completed the effects but failed the unchanged
+three-second assertion on the third call. The candidate used less Scheme
+CPU in every matching sample, and all six candidate calls passed the
+time assertion. The sample still leaves wall-clock stability open.
+Restricting the producer's warmup to ordinary construction with no
+active observer preserved the 3,246 reads and the refusal control.
+
+Two new processes repeated that last build without changing the compiled
+prerequisites or B digest. The standard fixture checks the invalid Task
+before evaluator startup and refuses a source edit after destroy.
+
+| Guarded warmup repeat | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|-----------------------+-------------------+----------------+-------------------+-----------------------|
+| First new process | 2.853, 2.669, 2.453 | 1.599, 1.528, 1.523 | 0.252, 0.188, 0.162 | 0.814, 0.831, 0.670 |
+| Second new process | 2.331, 2.334, 2.314 | 1.485, 1.508, 1.468 | 0.161, 0.163, 0.155 | 0.570, 0.581, 0.629 |
+
+All nine samples on the guarded-warmup build passed the time assertion.
+Both new processes reported 3,246 file reads and about 1.20 s of
+inclusive replay CPU in their separate accounting rounds.
+
+A separate diagnostic build timed the existing native replay branches
+and the checkpoint body using the same private operation counters. It
+retained 3,246 file reads and 255,083 issued-read visits. The 68 ordinary
+replays used 0.229 s of CPU. The 62 protected replays used 1.033 s
+inclusive, of which 0.661 s was inside their checkpoint bodies. The
+remaining 0.372 s is the surrounding protected replay and accounting,
+including native entry and return authentication. The protected calls
+were attributed to 17 =link-current= phases and 45 =source= phases.
+These values come from the diagnostic build only. Its additional nested
+timers make the sums unsuitable for comparison with the uninstrumented
+runtime samples.
+To reproduce the split, wrap the two branches of
+=module-source-measure-replay= in =module-source-measure-operation= spans
+named =metadata-plain= and =metadata-guarded=. Add those names and
+=metadata-checkpoints= to the detailed accounting set in
+=measure-source-operation=. Read each span's user plus system CPU from
+the fixture's =source-accounting= invocation. Run the same fixed B test
+with the diagnostic observations product ahead of the ordinary one.
+
+**** Ordinary replay without a visitor
+
+For an isolated comparison, replace only the no-accounting branch's
+fixed void visitor in =module-source-measure-replay= with
+=(call-with-current-slot-reads reads void)=. Build both observation
+products with the same Gerbil compiler options and run the fixed B
+fixture with their library prefixes in A/B/B/A order. The diagnostic
+visitor stays in place for accounting, including partial counts on
+failure.
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+-----------------------|
+| A | 2.271, 2.214, 2.264 | 1.483, 1.462, 1.466 | 0.115, 0.136, 0.108 | 0.607, 0.561, 0.631 |
+| B | 2.320, 2.556, 2.219 | 1.478, 1.521, 1.452 | 0.114, 0.148, 0.110 | 0.661, 0.682, 0.594 |
+| B | 2.257, 2.352, 2.322 | 1.469, 1.515, 1.477 | 0.110, 0.112, 0.186 | 0.627, 0.666, 0.593 |
+| A | 2.186, 2.157, 2.264 | 1.445, 1.426, 1.464 | 0.132, 0.109, 0.115 | 0.555, 0.563, 0.624 |
+
+Every process passed the same qualification, retaining 3,246 file reads
+and 255,083 issued-read visits in the accounting round. Median Scheme CPU
+was 1.463 s for A and 1.477 s for B. A separate issued-read control
+confirmed equal stale and forged diagnostics, with forged issuance
+refused before an earlier stale record. Neither path delivered reads
+to the outer observer or forced the unrelated slot. The replacement
+stayed isolated. With the two A processes, the retained build has
+15 numbered samples between 2.157 and 2.853 s across five processes.
+
+**** Funflow dispatch attribution
+
+Run the same fixed B fixture with diagnostic =cpu-time= spans around
+=job-graph=, =job-flow=, =runner-run= and the actual =TaskRun= call in
+=run-job=. Refine the Runner span around =admit-flow=, input validation,
+=runner-plan=, plan-node validation, node execution and output validation.
+Keep these diagnostics outside the wall-clock qualification comparison.
+
+The six-step in-process control spent 1–2 ms on the Job graph and
+about 25 ms constructing its typed Flow. In one of the Runner passes
+without a visible timing spike, the first Flow admission used 34 ms,
+planning 49 ms, and node execution 13 ms. Input, output and plan-node
+validation together took less than 1 ms in that pass. The planning span
+includes the Strategy planner's checked Function input and graph lowering.
+In the first three full =.run= samples with the outer dispatch probes,
+Runner CPU was 0.97–1.00 s inclusive. The task calls accounted for
+0.81–0.84 s, including the real source guards and process supervision.
+
+The Runner admits the Flow before it calls the input Type validator.
+The planner's checked Function then admits the Flow at the planner
+boundary. A control built a =pure-flow= with a custom input validator
+and replaced the shared Function signature's =outputs= with the empty
+list during that validator. The planner rejected with =TypeError?=,
+after one input validation and before the task body ran. Replacing
+the original Flow's =steps= in the first control did not affect the
+normalized Flow. Neither control changes the production checks.
+
+The original candidate passed the Core build Graph, publication,
+testing-source admission and four mutation controls. Lab's deployment
+gate completed with zero source-projection scopes and independent B
+first reads. The separate Memory Feature gate completed all three
+compiled first reads, the zero-compile hot build and withdrawal
+cleanup. It entered the final refusal process at 115.91 s and hit
+the unchanged 120 s aggregate before that process returned.
+On the guarded-warmup build, the full deployment gate and the four
+Core mutation controls passed again. The Memory refusal scenario also
+passed separately with its normal child invocation in 9.18 s. This
+isolated result does not close the full 120 s Memory gate.
+
+A full guarded-warmup rerun used the same installed package prefix and
+ordinary Memory test. It completed all three independent first reads
+and the enabled zero-compile build. The withdrawn clean entered at
+118.63 s and the aggregate expired. The three cold builds accounted
+for 59.84 s, the three runtime checks for 40.02 s, and the hot build
+for 14.68 s before clean.
+
+To locate the outer build overhead, use the Memory fixture's withdrawn
+state and its existing Ops action to run one cold =gerbil build=.
+Then run =gerbil build=, =./build.ss compile=, and =gerbil build= on
+that same state with verbosity 2. Compare the caller's wall epoch to
+the existing =BUILD-STAGE main return= epoch, and check zero compiles
+and identical product digests after every warm call. This diagnostic
+does not replace any invocation in the acceptance test.
+
+| Warm invocation | Child wall (s) | Before main (s) | Inside build main (s) | After main return (s) |
+|-----------------+----------------+-----------------+-----------------------+-----------------------|
+| gerbil build | 11.954 | 3.835 | 3.975 | 4.144 |
+| ./build.ss compile | 9.379 | 2.091 | 3.758 | 3.530 |
+| gerbil build | 12.081 | 4.141 | 3.929 | 4.011 |
+
+The native package CLI adds about 2.6 s to this warm comparison.
+The direct build script still spends 3.53 s between its main return
+and the supervising action's return. That interval includes process
+shutdown and the caller's result handling, so it is outside
+=std/make= and the selected-source checks. No entrypoint or deadline
+changed in the full qualification.
+
+**** Complete Core product qualification
+
+Copy the tracked Core files with the candidate source changes into an
+isolated checkout. Start with an output prefix containing only the
+compiled POO pin =cd4de644= and its Gerbil package manifest. Use Core's
+ordinary =just build= with that prefix as =GERBIL_PATH= and its =lib=
+as =GERBIL_LOADPATH=. The empty Core output build returned in 110.38 s
+under the unchanged 120 s deadline and 2 GiB Gerbil heap cap. The build
+reported 275 compile targets.
+
+For downstream checks, put the resulting library before the existing
+fixed B prerequisites. The first OpenTofu qualification reached
+Gerbil's load of =module-system/building/products~0= and hit the
+60 s idle deadline before any numbered =.run= sample. The same Core
+product then rejected a selected-source edit from the replaced package
+callback and passed the Feature receiver test. In the input mutation
+gate, the positive build-role baseline hit its idle deadline before
+the fault cases. Retain that result as an incomplete gate.
+Lab's complete deployment gate passed with the same product. It
+reported 45 targets, clean isolation, zero-compile B reuse, and the
+independent B runtime checks. The fixed B execution digest remained
+unchanged throughout this sequence.
+
+Three subsequent processes used the same complete Core library
+and the same fixed B execution digest. The observations binary
+reported by the fixture came from that complete library in each
+process. The first two passed both refusal controls and exited
+naturally. The third completed all numbered calls and the source
+accounting round, then exceeded the aggregate deadline and exited
+137 during the remaining qualification.
+
+| Process | Complete .run (s) | Scheme CPU (s) | 14 Nix checks (s) | Six tofu commands (s) |
+|---------+-------------------+----------------+-------------------+-----------------------|
+| 1 | 2.976, 2.233, 2.252 | 1.452, 1.432, 1.442 | 0.525, 0.152, 0.157 | 0.885, 0.594, 0.570 |
+| 2 | 2.651, 2.339, 2.566 | 1.498, 1.514, 1.577 | 0.164, 0.114, 0.134 | 0.708, 0.628, 0.658 |
+| 3 | 11.006, 9.562, 12.422 | 2.031, 1.984, 1.975 | 0.592, 0.761, 1.073 | 1.973, 1.647, 1.406 |
+
+The three accounting rounds retained 3,246 physical source reads
+and 255,083 issued-read visits. The third process began at a
+one-minute host load of 11.62. During the numbered calls, a host
+snapshot recorded 41.07 and six concurrent Gambit stress processes.
+This records the concurrent work and timing split. It leaves the
+unattributed wall interval open and the complete-product stability
+gate unclosed.
+
 *** Build and selection gate follow-up
 
 On Yuanxu =27a666e=, the observer-free 10,000-owner Linux Case timed

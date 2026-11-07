@@ -15,6 +15,7 @@ on:
       - build.ss
       - gerbil.pkg
       - dev/gerbil.pkg
+      - packages/automation/runtime-dependencies.ss
       - init.ss
       - modules/**
       - core
@@ -28,6 +29,7 @@ on:
       - build.ss
       - gerbil.pkg
       - dev/gerbil.pkg
+      - packages/automation/runtime-dependencies.ss
       - init.ss
       - modules/**
       - core
@@ -114,7 +116,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: darwin-gerbil-build-v1-${{ runner.os }}-${{ runner.arch }}-${{ matrix.toolchain }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
+          key: darwin-gerbil-build-v2-${{ runner.os }}-${{ runner.arch }}-${{ matrix.toolchain }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py', 'packages/automation/runtime-dependencies.ss') }}
 
       - name: Install declared Gerbil dependencies
         shell: bash
@@ -122,15 +124,18 @@ jobs:
           set -euo pipefail
           mkdir -p "$HOME/.gerbil/pkg"
           gerbil pkg dir --add git.cons.io/mighty-gerbils/gerbil-directory
-          if [[ "${{ steps.dependency-cache.outputs.cache-hit }}" == "true" ]]; then
+          check_core_dependency() {
             gerbil env gerbil interactive -e \
-              '(begin (import :clan/poo/object) (displayln "library-cache-ready"))'
-          else
+              '(begin (import (only-in :clan/poo/object call-with-current-slot-reads)) (unless (procedure? call-with-current-slot-reads) (error "missing protected POO read checkpoint")))'
+          }
+          if [[ "${{ steps.dependency-cache.outputs.cache-hit }}" != "true" ]] || ! check_core_dependency; then
             gerbil env gerbil interactive packages/automation/runtime-dependencies.ss
+            (cd core && GERBIL_PATH="$GITHUB_WORKSPACE/.gerbil" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
           fi
           # The measurement harness is development tooling, not a library input.
           (cd dev && GERBIL_PATH="$GITHUB_WORKSPACE/dev/.gerbil" GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib" gerbil env gerbil interactive ../packages/automation/runtime-dependencies.ss)
           export GERBIL_LOADPATH="$GITHUB_WORKSPACE/.gerbil/lib:$GITHUB_WORKSPACE/dev/.gerbil/lib"
+          check_core_dependency
           echo "GERBIL_LOADPATH=$GERBIL_LOADPATH" >> "$GITHUB_ENV"
 
       - name: Save exact Gerbil dependency cache
@@ -141,7 +146,7 @@ jobs:
             .gerbil/pkg
             .gerbil/lib
             .gerbil/bin
-          key: darwin-gerbil-build-v1-${{ runner.os }}-${{ runner.arch }}-${{ matrix.toolchain }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py') }}
+          key: darwin-gerbil-build-v2-${{ runner.os }}-${{ runner.arch }}-${{ matrix.toolchain }}-${{ hashFiles('gerbil.pkg', 'core/gerbil.pkg', 'packages/automation/install_gerbil_release.py', 'packages/automation/runtime-dependencies.ss') }}
 
       - name: Measure cold Agentic AI Lab build
         env:
