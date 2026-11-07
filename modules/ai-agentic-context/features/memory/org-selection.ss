@@ -8,7 +8,9 @@
 ;;; The caller owns authentication of the graph against its source cut.
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :agentic-ai-lab/modules/session/objects
+        (only-in :agentic-ai-lab/modules/session/objects-core
+                 agentic-ai-lab-session-require
+                 agentic-ai-lab-session-every?)
         (only-in :agentic-ai-lab/modules/query/semantic/orgize-interface
                  org-element-graph-view?
                  org-element-graph-id-of

@@ -76,7 +76,7 @@
           (def (action state command)
             (def started (real-time))
             (displayln "LAB-CONTEXT-ACTION enter state=" (.get state name) " command=" command
-                       " at=" started)
+                       " at=" started " epoch=" (time->seconds (current-time)))
             (force-output)
             (def result
               (run-script
@@ -94,7 +94,8 @@
             (set! completed (1+ completed))
             (execution-progress! 'lab-context-memory-actions completed)
             (displayln "LAB-CONTEXT-ACTION return state=" (.get state name) " command=" command
-                       " seconds=" (- (real-time) started) " process=" (.get result seconds))
+                       " seconds=" (- (real-time) started) " process=" (.get result seconds)
+                       " epoch=" (time->seconds (current-time)))
             (force-output)
             output)
           (def (build! state (operation "build"))

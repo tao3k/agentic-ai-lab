@@ -7,8 +7,9 @@
 
 (import (only-in :clan/poo/object .o .ref object? object<-alist)
         :yuanxu/utilities/final-projection-syntax
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/transform
+        (only-in :agentic-ai-lab/modules/session/objects-core
+                 agentic-ai-lab-session-require
+                 agentic-ai-lab-session-every?)
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core)
 
 (export agentic-ai-lab-memory-catalog-summary

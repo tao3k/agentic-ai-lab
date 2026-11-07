@@ -140,6 +140,18 @@ on the Harness clock. This run establishes cold target and first-read
 coverage only. The hot compilation count, clean, refusal, and three
 complete in-budget runs remain separate acceptance obligations.
 
+Memory now imports the Session helpers and intent accessors from their
+defining modules. The same cold fixture drops exactly five targets:
+=session/objects=, =session/objects-attempt=, =session/objects-graph=,
+=session/objects-handoff=, and =session/transform=. Base and withdrawn
+still compile the same 12 targets. Enabled compiles 41, with 246 projection
+Contexts instead of 251. Native Make's expansion census still reports
+394, so the target reduction does not establish a wall-time improvement.
+The full run reached all three first reads and returned from the hot
+build with zero compilation. The aggregate watchdog interrupted
+withdrawn clean after its child logged =main return=, before the parent
+reported completion. That run does not qualify as acceptance.
+
 For withdrawal, compare the entire =gerbil clean= action with its
 =clean-outputs= span and the nested =gerbil-clean= and
 =clean-product-residue= spans. Use a fresh withdrawn build with

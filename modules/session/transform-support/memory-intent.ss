@@ -6,7 +6,8 @@
 ;;; Invariant: transformation preserves explicit store and handoff references.
 (import :gerbil/core
         (only-in :clan/poo/object .ref object?)
-        :agentic-ai-lab/modules/session/objects)
+        (only-in :agentic-ai-lab/modules/session/objects-core
+                 agentic-ai-lab-session-alist-ref))
 
 (export agentic-ai-lab-session-memory-intent-ref
         agentic-ai-lab-session-memory-intent?

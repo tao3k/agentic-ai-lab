@@ -12,8 +12,15 @@
 ;;; eligibility must not be mistaken for source-admission eligibility.
 
 (import (only-in :clan/poo/object .o .ref object?)
-        :agentic-ai-lab/modules/session/objects
-        :agentic-ai-lab/modules/session/transform-support/memory-intent
+        (only-in :agentic-ai-lab/modules/session/objects-core
+                 agentic-ai-lab-session-require
+                 agentic-ai-lab-session?
+                 agentic-ai-lab-session-id)
+        (only-in :agentic-ai-lab/modules/session/transform-support/memory-intent
+                 agentic-ai-lab-session-memory-intent?
+                 agentic-ai-lab-session-memory-intent-store-ref
+                 agentic-ai-lab-session-memory-intent-scope
+                 agentic-ai-lab-session-memory-intent-commit-policy)
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/objects-core
         :agentic-ai-lab/modules/ai-agentic-context/features/memory/org-selection)
 
